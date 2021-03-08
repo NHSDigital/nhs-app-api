@@ -18,6 +18,10 @@
     </array>
     <key>UILaunchStoryboardName</key>
     <string>LaunchScreen</string>
+    <key>NSCameraUsageDescription</key>
+    <string>So you can take a photo of your I.D.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>So you can record your video</string>
     <key>UISupportedInterfaceOrientations</key>
     <array>
       <string>UIInterfaceOrientationPortrait</string>

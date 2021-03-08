@@ -60,6 +60,7 @@
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Renderers\SwipeBackNavigationPageRenderer.cs" />
+    <Compile Include="Renderers\WebViews\NhsLoginUpliftWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\WebViewNavigationDelegate.cs" />
     <Compile Include="Renderers\WebViews\JavascriptBridge.cs" />
     <Compile Include="Renderers\WebViews\NhsAppWebViewRenderer.cs" />
@@ -74,6 +75,9 @@
       <DependentUpon>Info.template.plist</DependentUpon>
     </None>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="iProov.iOS" Version="8.1.1" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
