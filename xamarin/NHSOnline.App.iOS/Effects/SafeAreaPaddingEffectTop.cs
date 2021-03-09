@@ -14,15 +14,14 @@ namespace NHSOnline.App.iOS.Effects
         private Thickness _originalPadding;
         protected override void OnAttached()
         {
-            if (!(Element is Layout element))
+            if (UIDevice.CurrentDevice.SupportsSafeAreaInsets() &&
+                Element is Layout element)
             {
-                return;
+                _originalPadding = element.Padding;
+
+                var insets = UIApplication.SharedApplication.Windows[0].SafeAreaInsets;
+                element.Padding = AddTopPadding(element, insets.Top > 0 ? insets.Top : 20);
             }
-
-            _originalPadding = element.Padding;
-
-            var insets = UIApplication.SharedApplication.Windows[0].SafeAreaInsets;
-            element.Padding = AddTopPadding(element, insets.Top > 0 ? insets.Top : 20);
         }
 
         protected override void OnDetached()

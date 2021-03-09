@@ -57,6 +57,7 @@
     <Compile Include="DependencyServices\IosNativeLog.cs" />
     <Compile Include="Effects\SafeAreaPaddingEffectTop.cs" />
     <Compile Include="Effects\SafeAreaPaddingEffectBottom.cs" />
+    <Compile Include="Effects\UIDeviceExtensions.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Renderers\SwipeBackNavigationPageRenderer.cs" />

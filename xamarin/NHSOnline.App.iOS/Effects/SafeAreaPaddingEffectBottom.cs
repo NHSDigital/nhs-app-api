@@ -14,15 +14,14 @@ namespace NHSOnline.App.iOS.Effects
 
         protected override void OnAttached()
         {
-            if (!(Element is Layout element))
+            if (UIDevice.CurrentDevice.SupportsSafeAreaInsets() &&
+                Element is Layout element)
             {
-                return;
+                _originalPadding = element.Padding;
+
+                var insets = UIApplication.SharedApplication.Windows[0].SafeAreaInsets;
+                element.Padding = AddBottomPadding(element, insets.Bottom);
             }
-
-            _originalPadding = element.Padding;
-
-            var insets = UIApplication.SharedApplication.Windows[0].SafeAreaInsets;
-            element.Padding = AddBottomPadding(element, insets.Bottom);
         }
 
         protected override void OnDetached()
