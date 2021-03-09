@@ -5,7 +5,7 @@ using OpenQA.Selenium;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Web
 {
-    public sealed class WebText
+    public sealed class WebText : IActOnElementContext
     {
         private readonly IWebInteractor _interactor;
         private readonly string _tag;
@@ -30,13 +30,12 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
         private void ActOnElement(Action<IWebElement> action)
             => _interactor.ActOnElement(FindBy, action);
 
-        public void AssertExpanderCollapsedByHeight() => ActOnElement(e => e.Size.Height.Should().Be(0));
-
-        public void AssertExpanderExpandedByHeight() => ActOnElement(e => e.Size.Height.Should().NotBe(0));
-
         private By FindBy
             => By.XPath(WholeElementSelector);
 
         private string WholeElementSelector => $"//{ _tag}[normalize-space()={_text.QuoteXPathLiteral()}]";
+        void IActOnElementContext.ActOnElementContext(Action<ElementContext<IWebDriver, IWebElement>> action)
+            => _interactor.ActOnElementContext(FindBy, action);
+
     }
 }
