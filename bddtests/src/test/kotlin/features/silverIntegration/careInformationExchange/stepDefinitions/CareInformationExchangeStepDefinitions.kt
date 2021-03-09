@@ -5,8 +5,11 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
+import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.pages.CareInformationExchangePage
+import mocking.thirdPartyProviders.pkb.CIERequestBuilder
 import models.IdentityProofingLevel
 import pages.HybridPageObject
 import pages.PrescriptionsHubPage
@@ -22,6 +25,7 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
     private lateinit var redirector: RedirectorPage
     private lateinit var hospitalAppointmentsPage: HospitalAppointmentsPage
     private lateinit var prescriptionsHubPage: PrescriptionsHubPage
+    private lateinit var careInformationExchangePage: CareInformationExchangePage
 
     @Given("^I am a user who can view Appointments from Care Information Exchange$")
     fun iAmAUserWhoCanViewAppointmentsFromCareInformationExchange(){
@@ -97,6 +101,41 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
     @Given("^I am a user who cannot view Shared Health Links from Care Information Exchange$")
     fun iAmAUserWhoCannotViewSharedHealthLinksFromCareInformationExchange(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_LIBRARY_NONE)
+    }
+
+    @Given("^CIE responds to requests for appointments$")
+    fun cieRespondsToRequestsForAppointments() {
+        MockingClient.instance.forCIE.mock { CIERequestBuilder().appointmentsRequest().respondWithPage() }
+    }
+
+    @Given("^CIE responds to requests for care plans$")
+    fun cieRespondsToRequestsForCarePlans() {
+        MockingClient.instance.forCIE.mock { CIERequestBuilder().carePlanRequest().respondWithPage() }
+    }
+
+    @Given("^CIE responds to requests for health tracker$")
+    fun cieRespondsToRequestsForHealthTracker() {
+        MockingClient.instance.forCIE.mock { CIERequestBuilder().healthTrackerRequest().respondWithPage() }
+    }
+
+    @Given("^CIE responds to requests for medicines$")
+    fun cieRespondsToRequestsForMedicines() {
+        MockingClient.instance.forCIE.mock { CIERequestBuilder().medicinesRequest().respondWithPage() }
+    }
+
+    @Given("^CIE responds to requests for messages$")
+    fun cieRespondsToRequestsForMessages() {
+        MockingClient.instance.forCIE.mock { CIERequestBuilder().messagesRequest().respondWithPage() }
+    }
+
+    @Given("^CIE responds to requests for shared links$")
+    fun cieRespondsToRequestsForSharedLinks() {
+        MockingClient.instance.forCIE.mock { CIERequestBuilder().sharedLinksRequest().respondWithPage() }
+    }
+
+    @Given("^CIE responds to requests for test results$")
+    fun cieRespondsToRequestsForTestResults() {
+        MockingClient.instance.forCIE.mock { CIERequestBuilder().testResultsRequest().respondWithPage() }
     }
 
     @Then("^the link to CIE Track your health is not available on the health record hub page$")
@@ -205,6 +244,11 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
     @Then("^I click the CIE View Medicines link on the Prescriptions hub$")
     fun iClickTheCieViewMedicinesLink(){
         prescriptionsHubPage.cieMedicinesJumpOffButton.click()
+    }
+
+    @Then("^I am navigated to a third party site for CIE$")
+    fun iNavigateToThirdPartySiteForCIE() {
+        careInformationExchangePage.assertTitleVisible()
     }
 
     private fun setupPatient(configuration: SJRJourneyType, proofLevel: IdentityProofingLevel? = null) {

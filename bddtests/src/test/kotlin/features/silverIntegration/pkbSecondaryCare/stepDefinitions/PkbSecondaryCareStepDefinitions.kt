@@ -4,8 +4,11 @@ import features.serviceJourneyRules.factories.SJRJourneyType
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
+import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.pages.SecondaryCarePage
+import mocking.thirdPartyProviders.pkb.SecondaryCareRequestBuilder
 import models.IdentityProofingLevel
 import pages.HybridPageObject
 import pages.PrescriptionsHubPage
@@ -17,6 +20,7 @@ import utils.SerenityHelpers
 class PkbSecondaryCareStepDefinitions : HybridPageObject() {
     private lateinit var redirector: RedirectorPage
     private lateinit var prescriptionsHubPage: PrescriptionsHubPage
+    private lateinit var secondaryCarePage: SecondaryCarePage
 
     @Given("^I am a user who can view Medicines from PKB Secondary Care$")
     fun iAmAUserWhoCanViewMedicinesFromPkbSecondaryCare() {
@@ -26,6 +30,13 @@ class PkbSecondaryCareStepDefinitions : HybridPageObject() {
     @Given("^I am a user who cannot view Medicines from PKB Secondary Care$")
     fun iAmAUserWhoCannotViewMedicinesFromPkbSecondaryCare(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_MEDICINES_NONE)
+    }
+
+    @Given("^Secondary Care responds to requests for medicines$")
+    fun secondaryCareRespondsToRequestsForMedicines() {
+        MockingClient.instance.forSecondaryCare.mock {
+            SecondaryCareRequestBuilder().medicineRequest().respondWithPage()
+        }
     }
 
     @Then("^the PKB Secondary Care View Medicines link is available on the Prescriptions Hub$")
@@ -49,6 +60,11 @@ class PkbSecondaryCareStepDefinitions : HybridPageObject() {
                 "Hospital and other medicines\nThis service is provided by Patients Know Best",
                 "Your GP surgery or hospital has chosen this personal health record service provider.",
                 "Find out more about personal health record services")
+    }
+
+    @Then("^I am navigated to a third party site for Secondary Care")
+    fun iNavigateToThirdPartySiteForSecondaryCare() {
+        secondaryCarePage.assertTitleVisible()
     }
 
     private fun setupPatient(configuration: SJRJourneyType, proofLevel: IdentityProofingLevel? = null) {

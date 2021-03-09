@@ -24,15 +24,16 @@ Feature: Care Information Exchange Care Plans
   Scenario: A user can follow the link to Find out more about personal health records
     Given I am a user who can view care plans from Care Information Exchange
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fnhsapp-test.devstacks.pkb.io%2Fnhs-login%2Flogin%3FphrPath%3D%252Fauth%252FlistPlans.action%26brand=cie'
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Fauth%2FlistPlans.action%26brand=cie'
     Then I am redirected to the redirector page with the header 'Care plans'
     When I click the link called 'Find out more about personal health record services' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/'
     Then a new tab has been opened by the link
 
   Scenario: A user navigates directly to an external partner site and will see a warning page
     Given I am a user who can view care plans from Care Information Exchange
+    And CIE responds to requests for care plans
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fnhsapp-test.devstacks.pkb.io%2Fnhs-login%2Flogin%3FphrPath%3D%252Fauth%252FlistPlans.action%26brand=cie'
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Fauth%2FlistPlans.action%26brand=cie'
     Then I am redirected to the redirector page with the header 'Care plans'
-    When I click the 'Continue' button on the redirector page with a url starting with 'https://nhsapp-test.devstacks.pkb.io/nhs-login/login?phrPath=%2Fauth%2FlistPlans.action&brand=cie'
-    Then I am navigated to a third party site
+    When I click the 'Continue' button on the redirector page with a url starting with 'http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=/auth/listPlans.action&brand=cie'
+    Then I am navigated to a third party site for CIE

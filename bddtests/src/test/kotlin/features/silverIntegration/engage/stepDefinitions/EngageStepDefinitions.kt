@@ -5,8 +5,11 @@ import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
+import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.pages.EngagePage
+import mocking.thirdPartyProviders.engage.EngageRequestBuilder
 import models.IdentityProofingLevel
 import pages.HealthAdvicePage
 import pages.HybridPageObject
@@ -17,6 +20,7 @@ import utils.SerenityHelpers
 class EngageStepDefinitions : HybridPageObject() {
     private lateinit var redirector: RedirectorPage
     private lateinit var healthAdvicePage: HealthAdvicePage
+    private lateinit var engagePage: EngagePage
 
     @Given("^I am a user who can view Medical Advice from Engage$")
     fun iAmAUserWhoCanViewMedicalAdviceFromEngage() {
@@ -36,6 +40,21 @@ class EngageStepDefinitions : HybridPageObject() {
     @Given("^I am a user who cannot view Admin from Engage$")
     fun iAmAUserWhoCannotViewAdminFromEngage(){
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_ADMIN_NONE)
+    }
+
+    @Given("^Engage responds to requests for admin$")
+    fun engageRespondsToRequestsForAdmin() {
+        MockingClient.instance.forEngage.mock { EngageRequestBuilder().adminRequest().respondWithPage() }
+    }
+
+    @Given("^Engage responds to requests for medical advice")
+    fun engageRespondsToRequestsForMedicalAdvice() {
+        MockingClient.instance.forEngage.mock { EngageRequestBuilder().medicalAdviceRequest().respondWithPage() }
+    }
+
+    @Given("^Engage responds to requests for messages")
+    fun engageRespondsToRequestsForMessages() {
+        MockingClient.instance.forEngage.mock { EngageRequestBuilder().messagesRequest().respondWithPage() }
     }
 
     @Then("^the link to Engage Medical Advice is available on the Advice page$")
@@ -86,6 +105,11 @@ class EngageStepDefinitions : HybridPageObject() {
     fun iAmAUserWhoCannotViewMessagesAndOnlineConsultationsFromEngage() {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_NONE)
     }
+    @Then("^I am navigated to a third party site for Engage$")
+    fun iNavigateToThirdPartySiteForEngage() {
+        engagePage.assertTitleVisible()
+    }
+
 
     private fun setupPatient(configuration: SJRJourneyType, proofLevel: IdentityProofingLevel? = null) {
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(null, configuration, proofLevel)

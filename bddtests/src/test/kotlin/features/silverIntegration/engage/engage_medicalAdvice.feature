@@ -21,8 +21,9 @@ Feature: Engage Medical Advice
 
   Scenario: A user navigates directly to an external partner site and will see a warning page
     Given I am a user who can view Medical Advice from Engage
+    And Engage responds to requests for medical advice
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fnhs1-nhsapp.engage.gp%2F%3Fsso_route%3Dmedical'
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fengage.stubs.local.bitraft.io%3A8080%2F%3Fsso_route%3Dmedical'
     Then I am redirected to the redirector page with the header 'Ask your GP for advice'
-    When I click the 'Continue' button on the redirector page with a url starting with 'https://nhs1-nhsapp.engage.gp/?sso_route=medical'
-    Then I am navigated to a third party site
+    When I click the 'Continue' button on the redirector page with a url starting with 'http://engage.stubs.local.bitraft.io:8080/?sso_route=medical'
+    Then I am navigated to a third party site for Engage

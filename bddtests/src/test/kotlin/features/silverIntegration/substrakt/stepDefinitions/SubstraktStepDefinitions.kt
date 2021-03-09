@@ -4,8 +4,11 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
+import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.pages.SubstraktPage
+import mocking.thirdPartyProviders.substrakt.SubstraktRequestBuilder
 import models.IdentityProofingLevel
 import pages.HybridPageObject
 import pages.RedirectorPage
@@ -18,6 +21,7 @@ class SubstraktStepDefinitions : HybridPageObject() {
     private lateinit var redirector: RedirectorPage
     private lateinit var medicalRecordHubPage: MedicalRecordHubPage
     private lateinit var morePage: MorePage
+    private lateinit var substraktPage: SubstraktPage
 
     @Given("^I am a user who can view Ask Your Gp Surgery a Question from Substrakt$")
     fun iAmAUserWhoCanViewAskYourGpSurgeryAQuestionFromSubstrakt(){
@@ -42,6 +46,27 @@ class SubstraktStepDefinitions : HybridPageObject() {
     @Given("^I am a user who cannot view Update your personal details from Substrakt$")
     fun iAmAUserWhoCannotViewUpdateYourPersonalDetailsFromSubstrakt(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_ACCOUNT_ADMIN_NONE)
+    }
+
+    @Given("^Substrakt responds to requests for messages$")
+    fun substraktRespondsToRequestsForMessages() {
+        MockingClient.instance.forSubstrakt.mock {
+            SubstraktRequestBuilder().substraktMessageRequest().respondWithPage()
+        }
+    }
+
+    @Given("^Substrakt responds to requests for participation$")
+    fun substraktRespondsToRequestsForParticipation() {
+        MockingClient.instance.forSubstrakt.mock {
+            SubstraktRequestBuilder().substraktParticipationRequest().respondWithPage()
+        }
+    }
+
+    @Given("^Substrakt responds to requests for account admin$")
+    fun substraktRespondsToRequestsForAccountAdmin() {
+        MockingClient.instance.forSubstrakt.mock {
+            SubstraktRequestBuilder().substraktAccountAdminRequest().respondWithPage()
+        }
     }
 
     @Then("^the link to Substrakt 'Update your personal details' is not available on the Health Records Hub page$")
@@ -91,6 +116,11 @@ class SubstraktStepDefinitions : HybridPageObject() {
             "Update your personal details\nThis service is provided by Substrakt Health",
             "Your GP surgery or hospital has chosen this personal health record service provider.",
             "Find out more about personal health record services")
+    }
+
+    @Then("^I am navigated to a third party site for Substrakt$")
+    fun iNavigateToThirdPartySiteForSubstrakt() {
+        substraktPage.assertTitleVisible()
     }
 
     private fun setupPatient(configuration: SJRJourneyType, proofLevel: IdentityProofingLevel? = null) {

@@ -4,8 +4,11 @@ import features.serviceJourneyRules.factories.SJRJourneyType
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
+import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.pages.MyCareViewPage
+import mocking.thirdPartyProviders.pkb.MyCareViewRequestBuilder
 import models.IdentityProofingLevel
 import pages.HybridPageObject
 import pages.PrescriptionsHubPage
@@ -17,6 +20,7 @@ import utils.SerenityHelpers
 class PkbMyCareViewStepDefinitions : HybridPageObject() {
     private lateinit var redirector: RedirectorPage
     private lateinit var prescriptionsHubPage: PrescriptionsHubPage
+    private lateinit var myCareViewPage: MyCareViewPage
 
     @Given("^I am a user who can view Medicines from PKB My Care View$")
     fun iAmAUserWhoCanViewMedicinesFromPkbMyCareView() {
@@ -26,6 +30,11 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
     @Given("^I am a user who cannot view Medicines from PKB My Care View$")
     fun iAmAUserWhoCannotViewMedicinesFromMyCareView(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_MEDICINES_NONE)
+    }
+
+    @Given("^My Care View responds to requests for appointments$")
+    fun myCareViewRespondsToRequestsForAppointments() {
+        MockingClient.instance.forMyCareView.mock { MyCareViewRequestBuilder().appointmentsRequest().respondWithPage() }
     }
 
     @Then("^the PKB My Care View Medicines link is available on the Prescriptions Hub$")
@@ -49,6 +58,11 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
                 "Hospital and other medicines\nThis service is provided by MyCareView powered by Patients Know Best",
                 "Your GP surgery or hospital has chosen this personal health record service provider.",
                 "Find out more about personal health record services")
+    }
+
+    @Then("^I am navigated to a third party site for My Care View$")
+    fun iNavigateToThirdPartySiteForMyCareView() {
+        myCareViewPage.assertTitleVisible()
     }
 
     private fun setupPatient(configuration: SJRJourneyType, proofLevel: IdentityProofingLevel? = null) {

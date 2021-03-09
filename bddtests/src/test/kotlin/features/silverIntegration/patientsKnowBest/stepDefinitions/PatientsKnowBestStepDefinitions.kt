@@ -5,8 +5,11 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
+import mocking.MockingClient
+import mocking.thirdPartyProviders.pkb.PKBRequestBuilder
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.pages.PatientKnowsBestPage
 import models.IdentityProofingLevel
 import models.Patient
 import pages.HybridPageObject
@@ -19,10 +22,12 @@ import pages.gpMedicalRecord.MedicalRecordHubPage
 import utils.SerenityHelpers
 
 class PatientsKnowBestStepDefinitions : HybridPageObject() {
+
     private lateinit var medicalRecordHubPage: MedicalRecordHubPage
     private lateinit var redirector: RedirectorPage
     private lateinit var hospitalAppointmentsPage: HospitalAppointmentsPage
     private lateinit var prescriptionsHubPage: PrescriptionsHubPage
+    private lateinit var patientKnowsBestPage: PatientKnowsBestPage
 
     @Given("^I am a user who can view Appointments from Patients Know Best$")
     fun iAmAUserWhoCanViewAppointmentsFromPatientsKnowBest(){
@@ -102,6 +107,41 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
     @Given("^I am a user who cannot view Shared Links from Patients Know Best$")
     fun iAmAUserWhoCannotViewSharedLinksFromPatientsKnowBest(){
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_LIBRARY_NONE)
+    }
+
+    @Given("^PKB responds to requests for appointments$")
+    fun pkbRespondsToRequestsForAppointments() {
+        MockingClient.instance.forPKB.mock { PKBRequestBuilder().appointmentsRequest().respondWithPage() }
+    }
+
+    @Given("^PKB responds to requests for care plans$")
+    fun pkbRespondsToRequestsForCarePlans() {
+        MockingClient.instance.forPKB.mock { PKBRequestBuilder().carePlanRequest().respondWithPage() }
+    }
+
+    @Given("^PKB responds to requests for health tracker$")
+    fun pkbRespondsToRequestsForHealthTracker() {
+        MockingClient.instance.forPKB.mock { PKBRequestBuilder().healthTrackerRequest().respondWithPage() }
+    }
+
+    @Given("^PKB responds to requests for medicines$")
+    fun pkbRespondsToRequestsForMedicines() {
+        MockingClient.instance.forPKB.mock { PKBRequestBuilder().medicinesRequest().respondWithPage() }
+    }
+
+    @Given("^PKB responds to requests for messages$")
+    fun pkbRespondsToRequestsForMessages() {
+        MockingClient.instance.forPKB.mock { PKBRequestBuilder().messagesRequest().respondWithPage() }
+    }
+
+    @Given("^PKB responds to requests for shared links$")
+    fun pkbRespondsToRequestsForSharedLinks() {
+        MockingClient.instance.forPKB.mock { PKBRequestBuilder().sharedLinksRequest().respondWithPage() }
+    }
+
+    @Given("^PKB responds to requests for test results$")
+    fun pkbRespondsToRequestsForTestResults() {
+        MockingClient.instance.forPKB.mock { PKBRequestBuilder().testResultsRequest().respondWithPage() }
     }
 
     @Then("^the link to PKB Track your health is not available on the health record hub page$")
@@ -208,6 +248,11 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
     @Then("^I click the PKB View Medicines link on the Prescriptions hub$")
     fun iClickThePKBViewMedicinesLink(){
         prescriptionsHubPage.pkbMedicinesJumpOffButton.click()
+    }
+
+    @Then("^I am navigated to a third party site for PKB$")
+    fun iNavigateToThirdPartySiteForPKB() {
+        patientKnowsBestPage.assertTitleVisible()
     }
 
     private fun setupPatient(configuration: SJRJourneyType, proofLevel: IdentityProofingLevel? = null) {

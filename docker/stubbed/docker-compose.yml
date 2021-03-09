@@ -35,6 +35,7 @@ services:
       - ./docker/stubbed/env/spine_connectivity.env
       - ./docker/stubbed/env/tpp_connectivity.env
       - ./docker/stubbed/env/vision_connectivity.env
+      - ./docker/stubbed/env/knownservices.env
 
   cid.local.bitraft.io:
     env_file:
@@ -55,3 +56,7 @@ services:
           - uaf.nhslogin.stubs.local.bitraft.io
           - settings.nhslogin.stubs.local.bitraft.io
           - paycasso.stubs.local.bitraft.io
+          - pkb.stubs.local.bitraft.io
+          - engage.stubs.local.bitraft.io
+          - gncr.stubs.local.bitraft.io
+          - substrakt.stubs.local.bitraft.io

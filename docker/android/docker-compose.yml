@@ -23,4 +23,8 @@ services:
         -A /auth.nhslogin.stubs.local.bitraft.io/10.0.2.2 \
         -A /uaf.nhslogin.stubs.local.bitraft.io/10.0.2.2 \
         -A /ers.stubs.local.bitraft.io/10.0.2.2 \
-        -A /paycasso.stubs.local.bitraft.io/10.0.2.2
+        -A /paycasso.stubs.local.bitraft.io/10.0.2.2 \
+        -A /pkb.stubs.local.bitraft.io/10.0.2.2 \
+        -A /engage.stubs.local.bitraft.io/10.0.2.2 \
+        -A /gncr.stubs.local.bitraft.io/10.0.2.2 \
+        -A /substrakt.stubs.local.bitraft.io/10.0.2.2

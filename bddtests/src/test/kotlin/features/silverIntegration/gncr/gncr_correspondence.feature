@@ -24,15 +24,16 @@ Feature: Great North Care Record Correspondence
   Scenario: A user can follow the link to Find out more about hospital and other healthcare letters
     Given I am a user who can view Correspondence from GNCR
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fpepfront.enigmahost.net%2Fcorrespondence'
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fgncr.stubs.local.bitraft.io%3A8080%2Fcorrespondence'
     Then I am redirected to the redirector page with the header 'Hospital and other healthcare letters'
     When I click the link called 'Find out more about personal health record services' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/'
     Then a new tab has been opened by the link
 
   Scenario: A user navigates directly to an external partner site and will see a warning page
     Given I am a user who can view Correspondence from GNCR
+    And GNCR responds to requests for correspondence
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fpepfront.enigmahost.net%2Fcorrespondence'
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fgncr.stubs.local.bitraft.io%3A8080%2Fcorrespondence'
     Then I am redirected to the redirector page with the header 'Hospital and other healthcare letters'
-    When I click the 'Continue' button on the redirector page with a url starting with 'https://pepfront.enigmahost.net/correspondence'
-    Then I am navigated to a third party site
+    When I click the 'Continue' button on the redirector page with a url starting with 'http://gncr.stubs.local.bitraft.io:8080/correspondence'
+    Then I am navigated to a third party site for GNCR

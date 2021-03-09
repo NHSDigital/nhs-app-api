@@ -12,6 +12,13 @@ import mocking.onlineConsultations.OnlineConsultationsMappingBuilder
 import mocking.organDonation.OrganDonationMappingBuilder
 import mocking.qualtrics.QualtricsMappingBuilder
 import mocking.spine.SpineMappingBuilder
+import mocking.thirdPartyProviders.pkb.PKBRequestBuilder
+import mocking.thirdPartyProviders.pkb.CIERequestBuilder
+import mocking.thirdPartyProviders.pkb.MyCareViewRequestBuilder
+import mocking.thirdPartyProviders.pkb.SecondaryCareRequestBuilder
+import mocking.thirdPartyProviders.engage.EngageRequestBuilder
+import mocking.thirdPartyProviders.gncr.GNCRRequestBuilder
+import mocking.thirdPartyProviders.substrakt.SubstraktRequestBuilder
 import mocking.tpp.TppMappingRouter
 import mocking.vision.VisionMappingRouter
 import org.apache.http.HttpStatus
@@ -39,6 +46,14 @@ class MockingClient(configuration: MockingConfiguration) {
     val forTpp = ExternalSupplierMockingClient(TppMappingRouter(), wiremockHelper)
 
     val forExternalSites = ExternalSupplierMockingClient(ExternalSitesMappingBuilder(), wiremockHelper)
+
+    val forPKB = ExternalSupplierMockingClient(PKBRequestBuilder(), wiremockHelper)
+    val forCIE = ExternalSupplierMockingClient(CIERequestBuilder(), wiremockHelper)
+    val forMyCareView = ExternalSupplierMockingClient(MyCareViewRequestBuilder(), wiremockHelper)
+    val forSecondaryCare = ExternalSupplierMockingClient(SecondaryCareRequestBuilder(), wiremockHelper)
+    val forEngage = ExternalSupplierMockingClient(EngageRequestBuilder(), wiremockHelper)
+    val forGNCR = ExternalSupplierMockingClient(GNCRRequestBuilder(), wiremockHelper)
+    val forSubstrakt = ExternalSupplierMockingClient(SubstraktRequestBuilder(), wiremockHelper)
 
     fun favicon() = wiremockHelper.postMapping(FaviconMappingBuilder().respondWithNotFound())
 

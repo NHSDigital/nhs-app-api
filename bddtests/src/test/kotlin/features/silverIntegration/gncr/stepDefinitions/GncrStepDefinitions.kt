@@ -5,8 +5,11 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
+import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.pages.GNCRPage
+import mocking.thirdPartyProviders.gncr.GNCRRequestBuilder
 import models.IdentityProofingLevel
 import pages.HybridPageObject
 import pages.RedirectorPage
@@ -19,6 +22,7 @@ class GncrStepDefinitions : HybridPageObject() {
     private lateinit var redirector: RedirectorPage
     private lateinit var hospitalAppointmentsPage: HospitalAppointmentsPage
     private lateinit var medicalRecordHubPage: MedicalRecordHubPage
+    private lateinit var gncrPage: GNCRPage
 
     @Given("^I am a user who can view Appointments from GNCR$")
     fun iAmAUserWhoCanViewAppointmentsfromGNCR(){
@@ -28,6 +32,16 @@ class GncrStepDefinitions : HybridPageObject() {
     @Given("^I am a user who cannot view Appointments from GNCR$")
     fun iAmAUserWhoCannotViewAppointmentsfromGNCR(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS)
+    }
+
+    @Given("^GNCR responds to requests for appointments$")
+    fun gncrRespondsToRequestsForAppointments() {
+        MockingClient.instance.forGNCR.mock { GNCRRequestBuilder().gncrAppointmentsRequest().respondWithPage() }
+    }
+
+    @Given("^GNCR responds to requests for correspondence$")
+    fun gncrRespondsToRequestsForCorrespondence() {
+        MockingClient.instance.forGNCR.mock { GNCRRequestBuilder().gncrCorrespondenceRequest().respondWithPage() }
     }
 
     @When("^I click the GNCR View Appointments link on the Appointments page")
@@ -74,6 +88,11 @@ class GncrStepDefinitions : HybridPageObject() {
     @Then("^the link to GNCR 'Hospital and other healthcare letters' is not available on the Health Records Hub page$")
     fun theLinkToGNCRCorrespondenceIsNotAvailableOnTheAppointmentsPage() {
         medicalRecordHubPage.getHeaderElement("Hospital and other healthcare letters").assertElementNotPresent()
+    }
+
+    @Then("^I am navigated to a third party site for GNCR$")
+    fun iNavigateToThirdPartySiteForGNCR() {
+        gncrPage.assertTitleVisible()
     }
 
     private fun setupPatient(configuration: SJRJourneyType, proofLevel: IdentityProofingLevel? = null) {

@@ -30,15 +30,16 @@ Feature: Substrakt Patient Participation Groups
   Scenario: A user can follow the link to Find out more about personal health records
     Given I am a user who can view Patient participation groups from Substrakt
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fjump-point.test.substrakthealth.com%2Fjump%2Fjoin-ppg'
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fsubstrakt.stubs.local.bitraft.io%3A8080%2Fjump%2Fjoin-ppg'
     Then I am redirected to the redirector page with the header 'Patient participation groups'
     When I click the link called 'Find out more about personal health record services' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/'
     Then a new tab has been opened by the link
 
   Scenario: A user navigates to an external partner site and will see a warning page
     Given I am a user who can view Patient participation groups from Substrakt
+    And Substrakt responds to requests for participation
     And I am logged in
-    When I navigate to the redirector page with a url of 'redirector?redirect_to=https%3A%2F%2Fjump-point.test.substrakthealth.com%2Fjump%2Fjoin-ppg'
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fsubstrakt.stubs.local.bitraft.io%3A8080%2Fjump%2Fjoin-ppg'
     Then I am redirected to the redirector page with the header 'Patient participation groups'
-    When I click the 'Continue' button on the redirector page with a url starting with 'https://jump-point.test.substrakthealth.com/jump/join-ppg'
-    Then I am navigated to a third party site
+    When I click the 'Continue' button on the redirector page with a url starting with 'http://substrakt.stubs.local.bitraft.io:8080/jump/join-ppg'
+    Then I am navigated to a third party site for Substrakt
