@@ -31,6 +31,7 @@
                     Grid.RowSpan="2"
                     Grid.Column="0"
                     Grid.ColumnSpan="3"
+                    CornerRadius="0"
                     Padding="0"
                     HasShadow="False"
                     BorderColor="{ StaticResource NhsUkYellow }"
