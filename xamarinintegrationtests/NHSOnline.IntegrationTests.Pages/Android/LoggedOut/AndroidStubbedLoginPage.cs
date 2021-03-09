@@ -7,10 +7,13 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
     {
         private AndroidStubbedLoginPage(IAndroidDriverWrapper driver)
         {
+            Navigation = new AndroidSlimCloseNavigation(driver);
             PageContent = new StubbedLoginPageContent(driver.Web(WebViewContext.NhsLogin));
         }
 
         public StubbedLoginPageContent PageContent { get; }
+
+        public AndroidSlimCloseNavigation Navigation { get; }
 
         public static AndroidStubbedLoginPage AssertOnPage(IAndroidDriverWrapper driver)
         {
