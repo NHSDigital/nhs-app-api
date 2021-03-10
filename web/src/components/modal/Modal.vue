@@ -4,8 +4,10 @@
          :class="$style.container"
          role="dialog"
          aria-modal="true">
-      <div :class="$style['reveal-modal']" :style="`max-width: ${maxWidth};`">
-        <component :is="modalContent"/>
+      <div :class="$style['wrapper']" :style="`max-width: ${maxWidth};`">
+        <div :class="$style['reveal-modal']">
+          <component :is="modalContent"/>
+        </div>
       </div>
     </div>
   </div>

@@ -9,16 +9,23 @@
     z-index: 9999;
   }
 
-  .reveal-modal {
-    min-width: 250px;
+  .wrapper {
     width: 80%;
-    background: #ffffff;
+    max-height: 75%;
     margin: 0 auto;
     position: relative;
+    overflow: auto;
     z-index: 99999;
     top: 25%;
-    padding: 30px;
     -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
     -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  }
+
+  .reveal-modal {
+    min-width: 250px;
+    width: 100%;
+    background: #ffffff;
+    z-index: 99999;
+    padding: 30px;
   }
