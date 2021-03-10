@@ -60,3 +60,20 @@ function pull_docker_image () {
       ;;
   esac
 }
+
+function push_docker_image () {
+  local IMAGE_TO_PUSH=$1
+  local MAX_RETRIES=3
+
+  info "Pushing docker image $IMAGE_TO_PUSH"
+  RETRIES=0
+  while ! docker push "$IMAGE_TO_PUSH"; do
+    if [[ $RETRIES -ge $MAX_RETRIES ]]; then
+      die "Failed to push docker image $IMAGE_TO_PUSH"
+    else
+      warn "Failed to push docker image $IMAGE_TO_PUSH"
+    fi
+    RETRIES=$((RETRIES+1))
+    info "Retrying $RETRIES/$MAX_RETRIES"
+  done
+}

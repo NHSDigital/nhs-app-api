@@ -24,6 +24,6 @@ docker build \
 if [ -n "${BRANCH_TAG}" ]
 then
   docker tag "${DOCKER_REGISTRY}/nhsonline-clientloggerapi:${DOCKER_TAG}" "${DOCKER_REGISTRY}/nhsonline-clientloggerapi:${BRANCH_TAG}" || die "Failed to tag ${DOCKER_REGISTRY}/nhsonline-clientloggerapi:${BRANCH_TAG}"
-  docker push "${DOCKER_REGISTRY}/nhsonline-clientloggerapi:${DOCKER_TAG}" || die "Failed to push ${DOCKER_REGISTRY}/nhsonline-clientloggerapi:${DOCKER_TAG}"
-  docker push "${DOCKER_REGISTRY}/nhsonline-clientloggerapi:${BRANCH_TAG}" || die "Failed to push ${DOCKER_REGISTRY}/nhsonline-clientloggerapi:${BRANCH_TAG}"
+  push_docker_image "${DOCKER_REGISTRY}/nhsonline-clientloggerapi:${DOCKER_TAG}"
+  push_docker_image "${DOCKER_REGISTRY}/nhsonline-clientloggerapi:${BRANCH_TAG}"
 fi

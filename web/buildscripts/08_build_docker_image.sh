@@ -26,6 +26,6 @@ docker build \
 if [ -n "${BRANCH_TAG}" ]
 then
   docker tag "${DOCKER_REGISTRY}/nhsonline-web:${DOCKER_TAG}" "${DOCKER_REGISTRY}/nhsonline-web:$BRANCH_TAG" || die "Failed to tag web docker image"
-  docker push "${DOCKER_REGISTRY}/nhsonline-web:${DOCKER_TAG}" || die "Failed to push ${DOCKER_REGISTRY}/nhsonline-web:${DOCKER_TAG}"
-  docker push "${DOCKER_REGISTRY}/nhsonline-web:${BRANCH_TAG}" || die "Failed to push ${DOCKER_REGISTRY}/nhsonline-web:${BRANCH_TAG}"
+  push_docker_image "${DOCKER_REGISTRY}/nhsonline-web:${DOCKER_TAG}"
+  push_docker_image "${DOCKER_REGISTRY}/nhsonline-web:${BRANCH_TAG}"
 fi
