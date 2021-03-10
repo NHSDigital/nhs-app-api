@@ -1,4 +1,4 @@
-namespace NHSOnline.App.iOS.DependencyServices
+namespace NHSOnline.App.Controls.WebViews.Payloads.Paycasso
 {
     public sealed class PaycassoExternalReferences
     {
@@ -7,6 +7,6 @@ namespace NHSOnline.App.iOS.DependencyServices
         public string AppUserId { get; set; } = string.Empty;
         public string DeviceId { get; set; } = string.Empty;
         public string TransactionType { get; set; } = string.Empty;
-        public bool HasNfcJourney { get; set; } = false;
+        public bool HasNfcJourney { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-namespace NHSOnline.App.iOS.DependencyServices
+namespace NHSOnline.App.Controls.WebViews.Payloads.Paycasso
 {
     public sealed class PaycassoTransactionDetails
     {

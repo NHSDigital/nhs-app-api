@@ -1,4 +1,4 @@
-namespace NHSOnline.App.Controls.WebViews
+namespace NHSOnline.App.Controls.WebViews.Payloads
 {
     public interface ISelectMediaRequest
     {

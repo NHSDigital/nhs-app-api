@@ -32,6 +32,8 @@
     <MtouchExtraArgs>
     </MtouchExtraArgs>
     <MtouchLink>None</MtouchLink>
+    <CodesignKey>Apple Development: Andrew White (9JZ6XCR4MP)</CodesignKey>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Release|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Release|iPhoneSimulator' " />
@@ -57,8 +59,6 @@
     <Compile Include="DependencyServices\IosNativeLog.cs" />
     <Compile Include="DependencyServices\IosPaycassoSimulator.cs" />
     <Compile Include="DependencyServices\IosPaycasso.cs" />
-    <Compile Include="DependencyServices\IPaycasso.cs" />
-    <Compile Include="DependencyServices\PaycassoTransactionType.cs" />
     <Compile Include="Effects\SafeAreaPaddingEffectTop.cs" />
     <Compile Include="Effects\SafeAreaPaddingEffectBottom.cs" />
     <Compile Include="Effects\UIDeviceExtensions.cs" />
@@ -67,13 +67,6 @@
     <Compile Include="Renderers\SwipeBackNavigationPageRenderer.cs" />
     <Compile Include="Renderers\WebViews\IProovExtensions.cs" />
     <Compile Include="Renderers\WebViews\NhsLoginUpliftWebViewRenderer.cs" />
-    <Compile Include="DependencyServices\PaycassoCallbackResponse.cs" />
-    <Compile Include="DependencyServices\PaycassoCredentials.cs" />
-    <Compile Include="DependencyServices\PaycassoData.cs" />
-    <Compile Include="DependencyServices\PaycassoDocumentType.cs" />
-    <Compile Include="DependencyServices\PaycassoError.cs" />
-    <Compile Include="DependencyServices\PaycassoExternalReferences.cs" />
-    <Compile Include="DependencyServices\PaycassoTransactionDetails.cs" />
     <Compile Include="Renderers\WebViews\WebViewNavigationDelegate.cs" />
     <Compile Include="Renderers\WebViews\JavascriptBridge.cs" />
     <Compile Include="Renderers\WebViews\NhsAppWebViewRenderer.cs" />
@@ -112,6 +105,10 @@
     <ProjectReference Include="..\NHSOnline.App.Logging\NHSOnline.App.Logging.csproj">
       <Project>{7783bcd8-95f8-4645-95a9-28fef39731ba}</Project>
       <Name>NHSOnline.App.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NHSOnline.App.Threading\NHSOnline.App.Threading.csproj">
+      <Project>{3e4fec39-10ff-479f-a542-48d3fc8d012b}</Project>
+      <Name>NHSOnline.App.Threading</Name>
     </ProjectReference>
     <ProjectReference Include="..\NHSOnline.App\NHSOnline.App.csproj">
       <Project>{61B85797-E631-4EC3-A3CC-6B8DB92A9B01}</Project>

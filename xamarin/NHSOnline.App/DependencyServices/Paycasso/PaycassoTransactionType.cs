@@ -1,4 +1,4 @@
-namespace NHSOnline.App.iOS.DependencyServices
+namespace NHSOnline.App.DependencyServices.Paycasso
 {
     public enum PaycassoTransactionType
     {

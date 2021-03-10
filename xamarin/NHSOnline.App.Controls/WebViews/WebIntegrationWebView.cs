@@ -7,7 +7,9 @@ namespace NHSOnline.App.Controls.WebViews
         public const string JavascriptObjectName = "nhsappNative";
 
         public static readonly BindableProperty RedirectToNhsAppPageCommandProperty =
-            BindableProperty.Create(nameof(RedirectToNhsAppPageCommand), typeof(AsyncCommand<string>),
+            BindableProperty.Create(
+                nameof(RedirectToNhsAppPageCommand),
+                typeof(AsyncCommand<string>),
                 typeof(WebIntegrationWebView));
 
         public AsyncCommand<string> RedirectToNhsAppPageCommand

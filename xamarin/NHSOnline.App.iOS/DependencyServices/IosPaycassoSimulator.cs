@@ -1,6 +1,8 @@
 #if SIMULATOR
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
+[assembly: Dependency(typeof(IosPaycassoSimulator))]
 namespace NHSOnline.App.iOS.DependencyServices
 {
     internal sealed class IosPaycassoSimulator: IPaycasso
