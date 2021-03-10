@@ -56,9 +56,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
         }
 
         private TestLogs Logs { get; }
-        
+
         private AppState RetrieveAppState() => _driver.GetAppState("com.nhs.online.dev.browserstack");
-        
+
         IWebInteractor INativeDriverWrapper.Web(WebViewContext webViewContext)
             => new NativeWebInteractor(_nativeDriverContext, Logs, _driver, webViewContext);
 
@@ -73,7 +73,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
         IIOSInteractor IIOSInteractor.CreateContainedInteractor(By findContainerBy) => _interactor.CreateContainedInteractor(findContainerBy);
         void IIOSInteractor.AssertElementCannotBeFound(By by, string because) => _interactor.AssertElementCannotBeFound(by, because);
 
-        void IIOSDriverWrapper.SwipeBack()
+        WaitForAction IIOSDriverWrapper.SwipeBack()
         {
             _driver.ExecuteScript("mobile: dragFromToForDuration", new Dictionary<string, string>
             {
@@ -83,6 +83,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
                 { "toX", "101" },
                 { "toY", "50" }
             });
+            return new WaitForAction();
         }
 
         void IDriverWrapper.AttachDebugInfo(IDriverCleanupContext context)

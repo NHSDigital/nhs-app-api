@@ -70,7 +70,11 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         void IAndroidInteractor.PressEnterKey()
             => _interactor.PressEnterKey();
 
-        void IAndroidDriverWrapper.PressBackButton() =>_driver.PressKeyCode(AndroidKeyCode.Back);
+        WaitForAction IAndroidDriverWrapper.PressBackButton()
+        {
+            _driver.PressKeyCode(AndroidKeyCode.Back);
+            return new WaitForAction();
+        }
 
         void IAndroidDriverWrapper.AssertNotRunningInForeground()
             => RetrieveAppState().Should().NotBe(AppState.RunningInForeground);
