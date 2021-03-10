@@ -35,6 +35,24 @@ Feature: Linkage Post Key
     And I receive a valid linkage response
     And the IM1 Connection Token is in the cache
 
+
+  Scenario Outline: A repeated <GP System> linkage creation attempt caches the new im1 connection token
+    Given I have valid <GP System> linkage details for posting
+    And no IM1 Connection Token is currently cached
+    When I call the Linkage POST endpoint
+    Then I receive a "Created" success code
+    And I receive a valid linkage response
+    And the IM1 Connection Token is in the cache
+    Given the next <GP System> linkage details creation returns new data to be cached
+    When I call the Linkage POST endpoint
+    Then I receive a "Created" success code
+    And I receive a valid linkage response
+    And the IM1 Connection Token has a different cached value
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+
   Scenario Outline: Linkage request POST for <GP System> returns success with LinkageResponse text
     Given I have valid <GP System> linkage details for posting
     When I call the Linkage POST endpoint

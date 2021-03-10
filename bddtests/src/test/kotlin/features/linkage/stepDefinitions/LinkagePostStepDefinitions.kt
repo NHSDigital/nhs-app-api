@@ -8,6 +8,7 @@ import features.linkage.LinkageResult
 import mockingFacade.linkage.LinkageInformationFacade
 import net.serenitybdd.core.Serenity
 import org.joda.time.DateTime
+import java.util.*
 
 open class LinkagePostStepDefinitions {
 
@@ -15,6 +16,13 @@ open class LinkagePostStepDefinitions {
     fun iHaveValidLinkageDetailsForPosting(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val linkage = LinkageFactory.validLinkage(supplier)
+        LinkageFactory.setLinkageInformation(linkage, LinkageResult.SuccessfullyCreated)
+    }
+
+    @Given("^the next (.*) linkage details creation returns new data to be cached$")
+    fun theNextLinkageDetailsCreationReturnsNewDataToBeCached(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val linkage = LinkageFactory.validLinkage(supplier).copy(cachedData = UUID.randomUUID().toString())
         LinkageFactory.setLinkageInformation(linkage, LinkageResult.SuccessfullyCreated)
     }
 

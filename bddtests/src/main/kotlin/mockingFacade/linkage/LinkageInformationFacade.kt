@@ -9,4 +9,5 @@ data class LinkageInformationFacade(
         var emailAddress: String = "",
         var surname: String = "",
         var dateOfBirth: String = "",
-        var apiKey: String = "")
+        var apiKey: String = "",
+        var cachedData: String ="")

@@ -32,6 +32,11 @@ class TppLinkagePOSTBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST"
                 accountId = linkage.accountId,
                 passphraseToLink = "passphraseToLink"
         )
+
+        if (!linkage.cachedData.isNullOrEmpty()) {
+            reply.passphrase = linkage.cachedData
+        }
+
         val body = JSonXmlConverter.toXML(reply)
 
         return respondWith(HttpStatus.SC_OK) {

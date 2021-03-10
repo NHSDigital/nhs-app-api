@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection.Cache
                 Token = token
             };
 
-            await _repository.Create(record, nameof(Im1CacheRecord));
+            await _repository.CreateOrUpdate(r => r.Key == key, record, nameof(Im1CacheRecord));
         }
 
         public async Task<Option<string>> Get(string key)

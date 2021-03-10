@@ -126,13 +126,18 @@ class Im1ConnectionV2FactoryEmis : Im1ConnectionV2Factory(Supplier.EMIS) {
 
     override fun successfulLinkagePost(linkageInformationFacade: LinkageInformationFacade) {
         endUserSessionSetup()
+        var connectionToken = EmisMockDefaults.patientEmis.connectionToken
+
+        if (!linkageInformationFacade.cachedData.isNullOrEmpty()) {
+            connectionToken = linkageInformationFacade.cachedData
+        }
         mockingClient.forEmis.mock {
             authentication.linkageKeyPOSTRequest(
                     AddNhsUserRequest(
                             linkageInformationFacade.odsCode,
                             linkageInformationFacade.nhsNumber,
                             linkageInformationFacade.emailAddress))
-                    .respondWithSuccessfullyCreated(AddNhsUserResponse(EmisMockDefaults.patientEmis.connectionToken))
+                    .respondWithSuccessfullyCreated(AddNhsUserResponse(connectionToken))
                     .inScenario("LinkageCreation")
                     .willSetStateTo("Linkage key created")
         }
