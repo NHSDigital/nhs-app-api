@@ -6,7 +6,8 @@
                     xmlns:webViews="clr-namespace:NHSOnline.App.Controls.WebViews;assembly=NHSOnline.App.Controls"
                     xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
                     mc:Ignorable="d"
-                    x:Class="NHSOnline.App.Areas.LoggedOut.Views.NhsLoginPage">
+                    x:Class="NHSOnline.App.Areas.LoggedOut.Views.NhsLoginPage"
+                    x:Name="Page">
             
     <webViews:NhsLoginWebView x:Name="WebView" VerticalOptions = "FillAndExpand" />
 

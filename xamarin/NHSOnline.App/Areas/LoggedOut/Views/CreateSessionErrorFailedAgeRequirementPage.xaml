@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorFailedAgeRequirementPage"
              BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}"
-             x:Name="Root">
+             x:Name="Page">
 
     <StackLayout>
 
@@ -16,11 +16,11 @@
 
         <controls:NhsErrorCallout HorizontalOptions="CenterAndExpand" 
                                   LabelText="Error">
-            <StackLayout BindingContext="{x:Reference Name=Root}">
+            <StackLayout>
                 <controls:Paragraph>
                     <FormattedString>
                         <Span Text="Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services. For urgent medical advice, go to " />
-                        <controls:LinkSpan Text="111.nhs.uk" Tapped="{Binding OneOneOneCommand}" />
+                        <controls:LinkSpan Text="111.nhs.uk" Tapped="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
                         <Span Text=" or call 111." />
                     </FormattedString>
                 </controls:Paragraph>

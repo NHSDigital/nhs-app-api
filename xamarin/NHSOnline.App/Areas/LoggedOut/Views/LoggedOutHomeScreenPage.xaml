@@ -9,11 +9,11 @@
              xmlns:icons="clr-namespace:NHSOnline.App.Controls.Icons;assembly=NHSOnline.App.Controls"
              mc:Ignorable="d"
              x:Class="NHSOnline.App.Areas.LoggedOut.Views.LoggedOutHomeScreenPage"
-             x:Name="Root">
+             x:Name="Page">
     
-    <controls:GradientBackground BackgroundColor="{ StaticResource HomeBlueInnerGradient }"
-                                 InnerColour="{ StaticResource HomeBlueInnerGradient }"
-                                 OuterColour="{ StaticResource HomeBlueOuterGradient }"
+    <controls:GradientBackground BackgroundColor="{StaticResource HomeBlueInnerGradient}"
+                                 InnerColour="{StaticResource HomeBlueInnerGradient}"
+                                 OuterColour="{StaticResource HomeBlueOuterGradient}"
                                  Radius="Max" >
         <ContentView.Effects>
             <controls:SafeAreaPaddingTop />
@@ -40,7 +40,7 @@
                      Grid.ColumnSpan="3">
                 <BoxView.GestureRecognizers>
                     <TapGestureRecognizer 
-                        Command="{Binding NhsUkCovidConditionsServiceCommand, Source={x:Reference Name=Root}}" />
+                        Command="{Binding NhsUkCovidConditionsServiceCommand, Source={x:Reference Name=Page}}" />
                 </BoxView.GestureRecognizers>
             </BoxView>
                 
@@ -60,7 +60,7 @@
                     </Label.FormattedText>
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer 
-                            Command="{Binding NhsUkCovidConditionsServiceCommand, Source={x:Reference Name=Root}}" />
+                            Command="{Binding NhsUkCovidConditionsServiceCommand, Source={x:Reference Name=Page}}" />
                     </Label.GestureRecognizers>
             </Label>
             
@@ -71,7 +71,7 @@
                                   HorizontalOptions="End" >
                 <icons:IconArrowRight.GestureRecognizers>
                     <TapGestureRecognizer 
-                        Command="{Binding NhsUkCovidConditionsServiceCommand, Source={x:Reference Name=Root}}" />
+                        Command="{Binding NhsUkCovidConditionsServiceCommand, Source={x:Reference Name=Page}}" />
                 </icons:IconArrowRight.GestureRecognizers>
             </icons:IconArrowRight>
             
@@ -86,7 +86,7 @@
                     AutomationProperties.HelpText="NHS App help icon">
                     <icons:IconHelp.GestureRecognizers>
                         <TapGestureRecognizer 
-                            Command="{Binding NhsUkLoginHelpServiceCommand, Source={x:Reference Name=Root}}" />
+                            Command="{Binding NhsUkLoginHelpServiceCommand, Source={x:Reference Name=Page}}" />
                     </icons:IconHelp.GestureRecognizers>
                 </icons:IconHelp>
                 
@@ -108,7 +108,7 @@
                    Text="Access your NHS services"
                    StyleClass="Heading2"
                    HorizontalOptions="Center"
-                   TextColor="{ StaticResource NhsUkWhite }" 
+                   TextColor="{StaticResource NhsUkWhite}" 
                    Padding="0,10,0,0" />
 
             <controls:NhsLoginButton Grid.Row="3"
@@ -116,15 +116,15 @@
                                      Text="Continue with NHS login"
                                      ButtonColour = "{StaticResource NhsUkWhite}"
                                      PressedButtonColour="{StaticResource NhsUkSecondaryGrey4}"
-                                     TextColour = "{ StaticResource NhsUkBlue }"
-                                     Command="{Binding LoginCommand, Source={x:Reference Name=Root} }"
+                                     TextColour = "{StaticResource NhsUkBlue}"
+                                     Command="{Binding LoginCommand, Source={x:Reference Name=Page}}"
                                      Padding="0,10,0,10" />
             
             <Label Grid.Row="4" 
                    Grid.Column="1"
                    Text="Get advice without logging in"
                    HorizontalOptions="Center"
-                   TextColor="{ StaticResource NhsUkWhite }"
+                   TextColor="{StaticResource NhsUkWhite}"
                    TextDecorations="Underline"
                    FontAttributes="Bold"
                    FontFamily="Frutiger"
@@ -137,7 +137,7 @@
                    HorizontalOptions="Center"
                    FontAttributes="Bold"
                    FontFamily="Frutiger"
-                   TextColor="{ StaticResource NhsUkWhite }"
+                   TextColor="{StaticResource NhsUkWhite}"
                    FontSize="Small"
                    Margin="0,10,0,10" />
         </Grid>

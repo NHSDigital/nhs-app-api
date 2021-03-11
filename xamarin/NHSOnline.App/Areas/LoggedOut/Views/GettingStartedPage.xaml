@@ -7,9 +7,9 @@
                                     xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
                                     mc:Ignorable="d"
                                     x:Class="NHSOnline.App.Areas.LoggedOut.Views.GettingStartedPage"
-                                    x:Name="GettingStarted">
+                                    x:Name="Page">
 
-    <ScrollView BackgroundColor="{ StaticResource NhsUkPageBackgroundGrey }">
+    <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         
         <Grid>
             <Grid.ColumnDefinitions>
@@ -35,15 +35,15 @@
                     <controls:MediumLabel Text="To download the NHS COVID-19 contact tracing app."
                                           Margin="0,5,0,10" />
                     
-                    <controls:LinkLabel LabelTextColour="{ StaticResource NhsUkPrimaryText }"
+                    <controls:LinkLabel LabelTextColour="{StaticResource NhsUkPrimaryText}"
                                         LabelTextDecoration="None"
-                                        Command="{ Binding NhsUkCovidAppCommand, Source={ x:Reference Name=GettingStarted }}">
+                                        Command="{Binding NhsUkCovidAppCommand, Source={x:Reference Name=Page}}">
                         <controls:LinkLabel.FormattedText>
                             <FormattedString>
                                 <Span Text="Go to " />
                                 <Span Text="covid19.nhs.uk" 
                                       TextDecorations="Underline"
-                                      TextColor="{ StaticResource NhsUkPrimaryLinkBlue }" />    
+                                      TextColor="{StaticResource NhsUkPrimaryLinkBlue}" />    
                             </FormattedString>
                         </controls:LinkLabel.FormattedText>
                     </controls:LinkLabel>
@@ -76,11 +76,11 @@
             <controls:Button Grid.Column="1" 
                              Grid.Row="3"
                              Text="Continue"
-                             ButtonColour = "{ StaticResource NhsUkGreen }"
-                             ColourGradient="{ StaticResource ButtonGreenLowerGradient }"
-                             TextColour = "{ StaticResource NhsUkWhite }"
+                             ButtonColour = "{StaticResource NhsUkGreen}"
+                             ColourGradient="{StaticResource ButtonGreenLowerGradient}"
+                             TextColour = "{StaticResource NhsUkWhite}"
                              Margin="0,20,0,0"
-                             Command="{ Binding LoginCommand, Source={ x:Reference Name=GettingStarted }}"
+                             Command="{Binding LoginCommand, Source={x:Reference Name=Page}}"
                              HorizontalOptions="Start" />
         </Grid>
     </ScrollView>

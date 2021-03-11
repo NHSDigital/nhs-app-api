@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <pages:NhsAppFullHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:webViews="clr-namespace:NHSOnline.App.Controls.WebViews;assembly=NHSOnline.App.Controls"
-             xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
-             mc:Ignorable="d"
-             x:Class="NHSOnline.App.Areas.WebIntegration.Views.WebIntegrationPage">
+                            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                            xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+                            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                            xmlns:webViews="clr-namespace:NHSOnline.App.Controls.WebViews;assembly=NHSOnline.App.Controls"
+                            xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
+                            mc:Ignorable="d"
+                            x:Class="NHSOnline.App.Areas.WebIntegration.Views.WebIntegrationPage"
+                            x:Name="Page">
 
     <webViews:WebIntegrationWebView x:Name="WebView"
                                     VerticalOptions="FillAndExpand"
-                                    RedirectToNhsAppPageCommand="{Binding RedirectToNhsAppPageCommand, Source={RelativeSource AncestorType={x:Type pages:NhsAppFullHeaderPage}}}" />
-
+                                    RedirectToNhsAppPageCommand="{Binding RedirectToNhsAppPageCommand, Source={x:Reference Name=Page}}" />
 
 </pages:NhsAppFullHeaderPage>

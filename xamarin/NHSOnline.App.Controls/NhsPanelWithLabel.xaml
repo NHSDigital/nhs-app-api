@@ -18,8 +18,8 @@
         <RelativeLayout Margin="20"
                         VerticalOptions="FillAndExpand">
             <StackLayout RelativeLayout.XConstraint="0"
-                         RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=X, Factor=0, Constant=18 }"
-                         RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1 }"
+                         RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=X, Factor=0, Constant=18}"
+                         RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
                          BackgroundColor="{Binding PanelBackgroundColour, Source={x:Reference Name=Root}}"
                          Margin="0, 0, 0, 18"
                          Padding="10, 32, 10, 10">
@@ -28,8 +28,8 @@
             
             <BoxView HeightRequest="3" BackgroundColor="{Binding PanelHighlightColour, Source={x:Reference Name=Root}}"
                      RelativeLayout.XConstraint="0"
-                     RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=X, Factor=0, Constant=18 }"
-                     RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1 }" />
+                     RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=X, Factor=0, Constant=18}"
+                     RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}" />
         
             <controls:Heading1 Text="{Binding LabelText, Source={x:Reference Name=Root}}"
                    BackgroundColor="{Binding LabelBackgroundColour, Source={x:Reference Name=Root}}"

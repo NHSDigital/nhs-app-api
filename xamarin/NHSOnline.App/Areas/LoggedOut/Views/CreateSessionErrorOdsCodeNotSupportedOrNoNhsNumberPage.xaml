@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberPage"
              BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}"
-             x:Name="Root">
+             x:Name="Page">
 
     <ScrollView>
         <StackLayout>
@@ -17,15 +17,15 @@
 
             <controls:NhsErrorCallout HorizontalOptions="CenterAndExpand" 
                                       LabelText="Error">
-                <StackLayout BindingContext="{x:Reference Name=Root}">
+                <StackLayout>
                     <controls:Heading2 Text="If your GP surgery is in Wales" />
                     <controls:Paragraph Text="The NHS App is not available in Wales because health services are managed separately from England." />
                     <controls:Paragraph>
                         <FormattedString>
                             <Span Text="If you need an appointment or prescription, go to " />
-                            <controls:LinkSpan Text="My Health Online" Tapped="{Binding MyHealthOnlineCommand}" />
+                            <controls:LinkSpan Text="My Health Online" Tapped="{Binding MyHealthOnlineCommand, Source={x:Reference Name=Page}}" />
                             <Span Text=" or contact your GP surgery directly. For urgent medical advice, go to " />
-                            <controls:LinkSpan Text="111.wales.nhs.uk" Tapped="{Binding OneOneOneWalesCommand}" />
+                            <controls:LinkSpan Text="111.wales.nhs.uk" Tapped="{Binding OneOneOneWalesCommand, Source={x:Reference Name=Page}}" />
                             <Span Text=" or call 111." />
                         </FormattedString>
                     </controls:Paragraph>
@@ -35,14 +35,14 @@
                     <controls:Paragraph>
                         <FormattedString>
                             <Span Text="If you need an appointment or prescription, contact your GP surgery directly. For urgent medical advice, go to " />
-                            <controls:LinkSpan Text="111.nhs.uk" Tapped="{Binding OneOneOneCommand}" />
+                            <controls:LinkSpan Text="111.nhs.uk" Tapped="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
                             <Span Text=" or call 111." />
                         </FormattedString>
                     </controls:Paragraph>
                     <controls:Paragraph>
                         <FormattedString>
                             <Span Text="If you still need help to access the app, " />
-                            <controls:LinkSpan Text="contact us" Tapped="{Binding ContactUsCommand}" />
+                            <controls:LinkSpan Text="contact us" Tapped="{Binding ContactUsCommand, Source={x:Reference Name=Page}}" />
                             <Span Text="." />
                         </FormattedString>
                     </controls:Paragraph>
@@ -54,7 +54,7 @@
                     <controls:Paragraph>
                         <FormattedString>
                             <Span Text="Reference: " FontSize="12" />
-                            <Span Text="{Binding ServiceDeskReference}" FontSize="12" />
+                            <Span Text="{Binding ServiceDeskReference, Source={x:Reference Name=Page}}" FontSize="12" />
                         </FormattedString>
                     </controls:Paragraph>
                 </StackLayout>

@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorPage"
              BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}"
-             x:Name="Root">
+             x:Name="Page">
 
     <StackLayout>
 
@@ -16,25 +16,25 @@
 
         <controls:NhsErrorCallout HorizontalOptions="CenterAndExpand" 
                                   LabelText="Error">
-            <StackLayout  BindingContext="{x:Reference Name=Root}">
+            <StackLayout>
                 <controls:Paragraph Text="We cannot log you in to the NHS App." />
                 <controls:Paragraph Text="Go back to the home screen and try logging in again." />
                 <controls:Paragraph>
                     <FormattedString>
                         <Span Text="If you keep seeing this message, contact us. Quote the error code " />
-                        <Span Text="{Binding ServiceDeskReference}" FontAttributes="Bold" />
+                        <Span Text="{Binding ServiceDeskReference, Source={x:Reference Name=Page}}" FontAttributes="Bold" />
                         <Span Text=" to help us resolve the problem more quickly." />
                     </FormattedString>
                 </controls:Paragraph>
                 <controls:Paragraph>
                     <FormattedString>
                         <Span Text="If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to " />
-                        <controls:LinkSpan Text="111.nhs.uk" Tapped="{Binding OneOneOneCommand}" />
+                        <controls:LinkSpan Text="111.nhs.uk" Tapped="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
                         <Span Text=" or call 111." />
                     </FormattedString>
                 </controls:Paragraph>
-                <controls:LinkLabel Text="Contact us" Command="{Binding ContactUsCommand}" />
-                <controls:LinkLabel Text="Back to home" Command="{Binding BackHomeCommand}" />
+                <controls:LinkLabel Text="Contact us" Command="{Binding ContactUsCommand, Source={x:Reference Name=Page}}" />
+                <controls:LinkLabel Text="Back to home" Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />
             </StackLayout>
         </controls:NhsErrorCallout>
 

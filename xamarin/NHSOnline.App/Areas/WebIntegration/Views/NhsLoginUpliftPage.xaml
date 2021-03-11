@@ -5,13 +5,13 @@
                                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                                  xmlns:webViews="clr-namespace:NHSOnline.App.Controls.WebViews;assembly=NHSOnline.App.Controls"
                                  xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
-                                 xmlns:views="clr-namespace:NHSOnline.App.Areas.WebIntegration.Views;assembly=NHSOnline.App"
                                  mc:Ignorable="d"
-                                 x:Class="NHSOnline.App.Areas.WebIntegration.Views.NhsLoginUpliftPage">
+                                 x:Class="NHSOnline.App.Areas.WebIntegration.Views.NhsLoginUpliftPage"
+                                 x:Name="Page">
 
     <webViews:NhsLoginUpliftWebView x:Name="WebView"
-                                    SelectMediaCommand="{Binding SelectMediaCommand, Source={RelativeSource AncestorType={x:Type pages:NhsAppCloseSlimHeaderPage}}}"
-                                    LaunchPaycassoCommand="{Binding LaunchPaycassoCommand, Source={RelativeSource AncestorType={x:Type pages:NhsAppCloseSlimHeaderPage}}}"
+                                    SelectMediaCommand="{Binding SelectMediaCommand, Source={x:Reference Name=Page}}"
+                                    LaunchPaycassoCommand="{Binding LaunchPaycassoCommand, Source={x:Reference Name=Page}}"
                                     VerticalOptions="FillAndExpand" />
 
 </pages:NhsAppCloseSlimHeaderPage>

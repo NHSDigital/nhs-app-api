@@ -6,12 +6,13 @@
              xmlns:webViews="clr-namespace:NHSOnline.App.Controls.WebViews;assembly=NHSOnline.App.Controls"
              xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
              mc:Ignorable="d"
-             x:Class="NHSOnline.App.Areas.Home.Views.NhsAppWebPage">
+             x:Class="NHSOnline.App.Areas.Home.Views.NhsAppWebPage"
+             x:Name="Page">
 
     <webViews:NhsAppWebView x:Name="WebView"
                             VerticalOptions="FillAndExpand"
-                            OpenWebIntegrationCommand="{Binding OpenWebIntegrationCommand, Source={RelativeSource AncestorType={x:Type pages:NhsAppFullHeaderPage}}}"
-                            StartNhsLoginUpliftCommand="{Binding StartNhsLoginUpliftCommand, Source={RelativeSource AncestorType={x:Type pages:NhsAppFullHeaderPage}}}"
-                            GetNotificationsStatusCommand="{Binding GetNotificationsStatusCommand, Source={RelativeSource AncestorType={x:Type pages:NhsAppFullHeaderPage}}}" />
+                            OpenWebIntegrationCommand="{Binding OpenWebIntegrationCommand, Source={x:Reference Name=Page}}"
+                            StartNhsLoginUpliftCommand="{Binding StartNhsLoginUpliftCommand, Source={x:Reference Name=Page}}"
+                            GetNotificationsStatusCommand="{Binding GetNotificationsStatusCommand, Source={x:Reference Name=Page}}" />
     
 </pages:NhsAppFullHeaderPage>

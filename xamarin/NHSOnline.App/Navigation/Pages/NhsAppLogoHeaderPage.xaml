@@ -5,7 +5,7 @@
              xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Navigation.Pages.NhsAppLogoHeaderPage"
              x:Name="Root"
-             BackgroundColor="{StaticResource NhsUkBlue }">
+             BackgroundColor="{StaticResource NhsUkBlue}">
     
     <ContentPage.Content>
         <ContentView>
@@ -14,7 +14,7 @@
                 <controls:SafeAreaPaddingTop />
             </ContentView.Effects>
             
-            <StackLayout BackgroundColor="{StaticResource NhsUkBlue }" 
+            <StackLayout BackgroundColor="{StaticResource NhsUkBlue}" 
                          Spacing="0" 
                          Padding="0,5,0,0">
                 

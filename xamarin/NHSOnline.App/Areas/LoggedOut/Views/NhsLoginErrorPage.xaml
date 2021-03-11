@@ -1,36 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <pages:NhsAppCloseSlimHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
-              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
-             xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
-             mc:Ignorable="d"
-             x:Class="NHSOnline.App.Areas.LoggedOut.Views.NhsLoginErrorPage">
+                                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                                 xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+                                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                                 xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
+                                 xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
+                                 mc:Ignorable="d"
+                                 x:Class="NHSOnline.App.Areas.LoggedOut.Views.NhsLoginErrorPage"
+                                 x:Name="Page">
 
     <StackLayout BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
-        
+
         <controls:Heading1 Text="Login failed"
                            Padding="10,0,0,0" />
-        
+
         <controls:NhsErrorCallout HorizontalOptions="CenterAndExpand" 
                                   LabelText="Error">
-            <StackLayout  BindingContext="{x:Reference Name=Root}">
+            <StackLayout>
                 <controls:Paragraph Text="We cannot get your details from your GP surgery." />
                 <controls:Paragraph Text="Go back to the home screen and try logging in again." />
                 <controls:Paragraph>
                     <FormattedString>
                         <Span Text="If you keep seeing this message, contact us. Quote the error code " />
-                        <Span Text="{Binding ServiceDeskReference}" FontAttributes="Bold" />
+                        <Span Text="{Binding ServiceDeskReference, Source={x:Reference Name=Page}}" FontAttributes="Bold" />
                         <Span Text=" to help us resolve the problem quicker." />
                     </FormattedString>
                 </controls:Paragraph>
                 <controls:Paragraph Text="If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111." />
-                <controls:LinkLabel Text="Contact us" Command="{Binding ContactUsCommand}" />
-                <controls:LinkLabel Text="Back home" Command="{Binding BackHomeCommand}" />
+                <controls:LinkLabel Text="Contact us" Command="{Binding ContactUsCommand, Source={x:Reference Name=Page}}" />
+                <controls:LinkLabel Text="Back home" Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />
             </StackLayout>
         </controls:NhsErrorCallout>
-        
+
     </StackLayout>
 
 </pages:NhsAppCloseSlimHeaderPage>
