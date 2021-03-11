@@ -307,7 +307,7 @@ stages:
             configuration: 'Preview - Release'
             provProfileSecureFile: iOSDevelopmentPreview.mobileprovision
 
-  - ${{ if or(eq(variables['native.xamarin.target'], 'Staging'), eq(variables['source.develop'], 'True'), eq(variables['source.tag'], 'True')) }}:
+  - ${{ if or(eq(variables['native.xamarin.target'], 'Staging'), eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
     - stage: xamarin_staging
       displayName: Build Xamarin Staging Apps
       dependsOn:
@@ -362,7 +362,7 @@ stages:
           parameters:
             target: 'Preview'
 
-  - ${{ if and(or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True')), eq(variables['int.tests.run.native.xamarin'], 'true')) }}:
+  - ${{ if and(or(eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')), eq(variables['int.tests.run.native.xamarin'], 'true')) }}:
     - stage: xamarin_distribute_apps
       displayName: Xamarin Distribute Staging Apps
       dependsOn:
