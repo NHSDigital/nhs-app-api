@@ -40,6 +40,9 @@ namespace NHSOnline.IntegrationTests.UI
             => Error(string.Format(CultureInfo.InvariantCulture, format, args));
         internal void Error(string message) => Log(_error, message);
 
+        internal void ManualTest(string zephyrId, string justification)
+            => _testReport.ManualTest = new ManualTest(zephyrId, justification);
+
         internal void TestDevice(string name, string operatingSystemVersion)
             => _testReport.TestDevice(name, operatingSystemVersion);
 

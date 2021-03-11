@@ -7,6 +7,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <title>NHS Login Stubbed - Uplift</title>
+    <style>
+        label.camera-button {
+            display: inline-block;
+            padding: 12px 24px;
+            color: #fff;
+            font-size: 20px;
+            line-height: 32px;
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+            margin: 0;
+            border: 2px solid #666;
+            background-color: #007f3b;
+        }
+    </style>
+    <script>
+    function updateTextOnFileSelection() {
+        document.getElementById('file-selected').innerText = "File selected";
+    }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -36,9 +56,12 @@
                 <li class="list-group-item">@key: @value</li>
             }
         </ul>
-        <label tabindex="0" for="photo-id-document" role="button" class="camera-button">
-            Choose a file to upload
-            <input type="file" name="image" accept="image/*">
+        <p id="file-selected">No file selected</p>
+        <label tabindex="0" for="file-upload" role="button" class="camera-button">
+            Open photo library
+            
+            <input id="file-upload" type="file" name="image" accept="image/*"
+                   onchange="updateTextOnFileSelection()">
         </label>
     </div>
 </body>

@@ -12,10 +12,10 @@ namespace NHSOnline.IntegrationTests.UI
         {
             var testName = DisplayName ?? testMethod.TestMethodName;
 
-            var testExecutor = new TestExecutor<IAndroidDriverWrapper>(
-                testName,
-                testMethod,
-                (logs, _) => new AndroidDriverWrapper(testName, logs));
+            var testExecution = new AutomatedTestExecution<IAndroidDriverWrapper>(
+                logs => new AndroidDriverWrapper(testName, logs));
+
+            var testExecutor = new TestExecutor(testName, testMethod, testExecution);
 
             return testExecutor.Execute();
         }

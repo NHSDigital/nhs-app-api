@@ -38,6 +38,7 @@ namespace NHSOnline.IntegrationTests.UI.Reporting
 
         public UnitTestOutcome? Outcome { get; set; }
 
+        public ManualTest? ManualTest { get; set; }
         public string? TestFailureMessage { get; set; }
 
         public List<BusinessRule> BusinessRules { get; }

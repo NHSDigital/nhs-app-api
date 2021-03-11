@@ -7,32 +7,30 @@ using OpenQA.Selenium.Appium.iOS;
 
 namespace NHSOnline.IntegrationTests.UI.Components.IOS
 {
-    public sealed class IOSLabel
+    public sealed class IOSSystemLinkLabel
     {
         private readonly IIOSInteractor _interactor;
         private readonly IIOSLocatorStrategy _locatorStrategy;
 
-        private IOSLabel(IIOSInteractor interactor, IIOSLocatorStrategy locatorStrategy)
+        private IOSSystemLinkLabel(IIOSInteractor interactor, IIOSLocatorStrategy locatorStrategy)
         {
             _interactor = interactor;
             _locatorStrategy = locatorStrategy;
         }
 
-        public static IOSLabel WithText(IIOSInteractor interactor, string text)
-            => new IOSLabel(interactor, new TextLocatorStrategy(interactor, text));
+        public static IOSSystemLinkLabel WithText(IIOSInteractor interactor, string text)
+            => new IOSSystemLinkLabel(interactor, new TextLocatorStrategy(interactor, text));
 
-        public static IOSLabel WhichMatches(IIOSInteractor interactor, string pattern)
-            => new IOSLabel(interactor, new MatchesLocatorStrategy(interactor, pattern));
+        public static IOSSystemLinkLabel WhichMatches(IIOSInteractor interactor, string pattern)
+            => new IOSSystemLinkLabel(interactor, new MatchesLocatorStrategy(interactor, pattern));
 
         public void Click() => _interactor.ActOnElementContext(_locatorStrategy.FindBy, context=>context.Element.Click());
 
-        public IOSLabel ScrollIntoView()
-            => new IOSLabel(_interactor, new IOSScrollLocatorStrategy(_interactor, _locatorStrategy));
+        public IOSSystemLinkLabel ScrollIntoView()
+            => new IOSSystemLinkLabel(_interactor, new IOSScrollLocatorStrategy(_interactor, _locatorStrategy));
 
         public void AssertVisible() => _locatorStrategy.ActOnElementContext(
             context => context.Element.Displayed.Should().BeTrue($"a label {_locatorStrategy.Description} should be displayed"));
-
-        public void AssertNotPresent() => _locatorStrategy.AssertCannotBeFound($"a label {_locatorStrategy.Description} should not be displayed");
 
         private sealed class TextLocatorStrategy : IIOSLocatorStrategy
         {
@@ -47,9 +45,10 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
 
             public string Description => $"with text '{_text}'";
 
-            public By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeStaticText' AND value == {_text.QuotePredicateLiteral()}");
+            public By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeCell' AND name == {_text.QuotePredicateLiteral()}");
 
             public void ActOnElementContext(Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action) => _interactor.ActOnElementContext(FindBy, action);
+
             public void AssertCannotBeFound(string because) => _interactor.AssertElementCannotBeFound(FindBy, because);
         }
 
@@ -66,9 +65,10 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
 
             public string Description => $"which matches '{_pattern}'";
 
-            public By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeStaticText' AND value MATCHES {_pattern.QuotePredicateLiteral()}");
+            public By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeCell' AND name MATCHES {_pattern.QuotePredicateLiteral()}");
 
             public void ActOnElementContext(Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action) => _interactor.ActOnElementContext(FindBy, action);
+
             public void AssertCannotBeFound(string because) => _interactor.AssertElementCannotBeFound(FindBy, because);
         }
     }

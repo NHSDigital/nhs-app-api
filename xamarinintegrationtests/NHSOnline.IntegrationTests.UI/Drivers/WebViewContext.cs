@@ -10,12 +10,21 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         // but the web view may persist and should not be reused.
         public static WebViewContext OneOff { get; } = new OneOffWebViewContext();
         public static WebViewContext NhsLogin { get; } = new NhsLoginWebViewContext();
+
+        public static WebViewContext NhsLoginUplift { get; } = new NhsLoginUpliftWebViewContext();
         public static WebViewContext NhsApp { get; } = new NhsAppWebViewContext();
         public static WebViewContext ErsWebIntegration { get; } = new ErsWebIntegrationWebViewContext();
 
         internal abstract void AssertContextReady(IWebDriver driver);
 
         private class OneOffWebViewContext : WebViewContext
+        {
+            internal override void AssertContextReady(IWebDriver driver)
+            {
+            }
+        }
+
+        private class NhsLoginUpliftWebViewContext : WebViewContext
         {
             internal override void AssertContextReady(IWebDriver driver)
             {

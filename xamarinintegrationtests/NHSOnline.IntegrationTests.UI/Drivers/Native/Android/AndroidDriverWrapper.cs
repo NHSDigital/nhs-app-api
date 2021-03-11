@@ -33,7 +33,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 
             options.AddAdditionalCapability("name", testName);
 
-            options.AddAdditionalCapability("autoGrantPermissions", true);
+            options.AddAdditionalCapability("autoGrantPermissions", false);
             options.AddAdditionalCapability("nativeWebScreenshot", true);
             options.AddAdditionalCapability("ensureWebviewsHavePages", true);
 

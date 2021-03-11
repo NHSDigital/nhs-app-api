@@ -27,14 +27,23 @@
         Object.freeze(objectToFreeze);
     }
     
+    function getDevice(i) {
+        return (i % 3 === 0) ? {"name":"Google Pixel 2","operatingSystemVersion":"8.0"} :
+            (i % 3 === 1) ? {"name":"iPhone 8","operatingSystemVersion":"13.0"}: null
+    }
+    
     const TestResults = RealTestResults || Array.from({length: 40}, (_, i) => ({
         "className": "NHSOnline.IntegrationTests.LoggedOut.NhsLoginBackToLoggedOutHomeScreenTests",
         "methodName": "APatientNavigatingBackFromTheNhsLoginJourneyIsShownTheLoggedOutHomeScreenAndroid",
         "displayName": "A Patient Navigating Back From The Nhs Login Journey Is Shown The Logged Out Home Screen Android",
-        "device": (i % 2 === 0) ? {"name":"Google Pixel 2","operatingSystemVersion":"8.0"} : {"name":"iPhone 8","operatingSystemVersion":"13.0"},
+        "device": getDevice(i),
         "browserStackSessionId": null, // Don't fill this in as we don't want to request random things from BrowserStack
         "browserStackSessionUrl": null, // Don't fill this in as we don't want to request random things from BrowserStack
         "shouldRetry": false,
+        "manualTest": (getDevice(i) !== null) ? null : {
+            "zephyrId": "NHSO-13697",
+            "justification": "This cannot run in Browserstack"
+        },
         "outcome": "Passed",
         "businessRules": Array.from({length: i % 3}, (_, j) => ({
             "id": `BR-LOG-${i % 30}.${j}`,
@@ -199,8 +208,8 @@
             ${tests.map(test => html`
                 <tr onclick="${() => onclick(test)}">
                     <td>${test.displayName}</td>
-                    <td>${test.device.name}</td>
-                    <td>${test.device.operatingSystemVersion}</td>
+                    <td>${test.device?.name ?? 'N/A'}</td>
+                    <td>${test.device?.operatingSystemVersion ?? 'N/A'}</td>
                     <td><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></td>
                 </tr>
             `)}
@@ -222,10 +231,12 @@
                 <h4 class="list-group-item-heading">Test Method</h4>
                 <p class="list-group-item-text">${test.methodName}</p>
             </div>
-            <div class="list-group-item">
-                <h4 class="list-group-item-heading">Device</h4>
-                <p class="list-group-item-text">${test.device.name} - ${test.device.operatingSystemVersion}</p>
-            </div>
+            ${ test.device && html`
+                <div class="list-group-item">
+                    <h4 class="list-group-item-heading">Device</h4>
+                    <p class="list-group-item-text">${test.device.name} - ${test.device.operatingSystemVersion}</p>
+                </div>
+            `}
             <div class="list-group-item">
                 <h4 class="list-group-item-heading">Business Rules Tested</h4>
                 <div class="list-group">
@@ -239,23 +250,45 @@
                     `)}
                 </div>
             </div>
-            <a href="${BrowserStackUrl(test)}"
-               target="_blank"
-               class="list-group-item">
-                <h4 class="list-group-item-heading">BrowserStack Session
-                    <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true"></span>
-                </h4>
-            </a>
+            ${ BrowserStackUrl(test) && html`
+                <a href="${BrowserStackUrl(test)}"
+                   target="_blank"
+                   class="list-group-item">
+                    <h4 class="list-group-item-heading">BrowserStack Session
+                        <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true"></span>
+                    </h4>
+                </a>
+            `}
+
+            ${ test.manualTest && html`
+                <div class="list-group-item">
+                    <h4 class="list-group-item-heading">This is a manual test</h4>
+                    <p class="list-group-item-text">${test.manualTest.justification}</p>
+                </div>
+            `}
+
+            ${ test.manualTest && html`
+                <a href="${ZephyrUrl(test.manualTest.zephyrId)}"
+                   target="_blank"
+                   class="list-group-item">
+                    <h4 class="list-group-item-heading">Zephyr ticket
+                        <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true"></span>
+                    </h4>
+                </a>
+            `}
         </div>
     `;
     
     const BrowserStackUrl = (test) => {
         if (test.browserStackSessionUrl) {
             return test.browserStackSessionUrl;
-        } else {
-            return `https://app-automate.browserstack.com/dashboard/v2/search?query=${test.browserStackSessionId}&type=session`
-        }
+        } else if(test.browserStackSessionId) {
+            return `https://app-automate.browserstack.com/dashboard/v2/search?query=${test.browserStackSessionId}&type=session`;
+        } 
+        
+        return null;
     }
+    const ZephyrUrl = (zephyrId) => `https://nhsd-jira.digital.nhs.uk/browse/${zephyrId}`;
     
     class Page extends Component {
         constructor() {
