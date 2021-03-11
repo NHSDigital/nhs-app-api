@@ -1,16 +1,20 @@
-#if SIMULATOR
 using System.Threading.Tasks;
+using NHSOnline.App.Controls.WebViews.Payloads.Paycasso;
+using NHSOnline.App.DependencyServices.Paycasso;
+using NHSOnline.App.iOS.DependencyServices;
 using Xamarin.Forms;
 
+#if SIMULATOR
 [assembly: Dependency(typeof(IosPaycassoSimulator))]
+#endif
 namespace NHSOnline.App.iOS.DependencyServices
 {
     internal sealed class IosPaycassoSimulator: IPaycasso
     {
-        public Task<PaycassoCallbackResponse> Launch(PaycassoData data)
+        public Task<PaycassoResult> Launch(LaunchPaycassoRequest request)
         {
-            return Task.FromResult(PaycassoCallbackResponse.ForError("Paycasso not supported on Simulator"));
+            PaycassoResult paycassoFailedResult = new PaycassoResult.Failure("Paycasso not supported on Simulator");
+            return Task.FromResult(paycassoFailedResult);
         }
     }
 }
-#endif
