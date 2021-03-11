@@ -1,4 +1,3 @@
-using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.iOS;
 
@@ -31,12 +30,11 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             _interactor.AssertElementCannotBeFound(@by, because);
         }
 
-        void IInteractor<IOSDriver<IOSElement>, IOSElement>.ActOnElementContext(
-            By by,
-            Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action)
+        void IInteractor<IOSDriver<IOSElement>, IOSElement>.ActOnDriver(
+            ActOnDriverAction<IOSDriver<IOSElement>, IOSElement> action)
         {
             _nativeDriverContext.SwitchToNativeContext();
-            _interactor.ActOnElementContext(@by, action);
+            _interactor.ActOnDriver(action);
         }
     }
 }

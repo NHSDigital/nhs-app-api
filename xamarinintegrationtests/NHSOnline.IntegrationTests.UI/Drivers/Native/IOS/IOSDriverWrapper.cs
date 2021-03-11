@@ -62,12 +62,11 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
         IWebInteractor INativeDriverWrapper.Web(WebViewContext webViewContext)
             => new NativeWebInteractor(_nativeDriverContext, Logs, _driver, webViewContext);
 
-        void IInteractor<IOSDriver<IOSElement>, IOSElement>.ActOnElementContext(
-            By by,
-            Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action)
+        void IInteractor<IOSDriver<IOSElement>, IOSElement>.ActOnDriver(
+            ActOnDriverAction<IOSDriver<IOSElement>, IOSElement> action)
         {
             _nativeDriverContext.SwitchToNativeContext();
-            _interactor.ActOnElementContext(by, action);
+            _interactor.ActOnDriver(action);
         }
 
         IIOSInteractor IIOSInteractor.CreateContainedInteractor(By findContainerBy) => _interactor.CreateContainedInteractor(findContainerBy);

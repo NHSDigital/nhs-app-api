@@ -82,14 +82,15 @@ Before running the app locally, some entries need to be added to your machine's 
 127.0.0.1 messages.local.bitraft.io
 127.0.0.1 minimock.local.bitraft.io
 127.0.0.1 mongodb.bitraft.io
+127.0.0.1 paycasso.stubs.local.bitraft.io
 127.0.0.1 pfs.local.bitraft.io
 127.0.0.1 servicejourneyrulesapi.local.bitraft.io
+127.0.0.1 settings.nhslogin.stubs.local.bitraft.io
 127.0.0.1 silver.local.bitraft.io
 127.0.0.1 stubs.local.bitraft.io
 127.0.0.1 uaf.nhslogin.stubs.local.bitraft.io
 127.0.0.1 userinfo.local.bitraft.io
 127.0.0.1 users.local.bitraft.io
-127.0.0.1 settings.nhslogin.stubs.local.bitraft.io
 127.0.0.1 web.local.bitraft.io
 ```
 

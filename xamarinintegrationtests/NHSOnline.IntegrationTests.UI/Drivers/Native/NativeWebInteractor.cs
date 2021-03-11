@@ -1,4 +1,3 @@
-using System;
 using OpenQA.Selenium;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers.Native
@@ -30,12 +29,11 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
             _interactor = interactor;
         }
 
-        void IInteractor<IWebDriver, IWebElement>.ActOnElementContext(
-            By by,
-            Action<ElementContext<IWebDriver, IWebElement>> action)
+        void IInteractor<IWebDriver, IWebElement>.ActOnDriver(
+            ActOnDriverAction<IWebDriver, IWebElement> action)
         {
             ChangeContext();
-            _interactor.ActOnElementContext(by, action);
+            _interactor.ActOnDriver(action);
         }
 
         public IWebInteractor CreateContainedInteractor(By findBy)

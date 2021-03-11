@@ -1,4 +1,3 @@
-using System;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace NHSOnline.IntegrationTests.Mongo.TermsAndConditions

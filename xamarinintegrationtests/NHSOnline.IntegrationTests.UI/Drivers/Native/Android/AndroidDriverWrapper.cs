@@ -56,10 +56,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         public IWebInteractor Web(WebViewContext webViewContext)
             => new NativeWebInteractor(_nativeDriverContext, Logs, _driver, webViewContext);
 
-        void IInteractor<AndroidDriver<AndroidElement>, AndroidElement>.ActOnElementContext(
-            By by,
-            Action<ElementContext<AndroidDriver<AndroidElement>, AndroidElement>> action)
-            => _interactor.ActOnElementContext(by, action);
+        void IInteractor<AndroidDriver<AndroidElement>, AndroidElement>.ActOnDriver(
+            ActOnDriverAction<AndroidDriver<AndroidElement>, AndroidElement> action)
+            => _interactor.ActOnDriver(action);
 
         IAndroidInteractor IAndroidInteractor.CreateContainedInteractor(By findContainerBy)
             => _interactor.CreateContainedInteractor(findContainerBy);

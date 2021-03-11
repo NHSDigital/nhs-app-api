@@ -21,16 +21,22 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
             _findElement = findElement;
         }
 
-        internal void ActOnElementContext(By by, Action<ElementContext<TDriver, TElement>> action)
+        internal void ActOnDriver(ActOnDriverAction<TDriver, TElement> action)
         {
             var retryUntil = DateTime.UtcNow.Add(ExtendedTimeout.Value);
 
             while (true)
             {
+                By? attemptedBy = null;
                 try
                 {
-                    var element = _findElement(by);
-                    action(new ElementContext<TDriver, TElement>(_driver, element));
+                    action(
+                        _driver,
+                        by =>
+                        {
+                            attemptedBy = by;
+                            return _findElement(by);
+                        });
                     return;
                 }
                 catch (StaleElementReferenceException e)
@@ -41,15 +47,15 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
                 {
                     _logs.Info("{0}: Retrying", e.Message);
                 }
-                catch (NoSuchElementException e)
+                catch (NoSuchElementException e) when (attemptedBy != null)
                 {
-                    var message = $"No {typeof(TElement).Name} found matching {@by}\n{e.Message}";
+                    var message = $"No {typeof(TElement).Name} found matching {attemptedBy}\n{e.Message}";
                     _logs.Error($"{message}\n{e.StackTrace}");
                     throw new AssertFailedException(message, e);
                 }
-                catch (WebDriverException e)
+                catch (WebDriverException e) when (attemptedBy != null)
                 {
-                    var message = $"Failed to act on {typeof(TElement).Name} matching {by}\n{e.Message}";
+                    var message = $"Failed to act on {typeof(TElement).Name} matching {attemptedBy}\n{e.Message}";
                     _logs.Error($"{message}\n{e.StackTrace}");
                     throw new AssertFailedException(message, e);
                 }
@@ -87,9 +93,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
                 }
             }
         }
-
-        internal void ActOnDriver(Action<TDriver> action) => action(_driver);
-
+        
         internal Interactor<TDriver, TElement> CreateContainedInteractor(By findContainerBy)
         {
             return new(

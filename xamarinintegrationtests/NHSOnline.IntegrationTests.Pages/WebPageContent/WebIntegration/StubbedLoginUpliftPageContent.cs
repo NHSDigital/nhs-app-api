@@ -14,6 +14,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "NHS Login - Uplift");
 
+        private WebLink PaycassoLink => WebLink.WithText(_interactor, "Paycasso");
         private WebFormLabel FileUploadButton => WebFormLabel.WithText(_interactor, "Open photo library");
 
         private WebText FileNotSelected => WebText.WithTagAndText(_interactor, "p", "No file selected");
@@ -31,5 +32,10 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
         }
 
         public void AssertFileSelected() => FileSelected.AssertVisible();
+
+        public void Paycasso()
+        {
+            PaycassoLink.Click();
+        }
     }
 }

@@ -3,8 +3,10 @@ using OpenQA.Selenium;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers
 {
-    public interface IInteractor<TDriver, TElement>
+    internal delegate void ActOnDriverAction<in TDriver, in TElement>(TDriver driver, Func<By, TElement> findElement);
+
+    public interface IInteractor<out TDriver, out TElement>
     {
-        internal void ActOnElementContext(By by, Action<ElementContext<TDriver, TElement>> action);
+        internal void ActOnDriver(ActOnDriverAction<TDriver, TElement> action);
     }
 }

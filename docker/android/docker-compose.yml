@@ -22,4 +22,5 @@ services:
         -A /stubs.local.bitraft.io/10.0.2.2 \
         -A /auth.nhslogin.stubs.local.bitraft.io/10.0.2.2 \
         -A /uaf.nhslogin.stubs.local.bitraft.io/10.0.2.2 \
-        -A /ers.stubs.local.bitraft.io/10.0.2.2
+        -A /ers.stubs.local.bitraft.io/10.0.2.2 \
+        -A /paycasso.stubs.local.bitraft.io/10.0.2.2

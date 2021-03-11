@@ -31,14 +31,15 @@
     </div>
 
     <fieldset>
-        <label for="subject">Insert token</label><br>
+        <label for="token">Insert token</label><br>
         <input type="text" id="token" name="token"><br><br>
 
-        <label for="subject">
+        <label for="paycassoUrl">
             Insert paycasso url<br>
             <small>(optional)</small><br>
         </label>
-        <input type="text" id="paycassoUrl" name="paycassoUrl" value="https://api-london-prod.paycasso.com"><br><br>
+        <input type="text" id="paycassoUrl" name="paycassoUrl"><br>
+        <a onclick="stubs()">Stubs</a> | <a onclick="real()">Real</a><br><br/>
 
         <label for="type">Choose type</label><br>
         <select name="type" id="type">
@@ -59,42 +60,54 @@
         <textarea style="width:100%;" id="response" name="response" rows="10"></textarea>
     </fieldset>
 
-    <script>
-        function startPaycasso() {
-            const token = document.getElementById('token').value;
-            const type = document.getElementById('type').value;
-            const paycassoUrl = document.getElementById('paycassoUrl').value || 'https://api-london-prod.paycasso.com';
-            const transactionType = document.getElementById('transactionType').value;
+<script>
+    function stubs() {
+        document.getElementById('paycassoUrl').value = 'http://paycasso.stubs.local.bitraft.io:8080/';
+        document.getElementById('token').value = '389c276f-bf32-4cb2-a101-7efd6d9043aa';
+    }
 
-            const request = {
-                credentials: {
-                    hostUrl: paycassoUrl,
-                    token: token
-                },
-                externalReferences: {
-                    consumerReference: 'thenhsapp',
-                    transactionReference: 'thenhsapp',
-                    appUserId: 'externalAppUserId',
-                    deviceId: 'externalDeviceId',
-                    transactionType
-                },
-                transactionDetails: {
-                    documentType: type
-                }
-            }
-
-            if (!window.nativeNhsLogin) {
-                alert('This is only supported on native.');
-                return;
-            }
-
-            window.authentication = {
-                paycassoOnSuccess: response => document.getElementById('response').value = JSON.stringify(response, null, 2),
-                paycassoOnFailure: response => document.getElementById('response').value = JSON.stringify(response, null, 2)
-            };
-
-            window.nativeNhsLogin.startPaycasso(JSON.stringify(request));
+    function real() {
+        document.getElementById('paycassoUrl').value = 'https://api-london-prod.paycasso.com';
+        if (document.getElementById('token').value === '389c276f-bf32-4cb2-a101-7efd6d9043aa') {
+            document.getElementById('token').value = '';
         }
-    </script>
+    }
+
+    function startPaycasso() {
+        const token = document.getElementById('token').value;
+        const type = document.getElementById('type').value;
+        const paycassoUrl = document.getElementById('paycassoUrl').value || 'https://api-london-prod.paycasso.com';
+        const transactionType = document.getElementById('transactionType').value;
+
+        const request = {
+            credentials: {
+                hostUrl: paycassoUrl,
+                token: token
+            },
+            externalReferences: {
+                consumerReference: 'thenhsapp',
+                transactionReference: 'thenhsapp',
+                appUserId: 'externalAppUserId',
+                deviceId: 'externalDeviceId',
+                transactionType
+            },
+            transactionDetails: {
+                documentType: type
+            }
+        }
+
+        if (!window.nativeNhsLogin) {
+            alert('This is only supported on native.');
+            return;
+        }
+
+        window.authentication = {
+            paycassoOnSuccess: response => document.getElementById('response').value = JSON.stringify(response, null, 2),
+            paycassoOnFailure: response => document.getElementById('response').value = JSON.stringify(response, null, 2)
+        };
+
+        window.nativeNhsLogin.startPaycasso(JSON.stringify(request));
+    }
+</script>
 </body>
 </html>

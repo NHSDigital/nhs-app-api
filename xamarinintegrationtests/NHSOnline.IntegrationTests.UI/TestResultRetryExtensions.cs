@@ -50,6 +50,11 @@ namespace NHSOnline.IntegrationTests.UI
             @"Appium error: An unknown server-side error occurred while processing the command\. Original error: Did not get any response for atom execution after \d+ms",
             RegexOptions.Compiled);
 
+        // Some BrowserStack iOS devices do not display the camera permissions dialog
+        private static readonly Regex UnableToAccessCamera = new(
+            @"Please go to Settings to provide application access to camera\.",
+            RegexOptions.Compiled);
+
         private static readonly List<(Regex pattern, RetryStatus result)> RetryExceptionMessageRegexes = new()
         {
             (InvalidServiceWebInspectorMessage, RetryStatus.Retry(nameof(InvalidServiceWebInspectorMessage))),
@@ -59,7 +64,8 @@ namespace NHSOnline.IntegrationTests.UI
             (AppNotRunning, RetryStatus.Retry(nameof(AppNotRunning))),
             (IncorrectChromeVersion, RetryStatus.Retry(nameof(IncorrectChromeVersion))),
             (JavascriptLoadFailure, RetryStatus.Retry(nameof(JavascriptLoadFailure))),
-            (AtomExecutionTimeout, RetryStatus.Retry(nameof(AtomExecutionTimeout)))
+            (AtomExecutionTimeout, RetryStatus.Retry(nameof(AtomExecutionTimeout))),
+            (UnableToAccessCamera, RetryStatus.Retry(nameof(UnableToAccessCamera)))
         };
 
         internal static RetryStatus ShouldRetry(this TestResult result, TestLogs logs)

@@ -1,10 +1,9 @@
-using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Android;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 {
-    class AndroidInteractor : IAndroidInteractor
+    internal sealed class AndroidInteractor : IAndroidInteractor
     {
         private readonly NativeDriverContext _nativeDriverContext;
         private readonly Interactor<AndroidDriver<AndroidElement>, AndroidElement> _interactor;
@@ -17,12 +16,11 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             _interactor = createContainedInteractor;
         }
 
-        void IInteractor<AndroidDriver<AndroidElement>, AndroidElement>.ActOnElementContext(
-            By by,
-            Action<ElementContext<AndroidDriver<AndroidElement>, AndroidElement>> action)
+        void IInteractor<AndroidDriver<AndroidElement>, AndroidElement>.ActOnDriver(
+            ActOnDriverAction<AndroidDriver<AndroidElement>, AndroidElement> action)
         {
             _nativeDriverContext.SwitchToNativeContext();
-            _interactor.ActOnElementContext(by, action);
+            _interactor.ActOnDriver(action);
         }
         
         IAndroidInteractor IAndroidInteractor.CreateContainedInteractor(By findContainerBy)
@@ -31,13 +29,13 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         void IAndroidInteractor.PressTabKey()
         {
             _nativeDriverContext.SwitchToNativeContext();
-            _interactor.ActOnDriver(driver => driver.PressKeyCode(AndroidKeyCode.Keycode_TAB));
+            _interactor.ActOnDriver((driver, _) => driver.PressKeyCode(AndroidKeyCode.Keycode_TAB));
         }
 
         void IAndroidInteractor.PressEnterKey()
         {
             _nativeDriverContext.SwitchToNativeContext();
-            _interactor.ActOnDriver(driver => driver.PressKeyCode(AndroidKeyCode.Keycode_ENTER));
+            _interactor.ActOnDriver((driver, _) => driver.PressKeyCode(AndroidKeyCode.Keycode_ENTER));
         }
     }
 }
