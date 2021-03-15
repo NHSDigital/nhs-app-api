@@ -92,7 +92,7 @@ describe('Authorisation Service', () => {
         });
 
         it('will have P5 vector of trust', () => {
-          expect(loginUrl).toContain(`vtr=${encodeURIComponent('["P5.Cp.Cd", "P5.Cp.Ck", "P5.Cm"]')}`);
+          expect(loginUrl).toContain(`vtr=${encodeURIComponent('["P5.Cp.Cd", "P5.Cp.Ck", "P5.Cm", "P9.Cp.Cd", "P9.Cp.Ck", "P9.Cm"]')}`);
         });
       });
 

@@ -95,7 +95,7 @@ class AuthorisationService {
       codeChallengeMethod: 'S256',
       authoriseUrl: this.cidAuthEndpoint,
       fidoAuthResponse,
-      vtr: p5VectorOfTrust ? '["P5.Cp.Cd", "P5.Cp.Ck", "P5.Cm"]' : '["P9.Cp.Cd", "P9.Cp.Ck", "P9.Cm"]',
+      vtr: p5VectorOfTrust ? '["P5.Cp.Cd", "P5.Cp.Ck", "P5.Cm", "P9.Cp.Cd", "P9.Cp.Ck", "P9.Cm"]' : '["P9.Cp.Cd", "P9.Cp.Ck", "P9.Cm"]',
     };
 
     setCookie({
