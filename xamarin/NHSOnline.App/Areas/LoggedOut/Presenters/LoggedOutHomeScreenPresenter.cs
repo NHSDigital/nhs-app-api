@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
@@ -7,8 +6,6 @@ using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
-using Xamarin.Essentials;
-using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.LoggedOut.Presenters
 {
@@ -21,6 +18,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly INhsLoginService _nhsLoginService;
         private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
         private readonly ILifecycle _lifecycle;
+        private readonly IBrowserOverlay _browserOverlay;
 
         public LoggedOutHomeScreenPresenter(
             ILoggedOutHomeScreenView view,
@@ -29,7 +27,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             IUserPreferencesService userPreferencesService,
             INhsLoginService nhsLoginService,
             INhsExternalServicesConfiguration nhsExternalServicesConfiguration,
-            ILifecycle lifecycle)
+            ILifecycle lifecycle,
+            IBrowserOverlay browserOverlay)
         {
             _view = view;
             _logger = logger;
@@ -38,16 +37,17 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _nhsLoginService = nhsLoginService;
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
             _lifecycle = lifecycle;
+            _browserOverlay = browserOverlay;
 
-            view.LoginRequested += ViewOnLoginRequested;
-            view.NhsUkCovidConditionsServicePageRequested += LoadCovidConditionsUrl;
-            view.NhsUkLoginHelpServicePageRequested += LoadLoginHelpUrl;
-            view.BackRequested += BackRequested;
-
-            view.ResetAndShowErrorRequested = ResetAndShowErrorRequested;
+            _view.AppNavigation
+                .RegisterHandler(ViewOnLoginRequested, (v, h) => v.LoginRequested = h)
+                .RegisterHandler(LoadCovidConditionsUrl, (v, h) => v.NhsUkCovidConditionsServicePageRequested = h)
+                .RegisterHandler(LoadLoginHelpUrl, (v, h) => v.NhsUkLoginHelpServicePageRequested = h)
+                .RegisterHandler(BackRequested, (v, h) => v.BackRequested = h)
+                .RegisterHandler(ResetAndShowErrorRequested, (v, h) => v.ResetAndShowErrorRequested = h);
         }
 
-        private async void ViewOnLoginRequested(object sender, EventArgs e)
+        private async Task ViewOnLoginRequested()
         {
             _logger.LogInformation("Login Requested");
 
@@ -61,17 +61,18 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             }
         }
 
-        private void BackRequested(object sender, EventArgs e)
+        private Task BackRequested()
         {
             _logger.LogInformation("Back Requested");
             _lifecycle.CloseApplication();
+            return Task.CompletedTask;
         }
 
         private async Task ShowGettingStartedPage()
         {
             var gettingStartedModel = new GettingStartedModel();
             var gettingStartedPage = _pageFactory.CreatePageFor(gettingStartedModel);
-            await _view.Navigation.PushAsync(gettingStartedPage).PreserveThreadContext();
+            await _view.AppNavigation.Push(gettingStartedPage).PreserveThreadContext();
         }
 
         private async Task ShowNhsLoginPage()
@@ -79,19 +80,23 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var pkceCodes = _nhsLoginService.GeneratePkceCodes();
             var loginModel = new NhsLoginModel(pkceCodes);
             var loginView = _pageFactory.CreatePageFor(loginModel);
-            await _view.Navigation.PushAsync(loginView).PreserveThreadContext();
+            await _view.AppNavigation.Push(loginView).PreserveThreadContext();
         }
 
-        private async void LoadCovidConditionsUrl(object sender, EventArgs e)
+        private async Task LoadCovidConditionsUrl()
         {
             _logger.LogInformation("Accessing covid conditions url");
-            await OpenAppTab(_nhsExternalServicesConfiguration.NhsUkCovidConditionsUrl).PreserveThreadContext();
+            await _browserOverlay
+                .OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkCovidConditionsUrl)
+                .PreserveThreadContext();
         }
 
-        private async void LoadLoginHelpUrl(object sender, EventArgs e)
+        private async Task LoadLoginHelpUrl()
         {
             _logger.LogInformation("Accessing login help url");
-            await OpenAppTab(_nhsExternalServicesConfiguration.NhsUkLoginHelpUrl).PreserveThreadContext();
+            await _browserOverlay
+                .OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkLoginHelpUrl)
+                .PreserveThreadContext();
         }
 
         private Task ResetAndShowErrorRequested()
@@ -99,17 +104,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             // TODO ShowError
             _logger.LogInformation("Showing unexpected error");
             return Task.CompletedTask;
-        }
-
-        private static async Task OpenAppTab(Uri requestedService)
-        {
-            await Browser.OpenAsync(requestedService, new BrowserLaunchOptions
-            {
-                LaunchMode = BrowserLaunchMode.SystemPreferred,
-                TitleMode = BrowserTitleMode.Show,
-                PreferredToolbarColor = (Color) Application.Current.Resources["NhsUkBlue"],
-                PreferredControlColor = (Color) Application.Current.Resources["NhsUkWhite"]
-            }).PreserveThreadContext();
         }
     }
 }

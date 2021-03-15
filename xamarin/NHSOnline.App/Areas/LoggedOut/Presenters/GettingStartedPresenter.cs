@@ -1,9 +1,8 @@
-using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.DependencyInjection;
-using NHSOnline.App.Navigation;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
 
@@ -36,12 +35,13 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _browserOverlay = browserOverlay;
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
 
-            view.LoginRequested += ViewOnLoginRequested;
-            view.NhsUkCovidAppPageRequested += LoadCovidUrl;
-            view.BackRequested += BackRequested;
+            view.AppNavigation
+                .RegisterHandler(ViewOnLoginRequested, (v, h) => v.LoginRequested = h)
+                .RegisterHandler(LoadCovidUrl, (v, h) => v.NhsUkCovidAppPageRequested = h)
+                .RegisterHandler(BackRequested, (v, h) => v.BackRequested = h);
         }
 
-        private async void ViewOnLoginRequested(object sender, EventArgs e)
+        private async Task ViewOnLoginRequested()
         {
             _logger.LogInformation("Login Requested");
 
@@ -51,20 +51,21 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var loginModel = new NhsLoginModel(pkceCodes);
 
             var loginPage = _pageFactory.CreatePageFor(loginModel);
-            await _view.Navigation.ReplaceCurrentPage(loginPage).PreserveThreadContext();
+            await _view.AppNavigation.ReplaceCurrentPage(loginPage).PreserveThreadContext();
         }
 
-        private async void LoadCovidUrl(object sender, EventArgs e)
+        private async Task LoadCovidUrl()
         {
             _logger.LogInformation("Accessing covid url");
-            await _browserOverlay.OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkCovidAppUrl)
+            await _browserOverlay
+                .OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkCovidAppUrl)
                 .PreserveThreadContext();
         }
 
-        private async void BackRequested(object sender, EventArgs e)
+        private async Task BackRequested()
         {
             _logger.LogInformation("Back Requested");
-            await _view.Navigation.PopAsync().PreserveThreadContext();
+            await _view.AppNavigation.Pop().PreserveThreadContext();
         }
     }
 }

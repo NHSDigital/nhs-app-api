@@ -9,7 +9,6 @@ using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Areas.PreHome.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.DependencyInjection;
-using NHSOnline.App.Navigation;
 using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.Areas.LoggedOut.Presenters
@@ -95,7 +94,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var preHomeScreenModel = new NhsAppPreHomeScreenWebModel(sessionCookies);
             var preHomeScreenPage = _pageFactory.CreatePageFor(preHomeScreenModel);
 
-            await _view.Navigation.PopToNewRoot(preHomeScreenPage).PreserveThreadContext();
+            await _view.AppNavigation.PopToNewRoot(preHomeScreenPage).PreserveThreadContext();
         }
 
         private async Task NavigateToFailedPage()
@@ -103,7 +102,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var errorModel = _model.FallbackError();
             var errorPage = _pageFactory.CreatePageFor(errorModel);
 
-            await _view.Navigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
+            await _view.AppNavigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
         }
 
         private async Task NavigateToBadRequestPage(string serviceDeskReference)
@@ -111,7 +110,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var errorModel = _model.BadRequestError(serviceDeskReference);
             var errorPage = _pageFactory.CreatePageFor(errorModel);
 
-            await _view.Navigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
+            await _view.AppNavigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
         }
 
         private async Task NavigateToOdsCodeNotSupportedOrNoNhsNumberPage(string serviceDeskReference)
@@ -119,7 +118,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var errorModel = _model.OdsCodeNotSupportedOrNoNhsNumberError(serviceDeskReference);
             var errorPage = _pageFactory.CreatePageFor(errorModel);
 
-            await _view.Navigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
+            await _view.AppNavigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
         }
 
         private async Task NavigateToFailedAgeRequirementPage(string serviceDeskReference)
@@ -127,7 +126,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var errorModel = _model.FailedAgeRequirementError(serviceDeskReference);
             var errorPage = _pageFactory.CreatePageFor(errorModel);
 
-            await _view.Navigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
+            await _view.AppNavigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
         }
 
         private async Task NavigateToBadResponseFromUpstreamSystemPage(string serviceDeskReference)
@@ -135,7 +134,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var errorModel = _model.BadResponseFromUpstreamSystemError(serviceDeskReference);
             var errorPage = _pageFactory.CreatePageFor(errorModel);
 
-            await _view.Navigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
+            await _view.AppNavigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
         }
 
         private async Task NavigateToUpstreamSystemTimeoutPage(string serviceDeskReference)
@@ -143,7 +142,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var errorModel = _model.UpstreamSystemTimeoutError(serviceDeskReference);
             var errorPage = _pageFactory.CreatePageFor(errorModel);
 
-            await _view.Navigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
+            await _view.AppNavigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
         }
 
         private CookieContainer BuildSessionCookieContainer(UserSession userSession, CookieContainer cookies)

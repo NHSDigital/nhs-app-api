@@ -1,18 +1,18 @@
 using System;
 using System.Threading.Tasks;
-using Xamarin.Forms;
+using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut
 {
-    internal interface ILoggedOutHomeScreenView
+    internal interface ILoggedOutHomeScreenView: INavigationView<ILoggedOutHomeScreenView.IEvents>
     {
-        event EventHandler<EventArgs> LoginRequested;
-        event EventHandler<EventArgs> NhsUkCovidConditionsServicePageRequested;
-        event EventHandler<EventArgs> NhsUkLoginHelpServicePageRequested;
-        event EventHandler<EventArgs> BackRequested;
-
-        Func<Task>? ResetAndShowErrorRequested { get; set; }
-
-        INavigation Navigation { get; }
+        internal interface IEvents
+        {
+            Func<Task>? LoginRequested { get; set; }
+            Func<Task>? NhsUkCovidConditionsServicePageRequested { get; set; }
+            Func<Task>? NhsUkLoginHelpServicePageRequested { get; set; }
+            Func<Task>? BackRequested { get; set; }
+            Func<Task>? ResetAndShowErrorRequested { get; set; }
+        }
     }
 }

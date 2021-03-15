@@ -1,9 +1,8 @@
-using Xamarin.Forms;
+using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut
 {
-    internal interface ICreateSessionView
+    internal interface ICreateSessionView: INavigationView<ICreateSessionView>
     {
-        INavigation Navigation { get; }
     }
 }

@@ -45,16 +45,14 @@
                  Orientation="Vertical">
         <StackLayout Orientation="Horizontal"
                      Margin="0,0,0,5">
-            
-            <icons:IconClose AutomationProperties.IsInAccessibleTree="True">
-                
-                <icons:IconClose.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding CloseCommand, Source={x:Reference Name=Root}}"  />
-                </icons:IconClose.GestureRecognizers>
-                
-            </icons:IconClose>
-            
+
+            <icons:IconClose AutomationProperties.IsInAccessibleTree="True" />
+
             <controls:MediumLabel Text="Close" />
+
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding CloseCommand, Source={x:Reference Name=Root}}"  />
+            </StackLayout.GestureRecognizers>
         </StackLayout>
         
         <StackLayout Orientation="Horizontal"

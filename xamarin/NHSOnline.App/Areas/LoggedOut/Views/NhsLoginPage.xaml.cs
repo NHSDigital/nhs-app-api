@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
+using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.LoggedOut.Views
@@ -12,27 +13,33 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
     public partial class NhsLoginPage: INhsLoginView
     {
         private readonly ILogger _logger;
-
-        public event EventHandler<EventArgs>? BackRequested;
-
-        public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
-        private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
-
-        public Func<Task>? NavigationFailed { get; set; }
-        private AsyncCommand NavigationFailedCommand => new AsyncCommand(() => NavigationFailed);
+        private readonly AppNavigation<INhsLoginView> _appNavigation;
 
         public NhsLoginPage(ILogger<NhsLoginPage> logger)
         {
             _logger = logger;
+            _appNavigation = new AppNavigation<INhsLoginView>(this, Navigation);
 
             InitializeComponent();
 
             AddEventHandlers();
         }
 
+        IAppNavigation<INhsLoginView> INavigationView<INhsLoginView>.AppNavigation => _appNavigation;
+
+        public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
+        private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
+
+        public Func<Task>? NavigationFailed { get; set; }
+        private AsyncCommand NavigationFailedCommand => new AsyncCommand(() => NavigationFailed);
+        
+        public Func<Task>? BackRequested { get; set; }
+        private AsyncCommand BackRequestedCommand => new AsyncCommand(() => BackRequested);
+
         protected override void OnAppearing()
         {
-            base.OnAppearing();
+            _logger.LogInformation("{Method}", nameof(OnAppearing));
+            _appNavigation.EnableHandlers();
 
             RemoveEventHandlers();
             AddEventHandlers();
@@ -40,7 +47,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
 
         protected override void OnDisappearing()
         {
-            base.OnDisappearing();
+            _logger.LogInformation("{Method}", nameof(OnDisappearing));
+            _appNavigation.SuppressHandlers();
 
             RemoveEventHandlers();
         }
@@ -92,7 +100,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
 
         protected override bool OnBackButtonPressed()
         {
-            BackRequested?.Invoke(this, EventArgs.Empty);
+            BackRequestedCommand.Execute(null);
             return true;
         }
     }

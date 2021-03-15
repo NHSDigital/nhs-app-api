@@ -1,13 +1,13 @@
 using System;
 using System.Threading.Tasks;
 using NHSOnline.App.Areas.Cookies;
+using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.PreHome
 {
-    internal interface INhsAppPreHomeScreenWebView : ICookieView
+    internal interface INhsAppPreHomeScreenWebView : INavigationView<INhsAppPreHomeScreenWebView.IEvents>, ICookieView
     {
-        INavigation Navigation { get; }
         Func<Task>? Appearing { get; set; }
         Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
         Func<WebNavigatedEventArgs, Task>? Navigated { get; set; }
@@ -18,5 +18,9 @@ namespace NHSOnline.App.Areas.PreHome
 
         void GoToUri(Uri uri);
         Task SendNotificationsStatus(string status);
+
+        internal interface IEvents
+        {
+        }
     }
 }

@@ -2,22 +2,31 @@ using System;
 using System.ComponentModel;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
+using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.PreHome.Views
 {
     [DesignTimeVisible(false)]
-    public partial class NhsAppPreHomeScreenWebPage : INhsAppPreHomeScreenWebView, IRootPage
+    public partial class NhsAppPreHomeScreenWebPage : INhsAppPreHomeScreenWebView, INhsAppPreHomeScreenWebView.IEvents, IRootPage
     {
-        public NhsAppPreHomeScreenWebPage()
-        {
-            InitializeComponent();
+        private readonly ILogger _logger;
+        private readonly AppNavigation<INhsAppPreHomeScreenWebView.IEvents> _appNavigation;
 
+        public NhsAppPreHomeScreenWebPage(ILogger<NhsAppPreHomeScreenWebPage> logger)
+        {
+            _logger = logger;
+            _appNavigation = new AppNavigation<INhsAppPreHomeScreenWebView.IEvents>(this, Navigation);
+
+            InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
         }
+
+        IAppNavigation<INhsAppPreHomeScreenWebView.IEvents> INavigationView<INhsAppPreHomeScreenWebView.IEvents>.AppNavigation => _appNavigation;
 
         Func<Task>? INhsAppPreHomeScreenWebView.Appearing { get; set; }
 
@@ -43,7 +52,8 @@ namespace NHSOnline.App.Areas.PreHome.Views
 
         protected override void OnAppearing()
         {
-            base.OnAppearing();
+            _logger.LogInformation("{Method}", nameof(OnAppearing));
+            _appNavigation.EnableHandlers();
 
             RemoveEventHandlers();
             AddEventHandlers();
@@ -53,7 +63,8 @@ namespace NHSOnline.App.Areas.PreHome.Views
 
         protected override void OnDisappearing()
         {
-            base.OnDisappearing();
+            _logger.LogInformation("{Method}", nameof(OnDisappearing));
+            _appNavigation.SuppressHandlers();
 
             RemoveEventHandlers();
         }

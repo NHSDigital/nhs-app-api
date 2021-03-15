@@ -2,11 +2,9 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
-using NHSOnline.App.Areas.LoggedOut.Views;
 using NHSOnline.App.Config;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices;
-using NHSOnline.App.Navigation;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
 using Xamarin.Forms;
@@ -40,7 +38,10 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _nhsLoginConfiguration = nhsLoginConfiguration;
             _browserOverlay = browserOverlay;
 
-            AttachEventHandlers();
+            _view.AppNavigation
+                .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (v, h) => v.Navigating = h)
+                .RegisterHandler(ViewOnNavigationFailed, (v, h) => v.NavigationFailed = h)
+                .RegisterHandler(BackRequested, (v, h) => v.BackRequested = h);;
 
             // TODO: NHSO-10323 addresses cookie management in web views
             cookies.Clear();
@@ -48,21 +49,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _loginState = nhsLoginService.BeginLogin(_model.PkceCodes);
             _view.LoadUrlAndNotifyOnRedirect(_loginState.AuthoriseUri, IsRedirect, OnRedirect);
         }
-
-        private void AttachEventHandlers()
-        {
-            _view.Navigating = ViewOnNavigating;
-            _view.NavigationFailed = ViewOnNavigationFailed;
-            _view.BackRequested += BackRequested;
-        }
-
-        private void DetachEventHandlers()
-        {
-            _view.Navigating = null;
-            _view.NavigationFailed = null;
-            _view.BackRequested -= BackRequested;
-        }
-
+        
         private async Task ViewOnNavigating(WebNavigatingEventArgs webNavigatingEventArgs)
         {
             var url = new Uri(webNavigatingEventArgs.Url);
@@ -78,9 +65,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var errorReferenceCode =
                 $"3w{RandomErrorReferenceGenerator.GenerateString(4, "acefghjkmnorstuwxyz3456789")}";
             _logger.LogError($"NHS login navigation failed, error reference {errorReferenceCode} generated");
-
-            DetachEventHandlers();
-
+            
             await NavigateToLoginErrorPage(errorReferenceCode).PreserveThreadContext();
         }
 
@@ -88,8 +73,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async void OnRedirect(Uri redirectUri)
         {
-            DetachEventHandlers();
-
             var result = _loginState.CheckAuthReturn(redirectUri);
             await result.Accept(this).PreserveThreadContext();
         }
@@ -101,7 +84,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var createSessionModel = _model.AuthReturn(authorised.RedirectUri, authorised.AuthCode);
             var createSessionPage = _pageFactory.CreatePageFor(createSessionModel);
 
-            await _view.Navigation.ReplaceCurrentPage(createSessionPage).PreserveThreadContext();
+            await _view.AppNavigation.ReplaceCurrentPage(createSessionPage).PreserveThreadContext();
         }
 
         public async Task Visit(AuthReturnCheckResult.TermsAndConditionsDeclined termsDeclined)
@@ -111,7 +94,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var termsAndConditionsDeclinedModel = new NhsLoginTermsAndConditionsDeclinedModel();
             var termsAndConditionsDeclinedPage = _pageFactory.CreatePageFor(termsAndConditionsDeclinedModel);
 
-            await _view.Navigation.ReplaceCurrentPage(termsAndConditionsDeclinedPage).PreserveThreadContext();
+            await _view.AppNavigation.ReplaceCurrentPage(termsAndConditionsDeclinedPage).PreserveThreadContext();
         }
 
         public async Task Visit(AuthReturnCheckResult.Failed failed)
@@ -129,7 +112,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var nhsLoginErrorModel = _model.NhsLoginFailed(errorReferenceCode);
             var nhsLoginErrorPage = _pageFactory.CreatePageFor(nhsLoginErrorModel);
 
-            await _view.Navigation.ReplaceCurrentPage(nhsLoginErrorPage).PreserveThreadContext();
+            await _view.AppNavigation.ReplaceCurrentPage(nhsLoginErrorPage).PreserveThreadContext();
         }
 
         private bool ShouldOpenInBrowserOverlay(Uri url)
@@ -153,10 +136,10 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             await _browserOverlay.OpenBrowserOverlay(url).PreserveThreadContext();
         }
 
-        private async void BackRequested(object sender, EventArgs e)
+        private async Task BackRequested()
         {
             _logger.LogInformation("Back Requested");
-            await _view.Navigation.PopAsync().PreserveThreadContext();
+            await _view.AppNavigation.Pop().PreserveThreadContext();
         }
     }
 }

@@ -6,7 +6,6 @@ using NHSOnline.App.Areas.Home.Models;
 using NHSOnline.App.Areas.PreHome.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.DependencyInjection;
-using NHSOnline.App.Navigation;
 using NHSOnline.App.Services;
 using Xamarin.Forms;
 
@@ -51,7 +50,7 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             var homePageModel = new NhsAppWebModel(_model.Cookies);
             var homePage = _pageFactory.CreatePageFor(homePageModel);
 
-            await _view.Navigation.PopToNewRoot(homePage).PreserveThreadContext();
+            await _view.AppNavigation.PopToNewRoot(homePage).PreserveThreadContext();
         }
 
         private async Task ViewOnAppearing()
