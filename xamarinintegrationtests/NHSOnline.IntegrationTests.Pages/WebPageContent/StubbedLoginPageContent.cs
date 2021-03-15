@@ -23,6 +23,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebInputSubmit LoginButton => WebInputSubmit.WithText(_interactor, "Login");
 
+        private WebCheckbox LoginTermsAndConditions => WebCheckbox.WithLabel(_interactor, "Show Login Terms and Conditions");
+
         internal void AssertOnPage()
         {
             TitleText.AssertVisible();
@@ -58,6 +60,12 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         public void Covid()
         {
             CovidLink.Click();
+        }
+
+        public void LoginWithLoginTermsAndConditions(Patient patient)
+        {
+            LoginTermsAndConditions.Click();
+            Login(patient);
         }
     }
 }

@@ -101,6 +101,23 @@ namespace NHSOnline.HttpMocks.CitizenId
         }
 
         [Host(AuthHostName)]
+        [HttpGet("terms-and-conditions")]
+        public IActionResult NhsLoginTermsAndConditionsDecisionPage(
+            [FromQuery(Name = "redirect_uri")] string redirect,
+            [FromQuery] string state,
+            [FromQuery] string patientId)
+        {
+            (string AuthHostName, string Redirect, string State, string patientId) model = (AuthHostName, redirect, state, patientId);
+            return View(model);
+        }
+
+        [Host(AuthHostName)]
+        [HttpGet("terms-and-conditions-declined")]
+        public IActionResult TermsAndConditionsDeclined(
+            [FromQuery(Name = "redirect_uri")] string redirect,
+            [FromQuery] string state) => new RedirectResult($"{redirect}?state={state}&error_description=ConsentNotGiven");
+
+        [Host(AuthHostName)]
         [HttpPost("token")]
         public IActionResult Token(string code)
         {

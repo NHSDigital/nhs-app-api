@@ -8,9 +8,15 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <title>NHS Login Stubbed</title>
     <script>
+        function ShowLoginTCsChanged(e)
+        {
+            const loginAction = e.currentTarget.checked ? 'terms-and-conditions' : 'complete-login';
+            document.getElementById('LoginForm').setAttribute('action', loginAction);
+        }
+    
         function Login(patientId) {
-          document.getElementById('PatientId').value = patientId;
-          document.getElementById('Login').click();
+            document.getElementById('PatientId').value = patientId;
+            document.getElementById('Login').click();
         }
     </script>
 </head>
@@ -27,7 +33,9 @@
             <li><a href="http://stubs.local.bitraft.io:8080/nhsuk/covid">Covid</a></li>
         </ul>
         <hr>
-        <form action="complete-login" method="get">
+        <label for="ShowLoginTCs">Show Login Terms and Conditions</label>
+        <input type="checkbox" id="ShowLoginTCs" onchange="ShowLoginTCsChanged(event)">
+        <form action="complete-login" method="get" id="LoginForm">
             <input value="@Model.Redirect" type="hidden" name="redirect_uri">
             <input value="@Model.Redirect" type="hidden" name="state">
             <div class="form-group">
@@ -36,6 +44,7 @@
             </div>
             <input type="submit" id="Login" value="Login">
         </form>
+        <hr>
         <h2>Patients</h2>
         <dl class="list-group">
             @foreach(var (key, value) in Model.Request.Query.SelectMany(q => q.Value.Select(v => (q.Key, v))))

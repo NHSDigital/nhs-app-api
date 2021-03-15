@@ -14,11 +14,11 @@
         <controls:Heading1 Text="You need to accept NHS login terms of use to continue" />
 
         <StackLayout>
-            <controls:Paragraph Text="You cannot use the NHS app if you have not accepted NHS login terms of use." />
+            <controls:Paragraph Text="You cannot use the NHS App if you have not accepted NHS login terms of use." />
             <controls:Paragraph Text="If you need to book an appointment or get a prescription now, contact your GP surgery directly." />
             <controls:Paragraph>
                 <FormattedString>
-                    <Span Text="For urgent medical advice, go to " />
+                    <Span Text="For urgent medical advice, visit " />
                     <controls:LinkSpan Text="111.nhs.uk" Tapped="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
                     <Span Text=" or call 111." />
                 </FormattedString>
