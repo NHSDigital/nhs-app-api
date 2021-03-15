@@ -94,6 +94,10 @@
       <DependentUpon>NhsAppLogoHeaderPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Areas\LoggedOut\Views\NhsLoginTermsAndConditionsDeclinedPage.xaml.cs">
+      <DependentUpon>NhsLoginTermsAndConditionsDeclinedPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

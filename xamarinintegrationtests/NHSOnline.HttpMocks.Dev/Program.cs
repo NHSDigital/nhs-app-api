@@ -27,6 +27,7 @@ namespace NHSOnline.HttpMocks.Dev
                 yield return new P9Patient().WithLogin("UnknownOdsCode").WithUnknownOdsCode();
                 yield return new EmisPatient().WithLogin("EmisPatient").WithName(b => b.FamilyName("EMIS"));
                 yield return new EmisPatient().WithLogin("EmisForbidden").WithBehaviour(new EmisCreateSessionForbiddenBehaviour());
+                yield return new EmisPatient().WithLogin("EmisDeclineTsCs").WithBehaviour(new NhsLoginAuthorizeDeclineTsCsBehaviour());
                 yield return new TppPatient().WithLogin("TppPatient").WithName(b => b.FamilyName("Tpp"));
                 yield return new MicrotestPatient().WithLogin("MicrotestPatient").WithName(b => b.FamilyName("Microtest"));
                 yield return new VisionPatient().WithLogin("VisionPatient").WithName(b => b.FamilyName("Vision"));

@@ -22,6 +22,11 @@ namespace NHSOnline.App.NhsLogin
             public override T Accept<T>(IAuthReturnCheckResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
+        public sealed class TermsAndConditionsDeclined : AuthReturnCheckResult
+        {
+            public override T Accept<T>(IAuthReturnCheckResultVisitor<T> visitor) => visitor.Visit(this);
+        }
+
         public sealed class Failed : AuthReturnCheckResult
         {
             public override T Accept<T>(IAuthReturnCheckResultVisitor<T> visitor) => visitor.Visit(this);

@@ -37,6 +37,12 @@ namespace NHSOnline.App.NhsLogin
                 return new AuthReturnCheckResult.Authorised(_authReturnUri, code);
             }
 
+            var errorDescription = queryString["error_description"];
+            if (errorDescription != null && "ConsentNotGiven".Equals(errorDescription, StringComparison.Ordinal))
+            {
+                return new AuthReturnCheckResult.TermsAndConditionsDeclined();
+            }
+
             if (queryString["error"] != null)
             {
                 var error = queryString["error"];

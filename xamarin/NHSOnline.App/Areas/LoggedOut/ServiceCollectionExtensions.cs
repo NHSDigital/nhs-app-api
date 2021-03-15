@@ -22,7 +22,8 @@ namespace NHSOnline.App.Areas.LoggedOut
                 .AddModelViewPresenter<CreateSessionModel, CreateSessionPage, CreateSessionPresenter>()
                 .AddModelViewPresenter<LoggedOutHomeScreenModel, LoggedOutHomeScreenPage, LoggedOutHomeScreenPresenter>()
                 .AddModelViewPresenter<NhsLoginErrorModel, NhsLoginErrorPage, NhsLoginErrorPresenter>()
-                .AddModelViewPresenter<NhsLoginModel, NhsLoginPage, NhsLoginPresenter>();
+                .AddModelViewPresenter<NhsLoginModel, NhsLoginPage, NhsLoginPresenter>()
+                .AddModelViewPresenter<NhsLoginTermsAndConditionsDeclinedModel, NhsLoginTermsAndConditionsDeclinedPage, NhsLoginTermsAndConditionsDeclinedPresenter>();
         }
     }
 }

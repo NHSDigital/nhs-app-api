@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:NhsAppCloseAndLogoHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
+                                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                                    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+                                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                                    xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
+                                    xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
+                                    mc:Ignorable="d"
+                                    x:Class="NHSOnline.App.Areas.LoggedOut.Views.NhsLoginTermsAndConditionsDeclinedPage"
+                                    x:Name="Page">
+
+    <StackLayout BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}" Padding="20,0,20,20">
+        
+        <controls:Heading1 Text="You need to accept NHS login terms of use to continue" />
+
+        <StackLayout>
+            <controls:Paragraph Text="You cannot use the NHS app if you have not accepted NHS login terms of use." />
+            <controls:Paragraph Text="If you need to book an appointment or get a prescription now, contact your GP surgery directly." />
+            <controls:Paragraph>
+                <FormattedString>
+                    <Span Text="For urgent medical advice, go to " />
+                    <controls:LinkSpan Text="111.nhs.uk" Tapped="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
+                    <Span Text=" or call 111." />
+                </FormattedString>
+            </controls:Paragraph>
+            <controls:LinkLabel Text="Back to home" Command="{Binding BackToHomeCommand, Source={x:Reference Name=Page}}"/>
+        </StackLayout>
+        
+    </StackLayout>
+
+</pages:NhsAppCloseAndLogoHeaderPage>

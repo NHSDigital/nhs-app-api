@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
+using NHSOnline.App.Areas.LoggedOut.Views;
 using NHSOnline.App.Config;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices;
@@ -101,6 +102,16 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var createSessionPage = _pageFactory.CreatePageFor(createSessionModel);
 
             await _view.Navigation.ReplaceCurrentPage(createSessionPage).PreserveThreadContext();
+        }
+
+        public async Task Visit(AuthReturnCheckResult.TermsAndConditionsDeclined termsDeclined)
+        {
+            _logger.LogInformation("NHS Login Terms and Conditions declined");
+
+            var termsAndConditionsDeclinedModel = new NhsLoginTermsAndConditionsDeclinedModel();
+            var termsAndConditionsDeclinedPage = _pageFactory.CreatePageFor(termsAndConditionsDeclinedModel);
+
+            await _view.Navigation.ReplaceCurrentPage(termsAndConditionsDeclinedPage).PreserveThreadContext();
         }
 
         public async Task Visit(AuthReturnCheckResult.Failed failed)
