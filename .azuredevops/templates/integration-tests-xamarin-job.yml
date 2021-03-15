@@ -1,6 +1,7 @@
 jobs:
   - job:
     displayName: Build and Integration Test
+    timeoutInMinutes: 180
     steps:
       - template: set-branch-tag-steps.yml
       - template: docker-login-steps.yml
@@ -49,6 +50,7 @@ jobs:
 
       - task: ShellScript@2
         displayName: Run Integration Tests
+        timeoutInMinutes: 180
         continueOnError: ${{ or(eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['Build.SourceBranch'], 'refs/tags/')) }}
         env:
           BrowserStack__Key: $(browserstack.access.key)

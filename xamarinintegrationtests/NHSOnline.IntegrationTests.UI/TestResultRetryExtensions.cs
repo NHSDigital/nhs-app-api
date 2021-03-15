@@ -6,6 +6,8 @@ namespace NHSOnline.IntegrationTests.UI
 {
     internal static class TestResultRetryExtensions
     {
+        internal const string FailedToCreateDriverMessage = "Failed to create driver";
+
         internal const string DeviceTimeSkewMessage = "device time should be close to the current time";
 
         internal const string AppNotRunningMessage = "application should have been automatically started on test device";
@@ -23,6 +25,11 @@ namespace NHSOnline.IntegrationTests.UI
         // 388660-Error executing adbExec - adb: error: listener 'tcp:9222' not found
         private static readonly Regex AdbErrorListenerNotFound = new(
             @"Appium error: An unknown server-side error occurred while processing the command\. Original error: Error executing adbExec\. .* Stderr: 'adb: error: listener 'tcp:9222' not found'",
+            RegexOptions.Compiled);
+
+        // Failed to create driver
+        private static readonly Regex FailedToCreateDriver = new(
+            Regex.Escape(FailedToCreateDriverMessage),
             RegexOptions.Compiled);
 
         // 390309-Device time in the future
@@ -60,6 +67,7 @@ namespace NHSOnline.IntegrationTests.UI
             (InvalidServiceWebInspectorMessage, RetryStatus.Retry(nameof(InvalidServiceWebInspectorMessage))),
             (UnableToConnectToRenderer, RetryStatus.Retry(nameof(UnableToConnectToRenderer))),
             (AdbErrorListenerNotFound, RetryStatus.Retry(nameof(AdbErrorListenerNotFound))),
+            (FailedToCreateDriver, RetryStatus.Retry(nameof(FailedToCreateDriver))),
             (DeviceTimeSkew, RetryStatus.Retry(nameof(DeviceTimeSkew))),
             (AppNotRunning, RetryStatus.Retry(nameof(AppNotRunning))),
             (IncorrectChromeVersion, RetryStatus.Retry(nameof(IncorrectChromeVersion))),
