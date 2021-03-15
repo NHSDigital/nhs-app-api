@@ -23,7 +23,6 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly IBrowserOverlay _browserOverlay;
         private readonly IPageFactory _pageFactory;
         private readonly INhsAppNavigationHandler _navigationHandler;
-        private readonly ICookieHandler _cookieHandler;
 
         public NhsAppWebPresenter(
             INhsAppWebView view,
@@ -32,8 +31,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             ILogger<NhsAppWebPresenter> logger,
             INhsExternalServicesConfiguration nhsExternalServicesConfiguration,
             IBrowserOverlay browserOverlay,
-            IPageFactory pageFactory,
-            ICookieHandler cookieHandler)
+            IPageFactory pageFactory)
         {
             _view = view;
             _model = model;
@@ -42,7 +40,6 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
             _browserOverlay = browserOverlay;
             _pageFactory = pageFactory;
-            _cookieHandler = cookieHandler;
             _navigationHandler = new NhsAppNavigationHandler(view);
 
             _view.Appearing = ViewOnAppearing;
@@ -66,8 +63,6 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private async Task ViewOnAppearing()
         {
             _view.Appearing = null;
-
-            await _cookieHandler.AddCookies(_view, _config.BaseAddress, _model.Cookies).PreserveThreadContext();
             await DisplayNhsAppWeb().PreserveThreadContext();
         }
 

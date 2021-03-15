@@ -1,6 +1,3 @@
-using System;
-using System.Net;
-using System.Threading.Tasks;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using Xamarin.Forms;
 
@@ -16,8 +13,6 @@ namespace NHSOnline.App.Controls.WebViews
 
         public static readonly BindableProperty GetNotificationsStatusCommandProperty =
             BindableProperty.Create(nameof(GetNotificationsStatusCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
-
-        public Func<Cookie, Task>? SetCookie { get; set; }
 
         public AsyncCommand<OpenWebIntegrationRequest> OpenWebIntegrationCommand
         {

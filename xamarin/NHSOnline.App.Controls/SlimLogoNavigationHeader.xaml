@@ -23,6 +23,7 @@
             <Style TargetType="controls:NhsLogo">
                 <Setter Property="HeightRequest" Value="25" />
                 <Setter Property="WidthRequest" Value="60" />
+                <Setter Property="VerticalOptions" Value="Center" />
                 <Setter Property="Padding" Value="0,0,10,10" />
                 <Setter Property="Margin" Value="0,0,0,0" />
             </Style>

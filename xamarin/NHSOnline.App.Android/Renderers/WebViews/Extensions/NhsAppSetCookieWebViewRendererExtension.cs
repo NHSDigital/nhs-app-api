@@ -12,16 +12,6 @@ namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions
     {
         public void OnElementChanged(ElementChangedEventArgs<WebView> e)
         {
-            if (e.OldElement is NhsAppWebView oldNhsAppWebView)
-            {
-                oldNhsAppWebView.SetCookie = null;
-            }
-
-            if (e.NewElement is NhsAppWebView newNhsAppWebView)
-            {
-                newNhsAppWebView.SetCookie = SetCookie;
-            }
-
             if (e.OldElement is NhsAppPreHomeScreenWebview oldNhsAppPreHomeScreenWebview)
             {
                 oldNhsAppPreHomeScreenWebview.SetCookie = null;

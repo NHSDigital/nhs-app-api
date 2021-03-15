@@ -47,7 +47,7 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
 
         private async Task GoToLoggedInHomeRequested()
         {
-            var homePageModel = new NhsAppWebModel(_model.Cookies);
+            var homePageModel = new NhsAppWebModel();
             var homePage = _pageFactory.CreatePageFor(homePageModel);
 
             await _view.AppNavigation.PopToNewRoot(homePage).PreserveThreadContext();

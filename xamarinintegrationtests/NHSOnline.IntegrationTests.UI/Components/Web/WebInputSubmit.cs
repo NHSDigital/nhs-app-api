@@ -24,7 +24,6 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
                 LabelFindBy,
                 c =>
                 {
-                    ScrollTo();
                     c.Element.Click();
                 });
 
