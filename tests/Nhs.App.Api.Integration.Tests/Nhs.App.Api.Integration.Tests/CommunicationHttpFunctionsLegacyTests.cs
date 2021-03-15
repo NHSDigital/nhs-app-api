@@ -80,7 +80,7 @@ namespace Nhs.App.Api.Integration.Tests
         public async Task CommunicationPost_WithInvalidPayload_Returns400BadRequest(string invalidJson)
         {
             // Arrange
-            using var httpClient = CreateApiKeyHttpClient();
+            using var httpClient = CreateLegacyHttpClient();
 
             var httpContent = new StringContent(invalidJson, Encoding.UTF8, "application/json");
 
@@ -95,7 +95,7 @@ namespace Nhs.App.Api.Integration.Tests
         public async Task CommunicationPost_InvalidApiKey_Returns401Unauthorized()
         {
             // Arrange
-            using var httpClient = CreateApiKeyHttpClient();
+            using var httpClient = CreateLegacyHttpClient();
 
             var stringPayload = BuildValidCommunicationPostBody(_sendToNhsNumbers, "null", ValidAppMessageJson);
             var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
@@ -109,7 +109,7 @@ namespace Nhs.App.Api.Integration.Tests
 
         private static async Task CommunicationPost_ValidTest(string validPayload)
         {
-            using var httpClient = CreateApiKeyHttpClient();
+            using var httpClient = CreateLegacyHttpClient();
 
             var httpContent = new StringContent(validPayload, Encoding.UTF8, "application/json");
 
