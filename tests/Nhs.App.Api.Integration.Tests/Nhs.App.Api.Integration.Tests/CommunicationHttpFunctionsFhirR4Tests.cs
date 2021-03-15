@@ -90,7 +90,7 @@ namespace Nhs.App.Api.Integration.Tests
         public async Task CommunicationPost_InvalidBearerToken_Returns401Unauthorized(EndpointInfo endpoint)
         {
             // Arrange
-            using var httpClient = CreateJwtHttpClient();
+            using var httpClient = CreateHttpClient();
 
             var stringPayload = BuildValidRequestBody();
             var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
@@ -122,7 +122,7 @@ namespace Nhs.App.Api.Integration.Tests
         public async Task CommunicationPost_UnparseablePayload_Returns400BadRequest(EndpointInfo endpoint)
         {
             // Arrange
-            using var httpClient = CreateJwtHttpClient();
+            using var httpClient = CreateHttpClient();
 
             var httpContent = new StringContent("{ bad Json", Encoding.UTF8, "application/json");
             var correlationId = Guid.NewGuid().ToString();
@@ -149,7 +149,7 @@ namespace Nhs.App.Api.Integration.Tests
         public async Task CommunicationPost_ValidJsonInvalidFhirResourceUnknownResourceType_Returns400BadRequest(EndpointInfo endpoint)
         {
             // Arrange
-            using var httpClient = CreateJwtHttpClient();
+            using var httpClient = CreateHttpClient();
 
             var stringPayload = BuildValidRequestBody();
             stringPayload = stringPayload.Replace("\"CommunicationRequest\"", "\"UnknownType\"", StringComparison.OrdinalIgnoreCase);
@@ -180,7 +180,7 @@ namespace Nhs.App.Api.Integration.Tests
         public async Task CommunicationPost_ValidJsonInvalidFhirResourceMissingResourceType_Returns400BadRequest(EndpointInfo endpoint)
         {
             // Arrange
-            using var httpClient = CreateJwtHttpClient();
+            using var httpClient = CreateHttpClient();
 
             var stringPayload = BuildValidRequestBody();
             stringPayload = stringPayload.Replace("\"ResourceType\":", "", StringComparison.OrdinalIgnoreCase);
@@ -212,7 +212,7 @@ namespace Nhs.App.Api.Integration.Tests
         public async Task CommunicationPost_NoCorrelationIdPassed_NoCorrelationIdHeaderInTheResponse(EndpointInfo endpoint)
         {
             // Arrange
-            using var httpClient = CreateJwtHttpClient();
+            using var httpClient = CreateHttpClient();
             var stringPayload = BuildValidRequestBody();
             var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
 
@@ -223,48 +223,10 @@ namespace Nhs.App.Api.Integration.Tests
             response.Headers.ShouldNotContainHeader("X-Correlation-ID");
         }
 
-        /// <summary>
-        /// This test exists to check that any unanticipated errors are shown the default catch-all error content defined in the AssignMessage.CatchallErrorMessage policy.
-        ///
-        /// It does this by making a call to a non-existent path, in the expectation of receiving a 404 response.
-        ///
-        /// In practice, this test is receiving a 429 (too many request) or 500 (internal server error) response status code, but as those also cause the default
-        /// catch-all error content to be shown, the effect is the same.
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        [TestMethod]
-        public async Task CommunicationPost_UnhandledError_ReturnsCatchAllErrorContent()
-        {
-            // Arrange
-            using var httpClient = CreateJwtHttpClient();
-            var correlationId = Guid.NewGuid().ToString();
-
-            // Act
-            var response = await httpClient.PostAsync("unknown_path", new StringContent(""), correlationId);
-
-            // Assert
-            var operationOutcome = await ParseOperationOutcome(response);
-
-            var issue = operationOutcome.Issue.Single();
-            issue.Severity.Should().Be(OperationOutcome.IssueSeverity.Error);
-            issue.Code.Should().Be(OperationOutcome.IssueType.Unknown);
-
-            var coding = issue.Details.Coding.Single();
-            coding.System.Should().Be("https://fhir.nhs.uk/R4/CodeSystem/Spine-ErrorOrWarningCode");
-            coding.Version.Should().Be("1");
-            coding.Code.Should().Be("UNKNOWN_ERROR");
-            coding.Display.Should()
-                .StartWith(
-                    "An unknown error occurred processing this request. Contact us for assistance diagnosing this issue: https://digital.nhs.uk/developer/help-and-support. (Message ID:");
-
-           response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
-        }
-
         private static async Task CommunicationPost_ValidTest(string validPayload, string endpointPath)
         {
             // Arrange, continued.
-            using var httpClient = CreateJwtHttpClient();
+            using var httpClient = CreateHttpClient();
 
             var httpContent = new StringContent(validPayload, Encoding.UTF8, "application/json");
             var correlationId = Guid.NewGuid().ToString();
@@ -360,15 +322,6 @@ namespace Nhs.App.Api.Integration.Tests
             }));
 
             return recipients;
-        }
-
-        private static async Task<OperationOutcome> ParseOperationOutcome(HttpResponseMessage response)
-        {
-            var responseString = await response.Content.ReadAsStringAsync();
-
-            var operationOutcome = new FhirJsonParser().Parse<OperationOutcome>(responseString);
-
-            return operationOutcome;
         }
 
         private static async Task<CommunicationRequest> DeserializeFhirResponseAsync(HttpResponseMessage response)

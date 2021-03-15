@@ -42,11 +42,25 @@ namespace Nhs.App.Api.Integration.Tests.Services
             }
         }
 
-        public async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content, string correlationId = null, string accessToken = null)
+        public async Task<HttpResponseMessage> PostAsync(
+            string requestUri, HttpContent content, string correlationId = null, string accessToken = null)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, requestUri) { Content = content };
+
+            return await SendAsync(request, correlationId, accessToken);
+        }
+
+        public async Task<HttpResponseMessage> GetAsync(
+            string requestUri, string correlationId = null, string accessToken = null)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+
+            return await SendAsync(request, correlationId, accessToken);
+        }
+
+        private async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, string correlationId = null, string accessToken = null)
         {
             accessToken ??= await GetAccessToken();
-
-            var request = new HttpRequestMessage(HttpMethod.Post, requestUri) {Content = content};
 
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
