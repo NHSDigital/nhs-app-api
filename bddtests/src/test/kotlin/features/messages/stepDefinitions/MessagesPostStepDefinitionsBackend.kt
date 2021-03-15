@@ -10,6 +10,9 @@ import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set
 import worker.models.messages.MessageRequest
+import worker.models.messages.SenderContext
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 class MessagesPostStepDefinitionsBackend {
 
@@ -23,14 +26,37 @@ class MessagesPostStepDefinitionsBackend {
         iAmAnApiUserWishingToPostAMessage()
     }
 
-    private fun iAmAnApiUserWishingToPostAMessage(communicationId: String? = null, transmissionId: String? = null) {
+    @Given("^I am an api user wishing to post a message with sender context$")
+    fun iAmAApiUserWishingToPostAMessageWithSenderContext() {
+        iAmAnApiUserWishingToPostAMessage(
+            senderContext = SenderContext(
+                supplierId = "supplierId",
+                communicationId = "communicationId",
+                transmissionId = "transmissionId",
+                communicationCreatedDateTime = Instant.now().truncatedTo(ChronoUnit.MILLIS).toString(),
+                requestReference = "requestReference",
+                campaignId = "campaignId",
+                odsCode = "odsCode",
+                nhsNumber = "nhsNumber",
+                nhsLoginId = "nhsLoginId"
+            )
+        )
+    }
+
+    private fun iAmAnApiUserWishingToPostAMessage(
+        communicationId: String? = null,
+        transmissionId: String? = null,
+        senderContext: SenderContext? = null
+    ) {
         MongoDBConnection.MessagesCollection.clearCache()
         val message = MessageRequest(
-                sender = "Sender One",
-                body = "Message One",
-                communicationId = communicationId,
-                transmissionId = transmissionId,
-                version = MessageVersion.PLAIN_TEXT.value)
+            sender = "Sender One",
+            body = "Message One",
+            communicationId = communicationId,
+            transmissionId = transmissionId,
+            version = MessageVersion.PLAIN_TEXT.value,
+            senderContext = senderContext
+        )
         val nhsLoginId = "0123456789ABCDEF"
         MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
         MessagesSerenityHelpers.EXPECTED_MESSAGE.set(message)
@@ -70,22 +96,25 @@ class MessagesPostStepDefinitionsBackend {
     }
 
     private fun assertInvalidMessageThrowsBadRequest(
-            request: MessageRequest,
-            nhsLoginId: String,
-            invalidParam: String,
-            requestChange: (MessageRequest) -> Unit) {
+        request: MessageRequest,
+        nhsLoginId: String,
+        invalidParam: String,
+        requestChange: (MessageRequest) -> Unit
+    ) {
 
         SerenityHelpers.clearHttpException()
         requestChange.invoke(request)
         MessagesApi.post(request, nhsLoginId)
         val errorResponse = SerenityHelpers.getHttpException()
         Assert.assertNotNull(
-                "An exception was expected but was not returned within the expected time limit. " +
-                        "Invalid Param: $invalidParam"
+            "An exception was expected but was not returned within the expected time limit. " +
+                    "Invalid Param: $invalidParam"
         )
-        Assert.assertEquals("Incorrect status code returned. Invalid Param: $invalidParam",
-                HttpStatus.SC_BAD_REQUEST,
-                errorResponse!!.statusCode)
+        Assert.assertEquals(
+            "Incorrect status code returned. Invalid Param: $invalidParam",
+            HttpStatus.SC_BAD_REQUEST,
+            errorResponse!!.statusCode
+        )
     }
 }
 

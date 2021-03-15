@@ -7,6 +7,7 @@ import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters.regex
 import config.Config
 import org.bson.Document
+import org.bson.json.JsonWriterSettings
 import org.junit.Assert
 import pages.ELEMENT_RETRY_TIME
 import pages.MILLISECONDS_IN_A_SECOND
@@ -34,7 +35,7 @@ class MongoDBConnection(private val collectionName: String, private val host: St
             val documents = collection.find()
             documents.map {
                 document ->
-                val jsonDocument = document.toJson()
+                val jsonDocument = document.toJson(jsonWriterSettings)
                 gsonBuilder.fromJson<T>(jsonDocument, type)
             }.toList()
         }
@@ -46,7 +47,7 @@ class MongoDBConnection(private val collectionName: String, private val host: St
             val documents = collection.find(regex(field, ".*" + Pattern.quote(value) + ".*"))
             documents.map {
                 document ->
-                val jsonDocument = document.toJson()
+                val jsonDocument = document.toJson(jsonWriterSettings)
                 gsonBuilder.fromJson<T>(jsonDocument, type)
             }.toList()
         }
@@ -118,6 +119,11 @@ class MongoDBConnection(private val collectionName: String, private val host: St
         private const val developmentDatabaseName = "development"
         private const val termsAndConditionsCollectionName = "consent"
         private const val auditInfoCollectionName = "audit_info"
+
+        private val jsonWriterSettings = JsonWriterSettings.builder()
+            .dateTimeConverter(JsonDateTimeConverter())
+            .build()
+
         val mongoDateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssz")
 
         val Im1CacheCollection = MongoDBConnection(

@@ -19,6 +19,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
         private readonly ILogger<MessagesController> _logger;
         private readonly IMapper<List<UserMessage>, MessagesResponse> _userMessagesToResponseMapper;
         private readonly IMapper<List<SummaryMessage>, MessagesResponse> _summaryMessagesToResponseMapper;
+        private readonly IMapper<AddMessageRequest, string, UserMessage> _addMessageToUserMessageMapper;
         private readonly IMessagesValidationService _validator;
 
         public MessageService
@@ -27,12 +28,14 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             ILogger<MessagesController> logger,
             IMapper<List<UserMessage>, MessagesResponse> userMessagesToResponseMapper,
             IMapper<List<SummaryMessage>, MessagesResponse> summaryMessagesToResponseMapper,
+            IMapper<AddMessageRequest, string, UserMessage> addMessageToUserMessageMapper,
             IMessagesValidationService validator)
         {
             _messageRepository = messageRepository;
             _logger = logger;
             _userMessagesToResponseMapper = userMessagesToResponseMapper;
             _summaryMessagesToResponseMapper = summaryMessagesToResponseMapper;
+            _addMessageToUserMessageMapper = addMessageToUserMessageMapper;
             _validator = validator;
         }
 
@@ -47,17 +50,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                     return new MessageResult.BadRequest();
                 }
 
-                var userMessage = new UserMessage
-                {
-                    NhsLoginId = nhsLoginId,
-                    Sender = addMessageRequest.Sender,
-                    Version = addMessageRequest.Version,
-                    Body = addMessageRequest.Body,
-                    SentTime = DateTime.UtcNow,
-                    CommunicationId = string.IsNullOrWhiteSpace(addMessageRequest.CommunicationId) ? null : addMessageRequest.CommunicationId,
-                    TransmissionId = string.IsNullOrWhiteSpace(addMessageRequest.TransmissionId) ? null : addMessageRequest.TransmissionId,
-                };
-
+                var userMessage = _addMessageToUserMessageMapper.Map(addMessageRequest, nhsLoginId);
                 var result = await _messageRepository.Create(userMessage);
 
                 return result.Accept(new RepositoryCreateResultVisitor());
@@ -141,7 +134,8 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                     return findResult.Accept(new RepositoryFindMessagePatchResultVisitor());
                 }
 
-                var updateResult = await _messageRepository.UpdateOne(accessToken.Subject, messageId, repositoryUpdates);
+                var updateResult =
+                    await _messageRepository.UpdateOne(accessToken.Subject, messageId, repositoryUpdates);
                 if (!(updateResult is RepositoryUpdateResult<UserMessage>.Updated))
                 {
                     _logger.LogWarning("Message Patch did not update message in repository");
@@ -149,7 +143,8 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                 }
 
                 var record = foundResult.Records.First();
-                return new MessagePatchResult.Updated(record.Id.ToString(), record.CommunicationId, record.TransmissionId);
+                return new MessagePatchResult.Updated(record.Id.ToString(), record.CommunicationId,
+                    record.TransmissionId);
             }
             catch (Exception e)
             {

@@ -31,6 +31,7 @@ namespace NHSOnline.Backend.MessagesApi
             services.AddSingleton<IMessageRepository, MessageRepository>();
             services.AddSingleton<IMapper<List<UserMessage>, MessagesResponse>, MessagesResponseMapper>();
             services.AddSingleton<IMapper<List<SummaryMessage>, MessagesResponse>, MessagesResponseMapper>();
+            services.AddSingleton<IMapper<AddMessageRequest, string, UserMessage>, UserMessageMapper>();
 
             ConfigureUserProfileServices(services);
             ConfigureCitizenIdServices(services);

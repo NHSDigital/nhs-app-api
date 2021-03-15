@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             _mockMessageRepository = new Mock<IMessageRepository>();
             _userMessageId = "fd9fb3db27402da79fe66515"; //24 digit hex regex
 
-            _mockMessagesValidationService = new Mock<IMessagesValidationService>();
+            _mockMessagesValidationService = new Mock<IMessagesValidationService>(MockBehavior.Strict);
 
             var mockLogger = new Mock<ILogger<MessagesController>>();
             var accessTokenString = JwtToken.Generate(new[]
@@ -53,6 +53,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 mockLogger.Object,
                 new Mock<IMapper<List<UserMessage>, MessagesResponse>>().Object,
                 new Mock<IMapper<List<SummaryMessage>, MessagesResponse>>().Object,
+                new Mock<IMapper<AddMessageRequest, string, UserMessage>>().Object,
                 _mockMessagesValidationService.Object);
         }
 

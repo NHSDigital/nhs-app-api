@@ -7,5 +7,6 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
         public string Body { get; set; }
         public string CommunicationId { get; set; }
         public string TransmissionId { get; set; }
+        public AddMessageSenderContext SenderContext { get; set; }
     }
 }

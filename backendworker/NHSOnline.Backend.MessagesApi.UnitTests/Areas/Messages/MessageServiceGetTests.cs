@@ -36,8 +36,10 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 new Claim("nhs_number", "nhsNumber")
             });
 
-            _mockUserMessagesToResponseMapper = new Mock<IMapper<List<UserMessage>, MessagesResponse>>();
-            _mockSummaryMessagesToResponseMapper =new Mock<IMapper<List<SummaryMessage>, MessagesResponse>>();
+            _mockUserMessagesToResponseMapper =
+                new Mock<IMapper<List<UserMessage>, MessagesResponse>>(MockBehavior.Strict);
+            _mockSummaryMessagesToResponseMapper =
+                new Mock<IMapper<List<SummaryMessage>, MessagesResponse>>(MockBehavior.Strict);
 
             _accessToken = AccessToken.Parse(mockLogger.Object, accessTokenString);
 
@@ -46,9 +48,10 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 mockLogger.Object,
                 _mockUserMessagesToResponseMapper.Object,
                 _mockSummaryMessagesToResponseMapper.Object,
+                new Mock<IMapper<AddMessageRequest, string, UserMessage>>().Object,
                 new Mock<IMessagesValidationService>().Object);
         }
-        
+
         [TestMethod]
         public async Task GetMessages_Some()
         {
@@ -146,7 +149,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             var summaryMessage = new SummaryMessage { Body = "Body" };
 
             _mockMessageRepository.Setup(x => x.FindAllForUser(_accessToken.Subject))
-                .ReturnsAsync(new RepositoryFindResult<UserMessage>.Found(new[]{summaryMessage}));
+                .ReturnsAsync(new RepositoryFindResult<UserMessage>.Found(new[] { summaryMessage }));
             _mockSummaryMessagesToResponseMapper.Setup(x => x.Map(It.IsAny<List<SummaryMessage>>())).Returns(response);
 
             // Act

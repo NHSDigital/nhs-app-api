@@ -34,5 +34,9 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
 
         [BsonElement]
         public string TransmissionId { get; set; }
+
+        [BsonElement]
+        public SenderContext SenderContext { get; set; }
+
     }
 }
