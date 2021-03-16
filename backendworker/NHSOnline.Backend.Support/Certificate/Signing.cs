@@ -25,15 +25,15 @@ namespace NHSOnline.Backend.Support.Certificate
             _logger = logger;
         }
 
-        public SigningCredentials GetSigningCredentials(string certPrefix)
+        public SigningCredentials GetSigningCredentials(string signingKeyPrefix)
         {
             try
             {
-                var certPath = _configuration.GetOrWarn($"{certPrefix}_CERT_PATH", _logger);
-                var password = _configuration.GetOrWarn($"{certPrefix}_CERT_PASSPHRASE", _logger);
-                _logger.LogInformation("{prefix}_CERT_PATH: {path}", certPrefix, certPath);
+                var signingKey = _configuration.GetOrWarn($"{signingKeyPrefix}_SIGNING_KEY", _logger);
+                var password = _configuration.GetOrWarn($"{signingKeyPrefix}_SIGNING_KEY_PASSPHRASE", _logger);
+                _logger.LogInformation("{prefix}_SIGNING_KEY: {path}", signingKeyPrefix, signingKey);
 
-                var certificate = _certificateService.GetCertificate(certPath, password);
+                var certificate = _certificateService.GetCertificate(signingKey, password);
 
                 var key = new X509SecurityKey(certificate);
 

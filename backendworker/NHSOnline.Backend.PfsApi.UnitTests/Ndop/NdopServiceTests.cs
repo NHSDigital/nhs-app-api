@@ -7,7 +7,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.PfsApi.Ndop;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Certificate;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Ndop
@@ -20,7 +19,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Ndop
         private Mock<ISigning> _signing;
         private Mock<Microsoft.Extensions.Configuration.IConfiguration> _configuration;
 
-        private const string CertPrefix = "NDOP";
+        private const string Prefix = "NDOP";
 
         [TestInitialize]
         public void TestInitialize()
@@ -40,14 +39,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Ndop
         public void GetToken_WhenCalledAndErrorCreatingSigningCredentials_ReturnsInternalServerErrorResponse()
         {
             // Arrange
-            _signing.Setup(x => x.GetSigningCredentials(CertPrefix)).Returns(() => null);
+            _signing.Setup(x => x.GetSigningCredentials(Prefix)).Returns(() => null);
             const string testNhsNumber = "123456789";
 
             // Act
             var ndopResponse = _ndopService.GetJwtToken(testNhsNumber);
 
             // Assert
-            _signing.Verify(x => x.GetSigningCredentials(CertPrefix));
+            _signing.Verify(x => x.GetSigningCredentials(Prefix));
             ndopResponse.Should().BeOfType<GetNdopResult.InternalServerError>();
         }
 
@@ -55,14 +54,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Ndop
         public void GetToken_WhenCalledAndExceptionOccursCreatingSigningCredentials_ReturnsInternalServerErrorResponse()
         {
             // Arrange
-            _signing.Setup(x => x.GetSigningCredentials(CertPrefix)).Throws<Exception>();
+            _signing.Setup(x => x.GetSigningCredentials(Prefix)).Throws<Exception>();
             const string testNhsNumber = "123456789";
 
             // Act
             var ndopResponse = _ndopService.GetJwtToken(testNhsNumber);
 
             // Assert
-            _signing.Verify(x => x.GetSigningCredentials(CertPrefix));
+            _signing.Verify(x => x.GetSigningCredentials(Prefix));
             ndopResponse.Should().BeOfType<GetNdopResult.InternalServerError>();
         }
 
@@ -77,13 +76,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Ndop
             var credentials = new SigningCredentials
                 (securityKey, SecurityAlgorithms.HmacSha256);
 
-            _signing.Setup(x => x.GetSigningCredentials(CertPrefix)).Returns(() => credentials);
+            _signing.Setup(x => x.GetSigningCredentials(Prefix)).Returns(() => credentials);
 
             // Act
             var ndopResponse = _ndopService.GetJwtToken(testNhsNumber);
 
             // Assert
-            _signing.Verify(x => x.GetSigningCredentials(CertPrefix));
+            _signing.Verify(x => x.GetSigningCredentials(Prefix));
             ndopResponse.Should().BeOfType<GetNdopResult.Success>();
         }
 
@@ -101,7 +100,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Ndop
             var credentials = new SigningCredentials
                 (securityKey, SecurityAlgorithms.HmacSha256);
 
-            _signing.Setup(x => x.GetSigningCredentials(CertPrefix)).Returns(() => credentials);
+            _signing.Setup(x => x.GetSigningCredentials(Prefix)).Returns(() => credentials);
             _configuration.SetupGet(x => x["NDOP_CLAIM_AUDIENCE"]).Returns(claimAudience);
             _configuration.SetupGet(x => x["NDOP_CLAIM_ISSUER"]).Returns(claimIssuer);
 
@@ -109,7 +108,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Ndop
             var ndopResponse = _ndopService.GetJwtToken(testNhsNumber);
 
             // Assert
-            _signing.Verify(x => x.GetSigningCredentials(CertPrefix));
+            _signing.Verify(x => x.GetSigningCredentials(Prefix));
             ndopResponse.Should().BeOfType<GetNdopResult.InternalServerError>();
         }
 
@@ -119,13 +118,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Ndop
             // Arrange
             const string testNhsNumber = "123456789";
 
-            _signing.Setup(x => x.GetSigningCredentials(CertPrefix)).Returns(() => null);
+            _signing.Setup(x => x.GetSigningCredentials(Prefix)).Returns(() => null);
 
             // Act
             var ndopResponse = _ndopService.GetJwtToken(testNhsNumber);
 
             // Assert
-            _signing.Verify(x => x.GetSigningCredentials(CertPrefix));
+            _signing.Verify(x => x.GetSigningCredentials(Prefix));
             ndopResponse.Should().BeOfType<GetNdopResult.InternalServerError>();
         }
     }

@@ -95,8 +95,8 @@ services:
           if [ -f "$$GP_LOOKUP_API_KEY" ]; then
             export GP_LOOKUP_API_KEY=$$(<$$GP_LOOKUP_API_KEY)
           fi
-          if [ -f "$$NDOP_CERT_PASSPHRASE" ]; then
-            export NDOP_CERT_PASSPHRASE=$$(<$$NDOP_CERT_PASSPHRASE)
+          if [ -f "$$NDOP_SIGNING_KEY_PASSPHRASE" ]; then
+            export NDOP_SIGNING_KEY_PASSPHRASE=$$(<$$NDOP_SIGNING_KEY_PASSPHRASE)
           fi
           if [ -f "$$VISION_CERT_PASSPHRASE" ]; then
             export VISION_CERT_PASSPHRASE=$$(<$$VISION_CERT_PASSPHRASE)

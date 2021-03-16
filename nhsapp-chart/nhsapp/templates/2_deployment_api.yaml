@@ -242,7 +242,7 @@ spec:
         - name: CITIZEN_ID_JWT_ISSUER
           value: "{{ $.Values.cidProtocol }}://{{ $.Values.cidHostname }}"
         {{- end }}
-        - name: NDOP_CERT_PATH
+        - name: NDOP_SIGNING_KEY
           value: "/mnt/secrets-store/ndopSigningKey"
         - name: NDOP_CLAIM_AUDIENCE
           value: "{{ $.Values.ndopClaimAudience }}"

@@ -17,9 +17,9 @@ secrets:
     file: "~/.nhsonline/secrets/azure_notification_hub_key_bdd"
   gp_lookup_api_key:
     file: "./docker/bddtests/secrets/gp_lookup_api_key"
-  ndop_cert:
+  ndop_signing_key:
     file: "./docker/stubbed/certs/TestCert.pfx"
-  ndop_cert_passphrase:
+  ndop_signing_key_passphrase:
     file: "./docker/stubbed/certs/TestCert.password"
   qualtrics_api_key:
     file: "./docker/bddtests/secrets/qualtrics_api_key"
@@ -37,8 +37,8 @@ services:
       - ./docker/bddtests/env/proxy_access.env
       - ./docker/bddtests/env/pfs.env
     secrets:
-      - ndop_cert
-      - ndop_cert_passphrase
+      - ndop_signing_key
+      - ndop_signing_key_passphrase
 
   cid.local.bitraft.io:
     env_file:

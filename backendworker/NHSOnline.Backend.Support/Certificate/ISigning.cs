@@ -5,7 +5,7 @@ namespace NHSOnline.Backend.Support.Certificate
 {
     public interface ISigning
     {
-        SigningCredentials GetSigningCredentials(string certPrefix);
+        SigningCredentials GetSigningCredentials(string signingKeyPrefix);
         RSAParameters GetRsaParameters(IKeyConfig keyConfig);
     }
 }
