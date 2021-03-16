@@ -39,3 +39,11 @@ or
 ```bash
 make run-dev-stubs PFSAPI=host PROXY=true
 ```
+
+## Troubleshooting
+
+### ZScaler / iPhone USB network requests timing out
+
+If connecting via the iPhone USB network times out, due to restrictions on your machine (ZScaler et al), try connecting via WiFi.
+
+Instead of using the iPhone USB address, you'll need your machine's local address on your network. Repeat the steps above but in the Mac steps, instead of choosing iPhone USB, change the dropdown back to Wi-Fi and use this IP address instead.
