@@ -39,9 +39,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _browserOverlay = browserOverlay;
 
             _view.AppNavigation
-                .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (v, h) => v.Navigating = h)
-                .RegisterHandler(ViewOnNavigationFailed, (v, h) => v.NavigationFailed = h)
-                .RegisterHandler(BackRequested, (v, h) => v.BackRequested = h);;
+                .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
+                .RegisterHandler(ViewOnNavigationFailed, (view, handler) => view.NavigationFailed = handler)
+                .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler);;
 
             // TODO: NHSO-10323 addresses cookie management in web views
             cookies.Clear();
@@ -49,7 +49,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _loginState = nhsLoginService.BeginLogin(_model.PkceCodes);
             _view.LoadUrlAndNotifyOnRedirect(_loginState.AuthoriseUri, IsRedirect, OnRedirect);
         }
-        
+
         private async Task ViewOnNavigating(WebNavigatingEventArgs webNavigatingEventArgs)
         {
             var url = new Uri(webNavigatingEventArgs.Url);
@@ -65,7 +65,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var errorReferenceCode =
                 $"3w{RandomErrorReferenceGenerator.GenerateString(4, "acefghjkmnorstuwxyz3456789")}";
             _logger.LogError($"NHS login navigation failed, error reference {errorReferenceCode} generated");
-            
+
             await NavigateToLoginErrorPage(errorReferenceCode).PreserveThreadContext();
         }
 

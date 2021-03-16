@@ -1,14 +1,16 @@
 using System;
-using Xamarin.Forms;
+using System.Threading.Tasks;
+using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut
 {
-    internal interface ICreateSessionErrorFailedAgeRequirementView
+    internal interface ICreateSessionErrorFailedAgeRequirementView: INavigationView<ICreateSessionErrorFailedAgeRequirementView.IEvents>
     {
-        public event EventHandler<EventArgs>? OneOneOneRequested;
+        string ServiceDeskReference { get; set; }
 
-        public string ServiceDeskReference { get; set; }
-
-        INavigation Navigation { get; }
+        internal interface IEvents
+        {
+            Func<Task>? OneOneOneRequested { get; set; }
+        }
     }
 }

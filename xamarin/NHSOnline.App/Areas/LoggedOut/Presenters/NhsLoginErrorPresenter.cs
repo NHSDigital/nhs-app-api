@@ -1,4 +1,4 @@
-using System;
+using System.Threading.Tasks;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.Services;
@@ -23,19 +23,21 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _browserOverlay = browserOverlay;
             _externalServicesConfiguration = externalServicesConfiguration;
 
-            _view.BackHomeRequested += ViewOnBackHomeRequested;
-            _view.ContactUsRequested += ViewOnContactUsRequested;
             _view.ServiceDeskReference = model.ServiceDeskReference;
+
+            _view.AppNavigation
+                .RegisterHandler(ViewOnBackHomeRequested, (view, handler) => view.BackHomeRequested = handler)
+                .RegisterHandler(ViewOnContactUsRequested, (view, handler) => view.ContactUsRequested = handler);
         }
 
-        private async void ViewOnBackHomeRequested(object sender, EventArgs e)
+        private async Task ViewOnBackHomeRequested()
         {
-            await _view.Navigation
-                .PopToRootAsync()
+            await _view.AppNavigation
+                .PopToRoot()
                 .PreserveThreadContext();
         }
 
-        private async void ViewOnContactUsRequested(object sender, EventArgs e)
+        private async Task ViewOnContactUsRequested()
         {
             var contactUsUri = _externalServicesConfiguration.NhsUkContactUsUrlWithErrorCode(_model.ServiceDeskReference);
             await _browserOverlay

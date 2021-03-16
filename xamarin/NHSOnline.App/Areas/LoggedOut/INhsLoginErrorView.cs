@@ -1,15 +1,17 @@
 using System;
-using Xamarin.Forms;
+using System.Threading.Tasks;
+using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut
 {
-    internal interface INhsLoginErrorView
+    internal interface INhsLoginErrorView: INavigationView<INhsLoginErrorView.IEvents>
     {
-        public event EventHandler<EventArgs>? BackHomeRequested;
-        public event EventHandler<EventArgs>? ContactUsRequested;
+        string ServiceDeskReference { get; set; }
 
-        INavigation Navigation { get; }
-
-        public string ServiceDeskReference { get; set; }
+        internal interface IEvents
+        {
+            Func<Task>? BackHomeRequested { get; set; }
+            Func<Task>? ContactUsRequested { get; set; }
+        }
     }
 }

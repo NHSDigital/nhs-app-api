@@ -1,4 +1,4 @@
-using System;
+using System.Threading.Tasks;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.Services;
@@ -23,29 +23,30 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _browserOverlay = browserOverlay;
             _externalServicesConfiguration = externalServicesConfiguration;
 
-            _view.OneOneOneRequested += ViewOnOneOneOneRequested;
-            _view.ContactUsRequested += ViewOnContactUsRequested;
-            _view.BackHomeRequested += ViewOnBackHomeRequested;
+            _view.AppNavigation
+                .RegisterHandler(ViewOnOneOneOneRequested, (view, handler) => view.OneOneOneRequested = handler)
+                .RegisterHandler(ViewOnContactUsRequested, (view, handler) => view.ContactUsRequested = handler)
+                .RegisterHandler(ViewOnBackHomeRequested, (view, handler) => view.BackHomeRequested = handler);
         }
 
-        private async void ViewOnOneOneOneRequested(object sender, EventArgs e)
+        private async Task ViewOnOneOneOneRequested()
         {
             await _browserOverlay
                 .OpenBrowserOverlay(_externalServicesConfiguration.OneOneOneUrl)
                 .PreserveThreadContext();
         }
 
-        private async void ViewOnContactUsRequested(object sender, EventArgs e)
+        private async Task ViewOnContactUsRequested()
         {
             await _browserOverlay
                 .OpenBrowserOverlay(_externalServicesConfiguration.NhsUkContactUsUrl)
                 .PreserveThreadContext();
         }
 
-        private async void ViewOnBackHomeRequested(object sender, EventArgs e)
+        private async Task ViewOnBackHomeRequested()
         {
-            await _view.Navigation
-                .PopToRootAsync()
+            await _view.AppNavigation
+                .PopToRoot()
                 .PreserveThreadContext();
         }
     }

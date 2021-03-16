@@ -1,4 +1,4 @@
-using System;
+using System.Threading.Tasks;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.Services;
@@ -23,10 +23,11 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
             _view.ServiceDeskReference = model.ServiceDeskReference;
 
-            _view.OneOneOneRequested += ViewOnOneOneOneRequested;
+            _view.AppNavigation
+                .RegisterHandler(ViewOnOneOneOneRequested, (view, handler) => view.OneOneOneRequested = handler);
         }
 
-        private async void ViewOnOneOneOneRequested(object sender, EventArgs e)
+        private async Task ViewOnOneOneOneRequested()
         {
             await _browserOverlay
                 .OpenBrowserOverlay(_externalServicesConfiguration.OneOneOneUrl)

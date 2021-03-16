@@ -74,6 +74,13 @@ namespace NHSOnline.App.Navigation
             await _navigation.PopAsync().PreserveThreadContext();
         }
 
+        public async Task PopToRoot()
+        {
+            SuppressHandlers();
+
+            await _navigation.PopToRootAsync().PreserveThreadContext();
+        }
+
         public async Task PopToNewRoot(Page newRootPage)
         {
             SuppressHandlers();

@@ -10,22 +10,22 @@ using Xamarin.Forms;
 namespace NHSOnline.App.Areas.LoggedOut.Views
 {
     [DesignTimeVisible(false)]
-    public partial class NhsLoginPage: INhsLoginView
+    public partial class NhsLoginPage: INhsLoginView, INhsLoginView.IEvents
     {
         private readonly ILogger _logger;
-        private readonly AppNavigation<INhsLoginView> _appNavigation;
+        private readonly AppNavigation<INhsLoginView.IEvents> _appNavigation;
 
         public NhsLoginPage(ILogger<NhsLoginPage> logger)
         {
             _logger = logger;
-            _appNavigation = new AppNavigation<INhsLoginView>(this, Navigation);
+            _appNavigation = new AppNavigation<INhsLoginView.IEvents>(this, Navigation);
 
             InitializeComponent();
 
             AddEventHandlers();
         }
 
-        IAppNavigation<INhsLoginView> INavigationView<INhsLoginView>.AppNavigation => _appNavigation;
+        IAppNavigation<INhsLoginView.IEvents> INavigationView<INhsLoginView.IEvents>.AppNavigation => _appNavigation;
 
         public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
         private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);

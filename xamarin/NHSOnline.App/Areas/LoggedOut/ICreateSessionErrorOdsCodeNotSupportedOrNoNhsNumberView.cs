@@ -1,17 +1,19 @@
 using System;
-using Xamarin.Forms;
+using System.Threading.Tasks;
+using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut
 {
-    internal interface ICreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberView
+    internal interface ICreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberView: INavigationView<ICreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberView.IEvents>
     {
-        public event EventHandler<EventArgs>? MyHealthOnlineRequested;
-        public event EventHandler<EventArgs>? OneOneOneWalesRequested;
-        public event EventHandler<EventArgs>? OneOneOneRequested;
-        public event EventHandler<EventArgs>? ContactUsRequested;
+        string ServiceDeskReference { get; set; }
 
-        public string ServiceDeskReference { get; set; }
-
-        INavigation Navigation { get; }
+        internal interface IEvents
+        {
+            Func<Task>? MyHealthOnlineRequested { get; set; }
+            Func<Task>? OneOneOneWalesRequested { get; set; }
+            Func<Task>? OneOneOneRequested { get; set; }
+            Func<Task>? ContactUsRequested { get; set; }
+        }
     }
 }

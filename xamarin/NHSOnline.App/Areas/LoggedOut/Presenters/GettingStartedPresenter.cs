@@ -36,9 +36,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
 
             view.AppNavigation
-                .RegisterHandler(ViewOnLoginRequested, (v, h) => v.LoginRequested = h)
-                .RegisterHandler(LoadCovidUrl, (v, h) => v.NhsUkCovidAppPageRequested = h)
-                .RegisterHandler(BackRequested, (v, h) => v.BackRequested = h);
+                .RegisterHandler(ViewOnLoginRequested, (view, handler) => view.LoginRequested = handler)
+                .RegisterHandler(LoadCovidUrl, (view, handler) => view.NhsUkCovidAppPageRequested = handler)
+                .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler);
         }
 
         private async Task ViewOnLoginRequested()

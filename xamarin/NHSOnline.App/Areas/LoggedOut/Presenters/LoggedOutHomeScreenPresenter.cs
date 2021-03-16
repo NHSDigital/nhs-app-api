@@ -40,11 +40,11 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _browserOverlay = browserOverlay;
 
             _view.AppNavigation
-                .RegisterHandler(ViewOnLoginRequested, (v, h) => v.LoginRequested = h)
-                .RegisterHandler(LoadCovidConditionsUrl, (v, h) => v.NhsUkCovidConditionsServicePageRequested = h)
-                .RegisterHandler(LoadLoginHelpUrl, (v, h) => v.NhsUkLoginHelpServicePageRequested = h)
-                .RegisterHandler(BackRequested, (v, h) => v.BackRequested = h)
-                .RegisterHandler(ResetAndShowErrorRequested, (v, h) => v.ResetAndShowErrorRequested = h);
+                .RegisterHandler(ViewOnLoginRequested, (view, handler) => view.LoginRequested = handler)
+                .RegisterHandler(LoadCovidConditionsUrl, (view, handler) => view.NhsUkCovidConditionsServicePageRequested = handler)
+                .RegisterHandler(LoadLoginHelpUrl, (view, handler) => view.NhsUkLoginHelpServicePageRequested = handler)
+                .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler)
+                .RegisterHandler(ResetAndShowErrorRequested, (view, handler) => view.ResetAndShowErrorRequested = handler);
         }
 
         private async Task ViewOnLoginRequested()

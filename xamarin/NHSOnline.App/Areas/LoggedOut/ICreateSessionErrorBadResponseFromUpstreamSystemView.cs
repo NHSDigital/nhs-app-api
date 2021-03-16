@@ -1,16 +1,18 @@
 using System;
-using Xamarin.Forms;
+using System.Threading.Tasks;
+using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut
 {
-    internal interface ICreateSessionErrorBadResponseFromUpstreamSystemView
+    internal interface ICreateSessionErrorBadResponseFromUpstreamSystemView: INavigationView<ICreateSessionErrorBadResponseFromUpstreamSystemView.IEvents>
     {
-        public event EventHandler<EventArgs>? OneOneOneRequested;
-        public event EventHandler<EventArgs>? ContactUsRequested;
-        public event EventHandler<EventArgs>? BackHomeRequested;
+        string ServiceDeskReference { get; set; }
 
-        public string ServiceDeskReference { get; set; }
-
-        INavigation Navigation { get; }
+        internal interface IEvents
+        {
+            Func<Task>? OneOneOneRequested { get; set; }
+            Func<Task>? ContactUsRequested { get; set; }
+            Func<Task>? BackHomeRequested { get; set; }
+        }
     }
 }

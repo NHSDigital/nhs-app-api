@@ -1,14 +1,16 @@
 using System;
-using Xamarin.Forms;
+using System.Threading.Tasks;
+using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut
 {
-    internal interface ICreateSessionErrorFallbackView
+    internal interface ICreateSessionErrorFallbackView: INavigationView<ICreateSessionErrorFallbackView.IEvents>
     {
-        event EventHandler<EventArgs>? OneOneOneRequested;
-        event EventHandler<EventArgs>? ContactUsRequested;
-        event EventHandler<EventArgs>? BackHomeRequested;
-
-        INavigation Navigation { get; }
+        internal interface IEvents
+        {
+            Func<Task>? OneOneOneRequested { get; set; }
+            Func<Task>? ContactUsRequested { get; set; }
+            Func<Task>? BackHomeRequested { get; set; }
+        }
     }
 }

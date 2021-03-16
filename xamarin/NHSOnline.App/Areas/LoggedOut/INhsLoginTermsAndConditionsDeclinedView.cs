@@ -1,13 +1,15 @@
 using System;
-using Xamarin.Forms;
+using System.Threading.Tasks;
+using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut
 {
-    internal interface INhsLoginTermsAndConditionsDeclinedView
+    internal interface INhsLoginTermsAndConditionsDeclinedView: INavigationView<INhsLoginTermsAndConditionsDeclinedView.IEvents>
     {
-        public event EventHandler<EventArgs>? BackToHomeRequested;
-        public event EventHandler<EventArgs>? OneOneOneRequested;
-
-        INavigation Navigation { get; }
+        internal interface IEvents
+        {
+            Func<Task>? BackToHomeRequested { get; set; }
+            Func<Task>? OneOneOneRequested { get; set; }
+        }
     }
 }

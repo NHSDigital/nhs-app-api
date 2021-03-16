@@ -1,24 +1,48 @@
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
-using Xamarin.Forms;
+using Microsoft.Extensions.Logging;
+using NHSOnline.App.Controls;
+using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut.Views
 {
     [DesignTimeVisible(false)]
-    public partial class CreateSessionErrorFallbackPage : ICreateSessionErrorFallbackView
+    public partial class CreateSessionErrorFallbackPage : ICreateSessionErrorFallbackView, ICreateSessionErrorFallbackView.IEvents
     {
-        public event EventHandler<EventArgs>? OneOneOneRequested;
-        public event EventHandler<EventArgs>? ContactUsRequested;
-        public event EventHandler<EventArgs>? BackHomeRequested;
+        private readonly ILogger _logger;
+        private readonly AppNavigation<ICreateSessionErrorFallbackView.IEvents> _appNavigation;
 
-        public CreateSessionErrorFallbackPage()
+        public CreateSessionErrorFallbackPage(ILogger<CreateSessionErrorFallbackPage> logger)
         {
+            _logger = logger;
+            _appNavigation = new AppNavigation<ICreateSessionErrorFallbackView.IEvents>(this, Navigation);
+
             InitializeComponent();
         }
 
-        public ICommand OneOneOneCommand => new Command(() => OneOneOneRequested?.Invoke(this, EventArgs.Empty));
-        public ICommand ContactUsCommand => new Command(() => ContactUsRequested?.Invoke(this, EventArgs.Empty));
-        public ICommand BackHomeCommand => new Command(() => BackHomeRequested?.Invoke(this, EventArgs.Empty));
+        IAppNavigation<ICreateSessionErrorFallbackView.IEvents> INavigationView<ICreateSessionErrorFallbackView.IEvents>.AppNavigation => _appNavigation;
+
+        public Func<Task>? OneOneOneRequested { get; set; }
+        public ICommand OneOneOneCommand => new AsyncCommand(() => OneOneOneRequested);
+
+        public Func<Task>? ContactUsRequested { get; set; }
+        public ICommand ContactUsCommand => new AsyncCommand(() => ContactUsRequested);
+
+        public Func<Task>? BackHomeRequested { get; set; }
+        public ICommand BackHomeCommand => new AsyncCommand(() => BackHomeRequested);
+
+        protected override void OnAppearing()
+        {
+            _logger.LogInformation("{Method}", nameof(OnAppearing));
+            _appNavigation.EnableHandlers();
+        }
+
+        protected override void OnDisappearing()
+        {
+            _logger.LogInformation("{Method}", nameof(OnDisappearing));
+            _appNavigation.SuppressHandlers();
+        }
     }
 }
