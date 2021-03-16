@@ -288,5 +288,25 @@ describe('native app', () => {
         expect(result).toBe(false);
       });
     });
+
+    describe('when goToLoggedInHomeScreen method exists', () => {
+      beforeEach(() => {
+        global.nativeApp.goToLoggedInHomeScreen = jest.fn();
+      });
+
+      it('shouldShowPreLoginHeader will return false', () => {
+        expect(nativeApp.shouldShowPreLoginHeader()).toBe(false);
+      });
+    });
+
+    describe('when goToLoggedInHomeScreen method does not exist', () => {
+      beforeEach(() => {
+        global.nativeApp.goToLoggedInHomeScreen = undefined;
+      });
+
+      it('shouldShowPreLoginHeader will return true', () => {
+        expect(nativeApp.shouldShowPreLoginHeader()).toBe(true);
+      });
+    });
   });
 });

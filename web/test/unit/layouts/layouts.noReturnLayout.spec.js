@@ -2,10 +2,10 @@
 import ContentHeader from '@/components/widgets/ContentHeader';
 import WebHeader from '@/components/widgets/WebHeader';
 import i18n from '@/plugins/i18n';
-import TsAndCsLayout from '@/layouts/termsAndConditions';
+import NoReturnLayout from '@/layouts/no-return-flow-layout';
 import OnUpdateTitleMixin from '@/plugins/mixinDefinitions/OnUpdateTitleMixin';
 import ResetSpinnerMixin from '@/plugins/mixinDefinitions/ResetSpinnerMixin';
-import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
+import { UPDATE_HEADER, EventBus } from '@/services/event-bus';
 import NativeApp from '@/services/native-app';
 import { createStore, shallowMount } from '../helpers';
 
@@ -17,15 +17,15 @@ jest.mock('@/services/event-bus', () => ({
 jest.mock('@/services/native-app');
 
 const routeMeta = {
-  headerKey: 'terms-conditions-header',
-  titleKey: 'terms-conditions-title',
+  headerKey: 'no-return-layout-header',
+  titleKey: 'no-return-layout-title',
   helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
 };
 
-const createDefaultPage = ($store, stubs) => (shallowMount(TsAndCsLayout, {
+const createDefaultPage = ($store, stubs) => (shallowMount(NoReturnLayout, {
   $store,
   $route: {
-    name: 'terms-and-conditions',
+    name: 'no-return-flow-layout',
     meta: routeMeta,
   },
   showTemplate: () => true,
@@ -53,9 +53,8 @@ const createLayoutStore = ({
   },
 });
 
-describe('termsAndConditions.vue ', () => {
+describe('no-return-flow-layout.vue ', () => {
   beforeEach(() => {
-    window.validateSession = () => {};
     EventBus.$emit.mockClear();
   });
 
@@ -79,11 +78,6 @@ describe('termsAndConditions.vue ', () => {
     it('will emit UPDATE_HEADER passing the current route meta as event', () => {
       createDefaultPage(createLayoutStore(), { 'content-header': '<div/>' });
       expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, routeMeta);
-    });
-
-    it('will emit UPDATE_TITLE passing the current route meta as event', () => {
-      createDefaultPage(createLayoutStore(), { 'content-header': '<div/>' });
-      expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, routeMeta);
     });
 
     describe('showWebHeader is true', () => {
@@ -113,6 +107,7 @@ describe('termsAndConditions.vue ', () => {
     });
   });
 
+
   describe('created()', () => {
     it('will dispatch appVersion/updateWebVersion on created', () => {
       const $store = createLayoutStore();
@@ -122,26 +117,6 @@ describe('termsAndConditions.vue ', () => {
       expect($store.dispatch)
         .toHaveBeenLastCalledWith('appVersion/updateWebVersion', 1);
     });
-
-    it('will dispatch session/updateLastCalledAt if process is browser', () => {
-      process.browser = true;
-      const $store = createLayoutStore();
-      jest.spyOn($store, 'dispatch');
-
-      createDefaultPage($store);
-      expect($store.dispatch)
-        .toHaveBeenCalledWith('session/updateLastCalledAt');
-    });
-
-    it('will not dispatch session/updateLastCalledAt if process is not browser', () => {
-      process.browser = false;
-      const $store = createLayoutStore();
-      jest.spyOn($store, 'dispatch');
-
-      createDefaultPage($store);
-      expect($store.dispatch)
-        .not.toHaveBeenCalledWith('session/updateLastCalledAt');
-    });
   });
   describe('metaInfo', () => {
     let head;
@@ -149,7 +124,7 @@ describe('termsAndConditions.vue ', () => {
     describe('web, analytics not accepted, durationSeconds not in session cookie', () => {
       beforeEach(() => {
         const layout = createDefaultPage(createLayoutStore());
-        layout.setData({ title: 'Accept conditions of use' });
+        layout.setData({ title: 'No return layout title' });
         head = layout.vm.$options.metaInfo.call(layout.vm);
       });
 
@@ -157,8 +132,8 @@ describe('termsAndConditions.vue ', () => {
         expect(head.htmlAttrs.lang).toBe('en-GB');
       });
 
-      it('will set title to be the ts & cs pageTitle with the app title appended', () => {
-        expect(head.title).toBe('Accept conditions of use - NHS App');
+      it('will set title to the pageTitle with the app title appended', () => {
+        expect(head.title).toBe('No return layout title - NHS App');
       });
 
       it('will have no scripts defined', () => {
@@ -214,7 +189,7 @@ describe('termsAndConditions.vue ', () => {
 
     describe('mixins', () => {
       it('will include the OnUpdateTitleMixin', () => {
-        expect(TsAndCsLayout.mixins).toEqual([ResetSpinnerMixin, OnUpdateTitleMixin]);
+        expect(NoReturnLayout.mixins).toEqual([ResetSpinnerMixin, OnUpdateTitleMixin]);
       });
     });
   });

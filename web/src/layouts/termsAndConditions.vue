@@ -3,7 +3,8 @@
        ref="nhsAppRoot"
        tabindex="-1">
     <div>
-      <web-header :show-menu="false"
+      <web-header v-if="showWebHeader"
+                  :show-menu="false"
                   :show-links="false"
                   :show-header-buttons="false"/>
     </div>
@@ -38,7 +39,7 @@ import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import ContentHeader from '@/components/widgets/ContentHeader';
 import FlashMessage from '@/components/widgets/FlashMessage';
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import NativeVersionSetup from '@/services/nativeVersionSetup';
 import OnUpdateTitleMixin from '@/plugins/mixinDefinitions/OnUpdateTitleMixin';
 import ResetSpinnerMixin from '@/plugins/mixinDefinitions/ResetSpinnerMixin';
@@ -105,6 +106,9 @@ export default {
     shouldShowFooter() {
       return !this.$store.state.device.isNativeApp;
     },
+    showWebHeader() {
+      return NativeApp.shouldShowPreLoginHeader();
+    },
   },
   created() {
     if (process.browser) {
@@ -124,7 +128,7 @@ export default {
       window.validateSession || (() => this.$store.dispatch('session/validate'));
     this.configureWebContext(this.currentHelpUrl);
     if (this.$store.state.device.isNativeApp) {
-      NativeCallbacks.dismissProgressBar();
+      NativeApp.dismissProgressBar();
     }
   },
   methods: {

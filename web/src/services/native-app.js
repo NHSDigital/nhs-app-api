@@ -48,6 +48,14 @@ export default {
     app.startNhsLoginUplift(request);
   },
 
+  /* This method is used to determine whether to hide the web header on the
+  pre homepage screens for Xamarin */
+  shouldShowPreLoginHeader: () => {
+    const app = window.nativeApp;
+
+    return !(app && app.goToLoggedInHomeScreen);
+  },
+
   goToLoggedInHomeScreen() {
     const app = window.nativeApp;
     if (app && app.goToLoggedInHomeScreen) {
