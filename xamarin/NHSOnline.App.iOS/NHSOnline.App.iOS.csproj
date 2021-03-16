@@ -24,17 +24,8 @@
     <LangVersion>latest</LangVersion>
     <OutputPath>bin\$(Platform)\$(DebugMode)</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Debug|iPhoneSimulator' ">
-    <MtouchExtraArgs>
-    </MtouchExtraArgs>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Debug|iPhone' ">
-    <MtouchExtraArgs>
-    </MtouchExtraArgs>
-    <MtouchLink>None</MtouchLink>
-    <CodesignKey>Apple Development: Andrew White (9JZ6XCR4MP)</CodesignKey>
-    <CodesignProvision>VS: WildCard Development</CodesignProvision>
-  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Debug|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Release|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Release|iPhoneSimulator' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Debug|iPhoneSimulator' " />
