@@ -1,8 +1,6 @@
 <template>
   <div :class="$style.toggleAndLabel">
     <label class="nhsuk-u-font-size-19"
-           aria-hidden="true"
-           :aria-label="labelText"
            :for="checkboxId"
            @click.stop.prevent="onClick">
       <strong>{{ label }}</strong>
@@ -11,7 +9,8 @@
         <span class="nhsuk-body">{{ hintText }}</span>
       </template>
     </label>
-    <toggle :value="value" :checkbox-id="checkboxId" :is-waiting="isWaiting" @input="onClick"/>
+    <toggle :value="value" :checkbox-id="checkboxId" :is-waiting="isWaiting"
+            :name="checkboxId" @input="onClick"/>
   </div>
 </template>
 
