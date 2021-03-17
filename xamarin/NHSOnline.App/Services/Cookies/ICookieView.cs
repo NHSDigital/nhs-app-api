@@ -1,7 +1,7 @@
 using System.Net;
 using System.Threading.Tasks;
 
-namespace NHSOnline.App.Areas.Cookies
+namespace NHSOnline.App.Services.Cookies
 {
     public interface ICookieView
     {

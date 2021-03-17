@@ -1,67 +1,66 @@
 using System.Threading.Tasks;
 using NHSOnline.App.Navigation;
-using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.Home.Presenters
 {
     internal sealed class NhsAppPopToRootNavigationHandler : INhsAppNavigationHandler
     {
-        private readonly INavigation _navigation;
+        private readonly IAppNavigation<INhsAppWebView.IEvents> _appNavigation;
         private readonly INhsAppNavigationHandler _rootHandler;
 
         public NhsAppPopToRootNavigationHandler(
             INhsAppNavigationHandler rootHandler,
-            INavigation navigation)
+            IAppNavigation<INhsAppWebView.IEvents> navigation)
         {
             _rootHandler = rootHandler;
-            _navigation = navigation;
+            _appNavigation = navigation;
         }
 
         public async Task SettingsRequested()
         {
-            await _navigation.PopToRootAsync(true).PreserveThreadContext();
+            await _appNavigation.PopToRootAnimated().PreserveThreadContext();
             await _rootHandler.SettingsRequested().PreserveThreadContext();
         }
 
         public async Task HomeRequested()
         {
-            await _navigation.PopToRootAsync(true).PreserveThreadContext();
+            await _appNavigation.PopToRootAnimated().PreserveThreadContext();
             await _rootHandler.HomeRequested().PreserveThreadContext();
         }
 
         public async Task SymptomsRequested()
         {
-            await _navigation.PopToRootAsync(true).PreserveThreadContext();
+            await _appNavigation.PopToRootAnimated().PreserveThreadContext();
             await _rootHandler.SymptomsRequested().PreserveThreadContext();
         }
 
         public async Task AppointmentsRequested()
         {
-            await _navigation.PopToRootAsync(true).PreserveThreadContext();
+            await _appNavigation.PopToRootAnimated().PreserveThreadContext();
             await _rootHandler.AppointmentsRequested().PreserveThreadContext();
         }
 
         public async Task PrescriptionsRequested()
         {
-            await _navigation.PopToRootAsync(true).PreserveThreadContext();
+            await _appNavigation.PopToRootAnimated().PreserveThreadContext();
             await _rootHandler.PrescriptionsRequested().PreserveThreadContext();
         }
 
         public async Task RecordRequested()
         {
-            await _navigation.PopToRootAsync(true).PreserveThreadContext();
+            await _appNavigation.PopToRootAnimated().PreserveThreadContext();
             await _rootHandler.RecordRequested().PreserveThreadContext();
         }
 
         public async Task MoreRequested()
         {
-            await _navigation.PopToRootAsync(true).PreserveThreadContext();
+            await _appNavigation.PopToRootAnimated().PreserveThreadContext();
             await _rootHandler.MoreRequested().PreserveThreadContext();
         }
 
         public async Task RedirectToNhsAppPageRequested(string page)
         {
-            await _navigation.PopToRootAsync(true).PreserveThreadContext();
+            await _appNavigation.PopToRootAnimated().PreserveThreadContext();
             await _rootHandler.RedirectToNhsAppPageRequested(page).PreserveThreadContext();
         }
     }

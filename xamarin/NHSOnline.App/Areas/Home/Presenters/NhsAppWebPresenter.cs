@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.App.Areas.Home.Models;
 using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.Controls.WebViews.Payloads;
@@ -16,8 +15,9 @@ namespace NHSOnline.App.Areas.Home.Presenters
 {
     internal sealed class NhsAppWebPresenter
     {
+        private bool _hasAlreadyAppeared;
+
         private readonly INhsAppWebView _view;
-        private readonly NhsAppWebModel _model;
         private readonly INhsAppWebConfiguration _config;
         private readonly ILogger _logger;
         private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
@@ -29,7 +29,6 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         public NhsAppWebPresenter(
             INhsAppWebView view,
-            NhsAppWebModel model,
             INhsAppWebConfiguration config,
             ILogger<NhsAppWebPresenter> logger,
             INhsExternalServicesConfiguration nhsExternalServicesConfiguration,
@@ -39,40 +38,64 @@ namespace NHSOnline.App.Areas.Home.Presenters
             IBiometricAuthenticationService biometricAuthenticationService)
         {
             _view = view;
-            _model = model;
             _config = config;
             _logger = logger;
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
             _browserOverlay = browserOverlay;
             _pageFactory = pageFactory;
             _notifications = notifications;
+
             _biometricAuthenticationService = biometricAuthenticationService;
             _navigationHandler = new NhsAppNavigationHandler(view);
 
-            _view.Appearing = ViewOnAppearing;
-            _view.Navigating = ViewOnNavigating;
-            _view.Navigated = ViewOnNavigated;
-            _view.HelpRequested = HelpRequested;
-            _view.OpenWebIntegrationRequested = OpenWebIntegrationRequested;
-            _view.StartNhsLoginUpliftRequested = StartNhsLoginUpliftRequested;
-            _view.ResetAndShowErrorRequested = ResetAndShowErrorRequested;
-            _view.GetNotificationsStatusRequested = GetNotificationsStatusRequested;
-            _view.GetPnsTokenRequested = RequestPnsToken;
-            _view.FetchBiometricSpecRequested = FetchBiometricSpecRequested;
-            _view.UpdateBiometricRegistrationRequested = UpdateBiometricRegistrationRequested;
-
-            _view.SettingsRequested = _navigationHandler.SettingsRequested;
-            _view.HomeRequested = _navigationHandler.HomeRequested;
-            _view.SymptomsRequested = _navigationHandler.SymptomsRequested;
-            _view.AppointmentsRequested = _navigationHandler.AppointmentsRequested;
-            _view.PrescriptionsRequested = _navigationHandler.PrescriptionsRequested;
-            _view.RecordRequested = _navigationHandler.RecordRequested;
-            _view.MoreRequested = _navigationHandler.MoreRequested;
+            _view.AppNavigation
+                .RegisterHandler(
+                    ViewOnAppearing, (view, handler) => view.Appearing = handler)
+                .RegisterHandler<WebNavigatingEventArgs>(
+                    ViewOnNavigating, (view, handler) => view.Navigating = handler)
+                .RegisterHandler<WebNavigatedEventArgs>(
+                    ViewOnNavigated, (view, handler) => view.Navigated = handler)
+                .RegisterHandler(
+                    HelpRequested, (view, handler) => view.HelpRequested = handler)
+                .RegisterHandler<OpenWebIntegrationRequest>(
+                    OpenWebIntegrationRequested, (view, handler) => view.OpenWebIntegrationRequested = handler)
+                .RegisterHandler<StartNhsLoginUpliftRequest>(
+                    StartNhsLoginUpliftRequested, (view, handler) => view.StartNhsLoginUpliftRequested = handler)
+                .RegisterHandler(
+                    ResetAndShowErrorRequested, (view, handler) => view.ResetAndShowErrorRequested = handler)
+                .RegisterHandler(
+                    GetNotificationsStatusRequested, (view, handler) => view.GetNotificationsStatusRequested = handler)
+                .RegisterHandler<string>(
+                    RequestPnsToken, (view, handler) => view.GetPnsTokenRequested = handler)
+                .RegisterHandler(
+                    FetchBiometricSpecRequested, (view, handler) => view.FetchBiometricSpecRequested = handler)
+                .RegisterHandler<string>(
+                    UpdateBiometricRegistrationRequested, (view, handler) => view.UpdateBiometricRegistrationRequested = handler)
+                .RegisterHandler(
+                    _navigationHandler.SettingsRequested, (view, handler) => view.SettingsRequested = handler)
+                .RegisterHandler(
+                    _navigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
+                .RegisterHandler(
+                    _navigationHandler.SymptomsRequested, (view, handler) => view.SymptomsRequested = handler)
+                .RegisterHandler(
+                    _navigationHandler.AppointmentsRequested, (view, handler) => view.AppointmentsRequested = handler)
+                .RegisterHandler(
+                    _navigationHandler.PrescriptionsRequested, (view, handler) => view.PrescriptionsRequested = handler)
+                .RegisterHandler(
+                    _navigationHandler.RecordRequested, (view, handler) => view.RecordRequested = handler)
+                .RegisterHandler(
+                    _navigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler);
         }
 
         private async Task ViewOnAppearing()
         {
-            _view.Appearing = null;
+            if (_hasAlreadyAppeared)
+            {
+                return;
+            }
+
+            _hasAlreadyAppeared = true;
+
             await DisplayNhsAppWeb().PreserveThreadContext();
         }
 
@@ -80,18 +103,13 @@ namespace NHSOnline.App.Areas.Home.Presenters
         {
             _logger.LogInformation("Navigating: {Uri}", args.Url);
             var uri = new Uri(args.Url);
-            if (! IsNhsAppWeb(uri))
+            if (!IsNhsAppWeb(uri))
             {
                 args.Cancel = true;
                 await _browserOverlay
                     .OpenBrowserOverlay(uri)
                     .PreserveThreadContext();
             }
-        }
-
-        private bool IsNhsAppWeb(Uri uri)
-        {
-            return string.Equals(uri.Host, _config.Host, StringComparison.OrdinalIgnoreCase);
         }
 
         private Task ViewOnNavigated(WebNavigatedEventArgs args)
@@ -104,12 +122,12 @@ namespace NHSOnline.App.Areas.Home.Presenters
         {
             _logger.LogInformation("Opening Web Integration - {Url}", request.Url);
 
-            var popToRootNavigationHandler = new NhsAppPopToRootNavigationHandler(_navigationHandler, _view.Navigation);
+            var popToRootNavigationHandler = new NhsAppPopToRootNavigationHandler(_navigationHandler, _view.AppNavigation);
             var model = new WebIntegrationModel(popToRootNavigationHandler, request.Url);
 
             var page = _pageFactory.CreatePageFor(model);
-            await _view.Navigation
-                .PushAsync(page)
+            await _view.AppNavigation
+                .Push(page)
                 .PreserveThreadContext();
         }
 
@@ -120,8 +138,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
             var model = new NhsLoginUpliftModel(request.Url);
 
             var page = _pageFactory.CreatePageFor(model);
-            await _view.Navigation
-                .PushAsync(page)
+            await _view.AppNavigation
+                .Push(page)
                 .PreserveThreadContext();
         }
 
@@ -129,7 +147,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         {
             await DisplayNhsAppWeb().PreserveThreadContext();
             //TODO ShowError
-            _logger.LogInformation($"Showing unexpected error");
+            _logger.LogInformation("Showing unexpected error");
         }
 
         private async Task GetNotificationsStatusRequested()
@@ -211,6 +229,11 @@ namespace NHSOnline.App.Areas.Home.Presenters
             await _browserOverlay.OpenBrowserOverlay(
                 _nhsExternalServicesConfiguration.NhsUkBaseHelpUrl)
                 .PreserveThreadContext();
+        }
+
+        private bool IsNhsAppWeb(Uri uri)
+        {
+            return string.Equals(uri.Host, _config.Host, StringComparison.OrdinalIgnoreCase);
         }
 
         private Task DisplayNhsAppWeb()

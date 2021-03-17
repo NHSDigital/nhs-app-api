@@ -2,7 +2,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace NHSOnline.App.Areas.Cookies
+namespace NHSOnline.App.Services.Cookies
 {
     internal interface ICookieHandler
     {

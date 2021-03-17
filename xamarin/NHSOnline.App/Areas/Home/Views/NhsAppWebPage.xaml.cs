@@ -5,60 +5,80 @@ using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Threading;
+using Microsoft.Extensions.Logging;
+using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.Home.Views
 {
     [DesignTimeVisible(false)]
-    public partial class NhsAppWebPage : INhsAppWebView, IRootPage
+    public partial class NhsAppWebPage : INhsAppWebView, INhsAppWebView.IEvents, IRootPage
     {
-        public NhsAppWebPage()
+        private readonly ILogger _logger;
+        private readonly AppNavigation<INhsAppWebView.IEvents> _appNavigation;
+
+        public NhsAppWebPage(ILogger<NhsAppWebPage> logger)
         {
+            _logger = logger;
+            _appNavigation = new AppNavigation<INhsAppWebView.IEvents>(this, Navigation);
+
             InitializeComponent();
-
-            AddEventHandlers();
-
             NavigationPage.SetHasNavigationBar(this, false);
         }
 
-        Func<Task>? INhsAppWebView.Appearing { get; set; }
+        IAppNavigation<INhsAppWebView.IEvents> INavigationView<INhsAppWebView.IEvents>.AppNavigation => _appNavigation;
+
+        Func<Task>? INhsAppWebView.IEvents.Appearing { get; set; }
+        private AsyncCommand AppearingCommand
+            => new AsyncCommand(() => ((INhsAppWebView.IEvents)this).Appearing);
 
         public Func<OpenWebIntegrationRequest, Task>? OpenWebIntegrationRequested { get; set; }
-        public Func<StartNhsLoginUpliftRequest, Task>? StartNhsLoginUpliftRequested { get; set; }
-
-        public Func<Task>? GetNotificationsStatusRequested { get; set; }
-
-        public Func<string, Task>? GetPnsTokenRequested { get; set; }
-
-        public Func<Task>? ResetAndShowErrorRequested { get; set; }
-
         public AsyncCommand<OpenWebIntegrationRequest> OpenWebIntegrationCommand
             => new AsyncCommand<OpenWebIntegrationRequest>(() => OpenWebIntegrationRequested);
 
+        public Func<StartNhsLoginUpliftRequest, Task>? StartNhsLoginUpliftRequested { get; set; }
         public AsyncCommand<StartNhsLoginUpliftRequest> StartNhsLoginUpliftCommand
             => new AsyncCommand<StartNhsLoginUpliftRequest>(() => StartNhsLoginUpliftRequested);
 
-        public AsyncCommand GetNotificationsStatusCommand => new AsyncCommand(() => GetNotificationsStatusRequested);
+        public Func<Task>? GetNotificationsStatusRequested { get; set; }
+        public AsyncCommand GetNotificationsStatusCommand
+            => new AsyncCommand(() => GetNotificationsStatusRequested);
 
-        public AsyncCommand<string> RequestPnsTokenCommand => new AsyncCommand<string>(() => GetPnsTokenRequested);
+        public Func<string, Task>? GetPnsTokenRequested { get; set; }
+        public AsyncCommand<string> RequestPnsTokenCommand
+            => new AsyncCommand<string>(() => GetPnsTokenRequested);
 
         public Func<Task>? FetchBiometricSpecRequested { get; set; }
-        public AsyncCommand FetchBiometricSpecCommand => new AsyncCommand(() => FetchBiometricSpecRequested);
+        public AsyncCommand FetchBiometricSpecCommand
+            => new AsyncCommand(() => FetchBiometricSpecRequested);
 
         public Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
-        public AsyncCommand<string> UpdateBiometricRegistrationCommand => new AsyncCommand<string>(() => UpdateBiometricRegistrationRequested);
-
-        private AsyncCommand AppearingCommand => new AsyncCommand(() => ((INhsAppWebView) this).Appearing);
+        public AsyncCommand<string> UpdateBiometricRegistrationCommand
+            => new AsyncCommand<string>(() => UpdateBiometricRegistrationRequested);
 
         public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
-        private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
+        private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand
+            => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
 
         public Func<WebNavigatedEventArgs, Task>? Navigated { get; set; }
-        private AsyncCommand<WebNavigatedEventArgs> NavigatedCommand => new AsyncCommand<WebNavigatedEventArgs>(() => Navigated);
+        private AsyncCommand<WebNavigatedEventArgs> NavigatedCommand
+            => new AsyncCommand<WebNavigatedEventArgs>(() => Navigated);
+
+        public Func<Task>? ResetAndShowErrorRequested { get; set; }
+        public async Task ResetAndShowError()
+        {
+            if (ResetAndShowErrorRequested != null)
+            {
+                await ResetAndShowErrorRequested().ResumeOnThreadPool();
+            }
+        }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
+
+            _logger.LogInformation("{Method}", nameof(OnAppearing));
+            _appNavigation.EnableHandlers();
 
             RemoveEventHandlers();
             AddEventHandlers();
@@ -69,6 +89,9 @@ namespace NHSOnline.App.Areas.Home.Views
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
+
+            _logger.LogInformation("{Method}", nameof(OnDisappearing));
+            _appNavigation.SuppressHandlers();
 
             RemoveEventHandlers();
         }
@@ -119,19 +142,15 @@ namespace NHSOnline.App.Areas.Home.Views
         public async Task SendBiometricCompletion(BiometricCompletion completionDetails)
             => await WebView.SendBiometricCompletion(completionDetails).ResumeOnThreadPool();
 
-        public async Task ResetAndShowError()
-            => await (ResetAndShowErrorRequested?.Invoke() ?? Task.CompletedTask).ResumeOnThreadPool();
-
         public async Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse)
             => await WebView.SendNotificationAuthorised(authorisedResponse).ResumeOnThreadPool();
 
         public async Task SendNotificationUnauthorised() => await WebView.SendNotificationUnauthorised().ResumeOnThreadPool();
-        
+
         private void WebViewNavigating(object sender, WebNavigatingEventArgs e)
         {
             Spinner.IsVisible = true;
             WebView.IsVisible = false;
-
         }
 
         private void WebOnEndNavigating(object sender, WebNavigatedEventArgs e)

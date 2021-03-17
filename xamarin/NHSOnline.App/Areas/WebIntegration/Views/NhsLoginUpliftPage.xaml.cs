@@ -5,41 +5,50 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.Payloads;
+using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.WebIntegration.Views
 {
     [DesignTimeVisible(false)]
-    public partial class NhsLoginUpliftPage : INhsLoginUpliftView
+    public partial class NhsLoginUpliftPage : INhsLoginUpliftView, INhsLoginUpliftView.IEvents
     {
         private readonly ILogger _logger;
+        private readonly AppNavigation<INhsLoginUpliftView.IEvents> _appNavigation;
 
         public NhsLoginUpliftPage(ILogger<NhsLoginUpliftPage> logger)
         {
             _logger = logger;
+            _appNavigation = new AppNavigation<INhsLoginUpliftView.IEvents>(this, Navigation);
 
             InitializeComponent();
 
             AddEventHandlers();
         }
 
-        Func<Task>? INhsLoginUpliftView.Appearing { get; set; }
-        private AsyncCommand AppearingCommand => new AsyncCommand(() => View.Appearing);
+        IAppNavigation<INhsLoginUpliftView.IEvents> INavigationView<INhsLoginUpliftView.IEvents>.AppNavigation => _appNavigation;
 
-        Func<WebNavigatingEventArgs, Task>? INhsLoginUpliftView.Navigating { get; set; }
-        private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand => new AsyncCommand<WebNavigatingEventArgs>(() => View.Navigating);
+        Func<Task>? INhsLoginUpliftView.IEvents.Appearing { get; set; }
+        private AsyncCommand AppearingCommand
+            => new AsyncCommand(() => ((INhsLoginUpliftView.IEvents)this).Appearing);
 
-        Func<Task>? INhsLoginUpliftView.BackRequested { get; set; }
-        private AsyncCommand BackRequestedCommand => new AsyncCommand(() => View.BackRequested);
+        public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
+        private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand
+            => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
 
-        Func<ISelectMediaRequest, Task>? INhsLoginUpliftView.SelectMediaRequested { get; set; }
-        public AsyncCommand<ISelectMediaRequest> SelectMediaCommand => new AsyncCommand<ISelectMediaRequest>(() => View.SelectMediaRequested);
+        public Func<Task>? BackRequested { get; set; }
+        private AsyncCommand BackRequestedCommand => new AsyncCommand(() => BackRequested);
 
-        private INhsLoginUpliftView View => this;
+        public Func<ISelectMediaRequest, Task>? SelectMediaRequested { get; set; }
+        public AsyncCommand<ISelectMediaRequest> SelectMediaCommand
+            => new AsyncCommand<ISelectMediaRequest>(() => SelectMediaRequested);
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
+
+            _logger.LogInformation("{Method}", nameof(OnAppearing));
+            _appNavigation.EnableHandlers();
 
             RemoveEventHandlers();
             AddEventHandlers();
@@ -50,6 +59,9 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
+
+            _logger.LogInformation("{Method}", nameof(OnDisappearing));
+            _appNavigation.SuppressHandlers();
 
             RemoveEventHandlers();
         }

@@ -12,6 +12,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 {
     internal sealed class NhsLoginUpliftPresenter
     {
+        private bool _hasAlreadyAppeared;
+
         private readonly ILogger _logger;
         private readonly INhsLoginUpliftView _view;
         private readonly NhsLoginUpliftModel _model;
@@ -35,10 +37,15 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
             _uriDestination = new WebIntegrationUriDestination(nhsLoginConfiguration, model.Url);
 
-            _view.Appearing = ViewOnAppearing;
-            _view.Navigating = ViewOnNavigating;
-            _view.BackRequested = BackRequested;
-            _view.SelectMediaRequested = SelectMediaRequested;
+            _view.AppNavigation
+                .RegisterHandler(
+                    ViewOnAppearing, (view, handler) => view.Appearing = handler)
+                .RegisterHandler<WebNavigatingEventArgs>(
+                    ViewOnNavigating, (view, handler) => view.Navigating = handler)
+                .RegisterHandler(
+                    BackRequested, (view, handler) => view.BackRequested = handler)
+                .RegisterHandler<ISelectMediaRequest>(
+                    SelectMediaRequested, (view, handler) => view.SelectMediaRequested = handler);
         }
 
         private async Task SelectMediaRequested(ISelectMediaRequest request)
@@ -48,7 +55,13 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
         private Task ViewOnAppearing()
         {
-            _view.Appearing = null;
+            if (_hasAlreadyAppeared)
+            {
+                return Task.CompletedTask;
+            }
+
+            _hasAlreadyAppeared = true;
+
             _view.GoToUri(_model.Url);
 
             return Task.CompletedTask;
@@ -72,7 +85,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
         private async Task BackRequested()
         {
             _logger.LogInformation("Back Requested");
-            await _view.Navigation.PopAsync().PreserveThreadContext();
+            await _view.AppNavigation.Pop().PreserveThreadContext();
         }
     }
 }

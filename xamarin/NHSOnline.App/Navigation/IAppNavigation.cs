@@ -9,7 +9,9 @@ namespace NHSOnline.App.Navigation
         Task Push(Page page);
         Task Pop();
         Task PopToRoot();
-        Task PopToNewRoot(Page newRootPage, bool isAnimated = true);
+        Task PopToRootAnimated();
+        Task PopToNewRoot(Page newRootPage);
+        Task PopToNewRootAnimated(Page newRootPage);
         Task ReplaceCurrentPage(Page page);
     }
 

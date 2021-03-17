@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.App.Areas.Cookies;
+using NHSOnline.App.Services.Cookies;
 using NHSOnline.App.Areas.Home.Models;
 using NHSOnline.App.Areas.PreHome.Models;
 using NHSOnline.App.Config;
@@ -15,6 +15,8 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
 {
     internal class NhsAppPreHomeScreenWebPresenter
     {
+        private bool _hasAlreadyAppeared;
+
         private readonly INhsAppPreHomeScreenWebView _view;
         private readonly NhsAppPreHomeScreenWebModel _model;
         private readonly INhsAppWebConfiguration _config;
@@ -43,14 +45,14 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             _cookieHandler = cookieHandler;
             _notifications = notifications;
 
-            _view.Appearing = ViewOnAppearing;
-            _view.Navigating = ViewOnNavigating;
-            _view.Navigated = ViewOnNavigated;
-            _view.GetNotificationsStatusRequested = GetNotificationsStatusRequested;
-            _view.GoToLoggedInHomeRequested = GoToLoggedInHomeRequested;
-            _view.GetPnsTokenRequested = RequestPnsToken;
-
-            _view.ResetAndShowErrorRequested = ResetAndShowErrorRequested;
+            _view.AppNavigation
+                .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
+                .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
+                .RegisterHandler<WebNavigatedEventArgs>(ViewOnNavigated, (view, handler) => view.Navigated = handler)
+                .RegisterHandler(GetNotificationsStatusRequested, (view, handler) => view.GetNotificationsStatusRequested = handler)
+                .RegisterHandler(GoToLoggedInHomeRequested, (view, handler) => view.GoToLoggedInHomeRequested = handler)
+                .RegisterHandler<string>(RequestPnsToken, (view, handler) => view.GetPnsTokenRequested = handler)
+                .RegisterHandler(ResetAndShowErrorRequested, (view, handler) => view.ResetAndShowErrorRequested = handler);
         }
 
         private async Task GoToLoggedInHomeRequested()
@@ -58,12 +60,18 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             var homePageModel = new NhsAppWebModel();
             var homePage = _pageFactory.CreatePageFor(homePageModel);
 
-            await _view.AppNavigation.PopToNewRoot(homePage).PreserveThreadContext();
+            await _view.AppNavigation.PopToNewRootAnimated(homePage).PreserveThreadContext();
         }
 
         private async Task ViewOnAppearing()
         {
-            _view.Appearing = null;
+            if (_hasAlreadyAppeared)
+            {
+                return;
+            }
+
+            _hasAlreadyAppeared = true;
+
             await _cookieHandler.AddCookies(_view, _config.BaseAddress, _model.Cookies).PreserveThreadContext();
             await DisplayNhsAppWeb().PreserveThreadContext();
         }
@@ -120,7 +128,7 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
         {
             await DisplayNhsAppWeb().PreserveThreadContext();
             //TODO ShowError
-            _logger.LogInformation($"Showing unexpected error");
+            _logger.LogInformation("Showing unexpected error");
         }
 
         private Task DisplayNhsAppWeb()

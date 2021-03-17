@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using NHSOnline.App.Areas.Cookies;
+using NHSOnline.App.Services.Cookies;
 using NHSOnline.App.Areas.Home;
 using NHSOnline.App.Areas.LoggedOut;
 using NHSOnline.App.Areas.PreHome;

@@ -29,17 +29,17 @@ namespace NHSOnline.App.Areas.PreHome.Views
 
         IAppNavigation<INhsAppPreHomeScreenWebView.IEvents> INavigationView<INhsAppPreHomeScreenWebView.IEvents>.AppNavigation => _appNavigation;
 
-        Func<Task>? INhsAppPreHomeScreenWebView.Appearing { get; set; }
-
-        public Func<Task>? ResetAndShowErrorRequested { get; set; }
+        Func<Task>? INhsAppPreHomeScreenWebView.IEvents.Appearing { get; set; }
+        private AsyncCommand AppearingCommand => new AsyncCommand(() => Events.Appearing);
 
         public Func<Task>? GetNotificationsStatusRequested { get; set; }
+        public AsyncCommand GetNotificationsStatusCommand => new AsyncCommand(() => GetNotificationsStatusRequested);
 
         public Func<string, Task>? GetPnsTokenRequested { get; set; }
+        public AsyncCommand<string> RequestPnsTokenCommand => new AsyncCommand<string>(() => GetPnsTokenRequested);
 
         public Func<Task>? GoToLoggedInHomeRequested { get; set; }
-
-        private AsyncCommand AppearingCommand => new AsyncCommand(() => ((INhsAppPreHomeScreenWebView)this).Appearing);
+        public AsyncCommand GoToLoggedInHomeCommand => new AsyncCommand(() => GoToLoggedInHomeRequested);
 
         public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
         private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
@@ -47,14 +47,16 @@ namespace NHSOnline.App.Areas.PreHome.Views
         public Func<WebNavigatedEventArgs, Task>? Navigated { get; set; }
         private AsyncCommand<WebNavigatedEventArgs> NavigatedCommand => new AsyncCommand<WebNavigatedEventArgs>(() => Navigated);
 
-        public AsyncCommand GetNotificationsStatusCommand
-            => new AsyncCommand(() => GetNotificationsStatusRequested);
+        public Func<Task>? ResetAndShowErrorRequested { get; set; }
+        public async Task ResetAndShowError()
+        {
+            if (Events.ResetAndShowErrorRequested != null)
+            {
+                await Events.ResetAndShowErrorRequested().PreserveThreadContext();
+            }
+        }
 
-        public AsyncCommand<string> RequestPnsTokenCommand
-            => new AsyncCommand<string>(() => GetPnsTokenRequested);
-
-        public AsyncCommand GoToLoggedInHomeCommand
-            => new AsyncCommand(() => GoToLoggedInHomeRequested);
+        private INhsAppPreHomeScreenWebView.IEvents Events => this;
 
         protected override void OnAppearing()
         {
@@ -98,9 +100,6 @@ namespace NHSOnline.App.Areas.PreHome.Views
 
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);
 
-        public async Task ResetAndShowError()
-            => await (ResetAndShowErrorRequested?.Invoke() ?? Task.CompletedTask).PreserveThreadContext();
-
         public async Task SendNotificationsStatus(string status)
             => await WebView.SendNotificationsStatus(status).ResumeOnThreadPool();
 
@@ -109,7 +108,7 @@ namespace NHSOnline.App.Areas.PreHome.Views
 
         public async Task SendNotificationUnauthorised()
             => await WebView.SendNotificationUnauthorised().ResumeOnThreadPool();
-        
+
         private void WebViewNavigating (object sender, WebNavigatingEventArgs e)
         {
             Spinner.IsVisible = true;

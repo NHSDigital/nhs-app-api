@@ -4,18 +4,21 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
+using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.WebIntegration.Views
 {
     [DesignTimeVisible(false)]
-    public partial class WebIntegrationPage : IWebIntegrationView
+    public partial class WebIntegrationPage : IWebIntegrationView, IWebIntegrationView.IEvents
     {
         private readonly ILogger _logger;
+        private readonly AppNavigation<IWebIntegrationView.IEvents> _appNavigation;
 
         public WebIntegrationPage(ILogger<WebIntegrationPage> logger)
         {
             _logger = logger;
+            _appNavigation = new AppNavigation<IWebIntegrationView.IEvents>(this, Navigation);
 
             InitializeComponent();
 
@@ -24,8 +27,10 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
             NavigationPage.SetHasNavigationBar(this, false);
         }
 
-        Func<Task>? IWebIntegrationView.Appearing { get; set; }
-        private AsyncCommand AppearingCommand => new AsyncCommand(() => ((IWebIntegrationView)this).Appearing);
+        IAppNavigation<IWebIntegrationView.IEvents> INavigationView<IWebIntegrationView.IEvents>.AppNavigation => _appNavigation;
+
+        Func<Task>? IWebIntegrationView.IEvents.Appearing { get; set; }
+        private AsyncCommand AppearingCommand => new AsyncCommand(() => ((IWebIntegrationView.IEvents)this).Appearing);
 
         public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
         private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
@@ -38,6 +43,9 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         {
             base.OnAppearing();
 
+            _logger.LogInformation("{Method}", nameof(OnAppearing));
+            _appNavigation.EnableHandlers();
+
             RemoveEventHandlers();
             AddEventHandlers();
 
@@ -47,6 +55,9 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
+
+            _logger.LogInformation("{Method}", nameof(OnDisappearing));
+            _appNavigation.SuppressHandlers();
 
             RemoveEventHandlers();
         }

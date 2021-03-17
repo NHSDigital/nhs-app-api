@@ -2,8 +2,9 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using NHSOnline.App.Areas;
 
-namespace NHSOnline.App.Areas.Cookies
+namespace NHSOnline.App.Services.Cookies
 {
     internal class CookieHandler : ICookieHandler
     {
