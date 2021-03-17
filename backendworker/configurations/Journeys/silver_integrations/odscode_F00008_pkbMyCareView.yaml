@@ -15,7 +15,8 @@ journeys:
     libraries: []
     medicines:
       - pkbMyCareView
-    messages: []
+    messages:
+      - pkbMyCareView
     secondaryAppointments:
       - pkbMyCareView
     testResults: []

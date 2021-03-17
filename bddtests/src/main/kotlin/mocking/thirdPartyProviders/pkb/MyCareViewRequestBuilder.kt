@@ -14,13 +14,18 @@ class MyCareViewRequestBuilder(queryStringEntries: HashMap<String, String> = has
         }
     }
 
-    fun medicinesRequest() = MyCareViewRequestBuilder(
-            hashMapOf("phrPath" to "/auth/manageMedications.action?tab=treatments",
+    fun appointmentRequest() = MyCareViewRequestBuilder(
+            hashMapOf("phrPath" to "/diary/listAppointments.action",
                     "brand" to "pkbMyCareView")
     )
 
-    fun appointmentRequest() = MyCareViewRequestBuilder(
-            hashMapOf("phrPath" to "/diary/listAppointments.action",
+    fun messagesRequest() = MyCareViewRequestBuilder(
+            hashMapOf("phrPath" to "/auth/getInbox.action?tab=messages",
+                    "brand" to "pkbMyCareView")
+    )
+
+    fun medicinesRequest() = MyCareViewRequestBuilder(
+            hashMapOf("phrPath" to "/auth/manageMedications.action?tab=treatments",
                     "brand" to "pkbMyCareView")
     )
 

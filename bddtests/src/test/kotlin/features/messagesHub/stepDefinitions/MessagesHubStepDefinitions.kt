@@ -22,6 +22,16 @@ class MessagesHubStepDefinitions {
         messagesHubPage.clickOnMenuItem("btn_pkb_cie_messages_and_consultations")
     }
 
+    @When("^I click the PKB Secondary Care Messages and online consultations link on the Messages Hub page$")
+    fun clickOnPkbSecondaryCareMessagesConsultations() {
+        messagesHubPage.clickOnMenuItem("btn_pkb_secondary_care_messages_and_consultations")
+    }
+
+    @When("^I click the PKB My Care View Messages and online consultations link on the Messages Hub page$")
+    fun clickOnPkbMyCareViewMessagesConsultations() {
+        messagesHubPage.clickOnMenuItem("btn_pkb_my_care_view_messages_and_consultations")
+    }
+
     @When("^I click the Engage Messages link on the Messages Hub page$")
     fun clickOnEngageMessagesConsultations() {
         messagesHubPage.clickOnMenuItem("btn_engage_messages")
@@ -60,6 +70,16 @@ class MessagesHubStepDefinitions {
     @Then("^the link to CIE Messages and consultations is not available on the Messages Hub page")
     fun theMessagesConsultationsLinkForCIDIsNotDisplayed() {
         messagesHubPage.assertMenuItemNotDisplayed("btn_pkb_cie_messages_and_consultations")
+    }
+
+    @Then("^the link to PKB Secondary Care Messages and consultations is not available on the Messages Hub page")
+    fun theMessagesConsultationsLinkForPkbSecondaryCareIsNotDisplayed() {
+        messagesHubPage.assertMenuItemNotDisplayed("btn_pkb_secondary_care_messages_and_consultations")
+    }
+
+    @Then("^the link to PKB My Care View Messages and consultations is not available on the Messages Hub page")
+    fun theMessagesConsultationsLinkForPkbMyCareViewIsNotDisplayed() {
+        messagesHubPage.assertMenuItemNotDisplayed("btn_pkb_my_care_view_messages_and_consultations")
     }
 
     @When("^the link to Engage Messages and consultations is not available on the Messages Hub page$")

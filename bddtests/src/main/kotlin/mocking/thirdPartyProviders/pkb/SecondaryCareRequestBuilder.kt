@@ -14,13 +14,18 @@ class SecondaryCareRequestBuilder(queryStringEntries: HashMap<String, String> = 
         }
     }
 
-    fun medicineRequest() = SecondaryCareRequestBuilder(
-            hashMapOf("phrPath" to "/auth/manageMedications.action?tab=treatments",
+    fun appointmentRequest() = SecondaryCareRequestBuilder(
+            hashMapOf("phrPath" to "/diary/listAppointments.action",
                     "brand" to "pkbSecondaryCare")
     )
 
-    fun appointmentRequest() = SecondaryCareRequestBuilder(
-            hashMapOf("phrPath" to "/diary/listAppointments.action",
+    fun messagesRequest() = SecondaryCareRequestBuilder(
+            hashMapOf("phrPath" to "/auth/getInbox.action?tab=messages",
+                    "brand" to "pkbSecondaryCare")
+    )
+
+    fun medicineRequest() = SecondaryCareRequestBuilder(
+            hashMapOf("phrPath" to "/auth/manageMedications.action?tab=treatments",
                     "brand" to "pkbSecondaryCare")
     )
 

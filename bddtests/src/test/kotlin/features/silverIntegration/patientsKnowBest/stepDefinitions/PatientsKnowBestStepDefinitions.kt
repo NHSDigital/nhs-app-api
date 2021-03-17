@@ -89,14 +89,14 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB)
     }
 
-    @Given("^I am a user with proof level 5 who can view Messages and Online Consultations from Patients Know Best$")
-    fun iAmAUserWithProofLevel5WhoCanViewMessagesAndOnlineConsultationsFromPatientsKnowBest(){
-        setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB, IdentityProofingLevel.P5)
-    }
-
     @Given("^I am a user who cannot view Messages and Online Consultations from Patients Know Best$")
     fun iAmAUserWhoCannotViewMessagesAndOnlineConsultationsFromPatientsKnowBest() {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_NONE)
+    }
+
+    @Given("^I am a user with proof level 5 who can view Messages and Online Consultations from Patients Know Best$")
+    fun iAmAUserWithProofLevel5WhoCanViewMessagesAndOnlineConsultationsFromPatientsKnowBest(){
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB, IdentityProofingLevel.P5)
     }
 
     @Given("^I am a user who can view Shared Links from Patients Know Best$")

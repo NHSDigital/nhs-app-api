@@ -203,8 +203,8 @@ export default {
       {
         id: 'messages',
         jumpOffContent: {
-          headerText: 'Messages and consultations with a doctor or health professional',
-          descriptionText: 'Send or view messages and online consultations with a doctor or health professional',
+          headerText: 'Consultations, events and messages',
+          descriptionText: 'See details of your visits and treatments, view clinical documents, message your health team, or fill in a consultation form',
         },
         thirdPartyWarning: {
           featureName: 'Messages and online consultations',
@@ -362,20 +362,6 @@ export default {
         },
       },
       {
-        id: 'medicinesPkbSecondaryCare',
-        jumpOffContent: {
-          headerText: 'Hospital and other medicines',
-          descriptionText: 'View your current and past medicines or add a record of your own',
-        },
-        thirdPartyWarning: {
-          featureName: 'Hospital and other medicines',
-          servicePurchaser: 'Your GP surgery or hospital',
-          serviceType: 'personal health record service',
-          serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
-        },
-      },
-      {
         id: 'appointmentsPkbSecondaryCare',
         jumpOffContent: {
           headerText: 'View appointments',
@@ -390,13 +376,26 @@ export default {
         },
       },
       {
-        id: 'medicinesPkbMyCareView',
+        id: 'messagesPkbSecondaryCare',
+        jumpOffContent: {
+          headerText: 'Consultations, events and messages',
+          descriptionText: 'See details of your visits and treatments, view clinical documents, message your health team, or fill in a consultation form',
+        },
+        thirdPartyWarning: {
+          featureName: 'Consultations, events and messages',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
+        id: 'medicinesPkbSecondaryCare',
         jumpOffContent: {
           headerText: 'Hospital and other medicines',
           descriptionText: 'View your current and past medicines or add a record of your own',
         },
         thirdPartyWarning: {
-          brandName: 'MyCareView powered by Patients Know Best',
           featureName: 'Hospital and other medicines',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
@@ -413,6 +412,36 @@ export default {
         thirdPartyWarning: {
           brandName: 'MyCareView powered by Patients Know Best',
           featureName: 'View appointments',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
+        id: 'messagesPkbMyCareView',
+        jumpOffContent: {
+          headerText: 'Consultations, events and messages',
+          descriptionText: 'See details of your visits and treatments, view clinical documents, message your health team, or fill in a consultation form',
+        },
+        thirdPartyWarning: {
+          brandName: 'MyCareView powered by Patients Know Best',
+          featureName: 'Consultations, events and messages',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
+        id: 'medicinesPkbMyCareView',
+        jumpOffContent: {
+          headerText: 'Hospital and other medicines',
+          descriptionText: 'View your current and past medicines or add a record of your own',
+        },
+        thirdPartyWarning: {
+          brandName: 'MyCareView powered by Patients Know Best',
+          featureName: 'Hospital and other medicines',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',

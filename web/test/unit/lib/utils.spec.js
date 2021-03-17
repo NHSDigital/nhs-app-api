@@ -732,7 +732,7 @@ describe('util library', () => {
         textType: 'headerText',
         jumpOffId: 'messages',
         feature: 'jumpOffContent',
-        expectedText: 'Messages and consultations with a doctor or health professional',
+        expectedText: 'Consultations, events and messages',
       }, {
         textType: 'featureName',
         jumpOffId: 'messages',

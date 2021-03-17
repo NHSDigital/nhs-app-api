@@ -16,7 +16,7 @@ Feature: Silver integration errors
     Given I am a user with proof level 5 who can view Messages and Online Consultations from Patients Know Best
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Fauth%252FgetInbox.action%253Ftab%253Dmessages'
-    Then the page title is 'Messages and consultations with a doctor or health professional'
+    Then the page title is 'Consultations, events and messages'
     And I am asked to prove my identity to access 'silver integration feature'
     When I click the 'Continue' button
     Then the uplift journey starts

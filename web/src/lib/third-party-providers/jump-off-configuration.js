@@ -94,22 +94,22 @@ const thirdPartyProvider = {
       provider: 'pkbCie',
       serviceType: 'testResults',
     },
-    medicinesPkbSecondaryCare: {
-      jumpOffId: 'medicinesPkbSecondaryCare',
-      redirectPath: '/nhs-login/login?phrPath=/auth/manageMedications.action?tab=treatments&brand=pkbSecondaryCare',
-      provider: 'pkbSecondaryCare',
-      serviceType: 'medicines',
-    },
     appointmentsPkbSecondaryCare: {
       jumpOffId: 'appointmentsPkbSecondaryCare',
       redirectPath: '/nhs-login/login?phrPath=/diary/listAppointments.action&brand=pkbSecondaryCare',
       provider: 'pkbSecondaryCare',
       serviceType: 'secondaryAppointments',
     },
-    medicinesPkbMyCareView: {
-      jumpOffId: 'medicinesPkbMyCareView',
-      redirectPath: '/nhs-login/login?phrPath=/auth/manageMedications.action?tab=treatments&brand=pkbMyCareView',
-      provider: 'pkbMyCareView',
+    messagesPkbSecondaryCare: {
+      jumpOffId: 'messagesPkbSecondaryCare',
+      redirectPath: '/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages&brand=pkbSecondaryCare',
+      provider: 'pkbSecondaryCare',
+      serviceType: 'messages',
+    },
+    medicinesPkbSecondaryCare: {
+      jumpOffId: 'medicinesPkbSecondaryCare',
+      redirectPath: '/nhs-login/login?phrPath=/auth/manageMedications.action?tab=treatments&brand=pkbSecondaryCare',
+      provider: 'pkbSecondaryCare',
       serviceType: 'medicines',
     },
     appointmentsPkbMyCareView: {
@@ -117,6 +117,18 @@ const thirdPartyProvider = {
       redirectPath: '/nhs-login/login?phrPath=/diary/listAppointments.action&brand=pkbMyCareView',
       provider: 'pkbMyCareView',
       serviceType: 'secondaryAppointments',
+    },
+    messagesPkbMyCareView: {
+      jumpOffId: 'messagesPkbMyCareView',
+      redirectPath: '/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages&brand=pkbMyCareView',
+      provider: 'pkbMyCareView',
+      serviceType: 'messages',
+    },
+    medicinesPkbMyCareView: {
+      jumpOffId: 'medicinesPkbMyCareView',
+      redirectPath: '/nhs-login/login?phrPath=/auth/manageMedications.action?tab=treatments&brand=pkbMyCareView',
+      provider: 'pkbMyCareView',
+      serviceType: 'medicines',
     },
   },
   substraktPatientPack: {

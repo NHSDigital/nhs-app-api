@@ -119,7 +119,8 @@ class ServiceJourneyRulesMapper {
                                 SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_NONE,
                                 SJRJourneyType.MEDICAL_RECORD_IM1,
                                 SJRJourneyType.SILVER_INTEGRATION_MEDICINES_PKB_SECONDARY_CARE,
-                                SJRJourneyType.SILVER_INTEGRATION_APPOINTMENTS_PKB_SECONDARY_CARE))
+                                SJRJourneyType.SILVER_INTEGRATION_APPOINTMENTS_PKB_SECONDARY_CARE,
+                                SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_SECONDARY_CARE))
                 .add(Supplier.EMIS, "A82010",
                         EnumSet.of(
                                 SJRJourneyType.SILVER_INTEGRATION_MESSAGES_SUBSTRAKT,
@@ -128,7 +129,8 @@ class ServiceJourneyRulesMapper {
                 .add(Supplier.EMIS, "A10001",
                         EnumSet.of(
                                 SJRJourneyType.SILVER_INTEGRATION_MEDICINES_PKB_MY_CARE_VIEW,
-                                SJRJourneyType.SILVER_INTEGRATION_APPOINTMENTS_PKB_MY_CARE_VIEW))
+                                SJRJourneyType.SILVER_INTEGRATION_APPOINTMENTS_PKB_MY_CARE_VIEW,
+                                SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_MY_CARE_VIEW))
 
         fun findPatientForConfiguration(gpSystem: Supplier?,
                                         journeyType: SJRJourneyType,

@@ -45,11 +45,14 @@ class PkbSecondaryCareStepDefinitions : HybridPageObject() {
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS)
     }
 
-    @Given("^Secondary Care responds to requests for medicines$")
-    fun secondaryCareRespondsToRequestsForMedicines() {
-        MockingClient.instance.forSecondaryCare.mock {
-            SecondaryCareRequestBuilder().medicineRequest().respondWithPage()
-        }
+    @Given("^I am a user who can view Messages and Online Consultations from PKB Secondary Care$")
+    fun iAmAUserWhoCanViewMessagesAndOnlineConsultationsFromPkbSecondaryCare(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_SECONDARY_CARE)
+    }
+
+    @Given("^I am a user who cannot view Messages and Online Consultations from PKB Secondary Care$")
+    fun iAmAUserWhoCannotViewMessagesAndOnlineConsultationsFromPkbSecondaryCare() {
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_NONE)
     }
 
     @Given("^Secondary Care responds to requests for appointments$")
@@ -57,6 +60,26 @@ class PkbSecondaryCareStepDefinitions : HybridPageObject() {
         MockingClient.instance.forSecondaryCare.mock {
             SecondaryCareRequestBuilder().appointmentRequest().respondWithPage()
         }
+    }
+
+    @Given("^Secondary Care responds to requests for messages$")
+    fun secondaryCareRespondsToRequestsForMessages() {
+        MockingClient.instance.forSecondaryCare.mock {
+            SecondaryCareRequestBuilder().messagesRequest().respondWithPage()
+        }
+    }
+
+    @Given("^Secondary Care responds to requests for medicines$")
+    fun secondaryCareRespondsToRequestsForMedicines() {
+        MockingClient.instance.forSecondaryCare.mock {
+            SecondaryCareRequestBuilder().medicineRequest().respondWithPage()
+        }
+    }
+
+    @Given("^I am a user with proof level 5 who can view" +
+            " Messages and Online Consultations from PKB Secondary Care$")
+    fun iAmAUserWithProofLevel5WhoCanViewMessagesAndOnlineConsultationsFromPkbSecondaryCare(){
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_SECONDARY_CARE, IdentityProofingLevel.P5)
     }
 
     @Then("^the PKB Secondary Care View Medicines link is available on the Prescriptions Hub$")
@@ -92,10 +115,10 @@ class PkbSecondaryCareStepDefinitions : HybridPageObject() {
                 "Find out more about personal health record services")
     }
 
-    @Then("the view appointments warning on the page explains the service is from PKB My Care View")
-    fun assertViewAppointmentsWarningMessageContentForPkbMyCareView() {
+    @Then("the consultations warning on the page explains the service is from PKB Secondary Care$")
+    fun assertConsultationsWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-                "View appointments\nThis service is provided by MyCareView powered by Patients Know Best",
+                "Consultations, events and messages\nThis service is provided by Patients Know Best",
                 "Your GP surgery or hospital has chosen this personal health record service provider.",
                 "Find out more about personal health record services")
     }

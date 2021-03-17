@@ -45,14 +45,35 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS)
     }
 
+    @Given("^I am a user who can view Messages and Online Consultations from PKB My Care View$")
+    fun iAmAUserWhoCanViewMessagesAndOnlineConsultationsFromPkbMyCareView(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_MY_CARE_VIEW)
+    }
+
+    @Given("^I am a user who cannot view Messages and Online Consultations from PKB My Care View$")
+    fun iAmAUserWhoCannotViewMessagesAndOnlineConsultationsFromPkbMyCareView() {
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_NONE)
+    }
+
     @Given("^My Care View responds to requests for appointments$")
     fun myCareViewRespondsToRequestsForAppointments() {
         MockingClient.instance.forMyCareView.mock { MyCareViewRequestBuilder().appointmentRequest().respondWithPage() }
     }
 
+    @Given("^My Care View responds to requests for messages$")
+    fun myCareViewRespondsToRequestsForMessages() {
+        MockingClient.instance.forMyCareView.mock { MyCareViewRequestBuilder().messagesRequest().respondWithPage() }
+    }
+
     @Given("^My Care View responds to requests for medicines$")
     fun myCareViewRespondsToRequestsForMedicines() {
         MockingClient.instance.forMyCareView.mock { MyCareViewRequestBuilder().medicinesRequest().respondWithPage() }
+    }
+
+    @Given("^I am a user with proof level 5 who can view" +
+            " Messages and Online Consultations from PKB My Care View$")
+    fun iAmAUserWithProofLevel5WhoCanViewMessagesAndOnlineConsultationsFromPkbMyCareView(){
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_MY_CARE_VIEW, IdentityProofingLevel.P5)
     }
 
     @Then("^the PKB My Care View Medicines link is available on the Prescriptions Hub$")
@@ -80,10 +101,28 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
         hospitalAppointmentsPage.btnPkbAppointments.click()
     }
 
+    @Then("the view appointments warning on the page explains the service is from PKB My Care View")
+    fun assertViewAppointmentsWarningMessageContentForPkbMyCareView() {
+        redirector.interruptionCard.assertContent(
+                "View appointments\nThis service is provided by MyCareView powered by Patients Know Best",
+                "Your GP surgery or hospital has chosen this personal health record service provider.",
+                "Find out more about personal health record services")
+    }
+
+    @Then("the consultations warning on the page explains the service is from PKB My Care View$")
+    fun assertConsultationsWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+                "Consultations, events and messages\n" +
+                        "This service is provided by MyCareView powered by Patients Know Best",
+                "Your GP surgery or hospital has chosen this personal health record service provider.",
+                "Find out more about personal health record services")
+    }
+
     @Then("the hospital and medicines warning on the page explains the service is from PKB My Care View$")
     fun assertHospitalAndMedicinesWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-                "Hospital and other medicines\nThis service is provided by MyCareView powered by Patients Know Best",
+                "Hospital and other medicines\n" +
+                        "This service is provided by MyCareView powered by Patients Know Best",
                 "Your GP surgery or hospital has chosen this personal health record service provider.",
                 "Find out more about personal health record services")
     }
