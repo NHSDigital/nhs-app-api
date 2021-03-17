@@ -14,6 +14,7 @@
                     class="nhsuk-header__menu-toggle"
                     :class="$style.menuButton"
                     aria-controls="header-navigation"
+                    :aria-expanded="miniMenuExpanded"
                     :aria-label="$t('navigation.header.openMenu')"
                     @click.prevent="toggleMiniMenu"
                     @keyup.enter="toggleMiniMenu">{{ $t('navigation.header.menu') }}
@@ -93,6 +94,9 @@ export default {
         { name: this.$t('navigation.header.more'), value: this.morePath, id: 'more-link', internal: true },
         { name: this.$t('navigation.header.logout'), value: this.logoutPath, id: 'account-logout', internal: true },
       ];
+    },
+    miniMenuExpanded() {
+      return this.$store.state.header.miniMenuExpanded.toString();
     },
   },
   methods: {
