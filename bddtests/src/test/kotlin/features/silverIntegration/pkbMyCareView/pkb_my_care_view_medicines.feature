@@ -25,17 +25,17 @@ Feature: Patients Know Best My Care View Medicines
 
   Scenario: A user navigates directly to an external partner site and will see a warning page
     Given I am a user who can view Medicines from PKB My Care View
-    And My Care View responds to requests for appointments
+    And My Care View responds to requests for medicines
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Fauth%2FmanageMedications.action%3Ftab%3Dtreatments%26brand=myCareView'
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Fauth%2FmanageMedications.action%3Ftab%3Dtreatments%26brand=pkbMyCareView'
     Then I am redirected to the redirector page with the header 'Hospital and other medicines'
-    When I click the 'Continue' button on the redirector page with a url starting with 'http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=/auth/manageMedications.action?tab=treatments&brand=myCareView'
+    When I click the 'Continue' button on the redirector page with a url starting with 'http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=/auth/manageMedications.action?tab=treatments&brand=pkbMyCareView'
     Then I am navigated to a third party site for My Care View
 
   Scenario: A user can follow the link to Find out more about personal health records
     Given I am a user who can view Medicines from PKB My Care View
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Fauth%2FmanageMedications.action%3Ftab%3Dtreatments%26brand=myCareView'
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Fauth%2FmanageMedications.action%3Ftab%3Dtreatments%26brand=pkbMyCareView'
     Then I am redirected to the redirector page with the header 'Hospital and other medicines'
     When I click the link called 'Find out more about personal health record services' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/'
     Then a new tab has been opened by the link
@@ -43,7 +43,7 @@ Feature: Patients Know Best My Care View Medicines
   Scenario: A user who cannot see PKB My Care View medications but tries to access it is redirected
     Given I am a user who cannot view Medicines from PKB My Care View
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Fauth%2FmanageMedications.action%3Ftab%3Dtreatments%26brand=myCareView'
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Fauth%2FmanageMedications.action%3Ftab%3Dtreatments%26brand=pkbMyCareView'
     Then I see silver integration error page loaded with title Hospital and other medicines
     When I select the Go to NHS App homepage link from the feature not available page
     Then I see the home page header

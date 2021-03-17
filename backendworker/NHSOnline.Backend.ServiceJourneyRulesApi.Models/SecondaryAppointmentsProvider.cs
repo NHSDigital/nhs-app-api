@@ -10,6 +10,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
         ers,
         pkb,
         pkbCie,
+        pkbMyCareView,
+        pkbSecondaryCare,
         gncr
     }
 }

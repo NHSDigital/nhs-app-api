@@ -100,11 +100,23 @@ const thirdPartyProvider = {
       provider: 'pkbSecondaryCare',
       serviceType: 'medicines',
     },
+    appointmentsPkbSecondaryCare: {
+      jumpOffId: 'appointmentsPkbSecondaryCare',
+      redirectPath: '/nhs-login/login?phrPath=/diary/listAppointments.action&brand=pkbSecondaryCare',
+      provider: 'pkbSecondaryCare',
+      serviceType: 'secondaryAppointments',
+    },
     medicinesPkbMyCareView: {
       jumpOffId: 'medicinesPkbMyCareView',
-      redirectPath: '/nhs-login/login?phrPath=/auth/manageMedications.action?tab=treatments&brand=myCareView',
+      redirectPath: '/nhs-login/login?phrPath=/auth/manageMedications.action?tab=treatments&brand=pkbMyCareView',
       provider: 'pkbMyCareView',
       serviceType: 'medicines',
+    },
+    appointmentsPkbMyCareView: {
+      jumpOffId: 'appointmentsPkbMyCareView',
+      redirectPath: '/nhs-login/login?phrPath=/diary/listAppointments.action&brand=pkbMyCareView',
+      provider: 'pkbMyCareView',
+      serviceType: 'secondaryAppointments',
     },
   },
   substraktPatientPack: {

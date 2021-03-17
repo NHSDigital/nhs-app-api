@@ -74,3 +74,19 @@ Feature: Hospital Appointments
     When I click the 'Hospital and other services' link on the Appointments Hub
     Then the Hospital Appointments page is displayed
     And the Hospital Appointments links are displayed
+
+  Scenario: A user with no access to PKB Secondary Care cannot see the Appointments link on the Prescriptions Hub
+    Given I am a user who cannot view Medicines from PKB Secondary Care
+    And I am logged in
+    Then I see the home page
+    Given I navigate to the your prescriptions page
+    Then the Prescriptions Hub page is displayed
+    And the link to PKB Secondary Care View Appointments is not available on the Appointments page
+
+  Scenario: A user with no access to PKB My Care View cannot see the Medicines link on the Prescriptions Hub
+    Given I am a user who cannot view Medicines from PKB My Care View
+    And I am logged in
+    Then I see the home page
+    Given I navigate to the your prescriptions page
+    Then the Prescriptions Hub page is displayed
+    And the link to PKB My Care View Appointments is not available on the Appointments page

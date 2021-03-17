@@ -54,6 +54,12 @@ describe('hospital appointments hub', () => {
       ['cie', 'Appointments', true, false, true],
       ['cie', 'Appointments', true, true, false],
       ['cie', 'Appointments', false, false, false],
+      ['pkbSecondaryCare', 'Appointments', true, false, true],
+      ['pkbSecondaryCare', 'Appointments', true, true, false],
+      ['pkbSecondaryCare', 'Appointments', false, false, false],
+      ['pkbMyCareView', 'Appointments', true, false, true],
+      ['pkbMyCareView', 'Appointments', true, true, false],
+      ['pkbMyCareView', 'Appointments', false, false, false],
     ]).describe('%s %s enabled is %s, proxy is %s', (
       provider, linkType, context, isProxy, expectedResult,
     ) => {
@@ -67,6 +73,12 @@ describe('hospital appointments hub', () => {
             break;
           case 'pkbAppointments':
             linkElement = '#btn_pkb_appointments';
+            break;
+          case 'pkbSecondaryCare':
+            linkElement = '#btn_pkb_secondary_care_appointments';
+            break;
+          case 'pkbMyCareView':
+            linkElement = '#btn_pkb_my_care_view_appointments';
             break;
           default:
             break;

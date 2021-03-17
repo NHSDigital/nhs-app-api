@@ -10,4 +10,5 @@ journeys:
     medicines:
       - pkbMyCareView
     messages: []
-    secondaryAppointments: []
+    secondaryAppointments:
+      - pkbMyCareView

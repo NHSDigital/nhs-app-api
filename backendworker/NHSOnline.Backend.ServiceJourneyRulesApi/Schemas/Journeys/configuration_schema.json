@@ -192,7 +192,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [ "ers", "pkb", "pkbCie", "gncr"]
+            "enum": [ "ers", "pkb", "pkbCie", "pkbMyCareView" , "pkbSecondaryCare" , "gncr"]
           }
         },
         "testResults": {

@@ -16,5 +16,6 @@ journeys:
     medicines:
       - pkbSecondaryCare
     messages: []
-    secondaryAppointments: []
+    secondaryAppointments:
+      - pkbSecondaryCare
     testResults: []

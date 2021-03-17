@@ -344,6 +344,20 @@ export default {
         },
       },
       {
+        id: 'appointmentsPkbSecondaryCare',
+        jumpOffContent: {
+          headerText: 'View appointments',
+          descriptionText: 'See your upcoming and past hospital or other appointments',
+        },
+        thirdPartyWarning: {
+          featureName: 'View appointments',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
         id: 'medicinesPkbMyCareView',
         jumpOffContent: {
           headerText: 'Hospital and other medicines',
@@ -352,6 +366,21 @@ export default {
         thirdPartyWarning: {
           brandName: 'MyCareView powered by Patients Know Best',
           featureName: 'Hospital and other medicines',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
+        id: 'appointmentsPkbMyCareView',
+        jumpOffContent: {
+          headerText: 'View appointments',
+          descriptionText: 'See your upcoming and past hospital or other appointments',
+        },
+        thirdPartyWarning: {
+          brandName: 'MyCareView powered by Patients Know Best',
+          featureName: 'View appointments',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',

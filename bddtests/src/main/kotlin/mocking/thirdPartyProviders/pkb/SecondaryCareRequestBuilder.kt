@@ -19,6 +19,11 @@ class SecondaryCareRequestBuilder(queryStringEntries: HashMap<String, String> = 
                     "brand" to "pkbSecondaryCare")
     )
 
+    fun appointmentRequest() = SecondaryCareRequestBuilder(
+            hashMapOf("phrPath" to "/diary/listAppointments.action",
+                    "brand" to "pkbSecondaryCare")
+    )
+
     fun respondWithPage(): Mapping {
         return respondWith(HttpStatus.SC_OK) {
             andHtmlBody("""

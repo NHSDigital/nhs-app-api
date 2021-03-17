@@ -14,9 +14,14 @@ class MyCareViewRequestBuilder(queryStringEntries: HashMap<String, String> = has
         }
     }
 
-    fun appointmentsRequest() = MyCareViewRequestBuilder(
+    fun medicinesRequest() = MyCareViewRequestBuilder(
             hashMapOf("phrPath" to "/auth/manageMedications.action?tab=treatments",
-                    "brand" to "myCareView")
+                    "brand" to "pkbMyCareView")
+    )
+
+    fun appointmentRequest() = MyCareViewRequestBuilder(
+            hashMapOf("phrPath" to "/diary/listAppointments.action",
+                    "brand" to "pkbMyCareView")
     )
 
     fun respondWithPage(): Mapping {
