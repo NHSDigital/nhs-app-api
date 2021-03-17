@@ -102,5 +102,17 @@ namespace NHSOnline.App.Areas.PreHome.Views
         {
             return JsonConvert.SerializeObject(arg);
         }
+
+        private void WebViewNavigating (object sender, WebNavigatingEventArgs e)
+        {
+            Spinner.IsVisible = true;
+            WebView.IsVisible = false;
+        }
+
+        private void WebOnEndNavigating (object sender, WebNavigatedEventArgs e)
+        {
+            Spinner.IsVisible = false;
+            WebView.IsVisible = true;
+        }
     }
 }

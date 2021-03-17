@@ -32,7 +32,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
 
         public Func<Task>? NavigationFailed { get; set; }
         private AsyncCommand NavigationFailedCommand => new AsyncCommand(() => NavigationFailed);
-        
+
         public Func<Task>? BackRequested { get; set; }
         private AsyncCommand BackRequestedCommand => new AsyncCommand(() => BackRequested);
 
@@ -102,6 +102,19 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         {
             BackRequestedCommand.Execute(null);
             return true;
+        }
+
+        private void WebViewNavigating (object sender, WebNavigatingEventArgs e)
+        {
+            Spinner.IsVisible = true;
+            WebView.IsVisible = false;
+
+        }
+
+        private void WebOnEndNavigating (object sender, WebNavigatedEventArgs e)
+        {
+            Spinner.IsVisible = false;
+            WebView.IsVisible = true;
         }
     }
 }

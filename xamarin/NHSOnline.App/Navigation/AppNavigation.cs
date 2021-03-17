@@ -81,12 +81,12 @@ namespace NHSOnline.App.Navigation
             await _navigation.PopToRootAsync().PreserveThreadContext();
         }
 
-        public async Task PopToNewRoot(Page newRootPage)
+        public async Task PopToNewRoot(Page newRootPage, bool isAnimated = true)
         {
             SuppressHandlers();
 
             _navigation.InsertPageBefore(newRootPage, _navigation.NavigationStack[0]);
-            await _navigation.PopToRootAsync().PreserveThreadContext();
+            await _navigation.PopToRootAsync(isAnimated).PreserveThreadContext();
         }
 
         public async Task ReplaceCurrentPage(Page page)

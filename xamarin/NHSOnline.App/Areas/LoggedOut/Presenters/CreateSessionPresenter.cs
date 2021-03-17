@@ -94,7 +94,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var preHomeScreenModel = new NhsAppPreHomeScreenWebModel(sessionCookies);
             var preHomeScreenPage = _pageFactory.CreatePageFor(preHomeScreenModel);
 
-            await _view.AppNavigation.PopToNewRoot(preHomeScreenPage).PreserveThreadContext();
+            await _view.AppNavigation.PopToNewRoot(preHomeScreenPage, false).PreserveThreadContext();
         }
 
         private async Task NavigateToFailedPage()
