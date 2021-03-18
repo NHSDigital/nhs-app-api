@@ -1,11 +1,15 @@
 <template>
   <div :class="{ [$style.toggleWrapper]: true, [$style.waiting]: isWaiting }">
     <toggle-spinner :id="`${checkboxId}_spinner`" v-visible="isWaiting" :class="$style.spinner" />
+    <section :id="'hiddenLabel'"
+             :class="$style.hideAria"
+             role="note">{{ ariaLabel }}</section>
     <input :id="checkboxId"
            :class="$style.toggle"
            type="checkbox"
            :name="name"
            :checked="value"
+           :aria-labelledby="'hiddenLabel'"
            role="switch"
            @click.stop.prevent="onClick">
     <span :id="`span${checkboxId}`" v-visible="!isWaiting"
@@ -37,6 +41,10 @@ export default {
     // eslint-disable-next-line vue/require-prop-types
     value: {
       default: '',
+    },
+    ariaLabel: {
+      type: String,
+      default: undefined,
     },
   },
   methods: {

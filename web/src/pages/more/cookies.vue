@@ -21,7 +21,8 @@
       checkbox-id="allow_cookies"
       :is-waiting="false"
       :label="$t('account.cookies.allowOptionalCookies')"
-      :hint-text="$t('account.cookies.iAcceptTheUseOfOptionalCookies')"/>
+      :hint-text="$t('account.cookies.iAcceptTheUseOfOptionalCookies')"
+      :aria-label="$t('account.cookies.turningCookiesOffRefreshesThePage')"/>
 
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                             :path="backPath"

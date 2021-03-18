@@ -9,8 +9,12 @@
         <span class="nhsuk-body">{{ hintText }}</span>
       </template>
     </label>
-    <toggle :value="value" :checkbox-id="checkboxId" :is-waiting="isWaiting"
-            :name="checkboxId" @input="onClick"/>
+    <toggle :value="value"
+            :checkbox-id="checkboxId"
+            :is-waiting="isWaiting"
+            :name="checkboxId"
+            :aria-label="ariaLabel"
+            @input="onClick"/>
   </div>
 </template>
 
@@ -42,6 +46,10 @@ export default {
     hintText: {
       type: String,
       default: '',
+    },
+    ariaLabel: {
+      type: String,
+      default: undefined,
     },
   },
   computed: {

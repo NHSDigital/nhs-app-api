@@ -35,6 +35,11 @@
     transition: visibility 0s, opacity 0.5s linear;
   }
 
+  .hideAria {
+    position: absolute;
+    left: -999em;
+  }
+
   input.toggle {
     opacity: 0; // hides checkbox
     position: absolute;
