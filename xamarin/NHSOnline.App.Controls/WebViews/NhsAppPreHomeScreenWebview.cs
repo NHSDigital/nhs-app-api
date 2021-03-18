@@ -66,9 +66,6 @@ namespace NHSOnline.App.Controls.WebViews
             set => SetValue(GoToLoggedInHomeScreenCommandProperty, value);
         }
 
-        private static T ConvertFromJsonString<T>(string json)
-            => JsonConvert.DeserializeObject<T>(json, Settings) ?? throw new ArgumentException($"Failed to deserialise JSON to {typeof(T).FullName}", nameof(json));
-
         private static string ConvertToJsonString<T>(T value) => JsonConvert.SerializeObject(value, Settings);
 
         private static JsonSerializerSettings CreateJsonSerializerSettings()

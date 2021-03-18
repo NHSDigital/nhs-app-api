@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.iOS.DependencyServices;
 
@@ -11,10 +12,10 @@ namespace NHSOnline.App.iOS.DependencyServices
             return NotificationStatus.notDetermined;
         }
 
-        public GetPnsTokenResult GetPnsToken()
+        public Task<GetPnsTokenResult> GetPnsToken()
         {
             //TODO: Implement getting actual PNS token from iOS
-            return new GetPnsTokenResult.Authorised(new IosGetPnsTokenResponse("THISISASTUBVALUE"));
+            return Task.FromResult<GetPnsTokenResult>(new GetPnsTokenResult.Authorised(new IosGetPnsTokenResponse("THISISASTUBVALUE")));
         }
     }
 }

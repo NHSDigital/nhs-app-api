@@ -3,26 +3,26 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.Android.Settings
 {
-    public sealed class AndroidSettingsPage
+    public sealed class AndroidNotificationsPage
     {
-        private AndroidSettingsPage(IAndroidDriverWrapper driver)
+        private AndroidNotificationsPage(IAndroidDriverWrapper driver)
         {
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new SettingsPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new NotificationsPageContent(driver.Web(WebViewContext.NhsApp));
         }
 
         public AndroidFullNavigation Navigation { get; }
 
-        public SettingsPageContent PageContent { get; }
+        public NotificationsPageContent PageContent { get; }
 
-        public static AndroidSettingsPage AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidNotificationsPage AssertOnPage(IAndroidDriverWrapper driver)
         {
-            var page = new AndroidSettingsPage(driver);
+            var page = new AndroidNotificationsPage(driver);
             page.PageContent.AssertOnPage();
             return page;
         }
 
-        public AndroidSettingsPage AssertPageElements()
+        public AndroidNotificationsPage AssertPageElements()
         {
             Navigation.AssertNavigationPresent();
             PageContent.AssertPageElements();

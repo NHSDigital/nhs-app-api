@@ -21,7 +21,7 @@ namespace NHSOnline.App.Controls.WebViews
             BindableProperty.Create(nameof(GetNotificationsStatusCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
 
         public static readonly BindableProperty RequestPnsTokenCommandProperty =
-            BindableProperty.Create(nameof(RequestPnsTokenCommand), typeof(AsyncCommand<string>), typeof(NhsAppPreHomeScreenWebview));
+            BindableProperty.Create(nameof(RequestPnsTokenCommand), typeof(AsyncCommand<string>), typeof(NhsAppWebView));
 
         public static readonly BindableProperty FetchBiometricSpecCommandProperty =
             BindableProperty.Create(nameof(FetchBiometricSpecCommand), typeof(AsyncCommand), typeof(NhsAppWebView));

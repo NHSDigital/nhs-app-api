@@ -2,7 +2,12 @@ import get from 'lodash/fp/get';
 import NativeApp from '@/services/native-app';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import jwt from 'jwt-decode';
-import { NOTIFICATIONS_NAME, AUTH_RETURN_NAME } from '@/router/names';
+import {
+  NOTIFICATIONS_NAME,
+  AUTH_RETURN_NAME,
+  TERMSANDCONDITIONS_NAME,
+  USER_RESEARCH_NAME,
+} from '@/router/names';
 import { NOTIFICATIONS_GENERIC_FAILURE_PATH } from '@/router/paths';
 import { setCookie } from '@/lib/cookie-manager';
 import {
@@ -148,7 +153,9 @@ export default {
   },
   unauthorised({ commit }) {
     commit(SET_WAITING, false);
-    if (this.app.$router.currentRoute.name === NOTIFICATIONS_NAME) {
+    if (this.app.$router.currentRoute.name === NOTIFICATIONS_NAME ||
+      this.app.$router.currentRoute.name === USER_RESEARCH_NAME ||
+      this.app.$router.currentRoute.name === TERMSANDCONDITIONS_NAME) {
       this.dispatch('notifications/logMetrics',
         { screenShown: true,
           notificationsRegistered: false,

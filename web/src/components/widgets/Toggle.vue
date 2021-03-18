@@ -5,12 +5,13 @@
              :class="$style.hideAria"
              role="note">{{ ariaLabel }}</section>
     <input :id="checkboxId"
-           :class="$style.toggle"
-           type="checkbox"
-           :name="name"
+           :aria-checked="value"
            :checked="value"
+           :class="$style.toggle"
+           :name="name"
            :aria-labelledby="'hiddenLabel'"
            role="switch"
+           type="checkbox"
            @click.stop.prevent="onClick">
     <span :id="`span${checkboxId}`" v-visible="!isWaiting"
           @click.stop.prevent="onClick"/>

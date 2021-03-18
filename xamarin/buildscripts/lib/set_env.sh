@@ -7,6 +7,8 @@ DEBUGMODE=${DEBUGMODE:-Release}
 ENVIRONMENT=${ENVIRONMENT:-BrowserStack}
 CONFIGURATION="${CONFIGURATION:-${ENVIRONMENT} - ${DEBUGMODE}}"
 IPA_PACKAGE_DIR=${IPA_PACKAGE_DIR:-${REPO_ROOT}/xamarinintegrationtests}
+NATIVE_VERSION_NUMBER="1.0.0"
+NATIVE_IOS_BUILD_NUMBER="1"
 
 MSBUILD=${MSBUILD:-$(command -v msbuild || true)}
 if [[ $(uname -s) =~ ^MING.* ]]; then

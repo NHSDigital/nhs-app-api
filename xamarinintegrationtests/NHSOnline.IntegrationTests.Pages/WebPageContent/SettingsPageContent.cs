@@ -13,6 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         }
 
         private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Settings");
+        private WebMenuItem NotificationsMenuItem => WebMenuItem.WithTitle(_interactor, "Notifications");
 
         internal void AssertOnPage()
         {
@@ -22,7 +23,13 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         public SettingsPageContent AssertPageElements()
         {
             Title.AssertVisible();
+            NotificationsMenuItem.AssertVisible();
             return this;
+        }
+
+        public void NavigateToNotifications()
+        {
+            NotificationsMenuItem.Click();
         }
     }
 }

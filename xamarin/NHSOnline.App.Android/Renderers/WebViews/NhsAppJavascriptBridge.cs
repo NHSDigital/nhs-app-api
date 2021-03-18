@@ -37,5 +37,15 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         {
             NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.GetNotificationsStatus());
         }
+
+        [JavascriptInterface]
+        [Export("requestPnsToken")]
+        public void RequestPnsToken(string trigger)
+        {
+            NhsAppResilience.ExecuteOnMainThread(() =>
+            {
+                _nhsAppWebView.RequestPnsTokenCommand.Execute(trigger);
+            });
+        }
     }
 }
