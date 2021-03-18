@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DependencyServices\AndroidBiometrics.cs" />
     <Compile Include="DependencyServices\AndroidGetPnsTokenResponse.cs" />
     <Compile Include="DependencyServices\AndroidLifecycle.cs" />
     <Compile Include="DependencyServices\AndroidCookies.cs" />

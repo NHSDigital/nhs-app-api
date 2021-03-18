@@ -6,6 +6,7 @@ using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
+using NHSOnline.App.DependencyServices.Biometrics;
 using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.Navigation;
 using NHSOnline.App.Services;
@@ -22,6 +23,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
         private readonly IBrowserOverlay _browserOverlay;
         private readonly IPageFactory _pageFactory;
+        private readonly IBiometrics _biometrics;
         private readonly INhsAppNavigationHandler _navigationHandler;
         private readonly INotifications _notifications;
 
@@ -33,7 +35,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
             INhsExternalServicesConfiguration nhsExternalServicesConfiguration,
             IBrowserOverlay browserOverlay,
             IPageFactory pageFactory,
-            INotifications notifications)
+            INotifications notifications,
+            IBiometrics biometrics)
         {
             _view = view;
             _model = model;
@@ -43,6 +46,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _browserOverlay = browserOverlay;
             _pageFactory = pageFactory;
             _notifications = notifications;
+            _biometrics = biometrics;
             _navigationHandler = new NhsAppNavigationHandler(view);
 
             _view.Appearing = ViewOnAppearing;
@@ -54,6 +58,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _view.ResetAndShowErrorRequested = ResetAndShowErrorRequested;
             _view.GetNotificationsStatusRequested = GetNotificationsStatusRequested;
             _view.GetPnsTokenRequested = RequestPnsToken;
+            _view.FetchBiometricSpecRequested = FetchBiometricSpecRequested;
 
             _view.SettingsRequested = _navigationHandler.SettingsRequested;
             _view.HomeRequested = _navigationHandler.HomeRequested;
@@ -146,6 +151,15 @@ namespace NHSOnline.App.Areas.Home.Presenters
             else
             {
                 await _view.SendNotificationUnauthorised().PreserveThreadContext();
+            }
+        }
+
+        private async Task FetchBiometricSpecRequested()
+        {
+            var biometricSpec = await _biometrics.FetchBiometricSpec().PreserveThreadContext();
+            if (biometricSpec != null)
+            {
+                await _view.SendBiometricSpec(biometricSpec).PreserveThreadContext();
             }
         }
 

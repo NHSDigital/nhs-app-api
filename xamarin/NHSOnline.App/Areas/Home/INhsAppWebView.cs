@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using NHSOnline.App.Controls.WebViews.Payloads;
+using NHSOnline.App.DependencyServices.Biometrics;
 using NHSOnline.App.DependencyServices.Notifications;
 using Xamarin.Forms;
 
@@ -29,6 +30,8 @@ namespace NHSOnline.App.Areas.Home
         Func<Task>? GetNotificationsStatusRequested { get; set; }
         Func<string, Task>? GetPnsTokenRequested { get; set; }
 
+        Func<Task>? FetchBiometricSpecRequested { get; set; }
+
         INavigation Navigation { get; }
 
         void GoToUri(Uri uri);
@@ -43,5 +46,6 @@ namespace NHSOnline.App.Areas.Home
         Task SendNotificationsStatus(string status);
         Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse);
         Task SendNotificationUnauthorised();
+        Task SendBiometricSpec(BiometricSpec biometricSpec);
     }
 }

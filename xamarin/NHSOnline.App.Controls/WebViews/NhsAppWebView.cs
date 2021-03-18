@@ -17,6 +17,9 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty RequestPnsTokenCommandProperty =
             BindableProperty.Create(nameof(RequestPnsTokenCommand), typeof(AsyncCommand<string>), typeof(NhsAppPreHomeScreenWebview));
 
+        public static readonly BindableProperty FetchBiometricSpecCommandProperty =
+            BindableProperty.Create(nameof(FetchBiometricSpecCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
+
         public AsyncCommand<OpenWebIntegrationRequest> OpenWebIntegrationCommand
         {
             get => (AsyncCommand<OpenWebIntegrationRequest>) GetValue(OpenWebIntegrationCommandProperty);
@@ -39,6 +42,12 @@ namespace NHSOnline.App.Controls.WebViews
         {
             get => (AsyncCommand<string>) GetValue(RequestPnsTokenCommandProperty);
             set => SetValue(RequestPnsTokenCommandProperty, value);
+        }
+
+        public AsyncCommand FetchBiometricSpecCommand
+        {
+            get => (AsyncCommand)GetValue(FetchBiometricSpecCommandProperty);
+            set => SetValue(FetchBiometricSpecCommandProperty, value);
         }
     }
 }

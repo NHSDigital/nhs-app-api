@@ -2,9 +2,12 @@ using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.Payloads;
+using NHSOnline.App.DependencyServices.Biometrics;
 using NHSOnline.App.DependencyServices.Notifications;
 using Xamarin.Forms;
 
@@ -43,6 +46,9 @@ namespace NHSOnline.App.Areas.Home.Views
 
         public AsyncCommand<string> RequestPnsTokenCommand
             => new AsyncCommand<string>(() => GetPnsTokenRequested);
+
+        public Func<Task>? FetchBiometricSpecRequested { get; set; }
+        public AsyncCommand FetchBiometricSpecCommand => new AsyncCommand(() => FetchBiometricSpecRequested);
 
         private AsyncCommand AppearingCommand => new AsyncCommand(() => ((INhsAppWebView)this).Appearing);
 
@@ -116,6 +122,9 @@ namespace NHSOnline.App.Areas.Home.Views
          public async Task SendNotificationsStatus(string status)
              => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.notificationsSettingsStatus({ConvertToJsonString(status)})").PreserveThreadContext();
 
+         public async Task SendBiometricSpec(BiometricSpec biometricSpec)
+             => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.loginSettingsBiometricSpec({ConvertToJsonString(biometricSpec)})").PreserveThreadContext();
+
          public async Task ResetAndShowError()
             => await (ResetAndShowErrorRequested?.Invoke() ?? Task.CompletedTask).PreserveThreadContext();
 
@@ -127,7 +136,13 @@ namespace NHSOnline.App.Areas.Home.Views
 
         private static string ConvertToJsonString<T>(T arg)
         {
-            return JsonConvert.SerializeObject(arg);
+            var settings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                NullValueHandling = NullValueHandling.Ignore
+            };
+            settings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
+            return JsonConvert.SerializeObject(arg, settings);
         }
 
         private void WebViewNavigating (object sender, WebNavigatingEventArgs e)

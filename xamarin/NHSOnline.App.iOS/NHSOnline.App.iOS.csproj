@@ -44,6 +44,7 @@
   <Import Project="Properties/BuildConfiguration.debugmode.$(DebugMode).props" />
   <Import Project="Properties/BuildConfiguration.platform.$(Platform).props" />
   <ItemGroup>
+    <Compile Include="DependencyServices\IosBiometrics.cs" />
     <Compile Include="DependencyServices\IosGetPnsTokenResponse.cs" />
     <Compile Include="DependencyServices\IosHttpMessageHandlerFactory.cs" />
     <Compile Include="DependencyServices\IosCookies.cs" />
