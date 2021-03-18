@@ -14,6 +14,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
     public class NhsLoginUpliftPaycassoPassportTests
     {
         [NhsAppIOSTest]
+        [Ignore("NHSO-13762: Ignoring test until we decide whether Paycasso should stay or go")]
         public void APatientWithProofLevelFiveCanStartPaycassoToTakeAPhotoOfTheirPassportIos(IIOSDriverWrapper driver)
         {
             var patient = new P5Patient();
