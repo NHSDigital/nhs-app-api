@@ -5,13 +5,12 @@
         <h2 v-if="shouldShowHeader" class="nhsuk-u-margin-bottom-3">
           {{ $t('login.beforeYouStart') }}
         </h2>
-        <div class="nhsuk-warning-callout">
-          <h3 class="nhsuk-warning-callout__label">{{ $t('login.notTheNhsCovidApp') }}</h3>
+        <warning-callout :title="$t('login.notTheNhsCovidApp')">
           <p>
             {{ $t('login.toDownloadTheNhsCovidApp') }}
             <a href="https://covid19.nhs.uk" target="_blank" rel="noopener noreferrer">covid19.nhs.uk</a>.
           </p>
-        </div>
+        </warning-callout>
         <p>{{ $t('login.toUseThisServiceYouMustBe') }}</p>
         <ul>
           <li class="nhsuk-u-margin-bottom-3">
@@ -33,11 +32,13 @@
 </template>
 <script>
 import CollapsibleDetails from '@/components/widgets/collapsible/CollapsibleDetails';
+import WarningCallout from '@/components/widgets/WarningCallout';
 
 export default {
   name: 'PreRegistrationInformation',
   components: {
     CollapsibleDetails,
+    WarningCallout,
   },
   props: {
     shouldShowHeader: {

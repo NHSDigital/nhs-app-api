@@ -5,7 +5,9 @@
                 'nhsuk-width-container--full',
                 {[$style.desktopWeb] : !$store.state.device.isNativeApp},
                 plainStyle]">
-    <h2 v-if="showIcon" :class="['nhsuk-heading-m', $style.icon, $style.break]">
+    <h2 v-if="showIcon"
+        :class="['nhsuk-heading-m', $style.icon, $style.break]"
+        :aria-label="headingAriaLabel">
       {{ iText }}
     </h2>
     <div :id="messageId" :class="$style['msg-content']"
@@ -60,6 +62,9 @@ export default {
     },
     showIcon() {
       return this.overrideStyle !== 'plain';
+    },
+    headingAriaLabel() {
+      return this.messageType === 'warning' && this.iText.toLowerCase().indexOf('important') < 0 ? `Important: ${this.iText}` : undefined;
     },
   },
   beforeMount() {
