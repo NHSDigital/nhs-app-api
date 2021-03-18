@@ -77,9 +77,9 @@ open class SessionExpiry : NativePageObject() {
         waitForSessionExpiryAfterModalDisplay()
     }
 
-    fun waitForSessionExpiryModal() {
+    fun waitForSessionExpiryModal(customFrom: LocalDateTime? = null) {
         val modalDelay = timeUntilSessionExpiryModalShouldBeDisplayed()
-        waitFor(modalDelay)
+        waitFor(modalDelay, customFrom)
     }
 
     fun waitForSessionExpiryAfterModalDisplay() {
@@ -111,8 +111,9 @@ open class SessionExpiry : NativePageObject() {
         return timeoutDuration.minus(sessionExpiryModalDisplayDuration)
     }
 
-    private fun waitFor(modalDelay: Duration) {
-        val delayUntil = LocalDateTime.now().plus(modalDelay)
+    private fun waitFor(modalDelay: Duration, customFrom: LocalDateTime? = null) {
+        val from = customFrom ?: LocalDateTime.now()
+        val delayUntil = from.plus(modalDelay)
 
         while (true) {
             val now = LocalDateTime.now()

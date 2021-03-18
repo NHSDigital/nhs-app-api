@@ -20,6 +20,7 @@ import utils.getOrFail
 import utils.set
 import worker.WorkerClient
 import worker.models.session.UserSessionRequest
+import java.time.LocalDateTime
 
 private const val DELAY_SECONDS_FOR_WAITING = 2000L
 private const val DELAY_BEFORE_RESUME = 10_000L
@@ -98,6 +99,18 @@ class SessionExpiryStepDefinitions  {
 
     @When("^I am idle long enough for the session expiry dialog box to appear$")
     fun iAmIdleLongEnoughForSessionExpiryDialog() = sessionExpiry.waitForSessionExpiryModal()
+
+    @When("^I take note of the current time as when the session was last refreshed")
+    fun iTakeNoteOfTheCurrentTimeAsWhenTheSessionWasLastRefreshed()
+            = GlobalSerenityHelpers.NOTED_SESSION_LAST_REFRESHED_TIME.set(LocalDateTime.now())
+
+    @When("^I am idle long enough " +
+            "after the time I noted the session was refreshed " +
+            "for the session expiry dialog box to appear$")
+    fun iAmIdleLongEnoughAfterTheTimeINotedTheSessionWasRefreshedForSessionExpiryDialog() {
+        val from = GlobalSerenityHelpers.NOTED_SESSION_LAST_REFRESHED_TIME.getOrFail<LocalDateTime>()
+        sessionExpiry.waitForSessionExpiryModal(from)
+    }
 
     @When("^I am idle long enough on a secure page for the session expiry dialog box to appear$")
     fun iAmIdleLongEnoughOnASecurePageForSessionExpiryDialog() {

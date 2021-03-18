@@ -144,8 +144,7 @@ open class SharedStepDefinitions {
     @Given("^I log in to the app expecting to see the notifications prompt$")
     fun iLogInToTheAppExpectingTheNotificationsPrompt() {
         val patient = handleLogin()
-        login.usingLoginWithNotificationOptions(
-                patient)
+        login.usingLoginWithNotificationOptions(patient)
     }
 
     @Given("^I am logged in$")

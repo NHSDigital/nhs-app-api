@@ -132,15 +132,17 @@ Feature: Session Expiry and Extend Frontend
   Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure screen is prompted with the session extension dialog box, extends their session and stays signed in
     Given I have upcoming appointments before cutoff time for EMIS
     And I am using the native app user agent
-    And I log in to the app expecting to see the notifications prompt
+    When I log in to the app expecting to see the notifications prompt
+    And I take note of the current time as when the session was last refreshed
     Then I see the notifications prompt
     When I do not accept notifications and continue
     Then I see the home page
     When I navigate to Advice
     And I click Use NHS 111 online
-    And I am idle long enough for the session expiry dialog box to appear
+    And I am idle long enough after the time I noted the session was refreshed for the session expiry dialog box to appear
     And I navigate to Appointments
     Then the dialog box is not visible on the screen
+    And the Appointments Hub page is displayed
     When I am idle long enough on a secure page for the session expiry dialog box to appear
     And I click to extend the session
     Then the dialog box is not visible on the screen
@@ -152,16 +154,17 @@ Feature: Session Expiry and Extend Frontend
   Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure screen is prompted with the session extension dialog box, opts to logout
     Given I have upcoming appointments before cutoff time for EMIS
     And I am using the native app user agent
-    And I log in to the app expecting to see the notifications prompt
+    When I log in to the app expecting to see the notifications prompt
+    And I take note of the current time as when the session was last refreshed
     Then I see the notifications prompt
     When I do not accept notifications and continue
     Then I see the home page
     When I navigate to Advice
     And I click Use NHS 111 online
-    And I am idle long enough for the session expiry dialog box to appear
-    And I am idle for a short time
+    And I am idle long enough after the time I noted the session was refreshed for the session expiry dialog box to appear
     And I navigate to Appointments
     Then the dialog box is not visible on the screen
+    And the Appointments Hub page is displayed
     When I am idle long enough for the session expiry dialog box to appear
     Then I see a dialog box prompting to extend the session
     When I click to log out
@@ -173,16 +176,17 @@ Feature: Session Expiry and Extend Frontend
   Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure screen is prompted with the session extension dialog box, does nothing and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
     And I am using the native app user agent
-    And I log in to the app expecting to see the notifications prompt
+    When I log in to the app expecting to see the notifications prompt
+    And I take note of the current time as when the session was last refreshed
     Then I see the notifications prompt
     When I do not accept notifications and continue
     Then I see the home page
     When I navigate to Advice
     And I click Use NHS 111 online
-    And I am idle long enough for the session expiry dialog box to appear
-    And I am idle for a short time
+    And I am idle long enough after the time I noted the session was refreshed for the session expiry dialog box to appear
     And I navigate to Appointments
     Then the dialog box is not visible on the screen
+    And the Appointments Hub page is displayed
     When I am idle long enough for the session expiry dialog box to appear
     Then I see a dialog box prompting to extend the session
     When I am idle long enough for the session to expire after the dialog

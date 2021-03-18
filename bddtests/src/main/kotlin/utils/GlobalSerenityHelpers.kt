@@ -14,5 +14,6 @@ enum class GlobalSerenityHelpers : ISerenityHelperEnums{
     PATIENT,
     HTTP_EXCEPTION,
     HTTP_RESPONSE,
-    APP_BUNDLE_ID
+    APP_BUNDLE_ID,
+    NOTED_SESSION_LAST_REFRESHED_TIME
 }
