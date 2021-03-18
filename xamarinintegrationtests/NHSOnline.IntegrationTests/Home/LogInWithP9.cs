@@ -30,7 +30,9 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidStubbedLoginPage
                 .AssertOnPage(driver)
-                .PageContent.Login(patient);
+                .PageContent
+                    .AssertVectorOfTrust()
+                    .Login(patient);
 
             AndroidTermsAndConditionsPage
                 .AssertOnPage(driver)
@@ -66,7 +68,9 @@ namespace NHSOnline.IntegrationTests.Home
 
             IOSStubbedLoginPage
                 .AssertOnPage(driver)
-                .PageContent.Login(patient);
+                .PageContent
+                    .AssertVectorOfTrust()
+                    .Login(patient);
 
             IOSTermsAndConditionsPage
                 .AssertOnPage(driver)

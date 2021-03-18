@@ -52,7 +52,7 @@ namespace NHSOnline.App.NhsLogin
                 .Challenge(codes.Challenge, codes.Method)
                 .ClientId("nhs-online")
                 .Scopes("openid", "profile", "nhs_app_credentials", "gp_integration_credentials", "profile_extended")
-                .VectorsOfTrust("P5.Cp.Cd", "P5.Cp.Ck", "P5.Cm")
+                .VectorsOfTrust("P5.Cp.Cd", "P5.Cp.Ck", "P5.Cm", "P9.Cp.Cd", "P9.Cp.Ck", "P9.Cm")
                 .RedirectUri(authReturnUri)
                 .Uri;
 

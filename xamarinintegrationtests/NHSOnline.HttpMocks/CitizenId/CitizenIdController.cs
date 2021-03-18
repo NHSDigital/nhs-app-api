@@ -46,7 +46,7 @@ namespace NHSOnline.HttpMocks.CitizenId
             [FromQuery(Name = "redirect_uri")] string redirect,
             string state)
         {
-            (string AuthHostName, string Redirect, string State) model = (AuthHostName, redirect, state);
+            (string AuthHostName, string Redirect, string State, HttpRequest request) model = (AuthHostName, redirect, state, Request);
             return View(model);
         }
 

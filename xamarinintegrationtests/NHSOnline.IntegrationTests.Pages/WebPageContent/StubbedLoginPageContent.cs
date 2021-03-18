@@ -19,11 +19,19 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebInputText PatientIdWebInputText => WebInputText.WithLabel(_interactor, "Patient ID");
 
+        private WebDefinitionTerm VectorsOfTrust => WebDefinitionTerm.WithTerm(_interactor, "vtr");
+
         private WebInputSubmit LoginButton => WebInputSubmit.WithText(_interactor, "Login");
 
         internal void AssertOnPage()
         {
             TitleText.AssertVisible();
+        }
+
+        public StubbedLoginPageContent AssertVectorOfTrust()
+        {
+            VectorsOfTrust.AssertValue("[\"P5.Cp.Cd\", \"P5.Cp.Ck\", \"P5.Cm\", \"P9.Cp.Cd\", \"P9.Cp.Ck\", \"P9.Cm\"]");
+            return this;
         }
 
         public void Login(Patient patient)

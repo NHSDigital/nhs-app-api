@@ -1,6 +1,6 @@
 ﻿@using NHSOnline.HttpMocks.Domain
 @inject IPatients Patients
-@model (string AuthHostName, string Redirect, string State)
+@model (string AuthHostName, string Redirect, string State, Microsoft.AspNetCore.Http.HttpRequest Request)
 <html>
 <head>
     <meta charset="utf-8">
@@ -38,6 +38,13 @@
             <input type="submit" id="Login" value="Login">
         </form>
         <h2>Patients</h2>
+        <dl class="list-group">
+            @foreach(var (key, value) in Model.Request.Query.SelectMany(q => q.Value.Select(v => (q.Key, v))))
+            {
+                <dt>@key</dt>
+                <dd>@value</dd>
+            }
+        </dl>
         @{
             var patientsList =
                 Patients

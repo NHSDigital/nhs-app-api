@@ -89,10 +89,10 @@ namespace NHSOnline.App.NhsLogin
             return this;
         }
 
-        public INhsLoginUriBuilderRedirectUriSetter VectorsOfTrust(string firstVectorOfTrust,
+        public INhsLoginUriBuilderRedirectUriSetter VectorsOfTrust(string requiredFirstVectorOfTrust,
             params string[] otherVectorsOfTrust)
         {
-            var quotedValues = string.Join(", ", otherVectorsOfTrust.Prepend(firstVectorOfTrust)
+            var quotedValues = string.Join(", ", otherVectorsOfTrust.Prepend(requiredFirstVectorOfTrust)
                 .Select(x => $"\"{x}\""));
             _queryString.Add("vtr", $"[{quotedValues}]");
             return this;
