@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using NHSOnline.App.Areas.Cookies;
+using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
@@ -15,9 +16,12 @@ namespace NHSOnline.App.Areas.PreHome
         Func<Task>? GetNotificationsStatusRequested { get; set; }
         Func<Task>? GoToLoggedInHomeRequested { get; set; }
         Func<Task>? ResetAndShowErrorRequested { get; set; }
+        Func<string, Task>? GetPnsTokenRequested { get; set; }
 
         void GoToUri(Uri uri);
         Task SendNotificationsStatus(string status);
+        Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse);
+        Task SendNotificationUnauthorised();
 
         internal interface IEvents
         {

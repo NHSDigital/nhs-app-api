@@ -1,12 +1,12 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.App.Areas.Cookies;
 using NHSOnline.App.Areas.Home.Models;
 using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
+using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.Navigation;
 using NHSOnline.App.Services;
 using Xamarin.Forms;
@@ -23,6 +23,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly IBrowserOverlay _browserOverlay;
         private readonly IPageFactory _pageFactory;
         private readonly INhsAppNavigationHandler _navigationHandler;
+        private readonly INotifications _notifications;
 
         public NhsAppWebPresenter(
             INhsAppWebView view,
@@ -31,7 +32,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
             ILogger<NhsAppWebPresenter> logger,
             INhsExternalServicesConfiguration nhsExternalServicesConfiguration,
             IBrowserOverlay browserOverlay,
-            IPageFactory pageFactory)
+            IPageFactory pageFactory,
+            INotifications notifications)
         {
             _view = view;
             _model = model;
@@ -40,6 +42,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
             _browserOverlay = browserOverlay;
             _pageFactory = pageFactory;
+            _notifications = notifications;
             _navigationHandler = new NhsAppNavigationHandler(view);
 
             _view.Appearing = ViewOnAppearing;
@@ -50,6 +53,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _view.StartNhsLoginUpliftRequested = StartNhsLoginUpliftRequested;
             _view.ResetAndShowErrorRequested = ResetAndShowErrorRequested;
             _view.GetNotificationsStatusRequested = GetNotificationsStatusRequested;
+            _view.GetPnsTokenRequested = RequestPnsToken;
 
             _view.SettingsRequested = _navigationHandler.SettingsRequested;
             _view.HomeRequested = _navigationHandler.HomeRequested;
@@ -124,7 +128,25 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         private async Task GetNotificationsStatusRequested()
         {
-            await _view.SendNotificationsStatus("notDetermined").PreserveThreadContext();
+            await _view.SendNotificationsStatus(_notifications.GetDeviceNotificationsStatus().ToString()).PreserveThreadContext();
+        }
+
+        private async Task RequestPnsToken(string trigger)
+        {
+            var pnsTokenResult = _notifications.GetPnsToken();
+
+            if (pnsTokenResult is GetPnsTokenResult.Authorised authorisedResult)
+            {
+                var response = new NotificationAuthorisedResponse(
+                    trigger,
+                    authorisedResult);
+
+                await _view.SendNotificationAuthorised(response).PreserveThreadContext();
+            }
+            else
+            {
+                await _view.SendNotificationUnauthorised().PreserveThreadContext();
+            }
         }
 
         private async Task HelpRequested()

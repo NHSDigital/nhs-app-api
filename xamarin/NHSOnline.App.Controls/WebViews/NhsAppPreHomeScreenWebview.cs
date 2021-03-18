@@ -10,6 +10,9 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty GetNotificationsStatusCommandProperty =
             BindableProperty.Create(nameof(GetNotificationsStatusCommand), typeof(AsyncCommand), typeof(NhsAppPreHomeScreenWebview));
 
+        public static readonly BindableProperty RequestPnsTokenCommandProperty =
+            BindableProperty.Create(nameof(RequestPnsTokenCommand), typeof(AsyncCommand<string>), typeof(NhsAppPreHomeScreenWebview));
+
         public static readonly BindableProperty GoToLoggedInHomeScreenCommandProperty =
             BindableProperty.Create(nameof(GoToLoggedInHomeScreenCommand), typeof(AsyncCommand), typeof(NhsAppPreHomeScreenWebview));
 
@@ -19,6 +22,12 @@ namespace NHSOnline.App.Controls.WebViews
         {
             get => (AsyncCommand) GetValue(GetNotificationsStatusCommandProperty);
             set => SetValue(GetNotificationsStatusCommandProperty, value);
+        }
+
+        public AsyncCommand<string> RequestPnsTokenCommand
+        {
+            get => (AsyncCommand<string>) GetValue(RequestPnsTokenCommandProperty);
+            set => SetValue(RequestPnsTokenCommandProperty, value);
         }
 
         public AsyncCommand GoToLoggedInHomeScreenCommand

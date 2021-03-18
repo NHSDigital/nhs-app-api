@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.Payloads;
+using NHSOnline.App.DependencyServices.Notifications;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.Home.Views
@@ -28,6 +29,8 @@ namespace NHSOnline.App.Areas.Home.Views
 
         public Func<Task>? GetNotificationsStatusRequested { get; set; }
 
+        public Func<string, Task>? GetPnsTokenRequested { get; set; }
+
         public Func<Task>? ResetAndShowErrorRequested { get; set; }
 
         public AsyncCommand<OpenWebIntegrationRequest> OpenWebIntegrationCommand
@@ -37,6 +40,9 @@ namespace NHSOnline.App.Areas.Home.Views
 
         public AsyncCommand GetNotificationsStatusCommand
             => new AsyncCommand(() => GetNotificationsStatusRequested);
+
+        public AsyncCommand<string> RequestPnsTokenCommand
+            => new AsyncCommand<string>(() => GetPnsTokenRequested);
 
         private AsyncCommand AppearingCommand => new AsyncCommand(() => ((INhsAppWebView)this).Appearing);
 
@@ -113,7 +119,13 @@ namespace NHSOnline.App.Areas.Home.Views
          public async Task ResetAndShowError()
             => await (ResetAndShowErrorRequested?.Invoke() ?? Task.CompletedTask).PreserveThreadContext();
 
-        private static string ConvertToJsonString(string arg)
+         public async Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse)
+             => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.notificationsAuthorised({ConvertToJsonString(authorisedResponse)})").PreserveThreadContext();
+
+         public async Task SendNotificationUnauthorised()
+             => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.notificationsUnauthorised()").PreserveThreadContext();
+
+        private static string ConvertToJsonString<T>(T arg)
         {
             return JsonConvert.SerializeObject(arg);
         }

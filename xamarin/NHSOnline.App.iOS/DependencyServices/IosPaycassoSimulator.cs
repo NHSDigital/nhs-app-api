@@ -1,8 +1,6 @@
 using System.Threading.Tasks;
 using NHSOnline.App.Controls.WebViews.Payloads.Paycasso;
 using NHSOnline.App.DependencyServices.Paycasso;
-using NHSOnline.App.iOS.DependencyServices;
-using Xamarin.Forms;
 
 #if SIMULATOR
 [assembly: Dependency(typeof(IosPaycassoSimulator))]

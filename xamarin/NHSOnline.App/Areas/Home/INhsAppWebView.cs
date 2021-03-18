@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using NHSOnline.App.Controls.WebViews.Payloads;
+using NHSOnline.App.DependencyServices.Notifications;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.Home
@@ -26,6 +27,7 @@ namespace NHSOnline.App.Areas.Home
         Func<StartNhsLoginUpliftRequest, Task>? StartNhsLoginUpliftRequested { get; set; }
 
         Func<Task>? GetNotificationsStatusRequested { get; set; }
+        Func<string, Task>? GetPnsTokenRequested { get; set; }
 
         INavigation Navigation { get; }
 
@@ -39,5 +41,7 @@ namespace NHSOnline.App.Areas.Home
         Task NavigateToSettings();
         Task NavigateToHome();
         Task SendNotificationsStatus(string status);
+        Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse);
+        Task SendNotificationUnauthorised();
     }
 }

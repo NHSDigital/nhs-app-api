@@ -6,6 +6,7 @@ using NHSOnline.App.Areas.Home.Models;
 using NHSOnline.App.Areas.PreHome.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.DependencyInjection;
+using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.Services;
 using Xamarin.Forms;
 
@@ -20,14 +21,17 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
         private readonly ILogger _logger;
         private readonly IBrowserOverlay _browserOverlay;
         private readonly ICookieHandler _cookieHandler;
+        private readonly INotifications _notifications;
 
         public NhsAppPreHomeScreenWebPresenter(
             INhsAppPreHomeScreenWebView view,
             NhsAppPreHomeScreenWebModel model,
             INhsAppWebConfiguration config,
             ILogger<NhsAppPreHomeScreenWebPresenter> logger,
-            IBrowserOverlay browserOverlay, IPageFactory pageFactory,
-            ICookieHandler cookieHandler)
+            IBrowserOverlay browserOverlay,
+            IPageFactory pageFactory,
+            ICookieHandler cookieHandler,
+            INotifications notifications)
         {
             _view = view;
             _model = model;
@@ -36,12 +40,15 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             _browserOverlay = browserOverlay;
             _pageFactory = pageFactory;
             _cookieHandler = cookieHandler;
+            _notifications = notifications;
 
             _view.Appearing = ViewOnAppearing;
             _view.Navigating = ViewOnNavigating;
             _view.Navigated = ViewOnNavigated;
             _view.GetNotificationsStatusRequested = GetNotificationsStatusRequested;
             _view.GoToLoggedInHomeRequested = GoToLoggedInHomeRequested;
+            _view.GetPnsTokenRequested = RequestPnsToken;
+
             _view.ResetAndShowErrorRequested = ResetAndShowErrorRequested;
         }
 
@@ -86,7 +93,25 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
 
         private async Task GetNotificationsStatusRequested()
         {
-            await _view.SendNotificationsStatus("notDetermined").PreserveThreadContext();
+            await _view.SendNotificationsStatus(_notifications.GetDeviceNotificationsStatus().ToString()).PreserveThreadContext();
+        }
+
+        private async Task RequestPnsToken(string trigger)
+        {
+            var pnsTokenResult = _notifications.GetPnsToken();
+
+            if (pnsTokenResult is GetPnsTokenResult.Authorised authorisedResult)
+            {
+                var response = new NotificationAuthorisedResponse(
+                    trigger,
+                    authorisedResult);
+
+                await _view.SendNotificationAuthorised(response).PreserveThreadContext();
+            }
+            else
+            {
+                await _view.SendNotificationUnauthorised().PreserveThreadContext();
+            }
         }
 
         private async Task ResetAndShowErrorRequested()

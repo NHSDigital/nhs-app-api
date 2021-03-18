@@ -22,6 +22,7 @@
         <webViews:NhsAppPreHomeScreenWebview AbsoluteLayout.LayoutFlags="All"
                                              AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                                              x:Name="WebView" VerticalOptions = "FillAndExpand" 
+                                             RequestPnsTokenCommand="{Binding RequestPnsTokenCommand, Source={RelativeSource AncestorType={x:Type views:NhsAppPreHomeScreenWebPage}}}"
                                              GetNotificationsStatusCommand="{Binding GetNotificationsStatusCommand, Source={RelativeSource AncestorType={x:Type views:NhsAppPreHomeScreenWebPage}}}"
                                              GoToLoggedInHomeScreenCommand="{Binding GoToLoggedInHomeCommand, Source={RelativeSource AncestorType={x:Type views:NhsAppPreHomeScreenWebPage}}}"
                                              Navigating="WebViewNavigating"

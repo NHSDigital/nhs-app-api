@@ -44,10 +44,12 @@
   <Import Project="Properties/BuildConfiguration.debugmode.$(DebugMode).props" />
   <Import Project="Properties/BuildConfiguration.platform.$(Platform).props" />
   <ItemGroup>
+    <Compile Include="DependencyServices\IosGetPnsTokenResponse.cs" />
     <Compile Include="DependencyServices\IosHttpMessageHandlerFactory.cs" />
     <Compile Include="DependencyServices\IosCookies.cs" />
     <Compile Include="DependencyServices\IosLifecycle.cs" />
     <Compile Include="DependencyServices\IosNativeLog.cs" />
+    <Compile Include="DependencyServices\IosNotifications.cs" />
     <Compile Include="DependencyServices\IosPaycassoSimulator.cs" />
     <Compile Include="DependencyServices\IosPaycasso.cs" />
     <Compile Include="Effects\SafeAreaPaddingEffectTop.cs" />

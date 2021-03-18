@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
+using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
@@ -34,6 +35,8 @@ namespace NHSOnline.App.Areas.PreHome.Views
 
         public Func<Task>? GetNotificationsStatusRequested { get; set; }
 
+        public Func<string, Task>? GetPnsTokenRequested { get; set; }
+
         public Func<Task>? GoToLoggedInHomeRequested { get; set; }
 
         private AsyncCommand AppearingCommand => new AsyncCommand(() => ((INhsAppPreHomeScreenWebView)this).Appearing);
@@ -46,6 +49,9 @@ namespace NHSOnline.App.Areas.PreHome.Views
 
         public AsyncCommand GetNotificationsStatusCommand
             => new AsyncCommand(() => GetNotificationsStatusRequested);
+
+        public AsyncCommand<string> RequestPnsTokenCommand
+            => new AsyncCommand<string>(() => GetPnsTokenRequested);
 
         public AsyncCommand GoToLoggedInHomeCommand
             => new AsyncCommand(() => GoToLoggedInHomeRequested);
@@ -98,7 +104,13 @@ namespace NHSOnline.App.Areas.PreHome.Views
         public async Task SendNotificationsStatus(string status)
             => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.notificationsSettingsStatus({ConvertToJsonString(status)})").PreserveThreadContext();
 
-        private static string ConvertToJsonString(string arg)
+        public async Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse)
+            => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.notificationsAuthorised({ConvertToJsonString(authorisedResponse)})").PreserveThreadContext();
+
+        public async Task SendNotificationUnauthorised()
+            => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.notificationsUnauthorised()").PreserveThreadContext();
+
+        private static string ConvertToJsonString<T>(T arg)
         {
             return JsonConvert.SerializeObject(arg);
         }

@@ -14,6 +14,9 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty GetNotificationsStatusCommandProperty =
             BindableProperty.Create(nameof(GetNotificationsStatusCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
 
+        public static readonly BindableProperty RequestPnsTokenCommandProperty =
+            BindableProperty.Create(nameof(RequestPnsTokenCommand), typeof(AsyncCommand<string>), typeof(NhsAppPreHomeScreenWebview));
+
         public AsyncCommand<OpenWebIntegrationRequest> OpenWebIntegrationCommand
         {
             get => (AsyncCommand<OpenWebIntegrationRequest>) GetValue(OpenWebIntegrationCommandProperty);
@@ -30,6 +33,12 @@ namespace NHSOnline.App.Controls.WebViews
         {
             get => (AsyncCommand) GetValue(GetNotificationsStatusCommandProperty);
             set => SetValue(GetNotificationsStatusCommandProperty, value);
+        }
+
+        public AsyncCommand<string> RequestPnsTokenCommand
+        {
+            get => (AsyncCommand<string>) GetValue(RequestPnsTokenCommandProperty);
+            set => SetValue(RequestPnsTokenCommandProperty, value);
         }
     }
 }

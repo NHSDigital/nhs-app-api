@@ -36,5 +36,15 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
                 _nhsAppPreHomeScreenWebView.GetNotificationsStatusCommand.Execute(null);
             });
         }
+
+        [JavascriptInterface]
+        [Export("requestPnsToken")]
+        public void RequestPnsToken(string trigger)
+        {
+            NhsAppResilience.ExecuteOnMainThread(() =>
+            {
+                _nhsAppPreHomeScreenWebView.RequestPnsTokenCommand.Execute(trigger);
+            });
+        }
     }
 }
