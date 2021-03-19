@@ -26,6 +26,24 @@ export default {
     return false;
   },
 
+  fetchBiometricSpec() {
+    const app = window.nativeApp;
+    if (app && app.fetchBiometricSpec) {
+      app.fetchBiometricSpec();
+      return true;
+    }
+    return false;
+  },
+
+  updateBiometricRegistrationWithToken(accessToken) {
+    const app = window.nativeApp;
+    if (app && app.updateBiometricRegistrationWithToken) {
+      app.updateBiometricRegistrationWithToken(accessToken);
+      return true;
+    }
+    return false;
+  },
+
   supportsNativeWebIntegration() {
     const app = window.nativeApp;
     return app && app.openWebIntegration;
@@ -109,15 +127,6 @@ export default {
     if (app && app.fetchNativeAppVersion) {
       const appVersion = app.fetchNativeAppVersion();
       return appVersion;
-    }
-    return '';
-  },
-
-  fetchBiometricSpec() {
-    const app = window.nativeApp;
-    if (app && app.fetchBiometricSpec) {
-      const biometricSpec = app.fetchBiometricSpec();
-      return biometricSpec;
     }
     return '';
   },
@@ -353,22 +362,6 @@ export default {
       app.addEventToCalendar(calendarEvent);
       return true;
     }
-    return false;
-  },
-
-  updateBiometricRegistrationWithToken(accessToken) {
-    const app = window.nativeApp;
-    if (app && app.updateBiometricRegistrationWithToken) {
-      app.updateBiometricRegistrationWithToken(accessToken);
-      return true;
-    }
-
-    // NHSO-10729: Remove once minimum native supported version is 1.38
-    if (app && app.updateBiometricRegistration) {
-      app.updateBiometricRegistration();
-      return true;
-    }
-
     return false;
   },
 

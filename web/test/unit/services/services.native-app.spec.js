@@ -259,23 +259,6 @@ describe('native app', () => {
       });
     });
 
-    describe('only legacy native method exists', () => {
-      let result;
-      beforeEach(() => {
-        global.nativeApp.updateBiometricRegistrationWithToken = undefined;
-        global.nativeApp.updateBiometricRegistration = jest.fn();
-        result = nativeApp.updateBiometricRegistrationWithToken('accessToken');
-      });
-
-      it('will return true', () => {
-        expect(result).toBe(true);
-      });
-
-      it('will call legacy native method', () => {
-        expect(global.nativeApp.updateBiometricRegistration).toBeCalled();
-      });
-    });
-
     describe('native methods do not exist', () => {
       let result;
       beforeEach(() => {

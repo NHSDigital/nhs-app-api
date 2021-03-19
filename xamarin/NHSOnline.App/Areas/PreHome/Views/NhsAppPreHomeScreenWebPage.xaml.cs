@@ -3,11 +3,11 @@ using System.ComponentModel;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
-using NHSOnline.App.DependencyServices.Notifications;
+using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Navigation;
+using NHSOnline.App.Threading;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.PreHome.Views
@@ -102,19 +102,14 @@ namespace NHSOnline.App.Areas.PreHome.Views
             => await (ResetAndShowErrorRequested?.Invoke() ?? Task.CompletedTask).PreserveThreadContext();
 
         public async Task SendNotificationsStatus(string status)
-            => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.notificationsSettingsStatus({ConvertToJsonString(status)})").PreserveThreadContext();
+            => await WebView.SendNotificationsStatus(status).ResumeOnThreadPool();
 
         public async Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse)
-            => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.notificationsAuthorised({ConvertToJsonString(authorisedResponse)})").PreserveThreadContext();
+            => await WebView.SendNotificationAuthorised(authorisedResponse).ResumeOnThreadPool();
 
         public async Task SendNotificationUnauthorised()
-            => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.notificationsUnauthorised()").PreserveThreadContext();
-
-        private static string ConvertToJsonString<T>(T arg)
-        {
-            return JsonConvert.SerializeObject(arg);
-        }
-
+            => await WebView.SendNotificationUnauthorised().ResumeOnThreadPool();
+        
         private void WebViewNavigating (object sender, WebNavigatingEventArgs e)
         {
             Spinner.IsVisible = true;

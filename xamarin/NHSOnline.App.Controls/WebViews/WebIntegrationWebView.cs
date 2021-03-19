@@ -12,6 +12,8 @@ namespace NHSOnline.App.Controls.WebViews
                 typeof(AsyncCommand<string>),
                 typeof(WebIntegrationWebView));
 
+        public void RedirectToNhsAppPage(string argument) => RedirectToNhsAppPageCommand.Execute(argument);
+
         public AsyncCommand<string> RedirectToNhsAppPageCommand
         {
             get => (AsyncCommand<string>) GetValue(RedirectToNhsAppPageCommandProperty);

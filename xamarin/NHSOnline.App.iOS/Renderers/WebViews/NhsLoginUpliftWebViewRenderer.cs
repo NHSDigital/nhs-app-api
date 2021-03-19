@@ -21,7 +21,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
             
             _javascriptBridge = JavascriptBridge
                 .ForWebView(() => (NhsLoginUpliftWebView)Element, "nativeNhsLogin")
-                .AddFunction("startPaycasso", webView => webView.LaunchPaycassoCommand)
+                .AddFunction("startPaycasso", webView => webView.LaunchPaycasso)
                 .Apply(config.UserContentController);
         }
 

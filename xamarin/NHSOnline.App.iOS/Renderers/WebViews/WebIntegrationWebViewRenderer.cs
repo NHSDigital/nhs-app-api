@@ -18,7 +18,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
         {
             _javascriptBridge = JavascriptBridge
                 .ForWebView(() => (WebIntegrationWebView)Element, WebIntegrationWebView.JavascriptObjectName)
-                .AddFunction("goToPage", webView => webView.RedirectToNhsAppPageCommand)
+                .AddFunction("goToPage", webView => webView.RedirectToNhsAppPage)
                 .Apply(config.UserContentController);
         }
 

@@ -18,12 +18,13 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
         private NhsAppWebViewRenderer(WKWebViewConfiguration config) : base(config)
         {
             _javascriptBridge = JavascriptBridge
-                    .ForWebView(() => (NhsAppWebView)Element, "nativeApp")
-                    .AddFunction("openWebIntegration", webView => webView.OpenWebIntegrationCommand)
-                    .AddFunction("startNhsLoginUplift", webView => webView.StartNhsLoginUpliftCommand)
-                    .AddFunction("getNotificationsStatus", webView => webView.GetNotificationsStatusCommand)
-                    .AddFunction("fetchBiometricSpec", webView => webView.FetchBiometricSpecCommand)
-                    .Apply(config.UserContentController);
+                .ForWebView(() => (NhsAppWebView) Element, "nativeApp")
+                .AddFunction("openWebIntegration", webView => webView.OpenWebIntegration)
+                .AddFunction("startNhsLoginUplift", webView => webView.StartNhsLoginUplift)
+                .AddFunction("getNotificationsStatus", webView => webView.GetNotificationsStatus)
+                .AddFunction("fetchBiometricSpec", webView => webView.FetchBiometricSpec)
+                .AddFunction("updateBiometricRegistrationWithToken", webView => webView.UpdateBiometricRegistration)
+                .Apply(config.UserContentController);
         }
 
         protected override void OnElementChanged(VisualElementChangedEventArgs e)

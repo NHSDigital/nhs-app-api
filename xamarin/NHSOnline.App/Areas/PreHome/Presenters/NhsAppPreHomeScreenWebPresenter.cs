@@ -5,6 +5,7 @@ using NHSOnline.App.Areas.Cookies;
 using NHSOnline.App.Areas.Home.Models;
 using NHSOnline.App.Areas.PreHome.Models;
 using NHSOnline.App.Config;
+using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.Services;
@@ -104,7 +105,8 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             {
                 var response = new NotificationAuthorisedResponse(
                     trigger,
-                    authorisedResult);
+                    authorisedResult.DevicePns,
+                    authorisedResult.DeviceType);
 
                 await _view.SendNotificationAuthorised(response).PreserveThreadContext();
             }

@@ -28,6 +28,7 @@
                                 GetNotificationsStatusCommand="{Binding GetNotificationsStatusCommand, Source={x:Reference Name=Page}}"
                                 RequestPnsTokenCommand="{Binding RequestPnsTokenCommand, Source={x:Reference Name=Page}}"
                                 FetchBiometricSpecCommand="{Binding FetchBiometricSpecCommand, Source={x:Reference Name=Page}}"
+                                UpdateBiometricRegistrationCommand="{Binding UpdateBiometricRegistrationCommand, Source={x:Reference Name=Page}}"
                                 Navigating="WebViewNavigating"
                                 Navigated="WebOnEndNavigating" />
         

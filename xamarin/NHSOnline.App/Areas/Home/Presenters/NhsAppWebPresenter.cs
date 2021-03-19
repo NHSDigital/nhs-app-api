@@ -6,10 +6,10 @@ using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
-using NHSOnline.App.DependencyServices.Biometrics;
 using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.Navigation;
 using NHSOnline.App.Services;
+using NHSOnline.App.Services.FIDO;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.Home.Presenters
@@ -23,7 +23,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
         private readonly IBrowserOverlay _browserOverlay;
         private readonly IPageFactory _pageFactory;
-        private readonly IBiometrics _biometrics;
+        private readonly IBiometricAuthenticationService _biometricAuthenticationService;
         private readonly INhsAppNavigationHandler _navigationHandler;
         private readonly INotifications _notifications;
 
@@ -36,7 +36,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             IBrowserOverlay browserOverlay,
             IPageFactory pageFactory,
             INotifications notifications,
-            IBiometrics biometrics)
+            IBiometricAuthenticationService biometricAuthenticationService)
         {
             _view = view;
             _model = model;
@@ -46,7 +46,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _browserOverlay = browserOverlay;
             _pageFactory = pageFactory;
             _notifications = notifications;
-            _biometrics = biometrics;
+            _biometricAuthenticationService = biometricAuthenticationService;
             _navigationHandler = new NhsAppNavigationHandler(view);
 
             _view.Appearing = ViewOnAppearing;
@@ -59,6 +59,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _view.GetNotificationsStatusRequested = GetNotificationsStatusRequested;
             _view.GetPnsTokenRequested = RequestPnsToken;
             _view.FetchBiometricSpecRequested = FetchBiometricSpecRequested;
+            _view.UpdateBiometricRegistrationRequested = UpdateBiometricRegistrationRequested;
 
             _view.SettingsRequested = _navigationHandler.SettingsRequested;
             _view.HomeRequested = _navigationHandler.HomeRequested;
@@ -144,7 +145,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
             {
                 var response = new NotificationAuthorisedResponse(
                     trigger,
-                    authorisedResult);
+                    authorisedResult.DevicePns,
+                    authorisedResult.DeviceType);
 
                 await _view.SendNotificationAuthorised(response).PreserveThreadContext();
             }
@@ -156,11 +158,52 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         private async Task FetchBiometricSpecRequested()
         {
-            var biometricSpec = await _biometrics.FetchBiometricSpec().PreserveThreadContext();
-            if (biometricSpec != null)
+            var biometricStatus = await _biometricAuthenticationService.FetchBiometricStatus().PreserveThreadContext();
+            if (biometricStatus != null)
             {
+                var biometricSpec = new BiometricSpec
+                {
+                    BiometricTypeReference = biometricStatus.BiometricTypeReference,
+                    Enabled = biometricStatus.Enabled
+                };
                 await _view.SendBiometricSpec(biometricSpec).PreserveThreadContext();
             }
+        }
+
+        private async Task UpdateBiometricRegistrationRequested(string accessToken)
+        {
+            var completion = new BiometricCompletion {Action = "Register"};
+
+            try
+            {
+                var biometricStatus = await _biometricAuthenticationService.FetchBiometricStatus().PreserveThreadContext();
+                switch (biometricStatus)
+                {
+                    case { Enabled: false }:
+                        completion.Action = "Register";
+                        var registerResult = await _biometricAuthenticationService.Register().PreserveThreadContext();
+                        completion.Outcome = registerResult.Outcome.ToString();
+                        completion.ErrorCode = registerResult.ErrorCode?.ToString() ?? string.Empty;
+                        break;
+                    case { Enabled: true }:
+                        completion.Action = "Deregister";
+                        var deleteRegistrationResult = await _biometricAuthenticationService.DeleteRegistration().PreserveThreadContext();
+                        completion.Outcome = deleteRegistrationResult.Outcome.ToString();
+                        completion.ErrorCode = deleteRegistrationResult.ErrorCode?.ToString() ?? string.Empty;
+                        break;
+                    default:
+                        completion.Outcome = BiometricOutcome.Failed.ToString();
+                        completion.ErrorCode = BiometricErrorCode.CannotFindBiometrics.ToString();
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to update biometric registration");
+                completion.Outcome = BiometricOutcome.Failed.ToString();
+            }
+
+            await _view.SendBiometricCompletion(completion).PreserveThreadContext();
         }
 
         private async Task HelpRequested()

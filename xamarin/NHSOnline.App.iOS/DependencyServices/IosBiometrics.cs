@@ -8,9 +8,9 @@ namespace NHSOnline.App.iOS.DependencyServices
 {
     public sealed class IosBiometrics : IBiometrics
     {
-        public Task<BiometricSpec?> FetchBiometricSpec()
+        public Task<BiometricStatus?> FetchBiometricStatus()
         {
-            return Task.FromResult<BiometricSpec?>(BiometricSpec.Face(true));
+            return Task.FromResult<BiometricStatus?>(BiometricStatus.Face(false));
         }
     }
 }

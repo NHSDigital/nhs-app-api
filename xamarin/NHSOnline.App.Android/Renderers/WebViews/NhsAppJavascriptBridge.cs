@@ -1,9 +1,7 @@
 using Android.Webkit;
 using Java.Interop;
-using Newtonsoft.Json;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
-using NHSOnline.App.Controls.WebViews.Payloads;
 using Object = Java.Lang.Object;
 
 namespace NHSOnline.App.Droid.Renderers.WebViews
@@ -23,32 +21,21 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         [Export("openWebIntegration")]
         public void OpenWebIntegration(string argumentJson)
         {
-            NhsAppResilience.ExecuteOnMainThread(() =>
-            {
-                var argument = JsonConvert.DeserializeObject<OpenWebIntegrationRequest>(argumentJson);
-                _nhsAppWebView.OpenWebIntegrationCommand.Execute(argument);
-            });
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.OpenWebIntegration(argumentJson));
         }
 
         [JavascriptInterface]
         [Export("startNhsLoginUplift")]
         public void StartNhsLoginUplift(string argumentJson)
         {
-            NhsAppResilience.ExecuteOnMainThread(() =>
-            {
-                var argument = JsonConvert.DeserializeObject<StartNhsLoginUpliftRequest>(argumentJson);
-                _nhsAppWebView.StartNhsLoginUpliftCommand.Execute(argument);
-            });
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.StartNhsLoginUplift(argumentJson));
         }
 
         [JavascriptInterface]
         [Export("getNotificationsStatus")]
         public void GetNotificationsStatus()
         {
-            NhsAppResilience.ExecuteOnMainThread(() =>
-            {
-                _nhsAppWebView.GetNotificationsStatusCommand.Execute(null);
-            });
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.GetNotificationsStatus());
         }
     }
 }

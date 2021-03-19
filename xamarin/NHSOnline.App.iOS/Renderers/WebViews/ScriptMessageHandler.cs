@@ -1,6 +1,5 @@
 using System;
 using Foundation;
-using Newtonsoft.Json;
 using NHSOnline.App.Controls;
 using WebKit;
 
@@ -8,61 +7,30 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 {
     internal static class ScriptMessageHandler
     {
-        public static IWKScriptMessageHandler For(Func<AsyncCommand> command) => new NoArguments(command);
-        public static IWKScriptMessageHandler For(Func<AsyncCommand<string>> command) => new StringArgument(command);
-        public static IWKScriptMessageHandler For<TArgument>(Func<AsyncCommand<TArgument>> command) => new JsonArgument<TArgument>(command);
+        public static IWKScriptMessageHandler For(Func<Action> action) => new ActionMessageHandler(action);
+        public static IWKScriptMessageHandler For(Func<Action<string>> action) => new StringActionMessageHandler(action);
 
-        private sealed class NoArguments : NSObject, IWKScriptMessageHandler
+        private sealed class ActionMessageHandler : NSObject, IWKScriptMessageHandler
         {
-            private readonly Func<AsyncCommand> _command;
+            private readonly Func<Action> _action;
 
-            internal NoArguments(Func<AsyncCommand> command) => _command = command;
+            internal ActionMessageHandler(Func<Action> action) => _action = action;
 
             public void DidReceiveScriptMessage(WKUserContentController userContentController, WKScriptMessage message)
             {
-                NhsAppResilience.ExecuteOnMainThread(ExecuteCommand);
-            }
-
-            private void ExecuteCommand()
-            {
-                _command().Execute(null);
+                NhsAppResilience.ExecuteOnMainThread(() => _action()());
             }
         }
-
-        private sealed class StringArgument : NSObject, IWKScriptMessageHandler
+        
+        private sealed class StringActionMessageHandler : NSObject, IWKScriptMessageHandler
         {
-            private readonly Func<AsyncCommand<string>> _command;
+            private readonly Func<Action<string>> _action;
 
-            public StringArgument(Func<AsyncCommand<string>> command) => _command = command;
+            public StringActionMessageHandler(Func<Action<string>> action) => _action = action;
 
             public void DidReceiveScriptMessage(WKUserContentController userContentController, WKScriptMessage message)
             {
-                NhsAppResilience.ExecuteOnMainThread(() => ExecuteCommand(message.Body.ToString()));
-            }
-
-            private void ExecuteCommand(string argument)
-            {
-                _command().Execute(argument);
-            }
-        }
-
-        private sealed class JsonArgument<TArgument> : NSObject, IWKScriptMessageHandler
-        {
-            private readonly Func<AsyncCommand<TArgument>> _command;
-
-            public JsonArgument(Func<AsyncCommand<TArgument>> command) => _command = command;
-
-            public void DidReceiveScriptMessage(WKUserContentController userContentController, WKScriptMessage message)
-            {
-                NhsAppResilience.ExecuteOnMainThread(() => ExecuteCommand(message.Body.ToString()));
-            }
-
-            private void ExecuteCommand(string argumentJson)
-            {
-                var argument = JsonConvert.DeserializeObject<TArgument>(argumentJson) ??
-                               throw new ArgumentException($"Failed to deserialise JSON to {typeof(TArgument).FullName}", nameof(argumentJson));
-
-                _command().Execute(argument);
+                NhsAppResilience.ExecuteOnMainThread(() => _action()(message.Body.ToString()));
             }
         }
     }

@@ -1,8 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using NHSOnline.App.Controls.WebViews.Payloads;
-using NHSOnline.App.DependencyServices.Biometrics;
-using NHSOnline.App.DependencyServices.Notifications;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.Home
@@ -31,6 +29,7 @@ namespace NHSOnline.App.Areas.Home
         Func<string, Task>? GetPnsTokenRequested { get; set; }
 
         Func<Task>? FetchBiometricSpecRequested { get; set; }
+        Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
 
         INavigation Navigation { get; }
 
@@ -47,5 +46,6 @@ namespace NHSOnline.App.Areas.Home
         Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse);
         Task SendNotificationUnauthorised();
         Task SendBiometricSpec(BiometricSpec biometricSpec);
+        Task SendBiometricCompletion(BiometricCompletion completionDetails);
     }
 }

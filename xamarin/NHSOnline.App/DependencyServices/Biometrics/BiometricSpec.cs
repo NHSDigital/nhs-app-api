@@ -1,44 +1,44 @@
-﻿namespace NHSOnline.App.DependencyServices.Biometrics
+namespace NHSOnline.App.DependencyServices.Biometrics
 {
-    public abstract class BiometricSpec
+    public abstract class BiometricStatus
     {
-        private BiometricSpec(bool enabled)
+        private BiometricStatus(bool enabled)
         {
             Enabled = enabled;
         }
 
-        public static BiometricSpec FingerPrint(bool enabled) => new FingerPrintSpec(enabled);
-        public static BiometricSpec Touch(bool enabled) => new TouchSpec(enabled);
-        public static BiometricSpec Face(bool enabled) => new FaceSpec(enabled);
+        public static BiometricStatus FingerPrint(bool enabled) => new FingerPrintStatus(enabled);
+        public static BiometricStatus Touch(bool enabled) => new TouchStatus(enabled);
+        public static BiometricStatus Face(bool enabled) => new FaceStatus(enabled);
 
-        public abstract BiometricTypeReference BiometricTypeReference { get; }
+        public abstract string BiometricTypeReference { get; }
         public bool Enabled { get; }
 
-        private sealed class FingerPrintSpec : BiometricSpec
+        private sealed class FingerPrintStatus : BiometricStatus
         {
-            public FingerPrintSpec(bool enabled) : base(enabled)
+            public FingerPrintStatus(bool enabled) : base(enabled)
             {
             }
 
-            public override BiometricTypeReference BiometricTypeReference => BiometricTypeReference.FingerPrint;
+            public override string BiometricTypeReference => "fingerPrint";
         }
 
-        private sealed class FaceSpec : BiometricSpec
+        private sealed class FaceStatus : BiometricStatus
         {
-            public FaceSpec(bool enabled) : base(enabled)
+            public FaceStatus(bool enabled) : base(enabled)
             {
             }
 
-            public override BiometricTypeReference BiometricTypeReference => BiometricTypeReference.Face;
+            public override string BiometricTypeReference => "face";
         }
 
-        private sealed class TouchSpec : BiometricSpec
+        private sealed class TouchStatus : BiometricStatus
         {
-            public TouchSpec(bool enabled) : base(enabled)
+            public TouchStatus(bool enabled) : base(enabled)
             {
             }
 
-            public override BiometricTypeReference BiometricTypeReference => BiometricTypeReference.Touch;
+            public override string BiometricTypeReference => "touch";
         }
     }
 }

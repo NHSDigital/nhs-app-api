@@ -4,6 +4,6 @@ namespace NHSOnline.App.DependencyServices.Biometrics
 {
     public interface IBiometrics
     {
-        Task<BiometricSpec?> FetchBiometricSpec();
+        Task<BiometricStatus?> FetchBiometricStatus();
     }
 }

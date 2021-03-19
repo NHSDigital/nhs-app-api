@@ -8,12 +8,14 @@ namespace NHSOnline.App.DependencyServices.Notifications
 
         public sealed class Authorised: GetPnsTokenResult
         {
-            public GetPnsTokenResponse Response { get; }
-
             public Authorised(GetPnsTokenResponse response)
             {
                 Response = response;
             }
+
+            private GetPnsTokenResponse Response { get; }
+            public string DevicePns => Response.DevicePns;
+            public string DeviceType => Response.DeviceType;
         }
 
         public sealed class Unauthorised: GetPnsTokenResult

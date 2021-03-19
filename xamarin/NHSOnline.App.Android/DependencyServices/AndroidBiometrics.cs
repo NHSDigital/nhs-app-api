@@ -8,9 +8,9 @@ namespace NHSOnline.App.Droid.DependencyServices
 {
     public sealed class AndroidBiometrics : IBiometrics
     {
-        public Task<BiometricSpec?> FetchBiometricSpec()
+        public Task<BiometricStatus?> FetchBiometricStatus()
         {
-            return Task.FromResult<BiometricSpec?>(null);
+            return Task.FromResult<BiometricStatus?>(null);
         }
     }
 }

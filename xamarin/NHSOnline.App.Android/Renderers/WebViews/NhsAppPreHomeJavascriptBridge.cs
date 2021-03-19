@@ -21,30 +21,21 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         [Export("goToLoggedInHomeScreen")]
         public void GoToLoggedInHomeScreen()
         {
-            NhsAppResilience.ExecuteOnMainThread(() =>
-            {
-                _nhsAppPreHomeScreenWebView.GoToLoggedInHomeScreenCommand.Execute(null);
-            });
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppPreHomeScreenWebView.GoToLoggedInHomeScreen());
         }
 
         [JavascriptInterface]
         [Export("getNotificationsStatus")]
         public void GetNotificationsStatus()
         {
-            NhsAppResilience.ExecuteOnMainThread(() =>
-            {
-                _nhsAppPreHomeScreenWebView.GetNotificationsStatusCommand.Execute(null);
-            });
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppPreHomeScreenWebView.GetNotificationsStatus());
         }
 
         [JavascriptInterface]
         [Export("requestPnsToken")]
         public void RequestPnsToken(string trigger)
         {
-            NhsAppResilience.ExecuteOnMainThread(() =>
-            {
-                _nhsAppPreHomeScreenWebView.RequestPnsTokenCommand.Execute(trigger);
-            });
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppPreHomeScreenWebView.RequestPnsToken(trigger));
         }
     }
 }

@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.App.Services.FIDO;
 using NHSOnline.App.Services.Media;
 
 namespace NHSOnline.App.Services
@@ -8,6 +9,7 @@ namespace NHSOnline.App.Services
         internal static IServiceCollection AddServices(this IServiceCollection services)
         {
             return services
+                .AddTransient<IBiometricAuthenticationService, BiometricAuthenticationService>()
                 .AddTransient<IBrowserOverlay, BrowserOverlay>()
                 .AddTransient<ISelectMediaService, SelectMediaService>()
                 .AddTransient<IUserPreferencesService, UserPreferencesService>();

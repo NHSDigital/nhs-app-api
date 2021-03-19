@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using Foundation;
-using NHSOnline.App.Controls;
 using WebKit;
 
 namespace NHSOnline.App.iOS.Renderers.WebViews
@@ -33,24 +32,18 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
             _javascriptObjectName = javascriptObjectName;
         }
 
-        public JavascriptBridge<TWebView> AddFunction(string name, Func<TWebView, AsyncCommand> command)
+        public JavascriptBridge<TWebView> AddFunction(string name, Func<TWebView, Action> action)
+        {
+            _functions.Add(name, ScriptMessageHandler.For(() => action(_webViewAccessor())));
+            return this;
+        }
+        
+        public JavascriptBridge<TWebView> AddFunction(string name, Func<TWebView, Action<string>> command)
         {
             _functions.Add(name, ScriptMessageHandler.For(() => command(_webViewAccessor())));
             return this;
         }
-
-        public JavascriptBridge<TWebView> AddFunction(string name, Func<TWebView, AsyncCommand<string>> command)
-        {
-            _functions.Add(name, ScriptMessageHandler.For(() => command(_webViewAccessor())));
-            return this;
-        }
-
-        public JavascriptBridge<TWebView> AddFunction<TArgument>(string name, Func<TWebView, AsyncCommand<TArgument>> command)
-        {
-            _functions.Add(name, ScriptMessageHandler.For(() => command(_webViewAccessor())));
-            return this;
-        }
-
+        
         public JavascriptBridge<TWebView> Apply(WKUserContentController userContentController)
         {
             foreach (var (name, handler) in _functions)

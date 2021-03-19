@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using NHSOnline.App.Areas.Cookies;
-using NHSOnline.App.DependencyServices.Notifications;
+using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 

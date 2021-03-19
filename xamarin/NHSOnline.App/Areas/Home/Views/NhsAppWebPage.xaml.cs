@@ -1,14 +1,10 @@
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.Payloads;
-using NHSOnline.App.DependencyServices.Biometrics;
-using NHSOnline.App.DependencyServices.Notifications;
+using NHSOnline.App.Threading;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.Home.Views
@@ -38,19 +34,21 @@ namespace NHSOnline.App.Areas.Home.Views
 
         public AsyncCommand<OpenWebIntegrationRequest> OpenWebIntegrationCommand
             => new AsyncCommand<OpenWebIntegrationRequest>(() => OpenWebIntegrationRequested);
+
         public AsyncCommand<StartNhsLoginUpliftRequest> StartNhsLoginUpliftCommand
             => new AsyncCommand<StartNhsLoginUpliftRequest>(() => StartNhsLoginUpliftRequested);
 
-        public AsyncCommand GetNotificationsStatusCommand
-            => new AsyncCommand(() => GetNotificationsStatusRequested);
+        public AsyncCommand GetNotificationsStatusCommand => new AsyncCommand(() => GetNotificationsStatusRequested);
 
-        public AsyncCommand<string> RequestPnsTokenCommand
-            => new AsyncCommand<string>(() => GetPnsTokenRequested);
+        public AsyncCommand<string> RequestPnsTokenCommand => new AsyncCommand<string>(() => GetPnsTokenRequested);
 
         public Func<Task>? FetchBiometricSpecRequested { get; set; }
         public AsyncCommand FetchBiometricSpecCommand => new AsyncCommand(() => FetchBiometricSpecRequested);
 
-        private AsyncCommand AppearingCommand => new AsyncCommand(() => ((INhsAppWebView)this).Appearing);
+        public Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
+        public AsyncCommand<string> UpdateBiometricRegistrationCommand => new AsyncCommand<string>(() => UpdateBiometricRegistrationRequested);
+
+        private AsyncCommand AppearingCommand => new AsyncCommand(() => ((INhsAppWebView) this).Appearing);
 
         public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
         private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
@@ -95,64 +93,48 @@ namespace NHSOnline.App.Areas.Home.Views
 
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);
 
-        public async Task NavigateToAdvice()
-            => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigationGoToAdvice()").PreserveThreadContext();
+        public async Task NavigateToAdvice() => await WebView.NavigateToAdvice().ResumeOnThreadPool();
 
-        public async Task NavigateToAppointments()
-            => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigationGoToAppointments()").PreserveThreadContext();
+        public async Task NavigateToAppointments() => await WebView.NavigateToAppointments().ResumeOnThreadPool();
 
-        public async Task NavigateToPrescriptions()
-            => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigationGoToPrescriptions()").PreserveThreadContext();
+        public async Task NavigateToPrescriptions() => await WebView.NavigateToPrescriptions().ResumeOnThreadPool();
 
-        public async Task NavigateToYourHealth()
-            => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigationGoToYourHealth()").PreserveThreadContext();
+        public async Task NavigateToYourHealth() => await WebView.NavigateToYourHealth().ResumeOnThreadPool();
 
-        public async Task NavigateToMessages()
-            => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigationGoToMessages()").PreserveThreadContext();
+        public async Task NavigateToMessages() => await WebView.NavigateToMessages().ResumeOnThreadPool();
 
-         public async Task NavigateToSettings()
-            => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigationGoToSettings()").PreserveThreadContext();
+        public async Task NavigateToSettings() => await WebView.NavigateToSettings().ResumeOnThreadPool();
 
-         public async Task NavigateToHome()
-             => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigationGoToHome()").PreserveThreadContext();
+        public async Task NavigateToHome() => await WebView.NavigateToHome().ResumeOnThreadPool();
 
-         public async Task NavigateToRedirectedPathWithinApp(string spaPath)
-             => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigationGoTo({ConvertToJsonString(spaPath)})").PreserveThreadContext();
+        public async Task NavigateToRedirectedPathWithinApp(string spaPath)
+            => await WebView.NavigateToRedirectedPathWithinApp(spaPath).ResumeOnThreadPool();
 
-         public async Task SendNotificationsStatus(string status)
-             => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.notificationsSettingsStatus({ConvertToJsonString(status)})").PreserveThreadContext();
+        public async Task SendNotificationsStatus(string status)
+            => await WebView.SendNotificationsStatus(status).ResumeOnThreadPool();
 
-         public async Task SendBiometricSpec(BiometricSpec biometricSpec)
-             => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.loginSettingsBiometricSpec({ConvertToJsonString(biometricSpec)})").PreserveThreadContext();
+        public async Task SendBiometricSpec(BiometricSpec biometricSpec)
+            => await WebView.SendBiometricSpec(biometricSpec).ResumeOnThreadPool();
 
-         public async Task ResetAndShowError()
-            => await (ResetAndShowErrorRequested?.Invoke() ?? Task.CompletedTask).PreserveThreadContext();
+        public async Task SendBiometricCompletion(BiometricCompletion completionDetails)
+            => await WebView.SendBiometricCompletion(completionDetails).ResumeOnThreadPool();
 
-         public async Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse)
-             => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.notificationsAuthorised({ConvertToJsonString(authorisedResponse)})").PreserveThreadContext();
+        public async Task ResetAndShowError()
+            => await (ResetAndShowErrorRequested?.Invoke() ?? Task.CompletedTask).ResumeOnThreadPool();
 
-         public async Task SendNotificationUnauthorised()
-             => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.notificationsUnauthorised()").PreserveThreadContext();
+        public async Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse)
+            => await WebView.SendNotificationAuthorised(authorisedResponse).ResumeOnThreadPool();
 
-        private static string ConvertToJsonString<T>(T arg)
-        {
-            var settings = new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                NullValueHandling = NullValueHandling.Ignore
-            };
-            settings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
-            return JsonConvert.SerializeObject(arg, settings);
-        }
-
-        private void WebViewNavigating (object sender, WebNavigatingEventArgs e)
+        public async Task SendNotificationUnauthorised() => await WebView.SendNotificationUnauthorised().ResumeOnThreadPool();
+        
+        private void WebViewNavigating(object sender, WebNavigatingEventArgs e)
         {
             Spinner.IsVisible = true;
             WebView.IsVisible = false;
 
         }
 
-        private void WebOnEndNavigating (object sender, WebNavigatedEventArgs e)
+        private void WebOnEndNavigating(object sender, WebNavigatedEventArgs e)
         {
             Spinner.IsVisible = false;
             WebView.IsVisible = true;
