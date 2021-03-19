@@ -18,10 +18,9 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
         private NhsLoginUpliftWebViewRenderer(WKWebViewConfiguration config) : base(config)
         {
             this.InstallIProov();
-            
+
             _javascriptBridge = JavascriptBridge
                 .ForWebView(() => (NhsLoginUpliftWebView)Element, "nativeNhsLogin")
-                .AddFunction("startPaycasso", webView => webView.LaunchPaycasso)
                 .Apply(config.UserContentController);
         }
 

@@ -52,7 +52,6 @@
     <Compile Include="DependencyServices\AndroidCookies.cs" />
     <Compile Include="DependencyServices\AndroidHttpMessageHandlerFactory.cs" />
     <Compile Include="DependencyServices\AndroidNativeLog.cs" />
-    <Compile Include="DependencyServices\AndroidPaycasso.cs" />
     <Compile Include="DependencyServices\AndroidNotifications.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Renderers\KeyEventArgsExtensions.cs" />

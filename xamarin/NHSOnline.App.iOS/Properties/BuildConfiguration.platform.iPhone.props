@@ -5,7 +5,6 @@
     <DefineConstants>IPHONE;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Paycasso.iOS" Version="1.0.0" />
     <PackageReference Include="iProov.iOS" Version="8.1.1" />
   </ItemGroup>
 </Project>

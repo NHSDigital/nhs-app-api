@@ -11,7 +11,6 @@
 
     <webViews:NhsLoginUpliftWebView x:Name="WebView"
                                     SelectMediaCommand="{Binding SelectMediaCommand, Source={x:Reference Name=Page}}"
-                                    LaunchPaycassoCommand="{Binding LaunchPaycassoCommand, Source={x:Reference Name=Page}}"
                                     VerticalOptions="FillAndExpand" />
 
 </pages:NhsAppCloseSlimHeaderPage>

@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.Payloads;
-using NHSOnline.App.Controls.WebViews.Payloads.Paycasso;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.WebIntegration.Views
@@ -35,9 +34,6 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
 
         Func<ISelectMediaRequest, Task>? INhsLoginUpliftView.SelectMediaRequested { get; set; }
         public AsyncCommand<ISelectMediaRequest> SelectMediaCommand => new AsyncCommand<ISelectMediaRequest>(() => View.SelectMediaRequested);
-
-        Func<LaunchPaycassoRequest, Task>? INhsLoginUpliftView.LaunchPaycassoRequested { get; set; }
-        public AsyncCommand<LaunchPaycassoRequest> LaunchPaycassoCommand => new AsyncCommand<LaunchPaycassoRequest>(() => View.LaunchPaycassoRequested);
 
         private INhsLoginUpliftView View => this;
 
@@ -88,15 +84,5 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         }
 
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);
-
-        public async Task PaycassoOnSuccess(string response)
-        {
-            await WebView.EvaluateJavaScriptAsync($"window.authentication.paycassoOnSuccess({response})").PreserveThreadContext();
-        }
-
-        public async Task PaycassoOnFailure(string error)
-        {
-            await WebView.EvaluateJavaScriptAsync($"window.authentication.paycassoOnFailure({error})").PreserveThreadContext();
-        }
     }
 }

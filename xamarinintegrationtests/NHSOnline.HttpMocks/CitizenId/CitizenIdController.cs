@@ -75,10 +75,6 @@ namespace NHSOnline.HttpMocks.CitizenId
         }
 
         [Host(AuthHostName)]
-        [HttpGet("Page/Paycasso.html")]
-        public IActionResult PaycassoPage() => View(model: AuthHostName);
-
-        [Host(AuthHostName)]
         [HttpGet("Page/FailFast.html")]
         public IActionResult FailFast()
         {

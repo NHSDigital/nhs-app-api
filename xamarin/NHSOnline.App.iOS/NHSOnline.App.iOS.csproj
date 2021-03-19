@@ -51,8 +51,6 @@
     <Compile Include="DependencyServices\IosLifecycle.cs" />
     <Compile Include="DependencyServices\IosNativeLog.cs" />
     <Compile Include="DependencyServices\IosNotifications.cs" />
-    <Compile Include="DependencyServices\IosPaycassoSimulator.cs" />
-    <Compile Include="DependencyServices\IosPaycasso.cs" />
     <Compile Include="Effects\SafeAreaPaddingEffectTop.cs" />
     <Compile Include="Effects\SafeAreaPaddingEffectBottom.cs" />
     <Compile Include="Effects\UIDeviceExtensions.cs" />
