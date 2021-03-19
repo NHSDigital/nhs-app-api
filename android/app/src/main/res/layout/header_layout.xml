@@ -109,30 +109,29 @@
 
     <ImageView
         android:id="@+id/moreIcon"
-        android:layout_width="47dp"
-        android:layout_height="32dp"
+        android:layout_width="wrap_content"
+        android:maxWidth="@dimen/_26sdp"
         android:adjustViewBounds="true"
         android:background="@drawable/icon_drawable_boarder_focusable"
         android:contentDescription="@string/header_icon_settings"
         android:focusable="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/helpIcon"
         android:focusableInTouchMode="false"
         android:nextFocusUp="@id/messages"
         android:paddingLeft="@dimen/_6sdp"
         android:paddingTop="@dimen/_7sdp"
-        android:paddingRight="@dimen/_14sdp"
+        android:paddingRight="@dimen/_7sdp"
         android:paddingBottom="@dimen/_2sdp"
         android:src="@drawable/icon_drawable_more_white"
-        app:layout_constraintBottom_toBottomOf="@id/helpIcon"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        android:layout_height="0dp"/>
     <TextView
         android:id="@+id/settingsIconText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="1dp"
         android:importantForAccessibility="no"
-        android:paddingRight="@dimen/_6sdp"
         android:paddingBottom="@dimen/_2sdp"
         android:text="@string/header_icon_more_label"
         android:textAlignment="center"
