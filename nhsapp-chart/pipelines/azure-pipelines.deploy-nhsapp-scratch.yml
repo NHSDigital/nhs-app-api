@@ -113,6 +113,21 @@ stages:
       env:
         chartVersion: $(Build.SourceBranchName)
         appImageTag: $(version)
+    - task: Bash@3
+      displayName: 'Set release name'
+      inputs:
+        targetType: 'inline'
+        script: |
+          releaseName=${{ parameters.namespace }}-$(Build.SourceBranchName)
+
+          if [ ${#releaseName} -gt 50 ]; then
+            truncatedReleaseName="${releaseName:0:50}-t"
+            lowercaseReleaseName=$(echo "$truncatedReleaseName" | tr '[:upper:]' '[:lower:]')
+          else
+            lowercaseReleaseName=$(echo "$releaseName" | tr '[:upper:]' '[:lower:]')
+          fi
+          echo $lowercaseReleaseName
+          echo "##vso[task.setvariable variable=lowercaseReleaseName]$lowercaseReleaseName"
     - task: AzureCLI@2
       displayName: Get cluster IP
       inputs:
@@ -152,7 +167,7 @@ stages:
         command: upgrade
         chartType: filepath
         chartPath: $(System.DefaultWorkingDirectory)/nhsapp-chart/nhsapp/
-        releaseName: ${{ parameters.namespace }}-$(Build.SourceBranchName)
+        releaseName: $(lowercaseReleaseName)
         valueFile: $(System.DefaultWorkingDirectory)/nhsapp-chart/vars/cluster/vars-$(AKS_SHORTNAME).yaml
         arguments: --set global.environment="${{ parameters.namespace }}"
                    -f $(System.DefaultWorkingDirectory)/nhsapp-chart/vars/zone/$(environment)/vars-$(environment).yaml
