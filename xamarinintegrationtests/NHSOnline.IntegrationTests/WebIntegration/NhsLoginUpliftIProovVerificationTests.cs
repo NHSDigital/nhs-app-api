@@ -9,5 +9,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration
     {
         [NhsAppManualTest("NHSO-13695", "No reliable means via BrowserStack to determine the SDK is available, at the moment")]
         public void APatientWithProofLevelFiveWhenUpliftingCanVerifyTheirIdentityUsingIProovIOS() { }
+
+        [NhsAppManualTest("NHSO-13794", "Currently unable to mock iProov SDK")]
+        public void APatientWithProofLevelFiveWhenUpliftingCanVerifyTheirIdentityUsingIProovAndroid() { }
     }
 }

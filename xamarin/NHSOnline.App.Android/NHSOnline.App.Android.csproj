@@ -37,6 +37,7 @@
   <Import Project="Properties/BuildConfiguration.debugmode.$(DebugMode).props" />
   <Import Project="Properties/BuildConfiguration.env.$(Environment).props" />
   <ItemGroup>
+    <PackageReference Include="iProov.Android" Version="6.3.1" />
     <Reference Include="Mono.Android" />
     <Reference Include="Mono.Android.Export" />
     <Reference Include="System" />
@@ -57,6 +58,7 @@
     <Compile Include="Renderers\KeyEventArgsExtensions.cs" />
     <Compile Include="Renderers\LinkLabelRenderer.cs" />
     <Compile Include="Renderers\WebViews\Extensions\EnableTargetBlankLinksRendererExtension.cs" />
+    <Compile Include="Renderers\WebViews\Extensions\iProovExtension.cs" />
     <Compile Include="Renderers\WebViews\Extensions\IWebViewRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\Extensions\Javascript\NhsAppJavascriptBridgeWebViewRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\Extensions\Javascript\PreHomeScreenJavascriptBridgeWebViewRendererExtension.cs" />
