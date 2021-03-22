@@ -64,13 +64,14 @@
                                :error.sync="showMandatoryReasonError"
                                :text-area-classes="['nhsuk-u-margin-bottom-0']"
                                text-area-ref="specialRequest"
-                               :maxlength="`${specialRequestCharacterLimit}`"
+                               :data-maxlength="`${specialRequestCharacterLimit}`"
                                aria-describedby="specialRequestCharactersRemaining"
                                @focus.once="onFocusSpecialRequest"/>
             <p id="specialRequestCharactersRemaining"
                class="nhsuk-u-padding-bottom-4"
                :aria-live="specialRequestAriaLive">
               {{ remainingCharacters }}</p>
+            <div v-if="stopExcessEntry"/>
           </div>
           <generic-button id="btn_order_prescription"
                           :button-classes="['nhsuk-button']"
@@ -262,6 +263,9 @@ export default {
         { n: remaining },
       );
     },
+    stopExcessEntry() {
+      return this.specialRequest;
+    },
   },
   watch: {
     '$route.query.ts': function watchTimestamp() {
@@ -270,6 +274,11 @@ export default {
     hasApiError(value) {
       if (value) {
         showShutterPage(this.$router.currentRoute, this);
+      }
+    },
+    stopExcessEntry() {
+      if (this.specialRequest.length > this.specialRequestCharacterLimit) {
+        this.specialRequest = this.specialRequest.slice(0, this.specialRequestCharacterLimit);
       }
     },
   },

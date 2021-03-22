@@ -19,7 +19,9 @@
               autocorrect="off"
               autocapitalize="off"
               spellcheck="false"
-              @focus="onFocus"/>
+              @focus="onFocus"
+              @keydown="onKeyDown"
+              @keyup="onKeyUp"/>
   </div>
 </template>
 
@@ -103,6 +105,18 @@ export default {
     },
     onFocus(event) {
       this.$emit('focus', event);
+    },
+    keydown() {
+      this.$refs.textArea.keydown();
+    },
+    onKeyDown(event) {
+      this.$emit('keydown', event);
+    },
+    keyup() {
+      this.$refs.textArea.keyup();
+    },
+    onKeyUp(event) {
+      this.$emit('keyup', event);
     },
   },
 };
