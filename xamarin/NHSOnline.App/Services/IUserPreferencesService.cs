@@ -1,7 +1,9 @@
-﻿namespace NHSOnline.App.Services
+namespace NHSOnline.App.Services
 {
     internal interface IUserPreferencesService
     {
         bool ShowGettingStarted { get; set; }
+
+        string? BiometricsKeyId { get; set; }
     }
 }

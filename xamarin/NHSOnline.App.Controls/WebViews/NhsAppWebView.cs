@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using NHSOnline.App.Areas.Home;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Threading;
 using Xamarin.Forms;

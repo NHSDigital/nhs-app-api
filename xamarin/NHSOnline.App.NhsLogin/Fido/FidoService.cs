@@ -30,5 +30,17 @@ namespace NHSOnline.App.NhsLogin.Fido
                 return new FidoRegisterResult.Failed();
             }
         }
+
+        public async Task Deregister(string accessToken, string keyId)
+        {
+            try
+            {
+                await _registrationService.Deregister(accessToken, keyId).ResumeOnThreadPool();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "FIDO deregister failed");
+            }
+        }
     }
 }

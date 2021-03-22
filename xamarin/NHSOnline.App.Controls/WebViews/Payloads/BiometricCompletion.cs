@@ -1,4 +1,4 @@
-namespace NHSOnline.App.Areas.Home
+namespace NHSOnline.App.Controls.WebViews.Payloads
 {
     public sealed class BiometricCompletion
     {

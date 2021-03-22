@@ -34,6 +34,13 @@ namespace NHSOnline.App.NhsLogin.Fido
             return await PostRegistrationResponse(registrationResponse, accessToken).ResumeOnThreadPool();
         }
 
+        internal async Task Deregister(string accessToken, string keyId)
+        {
+            var deregistrationRequest = CreateDeregistrationRequest(keyId);
+
+            await PostDeregistrationRequest(accessToken, deregistrationRequest).ResumeOnThreadPool();
+        }
+
         private async Task<UafRegistrationRequest> GetRegistrationRequest(string accessToken)
         {
             using var client = new HttpClient
@@ -124,6 +131,42 @@ namespace NHSOnline.App.NhsLogin.Fido
 
             _logger.LogError("Fido post registration response returned {HttpStatusCode}", result.StatusCode);
             return new FidoRegisterResult.Failed();
+        }
+
+        private static UafDeregistrationRequest CreateDeregistrationRequest(string keyId)
+        {
+            var request = new UafDeregistrationRequest
+            {
+                Header = new UafOperationHeader
+                {
+                    Upv = new UafProtocolVersion { Major = 1, Minor = 0},
+                    AppId = AppId,
+                    Op = UafOperation.Dereg
+                }
+            };
+            request.Authenticators.Add(new UafDeregisterAuthenticator { KeyId = keyId });
+            return request;
+        }
+
+        private async Task PostDeregistrationRequest(string accessToken, UafDeregistrationRequest request)
+        {
+            using var client = new HttpClient
+            {
+                BaseAddress = _config.UafBaseAddress
+            };
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
+
+            var requestJson = JsonConvert.SerializeObject(new[] { request });
+
+            _logger.LogInformation("UAF Deregistration Request: {UafDeregistrationRequest}", requestJson);
+
+            using var content = new StringContent(requestJson, Encoding.Default, "application/json");
+            var result = await client.PostAsync("/deregRequest", content).ResumeOnThreadPool();
+            var resultString = await result.Content.ReadAsStringAsync().ResumeOnThreadPool();
+
+            _logger.LogInformation("UAF Deregistration Response: {UafDeregistrationResponse}", resultString);
+
+            result.EnsureSuccessStatusCode();
         }
     }
 }

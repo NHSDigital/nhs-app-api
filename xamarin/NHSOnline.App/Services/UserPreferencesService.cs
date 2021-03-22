@@ -5,10 +5,36 @@ namespace NHSOnline.App.Services
 {
     internal sealed class UserPreferencesService: IUserPreferencesService
     {
+        private const string BiometricsKeyIdKey = "keyID";
+
         public bool ShowGettingStarted
         {
             get => GetPreference().ValueOr(true);
             set => GetPreference().Set(value);
+        }
+
+        public string? BiometricsKeyId
+        {
+            get
+            {
+                var value = Preferences.Get(BiometricsKeyIdKey, string.Empty);
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    return null;
+                }
+                return value;
+            }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    Preferences.Remove(BiometricsKeyIdKey);
+                }
+                else
+                {
+                    Preferences.Set(BiometricsKeyIdKey, value);
+                }
+            }
         }
 
         private static UserPreference GetPreference([CallerMemberName] string key = "") => new UserPreference(key);

@@ -176,14 +176,10 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         private async Task FetchBiometricSpecRequested()
         {
-            var biometricStatus = await _biometricAuthenticationService.FetchBiometricStatus().PreserveThreadContext();
-            if (biometricStatus != null)
+            var result = await _biometricAuthenticationService.FetchBiometricStatus().PreserveThreadContext();
+            var biometricSpec = result.Accept(new BiometricResultToSpecVisitor());
+            if (biometricSpec != null)
             {
-                var biometricSpec = new BiometricSpec
-                {
-                    BiometricTypeReference = biometricStatus.BiometricTypeReference,
-                    Enabled = biometricStatus.Enabled
-                };
                 await _view.SendBiometricSpec(biometricSpec).PreserveThreadContext();
             }
         }
@@ -194,21 +190,29 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
             try
             {
-                var biometricStatus = await _biometricAuthenticationService.FetchBiometricStatus().PreserveThreadContext();
-                switch (biometricStatus)
+                var biometricStatusResult = await _biometricAuthenticationService.FetchBiometricStatus().PreserveThreadContext();
+                switch (biometricStatusResult)
                 {
-                    case { Enabled: false }:
+                    case BiometricStatusResult.HardwarePresent { Registered: false, Usable: true }:
                         completion.Action = "Register";
-                        var registerResult = await _biometricAuthenticationService.Register().PreserveThreadContext();
+                        var registerResult = await _biometricAuthenticationService.Register(accessToken).PreserveThreadContext();
                         completion.Outcome = registerResult.Outcome.ToString();
                         completion.ErrorCode = registerResult.ErrorCode?.ToString() ?? string.Empty;
                         break;
-                    case { Enabled: true }:
-                        completion.Action = "Deregister";
-                        var deleteRegistrationResult = await _biometricAuthenticationService.DeleteRegistration().PreserveThreadContext();
-                        completion.Outcome = deleteRegistrationResult.Outcome.ToString();
-                        completion.ErrorCode = deleteRegistrationResult.ErrorCode?.ToString() ?? string.Empty;
+
+                    case BiometricStatusResult.HardwarePresent { Registered: false, Usable: false }:
+                        completion.Action = "Register";
+                        completion.Outcome = BiometricOutcome.Failed.ToString();
+                        completion.ErrorCode = BiometricErrorCode.CannotChangeBiometrics.ToString();
                         break;
+
+                    case BiometricStatusResult.HardwarePresent { Registered: true }:
+                        completion.Action = "Deregister";
+                        await _biometricAuthenticationService.DeleteRegistration(accessToken).PreserveThreadContext();
+                        completion.Outcome = BiometricOutcome.Success.ToString();
+                        completion.ErrorCode = string.Empty;
+                        break;
+                        
                     default:
                         completion.Outcome = BiometricOutcome.Failed.ToString();
                         completion.ErrorCode = BiometricErrorCode.CannotFindBiometrics.ToString();
@@ -219,6 +223,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             {
                 _logger.LogError(e, "Failed to update biometric registration");
                 completion.Outcome = BiometricOutcome.Failed.ToString();
+                completion.ErrorCode = BiometricErrorCode.Unknown.ToString();
             }
 
             await _view.SendBiometricCompletion(completion).PreserveThreadContext();
@@ -243,6 +248,20 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _view.GoToUri(homeUri);
 
             return Task.CompletedTask;
+        }
+
+        private sealed class BiometricResultToSpecVisitor : IBiometricStatusResultVisitor<BiometricSpec?>
+        {
+            public BiometricSpec? Visit(BiometricStatusResult.HardwareNotPresent hardwareNotPresent) => null;
+
+            public BiometricSpec? Visit(BiometricStatusResult.FingerPrint fingerPrint)
+                => BiometricSpec.FingerPrint(fingerPrint.Registered);
+
+            public BiometricSpec? Visit(BiometricStatusResult.TouchId touchId)
+                => BiometricSpec.FingerPrint(touchId.Registered);
+
+            public BiometricSpec? Visit(BiometricStatusResult.FaceId faceId)
+                => BiometricSpec.FingerPrint(faceId.Registered);
         }
     }
 }
