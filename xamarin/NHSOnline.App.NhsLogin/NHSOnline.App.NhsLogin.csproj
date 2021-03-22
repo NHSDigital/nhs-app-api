@@ -8,10 +8,12 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.13" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.13" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.7.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NHSOnline.App.Config\NHSOnline.App.Config.csproj" />
+    <ProjectReference Include="..\NHSOnline.App.Threading\NHSOnline.App.Threading.csproj" />
   </ItemGroup>
 
 </Project>

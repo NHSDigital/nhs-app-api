@@ -15,6 +15,11 @@ namespace NHSOnline.App.Threading
             return task.ConfigureAwait(false);
         }
 
+        public static ConfiguredValueTaskAwaitable ResumeOnThreadPool(this ValueTask task)
+        {
+            return task.ConfigureAwait(false);
+        }
+
         public static ConfiguredTaskAwaitable<T> ResumeOnThreadPool<T>(this Task<T> task)
         {
             return task.ConfigureAwait(false);

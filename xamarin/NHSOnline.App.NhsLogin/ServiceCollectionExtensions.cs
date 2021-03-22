@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.App.NhsLogin.Fido;
 
 namespace NHSOnline.App.NhsLogin
 {
@@ -7,7 +8,8 @@ namespace NHSOnline.App.NhsLogin
         public static IServiceCollection AddNhsLoginServices(this IServiceCollection services)
         {
             return services
-                .AddTransient<INhsLoginService, NhsLoginService>();
+                .AddTransient<INhsLoginService, NhsLoginService>()
+                .AddFidoServices();
         }
     }
 }
