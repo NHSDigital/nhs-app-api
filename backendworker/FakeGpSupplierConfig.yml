@@ -858,6 +858,56 @@ defaultUsers:
       dateOfBirth: 1959-08-08T00:00:00
       sex: male
 
+    9692239934:
+      userId: 1e40d4ca-4c68-4161-a0cb-d1358dd65711
+      emailAddress: nhsapp.aos+engage.user4@gmail.com
+      odsCode: F00006
+      givenName: Ceri
+      familyName: SUTTER
+      dateOfBirth: 2005-08-26T00:00:00
+      sex: female
 
+    9692240002:
+      userId: ddb04464-8dc8-4ec7-b87d-4825f2ee742b
+      emailAddress: nhsapp.aos+engage.user5@gmail.com
+      odsCode: F00006
+      givenName: Brad
+      familyName: CARR
+      dateOfBirth: 1987-06-22T00:00:00
+      sex: MALE
 
+    9692240010:
+      userId: 103b20b4-79c6-47ee-a234-8fd40145c821
+      emailAddress: nhsapp.aos+engage.user6@gmail.com
+      odsCode: F00006
+      givenName: Sven
+      familyName: HURRY
+      dateOfBirth: 1997-10-03T00:00:00
+      sex: MALE
 
+    9692240029:
+      userId: 68cfb805-b541-4e22-9b2d-a0101125fefe
+      emailAddress: nhsapp.aos+engage.user7@gmail.com
+      odsCode: F00006
+      givenName: Julian
+      familyName: MAHER
+      dateOfBirth: 1994-04-16T00:00:00
+      sex: MALE
+
+    9692240037:
+      userId: 44a7a5e1-e3d8-431b-bd4c-4dfcfb23a717
+      emailAddress: nhsapp.aos+engage.user8@gmail.com
+      odsCode: F00006
+      givenName: Jacob
+      familyName: OWENS
+      dateOfBirth: 1983-02-04T00:00:00
+      sex: MALE
+
+    9692240045:
+      userId: 37321f0a-30eb-4317-ae71-eb328b5cca7b
+      emailAddress: nhsapp.aos+engage.user9@gmail.com
+      odsCode: F00006
+      givenName: Nigel
+      familyName: DIGGLE
+      dateOfBirth: 1967-08-20T00:00:00
+      sex: MALE
