@@ -324,7 +324,7 @@ stages:
           configuration: 'Staging - Release'
           certSecureFile: iOSProductionCertificate.p12
           certPwd: '$(ios.production.certificate.password)'
-          provProfileSecureFile: iOSDemo.mobileprovision
+          provProfileSecureFile: iOSStaging.mobileprovision
 
   - ${{ if or(eq(variables['int.tests.run.native.xamarin'], 'true'), eq(variables['Build.Reason'], 'PullRequest')) }}:
     - stage: xamarin_browserstack
