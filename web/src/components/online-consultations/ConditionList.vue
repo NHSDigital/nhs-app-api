@@ -3,8 +3,7 @@
     <div id="conditionInfo" data-purpose="info">
       <p>{{ $t('onlineConsultations.conditions.chooseYourCondition') }}</p>
       <p class="nhsuk-u-margin-0 nhsuk-u-padding-0">
-        <a id="cannotFindConditionLink"
-           role="link"
+        <a id="cannotFindConditionLink" role="link" href="#"
            @click.prevent="onConditionClicked(generalGpAdviceServiceDefinition)">
           {{ $t('onlineConsultations.conditions.iCannotFindMyCondition') }}</a>
       </p>
@@ -25,8 +24,7 @@
       </menu-item-list>
     </div>
     <p id="endConditionInfo" class="nhsuk-u-margin-0 nhsuk-u-padding-0">
-      <a id="cannotFindConditionLink"
-         role="link"
+      <a id="cannotFindConditionLink" role="link" href="#"
          @click.prevent="onConditionClicked(generalGpAdviceServiceDefinition)">
         {{ $t('onlineConsultations.conditions.iCannotFindMyCondition') }}
       </a>
