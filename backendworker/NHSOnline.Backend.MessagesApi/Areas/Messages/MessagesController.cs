@@ -11,6 +11,8 @@ using NHSOnline.Backend.Auth.AspNet.ApiKey;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
 using NHSOnline.Backend.Metrics;
+using NHSOnline.Backend.Metrics.EventHub;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.MessagesApi.Areas.Messages
@@ -21,17 +23,25 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
         private readonly IMessageService _messageService;
         private readonly ILogger<MessagesController> _logger;
         private readonly IMetricLogger _metricLogger;
+        private readonly IEventHubLogger _eventHubLogger;
+
+        private readonly IMapper<SenderContext, MessageSenderContextEventLogData>
+            _messageSenderContextEventLogDataMapper;
 
         public MessagesController
         (
             IMessageService messageService,
             ILogger<MessagesController> logger,
             IMetricLogger metricLogger,
+            IEventHubLogger eventHubLogger,
+            IMapper<SenderContext, MessageSenderContextEventLogData> messageSenderContextEventLogDataMapper,
             IAccessTokenProvider accessTokenProvider)
         {
             _messageService = messageService;
             _logger = logger;
             _metricLogger = metricLogger;
+            _eventHubLogger = eventHubLogger;
+            _messageSenderContextEventLogDataMapper = messageSenderContextEventLogDataMapper;
             _accessTokenProvider = accessTokenProvider;
         }
 
@@ -51,6 +61,8 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                 var messageResult =
                     await _messageService.Send(addMessageRequest, nhsLoginId);
 
+                await messageResult.Accept(
+                    new MessageLogResultVisitor(_eventHubLogger, _messageSenderContextEventLogDataMapper, _logger));
                 return messageResult.Accept(new MessageResultVisitor());
             }
             catch (Exception e)
@@ -98,9 +110,13 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             {
                 _logger.LogEnter();
 
-                var messageResult = await _messageService.UpdateMessage(patchDocument, _accessTokenProvider.AccessToken, messageId);
+                var messageResult =
+                    await _messageService.UpdateMessage(patchDocument, _accessTokenProvider.AccessToken, messageId);
 
-                return await messageResult.Accept(new MessagePatchResultVisitor(_metricLogger));
+                await messageResult.Accept(
+                    new MessageLogPatchResultVisitor(_metricLogger, _eventHubLogger,
+                        _messageSenderContextEventLogDataMapper, _logger));
+                return await messageResult.Accept(new MessagePatchResultVisitor());
             }
             catch (Exception e)
             {

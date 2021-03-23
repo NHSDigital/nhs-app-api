@@ -65,5 +65,7 @@ validate_secret tpp_client_cert.pfx
 validate_secret qualtrics_api_key
 validate_secret vision_client_cert.password
 validate_secret vision_client_cert.pfx
+validate_secret comms_hub_event_hub_pid_connection_string
+validate_secret comms_hub_event_hub_connection_string
 
 exit $MISSING_SECRETS

@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests
             act.Should().Throw<ConfigurationNotValidException>()
                 .Which.Message.Should().Contain("NHSAPP_API_KEY");
         }
-        
+
         [TestMethod]
         public void ConfigureServices_ConfigureAuth_WhenInProduction_ShouldRequireHttpsMetadata()
         {
@@ -95,10 +95,16 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests
         private void SetupAllConfiguration()
         {
             _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns("Valid Value");
-           _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns("Valid Value");
-           _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns("https://authority.which.must.be.https.com/");
-           _mockConfiguration.Setup(x => x["NHSAPP_API_KEY"]).Returns("Valid Value");
-           _mockConfiguration.Setup(x => x["ConfigurationSettings:DefaultHttpTimeoutSeconds"]).Returns("2");
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns("Valid Value");
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"])
+                .Returns("https://authority.which.must.be.https.com/");
+            _mockConfiguration.Setup(x => x["NHSAPP_API_KEY"]).Returns("Valid Value");
+            _mockConfiguration.Setup(x => x["ENVIRONMENT_NAME"]).Returns("Valid Value");
+            _mockConfiguration.Setup(x => x["COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING"]).Returns(
+                "Endpoint=sb://example.servicebus.windows.net/;SharedAccessKeyName=example-sender;SharedAccessKey=fake;EntityPath=example-events");
+            _mockConfiguration.Setup(x => x["COMMS_HUB_EVENT_HUB_CONNECTION_STRING"]).Returns(
+                "Endpoint=sb://example.servicebus.windows.net/;SharedAccessKeyName=example-sender;SharedAccessKey=fake;EntityPath=example-events");
+            _mockConfiguration.Setup(x => x["ConfigurationSettings:DefaultHttpTimeoutSeconds"]).Returns("2");
         }
     }
 }

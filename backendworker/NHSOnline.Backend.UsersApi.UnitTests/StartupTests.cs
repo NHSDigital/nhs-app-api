@@ -244,6 +244,18 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
                 .Returns("Valid Api Key");
 
             _mockConfiguration
+                .Setup(x => x["ENVIRONMENT_NAME"])
+                .Returns("Valid Value");
+
+            _mockConfiguration
+                .Setup(x => x["COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING"])
+                .Returns("Endpoint=sb://example.servicebus.windows.net/;SharedAccessKeyName=example-sender;SharedAccessKey=fake;EntityPath=example-events");
+
+            _mockConfiguration
+                .Setup(x => x["COMMS_HUB_EVENT_HUB_CONNECTION_STRING"])
+                .Returns("Endpoint=sb://example.servicebus.windows.net/;SharedAccessKeyName=example-sender;SharedAccessKey=fake;EntityPath=example-events");
+
+            _mockConfiguration
                 .Setup(x => x["ConfigurationSettings:DefaultHttpTimeoutSeconds"])
                 .Returns("2");
 

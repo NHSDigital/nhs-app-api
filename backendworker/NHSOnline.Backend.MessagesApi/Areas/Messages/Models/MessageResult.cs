@@ -6,14 +6,11 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
 
         public class Success : MessageResult
         {
-            public AddMessageResponse Response { get; }
+            public UserMessage UserMessage { get; }
 
-            public Success(string messageId)
+            public Success(UserMessage userMessage)
             {
-                Response = new AddMessageResponse
-                {
-                    MessageId = messageId
-                };
+                UserMessage = userMessage;
             }
 
             public override T Accept<T>(IMessageResultVisitor<T> visitor)

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.Globalization;
+
 namespace NHSOnline.Backend.Metrics
 {
     public sealed class AppointmentData : IMetricData

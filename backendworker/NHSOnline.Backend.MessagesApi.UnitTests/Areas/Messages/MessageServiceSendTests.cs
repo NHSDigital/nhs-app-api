@@ -79,8 +79,8 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Assert
             VerifyAll();
 
-            result.Should().BeAssignableTo<MessageResult.Success>()
-                .Subject.Response.MessageId.Should().Be(returnedUserMessage.Id.ToString());
+            var subject = result.Should().BeAssignableTo<MessageResult.Success>().Subject;
+            subject.UserMessage.Should().Be(returnedUserMessage);
         }
 
         [TestMethod]

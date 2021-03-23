@@ -2,18 +2,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
-using NHSOnline.Backend.Metrics;
 
 namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 {
     public class MessagePatchResultVisitor : IMessagePatchResultVisitor<Task<IActionResult>>
     {
-        private readonly IMetricLogger _metricLogger;
-
-        public MessagePatchResultVisitor(IMetricLogger metricLogger)
-        {
-            _metricLogger = metricLogger;
-        }
 
         public async Task<IActionResult> Visit(MessagePatchResult.NoChange result)
         {
@@ -22,15 +15,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 
         public async Task<IActionResult> Visit(MessagePatchResult.Updated result)
         {
-            await _metricLogger.MessageRead(new MessageReadData(
-                result.Id,
-                result.CommunicationId,
-                result.TransmissionId,
-                result.CampaignId,
-                result.SupplierId
-            ));
-
-            return new NoContentResult();
+            return await Task.FromResult(new NoContentResult());
         }
 
         public async Task<IActionResult> Visit(MessagePatchResult.BadRequest result){

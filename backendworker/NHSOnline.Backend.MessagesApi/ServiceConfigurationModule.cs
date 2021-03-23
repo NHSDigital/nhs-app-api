@@ -15,6 +15,7 @@ using NHSOnline.Backend.MessagesApi.Areas.Messages.Mappers;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
 using NHSOnline.Backend.MessagesApi.Repository;
 using NHSOnline.Backend.Metrics;
+using NHSOnline.Backend.Metrics.EventHub;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support.Http;
@@ -35,6 +36,7 @@ namespace NHSOnline.Backend.MessagesApi
             services.AddSingleton<IMapper<MessageLink, RepositoryFindResult<UserMessage>.Found, MessageLinkClickedData>, MessageLinkClickedDataMapper>();
             services.AddScoped<IMessageLinkClickedService, MessageLinkClickedService>();
             services.AddSingleton<IMessageLinkClickedValidationService, MessageLinkClickedValidationService>();
+            services.AddSingleton<IMapper<SenderContext, MessageSenderContextEventLogData>, MessageSenderContextEventLogDataMapper>();
 
             ConfigureUserProfileServices(services);
             ConfigureCitizenIdServices(services);

@@ -127,13 +127,6 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                     return repositoryUpdatesFailure;
                 }
 
-                var findResult = await _messageRepository.FindMessage(accessToken.Subject, messageId);
-                if (!(findResult is RepositoryFindResult<UserMessage>.Found foundResult))
-                {
-                    _logger.LogWarning("Message Patch failed to find message in repository");
-                    return findResult.Accept(new RepositoryFindMessagePatchResultVisitor());
-                }
-
                 var updateResult =
                     await _messageRepository.UpdateOne(accessToken.Subject, messageId, repositoryUpdates);
                 if (!(updateResult is RepositoryUpdateResult<UserMessage>.Updated))
@@ -142,15 +135,16 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                     return updateResult.Accept(new RepositoryUpdateMessageResultVisitor());
                 }
 
+                var findResult = await _messageRepository.FindMessage(accessToken.Subject, messageId);
+                if (!(findResult is RepositoryFindResult<UserMessage>.Found foundResult))
+                {
+                    _logger.LogWarning("Message Patch failed to find message in repository");
+                    return findResult.Accept(new RepositoryFindMessagePatchResultVisitor());
+                }
+
                 var record = foundResult.Records.First();
 
-                return new MessagePatchResult.Updated(
-                    record.Id.ToString(),
-                    record.SenderContext?.CommunicationId ?? record.CommunicationId,
-                    record.SenderContext?.TransmissionId ?? record.TransmissionId,
-                    record.SenderContext?.CampaignId,
-                    record.SenderContext?.SupplierId
-                );
+                return new MessagePatchResult.Updated(record);
             }
             catch (Exception e)
             {

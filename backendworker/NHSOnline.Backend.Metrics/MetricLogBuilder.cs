@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Web;
+using NHSOnline.Backend.Metrics.Extensions;
 
 namespace NHSOnline.Backend.Metrics
 {
@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.Metrics
 
         private static string Timestamp()
         {
-            return DateTimeOffset.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss:fff", CultureInfo.InvariantCulture);
+            return DateTimeOffset.UtcNow.ToSplunkString();
         }
     }
 }

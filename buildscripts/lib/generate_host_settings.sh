@@ -75,7 +75,10 @@ function generate_launch_settings() {
       SECRET_NAME=${BASH_REMATCH[1]}
     elif [ "$IN_SECRETS" == "1" ] && [[ "$LINE" =~ $SECRET_FILE_REGEX ]]; then
       SECRET_VALUE=${BASH_REMATCH[1]}
-      if [[ "$SECRET_VALUE" =~ password$ ]] || [[ "$SECRET_VALUE" =~ azure_notification_hub_key(_bdd)?$ ]] || [[ "$SECRET_VALUE" =~ nhsapp_api_key$ ]]; then
+      if [[ "$SECRET_VALUE" =~ password$ ]] || \
+         [[ "$SECRET_VALUE" =~ azure_notification_hub_key(_bdd)?$ ]] || \
+         [[ "$SECRET_VALUE" =~ connection_string$ ]] || \
+         [[ "$SECRET_VALUE" =~ nhsapp_api_key$ ]]; then
         SECRET_VALUE=$(<"$SECRET_VALUE")
       fi
       echo "s#\"/run/secrets/$SECRET_NAME\"\$#\"${SECRET_VALUE//\\//}\"#" >> "$SED_SCRIPT"

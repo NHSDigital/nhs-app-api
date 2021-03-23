@@ -184,6 +184,10 @@ cosmosDBIPTrust:
   - "51.141.55.229/32"           # CosmosDB UKWest 11.11.2020
   - "2603:1020:605:402::c0/122"  # CosmosDB UKWest 11.11.2020
 
+eventHubPorts:
+  - 5671
+  - 5672
+
 microtestHostname: nhsapp-test.microtest.co.uk
 microtestProtocol: https
 microtestCertificateEnabled: false

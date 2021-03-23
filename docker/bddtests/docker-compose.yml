@@ -23,6 +23,10 @@ secrets:
     file: "./docker/stubbed/certs/TestCert.password"
   qualtrics_api_key:
     file: "./docker/bddtests/secrets/qualtrics_api_key"
+  comms_hub_event_hub_pid_connection_string:
+    file: "./docker/bddtests/secrets/event_hub_connection_string"
+  comms_hub_event_hub_connection_string:
+    file: "./docker/bddtests/secrets/event_hub_connection_string"
 
 services:
 

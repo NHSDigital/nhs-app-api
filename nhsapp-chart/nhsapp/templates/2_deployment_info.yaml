@@ -159,6 +159,18 @@ spec:
             secretKeyRef:
               name: qualtrics-api-key-{{ .Chart.AppVersion }}
               key: apikey
+        - name: ENVIRONMENT_NAME
+          value: {{ $.Values.global.environment }}
+        - name: COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING
+          valueFrom:
+            secretKeyRef:
+              name: comms-hub-event-hub-pid-connection-string-{{ .Chart.AppVersion }}
+              key: secret
+        - name: COMMS_HUB_EVENT_HUB_CONNECTION_STRING
+          valueFrom:
+            secretKeyRef:
+              name: comms-hub-event-hub-connection-string-{{ .Chart.AppVersion }}
+              key: secret
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"

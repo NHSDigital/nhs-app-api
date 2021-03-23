@@ -35,6 +35,10 @@ secrets:
     file: "~/.nhsonline/secrets/vision_client_cert.password"
   qualtrics_api_key:
     file: "~/.nhsonline/secrets/qualtrics_api_key"
+  comms_hub_event_hub_pid_connection_string:
+    file: "~/.nhsonline/secrets/comms_hub_event_hub_pid_connection_string"
+  comms_hub_event_hub_connection_string:
+    file: "~/.nhsonline/secrets/comms_hub_event_hub_connection_string"
 
 
 services:
@@ -105,6 +109,12 @@ services:
           if [ -f "$$VISION_CERT_PASSPHRASE" ]; then
             export VISION_CERT_PASSPHRASE=$$(<$$VISION_CERT_PASSPHRASE)
           fi
+          if [ -f "$$COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING" ]; then
+            export COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING=$$(<$$COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING)
+          fi
+          if [ -f "$$COMMS_HUB_EVENT_HUB_CONNECTION_STRING" ]; then
+            export COMMS_HUB_EVENT_HUB_CONNECTION_STRING=$$(<$$COMMS_HUB_EVENT_HUB_CONNECTION_STRING)
+          fi
           exec $$*
       - "--"
     command: dotnet NHSOnline.Backend.PfsApi.dll
@@ -122,6 +132,7 @@ services:
       - ./docker/tpp_connectivity.env
       - ./docker/userinfo_connectivity.env
       - ./docker/vision_connectivity.env
+      - ./docker/eventhub_connectivity.env
       - ./docker/proxy_access.env
       - ./docker/appointments.env
       - ./docker/pfs.env
@@ -145,6 +156,8 @@ services:
       - tpp_cert_passphrase
       - vision_cert
       - vision_cert_passphrase
+      - comms_hub_event_hub_pid_connection_string
+      - comms_hub_event_hub_connection_string
 
   cid.local.bitraft.io:
     image: ${CIDAPI_DOCKER_REGISTRY:-local}/nhsonline-backendcidapi:${CIDAPI_DOCKER_TAG:-latest}
@@ -216,17 +229,26 @@ services:
           if [ -f "$$AZURE_NOTIFICATION_HUBS__0__AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY" ]; then
             export AZURE_NOTIFICATION_HUBS__0__AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=$$(<$$AZURE_NOTIFICATION_HUBS__0__AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY)
           fi
+          if [ -f "$$COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING" ]; then
+            export COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING=$$(<$$COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING)
+          fi
+          if [ -f "$$COMMS_HUB_EVENT_HUB_CONNECTION_STRING" ]; then
+            export COMMS_HUB_EVENT_HUB_CONNECTION_STRING=$$(<$$COMMS_HUB_EVENT_HUB_CONNECTION_STRING)
+          fi
           exec $$*
       - "--"
     command: dotnet NHSOnline.Backend.UsersApi.dll
     env_file:
       - ./docker/notificationhub_connectivity.env
+      - ./docker/eventhub_connectivity.env
       - ./docker/users.env
     secrets:
       - auth_signing_private_key
       - auth_signing_rsapass
       - azure_notification_hub_key
       - nhsapp_api_key
+      - comms_hub_event_hub_pid_connection_string
+      - comms_hub_event_hub_connection_string
 
   userinfo.local.bitraft.io:
     image: ${USERINFOAPI_DOCKER_REGISTRY:-local}/nhsonline-backenduserinfoapi:${USERINFOAPI_DOCKER_TAG:-latest}
@@ -243,18 +265,27 @@ services:
           if [ -f "$$QUALTRICS_API_KEY" ]; then
             export QUALTRICS_API_KEY=$$(<$$QUALTRICS_API_KEY)
           fi
+          if [ -f "$$COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING" ]; then
+            export COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING=$$(<$$COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING)
+          fi
+          if [ -f "$$COMMS_HUB_EVENT_HUB_CONNECTION_STRING" ]; then
+            export COMMS_HUB_EVENT_HUB_CONNECTION_STRING=$$(<$$COMMS_HUB_EVENT_HUB_CONNECTION_STRING)
+          fi
           exec $$*
       - "--"
     command: dotnet NHSOnline.Backend.UserInfoApi.dll
     env_file:
       - ./docker/nhslogin_connectivity_ext.env
       - ./docker/qualtrics_connectivity.env
+      - ./docker/eventhub_connectivity.env
       - ./docker/userinfo.env
     secrets:
       - auth_signing_private_key
       - auth_signing_rsapass
       - nhsapp_api_key
       - qualtrics_api_key
+      - comms_hub_event_hub_pid_connection_string
+      - comms_hub_event_hub_connection_string
 
   messages.local.bitraft.io:
     image: ${MESSAGESAPI_DOCKER_REGISTRY:-local}/nhsonline-backendmessagesapi:${MESSAGESAPI_DOCKER_TAG:-latest}
@@ -268,15 +299,24 @@ services:
           if [ -f "$$NHSAPP_API_KEY" ]; then
             export NHSAPP_API_KEY=$$(<$$NHSAPP_API_KEY)
           fi
+          if [ -f "$$COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING" ]; then
+            export COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING=$$(<$$COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING)
+          fi
+          if [ -f "$$COMMS_HUB_EVENT_HUB_CONNECTION_STRING" ]; then
+            export COMMS_HUB_EVENT_HUB_CONNECTION_STRING=$$(<$$COMMS_HUB_EVENT_HUB_CONNECTION_STRING)
+          fi
           exec $$*
       - "--"
     command: dotnet NHSOnline.Backend.MessagesApi.dll
     env_file:
       - ./docker/messages.env
+      - ./docker/eventhub_connectivity.env
     secrets:
       - auth_signing_private_key
       - auth_signing_rsapass
       - nhsapp_api_key
+      - comms_hub_event_hub_pid_connection_string
+      - comms_hub_event_hub_connection_string
 
   log.local.bitraft.io:
     image: ${LOGAPI_DOCKER_REGISTRY:-local}/nhsonline-clientloggerapi:${LOGAPI_DOCKER_TAG:-latest}
