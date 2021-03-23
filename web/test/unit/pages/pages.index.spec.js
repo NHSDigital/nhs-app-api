@@ -63,6 +63,7 @@ describe('index', () => {
         'session/isProofLevel9': isProofLevel9,
         'session/isProxying': isProxying,
         'session/currentProfile': { name: '' },
+        'serviceJourneyRules/silverIntegrationEnabled': () => false,
       },
     });
     return mount(Index, { $store, $router, mountOpts: { i18n }, stubs: ['BiometricBanner'] });

@@ -73,6 +73,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             return this;
         }
 
+        public SilverIntegrationsBuilder VaccineRecord(params VaccineRecordProvider[] providers)
+        {
+            _silverIntegrations.VaccineRecord = providers.ToList();
+            return this;
+        }
+
         public SilverIntegrations Build()
         {
             return _silverIntegrations;

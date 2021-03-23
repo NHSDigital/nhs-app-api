@@ -5,6 +5,11 @@
                            :widen-on-tablet="true"
                            :text="$t('navigation.popularServices')"/>
     <menu-item-list data-sid="navigation-list-menu" class="nhsuk-u-margin-top-0">
+      <third-party-jump-off-button v-if="showVaccineRecord"
+                                   id="btn_nhsd_vaccine_record"
+                                   provider-id="nhsd"
+                                   :provider-configuration="thirdPartyProvider.nhsd.
+                                     vaccineRecord" />
       <menu-item v-if="gpMessagingAvailable"
                  id="btn_messages"
                  :header-tag="headerTag"
@@ -48,6 +53,7 @@
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import MenuItemListHeader from '@/components/MenuItemListHeader';
+import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import {
   MESSAGES_PATH,
   GP_MEDICAL_RECORD_PATH,
@@ -56,6 +62,8 @@ import {
   INDEX_PATH,
 } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
+import sjrIf from '@/lib/sjrIf';
+import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 
 export default {
   name: 'NavigationListMenu',
@@ -63,6 +71,7 @@ export default {
     MenuItem,
     MenuItemList,
     MenuItemListHeader,
+    ThirdPartyJumpOffButton,
   },
   props: {
     headerTag: {
@@ -76,13 +85,25 @@ export default {
   },
   data() {
     return {
+      isProxying: this.$store.getters['session/isProxying'],
       prescriptionsPath: PRESCRIPTIONS_PATH,
       gpMedicalRecordPath: GP_MEDICAL_RECORD_PATH,
       messagesPath: MESSAGES_PATH,
       linkedProfilesPath: LINKED_PROFILES_PATH,
+      thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
     };
   },
   computed: {
+    hasVaccineRecord() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'nhsd',
+          serviceType: 'vaccineRecord',
+        },
+      });
+    },
     isProofLevel9() {
       return this.$store.getters['session/isProofLevel9'];
     },
@@ -96,6 +117,9 @@ export default {
     },
     supportsLinkedProfiles() {
       return this.$store.state.serviceJourneyRules.rules.supportsLinkedProfiles;
+    },
+    showVaccineRecord() {
+      return this.hasVaccineRecord && !this.isProxying && this.isProofLevel9;
     },
   },
   created() {

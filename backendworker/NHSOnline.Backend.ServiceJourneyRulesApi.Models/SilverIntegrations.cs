@@ -41,6 +41,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
         [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
         public IList<TestResultsProvider> TestResults { get; set; }
 
+        [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
+        public IList<VaccineRecordProvider> VaccineRecord { get; set; }
+
         public SilverIntegrations Clone()
         {
             var silverIntegrations = new SilverIntegrations
@@ -55,7 +58,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
                 Messages = Clone(Messages),
                 Participation = Clone(Participation),
                 SecondaryAppointments = Clone(SecondaryAppointments),
-                TestResults = Clone(TestResults)
+                TestResults = Clone(TestResults),
+                VaccineRecord = Clone(VaccineRecord)
             };
 
             return silverIntegrations;
@@ -74,6 +78,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
             Participation = Merge(Participation, other?.Participation);
             SecondaryAppointments = Merge(SecondaryAppointments, other?.SecondaryAppointments);
             TestResults = Merge(TestResults, other?.TestResults);
+            VaccineRecord = Merge(VaccineRecord, other?.VaccineRecord);
         }
 
         private IList<T> Clone<T>(IList<T> toClone)

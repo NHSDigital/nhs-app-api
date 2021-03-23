@@ -71,7 +71,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         .AccountAdmin(AccountAdminProvider.gncr)
                         .ConsultationsAdmin(ConsultationsAdminProvider.engage)
                         .Participation(ParticipationProvider.substraktPatientPack)
-                        .SecondaryAppointments(SecondaryAppointmentsProvider.ers))
+                        .SecondaryAppointments(SecondaryAppointmentsProvider.ers)
+                        .VaccineRecord(VaccineRecordProvider.nhsd)
+                    )
                     .DocumentsEnabled(false)
                     .Im1MessagingEnabled(false, false, false, false,
                         false)
@@ -125,7 +127,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         .Medicines(MedicinesProvider.pkb)
                         .Messages(MessagesProvider.pkb)
                         .Participation(ParticipationProvider.substraktPatientPack)
-                        .SecondaryAppointments(SecondaryAppointmentsProvider.pkb))
+                        .SecondaryAppointments(SecondaryAppointmentsProvider.pkb)
+                        .VaccineRecord(VaccineRecordProvider.nhsd)
+                    )
                     .DocumentsEnabled(true)
                     .Im1MessagingEnabled(true, true, true,
                         true, true)
@@ -162,7 +166,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         .ConsultationsAdmin(ConsultationsAdminProvider.engage)
                         .Participation(ParticipationProvider.substraktPatientPack)
                         .SecondaryAppointments(SecondaryAppointmentsProvider.ers)
-                        .TestResults(TestResultsProvider.pkb))
+                        .TestResults(TestResultsProvider.pkb)
+                        .VaccineRecord(VaccineRecordProvider.nhsd)
+                    )
                     .DocumentsEnabled(false)
                     .Im1MessagingEnabled(false, false, false, false,
                         false)
@@ -187,7 +193,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         .Messages(MessagesProvider.pkb)
                         .Participation(ParticipationProvider.substraktPatientPack)
                         .SecondaryAppointments(SecondaryAppointmentsProvider.ers , SecondaryAppointmentsProvider.pkb)
-                        .TestResults(TestResultsProvider.pkb))
+                        .TestResults(TestResultsProvider.pkb)
+                        .VaccineRecord(VaccineRecordProvider.nhsd)
+                    )
                     .HomeScreen(x => x.PublicHealthNotifications(new[] { CreatePublicHealthNotification("1") }))
                     .DocumentsEnabled(true)
                     .Im1MessagingEnabled(true, true, true,

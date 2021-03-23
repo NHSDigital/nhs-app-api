@@ -450,4 +450,16 @@ export default {
       },
     ],
   },
+  nhsd: {
+    serviceId: 'nhsd',
+    providerName: 'NHS Digital',
+    jumpOffs: [
+      {
+        id: 'vaccineRecord',
+        jumpOffContent: {
+          headerText: 'Check your coronavirus vaccine record',
+        },
+      },
+    ],
+  },
 };

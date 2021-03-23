@@ -187,6 +187,14 @@ const thirdPartyProvider = {
       serviceType: 'messages',
     },
   },
+  nhsd: {
+    vaccineRecord: {
+      jumpOffId: 'vaccineRecord',
+      redirectPath: '/',
+      provider: 'nhsd',
+      serviceType: 'vaccineRecord',
+    },
+  },
 };
 
 export const getJumpOffConfiguration = id => get(id)(thirdPartyProvider);

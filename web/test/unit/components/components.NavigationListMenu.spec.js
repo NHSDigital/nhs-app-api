@@ -13,6 +13,8 @@ const mountAs = ({
   isProofLevel9 = true,
   gpMessagingSessionUnavailable = false,
   supportsLinkedProfiles = true,
+  hasVaccineRecord = true,
+  isProxying = false,
 } = {}) => {
   $router = createRouter();
   $store = createStore({
@@ -31,6 +33,9 @@ const mountAs = ({
     },
     getters: {
       'session/isProofLevel9': isProofLevel9,
+      'serviceJourneyRules/silverIntegrationEnabled': () => hasVaccineRecord,
+      'knownServices/matchOneById': jest.fn().mockImplementation(() => 'somewhere'),
+      'session/isProxying': isProxying,
     },
   });
   return mount(NavigationListMenu, { $store, $router, methods: { goToUrl } });
@@ -38,11 +43,27 @@ const mountAs = ({
 
 beforeEach(() => {
   goToUrl = jest.fn();
-  wrapper = mountAs();
   window.open = jest.fn();
 });
 
 describe('Navigation Links ', () => {
+  describe('Check Vaccine Record link', () => {
+    each([
+      ['P9', 'not proxying', 'defined', 'shown', true, false, true, true],
+      ['P9', 'proxying', 'defined', 'hidden', true, true, true, false],
+      ['P9', 'not proxying', 'not defined', 'hidden', true, false, false, false],
+      ['P9', 'proxying', 'not defined', 'hidden', true, true, false, false],
+      ['P5', 'not proxying', 'defined', 'hidden', false, false, true, false],
+      ['P5', 'proxying', 'defined', 'hidden', false, true, true, false],
+      ['P5', 'not proxying', 'not defined', 'hidden', false, false, false, false],
+      ['P5', 'proxying', 'not defined', 'hidden', false, true, false, false],
+    ])
+      .it('A %s user that is %s, and has a vaccine record provider %s, will have a vaccine record link %s', (_, __, ___, ____, isProofLevel9, isProxying, hasVaccineRecord, isVisible) => {
+        wrapper = mountAs({ isProofLevel9, isProxying, hasVaccineRecord });
+        expect(wrapper.find('#btn_nhsd_vaccine_record').exists()).toBe(isVisible);
+      });
+  });
+
   describe('Messages Hub link', () => {
     each([
       ['shown', 'gpMessagingSession is available', false, true],

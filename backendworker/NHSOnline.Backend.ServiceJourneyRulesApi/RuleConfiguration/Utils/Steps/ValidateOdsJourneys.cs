@@ -123,7 +123,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                 .Add(journeys => journeys.SilverIntegrations?.SecondaryAppointments != null,
                     "journeys.SilverIntegrations.SecondaryAppointments")
                 .Add(journeys => journeys.SilverIntegrations?.TestResults != null,
-                    "journeys.SilverIntegrations.TestResults");
+                    "journeys.SilverIntegrations.TestResults")
+                .Add(journeys => journeys.SilverIntegrations.VaccineRecord != null,
+                    "journeys.SilverIntegrations.VaccineRecord");
         }
 
         private static void AddIm1MessagingValidations(JourneysValidator journeysValidator)

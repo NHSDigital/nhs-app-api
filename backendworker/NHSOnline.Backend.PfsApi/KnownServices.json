@@ -483,6 +483,18 @@
       "showThirdPartyWarning": true,
       "requiresAssertedLoginIdentity": true,
       "validateSession": true
+    },
+    "nhsd": {
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": true,
+      "url": "https://vaccine-status-dev-uks.azurewebsites.net"
     }
   }
 }

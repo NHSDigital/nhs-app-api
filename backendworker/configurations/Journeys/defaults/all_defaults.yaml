@@ -29,6 +29,7 @@ journeys:
     participation: []
     secondaryAppointments: []
     testResults: []
+    vaccineRecord: []
   documents: false
   im1Messaging:
     isEnabled: false
