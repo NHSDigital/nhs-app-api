@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
 
             var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
-                PrepareHeaderForMatch = (header, index) => header.ToUpperInvariant()
+                PrepareHeaderForMatch = forMatchArgs => forMatchArgs.Header.ToUpperInvariant()
             };
             
             using var csvReader = new CsvReader(reader, configuration);
