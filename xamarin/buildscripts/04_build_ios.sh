@@ -17,6 +17,8 @@ MSBUILD_ARGS+=("-p:Platform=iPhone")
 MSBUILD_ARGS+=("-p:BuildIpa=true")
 MSBUILD_ARGS+=("-restore")
 MSBUILD_ARGS+=("-p:IpaPackageDir=${IPA_PACKAGE_DIR}")
+MSBUILD_ARGS+=("-p:NhsAppBundleShortVersion=${NATIVE_VERSION_NUMBER}")
+MSBUILD_ARGS+=("-p:NhsAppBundleVersion=${NATIVE_IOS_BUILD_NUMBER}")
 
 if [ -n "${APPLE_CERTIFICATE_SIGNING_IDENTITY}" ]; then
   MSBUILD_ARGS+=("-p:Codesignkey=${APPLE_CERTIFICATE_SIGNING_IDENTITY}")

@@ -5,10 +5,12 @@
     <string>NHSOnline.App</string>
     <key>CFBundleIdentifier</key>
     <string>-o</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
     <key>CFBundleName</key>
     <string>NHSOnline.App</string>
     <key>CFBundleVersion</key>
-    <string>1.0</string>
+    <string>1</string>
     <key>MinimumOSVersion</key>
     <string>10.0</string>
     <key>UIDeviceFamily</key>
@@ -42,6 +44,10 @@
     <string>Resources/Assets.xcassets/AppIcon.appiconset</string>
     <key>NSAppTransportSecurity</key>
     <dict />
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>This is so that you can download your photos.</string>
+    <key>ITSAppUsesNonExemptEncryption</key>
+    <false />
   </dict>
 </plist>
 

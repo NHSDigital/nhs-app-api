@@ -1,0 +1,35 @@
+parameters:
+    - name: target
+      type: string
+    - name: uploadAppIdentifier
+      type: string
+    - name: uploadServiceEndpoint
+      type: string
+
+jobs:
+  - job:
+    displayName: Xamarin upload to testflight
+    pool:
+      vmImage: 'macos-latest'
+
+    variables:
+      ipa.itemPattern: 'Xamarin iOS Clients/NHSOnline.App.${{ parameters.target }}.ipa'
+      ipa.name: 'NHSOnline.App.${{ parameters.target }}.ipa'
+
+    steps:
+    - task: DownloadBuildArtifacts@0
+      displayName: Download iOS Apps
+      inputs:
+        downloadType: single
+        artifactName: Xamarin iOS Clients
+        itemPattern: |
+          $(ipa.itemPattern)
+
+    - task: AppStoreRelease@1
+      displayName: 'Publish to the App Store TestFlight track'
+      inputs:
+        serviceEndpoint: ${{ parameters.uploadServiceEndpoint }}
+        appIdentifier: ${{ parameters.uploadAppIdentifier }}
+        ipaPath: '$(System.ArtifactsDirectory)/Xamarin iOS Clients/$(ipa.name)'
+        shouldSkipWaitingForProcessing: true
+        shouldSkipSubmission: true

@@ -141,6 +141,9 @@ variables:
   native.android.target: ${{ parameters.androidTarget }}
   native.ios.target: ${{ parameters.iosTarget }}
   native.xamarin.target: ${{ parameters.xamarinTarget }}
+  native.version.number: '1.49.0'
+  native.ios.build.number: $[counter(variables['native.version.number'], 1)]
+  native.android.build.number: $[counter('android.build.counter', 100)]
 
   # Build.Reason is blank when specifying parameters but Manual when running the pipeline
   ${{ if or(eq(variables['Build.Reason'], ''), eq(variables['Build.Reason'], 'Manual')) }}:
@@ -351,24 +354,15 @@ stages:
       jobs:
         - template: .azuredevops/templates/integration-tests-xamarin-job.yml
 
-  - ${{ if and(eq(variables['native.xamarin.target'], 'Preview'), eq(variables['native.xamarin.distribute'], 'true'), eq(variables['int.tests.run.native.xamarin'], 'true')) }}:
-    - stage: xamarin_distribute_apps
-      displayName: Xamarin Distribute Preview Apps
-      dependsOn:
-        - xamarin_preview
-        - xamarin_integration_tests
-      jobs:
-        - template: .azuredevops/templates/xamarin-distribute-apps-job.yml
-          parameters:
-            target: 'Preview'
-
-  - ${{ if and(or(eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')), eq(variables['int.tests.run.native.xamarin'], 'true')) }}:
-    - stage: xamarin_distribute_apps
+  - ${{ if and(or(and(eq(variables['native.xamarin.distribute'], 'true'), eq(variables['native.xamarin.target'], 'Staging')), eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')), eq(variables['int.tests.run.native.xamarin'], 'true')) }}:
+    - stage: xamarin_upload_ipa_job
       displayName: Xamarin Distribute Staging Apps
       dependsOn:
         - xamarin_staging
         - xamarin_integration_tests
       jobs:
-        - template: .azuredevops/templates/xamarin-distribute-apps-job.yml
+        - template: .azuredevops/templates/xamarin-upload-ipa-job.yml
           parameters:
             target: 'Staging'
+            uploadAppIdentifier: com.nhs.online.staging
+            uploadServiceEndpoint: nhsapp-staging-apple-app-store
