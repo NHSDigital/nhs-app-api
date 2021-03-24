@@ -10,7 +10,7 @@ namespace NHSOnline.App.iOS.DependencyServices
             NSUserDefaults.StandardUserDefaults.SetValueForKey(domainState, key);
         }
 
-        internal static NSData Get()
+        internal static NSData? Get()
         {
             return NSUserDefaults.StandardUserDefaults.DataForKey("DomainState");
         }

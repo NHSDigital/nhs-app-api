@@ -32,7 +32,7 @@ namespace NHSOnline.App.Services.FIDO
             await DeleteRegistration(accessToken).ResumeOnThreadPool();
 
             using var key = await _biometrics.CreateBiometricKey().ResumeOnThreadPool();
-            var verifyResult = await key.VerifyUser().ResumeOnThreadPool();
+            var verifyResult = await key.VerifyUser("To register with NHS login").ResumeOnThreadPool();
 
             var verifyUserResultVisitor = new RegisterVerifyUserResultVisitor(_preferencesService, _fidoService, key, accessToken);
             return await verifyResult.Accept(verifyUserResultVisitor).ResumeOnThreadPool();
@@ -128,7 +128,7 @@ namespace NHSOnline.App.Services.FIDO
 
             public Task<BiometricRegisterResult> Visit(BiometricAuthVerifyUserResult.Failed failed)
             {
-                return Task.FromResult(BiometricRegisterResult.Failed(BiometricErrorCode.Unknown));
+                return Task.FromResult(BiometricRegisterResult.Failed(BiometricErrorCode.CannotChangeBiometrics));
             }
         }
 
@@ -153,7 +153,7 @@ namespace NHSOnline.App.Services.FIDO
 
             public BiometricRegisterResult Visit(FidoRegisterResult.Failed failed)
             {
-                return BiometricRegisterResult.Failed(BiometricErrorCode.Unknown);
+                return BiometricRegisterResult.Failed(BiometricErrorCode.CannotChangeBiometrics);
             }
         }
     }

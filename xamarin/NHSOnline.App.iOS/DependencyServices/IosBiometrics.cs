@@ -50,35 +50,43 @@ namespace NHSOnline.App.iOS.DependencyServices
 
         public Task<IBiometricAuthKey> CreateBiometricKey()
         {
-            using var context = new LAContext();
-            var supported = HasBiometricHardware(context, out var state);
-            if (!supported || state == BiometricHardwareState.Unusable || context.EvaluatedPolicyDomainState is null)
+            var context = new LAContext();
+            try
             {
-                throw new InvalidOperationException("Cannot create auth key: Biometrics unusable");
+                var keyGenerationParameters = CreateGenerationParameters();
+
+                CreateKey(keyGenerationParameters);
+
+                if (TryGetKey(context, out var biometricAuthKey))
+                {
+                    return Task.FromResult(biometricAuthKey);
+                }
+
+                throw new InvalidOperationException("Failed to retrieve generated key");
             }
-
-            var keyGenerationParameters = CreateGenerationParameters();
-
-            var key = CreateKey(keyGenerationParameters);
-
-            BiometricRegistrationDomainState.Set(context.EvaluatedPolicyDomainState);
-
-            return Task.FromResult<IBiometricAuthKey>(new BiometricAuthKey(key));
+            catch (Exception)
+            {
+                context.Dispose();
+                throw;
+            }
         }
 
-        public bool TryGetKey([NotNullWhen(true)] out IBiometricAuthKey? key)
+        public bool TryGetKey([NotNullWhen(true)] out IBiometricAuthKey? key) => TryGetKey(new LAContext(), out key);
+
+        private static bool TryGetKey(LAContext context, [NotNullWhen(true)] out IBiometricAuthKey? key)
         {
             using var query = new SecRecord(SecKind.Key)
             {
                 Label = PrivateKeyLabel,
-                KeyClass = SecKeyClass.Private
+                KeyClass = SecKeyClass.Private,
+                AuthenticationContext = context
             };
 
             var queryResult = SecKeyChain.QueryAsConcreteType(query, out _);
 
             if (queryResult is SecKey secKey)
             {
-                key = new BiometricAuthKey(secKey);
+                key = new BiometricAuthKey(context, secKey);
                 return true;
             }
 
@@ -163,9 +171,8 @@ namespace NHSOnline.App.iOS.DependencyServices
                 error?.Dispose();
             }
         }
-
-        [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Caller is responsible for calling Dispose")]
-        private static SecKey CreateKey(SecKeyGenerationParameters keyGenerationParameters)
+        
+        private static void CreateKey(SecKeyGenerationParameters keyGenerationParameters)
         {
             SecKey? key = null;
             NSError? error = null;
@@ -182,17 +189,11 @@ namespace NHSOnline.App.iOS.DependencyServices
                     throw new InvalidOperationException($"{nameof(SecKey.CreateRandomKey)} Returned null");
                 }
             }
-            catch (Exception)
-            {
-                key?.Dispose();
-                throw;
-            }
             finally
             {
+                key?.Dispose();
                 error?.Dispose();
             }
-
-            return key;
         }
     }
 }

@@ -223,7 +223,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             {
                 _logger.LogError(e, "Failed to update biometric registration");
                 completion.Outcome = BiometricOutcome.Failed.ToString();
-                completion.ErrorCode = BiometricErrorCode.Unknown.ToString();
+                completion.ErrorCode = BiometricErrorCode.CannotChangeBiometrics.ToString();
             }
 
             await _view.SendBiometricCompletion(completion).PreserveThreadContext();

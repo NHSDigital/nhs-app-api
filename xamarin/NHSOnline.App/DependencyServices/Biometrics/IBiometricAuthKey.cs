@@ -7,7 +7,7 @@ namespace NHSOnline.App.DependencyServices.Biometrics
     {
         byte[] PublicKeyEccX962Raw();
 
-        Task<BiometricAuthVerifyUserResult> VerifyUser();
+        Task<BiometricAuthVerifyUserResult> VerifyUser(string reason);
         Task Delete();
     }
 }
