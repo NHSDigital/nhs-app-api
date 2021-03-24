@@ -17,15 +17,14 @@
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />
                 <Setter Property="BackgroundColor" Value="{StaticResource NhsUkBlue}" />
                 <Setter Property="Orientation" Value="Horizontal" />
-                <Setter Property="Margin" Value="15,5,0,5" />
+                <Setter Property="Margin" Value="15,0,0,0" />
             </Style>
             
             <Style TargetType="controls:NhsLogo">
-                <Setter Property="HeightRequest" Value="25" />
-                <Setter Property="WidthRequest" Value="60" />
+                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="WidthRequest" Value="95" />
                 <Setter Property="VerticalOptions" Value="Center" />
-                <Setter Property="Padding" Value="0,0,10,10" />
-                <Setter Property="Margin" Value="0,0,0,0" />
+                <Setter Property="Margin" Value="0,10,10,20" />
             </Style>
             
             <Style TargetType="controls:MediumLabel">

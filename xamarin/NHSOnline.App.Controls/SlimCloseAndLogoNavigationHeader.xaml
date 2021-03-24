@@ -33,9 +33,10 @@
             </Style>
             
             <Style TargetType="controls:NhsLogo">
-                <Setter Property="HeightRequest" Value="25" />
-                <Setter Property="WidthRequest" Value="60" />
-                <Setter Property="Padding" Value="0,0,10,10" />
+                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="WidthRequest" Value="95" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="Margin" Value="0,10,10,10" />
             </Style>
             
         </ResourceDictionary>
@@ -60,8 +61,7 @@
             
             <controls:NhsLogo />
             
-            <controls:MediumLabel Text="NHS App"
-                                  Margin="0,0,0,10" />
+            <controls:MediumLabel Text="NHS App" />
             
         </StackLayout>
     </StackLayout>
