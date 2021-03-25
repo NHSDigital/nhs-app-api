@@ -52,6 +52,8 @@ namespace NHSOnline.Backend.Metrics
 
         public Task RepeatPrescriptionOrder(RepeatPrescriptionData data) => WriteMetricLog(data);
 
+        public Task MessageLinkClicked(MessageLinkClickedData data) => WriteMetricLog(data);
+
         private Task WriteMetricLog(IMetricData data, [CallerMemberName] string action = "")
         {
             return CreateMetricLog(action).With(data).WriteMetricLog();

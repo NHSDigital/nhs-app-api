@@ -252,7 +252,7 @@ class MessagesStepDefinitions {
     private fun setupMessagesEnabledPatient(): MessagesFactory {
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
                 null,
-                SJRJourneyType.MESSAGES_ENABLED)
+                arrayListOf(SJRJourneyType.MESSAGES_ENABLED, SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB))
         val factory = MessagesFactory()
         factory.setUpUser(patient)
 

@@ -18,6 +18,10 @@ export default {
       type: String,
       default: undefined,
     },
+    messageId: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
@@ -42,6 +46,13 @@ export default {
     navigateTo(event) {
       const href = event.target.getAttribute('href');
       const target = event.target.getAttribute('target');
+
+      if (target === '_blank') {
+        this.$store.dispatch('messaging/linkClicked', {
+          messageId: this.messageId,
+          link: href,
+        });
+      }
 
       if (href.startsWith('/') && !href.startsWith('//') && target !== '_blank') {
         event.preventDefault();

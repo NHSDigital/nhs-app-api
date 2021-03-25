@@ -11,6 +11,9 @@ journeys:
   medicalRecord:
     provider: im1
     version: "2"
+  nominatedPharmacy: true
   prescriptions:
     provider: im1
-  nominatedPharmacy: true
+  silverIntegrations:
+    messages:
+      - pkb

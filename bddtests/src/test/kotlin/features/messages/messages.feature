@@ -134,10 +134,10 @@ Feature: Messages
     When I click the link called '111.nhs.uk/' with a url of 'https://111.nhs.uk/'
     Then a new tab has been opened by the link
 
-  Scenario: A user can see their markdown messages and follow a link to an nhs partner site via a redirector url
+  Scenario: A user can see their markdown messages and follow a link to a nhs partner site via a redirector url
     Given I am using the native app user agent
     And I am a user wishing to view my messages with markdown content
-      | [silver.local.bitraft.io](http://silver.local.bitraft.io:5000)  |
+      | [pkb.stubs.local.bitraft.io](http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages)  |
     And I am logged in
     When I follow the Messages link from the home page
     And I click the App Messages link on the messages hub page
@@ -145,8 +145,8 @@ Feature: Messages
     And the senders and latest messages are displayed on the Messages Inbox page
     And I click on a sender in the Messages Inbox
     Then the Messages page is displayed
-    When I click the internal link called 'silver.local.bitraft.io' with a url of '/redirector?redirect_to=http%3A%2F%2Fsilver.local.bitraft.io%3A5000'
-    Then a new tab has been opened by the link
+    When I click the internal link called 'pkb.stubs.local.bitraft.io' with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Fauth%252FgetInbox.action%253Ftab%253Dmessages'
+    Then I am redirected to the redirector page with the header 'Messages and online consultations'
 
   Scenario: A user can see their markdown messages and follow an internal link
     Given I am using the native app user agent

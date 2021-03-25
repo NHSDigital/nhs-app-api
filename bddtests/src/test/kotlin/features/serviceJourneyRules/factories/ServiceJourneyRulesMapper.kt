@@ -60,7 +60,8 @@ class ServiceJourneyRulesMapper {
                                 SJRJourneyType.MESSAGES_ENABLED,
                                 SJRJourneyType.USER_INFO_ENABLED,
                                 SJRJourneyType.IM1_MESSAGING_ENABLED,
-                                SJRJourneyType.ONLINE_CONSULTATIONS_DISABLED))
+                                SJRJourneyType.ONLINE_CONSULTATIONS_DISABLED,
+                                SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB))
                 .add(Supplier.VISION, "A66666",
                         EnumSet.of(SJRJourneyType.ONLINE_CONSULTATIONS_DISABLED))
                 .add(Supplier.EMIS, "A80001",

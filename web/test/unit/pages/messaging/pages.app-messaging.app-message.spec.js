@@ -306,9 +306,9 @@ describe('messaging messages', () => {
         senderMessages: [{
           sender: testSender,
           messages: [
-            { body: '**Supports markdown** http://test.com', version: 1, read: true, sentTime: '2019-09-14T02:15:12.356Z' },
-            { body: '**Supports linkify** http://test.com', version: 0, read: true, sentTime: '2019-09-14T02:15:12.356Z' },
-            { body: '**Supports markdown** http://test.com', version: 1, read: true, sentTime: '2019-09-14T02:15:12.356Z' },
+            { id: 'abc123-1', body: '**Supports markdown** http://test.com', version: 1, read: true, sentTime: '2019-09-14T02:15:12.356Z' },
+            { id: 'abc123-2', body: '**Supports linkify** http://test.com', version: 0, read: true, sentTime: '2019-09-14T02:15:12.356Z' },
+            { id: 'abc123-3', body: '**Supports markdown** http://test.com', version: 1, read: true, sentTime: '2019-09-14T02:15:12.356Z' },
           ],
         }],
       });

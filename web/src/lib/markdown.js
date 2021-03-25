@@ -8,13 +8,17 @@ import { INTERSTITIAL_REDIRECTOR_PATH } from '@/router/paths';
 let markdownInternal;
 let $store;
 
-const overrideLinkForRedirector = (token, href, hrefIndex) => {
+const getHref = (token, hrefIndex) => {
+  const href = token.attrs[hrefIndex][1];
+
   if (!isEmpty($store)) {
     const matchedService = $store.getters['knownServices/matchOneByUrl'](href) || {};
     if (matchedService.requiresAssertedLoginIdentity) {
-      token.attrs[hrefIndex][1] = `/${INTERSTITIAL_REDIRECTOR_PATH}?${REDIRECT_PARAMETER}=${encodeURIComponent(href)}`;
+      return `/${INTERSTITIAL_REDIRECTOR_PATH}?${REDIRECT_PARAMETER}=${encodeURIComponent(href)}`;
     }
   }
+
+  return href;
 };
 
 const assignTarget = (token, href) => {
@@ -35,10 +39,11 @@ const overrideLinkRenderer = (md) => {
   md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
     const token = tokens[idx];
     const hrefIndex = token.attrIndex('href');
-    const href = token.attrs[hrefIndex][1];
+    const href = getHref(token, hrefIndex);
 
-    overrideLinkForRedirector(token, href, hrefIndex);
     assignTarget(token, href);
+
+    token.attrs[hrefIndex][1] = href;
 
     return defaultRender(tokens, idx, options, env, self);
   };
