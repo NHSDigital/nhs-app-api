@@ -17,6 +17,7 @@ import pages.RedirectorPage
 import pages.appointments.HospitalAppointmentsPage
 import pages.assertElementNotPresent
 import pages.assertIsVisible
+import pages.gpMedicalRecord.MedicalRecordHubPage
 import utils.SerenityHelpers
 
 class PkbMyCareViewStepDefinitions : HybridPageObject() {
@@ -24,10 +25,11 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
     private lateinit var prescriptionsHubPage: PrescriptionsHubPage
     private lateinit var hospitalAppointmentsPage: HospitalAppointmentsPage
     private lateinit var myCareViewPage: MyCareViewPage
+    private lateinit var medicalRecordHubPage: MedicalRecordHubPage
 
     @Given("^I am a user who can view Medicines from PKB My Care View$")
     fun iAmAUserWhoCanViewMedicinesFromPkbMyCareView() {
-        setupPatient(SJRJourneyType.SILVER_INTEGRATION_MEDICINES_PKB_MY_CARE_VIEW)
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_MEDICINES_PKB_MY_CARE_VIEW)
     }
 
     @Given("^I am a user who cannot view Medicines from PKB My Care View$")
@@ -36,13 +38,23 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
     }
 
     @Given("^I am a user who can view Appointments from PKB My Care View$")
-    fun iAmAUserWhoCanViewAppointmentsFromPkbSecondaryCare(){
+    fun iAmAUserWhoCanViewAppointmentsFromPkbMyCareView(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_APPOINTMENTS_PKB_MY_CARE_VIEW)
     }
 
     @Given("^I am a user who cannot view Appointments from PKB My Care View$")
-    fun iAmAUserWhoCannotViewAppointmentsFromPkbSecondaryCare(){
+    fun iAmAUserWhoCannotViewAppointmentsFromPkbMyCareView(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS)
+    }
+
+    @Given("^I am a user who can view Shared Links from PKB My Care View$")
+    fun iAmAUserWhoCanViewSharedLinksFromPkbMyCareView(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB_MY_CARE_VIEW)
+    }
+
+    @Given("^I am a user who cannot view Shared Links from PKB My Care View$")
+    fun iAmAUserWhoCannotViewSharedLinksFromPkbMyCareView(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_LIBRARY_NONE)
     }
 
     @Given("^I am a user who can view Messages and Online Consultations from PKB My Care View$")
@@ -52,7 +64,7 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
 
     @Given("^I am a user who cannot view Messages and Online Consultations from PKB My Care View$")
     fun iAmAUserWhoCannotViewMessagesAndOnlineConsultationsFromPkbMyCareView() {
-        setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_NONE)
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_MESSAGES_NONE)
     }
 
     @Given("^My Care View responds to requests for appointments$")
@@ -68,6 +80,16 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
     @Given("^My Care View responds to requests for medicines$")
     fun myCareViewRespondsToRequestsForMedicines() {
         MockingClient.instance.forMyCareView.mock { MyCareViewRequestBuilder().medicinesRequest().respondWithPage() }
+    }
+
+    @Given("^My Care View responds to requests for shared links$")
+    fun myCareViewRespondsToRequestsForSharedLinks() {
+        MockingClient.instance.forMyCareView.mock { MyCareViewRequestBuilder().sharedLinksRequest().respondWithPage() }
+    }
+
+    @Then("^the link to PKB My Care View shared links is not available on the Health Records Hub$")
+    fun thePKBMyCareViewSharedLinksLinkIsNotAvailableOnTheHealthRecordsHub() {
+        medicalRecordHubPage.getHeaderElement("Shared health links").assertElementNotPresent()
     }
 
     @Given("^I am a user with proof level 5 who can view" +
@@ -123,6 +145,14 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
         redirector.interruptionCard.assertContent(
                 "Hospital and other medicines\n" +
                         "This service is provided by MyCareView powered by Patients Know Best",
+                "Your GP surgery or hospital has chosen this personal health record service provider.",
+                "Find out more about personal health record services")
+    }
+
+    @Then("the shared health links warning on the page explains the service is from PKB My Care View$")
+    fun assertSharedLinksWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+                "Shared health links\nThis service is provided by MyCareView powered by Patients Know Best",
                 "Your GP surgery or hospital has chosen this personal health record service provider.",
                 "Find out more about personal health record services")
     }

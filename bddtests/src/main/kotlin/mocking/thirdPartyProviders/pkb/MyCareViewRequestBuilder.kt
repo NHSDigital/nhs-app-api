@@ -29,6 +29,11 @@ class MyCareViewRequestBuilder(queryStringEntries: HashMap<String, String> = has
                     "brand" to "pkbMyCareView")
     )
 
+    fun sharedLinksRequest() = MyCareViewRequestBuilder(
+            hashMapOf("phrPath" to "/library/manageLibrary.action",
+                    "brand" to "pkbMyCareView")
+    )
+
     fun respondWithPage(): Mapping {
         return respondWith(HttpStatus.SC_OK) {
             andHtmlBody("""

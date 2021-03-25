@@ -106,6 +106,12 @@ const thirdPartyProvider = {
       provider: 'pkbSecondaryCare',
       serviceType: 'messages',
     },
+    sharedLinksPkbSecondaryCare: {
+      jumpOffId: 'sharedLinksPkbSecondaryCare',
+      redirectPath: '/nhs-login/login?phrPath=/library/manageLibrary.action&brand=pkbSecondaryCare',
+      provider: 'pkbSecondaryCare',
+      serviceType: 'libraries',
+    },
     medicinesPkbSecondaryCare: {
       jumpOffId: 'medicinesPkbSecondaryCare',
       redirectPath: '/nhs-login/login?phrPath=/auth/manageMedications.action?tab=treatments&brand=pkbSecondaryCare',
@@ -123,6 +129,12 @@ const thirdPartyProvider = {
       redirectPath: '/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages&brand=pkbMyCareView',
       provider: 'pkbMyCareView',
       serviceType: 'messages',
+    },
+    sharedLinksPkbMyCareView: {
+      jumpOffId: 'sharedLinksPkbMyCareView',
+      redirectPath: '/nhs-login/login?phrPath=/library/manageLibrary.action&brand=pkbMyCareView',
+      provider: 'pkbMyCareView',
+      serviceType: 'libraries',
     },
     medicinesPkbMyCareView: {
       jumpOffId: 'medicinesPkbMyCareView',

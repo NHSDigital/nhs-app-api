@@ -151,7 +151,7 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
 
     @Then("^the link to PKB shared links is not available on the health record hub page$")
     fun theLinkToPkbSharedLinksIsNotAvailableOnTheHealthRecordHubPage() {
-        medicalRecordHubPage.getHeaderElement("Shared links").assertElementNotPresent()
+        medicalRecordHubPage.getHeaderElement("Shared health links").assertElementNotPresent()
     }
 
     @Then("^the link to PKB test results is not available on the health record hub page$")
@@ -188,7 +188,7 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
     @Then("the shared links warning on the page explains the service is from Patients Know Best$")
     fun assertSharedLinksWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-            "Shared links\nThis service is provided by Patients Know Best",
+            "Shared health links\nThis service is provided by Patients Know Best",
             "Your GP surgery or hospital has chosen this personal health record service provider.",
             "Find out more about personal health record services")
     }

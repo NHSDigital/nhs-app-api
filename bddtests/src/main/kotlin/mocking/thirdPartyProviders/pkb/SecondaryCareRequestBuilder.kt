@@ -29,6 +29,11 @@ class SecondaryCareRequestBuilder(queryStringEntries: HashMap<String, String> = 
                     "brand" to "pkbSecondaryCare")
     )
 
+    fun sharedLinksRequest() = SecondaryCareRequestBuilder(
+            hashMapOf("phrPath" to "/library/manageLibrary.action",
+                    "brand" to "pkbSecondaryCare")
+    )
+
     fun respondWithPage(): Mapping {
         return respondWith(HttpStatus.SC_OK) {
             andHtmlBody("""

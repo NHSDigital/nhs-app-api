@@ -217,11 +217,11 @@ export default {
       {
         id: 'sharedLinks',
         jumpOffContent: {
-          headerText: 'Shared links',
+          headerText: 'Shared health links',
           descriptionText: 'View links your doctor or health professional has shared with you',
         },
         thirdPartyWarning: {
-          featureName: 'Shared links',
+          featureName: 'Shared health links',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
@@ -390,6 +390,20 @@ export default {
         },
       },
       {
+        id: 'sharedLinksPkbSecondaryCare',
+        jumpOffContent: {
+          headerText: 'Shared health links',
+          descriptionText: 'View links or documents your health team has shared with you, or add your own',
+        },
+        thirdPartyWarning: {
+          featureName: 'Shared health links',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
         id: 'medicinesPkbSecondaryCare',
         jumpOffContent: {
           headerText: 'Hospital and other medicines',
@@ -427,6 +441,21 @@ export default {
         thirdPartyWarning: {
           brandName: 'MyCareView powered by Patients Know Best',
           featureName: 'Consultations, events and messages',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
+        id: 'sharedLinksPkbMyCareView',
+        jumpOffContent: {
+          headerText: 'Shared health links',
+          descriptionText: 'View links or documents your health team has shared with you, or add your own',
+        },
+        thirdPartyWarning: {
+          brandName: 'MyCareView powered by Patients Know Best',
+          featureName: 'Shared health links',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
@@ -511,5 +540,4 @@ export default {
       },
     ],
   },
-
 };

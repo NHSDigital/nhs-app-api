@@ -144,6 +144,12 @@ describe('healthRecords', () => {
       ['cie', 'secondary shared links', true, false, true],
       ['cie', 'secondary shared links', true, true, false],
       ['cie', 'secondary shared links', false, false, false],
+      ['pkbSecondaryCare', 'secondary shared links', true, false, true],
+      ['pkbSecondaryCare', 'secondary shared links', true, true, false],
+      ['pkbSecondaryCare', 'secondary shared links', false, false, false],
+      ['myCareView', 'secondary shared links', true, false, true],
+      ['myCareView', 'secondary shared links', true, true, false],
+      ['myCareView', 'secondary shared links', false, false, false],
       ['gncr', 'correspondence', true, false, true],
       ['gncr', 'correspondence', true, true, false],
       ['gncr', 'correspondence', false, false, false],
@@ -178,6 +184,12 @@ describe('healthRecords', () => {
             break;
           case 'cieSharedLinks':
             linkElement = '#btn_pkb_cie_shared_links';
+            break;
+          case 'pkbSecondaryCareSharedLinks':
+            linkElement = '#btn_pkb_secondary_care_shared_links';
+            break;
+          case 'myCareViewSharedLinks':
+            linkElement = '#btn_pkb_my_care_view_shared_links';
             break;
           case 'gncrMessages':
             linkElement = '#btn_gncr_messages_and_consultations';

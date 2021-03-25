@@ -65,6 +65,16 @@
                                          provider-id="pkb"
                                          :provider-configuration="thirdPartyProvider
                                            .pkb.sharedLinksCie" />
+            <third-party-jump-off-button v-if="showPkbSecondaryCareSharedLinks"
+                                         id="btn_pkb_secondary_care_shared_links"
+                                         provider-id="pkb"
+                                         :provider-configuration="thirdPartyProvider
+                                           .pkb.sharedLinksPkbSecondaryCare"/>
+            <third-party-jump-off-button v-if="showPkbMyCareViewSharedLinks"
+                                         id="btn_pkb_my_care_view_shared_links"
+                                         provider-id="pkb"
+                                         :provider-configuration="thirdPartyProvider
+                                           .pkb.sharedLinksPkbMyCareView" />
             <third-party-jump-off-button v-if="showPatientPackAccountAdmin"
                                          id="btn_substrakt_update_details"
                                          provider-id="substraktPatientPack"
@@ -192,6 +202,22 @@ export default {
         journey: 'silverIntegration',
         context: {
           provider: 'pkbCie',
+          serviceType: 'libraries',
+        },
+      }),
+      showPkbSecondaryCareSharedLinks: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbSecondaryCare',
+          serviceType: 'libraries',
+        },
+      }),
+      showPkbMyCareViewSharedLinks: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbMyCareView',
           serviceType: 'libraries',
         },
       }),
