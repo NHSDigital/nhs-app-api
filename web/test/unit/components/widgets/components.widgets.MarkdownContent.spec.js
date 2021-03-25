@@ -3,7 +3,7 @@ import each from 'jest-each';
 import { key } from '@/lib/utils';
 import { createRouter, createStore, mount, normaliseNewLines } from '../../helpers';
 
-const createEvent = ({ keyName, href, target = '' }) => ({
+const createEvent = ({ keyName, href }) => ({
   key: keyName,
   preventDefault: jest.fn(),
   target: {
@@ -11,29 +11,23 @@ const createEvent = ({ keyName, href, target = '' }) => ({
       if (attribute === 'href') {
         return href;
       }
-      if (attribute === 'target') {
-        return target;
-      }
       return '';
     }),
   },
 });
 
 describe('MarkdownContent', () => {
-  let expectedMessageId;
   let $router;
-  let $store;
   let wrapper;
 
   const mountMarkdownContent = ({
     content = 'lorem ipsum dolor sit amet',
     id,
-    messageId = '1234-abcd',
     hasKnownService = false,
     requiresAssertedLoginIdentity = false,
-  } = {}) => {
-    expectedMessageId = messageId;
-    $store = createStore({
+  } = {}) => mount(MarkdownContent, {
+    $router,
+    $store: createStore({
       getters: {
         'session/isLoggedIn': jest.fn(),
         'knownServices/matchOneByUrl': jest.fn().mockImplementation((url) => {
@@ -47,17 +41,12 @@ describe('MarkdownContent', () => {
           return undefined;
         }),
       },
-    });
-    return mount(MarkdownContent, {
-      $router,
-      $store,
-      propsData: {
-        content,
-        id,
-        messageId,
-      },
-    });
-  };
+    }),
+    propsData: {
+      content,
+      id,
+    },
+  });
 
   beforeEach(() => {
     $router = createRouter();
@@ -371,10 +360,6 @@ describe('MarkdownContent', () => {
         it('will call event preventDefault', () => {
           expect(event.preventDefault).toBeCalled();
         });
-
-        it('will not dispatch', () => {
-          expect($store.dispatch).not.toBeCalled();
-        });
       });
 
       describe('with a `//` href', () => {
@@ -391,35 +376,6 @@ describe('MarkdownContent', () => {
 
         it('will not call event preventDefault', () => {
           expect(event.preventDefault).not.toBeCalled();
-        });
-
-        it('will not dispatch', () => {
-          expect($store.dispatch).not.toBeCalled();
-        });
-      });
-
-      describe('with an external link', () => {
-        const href = 'https://link-to-external-site.com';
-        const target = '_blank';
-
-        beforeEach(() => {
-          event = createEvent({ keyName: key.Enter, href, target });
-          wrapper.vm.navigateTo(event);
-        });
-
-        it('will not push to the router', () => {
-          expect($router.push).not.toBeCalled();
-        });
-
-        it('will not call event preventDefault', () => {
-          expect(event.preventDefault).not.toBeCalled();
-        });
-
-        it('will dispatch `messaging/linkClicked` with correct arguments ', () => {
-          expect($store.dispatch).toBeCalledWith('messaging/linkClicked', {
-            link: href,
-            messageId: expectedMessageId,
-          });
         });
       });
     });

@@ -92,46 +92,6 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
         "502":
           $ref: '#/components/responses/UnexpectedError'
-  /users/me/messages/{messageId}/link-clicked/metrics:
-    post:
-      security:
-        - nhsLoginBearerAuth: []
-      tags:
-        - messages
-      summary: Logs metrics for clicked links
-      description: Logs metrics for clicked links
-      parameters:
-        - in: header
-          name: NHSO-Request-ID
-          required: false
-          description: A request identifier, should provide something unique on each separate request to allow NHS App to easily retrieve relevant log entries for debugging purposes.
-          schema:
-            type: string
-        - in: path
-          name: messageId
-          required: true
-          description: A unique identifier for a message.
-          schema:
-            type: string
-      requestBody:
-        x-name: LinkClickedMessage
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/LinkClickedMessage"
-        description: Details of the link clicked by the user
-        required: true
-      responses:
-        "200":
-          description: Successful operation.
-        "400":
-          description: Bad request. Supplied request contains invalid details.
-        "401":
-          $ref: '#/components/responses/UnauthorizedError'
-        "500":
-          $ref: '#/components/responses/UnexpectedError'
-        "502":
-          $ref: '#/components/responses/UnexpectedError'
   /users/{nhsLoginId}/messages:
     post:
       tags:
@@ -198,24 +158,12 @@ components:
           type: string
         transmissionId:
           type: string
-        senderContext:
-          $ref: "#/components/schemas/AddMessageSenderContext"
       example:
         sender: b1f99cf0-278d-49ca-a325-0a1504799488
         version: 0
         body: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
         communicationId: 1c92e18e-6221-4bfd-8d30-d535e16dacd1
         transmissionId: 2c92e18e-6221-4bfd-8d30-d535e16dacd2
-        senderContext: 
-          supplierId: 7e874122-d6c0-47c1-96eb-0a2532b51675
-          communicationId: 1c92e18e-6221-4bfd-8d30-d535e16dacd1
-          transmissionId: 2c92e18e-6221-4bfd-8d30-d535e16dacd2
-          communcationCreatedDateTime: 2020-10-26T15:06:37.35Z
-          requestReference: RequestReference
-          campaignId: c40b8210-2217-43d8-9016-333f04388e40
-          odsCode: OdsCode
-          nhsNumber: NhsNumber
-          nhsLoginId: 123-456-789
     AddMessageResponse:
       type: object
       properties:
@@ -223,37 +171,6 @@ components:
           type: string
       example:
         id: 51020e00-8b87-4bcd-a0ff-d862184275fa
-    AddMessageSenderContext:
-      type: object
-      properties:
-        supplierId:
-          type: string
-        communicationId:
-          type: string
-        transmissionId:
-          type: string
-        communcationCreatedDateTime:
-          type: string
-          format: date-time
-        requestReference:
-          type: string
-        campaignId:
-          type: string
-        odsCode:
-          type: string
-        nhsNumber:
-          type: string
-        nhsLoginId:
-          type: string
-    LinkClickedMessage:
-      type: object
-      required:
-        - link
-      properties:
-        link:
-          type: string
-      example:
-        link: "https://www.google.com/"
     MessageResponse:
       type: object
       properties:

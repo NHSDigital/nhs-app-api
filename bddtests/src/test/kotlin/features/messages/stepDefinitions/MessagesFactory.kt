@@ -21,7 +21,6 @@ import worker.models.messages.SingleMessageFacade
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.UUID
 
 private const val SEVEN_DAYS: Long = 7
 private const val TWO_MONTHS: Long = 2
@@ -54,19 +53,16 @@ class MessagesFactory {
         val nhsLoginId = SerenityHelpers.getPatient().subject
         MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
 
-        val senderOneMessageOne = createReadMessage(
-                "1.1", senderOne, "Message One", twoMonthsAgo, MessageVersion.PLAIN_TEXT)
-        val senderOneMessageTwo = createUnreadMessage(
-                "1.2", senderOne, "Message Two", oneMonthAgo, MessageVersion.PLAIN_TEXT)
-        val senderOneMessageThree = createReadMessage(
-                "1.3", senderOne, "Message Three", oneWeekAgo, MessageVersion.PLAIN_TEXT)
+        val senderOneMessageOne = createReadMessage(senderOne, "Message One", twoMonthsAgo, MessageVersion.PLAIN_TEXT)
+        val senderOneMessageTwo = createUnreadMessage(senderOne, "Message Two", oneMonthAgo, MessageVersion.PLAIN_TEXT)
+        val senderOneMessageThree = createReadMessage(senderOne, "Message Three", oneWeekAgo, MessageVersion.PLAIN_TEXT)
         val senderOneMessages = createSenderMessages(
                 arrayListOf(senderOneMessageOne, senderOneMessageTwo, senderOneMessageThree))
         val senderOneSummaryMessage = MessagesSummaryFacade(senderOne, 1, arrayListOf(senderOneMessageThree),
                 lastMessageTime = frontendSummaryDateFormatter.format(oneWeekAgo))
 
         val senderTwoMessageOne = createUnreadMessage(
-                "2.1", senderTwo, "Message Three", twoMonthsAgo, MessageVersion.PLAIN_TEXT)
+                senderTwo, "Message Three", twoMonthsAgo, MessageVersion.PLAIN_TEXT)
         val senderTwoMessages = createSenderMessages(arrayListOf(senderTwoMessageOne))
         val senderTwoSummaryMessage = MessagesSummaryFacade(senderTwo, 1, arrayListOf(senderTwoMessageOne),
                 lastMessageTime = frontendSummaryDateFormatter.format(twoMonthsAgo))
@@ -88,7 +84,7 @@ class MessagesFactory {
         MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
 
         val links = table.toSingleElementList()
-        val messages = links.mapIndexed{ index, link -> createReadMessage(UUID.randomUUID().toString(), senderOne,
+        val messages = links.mapIndexed{ index, link -> createReadMessage(senderOne,
                 "message ${prefixInternalLink(link)}", twoMonthsAgo.minusDays(index.toLong()), messageVersion)}
 
         val senderMessages = createSenderMessages(messages as ArrayList<SingleMessageFacade>)
@@ -119,10 +115,9 @@ class MessagesFactory {
     }
 
     private fun createReadMessage(
-            id: String, sender: String, body: String, sentTime: ZonedDateTime, messageVersion: MessageVersion
+            sender: String, body: String, sentTime: ZonedDateTime, messageVersion: MessageVersion
     ): SingleMessageFacade {
-        return SingleMessageFacade(id,
-                sender,
+        return SingleMessageFacade(sender,
                 body,
                 true,
                 MongoDBConnection.mongoDateFormatter.format(sentTime),
@@ -137,10 +132,9 @@ class MessagesFactory {
     }
 
     private fun createUnreadMessage(
-            id: String, sender: String, body: String, sentTime: ZonedDateTime, messageVersion: MessageVersion
+            sender: String, body: String, sentTime: ZonedDateTime, messageVersion: MessageVersion
     ): SingleMessageFacade {
-        return SingleMessageFacade(id,
-                sender,
+        return SingleMessageFacade(sender,
                 body,
                 false,
                 MongoDBConnection.mongoDateFormatter.format(sentTime),

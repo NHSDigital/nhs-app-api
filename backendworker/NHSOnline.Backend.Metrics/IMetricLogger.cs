@@ -43,7 +43,5 @@ namespace NHSOnline.Backend.Metrics
         Task NominatedPharmacyUpdate(NominatedPharmacyData data);
 
         Task RepeatPrescriptionOrder(RepeatPrescriptionData data);
-
-        Task MessageLinkClicked(MessageLinkClickedData data);
     }
 }

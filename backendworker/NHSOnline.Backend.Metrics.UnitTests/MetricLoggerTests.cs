@@ -327,34 +327,6 @@ namespace NHSOnline.Backend.Metrics.UnitTests
             splitConsoleMessage.Should().Contain("SessionId=sessionId_1234");
         }
 
-        [TestMethod]
-        public async Task MessageLinkClicked_LogsMessageLinkClickedData()
-        {
-            // Arrange
-            var metricLogger = CreateMetricLogger(new Mock<IMetricContext>());
-            var data = GetTestMessageLinkClickedData();
-            using var consoleOut = new CaptureConsoleOut();
-
-            // Act
-            await metricLogger.MessageLinkClicked(data);
-
-            // Assert
-            var splitConsoleMessage = MetricLoggerAssert.AssertSingleLine(consoleOut.ToString()).Split(" ");
-            splitConsoleMessage.Should().Contain("MessageId=MessageId");
-            splitConsoleMessage.Should().Contain("Link=https%3a%2f%2ftesting.com%2fvalid%2furl%2f");
-            splitConsoleMessage.Should().Contain("CampaignId=CampaignId");
-            splitConsoleMessage.Should().Contain("CommunicationId=CommunicationId");
-            splitConsoleMessage.Should().Contain("TransmissionId=TransmissionId");
-        }
-
-        private static MessageLinkClickedData GetTestMessageLinkClickedData() => new MessageLinkClickedData(
-            "MessageId",
-            new Uri("https://testing.com/valid/url/"),
-            "CampaignId",
-            "CommunicationId",
-            "TransmissionId"
-        );
-
         private static IMetricLogger CreateMetricLogger(Mock<IMetricContext> mockMetricContext)
         {
             var services = new ServiceCollection();
@@ -407,9 +379,6 @@ namespace NHSOnline.Backend.Metrics.UnitTests
 
                 var silverIntegrationData = new SilverIntegrationData("sessionId", "providerId", "providerName", "jumpOffId");
                 yield return new object[] { Method(metricLogger => metricLogger.SilverIntegrationJumpOff(silverIntegrationData)), "SilverIntegrationJumpOff" };
-
-                var messageLinkedClickData = GetTestMessageLinkClickedData();
-                yield return new object[] { Method(metricLogger => metricLogger.MessageLinkClicked(messageLinkedClickData)), "MessageLinkClicked" };
 
                 static Func<IMetricLogger, Task> Method(Func<IMetricLogger, Task> method) => method;
             }
