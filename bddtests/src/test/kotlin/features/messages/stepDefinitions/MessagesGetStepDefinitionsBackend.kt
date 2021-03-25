@@ -159,6 +159,7 @@ class MessagesGetStepDefinitionsBackend {
     private fun toFacade(messages: Array<MessagesResponseMessage>): List<SingleMessageFacade> {
         return messages.map { message ->
             SingleMessageFacade(
+                    message.id,
                     message.sender,
                     message.body,
                     message.read?.toLowerCase() =="true" ,

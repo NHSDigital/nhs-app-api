@@ -9,6 +9,19 @@ export default {
   init({ commit }) {
     commit(INIT);
   },
+  linkClicked(_, { messageId, link }) {
+    const request = {
+      messageId,
+      linkClickedMessage: {
+        link,
+      },
+      ignoreError: true,
+      ignoreLoading: true,
+    };
+    this.app.$http.postV1ApiUsersMeMessagesByMessageidLinkClickedMetrics(
+      request,
+    );
+  },
   async load({ commit }, { sender, ignoreError } = {}) {
     const request = sender ? { sender } : { summary: true };
     request.ignoreError = ignoreError;

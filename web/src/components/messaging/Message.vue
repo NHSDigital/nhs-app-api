@@ -3,7 +3,8 @@
     <div>
       <h3 :class="$style['message-panel__sender']">{{ message.sender }}</h3>
       <div :class="$style['message-panel__content']">
-        <markdown-content v-if="isMarkdown" class="panel-content" :content="message.body" />
+        <markdown-content v-if="isMarkdown" class="panel-content" :content="message.body"
+                          :message-id="message.id" />
         <linkify-content v-else class="panel-content" :content="message.body" tag="p" />
       </div>
       <formatted-date-time :class="$style['message-panel__time']"
