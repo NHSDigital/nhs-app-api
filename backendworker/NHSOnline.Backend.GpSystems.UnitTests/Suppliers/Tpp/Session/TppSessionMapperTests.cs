@@ -46,6 +46,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var mainPatientId = response.Body.User.Person.PatientId;
             response.Body.OnlineUserId = mainPatientId;
             response.Body.People.Add(response.Body.User.Person);
+            response.Body.Registration.PatientAccess.Add(new PatientAccess { PatientId = mainPatientId });
 
             response.Headers.Add("suid", _suid);
 
@@ -67,6 +68,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             value.PatientId.Should().Be(response.Body.User.Person.PatientId);
             value.OdsCode.Should().Be(_odsCode);
             value.NhsNumber.Should().Be(_nhsNumber);
+            value.HasSelfAccess.Should().BeTrue();
             value.ProxyPatients.Count.Should().Be(response.Body.People.Count - 1); // 1 less
 
             var proxies = value.ProxyPatients;
@@ -107,6 +109,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var mainPatientId = response.Body.User.Person.PatientId;
             response.Body.OnlineUserId = mainPatientId;
             response.Body.People.Add(response.Body.User.Person);
+            response.Body.Registration.PatientAccess.Add(new PatientAccess { PatientId = mainPatientId });
 
             response.Headers.Add("suid", _suid);
 
@@ -129,6 +132,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             value.PatientId.Should().Be(response.Body.User.Person.PatientId);
             value.OdsCode.Should().Be(_odsCode);
             value.NhsNumber.Should().Be(_nhsNumber);
+            value.HasSelfAccess.Should().BeTrue();
             value.ProxyPatients.Count.Should().Be(numberOfValidProxies);
 
             var proxies = value.ProxyPatients;
@@ -154,8 +158,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             // realistic response has:
             // - online user id and patient id equal
             // - the main user in the person collection
-            response.Body.OnlineUserId = response.Body.User.Person.PatientId;
+            var mainPatientId = response.Body.User.Person.PatientId;
+            response.Body.OnlineUserId = mainPatientId;
             response.Body.People = new List<Person> { response.Body.User.Person };
+            response.Body.Registration.PatientAccess.Add(new PatientAccess { PatientId = mainPatientId });
 
             response.Headers.Add("suid", _suid);
 
@@ -170,10 +176,61 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             value.Name.Should().Be(response.Body.User.Person.PersonName.Name);
             value.Suid.Should().Be(_suid);
             value.OnlineUserId.Should().Be(response.Body.OnlineUserId);
+            value.PatientId.Should().Be(mainPatientId);
+            value.OdsCode.Should().Be(_odsCode);
+            value.NhsNumber.Should().Be(_nhsNumber);
+            value.HasSelfAccess.Should().BeTrue();
+            value.ProxyPatients.Count.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void Map_WhenOnlineUserCannotAccessOwnRecord_MapsCorrectlyAndReturnsOptionTppUserSession()
+        {
+            // Arrange
+            var response = _fixture.Create<TppApiObjectResponse<AuthenticateReply>>();
+
+            // on occasion response has:
+            // - online user id and patient id equal
+            // - no patient access for the main user
+            var mainPatientId = response.Body.User.Person.PatientId;
+            response.Body.OnlineUserId = mainPatientId;
+            response.Body.People.Add(response.Body.User.Person);
+
+            response.Headers.Add("suid", _suid);
+
+            var idsOfProxyPatients = response.Body.People
+                .Where(x => x.PatientId != mainPatientId)
+                .Select(p => p.PatientId);
+
+            // Act
+            var result = _systemUnderTest.Map(response, _odsCode, _nhsNumber, idsOfProxyPatients);
+
+            // Assert
+            result.HasValue.Should().BeTrue();
+
+            var value = result.ValueOrFailure();
+
+            value.Name.Should().Be(response.Body.User.Person.PersonName.Name);
+            value.Suid.Should().Be(_suid);
+            value.OnlineUserId.Should().Be(response.Body.OnlineUserId);
             value.PatientId.Should().Be(response.Body.User.Person.PatientId);
             value.OdsCode.Should().Be(_odsCode);
             value.NhsNumber.Should().Be(_nhsNumber);
-            value.ProxyPatients.Count.Should().Be(0);
+            value.HasSelfAccess.Should().BeFalse();
+            value.ProxyPatients.Count.Should().Be(response.Body.People.Count - 1); // 1 less
+
+            var proxies = value.ProxyPatients;
+
+            foreach (var proxy in proxies)
+            {
+                var associatedPerson = response.Body.People.First(x => string.Equals(x.PatientId, proxy.PatientId, StringComparison.Ordinal));
+                proxy.Id.Should().NotBeEmpty();
+                proxy.FullName.Should().Be(associatedPerson.PersonName.Name);
+                proxy.NhsNumber.Should().Be(associatedPerson.NationalId.Value);
+                proxy.PatientId.Should().Be(associatedPerson.PatientId);
+                proxy.DateOfBirth.Should().Be(associatedPerson.DateOfBirth);
+                proxy.Suid.Should().BeNull();
+            }
         }
 
         [TestMethod]
@@ -273,11 +330,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var response = _fixture.Create<TppApiObjectResponse<AuthenticateReply>>();
             response.Body.OnlineUserId = response.Body.User.Person.PatientId;
             response.Body.People.Add(response.Body.User.Person);
-
+            response.Body.Registration.PatientAccess.FirstOrDefault().PatientId = _patientId;
             response.Headers.Add("suid", _suid);
 
             // Act
-            var result = _systemUnderTest.Map(response, _odsCode, _nhsNumber, _patientId);
+            var result = _systemUnderTest.Map(response, _odsCode, _nhsNumber, Enumerable.Empty<string>(), _patientId);
 
             // Assert
             result.HasValue.Should().BeTrue();
@@ -290,20 +347,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             value.PatientId.Should().Be(_patientId);
             value.OdsCode.Should().Be(_odsCode);
             value.NhsNumber.Should().Be(_nhsNumber);
+            value.HasSelfAccess.Should().BeTrue();
             value.ProxyPatients.Count.Should().Be(0); // ignore proxy mapping when mapping a specific patient
-
-            var proxies = value.ProxyPatients;
-
-            foreach (var proxy in proxies)
-            {
-                var associatedPerson = response.Body.People.First(x => string.Equals(x.PatientId, proxy.PatientId, StringComparison.Ordinal));
-                proxy.Id.Should().NotBeEmpty();
-                proxy.FullName.Should().Be(associatedPerson.PersonName.Name);
-                proxy.NhsNumber.Should().Be(associatedPerson.NationalId.Value);
-                proxy.PatientId.Should().Be(associatedPerson.PatientId);
-                proxy.DateOfBirth.Should().Be(associatedPerson.DateOfBirth);
-                proxy.Suid.Should().BeNull();
-            }
         }
 
         [TestMethod]
@@ -313,7 +358,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             TppApiObjectResponse<AuthenticateReply> response = null;
 
             // Act
-            var result = _systemUnderTest.Map(response, _odsCode, _nhsNumber, _patientId);
+            var result = _systemUnderTest.Map(response, _odsCode, _nhsNumber, Enumerable.Empty<string>(), _patientId);
 
             // Assert
             Action act = () => result.ValueOrFailure();

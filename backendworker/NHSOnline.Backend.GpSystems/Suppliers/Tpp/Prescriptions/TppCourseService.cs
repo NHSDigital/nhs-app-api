@@ -42,6 +42,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
             {
                 _logger.LogEnter();
                 _logger.LogDebug("Beginning Fetch Courses for user");
+
+                var tppUserSession = (TppUserSession)gpLinkedAccountModel.GpUserSession;
+
+                if (!tppUserSession.HasSelfAccess)
+                {
+                    _logger.LogInformation("User does not have self access");
+                    return new GetCoursesResult.Forbidden();
+                }
+
                 var response = await _listRepeatMedication.Post(tppRequestParameters);
                 _logger.LogDebug("Fetch Courses for user complete");
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
@@ -316,6 +316,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 Body = _fixture.Create<TestResultsViewReply>()
             };
             var testResultResponse = _fixture.Create<TestResultResponse>();
+            testResultResponse.HasErrored = false;
 
             _testResultsViewDetailed
                 .Setup(x => x.Post(TestResultsViewDetailedMatchParameters(testResultId)))

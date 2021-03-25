@@ -4,6 +4,6 @@ namespace NHSOnline.Backend.GpSystems.Session
 {
     public interface IRecreateSessionMapperService
     {
-        GpUserSession Map(GpUserSession gpUserSession, string suid, string patientId);
+        GpUserSession Map(GpUserSession gpUserSession, string suid, string patientId, bool hasSelfAccess);
     }
 }

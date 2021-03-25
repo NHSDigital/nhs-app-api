@@ -149,8 +149,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
 
             var patientAccessItems = response.Registration?.PatientAccess ?? new List<PatientAccess>();
 
-            var selfPatient = patientAccessItems.FirstOrDefault(
-                x => mainPatientId.Equals(x.PatientId, StringComparison.Ordinal));
+            var selfPatient = response.GetPatientAccess(mainPatientId);
 
             if (selfPatient == null)
             {

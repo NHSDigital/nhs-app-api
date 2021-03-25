@@ -296,7 +296,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                 .Returns(_mockRecreateSessionMapperService.Object);
 
             _mockRecreateSessionMapperService
-                .Setup(x => x.Map(originalGpUserSession, gpSessionRecreateResult.Suid, _patientId))
+                .Setup(x => x.Map(originalGpUserSession, gpSessionRecreateResult.Suid, _patientId, gpSessionRecreateResult.HasSelfAccess))
                 .Returns(updatedGpUserSession);
 
             // Act
@@ -308,7 +308,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             _userSession.GpUserSession.Should().Be(updatedGpUserSession);
             _mockGpSystem.Verify(x => x.GetRecreateSessionMapperService(), Times.Once);
             _mockRecreateSessionMapperService.Verify(x =>
-                x.Map(It.IsAny<GpUserSession>(), gpSessionRecreateResult.Suid, _patientId), Times.Once);
+                x.Map(It.IsAny<GpUserSession>(), gpSessionRecreateResult.Suid, _patientId, gpSessionRecreateResult.HasSelfAccess), Times.Once);
             _mockSessionCacheService.Verify(x => x.UpdateUserSession(_userSession));
         }
 
@@ -333,7 +333,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                 x.GetRecreateSessionMapperService(), Times.Never());
 
             _mockRecreateSessionMapperService.Verify(x =>
-                x.Map(It.IsAny<GpUserSession>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+                x.Map(It.IsAny<GpUserSession>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()), Times.Never());
 
             _mockSessionCacheService.Verify(x =>
                 x.UpdateUserSession(It.IsAny<P9UserSession>()), Times.Never());

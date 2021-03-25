@@ -54,10 +54,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
         {
             _patientId = Guid.NewGuid();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-        
             
             _tppUserSession = _fixture.Freeze<TppUserSession>();
             _tppUserSession.Id = _patientId;
+            _tppUserSession.HasSelfAccess = true;
             _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _patientId);
             
             _listRepeatMedication = _fixture.Freeze<Mock<ITppClientRequest<TppRequestParameters, ListRepeatMedicationReply>>>();
@@ -268,11 +268,24 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             result.Should().BeAssignableTo<GetPrescriptionsResult.Forbidden>();
         }
 
+        [TestMethod]
+        public async Task Get_ReturnsForbidden_WhenUserDoesNotHaveSelfAccess()
+        {
+            // Arrange
+            _tppUserSession.HasSelfAccess = false;
+
+            // Act
+            var result = await _systemUnderTest.GetPrescriptions(_gpLinkedAccountModel);
+
+            // Assert
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Forbidden>();
+        }
+
         #endregion
 
         #region Post Prescriptions
 
-         [TestMethod]
+        [TestMethod]
         public async Task Post_ReturnsConflict_WhenAlreadyOrdered_IsUnavailable_ErrorReceivedFromTpp()
         {
             // Arrange

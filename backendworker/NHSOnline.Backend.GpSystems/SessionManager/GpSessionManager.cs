@@ -97,7 +97,8 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             if (recreateGpUserSessionResult is GpSessionRecreateResult.Success success)
             {
                 var recreateSessionMapperService = gpSystem.GetRecreateSessionMapperService();
-                var updatedGpUserSession = recreateSessionMapperService.Map(gpUserSession, success.Suid, patientId);
+                var updatedGpUserSession = recreateSessionMapperService.Map(gpUserSession, success.Suid, patientId,
+                                                                            success.HasSelfAccess);
 
                 userSession.GpUserSession = updatedGpUserSession;
                 await _sessionCacheService.UpdateUserSession(userSession);

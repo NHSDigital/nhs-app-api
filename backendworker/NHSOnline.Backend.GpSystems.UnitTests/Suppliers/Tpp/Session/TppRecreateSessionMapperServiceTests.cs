@@ -39,12 +39,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var gpUserSession = (GpUserSession) _tppUserSession;
 
             //Act
-            var result = _systemUnderTest.Map(gpUserSession, _suid, _patientId);
+            var result = _systemUnderTest.Map(gpUserSession, _suid, _patientId, true);
 
             //Assert
             Assert.IsInstanceOfType(result, typeof(TppUserSession));
             var tppUserSession = (TppUserSession) result;
             Assert.AreEqual(tppUserSession.Suid, _suid);
+            Assert.IsTrue(tppUserSession.HasSelfAccess);
 
             foreach (var proxy in tppUserSession.ProxyPatients)
             {
@@ -60,12 +61,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var gpUserSession = (GpUserSession) _tppUserSession;
 
             //Act
-            var result = _systemUnderTest.Map(gpUserSession, _suid, _patientId);
+            var result = _systemUnderTest.Map(gpUserSession, _suid, _patientId, false);
 
             //Assert
             Assert.IsInstanceOfType(result, typeof(TppUserSession));
             var tppUserSession = (TppUserSession) result;
             Assert.IsNull(tppUserSession.Suid);
+            Assert.IsFalse(tppUserSession.HasSelfAccess);
 
             foreach (var proxy in tppUserSession.ProxyPatients)
             {
@@ -91,7 +93,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             suids.Add(_tppUserSession.Suid);
 
             //Act
-            var result = _systemUnderTest.Map(gpUserSession, _suid, patientId);
+            var result = _systemUnderTest.Map(gpUserSession, _suid, patientId, true);
 
             //Assert
             var tppUserSession = (TppUserSession) result;
@@ -100,6 +102,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             Assert.IsNotNull(_tppUserSession.Suid);
             Assert.AreNotEqual(_suid, _tppUserSession.Suid);
             Assert.IsTrue(suids.Contains(_tppUserSession.Suid));
+            Assert.IsTrue(tppUserSession.HasSelfAccess);
 
             foreach (var proxy in tppUserSession.ProxyPatients)
             {

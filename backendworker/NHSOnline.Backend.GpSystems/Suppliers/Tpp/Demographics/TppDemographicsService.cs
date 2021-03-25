@@ -31,6 +31,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Demographics
             {
                 _logger.LogEnter();
 
+                var tppUserSession = (TppUserSession)gpLinkedAccountModel.GpUserSession;
+
+                if (!tppUserSession.HasSelfAccess)
+                {
+                    _logger.LogInformation("User does not have self access");
+                    return new DemographicsResult.Forbidden();
+                }
+
                 var tppRequestParameters = gpLinkedAccountModel.BuildTppRequestParameters(_logger);
 
                 var demographicsResponse = await _patientSelected.Post(tppRequestParameters);

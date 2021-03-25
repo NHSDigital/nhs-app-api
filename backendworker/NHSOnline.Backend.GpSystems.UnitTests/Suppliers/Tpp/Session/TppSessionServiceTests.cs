@@ -186,7 +186,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                 .Verifiable();
 
             _mockTppSessionMapper
-                .Setup(x => x.Map(reply, odsCode, _nhsNumber, proxyPatientIds))
+                .Setup(x => x.Map(reply, odsCode, _nhsNumber, proxyPatientIds, null))
                 .Returns(Option.Some(CreateUserSession(expectedName, odsCode, nhsNumber: _nhsNumber, proxyPatientIds: proxyPatientIds)));
 
             // Act
@@ -202,7 +202,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         }
 
         [TestMethod]
-        public async Task Create_WhenResponseHasNoLinkedAccounts_DoesNotCallAuthenticate()
+        public async Task Create_WhenResponseHasNoLinkedAccounts_DoesNotCallPatientSelected()
         {
             // Arrange
             const string expectedName = "Montel";
@@ -217,8 +217,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
 
             var capturedProxyPatientIds = Enumerable.Empty<string>();
             _mockTppSessionMapper
-                .Setup(x => x.Map(reply, odsCode, _nhsNumber, It.IsAny<IEnumerable<string>>()))
-                .Callback((TppApiObjectResponse<AuthenticateReply> a, string b, string c, IEnumerable<string> proxyPatientIds) => capturedProxyPatientIds = proxyPatientIds)
+                .Setup(x => x.Map(reply, odsCode, _nhsNumber, It.IsAny<IEnumerable<string>>(), null))
+                .Callback((TppApiObjectResponse<AuthenticateReply> a, string b, string c, IEnumerable<string> proxyPatientIds, string d) => capturedProxyPatientIds = proxyPatientIds)
                 .Returns(Option.Some(CreateUserSession(expectedName, odsCode, _nhsNumber, proxyPatientIds: new List<string>())));
 
             // Act
@@ -234,7 +234,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         }
 
         [TestMethod]
-        public async Task Create_WhenResponseHasLinkedAccountsButNoneAreValid_StillCallsAuthenticate()
+        public async Task Create_WhenResponseHasLinkedAccountsButNoneAreValid_StillCallsPatientSelected()
         {
             // Arrange
             const string expectedName = "Montel";
@@ -250,8 +250,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
 
             var capturedMappedProxyPatientIds = Enumerable.Empty<string>();
             _mockTppSessionMapper
-                .Setup(x => x.Map(reply, odsCode, _nhsNumber, It.IsAny<IEnumerable<string>>()))
-                .Callback((TppApiObjectResponse<AuthenticateReply> a, string b, string c, IEnumerable<string> proxyPatientIds) => capturedMappedProxyPatientIds = proxyPatientIds)
+                .Setup(x => x.Map(reply, odsCode, _nhsNumber, It.IsAny<IEnumerable<string>>(), null))
+                .Callback((TppApiObjectResponse<AuthenticateReply> a, string b, string c, IEnumerable<string> proxyPatientIds, string d) => capturedMappedProxyPatientIds = proxyPatientIds)
                 .Returns(Option.Some(CreateUserSession(expectedName, odsCode, _nhsNumber, proxyPatientIds: new List<string>())));
 
             // Act
@@ -264,6 +264,37 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             created.UserSession.Name.Should().Be(expectedName);
             capturedMappedProxyPatientIds.Should().BeEmpty();
             _mockPatientSelected.Verify(x => x.Post(It.IsAny<TppRequestParameters>()), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task Create_WhenResponseHasLinkedAccountsButUserHasNoSelfAccess_DoesNotCallPatientSelected()
+        {
+            // Arrange
+            const string expectedName = "Montel";
+            const string odsCode = "1234";
+            var proxyPatientIds = new List<string> { "282", "383" };
+            var reply = CreateReply(expectedName, proxyPatientIds: proxyPatientIds);
+
+            _authenticatePostResult = reply;
+
+            _mockLinkedAccountsService.Setup(x => x.ExtractValidProxyPatients(_authenticatePostResult.Body))
+                .Returns(_authenticatePostResult.Body.ExtractLinkedPatients().ToList)
+                .Verifiable();
+
+            _mockTppSessionMapper
+                .Setup(x => x.Map(reply, odsCode, _nhsNumber, proxyPatientIds, null))
+                .Returns(Option.Some(CreateUserSession(expectedName, odsCode, nhsNumber: _nhsNumber,
+                                                       proxyPatientIds: proxyPatientIds, hasSelfAccess: false)));
+            // Act
+            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), odsCode, _nhsNumber);
+
+            // Assert
+            var created = (GpSessionCreateResult.Success)result;
+            created.UserSession.Name.Should().Be(expectedName);
+
+            _mockListServicesAccessesPost.Verify(x => x.Post(It.IsAny<TppUserSession>()), Times.Never);
+            _mockLinkedAccountsService.Verify();
+            _mockPatientSelected.Verify(x => x.Post(It.IsAny<TppRequestParameters>()), Times.Never);
         }
 
         [TestMethod]
@@ -285,7 +316,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                 .Verifiable();
 
             _mockTppSessionMapper
-                .Setup(x => x.Map(reply, odsCode, _nhsNumber, new List<string> { validProxyPatientId }))
+                .Setup(x => x.Map(reply, odsCode, _nhsNumber, new List<string> { validProxyPatientId }, null))
                 .Returns(Option.Some(CreateUserSession(expectedName, odsCode, nhsNumber: _nhsNumber, proxyPatientIds: proxyPatientIds)));
 
             // Act
@@ -313,7 +344,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                 .ReturnsAsync(() => reply);
 
             _mockTppSessionMapper
-                .Setup(x => x.Map(reply, odsCode, _nhsNumber, It.IsAny<IEnumerable<string>>()))
+                .Setup(x => x.Map(reply, odsCode, _nhsNumber, It.IsAny<IEnumerable<string>>(), null))
                 .Returns(Option.Some(CreateUserSession(expectedName, odsCode, _nhsNumber)));
 
             _mockLinkedAccountsService.Setup(x => x.ExtractValidProxyPatients(reply.Body))
@@ -352,7 +383,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                 .ReturnsAsync(() => reply);
 
             _mockTppSessionMapper
-                .Setup(x => x.Map(reply, odsCode, _nhsNumber, It.IsAny<IEnumerable<string>>()))
+                .Setup(x => x.Map(reply, odsCode, _nhsNumber, It.IsAny<IEnumerable<string>>(), null))
                 .Returns(Option.Some(userSession));
 
             _mockLinkedAccountsService.Setup(x => x.ExtractValidProxyPatients(reply.Body))
@@ -446,7 +477,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                 .ReturnsAsync(() => reply);
 
             _mockTppSessionMapper
-                .Setup(x => x.Map(reply, odsCode, _nhsNumber, Enumerable.Empty<string>()))
+                .Setup(x => x.Map(reply, odsCode, _nhsNumber, Enumerable.Empty<string>(), null))
                 .Returns(Option.None<TppUserSession>());
 
             // Act
@@ -689,7 +720,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                 .ReturnsAsync(() => reply);
 
             _mockTppSessionMapper
-                .Setup(x => x.Map(reply, odsCode, _nhsNumber, _patientId))
+                .Setup(x => x.Map(reply, odsCode, _nhsNumber, Enumerable.Empty<string>(), _patientId))
                 .Returns(Option.Some(CreateUserSession(expectedName, odsCode, _nhsNumber)));
 
             // Act
@@ -744,7 +775,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             string onlineUserId = "123",
             string patientId = "123",
             string nhsNumber = "123456789",
-            List<string> proxyPatientIds = null)
+            List<string> proxyPatientIds = null,
+            bool hasSelfAccess = true)
         {
             var tppUserSession = new TppUserSession
             {
@@ -754,6 +786,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                 PatientId = patientId,
                 OdsCode = odsCode,
                 NhsNumber = nhsNumber,
+                HasSelfAccess = hasSelfAccess,
                 ProxyPatients = new List<TppProxyUserSession>(),
             };
 

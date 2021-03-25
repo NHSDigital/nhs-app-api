@@ -51,6 +51,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             _tppUserSession = _fixture.Create<TppUserSession>();
             _tppUserSession.Id = _patientId;
+            _tppUserSession.HasSelfAccess = true;
 
             _listRepeatMedication = _fixture.Freeze<Mock<ITppClientRequest<TppRequestParameters, ListRepeatMedicationReply>>>();
 
@@ -305,6 +306,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
                             {
                                 ErrorResponse = expectedError
                             }));
+            // Act
+            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_tppUserSession, _patientId));
+
+            // Assert
+            result.Should().BeAssignableTo<GetCoursesResult.Forbidden>();
+        }
+
+        [TestMethod]
+        public async Task Get_ReturnsForbidden_WhenUserDoesNotHaveSelfAccess()
+        {
+            // Arrange
+            _tppUserSession.HasSelfAccess = false;
+
             // Act
             var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_tppUserSession, _patientId));
 

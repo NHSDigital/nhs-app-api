@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
@@ -52,6 +52,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models
         {
             return Registration.PatientAccess
                     .FirstOrDefault(x => x.PatientId == patientId)?.SiteDetails;
+        }
+
+        public PatientAccess GetPatientAccess(string patientId)
+        {
+            var patientAccessItems = Registration?.PatientAccess ?? new List<PatientAccess>();
+
+            return !string.IsNullOrEmpty(patientId) ? patientAccessItems.FirstOrDefault(
+                x => patientId.Equals(x.PatientId, StringComparison.Ordinal)) : null;
         }
     }
 }

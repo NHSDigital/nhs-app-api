@@ -121,11 +121,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
         {
             // The PatientSelected call is only required if
             // more than 1 person is found in the response.
-            if (authenticateReply.Body.ExtractLinkedPatients().Any())
+            if (authenticateReply.Body.ExtractLinkedPatients().Any() && tppUserSession.HasSelfAccess)
             {
                 var tppRequestParameters = new GpLinkedAccountModel(tppUserSession).BuildTppRequestParameters(_logger);
 
                 await _patientSelected.Post(tppRequestParameters);
+            }
+            else
+            {
+                _logger.LogInformation($"PatientSelected not called.  Linked patient count: {authenticateReply.Body.ExtractLinkedPatients().Count()} Self access: {tppUserSession.HasSelfAccess}");
             }
         }
 
@@ -158,6 +162,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 
         private async Task<bool> IsIm1MessagingEnabled(TppUserSession tppUserSession)
         {
+            if (!tppUserSession.HasSelfAccess)
+            {
+                return false;
+            }
+
             var serviceAccesses = await _listServiceAccesses.Post(tppUserSession);
 
             return serviceAccesses.Body?.ServiceAccess?.Where(IsIm1MessageService).Any(IsEnabled) ?? false;
@@ -230,7 +239,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                     return new GpSessionRecreateResult.Failure();
                 }
 
-                var userSession= _sessionMapper.Map(authenticateReply, odsCode, nhsNumber, patientId);
+                var userSession= _sessionMapper.Map(authenticateReply, odsCode, nhsNumber, Enumerable.Empty<string>(), patientId);
                 if (!userSession.HasValue)
                 {
                     _logger.LogError("Cannot recreate a valid session from Tpp response");
@@ -239,13 +248,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 
                 var tppUserSession = userSession.ValueOrFailure();
 
-                var tppRequestParameters = new GpLinkedAccountModel(tppUserSession)
-                    .BuildTppRequestParameters(_logger);
+                if (tppUserSession.HasSelfAccess)
+                {
+                    var tppRequestParameters = new GpLinkedAccountModel(tppUserSession)
+                        .BuildTppRequestParameters(_logger);
 
-                await _patientSelected.Post(tppRequestParameters);
+                    await _patientSelected.Post(tppRequestParameters);
+                }
 
                 _logger.LogDebug($"TPP user session successfully recreated for patientId {patientId}");
-                return new GpSessionRecreateResult.Success(tppUserSession.Suid);
+                return new GpSessionRecreateResult.Success(tppUserSession.Suid, tppUserSession.HasSelfAccess);
             }
             catch (HttpRequestException e)
             {

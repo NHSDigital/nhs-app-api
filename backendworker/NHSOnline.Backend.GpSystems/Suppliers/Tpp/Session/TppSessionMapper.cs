@@ -10,10 +10,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
     public interface ITppSessionMapper
     {
         Option<TppUserSession> Map(TppApiObjectResponse<AuthenticateReply> authenticateResponse,
-            string odsCode, string nhsNumber, IEnumerable<string> proxyPatientIdsToBeIncluded);
-
-        Option<TppUserSession> Map(TppApiObjectResponse<AuthenticateReply> authenticateResponse,
-            string odsCode, string nhsNumber, string patientId);
+            string odsCode, string nhsNumber, IEnumerable<string> proxyPatientIdsToBeIncluded, string patientId = null);
     }
 
     public class TppSessionMapper : ITppSessionMapper
@@ -25,7 +22,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             _logger = logger;
         }
 
-        public Option<TppUserSession> Map(TppApiObjectResponse<AuthenticateReply> authenticateResponse, string odsCode, string nhsNumber, IEnumerable<string> proxyPatientIdsToBeIncluded)
+        public Option<TppUserSession> Map(TppApiObjectResponse<AuthenticateReply> authenticateResponse,
+                                          string odsCode,
+                                          string nhsNumber,
+                                          IEnumerable<string> proxyPatientIdsToBeIncluded,
+                                          string patientId = null)
         {
             if (!IsResponseValid(authenticateResponse))
             {
@@ -37,15 +38,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             var linkedPatients = authenticateResponse.Body.ExtractLinkedPatients()
                 .Where(x => proxyPatientIdsToBeIncluded.Contains(x.PatientId));
 
+            var selfAccess = authenticateResponse.Body
+                .GetPatientAccess(patientId ?? authenticateResponse.Body.User.Person.PatientId);
+
             return Option.Some(new TppUserSession
             {
                 Id = Guid.NewGuid(),
                 Suid = suidHeader?.Value,
                 OnlineUserId = authenticateResponse.Body.OnlineUserId,
-                PatientId = authenticateResponse.Body.User.Person.PatientId,
+                PatientId = patientId ?? authenticateResponse.Body.User.Person.PatientId,
                 OdsCode = odsCode,
                 NhsNumber = nhsNumber,
                 Name = authenticateResponse.Body.User?.Person?.PersonName?.Name,
+                HasSelfAccess = selfAccess != null,
                 ProxyPatients = linkedPatients.Select(x => new TppProxyUserSession
                 {
                     Id = Guid.NewGuid(),
@@ -55,18 +60,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                     PatientId = x.PatientId,
                 }).ToList(),
             });
-        }
-
-        public Option<TppUserSession> Map(TppApiObjectResponse<AuthenticateReply> authenticateResponse, string odsCode, string nhsNumber, string patientId)
-        {
-            var response = Map(authenticateResponse, odsCode, nhsNumber, Enumerable.Empty<string>());
-
-            if (response.HasValue)
-            {
-                response.ValueOrFailure().PatientId = patientId;
-            }
-
-            return response;
         }
 
         private bool IsResponseValid(TppApiObjectResponse<AuthenticateReply> authenticateResponse)

@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 {
     public class TppRecreateSessionMapperService : IRecreateSessionMapperService
     {
-        public GpUserSession Map(GpUserSession gpUserSession, string suid, string patientId)
+        public GpUserSession Map(GpUserSession gpUserSession, string suid, string patientId, bool hasSelfAccess)
         {
             TppUserSession tppUserSession = (TppUserSession) gpUserSession;
 
@@ -15,6 +15,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             {
                 return gpUserSession;
             }
+
+            tppUserSession.HasSelfAccess = hasSelfAccess;
 
             if (tppUserSession.PatientId.Equals(patientId, StringComparison.Ordinal))
             {

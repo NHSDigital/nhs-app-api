@@ -30,6 +30,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             try
             {
                 _logger.LogEnter();
+
+                if (!((TppUserSession)gpLinkedAccountModel.GpUserSession).HasSelfAccess)
+                {
+                    _logger.LogInformation("User does not have self access");
+                    return new AppointmentsResult.Forbidden();
+                }
+
                 var tppRequestParams = gpLinkedAccountModel.BuildTppRequestParameters(_logger);
 
                 var viewPastAppointmentsTask = _viewAppointments.Post((tppRequestParams, AppointmentViewType.Past));

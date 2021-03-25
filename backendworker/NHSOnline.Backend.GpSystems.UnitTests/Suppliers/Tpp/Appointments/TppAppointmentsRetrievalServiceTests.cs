@@ -54,6 +54,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             _tppUserSession = _fixture.Create<TppUserSession>();
             _tppUserSession.Id = _patientId;
+            _tppUserSession.HasSelfAccess = true;
 
             _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _patientId);
 
@@ -65,9 +66,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 OnlineUserId = _tppUserSession.OnlineUserId,
                 PatientId = _tppUserSession.PatientId,
                 UuId = "uuid",
-                Appointments = new List<Backend.GpSystems.Suppliers.Tpp.Models.Appointments.Appointment>()
+                Appointments = new List<GpSystems.Suppliers.Tpp.Models.Appointments.Appointment>()
                 {
-                    new Backend.GpSystems.Suppliers.Tpp.Models.Appointments.Appointment
+                    new GpSystems.Suppliers.Tpp.Models.Appointments.Appointment
                     {
                         StartDate = "2017-12-12T09:30:00",
                         EndDate = "2017-12-12T09:40:00",
@@ -91,7 +92,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 UuId = "uuid",
                 Appointments = new List<Backend.GpSystems.Suppliers.Tpp.Models.Appointments.Appointment>()
                 {
-                    new Backend.GpSystems.Suppliers.Tpp.Models.Appointments.Appointment
+                    new GpSystems.Suppliers.Tpp.Models.Appointments.Appointment
                     {
                         StartDate = "2018-12-12T09:30:00",
                         EndDate = "2018-12-12T09:40:00",
@@ -256,6 +257,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             };
             MockTppClientAppointmentsGetMethod(tppResponse, AppointmentViewType.Past);
             MockTppClientAppointmentsGetMethod(tppResponse, AppointmentViewType.Future);
+
+            // Act
+            var result = await _systemUnderTest.GetAppointments(_gpLinkedAccountModel);
+
+            // Assert
+            result.Should().BeAssignableTo<AppointmentsResult.Forbidden>();
+
+        }
+
+        [TestMethod]
+        public async Task GetAppointments_TppUserCannotAccess_ReturnsForbidden()
+        {
+            // Arrange
+            _tppUserSession.HasSelfAccess = false;
 
             // Act
             var result = await _systemUnderTest.GetAppointments(_gpLinkedAccountModel);

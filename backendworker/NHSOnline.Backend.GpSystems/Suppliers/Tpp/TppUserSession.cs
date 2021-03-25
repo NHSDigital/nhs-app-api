@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
@@ -13,6 +13,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         public string Suid { get; set; }
         public string PatientId { get; set; }
         public string OnlineUserId { get; set; }
+        public bool HasSelfAccess { get; set; }
 
         public string UnitId => OdsCode;
 
