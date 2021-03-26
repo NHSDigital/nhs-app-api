@@ -212,7 +212,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                         completion.Outcome = BiometricOutcome.Success.ToString();
                         completion.ErrorCode = string.Empty;
                         break;
-                        
+
                     default:
                         completion.Outcome = BiometricOutcome.Failed.ToString();
                         completion.ErrorCode = BiometricErrorCode.CannotFindBiometrics.ToString();

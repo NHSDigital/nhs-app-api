@@ -30,12 +30,22 @@ namespace NHSOnline.App.Services.FIDO
         public async Task<BiometricRegisterResult> Register(string accessToken)
         {
             await DeleteRegistration(accessToken).ResumeOnThreadPool();
-
             using var key = await _biometrics.CreateBiometricKey().ResumeOnThreadPool();
-            var verifyResult = await key.VerifyUser("To register with NHS login").ResumeOnThreadPool();
 
-            var verifyUserResultVisitor = new RegisterVerifyUserResultVisitor(_preferencesService, _fidoService, key, accessToken);
-            return await verifyResult.Accept(verifyUserResultVisitor).ResumeOnThreadPool();
+            var authSigner = await VerifyUser(key).ResumeOnThreadPool();
+            if (authSigner.Failed(out var authSignerFailure))
+            {
+                return authSignerFailure;
+            }
+
+            var keyId = await DoFidoRegistration(key, authSigner.Result, accessToken).ResumeOnThreadPool();
+            if (keyId.Failed(out var keyIdFailure))
+            {
+                return keyIdFailure;
+            }
+
+            _preferencesService.BiometricsKeyId = keyId;
+            return BiometricRegisterResult.Success();
         }
 
         public async Task DeleteRegistration(string accessToken)
@@ -61,6 +71,25 @@ namespace NHSOnline.App.Services.FIDO
             var bytes = new byte[64];
             random.GetBytes(bytes);
             return Convert.ToBase64String(bytes);
+        }
+
+        private async Task<ProcessResult<string, BiometricRegisterResult>> DoFidoRegistration(
+            IBiometricAuthKey key,
+            IBiometricAuthSigner authSigner,
+            string accessToken)
+        {
+            var keyId = GenerateKeyId();
+            var fidoKey = new FidoKey(keyId, key, authSigner);
+            var result = await _fidoService.Register(fidoKey, accessToken).ResumeOnThreadPool();
+            return result.Accept(new FidoRegisterResultVisitor(keyId));
+        }
+
+        private static async Task<ProcessResult<IBiometricAuthSigner, BiometricRegisterResult>> VerifyUser(IBiometricAuthKey key)
+        {
+            var verifyResult = await key.VerifyUser("To register with NHS login").ResumeOnThreadPool();
+
+            var verifyUserResultVisitor = new RegisterVerifyUserResultVisitor();
+            return verifyResult.Accept(verifyUserResultVisitor);
         }
 
         private async Task DeleteAuthKey()
@@ -93,65 +122,40 @@ namespace NHSOnline.App.Services.FIDO
             }
         }
 
-        private sealed class RegisterVerifyUserResultVisitor : IBiometricAuthVerifyUserResultVisitor<Task<BiometricRegisterResult>>
+        private sealed class RegisterVerifyUserResultVisitor : IBiometricAuthVerifyUserResultVisitor<ProcessResult<IBiometricAuthSigner, BiometricRegisterResult>>
         {
-            private readonly IUserPreferencesService _preferencesService;
-            private readonly IFidoService _fidoService;
-            private readonly IBiometricAuthKey _key;
-            private readonly string _accessToken;
-
-            public RegisterVerifyUserResultVisitor(
-                IUserPreferencesService preferencesService,
-                IFidoService fidoService,
-                IBiometricAuthKey key,
-                string accessToken)
+            public ProcessResult<IBiometricAuthSigner, BiometricRegisterResult> Visit(BiometricAuthVerifyUserResult.Authorised authorised)
             {
-                _preferencesService = preferencesService;
-                _fidoService = fidoService;
-                _key = key;
-                _accessToken = accessToken;
+                return ProcessResult<IBiometricAuthSigner, BiometricRegisterResult>.FromTResult(authorised.Signer);
             }
 
-            public async Task<BiometricRegisterResult> Visit(BiometricAuthVerifyUserResult.Authorised authorised)
+            public ProcessResult<IBiometricAuthSigner, BiometricRegisterResult> Visit(BiometricAuthVerifyUserResult.Cancelled cancelled)
             {
-                var keyId = GenerateKeyId();
-
-                var fidoKey = new FidoKey(keyId, _key, authorised.Signer);
-                var result = await _fidoService.Register(fidoKey, _accessToken).ResumeOnThreadPool();
-                return result.Accept(new FidoRegisterResultVisitor(_preferencesService, keyId));
+                return BiometricRegisterResult.Cancelled();
             }
 
-            public Task<BiometricRegisterResult> Visit(BiometricAuthVerifyUserResult.Cancelled cancelled)
+            public ProcessResult<IBiometricAuthSigner, BiometricRegisterResult> Visit(BiometricAuthVerifyUserResult.Failed failed)
             {
-                return Task.FromResult(BiometricRegisterResult.Cancelled());
-            }
-
-            public Task<BiometricRegisterResult> Visit(BiometricAuthVerifyUserResult.Failed failed)
-            {
-                return Task.FromResult(BiometricRegisterResult.Failed(BiometricErrorCode.CannotChangeBiometrics));
+                return BiometricRegisterResult.Failed(BiometricErrorCode.CannotChangeBiometrics);
             }
         }
 
-        private sealed class FidoRegisterResultVisitor : IFidoRegisterResultVisitor<BiometricRegisterResult>
+        private sealed class FidoRegisterResultVisitor : IFidoRegisterResultVisitor<ProcessResult<string, BiometricRegisterResult>>
         {
-            private readonly IUserPreferencesService _preferencesService;
             private readonly string _keyId;
 
             public FidoRegisterResultVisitor(
-                IUserPreferencesService preferencesService,
                 string keyId)
             {
-                _preferencesService = preferencesService;
                 _keyId = keyId;
             }
 
-            public BiometricRegisterResult Visit(FidoRegisterResult.Registered registered)
+            public ProcessResult<string, BiometricRegisterResult> Visit(FidoRegisterResult.Registered registered)
             {
-                _preferencesService.BiometricsKeyId = _keyId;
-                return BiometricRegisterResult.Success();
+                return _keyId;
             }
 
-            public BiometricRegisterResult Visit(FidoRegisterResult.Failed failed)
+            public ProcessResult<string, BiometricRegisterResult> Visit(FidoRegisterResult.Failed failed)
             {
                 return BiometricRegisterResult.Failed(BiometricErrorCode.CannotChangeBiometrics);
             }
