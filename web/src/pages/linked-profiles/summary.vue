@@ -13,7 +13,8 @@
             <li :id="item.id">
               <Green-Tick v-if="item.canDo" />
               <Red-Cross v-else />
-              {{ $t(item.text) }}
+              <p v-if="item.canDo">{{ $t('profiles.youCanLabel') }} {{ $t(item.text) }}</p>
+              <p v-else>{{ $t('profiles.youCannotLabel') }} {{ $t(item.text) }}</p>
             </li>
           </ul>
         </div>
