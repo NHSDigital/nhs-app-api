@@ -60,3 +60,5 @@ services:
           - engage.stubs.local.bitraft.io
           - gncr.stubs.local.bitraft.io
           - substrakt.stubs.local.bitraft.io
+          - nhsd.stubs.local.bitraft.io
+          - netcompany.stubs.local.bitraft.io

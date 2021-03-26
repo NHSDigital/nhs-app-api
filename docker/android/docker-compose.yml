@@ -27,4 +27,6 @@ services:
         -A /pkb.stubs.local.bitraft.io/10.0.2.2 \
         -A /engage.stubs.local.bitraft.io/10.0.2.2 \
         -A /gncr.stubs.local.bitraft.io/10.0.2.2 \
-        -A /substrakt.stubs.local.bitraft.io/10.0.2.2
+        -A /substrakt.stubs.local.bitraft.io/10.0.2.2 \
+        -A /nhsd.stubs.local.bitraft.io/10.0.2.2 \
+        -A /netcompany.stubs.local.bitraft.io/10.0.2.2
