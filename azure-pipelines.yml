@@ -354,7 +354,7 @@ stages:
       jobs:
         - template: .azuredevops/templates/integration-tests-xamarin-job.yml
 
-  - ${{ if and(or(and(eq(variables['native.xamarin.distribute'], 'true'), eq(variables['native.xamarin.target'], 'Staging')), eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')), eq(variables['int.tests.run.native.xamarin'], 'true')) }}:
+  - ${{ if and(eq(variables['native.xamarin.distribute'], 'true'), eq(variables['native.xamarin.target'], 'Staging'), eq(variables['int.tests.run.native.xamarin'], 'true'), or(eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))) }}:
     - stage: xamarin_upload_ipa_job
       displayName: Xamarin Distribute Staging Apps
       dependsOn:
