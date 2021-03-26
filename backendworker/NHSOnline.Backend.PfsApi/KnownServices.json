@@ -495,6 +495,18 @@
       "requiresAssertedLoginIdentity": false,
       "validateSession": true,
       "url": "https://vaccine-status-dev-uks.azurewebsites.net"
-    }
+    },
+    "netCompany": {
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true,
+      "url": "https://storsitstatic.z33.web.core.windows.net"
+    } 
   }
 }

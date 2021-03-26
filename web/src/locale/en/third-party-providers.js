@@ -122,6 +122,38 @@ export default {
       },
     ],
   },
+  netCompany: {
+    serviceId: 'netCompany',
+    providerName: 'Netcompany',
+    jumpOffs: [
+      {
+        id: 'vaccineRecord',
+        jumpOffContent: {
+          headerText: 'NetCompany jump-off',
+          description: 'DESCRIPTION TEXT',
+        },
+        thirdPartyWarning: {
+          featureName: 'FEATURE NAME',
+          servicePurchaser: 'SERVICE PURCHASER',
+          serviceType: 'SERVICE TYPE',
+          serviceTypePlural: 'SERVICE TYPES',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+    ],
+  },
+  nhsd: {
+    serviceId: 'nhsd',
+    providerName: 'NHS Digital',
+    jumpOffs: [
+      {
+        id: 'vaccineRecord',
+        jumpOffContent: {
+          headerText: 'Check your coronavirus vaccine record',
+        },
+      },
+    ],
+  },
   pkb: {
     serviceId: 'pkb',
     providerName: 'Patients Know Best',
@@ -450,16 +482,5 @@ export default {
       },
     ],
   },
-  nhsd: {
-    serviceId: 'nhsd',
-    providerName: 'NHS Digital',
-    jumpOffs: [
-      {
-        id: 'vaccineRecord',
-        jumpOffContent: {
-          headerText: 'Check your coronavirus vaccine record',
-        },
-      },
-    ],
-  },
+
 };

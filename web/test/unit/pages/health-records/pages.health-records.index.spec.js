@@ -16,7 +16,6 @@ describe('healthRecords', () => {
     integrationEnabled = true,
     isProxying = false,
     isNativeApp = false,
-    isProofLevel9 = true,
   } = {}) => {
     $router = createRouter();
     $store = createStore({
@@ -30,7 +29,6 @@ describe('healthRecords', () => {
         }),
         'serviceJourneyRules/silverIntegrationEnabled': () => (integrationEnabled),
         'session/isProxying': isProxying,
-        'session/isProofLevel9': isProofLevel9,
       },
     });
     return mount(HealthRecords, { $store, $router });
@@ -57,17 +55,6 @@ describe('healthRecords', () => {
       it('will include the ndop link', () => {
         expect(wrapper.find('#btn_data_sharing').exists()).toBe(true);
       });
-
-      describe('Vaccine Record link', () => {
-        each([
-          ['shown', 'defined', true, true],
-          ['hidden', 'not defined', false, false],
-        ])
-          .it('will be %s when a vaccine record provider is %s', (_, __, integrationEnabled, isVisible) => {
-            wrapper = mountAs({ integrationEnabled });
-            expect(wrapper.find('#btn_nhsd_vaccine_record').exists()).toBe(isVisible);
-          });
-      });
     });
 
     describe('when proxying', () => {
@@ -80,30 +67,6 @@ describe('healthRecords', () => {
       it('will not include the ndop link', () => {
         expect(wrapper.find('#btn_data_sharing').exists()).toBe(false);
       });
-
-      describe('Vaccine Record link', () => {
-        each([
-          ['hidden', 'defined', true, false],
-          ['hidden', 'not defined', false, false],
-        ])
-          .it('will be %s when a vaccine record provider is %s', (_, __, integrationEnabled, isVisible) => {
-            wrapper = mountAs({ isProxying: true, integrationEnabled });
-            expect(wrapper.find('#btn_nhsd_vaccine_record').exists()).toBe(isVisible);
-          });
-      });
-    });
-  });
-
-  describe('P5', () => {
-    describe('Vaccine Record link', () => {
-      each([
-        ['hidden', 'defined', true, false],
-        ['hidden', 'not defined', false, false],
-      ])
-        .it('will be %s when a vaccine record provider is %s', (_, __, integrationEnabled, isVisible) => {
-          wrapper = mountAs({ isProofLevel9: false, integrationEnabled });
-          expect(wrapper.find('#btn_nhsd_vaccine_record').exists()).toBe(isVisible);
-        });
     });
   });
 
@@ -184,6 +147,12 @@ describe('healthRecords', () => {
       ['gncr', 'correspondence', true, false, true],
       ['gncr', 'correspondence', true, true, false],
       ['gncr', 'correspondence', false, false, false],
+      ['nhsd', 'Vaccine Record', true, false, true],
+      ['nhsd', 'Vaccine Record', true, true, false],
+      ['nhsd', 'Vaccine Record', false, false, false],
+      ['netCompany', 'Vaccine Record', true, false, true],
+      ['netCompany', 'Vaccine Record', true, true, false],
+      ['netCompany', 'Vaccine Record', false, false, false],
     ]).describe('%s %s enabled is %s, proxy is %s', (
       provider, linkType, integrationEnabled, isProxying, expectedResult,
     ) => {
@@ -212,6 +181,12 @@ describe('healthRecords', () => {
             break;
           case 'gncrMessages':
             linkElement = '#btn_gncr_messages_and_consultations';
+            break;
+          case 'nhsdVaccineRecord':
+            linkElement = '#btn_nhsd_vaccine_record';
+            break;
+          case 'netCompanyVaccineRecord':
+            linkElement = '#btn_netCompany_vaccine_record';
             break;
           default:
             break;

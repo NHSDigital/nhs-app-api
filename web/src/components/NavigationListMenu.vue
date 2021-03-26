@@ -5,10 +5,15 @@
                            :widen-on-tablet="true"
                            :text="$t('navigation.popularServices')"/>
     <menu-item-list data-sid="navigation-list-menu" class="nhsuk-u-margin-top-0">
-      <third-party-jump-off-button v-if="showVaccineRecord"
+      <third-party-jump-off-button v-if="showNhsdVaccineRecord"
                                    id="btn_nhsd_vaccine_record"
                                    provider-id="nhsd"
                                    :provider-configuration="thirdPartyProvider.nhsd.
+                                     vaccineRecord" />
+      <third-party-jump-off-button v-if="showNetCompanyVaccineRecord"
+                                   id="btn_netCompany_vaccine_record"
+                                   provider-id="netCompany"
+                                   :provider-configuration="thirdPartyProvider.netCompany.
                                      vaccineRecord" />
       <menu-item v-if="gpMessagingAvailable"
                  id="btn_messages"
@@ -94,7 +99,17 @@ export default {
     };
   },
   computed: {
-    hasVaccineRecord() {
+    hasNetCompanyVaccineRecord() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'netCompany',
+          serviceType: 'vaccineRecord',
+        },
+      });
+    },
+    hasNhsdVaccineRecord() {
       return sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',
@@ -118,8 +133,11 @@ export default {
     supportsLinkedProfiles() {
       return this.$store.state.serviceJourneyRules.rules.supportsLinkedProfiles;
     },
-    showVaccineRecord() {
-      return this.hasVaccineRecord && !this.isProxying && this.isProofLevel9;
+    showNhsdVaccineRecord() {
+      return this.hasNhsdVaccineRecord && !this.isProxying && this.isProofLevel9;
+    },
+    showNetCompanyVaccineRecord() {
+      return this.hasNetCompanyVaccineRecord && !this.isProxying && this.isProofLevel9;
     },
   },
   created() {

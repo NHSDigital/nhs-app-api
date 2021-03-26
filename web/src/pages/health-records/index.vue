@@ -15,11 +15,16 @@
                        'myRecord.hub.viewAllergiesMedicinesAndMore')" />
 
           <div v-if="!isProxying">
-            <third-party-jump-off-button v-if="showVaccineRecord"
+            <third-party-jump-off-button v-if="showNhsdVaccineRecord"
                                          id="btn_nhsd_vaccine_record"
                                          provider-id="nhsd"
-                                         :provider-configuration="thirdPartyProvider.nhsd
-                                           .vaccineRecord" />
+                                         :provider-configuration="thirdPartyProvider
+                                           .nhsd.vaccineRecord" />
+            <third-party-jump-off-button v-if="showNetCompanyVaccineRecord"
+                                         id="btn_netCompany_vaccine_record"
+                                         provider-id="netCompany"
+                                         :provider-configuration="thirdPartyProvider
+                                           .netCompany.vaccineRecord" />
             <third-party-jump-off-button v-if="showPkbTestResults"
                                          id="btn_pkb_test_results"
                                          provider-id="pkb"
@@ -206,7 +211,7 @@ export default {
           serviceType: 'messages',
         },
       }),
-      hasVaccineRecord: sjrIf({
+      showNhsdVaccineRecord: sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',
         context: {
@@ -214,17 +219,17 @@ export default {
           serviceType: 'vaccineRecord',
         },
       }),
+      showNetCompanyVaccineRecord: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'netCompany',
+          serviceType: 'vaccineRecord',
+        },
+      }),
       isProxying: this.$store.getters['session/isProxying'],
       thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
     };
-  },
-  computed: {
-    isProofLevel9() {
-      return this.$store.getters['session/isProofLevel9'];
-    },
-    showVaccineRecord() {
-      return this.hasVaccineRecord && this.isProofLevel9;
-    },
   },
   updated() {
     window.scrollTo(0, 0);
