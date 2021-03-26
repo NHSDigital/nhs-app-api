@@ -241,6 +241,20 @@ export default {
         },
       },
       {
+        id: 'recordSharing',
+        jumpOffContent: {
+          headerText: 'Record sharing',
+          descriptionText: 'Choose and manage information you share with your health teams',
+        },
+        thirdPartyWarning: {
+          featureName: 'Record Sharing',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
         id: 'testResults',
         jumpOffContent: {
           headerText: 'Test results',
@@ -308,6 +322,21 @@ export default {
         thirdPartyWarning: {
           brandName: 'Care Information Exchange (Patients Know Best)',
           featureName: 'Consultations, events and messages',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
+        id: 'recordSharingCie',
+        jumpOffContent: {
+          headerText: 'Record sharing',
+          descriptionText: 'Choose and manage information you share with your health teams',
+        },
+        thirdPartyWarning: {
+          brandName: 'Care Information Exchange powered by Patients Know Best',
+          featureName: 'Record Sharing',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
@@ -416,6 +445,20 @@ export default {
         },
       },
       {
+        id: 'recordSharingPkbSecondaryCare',
+        jumpOffContent: {
+          headerText: 'Record sharing',
+          descriptionText: 'Choose and manage information you share with your health teams',
+        },
+        thirdPartyWarning: {
+          featureName: 'Record Sharing',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
         id: 'appointmentsPkbMyCareView',
         jumpOffContent: {
           headerText: 'View appointments',
@@ -469,6 +512,21 @@ export default {
         thirdPartyWarning: {
           brandName: 'MyCareView powered by Patients Know Best',
           featureName: 'Hospital and other medicines',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
+        id: 'recordSharingPkbMyCareView',
+        jumpOffContent: {
+          headerText: 'Record sharing',
+          descriptionText: 'Choose and manage information you share with your health teams',
+        },
+        thirdPartyWarning: {
+          brandName: 'MyCareView powered by Patients Know Best',
+          featureName: 'Record Sharing',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',

@@ -93,6 +93,16 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_NONE)
     }
 
+    @Given("^I am a user who can view Record Sharing from Care Information Exchange$")
+    fun iAmAUserWhoCanViewRecordSharingFromCareInformationExchange(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_CIE)
+    }
+
+    @Given("^I am a user who cannot view Record Sharing from Care Information Exchange$")
+    fun iAmAUserWhoCannotViewRecordSharingFromCareInformationExchange(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_NONE)
+    }
+
     @Given("^I am a user who can view Shared Health Links from Care Information Exchange$")
     fun iAmAUserWhoCanViewSharedHealthLinksFromCareInformationExchange(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_LIBRARY_CIE)
@@ -128,6 +138,11 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
         MockingClient.instance.forCIE.mock { CIERequestBuilder().messagesRequest().respondWithPage() }
     }
 
+    @Given("^CIE responds to requests for record sharing$")
+    fun cieRespondsToRequestsForRecordSharing() {
+        MockingClient.instance.forCIE.mock { CIERequestBuilder().recordSharingRequest().respondWithPage() }
+    }
+
     @Given("^CIE responds to requests for shared links$")
     fun cieRespondsToRequestsForSharedLinks() {
         MockingClient.instance.forCIE.mock { CIERequestBuilder().sharedLinksRequest().respondWithPage() }
@@ -141,6 +156,11 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
     @Then("^the link to CIE Track your health is not available on the health record hub page$")
     fun theLinkToCieHealthTrackerIsNotAvailableOnTheHealthRecordHubPage() {
         medicalRecordHubPage.getHeaderElement("Track your health").assertElementNotPresent()
+    }
+
+    @Then("^the link to CIE record sharing is not available on the health record hub page$")
+    fun theLinkToCieRecordSharingIsNotAvailableOnTheHealthRecordHubPage() {
+        medicalRecordHubPage.getHeaderElement("Record Sharing").assertElementNotPresent()
     }
 
     @Then("^the link to CIE shared health links is not available on the health record hub page$")
@@ -194,6 +214,14 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
             "Test results\nThis service is provided by Care Information Exchange (Patients Know Best)",
             "Your GP surgery or hospital has chosen this personal health record service provider.",
             "Find out more about personal health record services")
+    }
+
+    @Then("the record sharing warning on the page explains the service is from Care Information Exchange$")
+    fun assertRecordSharingWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+                "Record Sharing\nThis service is provided by Care Information Exchange powered by Patients Know Best",
+                "Your GP surgery or hospital has chosen this personal health record service provider.",
+                "Find out more about personal health record services")
     }
 
     @Then("the shared health warning on the page explains the service is from Care Information Exchange$")

@@ -12,6 +12,8 @@ journeys:
       - pkbSecondaryCare
     messages:
       - pkbSecondaryCare
+    recordSharing:
+      - pkbSecondaryCare
     secondaryAppointments:
       - pkbSecondaryCare
     testResults: []

@@ -150,6 +150,18 @@ describe('healthRecords', () => {
       ['myCareView', 'secondary shared links', true, false, true],
       ['myCareView', 'secondary shared links', true, true, false],
       ['myCareView', 'secondary shared links', false, false, false],
+      ['pkb', 'Record Sharing', true, false, true],
+      ['pkb', 'Record Sharing', true, true, false],
+      ['pkb', 'Record Sharing', false, false, false],
+      ['pkbCie', 'Record Sharing', true, false, true],
+      ['pkbCie', 'Record Sharing', true, true, false],
+      ['pkbCie', 'Record Sharing', false, false, false],
+      ['pkbSecondaryCare', 'Record Sharing', true, false, true],
+      ['pkbSecondaryCare', 'Record Sharing', true, true, false],
+      ['pkbSecondaryCare', 'Record Sharing', false, false, false],
+      ['myCareView', 'Record Sharing', true, false, true],
+      ['myCareView', 'Record Sharing', true, true, false],
+      ['myCareView', 'Record Sharing', false, false, false],
       ['gncr', 'correspondence', true, false, true],
       ['gncr', 'correspondence', true, true, false],
       ['gncr', 'correspondence', false, false, false],
@@ -199,6 +211,18 @@ describe('healthRecords', () => {
             break;
           case 'netCompanyVaccineRecord':
             linkElement = '#btn_netCompany_vaccine_record';
+            break;
+          case 'pkbRecordSharing':
+            linkElement = '#btn_pkb_record_sharing';
+            break;
+          case 'pkbCieRecordSharing':
+            linkElement = '#btn_pkb_cie_record_sharing';
+            break;
+          case 'pkbSecondaryCareRecordSharing':
+            linkElement = '#btn_pkb_secondary_care_record_sharing';
+            break;
+          case 'myCareViewRecordSharing':
+            linkElement = '#btn_pkb_my_care_view_record_sharing';
             break;
           default:
             break;

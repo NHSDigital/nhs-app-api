@@ -39,6 +39,12 @@ class CIERequestBuilder(queryStringEntries: HashMap<String, String> = hashMapOf(
                     "brand" to "cie")
     )
 
+    fun recordSharingRequest() = CIERequestBuilder(
+            hashMapOf("phrPath" to "/patient/myConsentTeam.action?tab=invitations",
+                    "subTab" to "myClinicians",
+                    "brand" to "cie")
+    )
+
     fun sharedLinksRequest() = CIERequestBuilder(
             hashMapOf("phrPath" to "/library/manageLibrary.action",
                     "brand" to "cie")

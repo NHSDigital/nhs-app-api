@@ -9,4 +9,5 @@ journeys:
     libraries: []
     medicines: []
     messages: []
+    recordSharing: []
     secondaryAppointments: []

@@ -12,5 +12,7 @@ journeys:
       - pkbMyCareView
     messages:
       - pkbMyCareView
+    recordSharing:
+      - pkbMyCareView
     secondaryAppointments:
       - pkbMyCareView

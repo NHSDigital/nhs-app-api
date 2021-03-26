@@ -47,6 +47,16 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS)
     }
 
+    @Given("^I am a user who can view Record Sharing from PKB My Care View$")
+    fun iAmAUserWhoCanViewRecordSharingFromPkbMyCareView(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_PKB_MY_CARE_VIEW)
+    }
+
+    @Given("^I am a user who cannot view Record Sharing from PKB My Care View$")
+    fun iAmAUserWhoCannotViewRecordSharingFromPkbMyCareView(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_NONE)
+    }
+
     @Given("^I am a user who can view Shared Links from PKB My Care View$")
     fun iAmAUserWhoCanViewSharedLinksFromPkbMyCareView(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB_MY_CARE_VIEW)
@@ -82,9 +92,21 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
         MockingClient.instance.forMyCareView.mock { MyCareViewRequestBuilder().medicinesRequest().respondWithPage() }
     }
 
+    @Given("^My Care View responds to requests for record sharing$")
+    fun myCareViewRespondsToRequestsForRecordSharing() {
+        MockingClient.instance.forMyCareView.mock {
+            MyCareViewRequestBuilder().recordSharingRequest().respondWithPage()
+        }
+    }
+
     @Given("^My Care View responds to requests for shared links$")
     fun myCareViewRespondsToRequestsForSharedLinks() {
         MockingClient.instance.forMyCareView.mock { MyCareViewRequestBuilder().sharedLinksRequest().respondWithPage() }
+    }
+
+    @Then("^the link to PKB My Care View record sharing is not available on the Health Records Hub$")
+    fun thePKBMyCareViewRecordSharingLinkIsNotAvailableOnTheHealthRecordsHub() {
+        medicalRecordHubPage.getHeaderElement("Record Sharing").assertElementNotPresent()
     }
 
     @Then("^the link to PKB My Care View shared links is not available on the Health Records Hub$")
@@ -145,6 +167,14 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
         redirector.interruptionCard.assertContent(
                 "Hospital and other medicines\n" +
                         "This service is provided by MyCareView powered by Patients Know Best",
+                "Your GP surgery or hospital has chosen this personal health record service provider.",
+                "Find out more about personal health record services")
+    }
+
+    @Then("the record sharing warning on the page explains the service is from PKB My Care View$")
+    fun assertRecordSharingWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+                "Record Sharing\nThis service is provided by MyCareView powered by Patients Know Best",
                 "Your GP surgery or hospital has chosen this personal health record service provider.",
                 "Find out more about personal health record services")
     }

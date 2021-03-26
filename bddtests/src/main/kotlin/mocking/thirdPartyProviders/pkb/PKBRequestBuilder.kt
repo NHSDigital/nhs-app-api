@@ -34,6 +34,11 @@ class PKBRequestBuilder(queryStringEntries: HashMap<String, String> = hashMapOf(
             hashMapOf("phrPath" to "/auth/getInbox.action?tab=messages")
     )
 
+    fun recordSharingRequest() = PKBRequestBuilder(
+            hashMapOf("phrPath" to "/patient/myConsentTeam.action?tab=invitations",
+                    "subTab" to "myClinicians")
+    )
+
     fun sharedLinksRequest() = PKBRequestBuilder(
             hashMapOf("phrPath" to "/library/manageLibrary.action")
     )

@@ -99,6 +99,16 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB, IdentityProofingLevel.P5)
     }
 
+    @Given("^I am a user who can view Record Sharing from Patients Know Best$")
+    fun iAmAUserWhoCanViewRecordSharingFromPatientsKnowBest(){
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_PKB)
+    }
+
+    @Given("^I am a user who cannot view Record Sharing from Patients Know Best$")
+    fun iAmAUserWhoCannotViewRecordSharingFromPatientsKnowBest(){
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_NONE)
+    }
+
     @Given("^I am a user who can view Shared Links from Patients Know Best$")
     fun iAmAUserWhoCanViewSharedLinksFromPatientsKnowBest(){
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB)
@@ -134,6 +144,11 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
         MockingClient.instance.forPKB.mock { PKBRequestBuilder().messagesRequest().respondWithPage() }
     }
 
+    @Given("^PKB responds to requests for record sharing$")
+    fun pkbRespondsToRequestsForRecordSharing() {
+        MockingClient.instance.forPKB.mock { PKBRequestBuilder().recordSharingRequest().respondWithPage() }
+    }
+
     @Given("^PKB responds to requests for shared links$")
     fun pkbRespondsToRequestsForSharedLinks() {
         MockingClient.instance.forPKB.mock { PKBRequestBuilder().sharedLinksRequest().respondWithPage() }
@@ -147,6 +162,11 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
     @Then("^the link to PKB Track your health is not available on the health record hub page$")
     fun theLinkToPkbHealthTrackerIsNotAvailableOnTheHealthRecordHubPage() {
         medicalRecordHubPage.getHeaderElement("Track your health").assertElementNotPresent()
+    }
+
+    @Then("^the link to PKB record sharing is not available on the health record hub page$")
+    fun theLinkToPkbRecordSharingIsNotAvailableOnTheHealthRecordHubPage() {
+        medicalRecordHubPage.getHeaderElement("Record Sharing").assertElementNotPresent()
     }
 
     @Then("^the link to PKB shared links is not available on the health record hub page$")
@@ -183,6 +203,14 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
             "Hospital and other prescriptions\nThis service is provided by Patients Know Best",
             "Your GP surgery or hospital has chosen this personal health record service provider.",
             "Find out more about personal health record services")
+    }
+
+    @Then("the record sharing warning on the page explains the service is from Patients Know Best$")
+    fun assertRecordSharingWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+                "Record Sharing\nThis service is provided by Patients Know Best",
+                "Your GP surgery or hospital has chosen this personal health record service provider.",
+                "Find out more about personal health record services")
     }
 
     @Then("the shared links warning on the page explains the service is from Patients Know Best$")

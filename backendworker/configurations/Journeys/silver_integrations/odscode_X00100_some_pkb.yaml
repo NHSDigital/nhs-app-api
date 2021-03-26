@@ -12,5 +12,7 @@ journeys:
     messages:
       - pkb
       - testSilverThirdPartyProvider
+    recordSharing:
+      - pkb
     secondaryAppointments:
       - pkb

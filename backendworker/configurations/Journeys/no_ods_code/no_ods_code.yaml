@@ -24,9 +24,10 @@ journeys:
     libraries: []
     medicines: []
     messages: []
+    recordSharing: []
     secondaryAppointments: []
   documents: false
-  im1Messaging: 
+  im1Messaging:
     isEnabled: false
     canDeleteMessages: false
     canUpdateReadStatus: false

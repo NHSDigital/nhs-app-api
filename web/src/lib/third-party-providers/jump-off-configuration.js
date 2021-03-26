@@ -46,6 +46,12 @@ const thirdPartyProvider = {
       provider: 'pkb',
       serviceType: 'medicines',
     },
+    recordSharing: {
+      jumpOffId: 'recordSharing',
+      redirectPath: '/nhs-login/login?phrPath=/patient/myConsentTeam.action?tab=invitations&subTab=myClinicians',
+      provider: 'pkb',
+      serviceType: 'recordSharing',
+    },
     testResults: {
       jumpOffId: 'testResults',
       redirectPath: '/nhs-login/login?phrPath=/test/myTests.action',
@@ -88,6 +94,12 @@ const thirdPartyProvider = {
       provider: 'pkbCie',
       serviceType: 'medicines',
     },
+    recordSharingCie: {
+      jumpOffId: 'recordSharingCie',
+      redirectPath: '/nhs-login/login?phrPath=/patient/myConsentTeam.action?tab=invitations&subTab=myClinicians&brand=cie',
+      provider: 'pkbCie',
+      serviceType: 'recordSharing',
+    },
     testResultsCie: {
       jumpOffId: 'testResultsCie',
       redirectPath: '/nhs-login/login?phrPath=/test/myTests.action&brand=cie',
@@ -118,6 +130,12 @@ const thirdPartyProvider = {
       provider: 'pkbSecondaryCare',
       serviceType: 'medicines',
     },
+    recordSharingPkbSecondaryCare: {
+      jumpOffId: 'recordSharingPkbSecondaryCare',
+      redirectPath: '/nhs-login/login?phrPath=/patient/myConsentTeam.action?tab=invitations&subTab=myClinicians&brand=pkbSecondaryCare',
+      provider: 'pkbSecondaryCare',
+      serviceType: 'recordSharing',
+    },
     appointmentsPkbMyCareView: {
       jumpOffId: 'appointmentsPkbMyCareView',
       redirectPath: '/nhs-login/login?phrPath=/diary/listAppointments.action&brand=pkbMyCareView',
@@ -141,6 +159,12 @@ const thirdPartyProvider = {
       redirectPath: '/nhs-login/login?phrPath=/auth/manageMedications.action?tab=treatments&brand=pkbMyCareView',
       provider: 'pkbMyCareView',
       serviceType: 'medicines',
+    },
+    recordSharingPkbMyCareView: {
+      jumpOffId: 'recordSharingPkbMyCareView',
+      redirectPath: '/nhs-login/login?phrPath=/patient/myConsentTeam.action?tab=invitations&subTab=myClinicians&brand=pkbMyCareView',
+      provider: 'pkbMyCareView',
+      serviceType: 'recordSharing',
     },
   },
   substraktPatientPack: {

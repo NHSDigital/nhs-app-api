@@ -120,6 +120,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                     "journeys.SilverIntegrations.Messages")
                 .Add(journeys => journeys.SilverIntegrations?.Participation != null,
                     "journeys.SilverIntegrations.Participation")
+                .Add(journeys => journeys.SilverIntegrations?.RecordSharing != null,
+                    "journeys.SilverIntegrations.RecordSharing")
                 .Add(journeys => journeys.SilverIntegrations?.SecondaryAppointments != null,
                     "journeys.SilverIntegrations.SecondaryAppointments")
                 .Add(journeys => journeys.SilverIntegrations?.TestResults != null,

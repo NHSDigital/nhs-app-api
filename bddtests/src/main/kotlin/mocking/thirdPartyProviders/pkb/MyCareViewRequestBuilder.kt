@@ -29,6 +29,12 @@ class MyCareViewRequestBuilder(queryStringEntries: HashMap<String, String> = has
                     "brand" to "pkbMyCareView")
     )
 
+    fun recordSharingRequest() = MyCareViewRequestBuilder(
+            hashMapOf("phrPath" to "/patient/myConsentTeam.action?tab=invitations",
+                    "subTab" to "myClinicians",
+                    "brand" to "pkbMyCareView")
+    )
+
     fun sharedLinksRequest() = MyCareViewRequestBuilder(
             hashMapOf("phrPath" to "/library/manageLibrary.action",
                     "brand" to "pkbMyCareView")

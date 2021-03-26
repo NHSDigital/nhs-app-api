@@ -21,6 +21,8 @@ journeys:
       - pkbCie
     messages:
       - pkbCie
+    recordSharing:
+      - pkbCie
     secondaryAppointments:
       - pkbCie
     testResults:

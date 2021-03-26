@@ -29,6 +29,12 @@ class SecondaryCareRequestBuilder(queryStringEntries: HashMap<String, String> = 
                     "brand" to "pkbSecondaryCare")
     )
 
+    fun recordSharingRequest() = SecondaryCareRequestBuilder(
+            hashMapOf("phrPath" to "/patient/myConsentTeam.action?tab=invitations",
+                    "subTab" to "myClinicians",
+                    "brand" to "pkbSecondaryCare")
+    )
+
     fun sharedLinksRequest() = SecondaryCareRequestBuilder(
             hashMapOf("phrPath" to "/library/manageLibrary.action",
                     "brand" to "pkbSecondaryCare")

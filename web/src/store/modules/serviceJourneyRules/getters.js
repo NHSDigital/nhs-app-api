@@ -23,7 +23,6 @@ const {
   SILVER_INTEGRATION_ENABLED,
   SILVER_INTEGRATION_APPOINTMENTS_ENABLED,
   SILVER_INTEGRATION_MESSAGES_ENABLED,
-  MY_RECORD_HUB_ENABLED,
   DOCUMENTS_ENABLED,
   IM1MESSAGING_ENABLED,
   DELETE_GP_MESSAGES_ENABLED,
@@ -104,11 +103,6 @@ export default {
   },
   [SILVER_INTEGRATION_MESSAGES_ENABLED](state) {
     return get('rules.silverIntegrations.messages.length')(state) > 0;
-  },
-  [MY_RECORD_HUB_ENABLED](state) {
-    return get('rules.silverIntegrations.carePlans.length')(state) > 0 ||
-      get('rules.silverIntegrations.healthTrackers.length')(state) > 0 ||
-      get('rules.silverIntegrations.testResults.length')(state) > 0;
   },
   [DOCUMENTS_ENABLED](state) {
     return get('rules.documents')(state);

@@ -16,6 +16,8 @@ journeys:
     messages:
       - pkbCie
       - testSilverThirdPartyProvider
+    recordSharing:
+      - pkbCie
     secondaryAppointments:
       - ers
       - pkbCie

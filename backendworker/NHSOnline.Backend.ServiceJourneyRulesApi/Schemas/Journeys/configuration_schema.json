@@ -188,6 +188,13 @@
             "enum": [ "pkb", "pkbCie", "pkbMyCareView" , "pkbSecondaryCare" , "testSilverThirdPartyProvider", "engage" , "gncr", "substraktPatientPack"]
           }
         },
+        "recordSharing": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [ "pkb", "pkbCie", "pkbMyCareView" , "pkbSecondaryCare"]
+          }
+        },
         "secondaryAppointments": {
           "type": "array",
           "items": {

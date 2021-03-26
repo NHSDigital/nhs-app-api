@@ -27,6 +27,7 @@ journeys:
     medicines: []
     messages: []
     participation: []
+    recordSharing: []
     secondaryAppointments: []
     testResults: []
     vaccineRecord: []

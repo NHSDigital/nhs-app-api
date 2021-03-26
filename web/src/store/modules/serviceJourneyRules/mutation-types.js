@@ -34,6 +34,7 @@ export const initialState = () => ({
       medicines: [],
       messages: [],
       participation: [],
+      recordSharing: [],
       secondaryAppointments: [],
       vaccineRecord: [],
     },

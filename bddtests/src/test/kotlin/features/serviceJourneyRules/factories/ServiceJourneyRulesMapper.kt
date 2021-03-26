@@ -28,6 +28,7 @@ class ServiceJourneyRulesMapper {
                                 SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB,
                                 SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB,
                                 SJRJourneyType.SILVER_INTEGRATION_MEDICINES_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_PKB,
                                 SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_PKB,
                                 SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_NONE,
                                 SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_ADMIN_NONE
@@ -49,6 +50,7 @@ class ServiceJourneyRulesMapper {
                                 SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_NONE,
                                 SJRJourneyType.SILVER_INTEGRATION_LIBRARY_NONE,
                                 SJRJourneyType.SILVER_INTEGRATION_MESSAGES_NONE,
+                                SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_NONE,
                                 SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_NONE,
                                 SJRJourneyType.SILVER_INTEGRATION_ACCOUNT_ADMIN_NONE,
                                 SJRJourneyType.SILVER_INTEGRATION_PARTICIPATION_NONE))
@@ -102,6 +104,7 @@ class ServiceJourneyRulesMapper {
                                 SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_PKB,
                                 SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB,
                                 SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_PKB,
                                 SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_TESTSILVERTHIRDPARTYPROVIDER,
                                 SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB))
                 .add(Supplier.EMIS, "B86013",
@@ -113,6 +116,7 @@ class ServiceJourneyRulesMapper {
                                 SJRJourneyType.SILVER_INTEGRATION_LIBRARY_CIE,
                                 SJRJourneyType.SILVER_INTEGRATION_MEDICINES_CIE,
                                 SJRJourneyType.SILVER_INTEGRATION_MESSAGES_CIE,
+                                SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_CIE,
                                 SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_CIE))
                 .add(Supplier.MICROTEST, "A21410",
                         EnumSet.of(
@@ -121,7 +125,8 @@ class ServiceJourneyRulesMapper {
                                 SJRJourneyType.SILVER_INTEGRATION_MEDICINES_PKB_SECONDARY_CARE,
                                 SJRJourneyType.SILVER_INTEGRATION_APPOINTMENTS_PKB_SECONDARY_CARE,
                                 SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB_SECONDARY_CARE,
-                                SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_SECONDARY_CARE))
+                                SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_SECONDARY_CARE,
+                                SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_PKB_SECONDARY_CARE))
                 .add(Supplier.EMIS, "A82010",
                         EnumSet.of(
                                 SJRJourneyType.SILVER_INTEGRATION_MESSAGES_SUBSTRAKT,
@@ -132,7 +137,8 @@ class ServiceJourneyRulesMapper {
                                 SJRJourneyType.SILVER_INTEGRATION_MEDICINES_PKB_MY_CARE_VIEW,
                                 SJRJourneyType.SILVER_INTEGRATION_APPOINTMENTS_PKB_MY_CARE_VIEW,
                                 SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB_MY_CARE_VIEW,
-                                SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_MY_CARE_VIEW))
+                                SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_MY_CARE_VIEW,
+                                SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_PKB_MY_CARE_VIEW))
 
         fun findPatientForConfiguration(gpSystem: Supplier?,
                                         journeyType: SJRJourneyType,

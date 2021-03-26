@@ -80,6 +80,27 @@
                                          provider-id="substraktPatientPack"
                                          :provider-configuration="thirdPartyProvider
                                            .substraktPatientPack.accountAdmin" />
+            <third-party-jump-off-button v-if="showPkbRecordSharing"
+                                         id="btn_pkb_record_sharing"
+                                         provider-id="pkb"
+                                         :provider-configuration="thirdPartyProvider
+                                           .pkb.recordSharing" />
+            <third-party-jump-off-button v-if="showPkbCieRecordSharing"
+                                         id="btn_pkb_cie_record_sharing"
+                                         provider-id="pkb"
+                                         :provider-configuration="thirdPartyProvider
+                                           .pkb.recordSharingCie" />
+            <third-party-jump-off-button v-if="showPkbSecondaryCareRecordSharing"
+                                         id="btn_pkb_secondary_care_record_sharing"
+                                         provider-id="pkb"
+                                         :provider-configuration="thirdPartyProvider
+                                           .pkb.recordSharingPkbSecondaryCare" />
+            <third-party-jump-off-button v-if="showPkbMyCareViewRecordSharing"
+                                         id="btn_pkb_my_care_view_record_sharing"
+                                         provider-id="pkb"
+                                         :provider-configuration="thirdPartyProvider
+                                           .pkb.recordSharingPkbMyCareView" />
+
             <third-party-jump-off-button
               v-if="showGncrMessages"
               id="btn_gncr_messages_and_consultations"
@@ -251,6 +272,38 @@ export default {
         context: {
           provider: 'netCompany',
           serviceType: 'vaccineRecord',
+        },
+      }),
+      showPkbRecordSharing: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkb',
+          serviceType: 'recordSharing',
+        },
+      }),
+      showPkbCieRecordSharing: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbCie',
+          serviceType: 'recordSharing',
+        },
+      }),
+      showPkbSecondaryCareRecordSharing: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbSecondaryCare',
+          serviceType: 'recordSharing',
+        },
+      }),
+      showPkbMyCareViewRecordSharing: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbMyCareView',
+          serviceType: 'recordSharing',
         },
       }),
       isProxying: this.$store.getters['session/isProxying'],

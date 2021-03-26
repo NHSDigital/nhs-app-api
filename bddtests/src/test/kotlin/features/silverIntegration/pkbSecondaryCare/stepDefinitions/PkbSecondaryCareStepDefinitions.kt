@@ -47,6 +47,16 @@ class PkbSecondaryCareStepDefinitions : HybridPageObject() {
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS)
     }
 
+    @Given("^I am a user who can view Record Sharing from PKB Secondary Care$")
+    fun iAmAUserWhoCanViewRecordSharingFromPkbSecondaryCare(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_PKB_SECONDARY_CARE)
+    }
+
+    @Given("^I am a user who cannot view Record Sharing from PKB Secondary Care$")
+    fun iAmAUserWhoCannotViewRecordSharingFromPkbSecondaryCare(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_NONE)
+    }
+
     @Given("^I am a user who can view Shared Links from PKB Secondary Care$")
     fun iAmAUserWhoCanViewSharedLinksFromPkbSecondaryCare(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB_SECONDARY_CARE)
@@ -94,10 +104,21 @@ class PkbSecondaryCareStepDefinitions : HybridPageObject() {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_SECONDARY_CARE, IdentityProofingLevel.P5)
     }
 
+    @Given("^Secondary Care responds to requests for record sharing$")
+    fun secondaryCareRespondsToRequestsForRecordSharing() {
+        MockingClient.instance.forMyCareView.mock {
+            SecondaryCareRequestBuilder().recordSharingRequest().respondWithPage() }
+    }
+
     @Given("^Secondary Care responds to requests for shared links$")
     fun secondaryCareRespondsToRequestsForSharedLinks() {
         MockingClient.instance.forMyCareView.mock {
             SecondaryCareRequestBuilder().sharedLinksRequest().respondWithPage() }
+    }
+
+    @Then("^the link to PKB Secondary Care record sharing is not available on the Health Records Hub$")
+    fun thePKBSecondaryCareRecordSharingLinkIsNotAvailableOnTheHealthRecordsHub() {
+        medicalRecordHubPage.getHeaderElement("Record SHaring").assertElementNotPresent()
     }
 
     @Then("^the link to PKB Secondary Care shared links is not available on the Health Records Hub$")
@@ -150,6 +171,14 @@ class PkbSecondaryCareStepDefinitions : HybridPageObject() {
     fun assertHospitalAndMedicinesWarningMessageContent() {
         redirector.interruptionCard.assertContent(
                 "Hospital and other medicines\nThis service is provided by Patients Know Best",
+                "Your GP surgery or hospital has chosen this personal health record service provider.",
+                "Find out more about personal health record services")
+    }
+
+    @Then("the record sharing warning on the page explains the service is from PKB Secondary Care$")
+    fun assertRecordSharingWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+                "Record Sharing\nThis service is provided by Patients Know Best",
                 "Your GP surgery or hospital has chosen this personal health record service provider.",
                 "Find out more about personal health record services")
     }
