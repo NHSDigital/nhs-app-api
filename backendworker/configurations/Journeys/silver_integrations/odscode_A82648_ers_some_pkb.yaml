@@ -14,3 +14,6 @@ journeys:
       - testSilverThirdPartyProvider
     secondaryAppointments:
       - ers
+    vaccineRecord:
+      - netCompany
+      - nhsd

@@ -19,3 +19,5 @@ journeys:
     secondaryAppointments:
       - ers
       - pkb
+    vaccineRecord:
+      - nhsd
