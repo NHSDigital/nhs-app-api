@@ -1,0 +1,12 @@
+#
+#
+#   Sandpit users in ODS code F00009 are used by NHSD Covid vaccine record.
+#
+#
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "F00009"
+journeys:
+  silverIntegrations:
+    vaccineRecord: 
+      - nhsd

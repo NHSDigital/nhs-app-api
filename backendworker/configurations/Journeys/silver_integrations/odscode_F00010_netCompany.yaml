@@ -1,0 +1,13 @@
+#
+#
+#   Sandpit users in ODS code F00010 are used by Netcompany Covid-19 status checker
+#   DO NOT enable any third-party silver integrations other than NetCompany for this ODS code.
+#
+#
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "F00010"
+journeys:
+  silverIntegrations:
+    vaccineRecord: 
+      - netCompany
