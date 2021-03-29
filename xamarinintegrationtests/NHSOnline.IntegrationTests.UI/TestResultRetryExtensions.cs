@@ -62,6 +62,11 @@ namespace NHSOnline.IntegrationTests.UI
             @"Please go to Settings to provide application access to camera\.",
             RegexOptions.Compiled);
 
+        // NHSO-13894 - Appium/BrowserStack nginx returned 502
+        private static readonly Regex NginxBadGateway = new(
+            @"<html>\\n<head><title>502 Bad Gateway</title></head>\\n<body>\\n<center><h1>502 Bad Gateway</h1></center>\\n<hr><center>nginx</center>\\n</body>\\n</html>",
+            RegexOptions.Compiled);
+
         private static readonly List<(Regex pattern, RetryStatus result)> RetryExceptionMessageRegexes = new()
         {
             (InvalidServiceWebInspectorMessage, RetryStatus.Retry(nameof(InvalidServiceWebInspectorMessage))),
@@ -73,7 +78,8 @@ namespace NHSOnline.IntegrationTests.UI
             (IncorrectChromeVersion, RetryStatus.Retry(nameof(IncorrectChromeVersion))),
             (JavascriptLoadFailure, RetryStatus.Retry(nameof(JavascriptLoadFailure))),
             (AtomExecutionTimeout, RetryStatus.Retry(nameof(AtomExecutionTimeout))),
-            (UnableToAccessCamera, RetryStatus.Retry(nameof(UnableToAccessCamera)))
+            (UnableToAccessCamera, RetryStatus.Retry(nameof(UnableToAccessCamera))),
+            (NginxBadGateway, RetryStatus.Retry(nameof(NginxBadGateway)))
         };
 
         internal static RetryStatus ShouldRetry(this TestResult result, TestLogs logs)
