@@ -417,6 +417,20 @@ export default {
         },
       },
       {
+        id: 'healthTrackersPkbSecondaryCare',
+        jumpOffContent: {
+          headerText: 'Track your health',
+          descriptionText: 'Record symptoms and add to your health journal',
+        },
+        thirdPartyWarning: {
+          featureName: 'Track your health',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
         id: 'messagesPkbSecondaryCare',
         jumpOffContent: {
           headerText: 'Consultations, events and messages',
@@ -510,6 +524,21 @@ export default {
         thirdPartyWarning: {
           brandName: 'MyCareView powered by Patients Know Best',
           featureName: 'Care plans',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
+        id: 'healthTrackersPkbMyCareView',
+        jumpOffContent: {
+          headerText: 'Track your health',
+          descriptionText: 'Record symptoms and add to your health journal',
+        },
+        thirdPartyWarning: {
+          brandName: 'MyCareView powered by Patients Know Best',
+          featureName: 'Track your health',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',

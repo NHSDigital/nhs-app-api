@@ -57,6 +57,16 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_NONE)
     }
 
+    @Given("^I am a user who can view Health Tracker from PKB My Care View$")
+    fun iAmAUserWhoCanViewHealthTrackerFromPkbMyCareView(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB_MY_CARE_VIEW)
+    }
+
+    @Given("^I am a user who cannot view Health Tracker from PKB My Care View$")
+    fun iAmAUserWhoCannotViewHealthTrackerFromPkbMyCareView(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_NONE)
+    }
+
     @Given("^I am a user who can view Shared Links from PKB My Care View$")
     fun iAmAUserWhoCanViewSharedLinksFromPkbMyCareView(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB_MY_CARE_VIEW)
@@ -134,9 +144,21 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
         MockingClient.instance.forMyCareView.mock { MyCareViewRequestBuilder().carePlanRequest().respondWithPage() }
     }
 
+    @Given("^My Care View responds to requests for health tracker$")
+    fun myCareViewRespondsToRequestsForHealthTracker() {
+        MockingClient.instance.forMyCareView.mock {
+            MyCareViewRequestBuilder().healthTrackerRequest().respondWithPage()
+        }
+    }
+
     @Then("^the link to PKB My Care View record sharing is not available on the Health Records Hub$")
     fun thePKBMyCareViewRecordSharingLinkIsNotAvailableOnTheHealthRecordsHub() {
         medicalRecordHubPage.getHeaderElement("Record Sharing").assertElementNotPresent()
+    }
+
+    @Then("^the link to PKB My Care View Track your health is not available on the health record hub page$")
+    fun thePKBMyCareViewHealthTrackerLinkIsNotAvailableOnTheHealthRecordsHub() {
+        medicalRecordHubPage.getHeaderElement("Track your health").assertElementNotPresent()
     }
 
     @Then("^the link to PKB My Care View shared links is not available on the Health Records Hub$")
@@ -239,6 +261,14 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
     fun assertCarePlansWarningMessageContent() {
         redirector.interruptionCard.assertContent(
                 "Care plans\nThis service is provided by MyCareView powered by Patients Know Best",
+                "Your GP surgery or hospital has chosen this personal health record service provider.",
+                "Find out more about personal health record services")
+    }
+
+    @Then("the track your health warning on the page explains the service is from PKB My Care View$")
+    fun assertHealthTrackerWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+                "Track your health\nThis service is provided by MyCareView powered by Patients Know Best",
                 "Your GP surgery or hospital has chosen this personal health record service provider.",
                 "Find out more about personal health record services")
     }

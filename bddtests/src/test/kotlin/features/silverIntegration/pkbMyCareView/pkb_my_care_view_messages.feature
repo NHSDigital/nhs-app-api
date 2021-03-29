@@ -11,7 +11,7 @@ Feature: Patients Know Best My Care View Messages
     Then the Messages Hub page is displayed
     And the link to PKB My Care View Messages and consultations is not available on the Messages Hub page
 
-  Scenario: A user navigates to PKB Secondary Care messages and sees the warning message
+  Scenario: A user navigates to PKB My Care View messages and sees the warning message
     Given I am using the native app user agent
     And I am a user who can view Messages and Online Consultations from PKB My Care View
     And I am logged in

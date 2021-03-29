@@ -118,6 +118,12 @@ const thirdPartyProvider = {
       provider: 'pkbSecondaryCare',
       serviceType: 'carePlans',
     },
+    healthTrackersPkbSecondaryCare: {
+      jumpOffId: 'healthTrackersPkbSecondaryCare',
+      redirectPath: '/nhs-login/login?phrPath=/pkbNhsMenu.action&brand=pkbSecondaryCare',
+      provider: 'pkbSecondaryCare',
+      serviceType: 'healthTrackers',
+    },
     messagesPkbSecondaryCare: {
       jumpOffId: 'messagesPkbSecondaryCare',
       redirectPath: '/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages&brand=pkbSecondaryCare',
@@ -159,6 +165,12 @@ const thirdPartyProvider = {
       redirectPath: '/nhs-login/login?phrPath=/auth/listPlans.action&brand=pkbMyCareView',
       provider: 'pkbMyCareView',
       serviceType: 'carePlans',
+    },
+    healthTrackersPkbMyCareView: {
+      jumpOffId: 'healthTrackersPkbMyCareView',
+      redirectPath: '/nhs-login/login?phrPath=/pkbNhsMenu.action&brand=pkbMyCareView',
+      provider: 'pkbMyCareView',
+      serviceType: 'healthTrackers',
     },
     messagesPkbMyCareView: {
       jumpOffId: 'messagesPkbMyCareView',

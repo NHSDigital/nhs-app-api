@@ -12,7 +12,8 @@ journeys:
     carePlans:
       - pkbSecondaryCare
     consultations: []
-    healthTrackers: []
+    healthTrackers:
+      - pkbSecondaryCare
     libraries:
       - pkbSecondaryCare
     medicines:

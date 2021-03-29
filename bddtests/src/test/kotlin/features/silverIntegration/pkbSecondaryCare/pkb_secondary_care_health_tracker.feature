@@ -1,0 +1,39 @@
+@silverIntegration
+@pkbSecondaryCare
+Feature: Patients Know Best Secondary Care Health Tracker
+
+  # P5 notes - the health record hub page is not available to P5 users, preventing them from accessing any silver integration health trackers jump offs.
+
+  Scenario: A user navigates to PKB Secondary Care health tracker and sees the warning message
+    Given I am using the native app user agent
+    And I am a user who can view Health Tracker from PKB Secondary Care
+    And I am logged in
+    When I navigate to the health record hub page
+    Then I see the health records hub page
+    And I click the menu item 'Track your health'
+    And I am redirected to the redirector page with the header 'Track your health'
+    And the Track your Health warning on the page explains the service is from PKB Secondary Care
+
+  Scenario: A user without access to PKB Secondary Care cannot see the menu item 'Track your health' on the Health Record Hub
+    Given I am a user who cannot view Health Tracker from PKB Secondary Care
+    And I am logged in
+    When I navigate to the health record hub page
+    Then I see the health records hub page
+    And the link to PKB Secondary Care Track Your Health is not available on the Health Record Hub
+
+  Scenario: A user can follow the link to Find out more about personal health records
+    Given I am a user who can view Health Tracker from PKB Secondary Care
+    And I am logged in
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2FpkbNhsMenu.action%26brand=pkbSecondaryCare'
+    Then I am redirected to the redirector page with the header 'Track your health'
+    When I click the link called 'Find out more about personal health record services' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/'
+    Then a new tab has been opened by the link
+
+  Scenario: A user navigates to an external partner site and will see a warning page
+    Given I am a user who can view Health Tracker from PKB Secondary Care
+    And Secondary Care responds to requests for health tracker
+    And I am logged in
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2FpkbNhsMenu.action%26brand=pkbSecondaryCare'
+    Then I am redirected to the redirector page with the header 'Track your health'
+    When I click the 'Continue' button on the redirector page with a url starting with 'http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=/pkbNhsMenu.action&brand=pkbSecondaryCare'
+    Then I am navigated to a third party site for Secondary Care

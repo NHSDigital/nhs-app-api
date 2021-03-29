@@ -150,6 +150,12 @@ describe('healthRecords', () => {
       ['cie', 'Health Trackers', true, false, true],
       ['cie', 'Health Trackers', true, true, false],
       ['cie', 'Health Trackers', false, false, false],
+      ['pkbSecondaryCare', 'Health Trackers', true, false, true],
+      ['pkbSecondaryCare', 'Health Trackers', true, true, false],
+      ['pkbSecondaryCare', 'Health Trackers', false, false, false],
+      ['myCareView', 'Health Trackers', true, false, true],
+      ['myCareView', 'Health Trackers', true, true, false],
+      ['myCareView', 'Health Trackers', false, false, false],
       ['pkb', 'secondary shared links', true, false, true],
       ['pkb', 'secondary shared links', true, true, false],
       ['pkb', 'secondary shared links', false, false, false],
@@ -208,6 +214,12 @@ describe('healthRecords', () => {
             break;
           case 'cieHealthTrackers':
             linkElement = '#btn_pkb_cie_health_trackers';
+            break;
+          case 'pkbSecondaryCareHealthTrackers':
+            linkElement = '#btn_pkb_secondary_care_health_trackers';
+            break;
+          case 'myCareViewHealthTrackers':
+            linkElement = '#btn_pkb_my_care_view_health_trackers';
             break;
           case 'pkbSharedLinks':
             linkElement = '#btn_pkb_shared_links';

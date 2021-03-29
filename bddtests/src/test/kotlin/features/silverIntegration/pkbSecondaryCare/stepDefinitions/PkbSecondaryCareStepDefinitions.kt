@@ -67,6 +67,16 @@ class PkbSecondaryCareStepDefinitions : HybridPageObject() {
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_LIBRARY_NONE)
     }
 
+    @Given("^I am a user who can view Health Tracker from PKB Secondary Care$")
+    fun iAmAUserWhoCanViewHealthTrackerFromPkbSecondaryCare(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB_SECONDARY_CARE)
+    }
+
+    @Given("^I am a user who cannot view Health Tracker from PKB Secondary Care$")
+    fun iAmAUserWhoCannotViewHealthTrackerFromPkbSecondaryCare(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_NONE)
+    }
+
     @Given("^I am a user who can view Messages and Online Consultations from PKB Secondary Care$")
     fun iAmAUserWhoCanViewMessagesAndOnlineConsultationsFromPkbSecondaryCare(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_SECONDARY_CARE)
@@ -140,14 +150,20 @@ class PkbSecondaryCareStepDefinitions : HybridPageObject() {
 
     @Given("^Secondary Care responds to requests for record sharing$")
     fun secondaryCareRespondsToRequestsForRecordSharing() {
-        MockingClient.instance.forMyCareView.mock {
+        MockingClient.instance.forSecondaryCare.mock {
             SecondaryCareRequestBuilder().recordSharingRequest().respondWithPage() }
     }
 
     @Given("^Secondary Care responds to requests for shared links$")
     fun secondaryCareRespondsToRequestsForSharedLinks() {
-        MockingClient.instance.forMyCareView.mock {
+        MockingClient.instance.forSecondaryCare.mock {
             SecondaryCareRequestBuilder().sharedLinksRequest().respondWithPage() }
+    }
+
+    @Given("^Secondary Care responds to requests for health tracker$")
+    fun secondaryCareRespondsToRequestsForHealthTracker() {
+        MockingClient.instance.forSecondaryCare.mock {
+            SecondaryCareRequestBuilder().healthTrackerRequest().respondWithPage() }
     }
 
     @Then("^the link to PKB Secondary Care record sharing is not available on the Health Records Hub$")
@@ -168,6 +184,11 @@ class PkbSecondaryCareStepDefinitions : HybridPageObject() {
     @Then("^the link to PKB Secondary Care Care plans is not available on the Health Records Hub$")
     fun thePKBSecondaryCareCarePlansLinkIsNotAvailableOnTheHealthRecordsHub() {
         medicalRecordHubPage.getHeaderElement("Care plans").assertElementNotPresent()
+    }
+
+     @Then("^the link to PKB Secondary Care Track Your Health is not available on the Health Record Hub$")
+    fun thePKBSecondaryCareTrackYourHealthLinkIsNotAvailableOnTheHealthRecordsHub() {
+        medicalRecordHubPage.getHeaderElement("Track your health").assertElementNotPresent()
     }
 
     @Then("^the PKB Secondary Care View Medicines link is available on the Prescriptions Hub$")
@@ -223,6 +244,14 @@ class PkbSecondaryCareStepDefinitions : HybridPageObject() {
     fun assertRecordSharingWarningMessageContent() {
         redirector.interruptionCard.assertContent(
                 "Record Sharing\nThis service is provided by Patients Know Best",
+                "Your GP surgery or hospital has chosen this personal health record service provider.",
+                "Find out more about personal health record services")
+    }
+
+    @Then("the Track your Health warning on the page explains the service is from PKB Secondary Care$")
+    fun assertHealthTrackerWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+                "Track your health\nThis service is provided by Patients Know Best",
                 "Your GP surgery or hospital has chosen this personal health record service provider.",
                 "Find out more about personal health record services")
     }

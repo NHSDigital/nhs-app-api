@@ -75,6 +75,16 @@
                                          provider-id="pkb"
                                          :provider-configuration="thirdPartyProvider
                                            .pkb.healthTrackersCie" />
+            <third-party-jump-off-button v-if="showPkbSecondaryCareHealthTracker"
+                                         id="btn_pkb_secondary_care_health_trackers"
+                                         provider-id="pkb"
+                                         :provider-configuration="thirdPartyProvider
+                                           .pkb.healthTrackersPkbSecondaryCare" />
+            <third-party-jump-off-button v-if="showPkbMyCareViewHealthTracker"
+                                         id="btn_pkb_my_care_view_health_trackers"
+                                         provider-id="pkb"
+                                         :provider-configuration="thirdPartyProvider
+                                           .pkb.healthTrackersPkbMyCareView" />
             <third-party-jump-off-button v-if="showPkbSharedLinks"
                                          id="btn_pkb_shared_links"
                                          provider-id="pkb"
@@ -259,6 +269,22 @@ export default {
         journey: 'silverIntegration',
         context: {
           provider: 'pkbCie',
+          serviceType: 'healthTrackers',
+        },
+      }),
+      showPkbSecondaryCareHealthTracker: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbSecondaryCare',
+          serviceType: 'healthTrackers',
+        },
+      }),
+      showPkbMyCareViewHealthTracker: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbMyCareView',
           serviceType: 'healthTrackers',
         },
       }),

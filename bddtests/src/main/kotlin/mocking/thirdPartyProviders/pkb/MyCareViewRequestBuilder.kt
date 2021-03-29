@@ -50,6 +50,11 @@ class MyCareViewRequestBuilder(queryStringEntries: HashMap<String, String> = has
                     "brand" to "pkbMyCareView")
     )
 
+    fun healthTrackerRequest() = MyCareViewRequestBuilder(
+            hashMapOf("phrPath" to "/pkbNhsMenu.action",
+                    "brand" to "pkbMyCareView")
+    )
+
     fun respondWithPage(): Mapping {
         return respondWith(HttpStatus.SC_OK) {
             andHtmlBody("""

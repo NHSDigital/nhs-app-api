@@ -12,7 +12,8 @@ journeys:
     carePlans:
       - pkbMyCareView
     consultations: []
-    healthTrackers: []
+    healthTrackers:
+      - pkbMyCareView
     libraries:
       - pkbMyCareView
     medicines:
