@@ -1,10 +1,8 @@
 using System;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using NHSOnline.App.Config;
 using NHSOnline.App.NhsLogin.Fido.Assertion;
 using NHSOnline.App.NhsLogin.Fido.Models;
 using NHSOnline.App.Threading;
@@ -16,14 +14,14 @@ namespace NHSOnline.App.NhsLogin.Fido
         private const string AppId = "xarmain:nhs-app";
 
         private readonly ILogger _logger;
-        private readonly INhsLoginConfiguration _config;
+        private readonly IUafClient _uafClient;
 
         public FidoRegistrationService(
             ILogger<FidoService> logger,
-            INhsLoginConfiguration config)
+            IUafClient uafClient)
         {
             _logger = logger;
-            _config = config;
+            _uafClient = uafClient;
         }
 
         internal async Task<FidoRegisterResult> Register(IFidoKey key, string accessToken)
@@ -44,13 +42,7 @@ namespace NHSOnline.App.NhsLogin.Fido
 
         private async Task<UafRegistrationRequest> GetRegistrationRequest(string accessToken)
         {
-            using var client = new HttpClient
-            {
-                BaseAddress = _config.UafBaseAddress
-            };
-            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
-
-            var result = await client.GetAsync("/regRequest").ResumeOnThreadPool();
+            var result = await _uafClient.GetRegistrationRequest(accessToken).ResumeOnThreadPool();
             var resultString = await result.Content.ReadAsStringAsync().ResumeOnThreadPool();
 
             _logger.LogInformation("UAF Registration Request: {UAFRegistrationRequest}", resultString);
@@ -115,18 +107,7 @@ namespace NHSOnline.App.NhsLogin.Fido
 
         private async Task<FidoRegisterResult> PostRegistrationResponse(UafRegistrationResponse registrationResponse, string accessToken)
         {
-            using var client = new HttpClient
-            {
-                BaseAddress = _config.UafBaseAddress
-            };
-            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
-
-            var requestJson = JsonConvert.SerializeObject(new[] { registrationResponse });
-
-            _logger.LogInformation("UAF Registration Response Request: {UAFRegistrationResponseRequest}", requestJson);
-
-            using var content = new StringContent(requestJson, Encoding.Default, "application/json");
-            var result = await client.PostAsync("/regResponse", content).ResumeOnThreadPool();
+            var result = await _uafClient.PostRegistrationResponse(registrationResponse, accessToken).ResumeOnThreadPool();
             var resultString = await result.Content.ReadAsStringAsync().ResumeOnThreadPool();
 
             _logger.LogInformation("UAF Registration Response Response: {UAFRegistrationResponseResponse}", resultString);
@@ -157,18 +138,7 @@ namespace NHSOnline.App.NhsLogin.Fido
 
         private async Task PostDeregistrationRequest(string accessToken, UafDeregistrationRequest request)
         {
-            using var client = new HttpClient
-            {
-                BaseAddress = _config.UafBaseAddress
-            };
-            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
-
-            var requestJson = JsonConvert.SerializeObject(new[] { request });
-
-            _logger.LogInformation("UAF Deregistration Request: {UafDeregistrationRequest}", requestJson);
-
-            using var content = new StringContent(requestJson, Encoding.Default, "application/json");
-            var result = await client.PostAsync("/deregRequest", content).ResumeOnThreadPool();
+            var result = await _uafClient.PostDeregistrationRequest(accessToken, request).ResumeOnThreadPool();
             var resultString = await result.Content.ReadAsStringAsync().ResumeOnThreadPool();
 
             _logger.LogInformation("UAF Deregistration Response: {UafDeregistrationResponse}", resultString);
