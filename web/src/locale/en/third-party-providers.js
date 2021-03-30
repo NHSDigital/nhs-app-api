@@ -124,20 +124,18 @@ export default {
   },
   netCompany: {
     serviceId: 'netCompany',
-    providerName: 'Netcompany',
+    providerName: 'the Department of Health and Social Care',
     jumpOffs: [
       {
         id: 'vaccineRecord',
         jumpOffContent: {
-          headerText: 'NetCompany jump-off',
-          description: 'DESCRIPTION TEXT',
+          headerText: 'Share your COVID-19 status',
+          descriptionText: 'Get a QR code to share your COVID-19 status with travel and event organisers',
         },
         thirdPartyWarning: {
-          featureName: 'FEATURE NAME',
-          servicePurchaser: 'SERVICE PURCHASER',
-          serviceType: 'SERVICE TYPE',
-          serviceTypePlural: 'SERVICE TYPES',
-          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+          featureName: 'Share your COVID-19 status',
+          serviceTypePlural: 'this service',
+          linkHref: 'https://www.nhs.uk/nhs-services/online-services/nhs-app/nhs-app-help-and-support/third-party-services/',
         },
       },
     ],
