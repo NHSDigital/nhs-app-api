@@ -4,6 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Local - Debug</Configuration>
     <NhsAppBundleShortVersion Condition=" '$(NhsAppBundleShortVersion)' == '' ">1.0.0</NhsAppBundleShortVersion>
     <NhsAppBundleVersion Condition=" '$(NhsAppBundleVersion)' == '' ">1</NhsAppBundleVersion>
+    <NhsAppBundleDisplayName Condition=" '$(NhsAppBundleDisplayName)' == '' ">NHS App</NhsAppBundleDisplayName>
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>

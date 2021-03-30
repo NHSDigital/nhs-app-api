@@ -25,6 +25,11 @@
       Value="$(NhsAppBundleVersion)"
       Query="/plist/dict/string[preceding-sibling::key[1] = 'CFBundleVersion']" />
 
+    <XmlPoke
+      XmlInputPath="$(InfoPlistGenerated)"
+      Value="$(NhsAppBundleDisplayName)"
+      Query="/plist/dict/string[preceding-sibling::key[1] = 'CFBundleDisplayName']" />
+
     <CallTarget Targets="Update Info Plist Allow Insecure Websites" Condition=" '$(NhsAppAllowInsecureBitraftDomain)' == 'true' " />
 
     <ReadLinesFromFile File="$(InfoPlistGenerated)">

@@ -2,7 +2,7 @@
 <plist version="1.0">
   <dict>
     <key>CFBundleDisplayName</key>
-    <string>NHSOnline.App</string>
+    <string>NHS App</string>
     <key>CFBundleIdentifier</key>
     <string>-o</string>
     <key>CFBundleShortVersionString</key>
