@@ -24,6 +24,12 @@
     <XmlPoke
       XmlInputPath="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml"
       Namespaces="$(ManifestNamespace)"
+      Query="/manifest/application/provider/@android:authorities"
+      Value="$(NhsAppPackageName).fileprovider" />
+
+    <XmlPoke
+      XmlInputPath="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml"
+      Namespaces="$(ManifestNamespace)"
       Query="/manifest/application/@android:networkSecurityConfig"
       Value="@xml/network_security_config_stubs"
       Condition=" '$(NhsAppEnableStubs)' == 'true' " />

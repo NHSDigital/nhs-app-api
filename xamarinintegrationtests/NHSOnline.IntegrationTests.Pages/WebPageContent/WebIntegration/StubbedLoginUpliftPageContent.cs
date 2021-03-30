@@ -15,13 +15,19 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "NHS Login - Uplift");
         private WebFormLabel FileUploadButton => WebFormLabel.WithText(_interactor, "Open photo library");
 
+        private WebFormLabel OpenCameraButton => WebFormLabel.WithText(_interactor, "Open Camera");
+
         private WebText FileNotSelected => WebText.WithTagAndText(_interactor, "p", "No file selected");
 
         private WebText FileSelected => WebText.WithTagAndText(_interactor, "p", "File selected");
 
+        private WebText PhotoCaptured => WebText.WithTagAndText(_interactor, "p", "Photo captured");
+
         internal void AssertOnPage() => TitleText.AssertVisible();
 
         public void UploadFile() => FileUploadButton.Click();
+
+        public void OpenCamera() => OpenCameraButton.Click();
 
         public StubbedLoginUpliftPageContent AssertNoFileSelected()
         {
@@ -30,5 +36,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
         }
 
         public void AssertFileSelected() => FileSelected.AssertVisible();
+
+        public void AssertPhotoCaptured() => PhotoCaptured.AssertVisible();
     }
 }

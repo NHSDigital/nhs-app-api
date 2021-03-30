@@ -26,6 +26,10 @@
     function updateTextOnFileSelection() {
         document.getElementById('file-selected').innerText = "File selected";
     }
+    
+    function updateTextOnPhotoCapture() {
+        document.getElementById('photo-captured').innerText = "Photo captured";
+    }
     </script>
 </head>
 <body>
@@ -61,6 +65,13 @@
             
             <input id="file-upload" type="file" name="image" accept="image/*"
                    onchange="updateTextOnFileSelection()">
+        </label>
+        
+        <p id="photo-captured">No photo captured</p>
+        <label tabindex="0" for="photo-id-document" role="button" class="camera-button">
+            Open Camera
+            <input id="photo-id-document" type="file" name="image" accept="image/*" class="camera-input" 
+                   capture="capture" onchange="updateTextOnPhotoCapture()">
         </label>
     </div>
 </body>

@@ -10,11 +10,11 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.WebIntegration
 {
     [TestClass]
-    [BusinessRule("BR-LOG-12.5", "Uploading a file in the NHS login uplift journey when the user has not granted appropriate permissions displays a native alert")]
-    public class P5FileUploadPermissionDialogShown
+    [BusinessRule("TBC", "Taking a photo of their ID allows the user to attach an image of the ID")]
+    public class P5TakePhotoPermissionsAllowedTests
     {
         [NhsAppAndroidTest]
-        public void APatientWithProofLevelFiveUploadingAFileIsShownPermissionsDialogAndroid(IAndroidDriverWrapper driver)
+        public void APatientWithProofLevelFiveCanTakeAPhotoOfTheirDocumentAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new P5Patient();
             using var patients = Mocks.Patients.Add(patient);
@@ -49,15 +49,33 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidStubbedLoginUpliftPage
                 .AssertOnPage(driver)
-                .PageContent.UploadFile();
+                .PageContent.OpenCamera();
+
+            AndroidCameraPermissionsDialog
+                .AssertDisplayed(driver)
+                .Allow();
 
             AndroidFilePermissionsDialog
-                .AssertDisplayed(driver);
+                .AssertDisplayed(driver)
+                .Allow();
+
+            AndroidLocationPermissionDialog
+                .AssertDisplayed(driver)
+                .Allow();
+
+            AndroidCamera
+                .AssertDisplayed(driver)
+                .TakePhoto();
+
+            AndroidCamera
+                .AssertDisplayed(driver)
+                .Done();
+
+            AndroidStubbedLoginUpliftPage
+                .AssertOnPage(driver)
+                .PageContent.AssertPhotoCaptured();
         }
 
-
-        [NhsAppManualTest("NHSO-13697", "BrowserStack does not show the permissions dialog for iOS")]
-        public void APatientWithProofLevelFiveUploadingAFileIsShownPermissionsDialogIOS() { }
-
+        // IOS test to be added.
     }
 }

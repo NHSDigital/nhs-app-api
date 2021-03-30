@@ -51,7 +51,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver)
                 .PageContent.UploadFile();
 
-            AndroidPermissionsDialog
+            AndroidFilePermissionsDialog
                 .AssertDisplayed(driver)
                 .Deny();
 

@@ -1,4 +1,5 @@
 using System;
+using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Android;
@@ -21,6 +22,10 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
 
         public void Click()
             => ActOnElement(e => e.Click());
+
+        public void AssertVisible() =>
+            ActOnElement(e =>
+                e.Displayed.Should().BeTrue("a label {0} should be displayed", _description));
 
         private void ActOnElement(Action<AndroidElement> action)
             => _interactor.ActOnElement(FindBy, action);
