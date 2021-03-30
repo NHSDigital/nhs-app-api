@@ -41,7 +41,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
             DateTime
-                .Parse(_driver.DeviceTime, CultureInfo.InvariantCulture)
+                .Parse(_driver.DeviceTime, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal)
                 .Should()
                 .BeCloseTo(DateTime.UtcNow, TimeSpan.FromMinutes(1), TestResultRetryExtensions.DeviceTimeSkewMessage);
 
