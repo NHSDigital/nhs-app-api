@@ -4,12 +4,11 @@
       {{ getWarningMessage('featureName') }}
     </template>
     <template slot="header">
-      {{ $t('thirdPartyProviders.warningConjunctions.heading', { providerName: providerName() }) }}
+      {{ $t('thirdPartyProviders.warningConjunctions.heading', { providerName }) }}
     </template>
     <template>
-      <p class="nhsuk-body-m"
-         data-purpose="silver-integration-info">
-        {{ paragraphText() }}
+      <p v-if="servicePurchaser" class="nhsuk-body-m" data-purpose="silver-integration-info">
+        {{ paragraphText }}
       </p>
 
       <a :href="redirectPath"
@@ -20,9 +19,9 @@
       </a>
 
       <p>
-        <a class="inline-link" :href="linkHref()"
+        <a class="inline-link" :href="linkHref"
            target="_blank" rel="noopener noreferrer">
-          {{ linkText() }}
+          {{ linkText }}
         </a>
       </p>
     </template>
@@ -66,6 +65,39 @@ export default {
       jumpOffContent,
     };
   },
+  computed: {
+    linkHref() {
+      return this.getWarningMessage('linkHref');
+    },
+    linkText() {
+      const paragraph = this.getWarningConjunction('linkText');
+      return paragraph.replace('{{ serviceTypePlural }}', this.serviceTypePlural);
+    },
+    paragraphText() {
+      const paragraph = this.getWarningConjunction('paragraph');
+      return paragraph
+        .replace('{{ servicePurchaser }}', this.servicePurchaser)
+        .replace('{{ serviceType }}', this.serviceType);
+    },
+    providerName() {
+      if (this.knownService) {
+        if (this.getWarningMessage('brandName') !== undefined) {
+          return this.getWarningMessage('brandName');
+        }
+        return this.getText(`thirdPartyProviders.${this.knownService.id}.providerName`);
+      }
+      return '';
+    },
+    serviceTypePlural() {
+      return this.getWarningMessage('serviceTypePlural');
+    },
+    servicePurchaser() {
+      return this.getWarningMessage('servicePurchaser');
+    },
+    serviceType() {
+      return this.getWarningMessage('serviceType');
+    },
+  },
   async mounted() {
     const featureName = this.getWarningMessage('featureName');
     EventBus.$emit(UPDATE_TITLE, featureName, true);
@@ -92,37 +124,6 @@ export default {
         return this.jumpOffContent.thirdPartyWarning[property];
       }
       return '';
-    },
-    linkHref() {
-      return this.getWarningMessage('linkHref');
-    },
-    linkText() {
-      const paragraph = this.getWarningConjunction('linkText');
-      return paragraph.replace('{{ serviceTypePlural }}', this.serviceTypePlural());
-    },
-    paragraphText() {
-      const paragraph = this.getWarningConjunction('paragraph');
-      return paragraph
-        .replace('{{ servicePurchaser }}', this.servicePurchaser())
-        .replace('{{ serviceType }}', this.serviceType());
-    },
-    providerName() {
-      if (this.knownService) {
-        if (this.getWarningMessage('brandName') !== undefined) {
-          return this.getWarningMessage('brandName');
-        }
-        return this.getText(`thirdPartyProviders.${this.knownService.id}.providerName`);
-      }
-      return '';
-    },
-    servicePurchaser() {
-      return this.getWarningMessage('servicePurchaser');
-    },
-    serviceType() {
-      return this.getWarningMessage('serviceType');
-    },
-    serviceTypePlural() {
-      return this.getWarningMessage('serviceTypePlural');
     },
   },
 };

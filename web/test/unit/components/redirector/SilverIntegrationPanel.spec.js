@@ -1,5 +1,6 @@
+import get from 'lodash/fp/get';
 import SilverIntegrationPanel from '@/components/redirector/SilverIntegrationPanel';
-import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
+import { EventBus, UPDATE_HEADER, UPDATE_TITLE } from '@/services/event-bus';
 import { createStore, mount } from '../../helpers';
 
 jest.mock('@/services/event-bus', () => ({
@@ -10,20 +11,55 @@ jest.mock('@/services/event-bus', () => ({
 describe('Silver Integration warning panel', () => {
   let wrapper;
 
-  const mountComponent = () => mount(SilverIntegrationPanel, {
-    $store: createStore(),
-    propsData: {
-      knownService: {
-        id: 'pkb',
-        requiresAssertedLoginIdentity: true,
-        showThirdPartyWarning: true,
-        url: 'http://www.url.com',
+  const mountComponent = ({ servicePurchaser = 'Your GP surgery' } = {}) => {
+    const locale = {
+      thirdPartyProviders: {
+        warningConjunctions: {
+          heading: 'This service is provided by {providerName}',
+          paragraph: '{{ servicePurchaser }} has chosen this {{ serviceType }} provider.',
+          button: 'Continue',
+          linkText: 'Find out more about {{ serviceTypePlural }}',
+        },
+        foo: {
+          jumpOffs: [
+            {
+              id: 'appointments',
+              jumpOffContent: {
+                headerText: 'View appointments',
+                descriptionText: 'See your upcoming and past hospital or other appointments',
+              },
+              thirdPartyWarning: {
+                featureName: 'View appointments',
+                servicePurchaser,
+                serviceType: 'personal health record service',
+                serviceTypePlural: 'personal health record services',
+                linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+              },
+            },
+          ],
+        },
       },
-      redirectPath: 'https://test.url.com/nhs-login/login?phrPath=/diary/listAppointments.action',
-      sessionStorageName: 'sessionName',
-      jumpOffId: 'appointments',
-    },
-  });
+    };
+
+    return mount(SilverIntegrationPanel, {
+      $store: createStore(),
+      mocks: {
+        $te: key => !!get(key)(locale),
+        $t: key => get(key)(locale),
+      },
+      propsData: {
+        knownService: {
+          id: 'foo',
+          requiresAssertedLoginIdentity: true,
+          showThirdPartyWarning: true,
+          url: 'http://www.url.com',
+        },
+        redirectPath: 'https://test.url.com/nhs-login/login?phrPath=/diary/listAppointments.action',
+        sessionStorageName: 'sessionName',
+        jumpOffId: 'appointments',
+      },
+    });
+  };
 
   beforeEach(() => {
     EventBus.$emit.mockClear();
@@ -35,6 +71,25 @@ describe('Silver Integration warning panel', () => {
       await wrapper.vm.$nextTick();
       expect(EventBus.$emit).not.toHaveBeenCalledWith(UPDATE_HEADER);
       expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, 'View appointments', true);
+    });
+  });
+
+  describe.each([
+    ['no service purchaser provider', null, false],
+    ['service purchaser provider', 'Has service purchaser', true],
+  ])('paragraph text', (testName, servicePurchaser, result) => {
+    const bodyTextId = 'p.nhsuk-body-m';
+    let bodyTextParagraph;
+
+    describe(testName, () => {
+      beforeEach(() => {
+        wrapper = mountComponent({ servicePurchaser });
+        bodyTextParagraph = wrapper.find(bodyTextId);
+      });
+
+      it(`will${result ? '' : ' not'} exist`, () => {
+        expect(bodyTextParagraph.exists()).toBe(result);
+      });
     });
   });
 
