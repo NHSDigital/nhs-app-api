@@ -22,12 +22,10 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Settings
             return page;
         }
 
-        public AndroidNotificationsPage AssertPageElements()
+        public void AssertPageElements()
         {
             Navigation.AssertNavigationPresent();
             PageContent.AssertPageElements();
-
-            return this;
         }
     }
 }

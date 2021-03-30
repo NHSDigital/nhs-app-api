@@ -1,4 +1,3 @@
-using System;
 using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
@@ -20,9 +19,13 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
         public static WebToggle WithLabel(IWebInteractor interactor, string label)
             => new(interactor, label);
 
-        public void AssertToggleState(string checkedValue)
-            => _interactor.ActOnElement(CheckboxFindBy(),
-                e => e.GetAttribute("aria-checked").Should().Be(checkedValue));
+        public void AssertToggledOn()
+            => _interactor.ActOnElement(CheckboxFindBy("true"),
+                e => e.GetAttribute("aria-checked").Should().Be("true"));
+
+        public void AssertToggledOff()
+            => _interactor.ActOnElement(CheckboxFindByNotToggled(),
+                e => e.GetAttribute("aria-checked").Should().Be(null));
 
         public void ToggleOn() => _interactor.ActOnElementContext(
             CheckboxFindBy(), c => new Actions(c.Driver).MoveToElement(c.Element).Click().Perform());
@@ -35,5 +38,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
 
         private By CheckboxFindBy()
             => _by.Input;
+
+        private By CheckboxFindByNotToggled()
+            => _by.LabelAndNotChecked();
     }
 }

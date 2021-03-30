@@ -31,7 +31,66 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             AndroidNotificationsPage
                 .AssertOnPage(driver)
-                .PageContent.ToggleNotifications();
+                .AssertPageElements();
+        }
+
+        [NhsAppAndroidTest]
+        public void APatientCanAccessNotificationsFromTheSettingsPageAndBothRegisterAndDeregisterForNotifications(
+            IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.Settings();
+
+            AndroidSettingsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToNotifications();
+
+            AndroidNotificationsPage
+                .AssertOnPage(driver)
+                .PageContent.ToggleOnNotifications()
+                .ToggleOffNotifications();
+        }
+
+        [NhsAppAndroidTest]
+        public void APatientCanEnableNotificationsAndTheirDecisionPersists(
+            IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.Settings();
+
+            AndroidSettingsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToNotifications();
+
+            AndroidNotificationsPage
+                .AssertOnPage(driver)
+                .PageContent.ToggleOnNotifications();
+
+            AndroidNotificationsPage
+                .AssertOnPage(driver)
+                .Navigation.Settings();
+
+            AndroidSettingsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToNotifications();
+
+            AndroidNotificationsPage
+                .AssertOnPage(driver)
+                .PageContent.AssertNotificationsEnabled();
         }
 
         private static void LogAndroidPatientIn(IAndroidDriverWrapper driver, Patient patient)

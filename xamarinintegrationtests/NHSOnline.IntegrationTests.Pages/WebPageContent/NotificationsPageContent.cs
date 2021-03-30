@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -23,7 +24,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             "If you share this device with other people, they may see your notifications. The settings will apply to everyone who logs in to the NHS App on this device.");
 
         private WebText MoreInfo => WebText.WithTagAndText(_interactor, "p",
-            "More information is available in the NHS App privacy policy");
+            "More information is available in the NHS App privacy policy.");
 
         private WebToggle NotificationsToggle => WebToggle.WithLabel(
             _interactor,
@@ -43,13 +44,25 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             return this;
         }
 
-        public void ToggleNotifications()
+        public void AssertNotificationsEnabled()
+        {
+            using var timeout = ExtendedTimeout.FromSeconds(10);
+            NotificationsToggle.AssertToggledOn();
+        }
+
+        public NotificationsPageContent ToggleOnNotifications()
         {
             NotificationsToggle.ToggleOn();
+            using var timeout = ExtendedTimeout.FromSeconds(10);
+            NotificationsToggle.AssertToggledOn();
+            return this;
+        }
 
-            Thread.Sleep(TimeSpan.FromSeconds(8));
-
-            NotificationsToggle.AssertToggleState("true");
+        public void ToggleOffNotifications()
+        {
+            NotificationsToggle.ToggleOff();
+            using var timeout = ExtendedTimeout.FromSeconds(10);
+            NotificationsToggle.AssertToggledOff();
         }
     }
 }

@@ -13,9 +13,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
             _text = text;
         }
 
-        internal By Text => By.XPath($"//{TextXPath}");
-
         internal By Input => By.XPath($"//input[@type={_type.QuoteXPathLiteral()} and //{TextXPath}/@for=@id]");
+        internal By LabelAndNotChecked() => By.XPath($"//input[@type={_type.QuoteXPathLiteral()} and not(@aria-checked) and //{TextXPath}/@for=@id]");
 
         internal By LabelAndChecked(string checkedValue) => By.XPath($"//input[@type={_type.QuoteXPathLiteral()} and @aria-checked={checkedValue.QuoteXPathLiteral()} and //{TextXPath}/@for=@id]");
 
