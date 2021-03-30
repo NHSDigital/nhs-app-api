@@ -4,7 +4,7 @@ using Foundation;
 using NHSOnline.App.DependencyServices.Biometrics;
 using Security;
 
-namespace NHSOnline.App.iOS.DependencyServices
+namespace NHSOnline.App.iOS.DependencyServices.Biometrics
 {
     internal sealed class BiometricAuthSigner : IBiometricAuthSigner
     {

@@ -48,6 +48,8 @@
     <string>This is so that you can download your photos.</string>
     <key>ITSAppUsesNonExemptEncryption</key>
     <false />
+    <key>NSFaceIDUsageDescription</key>
+    <string>Use this instead of a password and security code to log in.</string>
   </dict>
 </plist>
 

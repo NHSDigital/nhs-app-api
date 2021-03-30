@@ -7,7 +7,7 @@ using NHSOnline.App.Logging;
 using NHSOnline.App.Threading;
 using Security;
 
-namespace NHSOnline.App.iOS.DependencyServices
+namespace NHSOnline.App.iOS.DependencyServices.Biometrics
 {
     internal class BiometricAuthKey : IBiometricAuthKey
     {
@@ -21,7 +21,7 @@ namespace NHSOnline.App.iOS.DependencyServices
             _context = context;
             _secKey = secKey;
         }
-        
+
         public byte[] PublicKeyEccX962Raw()
         {
             using var data = _secKey.GetPublicKey().GetExternalRepresentation(out var error);
@@ -31,6 +31,7 @@ namespace NHSOnline.App.iOS.DependencyServices
                 {
                     throw new InvalidOperationException($"Failed to get external representation of key: {error}");
                 }
+
                 return data.ToArray();
             }
             finally
@@ -75,17 +76,17 @@ namespace NHSOnline.App.iOS.DependencyServices
                 error?.Dispose();
             }
         }
-        
+
         public Task Delete()
         {
             BiometricRegistrationDomainState.Clear();
-            
+
             using var secRecord = new SecRecord(_secKey);
             SecKeyChain.Remove(secRecord);
 
             return Task.CompletedTask;
         }
-        
+
         public void Dispose()
         {
             _secKey.Dispose();

@@ -258,10 +258,10 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 => BiometricSpec.FingerPrint(fingerPrint.Registered);
 
             public BiometricSpec? Visit(BiometricStatusResult.TouchId touchId)
-                => BiometricSpec.FingerPrint(touchId.Registered);
+                => BiometricSpec.TouchId(touchId.Registered);
 
             public BiometricSpec? Visit(BiometricStatusResult.FaceId faceId)
-                => BiometricSpec.FingerPrint(faceId.Registered);
+                => BiometricSpec.FaceId(faceId.Registered);
         }
     }
 }

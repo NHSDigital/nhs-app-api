@@ -46,10 +46,14 @@
   <Import Project="Properties/BuildConfiguration.debugmode.$(DebugMode).props" />
   <Import Project="Properties/BuildConfiguration.platform.$(Platform).props" />
   <ItemGroup>
-    <Compile Include="DependencyServices\BiometricAuthKey.cs" />
-    <Compile Include="DependencyServices\BiometricAuthSigner.cs" />
-    <Compile Include="DependencyServices\BiometricRegistrationDomainState.cs" />
-    <Compile Include="DependencyServices\IosBiometrics.cs" />
+    <Compile Include="DependencyServices\Biometrics\BiometricAuthKey.cs" />
+    <Compile Include="DependencyServices\Biometrics\BiometricAuthKeyProvider.cs" />
+    <Compile Include="DependencyServices\Biometrics\BiometricAuthSigner.cs" />
+    <Compile Include="DependencyServices\Biometrics\BiometricRegistrationDomainState.cs" />
+    <Compile Include="DependencyServices\Biometrics\BiometricsHardware.cs" />
+    <Compile Include="DependencyServices\Biometrics\IBiometricAuthKeyProvider.cs" />
+    <Compile Include="DependencyServices\Biometrics\IosBiometrics.cs" />
+    <Compile Include="DependencyServices\Biometrics\SimulatedBiometricAuthKeyProvider.cs" />
     <Compile Include="DependencyServices\IosGetPnsTokenResponse.cs" />
     <Compile Include="DependencyServices\IosHttpMessageHandlerFactory.cs" />
     <Compile Include="DependencyServices\IosCookies.cs" />

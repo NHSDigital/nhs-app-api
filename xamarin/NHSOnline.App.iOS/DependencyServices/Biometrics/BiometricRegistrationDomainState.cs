@@ -1,6 +1,6 @@
 using Foundation;
 
-namespace NHSOnline.App.iOS.DependencyServices
+namespace NHSOnline.App.iOS.DependencyServices.Biometrics
 {
     internal static class BiometricRegistrationDomainState
     {
