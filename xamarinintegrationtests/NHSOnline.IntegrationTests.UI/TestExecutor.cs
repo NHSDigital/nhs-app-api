@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -7,6 +8,9 @@ namespace NHSOnline.IntegrationTests.UI
 {
     internal sealed class TestExecutor
     {
+        private const int MinimumNumberOfRetries = 5;
+        private static readonly TimeSpan MinimumRetriesDuration = TimeSpan.FromSeconds(30);
+
         private readonly string _displayName;
         private readonly ITestMethod _testMethod;
         private readonly ITestExecution _testExecution;
@@ -23,6 +27,7 @@ namespace NHSOnline.IntegrationTests.UI
 
         internal TestResult[] Execute()
         {
+            var retryUntil = DateTime.UtcNow.Add(MinimumRetriesDuration);
             var results = new List<TestResult>();
             var retryStatus = RetryStatus.NoRetry;
 
@@ -54,10 +59,19 @@ namespace NHSOnline.IntegrationTests.UI
                 testResult.Duration = timer.Elapsed;
 
                 results.Add(testResult);
-            } while (results.Count < 5 && retryStatus.ShouldRetry);
+            } while (retryStatus.ShouldRetry && InRetryWindow());
 
             return results.ToArray();
-        }
 
+            bool InRetryWindow()
+            {
+                if (DateTime.UtcNow < retryUntil)
+                {
+                    return true;
+                }
+
+                return results.Count < MinimumNumberOfRetries;
+            }
+        }
     }
 }
