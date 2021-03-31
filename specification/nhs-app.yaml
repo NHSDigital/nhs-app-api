@@ -14,6 +14,7 @@ info:
     * send native Apple or Android push notifications to mobile devices registered by specific users of the NHS App
 
     ## Who can use this API?
+    Not you.
     This API can only be accessed by organisations that deliver functionality to citizens through the NHS App.
 
     ## API status and roadmap
