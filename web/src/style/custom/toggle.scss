@@ -89,6 +89,16 @@
         left: 1.6em;
       }
     }
+
+    //When Focused
+    &:focus {
+      & + span {
+        &::before {
+          border: 2px solid $black;
+          box-shadow: 0 0 0 4px $focus_highlight;
+        }
+      }
+    }
   }
 
   &.waiting {
