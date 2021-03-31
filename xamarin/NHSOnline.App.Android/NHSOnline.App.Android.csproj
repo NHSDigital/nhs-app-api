@@ -48,13 +48,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DependencyServices\AndroidBiometrics.cs" />
     <Compile Include="DependencyServices\AndroidGetPnsTokenResponse.cs" />
     <Compile Include="DependencyServices\AndroidLifecycle.cs" />
     <Compile Include="DependencyServices\AndroidCookies.cs" />
     <Compile Include="DependencyServices\AndroidHttpMessageHandlerFactory.cs" />
     <Compile Include="DependencyServices\AndroidNativeLog.cs" />
     <Compile Include="DependencyServices\AndroidNotifications.cs" />
+    <Compile Include="DependencyServices\Biometrics\AndroidBiometrics.cs" />
+    <Compile Include="DependencyServices\Biometrics\BiometricAuthKey.cs" />
+    <Compile Include="DependencyServices\Biometrics\BiometricAuthSigner.cs" />
+    <Compile Include="DependencyServices\Biometrics\BiometricKeyStore.cs" />
+    <Compile Include="DependencyServices\Biometrics\BiometricRegistrationState.cs" />
+    <Compile Include="DependencyServices\Biometrics\Extensions.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Renderers\KeyEventArgsExtensions.cs" />
     <Compile Include="Renderers\LinkLabelRenderer.cs" />
@@ -124,6 +129,10 @@
       <Project>{7783BCD8-95F8-4645-95A9-28FEF39731BA}</Project>
       <Name>NHSOnline.App.Logging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NHSOnline.App.Threading\NHSOnline.App.Threading.csproj">
+      <Project>{3e4fec39-10ff-479f-a542-48d3fc8d012b}</Project>
+      <Name>NHSOnline.App.Threading</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NHSOnline.App\NHSOnline.App.csproj">
       <Project>{E4B18CE6-D1B1-44F7-86F3-7DEAFDF47E31}</Project>
       <Name>NHSOnline.App</Name>
@@ -144,9 +153,13 @@
     <AndroidResource Include="Resources\xml\network_security_config_stubs.xml" Condition="'$(NhsAppEnableStubs)' == 'true'" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Xamarin.AndroidX.Preference">
+      <Version>1.1.1.8</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Firebase.Messaging" Version="121.0.1" />
     <PackageReference Include="Xamarin.Google.Android.DataTransport.TransportRuntime" Version="2.2.6" />
     <PackageReference Include="Xamarin.Google.Dagger" Version="2.27.0" />
+    <PackageReference Include="Xamarin.AndroidX.Biometric" Version="1.1.0.1" />
   </ItemGroup>
   <ItemGroup>
     <GoogleServicesJson Include="$(GoogleServicesFile)" />

@@ -4,6 +4,7 @@ using Android.Runtime;
 using Android.OS;
 using Android.Views;
 using NHSOnline.App.Droid.DependencyServices;
+using NHSOnline.App.Droid.DependencyServices.Biometrics;
 
 namespace NHSOnline.App.Droid
 {
@@ -26,6 +27,7 @@ namespace NHSOnline.App.Droid
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
             AndroidLifecycle.MainActivity = this;
+            AndroidBiometrics.MainActivity = this;
 
             LoadApplication(new NhsApp());
         }
