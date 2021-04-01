@@ -4,7 +4,7 @@ namespace NHSOnline.App.DependencyServices.Notifications
 {
     public interface INotifications
     {
-        NotificationStatus GetDeviceNotificationsStatus();
+        Task<NotificationStatus> GetDeviceNotificationsStatus();
         Task<GetPnsTokenResult> GetPnsToken();
     }
 }

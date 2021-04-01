@@ -152,7 +152,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         private async Task GetNotificationsStatusRequested()
         {
-            await _view.SendNotificationsStatus(_notifications.GetDeviceNotificationsStatus().ToString()).PreserveThreadContext();
+            var notificationStatus = await _notifications.GetDeviceNotificationsStatus().PreserveThreadContext();
+            await _view.SendNotificationsStatus(notificationStatus.ToString()).PreserveThreadContext();
         }
 
         private async Task RequestPnsToken(string trigger)

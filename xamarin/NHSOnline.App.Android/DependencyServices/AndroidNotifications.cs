@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.Droid.DependencyServices;
 using NHSOnline.App.Logging;
+using NHSOnline.App.Threading;
 
 [assembly: Xamarin.Forms.Dependency(typeof(AndroidNotifications))]
 namespace NHSOnline.App.Droid.DependencyServices
@@ -17,10 +18,17 @@ namespace NHSOnline.App.Droid.DependencyServices
     {
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(AndroidNotifications));
 
-        public NotificationStatus GetDeviceNotificationsStatus()
+        public Task<NotificationStatus> GetDeviceNotificationsStatus()
         {
             var notificationManager = NotificationManagerCompat.From(Application.Context);
-            return notificationManager.AreNotificationsEnabled() ? NotificationStatus.authorised : NotificationStatus.denied;
+
+            var notificationsStatus = notificationManager.AreNotificationsEnabled() switch
+            {
+                true => NotificationStatus.authorised,
+                false => NotificationStatus.denied
+            };
+
+            return Task.FromResult(notificationsStatus);
         }
 
         public async Task<GetPnsTokenResult> GetPnsToken()
@@ -31,7 +39,9 @@ namespace NHSOnline.App.Droid.DependencyServices
                 return new GetPnsTokenResult.Unauthorised();
             }
 
-            if (GetDeviceNotificationsStatus() == NotificationStatus.denied)
+            var notificationsStatus = await GetDeviceNotificationsStatus().ResumeOnThreadPool();
+
+            if (notificationsStatus == NotificationStatus.denied)
             {
                 Logger.LogError("Notification status is denied, returning unauthorised");
                 return new GetPnsTokenResult.Unauthorised();
