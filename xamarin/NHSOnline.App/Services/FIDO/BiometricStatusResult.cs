@@ -66,22 +66,32 @@ namespace NHSOnline.App.Services.FIDO
             public BiometricStatusResult Visit(BiometricStatus.FingerPrint fingerPrint)
             {
                 var usable = fingerPrint.State == BiometricHardwareState.Usable;
-                var registered = _hasKeyId && fingerPrint.RegistrationStatus == BiometricRegistrationStatus.Registered;
+                var registered = IsRegistered(fingerPrint.RegistrationStatus);
                 return new FingerPrint(usable, registered);
             }
 
             public BiometricStatusResult Visit(BiometricStatus.TouchId touchId)
             {
                 var usable = touchId.State == BiometricHardwareState.Usable;
-                var registered = _hasKeyId && touchId.RegistrationStatus == BiometricRegistrationStatus.Registered;
+                var registered = IsRegistered(touchId.RegistrationStatus);
                 return new TouchId(usable, registered);
             }
 
             public BiometricStatusResult Visit(BiometricStatus.FaceId faceId)
             {
                 var usable = faceId.State == BiometricHardwareState.Usable;
-                var registered = _hasKeyId && faceId.RegistrationStatus == BiometricRegistrationStatus.Registered;
+                var registered = IsRegistered(faceId.RegistrationStatus);
                 return new FaceId(usable, registered);
+            }
+
+            private bool IsRegistered(BiometricRegistrationStatus registrationStatus)
+            {
+                return registrationStatus switch
+                {
+                    BiometricRegistrationStatus.Registered => _hasKeyId,
+                    BiometricRegistrationStatus.Invalidated => _hasKeyId,
+                    _ => false
+                };
             }
         }
     }
