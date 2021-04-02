@@ -8,6 +8,8 @@ using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Linkage;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Settings;
@@ -17,7 +19,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
 {
     internal class TppLinkageService : ILinkageService
     {
-        private readonly ITppClientRequest<AddNhsUserRequest, AddNhsUserResponse> _nhsUser;
+        private readonly ITppClientRequest<LinkAccountRetrieve, LinkAccountReply> _linkAccountRetrieveRequest;
+        private readonly ITppClientRequest<LinkAccountCreate, LinkAccountReply> _linkAccountCreateRequest;
         private readonly ITppLinkageMapper _linkageMapper;
         private readonly IIm1CacheKeyGenerator _im1CacheKeyGenerator;
         private readonly IIm1CacheService _im1CacheService;
@@ -26,7 +29,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
         private readonly ConfigurationSettings _settings;
 
         public TppLinkageService(
-            ITppClientRequest<AddNhsUserRequest, AddNhsUserResponse> nhsUser,
+            ITppClientRequest<LinkAccountRetrieve, LinkAccountReply> linkAccountRetrieveRequest,
+            ITppClientRequest<LinkAccountCreate, LinkAccountReply> linkAccountCreateRequest,
             ITppLinkageMapper linkageMapper,
             IIm1CacheKeyGenerator im1CacheKeyGenerator,
             IIm1CacheService im1CacheService,
@@ -34,7 +38,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
             IMinimumAgeValidator minimumAgeValidator,
             ConfigurationSettings settings)
         {
-            _nhsUser = nhsUser;
+            _linkAccountRetrieveRequest = linkAccountRetrieveRequest;
+            _linkAccountCreateRequest = linkAccountCreateRequest;
             _linkageMapper = linkageMapper;
             _im1CacheKeyGenerator = im1CacheKeyGenerator;
             _im1CacheService = im1CacheService;
@@ -45,7 +50,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
 
         public async Task<LinkageResult> GetLinkageKey(GetLinkageRequest getLinkageRequest)
         {
-            return await Task.FromResult(new LinkageResult.NotFound(Im1ConnectionErrorCodes.InternalCode.UnknownError));
+            var linkAccountRequest = CreateGetRequest(getLinkageRequest);
+            var linkAccountReply = await _linkAccountRetrieveRequest.Post(linkAccountRequest);
+
+            if (linkAccountReply.HasSuccessResponse)
+            {
+                _logger.LogInformation("Linkage Key call successful");
+                return HandleRetrieveSuccess(linkAccountRequest, linkAccountReply);
+            }
+
+            return HandleRetrieveError(linkAccountReply, linkAccountRequest);
         }
 
         public async Task<LinkageResult> CreateLinkageKey(CreateLinkageRequest createLinkageRequest)
@@ -55,7 +69,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
                 _logger.LogEnter();
                 var request = CreateRequest(createLinkageRequest);
 
-                var createNhsUserResponse = await _nhsUser.Post(request);
+                var createNhsUserResponse = await _linkAccountCreateRequest.Post(request);
 
                 if (createNhsUserResponse.HasSuccessResponse)
                 {
@@ -64,7 +78,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
                 }
 
                 return HandleCreateError(createNhsUserResponse, request);
-
             }
             catch (Exception e) when (e is HttpRequestException || e is UnauthorisedGpSystemHttpRequestException)
             {
@@ -78,7 +91,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
         }
 
         private LinkageResult HandleCreateError(
-            TppApiObjectResponse<AddNhsUserResponse> createNhsUserResponse, AddNhsUserRequest request)
+            TppApiObjectResponse<LinkAccountReply> createNhsUserResponse, LinkAccountCreate request)
         {
             if (createNhsUserResponse.HasErrorWithCode("8") &&
                 !_minimumAgeValidator.IsValid(request.DateofBirth, _settings.MinimumLinkageAge))
@@ -88,8 +101,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
             return TppLinkagePostErrorMapper.Map(createNhsUserResponse, _logger);
         }
 
-        private async Task<LinkageResult> HandleCreateSuccess(AddNhsUserRequest request,
-            TppApiObjectResponse<AddNhsUserResponse> createNhsUserResponse)
+        private async Task<LinkageResult> HandleCreateSuccess(LinkAccountCreate request,
+            TppApiObjectResponse<LinkAccountReply> createNhsUserResponse)
         {
             try
             {
@@ -105,19 +118,68 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
             }
         }
 
-        private static AddNhsUserRequest CreateRequest(CreateLinkageRequest createLinkageRequest)
+        private LinkageResult HandleRetrieveSuccess(LinkAccountRetrieve linkAccountRequest,
+            TppApiObjectResponse<LinkAccountReply> linkAccountResponse)
         {
-            var request = new AddNhsUserRequest
+            try
+            {
+                bool validAccountDetailsFound = new ValidateAndLog(_logger)
+                    .IsNotNullOrWhitespace(linkAccountResponse.Body.AccountId, nameof(linkAccountResponse.Body.AccountId))
+                    .IsNotNullOrWhitespace(linkAccountResponse.Body.PassphraseToLink, nameof(linkAccountResponse.Body.PassphraseToLink))
+                    .IsValid();
+
+                if (!validAccountDetailsFound)
+                {
+                    _logger.LogInformation("Patient found but does not have an online account");
+                    return new LinkageResult.NotFound(Im1ConnectionErrorCodes.InternalCode.NotValidForOnlineUser);
+                }
+
+                var linkage = _linkageMapper.Map(linkAccountRequest, linkAccountResponse.Body);
+                return new LinkageResult.SuccessfullyRetrieved(linkage);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Something went wrong during building the response. Exception message: {e.Message}");
+                return new LinkageResult.InternalServerError();
+            }
+        }
+
+        private LinkageResult HandleRetrieveError(
+            TppApiObjectResponse<LinkAccountReply> linkAccountReply, LinkAccount request)
+        {
+            if (linkAccountReply.HasErrorWithCode("8") &&
+                !_minimumAgeValidator.IsValid(request.DateofBirth, _settings.MinimumLinkageAge))
+            {
+                return new LinkageResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.UnderMinimumAgeOrNonCompetent);
+            }
+            return TppLinkageGetErrorMapper.Map(linkAccountReply, _logger);
+        }
+
+        private static LinkAccountCreate CreateRequest(CreateLinkageRequest createLinkageRequest)
+        {
+            var request = new LinkAccountCreate
             {
                 NhsNumber = createLinkageRequest.NhsNumber,
                 DateofBirth = createLinkageRequest.DateOfBirth.Value,
                 LastName = createLinkageRequest.Surname,
-                OrganisationCode = createLinkageRequest.OdsCode
+                OrganisationCode = createLinkageRequest.OdsCode,
+                EmailAddress = createLinkageRequest.EmailAddress,
             };
             return request;
         }
 
-        private static TppConnectionToken CreateConnectionToken(TppApiObjectResponse<AddNhsUserResponse> createNhsUserResponse)
+        private static LinkAccountRetrieve CreateGetRequest(GetLinkageRequest getLinkageRequest)
+        {
+            return new LinkAccountRetrieve
+            {
+                NhsNumber = getLinkageRequest.NhsNumber,
+                DateofBirth = getLinkageRequest.DateOfBirth.Value,
+                LastName = getLinkageRequest.Surname,
+                OrganisationCode = getLinkageRequest.OdsCode,
+            };
+        }
+
+        private static TppConnectionToken CreateConnectionToken(TppApiObjectResponse<LinkAccountReply> createNhsUserResponse)
         {
             return new TppConnectionToken
             {

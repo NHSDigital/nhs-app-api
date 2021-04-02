@@ -9,7 +9,6 @@ import mocking.tpp.linkage.TppLinkageGETBuilder
 import mocking.tpp.linkage.TppLinkagePOSTBuilder
 import mocking.tpp.models.LinkAccount
 import mockingFacade.linkage.LinkageInformationFacade
-import models.Patient
 
 class LinkageFactoryTpp:  LinkageFactory(Supplier.TPP) {
     override val validOtherLinkageDetails = LinkageInformationFacade(
@@ -26,11 +25,12 @@ class LinkageFactoryTpp:  LinkageFactory(Supplier.TPP) {
             odsCode =  patient.odsCode,
             linkageKey = patient.linkageKey,
             accountId = patient.accountId,
-            nhsNumber = "3434234345",
+            nhsNumber = patient.nhsNumbers.first().filter { !it.isWhitespace() },
             identityToken = "abc",
-            emailAddress = "ab@cd.com",
-            surname = "Thompson",
-            dateOfBirth = "2000-01-01")
+            emailAddress = patient.contactDetails.emailAddress,
+            surname = patient.name.surname,
+            dateOfBirth = patient.age.dateOfBirth
+    )
 
     override val linkageDateOfBirthFormat = DateTimeFormats.backendDateTimeFormatWithoutTimezone
 
@@ -46,7 +46,14 @@ class LinkageFactoryTpp:  LinkageFactory(Supplier.TPP) {
         )
 
         val response = responseFromMap(linkageToPostRequestResponse, linkageResult)
-        val linkAccount = LinkAccount.forPatient(Patient.getDefault(gpSystem))
+
+        val linkAccount = LinkAccount(
+                lastName = linkageInformationFacade.surname,
+                dateOfBirth = linkageInformationFacade.dateOfBirth,
+                organisationCode = linkageInformationFacade.odsCode,
+                nhsNumber = linkageInformationFacade.nhsNumber,
+                emailAddress = linkageInformationFacade.emailAddress
+        )
 
         if (response != null) {
             mockingClient.forTpp.mock {
@@ -63,11 +70,17 @@ class LinkageFactoryTpp:  LinkageFactory(Supplier.TPP) {
                                       linkageResult: LinkageResult) {
 
         val linkageToGetRequestResponse = hashMapOf(
-                LinkageResult.SuccessfullyRetrieved to successfulGet()
+                LinkageResult.SuccessfullyRetrieved to successfulGet(linkageInformationFacade)
         )
 
         val response = responseFromMap(linkageToGetRequestResponse, linkageResult)
-        val linkAccount = LinkAccount.forPatient(Patient.getDefault(gpSystem))
+        val linkAccount = LinkAccount(
+                passphrase = linkageInformationFacade.linkageKey,
+                lastName = linkageInformationFacade.surname,
+                dateOfBirth = linkageInformationFacade.dateOfBirth,
+                organisationCode = linkageInformationFacade.odsCode,
+                nhsNumber = linkageInformationFacade.nhsNumber
+        )
 
         if (response != null) {
             mockingClient.forTpp.mock {
@@ -76,7 +89,7 @@ class LinkageFactoryTpp:  LinkageFactory(Supplier.TPP) {
         }
     }
 
-    private fun successfulGet():((TppLinkageGETBuilder) -> Mapping)? {
-        return { post -> post.respondWithNotFound() }
+    private fun successfulGet(linkageInformationFacade: LinkageInformationFacade):((TppLinkageGETBuilder) -> Mapping)? {
+        return { get -> get.respondWithSuccessfullyRetrieved(linkageInformationFacade) }
     }
 }

@@ -8,6 +8,7 @@ using Moq;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Linkage;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
 {
@@ -15,8 +16,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
     public class TppLinkageMapperTests
     {
         private TppLinkageMapper _systemUnderTest;
-        private static AddNhsUserRequest ValidAddNhsUserRequest => new AddNhsUserRequest { OrganisationCode = "A123456" };
-        private static AddNhsUserResponse ValidAddNhsUserResponse => new AddNhsUserResponse { PassphraseToLink = "absc123", AccountId = "123456" };
+        private static LinkAccountCreate ValidLinkAccountCreateRequest => new LinkAccountCreate { OrganisationCode = "A123456" };
+        private static LinkAccountReply ValidLinkAccountCreateReply => new LinkAccountReply { PassphraseToLink = "absc123", AccountId = "123456" };
 
         [TestInitialize]
         public void TestInitialize()
@@ -31,18 +32,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
         public void Map_ForValidInput_ReturnValidResponse()
         {
             // Arrange
-            var addNhsUserRequest = ValidAddNhsUserRequest;
-            var addNhsUserResponse = ValidAddNhsUserResponse;
+            var addNhsUserRequest = ValidLinkAccountCreateRequest;
+            var linkAccountReply = ValidLinkAccountCreateReply;
 
-            var expectedResponse = new LinkageResponse()
+            var expectedResponse = new LinkageResponse
             {
-                AccountId = addNhsUserResponse.AccountId,
-                LinkageKey = addNhsUserResponse.PassphraseToLink,
+                AccountId = linkAccountReply.AccountId,
+                LinkageKey = linkAccountReply.PassphraseToLink,
                 OdsCode = addNhsUserRequest.OrganisationCode
             };
 
             // Act
-            var result = _systemUnderTest.Map(addNhsUserRequest, addNhsUserResponse);
+            var result = _systemUnderTest.Map(addNhsUserRequest, linkAccountReply);
 
             // Assert
             result.Should().BeEquivalentTo(expectedResponse);
@@ -52,140 +53,140 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
         public void Map_ForValidInput_ReturnValidResponseWithHtml()
         {
             // Arrange
-            var addNhsUserRequest = ValidAddNhsUserRequest;
-            var addNhsUserResponse = ValidAddNhsUserResponse;
-            addNhsUserResponse.PassphraseToLink = "Y8C8m&quot;&amp;dbCY3vfs2";
+            var addNhsUserRequest = ValidLinkAccountCreateRequest;
+            var linkAccountReply = ValidLinkAccountCreateReply;
+            linkAccountReply.PassphraseToLink = "Y8C8m&quot;&amp;dbCY3vfs2";
 
-            var expectedResponse = new LinkageResponse()
+            var expectedResponse = new LinkageResponse
             {
-                AccountId = addNhsUserResponse.AccountId,
+                AccountId = linkAccountReply.AccountId,
                 LinkageKey = "Y8C8m\"&dbCY3vfs2",
                 OdsCode = addNhsUserRequest.OrganisationCode
             };
 
             // Act
-            var result = _systemUnderTest.Map(addNhsUserRequest, addNhsUserResponse);
+            var result = _systemUnderTest.Map(addNhsUserRequest, linkAccountReply);
 
             // Assert
             result.Should().BeEquivalentTo(expectedResponse);
         }
 
         [TestMethod]
-        public void Map_ForNullRequest_ThrowsArgumentNullException()
+        public void Map_ForNullRequest_ThrowsArgumentException()
         {
             // Arrange
-            AddNhsUserRequest addNhsUserRequest = null;
-            var addNhsUserResponse = ValidAddNhsUserResponse;
+            LinkAccountCreate request = null;
+            var linkAccountReply = ValidLinkAccountCreateReply;
 
             // Act
-            Action action = () => _systemUnderTest.Map(addNhsUserRequest, addNhsUserResponse);
+            Action action = () => _systemUnderTest.Map(request, linkAccountReply);
 
             // Assert
-            action.Should().Throw<ArgumentNullException>();
+            action.Should().Throw<ArgumentException>();
         }
 
         [TestMethod]
-        public void Map_ForNullRequestOrganisationCode_ThrowsArgumentNullException()
+        public void Map_ForNullRequestOrganisationCode_ThrowsArgumentException()
         {
             // Arrange
-            var addNhsUserRequest = ValidAddNhsUserRequest;
-            addNhsUserRequest.OrganisationCode = null;
-            var addNhsUserResponse = ValidAddNhsUserResponse;
+            var request = ValidLinkAccountCreateRequest;
+            request.OrganisationCode = null;
+            var linkAccountReply = ValidLinkAccountCreateReply;
 
             // Act
-            Action action = () => _systemUnderTest.Map(addNhsUserRequest, addNhsUserResponse);
+            Action action = () => _systemUnderTest.Map(request, linkAccountReply);
 
             // Assert
-            action.Should().Throw<ArgumentNullException>();
+            action.Should().Throw<ArgumentException>();
         }
 
         [TestMethod]
-        public void Map_ForEmptyRequestOrganisationCode_ThrowsArgumentNullException()
+        public void Map_ForEmptyRequestOrganisationCode_ThrowsArgumentException()
         {
             // Arrange
-            var addNhsUserRequest = ValidAddNhsUserRequest;
-            addNhsUserRequest.OrganisationCode = string.Empty;
-            var addNhsUserResponse = ValidAddNhsUserResponse;
+            var request = ValidLinkAccountCreateRequest;
+            request.OrganisationCode = string.Empty;
+            var linkAccountReply = ValidLinkAccountCreateReply;
 
             // Act
-            Action action = () => _systemUnderTest.Map(addNhsUserRequest, addNhsUserResponse);
+            Action action = () => _systemUnderTest.Map(request, linkAccountReply);
 
             // Assert
-            action.Should().Throw<ArgumentNullException>();
+            action.Should().Throw<ArgumentException>();
         }
 
         [TestMethod]
-        public void Map_ForNullResponse_ThrowsArgumentNullException()
+        public void Map_ForNullResponse_ThrowsArgumentException()
         {
             // Arrange
-            var addNhsUserRequest = ValidAddNhsUserRequest;
-            AddNhsUserResponse addNhsUserResponse = null;
+            var request = ValidLinkAccountCreateRequest;
+            LinkAccountReply linkAccountReply = null;
 
             // Act
-            Action action = () => _systemUnderTest.Map(addNhsUserRequest, addNhsUserResponse);
+            Action action = () => _systemUnderTest.Map(request, linkAccountReply);
 
             // Assert
-            action.Should().Throw<ArgumentNullException>();
+            action.Should().Throw<ArgumentException>();
         }
 
         [TestMethod]
-        public void Map_ForNullResponsePassphraseToLink_ThrowsArgumentNullException()
+        public void Map_ForNullResponsePassphraseToLink_ThrowsArgumentException()
         {
             // Arrange
-            var addNhsUserRequest = ValidAddNhsUserRequest;
-            var addNhsUserResponse = ValidAddNhsUserResponse;
-            addNhsUserResponse.PassphraseToLink = null;
+            var request = ValidLinkAccountCreateRequest;
+            var response = ValidLinkAccountCreateReply;
+            response.PassphraseToLink = null;
 
             // Act
-            Action action = () => _systemUnderTest.Map(addNhsUserRequest, addNhsUserResponse);
+            Action action = () => _systemUnderTest.Map(request, response);
 
             // Assert
-            action.Should().Throw<ArgumentNullException>();
+            action.Should().Throw<ArgumentException>();
         }
 
         [TestMethod]
-        public void Map_ForEmptyResponsePassphraseToLink_ThrowsArgumentNullException()
+        public void Map_ForEmptyResponsePassphraseToLink_ThrowsArgumentException()
         {
             // Arrange
-            var addNhsUserRequest = ValidAddNhsUserRequest;
-            var addNhsUserResponse = ValidAddNhsUserResponse;
-            addNhsUserResponse.PassphraseToLink = string.Empty;
+            var request = ValidLinkAccountCreateRequest;
+            var linkAccountReply = ValidLinkAccountCreateReply;
+            linkAccountReply.PassphraseToLink = string.Empty;
 
             // Act
-            Action action = () => _systemUnderTest.Map(addNhsUserRequest, addNhsUserResponse);
+            Action action = () => _systemUnderTest.Map(request, linkAccountReply);
 
             // Assert
-            action.Should().Throw<ArgumentNullException>();
+            action.Should().Throw<ArgumentException>();
         }
 
         [TestMethod]
-        public void Map_ForNullResponseAccountId_ThrowsArgumentNullException()
+        public void Map_ForNullResponseAccountId_ThrowsArgumentException()
         {
             // Arrange
-            var addNhsUserRequest = ValidAddNhsUserRequest;
-            var addNhsUserResponse = ValidAddNhsUserResponse;
-            addNhsUserResponse.AccountId = null;
+            var addNhsUserRequest = ValidLinkAccountCreateRequest;
+            var linkAccountReply = ValidLinkAccountCreateReply;
+            linkAccountReply.AccountId = null;
 
             // Act
-            Action action = () => _systemUnderTest.Map(addNhsUserRequest, addNhsUserResponse);
+            Action action = () => _systemUnderTest.Map(addNhsUserRequest, linkAccountReply);
 
             // Assert
-            action.Should().Throw<ArgumentNullException>();
+            action.Should().Throw<ArgumentException>();
         }
 
         [TestMethod]
-        public void Map_ForEmptyResponseAccountId_ThrowsArgumentNullException()
+        public void Map_ForEmptyResponseAccountId_ThrowsArgumentException()
         {
             // Arrange
-            var addNhsUserRequest = ValidAddNhsUserRequest;
-            var addNhsUserResponse = ValidAddNhsUserResponse;
-            addNhsUserResponse.AccountId = string.Empty;
+            var addNhsUserRequest = ValidLinkAccountCreateRequest;
+            var linkAccountReply = ValidLinkAccountCreateReply;
+            linkAccountReply.AccountId = string.Empty;
 
             // Act
-            Action action = () => _systemUnderTest.Map(addNhsUserRequest, addNhsUserResponse);
+            Action action = () => _systemUnderTest.Map(addNhsUserRequest, linkAccountReply);
 
             // Assert
-            action.Should().Throw<ArgumentNullException>();
+            action.Should().Throw<ArgumentException>();
         }
     }
 }

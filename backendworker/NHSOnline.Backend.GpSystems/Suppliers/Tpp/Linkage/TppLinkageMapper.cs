@@ -3,6 +3,7 @@ using System.Web;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Linkage;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
@@ -16,43 +17,42 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
             _logger = logger;
         }
 
-
-        public LinkageResponse Map(AddNhsUserRequest addNhsUserRequest, AddNhsUserResponse addNhsUserResponse)
+        public LinkageResponse Map(LinkAccount linkAccount, LinkAccountReply linkAccountReply)
         {
-            if (!IsRequestValid(addNhsUserRequest))
+            if (!IsRequestValid(linkAccount))
             {
-                throw new ArgumentNullException(nameof(addNhsUserRequest));
-            }
-            
-            if (!IsResponseValid(addNhsUserResponse))
-            {
-                throw new ArgumentNullException(nameof(addNhsUserResponse));
+                throw new ArgumentException("Request is not valid", nameof(linkAccount));
             }
 
-            var passphraseToLink = addNhsUserResponse.PassphraseToLink;
+            if (!IsResponseValid(linkAccountReply))
+            {
+                throw new ArgumentException("Response is not valid", nameof(linkAccountReply));
+            }
+
+            var passphraseToLink = linkAccountReply.PassphraseToLink;
             var passphraseToLinkDecoded = HttpUtility.HtmlDecode(passphraseToLink);
 
             return new LinkageResponse
             {
-                AccountId = addNhsUserResponse.AccountId,
-                OdsCode = addNhsUserRequest.OrganisationCode,
+                AccountId = linkAccountReply.AccountId,
+                OdsCode = linkAccount.OrganisationCode,
                 LinkageKey = passphraseToLinkDecoded
             };
         }
 
-        private bool IsRequestValid(AddNhsUserRequest addNhsUserRequest)
+        private bool IsRequestValid(LinkAccount request)
         {
-            if (addNhsUserRequest == null)
+            if (request == null)
             {
                 return false;
             }
 
             return new ValidateAndLog(_logger)
-                .IsNotNullOrWhitespace(addNhsUserRequest.OrganisationCode, nameof(addNhsUserRequest.OrganisationCode))
+                .IsNotNullOrWhitespace(request.OrganisationCode, nameof(request.OrganisationCode))
                 .IsValid();
         }
 
-        private bool IsResponseValid(AddNhsUserResponse addNhsUserResponse)
+        private bool IsResponseValid(LinkAccountReply addNhsUserResponse)
         {
             if (addNhsUserResponse == null)
             {

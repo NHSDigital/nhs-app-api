@@ -30,7 +30,7 @@ Feature: Im1 Connection V2 POST
       | GP System |
       | EMIS      |
       | VISION    |
-    #TPP cannot retrieve linkage keys, so this test would be invalid
+      | TPP       |
     #MICROTEST users connection token is based on generated guids so we cant use the assert on the connection token
 
   Scenario: A MICROTEST user can successfully register, getting retrieved linkage details
@@ -160,7 +160,6 @@ Feature: Im1 Connection V2 POST
     Then I receive a '<ExpectedStatus>' IM1 error status code with code '<ExpectedCode>'
     Examples:
       | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedCode | Message |
-      | TPP       | 200        | 8      | 500            | 100  ||
       | EMIS      | 400        | 1001   | 403            | 101  ||
       | EMIS      | 400        | 1401   | 403            | 101  ||
       | EMIS      | 400        | 1107   | 403            | 102  ||
@@ -173,6 +172,7 @@ Feature: Im1 Connection V2 POST
       | EMIS      | 400        | 1108   | 409            | 105  ||
       | VISION    | 200        | -2     | 409            | 105  ||
       | EMIS      | 400        | 1105   | 400            | 106  ||
+      | TPP       | 200        | 8      | 400            | 106  ||
       | VISION    | 200        | -31    | 400            | 106  ||
       | VISION    | 400        | V4205  | 400            | 108  ||
       | VISION    | 404        | V4205  | 400            | 108  ||

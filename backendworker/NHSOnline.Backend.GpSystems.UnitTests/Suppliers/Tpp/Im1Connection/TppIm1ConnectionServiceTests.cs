@@ -19,6 +19,7 @@ using NHSOnline.Backend.Support;
 using UnitTestHelper;
 using Im1ConnectionErrorCodes = NHSOnline.Backend.GpSystems.Im1Connection.Im1ConnectionErrorCodes;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Linkage;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 {
@@ -31,18 +32,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
         private const string DefaultOdsCode = "token";
 
         private IFixture _fixture;
-        private Mock<ITppClientRequest<LinkAccount, LinkAccountReply>> _mockLinkAccount;
+        private Mock<ITppClientRequest<LinkAccountAuthenticate, LinkAccountReply>> _mockLinkAccount;
         private Mock<ITppClientRequest<Authenticate, AuthenticateReply>> _mockAuthenticate;
         private Mock<IIm1CacheService> _mockIm1CacheService;
         private Mock<IIm1CacheKeyGenerator> _mockIm1CacheKeyGenerator;
         private Mock<ILogger<TppIm1ConnectionService>> _mockLogger;
 
-
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _mockLinkAccount = _fixture.Freeze<Mock<ITppClientRequest<LinkAccount, LinkAccountReply>>>();
+            _mockLinkAccount = _fixture.Freeze<Mock<ITppClientRequest<LinkAccountAuthenticate, LinkAccountReply>>>();
             _mockAuthenticate = _fixture.Freeze<Mock<ITppClientRequest<Authenticate, AuthenticateReply>>>();
             _mockIm1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
             _mockIm1CacheKeyGenerator = _fixture.Freeze<Mock<IIm1CacheKeyGenerator>>();
@@ -200,7 +200,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
         {
             // Arrange
             var linkAccountReply = _fixture.Create<LinkAccountReply>();
-            _mockLinkAccount.Setup(x => x.Post(It.IsAny<LinkAccount>())).Returns(
+            _mockLinkAccount.Setup(x => x.Post(It.IsAny<LinkAccountAuthenticate>())).Returns(
                 Task.FromResult(
                     new TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
                     {
@@ -236,15 +236,23 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.Success>();
             _mockIm1CacheService.Verify(x => x.GetIm1ConnectionToken<TppConnectionToken>(key), Times.Once);
-            _mockLinkAccount.Verify(x => x.Post(It.IsAny<LinkAccount>()), Times.Never);
+            _mockLinkAccount.Verify(x => x.Post(It.IsAny<LinkAccountAuthenticate>()), Times.Never);
         }
 
         [TestMethod]
         public async Task Register_Success_WhenDataAreCorrect()
         {
             // Arrange
+            var request = _fixture.Create<PatientIm1ConnectionRequest>();
+
             var linkAccountReply = _fixture.Create<LinkAccountReply>();
-            _mockLinkAccount.Setup(x => x.Post(It.IsAny<LinkAccount>())).Returns(
+            _mockLinkAccount.Setup(x => x.Post(It.Is<LinkAccountAuthenticate>(x =>
+                    x.AccountId == request.AccountId &&
+                    x.DateofBirth == request.DateOfBirth &&
+                    x.LastName == request.Surname &&
+                    x.OrganisationCode == request.OdsCode &&
+                    x.Passphrase == request.LinkageKey)))
+                .Returns(
                 Task.FromResult(
                     new TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
                     {
@@ -275,7 +283,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
                 .Verifiable();
 
             var systemUnderTest = CreateSystemUnderTest();
-            var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
             // Act
             var result = await systemUnderTest.Register(request);
@@ -325,7 +332,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
                 .With(x => x.ErrorCode, "6")
                 .Create();
 
-            _mockLinkAccount.Setup(x => x.Post(It.IsAny<LinkAccount>())).Returns(
+            _mockLinkAccount.Setup(x => x.Post(It.IsAny<LinkAccountAuthenticate>())).Returns(
                 Task.FromResult(
                     new TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
                     {
@@ -350,7 +357,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
                 .With(x => x.ErrorCode, "8")
                 .Create();
 
-            _mockLinkAccount.Setup(x => x.Post(It.IsAny<LinkAccount>())).Returns(
+            _mockLinkAccount.Setup(x => x.Post(It.IsAny<LinkAccountAuthenticate>())).Returns(
                 Task.FromResult(
                     new TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
                     {
@@ -372,7 +379,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
         {
             // Arrange
             var errorResponse = _fixture.Create<Error>();
-            _mockLinkAccount.Setup(x => x.Post(It.IsAny<LinkAccount>())).Returns(
+            _mockLinkAccount.Setup(x => x.Post(It.IsAny<LinkAccountAuthenticate>())).Returns(
                 Task.FromResult(
                     new TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
                     {
@@ -394,7 +401,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
         {
             // Arrange
             var linkAccountReply = _fixture.Create<LinkAccountReply>();
-            _mockLinkAccount.Setup(x => x.Post(It.IsAny<LinkAccount>())).Returns(
+            _mockLinkAccount.Setup(x => x.Post(It.IsAny<LinkAccountAuthenticate>())).Returns(
                 Task.FromResult(
                     new TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
                     {
@@ -424,7 +431,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
         {
             // Arrange
             _mockLinkAccount
-                .Setup(x => x.Post(It.IsAny<LinkAccount>()))
+                .Setup(x => x.Post(It.IsAny<LinkAccountAuthenticate>()))
                 .Throws<HttpRequestException>();
             var systemUnderTest = CreateSystemUnderTest();
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
@@ -441,7 +448,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
         {
             // Arrange
             var linkAccountReply = _fixture.Create<LinkAccountReply>();
-            _mockLinkAccount.Setup(x => x.Post(It.IsAny<LinkAccount>())).Returns(
+            _mockLinkAccount.Setup(x => x.Post(It.IsAny<LinkAccountAuthenticate>())).Returns(
                 Task.FromResult(
                     new TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
                     {
@@ -470,7 +477,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
         private PatientIm1ConnectionRequest SetUpForRegister(string nhsNumber)
         {
             var linkAccountReply = _fixture.Create<LinkAccountReply>();
-            _mockLinkAccount.Setup(x => x.Post(It.IsAny<LinkAccount>())).Returns(
+            _mockLinkAccount.Setup(x => x.Post(It.IsAny<LinkAccountAuthenticate>())).Returns(
                 Task.FromResult(
                     new TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
                     {

@@ -7,6 +7,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.BinaryData;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientPracticeMessaging;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Prescriptions;
@@ -20,8 +21,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         {
             services.AddTppClientRequest<Authenticate, AuthenticateReply, TppClientAuthenticatePost>()
                 .AddTppClientRequest<TppRequestParameters, LogoffReply, TppClientLogoffPost>()
-                .AddTppClientRequest<AddNhsUserRequest, AddNhsUserResponse, TppClientNhsUserPost>()
-                .AddTppClientRequest<LinkAccount, LinkAccountReply, TppClientLinkAccountPost>();
+                .AddTppClientRequest<LinkAccountRetrieve, LinkAccountReply, TppClientLinkAccountRetrievePost>()
+                .AddTppClientRequest<LinkAccountCreate, LinkAccountReply, TppClientLinkAccountCreatePost>()
+                .AddTppClientRequest<LinkAccountAuthenticate, LinkAccountReply, TppClientLinkAccountAuthenticatePost>();
 
             return services;
         }

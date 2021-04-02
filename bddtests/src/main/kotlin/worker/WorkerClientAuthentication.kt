@@ -84,6 +84,7 @@ class WorkerClientAuthentication(val config: Config, val sender: WorkerClientSen
                 .setHeader(WorkerHeaders.OdsCode, linkage.odsCode)
                 .setHeader(WorkerHeaders.IdentityToken, linkage.identityToken)
                 .setHeader(WorkerHeaders.Surname, linkage.surname)
+                .setHeader(WorkerHeaders.DateOfBirth, linkage.dateOfBirth)
         return httpGet.sendAndGetResult(sender, gson, LinkageResponse::class.java)
     }
 

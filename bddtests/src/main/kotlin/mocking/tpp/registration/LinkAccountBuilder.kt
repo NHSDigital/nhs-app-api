@@ -10,12 +10,16 @@ import java.io.StringWriter
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.Marshaller
 
-class LinkAccountBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST", "/tpp/") {
+class LinkAccountBuilder(val linkAccount: LinkAccount) : TppMappingBuilder("POST", "/tpp/") {
     init {
         val contentTypeHeader = "content-type"
         val contentTypeValue = "text/xml; charset=UTF-8"
         val typeHeader = "type"
         val typeValue = "LinkAccount"
+
+        val dateOfBirthInCorrectFormat =
+            if (linkAccount.dateOfBirth.endsWith("T00:00:00")) linkAccount.dateOfBirth
+            else linkAccount.dateOfBirth.plus("T00:00:00")
 
         requestBuilder
                 .andHeader(contentTypeHeader, contentTypeValue)
@@ -23,23 +27,20 @@ class LinkAccountBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST", "
                 .andBodyMatchingXpath("//LinkAccount[" +
                         "@apiVersion='${linkAccount.apiVersion}' and " +
                         "@lastName='${linkAccount.lastName}' and " +
+                        "@dateOfBirth='${dateOfBirthInCorrectFormat}' and " +
+                        "@accountId='${linkAccount.accountId}' and " +
+                        "@passphrase='${linkAccount.passphrase}' and " +
                         "@organisationCode='${linkAccount.organisationCode}']")
     }
 
     fun respondWithSuccess(linkAccountReply: LinkAccountReply): Mapping {
-        val responseBody = LinkAccountReply(
-                linkAccountReply.passphrase,
-                linkAccountReply.uuid,
-                passphraseToLink = "passphraseToLink",
-                accountId = linkAccountReply.accountId)
-
         val jaxbContext = JAXBContext.newInstance(LinkAccountReply::class.java)
         val marshaller = jaxbContext.createMarshaller()
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true)
 
         val stringWriter = StringWriter()
         stringWriter.use {
-            marshaller.marshal(responseBody, stringWriter)
+            marshaller.marshal(linkAccountReply, stringWriter)
         }
 
         return respondWith(HttpStatus.SC_OK) {
@@ -59,19 +60,13 @@ class LinkAccountBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST", "
     }
 
     fun respondWithError(errorBody: Error, httpResponse : Int = HttpStatus.SC_OK): Mapping {
-        val responseBody = Error(
-                errorBody.errorCode,
-                errorBody.userFriendlyMessage,
-                errorBody.uuid
-        )
-
         val jaxbContext = JAXBContext.newInstance(Error::class.java)
         val marshaller = jaxbContext.createMarshaller()
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true)
 
         val stringWriter = StringWriter()
         stringWriter.use {
-            marshaller.marshal(responseBody, stringWriter)
+            marshaller.marshal(errorBody, stringWriter)
         }
 
         return respondWith(httpResponse) {

@@ -7,4 +7,5 @@ object WorkerHeaders {
     val IdentityToken = "NHSO-Identity-Token"
     val Surname = "NHSO-Surname"
     val PatientId = "NHSO-Patient-Id"
+    val DateOfBirth = "NHSO-Date-Of-Birth"
 }

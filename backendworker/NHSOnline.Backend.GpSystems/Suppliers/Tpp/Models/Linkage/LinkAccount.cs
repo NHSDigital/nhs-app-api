@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models
+namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Linkage
 {
-    [XmlType(TypeName = "LinkAccount")]
-    public class AddNhsUserRequest : ITppApplicationRequest
+    public abstract class LinkAccount : ITppApplicationRequest
     {
         [XmlIgnore]
         public string RequestType => "LinkAccount";
@@ -20,9 +19,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models
 
         [XmlAttribute("lastName")]
         public string LastName { get; set; }
-        
-        [XmlAttribute("nhsNumber")]
-        public string NhsNumber { get; set; }
 
         [XmlAttribute("dateOfBirth")]
         public DateTime DateofBirth { get; set; }

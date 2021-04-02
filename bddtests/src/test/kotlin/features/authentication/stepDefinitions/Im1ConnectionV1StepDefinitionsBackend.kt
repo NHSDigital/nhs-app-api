@@ -253,12 +253,12 @@ class Im1ConnectionV1StepDefinitionsBackend {
         ))
         val gpSystem = SerenityHelpers.getGpSupplier()
         val defaultPatient = Patient.getDefault(gpSystem)
-        val patient =defaultPatient.copy(
+        val patient = defaultPatient.copy(
                 accountId = linkingInformationExample.accountId,
                 linkageKey = linkingInformationExample.linkageKey,
                 odsCode = linkingInformationExample.odsCode,
                 name = defaultPatient.name.copy(surname = linkingInformationExample.surname),
-                age = PatientAge( linkingInformationExample.dateOfBirth),
+                age = PatientAge(linkingInformationExample.dateOfBirth),
                 nhsNumbers = arrayListOf(linkingInformationExample.nhsNumber)
         )
         CitizenIdSessionCreateJourney().createFor(patient)

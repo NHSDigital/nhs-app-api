@@ -6,9 +6,9 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
 {
-    internal static class TppLinkagePostErrorMapper
+    internal static class TppLinkageGetErrorMapper
     {
-        private static Dictionary<string, Im1ConnectionErrorCodes.InternalCode> KeyToEnumMapper=>
+        private static Dictionary<string, Im1ConnectionErrorCodes.InternalCode> KeyToEnumMapper =>
             new Dictionary<string, Im1ConnectionErrorCodes.InternalCode>
             {
                 {

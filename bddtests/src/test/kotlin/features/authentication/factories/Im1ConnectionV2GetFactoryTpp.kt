@@ -4,6 +4,7 @@ import constants.Supplier
 import mocking.tpp.models.Application
 import mocking.tpp.models.Authenticate
 import mocking.tpp.models.Error
+import mocking.tpp.models.LinkAccount
 
 class Im1ConnectionV2GetFactoryTpp : Im1ConnectionV2GetFactory(Supplier.TPP) {
 
@@ -14,8 +15,10 @@ class Im1ConnectionV2GetFactoryTpp : Im1ConnectionV2GetFactory(Supplier.TPP) {
                 errorCode,
                 "Mocked TPP Error"
         )
+        val linkAccount = LinkAccount.forPatient(patient)
+
         mockingClient.forTpp.mock {
-            authentication.linkAccountRequest(patient).respondWithError(error, httpStatusCode)
+            authentication.linkAccountRequest(linkAccount).respondWithError(error, httpStatusCode)
         }
     }
 

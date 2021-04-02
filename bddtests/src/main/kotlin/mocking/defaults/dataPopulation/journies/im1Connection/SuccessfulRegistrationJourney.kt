@@ -9,16 +9,17 @@ import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.me.LinkageDetailsModel
 import mocking.emis.models.AssociationType
 import mocking.emis.models.IdentifierType
+import mocking.defaults.VisionMockDefaults
+import mocking.emis.practices.SettingsResponseModel
 import mocking.tpp.models.Application
 import mocking.tpp.models.Authenticate
 import mocking.tpp.models.AuthenticateReply
+import mocking.tpp.models.LinkAccount
 import mocking.tpp.models.LinkAccountReply
 import mocking.tpp.models.NationalId
 import mocking.tpp.models.Person
 import mocking.tpp.models.PersonName
 import mocking.tpp.models.User
-import mocking.defaults.VisionMockDefaults
-import mocking.emis.practices.SettingsResponseModel
 import mocking.vision.models.Account
 import mocking.vision.models.Configuration
 import mocking.vision.models.PatientNumber
@@ -79,8 +80,9 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
 
     private fun generateTppMocks(patient: Patient) {
 
+        val linkAccount = LinkAccount.forPatient(patient)
         client.forTpp.mock {
-                authentication.linkAccountRequest(patient).respondWithSuccess(
+                authentication.linkAccountRequest(linkAccount).respondWithSuccess(
                                 LinkAccountReply(
                                         passphrase = patient.passphrase,
                                         uuid = TppMockDefaults.DEFAULT_TPP_UUID,

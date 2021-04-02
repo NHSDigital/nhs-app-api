@@ -17,13 +17,21 @@ class TppLinkagePOSTBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST"
         val typeHeader = "type"
         val typeValue = "LinkAccount"
 
+        val dateOfBirthInCorrectFormat =
+            if (linkAccount.dateOfBirth.endsWith("T00:00:00")) linkAccount.dateOfBirth
+            else linkAccount.dateOfBirth.plus("T00:00:00")
+
         requestBuilder
                 .andHeader(contentTypeHeader, contentTypeValue)
                 .andHeader(typeHeader, typeValue)
                 .andBodyMatchingXpath("//LinkAccount[" +
-                        "@apiVersion='${linkAccount.apiVersion}']")
+                        "@apiVersion='${linkAccount.apiVersion}' and " +
+                        "@lastName='${linkAccount.lastName}' and " +
+                        "@dateOfBirth='${dateOfBirthInCorrectFormat}' and " +
+                        "@nhsNumber='${linkAccount.nhsNumber}' and " +
+                        "@emailAddress='${linkAccount.emailAddress}' and " +
+                        "@organisationCode='${linkAccount.organisationCode}']")
     }
-
 
     fun respondWithSuccessfullyCreated(linkage: LinkageInformationFacade): Mapping {
         val reply = LinkAccountReply(

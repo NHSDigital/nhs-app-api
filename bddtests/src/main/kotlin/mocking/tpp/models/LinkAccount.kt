@@ -17,7 +17,10 @@ data class LinkAccount(
         @XmlAttribute var lastName: String = "default lastName",
         @XmlAttribute var dateOfBirth: String = "1985-05-29T00:00:00.0Z",
         @XmlAttribute var organisationCode: String = "default unitId",
-        @XmlAttribute var uuid: String = "default uuid",
+        @XmlAttribute var retrieveOnly: String = "n",
+        @XmlAttribute var nhsNumber: String = "default nhsNumber",
+        @XmlAttribute var emailAddress: String = "default email",
+        @XmlAttribute var uuid: String = TppMockDefaults.DEFAULT_TPP_UUID,
         @field:XmlElement(name = "Application") var application: Application = TppMockDefaults.DEFAULT_TPP_APPLICATION
 ) {
         companion object {
@@ -28,7 +31,8 @@ data class LinkAccount(
                             lastName = patient.name.surname,
                             dateOfBirth = patient.age.dateOfBirth,
                             organisationCode = patient.odsCode,
-                            uuid = TppMockDefaults.DEFAULT_TPP_UUID
+                            nhsNumber = patient.nhsNumbers.first().filter { !it.isWhitespace() },
+                            emailAddress = patient.contactDetails.emailAddress
                     )
             }
         }

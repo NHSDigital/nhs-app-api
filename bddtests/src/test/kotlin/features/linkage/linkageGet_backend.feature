@@ -16,10 +16,11 @@ Feature: Linkage Get Key
     Then I receive a "OK" success code
     And I receive a valid linkage response
 
-  Scenario: Linkage request GET with correct values for TPP returns 404 Not Found
+  Scenario: Linkage request GET with correct values for TPP returns valid linkage details
     Given I have valid TPP linkage details
     When I call the Linkage GET endpoint
-    Then I receive a "Not Found" error
+    Then I receive a "OK" success code
+    And I receive a valid linkage response
 
   Scenario Outline: Linkage request GET with patients who have linkage keys <GP System>
     Given I have valid <GP System> linkage details

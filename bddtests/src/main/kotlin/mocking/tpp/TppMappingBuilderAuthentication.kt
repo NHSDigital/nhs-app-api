@@ -8,7 +8,6 @@ import mocking.tpp.patientSelected.TppPatientSelectedBuilder
 import mocking.tpp.registration.LinkAccountBuilder
 import mocking.tpp.session.TppLogOffBuilder
 import mocking.tpp.session.TppSessionBuilder
-import models.Patient
 import worker.models.demographics.TppUserSession
 
 class TppMappingBuilderAuthentication{
@@ -17,7 +16,7 @@ class TppMappingBuilderAuthentication{
 
     fun logOffRequest()= TppLogOffBuilder()
 
-    fun linkAccountRequest(patient: Patient) = LinkAccountBuilder(LinkAccount.forPatient(patient))
+    fun linkAccountRequest(linkAccount: LinkAccount) = LinkAccountBuilder(linkAccount)
 
     fun linkageKeyPOSTRequest(linkAccount: LinkAccount) = TppLinkagePOSTBuilder(linkAccount)
 

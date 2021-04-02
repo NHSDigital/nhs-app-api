@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement
 data class LinkAccountReply (
         @XmlAttribute var passphrase: String = "default passphrase",
         @XmlAttribute var uuid: String = "default uuid",
+        @XmlAttribute var onlineUserId: String = "default onlineUserId",
         @XmlAttribute var accountId: String? = null,
         @XmlAttribute var passphraseToLink: String? = "default passphraseToLink"
 )

@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Linkage;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support;
 using RichardSzalay.MockHttp;
@@ -18,7 +19,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
     public sealed class TppClientLinkAccountPostTests : IDisposable
     {
         private TppClientTestsContext Context { get; set; }
-        private ITppClientRequest<LinkAccount, LinkAccountReply> SystemUnderTest { get; set; }
+        private ITppClientRequest<LinkAccountCreate, LinkAccountReply> SystemUnderTest { get; set; }
 
         private MockHttpMessageHandler MockHttpHandler => Context.MockHttpHandler;
 
@@ -27,14 +28,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
         {
             Context = new TppClientTestsContext();
             Context.Initialise();
-            SystemUnderTest = Context.ServiceProvider.GetRequiredService<ITppClientRequest<LinkAccount, LinkAccountReply>>();
+            SystemUnderTest = Context.ServiceProvider.GetRequiredService<ITppClientRequest<LinkAccountCreate, LinkAccountReply>>();
         }
 
         [TestMethod]
         public async Task LinkAccountPostRequest_ReturnsLinkAccountReply_WhenValidlyRequested()
         {
             // Arrange
-            var linkRequestModel = new LinkAccount
+            var linkRequestModel = new LinkAccountCreate
             {
                 OrganisationCode = TppClientTestsContext.UnitId,
                 Uuid = TppClientTestsContext.Uuid,
@@ -81,7 +82,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
         public async Task LinkAccountPostRequest_ReturnsErrorWithFalseSuccessCode_WhenResponseHasErrorInBody()
         {
             // Arrange
-            var linkAccountRequestModel = new LinkAccount
+            var linkAccountRequestModel = new LinkAccountCreate
             {
                 OrganisationCode = TppClientTestsContext.UnitId,
                 Uuid = TppClientTestsContext.Uuid,
@@ -123,7 +124,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
             HttpStatusCode value)
         {
             // Arrange
-            var linkAccountRequestModel = new LinkAccount
+            var linkAccountRequestModel = new LinkAccountCreate
             {
                 OrganisationCode = TppClientTestsContext.UnitId,
                 Uuid = TppClientTestsContext.Uuid,
@@ -155,7 +156,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
         public async Task LinkAccountPostRequest_ThrowsUnauthorisedHttpResponseException_WhenResponseIndicatesNotAuthorised()
         {
             // Arrange
-            var linkAccountRequestModel = new LinkAccount
+            var linkAccountRequestModel = new LinkAccountCreate
             {
                 OrganisationCode = TppClientTestsContext.UnitId,
                 Uuid = TppClientTestsContext.Uuid,

@@ -15,7 +15,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
 {
     [TestClass]
-    public class TppLinkagePostLinkageErrorMapperTests
+    public class TppLinkageGetErrorMapperTests
     {
         private IFixture _fixture;
         private Mock<ILogger<TppLinkageService>> _logger;
@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
         public void Map_WhenPassingNull_ThrowsNullReferenceException()
         {
             // Act
-            Action act = () => TppLinkagePostErrorMapper.Map(null, _logger.Object);
+            Action act = () => TppLinkageGetErrorMapper.Map(null, _logger.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("response");
@@ -47,13 +47,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
                 "6");
 
             // Act
-            var result = TppLinkagePostErrorMapper.Map(response, _logger.Object);
-            
+            var result = TppLinkageGetErrorMapper.Map(response, _logger.Object);
+
             // Assert
             result.Should().BeAssignableTo<LinkageResult.ErrorCase>()
                 .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.ProblemLinkingAccount);
         }
-        
+
         [TestMethod]
         public void Map_WithUnknownValues_MapsCorrectly()
         {
@@ -61,18 +61,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
             var response = CreateResponse(HttpStatusCode.OK, "10");
 
             // Act
-            var result = TppLinkagePostErrorMapper.Map(response, _logger.Object);
-            
+            var result = TppLinkageGetErrorMapper.Map(response, _logger.Object);
+
             // Assert
             result.Should().BeAssignableTo<LinkageResult.UnmappedErrorWithStatusCode>()
                 .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
-        
-        private TppApiObjectResponse<AddNhsUserResponse> CreateResponse(
+
+        private TppApiObjectResponse<LinkAccountReply> CreateResponse(
             HttpStatusCode statusCode,
             string errorCode)
         {
-            var response = _fixture.Create<TppApiObjectResponse<AddNhsUserResponse>>();
+            var response = _fixture.Create<TppApiObjectResponse<LinkAccountReply>>();
 
             response.StatusCode = statusCode;
             response.ErrorResponse.ErrorCode = errorCode;

@@ -5,6 +5,7 @@ import constants.Supplier
 import mocking.defaults.TppMockDefaults
 import mocking.tpp.models.AuthenticateReply
 import mocking.tpp.models.Error
+import mocking.tpp.models.LinkAccount
 import models.Patient
 import java.time.Duration
 
@@ -104,8 +105,9 @@ class AuthenticationFactoryTpp : AuthenticationFactory(Supplier.TPP) {
     }
 
     private fun createInvalidLinkageTest(patient: Patient) {
+        val linkAccount = LinkAccount.forPatient(patient)
         mockingClient.forTpp.mock {
-            authentication.linkAccountRequest(patient).respondWithInvalidLinkageCredentials()
+            authentication.linkAccountRequest(linkAccount).respondWithInvalidLinkageCredentials()
         }
     }
 }

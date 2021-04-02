@@ -10,18 +10,19 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Linkage;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
 {
     internal class TppIm1ConnectionService : IIm1ConnectionService
     {
-        private readonly ITppClientRequest<LinkAccount, LinkAccountReply> _linkAccount;
+        private readonly ITppClientRequest<LinkAccountAuthenticate, LinkAccountReply> _linkAccount;
         private readonly ITppClientRequest<Authenticate, AuthenticateReply> _authenticate;
         private readonly IIm1CacheService _im1CacheService;
         private readonly IIm1CacheKeyGenerator _im1CacheKeyGenerator;
         private readonly ILogger<TppIm1ConnectionService> _logger;
 
-        public TppIm1ConnectionService(ITppClientRequest<LinkAccount, LinkAccountReply> linkAccount,
+        public TppIm1ConnectionService(ITppClientRequest<LinkAccountAuthenticate, LinkAccountReply> linkAccount,
             ITppClientRequest<Authenticate, AuthenticateReply> authenticate, IIm1CacheService im1CacheService,
             IIm1CacheKeyGenerator im1CacheKeyGenerator, ILogger<TppIm1ConnectionService> logger)
         {
@@ -135,7 +136,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
 
         private async Task<Im1ConnectionRegisterResult> HandleAuthenticateRequestAndResponse(
             TppConnectionToken connectionToken,
-            LinkAccount linkAccountRequest)
+            LinkAccountAuthenticate linkAccountRequest)
         {
             var authenticateRequest = CreateAuthenticate(connectionToken, linkAccountRequest);
 
@@ -165,7 +166,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
             return new Im1ConnectionRegisterResult.Success(response);
         }
 
-        private static TppConnectionToken CreateTppConnectionToken(LinkAccount linkAccountRequest,
+        private static TppConnectionToken CreateTppConnectionToken(LinkAccountAuthenticate linkAccountRequest,
             TppApiObjectResponse<LinkAccountReply> linkAccountReply, string key)
         {
             return new TppConnectionToken
@@ -189,15 +190,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
             };
         }
 
-        private static LinkAccount CreateLinkAccount(PatientIm1ConnectionRequest request)
+        private static LinkAccountAuthenticate CreateLinkAccount(PatientIm1ConnectionRequest request)
         {
-            return new LinkAccount
+            return new LinkAccountAuthenticate
             {
                 AccountId = request.AccountId,
                 DateofBirth = request.DateOfBirth,
                 LastName = request.Surname,
                 OrganisationCode = request.OdsCode,
-                Passphrase = request.LinkageKey
+                Passphrase = request.LinkageKey,
             };
         }
 

@@ -1,0 +1,13 @@
+---
+cidHostname: auth.nhsapp.signin.nhs.uk
+cidFidoHostname: uaf.nhsapp.signin.nhs.uk
+cidSettingsHostName: settings.nhsapp.signin.nhs.uk
+
+api:
+  knownServicesOverrides:
+    services__cid_settings__url: https://settings.nhsapp.signin.nhs.uk
+    services__cid_account__url: https://account.nhsapp.signin.nhs.uk
+    services__cid_auth__url: https://auth.nhsapp.signin.nhs.uk
+    services__cid_uaf__url: https://uaf.nhsapp.signin.nhs.uk
+    services__cid_access__url: https://access.nhsapp.signin.nhs.uk
+    services__cid_idvm__url: https://idvm.nhsapp.signin.nhs.uk
