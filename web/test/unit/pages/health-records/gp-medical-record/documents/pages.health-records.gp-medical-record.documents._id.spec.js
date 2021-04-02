@@ -33,6 +33,9 @@ const newStore = ({
         isNativeApp: false,
       },
     },
+    $env: {
+      CLINICAL_ABBREVIATIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/',
+    },
   }));
 
 let page;

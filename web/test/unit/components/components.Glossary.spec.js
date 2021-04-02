@@ -6,7 +6,9 @@ jest.mock('@/lib/utils');
 const mountGlossary = () => mount(Glossary, {
   $store: {
     state: { device: { isNativeApp: false } },
-    $env: { BASE_NHS_APP_HELP_URL: 'http://stubs.local.bitraft.io/help-and-support/' },
+    $env: {
+      CLINICAL_ABBREVIATIONS_URL: 'http://stubs.local.bitraft.io:8080/external/nhsuk/abbreviations',
+    },
   },
 });
 
@@ -20,7 +22,7 @@ describe('Glossary', () => {
 
     it('will have the correct url as the href', () => {
       expect(link.attributes('href'))
-        .toEqual('http://stubs.local.bitraft.io/help-and-support/health-records-in-the-nhs-app/abbreviations-commonly-found-in-medical-records/');
+        .toEqual('http://stubs.local.bitraft.io:8080/external/nhsuk/abbreviations');
     });
   });
 });

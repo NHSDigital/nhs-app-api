@@ -67,10 +67,6 @@ import {
 import { redirectTo } from '@/lib/utils';
 import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import {
-  PRIVACY_POLICY_URL,
-  ONLINE_CONSULTATIONS_PRIVACY_URL,
-} from '@/router/externalLinks';
 import last from 'lodash/fp/last';
 
 export default {
@@ -106,8 +102,8 @@ export default {
       code: DEMOGRAPHICS_QUESTION_OPTION,
       name: DEMOGRAPHICS_QUESTION_NAME,
       isDemographicsAccepted: false,
-      privacyPolicyUrl: PRIVACY_POLICY_URL,
-      onlineConsultationsUrl: ONLINE_CONSULTATIONS_PRIVACY_URL,
+      privacyPolicyUrl: this.$store.$env.PRIVACY_POLICY_URL,
+      onlineConsultationsUrl: this.$store.$env.ONLINE_CONSULTATIONS_PRIVACY_URL,
     };
   },
   computed: {

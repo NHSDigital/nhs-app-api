@@ -208,6 +208,7 @@ Feature: Documents Frontend - Medical Record v2
 
   Scenario: An EMIS user selecting an unavailable or invalid document will see an error page - Medical Record v2
     Given I am a EMIS user setup to use medical record version 2
+    And '111' responds to requests for '/home'
     And the GP Practice has multiple documents where one has an invalid id
     And I am logged in
     When I retrieve the 'gp medical record' page directly
@@ -219,7 +220,7 @@ Feature: Documents Frontend - Medical Record v2
     Then I see the document information page with actions
     When I click the View action link on the document information page
     Then I see the appropriate error message for a document server error
-    When I click the error '111.nhs.uk' link with a url of 'https://111.nhs.uk'
+    When I click the error '111.nhs.uk' link with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
     Then a new tab has been opened by the link
 
   Scenario: An EMIS user has a document result with an unknown date

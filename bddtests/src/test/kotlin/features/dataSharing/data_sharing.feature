@@ -42,20 +42,22 @@ Feature: Data Sharing Frontend
 
   Scenario: A user can navigate to the NHS website to find out more information on Data Sharing
     Given I am using the native app user agent
+    And 'NHS UK' responds to requests for '/data-matters'
     And I am a user who wishes to manage their Data Sharing Preferences
     And I am logged in
     And I retrieve the 'Data Sharing' page directly
     Then the Data Sharing 'Overview' page is displayed
-    When I click the link called 'Visit the NHS website' with a url of 'https://www.nhs.uk/your-nhs-data-matters/'
+    When I click the link called 'Visit the NHS website' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/data-matters'
     Then a new tab has been opened by the link
 
   Scenario: A user can navigate to the NHS website to find out more information on Managing their Choice
     Given I am using the native app user agent
+    And 'NHS UK' responds to requests for '/make-choice'
     And I am a user who wishes to manage their Data Sharing Preferences
     And I am logged in
     And I retrieve the 'Data Sharing Make Your Choice' page directly
     Then the Data Sharing 'Make your choice' page is displayed
-    When I click the link called 'NHS website' with a url of 'https://www.nhs.uk/your-nhs-data-matters/manage-your-choice/other-ways-to-manage-your-choice/'
+    When I click the link called 'NHS website' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/make-choice'
     Then a new tab has been opened by the link
 
   Scenario: A user chooses to manage their Data Sharing preferences
@@ -71,6 +73,7 @@ Feature: Data Sharing Frontend
 
   Scenario: A desktop user is directed to the NHS website to find out more information on Data Sharing
     Given I am a user who wishes to manage their Data Sharing Preferences
+    And 'NHS UK' responds to requests for '/data-matters'
     And I am logged in
     When I browse to the pages at the following urls I see the home page
       | /data-sharing                   |
@@ -78,5 +81,5 @@ Feature: Data Sharing Frontend
       | /data-sharing/does-not-apply    |
       | /data-sharing/make-your-choice  |
     And I retrieve the 'health record hub' page directly
-    And I click the link called 'Choose if data from your health records is shared for research and planning' with a url of 'https://www.nhs.uk/your-nhs-data-matters/'
+    And I click the link called 'Choose if data from your health records is shared for research and planning' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/data-matters'
     Then a new tab has been opened by the link

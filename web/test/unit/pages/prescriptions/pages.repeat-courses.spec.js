@@ -38,7 +38,7 @@ const createStore = ({
     validationError: jest.fn(),
   },
   $env: {
-    BASE_NHS_APP_HELP_URL: 'http://stubs.local.bitraft.io/help-and-support',
+    CLINICAL_ABBREVIATIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/',
   },
   state: {
     repeatPrescriptionCourses: {

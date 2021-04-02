@@ -117,6 +117,7 @@ export default {
   data() {
     return {
       isNativeApp: this.$store.state.device.isNativeApp,
+      symptomCheckerUrl: this.$store.$env.SYMPTOM_CHECKER_URL,
     };
   },
   computed: {
@@ -309,7 +310,7 @@ export default {
       this.$store.dispatch('analytics/trackError', errorMessage);
     },
     get111HyperLink() {
-      return '<a href="https://111.nhs.uk" target="_blank" rel="noopener noreferrer" style="display:inline">111.nhs.uk</a>';
+      return `<a href="${this.symptomCheckerUrl}" target="_blank" rel="noopener noreferrer" style="display:inline">111.nhs.uk</a>`;
     },
     backLinkClicked() {
       redirectTo(this, this.backLinkUrl);

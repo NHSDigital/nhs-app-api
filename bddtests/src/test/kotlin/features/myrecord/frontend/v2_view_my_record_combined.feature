@@ -31,15 +31,15 @@ Feature: Combined Frontend - Medical Record v2
 
   Scenario Outline: A <GP System> user can see information on what to do when DCR access is disabled
     Given I am a <GP System> user setup to use medical record version 2
+    And 'NHS UK' responds to requests for '/health-records'
     And the GP Practice has disabled DCR access for the patient
     And I am logged in
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
     Then I see the medical record v2 page with information on asking for DCR access
-    When I click the link called 'Find out more about requesting access.' with a url of 'http://stubs.local.bitraft.io:8080/help/health-records-in-the-nhs-app/gp-health-record/'
-    And a new tab has been opened by the link
-    Then I see the your health help page
+    When I click the link called 'Find out more about requesting access.' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/health-records'
+    Then a new tab has been opened by the link
     Examples:
       | GP System |
       | EMIS      |

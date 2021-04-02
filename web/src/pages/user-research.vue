@@ -64,9 +64,6 @@ import PrimaryButton from '@/components/PrimaryButton';
 import RadioGroup from '@/components/RadioGroup';
 import TermsAndConditionsLayout from '@/layouts/termsAndConditions';
 import isUndefined from 'lodash/fp/isUndefined';
-import {
-  PRIVACY_POLICY_URL,
-} from '@/router/externalLinks';
 import { NOTIFICATIONS_PATH } from '@/router/paths';
 
 export default {
@@ -87,7 +84,7 @@ export default {
         { label: this.$t('userResearch.noDoNotContactMe'), value: 'optOut' },
       ],
       hasTriedToContinue: false,
-      privacyPolicyUrl: PRIVACY_POLICY_URL,
+      privacyPolicyUrl: this.$store.$env.PRIVACY_POLICY_URL,
       selectedValue: undefined,
     };
   },

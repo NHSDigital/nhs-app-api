@@ -47,7 +47,7 @@ open class HealthAdviceStepDefinitions {
     fun iAmAUserWhoWishesToViewOneOneOneOnline() {
         setupUser()
         MockingClient.instance.favicon()
-        MockingClient.instance.forExternalSites.mock { oneOneOneOnlineRequest().respondWithPage() }
+        MockingClient.instance.forExternalSites.mock { oneOneOneOnlineRequest("/home").respondWithPage("/home") }
     }
 
     @When("^I click Search Conditions and Treatments$")

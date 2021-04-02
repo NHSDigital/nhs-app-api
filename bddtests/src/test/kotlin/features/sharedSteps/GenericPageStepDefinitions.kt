@@ -36,6 +36,7 @@ class GenericPageStepDefinitions {
 
     @When("^I click the '(.*)' link$")
     fun iClickTheLink(linkText: String) {
+        browser.storeCurrentTabCount()
         genericPage.clickOnActionContainingText(linkText)
     }
 

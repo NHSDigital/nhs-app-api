@@ -54,12 +54,6 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import { MORE_ACCOUNTANDSETTINGS_PATH, MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_MANAGECOOKIES_PATH } from '@/router/paths';
-import {
-  TERMS_AND_CONDITIONS_URL,
-  PRIVACY_POLICY_URL,
-  ACCESSIBILITY_STATEMENT_URL,
-  OPEN_SOURCE_LICENCES_URL,
-} from '@/router/externalLinks';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -72,10 +66,10 @@ export default {
   data() {
     return {
       manageCookiesPath: MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_MANAGECOOKIES_PATH,
-      termsOfUsePath: TERMS_AND_CONDITIONS_URL,
-      privacyPolicyPath: PRIVACY_POLICY_URL,
-      accessibilityStatementPath: ACCESSIBILITY_STATEMENT_URL,
-      openSourceLicencesPath: OPEN_SOURCE_LICENCES_URL,
+      termsOfUsePath: this.$store.$env.TERMS_AND_CONDITIONS_URL,
+      privacyPolicyPath: this.$store.$env.PRIVACY_POLICY_URL,
+      accessibilityStatementPath: this.$store.$env.ACCESSIBILITY_STATEMENT_URL,
+      openSourceLicencesPath: this.$store.$env.OPEN_SOURCE_LICENCES_URL,
       backPath: MORE_ACCOUNTANDSETTINGS_PATH,
     };
   },

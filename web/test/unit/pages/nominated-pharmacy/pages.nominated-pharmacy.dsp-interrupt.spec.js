@@ -32,6 +32,9 @@ describe('nominated pharmacy not found', () => {
       $store = createStore({
         dispatch: jest.fn(() => Promise.resolve()),
         state: createState(),
+        $env: {
+          NOMINATED_PHARMACY_DSP_URL: 'https://www.nhs.uk/Service-Search/other-services/pharmacies/internetpharmacies',
+        },
       });
       dependency.redirectTo = jest.fn();
       wrapper = mountPage();

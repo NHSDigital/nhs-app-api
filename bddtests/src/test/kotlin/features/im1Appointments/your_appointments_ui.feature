@@ -130,12 +130,13 @@ Feature: Your Appointments Frontend
   #500
   Scenario: TPP user sees appropriate error message when it returns corrupt data
     Given TPP returns corrupted response for my appointments
+    And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     And I am logged in
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed
     When I click the GP Appointments link
     Then I see appropriate try again error message when there is an error with 'xx'
-    When I click the error 'Report a problem' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
+    When I click the error 'Report a problem' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
     Then a new tab has been opened by the link
 
   Scenario: EMIS user retries to view my appointments after it returns corrupt data
@@ -152,6 +153,7 @@ Feature: Your Appointments Frontend
   Scenario Outline: A <GP System> user sees a reference code when they login without a GP system
     Given I have valid OAuth details and <GP System> returns a Bad Gateway response
     And I am logged in
+    And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed
     When I click the GP Appointments link
@@ -182,12 +184,13 @@ Feature: Your Appointments Frontend
   #504
   Scenario: VISION user opens up contact us after a timeout
     Given VISION will time out when trying to retrieve my appointments
+    And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     And I am logged in
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed
     When I click the GP Appointments link
     Then I see appropriate try again book/cancel error message when there is an error with 'zs'
-    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
+    When I click the error 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
     Then a new tab has been opened by the link
 
   Scenario: Cancellation link won't be displayed for VISION appointment before cancellation cut off period without cancellation reason(s) available

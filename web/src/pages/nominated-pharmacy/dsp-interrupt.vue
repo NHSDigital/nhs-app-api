@@ -41,9 +41,6 @@ import { redirectTo } from '@/lib/utils';
 import { PRESCRIPTIONS_PATH } from '@/router/paths';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import {
-  NOMINATED_PHARMACY_DSP_URL,
-} from '@/router/externalLinks';
 
 export default {
   layout: 'nhsuk-layout',
@@ -53,7 +50,7 @@ export default {
   },
   data() {
     return {
-      visitOnlinePharmacyListPath: NOMINATED_PHARMACY_DSP_URL,
+      visitOnlinePharmacyListPath: this.$store.$env.NOMINATED_PHARMACY_DSP_URL,
       returnToPrescriptionsPath: PRESCRIPTIONS_PATH,
     };
   },

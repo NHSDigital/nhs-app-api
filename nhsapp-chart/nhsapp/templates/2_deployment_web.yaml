@@ -122,8 +122,6 @@ spec:
           value: "{{ $.Values.web.image_tag }}"
         - name: BLOOD_DONATION_URL
           value: "{{ $.Values.web.bloodDonationUrl }}"
-        - name: CONTACT_US_URL
-          value: "{{ $.Values.contactUsUrl }}"
         - name: GP_MESSAGES_ENABLED
           value: "{{ $.Values.patientPracticeMessagingEnabled }}"
         - name: USER_RESEARCH_ENABLED
@@ -152,14 +150,62 @@ spec:
           value: "60"
         - name: SYMPTOM_CHECKER_URL
           value: "https://111.nhs.uk"
+        - name: SYMPTOM_CHECKER_WALES_URL
+          value: "https://111.wales.nhs.uk"
         - name: CONDITIONS_CHECKER_URL
           value: "https://www.nhs.uk/conditions/"
         - name: CORONA_SERVICE_URL
           value: "https://111.nhs.uk/service/COVID-19/"
         - name: CORONA_CONDITIONS_URL
           value: "https://www.nhs.uk/conditions/coronavirus-covid-19/"
+        - name: MY_HEALTH_ONLINE
+          value: "https://111.wales.nhs.uk/contactus/myhealthonline/"
+        - name: ORGAN_DONATION_PRIVACY_URL
+          value: "https://www.organdonation.nhs.uk/app/app-privacy/"
+        - name: ORGAN_DONATION_ALREADY_REGISTERED_URL
+          value: "https://www.organdonation.nhs.uk/app/app-check/"
+        - name: ORGAN_DONATION_FIND_OUT_MORE_URL
+          value: "https://www.organdonation.nhs.uk/app/app-donation/"
+        - name: ORGAN_DONATION_LAW_CHANGE_URL
+          value: "https://www.organdonation.nhs.uk/app/app-law/"
+        - name: ORGAN_DONATION_SHARE_DECISION_URL
+          value: "https://www.organdonation.nhs.uk/app/app-share/"
+        - name: ORGAN_DONATION_TELL_FAMILY_URL
+          value: "https://www.organdonation.nhs.uk/app/app-tell/"
+        - name: BLOOD_DONATION_URL
+          value: "https://www.blood.co.uk/"  
+        - name: CONTACT_US_URL
+          value: "https://www.nhs.uk/contact-us/nhs-app-contact-us"
+        - name: COOKIES_BANNER_URL
+          value: "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy#manage"
+        - name: PRIVACY_POLICY_URL
+          value: "https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/privacy-policy/"
+        - name: ONLINE_CONSULTATIONS_PRIVACY_URL
+          value: "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/online-consultations/"
+        - name: CLINICAL_ABBREVIATIONS_URL
+          value: "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/"
+        - name: HEALTH_RECORDS_HELP_AND_SUPPORT_URL
+          value: "https://www.nhs.uk/nhs-services/online-services/nhs-app/nhs-app-help-and-support/health-records/"
+        - name: YOUR_NHS_DATA_MATTERS_URL
+          value: "https://www.nhs.uk/your-nhs-data-matters/"
+        - name: OTHER_WAYS_TO_MAKE_A_CHOICE_URL
+          value: "https://www.nhs.uk/your-nhs-data-matters/manage-your-choice/other-ways-to-manage-your-choice/"
+        - name: TERMS_AND_CONDITIONS_URL
+          value: "https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-terms-of-use/"
+        - name: COOKIES_POLICY_URL
+          value: "https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-cookies-policy/"
+        - name: ACCESSIBILITY_STATEMENT_URL
+          value: "https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-accessibility-statement/"  
+        - name: OPEN_SOURCE_LICENCES_URL
+          value: "https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-open-source-licences/"    
+        - name: NOMINATED_PHARMACY_DSP_URL
+          value: "https://www.nhs.uk/Service-Search/other-services/pharmacies/internetpharmacies"
+        - name: GPATHAND_APP_DOWNLOAD_URL
+          value: "https://www.gpathand.nhs.uk/download-app"
         - name: EMERGENCY_PRESCRIPTIONS_URL
           value: "https://111.nhs.uk/emergency-prescription/"
+        - name: INFORMATICA_URL
+          value: "https://the-andover-health-centre-medical-practice.appointments-online.co.uk/"  
         - name: VUE_WINDOW_OBJECT_ENABLED
           value: "{{ $.Values.webVueGlobalObject }}"
         - name: GP_SESSION_ON_DEMAND_ENABLED

@@ -40,7 +40,20 @@ export default {
     getURL(content) {
       let url;
       if (content.linkUrl) {
-        url = content.linkUrl;
+        switch (content.linkUrl) {
+          case 'SYMPTOM_CHECKER_URL':
+            url = this.$store.$env[content.linkUrl];
+            break;
+          case 'MY_HEALTH_ONLINE':
+            url = this.$store.$env[content.linkUrl];
+            break;
+          case 'SYMPTOM_CHECKER_WALES_URL':
+            url = this.$store.$env[content.linkUrl];
+            break;
+          default:
+            url = content.linkUrl;
+            break;
+        }
       } else {
         url = this.$store.$env.CONTACT_US_URL;
       }

@@ -108,11 +108,6 @@ import GenericButton from '@/components/widgets/GenericButton';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 import { USER_RESEARCH_PATH, NOTIFICATIONS_PATH } from '@/router/paths';
 import { isFalsy } from '@/lib/utils';
-import {
-  TERMS_AND_CONDITIONS_URL,
-  PRIVACY_POLICY_URL,
-  COOKIES_POLICY_URL,
-} from '@/router/externalLinks';
 import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 
 export default {
@@ -127,9 +122,9 @@ export default {
   },
   data() {
     return {
-      termsAndConditionsURL: TERMS_AND_CONDITIONS_URL,
-      privacyPolicyURL: PRIVACY_POLICY_URL,
-      cookiesPolicyURL: COOKIES_POLICY_URL,
+      termsAndConditionsURL: this.$store.$env.TERMS_AND_CONDITIONS_URL,
+      privacyPolicyURL: this.$store.$env.PRIVACY_POLICY_URL,
+      cookiesPolicyURL: this.$store.$env.COOKIES_POLICY_URL,
       areTermsAccepted: false,
       isAnalyticsCookieAccepted: false,
       termsAcceptedValue: 'terms',

@@ -98,6 +98,7 @@ Feature: nominated pharmacy journey
 
   Scenario Outline: Patient can see the online pharmacy interrupt page and goto external site
     Given I am a patient using the <GP System> GP System
+    And 'NHS UK' responds to requests for '/internetpharmacies'
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And my GP Practice is EPS enabled
@@ -117,7 +118,7 @@ Feature: nominated pharmacy journey
     And I select online pharmacy
     And I click on the choose type continue button
     And I see the dsp interrupt page is loaded
-    When I click the link called 'View a list of online-only pharmacies' with a url of 'https://www.nhs.uk/Service-Search/other-services/pharmacies/internetpharmacies'
+    When I click the link called 'View a list of online-only pharmacies' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/internetpharmacies'
     Then a new tab has been opened by the link
     Examples:
       | GP System | Pharmacy type | OdsCode |

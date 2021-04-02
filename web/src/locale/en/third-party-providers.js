@@ -27,7 +27,7 @@ export default {
           servicePurchaser: 'Your GP surgery',
           serviceType: 'online consultation service',
           serviceTypePlural: 'online consultation services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/online-consultation-services/',
+          linkHref: 'ONLINE_CONSULTATIONS_PRIVACY_URL',
         },
       },
       {
@@ -41,7 +41,7 @@ export default {
           servicePurchaser: 'Your GP surgery',
           serviceType: 'online consultation service',
           serviceTypePlural: 'online consultation services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/online-consultation-services/',
+          linkHref: 'ONLINE_CONSULTATIONS_PRIVACY_URL',
         },
       },
       {
@@ -55,7 +55,7 @@ export default {
           servicePurchaser: 'Your GP surgery',
           serviceType: 'online consultation service',
           serviceTypePlural: 'online consultation services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/online-consultation-services/',
+          linkHref: 'ONLINE_CONSULTATIONS_PRIVACY_URL',
         },
       },
     ],
@@ -89,7 +89,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -103,7 +103,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -117,7 +117,7 @@ export default {
           servicePurchaser: 'service purchaser',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
     ],
@@ -175,7 +175,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -189,7 +189,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -203,7 +203,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -217,7 +217,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -231,7 +231,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -245,7 +245,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -259,7 +259,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -273,7 +273,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -288,7 +288,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -303,7 +303,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -318,7 +318,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -333,7 +333,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -348,7 +348,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -363,7 +363,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -378,7 +378,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -393,7 +393,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -407,7 +407,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -421,7 +421,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -435,7 +435,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -449,7 +449,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -463,7 +463,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -477,7 +477,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -491,7 +491,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -505,7 +505,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -520,7 +520,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -535,7 +535,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -550,7 +550,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -565,7 +565,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -580,7 +580,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -595,7 +595,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -610,7 +610,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -625,7 +625,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
     ],
@@ -645,7 +645,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -659,7 +659,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
       {
@@ -673,7 +673,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
+          linkHref: 'HEALTH_RECORDS_HELP_AND_SUPPORT_URL',
         },
       },
     ],

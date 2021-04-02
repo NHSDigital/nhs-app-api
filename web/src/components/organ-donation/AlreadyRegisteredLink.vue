@@ -9,7 +9,6 @@
 
 <script>
 import MenuItem from '@/components/MenuItem';
-import { ORGAN_DONATION_ALREADY_REGISTERED_URL } from '@/router/externalLinks';
 
 export default {
   name: 'AlreadyRegisteredLink',
@@ -18,7 +17,7 @@ export default {
   },
   data() {
     return {
-      alreadyRegisteredUrl: ORGAN_DONATION_ALREADY_REGISTERED_URL,
+      alreadyRegisteredUrl: this.$store.$env.ORGAN_DONATION_ALREADY_REGISTERED_URL,
     };
   },
 };

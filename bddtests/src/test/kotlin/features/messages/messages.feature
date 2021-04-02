@@ -89,9 +89,10 @@ Feature: Messages
 
   Scenario: A user can see their plain text messages and follow an external link
     Given I am using the native app user agent
+    And '111' responds to requests for '/home'
     And I am a user wishing to view my messages with content
-      | https://111.nhs.uk/  |
-      | 111.nhs.uk/  |
+      | http://stubs.local.bitraft.io:8080/external/111/home  |
+      | stubs.local.bitraft.io:8080/external/111/home  |
     And I am logged in
     When I follow the Messages link from the home page
     And I click the App Messages link on the messages hub page
@@ -99,9 +100,9 @@ Feature: Messages
     And the senders and latest messages are displayed on the Messages Inbox page
     And I click on a sender in the Messages Inbox
     Then the Messages page is displayed
-    When I click the link called 'https://111.nhs.uk/' with a url of 'https://111.nhs.uk/'
+    When I click the link called 'http://stubs.local.bitraft.io:8080/external/111/home' with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
     Then a new tab has been opened by the link
-    When I click the link called '111.nhs.uk/' with a url of 'https://111.nhs.uk/'
+    When I click the link called 'stubs.local.bitraft.io:8080/external/111/home' with a url of 'https://stubs.local.bitraft.io:8080/external/111/home'
     Then a new tab has been opened by the link
 
   Scenario: A user can see their plain text messages and see a mailto link
@@ -119,9 +120,10 @@ Feature: Messages
 
   Scenario: A user can see their markdown messages and follow some external links
     Given I am using the native app user agent
+    And '111' responds to requests for '/home'
     And I am a user wishing to view my messages with markdown content
-      | [https://111.nhs.uk/](https://111.nhs.uk/)  |
-      | [111.nhs.uk/](https://111.nhs.uk/)  |
+      | [http://stubs.local.bitraft.io:8080/external/111/home](http://stubs.local.bitraft.io:8080/external/111/home)  |
+      | [stubs.local.bitraft.io:8080/external/111/home](https://stubs.local.bitraft.io:8080/external/111/home)  |
     And I am logged in
     When I follow the Messages link from the home page
     And I click the App Messages link on the messages hub page
@@ -129,9 +131,9 @@ Feature: Messages
     And the senders and latest messages are displayed on the Messages Inbox page
     And I click on a sender in the Messages Inbox
     Then the Messages page is displayed
-    When I click the link called 'https://111.nhs.uk/' with a url of 'https://111.nhs.uk/'
+    When I click the link called 'http://stubs.local.bitraft.io:8080/external/111/home' with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
     Then a new tab has been opened by the link
-    When I click the link called '111.nhs.uk/' with a url of 'https://111.nhs.uk/'
+    When I click the link called 'stubs.local.bitraft.io:8080/external/111/home' with a url of 'https://stubs.local.bitraft.io:8080/external/111/home'
     Then a new tab has been opened by the link
 
   Scenario: A user can see their markdown messages and follow a link to a nhs partner site via a redirector url
@@ -177,6 +179,7 @@ Feature: Messages
 
   Scenario: A user can see their messages and follow an incorrect internal link
     Given I am using the native app user agent
+    And '111' responds to requests for '/home'
     And I am a user wishing to view my messages with content
       | /appointments/sausages  |
     And I am logged in
@@ -188,7 +191,7 @@ Feature: Messages
     Then the Messages page is displayed
     When I click on the '/appointments/sausages' link in the message
     Then the Page not found error is displayed
-    When I click the error '111.nhs.uk' link with a url of 'https://111.nhs.uk'
+    When I click the error '111.nhs.uk' link with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
     Then a new tab has been opened by the link
 
   Scenario: A user with no messages can navigate to the messages inbox, but sees no messages

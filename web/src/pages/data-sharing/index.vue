@@ -75,9 +75,6 @@ import Contents from '@/components/data-sharing/Contents';
 import InsetText from '@/components/InsetText';
 import Pagination from '@/components/Pagination';
 import { DATA_SHARING_WHERE_USED_PATH } from '@/router/paths';
-import {
-  YOUR_NHS_DATA_MATTERS_URL,
-} from '@/router/externalLinks';
 
 export default {
   name: 'DataSharingOverviewPage',
@@ -90,7 +87,7 @@ export default {
   data() {
     return {
       whereUsedPath: DATA_SHARING_WHERE_USED_PATH,
-      yourDataMattersUrl: YOUR_NHS_DATA_MATTERS_URL,
+      yourDataMattersUrl: this.$store.$env.YOUR_NHS_DATA_MATTERS_URL,
     };
   },
 };

@@ -32,7 +32,7 @@ open class GpSessionError: HybridPageObject() {
 
     fun clickReportAProblemLink() {
         getElement("//a[contains(text(),'Report a problem')]" +
-                "[starts-with(@href, 'https://www.nhs.uk/contact-us/nhs-app-contact-us')]")
+                "[starts-with(@href, 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us')]")
                 .click()
     }
 

@@ -39,10 +39,11 @@ Feature: User Research
 
   Scenario: A newly registered patient can navigate to the User Research Privacy policy page
     Given I am a EMIS patient who has not already accepted terms and conditions
+    And 'NHS UK' responds to requests for '/privacy'
     And I am logged in expecting to see T&Cs
     Then the Terms and Conditions page is displayed
     When I check the agree to terms and conditions checkbox
     And I click the 'Continue' button
     Then the User Research page is displayed
-    When I click the link called 'Read our privacy policy' with a url of 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/privacy-policy/'
+    When I click the link called 'Read our privacy policy' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/privacy'
     Then a new tab has been opened by the link

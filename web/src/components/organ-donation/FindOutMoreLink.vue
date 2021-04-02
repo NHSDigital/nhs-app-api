@@ -9,7 +9,6 @@
 
 <script>
 import MenuItem from '@/components/MenuItem';
-import { ORGAN_DONATION_FIND_OUT_MORE_URL } from '@/router/externalLinks';
 
 export default {
   name: 'FindOutMoreLink',
@@ -18,7 +17,7 @@ export default {
   },
   data() {
     return {
-      findOutMoreUrl: ORGAN_DONATION_FIND_OUT_MORE_URL,
+      findOutMoreUrl: this.$store.$env.ORGAN_DONATION_FIND_OUT_MORE_URL,
     };
   },
 };

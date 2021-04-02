@@ -137,7 +137,6 @@ import {
   PRESCRIPTION_REPEAT_COURSES_PATH,
   PRESCRIPTION_TYPE_PATH,
 } from '@/router/paths';
-import { CLINICAL_ABBREVIATIONS_HELP_PATH } from '@/router/externalLinks';
 import { EventBus, UPDATE_HEADER, UPDATE_TITLE, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
 import { redirectTo, gpSessionErrorHasRetried, GP_SESSION_ERROR_STATUS } from '@/lib/utils';
 import showShutterPage from '@/lib/proxy/shutter';
@@ -185,7 +184,7 @@ export default {
       specialRequest: this.$store.state.repeatPrescriptionCourses.specialRequest || '',
       selected: this.$store.getters['repeatPrescriptionCourses/selectedIds'],
       tryAgainPath: PRESCRIPTION_REPEAT_COURSES_PATH,
-      medicalAbbreviationsPath: `${this.$store.$env.BASE_NHS_APP_HELP_URL}${CLINICAL_ABBREVIATIONS_HELP_PATH}`,
+      medicalAbbreviationsPath: this.$store.$env.CLINICAL_ABBREVIATIONS_URL,
     };
   },
   computed: {

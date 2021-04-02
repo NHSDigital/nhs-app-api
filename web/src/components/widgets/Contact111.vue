@@ -1,7 +1,7 @@
 <template>
   <p :class="clazz" :aria-label="ariaLabel" data-purpose="msg-text">
     {{ text }}
-    <a href="https://111.nhs.uk" target="_blank" rel="noopener noreferrer" style="display:inline">
+    <a :href="symptomCheckerUrl" target="_blank" rel="noopener noreferrer" style="display:inline">
       {{ $t('generic.nhs111Link') }}</a>
     {{ $t('generic.orCall') }}
   </p>
@@ -23,6 +23,11 @@ export default {
       type: String,
       default: undefined,
     },
+  },
+  data() {
+    return {
+      symptomCheckerUrl: this.$store.$env.SYMPTOM_CHECKER_URL,
+    };
   },
 };
 </script>

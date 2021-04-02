@@ -23,10 +23,11 @@ Feature: Great North Care Record Correspondence
 
   Scenario: A user can follow the link to Find out more about hospital and other healthcare letters
     Given I am a user who can view Correspondence from GNCR
+    And 'NHS UK' responds to requests for '/health-records'
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fgncr.stubs.local.bitraft.io%3A8080%2Fcorrespondence'
     Then I am redirected to the redirector page with the header 'Hospital and other healthcare letters'
-    When I click the link called 'Find out more about personal health record services' with a url of 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/'
+    When I click the link called 'Find out more about personal health record services' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/health-records'
     Then a new tab has been opened by the link
 
   Scenario: A user navigates directly to an external partner site and will see a warning page

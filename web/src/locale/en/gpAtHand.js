@@ -17,7 +17,7 @@ export default {
       {
         prefix: 'To {contentTag} with Babylon GP at Hand, please ',
         linkText: 'use the Babylon app',
-        linkUrl: 'https://www.gpathand.nhs.uk/download-app',
+        linkUrl: 'GPATHAND_APP_DOWNLOAD_URL',
         suffix: '.',
       },
       {

@@ -78,7 +78,6 @@ import { DATA_SHARING_DOES_NOT_APPLY_PATH } from '@/router/paths';
 import {
   NATIONAL_DATA_OPT_OUT_URL,
   NDOP_HELP_PATH,
-  OTHER_WAYS_TO_MAKE_A_CHOICE_URL,
 } from '@/router/externalLinks';
 
 export default {
@@ -95,8 +94,8 @@ export default {
       dataPreferencesUrl: this.$store.$env.DATA_PREFERENCES_URL,
       doesNotApplyPath: DATA_SHARING_DOES_NOT_APPLY_PATH,
       ndopToken: undefined,
-      otherWaysToMakeChoiceUrl: OTHER_WAYS_TO_MAKE_A_CHOICE_URL,
       nationalDataOptOutPath: NATIONAL_DATA_OPT_OUT_URL,
+      otherWaysToMakeChoiceUrl: this.$store.$env.OTHER_WAYS_TO_MAKE_A_CHOICE_URL,
     };
   },
   methods: {

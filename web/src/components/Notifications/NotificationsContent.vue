@@ -24,9 +24,6 @@
 <script>
 import LabelledToggle from '@/components/widgets/LabelledToggle';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import {
-  PRIVACY_POLICY_URL,
-} from '@/router/externalLinks';
 
 export default {
   name: 'NotificationsContent',
@@ -36,7 +33,7 @@ export default {
   },
   data() {
     return {
-      privacyURl: PRIVACY_POLICY_URL,
+      privacyURl: this.$store.$env.PRIVACY_POLICY_URL,
     };
   },
   computed: {

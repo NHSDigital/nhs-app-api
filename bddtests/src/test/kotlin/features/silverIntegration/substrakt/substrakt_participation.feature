@@ -28,10 +28,11 @@ Feature: Substrakt Join a Patient Participation Group
 
   Scenario: A user can follow the link to Find out more about personal health records
     Given I am a user who can view Join a patient participation group from Substrakt
+    And 'NHS UK' responds to requests for '/health-records'
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fsubstrakt.stubs.local.bitraft.io%3A8080%2Fjump%2Fjoin-ppg'
     Then I am redirected to the redirector page with the header 'Join a patient participation group'
-    When I click the link called 'Find out more about personal health record services' with a url of 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/'
+    When I click the link called 'Find out more about personal health record services' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/health-records'
     Then a new tab has been opened by the link
 
   Scenario: A user navigates to an external partner site and will see a warning page

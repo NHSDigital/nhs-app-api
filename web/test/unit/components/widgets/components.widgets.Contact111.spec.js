@@ -12,6 +12,9 @@ describe('Contact111', () => {
       ariaLabel,
       clazz,
     },
+    $env: {
+      SYMPTOM_CHECKER_URL: 'https://111.nhs.uk',
+    },
   });
 
   let wrapper;

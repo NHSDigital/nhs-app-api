@@ -6,7 +6,6 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import features.sharedSteps.BrowserSteps
-import features.sharedSteps.NavigationSteps
 import mocking.data.organDonation.OrganDonationReferenceDataBuilder
 import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
 import mocking.organDonation.models.OrganDonationDemographics
@@ -25,8 +24,6 @@ open class OrganDonationStepDefinitions {
 
     @Steps
     lateinit var browser: BrowserSteps
-    @Steps
-    lateinit var navbarSteps: NavigationSteps
 
     lateinit var header: HeaderNative
     lateinit var organDonationChoicePage: OrganDonationChoicePage

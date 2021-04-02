@@ -155,20 +155,22 @@ Feature: Organ Donation Frontend
 
   Scenario: A user can view the privacy statement on the organ donation Check Details page
     Given I am using the native app user agent
+    And 'Organ Donation' responds to requests for '/app-privacy'
     And I am a EMIS user not registered with organ donation, who wishes to register and opt out
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I follow the opt-out journey to the 'Check Details' page
-    And I click the link called 'privacy statement' with a url of 'https://www.organdonation.nhs.uk/app/app-privacy/'
+    And I click the link called 'privacy statement' with a url of 'http://stubs.local.bitraft.io:8080/external/organdonation/app-privacy'
     Then a new tab has been opened by the link
 
   Scenario: A user can register to be a blood donor on the organ donation View Registration page
     Given I am using the native app user agent
+    And 'Blood Donor' responds to requests for '/blood-donor'
     And I am a EMIS user not registered with organ donation, who wishes to register and opt out
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I follow the opt-out journey to the 'Confirmation' page
-    And I click the link called 'Register to be a blood donor' with a url of 'https://www.blood.co.uk/'
+    And I click the link called 'Register to be a blood donor' with a url of 'http://stubs.local.bitraft.io:8080/external/blood-donor'
     Then a new tab has been opened by the link
 
   Scenario: A user can navigate back through the opt out journey
@@ -299,18 +301,20 @@ Feature: Organ Donation Frontend
 
   Scenario: When a user has no organ donation registration, they may follow a link to check their registration
     Given I am using the native app user agent
+    And 'Organ Donation' responds to requests for '/app-check'
     And I am a EMIS user not registered with organ donation, who wishes to register
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
-    And I click the link called 'Think you have registered already?' with a url of 'https://www.organdonation.nhs.uk/app/app-check/'
+    And I click the link called 'Think you have registered already?' with a url of 'http://stubs.local.bitraft.io:8080/external/organdonation/app-check'
     Then a new tab has been opened by the link
 
   Scenario: A user can find out more about organ donation when registering
     Given I am using the native app user agent
+    And 'Organ Donation' responds to requests for '/findoutmore'
     And I am a EMIS user not registered with organ donation, who wishes to register
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
-    And I click the link called 'Find out more about organ donation' with a url of 'https://www.organdonation.nhs.uk/app/app-donation/'
+    And I click the link called 'Find out more about organ donation' with a url of 'http://stubs.local.bitraft.io:8080/external/organdonation/findoutmore'
     Then a new tab has been opened by the link
 
   Scenario: A user can find out more about examples of of end of life wishes
@@ -388,8 +392,9 @@ Feature: Organ Donation Frontend
 
   Scenario: A user can find out more about changes to the organ donation laws when registering
     Given I am using the native app user agent
+    And 'Organ Donation' responds to requests for '/app-law'
     And I am a EMIS user not registered with organ donation, who wishes to register
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
-    And I click the link called 'changes to the law around organ donation may affect you' with a url of 'https://www.organdonation.nhs.uk/app/app-law/'
+    And I click the link called 'changes to the law around organ donation may affect you' with a url of 'http://stubs.local.bitraft.io:8080/external/organdonation/app-law'
     Then a new tab has been opened by the link

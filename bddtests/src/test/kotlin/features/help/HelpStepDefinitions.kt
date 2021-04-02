@@ -3,7 +3,6 @@ package features.help
 import features.sharedSteps.BrowserSteps
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
-import mocking.pages.help.NhsAbbreviationsHelpPage
 import mocking.pages.help.NhsAppointmentsHelpPage
 import mocking.pages.help.NhsMessagingHelpPage
 import mocking.pages.help.NhsPrescriptionsHelpPage
@@ -21,7 +20,6 @@ class HelpStepDefinitions {
     private lateinit var nhsPrescriptionsHelpPage: NhsPrescriptionsHelpPage
     private lateinit var nhsMessagingHelpPage: NhsMessagingHelpPage
     private lateinit var nhsYourHealthHelpPage: NhsYourHealthHelpPage
-    private lateinit var nhsAbbreviationsHelpPage: NhsAbbreviationsHelpPage
 
     @When("^I click help and support$")
     fun iClickHelpAndSupport() {
@@ -50,11 +48,5 @@ class HelpStepDefinitions {
     fun iSeeTheCorrectYourHealthHelpPage() {
         browser.changeTab(nhsYourHealthHelpPage.url)
         nhsYourHealthHelpPage.assertTitle()
-    }
-
-    @Then("^I see the abbreviations help page$")
-    fun iSeeTheCorrectAbbreviationsHelpPage() {
-        browser.changeTab(nhsAbbreviationsHelpPage.url)
-        nhsAbbreviationsHelpPage.assertTitle()
     }
 }

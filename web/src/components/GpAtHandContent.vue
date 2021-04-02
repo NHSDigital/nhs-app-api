@@ -8,7 +8,7 @@
          :key="index">
         {{ replaceContentTag(content.prefix) }}
         <analytics-tracked-tag
-          :href="content.linkUrl"
+          :href="`${linkHref(content.linkUrl)}`"
           :text="content.linkText"
           tag="a" target="_blank">
           {{
@@ -50,6 +50,13 @@ export default {
   methods: {
     replaceContentTag(content) {
       return content.replace('{contentTag}', this.contentTagText);
+    },
+    linkHref(contentLinkUrl) {
+      const linkName = contentLinkUrl;
+      if (linkName === 'GPATHAND_APP_DOWNLOAD_URL') {
+        return this.$store.$env[linkName];
+      }
+      return linkName;
     },
   },
 };

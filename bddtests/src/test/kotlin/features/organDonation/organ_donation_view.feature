@@ -107,20 +107,22 @@ Feature: Organ Donation View Frontend
 
   Scenario: A user can navigate to the external 'Share my decision' page when viewing their registration
     Given I am using the native app user agent
+    And 'Organ Donation' responds to requests for '/app-share'
     And I am a EMIS user registered with organ donation to donate all organs
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed
-    When I click the link called 'Share that you are a donor' with a url of 'https://www.organdonation.nhs.uk/app/app-share/'
+    When I click the link called 'Share that you are a donor' with a url of 'http://stubs.local.bitraft.io:8080/external/organdonation/app-share'
     Then a new tab has been opened by the link
 
   Scenario: A user can navigate to the external 'Tell your family and friends' page when viewing their registration
     Given I am using the native app user agent
+    And 'Organ Donation' responds to requests for '/app-tell'
     And I am a EMIS user registered with organ donation to donate all organs
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed
-    When I click the link called 'Tell your family and friends' with a url of 'https://www.organdonation.nhs.uk/app/app-tell/'
+    When I click the link called 'Tell your family and friends' with a url of 'http://stubs.local.bitraft.io:8080/external/organdonation/app-tell'
     Then a new tab has been opened by the link
 
   Scenario Outline: A user when navigating to Organ Donation, but OD returns a <Error Code> recoverable error when retrieving their registration, is shown an error message and can retry

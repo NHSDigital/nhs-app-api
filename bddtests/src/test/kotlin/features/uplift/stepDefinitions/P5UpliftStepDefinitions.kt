@@ -56,7 +56,8 @@ class P5UpliftStepDefinitions : HybridPageObject() {
   @Given("^I am a patient with proof level 5 who wishes to view 111 online$")
   fun iAmAUserWhoWishesToViewOneOneOneOnline() {
     setupPatient()
-    MockingClient.instance.forExternalSites.mock { oneOneOneOnlineRequest().respondWithPage() }
+    MockingClient.instance.forExternalSites.mock {
+      oneOneOneOnlineRequest("/home").respondWithPage("/home") }
   }
 
   private fun setupPatient() {

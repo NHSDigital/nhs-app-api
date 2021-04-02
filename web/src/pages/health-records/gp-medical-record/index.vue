@@ -127,7 +127,6 @@ import agreedToMedicalWarning from '@/lib/sessionStorage';
 import Shutter from '@/components/linked-profiles/Shutter';
 import ProxyPatientDetails from '@/components/gp-medical-record/SharedComponents/ProxyPatientDetails';
 import { EventBus, FOCUS_NHSAPP_TITLE, UPDATE_HEADER, UPDATE_TITLE } from '@/services/event-bus';
-import { GP_MEDICAL_RECORD_HELP_PATH } from '@/router/externalLinks';
 import HealthRecordErrors from '@/components/errors/pages/health-record/HealthRecordErrors';
 import { GP_SESSION_ERROR_STATUS, gpSessionErrorHasRetried } from '@/lib/utils';
 
@@ -155,7 +154,7 @@ export default {
     return {
       PATIENTDETAILS,
       isProxying: this.$store.getters['session/isProxying'],
-      helpAndSupportUrl: `${this.$store.$env.BASE_NHS_APP_HELP_URL}${GP_MEDICAL_RECORD_HELP_PATH}`,
+      helpAndSupportUrl: this.$store.$env.HEALTH_RECORDS_HELP_AND_SUPPORT_URL,
     };
   },
   computed: {

@@ -17,6 +17,9 @@ const defaultStore = () => (
       onlineConsultations: {},
       device: { isNativeApp: false },
     },
+    $env: {
+      ONLINE_CONSULTATIONS_PRIVACY_URL: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/online-consultation-services/',
+    },
   })
 );
 

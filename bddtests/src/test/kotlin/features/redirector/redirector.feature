@@ -28,8 +28,9 @@ Feature: Redirector
 
   Scenario: A user navigating to a webpage in known services that is not a silver integration site will be redirected to that site
     Given I am a EMIS patient
+    And '111' responds to requests for '/home'
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=https://111.nhs.uk'
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http://stubs.local.bitraft.io:8080/external/111/home'
     Then I am navigated to a third party site
 
   Scenario: The back button on the warning page will take the user to the previous page

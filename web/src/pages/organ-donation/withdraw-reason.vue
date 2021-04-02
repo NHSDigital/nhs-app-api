@@ -94,9 +94,6 @@ import {
 } from '@/router/paths';
 import { isNativeApp } from '@/components/NativeOnlyMixin';
 import { redirectTo } from '@/lib/utils';
-import {
-  ORGAN_DONATION_LAW_CHANGE_URL,
-} from '@/router/externalLinks';
 import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
 
 export default {
@@ -113,7 +110,7 @@ export default {
   data() {
     return {
       hasTriedToContinue: false,
-      lawChangeUrl: ORGAN_DONATION_LAW_CHANGE_URL,
+      lawChangeUrl: this.$store.$env.ORGAN_DONATION_LAW_CHANGE_URL,
       reasonId: get('organDonation.withdrawReasonId')(this.$store.state),
     };
   },

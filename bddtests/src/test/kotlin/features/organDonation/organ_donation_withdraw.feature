@@ -111,13 +111,14 @@ Feature: Organ Donation Withdraw Frontend
 
   Scenario: A user can find out more about changes to the organ donation laws when withdrawing
     Given I am using the native app user agent
+    And 'Organ Donation' responds to requests for '/app-law'
     And I am a VISION user registered with organ donation with a decision to opt-out who wishes to withdraw but OD returns recoverable 503 error
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-out
     When I choose to withdraw my organ donation decision
     Then the Organ Donation Withdraw Decision page is displayed
-    When I click the link called 'law and excluded groups' with a url of 'https://www.organdonation.nhs.uk/app/app-law/'
+    When I click the link called 'law and excluded groups' with a url of 'http://stubs.local.bitraft.io:8080/external/organdonation/app-law'
     Then a new tab has been opened by the link
 
   Scenario: A user can decide to amend their decision when withdrawing
@@ -133,6 +134,7 @@ Feature: Organ Donation Withdraw Frontend
 
   Scenario: A user can find out more about changes to the organ donation laws after withdrawing
     Given I am using the native app user agent
+    And 'Organ Donation' responds to requests for '/app-law'
     And I am a EMIS user registered with organ donation with a decision to opt-in who wishes to withdraw
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
@@ -146,5 +148,5 @@ Feature: Organ Donation Withdraw Frontend
     And I confirm that my details are accurate, and accept the privacy statement for organ donation
     When I click the 'Submit my decision' button on an Organ Donation page
     Then the Organ Donation View Registration page is displayed with my decision to withdraw
-    When I click the link called 'More information about these changes to the law around organ donation' with a url of 'https://www.organdonation.nhs.uk/app/app-law/'
+    When I click the link called 'More information about these changes to the law around organ donation' with a url of 'http://stubs.local.bitraft.io:8080/external/organdonation/app-law'
     Then a new tab has been opened by the link

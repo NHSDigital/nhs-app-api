@@ -42,6 +42,9 @@ describe('gp messages view attachment page', () => {
         gpMessages: { selectedMessageDetails },
         documents: { currentDocument },
       },
+      $env: {
+        CLINICAL_ABBREVIATIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/',
+      },
     });
 
     wrapper = mount(ViewAttachment, {

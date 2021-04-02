@@ -1,6 +1,9 @@
 package mocking.externalSites
 
 import mocking.MappingBuilder
+import mocking.externalSites.oneOneOne.OneOneOneOnlineRequestBuilder
+import mocking.externalSites.nhsUK.NhsUkRequestBuilder
+import mocking.externalSites.organDonation.OrganDonationRequestBuilder
 
 open class ExternalSitesMappingBuilder(method: String ="GET", relativePath:String="")
     : MappingBuilder(method, "/external$relativePath") {
@@ -9,5 +12,13 @@ open class ExternalSitesMappingBuilder(method: String ="GET", relativePath:Strin
 
     fun healthAToZRequest() = HealthAToZRequestBuilder()
 
-    fun oneOneOneOnlineRequest() = OneOneOneOnlineRequestBuilder()
+    fun bloodDonorRequest() = BloodDonorRequestBuilder()
+
+    fun informaticaRequest() = InformaticaRequestBuilder()
+
+    fun oneOneOneOnlineRequest(path: String) = OneOneOneOnlineRequestBuilder("GET", path)
+
+    fun organDonationRequest(path: String) = OrganDonationRequestBuilder("GET", path)
+
+    fun nhsUkRequest(path: String) = NhsUkRequestBuilder("GET", path)
 }

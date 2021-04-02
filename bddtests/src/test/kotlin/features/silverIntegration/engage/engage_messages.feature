@@ -30,10 +30,11 @@ Feature: Engage Messages
 
   Scenario: A user can follow the link to Find out more about personal health records
     Given I am a user who can view Messages and Online Consultations from Engage
+    And 'NHS UK' responds to requests for 'online-consultations'
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fengage.stubs.local.bitraft.io%3A8080%2F%3Fsso_route%3Dmessages'
     Then I am redirected to the redirector page with the header 'Online consultations'
-    When I click the link called 'Find out more about online consultation services' with a url of 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/online-consultation-services/'
+    When I click the link called 'Find out more about online consultation services' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/online-consultations'
     Then a new tab has been opened by the link
 
   Scenario: A user navigates directly to an external partner site and will see a warning page

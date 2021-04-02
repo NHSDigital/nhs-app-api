@@ -30,6 +30,9 @@ describe('authReturn layout', () => {
     $store: createStore({
       $env: {
         CONTACT_US_URL,
+        SYMPTOM_CHECKER_URL: 'https://111.nhs.uk',
+        SYMPTOM_CHECKER_WALES_URL: 'https://111.wales.nhs.uk',
+        MY_HEALTH_ONLINE: 'https://111.wales.nhs.uk/contactus/myhealthonline/',
       },
       getters: {
         'errors/showApiError': showApiError,

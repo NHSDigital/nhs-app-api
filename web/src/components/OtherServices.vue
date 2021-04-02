@@ -3,7 +3,7 @@
     <p>{{ $t('login.otherServicesYouCanUse') }}</p>
     <ul>
       <li class="nhsuk-u-margin-bottom-3">
-        <a href="https://www.nhs.uk/conditions/" target="_blank" rel="noopener noreferrer">
+        <a :href="searchConditionUrl" target="_blank" rel="noopener noreferrer">
           {{ $t('login.searchConditionsAndTreatments') }}
         </a>
       </li>
@@ -13,6 +13,12 @@
 <script>
 export default {
   name: 'OtherServices',
+  data() {
+    return {
+      searchConditionUrl: this.$store.$env.CONDITIONS_CHECKER_URL,
+    };
+  },
+
 };
 </script>
 

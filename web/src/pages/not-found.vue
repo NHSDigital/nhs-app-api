@@ -11,7 +11,7 @@
                     :aria-label="$t('generic.errors.youCanGoDirectlyToOrOneOneOne')"
                     data-purpose="msg-text">
         {{ $t('generic.errors.youCanGoDirectlyToOr111') }}
-        <a href="https://111.nhs.uk" target="_blank" rel="noopener noreferrer"
+        <a :href="symptomCheckerUrl" target="_blank" rel="noopener noreferrer"
            style="display:inline">
           {{ $t('generic.nhs111Link') }}
         </a>
@@ -38,6 +38,11 @@ export default {
         return {};
       },
     },
+  },
+  data() {
+    return {
+      symptomCheckerUrl: this.$store.$env.SYMPTOM_CHECKER_URL,
+    };
   },
   computed: {
     overrideStyle() {

@@ -186,13 +186,14 @@ Feature: Cancel Appointments Frontend
   #502
   Scenario Outline: EMIS user sees appropriate error message when it returns unknown exception when cancelling appointment
     Given EMIS returns unknown exception when cancelling appointment with '<Reason>'
+    And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     And I select "Cancel appointment" button
     Then I see appropriate submit error message when there is an error with '<Prefix>'
-    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
+    When I click the error 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
     Then a new tab has been opened by the link
     Examples:
       | Reason           | Prefix |
@@ -201,13 +202,14 @@ Feature: Cancel Appointments Frontend
   #504
   Scenario Outline: A <GP System> user sees appropriate information message when there is a timeout
     Given  <GP System> will time out when trying to cancel with '<Reason>'
+    And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     And I select "Cancel appointment" button
     Then I see appropriate submit error message when there is an error with '<Prefix>'
-    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
+    When I click the error 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
     Then a new tab has been opened by the link
     Examples:
       | Reason             | Prefix | GP System |

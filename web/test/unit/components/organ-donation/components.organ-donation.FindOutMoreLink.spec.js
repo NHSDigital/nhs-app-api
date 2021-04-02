@@ -22,7 +22,10 @@ describe('find out more link', () => {
     let link;
 
     beforeEach(() => {
-      $store = createStore();
+      $store = createStore({ $env: {
+        ORGAN_DONATION_FIND_OUT_MORE_URL: 'https://www.organdonation.nhs.uk/app/app-donation/',
+      },
+      });
       wrapper = mountFindOutMoreLink();
       link = wrapper.find('a');
     });

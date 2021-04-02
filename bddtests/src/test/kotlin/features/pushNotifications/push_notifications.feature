@@ -70,6 +70,7 @@ Feature: Push Notifications
 
   Scenario: A user can navigate to the push notifications Privacy policy page
     Given I am using the native app user agent
+    And 'NHS UK' responds to requests for '/privacy'
     And I am a user wishing to enable push notifications for the first time, with my initial state undetermined
     And I am logged in
     When I navigate to the More page
@@ -77,7 +78,7 @@ Feature: Push Notifications
     Then the Account and settings page settings links are available
     And I click the Manage notifications link on the account and settings page
     And the Notifications Settings page is displayed
-    When I click the link called 'NHS App privacy policy' with a url of 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/privacy-policy/'
+    When I click the link called 'NHS App privacy policy' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/privacy'
     Then a new tab has been opened by the link
 
   @smoketest

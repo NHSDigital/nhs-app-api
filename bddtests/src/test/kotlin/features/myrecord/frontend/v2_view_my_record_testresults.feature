@@ -95,6 +95,7 @@ Feature: Test Results Frontend - Medical Record v2
 
   Scenario: A TPP user will see a error screen when viewing an invalid individual test result - Medical Record v2
     Given I am a TPP user setup to use medical record version 2
+    And '111' responds to requests for '/home'
     And the GP Practice has six test results
     And an error occurs retrieving the test result detail
     And I am logged in
@@ -104,7 +105,7 @@ Feature: Test Results Frontend - Medical Record v2
     And I click the Test results link on my record - Medical Record v2
     And I click a test result - Medical Record v2
     Then I see the appropriate error message for retrieving test result detail
-    When I click the error '111.nhs.uk' link with a url of 'https://111.nhs.uk'
+    When I click the error '111.nhs.uk' link with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
     Then a new tab has been opened by the link
 
   Scenario: A TPP user can navigate to an individual test result - Medical Record v2

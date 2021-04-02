@@ -171,9 +171,6 @@ import {
   HEALTH_RECORDS_PATH,
   DATA_SHARING_OVERVIEW_PATH,
 } from '@/router/paths';
-import {
-  YOUR_NHS_DATA_MATTERS_URL,
-} from '@/router/externalLinks';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
@@ -195,7 +192,7 @@ export default {
       yourHealthPath: HEALTH_RECORDS_PATH,
       dataSharingPath: this.$store.state.device.isNativeApp
         ? DATA_SHARING_OVERVIEW_PATH
-        : YOUR_NHS_DATA_MATTERS_URL,
+        : this.$store.$env.YOUR_NHS_DATA_MATTERS_URL,
       showPkbTestResults: sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',

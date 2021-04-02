@@ -37,9 +37,6 @@ import { redirectTo } from '@/lib/utils';
 import LabelledToggle from '@/components/widgets/LabelledToggle';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
-import {
-  COOKIES_POLICY_URL,
-} from '@/router/externalLinks';
 import DesktopGenericBackLink from '../../../../components/widgets/DesktopGenericBackLink';
 
 export default {
@@ -54,7 +51,7 @@ export default {
   data() {
     return {
       backPath: MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_PATH,
-      cookieLink: COOKIES_POLICY_URL,
+      cookieLink: this.$store.$env.COOKIES_POLICY_URL,
       dataToggle: this.registered,
     };
   },

@@ -83,9 +83,6 @@ import {
 } from '@/store/modules/organDonation/mutation-types';
 import { INDEX_PATH } from '@/router/paths';
 import { isNativeApp } from '@/components/NativeOnlyMixin';
-import {
-  ORGAN_DONATION_LAW_CHANGE_URL,
-} from '@/router/externalLinks';
 import { EventBus, FOCUS_NHSAPP_TITLE, UPDATE_HEADER, UPDATE_TITLE } from '@/services/event-bus';
 import OrganDonationErrors from '@/components/errors/pages/organ-donation/OrganDonationErrors';
 import { redirectTo, GP_SESSION_ERROR_STATUS, gpSessionErrorHasRetried } from '@/lib/utils';
@@ -114,7 +111,7 @@ export default {
   data() {
     return {
       hasLoaded: false,
-      lawChangeUrl: ORGAN_DONATION_LAW_CHANGE_URL,
+      lawChangeUrl: this.$store.$env.ORGAN_DONATION_LAW_CHANGE_URL,
     };
   },
   computed: {

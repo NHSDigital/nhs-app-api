@@ -13,7 +13,7 @@ class OneOneOneOnlinePage: HybridPageObject() {
             webDesktopLocator = "//h1",
             androidLocator = null,
             page = this
-    ).withText("111 online")
+    ).withText("/home")
 
     fun assertTitleVisible() {
         pageTitle.assertIsVisible()

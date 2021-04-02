@@ -39,23 +39,26 @@ Feature: Use Terms and conditions page
 
   Scenario: A patient can navigate to the Privacy policy page
     Given I am a EMIS patient who has not already accepted terms and conditions
+    And 'NHS UK' responds to requests for '/privacy'
     And I am logged in expecting to see T&Cs
     Then the Terms and Conditions page is displayed
-    When I click the link called 'privacy policy' with a url of 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/privacy-policy/'
+    When I click the link called 'privacy policy' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/privacy'
     Then a new tab has been opened by the link
 
   Scenario: A patient can navigate to the Cookies policy page
     Given I am a EMIS patient who has not already accepted terms and conditions
+    And 'NHS UK' responds to requests for '/cookie-policy'
     And I am logged in expecting to see T&Cs
     Then the Terms and Conditions page is displayed
-    When I click the link called 'cookies policy' with a url of 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-cookies-policy/'
+    When I click the link called 'cookies policy' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/cookie-policy'
     Then a new tab has been opened by the link
 
   Scenario: A patient can navigate to the Terms of use page
     Given I am a EMIS patient who has not already accepted terms and conditions
+    And 'NHS UK' responds to requests for '/terms'
     And I am logged in expecting to see T&Cs
     Then the Terms and Conditions page is displayed
-    When I click the link called 'terms of use' with a url of 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-terms-of-use/'
+    When I click the link called 'terms of use' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/terms'
     Then a new tab has been opened by the link
 
   Scenario: A patient can consent to analytics cookies on the terms and conditions page

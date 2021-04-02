@@ -106,6 +106,7 @@ Feature: Book Appointments Frontend
   #400
   Scenario Outline: A <GP System> user cannot enter dangerous text for booking reason
     Given there are <GP System> appointments available to book and user attempts to enter a dangerous booking reason
+    And '111' responds to requests for '/home'
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I have selected an appointment slot to book
@@ -113,7 +114,7 @@ Feature: Book Appointments Frontend
     When I enter symptoms
     And I click the 'Confirm and book appointment' button
     Then I see appropriate information message when there is an error sending data on appointment confirmation page
-    When I click the error '111.nhs.uk' link with a url of 'https://111.nhs.uk'
+    When I click the error '111.nhs.uk' link with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
     Then a new tab has been opened by the link
     Examples:
       | GP System |
@@ -184,6 +185,7 @@ Feature: Book Appointments Frontend
   @nativesmoketest
   Scenario Outline: A <GP System> user sees appropriate information message when GP system is unavailable
     Given there are <GP System> appointments available to book, but the GP system is unavailable
+    And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I have selected an appointment slot to book
@@ -191,7 +193,7 @@ Feature: Book Appointments Frontend
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button
     Then I see appropriate submit error message when there is an error with '<Prefix>'
-    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
+    When I click the error 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
     Then a new tab has been opened by the link
     Examples:
       | Prefix | GP System |
@@ -201,6 +203,7 @@ Feature: Book Appointments Frontend
   #504
   Scenario Outline: A <GP System> user sees appropriate information message when there is a timeout
     Given there are <GP System> appointments available to book, but GP system doesn't respond a timely fashion when booking
+    And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I have selected an appointment slot to book
@@ -208,7 +211,7 @@ Feature: Book Appointments Frontend
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button
     Then I see appropriate submit error message when there is an error with '<Prefix>'
-    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
+    When I click the error 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
     Then a new tab has been opened by the link
     Examples:
       | Prefix | GP System |

@@ -254,12 +254,13 @@ Feature: Organ Donation Amend Frontend
 
   Scenario: A user can find out more about organ donation when amending their decision
     Given I am using the native app user agent
+    And 'Organ Donation' responds to requests for '/findoutmore'
     And I am a EMIS user registered as opt-in with organ donation, who wishes to amend
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I choose to amend my Organ Donation decision
     Then the amend Organ Donation Choice Page is displayed
-    When I click the link called 'Find out more about organ donation' with a url of 'https://www.organdonation.nhs.uk/app/app-donation/'
+    When I click the link called 'Find out more about organ donation' with a url of 'http://stubs.local.bitraft.io:8080/external/organdonation/findoutmore'
     Then a new tab has been opened by the link
 
   Scenario Outline: A user amending a decision, where OD returns a <Error Code> recoverable error, is shown an error message and can retry

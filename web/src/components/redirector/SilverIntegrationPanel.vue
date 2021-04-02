@@ -67,7 +67,8 @@ export default {
   },
   computed: {
     linkHref() {
-      return this.getWarningMessage('linkHref');
+      const linkName = this.getWarningMessage('linkHref');
+      return this.$store.$env[linkName];
     },
     linkText() {
       const paragraph = this.getWarningConjunction('linkText');

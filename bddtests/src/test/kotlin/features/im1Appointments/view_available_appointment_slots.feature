@@ -210,10 +210,11 @@ Feature: View Available Appointment Slots Frontend
   #500
   Scenario: TPP user sees appropriate error message when GP system returns corrupt data
     Given TPP returns corrupt data for appointment slots
+    And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     Then I see appropriate error message when there is a loading error with 'xx'
-    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
+    When I click the error 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
     Then a new tab has been opened by the link
 
   #502
@@ -229,10 +230,11 @@ Feature: View Available Appointment Slots Frontend
   #504
   Scenario: VISION user opens up contact us after a timeout
     Given the VISION doesn't respond in a timely fashion for available appointment slots
+    And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     Then I see appropriate error message for loading time-outs with 'zs'
-    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
+    When I click the error 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
     Then a new tab has been opened by the link
 
   Scenario: TPP user can try again after a timeout fetching appointment slots and be successful

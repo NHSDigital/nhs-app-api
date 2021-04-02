@@ -19,6 +19,7 @@ Feature: View prescriptions error cases
 
   Scenario Outline: A <GP System> user sees a reference code when they login without a GP system due to a timeout
     Given I have valid OAuth details and <GP System> fails to respond in 31 seconds
+    And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     And I am logged in
     When I retrieve the 'Prescription Repeat Courses' page directly
     Then I see appropriate try again error message for prescriptions when there is no GP session
@@ -92,6 +93,7 @@ Feature: View prescriptions error cases
 
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but the request times out
     Given I am a patient using the <GP System> GP System
+    And '111' responds to requests for '/home'
     And I am logged in
     And I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -104,7 +106,7 @@ Feature: View prescriptions error cases
     And I select 1 prescription to order
     And I wait for 20 seconds
     Then I see the appropriate error message for a course request error
-    When I click the error '111.nhs.uk' link with a url of 'https://111.nhs.uk'
+    When I click the error '111.nhs.uk' link with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
     Then a new tab has been opened by the link
     Examples:
       | GP System |
@@ -113,6 +115,7 @@ Feature: View prescriptions error cases
   @nativesmoketest
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but the request throws a server error
     Given I am a patient using the <GP System> GP System
+    And '111' responds to requests for '/home'
     And I am logged in
     And I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -124,7 +127,7 @@ Feature: View prescriptions error cases
     When I retrieve the 'Prescription Repeat Courses' page directly
     And I select 1 prescription to order
     Then I see the appropriate error message for a course request error
-    When I click the error '111.nhs.uk' link with a url of 'https://111.nhs.uk'
+    When I click the error '111.nhs.uk' link with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
     Then a new tab has been opened by the link
     Examples:
       | GP System |
@@ -133,6 +136,7 @@ Feature: View prescriptions error cases
   @nativesmoketest
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but request returns an already ordered response
     Given I am a patient using the <GP System> GP System
+    And '111' responds to requests for '/home'
     And I am logged in
     And I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -144,7 +148,7 @@ Feature: View prescriptions error cases
     When I retrieve the 'Prescription Repeat Courses' page directly
     And I select 1 prescription to order
     Then I see the appropriate error message for a course request error
-    When I click the error '111.nhs.uk' link with a url of 'https://111.nhs.uk'
+    When I click the error '111.nhs.uk' link with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
     Then a new tab has been opened by the link
     Examples:
       | GP System |
@@ -153,6 +157,7 @@ Feature: View prescriptions error cases
   @nativesmoketest
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but request returns an invalid guid error
     Given I am a patient using the <GP System> GP System
+    And '111' responds to requests for '/home'
     And I am logged in
     And I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -164,7 +169,7 @@ Feature: View prescriptions error cases
     When I retrieve the 'Prescription Repeat Courses' page directly
     And I select 1 prescription to order
     Then I see the appropriate error message for a course request error
-    When I click the error '111.nhs.uk' link with a url of 'https://111.nhs.uk'
+    When I click the error '111.nhs.uk' link with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
     Then a new tab has been opened by the link
     Examples:
       | GP System |

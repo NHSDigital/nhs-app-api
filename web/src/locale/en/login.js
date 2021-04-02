@@ -53,7 +53,7 @@ export default {
       {
         text: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services. For urgent medical advice, go to ',
         label: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services. For urgent medical advice, go to one one one dot nhs dot uk',
-        linkUrl: 'https://111.nhs.uk',
+        linkUrl: 'SYMPTOM_CHECKER_URL',
         linkText: '111.nhs.uk',
       },
       {
@@ -65,7 +65,7 @@ export default {
       {
         text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to',
         label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to one one one dot nhs dot uk',
-        linkUrl: 'https://111.nhs.uk',
+        linkUrl: 'SYMPTOM_CHECKER_URL',
         linkText: '111.nhs.uk',
       },
       {
@@ -77,7 +77,7 @@ export default {
       {
         text: 'If you need an appointment or prescription, contact your GP surgery directly. For urgent medical advice, go to ',
         label: 'If you need an appointment or prescription, contact your GP surgery directly. For urgent medical advice, go to one one one dot nhs dot uk',
-        linkUrl: 'https://111.nhs.uk',
+        linkUrl: 'SYMPTOM_CHECKER_URL',
         linkText: '111.nhs.uk',
       },
       {
@@ -93,13 +93,13 @@ export default {
       {
         text: 'If you need an appointment or prescription, go to ',
         label: 'If you need an appointment or prescription, go to My Health Online, link,',
-        linkUrl: 'https://111.wales.nhs.uk/contactus/myhealthonline/',
+        linkUrl: 'MY_HEALTH_ONLINE',
         linkText: 'My Health Online',
       },
       {
         text: ' or contact your GP surgery directly. For urgent medical advice, go to ',
         label: ' or contact your GP surgery directly. For urgent medical advice, go to one one one dot wales dot nhs dot uk',
-        linkUrl: 'https://111.wales.nhs.uk',
+        linkUrl: 'SYMPTOM_CHECKER_WALES_URL',
         linkText: '111.wales.nhs.uk',
       },
       {

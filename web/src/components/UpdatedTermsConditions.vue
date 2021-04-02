@@ -85,7 +85,6 @@ import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
 import {
   TERMS_AND_CONDITIONS_URL,
-  PRIVACY_POLICY_URL,
   COOKIES_POLICY_URL,
 } from '@/router/externalLinks';
 import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
@@ -104,7 +103,7 @@ export default {
   data() {
     return {
       termsAndConditionsURL: TERMS_AND_CONDITIONS_URL,
-      privacyPolicyURL: PRIVACY_POLICY_URL,
+      privacyPolicyURL: this.$store.$env.PRIVACY_POLICY_URL,
       cookiesPolicyURL: COOKIES_POLICY_URL,
       areTermsAccepted: false,
       termsAcceptedValue: 'terms',

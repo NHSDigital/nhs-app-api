@@ -23,6 +23,9 @@ describe('healthRecords', () => {
       state: {
         device: { isNativeApp },
       },
+      $env: {
+        YOUR_NHS_DATA_MATTERS_URL: 'https://www.nhs.uk/your-nhs-data-matters/',
+      },
       getters: {
         'knownServices/matchOneById': id => ({
           id,

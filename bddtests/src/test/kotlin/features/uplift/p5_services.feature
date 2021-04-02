@@ -10,7 +10,7 @@ Feature: Services available with P5 Access
     Given I am a patient with proof level 5 who wishes to view 111 online
     And I am logged in
     When I navigate to the advice page
-    And I click the link called 'Use NHS 111 online' with a url of 'http://stubs.local.bitraft.io:8080/external/111'
+    And I click the link called 'Use NHS 111 online' with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
     Then the 111 online page has been opened in a new tab
 
   Scenario: P5 user can access Health A-Z
