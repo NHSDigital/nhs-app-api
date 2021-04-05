@@ -7,12 +7,12 @@ using AndroidX.Core.App;
 using Firebase.Messaging;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.DependencyServices.Notifications;
-using NHSOnline.App.Droid.DependencyServices;
+using NHSOnline.App.Droid.DependencyServices.Notifications;
 using NHSOnline.App.Logging;
 using NHSOnline.App.Threading;
 
 [assembly: Xamarin.Forms.Dependency(typeof(AndroidNotifications))]
-namespace NHSOnline.App.Droid.DependencyServices
+namespace NHSOnline.App.Droid.DependencyServices.Notifications
 {
     public class AndroidNotifications: INotifications
     {

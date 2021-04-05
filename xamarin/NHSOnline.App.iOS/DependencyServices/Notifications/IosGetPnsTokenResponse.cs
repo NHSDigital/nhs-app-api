@@ -1,6 +1,6 @@
 using NHSOnline.App.DependencyServices.Notifications;
 
-namespace NHSOnline.App.iOS.DependencyServices
+namespace NHSOnline.App.iOS.DependencyServices.Notifications
 {
     public class IosGetPnsTokenResponse : GetPnsTokenResponse
     {

@@ -48,18 +48,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DependencyServices\AndroidGetPnsTokenResponse.cs" />
     <Compile Include="DependencyServices\AndroidLifecycle.cs" />
     <Compile Include="DependencyServices\AndroidCookies.cs" />
     <Compile Include="DependencyServices\AndroidHttpMessageHandlerFactory.cs" />
     <Compile Include="DependencyServices\AndroidNativeLog.cs" />
-    <Compile Include="DependencyServices\AndroidNotifications.cs" />
     <Compile Include="DependencyServices\Biometrics\AndroidBiometrics.cs" />
     <Compile Include="DependencyServices\Biometrics\BiometricAuthKey.cs" />
     <Compile Include="DependencyServices\Biometrics\BiometricAuthSigner.cs" />
     <Compile Include="DependencyServices\Biometrics\BiometricKeyStore.cs" />
     <Compile Include="DependencyServices\Biometrics\BiometricRegistrationState.cs" />
     <Compile Include="DependencyServices\Biometrics\Extensions.cs" />
+    <Compile Include="DependencyServices\Notifications\AndroidGetPnsTokenResponse.cs" />
+    <Compile Include="DependencyServices\Notifications\AndroidNotifications.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Renderers\KeyEventArgsExtensions.cs" />
     <Compile Include="Renderers\LinkLabelRenderer.cs" />

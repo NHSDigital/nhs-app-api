@@ -1,13 +1,16 @@
+using System;
 using System.Threading.Tasks;
+using CoreFoundation;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.DependencyServices.Notifications;
-using NHSOnline.App.iOS.DependencyServices;
+using NHSOnline.App.iOS.DependencyServices.Notifications;
 using NHSOnline.App.Logging;
 using NHSOnline.App.Threading;
+using UIKit;
 using UserNotifications;
 
 [assembly: Xamarin.Forms.Dependency(typeof(IosNotifications))]
-namespace NHSOnline.App.iOS.DependencyServices
+namespace NHSOnline.App.iOS.DependencyServices.Notifications
 {
     public class IosNotifications: INotifications
     {
@@ -23,10 +26,20 @@ namespace NHSOnline.App.iOS.DependencyServices
             return await completionSource.Task.ResumeOnThreadPool();
         }
 
-        public Task<GetPnsTokenResult> GetPnsToken()
+        public async Task<GetPnsTokenResult> GetPnsToken()
         {
-            //TODO: Implement getting actual PNS token from iOS
-            return Task.FromResult<GetPnsTokenResult>(new GetPnsTokenResult.Authorised(new IosGetPnsTokenResponse("THISISASTUBVALUE")));
+            if (AppDelegate.Instance is null)
+            {
+                throw new InvalidOperationException($"{nameof(AppDelegate.Instance)} is null");
+            }
+
+            var completionSource = new TaskCompletionSource<GetPnsTokenResult>();
+
+            AppDelegate.Instance.SetHandler(new RemoteNotificationRegistrationHandler(completionSource));
+
+            RequestPnsToken(completionSource);
+
+            return await completionSource.Task.ResumeOnThreadPool();
         }
 
         private static NotificationStatus MapNotificationAuthorizationStatus(UNAuthorizationStatus status)
@@ -51,6 +64,26 @@ namespace NHSOnline.App.iOS.DependencyServices
             }
 
             return notificationStatus;
+        }
+
+        private static void RequestPnsToken(TaskCompletionSource<GetPnsTokenResult> completionSource)
+        {
+            UNUserNotificationCenter.Current.RequestAuthorization(
+                UNAuthorizationOptions.Alert | UNAuthorizationOptions.Badge | UNAuthorizationOptions.Sound,
+                (granted, error) =>
+                {
+                    if (granted)
+                    {
+                        DispatchQueue.MainQueue.DispatchAsync(() =>
+                        {
+                            UIApplication.SharedApplication.RegisterForRemoteNotifications();
+                        });
+                    }
+                    else
+                    {
+                        completionSource.SetResult(new GetPnsTokenResult.Unauthorised());
+                    }
+                });
         }
     }
 }

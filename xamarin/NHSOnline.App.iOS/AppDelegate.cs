@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Foundation;
+using NHSOnline.App.iOS.DependencyServices.Notifications;
 using UIKit;
 
 namespace NHSOnline.App.iOS
@@ -11,6 +12,15 @@ namespace NHSOnline.App.iOS
     [SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "iOS naming convention")]
     public partial class AppDelegate : Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
+        private RemoteNotificationRegistrationHandler? _remoteNotificationRegistrationHandler;
+
+        internal static AppDelegate? Instance { get; private set; }
+
+        public AppDelegate()
+        {
+            Instance = this;
+        }
+
         //
         // This method is invoked when the application has loaded and is ready to run. In this
         // method you should instantiate the window, load the UI into it and then make the window
@@ -26,5 +36,14 @@ namespace NHSOnline.App.iOS
 
             return base.FinishedLaunching(uiApplication, launchOptions);
         }
+
+        public void SetHandler(RemoteNotificationRegistrationHandler remoteNotificationRegistrationHandler)
+            => _remoteNotificationRegistrationHandler = remoteNotificationRegistrationHandler;
+
+        public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
+            => _remoteNotificationRegistrationHandler?.RegisteredForRemoteNotifications(deviceToken);
+
+        public override void FailedToRegisterForRemoteNotifications(UIApplication application, NSError error)
+            => _remoteNotificationRegistrationHandler?.FailedToRegisterForRemoteNotifications(error);
     }
 }

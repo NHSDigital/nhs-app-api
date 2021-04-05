@@ -23,6 +23,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
             _javascriptBridge = JavascriptBridge
                     .ForWebView(() => (NhsAppPreHomeScreenWebview)Element, "nativeApp")
                     .AddFunction("getNotificationsStatus", webView => webView.GetNotificationsStatus)
+                    .AddFunction("requestPnsToken", webView => webView.RequestPnsToken)
                     .AddFunction("goToLoggedInHomeScreen", webView => webView.GoToLoggedInHomeScreen)
                     .Apply(config.UserContentController);
         }

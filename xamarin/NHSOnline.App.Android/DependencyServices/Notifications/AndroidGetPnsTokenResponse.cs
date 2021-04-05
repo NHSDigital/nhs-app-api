@@ -1,6 +1,6 @@
 using NHSOnline.App.DependencyServices.Notifications;
 
-namespace NHSOnline.App.Droid.DependencyServices
+namespace NHSOnline.App.Droid.DependencyServices.Notifications
 {
     public sealed class AndroidGetPnsTokenResponse : GetPnsTokenResponse
     {
