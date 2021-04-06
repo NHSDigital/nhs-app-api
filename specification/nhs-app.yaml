@@ -14,29 +14,35 @@ info:
     * send native Apple or Android push notifications to mobile devices registered by specific users of the NHS App
 
     ## Who can use this API?
-    This API can only be accessed by organisations that deliver functionality to citizens through the NHS App.
+    To use this API, you must [integrate with the NHS App](https://digital.nhs.uk/services/nhs-app/partners-and-developers/integrate-with-the-nhs-app).
+
+    [Contact us](mailto:app.onboarding@nhs.net) before you begin any development work with this API, even if your service is already integrated.
 
     ## API status and roadmap
     This API is in [private beta](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#api-status), meaning:
-    - we might make breaking changes, but only if we can't avoid it, and we'll give advance notice
-    - we can't guarantee availability or performance
+    - we might make breaking changes, but only if we cannot avoid it, and we'll give advance notice
+    - we cannot guarantee availability or performance
 
     To see our roadmap, or to suggest, comment or vote on features for this API, see our [interactive product backlog](https://nhs-digital-api-management.featureupvote.com/?order=popular&filter=allexceptdone&tag=nhs-app-api).
 
     If you have any queries, please [contact us](https://digital.nhs.uk/developer/help-and-support).
 
     ## Technology
-    This API is [RESTful](https://digital.nhs.uk/developer/guides-and-documentation/api-technologies-at-nhs-digital#basic-rest).
+    This API:
+    - is [RESTful](https://digital.nhs.uk/developer/guides-and-documentation/api-technologies-at-nhs-digital#basic-rest)
+    - conforms to the FHIR global standard for health care data exchange
+    - aligns with FHIR UK Core (which is built on FHIR Release 4)
 
-    It also conforms to the FHIR global standard for health care data exchange. Specifically, it is aligned with FHIR UK Core, which is built on FHIR Release 4.
-
-    You don't need to know much about FHIR to use this API - FHIR APIs are just RESTful APIs that follow specific rules. In particular:
+    ### Specific rules for FHIR APIs
+    FHIR APIs are RESTful APIs that follow specific rules. In particular:
 
     - resource names are capitalised and singular, for example `/CommunicationRequest` not `/communicationRequests`
     
     - array names are singular, for example `recipient` not `recipients` for communication recipients
 
-    - data items that are country-specific and thus not included in the FHIR global base resources are usually wrapped in an `extension` object.
+    - data items that are country-specific and thus not included in the FHIR global base resources are usually wrapped in an `extension` object
+
+    There are [libraries and SDKs available](https://digital.nhs.uk/developer/guides-and-documentation/api-technologies-at-nhs-digital#fhir-libraries-and-sdks) to help with FHIR integration.
 
     ## Network access
     This API is available on the internet, and, indirectly, on the [Health and Social Care Network (HSCN)](https://digital.nhs.uk/services/health-and-social-care-network).
@@ -47,7 +53,7 @@ info:
     This API is [application-restricted](https://digital.nhs.uk/developer/guides-and-documentation/security-and-authorisation#application-restricted-apis),
     meaning we authenticate the calling application but not the end user. In particular, the three FHIR `CommunicationRequest` endpoints use signed JWT authentication - you authenticate your application by sending a signed JSON web token (JWT) to our OAuth 2.0 authorisation server. For more details see [Application-restricted RESTful APIs - signed JWT authentication](https://digital.nhs.uk/developer/guides-and-documentation/security-and-authorisation/application-restricted-restful-apis-signed-jwt-authentication).
 
-    The non-FHIR `communication` endpoint used an API key pattern to authorise the calling system. This endpoint has been deprecated and will soon be removed from the API. It should no longer be used.
+    Do not use the non-FHIR `communication` endpoint. This used an API key pattern to authorise the calling system. It has been deprecated and will soon be removed from the API.
 
     ## Environments and testing
     | API Environment      | NHS Login Environment | Base URL                                    |
@@ -71,9 +77,14 @@ info:
     For more details see [integration testing with our RESTful APIs](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing-with-our-restful-apis).
 
     ## Onboarding
-    You need to get your software approved by us before it can go live with this API. We call this onboarding. The onboarding process can sometimes be quite long, so it’s worth planning well ahead.
+    You need to get your product or service approved by us before you can use this API. We call this onboarding. The onboarding process can sometimes be quite long, so it’s worth planning well ahead.
 
-    To onboard for this API, please get in touch with the NHS App onboarding team at [app.onboarding@nhs.net](mailto:app.onboarding@nhs.net) .
+    ### Services not yet integrated
+    If your service is not yet integrated with the NHS App, you will need to follow our [step by step process](https://digital.nhs.uk/services/nhs-app/partners-and-developers/integrate-with-the-nhs-app) to onboard with us.
+    ### Integrated services
+    If your service is already integrated, and you now want to add notifications and messaging to your integration, you will need to take some extra steps before you can use this API. [Explore notifications and messaging in the NHS App](https://digital.nhs.uk/services/nhs-app/partners-and-developers/integrate-with-the-nhs-app/explore-notifications-and-messaging) for guidelines and restrictions, and the documents you will need to complete.
+
+    To onboard for this API, please get in touch with the NHS App onboarding team at [app.onboarding@nhs.net](mailto:app.onboarding@nhs.net).
 
   contact:
     name: NHS App API Support
