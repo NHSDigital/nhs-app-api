@@ -1,5 +1,9 @@
 import Foundation
 
+enum Base64FileError: Error {
+    case failDecoding
+}
+
 class Base64File {
     private let DATA_SCHEME = "data:"
     let fileName: String
@@ -27,9 +31,11 @@ class Base64File {
         }
     }
     
-    public func decode() -> Data {
-        return Data(
-            base64Encoded: String(describing: self.data),
-            options: .ignoreUnknownCharacters)!
+    public func decode() throws -> Data {
+        if let data = Data(base64Encoded: String(describing: self.data), options: .ignoreUnknownCharacters) {
+            return data
+        }
+        
+        throw Base64FileError.failDecoding
     }
 }

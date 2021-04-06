@@ -53,7 +53,16 @@ class FileDownloadHelperTests: XCTestCase {
 
         let result = FileDownloadStaticLib.downloadFile(data: "|split|test.docx|split|application/msword", view: mockHomeViewController.view, documentInteractionController: mockDocumentInteractionController)
 
-        XCTAssert(result == DownloadOutcome.ERROR, "Expected the downloadfile call to return SUCCESS")
+        XCTAssert(result == DownloadOutcome.ERROR, "Expected the downloadfile call to return ERROR")
+        XCTAssert(mockDocumentInteractionController.menuOpened == false,
+        "Expected the presentOptionsMenu to be called")
+    }
+    
+    func test_startDownload_InvalidFileData() {
+
+        let result = FileDownloadStaticLib.downloadFile(data: "notbase64data|split|test.docx|split|application/msword", view: mockHomeViewController.view, documentInteractionController: mockDocumentInteractionController)
+
+        XCTAssert(result == DownloadOutcome.ERROR, "Expected the downloadfile call to return ERROR")
         XCTAssert(mockDocumentInteractionController.menuOpened == false,
         "Expected the presentOptionsMenu to be called")
     }

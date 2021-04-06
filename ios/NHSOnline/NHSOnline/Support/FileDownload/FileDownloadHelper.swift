@@ -55,17 +55,19 @@ class FileDownloadStaticLib {
             return DownloadOutcome.ERROR
         }
         
-        let convertedData = base64File.decode()
-        let tmpURL = FileManager.default.temporaryDirectory
-            .appendingPathComponent(base64File.fileName)
         do {
+            let convertedData = try base64File.decode()
+            let tmpURL = FileManager.default.temporaryDirectory
+                .appendingPathComponent(base64File.fileName)
+            
             try convertedData.write(to: tmpURL)
+            
+            setUpDocumentController(url: tmpURL, mimeType: base64File.fileMimeType, view: view, documentInteractionController: documentInteractionController)
+            
+            return DownloadOutcome.SUCCESS
         } catch {
             return DownloadOutcome.ERROR
         }
-        
-        setUpDocumentController(url: tmpURL, mimeType: base64File.fileMimeType, view: view, documentInteractionController: documentInteractionController)
-        return DownloadOutcome.SUCCESS
     }
     
     private static func setUpDocumentController( url: URL, mimeType: String, view: UIView, documentInteractionController: UIDocumentInteractionController) {
