@@ -140,7 +140,6 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
             {
                 base.OnAuthenticationFailed();
                 Logger.LogWarning("Authentication failed, biometric presented but not recognised");
-                _completionSource.SetResult(new BiometricAuthVerifyUserResult.Failed());
             }
         }
     }
