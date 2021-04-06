@@ -24,7 +24,7 @@ namespace NHSOnline.HttpMocks
             _task = task;
         }
 
-        public static MockWebServer Start(IPatients patients, Action<ILoggingBuilder> configureLogging)
+        public static async Task<MockWebServer> Start(IPatients patients, Action<ILoggingBuilder> configureLogging)
         {
             var host = new HostBuilder()
                 .UseContentRoot(Directory.GetCurrentDirectory())
@@ -47,9 +47,9 @@ namespace NHSOnline.HttpMocks
                         .RegisterVisionService()))
                 .Build();
 
-            var task = Task.Run(async () => await host.StartAsync());
+            await host.StartAsync();
 
-            return new MockWebServer(host, task);
+            return new MockWebServer(host, Task.CompletedTask);
         }
 
         public async ValueTask DisposeAsync()

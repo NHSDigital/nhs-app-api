@@ -8,21 +8,21 @@ namespace NHSOnline.IntegrationTests.UI
 {
     public static class Mocks
     {
-        private static readonly MocksLoggerProvider _mocksLoggerProvider = new MocksLoggerProvider();
+        private static readonly MocksLoggerProvider MocksLoggerProvider = new();
 
-        public static PatientsCollection Patients { get; } = new PatientsCollection();
+        public static PatientsCollection Patients { get; } = new();
 
         internal static MockWebServer WebServer { get; private set; } = null!;
 
         internal static event EventHandler<string> Logged
         {
-            add => _mocksLoggerProvider.Logged += value;
-            remove => _mocksLoggerProvider.Logged -= value;
+            add => MocksLoggerProvider.Logged += value;
+            remove => MocksLoggerProvider.Logged -= value;
         }
 
-        internal static void Initialize()
+        internal static async Task Initialize()
         {
-            WebServer = MockWebServer.Start(Patients, SetupLogDelivery);
+            WebServer = await MockWebServer.Start(Patients, SetupLogDelivery);
         }
 
         internal static async Task CleanUp()
@@ -32,7 +32,7 @@ namespace NHSOnline.IntegrationTests.UI
 
         private static void SetupLogDelivery(ILoggingBuilder loggingBuilder)
         {
-            loggingBuilder.AddProvider(_mocksLoggerProvider);
+            loggingBuilder.AddProvider(MocksLoggerProvider);
         }
     }
 }

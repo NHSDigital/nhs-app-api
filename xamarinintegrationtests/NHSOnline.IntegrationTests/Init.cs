@@ -9,10 +9,10 @@ namespace NHSOnline.IntegrationTests
     {
         [AssemblyInitialize]
 #pragma warning disable CA1801 // Remove unused parameter
-        public static void Initialize(TestContext context)
+        public static async Task Initialize(TestContext context)
 #pragma warning restore CA1801 // Remove unused parameter
         {
-            NhsAppIntegrationTests.Initialize();
+            await NhsAppIntegrationTests.Initialize();
         }
 
         [AssemblyCleanup]

@@ -50,7 +50,7 @@ namespace NHSOnline.HttpMocks.Dev
                 patients.Add(patient);
             }
 
-            await using var _ = MockWebServer.Start(patients, config => config.AddConsole());
+            await using var _ = await MockWebServer.Start(patients, config => config.AddConsole());
 
             using var semaphore = new SemaphoreSlim(0, 1);
             Console.CancelKeyPress += (sender, eventArgs) => semaphore.Release();

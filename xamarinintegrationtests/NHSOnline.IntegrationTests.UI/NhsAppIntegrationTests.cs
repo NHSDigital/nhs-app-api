@@ -4,10 +4,10 @@ namespace NHSOnline.IntegrationTests.UI
 {
     public static class NhsAppIntegrationTests
     {
-        public static void Initialize()
+        public static async Task Initialize()
         {
             Configuration.Initialize();
-            Mocks.Initialize();
+            await Mocks.Initialize();
         }
 
         public static async Task Cleanup()
