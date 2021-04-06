@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,7 +55,13 @@ namespace NHSOnline.App.NhsLogin.Fido
 
             _logger.LogInformation("UAF Registration Request: {UAFRegistrationRequest}", resultString);
 
-            return JsonConvert.DeserializeObject<UafRegistrationRequest[]>(resultString)[0];
+            var uafRegistrationRequests = JsonConvert.DeserializeObject<UafRegistrationRequest[]>(resultString);
+            if (uafRegistrationRequests is null)
+            {
+                _logger.LogError("Failed to deserialise reg request response: {Response}", resultString);
+                throw new InvalidOperationException("Failed to deserialise reg request response");
+            }
+            return uafRegistrationRequests[0];
         }
 
         private async Task<UafRegistrationResponse> CreateAndSignRegistrationResponse(
