@@ -27,6 +27,7 @@ Using these fundamentals there are many ways that any given feature can be imple
 * [Integration Tests](xamarin/integration-tests.md)
 * [Android Bindings](xamarin/android-bindings.md)
 * [Event Handling](xamarin/event-handling.md)
+* [Web Interaction](xamarin/web-interaction.md)
 
 ## Setup
 

@@ -50,7 +50,7 @@ namespace NHSOnline.App.Controls.WebViews
 
         public async Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse)
         {
-            const string? callbackName = "window.nativeAppCallbacks.notificationsAuthorised";
+            const string callbackName = "window.nativeAppCallbacks.notificationsAuthorised";
             var argumentJson = ConvertToJsonString(authorisedResponse);
             await EvaluateJavaScriptAsync($"{callbackName}({argumentJson})").ResumeOnThreadPool();
         }
