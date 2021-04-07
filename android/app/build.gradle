@@ -268,7 +268,9 @@ dependencies {
     implementation "com.google.firebase:firebase-core:16.0.1"
     implementation "com.google.firebase:firebase-messaging:17.3.4"
 
-    implementation "com.iproov.sdk:iproov:6.3.1"
+    implementation ("com.iproov.sdk:iproov:6.3.1"){
+        exclude group:"org.json", module:"json"
+    }
 
     implementation "com.squareup.moshi:moshi:1.10.0"
     implementation "com.squareup.moshi:moshi-kotlin:1.10.0"
