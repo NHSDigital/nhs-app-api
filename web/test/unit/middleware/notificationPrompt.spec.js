@@ -12,7 +12,7 @@ describe('notification prompt next', () => {
   let next;
   let store;
 
-  const callsNotificationsPrompt = ({ isNativeApp }) => {
+  const callsNotificationsPrompt = ({ isNativeApp, notificationCookieExists = false }) => {
     const to = {
       name: NOTIFICATIONS_NAME,
       params,
@@ -28,26 +28,49 @@ describe('notification prompt next', () => {
         device: {
           isNativeApp,
         },
+        notifications: {
+          notificationCookieExists,
+        },
       },
     });
     notificationPrompt({ next, to, store });
   };
 
   describe('native', () => {
-    beforeEach(() => {
-      callsNotificationsPrompt({ isNativeApp: true });
+    describe('notification cookie exists', () => {
+      beforeEach(() => {
+        callsNotificationsPrompt({ isNativeApp: true, notificationCookieExists: true });
+      });
+
+      it('will dispatch `notifications/checkNotificationCookie`', () => {
+        expect(store.dispatch).toBeCalledWith('notifications/checkNotificationCookie');
+      });
+
+      it('will not dispatch `notifications/load`', () => {
+        expect(store.dispatch).not.toBeCalledWith('notifications/load');
+      });
+
+      it('will call next', () => {
+        expect(next).toBeCalled();
+      });
     });
 
-    it('will dispatch `notifications/load`', () => {
-      expect(store.dispatch).toBeCalledWith('notifications/load');
-    });
+    describe('notification cookie does not exist', () => {
+      beforeEach(() => {
+        callsNotificationsPrompt({ isNativeApp: true, notificationCookieExists: false });
+      });
 
-    it('will dispatch `notifications/load`', () => {
-      expect(store.dispatch).toBeCalledWith('notifications/checkNotificationCookie');
-    });
+      it('will dispatch `notifications/checkNotificationCookie`', () => {
+        expect(store.dispatch).toBeCalledWith('notifications/checkNotificationCookie');
+      });
 
-    it('will call next', () => {
-      expect(next).toBeCalled();
+      it('will dispatch `notifications/load`', () => {
+        expect(store.dispatch).toBeCalledWith('notifications/load');
+      });
+
+      it('will call next', () => {
+        expect(next).toBeCalled();
+      });
     });
   });
 

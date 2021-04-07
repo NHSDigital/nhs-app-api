@@ -13,8 +13,11 @@ export default async ({ to, store, next }) => {
     return next(redirectRoute);
   }
 
-  await store.dispatch('notifications/load');
   await store.dispatch('notifications/checkNotificationCookie');
+
+  if (!store.state.notifications.notificationCookieExists) {
+    await store.dispatch('notifications/load');
+  }
 
   return next();
 };

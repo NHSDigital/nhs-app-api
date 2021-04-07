@@ -156,7 +156,6 @@ open class SharedStepDefinitions {
     fun iAmLoggedInWithNotificationsDenied() {
         val patient = handleLogin()
         login.using(patient)
-        login.skipNotificationPromptCookie()
 
         home.waitForLoginToCompleteSuccessfully(true)
 
@@ -169,7 +168,6 @@ open class SharedStepDefinitions {
     fun iAmLoggedInSkippingNotificationsPrompt() {
         val patient = handleLogin()
         login.using(patient)
-        login.skipNotificationPromptCookie()
 
         home.waitForLoginToCompleteSuccessfully(true)
 
@@ -180,7 +178,6 @@ open class SharedStepDefinitions {
     fun iAmLoggedInWithNotificationsEnabledButIssuesOccurWhenLoggedIn() {
         val patient = handleLogin()
         login.using(patient)
-        login.skipNotificationPromptCookie()
 
         home.waitForLoginToCompleteSuccessfully(true)
 

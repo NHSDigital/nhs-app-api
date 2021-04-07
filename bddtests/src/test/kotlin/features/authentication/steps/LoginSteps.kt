@@ -28,42 +28,17 @@ open class LoginSteps {
 
     @Step
     fun using(patient: Patient) {
-        stubbedLoginAndResetScripts(
-                patient, true)
-
-        val userAgent = GlobalSerenityHelpers.USER_AGENT.getOrNull<String>()
-
-        if (!userAgent.isNullOrBlank()) {
-            val executor = loginPage.driver as JavascriptExecutor
-
-            Thread.sleep(SLEEP_TIME_FOR_PROMISE)
-
-            executor.executeScript("""
-        window.nativeAppCallbacks.notificationsSettingsStatus("");
-    """.trimIndent())
-        }
+        stubbedLoginAndResetScripts(patient, true)
     }
 
     @Step
-    fun usingLoginWithNotificationOptions(
-            patient: Patient) {
+    fun usingLoginWithNotificationOptions(patient: Patient) {
         stubbedLoginAndResetScripts(patient, false)
 
         if (loginPage.driver.isIOS() || loginPage.driver.isAndroid()) {
             return
         }
 
-        val executor = loginPage.driver as JavascriptExecutor
-
-        Thread.sleep(SLEEP_TIME_FOR_PROMISE)
-
-        executor.executeScript("""
-        window.nativeAppCallbacks.notificationsSettingsStatus("");
-    """.trimIndent())
-    }
-
-    @Step
-    fun skipNotificationPromptCookie() {
         val executor = loginPage.driver as JavascriptExecutor
 
         Thread.sleep(SLEEP_TIME_FOR_PROMISE)
