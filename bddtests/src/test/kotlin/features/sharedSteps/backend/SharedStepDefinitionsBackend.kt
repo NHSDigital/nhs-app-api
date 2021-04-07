@@ -36,7 +36,7 @@ open class SharedStepDefinitionsBackend{
         val redirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
         CitizenIdSessionCreateJourney().createFor(patient)
 
-        if( isProofLevel9 ) {
+        if (isProofLevel9) {
             SessionCreateJourneyFactory.getForSupplier(gpSystem).createFor(patient)
         }
 

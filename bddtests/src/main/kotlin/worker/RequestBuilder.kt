@@ -69,7 +69,6 @@ open class RequestBuilder protected constructor(private var request: HttpRequest
 
     fun send(sender: WorkerClientSender): HttpResponse? {
         val response = sender.sendAsync(request)
-        request.releaseConnection()
         return response
     }
 
@@ -83,7 +82,6 @@ open class RequestBuilder protected constructor(private var request: HttpRequest
 
     fun sendAndGetResult(sender: WorkerClientSender, context: HttpContext? =null): String? {
         val response = sender.sendAsyncAndGetResult(request, context)
-        request.releaseConnection()
         return response
     }
 }

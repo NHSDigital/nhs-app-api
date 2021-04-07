@@ -54,7 +54,7 @@ class WorkerClientAuthentication(val config: Config, val sender: WorkerClientSen
                 .addBody(requestBody, gson)
 
         val response = httpPost.send(sender)
-        if(response!=null) {
+        if (response != null) {
             val rd = BufferedReader(InputStreamReader(response.entity.content))
             val result = rd.use { it.readText() }
 
