@@ -66,6 +66,7 @@
     <Compile Include="Effects\SafeAreaPaddingEffectBottom.cs" />
     <Compile Include="Effects\UIDeviceExtensions.cs" />
     <Compile Include="Extensions\NSDataExtensions.cs" />
+    <Compile Include="Handlers\UserNotificationCenterHandler.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Renderers\SwipeBackNavigationPageRenderer.cs" />

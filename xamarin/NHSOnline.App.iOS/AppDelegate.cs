@@ -1,7 +1,12 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using Foundation;
+using Microsoft.Extensions.Logging;
 using NHSOnline.App.iOS.DependencyServices.Notifications;
+using NHSOnline.App.iOS.Handlers;
+using NHSOnline.App.Logging;
 using UIKit;
+using UserNotifications;
 
 namespace NHSOnline.App.iOS
 {
@@ -14,6 +19,7 @@ namespace NHSOnline.App.iOS
     {
         private RemoteNotificationRegistrationHandler? _remoteNotificationRegistrationHandler;
 
+        private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(AppDelegate));
         internal static AppDelegate? Instance { get; private set; }
 
         public AppDelegate()
@@ -32,6 +38,8 @@ namespace NHSOnline.App.iOS
         {
             Xamarin.Forms.Forms.SetFlags("Expander_Experimental");
             Xamarin.Forms.Forms.Init();
+            UNUserNotificationCenter.Current.Delegate = new UserNotificationCenterHandler();
+
             LoadApplication(new NhsApp());
 
             return base.FinishedLaunching(uiApplication, launchOptions);
@@ -45,5 +53,11 @@ namespace NHSOnline.App.iOS
 
         public override void FailedToRegisterForRemoteNotifications(UIApplication application, NSError error)
             => _remoteNotificationRegistrationHandler?.FailedToRegisterForRemoteNotifications(error);
+
+        public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, Action<UIBackgroundFetchResult> completionHandler)
+        {
+            // Will be used for NHSO-13864 when we deal with links in the notifications
+            Logger.LogInformation("RECEIVED NOTIFICATION");
+        }
     }
 }
