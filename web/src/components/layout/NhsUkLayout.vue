@@ -201,9 +201,7 @@ export default {
 
     NativeVersionSetup(this.$store);
 
-    if (this.$store.state.loginSettings.biometricType === undefined) {
-      NativeCallbacks.fetchBiometricSpec();
-    }
+    this.$store.dispatch('loginSettings/fetchBiometricStatus');
 
     if (this.loggedIn) {
       this.$store.dispatch('session/startValidationChecking');

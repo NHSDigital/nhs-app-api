@@ -23,8 +23,8 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty RequestPnsTokenCommandProperty =
             BindableProperty.Create(nameof(RequestPnsTokenCommand), typeof(AsyncCommand<string>), typeof(NhsAppWebView));
 
-        public static readonly BindableProperty FetchBiometricSpecCommandProperty =
-            BindableProperty.Create(nameof(FetchBiometricSpecCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
+        public static readonly BindableProperty FetchBiometricStatusCommandProperty =
+            BindableProperty.Create(nameof(FetchBiometricStatusCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
 
         public static readonly BindableProperty UpdateBiometricRegistrationCommandProperty =
             BindableProperty.Create(nameof(UpdateBiometricRegistrationCommand), typeof(AsyncCommand<string>), typeof(NhsAppWebView));
@@ -70,8 +70,6 @@ namespace NHSOnline.App.Controls.WebViews
             await EvaluateJavaScriptAsync($"{callbackName}({argumentJson})").ResumeOnThreadPool();
         }
 
-        public void RequestPnsToken(string argument) => RequestPnsTokenCommand.Execute(argument);
-
         public async Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse)
         {
             const string callbackName = "window.nativeAppCallbacks.notificationsAuthorised";
@@ -82,22 +80,28 @@ namespace NHSOnline.App.Controls.WebViews
         public async Task SendNotificationUnauthorised()
             => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.notificationsUnauthorised()").ResumeOnThreadPool();
 
+        public void RequestPnsToken(string argument) => RequestPnsTokenCommand.Execute(argument);
+
         public AsyncCommand<string> RequestPnsTokenCommand
         {
             get => (AsyncCommand<string>) GetValue(RequestPnsTokenCommandProperty);
             set => SetValue(RequestPnsTokenCommandProperty, value);
         }
 
-        public void FetchBiometricSpec() => FetchBiometricSpecCommand.Execute(null);
+        public void FetchBiometricStatus() => FetchBiometricStatusCommand.Execute(null);
 
-        public AsyncCommand FetchBiometricSpecCommand
+        public AsyncCommand FetchBiometricStatusCommand
         {
-            get => (AsyncCommand)GetValue(FetchBiometricSpecCommandProperty);
-            set => SetValue(FetchBiometricSpecCommandProperty, value);
+            get => (AsyncCommand)GetValue(FetchBiometricStatusCommandProperty);
+            set => SetValue(FetchBiometricStatusCommandProperty, value);
         }
 
-        public async Task SendBiometricSpec(BiometricSpec biometricSpec)
-            => await EvaluateJavaScriptAsync($"window.nativeAppCallbacks.loginSettingsBiometricSpec({ConvertToJsonString(biometricSpec)})").ResumeOnThreadPool();
+        public async Task SendBiometricStatus(BiometricStatus biometricStatus)
+        {
+            const string callbackName = "window.nativeAppCallbacks.biometricStatus";
+            var jsonArgument = ConvertToJsonString(biometricStatus);
+            await EvaluateJavaScriptAsync($"{callbackName}({jsonArgument})").ResumeOnThreadPool();
+        }
 
         public void UpdateBiometricRegistration(string argument) => UpdateBiometricRegistrationCommand.Execute(argument);
 

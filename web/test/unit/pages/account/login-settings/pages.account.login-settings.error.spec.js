@@ -2,7 +2,6 @@ import loginSettingsError from '@/pages/account/login-settings/error';
 import { LOGIN_SETTINGS_PATH } from '@/router/paths';
 import each from 'jest-each';
 import biometricErrorCodes from '@/lib/biometrics/biometricErrorCodes';
-import biometricTypes from '@/lib/biometrics/biometricTypes';
 import { redirectTo } from '@/lib/utils';
 import { mount, createRouter, createStore } from '../../../helpers';
 
@@ -14,9 +13,7 @@ describe('login settings page', () => {
   let $router;
 
   const mountPage = ({
-    biometricsRegistrationStatus = false,
-    biometricType = 'loginSettings.biometrics.biometricType.face',
-    biometricLocaleReference = biometricTypes.FaceID,
+    biometricType = 'face',
     isNativeApp = true,
     errorCode = undefined,
   } = {}) => {
@@ -24,9 +21,7 @@ describe('login settings page', () => {
     store = createStore({
       state: {
         loginSettings: {
-          biometricsRegistrationStatus,
           biometricType,
-          biometricLocaleReference,
           errorCode,
         },
         device: {
@@ -34,14 +29,14 @@ describe('login settings page', () => {
         },
       },
       getters: {
-        'loginSettings/retrieveError': errorCode,
-        'loginSettings/getDeviceBiometricNameString': biometricType,
+        'loginSettings/biometricError': errorCode,
+        'loginSettings/biometricType': biometricType,
       },
     });
     wrapper = mount(loginSettingsError,
       { $store: store,
         data: () => ({
-          cannotFindErrorText: `loginSettings.biometrics.errors.cannotFindBiometricType.errorText.${biometricLocaleReference}`,
+          cannotFindErrorText: `loginSettings.biometrics.errors.cannotFindBiometricType.errorText.${biometricType}`,
         }),
         $router });
   };
@@ -56,8 +51,7 @@ describe('login settings page', () => {
         mountPage(
           {
             errorCode: biometricErrorCodes.CannotFindBiometrics,
-            biometricType: `loginSettings.biometrics.biometricType.${biometricType}`,
-            biometricLocaleReference: biometricType,
+            biometricType,
           },
         );
         expect(wrapper.findAll('p').at(0).text()).toContain(text);

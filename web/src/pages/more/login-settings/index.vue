@@ -1,7 +1,7 @@
 <template>
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <div v-if="!hasBiometricType" class="nhsuk-u-padding-top-4">
+      <div v-if="!biometricSupported" class="nhsuk-u-padding-top-4">
         <p>
           {{ $t('loginSettings.biometrics.noBiometricType.information.paragraph1') }}
         </p>
@@ -32,6 +32,8 @@
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import LabelledToggle from '@/components/widgets/LabelledToggle';
+import { MORE_PATH } from '@/router/paths';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'LoginSettingsPage',
@@ -40,29 +42,39 @@ export default {
     MessageText,
     LabelledToggle,
   },
-  data() {
-    const biometricType = this.$t(this.$store.getters['loginSettings/getDeviceBiometricNameString']);
-    return {
-      biometricType,
-      toggleLabel: this.$t(this.$store.getters['loginSettings/getBiometricToggleText']),
-      biometricInformation: this.$t(this.$store.getters['loginSettings/getBiometricInformation']),
-      biometricWarningText: this.$t(this.$store.getters['loginSettings/getBiometricWarningText']),
-      hasBiometricType: this.$store.getters['loginSettings/deviceBiometricType'] !== undefined,
-    };
-  },
   computed: {
+    biometricType() {
+      return this.$store.getters['loginSettings/biometricType'];
+    },
+    toggleLabel() {
+      return this.$t(`loginSettings.biometrics.toggleLabel.${this.biometricType}`);
+    },
+    biometricInformation() {
+      return this.$t(`loginSettings.biometrics.biometricInformation.${this.biometricType}`);
+    },
+    biometricWarningText() {
+      return this.$t(`loginSettings.biometrics.warningText.${this.biometricType}`);
+    },
+    biometricSupported() {
+      return this.$store.getters['loginSettings/biometricSupported'];
+    },
     isWaiting() {
-      return this.$store.state.loginSettings.isWaiting;
+      return this.$store.getters['loginSettings/isWaiting'];
     },
     registered: {
       get() {
-        return this.$store.getters['loginSettings/biometricState'];
+        return this.$store.getters['loginSettings/biometricRegistered'];
       },
       set() {
         this.$store.dispatch('spinner/prevent', true);
         this.$store.dispatch('loginSettings/updateRegistration');
       },
     },
+  },
+  async created() {
+    if (await this.$store.dispatch('loginSettings/missingBiometricState')) {
+      redirectTo(this, MORE_PATH);
+    }
   },
   mounted() {
     this.$store.dispatch('loginSettings/clearErrorCode');

@@ -6,6 +6,9 @@ const NativeAppCallbacksPlugin = {
       loginSettingsBiometricCompletion(biometricCompletionDetails) {
         store.dispatch('loginSettings/biometricCompletion', biometricCompletionDetails);
       },
+      biometricStatus(biometricStatus) {
+        store.dispatch('loginSettings/biometricStatus', biometricStatus);
+      },
       loginSettingsBiometricSpec(biometricSpecDetails) {
         store.dispatch('loginSettings/biometricSpec', biometricSpecDetails);
       },

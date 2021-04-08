@@ -48,9 +48,9 @@ namespace NHSOnline.App.Areas.Home.Views
         public AsyncCommand<string> RequestPnsTokenCommand
             => new AsyncCommand<string>(() => GetPnsTokenRequested);
 
-        public Func<Task>? FetchBiometricSpecRequested { get; set; }
-        public AsyncCommand FetchBiometricSpecCommand
-            => new AsyncCommand(() => FetchBiometricSpecRequested);
+        public Func<Task>? FetchBiometricStatusRequested { get; set; }
+        public AsyncCommand FetchBiometricStatusCommand
+            => new AsyncCommand(() => FetchBiometricStatusRequested);
 
         public Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
         public AsyncCommand<string> UpdateBiometricRegistrationCommand
@@ -136,8 +136,8 @@ namespace NHSOnline.App.Areas.Home.Views
         public async Task SendNotificationsStatus(string status)
             => await WebView.SendNotificationsStatus(status).ResumeOnThreadPool();
 
-        public async Task SendBiometricSpec(BiometricSpec biometricSpec)
-            => await WebView.SendBiometricSpec(biometricSpec).ResumeOnThreadPool();
+        public async Task SendBiometricStatus(BiometricStatus biometricStatus)
+            => await WebView.SendBiometricStatus(biometricStatus).ResumeOnThreadPool();
 
         public async Task SendBiometricCompletion(BiometricCompletion completionDetails)
             => await WebView.SendBiometricCompletion(completionDetails).ResumeOnThreadPool();

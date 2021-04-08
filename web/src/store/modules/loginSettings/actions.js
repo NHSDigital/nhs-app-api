@@ -23,6 +23,33 @@ const addApiError = ({ dispatch }, statusCode, errorCode, message) => dispatch('
 });
 
 export default {
+  fetchBiometricStatus({ state }) {
+    if (state.biometricType === undefined) {
+      if (NativeApp.supportsBiometricStatus()) {
+        NativeApp.fetchBiometricStatus();
+      } else {
+        NativeApp.fetchBiometricSpec();
+      }
+    }
+  },
+
+  missingBiometricState({ state }) {
+    if (NativeApp.supportsBiometricStatus()) {
+      return state.biometricType === undefined;
+    }
+
+    // Legacy native apps do not call back if biometrics are not supported so
+    // there is no way to determine if the state is initialised.
+    return false;
+  },
+
+  biometricStatus({ commit }, biometricStatus) {
+    const { biometricType, enabled } = biometricStatus;
+
+    commit(UPDATE_REGISTRATION_STATUS, enabled);
+    commit(UPDATE_BIOMETRIC_TYPE, biometricType);
+  },
+
   async updateRegistration({ commit }) {
     commit(SET_WAITING, true);
     await this.dispatch('auth/ensureAccessToken');
@@ -44,8 +71,8 @@ export default {
     if (outcome === biometricRegistrationOutcomes.Failure) {
       if (errorCode === biometricErrorCodes.CannotFindBiometrics
         || errorCode === biometricErrorCodes.CannotChangeBiometrics) {
-        redirectTo({ $router: this.app.$router, $store: this }, LOGIN_SETTINGS_ERROR_PATH);
         commit(ADD_ERROR_CODE, errorCode);
+        redirectTo({ $router: this.app.$router, $store: this }, LOGIN_SETTINGS_ERROR_PATH);
       } else {
         addApiError(this,
           500,

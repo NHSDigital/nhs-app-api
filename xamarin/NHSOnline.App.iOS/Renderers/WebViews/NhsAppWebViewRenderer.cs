@@ -23,7 +23,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                 .AddFunction("startNhsLoginUplift", webView => webView.StartNhsLoginUplift)
                 .AddFunction("getNotificationsStatus", webView => webView.GetNotificationsStatus)
                 .AddFunction("requestPnsToken", webView => webView.RequestPnsToken)
-                .AddFunction("fetchBiometricSpec", webView => webView.FetchBiometricSpec)
+                .AddFunction("fetchBiometricStatus", webView => webView.FetchBiometricStatus)
                 .AddFunction("updateBiometricRegistrationWithToken", webView => webView.UpdateBiometricRegistration)
                 .Apply(config.UserContentController);
         }

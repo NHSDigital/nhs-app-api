@@ -31,7 +31,7 @@ namespace NHSOnline.App.Areas.Home
             Func<Task>? GetNotificationsStatusRequested { get; set; }
             Func<string, Task>? GetPnsTokenRequested { get; set; }
 
-            Func<Task>? FetchBiometricSpecRequested { get; set; }
+            Func<Task>? FetchBiometricStatusRequested { get; set; }
             Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
         }
 
@@ -47,7 +47,7 @@ namespace NHSOnline.App.Areas.Home
         Task SendNotificationsStatus(string status);
         Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse);
         Task SendNotificationUnauthorised();
-        Task SendBiometricSpec(BiometricSpec biometricSpec);
+        Task SendBiometricStatus(BiometricStatus biometricStatus);
         Task SendBiometricCompletion(BiometricCompletion completionDetails);
     }
 }

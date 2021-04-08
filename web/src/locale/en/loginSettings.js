@@ -28,6 +28,11 @@ export default {
       },
     },
     errors: {
+      title: {
+        fingerPrint: 'fingerprint',
+        face: 'Face ID',
+        touch: 'Touch ID',
+      },
       cannotFindBiometricType: {
         errorText: {
           face: 'Check that you have added a face scan in your device\'s Face ID settings.',

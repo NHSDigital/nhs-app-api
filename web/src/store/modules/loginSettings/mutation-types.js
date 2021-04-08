@@ -6,7 +6,6 @@ export const CLEAR_ERROR_CODE = 'CLEAR_ERROR_CODE';
 export const initialState = () => ({
   biometricsRegistrationStatus: false,
   biometricType: undefined,
-  biometricLocaleReference: undefined,
   isWaiting: false,
   errorCode: undefined,
 });

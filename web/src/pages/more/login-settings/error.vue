@@ -26,16 +26,18 @@ import { redirectTo } from '@/lib/utils';
 export default {
   name: 'LoginSettingsErrorPage',
   data() {
+    const error = this.$store.getters['loginSettings/biometricError'];
+    const biometricType = this.$store.getters['loginSettings/biometricType'];
     return {
-      error: this.$store.getters['loginSettings/retrieveError'],
-      hasError: this.$store.getters['loginSettings/retrieveError'] !== undefined,
-      cannotFindErrorText: this.$store.getters['loginSettings/retrieveCannotFindErrorText'],
+      error,
+      hasError: error !== undefined,
+      cannotFindErrorText: `loginSettings.biometrics.errors.cannotFindBiometricType.errorText.${biometricType}`,
       cannotFindBiometricsErrorCode: biometricErrorCodes.CannotFindBiometrics,
       cannotChangeBiometricsErrorCode: biometricErrorCodes.CannotChangeBiometrics,
     };
   },
   created() {
-    if (this.$store.state.loginSettings.errorCode === undefined) {
+    if (this.$store.getters['loginSettings/biometricError'] === undefined) {
       redirectTo(this, MORE_LOGIN_SETTINGS_PATH);
     }
   },

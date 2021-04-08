@@ -68,7 +68,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterHandler<string>(
                     RequestPnsToken, (view, handler) => view.GetPnsTokenRequested = handler)
                 .RegisterHandler(
-                    FetchBiometricSpecRequested, (view, handler) => view.FetchBiometricSpecRequested = handler)
+                    FetchBiometricStatusRequested, (view, handler) => view.FetchBiometricStatusRequested = handler)
                 .RegisterHandler<string>(
                     UpdateBiometricRegistrationRequested, (view, handler) => view.UpdateBiometricRegistrationRequested = handler)
                 .RegisterHandler(
@@ -175,14 +175,11 @@ namespace NHSOnline.App.Areas.Home.Presenters
             }
         }
 
-        private async Task FetchBiometricSpecRequested()
+        private async Task FetchBiometricStatusRequested()
         {
             var result = await _biometricAuthenticationService.FetchBiometricStatus().PreserveThreadContext();
-            var biometricSpec = result.Accept(new BiometricResultToSpecVisitor());
-            if (biometricSpec != null)
-            {
-                await _view.SendBiometricSpec(biometricSpec).PreserveThreadContext();
-            }
+            var biometricStatus = result.Accept(new BiometricResultToStatusVisitor());
+            await _view.SendBiometricStatus(biometricStatus).PreserveThreadContext();
         }
 
         private async Task UpdateBiometricRegistrationRequested(string accessToken)
@@ -251,18 +248,19 @@ namespace NHSOnline.App.Areas.Home.Presenters
             return Task.CompletedTask;
         }
 
-        private sealed class BiometricResultToSpecVisitor : IBiometricStatusResultVisitor<BiometricSpec?>
+        private sealed class BiometricResultToStatusVisitor : IBiometricStatusResultVisitor<BiometricStatus>
         {
-            public BiometricSpec? Visit(BiometricStatusResult.HardwareNotPresent hardwareNotPresent) => null;
+            public BiometricStatus Visit(BiometricStatusResult.HardwareNotPresent hardwareNotPresent)
+                => BiometricStatus.None();
 
-            public BiometricSpec? Visit(BiometricStatusResult.FingerPrint fingerPrint)
-                => BiometricSpec.FingerPrint(fingerPrint.Registered);
+            public BiometricStatus Visit(BiometricStatusResult.FingerPrint fingerPrint)
+                => BiometricStatus.FingerPrint(fingerPrint.Registered);
 
-            public BiometricSpec? Visit(BiometricStatusResult.TouchId touchId)
-                => BiometricSpec.TouchId(touchId.Registered);
+            public BiometricStatus Visit(BiometricStatusResult.TouchId touchId)
+                => BiometricStatus.TouchId(touchId.Registered);
 
-            public BiometricSpec? Visit(BiometricStatusResult.FaceId faceId)
-                => BiometricSpec.FaceId(faceId.Registered);
+            public BiometricStatus Visit(BiometricStatusResult.FaceId faceId)
+                => BiometricStatus.FaceId(faceId.Registered);
         }
     }
 }

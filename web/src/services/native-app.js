@@ -35,6 +35,16 @@ export default {
     return false;
   },
 
+  supportsBiometricStatus() {
+    const app = window.nativeApp;
+    return app && app.fetchBiometricStatus;
+  },
+
+  fetchBiometricStatus() {
+    const app = window.nativeApp;
+    app.fetchBiometricStatus();
+  },
+
   updateBiometricRegistrationWithToken(accessToken) {
     const app = window.nativeApp;
     if (app && app.updateBiometricRegistrationWithToken) {

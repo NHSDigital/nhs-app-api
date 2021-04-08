@@ -72,8 +72,9 @@ export default {
   },
   computed: {
     getBiometricLinkText() {
-      if (this.$store.getters['loginSettings/getDeviceBiometricNameString'] !== undefined) {
-        return this.$store.getters['loginSettings/getDeviceBiometricNameString'];
+      if (this.$store.getters['loginSettings/biometricSupported']) {
+        const biometricType = this.$store.getters['loginSettings/biometricType'];
+        return `loginSettings.biometrics.biometricType.${biometricType}`;
       }
 
       return 'loginSettings.biometrics.noBiometricType.settingsLinkText';

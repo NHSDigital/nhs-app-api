@@ -1,31 +1,29 @@
+import biometricTypes from '@/lib/biometrics/biometricTypes';
+
 export default {
-  biometricState(state) {
+  biometricSupported(state) {
+    switch (state.biometricType) {
+      case biometricTypes.TouchID:
+      case biometricTypes.FaceID:
+      case biometricTypes.Fingerprint:
+        return true;
+      default:
+        return false;
+    }
+  },
+  biometricRegistered(state) {
     return state.biometricsRegistrationStatus;
   },
-  deviceBiometricType(state) {
+  isWaiting(state) {
+    return state.isWaiting;
+  },
+  biometricType(state) {
+    if (state.biometricType === undefined) {
+      return biometricTypes.None;
+    }
     return state.biometricType;
   },
-  getDeviceBiometricNameString(state) {
-    if (state.biometricType === undefined) {
-      return undefined;
-    }
-    return `loginSettings.biometrics.biometricType.${state.biometricType}`;
-  },
-  getBiometricToggleText(state) {
-    return `loginSettings.biometrics.toggleLabel.${state.biometricType}`;
-  },
-  getBiometricInformation(state) {
-    return `loginSettings.biometrics.biometricInformation.${state.biometricType}`;
-  },
-  getBiometricWarningText(state) {
-    return `loginSettings.biometrics.warningText.${state.biometricType}`;
-  },
-
-  retrieveError(state) {
+  biometricError(state) {
     return state.errorCode;
-  },
-
-  retrieveCannotFindErrorText(state) {
-    return `loginSettings.biometrics.errors.cannotFindBiometricType.errorText.${state.biometricType}`;
   },
 };

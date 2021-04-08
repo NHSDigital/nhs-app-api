@@ -28,29 +28,28 @@ import proofLevel from '@/lib/proofLevel';
 import breadcrumbs from '@/breadcrumbs/more';
 import biometricErrorCodes from '@/lib/biometrics/biometricErrorCodes';
 import biometricTypes from '@/lib/biometrics/biometricTypes';
-import get from 'lodash/fp/get';
 import { INDEX } from '@/router/routes/general';
 
 const getLoginSettingsHeaderTitle = (prefix, store, i18n) => {
-  const biometricTypeReference = get('state.loginSettings.biometricLocaleReference')(store);
-  return (biometricTypeReference === undefined)
-    ? i18n.t(`${prefix}.loginSettingsNoType`)
-    : i18n.t(`${prefix}.loginSettings`, { biometricType: i18n.t(biometricTypeReference) });
+  const biometricType = store.getters['loginSettings/biometricType'];
+  if (biometricType === biometricTypes.None) {
+    return i18n.t(`${prefix}.loginSettingsNoType`);
+  }
+  return i18n.t(
+    `${prefix}.loginSettings`,
+    { biometricType: i18n.t(`loginSettings.biometrics.biometricType.${biometricType}`) },
+  );
 };
 
 const getLoginSettingsErrorHeaderTitle = (prefix, store, i18n) => {
-  const biometricTypeReference = get('state.loginSettings.biometricLocaleReference')(store);
-  const errorCode = get('state.loginSettings.errorCode')(store);
+  const biometricType = store.getters['loginSettings/biometricType'];
+  const biometricTypeName = i18n.t(`loginSettings.biometrics.errors.title.${biometricType}`);
 
-  let biometricType = i18n.t(biometricTypeReference);
-
-  if (biometricType.toLocaleLowerCase() === biometricTypes.Fingerprint.toLocaleLowerCase()) {
-    biometricType = biometricType.toLocaleLowerCase();
-  }
+  const errorCode = store.getters['loginSettings/biometricError'];
 
   return errorCode === biometricErrorCodes.CannotFindBiometrics
-    ? i18n.t(`${prefix}.loginSettingsErrorCannotFind`, { biometricType })
-    : i18n.t(`${prefix}.loginSettingsErrorCannotChange`, { biometricType });
+    ? i18n.t(`${prefix}.loginSettingsErrorCannotFind`, { biometricType: biometricTypeName })
+    : i18n.t(`${prefix}.loginSettingsErrorCannotChange`, { biometricType: biometricTypeName });
 };
 
 export const MORE = {

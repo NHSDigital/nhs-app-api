@@ -24,17 +24,12 @@ describe('login settings page', () => {
         },
       },
       getters: {
-        'loginSettings/biometricState': biometricsRegistrationStatus,
-        'loginSettings/getBiometricToggleText': `loginSettings.biometrics.toggleLabel.${biometricType}`,
-        'loginSettings/getDeviceBiometricNameString': `loginSettings.biometrics.biometricType.${biometricType}`,
+        'loginSettings/biometricType': biometricType,
+        'loginSettings/biometricRegistered': biometricsRegistrationStatus,
+        'loginSettings/biometricSupported': hasBiometricType,
       },
     });
-    wrapper = mount(loginSettings,
-      { $store,
-        data: () => ({
-          hasBiometricType,
-        }),
-        $router });
+    wrapper = mount(loginSettings, { $store, $router });
   };
 
   describe('biometric toggle', () => {
