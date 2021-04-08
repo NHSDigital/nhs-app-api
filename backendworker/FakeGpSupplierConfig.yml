@@ -1057,6 +1057,9 @@ defaultUsers:
       familyName: Filson
       dateOfBirth: "2001-04-24T00:00:00"
       sex: Male
+      linkedAccountsNhsNumbers:
+        - "9692238210"
+        - "9692238237"
 
     9692238237:
       userId: 721131a4-051d-476a-8208-cbe277537b5a
