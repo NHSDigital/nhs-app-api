@@ -58,7 +58,7 @@
 
 /*Data Download Errors*/
 "DataDownloadErrorHeader" = "Sorry, something went wrong";
-"DataDownloadErrorMessage" = "\nWe could not download this file.\n\nIf the problem continues and you need to view this document now, contact your GP surgery and request it from them directly.";
+"DataDownloadErrorMessage" = "\nWe could not download this file, please try again.\n\nIf the problem continues and you need to download a document from your GP health record, contact your GP surgery.\n\nIf you're trying to download another type of document, you can try again now. If the problem continues you may need to find another way to download the document.";
 "DataDownloadOSNotSupportedTitle" = "Important";
 "DataDownloadOSNotSupportedMessage" = "You may be able to use it if you can update your operating system. Check with your operating system developer.";
 
