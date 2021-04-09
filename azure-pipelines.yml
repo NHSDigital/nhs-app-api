@@ -136,7 +136,7 @@ pool:
 variables:
   docker.registry: nhsapp.azurecr.io
   docker.tag: $[variables['Build.SourceVersion']]
-  source.develop: $[eq(variables['Build.SourceBranchName'], 'develop')]
+  source.develop: ${{ eq(variables['Build.SourceBranchName'], 'develop') }}
   source.tag: $[startsWith(variables['Build.SourceBranch'], 'refs/tags/')]
   native.android.target: ${{ parameters.androidTarget }}
   native.ios.target: ${{ parameters.iosTarget }}
@@ -354,12 +354,11 @@ stages:
       jobs:
         - template: .azuredevops/templates/integration-tests-xamarin-job.yml
 
-  - ${{ if and(eq(variables['native.xamarin.distribute'], 'true'), eq(variables['native.xamarin.target'], 'Staging'), eq(variables['int.tests.run.native.xamarin'], 'true'), or(eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))) }}:
+  - ${{ if and(eq(variables['native.xamarin.distribute'], 'true'), eq(variables['native.xamarin.target'], 'Staging'), eq(variables['source.develop'], 'True')) }}:
     - stage: xamarin_upload_ipa_job
       displayName: Xamarin Distribute Staging Apps
       dependsOn:
         - xamarin_staging
-        - xamarin_integration_tests
       jobs:
         - template: .azuredevops/templates/xamarin-upload-ipa-job.yml
           parameters:
