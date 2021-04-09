@@ -38,8 +38,9 @@ do
     if [ -n "$TF_BUILD" ]; then
       echo "##vso[task.addattachment type=Distributedtask.Core.Summary;name=Test Report;]$(realpath "${REPORT_MD}")"
 
-      for CATEGORY in $(jq -r '.[] | select(.shouldRetry == true) | .retryCategory' < "${REPORT_JSON}"); do
+      for CATEGORY in $(jq -r '.[] | select(.shouldRetry == true) | .retryCategory' < "${REPORT_JSON}" | sort -u); do
         echo "##vso[build.addbuildtag]${CATEGORY}"
+        sleep 2
       done
     else
       cat "${REPORT_MD}"
