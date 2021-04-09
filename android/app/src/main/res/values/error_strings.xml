@@ -58,7 +58,7 @@
     <string name="download_failure_message">
         We could not download this file, please try again.\n\nIf the problem continues and you need
         to download a document from your GP health record, contact your GP surgery.\n\nIf you’re trying
-        to download another type of document, you can try again now. If you problem continues you may
+        to download another type of document, you can try again now. If the problem continues you may
         need to find another way to download the document.
     </string>
 </resources>
