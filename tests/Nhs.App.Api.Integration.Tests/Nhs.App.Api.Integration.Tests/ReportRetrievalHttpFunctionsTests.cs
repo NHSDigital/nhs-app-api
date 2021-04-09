@@ -41,12 +41,7 @@ namespace Nhs.App.Api.Integration.Tests
             var issue = operationOutcome.Issue.Single();
             issue.Severity.Should().Be(OperationOutcome.IssueSeverity.Error);
             issue.Code.Should().Be(OperationOutcome.IssueType.Forbidden);
-
-            var coding = issue.Details.Coding.Single();
-
-            coding.System.Should().Be("https://fhir.nhs.uk/R4/CodeSystem/Spine-ErrorOrWarningCode");
-            coding.Code.Should().Be("ACCESS_DENIED");
-            coding.Display.ToLowerInvariant().Should().Be("invalid access token");
+            issue.Diagnostics.Should().Be("Invalid Access Token");
 
             response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
         }
