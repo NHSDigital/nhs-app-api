@@ -10,14 +10,14 @@ namespace NHSOnline.Backend.Support
     public class OdsCodeMassager : IOdsCodeMassager
     {
         private const string OdsCodeRegex = @"([A-Z]\d{5}|[A-Z]\d[A-Z]\d[A-Z])";
-        private static readonly string OdsCodeMapRegex = $"^{OdsCodeRegex}:{OdsCodeRegex}(;{OdsCodeRegex}:{OdsCodeRegex})*$";
+        private const string OdsCodeMapRegex = "^" + OdsCodeRegex + ":" + OdsCodeRegex + "(;" + OdsCodeRegex + ":" + OdsCodeRegex + ")*$";
 
         private static readonly IDictionary<string, string> DefaultOdsCodeMap =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-        {
-            { "G85075", "X00100" },
-            { "G85672", "X00100" }
-        };
+            {
+                { "G85075", "X00100" },
+                { "G85672", "X00100" }
+            };
 
         private readonly IDictionary<string, string> _odsCodeMap;
 

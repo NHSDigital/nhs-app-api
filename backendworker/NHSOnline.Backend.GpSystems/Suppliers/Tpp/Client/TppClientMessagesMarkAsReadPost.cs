@@ -24,8 +24,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 
             if (requestParameters is null)
             {
-                throw new ArgumentNullException($"First item in {nameof(parameters)} tuple " +
-                                                $"must not be null");
+                throw new ArgumentNullException(nameof(parameters), $"First item in {nameof(parameters)} tuple must not be null");
             }
 
             var messagesToMarkAsRead = messageIdsToMarkAsRead?.Select(id => new Message

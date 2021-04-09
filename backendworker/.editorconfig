@@ -160,6 +160,9 @@ dotnet_diagnostic.CA1064.severity = error
 # CA1065: Do not raise exceptions in unexpected locations
 dotnet_diagnostic.CA1065.severity = error
 
+# CA1082: Use Literals Where Appropriate
+dotnet_diagnostic.CA1082.severity = error
+
 # CA1300: Specify MessageBoxOptions
 dotnet_diagnostic.CA1300.severity = error
 
