@@ -1,4 +1,5 @@
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using NHSOnline.App.Threading;
 
@@ -14,20 +15,24 @@ namespace NHSOnline.App.NhsLogin.Fido
         }
 
         internal async Task<HttpResponseMessage> Get(string endpoint, string accessToken)
-            => await Send(HttpMethod.Post, endpoint, accessToken, null).ResumeOnThreadPool();
+        {
+            using var requestMessage = new HttpRequestMessage(HttpMethod.Get, endpoint);
+            AddAuthorizationHeader(requestMessage, accessToken);
+
+            return await _httpClient.SendAsync(requestMessage).ResumeOnThreadPool();
+        }
 
         internal async Task<HttpResponseMessage> Post(StringContent content, string endpoint, string accessToken)
-            => await Send(HttpMethod.Post, endpoint, accessToken, content).ResumeOnThreadPool();
-
-        private async Task<HttpResponseMessage> Send(HttpMethod httpMethod, string endpoint, string accessToken, HttpContent? content)
         {
-            using var requestMessage = new HttpRequestMessage(httpMethod, endpoint);
-            requestMessage.Headers.Add("Authorization", $"Bearer {accessToken}");
-            if (content != null)
-            {
-                requestMessage.Content = content;
-            }
+            using var requestMessage = new HttpRequestMessage(HttpMethod.Post, endpoint) {Content = content};
+            AddAuthorizationHeader(requestMessage, accessToken);
+
             return await _httpClient.SendAsync(requestMessage).ResumeOnThreadPool();
+        }
+
+        private static void AddAuthorizationHeader(HttpRequestMessage message, string accessToken)
+        {
+            message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
     }
 }
