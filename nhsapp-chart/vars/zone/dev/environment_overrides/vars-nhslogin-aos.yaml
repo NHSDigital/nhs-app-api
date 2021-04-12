@@ -16,6 +16,7 @@ api:
     services__cid_uaf__javaScriptInteractionMode: NhsLogin
     services__cid_access__url: https://access.aos.signin.nhs.uk
     services__cid_access__javaScriptInteractionMode: NhsLogin
+    services__cid_idvm__url: https://idvm.aos.signin.nhs.uk
     services__ers__url: https://pat.sa.refer.nhs.uk
     services__substraktPatientPack__url: https://jump-point.aoc.substrakthealth.com
     services__substraktPatientPack_admin__url: https://admin-request.aoc.substrakthealth.com

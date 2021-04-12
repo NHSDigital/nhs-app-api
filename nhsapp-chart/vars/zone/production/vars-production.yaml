@@ -116,6 +116,7 @@ api:
     services__cid_auth__url: https://auth.login.nhs.uk
     services__cid_uaf__url: https://uaf.login.nhs.uk
     services__cid_access__url: https://access.login.nhs.uk
+    services__cid_idvm__url: https://idvm.login.nhs.uk
     services__ers__url: https://refer.nhs.uk
     services__pkb__url: https://my.patientsknowbest.com
     services__pkb_alt__url: http://my.patientsknowbest.com:443

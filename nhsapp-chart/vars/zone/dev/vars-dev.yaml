@@ -62,6 +62,7 @@ api:
     services__cid_auth__url: https://auth.ext.signin.nhs.uk
     services__cid_uaf__url: https://uaf.ext.signin.nhs.uk
     services__cid_access__url: https://access.ext.signin.nhs.uk
+    services__cid_idvm__url: https://idvm.ext.signin.nhs.uk
     services__ers__url: https://pat.rc.refer.nhs.uk
     services__pkb__url: https://nhsapp-test.devstacks.pkb.io
     services__pkb_alt__url: http://nhsapp-test.devstacks.pkb.io:443

@@ -190,6 +190,17 @@
         }
       ]
     },
+    "cid_idvm": {
+      "subServices": null,
+      "javaScriptInteractionMode": "NhsLogin",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
     "nhs_web_app": {
       "url": "https://WebAppBaseUrl",
       "javaScriptInteractionMode": "NhsApp",

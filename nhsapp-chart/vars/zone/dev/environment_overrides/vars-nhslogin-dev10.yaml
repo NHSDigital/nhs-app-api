@@ -12,3 +12,4 @@ api:
     services__cid_auth__url: https://auth.dev10.signin.nhs.uk
     services__cid_uaf__url: https://uaf.dev10.signin.nhs.uk
     services__cid_access__url: https://access.dev10.signin.nhs.uk
+    services__cid_idvm__url: https://idvm.dev10.signin.nhs.uk
