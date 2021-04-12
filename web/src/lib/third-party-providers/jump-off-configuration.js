@@ -136,6 +136,12 @@ const thirdPartyProvider = {
       provider: 'pkbSecondaryCare',
       serviceType: 'recordSharing',
     },
+    testResultsPkbSecondaryCare: {
+      jumpOffId: 'testResultsPkbSecondaryCare',
+      redirectPath: '/nhs-login/login?phrPath=/test/myTests.action&brand=pkbSecondaryCare',
+      provider: 'pkbSecondaryCare',
+      serviceType: 'testResults',
+    },
     appointmentsPkbMyCareView: {
       jumpOffId: 'appointmentsPkbMyCareView',
       redirectPath: '/nhs-login/login?phrPath=/diary/listAppointments.action&brand=pkbMyCareView',
@@ -165,6 +171,12 @@ const thirdPartyProvider = {
       redirectPath: '/nhs-login/login?phrPath=/patient/myConsentTeam.action?tab=invitations&subTab=myClinicians&brand=pkbMyCareView',
       provider: 'pkbMyCareView',
       serviceType: 'recordSharing',
+    },
+    testResultsPkbMyCareView: {
+      jumpOffId: 'testResultsPkbMyCareView',
+      redirectPath: '/nhs-login/login?phrPath=/test/myTests.action&brand=pkbMyCareView',
+      provider: 'pkbMyCareView',
+      serviceType: 'testResults',
     },
   },
   substraktPatientPack: {

@@ -126,6 +126,12 @@ describe('healthRecords', () => {
       ['cie', 'Test Results', true, false, true],
       ['cie', 'Test Results', true, true, false],
       ['cie', 'Test Results', false, false, false],
+      ['pkbSecondaryCare', 'Test Results', true, false, true],
+      ['pkbSecondaryCare', 'Test Results', true, true, false],
+      ['pkbSecondaryCare', 'Test Results', false, false, false],
+      ['myCareView', 'Test Results', true, false, true],
+      ['myCareView', 'Test Results', true, true, false],
+      ['myCareView', 'Test Results', false, false, false],
       ['pkb', 'Care Plans', true, false, true],
       ['pkb', 'Care Plans', true, true, false],
       ['pkb', 'Care Plans', false, false, false],
@@ -223,6 +229,12 @@ describe('healthRecords', () => {
             break;
           case 'myCareViewRecordSharing':
             linkElement = '#btn_pkb_my_care_view_record_sharing';
+            break;
+          case 'pkbSecondaryCareTestResults':
+            linkElement = '#btn_pkb_secondary_care_test_results';
+            break;
+          case 'myCareViewTestResults':
+            linkElement = '#btn_pkb_my_care_view_test_results';
             break;
           default:
             break;

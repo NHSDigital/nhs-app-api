@@ -40,6 +40,11 @@ class SecondaryCareRequestBuilder(queryStringEntries: HashMap<String, String> = 
                     "brand" to "pkbSecondaryCare")
     )
 
+    fun testResultsRequest() = SecondaryCareRequestBuilder(
+            hashMapOf("phrPath" to "/test/myTests.action",
+                    "brand" to "pkbSecondaryCare")
+    )
+
     fun respondWithPage(): Mapping {
         return respondWith(HttpStatus.SC_OK) {
             andHtmlBody("""

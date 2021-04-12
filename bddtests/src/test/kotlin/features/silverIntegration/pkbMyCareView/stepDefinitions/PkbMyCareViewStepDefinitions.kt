@@ -77,6 +77,16 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_MESSAGES_NONE)
     }
 
+    @Given("^I am a user who can view test results from PKB My Care View$")
+    fun iAmAUserWhoCanViewTestResultsFromPkbMyCareView(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_PKB_MY_CARE_VIEW)
+    }
+
+    @Given("^I am a user who cannot view test results from PKB My Care View$")
+    fun iAmAUserWhoCannotViewTestResultsFromPkbMyCareView() {
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_NONE)
+    }
+
     @Given("^My Care View responds to requests for appointments$")
     fun myCareViewRespondsToRequestsForAppointments() {
         MockingClient.instance.forMyCareView.mock { MyCareViewRequestBuilder().appointmentRequest().respondWithPage() }
@@ -104,6 +114,11 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
         MockingClient.instance.forMyCareView.mock { MyCareViewRequestBuilder().sharedLinksRequest().respondWithPage() }
     }
 
+    @Given("^My Care View responds to requests for test results$")
+    fun myCareViewRespondsToRequestsForTestResults() {
+        MockingClient.instance.forMyCareView.mock { MyCareViewRequestBuilder().testResultsRequest().respondWithPage() }
+    }
+
     @Then("^the link to PKB My Care View record sharing is not available on the Health Records Hub$")
     fun thePKBMyCareViewRecordSharingLinkIsNotAvailableOnTheHealthRecordsHub() {
         medicalRecordHubPage.getHeaderElement("Record Sharing").assertElementNotPresent()
@@ -112,6 +127,11 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
     @Then("^the link to PKB My Care View shared links is not available on the Health Records Hub$")
     fun thePKBMyCareViewSharedLinksLinkIsNotAvailableOnTheHealthRecordsHub() {
         medicalRecordHubPage.getHeaderElement("Shared health links").assertElementNotPresent()
+    }
+
+    @Then("^the link to PKB My Care View test results is not available on the Health Records Hub$")
+    fun thePKBMyCareViewTestResultsLinkIsNotAvailableOnTheHealthRecordsHub() {
+        medicalRecordHubPage.getHeaderElement("Test results").assertElementNotPresent()
     }
 
     @Given("^I am a user with proof level 5 who can view" +
@@ -183,6 +203,14 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
     fun assertSharedLinksWarningMessageContent() {
         redirector.interruptionCard.assertContent(
                 "Shared health links\nThis service is provided by MyCareView powered by Patients Know Best",
+                "Your GP surgery or hospital has chosen this personal health record service provider.",
+                "Find out more about personal health record services")
+    }
+
+    @Then("the test results warning on the page explains the service is from PKB My Care View$")
+    fun assertTestResultsWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+                "Test results\nThis service is provided by MyCareView powered by Patients Know Best",
                 "Your GP surgery or hospital has chosen this personal health record service provider.",
                 "Find out more about personal health record services")
     }

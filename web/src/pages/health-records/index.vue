@@ -35,6 +35,16 @@
                                          provider-id="pkb"
                                          :provider-configuration="thirdPartyProvider
                                            .pkb.testResultsCie" />
+            <third-party-jump-off-button v-if="showPkbSecondaryCareTestResults"
+                                         id="btn_pkb_secondary_care_test_results"
+                                         provider-id="pkb"
+                                         :provider-configuration="thirdPartyProvider
+                                           .pkb.testResultsPkbSecondaryCare" />
+            <third-party-jump-off-button v-if="showPkbMyCareViewTestResults"
+                                         id="btn_pkb_my_care_view_test_results"
+                                         provider-id="pkb"
+                                         :provider-configuration="thirdPartyProvider
+                                           .pkb.testResultsPkbMyCareView" />
             <third-party-jump-off-button v-if="showPkbCarePlans"
                                          id="btn_pkb_care_plans"
                                          provider-id="pkb"
@@ -175,6 +185,22 @@ export default {
         journey: 'silverIntegration',
         context: {
           provider: 'pkbCie',
+          serviceType: 'testResults',
+        },
+      }),
+      showPkbSecondaryCareTestResults: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbSecondaryCare',
+          serviceType: 'testResults',
+        },
+      }),
+      showPkbMyCareViewTestResults: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbMyCareView',
           serviceType: 'testResults',
         },
       }),

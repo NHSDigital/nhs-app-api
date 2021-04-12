@@ -40,6 +40,11 @@ class MyCareViewRequestBuilder(queryStringEntries: HashMap<String, String> = has
                     "brand" to "pkbMyCareView")
     )
 
+    fun testResultsRequest() = MyCareViewRequestBuilder(
+            hashMapOf("phrPath" to "/test/myTests.action",
+                    "brand" to "pkbMyCareView")
+    )
+
     fun respondWithPage(): Mapping {
         return respondWith(HttpStatus.SC_OK) {
             andHtmlBody("""

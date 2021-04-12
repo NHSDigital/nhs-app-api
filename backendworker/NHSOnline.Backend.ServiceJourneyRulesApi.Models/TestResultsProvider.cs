@@ -8,6 +8,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     public enum TestResultsProvider
     {
         pkb,
-        pkbCie
+        pkbCie,
+        pkbSecondaryCare,
+        pkbMyCareView
     }
 }

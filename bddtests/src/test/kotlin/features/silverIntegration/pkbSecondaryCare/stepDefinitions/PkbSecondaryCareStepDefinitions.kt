@@ -77,6 +77,16 @@ class PkbSecondaryCareStepDefinitions : HybridPageObject() {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_NONE)
     }
 
+    @Given("^I am a user who can view test results from PKB Secondary Care$")
+    fun iAmAUserWhoCanViewTestResultsFromPkbSecondaryCare(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_PKB_SECONDARY_CARE)
+    }
+
+    @Given("^I am a user who cannot view test results from PKB Secondary Care$")
+    fun iAmAUserWhoCannotViewTestResultsFromPkbSecondaryCare(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_NONE)
+    }
+
     @Given("^Secondary Care responds to requests for appointments$")
     fun secondaryCareRespondsToRequestsForAppointments() {
         MockingClient.instance.forSecondaryCare.mock {
@@ -95,6 +105,13 @@ class PkbSecondaryCareStepDefinitions : HybridPageObject() {
     fun secondaryCareRespondsToRequestsForMedicines() {
         MockingClient.instance.forSecondaryCare.mock {
             SecondaryCareRequestBuilder().medicineRequest().respondWithPage()
+        }
+    }
+
+    @Given("^Secondary Care responds to requests for test results$")
+    fun secondaryCareRespondsToRequestsForTestResults() {
+        MockingClient.instance.forSecondaryCare.mock {
+            SecondaryCareRequestBuilder().testResultsRequest().respondWithPage()
         }
     }
 
@@ -124,6 +141,11 @@ class PkbSecondaryCareStepDefinitions : HybridPageObject() {
     @Then("^the link to PKB Secondary Care shared links is not available on the Health Records Hub$")
     fun thePKBSecondaryCareSharedLinksLinkIsNotAvailableOnTheHealthRecordsHub() {
         medicalRecordHubPage.getHeaderElement("Shared health links").assertElementNotPresent()
+    }
+
+    @Then("^the link to PKB Secondary Care test results is not available on the Health Records Hub$")
+    fun thePKBSecondaryCareTestResultsLinkIsNotAvailableOnTheHealthRecordsHub() {
+        medicalRecordHubPage.getHeaderElement("Test results").assertElementNotPresent()
     }
 
     @Then("^the PKB Secondary Care View Medicines link is available on the Prescriptions Hub$")
@@ -187,6 +209,14 @@ class PkbSecondaryCareStepDefinitions : HybridPageObject() {
     fun assertSharedLinksWarningMessageContent() {
         redirector.interruptionCard.assertContent(
                 "Shared health links\nThis service is provided by Patients Know Best",
+                "Your GP surgery or hospital has chosen this personal health record service provider.",
+                "Find out more about personal health record services")
+    }
+
+    @Then("the test results warning on the page explains the service is from PKB Secondary Care$")
+    fun assertTestResultsWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+                "Test results\nThis service is provided by Patients Know Best",
                 "Your GP surgery or hospital has chosen this personal health record service provider.",
                 "Find out more about personal health record services")
     }

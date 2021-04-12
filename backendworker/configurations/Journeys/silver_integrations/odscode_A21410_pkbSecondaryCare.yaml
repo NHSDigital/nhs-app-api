@@ -16,4 +16,5 @@ journeys:
       - pkbSecondaryCare
     secondaryAppointments:
       - pkbSecondaryCare
-    testResults: []
+    testResults:
+      - pkbSecondaryCare

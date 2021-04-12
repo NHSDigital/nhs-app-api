@@ -22,4 +22,5 @@ journeys:
       - pkbMyCareView
     secondaryAppointments:
       - pkbMyCareView
-    testResults: []
+    testResults:
+      - pkbMyCareView
