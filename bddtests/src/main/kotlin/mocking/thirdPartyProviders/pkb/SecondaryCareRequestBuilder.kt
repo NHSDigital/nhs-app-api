@@ -19,6 +19,11 @@ class SecondaryCareRequestBuilder(queryStringEntries: HashMap<String, String> = 
                     "brand" to "pkbSecondaryCare")
     )
 
+    fun carePlanRequest() = SecondaryCareRequestBuilder(
+            hashMapOf("phrPath" to "/auth/listPlans.action",
+                    "brand" to "pkbSecondaryCare")
+    )
+
     fun messagesRequest() = SecondaryCareRequestBuilder(
             hashMapOf("phrPath" to "/auth/getInbox.action?tab=messages",
                     "brand" to "pkbSecondaryCare")

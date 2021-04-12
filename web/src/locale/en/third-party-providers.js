@@ -174,7 +174,7 @@ export default {
         id: 'carePlans',
         jumpOffContent: {
           headerText: 'Care plans',
-          descriptionText: 'View your personalised care plans',
+          descriptionText: 'View your care plans from your hospital or other care provider, or add your own',
         },
         thirdPartyWarning: {
           featureName: 'Care plans',
@@ -403,6 +403,20 @@ export default {
         },
       },
       {
+        id: 'carePlansPkbSecondaryCare',
+        jumpOffContent: {
+          headerText: 'Care plans',
+          descriptionText: 'View your care plans from your hospital or other care provider, or add your own',
+        },
+        thirdPartyWarning: {
+          featureName: 'Care plans',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
         id: 'messagesPkbSecondaryCare',
         jumpOffContent: {
           headerText: 'Consultations, events and messages',
@@ -481,6 +495,21 @@ export default {
         thirdPartyWarning: {
           brandName: 'MyCareView powered by Patients Know Best',
           featureName: 'View appointments',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
+        id: 'carePlansPkbMyCareView',
+        jumpOffContent: {
+          headerText: 'Care plans',
+          descriptionText: 'View your care plans from your hospital or other care provider, or add your own',
+        },
+        thirdPartyWarning: {
+          brandName: 'MyCareView powered by Patients Know Best',
+          featureName: 'Care plans',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',

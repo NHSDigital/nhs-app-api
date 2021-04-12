@@ -10,5 +10,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     {
         pkb,
         pkbCie,
+        pkbSecondaryCare,
+        pkbMyCareView
     }
 }

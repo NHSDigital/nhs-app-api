@@ -19,6 +19,11 @@ class MyCareViewRequestBuilder(queryStringEntries: HashMap<String, String> = has
                     "brand" to "pkbMyCareView")
     )
 
+    fun carePlanRequest() = MyCareViewRequestBuilder(
+            hashMapOf("phrPath" to "/auth/listPlans.action",
+                    "brand" to "pkbMyCareView")
+    )
+
     fun messagesRequest() = MyCareViewRequestBuilder(
             hashMapOf("phrPath" to "/auth/getInbox.action?tab=messages",
                     "brand" to "pkbMyCareView")

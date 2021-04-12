@@ -3,7 +3,8 @@ target:
   odsCode: "A21410"
 journeys:
   silverIntegrations:
-    carePlans: []
+    carePlans:
+      - pkbSecondaryCare
     consultations: []
     healthTrackers: []
     libraries:
