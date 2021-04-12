@@ -18,15 +18,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
         private readonly ILogger<EmisLinkedAccountsService> _logger;
         private readonly IEmisDemographicsService _demographicsService;
         private readonly IEmisClient _emisClient;
+        private readonly CalculateAge _calculateAge;
 
         public EmisLinkedAccountsService(
             ILogger<EmisLinkedAccountsService> logger,
             IEmisDemographicsService demographicsService,
-            IEmisClient emisClient)
+            IEmisClient emisClient,
+            CalculateAge calculateAge)
         {
             _logger = logger;
             _demographicsService = demographicsService;
             _emisClient = emisClient;
+            _calculateAge = calculateAge;
         }
 
         public string GetOdsCodeForLinkedAccount(GpUserSession gpUserSession, Guid id)
@@ -171,13 +174,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
                     var demographics = (DemographicsResult.Success)x.Value.Result;
 
                     var dateOfBirth = demographics.Response.DateOfBirth;
+                    var ageInMonthsAndYears = _calculateAge.CalculateAgeInMonthsAndYears(dateOfBirth);
                     return new LinkedAccount
                     {
                         Id = x.Key,
                         GivenName = demographics.Response.NameParts.Given,
                         FullName = demographics.Response.PatientName,
-                        AgeMonths = CalculateAge.CalculateAgeInMonthsAndYears(dateOfBirth).AgeMonths,
-                        AgeYears = CalculateAge.CalculateAgeInMonthsAndYears(dateOfBirth).AgeYears,
+                        AgeMonths = ageInMonthsAndYears.AgeMonths,
+                        AgeYears = ageInMonthsAndYears.AgeYears,
                         DisplayPersonalizedContent = true
                     };
                 });

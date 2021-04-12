@@ -19,6 +19,8 @@ namespace NHSOnline.Backend.Support
             services.AddTransient<IErrorReferenceGenerator, ErrorReferenceGenerator>();
 
             services.AddTransient<IFireAndForgetService, FireAndForgetService>();
+
+            services.AddTransient<CalculateAge>();
         }
     }
 }

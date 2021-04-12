@@ -17,6 +17,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Strategies.ResponseSuccessOutcome;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Temporal;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
@@ -27,6 +28,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
         private EmisLinkedAccountsService _systemUnderTest;
         private Mock<IEmisDemographicsService> _demographicsService;
         private Mock<IEmisClient> _emisClient;
+        private Mock<ICurrentDateTimeProvider> _timeProvider;
         private EmisConfigurationSettings _settings;
         private EmisUserSession _emisUserSession;
         private IFixture _fixture;
@@ -54,11 +56,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             _demographicsService = new Mock<IEmisDemographicsService>();
             _emisClient = new Mock<IEmisClient>();
 
+            _timeProvider = new Mock<ICurrentDateTimeProvider>();
+
             _settings = new EmisConfigurationSettings(BaseUri, DefaultEmisApplicationId, DefaultEmisVersion, CertificatePath,
                 CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit);
+
             _fixture.Inject(_settings);
             _fixture.Inject(_demographicsService);
             _fixture.Inject(_emisClient);
+            _fixture.Inject(_timeProvider);
+
             _systemUnderTest = _fixture.Create<EmisLinkedAccountsService>();
             _sampleSuccessStatusCodes = new List<HttpStatusCode>()
             {
@@ -299,6 +306,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             {
                 var demographicsResponse = _fixture.Create<DemographicsResponse>();
                 demographicsResponses.Add(user.Id, demographicsResponse);
+                demographicsResponse.DateOfBirth = new DateTime(1972, 04, 12, 0, 0, 0, DateTimeKind.Utc);
                 DemographicsResult demographicsResult = new DemographicsResult.Success(demographicsResponse);
 
                 _demographicsService
@@ -309,6 +317,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
                     .Returns(Task.FromResult(demographicsResult))
                     .Verifiable();
             }
+
+            _timeProvider.Setup(x => x.LocalNow).Returns(new DateTime(2021, 06, 12, 4, 32, 0, DateTimeKind.Utc));
 
             // Act
             var result = await _systemUnderTest.GetLinkedAccounts(_emisUserSession);
@@ -329,8 +339,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
 
                 linkedAccountDetail.Id.Should().Be(emisProxyPatient.Id);
                 linkedAccountDetail.FullName.Should().Be(demographicsResponseForUser.PatientName);
-                linkedAccountDetail.AgeMonths.Should().Be(CalculateAge.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeMonths);
-                linkedAccountDetail.AgeYears.Should().Be(CalculateAge.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeYears);
+                linkedAccountDetail.AgeMonths.Should().Be(0);
+                linkedAccountDetail.AgeYears.Should().Be(49);
             }
 
             _demographicsService.VerifyAll();
@@ -502,6 +512,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             {
                 var demographicsResponse = _fixture.Create<DemographicsResponse>();
                 demographicsResponses.Add(user.Id, demographicsResponse);
+                demographicsResponse.DateOfBirth = new DateTime(1972, 04, 12, 0, 0, 0, DateTimeKind.Utc);
                 DemographicsResult demographicsResult = new DemographicsResult.Success(demographicsResponse);
 
                 if (patientToFailDemographicsFor == user)
@@ -521,6 +532,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
                     .Returns(Task.FromResult(demographicsResult))
                     .Verifiable();
             }
+
+            _timeProvider.Setup(x => x.LocalNow).Returns(new DateTime(2021, 06, 12, 4, 32, 0, DateTimeKind.Utc));
 
             // Act
             var result = await _systemUnderTest.GetLinkedAccounts(_emisUserSession);
@@ -544,8 +557,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
 
                 linkedAccountDetail.Id.Should().Be(emisProxyPatient.Id);
                 linkedAccountDetail.FullName.Should().Be(demographicsResponseForUser.PatientName);
-                linkedAccountDetail.AgeMonths.Should().Be(CalculateAge.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeMonths);
-                linkedAccountDetail.AgeYears.Should().Be(CalculateAge.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeYears);
+                linkedAccountDetail.AgeMonths.Should().Be(0);
+                linkedAccountDetail.AgeYears.Should().Be(49);
             }
 
             _demographicsService.VerifyAll();

@@ -15,6 +15,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Temporal;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
@@ -28,6 +29,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
         private Mock<IGpSessionManager> _gpSessionManager;
         private Mock<IFireAndForgetService> _fireAndForgetService;
         private Mock<ILogger<TppLinkedAccountsService>> _mockLogger;
+        private Mock<ICurrentDateTimeProvider> _timeProvider;
 
         [TestInitialize]
         public void TestInitialize()
@@ -38,6 +40,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             _gpSessionManager = _fixture.Freeze<Mock<IGpSessionManager>>();
             _fireAndForgetService = _fixture.Freeze<Mock<IFireAndForgetService>>();
             _mockLogger = _fixture.Freeze<Mock<ILogger<TppLinkedAccountsService>>>();
+            _timeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
             _systemUnderTest = _fixture.Create<TppLinkedAccountsService>();
         }
 
@@ -316,25 +319,27 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
                     {
                         Id = Guid.NewGuid(),
                         FullName = _fixture.Create<string>(),
-                        DateOfBirth = _fixture.Create<DateTime>(),
+                        DateOfBirth = new DateTime(1972, 04, 11, 0, 0, 0, DateTimeKind.Utc),
                         NhsNumber = _fixture.Create<string>()
                     },
                     new TppProxyUserSession
                     {
                         Id = Guid.NewGuid(),
                         FullName = _fixture.Create<string>(),
-                        DateOfBirth = _fixture.Create<DateTime>(),
+                        DateOfBirth = new DateTime(1972, 04, 12, 0, 0, 0, DateTimeKind.Utc),
                         NhsNumber = _fixture.Create<string>()
                     },
                     new TppProxyUserSession
                     {
                         Id = Guid.NewGuid(),
                         FullName = _fixture.Create<string>(),
-                        DateOfBirth = _fixture.Create<DateTime>(),
+                        DateOfBirth = new DateTime(1972, 04, 13, 0, 0, 0, DateTimeKind.Utc),
                         NhsNumber = _fixture.Create<string>()
                     },
                 }
             };
+
+            _timeProvider.Setup(x => x.LocalNow).Returns(new DateTime(2021, 04, 12, 4, 32, 0, DateTimeKind.Utc));
 
             //Act
             var result = await _systemUnderTest.GetLinkedAccounts(_tppUserSession);
@@ -353,10 +358,24 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
 
                 linkedAccountDetail.Id.Should().Be(tppProxyPatient.Id);
                 linkedAccountDetail.FullName.Should().Be(tppProxyPatient.FullName);
-                linkedAccountDetail.AgeMonths.Should()
-                    .Be(CalculateAge.CalculateAgeInMonthsAndYears(tppProxyPatient.DateOfBirth).AgeMonths);
-                linkedAccountDetail.AgeYears.Should()
-                    .Be(CalculateAge.CalculateAgeInMonthsAndYears(tppProxyPatient.DateOfBirth).AgeYears);
+                switch (i)
+                {
+                    case 0:
+                        linkedAccountDetail.AgeMonths.Should().Be(0);
+                        linkedAccountDetail.AgeYears.Should().Be(49);
+                        break;
+                    case 1:
+                        linkedAccountDetail.AgeMonths.Should().Be(0);
+                        linkedAccountDetail.AgeYears.Should().Be(49);
+                        break;
+                    case 2:
+                        linkedAccountDetail.AgeMonths.Should().Be(0);
+                        linkedAccountDetail.AgeYears.Should().Be(48);
+                        break;
+                    default:
+                        Assert.Fail("Invalid patient index {0}", i);
+                        break;
+                }
             }
         }
 

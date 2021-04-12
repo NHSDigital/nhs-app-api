@@ -15,14 +15,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.LinkedAccounts
     {
         private readonly ILogger<DefaultLinkedAccountsAreaBehaviour> _logger;
         private readonly IFakeUserRepository _fakeUserRepository;
+        private readonly CalculateAge _calculateAge;
 
         public DefaultLinkedAccountsAreaBehaviour(
             ILogger<DefaultLinkedAccountsAreaBehaviour> logger,
-            IFakeUserRepository fakeUserRepository
-        )
+            IFakeUserRepository fakeUserRepository,
+            CalculateAge calculateAge)
         {
             _logger = logger;
             _fakeUserRepository = fakeUserRepository;
+            _calculateAge = calculateAge;
         }
 
         public string GetOdsCodeForLinkedAccount(GpUserSession gpUserSession, Guid id)
@@ -55,7 +57,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.LinkedAccounts
                 {
                     var proxyUser = await _fakeUserRepository.Find(proxyPatient.NhsNumber);
 
-                    var ageData = CalculateAge.CalculateAgeInMonthsAndYears(proxyUser.DateOfBirth);
+                    var ageData = _calculateAge.CalculateAgeInMonthsAndYears(proxyUser.DateOfBirth);
 
                     linkedAccounts.Add(new LinkedAccount
                     {

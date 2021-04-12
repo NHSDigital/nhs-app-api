@@ -18,15 +18,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
         private readonly ILogger<TppLinkedAccountsService> _logger;
         private readonly IGpSessionManager _gpSessionManager;
         private readonly IFireAndForgetService _fireAndForgetService;
+        private readonly CalculateAge _calculateAge;
 
         public TppLinkedAccountsService(
             ILogger<TppLinkedAccountsService> logger,
             IGpSessionManager gpSessionManager,
-            IFireAndForgetService fireAndForgetService)
+            IFireAndForgetService fireAndForgetService,
+            CalculateAge calculateAge)
         {
             _logger = logger;
             _gpSessionManager = gpSessionManager;
             _fireAndForgetService = fireAndForgetService;
+            _calculateAge = calculateAge;
         }
 
         public string GetOdsCodeForLinkedAccount(GpUserSession gpUserSession, Guid id)
@@ -93,13 +96,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
                 foreach (var proxyPatient in tppUserSession.ProxyPatients)
                 {
                     var dateOfBirth = proxyPatient.DateOfBirth;
+                    var ageInMonthsAndYears = _calculateAge.CalculateAgeInMonthsAndYears(dateOfBirth);
                     linkedAccounts.Add(new LinkedAccount
                     {
                         Id = proxyPatient.Id,
                         GivenName = proxyPatient.FullName,
                         FullName = proxyPatient.FullName,
-                        AgeMonths = CalculateAge.CalculateAgeInMonthsAndYears(dateOfBirth).AgeMonths,
-                        AgeYears = CalculateAge.CalculateAgeInMonthsAndYears(dateOfBirth).AgeYears,
+                        AgeMonths = ageInMonthsAndYears.AgeMonths,
+                        AgeYears = ageInMonthsAndYears.AgeYears,
                         DisplayPersonalizedContent = false
                     });
                 }
