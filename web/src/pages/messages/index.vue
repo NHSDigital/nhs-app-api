@@ -156,15 +156,6 @@ export default {
         this.substraktEnabled ||
         this.testProviderEnabled;
     },
-    onlyAppMessagingEnabled() {
-      return this.appMessagingSjrEnabled &&
-        !this.gpMessagesEnabled &&
-        !this.engageEnabled &&
-        !this.pkbEnabled &&
-        !this.pkbCieEnabled &&
-        !this.substraktEnabled &&
-        !this.testProviderEnabled;
-    },
     gpMessagesEnabled() {
       return this.im1MessagingSjrEnabled && this.$store.state.practiceSettings.im1MessagingEnabled;
     },
