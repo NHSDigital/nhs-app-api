@@ -622,6 +622,9 @@ defaultUsers:
       familyName: Davidson
       dateOfBirth: "1964-02-15T00:00:00"
       sex: Male
+      linkedAccountsNhsNumbers:
+        - "9692239462"
+        - "9692239470"
 
     9692239462:
       userId: 157ba591-ec7c-4232-b3e7-e17de8e541a1
@@ -649,6 +652,8 @@ defaultUsers:
       familyName: Lundy
       dateOfBirth: "1931-01-01T00:00:00"
       sex: Male
+      linkedAccountsNhsNumbers:
+        - "9692236471"
 
     9692237699:
       userId: 56da05d1-e073-45b8-ba6b-fe0152f738db
@@ -667,6 +672,8 @@ defaultUsers:
       familyName: COULCH
       dateOfBirth: 1937-09-28T00:00:00
       sex: male
+      linkedAccountsNhsNumbers:
+        - "9692237710"
 
     9692237710:
       userId: 0cbe36d1-814e-46f6-8e64-2b0f124b3a0d
@@ -694,6 +701,8 @@ defaultUsers:
       familyName: TUCKER
       dateOfBirth: 1950-09-19T00:00:00
       sex: male
+      linkedAccountsNhsNumbers:
+        - "9692236005"
 
     9692236005:
       userId: 1032c0b5-44a4-415b-b43a-04190cb75593
@@ -794,6 +803,9 @@ defaultUsers:
       familyName: Callen
       dateOfBirth: "1964-02-11T00:00:00"
       sex: Female
+      linkedAccountsNhsNumbers:
+        - "9993829978"
+        - "9692237729"
 
     9993829978:
       userId: 8e57be4a-60b1-403b-b372-013767d14458
@@ -821,6 +833,9 @@ defaultUsers:
       familyName: HIGHAM
       dateOfBirth: 1947-03-19T00:00:00
       sex: male
+      linkedAccountsNhsNumbers:
+        - "9692237745"
+        - "9692236633"
 
     9692237745:
       userId: 20efd815-0d65-4342-8635-f09b6580fa74
@@ -848,6 +863,8 @@ defaultUsers:
       familyName: LOWDAY
       dateOfBirth: 1960-06-03T00:00:00
       sex: male
+      linkedAccountsNhsNumbers:
+        - "9692236668"
 
     9692236668:
       userId: 5e791ae3-eeb0-456f-ac45-414241010ebb
@@ -866,6 +883,9 @@ defaultUsers:
       familyName: SUTTER
       dateOfBirth: 2005-08-26T00:00:00
       sex: female
+      linkedAccountsNhsNumbers:
+        - "9692240002"
+        - "9692240010"
 
     9692240002:
       userId: ddb04464-8dc8-4ec7-b87d-4825f2ee742b
@@ -921,6 +941,9 @@ defaultUsers:
       familyName: DUPRE
       dateOfBirth: "1944-10-08T00:00:00"
       sex: Female
+      linkedAccountsNhsNumbers:
+        - "9692237826"
+        - "9692237834"
 
     9692237826:
       userId: b126106f-fab5-4a17-ae4c-c44224b7e818
@@ -975,6 +998,9 @@ defaultUsers:
       familyName: BRANT
       dateOfBirth: "1957-07-19T00:00:00"
       sex: Male
+      linkedAccountsNhsNumbers:
+        - "9692238474"
+        - "9692238482"
 
     9692238474:
       userId: 38d06f06-f056-46ca-992c-d14c231b2c20
@@ -1024,16 +1050,19 @@ defaultUsers:
   netCompany:
     9692237877:
       userId: f5d0d594-ec20-4d40-b22a-30eb5daf69d6
-      emailAddress:  onboarding.nhsapp+netcompany.user1gmail.com 
+      emailAddress:  onboarding.nhsapp+netcompany.user1@gmail.com 
       odsCode: F00010
       givenName: Viola
       familyName: PECK
       dateOfBirth: "1943-07-25T00:00:00"
       sex: Female
+      linkedAccountsNhsNumbers:
+        - "9692238202"
+        - "9692238210"
 
     9692238202:
       userId: 080f5c91-2068-4cdd-b2b1-258d207a9b41
-      emailAddress:  onboarding.nhsapp+netcompany.user2gmail.com 
+      emailAddress:  onboarding.nhsapp+netcompany.user2@gmail.com 
       odsCode: F00010
       givenName: West
       familyName: DAWSON
@@ -1042,7 +1071,7 @@ defaultUsers:
 
     9692238210:
       userId: abc04f11-7085-4e7c-9798-c4d3dad66366
-      emailAddress:  onboarding.nhsapp+netcompany.user3gmail.com 
+      emailAddress:  onboarding.nhsapp+netcompany.user3@gmail.com 
       odsCode: F00010
       givenName: Marcus
       familyName: LUNDON
@@ -1051,7 +1080,7 @@ defaultUsers:
 
     9692238229:
       userId: 5e97523a-5dd9-4f1c-8cd9-ce2afe6aaa0b
-      emailAddress:  onboarding.nhsapp+netcompany.user4gmail.com 
+      emailAddress:  onboarding.nhsapp+netcompany.user4@gmail.com 
       odsCode: F00010
       givenName: Carl
       familyName: Filson
@@ -1063,7 +1092,7 @@ defaultUsers:
 
     9692238237:
       userId: 721131a4-051d-476a-8208-cbe277537b5a
-      emailAddress:  onboarding.nhsapp+netcompany.user5gmail.com 
+      emailAddress:  onboarding.nhsapp+netcompany.user5@gmail.com 
       odsCode: F00010
       givenName: Sam
       familyName: RIMMER
@@ -1072,7 +1101,7 @@ defaultUsers:
 
     9692238245:
       userId: dac56a78-3759-40f1-81a1-614d7c1d561b
-      emailAddress:  onboarding.nhsapp+netcompany.user6gmail.com 
+      emailAddress:  onboarding.nhsapp+netcompany.user6@gmail.com 
       odsCode: F00010
       givenName: Joel
       familyName: LAPPIN
@@ -1081,7 +1110,7 @@ defaultUsers:
 
     9692238253:
       userId: f55bfe6e-16d8-4380-9627-0f0108966e94
-      emailAddress:  onboarding.nhsapp+netcompany.user7gmail.com 
+      emailAddress:  onboarding.nhsapp+netcompany.user7@gmail.com 
       odsCode: F00010
       givenName: Tommy
       familyName: DEE
@@ -1090,7 +1119,7 @@ defaultUsers:
 
     9692238261:
       userId: 0eea557f-75ca-40a5-bb2f-3fbd15ab7764
-      emailAddress:  onboarding.nhsapp+netcompany.user8gmail.com 
+      emailAddress:  onboarding.nhsapp+netcompany.user8@gmail.com 
       odsCode: F00010
       givenName: Matt
       familyName: PERRY
@@ -1099,7 +1128,7 @@ defaultUsers:
 
     9692238288:
       userId: 21384eb5-eceb-4076-91db-f6ca2ebb0fff
-      emailAddress:  onboarding.nhsapp+netcompany.user9gmail.com 
+      emailAddress:  onboarding.nhsapp+netcompany.user9@gmail.com 
       odsCode: F00010
       givenName: Brett
       familyName: WIVELL
@@ -1108,7 +1137,7 @@ defaultUsers:
 
     9692238296:
       userId: 685485fa-b178-401a-ac28-1ba4da5c4088
-      emailAddress:  onboarding.nhsapp+netcompany.user10gmail.com 
+      emailAddress:  onboarding.nhsapp+netcompany.user10@gmail.com 
       odsCode: F00010
       givenName: Robert
       familyName: HIDE
@@ -1117,7 +1146,7 @@ defaultUsers:
 
     9692238415:
       userId: 4deaf277-e435-4f39-8613-e6835f538feb
-      emailAddress:  onboarding.nhsapp+netcompany.user11gmail.com 
+      emailAddress:  onboarding.nhsapp+netcompany.user11@gmail.com 
       odsCode: F00010
       givenName: Dean
       familyName: COY
@@ -1126,7 +1155,7 @@ defaultUsers:
 
     9692238423:
       userId: c7dbb429-eee1-4239-92f6-568f91b3dcd9
-      emailAddress:  onboarding.nhsapp+netcompany.user12gmail.com 
+      emailAddress:  onboarding.nhsapp+netcompany.user12@gmail.com 
       odsCode: F00010
       givenName: Harvey
       familyName: MCVAY
@@ -1135,7 +1164,7 @@ defaultUsers:
 
     9692238431:
       userId: 919229d9-ab3b-4b5a-8c18-772fcd767c4e
-      emailAddress:  onboarding.nhsapp+netcompany.user13gmail.com 
+      emailAddress:  onboarding.nhsapp+netcompany.user13@gmail.com 
       odsCode: F00010
       givenName: Eric
       familyName: SLEIGH
@@ -1144,7 +1173,7 @@ defaultUsers:
 
     9692238458:
       userId: 1d7e4282-be8b-4d2e-bc11-48aced55a48f
-      emailAddress:  onboarding.nhsapp+netcompany.user14gmail.com 
+      emailAddress:  onboarding.nhsapp+netcompany.user14@gmail.com 
       odsCode: F00010
       givenName: Hubert
       familyName: SOFFE
@@ -1159,6 +1188,9 @@ defaultUsers:
       familyName: RUSK
       dateOfBirth: "1960-12-11T00:00:00"
       sex: Male
+      linkedAccountsNhsNumbers:
+        - "9692238326"
+        - "9692238334"
 
     9692238326:
       userId: f2b4cbba-8f23-48e6-924b-d69bcb68d46a
@@ -1231,6 +1263,9 @@ defaultUsers:
       familyName: WARNER
       dateOfBirth: "1979-04-06T00:00:00"
       sex: Male
+      linkedAccountsNhsNumbers:
+        - "9692238385"
+        - "9692238393"
 
     9692238385:
       userId: b534a02a-b353-4892-ad45-5d6b66a8f15a
