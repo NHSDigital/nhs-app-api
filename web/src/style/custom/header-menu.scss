@@ -62,11 +62,22 @@ nav {
           }
 
           &:hover {
-            background: #003d78;
-            box-shadow: none;
-            color: #FFFFFF;
-            text-decoration: underline;
+            // Editted as part of NHSO-13314
+            // Made !important to override the a:hover in _focus.scss
+            background: #003d78 !important;
+            box-shadow: none !important;
+            color: #FFFFFF !important;
+            text-decoration: underline !important;
+            // End of Edit
           }
+
+          // Added as part of NHSO-13314
+          // Needed for box shadow on desktop as margin is zero
+          &:focus {
+            margin-bottom: 4px;
+            padding-bottom: 12px;
+          }
+          // End of Addition
         }
       }
     }

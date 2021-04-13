@@ -76,17 +76,32 @@
         left: 0px;
         border-radius: 4em;
       }
+
+      //When Hovered Over & unchecked
+      &:hover {
+        &::before {
+          background: $nhsuk-reverse-button-hover-colour;
+        }
+      }
     }
 
     // When Active
     &:checked {
-      & + span::before {
-        background: $light_green;
-        transition: width 0.2s cubic-bezier(0, 0, 0, 0.1);
-      }
+      & + span {
+        &::before {
+          background: $light_green;
+          transition: width 0.2s cubic-bezier(0, 0, 0, 0.1);
+        }
+        
+        &::after {
+          left: 1.6em;
+        }
 
-      & + span::after {
-        left: 1.6em;
+        &:hover {
+          &::before {
+            background: $color_shade_nhsuk-green-35;
+          }
+        }
       }
     }
 

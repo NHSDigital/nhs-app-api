@@ -26,4 +26,5 @@ export default {
 <style lang="scss">
   @import "~nhsuk-frontend/packages/nhsuk";
   @import "./style/links";
+  @import "./style/desktopWeb/focus";
 </style>

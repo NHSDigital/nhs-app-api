@@ -1,3 +1,8 @@
+// Added as part of NHSO-13314
+@import '../colours';
+@import '~nhsuk-frontend/packages/core/settings/globals';
+// End of Addition
+
 ul {
   margin: 0;
   padding: 0;
@@ -12,8 +17,11 @@ ul {
       &:focus,
       &:hover {
         border-radius: 4px;
+        // Added as part of NHSO-13314
+        box-shadow: 0 0 0 $nhsuk-focus-width $focus_highlight !important;
+        // End of Addition
       }
-      
+
       img{
         display: block;
       }

@@ -35,6 +35,7 @@
 @mixin linkFocusStyle {
   background: $focus_highlight;
   box-shadow: 0 0 0 4px $focus_highlight;
+  border-bottom: 5px $black;
   color: $black;
   outline: 0;
   width: auto;

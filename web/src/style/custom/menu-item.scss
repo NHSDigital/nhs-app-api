@@ -11,6 +11,10 @@
 
 @import '../arrow';
 
+// Added as part of NHSO-13314
+@import '../desktopWeb/_focus';
+// End of addition
+
 @mixin outlineStyle {
   outline: 4px solid transparent;
   outline-offset: -6px;
@@ -29,6 +33,7 @@
     border-bottom: 1px $color_nhsuk-grey-4 solid;
     padding: nhsuk-spacing(3);
     text-decoration: none;
+    cursor: pointer;
 
     @include govuk-media-query($until: tablet) {
       @include nhsuk-responsive-padding(2, "top");

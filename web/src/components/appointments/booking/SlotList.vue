@@ -8,7 +8,9 @@
         <span data-purpose="appointment-day-heading">
           {{ formatDate(daySlots[0]) }}
         </span>
-        <p class="nhsuk-u-margin-bottom-0">
+      </template>
+      <template slot="text">
+        <p class="nhsuk-u-margin-bottom-0 nhsuk-u-padding-left-6">
           <span id="appointmentCount" :class="$style['subHeader']">
             {{ availableAppointmentCount(daySlots[1].length) }}
           </span>

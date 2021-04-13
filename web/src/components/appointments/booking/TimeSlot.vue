@@ -6,18 +6,20 @@
     <a :href="appointmentConfirmationPath"
        data-purpose="confirm-timeslot"
        @click.prevent="select">
-      <span>
-        <span :class="$style.strong"
-              data-label="start time"
-              :aria-label="formatTime(timeSlot.startTime)">
-          {{ formatTime(timeSlot.startTime) }}
+      <div class="timeslot-wrapper">
+        <span>
+          <span :class="$style.strong"
+                data-label="start time"
+                :aria-label="formatTime(timeSlot.startTime)">
+            {{ formatTime(timeSlot.startTime) }}
+          </span>
+          <p v-if="timeSlot.sessionName"
+             class="nhsuk-u-margin-bottom-0"
+             data-label="session name">
+            {{ timeSlot.sessionName }}
+          </p>
         </span>
-        <p v-if="timeSlot.sessionName"
-           class="nhsuk-u-margin-bottom-0"
-           data-label="session name">
-          {{ timeSlot.sessionName }}
-        </p>
-      </span>
+      </div>
     </a>
   </li>
 </template>

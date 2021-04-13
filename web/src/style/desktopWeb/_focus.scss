@@ -1,0 +1,492 @@
+@import '../colours';
+@import '~nhsuk-frontend/packages/core/settings/globals';
+
+// ==========================================================================
+// TOOLS / #FOCUSED & HOVER
+// ==========================================================================
+
+//
+// Focused text
+//
+// Provides an outline to clearly indicate when the target element is focused.
+// Used for interactive text-based elements.
+//
+
+@mixin nhsuk-focused-text {
+  background-color: $focus_highlight !important;
+  box-shadow: 0 -2px $focus_highlight, 0 $nhsuk-focus-width $nhsuk-focus-text-color !important;
+  color: $nhsuk-focus-text-color !important;
+  // When colours are overridden, for example when users have a dark mode,
+  // backgrounds and box-shadows disappear, so we need to ensure there's a
+  // transparent outline which will be set to a visible colour.
+  outline: $nhsuk-focus-width solid transparent !important;
+  // When link is focussed, hide the default underline since the
+  // box shadow adds the "underline"
+  text-decoration: none !important;
+  outline-color: transparent !important;
+}
+
+@mixin nhsuk-focused-link-text {
+  @include nhsuk-focused-text;
+  border-bottom: $nhsuk-focus-width $color_nhsuk-black;
+}
+
+@mixin nhsuk-focused-link-width {
+  width: max-content;
+  max-width: 100% !important;
+}
+
+/// Focused input (form elements)
+///
+/// Provides an additional outline and border to clearly indicate when
+/// the target element has focus. Used for interactive input-based elements such
+/// as text inputs.
+
+@mixin nhsuk-focused-input {
+  border: 2px solid $nhsuk-focus-text-color !important;
+  box-shadow: inset 0 0 0 2px !important;
+  outline: $nhsuk-focus-width solid $focus_highlight !important;
+  outline-offset: 0 !important;
+}
+
+/// Focused Select/Drop Down (form elements)
+@mixin nhsuk-focused-select {
+  box-shadow: inset 0 0 0 4px black, 0 0 0 4px $focus_highlight !important;
+}
+
+/// Focused radio input (form element)
+///
+/// Provides an additional outline and border to clearly indicate when
+/// the target element has focus. Used by radios.
+
+@mixin nhsuk-focused-radio {
+  box-shadow: 0 0 0 $nhsuk-focus-width $focus_highlight !important;
+  border: $nhsuk-focus-width solid $nhsuk-focus-text-color !important;
+}
+
+/// Focused checkbox input (form element)
+///
+/// Provides an additional outline and border to clearly indicate when
+/// the target element has focus. Used by checkbox.
+
+@mixin nhsuk-focused-checkbox {
+  box-shadow: 0 0 0 $nhsuk-focus-width $focus_highlight !important;
+  border: $nhsuk-focus-width solid $nhsuk-focus-text-color !important;
+}
+
+/// Focused button
+///
+/// Provides an additional outline and background to clearly indicate when
+/// the target element has focus. Used for buttons.
+
+@mixin nhsuk-focused-button {
+  background-color: $focus_highlight !important;
+  border: 2px solid transparent !important;
+  box-shadow: 0 $nhsuk-focus-width 0 0 $nhsuk-focus-text-color !important;
+  color: $nhsuk-focus-text-color;
+  outline: $nhsuk-focus-width solid transparent;
+  outline-offset: $nhsuk-focus-width;
+
+  .nhsuk-icon {
+    fill: $nhsuk-focus-text-color;
+  }
+}
+
+/// Hover Link Text
+///
+/// Resets the styles to transparent/empty
+/// Overrides styles used elsewhere in parent element's class
+
+@mixin nhsuk-hover-link-background-reset {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/// Hover Header Link Text
+///
+/// Adds the blue background to the header links
+/// Most links get their background style from original stylesheets
+
+@mixin nhsuk-hover-header-links {
+  background: $hover_blue !important;
+  box-shadow: 0 0 0 3px $hover_blue !important;
+  color: $color_nhsuk-white;
+  text-decoration: underline !important;
+}
+
+/// Hover button
+///
+/// Provides the black underline
+/// Original stylesheets make the background a shade darker
+
+@mixin nhsuk-hover-button {
+  box-shadow: 0 $nhsuk-focus-width 0 0 $nhsuk-focus-text-color !important;
+}
+
+@mixin nhsuk-banner-focus {
+  color: $color_nhsuk-white !important;
+  background-color: $hover_blue !important;
+}
+
+@mixin nhsuk-banner-hover {
+  color: $color_nhsuk-white !important;
+  background-color: $color_nhsuk-blue !important;
+}
+
+// Focus and Hover for buttons
+a.button {
+  &:focus {
+    @include nhsuk-focused-button;
+  }
+
+  &:hover {
+    @include nhsuk-hover-button;
+  }
+}
+
+// Focus and Hover for buttons
+button {
+  &:focus {
+    @include nhsuk-focused-button;
+  }
+  
+  &:hover {
+    @include nhsuk-hover-button;
+  }
+}
+
+// Hover & Focus for silver integration panel
+.warning-content-panel__content {
+  .nhsuk-button--reverse {
+    border-bottom: 0px !important;
+    &:focus {
+      box-shadow: 0 4px 0 $nhsuk-reverse-button-shadow-colour !important;
+
+      &:hover {
+        background-color: $focus_highlight!important;
+      }
+    }
+
+    &:hover {
+      background-color: $nhsuk-reverse-button-hover-colour !important;
+      color: $nhsuk-reverse-button-text-colour !important;
+      box-shadow: 0 4px 0 $nhsuk-reverse-button-shadow-colour !important;
+    }
+  }
+
+  p a {
+    &:focus {
+      &:hover {
+        @include nhsuk-focused-link-text;
+      }
+    }
+
+    &:hover {
+      @include nhsuk-banner-focus;
+    }
+  }
+}
+
+// Focus for checkboxes
+.nhsuk-checkboxes__input:focus + .nhsuk-checkboxes__label::before {
+  @include nhsuk-focused-checkbox;
+}
+
+// Clicked for checkboxes
+.nhsuk-checkboxes__input:checked + .nhsuk-checkboxes__label::before {
+  @include nhsuk-focused-checkbox;
+}
+
+// Focus and Hover for Panel Links
+.listMenuItem .listMenuItemLink {
+  &:focus {
+    background-color: $color_nhsuk-white !important;
+    box-shadow: none !important;
+    
+    //To override the global focus properties of buttons for eConsult Panels
+    border-top: 1px $color_nhsuk-grey-4 solid !important;
+    border-bottom: 1px $color_nhsuk-grey-4 solid !important;
+    border-left: 0px !important;
+    border-right: 0px !important;
+
+    .listMenuItemContainer h2 {
+      @include nhsuk-focused-link-text;
+      @include nhsuk-focused-link-width;
+    }
+
+    &:hover {
+      border-bottom: 1px $color_nhsuk-grey-4 solid;
+
+      .listMenuItemContainer h2 {
+        text-decoration: none !important;
+      }
+    }
+  }
+  
+  &:hover {
+    background-color: $color_nhsuk-white !important;
+    box-shadow: none !important;
+
+    .listMenuItemContainer h2 {
+      color: $nhsuk-hover-link-color;
+      text-decoration: underline !important;
+    }
+  }
+}
+
+// Focus and Hover for Panel Links on GP Messages & App Messages
+#gpInboxMessages a, #inboxMessages a {
+  &:focus {
+    @include nhsuk-hover-link-background-reset;
+
+    h2 {
+      @include nhsuk-focused-link-text;
+    }
+
+    &:hover h2 {
+      @include nhsuk-focused-link-text;
+    }
+  }
+  
+  &:hover {
+    h2 {
+      @include nhsuk-hover-link-background-reset;
+      color: $nhsuk-hover-link-color !important;
+      text-decoration: underline !important;
+    }
+  }
+}
+
+// Focus and Hover for NHS logo
+.nhsuk-header__link--service {
+  &:focus {
+    .nhsuk-header__service-name {
+      color: $nhsuk-focus-text-color !important;
+    }
+
+    &:hover {
+      @include nhsuk-hover-header-links;
+
+      .nhsuk-header__service-name {
+        color: $color_nhsuk-white !important;
+      }
+    }
+  }
+  
+  &:hover {
+    @include nhsuk-hover-header-links;
+
+    .nhsuk-header__service-name {
+      color: $color_nhsuk-white;
+    }
+  }
+}
+
+// Focus and Hover for Summary Detail Component
+.nhsuk-details__summary {
+  &:focus {
+    @include nhsuk-focused-link-text;
+
+    .nhsuk-details__summary-text {
+      text-decoration: none !important;
+    }
+
+    &:hover {
+      @include nhsuk-focused-link-text;
+
+      .nhsuk-details__summary-text {
+        color: $color_nhsuk-black !important;
+      }
+    }
+  }
+  
+  &:hover {
+    @include nhsuk-hover-link-background-reset;
+    color: $nhsuk-hover-link-color !important;
+
+    .nhsuk-details__summary-text {
+      color: $nhsuk-hover-link-color !important;
+    }
+  }
+}
+
+// Focus for expander when expanded
+.nhsuk-expander[open] .nhsuk-details__summary {
+  &:focus {
+    .nhsuk-details__summary-text {
+      background: url("data:image/svg+xml,%3Csvg class='nhsuk-icon nhsuk-icon__minus' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='32' aria-hidden='true'%3E%3Ccircle cx='12' cy='12' r='10' fill='002f5c'%3E%3C/circle%3E%3Cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M8 12h8'%3E%3C/path%3E%3C/svg%3E%0A") left -2px center no-repeat; /* [3] */ // sass-lint:disable-line quotes
+    }
+  }
+
+  border-bottom: 1px solid $color_nhsuk-grey-5;
+}
+
+// Hover and Focus for Expanders
+.nhsuk-expander .nhsuk-details__summary {
+  &:focus {
+    @include nhsuk-hover-link-background-reset;
+
+    .nhsuk-details__summary-text {
+      @include nhsuk-focused-link-text;
+      @include nhsuk-focused-link-width;
+      background: url("data:image/svg+xml,%3Csvg class='nhsuk-icon nhsuk-icon__plus' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='32' aria-hidden='true'%3E%3Ccircle cx='12' cy='12' r='10' fill='002f5c'%3E%3C/circle%3E%3Cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M12 8v8M8 12h8'%3E%3C/path%3E%3C/svg%3E%0A") left -2px center no-repeat; // sass-lint:disable-line quotes
+    }
+  }
+
+  .nhsuk-details__summary-text {
+    padding-left: nhsuk-spacing(6) !important;
+  }
+}
+
+//Focus and Hover for GP appointent time slots
+.timeSlot a {
+  &:focus {
+    @include nhsuk-hover-link-background-reset;
+    
+    div span span {
+      text-decoration: none !important;
+      @include nhsuk-focused-link-text;
+      @include nhsuk-focused-link-width;
+    }
+
+    &:hover {
+      @include nhsuk-hover-link-background-reset;
+
+      div span span {
+        @include nhsuk-focused-link-text;
+      }
+    }
+  }
+  
+  &:hover {
+    color: $color_nhsuk-black !important;
+
+    div span span {
+      text-decoration: underline !important;
+      color: $nhsuk-hover-link-color !important;
+    }
+  }
+}
+
+// Hover for Footer Links
+.nhsuk-footer__list-item-link {
+  &:hover {
+    color: $nhsuk-focus-text-color !important;
+  }
+}
+
+// Focus & Hover for Action Links 
+.nhsuk-action-link__link {
+  &:focus {
+    span {
+      text-decoration: none !important;  
+    }
+  }
+}
+
+// Focus and Hover for <a> tag / links
+a {
+  &:focus {
+    @include nhsuk-focused-link-text;
+
+    &:hover {
+      @include nhsuk-focused-link-text;
+    }
+  }
+  
+  &:hover {
+    @include nhsuk-hover-link-background-reset;
+    color: $nhsuk-hover-link-color !important;
+  }
+}
+
+p a {
+  width: -webkit-max-content;
+}
+
+// Focus and Hover for NHS Log In Button
+button.nhsuk-button {
+  &:focus {
+    @include nhsuk-focused-button;
+  }
+  
+  &:hover {
+    @include nhsuk-hover-button;
+  }
+}
+
+// Focus, Hover and Active for Menu Button
+.nhsuk-header__menu-toggle {
+  &:focus {
+    @include nhsuk-focused-button;
+    border: 1px solid transparent !important;
+    
+    &:hover {
+      @include nhsuk-hover-button;
+    }
+  }
+  
+  &:hover {
+    box-shadow: none !important;
+  }
+
+  &:active {
+    color: $color_nhsuk-black !important;
+  }
+}
+
+// Focus for Radio Buttons
+.nhsuk-radios__input:focus + .nhsuk-radios__label::before {
+  @include nhsuk-focused-radio;
+}
+
+// Clicked for Radio Buttons
+.nhsuk-radios__input:checked + .nhsuk-radios__label::before {
+  @include nhsuk-focused-radio;
+}
+
+// Focus for text inputs
+input.nhsuk-input {
+  &:focus {
+    @include nhsuk-focused-input;
+  }
+}
+
+// Focus for text areas
+textarea {
+  &:focus {
+    @include nhsuk-focused-input;
+  }
+}
+
+// Focus & Hover for drop downs
+.nhsuk-select {
+  &:focus {
+    @include nhsuk-focused-select;
+  }
+  
+  &:hover {
+    @include nhsuk-focused-select;
+  }
+}
+
+// Focus and Hover for Linked Profile Banner
+#acting-as-other-user-warning{
+  &:focus {
+    box-shadow: none !important;
+
+    p {
+      @include nhsuk-banner-focus;
+      @include nhsuk-focused-link-width;
+    }
+  }
+
+  &:hover {
+    text-decoration: none !important;
+
+    p {
+      @include nhsuk-banner-hover;
+      @include nhsuk-focused-link-width;
+    }
+  }
+}

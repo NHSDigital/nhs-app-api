@@ -7,7 +7,7 @@
   float: right;
   display: none;
   margin-top: 1.5em;
-  
+
   :focus {
     outline-color: $focus_highlight;
     box-shadow: inset 0 0 0 4px $focus_highlight;
@@ -29,10 +29,13 @@
       }
 
       &:hover {
-        background: $hover_blue;
-        box-shadow: none;
-        color: $white;
-        text-decoration: underline;
+        // Editted as part of NHSO-13314
+        // Made !important to override the a:hover in _focus.scss
+        background: $hover_blue !important;
+        box-shadow: none !important;
+        color: $white !important;
+        text-decoration: underline !important;
+        // End of Edit
       }
     }
 
