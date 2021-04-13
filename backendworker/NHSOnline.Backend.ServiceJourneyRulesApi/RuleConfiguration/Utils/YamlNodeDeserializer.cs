@@ -59,13 +59,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
             {
                 var type = _supportedTypes.First(t => t.Name.Equals(typeName, StringComparison.Ordinal));
 
-                using (var streamReader = _streamReaderBuilder.GetReader(filePath))
-                {
-                    var parser = _parserBuilder.GetParser(streamReader); 
-                    value = _deserializer.Deserialize(parser, type);
-                    reader.MoveNext();
-                    return true;
-                }
+                using var streamReader = _streamReaderBuilder.GetReader(filePath);
+                var parser = _parserBuilder.GetParser(streamReader);
+                value = _deserializer.Deserialize(parser, type);
+                reader.MoveNext();
+                return true;
             }
             catch (FileNotFoundException e)
             {

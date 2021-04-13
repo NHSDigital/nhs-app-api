@@ -56,11 +56,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
         private string GetEmbeddedText(string resourceName)
         {
             _logger.LogDebug($"Reading resource: {resourceName}");
-            using (var resourceStream = _assembly.GetManifestResourceStream(resourceName))
-            using (var stream = new StreamReader(resourceStream, Encoding.UTF8))
-            {
-                return stream.ReadToEnd();
-            }
+            using var resourceStream = _assembly.GetManifestResourceStream(resourceName);
+            using var stream = new StreamReader(resourceStream, Encoding.UTF8);
+            return stream.ReadToEnd();
         }
 
         private void CreateDirectory(string filePath)

@@ -77,6 +77,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .DocumentsEnabled(false)
                     .Im1MessagingEnabled(false, false, false, false,
                         false)
+                    .NotificationPromptEnabled(false)
                     .Build(),
                 new JourneysBuilder()
                     .CdssAdminProvider(CdssProvider.none)
@@ -98,6 +99,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .DocumentsEnabled(false)
                     .Im1MessagingEnabled(false, false, false, false,
                         false)
+                    .NotificationPromptEnabled(true)
                     .Build(),
                 new JourneysBuilder().Build()
             );
@@ -134,6 +136,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .DocumentsEnabled(true)
                     .Im1MessagingEnabled(true, true, true,
                         true, true)
+                    .NotificationPromptEnabled(true)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.im1)
@@ -147,6 +150,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .DocumentsEnabled(true)
                     .Im1MessagingEnabled(true, false, false, false,
                         false)
+                    .NotificationPromptEnabled(false)
                     .Build(),
                 new JourneysBuilder().Build()
             );
@@ -173,6 +177,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .DocumentsEnabled(false)
                     .Im1MessagingEnabled(false, false, false, false,
                         false)
+                    .NotificationPromptEnabled(false)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.gpAtHand)
@@ -202,6 +207,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .DocumentsEnabled(true)
                     .Im1MessagingEnabled(true, true, true,
                         true, true)
+                    .NotificationPromptEnabled(true)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.im1)
@@ -218,6 +224,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .DocumentsEnabled(true)
                     .Im1MessagingEnabled(true, false, false,
                         false, false)
+                    .NotificationPromptEnabled(false)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(null)
@@ -229,6 +236,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .MessagingEnabled(null)
                     .UserInfoEnabled(null)
                     .DocumentsEnabled(null)
+                    .NotificationPromptEnabled(null)
                     .Build()
             );
 

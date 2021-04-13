@@ -1,8 +1,10 @@
+import sjrIf from '@/lib/sjrIf';
 import { INDEX_NAME } from '@/router/names';
 import { createConditionalRedirectRouteByName } from '@/lib/utils';
 
 export default async ({ to, store, next }) => {
-  if (!store.state.device.isNativeApp) {
+  if (!store.state.device.isNativeApp
+    || sjrIf({ $store: store, journey: 'notificationPrompt', disabled: true })) {
     const redirectRoute = createConditionalRedirectRouteByName({
       name: INDEX_NAME,
       query: to.query,

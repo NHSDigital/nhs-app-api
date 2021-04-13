@@ -192,6 +192,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             return this;
         }
 
+        public JourneysBuilder NotificationPromptEnabled(bool? enabled)
+        {
+            _journeys.NotificationPrompt = enabled;
+            return this;
+        }
+
         public Journeys Build()
         {
             return _journeys;

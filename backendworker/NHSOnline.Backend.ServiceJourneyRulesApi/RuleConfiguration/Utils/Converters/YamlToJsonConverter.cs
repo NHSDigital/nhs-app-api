@@ -30,19 +30,15 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Conve
                 {
                     _logger.LogDebug($"Deserializing {yamlFile.Name}");
 
-                    using (var sr = new StringReader(yamlFile.Data))
-                    {
-                        var yaml = _deserializer.Deserialize(sr);
+                    using var sr = new StringReader(yamlFile.Data);
+                    var yaml = _deserializer.Deserialize(sr);
 
-                        using (var json = new StringWriter())
-                        {
-                            _logger.LogDebug($"Successfully deserialized {yamlFile.Name}");
-                            _serializer.Serialize(json, yaml);
+                    using var json = new StringWriter();
+                    _logger.LogDebug($"Successfully deserialized {yamlFile.Name}");
+                    _serializer.Serialize(json, yaml);
 
-                            jsonFile = new FileData(yamlFile.Name, json.ToString());
-                            return true;
-                        }
-                    }
+                    jsonFile = new FileData(yamlFile.Name, json.ToString());
+                    return true;
                 }
                 catch (Exception e)
                 {

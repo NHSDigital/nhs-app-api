@@ -43,6 +43,8 @@ class ServiceJourneyRulesMapper {
                 .add(Supplier.EMIS, "A44444",
                         EnumSet.of(SJRJourneyType.APPOINTMENTS_GPATHAND,
                                 SJRJourneyType.MEDICAL_RECORD_GPATHAND,
+                                SJRJourneyType.NOTIFICATIONS_ENABLED,
+                                SJRJourneyType.NOTIFICATION_PROMPT_DISABLED,
                                 SJRJourneyType.PRESCRIPTIONS_GPATHAND,
                                 SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_NONE,
                                 SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_NONE,
@@ -57,6 +59,7 @@ class ServiceJourneyRulesMapper {
                 .add(Supplier.TPP, "A55555",
                         EnumSet.of(SJRJourneyType.ONLINE_CONSULTATIONS_DISABLED,
                                 SJRJourneyType.NOTIFICATIONS_ENABLED,
+                                SJRJourneyType.NOTIFICATION_PROMPT_ENABLED,
                                 SJRJourneyType.MESSAGES_ENABLED,
                                 SJRJourneyType.USER_INFO_ENABLED,
                                 SJRJourneyType.IM1_MESSAGING_ENABLED,
@@ -176,7 +179,7 @@ class ServiceJourneyRulesMapper {
             return patient
         }
 
-        private fun findUniquePatientForConfiguration(gpSystem: Supplier?,
+        fun findUniquePatientForConfiguration(gpSystem: Supplier?,
                                               journeyTypes: Collection<SJRJourneyType>,
                                               proofLevel: IdentityProofingLevel? = null,
                                               setSerenityVariable: Boolean = true): Patient {

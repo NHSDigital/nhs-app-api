@@ -27,8 +27,8 @@ open class LoginSteps {
     lateinit var browser: BrowserSteps
 
     @Step
-    fun using(patient: Patient) {
-        stubbedLoginAndResetScripts(patient, true)
+    fun using(patient: Patient, shouldAddNotificationsCookie: Boolean = true) {
+        stubbedLoginAndResetScripts(patient, shouldAddNotificationsCookie)
     }
 
     @Step

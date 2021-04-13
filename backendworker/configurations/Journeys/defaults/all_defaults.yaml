@@ -39,3 +39,4 @@ journeys:
     requiresDetailsRequest: false
     sendMessageSubject: false
   supportsLinkedProfiles: true
+  notificationPrompt: true

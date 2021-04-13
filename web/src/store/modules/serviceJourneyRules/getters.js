@@ -19,6 +19,7 @@ const {
   IM1_PROVIDER_GP_MEDICAL_RECORD_V2_ENABLED,
   MESSAGING_ENABLED,
   NOMINATED_PHARMACY_ENABLED,
+  NOTIFICATION_PROMPT_ENABLED,
   NOTIFICATIONS_ENABLED,
   SILVER_INTEGRATION_ENABLED,
   SILVER_INTEGRATION_APPOINTMENTS_ENABLED,
@@ -91,6 +92,9 @@ export default {
   },
   [NOMINATED_PHARMACY_ENABLED](state) {
     return get('rules.nominatedPharmacy')(state);
+  },
+  [NOTIFICATION_PROMPT_ENABLED](state) {
+    return get('rules.notificationPrompt')(state);
   },
   [NOTIFICATIONS_ENABLED](state) {
     return get('rules.notifications')(state);

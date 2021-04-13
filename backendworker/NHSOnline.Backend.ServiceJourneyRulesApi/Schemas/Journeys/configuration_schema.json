@@ -352,7 +352,8 @@
         "userInfo": { "enum": ["true", "false"]  },
         "documents": { "enum": ["true", "false"]  },
         "supportsLinkedProfiles": { "enum":  ["true", "false"] },
-        "im1Messaging": { "$ref": "#/definitions/im1MessagingJourney" }
+        "im1Messaging": { "$ref": "#/definitions/im1MessagingJourney" },
+        "notificationPrompt": { "enum":  ["true", "false"] }
       },
       "anyOf": [
         {
@@ -399,6 +400,9 @@
         },
         {
           "required": [ "im1Messaging" ]
+        },
+        {
+          "required": [ "notificationPrompt" ]
         }
       ]
     }

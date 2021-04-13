@@ -147,6 +147,12 @@ open class SharedStepDefinitions {
         login.usingLoginWithNotificationOptions(patient)
     }
 
+    @Given("^I log in without notification cookie$")
+    fun iLogInWithoutNotificationCookie() {
+        val patient = handleLogin()
+        login.using(patient, false)
+    }
+
     @Given("^I am logged in$")
     fun iAmLoggedIn() {
         doLogin(true)

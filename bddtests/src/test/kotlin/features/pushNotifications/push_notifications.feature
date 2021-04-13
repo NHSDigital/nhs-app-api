@@ -15,6 +15,12 @@ Feature: Push Notifications
     Then the notifications toggle is displayed as on
     And the push registration has been added to the repository
 
+  Scenario: A user will not see the push notification prompt during login if SJR disabled
+    Given I am using the native app user agent
+    And I am a user wishing to enable push notifications for the first time, with prompt disabled
+    And I log in without notification cookie
+    Then I see the home page
+
   Scenario: A user can enable push notifications during login
     Given I am using the native app user agent
     And I am a user wishing to enable push notifications for the first time, with my initial state undetermined

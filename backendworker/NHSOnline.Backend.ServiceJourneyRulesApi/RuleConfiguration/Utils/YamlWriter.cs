@@ -14,10 +14,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
         public void Write<TModel>(string filePath, TModel model)
             where TModel : class, new()
         {
-            using (var writer = _fileHandler.GetTextWriter(filePath))
-            {
-                _serializer.Serialize(writer, model);
-            }
+            using var writer = _fileHandler.GetTextWriter(filePath);
+            _serializer.Serialize(writer, model);
         }
     }
 }

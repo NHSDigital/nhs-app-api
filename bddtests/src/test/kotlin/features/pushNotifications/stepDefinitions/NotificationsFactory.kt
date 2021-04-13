@@ -15,12 +15,22 @@ import utils.getOrFail
 import worker.models.userDevices.InvalidUserDevice
 
 class NotificationsFactory {
-    fun setUpUser(supplier: Supplier? = null, patient: Patient? = null): Patient {
-        var patientToUse = patient ?: SerenityHelpers.getPatientOrNull()
-        patientToUse = patientToUse ?: ServiceJourneyRulesMapper.findUniquePatientForConfiguration(supplier,
-                SJRJourneyType.NOTIFICATIONS_ENABLED)
+    fun setUpUser(notificationPromptEnabled: Boolean = true): Patient {
+        var patientToUse = SerenityHelpers.getPatientOrNull()
+        val journeyTypes = arrayListOf(
+            SJRJourneyType.NOTIFICATIONS_ENABLED,
+            if (notificationPromptEnabled)
+                SJRJourneyType.NOTIFICATION_PROMPT_ENABLED
+            else
+                SJRJourneyType.NOTIFICATION_PROMPT_DISABLED
+        )
 
-        val supplierToUse = supplier ?: SerenityHelpers.getGpSupplier()
+        patientToUse = patientToUse ?: ServiceJourneyRulesMapper.findUniquePatientForConfiguration(
+            null,
+            journeyTypes
+        )
+
+        val supplierToUse = SerenityHelpers.getGpSupplier()
         SerenityHelpers.setPatient(patientToUse)
         CitizenIdSessionCreateJourney().createFor(patientToUse)
         SessionCreateJourneyFactory.getForSupplier(supplierToUse).createFor(patientToUse)
@@ -33,13 +43,14 @@ class NotificationsFactory {
         // Use SJR generated patient, but then change subject and access token based on that,
         // to create a new nhsLoginId and differentiate from the primary patient
         val patient = ServiceJourneyRulesMapper.findUniquePatientForConfiguration(
-                supplier,
-                SJRJourneyType.NOTIFICATIONS_ENABLED,
-                setSerenityVariable = false)
+            supplier,
+            SJRJourneyType.NOTIFICATIONS_ENABLED,
+            setSerenityVariable = false
+        )
         CitizenIdSessionCreateJourney()
-                .createFor(patient, alternativeUser = true)
+            .createFor(patient, alternativeUser = true)
         SessionCreateJourneyFactory.getForSupplier(SerenityHelpers.getGpSupplier())
-                .createFor(patient, alternativeUser = true)
+            .createFor(patient, alternativeUser = true)
         MongoDBConnection.UserDevicesCollection.clearCache()
         return patient
     }
@@ -52,11 +63,13 @@ class NotificationsFactory {
         setUpDeletionAfterTest(devicePns, accessToken)
     }
 
-    fun setUpDeletionAfterTest(pnsToken:String, accessToken :String? = null) {
+    fun setUpDeletionAfterTest(pnsToken: String, accessToken: String? = null) {
         val deletion = {
             NotificationsApi.deleteRegistration(
-                    accessToken ?: SerenityHelpers.getPatient().accessToken,
-                    pnsToken) }
+                accessToken ?: SerenityHelpers.getPatient().accessToken,
+                pnsToken
+            )
+        }
         GlobalSerenityHelpers.TEAR_DOWN_ACTIONS.addToList(deletion)
     }
 
@@ -65,15 +78,16 @@ class NotificationsFactory {
     }
 
     fun mockNativeNotificationFunctions(
-            status: SettingStatus,
-            authorised: Boolean = true) {
+        status: SettingStatus,
+        authorised: Boolean = true
+    ) {
         val pns = PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail<String>()
 
         val deviceType = PushNotificationsSerenityHelpers.EXPECTED_DEVICE_TYPE.getOrFail<String>().toLowerCase()
 
         val notificationsFunction =
-                if (authorised) mockNotificationsAuthorised(pns, deviceType)
-                else mockNotificationsUnauthorised()
+            if (authorised) mockNotificationsAuthorised(pns, deviceType)
+            else mockNotificationsUnauthorised()
 
         GlobalSerenityHelpers.FUNCTIONS_TO_ADD_TO_WINDOW_NATIVE_APP_OBJECT.addToList(notificationsFunction)
         val notificationsStatusFunction = mockNotificationsStatus(status)
@@ -117,11 +131,12 @@ class NotificationsFactory {
     }
 
     private fun createInvalidDevice(patient: Patient): InvalidUserDevice {
-        val devicePns =  PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail<String>()
+        val devicePns = PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail<String>()
         return InvalidUserDevice(
-                patient.subject + "-" + devicePns,
-                patient.subject,
-                "this is an invalid field")
+            patient.subject + "-" + devicePns,
+            patient.subject,
+            "this is an invalid field"
+        )
     }
 
     private fun createUserDeviceInRepository(userDevice: InvalidUserDevice) {

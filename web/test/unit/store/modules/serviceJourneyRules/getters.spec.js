@@ -361,4 +361,18 @@ describe('getters', () => {
         .toBe(false);
     });
   });
+
+  describe('notificationPromptEnabled', () => {
+    const { notificationPromptEnabled } = getters;
+
+    it('will be true if notificationPrompt is true', () => {
+      currentState.rules.notificationPrompt = true;
+      expect(notificationPromptEnabled(currentState)).toBe(true);
+    });
+
+    it('will be false if notificationPrompt is false', () => {
+      currentState.rules.notificationPrompt = false;
+      expect(notificationPromptEnabled(currentState)).toBe(false);
+    });
+  });
 });

@@ -34,6 +34,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 
         public Im1Messaging Im1Messaging { get; set; }
 
+        public bool? NotificationPrompt { get; set; }
+
         public Journeys Clone() => new Journeys
         {
             HomeScreen = HomeScreen?.Clone(),
@@ -50,6 +52,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
             Documents = Documents,
             SupportsLinkedProfiles = SupportsLinkedProfiles,
             Im1Messaging = Im1Messaging?.Clone(),
+            NotificationPrompt = NotificationPrompt
         };
 
         public Journeys AddSupplier(Supplier? supplier)
@@ -130,6 +133,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
             {
                 Im1Messaging ??= new Im1Messaging();
                 Im1Messaging.Merge(other.Im1Messaging);
+            }
+
+            if (other.NotificationPrompt.HasValue)
+            {
+                NotificationPrompt = other.NotificationPrompt;
             }
         }
     }

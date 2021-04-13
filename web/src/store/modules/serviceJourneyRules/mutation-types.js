@@ -15,11 +15,20 @@ export const initialState = () => ({
     cdssAdvice: {
       provider: 'none',
     },
+    documents: false,
+    im1Messaging: {
+      isEnabled: false,
+      canDeleteMessages: false,
+      canUpdateReadStatus: false,
+      requiresDetailsRequest: false,
+      sendMessageSubject: false,
+    },
     medicalRecord: {
       version: '1',
     },
     messaging: false,
     nominatedPharmacy: false,
+    notificationPrompt: false,
     notifications: false,
     prescriptions: {
       provider: IM1_PROVIDER,
@@ -37,14 +46,6 @@ export const initialState = () => ({
       recordSharing: [],
       secondaryAppointments: [],
       vaccineRecord: [],
-    },
-    documents: false,
-    im1Messaging: {
-      isEnabled: false,
-      canDeleteMessages: false,
-      canUpdateReadStatus: false,
-      requiresDetailsRequest: false,
-      sendMessageSubject: false,
     },
   },
 });

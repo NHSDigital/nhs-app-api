@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
 
         private bool _isInitialised;
         private TModel _model;
-        
+
         public YamlReader(
             string filePath,
             FileData schemaData,
@@ -72,13 +72,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
             return _yamlToJsonConverter.Convert(new FileData(_filePath, rawData), out var jsonData)
                 && await _schemaValidator.ValidateJsonAgainstSchema(_schemaData, jsonData);
         }
-        
+
         private string ReadToEnd()
         {
-            using (var stream = _fileHandler.GetTextReader(_filePath))
-            {
-                return stream.ReadToEnd();
-            }
+            using var stream = _fileHandler.GetTextReader(_filePath);
+            return stream.ReadToEnd();
         }
     }
 }
