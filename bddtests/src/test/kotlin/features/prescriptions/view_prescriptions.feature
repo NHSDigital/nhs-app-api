@@ -6,7 +6,7 @@ Feature: View prescriptions Frontend
 
   @nativesmoketest
   Scenario Outline: <GP System> patient selects the prescriptions menu button
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And I am logged in
@@ -21,7 +21,7 @@ Feature: View prescriptions Frontend
 
   @nativesmoketest
   Scenario Outline: <GP System> patient with no past repeat prescriptions
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have 0 past repeat prescriptions
     And each repeat prescription contains 0 courses of which 0 are repeats
     And I am logged in
@@ -34,7 +34,7 @@ Feature: View prescriptions Frontend
       | EMIS      |
 
   Scenario Outline: <GP System> patient who has prescriptions totalling more than one hundred courses
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have 110 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And I am logged in
@@ -48,7 +48,7 @@ Feature: View prescriptions Frontend
   @smoketest
   @nativesmoketest
   Scenario Outline: <GP System> patient who has multiple prescription each containing one course
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have 3 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And I am logged in
@@ -60,7 +60,7 @@ Feature: View prescriptions Frontend
       | EMIS      |
 
   Scenario Outline: <GP System> patient who has multiple prescription each containing the same repeat prescription
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have 3 past repeat prescriptions
     And each repeat prescription shares the same course
     And I am logged in
@@ -73,7 +73,7 @@ Feature: View prescriptions Frontend
       | MICROTEST |
 
   Scenario: The Ordered by label does exist if the prescription was ordered by proxy
-    Given I am patient using the EMIS GP System
+    Given I am a patient using the EMIS GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 3 courses of which 2 are repeats
     And the prescription was ordered by proxy user
@@ -84,7 +84,7 @@ Feature: View prescriptions Frontend
     Then I see the name of the proxy user who ordered the prescription
 
   Scenario: The Ordered by label does not exist if the prescription was not ordered by proxy
-    Given I am patient using the EMIS GP System
+    Given I am a patient using the EMIS GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 3 courses of which 2 are repeats
     And I am logged in
@@ -94,7 +94,7 @@ Feature: View prescriptions Frontend
     Then I do not see the name of the proxy user who ordered the prescription
 
   Scenario Outline: <GP System> patient who has only one prescription containing multiple courses
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 3 courses of which 3 are repeats
     And I am logged in
@@ -106,7 +106,7 @@ Feature: View prescriptions Frontend
       | EMIS      |
 
   Scenario: EMIS patient who has acute prescriptions
-    Given I am patient using the EMIS GP System
+    Given I am a patient using the EMIS GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 3 courses of which 2 are repeats
     And I am logged in
@@ -116,7 +116,7 @@ Feature: View prescriptions Frontend
 
   @nativesmoketest
   Scenario Outline: The <GP System> User clicks on the Prescriptions button and the service is disabled at a GP Practice level
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And prescriptions is disabled at a GP Practice level
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
@@ -127,7 +127,7 @@ Feature: View prescriptions Frontend
       | TPP       |
 
   Scenario Outline: A <GP System> user with historic prescriptions with missing quantity info
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And each course has only dosage info
@@ -140,7 +140,7 @@ Feature: View prescriptions Frontend
       | EMIS      |
 
   Scenario Outline: A <GP System> user with historic prescriptions with missing dosage info
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And each course has only quantity info
@@ -153,7 +153,7 @@ Feature: View prescriptions Frontend
       | EMIS      |
 
   Scenario: VISION user with historic prescriptions with missing dosage and quantity info
-    Given I am patient using the VISION GP System
+    Given I am a patient using the VISION GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And each course has no info
@@ -163,7 +163,7 @@ Feature: View prescriptions Frontend
     Then I see 1 prescriptions
 
   Scenario: A user who has multiple prescriptions but medication status should not be displayed
-    Given I am patient using the EMIS GP System
+    Given I am a patient using the EMIS GP System
     And I have 6 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And courses have status

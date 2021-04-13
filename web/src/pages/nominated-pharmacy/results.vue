@@ -24,7 +24,8 @@
                      :aria-label="ariaLabelCaption(pharmacy)">
             <slot>
               <div class="nhsuk-u-padding-left-2" :class="$style['results-styling']">
-                <pharmacy-address-component id="resultAddressComponent" :pharmacy="pharmacy"/>
+                <pharmacy-address-component :id="'resultAddressComponent-' + index"
+                                            :pharmacy="pharmacy" :identifier="index"/>
               </div>
             </slot>
           </menu-item>

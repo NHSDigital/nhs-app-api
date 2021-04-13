@@ -87,7 +87,7 @@ open class PrescriptionsStepDefinitions {
                 numberOfPrescriptions)
     }
 
-    @Given("^I am patient using the (.*) GP System$")
+    @Given("^I am a patient using the (.*) GP System$")
     fun givenIAmAPatientUsingGPSystem(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         SerenityHelpers.setGpSupplier(supplier)

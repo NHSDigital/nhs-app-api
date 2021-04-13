@@ -226,6 +226,11 @@ class NominatedPharmacyStepDefinitions {
                 .assertIsVisible("Change my nominated pharmacy link is not visible")
     }
 
+    @Then("^I see the high street pharmacy search results page loaded for (.*)$")
+    fun iSeeHighStreetPharmacyResultsPageIsLoaded(searchText: String) {
+       nominatedPharmacyResultsPage.isLoaded(searchText)
+    }
+
     @Then("^I see list of pharmacies displayed on the result page$")
     fun iSeePharmaciesOnResultsPage() {
         nominatedPharmacyResultsPage.assertIsLoaded()

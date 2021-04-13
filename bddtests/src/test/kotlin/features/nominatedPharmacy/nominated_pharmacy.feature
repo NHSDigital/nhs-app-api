@@ -2,7 +2,7 @@
 Feature: nominated pharmacy journey
 
   Scenario Outline: Patient can change their nominated pharmacy
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And my GP Practice is EPS enabled
@@ -37,7 +37,7 @@ Feature: nominated pharmacy journey
       | EMIS      | P1            | se1       | SW11XR  |
 
   Scenario Outline: Patient can change their nominated pharmacy from View Orders
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And my GP Practice is EPS enabled
@@ -68,7 +68,7 @@ Feature: nominated pharmacy journey
       | EMIS      | P1            | se1       | SW11XR  |
 
   Scenario Outline: Patient can see the online pharmacy interrupt page and return to prescriptions home
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And my GP Practice is EPS enabled
@@ -97,7 +97,7 @@ Feature: nominated pharmacy journey
       | EMIS      | P1            | SW11XR  |
 
   Scenario Outline: Patient can see the online pharmacy interrupt page and goto external site
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And my GP Practice is EPS enabled
@@ -124,7 +124,7 @@ Feature: nominated pharmacy journey
       | EMIS      | P1            | SW11XR  |
 
   Scenario Outline: Patient can only search nominated pharmacy with postcode
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And my GP Practice is EPS enabled
@@ -151,7 +151,7 @@ Feature: nominated pharmacy journey
       | EMIS      | P1            | boots       | SW11XR  |
 
   Scenario Outline: No results messages are shown for postcode not in use
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And my GP Practice is EPS enabled
@@ -180,7 +180,7 @@ Feature: nominated pharmacy journey
 
   @smoketest
   Scenario Outline: Patient with no nominated pharmacy can nominate a pharmacy
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And my GP Practice is EPS enabled
@@ -211,7 +211,7 @@ Feature: nominated pharmacy journey
       | EMIS      | se1       |
 
   Scenario Outline: Patient does not see nominated pharmacy when their gp practice is not enabled for EPS
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And my GP Practice is EPS disabled
@@ -225,7 +225,7 @@ Feature: nominated pharmacy journey
       | EMIS      |
 
   Scenario Outline: Patient with no nominated pharmacy sees relevant text in View Orders Page
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And my GP Practice is EPS enabled
@@ -240,7 +240,7 @@ Feature: nominated pharmacy journey
       | EMIS      |
 
   Scenario Outline: Patient does not see nominated pharmacy when gp practice is enabled but account is sensitive
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And my GP Practice is EPS enabled
@@ -255,7 +255,7 @@ Feature: nominated pharmacy journey
       | EMIS      |
 
   Scenario Outline: Patient does not see nominated pharmacy when gp practice is enabled but nhs number is superseded
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And my GP Practice is EPS enabled
@@ -311,7 +311,7 @@ Feature: nominated pharmacy journey
     Then I do not see a nominated pharmacy
 
   Scenario Outline: Pateint can see nominated pharmacy when nominated pharmacy is enabled
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have a P1 typed nominated pharmacy with SW11XR OdsCode
     And I have historic prescriptions
     And there are 5 repeatable prescriptions available
@@ -326,7 +326,7 @@ Feature: nominated pharmacy journey
         | EMIS      |
 
   Scenario Outline: If patient has a P3 typed nominated pharmacy then Patient does not see nominated pharmacy
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And my GP Practice is EPS enabled
@@ -350,7 +350,7 @@ Feature: nominated pharmacy journey
       | EMIS      | P3            | SW11XR  |
 
   Scenario Outline: If patient has an Internet Pharmacy they can see their nominated pharmacy
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And my GP Practice is EPS enabled

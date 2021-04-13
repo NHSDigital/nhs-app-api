@@ -8,10 +8,13 @@ import pages.HybridPageObject
 import pages.HybridPageElement
 import pages.assertIsVisible
 import pages.assertIsNotVisible
+import pages.navigation.HeaderNative
 import pages.text
 
 @DefaultUrl("http://web.local.bitraft.io:3000/nominated-pharmacy/results")
 open class NominatedPharmacyResultsPage : HybridPageObject() {
+
+    private lateinit var headerNative: HeaderNative
 
     private var basePharmacyResultItemPath: String = ""
 
@@ -37,23 +40,23 @@ open class NominatedPharmacyResultsPage : HybridPageObject() {
                 page = this)
     }
 
-    private fun getPharmacyResultAddress(): HybridPageElement {
+    private fun getPharmacyResultAddress(index: Int): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "$basePharmacyResultItemPath//p[@id='pharmacy-address-line-1']",
+                webDesktopLocator = "$basePharmacyResultItemPath//p[@id='pharmacy-$index-address-line-1']",
                 androidLocator = null,
                 page = this)
     }
 
-    private fun getPharmacyResultTelephoneNumber(): HybridPageElement {
+    private fun getPharmacyResultTelephoneNumber(index: Int): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "$basePharmacyResultItemPath//p[@id='pharmacy-telephone-number']",
+                webDesktopLocator = "$basePharmacyResultItemPath//p[@id='pharmacy-$index-telephone-number']",
                 androidLocator = null,
                 page = this)
     }
 
-    private fun getPharmacyResultWebsite(): HybridPageElement {
+    private fun getPharmacyResultWebsite(index: Int): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "$basePharmacyResultItemPath//p[@id='pharmacy-url']",
+                webDesktopLocator = "$basePharmacyResultItemPath//p[@id='pharmacy-$index-url']",
                 androidLocator = null,
                 page = this)
     }
@@ -79,8 +82,8 @@ open class NominatedPharmacyResultsPage : HybridPageObject() {
             listOfPharmacies.add(
                     PharmacySearchResult(
                             pharmacyName = getPharmacyResultName().text,
-                            address = getPharmacyResultAddress().text,
-                            phoneNumber = getPharmacyResultTelephoneNumber().text
+                            address = getPharmacyResultAddress(result.index).text,
+                            phoneNumber = getPharmacyResultTelephoneNumber(result.index).text
                     )
             )
         }
@@ -96,8 +99,8 @@ open class NominatedPharmacyResultsPage : HybridPageObject() {
             listOfPharmacies.add(
                     OnlinePharmacySearchResult(
                             pharmacyName = getPharmacyResultName().text,
-                            website = getPharmacyResultWebsite().text,
-                            phoneNumber = getPharmacyResultTelephoneNumber().text
+                            website = getPharmacyResultWebsite(result.index).text,
+                            phoneNumber = getPharmacyResultTelephoneNumber(result.index).text
                     )
             )
         }
@@ -107,5 +110,9 @@ open class NominatedPharmacyResultsPage : HybridPageObject() {
     fun selectPharmacyAtIndex(index: Int) {
         val results = findAll(By.cssSelector("#searchResults li a"))
         results[index].click()
+    }
+
+    fun isLoaded(searchTerm: String) {
+        headerNative.waitForPageHeaderText("High street pharmacies near \"$searchTerm\"")
     }
 }

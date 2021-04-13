@@ -12,43 +12,43 @@ open class PharmacyDetailComponent : HybridPageObject() {
     )
 
     val pharmacyAddressLine1 = HybridPageElement(
-            webDesktopLocator = "//p[@id='pharmacy-address-line-1']",
+            webDesktopLocator = "//p[@id='pharmacy-0-address-line-1']",
             androidLocator = null,
             page = this
     )
 
     val pharmacyAddressLine2 = HybridPageElement(
-            webDesktopLocator = "//p[@id='pharmacy-address-line-2']",
+            webDesktopLocator = "//p[@id='pharmacy-0-address-line-2']",
             androidLocator = null,
             page = this
     )
 
     val pharmacyAddressLine3 = HybridPageElement(
-            webDesktopLocator = "//p[@id='pharmacy-address-line-3']",
+            webDesktopLocator = "//p[@id='pharmacy-0-address-line-3']",
             androidLocator = null,
             page = this
     )
 
     val pharmacyCity = HybridPageElement(
-            webDesktopLocator = "//p[@id='pharmacy-city']",
+            webDesktopLocator = "//p[@id='pharmacy-0-city']",
             androidLocator = null,
             page = this
     )
 
     val pharmacyCounty = HybridPageElement(
-            webDesktopLocator = "//p[@id='pharmacy-county']",
+            webDesktopLocator = "//p[@id='pharmacy-0-county']",
             androidLocator = null,
             page = this
     )
 
     val pharmacyPostcode = HybridPageElement(
-            webDesktopLocator = "//p[@id='pharmacy-postcode']",
+            webDesktopLocator = "//p[@id='pharmacy-0-postcode']",
             androidLocator = null,
             page = this
     )
 
     val pharmacyPhoneNumber = HybridPageElement(
-            webDesktopLocator = "//p[@id='pharmacy-telephone-number']",
+            webDesktopLocator = "//p[@id='pharmacy-0-telephone-number']",
             androidLocator = null,
             page = this
     )

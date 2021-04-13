@@ -6,7 +6,7 @@ Feature: View prescriptions error cases
 
   @nativesmoketest
   Scenario Outline: A <GP System> user tries to navigate to the prescriptions page, but the request to retrieve the prescriptions times out
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I am logged in
     And The prescriptions endpoint is timing out
     When I retrieve the 'Your Prescriptions' page directly
@@ -35,7 +35,7 @@ Feature: View prescriptions error cases
 
   @nativesmoketest
   Scenario Outline: A <GP System> user tries to navigate to the prescriptions page, but the request to retrieve the prescriptions throws a server error
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I am logged in
     And The prescriptions endpoint is throwing a server error
     When I retrieve the 'Your Prescriptions' page directly
@@ -47,7 +47,7 @@ Feature: View prescriptions error cases
 
   @long-running
   Scenario: A user navigates to the prescriptions page and the session times out
-    Given I am patient using the EMIS GP System
+    Given I am a patient using the EMIS GP System
     And I have 3 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And I am logged in
@@ -57,7 +57,7 @@ Feature: View prescriptions error cases
     Then I see the login page with the session expiry notification
 
   Scenario Outline: A <GP System> user tried to navigate to the 'Order a Repeat Prescription' page, but the request to retrieve the repeat prescriptions to order times out
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I am logged in
     And I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -78,7 +78,7 @@ Feature: View prescriptions error cases
 
   @nativesmoketest
   Scenario Outline: A <GP System> user tried to navigate to the 'Order a Repeat Prescription' page, but the request to retrieve the repeat prescriptions to order throws a server error
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I am logged in
     And I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -91,7 +91,7 @@ Feature: View prescriptions error cases
       | TPP       |
 
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but the request times out
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I am logged in
     And I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -112,7 +112,7 @@ Feature: View prescriptions error cases
 
   @nativesmoketest
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but the request throws a server error
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I am logged in
     And I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -132,7 +132,7 @@ Feature: View prescriptions error cases
 
   @nativesmoketest
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but request returns an already ordered response
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I am logged in
     And I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -152,7 +152,7 @@ Feature: View prescriptions error cases
 
   @nativesmoketest
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but request returns an invalid guid error
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And I am logged in
     And I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats

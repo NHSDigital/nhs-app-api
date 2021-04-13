@@ -104,15 +104,15 @@ describe('pharmacy address component', () => {
 
     describe('main body content', () => {
       beforeEach(() => {
-        addressLine1 = wrapper.find('#pharmacy-address-line-1');
-        addressLine2 = wrapper.find('#pharmacy-address-line-2');
-        addressLine3 = wrapper.find('#pharmacy-address-line-3');
-        city = wrapper.find('#pharmacy-city');
-        county = wrapper.find('#pharmacy-county');
-        postcode = wrapper.find('#pharmacy-postcode');
-        url = wrapper.find('#pharmacy-url');
-        telephoneNumber = wrapper.find('#pharmacy-telephone-number');
-        distanceAway = wrapper.find('#pharmacy-distance-away');
+        addressLine1 = wrapper.find('#pharmacy-0-address-line-1');
+        addressLine2 = wrapper.find('#pharmacy-0-address-line-2');
+        addressLine3 = wrapper.find('#pharmacy-0-address-line-3');
+        city = wrapper.find('#pharmacy-0-city');
+        county = wrapper.find('#pharmacy-0-county');
+        postcode = wrapper.find('#pharmacy-0-postcode');
+        url = wrapper.find('#pharmacy-0-url');
+        telephoneNumber = wrapper.find('#pharmacy-0-telephone-number');
+        distanceAway = wrapper.find('#pharmacy-0-distance-away');
       });
 
       it('will exist', () => {
@@ -160,15 +160,15 @@ describe('pharmacy address component', () => {
 
     describe('main body content', () => {
       beforeEach(() => {
-        addressLine1 = wrapper.find('#pharmacy-address-line-1');
-        addressLine2 = wrapper.find('#pharmacy-address-line-2');
-        addressLine3 = wrapper.find('#pharmacy-address-line-3');
-        city = wrapper.find('#pharmacy-city');
-        county = wrapper.find('#pharmacy-county');
-        postcode = wrapper.find('#pharmacy-postcode');
-        url = wrapper.find('#pharmacy-url');
-        telephoneNumber = wrapper.find('#pharmacy-telephone-number');
-        distanceAway = wrapper.find('#pharmacy-distance-away');
+        addressLine1 = wrapper.find('#pharmacy-0-address-line-1');
+        addressLine2 = wrapper.find('#pharmacy-0-address-line-2');
+        addressLine3 = wrapper.find('#pharmacy-0-address-line-3');
+        city = wrapper.find('#pharmacy-0-city');
+        county = wrapper.find('#pharmacy-0-county');
+        postcode = wrapper.find('#pharmacy-0-postcode');
+        url = wrapper.find('#pharmacy-0-url');
+        telephoneNumber = wrapper.find('#pharmacy-0-telephone-number');
+        distanceAway = wrapper.find('#pharmacy-0-distance-away');
       });
 
       it('will exist', () => {
@@ -191,7 +191,7 @@ describe('pharmacy address component', () => {
 
     describe('url is handled correctly', () => {
       beforeEach(() => {
-        url = wrapper.find('#pharmacy-url');
+        url = wrapper.find('#pharmacy-0-url');
       });
 
       it('will remove the http:// when in the url data', () => {
@@ -220,7 +220,7 @@ describe('pharmacy address component', () => {
 
     describe('url will be handled correctly', () => {
       beforeEach(() => {
-        url = wrapper.find('#pharmacy-url');
+        url = wrapper.find('#pharmacy-0-url');
       });
 
       it('will remove the https in the url', () => {

@@ -273,7 +273,7 @@ Feature: View Courses Frontend
     Then A validation message is not displayed indicating the user has not entered special request text
 
   Scenario Outline: An <GP System> User manipulates the url to go to the repeat prescriptions page and the service is disabled at a GP Practice level
-    Given I am patient using the <GP System> GP System
+    Given I am a patient using the <GP System> GP System
     And prescriptions is disabled at a GP Practice level
     And I have historic prescriptions
     And I am logged in

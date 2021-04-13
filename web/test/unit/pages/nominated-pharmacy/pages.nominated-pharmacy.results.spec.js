@@ -272,19 +272,19 @@ describe('nominated pharmacy search results', () => {
     pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
 
     const pharmacyMenuItem = wrapper.find('#pharmacy-menu-item-0');
-    const addressComponent = wrapper.find('#resultAddressComponent');
+    const addressComponent = wrapper.find('#resultAddressComponent-0');
     // assert
     expect(pharmacyMenuItem.exists()).toBe(true);
     expect(addressComponent.exists()).toBe(true);
     expect(pharmacyMenuItem.text()).toContain('drug store');
-    expect(wrapper.find('#pharmacy-address-line-1').text()).toEqual('address 1');
-    expect(wrapper.find('#pharmacy-address-line-2').text()).toEqual('address 2');
-    expect(wrapper.find('#pharmacy-address-line-3').text()).toEqual('address 3');
-    expect(wrapper.find('#pharmacy-city').text()).toEqual('city name');
-    expect(wrapper.find('#pharmacy-county').text()).toEqual('county name');
-    expect(wrapper.find('#pharmacy-telephone-number').text()).toEqual('0819283');
-    expect(wrapper.find('#pharmacy-distance-away').text()).toEqual('50 miles away');
-    expect(wrapper.find('#pharmacy-url').exists()).toBe(false);
+    expect(wrapper.find('#pharmacy-0-address-line-1').text()).toEqual('address 1');
+    expect(wrapper.find('#pharmacy-0-address-line-2').text()).toEqual('address 2');
+    expect(wrapper.find('#pharmacy-0-address-line-3').text()).toEqual('address 3');
+    expect(wrapper.find('#pharmacy-0-city').text()).toEqual('city name');
+    expect(wrapper.find('#pharmacy-0-county').text()).toEqual('county name');
+    expect(wrapper.find('#pharmacy-0-telephone-number').text()).toEqual('0819283');
+    expect(wrapper.find('#pharmacy-0-distance-away').text()).toEqual('50 miles away');
+    expect(wrapper.find('#pharmacy-0-url').exists()).toBe(false);
   });
 
   it('will display pharmacy details from the store for online pharmacy', () => {
@@ -316,13 +316,13 @@ describe('nominated pharmacy search results', () => {
     pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
 
     const pharmacyMenuItem = wrapper.find('#pharmacy-menu-item-0');
-    const addressComponent = wrapper.find('#resultAddressComponent');
+    const addressComponent = wrapper.find('#resultAddressComponent-0');
     // assert
     expect(pharmacyMenuItem.exists()).toBe(true);
     expect(addressComponent.exists()).toBe(true);
     expect(pharmacyMenuItem.text()).toContain('drug store');
-    expect(wrapper.find('#pharmacy-url').text()).toEqual('testurl.com');
-    expect(wrapper.find('#pharmacy-telephone-number').text()).toEqual('4356345');
+    expect(wrapper.find('#pharmacy-0-url').text()).toEqual('testurl.com');
+    expect(wrapper.find('#pharmacy-0-telephone-number').text()).toEqual('4356345');
   });
 
   it('will correctly display the url in the search results without the http://', () => {
@@ -351,8 +351,8 @@ describe('nominated pharmacy search results', () => {
     };
 
     wrapper = mountPage();
-    expect(wrapper.find('#pharmacy-url').text()).toEqual('www.testurl.com');
-    expect(wrapper.find('#pharmacy-telephone-number').text()).toEqual('12345678');
+    expect(wrapper.find('#pharmacy-0-url').text()).toEqual('www.testurl.com');
+    expect(wrapper.find('#pharmacy-0-telephone-number').text()).toEqual('12345678');
   });
 
   it('will correctly display the url in the search results without the https://', () => {
@@ -381,7 +381,7 @@ describe('nominated pharmacy search results', () => {
     };
 
     wrapper = mountPage();
-    expect(wrapper.find('#pharmacy-url').text()).toEqual('www.testurl.com');
-    expect(wrapper.find('#pharmacy-telephone-number').text()).toEqual('62934453');
+    expect(wrapper.find('#pharmacy-0-url').text()).toEqual('www.testurl.com');
+    expect(wrapper.find('#pharmacy-0-telephone-number').text()).toEqual('62934453');
   });
 });
