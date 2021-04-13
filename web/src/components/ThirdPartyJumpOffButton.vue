@@ -42,8 +42,6 @@ export default {
   data() {
     return {
       redirectorPath: INTERSTITIAL_REDIRECTOR_PATH,
-      headerTextData: '',
-      descriptionTextData: '',
       isNativeApp: this.$store.state.device.isNativeApp,
       jumpOffId: this.providerConfiguration.jumpOffId,
       redirectPath: this.providerConfiguration.redirectPath,
