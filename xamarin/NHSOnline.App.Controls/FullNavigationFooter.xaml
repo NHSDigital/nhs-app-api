@@ -33,8 +33,10 @@
             <Style TargetType="icons:IconRecord">
                 <Setter Property="Margin" Value="10,15,15,0" />
             </Style>
-            <Style TargetType="icons:IconMore">
+            <Style TargetType="icons:IconMoreFooter">
                 <Setter Property="Margin" Value="10,15,15,0" />
+                <Setter Property="HeightRequest" Value="28" />
+                <Setter Property="WidthRequest" Value="28" />
             </Style>
         </ResourceDictionary>
     </View.Resources>
@@ -54,7 +56,7 @@
                 <controls:FullNavigationFooterItem
                     Text="Symptoms">
 
-                    <icons:IconSymptoms AutomationProperties.IsInAccessibleTree="true">
+                    <icons:IconSymptoms AutomationProperties.IsInAccessibleTree="true" AutomationId="NHS App symptoms icon">
 
                         <icons:IconSymptoms.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding SymptomsCommand, Source={x:Reference Name=Root}}" />
@@ -66,7 +68,7 @@
                 <controls:FullNavigationFooterItem
                     Text="Appointments">
 
-                    <icons:IconAppointment AutomationProperties.IsInAccessibleTree="true">
+                    <icons:IconAppointment AutomationProperties.IsInAccessibleTree="true" AutomationId="NHS App appointments icon">
 
                         <icons:IconAppointment.GestureRecognizers>
                             <TapGestureRecognizer
@@ -79,7 +81,7 @@
                 <controls:FullNavigationFooterItem
                     Text="Prescriptions">
 
-                    <icons:IconPrescriptions AutomationProperties.IsInAccessibleTree="true">
+                    <icons:IconPrescriptions AutomationProperties.IsInAccessibleTree="true" AutomationId="NHS App prescriptions icon">
 
                         <icons:IconPrescriptions.GestureRecognizers>
                             <TapGestureRecognizer
@@ -93,7 +95,7 @@
                 <controls:FullNavigationFooterItem
                     Text="My Record">
 
-                    <icons:IconRecord AutomationProperties.IsInAccessibleTree="true">
+                    <icons:IconRecord AutomationProperties.IsInAccessibleTree="true" AutomationId="NHS App records icon">
 
                         <icons:IconRecord.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding RecordCommand, Source={x:Reference Name=Root}}" />
@@ -104,15 +106,15 @@
                 </controls:FullNavigationFooterItem>
 
                 <controls:FullNavigationFooterItem
-                    Text="More">
+                    Text="Messages">
 
-                    <icons:IconMore AutomationProperties.IsInAccessibleTree="true">
+                    <icons:IconMoreFooter AutomationProperties.IsInAccessibleTree="true" AutomationId="NHS App messages icon">
 
-                        <icons:IconMore.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding MoreCommand, Source={x:Reference Name=Root}}" />
-                        </icons:IconMore.GestureRecognizers>
+                        <icons:IconMoreFooter.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding MessagesCommand, Source={x:Reference Name=Root}}" />
+                        </icons:IconMoreFooter.GestureRecognizers>
 
-                    </icons:IconMore>
+                    </icons:IconMoreFooter>
 
                 </controls:FullNavigationFooterItem>
             </StackLayout>

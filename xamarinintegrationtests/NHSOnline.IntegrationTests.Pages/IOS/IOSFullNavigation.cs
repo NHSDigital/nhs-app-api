@@ -21,7 +21,9 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         private IOSIcon HelpIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App help icon");
 
-        private IOSIcon SettingsIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App settings icon");
+        private IOSIcon MoreIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App more icon");
+        private IOSIcon MoreMenuItem => FullNavigationHeader.ContainingIconWithDescription("NHS App more icon");
+
 
         private IOSNavigationMenuItem AdviceMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App symptoms icon", "Symptoms");
 
@@ -30,9 +32,6 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
         private IOSNavigationMenuItem PrescriptionsMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App prescriptions icon", "Prescriptions");
 
         private IOSNavigationMenuItem YourHealthMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App records icon", "My Record");
-
-        private IOSNavigationMenuItem MoreMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App more icon", "More");
-
         private IOSNavigationMenuItem MessagesMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App messages icon", "Messages");
 
         internal void AssertNavigationPresent()
@@ -44,11 +43,6 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
         public void Home()
         {
             HomeIcon.Click();
-        }
-
-        public void Settings()
-        {
-            SettingsIcon.Click();
         }
 
         public void Advice()
@@ -69,6 +63,11 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
         public void YourHealth()
         {
             YourHealthMenuItem.Click();
+        }
+
+        public void Messages()
+        {
+            MessagesMenuItem.Click();
         }
 
         public void More()

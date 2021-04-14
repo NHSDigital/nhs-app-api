@@ -21,7 +21,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidIcon HelpIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App help icon");
 
-        private AndroidIcon SettingsIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App settings icon");
+        private AndroidIcon MoreIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App more icon");
 
         private AndroidNavigationMenuItem AdviceMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App symptoms icon", "Symptoms");
 
@@ -30,9 +30,6 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         private AndroidNavigationMenuItem PrescriptionsMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App prescriptions icon", "Prescriptions");
 
         private AndroidNavigationMenuItem YourHealthMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App records icon", "My Record");
-
-        private AndroidNavigationMenuItem MoreMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App more icon", "More");
-
         private AndroidNavigationMenuItem MessagesMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App messages icon", "Messages");
 
         public void AssertNavigationPresent()
@@ -46,9 +43,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             HomeIcon.Click();
         }
 
-        public void Settings()
+        public void Messages()
         {
-            SettingsIcon.Click();
+            MessagesMenuItem.Click();
         }
 
         public void Advice()
@@ -73,7 +70,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         public void More()
         {
-            MoreMenuItem.Click();
+            MoreIcon.Click();
         }
 
         public void Help()

@@ -50,6 +50,10 @@
     <false />
     <key>NSFaceIDUsageDescription</key>
     <string>Use this instead of a password and security code to log in.</string>
+    <key>UIStatusBarStyle</key>
+    <string>UIStatusBarStyleLightContent</string>
+    <key>UIViewControllerBasedStatusBarAppearance</key>
+    <false />
   </dict>
 </plist>
 

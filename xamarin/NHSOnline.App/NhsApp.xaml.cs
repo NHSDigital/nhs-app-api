@@ -33,6 +33,8 @@ namespace NHSOnline.App
 
                 var navigationPage = new NavigationPage(loggedOutHomeScreenPage);
 
+                navigationPage.BarTextColor = Color.White;
+
                 NhsAppResilience.Init(navigationPage.Navigation, Dispatcher);
 
                 MainPage = navigationPage;

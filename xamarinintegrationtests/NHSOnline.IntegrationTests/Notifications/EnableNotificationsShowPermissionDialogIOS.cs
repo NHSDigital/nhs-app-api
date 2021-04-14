@@ -3,7 +3,8 @@ using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
-using NHSOnline.IntegrationTests.Pages.IOS.Settings;
+using NHSOnline.IntegrationTests.Pages.IOS.More;
+using NHSOnline.IntegrationTests.Pages.IOS.Notifications;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -48,9 +49,9 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Settings();
+                .Navigation.More();
 
-            IOSSettingsPage
+            IOSMorePage
                 .AssertOnPage(driver)
                 .PageContent.NavigateToNotifications();
 

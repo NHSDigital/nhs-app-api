@@ -12,12 +12,6 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _view = view;
         }
 
-        public Task SettingsRequested()
-        {
-            _view.NavigateToSettings();
-            return Task.CompletedTask;
-        }
-
         public Task HomeRequested()
         {
             _view.NavigateToHome();
@@ -49,6 +43,12 @@ namespace NHSOnline.App.Areas.Home.Presenters
         }
 
         public Task MoreRequested()
+        {
+            _view.NavigateToMore();
+            return Task.CompletedTask;
+        }
+
+        public Task MessagesRequested()
         {
             _view.NavigateToMessages();
             return Task.CompletedTask;

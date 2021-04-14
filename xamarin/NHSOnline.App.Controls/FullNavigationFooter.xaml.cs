@@ -15,8 +15,8 @@ namespace NHSOnline.App.Controls
             BindableProperty.Create(nameof(PrescriptionsCommand), typeof(ICommand), typeof(FullNavigationFooter));
         public static readonly BindableProperty RecordCommandProperty =
             BindableProperty.Create(nameof(RecordCommand), typeof(ICommand), typeof(FullNavigationFooter));
-        public static readonly BindableProperty MoreCommandProperty =
-            BindableProperty.Create(nameof(MoreCommand), typeof(ICommand), typeof(FullNavigationFooter));
+        public static readonly BindableProperty MessagesCommandProperty =
+            BindableProperty.Create(nameof(MessagesCommand), typeof(ICommand), typeof(FullNavigationFooter));
 
         public FullNavigationFooter()
         {
@@ -47,10 +47,10 @@ namespace NHSOnline.App.Controls
             set => SetValue(RecordCommandProperty, value);
         }
 
-        public ICommand MoreCommand
+        public ICommand MessagesCommand
         {
-            get => (ICommand) GetValue(MoreCommandProperty);
-            set => SetValue(MoreCommandProperty, value);
+            get => (ICommand) GetValue(MessagesCommandProperty);
+            set => SetValue(MessagesCommandProperty, value);
         }
     }
 }

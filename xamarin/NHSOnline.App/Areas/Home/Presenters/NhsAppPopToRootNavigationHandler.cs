@@ -16,12 +16,6 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _appNavigation = navigation;
         }
 
-        public async Task SettingsRequested()
-        {
-            await _appNavigation.PopToRootAnimated().PreserveThreadContext();
-            await _rootHandler.SettingsRequested().PreserveThreadContext();
-        }
-
         public async Task HomeRequested()
         {
             await _appNavigation.PopToRootAnimated().PreserveThreadContext();
@@ -56,6 +50,12 @@ namespace NHSOnline.App.Areas.Home.Presenters
         {
             await _appNavigation.PopToRootAnimated().PreserveThreadContext();
             await _rootHandler.MoreRequested().PreserveThreadContext();
+        }
+
+        public async Task MessagesRequested()
+        {
+            await _appNavigation.PopToRootAnimated().PreserveThreadContext();
+            await _rootHandler.MessagesRequested().PreserveThreadContext();
         }
 
         public async Task RedirectToNhsAppPageRequested(string page)

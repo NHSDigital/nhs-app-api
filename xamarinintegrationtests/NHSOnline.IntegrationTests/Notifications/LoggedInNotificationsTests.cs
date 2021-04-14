@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
-using NHSOnline.IntegrationTests.Pages.Android.Settings;
+using NHSOnline.IntegrationTests.Pages.Android.More;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -12,7 +12,7 @@ namespace NHSOnline.IntegrationTests.Notifications
     public class LoggedInNotificationsTests
     {
         [NhsAppAndroidTest]
-        public void APatientCanAccessNotificationsFromTheSettingsPage(
+        public void APatientCanAccessNotificationsFromTheMorePage(
             IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
@@ -23,9 +23,9 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Settings();
+                .Navigation.More();
 
-            AndroidSettingsPage
+            AndroidMorePage
                 .AssertOnPage(driver)
                 .PageContent.NavigateToNotifications();
 
@@ -35,7 +35,7 @@ namespace NHSOnline.IntegrationTests.Notifications
         }
 
         [NhsAppAndroidTest]
-        public void APatientCanAccessNotificationsFromTheSettingsPageAndBothRegisterAndDeregisterForNotifications(
+        public void APatientCanAccessNotificationsFromTheMorePageAndBothRegisterAndDeregisterForNotifications(
             IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
@@ -46,9 +46,9 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Settings();
+                .Navigation.More();
 
-            AndroidSettingsPage
+            AndroidMorePage
                 .AssertOnPage(driver)
                 .PageContent.NavigateToNotifications();
 
@@ -70,9 +70,9 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Settings();
+                .Navigation.More();
 
-            AndroidSettingsPage
+            AndroidMorePage
                 .AssertOnPage(driver)
                 .PageContent.NavigateToNotifications();
 
@@ -82,9 +82,9 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             AndroidNotificationsPage
                 .AssertOnPage(driver)
-                .Navigation.Settings();
+                .Navigation.More();
 
-            AndroidSettingsPage
+            AndroidMorePage
                 .AssertOnPage(driver)
                 .PageContent.NavigateToNotifications();
 

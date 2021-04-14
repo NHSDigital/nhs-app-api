@@ -72,7 +72,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterHandler<string>(
                     UpdateBiometricRegistrationRequested, (view, handler) => view.UpdateBiometricRegistrationRequested = handler)
                 .RegisterHandler(
-                    _navigationHandler.SettingsRequested, (view, handler) => view.SettingsRequested = handler)
+                    _navigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
                 .RegisterHandler(
                     _navigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
                 .RegisterHandler(
@@ -84,7 +84,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterHandler(
                     _navigationHandler.RecordRequested, (view, handler) => view.RecordRequested = handler)
                 .RegisterHandler(
-                    _navigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler);
+                    _navigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler);
         }
 
         private async Task ViewOnAppearing()

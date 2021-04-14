@@ -1,7 +1,7 @@
 using NHSOnline.IntegrationTests.Pages.WebPageContent;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
-namespace NHSOnline.IntegrationTests.Pages.Android.Settings
+namespace NHSOnline.IntegrationTests.Pages.Android.More
 {
     public sealed class AndroidNotificationsPage
     {

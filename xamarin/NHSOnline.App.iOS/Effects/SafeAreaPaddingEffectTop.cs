@@ -1,4 +1,4 @@
-using System;
+using System.ComponentModel;
 using NHSOnline.App.Controls;
 using UIKit;
 using Xamarin.Forms;
@@ -14,13 +14,27 @@ namespace NHSOnline.App.iOS.Effects
         private Thickness _originalPadding;
         protected override void OnAttached()
         {
+            SetPadding();
+        }
+
+        protected override void OnElementPropertyChanged(PropertyChangedEventArgs args)
+        {
+            base.OnElementPropertyChanged(args);
+            if (args.PropertyName.ToUpperInvariant() == "WIDTH")
+            {
+                SetPadding();
+            }
+        }
+
+        private void SetPadding()
+        {
             if (UIDevice.CurrentDevice.SupportsSafeAreaInsets() &&
                 Element is Layout element)
             {
                 _originalPadding = element.Padding;
 
                 var insets = UIApplication.SharedApplication.Windows[0].SafeAreaInsets;
-                element.Padding = AddTopPadding(element, insets.Top > 0 ? insets.Top : 20);
+                element.Padding = new Thickness(insets.Left, insets.Top, insets.Right, 0);
             }
         }
 
@@ -30,18 +44,6 @@ namespace NHSOnline.App.iOS.Effects
             {
                 element.Padding = _originalPadding;
             }
-        }
-
-        private static Thickness AddTopPadding(
-            Layout element,
-            nfloat topInsetPadding)
-        {
-            var (left, top, right, bottom) = element.Padding;
-            return new Thickness(
-                left,
-                top + topInsetPadding,
-                right,
-                bottom);
         }
     }
 }

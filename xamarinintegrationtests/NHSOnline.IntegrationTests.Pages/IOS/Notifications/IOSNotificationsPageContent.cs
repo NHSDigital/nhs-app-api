@@ -1,7 +1,7 @@
 using NHSOnline.IntegrationTests.UI.Components.IOS;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
-namespace NHSOnline.IntegrationTests.Pages.IOS.Settings
+namespace NHSOnline.IntegrationTests.Pages.IOS.Notifications
 {
     public class IOSNotificationsPageContent
     {

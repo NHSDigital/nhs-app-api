@@ -1,24 +1,6 @@
-<svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 26 26"
-        id="vector">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
   <title>NHS App home icon</title>
   <desc>NHS App home icon</desc>
-  <path
-          id="path"
-          d="M 1.083 11.917 L 13.116 1.083 L 24.917 11.709"
-          fill="none"
-          stroke="#ffffff"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          fill-rule="evenodd"/>
-  <path
-          id="path_1"
-          d="M 21.667 8.667 L 21.667 24.917 L 16.643 24.917 L 16.643 15.921 L 9.749 15.921 L 9.749 24.917 L 4.333 24.917 L 4.333 8.667"
-          fill="none"
-          stroke="#ffffff"
-          stroke-width="1.8"
-          stroke-linejoin="round"
-          fill-rule="evenodd"/>
+  <path d="M16.39,9.7649h-.758v7.5288H10.4212V12.4959a.8517.8517,0,0,0-.8546-.8488H8.4293a.8477.8477,0,0,0-.85.8448v4.8018H2.3679V9.7649H1.61a.8536.8536,0,0,1-.6064-1.4587l7.39-7.2654a.8677.8677,0,0,1,1.2128,0l7.39,7.2654A.8536.8536,0,0,1,16.39,9.7649Z" 
+        style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5px"/>
 </svg>

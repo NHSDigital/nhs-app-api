@@ -34,6 +34,7 @@
     <EmbeddedResource Include="Icons\icon-help.svg" />
     <EmbeddedResource Include="Icons\icon-home.svg" />
     <EmbeddedResource Include="Icons\icon-minus.svg" />
+    <EmbeddedResource Include="Icons\icon-more-footer.svg" />
     <EmbeddedResource Include="Icons\icon-more.svg" />
     <EmbeddedResource Include="Icons\icon-plus.svg" />
     <EmbeddedResource Include="Icons\icon-prescription.svg" />
@@ -166,7 +167,7 @@
     <Compile Update="LinkLabel.xaml.cs">
       <DependentUpon>LinkLabel.xaml</DependentUpon>
     </Compile>
-    <Compile Update="SafeAreaPaddingTopTop.xaml.cs">
+    <Compile Update="SafeAreaPaddingTop.xaml.cs">
       <DependentUpon>SafeAreaPaddingEffect.xaml</DependentUpon>
     </Compile>
     <Compile Update="FullNavigationHeader.xaml.cs">

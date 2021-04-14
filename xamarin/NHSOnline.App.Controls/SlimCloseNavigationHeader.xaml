@@ -39,7 +39,7 @@
 
     <StackLayout AutomationId="NHS App Slim Close Navigation Header">
         
-        <icons:IconClose AutomationProperties.IsInAccessibleTree="True" />
+        <icons:IconClose AutomationProperties.IsInAccessibleTree="True" AutomationId="NHS App close icon" />
         
         <controls:MediumLabel Text="Close" />
         

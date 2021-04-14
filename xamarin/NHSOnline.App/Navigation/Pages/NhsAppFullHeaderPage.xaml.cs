@@ -26,9 +26,6 @@ namespace NHSOnline.App.Navigation.Pages
             set => SetValue(PageContentProperty, value);
         }
 
-        public Func<Task>? SettingsRequested { get; set; }
-        public ICommand SettingsClicked => new AsyncCommand(() => SettingsRequested);
-
         public Func<Task>? HelpRequested { get; set; }
         public ICommand HelpClicked => new AsyncCommand(() => HelpRequested);
 
@@ -49,5 +46,8 @@ namespace NHSOnline.App.Navigation.Pages
 
         public Func<Task>? MoreRequested { get; set; }
         public ICommand MoreClicked => new AsyncCommand(() => MoreRequested);
+
+        public Func<Task>? MessagesRequested { get; set; }
+        public ICommand MessagesClicked => new AsyncCommand(() => MessagesRequested);
     }
 }

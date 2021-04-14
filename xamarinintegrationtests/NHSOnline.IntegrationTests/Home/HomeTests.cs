@@ -6,14 +6,12 @@ using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.Android.More;
 using NHSOnline.IntegrationTests.Pages.Android.Prescriptions;
-using NHSOnline.IntegrationTests.Pages.Android.Settings;
 using NHSOnline.IntegrationTests.Pages.Android.Advice;
 using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.IOS.More;
-using NHSOnline.IntegrationTests.Pages.IOS.Settings;
 using NHSOnline.IntegrationTests.Pages.IOS.Advice;
 using NHSOnline.IntegrationTests.Pages.IOS.YourHealth;
 using NHSOnline.IntegrationTests.UI;
@@ -25,7 +23,7 @@ namespace NHSOnline.IntegrationTests.Home
     public class HomeTests
     {
         [NhsAppAndroidTest]
-        public void APatientWithProofLevelFiveCanAccessSettingsFromHomeScreenAndGoBackHomeAndroid(
+        public void APatientWithProofLevelFiveCanAccessMoreFromHomeScreenAndGoBackHomeAndroid(
             IAndroidDriverWrapper driver)
         {
             var patient = new P5Patient()
@@ -36,9 +34,9 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Settings();
+                .Navigation.More();
 
-            AndroidSettingsPage
+            AndroidMorePage
                 .AssertOnPage(driver)
                 .AssertPageElements()
                 .Navigation.Home();
@@ -48,7 +46,7 @@ namespace NHSOnline.IntegrationTests.Home
         }
 
         [NhsAppIOSTest]
-        public void APatientWithProofLevelFiveCanAccessSettingsFromHomeScreenAndGoBackHomeIOS(IIOSDriverWrapper driver)
+        public void APatientWithProofLevelFiveCanAccessMoreFromHomeScreenAndGoBackHomeIOS(IIOSDriverWrapper driver)
         {
             var patient = new P5Patient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
@@ -58,9 +56,9 @@ namespace NHSOnline.IntegrationTests.Home
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Settings();
+                .Navigation.More();
 
-            IOSSettingsPage
+            IOSMorePage
                 .AssertOnPage(driver)
                 .AssertPageElements()
                 .Navigation.Home();

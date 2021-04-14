@@ -47,7 +47,7 @@
         <StackLayout Orientation="Horizontal"
                      Margin="0,0,0,5">
 
-            <icons:IconClose AutomationProperties.IsInAccessibleTree="True" />
+            <icons:IconClose AutomationProperties.IsInAccessibleTree="True" AutomationId="NHS App close icon" />
 
             <controls:MediumLabel Text="Close" />
 

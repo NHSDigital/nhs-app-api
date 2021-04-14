@@ -133,8 +133,8 @@ namespace NHSOnline.App.Controls.WebViews
         public async Task NavigateToMessages()
             => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.navigationGoToMessages()").ResumeOnThreadPool();
 
-        public async Task NavigateToSettings()
-            => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.navigationGoToSettings()").ResumeOnThreadPool();
+        public async Task NavigateToMore()
+            => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.navigationGoToMore()").ResumeOnThreadPool();
 
         public async Task NavigateToHome()
             => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.navigationGoToHome()").ResumeOnThreadPool();

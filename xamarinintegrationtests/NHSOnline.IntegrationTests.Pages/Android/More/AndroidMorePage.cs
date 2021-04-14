@@ -13,7 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.More
 
         public AndroidFullNavigation Navigation { get; }
 
-        private MorePageContent PageContent { get; }
+        public MorePageContent PageContent { get; }
 
         public static AndroidMorePage AssertOnPage(IAndroidDriverWrapper driver)
         {
@@ -22,10 +22,12 @@ namespace NHSOnline.IntegrationTests.Pages.Android.More
             return page;
         }
 
-        public void AssertPageElements()
+        public AndroidMorePage AssertPageElements()
         {
             Navigation.AssertNavigationPresent();
             PageContent.AssertPageElements();
+
+            return this;
         }
     }
 }

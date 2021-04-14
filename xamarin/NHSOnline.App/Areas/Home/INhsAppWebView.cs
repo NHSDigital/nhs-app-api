@@ -14,7 +14,6 @@ namespace NHSOnline.App.Areas.Home
             Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
             Func<WebNavigatedEventArgs, Task>? Navigated { get; set; }
 
-            Func<Task>? SettingsRequested { get; set; }
             Func<Task>? HelpRequested { get; set; }
             Func<Task>? HomeRequested { get; set; }
             Func<Task>? SymptomsRequested { get; set; }
@@ -22,6 +21,7 @@ namespace NHSOnline.App.Areas.Home
             Func<Task>? PrescriptionsRequested { get; set; }
             Func<Task>? RecordRequested { get; set; }
             Func<Task>? MoreRequested { get; set; }
+            Func<Task>? MessagesRequested { get; set; }
 
             Func<Task>? ResetAndShowErrorRequested { get; set; }
 
@@ -42,7 +42,7 @@ namespace NHSOnline.App.Areas.Home
         Task NavigateToPrescriptions();
         Task NavigateToYourHealth();
         Task NavigateToMessages();
-        Task NavigateToSettings();
+        Task NavigateToMore();
         Task NavigateToHome();
         Task SendNotificationsStatus(string status);
         Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse);

@@ -6,75 +6,127 @@
              xmlns:icons="clr-namespace:NHSOnline.App.Controls.Icons;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Controls.FullNavigationHeader"
              x:Name="Root">
-
+    <ContentView.Effects>
+        <controls:SafeAreaPaddingTop/>
+    </ContentView.Effects>
+    
     <View.Resources>
         <ResourceDictionary>
+            
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Style TargetType="StackLayout">
-                <Setter Property="Orientation" Value="Horizontal" />
-                <Setter Property="BackgroundColor" Value="{StaticResource NhsUkBlue}" />
+            
+            <Style TargetType="Grid" Class="HeaderLeft">
+                <Setter Property="Margin" Value="8,0,0,0" />
+                <Setter Property="WidthRequest" Value="44" />
+                <Setter Property="HorizontalOptions" Value="Start" />
             </Style>
-            <Style TargetType="StackLayout" Class="FullHeader">
-                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
-                <Setter Property="Padding" Value="5,5,5,5" />
+            
+            <Style TargetType="Grid" Class="HeaderRight">
+                <Setter Property="Margin" Value="0,0,8,0" />
+                <Setter Property="WidthRequest" Value="90" />
+                <Setter Property="HorizontalOptions" Value="End" />
             </Style>
-            <Style TargetType="StackLayout" Class="HelpAndSettings">
-                <Setter Property="HorizontalOptions" Value="EndAndExpand" />
+            
+            <Style TargetType="StackLayout" Class="VerticalCenter">
+                <Setter Property="VerticalOptions" Value="Center" />
             </Style>
-            <Style TargetType="icons:IconHome">
-                <Setter Property="HorizontalOptions" Value="StartAndExpand" />
-                <Setter Property="Margin" Value="10" />
+            
+            <Style TargetType="StackLayout" Class="IconAndLabel">
+                <Setter Property="HeightRequest" Value="50" />
+                <Setter Property="WidthRequest" Value="44" />
+                <Setter Property="Orientation" Value="Vertical" />
+                <Setter Property="Spacing" Value="0" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="VerticalOptions" Value="End" />
             </Style>
-            <Style TargetType="icons:IconSettings">
-                <Setter Property="HorizontalOptions" Value="EndAndExpand" />
-                <Setter Property="Margin" Value="0,10,0,10" />
-            </Style>
-            <Style TargetType="icons:IconHelp">
-                <Setter Property="HorizontalOptions" Value="EndAndExpand" />
-                <Setter Property="Margin" Value="0,10,0,10" />
-            </Style>
-            <Style TargetType="controls:NhsLogo">
+            
+            <Style TargetType="controls:SvgImage">
                 <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
-                <Setter Property="Margin" Value="13" />
-                <Setter Property="WidthRequest" Value="60" />
+                <Setter Property="Margin" Value="0,0,0,5" />
+                <Setter Property="HeightRequest" Value="28" />
+                <Setter Property="WidthRequest" Value="28" />
+            </Style>
+            
+            <Style TargetType="controls:NhsLogo">
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="HeightRequest" Value="30" />
+                <Setter Property="WidthRequest" Value="74" />
+            </Style>
+            
+            <Style TargetType="Label">
+                <Setter Property="FontFamily" Value="Frutiger" />
+                <Setter Property="FontSize" Value="10" />
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
+                <Setter Property="TextColor" Value="{StaticResource NhsUkWhite}" />
             </Style>
         </ResourceDictionary>
     </View.Resources>
-
-    <Grid>
+            
+    <Grid AutomationId="NHS App Full Navigation Header">
         <Grid.RowDefinitions>
-            <RowDefinition Height="60" />
+            <RowDefinition Height="66"/>
         </Grid.RowDefinitions>
         
-        <StackLayout 
-            Grid.Row="0" 
-            StyleClass="FullHeader"
-            AutomationId="NHS App Full Navigation Header">
-            <icons:IconHome AutomationProperties.IsInAccessibleTree="true">
-                <icons:IconHome.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding HomeCommand, Source={x:Reference Name=Root}}"  />
-                </icons:IconHome.GestureRecognizers>
-            </icons:IconHome>
-
-            <controls:NhsLogo/>
-
-            <StackLayout StyleClass="HelpAndSettings">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        
+        <StackLayout Grid.Column="0" StyleClass="VerticalCenter">
+            <Grid StyleClass="HeaderLeft">
+                <Grid.ColumnDefinitions >
+                    <ColumnDefinition Width="44" />
+                </Grid.ColumnDefinitions>
                 
-                <icons:IconHelp AutomationProperties.IsInAccessibleTree="true">
-                    <icons:IconHelp.GestureRecognizers>
+                <StackLayout StyleClass="IconAndLabel" >
+                    <controls:SvgImage AutomationProperties.IsInAccessibleTree="true" IconName="Home" AutomationId="NHS App home icon"/>
+                    <Label Text="Home"/>
+                    
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding HomeCommand, Source={x:Reference Name=Root}}"  />
+                    </StackLayout.GestureRecognizers>
+                </StackLayout>
+            </Grid>
+        </StackLayout>
+
+        <StackLayout Grid.Column="1" StyleClass="VerticalCenter">
+            <controls:NhsLogo />
+        </StackLayout>
+
+        <StackLayout Grid.Column="2" StyleClass="VerticalCenter">
+            <Grid StyleClass="HeaderRight">
+                <Grid.ColumnSpacing>2</Grid.ColumnSpacing>
+                <Grid.ColumnDefinitions >
+                    <ColumnDefinition Width="44" />
+                    <ColumnDefinition Width="44" />
+                </Grid.ColumnDefinitions>
+            
+                <StackLayout Grid.Column="0" StyleClass="IconAndLabel">
+                    <controls:SvgImage AutomationProperties.IsInAccessibleTree="true" IconName="Help" AutomationId="NHS App help icon"/>
+                
+                    <Label Text="Help"/>
+            
+                    <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding HelpCommand, Source={x:Reference Name=Root}}"  />
-                    </icons:IconHelp.GestureRecognizers>
-                </icons:IconHelp>
+                    </StackLayout.GestureRecognizers>
+                </StackLayout>
                 
-                <icons:IconSettings AutomationProperties.IsInAccessibleTree="true">
-                    <icons:IconSettings.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding SettingsCommand, Source={x:Reference Name=Root}}"  />
-                    </icons:IconSettings.GestureRecognizers>
-                </icons:IconSettings>
-            </StackLayout>
-
+                <StackLayout Grid.Column="1" StyleClass="IconAndLabel">
+                    <controls:SvgImage AutomationProperties.IsInAccessibleTree="true" IconName="More" AutomationId="NHS App more icon"/>
+                    
+                    <Label Text="More"/>
+                
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding MoreCommand, Source={x:Reference Name=Root}}"  />
+                    </StackLayout.GestureRecognizers>
+                    
+                </StackLayout>
+            </Grid>
         </StackLayout>
     </Grid>
 </ContentView>

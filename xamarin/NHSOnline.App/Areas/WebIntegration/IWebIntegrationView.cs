@@ -13,7 +13,6 @@ namespace NHSOnline.App.Areas.WebIntegration
 
             Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
 
-            Func<Task>? SettingsRequested { get; set; }
             Func<Task>? HelpRequested { get; set; }
             Func<Task>? HomeRequested { get; set; }
             Func<Task>? SymptomsRequested { get; set; }
@@ -21,6 +20,7 @@ namespace NHSOnline.App.Areas.WebIntegration
             Func<Task>? PrescriptionsRequested { get; set; }
             Func<Task>? RecordRequested { get; set; }
             Func<Task>? MoreRequested { get; set; }
+            Func<Task>? MessagesRequested { get; set; }
 
             Func<string, Task>? RedirectToNhsAppPageRequested { get; set; }
         }

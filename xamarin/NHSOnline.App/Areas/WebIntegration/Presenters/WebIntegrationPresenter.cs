@@ -43,7 +43,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                 .RegisterHandler<WebNavigatingEventArgs>(
                     ViewOnNavigating, (view, handler) => view.Navigating = handler)
                 .RegisterHandler(
-                    model.NavigationHandler.SettingsRequested, (view, handler) => view.SettingsRequested = handler)
+                    model.NavigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
                 .RegisterHandler(
                     model.NavigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
                 .RegisterHandler(
@@ -55,7 +55,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                 .RegisterHandler(
                     model.NavigationHandler.RecordRequested, (view, handler) => view.RecordRequested = handler)
                 .RegisterHandler(
-                    model.NavigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
+                    model.NavigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler)
                 .RegisterHandler<string>(
                     RedirectToNhsAppPageRequested, (view, handler) => view.RedirectToNhsAppPageRequested = handler);
         }

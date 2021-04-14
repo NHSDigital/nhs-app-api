@@ -7,17 +7,17 @@ namespace NHSOnline.App.Controls
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class FullNavigationHeader
     {
-        public static readonly BindableProperty SettingsCommandProperty =
-            BindableProperty.Create(nameof(SettingsCommand), typeof(ICommand), typeof(FullNavigationHeader));
+        public static readonly BindableProperty MoreCommandProperty =
+            BindableProperty.Create(nameof(MoreCommand), typeof(ICommand), typeof(FullNavigationHeader));
         public static readonly BindableProperty HelpCommandProperty =
             BindableProperty.Create(nameof(HelpCommand), typeof(ICommand), typeof(FullNavigationHeader));
         public static readonly BindableProperty HomeCommandProperty =
             BindableProperty.Create(nameof(HomeCommand), typeof(ICommand), typeof(FullNavigationHeader));
 
-        public ICommand SettingsCommand
+        public ICommand MoreCommand
         {
-            get => (ICommand) GetValue(SettingsCommandProperty);
-            set => SetValue(SettingsCommandProperty, value);
+            get => (ICommand) GetValue(MoreCommandProperty);
+            set => SetValue(MoreCommandProperty, value);
         }
         public ICommand HelpCommand
         {
