@@ -7,5 +7,6 @@ namespace NHSOnline.App.Services.FIDO
         Task<BiometricStatusResult> FetchBiometricStatus();
         Task<BiometricRegisterResult> Register(string accessToken);
         Task DeleteRegistration(string accessToken);
+        Task<BiometricLoginResult> Authenticate();
     }
 }

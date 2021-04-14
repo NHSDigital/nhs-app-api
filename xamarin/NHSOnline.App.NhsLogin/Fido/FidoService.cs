@@ -9,13 +9,16 @@ namespace NHSOnline.App.NhsLogin.Fido
     {
         private readonly ILogger _logger;
         private readonly FidoRegistrationService _registrationService;
+        private readonly FidoAuthorisationService _authorisationService;
 
         public FidoService(
             ILogger<FidoService> logger,
-            FidoRegistrationService registrationService)
+            FidoRegistrationService registrationService,
+            FidoAuthorisationService authorisationService)
         {
             _logger = logger;
             _registrationService = registrationService;
+            _authorisationService = authorisationService;
         }
 
         public async Task<FidoRegisterResult> Register(IFidoKey key, string accessToken)
@@ -40,6 +43,19 @@ namespace NHSOnline.App.NhsLogin.Fido
             catch (Exception e)
             {
                 _logger.LogError(e, "FIDO deregister failed");
+            }
+        }
+
+        public async Task<FidoAuthorisationResult> Authorise(IFidoKey fidoKey)
+        {
+            try
+            {
+                return await _authorisationService.Authorise(fidoKey).ResumeOnThreadPool();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "FIDO authorise failed");
+                return new FidoAuthorisationResult.Failed();
             }
         }
     }

@@ -3,6 +3,6 @@ namespace NHSOnline.App.NhsLogin
     public interface INhsLoginService
     {
         ProofKeyCodeExchangeCodes GeneratePkceCodes();
-        LoginState BeginLogin(ProofKeyCodeExchangeCodes codes);
+        LoginState BeginLogin(ProofKeyCodeExchangeCodes codes, string? fidoAuthResponse);
     }
 }

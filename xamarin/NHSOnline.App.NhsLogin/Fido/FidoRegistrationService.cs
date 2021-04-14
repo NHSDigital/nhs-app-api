@@ -17,7 +17,7 @@ namespace NHSOnline.App.NhsLogin.Fido
         private readonly IUafClient _uafClient;
 
         public FidoRegistrationService(
-            ILogger<FidoService> logger,
+            ILogger<FidoRegistrationService> logger,
             IUafClient uafClient)
         {
             _logger = logger;
@@ -43,6 +43,9 @@ namespace NHSOnline.App.NhsLogin.Fido
         private async Task<UafRegistrationRequest> GetRegistrationRequest(string accessToken)
         {
             var result = await _uafClient.GetRegistrationRequest(accessToken).ResumeOnThreadPool();
+
+            result.EnsureSuccessStatusCode();
+
             var resultString = await result.Content.ReadAsStringAsync().ResumeOnThreadPool();
 
             _logger.LogInformation("UAF Registration Request: {UAFRegistrationRequest}", resultString);

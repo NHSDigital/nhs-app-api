@@ -48,7 +48,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _userPreferencesService.ShowGettingStarted = false;
 
             var pkceCodes = _nhsLoginService.GeneratePkceCodes();
-            var loginModel = new NhsLoginModel(pkceCodes);
+            var loginModel = new NhsLoginModel(pkceCodes, null);
 
             var loginPage = _pageFactory.CreatePageFor(loginModel);
             await _view.AppNavigation.ReplaceCurrentPage(loginPage).PreserveThreadContext();

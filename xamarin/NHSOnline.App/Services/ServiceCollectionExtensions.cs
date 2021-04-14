@@ -10,6 +10,8 @@ namespace NHSOnline.App.Services
         {
             return services
                 .AddTransient<IBiometricAuthenticationService, BiometricAuthenticationService>()
+                .AddTransient<BiometricRegistrationService>()
+                .AddTransient<BiometricLoginService>()
                 .AddTransient<IBrowserOverlay, BrowserOverlay>()
                 .AddTransient<ISelectMediaService, SelectMediaService>()
                 .AddTransient<IUserPreferencesService, UserPreferencesService>();

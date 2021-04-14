@@ -33,7 +33,7 @@ namespace NHSOnline.App.NhsLogin
 
     internal interface INhsLoginFidoAuthBuilder : INhsLoginUriBuilder
     {
-        INhsLoginUriBuilder FidoAuthResponse(string fidoAuthResponse);
+        INhsLoginUriBuilder FidoAuthResponse(string? fidoAuthResponse);
     }
 
     internal interface INhsLoginUriBuilder
@@ -104,9 +104,13 @@ namespace NHSOnline.App.NhsLogin
             return this;
         }
 
-        public INhsLoginUriBuilder FidoAuthResponse(string fidoAuthResponse)
+        public INhsLoginUriBuilder FidoAuthResponse(string? fidoAuthResponse)
         {
-            _queryString.Add("fido_auth_response", fidoAuthResponse);
+            if (fidoAuthResponse != null)
+            {
+                _queryString.Add("fido_auth_response", fidoAuthResponse);
+            }
+
             return this;
         }
 

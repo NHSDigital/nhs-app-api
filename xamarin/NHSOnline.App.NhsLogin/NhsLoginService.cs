@@ -39,7 +39,7 @@ namespace NHSOnline.App.NhsLogin
             return new ProofKeyCodeExchangeCodes(verifier, challenge, "S256");
         }
 
-        public LoginState BeginLogin(ProofKeyCodeExchangeCodes codes)
+        public LoginState BeginLogin(ProofKeyCodeExchangeCodes codes, string? fidoAuthResponse)
         {
             var authReturnUri = new UriBuilder
             {
@@ -54,6 +54,7 @@ namespace NHSOnline.App.NhsLogin
                 .Scopes("openid", "profile", "nhs_app_credentials", "gp_integration_credentials", "profile_extended")
                 .VectorsOfTrust("P5.Cp.Cd", "P5.Cp.Ck", "P5.Cm", "P9.Cp.Cd", "P9.Cp.Ck", "P9.Cm")
                 .RedirectUri(authReturnUri)
+                .FidoAuthResponse(fidoAuthResponse)
                 .Uri;
 
             return new LoginState(_logger, authoriseUri, authReturnUri);

@@ -8,6 +8,7 @@ namespace NHSOnline.App.Areas.LoggedOut
     {
         internal interface IEvents
         {
+            Func<Task>? Appearing { get; set; }
             Func<Task>? LoginRequested { get; set; }
             Func<Task>? NhsUkCovidConditionsServicePageRequested { get; set; }
             Func<Task>? NhsUkLoginHelpServicePageRequested { get; set; }

@@ -6,6 +6,7 @@ using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
+using NHSOnline.App.Services.FIDO;
 
 namespace NHSOnline.App.Areas.LoggedOut.Presenters
 {
@@ -15,6 +16,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly ILogger _logger;
         private readonly IPageFactory _pageFactory;
         private readonly IUserPreferencesService _userPreferencesService;
+        private readonly IBiometricAuthenticationService _biometricAuthenticationService;
         private readonly INhsLoginService _nhsLoginService;
         private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
         private readonly ILifecycle _lifecycle;
@@ -25,6 +27,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             ILogger<LoggedOutHomeScreenPresenter> logger,
             IPageFactory pageFactory,
             IUserPreferencesService userPreferencesService,
+            IBiometricAuthenticationService biometricAuthenticationService,
             INhsLoginService nhsLoginService,
             INhsExternalServicesConfiguration nhsExternalServicesConfiguration,
             ILifecycle lifecycle,
@@ -34,17 +37,26 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _logger = logger;
             _pageFactory = pageFactory;
             _userPreferencesService = userPreferencesService;
+            _biometricAuthenticationService = biometricAuthenticationService;
             _nhsLoginService = nhsLoginService;
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
             _lifecycle = lifecycle;
             _browserOverlay = browserOverlay;
 
             _view.AppNavigation
+                .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
                 .RegisterHandler(ViewOnLoginRequested, (view, handler) => view.LoginRequested = handler)
                 .RegisterHandler(LoadCovidConditionsUrl, (view, handler) => view.NhsUkCovidConditionsServicePageRequested = handler)
                 .RegisterHandler(LoadLoginHelpUrl, (view, handler) => view.NhsUkLoginHelpServicePageRequested = handler)
                 .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler)
                 .RegisterHandler(ResetAndShowErrorRequested, (view, handler) => view.ResetAndShowErrorRequested = handler);
+        }
+
+        private async Task ViewOnAppearing()
+        {
+            // TODO: If returning from error scenario, do we want to not do this again?
+            var result = await _biometricAuthenticationService.Authenticate().PreserveThreadContext();
+            await result.Accept(new BiometricLoginResultVisitor(this)).PreserveThreadContext();
         }
 
         private async Task ViewOnLoginRequested()
@@ -75,10 +87,10 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             await _view.AppNavigation.Push(gettingStartedPage).PreserveThreadContext();
         }
 
-        private async Task ShowNhsLoginPage()
+        private async Task ShowNhsLoginPage(string? fidoAuthResponse = null)
         {
             var pkceCodes = _nhsLoginService.GeneratePkceCodes();
-            var loginModel = new NhsLoginModel(pkceCodes);
+            var loginModel = new NhsLoginModel(pkceCodes, fidoAuthResponse);
             var loginView = _pageFactory.CreatePageFor(loginModel);
             await _view.AppNavigation.Push(loginView).PreserveThreadContext();
         }
@@ -104,6 +116,43 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             // TODO ShowError
             _logger.LogInformation("Showing unexpected error");
             return Task.CompletedTask;
+        }
+
+        private class BiometricLoginResultVisitor : IBiometricLoginResultVisitor<Task>
+        {
+            private readonly LoggedOutHomeScreenPresenter _presenter;
+
+            public BiometricLoginResultVisitor(LoggedOutHomeScreenPresenter presenter)
+            {
+                _presenter = presenter;
+            }
+
+            public async Task Visit(BiometricLoginResult.LoggedIn loggedIn)
+            {
+                await _presenter.ShowNhsLoginPage(loggedIn.FidoAuthResponse).PreserveThreadContext();
+            }
+
+            public Task Visit(BiometricLoginResult.Cancelled cancelled)
+            {
+                return Task.CompletedTask;
+            }
+
+            public Task Visit(BiometricLoginResult.Failed failed)
+            {
+                // TODO: Display appropriate error message
+                return Task.CompletedTask;
+            }
+
+            public Task Visit(BiometricLoginResult.NotRegistered notRegistered)
+            {
+                return Task.CompletedTask;
+            }
+
+            public Task Visit(BiometricLoginResult.Invalidated invalidated)
+            {
+                // TODO: Display appropriate error message
+                return Task.CompletedTask;
+            }
         }
     }
 }

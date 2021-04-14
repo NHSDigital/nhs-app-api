@@ -46,7 +46,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             // TODO: NHSO-10323 addresses cookie management in web views
             cookies.Clear();
 
-            _loginState = nhsLoginService.BeginLogin(_model.PkceCodes);
+            _loginState = nhsLoginService.BeginLogin(_model.PkceCodes, _model.FidoAuthResponse);
             _view.LoadUrlAndNotifyOnRedirect(_loginState.AuthoriseUri, IsRedirect, OnRedirect);
         }
 

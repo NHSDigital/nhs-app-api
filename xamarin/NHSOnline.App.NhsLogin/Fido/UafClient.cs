@@ -13,6 +13,7 @@ namespace NHSOnline.App.NhsLogin.Fido
         private const string RegistrationRequestEndpoint = "/regRequest";
         private const string RegistrationResponseEndpoint = "/regResponse";
         private const string DeregistrationRequestEndpoint = "/deregRequest";
+        private const string AuthorisationRequestEndpoint = "/authRequest";
 
         private readonly UafHttpClient _uafHttpClient;
         private readonly ILogger<UafClient> _logger;
@@ -22,6 +23,9 @@ namespace NHSOnline.App.NhsLogin.Fido
             _uafHttpClient = uafUafHttpClient;
             _logger = logger;
         }
+
+        public async Task<HttpResponseMessage> GetAuthorisationRequest()
+            => await _uafHttpClient.Get(AuthorisationRequestEndpoint).ResumeOnThreadPool();
 
         public async Task<HttpResponseMessage> GetRegistrationRequest(string accessToken)
             => await _uafHttpClient.Get(RegistrationRequestEndpoint, accessToken).ResumeOnThreadPool();

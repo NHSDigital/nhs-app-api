@@ -26,6 +26,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
 
         IAppNavigation<ILoggedOutHomeScreenView.IEvents> INavigationView<ILoggedOutHomeScreenView.IEvents>.AppNavigation => _appNavigation;
 
+        Func<Task>? ILoggedOutHomeScreenView.IEvents.Appearing { get; set; }
+        private ICommand AppearingCommand => new AsyncCommand(() => Events.Appearing);
+
         public Func<Task>? LoginRequested { get; set; }
         public ICommand LoginCommand => new AsyncCommand(() => LoginRequested);
 
@@ -48,10 +51,14 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             }
         }
 
+        private ILoggedOutHomeScreenView.IEvents Events => this;
+
         protected override void OnAppearing()
         {
             _logger.LogInformation("{Method}", nameof(OnAppearing));
             _appNavigation.EnableHandlers();
+
+            AppearingCommand.Execute(null);
         }
 
         protected override void OnDisappearing()
@@ -59,7 +66,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             _logger.LogInformation("{Method}", nameof(OnDisappearing));
             _appNavigation.SuppressHandlers();
         }
-        
+
         protected override bool OnBackButtonPressed()
         {
             BackRequestedCommand.Execute(null);

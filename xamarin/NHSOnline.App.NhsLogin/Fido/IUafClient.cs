@@ -9,5 +9,6 @@ namespace NHSOnline.App.NhsLogin.Fido
         Task<HttpResponseMessage> GetRegistrationRequest(string accessToken);
         Task<HttpResponseMessage> PostRegistrationResponse(UafRegistrationResponse registrationResponse, string accessToken);
         Task<HttpResponseMessage> PostDeregistrationRequest(string accessToken, UafDeregistrationRequest request);
+        Task<HttpResponseMessage> GetAuthorisationRequest();
     }
 }

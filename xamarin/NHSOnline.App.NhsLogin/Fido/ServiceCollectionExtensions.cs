@@ -15,7 +15,8 @@ namespace NHSOnline.App.NhsLogin.Fido
             return services
                 .AddTransient<IUafClient, UafClient>()
                 .AddTransient<IFidoService, FidoService>()
-                .AddTransient<FidoRegistrationService>();
+                .AddTransient<FidoRegistrationService>()
+                .AddTransient<FidoAuthorisationService>();
         }
 
         private static void ConfigureUafHttpClient(IServiceProvider serviceProvider, HttpClient httpClient)
