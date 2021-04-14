@@ -119,9 +119,7 @@ namespace NHSOnline.IntegrationTests.Home
                 .Navigation.Help();
 
             AndroidAppTabBrowserChoice
-                .AssertDisplayed(driver)
-                .ChooseChrome()
-                .Always();
+                .IfDisplayed(driver, choice => choice.ChooseChrome().Always());
 
             AndroidAppTab
                 .AssertOnHomeHelpPage(driver);

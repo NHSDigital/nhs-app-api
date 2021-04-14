@@ -65,9 +65,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             // Other pages should load in App Browser Tab
             AndroidAppTabBrowserChoice
-                .AssertDisplayed(driver)
-                .ChooseChrome()
-                .Always();
+                .IfDisplayed(driver, choice => choice.ChooseChrome().Always());
 
             AndroidAppTab
                 .AssertOnCovidPage(driver)

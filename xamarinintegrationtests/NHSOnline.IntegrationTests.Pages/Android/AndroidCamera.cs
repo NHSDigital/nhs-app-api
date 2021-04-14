@@ -1,3 +1,4 @@
+using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -31,6 +32,10 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             return this;
         }
 
-        public void Done() => DoneButton.Click();
+        public void Done()
+        {
+            using var timeout = ExtendedTimeout.FromSeconds(20);
+            DoneButton.Click();
+        }
     }
 }

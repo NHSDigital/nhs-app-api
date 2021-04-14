@@ -43,9 +43,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
             }
 
             AndroidAppTabBrowserChoice
-                .AssertDisplayed(driver)
-                .ChooseChrome()
-                .Always();
+                .IfDisplayed(driver, choice => choice.ChooseChrome().Always());
 
             AndroidAppTab
                 .AssertOnContactUsPage(driver)
