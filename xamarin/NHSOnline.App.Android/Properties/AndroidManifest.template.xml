@@ -6,6 +6,17 @@
 		  android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="29" />
 	<application android:label="placeholder" android:networkSecurityConfig="@xml/network_security_config">
+		<!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
+             See README(https://goo.gl/l4GJaQ) for more. -->
+		<meta-data
+				android:name="com.google.firebase.messaging.default_notification_icon"
+				android:resource="@drawable/icon_notifications_nhs_logo" />
+		<!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+		<meta-data
+				android:name="com.google.firebase.messaging.default_notification_color"
+				android:resource="@color/colornotificationsprimary" />
+		<!-- Disable firebase_analytics -->
 		<meta-data
 				android:name="firebase_analytics_collection_deactivated"
 				android:value="true" />

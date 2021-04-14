@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">@color/nhsUkBlue</color>
+    <!--    Xamarin build forces lowercase on color resource added to allow notification colour to be set-->
+    <!--    Issue https://github.com/xamarin/xamarin-android/issues/1559-->
+    <color name="colornotificationsprimary">@color/colorPrimary</color>
     <color name="colorPrimaryDark">@color/darkBlue</color>
     <color name="colorAccent">@color/lightGreen</color>
     

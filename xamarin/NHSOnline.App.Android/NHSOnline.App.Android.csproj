@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AndroidServices\AndroidNotificationMessagingService.cs" />
     <Compile Include="DependencyServices\AndroidLifecycle.cs" />
     <Compile Include="DependencyServices\AndroidCookies.cs" />
     <Compile Include="DependencyServices\AndroidHttpMessageHandlerFactory.cs" />
@@ -95,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\app_icon.xml" />
+    <AndroidResource Include="Resources\drawable\icon_notifications_nhs_logo.xml" />
     <AndroidResource Include="Resources\drawable\ic_launcher_foreground.xml" />
     <AndroidResource Include="Resources\drawable\nhs_logo.xml" />
     <AndroidResource Include="Resources\drawable\splash_screen.xml" />
