@@ -169,7 +169,10 @@ namespace NHSOnline.Backend.PfsApi
 
             app.UseNhsAppCorrelationId();
 
-            app.UseEndpoints(b => b.MapControllers());
+            app.UseEndpoints(b => {
+                b.MapHealthCheckEndpoints();
+                b.MapControllers();   
+            });
 
             _modularStartup.Configure(app, env);
         }

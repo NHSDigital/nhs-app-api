@@ -161,17 +161,21 @@ spec:
           mountPath: /usr/local/share/ca-certificates
           readOnly: true
         livenessProbe:
-          tcpSocket:
+          httpGet:
             port: 8080
-          initialDelaySeconds: 20
-          periodSeconds: 10
-          timeoutSeconds: 2
+            path: /healthz
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 1
+
         readinessProbe:
-          tcpSocket:
+          httpGet:
             port: 8080
+            path: /login
           initialDelaySeconds: 20
           periodSeconds: 10
           timeoutSeconds: 2
+
       - name: proxy
         image: {{ $.Values.registry }}/{{ $.Values.sidecar_proxy.image }}:{{ $.Values.sidecar_proxy.image_tag }}
         imagePullPolicy: {{ $.Values.sidecar_proxy.imagePullPolicy }}
@@ -195,6 +199,24 @@ spec:
         - name: sidecar-proxy-config
           mountPath: /etc/nginx/nginx.conf
           subPath: nginx.conf
+        livenessProbe:
+          httpGet:
+            scheme: HTTPS
+            port: 8443
+            path: /healthz
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 1
+
+        readinessProbe:
+          httpGet:
+            scheme: HTTPS
+            port: 8443
+            path: /login
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 2
+
       hostAliases:
       - ip: "{{ trimSuffix "/32" $.Values.clusterIP }}"
         hostnames:

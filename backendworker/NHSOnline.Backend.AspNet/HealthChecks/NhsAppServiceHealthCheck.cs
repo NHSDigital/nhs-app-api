@@ -11,6 +11,7 @@ namespace NHSOnline.Backend.AspNet.HealthChecks
 {
     internal static class NhsAppServiceHealthCheck
     {
+        internal const string LivenessProbe = "/health/live";
         internal const string ReadinessPath = "/health/ready";
     }
 

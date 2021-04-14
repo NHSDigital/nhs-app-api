@@ -10,9 +10,9 @@ keyvaultSubscriptionID: 47e498b8-ad52-4421-b6d0-d7f9988429df
 keyvaultTenantID: 50f6071f-bbfe-401a-8803-673748e629e2
 
 secrets:
-    notificationHub:
-        notificationHubSecretName: "notificationHubSharedAccessKey"
-        notificationHubSecretVersion: "ed60d1ae92f44e228e62bec53197d67e"
+  notificationHub:
+    notificationHubSecretName: "notificationHubSharedAccessKey"
+    notificationHubSecretVersion: "ed60d1ae92f44e228e62bec53197d67e"
 
 wildcardEnv: true
 
@@ -63,26 +63,12 @@ n3Hostname: 10.239.14.26
 
 web:
   publicURL: www-staging.nhsapp.service.nhs.uk
-  minAvailable: 3
-  minReplicas: 4
-  maxReplicas: 30
-  memoryRequest: "20Mi"
-  memoryLimit: "40Mi"
-  cpuRequest: "100m"
-  cpuLimit: "200m"
   analyticsEnvironment: "staging"
   analyticsURL: "//assets.adobedtm.com/launch-ENe671d37f1f8e4df8b91a2106e2038de7-staging.min.js"
   imagePullPolicy: Always
 
 api:
   publicURL: api-staging.nhsapp.service.nhs.uk
-  minAvailable: 2
-  minReplicas: 4
-  maxReplicas: 300
-  memoryRequest: "512Mi"
-  memoryLimit: "512Mi"
-  cpuRequest: "400m"
-  cpuLimit: "800m"
   imagePullPolicy: Always
   knownServicesOverrides:
     services__ndop__url: https://ndopapp-int1.thunderbird.service.nhs.uk
@@ -109,90 +95,17 @@ api:
     services__pkb__url: https://nhsapp.devstacks.pkb.io
     services__pkb_alt__url: https://nhsapp.devstacks.pkb.io:443
 
-cid:
-  minAvailable: 2
-  minReplicas: 4
-  maxReplicas: 30
-  memoryRequest: "256Mi"
-  memoryLimit: "512Mi"
-  cpuRequest: "100m"
-  cpuLimit: "200m"
-  imagePullPolicy: Always
-
-sjr:
-  minAvailable: 1
-  minReplicas: 2
-  maxReplicas: 30
-  memoryRequest: "150Mi"
-  memoryLimit: "256Mi"
-  cpuRequest: "100m"
-  cpuLimit: "500m"
-  imagePullPolicy: Always
-
-wiremock:
-  image: nhsonline-minimock
-  image_tag: latest
-  minAvailable: 1
-  minReplicas: 2
-  maxReplicas: 100
-  memoryRequest: "512Mi"
-  memoryLimit: "512Mi"
-  cpuRequest: "0.5"
-  cpuLimit: "4"
-  imagePullPolicy: Always
-
-iproxy:
-  minAvailable: 1
-  minReplicas: 2
-  maxReplicas: 30
-  memoryRequest: "20Mi"
-  memoryLimit: "40Mi"
-  cpuRequest: "100m"
-  cpuLimit: "200m"
-  imagePullPolicy: IfNotPresent
-  n3enabled: false
-
 messagesEnabled: true
 
 users:
-  minAvailable: 3
-  minReplicas: 4
-  maxReplicas: 100
-  memoryRequest: "512Mi"
-  memoryLimit: "512Mi"
-  cpuRequest: "200m"
-  cpuLimit: "400m"
   notificationHubPath: nhsapp-staging
   notificationHubConnectionString: Endpoint=sb://nhsapp-staging.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
 
-messages:
-  minAvailable: 1
-  minReplicas: 2
-  maxReplicas: 30
-  memoryRequest: "64Mi"
-  memoryLimit: "128Mi"
-  cpuRequest: "100m"
-  cpuLimit: "200m"
-
-info:
-  minAvailable: 1
-  minReplicas: 2
-  maxReplicas: 30
-  memoryRequest: "64Mi"
-  memoryLimit: "128Mi"
-  cpuRequest: "100m"
-  cpuLimit: "200m"
-
 metrics:
-  memoryRequest: "12Mi"
+  memoryRequest: "120Mi"
   memoryLimit: "120Mi"
-  cpuRequest: "3m"
-  cpuLimit: "30m"
-
-logger:
-  minAvailable: 1
-  minReplicas: 2
-  maxReplicas: 30
+  cpuRequest: "300m"
+  cpuLimit: "300m"
 
 splunk:
   pidIndex: apppid_nhsapp_staging

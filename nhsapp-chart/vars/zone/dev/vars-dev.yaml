@@ -55,6 +55,14 @@ qualtricsDirectoryId: "POOL_21oowrmextjSJqb"
 qualtricsMailingListId: "CG_27lDgMxvttB7Oxg"
 
 api:
+  minAvailable: 0
+  minReplicas: 1
+  maxReplicas: 1
+  memoryRequest: "256Mi"
+  memoryLimit: "512Mi"
+  cpuRequest: "100m"
+  cpuLimit: "250m"
+  targetCPUUtilizationPercentage: 40
   knownServicesOverrides:
     services__ndop__url: https://ndopapp-int1.thunderbird.service.nhs.uk
     services__cid_settings__url: https://settings.ext.signin.nhs.uk
@@ -82,4 +90,129 @@ api:
     services__silver_third_party_api_test__url: https://silverintegrationtestsa.z33.web.core.windows.net
     services__nhsd__url: https://vaccine-status-dev-uks.azurewebsites.net
     services__netCompany__url: https://storsitstatic.z33.web.core.windows.net
+
+sidecar_proxy:
+  memoryRequest: "128Mi"
+  memoryLimit: "256Mi"
+  cpuRequest: "125m"
+  cpuLimit: "250m"
+
+web:
+  minAvailable: 0
+  minReplicas: 1
+  maxReplicas: 1
+  memoryRequest: "20Mi"
+  memoryLimit: "40Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
+  targetCPUUtilizationPercentage: 45
+
+cid:
+  minAvailable: 0
+  minReplicas: 1
+  maxReplicas: 1
+  memoryRequest: "256Mi"
+  memoryLimit: "400Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
+  targetCPUUtilizationPercentage: 35
+
+logger:
+  minAvailable: 0
+  minReplicas: 1
+  maxReplicas: 1
+  memoryRequest: "64Mi"
+  memoryLimit: "128Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
+  targetCPUUtilizationPercentage: 45
+
+cdsswiremock:
+  minAvailable: 0
+  minReplicas: 1
+  maxReplicas: 1
+  memoryRequest: "256Mi"
+  memoryLimit: "512Mi"
+  cpuRequest: "125m"
+  cpuLimit: "250m"
+  targetCPUUtilizationPercentage: 45
+
+iproxy:
+  minAvailable: 0
+  minReplicas: 1
+  maxReplicas: 1
+  memoryRequest: "20Mi"
+  memoryLimit: "40Mi"
+  cpuRequest: "100m"
+  cpuLimit: "250m"
+  targetCPUUtilizationPercentage: 45
+
+iproxy_microtest:
+  minAvailable: 0
+  minReplicas: 1
+  maxReplicas: 1
+  memoryRequest: "125Mi"
+  memoryLimit: "250Mi"
+  cpuRequest: "125m"
+  cpuLimit: "250m"
+
+wiremock:
+  minAvailable: 0
+  minReplicas: 1
+  maxReplicas: 4
+  memoryRequest: "1024Mi"
+  memoryLimit: "4096Mi"
+  cpuRequest: "500m"
+  cpuLimit: "2"
+  targetCPUUtilizationPercentage: 35
+
+users:
+  minAvailable: 0
+  minReplicas: 1
+  maxReplicas: 1
+  memoryRequest: "64Mi"
+  memoryLimit: "128Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
+
+messages:
+  minAvailable: 0
+  minReplicas: 1
+  maxReplicas: 1
+  memoryRequest: "64Mi"
+  memoryLimit: "128Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
+
+info:
+  minAvailable: 0
+  minReplicas: 1
+  maxReplicas: 1
+  memoryRequest: "64Mi"
+  memoryLimit: "128Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
+  targetCPUUtilizationPercentage: 45
+
+sjr:
+  minAvailable: 0
+  minReplicas: 1
+  maxReplicas: 1
+  memoryRequest: "150Mi"
+  memoryLimit: "256Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
+  targetCPUUtilizationPercentage: 45
+  targetMemoryUtilizationPercentage: 80
+
+sjrconfig:
+  minAvailable: 0
+  minReplicas: 1
+  maxReplicas: 1
+  memoryRequest: "256Mi"
+  memoryLimit: "512Mi"
+  cpuRequest: "125m"
+  cpuLimit: "250m"
+  targetCPUUtilizationPercentage: 45
+  targetMemoryUtilizationPercentage: 80
 

@@ -1,5 +1,5 @@
 ---
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   labels:
@@ -14,8 +14,12 @@ spec:
     name: {{ template "nhsapp.name" . }}-{{ $.Values.users.role }}-{{ .Chart.AppVersion | replace "." "-" }}
   minReplicas: {{ $.Values.users.minReplicas }}
   maxReplicas: {{ $.Values.users.maxReplicas }}
+  behavior: 
+    {{ $.Values.scaling.dotnet | toYaml | indent 4 | trim }}
   metrics:
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ $.Values.users.targetCPUUtilizationPercentage }}
+        target:
+          type: Utilization
+          averageUtilization: {{ $.Values.users.targetCPUUtilizationPercentage }}

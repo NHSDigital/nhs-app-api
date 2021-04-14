@@ -88,6 +88,7 @@ data:
                 proxy_set_header X-Forwarded-Proto $scheme;
                 proxy_set_header Connection "";
             }
+
             location ~* ^/health/ready {
                 proxy_pass http://application;
                 proxy_set_header Host $host;
@@ -95,6 +96,10 @@ data:
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
                 proxy_set_header X-Forwarded-Proto $scheme;
                 proxy_set_header Connection "";
+            }
+
+            location /healthz {
+                return 204;
             }
 
             location / {

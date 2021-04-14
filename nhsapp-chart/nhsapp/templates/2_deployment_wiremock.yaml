@@ -72,6 +72,22 @@ spec:
         - name: MockSettings__CitizenId__CitizenIdTokenIssuer
           value: "{{ $.Values.cidProtocol }}://{{ $.Values.cidHostname }}"
         {{- end }}
+        livenessProbe:
+          httpGet:
+            port: 8080
+            path: /citizenid/.well-known/openid-configuration
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 1
+
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: /citizenid/.well-known/openid-configuration
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 2
+
       - name: proxy
         image: {{ $.Values.registry }}/{{ $.Values.sidecar_proxy.image }}:{{ $.Values.sidecar_proxy.image_tag }}
         imagePullPolicy: {{ $.Values.sidecar_proxy.imagePullPolicy }}
@@ -92,6 +108,24 @@ spec:
         - name: sidecar-proxy-config
           mountPath: /etc/nginx/nginx.conf
           subPath: nginx.conf
+        livenessProbe:
+          httpGet:
+            scheme: HTTPS
+            port: 8443
+            path: /healthz
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 1
+
+        readinessProbe:
+          httpGet:
+            scheme: HTTPS
+            port: 8443
+            path: /citizenid/.well-known/openid-configuration
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 2
+
       imagePullSecrets:
         - name: azure-registry-{{ .Chart.AppVersion }}
       dnsConfig:

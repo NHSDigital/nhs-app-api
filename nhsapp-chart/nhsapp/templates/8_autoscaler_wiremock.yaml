@@ -1,6 +1,6 @@
 {{- if $.Values.environmentStubbed.deployWiremock }}
 ---
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   labels:
@@ -15,9 +15,13 @@ spec:
     name: {{ template "nhsapp.name" . }}-{{ $.Values.wiremock.role }}-{{ .Chart.AppVersion | replace "." "-" }}
   minReplicas: {{ $.Values.wiremock.minReplicas }}
   maxReplicas: {{ $.Values.wiremock.maxReplicas }}
+  behavior: 
+    {{ $.Values.scaling.dotnet | toYaml | indent 4 | trim }}
   metrics:
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ $.Values.wiremock.targetCPUUtilizationPercentage }}
+        target:
+          type: Utilization
+          averageUtilization: {{ $.Values.wiremock.targetCPUUtilizationPercentage }}
 {{- end }}

@@ -69,6 +69,10 @@ data:
 
             access_log /var/log/nginx/access.log splunk_logs;
 
+            location /healthz {
+                return 204;
+            }
+
             location / {
                 proxy_pass http://application;
                 proxy_set_header Host $host;

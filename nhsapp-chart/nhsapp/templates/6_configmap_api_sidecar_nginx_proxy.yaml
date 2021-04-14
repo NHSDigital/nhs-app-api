@@ -71,15 +71,19 @@ data:
             location ~* ^/v1/patient/im1Connection {
                 return 404;
             }
+
             location ~* ^/v1/patient/linkage {
                 return 404;
             }
+
             location ~* ^/patient/healthcheck {
                 return 404;
             }
+
             location ~* ^/v1/patient/healthcheck {
                 return 404;
             }
+
             location ~* ^/fhir/ServiceDefinition {
                 client_max_body_size 3m;
                 proxy_pass http://application;
@@ -89,6 +93,24 @@ data:
                 proxy_set_header X-Forwarded-Proto $scheme;
                 proxy_set_header Connection "";
             }
+
+            location /healthz {
+                return 204;
+            }
+
+            location ~* ^/health/[^/]+$ {
+                if ($http_user_agent !~* ^kube-probe/\d+[.]\d+$) {
+                    return 404;
+                }
+
+                proxy_pass http://application;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_set_header Connection "";
+            }
+
             location / {
                 proxy_pass http://application;
                 proxy_set_header Host $host;

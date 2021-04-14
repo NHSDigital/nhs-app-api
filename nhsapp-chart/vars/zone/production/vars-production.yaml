@@ -84,13 +84,6 @@ qualtricsMailingListId: "CG_3nxFnDUpfzZsDpI"
 web:
   publicURL: www.nhsapp.service.nhs.uk
   hyphenatedHostname: false
-  minAvailable: 3
-  minReplicas: 4
-  maxReplicas: 30
-  memoryRequest: "20Mi"
-  memoryLimit: "40Mi"
-  cpuRequest: "100m"
-  cpuLimit: "200m"
   analyticsEnvironment: "production"
   analyticsURL: "//assets.adobedtm.com/launch-EN1b745c3f3db648ea9f254bf5795fa1fa.min.js"
   dataPreferencesUrl: https://app.your-data-matters.service.nhs.uk/createsession
@@ -101,13 +94,6 @@ web:
 
 api:
   publicURL: api.nhsapp.service.nhs.uk
-  minAvailable: 2
-  minReplicas: 4
-  maxReplicas: 300
-  memoryRequest: "512Mi"
-  memoryLimit: "512Mi"
-  cpuRequest: "400m"
-  cpuLimit: "800m"
   imagePullPolicy: IfNotPresent
   knownServicesOverrides:
     services__ndop__url: https://app.your-data-matters.service.nhs.uk
@@ -127,23 +113,9 @@ api:
     services__netCompany__url: https://covid-status.service.nhsx.nhs.uk
 
 cid:
-  minAvailable: 2
-  minReplicas: 4
-  maxReplicas: 30
-  memoryRequest: "256Mi"
-  memoryLimit: "512Mi"
-  cpuRequest: "100m"
-  cpuLimit: "200m"
   imagePullPolicy: IfNotPresent
 
 sjr:
-  minAvailable: 1
-  minReplicas: 2
-  maxReplicas: 30
-  memoryRequest: "150Mi"
-  memoryLimit: "256Mi"
-  cpuRequest: "100m"
-  cpuLimit: "500m"
   imagePullPolicy: IfNotPresent
 
 sjrconfig:
@@ -152,13 +124,6 @@ sjrconfig:
   image: nhsonline-service-journey-prod-config
 
 iproxy:
-  minAvailable: 1
-  minReplicas: 2
-  maxReplicas: 30
-  memoryRequest: "20Mi"
-  memoryLimit: "40Mi"
-  cpuRequest: "100m"
-  cpuLimit: "200m"
   imagePullPolicy: IfNotPresent
 
 messagesEnabled: true
@@ -166,41 +131,11 @@ messagesEnabled: true
 users:
   notificationHubPath: nhsapp-production
   notificationHubConnectionString: Endpoint=sb://nhsapp-production.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
-  minAvailable: 3
-  minReplicas: 4
-  maxReplicas: 100
-  memoryRequest: "512Mi"
-  memoryLimit: "512Mi"
-  cpuRequest: "200m"
-  cpuLimit: "400m"
-
-messages:
-  minAvailable: 1
-  minReplicas: 2
-  maxReplicas: 30
-  memoryRequest: "64Mi"
-  memoryLimit: "128Mi"
-  cpuRequest: "100m"
-  cpuLimit: "200m"
-
-info:
-  minAvailable: 1
-  minReplicas: 2
-  maxReplicas: 30
-  memoryRequest: "64Mi"
-  memoryLimit: "128Mi"
-  cpuRequest: "100m"
-  cpuLimit: "200m"
 
 metrics:
   memoryRequest: "12Mi"
   memoryLimit: "120Mi"
   cpuRequest: "3m"
   cpuLimit: "30m"
-
-logger:
-  minAvailable: 1
-  minReplicas: 2
-  maxReplicas: 30
 
 # NIET_LOAD_END_FLAG

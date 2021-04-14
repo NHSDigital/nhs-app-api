@@ -1,6 +1,6 @@
 {{- if $.Values.messagesEnabled }}
 ---
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   labels:
@@ -15,9 +15,13 @@ spec:
     name: {{ template "nhsapp.name" . }}-{{ $.Values.messages.role }}-{{ .Chart.AppVersion | replace "." "-" }}
   minReplicas: {{ $.Values.messages.minReplicas }}
   maxReplicas: {{ $.Values.messages.maxReplicas }}
+  behavior: 
+    {{ $.Values.scaling.dotnet | toYaml | indent 4 | trim }}
   metrics:
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ $.Values.messages.targetCPUUtilizationPercentage }}
+        target:
+          type: Utilization
+          averageUtilization: {{ $.Values.messages.targetCPUUtilizationPercentage }}
 {{- end }}

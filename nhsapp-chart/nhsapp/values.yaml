@@ -283,14 +283,14 @@ web:
   image: nhsonline-web
   image_tag: latest
   imagePullPolicy: Always
-  minAvailable: 0
-  minReplicas: 1
-  maxReplicas: 1
-  memoryRequest: "20Mi"
-  memoryLimit: "40Mi"
-  cpuRequest: "100m"
-  cpuLimit: "200m"
-  targetCPUUtilizationPercentage: 60
+  minAvailable: 4
+  minReplicas: 4
+  maxReplicas: 100
+  memoryRequest: "36Mi"
+  memoryLimit: "36Mi"
+  cpuRequest: "150m"
+  cpuLimit: "150m"
+  targetCPUUtilizationPercentage: 45
   analyticsEnvironment: "development"
   analyticsURL: "//assets.adobedtm.com/launch-EN2bcb86c8edd64d5aa2abd8aabdcfb129-development.min.js"
   hotjarSiteId: "859152"
@@ -307,14 +307,14 @@ api:
   image: nhsonline-backendpfsapi
   image_tag: latest
   imagePullPolicy: Always
-  minAvailable: 0
-  minReplicas: 1
-  maxReplicas: 1
-  memoryRequest: "256Mi"
-  memoryLimit: "512Mi"
-  cpuRequest: "100m"
-  cpuLimit: "250m"
-  targetCPUUtilizationPercentage: 60
+  minAvailable: 4
+  minReplicas: 4
+  maxReplicas: 300
+  memoryRequest: "896Mi"
+  memoryLimit: "896Mi"
+  cpuRequest: "1400m"
+  cpuLimit: "1400m"
+  targetCPUUtilizationPercentage: 40
   emisExtendedTimeout: 10
   mongoDatabaseAuditCollection: audit_info
   environmentVariables:
@@ -337,14 +337,14 @@ cid:
   image: nhsonline-backendcidapi
   image_tag: latest
   imagePullPolicy: Always
-  minAvailable: 0
-  minReplicas: 1
-  maxReplicas: 1
-  memoryRequest: "256Mi"
-  memoryLimit: "400Mi"
-  cpuRequest: "100m"
-  cpuLimit: "200m"
-  targetCPUUtilizationPercentage: 60
+  minAvailable: 4
+  minReplicas: 4
+  maxReplicas: 100
+  memoryRequest: "896Mi"
+  memoryLimit: "896Mi"
+  cpuRequest: "1400m"
+  cpuLimit: "1400m"
+  targetCPUUtilizationPercentage: 35
   mongoDatabaseAuditCollection: audit
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
@@ -361,14 +361,14 @@ logger:
   image: nhsonline-clientloggerapi
   image_tag: latest
   imagePullPolicy: Always
-  minAvailable: 0
-  minReplicas: 1
-  maxReplicas: 1
-  memoryRequest: "64Mi"
-  memoryLimit: "128Mi"
+  minAvailable: 2
+  minReplicas: 2
+  maxReplicas: 100
+  memoryRequest: "80Mi"
+  memoryLimit: "80Mi"
   cpuRequest: "100m"
-  cpuLimit: "200m"
-  targetCPUUtilizationPercentage: 60
+  cpuLimit: "100m"
+  targetCPUUtilizationPercentage: 45
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
       value: "Production"
@@ -387,7 +387,7 @@ cdsswiremock:
   memoryLimit: "512Mi"
   cpuRequest: "125m"
   cpuLimit: "250m"
-  targetCPUUtilizationPercentage: 60
+  targetCPUUtilizationPercentage: 45
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
       value: "Production"
@@ -398,14 +398,14 @@ iproxy:
   image: nhsonline-nginx
   image_tag: "v1.16.1"
   imagePullPolicy: IfNotPresent
-  minAvailable: 0
-  minReplicas: 1
-  maxReplicas: 1
-  memoryRequest: "20Mi"
-  memoryLimit: "40Mi"
-  cpuRequest: "100m"
-  cpuLimit: "250m"
-  targetCPUUtilizationPercentage: 60
+  minAvailable: 2
+  minReplicas: 2
+  maxReplicas: 100
+  memoryRequest: "36Mi"
+  memoryLimit: "36Mi"
+  cpuRequest: "150m"
+  cpuLimit: "150m"
+  targetCPUUtilizationPercentage: 45
   environmentVariables:
   n3enabled: false
 
@@ -423,23 +423,23 @@ iproxy_microtest:
   memoryLimit: "250Mi"
   cpuRequest: "125m"
   cpuLimit: "250m"
-  targetCPUUtilizationPercentage: 60
+  targetCPUUtilizationPercentage: 45
   environmentVariables:
 
 wiremock:
   containerPort: 8080
   role: wiremock
-  image: wiremock
-  image_tag: 2.22.0-alpine
-  imagePullPolicy: IfNotPresent
-  minAvailable: 0
-  minReplicas: 1
-  maxReplicas: 4
-  memoryRequest: "1024Mi"
-  memoryLimit: "4096Mi"
-  cpuRequest: "500m"
-  cpuLimit: "2"
-  targetCPUUtilizationPercentage: 60
+  image: nhsonline-minimock
+  image_tag: latest
+  imagePullPolicy: Always
+  minAvailable: 8
+  minReplicas: 8
+  maxReplicas: 300
+  memoryRequest: "768Mi"
+  memoryLimit: "768Mi"
+  cpuRequest: "940m"
+  cpuLimit: "940m"
+  targetCPUUtilizationPercentage: 35
   environmentVariables:
     - name: WAIT_FOR_TIMEOUT
       value: "60"
@@ -451,14 +451,14 @@ users:
   image: nhsonline-backendusersapi
   image_tag: latest
   imagePullPolicy: Always
-  minAvailable: 0
-  minReplicas: 1
-  maxReplicas: 1
-  memoryRequest: "64Mi"
-  memoryLimit: "128Mi"
-  cpuRequest: "100m"
-  cpuLimit: "200m"
-  targetCPUUtilizationPercentage: 60
+  minAvailable: 2
+  minReplicas: 2
+  maxReplicas: 100
+  memoryRequest: "416Mi"
+  memoryLimit: "416Mi"
+  cpuRequest: "350m"
+  cpuLimit: "350m"
+  targetCPUUtilizationPercentage: 45
   mongoDatabaseUserDeviceCollection: devices
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
@@ -471,14 +471,14 @@ messages:
   image: nhsonline-backendmessagesapi
   image_tag: develop
   imagePullPolicy: Always
-  minAvailable: 0
-  minReplicas: 1
-  maxReplicas: 1
-  memoryRequest: "64Mi"
-  memoryLimit: "128Mi"
-  cpuRequest: "100m"
-  cpuLimit: "200m"
-  targetCPUUtilizationPercentage: 60
+  minAvailable: 2
+  minReplicas: 2
+  maxReplicas: 100
+  memoryRequest: "256Mi"
+  memoryLimit: "256Mi"
+  cpuRequest: "300m"
+  cpuLimit: "300m"
+  targetCPUUtilizationPercentage: 45
   mongoDatabaseMessagesCollection: messages
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
@@ -491,14 +491,14 @@ info:
   image: nhsonline-backenduserinfoapi
   image_tag: 3229
   imagePullPolicy: Always
-  minAvailable: 0
-  minReplicas: 1
-  maxReplicas: 1
-  memoryRequest: "64Mi"
-  memoryLimit: "128Mi"
-  cpuRequest: "100m"
-  cpuLimit: "200m"
-  targetCPUUtilizationPercentage: 60
+  minAvailable: 2
+  minReplicas: 2
+  maxReplicas: 100
+  memoryRequest: "512Mi"
+  memoryLimit: "521Mi"
+  cpuRequest: "600m"
+  cpuLimit: "600m"
+  targetCPUUtilizationPercentage: 45
   mongoDatabaseInfoCollection: info
   mongoDatabaseInfoAuditCollection: audit_info
   environmentVariables:
@@ -513,14 +513,15 @@ sjr:
   image: nhsonline-backendservicejourneyrulesapi
   image_tag: latest
   imagePullPolicy: Always
-  minAvailable: 0
-  minReplicas: 1
-  maxReplicas: 1
-  memoryRequest: "150Mi"
+  minAvailable: 2
+  minReplicas: 2
+  maxReplicas: 100
+  # production SJR config is quite large, don't reduce if staging shows low memory usage
+  memoryRequest: "256Mi"
   memoryLimit: "256Mi"
-  cpuRequest: "100m"
-  cpuLimit: "200m"
-  targetCPUUtilizationPercentage: 60
+  cpuRequest: "500m"
+  cpuLimit: "500m"
+  targetCPUUtilizationPercentage: 45
   targetMemoryUtilizationPercentage: 80
   inputPath: /configurations  # From mounted image
   environmentVariables:
@@ -540,8 +541,68 @@ sjrconfig:
   memoryLimit: "512Mi"
   cpuRequest: "125m"
   cpuLimit: "250m"
-  targetCPUUtilizationPercentage: 60
+  targetCPUUtilizationPercentage: 45
   targetMemoryUtilizationPercentage: 80
 
 global:
   environment: default
+
+probes:
+  dotnet:
+    livenessProbe:
+      httpGet:
+        port: 8080
+        path: /health/live
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      timeoutSeconds: 5
+
+    readinessProbe:
+      httpGet:
+        port: 8080
+        path: /health/ready
+      initialDelaySeconds: 7
+      periodSeconds: 30
+      timeoutSeconds: 5
+
+  proxy:
+    livenessProbe:
+      httpGet:
+        scheme: HTTPS
+        port: 8443
+        path: /healthz
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      timeoutSeconds: 5
+
+    readinessProbe:
+      httpGet:
+        scheme: HTTPS
+        port: 8443
+        path: /health/ready
+      initialDelaySeconds: 7
+      periodSeconds: 10
+      timeoutSeconds: 5
+
+scaling:
+  dotnet:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Pods
+          value: 4
+          periodSeconds: 60
+        - type: Percent
+          value: 10
+          periodSeconds: 60
+      selectPolicy: Max
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+        - type: Percent
+          value: 100
+          periodSeconds: 7
+        - type: Pods
+          value: 8
+          periodSeconds: 7
+      selectPolicy: Max

@@ -78,6 +78,11 @@ data:
                 proxy_set_header X-Forwarded-Proto $scheme;
                 proxy_set_header Connection "";
             }
+
+            location /healthz {
+                return 204;
+            }
+
             location / {
                 return 404;
             }
