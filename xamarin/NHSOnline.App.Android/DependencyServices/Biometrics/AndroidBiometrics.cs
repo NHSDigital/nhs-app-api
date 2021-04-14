@@ -32,7 +32,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
                 BiometricManager.BiometricErrorNoHardware => HardwareNotPresent(),
                 BiometricManager.BiometricErrorSecurityUpdateRequired => Unusable(),
                 BiometricManager.BiometricErrorUnsupported => HardwareNotPresent(),
-                BiometricManager.BiometricStatusUnknown => HardwareNotPresent(),
+                BiometricManager.BiometricStatusUnknown => Unusable(),
                 BiometricManager.BiometricSuccess => Usable(),
                 _ => HardwareNotPresent()
             };
