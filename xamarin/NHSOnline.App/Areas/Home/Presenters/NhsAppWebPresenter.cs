@@ -201,7 +201,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                     case BiometricStatusResult.HardwarePresent { Registered: false, Usable: false }:
                         completion.Action = "Register";
                         completion.Outcome = BiometricOutcome.Failed.ToString();
-                        completion.ErrorCode = BiometricErrorCode.CannotChangeBiometrics.ToString();
+                        completion.ErrorCode = BiometricErrorCode.CannotFindBiometrics.ToString();
                         break;
 
                     case BiometricStatusResult.HardwarePresent { Registered: true }:
