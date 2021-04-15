@@ -38,7 +38,8 @@ class Im1ConnectionV2FactoryTpp:  Im1ConnectionV2Factory(Supplier.TPP) {
             dateOfBirth = linkageFacade.dateOfBirth,
             organisationCode = linkageFacade.odsCode,
             emailAddress = linkageFacade.emailAddress,
-            nhsNumber = linkageFacade.nhsNumber
+            nhsNumber = linkageFacade.nhsNumber,
+            mobileNo = linkageFacade.mobileNumber
         )
     }
 

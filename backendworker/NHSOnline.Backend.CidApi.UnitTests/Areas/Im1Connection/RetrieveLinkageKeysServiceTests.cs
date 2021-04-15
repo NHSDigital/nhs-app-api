@@ -26,6 +26,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         private const string DefaultSurname = "Surname";
         private static readonly DateTime DefaultDateOfBirth = new DateTime(1980, 1, 1);
         private const string DefaultIdentityToken = "IDTOKEN";
+        private const string DefaultPhoneNumber = "+447123456789";
 
         private IFixture _fixture;
         private Mock<IOdsCodeMassager> _odsCodeMassager;
@@ -96,7 +97,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 "Retrieve LinkageKey for NhsNumber=None",
                 Times.Once());
         }
-        
+
         [TestMethod]
         public async Task GetLinkageKey_Microtest_LinkageNotSupported()
         {
@@ -139,7 +140,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                         req.Surname.Equals(DefaultSurname, StringComparison.Ordinal) &&
                         req.DateOfBirth.Equals(DefaultDateOfBirth) &&
                         req.OdsCode.Equals(DefaultOdsCode, StringComparison.Ordinal) &&
-                        req.IdentityToken.Equals(DefaultIdentityToken, StringComparison.Ordinal)
+                        req.IdentityToken.Equals(DefaultIdentityToken, StringComparison.Ordinal) &&
+                        req.PhoneNumber.Equals(DefaultPhoneNumber, StringComparison.Ordinal)
                     ), gpSystemMock.Object))
                 .ReturnsAsync(mockResult);
 
@@ -162,12 +164,13 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                     req.Surname.Equals(createIm1ConnectionRequest.Surname, StringComparison.Ordinal) &&
                     req.DateOfBirth.Equals(createIm1ConnectionRequest.DateOfBirth) &&
                     req.OdsCode.Equals(createIm1ConnectionRequest.OdsCode, StringComparison.Ordinal) &&
-                    req.IdentityToken.Equals(createIm1ConnectionRequest.IdentityToken, StringComparison.Ordinal))
+                    req.IdentityToken.Equals(createIm1ConnectionRequest.IdentityToken, StringComparison.Ordinal) &&
+                    req.PhoneNumber.Equals(DefaultPhoneNumber, StringComparison.Ordinal))
                 , gpSystemMock.Object), Times.Once);
 
             _logger.VerifyLogger(LogLevel.Information,
                 $"Create LinkageKey for NhsNumber={DefaultNhsNumberWithoutWhitespace}",
-                Times.Once()); 
+                Times.Once());
             result.Should().BeAssignableTo<LinkageResult.SuccessfullyCreated>();
         }
 
@@ -180,7 +183,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 Surname = DefaultSurname,
                 DateOfBirth = DefaultDateOfBirth,
                 OdsCode = DefaultOdsCode,
-                IdentityToken = DefaultIdentityToken
+                IdentityToken = DefaultIdentityToken,
+                PhoneNumber = DefaultPhoneNumber,
             };
             return createIm1ConnectionRequest;
         }

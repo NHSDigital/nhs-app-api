@@ -151,7 +151,7 @@ paths:
         "504":
           description: Timeout when calling upstream system.
         "550":
-          description: NHS Number not found, the patient has changed surgery or the surgery has changed supplier, 
+          description: NHS Number not found, the patient has changed surgery or the surgery has changed supplier,
           but the GP system does not support POL registration.
     post:
       summary: For a given patient's NHS Number and practice's ODS Code, will find a
@@ -266,5 +266,9 @@ components:
             within the Citizen ID platform.
         EmailAddress:
           type: string
-          description: Patient's email address, this will be used if a new online user is
+          description: Patient's email address. This will be used if a new online user is
+            to be created in the GP System.
+        phoneNumber:
+          type: string
+          description: Patient's phone number. This will be used if a new online user is
             to be created in the GP System.

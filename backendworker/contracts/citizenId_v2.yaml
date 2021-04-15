@@ -102,7 +102,7 @@ paths:
                 $ref: '#/components/schemas/apiErrorResponse'
           description: |
             Bad Request - Possible errorCodes and errorMessages:
-            * 100 - Unknown Error 
+            * 100 - Unknown Error
             * 106 - Invalid details
             * 108 - Invalid Nhs Number
             * 109 - Invalid Provider Id
@@ -119,7 +119,7 @@ paths:
                 $ref: '#/components/schemas/apiErrorResponse'
           description: |
             Forbidden - Possible errorCodes and errorMessages:
-            * 100 - Unknown Error 
+            * 100 - Unknown Error
             * 101 - Practice not enabled
             * 102 - Patient Archived or Disabled
             * 104 - Patient under minimum age or non competent
@@ -130,7 +130,7 @@ paths:
                 $ref: '#/components/schemas/apiErrorResponse'
           description: |
             Not Found - Possible errorCodes and errorMessages:
-            * 100 - Unknown Error 
+            * 100 - Unknown Error
             * 103 - Patient not found
         "409":
           content:
@@ -139,7 +139,7 @@ paths:
                 $ref: '#/components/schemas/apiErrorResponse'
           description: |
             Conflict - Possible errorCodes and errorMessages:
-            * 100 - Unknown Error 
+            * 100 - Unknown Error
             * 105 - User account conflict
         "500":
           content:
@@ -217,9 +217,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/apiErrorResponse'
-          description: |            
+          description: |
             Bad Request - Possible errorCodes and errorMessages:
-            * 100 - Unknown Error 
+            * 100 - Unknown Error
             * 106 - Invalid details
             * 108 - Invalid Nhs Number
             * 109 - Invalid Provider Id
@@ -237,7 +237,7 @@ paths:
                 $ref: '#/components/schemas/apiErrorResponse'
           description: |
             Forbidden - Possible errorCodes and errorMessages:
-            * 100 - Unknown Error 
+            * 100 - Unknown Error
             * 101 - Practice not enabled
             * 102 - Patient Archived or Disabled
             * 104 - Patient under minimum age or non competent
@@ -249,7 +249,7 @@ paths:
                 $ref: '#/components/schemas/apiErrorResponse'
           description: |
             Not Found - Possible errorCodes and errorMessages:
-            * 100 - Unknown Error 
+            * 100 - Unknown Error
             * 103 - Patient not found
         "409":
           content:
@@ -258,7 +258,7 @@ paths:
                 $ref: '#/components/schemas/apiErrorResponse'
           description: |
             Conflict - Possible errorCodes and errorMessages:
-            * 100 - Unknown Error 
+            * 100 - Unknown Error
             * 105 - User account conflict
         "500":
           content:
@@ -328,6 +328,10 @@ components:
             linkageKey:
               type: string
               description: Patient's GP IM1 Linkage Key.
+            phoneNumber:
+              type: string
+              description: Patient's phone number. This will be used if a new online user is
+                to be created in the GP System.
 
     CreateIm1ConnectionWithNhsNumberRequest:
       allOf:

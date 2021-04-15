@@ -367,7 +367,8 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                 DateOfBirth = im1RegistrationRequest.DateOfBirth.Value,
                 OdsCode = im1RegistrationRequest.OdsCode,
                 IdentityToken = im1RegistrationRequest.IdentityToken,
-                EmailAddress = im1RegistrationRequest.EmailAddress
+                EmailAddress = im1RegistrationRequest.EmailAddress,
+                PhoneNumber = im1RegistrationRequest.PhoneNumber,
             };
         }
     }

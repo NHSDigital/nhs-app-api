@@ -164,6 +164,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
                 LastName = createLinkageRequest.Surname,
                 OrganisationCode = createLinkageRequest.OdsCode,
                 EmailAddress = createLinkageRequest.EmailAddress,
+                MobileNumber = createLinkageRequest.PhoneNumber,
             };
             return request;
         }

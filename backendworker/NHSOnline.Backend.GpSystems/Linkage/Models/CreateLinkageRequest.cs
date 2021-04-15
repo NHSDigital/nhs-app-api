@@ -11,9 +11,11 @@ namespace NHSOnline.Backend.GpSystems.Linkage.Models
         public string IdentityToken { get; set; }
 
         public string EmailAddress { get; set; }
-        
+
         public DateTime? DateOfBirth { get; set; }
-        
+
         public string Surname { get; set; }
+
+        public string PhoneNumber { get; set; }
     }
 }

@@ -20,6 +20,7 @@ data class LinkAccount(
         @XmlAttribute var retrieveOnly: String = "n",
         @XmlAttribute var nhsNumber: String = "default nhsNumber",
         @XmlAttribute var emailAddress: String = "default email",
+        @XmlAttribute var mobileNo: String = "default mobileNo",
         @XmlAttribute var uuid: String = TppMockDefaults.DEFAULT_TPP_UUID,
         @field:XmlElement(name = "Application") var application: Application = TppMockDefaults.DEFAULT_TPP_APPLICATION
 ) {
@@ -32,7 +33,8 @@ data class LinkAccount(
                             dateOfBirth = patient.age.dateOfBirth,
                             organisationCode = patient.odsCode,
                             nhsNumber = patient.nhsNumbers.first().filter { !it.isWhitespace() },
-                            emailAddress = patient.contactDetails.emailAddress
+                            emailAddress = patient.contactDetails.emailAddress,
+                            mobileNo = patient.contactDetails.telephoneFirst
                     )
             }
         }

@@ -37,31 +37,34 @@ abstract class Im1ConnectionV2Factory(protected val gpSystem: Supplier) {
                                   message: String? = null )
 
     val validLinkageDetails = LinkageInformationFacade(
-            odsCode = patient.odsCode,
-            linkageKey = patient.linkageKey,
-            accountId = patient.accountId,
-            nhsNumber = patient.nhsNumbers.first(),
-            identityToken = identityToken,
-            emailAddress = patient.contactDetails.emailAddress,
-            surname = patient.name.surname,
-            dateOfBirth = patient.age.dateOfBirth)
+        odsCode = patient.odsCode,
+        linkageKey = patient.linkageKey,
+        accountId = patient.accountId,
+        nhsNumber = patient.nhsNumbers.first(),
+        identityToken = identityToken,
+        emailAddress = patient.contactDetails.emailAddress,
+        surname = patient.name.surname,
+        dateOfBirth = patient.age.dateOfBirth,
+        mobileNumber = patient.contactDetails.telephoneFirst
+    )
 
-    val validIm1Request: Im1ConnectionRequest
-            = Im1ConnectionRequest(
-            AccountId = patient.accountId,
-            LinkageKey = patient.linkageKey,
-            OdsCode = patient.odsCode,
-            Surname = patient.name.surname,
-            DateOfBirth = patient.age.dateOfBirth)
+    val validIm1Request: Im1ConnectionRequest = Im1ConnectionRequest(
+        AccountId = patient.accountId,
+        LinkageKey = patient.linkageKey,
+        OdsCode = patient.odsCode,
+        Surname = patient.name.surname,
+        DateOfBirth = patient.age.dateOfBirth
+    )
 
-    val validCreateLinkageRequest: Im1ConnectionRequest
-            = Im1ConnectionRequest(
-            OdsCode = patient.odsCode,
-            Surname = patient.name.surname,
-            DateOfBirth = patient.age.dateOfBirth,
-            NhsNumber = patient.nhsNumbers.first(),
-            IdentityToken = identityToken,
-            EmailAddress = patient.contactDetails.emailAddress)
+    val validCreateLinkageRequest: Im1ConnectionRequest = Im1ConnectionRequest(
+        OdsCode = patient.odsCode,
+        Surname = patient.name.surname,
+        DateOfBirth = patient.age.dateOfBirth,
+        NhsNumber = patient.nhsNumbers.first(),
+        IdentityToken = identityToken,
+        EmailAddress = patient.contactDetails.emailAddress,
+        PhoneNumber = patient.contactDetails.telephoneFirst
+    )
 
     companion object : SupplierSpecificFactory<Im1ConnectionV2Factory>() {
 

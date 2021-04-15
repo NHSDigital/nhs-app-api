@@ -14,6 +14,8 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection.Models
 
         public string EmailAddress { get; set; }
 
+        public string PhoneNumber { get; set; }
+
         public string IdentityToken { get; set; }
     }
 }

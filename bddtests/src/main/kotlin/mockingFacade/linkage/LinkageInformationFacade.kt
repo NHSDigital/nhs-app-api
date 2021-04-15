@@ -7,6 +7,7 @@ data class LinkageInformationFacade(
         var nhsNumber: String = "",
         var identityToken: String = "",
         var emailAddress: String = "",
+        var mobileNumber: String = "",
         var surname: String = "",
         var dateOfBirth: String = "",
         var apiKey: String = "",

@@ -300,7 +300,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
                         && x.LastName == request.Surname
                         && x.DateofBirth == request.DateOfBirth
                         && x.OrganisationCode == request.OdsCode
-                        && x.EmailAddress == request.EmailAddress)))
+                        && x.EmailAddress == request.EmailAddress
+                        && x.MobileNumber == request.PhoneNumber)))
                 .ReturnsAsync(userResponse);
         }
     }

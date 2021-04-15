@@ -8,5 +8,6 @@ data class Im1ConnectionRequest (
     var DateOfBirth: String? = null,
     var NhsNumber: String? = null,
     var EmailAddress: String? = null,
-    var IdentityToken: String? =null
+    var IdentityToken: String? = null,
+    var PhoneNumber: String? = null
 )

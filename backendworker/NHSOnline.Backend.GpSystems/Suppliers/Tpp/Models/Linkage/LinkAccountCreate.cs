@@ -10,5 +10,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Linkage
 
         [XmlAttribute("emailAddress")]
         public string EmailAddress { get; set; }
+
+        [XmlAttribute("mobileNo")]
+        public string MobileNumber { get; set; }
     }
 }

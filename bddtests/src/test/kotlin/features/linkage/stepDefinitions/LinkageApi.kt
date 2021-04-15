@@ -18,13 +18,14 @@ open class LinkageApi {
 
         fun post(linkage: LinkageInformationFacade, delay: Int? = null) {
             val linkageResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .authentication.postLinkageKey(CreateLinkageRequest(
-                            linkage.odsCode,
-                            linkage.nhsNumber,
-                            linkage.identityToken,
-                            linkage.emailAddress,
-                            linkage.dateOfBirth,
-                            linkage.surname), delay)
+                .authentication.postLinkageKey(CreateLinkageRequest(
+                    linkage.odsCode,
+                    linkage.nhsNumber,
+                    linkage.identityToken,
+                    linkage.emailAddress,
+                    linkage.dateOfBirth,
+                    linkage.surname,
+                    linkage.mobileNumber), delay)
 
             Serenity.setSessionVariable(LinkageResponse::class).to(linkageResponse)
         }

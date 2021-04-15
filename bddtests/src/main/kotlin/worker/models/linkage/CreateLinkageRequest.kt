@@ -6,5 +6,6 @@ data class CreateLinkageRequest (
         var identityToken: String,
         var emailAddress: String,
         var dateOfBirth: String,
-        var surname: String)
+        var surname: String,
+        var phoneNumber: String)
 

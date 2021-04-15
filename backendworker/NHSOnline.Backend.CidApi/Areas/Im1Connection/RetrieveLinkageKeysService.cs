@@ -16,7 +16,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
         private readonly IGetLinkageKeysService _getLinkageKeysService;
         private readonly ICreateLinkageKeysService _createLinkageKeysService;
         private readonly ILogger<RetrieveLinkageKeysService> _logger;
-        
+
         public RetrieveLinkageKeysService(
             ILogger<RetrieveLinkageKeysService> logger,
             IGetLinkageKeysService getLinkageKeysService,
@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             _getLinkageKeysService = getLinkageKeysService;
             _createLinkageKeysService = createLinkageKeysService;
         }
-        
+
         public async Task<LinkageResult> RetrieveLinkageKey(RetrieveLinkageKeysRequest model, IGpSystem gpSystem)
         {
             try
@@ -119,7 +119,8 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                 DateOfBirth = model.DateOfBirth,
                 OdsCode = model.OdsCode,
                 IdentityToken = model.IdentityToken,
-                EmailAddress = model.EmailAddress
+                EmailAddress = model.EmailAddress,
+                PhoneNumber = model.PhoneNumber,
             };
         }
 

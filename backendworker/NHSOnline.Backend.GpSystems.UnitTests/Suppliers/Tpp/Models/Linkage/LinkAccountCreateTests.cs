@@ -17,6 +17,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Models
         private readonly Guid _uuid = new Guid("9b45b59f-96a1-41b1-8c69-7664c9f998ea");
         private const string NhsNumber = "981123123";
         private const string EmailAddress = "a@b.com";
+        private const string MobileNumber = "07701234567";
 
         protected override LinkAccountCreate CreateModel() => new LinkAccountCreate
         {
@@ -28,6 +29,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Models
             Application = new Application(),
             NhsNumber = NhsNumber,
             EmailAddress = EmailAddress,
+            MobileNumber = MobileNumber,
         };
 
         [TestMethod]
@@ -71,6 +73,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Models
         public void Serialization_EmailAddress_SerializesAsAttribute()
         {
             Element.Attribute("emailAddress").Should().HaveValue(EmailAddress);
+        }
+
+        [TestMethod]
+        public void Serialization_MobileNumber_SerializesAsAttribute()
+        {
+            Element.Attribute("mobileNo").Should().HaveValue(MobileNumber);
         }
 
         [TestMethod]

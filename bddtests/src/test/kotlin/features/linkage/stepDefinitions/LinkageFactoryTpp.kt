@@ -48,11 +48,12 @@ class LinkageFactoryTpp:  LinkageFactory(Supplier.TPP) {
         val response = responseFromMap(linkageToPostRequestResponse, linkageResult)
 
         val linkAccount = LinkAccount(
-                lastName = linkageInformationFacade.surname,
-                dateOfBirth = linkageInformationFacade.dateOfBirth,
-                organisationCode = linkageInformationFacade.odsCode,
-                nhsNumber = linkageInformationFacade.nhsNumber,
-                emailAddress = linkageInformationFacade.emailAddress
+            lastName = linkageInformationFacade.surname,
+            dateOfBirth = linkageInformationFacade.dateOfBirth,
+            organisationCode = linkageInformationFacade.odsCode,
+            nhsNumber = linkageInformationFacade.nhsNumber,
+            emailAddress = linkageInformationFacade.emailAddress,
+            mobileNo = linkageInformationFacade.mobileNumber
         )
 
         if (response != null) {

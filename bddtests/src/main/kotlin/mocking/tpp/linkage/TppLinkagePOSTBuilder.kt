@@ -30,6 +30,7 @@ class TppLinkagePOSTBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST"
                         "@dateOfBirth='${dateOfBirthInCorrectFormat}' and " +
                         "@nhsNumber='${linkAccount.nhsNumber}' and " +
                         "@emailAddress='${linkAccount.emailAddress}' and " +
+                        "@mobileNo='${linkAccount.mobileNo}' and " +
                         "@organisationCode='${linkAccount.organisationCode}']")
     }
 
