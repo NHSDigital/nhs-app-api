@@ -1,15 +1,17 @@
 ---
 users:
-    notificationHubPath: nhsapp-nonlive-scratch19
+  notificationHubs:
+    - notificationHubPath: nhsapp-nonlive-scratch19
+      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
 
 # well known
 wellKnownAndroidPackageName: com.nhs.online.nhsonline.scratch19
 wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.scratch19
 
 secrets:
-    notificationHub:
-        notificationHubSecretName: "notificationHubSharedAccessKeyScratch19"
-        notificationHubSecretVersion: "7eccdf7f4b1d4c13ab1df81c41062938"
+  notificationHubs:
+    - notificationHubSecretName: "notificationHubSharedAccessKeyScratch19"
+      notificationHubSecretVersion: "7eccdf7f4b1d4c13ab1df81c41062938"
 
 web:
-    thirdPartyJumpOffLoggingEnabled: true
+  thirdPartyJumpOffLoggingEnabled: true

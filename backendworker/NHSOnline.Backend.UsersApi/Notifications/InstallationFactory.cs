@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Azure.NotificationHubs;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
+using NHSOnline.Backend.UsersApi.Notifications.Models;
 
 namespace NHSOnline.Backend.UsersApi.Notifications
 {
@@ -15,15 +16,15 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             _installationTemplateFactory = installationTemplateFactory;
         }
 
-        public Installation Create(string devicePns, DeviceType deviceType, string nhsLoginId)
+        public Installation Create(InstallationRequest request)
         {
             return new Installation
             {
                 InstallationId = Guid.NewGuid().ToString(),
-                PushChannel = devicePns,
-                Tags = new List<string> { NhsLoginTagGenerator.Generate(nhsLoginId) },
-                Platform = GetNotificationPlatform(deviceType),
-                Templates = GetNotificationTemplates(deviceType, nhsLoginId)
+                PushChannel = request.DevicePns,
+                Tags = new List<string> { NhsLoginTagGenerator.Generate(request.NhsLoginId) },
+                Platform = GetNotificationPlatform(request.DeviceType),
+                Templates = GetNotificationTemplates(request.DeviceType, request.NhsLoginId)
             };
         }
 

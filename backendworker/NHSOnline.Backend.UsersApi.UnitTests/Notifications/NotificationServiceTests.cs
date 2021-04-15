@@ -7,25 +7,25 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 using NHSOnline.Backend.UsersApi.Notifications;
-using Notification = NHSOnline.Backend.UsersApi.Notifications.Models.Notification;
+using NotificationRequest = NHSOnline.Backend.UsersApi.Notifications.Models.NotificationRequest;
 
 namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 {
     [TestClass]
     public class NotificationServiceTests
     {
-        private NotificationService _systemUnderTest;
-        private Mock<IAzureNotificationHubClient> _mockAzureHubClient;
+        private INotificationService _systemUnderTest;
+        private Mock<INotificationClient> _mockNotificationClient;
         private const string NhsLoginId = "NhsLoginId";
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _mockAzureHubClient = new Mock<IAzureNotificationHubClient>(MockBehavior.Strict);
+            _mockNotificationClient = new Mock<INotificationClient>(MockBehavior.Strict);
 
             _systemUnderTest = new NotificationService(
                 new Mock<ILogger<NotificationService>>().Object,
-                _mockAzureHubClient.Object);
+                _mockNotificationClient.Object);
         }
 
         [TestMethod]
@@ -42,23 +42,24 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 Title = title,
                 Subtitle = subtitle,
                 Body = body,
-                Url = url
+                Url = url,
             };
 
-            _mockAzureHubClient
-                .Setup(x => x.SendNotification(NhsLoginId,
-                    It.Is<Notification>(y =>
+            _mockNotificationClient
+                .Setup(x => x.SendNotification(
+                    It.Is<NotificationRequest>(y =>
                         y.Title == title &&
                         y.Subtitle == subtitle &&
                         y.Body == body &&
-                        y.Url == new Uri(url))))
+                        y.Url == new Uri(url) &&
+                        y.NhsLoginId == NhsLoginId)))
                 .Returns(Task.CompletedTask);
 
             // Act
             var result = await _systemUnderTest.Send(NhsLoginId, request);
 
             // Assert
-            _mockAzureHubClient.VerifyAll();
+            _mockNotificationClient.VerifyAll();
 
             result.Should().BeOfType<NotificationSendResult.Success>();
         }
@@ -79,20 +80,21 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 Url = url
             };
 
-            _mockAzureHubClient
-                .Setup(x => x.SendNotification(NhsLoginId,
-                    It.Is<Notification>(y =>
+            _mockNotificationClient
+                .Setup(x => x.SendNotification(
+                    It.Is<NotificationRequest>(y =>
                         y.Title == null &&
                         y.Subtitle == subtitle &&
                         y.Body == body &&
-                        y.Url == new Uri(url))))
+                        y.Url == new Uri(url) &&
+                        y.NhsLoginId == NhsLoginId)))
                 .Returns(Task.CompletedTask);
 
             // Act
             var result = await _systemUnderTest.Send(NhsLoginId, request);
 
             // Assert
-            _mockAzureHubClient.VerifyAll();
+            _mockNotificationClient.VerifyAll();
 
             result.Should().BeOfType<NotificationSendResult.Success>();
         }
@@ -113,20 +115,21 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 Url = url
             };
 
-            _mockAzureHubClient
-                .Setup(x => x.SendNotification(NhsLoginId,
-                    It.Is<Notification>(y =>
+            _mockNotificationClient
+                .Setup(x => x.SendNotification(
+                    It.Is<NotificationRequest>(y =>
                         y.Title == title &&
                         y.Subtitle == null &&
                         y.Body == body &&
-                        y.Url == new Uri(url))))
+                        y.Url == new Uri(url) &&
+                        y.NhsLoginId == NhsLoginId)))
                 .Returns(Task.CompletedTask);
 
             // Act
             var result = await _systemUnderTest.Send(NhsLoginId, request);
 
             // Assert
-            _mockAzureHubClient.VerifyAll();
+            _mockNotificationClient.VerifyAll();
 
             result.Should().BeOfType<NotificationSendResult.Success>();
         }
@@ -150,20 +153,21 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 Url = url
             };
 
-            _mockAzureHubClient
-                .Setup(x => x.SendNotification(NhsLoginId,
-                    It.Is<Notification>(y =>
+            _mockNotificationClient
+                .Setup(x => x.SendNotification(
+                    It.Is<NotificationRequest>(y =>
                         y.Title == title &&
                         y.Subtitle == subtitle &&
                         y.Body == body &&
-                        y.Url == null)))
+                        y.Url == null &&
+                        y.NhsLoginId == NhsLoginId)))
                 .Returns(Task.CompletedTask);
 
             // Act
             await _systemUnderTest.Send(NhsLoginId, request);
 
             // Assert
-            _mockAzureHubClient.VerifyAll();
+            _mockNotificationClient.VerifyAll();
         }
 
         [TestMethod]
@@ -178,20 +182,21 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 Url = "   http://www.example.com  "
             };
 
-            _mockAzureHubClient
-                .Setup(x => x.SendNotification(NhsLoginId,
-                    It.Is<Notification>(y =>
+            _mockNotificationClient
+                .Setup(x => x.SendNotification(
+                    It.Is<NotificationRequest>(y =>
                         y.Title == "title" &&
                         y.Subtitle == "subtitle" &&
                         y.Body == "body" &&
-                        y.Url == new Uri("http://www.example.com"))))
+                        y.Url == new Uri("http://www.example.com") &&
+                        y.NhsLoginId == NhsLoginId)))
                 .Returns(Task.CompletedTask);
 
             // Act
             await _systemUnderTest.Send(NhsLoginId, request);
 
             // Assert
-            _mockAzureHubClient.VerifyAll();
+            _mockNotificationClient.VerifyAll();
         }
 
         [TestMethod]
@@ -211,20 +216,21 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 Url = url
             };
 
-            _mockAzureHubClient
-                .Setup(x => x.SendNotification(NhsLoginId,
-                    It.Is<Notification>(y =>
+            _mockNotificationClient
+                .Setup(x => x.SendNotification(
+                    It.Is<NotificationRequest>(y =>
                         y.Title == title &&
                         y.Subtitle == subtitle &&
                         y.Body == body &&
-                        y.Url == new Uri(url))))
+                        y.Url == new Uri(url) &&
+                        y.NhsLoginId == NhsLoginId)))
                 .ThrowsAsync(MessagingExceptionFactory.Create());
 
             // Act
             var result = await _systemUnderTest.Send(NhsLoginId, request);
 
             // Assert
-            _mockAzureHubClient.VerifyAll();
+            _mockNotificationClient.VerifyAll();
 
             result.Should().BeOfType<NotificationSendResult.BadGateway>();
         }
@@ -246,20 +252,21 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 Url = url
             };
 
-            _mockAzureHubClient
-                .Setup(x => x.SendNotification(NhsLoginId,
-                    It.Is<Notification>(y =>
+            _mockNotificationClient
+                .Setup(x => x.SendNotification(
+                    It.Is<NotificationRequest>(y =>
                         y.Title == title &&
                         y.Subtitle == subtitle &&
                         y.Body == body &&
-                        y.Url == new Uri(url))))
+                        y.Url == new Uri(url) &&
+                        y.NhsLoginId == NhsLoginId)))
                 .ThrowsAsync(new HttpRequestException("This is an exception"));
 
             // Act
             var result = await _systemUnderTest.Send(NhsLoginId, request);
 
             // Assert
-            _mockAzureHubClient.VerifyAll();
+            _mockNotificationClient.VerifyAll();
 
             result.Should().BeOfType<NotificationSendResult.BadGateway>();
         }
@@ -281,20 +288,21 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 Url = url
             };
 
-            _mockAzureHubClient
-                .Setup(x => x.SendNotification(NhsLoginId,
-                    It.Is<Notification>(y =>
+            _mockNotificationClient
+                .Setup(x => x.SendNotification(
+                    It.Is<NotificationRequest>(y =>
                         y.Title == title &&
                         y.Subtitle == subtitle &&
                         y.Body == body &&
-                        y.Url == new Uri(url))))
+                        y.Url == new Uri(url) &&
+                        y.NhsLoginId == NhsLoginId)))
                 .ThrowsAsync(new AggregateException("This is an exception"));
 
             // Act
             var result = await _systemUnderTest.Send(NhsLoginId, request);
 
             // Assert
-            _mockAzureHubClient.VerifyAll();
+            _mockNotificationClient.VerifyAll();
 
             result.Should().BeOfType<NotificationSendResult.InternalServerError>();
         }

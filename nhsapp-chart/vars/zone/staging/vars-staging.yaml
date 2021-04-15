@@ -10,9 +10,9 @@ keyvaultSubscriptionID: 47e498b8-ad52-4421-b6d0-d7f9988429df
 keyvaultTenantID: 50f6071f-bbfe-401a-8803-673748e629e2
 
 secrets:
-  notificationHub:
-    notificationHubSecretName: "notificationHubSharedAccessKey"
-    notificationHubSecretVersion: "ed60d1ae92f44e228e62bec53197d67e"
+  notificationHubs:
+    - notificationHubSecretName: "notificationHubSharedAccessKey"
+      notificationHubSecretVersion: "ed60d1ae92f44e228e62bec53197d67e"
 
 wildcardEnv: true
 
@@ -98,8 +98,9 @@ api:
 messagesEnabled: true
 
 users:
-  notificationHubPath: nhsapp-staging
-  notificationHubConnectionString: Endpoint=sb://nhsapp-staging.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+  notificationHubs:
+    - notificationHubPath: nhsapp-staging
+      notificationHubConnectionString: Endpoint=sb://nhsapp-staging.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
 
 metrics:
   memoryRequest: "120Mi"

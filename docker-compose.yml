@@ -206,8 +206,8 @@ services:
           if [ -f "$$NHSAPP_API_KEY" ]; then
             export NHSAPP_API_KEY=$$(<$$NHSAPP_API_KEY)
           fi
-          if [ -f "$$AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY" ]; then
-            export AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=$$(<$$AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY)
+          if [ -f "$$AZURE_NOTIFICATION_HUBS__0__AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY" ]; then
+            export AZURE_NOTIFICATION_HUBS__0__AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=$$(<$$AZURE_NOTIFICATION_HUBS__0__AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY)
           fi
           exec $$*
       - "--"

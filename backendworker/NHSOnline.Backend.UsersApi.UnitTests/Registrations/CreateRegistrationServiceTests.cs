@@ -7,6 +7,7 @@ using Moq;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 using NHSOnline.Backend.UsersApi.Notifications;
+using NHSOnline.Backend.UsersApi.Notifications.Models;
 using NHSOnline.Backend.UsersApi.Registrations;
 using NHSOnline.Backend.UsersApi.Repository;
 using UnitTestHelper;
@@ -22,7 +23,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         private const string NhsNumber = "NhsNumber";
         private const string NhsLoginId = "NhsLoginId";
         private const string DevicePns = "PNS";
-        private readonly DeviceType _deviceType = DeviceType.Android;
+        private const DeviceType UserDeviceType = DeviceType.Android;
         private AccessToken _accessToken;
 
         [TestInitialize]
@@ -47,7 +48,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
             var userDevice = new UserDevice();
             var expectedResult = new RegisterDeviceResult.Created(userDevice);
 
-            _mockNotificationService.Setup(x => x.Register(DevicePns, _deviceType, NhsLoginId))
+            _mockNotificationService
+                .Setup(x => x.Register(It.Is<InstallationRequest>(request => request.DevicePns == DevicePns
+                                                                             && request.DeviceType == UserDeviceType
+                                                                             && request.NhsLoginId == NhsLoginId)))
                 .ReturnsAsync(new RegistrationResult.Success(new NotificationRegistrationResult()));
 
             _mockDeviceRepositoryService.Setup(x => x.Create(
@@ -72,7 +76,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         {
             // Arrange
             var validRegisterDeviceRequest = CreateValidRegisterDeviceRequest();
-            _mockNotificationService.Setup(x => x.Register(DevicePns, _deviceType, NhsLoginId))
+            _mockNotificationService
+                .Setup(x => x.Register(It.Is<InstallationRequest>(request => request.DevicePns == DevicePns
+                                                                             && request.DeviceType == UserDeviceType
+                                                                             && request.NhsLoginId == NhsLoginId)))
                 .ReturnsAsync(new RegistrationResult.BadGateway());
 
             // Act
@@ -89,7 +96,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         {
             // Arrange
             var validRegisterDeviceRequest = CreateValidRegisterDeviceRequest();
-            _mockNotificationService.Setup(x => x.Register(DevicePns, _deviceType, NhsLoginId))
+            _mockNotificationService
+                .Setup(x => x.Register(It.Is<InstallationRequest>(request => request.DevicePns == DevicePns
+                                                                             && request.DeviceType == UserDeviceType
+                                                                             && request.NhsLoginId == NhsLoginId)))
                 .ReturnsAsync(new RegistrationResult.InternalServerError());
 
             // Act
@@ -106,7 +116,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         {
             // Arrange
             var validRegisterDeviceRequest = CreateValidRegisterDeviceRequest();
-            _mockNotificationService.Setup(x => x.Register(DevicePns, _deviceType, NhsLoginId))
+            _mockNotificationService
+                .Setup(x => x.Register(It.Is<InstallationRequest>(request => request.DevicePns == DevicePns
+                                                                             && request.DeviceType == UserDeviceType
+                                                                             && request.NhsLoginId == NhsLoginId)))
                 .Throws(new ArgumentException("Test"));
 
             // Act
@@ -123,7 +136,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         {
             // Arrange
             var validRegisterDeviceRequest = CreateValidRegisterDeviceRequest();
-            _mockNotificationService.Setup(x => x.Register(DevicePns, _deviceType, NhsLoginId))
+            _mockNotificationService
+                .Setup(x => x.Register(It.Is<InstallationRequest>(request => request.DevicePns == DevicePns
+                                                                             && request.DeviceType == UserDeviceType
+                                                                             && request.NhsLoginId == NhsLoginId)))
                 .ReturnsAsync(new RegistrationResult.Success(new NotificationRegistrationResult()));
 
             _mockDeviceRepositoryService.Setup(x => x.Create(
@@ -147,7 +163,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         {
             // Arrange
             var validRegisterDeviceRequest = CreateValidRegisterDeviceRequest();
-            _mockNotificationService.Setup(x => x.Register(DevicePns, _deviceType, NhsLoginId))
+            _mockNotificationService
+                .Setup(x => x.Register(It.Is<InstallationRequest>(request => request.DevicePns == DevicePns
+                                                                             && request.DeviceType == UserDeviceType
+                                                                             && request.NhsLoginId == NhsLoginId)))
                 .ReturnsAsync(new RegistrationResult.Success(new NotificationRegistrationResult()));
 
             _mockDeviceRepositoryService.Setup(x => x.Create(
@@ -171,7 +190,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         {
             // Arrange
             var validRegisterDeviceRequest = CreateValidRegisterDeviceRequest();
-            _mockNotificationService.Setup(x => x.Register(DevicePns, _deviceType, NhsLoginId))
+            _mockNotificationService
+                .Setup(x => x.Register(It.Is<InstallationRequest>(request => request.DevicePns == DevicePns
+                                                                             && request.DeviceType == UserDeviceType
+                                                                             && request.NhsLoginId == NhsLoginId)))
                 .ReturnsAsync(new RegistrationResult.Success(new NotificationRegistrationResult()));
 
             _mockDeviceRepositoryService.Setup(x => x.Create(
@@ -191,11 +213,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
             _mockDeviceRepositoryService.VerifyAll();
         }
 
-        private RegisterDeviceRequest CreateValidRegisterDeviceRequest()
-            => new RegisterDeviceRequest
-            {
-                DevicePns = DevicePns,
-                DeviceType = _deviceType
-            };
+        private static RegisterDeviceRequest CreateValidRegisterDeviceRequest() => new RegisterDeviceRequest
+        {
+            DevicePns = DevicePns,
+            DeviceType = UserDeviceType
+        };
     }
 }

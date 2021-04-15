@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.Serialization;
 
@@ -10,13 +11,18 @@ namespace NHSOnline.Backend.Support.Settings
         {
         }
 
-        public ConfigurationNotValidException(string name)
-            : base(string.Format(CultureInfo.InvariantCulture, ExceptionMessages.ConfigurationValueNotValid, name))
+        public ConfigurationNotValidException(string invalidPropertyName)
+            : base(string.Format(CultureInfo.InvariantCulture, ExceptionMessages.ConfigurationValueNotValid, invalidPropertyName))
         {
         }
 
-        public ConfigurationNotValidException(string name, Exception inner)
-            : base(string.Format(CultureInfo.InvariantCulture, ExceptionMessages.ConfigurationValueNotValid, name), inner)
+        public ConfigurationNotValidException(string invalidPropertyName, Exception inner)
+            : base(string.Format(CultureInfo.InvariantCulture, ExceptionMessages.ConfigurationValueNotValid, invalidPropertyName), inner)
+        {
+        }
+
+        public ConfigurationNotValidException(IEnumerable<string> formattedErrorMessages)
+            : base(string.Format(CultureInfo.InvariantCulture, string.Join(", ", formattedErrorMessages)))
         {
         }
 
@@ -25,6 +31,5 @@ namespace NHSOnline.Backend.Support.Settings
             StreamingContext context) : base(info, context)
         {
         }
-
     }
 }

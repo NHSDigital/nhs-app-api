@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Models
         public void ToDictionary_WithAllValues_ReturnsCompleteDictionary()
         {
             // Arrange
-            var notification = new Notification
+            var notification = new NotificationRequest
             {
                 Title = "title",
                 Subtitle = "subtitle",
@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Models
         public void ToDictionary_WithNoUrl_ReturnsNullUrlDictionary()
         {
             // Arrange
-            var notification = new Notification
+            var notification = new NotificationRequest
             {
                 Title = "title",
                 Subtitle = "subtitle",

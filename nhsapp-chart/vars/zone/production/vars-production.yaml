@@ -10,9 +10,9 @@ keyvaultSubscriptionID: 47e498b8-ad52-4421-b6d0-d7f9988429df
 keyvaultTenantID: 50f6071f-bbfe-401a-8803-673748e629e2
 
 secrets:
-    notificationHub:
-        notificationHubSecretName: "notificationHubSharedAccessKey"
-        notificationHubSecretVersion: "a6635ca8e4464192a85c3d29b00d5c59"
+  notificationHubs:
+    - notificationHubSecretName: "notificationHubSharedAccessKey"
+      notificationHubSecretVersion: "a6635ca8e4464192a85c3d29b00d5c59"
 
 addAppointmentToCalendarEnabled: true
 
@@ -130,8 +130,9 @@ iproxy:
 messagesEnabled: true
 
 users:
-  notificationHubPath: nhsapp-production
-  notificationHubConnectionString: Endpoint=sb://nhsapp-production.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+  notificationHubs:
+    - notificationHubPath: nhsapp-production
+      notificationHubConnectionString: Endpoint=sb://nhsapp-production.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
 
 metrics:
   memoryRequest: "12Mi"

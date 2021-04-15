@@ -5,12 +5,14 @@ odsRemapMap: "G85075:X00100;G85672:X00100;A21464:A29928"
 akamaiEnv: nhsapp.service.nhs.uk
 
 users:
-  notificationHubPath: nhsapp-logindevelopment
+  notificationHubs:
+    - notificationHubPath: nhsapp-logindevelopment
+      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
 
 secrets:
-    notificationHub:
-        notificationHubSecretName: "notificationHubSharedAccessKeyPreview"
-        notificationHubSecretVersion: "570a20e0acf6446f9646f8aaeb52f233"
+  notificationHubs:
+    - notificationHubSecretName: "notificationHubSharedAccessKeyPreview"
+      notificationHubSecretVersion: "570a20e0acf6446f9646f8aaeb52f233"
 
 web:
   publicURL: www-logindevelopment.nhsapp.service.nhs.uk

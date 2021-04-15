@@ -26,12 +26,12 @@ jobs:
       - task: Bash@3
         displayName: Initialise Secrets
         env:
-          AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY: $(azure.notification.hub.shared.access.key)
+          AZURE_NOTIFICATION_HUBS__0__AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY: $(azure.notification.hub.shared.access.key)
         inputs:
           targetType: 'inline'
           script: |
             mkdir -p ~/.nhsonline/secrets
-            echo "$AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY" > ~/.nhsonline/secrets/azure_notification_hub_key_bdd
+            echo "$AZURE_NOTIFICATION_HUBS__0__AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY" > ~/.nhsonline/secrets/azure_notification_hub_key_bdd
 
       - task: ShellScript@2
         displayName: Restore Packages

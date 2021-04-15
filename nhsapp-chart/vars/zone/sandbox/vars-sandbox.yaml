@@ -19,14 +19,15 @@ iproxy_microtest:
   deployMicrotest: false
 
 users:
-  notificationHubPath: nhsapp-nonlive
-  notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+  notificationHubs:
+    - notificationHubPath: nhsapp-nonlive
+      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
 
 nhsSearchHostname: nhsuk-apim-int-uks.azure-api.net
 
 secrets:
-  notificationHub:
-      notificationHubSecretName: "notificationHubSharedAccessKey"
+  notificationHubs:
+    - notificationHubSecretName: "notificationHubSharedAccessKey"
       notificationHubSecretVersion: "f174920b96bc4b338ea13c02998ba2d1"
 # Not used, just to prevent chart from crashing on install
 splunk:

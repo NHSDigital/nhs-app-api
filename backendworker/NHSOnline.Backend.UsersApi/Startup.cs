@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -20,6 +22,7 @@ using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Settings;
+using NHSOnline.Backend.UsersApi.Notifications;
 
 namespace NHSOnline.Backend.UsersApi
 {
@@ -74,19 +77,43 @@ namespace NHSOnline.Backend.UsersApi
 
         private void SetupConfigurationSettings(IServiceCollection services)
         {
-            var azureNotificationConfiguration = CreateAzureNotificationConfiguration();
-            services.AddSingleton(azureNotificationConfiguration);
+            var clientWrappers = CreateAzureNotificationHubConfigurations()
+                .Select(x => new AzureNotificationHubWrapper(x))
+                .Cast<IAzureNotificationHubWrapper>();
+
+            services.AddSingleton(clientWrappers);
 
             var httpTimeoutConfig = CreateHttpTimeoutConfiguration();
             services.AddSingleton<IHttpTimeoutConfigurationSettings>(httpTimeoutConfig);
         }
 
-        private AzureNotificationConfiguration CreateAzureNotificationConfiguration()
+        private IEnumerable<AzureNotificationHubConfiguration> CreateAzureNotificationHubConfigurations()
         {
-            var azureConnectionString = Configuration.GetOrThrow("AZURE_NOTIFICATION_HUB_CONNECTION_STRING", _logger);
-            var notificationHubPath = Configuration.GetOrThrow("AZURE_NOTIFICATION_HUB_PATH", _logger);
-            var sharedAccessKey = Configuration.GetOrThrow("AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY", _logger);
-            return new AzureNotificationConfiguration(azureConnectionString, notificationHubPath, sharedAccessKey);
+            var output = new List<AzureNotificationHubConfiguration>();
+            var hubConfigurations = Configuration.GetSection("AZURE_NOTIFICATION_HUBS").GetChildren();
+
+            foreach (var config in hubConfigurations)
+            {
+                var connectionString = config.GetOrThrow("AZURE_NOTIFICATION_HUB_CONNECTION_STRING", _logger);
+                var path = config.GetOrThrow("AZURE_NOTIFICATION_HUB_PATH", _logger);
+                var sharedAccessKey = config.GetOrThrow("AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY", _logger);
+                var readCharacters = config.GetOrThrow("AZURE_NOTIFICATION_HUB_READ_CHARACTERS", _logger);
+                var writeCharacters = config.GetOrThrow("AZURE_NOTIFICATION_HUB_WRITE_CHARACTERS", _logger);
+                var generation = config.GetIntOrThrow("AZURE_NOTIFICATION_HUB_GENERATION", _logger);
+
+                output.Add(new AzureNotificationHubConfiguration(
+                    connectionString,
+                    path,
+                    sharedAccessKey,
+                    readCharacters,
+                    writeCharacters,
+                    generation
+                ));
+            }
+
+            new AzureNotificationHubConfigurationValidator(_logger).Validate(output);
+
+            return output;
         }
 
         private HttpTimeoutConfigurationSettings CreateHttpTimeoutConfiguration()

@@ -1,18 +1,20 @@
 ---
 environmentStubbed:
-    deployWiremock: true
+  deployWiremock: true
 
 users:
-    notificationHubPath: nhsapp-nonlive-scratch18
+  notificationHubs:
+    - notificationHubPath: nhsapp-nonlive-scratch18
+      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
 
 # well known
 wellKnownAndroidPackageName: com.nhs.online.nhsonline.scratch18
 wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.scratch18
 
 secrets:
-    notificationHub:
-        notificationHubSecretName: "notificationHubSharedAccessKeyScratch18"
-        notificationHubSecretVersion: "6a9b412c8f5a438ea3cfc85626863b3f"
+  notificationHubs:
+    - notificationHubSecretName: "notificationHubSharedAccessKeyScratch18"
+      notificationHubSecretVersion: "6a9b412c8f5a438ea3cfc85626863b3f"
 
 web:
-    thirdPartyJumpOffLoggingEnabled: true
+  thirdPartyJumpOffLoggingEnabled: true

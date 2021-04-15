@@ -7,6 +7,7 @@ using Moq;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 using NHSOnline.Backend.UsersApi.Notifications;
+using NHSOnline.Backend.UsersApi.Notifications.Models;
 
 namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 {
@@ -50,8 +51,15 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 .Setup(x => x.Create(deviceType))
                 .Returns(installationTemplate);
 
+            var request = new InstallationRequest
+            {
+                DevicePns = DevicePns,
+                DeviceType = deviceType,
+                NhsLoginId = NhsLoginId
+            };
+
             // Act
-            var result = _systemUnderTest.Create(DevicePns, deviceType, NhsLoginId);
+            var result = _systemUnderTest.Create(request);
 
             // Assert
             _mockInstallationTemplateFactory.VerifyAll();

@@ -109,15 +109,38 @@ spec:
           value: {{ $.Values.cosmosDBName }}-mongo
         - name: USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION
           value: {{ $.Values.users.mongoDatabaseUserDeviceCollection }}
-        - name: AZURE_NOTIFICATION_HUB_PATH
-          value: {{ $.Values.users.notificationHubPath }}
-        - name: AZURE_NOTIFICATION_HUB_CONNECTION_STRING
-          value: {{ $.Values.users.notificationHubConnectionString }}
-        - name: AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY
+        {{- range $index, $notificationHub := .Values.users.notificationHubs }}
+        - name: AZURE_NOTIFICATION_HUBS__{{ $index }}__AZURE_NOTIFICATION_HUB_PATH
+          value: {{ $notificationHub.notificationHubPath }}
+        - name: AZURE_NOTIFICATION_HUBS__{{ $index }}__AZURE_NOTIFICATION_HUB_CONNECTION_STRING
+          value: {{ $notificationHub.notificationHubConnectionString }}
+        - name: AZURE_NOTIFICATION_HUBS__{{ $index }}__AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY
           valueFrom:
             secretKeyRef:
-              name: notification-hub-shared-access-key-{{ .Chart.AppVersion }}
+              name: notification-hub-shared-access-key-{{ $index }}-{{ $.Chart.AppVersion }}
               key: password
+        {{- if $notificationHub.notificationHubReadCharacters }}
+        - name: AZURE_NOTIFICATION_HUBS__{{ $index }}__AZURE_NOTIFICATION_HUB_READ_CHARACTERS
+          value: "{{ $notificationHub.notificationHubReadCharacters }}"
+        {{- else }}
+        - name: AZURE_NOTIFICATION_HUBS__{{ $index }}__AZURE_NOTIFICATION_HUB_READ_CHARACTERS
+          value: 0123456789ABCDEF
+        {{- end }}
+        {{- if $notificationHub.notificationHubWriteCharacters }}
+        - name: AZURE_NOTIFICATION_HUBS__{{ $index }}__AZURE_NOTIFICATION_HUB_WRITE_CHARACTERS
+          value: "{{ $notificationHub.notificationHubWriteCharacters }}"
+        {{- else }}
+        - name: AZURE_NOTIFICATION_HUBS__{{ $index }}__AZURE_NOTIFICATION_HUB_WRITE_CHARACTERS
+          value: 0123456789ABCDEF
+        {{- end }}
+        {{- if $notificationHub.notificationHubGeneration }}
+        - name: AZURE_NOTIFICATION_HUBS__{{ $index }}__AZURE_NOTIFICATION_HUB_GENERATION
+          value: "{{ $notificationHub.notificationHubGeneration }}"
+        {{- else }}
+        - name: AZURE_NOTIFICATION_HUBS__{{ $index }}__AZURE_NOTIFICATION_HUB_GENERATION
+          value: "1"
+        {{- end }}
+        {{- end }}
         - name: CITIZEN_ID_AUTHENTICATION_TYPE
           value: "{{ $.Values.cidAuthenticationType }}"
         {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cidStubbed)) }}

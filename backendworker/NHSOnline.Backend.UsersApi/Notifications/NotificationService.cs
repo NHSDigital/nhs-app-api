@@ -12,12 +12,12 @@ namespace NHSOnline.Backend.UsersApi.Notifications
     public class NotificationService: INotificationService
     {
         private readonly ILogger<NotificationService> _logger;
-        private readonly IAzureNotificationHubClient _azureHubClient;
+        private readonly INotificationClient _notificationClient;
 
-        public NotificationService(ILogger<NotificationService> logger, IAzureNotificationHubClient azureHubClient)
+        public NotificationService(ILogger<NotificationService> logger, INotificationClient notificationClient)
         {
             _logger = logger;
-            _azureHubClient = azureHubClient;
+            _notificationClient = notificationClient;
         }
 
         public async Task<NotificationSendResult> Send(string nhsLoginId,
@@ -27,17 +27,18 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             {
                 _logger.LogEnter();
 
-                var notification = new Notification
+                var request = new NotificationRequest
                 {
                     Title = notificationSendRequest.Title?.Trim(),
                     Subtitle = notificationSendRequest.Subtitle?.Trim(),
                     Body = notificationSendRequest.Body.Trim(),
                     Url = string.IsNullOrWhiteSpace(notificationSendRequest.Url)
                         ? null
-                        : new Uri(notificationSendRequest.Url.Trim())
+                        : new Uri(notificationSendRequest.Url.Trim()),
+                    NhsLoginId = nhsLoginId
                 };
 
-                await _azureHubClient.SendNotification(nhsLoginId, notification);
+                await _notificationClient.SendNotification(request);
                 return new NotificationSendResult.Success();
             }
             catch (MessagingException ex)

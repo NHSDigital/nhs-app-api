@@ -1,12 +1,36 @@
 ---
 users:
-    notificationHubPath: nhsapp-nonlive-scratch1
+  notificationHubs:
+    - notificationHubPath: nhsapp-nonlive-scratch1
+      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+      notificationHubWriteCharacters: "0123"
+    - notificationHubPath: nhsapp-nonlive-scratch1-0
+      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive-scratch1-0.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+      notificationHubReadCharacters: "4567"
+      notificationHubWriteCharacters: "4567"
+      notificationHubGeneration: "2"
+    - notificationHubPath: nhsapp-nonlive-scratch1-1
+      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive-scratch1-1.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+      notificationHubReadCharacters: "89AB"
+      notificationHubWriteCharacters: "89AB"
+      notificationHubGeneration: "2"
+    - notificationHubPath: nhsapp-nonlive-scratch1-2
+      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive-scratch1-2.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+      notificationHubReadCharacters: "CDEF"
+      notificationHubWriteCharacters: "CDEF"
+      notificationHubGeneration: "2"
 
 # well known
 wellKnownAndroidPackageName: com.nhs.online.nhsonline.scratch1
 wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.scratch1
 
 secrets:
-    notificationHub:
-        notificationHubSecretName: "notificationHubSharedAccessKeyScratch1"
-        notificationHubSecretVersion: "ae8b6b8480104dc1ab4be299d319459a"
+  notificationHubs:
+    - notificationHubSecretName: "notificationHubSharedAccessKeyScratch1"
+      notificationHubSecretVersion: "ae8b6b8480104dc1ab4be299d319459a"
+    - notificationHubSecretName: "notificationHubSharedAccessKeyScratch1-0"
+      notificationHubSecretVersion: "4a7d9d87ca1a42e7b8a4112d99b4668a"
+    - notificationHubSecretName: "notificationHubSharedAccessKeyScratch1-1"
+      notificationHubSecretVersion: "10a589fab2bb406c96ed52472f3142f4"
+    - notificationHubSecretName: "notificationHubSharedAccessKeyScratch1-2"
+      notificationHubSecretVersion: "7ad624e33a9d4c54a547854b12ad3e05"

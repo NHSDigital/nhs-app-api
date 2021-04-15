@@ -4,6 +4,7 @@ using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 using NHSOnline.Backend.UsersApi.Notifications;
+using NHSOnline.Backend.UsersApi.Notifications.Models;
 using NHSOnline.Backend.UsersApi.Repository;
 
 namespace NHSOnline.Backend.UsersApi.Registrations
@@ -33,8 +34,14 @@ namespace NHSOnline.Backend.UsersApi.Registrations
             {
                 _logger.LogEnter();
 
-                var registrationResult = await _notificationService.Register(request.DevicePns,
-                    request.DeviceType.Value, accessToken.Subject);
+                var installationRequest = new InstallationRequest
+                {
+                    DevicePns = request.DevicePns,
+                    DeviceType = request.DeviceType.Value,
+                    NhsLoginId = accessToken.Subject
+                };
+
+                var registrationResult = await _notificationService.Register(installationRequest);
 
                 if (!(registrationResult is RegistrationResult.Success registrationSuccessResult))
                 {
@@ -109,7 +116,10 @@ namespace NHSOnline.Backend.UsersApi.Registrations
                 }
 
                 var userDevice = foundDeviceResult.UserDevice;
-                var deleteRegistrationResult = await _notificationService.Delete(userDevice.RegistrationId);
+                var deleteRegistrationResult = await _notificationService.Delete(
+                    userDevice.RegistrationId,
+                    accessToken.Subject
+                );
 
                 switch (deleteRegistrationResult)
                 {

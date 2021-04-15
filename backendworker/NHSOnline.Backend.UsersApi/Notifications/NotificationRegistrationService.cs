@@ -5,51 +5,37 @@ using System.Threading.Tasks;
 using Microsoft.Azure.NotificationHubs.Messaging;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
+using NHSOnline.Backend.UsersApi.Notifications.Models;
 using NHSOnline.Backend.UsersApi.Repository;
 
 namespace NHSOnline.Backend.UsersApi.Notifications
 {
-    internal class AzureNotificationHubRegistrationService : INotificationRegistrationService
+    internal class NotificationRegistrationService : INotificationRegistrationService
     {
-        private readonly ILogger<AzureNotificationHubRegistrationService> _logger;
-        private readonly IAzureNotificationHubClient _azureHubClient;
-        private readonly IInstallationFactory _installationFactory;
+        private readonly ILogger<NotificationRegistrationService> _logger;
+        private readonly INotificationClient _notificationClient;
 
-        public AzureNotificationHubRegistrationService(
-            IAzureNotificationHubClient azureHubClient,
-            IInstallationFactory installationFactory,
-            ILogger<AzureNotificationHubRegistrationService> logger)
+        public NotificationRegistrationService(
+            INotificationClient notificationClient,
+            ILogger<NotificationRegistrationService> logger)
         {
-            _azureHubClient = azureHubClient;
-            _installationFactory = installationFactory;
+            _notificationClient = notificationClient;
             _logger = logger;
         }
 
-        public async Task<RegistrationResult> Register(string devicePns, DeviceType deviceType, string nhsLoginId)
+        public async Task<RegistrationResult> Register(InstallationRequest request)
         {
             try
             {
                 _logger.LogEnter();
-                var existingInstallations = await _azureHubClient.FindInstallationIdentifiers(devicePns);
 
-                _logger.LogInformation($"{existingInstallations.Count} existing registrations found for this pns token");
-                if (existingInstallations.Count > 0)
-                {
-                    var deleteTasks = existingInstallations.Select(_azureHubClient.DeleteInstallation)
-                        .ToList();
-
-                    await Task.WhenAll(deleteTasks);
-                    _logger.LogInformation("Existing registrations deleted");
-                }
-
-                var installation = _installationFactory.Create(devicePns, deviceType, nhsLoginId);
-                await _azureHubClient.CreateOrUpdateInstallation(installation);
+                await _notificationClient.DeleteInstallationsByDevicePns(request.DevicePns);
+                var installationId = await _notificationClient.CreateInstallation(request);
 
                 _logger.LogInformation("New registration created");
                 return new RegistrationResult.Success(new NotificationRegistrationResult
                 {
-                    Id = installation.InstallationId
+                    Id = installationId
                 });
             }
             catch (AggregateException ex) when (ex.InnerExceptions.Any(x => x is HttpRequestException || x is MessagingException))
@@ -89,7 +75,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             {
                 _logger.LogEnter();
 
-                if(await _azureHubClient.InstallationExists(userDevice.RegistrationId))
+                if(await _notificationClient.InstallationExists(userDevice.RegistrationId, userDevice.NhsLoginId))
                 {
                     return new RegistrationExistsResult.Found();
                 }
@@ -122,7 +108,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             {
                 _logger.LogEnter();
 
-                var registrations = await _azureHubClient.FindInstallationIdentifiersByNhsLoginId(nhsLoginId);
+                var registrations = await _notificationClient.FindInstallationIdsByNhsLoginId(nhsLoginId);
 
                 if(registrations?.Count > 0)
                 {
@@ -151,12 +137,12 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             }
         }
 
-        public async Task<DeleteRegistrationResult> Delete(string id)
+        public async Task<DeleteRegistrationResult> Delete(string id, string nhsLoginId)
         {
             try
             {
                 _logger.LogEnter();
-                await _azureHubClient.DeleteInstallation(id);
+                await _notificationClient.DeleteInstallation(id, nhsLoginId);
 
                 return new DeleteRegistrationResult.Success();
             }

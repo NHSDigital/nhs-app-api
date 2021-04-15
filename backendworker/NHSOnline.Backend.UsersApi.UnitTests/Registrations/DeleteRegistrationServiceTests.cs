@@ -49,7 +49,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
             _mockDeviceRepositoryService.Setup(x => x.Delete(userDevice.DeviceId, NhsLoginId))
                 .ReturnsAsync(new DeleteDeviceResult.Success());
 
-            _mockNotificationService.Setup(x => x.Delete(userDevice.RegistrationId))
+            _mockNotificationService
+                .Setup(x => x.Delete(userDevice.RegistrationId, NhsLoginId))
                 .ReturnsAsync(new DeleteRegistrationResult.Success());
 
             // Act
@@ -74,7 +75,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
             _mockDeviceRepositoryService.Setup(x => x.Delete(userDevice.DeviceId, NhsLoginId))
                 .ReturnsAsync(new DeleteDeviceResult.Success());
 
-            _mockNotificationService.Setup(x => x.Delete(userDevice.RegistrationId))
+            _mockNotificationService
+                .Setup(x => x.Delete(userDevice.RegistrationId, NhsLoginId))
                 .ReturnsAsync(new DeleteRegistrationResult.NotFound());
 
             // Act
@@ -144,7 +146,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
             _mockDeviceRepositoryService.Setup(x => x.Find(DevicePns, _accessToken))
                 .ReturnsAsync(new SearchDeviceResult.Found(userDevice));
 
-            _mockNotificationService.Setup(x => x.Delete(userDevice.RegistrationId))
+            _mockNotificationService
+                .Setup(x => x.Delete(userDevice.RegistrationId, NhsLoginId))
                 .ReturnsAsync(new DeleteRegistrationResult.InternalServerError());
 
             // Act
@@ -166,7 +169,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
             _mockDeviceRepositoryService.Setup(x => x.Find(DevicePns, _accessToken))
                 .ReturnsAsync(new SearchDeviceResult.Found(userDevice));
 
-            _mockNotificationService.Setup(x => x.Delete(userDevice.RegistrationId))
+            _mockNotificationService
+                .Setup(x => x.Delete(userDevice.RegistrationId, NhsLoginId))
                 .ReturnsAsync(new DeleteRegistrationResult.BadGateway());
 
             // Act
@@ -191,7 +195,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
             _mockDeviceRepositoryService.Setup(x => x.Delete(userDevice.DeviceId, NhsLoginId))
                 .ReturnsAsync(new DeleteDeviceResult.InternalServerError());
 
-            _mockNotificationService.Setup(x => x.Delete(userDevice.RegistrationId))
+            _mockNotificationService
+                .Setup(x => x.Delete(userDevice.RegistrationId, NhsLoginId))
                 .ReturnsAsync(new DeleteRegistrationResult.Success());
 
             // Act
@@ -216,7 +221,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
             _mockDeviceRepositoryService.Setup(x => x.Delete(userDevice.DeviceId, NhsLoginId))
                 .ReturnsAsync(new DeleteDeviceResult.BadGateway());
 
-            _mockNotificationService.Setup(x => x.Delete(userDevice.RegistrationId))
+            _mockNotificationService
+                .Setup(x => x.Delete(userDevice.RegistrationId, NhsLoginId))
                 .ReturnsAsync(new DeleteRegistrationResult.Success());
 
             // Act
@@ -238,7 +244,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
             _mockDeviceRepositoryService.Setup(x => x.Find(DevicePns, _accessToken))
                 .ReturnsAsync(new SearchDeviceResult.Found(userDevice));
 
-            _mockNotificationService.Setup(x => x.Delete(userDevice.RegistrationId))
+            _mockNotificationService
+                .Setup(x => x.Delete(userDevice.RegistrationId, NhsLoginId))
                 .ReturnsAsync(new DeleteRegistrationResult.Success());
 
             _mockDeviceRepositoryService.Setup(x => x.Delete(userDevice.DeviceId, NhsLoginId))
@@ -263,7 +270,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
             _mockDeviceRepositoryService.Setup(x => x.Find(DevicePns, _accessToken))
                 .ReturnsAsync(new SearchDeviceResult.Found(userDevice));
 
-            _mockNotificationService.Setup(x => x.Delete(userDevice.RegistrationId))
+            _mockNotificationService
+                .Setup(x => x.Delete(userDevice.RegistrationId, NhsLoginId))
                 .ReturnsAsync(new DeleteRegistrationResult.Success());
 
             _mockDeviceRepositoryService.Setup(x => x.Delete(userDevice.DeviceId, NhsLoginId))

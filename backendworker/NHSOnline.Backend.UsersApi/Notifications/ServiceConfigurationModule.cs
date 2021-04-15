@@ -8,12 +8,12 @@ namespace NHSOnline.Backend.UsersApi.Notifications
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IAzureNotificationHubClientWrapper, AzureNotificationHubClientWrapper>();
-            services.AddTransient<IAzureNotificationHubClient, AzureNotificationHubClient>();
+            services.AddTransient<INotificationClient, NotificationClient>();
+            services.AddSingleton<IAzureNotificationHubWrapperService, AzureNotificationHubWrapperService>();
             services.AddSingleton<IDeviceIdGenerator, DeviceIdGenerator>();
             services.AddTransient<IInstallationTemplateFactory, InstallationTemplateFactory>();
             services.AddTransient<IInstallationFactory, InstallationFactory>();
-            services.AddTransient<INotificationRegistrationService, AzureNotificationHubRegistrationService>();
+            services.AddTransient<INotificationRegistrationService, NotificationRegistrationService>();
             services.AddTransient<INotificationService, NotificationService>();
 
             base.ConfigureServices(services, configuration);

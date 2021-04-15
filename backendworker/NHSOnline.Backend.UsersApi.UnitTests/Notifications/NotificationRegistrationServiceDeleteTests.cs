@@ -10,34 +10,37 @@ using NHSOnline.Backend.UsersApi.Notifications;
 namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 {
     [TestClass]
-    public class AzureNotificationHubRegistrationServiceDeleteTests
+    public class NotificationRegistrationServiceDeleteTests
     {
-        private Mock<IAzureNotificationHubClient> _mockAzureNotificationsHubClient;
-        private AzureNotificationHubRegistrationService _systemUnderTest;
+        private Mock<INotificationClient> _mockNotificationClient;
+        private NotificationRegistrationService _systemUnderTest;
         private const string InstallationId = "fe7312a9-43dc-46f6-9727-03b3ddecab12";
+        private const string NhsLoginId = "NhsLoginId";
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _mockAzureNotificationsHubClient = new Mock<IAzureNotificationHubClient>(MockBehavior.Strict);
+            _mockNotificationClient = new Mock<INotificationClient>(MockBehavior.Strict);
 
-            _systemUnderTest = new AzureNotificationHubRegistrationService(_mockAzureNotificationsHubClient.Object,
-                new Mock<IInstallationFactory>().Object,
-                new Mock<ILogger<AzureNotificationHubRegistrationService>>().Object);
+            _systemUnderTest = new NotificationRegistrationService(
+                _mockNotificationClient.Object,
+                new Mock<ILogger<NotificationRegistrationService>>().Object
+            );
         }
 
         [TestMethod]
         public async Task Delete_WithInstallationIdentifier_Success()
         {
             // Arrange
-            _mockAzureNotificationsHubClient.Setup(x => x.DeleteInstallation(InstallationId))
+            _mockNotificationClient
+                .Setup(x => x.DeleteInstallation(InstallationId, NhsLoginId))
                 .Returns(Task.CompletedTask);
 
             // Act
-            var result = await _systemUnderTest.Delete(InstallationId);
+            var result = await _systemUnderTest.Delete(InstallationId, NhsLoginId);
 
             // Assert
-            _mockAzureNotificationsHubClient.VerifyAll();
+            _mockNotificationClient.VerifyAll();
 
             result.Should().BeOfType<DeleteRegistrationResult.Success>();
         }
@@ -46,15 +49,15 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         public async Task Delete_WhenDeleteInstallationThrowsException_ReturnsInternalServerErrorResult()
         {
             // Arrange
-            _mockAzureNotificationsHubClient
-                .Setup(x => x.DeleteInstallation(InstallationId))
+            _mockNotificationClient
+                .Setup(x => x.DeleteInstallation(InstallationId, NhsLoginId))
                 .Throws<ArgumentException>();
 
             // Act
-            var result = await _systemUnderTest.Delete(InstallationId);
+            var result = await _systemUnderTest.Delete(InstallationId, NhsLoginId);
 
             // Assert
-            _mockAzureNotificationsHubClient.VerifyAll();
+            _mockNotificationClient.VerifyAll();
 
             result.Should().BeOfType<DeleteRegistrationResult.InternalServerError>();
         }
@@ -63,15 +66,15 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         public async Task Delete_WhenDeleteInstallationThrowsAMessageException_ReturnsBadGatewayResult()
         {
             // Arrange
-            _mockAzureNotificationsHubClient
-                .Setup(x => x.DeleteInstallation(InstallationId))
+            _mockNotificationClient
+                .Setup(x => x.DeleteInstallation(InstallationId, NhsLoginId))
                 .Throws(MessagingExceptionFactory.Create());
 
             // Act
-            var result = await _systemUnderTest.Delete(InstallationId);
+            var result = await _systemUnderTest.Delete(InstallationId, NhsLoginId);
 
             // Assert
-            _mockAzureNotificationsHubClient.VerifyAll();
+            _mockNotificationClient.VerifyAll();
 
             result.Should().BeOfType<DeleteRegistrationResult.BadGateway>();
         }
@@ -80,15 +83,15 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         public async Task Delete_WhenDeleteInstallationThrowsAHttpException_ReturnsBadGatewayResult()
         {
             // Arrange
-            _mockAzureNotificationsHubClient
-                .Setup(x => x.DeleteInstallation(InstallationId))
+            _mockNotificationClient
+                .Setup(x => x.DeleteInstallation(InstallationId, NhsLoginId))
                 .Throws<HttpRequestException>();
 
             // Act
-            var result = await _systemUnderTest.Delete(InstallationId);
+            var result = await _systemUnderTest.Delete(InstallationId, NhsLoginId);
 
             // Assert
-            _mockAzureNotificationsHubClient.VerifyAll();
+            _mockNotificationClient.VerifyAll();
 
             result.Should().BeOfType<DeleteRegistrationResult.BadGateway>();
         }
