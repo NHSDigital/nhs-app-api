@@ -64,15 +64,23 @@ namespace NHSOnline.IntegrationTests.UI
 
         // NHSO-13894 - Appium/BrowserStack nginx returned 502
         private static readonly Regex NginxBadGateway = new(
-            @"<html>\\n<head><title>502 Bad Gateway</title></head>\\n<body>\\n<center><h1>502 Bad Gateway</h1></center>\\n<hr><center>nginx</center>\\n</body>\\n</html>", RegexOptions.Compiled);
+            @"<html>\\n<head><title>502 Bad Gateway</title></head>\\n<body>\\n<center><h1>502 Bad Gateway</h1></center>\\n<hr><center>nginx</center>\\n</body>\\n</html>",
+            RegexOptions.Compiled);
 
         // This is a temporary retry put in place for the manage notifications screen which on android is having firebase issues
         private static readonly Regex FirebaseAuthorisationFailureWontRetry = new(
-            @"Unable to locate element.*Manage notifications", RegexOptions.Compiled);
+            @"Unable to locate element.*Manage notifications",
+            RegexOptions.Compiled);
 
         // Appium could not proxy issue
         private static readonly Regex AppiumProxyIssue = new(
-            @"Appium error: An unknown server-side error occurred while processing the command\. Original error: Could not proxy.*", RegexOptions.Compiled);
+            @"Appium error: An unknown server-side error occurred while processing the command\. Original error: Could not proxy.*",
+            RegexOptions.Compiled);
+
+        // Network issue prevents stubbed "NHS login" page from being displayed on iOS
+        private static readonly Regex AboutBlank = new(
+            Regex.Escape("Expected driver.Url not to be \"about:blank\"."),
+            RegexOptions.Compiled);
 
         private static readonly List<(Regex pattern, RetryStatus result)> RetryExceptionMessageRegexes = new()
         {
@@ -88,7 +96,8 @@ namespace NHSOnline.IntegrationTests.UI
             (UnableToAccessCamera, RetryStatus.Retry(nameof(UnableToAccessCamera))),
             (NginxBadGateway, RetryStatus.Retry(nameof(NginxBadGateway))),
             (FirebaseAuthorisationFailureWontRetry, RetryStatus.Retry(nameof(FirebaseAuthorisationFailureWontRetry))),
-            (AppiumProxyIssue, RetryStatus.Retry(nameof(AppiumProxyIssue)))
+            (AppiumProxyIssue, RetryStatus.Retry(nameof(AppiumProxyIssue))),
+            (AboutBlank, RetryStatus.Retry(nameof(AboutBlank)))
         };
 
         internal static RetryStatus ShouldRetry(this TestResult result, TestLogs logs)

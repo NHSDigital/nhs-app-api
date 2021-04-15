@@ -1,3 +1,4 @@
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.Extensions;
@@ -35,6 +36,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         {
             internal override void AssertContextReady(IWebDriver driver)
             {
+                driver.Url.Should().NotBe("about:blank");
             }
         }
 
