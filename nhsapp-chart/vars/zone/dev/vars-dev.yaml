@@ -42,10 +42,6 @@ nhsSearchHostname: nhsuk-apim-int-uks.azure-api.net
 wellKnownAndroidPackageName: com.nhs.online.nhsonline.preview
 wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.preview
 
-users:
-  notificationHubPath: nhsapp-nonlive
-  notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
-
 splunk:
   pidIndex: apppid_nhsapp_dev
   specialCategoryIndex: appspecialcategory_nhsapp_dev
@@ -174,6 +170,8 @@ users:
   memoryLimit: "128Mi"
   cpuRequest: "100m"
   cpuLimit: "200m"
+  notificationHubPath: nhsapp-nonlive
+  notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
 
 messages:
   minAvailable: 0
