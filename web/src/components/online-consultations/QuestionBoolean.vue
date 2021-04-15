@@ -1,5 +1,5 @@
 <template>
-  <fieldset class="nhsuk-fieldset">
+  <span>
     <div v-if="error && errorText">
       <span v-for="singleError in errorText"
             :id="`${name}error`" :key="singleError" class="nhsuk-error-message">
@@ -23,7 +23,7 @@
                           :required="required"
                           :a-described-by="ariaDescribed"
                           @select="selected"/>
-  </fieldset>
+  </span>
 </template>
 
 <script>

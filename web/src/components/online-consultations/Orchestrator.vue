@@ -17,13 +17,14 @@
       </div>
 
       <form @submit.prevent="continueClicked">
-        <question :id="question.id"
-                  :is-legend="question.isLegend"
-                  :label-for="question.name"
-                  :question-tag="question.tag"
-                  :text="question.text"
-                  :required="question.required"
-                  :error="isValidationError">
+        <component :is="questionWrapper"
+                   :id="question.id"
+                   :is-legend="question.isLegend"
+                   :label-for="question.name"
+                   :question-tag="question.tag"
+                   :text="question.text"
+                   :required="question.required"
+                   :error="isValidationError">
           <component :is="questionComponent"
                      :id="question.name"
                      :key="questionKey"
@@ -46,7 +47,7 @@
                          validationErrorMessage, validationErrorMessageFromResponse)"
                      :render-as-html="true"
                      @validate="onAnswerValidate"/>
-        </question>
+        </component>
         <generic-button id="continueButton"
                         :button-classes="['nhsuk-button']"
                         click-delay="short"
@@ -59,15 +60,15 @@
     <div v-else-if="isSuccess && (carePlans || referralRequests)" id="result-container">
 
       <div v-for="referralRequest in referralRequests" :key="referralRequest.id">
-        <question question-tag="div" :text="referralRequest.description"/>
+        <generic-question-wrapper question-tag="div" :text="referralRequest.description"/>
       </div>
 
       <div v-for="carePlan in carePlans" :key="carePlan.id">
-        <question question-tag="div" :text="carePlan.title"/>
-        <question v-for="(activity, index) in carePlan.activities"
-                  :key="`${carePlan.id}-activity-${index}`"
-                  question-tag="div"
-                  :text="activity"/>
+        <generic-question-wrapper question-tag="div" :text="carePlan.title"/>
+        <generic-question-wrapper v-for="(activity, index) in carePlan.activities"
+                                  :key="`${carePlan.id}-activity-${index}`"
+                                  question-tag="div"
+                                  :text="activity"/>
       </div>
     </div>
 
@@ -95,8 +96,9 @@
 import get from 'lodash/fp/get';
 import BackButton from '@/components/BackButton';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import FieldsetQuestionWrapper from '@/components/online-consultations/FieldsetQuestionWrapper';
 import GenericButton from '@/components/widgets/GenericButton';
-import Question from '@/components/online-consultations/Question';
+import GenericQuestionWrapper from '@/components/online-consultations/GenericQuestionWrapper';
 import QuestionAttachment from '@/components/online-consultations/QuestionAttachment';
 import QuestionBoolean from '@/components/online-consultations/QuestionBoolean';
 import QuestionChoice from '@/components/online-consultations/QuestionChoice';
@@ -123,11 +125,12 @@ export default {
   components: {
     BackButton,
     DesktopGenericBackLink,
+    FieldsetQuestionWrapper,
     GenericButton,
+    GenericQuestionWrapper,
     MessageDialog,
     MessageList,
     MessageText,
-    Question,
     QuestionBoolean,
     QuestionChoice,
     QuestionDate,
@@ -170,6 +173,16 @@ export default {
     },
     question() {
       return this.$store.state.onlineConsultations.question;
+    },
+    questionWrapper() {
+      switch (get('question.type', this)) {
+        case QuestionTypes.BOOLEAN:
+        case QuestionTypes.CHOICE:
+        case QuestionTypes.MULTIPLE_CHOICE:
+          return FieldsetQuestionWrapper;
+        default:
+          return GenericQuestionWrapper;
+      }
     },
     questionComponent() {
       switch (get('question.type', this)) {

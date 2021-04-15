@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <div :class="formGroupClasses">
+  <div>
     <component :is="questionTag"
                v-if="text"
                :id="id"
@@ -11,14 +11,13 @@
          :id="id"
          :class="[questionClass, 'question', required && 'required']"
          :for="isLabel && labelFor">
-      <slot name="question-slot" />
+      <slot name="questionSlot" />
     </div>
     <p v-if="showOptional"
        id="optional-label"
        class="nhsuk-hint optionalLabel marginBottom">
       ({{ this.$t('onlineConsultations.question.optionalLabel') }})
     </p>
-    <slot />
   </div>
 </template>
 
@@ -64,9 +63,6 @@ export default {
     },
     questionClass() {
       return this.isLegend ? 'nhsuk-fieldset__legend' : 'nhsuk-label';
-    },
-    formGroupClasses() {
-      return this.error ? ['nhsuk-form-group', 'nhsuk-form-group--error'] : 'nhsuk-form-group';
     },
     showOptional() {
       return !(this.required || get('$store.state.onlineConsultations.status', this) === SUCCESS);
