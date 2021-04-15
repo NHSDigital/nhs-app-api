@@ -77,7 +77,7 @@ namespace NHSOnline.IntegrationTests.UI
             @"Appium error: An unknown server-side error occurred while processing the command\. Original error: Could not proxy.*",
             RegexOptions.Compiled);
 
-        // Network issue prevents stubbed "NHS login" page from being displayed on iOS
+        // 419002-Intermittent network access issue on iOS device
         private static readonly Regex AboutBlank = new(
             Regex.Escape("Expected driver.Url not to be \"about:blank\"."),
             RegexOptions.Compiled);
