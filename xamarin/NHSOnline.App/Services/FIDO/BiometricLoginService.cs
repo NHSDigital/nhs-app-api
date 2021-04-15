@@ -61,8 +61,7 @@ namespace NHSOnline.App.Services.FIDO
         {
             var verifyResult = await key.VerifyUser("Log in to NHS App").ResumeOnThreadPool();
 
-            var verifyUserResultVisitor = new LoginVerifyUserResultVisitor();
-            return verifyResult.Accept(verifyUserResultVisitor);
+            return verifyResult.Accept(new LoginVerifyUserResultVisitor());
         }
 
         private async Task<BiometricLoginResult> DoFidoLogin(string keyId, IBiometricAuthKey key, IBiometricAuthSigner signer)
@@ -83,9 +82,14 @@ namespace NHSOnline.App.Services.FIDO
                 return new BiometricLoginResult.Cancelled();
             }
 
-            public ProcessResult<IBiometricAuthSigner, BiometricLoginResult> Visit(BiometricAuthVerifyUserResult.Failed failed)
+            public ProcessResult<IBiometricAuthSigner, BiometricLoginResult> Visit(BiometricAuthVerifyUserResult.Unauthorised unauthorised)
             {
                 return new BiometricLoginResult.Failed();
+            }
+
+            public ProcessResult<IBiometricAuthSigner, BiometricLoginResult> Visit(BiometricAuthVerifyUserResult.LockedOut lockedOut)
+            {
+                return new BiometricLoginResult.Invalidated();
             }
         }
 
@@ -134,7 +138,12 @@ namespace NHSOnline.App.Services.FIDO
         {
             public BiometricLoginResult Visit(FidoAuthorisationResult.Authorised authorised)
             {
-                return new BiometricLoginResult.LoggedIn(authorised.FidoAuthResponse);
+                return new BiometricLoginResult.Authorised(authorised.FidoAuthResponse);
+            }
+
+            public BiometricLoginResult Visit(FidoAuthorisationResult.Unauthorised unauthorised)
+            {
+                return new BiometricLoginResult.Unauthorised();
             }
 
             public BiometricLoginResult Visit(FidoAuthorisationResult.Failed failed)

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
@@ -7,6 +8,8 @@ using NHSOnline.App.DependencyServices;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
 using NHSOnline.App.Services.FIDO;
+using NHSOnline.App.Threading;
+using Xamarin.Essentials;
 
 namespace NHSOnline.App.Areas.LoggedOut.Presenters
 {
@@ -21,6 +24,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
         private readonly ILifecycle _lifecycle;
         private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBackgroundExecutionService _backgroundExecutionService;
 
         public LoggedOutHomeScreenPresenter(
             ILoggedOutHomeScreenView view,
@@ -31,7 +35,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             INhsLoginService nhsLoginService,
             INhsExternalServicesConfiguration nhsExternalServicesConfiguration,
             ILifecycle lifecycle,
-            IBrowserOverlay browserOverlay)
+            IBrowserOverlay browserOverlay,
+            IBackgroundExecutionService backgroundExecutionService)
         {
             _view = view;
             _logger = logger;
@@ -42,6 +47,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
             _lifecycle = lifecycle;
             _browserOverlay = browserOverlay;
+            _backgroundExecutionService = backgroundExecutionService;
 
             _view.AppNavigation
                 .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
@@ -54,9 +60,17 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async Task ViewOnAppearing()
         {
-            // TODO: If returning from error scenario, do we want to not do this again?
-            var result = await _biometricAuthenticationService.Authenticate().PreserveThreadContext();
-            await result.Accept(new BiometricLoginResultVisitor(this)).PreserveThreadContext();
+            // NHSO-14252 will address this workaround
+            await _backgroundExecutionService.Run(async () =>
+            {
+                await Task.Delay(100).ResumeOnThreadPool();
+
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    var result = await _biometricAuthenticationService.Authenticate().PreserveThreadContext();
+                    await result.Accept(new BiometricLoginResultVisitor(this)).PreserveThreadContext();
+                });
+            }).ResumeOnThreadPool();
         }
 
         private async Task ViewOnLoginRequested()
@@ -95,6 +109,55 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             await _view.AppNavigation.Push(loginView).PreserveThreadContext();
         }
 
+        private async Task ShowCouldNotLoginWithBiometrics()
+        {
+            var couldNotLoginModel = new BiometricLoginCouldNotLoginModel();
+            var couldNotLoginView = _pageFactory.CreatePageFor(couldNotLoginModel);
+            await _view.AppNavigation.Push(couldNotLoginView).PreserveThreadContext();
+        }
+
+        private async Task ShowBiometricLoginFailed()
+        {
+            var result = await _biometricAuthenticationService.FetchBiometricStatus().PreserveThreadContext();
+            await result.Accept(new BiometricLoginFailedStatusResultVisitor(this)).PreserveThreadContext();
+        }
+
+        private async Task ShowBiometricLoginTouchIdFailed()
+        {
+            var model = new BiometricLoginTouchIdFailedModel();
+            var view = _pageFactory.CreatePageFor(model);
+            await _view.AppNavigation.Push(view).PreserveThreadContext();
+        }
+
+        private async Task ShowBiometricLoginFaceIdFailed()
+        {
+            var model = new BiometricLoginFaceIdFailedModel();
+            var view = _pageFactory.CreatePageFor(model);
+            await _view.AppNavigation.Push(view).PreserveThreadContext();
+        }
+
+        private async Task ShowBiometricLoginInvalidated()
+        {
+            _logger.LogInformation(nameof(ShowBiometricLoginInvalidated));
+            var result = await _biometricAuthenticationService.FetchBiometricStatus().PreserveThreadContext();
+            await result.Accept(new BiometricLoginInvalidatedStatusResultVisitor(this)).PreserveThreadContext();
+        }
+
+        private async Task ShowBiometricLoginTouchIdInvalidated()
+        {
+            var model = new BiometricLoginTouchIdInvalidatedModel();
+            var view = _pageFactory.CreatePageFor(model);
+            await _view.AppNavigation.Push(view).PreserveThreadContext();
+        }
+
+        private async Task ShowBiometricLoginFaceIdInvalidated()
+        {
+            _logger.LogInformation(nameof(ShowBiometricLoginFaceIdInvalidated));
+            var model = new BiometricLoginFaceIdInvalidatedModel();
+            var view = _pageFactory.CreatePageFor(model);
+            await _view.AppNavigation.Push(view).PreserveThreadContext();
+        }
+
         private async Task LoadCovidConditionsUrl()
         {
             _logger.LogInformation("Accessing covid conditions url");
@@ -127,32 +190,91 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
                 _presenter = presenter;
             }
 
-            public async Task Visit(BiometricLoginResult.LoggedIn loggedIn)
+            public async Task Visit(BiometricLoginResult.Authorised authorised)
             {
-                await _presenter.ShowNhsLoginPage(loggedIn.FidoAuthResponse).PreserveThreadContext();
+                _presenter._logger.LogInformation("Biometric authorisation successful");
+                await _presenter.ShowNhsLoginPage(authorised.FidoAuthResponse).PreserveThreadContext();
+            }
+
+            public async Task Visit(BiometricLoginResult.Unauthorised unauthorised)
+            {
+                _presenter._logger.LogInformation("Biometric authorisation unsuccessful");
+                await _presenter.ShowCouldNotLoginWithBiometrics().PreserveThreadContext();
+            }
+
+            public async Task Visit(BiometricLoginResult.Failed failed)
+            {
+                _presenter._logger.LogInformation("Biometrics failed");
+                await _presenter.ShowBiometricLoginFailed().PreserveThreadContext();
             }
 
             public Task Visit(BiometricLoginResult.Cancelled cancelled)
             {
-                return Task.CompletedTask;
-            }
-
-            public Task Visit(BiometricLoginResult.Failed failed)
-            {
-                // TODO: Display appropriate error message
+                _presenter._logger.LogInformation("Biometrics cancelled");
                 return Task.CompletedTask;
             }
 
             public Task Visit(BiometricLoginResult.NotRegistered notRegistered)
             {
+                _presenter._logger.LogInformation("Biometrics not registered");
                 return Task.CompletedTask;
             }
 
-            public Task Visit(BiometricLoginResult.Invalidated invalidated)
+            public async Task Visit(BiometricLoginResult.Invalidated invalidated)
             {
-                // TODO: Display appropriate error message
+                _presenter._logger.LogInformation("Biometrics invalidated");
+                await _presenter.ShowBiometricLoginInvalidated().PreserveThreadContext();
+            }
+        }
+
+        private sealed class BiometricLoginFailedStatusResultVisitor : IBiometricStatusResultVisitor<Task>
+        {
+            private readonly LoggedOutHomeScreenPresenter _presenter;
+
+            public BiometricLoginFailedStatusResultVisitor(LoggedOutHomeScreenPresenter presenter)
+            {
+                _presenter = presenter;
+            }
+
+            public Task Visit(BiometricStatusResult.HardwareNotPresent hardwareNotPresent)
+            {
+                _presenter._logger.LogError("Biometric login failed when hardware not present.");
                 return Task.CompletedTask;
             }
+
+            public Task Visit(BiometricStatusResult.FingerPrint fingerPrint)
+                => throw new NotImplementedException();
+
+            public async Task Visit(BiometricStatusResult.TouchId touchId)
+                => await _presenter.ShowBiometricLoginTouchIdFailed().PreserveThreadContext();
+
+            public async Task Visit(BiometricStatusResult.FaceId faceId)
+                => await _presenter.ShowBiometricLoginFaceIdFailed().PreserveThreadContext();
+        }
+
+        private sealed class BiometricLoginInvalidatedStatusResultVisitor : IBiometricStatusResultVisitor<Task>
+        {
+            private readonly LoggedOutHomeScreenPresenter _presenter;
+
+            public BiometricLoginInvalidatedStatusResultVisitor(LoggedOutHomeScreenPresenter presenter)
+            {
+                _presenter = presenter;
+            }
+
+            public Task Visit(BiometricStatusResult.HardwareNotPresent hardwareNotPresent)
+            {
+                _presenter._logger.LogError("Biometric login invalidated when hardware not present.");
+                return Task.CompletedTask;
+            }
+
+            public Task Visit(BiometricStatusResult.FingerPrint fingerPrint)
+                => throw new NotImplementedException();
+
+            public async Task Visit(BiometricStatusResult.TouchId touchId)
+                => await _presenter.ShowBiometricLoginTouchIdInvalidated().PreserveThreadContext();
+
+            public async Task Visit(BiometricStatusResult.FaceId faceId)
+                => await _presenter.ShowBiometricLoginFaceIdInvalidated().PreserveThreadContext();
         }
     }
 }

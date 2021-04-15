@@ -1,4 +1,5 @@
 NHSOnline.App.iOS/Info.plist
+NHSOnline.App.iOS/Entitlements.plist
 NHSOnline.App.Android/Properties/AndroidManifest.generated.xml
 remote_mac_config.sh
 *.GeneratedMSBuildEditorConfig.editorconfig

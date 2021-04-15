@@ -17,6 +17,11 @@ namespace NHSOnline.App.NhsLogin.Fido
             public override T Accept<T>(IFidoAuthorisationResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
+        public sealed class Unauthorised : FidoAuthorisationResult
+        {
+            public override T Accept<T>(IFidoAuthorisationResultVisitor<T> visitor) => visitor.Visit(this);
+        }
+
         public sealed class Failed : FidoAuthorisationResult
         {
             public override T Accept<T>(IFidoAuthorisationResultVisitor<T> visitor) => visitor.Visit(this);

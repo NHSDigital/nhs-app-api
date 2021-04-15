@@ -10,7 +10,7 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
 {
     internal class SimulatedBiometricAuthKeyProvider : IBiometricAuthKeyProvider
     {
-        private SecKey? _secKey;
+        private const string PrivateKeyLabel = "nhs-biometrics-key";
 
         private static SecKey CreateKey()
         {
@@ -25,6 +25,7 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
             return privateKey!;
         }
 
+        [SuppressMessage("ReSharper", "CA2000", Justification = "BiomtericAuthKey is not ready to be disposed of")]
         public Task<IBiometricAuthKey> CreateBiometricKey()
         {
             using var context = new LAContext();
@@ -34,23 +35,56 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
                 throw new InvalidOperationException("Cannot create auth key: Biometrics unusable");
             }
 
-            _secKey ??= CreateKey();
+            using var secKey = CreateKey();
 
-            BiometricRegistrationDomainState.Set(context.EvaluatedPolicyDomainState);
+            using var secRecord = new SecRecord(SecKind.Key)
+            {
+                Label = PrivateKeyLabel,
+                AuthenticationContext = context
+            };
+            secRecord.SetKey(secKey);
 
-            return Task.FromResult<IBiometricAuthKey>(new BiometricAuthKey(new LAContext(),_secKey));
+            SecKeyChain.Add(secRecord);
+
+            if (TryGetKey(out var biometricAuthKey))
+            {
+                BiometricRegistrationDomainState.Set(context.EvaluatedPolicyDomainState);
+
+                return Task.FromResult(biometricAuthKey);
+            }
+
+            throw new InvalidOperationException("Failed to retrieve generated key");
         }
 
         public bool TryGetKey([NotNullWhen(true)] out IBiometricAuthKey? key)
         {
-            if (_secKey == null)
+            var context = new LAContext();
+            try
             {
+                using var query = new SecRecord(SecKind.Key)
+                {
+                    Label = PrivateKeyLabel,
+                    AuthenticationContext = context
+                };
+
+                var queryResult = SecKeyChain.QueryAsConcreteType(query, out var secStatusCode);
+
+                Console.WriteLine(secStatusCode);
+
+                if (queryResult is SecKey secKey)
+                {
+                    key = new BiometricAuthKey(context, secKey);
+                    return true;
+                }
+
                 key = null;
                 return false;
             }
-
-            key = new BiometricAuthKey(new LAContext(), _secKey);
-            return true;
+            catch
+            {
+                context.Dispose();
+                throw;
+            }
         }
     }
 }

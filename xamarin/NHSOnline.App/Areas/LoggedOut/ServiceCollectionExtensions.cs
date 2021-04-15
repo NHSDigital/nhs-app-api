@@ -11,6 +11,11 @@ namespace NHSOnline.App.Areas.LoggedOut
         internal static IServiceCollection AddLoggedOutArea(this IServiceCollection services)
         {
             return services
+                .AddModelViewPresenter<BiometricLoginCouldNotLoginModel, BiometricLoginCouldNotLoginPage, BiometricLoginCouldNotLoginPresenter>()
+                .AddModelViewPresenter<BiometricLoginFaceIdFailedModel, BiometricLoginFaceIdFailedPage, BiometricLoginFaceIdFailedPresenter>()
+                .AddModelViewPresenter<BiometricLoginFaceIdInvalidatedModel, BiometricLoginFaceIdInvalidatedPage, BiometricLoginFaceIdInvalidatedPresenter>()
+                .AddModelViewPresenter<BiometricLoginTouchIdFailedModel, BiometricLoginTouchIdFailedPage, BiometricLoginTouchIdFailedPresenter>()
+                .AddModelViewPresenter<BiometricLoginTouchIdInvalidatedModel, BiometricLoginTouchIdInvalidatedPage, BiometricLoginTouchIdInvalidatedPresenter>()
                 .AddModelViewPresenter<GettingStartedModel, GettingStartedPage, GettingStartedPresenter>()
                 .AddModelViewPresenter<CreateSessionErrorBadRequestModel, CreateSessionErrorBadRequestPage, CreateSessionErrorBadRequestPresenter>()
                 .AddModelViewPresenter<CreateSessionErrorBadResponseFromUpstreamSystemModel, CreateSessionErrorBadResponseFromUpstreamSystemPage, CreateSessionErrorBadResponseFromUpstreamSystemPresenter>()

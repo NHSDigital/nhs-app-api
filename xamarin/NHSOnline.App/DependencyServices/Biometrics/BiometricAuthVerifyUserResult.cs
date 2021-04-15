@@ -21,7 +21,12 @@ namespace NHSOnline.App.DependencyServices.Biometrics
             public override T Accept<T>(IBiometricAuthVerifyUserResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
-        public sealed class Failed : BiometricAuthVerifyUserResult
+        public sealed class Unauthorised : BiometricAuthVerifyUserResult
+        {
+            public override T Accept<T>(IBiometricAuthVerifyUserResultVisitor<T> visitor) => visitor.Visit(this);
+        }
+
+        public sealed class LockedOut : BiometricAuthVerifyUserResult
         {
             public override T Accept<T>(IBiometricAuthVerifyUserResultVisitor<T> visitor) => visitor.Visit(this);
         }

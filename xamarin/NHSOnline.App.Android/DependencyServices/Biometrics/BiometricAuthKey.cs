@@ -63,7 +63,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
             var signature = Signature.GetInstance("SHA256withECDSA");
             if (signature == null)
             {
-                return new BiometricAuthVerifyUserResult.Failed();
+                return new BiometricAuthVerifyUserResult.Unauthorised();
             }
 
             signature.InitSign(_secretKey);
@@ -125,7 +125,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
 
                     default:
                         Logger.LogWarning("Authentication error: {ErrorCode} {ErrString}", errorCode, errString);
-                        _completionSource.SetResult(new BiometricAuthVerifyUserResult.Failed());
+                        _completionSource.SetResult(new BiometricAuthVerifyUserResult.Unauthorised());
                         break;
                 }
             }

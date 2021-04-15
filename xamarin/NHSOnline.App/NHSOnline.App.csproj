@@ -106,6 +106,26 @@
       <DependentUpon>NhsLoginTermsAndConditionsDeclinedPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Areas\LoggedOut\Views\BiometricLoginFaceIdFailedPage.xaml.cs">
+      <DependentUpon>BiometricLoginFaceIdFailedPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Areas\LoggedOut\Views\BiometricLoginTouchIdFailedPage.xaml.cs">
+      <DependentUpon>BiometricLoginTouchIdFailedPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Areas\LoggedOut\Views\BiometricLoginFaceIdInvalidatedPage.xaml.cs">
+      <DependentUpon>BiometricLoginFaceIdInvalidatedPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Areas\LoggedOut\Views\BiometricLoginTouchIdInvalidatedPage.xaml.cs">
+      <DependentUpon>BiometricLoginTouchIdInvalidatedPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Areas\LoggedOut\Views\BiometricLoginCouldNotLoginPage.xaml.cs">
+      <DependentUpon>BiometricLoginCouldNotLoginPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

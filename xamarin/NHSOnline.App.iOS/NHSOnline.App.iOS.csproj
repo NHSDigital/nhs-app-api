@@ -35,7 +35,9 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Debug|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Release|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Release|iPhoneSimulator' " />
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Preview - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Preview - Debug|iPhoneSimulator' ">
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Preview - Debug|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Preview - Release|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Preview - Release|iPhoneSimulator' " />
@@ -81,11 +83,13 @@
     <Compile Include="Renderers\WebViews\ScriptMessageHandler.cs" />
     <Compile Include="Renderers\WebViews\WebIntegrationWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\WebViewConfigurationBuilder.cs" />
-    <None Include="Entitlements.plist" />
-    <None Include="Info.template.plist">
-    </None>
+    <None Include="Info.template.plist"/>
     <None Include="Info.plist">
       <DependentUpon>Info.template.plist</DependentUpon>
+    </None>
+    <None Include="Entitlements.template.plist" />
+    <None Include="Entitlements.plist">
+      <DependentUpon>Entitlements.template.plist</DependentUpon>
     </None>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -122,7 +126,7 @@
       <Name>NHSOnline.App</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="GenerateInfoPlist.targets" />
+  <Import Project="GeneratePlists.targets" />
   <ItemGroup>
     <None Include="Properties\BuildConfiguration.debugmode.Debug.props" />
     <None Include="Properties\BuildConfiguration.debugmode.Release.props" />

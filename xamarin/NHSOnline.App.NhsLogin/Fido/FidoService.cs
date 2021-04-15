@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Threading;
@@ -54,8 +55,8 @@ namespace NHSOnline.App.NhsLogin.Fido
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "FIDO authorise failed");
-                return new FidoAuthorisationResult.Failed();
+                _logger.LogError(e, "FIDO authorise unsuccessful");
+                return new FidoAuthorisationResult.Unauthorised();
             }
         }
     }

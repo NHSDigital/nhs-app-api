@@ -126,7 +126,12 @@ namespace NHSOnline.App.Services.FIDO
                 return BiometricRegisterResult.Cancelled();
             }
 
-            public ProcessResult<IBiometricAuthSigner, BiometricRegisterResult> Visit(BiometricAuthVerifyUserResult.Failed failed)
+            public ProcessResult<IBiometricAuthSigner, BiometricRegisterResult> Visit(BiometricAuthVerifyUserResult.Unauthorised unauthorised)
+            {
+                return BiometricRegisterResult.Failed(BiometricErrorCode.CannotChangeBiometrics);
+            }
+
+            public ProcessResult<IBiometricAuthSigner, BiometricRegisterResult> Visit(BiometricAuthVerifyUserResult.LockedOut lockedOut)
             {
                 return BiometricRegisterResult.Failed(BiometricErrorCode.CannotChangeBiometrics);
             }

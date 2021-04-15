@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+  <!-- Info.plist -->
+
   <PropertyGroup>
     <InfoPlistTemplate>$(MSBuildProjectDirectory)/Info.template.plist</InfoPlistTemplate>
     <InfoPlistGenerated>$(MSBuildProjectDirectory)/Info.plist</InfoPlistGenerated>
@@ -65,5 +67,30 @@
       Query="$(NSAppTransportSecurityXPath)"
       Value="$(TemplateNSAppTransportSecurityContents)$(AdditionalNSAppTransportSecurityContents)" />
   </Target>
+
+  <!-- End Info.plist -->
+
+  <!-- Entitlements.plist -->
+
+  <PropertyGroup>
+    <EntitlementsPlistTemplate>$(MSBuildProjectDirectory)/Entitlements.template.plist</EntitlementsPlistTemplate>
+    <EntitlementsPlistGenerated>$(MSBuildProjectDirectory)/Entitlements.plist</EntitlementsPlistGenerated>
+  </PropertyGroup>
+
+  <Target Name="Generate Entitlements Plist" BeforeTargets="PrepareForBuild">
+    <Copy SourceFiles="$(EntitlementsPlistTemplate)" DestinationFiles="$(EntitlementsPlistGenerated)" />
+
+    <XmlPoke
+      XmlInputPath="$(EntitlementsPlistGenerated)"
+      Value="$(NhsAppBundleIdentifier)"
+      Query="/plist/dict/array[preceding-sibling::key[1] = 'keychain-access-groups']/string[1]" />
+
+    <ReadLinesFromFile File="$(EntitlementsPlistGenerated)">
+      <Output TaskParameter="Lines" ItemName="EntitlementsPlistLines" />
+    </ReadLinesFromFile>
+    <Message Text="@(EntitlementsPlistLines, '&#xA;')" Importance="High" />
+  </Target>
+
+  <!-- End Entitlements.plist -->
 
 </Project>

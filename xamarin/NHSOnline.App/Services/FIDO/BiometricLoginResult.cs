@@ -8,11 +8,11 @@ namespace NHSOnline.App.Services.FIDO
 
         public abstract T Accept<T>(IBiometricLoginResultVisitor<T> visitor);
 
-        internal sealed class LoggedIn : BiometricLoginResult
+        internal sealed class Authorised : BiometricLoginResult
         {
             public string FidoAuthResponse { get; }
 
-            public LoggedIn(string fidoAuthResponse)
+            public Authorised(string fidoAuthResponse)
             {
                 FidoAuthResponse = fidoAuthResponse;
             }
@@ -20,12 +20,17 @@ namespace NHSOnline.App.Services.FIDO
             public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
-        internal sealed class Cancelled : BiometricLoginResult
+        internal sealed class Unauthorised : BiometricLoginResult
         {
             public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
         internal sealed class Failed : BiometricLoginResult
+        {
+            public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
+        }
+
+        internal sealed class Cancelled : BiometricLoginResult
         {
             public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
         }
