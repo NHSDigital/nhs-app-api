@@ -18,7 +18,6 @@ namespace NHSOnline.App.Droid.AndroidServices
     {
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(AndroidNotificationMessagingService));
 
-        private const string ChannelId = "101";
         private const string UrlDataKey = "url";
 
         [SuppressMessage("Design", "CA1725: Parameter names should match base declaration",
@@ -66,7 +65,7 @@ namespace NHSOnline.App.Droid.AndroidServices
         private PendingIntent? BuildIntent(int notificationId, IDictionary<string, string> data)
         {
             using var intent = new Intent(this, typeof(MainActivity));
-            intent.AddFlags(ActivityFlags.NewTask);
+            intent.AddFlags(ActivityFlags.SingleTop);
 
             if (data.TryGetValue(UrlDataKey, out var url) && !string.IsNullOrWhiteSpace(url))
             {
@@ -78,7 +77,7 @@ namespace NHSOnline.App.Droid.AndroidServices
 
         private Notification BuildNotification(PendingIntent intent, RemoteMessage.Notification notification)
         {
-            using var notificationBuilder = new NotificationCompat.Builder(this, ChannelId);
+            using var notificationBuilder = new NotificationCompat.Builder(this, GetChannelId());
             notificationBuilder
                 .SetSmallIcon(Resource.Drawable.icon_notifications_nhs_logo)
                 .SetColorized(true)
@@ -92,13 +91,23 @@ namespace NHSOnline.App.Droid.AndroidServices
             return notificationBuilder.Build();
         }
 
-        private static NotificationChannel BuildChannel() =>
-            new NotificationChannel(ChannelId,
+        private NotificationChannel BuildChannel() =>
+            new NotificationChannel(GetChannelId(),
                 "NHS Notifications",
                 NotificationImportance.Default)
             {
                 Description = "Notifications from the NHS."
-            };
+        };
+
+        private string GetChannelId()
+        {
+            var channelId = Resources?.GetString(Resource.String.notificationChannel);
+            if (string.IsNullOrEmpty(channelId))
+            {
+                throw new InvalidOperationException("Expected configuration of notification channel to be set but was null or empty.");
+            }
+            return channelId!;
+        }
 
         private void SendNotification(int notificationId, Notification notification)
         {

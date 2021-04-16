@@ -1,14 +1,22 @@
 using Android.App;
+using Android.Content;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
+using Android.Util;
 using Android.Views;
 using NHSOnline.App.Droid.DependencyServices;
 using NHSOnline.App.Droid.DependencyServices.Biometrics;
 
 namespace NHSOnline.App.Droid
 {
-    [Activity(Label = "NHSOnline.App", Theme = "@style/MainTheme", Icon = "@mipmap/ic_launcher", RoundIcon = "@mipmap/ic_launcher_round", ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, ScreenOrientation = ScreenOrientation.Portrait)]
+    [Activity(Label = "NHSOnline.App",
+        LaunchMode = LaunchMode.SingleInstance,
+        Theme = "@style/MainTheme",
+        Icon = "@mipmap/ic_launcher",
+        RoundIcon = "@mipmap/ic_launcher_round",
+        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
+        ScreenOrientation = ScreenOrientation.Portrait)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
@@ -28,6 +36,8 @@ namespace NHSOnline.App.Droid
 
             AndroidLifecycle.MainActivity = this;
             AndroidBiometrics.MainActivity = this;
+
+            HandleIntent(this.Intent);
 
             LoadApplication(new NhsApp());
         }
@@ -81,6 +91,27 @@ namespace NHSOnline.App.Droid
             }
 
             viewGroup.ChildViewAdded += (_, args) => MakeNotFocusableIfViewGroup(args.Child, depth + 1);
+        }
+
+        protected override void OnNewIntent(Intent intent)
+        {
+            base.OnNewIntent(intent);
+
+            HandleIntent(intent);
+        }
+
+        private static void HandleIntent(Intent? intent)
+        {
+            if (intent == null)
+            {
+                return;
+            }
+
+            var url = intent.Extras?.GetString("url");
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                Log.Info(nameof(MainActivity), "Notification contains url {url}");
+            }
         }
     }
 }
