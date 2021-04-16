@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                     Birthdate = dateTimeNow.ToString(DateFormat, CultureInfo.InvariantCulture),
                     Im1ConnectionToken = _im1Token,
                     NhsNumber = NhsNumber,
-                    GpIntegrationCredentials = { OdsCode = _odsCode },
+                    GpRegistrationDetails = { OdsCode = _odsCode },
                     FamilyName = _familyName,
                     IdentityProofingLevel = "P9"
                 },
@@ -160,7 +160,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                     Birthdate = DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture),
                     Im1ConnectionToken = _im1Token,
                     NhsNumber = NhsNumber,
-                    GpIntegrationCredentials = { OdsCode = _odsCode },
+                    GpRegistrationDetails = { OdsCode = _odsCode },
                     FamilyName = _familyName
                 },
                 _accessToken,
@@ -197,7 +197,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                     Birthdate = null,
                     Im1ConnectionToken = _im1Token,
                     NhsNumber = NhsNumber,
-                    GpIntegrationCredentials = { OdsCode = _odsCode },
+                    GpRegistrationDetails = { OdsCode = _odsCode },
                     FamilyName = _familyName
                 },
                 _accessToken,
@@ -231,7 +231,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                     Birthdate = DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture),
                     Im1ConnectionToken = _im1Token,
                     NhsNumber = null,
-                    GpIntegrationCredentials = { OdsCode = _odsCode },
+                    GpRegistrationDetails = { OdsCode = _odsCode },
                     FamilyName = _familyName
                 },
                 _accessToken,
@@ -268,7 +268,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                     Birthdate = DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture),
                     Im1ConnectionToken = _im1Token,
                     NhsNumber = NhsNumber,
-                    GpIntegrationCredentials = { OdsCode = _odsCode },
+                    GpRegistrationDetails = { OdsCode = _odsCode },
                     FamilyName = _familyName,
                     IdentityProofingLevel = "P7"
                 },

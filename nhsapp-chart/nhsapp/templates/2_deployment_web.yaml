@@ -155,6 +155,8 @@ spec:
           value: "https://111.nhs.uk/emergency-prescription/"
         - name: VUE_WINDOW_OBJECT_ENABLED
           value: "{{ $.Values.webVueGlobalObject }}"
+        - name: GP_SESSION_ON_DEMAND
+          value: "{{ $.Values.gpSessionOnDemand }}"
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"

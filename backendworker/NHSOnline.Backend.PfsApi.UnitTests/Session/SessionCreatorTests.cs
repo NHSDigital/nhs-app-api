@@ -18,6 +18,7 @@ using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Session
 {
@@ -493,6 +494,53 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
             }
         }
 
+        [TestMethod]
+        public async Task CreateSession_HappyPathCreatesOnDemandGpSession_ReturnsSuccessResult()
+        {
+            // Arrange
+            var auditStub = ArrangeAudit();
+
+            Context.ArrangeGpSystemFactory();
+            Context.ArrangeAntiforgery();
+            Context.ArrangeCitizenIdService();
+            Context.ArrangeOdsCodeMassager();
+            Context.ArrangeSessionCacheService();
+            Context.ArrangeServiceJourneyRulesService();
+
+            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Success(Context.Data.EmisUserSession));
+            Context.Data.CitizenIdSessionResult.Im1ConnectionToken = "";
+
+            // Act
+            var result = await CreateSystemUnderTest().CreateSession(Context.Data.CreateSessionRequest);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                var successResult = result.Should().BeAssignableTo<CreateSessionResult.Success>().Subject;
+
+                var expectedUserSession = new P9UserSession(
+                    SessionCreatorTestContext.CsrfRequestToken,
+                    Context.Data.UserInfo.NhsNumber,
+                    Context.Data.CitizenIdSessionResult.Session,
+                    new OnDemandGpSession(Supplier.Disconnected),
+                    Context.Data.CitizenIdSessionResult.Im1ConnectionToken)
+                {
+                    Key = SessionCreatorTestContext.ApiSessionId,
+                    OrganDonationSessionId = ((P9UserSession) successResult.UserSession).OrganDonationSessionId
+                };
+
+                successResult.ServiceJourneyRules.Should().Be(Context.Data.ServiceJourneyRulesResponse);
+                successResult.UserSession.Should().BeEquivalentTo(expectedUserSession);
+
+                auditStub.AccessTokenString.Should().Be(Context.Data.CitizenIdUserSession.AccessToken);
+                auditStub.NhsNumber.Should().Be(Context.Data.UserProfile.NhsNumber);
+                auditStub.Supplier.Should().Be(Supplier.Emis);
+                auditStub.Operation.Should().Be("GP_Session_Create");
+                auditStub.Details.Should().Be("Attempting to create Session");
+                auditStub.ResponseDetails.Should().Be("Session successfully created.");
+            }
+        }
+
         [DataTestMethod]
         [DynamicData(nameof(TestDataServiceReference))]
         public async Task CreateSession_HappyPathNoGpSession_ReturnsUserSessionWithNullGpSession(
@@ -545,6 +593,148 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                 auditStub.Details.Should().Be("Attempting to create Session");
                 auditStub.ResponseDetails.Should().Be("Session successfully created.");
             }
+        }
+
+        [TestMethod]
+        public async Task CreateGpSessionOnDemand_HappyPath_ReturnsSuccessResult()
+        {
+            // Arrange
+            var auditStub = ArrangeAudit();
+
+            Context.ArrangeAntiforgery();
+            Context.ArrangeCitizenIdService();
+            Context.ArrangeOdsCodeMassager();
+            Context.ArrangeGpSystemFactory();
+            Context.ArrangeSessionCacheService();
+
+            Context.Data.SessionConfigSettings.ProxyEnabled = true;
+
+            Context.Data.EmisUserSession.ProxyPatients = new List<EmisProxyUserSession>
+            {
+                new EmisProxyUserSession()
+            };
+
+            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Success(Context.Data.EmisUserSession));
+
+            ArrangeMatchingNhsLoginIds();
+
+            // Act
+            var result = await CreateSystemUnderTest().CreateGpSessionOnDemand(Context.Data.CreateGpSessionOnDemandRequest);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                var successResult = result.Should().BeAssignableTo<CreateSessionResult.Success>().Subject;
+
+                var expectedUserSession = new P9UserSession(
+                    SessionCreatorTestContext.CsrfRequestToken,
+                    Context.Data.UserInfo.NhsNumber,
+                    Context.Data.CitizenIdSessionResult.Session,
+                    Context.Data.UserSession.GpUserSession,
+                    Context.Data.CitizenIdSessionResult.Im1ConnectionToken)
+                {
+                    OrganDonationSessionId = ((P9UserSession) successResult.UserSession).OrganDonationSessionId
+                };
+
+                successResult.UserSession.Should().BeEquivalentTo(expectedUserSession);
+
+                auditStub.AccessTokenString.Should().Be(Context.Data.CitizenIdUserSession.AccessToken);
+                auditStub.NhsNumber.Should().Be(Context.Data.UserProfile.NhsNumber);
+                auditStub.Supplier.Should().Be(Supplier.Unknown);
+                auditStub.Operation.Should().Be("CitizenId_Session_Create");
+                auditStub.Details.Should().Be("Create Citizen Id Session");
+                auditStub.ResponseDetails.Should().Be("Created Citizen Id Session 200");
+            }
+        }
+
+        [TestMethod]
+        public async Task CreateGpSessionOnDemand_NhsLoginIdMismatch_ReturnsErrorResult()
+        {
+            // Arrange
+            var auditStub = ArrangeAudit();
+
+            Context.ArrangeAntiforgery();
+            Context.ArrangeCitizenIdService();
+            Context.ArrangeOdsCodeMassager();
+            Context.ArrangeGpSystemFactory();
+            Context.ArrangeSessionCacheService();
+
+            Context.Data.SessionConfigSettings.ProxyEnabled = true;
+
+            Context.Data.EmisUserSession.ProxyPatients = new List<EmisProxyUserSession>
+            {
+                new EmisProxyUserSession()
+            };
+
+            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Success(Context.Data.EmisUserSession));
+
+            ArrangeDifferentNhsLoginIds();
+
+            // Act
+            var result = await CreateSystemUnderTest().CreateGpSessionOnDemand(Context.Data.CreateGpSessionOnDemandRequest);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                var errorResult = result.Should().BeAssignableTo<CreateSessionResult.ErrorResult>().Subject;
+
+                errorResult.ErrorTypes.Category.Should().Be(ErrorCategory.Login);
+                errorResult.ErrorTypes.Prefix.Should().BeEquivalentTo("3c");
+                errorResult.ErrorTypes.SourceApi.Should().Be(SourceApi.None);
+                errorResult.ErrorTypes.StatusCode.Should().Be(403);
+
+                auditStub.AccessTokenString.Should().Be(Context.Data.CitizenIdSessionResult.Session.AccessToken);
+                auditStub.NhsNumber.Should().Be(Context.Data.UserProfile.NhsNumber);
+                auditStub.Supplier.Should().Be(Supplier.Unknown);
+                auditStub.Operation.Should().Be("CitizenId_Session_Create");
+                auditStub.Details.Should().Be("Create Citizen Id Session");
+                auditStub.ResponseDetails.Should().Be("Created Citizen Id Session 200");
+            }
+        }
+
+        [TestMethod]
+        public async Task CreateGpSessionOnDemand_CIDUserProfileCallReturnsBadRequest_ReturnsLoginBadRequestError()
+        {
+            // Arrange
+            Context.ArrangeAntiforgery();
+            Context.Mocks.CitizenIdSessionService
+                .Setup(x => x.Create(
+                    Context.Data.UserSessionRequest.AuthCode,
+                    Context.Data.UserSessionRequest.CodeVerifier,
+                    new Uri(Context.Data.UserSessionRequest.RedirectUrl)))
+                .Returns(Task.FromResult(new CitizenIdSessionResult
+                {
+                    StatusCode = (int) HttpStatusCode.BadRequest
+                }))
+                .Verifiable();
+
+            Context.Mocks.ErrorReferenceGenerator
+                .Setup(x => x.GenerateAndLogErrorReference(
+                    It.Is<ErrorTypes>(
+                        et =>
+                            et.Category == ErrorCategory.Login &&
+                            et.StatusCode == StatusCodes.Status400BadRequest &&
+                            et.SourceApi == SourceApi.None)))
+                .Returns(SessionCreatorTestContext.ServiceDeskReference)
+                .Verifiable();
+
+            // Act
+            var result = await CreateSystemUnderTest()
+                .CreateGpSessionOnDemand(Context.Data.CreateGpSessionOnDemandRequest);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                var errorResult = result.Should().BeAssignableTo<CreateSessionResult.ErrorResult>().Subject;
+
+                errorResult.ErrorTypes.Category.Should().Be(ErrorCategory.Login);
+                errorResult.ErrorTypes.Prefix.Should().BeEquivalentTo("3a");
+                errorResult.ErrorTypes.SourceApi.Should().Be(SourceApi.None);
+                errorResult.ErrorTypes.StatusCode.Should().Be(400);
+            }
+
+            Context.Mocks.CitizenIdSessionService.Verify();
+            Context.Mocks.Auditor.VerifyNoOtherCalls();
         }
 
         private static IEnumerable<object[]> TestDataServiceReference
@@ -642,5 +832,22 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
         private AuditBuilderStub ArrangeAudit() => Context.ArrangeAudit();
 
         private SessionCreator CreateSystemUnderTest() => Context.CreateSystemUnderTest();
+
+        private void ArrangeMatchingNhsLoginIds()
+        {
+            var accessToken = AccessTokenMock.Generate(nhsNumber: "123", subject: "123456");
+            Context.Data.CitizenIdSessionResult.Session.AccessToken = accessToken.ToString();
+        }
+
+        private void ArrangeDifferentNhsLoginIds()
+        {
+            Context.Data.UserSession.CitizenIdUserSession.AccessToken =
+                AccessTokenMock.Generate(nhsNumber: "123", subject: "123456").ToString();
+
+            Context.Data.CitizenIdSessionResult.Session = new CitizenIdUserSession
+            {
+                AccessToken = AccessTokenMock.Generate(nhsNumber: "123", subject: "987654").ToString()
+            };
+        }
     }
 }

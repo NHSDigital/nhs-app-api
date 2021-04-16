@@ -188,7 +188,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
 
             var actualUserProfile = actualResult.UserProfile.ValueOrFailure();
             actualUserProfile.Im1ConnectionToken.Should().Be(userProfileResponse.Body.Im1ConnectionToken);
-            actualUserProfile.OdsCode.Should().Be(userProfileResponse.Body.GpIntegrationCredentials.OdsCode);
+            actualUserProfile.OdsCode.Should().Be(userProfileResponse.Body.GpRegistrationDetails.OdsCode);
             actualUserProfile.AccessToken.Should().Be(tokenResponse.Body.AccessToken);
 
             actualResult.StatusCode.Should().Be(StatusCodes.Status200OK);
@@ -377,7 +377,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
 
             var actualUserProfile = actualResult.UserProfile.ValueOrFailure();
             actualUserProfile.Im1ConnectionToken.Should().Be(userProfileResponse.Body.Im1ConnectionToken);
-            actualUserProfile.OdsCode.Should().Be(userProfileResponse.Body.GpIntegrationCredentials.OdsCode);
+            actualUserProfile.OdsCode.Should().Be(userProfileResponse.Body.GpRegistrationDetails.OdsCode);
             actualUserProfile.AccessToken.Should().Be(accessToken);
         }
 

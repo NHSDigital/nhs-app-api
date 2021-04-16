@@ -165,7 +165,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         {
             var userInfo = new Auth.CitizenId.Models.UserInfo
             {
-                GpIntegrationCredentials = { OdsCode = userProfile.OdsCode },
+                GpRegistrationDetails = { OdsCode = userProfile.OdsCode },
                 NhsNumber = userProfile.NhsNumber,
             };
             return new UserProfile(userInfo, "Access token", "Refresh Token");

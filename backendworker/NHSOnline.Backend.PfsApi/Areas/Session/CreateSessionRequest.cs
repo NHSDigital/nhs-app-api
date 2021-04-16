@@ -5,7 +5,7 @@ using NHSOnline.Backend.PfsApi.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Session
 {
-    internal sealed class CreateSessionRequest : ICreateSessionRequest
+    internal class CreateSessionRequest : ICreateSessionRequest
     {
         private readonly UserSessionRequest _model;
 

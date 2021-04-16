@@ -47,5 +47,12 @@ namespace NHSOnline.Backend.PfsApi.GpSession
 
             await _sessionCacheService.UpdateUserSession(_p9UserSession);
         }
+
+        public Task Visit(OnDemandGpSession onDemandGpSession)
+        {
+            _logger.LogWarning($"No GP session required for P9 user. odsCode={_p9UserSession.OdsCode}");
+
+            return Task.CompletedTask;
+        }
     }
 }

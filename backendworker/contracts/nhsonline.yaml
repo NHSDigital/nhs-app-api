@@ -32,7 +32,7 @@ paths:
   /v1/patient/prescriptions:
     $ref: ./nhsonline.prescriptions.yaml#/paths/~1prescriptions
   /v1/patient/terms-and-conditions/consent:
-    $ref: ./nhsonline.termsandconditions.yaml#/paths/~1consent  
+    $ref: ./nhsonline.termsandconditions.yaml#/paths/~1consent
   /v1/patient/terms-and-conditions/toggle-analytics-cookie-acceptance:
     $ref: ./nhsonline.termsandconditions.yaml#/paths/~1toggle-analytics-cookie-acceptance
   /v1/patient/test-result:
@@ -51,6 +51,8 @@ paths:
     $ref: ./nhsonline.usersession.yaml#/paths/~1session
   /v1/session/extend:
     $ref: ./nhsonline.usersession.yaml#/paths/~1session~1extend
+  /v1/session/gp-session-on-demand:
+    $ref: ./nhsonline.usersession.yaml#/paths/~1session~1gp-session-on-demand    
   /v1/patient/pharmacies:
     $ref: ./nhsonline.pharmacies.yaml#/paths/~1pharmacies
   /v1/patient/online-pharmacies:
@@ -60,7 +62,9 @@ paths:
   /v1/patient/journey-configuration:
     $ref: ./nhsonline.journey.yaml#/paths/~1journey-configuration
   /v1/patient/configuration:
-    $ref: ./nhsonline.journey.yaml#/paths/~1configuration  
+    $ref: ./nhsonline.journey.yaml#/paths/~1configuration
+  /v1/patient/linked-account-config:
+      $ref: ./nhsonline.journey.yaml#/paths/~1linked-account-config
   /v1/patient/linked-account-journey-configuration:
     $ref: ./nhsonline.journey.yaml#/paths/~1linked-account-journey-configuration
   /v1/patient/linked-accounts:

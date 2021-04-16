@@ -13,5 +13,10 @@ namespace NHSOnline.Backend.PfsApi.GpSession
         {
             return null;
         }
+
+        public string Visit(OnDemandGpSession onDemandGpSession)
+        {
+            return null;
+        }
     }
 }

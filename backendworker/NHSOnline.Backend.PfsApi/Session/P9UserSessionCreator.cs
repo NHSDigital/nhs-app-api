@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using NHSOnline.Backend.Auditing;
@@ -66,11 +67,20 @@ namespace NHSOnline.Backend.PfsApi.Session
                     $"Failed to determine the GP system based on ODS code '{odsCode}'");
             }
 
-            var gpUserSession = await _gpSessionCreator.CreateGpSession(citizenIdSessionResult, supplier);
-
-            var userSession = await CreateP9UserSession(citizenIdSessionResult, gpUserSession, csrfToken);
-
-            await DeleteConnectionTokenFromCache(citizenIdSessionResult.Im1ConnectionToken);
+            P9UserSession userSession;
+            if (string.IsNullOrEmpty(citizenIdSessionResult.Im1ConnectionToken))
+            {
+                _logger.LogInformation("Im1ConnectionToken null/empty. Creating OnDemandGpSession object");
+                var gpUserSession = new OnDemandGpSession(supplier);
+                userSession = await CreateP9UserSession(citizenIdSessionResult, gpUserSession, csrfToken);
+            }
+            else
+            {
+                _logger.LogInformation($"Im1ConnectionToken populated. Creating GpUserSession for {supplier}");
+                var gpUserSession = await _gpSessionCreator.CreateGpSession(citizenIdSessionResult, supplier);
+                userSession = await CreateP9UserSession(citizenIdSessionResult, gpUserSession, csrfToken);
+                await DeleteConnectionTokenFromCache(citizenIdSessionResult.Im1ConnectionToken);
+            }
 
             return CreateUserSessionResult.Succeeded(userSession);
         }

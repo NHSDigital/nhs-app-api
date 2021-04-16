@@ -5,5 +5,7 @@ namespace NHSOnline.Backend.PfsApi.Session
     public interface ISessionCreator
     {
         Task<CreateSessionResult> CreateSession(ICreateSessionRequest request);
+
+        Task<CreateSessionResult> CreateGpSessionOnDemand(ICreateGpSessionOnDemandRequest request);
     }
 }

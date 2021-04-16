@@ -13,6 +13,9 @@ namespace NHSOnline.Backend.Auth.CitizenId.Models
         [JsonProperty(JwtRegisteredClaimNames.FamilyName)]
         public string FamilyName { get; set; }
 
+        [JsonProperty("gp_registration_details")]
+        public GpRegistrationDetails GpRegistrationDetails { get; } = new GpRegistrationDetails();
+
         [JsonProperty("gp_integration_credentials")]
         public GpIntegrationCredentials GpIntegrationCredentials { get; } = new GpIntegrationCredentials();
 

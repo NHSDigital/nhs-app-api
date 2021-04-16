@@ -26,7 +26,20 @@ paths:
       tags:
         - linked-accounts
       summary: Gets the users guid which is used to determine which linked account is active
-      description: This call returns the users guid which is used to determine which linked account is activ
+      description: This call returns the users guid which is used to determine which linked account is active
+      responses:
+        "200":
+          description: Successful operation. Guid returned
+          content:
+            application/json:
+              schema:
+                $ref: "servicejourneyrules.yaml#/components/schemas/LinkedAccountsConfigResponse"
+  /linked-account-config:
+    get:
+      tags:
+        - linked-accounts
+      summary: Gets the users guid which is used to determine which linked account is active
+      description: This call returns the users guid which is used to determine which linked account is active
       responses:
         "200":
           description: Successful operation. Guid returned

@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo.Mappers
             _userProfile = new UserProfile(
                 new Auth.CitizenId.Models.UserInfo
                 {
-                    GpIntegrationCredentials = { OdsCode = "ODS Code" },
+                    GpRegistrationDetails = { OdsCode = "ODS Code" },
                     NhsNumber = "NHS Number",
                 },
                 "Access Token",

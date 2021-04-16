@@ -25,13 +25,15 @@ namespace NHSOnline.Backend.PfsApi.Filters
         private readonly IGpSessionCreator _gpSessionCreator;
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ISessionErrorResultBuilder _errorResultBuilder;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public GpSessionFilter(
             ILogger<GpSessionFilter> logger,
             IUserSessionService userSessionService,
             IGpSessionCreator gpSessionCreator,
             IGpSystemFactory gpSystemFactory,
-            ISessionErrorResultBuilder errorResultBuilder)
+            ISessionErrorResultBuilder errorResultBuilder,
+            IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _userSessionService = userSessionService;
@@ -39,6 +41,7 @@ namespace NHSOnline.Backend.PfsApi.Filters
             _gpSystemFactory = gpSystemFactory;
             _errorResultBuilder = errorResultBuilder;
             _userSessionService = userSessionService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -145,7 +148,7 @@ namespace NHSOnline.Backend.PfsApi.Filters
 
         private async Task<bool> EnsureGpSessionIsValid(ActionExecutingContext context, P9UserSession session)
         {
-            var recreateVisitor = new GpSessionRecreateVisitor(_logger, _gpSessionCreator, session);
+            var recreateVisitor = new GpSessionRecreateVisitor(_logger, _gpSessionCreator, session, _httpContextAccessor);
             var recreateResult = await session.GpUserSession.Accept(recreateVisitor);
 
             var filterRecreateRulesVisitor = new FilterSessionRecreateResultVisitor(this, context, session);
@@ -196,6 +199,24 @@ namespace NHSOnline.Backend.PfsApi.Filters
                 _context.Result = _gpSessionFilter._errorResultBuilder.BuildResult(
                     new ErrorTypes.GPSessionUnavailable(errorResult.ErrorType)
                 );
+
+                return Task.FromResult(false);
+            }
+
+            public Task<bool> Visit(GpSessionRecreateResult.SessionNotRequiredResult sessionNotRequiredResult)
+            {
+                _gpSessionFilter._logger.LogInformation(
+                    $"GP session still not required for user from odsCode={_p9UserSession.OdsCode}");
+
+                return Task.FromResult(true);
+            }
+
+            public Task<bool> Visit(GpSessionRecreateResult.Im1ConnectionTokenEmptyResult im1ConnectionTokenEmptyResult)
+            {
+                 _gpSessionFilter._logger.LogInformation("GP Session created on demand");
+
+                 _context.Result = _gpSessionFilter._errorResultBuilder
+                    .BuildResult(new ErrorTypes.GPSessionRequired());
 
                 return Task.FromResult(false);
             }

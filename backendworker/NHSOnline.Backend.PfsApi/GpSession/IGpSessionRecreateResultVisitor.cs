@@ -5,5 +5,7 @@ namespace NHSOnline.Backend.PfsApi.GpSession
         public T Visit(GpSessionRecreateResult.RecreatedResult createRecreatedResult);
         public T Visit(GpSessionRecreateResult.SessionStillValidResult createRecreatedResult);
         public T Visit(GpSessionRecreateResult.ErrorResult errorResult);
+        public T Visit(GpSessionRecreateResult.SessionNotRequiredResult sessionNotRequiredResult);
+        public T Visit(GpSessionRecreateResult.Im1ConnectionTokenEmptyResult sessionNotRequiredResult);
     }
 }

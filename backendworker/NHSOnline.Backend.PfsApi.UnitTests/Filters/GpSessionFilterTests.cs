@@ -54,6 +54,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
         private GpSessionRecreateResult _sessionRecreateErrorResult;
 
         private List<LinkedAccount> _linkedAccounts;
+        private HttpContextAccessor _httpContextAccessor;
 
         public static void MethodWithCorrectGpSessionTypeAndAttribute([GpSession] GpUserSession gpUserSession)
         {
@@ -203,13 +204,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
                 return Task.FromResult<ActionExecutedContext>(null);
             };
 
+            _httpContextAccessor = Mock.Of<HttpContextAccessor>();
+
             // system under test
             _gpSessionFilter = new GpSessionFilter(
                 _logger,
                 _userSessionService,
                 _gpSessionCreator,
                 gpSystemFactory,
-                _errorResultBuilder);
+                _errorResultBuilder,
+                _httpContextAccessor);
         }
 
         [TestMethod]

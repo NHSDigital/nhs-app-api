@@ -64,6 +64,17 @@ namespace NHSOnline.Backend.Support
             public override int StatusCode => Constants.CustomHttpStatusCodes.Status599GpSessionUnavailable;
         }
 
+        public class GPSessionRequired: ErrorTypes
+        {
+           // Although not needed (i.e. never seen by the end user), we need to implement Prefix from the
+           // abstract base class
+            public override string Prefix => "3o";
+
+            public override ErrorCategory Category => ErrorCategory.None;
+
+            public override int StatusCode => Constants.CustomHttpStatusCodes.Status598GpSessionRequired;
+        }
+
         public class LoginMinimumAgeNotMet : ErrorTypes
         {
             public override string Prefix => "3g";

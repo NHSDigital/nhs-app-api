@@ -5,5 +5,7 @@ namespace NHSOnline.Backend.Support
         T Visit(NullGpSession nullGpSession);
 
         T Visit(GpUserSession gpSession);
+
+        T Visit(OnDemandGpSession onDemandGpSession);
     }
 }

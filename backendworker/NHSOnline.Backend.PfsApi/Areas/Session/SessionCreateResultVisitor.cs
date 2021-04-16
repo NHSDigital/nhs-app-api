@@ -10,6 +10,7 @@ using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Session;
 using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Session
@@ -57,10 +58,23 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
             responseBody = userSession.Accept(new CreateResponseFromUserSessionVisitor<PostUserSessionResponse>(_settings, responseBody));
 
-            var userAgent = httpContext.Request.Headers[Constants.HttpHeaders.UserAgent];
+            await LogMetrics(httpContext, userSession, referrer);
 
-            var metricLoggingData = new LoginData(httpContext.TraceIdentifier, userSession.Key, userAgent, referrer);
-            await _metricLogger.Login(metricLoggingData);
+            return new CreatedResult(string.Empty, responseBody);
+        }
+
+        public async Task<IActionResult> Visit(CreateSessionResult.Success success, HttpContext httpContext, string referrer)
+        {
+            var userSession = success.UserSession;
+
+            _userSessionService.SetUserSession(userSession);
+            _logger.LogInformation($"Created {userSession.GetType().Name}");
+
+            var responseBody = new PostUserSessionResponse();
+
+            responseBody = userSession.Accept(new CreateResponseFromUserSessionVisitor<PostUserSessionResponse>(_settings, responseBody));
+
+            await LogMetrics(httpContext, userSession, referrer);
 
             return new CreatedResult(string.Empty, responseBody);
         }
@@ -70,7 +84,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             return Task.FromResult(_errorResultBuilder.BuildResult(errorResultResult.ErrorTypes));
         }
 
-        private async Task AppendCookieToResponse(string sessionId, HttpContext httpContext)
+        private static async Task AppendCookieToResponse(string sessionId, HttpContext httpContext)
         {
             var claims = new List<Claim>
             {
@@ -82,6 +96,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             await httpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity));
+        }
+
+        private async Task LogMetrics(HttpContext httpContext, UserSession userSession, string referrer)
+        {
+            var userAgent = httpContext.Request.Headers[Constants.HttpHeaders.UserAgent];
+
+            var metricLoggingData = new LoginData(httpContext.TraceIdentifier, userSession.Key, userAgent, referrer);
+            await _metricLogger.Login(metricLoggingData);
         }
     }
 }

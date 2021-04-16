@@ -126,5 +126,45 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 _logger.LogExit();
             }
         }
+
+
+        [HttpPut]
+        [Route("gp-session-on-demand")]
+        public async Task<IActionResult> GpSessionOnDemand([FromBody] UserSessionRequest model, [UserSession] P9UserSession p9UserSession)
+        {
+            try
+            {
+                _logger.LogEnter();
+                if (!ModelState.IsValid)
+                {
+                    return new BadRequestObjectResult(ModelState);
+                }
+
+                var validator = new SessionValidator(_logger);
+
+                if (!validator.IsPostValid(model))
+                {
+                    return _errorResultBuilder.BuildResult(new ErrorTypes.LoginBadRequest());
+                }
+
+                var csrfToken = _antiforgery.GetTokens(HttpContext).RequestToken;
+                var request = new CreateGpSessionOnDemandRequest(p9UserSession, model, csrfToken, HttpContext);
+
+                var result = await _sessionCreator.CreateGpSessionOnDemand(request);
+
+                var referrer = "";
+
+                if (model?.Referrer != null)
+                {
+                    referrer = model.Referrer;
+                }
+
+                return await result.Accept(_sessionResultVisitor, HttpContext, referrer);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
     }
 }

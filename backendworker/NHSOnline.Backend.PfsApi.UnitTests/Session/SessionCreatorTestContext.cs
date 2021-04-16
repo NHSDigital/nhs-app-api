@@ -152,6 +152,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
             internal ServiceJourneyRulesConfigResult ServiceJourneyRulesConfigResult { get; }
             internal ConfigurationSettings ConfigurationSettings { get; }
             internal CreateSessionRequest CreateSessionRequest { get; }
+            internal CreateGpSessionOnDemandRequest CreateGpSessionOnDemandRequest { get; }
 
             internal TestData(TestMocks mocks)
             {
@@ -162,7 +163,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                     NhsNumber = "012 345 6789",
                     GivenName = "Given",
                     FamilyName = "Family",
-                    GpIntegrationCredentials = { OdsCode = "OdsCode" }
+                    GpRegistrationDetails = { OdsCode = "OdsCode" }
                 };
                 UserProfile = new UserProfile(UserInfo, AccessToken, RefreshToken);
 
@@ -201,6 +202,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
 
                 CreateSessionRequest = new CreateSessionRequest(UserSessionRequest, CsrfRequestToken, mocks.HttpContext.Object);
 
+                CreateGpSessionOnDemandRequest = new CreateGpSessionOnDemandRequest(UserSession, UserSessionRequest, CsrfRequestToken, mocks.HttpContext.Object);
+
                 ConfigurationSettings = new ConfigurationSettings
                 {
                     DefaultSessionExpiryMinutes = SessionTimeoutMinutes,
@@ -222,7 +225,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
             internal Mock<HttpContext> HttpContext { get; } = new Mock<HttpContext>();
             internal Mock<IAntiforgery> Antiforgery { get; } = new Mock<IAntiforgery>();
             internal Mock<ISessionCacheService> SessionCacheService { get; } = new Mock<ISessionCacheService>();
-
             public void ConfigureServices(IServiceCollection serviceCollection)
             {
                 serviceCollection
