@@ -114,6 +114,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     .AddSingleton(new Mock<ICurrentDateTimeProvider>().Object)
                     .AddSingleton(new Mock<IJwtTokenGenerator>().Object)
                     .AddSingleton(new Mock<IWebHostEnvironment>().Object)
+                    .AddSingleton(new Mock<IHttpContextAccessor>().Object)
                     .AddMockLoggers();
             }
         }

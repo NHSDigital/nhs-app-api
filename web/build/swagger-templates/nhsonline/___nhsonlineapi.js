@@ -214,12 +214,9 @@ class NHSOnlineApi {
           // Must use lowercase to look for the header, regardless of
           // how it is defined in the backend.
           if (response.headers) {
-            if (response.headers['nhso-gp-session-created'] === 'true') {
-              this.store.dispatch('linkedAccounts/fetchPatientConfig');
-            }
             if (response.headers['nhso-im1-messaging-enabled']) {
               this.store.dispatch('practiceSettings/setIm1MessagingEnabled',
-                response.headers['nhso-im1-messaging-enabled'] === 'True');
+                response.headers['nhso-im1-messaging-enabled'].toUpperCase() === 'TRUE');
             }
           }
 
