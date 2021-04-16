@@ -35,7 +35,6 @@ import {
 
 import viewedPreRegInstructions from '@/middleware/viewedPreRegInstructions';
 import notificationsPrompt from '@/middleware/notificationsPrompt';
-import urlResolution from '@/middleware/urlResolution';
 import { CLEAR_SELECTED_MENU_ITEM } from '@/middleware/nativeNavigation';
 import { baseNhsAppHelpUrl, appLoginHelpUrl } from '@/router/externalLinks';
 import proofLevel from '@/lib/proofLevel';
@@ -62,7 +61,6 @@ export const LOGIN = {
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
     shouldShowContentHeader: false,
     helpUrl: appLoginHelpUrl,
-    middleware: [urlResolution],
   },
 };
 
@@ -93,7 +91,7 @@ export const PRE_REGISTRATION = {
     headerKey: 'navigation.pages.headers.preRegistrationInformation',
     titleKey: 'navigation.pages.titles.preRegistrationInformation',
     isAnonymous: true,
-    middleware: [urlResolution, viewedPreRegInstructions],
+    middleware: [viewedPreRegInstructions],
     crumb: {},
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
     helpUrl: appLoginHelpUrl,
@@ -107,7 +105,6 @@ export const BEGIN_LOGIN = {
     isAnonymous: true,
     crumb: {},
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
-    middleware: [urlResolution],
     helpUrl: appLoginHelpUrl,
   },
 };
@@ -172,7 +169,7 @@ export const NOTIFICATIONS = {
   meta: {
     headerKey: 'navigation.pages.headers.notifications',
     titleKey: 'navigation.pages.headers.notifications',
-    middleware: [urlResolution, notificationsPrompt],
+    middleware: [notificationsPrompt],
     proofLevel: proofLevel.P5,
     crumb: {},
     helpUrl: baseNhsAppHelpUrl,
@@ -186,7 +183,6 @@ export const NOTIFICATIONS_GENERIC_ERROR = {
   meta: {
     headerKey: 'navigation.pages.headers.notificationsGenericError',
     titleKey: 'navigation.pages.headers.notificationsGenericError',
-    middleware: [urlResolution],
     proofLevel: proofLevel.P5,
     crumb: {},
     helpUrl: baseNhsAppHelpUrl,

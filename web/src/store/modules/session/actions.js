@@ -103,6 +103,9 @@ export default {
 
     commit(SET_INFO, info);
   },
+  updateInfo({ commit }, info) {
+    commit(SET_INFO, info);
+  },
   startValidationChecking({ getters, commit, dispatch, state }) {
     if (!getters.isLoggedIn() || state.validationInterval) return;
 

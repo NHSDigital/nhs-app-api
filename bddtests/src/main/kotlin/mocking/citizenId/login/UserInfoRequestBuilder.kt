@@ -3,6 +3,7 @@ package mocking.citizenId.login
 import mocking.GsonFactory
 import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.citizenId.models.GpIntegrationCredentials
+import mocking.citizenId.models.GpRegistrationDetails
 import mocking.citizenId.models.UserInfo
 import mocking.models.Mapping
 import models.Patient
@@ -31,6 +32,7 @@ class UserInfoRequestBuilder(
                 Birthdate = patient.age.dateOfBirth,
                 Im1ConnectionToken = im1ConnectionToken,
                 GpIntegrationCredentials = GpIntegrationCredentials(patient.odsCode),
+                GpRegistrationDetails = GpRegistrationDetails(patient.odsCode),
                 GivenName = patient.name.firstName,
                 FamilyName = patient.name.surname,
                 Subject = patient.subject,

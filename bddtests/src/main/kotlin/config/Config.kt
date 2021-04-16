@@ -62,6 +62,9 @@ class Config private constructor() {
     val qualtricsDirectoryId:String
     val qualtricsMailingList:String
 
+    val cidGpSessionRedirectUri: String
+    val cidNativeGpSessionRedirectUri: String
+
     init {
         url = envOrDefault("url", "http://web.local.bitraft.io:3000")
         wiremockUrl = envOrDefault("wiremockUrl", "http://stubs.local.bitraft.io:8080")
@@ -105,6 +108,14 @@ class Config private constructor() {
         autoLogin = envOrDefault("AUTOLOGIN", "false")
         cidRedirectUri = envOrDefault("CID_REDIRECT_URI", "$appScheme://$webHostname:3000/auth-return")
         cidNativeRedirectUri = envOrDefault("CID_REDIRECT_URI", "$nativeAppScheme://$webHostname:3000/auth-return")
+
+        cidGpSessionRedirectUri =
+                envOrDefault("CID_GP_SESSION_REDIRECT_URI",
+                        "$appScheme://$webHostname:3000/on-demand-gp-return")
+        cidNativeGpSessionRedirectUri =
+                envOrDefault("CID_GP_SESSION_REDIRECT_URI",
+                        "$nativeAppScheme://$webHostname:3000/on-demand-gp-return")
+
         emisApplicationId = envOrDefault("EMIS_APPLICATION_ID", "16C4B8A9-A6B1-4727-80E3-DA0C755CD6E7")
         emisVersion = envOrDefault("EMIS_VERSION", "2.1.0.0")
 

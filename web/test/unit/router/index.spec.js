@@ -76,6 +76,11 @@ describe('router', () => {
         'session/isLoggedIn': () => true,
         'session/shouldUplift': () => true,
       };
+      store.$env = {
+        URI_FORMAT_API_CLIENT: 'http://api{host}',
+        URI_FORMAT_CID_REDIRECT_WEB: 'http://web{host}',
+        URI_FORMAT_CID_REDIRECT_NATIVE: 'nhsapp://web{host}',
+      };
     });
     describe.each([
       ['no guid', '/'],

@@ -12,6 +12,7 @@ import utils.GlobalSerenityHelpers
 import utils.getOrFail
 import utils.isTrueOrFalse
 import utils.set
+import utils.SerenityHelpers
 import worker.models.patient.Im1ConnectionToken
 
 private const val DELAY_BY = 1000L
@@ -21,16 +22,34 @@ class CitizenIdSessionCreateJourney {
 
     fun createFor(patient: Patient, alternativeUser:Boolean = false, hasNullToken: Boolean = false) {
         if (!GlobalSerenityHelpers.CITIZEN_ID_SESSION_CREATED.isTrueOrFalse() || alternativeUser) {
-            val accessToken = createMockingSteps(patient, GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail())
-            mockingClient.forCitizenId.mock {
-                userInfoRequest(accessToken).respondWithSuccess(patient, hasNullToken)
+            val accessToken = createMockingSteps(patient)
+
+            val isDecoupled = SerenityHelpers.getValueOrNull<Boolean>("DECOUPLED")
+            if (isDecoupled == null) {
+                mockingClient.forCitizenId.mock {
+                    userInfoRequest(accessToken).respondWithSuccess(patient, hasNullToken)
+                }
             }
+            else {
+                mockingClient.forCitizenId.mock {
+                    userInfoRequest(accessToken).respondWithSuccess(patient, true)
+                            .inScenario("DECOUPLED")
+                            .willSetStateTo("DECOUPLED_LOGIN_COMPLETE")
+                }
+
+                mockingClient.forCitizenId.mock {
+                    userInfoRequest(accessToken).respondWithSuccess(patient, false)
+                            .inScenario("DECOUPLED")
+                            .whenScenarioStateIs("DECOUPLED_LOGIN_COMPLETE")
+                }
+            }
+
             GlobalSerenityHelpers.CITIZEN_ID_SESSION_CREATED.set(true)
         }
     }
 
     fun createTermsNotAcceptedFor(patient: Patient) {
-        createMockingSteps(patient, GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail())
+        createMockingSteps(patient)
         mockingClient.forCitizenId.mock {
             completeLoginRequest(patient).respondWithTermsNotAcceptedResponse()
         }
@@ -82,7 +101,7 @@ class CitizenIdSessionCreateJourney {
     }
 
     fun createInvalidAuthenticationTokenFor(patient: Patient) {
-        val accessToken = createMockingSteps(patient, GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail())
+        val accessToken = createMockingSteps(patient)
 
         mockingClient.forCitizenId.mock {
             userInfoRequest(accessToken).respondWithSuccess(patient
@@ -91,14 +110,22 @@ class CitizenIdSessionCreateJourney {
         }
     }
 
-    private fun createMockingSteps(patient: Patient, redirectUri :String): String {
+    private fun createMockingSteps(patient: Patient): String {
+        val loginRedirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
+        val gpSessionRedirectUri = GlobalSerenityHelpers.GP_SESSION_REDIRECT_URI.getOrFail<String>()
+
         mockingClient.forCitizenId.mock {
-            initialLoginRequest(patient, redirectUri, Config.instance.cidClientId)
+            initialLoginRequest(patient, loginRedirectUri, Config.instance.cidClientId)
                     .respondWithLoginPage()
         }
 
         mockingClient.forCitizenId.mock {
-            UpliftLoginRequestBuilder(patient, redirectUri, Config.instance.cidClientId)
+            initialLoginRequest(patient, gpSessionRedirectUri, Config.instance.cidClientId)
+                    .respondWithLoginPage()
+        }
+
+        mockingClient.forCitizenId.mock {
+            UpliftLoginRequestBuilder(patient, loginRedirectUri, Config.instance.cidClientId)
                     .respondWithUpliftPage()
         }
 
@@ -126,7 +153,12 @@ class CitizenIdSessionCreateJourney {
         }
 
         mockingClient.forCitizenId.mock {
-            tokenRequest(patient.codeVerifier, patient.authCode, redirectUri)
+            tokenRequest(patient.codeVerifier, patient.authCode, loginRedirectUri)
+                    .respondWithSuccess(accessToken = accessToken, idToken = idToken)
+        }
+
+        mockingClient.forCitizenId.mock {
+            tokenRequest(patient.codeVerifier, patient.authCode, gpSessionRedirectUri)
                     .respondWithSuccess(accessToken = accessToken, idToken = idToken)
         }
 

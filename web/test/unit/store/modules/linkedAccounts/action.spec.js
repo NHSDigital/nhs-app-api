@@ -1,5 +1,4 @@
 import actions from '@/store/modules/linkedAccounts/actions';
-import { SET_LINKED_ACCOUNTS_CONFIG } from '@/store/modules/linkedAccounts/mutation-types';
 
 const {
   initialiseConfig,
@@ -30,7 +29,6 @@ describe('initialiseConfig', () => {
       .call(that, { commit })
       .then(() => {
         expect(that.app.$http.getV1PatientConfiguration).toHaveBeenCalled();
-        expect(commit).toHaveBeenCalledWith(SET_LINKED_ACCOUNTS_CONFIG, configResponse);
       });
   });
 });

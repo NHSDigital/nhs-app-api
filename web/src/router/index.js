@@ -16,6 +16,7 @@ import linkedProfilesRoutes from '@/router/routes/linked-profiles';
 import logoutRoute from '@/router/routes/logout';
 import organDonationRoutes from '@/router/routes/organ-donation';
 import silverIntegrationRoutes from '@/router/routes/silver-integration';
+import gpSessionOndDemandRoutes from '@/router/routes/gp-session-on-demand';
 import store from '@/store';
 
 import middlewarePipeline from '@/router/middlewarePipeline';
@@ -32,7 +33,7 @@ import conditionalRedirect from '@/middleware/conditionalRedirect';
 import setSource from '@/middleware/setSource';
 import sjrRedirect from '@/middleware/sjrRedirect';
 import upliftRedirect from '@/middleware/upliftRedirect';
-
+import urlResolution from '@/middleware/urlResolution';
 import configureAnalytics from '@/services/analytics-service';
 import { resetPageFocus } from '@/lib/utils';
 
@@ -52,6 +53,7 @@ VueRouter.prototype.push = function push(location) {
 const globalMiddleware = [
   setSource,
   authCookieConfig,
+  urlResolution,
   appConfig,
   auth,
   termsAndConditions,
@@ -87,6 +89,7 @@ export const allRoutes = [
       ...organDonationRoutes,
       ...dataSharingRoutes,
       ...silverIntegrationRoutes,
+      ...gpSessionOndDemandRoutes,
       // Route matching happens in order, generalRoutes should
       // be last so to not match before all other routes have been checked,
       // as it contains a catch-all NOT_FOUND route

@@ -12,6 +12,9 @@ data class UserInfo (
         @SerializedName("gp_integration_credentials")
         var GpIntegrationCredentials: GpIntegrationCredentials,
 
+        @SerializedName("gp_registration_details")
+        var GpRegistrationDetails: GpRegistrationDetails,
+
         @SerializedName("nhs_number")
         var NhsNumber: String,
 

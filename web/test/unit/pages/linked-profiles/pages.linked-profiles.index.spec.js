@@ -20,6 +20,9 @@ describe('linked profile index', () => {
       },
     },
     linkedAccounts: {
+      config: {
+        hasLoaded: true,
+      },
       items: [
         {
           id: 'user-id-0',
@@ -108,7 +111,7 @@ describe('linked profile index', () => {
 
     it('will watch and reload if the timestamp value changes', () => {
       wrapper = mountPage({ timestamp: 12345 });
-      expect($store.dispatch).toHaveBeenCalledWith('linkedAccounts/initialiseConfig');
+      expect($store.dispatch).toHaveBeenCalledWith('linkedAccounts/fetchPatientConfig');
     });
   });
 

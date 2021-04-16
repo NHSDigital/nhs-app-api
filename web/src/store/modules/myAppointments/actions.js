@@ -56,7 +56,6 @@ export default {
       const data = await this.app.$http.getV1PatientAppointments({
         ignoreError: true,
       });
-
       commit(LOADED, data);
 
       if (rootState.device.isNativeApp) {

@@ -38,7 +38,6 @@ import {
 import breadcrumbs from '@/breadcrumbs/prescriptions';
 
 import { PRESCRIPTIONS_MENU_ITEM } from '@/middleware/nativeNavigation';
-import urlResolution from '@/middleware/urlResolution';
 
 export const UPLIFT_PRESCRIPTIONS = {
   name: UPLIFT_PRESCRIPTIONS_NAME,
@@ -51,7 +50,6 @@ export const UPLIFT_PRESCRIPTIONS = {
     i18nKey: 'prescriptions',
     proofLevel: proofLevel.P5,
     helpUrl: prescriptionsHelpUrl,
-    middleware: [urlResolution],
   },
 };
 

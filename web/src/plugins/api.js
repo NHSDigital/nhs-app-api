@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import store from '@/store';
+import router from '@/router';
 import NHSOnlineApiV1 from '@/services/v1nhsonlineapi';
 import NHSOnlineApiV2 from '@/services/v2nhsonlineapi';
 import NHSOnlineApiV3 from '@/services/v3nhsonlineapi';
@@ -9,16 +10,19 @@ const ApiPlugin = {
     const api = new NHSOnlineApiV1({
       store,
       cookies: Vue.$cookies,
+      router,
     });
 
     const apiV2 = new NHSOnlineApiV2({
       store,
       cookies: Vue.$cookies,
+      router,
     });
 
     const apiV3 = new NHSOnlineApiV3({
       store,
       cookies: Vue.$cookies,
+      router,
     });
 
     Vue.$http = api;

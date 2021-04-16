@@ -22,6 +22,7 @@ describe('actions', () => {
     actions.app = {
       $http: {
         postV1Session: jest.fn(() => Promise.resolve({ data })),
+        putV1SessionGpSessionOnDemand: jest.fn(() => Promise.resolve({ data })),
         deleteV1Session: jest.fn(() => Promise.resolve()),
         getV1PatientTermsAndConditionsConsent: jest.fn(() => Promise.resolve({ response })),
       },
@@ -80,6 +81,29 @@ describe('actions', () => {
           gpOdsCode: actualOdsCode,
           token: actualToken,
         } = call[1];
+
+        expect(actualName).toEqual(name);
+        expect(actualTimeout).toEqual(sessionTimeout);
+        expect(actualOdsCode).toEqual(odsCode);
+        expect(actualToken).toEqual(token);
+      }));
+  });
+
+  describe('handle Gp On Demand Response', () => {
+    it('will update the info from the data received from the server', () => actions
+      .handleGpOnDemandResponse({ commit, state, rootState }, { code: '123' })
+      .then(() => {
+        const updateInfoCall = find(x => x[0] === 'session/updateInfo')(actions.dispatch.mock.calls);
+        expect(updateInfoCall).not.toBeUndefined();
+        expect(updateInfoCall.length).toEqual(2);
+
+        const updateInfoParameter = updateInfoCall[1];
+        const {
+          name: actualName,
+          durationSeconds: actualTimeout,
+          gpOdsCode: actualOdsCode,
+          token: actualToken,
+        } = updateInfoParameter;
 
         expect(actualName).toEqual(name);
         expect(actualTimeout).toEqual(sessionTimeout);

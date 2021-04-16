@@ -52,6 +52,7 @@ class SetupAndTeardown {
         setSessionVariable(WorkerClient::class).to(workerClient)
         GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.set(false)
         GlobalSerenityHelpers.LOGIN_REDIRECT_URI.set(Config.instance.cidRedirectUri)
+        GlobalSerenityHelpers.GP_SESSION_REDIRECT_URI.set(Config.instance.cidGpSessionRedirectUri)
         GlobalSerenityHelpers.SCENARIO_TITLE.set(scenario.name)
     }
 

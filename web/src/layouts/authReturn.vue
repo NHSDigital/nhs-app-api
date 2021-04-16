@@ -160,8 +160,10 @@
                 <error-link from="login.authReturn.backToLogin" :action="loginUrl"/>
               </div>
               <div v-else>
-                <main >
-                  <div :class="$style['blue-body']">
+                <main>
+                  <div :class="useDefaultPageStyling
+                    ? $style['default-grey; footer-container-desktop']
+                    : $style['blue-body']">
                     <spinner />
                     <connection-error />
                     <api-error />
@@ -202,6 +204,7 @@ import Spinner from '@/components/widgets/Spinner';
 import WebHeader from '@/components/widgets/WebHeader';
 import WebFooter from '@/components/widgets/WebFooter';
 import { LOGIN_PATH } from '@/router/paths';
+import { GP_SESSION_ON_DEMAND_RETURN_NAME } from '@/router/names';
 import { CONSENT_NOT_GIVEN_DESCRIPTION } from '@/lib/utils';
 
 export default {
@@ -281,6 +284,9 @@ export default {
     },
     termsNotAccepted() {
       return this.$route.query.error_description === this.consentNotGivenDescription;
+    },
+    useDefaultPageStyling() {
+      return this.$route.name === GP_SESSION_ON_DEMAND_RETURN_NAME;
     },
   },
   mounted() {

@@ -83,9 +83,9 @@ spec:
         - name: SECURE_COOKIES
           value: "true"
         - name: URI_FORMAT_CID_REDIRECT_WEB
-          value: "https://www{host}/auth-return"
+          value: "https://www{host}"
         - name: URI_FORMAT_CID_REDIRECT_NATIVE
-          value: "nhsapp://www{host}/auth-return"
+          value: "nhsapp://www{host}"
         - name: URI_FORMAT_API_CLIENT
           value: "https://api{host}"
         - name: API_BASE_URL
@@ -155,8 +155,8 @@ spec:
           value: "https://111.nhs.uk/emergency-prescription/"
         - name: VUE_WINDOW_OBJECT_ENABLED
           value: "{{ $.Values.webVueGlobalObject }}"
-        - name: GP_SESSION_ON_DEMAND
-          value: "{{ $.Values.gpSessionOnDemand }}"
+        - name: GP_SESSION_ON_DEMAND_ENABLED
+          value: "{{ $.Values.gpSessionOnDemandEnabled }}"
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"

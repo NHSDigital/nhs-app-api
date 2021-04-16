@@ -13,7 +13,6 @@ import {
 } from '@/router/names';
 
 import breadcrumbs from '@/breadcrumbs/silver-integration';
-import urlResolution from '@/middleware/urlResolution';
 
 export const UPLIFT_SILVER_INTEGRATION = {
   path: UPLIFT_SILVER_INTEGRATION_PATH,
@@ -25,7 +24,6 @@ export const UPLIFT_SILVER_INTEGRATION = {
     proofLevel: proofLevel.P5,
     crumb: breadcrumbs.UPLIFT_SILVER_INTEGRATION_CRUMB,
     helpUrl: baseNhsAppHelpUrl,
-    middleware: [urlResolution],
   },
 };
 
@@ -39,7 +37,6 @@ export const ERROR = {
     crumb: breadcrumbs.FEATURE_NOT_AVAILABLE_CRUMB,
     proofLevel: proofLevel.P5,
     helpUrl: baseNhsAppHelpUrl,
-    middleware: [urlResolution],
   },
 };
 

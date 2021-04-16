@@ -14,7 +14,6 @@ import {
 } from '@/router/names';
 
 import { CLEAR_SELECTED_MENU_ITEM } from '@/middleware/nativeNavigation';
-import urlResolution from '@/middleware/urlResolution';
 import proofLevel from '@/lib/proofLevel';
 import { baseNhsAppHelpUrl, thirdPartyHelpUrl } from '@/router/externalLinks';
 
@@ -29,7 +28,6 @@ export const INDEX = {
     crumb: breadcrumbs.INDEX_CRUMB,
     helpUrl: baseNhsAppHelpUrl,
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
-    middleware: [urlResolution],
   },
 };
 

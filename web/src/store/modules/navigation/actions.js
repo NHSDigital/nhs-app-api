@@ -5,7 +5,9 @@ import { ADVICE_PATH,
   HEALTH_RECORDS_PATH,
   MESSAGES_PATH,
   INDEX_PATH,
-  MORE_PATH } from '@/router/paths';
+  MORE_PATH,
+  GP_SESSION_ON_DEMAND_BEGIN_PATH,
+} from '@/router/paths';
 import {
   CLEAR_SELECTED_MENUITEM,
   INIT_NAVIGATION,
@@ -23,6 +25,9 @@ export default {
   },
   goTo(_, path) {
     redirectTo({ $router: this.app.$router, $store: this }, path);
+  },
+  goToGpSessionOnDemandPage(_, path) {
+    redirectTo({ $router: this.app.$router, $store: this }, `${GP_SESSION_ON_DEMAND_BEGIN_PATH}?targetPage=${path}`);
   },
   goToAdvicePage() {
     redirectTo({ $router: this.app.$router, $store: this }, ADVICE_PATH);

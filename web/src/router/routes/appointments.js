@@ -46,7 +46,6 @@ import {
 } from '@/router/names';
 
 import { APPOINTMENTS_MENU_ITEM } from '@/middleware/nativeNavigation';
-import urlResolution from '@/middleware/urlResolution';
 
 import proofLevel from '@/lib/proofLevel';
 import { appointmentsHelpUrl, onlineConsultationsHelpUrl } from '@/router/externalLinks';
@@ -64,7 +63,6 @@ export const UPLIFT_APPOINTMENTS = {
     crumb: breadcrumbs.UPLIFT_APPOINTMENTS_CRUMB,
     helpUrl: appointmentsHelpUrl,
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
-    middleware: [urlResolution],
   },
 };
 

@@ -40,7 +40,7 @@ describe('Authorisation Service', () => {
     });
 
     it('puts the correct redirect URI in the cookie', () => {
-      expect(cookies.b.redirectUri).toEqual(environment.NATIVE_CID_REDIRECT_URI);
+      expect(cookies.b.redirectUri).toEqual(`${environment.NATIVE_CID_REDIRECT_URI}/auth-return`);
     });
 
     it('adds a verifier to the cookie in the request', () => {
@@ -121,12 +121,12 @@ describe('Authorisation Service', () => {
 
       it('uses the correct URI for Web', () => {
         const uri = authorisationService.getRedirectUri(false);
-        expect(uri).toEqual(environment.CID_REDIRECT_URI);
+        expect(uri).toEqual(`${environment.CID_REDIRECT_URI}/auth-return`);
       });
 
       it('uses the correct URI for native', () => {
         const uri = authorisationService.getRedirectUri(true);
-        expect(uri).toEqual(environment.NATIVE_CID_REDIRECT_URI);
+        expect(uri).toEqual(`${environment.NATIVE_CID_REDIRECT_URI}/auth-return`);
       });
     });
 

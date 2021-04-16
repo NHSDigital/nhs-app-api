@@ -60,6 +60,27 @@ export default {
       }
     }
   },
+  async fetchPatientConfig({ commit, rootState }) {
+    commit(CLEAR);
+    try {
+      const patientConfigResponse = await this.app.$http.getV1PatientLinkedAccountConfig({
+        ignoreError: true,
+      });
+      commit(SET_LINKED_ACCOUNTS_CONFIG, patientConfigResponse);
+
+      if (rootState.device.isNativeApp) {
+        sessionStorage.removeItem('hasRetried');
+      }
+
+      this.dispatch('session/setRetry', false);
+    } catch (error) {
+      if (error.response && error.response.status !== GP_SESSION_ERROR_STATUS) {
+        this.dispatch('errors/addApiError', error);
+      } else {
+        commit(ADD_ERROR, createError(error));
+      }
+    }
+  },
   init({ commit }) {
     commit(INIT);
   },

@@ -13,3 +13,5 @@ secrets:
     - name: "notificationHubSharedAccessKey-nonlive-scratch3"
       versionuks: "150fde3f110d44b8af26ac0b6ea93d73"
       versionukw: "bf59aeeac41148f68358721a3a30fc62"
+
+gpSessionOnDemandEnabled: true

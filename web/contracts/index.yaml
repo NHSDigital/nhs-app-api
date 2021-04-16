@@ -4195,6 +4195,370 @@
                     serviceDeskReference: 
                       type: "string"
                       description: "Six character service desk reference code."
+    /v1/session/gp-session-on-demand: 
+      put: 
+        tags: 
+          - "session"
+        summary: "Updates a user session with an im1ConnectionToken for an authenticated user."
+        description: "Updates a user session with an im1ConnectionToken for an authenticated user."
+        requestBody: 
+          content: 
+            application/json: 
+              schema: 
+                type: "object"
+                required: 
+                  - "authCode"
+                  - "codeVerifier"
+                  - "redirectUrl"
+                properties: 
+                  authCode: 
+                    type: "string"
+                    description: "OAuth authorization code."
+                  codeVerifier: 
+                    type: "string"
+                    description: "PKCE code verifier."
+                  redirectUrl: 
+                    type: "string"
+                    description: "Redirect url provided when signing in to Citizen ID"
+                  referrer: 
+                    type: "string"
+                    description: "Where the app was referred to the user"
+          description: "OAuth details for the session to be created."
+          required: true
+          x-name: "UserSession"
+        responses: 
+          201: 
+            description: "Successfully authenticated. The session ID is returned in a cookie named `NHSO-Session-Id` and the session expiry in a cookie named `NHSO-Session-Expiry`. These cookies should be included in subsequent requests."
+            content: 
+              application/json: 
+                schema: 
+                  allOf: 
+                    - 
+                      type: "object"
+                      properties: 
+                        name: 
+                          type: "string"
+                          description: "User's name"
+                        sessionTimeout: 
+                          type: "integer"
+                          description: "User's session timeout period in seconds."
+                        odsCode: 
+                          type: "string"
+                          description: "Unique code that identifies a user's GP practice"
+                        token: 
+                          type: "string"
+                          description: "User's session CsrfToken"
+                        nhsNumber: 
+                          type: "string"
+                          description: "User's NHS number"
+                        accessToken: 
+                          type: "string"
+                          description: "User's access token which allows NHS Login to identify them"
+                        im1MessagingEnabled: 
+                          type: "boolean"
+                          description: "Patient to Practice Messaging has been enabled at the practice level for the current user"
+                        proofLevel: 
+                          type: "string"
+                          description: "User's proof level"
+                          enum: 
+                            - "P5"
+                            - "P9"
+                    - 
+                      type: "object"
+                      properties: 
+                        serviceJourneyRules: 
+                          type: "object"
+                          properties: 
+                            journeys: 
+                              type: "object"
+                              properties: 
+                                appointments: 
+                                  type: "object"
+                                  oneOf: 
+                                    - 
+                                      type: "object"
+                                      properties: 
+                                        provider: 
+                                          type: "string"
+                                          description: "The provider"
+                                          enum: 
+                                            - "im1"
+                                            - "gpAtHand"
+                                    - 
+                                      type: "object"
+                                      properties: 
+                                        provider: 
+                                          type: "string"
+                                          description: "The provider"
+                                          enum: 
+                                            - "informatica"
+                                        informaticaUrl: 
+                                          type: "string"
+                                          description: "The informaticaUrl"
+                                    - 
+                                      type: "object"
+                                      properties: 
+                                        provider: 
+                                          type: "string"
+                                          description: "The provider"
+                                          enum: 
+                                            - "linkedAccount"
+                                    - 
+                                      type: "object"
+                                      properties: 
+                                        provider: 
+                                          type: "string"
+                                          description: "The provider"
+                                          enum: 
+                                            - "eConsult"
+                                cdssAdvice: 
+                                  type: "object"
+                                  oneOf: 
+                                    - 
+                                      type: "object"
+                                      properties: 
+                                        provider: 
+                                          type: "string"
+                                          description: "The provider"
+                                          enum: 
+                                            - "none"
+                                    - 
+                                      type: "object"
+                                      properties: 
+                                        provider: 
+                                          type: "string"
+                                          description: "The cdss provider"
+                                          enum: 
+                                            - "eConsult"
+                                            - "stubs"
+                                        serviceDefinition: 
+                                          type: "string"
+                                          description: "The service definition"
+                                cdssAdmin: 
+                                  type: "object"
+                                  oneOf: 
+                                    - 
+                                      type: "object"
+                                      properties: 
+                                        provider: 
+                                          type: "string"
+                                          description: "The provider"
+                                          enum: 
+                                            - "none"
+                                    - 
+                                      type: "object"
+                                      properties: 
+                                        provider: 
+                                          type: "string"
+                                          description: "The cdss provider"
+                                          enum: 
+                                            - "eConsult"
+                                            - "stubs"
+                                        serviceDefinition: 
+                                          type: "string"
+                                          description: "The service definition"
+                                medicalRecord: 
+                                  type: "object"
+                                  oneOf: 
+                                    - 
+                                      type: "object"
+                                      properties: 
+                                        provider: 
+                                          type: "string"
+                                          description: "The provider"
+                                          enum: 
+                                            - "im1"
+                                            - "gpAtHand"
+                                        version: 
+                                          type: "string"
+                                          description: "The version of My Medical Records"
+                                          enum: 
+                                            - 1
+                                            - 2
+                                prescriptions: 
+                                  type: "object"
+                                  oneOf: 
+                                    - 
+                                      type: "object"
+                                      properties: 
+                                        provider: 
+                                          type: "string"
+                                          description: "The provider"
+                                          enum: 
+                                            - "im1"
+                                            - "gpAtHand"
+                                nominatedPharmacy: 
+                                  type: "boolean"
+                                notifications: 
+                                  type: "boolean"
+                                messaging: 
+                                  type: "boolean"
+                                userInfo: 
+                                  type: "boolean"
+                                homeScreen: 
+                                  type: "object"
+                                  nullable: true
+                                  properties: 
+                                    publicHealthNotifications: 
+                                      type: "array"
+                                      description: "A list of public health notifications"
+                                      items: 
+                                        anyOf: 
+                                          - 
+                                            type: "object"
+                                            description: "A notification message to be displayed as a Callout component"
+                                            properties: 
+                                              id: 
+                                                type: "string"
+                                                description: "The notification id"
+                                              type: 
+                                                type: "string"
+                                                description: "The type of notification layout to use"
+                                                enum: 
+                                                  - "callout"
+                                              urgency: 
+                                                type: "string"
+                                                description: "THe urgency style to use for the notification"
+                                                enum: 
+                                                  - "warning"
+                                              title: 
+                                                type: "string"
+                                                description: "The notification title"
+                                              body: 
+                                                type: "string"
+                                                description: "A html representation of the content to render within the notification component"
+                                documents: 
+                                  type: "boolean"
+                                im1Messaging: 
+                                  type: "object"
+                                  properties: 
+                                    isEnabled: 
+                                      type: "boolean"
+                                    canDeleteMessages: 
+                                      type: "boolean"
+                                    canUpdateReadStatus: 
+                                      type: "boolean"
+                                    requiresDetailsRequest: 
+                                      type: "boolean"
+          400: 
+            description: "Bad request. Supplied OAuth details are incomplete or invalid"
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
+          403: 
+            description: "Forbidden. Can occur if the IM1 connection token received from Citizen ID does not successfully authenticate with the GP system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
+          464: 
+            description: "ODS code associated with a user is not supported or no nhs number found."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
+          465: 
+            description: "User did not meet the minimum age requirement."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
+          500: 
+            description: "An unexpected error occurred during the processing of the request."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
+          502: 
+            description: "Bad response received from upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
+          504: 
+            description: "Timeout when calling upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
     /v1/patient/pharmacies: 
       get: 
         tags: 
@@ -4680,7 +5044,26 @@
         tags: 
           - "linked-accounts"
         summary: "Gets the users guid which is used to determine which linked account is active"
-        description: "This call returns the users guid which is used to determine which linked account is activ"
+        description: "This call returns the users guid which is used to determine which linked account is active"
+        responses: 
+          200: 
+            description: "Successful operation. Guid returned"
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  properties: 
+                    id: 
+                      type: "string"
+                      description: "The guid of the current user"
+                    hasLinkedAccounts: 
+                      type: "boolean"
+    /v1/patient/linked-account-config: 
+      get: 
+        tags: 
+          - "linked-accounts"
+        summary: "Gets the users guid which is used to determine which linked account is active"
+        description: "This call returns the users guid which is used to determine which linked account is active"
         responses: 
           200: 
             description: "Successful operation. Guid returned"

@@ -11,9 +11,7 @@ import axios from 'axios'
 import isEmpty from 'lodash/fp/isEmpty'
 import get from 'lodash/fp/get'
 import { v4 as uuid } from 'uuid'
-import {
-    resolveApiClient
-} from '../middleware/urlResolution'
+import { resolveApiClient } from '../middleware/urlResolution'
 
 const getWebVersion = get('store.state.appVersion.webVersion');
 const getNativeVersion = get('store.state.appVersion.nativeVersion');
@@ -46,6 +44,7 @@ class NHSOnlineApi {
     this.req = options.req;
     this.cookies = options.cookies;
     this.__domain = options.domain;
+    this.router = options.router;
   }
 
   get domain() {
@@ -114,6 +113,7 @@ class NHSOnlineApi {
       }) {
         const queryParams = queryParameters && Object.keys(queryParameters).length ? this.serializeQueryParams(queryParameters) : null;
         const urlWithParams = url + (queryParams ? '?' + queryParams : '');
+        const Status598GpSessionRequired = 598;
 
         if (body && !Object.keys(body).length) {
           body = undefined;
@@ -211,6 +211,18 @@ class NHSOnlineApi {
           data: JSON.stringify(body)
         }).then((response) => {
 
+          // Must use lowercase to look for the header, regardless of
+          // how it is defined in the backend.
+          if (response.headers) {
+            if (response.headers['nhso-gp-session-created'] === 'true') {
+              this.store.dispatch('linkedAccounts/fetchPatientConfig');
+            }
+            if (response.headers['nhso-im1-messaging-enabled']) {
+              this.store.dispatch('practiceSettings/setIm1MessagingEnabled',
+                response.headers['nhso-im1-messaging-enabled'] === 'True');
+            }
+          }
+
           if (returnResponse) {
             return response;
           }
@@ -245,6 +257,14 @@ class NHSOnlineApi {
                   deferred,
                   store: this.store
               });
+            }
+
+            if (error.response !== undefined && Status598GpSessionRequired === error.response.status) {
+              this.store.dispatch('navigation/goToGpSessionOnDemandPage', this.router.currentRoute.fullPath);
+              resolve({
+                deferred,
+                store: this.store
+            });
             }
 
             if (!ignoreError) {

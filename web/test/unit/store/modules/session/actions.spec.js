@@ -57,6 +57,18 @@ describe('actions', () => {
     });
   });
 
+  describe('update info', () => {
+    it('will have a updateInfo function', () => expect(actions.updateInfo).toBeInstanceOf(Function));
+
+    it('will call commit for the SET_INFO mutation passing the info object', () => {
+      const input = {};
+
+      actions.updateInfo(mutation, input);
+
+      expect(mutation.commit).toHaveBeenCalledWith(SET_INFO, input);
+    });
+  });
+
   describe('validation checking', () => {
     beforeEach(() => {
       mutation.state = {};

@@ -1,7 +1,7 @@
 <template>
   <nhs-uk-layout :has-footer="!chromeless">
     <div v-if="chromeless" slot="header"/>
-    <router-view/>
+    <router-view :class="$style['gp-session-on-demand-padding']"/>
     <slot/>
     <div v-if="chromeless" slot="footer"/>
   </nhs-uk-layout>
@@ -103,4 +103,8 @@ export default {
   @import "../style/nhsuk-customisations/nhsuk-customisations";
   @import "../style/links";
   @import "../style/econsultoverrides";
+</style>
+
+<style module lang="scss" scoped>
+ @import "../style/custom/on-demand-gp-session-spacing";
 </style>

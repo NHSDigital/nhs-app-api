@@ -86,7 +86,6 @@ import {
 
 import { YOUR_RECORD_MENU_ITEM } from '@/middleware/nativeNavigation';
 import gpMedicalRecordAcceptance from '@/middleware/gpMedicalRecordAcceptance';
-import urlResolution from '@/middleware/urlResolution';
 
 import proofLevel from '@/lib/proofLevel';
 import { gpMedicalRecordHelpUrl, healthRecordsHelpUrl } from '@/router/externalLinks';
@@ -103,7 +102,6 @@ export const UPLIFT_GP_MEDICAL_RECORD = {
     crumb: breadcrumbs.UPLIFT_GP_MEDICAL_RECORD_CRUMB,
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
-    middleware: [urlResolution],
   },
 };
 

@@ -1,11 +1,11 @@
 <template>
   <div v-if="showTemplate">
 
-    <no-linked-profiles v-if="!hasLinkedProfiles && !error" id="no-linked-profiles"/>
+    <no-linked-profiles v-if="hasLoaded && !hasLinkedProfiles && !error" id="no-linked-profiles"/>
 
     <linked-profile-errors v-else-if="error"/>
 
-    <div v-else class="nhsuk-grid-row">
+    <div v-else-if="hasLinkedProfiles" class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <p class="nhsuk-u-margin-bottom-3">
           {{ $t('profiles.youCanAccessForTheFollowingPeople') }}
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import { get } from 'lodash/fp';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import CalculateAgeInMonthsAndYears from '@/plugins/mixinDefinitions/CalculateAgeInMonthsAndYears';
@@ -64,10 +65,13 @@ export default {
     error() {
       return this.$store.state.linkedAccounts.error;
     },
+    hasLoaded() {
+      return get('state.linkedAccounts.config.hasLoaded')(this.$store);
+    },
   },
   watch: {
     '$route.query.ts': async function watchTimestamp() {
-      await this.$store.dispatch('linkedAccounts/initialiseConfig');
+      await this.$store.dispatch('linkedAccounts/fetchPatientConfig');
     },
   },
   async created() {
@@ -79,7 +83,7 @@ export default {
       this.$store.dispatch('session/setRetry', true);
     }
 
-    await this.$store.dispatch('linkedAccounts/initialiseConfig');
+    await this.$store.dispatch('linkedAccounts/fetchPatientConfig');
   },
   methods: {
     ariaLabelCaption(fullName, age) {

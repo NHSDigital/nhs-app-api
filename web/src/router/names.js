@@ -100,6 +100,8 @@ export const GP_MESSAGES_RECIPIENTS_NAME = 'messages-gp-messages-recipients';
 export const GP_MESSAGES_VIEW_MESSAGE_NAME = 'messages-gp-messages-view-details';
 export const GP_MESSAGES_CREATE_NAME = 'messages-gp-messages-send-message';
 export const GP_MESSAGES_DELETE_SUCCESS_NAME = 'messages-gp-messages-delete-success';
+export const GP_SESSION_ON_DEMAND_BEGIN_NAME = 'on-demand-gp-begin';
+export const GP_SESSION_ON_DEMAND_RETURN_NAME = 'on-demand-gp-return';
 export const PRESCRIPTIONS_NAME = 'prescriptions';
 export const PRESCRIPTIONS_VIEW_ORDERS_NAME = 'prescriptions-view-orders';
 export const PRESCRIPTION_CONFIRM_COURSES_NAME = 'prescriptions-confirm-prescription-details';
@@ -132,6 +134,7 @@ const names = [
   LOGIN_NAME,
   BEGINLOGIN_NAME,
   AUTH_RETURN_NAME,
+  GP_SESSION_ON_DEMAND_RETURN_NAME,
   TERMSANDCONDITIONS_NAME,
   LOGOUT_NAME,
   MORE_NAME,
@@ -225,6 +228,7 @@ const names = [
   GP_MESSAGES_VIEW_MESSAGE_NAME,
   GP_MESSAGES_CREATE_NAME,
   GP_MESSAGES_DELETE_SUCCESS_NAME,
+  GP_SESSION_ON_DEMAND_BEGIN_NAME,
   PRESCRIPTIONS_NAME,
   PRESCRIPTIONS_VIEW_ORDERS_NAME,
   PRESCRIPTION_CONFIRM_COURSES_NAME,

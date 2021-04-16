@@ -50,6 +50,56 @@ const logoutCleanUp = ({ self }) => {
   removeSessionCookies(self);
 };
 
+const createSessionRequest = (state, rootState, code) => {
+  const { codeVerifier, redirectUri: redirectUrl } = state.config || {};
+  const request = {
+    userSession: {
+      authCode: code,
+      codeVerifier,
+      redirectUrl,
+    },
+    ignoreError: true,
+    returnResponse: true,
+  };
+  if (rootState.device.referrer !== undefined) {
+    request.userSession.referrer = rootState.device.referrer;
+  }
+  return request;
+};
+
+const cleanupSession = ({ self }) => {
+  self.dispatch('session/startValidationChecking');
+
+  removeCookies({
+    cookies: self.$cookies,
+    key: 'nhso.auth',
+  });
+};
+
+const updateSessionStore = (self, data, updateType) => {
+  const {
+    name,
+    odsCode,
+    sessionTimeout,
+    token,
+    nhsNumber,
+    dateOfBirth,
+    accessToken,
+    proofLevel,
+  } = data;
+  self.dispatch('session/hideExpiryMessage');
+  self.dispatch(updateType, {
+    name,
+    durationSeconds: sessionTimeout,
+    gpOdsCode: odsCode,
+    token,
+    nhsNumber,
+    dateOfBirth,
+    accessToken,
+    proofLevel,
+  });
+};
+
 let refreshing;
 
 export default {
@@ -91,68 +141,31 @@ export default {
     return cookieValue.accessToken;
   },
   async handleAuthResponse({ commit, state, rootState }, code) {
-    /**
-     * This needs to fire a proxy method
-     * as more work needs to be done before logging in
-     * for now we will just edit the state object.
-     */
-    const { codeVerifier, redirectUri: redirectUrl } = state.config || {};
-
     try {
-      const response = rootState.device.referrer === undefined ? await this.app.$http
-        .postV1Session({
-          userSession: {
-            authCode: code,
-            codeVerifier,
-            redirectUrl,
-          },
-          ignoreError: true,
-          returnResponse: true,
-        }) : await this.app.$http
-        .postV1Session({
-          userSession: {
-            authCode: code,
-            codeVerifier,
-            redirectUrl,
-            referrer: rootState.device.referrer,
-          },
-          ignoreError: true,
-          returnResponse: true,
-        });
+      const request = createSessionRequest(state, rootState, code);
+      const response = await this.app.$http.postV1Session(request);
 
-      const {
-        name,
-        odsCode,
-        sessionTimeout,
-        token,
-        nhsNumber,
-        dateOfBirth,
-        accessToken,
-        proofLevel,
-      } = response.data;
-
-      this.dispatch('session/hideExpiryMessage');
-      this.dispatch('session/setInfo', {
-        name,
-        durationSeconds: sessionTimeout,
-        gpOdsCode: odsCode,
-        token,
-        nhsNumber,
-        dateOfBirth,
-        accessToken,
-        proofLevel,
-      });
+      updateSessionStore(this, response.data, 'session/setInfo');
 
       commit(AUTH_RESPONSE, response.data);
     } catch (error) {
       this.dispatch('errors/addApiError', error);
     } finally {
-      this.dispatch('session/startValidationChecking');
+      cleanupSession({ self: this });
+    }
+  },
+  async handleGpOnDemandResponse({ commit, state, rootState }, code) {
+    try {
+      const request = createSessionRequest(state, rootState, code);
+      const response = await this.app.$http.putV1SessionGpSessionOnDemand(request);
 
-      removeCookies({
-        cookies: this.$cookies,
-        key: 'nhso.auth',
-      });
+      updateSessionStore(this, response.data, 'session/updateInfo');
+
+      commit(AUTH_RESPONSE, response.data);
+    } catch (error) {
+      this.dispatch('errors/addApiError', error);
+    } finally {
+      cleanupSession({ self: this });
     }
   },
   logoutWhenExpired() {

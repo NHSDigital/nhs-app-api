@@ -46,12 +46,23 @@ const generateCIDUrl = (redirectData) => {
 
 class AuthorisationService {
   constructor(environment) {
-    this.nativeCidRedirectUri = environment.NATIVE_CID_REDIRECT_URI;
-    this.webCidRedirectUri = environment.CID_REDIRECT_URI;
+    const authReturn = '/auth-return';
+    const onDemandReturn = '/on-demand-gp-return';
+
+    this.nativeCidRedirectUri = environment.NATIVE_CID_REDIRECT_URI + authReturn;
+    this.webCidRedirectUri = environment.CID_REDIRECT_URI + authReturn;
+    this.nativeCidOnDemandReturnRedirectUri = environment.NATIVE_CID_REDIRECT_URI + onDemandReturn;
+    this.webCidOnDemandGpReturnRedirectUri = environment.CID_REDIRECT_URI + onDemandReturn;
     this.cidClientId = environment.CID_CLIENT_ID;
     this.cidAuthEndpoint = environment.CID_AUTH_ENDPOINT_URL;
     this.cidP5VectorOfTrustEnabled = environment.CID_P5_VECTOR_OF_TRUST_ENABLED;
     this.secureCookies = environment.SECURE_COOKIES;
+
+    if (environment.GP_SESSION_ON_DEMAND_ENABLED) {
+      this.defaultScope = 'openid profile email profile_extended gp_registration_details';
+    } else {
+      this.defaultScope = 'openid profile email profile_extended nhs_app_credentials gp_integration_credentials';
+    }
   }
 
   generateLoginUrl({ isNativeApp, redirectTo, cookies, fidoAuthResponse }) {
@@ -61,6 +72,7 @@ class AuthorisationService {
       cookies,
       fidoAuthResponse,
       p5VectorOfTrust: this.cidP5VectorOfTrustEnabled,
+      scope: this.defaultScope,
     });
   }
 
@@ -69,9 +81,24 @@ class AuthorisationService {
       isNativeApp,
       cookies,
       p5VectorOfTrust: false,
+      scope: this.defaultScope,
     });
 
     return { upliftUrl: loginUrl };
+  }
+
+  generateGpSessionUrl({ isNativeApp, redirectTo, cookies, fidoAuthResponse }) {
+    const { loginUrl } = this.generateAuthUrl({
+      isNativeApp,
+      redirectTo,
+      cookies,
+      fidoAuthResponse,
+      p5VectorOfTrust: this.cidP5VectorOfTrustEnabled,
+      scope: 'openid profile email nhs_app_credentials gp_registration_details profile_extended',
+      redirectUri: this.getOnDemandGpReturnRedirectUri(isNativeApp),
+    });
+
+    return { gpSessionConnectUrl: loginUrl };
   }
 
   generateAuthUrl({
@@ -79,13 +106,15 @@ class AuthorisationService {
     redirectTo,
     cookies,
     fidoAuthResponse,
-    p5VectorOfTrust }) {
+    p5VectorOfTrust,
+    scope,
+    redirectUri = this.getRedirectUri(isNativeApp),
+  }) {
     const verifier = createVerifier();
     const challenge = createChallenge(verifier);
     const myState = this.newState(this.cryptoGenerateRandom);
-    const redirectUri = this.getRedirectUri(isNativeApp);
     const request = {
-      scope: 'openid profile email nhs_app_credentials gp_integration_credentials profile_extended',
+      scope,
       clientId: this.cidClientId,
       redirectUri,
       responseType: 'code',
@@ -120,6 +149,12 @@ class AuthorisationService {
 
   getRedirectUri(isNativeApp) {
     return isNativeApp ? this.nativeCidRedirectUri : this.webCidRedirectUri;
+  }
+
+  getOnDemandGpReturnRedirectUri(isNativeApp) {
+    return isNativeApp
+      ? this.nativeCidOnDemandGpReturnRedirectUri
+      : this.webCidOnDemandGpReturnRedirectUri;
   }
 
   /* eslint-disable class-methods-use-this */
