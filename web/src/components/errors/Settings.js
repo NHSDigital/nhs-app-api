@@ -12,6 +12,8 @@ import {
   HEALTH_RECORDS_PATH,
   HEALTH_INFORMATION_UPDATES_PATH,
   HEALTH_INFORMATION_UPDATES_MESSAGES_PATH,
+  MORE_PATH,
+  MORE_NOTIFICATIONS_PATH,
   NOMINATED_PHARMACY_CONFIRM_PATH,
   NOMINATED_PHARMACY_SEARCH_PATH,
   ORGAN_DONATION_PATH,
@@ -120,6 +122,17 @@ export default {
       route: DOCUMENTS_PATH,
       redirectUrl: {
         default: GP_MEDICAL_RECORD_PATH,
+      },
+    },
+    {
+      route: MORE_NOTIFICATIONS_PATH,
+      action: {
+        10002: 'notifications/retryToggle',
+      },
+      errorOverrideStyles: { 403: 'plain' },
+      redirectUrl: {
+        default: MORE_PATH,
+        10001: MORE_NOTIFICATIONS_PATH,
       },
     },
     {

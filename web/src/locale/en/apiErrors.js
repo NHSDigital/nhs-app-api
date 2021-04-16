@@ -1,4 +1,5 @@
 import account from './apiErrorsAccount';
+import more from './apiErrorsMore';
 import healthRecords from './apiErrorsHealthRecords';
 import messages from './apiErrorsMessages';
 import organDonation from './apiErrorsOrganDonation';
@@ -33,6 +34,7 @@ export default {
   },
   components: {
     account,
+    more,
     health_records: healthRecords,
     organ_donation: organDonation,
     messages,

@@ -54,7 +54,6 @@ describe('native app', () => {
   callNative('onLogout');
   callNative('onSessionExpiring');
   callNative('openAppSettings');
-  callNative('openAppMore');
   callNative('pageLoadComplete');
   callNative('requestPnsToken', 'load');
   callNative('setMenuBarItem', 0);

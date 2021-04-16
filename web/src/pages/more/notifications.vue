@@ -4,7 +4,7 @@
       <div class="nhsuk-grid-column-full">
         <notifications-content/>
         <p>
-          <a id="app-more" href="#" @click.prevent.stop="openAppMore">
+          <a id="app-more" href="#" @click.prevent.stop="openAppSettings">
             {{ $t('notifications.manageNotifications.manageHowNotificationsAreShown') }}
           </a>
         </p>
@@ -31,8 +31,8 @@ export default {
     this.$store.dispatch('notifications/load');
   },
   methods: {
-    openAppMore() {
-      NativeApp.openAppMore();
+    openAppSettings() {
+      NativeApp.openAppSettings();
     },
   },
 };

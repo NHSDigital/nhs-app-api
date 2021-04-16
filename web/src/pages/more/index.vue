@@ -58,7 +58,7 @@ import CeMarkIcon from '@/components/icons/CeMarkIcon';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import NativeCallbacks from '@/services/native-app';
-import Settings from '@/components/account/Settings';
+import Settings from '@/components/more/Settings';
 import sjrIf from '@/lib/sjrIf';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';

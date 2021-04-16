@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { ACCOUNT_NOTIFICATIONS_PATH, LOGIN_SETTINGS_PATH } from '@/router/paths';
+import { MORE_NOTIFICATIONS_PATH, MORE_LOGIN_SETTINGS_PATH } from '@/router/paths';
 import MenuItem from '@/components/MenuItem';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import sjrIf from '@/lib/sjrIf';
@@ -35,7 +35,7 @@ import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuratio
 import { redirectTo } from '@/lib/utils';
 
 export default {
-  name: 'AccountSettings',
+  name: 'Settings',
   components: {
     MenuItem,
     ThirdPartyJumpOffButton,
@@ -91,10 +91,10 @@ export default {
   },
   methods: {
     goToLoginOptions() {
-      redirectTo(this, LOGIN_SETTINGS_PATH);
+      redirectTo(this, MORE_LOGIN_SETTINGS_PATH);
     },
     showNotificationsClicked() {
-      redirectTo(this, ACCOUNT_NOTIFICATIONS_PATH);
+      redirectTo(this, MORE_NOTIFICATIONS_PATH);
     },
     async goToNHSSettings() {
       const { token } = await this.$store.app.$http

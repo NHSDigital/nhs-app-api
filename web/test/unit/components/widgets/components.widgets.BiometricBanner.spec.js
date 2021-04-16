@@ -1,5 +1,5 @@
 import BiometricBanner from '@/components/widgets/BiometricBanner';
-import { LOGIN_SETTINGS_PATH } from '@/router/paths';
+import { MORE_LOGIN_SETTINGS_PATH } from '@/router/paths';
 import NativeCallbacks from '@/services/native-app';
 import { redirectTo } from '@/lib/utils';
 import { createRouter, createStore, mount } from '../../helpers';
@@ -103,7 +103,7 @@ describe('BiometricBanner', () => {
 
       it('will navigate to the web biometrics', () => {
         biometricsLink.trigger('click');
-        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, LOGIN_SETTINGS_PATH);
+        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, MORE_LOGIN_SETTINGS_PATH);
       });
     });
   });

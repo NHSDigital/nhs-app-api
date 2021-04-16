@@ -37,7 +37,7 @@ import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
-import { LOGIN_SETTINGS_PATH } from '@/router/paths';
+import { MORE_LOGIN_SETTINGS_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -69,7 +69,7 @@ export default {
       this.$store.dispatch('biometricBanner/sync');
     },
     goToLoginOptions() {
-      redirectTo(this, LOGIN_SETTINGS_PATH);
+      redirectTo(this, MORE_LOGIN_SETTINGS_PATH);
     },
   },
 };
