@@ -3,7 +3,8 @@
     "issue": [
         {
             "severity": "error",
-            "code": "forbidden"
+            "code": "forbidden",
+            "diagnostics": "Invalid Access Token"
         }
     ]
 }
