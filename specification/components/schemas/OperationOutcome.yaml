@@ -26,8 +26,6 @@ properties:
           description: FHIR error code.
           example: invalid
           enum: [invalid, security, processing, forbidden]
-        details:
-          $ref: 'ErrorCode.yaml'
         diagnostics:
           type: string
           description: Additional diagnostic information about the issue.
