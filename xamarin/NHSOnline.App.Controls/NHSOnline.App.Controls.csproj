@@ -34,13 +34,12 @@
     <EmbeddedResource Include="Icons\icon-help.svg" />
     <EmbeddedResource Include="Icons\icon-home.svg" />
     <EmbeddedResource Include="Icons\icon-minus.svg" />
-    <EmbeddedResource Include="Icons\icon-more-footer.svg" />
     <EmbeddedResource Include="Icons\icon-more.svg" />
+    <EmbeddedResource Include="Icons\icon-messages.svg" />
     <EmbeddedResource Include="Icons\icon-plus.svg" />
     <EmbeddedResource Include="Icons\icon-prescription.svg" />
-    <EmbeddedResource Include="Icons\icon-record.svg" />
-    <EmbeddedResource Include="Icons\icon-settings.svg" />
-    <EmbeddedResource Include="Icons\icon-symptoms.svg" />
+    <EmbeddedResource Include="Icons\icon-your-health.svg" />
+    <EmbeddedResource Include="Icons\icon-advice.svg" />
     <EmbeddedResource Include="Icons\icon-arrow-right.svg" />
     <EmbeddedResource Include="Icons\icon-arrow-left.svg" />
     <EmbeddedResource Include="Icons\icon-close.svg" />

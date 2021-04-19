@@ -22,10 +22,10 @@ namespace NHSOnline.App.Areas.Home.Presenters
             await _rootHandler.HomeRequested().PreserveThreadContext();
         }
 
-        public async Task SymptomsRequested()
+        public async Task AdviceRequested()
         {
             await _appNavigation.PopToRootAnimated().PreserveThreadContext();
-            await _rootHandler.SymptomsRequested().PreserveThreadContext();
+            await _rootHandler.AdviceRequested().PreserveThreadContext();
         }
 
         public async Task AppointmentsRequested()
@@ -40,10 +40,10 @@ namespace NHSOnline.App.Areas.Home.Presenters
             await _rootHandler.PrescriptionsRequested().PreserveThreadContext();
         }
 
-        public async Task RecordRequested()
+        public async Task YourHealthRequested()
         {
             await _appNavigation.PopToRootAnimated().PreserveThreadContext();
-            await _rootHandler.RecordRequested().PreserveThreadContext();
+            await _rootHandler.YourHealthRequested().PreserveThreadContext();
         }
 
         public async Task MoreRequested()

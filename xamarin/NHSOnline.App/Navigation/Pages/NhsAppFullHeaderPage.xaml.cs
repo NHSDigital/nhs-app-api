@@ -32,8 +32,8 @@ namespace NHSOnline.App.Navigation.Pages
         public Func<Task>? HomeRequested { get; set; }
         public ICommand HomeClicked => new AsyncCommand(() => HomeRequested);
 
-        public Func<Task>? SymptomsRequested { get; set; }
-        public ICommand SymptomsClicked => new AsyncCommand(() => SymptomsRequested);
+        public Func<Task>? AdviceRequested { get; set; }
+        public ICommand AdviceClicked => new AsyncCommand(() => AdviceRequested);
 
         public Func<Task>? AppointmentsRequested { get; set; }
         public ICommand AppointmentsClicked => new AsyncCommand(() => AppointmentsRequested);
@@ -41,8 +41,8 @@ namespace NHSOnline.App.Navigation.Pages
         public Func<Task>? PrescriptionsRequested { get; set; }
         public ICommand PrescriptionsClicked => new AsyncCommand(() => PrescriptionsRequested);
 
-        public Func<Task>? RecordRequested { get; set; }
-        public ICommand RecordClicked => new AsyncCommand(() => RecordRequested);
+        public Func<Task>? YourHealthRequested { get; set; }
+        public ICommand YourHealthClicked => new AsyncCommand(() => YourHealthRequested);
 
         public Func<Task>? MoreRequested { get; set; }
         public ICommand MoreClicked => new AsyncCommand(() => MoreRequested);

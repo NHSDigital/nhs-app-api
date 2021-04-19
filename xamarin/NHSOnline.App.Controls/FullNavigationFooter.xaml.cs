@@ -7,14 +7,14 @@ namespace NHSOnline.App.Controls
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class FullNavigationFooter
     {
-        public static readonly BindableProperty SymptomsCommandProperty =
-            BindableProperty.Create(nameof(SymptomsCommand), typeof(ICommand), typeof(FullNavigationFooter));
+        public static readonly BindableProperty AdviceCommandProperty =
+            BindableProperty.Create(nameof(AdviceCommand), typeof(ICommand), typeof(FullNavigationFooter));
         public static readonly BindableProperty AppointmentsCommandProperty =
             BindableProperty.Create(nameof(AppointmentsCommand), typeof(ICommand), typeof(FullNavigationFooter));
         public static readonly BindableProperty PrescriptionsCommandProperty =
             BindableProperty.Create(nameof(PrescriptionsCommand), typeof(ICommand), typeof(FullNavigationFooter));
-        public static readonly BindableProperty RecordCommandProperty =
-            BindableProperty.Create(nameof(RecordCommand), typeof(ICommand), typeof(FullNavigationFooter));
+        public static readonly BindableProperty YourHealthCommandProperty =
+            BindableProperty.Create(nameof(YourHealthCommand), typeof(ICommand), typeof(FullNavigationFooter));
         public static readonly BindableProperty MessagesCommandProperty =
             BindableProperty.Create(nameof(MessagesCommand), typeof(ICommand), typeof(FullNavigationFooter));
 
@@ -23,10 +23,10 @@ namespace NHSOnline.App.Controls
             InitializeComponent();
         }
 
-        public ICommand SymptomsCommand
+        public ICommand AdviceCommand
         {
-            get => (ICommand) GetValue(SymptomsCommandProperty);
-            set => SetValue(SymptomsCommandProperty, value);
+            get => (ICommand) GetValue(AdviceCommandProperty);
+            set => SetValue(AdviceCommandProperty, value);
         }
 
         public ICommand AppointmentsCommand
@@ -41,10 +41,10 @@ namespace NHSOnline.App.Controls
             set => SetValue(PrescriptionsCommandProperty, value);
         }
 
-        public ICommand RecordCommand
+        public ICommand YourHealthCommand
         {
-            get => (ICommand) GetValue(RecordCommandProperty);
-            set => SetValue(RecordCommandProperty, value);
+            get => (ICommand) GetValue(YourHealthCommandProperty);
+            set => SetValue(YourHealthCommandProperty, value);
         }
 
         public ICommand MessagesCommand

@@ -23,13 +23,13 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidIcon MoreIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App more icon");
 
-        private AndroidNavigationMenuItem AdviceMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App symptoms icon", "Symptoms");
+        private AndroidNavigationMenuItem AdviceMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App advice icon", "Advice");
 
         private AndroidNavigationMenuItem AppointmentsMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App appointments icon", "Appointments");
 
         private AndroidNavigationMenuItem PrescriptionsMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App prescriptions icon", "Prescriptions");
 
-        private AndroidNavigationMenuItem YourHealthMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App records icon", "My Record");
+        private AndroidNavigationMenuItem YourHealthMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App your health icon", "Your health");
         private AndroidNavigationMenuItem MessagesMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App messages icon", "Messages");
 
         public void AssertNavigationPresent()

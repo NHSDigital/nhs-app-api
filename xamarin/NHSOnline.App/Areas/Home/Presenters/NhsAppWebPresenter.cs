@@ -76,13 +76,13 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterHandler(
                     _navigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
                 .RegisterHandler(
-                    _navigationHandler.SymptomsRequested, (view, handler) => view.SymptomsRequested = handler)
+                    _navigationHandler.AdviceRequested, (view, handler) => view.AdviceRequested = handler)
                 .RegisterHandler(
                     _navigationHandler.AppointmentsRequested, (view, handler) => view.AppointmentsRequested = handler)
                 .RegisterHandler(
                     _navigationHandler.PrescriptionsRequested, (view, handler) => view.PrescriptionsRequested = handler)
                 .RegisterHandler(
-                    _navigationHandler.RecordRequested, (view, handler) => view.RecordRequested = handler)
+                    _navigationHandler.YourHealthRequested, (view, handler) => view.YourHealthRequested = handler)
                 .RegisterHandler(
                     _navigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler);
         }

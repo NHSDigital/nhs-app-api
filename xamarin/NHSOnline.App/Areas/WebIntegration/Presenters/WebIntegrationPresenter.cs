@@ -47,13 +47,13 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                 .RegisterHandler(
                     model.NavigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
                 .RegisterHandler(
-                    model.NavigationHandler.SymptomsRequested, (view, handler) => view.SymptomsRequested = handler)
+                    model.NavigationHandler.AdviceRequested, (view, handler) => view.AdviceRequested = handler)
                 .RegisterHandler(
                     model.NavigationHandler.AppointmentsRequested, (view, handler) => view.AppointmentsRequested = handler)
                 .RegisterHandler(
                     model.NavigationHandler.PrescriptionsRequested, (view, handler) => view.PrescriptionsRequested = handler)
                 .RegisterHandler(
-                    model.NavigationHandler.RecordRequested, (view, handler) => view.RecordRequested = handler)
+                    model.NavigationHandler.YourHealthRequested, (view, handler) => view.YourHealthRequested = handler)
                 .RegisterHandler(
                     model.NavigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler)
                 .RegisterHandler<string>(

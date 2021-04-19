@@ -1,15 +1,15 @@
-<?xml version="1.0" ?>
-<svg height="48" viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg">
+<svg xmlns="http://www.w3.org/2000/svg" 
+     viewBox="0 0 18 18">
   <title>NHS App appointments icon</title>
   <desc>NHS App appointments icon</desc>
-  <path d="M10.17,20.67h6.33v6.33h-6.33z" fill="none" stroke="#515151" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-  <path d="M20.83,20.67h6.33v6.33h-6.33z" fill="none" stroke="#515151" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-  <path d="M31.5,20.67h6.33v6.33h-6.33z" fill="none" stroke="#515151" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-  <path d="M10.17,31h6.33v6.33h-6.33z" fill="none" stroke="#515151" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-  <path d="M20.83,31h6.33v6.33h-6.33z" fill="none" stroke="#515151" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-  <path d="M31.5,31h6.33v6.33h-6.33z" fill="none" stroke="#515151" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-  <path d="M5.67,16l0,26l36.66,0l0,-26" fill="none" stroke="#515151" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-  <path d="M10.17,9.81l0,-3.81l6.33,0l0,3.85" fill="none" stroke="#515151" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-  <path d="M31.5,9.84l0,-3.84l6.33,0l0,3.82" fill="none" stroke="#515151" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-  <path d="M37.83,10l0,2.33l-6.33,0l0,-2.33l-15,0l0,2.33l-6.33,0l0,-2.33l-4.5,0l0,6l36.66,0l0,-6l-4.5,0z" fill="none" stroke="#515151" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+  <path d="M1,16H17v.5a.4951.4951,0,0,1-.5.5H1.5a.4951.4951,0,0,1-.5-.5Z" 
+        style="fill:#425563;stroke:#425563;stroke-linecap:round;stroke-miterlimit:10;stroke-width:1.79px"/>
+  <path d="M17.9,1.97V15.5a.5.5,0,0,1-1,0V2.86H14.25v.39a.75.75,0,0,1-1.5,0V2.86H5.25v.39a.75.75,0,0,1-1.5,0V2.86H1.1V15.59a.5.5,0,0,1-1,0V1.97a.8963.8963,0,0,1,.9-.9H3.75V.81a.75.75,0,1,1,1.5,0v.26h7.5V.81a.75.75,0,0,1,1.5,0v.26H17A.8963.8963,0,0,1,17.9,1.97Z" 
+        style="fill:#425563"/>
+  <rect x="2" 
+        y="5" 
+        width="3" 
+        height="3" 
+        rx="0.8874" 
+        style="fill:#425563"/>
 </svg>

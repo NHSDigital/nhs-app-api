@@ -18,7 +18,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             return Task.CompletedTask;
         }
 
-        public Task SymptomsRequested()
+        public Task AdviceRequested()
         {
             _view.NavigateToAdvice();
             return Task.CompletedTask;
@@ -36,7 +36,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             return Task.CompletedTask;
         }
 
-        public Task RecordRequested()
+        public Task YourHealthRequested()
         {
             _view.NavigateToYourHealth();
             return Task.CompletedTask;

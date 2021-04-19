@@ -2,8 +2,8 @@
 
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:icons="clr-namespace:NHSOnline.App.Controls.Icons;assembly=NHSOnline.App.Controls"
              xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
+             xmlns:icons="clr-namespace:NHSOnline.App.Controls.Icons;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Controls.FullNavigationFooter"
              x:Name="Root"
              BackgroundColor="{StaticResource NhsUkWhite}">
@@ -13,111 +13,91 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Style TargetType="StackLayout">
-                <Setter Property="BackgroundColor" Value="{StaticResource NhsUkWhite}" />
-                <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
-            </Style>
+            
             <Style TargetType="BoxView">
-                <Setter Property="HeightRequest" Value="1" />
-                <Setter Property="Color" Value="{StaticResource NhsUkSecondaryGrey2}" />
+                <Setter Property="HeightRequest" Value="2" />
+                <Setter Property="Color" Value="{StaticResource NhsUkSecondaryGrey4}" />
             </Style>
-            <Style TargetType="icons:IconSymptoms">
-                <Setter Property="Margin" Value="10,15,15,0" />
+            
+            <Style TargetType="controls:FullNavigationFooterItem">
+                <Setter Property="VerticalOptions" Value="Center"></Setter>
+                <Setter Property="HeightRequest" Value="50" />
+                <Setter Property="WidthRequest" Value="60" />
             </Style>
-            <Style TargetType="icons:IconAppointment">
-                <Setter Property="Margin" Value="10,15,15,0" />
-            </Style>
-            <Style TargetType="icons:IconPrescriptions">
-                <Setter Property="Margin" Value="10,15,15,0" />
-            </Style>
-            <Style TargetType="icons:IconRecord">
-                <Setter Property="Margin" Value="10,15,15,0" />
-            </Style>
-            <Style TargetType="icons:IconMoreFooter">
-                <Setter Property="Margin" Value="10,15,15,0" />
-                <Setter Property="HeightRequest" Value="28" />
-                <Setter Property="WidthRequest" Value="28" />
+            
+            <Style TargetType="controls:SvgImage" ApplyToDerivedTypes="True">
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="HeightRequest" Value="32" />
+                <Setter Property="WidthRequest" Value="32" />
             </Style>
         </ResourceDictionary>
     </View.Resources>
-
+    
     <ContentView>
-        <ContentView.Effects>
-            <controls:SafeAreaPaddingBottom />
-        </ContentView.Effects>
-
-        <StackLayout>
-
-            <BoxView />
-
-            <StackLayout
-                Orientation="Horizontal"
-                AutomationId="NHS App Full Navigation Footer">
-                <controls:FullNavigationFooterItem
-                    Text="Symptoms">
-
-                    <icons:IconSymptoms AutomationProperties.IsInAccessibleTree="true" AutomationId="NHS App symptoms icon">
-
-                        <icons:IconSymptoms.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding SymptomsCommand, Source={x:Reference Name=Root}}" />
-                        </icons:IconSymptoms.GestureRecognizers>
-                    </icons:IconSymptoms>
-
+        <StackLayout Spacing="0">
+            <BoxView  />
+            
+            <Grid AutomationId="NHS App Full Navigation Footer">
+                <Grid.Effects>
+                    <controls:SafeAreaPaddingBottom />
+                </Grid.Effects>
+                <Grid.ColumnSpacing>0</Grid.ColumnSpacing>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="66"/>
+                </Grid.RowDefinitions>
+                 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                
+                
+                
+                <controls:FullNavigationFooterItem Grid.Column="0"
+                                                   Text="Advice"
+                                                   IconCommand="{Binding AdviceCommand, Source={x:Reference Name=Root}}">
+                    
+                    <icons:IconAdvice AutomationProperties.IsInAccessibleTree="true" />
+                    
+                </controls:FullNavigationFooterItem>
+                
+                <controls:FullNavigationFooterItem Grid.Column="1"
+                                                   Text="Appointments"
+                                                   IconCommand="{Binding AppointmentsCommand, Source={x:Reference Name=Root}}">
+                    
+                    <icons:IconAppointments AutomationProperties.IsInAccessibleTree="true" />
+                    
                 </controls:FullNavigationFooterItem>
 
-                <controls:FullNavigationFooterItem
-                    Text="Appointments">
-
-                    <icons:IconAppointment AutomationProperties.IsInAccessibleTree="true" AutomationId="NHS App appointments icon">
-
-                        <icons:IconAppointment.GestureRecognizers>
-                            <TapGestureRecognizer
-                                Command="{Binding AppointmentsCommand, Source={x:Reference Name=Root}}" />
-                        </icons:IconAppointment.GestureRecognizers>
-                    </icons:IconAppointment>
-
+                <controls:FullNavigationFooterItem Grid.Column="2"
+                                                   Text="Prescriptions"
+                                                   IconCommand="{Binding PrescriptionsCommand, Source={x:Reference Name=Root}}">
+                    
+                    <icons:IconPrescriptions AutomationProperties.IsInAccessibleTree="true" />
+                    
                 </controls:FullNavigationFooterItem>
 
-                <controls:FullNavigationFooterItem
-                    Text="Prescriptions">
-
-                    <icons:IconPrescriptions AutomationProperties.IsInAccessibleTree="true" AutomationId="NHS App prescriptions icon">
-
-                        <icons:IconPrescriptions.GestureRecognizers>
-                            <TapGestureRecognizer
-                                Command="{Binding PrescriptionsCommand, Source={x:Reference Name=Root}}" />
-                        </icons:IconPrescriptions.GestureRecognizers>
-
-                    </icons:IconPrescriptions>
-
+                <controls:FullNavigationFooterItem Grid.Column="3"
+                                                   Text="Your health"
+                                                   IconCommand="{Binding YourHealthCommand, Source={x:Reference Name=Root}}">
+                    
+                    <icons:IconYourHealth AutomationProperties.IsInAccessibleTree="true" />
+                    
                 </controls:FullNavigationFooterItem>
 
-                <controls:FullNavigationFooterItem
-                    Text="My Record">
-
-                    <icons:IconRecord AutomationProperties.IsInAccessibleTree="true" AutomationId="NHS App records icon">
-
-                        <icons:IconRecord.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding RecordCommand, Source={x:Reference Name=Root}}" />
-                        </icons:IconRecord.GestureRecognizers>
-
-                    </icons:IconRecord>
-
+                <controls:FullNavigationFooterItem Grid.Column="4"
+                                                   Text="Messages"
+                                                   IconCommand="{Binding MessagesCommand, Source={x:Reference Name=Root}}">
+                    
+                    <icons:IconMessages AutomationProperties.IsInAccessibleTree="true" />
+                    
                 </controls:FullNavigationFooterItem>
 
-                <controls:FullNavigationFooterItem
-                    Text="Messages">
-
-                    <icons:IconMoreFooter AutomationProperties.IsInAccessibleTree="true" AutomationId="NHS App messages icon">
-
-                        <icons:IconMoreFooter.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding MessagesCommand, Source={x:Reference Name=Root}}" />
-                        </icons:IconMoreFooter.GestureRecognizers>
-
-                    </icons:IconMoreFooter>
-
-                </controls:FullNavigationFooterItem>
-            </StackLayout>
+            </Grid>
         </StackLayout>
     </ContentView>
 </ContentView>

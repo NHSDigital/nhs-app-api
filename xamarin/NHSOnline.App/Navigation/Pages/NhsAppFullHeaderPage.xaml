@@ -21,11 +21,11 @@
                     Content="{Binding PageContent, Source={x:Reference Name=Root}}" 
                     VerticalOptions = "FillAndExpand" />
                 
-                <controls:FullNavigationFooter SymptomsCommand="{Binding SymptomsClicked, Source={x:Reference Name=Root}}"
-                                         AppointmentsCommand="{Binding AppointmentsClicked, Source={x:Reference Name=Root}}"
-                                         PrescriptionsCommand="{Binding PrescriptionsClicked, Source={x:Reference Name=Root}}"
-                                         RecordCommand="{Binding RecordClicked, Source={x:Reference Name=Root}}"
-                                         MessagesCommand="{Binding MessagesClicked, Source={x:Reference Name=Root}}">
+                <controls:FullNavigationFooter AdviceCommand="{Binding AdviceClicked, Source={x:Reference Name=Root}}"
+                                               AppointmentsCommand="{Binding AppointmentsClicked, Source={x:Reference Name=Root}}"
+                                               PrescriptionsCommand="{Binding PrescriptionsClicked, Source={x:Reference Name=Root}}"
+                                               YourHealthCommand="{Binding YourHealthClicked, Source={x:Reference Name=Root}}"
+                                               MessagesCommand="{Binding MessagesClicked, Source={x:Reference Name=Root}}">
                 </controls:FullNavigationFooter>
                 
             </StackLayout>

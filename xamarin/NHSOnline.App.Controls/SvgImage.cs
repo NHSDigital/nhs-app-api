@@ -12,13 +12,6 @@ namespace NHSOnline.App.Controls
 
         private SKSize _svgSize;
 
-        public static readonly BindableProperty IconNameProperty =
-            BindableProperty.Create(nameof(IconName), typeof(AppIcons), typeof(SvgImage));
-
-        public SvgImage()
-        {
-            InitSvgImage();
-        }
         internal SvgImage(string svgPath)
         {
             InitSvgImage(svgPath);
@@ -26,57 +19,13 @@ namespace NHSOnline.App.Controls
 
         private void InitSvgImage(string? svgPath = null)
         {
-            SetResourceName(svgPath);
+            _resourceName = $"{nameof(NHSOnline)}.{nameof(App)}.{nameof(Controls)}.{svgPath}";
             var svg = LoadSvg();
             var canvasView = new SKCanvasView();
             canvasView.PaintSurface += (sender, args) => PaintBackground(args.Info, args.Surface, svg.Picture);
             Content = canvasView;
+            AutomationId = svg.Description;
             _svgSize = svg.Picture.CullRect.Size;
-        }
-
-        private void SetResourceName(string? svgPath)
-        {
-            if (svgPath != null)
-            {
-                _resourceName = $"{nameof(NHSOnline)}.{nameof(App)}.{nameof(Controls)}.{svgPath}";
-            }
-            else
-            {
-                _resourceName = IconName switch
-                {
-                    AppIcons.Home =>
-                        $"{nameof(NHSOnline)}.{nameof(App)}.{nameof(Controls)}.{nameof(Icons)}.icon-home.svg",
-
-                    AppIcons.Advice =>
-                        $"{nameof(NHSOnline)}.{nameof(App)}.{nameof(Controls)}.{nameof(Icons)}.icon-symptoms.svg",
-
-                    AppIcons.Appointments =>
-                        $"{nameof(NHSOnline)}.{nameof(App)}.{nameof(Controls)}.{nameof(Icons)}.icon-appointments.svg",
-
-                    AppIcons.Help =>
-                        $"{nameof(NHSOnline)}.{nameof(App)}.{nameof(Controls)}.{nameof(Icons)}.icon-help.svg",
-
-                    AppIcons.More =>
-                        $"{nameof(NHSOnline)}.{nameof(App)}.{nameof(Controls)}.{nameof(Icons)}.icon-more.svg",
-
-                    AppIcons.MyRecord =>
-                        $"{nameof(NHSOnline)}.{nameof(App)}.{nameof(Controls)}.{nameof(Icons)}.icon-record.svg",
-
-                    AppIcons.Prescriptions =>
-                        $"{nameof(NHSOnline)}.{nameof(App)}.{nameof(Controls)}.{nameof(Icons)}.icon-prescriptions.svg",
-
-                    _ => $"{nameof(NHSOnline)}.{nameof(App)}.{nameof(Controls)}"
-                };
-            }
-        }
-
-        protected override void OnPropertyChanged(string? propertyName = null)
-        {
-            base.OnPropertyChanging(propertyName);
-            if (propertyName == "IconName")
-            {
-                InitSvgImage();
-            }
         }
 
         protected override SizeRequest OnMeasure(double widthConstraint, double heightConstraint)
@@ -131,12 +80,6 @@ namespace NHSOnline.App.Controls
             using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(_resourceName);
             svg.Load(stream);
             return svg;
-        }
-
-        public AppIcons IconName
-        {
-            get => (AppIcons) GetValue(IconNameProperty);
-            set => SetValue(IconNameProperty, value);
         }
     }
 }

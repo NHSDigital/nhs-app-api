@@ -10,13 +10,18 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
             <Style TargetType="StackLayout">
                 <Setter Property="Orientation" Value="Vertical" />
+                
+                <Setter Property="HorizontalOptions" Value="Center" />
                 <Setter Property="BackgroundColor" Value="{StaticResource NhsUkWhite}" />
-                <Setter Property="Padding" Value="0,0,0,10" />
+                <Setter Property="HeightRequest" Value="50" />
+                <Setter Property="WidthRequest" Value="61" />
             </Style>
+            
             <Style TargetType="Label">
-                <Setter Property="FontSize" Value="8" />
+                <Setter Property="FontSize" Value="9" />
                 <Setter Property="LineBreakMode" Value="WordWrap" />
                 <Setter Property="HorizontalTextAlignment" Value="Center" />
             </Style>
@@ -25,9 +30,15 @@
 
     <ContentView.Content>
         <StackLayout AutomationId="{Binding Text, Source={x:Reference Name=Root}}">
+            
             <ContentView Content="{Binding Icon, Source={x:Reference Name=Root}}" />
-            <Label 
-                Text="{Binding Text, Source={x:Reference Name=Root}}" />
+
+            <Label Text="{Binding Text, Source={x:Reference Name=Root}}" />
+            
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding IconCommand, Source={x:Reference Name=Root}}" />
+            </StackLayout.GestureRecognizers>
+            
         </StackLayout>
     </ContentView.Content>
 </ContentView>

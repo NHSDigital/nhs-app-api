@@ -16,22 +16,20 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         private IOSNavigationBar FullNavigationFooter => IOSNavigationBar.WithName(_driver, "NHS App Full Navigation Footer");
 
-
         private IOSIcon HomeIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App home icon");
 
         private IOSIcon HelpIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App help icon");
 
         private IOSIcon MoreIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App more icon");
-        private IOSIcon MoreMenuItem => FullNavigationHeader.ContainingIconWithDescription("NHS App more icon");
 
-
-        private IOSNavigationMenuItem AdviceMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App symptoms icon", "Symptoms");
+        private IOSNavigationMenuItem AdviceMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App advice icon", "Advice");
 
         private IOSNavigationMenuItem AppointmentsMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App appointments icon", "Appointments");
 
         private IOSNavigationMenuItem PrescriptionsMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App prescriptions icon", "Prescriptions");
 
-        private IOSNavigationMenuItem YourHealthMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App records icon", "My Record");
+        private IOSNavigationMenuItem YourHealthMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App your health icon", "Your health");
+
         private IOSNavigationMenuItem MessagesMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App messages icon", "Messages");
 
         internal void AssertNavigationPresent()
@@ -72,7 +70,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         public void More()
         {
-            MoreMenuItem.Click();
+            MoreIcon.Click();
         }
 
         public void Help()

@@ -42,7 +42,7 @@
                 <Setter Property="VerticalOptions" Value="End" />
             </Style>
             
-            <Style TargetType="controls:SvgImage">
+            <Style TargetType="controls:SvgImage" ApplyToDerivedTypes="True">
                 <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
                 <Setter Property="Margin" Value="0,0,0,5" />
                 <Setter Property="HeightRequest" Value="28" />
@@ -84,7 +84,8 @@
                 </Grid.ColumnDefinitions>
                 
                 <StackLayout StyleClass="IconAndLabel" >
-                    <controls:SvgImage AutomationProperties.IsInAccessibleTree="true" IconName="Home" AutomationId="NHS App home icon"/>
+                    <icons:IconHome AutomationProperties.IsInAccessibleTree="true" />
+                    
                     <Label Text="Home"/>
                     
                     <StackLayout.GestureRecognizers>
@@ -107,8 +108,8 @@
                 </Grid.ColumnDefinitions>
             
                 <StackLayout Grid.Column="0" StyleClass="IconAndLabel">
-                    <controls:SvgImage AutomationProperties.IsInAccessibleTree="true" IconName="Help" AutomationId="NHS App help icon"/>
-                
+                    <icons:IconHelp AutomationProperties.IsInAccessibleTree="true" />
+                    
                     <Label Text="Help"/>
             
                     <StackLayout.GestureRecognizers>
@@ -117,7 +118,7 @@
                 </StackLayout>
                 
                 <StackLayout Grid.Column="1" StyleClass="IconAndLabel">
-                    <controls:SvgImage AutomationProperties.IsInAccessibleTree="true" IconName="More" AutomationId="NHS App more icon"/>
+                    <icons:IconMore AutomationProperties.IsInAccessibleTree="true" />         
                     
                     <Label Text="More"/>
                 

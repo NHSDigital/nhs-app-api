@@ -5,10 +5,10 @@ namespace NHSOnline.App.Navigation
     internal interface INhsAppNavigationHandler
     {
         Task HomeRequested();
-        Task SymptomsRequested();
+        Task AdviceRequested();
         Task AppointmentsRequested();
         Task PrescriptionsRequested();
-        Task RecordRequested();
+        Task YourHealthRequested();
         Task MoreRequested();
         Task MessagesRequested();
 

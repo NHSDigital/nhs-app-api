@@ -15,10 +15,10 @@ namespace NHSOnline.App.Areas.WebIntegration
 
             Func<Task>? HelpRequested { get; set; }
             Func<Task>? HomeRequested { get; set; }
-            Func<Task>? SymptomsRequested { get; set; }
+            Func<Task>? AdviceRequested { get; set; }
             Func<Task>? AppointmentsRequested { get; set; }
             Func<Task>? PrescriptionsRequested { get; set; }
-            Func<Task>? RecordRequested { get; set; }
+            Func<Task>? YourHealthRequested { get; set; }
             Func<Task>? MoreRequested { get; set; }
             Func<Task>? MessagesRequested { get; set; }
 

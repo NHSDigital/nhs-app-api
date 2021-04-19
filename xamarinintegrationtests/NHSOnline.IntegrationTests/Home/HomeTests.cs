@@ -7,12 +7,16 @@ using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.Android.More;
 using NHSOnline.IntegrationTests.Pages.Android.Prescriptions;
 using NHSOnline.IntegrationTests.Pages.Android.Advice;
+using NHSOnline.IntegrationTests.Pages.Android.Messages;
+using NHSOnline.IntegrationTests.Pages.Android.YourHealth;
 using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.IOS.More;
 using NHSOnline.IntegrationTests.Pages.IOS.Advice;
+using NHSOnline.IntegrationTests.Pages.IOS.Messages;
+using NHSOnline.IntegrationTests.Pages.IOS.Prescriptions;
 using NHSOnline.IntegrationTests.Pages.IOS.YourHealth;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -196,6 +200,24 @@ namespace NHSOnline.IntegrationTests.Home
         }
 
         [NhsAppIOSTest]
+        public void APatientWithProofLevelNineCanAccessPrescriptionsFromHomeScreenIOS(IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.Prescriptions();
+
+            IOSPrescriptionsPage
+                .AssertOnPage(driver)
+                .AssertPageElements();
+        }
+
+        [NhsAppIOSTest]
         public void APatientWithProofLevelNineCanAccessYourHealthFromHomeScreenIOS(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
@@ -214,7 +236,7 @@ namespace NHSOnline.IntegrationTests.Home
         }
 
         [NhsAppAndroidTest]
-        public void APatientWithProofLevelNineCanAccessMoreFromHomeScreenAndroid(IAndroidDriverWrapper driver)
+        public void APatientWithProofLevelNineCanAccessYourHealthFromHomeScreenAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
@@ -224,15 +246,33 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.More();
+                .Navigation.YourHealth();
 
-            AndroidMorePage
+            AndroidYourHealthPage
+                .AssertOnPage(driver)
+                .AssertPageElements();
+        }
+
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelNineCanAccessMessagesFromHomeScreenAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.Messages();
+
+            AndroidMessagesPage
                 .AssertOnPage(driver)
                 .AssertPageElements();
         }
 
         [NhsAppIOSTest]
-        public void APatientWithProofLevelNineCanAccessMoreFromHomeScreenIOS(IIOSDriverWrapper driver)
+        public void APatientWithProofLevelNineCanAccessMessagesFromHomeScreenIOS(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
@@ -242,9 +282,9 @@ namespace NHSOnline.IntegrationTests.Home
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.More();
+                .Navigation.Messages();
 
-            IOSMorePage
+            IOSMessagesPage
                 .AssertOnPage(driver)
                 .AssertPageElements();
         }
