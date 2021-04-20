@@ -5,7 +5,7 @@ using Xamarin.Forms.Xaml;
 namespace NHSOnline.App.Controls
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class FullNavigationFooter
+    public partial class FullNavigationFooterWide
     {
         private const int MediumScreenSize = 700;
 
@@ -20,7 +20,7 @@ namespace NHSOnline.App.Controls
         public static readonly BindableProperty MessagesCommandProperty =
             BindableProperty.Create(nameof(MessagesCommand), typeof(ICommand), typeof(FullNavigationFooter));
 
-        public FullNavigationFooter()
+        public FullNavigationFooterWide()
         {
             InitializeComponent();
         }

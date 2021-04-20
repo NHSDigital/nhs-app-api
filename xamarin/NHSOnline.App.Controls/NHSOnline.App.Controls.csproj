@@ -214,6 +214,14 @@
       <DependentUpon>SlimLogoNavigationHeader.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="FullNavigationFooterWide.xaml.cs">
+      <DependentUpon>FullNavigationFooterWide.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="FullNavigationFooterItemWide.xaml.cs">
+      <DependentUpon>FullNavigationFooterItemWide.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

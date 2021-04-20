@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+   
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
@@ -10,23 +10,35 @@
         <ContentView>
             
             <StackLayout BackgroundColor="{StaticResource NhsUkBlue}" Spacing="0" Padding="0,5,0,0">
-                
+                 
                 <controls:FullNavigationHeader 
                     MoreCommand="{Binding MoreClicked, Source={x:Reference Name=Root}}"
                     HelpCommand="{Binding HelpClicked, Source={x:Reference Name=Root}}"
                     HomeCommand="{Binding HomeClicked, Source={x:Reference Name=Root}}">
-                </controls:FullNavigationHeader>
+                </controls:FullNavigationHeader>  
                 
                 <ContentView 
                     Content="{Binding PageContent, Source={x:Reference Name=Root}}" 
                     VerticalOptions = "FillAndExpand" />
                 
-                <controls:FullNavigationFooter AdviceCommand="{Binding AdviceClicked, Source={x:Reference Name=Root}}"
-                                               AppointmentsCommand="{Binding AppointmentsClicked, Source={x:Reference Name=Root}}"
-                                               PrescriptionsCommand="{Binding PrescriptionsClicked, Source={x:Reference Name=Root}}"
-                                               YourHealthCommand="{Binding YourHealthClicked, Source={x:Reference Name=Root}}"
-                                               MessagesCommand="{Binding MessagesClicked, Source={x:Reference Name=Root}}">
+                <controls:FullNavigationFooter 
+                    x:Name="FullNavigationFooter"
+                    AdviceCommand="{Binding AdviceClicked, Source={x:Reference Name=Root}}"
+                    AppointmentsCommand="{Binding AppointmentsClicked, Source={x:Reference Name=Root}}"
+                    PrescriptionsCommand="{Binding PrescriptionsClicked, Source={x:Reference Name=Root}}"
+                    YourHealthCommand="{Binding YourHealthClicked, Source={x:Reference Name=Root}}"
+                    MessagesCommand="{Binding MessagesClicked, Source={x:Reference Name=Root}}">
                 </controls:FullNavigationFooter>
+                
+                <controls:FullNavigationFooterWide
+                    x:Name="FullNavigationFooterWide"
+                    IsVisible="False"
+                    AdviceCommand="{Binding AdviceClicked, Source={x:Reference Name=Root}}"
+                    AppointmentsCommand="{Binding AppointmentsClicked, Source={x:Reference Name=Root}}"
+                    PrescriptionsCommand="{Binding PrescriptionsClicked, Source={x:Reference Name=Root}}"
+                    YourHealthCommand="{Binding YourHealthClicked, Source={x:Reference Name=Root}}"
+                    MessagesCommand="{Binding MessagesClicked, Source={x:Reference Name=Root}}">
+                </controls:FullNavigationFooterWide>
                 
             </StackLayout>
         </ContentView>

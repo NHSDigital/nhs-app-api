@@ -4,7 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
              xmlns:icons="clr-namespace:NHSOnline.App.Controls.Icons;assembly=NHSOnline.App.Controls"
-             x:Class="NHSOnline.App.Controls.FullNavigationFooter"
+             x:Class="NHSOnline.App.Controls.FullNavigationFooterWide"
              x:Name="Root"
              BackgroundColor="{StaticResource NhsUkWhite}">
 
@@ -19,14 +19,16 @@
                 <Setter Property="Color" Value="{StaticResource NhsUkSecondaryGrey4}" />
             </Style>
             
-            <Style TargetType="controls:FullNavigationFooterItem">
+            <Style TargetType="controls:FullNavigationFooterItemWide">
                 <Setter Property="VerticalOptions" Value="Center" />
                 <Setter Property="HeightRequest" Value="50" />
-                <Setter Property="WidthRequest" Value="61" />
+                <Setter Property="WidthRequest" Value="110" />
             </Style>
             
             <Style TargetType="controls:SvgImage" ApplyToDerivedTypes="True">
                 <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                
                 <Setter Property="Margin" Value="0" />
                 <Setter Property="HeightRequest" Value="32" />
                 <Setter Property="WidthRequest" Value="32" />
@@ -49,56 +51,56 @@
                 </Grid.RowDefinitions>
                  
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="61" />
+                    <ColumnDefinition Width="110" />
                     <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="61" />
+                    <ColumnDefinition Width="110" />
                     <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="61" />
+                    <ColumnDefinition Width="110" />
                     <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="61" />
+                    <ColumnDefinition Width="110" />
                     <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="61" />
+                    <ColumnDefinition Width="110" />
                 </Grid.ColumnDefinitions>
                 
-                <controls:FullNavigationFooterItem Grid.Column="0"
+                <controls:FullNavigationFooterItemWide Grid.Column="0"
                                                    Text="Advice"
                                                    IconCommand="{Binding AdviceCommand, Source={x:Reference Name=Root}}">
                     
                     <icons:IconAdvice AutomationProperties.IsInAccessibleTree="true" />
                     
-                </controls:FullNavigationFooterItem>
+                </controls:FullNavigationFooterItemWide>
                 
-                <controls:FullNavigationFooterItem Grid.Column="2"
-                                                   Text="Appointments"
-                                                   IconCommand="{Binding AppointmentsCommand, Source={x:Reference Name=Root}}">
+                <controls:FullNavigationFooterItemWide Grid.Column="2"
+                                                       Text="Appointments"
+                                                       IconCommand="{Binding AppointmentsCommand, Source={x:Reference Name=Root}}">
                     
                     <icons:IconAppointments AutomationProperties.IsInAccessibleTree="true" />
                     
-                </controls:FullNavigationFooterItem>
+                </controls:FullNavigationFooterItemWide>
 
-                <controls:FullNavigationFooterItem Grid.Column="4"
-                                                   Text="Prescriptions"
-                                                   IconCommand="{Binding PrescriptionsCommand, Source={x:Reference Name=Root}}">
+                <controls:FullNavigationFooterItemWide Grid.Column="4"
+                                                       Text="Prescriptions"
+                                                       IconCommand="{Binding PrescriptionsCommand, Source={x:Reference Name=Root}}">
                     
                     <icons:IconPrescriptions AutomationProperties.IsInAccessibleTree="true" />
                     
-                </controls:FullNavigationFooterItem>
+                </controls:FullNavigationFooterItemWide>
 
-                <controls:FullNavigationFooterItem Grid.Column="6"
-                                                   Text="Your health"
-                                                   IconCommand="{Binding YourHealthCommand, Source={x:Reference Name=Root}}">
+                <controls:FullNavigationFooterItemWide Grid.Column="6"
+                                                       Text="Your health"
+                                                       IconCommand="{Binding YourHealthCommand, Source={x:Reference Name=Root}}">
                     
                     <icons:IconYourHealth AutomationProperties.IsInAccessibleTree="true" />
                     
-                </controls:FullNavigationFooterItem>
+                </controls:FullNavigationFooterItemWide>
 
-                <controls:FullNavigationFooterItem Grid.Column="8"
-                                                   Text="Messages"
-                                                   IconCommand="{Binding MessagesCommand, Source={x:Reference Name=Root}}">
+                <controls:FullNavigationFooterItemWide Grid.Column="8"
+                                                       Text="Messages"
+                                                       IconCommand="{Binding MessagesCommand, Source={x:Reference Name=Root}}">
                     
                     <icons:IconMessages AutomationProperties.IsInAccessibleTree="true" />
                     
-                </controls:FullNavigationFooterItem>
+                </controls:FullNavigationFooterItemWide>
 
             </Grid>
         </StackLayout>
