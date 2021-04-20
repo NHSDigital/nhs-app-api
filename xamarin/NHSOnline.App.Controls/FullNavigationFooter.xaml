@@ -38,7 +38,8 @@
         <StackLayout Spacing="0">
             <BoxView  />
             
-            <Grid AutomationId="NHS App Full Navigation Footer">
+            <Grid AutomationId="NHS App Full Navigation Footer"
+                  x:Name="FooterGrid">
                 <Grid.Effects>
                     <controls:SafeAreaPaddingBottom />
                 </Grid.Effects>
@@ -48,14 +49,16 @@
                 </Grid.RowDefinitions>
                  
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="61" />
                     <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="61" />
                     <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="61" />
                     <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="61" />
                     <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="61" />
                 </Grid.ColumnDefinitions>
-                
-                
                 
                 <controls:FullNavigationFooterItem Grid.Column="0"
                                                    Text="Advice"
@@ -65,7 +68,7 @@
                     
                 </controls:FullNavigationFooterItem>
                 
-                <controls:FullNavigationFooterItem Grid.Column="1"
+                <controls:FullNavigationFooterItem Grid.Column="2"
                                                    Text="Appointments"
                                                    IconCommand="{Binding AppointmentsCommand, Source={x:Reference Name=Root}}">
                     
@@ -73,7 +76,7 @@
                     
                 </controls:FullNavigationFooterItem>
 
-                <controls:FullNavigationFooterItem Grid.Column="2"
+                <controls:FullNavigationFooterItem Grid.Column="4"
                                                    Text="Prescriptions"
                                                    IconCommand="{Binding PrescriptionsCommand, Source={x:Reference Name=Root}}">
                     
@@ -81,7 +84,7 @@
                     
                 </controls:FullNavigationFooterItem>
 
-                <controls:FullNavigationFooterItem Grid.Column="3"
+                <controls:FullNavigationFooterItem Grid.Column="6"
                                                    Text="Your health"
                                                    IconCommand="{Binding YourHealthCommand, Source={x:Reference Name=Root}}">
                     
@@ -89,7 +92,7 @@
                     
                 </controls:FullNavigationFooterItem>
 
-                <controls:FullNavigationFooterItem Grid.Column="4"
+                <controls:FullNavigationFooterItem Grid.Column="8"
                                                    Text="Messages"
                                                    IconCommand="{Binding MessagesCommand, Source={x:Reference Name=Root}}">
                     

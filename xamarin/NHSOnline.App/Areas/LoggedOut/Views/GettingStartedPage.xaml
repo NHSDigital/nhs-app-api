@@ -51,8 +51,7 @@
                 </StackLayout>
             </controls:NhsYellowWarningCard> 
             
-            <StackLayout Grid.Column="1" 
-                         Grid.Row="2" >
+            <StackLayout Grid.Column="1" Grid.Row="2">
             
                 <controls:Paragraph Text="Use the NHS App to:" />
                 

@@ -23,6 +23,20 @@ namespace NHSOnline.App.Controls
             InitializeComponent();
         }
 
+        protected override void OnPropertyChanged(string? propertyName = null)
+        {
+            base.OnPropertyChanged(propertyName);
+            if (propertyName?.ToUpperInvariant() == "WIDTH")
+            {
+                FooterGrid.Margin = GetThickness(Device.info.PixelScreenSize.Width);
+            }
+        }
+
+        private static Thickness GetThickness(double screenWidth)
+        {
+            return screenWidth >= 700 ? new Thickness(4, 0) : new Thickness(0);
+        }
+
         public ICommand AdviceCommand
         {
             get => (ICommand) GetValue(AdviceCommandProperty);
