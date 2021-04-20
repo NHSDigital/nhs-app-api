@@ -97,142 +97,6 @@
         }
       ]
     },
-    "medicalRecordJourney": {
-      "properties": {
-        "provider": {
-          "enum": [ "im1", "gpAtHand" ]
-        },
-        "version": {
-          "type": "string"
-        }
-      },
-      "required": [ "provider", "version" ],
-      "additionalProperties": false
-    },
-    "prescriptionsJourney": {
-      "properties": {
-        "provider": {
-          "enum": [ "im1", "gpAtHand" ]
-        }
-      },
-      "required": [ "provider" ],
-      "additionalProperties": false
-    },
-    "publicHealthNotificationCallout": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "id": {
-          "type": "string",
-          "pattern": "[A-Za-z0-9_]+"
-        },
-        "type": {
-          "enum": [ "callout" ]
-        },
-        "urgency": {
-          "enum": [ "warning" ]
-        },
-        "title": { "type": "string" },
-        "body": { "type": "string" }
-      },
-      "required": [ "id", "type", "urgency", "title", "body" ]
-    },
-    "silverIntegrations": {
-      "properties": {
-        "carePlans": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": ["pkb", "pkbCie", "pkbSecondaryCare", "pkbMyCareView"]
-          }
-        },
-        "consultations": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [ "pkb", "pkbCie", "engage" ]
-          }
-        },
-        "consultationsAdmin": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [ "engage" ]
-          }
-        },
-        "healthTrackers": {
-          "type":"array",
-          "items": {
-            "type": "string",
-            "enum": ["pkb", "pkbCie"]
-          }
-        },
-        "libraries": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": ["pkb", "pkbCie", "pkbSecondaryCare", "pkbMyCareView"]
-          }
-        },
-        "medicines": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": ["pkb", "pkbCie", "pkbSecondaryCare", "pkbMyCareView"]
-          }
-        },
-        "messages": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [ "pkb", "pkbCie", "pkbMyCareView" , "pkbSecondaryCare" , "testSilverThirdPartyProvider", "engage" , "gncr", "substraktPatientPack"]
-          }
-        },
-        "recordSharing": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [ "pkb", "pkbCie", "pkbMyCareView" , "pkbSecondaryCare"]
-          }
-        },
-        "secondaryAppointments": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [ "ers", "pkb", "pkbCie", "pkbMyCareView" , "pkbSecondaryCare" , "gncr"]
-          }
-        },
-        "testResults": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [ "pkb", "pkbCie", "pkbSecondaryCare", "pkbMyCareView"]
-          }
-        },
-        "accountAdmin":  {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [ "gncr", "substraktPatientPack"]
-          }
-        },
-        "participation":  {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": ["substraktPatientPack"]
-          }
-        },
-        "vaccineRecord": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": ["nhsd", "netCompany"]
-          }
-        }
-      },
-      "additionalProperties": false
-    },
     "im1MessagingJourney": {
       "oneOf": [
         {
@@ -284,6 +148,142 @@
           "required": ["isEnabled"]
         }
       ]
+    },
+    "medicalRecordJourney": {
+      "properties": {
+        "provider": {
+          "enum": [ "im1", "gpAtHand" ]
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [ "provider", "version" ],
+      "additionalProperties": false
+    },
+    "prescriptionsJourney": {
+      "properties": {
+        "provider": {
+          "enum": [ "im1", "gpAtHand" ]
+        }
+      },
+      "required": [ "provider" ],
+      "additionalProperties": false
+    },
+    "publicHealthNotificationCallout": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "[A-Za-z0-9_]+"
+        },
+        "type": {
+          "enum": [ "callout" ]
+        },
+        "urgency": {
+          "enum": [ "warning" ]
+        },
+        "title": { "type": "string" },
+        "body": { "type": "string" }
+      },
+      "required": [ "id", "type", "urgency", "title", "body" ]
+    },
+    "silverIntegrations": {
+      "properties": {
+        "accountAdmin":  {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [ "gncr", "substraktPatientPack"]
+          }
+        },
+        "carePlans": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["pkb", "pkbCie", "pkbSecondaryCare", "pkbMyCareView"]
+          }
+        },
+        "consultations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [ "pkb", "pkbCie", "engage" ]
+          }
+        },
+        "consultationsAdmin": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [ "engage" ]
+          }
+        },
+        "healthTrackers": {
+          "type":"array",
+          "items": {
+            "type": "string",
+            "enum": ["pkb", "pkbCie"]
+          }
+        },
+        "libraries": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["pkb", "pkbCie", "pkbSecondaryCare", "pkbMyCareView"]
+          }
+        },
+        "medicines": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["pkb", "pkbCie", "pkbSecondaryCare", "pkbMyCareView"]
+          }
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [ "pkb", "pkbCie", "pkbMyCareView" , "pkbSecondaryCare" , "testSilverThirdPartyProvider", "engage" , "gncr", "substraktPatientPack"]
+          }
+        },
+        "participation":  {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["substraktPatientPack"]
+          }
+        },
+        "recordSharing": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [ "pkb", "pkbCie", "pkbMyCareView" , "pkbSecondaryCare"]
+          }
+        },
+        "secondaryAppointments": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [ "ers", "pkb", "pkbCie", "pkbMyCareView" , "pkbSecondaryCare" , "gncr"]
+          }
+        },
+        "testResults": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [ "pkb", "pkbCie", "pkbSecondaryCare", "pkbMyCareView"]
+          }
+        },
+        "vaccineRecord": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["nhsd", "netCompany"]
+          }
+        }
+      },
+      "additionalProperties": false
     }
   },
   "properties": {

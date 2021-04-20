@@ -26,6 +26,25 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             return this;
         }
 
+        public JourneysBuilder CdssAdminProvider(CdssProvider? cdssAdminProvider,
+            string cdssAdminServiceDefinition = null)
+        {
+            if (cdssAdminProvider != null)
+            {
+                _journeys.CdssAdmin = new Cdss
+                {
+                    Provider = cdssAdminProvider.Value,
+                    ServiceDefinition = cdssAdminServiceDefinition
+                };
+            }
+            else
+            {
+                _journeys.CdssAdmin = null;
+            }
+
+            return this;
+        }
+
         public JourneysBuilder CdssAdviceProvider(CdssProvider? cdssAdviceProvider,
             string cdssAdviceServiceDefinition = null,
             string cdssAdviceConditionsServiceDefinition = null)
@@ -47,97 +66,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             return this;
         }
 
-        public JourneysBuilder CdssAdminProvider(CdssProvider? cdssAdminProvider,
-            string cdssAdminServiceDefinition = null)
+        public JourneysBuilder DocumentsEnabled(bool? enabled)
         {
-            if (cdssAdminProvider != null)
-            {
-                _journeys.CdssAdmin = new Cdss
-                {
-                    Provider = cdssAdminProvider.Value,
-                    ServiceDefinition = cdssAdminServiceDefinition
-                };
-            }
-            else
-            {
-                _journeys.CdssAdmin = null;
-            }
-
-            return this;
-        }
-
-        public JourneysBuilder MedicalRecord(MedicalRecordProvider? provider,
-            string version = "1")
-        {
-
-            if (provider != null)
-            {
-                _journeys.MedicalRecord = new MedicalRecord
-                {
-                    Version = version,
-                    Provider = provider.Value
-                };
-            }
-            else
-            {
-                _journeys.MedicalRecord = null;
-            }
-
-            return this;
-        }
-
-        public JourneysBuilder Prescriptions(PrescriptionsProvider? provider)
-        {
-            if (provider != null)
-            {
-                _journeys.Prescriptions = new Prescriptions
-                {
-                    Provider = provider.Value
-                };
-            }
-            else
-            {
-                _journeys.Prescriptions = null;
-            }
-
-            return this;
-        }
-
-        public JourneysBuilder NominatedPharmacyEnabled(bool? enabled)
-        {
-            _journeys.NominatedPharmacy = enabled;
-            return this;
-        }
-
-        public JourneysBuilder NotificationsEnabled(bool? enabled)
-        {
-            _journeys.Notifications = enabled;
-            return this;
-        }
-
-        public JourneysBuilder MessagingEnabled(bool? enabled)
-        {
-            _journeys.Messaging = enabled;
-            return this;
-        }
-
-        public JourneysBuilder WithSupplier(Supplier supplier)
-        {
-            _journeys.Supplier = supplier;
-            return this;
-        }
-
-        public JourneysBuilder UserInfoEnabled(bool? enabled)
-        {
-            _journeys.UserInfo = enabled;
-            return this;
-        }
-
-        public JourneysBuilder SilverIntegrations(Action<SilverIntegrationsBuilder> actions)
-        {
-            var silverIntegrationsBuilder = new SilverIntegrationsBuilder();
-            actions.Invoke(silverIntegrationsBuilder);
-            _journeys.SilverIntegrations = silverIntegrationsBuilder.Build();
+            _journeys.Documents = enabled;
             return this;
         }
 
@@ -147,18 +78,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             actions.Invoke(homeScreenBuilder);
             _journeys.HomeScreen = homeScreenBuilder.Build();
 
-            return this;
-        }
-
-        public JourneysBuilder DocumentsEnabled(bool? enabled)
-        {
-            _journeys.Documents = enabled;
-            return this;
-        }
-
-        public JourneysBuilder SupportsLinkedProfiles(bool? supportsLinkedProfiles)
-        {
-            _journeys.SupportsLinkedProfiles = supportsLinkedProfiles;
             return this;
         }
 
@@ -192,9 +111,90 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             return this;
         }
 
+        public JourneysBuilder MedicalRecord(MedicalRecordProvider? provider,
+            string version = "1")
+        {
+
+            if (provider != null)
+            {
+                _journeys.MedicalRecord = new MedicalRecord
+                {
+                    Version = version,
+                    Provider = provider.Value
+                };
+            }
+            else
+            {
+                _journeys.MedicalRecord = null;
+            }
+
+            return this;
+        }
+
+        public JourneysBuilder MessagingEnabled(bool? enabled)
+        {
+            _journeys.Messaging = enabled;
+            return this;
+        }
+
+        public JourneysBuilder NominatedPharmacyEnabled(bool? enabled)
+        {
+            _journeys.NominatedPharmacy = enabled;
+            return this;
+        }
+
         public JourneysBuilder NotificationPromptEnabled(bool? enabled)
         {
             _journeys.NotificationPrompt = enabled;
+            return this;
+        }
+
+        public JourneysBuilder NotificationsEnabled(bool? enabled)
+        {
+            _journeys.Notifications = enabled;
+            return this;
+        }
+
+        public JourneysBuilder Prescriptions(PrescriptionsProvider? provider)
+        {
+            if (provider != null)
+            {
+                _journeys.Prescriptions = new Prescriptions
+                {
+                    Provider = provider.Value
+                };
+            }
+            else
+            {
+                _journeys.Prescriptions = null;
+            }
+
+            return this;
+        }
+
+        public JourneysBuilder SilverIntegrations(Action<SilverIntegrationsBuilder> actions)
+        {
+            var silverIntegrationsBuilder = new SilverIntegrationsBuilder();
+            actions.Invoke(silverIntegrationsBuilder);
+            _journeys.SilverIntegrations = silverIntegrationsBuilder.Build();
+            return this;
+        }
+
+        public JourneysBuilder SupportsLinkedProfiles(bool? supportsLinkedProfiles)
+        {
+            _journeys.SupportsLinkedProfiles = supportsLinkedProfiles;
+            return this;
+        }
+
+        public JourneysBuilder UserInfoEnabled(bool? enabled)
+        {
+            _journeys.UserInfo = enabled;
+            return this;
+        }
+
+        public JourneysBuilder WithSupplier(Supplier supplier)
+        {
+            _journeys.Supplier = supplier;
             return this;
         }
 

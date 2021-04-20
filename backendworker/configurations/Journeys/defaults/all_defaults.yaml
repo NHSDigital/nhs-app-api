@@ -4,19 +4,26 @@ target:
 journeys:
   appointments:
     provider: im1
-  cdssAdvice:
-    provider: none
   cdssAdmin:
     provider: none
+  cdssAdvice:
+    provider: none
+  documents: false
+  im1Messaging:
+    isEnabled: false
+    canDeleteMessages: false
+    canUpdateReadStatus: false
+    requiresDetailsRequest: false
+    sendMessageSubject: false
   medicalRecord:
     provider: im1
     version: "2"
-  prescriptions:
-    provider: im1
+  messaging: true
   nominatedPharmacy: true
   notifications: true
-  messaging: true
-  userInfo: true
+  notificationPrompt: true
+  prescriptions:
+    provider: im1
   silverIntegrations:
     accountAdmin: []
     carePlans: []
@@ -31,12 +38,5 @@ journeys:
     secondaryAppointments: []
     testResults: []
     vaccineRecord: []
-  documents: false
-  im1Messaging:
-    isEnabled: false
-    canDeleteMessages: false
-    canUpdateReadStatus: false
-    requiresDetailsRequest: false
-    sendMessageSubject: false
   supportsLinkedProfiles: true
-  notificationPrompt: true
+  userInfo: true

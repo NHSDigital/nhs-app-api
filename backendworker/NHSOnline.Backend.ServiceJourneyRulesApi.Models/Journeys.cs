@@ -4,55 +4,55 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 {
     public class Journeys : ICloneable<Journeys>
     {
-        public HomeScreen HomeScreen { get; set; }
-
         public Appointments Appointments { get; set; }
-
-        public Cdss CdssAdvice { get; set; }
 
         public Cdss CdssAdmin { get; set; }
 
+        public Cdss CdssAdvice { get; set; }
+
+        public bool? Documents { get; set; }
+
+        public HomeScreen HomeScreen { get; set; }
+
+        public Im1Messaging Im1Messaging { get; set; }
+
         public MedicalRecord MedicalRecord { get; set; }
 
-        public Prescriptions Prescriptions { get; set; }
+        public bool? Messaging { get; set; }
 
         public bool? NominatedPharmacy { get; set; }
 
         public bool? Notifications { get; set; }
 
-        public bool? Messaging { get; set; }
+        public bool? NotificationPrompt { get; set; }
 
-        public Supplier? Supplier { get; set; }
+        public Prescriptions Prescriptions { get; set; }
 
         public SilverIntegrations SilverIntegrations { get; set; }
 
-        public bool? UserInfo { get; set; }
-
-        public bool? Documents { get; set; }
+        public Supplier? Supplier { get; set; }
 
         public bool? SupportsLinkedProfiles { get; set; }
 
-        public Im1Messaging Im1Messaging { get; set; }
+        public bool? UserInfo { get; set; }
 
-        public bool? NotificationPrompt { get; set; }
-
-        public Journeys Clone() => new Journeys
+        public Journeys Clone() => new Journeys()
         {
-            HomeScreen = HomeScreen?.Clone(),
             Appointments = Appointments?.Clone(),
-            CdssAdvice = CdssAdvice?.Clone(),
             CdssAdmin = CdssAdmin?.Clone(),
+            CdssAdvice = CdssAdvice?.Clone(),
+            Documents = Documents,
+            HomeScreen = HomeScreen?.Clone(),
+            Im1Messaging = Im1Messaging?.Clone(),
             MedicalRecord = MedicalRecord?.Clone(),
-            Prescriptions = Prescriptions?.Clone(),
+            Messaging = Messaging,
             NominatedPharmacy = NominatedPharmacy,
             Notifications = Notifications,
-            Messaging = Messaging,
-            UserInfo = UserInfo,
+            NotificationPrompt = NotificationPrompt,
+            Prescriptions = Prescriptions?.Clone(),
             SilverIntegrations = SilverIntegrations?.Clone(),
-            Documents = Documents,
             SupportsLinkedProfiles = SupportsLinkedProfiles,
-            Im1Messaging = Im1Messaging?.Clone(),
-            NotificationPrompt = NotificationPrompt
+            UserInfo = UserInfo
         };
 
         public Journeys AddSupplier(Supplier? supplier)
@@ -63,19 +63,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 
         public void Merge(Journeys other)
         {
-            if (other.HomeScreen != null)
-            {
-                HomeScreen = other.HomeScreen;
-            }
-
             if (other.Appointments?.Provider != null)
             {
                 Appointments = other.Appointments;
-            }
-
-            if (other.CdssAdvice?.Provider != null)
-            {
-                CdssAdvice = other.CdssAdvice;
             }
 
             if (other.CdssAdmin?.Provider != null)
@@ -83,14 +73,35 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
                 CdssAdmin = other.CdssAdmin;
             }
 
+            if (other.CdssAdvice?.Provider != null)
+            {
+                CdssAdvice = other.CdssAdvice;
+            }
+
+            if(other.Documents.HasValue)
+            {
+                Documents = other.Documents;
+            }
+
+            if (other.HomeScreen != null)
+            {
+                HomeScreen = other.HomeScreen;
+            }
+
+            if (other.Im1Messaging != null)
+            {
+                Im1Messaging ??= new Im1Messaging();
+                Im1Messaging.Merge(other.Im1Messaging);
+            }
+
             if (other.MedicalRecord?.Provider != null)
             {
                 MedicalRecord = other.MedicalRecord;
             }
 
-            if (other.Prescriptions?.Provider != null)
+            if (other.Messaging.HasValue)
             {
-                Prescriptions = other.Prescriptions;
+                Messaging = other.Messaging;
             }
 
             if (other.NominatedPharmacy.HasValue)
@@ -103,24 +114,14 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
                 Notifications = other.Notifications;
             }
 
-            if (other.Messaging.HasValue)
+            if (other.NotificationPrompt.HasValue)
             {
-                Messaging = other.Messaging;
+                NotificationPrompt = other.NotificationPrompt;
             }
 
-            if (other.UserInfo.HasValue)
+            if (other.Prescriptions?.Provider != null)
             {
-                UserInfo = other.UserInfo;
-            }
-
-            if (other.Documents.HasValue)
-            {
-                Documents = other.Documents;
-            }
-
-            if (other.SupportsLinkedProfiles.HasValue)
-            {
-                SupportsLinkedProfiles = other.SupportsLinkedProfiles;
+                Prescriptions = other.Prescriptions;
             }
 
             if (other.SilverIntegrations != null)
@@ -129,15 +130,14 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
                 SilverIntegrations.Merge(other.SilverIntegrations);
             }
 
-            if (other.Im1Messaging != null)
+            if (other.SupportsLinkedProfiles.HasValue)
             {
-                Im1Messaging ??= new Im1Messaging();
-                Im1Messaging.Merge(other.Im1Messaging);
+                SupportsLinkedProfiles = other.SupportsLinkedProfiles;
             }
 
-            if (other.NotificationPrompt.HasValue)
+            if (other.UserInfo.HasValue)
             {
-                NotificationPrompt = other.NotificationPrompt;
+                UserInfo = other.UserInfo;
             }
         }
     }
