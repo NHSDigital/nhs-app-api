@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         private AndroidCreateSessionUpstreamSystemTimeoutErrorPage(IAndroidDriverWrapper driver) => _driver = driver;
 
-        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Login failed");
+        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Login failed").ScrollIntoView();
 
         private AndroidLabel ThisCouldBeText => AndroidLabel.WithText(_driver, "This can be one of two problems:");
         private AndroidLabel CannotGetLoginDetailsText => AndroidLabel.WithText(_driver, "we cannot get your NHS login details");
@@ -20,8 +20,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         private AndroidLabel ErrorCodeText => AndroidLabel.WhichMatches(_driver, "If you keep seeing this message, contact us. Quote the error code z[0-9a-z]{5} to help us resolve the problem more quickly.");
 
         private AndroidLabel IfYouNeedText => AndroidLabel.WithText(_driver, "If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.");
-        private AndroidLink ContactUsLink => AndroidLink.WithText(_driver, "Contact us");
-        private AndroidLink BackHomeLink => AndroidLink.WithText(_driver, "Back to home");
+        private AndroidLink ContactUsLink => AndroidLink.WithText(_driver, "Contact us").ScrollIntoView();
+        private AndroidLink BackHomeLink => AndroidLink.WithText(_driver, "Back to home").ScrollIntoView();
 
         public static AndroidCreateSessionUpstreamSystemTimeoutErrorPage AssertOnPage(IAndroidDriverWrapper driver)
         {

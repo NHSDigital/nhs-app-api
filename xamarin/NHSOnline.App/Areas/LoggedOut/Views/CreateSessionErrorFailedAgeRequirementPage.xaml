@@ -9,24 +9,25 @@
              BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}"
              x:Name="Page">
 
-    <StackLayout>
+    <ScrollView>
+        <StackLayout>
 
-        <controls:Heading1 Text="Login failed"
-                           Padding="10,0,0,0" />
+            <controls:Heading1 Text="Login failed"
+                               Padding="10,0,0,0" />
 
-        <controls:NhsErrorCallout HorizontalOptions="CenterAndExpand" 
-                                  LabelText="Error">
-            <StackLayout>
-                <controls:Paragraph>
-                    <FormattedString>
-                        <Span Text="Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services. For urgent medical advice, go to " />
-                        <controls:LinkSpan Text="111.nhs.uk" Tapped="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
-                        <Span Text=" or call 111." />
-                    </FormattedString>
-                </controls:Paragraph>
-            </StackLayout>
-        </controls:NhsErrorCallout>
+            <controls:NhsErrorCallout HorizontalOptions="CenterAndExpand" 
+                                      LabelText="Error">
+                <StackLayout>
+                    <controls:Paragraph>
+                        <FormattedString>
+                            <Span Text="Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services. For urgent medical advice, go to " />
+                            <controls:LinkSpan Text="111.nhs.uk" Tapped="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
+                            <Span Text=" or call 111." />
+                        </FormattedString>
+                    </controls:Paragraph>
+                </StackLayout>
+            </controls:NhsErrorCallout>
 
-    </StackLayout>
-
+        </StackLayout>
+    </ScrollView>
 </ContentPage>
