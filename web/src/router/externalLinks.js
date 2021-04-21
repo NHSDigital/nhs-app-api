@@ -39,3 +39,4 @@ export const ONLINE_CONSULTATIONS_PRIVACY_URL = 'https://www.nhs.uk/using-the-nh
 export const NOMINATED_PHARMACY_DSP_URL = 'https://www.nhs.uk/Service-Search/other-services/pharmacies/internetpharmacies';
 export const LINKED_PROFILES_FIND_OUT_MORE_URL = 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/proxy/';
 export const HEALTH_RECORDS_HELP_AND_SUPPORT_URL = 'https://www.nhs.uk/nhs-services/online-services/nhs-app/nhs-app-help-and-support/health-records/';
+export const NATIONAL_DATA_OPT_OUT_URL = 'https://digital.nhs.uk/services/national-data-opt-out';

@@ -27,7 +27,13 @@
         <p>{{ $t('dataSharing.yourChoiceWillBeAppliedBy') }}</p>
         <ul>
           <li>{{ $t('dataSharing.nhsDigitalAndPublicHealthEngland') }}</li>
-          <li>{{ $t('dataSharing.allOtherHealthAndCareOrganisations') }}</li>
+          <li>{{ $t('dataSharing.allOtherHealthAndCareOrganisations') }}
+            <a id="nationalDataOptOutLink"
+               style="display: inline; vertical-align: baseline"
+               :href="nationalDataOptOutPath"
+               target="_blank" rel="noopener noreferrer">
+              {{ $t('dataSharing.complianceDeadlineNationalDataOptOutExtension') }}</a>
+          </li>
         </ul>
 
         <p>{{ $t('dataSharing.choiceWillNotImpactYourCare') }}</p>
@@ -69,6 +75,7 @@ import InsetText from '@/components/InsetText';
 import Pagination from '@/components/Pagination';
 import { DATA_SHARING_DOES_NOT_APPLY_PATH } from '@/router/paths';
 import {
+  NATIONAL_DATA_OPT_OUT_URL,
   OTHER_WAYS_TO_MAKE_A_CHOICE_URL,
 } from '@/router/externalLinks';
 
@@ -87,6 +94,7 @@ export default {
       doesNotApplyPath: DATA_SHARING_DOES_NOT_APPLY_PATH,
       ndopToken: undefined,
       otherWaysToMakeChoiceUrl: OTHER_WAYS_TO_MAKE_A_CHOICE_URL,
+      nationalDataOptOutPath: NATIONAL_DATA_OPT_OUT_URL,
     };
   },
   methods: {
