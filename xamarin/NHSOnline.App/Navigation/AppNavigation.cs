@@ -24,7 +24,9 @@ namespace NHSOnline.App.Navigation
             _navigation = navigation;
         }
 
-        public IAppNavigation<TEvents> RegisterHandler(Func<Task> handler, Action<TEvents, Func<Task>?> assignHandler)
+        public IAppNavigation<TEvents> RegisterHandler(
+            Func<Task> handler,
+            Action<TEvents, Func<Task>?> assignHandler)
         {
             _enableHandlers.Add(() => assignHandler(_viewEvents, handler));
             _suppressHandlers.Add(() => assignHandler(_viewEvents, SuppressedEvent));
@@ -37,10 +39,18 @@ namespace NHSOnline.App.Navigation
             return Task.CompletedTask;
         }
 
-        public IAppNavigation<TEvents> RegisterHandler<TArgs>(Func<TArgs, Task> handler, Action<TEvents, Func<TArgs, Task>?> assignHandler)
+        public IAppNavigation<TEvents> RegisterHandler<TArgs>(
+            Func<TArgs, Task> handler,
+            Action<TEvents, Func<TArgs, Task>?> assignHandler)
         {
             _enableHandlers.Add(() => assignHandler(_viewEvents, handler));
             _suppressHandlers.Add(() => assignHandler(_viewEvents, SuppressedEvent));
+            return this;
+        }
+
+        public IAppNavigation<TEvents> RegisterPermanentHandler<TArgs>(Func<TArgs, Task> handler, Action<TEvents, Func<TArgs, Task>?> assignHandler)
+        {
+            assignHandler(_viewEvents, handler);
             return this;
         }
 

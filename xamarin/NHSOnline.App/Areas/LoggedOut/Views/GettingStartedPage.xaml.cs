@@ -31,6 +31,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public ICommand NhsUkCovidAppCommand => new AsyncCommand(() => NhsUkCovidAppPageRequested);
 
         public Func<Task>? BackRequested { get; set; }
+        public Func<Uri, Task>? DeeplinkRequested { get; set; }
         private ICommand BackRequestedCommand => new AsyncCommand(() => BackRequested);
 
         protected override void OnAppearing()
@@ -49,6 +50,14 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         {
             BackRequestedCommand.Execute(null);
             return true;
+        }
+
+        public async Task HandleDeeplink(Uri deeplinkUrl)
+        {
+            if (DeeplinkRequested != null)
+            {
+                await DeeplinkRequested(deeplinkUrl).PreserveThreadContext();
+            }
         }
     }
 }

@@ -4,7 +4,7 @@ using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut
 {
-    internal interface ILoggedOutHomeScreenView: INavigationView<ILoggedOutHomeScreenView.IEvents>
+    internal interface ILoggedOutHomeScreenView: INavigationView<ILoggedOutHomeScreenView.IEvents>, INhsAppPage
     {
         internal interface IEvents
         {
@@ -14,6 +14,7 @@ namespace NHSOnline.App.Areas.LoggedOut
             Func<Task>? NhsUkLoginHelpServicePageRequested { get; set; }
             Func<Task>? BackRequested { get; set; }
             Func<Task>? ResetAndShowErrorRequested { get; set; }
+            Func<Uri, Task>? DeeplinkRequested { get; set; }
         }
     }
 }

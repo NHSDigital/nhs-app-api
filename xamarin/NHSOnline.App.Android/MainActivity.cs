@@ -19,6 +19,8 @@ namespace NHSOnline.App.Droid
         ScreenOrientation = ScreenOrientation.Portrait)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
+        private NhsApp? NhsApp { get; set; }
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
 #if DEBUG_WEBVIEW
@@ -37,9 +39,10 @@ namespace NHSOnline.App.Droid
             AndroidLifecycle.MainActivity = this;
             AndroidBiometrics.MainActivity = this;
 
-            HandleIntent(this.Intent);
+            HandleIntent(Intent);
 
-            LoadApplication(new NhsApp());
+            NhsApp = new NhsApp();
+            LoadApplication(NhsApp);
         }
 
         public override void SetContentView(View? view)
@@ -100,7 +103,7 @@ namespace NHSOnline.App.Droid
             HandleIntent(intent);
         }
 
-        private static void HandleIntent(Intent? intent)
+        private void HandleIntent(Intent? intent)
         {
             if (intent == null)
             {
@@ -110,6 +113,7 @@ namespace NHSOnline.App.Droid
             var url = intent.Extras?.GetString("url");
             if (!string.IsNullOrWhiteSpace(url))
             {
+                NhsApp?.HandleDeeplink(url!);
                 Log.Info(nameof(MainActivity), "Notification contains url {url}");
             }
         }

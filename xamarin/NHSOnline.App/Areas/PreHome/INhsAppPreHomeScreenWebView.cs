@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.PreHome
 {
-    internal interface INhsAppPreHomeScreenWebView : INavigationView<INhsAppPreHomeScreenWebView.IEvents>, ICookieView
+    internal interface INhsAppPreHomeScreenWebView : INavigationView<INhsAppPreHomeScreenWebView.IEvents>, ICookieView, INhsAppPage
     {
         internal interface IEvents
         {
@@ -19,6 +19,7 @@ namespace NHSOnline.App.Areas.PreHome
             Func<Task>? GoToLoggedInHomeRequested { get; set; }
             Func<Task>? ResetAndShowErrorRequested { get; set; }
             Func<string, Task>? GetPnsTokenRequested { get; set; }
+            Func<Uri, Task>? DeeplinkRequested { get; set; }
         }
 
         void GoToUri(Uri uri);

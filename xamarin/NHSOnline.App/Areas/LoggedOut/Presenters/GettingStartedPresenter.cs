@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
@@ -17,8 +18,13 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly INhsLoginService _nhsLoginService;
         private readonly IBrowserOverlay _browserOverlay;
         private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
+        private readonly GettingStartedModel _model;
+        private Uri? _deeplinkUrl;
+
+        private Uri? ResolveDeeplinkUrl => _deeplinkUrl ?? _model.DeeplinkUrl;
 
         public GettingStartedPresenter(
+            GettingStartedModel model,
             IGettingStartedView view,
             ILogger<GettingStartedPresenter> logger,
             IPageFactory pageFactory,
@@ -27,6 +33,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             IBrowserOverlay browserOverlay,
             INhsExternalServicesConfiguration nhsExternalServicesConfiguration)
         {
+            _model = model;
             _view = view;
             _logger = logger;
             _pageFactory = pageFactory;
@@ -38,7 +45,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             view.AppNavigation
                 .RegisterHandler(ViewOnLoginRequested, (view, handler) => view.LoginRequested = handler)
                 .RegisterHandler(LoadCovidUrl, (view, handler) => view.NhsUkCovidAppPageRequested = handler)
-                .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler);
+                .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler)
+                .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeeplinkRequested = handler);
         }
 
         private async Task ViewOnLoginRequested()
@@ -48,7 +56,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _userPreferencesService.ShowGettingStarted = false;
 
             var pkceCodes = _nhsLoginService.GeneratePkceCodes();
-            var loginModel = new NhsLoginModel(pkceCodes, null);
+            var loginModel = new NhsLoginModel(pkceCodes, null, ResolveDeeplinkUrl);
 
             var loginPage = _pageFactory.CreatePageFor(loginModel);
             await _view.AppNavigation.ReplaceCurrentPage(loginPage).PreserveThreadContext();
@@ -60,6 +68,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             await _browserOverlay
                 .OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkCovidAppUrl)
                 .PreserveThreadContext();
+        }
+
+        private Task DeeplinkRequested(Uri deeplinkUrl)
+        {
+            _deeplinkUrl = deeplinkUrl;
+            return Task.CompletedTask;
         }
 
         private async Task BackRequested()

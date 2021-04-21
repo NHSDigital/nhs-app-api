@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Areas.Home.Models;
 using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.Controls.WebViews.Payloads;
@@ -17,6 +18,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
     {
         private bool _hasAlreadyAppeared;
 
+        private readonly NhsAppWebModel _model;
         private readonly INhsAppWebView _view;
         private readonly INhsAppWebConfiguration _config;
         private readonly ILogger _logger;
@@ -28,6 +30,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly INotifications _notifications;
 
         public NhsAppWebPresenter(
+            NhsAppWebModel model,
             INhsAppWebView view,
             INhsAppWebConfiguration config,
             ILogger<NhsAppWebPresenter> logger,
@@ -37,6 +40,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             INotifications notifications,
             IBiometricAuthenticationService biometricAuthenticationService)
         {
+            _model = model;
             _view = view;
             _config = config;
             _logger = logger;
@@ -84,7 +88,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterHandler(
                     _navigationHandler.YourHealthRequested, (view, handler) => view.YourHealthRequested = handler)
                 .RegisterHandler(
-                    _navigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler);
+                    _navigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler)
+                .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeeplinkRequested = handler);
         }
 
         private async Task ViewOnAppearing()
@@ -234,6 +239,13 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .PreserveThreadContext();
         }
 
+        private Task DeeplinkRequested(Uri deeplinkUrl)
+        {
+            _view.GoToUri(deeplinkUrl);
+
+            return Task.CompletedTask;
+        }
+
         private bool IsNhsAppWeb(Uri uri)
         {
             return string.Equals(uri.Host, _config.Host, StringComparison.OrdinalIgnoreCase);
@@ -241,9 +253,9 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         private Task DisplayNhsAppWeb()
         {
-            var homeUri = _config.BaseAddress;
+            var targetUrl = _model.DeeplinkUrl ?? _config.BaseAddress;
 
-            _view.GoToUri(homeUri);
+            _view.GoToUri(targetUrl);
 
             return Task.CompletedTask;
         }

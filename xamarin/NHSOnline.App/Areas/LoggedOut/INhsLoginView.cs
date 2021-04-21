@@ -5,7 +5,7 @@ using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.LoggedOut
 {
-    internal interface INhsLoginView: INavigationView<INhsLoginView.IEvents>
+    internal interface INhsLoginView: INavigationView<INhsLoginView.IEvents>, INhsAppPage
     {
         void LoadUrlAndNotifyOnRedirect(Uri uri, Func<Uri, bool> isRedirect, Action<Uri> redirected);
 
@@ -14,6 +14,7 @@ namespace NHSOnline.App.Areas.LoggedOut
             Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
             Func<Task>? NavigationFailed { get; set; }
             Func<Task>? BackRequested { get; set; }
+            Func<Uri, Task>? DeeplinkRequested { get; set; }
         }
     }
 }

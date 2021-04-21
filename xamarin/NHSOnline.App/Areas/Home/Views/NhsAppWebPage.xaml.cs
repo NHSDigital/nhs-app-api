@@ -53,6 +53,8 @@ namespace NHSOnline.App.Areas.Home.Views
             => new AsyncCommand(() => FetchBiometricStatusRequested);
 
         public Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
+        public Func<Uri, Task>? DeeplinkRequested { get; set; }
+
         public AsyncCommand<string> UpdateBiometricRegistrationCommand
             => new AsyncCommand<string>(() => UpdateBiometricRegistrationRequested);
 
@@ -157,6 +159,14 @@ namespace NHSOnline.App.Areas.Home.Views
         {
             Spinner.IsVisible = false;
             WebView.IsVisible = true;
+        }
+
+        public async Task HandleDeeplink(Uri deeplinkUrl)
+        {
+            if (DeeplinkRequested != null)
+            {
+                await DeeplinkRequested(deeplinkUrl).PreserveThreadContext();
+            }
         }
     }
 }

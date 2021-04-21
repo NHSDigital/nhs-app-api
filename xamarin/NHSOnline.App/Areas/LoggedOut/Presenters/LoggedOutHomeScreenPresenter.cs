@@ -25,6 +25,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly ILifecycle _lifecycle;
         private readonly IBrowserOverlay _browserOverlay;
         private readonly IBackgroundExecutionService _backgroundExecutionService;
+        private Uri? _deeplinkUrl;
 
         public LoggedOutHomeScreenPresenter(
             ILoggedOutHomeScreenView view,
@@ -52,10 +53,13 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _view.AppNavigation
                 .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
                 .RegisterHandler(ViewOnLoginRequested, (view, handler) => view.LoginRequested = handler)
-                .RegisterHandler(LoadCovidConditionsUrl, (view, handler) => view.NhsUkCovidConditionsServicePageRequested = handler)
+                .RegisterHandler(LoadCovidConditionsUrl,
+                    (view, handler) => view.NhsUkCovidConditionsServicePageRequested = handler)
                 .RegisterHandler(LoadLoginHelpUrl, (view, handler) => view.NhsUkLoginHelpServicePageRequested = handler)
                 .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler)
-                .RegisterHandler(ResetAndShowErrorRequested, (view, handler) => view.ResetAndShowErrorRequested = handler);
+                .RegisterHandler(ResetAndShowErrorRequested,
+                    (view, handler) => view.ResetAndShowErrorRequested = handler)
+                .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeeplinkRequested = handler);
         }
 
         private async Task ViewOnAppearing()
@@ -96,15 +100,21 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async Task ShowGettingStartedPage()
         {
-            var gettingStartedModel = new GettingStartedModel();
+            var gettingStartedModel = new GettingStartedModel(_deeplinkUrl);
             var gettingStartedPage = _pageFactory.CreatePageFor(gettingStartedModel);
             await _view.AppNavigation.Push(gettingStartedPage).PreserveThreadContext();
+        }
+
+        private Task DeeplinkRequested(Uri deeplinkUrl)
+        {
+            _deeplinkUrl = deeplinkUrl;
+            return Task.CompletedTask;
         }
 
         private async Task ShowNhsLoginPage(string? fidoAuthResponse = null)
         {
             var pkceCodes = _nhsLoginService.GeneratePkceCodes();
-            var loginModel = new NhsLoginModel(pkceCodes, fidoAuthResponse);
+            var loginModel = new NhsLoginModel(pkceCodes, fidoAuthResponse, _deeplinkUrl);
             var loginView = _pageFactory.CreatePageFor(loginModel);
             await _view.AppNavigation.Push(loginView).PreserveThreadContext();
         }

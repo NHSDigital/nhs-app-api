@@ -20,6 +20,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly INhsLoginConfiguration _nhsLoginConfiguration;
         private readonly IBrowserOverlay _browserOverlay;
         private readonly LoginState _loginState;
+        private Uri? _deeplinkUrl;
+
+        private Uri? ResolveDeeplinkUrl => _deeplinkUrl ?? _model.DeeplinkUrl;
 
         public NhsLoginPresenter(
             NhsLoginModel model,
@@ -41,7 +44,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _view.AppNavigation
                 .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
                 .RegisterHandler(ViewOnNavigationFailed, (view, handler) => view.NavigationFailed = handler)
-                .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler);;
+                .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler)
+                .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeeplinkRequested = handler);
 
             // TODO: NHSO-10323 addresses cookie management in web views
             cookies.Clear();
@@ -57,6 +61,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             {
                 await OpenInBrowserOverlay(webNavigatingEventArgs, url).PreserveThreadContext();
             }
+        }
+
+        private Task DeeplinkRequested(Uri deeplinkUrl)
+        {
+            _deeplinkUrl = deeplinkUrl;
+            return Task.CompletedTask;
         }
 
         private async Task ViewOnNavigationFailed()
@@ -81,7 +91,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         {
             _logger.LogInformation("Authorised, Code: {AuthCode}", authorised.AuthCode);
 
-            var createSessionModel = _model.AuthReturn(authorised.RedirectUri, authorised.AuthCode);
+            var createSessionModel = _model.AuthReturn(authorised.RedirectUri, authorised.AuthCode, ResolveDeeplinkUrl);
             var createSessionPage = _pageFactory.CreatePageFor(createSessionModel);
 
             await _view.AppNavigation.ReplaceCurrentPage(createSessionPage).PreserveThreadContext();

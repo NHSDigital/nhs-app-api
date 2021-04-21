@@ -42,6 +42,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         private ICommand BackRequestedCommand => new AsyncCommand(() => BackRequested);
 
         public Func<Task>? ResetAndShowErrorRequested { get; set; }
+        public Func<Uri, Task>? DeeplinkRequested { get; set; }
 
         public async Task ResetAndShowError()
         {
@@ -71,6 +72,14 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         {
             BackRequestedCommand.Execute(null);
             return true;
+        }
+
+        public async Task HandleDeeplink(Uri deeplinkUrl)
+        {
+            if (DeeplinkRequested != null)
+            {
+                await DeeplinkRequested(deeplinkUrl).PreserveThreadContext();
+            }
         }
     }
 }

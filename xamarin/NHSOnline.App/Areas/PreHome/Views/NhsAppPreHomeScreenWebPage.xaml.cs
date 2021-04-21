@@ -36,6 +36,7 @@ namespace NHSOnline.App.Areas.PreHome.Views
         public AsyncCommand GetNotificationsStatusCommand => new AsyncCommand(() => GetNotificationsStatusRequested);
 
         public Func<string, Task>? GetPnsTokenRequested { get; set; }
+        public Func<Uri, Task>? DeeplinkRequested { get; set; }
         public AsyncCommand<string> RequestPnsTokenCommand => new AsyncCommand<string>(() => GetPnsTokenRequested);
 
         public Func<Task>? GoToLoggedInHomeRequested { get; set; }
@@ -119,6 +120,14 @@ namespace NHSOnline.App.Areas.PreHome.Views
         {
             Spinner.IsVisible = false;
             WebView.IsVisible = true;
+        }
+
+        public async Task HandleDeeplink(Uri deeplinkUrl)
+        {
+            if (DeeplinkRequested != null)
+            {
+                await DeeplinkRequested(deeplinkUrl).PreserveThreadContext();
+            }
         }
     }
 }

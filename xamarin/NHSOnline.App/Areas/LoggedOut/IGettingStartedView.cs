@@ -4,13 +4,14 @@ using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut
 {
-    internal interface IGettingStartedView: INavigationView<IGettingStartedView.IEvents>
+    internal interface IGettingStartedView: INavigationView<IGettingStartedView.IEvents>, INhsAppPage
     {
         internal interface IEvents
         {
             Func<Task>? LoginRequested { get; set; }
             Func<Task>? NhsUkCovidAppPageRequested { get; set; }
             Func<Task>? BackRequested { get; set; }
+            Func<Uri, Task>? DeeplinkRequested { get; set; }
         }
     }
 }

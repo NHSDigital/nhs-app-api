@@ -1,4 +1,6 @@
+using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
@@ -20,6 +22,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             NavigationPage.SetHasNavigationBar(this, false);
         }
 
+        public Func<Uri, Task>? DeeplinkRequested { get; set; }
+
         IAppNavigation<ICreateSessionView.IEvents> INavigationView<ICreateSessionView.IEvents>.AppNavigation => _appNavigation;
 
         protected override void OnAppearing()
@@ -32,6 +36,14 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         {
             _logger.LogInformation("{Method}", nameof(OnDisappearing));
             _appNavigation.SuppressHandlers();
+        }
+
+        public async Task HandleDeeplink(Uri deeplinkUrl)
+        {
+            if (DeeplinkRequested != null)
+            {
+                await DeeplinkRequested(deeplinkUrl).PreserveThreadContext();
+            }
         }
     }
 }

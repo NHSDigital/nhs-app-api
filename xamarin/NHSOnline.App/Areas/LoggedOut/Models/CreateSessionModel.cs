@@ -4,15 +4,15 @@ namespace NHSOnline.App.Areas.LoggedOut.Models
 {
     internal class CreateSessionModel: NhsLoginModel
     {
-        public CreateSessionModel(NhsLoginModel nhsLoginModel, Uri redirectUri, string authCode)
-            : base(nhsLoginModel)
+        public CreateSessionModel(NhsLoginModel nhsLoginModel, Uri redirectUri, string authCode, Uri? deeplinkUrl)
+            : base(nhsLoginModel.PkceCodes, nhsLoginModel.FidoAuthResponse, deeplinkUrl)
         {
             RedirectUri = redirectUri;
             AuthCode = authCode;
         }
 
         protected CreateSessionModel(CreateSessionModel createSessionModel)
-            : this(createSessionModel, createSessionModel.RedirectUri, createSessionModel.AuthCode)
+            : this(createSessionModel, createSessionModel.RedirectUri, createSessionModel.AuthCode, createSessionModel.DeeplinkUrl)
         {
         }
 

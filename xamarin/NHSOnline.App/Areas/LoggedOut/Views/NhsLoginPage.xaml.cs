@@ -36,6 +36,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public Func<Task>? BackRequested { get; set; }
         private AsyncCommand BackRequestedCommand => new AsyncCommand(() => BackRequested);
 
+        public Func<Uri, Task>? DeeplinkRequested { get; set; }
+
         protected override void OnAppearing()
         {
             _logger.LogInformation("{Method}", nameof(OnAppearing));
@@ -115,6 +117,14 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         {
             Spinner.IsVisible = false;
             WebView.IsVisible = true;
+        }
+
+        public async Task HandleDeeplink(Uri deeplinkUrl)
+        {
+            if (DeeplinkRequested != null)
+            {
+                await DeeplinkRequested(deeplinkUrl).PreserveThreadContext();
+            }
         }
     }
 }

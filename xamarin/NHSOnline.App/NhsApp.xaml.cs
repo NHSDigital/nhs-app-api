@@ -1,6 +1,8 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Areas;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Controls;
 using NHSOnline.App.DependencyInjection;
@@ -11,6 +13,8 @@ namespace NHSOnline.App
 {
     public partial class NhsApp
     {
+        private NavigationPage? NavigationPage { get; set; }
+
         public NhsApp()
         {
             InitializeComponent();
@@ -31,13 +35,13 @@ namespace NHSOnline.App
                 var pageFactory = serviceProvider.GetRequiredService<IPageFactory>();
                 var loggedOutHomeScreenPage = pageFactory.CreatePageFor(new LoggedOutHomeScreenModel());
 
-                var navigationPage = new NavigationPage(loggedOutHomeScreenPage);
+                NavigationPage = new NavigationPage(loggedOutHomeScreenPage);
 
-                navigationPage.BarTextColor = Color.White;
+                NavigationPage.BarTextColor = Color.White;
 
-                NhsAppResilience.Init(navigationPage.Navigation, Dispatcher);
+                NhsAppResilience.Init(NavigationPage.Navigation, Dispatcher);
 
-                MainPage = navigationPage;
+                MainPage = NavigationPage;
             }
             catch (Exception e)
             {
@@ -57,16 +61,17 @@ namespace NHSOnline.App
             }
         }
 
-        protected override void OnStart()
+        [SuppressMessage("Design", "CA1054: URI parameters should not be strings",
+            Justification = "Parsing at the app level rather than in the individual apps")]
+        public void HandleDeeplink(string deeplinkUrl)
         {
-        }
-
-        protected override void OnSleep()
-        {
-        }
-
-        protected override void OnResume()
-        {
+            if (Uri.TryCreate(deeplinkUrl, UriKind.Absolute, out var targetUri))
+            {
+                if (NavigationPage?.CurrentPage is INhsAppPage currentPage)
+                {
+                    currentPage.HandleDeeplink(targetUri);
+                }
+            }
         }
     }
 }

@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.Home
 {
-    internal interface INhsAppWebView: INavigationView<INhsAppWebView.IEvents>
+    internal interface INhsAppWebView: INavigationView<INhsAppWebView.IEvents>, INhsAppPage
     {
         internal interface IEvents
         {
@@ -33,6 +33,7 @@ namespace NHSOnline.App.Areas.Home
 
             Func<Task>? FetchBiometricStatusRequested { get; set; }
             Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
+            Func<Uri, Task>? DeeplinkRequested { get; set; }
         }
 
         void GoToUri(Uri uri);

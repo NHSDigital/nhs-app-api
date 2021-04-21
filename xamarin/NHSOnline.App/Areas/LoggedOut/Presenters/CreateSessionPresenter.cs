@@ -24,6 +24,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly ISessionService _sessionService;
         private readonly IBackgroundExecutionService _backgroundExecutionService;
         private readonly INhsAppWebConfiguration _config;
+        private Uri? _deeplinkUrl;
+
+        private Uri? ResolveDeeplinkUrl => _deeplinkUrl ?? _model.DeeplinkUrl;
 
         public CreateSessionPresenter(
             ICreateSessionView view,
@@ -41,6 +44,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _sessionService = sessionService;
             _backgroundExecutionService = backgroundExecutionService;
             _config = config;
+
+            view.AppNavigation
+                .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeeplinkRequested = handler);
 
             CreateSession();
         }
@@ -91,7 +97,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task NavigateToPreHomeScreenPages(UserSession userSession, CookieContainer cookies)
         {
             var sessionCookies = BuildSessionCookieContainer(userSession, cookies);
-            var preHomeScreenModel = new NhsAppPreHomeScreenWebModel(sessionCookies);
+            var preHomeScreenModel = new NhsAppPreHomeScreenWebModel(sessionCookies, ResolveDeeplinkUrl);
             var preHomeScreenPage = _pageFactory.CreatePageFor(preHomeScreenModel);
 
             await _view.AppNavigation.PopToNewRoot(preHomeScreenPage).PreserveThreadContext();
@@ -167,6 +173,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
                 Secure = _config.NhsOnlineSessionCookieSecure,
                 HttpOnly = false
             };
+        }
+
+        private Task DeeplinkRequested(Uri deeplinkUrl)
+        {
+            _deeplinkUrl = deeplinkUrl;
+            return Task.CompletedTask;
         }
 
         // Shim to convert the user session object from the API to the slightly

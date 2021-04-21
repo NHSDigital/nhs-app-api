@@ -16,6 +16,7 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
     internal class NhsAppPreHomeScreenWebPresenter
     {
         private bool _hasAlreadyAppeared;
+        private Uri? _deeplinkUrl;
 
         private readonly INhsAppPreHomeScreenWebView _view;
         private readonly NhsAppPreHomeScreenWebModel _model;
@@ -25,6 +26,8 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
         private readonly IBrowserOverlay _browserOverlay;
         private readonly ICookieHandler _cookieHandler;
         private readonly INotifications _notifications;
+
+        private Uri? ResolveDeeplinkUrl => _deeplinkUrl ?? _model.DeeplinkUrl;
 
         public NhsAppPreHomeScreenWebPresenter(
             INhsAppPreHomeScreenWebView view,
@@ -46,18 +49,26 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             _notifications = notifications;
 
             _view.AppNavigation
-                .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
-                .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
-                .RegisterHandler<WebNavigatedEventArgs>(ViewOnNavigated, (view, handler) => view.Navigated = handler)
-                .RegisterHandler(GetNotificationsStatusRequested, (view, handler) => view.GetNotificationsStatusRequested = handler)
-                .RegisterHandler(GoToLoggedInHomeRequested, (view, handler) => view.GoToLoggedInHomeRequested = handler)
-                .RegisterHandler<string>(RequestPnsToken, (view, handler) => view.GetPnsTokenRequested = handler)
-                .RegisterHandler(ResetAndShowErrorRequested, (view, handler) => view.ResetAndShowErrorRequested = handler);
+                .RegisterHandler(ViewOnAppearing,
+                    (view, handler) => view.Appearing = handler)
+                .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating,
+                    (view, handler) => view.Navigating = handler)
+                .RegisterHandler<WebNavigatedEventArgs>(ViewOnNavigated,
+                    (view, handler) => view.Navigated = handler)
+                .RegisterHandler(GetNotificationsStatusRequested,
+                    (view, handler) => view.GetNotificationsStatusRequested = handler)
+                .RegisterHandler(GoToLoggedInHomeRequested,
+                    (view, handler) => view.GoToLoggedInHomeRequested = handler)
+                .RegisterHandler<string>(RequestPnsToken,
+                    (view, handler) => view.GetPnsTokenRequested = handler)
+                .RegisterHandler(ResetAndShowErrorRequested,
+                    (view, handler) => view.ResetAndShowErrorRequested = handler)
+                .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeeplinkRequested = handler);
         }
 
         private async Task GoToLoggedInHomeRequested()
         {
-            var homePageModel = new NhsAppWebModel();
+            var homePageModel = new NhsAppWebModel(ResolveDeeplinkUrl);
             var homePage = _pageFactory.CreatePageFor(homePageModel);
 
             await _view.AppNavigation.PopToNewRootAnimated(homePage).PreserveThreadContext();
@@ -138,6 +149,12 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
 
             _view.GoToUri(homeUri);
 
+            return Task.CompletedTask;
+        }
+
+        private Task DeeplinkRequested(Uri deeplinkUrl)
+        {
+            _deeplinkUrl = deeplinkUrl;
             return Task.CompletedTask;
         }
     }
