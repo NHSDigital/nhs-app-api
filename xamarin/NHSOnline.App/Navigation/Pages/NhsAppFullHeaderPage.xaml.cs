@@ -11,7 +11,7 @@ namespace NHSOnline.App.Navigation.Pages
     [ContentProperty(nameof(PageContent))]
     public partial class NhsAppFullHeaderPage
     {
-        private const int WideScreenSize = 1300;
+        private const int WideScreenSize = 650;
 
         public static readonly BindableProperty PageContentProperty =
             BindableProperty.Create(nameof(PageContent), typeof(View), typeof(NhsAppFullHeaderPage));
@@ -25,7 +25,7 @@ namespace NHSOnline.App.Navigation.Pages
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
-            var isWideDevice = Device.info.PixelScreenSize.Width >= WideScreenSize;
+            var isWideDevice = Device.info.ScaledScreenSize.Width >= WideScreenSize;
 
             FullNavigationFooterWide.IsVisible = isWideDevice;
             FullNavigationFooter.IsVisible = !isWideDevice;

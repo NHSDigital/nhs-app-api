@@ -22,7 +22,7 @@
             <Style TargetType="controls:FullNavigationFooterItem">
                 <Setter Property="VerticalOptions" Value="Center" />
                 <Setter Property="HeightRequest" Value="50" />
-                <Setter Property="WidthRequest" Value="61" />
+                <Setter Property="WidthRequest" Value="62" />
             </Style>
             
             <Style TargetType="controls:SvgImage" ApplyToDerivedTypes="True">
@@ -49,15 +49,15 @@
                 </Grid.RowDefinitions>
                  
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="61" />
+                    <ColumnDefinition Width="62" />
                     <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="61" />
+                    <ColumnDefinition Width="62" />
                     <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="61" />
+                    <ColumnDefinition Width="62" />
                     <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="61" />
+                    <ColumnDefinition Width="62" />
                     <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="61" />
+                    <ColumnDefinition Width="62" />
                 </Grid.ColumnDefinitions>
                 
                 <controls:FullNavigationFooterItem Grid.Column="0"

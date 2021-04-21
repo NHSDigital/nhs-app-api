@@ -9,7 +9,6 @@ namespace NHSOnline.App.Controls.Effects
             BindableProperty.CreateAttached(nameof(AccessibilityControlType), typeof(AccessibilityControlType?),
                 typeof(AccessibilityEffect), null, propertyChanged: OnAccessibilityControlTypeChanged);
 
-
         public static AccessibilityControlType? GetAccessibilityControlType (BindableObject view)
         {
             if (view.GetValue(AccessibilityControlTypeProperty) is AccessibilityControlType controlType)
@@ -56,12 +55,9 @@ namespace NHSOnline.App.Controls.Effects
 
         class AccessibilityRoutingEffect : RoutingEffect
         {
-            public AccessibilityRoutingEffect () : base ($"{NhsAppEffects.ResolutionGroupName}.{nameof(AccessibilityEffect)}")
+            public AccessibilityRoutingEffect() : base($"{NhsAppEffects.ResolutionGroupName}.{nameof(AccessibilityEffect)}")
             {
             }
         }
     }
-
-
-
 }

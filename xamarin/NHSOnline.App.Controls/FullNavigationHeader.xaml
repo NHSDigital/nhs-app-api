@@ -4,6 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
              xmlns:icons="clr-namespace:NHSOnline.App.Controls.Icons;assembly=NHSOnline.App.Controls"
+             xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Controls.FullNavigationHeader"
              x:Name="Root">
     <ContentView.Effects>
@@ -62,6 +63,7 @@
                 <Setter Property="FontSize" Value="10" />
                 <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
                 <Setter Property="TextColor" Value="{StaticResource NhsUkWhite}" />
+                <Setter Property="effects:FixedFontSizeEffect.HasFixedFontSize" Value="True" /> 
             </Style>
         </ResourceDictionary>
     </View.Resources>
@@ -125,7 +127,6 @@
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding MoreCommand, Source={x:Reference Name=Root}}"  />
                     </StackLayout.GestureRecognizers>
-                    
                 </StackLayout>
             </Grid>
         </StackLayout>
