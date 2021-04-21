@@ -120,7 +120,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
                     case BiometricPrompt.ErrorUserCanceled:
                     case BiometricPrompt.ErrorNegativeButton:
                         Logger.LogInformation("Cancelled by user");
-                        _completionSource.SetResult(new BiometricAuthVerifyUserResult.Cancelled());
+                        _completionSource.SetResult(new BiometricAuthVerifyUserResult.UserCancelled());
                         break;
 
                     default:

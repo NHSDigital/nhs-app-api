@@ -30,7 +30,12 @@ namespace NHSOnline.App.Services.FIDO
             public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
-        internal sealed class Cancelled : BiometricLoginResult
+        internal sealed class UserCancelled : BiometricLoginResult
+        {
+            public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
+        }
+
+        internal sealed class SystemCancelled : BiometricLoginResult
         {
             public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
         }

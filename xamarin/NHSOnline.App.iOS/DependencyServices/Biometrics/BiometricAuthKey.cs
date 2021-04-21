@@ -62,16 +62,24 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
                     return new BiometricAuthVerifyUserResult.Authorised(new BiometricAuthSigner(_secKey));
                 }
 
-                if (error?.Code == (nint)(long)LAStatus.UserCancel)
-                {
-                    Logger.LogInformation("EvaluatePolicyAsync canceled by user");
-                    return new BiometricAuthVerifyUserResult.Cancelled();
-                }
+                var status = (LAStatus?) (long?) error?.Code;
 
-                if (error?.Code == (nint)(long)LAStatus.BiometryLockout)
+                if (status == LAStatus.BiometryLockout)
                 {
                     Logger.LogInformation("EvaluatePolicyAsync locked out");
                     return new BiometricAuthVerifyUserResult.LockedOut();
+                }
+
+                if (status == LAStatus.UserCancel)
+                {
+                    Logger.LogInformation("EvaluatePolicyAsync canceled by user");
+                    return new BiometricAuthVerifyUserResult.UserCancelled();
+                }
+
+                if (status == LAStatus.SystemCancel)
+                {
+                    Logger.LogInformation("EvaluatePolicyAsync canceled by system");
+                    return new BiometricAuthVerifyUserResult.SystemCancelled();
                 }
 
                 Logger.LogWarning("EvaluatePolicyAsync failed: {Error}", error);

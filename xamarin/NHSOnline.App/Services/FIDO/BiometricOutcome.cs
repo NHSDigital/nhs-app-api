@@ -4,6 +4,7 @@ namespace NHSOnline.App.Services.FIDO
     {
         Success,
         Failed,
-        Cancelled
+        UserCancelled,
+        SystemCancelled
     }
 }

@@ -121,9 +121,14 @@ namespace NHSOnline.App.Services.FIDO
                 return ProcessResult<IBiometricAuthSigner, BiometricRegisterResult>.FromTResult(authorised.Signer);
             }
 
-            public ProcessResult<IBiometricAuthSigner, BiometricRegisterResult> Visit(BiometricAuthVerifyUserResult.Cancelled cancelled)
+            public ProcessResult<IBiometricAuthSigner, BiometricRegisterResult> Visit(BiometricAuthVerifyUserResult.UserCancelled userCancelled)
             {
-                return BiometricRegisterResult.Cancelled();
+                return BiometricRegisterResult.UserCancelled();
+            }
+
+            public ProcessResult<IBiometricAuthSigner, BiometricRegisterResult> Visit(BiometricAuthVerifyUserResult.SystemCancelled systemCancelled)
+            {
+                return BiometricRegisterResult.SystemCancelled();
             }
 
             public ProcessResult<IBiometricAuthSigner, BiometricRegisterResult> Visit(BiometricAuthVerifyUserResult.Unauthorised unauthorised)
