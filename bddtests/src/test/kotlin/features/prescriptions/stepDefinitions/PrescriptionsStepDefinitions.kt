@@ -14,8 +14,8 @@ import mocking.data.prescriptions.EmisPrescriptionLoader
 import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.defaults.EmisMockDefaults
 import mocking.defaults.VisionMockDefaults
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.emis.models.RequestedMedicationCourseStatus
 import mocking.microtest.prescriptions.PrescriptionHistoryGetResponse

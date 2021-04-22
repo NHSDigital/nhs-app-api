@@ -6,8 +6,8 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import mocking.MockingClient
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import models.Patient
 import pages.ndop.ChoiceApplyDataSharingPage
 import pages.ndop.ConfidentialDataSharingPage

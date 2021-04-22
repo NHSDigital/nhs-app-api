@@ -1,6 +1,6 @@
-package mocking.defaults.dataPopulation.journies.prescriptions
+package mocking.defaults.dataPopulation.journeys.prescriptions
 
-import mocking.defaults.dataPopulation.journies.courses.CoursesDataBuilder
+import mocking.defaults.dataPopulation.journeys.courses.CoursesDataBuilder
 import mocking.emis.models.PrescriptionRequest
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.emis.models.RequestedMedicationCourse

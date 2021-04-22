@@ -7,8 +7,8 @@ import io.cucumber.java.en.When
 import features.serviceJourneyRules.factories.SJRJourneyType
 import pages.gpMedicalRecord.MedicalRecordHubPage
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import pages.assertSingleElementPresent
 
 open class MedicalRecordHubPageStepDefinitions {

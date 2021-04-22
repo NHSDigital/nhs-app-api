@@ -8,9 +8,9 @@ import io.cucumber.datatable.DataTable
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
-import mocking.defaults.dataPopulation.journies.termsAndConditions.TermsAndConditionsJourneyFactory
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.termsAndConditions.TermsAndConditionsJourneyFactory
 import models.Patient
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert.assertEquals

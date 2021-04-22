@@ -4,8 +4,8 @@ import config.Config
 import io.cucumber.datatable.DataTable
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import models.Patient
 import mongodb.MongoDBConnection
 import mongodb.MongoRepositoryMessage

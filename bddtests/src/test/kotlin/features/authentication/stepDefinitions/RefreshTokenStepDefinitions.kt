@@ -7,8 +7,8 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import mocking.AccessTokenBuilder
 import mocking.MockingClient
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import models.IdentityProofingLevel
 import models.Patient
 import net.serenitybdd.core.Serenity

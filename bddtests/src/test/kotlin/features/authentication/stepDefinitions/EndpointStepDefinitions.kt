@@ -7,8 +7,8 @@ import io.cucumber.java.en.Then
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory
 import mocking.MockingClient
 import utils.SerenityHelpers
-import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.im1Connection.SuccessfulRegistrationJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import models.Patient
 import net.serenitybdd.core.Serenity
 import org.apache.http.HttpStatus

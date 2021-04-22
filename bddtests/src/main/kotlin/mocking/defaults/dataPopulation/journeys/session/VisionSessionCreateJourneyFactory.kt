@@ -1,4 +1,4 @@
-package mocking.defaults.dataPopulation.journies.session
+package mocking.defaults.dataPopulation.journeys.session
 
 import mocking.defaults.VisionMockDefaults
 import mocking.vision.VisionConstants.gpAppointmentsDisabled

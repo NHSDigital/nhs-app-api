@@ -6,8 +6,8 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import mocking.MockingClient
 import mocking.citizenId.login.UpliftLoginRequestBuilder
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import models.IdentityProofingLevel
 import models.Patient
 import net.thucydides.core.annotations.Steps

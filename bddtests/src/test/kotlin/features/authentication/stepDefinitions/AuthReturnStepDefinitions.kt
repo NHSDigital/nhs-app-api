@@ -6,7 +6,7 @@ import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
 import mocking.MockingClient
 import mocking.defaults.TppMockDefaults
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
 import mocking.emis.practices.SettingsResponseModel
 import mocking.tpp.models.Application
 import mocking.tpp.models.Authenticate

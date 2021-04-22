@@ -8,8 +8,8 @@ import io.cucumber.java.en.When
 import mocking.MockingClient
 import mocking.citizenId.models.signingKeys.SucceededResponse
 import mocking.defaults.EmisMockDefaults
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import models.Patient
 import org.apache.commons.lang3.StringUtils
 import org.junit.Assert

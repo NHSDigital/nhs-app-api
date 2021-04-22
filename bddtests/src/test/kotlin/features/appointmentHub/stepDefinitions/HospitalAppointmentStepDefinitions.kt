@@ -6,8 +6,8 @@ import io.cucumber.java.en.Then
 import features.myrecord.factories.DemographicsFactory
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import models.patients.EmisPatients
 import pages.appointments.HospitalAppointmentsPage
 import utils.SerenityHelpers

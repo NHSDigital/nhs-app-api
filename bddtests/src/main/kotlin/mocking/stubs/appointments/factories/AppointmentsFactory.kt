@@ -3,8 +3,8 @@ package mocking.stubs.appointments.factories
 import constants.DateTimeFormats
 import constants.Supplier
 import mocking.MockingClient
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory.Companion.telephoneNumberToEnter
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade

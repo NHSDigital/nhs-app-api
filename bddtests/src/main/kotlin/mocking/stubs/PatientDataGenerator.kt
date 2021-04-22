@@ -2,7 +2,7 @@ package mocking.stubs
 
 import constants.Supplier
 import mocking.MockingClient
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import models.Patient
 
 class PatientDataGenerator {

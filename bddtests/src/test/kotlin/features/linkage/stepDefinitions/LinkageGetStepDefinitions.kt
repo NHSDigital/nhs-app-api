@@ -8,7 +8,7 @@ import io.cucumber.java.en.When
 import features.linkage.LinkageResult
 import features.myrecord.factories.DemographicsFactory
 import mocking.MockingClient
-import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
+import mocking.defaults.dataPopulation.journeys.im1Connection.SuccessfulRegistrationJourney
 import mockingFacade.linkage.LinkageInformationFacade
 import models.patients.MicrotestPatients
 import net.serenitybdd.core.Serenity

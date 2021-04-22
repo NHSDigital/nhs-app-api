@@ -2,8 +2,8 @@ package features.authentication.stepDefinitions
 
 import constants.Supplier
 import io.cucumber.java.en.Given
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory
 import models.Patient
 import utils.SerenityHelpers

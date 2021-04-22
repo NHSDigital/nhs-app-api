@@ -7,8 +7,8 @@ import io.cucumber.java.en.When
 import features.authentication.factories.PatientVerificationFactory
 import features.authentication.steps.LoginSteps
 import features.myrecord.factories.DemographicsFactory
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import models.Patient
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps

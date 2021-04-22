@@ -14,10 +14,10 @@ import features.sharedSteps.NavigationSteps
 import io.cucumber.datatable.DataTable
 import mocking.MockingClient
 import mocking.defaults.EmisMockDefaults
-import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyFactory
-import mocking.defaults.dataPopulation.journies.termsAndConditions.TermsAndConditionsJourneyFactory
+import mocking.defaults.dataPopulation.journeys.im1Connection.SuccessfulRegistrationJourney
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.TppSessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.termsAndConditions.TermsAndConditionsJourneyFactory
 import models.Patient
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert

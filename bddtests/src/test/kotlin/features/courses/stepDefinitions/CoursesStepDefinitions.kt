@@ -8,7 +8,7 @@ import features.authentication.steps.LoginSteps
 import features.prescriptions.helpers.PrescriptionHelpers
 import features.prescriptions.stepDefinitions.PrescriptionsSerenityHelpers
 import mocking.MockingClient
-import mocking.defaults.dataPopulation.journies.prescriptions.PrescriptionsHistoryJourney
+import mocking.defaults.dataPopulation.journeys.prescriptions.PrescriptionsHistoryJourney
 import mocking.emis.practices.NecessityOption
 import mocking.emis.practices.SettingsResponseModel
 import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader

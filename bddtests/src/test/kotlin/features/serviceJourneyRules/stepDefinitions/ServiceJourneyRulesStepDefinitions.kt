@@ -9,8 +9,8 @@ import features.serviceJourneyRules.factories.ServiceJourneyRulesConfiguration
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import features.serviceJourneyRules.mappers.PublicHealthNotificationsMapper
 import mocking.defaults.TppMockDefaults.Companion.TPP_ODS_CODE_NO_SJR_CONFIGURATION
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import models.Patient
 import net.serenitybdd.core.Serenity
 import org.junit.Assert

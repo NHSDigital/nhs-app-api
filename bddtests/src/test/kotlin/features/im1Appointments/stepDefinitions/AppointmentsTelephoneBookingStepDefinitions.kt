@@ -5,8 +5,8 @@ import io.cucumber.datatable.DataTable
 import io.cucumber.java.en.Given
 import features.im1Appointments.steps.AppointmentSerenityHelpers
 import features.myrecord.factories.DemographicsFactory
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory
 import mocking.stubs.appointments.factories.MyAppointmentsFactory
 import models.Patient

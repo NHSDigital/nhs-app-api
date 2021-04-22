@@ -6,8 +6,8 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import mocking.data.organDonation.OrganDonationReferenceDataBuilder
 import mocking.data.organDonation.OrganDonationSerenityHelpers
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import org.apache.http.HttpStatus
 import pages.organDonation.OrganDonationErrorPage
 import utils.set

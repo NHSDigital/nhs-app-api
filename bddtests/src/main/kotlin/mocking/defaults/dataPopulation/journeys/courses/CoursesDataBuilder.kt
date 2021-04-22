@@ -1,6 +1,6 @@
-package mocking.defaults.dataPopulation.journies.courses
+package mocking.defaults.dataPopulation.journeys.courses
 
-import mocking.defaults.dataPopulation.journies.prescriptions.PrescriptionsData
+import mocking.defaults.dataPopulation.journeys.prescriptions.PrescriptionsData
 import mocking.emis.models.PrescriptionType
 import models.prescriptions.MedicationCourse
 import java.util.*

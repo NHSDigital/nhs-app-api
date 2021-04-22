@@ -3,8 +3,8 @@ package features.sharedSteps.backend
 import constants.Supplier
 import io.cucumber.java.en.Given
 import features.myrecord.factories.DemographicsFactory
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import models.IdentityProofingLevel
 import models.Patient
 import net.serenitybdd.core.Serenity

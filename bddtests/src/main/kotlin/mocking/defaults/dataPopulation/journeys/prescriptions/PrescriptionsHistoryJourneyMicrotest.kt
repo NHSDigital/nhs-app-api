@@ -1,4 +1,4 @@
-package mocking.defaults.dataPopulation.journies.prescriptions
+package mocking.defaults.dataPopulation.journeys.prescriptions
 
 import mocking.data.prescriptions.MicrotestPrescriptionLoader
 import models.Patient

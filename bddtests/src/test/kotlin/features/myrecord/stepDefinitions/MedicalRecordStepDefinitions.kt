@@ -8,8 +8,8 @@ import features.authentication.steps.LoginSteps
 import features.myrecord.factories.MyRecordFactory
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import mocking.microtest.myRecord.MyRecordModuleCounts
 import mocking.microtest.myRecord.TestResultOptions
 import net.serenitybdd.core.Serenity

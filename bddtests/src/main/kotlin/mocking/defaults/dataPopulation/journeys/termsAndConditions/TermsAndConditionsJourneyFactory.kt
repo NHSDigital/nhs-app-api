@@ -1,4 +1,4 @@
-package mocking.defaults.dataPopulation.journies.termsAndConditions
+package mocking.defaults.dataPopulation.journeys.termsAndConditions
 
 import mocking.sharedModels.ConsentMongoSerenityHelpers
 import mocking.termsAndConditions.MongoTermsAndConditions

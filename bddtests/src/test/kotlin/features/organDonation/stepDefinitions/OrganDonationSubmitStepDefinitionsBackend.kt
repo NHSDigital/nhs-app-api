@@ -6,7 +6,7 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
 import mocking.data.organDonation.OrganDonationSerenityHelpers
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
 import mocking.organDonation.OrganDonationWithdrawalResponse
 import mocking.organDonation.models.OrganDonationRegistrationRequest
 import mocking.organDonation.models.OrganDonationWithdrawRequest

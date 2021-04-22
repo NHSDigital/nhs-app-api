@@ -1,4 +1,4 @@
-package mocking.defaults.dataPopulation.journies.session
+package mocking.defaults.dataPopulation.journeys.session
 
 import constants.TppConstants
 import mocking.defaults.TppMockDefaults

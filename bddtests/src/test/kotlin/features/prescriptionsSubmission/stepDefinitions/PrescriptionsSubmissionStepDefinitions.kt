@@ -17,8 +17,8 @@ import mocking.MockingClient
 import mocking.data.nhsAzureSearchData.NhsAzureSearchData
 import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.defaults.VisionMockDefaults
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.microtest.prescriptions.PrescriptionHistoryGetResponse
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationItem

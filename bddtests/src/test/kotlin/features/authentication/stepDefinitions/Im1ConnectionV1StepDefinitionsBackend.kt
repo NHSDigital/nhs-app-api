@@ -7,9 +7,9 @@ import io.cucumber.java.en.When
 import features.myrecord.factories.DemographicsFactory
 import mocking.GsonFactory
 import mocking.MockingClient
-import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.im1Connection.SuccessfulRegistrationJourney
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.me.LinkageDetailsModel
 import mockingFacade.linkage.LinkageInformationFacade

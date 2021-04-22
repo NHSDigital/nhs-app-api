@@ -14,9 +14,9 @@ import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
 import mocking.data.nhsAzureSearchData.NhsAzureSearchData
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
-import mocking.defaults.dataPopulation.journies.termsAndConditions.TermsAndConditionsJourneyFactory
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.termsAndConditions.TermsAndConditionsJourneyFactory
 import mocking.nhsAzureSearchService.nhsAzureSearchOrganisationByOdsCodeRequestBody
 import mocking.stubs.appointments.factories.MyAppointmentsFactory
 import mocking.stubs.prescriptions.factories.PrescriptionsFactory

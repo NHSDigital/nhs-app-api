@@ -1,4 +1,4 @@
-package mocking.defaults.dataPopulation.journies.im1Connection
+package mocking.defaults.dataPopulation.journeys.im1Connection
 
 import constants.Supplier
 import constants.TppConstants

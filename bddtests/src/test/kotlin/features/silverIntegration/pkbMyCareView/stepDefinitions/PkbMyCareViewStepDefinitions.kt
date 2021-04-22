@@ -6,8 +6,8 @@ import io.cucumber.java.en.Then
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import io.cucumber.java.en.When
 import mocking.MockingClient
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import mocking.pages.MyCareViewPage
 import mocking.thirdPartyProviders.pkb.MyCareViewRequestBuilder
 import models.IdentityProofingLevel
