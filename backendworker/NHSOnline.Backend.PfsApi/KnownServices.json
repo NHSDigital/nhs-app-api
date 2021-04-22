@@ -508,7 +508,6 @@
       "url": "https://vaccine-status-dev-uks.azurewebsites.net"
     },
     "netCompany": {
-      "subServices": null,
       "javaScriptInteractionMode": "SilverThirdParty",
       "menuTab": "None",
       "viewMode": "WebView",
@@ -517,7 +516,33 @@
       "showThirdPartyWarning": true,
       "requiresAssertedLoginIdentity": true,
       "validateSession": true,
-      "url": "https://storsitstatic.z33.web.core.windows.net"
+      "url": "https://storsitstatic.z33.web.core.windows.net",
+      "subServices": [
+        {
+          "path": "/api/PdfDirectDownload",
+          "queryString": null,
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "AppTab",
+          "integrationLevel": "Bronze",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        },
+        {
+          "path": "/api/walletPassIos",
+          "queryString": null,
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "AppTab",
+          "integrationLevel": "Bronze",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        }
+      ]
     } 
   }
 }
