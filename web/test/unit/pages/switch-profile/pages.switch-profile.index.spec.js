@@ -2,7 +2,6 @@ import i18n from '@/plugins/i18n';
 import SwitchProfile from '@/pages/switch-profile/index';
 import * as dependency from '@/lib/utils';
 import '@/plugins/filters';
-import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import { createStore, mount } from '../../helpers';
 
 jest.mock('@/services/event-bus', () => ({
@@ -52,11 +51,6 @@ describe('switch profile page is there', () => {
       wrapper = mountPage();
       $store.getters['linkedAccounts/hasLinkedAccounts'] = true;
       $store.getters['linkedAccounts/mainPatientId'] = mainUserGuid;
-    });
-
-    it('updated header and title is correct', () => {
-      expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'You are acting on behalf of ', true);
-      expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, 'You are acting on behalf of ', true);
     });
 
     it('proxy users age is visible', () => {

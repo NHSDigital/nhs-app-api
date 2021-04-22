@@ -176,8 +176,14 @@ export const SWITCH_PROFILE = {
   path: SWITCH_PROFILE_NAME,
   component: SwitchProfilePage,
   meta: {
-    headerKey: 'navigation.pages.headers.switchProfile',
-    titleKey: 'navigation.pages.titles.switchProfile',
+    headerKey: (store, i18n) => {
+      const fullName = get('state.linkedAccounts.actingAsUser.fullName')(store);
+      return i18n.t('navigation.pages.headers.switchProfile', { fullName });
+    },
+    titleKey: (store, i18n) => {
+      const fullName = get('state.linkedAccounts.actingAsUser.fullName')(store);
+      return i18n.t('navigation.pages.titles.switchProfile', { fullName });
+    },
     crumb: breadcrumbs.SWITCH_PROFILE_CRUMB,
     proofLevel: proofLevel.P5,
     helpUrl: proxyHelpUrl,
