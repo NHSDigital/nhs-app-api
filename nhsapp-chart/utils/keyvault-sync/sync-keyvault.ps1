@@ -28,7 +28,7 @@ function Export-Secret {
 function Sync-Secret {
   param($Config, $Secret)
 
-  Write-Host -ForegroundColor Yellow "Attempting to add secret '$($Secret.Name)' to destination keyvault '$($Config.source)'"
+  Write-Host -ForegroundColor Yellow "Attempting to add secret '$($Secret.Name)' to destination keyvault '$($config.dest)'"
 
   if (Get-AzKeyVaultSecret -VaultName $Config.dest -Name $Secret.Name -ErrorAction SilentlyContinue) {
     if (-Not $Config.overwriteExisting) {
@@ -51,11 +51,10 @@ function Sync-Secret {
   
     Write-Host -ForegroundColor Green "Secret '$($Secret.Name)' added to destination keyvault '$($Config.dest)'"
   } catch {
-    if (-Not $Config.ignoreAddSecretErrors) {
+    Write-Host -ForegroundColor Red "Error adding secret '$($Secret.Name)' to destination keyvault '$($Config.dest)':`n$($_.Exception.Message.message)"
+    if (-Not $Config.ignoreSecretSyncErrors) {
       throw $_.Exception
     }
-
-    Write-Host -ForegroundColor Red "Error adding secret '$($Secret.Name)' to destination keyvault '$($Config.dest)':`n$($_.Exception.Message)"
   }
 }
 
@@ -107,7 +106,7 @@ function Sync-Cert {
 
   $certCollection = Export-Cert -VaultName $Config.source -CertName $Cert.Name 
 
-  Write-Host -ForegroundColor Yellow "Attempting to import certificate '$($Cert.Name)' to destination keyvault '$($Config.source)'"
+  Write-Host -ForegroundColor Yellow "Attempting to import certificate '$($Cert.Name)' to destination keyvault '$($Config.dest)'"
 
   try {
     $importParams = @{
@@ -120,11 +119,11 @@ function Sync-Cert {
 
     Write-Host -ForegroundColor Green "Certificate '$($Cert.Name)' synced to destination keyvault '$($Config.dest)'"
   } catch {
+    Write-Host -ForegroundColor Red "Error importing cert '$($Cert.Name)' into destination keyvault '$($Config.dest)':`n$($_.Exception.Message.message)"
     if (-Not $Config.ignoreCertImportErrors) {
       throw $_.Exception
     }
 
-    Write-Host -ForegroundColor Red "Error importing cert '$($Cert.Name)' into destination keyvault '$($Config.dest)':`n$($_.Exception.Message)"
   }
 }
 
