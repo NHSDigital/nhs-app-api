@@ -16,7 +16,7 @@
         <controls:Paragraph Text="Log in using your email, password and security code, then turn Touch ID on in the NHS App settings."
                             Padding="0,5,0,0" />
         
-        <controls:LinkLabel Text="Return to login"
+        <controls:LinkLabel Text="Back to login"
                             Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}"
                             Padding="0,10,0,0" />
     </StackLayout>

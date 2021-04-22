@@ -13,7 +13,7 @@
         <controls:Paragraph Text="Check that you have added a face scan in your device's Face ID settings."
                             Padding="0,10,0,0" />
         
-        <controls:LinkLabel Text="Return to login"
+        <controls:LinkLabel Text="Back to login"
                             Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}"
                             Padding="0,10,0,0" />
     </StackLayout>
