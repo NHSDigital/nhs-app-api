@@ -66,6 +66,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             return this;
         }
 
+        public JourneysBuilder CoronavirusInformationEnabled(bool? enabled)
+        {
+            _journeys.CoronavirusInformation = enabled;
+            return this;
+        }
+
         public JourneysBuilder DocumentsEnabled(bool? enabled)
         {
             _journeys.Documents = enabled;
@@ -137,6 +143,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             return this;
         }
 
+        public JourneysBuilder NdopEnabled(bool? enabled)
+        {
+            _journeys.Ndop = enabled;
+            return this;
+        }
+
         public JourneysBuilder NominatedPharmacyEnabled(bool? enabled)
         {
             _journeys.NominatedPharmacy = enabled;
@@ -152,6 +164,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
         public JourneysBuilder NotificationsEnabled(bool? enabled)
         {
             _journeys.Notifications = enabled;
+            return this;
+        }
+
+        public JourneysBuilder OneOneOneEnabled(bool? enabled)
+        {
+            _journeys.OneOneOne = enabled;
             return this;
         }
 

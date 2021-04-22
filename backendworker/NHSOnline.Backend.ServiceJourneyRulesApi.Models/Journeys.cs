@@ -10,6 +10,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 
         public Cdss CdssAdvice { get; set; }
 
+        public bool? CoronavirusInformation { get; set; }
+
         public bool? Documents { get; set; }
 
         public HomeScreen HomeScreen { get; set; }
@@ -20,11 +22,15 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 
         public bool? Messaging { get; set; }
 
+        public bool? Ndop { get; set; }
+
         public bool? NominatedPharmacy { get; set; }
 
         public bool? Notifications { get; set; }
 
         public bool? NotificationPrompt { get; set; }
+
+        public bool? OneOneOne { get; set; }
 
         public Prescriptions Prescriptions { get; set; }
 
@@ -41,14 +47,17 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
             Appointments = Appointments?.Clone(),
             CdssAdmin = CdssAdmin?.Clone(),
             CdssAdvice = CdssAdvice?.Clone(),
+            CoronavirusInformation = CoronavirusInformation,
             Documents = Documents,
             HomeScreen = HomeScreen?.Clone(),
             Im1Messaging = Im1Messaging?.Clone(),
             MedicalRecord = MedicalRecord?.Clone(),
             Messaging = Messaging,
+            Ndop = Ndop,
             NominatedPharmacy = NominatedPharmacy,
             Notifications = Notifications,
             NotificationPrompt = NotificationPrompt,
+            OneOneOne = OneOneOne,
             Prescriptions = Prescriptions?.Clone(),
             SilverIntegrations = SilverIntegrations?.Clone(),
             SupportsLinkedProfiles = SupportsLinkedProfiles,
@@ -78,6 +87,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
                 CdssAdvice = other.CdssAdvice;
             }
 
+            if (other.CoronavirusInformation.HasValue)
+            {
+                CoronavirusInformation = other.CoronavirusInformation;
+            }
+
             if(other.Documents.HasValue)
             {
                 Documents = other.Documents;
@@ -104,6 +118,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
                 Messaging = other.Messaging;
             }
 
+            if (other.Ndop.HasValue)
+            {
+                Ndop = other.Ndop;
+            }
+
             if (other.NominatedPharmacy.HasValue)
             {
                 NominatedPharmacy = other.NominatedPharmacy;
@@ -117,6 +136,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
             if (other.NotificationPrompt.HasValue)
             {
                 NotificationPrompt = other.NotificationPrompt;
+            }
+
+            if (other.OneOneOne.HasValue)
+            {
+                OneOneOne = other.OneOneOne;
             }
 
             if (other.Prescriptions?.Provider != null)

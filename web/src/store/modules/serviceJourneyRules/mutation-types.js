@@ -15,6 +15,7 @@ export const initialState = () => ({
     cdssAdvice: {
       provider: 'none',
     },
+    coronavirusInformation: false,
     documents: false,
     im1Messaging: {
       isEnabled: false,
@@ -27,9 +28,11 @@ export const initialState = () => ({
       version: '1',
     },
     messaging: false,
+    ndop: false,
     nominatedPharmacy: false,
     notificationPrompt: false,
     notifications: false,
+    oneOneOne: false,
     prescriptions: {
       provider: IM1_PROVIDER,
     },

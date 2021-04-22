@@ -375,4 +375,46 @@ describe('getters', () => {
       expect(notificationPromptEnabled(currentState)).toBe(false);
     });
   });
+
+  describe('coronavirusInformationEnabled', () => {
+    const { coronavirusInformationEnabled } = getters;
+
+    it('will be true if coronavirusInformation is true', () => {
+      currentState.rules.coronavirusInformation = true;
+      expect(coronavirusInformationEnabled(currentState)).toBe(true);
+    });
+
+    it('will be false if coronavirusInformation is false', () => {
+      currentState.rules.coronavirusInformation = false;
+      expect(coronavirusInformationEnabled(currentState)).toBe(false);
+    });
+  });
+
+  describe('ndopEnabled', () => {
+    const { ndopEnabled } = getters;
+
+    it('will be true if ndop is true', () => {
+      currentState.rules.ndop = true;
+      expect(ndopEnabled(currentState)).toBe(true);
+    });
+
+    it('will be false if ndop is false', () => {
+      currentState.rules.ndop = false;
+      expect(ndopEnabled(currentState)).toBe(false);
+    });
+  });
+
+  describe('oneOneOneEnabled', () => {
+    const { oneOneOneEnabled } = getters;
+
+    it('will be true if oneOneOne is true', () => {
+      currentState.rules.oneOneOne = true;
+      expect(oneOneOneEnabled(currentState)).toBe(true);
+    });
+
+    it('will be false if oneOneOne is false', () => {
+      currentState.rules.oneOneOne = false;
+      expect(oneOneOneEnabled(currentState)).toBe(false);
+    });
+  });
 });

@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - "A00002"
+    - "F00010"
+journeys:
+  oneOneOne: false

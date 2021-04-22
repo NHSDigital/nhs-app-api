@@ -341,19 +341,22 @@
         "appointments": { "$ref": "#/definitions/appointmentsJourney" },
         "cdssAdvice": { "$ref": "#/definitions/cdssAdviceJourney" },
         "cdssAdmin": { "$ref": "#/definitions/cdssAdminJourney" },
+        "coronavirusInformation": { "enum": [ "true", "false" ] },
+        "documents": { "enum": [ "true", "false" ] },
         "homeScreen": { "$ref": "#/definitions/homeScreen" },
+        "im1Messaging": { "$ref": "#/definitions/im1MessagingJourney" },
         "medicalRecord": { "$ref": "#/definitions/medicalRecordJourney" },
         "messaging": { "enum": [ "true", "false" ] },
+        "ndop": { "enum": [ "true", "false" ] },
         "nominatedPharmacy": { "enum": [ "true", "false" ] },
         "notifications": { "enum": [ "true", "false" ] },
+        "notificationPrompt": { "enum": [ "true", "false" ] },
+        "oneOneOne": { "enum": [ "true", "false" ] },
         "prescriptions": { "$ref": "#/definitions/prescriptionsJourney" },
         "silverIntegrations": { "$ref": "#/definitions/silverIntegrations" },
         "supplier": { "enum": [ "Emis", "Fake", "Tpp", "Vision", "Microtest" ] },
-        "userInfo": { "enum": ["true", "false"]  },
-        "documents": { "enum": ["true", "false"]  },
-        "supportsLinkedProfiles": { "enum":  ["true", "false"] },
-        "im1Messaging": { "$ref": "#/definitions/im1MessagingJourney" },
-        "notificationPrompt": { "enum":  ["true", "false"] }
+        "supportsLinkedProfiles": { "enum": [ "true", "false" ] },
+        "userInfo": { "enum": [ "true", "false" ] }
       },
       "anyOf": [
         {
@@ -366,7 +369,16 @@
           "required": [ "cdssAdmin" ]
         },
         {
+          "required": [ "coronavirusInformation" ]
+        },
+        {
+          "required": [ "documents" ]
+        },
+        {
           "required": [ "homeScreen" ]
+        },
+        {
+          "required": [ "im1Messaging" ]
         },
         {
           "required": [ "medicalRecord" ]
@@ -375,10 +387,19 @@
           "required": [ "messaging" ]
         },
         {
+          "required": [ "ndop" ]
+        },
+        {
           "required": [ "nominatedPharmacy" ]
         },
         {
           "required": [ "notifications" ]
+        },
+        {
+          "required": [ "notificationPrompt" ]
+        },
+        {
+          "required": [ "oneOneOne" ]
         },
         {
           "required": [ "prescriptions" ]
@@ -390,19 +411,10 @@
           "required": [ "supplier" ]
         },
         {
-          "required": [ "userInfo" ]
-        },
-        {
-          "required": [ "documents" ]
-        },
-        {
           "required": [ "supportsLinkedProfiles" ]
         },
         {
-          "required": [ "im1Messaging" ]
-        },
-        {
-          "required": [ "notificationPrompt" ]
+          "required": [ "userInfo" ]
         }
       ]
     }

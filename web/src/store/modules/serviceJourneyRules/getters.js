@@ -4,6 +4,7 @@ import { getterNames, mutationNames } from './constants';
 const {
   CDSS_ADMIN_ENABLED,
   CDSS_ADVICE_ENABLED,
+  CORONAVIRUS_INFORMATION_ENABLED,
   DELETE_GP_MESSAGES_ENABLED,
   DOCUMENTS_ENABLED,
   GP_AT_HAND_APPOINTMENTS_ENABLED,
@@ -20,9 +21,11 @@ const {
   INFORMATICA_APPOINTMENTS_ENABLED,
   LINKED_ACCOUNT_APPOINTMENTS_ENABLED,
   MESSAGING_ENABLED,
+  NDOP_ENABLED,
   NOMINATED_PHARMACY_ENABLED,
   NOTIFICATION_PROMPT_ENABLED,
   NOTIFICATIONS_ENABLED,
+  ONE_ONE_ONE_ENABLED,
   ONLINE_CONSULTATIONS_ENABLED,
   REQUIRED_DETAILS_CALL_GP_MESSAGES_ENABLED,
   SEND_MESSAGE_SUBJECT_ENABLED,
@@ -47,6 +50,9 @@ export default {
   },
   [CDSS_ADVICE_ENABLED](state) {
     return get('rules.cdssAdvice.provider')(state) !== 'none';
+  },
+  [CORONAVIRUS_INFORMATION_ENABLED](state) {
+    return get('rules.coronavirusInformation')(state);
   },
   [DELETE_GP_MESSAGES_ENABLED](state) {
     return get('rules.im1Messaging.canDeleteMessages')(state);
@@ -96,6 +102,9 @@ export default {
   [MESSAGING_ENABLED](state) {
     return get('rules.messaging')(state);
   },
+  [NDOP_ENABLED](state) {
+    return get('rules.ndop')(state);
+  },
   [NOMINATED_PHARMACY_ENABLED](state) {
     return get('rules.nominatedPharmacy')(state);
   },
@@ -104,6 +113,9 @@ export default {
   },
   [NOTIFICATIONS_ENABLED](state) {
     return get('rules.notifications')(state);
+  },
+  [ONE_ONE_ONE_ENABLED](state) {
+    return get('rules.oneOneOne')(state);
   },
   [ONLINE_CONSULTATIONS_ENABLED](_, getters) {
     return getters[CDSS_ADMIN_ENABLED] || getters[CDSS_ADVICE_ENABLED];

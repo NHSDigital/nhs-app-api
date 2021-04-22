@@ -104,6 +104,9 @@ class ServiceJourneyRulesMapper {
                                 SJRJourneyType.IM1_MESSAGING_REQUIRESDETAILSREQUEST_DISABLED))
                 .add(Supplier.EMIS, "A00002",
                         EnumSet.of(
+                                SJRJourneyType.CORONAVIRUS_INFORMATION_DISABLED,
+                                SJRJourneyType.NDOP_DISABLED,
+                                SJRJourneyType.ONE_ONE_ONE_DISABLED,
                                 SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB,
                                 SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_PKB,
                                 SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB,

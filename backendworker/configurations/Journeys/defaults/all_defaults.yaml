@@ -8,6 +8,7 @@ journeys:
     provider: none
   cdssAdvice:
     provider: none
+  coronavirusInformation: true
   documents: false
   im1Messaging:
     isEnabled: false
@@ -19,9 +20,11 @@ journeys:
     provider: im1
     version: "2"
   messaging: true
+  ndop: true
   nominatedPharmacy: true
   notifications: true
   notificationPrompt: true
+  oneOneOne: true
   prescriptions:
     provider: im1
   silverIntegrations:
