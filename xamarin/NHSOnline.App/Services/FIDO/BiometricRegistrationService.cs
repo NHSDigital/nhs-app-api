@@ -62,10 +62,18 @@ namespace NHSOnline.App.Services.FIDO
             IBiometricAuthSigner authSigner,
             string accessToken)
         {
-            var keyId = GenerateKeyId();
+            var keyId = GenerateRandomFidoKeyId();
             var fidoKey = new FidoKey(keyId, key, authSigner);
             var result = await _fidoService.Register(fidoKey, accessToken).ResumeOnThreadPool();
             return result.Accept(new FidoRegisterResultVisitor(keyId));
+        }
+
+        internal static string GenerateRandomFidoKeyId()
+        {
+            using var random = RandomNumberGenerator.Create();
+            var bytes = new byte[64];
+            random.GetBytes(bytes);
+            return Convert.ToBase64String(bytes);
         }
 
         private static async Task<ProcessResult<IBiometricAuthSigner, BiometricRegisterResult>> VerifyUser(IBiometricAuthKey key)
@@ -74,14 +82,6 @@ namespace NHSOnline.App.Services.FIDO
 
             var verifyUserResultVisitor = new RegisterVerifyUserResultVisitor();
             return verifyResult.Accept(verifyUserResultVisitor);
-        }
-
-        private static string GenerateKeyId()
-        {
-            using var random = RandomNumberGenerator.Create();
-            var bytes = new byte[64];
-            random.GetBytes(bytes);
-            return Convert.ToBase64String(bytes);
         }
 
         private async Task DeleteAuthKey()
@@ -136,7 +136,12 @@ namespace NHSOnline.App.Services.FIDO
                 return BiometricRegisterResult.Failed(BiometricErrorCode.CannotChangeBiometrics);
             }
 
-            public ProcessResult<IBiometricAuthSigner, BiometricRegisterResult> Visit(BiometricAuthVerifyUserResult.LockedOut lockedOut)
+            public ProcessResult<IBiometricAuthSigner, BiometricRegisterResult> Visit(BiometricAuthVerifyUserResult.PermanentLockout permanentLockout)
+            {
+                return BiometricRegisterResult.Failed(BiometricErrorCode.CannotChangeBiometrics);
+            }
+
+            public ProcessResult<IBiometricAuthSigner, BiometricRegisterResult> Visit(BiometricAuthVerifyUserResult.TemporaryLockout temporaryLockout)
             {
                 return BiometricRegisterResult.Failed(BiometricErrorCode.CannotChangeBiometrics);
             }
@@ -146,8 +151,7 @@ namespace NHSOnline.App.Services.FIDO
         {
             private readonly string _keyId;
 
-            public FidoRegisterResultVisitor(
-                string keyId)
+            public FidoRegisterResultVisitor(string keyId)
             {
                 _keyId = keyId;
             }

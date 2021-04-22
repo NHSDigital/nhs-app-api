@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Android.App;
 using Android.OS;
-using Android.Runtime;
 using Android.Security.Keystore;
 using AndroidX.Biometric;
 using AndroidX.Fragment.App;
@@ -25,6 +24,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
             using var manager = BiometricManager.From(MainActivity);
 
             var canAuthenticate = manager.CanAuthenticate(BiometricManager.Authenticators.BiometricWeak);
+
             BiometricStatus status = canAuthenticate switch
             {
                 BiometricManager.BiometricErrorHwUnavailable => Unusable(),
@@ -48,7 +48,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
 
         private BiometricRegistrationStatus DeriveBiometricRegistrationStatus()
         {
-            var registered = BiometricRegistrationState.Get();
+            var registered = BiometricRegistrationState.FidoRegistered;
             if (!registered)
             {
                 return BiometricRegistrationStatus.NotRegistered;
@@ -64,7 +64,9 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
 
         public Task<IBiometricAuthKey> CreateBiometricKey()
         {
-            var keyPairGenerator = KeyPairGenerator.GetInstance(KeyProperties.KeyAlgorithmEc, "AndroidKeyStore").ThrowIfNull("KeyPairGenerator is null");
+            var keyPairGenerator = KeyPairGenerator
+                .GetInstance(KeyProperties.KeyAlgorithmEc, BiometricKeyStore.InstanceName)
+                .ThrowIfNull("KeyPairGenerator is null");
             var keyGenParameterSpec = BuildKeyGenParameterSpec();
 
             keyPairGenerator.Initialize(keyGenParameterSpec);
@@ -72,7 +74,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
             _ = keyPairGenerator.GenerateKeyPair() ?? throw new InvalidOperationException("GenerateKeyPair returns null");
             if (TryGetKey(out var biometricAuthKey))
             {
-                BiometricRegistrationState.Set(true);
+                BiometricRegistrationState.FidoRegistered = true;
                 return Task.FromResult(biometricAuthKey);
             }
 
@@ -81,8 +83,11 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
 
         private static KeyGenParameterSpec BuildKeyGenParameterSpec()
         {
-            using var builder = new KeyGenParameterSpec.Builder(BiometricKeyStore.KeyName, KeyStorePurpose.Sign);
+            var keystoreAlias = $"{BiometricKeyStore.KeyPrefix}_{BiometricRegistrationState.FidoUsername}";
+
+            using var builder = new KeyGenParameterSpec.Builder(keystoreAlias, KeyStorePurpose.Sign);
             using var ecGenParameterSpec = new ECGenParameterSpec("secp256r1");
+
             builder
                 .SetAlgorithmParameterSpec(ecGenParameterSpec)
                 ?.SetDigests(
@@ -101,8 +106,10 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
 
         public bool TryGetKey([NotNullWhen(true)] out IBiometricAuthKey? key)
         {
-            var secretKey = BiometricKeyStore.KeyStore.GetKey(BiometricKeyStore.KeyName, null).JavaCast<IPrivateKey>();
-            var certificate = BiometricKeyStore.KeyStore.GetCertificate(BiometricKeyStore.KeyName);
+            var fidoUsername = BiometricRegistrationState.FidoUsername;
+
+            var secretKey = BiometricKeyStore.GetKey(fidoUsername);
+            var certificate = BiometricKeyStore.GetCertificate(fidoUsername);
 
             if (secretKey != null && certificate != null)
             {

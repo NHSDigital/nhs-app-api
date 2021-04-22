@@ -4,11 +4,10 @@ using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut
 {
-    internal interface IBiometricLoginFaceIdInvalidatedView : INavigationView<IBiometricLoginFaceIdInvalidatedView.IEvents>
+    internal interface IBiometricLoginFingerprintFailedView : INavigationView<IBiometricLoginFingerprintFailedView.IEvents>
     {
         internal interface IEvents
         {
-            Func<Task>? Appearing { get; set; }
             Func<Task>? BackHomeRequested { get; set; }
         }
     }

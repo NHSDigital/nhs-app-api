@@ -88,9 +88,10 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
 
         public Task Delete()
         {
-            BiometricRegistrationState.Set(false);
+            BiometricRegistrationState.FidoRegistered = false;
 
-            BiometricKeyStore.KeyStore.DeleteEntry(BiometricKeyStore.KeyName);
+            BiometricKeyStore.DeleteEntry(BiometricRegistrationState.FidoUsername);
+
             return Task.CompletedTask;
         }
 
@@ -103,6 +104,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
         private class AuthCallback : BiometricPrompt.AuthenticationCallback
         {
             private static ILogger Logger => NhsAppLogging.CreateLogger<AuthCallback>();
+            private bool _userPresentedBiometrics;
 
             private readonly TaskCompletionSource<BiometricAuthVerifyUserResult> _completionSource;
 
@@ -123,6 +125,22 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
                         _completionSource.SetResult(new BiometricAuthVerifyUserResult.UserCancelled());
                         break;
 
+                    case BiometricPrompt.ErrorLockout:
+                        if (_userPresentedBiometrics)
+                        {
+                            Logger.LogInformation("Failed to recognise biometric");
+                            _completionSource.SetResult(new BiometricAuthVerifyUserResult.Unauthorised());
+                            break;
+                        }
+                        Logger.LogInformation("Biometric authentication suspended");
+                        _completionSource.SetResult(new BiometricAuthVerifyUserResult.TemporaryLockout());
+                        break;
+
+                    case BiometricPrompt.ErrorLockoutPermanent:
+                        Logger.LogInformation("Sensor disabled. Permanently locked out");
+                        _completionSource.SetResult(new BiometricAuthVerifyUserResult.PermanentLockout());
+                        break;
+
                     default:
                         Logger.LogWarning("Authentication error: {ErrorCode} {ErrString}", errorCode, errString);
                         _completionSource.SetResult(new BiometricAuthVerifyUserResult.Unauthorised());
@@ -139,7 +157,9 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
             public override void OnAuthenticationFailed()
             {
                 base.OnAuthenticationFailed();
+
                 Logger.LogWarning("Authentication failed, biometric presented but not recognised");
+                _userPresentedBiometrics = true;
             }
         }
     }

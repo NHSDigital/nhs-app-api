@@ -67,7 +67,7 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
                 if (status == LAStatus.BiometryLockout)
                 {
                     Logger.LogInformation("EvaluatePolicyAsync locked out");
-                    return new BiometricAuthVerifyUserResult.LockedOut();
+                    return new BiometricAuthVerifyUserResult.PermanentLockout();
                 }
 
                 if (status == LAStatus.UserCancel)

@@ -19,7 +19,7 @@ namespace NHSOnline.App.NhsLogin.Fido.Assertion
         public RegistrationAssertionBuilder FinalChallengeParams(string fcParams)
             => _assertionBuilder.FinalChallengeParams(_assertion.UafV1KeyRegistrationData.FinalChallenge, fcParams);
 
-        public RegistrationAssertionBuilder KeyId(byte[] keyId)
+        public RegistrationAssertionBuilder KeyId(string keyId)
             => _assertionBuilder.KeyId(_assertion.UafV1KeyRegistrationData.KeyId, keyId);
 
         public RegistrationAssertionBuilder PublicKeyEccX962Raw(byte[] publicKey)

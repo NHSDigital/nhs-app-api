@@ -4,6 +4,5 @@ namespace NHSOnline.App.NhsLogin.Fido
     {
         T Visit(FidoAuthorisationResult.Authorised authorised);
         T Visit(FidoAuthorisationResult.Unauthorised unauthorised);
-        T Visit(FidoAuthorisationResult.Failed failed);
     }
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<pages:NhsAppCloseAndLogoHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
+                                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                                    xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
+                                    xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
+                                    x:Class="NHSOnline.App.Areas.LoggedOut.Views.BiometricLoginFingerprintFailedPage"
+                                    x:Name="Page">
+    <StackLayout BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}"
+                 Padding="20,0,20,0">
+        <controls:Heading1 Text="We cannot find your fingerprint" />
+        
+        <controls:Paragraph Text="Check that you have added a fingerprint in your device's security settings."
+                            Padding="0,10,0,0" />
+        
+        <controls:LinkLabel Text="Back to login"
+                            Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}"
+                            Padding="0,10,0,0" />
+    </StackLayout>
+</pages:NhsAppCloseAndLogoHeaderPage>

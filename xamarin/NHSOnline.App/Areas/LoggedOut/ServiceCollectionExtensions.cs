@@ -13,9 +13,11 @@ namespace NHSOnline.App.Areas.LoggedOut
             return services
                 .AddModelViewPresenter<BiometricLoginCouldNotLoginModel, BiometricLoginCouldNotLoginPage, BiometricLoginCouldNotLoginPresenter>()
                 .AddModelViewPresenter<BiometricLoginFaceIdFailedModel, BiometricLoginFaceIdFailedPage, BiometricLoginFaceIdFailedPresenter>()
-                .AddModelViewPresenter<BiometricLoginFaceIdInvalidatedModel, BiometricLoginFaceIdInvalidatedPage, BiometricLoginFaceIdInvalidatedPresenter>()
+                .AddModelViewPresenter<BiometricLoginFaceIdLockedOutModel, BiometricLoginFaceIdLockedOutPage, BiometricLoginFaceIdLockedOutPresenter>()
+                .AddModelViewPresenter<BiometricLoginFingerprintFailedModel, BiometricLoginFingerprintFailedPage, BiometricLoginFingerprintFailedPresenter>()
+                .AddModelViewPresenter<BiometricLoginFingerprintLockedOutModel, BiometricLoginFingerprintLockedOutPage, BiometricLoginFingerprintLockedOutPresenter>()
                 .AddModelViewPresenter<BiometricLoginTouchIdFailedModel, BiometricLoginTouchIdFailedPage, BiometricLoginTouchIdFailedPresenter>()
-                .AddModelViewPresenter<BiometricLoginTouchIdInvalidatedModel, BiometricLoginTouchIdInvalidatedPage, BiometricLoginTouchIdInvalidatedPresenter>()
+                .AddModelViewPresenter<BiometricLoginTouchIdLockedOutModel, BiometricLoginTouchIdLockedOutPage, BiometricLoginTouchIdLockedOutPresenter>()
                 .AddModelViewPresenter<GettingStartedModel, GettingStartedPage, GettingStartedPresenter>()
                 .AddModelViewPresenter<CreateSessionErrorBadRequestModel, CreateSessionErrorBadRequestPage, CreateSessionErrorBadRequestPresenter>()
                 .AddModelViewPresenter<CreateSessionErrorBadResponseFromUpstreamSystemModel, CreateSessionErrorBadResponseFromUpstreamSystemPage, CreateSessionErrorBadResponseFromUpstreamSystemPresenter>()

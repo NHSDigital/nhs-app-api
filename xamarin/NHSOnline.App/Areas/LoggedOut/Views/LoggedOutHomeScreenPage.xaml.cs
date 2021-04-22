@@ -29,6 +29,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         Func<Task>? ILoggedOutHomeScreenView.IEvents.Appearing { get; set; }
         private ICommand AppearingCommand => new AsyncCommand(() => Events.Appearing);
 
+        Func<Task>? ILoggedOutHomeScreenView.IEvents.Disappearing { get; set; }
+        private ICommand DisappearingCommand => new AsyncCommand(() => Events.Disappearing);
+
         public Func<Task>? LoginRequested { get; set; }
         public ICommand LoginCommand => new AsyncCommand(() => LoginRequested);
 
@@ -64,6 +67,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
 
         protected override void OnDisappearing()
         {
+            DisappearingCommand.Execute(null);
+
             _logger.LogInformation("{Method}", nameof(OnDisappearing));
             _appNavigation.SuppressHandlers();
         }

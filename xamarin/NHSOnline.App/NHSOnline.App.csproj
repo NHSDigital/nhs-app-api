@@ -114,16 +114,24 @@
       <DependentUpon>BiometricLoginTouchIdFailedPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Areas\LoggedOut\Views\BiometricLoginFaceIdInvalidatedPage.xaml.cs">
-      <DependentUpon>BiometricLoginFaceIdInvalidatedPage.xaml</DependentUpon>
+    <Compile Update="Areas\LoggedOut\Views\BiometricLoginFaceIdLockedOutPage.xaml.cs">
+      <DependentUpon>BiometricLoginFaceIdLockedOutPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Areas\LoggedOut\Views\BiometricLoginTouchIdInvalidatedPage.xaml.cs">
-      <DependentUpon>BiometricLoginTouchIdInvalidatedPage.xaml</DependentUpon>
+    <Compile Update="Areas\LoggedOut\Views\BiometricLoginTouchIdLockedOutPage.xaml.cs">
+      <DependentUpon>BiometricLoginTouchIdLockedOutPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Areas\LoggedOut\Views\BiometricLoginCouldNotLoginPage.xaml.cs">
       <DependentUpon>BiometricLoginCouldNotLoginPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Areas\LoggedOut\Views\BiometricLoginFingerprintFailedPage.xaml.cs">
+      <DependentUpon>BiometricLoginFingerprintFailedPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Areas\LoggedOut\Views\BiometricLoginFingerprintLockedOutPage.xaml.cs">
+      <DependentUpon>BiometricLoginFingerprintLockedOutPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

@@ -8,6 +8,11 @@ namespace NHSOnline.App.Services.FIDO
 
         public abstract T Accept<T>(IBiometricLoginResultVisitor<T> visitor);
 
+        internal sealed class NotRegistered : BiometricLoginResult
+        {
+            public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
+        }
+
         internal sealed class Authorised : BiometricLoginResult
         {
             public string FidoAuthResponse { get; }
@@ -25,11 +30,6 @@ namespace NHSOnline.App.Services.FIDO
             public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
-        internal sealed class Failed : BiometricLoginResult
-        {
-            public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
-        }
-
         internal sealed class UserCancelled : BiometricLoginResult
         {
             public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
@@ -40,12 +40,17 @@ namespace NHSOnline.App.Services.FIDO
             public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
-        internal sealed class NotRegistered : BiometricLoginResult
+        internal sealed class Failed : BiometricLoginResult
         {
             public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
-        internal sealed class Invalidated : BiometricLoginResult
+        internal sealed class PermanentLockout : BiometricLoginResult
+        {
+            public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
+        }
+
+        internal sealed class TemporaryLockout : BiometricLoginResult
         {
             public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
         }

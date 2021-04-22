@@ -32,7 +32,7 @@ namespace NHSOnline.App.Services.FIDO
 
             if (!_biometrics.TryGetKey(out var biometricAuthKey))
             {
-                return new BiometricLoginResult.Invalidated();
+                return new BiometricLoginResult.PermanentLockout();
             }
 
             var authSigner = await VerifyUser(biometricAuthKey).ResumeOnThreadPool();
@@ -92,9 +92,14 @@ namespace NHSOnline.App.Services.FIDO
                 return new BiometricLoginResult.Failed();
             }
 
-            public ProcessResult<IBiometricAuthSigner, BiometricLoginResult> Visit(BiometricAuthVerifyUserResult.LockedOut lockedOut)
+            public ProcessResult<IBiometricAuthSigner, BiometricLoginResult> Visit(BiometricAuthVerifyUserResult.PermanentLockout permanentLockout)
             {
-                return new BiometricLoginResult.Invalidated();
+                return new BiometricLoginResult.PermanentLockout();
+            }
+
+            public ProcessResult<IBiometricAuthSigner, BiometricLoginResult> Visit(BiometricAuthVerifyUserResult.TemporaryLockout temporaryLockout)
+            {
+                return new BiometricLoginResult.TemporaryLockout();
             }
         }
 
@@ -133,7 +138,7 @@ namespace NHSOnline.App.Services.FIDO
                 {
                     BiometricRegistrationStatus.NotRegistered => new BiometricLoginResult.NotRegistered(),
                     BiometricRegistrationStatus.Registered => _keyId,
-                    BiometricRegistrationStatus.Invalidated => new BiometricLoginResult.Invalidated(),
+                    BiometricRegistrationStatus.Invalidated => new BiometricLoginResult.PermanentLockout(),
                     _ => throw new InvalidOperationException($"Unknown registration status: {status}")
                 };
             }
@@ -149,11 +154,6 @@ namespace NHSOnline.App.Services.FIDO
             public BiometricLoginResult Visit(FidoAuthorisationResult.Unauthorised unauthorised)
             {
                 return new BiometricLoginResult.Unauthorised();
-            }
-
-            public BiometricLoginResult Visit(FidoAuthorisationResult.Failed failed)
-            {
-                return new BiometricLoginResult.Failed();
             }
         }
     }

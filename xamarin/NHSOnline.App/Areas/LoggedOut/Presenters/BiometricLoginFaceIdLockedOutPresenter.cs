@@ -4,15 +4,15 @@ using NHSOnline.App.Services.FIDO;
 
 namespace NHSOnline.App.Areas.LoggedOut.Presenters
 {
-    internal sealed class BiometricLoginTouchIdInvalidatedPresenter
+    internal sealed class BiometricLoginFaceIdLockedOutPresenter
     {
-        private readonly ILogger<BiometricLoginTouchIdInvalidatedPresenter> _logger;
-        private readonly IBiometricLoginTouchIdInvalidatedView _view;
+        private readonly ILogger<BiometricLoginFaceIdLockedOutPresenter> _logger;
+        private readonly IBiometricLoginFaceIdLockedOutView _view;
         private readonly IBiometricAuthenticationService _biometricAuthenticationService;
 
-        public BiometricLoginTouchIdInvalidatedPresenter(
-            ILogger<BiometricLoginTouchIdInvalidatedPresenter> logger,
-            IBiometricLoginTouchIdInvalidatedView view,
+        public BiometricLoginFaceIdLockedOutPresenter(
+            ILogger<BiometricLoginFaceIdLockedOutPresenter> logger,
+            IBiometricLoginFaceIdLockedOutView view,
             IBiometricAuthenticationService biometricAuthenticationService)
         {
             _logger = logger;

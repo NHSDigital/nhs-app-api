@@ -21,7 +21,7 @@ namespace NHSOnline.App.Navigation
         IAppNavigation<TEvents> RegisterHandler(Func<Task> handler, Action<TEvents, Func<Task>?> assignHandler);
         IAppNavigation<TEvents> RegisterHandler<TArgs>(Func<TArgs, Task> handler, Action<TEvents, Func<TArgs, Task>?> assignHandler);
 
-        IAppNavigation<TEvents> RegisterPermanentHandler<TArgs>(Func<TArgs, Task> handler,
-            Action<TEvents, Func<TArgs, Task>?> assignHandler);
+        IAppNavigation<TEvents> RegisterPermanentHandler(Func<Task> handler, Action<TEvents, Func<Task>?> assignHandler);
+        IAppNavigation<TEvents> RegisterPermanentHandler<TArgs>(Func<TArgs, Task> handler, Action<TEvents, Func<TArgs, Task>?> assignHandler);
     }
 }

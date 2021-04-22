@@ -4,16 +4,16 @@
                                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                                     xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
                                     xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
-                                    x:Class="NHSOnline.App.Areas.LoggedOut.Views.BiometricLoginFaceIdInvalidatedPage"
+                                    x:Class="NHSOnline.App.Areas.LoggedOut.Views.BiometricLoginTouchIdLockedOutPage"
                                     x:Name="Page">
     <StackLayout BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}"
                  Padding="20,0,20,0">
-        <controls:Heading1 Text="You need to turn on Face ID again" />
+        <controls:Heading1 Text="You need to turn on Touch ID again" />
         
         <controls:Paragraph Text="We have turned it off as something has changed."
                             Padding="0,10,0,0" />
         
-        <controls:Paragraph Text="Log in using your email, password and security code, then turn Face ID on in the NHS App settings."
+        <controls:Paragraph Text="Log in using your email, password and security code, then turn Touch ID on in the NHS App settings."
                             Padding="0,5,0,0" />
         
         <controls:LinkLabel Text="Back to login"

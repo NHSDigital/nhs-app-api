@@ -48,6 +48,12 @@ namespace NHSOnline.App.Navigation
             return this;
         }
 
+        public IAppNavigation<TEvents> RegisterPermanentHandler(Func<Task> handler, Action<TEvents, Func<Task>?> assignHandler)
+        {
+            assignHandler(_viewEvents, handler);
+            return this;
+        }
+
         public IAppNavigation<TEvents> RegisterPermanentHandler<TArgs>(Func<TArgs, Task> handler, Action<TEvents, Func<TArgs, Task>?> assignHandler)
         {
             assignHandler(_viewEvents, handler);

@@ -4,7 +4,7 @@ namespace NHSOnline.App.NhsLogin.Fido
 {
     public interface IFidoKey
     {
-        byte[] KeyId();
+        string KeyId();
         byte[] PublicKeyEccX962Raw();
 
         Task<byte[]> SignBytes(byte[] toSign);

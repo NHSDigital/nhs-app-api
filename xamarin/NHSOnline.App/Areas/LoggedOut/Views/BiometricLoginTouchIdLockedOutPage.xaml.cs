@@ -9,28 +9,28 @@ using NHSOnline.App.Navigation;
 namespace NHSOnline.App.Areas.LoggedOut.Views
 {
     [DesignTimeVisible(false)]
-    public partial class BiometricLoginFaceIdInvalidatedPage : IBiometricLoginFaceIdInvalidatedView, IBiometricLoginFaceIdInvalidatedView.IEvents
+    public partial class BiometricLoginTouchIdLockedOutPage : IBiometricLoginTouchIdLockedOutView, IBiometricLoginTouchIdLockedOutView.IEvents
     {
         private readonly ILogger _logger;
-        private readonly AppNavigation<IBiometricLoginFaceIdInvalidatedView.IEvents> _appNavigation;
+        private readonly AppNavigation<IBiometricLoginTouchIdLockedOutView.IEvents> _appNavigation;
 
-        public BiometricLoginFaceIdInvalidatedPage(ILogger<BiometricLoginFaceIdInvalidatedPage> logger)
+        public BiometricLoginTouchIdLockedOutPage(ILogger<BiometricLoginTouchIdLockedOutPage> logger)
         {
             _logger = logger;
-            _appNavigation = new AppNavigation<IBiometricLoginFaceIdInvalidatedView.IEvents>(this, Navigation);
+            _appNavigation = new AppNavigation<IBiometricLoginTouchIdLockedOutView.IEvents>(this, Navigation);
 
             InitializeComponent();
         }
 
-        IAppNavigation<IBiometricLoginFaceIdInvalidatedView.IEvents> INavigationView<IBiometricLoginFaceIdInvalidatedView.IEvents>.AppNavigation => _appNavigation;
+        IAppNavigation<IBiometricLoginTouchIdLockedOutView.IEvents> INavigationView<IBiometricLoginTouchIdLockedOutView.IEvents>.AppNavigation => _appNavigation;
 
-        Func<Task>? IBiometricLoginFaceIdInvalidatedView.IEvents.Appearing { get; set; }
+        Func<Task>? IBiometricLoginTouchIdLockedOutView.IEvents.Appearing { get; set; }
         private ICommand AppearingCommand => new AsyncCommand(() => Events.Appearing);
 
         public Func<Task>? BackHomeRequested { get; set; }
         public ICommand BackHomeCommand => new AsyncCommand(() => BackHomeRequested);
 
-        private IBiometricLoginFaceIdInvalidatedView.IEvents Events => this;
+        private IBiometricLoginTouchIdLockedOutView.IEvents Events => this;
 
         protected override void OnAppearing()
         {

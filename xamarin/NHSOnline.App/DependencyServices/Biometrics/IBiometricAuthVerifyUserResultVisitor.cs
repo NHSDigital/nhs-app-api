@@ -6,6 +6,7 @@ namespace NHSOnline.App.DependencyServices.Biometrics
         T Visit(BiometricAuthVerifyUserResult.UserCancelled userCancelled);
         T Visit(BiometricAuthVerifyUserResult.SystemCancelled systemCancelled);
         T Visit(BiometricAuthVerifyUserResult.Unauthorised unauthorised);
-        T Visit(BiometricAuthVerifyUserResult.LockedOut lockedOut);
+        T Visit(BiometricAuthVerifyUserResult.PermanentLockout permanentLockout);
+        T Visit(BiometricAuthVerifyUserResult.TemporaryLockout temporaryLockout);
     }
 }

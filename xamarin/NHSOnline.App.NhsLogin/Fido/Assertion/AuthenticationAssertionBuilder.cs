@@ -19,7 +19,7 @@ namespace NHSOnline.App.NhsLogin.Fido.Assertion
         public AuthenticationAssertionBuilder FinalChallengeParams(string fcParams)
             => _assertionBuilder.FinalChallengeParams(_assertion.UafV1SignedData.FinalChallenge, fcParams);
 
-        public AuthenticationAssertionBuilder KeyId(byte[] keyId)
+        public AuthenticationAssertionBuilder KeyId(string keyId)
             => _assertionBuilder.KeyId(_assertion.UafV1SignedData.KeyId, keyId);
 
         public async Task<AuthenticationAssertionBuilder> Sign(Func<byte[], Task<byte[]>> signer)

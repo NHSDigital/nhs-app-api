@@ -31,12 +31,9 @@ namespace NHSOnline.App.NhsLogin.Fido.Assertion
             return _builder;
         }
 
-        internal TBuilder KeyId(TagKeyId keyId, byte[] keyIdBytes)
+        internal TBuilder KeyId(TagKeyId tagKeyId, string keyId)
         {
-            var keyIdString = Base64Url.Encode(keyIdBytes);
-
-            _logger.LogDebug("KeyId: {KeyId}", keyIdString);
-            keyId.Value = keyIdString;
+            tagKeyId.Value = keyId;
 
             return _builder;
         }

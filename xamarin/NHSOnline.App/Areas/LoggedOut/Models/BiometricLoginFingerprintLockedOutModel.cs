@@ -1,6 +1,6 @@
 namespace NHSOnline.App.Areas.LoggedOut.Models
 {
-    public class BiometricLoginFaceIdInvalidatedModel
+    public class BiometricLoginFingerprintLockedOutModel
     {
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
@@ -39,10 +38,17 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             await result.Accept(new BiometricLoginFailedStatusResultVisitor(this)).PreserveThreadContext();
         }
 
-        public async Task ShowBiometricLoginInvalidated()
+        public async Task ShowBiometricLoginPermanentlyLockedOut()
         {
             var result = await _biometricAuthenticationService.FetchBiometricStatus().PreserveThreadContext();
-            await result.Accept(new BiometricLoginInvalidatedStatusResultVisitor(this)).PreserveThreadContext();
+            await result.Accept(new BiometricLoginPermanentLockoutStatusResultVisitor(this)).PreserveThreadContext();
+        }
+
+        private async Task ShowBiometricLoginFingerprintFailed()
+        {
+            var model = new BiometricLoginFingerprintFailedModel();
+            var view = _pageFactory.CreatePageFor(model);
+            await _view.AppNavigation.Push(view).PreserveThreadContext();
         }
 
         private async Task ShowBiometricLoginTouchIdFailed()
@@ -59,68 +65,75 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             await _view.AppNavigation.PushAnimated(view).PreserveThreadContext();
         }
 
-        private async Task ShowBiometricLoginTouchIdInvalidated()
+        private async Task ShowBiometricLoginFingerprintPermanentlyLockedOut()
         {
-            var model = new BiometricLoginTouchIdInvalidatedModel();
+            var model = new BiometricLoginFingerprintLockedOutModel();
+            var view = _pageFactory.CreatePageFor(model);
+            await _view.AppNavigation.Push(view).PreserveThreadContext();
+        }
+
+        private async Task ShowBiometricLoginTouchIdPermanentlyLockedOut()
+        {
+            var model = new BiometricLoginTouchIdLockedOutModel();
             var view = _pageFactory.CreatePageFor(model);
             await _view.AppNavigation.PushAnimated(view).PreserveThreadContext();
         }
 
-        private async Task ShowBiometricLoginFaceIdInvalidated()
+        private async Task ShowBiometricLoginFaceIdPermanentlyLockedOut()
         {
-            var model = new BiometricLoginFaceIdInvalidatedModel();
+            var model = new BiometricLoginFaceIdLockedOutModel();
             var view = _pageFactory.CreatePageFor(model);
             await _view.AppNavigation.PushAnimated(view).PreserveThreadContext();
-        }
-
-        private sealed class BiometricLoginInvalidatedStatusResultVisitor : IBiometricStatusResultVisitor<Task>
-        {
-            private readonly BiometricLoginErrorPageDispatcher _handler;
-
-            public BiometricLoginInvalidatedStatusResultVisitor(BiometricLoginErrorPageDispatcher handler)
-            {
-                _handler = handler;
-            }
-
-            public Task Visit(BiometricStatusResult.HardwareNotPresent hardwareNotPresent)
-            {
-                Logger.LogError("Biometric login invalidated when hardware not present");
-                return Task.CompletedTask;
-            }
-
-            public Task Visit(BiometricStatusResult.FingerPrint fingerPrint)
-                => throw new NotImplementedException();
-
-            public async Task Visit(BiometricStatusResult.TouchId touchId)
-                => await _handler.ShowBiometricLoginTouchIdInvalidated().PreserveThreadContext();
-
-            public async Task Visit(BiometricStatusResult.FaceId faceId)
-                => await _handler.ShowBiometricLoginFaceIdInvalidated().PreserveThreadContext();
         }
 
         private sealed class BiometricLoginFailedStatusResultVisitor : IBiometricStatusResultVisitor<Task>
         {
-            private readonly BiometricLoginErrorPageDispatcher _handler;
+            private readonly BiometricLoginErrorPageDispatcher _dispatcher;
 
-            public BiometricLoginFailedStatusResultVisitor(BiometricLoginErrorPageDispatcher handler)
+            public BiometricLoginFailedStatusResultVisitor(BiometricLoginErrorPageDispatcher dispatcher)
             {
-                _handler = handler;
+                _dispatcher = dispatcher;
             }
 
             public Task Visit(BiometricStatusResult.HardwareNotPresent hardwareNotPresent)
             {
-                Logger.LogError("Biometric login failed when hardware not present");
+                Logger.LogError("Biometric login failed result when hardware not present");
                 return Task.CompletedTask;
             }
 
-            public Task Visit(BiometricStatusResult.FingerPrint fingerPrint)
-                => throw new NotImplementedException();
+            public async Task Visit(BiometricStatusResult.FingerPrint fingerPrint)
+                => await _dispatcher.ShowBiometricLoginFingerprintFailed().PreserveThreadContext();
 
             public async Task Visit(BiometricStatusResult.TouchId touchId)
-                => await _handler.ShowBiometricLoginTouchIdFailed().PreserveThreadContext();
+                => await _dispatcher.ShowBiometricLoginTouchIdFailed().PreserveThreadContext();
 
             public async Task Visit(BiometricStatusResult.FaceId faceId)
-                => await _handler.ShowBiometricLoginFaceIdFailed().PreserveThreadContext();
+                => await _dispatcher.ShowBiometricLoginFaceIdFailed().PreserveThreadContext();
+        }
+
+        private sealed class BiometricLoginPermanentLockoutStatusResultVisitor : IBiometricStatusResultVisitor<Task>
+        {
+            private readonly BiometricLoginErrorPageDispatcher _dispatcher;
+
+            public BiometricLoginPermanentLockoutStatusResultVisitor(BiometricLoginErrorPageDispatcher dispatcher)
+            {
+                _dispatcher = dispatcher;
+            }
+
+            public Task Visit(BiometricStatusResult.HardwareNotPresent hardwareNotPresent)
+            {
+                Logger.LogError("Biometric login permanently locked out result when hardware not present");
+                return Task.CompletedTask;
+            }
+
+            public async Task Visit(BiometricStatusResult.FingerPrint fingerPrint)
+                => await _dispatcher.ShowBiometricLoginFingerprintPermanentlyLockedOut().PreserveThreadContext();
+
+            public async Task Visit(BiometricStatusResult.TouchId touchId)
+                => await _dispatcher.ShowBiometricLoginTouchIdPermanentlyLockedOut().PreserveThreadContext();
+
+            public async Task Visit(BiometricStatusResult.FaceId faceId)
+                => await _dispatcher.ShowBiometricLoginFaceIdPermanentlyLockedOut().PreserveThreadContext();
         }
     }
 }
