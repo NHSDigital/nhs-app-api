@@ -3,6 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Android.OS;
 using Android.Views.Accessibility;
+using AndroidX.Core.View;
+using AndroidX.Core.View.Accessibility;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.Effects;
 using NHSOnline.App.Droid.Renderers;
@@ -92,11 +94,6 @@ namespace NHSOnline.App.Droid.Effects
 
             public override bool PerformAccessibilityAction(View? host, Action action, Bundle? args)
             {
-                if (base.PerformAccessibilityAction(host, action, args))
-                {
-                    return true;
-                }
-
                 if (action == Action.Click && _element.TryGetTarget(out var element))
                 {
                     if (element is Xamarin.Forms.View view)
@@ -111,7 +108,7 @@ namespace NHSOnline.App.Droid.Effects
                     }
                 }
 
-                return false;
+                return base.PerformAccessibilityAction(host, action, args);
             }
 
             public override void OnInitializeAccessibilityNodeInfo(View? host, AccessibilityNodeInfo? info)
@@ -119,21 +116,23 @@ namespace NHSOnline.App.Droid.Effects
                 base.OnInitializeAccessibilityNodeInfo(host, info);
                 if (info != null)
                 {
-                    AddAccessibilityActions(info, _controlType);
+                    AddAccessibilityActions(AccessibilityNodeInfoCompat.Wrap(info), _controlType);
                 }
             }
 
             private static void AddAccessibilityActions(
-                AccessibilityNodeInfo info,
+                AccessibilityNodeInfoCompat info,
                 AccessibilityEffect.AccessibilityControlType controlType)
             {
                 switch (controlType)
                 {
                     case AccessibilityEffect.AccessibilityControlType.Button:
+                        info.RoleDescription = "Button";
+                        info.Clickable = true;
+                        break;
                     case AccessibilityEffect.AccessibilityControlType.Link:
-#pragma warning disable 618
-                        info.AddAction(Action.Click);
-#pragma warning restore 618
+                        info.RoleDescription = "Link";
+                        info.Clickable = true;
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(

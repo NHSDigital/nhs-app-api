@@ -30,7 +30,6 @@
                      HorizontalOptions="Center"
                      MinimumHeightRequest="{Binding HeightRequest, Source={x:Reference Name=Root}}"
                      effects:AccessibilityEffect.AccessibilityControlType="Button"
-                     AutomationProperties.HelpText="{Binding Text, Source={Reference Name=Root}}"
                      AutomationProperties.Name="{Binding Text, Source={Reference Name=Root}}">
             
             <BoxView HorizontalOptions="Start" />
