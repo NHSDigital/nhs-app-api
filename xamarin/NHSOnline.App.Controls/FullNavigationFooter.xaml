@@ -31,6 +31,10 @@
                 <Setter Property="HeightRequest" Value="32" />
                 <Setter Property="WidthRequest" Value="32" />
             </Style>
+            
+            <Style TargetType="controls:SvgImage" Class="Advice" ApplyToDerivedTypes="True">
+                <Setter Property="WidthRequest" Value="28" />
+            </Style>
         </ResourceDictionary>
     </View.Resources>
     
@@ -64,7 +68,7 @@
                                                    Text="Advice"
                                                    IconCommand="{Binding AdviceCommand, Source={x:Reference Name=Root}}">
                     
-                    <icons:IconAdvice AutomationProperties.IsInAccessibleTree="true" />
+                    <icons:IconAdvice StyleClass="Advice" AutomationProperties.IsInAccessibleTree="true" />
                     
                 </controls:FullNavigationFooterItem>
                 

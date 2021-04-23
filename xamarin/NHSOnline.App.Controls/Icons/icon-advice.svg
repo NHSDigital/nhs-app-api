@@ -1,25 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" 
-     viewBox="0 0 18 18">
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 15.4 17.6" width="28" height="32">
   <title>NHS App advice icon</title>
   <desc>NHS App advice icon</desc>
-  <path d="M9.9437,1.525H8.3161V2.04C8.0548,5.834,10.2074,8.475,11.8037,8.475s3.749-2.641,3.4877-6.4352V1.525H13.5476" 
-        style="fill:none;stroke:#425563;stroke-linejoin:round;stroke-width:1.5px"/>
-  <rect x="9.5631" 
-        y="0.325" 
-        width="1.5" 
-        height="2.5" 
-        rx="0.3695" 
-        style="fill:#425563"/>
-  <rect x="12.5631" 
-        y="0.325" 
-        width="1.5" 
-        height="2.5" 
-        rx="0.3695" 
-        style="fill:#425563"/>
-  <circle cx="4.4" 
-          cy="11.1937" 
-          r="1.7313" 
-          style="fill:none;stroke:#425563;stroke-miterlimit:10;stroke-width:1.5px"/>
-  <path d="M11.6869,8.925a10.5235,10.5235,0,0,1,0,2c-.1926,2.0074-1,6-3,6-1.6094,0-3.447-1.9454-4-4" 
-        style="fill:none;stroke:#425563;stroke-linejoin:round;stroke-width:1.5px"/>
+  <path d="m8.6527 1.325h-1.6276v0.515c-0.2613 3.794 1.8913 6.435 3.4876 6.435 1.5963 0 3.749-2.641 3.4877-6.4352v-0.5148h-1.7438" fill="none" stroke="#425563" stroke-linejoin="round" stroke-width="1.5px"/>
+  <rect x="8.2721" y=".125" width="1.5" height="2.5" rx=".3695" fill="#425563"/>
+  <rect x="11.272" y=".125" width="1.5" height="2.5" rx=".3695" fill="#425563"/>
+  <circle cx="3.109" cy="10.994" r="1.7313" fill="none" stroke="#425563" stroke-miterlimit="10" stroke-width="1.5px"/>
+  <path d="m10.396 8.725a10.524 10.524 0 0 1 0 2c-0.1926 2.0074-1 6-3 6-1.6094 0-3.447-1.9454-4-4" fill="none" stroke="#425563" stroke-linejoin="round" stroke-width="1.5px"/>
 </svg>
