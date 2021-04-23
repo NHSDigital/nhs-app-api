@@ -58,6 +58,7 @@ namespace NHSOnline.Backend.Auditing
         public const string SearchNominatedPharmacyAuditTypeRequest = "SearchNominatedPharmacy_Get_Request";
         public const string SearchNominatedPharmacyAuditTypeResponse = "SearchNominatedPharmacy_Get_Response";
         public const string OnlineConsultationsDemographicAuditTypeRequest = "OnlineConsultations_Demographics_Request";
+        public const string OnlineConsultationsSubmitted = "OnlineConsultations_Submitted";
         public const string GetPatientConfigRequest = "Patient_Config_Get_Request";
         public const string GetPatientConfigResponse = "Patient_Config_Get_Response";
         public const string GetLinkedAccountsRequest = "LinkedAccounts_Get_Request";

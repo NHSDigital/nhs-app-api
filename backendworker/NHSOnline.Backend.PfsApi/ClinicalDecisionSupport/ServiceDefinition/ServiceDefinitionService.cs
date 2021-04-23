@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
@@ -70,6 +71,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
                 var parameters = _fhirParameterHelpers.CreateInitialServiceDefinitionEvaluateParameters(odsCode);
 
+                var nhsLoginId = GetNhsLoginId(userSession);
+
                 return await _querySender.SendEvaluateQueryAndHandleResponse(
                     providerKey,
                     serviceDefinitionId,
@@ -80,6 +83,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                     }),
                     false,
                     odsCode,
+                    nhsLoginId,
                     version);
             }
             finally
@@ -171,6 +175,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                         "User has not agreed to share their name, age, NHS number and postal address.");
                 }
 
+                var nhsLoginId = GetNhsLoginId(userSession);
+
                 return await _querySender.SendEvaluateQueryAndHandleResponse(
                     providerKey,
                     serviceDefinitionId,
@@ -178,6 +184,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                     _serializer.SerializeToString(parameters),
                     addJavascriptDisabledHeader,
                     userSession.OdsCode,
+                    nhsLoginId,
                     version,
                     _fhirParameterHelpers.GetSessionIdFromParameters(parameters));
             }
@@ -212,5 +219,9 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                 _logger.LogExit();
             }
         }
+
+        private string GetNhsLoginId(P5UserSession userSession)
+            => AccessToken.Parse(_logger, userSession.CitizenIdUserSession.AccessToken).Subject;
+
     }
 }

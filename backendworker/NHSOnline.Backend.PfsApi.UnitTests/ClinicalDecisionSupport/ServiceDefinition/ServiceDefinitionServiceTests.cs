@@ -1,5 +1,6 @@
  using System;
  using System.Collections.Generic;
+ using System.IdentityModel.Tokens.Jwt;
  using System.Linq.Expressions;
  using System.Net;
  using System.Net.Http;
@@ -29,6 +30,7 @@
  using Constants = NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Constants;
  using Task = System.Threading.Tasks.Task;
  using NhsAppFhir = NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Models.Fhir;
+ using Claim = System.Security.Claims.Claim;
 
  namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefinition
  {
@@ -58,6 +60,7 @@
          private const string ServiceDefinitionId = "testId";
          private const string ServiceDefinitionDescription = "test admin help";
          private const string SessionId = "9102fb79-bc0e-465d-b2de-2a724ec876dc";
+         private const string NhsLoginId = "cb09b2b9-aae3-4162-96d3-0eea6ae938d8";
 
          private const string GuidanceResponseJsonContent = "{ \"resourceType\" : \"Bundle\", \"status\": \"success\" }";
          private const string BundleJsonContent = "{ \"resourceType\" : \"Bundle\", \"type\": \"searchset\", \"total\": 3 }";
@@ -66,6 +69,7 @@
          private const string SessionEndGuidanceResponse = "{ \"resourceType\": \"GuidanceResponse\", \"contained\": [ { \"resourceType\": \"Parameters\", \"id\": \"outputParams\", \"parameter\": [ { \"name\": \"sessionId\", \"valueString\": \"" + SessionId + "\" } ] }, { \"resourceType\": \"OperationOutcome\", \"id\": \"outcome1\", \"issue\": [ { \"severity\": \"error\", \"code\": \"not-found\", \"details\": { \"coding\": [ { \"system\": \"https://test\", \"code\": \"SESSION_ENDED\", \"display\": \"sessionId test has already ended\" } ] } } ] } ], \"module\": { \"reference\": \"https://test/ServiceDefinition/GEC_ADM\" }, \"status\": \"failure\", \"occurrenceDateTime\": \"2019-12-02T13:38:09.403\", \"evaluationMessage\": [ { \"reference\": \"#outcome1\" } ], \"outputParameters\": { \"reference\": \"#outputParams\" } }";
          private const string IsValidResponseFormat ="{\"resourceType\":\"Parameters\",\"parameter\":[{\"name\":\"{{name}}\",\"{{fhirType}}\":{{value}}}]}";
          private const string InvalidIsValidResponse ="{invalid: format}";
+         private const string AuditType = AuditingOperations.OnlineConsultationsSubmitted;
 
          private readonly Guid _requestId = Guid.NewGuid();
          private FhirJsonSerializer _serializer;
@@ -92,7 +96,11 @@
 
              _demographicsResult = new DemographicsResult.Success(new DemographicsResponse());
 
-             _cidUserSession = new CitizenIdUserSession { OdsCode = OdsCode };
+             _cidUserSession = new CitizenIdUserSession { OdsCode = OdsCode, AccessToken = JwtToken.Generate(new[]
+             {
+                 new Claim(JwtRegisteredClaimNames.Sub, NhsLoginId),
+                 new Claim("nhs_number", "NHS Number")
+             })};
              _userSession = new P9UserSession("csrfToken", "nhsNumber", _cidUserSession, new EmisUserSession(), "im1ConnectionToken");
              _mockGuidCreator.Setup(c => c.CreateGuid()).Returns(_requestId);
 
@@ -132,6 +140,7 @@
                  _mockGuidCreator.Object,
                  new ServiceDefinitionQuerySender(
                      _mockSenderLogger.Object,
+                     _mockAuditor.Object,
                      _mockHtmlSanitizer.Object,
                      _mockFhirSanitizationHelper.Object,
                      _mockFhirParameterHelpers.Object,
@@ -552,6 +561,100 @@
 
              // Assert
              _mockSenderLogger.VerifyLogger(LogLevel.Information, $"Ending consultation for {ServiceDefinitionDescription}. ODSCode: {_userSession.GpUserSession.OdsCode}", Times.Once());
+         }
+
+         [TestMethod]
+         public async Task EvaluateServiceDefinition_WhenResponseStatusIsSuccess_WillLogEndingConsultationWithNhsLoginIdAnd_eConsultId()
+         {
+             // Arrange
+             MockHttpResponseMessage(HttpStatusCode.OK, GuidanceResponseJsonContent);
+
+             _mockEvaluateServiceDefinitionQuery
+                 .Setup(a => a.EvaluateServiceDefinition(
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<bool>(),
+                     "1",
+                     SessionId))
+                 .ReturnsAsync(_httpResponse);
+
+             _mockFhirParameterHelpers
+                 .Setup(h => h.GetSessionIdFromParameters(It.IsAny<Parameters>()))
+                 .Returns(SessionId);
+
+             // Act
+             await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession, "1");
+
+             // Assert
+             _mockSenderLogger.VerifyLogger(LogLevel.Information, $"eConsult successfully submitted: nhsLoginId={NhsLoginId} eConsultId={SessionId}", Times.Once());
+         }
+
+         [TestMethod]
+         public async Task EvaluateServiceDefinition_WhenResponseStatusIsSuccessButNo_eConsultIdSet_WillLogEndingConsultationWithNhsLoginId()
+         {
+             // Arrange
+             MockHttpResponseMessage(HttpStatusCode.OK, GuidanceResponseJsonContent);
+             MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
+
+             _mockFhirParameterHelpers
+                 .Setup(h => h.GetSessionIdFromParameters(It.IsAny<Parameters>()))
+                 .Returns((string)null);
+
+             // Act
+             await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession, "1");
+
+             // Assert
+             _mockSenderLogger.VerifyLogger(LogLevel.Information, $"eConsult submitted before eConsultId has been assigned: nhsLoginId={NhsLoginId}", Times.Once());
+         }
+
+         [TestMethod]
+         public async Task EvaluateServiceDefinition_WhenResponseStatusIsSuccess_WillAuditEndingConsultationWithNhsLoginIdAnd_eConsultId()
+         {
+             // Arrange
+             MockHttpResponseMessage(HttpStatusCode.OK, GuidanceResponseJsonContent);
+
+             _mockEvaluateServiceDefinitionQuery
+                 .Setup(a => a.EvaluateServiceDefinition(
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<bool>(),
+                     "1",
+                     SessionId))
+                 .ReturnsAsync(_httpResponse);
+
+             _mockFhirParameterHelpers
+                 .Setup(h => h.GetSessionIdFromParameters(It.IsAny<Parameters>()))
+                 .Returns(SessionId);
+
+             // Act
+             await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription,
+                 new Parameters(), false, false, _userSession, "1");
+
+             // Assert
+             _mockAuditor.Verify(x => x.PostOperationAudit(AuditType,
+                 $"eConsult successfully submitted: nhsLoginId={NhsLoginId} eConsultId={SessionId}"));
+         }
+
+         [TestMethod]
+         public async Task EvaluateServiceDefinition_WhenResponseStatusIsSuccessButNo_eConsultIdSet_WillAuditEndingConsultationWithNhsLoginId()
+         {
+             // Arrange
+             MockHttpResponseMessage(HttpStatusCode.OK, GuidanceResponseJsonContent);
+             MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
+
+             _mockFhirParameterHelpers
+                 .Setup(h => h.GetSessionIdFromParameters(It.IsAny<Parameters>()))
+                 .Returns((string)null);
+
+             // Act
+             await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription,
+                 new Parameters(), false, false, _userSession, "1");
+
+             // Assert
+             _mockAuditor.Verify(x => x.PostOperationAudit(AuditType,
+                 $"eConsult submitted before eConsultId has been assigned: nhsLoginId={NhsLoginId}"));
          }
 
          [TestMethod]

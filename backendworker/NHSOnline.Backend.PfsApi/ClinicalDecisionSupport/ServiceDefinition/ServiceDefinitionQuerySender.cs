@@ -6,6 +6,7 @@ using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Extensions;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Models;
@@ -18,6 +19,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
     internal sealed class ServiceDefinitionQuerySender
     {
         private readonly ILogger _logger;
+        private readonly IAuditor _auditor;
         private readonly IHtmlSanitizer _htmlSanitizer;
         private readonly IFhirSanitizationHelper _fhirSanitizationHelper;
         private readonly IFhirParameterHelpers _fhirParameterHelpers;
@@ -27,8 +29,11 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
         private readonly IEvaluateServiceDefinitionQuery _evaluateServiceDefinitionQuery;
         private readonly IServiceDefinitionIsValidQuery _serviceDefinitionIsValidQuery;
 
+        private const string AuditType = AuditingOperations.OnlineConsultationsSubmitted;
+
         public ServiceDefinitionQuerySender(
             ILogger<ServiceDefinitionQuerySender> logger,
+            IAuditor auditor,
             IHtmlSanitizer htmlSanitizer,
             IFhirSanitizationHelper fhirSanitizationHelper,
             IFhirParameterHelpers fhirParameterHelpers,
@@ -36,6 +41,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             IServiceDefinitionIsValidQuery serviceDefinitionIsValidQuery)
         {
             _logger = logger;
+            _auditor = auditor;
             _htmlSanitizer = htmlSanitizer;
             _fhirSanitizationHelper = fhirSanitizationHelper;
             _fhirParameterHelpers = fhirParameterHelpers;
@@ -116,6 +122,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             string parameters,
             bool addJavascriptDisabledHeader,
             string odsCode,
+            string nhsLoginId,
             string version,
             string sessionId = null)
         {
@@ -205,6 +212,13 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             {
                 _logger.LogInformation(
                     $"Ending consultation for {serviceDefinitionDescription}. ODSCode: {odsCode}");
+
+                var eConsultEndedMessage = !string.IsNullOrEmpty(sessionId)
+                    ? $"eConsult successfully submitted: nhsLoginId={nhsLoginId} eConsultId={sessionId}"
+                    : $"eConsult submitted before eConsultId has been assigned: nhsLoginId={nhsLoginId}";
+
+                _logger.LogInformation(eConsultEndedMessage);
+                await _auditor.PostOperationAudit(AuditType, eConsultEndedMessage);
             }
 
             return new ServiceDefinitionResult.Success(_serializer.SerializeToString(guidanceResponse));
