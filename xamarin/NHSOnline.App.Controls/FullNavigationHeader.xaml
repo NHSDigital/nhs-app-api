@@ -39,23 +39,23 @@
                 <Setter Property="WidthRequest" Value="44" />
                 <Setter Property="Orientation" Value="Vertical" />
                 <Setter Property="Spacing" Value="0" />
-                <Setter Property="Padding" Value="0" />
+                <Setter Property="Padding" Value="0, 5" />
                 <Setter Property="VerticalOptions" Value="End" />
             </Style>
             
             <Style TargetType="controls:SvgImage" ApplyToDerivedTypes="True">
                 <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
                 <Setter Property="Margin" Value="0,0,0,5" />
-                <Setter Property="HeightRequest" Value="28" />
-                <Setter Property="WidthRequest" Value="28" />
+                <Setter Property="HeightRequest" Value="23" />
+                <Setter Property="WidthRequest" Value="23" />
             </Style>
             
             <Style TargetType="controls:NhsLogo">
                 <Setter Property="HorizontalOptions" Value="Center" />
                 <Setter Property="VerticalOptions" Value="Center" />
                 <Setter Property="Padding" Value="0" />
-                <Setter Property="HeightRequest" Value="30" />
-                <Setter Property="WidthRequest" Value="74" />
+                <Setter Property="HeightRequest" Value="24" />
+                <Setter Property="WidthRequest" Value="59" />
             </Style>
             
             <Style TargetType="Label">
@@ -70,7 +70,7 @@
             
     <Grid AutomationId="NHS App Full Navigation Header">
         <Grid.RowDefinitions>
-            <RowDefinition Height="66"/>
+            <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         
         <Grid.ColumnDefinitions>

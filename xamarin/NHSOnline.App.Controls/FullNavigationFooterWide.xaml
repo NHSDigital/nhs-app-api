@@ -29,12 +29,12 @@
                 <Setter Property="HorizontalOptions" Value="Center" />
                 <Setter Property="VerticalOptions" Value="Center" />
                 <Setter Property="Margin" Value="0" />
-                <Setter Property="HeightRequest" Value="32" />
-                <Setter Property="WidthRequest" Value="32" />
+                <Setter Property="HeightRequest" Value="26" />
+                <Setter Property="WidthRequest" Value="26" />
             </Style>
             
             <Style TargetType="controls:SvgImage" Class="Advice" ApplyToDerivedTypes="True">
-                <Setter Property="WidthRequest" Value="28" />
+                <Setter Property="WidthRequest" Value="23" />
             </Style>
         </ResourceDictionary>
     </View.Resources>
@@ -50,7 +50,7 @@
                 </Grid.Effects>
                 <Grid.ColumnSpacing>0</Grid.ColumnSpacing>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="66"/>
+                    <RowDefinition Height="50" />
                 </Grid.RowDefinitions>
                  
                 <Grid.ColumnDefinitions>
