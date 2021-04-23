@@ -5,13 +5,10 @@
       <api-error/>
     </div>
     <div v-else id="app" :class="{ [$style['no-footer']]: isNativeApp }">
-      <corona-virus-banner v-if="isNativeApp"
-                           :should-be-floating="true"/>
       <div :class="dynamicStyle('login-app-header-flex-container')">
         <home-header v-if="isNativeApp"/>
         <div v-else>
           <web-header :show-menu="false" :show-links="false" :show-header-buttons="false"/>
-          <corona-virus-banner/>
         </div>
         <session-expired-banner v-if="showSessionExpiredBanner"/>
         <main v-if="isNativeApp" :class="$style.homeMain">
@@ -74,7 +71,6 @@
 <script>
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
-import CoronaVirusBanner from '@/components/widgets/CoronaVirusBanner';
 import FlashMessage from '@/components/widgets/FlashMessage';
 import HomeHeader from '@/components/HomeHeader';
 import NativeCallbacks from '@/services/native-app';
@@ -95,7 +91,6 @@ export default {
     PreRegistrationInformation,
     ApiError,
     ConnectionError,
-    CoronaVirusBanner,
     FlashMessage,
     HomeHeader,
     SessionExpiredBanner,

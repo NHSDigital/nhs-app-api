@@ -14,6 +14,7 @@ describe('Advice Check Menu', () => {
   const mountComponent = ({
     isLoggedIn = true,
     cdssAdviceEnabled = true,
+    coronavirusInformationEnabled = true,
     isProofLevel9 = true,
     silverIntegrationEnabled = true,
   } = {}) => {
@@ -29,8 +30,9 @@ describe('Advice Check Menu', () => {
           url: 'www.url.com',
         }),
         'serviceJourneyRules/cdssAdviceEnabled': cdssAdviceEnabled,
+        'serviceJourneyRules/coronavirusInformationEnabled': coronavirusInformationEnabled,
         'serviceJourneyRules/silverIntegrationEnabled': () => (silverIntegrationEnabled),
-        'session/isLoggedIn': isLoggedIn,
+        'session/isLoggedIn': () => isLoggedIn,
         'session/isProofLevel9': isProofLevel9,
       },
     });
@@ -52,7 +54,7 @@ describe('Advice Check Menu', () => {
     });
 
     each([
-      ['Coronavirus', 0, { h2: 'Get advice about coronavirus', p: 'Find out what to do if you think you have coronavirus' }],
+      ['Coronavirus', 0, { h2: 'Get advice about coronavirus (COVID-19)', p: 'Find information about COVID-19, including symptoms, testing, vaccination and self-isolation' }],
       ['Conditions and treatments', 1, { h2: 'Search conditions and treatments', p: 'Find trusted NHS information on hundreds of conditions' }],
       ['NHS 111 online', 2, { h2: 'Use NHS 111 online', p: 'Check if you need urgent help and find out what to do next' }],
       ['CDSS GP advice', 3, { h2: 'Ask your GP for advice', p: 'Answer questions online and get a response from your GP surgery. You may be able to get advice for your child if it\'s available at your surgery' }],
@@ -72,45 +74,107 @@ describe('Advice Check Menu', () => {
     });
   });
 
-  it('will hide the GP advice menu item if logged in but cdssAdvice is disabled in SJR', () => {
-    mountComponent({ cdssAdviceEnabled: false });
+  describe('If the user is not logged in', () => {
+    beforeEach(() => {
+      mountComponent({ isLoggedIn: false });
+    });
 
-    expect(wrapper.find('#btn_gpAdvice').exists()).toBe(false);
+    it('will hide the coronavirus advice button', () => {
+      expect(wrapper.find('#btn_corona').exists()).toBe(false);
+    });
+
+    it('will hide the GP advice button', () => {
+      expect(wrapper.find('#btn_gpAdvice').exists()).toBe(false);
+    });
   });
 
-  it('will show the GP advice menu item if logged in and cdssAdvice is enabled in SJR', () => {
-    mountComponent();
+  describe('If the user is logged in', () => {
+    const isLoggedIn = true;
 
-    expect(wrapper.find('#btn_gpAdvice').exists()).toBe(true);
-  });
+    describe('and coronavirus information is disabled in SJR', () => {
+      mountComponent({ isLoggedIn, coronavirusInformationEnabled: false });
 
-  it('will hide the GP advice button if not logged in', () => {
-    mountComponent({ isLoggedIn: false });
+      it('will hide the coronavirus advice button', () => {
+        expect(wrapper.find('#btn_corona').exists()).toBe(false);
+      });
+    });
 
-    expect(wrapper.find('#btn_gpAdvice').exists()).toBe(false);
-  });
+    describe('and coronavirus information is enabled in SJR', () => {
+      beforeEach(() => {
+        mountComponent({ isLoggedIn, coronavirusInformationEnabled: true });
+      });
 
-  it('will hide the GP advice button if logged in and cdssAdvice is enabled in SJR but user is not P9', () => {
-    mountComponent({ isProofLevel9: false });
+      it('will show the coronavirus advice button', () => {
+        expect(wrapper.find('#btn_corona').exists()).toBe(true);
+      });
+    });
 
-    expect(wrapper.find('#btn_gpAdvice').exists()).toBe(false);
-  });
+    describe('and cdss advice is disabled in SJR', () => {
+      beforeEach(() => {
+        mountComponent({ isLoggedIn, cdssAdviceEnabled: false });
+      });
 
-  it('will show engage medical advice if logged in and silver integration is enabled and user is P9', () => {
-    mountComponent();
+      it('will hide the GP advice menu item', () => {
+        expect(wrapper.find('#btn_gpAdvice').exists()).toBe(false);
+      });
+    });
 
-    expect(wrapper.find('#btn_engage_medical_advice').exists()).toBe(true);
-  });
+    describe('and cdss advice is enabled in SJR', () => {
+      const cdssAdviceEnabled = true;
 
-  it('will hide engage medical advice if logged in and silver integration is enabled and user is not P9', () => {
-    mountComponent({ isProofLevel9: false });
+      describe('and user is P9', () => {
+        beforeEach(() => {
+          mountComponent({ isLoggedIn, cdssAdviceEnabled, isProofLevel9: true });
+        });
 
-    expect(wrapper.find('#btn_engage_medical_advice').exists()).toBe(false);
-  });
+        it('will show the GP advice menu item', () => {
+          expect(wrapper.find('#btn_gpAdvice').exists()).toBe(true);
+        });
+      });
 
-  it('will hide engage medical advice if logged in and silver integration is disabled and user is P9', () => {
-    mountComponent({ silverIntegrationEnabled: false });
+      describe('and user is not P9', () => {
+        beforeEach(() => {
+          mountComponent({ isLoggedIn, cdssAdviceEnabled, isProofLevel9: false });
+        });
 
-    expect(wrapper.find('#btn_engage_medical_advice').exists()).toBe(false);
+        it('will hide the GP advice menu item', () => {
+          expect(wrapper.find('#btn_gpAdvice').exists()).toBe(false);
+        });
+      });
+    });
+
+    describe('and silver integration is disabled in SJR', () => {
+      beforeEach(() => {
+        mountComponent({ isLoggedIn, silverIntegrationEnabled: false });
+      });
+
+      it('will hide engage medical advice', () => {
+        expect(wrapper.find('#btn_engage_medical_advice').exists()).toBe(false);
+      });
+    });
+
+    describe('and silver integration is enabled in SJR', () => {
+      const silverIntegrationEnabled = true;
+
+      describe('and user is P9', () => {
+        beforeEach(() => {
+          mountComponent({ isLoggedIn, silverIntegrationEnabled, isProofLevel9: true });
+        });
+
+        it('will show engage medical advice', () => {
+          expect(wrapper.find('#btn_engage_medical_advice').exists()).toBe(true);
+        });
+      });
+
+      describe('and user is not P9', () => {
+        beforeEach(() => {
+          mountComponent({ isLoggedIn, silverIntegrationEnabled, isProofLevel9: false });
+        });
+
+        it('will hide engage medical advice', () => {
+          expect(wrapper.find('#btn_engage_medical_advice').exists()).toBe(false);
+        });
+      });
+    });
   });
 });

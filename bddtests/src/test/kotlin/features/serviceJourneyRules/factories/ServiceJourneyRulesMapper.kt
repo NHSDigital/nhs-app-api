@@ -14,6 +14,7 @@ class ServiceJourneyRulesMapper {
         private val journeysToGpInformationMap = ServiceJourneyRulesConfigurationBuilder()
                 .add(Supplier.EMIS, "A11111",
                         EnumSet.of(SJRJourneyType.APPOINTMENTS_IM1,
+                                SJRJourneyType.CORONAVIRUS_INFORMATION_ENABLED,
                                 SJRJourneyType.MEDICAL_RECORD_IM1,
                                 SJRJourneyType.PRESCRIPTIONS_IM1,
                                 SJRJourneyType.ONLINE_CONSULTATIONS_DISABLED,

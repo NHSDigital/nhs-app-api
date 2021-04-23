@@ -149,6 +149,8 @@ spec:
           value: "https://www.nhs.uk/conditions/"
         - name: CORONA_SERVICE_URL
           value: "https://111.nhs.uk/service/COVID-19/"
+        - name: CORONA_CONDITIONS_URL
+          value: "https://www.nhs.uk/conditions/coronavirus-covid-19/"
         - name: EMERGENCY_PRESCRIPTIONS_URL
           value: "https://111.nhs.uk/emergency-prescription/"
         - name: VUE_WINDOW_OBJECT_ENABLED

@@ -15,7 +15,7 @@ open class HealthAdvicePage : HybridPageObject() {
     )
 
     val adviceAboutCoronavirus = HybridPageElement(
-            webDesktopLocator = "//h2[contains(text(),'Get advice about coronavirus')]",
+            webDesktopLocator = "//h2[contains(text(),'Get advice about coronavirus (COVID-19)')]",
             androidLocator = null,
             page = this
     )
@@ -31,10 +31,4 @@ open class HealthAdvicePage : HybridPageObject() {
             androidLocator = null,
             page = this
     )
-
-    fun assertPageDisplayed(){
-        searchConditionsAndTreatments.assertSingleElementPresent()
-        useNhsOneOneOneOnline.assertSingleElementPresent()
-        adviceAboutCoronavirus.assertSingleElementPresent()
-    }
 }

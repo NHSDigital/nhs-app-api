@@ -1,6 +1,8 @@
 package features.healthAdvice.stepDefinitions
 
 import constants.Supplier
+import features.serviceJourneyRules.factories.SJRJourneyType
+import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
@@ -9,7 +11,6 @@ import mocking.MockingClient
 import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journeys.termsAndConditions.TermsAndConditionsJourneyFactory
-import models.Patient
 import net.thucydides.core.annotations.Steps
 import pages.HealthAdvicePage
 import pages.assertElementNotPresent
@@ -28,6 +29,11 @@ open class HealthAdviceStepDefinitions {
     private lateinit var adviceAboutCoronavirusPage: AdviceAboutCoronavirusPage
     private lateinit var healthAToZPage: HealthAToZPage
     private lateinit var oneOneOneOnlinePage: OneOneOneOnlinePage
+
+    @Given("^I am a user with coronavirus information disabled$")
+    fun iAmAUser() {
+        setupUser(SJRJourneyType.CORONAVIRUS_INFORMATION_DISABLED)
+    }
 
     @Given("^I am a user who wishes to view advice about coronavirus$")
     fun iAmAUserWhoWishesToViewAdviceAboutCoronavirus() {
@@ -50,9 +56,14 @@ open class HealthAdviceStepDefinitions {
         MockingClient.instance.forExternalSites.mock { oneOneOneOnlineRequest().respondWithPage() }
     }
 
-    private fun setupUser() {
+    private fun setupUser(journeyType: SJRJourneyType = SJRJourneyType.CORONAVIRUS_INFORMATION_ENABLED) {
         val supplier = Supplier.valueOf("EMIS")
-        val patient = Patient.getDefault(supplier)
+
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
+            supplier,
+            journeyType
+        )
+
         SerenityHelpers.setPatient(patient)
         SerenityHelpers.setGpSupplier(supplier)
 
@@ -85,11 +96,21 @@ open class HealthAdviceStepDefinitions {
         healthAdvicePage.askYourGpForAdvice.click()
     }
 
-    @Then("^the Advice page is displayed")
-    fun getHealthAdvicePageIsDisplayed() {
+    private fun getHealthAdvicePageIsDisplayed() {
         healthAdvicePage.searchConditionsAndTreatments.assertIsVisible()
         healthAdvicePage.useNhsOneOneOneOnline.assertIsVisible()
+    }
+
+    @Then("^the Advice page is displayed")
+    fun getHealthAdvicePageWithCoronavirusAdviceDisplayed() {
+        getHealthAdvicePageIsDisplayed()
         healthAdvicePage.adviceAboutCoronavirus.assertIsVisible()
+    }
+
+    @Then("^the Advice page is displayed without advice about coronavirus")
+    fun getHealthAdvicePageWithoutCoronavirusAdviceDisplayed() {
+        getHealthAdvicePageIsDisplayed()
+        healthAdvicePage.adviceAboutCoronavirus.assertElementNotPresent()
     }
 
     @Then("^the advice about coronavirus page has been opened in a new tab$")

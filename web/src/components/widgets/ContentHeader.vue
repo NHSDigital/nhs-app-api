@@ -5,7 +5,6 @@
                          :crumbs="currentBreadCrumbs()"/>
     </div>
     <div :class="[$style[isNative && isBreadCrumbVisible ? 'native-padding' : '']]">
-      <corona-virus-banner v-if="showCoronaVirusBanner"/>
       <warning-banner v-if="showWarningBanner" id="warning-banner"
                       :color="externalServiceBannerStyle"
                       :has-border="showExternalServiceWarning"
@@ -57,13 +56,11 @@ import PageTitle from '@/components/widgets/PageTitle';
 import { SWITCH_PROFILE_PATH } from '@/router/paths';
 import {
   SWITCH_PROFILE_NAME,
-  INDEX_NAME,
   APPOINTMENT_ADMIN_HELP_NAME,
   GP_ADVICE_NAME,
 } from '@/router/names';
 import OnUpdateHeaderMixin from '@/plugins/mixinDefinitions/OnUpdateHeaderMixin';
 import WarningBanner from './WarningBanner';
-import CoronaVirusBanner from './CoronaVirusBanner';
 
 export default {
   name: 'ContentHeader',
@@ -71,7 +68,6 @@ export default {
     WarningBanner,
     BreadCrumbTrail,
     PageTitle,
-    CoronaVirusBanner,
   },
   mixins: [OnUpdateHeaderMixin],
   props: {
@@ -101,9 +97,6 @@ export default {
     },
     hasHeaderOrCaption() {
       return !isEmpty(this.header) || !isEmpty(this.caption);
-    },
-    showCoronaVirusBanner() {
-      return !this.isProxying && this.$route.name === INDEX_NAME;
     },
     demographicsQuestionAnswered() {
       return this.$store.state.onlineConsultations.demographicsQuestionAnswered;

@@ -1,7 +1,7 @@
 export default {
   symptoms: 'Symptoms',
-  getAdviceAboutCoronavirus: 'Get advice about coronavirus',
-  findOutWhatToDoIfYouHaveCoronavirus: 'Find out what to do if you think you have coronavirus',
+  coronavirus: 'Get advice about coronavirus (COVID-19)',
+  getCoronavirusInformationOnWebsite: 'Find information about COVID-19, including symptoms, testing, vaccination and self-isolation',
   useNhs111Online: 'Use NHS 111 online',
   useNhsOneOneOneOnline: 'Use NHS one one one online',
   checkIfYouNeedUrgentHelp: 'Check if you need urgent help and find out what to do next',

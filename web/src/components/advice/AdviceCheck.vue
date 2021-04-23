@@ -1,17 +1,18 @@
 <template>
   <div v-if="showTemplate">
     <menu-item-list>
-      <menu-item id="btn_corona"
+      <menu-item v-if="isLoggedIn && coronavirusInformationEnabled"
+                 id="btn_corona"
                  header-tag="h2"
                  :click-func="navigateToWebIntegration"
                  :click-param="coronaCheckerUrl"
                  :href="coronaCheckerUrl"
                  target="_blank"
-                 :text="$t('adviceCheck.getAdviceAboutCoronavirus')"
-                 :description="$t('adviceCheck.findOutWhatToDoIfYouHaveCoronavirus')"
+                 :text="$t('adviceCheck.coronavirus')"
+                 :description="$t('adviceCheck.getCoronavirusInformationOnWebsite')"
                  :aria-label="ariaLabelCaption(
-                   'adviceCheck.getAdviceAboutCoronavirus',
-                   'adviceCheck.findOutWhatToDoIfYouHaveCoronavirus')"/>
+                   'adviceCheck.coronavirus',
+                   'adviceCheck.getCoronavirusInformationOnWebsite')"/>
 
       <menu-item id="btn_choices"
                  header-tag="h2"
@@ -73,8 +74,9 @@ export default {
     return {
       symptomsCheckerUrl,
       conditionsCheckerUrl: this.$store.$env.CONDITIONS_CHECKER_URL,
-      coronaCheckerUrl: this.$store.$env.CORONA_SERVICE_URL,
-      isLoggedIn: this.$store.getters['session/isLoggedIn'],
+      coronaCheckerUrl: this.$store.$env.CORONA_CONDITIONS_URL,
+      coronavirusInformationEnabled: sjrIf({ $store: this.$store, journey: 'coronavirusInformation' }),
+      isLoggedIn: this.$store.getters['session/isLoggedIn'](),
       isCdssAdvice: sjrIf({ $store: this.$store, journey: 'cdssAdvice' }),
       isProofLevel9: this.$store.getters['session/isProofLevel9'],
       showEngageMedicalAdvice: sjrIf({

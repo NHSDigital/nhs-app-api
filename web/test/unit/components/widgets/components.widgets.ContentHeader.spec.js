@@ -1,7 +1,7 @@
 import each from 'jest-each';
 import ContentHeader from '@/components/widgets/ContentHeader';
 import PageTitle from '@/components/widgets/PageTitle';
-import { LINKED_PROFILES_NAME, APPOINTMENT_ADMIN_HELP_NAME } from '@/router/names';
+import { APPOINTMENT_ADMIN_HELP_NAME } from '@/router/names';
 import OnUpdateHeaderMixin from '@/plugins/mixinDefinitions/OnUpdateHeaderMixin';
 import { createStore, mount } from '../../helpers';
 
@@ -101,69 +101,6 @@ describe('ContentHeader.vue', () => {
         expect(wrapper.vm.showWarningBanner).toBe(true);
         expect(warning.exists()).toBe(true);
       });
-    });
-  });
-
-  describe('Corona Virus banner on home', () => {
-    let $route;
-    let $store;
-    let wrapper;
-    let coronaVirusBanner;
-
-    const mountAs = ({ linkedAccountsState = {} } = {}) => {
-      getter['appVersion/isNativeVersionAfter'] = jest.fn(() => true);
-      $store = createStore({
-        state: {
-          device: {
-            isNativeApp: true,
-          },
-          errors: {},
-          navigation: {
-            crumbSetName: 'testCrumb',
-          },
-          linkedAccounts: linkedAccountsState,
-          session: {
-            csrfToken: 'someToken',
-          },
-        },
-        getters: getter,
-      });
-      $route = {
-        name: 'index',
-        meta: { crumb: {} },
-      };
-      return mount(ContentHeader, { $store, $route });
-    };
-
-    it('will show Corona Virus Banner when on home page and proxying is false', () => {
-      wrapper = mountAs();
-      coronaVirusBanner = wrapper.find('#corona-virus-banner');
-      getter['session/isProxying'] = false;
-      expect(wrapper.vm.showCoronaVirusBanner).toEqual(true);
-      expect(coronaVirusBanner.exists()).toEqual(true);
-    });
-
-    it('will not show Corona Virus Banner when not on the home page and proxying is false', () => {
-      wrapper = mountAs();
-      coronaVirusBanner = wrapper.find('#corona-virus-banner');
-      $route.name = LINKED_PROFILES_NAME;
-      getter['session/isProxying'] = false;
-      expect(wrapper.vm.showCoronaVirusBanner).toEqual(false);
-      expect(coronaVirusBanner.exists()).toEqual(false);
-    });
-
-    it('will not show Corona Virus Banner when on home page and proxying is true', () => {
-      getter['session/isProxying'] = true;
-      wrapper = mountAs({
-        linkedAccountsState: {
-          actingAsUser: {
-            name: 'david',
-          },
-        },
-      });
-      coronaVirusBanner = wrapper.find('#corona-virus-banner');
-      expect(wrapper.vm.showCoronaVirusBanner).toEqual(false);
-      expect(coronaVirusBanner.exists()).toEqual(false);
     });
   });
 
