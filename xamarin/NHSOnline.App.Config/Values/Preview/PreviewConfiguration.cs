@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using NHSOnline.App.Config.Values.NhsLogin;
 
 namespace NHSOnline.App.Config.Values.Preview
 {
@@ -6,7 +7,7 @@ namespace NHSOnline.App.Config.Values.Preview
     internal sealed class PreviewConfiguration : IConfiguration
     {
         public ILoggingConfiguration Logging { get; } = new PreviewLoggingConfiguration();
-        public INhsLoginConfiguration NhsLogin { get; } = new PreviewNhsLoginConfiguration();
+        public INhsLoginConfiguration NhsLogin { get; } = new ExtNhsLoginConfiguration();
         public INhsAppWebConfiguration NhsAppWeb { get; } = new PreviewNhsAppWebConfiguration();
         public INhsAppApiConfiguration NhsAppApi { get; } = new PreviewNhsAppApiConfiguration();
         public INhsExternalServicesConfiguration NhsExternalServices { get; } = new PreviewNhsExternalServicesConfiguration();

@@ -45,6 +45,7 @@ namespace NHSOnline.App.Areas.Home
         Task NavigateToMessages();
         Task NavigateToMore();
         Task NavigateToHome();
+        Task NavigateToRedirector(Uri targetUrl);
         Task SendNotificationsStatus(string status);
         Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse);
         Task SendNotificationUnauthorised();

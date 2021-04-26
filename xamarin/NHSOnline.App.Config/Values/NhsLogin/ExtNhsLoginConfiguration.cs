@@ -1,6 +1,6 @@
-﻿namespace NHSOnline.App.Config.Values.Preview
+namespace NHSOnline.App.Config.Values.NhsLogin
 {
-    internal sealed class PreviewNhsLoginConfiguration : INhsLoginConfiguration
+    internal sealed class ExtNhsLoginConfiguration : INhsLoginConfiguration
     {
         public string Scheme { get; } = "https";
         public string BaseHost { get; } = "ext.signin.nhs.uk";

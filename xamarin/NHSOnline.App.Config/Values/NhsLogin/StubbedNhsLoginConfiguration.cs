@@ -1,6 +1,6 @@
-namespace NHSOnline.App.Config.Values.Local
+namespace NHSOnline.App.Config.Values.NhsLogin
 {
-    internal sealed class LocalNhsLoginConfiguration : INhsLoginConfiguration
+    internal sealed class StubbedNhsLoginConfiguration : INhsLoginConfiguration
     {
         public string Scheme { get; } = "http";
         public string BaseHost { get; } = "nhslogin.stubs.local.bitraft.io";

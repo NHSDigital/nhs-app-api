@@ -45,6 +45,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Debug|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Release|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Release|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch6 - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch6 - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch18 - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch18 - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch19 - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch19 - Debug|iPhoneSimulator' " />
   <Import Project="Properties/BuildConfiguration.env.$(Environment).props" />
   <Import Project="Properties/BuildConfiguration.debugmode.$(DebugMode).props" />
   <Import Project="Properties/BuildConfiguration.platform.$(Platform).props" />
@@ -83,7 +89,7 @@
     <Compile Include="Renderers\WebViews\ScriptMessageHandler.cs" />
     <Compile Include="Renderers\WebViews\WebIntegrationWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\WebViewConfigurationBuilder.cs" />
-    <None Include="Info.template.plist"/>
+    <None Include="Info.template.plist" />
     <None Include="Info.plist">
       <DependentUpon>Info.template.plist</DependentUpon>
     </None>
@@ -134,6 +140,9 @@
     <None Include="Properties\BuildConfiguration.env.Dev.props" />
     <None Include="Properties\BuildConfiguration.env.Local.props" />
     <None Include="Properties\BuildConfiguration.env.Preview.props" />
+    <None Include="Properties\BuildConfiguration.env.Scratch18.props" />
+    <None Include="Properties\BuildConfiguration.env.Scratch19.props" />
+    <None Include="Properties\BuildConfiguration.env.Scratch6.props" />
     <None Include="Properties\BuildConfiguration.env.Staging.props" />
     <None Include="Properties\BuildConfiguration.platform.iPhone.props" />
     <None Include="Properties\BuildConfiguration.platform.iPhoneSimulator.props" />

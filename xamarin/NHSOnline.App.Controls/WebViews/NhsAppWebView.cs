@@ -139,6 +139,9 @@ namespace NHSOnline.App.Controls.WebViews
         public async Task NavigateToHome()
             => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.navigationGoToHome()").ResumeOnThreadPool();
 
+        public async Task NavigateToRedirector(Uri targetUrl)
+            => await EvaluateJavaScriptAsync($"window.nativeAppCallbacks.redirectToTargetUrl('{targetUrl}')").ResumeOnThreadPool();
+
         public async Task NavigateToRedirectedPathWithinApp(string spaPath)
         {
             var callbackName = "window.nativeAppCallbacks.navigationGoTo";

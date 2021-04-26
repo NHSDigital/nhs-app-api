@@ -1,7 +1,11 @@
 import NativeAppCallbacksPlugin from '@/plugins/native-app-callbacks';
 import store from '@/store';
+import { redirectTo } from '@/lib/utils';
+import router from '@/router';
 
 jest.mock('@/store');
+jest.mock('@/lib/utils');
+jest.mock('@/router');
 
 describe('native-app-callbacks', () => {
   beforeEach(() => {
@@ -87,6 +91,41 @@ describe('native-app-callbacks', () => {
       const payload = {};
       window.nativeAppCallbacks.navigationGoTo(payload);
       expect(store.dispatch).toHaveBeenCalledWith('navigation/goTo', payload);
+    });
+  });
+
+  describe('redirectToTargetUrl', () => {
+    beforeEach(() => {
+      redirectTo.mockClear();
+    });
+    describe('targetUrl is populated', () => {
+      beforeEach(() => {
+        window.nativeAppCallbacks.redirectToTargetUrl('http://www.mock.url');
+      });
+
+      it('will call redirectTo with http://www.mock.url', () => {
+        expect(redirectTo).toHaveBeenCalledWith({ $router: router, $store: store }, '/redirector?redirect_to=http%3A%2F%2Fwww.mock.url');
+      });
+    });
+
+    describe('targetUrl is undefined', () => {
+      beforeEach(() => {
+        window.nativeAppCallbacks.redirectToTargetUrl(undefined);
+      });
+
+      it('will not call redirectTo', () => {
+        expect(redirectTo).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('targetUrl is blank', () => {
+      beforeEach(() => {
+        window.nativeAppCallbacks.redirectToTargetUrl('');
+      });
+
+      it('will not call redirectTo', () => {
+        expect(redirectTo).not.toHaveBeenCalled();
+      });
     });
   });
 

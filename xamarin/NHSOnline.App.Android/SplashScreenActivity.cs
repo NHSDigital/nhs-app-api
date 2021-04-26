@@ -14,7 +14,14 @@ namespace NHSOnline.App.Droid
         {
             base.OnResume();
 
-            StartActivity(new Intent(Application.Context, typeof(MainActivity)));
+            var mainActivity = new Intent(Application.Context, typeof(MainActivity));
+
+            if (Intent?.Extras != null)
+            {
+                mainActivity.PutExtras(Intent.Extras);
+            }
+
+            StartActivity(mainActivity);
         }
     }
 }

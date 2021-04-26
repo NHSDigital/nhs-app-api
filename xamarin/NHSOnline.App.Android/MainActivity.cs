@@ -11,7 +11,7 @@ using NHSOnline.App.Droid.DependencyServices.Biometrics;
 namespace NHSOnline.App.Droid
 {
     [Activity(Label = "NHSOnline.App",
-        LaunchMode = LaunchMode.SingleInstance,
+        LaunchMode = LaunchMode.SingleTask,
         Theme = "@style/MainTheme",
         Icon = "@mipmap/ic_launcher",
         RoundIcon = "@mipmap/ic_launcher_round",
@@ -39,10 +39,10 @@ namespace NHSOnline.App.Droid
             AndroidLifecycle.MainActivity = this;
             AndroidBiometrics.MainActivity = this;
 
-            HandleIntent(Intent);
-
             NhsApp = new NhsApp();
             LoadApplication(NhsApp);
+
+            HandleIntent(Intent);
         }
 
         public override void SetContentView(View? view)
@@ -114,7 +114,7 @@ namespace NHSOnline.App.Droid
             if (!string.IsNullOrWhiteSpace(url))
             {
                 NhsApp?.HandleDeeplink(url!);
-                Log.Info(nameof(MainActivity), "Notification contains url {url}");
+                Log.Info(nameof(MainActivity), $"Notification contains url {url}");
             }
         }
     }

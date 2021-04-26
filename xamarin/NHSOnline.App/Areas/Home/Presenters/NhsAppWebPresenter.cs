@@ -26,6 +26,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly IBrowserOverlay _browserOverlay;
         private readonly IPageFactory _pageFactory;
         private readonly IBiometricAuthenticationService _biometricAuthenticationService;
+        private readonly RedirectorUrlFactory _redirectorUrlFactory;
         private readonly INhsAppNavigationHandler _navigationHandler;
         private readonly INotifications _notifications;
 
@@ -38,7 +39,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
             IBrowserOverlay browserOverlay,
             IPageFactory pageFactory,
             INotifications notifications,
-            IBiometricAuthenticationService biometricAuthenticationService)
+            IBiometricAuthenticationService biometricAuthenticationService,
+            RedirectorUrlFactory redirectorUrlFactory)
         {
             _model = model;
             _view = view;
@@ -50,6 +52,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _notifications = notifications;
 
             _biometricAuthenticationService = biometricAuthenticationService;
+            _redirectorUrlFactory = redirectorUrlFactory;
             _navigationHandler = new NhsAppNavigationHandler(view);
 
             _view.AppNavigation
@@ -239,11 +242,9 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .PreserveThreadContext();
         }
 
-        private Task DeeplinkRequested(Uri deeplinkUrl)
+        private async Task DeeplinkRequested(Uri deeplinkUrl)
         {
-            _view.GoToUri(deeplinkUrl);
-
-            return Task.CompletedTask;
+            await _view.NavigateToRedirector(deeplinkUrl).PreserveThreadContext();
         }
 
         private bool IsNhsAppWeb(Uri uri)
@@ -253,10 +254,13 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         private Task DisplayNhsAppWeb()
         {
-            var targetUrl = _model.DeeplinkUrl ?? _config.BaseAddress;
+            if (_model.DeeplinkUrl != null)
+            {
+                _view.GoToUri(_redirectorUrlFactory.CreateUrlRedirect(_model.DeeplinkUrl));
+                return Task.CompletedTask;
+            }
 
-            _view.GoToUri(targetUrl);
-
+            _view.GoToUri(_config.BaseAddress);
             return Task.CompletedTask;
         }
 

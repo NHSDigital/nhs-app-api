@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Android.OS;
 using Android.Views.Accessibility;
-using AndroidX.Core.View;
 using AndroidX.Core.View.Accessibility;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.Effects;
@@ -61,7 +60,7 @@ namespace NHSOnline.App.Droid.Effects
                 gestureRecognizers.GestureRecognizers
                     .OfType<TapGestureRecognizer>()
                     .FirstOrDefault(x => x.NumberOfTapsRequired == 1)
-                    ?.SendTapped(view); 
+                    ?.SendTapped(view);
                 e.Handled = true;
             }
         }

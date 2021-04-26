@@ -132,6 +132,8 @@ namespace NHSOnline.App.Areas.Home.Views
 
         public async Task NavigateToMore() => await WebView.NavigateToMore().ResumeOnThreadPool();
 
+        public async Task NavigateToRedirector(Uri targetUrl) => await WebView.NavigateToRedirector(targetUrl).ResumeOnThreadPool();
+
         public async Task NavigateToRedirectedPathWithinApp(string spaPath)
             => await WebView.NavigateToRedirectedPathWithinApp(spaPath).ResumeOnThreadPool();
 

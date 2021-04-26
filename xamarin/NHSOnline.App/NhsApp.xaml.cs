@@ -13,7 +13,7 @@ namespace NHSOnline.App
 {
     public partial class NhsApp
     {
-        private NavigationPage? NavigationPage { get; set; }
+        private NavigationPage? NavigationPage { get; }
 
         public NhsApp()
         {
@@ -65,7 +65,7 @@ namespace NHSOnline.App
             Justification = "Parsing at the app level rather than in the individual apps")]
         public void HandleDeeplink(string deeplinkUrl)
         {
-            if (Uri.TryCreate(deeplinkUrl, UriKind.Absolute, out var targetUri))
+            if (Uri.TryCreate(deeplinkUrl, UriKind.RelativeOrAbsolute, out var targetUri))
             {
                 if (NavigationPage?.CurrentPage is INhsAppPage currentPage)
                 {
