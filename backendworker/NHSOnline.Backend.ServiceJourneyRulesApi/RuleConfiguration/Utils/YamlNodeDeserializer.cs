@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
     {
         private readonly IDeserializer _deserializer;
         private readonly string _baseIncludePath;
-        private readonly string _tag;
+        private readonly TagName _tag;
         private readonly IEnumerable<Type> _supportedTypes;
         private readonly ITextReaderBuilder<TextReader> _streamReaderBuilder;
         private readonly IParserBuilder<IParser> _parserBuilder;
@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
             ILogger<YamlNodeDeserializer> logger)
         {
             _deserializer = deserializer;
-            _tag = tag;
+            _tag = new TagName(tag);
             _baseIncludePath = baseIncludePath;
             _supportedTypes = supportedTypes;
             _streamReaderBuilder = streamReaderBuilder;
@@ -40,8 +40,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
 
         public bool Deserialize(IParser reader, Type expectedType, Func<IParser, Type, object> nestedObjectDeserializer, out object value)
         {
-            if (reader.Accept<Scalar>(out var scalar) &&
-                _tag.Equals(scalar.Tag, StringComparison.Ordinal))
+            if (reader.Accept<Scalar>(out var scalar) && _tag.Equals(scalar.Tag))
             {
                 return DeserializeNode(reader, scalar, out value);
             }
