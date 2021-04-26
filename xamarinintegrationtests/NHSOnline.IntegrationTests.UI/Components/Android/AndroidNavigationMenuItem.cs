@@ -24,7 +24,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
         public static AndroidNavigationMenuItem WithIconDescriptionAndText(IAndroidInteractor interactor, string iconDescription, string text)
             => new AndroidNavigationMenuItem(interactor, iconDescription, text);
 
-        private AndroidIcon Icon => AndroidIcon.WithDescription(_containedInteractor, _iconDescription);
+        public AndroidIcon Icon => AndroidIcon.WithName(_containedInteractor, _iconDescription);
         private AndroidLabel Label => AndroidLabel.WithText(_containedInteractor, _text);
 
         public void Click() => ActOnElement(e => e.Click());

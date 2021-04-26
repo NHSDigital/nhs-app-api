@@ -16,7 +16,7 @@ namespace NHSOnline.App.Droid
         Icon = "@mipmap/ic_launcher",
         RoundIcon = "@mipmap/ic_launcher_round",
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
-        ScreenOrientation = ScreenOrientation.FullSensor)]
+        ScreenOrientation = ScreenOrientation.FullUser)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         private NhsApp? NhsApp { get; set; }

@@ -1,3 +1,4 @@
+using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -16,21 +17,36 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidNavigationBar FullNavigationFooter => AndroidNavigationBar.WithName(_driver, "NHS App Full Navigation Footer");
 
+        private AndroidIcon HomeIcon => FullNavigationHeader.ContainingIconWithName("Home");
 
-        private AndroidIcon HomeIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App home icon");
+        private AndroidIcon HelpIcon => FullNavigationHeader.ContainingIconWithName("Help");
 
-        private AndroidIcon HelpIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App help icon");
+        private AndroidIcon MoreIcon => FullNavigationHeader.ContainingIconWithName("More");
 
-        private AndroidIcon MoreIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App more icon");
+        private AndroidIcon AdviceIcon => FullNavigationFooter.ContainingIconWithName("Advice");
 
-        private AndroidNavigationMenuItem AdviceMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App advice icon", "Advice");
+        private AndroidIcon AppointmentsIcon => FullNavigationFooter.ContainingIconWithName("Appointments");
 
-        private AndroidNavigationMenuItem AppointmentsMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App appointments icon", "Appointments");
+        private AndroidIcon PrescriptionsIcon => FullNavigationFooter.ContainingIconWithName("Prescriptions");
 
-        private AndroidNavigationMenuItem PrescriptionsMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App prescriptions icon", "Prescriptions");
+        private AndroidIcon YourHealthIcon => FullNavigationFooter.ContainingIconWithName("Your health");
 
-        private AndroidNavigationMenuItem YourHealthMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App your health icon", "Your health");
-        private AndroidNavigationMenuItem MessagesMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App messages icon", "Messages");
+        private AndroidIcon MessagesIcon => FullNavigationFooter.ContainingIconWithName("Messages");
+
+        internal AndroidKeyboardNavigation KeyboardHeaderNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(
+            _driver,
+            HomeIcon,
+            HelpIcon,
+            MoreIcon);
+
+        public AndroidKeyboardNavigation KeyboardFooterNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(
+            _driver,
+            AdviceIcon,
+            AppointmentsIcon,
+            PrescriptionsIcon,
+            YourHealthIcon,
+            MessagesIcon);
+
 
         public void AssertNavigationPresent()
         {
@@ -45,27 +61,27 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         public void Messages()
         {
-            MessagesMenuItem.Click();
+            MessagesIcon.Click();
         }
 
         public void Advice()
         {
-            AdviceMenuItem.Click();
+            AdviceIcon.Click();
         }
 
         public void Appointments()
         {
-            AppointmentsMenuItem.Click();
+            AppointmentsIcon.Click();
         }
 
         public void Prescriptions()
         {
-            PrescriptionsMenuItem.Click();
+            PrescriptionsIcon.Click();
         }
 
         public void YourHealth()
         {
-            YourHealthMenuItem.Click();
+            YourHealthIcon.Click();
         }
 
         public void More()
@@ -76,6 +92,28 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         public void Help()
         {
             HelpIcon.Click();
+        }
+
+        public void KeyboardNavigateToAdvice(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateIcon(AdviceIcon, navigation);
+
+        public void KeyboardNavigateToAppointments(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateIcon(AppointmentsIcon, navigation);
+
+        public void KeyboardNavigatePrescriptions(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateIcon(PrescriptionsIcon, navigation);
+
+        public void KeyboardNavigateToYourHealth(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateIcon(YourHealthIcon, navigation);
+
+        public void KeyboardNavigateToMessages(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateIcon(MessagesIcon, navigation);
+
+        public void KeyboardNavigateToHome(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateIcon(HomeIcon, navigation);
+
+        public void KeyboardNavigateToHelp(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateIcon(HelpIcon, navigation);
+
+        public void KeyboardNavigateToMore(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateIcon(MoreIcon, navigation);
+
+        private void KeyboardNavigateToAndActivateIcon(IFocusable icon, AndroidKeyboardNavigation keyboardPageContentNavigation)
+        {
+            keyboardPageContentNavigation.TabTo(icon);
+            keyboardPageContentNavigation.PressEnterKey();
         }
     }
 }

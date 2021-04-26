@@ -25,7 +25,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
         public static IOSNavigationMenuItem WithIconDescriptionAndText(IIOSInteractor interactor, string iconDescription, string text)
             => new IOSNavigationMenuItem(interactor, iconDescription, text);
 
-        private IOSIcon Icon => IOSIcon.WithDescription(_containedInteractor, _iconDescription);
+        private IOSIcon Icon => IOSIcon.WithName(_containedInteractor, _iconDescription);
         private IOSLabel Label => IOSLabel.WithText(_containedInteractor, _text);
 
         public void Click()
@@ -34,7 +34,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
         public void AssertVisible()
         {
             ActOnElement(e => e.Displayed.Should().BeTrue("a button with text {1} should be displayed", _text));
-            Icon.AssertVisible();
+            Icon.AssertButtonVisible();
             Label.AssertVisible();
         }
 
@@ -42,6 +42,6 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
             => _interactor.ActOnElement(ContainerFindBy, action);
 
         private By ContainerFindBy
-            => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeOther' AND name == {_text.QuotePredicateLiteral()}");
+            => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeButton' AND name == {_text.QuotePredicateLiteral()}");
     }
 }

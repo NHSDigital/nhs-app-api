@@ -32,10 +32,13 @@
     </View.Resources>
 
     <ContentView.Content>
-        <StackLayout AutomationId="{Binding Text, Source={x:Reference Name=Root}}">
+        <StackLayout AutomationId="{Binding Text, Source={x:Reference Name=Root}}" 
+                     effects:AccessibilityEffect.AccessibilityControlType="Button"
+                     AutomationProperties.Name="{Binding Text, Source={x:Reference Name=Root}}" >
             <ContentView Content="{Binding Icon, Source={x:Reference Name=Root}}" />
 
-            <Label Text="{Binding Text, Source={x:Reference Name=Root}}" />
+            <Label Text="{Binding Text, Source={x:Reference Name=Root}}"
+                   AutomationProperties.IsInAccessibleTree="False" />
             
             <StackLayout.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding IconCommand, Source={x:Reference Name=Root}}" />

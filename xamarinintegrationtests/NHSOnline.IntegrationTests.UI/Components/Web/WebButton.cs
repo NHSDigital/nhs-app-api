@@ -1,11 +1,12 @@
 using System;
+using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Web
 {
-    public sealed class WebButton
+    public sealed class WebButton: IFocusable
     {
         private readonly IWebInteractor _interactor;
         private readonly string _text;
@@ -36,5 +37,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
 
         private By FindBy
             => By.XPath($".//button[normalize-space(text())={_text.QuoteXPathLiteral()}]");
+
+        string IFocusable.ElementDescription
+            => new FocusableDescriptionBuilder {Tag = "Button", Text = _text}.Description;
     }
 }

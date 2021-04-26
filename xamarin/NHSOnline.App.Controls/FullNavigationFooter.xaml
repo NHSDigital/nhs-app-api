@@ -68,7 +68,7 @@
                                                    Text="Advice"
                                                    IconCommand="{Binding AdviceCommand, Source={x:Reference Name=Root}}">
                     
-                    <icons:IconAdvice StyleClass="Advice" AutomationProperties.IsInAccessibleTree="true" />
+                    <icons:IconAdvice StyleClass="Advice" />
                     
                 </controls:FullNavigationFooterItem>
                 
@@ -76,7 +76,7 @@
                                                    Text="Appointments"
                                                    IconCommand="{Binding AppointmentsCommand, Source={x:Reference Name=Root}}">
                     
-                    <icons:IconAppointments AutomationProperties.IsInAccessibleTree="true" />
+                    <icons:IconAppointments />
                     
                 </controls:FullNavigationFooterItem>
 
@@ -84,7 +84,7 @@
                                                    Text="Prescriptions"
                                                    IconCommand="{Binding PrescriptionsCommand, Source={x:Reference Name=Root}}">
                     
-                    <icons:IconPrescriptions AutomationProperties.IsInAccessibleTree="true" />
+                    <icons:IconPrescriptions />
                     
                 </controls:FullNavigationFooterItem>
 
@@ -92,7 +92,7 @@
                                                    Text="Your health"
                                                    IconCommand="{Binding YourHealthCommand, Source={x:Reference Name=Root}}">
                     
-                    <icons:IconYourHealth AutomationProperties.IsInAccessibleTree="true" />
+                    <icons:IconYourHealth />
                     
                 </controls:FullNavigationFooterItem>
 
@@ -100,7 +100,7 @@
                                                    Text="Messages"
                                                    IconCommand="{Binding MessagesCommand, Source={x:Reference Name=Root}}">
                     
-                    <icons:IconMessages AutomationProperties.IsInAccessibleTree="true" />
+                    <icons:IconMessages />
                     
                 </controls:FullNavigationFooterItem>
 

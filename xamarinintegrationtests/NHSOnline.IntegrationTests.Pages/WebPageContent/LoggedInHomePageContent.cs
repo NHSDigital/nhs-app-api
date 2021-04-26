@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -16,6 +18,30 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebDefinitionTerm Name => WebDefinitionTerm.WithTerm(_interactor, "Name:");
 
+        private WebButton OpenSettings => WebButton.WithText(_interactor, "Open Settings");
+
+        private WebLink DismissBiometricsBanner => WebLink.WithText(_interactor, "Dismiss");
+
+        private WebMenuItem CheckCovidVaccineMenuItem => WebMenuItem.WithTitle(_interactor, "Check your coronavirus vaccine record");
+
+        private WebMenuItem MessagesMenuItem => WebMenuItem.WithTitle(_interactor, "View your messages");
+
+        private WebMenuItem LinkedProfilesMenuItem => WebMenuItem.WithTitle(_interactor, "Linked profiles");
+
+        private WebMenuItem GpHealthMenuItem => WebMenuItem.WithTitle(_interactor, "View your GP health record");
+
+        private WebMenuItem PrescriptionsMenuItem => WebMenuItem.WithTitle(_interactor, "Order a repeat prescriptions");
+
+        public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
+        {
+            OpenSettings,
+            DismissBiometricsBanner,
+            CheckCovidVaccineMenuItem,
+            MessagesMenuItem,
+            LinkedProfilesMenuItem,
+            GpHealthMenuItem,
+            PrescriptionsMenuItem
+        };
 
         private WebPanel UpliftPanel => WebPanel.WithTitle(_interactor, "Prove your identity to get full access");
         private WebButton Continue => UpliftPanel.ContainingButtonWithText("Continue");
@@ -25,10 +51,9 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             Title.AssertVisible();
         }
 
-        public LoggedInHomePageContent AssertNameDisplayedFor(string patientName)
+        public void AssertNameDisplayedFor(string patientName)
         {
             Name.AssertValue(patientName);
-            return this;
         }
 
         public void ProveYourIdentityContinue() => Continue.Click();

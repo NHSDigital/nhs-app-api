@@ -29,6 +29,11 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             params IFocusable[] focusableElements)
             => new(interactor, focusableElements);
 
+        public static AndroidKeyboardNavigation WithExpectedFocusableElements(
+            IAndroidInteractor interactor,
+            IEnumerable<IFocusable> focusableElements)
+            => new(interactor, focusableElements);
+
         public void TabTo(IFocusable focusable)
         {
             _expectedFocusableElements
@@ -40,6 +45,11 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
                 _interactor.PressTabKey();
                 _currentFocusable = FollowingFocusable(_currentFocusable);
             }
+        }
+
+        public IEnumerable<IFocusable> GetFocusableElements()
+        {
+            return _expectedFocusableElements.ToList();
         }
 
         private IFocusable FollowingFocusable(IFocusable? currentFocusable)

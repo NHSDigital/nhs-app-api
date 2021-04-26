@@ -41,7 +41,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             logs.BrowserStackSessionId(_driver.SessionId);
 
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
-            _driver.Orientation = ScreenOrientation.Landscape;
 
             _nativeDriverContext = new NativeDriverContext(_driver, _driver, new AndroidWebViewLocatorStrategy(_driver));
 

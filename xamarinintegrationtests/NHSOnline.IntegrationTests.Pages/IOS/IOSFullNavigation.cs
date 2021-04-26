@@ -16,21 +16,21 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         private IOSNavigationBar FullNavigationFooter => IOSNavigationBar.WithName(_driver, "NHS App Full Navigation Footer");
 
-        private IOSIcon HomeIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App home icon");
+        private IOSIcon HomeIcon => FullNavigationHeader.ContainingButtonWithName("Home");
 
-        private IOSIcon HelpIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App help icon");
+        private IOSIcon HelpIcon => FullNavigationHeader.ContainingButtonWithName("Help");
 
-        private IOSIcon MoreIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App more icon");
+        private IOSIcon MoreIcon => FullNavigationHeader.ContainingButtonWithName("More");
 
-        private IOSNavigationMenuItem AdviceMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App advice icon", "Advice");
+        private IOSIcon AdviceIcon => FullNavigationFooter.ContainingButtonWithName("Advice");
 
-        private IOSNavigationMenuItem AppointmentsMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App appointments icon", "Appointments");
+        private IOSIcon AppointmentsIcon => FullNavigationFooter.ContainingButtonWithName("Appointments");
 
-        private IOSNavigationMenuItem PrescriptionsMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App prescriptions icon", "Prescriptions");
+        private IOSIcon PrescriptionsIcon => FullNavigationFooter.ContainingButtonWithName("Prescriptions");
 
-        private IOSNavigationMenuItem YourHealthMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App your health icon", "Your health");
+        private IOSIcon YourHealthIcon => FullNavigationFooter.ContainingButtonWithName("Your health");
 
-        private IOSNavigationMenuItem MessagesMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App messages icon", "Messages");
+        private IOSIcon MessagesIcon => FullNavigationFooter.ContainingButtonWithName("Messages");
 
         internal void AssertNavigationPresent()
         {
@@ -40,42 +40,42 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         public void Home()
         {
-            HomeIcon.Click();
+            HomeIcon.ClickButton();
         }
 
         public void Advice()
         {
-            AdviceMenuItem.Click();
+            AdviceIcon.ClickButton();
         }
 
         public void Appointments()
         {
-            AppointmentsMenuItem.Click();
+            AppointmentsIcon.ClickButton();
         }
 
         public void Prescriptions()
         {
-            PrescriptionsMenuItem.Click();
+            PrescriptionsIcon.ClickButton();
         }
 
         public void YourHealth()
         {
-            YourHealthMenuItem.Click();
+            YourHealthIcon.ClickButton();
         }
 
         public void Messages()
         {
-            MessagesMenuItem.Click();
+            MessagesIcon.ClickButton();
         }
 
         public void More()
         {
-            MoreIcon.Click();
+            MoreIcon.ClickButton();
         }
 
         public void Help()
         {
-            HelpIcon.Click();
+            HelpIcon.ClickButton();
         }
     }
 }

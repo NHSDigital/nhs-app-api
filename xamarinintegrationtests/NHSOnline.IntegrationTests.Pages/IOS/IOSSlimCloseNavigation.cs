@@ -22,7 +22,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         public void Close()
         {
-            CloseIcon.Click();
+            CloseIcon.ClickOther();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace NHSOnline.IntegrationTests.UI.Components.Android
+﻿namespace NHSOnline.IntegrationTests.UI.Components
 {
     public interface IFocusable
     {

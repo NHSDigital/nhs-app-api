@@ -289,6 +289,155 @@ namespace NHSOnline.IntegrationTests.Home
                 .AssertPageElements();
         }
 
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelNineCanUseTheKeyboardToNavigateToAdviceAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .KeyboardNavigateToAdvice();
+
+            AndroidAdvicePage
+                .AssertOnPage(driver)
+                .AssertPageElements();
+        }
+
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelNineCanUseTheKeyboardToNavigateToAppointmentsAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .KeyboardNavigateToAppointments();
+
+            AndroidAppointmentsPage
+                .AssertOnPage(driver)
+                .AssertPageElements();
+        }
+
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelNineCanUseTheKeyboardToNavigateToPrescriptionsAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .KeyboardNavigatePrescriptions();
+
+            AndroidPrescriptionsPage
+                .AssertOnPage(driver)
+                .AssertPageElements();
+        }
+
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelNineCanUseTheKeyboardToNavigateToYourHealthAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .KeyboardNavigateToYourHealth();
+
+            AndroidYourHealthPage
+                .AssertOnPage(driver)
+                .AssertPageElements();
+        }
+
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelNineCanUseTheKeyboardToNavigateToMessagesAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .KeyboardNavigateToMessages();
+
+            AndroidMessagesPage
+                .AssertOnPage(driver)
+                .AssertPageElements();
+        }
+
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelNineCanUseTheKeyboardToNavigateFromHomeScreenAndGoBackHomeAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.Advice();
+
+            AndroidAdvicePage
+                .AssertOnPage(driver)
+                .KeyboardNavigateToHome();
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelNineCanUseTheKeyboardToNavigateToHelpAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .KeyboardNavigateToHelp();
+
+            AndroidAppTabBrowserChoice
+                .IfDisplayed(driver, choice => choice.ChooseChrome().Always());
+
+            AndroidAppTab
+                .AssertOnHomeHelpPage(driver);
+        }
+
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelNineCanUseTheKeyboardToNavigateToMoreAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .KeyboardNavigateToMore();
+
+            AndroidMorePage
+                .AssertOnPage(driver)
+                .AssertPageElements();
+        }
+
         private static void LogAndroidPatientIn(IAndroidDriverWrapper driver, Patient patient)
         {
             AndroidLoggedOutHomePage

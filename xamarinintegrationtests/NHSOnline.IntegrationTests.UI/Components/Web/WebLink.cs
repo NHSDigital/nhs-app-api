@@ -1,11 +1,12 @@
 using System;
 using FluentAssertions;
+using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Web
 {
-    public sealed class WebLink
+    public sealed class WebLink: IFocusable
     {
         private readonly IWebInteractor _interactor;
         private readonly string _text;
@@ -35,5 +36,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
 
         private By FindBy
             => By.XPath($"{_searchPrefix}//a[normalize-space(text())={_text.QuoteXPathLiteral()}]");
+
+        string IFocusable.ElementDescription
+            => new FocusableDescriptionBuilder {Tag = "a", Text = _text}.Description;
     }
 }

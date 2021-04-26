@@ -94,7 +94,10 @@ namespace NHSOnline.App.Areas.PreHome.Views
             => NavigatingCommand.Execute(args);
 
         private void WebViewOnNavigated(object sender, WebNavigatedEventArgs args)
-            => NavigatedCommand.Execute(args);
+        {
+            WebView.Focus();
+            NavigatedCommand.Execute(args);
+        }
 
         public async Task AddCookie(Cookie cookie)
             => await (WebView.SetCookie?.Invoke(cookie) ?? Task.CompletedTask).PreserveThreadContext();

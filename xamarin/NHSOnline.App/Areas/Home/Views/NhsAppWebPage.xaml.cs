@@ -114,28 +114,66 @@ namespace NHSOnline.App.Areas.Home.Views
             => NavigatingCommand.Execute(args);
 
         private void WebViewOnNavigated(object sender, WebNavigatedEventArgs args)
-            => NavigatedCommand.Execute(args);
+        {
+            WebView.Focus();
+            NavigatedCommand.Execute(args);
+        }
 
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);
 
-        public async Task NavigateToAdvice() => await WebView.NavigateToAdvice().ResumeOnThreadPool();
+        public async Task NavigateToAdvice()
+        {
+            WebView.Focus();
+            await WebView.NavigateToAdvice().ResumeOnThreadPool();
+        }
 
-        public async Task NavigateToAppointments() => await WebView.NavigateToAppointments().ResumeOnThreadPool();
+        public async Task NavigateToAppointments()
+        {
+            WebView.Focus();
+            await WebView.NavigateToAppointments().ResumeOnThreadPool();
+        }
 
-        public async Task NavigateToPrescriptions() => await WebView.NavigateToPrescriptions().ResumeOnThreadPool();
+        public async Task NavigateToPrescriptions()
+        {
+            WebView.Focus();
+            await WebView.NavigateToPrescriptions().ResumeOnThreadPool();
+        }
 
-        public async Task NavigateToYourHealth() => await WebView.NavigateToYourHealth().ResumeOnThreadPool();
+        public async Task NavigateToYourHealth()
+        {
+            WebView.Focus();
+            await WebView.NavigateToYourHealth().ResumeOnThreadPool();
+        }
 
-        public async Task NavigateToMessages() => await WebView.NavigateToMessages().ResumeOnThreadPool();
+        public async Task NavigateToMessages()
+        {
+            WebView.Focus();
+            await WebView.NavigateToMessages().ResumeOnThreadPool();
+        }
 
-        public async Task NavigateToHome() => await WebView.NavigateToHome().ResumeOnThreadPool();
+        public async Task NavigateToHome()
+        {
+            WebView.Focus();
+            await WebView.NavigateToHome().ResumeOnThreadPool();
+        }
 
-        public async Task NavigateToMore() => await WebView.NavigateToMore().ResumeOnThreadPool();
+        public async Task NavigateToMore()
+        {
+            WebView.Focus();
+            await WebView.NavigateToMore().ResumeOnThreadPool();
+        }
 
-        public async Task NavigateToRedirector(Uri targetUrl) => await WebView.NavigateToRedirector(targetUrl).ResumeOnThreadPool();
+        public async Task NavigateToRedirector(Uri targetUrl)
+        {
+            WebView.Focus();
+            await WebView.NavigateToRedirector(targetUrl).ResumeOnThreadPool();
+        }
 
         public async Task NavigateToRedirectedPathWithinApp(string spaPath)
-            => await WebView.NavigateToRedirectedPathWithinApp(spaPath).ResumeOnThreadPool();
+        {
+            WebView.Focus();
+            await WebView.NavigateToRedirectedPathWithinApp(spaPath).ResumeOnThreadPool();
+        }
 
         public async Task SendNotificationsStatus(string status)
             => await WebView.SendNotificationsStatus(status).ResumeOnThreadPool();

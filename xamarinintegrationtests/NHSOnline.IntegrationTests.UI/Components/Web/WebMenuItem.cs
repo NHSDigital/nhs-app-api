@@ -1,11 +1,12 @@
 using System;
 using FluentAssertions;
+using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Web
 {
-    public sealed class WebMenuItem
+    public sealed class WebMenuItem: IFocusable
     {
         private readonly IWebInteractor _interactor;
         private readonly string _title;
@@ -30,5 +31,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
 
         private By FindBy
             => By.XPath($"//a[div/h2[normalize-space(text())={_title.QuoteXPathLiteral()}]]");
+
+        string IFocusable.ElementDescription
+            => new FocusableDescriptionBuilder {Tag = "a", Text = _title}.Description;
     }
 }

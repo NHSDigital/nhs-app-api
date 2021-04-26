@@ -85,10 +85,11 @@
                     <ColumnDefinition Width="44" />
                 </Grid.ColumnDefinitions>
                 
-                <StackLayout StyleClass="IconAndLabel" >
-                    <icons:IconHome AutomationProperties.IsInAccessibleTree="true" />
+                <StackLayout StyleClass="IconAndLabel" AutomationProperties.Name="Home"
+                             effects:AccessibilityEffect.AccessibilityControlType="Button">
+                    <icons:IconHome />
                     
-                    <Label Text="Home"/>
+                    <Label Text="Home" AutomationProperties.IsInAccessibleTree="false" />
                     
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding HomeCommand, Source={x:Reference Name=Root}}"  />
@@ -109,20 +110,22 @@
                     <ColumnDefinition Width="44" />
                 </Grid.ColumnDefinitions>
             
-                <StackLayout Grid.Column="0" StyleClass="IconAndLabel">
-                    <icons:IconHelp AutomationProperties.IsInAccessibleTree="true" />
+                <StackLayout Grid.Column="0" StyleClass="IconAndLabel" AutomationProperties.Name="Help"
+                             effects:AccessibilityEffect.AccessibilityControlType="Button">
+                    <icons:IconHelp />
                     
-                    <Label Text="Help"/>
+                    <Label Text="Help" AutomationProperties.IsInAccessibleTree="False"/>
             
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding HelpCommand, Source={x:Reference Name=Root}}"  />
                     </StackLayout.GestureRecognizers>
                 </StackLayout>
                 
-                <StackLayout Grid.Column="1" StyleClass="IconAndLabel">
-                    <icons:IconMore AutomationProperties.IsInAccessibleTree="true" />         
+                <StackLayout Grid.Column="1" StyleClass="IconAndLabel" AutomationProperties.Name="More"
+                             effects:AccessibilityEffect.AccessibilityControlType="Button" >
+                    <icons:IconMore />         
                     
-                    <Label Text="More"/>
+                    <Label Text="More" AutomationProperties.IsInAccessibleTree="False" />
                 
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding MoreCommand, Source={x:Reference Name=Root}}"  />

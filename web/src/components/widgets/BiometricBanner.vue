@@ -8,7 +8,7 @@
         {{ $t('home.ifYourDeviceSupports') }}
       </message-text>
       <message-text>
-        <analytics-tracked-tag :text="$t('home.openSettings')">
+        <analytics-tracked-tag :text="$t('home.openSettings')" tabindex="">
           <generic-button
             id="btn_goToSettings"
             :button-classes="['nhsuk-button',
