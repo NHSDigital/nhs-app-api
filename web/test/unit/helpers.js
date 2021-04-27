@@ -87,20 +87,24 @@ export const mount = (component, {
   methods = {},
   slots = {},
   computed = {},
+  router = undefined,
 } = {}) => {
   const store = $store || createStore({ $env, state });
   const mountFn = shallow ? vueShallowMount : vueMount;
 
   const mocksObj = {
     $cookies,
-    $route,
-    $router,
     $store: store,
     $style,
     $env,
     showTemplate: () => true,
     ...mocks,
   };
+
+  if (!router) {
+    mocksObj.$route = $route;
+    mocksObj.$router = $router;
+  }
 
   const options = {
     localVue,
@@ -112,6 +116,7 @@ export const mount = (component, {
     slots,
     i18n,
     computed,
+    router,
   };
 
   return mountFn(component, options);

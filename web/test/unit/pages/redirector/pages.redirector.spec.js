@@ -1,10 +1,7 @@
+import VueRouter from 'vue-router';
 import Redirector from '@/pages/redirector/index';
-import {
-  INTERSTITIAL_REDIRECTOR_NAME,
-  REDIRECT_PARAMETER,
-  REDIRECT_PAGE_PARAMETER,
-  APPOINTMENTS_NAME,
-} from '@/router/names';
+import * as names from '@/router/names';
+import hasAgreedToThirdPartyWarning from '@/lib/sessionStorage';
 import { AppPage } from '@/static/js/v1/src/constants';
 import {
   GP_MEDICAL_RECORD_PATH,
@@ -12,21 +9,24 @@ import {
   UPLIFT_SILVER_INTEGRATION_PATH,
   SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_PATH,
 } from '@/router/paths';
-import hasAgreedToThirdPartyWarning from '@/lib/sessionStorage';
+import { allRoutes } from '@/router';
 import * as dependency from '@/lib/utils';
-import { createRouter, createStore, mount } from '../../helpers';
+import * as window from '@/lib/window';
+import { createStore, localVue, mount } from '../../helpers';
 
 jest.mock('@/lib/sessionStorage');
 jest.mock('@/services/native-app');
 
 describe('redirector page', () => {
-  let $route;
-  let $router;
   let wrapper;
   let $http;
+  let $route;
+
+  const nhsAppBaseUrl = 'https://www.nhsapp.com';
+
+  localVue.use(VueRouter);
 
   const mountRedirector = ({
-    isNhsAppPath = true,
     hasKnownService = false,
     knownServiceId = 'pkb',
     requiresAssertedLoginIdentity = false,
@@ -58,23 +58,29 @@ describe('redirector page', () => {
       },
     });
 
-    $store.app.isNhsAppPath = jest.fn().mockReturnValue(isNhsAppPath);
+    const router = new VueRouter({
+      mode: 'history',
+      base: nhsAppBaseUrl,
+      routes: allRoutes,
+    });
 
-    return mount(Redirector, { $store, $router, $route });
+    router.push($route);
+
+    return mount(Redirector, { $store, router });
   };
 
   beforeEach(() => {
     dependency.redirectTo = jest.fn();
     dependency.redirectByName = jest.fn();
-    $router = createRouter();
+    window.getWindowLocationOrigin = jest.fn().mockReturnValue(nhsAppBaseUrl);
     $route = {};
     wrapper = undefined;
   });
 
-  describe('has no redirect param', () => {
+  describe('has no redirect parameter', () => {
     beforeEach(() => {
       $route = {
-        name: INTERSTITIAL_REDIRECTOR_NAME,
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
         query: {},
         meta: {},
       };
@@ -87,11 +93,11 @@ describe('redirector page', () => {
     });
   });
 
-  describe('has empty redirect param', () => {
+  describe('has an empty redirect parameter', () => {
     beforeEach(() => {
       $route = {
-        name: INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [REDIRECT_PARAMETER]: '' },
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PARAMETER]: '' },
         meta: {},
       };
 
@@ -103,46 +109,78 @@ describe('redirector page', () => {
     });
   });
 
-  describe('has redirect param to internal route name', () => {
+  describe('has a redirect parameter to an internal route name', () => {
     beforeEach(() => {
       $route = {
-        name: INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [REDIRECT_PARAMETER]: APPOINTMENTS_NAME },
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PARAMETER]: names.APPOINTMENTS_NAME },
         meta: {},
       };
       wrapper = mountRedirector();
     });
 
     it('will call redirectByName passing redirect param', () => {
-      expect(dependency.redirectByName).toHaveBeenCalledWith(wrapper.vm, APPOINTMENTS_NAME);
+      expect(dependency.redirectByName).toHaveBeenCalledWith(wrapper.vm, names.APPOINTMENTS_NAME);
     });
   });
 
-  describe('has redirect param to internal route path', () => {
+  describe('has a redirect parameter that is an absolute path to an internal path', () => {
     beforeEach(() => {
       $route = {
-        name: INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [REDIRECT_PARAMETER]: GP_MEDICAL_RECORD_PATH },
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PARAMETER]: `${nhsAppBaseUrl}/${GP_MEDICAL_RECORD_PATH}` },
         meta: {},
       };
-      wrapper = mountRedirector({ isNhsAppPath: true });
+      wrapper = mountRedirector();
     });
 
-    it('will redirect to param value', () => {
+    it('will redirectByName to param value', () => {
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, GP_MEDICAL_RECORD_PATH);
+        .toHaveBeenCalledWith(wrapper.vm, `/patient/${GP_MEDICAL_RECORD_PATH}`);
     });
   });
 
-  describe('has redirect param to a mis-spelled internal route path', () => {
+  describe('has a redirect parameter that is an encoded absolute path to an internal path', () => {
     beforeEach(() => {
       $route = {
-        name: INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [REDIRECT_PARAMETER]: `${GP_MEDICAL_RECORD_PATH}xyz` },
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PARAMETER]: `https%3A%2F%2Fwww.nhsapp.com%2F${GP_MEDICAL_RECORD_PATH}` },
+        meta: {},
+      };
+      wrapper = mountRedirector();
+    });
+
+    it('will redirectByName to param value', () => {
+      expect(dependency.redirectTo)
+        .toHaveBeenCalledWith(wrapper.vm, `/patient/${GP_MEDICAL_RECORD_PATH}`);
+    });
+  });
+
+  describe('has a redirect parameter to an internal path', () => {
+    beforeEach(() => {
+      $route = {
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PARAMETER]: GP_MEDICAL_RECORD_PATH },
+        meta: {},
+      };
+      wrapper = mountRedirector();
+    });
+
+    it('will redirectByName to param value', () => {
+      expect(dependency.redirectTo)
+        .toHaveBeenCalledWith(wrapper.vm, `/patient/${GP_MEDICAL_RECORD_PATH}`);
+    });
+  });
+
+  describe('has a redirect parameter for an non existent internal path', () => {
+    beforeEach(() => {
+      $route = {
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PARAMETER]: `${GP_MEDICAL_RECORD_PATH}xyz` },
         meta: {},
       };
 
-      wrapper = mountRedirector({ hasKnownService: false, isNhsAppPath: false });
+      wrapper = mountRedirector({ hasKnownService: false });
     });
 
     it('will redirect to INDEX path', () => {
@@ -150,15 +188,15 @@ describe('redirector page', () => {
     });
   });
 
-  describe('has redirect param external site not on knownServices list', () => {
+  describe('has a redirect parameter to an external site not in the knownServices list', () => {
     beforeEach(() => {
       $route = {
-        name: INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [REDIRECT_PARAMETER]: 'http://www.google.com' },
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PARAMETER]: 'http://www.google.com' },
         meta: {},
       };
 
-      wrapper = mountRedirector({ hasKnownService: false, isNhsAppPath: false });
+      wrapper = mountRedirector({ hasKnownService: false });
     });
 
     it('will redirect to INDEX path', () => {
@@ -166,11 +204,11 @@ describe('redirector page', () => {
     });
   });
 
-  describe('has redirect param external site on knownServices list for unknown third party', () => {
+  describe('has a redirect parameter to an external site which is in the knownServices list, with no third party configuration', () => {
     beforeEach(() => {
       $route = {
-        name: INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [REDIRECT_PARAMETER]: 'http://www.url.com' },
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PARAMETER]: 'http://www.url.com' },
         meta: {},
       };
 
@@ -178,7 +216,6 @@ describe('redirector page', () => {
         hasKnownService: true,
         requiresAssertedLoginIdentity: true,
         showThirdPartyWarning: false,
-        isNhsAppPath: false,
         isSilverIntegrationEnabled: true,
       });
     });
@@ -192,48 +229,12 @@ describe('redirector page', () => {
     });
   });
 
-  describe('has redirect param external site on knownServices list for an unknown third party', () => {
-    const { location } = global;
-
-    beforeEach(() => {
-      $route = {
-        name: INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [REDIRECT_PARAMETER]: 'http://www.url.com' },
-        meta: {},
-      };
-
-      delete global.location;
-
-      wrapper = mountRedirector({
-        isNhsAppPath: false,
-        hasKnownService: true,
-        knownServiceId: 'unknown',
-        requiresAssertedLoginIdentity: false,
-        showThirdPartyWarning: false,
-        isSilverIntegrationEnabled: true,
-      });
-    });
-
-    it('will redirect using location to external url', () => {
-      expect(global.location).toBe('http://www.url.com');
-    });
-
-    it('warning section should not be shown', () => {
-      expect(wrapper.vm.shouldShowWarning).toEqual(false);
-    });
-
-    afterEach(() => {
-      global.location = location;
-    });
-  });
-
-
-  describe('has redirect param external site on knownServices for pkb and path included in third-party-provider locale', () => {
+  describe('has a redirect parameter to an external site in the knownServices list and the path is included in the third-party-provider locale', () => {
     beforeEach(() => {
       hasAgreedToThirdPartyWarning.mockReturnValue(false);
       $route = {
-        name: INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
         meta: {},
       };
 
@@ -241,7 +242,6 @@ describe('redirector page', () => {
         hasKnownService: true,
         requiresAssertedLoginIdentity: true,
         showThirdPartyWarning: true,
-        isNhsAppPath: false,
         isSilverIntegrationEnabled: true,
         isProofLevel9: true,
       });
@@ -252,7 +252,7 @@ describe('redirector page', () => {
     });
 
     it('will set tab title to be the name of the feature', () => {
-      expect($route.meta.titleKey).toBe('Messages and online consultations');
+      expect(wrapper.vm.$route.meta.titleKey).toBe('Messages and online consultations');
     });
 
     describe('on continue button click', () => {
@@ -280,17 +280,16 @@ describe('redirector page', () => {
     });
   });
 
-  describe('has redirect param external site on knownServices for pkb and path not included in third-party-provider locale', () => {
+  describe('has a redirect parameter to an external site in the knownServices list, and the path is not included in the third-party-provider locale', () => {
     beforeEach(() => {
       hasAgreedToThirdPartyWarning.mockReturnValue(false);
       $route = {
-        name: INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [REDIRECT_PARAMETER]: 'http://www.url.com/abc?def=ghi' },
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PARAMETER]: 'http://www.url.com/abc?def=ghi' },
         meta: {},
       };
 
       wrapper = mountRedirector({
-        isNhsAppPath: false,
         hasKnownService: true,
         requiresAssertedLoginIdentity: true,
         showThirdPartyWarning: true,
@@ -310,14 +309,14 @@ describe('redirector page', () => {
     });
   });
 
-  describe('has redirect param not a url or internal path', () => {
+  describe('has a redirect parameter which is not a url or internal path', () => {
     beforeEach(() => {
       $route = {
-        name: INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [REDIRECT_PARAMETER]: 'something else' },
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PARAMETER]: 'something else' },
         meta: {},
       };
-      wrapper = mountRedirector({ isNhsAppPath: false });
+      wrapper = mountRedirector();
     });
 
     it('will redirect to INDEX path', () => {
@@ -325,16 +324,15 @@ describe('redirector page', () => {
     });
   });
 
-  describe('has redirect param external site on knownServices for pkb with SJR feature enabled but is not P9 proof level', () => {
+  describe('has a redirect parameter to an external site in the knownServices list with the SJR feature enabled but not P9 proof level', () => {
     beforeEach(() => {
       $route = {
-        name: INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
         meta: {},
       };
 
       wrapper = mountRedirector({
-        isNhsAppPath: false,
         hasKnownService: true,
         requiresAssertedLoginIdentity: true,
         showThirdPartyWarning: true,
@@ -349,16 +347,15 @@ describe('redirector page', () => {
     });
   });
 
-  describe('has redirect param external site on knownServices for pkb with SJR feature disabled but is not P9 proof level', () => {
+  describe('has a redirect parameter to an external site in the knownServices list with the SJR feature disabled but not P9 proof level', () => {
     beforeEach(() => {
       $route = {
-        name: INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
         meta: {},
       };
 
       wrapper = mountRedirector({
-        isNhsAppPath: false,
         hasKnownService: true,
         requiresAssertedLoginIdentity: true,
         showThirdPartyWarning: true,
@@ -373,16 +370,15 @@ describe('redirector page', () => {
     });
   });
 
-  describe('has redirect param external site on knownServices but doesn\'t have silver integration feature enabled via SJR', () => {
+  describe('has a redirect parameter to an external site in the knownServices list but doesn\'t have the silver integration feature enabled via SJR', () => {
     beforeEach(() => {
       $route = {
-        name: INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
         meta: {},
       };
 
       wrapper = mountRedirector({
-        isNhsAppPath: false,
         hasKnownService: true,
         requiresAssertedLoginIdentity: true,
         showThirdPartyWarning: true,
@@ -401,17 +397,16 @@ describe('redirector page', () => {
     });
   });
 
-  describe('has redirect param external site on knownServices for pkb and path included in third-party-provider locale and thirdparty warning has been accepted', () => {
+  describe('has a redirect parameter to an external site in the knownServices list and the path is included in third-party-provider locale and the thirdparty warning has been accepted', () => {
     beforeEach(() => {
       hasAgreedToThirdPartyWarning.mockReturnValue(true);
       $route = {
-        name: INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
         meta: {},
       };
 
       wrapper = mountRedirector({
-        isNhsAppPath: false,
         hasKnownService: true,
         requiresAssertedLoginIdentity: true,
         showThirdPartyWarning: true,
@@ -429,7 +424,7 @@ describe('redirector page', () => {
     });
 
     it('will set tab title to be the name of the feature', () => {
-      expect($route.meta.titleKey).toBe('Messages and online consultations');
+      expect(wrapper.vm.$route.meta.titleKey).toBe('Messages and online consultations');
     });
 
     it('will generate an asserted login identity for the matching service', () => {
@@ -455,26 +450,26 @@ describe('redirector page', () => {
     });
   });
 
-  describe('has redirect to page param', () => {
+  describe('has redirect to page parameter set to a valid page enum', () => {
     beforeEach(() => {
       $route = {
-        name: INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [REDIRECT_PAGE_PARAMETER]: AppPage.APPOINTMENTS },
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PAGE_PARAMETER]: AppPage.APPOINTMENTS },
         meta: {},
       };
       wrapper = mountRedirector();
     });
 
     it('will call redirectByName passing redirect to page param', () => {
-      expect(dependency.redirectByName).toHaveBeenCalledWith(wrapper.vm, APPOINTMENTS_NAME);
+      expect(dependency.redirectByName).toHaveBeenCalledWith(wrapper.vm, names.APPOINTMENTS_NAME);
     });
   });
 
-  describe('has redirect to page param with invalid value', () => {
+  describe('has redirect to page parameter set to a invalid value', () => {
     beforeEach(() => {
       $route = {
-        name: INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [REDIRECT_PAGE_PARAMETER]: 'foo' },
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PAGE_PARAMETER]: 'foo' },
         meta: {},
       };
       wrapper = mountRedirector();
@@ -482,6 +477,48 @@ describe('redirector page', () => {
 
     it('will redirect to INDEX path', () => {
       expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
+    });
+  });
+
+  describe('has a redirect parameter to an external site in the knownServices list which is not a silver integration', () => {
+    beforeEach(() => {
+      $route = {
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PARAMETER]: 'http://www.url.com' },
+        meta: {},
+      };
+
+      window.setWindowLocation = jest.fn();
+
+      wrapper = mountRedirector({
+        hasKnownService: true,
+        knownServiceId: 'unknown',
+        requiresAssertedLoginIdentity: false,
+        showThirdPartyWarning: false,
+      });
+    });
+
+    it('will redirect to the external url', () => {
+      expect(window.setWindowLocation).toHaveBeenCalledWith('http://www.url.com');
+    });
+
+    it('warning section should not be shown', () => {
+      expect(wrapper.vm.shouldShowWarning).toEqual(false);
+    });
+  });
+
+  describe('has a redirect parameter to an encoded unknown absolute path', () => {
+    beforeEach(() => {
+      $route = {
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PARAMETER]: `${nhsAppBaseUrl}/aptt` },
+        meta: {},
+      };
+      wrapper = mountRedirector();
+    });
+    it('will redirectByName to param value', () => {
+      expect(dependency.redirectTo)
+        .toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
     });
   });
 });

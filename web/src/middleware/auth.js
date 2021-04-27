@@ -9,11 +9,11 @@ import {
 } from '@/router/names';
 import { EMPTY_PATH, INTERSTITIAL_REDIRECTOR_PATH } from '@/router/paths';
 import { isAnonymous } from '@/router';
-import { createRouteByNameObject, createRoutePathObject, checkIfPathShouldHavePatientPrefix } from '@/lib/utils';
+import { createRouteByNameObject, createRoutePathObject, pathWithPatientPrefixOrUndefined } from '@/lib/utils';
 
-export default ({ store, to, next }) => {
+export default ({ router, store, to, next }) => {
   const isLoggedIn = store.getters['session/isLoggedIn']();
-  const santizedPath = checkIfPathShouldHavePatientPrefix({ path: to.path, store });
+  const santizedPath = pathWithPatientPrefixOrUndefined({ path: to.path, store, router });
   if (!isAnonymous(to) && !isLoggedIn) {
     if (to.path === EMPTY_PATH || !santizedPath) {
       return next({ name: LOGIN_NAME });

@@ -109,6 +109,7 @@ router.beforeEach((to, from, next) => {
     from,
     next,
     store,
+    router,
   };
 
   let specificRouteMiddleware = [].concat(globalMiddleware);

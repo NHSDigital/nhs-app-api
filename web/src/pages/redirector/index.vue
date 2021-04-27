@@ -29,11 +29,18 @@ import {
   SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_PATH,
 } from '@/router/paths';
 import {
+  pathWithPatientPrefixOrUndefined,
   getPathAndQuery,
   getThirdPartyJumpOff,
-  redirectTo,
+  isNhsAppHost,
+  isNhsAppPath,
   redirectByName,
+  redirectTo,
+  removeNhsAppHost,
 } from '@/lib/utils';
+import {
+  setWindowLocation,
+} from '@/lib/window';
 import { getJumpOffConfiguration } from '@/lib/third-party-providers/jump-off-configuration';
 
 export default {
@@ -63,8 +70,6 @@ export default {
     this.redirectParameter = get(REDIRECT_PARAMETER)(this.$route.query);
     const redirectEnum = get(REDIRECT_PAGE_PARAMETER)(this.$route.query);
 
-    let path;
-
     if (redirectEnum) {
       const pathName = findByRedirectEnum(redirectEnum);
 
@@ -73,24 +78,13 @@ export default {
         return;
       }
     }
-    if (this.redirectParameter) {
-      if (isNhsAppRouteName(this.redirectParameter)) {
-        redirectByName(this, this.redirectParameter);
-        return;
-      }
-      if (this.$store.app.isNhsAppPath(this.redirectParameter)) {
-        path = this.redirectParameter;
-      }
-    } else {
-      path = INDEX_PATH;
-    }
 
-    if (path) {
-      redirectTo(this, path);
+    if (this.redirectParameter) {
+      this.handleRedirectParameter(this.redirectParameter);
       return;
     }
 
-    this.handleExternalRedirect();
+    redirectTo(this, INDEX_PATH);
   },
   methods: {
     async getAssertedLoginIdentityAndNavigate() {
@@ -106,7 +100,14 @@ export default {
           ignoreError: true,
         })
         .then((response) => {
-          this.navigateToExternalPath(
+          if (NativeApp.supportsNativeWebIntegration()) {
+            NativeApp.openWebIntegration(
+              this.appendAssertedLoginIdentity(this.redirectParameter, response),
+            );
+            return;
+          }
+
+          setWindowLocation(
             this.appendAssertedLoginIdentity(this.redirectParameter, response),
           );
         })
@@ -128,7 +129,7 @@ export default {
       if (NativeApp.supportsNativeWebIntegration()) {
         NativeApp.openWebIntegration(url);
       } else {
-        window.location = url;
+        setWindowLocation(url);
       }
     },
     canAccessSilverIntegration(store, { provider, serviceType }) {
@@ -182,7 +183,6 @@ export default {
     updateTitle({ jumpOffConfig, featureJumpOffContent }, next) {
       if (!isEmpty(featureJumpOffContent)) {
         const { jumpOffContent, thirdPartyWarning } = featureJumpOffContent;
-
         if (!isEmpty(thirdPartyWarning)) {
           this.$route.meta.titleKey = featureJumpOffContent.thirdPartyWarning.featureName;
         } else if (!isEmpty(jumpOffContent)) {
@@ -228,6 +228,14 @@ export default {
 
       redirectTo(this, INDEX_PATH);
     },
+    handleInternalRedirect(url) {
+      if (isNhsAppPath(url, this.$router)) {
+        redirectTo(this, url);
+        return;
+      }
+
+      redirectTo(this, INDEX_PATH);
+    },
     handleExternalRedirect() {
       this.matchedService = this.$store.getters['knownServices/matchOneByUrl'](this.redirectParameter) || {};
 
@@ -257,6 +265,30 @@ export default {
       };
 
       executeStep(0);
+    },
+    handleRedirectParameter(redirectParameter) {
+      if (isNhsAppRouteName(redirectParameter)) {
+        redirectByName(this, redirectParameter);
+        return;
+      }
+
+      const decodedParameter = decodeURIComponent(redirectParameter);
+      const path = this.resolvePatientUrl(decodedParameter);
+      if (isNhsAppHost(decodedParameter) || isNhsAppPath(path, this.$router)) {
+        this.handleInternalRedirect(path);
+        return;
+      }
+
+      this.handleExternalRedirect();
+    },
+    resolvePatientUrl(url) {
+      const trimmedPath = removeNhsAppHost(url);
+      return pathWithPatientPrefixOrUndefined({
+        store: this.$store,
+        path: trimmedPath,
+        router: this.$router,
+      })
+      || trimmedPath;
     },
   },
 };

@@ -58,7 +58,7 @@ describe('middleware/auth', () => {
     };
     dependancy.createRouteByNameObject = jest.fn();
     dependancy.createRoutePathObject = jest.fn();
-    dependancy.checkIfPathShouldHavePatientPrefix.mockImplementation(x => x.path);
+    dependancy.pathWithPatientPrefixOrUndefined.mockImplementation(x => x.path);
   });
 
   describe('isloggedIn is true', () => {
@@ -110,7 +110,7 @@ describe('middleware/auth', () => {
         store,
       };
       it('will not redirect if path is invalid', () => {
-        dependancy.checkIfPathShouldHavePatientPrefix.mockImplementation(undefined);
+        dependancy.pathWithPatientPrefixOrUndefined.mockImplementation(undefined);
         callAuth(to);
         expect(dependancy.createRoutePathObject).not.toBeCalledWith(expect.anything);
         expect(next).not.toBeCalledWith(expect.anything);

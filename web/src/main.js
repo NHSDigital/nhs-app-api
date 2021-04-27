@@ -58,20 +58,8 @@ const defineErrorHandling = () => {
   });
 
   store.app = app;
-  store.app.isNhsAppPath = (path) => {
-    const matches = router.getMatchedComponents(path);
-
-    if (matches.length === 0) {
-      return false;
-    }
-
-    const matchesWithNotFound = matches.filter(m => m !== undefined && m.name === 'NotFoundPage');
-    return matchesWithNotFound.length === 0;
-  };
 
   app.$mount('#app');
-
-
 
   // only adds a global reference to the vue instance running locally
   if (store.$env.VUE_WINDOW_OBJECT_ENABLED) {

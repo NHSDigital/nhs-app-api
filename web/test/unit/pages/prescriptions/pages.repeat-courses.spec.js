@@ -4,7 +4,7 @@ import Necessity from '@/lib/necessity';
 import RepeatCoursesPage from '@/pages/prescriptions/repeat-courses';
 import { PRESCRIPTION_REPEAT_COURSES_PATH } from '@/router/paths';
 import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
-import { mount } from '../../helpers';
+import { createRouter, mount } from '../../helpers';
 
 jest.mock('@/services/event-bus', () => ({
   ...jest.requireActual('@/services/event-bus'),
@@ -30,9 +30,6 @@ const createStore = ({
 } = {}) => ({
   dispatch: jest.fn(() => Promise.resolve()),
   app: {
-    router: {
-      push: jest.fn(),
-    },
     $analytics: {
       validationError: jest.fn(),
     },
@@ -78,12 +75,11 @@ const createRepeatCoursesPage = ($store) => {
     methods: {
       reload: jest.fn(),
     },
-    mocks: {
-      $route,
-      $store,
-      $style: {
-        msg: 'mock msg',
-      },
+    $route,
+    $router: createRouter(),
+    $store,
+    $style: {
+      msg: 'mock msg',
     },
   });
 };

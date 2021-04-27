@@ -11,6 +11,7 @@ import {
 } from '@/router/paths';
 import { INTERSTITIAL_REDIRECTOR_NAME, REDIRECT_PARAMETER, isNhsAppRouteName } from '@/router/names';
 import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
+import { getWindowLocationOrigin } from './window';
 
 const protocol = 'http://';
 const secureProtocol = 'https://';
@@ -191,6 +192,21 @@ export const createConditionalRedirectRouteByName = ({ name, query, params, stor
   });
 };
 
+export const isNhsAppPath = (path, router) => {
+  const matches = router.getMatchedComponents(path);
+
+  if (matches.length === 0) {
+    return false;
+  }
+
+  const matchesWithNotFound = matches.filter(m => m !== undefined && m.name === 'NotFoundPage');
+  return matchesWithNotFound.length === 0;
+};
+
+export const removeNhsAppHost = url => url.replace(`${getWindowLocationOrigin()}/`, '');
+
+export const isNhsAppHost = url => url.startsWith(getWindowLocationOrigin());
+
 export const redirectByName = ({ $router, $store }, name, query) => {
   const { currentRoute } = $router;
   const { params } = currentRoute;
@@ -249,13 +265,14 @@ export const removePatientIdPrefixFromPath = path =>
     : path.replace(new RegExp(`^/patient(/${PATIENT_ID_REGEX_PATTERN})?/?`), EMPTY_PATH));
 
 // TODO add more unit tests here
-export const checkIfPathShouldHavePatientPrefix = ({ path, store }) => {
-  if (store.app.isNhsAppPath(path)) {
+export const pathWithPatientPrefixOrUndefined = ({ path, store, router }) => {
+  if (isNhsAppPath(path, router)) {
     return path;
   }
+
   const trimmedPath = getTrimmedPath(path);
   const completePath = getPathWithPatientIdPrefix({ trimmedPath, store });
-  return store.app.isNhsAppPath(completePath) ? trimmedPath : undefined;
+  return isNhsAppPath(completePath, router) ? completePath : undefined;
 };
 
 export const createRoutePathObject = ({ path, query, store }) => {

@@ -5,7 +5,7 @@ import Vue from 'vue';
 import { createLocalVue } from '@vue/test-utils';
 import ViewOrders from '@/pages/prescriptions/view-orders';
 import { PRESCRIPTIONS_VIEW_ORDERS_PATH } from '@/router/paths';
-import { shallowMount } from '../../helpers';
+import { createRouter, shallowMount } from '../../helpers';
 
 const mockDependency = (name) => {
   ViewOrders.components[name] = {
@@ -87,15 +87,14 @@ const createViewOrdersPrescriptionsPage = ($store) => {
     methods: {
       reload: jest.fn(),
     },
-    mocks: {
-      $http,
-      $store,
-      $route,
-      $style: {
-        info: 'info',
-      },
-      showTemplate: () => true,
+    $http,
+    $store,
+    $route,
+    $router: createRouter(),
+    $style: {
+      info: 'info',
     },
+    showTemplate: () => true,
   });
 };
 
