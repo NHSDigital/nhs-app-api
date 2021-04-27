@@ -2,7 +2,7 @@ export default {
   accessWillNotBeGivenFor: 'Access to confidential patient information will not be given for:',
   allNhsOrganisationMustProvideInformation: 'All NHS organisations must provide information on the type of data they collect and how it\'s used. Data release registers are published by NHS Digital and Public Health England, showing records of the data they have shared with other organisations.',
   allNhsOrgsTrustsAndLocalAuthorities: 'all NHS organisations, trusts and local authorities',
-  allOtherHealthAndCareOrganisations: 'All other health and care organisations by 30 September 2021 (delayed from March 2020 to allow organisations to focus on the COVID-19 outbreak). ',
+  allOtherHealthAndCareOrganisations: 'all other health and care organisations by 30 September 2021 (delayed from March 2020 to allow organisations to focus on the COVID-19 outbreak). ',
   complianceDeadlineNationalDataOptOutExtension: 'Read more about the extension to the compliance deadline for national data opt-out.',
   changeOrCheckYourChoice: 'change or check your current choice',
   choiceWillNotImpactYourCare: 'Any choice you make will not impact your individual care.',
