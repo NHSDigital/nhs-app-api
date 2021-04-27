@@ -52,8 +52,7 @@ import MenuItemListHeader from '@/components/MenuItemListHeader';
 import MenuItemList from '@/components/MenuItemList';
 import MenuItem from '@/components/MenuItem';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import { redirectTo, isNumber, isEmptyArray } from '@/lib/utils';
-import { formatDate } from '@/plugins/filters';
+import { redirectTo, isNumber, isEmptyArray, formatInboxMessageTime, formatMessageDayWise } from '@/lib/utils';
 import srjIf from '@/lib/sjrIf';
 import last from 'lodash/fp/last';
 import {
@@ -129,16 +128,27 @@ export default {
     },
     getMessageLabel(summary) {
       const { subject, recipient, lastMessageDateTime } = summary;
+      const messageTime = formatInboxMessageTime(lastMessageDateTime, this.$t.bind(this));
+      const messageDay = formatMessageDayWise(lastMessageDateTime, this.$t.bind(this));
+      let timePrep = this.$t('generic.on');
+
+      if (messageDay === 'Yesterday') {
+        timePrep = '';
+      } else if ((messageTime === 'Midday') || (messageTime === 'Midnight') || (messageDay === 'Today')) {
+        timePrep = this.$t('generic.at');
+      }
 
       return (this.hasSubject) ?
-        this.$t('messages.conversationWithRecipientSubjectLastMessageOnDate', {
+        this.$t('messages.conversationWithRecipientSubjectLastMessageDate', {
           recipient,
           subject,
-          date: formatDate(lastMessageDateTime, 'D MMMM YYYY'),
+          timePrep,
+          date: messageTime,
         }) :
-        this.$t('messages.conversationWithRecipientLastMessageOnDate', {
+        this.$t('messages.conversationWithRecipientLastMessageDate', {
           recipient,
-          date: formatDate(lastMessageDateTime, 'D MMMM YYYY'),
+          timePrep,
+          date: messageTime,
         });
     },
     backLinkClicked() {

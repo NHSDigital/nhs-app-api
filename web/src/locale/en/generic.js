@@ -1,5 +1,6 @@
 export default {
   and: 'and',
+  at: 'at',
   back: 'Back',
   contactUs: 'Contact us',
   continue: 'Continue',
@@ -23,6 +24,7 @@ export default {
   no: 'No',
   nonUrgentAdvice: 'Non-urgent advice:',
   nhs111Link: '111.nhs.uk',
+  on: 'on',
   orCall: 'or call 111.',
   oneMonth: ' month old',
   oneYear: ' year old',
@@ -33,6 +35,7 @@ export default {
   sentYesterdayAtTimeFormat: '[Sent yesterday at ]{timeFormat}',
   skipToMainContent: 'Skip to main content',
   success: 'Success',
+  today: 'Today',
   tryAgain: 'Try again',
   unit: 'Unit',
   urgentAdvice: 'Urgent advice:',

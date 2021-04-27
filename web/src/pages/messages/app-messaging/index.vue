@@ -34,8 +34,7 @@
 </template>
 
 <script>
-import { formatDate } from '@/plugins/filters';
-import { redirectTo } from '@/lib/utils';
+import { redirectTo, formatInboxMessageTime, formatMessageDayWise } from '@/lib/utils';
 import { HEALTH_INFORMATION_UPDATES_MESSAGES_PATH, MESSAGES_PATH } from '@/router/paths';
 import { toPlainText } from '@/lib/markdown';
 import SummaryMessage from '@/components/messaging/SummaryMessage';
@@ -86,9 +85,20 @@ export default {
       redirectTo(this, this.messagePath());
     },
     messageLabel(senderMessage, message) {
-      let label = this.$t('messages.messagesFromSenderLastSentOnDate')
+      let timePrep = this.$t('generic.on');
+      const messageDate = formatInboxMessageTime(message.sentTime, this.$t.bind(this));
+      const messageDay = formatMessageDayWise(message.sentTime, this.$t.bind(this));
+
+      if (messageDay === 'Yesterday') {
+        timePrep = '';
+      } else if ((messageDate === 'Midday') || (messageDate === 'Midnight') || (messageDay === 'Today')) {
+        timePrep = this.$t('generic.at');
+      }
+
+      let label = this.$t('messages.messagesFromSenderLastSentDate')
         .replace('{sender}', senderMessage.sender)
-        .replace('{date}', formatDate(message.sentTime, 'DD MMMM YYYY'));
+        .replace('{timePrep}', timePrep)
+        .replace('{date}', messageDate);
 
       if (senderMessage.unreadCount > 0) {
         label += this.$t('messages.youHaveCountUnreadMessagePlural')

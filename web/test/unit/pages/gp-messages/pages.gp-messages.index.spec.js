@@ -2,8 +2,7 @@ import i18n from '@/plugins/i18n';
 import last from 'lodash/fp/last';
 import Page from '@/pages/messages/gp-messages/index';
 import SummaryMessage from '@/components/messaging/SummaryMessage';
-import { formatDate } from '@/plugins/filters';
-import { isEmptyArray, redirectTo } from '@/lib/utils';
+import { isEmptyArray, redirectTo, formatInboxMessageTime, formatMessageDayWise } from '@/lib/utils';
 import { INDEX_PATH } from '@/router/paths';
 import { createStore, mount } from '../../helpers';
 
@@ -90,8 +89,9 @@ describe('practice patient messaging inbox', () => {
     redirectTo.mockClear();
   });
 
-  beforeAll(() => {
-    formatDate.mockImplementation('2020-01-01T13:37:00.137Z', 'D MMMM YYYY').mockReturnValue('mock formatted date');
+  beforeEach(() => {
+    formatInboxMessageTime.mockImplementation('2020-01-01T13:37:00.137Z', 'D MMMM YYYY').mockReturnValue('mock formatted date');
+    formatMessageDayWise.mockImplementation('2020-01-01T13:37:00.137Z', 'D MMMM YYYY').mockReturnValue('mock day');
   });
 
   describe('created', () => {
@@ -148,6 +148,84 @@ describe('practice patient messaging inbox', () => {
 
       // Assert
       expect(messageLabel).toEqual('Conversation with Dr NHS Online. The last message in this conversation was sent on mock formatted date. View full message.');
+    });
+
+    it('should not contain "at" when the message date/time is Yesterday', () => {
+      // Arrange
+      formatInboxMessageTime.mockImplementation('2020-01-01T13:37:00.137Z', 'D MMMM YYYY').mockReturnValue('Yesterday');
+      formatMessageDayWise.mockImplementation('2020-01-01T13:37:00.137Z', 'D MMMM YYYY').mockReturnValue('Yesterday');
+
+      // Act
+      mountPage();
+      const messageLabel = wrapper.vm.getMessageLabel(summaries[0]);
+
+      // Assert
+      expect(messageLabel).toContain('The last message in this conversation was sent  Yesterday');
+    });
+
+    it('should contain "at" when the message date/time is Midday Today', () => {
+      // Arrange
+      formatInboxMessageTime.mockImplementation('2020-01-01T13:37:00.137Z', 'D MMMM YYYY').mockReturnValue('Midday');
+      formatMessageDayWise.mockImplementation('2020-01-01T13:37:00.137Z', 'D MMMM YYYY').mockReturnValue('Today');
+
+      // Act
+      mountPage();
+      const messageLabel = wrapper.vm.getMessageLabel(summaries[0]);
+
+      // Assert
+      expect(messageLabel).toContain('The last message in this conversation was sent at Midday');
+    });
+
+    it('should contain "at" when the message date/time is Midnight Today', () => {
+      // Arrange
+      formatInboxMessageTime.mockImplementation('2020-01-01T13:37:00.137Z', 'D MMMM YYYY').mockReturnValue('Midnight');
+      formatMessageDayWise.mockImplementation('2020-01-01T13:37:00.137Z', 'D MMMM YYYY').mockReturnValue('Today');
+
+      // Act
+      mountPage();
+      const messageLabel = wrapper.vm.getMessageLabel(summaries[0]);
+
+      // Assert
+      expect(messageLabel).toContain('The last message in this conversation was sent at Midnight');
+    });
+
+    it('should say "at 11:00am" when the message date/time is 11 am Today', () => {
+      // Arrange
+      formatInboxMessageTime.mockImplementation('2020-01-01T13:37:00.137Z', 'D MMMM YYYY').mockReturnValue('11:00AM');
+      formatMessageDayWise.mockImplementation('2020-01-01T13:37:00.137Z', 'D MMMM YYYY').mockReturnValue('Today');
+
+      // Act
+      mountPage();
+      const messageLabel = wrapper.vm.getMessageLabel(summaries[0]);
+
+      // Assert
+      expect(messageLabel).toContain('The last message in this conversation was sent at 11:00AM');
+    });
+
+    it('should prefix the day with "on" when the message date/time is within last week', () => {
+      // Arrange
+      formatInboxMessageTime.mockImplementation('2020-01-01T13:37:00.137Z', 'D MMMM YYYY').mockReturnValue('Thursday');
+      formatMessageDayWise.mockImplementation('2020-01-01T13:37:00.137Z', 'D MMMM YYYY').mockReturnValue('Thursday');
+
+      // Act
+      mountPage();
+      const messageLabel = wrapper.vm.getMessageLabel(summaries[0]);
+
+      // Assert
+      expect(messageLabel).toContain('The last message in this conversation was sent on Thursday');
+    });
+
+    it('should prefix date/time with "on" when the message date/time is more than one week in past', () => {
+      // Arrange
+      formatInboxMessageTime.mockImplementation('2020-01-01T13:37:00.137Z', 'D MMMM YYYY').mockReturnValue('20 April 2021');
+      formatMessageDayWise.mockImplementation('2020-01-01T13:37:00.137Z', 'D MMMM YYYY').mockReturnValue('20 April 2021');
+
+      // Act
+      mountPage();
+      const messageLabel = wrapper.vm.getMessageLabel(summaries[0]);
+
+      // Assert
+      expect(messageLabel).toContain('The last message in this conversation was sent on 20 April 2021');
     });
   });
 

@@ -120,6 +120,19 @@ export const formatIndividualMessageTime = (messageTime, $t) => {
   return messageMoment.calendar(moment.tz('Europe/London'), formatConfig);
 };
 
+export const formatMessageDayWise = (messageTime, $t) => {
+  const messageMoment = moment(messageTime);
+
+  const formatConfig = {
+    sameDay: `[${$t('generic.today')}]`,
+    lastDay: `[${$t('generic.yesterday')}]`,
+    lastWeek: 'dddd',
+    sameElse: 'D MMMM YYYY',
+  };
+
+  return messageMoment.calendar(moment.tz('Europe/London'), formatConfig);
+};
+
 export const key = {
   ArrowDown: 'ArrowDown',
   ArrowLeft: 'ArrowLeft',
