@@ -19,7 +19,6 @@ describe('Question', () => {
 
         expect(wrapper.find(`${questionTag}.nhsuk-label`).element).toBeDefined();
       });
-
     it('should render the text prop as html inside the question tag', () => {
       const wrapper = mount(Question, {
         propsData: {
@@ -30,7 +29,6 @@ describe('Question', () => {
 
       expect(wrapper.find('p>div.slot-content').element).toBeDefined();
     });
-
     it('should allow a for attribute to be set on the question (for labels)', () => {
       const wrapper = mount(Question, {
         propsData: {
@@ -43,7 +41,6 @@ describe('Question', () => {
       expect(wrapper.find('label[for=test-input-id]').element).toBeDefined();
     });
   });
-
   describe('Optional label', () => {
     each([{
       required: true,
@@ -75,23 +72,21 @@ describe('Question', () => {
       expect(wrapper.find('p.optionalLabel').exists()).toBe(visible);
     });
   });
-
   describe('Slots', () => {
-    it('should have a question-slot', () => {
+    it('should have a default slot', () => {
       const options = {
         propsData: {
-          questionTag: 'p',
+          ...defaultPropsData,
         },
         slots: {
-          questionSlot: '<div class="question-slot-content"><p>Slot data</p></div>',
+          default: '<div class="slot-content"><p>Slot data</p></div>',
         },
       };
       const wrapper = mount(Question, options);
 
-      expect(wrapper.find('div.question-slot-content').element).toBeDefined();
+      expect(wrapper.find('div.slot-content').element).toBeDefined();
     });
   });
-
   describe('Computed properties', () => {
     describe('questionClass', () => {
       each([{
@@ -109,6 +104,24 @@ describe('Question', () => {
         });
 
         expect(wrapper.vm.questionClass).toEqual(data.class);
+      });
+    });
+    describe('formGroupClasses', () => {
+      each([{
+        error: false,
+        classes: 'nhsuk-form-group',
+      }, {
+        error: true,
+        classes: ['nhsuk-form-group', 'nhsuk-form-group--error'],
+      }]).it('should set appropriate classes on the root element if it there is an error', (data) => {
+        const wrapper = mount(Question, {
+          propsData: {
+            ...defaultPropsData,
+            error: data.error,
+          },
+        });
+
+        expect(wrapper.vm.formGroupClasses).toEqual(data.classes);
       });
     });
   });

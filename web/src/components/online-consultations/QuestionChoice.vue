@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <fieldset class="nhsuk-fieldset">
     <div v-if="error && errorText">
       <span v-for="singleError in errorText"
             :id="`${name}error`" :key="singleError" class="nhsuk-error-message">
@@ -7,7 +7,7 @@
         {{ singleError }}
       </span>
     </div>
-    <span v-if="legend" name="legend" class="nhsuk-u-visually-hidden">{{ legend }}</span>
+    <legend v-if="legend" class="nhsuk-u-visually-hidden">{{ legend }}</legend>
     <radio-group :key="name"
                  v-model="selectedValue"
                  :name="name"
@@ -17,7 +17,7 @@
                  :render-as-html="renderAsHtml"
                  :a-described-by="ariaDescribed"
                  @select="selected"/>
-  </span>
+  </fieldset>
 </template>
 
 <script>

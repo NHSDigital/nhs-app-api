@@ -37,7 +37,7 @@ describe('questionChoice compoonent', () => {
   describe('legend', () => {
     it('will include legend element if legend provided', () => {
       wrapper = mountQuestion({ legend: 'Question choice legend' });
-      const legend = wrapper.find("[name='legend']");
+      const legend = wrapper.find('legend');
       expect(legend.text()).toEqual('Question choice legend');
     });
   });
