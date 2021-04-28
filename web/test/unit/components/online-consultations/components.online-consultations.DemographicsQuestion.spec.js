@@ -140,7 +140,7 @@ describe('demographics question', () => {
       });
 
       // Act
-      const questionText = component.find('question-stub > .demographicsQuestion > p.q-text');
+      const questionText = component.find('generic-question-wrapper-stub > .demographicsQuestion > p.q-text');
 
       // Assert
       expect(questionText).toBeDefined();

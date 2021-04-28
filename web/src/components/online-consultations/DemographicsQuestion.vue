@@ -13,8 +13,8 @@
         </span>
       </message-text>
     </message-dialog>
-    <question>
-      <div slot="question-slot" class="demographicsQuestion">
+    <generic-question-wrapper>
+      <div slot="questionSlot" class="demographicsQuestion">
         <slot/>
       </div>
       <form @submit.prevent="demographicsContinueClicked">
@@ -46,16 +46,16 @@
                               :path="backLink"
                               :button-text="'onlineConsultations.orchestrator.backButton'"
                               @clickAndPrevent="backClicked"/>
-    </question>
+    </generic-question-wrapper>
   </div>
 </template>
 
 <script>
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
-import Question from '@/components/online-consultations/Question';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
+import GenericQuestionWrapper from '@/components/online-consultations/GenericQuestionWrapper';
 import {
   DEMOGRAPHICS_QUESTION_NAME,
   DEMOGRAPHICS_QUESTION_OPTION,
@@ -74,9 +74,9 @@ export default {
   components: {
     MessageDialog,
     MessageText,
-    Question,
     GenericCheckbox,
     GenericButton,
+    GenericQuestionWrapper,
     DesktopGenericBackLink,
   },
   props: {

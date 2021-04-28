@@ -100,17 +100,16 @@ describe('orchestrator', () => {
       });
 
       describe('question components', () => {
-        const questionSelector = 'question-stub';
+        const genericQuestionSelector = 'genericquestionwrapper-stub';
+        const fieldsetQuestionSelector = 'fieldsetquestionwrapper-stub';
         let question;
 
         let id;
         let questionTag;
         let text;
-        let error;
         let isLegend;
         let name;
         let required;
-        let errorText;
         let accept;
         let maxSize;
         let options;
@@ -125,25 +124,21 @@ describe('orchestrator', () => {
         let questionInputVm;
 
         afterEach(() => {
-          ({ id, questionTag, text, error, isLegend } = questionVm);
-          ({ name, required, errorText } = questionInputVm);
+          ({ id, questionTag, text, isLegend } = questionVm);
+          ({ name, required } = questionInputVm);
 
           const questionInputId = questionInputVm.id;
-          const questionInputError = questionInputVm.error;
 
           // Assert
           if (!['boolean', 'choice', 'multiple_choice', 'quantity'].includes(question.type)) {
             expect(questionInputId).toEqual(question.name);
           }
-          expect(questionInputError).toEqual(true);
           expect(id).toEqual(question.id);
           expect(questionTag).toEqual(question.tag);
           expect(text).toEqual(question.text);
-          expect(error).toEqual(true);
           expect(isLegend).toEqual(question.isLegend);
           expect(name).toEqual(question.name);
           expect(required).toEqual(question.required);
-          expect(errorText).toEqual(['Select a file']);
         });
 
         describe('attachment', () => {
@@ -159,7 +154,7 @@ describe('orchestrator', () => {
             // Act
             mountOrchestrator();
 
-            questionVm = orchestrator.find(questionSelector).vm;
+            questionVm = orchestrator.find(genericQuestionSelector).vm;
             questionInputVm = orchestrator.find(questionInputSelector).vm;
 
             ({ accept, maxSize } = questionInputVm);
@@ -180,7 +175,7 @@ describe('orchestrator', () => {
             // Act
             mountOrchestrator();
 
-            questionVm = orchestrator.find(questionSelector).vm;
+            questionVm = orchestrator.find(fieldsetQuestionSelector).vm;
             questionInputVm = orchestrator.find(questionInputSelector).vm;
           });
         });
@@ -197,7 +192,7 @@ describe('orchestrator', () => {
             // Act
             mountOrchestrator();
 
-            questionVm = orchestrator.find(questionSelector).vm;
+            questionVm = orchestrator.find(fieldsetQuestionSelector).vm;
             questionInputVm = orchestrator.find(questionInputSelector).vm;
 
             ({ options } = questionInputVm);
@@ -223,7 +218,7 @@ describe('orchestrator', () => {
             // Act
             mountOrchestrator();
 
-            questionVm = orchestrator.find(questionSelector).vm;
+            questionVm = orchestrator.find(genericQuestionSelector).vm;
             questionInputVm = orchestrator.find(questionInputSelector).vm;
           });
         });
@@ -244,7 +239,7 @@ describe('orchestrator', () => {
             // Act
             mountOrchestrator();
 
-            questionVm = orchestrator.find(questionSelector).vm;
+            questionVm = orchestrator.find(genericQuestionSelector).vm;
             questionInputVm = orchestrator.find(questionInputSelector).vm;
 
             ({ min, max } = questionInputVm);
@@ -267,7 +262,7 @@ describe('orchestrator', () => {
             // Act
             mountOrchestrator();
 
-            questionVm = orchestrator.find(questionSelector).vm;
+            questionVm = orchestrator.find(genericQuestionSelector).vm;
             questionInputVm = orchestrator.find(questionInputSelector).vm;
 
             ({ source } = questionInputVm);
@@ -293,7 +288,7 @@ describe('orchestrator', () => {
             // Act
             mountOrchestrator();
 
-            questionVm = orchestrator.find(questionSelector).vm;
+            questionVm = orchestrator.find(fieldsetQuestionSelector).vm;
             questionInputVm = orchestrator.find(questionInputSelector).vm;
 
             ({ options, allOptionsRequired } = questionInputVm);
@@ -317,7 +312,7 @@ describe('orchestrator', () => {
             // Act
             mountOrchestrator();
 
-            questionVm = orchestrator.find(questionSelector).vm;
+            questionVm = orchestrator.find(genericQuestionSelector).vm;
             questionInputVm = orchestrator.find(questionInputSelector).vm;
 
             ({ options, maxValue } = questionInputVm);
@@ -339,7 +334,7 @@ describe('orchestrator', () => {
             // Act
             mountOrchestrator();
 
-            questionVm = orchestrator.find(questionSelector).vm;
+            questionVm = orchestrator.find(genericQuestionSelector).vm;
             questionInputVm = orchestrator.find(questionInputSelector).vm;
           });
         });
@@ -356,7 +351,7 @@ describe('orchestrator', () => {
             // Act
             mountOrchestrator();
 
-            questionVm = orchestrator.find(questionSelector).vm;
+            questionVm = orchestrator.find(genericQuestionSelector).vm;
             questionInputVm = orchestrator.find(questionInputSelector).vm;
 
             ({ maxLength } = questionInputVm);
@@ -443,7 +438,7 @@ describe('orchestrator', () => {
           mountOrchestrator();
 
           // Act
-          const renderedDescriptions = orchestrator.findAll('#result-container div question-stub').wrappers.map(w => w.vm.text);
+          const renderedDescriptions = orchestrator.findAll('#result-container div generic-question-wrapper-stub').wrappers.map(w => w.vm.text);
 
           // Assert
           expect(renderedDescriptions).toEqual(expectedDescriptions);
@@ -472,7 +467,7 @@ describe('orchestrator', () => {
           mountOrchestrator();
 
           // Act
-          const renderedTitlesAndActivities = orchestrator.findAll('#result-container div question-stub').wrappers.map(w => w.vm.text);
+          const renderedTitlesAndActivities = orchestrator.findAll('#result-container div generic-question-wrapper-stub').wrappers.map(w => w.vm.text);
 
           // Assert
           expect(renderedTitlesAndActivities).toEqual(expectedTitlesAndActivities);
