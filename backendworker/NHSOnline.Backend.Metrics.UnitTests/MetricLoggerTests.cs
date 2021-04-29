@@ -103,7 +103,13 @@ namespace NHSOnline.Backend.Metrics.UnitTests
             // Arrange
             var mockMetricContext = new Mock<IMetricContext>();
             var metricLogger = CreateMetricLogger(mockMetricContext);
-            var messageReadData = new MessageReadData("messageId_1234", "communicationId_5678", "transmissionId_4567");
+            var messageReadData = new MessageReadData(
+                "messageId_1234",
+                "communicationId_5678",
+                "transmissionId_4567",
+                "campaignId_1234",
+                "supplierId_5678"
+            );
             using var consoleOut = new CaptureConsoleOut();
 
             // Act
@@ -114,6 +120,8 @@ namespace NHSOnline.Backend.Metrics.UnitTests
             splitConsoleMessage.Should().Contain("MessageId=messageId_1234");
             splitConsoleMessage.Should().Contain("CommunicationId=communicationId_5678");
             splitConsoleMessage.Should().Contain("TransmissionId=transmissionId_4567");
+            splitConsoleMessage.Should().Contain("CampaignId=campaignId_1234");
+            splitConsoleMessage.Should().Contain("SupplierId=supplierId_5678");
         }
 
         [TestMethod]
@@ -383,7 +391,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests
                 yield return new object[] { Method(metricLogger => metricLogger.UserResearchOptOut()), "UserResearchOptOut" };
                 yield return new object[] { Method(metricLogger => metricLogger.TermsAndConditionsInitialConsent()), "TermsAndConditionsInitialConsent" };
 
-                var messageReadData = new MessageReadData("messageId", "communicationId", "transmissionId");
+                var messageReadData = new MessageReadData("messageId", "communicationId", "transmissionId", "campaignId", "supplierId");
                 yield return new object[] { Method(metricLogger => metricLogger.MessageRead(messageReadData)), "MessageRead" };
 
                 yield return new object[] { Method(metricLogger => metricLogger.NotificationsEnabled()), "NotificationsEnabled" };

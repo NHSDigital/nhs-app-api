@@ -86,6 +86,9 @@ services:
           if [ -f "$$MICROTEST_CERT_PASSPHRASE" ]; then
             export MICROTEST_CERT_PASSPHRASE=$$(<$$MICROTEST_CERT_PASSPHRASE)
           fi
+          if [ -f "$$NHSAPP_API_KEY" ]; then
+            export NHSAPP_API_KEY=$$(<$$NHSAPP_API_KEY)
+          fi
           if [ -f "$$ORGAN_DONATION_CERT_PASSPHRASE" ]; then
             export ORGAN_DONATION_CERT_PASSPHRASE=$$(<$$ORGAN_DONATION_CERT_PASSPHRASE)
           fi
@@ -109,6 +112,7 @@ services:
       - ./docker/fakegp_connectivity.env
       - ./docker/gplookup_connectivity.env
       - ./docker/im1cache_database.env
+      - ./docker/messages_connectivity.env
       - ./docker/microtest_connectivity.env
       - ./docker/organdonation_connectivity.env
       - ./docker/session_database.env
@@ -129,6 +133,7 @@ services:
       - gp_lookup_api_key
       - microtest_cert
       - microtest_cert_passphrase
+      - nhsapp_api_key
       - organ_donation_cert
       - organ_donation_cert_passphrase
       - session_encryption_key

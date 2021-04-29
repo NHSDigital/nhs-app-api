@@ -248,6 +248,11 @@ wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.onboardingsandpit
 # Add Appointment to Native Calendar
 addAppointmentToCalendarEnabled: true
 
+# Introductory messages
+sendIntroductoryMessage: false
+introductoryMessageCampaignId: "Intro v1"
+messagesApiResourceUrl: "/v1/api/users/{0}/messages"
+
 # Placeholder values
 cosmosdbKey: cGxhY2Vob2xkZXI=
 cosmosdbMongoKey: cGxhY2Vob2xkZXI=

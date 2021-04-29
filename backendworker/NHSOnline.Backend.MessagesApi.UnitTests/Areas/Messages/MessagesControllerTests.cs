@@ -340,16 +340,21 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             const string messageId = "id_1234";
             const string communicationId = "communicationId_2345";
             const string transmissionId = "transmissionId_3456";
+            const string campaignId = "campaignId_1234";
+            const string supplierId = "supplierId_5678";
 
             _mockMessageService.Setup(x =>
                     x.UpdateMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<AccessToken>(), It.IsAny<string>()))
-                .ReturnsAsync(new MessagePatchResult.Updated(messageId, communicationId, transmissionId));
+                .ReturnsAsync(new MessagePatchResult.Updated(messageId, communicationId, transmissionId, campaignId, supplierId));
 
             _mockMetricLogger
                 .Setup(x => x.MessageRead(It.Is<MessageReadData>(mrd =>
                     mrd.CommunicationId == communicationId &&
                     mrd.TransmissionId == transmissionId &&
-                    mrd.MessageId == messageId)))
+                    mrd.MessageId == messageId &&
+                    mrd.CampaignId == campaignId &&
+                    mrd.SupplierId == supplierId
+                    )))
                 .Returns(Task.CompletedTask);
 
             // Act

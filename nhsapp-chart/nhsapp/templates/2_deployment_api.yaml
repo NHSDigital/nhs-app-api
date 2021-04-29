@@ -363,6 +363,19 @@ spec:
       {{- end }}
         - name: SIXTEEN_WEEKS_SLOTS_ENABLED
           value: "{{ $.Values.sixteenWeeksSlotsEnabled }}"
+        - name: NHSAPP_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: nhsapp-api-key-{{ .Chart.AppVersion }}
+              key: apikey
+        - name: MESSAGES_API_BASE_URL
+          value: "https://nhsapp-messages-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}"
+        - name: SEND_INTRODUCTORY_MESSAGE
+          value: "{{ $.Values.sendIntroductoryMessage }}"
+        - name: INTRODUCTORY_MESSAGE_CAMPAIGN_ID
+          value: "{{ $.Values.introductoryMessageCampaignId }}"
+        - name: MESSAGES_API_RESOURCE_URL
+          value: "{{ $.Values.messagesApiResourceUrl }}"
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"

@@ -22,12 +22,14 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 
         public async Task<IActionResult> Visit(MessagePatchResult.Updated result)
         {
-            await _metricLogger.MessageRead(
-                new MessageReadData(
-                    result.Id,
-                    result.CommunicationId,
-                    result.TransmissionId)
-                );
+            await _metricLogger.MessageRead(new MessageReadData(
+                result.Id,
+                result.CommunicationId,
+                result.TransmissionId,
+                result.CampaignId,
+                result.SupplierId
+            ));
+
             return new NoContentResult();
         }
 

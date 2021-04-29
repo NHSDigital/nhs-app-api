@@ -54,6 +54,7 @@
     <Content Include="..\Rotativa\**\*" LinkBase="Rotativa\">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Remove="Resources\Markdown\IntroductoryMessage.md" />
     <Content Include="..\FakeGpSupplierConfig.yml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -102,5 +103,9 @@
     <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\TEST_GEC_ADM\TEST_GEC_ADM_AD_ISSUE_SICKNOTE\7_admin_issue_choice.json" />
     <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\TEST_GEC_ADM\TEST_GEC_ADM_AD_ISSUE_SICKNOTE\8_new_or_extend.json" />
     <_ContentIncludedByDefault Remove="ClinicalDecisionSupport\cdss-wiremock\stubs\__files\resources\serviceDefinition\response\TEST_GEC_ADM\TEST_GEC_ADM_AD_ISSUE_SICKNOTE\9_duration.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Markdown\IntroductoryMessage.md" />
   </ItemGroup>
 </Project>

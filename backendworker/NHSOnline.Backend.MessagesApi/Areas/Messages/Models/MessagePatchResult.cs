@@ -49,12 +49,22 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
             public string Id { get; }
             public string CommunicationId { get; }
             public string TransmissionId { get; }
+            public string CampaignId { get; }
+            public string SupplierId { get; }
 
-            public Updated(string id, string communicationId, string transmissionId)
+            public Updated(
+                string id,
+                string communicationId,
+                string transmissionId,
+                string campaignId,
+                string supplierId
+            )
             {
                 Id = id;
                 CommunicationId = communicationId;
                 TransmissionId = transmissionId;
+                CampaignId = campaignId;
+                SupplierId = supplierId;
             }
 
             public override T Accept<T>(IMessagePatchResultVisitor<T> visitor)

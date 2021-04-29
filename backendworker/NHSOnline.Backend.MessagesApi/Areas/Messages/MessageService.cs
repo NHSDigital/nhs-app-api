@@ -143,8 +143,14 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                 }
 
                 var record = foundResult.Records.First();
-                return new MessagePatchResult.Updated(record.Id.ToString(), record.CommunicationId,
-                    record.TransmissionId);
+
+                return new MessagePatchResult.Updated(
+                    record.Id.ToString(),
+                    record.SenderContext?.CommunicationId ?? record.CommunicationId,
+                    record.SenderContext?.TransmissionId ?? record.TransmissionId,
+                    record.SenderContext?.CampaignId,
+                    record.SenderContext?.SupplierId
+                );
             }
             catch (Exception e)
             {

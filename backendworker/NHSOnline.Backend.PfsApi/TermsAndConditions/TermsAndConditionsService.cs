@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Metrics;
+using NHSOnline.Backend.PfsApi.Messages;
 using NHSOnline.Backend.PfsApi.TermsAndConditions.Models;
 using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
@@ -17,6 +18,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
         private readonly IConsentRequestToTermsAndConditionsMapper _consentRequestToTermsAndConditionsMapper;
         private readonly IMapper<ConsentRequest, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> _consentRequestToUpdateMapper;
         private readonly IMapper<AnalyticsCookieAcceptance, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> _analyticsCookieAcceptanceToUpdateMapper;
+        private readonly IMessagesService _messagesService;
         private readonly IMetricLogger _metricLogger;
 
         public TermsAndConditionsService
@@ -27,6 +29,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             IConsentRequestToTermsAndConditionsMapper consentRequestToTermsAndConditionsMapper,
             IMapper<ConsentRequest, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> consentRequestToUpdateMapper,
             IMapper<AnalyticsCookieAcceptance, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> analyticsCookieAcceptanceToUpdateMapper,
+            IMessagesService messagesService,
             IMetricLogger metricLogger
         )
         {
@@ -36,6 +39,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             _consentRequestToTermsAndConditionsMapper = consentRequestToTermsAndConditionsMapper;
             _consentRequestToUpdateMapper = consentRequestToUpdateMapper;
             _analyticsCookieAcceptanceToUpdateMapper = analyticsCookieAcceptanceToUpdateMapper;
+            _messagesService = messagesService;
             _metricLogger = metricLogger;
         }
 
@@ -66,9 +70,19 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             DateTimeOffset consentTime
         )
         {
-            return request.UpdatingConsent
-                ? await UpdateConsent(nhsLoginId, request, consentTime)
-                : await RecordInitialConsent(nhsLoginId, request, consentTime);
+            if (request.UpdatingConsent)
+            {
+                return await UpdateConsent(nhsLoginId, request, consentTime);
+            }
+
+            var result = await RecordInitialConsent(nhsLoginId, request, consentTime);
+
+            if (result is TermsAndConditionsRecordConsentResult.InitialConsentRecorded)
+            {
+                await _messagesService.SendIntroductoryMessage(nhsLoginId);
+            }
+
+            return result;
         }
 
         private async Task<TermsAndConditionsRecordConsentResult> RecordInitialConsent

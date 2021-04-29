@@ -57,7 +57,7 @@ describe('message', () => {
       });
 
       it('will wrap content in a `<div>` then a `<p>` tag', () => {
-        expect(content).toBe('<div class="panel-content"><p>Lorem ipsum dolor sit amet</p></div>');
+        expect(content).toBe('<div class="panel-content"><p>Lorem ipsumdolor sit amet</p></div>');
       });
     });
   });

@@ -8,6 +8,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.PfsApi.UnitTests.Extensions;
 using NHSOnline.Backend.PfsApi.UserInfo;
 using RichardSzalay.MockHttp;
 using UnitTestHelper;
@@ -48,7 +49,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.UserInfo
         {
             // Arrange
             _mockHttpHandler
-                .WhenUserInfo(HttpMethod.Post, string.Empty)
+                .WhenRequest(HttpMethod.Post, BaseUri, string.Empty)
                 .Respond(HttpStatusCode.Created);
 
             // Act
@@ -67,7 +68,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.UserInfo
         {
             // Arrange
             _mockHttpHandler
-                .WhenUserInfo(HttpMethod.Post, string.Empty)
+                .WhenRequest(HttpMethod.Post, BaseUri, string.Empty)
                 .Respond(httpStatusCode);
 
             // Act
@@ -82,6 +83,5 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.UserInfo
         {
             _mockHttpHandler.Dispose();
         }
-
     }
 }

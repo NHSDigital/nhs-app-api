@@ -7,12 +7,22 @@ namespace NHSOnline.Backend.Metrics
         public string MessageId { get; }
         public string CommunicationId { get; }
         public string TransmissionId { get; }
+        public string CampaignId { get; }
+        public string SupplierId { get; }
 
-        public MessageReadData(string messageId, string communicationId, string transmissionId)
+        public MessageReadData(
+            string messageId,
+            string communicationId,
+            string transmissionId,
+            string campaignId,
+            string supplierId
+        )
         {
             MessageId = messageId;
             CommunicationId = communicationId;
             TransmissionId = transmissionId;
+            CampaignId = campaignId;
+            SupplierId = supplierId;
         }
 
         public IEnumerable<KeyValuePair<string, string>> ToKeyValuePairs()
@@ -20,6 +30,8 @@ namespace NHSOnline.Backend.Metrics
             yield return new KeyValuePair<string, string>("MessageId", MessageId);
             yield return new KeyValuePair<string, string>("CommunicationId", CommunicationId);
             yield return new KeyValuePair<string, string>("TransmissionId", TransmissionId);
+            yield return new KeyValuePair<string, string>("CampaignId", CampaignId);
+            yield return new KeyValuePair<string, string>("SupplierId", SupplierId);
         }
     }
 }

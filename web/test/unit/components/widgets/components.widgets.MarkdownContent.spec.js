@@ -117,6 +117,19 @@ describe('MarkdownContent', () => {
           });
         });
 
+        describe('newlines', () => {
+          let brElement;
+
+          beforeEach(() => {
+            wrapper = mountMarkdownContent({ content: 'Lorem ipsum  \r\ndolor sit amet' });
+            brElement = wrapper.find('br');
+          });
+
+          it('will render newline', () => {
+            expect(brElement.exists()).toBe(true);
+          });
+        });
+
         describe('images', () => {
           let imageElement;
 

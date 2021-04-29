@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Metrics;
+using NHSOnline.Backend.PfsApi.Messages;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
 using NHSOnline.Backend.PfsApi.TermsAndConditions.Models;
 using NHSOnline.Backend.Repository;
@@ -23,7 +24,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
         private Mock<IConsentRequestToTermsAndConditionsMapper> _mockConsentRequestToTermsAndConditionsMapper;
         private Mock<IMapper<ConsentRequest, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>>> _mockConsentRequestToUpdateMapper;
         private Mock<IMapper<AnalyticsCookieAcceptance, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>>> _mockAnalyticsCookieAcceptanceToUpdateMapper;
+        private Mock<IMessagesService> _mockMessagesService;
         private Mock<IMetricLogger> _mockMetricLogger;
+
+        private const string MessageId = "MessageId";
 
         [TestInitialize]
         public void TestInitialize()
@@ -41,6 +45,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
                 new Mock<IMapper<AnalyticsCookieAcceptance, DateTimeOffset,
                     UpdateRecordBuilder<TermsAndConditionsRecord>>>();
 
+            _mockMessagesService = new Mock<IMessagesService>(MockBehavior.Strict);
+
             _mockMetricLogger = new Mock<IMetricLogger>();
 
             _systemUnderTest = new TermsAndConditionsService(
@@ -50,7 +56,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
                 _mockConsentRequestToTermsAndConditionsMapper.Object,
                 _mockConsentRequestToUpdateMapper.Object,
                 _mockAnalyticsCookieAcceptanceToUpdateMapper.Object,
-                _mockMetricLogger.Object);
+                _mockMessagesService.Object,
+                _mockMetricLogger.Object
+            );
         }
 
         [TestMethod]
@@ -67,16 +75,21 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
             var consentTime = DateTimeOffset.Now;
 
             var record = new TermsAndConditionsRecord();
+
             _mockTermsAndConditionsRepository
                 .Setup(x => x.Create(It.IsAny<TermsAndConditionsRecord>()))
                 .ReturnsAsync(new RepositoryCreateResult<TermsAndConditionsRecord>.Created(record));
+
+            _mockMessagesService
+                .Setup(x => x.SendIntroductoryMessage(_nhsLoginId))
+                .ReturnsAsync(new MessagesResult.Success(MessageId));
 
             // Act
             var result = await _systemUnderTest.RecordConsent(_nhsLoginId, request, consentTime);
 
             // Assert
             _mockTermsAndConditionsRepository.Verify(x => x.Create(It.IsAny<TermsAndConditionsRecord>()));
-
+            _mockMessagesService.Verify(x => x.SendIntroductoryMessage(_nhsLoginId), Times.Once);
             _mockMetricLogger.Verify(x => x.TermsAndConditionsInitialConsent(), Times.Once);
 
             result.Should().BeOfType<TermsAndConditionsRecordConsentResult.InitialConsentRecorded>();
@@ -144,12 +157,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
                     x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()))
                 .ReturnsAsync(new RepositoryUpdateResult<TermsAndConditionsRecord>.Updated());
 
+            _mockMessagesService
+                .Setup(x => x.SendIntroductoryMessage(_nhsLoginId))
+                .ReturnsAsync(new MessagesResult.Success(MessageId));
+
             // Act
             var result = await _systemUnderTest.RecordConsent(_nhsLoginId, request, consentTime);
 
             // Assert
             _mockTermsAndConditionsRepository.Verify(x =>
                 x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()));
+            _mockMessagesService.Verify(x => x.SendIntroductoryMessage(_nhsLoginId), Times.Never);
             _mockMetricLogger.Verify(x => x.TermsAndConditionsInitialConsent(), Times.Never);
             result.Should().NotBeNull();
             result.Should().BeOfType<TermsAndConditionsRecordConsentResult.UpdateConsentRecorded>();
