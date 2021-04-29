@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         private AndroidCreateSessionBadRequestErrorPage(IAndroidDriverWrapper driver) => _driver = driver;
 
-        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Login failed").ScrollIntoView();
+        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Login failed");
 
         private AndroidLabel GoBackText => AndroidLabel.WithText(_driver, "Go back to the home screen and try logging in again.");
 

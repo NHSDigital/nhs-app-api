@@ -40,42 +40,42 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         public void Home()
         {
-            HomeIcon.ClickButton();
+            HomeIcon.Click();
         }
 
         public void Advice()
         {
-            AdviceIcon.ClickButton();
+            AdviceIcon.Click();
         }
 
         public void Appointments()
         {
-            AppointmentsIcon.ClickButton();
+            AppointmentsIcon.Click();
         }
 
         public void Prescriptions()
         {
-            PrescriptionsIcon.ClickButton();
+            PrescriptionsIcon.Click();
         }
 
         public void YourHealth()
         {
-            YourHealthIcon.ClickButton();
+            YourHealthIcon.Click();
         }
 
         public void Messages()
         {
-            MessagesIcon.ClickButton();
+            MessagesIcon.Click();
         }
 
         public void More()
         {
-            MoreIcon.ClickButton();
+            MoreIcon.Click();
         }
 
         public void Help()
         {
-            HelpIcon.ClickButton();
+            HelpIcon.Click();
         }
     }
 }

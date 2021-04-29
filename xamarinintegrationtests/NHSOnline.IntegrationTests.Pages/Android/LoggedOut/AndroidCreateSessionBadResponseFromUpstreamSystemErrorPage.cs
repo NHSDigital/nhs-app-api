@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         private AndroidCreateSessionBadResponseFromUpstreamSystemErrorPage(IAndroidDriverWrapper driver) => _driver = driver;
 
-        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Login failed").ScrollIntoView();
+        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Login failed");
 
         private AndroidLabel ThisCouldBeText => AndroidLabel.WithText(_driver, "This can be one of two problems:");
         private AndroidLabel CannotGetLoginDetailsText => AndroidLabel.WithText(_driver, "we cannot get your NHS login details");

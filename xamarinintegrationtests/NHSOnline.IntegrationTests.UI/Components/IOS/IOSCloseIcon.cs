@@ -7,19 +7,20 @@ using OpenQA.Selenium.Appium.iOS;
 
 namespace NHSOnline.IntegrationTests.UI.Components.IOS
 {
-    public sealed class IOSIcon
+    // NHS0-13681: Temporary implementation - to be migrated to IOSIcon
+    public class IOSCloseIcon
     {
         private readonly IIOSInteractor _interactor;
         private readonly string _name;
 
-        private IOSIcon(IIOSInteractor interactor, string name)
+        private IOSCloseIcon(IIOSInteractor interactor, string name)
         {
             _interactor = interactor;
             _name = name;
         }
 
-        public static IOSIcon WithName(IIOSInteractor interactor, string name)
-            => new IOSIcon(interactor, name);
+        public static IOSCloseIcon WithDescription(IIOSInteractor interactor, string description)
+            => new IOSCloseIcon(interactor, description);
 
         public void Click()
             => ActOnElement(e => e.Click(), FindBy);
@@ -31,6 +32,6 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
             => _interactor.ActOnElement(findBy, action);
 
         private By FindBy
-            => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeButton' AND name == {_name.QuotePredicateLiteral()}");
+            => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeOther' AND name == {_name.QuotePredicateLiteral()}");
     }
 }

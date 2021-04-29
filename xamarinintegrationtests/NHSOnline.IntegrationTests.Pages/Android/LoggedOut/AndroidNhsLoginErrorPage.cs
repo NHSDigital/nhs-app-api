@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         private AndroidNhsLoginErrorPage(IAndroidDriverWrapper driver) => _driver = driver;
 
-        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Login failed").ScrollIntoView();
+        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Login failed");
 
         private AndroidLabel CannotGetDetailsText => AndroidLabel.WithText(_driver, "We cannot get your details from your GP surgery.");
         private AndroidLabel GoBackText => AndroidLabel.WithText(_driver, "Go back to the home screen and try logging in again.");
