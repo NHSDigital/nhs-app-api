@@ -147,7 +147,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
             var page = _pageFactory.CreatePageFor(model);
             await _view.AppNavigation
-                .Push(page)
+                .PushAnimated(page)
                 .PreserveThreadContext();
         }
 

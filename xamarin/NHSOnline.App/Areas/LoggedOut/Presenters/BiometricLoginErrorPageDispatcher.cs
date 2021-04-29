@@ -30,7 +30,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         {
             var couldNotLoginModel = new BiometricLoginCouldNotLoginModel();
             var couldNotLoginView = _pageFactory.CreatePageFor(couldNotLoginModel);
-            await _view.AppNavigation.Push(couldNotLoginView).PreserveThreadContext();
+            await _view.AppNavigation.PushAnimated(couldNotLoginView).PreserveThreadContext();
         }
 
         public async Task ShowBiometricLoginFailed()
@@ -49,28 +49,28 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         {
             var model = new BiometricLoginTouchIdFailedModel();
             var view = _pageFactory.CreatePageFor(model);
-            await _view.AppNavigation.Push(view).PreserveThreadContext();
+            await _view.AppNavigation.PushAnimated(view).PreserveThreadContext();
         }
 
         private async Task ShowBiometricLoginFaceIdFailed()
         {
             var model = new BiometricLoginFaceIdFailedModel();
             var view = _pageFactory.CreatePageFor(model);
-            await _view.AppNavigation.Push(view).PreserveThreadContext();
+            await _view.AppNavigation.PushAnimated(view).PreserveThreadContext();
         }
 
         private async Task ShowBiometricLoginTouchIdInvalidated()
         {
             var model = new BiometricLoginTouchIdInvalidatedModel();
             var view = _pageFactory.CreatePageFor(model);
-            await _view.AppNavigation.Push(view).PreserveThreadContext();
+            await _view.AppNavigation.PushAnimated(view).PreserveThreadContext();
         }
 
         private async Task ShowBiometricLoginFaceIdInvalidated()
         {
             var model = new BiometricLoginFaceIdInvalidatedModel();
             var view = _pageFactory.CreatePageFor(model);
-            await _view.AppNavigation.Push(view).PreserveThreadContext();
+            await _view.AppNavigation.PushAnimated(view).PreserveThreadContext();
         }
 
         private sealed class BiometricLoginInvalidatedStatusResultVisitor : IBiometricStatusResultVisitor<Task>

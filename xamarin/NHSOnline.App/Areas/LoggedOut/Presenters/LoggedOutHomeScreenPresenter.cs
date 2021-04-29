@@ -106,7 +106,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         {
             var gettingStartedModel = new GettingStartedModel(_deeplinkUrl);
             var gettingStartedPage = _pageFactory.CreatePageFor(gettingStartedModel);
-            await _view.AppNavigation.Push(gettingStartedPage).PreserveThreadContext();
+            await _view.AppNavigation.PushAnimated(gettingStartedPage).PreserveThreadContext();
         }
 
         private Task DeeplinkRequested(Uri deeplinkUrl)
@@ -120,7 +120,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var pkceCodes = _nhsLoginService.GeneratePkceCodes();
             var loginModel = new NhsLoginModel(pkceCodes, fidoAuthResponse, _deeplinkUrl);
             var loginView = _pageFactory.CreatePageFor(loginModel);
-            await _view.AppNavigation.Push(loginView).PreserveThreadContext();
+            await _view.AppNavigation.PushAnimated(loginView).PreserveThreadContext();
         }
 
         private async Task ShowCouldNotLoginWithBiometrics()

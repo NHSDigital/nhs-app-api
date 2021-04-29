@@ -49,7 +49,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task ViewOnBackHomeRequested()
         {
             await _view.AppNavigation
-                .PopToRoot()
+                .PopToRootAnimated()
                 .PreserveThreadContext();
         }
     }

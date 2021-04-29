@@ -18,43 +18,43 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         public async Task HomeRequested()
         {
-            await _appNavigation.PopToRootAnimated().PreserveThreadContext();
+            await _appNavigation.PopToRoot().PreserveThreadContext();
             await _rootHandler.HomeRequested().PreserveThreadContext();
         }
 
         public async Task AdviceRequested()
         {
-            await _appNavigation.PopToRootAnimated().PreserveThreadContext();
+            await _appNavigation.PopToRoot().PreserveThreadContext();
             await _rootHandler.AdviceRequested().PreserveThreadContext();
         }
 
         public async Task AppointmentsRequested()
         {
-            await _appNavigation.PopToRootAnimated().PreserveThreadContext();
+            await _appNavigation.PopToRoot().PreserveThreadContext();
             await _rootHandler.AppointmentsRequested().PreserveThreadContext();
         }
 
         public async Task PrescriptionsRequested()
         {
-            await _appNavigation.PopToRootAnimated().PreserveThreadContext();
+            await _appNavigation.PopToRoot().PreserveThreadContext();
             await _rootHandler.PrescriptionsRequested().PreserveThreadContext();
         }
 
         public async Task YourHealthRequested()
         {
-            await _appNavigation.PopToRootAnimated().PreserveThreadContext();
+            await _appNavigation.PopToRoot().PreserveThreadContext();
             await _rootHandler.YourHealthRequested().PreserveThreadContext();
         }
 
         public async Task MoreRequested()
         {
-            await _appNavigation.PopToRootAnimated().PreserveThreadContext();
+            await _appNavigation.PopToRoot().PreserveThreadContext();
             await _rootHandler.MoreRequested().PreserveThreadContext();
         }
 
         public async Task MessagesRequested()
         {
-            await _appNavigation.PopToRootAnimated().PreserveThreadContext();
+            await _appNavigation.PopToRoot().PreserveThreadContext();
             await _rootHandler.MessagesRequested().PreserveThreadContext();
         }
 
