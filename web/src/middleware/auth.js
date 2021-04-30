@@ -14,6 +14,7 @@ import { createRouteByNameObject, createRoutePathObject, pathWithPatientPrefixOr
 export default ({ router, store, to, next }) => {
   const isLoggedIn = store.getters['session/isLoggedIn']();
   const santizedPath = pathWithPatientPrefixOrUndefined({ path: to.path, store, router });
+
   if (!isAnonymous(to) && !isLoggedIn) {
     if (to.path === EMPTY_PATH || !santizedPath) {
       return next({ name: LOGIN_NAME });
@@ -23,7 +24,7 @@ export default ({ router, store, to, next }) => {
     let navigateToRedirector = to.name === INTERSTITIAL_REDIRECTOR_NAME;
     if (!to.name) {
       queryParam = santizedPath;
-      navigateToRedirector = santizedPath === INTERSTITIAL_REDIRECTOR_PATH;
+      navigateToRedirector = santizedPath === `/patient/${INTERSTITIAL_REDIRECTOR_PATH}`;
     }
 
     const query = { [REDIRECT_PARAMETER]: queryParam };

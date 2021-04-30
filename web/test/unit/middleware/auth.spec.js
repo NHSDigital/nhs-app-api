@@ -53,12 +53,11 @@ describe('middleware/auth', () => {
       getters,
       app: {
         $router,
-        isNhsAppPath: jest.fn(),
       },
     };
     dependancy.createRouteByNameObject = jest.fn();
     dependancy.createRoutePathObject = jest.fn();
-    dependancy.pathWithPatientPrefixOrUndefined.mockImplementation(x => x.path);
+    dependancy.pathWithPatientPrefixOrUndefined.mockImplementation(x => `/patient/${x.path}`);
   });
 
   describe('isloggedIn is true', () => {
@@ -180,7 +179,7 @@ describe('middleware/auth', () => {
       query[REDIRECT_PARAMETER] = APPOINTMENTS_NAME;
       beforeEach(() => {
         callAuth({
-          ...REDIRECTOR,
+          ...{ path: 'redirector' },
           query,
         });
       });
