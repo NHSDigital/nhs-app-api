@@ -53,6 +53,7 @@
 import GpAdviceMenuItem from '@/components/menuItems/GpAdviceMenuItem';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
+import NativeApp from '@/services/native-app';
 import sjrIf from '@/lib/sjrIf';
 import { SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS } from '@/router/externalLinks';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
@@ -95,7 +96,11 @@ export default {
       return `${this.$t(header)}. ${this.$t(body)}`;
     },
     navigateToWebIntegration(url) {
-      window.open(url, '_blank', 'noopener,noreferrer');
+      if (NativeApp.supportsNativeWebIntegration()) {
+        NativeApp.openWebIntegration(url);
+      } else {
+        window.open(url, '_blank', 'noopener,noreferrer');
+      }
     },
   },
 };

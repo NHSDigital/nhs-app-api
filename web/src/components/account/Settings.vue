@@ -11,7 +11,7 @@
                :target="(isNativeApp ? '_parent' : '_blank')"
                :text="$t('account.nhsLogin')"
                :aria-label="$t('account.nhsLogin')"
-               :href="settingsUrl"/>
+               :click-func="goToNHSSettings"/>
     <menu-item v-if="showNotifications"
                id="btn_notificationOptions"
                :header-tag="headerTag"
@@ -29,6 +29,7 @@
 <script>
 import { ACCOUNT_NOTIFICATIONS_PATH, LOGIN_SETTINGS_PATH } from '@/router/paths';
 import MenuItem from '@/components/MenuItem';
+import NativeApp from '@/services/native-app';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import sjrIf from '@/lib/sjrIf';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
@@ -86,9 +87,6 @@ export default {
       return this.$store.getters['session/isProofLevel9'];
     },
   },
-  mounted() {
-    this.goToNHSSettings();
-  },
   methods: {
     goToLoginOptions() {
       redirectTo(this, LOGIN_SETTINGS_PATH);
@@ -103,7 +101,17 @@ export default {
             IntendedRelyingPartyUrl: window.location.hostname,
           },
         });
-      this.settingsUrl = `${this.cidSettingsUrl}?asserted_login_identity=${token}`;
+      const settingsUrl = `${this.cidSettingsUrl}?asserted_login_identity=${token}`;
+
+      if (this.isNativeApp) {
+        if (NativeApp.supportsNativeWebIntegration()) {
+          NativeApp.openWebIntegration(settingsUrl);
+        } else {
+          window.location = settingsUrl;
+        }
+      } else {
+        window.open(settingsUrl, '_blank', 'noopener,noreferrer');
+      }
     },
   },
 };

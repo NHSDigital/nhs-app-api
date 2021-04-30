@@ -32,6 +32,7 @@ describe('More Page', () => {
         webVersion: 'web',
       },
     };
+    window.open = jest.fn();
   });
 
   const buildStoreGetters = ({
