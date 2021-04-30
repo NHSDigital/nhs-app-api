@@ -503,7 +503,7 @@
       "integrationLevel": "SilverWithWebNavigation",
       "showSpinner": true,
       "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": false,
+      "requiresAssertedLoginIdentity": true,
       "validateSession": true,
       "url": "https://vaccine-status-dev-uks.azurewebsites.net"
     },

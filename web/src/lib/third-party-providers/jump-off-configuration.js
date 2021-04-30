@@ -274,7 +274,7 @@ const thirdPartyProvider = {
   nhsd: {
     vaccineRecord: {
       jumpOffId: 'vaccineRecord',
-      redirectPath: '/',
+      redirectPath: '/sso',
       provider: 'nhsd',
       serviceType: 'vaccineRecord',
     },
