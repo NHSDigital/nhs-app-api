@@ -4,6 +4,10 @@ using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
+using NHSOnline.IntegrationTests.Pages.IOS;
+using NHSOnline.IntegrationTests.Pages.IOS.Home;
+using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
+using NHSOnline.IntegrationTests.Pages.IOS.WebIntegration;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -76,6 +80,59 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .PageContent.AssertPhotoCaptured();
         }
 
-        // IOS test to be added.
+        [NhsAppIOSTest]
+        public void APatientWithProofLevelFiveCanTakeAPhotoOfTheirDocumentIOS(IIOSDriverWrapper driver)
+        {
+            var patient = new P5Patient();
+            using var patients = Mocks.Patients.Add(patient);
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            IOSGettingStartedPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            IOSStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
+
+            IOSTermsAndConditionsPage
+                .AssertOnPage(driver)
+                .PageContent.AcceptTermsAndConditions();
+
+            IOSUserResearchOptInPage
+                .AssertOnPage(driver)
+                .PageContent.OptInToUserResearch();
+
+            IOSManageNotificationsPromptPage
+                .AssertOnPage(driver)
+                .PageContent.Continue();
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .PageContent.ProveYourIdentityContinue();
+
+            IOSStubbedLoginUpliftPage
+                 .AssertOnPage(driver)
+                 .PageContent.OpenCamera();
+
+            IOSImageSourceDialog
+                .IfDisplayed(driver, page => page.TakePhoto());
+
+            IOSCameraPermissionDialog
+                .AssertDisplayed(driver)
+                .Allow();
+
+            IOSCamera
+                .AssertDisplayed(driver)
+                .Capture()
+                .UsePhoto();
+
+            IOSStubbedLoginUpliftPage
+                .AssertOnPage(driver)
+                .PageContent.AssertPhotoCaptured();
+        }
     }
 }

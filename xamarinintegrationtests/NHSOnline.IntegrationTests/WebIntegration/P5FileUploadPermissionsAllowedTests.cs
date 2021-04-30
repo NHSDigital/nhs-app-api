@@ -112,7 +112,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                  .AssertOnPage(driver)
                  .UploadFile();
 
-            IOSFileUploadDialog
+             IOSImageSourceDialog
                 .AssertDisplayed(driver)
                 .Browse();
 

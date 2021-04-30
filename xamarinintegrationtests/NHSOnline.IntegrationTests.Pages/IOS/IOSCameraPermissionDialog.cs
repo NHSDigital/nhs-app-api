@@ -16,11 +16,11 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             _title = title;
         }
 
-        private IOSAlert Alert => IOSAlert.WithText(_driver, _title);
+        private IOSAlert Alert => IOSAlert.WithMatchingText(_driver, _title);
 
         public static IOSCameraPermissionDialog AssertDisplayed(IIOSDriverWrapper driver) => AssertDisplayed(
             driver,
-            $"“NHSOnline.App” Would Like to Access the Camera{Environment.NewLine}So you can take a photo of your I.D.");
+            $"“NHS App BrowserStack” Would Like to Access the Camera{Environment.NewLine}So you can take a photo of your I.D.");
 
         private static IOSCameraPermissionDialog AssertDisplayed(IIOSDriverWrapper driver, string text)
         {
