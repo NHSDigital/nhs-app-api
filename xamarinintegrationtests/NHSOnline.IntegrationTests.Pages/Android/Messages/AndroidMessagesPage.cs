@@ -13,7 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Messages
 
         private AndroidFullNavigation Navigation { get; }
 
-        private MessagesPageContent PageContent { get; }
+        public MessagesPageContent PageContent { get; }
 
         public static AndroidMessagesPage AssertOnPage(IAndroidDriverWrapper driver)
         {

@@ -13,6 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         }
 
         private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Messages");
+        private WebMenuItem TestProviderMenuItem => WebMenuItem.WithTitle(_interactor, "Test Provider");
 
         internal void AssertOnPage()
         {
@@ -23,6 +24,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         {
             Title.AssertVisible();
             return this;
+        }
+
+        public void TestProvider()
+        {
+            TestProviderMenuItem.Click();
         }
     }
 }

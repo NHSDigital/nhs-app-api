@@ -86,5 +86,17 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         }
 
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);
+
+        private void WebViewNavigating(object sender, WebNavigatingEventArgs e)
+        {
+            Spinner.IsVisible = true;
+            WebView.IsVisible = false;
+        }
+
+        private void WebOnEndNavigating(object sender, WebNavigatedEventArgs e)
+        {
+            Spinner.IsVisible = false;
+            WebView.IsVisible = true;
+        }
     }
 }

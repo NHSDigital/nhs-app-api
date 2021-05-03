@@ -4,7 +4,7 @@ services:
 
   pfs.local.bitraft.io:
     env_file:
-      - ./docker/inttests/env/ers_connectivity.env
+      - ./docker/inttests/env/known_services_connectivity.env
       - ./docker/inttests/env/vision_connectivity.env
 
   stubs.local.bitraft.io:
@@ -15,6 +15,7 @@ services:
       default:
         aliases:
           - ers.stubs.local.bitraft.io
+          - silverintegrationtestprovider.stubs.local.bitraft.io
 
   browserstack.local:
     image: ${DOCKER_IMAGE_BROWSERSTACK_LOCAL}

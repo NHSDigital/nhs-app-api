@@ -13,7 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Messages
 
         public IOSFullNavigation Navigation { get; }
 
-        private MessagesPageContent PageContent { get; }
+        public MessagesPageContent PageContent { get; }
 
         public static IOSMessagesPage AssertOnPage(IIOSDriverWrapper driver)
         {

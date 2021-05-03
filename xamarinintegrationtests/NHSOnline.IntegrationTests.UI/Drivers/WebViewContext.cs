@@ -15,6 +15,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         public static WebViewContext NhsLoginUplift { get; } = new NhsLoginUpliftWebViewContext();
         public static WebViewContext NhsApp { get; } = new NhsAppWebViewContext();
         public static WebViewContext ErsWebIntegration { get; } = new ErsWebIntegrationWebViewContext();
+        public static WebViewContext TestProviderWebIntegration { get; } = new TestWebIntegrationProviderWebViewContext();
 
         internal abstract void AssertContextReady(IWebDriver driver);
 
@@ -61,6 +62,13 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         }
 
         private class ErsWebIntegrationWebViewContext : WebViewContext
+        {
+            internal override void AssertContextReady(IWebDriver driver)
+            {
+            }
+        }
+
+        private class TestWebIntegrationProviderWebViewContext : WebViewContext
         {
             internal override void AssertContextReady(IWebDriver driver)
             {
