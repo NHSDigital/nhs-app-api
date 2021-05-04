@@ -3,7 +3,8 @@
     <div class="warning-content-panel__content">
       <h1 ref="warningContentPanelHeader"
           tabindex="-1"
-          class="nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-4">
+          class="nhsuk-heading-l nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0
+                 nhsuk-u-margin-bottom-4">
         <p class="nhsuk-u-padding-top-4 nhsuk-caption-l whiteText"
            data-purpose="warning-pre-header">
           <slot name="preHeader"/>
