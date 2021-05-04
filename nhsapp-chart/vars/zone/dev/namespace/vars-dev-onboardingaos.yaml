@@ -43,3 +43,4 @@ api:
     services__substraktPatientPack_admin__url: https://admin-request.aoc.substrakthealth.com
     services__substraktPatientPack_auth__url: https://auth.aoc.substrakthealth.com
     services__netCompany__url: https://stage.covid-status.service.nhsx.nhs.uk
+    services__nhsd__url: https://vaccine-status-int.azurefd.net
