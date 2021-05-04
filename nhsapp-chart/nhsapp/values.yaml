@@ -337,12 +337,12 @@ cid:
   image: nhsonline-backendcidapi
   image_tag: latest
   imagePullPolicy: Always
-  minAvailable: 4
-  minReplicas: 4
+  minAvailable: 2
+  minReplicas: 2
   maxReplicas: 100
   memoryRequest: "896Mi"
   memoryLimit: "896Mi"
-  cpuRequest: "1400m"
+  cpuRequest: "100m"
   cpuLimit: "1400m"
   targetCPUUtilizationPercentage: 35
   mongoDatabaseAuditCollection: audit
