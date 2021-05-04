@@ -282,7 +282,7 @@ const thirdPartyProvider = {
   netCompany: {
     vaccineRecord: {
       jumpOffId: 'vaccineRecord',
-      redirectPath: '/covid-status-sso?journey=domestic',
+      redirectPath: '/covid-status-sso',
       provider: 'netCompany',
       serviceType: 'vaccineRecord',
     },
