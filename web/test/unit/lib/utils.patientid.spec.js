@@ -1,8 +1,12 @@
+import VueRouter from 'vue-router';
 import each from 'jest-each';
 import {
   getPathWithPatientIdPrefix,
   removePatientIdPrefixFromPath,
+  pathWithPatientPrefixOrUndefined,
 } from '@/lib/utils';
+import { allRoutes } from '@/router';
+import { localVue } from '../helpers';
 
 describe('util library patientId', () => {
   describe('getPathWithPatientIdPrefix', () => {
@@ -58,6 +62,55 @@ describe('util library patientId', () => {
       ['/patient/c5af7c34-b4ba-4f1a-bff8-476324e5f835/a/b', '/a/b'],
     ]).it('will remove the /patient/patientId prefix from the path', (path, expected) => {
       expect(removePatientIdPrefixFromPath(path)).toEqual(expected);
+    });
+  });
+
+  describe('pathWithPatientPrefixOrUndefined', () => {
+    let $store;
+    let $router;
+    const patientId = '330b2795-e20f-427e-9699-7943dd31d4db';
+    beforeEach(() => {
+      localVue.use(VueRouter);
+      $router = new VueRouter({
+        mode: 'history',
+        routes: allRoutes,
+      });
+      $store = {
+        getters: {
+          'linkedAccounts/getPatientId': patientId,
+          'linkedAccounts/isPatientIdNotEmpty': true,
+        },
+      };
+    });
+
+    it('will add patient id prefix when url does not begin with patient', () => {
+      expect(pathWithPatientPrefixOrUndefined(
+        { path: '/appointments', store: $store, router: $router },
+      )).toBe(`/patient/${patientId}/appointments`);
+    });
+
+    it('will add not add patient id prefix when url begins with patient', () => {
+      expect(pathWithPatientPrefixOrUndefined(
+        { path: '/patient/appointments', store: $store, router: $router },
+      )).toBe('/patient/appointments');
+    });
+
+    it('returns undefined when host not does not match', () => {
+      expect(pathWithPatientPrefixOrUndefined(
+        { path: 'https://www.nhsapp.com/appointments', store: $store, router: $router },
+      )).toBe(undefined);
+    });
+
+    it('returns undefined when not an app path', () => {
+      expect(pathWithPatientPrefixOrUndefined(
+        { path: '/appointments-undefined', store: $store, router: $router },
+      )).toBe(undefined);
+    });
+
+    it('returns undefined when NotFoundPage', () => {
+      expect(pathWithPatientPrefixOrUndefined(
+        { path: '/NotFoundPage', store: $store, router: $router },
+      )).toBe(undefined);
     });
   });
 });

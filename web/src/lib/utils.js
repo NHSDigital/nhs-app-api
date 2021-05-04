@@ -264,7 +264,6 @@ export const removePatientIdPrefixFromPath = path =>
     ? path
     : path.replace(new RegExp(`^/patient(/${PATIENT_ID_REGEX_PATTERN})?/?`), EMPTY_PATH));
 
-// TODO add more unit tests here
 export const pathWithPatientPrefixOrUndefined = ({ path, store, router }) => {
   if (isNhsAppPath(path, router)) {
     return path;
