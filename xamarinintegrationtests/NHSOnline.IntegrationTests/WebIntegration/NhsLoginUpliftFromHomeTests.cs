@@ -21,29 +21,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
             var patient = new P5Patient();
             using var patients = Mocks.Patients.Add(patient);
 
-            AndroidLoggedOutHomePage
-                .AssertOnPage(driver)
-                .ContinueWithNhsLogin();
-
-            AndroidGettingStartedPage
-                .AssertOnPage(driver)
-                .Continue();
-
-            AndroidStubbedLoginPage
-                .AssertOnPage(driver)
-                .PageContent.Login(patient);
-
-            AndroidTermsAndConditionsPage
-                .AssertOnPage(driver)
-                .PageContent.AcceptTermsAndConditions();
-
-            AndroidUserResearchOptInPage
-                .AssertOnPage(driver)
-                .PageContent.OptInToUserResearch();
-
-            AndroidManageNotificationsPromptPage
-                .AssertOnPage(driver)
-                .PageContent.Continue();
+            LoginProcess.LogAndroidPatientIn(driver, patient);
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
@@ -59,29 +37,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
             var patient = new P5Patient();
             using var patients = Mocks.Patients.Add(patient);
 
-            IOSLoggedOutHomePage
-                .AssertOnPage(driver)
-                .ContinueWithNhsLogin();
-
-            IOSGettingStartedPage
-                .AssertOnPage(driver)
-                .Continue();
-
-            IOSStubbedLoginPage
-                .AssertOnPage(driver)
-                .PageContent.Login(patient);
-
-            IOSTermsAndConditionsPage
-                .AssertOnPage(driver)
-                .PageContent.AcceptTermsAndConditions();
-
-            IOSUserResearchOptInPage
-                .AssertOnPage(driver)
-                .PageContent.OptInToUserResearch();
-
-            IOSManageNotificationsPromptPage
-                .AssertOnPage(driver)
-                .PageContent.Continue();
+            LoginProcess.LogIOSPatientIn(driver, patient);
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)

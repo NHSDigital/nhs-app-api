@@ -23,29 +23,7 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             using var patients = Mocks.Patients.Add(patient);
 
-            IOSLoggedOutHomePage
-                .AssertOnPage(driver)
-                .ContinueWithNhsLogin();
-
-            IOSGettingStartedPage
-                .AssertOnPage(driver)
-                .Continue();
-
-            IOSStubbedLoginPage
-                .AssertOnPage(driver)
-                .PageContent.Login(patient);
-
-            IOSTermsAndConditionsPage
-                .AssertOnPage(driver)
-                .PageContent.AcceptTermsAndConditions();
-
-            IOSUserResearchOptInPage
-                .AssertOnPage(driver)
-                .PageContent.OptInToUserResearch();
-
-            IOSManageNotificationsPromptPage
-                .AssertOnPage(driver)
-                .PageContent.Continue();
+            LoginProcess.LogIOSPatientIn(driver, patient);
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)

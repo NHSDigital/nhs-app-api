@@ -25,7 +25,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .WithName(b => b.GivenName("David").FamilyName("April"));
             using var patients = Mocks.Patients.Add(patient);
 
-            Login(driver, patient);
+            LoginProcess.LogAndroidPatientIn(driver, patient);
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
@@ -86,7 +86,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .WithName(b => b.GivenName("David").FamilyName("June"));
             using var patients = Mocks.Patients.Add(patient);
 
-            Login(driver, patient);
+            LoginProcess.LogIOSPatientIn(driver, patient);
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
@@ -140,7 +140,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .WithName(b => b.GivenName("David").FamilyName("June"));
             using var patients = Mocks.Patients.Add(patient);
 
-            Login(driver, patient);
+            LoginProcess.LogIOSPatientIn(driver, patient);
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
@@ -160,60 +160,6 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSAppointmentsPage
                 .AssertOnPage(driver);
-        }
-
-        private static void Login(IAndroidDriverWrapper driver, Patient patient)
-        {
-            AndroidLoggedOutHomePage
-                .AssertOnPage(driver)
-                .ContinueWithNhsLogin();
-
-            AndroidGettingStartedPage
-                .AssertOnPage(driver)
-                .Continue();
-
-            AndroidStubbedLoginPage
-                .AssertOnPage(driver)
-                .PageContent.Login(patient);
-
-            AndroidTermsAndConditionsPage
-                .AssertOnPage(driver)
-                .PageContent.AcceptTermsAndConditions();
-
-            AndroidUserResearchOptInPage
-                .AssertOnPage(driver)
-                .PageContent.OptInToUserResearch();
-
-            AndroidManageNotificationsPromptPage
-                .AssertOnPage(driver)
-                .PageContent.Continue();
-        }
-
-        private static void Login(IIOSDriverWrapper driver, Patient patient)
-        {
-            IOSLoggedOutHomePage
-                .AssertOnPage(driver)
-                .ContinueWithNhsLogin();
-
-            IOSGettingStartedPage
-                .AssertOnPage(driver)
-                .Continue();
-
-            IOSStubbedLoginPage
-                .AssertOnPage(driver)
-                .PageContent.Login(patient);
-
-            IOSTermsAndConditionsPage
-                .AssertOnPage(driver)
-                .PageContent.AcceptTermsAndConditions();
-
-            IOSUserResearchOptInPage
-                .AssertOnPage(driver)
-                .PageContent.OptInToUserResearch();
-
-            IOSManageNotificationsPromptPage
-                .AssertOnPage(driver)
-                .PageContent.Continue();
         }
     }
 }
