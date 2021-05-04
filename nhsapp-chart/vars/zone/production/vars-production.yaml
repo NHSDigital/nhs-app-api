@@ -110,6 +110,7 @@ api:
     services__substraktPatientPack_admin__url: https://admin-request.production.substrakthealth.com
     services__substraktPatientPack_auth__url: https://auth.production.substrakthealth.com
     services__engage__url: https://nhs.engage.gp
+    services__nhsd__url: https://www.coronavirus-record.service.nhs.uk/
     services__netCompany__url: https://covid-status.service.nhsx.nhs.uk
 
 cid:
