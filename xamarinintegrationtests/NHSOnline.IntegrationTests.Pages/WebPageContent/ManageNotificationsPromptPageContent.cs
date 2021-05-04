@@ -14,6 +14,10 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
 
+        private WebToggle NotificationsToggle => WebToggle.WithLabel(
+            _interactor,
+            "Allow notificationsI accept the NHS App sending notifications on this device");
+
         internal void AssertOnPage()
         {
             using var timeout = ExtendedTimeout.FromSeconds(10);
@@ -23,6 +27,14 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         public void Continue()
         {
             ContinueButton.Click();
+        }
+
+        public ManageNotificationsPromptPageContent ToggleOnNotifications()
+        {
+            NotificationsToggle.ToggleOn();
+            using var timeout = ExtendedTimeout.FromSeconds(10);
+            NotificationsToggle.AssertToggledOn();
+            return this;
         }
     }
 }

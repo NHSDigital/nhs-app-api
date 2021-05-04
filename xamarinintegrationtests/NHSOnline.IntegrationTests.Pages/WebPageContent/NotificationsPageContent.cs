@@ -48,6 +48,12 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             NotificationsToggle.AssertToggledOn();
         }
 
+        public void AssertNotificationsDisabled()
+        {
+            using var timeout = ExtendedTimeout.FromSeconds(10);
+            NotificationsToggle.AssertToggledOff();
+        }
+
         public NotificationsPageContent ToggleOnNotifications()
         {
             NotificationsToggle.ToggleOn();
