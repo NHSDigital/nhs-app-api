@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.PreHome
 {
-    internal interface INhsAppPreHomeScreenWebView : INavigationView<INhsAppPreHomeScreenWebView.IEvents>, ICookieView, INhsAppPage
+    internal interface INhsAppPreHomeScreenWebView : INavigationView<INhsAppPreHomeScreenWebView.IEvents>, ICookieView
     {
         internal interface IEvents
         {

@@ -96,5 +96,11 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         }
 
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);
+
+        public Task HandleDeeplink(Uri deeplinkUrl)
+        {
+            _logger.LogInformation("{className} is not required to handle deeplinks", nameof(NhsLoginUpliftPage));
+            return Task.CompletedTask;
+        }
     }
 }

@@ -92,5 +92,11 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
             Spinner.IsVisible = false;
             WebView.IsVisible = true;
         }
+
+        public Task HandleDeeplink(Uri deeplinkUrl)
+        {
+            _logger.LogInformation("{className} is not required to handle deeplinks", nameof(WebIntegrationPage));
+            return Task.CompletedTask;
+        }
     }
 }

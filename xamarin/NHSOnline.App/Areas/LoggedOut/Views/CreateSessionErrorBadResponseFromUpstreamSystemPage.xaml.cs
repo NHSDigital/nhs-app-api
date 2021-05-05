@@ -39,7 +39,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
 
         public Func<Task>? ContactUsRequested { get; set; }
         public ICommand ContactUsCommand => new AsyncCommand(() => ContactUsRequested);
-        
+
         public Func<Task>? BackHomeRequested { get; set; }
         public ICommand BackHomeCommand => new AsyncCommand(() => BackHomeRequested);
 
@@ -53,6 +53,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         {
             _logger.LogInformation("{Method}", nameof(OnDisappearing));
             _appNavigation.SuppressHandlers();
+        }
+
+        public Task HandleDeeplink(Uri deeplinkUrl)
+        {
+            _logger.LogInformation("{className} is not required to handle deeplinks", nameof(CreateSessionErrorBadResponseFromUpstreamSystemPage));
+            return Task.CompletedTask;
         }
     }
 }

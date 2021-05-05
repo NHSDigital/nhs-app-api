@@ -4,7 +4,7 @@ using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut
 {
-    internal interface ICreateSessionView: INavigationView<ICreateSessionView.IEvents>, INhsAppPage
+    internal interface ICreateSessionView: INavigationView<ICreateSessionView.IEvents>
     {
         internal interface IEvents
         {

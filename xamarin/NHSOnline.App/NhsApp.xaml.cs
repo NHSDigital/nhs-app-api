@@ -2,11 +2,11 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NHSOnline.App.Areas;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Controls;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.Logging;
+using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
 namespace NHSOnline.App
@@ -67,7 +67,7 @@ namespace NHSOnline.App
         {
             if (Uri.TryCreate(deeplinkUrl, UriKind.RelativeOrAbsolute, out var targetUri))
             {
-                if (NavigationPage?.CurrentPage is INhsAppPage currentPage)
+                if (NavigationPage?.CurrentPage is INavigationView currentPage)
                 {
                     currentPage.HandleDeeplink(targetUri);
                 }

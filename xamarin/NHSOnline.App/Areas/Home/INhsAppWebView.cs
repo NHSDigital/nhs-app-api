@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.Home
 {
-    internal interface INhsAppWebView: INavigationView<INhsAppWebView.IEvents>, INhsAppPage
+    internal interface INhsAppWebView: INavigationView<INhsAppWebView.IEvents>
     {
         internal interface IEvents
         {

@@ -51,5 +51,11 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             _logger.LogInformation("{Method}", nameof(OnDisappearing));
             _appNavigation.SuppressHandlers();
         }
+
+        public Task HandleDeeplink(Uri deeplinkUrl)
+        {
+            _logger.LogInformation("{className} is not required to handle deeplinks", nameof(NhsLoginErrorPage));
+            return Task.CompletedTask;
+        }
     }
 }
