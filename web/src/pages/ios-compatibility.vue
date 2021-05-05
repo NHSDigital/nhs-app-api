@@ -51,7 +51,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss">
-  @import "@/style/custom/ios-compatibility";
-</style>

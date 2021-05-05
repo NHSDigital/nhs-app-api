@@ -57,7 +57,10 @@ export default {
   mixins: [ResetSpinnerMixin, OnUpdateTitleMixin],
   metaInfo() {
     const head = {
-      htmlAttrs: { lang: this.$t('language') },
+      htmlAttrs: {
+        lang: this.$t('language'),
+        class: this.$style['background-light-grey'],
+      },
       title: `${this.title} - ${this.$t('appTitle')}`,
       // TODO: needed if 'nojs' is not a thing?
       __dangerouslyDisableSanitizers: ['noscript'],
@@ -118,6 +121,11 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style module lang="scss">
   @import "~nhsuk-frontend/packages/nhsuk";
+  @import "../style/colours";
+
+  .background-light-grey {
+    background-color: $background;
+  }
 </style>
