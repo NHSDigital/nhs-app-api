@@ -19,6 +19,12 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
     {
         internal static Activity MainActivity { get; set; } = null!;
 
+        public string BiometricsUsername
+        {
+            get => BiometricRegistrationState.FidoUsername;
+            set => BiometricRegistrationState.FidoUsername = value;
+        }
+
         public Task<BiometricStatus> FetchBiometricStatus()
         {
             using var manager = BiometricManager.From(MainActivity);

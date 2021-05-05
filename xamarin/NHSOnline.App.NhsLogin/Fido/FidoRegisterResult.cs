@@ -8,6 +8,13 @@
 
         public sealed class Registered : FidoRegisterResult
         {
+            public string Username { get; }
+
+            public Registered(string username)
+            {
+                Username = username;
+            }
+
             public override T Accept<T>(IFidoRegisterResultVisitor<T> visitor) => visitor.Visit(this);
         }
 

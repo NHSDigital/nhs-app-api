@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -115,13 +117,21 @@ namespace NHSOnline.App.NhsLogin.Fido
 
             _logger.LogInformation("UAF Registration Response Response: {UAFRegistrationResponseResponse}", resultString);
 
+            var uafPostRegistrationResponse = JsonConvert.DeserializeObject<List<UafPostRegistrationResponse>>(resultString);
+            var username = uafPostRegistrationResponse?.FirstOrDefault()?.Username ?? string.Empty;
+
             if (result.IsSuccessStatusCode)
             {
-                return new FidoRegisterResult.Registered();
+                return new FidoRegisterResult.Registered(username);
             }
 
             _logger.LogError("Fido post registration response returned {HttpStatusCode}", result.StatusCode);
             return new FidoRegisterResult.Failed();
+        }
+
+        private class UafPostRegistrationResponse
+        {
+            public string? Username { get; set; }
         }
 
         private static UafDeregistrationRequest CreateDeregistrationRequest(string keyId)

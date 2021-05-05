@@ -23,6 +23,9 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
 #endif
         }
 
+        // NHSO-14610: Will need to use this property to correctly show the current users biometrics state.
+        public string BiometricsUsername { get; set; } = string.Empty;
+
         public Task<BiometricStatus> FetchBiometricStatus()
         {
             BiometricStatus status = new BiometricStatus.HardwareNotPresent();

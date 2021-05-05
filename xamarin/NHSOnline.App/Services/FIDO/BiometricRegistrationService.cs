@@ -65,7 +65,7 @@ namespace NHSOnline.App.Services.FIDO
             var keyId = GenerateRandomFidoKeyId();
             var fidoKey = new FidoKey(keyId, key, authSigner);
             var result = await _fidoService.Register(fidoKey, accessToken).ResumeOnThreadPool();
-            return result.Accept(new FidoRegisterResultVisitor(keyId));
+            return result.Accept(new FidoRegisterResultVisitor(keyId, _biometrics));
         }
 
         internal static string GenerateRandomFidoKeyId()
@@ -106,6 +106,7 @@ namespace NHSOnline.App.Services.FIDO
                 if (keyId != null)
                 {
                     await _fidoService.Deregister(accessToken, keyId).ResumeOnThreadPool();
+                    _biometrics.BiometricsUsername = string.Empty;
                 }
             }
             catch (Exception e)
@@ -150,14 +151,17 @@ namespace NHSOnline.App.Services.FIDO
         private sealed class FidoRegisterResultVisitor : IFidoRegisterResultVisitor<ProcessResult<string, BiometricRegisterResult>>
         {
             private readonly string _keyId;
+            private readonly IBiometrics _biometrics;
 
-            public FidoRegisterResultVisitor(string keyId)
+            public FidoRegisterResultVisitor(string keyId, IBiometrics biometrics)
             {
                 _keyId = keyId;
+                _biometrics = biometrics;
             }
 
             public ProcessResult<string, BiometricRegisterResult> Visit(FidoRegisterResult.Registered registered)
             {
+                _biometrics.BiometricsUsername = registered.Username;
                 return _keyId;
             }
 

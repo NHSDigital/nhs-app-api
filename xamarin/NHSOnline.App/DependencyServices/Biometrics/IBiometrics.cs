@@ -5,6 +5,7 @@ namespace NHSOnline.App.DependencyServices.Biometrics
 {
     public interface IBiometrics
     {
+        string BiometricsUsername { get; set; }
         Task<BiometricStatus> FetchBiometricStatus();
 
         Task<IBiometricAuthKey> CreateBiometricKey();

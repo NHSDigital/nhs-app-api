@@ -169,7 +169,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
             return new Cookie(NhsOnlineSessionCookieName, sessionCookieEscaped, "/", homeUri.Host)
             {
-
                 Secure = _config.NhsOnlineSessionCookieSecure,
                 HttpOnly = false
             };
