@@ -147,7 +147,8 @@ export default {
       {
         id: 'vaccineRecord',
         jumpOffContent: {
-          headerText: 'Check your coronavirus vaccine record',
+          headerText: 'Check your COVID-19 vaccine record',
+          descriptionText: 'View your vaccination details, like the name and batch number, and report any side effects you have experienced',
         },
       },
     ],

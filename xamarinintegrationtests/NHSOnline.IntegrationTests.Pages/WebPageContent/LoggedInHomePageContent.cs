@@ -22,7 +22,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebLink DismissBiometricsBanner => WebLink.WithText(_interactor, "Dismiss");
 
-        private WebMenuItem CheckCovidVaccineMenuItem => WebMenuItem.WithTitle(_interactor, "Check your coronavirus vaccine record");
+        private WebMenuItem CheckCovidVaccineMenuItem => WebMenuItem.WithTitle(_interactor, "Check your COVID-19 vaccine record");
 
         private WebMenuItem MessagesMenuItem => WebMenuItem.WithTitle(_interactor, "View your messages");
 
