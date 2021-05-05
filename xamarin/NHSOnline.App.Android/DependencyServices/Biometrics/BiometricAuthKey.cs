@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Runtime;
+using Android.Security.Keystore;
 using AndroidX.Fragment.App;
 using AndroidX.Biometric;
 using Java.Lang;
@@ -22,6 +23,8 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
         private readonly FragmentActivity _fragmentActivity;
         private readonly IPrivateKey _secretKey;
         private readonly Certificate _certificate;
+
+        private static ILogger Logger => NhsAppLogging.CreateLogger<BiometricAuthKey>();
 
         public BiometricAuthKey(
             FragmentActivity fragmentActivity,
@@ -66,7 +69,15 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
                 return new BiometricAuthVerifyUserResult.Unauthorised();
             }
 
-            signature.InitSign(_secretKey);
+            try
+            {
+                signature.InitSign(_secretKey);
+            }
+            catch (KeyPermanentlyInvalidatedException e)
+            {
+                Logger.LogError(e, "Failed to init signature. KeyStore value invalidated");
+                return new BiometricAuthVerifyUserResult.PermanentLockout();
+            }
 
             using var promptInfoBuilder = new BiometricPrompt.PromptInfo.Builder();
             var promptInfo = promptInfoBuilder
