@@ -47,6 +47,12 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             }
         }
 
+        public void TabBetween(IFocusable fromFocusable, IFocusable toFocusable)
+        {
+            _currentFocusable = fromFocusable;
+            TabTo(toFocusable);
+        }
+
         public IEnumerable<IFocusable> GetFocusableElements()
         {
             return _expectedFocusableElements.ToList();

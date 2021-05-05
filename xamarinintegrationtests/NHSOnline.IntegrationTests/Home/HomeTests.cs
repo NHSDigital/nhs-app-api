@@ -388,7 +388,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Advice();
+                .KeyboardNavigateToAdvice();
 
             AndroidAdvicePage
                 .AssertOnPage(driver)

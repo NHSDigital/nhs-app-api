@@ -36,6 +36,27 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver);
         }
 
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelNineCanKeyboardNavigateToAccessTheAToZScreenFromAdviceAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Andrew").FamilyName("Zulu"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .KeyboardNavigateToAdvice();
+
+            AndroidAdvicePage
+                .AssertOnPage(driver)
+                .KeyboardNavigateToAToZ();
+
+            AndroidAToZPage
+                .AssertOnPage(driver);
+        }
+
         [NhsAppIOSTest]
         public void APatientWithProofLevelNineCanAccessTheAToZScreenFromAdviceIOS(IIOSDriverWrapper driver)
         {

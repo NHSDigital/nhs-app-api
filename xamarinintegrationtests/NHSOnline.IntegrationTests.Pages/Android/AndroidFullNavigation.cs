@@ -94,25 +94,49 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             HelpIcon.Click();
         }
 
-        public void KeyboardNavigateToAdvice(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateIcon(AdviceIcon, navigation);
+        public void KeyboardNavigateToAdvice(AndroidKeyboardNavigation navigation)
+            => KeyboardNavigateToAndActivateIcon(AdviceIcon, navigation);
 
-        public void KeyboardNavigateToAppointments(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateIcon(AppointmentsIcon, navigation);
+        public void KeyboardNavigateToAppointments(AndroidKeyboardNavigation navigation)
+            => KeyboardNavigateToAndActivateIcon(AppointmentsIcon, navigation);
 
-        public void KeyboardNavigatePrescriptions(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateIcon(PrescriptionsIcon, navigation);
+        public void KeyboardNavigatePrescriptions(AndroidKeyboardNavigation navigation)
+            => KeyboardNavigateToAndActivateIcon(PrescriptionsIcon, navigation);
 
-        public void KeyboardNavigateToYourHealth(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateIcon(YourHealthIcon, navigation);
+        public void KeyboardNavigateToYourHealth(AndroidKeyboardNavigation navigation)
+            => KeyboardNavigateToAndActivateIcon(YourHealthIcon, navigation);
 
-        public void KeyboardNavigateToMessages(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateIcon(MessagesIcon, navigation);
+        public void KeyboardNavigateToMessages(AndroidKeyboardNavigation navigation)
+            => KeyboardNavigateToAndActivateIcon(MessagesIcon, navigation);
 
-        public void KeyboardNavigateToHome(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateIcon(HomeIcon, navigation);
+        public void KeyboardNavigateToHome(AndroidKeyboardNavigation navigation) =>
+            KeyboardNavigateToAndActivateIcon(HomeIcon, navigation);
 
-        public void KeyboardNavigateToHelp(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateIcon(HelpIcon, navigation);
+        public void KeyboardNavigateToHelp(AndroidKeyboardNavigation navigation)
+            => KeyboardNavigateToAndActivateIcon(HelpIcon, navigation);
 
-        public void KeyboardNavigateToMore(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateIcon(MoreIcon, navigation);
+        public void KeyboardNavigateToMore(AndroidKeyboardNavigation navigation)
+            => KeyboardNavigateToAndActivateIcon(MoreIcon, navigation);
 
-        private void KeyboardNavigateToAndActivateIcon(IFocusable icon, AndroidKeyboardNavigation keyboardPageContentNavigation)
+        public void KeyboardNavigateToHomeFromElement(AndroidKeyboardNavigation navigation, IFocusable fromFocusable) =>
+            KeyboardNavigateBetweenAndActivateIcon(HomeIcon, navigation, fromFocusable);
+
+        private static void KeyboardNavigateBetweenAndActivateIcon(
+            IFocusable icon,
+            AndroidKeyboardNavigation keyboardPageContentNavigation,
+            IFocusable fromFocusable)
+        {
+            keyboardPageContentNavigation.TabBetween(fromFocusable, icon);
+
+            keyboardPageContentNavigation.PressEnterKey();
+        }
+
+        private static void KeyboardNavigateToAndActivateIcon(
+            IFocusable icon,
+            AndroidKeyboardNavigation keyboardPageContentNavigation)
         {
             keyboardPageContentNavigation.TabTo(icon);
+
             keyboardPageContentNavigation.PressEnterKey();
         }
     }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using NHSOnline.IntegrationTests.UI.Components;
+using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -16,7 +17,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Advice");
 
-        private WebMenuItem GetAdviceMenuItem => WebMenuItem.WithTitle(_interactor, "Get advice about coronavirus");
+        private WebMenuItem GetAdviceMenuItem => WebMenuItem.WithTitle(_interactor, "Get advice about coronavirus (COVID-19)");
 
         private WebMenuItem SearchConditionsMenuItem => WebMenuItem.WithTitle(_interactor, "Search conditions and treatments");
 
@@ -51,6 +52,16 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         public void AToZ()
         {
             SearchConditionsMenuItem.Click();
+        }
+
+        public void KeyboardNavigateToOneOneOne(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(UseNhsOnlineMenuItem, navigation);
+
+        public void KeyboardNavigateToAToZ(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(SearchConditionsMenuItem, navigation);
+
+        private void KeyboardNavigateToAndActivateMenuItem(IFocusable menuItem, AndroidKeyboardNavigation keyboardPageContentNavigation)
+        {
+            keyboardPageContentNavigation.TabBetween(GetAdviceMenuItem, menuItem);
+            keyboardPageContentNavigation.PressEnterKey();
         }
     }
 }

@@ -49,6 +49,12 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Advice
         }
 
         public void KeyboardNavigateToHome() =>
-            Navigation.KeyboardNavigateToHome(KeyboardPageContentNavigation);
+            Navigation.KeyboardNavigateToHomeFromElement(KeyboardPageContentNavigation, PageContent.FocusableElements.First());
+
+        public void KeyboardNavigateToOneOneOne() =>
+            PageContent.KeyboardNavigateToOneOneOne(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToAToZ() =>
+            PageContent.KeyboardNavigateToAToZ(KeyboardPageContentNavigation);
     }
 }

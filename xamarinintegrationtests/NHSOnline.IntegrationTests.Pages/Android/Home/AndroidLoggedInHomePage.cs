@@ -62,9 +62,6 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
         public void KeyboardNavigateToMessages() =>
             Navigation.KeyboardNavigateToMessages(KeyboardPageContentNavigation);
 
-        public void KeyboardNavigateToHome() =>
-            Navigation.KeyboardNavigateToHome(KeyboardPageContentNavigation);
-
         public void KeyboardNavigateToHelp() =>
             Navigation.KeyboardNavigateToHelp(KeyboardPageContentNavigation);
 
