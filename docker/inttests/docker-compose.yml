@@ -2,6 +2,10 @@ version: "3.4"
 
 services:
 
+  web.local.bitraft.io:
+    env_file:
+     - ./docker/inttests/env/web.env
+
   pfs.local.bitraft.io:
     env_file:
       - ./docker/inttests/env/known_services_connectivity.env

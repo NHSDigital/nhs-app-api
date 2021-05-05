@@ -33,7 +33,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Advice
 
         public AndroidFullNavigation Navigation { get; }
 
-        private AdvicePageContent PageContent { get; }
+        public AdvicePageContent PageContent { get; }
 
         public static AndroidAdvicePage AssertOnPage(IAndroidDriverWrapper driver)
         {

@@ -6,7 +6,6 @@ namespace NHSOnline.HttpMocks.ExternalServices
     [Route("nhsuk")]
     public class ExternalNhsUkServicesController : Controller
     {
-
         [HttpGet("covid")]
         public IActionResult Covid()
         {
@@ -23,6 +22,12 @@ namespace NHSOnline.HttpMocks.ExternalServices
         public IActionResult CovidConditions()
         {
             return CreatePage("Covid Conditions");
+        }
+
+        [HttpGet("healthAtoZ")]
+        public IActionResult HealthAtoZ()
+        {
+            return CreatePage("Health A to Z");
         }
 
         [HttpGet("help/login")]

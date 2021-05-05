@@ -14,6 +14,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebText Title => WebText.WithTagAndText(_interactor, "h1", "More");
         private WebMenuItem NotificationsMenuItem => WebMenuItem.WithTitle(_interactor, "Notifications");
+        private WebMenuItem NhsLoginMenuItem => WebMenuItem.WithTitle(_interactor, "NHS Login");
 
         internal void AssertOnPage()
         {
@@ -30,6 +31,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         public void NavigateToNotifications()
         {
             NotificationsMenuItem.Click();
+        }
+
+        public void NavigateToNhsLogin()
+        {
+            NhsLoginMenuItem.Click();
         }
     }
 }

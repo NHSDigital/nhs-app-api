@@ -13,7 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Advice
 
         public IOSFullNavigation Navigation { get; }
 
-        private AdvicePageContent PageContent { get; }
+        public AdvicePageContent PageContent { get; }
 
         public static IOSAdvicePage AssertOnPage(IIOSDriverWrapper driver)
         {

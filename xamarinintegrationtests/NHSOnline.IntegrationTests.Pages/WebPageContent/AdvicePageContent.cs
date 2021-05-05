@@ -18,7 +18,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebMenuItem GetAdviceMenuItem => WebMenuItem.WithTitle(_interactor, "Get advice about coronavirus");
 
-        private WebMenuItem ShareConditionsMenuItem => WebMenuItem.WithTitle(_interactor, "Share conditions and treatments");
+        private WebMenuItem SearchConditionsMenuItem => WebMenuItem.WithTitle(_interactor, "Search conditions and treatments");
 
         private WebMenuItem UseNhsOnlineMenuItem => WebMenuItem.WithTitle(_interactor, "Use NHS 111 online");
 
@@ -27,7 +27,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
             GetAdviceMenuItem,
-            ShareConditionsMenuItem,
+            SearchConditionsMenuItem,
             UseNhsOnlineMenuItem,
             AskGpMenuItem
         };
@@ -41,6 +41,16 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         {
             Title.AssertVisible();
             return this;
+        }
+
+        public void OneOneOne()
+        {
+            UseNhsOnlineMenuItem.Click();
+        }
+
+        public void AToZ()
+        {
+            SearchConditionsMenuItem.Click();
         }
     }
 }
