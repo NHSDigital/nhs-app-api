@@ -189,12 +189,6 @@ namespace NHSOnline.App.Areas.Home.Views
 
         public async Task SendNotificationUnauthorised() => await WebView.SendNotificationUnauthorised().ResumeOnThreadPool();
 
-        private void WebViewNavigating(object sender, WebNavigatingEventArgs e)
-        {
-            Spinner.IsVisible = true;
-            WebView.IsVisible = false;
-        }
-
         private void WebOnEndNavigating(object sender, WebNavigatedEventArgs e)
         {
             Spinner.IsVisible = false;

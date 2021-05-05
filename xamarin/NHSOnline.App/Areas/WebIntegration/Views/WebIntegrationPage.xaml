@@ -24,7 +24,6 @@
                                         x:Name="WebView"
                                         VerticalOptions="FillAndExpand"
                                         RedirectToNhsAppPageCommand="{Binding RedirectToNhsAppPageCommand, Source={x:Reference Name=Page}}"
-                                        Navigating="WebViewNavigating"
                                         Navigated="WebOnEndNavigating" />
 
     </AbsoluteLayout>
