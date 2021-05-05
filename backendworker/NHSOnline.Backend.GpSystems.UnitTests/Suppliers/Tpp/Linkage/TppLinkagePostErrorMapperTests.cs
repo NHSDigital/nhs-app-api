@@ -38,20 +38,34 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("response");
         }
 
-        [TestMethod]
-        public void Map_WithOkayWithErrorCodeValues_MapsCorrectly()
+
+
+
+
+        [DataTestMethod]
+        [DataRow("6", Im1ConnectionErrorCodes.InternalCode.ProblemLinkingAccount)]
+        [DataRow("8", Im1ConnectionErrorCodes.InternalCode.ProblemLinkingAccount)]
+        [DataRow("19", Im1ConnectionErrorCodes.InternalCode.PatientOnSystemOneNotMatchedToARecordOnPDS)]
+        [DataRow("509", Im1ConnectionErrorCodes.InternalCode.IncompleteOrEndedPFSRegistrationDetails)]
+        [DataRow("512", Im1ConnectionErrorCodes.InternalCode.ProvidedLastNameDoesNotMatchSystmOne)]
+        [DataRow("513", Im1ConnectionErrorCodes.InternalCode.ProvidedDOBDoesNotMatchSystmOne)]
+        [DataRow("553", Im1ConnectionErrorCodes.InternalCode.PatientIsNotOldEnoughToSignUp)]
+        [DataRow("554", Im1ConnectionErrorCodes.InternalCode.NoPatientWithNhsNumberExistsOnSystmOne)]
+        [DataRow("555", Im1ConnectionErrorCodes.InternalCode.PatientNotRegisteredAtPracticeSpecifiedByOrgCode)]
+        [DataRow("556", Im1ConnectionErrorCodes.InternalCode.ErrorCreatingNewPFSAccountAndLinkageKeys)]
+        public void Map_WithOkayWithErrorCodeValues_MapsCorrectly(string errorCode, Im1ConnectionErrorCodes.InternalCode expectedError)
         {
             // Arrange
             var response = CreateResponse(
                 HttpStatusCode.OK,
-                "6");
+                errorCode);
 
             // Act
             var result = TppLinkagePostErrorMapper.Map(response, _logger.Object);
 
             // Assert
             result.Should().BeAssignableTo<LinkageResult.ErrorCase>()
-                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.ProblemLinkingAccount);
+                .Subject.ErrorCode.Should().Be(expectedError);
         }
 
         [TestMethod]

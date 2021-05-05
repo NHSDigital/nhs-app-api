@@ -135,6 +135,14 @@ Feature: Im1 Connection V2 POST
       | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedCode |
       | TPP       | 200        | 8      | 500            | 100          |
       | TPP       | 200        | 6      | 500            | 100          |
+      | TPP       | 200        | 19     | 400            | 106          |
+      | TPP       | 200        | 509    | 400            | 106          |
+      | TPP       | 200        | 512    | 400            | 106          |
+      | TPP       | 200        | 513    | 400            | 106          |
+      | TPP       | 200        | 553    | 400            | 106          |
+      | TPP       | 200        | 554    | 400            | 106          |
+      | TPP       | 200        | 555    | 400            | 106          |
+      | TPP       | 200        | 556    | 400            | 106          |
       | EMIS      | 400        | 1107   | 403            | 102          |
       | EMIS      | 400        | 1553   | 403            | 104          |
       | EMIS      | 409        | 1110   | 409            | 105          |

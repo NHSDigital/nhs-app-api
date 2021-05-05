@@ -4,6 +4,7 @@ import mocking.JSonXmlConverter
 import mocking.defaults.TppMockDefaults
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
+import mocking.tpp.models.Error
 import mocking.tpp.models.LinkAccount
 import mocking.tpp.models.LinkAccountReply
 import mockingFacade.linkage.LinkageInformationFacade
@@ -38,6 +39,18 @@ class TppLinkageGETBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST",
                 uuid = TppMockDefaults.DEFAULT_TPP_UUID,
                 accountId = linkage.accountId,
                 passphraseToLink = linkage.linkageKey
+        )
+
+        val body = JSonXmlConverter.toXML(reply)
+
+        return respondWith(HttpStatus.SC_OK) {
+            andXmlBody(body).build()
+        }
+    }
+
+    fun respondWithError(errorCode: String): Mapping {
+        val reply = Error(
+                errorCode = errorCode
         )
 
         val body = JSonXmlConverter.toXML(reply)

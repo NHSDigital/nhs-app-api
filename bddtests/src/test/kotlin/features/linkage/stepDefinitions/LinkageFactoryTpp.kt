@@ -40,6 +40,14 @@ class LinkageFactoryTpp:  LinkageFactory(Supplier.TPP) {
         val linkageToPostRequestResponse = hashMapOf(
                 LinkageResult.SuccessfullyCreated to successfulPost(linkageInformationFacade),
                 LinkageResult.SuccessfullyRetrieved to successfulPost(linkageInformationFacade),
+                LinkageResult.DetailsDoNotMatchInPDS to errorResponsePost("19"),
+                LinkageResult.IncompletePFSRegistration to errorResponsePost("509"),
+                LinkageResult.LastNameDoesNotMatch to errorResponsePost("512"),
+                LinkageResult.DOBDoesNotMatch to errorResponsePost("513"),
+                LinkageResult.PatientNotOldEnough to errorResponsePost("553"),
+                LinkageResult.NoPatientWithNHSNumber to errorResponsePost("554"),
+                LinkageResult.PatientNotRegisteredAtSpecifiedPractice to errorResponsePost("555"),
+                LinkageResult.ErrorCreatingNewPFSAccountAndLinkageKeys to errorResponsePost("556"),
                 LinkageResult.InternalServerError to { post -> post.respondWithInternalServerError() },
                 LinkageResult.PatientNonCompetentOrUnderMinimumAge to {post -> post
                         .respondWithPatientNonCompetentOrUnderMinumumAge()}
@@ -67,11 +75,23 @@ class LinkageFactoryTpp:  LinkageFactory(Supplier.TPP) {
         return { post -> post.respondWithSuccessfullyCreated(linkage) }
     }
 
+    private fun errorResponsePost(errorCode: String):((TppLinkagePOSTBuilder) -> Mapping)? {
+        return { post -> post.respondWithError(errorCode) }
+    }
+
     override fun mockLinkageGetResult(linkageInformationFacade: LinkageInformationFacade,
                                       linkageResult: LinkageResult) {
 
         val linkageToGetRequestResponse = hashMapOf(
-                LinkageResult.SuccessfullyRetrieved to successfulGet(linkageInformationFacade)
+                LinkageResult.SuccessfullyRetrieved to successfulGet(linkageInformationFacade),
+                LinkageResult.DetailsDoNotMatchInPDS to errorResponse("19"),
+                LinkageResult.IncompletePFSRegistration to errorResponse("509"),
+                LinkageResult.LastNameDoesNotMatch to errorResponse("512"),
+                LinkageResult.DOBDoesNotMatch to errorResponse("513"),
+                LinkageResult.PatientNotOldEnough to errorResponse("553"),
+                LinkageResult.NoPatientWithNHSNumber to errorResponse("554"),
+                LinkageResult.PatientNotRegisteredAtSpecifiedPractice to errorResponse("555"),
+                LinkageResult.ErrorCreatingNewPFSAccountAndLinkageKeys to errorResponse("556")
         )
 
         val response = responseFromMap(linkageToGetRequestResponse, linkageResult)
@@ -92,5 +112,9 @@ class LinkageFactoryTpp:  LinkageFactory(Supplier.TPP) {
 
     private fun successfulGet(linkageInformationFacade: LinkageInformationFacade):((TppLinkageGETBuilder) -> Mapping)? {
         return { get -> get.respondWithSuccessfullyRetrieved(linkageInformationFacade) }
+    }
+
+    private fun errorResponse(errorCode: String):((TppLinkageGETBuilder) -> Mapping)? {
+        return { get -> get.respondWithError(errorCode) }
     }
 }

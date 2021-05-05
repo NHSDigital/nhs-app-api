@@ -13,6 +13,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
             {
                 { "2008", InternalCode.InvalidLinkageDetailsTpp },
                 { "2006", InternalCode.InvalidLinkageDetailsTpp },
+                { "20019", InternalCode.PatientOnSystemOneNotMatchedToARecordOnPDS },
+                { "200509", InternalCode.IncompleteOrEndedPFSRegistrationDetails },
+                { "200512", InternalCode.ProvidedLastNameDoesNotMatchSystmOne },
+                { "200513", InternalCode.ProvidedDOBDoesNotMatchSystmOne },
+                { "200553", InternalCode.PatientIsNotOldEnoughToSignUp },
+                { "200554", InternalCode.NoPatientWithNhsNumberExistsOnSystmOne },
+                { "200555", InternalCode.PatientNotRegisteredAtPracticeSpecifiedByOrgCode },
+                { "200556", InternalCode.ErrorCreatingNewPFSAccountAndLinkageKeys },
             };
 
         public static Im1ConnectionRegisterResult Map(TppApiObjectResponse<LinkAccountReply> response, ILogger<TppIm1ConnectionService> logger)

@@ -169,6 +169,46 @@ Feature: Linkage Post Key
     When I call the Linkage POST endpoint
     Then I receive a "Conflict" error
 
+  Scenario: Linkage request POST with TPP Record not matched on PDS
+    Given I have TPP linkage details which don't match in PDS
+    When I call the Linkage POST endpoint
+    Then I receive a "Not Found" error
+
+  Scenario: Linkage request POST with incomplete or ended PFS registration details for a TPP user
+    Given I have incomplete or ended PFS registration details for a TPP user
+    When I call the Linkage POST endpoint
+    Then I receive a "Not Found" error
+
+  Scenario: Linkage request POST for TPP user with a last name that does not match SystmOne
+    Given I have TPP linkage details where the last name does not match SystmOne
+    When I call the Linkage POST endpoint
+    Then I receive a "Not Found" error
+
+  Scenario: Linkage request POST for TPP user with a DOB that does not match SystmOne
+    Given I have TPP linkage details where the DOB does not match SystmOne
+    When I call the Linkage POST endpoint
+    Then I receive a "Not Found" error
+
+  Scenario: Linkage request POST for TPP user not old enough to register
+    Given I have TPP linkage details where the user is not old enough
+    When I call the Linkage POST endpoint
+    Then I receive a "Not Found" error
+
+  Scenario: Linkage request POST for TPP user with non-existing NHS Number
+    Given I have TPP linkage details where no patient with the provided NHS number exists on SystmOne
+    When I call the Linkage POST endpoint
+    Then I receive a "Not Found" error
+
+  Scenario: Linkage request POST for TPP user not registered at specified practice
+    Given I have TPP linkage details where the patient is not registered at the specified practice
+    When I call the Linkage POST endpoint
+    Then I receive a "Not Found" error
+
+  Scenario: Linkage request POST for TPP user which cause an error creating a new PFS account and linkage keys
+    Given I have TPP linkage Post details which cause an error creating a new PFS account and linkage keys
+    When I call the Linkage POST endpoint
+    Then I receive a "Not Found" error
+
   Scenario Outline: Linkage request POST for <GP System> returns 502, when GP system responds with 500
     Given I have valid <GP System> linkage details but the GP system responds with an internal server error creating the linkage key
     When I call the Linkage POST endpoint

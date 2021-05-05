@@ -22,6 +22,38 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
                 {
                     "2005",
                     Im1ConnectionErrorCodes.InternalCode.InvalidProviderId
+                },
+                {
+                    "20019",
+                    Im1ConnectionErrorCodes.InternalCode.PatientOnSystemOneNotMatchedToARecordOnPDS
+                },
+                {
+                    "200509",
+                    Im1ConnectionErrorCodes.InternalCode.IncompleteOrEndedPFSRegistrationDetails
+                },
+                {
+                    "200512",
+                    Im1ConnectionErrorCodes.InternalCode.ProvidedLastNameDoesNotMatchSystmOne
+                },
+                {
+                    "200513",
+                    Im1ConnectionErrorCodes.InternalCode.ProvidedDOBDoesNotMatchSystmOne
+                },
+                {
+                    "200553",
+                    Im1ConnectionErrorCodes.InternalCode.PatientIsNotOldEnoughToSignUp
+                },
+                {
+                    "200554",
+                    Im1ConnectionErrorCodes.InternalCode.NoPatientWithNhsNumberExistsOnSystmOne
+                },
+                {
+                    "200555",
+                    Im1ConnectionErrorCodes.InternalCode.PatientNotRegisteredAtPracticeSpecifiedByOrgCode
+                },
+                {
+                    "200556",
+                    Im1ConnectionErrorCodes.InternalCode.ErrorCreatingNewPFSAccountAndLinkageKeys
                 }
             };
 

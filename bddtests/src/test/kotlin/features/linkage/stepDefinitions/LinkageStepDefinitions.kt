@@ -107,6 +107,48 @@ open class LinkageStepDefinitions {
         LinkageFactory.setLinkageInformation(linkage, LinkageResult.PatientRecordNotFound)
     }
 
+    @Given("I have TPP linkage details which don't match in PDS$")
+    fun iHaveTPPLinkageDetailsWhichDoNotMatchInPDS() {
+        val linkage = LinkageFactory.validLinkage(Supplier.TPP)
+        LinkageFactory.setLinkageInformation(linkage, LinkageResult.DetailsDoNotMatchInPDS)
+    }
+
+    @Given("I have incomplete or ended PFS registration details for a TPP user$")
+    fun iHaveIncompleteOrEndedPFSRegistrationDetailsForATPPUser(){
+        val linkage = LinkageFactory.validLinkage(Supplier.TPP)
+        LinkageFactory.setLinkageInformation(linkage, LinkageResult.IncompletePFSRegistration)
+    }
+
+    @Given("I have TPP linkage details where the last name does not match SystmOne")
+    fun iHaveTPPLinkageDetailsWhereTheLastNameDoesNotMatchSystmOne() {
+        val linkage = LinkageFactory.validLinkage(Supplier.TPP)
+        LinkageFactory.setLinkageInformation(linkage, LinkageResult.LastNameDoesNotMatch)
+    }
+
+    @Given("I have TPP linkage details where the DOB does not match SystmOne")
+    fun iHaveTPPLinkageDetailsWhereTheDOBDoesNotMatchSystmOne() {
+        val linkage = LinkageFactory.validLinkage(Supplier.TPP)
+        LinkageFactory.setLinkageInformation(linkage, LinkageResult.DOBDoesNotMatch)
+    }
+
+    @Given("I have TPP linkage details where the user is not old enough")
+    fun iHaveTPPLinkageDetailsWhereTheUserIsNotOldEnough() {
+        val linkage = LinkageFactory.validLinkage(Supplier.TPP)
+        LinkageFactory.setLinkageInformation(linkage, LinkageResult.PatientNotOldEnough)
+    }
+
+    @Given("I have TPP linkage details where no patient with the provided NHS number exists on SystmOne")
+    fun iHaveTPPLinkageDetailsWhereNoPatientWithTheProvidedNHSNumberExistsOnSystmOne() {
+        val linkage = LinkageFactory.validLinkage(Supplier.TPP)
+        LinkageFactory.setLinkageInformation(linkage, LinkageResult.NoPatientWithNHSNumber)
+    }
+
+    @Given("I have TPP linkage details where the patient is not registered at the specified practice")
+    fun iHaveTPPLinkageDetailsWhereThePatientIsNotRegisteredAtTheSpecifiedPractice() {
+        val linkage = LinkageFactory.validLinkage(Supplier.TPP)
+        LinkageFactory.setLinkageInformation(linkage, LinkageResult.PatientNotRegisteredAtSpecifiedPractice)
+    }
+
     @Then("^I receive a valid linkage response$")
     fun iReceiveAValidResponse() {
         val linkageResponse = Serenity.sessionVariableCalled<LinkageResponse>(LinkageResponse::class)

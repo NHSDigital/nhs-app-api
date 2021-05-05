@@ -44,6 +44,8 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
         {
             [Description("Unknown Error")]
             InvalidOption = 0,
+            [Description("The patient on SystmOne has not been matched to a record on PDS. The demographics held in SystmOne have not been verified so cannot be sure the NHS number is correct.")]
+            PatientOnSystemOneNotMatchedToARecordOnPDS = 19,
             [Description("Unknown Error")]
             UnknownError = 100,
             [Description("Invalid linkage details")]
@@ -124,8 +126,22 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
             NoSelfAssociatedUserExistWithThisPatient = 199,
             [Description("Error returned for given demographics")]
             ErrorRetrievingGivenDemographics = 200,
+            [Description("The patient has incomplete or ended PFS registration details. Possibly caused by (but not limited to) the account being locked due to too many failures to Authenticate")]
+            IncompleteOrEndedPFSRegistrationDetails = 509,
+            [Description("The provided lastName does not match the name in SystmOne. The name is checked to guard against incorrect NHS numbers being provided.")]
+            ProvidedLastNameDoesNotMatchSystmOne = 512,
+            [Description("The provided dateOfBirth does not match the date in SystmOne. The date of birth is checked to guard against incorrect NHS numbers being provided.")]
+            ProvidedDOBDoesNotMatchSystmOne = 513,
             [Description("Linkage keys are currently not supported by the supplier")]
-            LinkageKeysNotSupportedBySupplier = 550
+            LinkageKeysNotSupportedBySupplier = 550,
+            [Description("The patient is not old enough to be able to digitally sign up to online services (must be at least 16 years old).")]
+            PatientIsNotOldEnoughToSignUp = 553,
+            [Description("No patient with this NHS number exists on SystmOne")]
+            NoPatientWithNhsNumberExistsOnSystmOne = 554,
+            [Description("The patient is not registered at the practice specified by the provided organisationCode.")]
+            PatientNotRegisteredAtPracticeSpecifiedByOrgCode = 555,
+            [Description("Transient error creating new PFS account and linkage keys. Retry the message.")]
+            ErrorCreatingNewPFSAccountAndLinkageKeys = 556
         }
 
         //Any changes to this enum must also be made in the swagger contract
@@ -201,13 +217,13 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
 
                 { InternalCode.NoUserFoundForLinkageDetails, ExternalCode.PatientNotFound },
 
-                { InternalCode.InvalidLinkageDetails,ExternalCode.InvalidDetails },
+                { InternalCode.InvalidLinkageDetails, ExternalCode.InvalidDetails },
                 { InternalCode.InvalidLinkageDetailsTpp, ExternalCode.InvalidDetails },
                 { InternalCode.InvalidNhsNumber, ExternalCode.InvalidNhsNumber },
                 { InternalCode.AccountIdLengthOutsideOfValidRange, ExternalCode.InvalidAccountId },
                 { InternalCode.LinkageKeyLengthOutsideOfValidRange, ExternalCode.InvalidLinkageKey},
                 { InternalCode.InputValueLengthOutsideOfValidRange, ExternalCode.InvalidDetails},
-                { InternalCode.InvalidProviderId,  ExternalCode.InvalidProviderId},
+                { InternalCode.InvalidProviderId, ExternalCode.InvalidProviderId},
 
                 { InternalCode.UserAlreadyLinked, ExternalCode.UserAccountConflict },
                 { InternalCode.MultipleRecordsFoundWithNhsNumber, ExternalCode.UserAccountConflict  },
@@ -226,6 +242,15 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
                 { InternalCode.InvalidSecurity, ExternalCode.InvalidSecurity },
                 { InternalCode.InvalidRequest, ExternalCode.InvalidRequest },
                 { InternalCode.InvalidUserPatientLinkToken, ExternalCode.InvalidUserPatientLinkToken },
+
+                { InternalCode.NoPatientWithNhsNumberExistsOnSystmOne, ExternalCode.InvalidDetails },
+                { InternalCode.PatientNotRegisteredAtPracticeSpecifiedByOrgCode, ExternalCode.InvalidDetails },
+                { InternalCode.ErrorCreatingNewPFSAccountAndLinkageKeys, ExternalCode.InvalidDetails },
+                { InternalCode.IncompleteOrEndedPFSRegistrationDetails, ExternalCode.InvalidDetails },
+                { InternalCode.PatientOnSystemOneNotMatchedToARecordOnPDS, ExternalCode.InvalidDetails },
+                { InternalCode.ProvidedLastNameDoesNotMatchSystmOne, ExternalCode.InvalidDetails },
+                { InternalCode.ProvidedDOBDoesNotMatchSystmOne, ExternalCode.InvalidDetails },
+                { InternalCode.PatientIsNotOldEnoughToSignUp, ExternalCode.InvalidDetails },
 
                 // The following error codes are caught earlier in the process.
                 // They are included here for completeness, but should never reach this stage.

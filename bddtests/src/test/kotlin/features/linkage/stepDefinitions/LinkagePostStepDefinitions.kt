@@ -91,6 +91,12 @@ open class LinkagePostStepDefinitions {
         LinkageFactory.setLinkageInformation(linkage, LinkageResult.LinkageKeyAlreadyExists)
     }
 
+    @Given("I have TPP linkage Post details which cause an error creating a new PFS account and linkage keys")
+    fun iHaveTPPLinkagePostDetailsWhichCauseAnErrorCreatingANewPFSAccountAndLinkageKeys() {
+        val linkage = LinkageFactory.validLinkage(Supplier.TPP)
+        LinkageFactory.setLinkageInformation(linkage, LinkageResult.ErrorCreatingNewPFSAccountAndLinkageKeys)
+    }
+
     @When("^I call the Linkage POST endpoint$")
     fun iCallTheLinkagePOSTEndpoint() {
         val linkage = LinkageFactory.setUpPostMocks()
