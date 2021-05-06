@@ -130,7 +130,7 @@ export default {
         id: 'vaccineRecord',
         jumpOffContent: {
           headerText: 'Share your COVID-19 status',
-          descriptionText: 'Get a QR code to share your COVID-19 status with travel and event organisers',
+          descriptionText: 'View and share proof of your COVID-19 status for travel',
         },
         thirdPartyWarning: {
           featureName: 'Share your COVID-19 status',

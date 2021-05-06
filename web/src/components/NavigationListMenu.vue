@@ -5,15 +5,15 @@
                            :widen-on-tablet="true"
                            :text="$t('navigation.popularServices')"/>
     <menu-item-list data-sid="navigation-list-menu" class="nhsuk-u-margin-top-0">
-      <third-party-jump-off-button v-if="showNhsdVaccineRecord"
-                                   id="btn_nhsd_vaccine_record"
-                                   provider-id="nhsd"
-                                   :provider-configuration="thirdPartyProvider.nhsd.
-                                     vaccineRecord" />
       <third-party-jump-off-button v-if="showNetCompanyVaccineRecord"
                                    id="btn_netCompany_vaccine_record"
                                    provider-id="netCompany"
                                    :provider-configuration="thirdPartyProvider.netCompany.
+                                     vaccineRecord" />
+      <third-party-jump-off-button v-if="showNhsdVaccineRecord"
+                                   id="btn_nhsd_vaccine_record"
+                                   provider-id="nhsd"
+                                   :provider-configuration="thirdPartyProvider.nhsd.
                                      vaccineRecord" />
       <menu-item v-if="gpMessagingAvailable"
                  id="btn_messages"
