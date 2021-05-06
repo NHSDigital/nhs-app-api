@@ -6,15 +6,16 @@
                                     xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
                                     x:Class="NHSOnline.App.Areas.LoggedOut.Views.BiometricLoginTouchIdFailedPage"
                                     x:Name="Page">
-    <StackLayout BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}"
-                 Padding="20,0,20,0">
-        <controls:Heading1 Text="We cannot find your Touch ID" />
-        
-        <controls:Paragraph Text="Check that you have added a fingerprint in your device's Touch ID settings."
-                            Padding="0,10,0,0" />
-        
-        <controls:LinkLabel Text="Back to login"
-                            Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}"
-                            Padding="0,10,0,0" />
-    </StackLayout>
+    <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
+        <StackLayout Padding="20,0,20,0">
+            <controls:Heading1 Text="We cannot find your Touch ID" x:Name="Heading" />
+            
+            <controls:Paragraph Text="Check that you have added a fingerprint in your device's Touch ID settings."
+                                Padding="0,10,0,0" />
+            
+            <controls:LinkLabel Text="Back to login"
+                                Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}"
+                                Padding="0,10,0,0" />
+        </StackLayout>
+    </ScrollView>
 </pages:NhsAppCloseAndLogoHeaderPage>

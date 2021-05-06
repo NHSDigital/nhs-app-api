@@ -6,18 +6,19 @@
                                     xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
                                     x:Class="NHSOnline.App.Areas.LoggedOut.Views.BiometricLoginCouldNotLoginPage"
                                     x:Name="Page">
-    <StackLayout BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}"
-                 Padding="20,0,20,0">
-        <controls:Heading1 Text="We could not log you in" />
+    <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
+        <StackLayout Padding="20,0,20,0">
+            <controls:Heading1 Text="We could not log you in" x:Name="Heading" />
         
-        <controls:Paragraph Text="Go back to the homepage and try logging in again."
-                            Padding="0,10,0,0" />
+            <controls:Paragraph Text="Go back to the homepage and try logging in again."
+                                Padding="0,10,0,0" />
         
-        <controls:Paragraph Text="If you keep seeing this message, go back to the homepage and log in using your email, password and security code."
-                            Padding="0,5,0,0" />
+            <controls:Paragraph Text="If you keep seeing this message, go back to the homepage and log in using your email, password and security code."
+                                Padding="0,5,0,0" />
         
-        <controls:LinkLabel Text="Back to login"
-                            Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}"
-                            Padding="0,10,0,0" />
-    </StackLayout>
+            <controls:LinkLabel Text="Back to login"
+                                Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}"
+                                Padding="0,10,0,0" />
+        </StackLayout>
+    </ScrollView>
 </pages:NhsAppCloseAndLogoHeaderPage>

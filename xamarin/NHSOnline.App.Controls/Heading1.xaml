@@ -3,7 +3,8 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="NHSOnline.App.Controls.Heading1"
-             x:Name="Root" Margin="0, 20, 20, 0">
+             x:Name="Root"
+             Margin="0, 20, 20, 0">
     
     <View.Resources>
         <ResourceDictionary>
@@ -18,8 +19,5 @@
         </ResourceDictionary>
     </View.Resources>
     
-    
-    <StackLayout>
-        <Label Text="{Binding Text, Source={x:Reference Name=Root}}" />
-    </StackLayout>
+    <Label Text="{Binding Text, Source={x:Reference Name=Root}}" />
 </ContentView>

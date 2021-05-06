@@ -72,6 +72,7 @@
     <Compile Include="Effects\AndroidAccessibilityEffect.cs" />
     <Compile Include="Effects\AndroidFixedFontSizeEffect.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="Renderers\Heading1Renderer.cs" />
     <Compile Include="Renderers\KeyEventArgsExtensions.cs" />
     <Compile Include="Renderers\LinkLabelRenderer.cs" />
     <Compile Include="Renderers\WebViews\Extensions\AccessibilityWebViewRendererExtension.cs" />

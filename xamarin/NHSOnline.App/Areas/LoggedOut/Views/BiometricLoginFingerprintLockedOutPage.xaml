@@ -6,18 +6,19 @@
                                     xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
                                     x:Class="NHSOnline.App.Areas.LoggedOut.Views.BiometricLoginFingerprintLockedOutPage"
                                     x:Name="Page">
-    <StackLayout BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}"
-                 Padding="20,0,20,0">
-        <controls:Heading1 Text="You need to turn on fingerprint again" />
-        
-        <controls:Paragraph Text="We have turned it off as something has changed."
-                            Padding="0,10,0,0" />
-        
-        <controls:Paragraph Text="Log in using your email, password and security code, then turn Face ID on in the NHS App settings."
-                            Padding="0,5,0,0" />
-        
-        <controls:LinkLabel Text="Back to login"
-                            Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}"
-                            Padding="0,10,0,0" />
-    </StackLayout>
+    <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
+        <StackLayout Padding="20,0,20,0">
+            <controls:Heading1 Text="You need to turn on fingerprint again" x:Name="Heading" />
+            
+            <controls:Paragraph Text="We have turned it off as something has changed."
+                                Padding="0,10,0,0" />
+            
+            <controls:Paragraph Text="Log in using your email, password and security code, then turn fingerprint on in the NHS App settings."
+                                Padding="0,5,0,0" />
+            
+            <controls:LinkLabel Text="Back to login"
+                                Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}"
+                                Padding="0,10,0,0" />
+        </StackLayout>
+    </ScrollView>
 </pages:NhsAppCloseAndLogoHeaderPage>

@@ -7,7 +7,7 @@ namespace NHSOnline.App.Controls
     public partial class Heading2
     {
         public static readonly BindableProperty TextProperty =
-            BindableProperty.Create(nameof(Text), typeof(string), typeof(Heading2));
+            BindableProperty.Create(nameof(Text), typeof(string), typeof(Heading1));
 
         public static readonly BindableProperty TextColourProperty =
             BindableProperty.Create(nameof(TextColour), typeof(Color), typeof(Heading2), NhsUkColours.NhsUkPrimaryText);
@@ -22,7 +22,6 @@ namespace NHSOnline.App.Controls
             get => (string) GetValue(TextProperty);
             set => SetValue(TextProperty, value);
         }
-
         public Color TextColour
         {
             get => (Color) GetValue(TextColourProperty);

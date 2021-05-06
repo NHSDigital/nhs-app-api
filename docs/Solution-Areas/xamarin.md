@@ -28,6 +28,7 @@ Using these fundamentals there are many ways that any given feature can be imple
 * [Android Bindings](xamarin/android-bindings.md)
 * [Event Handling](xamarin/event-handling.md)
 * [Web Interaction](xamarin/web-interaction.md)
+* [Setting Screen Reader Focus](xamarin/Accessibility/setting-screen-reader-focus.md)
 
 ## Setup
 

@@ -1,3 +1,4 @@
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,6 +12,8 @@ namespace NHSOnline.App.Controls
 
         public static readonly BindableProperty TextColourProperty =
             BindableProperty.Create(nameof(TextColour), typeof(Color), typeof(Heading1), NhsUkColours.NhsUkPrimaryText);
+
+        public event EventHandler<FocusRequestArgs>? AccessibilityFocusChangeRequested;
 
         public Heading1()
         {
@@ -27,6 +30,15 @@ namespace NHSOnline.App.Controls
         {
             get => (Color) GetValue(TextColourProperty);
             set => SetValue(TextColourProperty, value);
+        }
+
+        public void AccessibilityFocus()
+        {
+            if (AccessibilityFocusChangeRequested != null)
+            {
+                var arg = new FocusRequestArgs {Focus = true};
+                AccessibilityFocusChangeRequested(this, arg);
+            }
         }
     }
 }
