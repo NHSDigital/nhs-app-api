@@ -72,6 +72,7 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Renderers\KeyEventArgsExtensions.cs" />
     <Compile Include="Renderers\LinkLabelRenderer.cs" />
+    <Compile Include="Renderers\WebViews\Extensions\AccessibilityWebViewRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\Extensions\EnableTargetBlankLinksRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\Extensions\iProovExtension.cs" />
     <Compile Include="Renderers\WebViews\Extensions\IWebViewRendererExtension.cs" />

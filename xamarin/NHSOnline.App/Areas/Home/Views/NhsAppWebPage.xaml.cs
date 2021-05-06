@@ -116,6 +116,7 @@ namespace NHSOnline.App.Areas.Home.Views
         private void WebViewOnNavigated(object sender, WebNavigatedEventArgs args)
         {
             WebView.Focus();
+            WebView.AccessibilityFocus();
             NavigatedCommand.Execute(args);
         }
 
@@ -124,54 +125,63 @@ namespace NHSOnline.App.Areas.Home.Views
         public async Task NavigateToAdvice()
         {
             WebView.Focus();
+            WebView.AccessibilityFocus();
             await WebView.NavigateToAdvice().ResumeOnThreadPool();
         }
 
         public async Task NavigateToAppointments()
         {
             WebView.Focus();
+            WebView.AccessibilityFocus();
             await WebView.NavigateToAppointments().ResumeOnThreadPool();
         }
 
         public async Task NavigateToPrescriptions()
         {
             WebView.Focus();
+            WebView.AccessibilityFocus();
             await WebView.NavigateToPrescriptions().ResumeOnThreadPool();
         }
 
         public async Task NavigateToYourHealth()
         {
             WebView.Focus();
+            WebView.AccessibilityFocus();
             await WebView.NavigateToYourHealth().ResumeOnThreadPool();
         }
 
         public async Task NavigateToMessages()
         {
             WebView.Focus();
+            WebView.AccessibilityFocus();
             await WebView.NavigateToMessages().ResumeOnThreadPool();
         }
 
         public async Task NavigateToHome()
         {
             WebView.Focus();
+            WebView.AccessibilityFocus();
             await WebView.NavigateToHome().ResumeOnThreadPool();
         }
 
         public async Task NavigateToMore()
         {
             WebView.Focus();
+            WebView.AccessibilityFocus();
             await WebView.NavigateToMore().ResumeOnThreadPool();
         }
 
         public async Task NavigateToRedirector(Uri targetUrl)
         {
             WebView.Focus();
+            WebView.AccessibilityFocus();
             await WebView.NavigateToRedirector(targetUrl).ResumeOnThreadPool();
         }
 
         public async Task NavigateToRedirectedPathWithinApp(string spaPath)
         {
             WebView.Focus();
+            WebView.AccessibilityFocus();
             await WebView.NavigateToRedirectedPathWithinApp(spaPath).ResumeOnThreadPool();
         }
 

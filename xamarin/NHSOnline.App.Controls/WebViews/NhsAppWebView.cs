@@ -11,6 +11,18 @@ namespace NHSOnline.App.Controls.WebViews
 {
     public sealed class NhsAppWebView: WebView
     {
+
+        public event EventHandler<FocusRequestArgs> AccessibilityFocusChangeRequested = null!;
+
+        public void AccessibilityFocus()
+        {
+            if (AccessibilityFocusChangeRequested != null)
+            {
+                var arg = new FocusRequestArgs {Focus = true};
+                AccessibilityFocusChangeRequested(this, arg);
+            }
+        }
+
         public static readonly BindableProperty OpenWebIntegrationCommandProperty =
             BindableProperty.Create(nameof(OpenWebIntegrationCommand), typeof(AsyncCommand<OpenWebIntegrationRequest>), typeof(NhsAppWebView));
 
