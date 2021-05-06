@@ -27,7 +27,8 @@
                    'adviceCheck.searchConditionsAndTreatments',
                    'adviceCheck.findTrustedNhsInformation')"/>
 
-      <menu-item id="btn_111"
+      <menu-item v-if="isLoggedIn && oneOneOneEnabled"
+                 id="btn_111"
                  header-tag="h2"
                  :click-func="navigateToWebIntegration"
                  :click-param="symptomsCheckerUrl"
@@ -88,6 +89,7 @@ export default {
           serviceType: 'consultations',
         },
       }),
+      oneOneOneEnabled: sjrIf({ $store: this.$store, journey: 'oneOneOne' }),
       thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
     };
   },

@@ -17,6 +17,7 @@ describe('Advice Check Menu', () => {
     coronavirusInformationEnabled = true,
     isProofLevel9 = true,
     silverIntegrationEnabled = true,
+    oneOneOneEnabled = true,
   } = {}) => {
     $store = createStore({
       state: {
@@ -34,6 +35,7 @@ describe('Advice Check Menu', () => {
         'serviceJourneyRules/silverIntegrationEnabled': () => (silverIntegrationEnabled),
         'session/isLoggedIn': () => isLoggedIn,
         'session/isProofLevel9': isProofLevel9,
+        'serviceJourneyRules/oneOneOneEnabled': oneOneOneEnabled,
       },
     });
 
@@ -86,6 +88,10 @@ describe('Advice Check Menu', () => {
     it('will hide the GP advice button', () => {
       expect(wrapper.find('#btn_gpAdvice').exists()).toBe(false);
     });
+
+    it('will hide the one one one menu item', () => {
+      expect(wrapper.find('#btn_111').exists()).toBe(false);
+    });
   });
 
   describe('If the user is logged in', () => {
@@ -106,6 +112,26 @@ describe('Advice Check Menu', () => {
 
       it('will show the coronavirus advice button', () => {
         expect(wrapper.find('#btn_corona').exists()).toBe(true);
+      });
+    });
+
+    describe('and one one one is disabled in SJR', () => {
+      beforeEach(() => {
+        mountComponent({ isLoggedIn, oneOneOneEnabled: false });
+      });
+
+      it('will hide the one one one menu item', () => {
+        expect(wrapper.find('#btn_111').exists()).toBe(false);
+      });
+    });
+
+    describe('and one one one is enabled in SJR', () => {
+      beforeEach(() => {
+        mountComponent({ isLoggedIn, oneOneOneEnabled: true });
+      });
+
+      it('will show the one one one menu item', () => {
+        expect(wrapper.find('#btn_111').exists()).toBe(true);
       });
     });
 

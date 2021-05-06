@@ -2,6 +2,8 @@ $schema: "Schemas/Journeys/configuration_schema.json"
 target:
   odsCodes:
     - "A00002"
+    - "A80005"
+    - "no-ods-code"
     - "F00010"
 journeys:
   coronavirusInformation: false

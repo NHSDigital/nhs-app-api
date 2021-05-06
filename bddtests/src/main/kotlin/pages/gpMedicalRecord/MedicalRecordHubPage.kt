@@ -42,4 +42,10 @@ class MedicalRecordHubPage : HybridPageObject() {
             webDesktopLocator = "//*[@id='btn_gp_medical_record']",
             page = this
     )
+
+    val ndopLink = HybridPageElement(
+            webDesktopLocator = "//h2[contains(text(),'Choose if data from your health records is shared')]",
+            androidLocator = null,
+            page = this
+    )
 }

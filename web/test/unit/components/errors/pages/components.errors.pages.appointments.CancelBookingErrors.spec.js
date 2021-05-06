@@ -9,6 +9,7 @@ describe('CancelBookingErrors', () => {
     cdssAdviceEnabled = true,
     cdssAdminEnabled = true,
     silverIntegrationEnabled = true,
+    oneOneOneEnabled = true,
     status,
   } = {}) => mount(CancelBookingErrors, {
     $store: createStore({
@@ -27,6 +28,7 @@ describe('CancelBookingErrors', () => {
         'serviceJourneyRules/cdssAdminEnabled': cdssAdminEnabled,
         'serviceJourneyRules/cdssAdviceEnabled': cdssAdviceEnabled,
         'serviceJourneyRules/silverIntegrationEnabled': () => (silverIntegrationEnabled),
+        'serviceJourneyRules/oneOneOneEnabled': oneOneOneEnabled,
       },
     }),
     propsData: {
@@ -64,8 +66,8 @@ describe('CancelBookingErrors', () => {
         expect(content.at(1).text()).toContain('or call 111.');
       });
 
-      it('will have 6 menu items', () => {
-        expect(menuItems.length).toBe(6);
+      it('will have 5 menu items', () => {
+        expect(menuItems.length).toBe(5);
       });
 
       it('will have a menu item for gp advice', () => {
@@ -74,10 +76,6 @@ describe('CancelBookingErrors', () => {
 
       it('will have a menu item for gp admin help', () => {
         expect(wrapper.find('#btn_adminHelp').exists()).toBe(true);
-      });
-
-      it('will have a menu item for corona virus advice', () => {
-        expect(wrapper.find('#btn_corona').exists()).toBe(true);
       });
 
       it('will have a menu item for the nhs 111 service', () => {
@@ -93,9 +91,9 @@ describe('CancelBookingErrors', () => {
       });
       const menuItems = wrapper.findAll(MenuItem);
 
-      it('will not show the admin help menu item if admin help is disabled', () => {
+      it('will not show the admin help menu item', () => {
         expect(wrapper.find('#btn_adminHelp').exists()).toBe(false);
-        expect(menuItems.length).toBe(3);
+        expect(menuItems.length).toBe(2);
       });
     });
 
@@ -107,9 +105,23 @@ describe('CancelBookingErrors', () => {
       });
       const menuItems = wrapper.findAll(MenuItem);
 
-      it('will not show the gp advice menu item if admin help is disabled', () => {
+      it('will not show the gp advice menu item', () => {
         expect(wrapper.find('#btn_gpAdvice').exists()).toBe(false);
-        expect(menuItems.length).toBe(3);
+        expect(menuItems.length).toBe(2);
+      });
+    });
+
+    describe('without one one one and silverIntegrations enabled', () => {
+      const wrapper = mountWrapper({
+        oneOneOneEnabled: false,
+        silverIntegrationEnabled: false,
+        status: 403,
+      });
+      const menuItems = wrapper.findAll(MenuItem);
+
+      it('will not show the one one one menu item', () => {
+        expect(wrapper.find('#btn_111').exists()).toBe(false);
+        expect(menuItems.length).toBe(2);
       });
     });
 
@@ -117,18 +129,35 @@ describe('CancelBookingErrors', () => {
       const wrapper = mountWrapper({
         cdssAdviceEnabled: false,
         cdssAdminEnabled: false,
+        oneOneOneEnabled: false,
         status: 403,
       });
       const menuItems = wrapper.findAll(MenuItem);
 
       it('will show the gp advice menu item', () => {
         expect(wrapper.find('#btn_gpAdvice').exists()).toBe(true);
-        expect(menuItems.length).toBe(4);
+        expect(menuItems.length).toBe(2);
       });
 
       it('will show the admin help menu item', () => {
         expect(wrapper.find('#btn_adminHelp').exists()).toBe(true);
-        expect(menuItems.length).toBe(4);
+        expect(menuItems.length).toBe(2);
+      });
+    });
+
+    describe('with nothing enabled', () => {
+      const wrapper = mountWrapper({
+        cdssAdviceEnabled: false,
+        cdssAdminEnabled: false,
+        oneOneOneEnabled: false,
+        silverIntegrationEnabled: false,
+        status: 403,
+      });
+      const menuItems = wrapper.findAll(MenuItem);
+
+      it('will not show the what can i do next options', () => {
+        expect(wrapper.find('#alternative_actions').exists()).toBe(false);
+        expect(menuItems.length).toBe(0);
       });
     });
 

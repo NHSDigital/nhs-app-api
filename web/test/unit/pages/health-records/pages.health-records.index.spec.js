@@ -16,6 +16,7 @@ describe('healthRecords', () => {
     integrationEnabled = true,
     isProxying = false,
     isNativeApp = false,
+    ndopEnabled = true,
   } = {}) => {
     $router = createRouter();
     $store = createStore({
@@ -29,6 +30,7 @@ describe('healthRecords', () => {
         }),
         'serviceJourneyRules/silverIntegrationEnabled': () => (integrationEnabled),
         'session/isProxying': isProxying,
+        'serviceJourneyRules/ndopEnabled': ndopEnabled,
       },
     });
     return mount(HealthRecords, { $store, $router });
@@ -84,6 +86,14 @@ describe('healthRecords', () => {
     });
   });
 
+  describe('ndopDisabled', () => {
+    const linkElementNdop = wrapperObj => wrapperObj.find('#btn_data_sharing');
+    it('will not show ndop link', () => {
+      wrapper = mountAs({ ndopEnabled: false });
+      expect(linkElementNdop(wrapper).exists()).toBe(false);
+    });
+  });
+
   describe('gp medical records link is always visible', () => {
     const linkElementGP = wrapperObj => wrapperObj.find('#btn_gp_medical_record');
 
@@ -110,6 +120,26 @@ describe('healthRecords', () => {
     describe('silver integration rules enabled, but proxying', () => {
       beforeEach(() => {
         wrapper = mountAs({ isProxying: true });
+      });
+
+      it('will show link', () => {
+        expect(linkElementGP(wrapper).exists()).toBe(true);
+      });
+    });
+
+    describe('ndop enabled', () => {
+      beforeEach(() => {
+        wrapper = mountAs();
+      });
+
+      it('will show link', () => {
+        expect(linkElementGP(wrapper).exists()).toBe(true);
+      });
+    });
+
+    describe('ndop disabled', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ ndopEnabled: false });
       });
 
       it('will show link', () => {

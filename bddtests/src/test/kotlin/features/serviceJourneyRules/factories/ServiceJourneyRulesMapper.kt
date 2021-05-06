@@ -105,8 +105,35 @@ class ServiceJourneyRulesMapper {
                                 SJRJourneyType.IM1_MESSAGING_REQUIRESDETAILSREQUEST_DISABLED))
                 .add(Supplier.EMIS, "A00002",
                         EnumSet.of(
+                                SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_TESTSILVERTHIRDPARTYPROVIDER,
+                                SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB))
+                .add(Supplier.EMIS, "A80005",
+                        EnumSet.of(
                                 SJRJourneyType.CORONAVIRUS_INFORMATION_DISABLED,
+                                SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_TESTSILVERTHIRDPARTYPROVIDER,
+                                SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB))
+                .add(Supplier.EMIS, "A80006",
+                        EnumSet.of(
                                 SJRJourneyType.NDOP_DISABLED,
+                                SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_TESTSILVERTHIRDPARTYPROVIDER,
+                                SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB))  
+                .add(Supplier.EMIS, "A80007",
+                        EnumSet.of(
                                 SJRJourneyType.ONE_ONE_ONE_DISABLED,
                                 SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB,
                                 SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_PKB,

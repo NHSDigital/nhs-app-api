@@ -50,3 +50,19 @@ Feature: Medical record hub page
     Then I see the health records hub page
     And I click the menu item 'GP health record'
     And I see the 'GP health record' page
+
+  Scenario: A user can view NDOP data sharing link if NDOP SJR is enabled
+    Given I am using the native app user agent
+    And I am an EMIS patient and I have NDOP enabled
+    And I am logged in
+    When I navigate to the health record hub page
+    Then I see the health records hub page
+    And I see the NDOP data sharing link
+
+  Scenario: A user cannot view NDOP data sharing link if NDOP SJR is disabled
+    Given I am using the native app user agent
+    And I am an EMIS patient and I have NDOP disabled
+    And I am logged in
+    When I navigate to the health record hub page
+    Then I see the health records hub page
+    And I do not see the NDOP data sharing link

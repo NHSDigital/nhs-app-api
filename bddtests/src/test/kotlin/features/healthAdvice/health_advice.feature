@@ -30,3 +30,10 @@ Feature: Get Health Advice
     Then the Advice page is displayed
     When I click Use NHS 111 online
     Then the 111 online page has been opened in a new tab
+
+  Scenario: A user with 111 disabled can not use the get health advice to navigate to 111 online
+    Given I am a user with 111 disabled
+    And I am logged in
+    When I navigate to Advice
+    Then the Advice page is displayed without Use NHS 111 online
+

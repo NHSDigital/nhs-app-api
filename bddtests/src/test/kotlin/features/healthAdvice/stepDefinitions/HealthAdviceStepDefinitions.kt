@@ -11,6 +11,7 @@ import mocking.MockingClient
 import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journeys.termsAndConditions.TermsAndConditionsJourneyFactory
+import models.Patient
 import net.thucydides.core.annotations.Steps
 import pages.HealthAdvicePage
 import pages.assertElementNotPresent
@@ -31,10 +32,15 @@ open class HealthAdviceStepDefinitions {
     private lateinit var oneOneOneOnlinePage: OneOneOneOnlinePage
 
     @Given("^I am a user with coronavirus information disabled$")
-    fun iAmAUser() {
+    fun iAmAUserWithCoronavirusInformationDisabled() {
         setupUser(SJRJourneyType.CORONAVIRUS_INFORMATION_DISABLED)
     }
 
+    @Given("^I am a user with 111 disabled$")
+    fun iAmAUserOneOneOneDisabled() {
+        setupUser(SJRJourneyType.ONE_ONE_ONE_DISABLED)
+    }
+    
     @Given("^I am a user who wishes to view advice about coronavirus$")
     fun iAmAUserWhoWishesToViewAdviceAboutCoronavirus() {
         setupUser()
@@ -56,14 +62,21 @@ open class HealthAdviceStepDefinitions {
         MockingClient.instance.forExternalSites.mock { oneOneOneOnlineRequest().respondWithPage() }
     }
 
-    private fun setupUser(journeyType: SJRJourneyType = SJRJourneyType.CORONAVIRUS_INFORMATION_ENABLED) {
+    private fun setupUser(journeyType: SJRJourneyType? = null)
+    {
         val supplier = Supplier.valueOf("EMIS")
+        var patient = Patient.getDefault(supplier)
+        if(journeyType != null)
+        {
+            patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
+                supplier,
+                journeyType
+            )
+        }
+        setupUser(supplier, patient)
+    }
 
-        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
-            supplier,
-            journeyType
-        )
-
+    private fun setupUser(supplier: Supplier, patient: Patient) {
         SerenityHelpers.setPatient(patient)
         SerenityHelpers.setGpSupplier(supplier)
 
@@ -96,20 +109,17 @@ open class HealthAdviceStepDefinitions {
         healthAdvicePage.askYourGpForAdvice.click()
     }
 
-    private fun getHealthAdvicePageIsDisplayed() {
+    @Then("^the Advice page is displayed")
+    fun getHealthAdvicePageDisplayed() {
         healthAdvicePage.searchConditionsAndTreatments.assertIsVisible()
         healthAdvicePage.useNhsOneOneOneOnline.assertIsVisible()
-    }
-
-    @Then("^the Advice page is displayed")
-    fun getHealthAdvicePageWithCoronavirusAdviceDisplayed() {
-        getHealthAdvicePageIsDisplayed()
         healthAdvicePage.adviceAboutCoronavirus.assertIsVisible()
     }
 
     @Then("^the Advice page is displayed without advice about coronavirus")
     fun getHealthAdvicePageWithoutCoronavirusAdviceDisplayed() {
-        getHealthAdvicePageIsDisplayed()
+        healthAdvicePage.searchConditionsAndTreatments.assertIsVisible()
+        healthAdvicePage.useNhsOneOneOneOnline.assertIsVisible()
         healthAdvicePage.adviceAboutCoronavirus.assertElementNotPresent()
     }
 
@@ -134,5 +144,12 @@ open class HealthAdviceStepDefinitions {
     @Then("^the link to Engage Medical Advice is not available on the Advice page$")
     fun theLinkToEngageMedicalAdviceIsNotAvailableOnTheAdvicePage() {
         healthAdvicePage.engageMedicalAdvice.assertElementNotPresent()
+    }
+
+    @Then("^the Advice page is displayed without Use NHS 111 online")
+    fun getHealthAdvicePageWithoutOneOneOneDisplayed() {
+        healthAdvicePage.searchConditionsAndTreatments.assertIsVisible()
+        healthAdvicePage.adviceAboutCoronavirus.assertIsVisible()
+        healthAdvicePage.useNhsOneOneOneOnline.assertElementNotPresent()
     }
 }

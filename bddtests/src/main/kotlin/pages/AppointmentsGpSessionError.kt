@@ -2,7 +2,6 @@ package pages
 
 open class AppointmentsGpSessionError: GpSessionError() {
 
-    private val coronaVirusHeader = setupElement("Get advice about coronavirus")
     private val gpAdviceHeader = setupElement("Ask your GP for advice")
     private val gpAdminHeader = setupElement("Additional GP services")
     private val nhs111Header = setupElement("Use NHS 111 online")
@@ -14,11 +13,6 @@ open class AppointmentsGpSessionError: GpSessionError() {
 
     fun assertGpAdminMenuItem(): AppointmentsGpSessionError{
         gpAdminHeader.assertIsVisible()
-        return this
-    }
-
-    fun assertCoronaVirusMenuItem(): AppointmentsGpSessionError{
-        coronaVirusHeader.assertIsVisible()
         return this
     }
 

@@ -259,7 +259,6 @@ class YourAppointmentsStepDefinitions {
                 .assertParagraphText("If the problem continues and you need to book an appointment now, " +
                         "contact your GP surgery directly. For urgent medical advice go to ")
         appointmentForbiddenError.assertNHS111Online()
-                .assertCoronaVirusMenuItem()
     }
 
     @Then("^I see appropriate try again error message when there is an error with '(.*)'$")
@@ -309,6 +308,5 @@ class YourAppointmentsStepDefinitions {
                         "contact your GP surgery directly. For urgent medical advice go to ")
                 .assertReportAProblemLink()
         appointmentGpSessionError.assertNHS111Online()
-                .assertCoronaVirusMenuItem()
     }
 }

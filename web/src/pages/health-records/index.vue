@@ -144,6 +144,7 @@
               :back-link-override="yourHealthPath"/>
 
             <menu-item
+              v-if="showDataSharing"
               id="btn_data_sharing"
               header-tag="h2"
               data-purpose="text_link"
@@ -383,6 +384,10 @@ export default {
           provider: 'pkbMyCareView',
           serviceType: 'recordSharing',
         },
+      }),
+      showDataSharing: sjrIf({
+        $store: this.$store,
+        journey: 'ndop',
       }),
       isProxying: this.$store.getters['session/isProxying'],
       thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
