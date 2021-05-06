@@ -32,11 +32,32 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidMessagesPage
                 .AssertOnPage(driver)
-                .PageContent.TestProvider();
+                .PageContent.NavigateToTestProvider();
 
             AndroidTestWebIntegrationProviderPage
                 .AssertOnPage(driver)
                 .AssertNativeHeader();
+        }
+
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelNineCanKeyboardNavigateToAccessTheTestProviderFromMessagesScreenAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .KeyboardNavigateToMessages();
+
+            AndroidMessagesPage
+                .AssertOnPage(driver)
+                .KeyboardNavigateToTestProvider();
+
+            AndroidTestWebIntegrationProviderPage
+                .AssertOnPage(driver);
         }
 
         [NhsAppIOSTest]
@@ -54,7 +75,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSMessagesPage
                 .AssertOnPage(driver)
-                .PageContent.TestProvider();
+                .PageContent.NavigateToTestProvider();
 
             IOSTestWebIntegrationProviderPage
                 .AssertOnPage(driver)
