@@ -15,7 +15,7 @@ namespace NHSOnline.App.Droid
         Theme = "@style/MainTheme",
         Icon = "@mipmap/ic_launcher",
         RoundIcon = "@mipmap/ic_launcher_round",
-        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
+        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden,
         ScreenOrientation = ScreenOrientation.FullUser)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
