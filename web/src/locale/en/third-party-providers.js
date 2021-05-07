@@ -135,7 +135,7 @@ export default {
         thirdPartyWarning: {
           featureName: 'Share your COVID-19 status',
           serviceTypePlural: 'this service',
-          linkHref: 'https://www.nhs.uk/nhs-services/online-services/nhs-app/nhs-app-help-and-support/third-party-services/',
+          linkHref: 'https://www.nhs.uk/nhs-services/online-services/nhs-app/nhs-app-help-and-support/about-the-share-your-covid-19-status-service/',
         },
       },
     ],
