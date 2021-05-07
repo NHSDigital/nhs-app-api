@@ -18,6 +18,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         public static WebViewContext AToZWebIntegration { get; } = new AToZWebIntegrationWebViewContext();
         public static WebViewContext OneOneOneWebIntegration { get; } = new OneOneOneWebIntegrationWebViewContext();
         public static WebViewContext TestProviderWebIntegration { get; } = new TestWebIntegrationProviderWebViewContext();
+        public static WebViewContext NhsLoginSettingsWebIntegration { get; } = new NhsLoginSettingsWebIntegrationWebViewContext();
 
         internal abstract void AssertContextReady(IWebDriver driver);
 
@@ -85,6 +86,13 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         }
 
         private class AToZWebIntegrationWebViewContext : WebViewContext
+        {
+            internal override void AssertContextReady(IWebDriver driver)
+            {
+            }
+        }
+
+        private class NhsLoginSettingsWebIntegrationWebViewContext : WebViewContext
         {
             internal override void AssertContextReady(IWebDriver driver)
             {
