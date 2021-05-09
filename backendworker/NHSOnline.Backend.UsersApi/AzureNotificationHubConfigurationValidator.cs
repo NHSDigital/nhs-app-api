@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.UsersApi
 
             foreach (var config in configs)
             {
-                errors.AddRange(config.WriteCharacters
+                errors.AddRange(config.WriteCharacters.Intersect(FullRangeOfCharacters)
                     .Where(x => !config.ReadCharacters.Contains(x, StringComparison.InvariantCulture))
                     .Select(x => $"Entry for write character [{x}] found that does not permit reading"));
             }

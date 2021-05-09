@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.Backend.UsersApi.Notifications.Migration;
 using NHSOnline.Backend.UsersApi.Repository;
 
 namespace NHSOnline.Backend.UsersApi.Notifications
@@ -15,6 +16,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             services.AddTransient<IInstallationFactory, InstallationFactory>();
             services.AddTransient<INotificationRegistrationService, NotificationRegistrationService>();
             services.AddTransient<INotificationService, NotificationService>();
+            services.AddTransient<IMigrationService, MigrationService>();
 
             base.ConfigureServices(services, configuration);
         }

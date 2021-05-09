@@ -119,26 +119,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
         [TestMethod]
         [DataRow(null)]
         [DataRow("")]
-        public void ConfigureServices_AzureConfiguration_WhenHubWriteCharactersIsInvalid_ThrowsException(string characters)
-        {
-            // Arrange
-            SetupConfiguration();
-
-            _mockHubConfigurationSections.First()
-                .Setup(x => x["AZURE_NOTIFICATION_HUB_WRITE_CHARACTERS"])
-                .Returns(characters);
-
-            // Act
-            Action act = () => _systemUnderTest.ConfigureServices(new ServiceCollection());
-
-            // Assert
-            act.Should().Throw<ConfigurationNotValidException>()
-                .Which.Message.Should().Contain("AZURE_NOTIFICATION_HUB_WRITE_CHARACTERS");
-        }
-
-        [TestMethod]
-        [DataRow(null)]
-        [DataRow("")]
         [DataRow("Non-Integer Value")]
         public void ConfigureServices_AzureConfiguration_WhenHubGenerationIsInvalid_ThrowsException(string generation)
         {

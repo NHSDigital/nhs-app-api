@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 .Returns(Task.CompletedTask);
 
             _mockNotificationClient
-                .Setup(x => x.CreateInstallation(_installation))
+                .Setup(x => x.CreateInstallation(_installation, null))
                 .ReturnsAsync(InstallationId);
 
             // Act
@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 .Returns(Task.CompletedTask);
 
             _mockNotificationClient
-                .Setup(x => x.CreateInstallation(_installation))
+                .Setup(x => x.CreateInstallation(_installation, null))
                 .ReturnsAsync(InstallationId);
 
             // Act
@@ -147,7 +147,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 .Returns(Task.CompletedTask);
 
             _mockNotificationClient
-                .Setup(x => x.CreateInstallation(_installation))
+                .Setup(x => x.CreateInstallation(_installation, null))
                 .Throws<HttpRequestException>();
 
             // Act
@@ -168,7 +168,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 .Returns(Task.CompletedTask);
 
             _mockNotificationClient
-                .Setup(x => x.CreateInstallation(_installation))
+                .Setup(x => x.CreateInstallation(_installation, null))
                 .Throws<Exception>();
 
             // Act
@@ -189,7 +189,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 .Returns(Task.CompletedTask);
 
             _mockNotificationClient
-                .Setup(x => x.CreateInstallation(_installation))
+                .Setup(x => x.CreateInstallation(_installation, null))
                 .Throws(MessagingExceptionFactory.Create());
 
             // Act

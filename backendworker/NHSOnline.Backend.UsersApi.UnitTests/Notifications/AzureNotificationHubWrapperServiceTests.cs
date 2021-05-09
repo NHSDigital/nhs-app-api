@@ -14,18 +14,18 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         private const string NhsLoginId = "NhsLoginId";
 
         private IAzureNotificationHubWrapperService _systemUnderTest;
-
         private readonly List<IAzureNotificationHubWrapper> _wrappers = new List<IAzureNotificationHubWrapper>();
 
         [TestInitialize]
         public void Setup()
         {
-            _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
         }
 
         [TestMethod]
         public void All_Empty_ReturnsEmpty()
         {
+            _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
+
             var result = _systemUnderTest.All();
 
             result.Should().BeEmpty();
@@ -35,6 +35,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         public void All_Single_ReturnsSingle()
         {
             _wrappers.Add(GetMockWrapperForReading(1, true).Object);
+
+            _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
 
             var result = _systemUnderTest.All().ToList();
 
@@ -52,6 +54,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 GetMockWrapperForReading(3, true).Object
             });
 
+            _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
+
             var result = _systemUnderTest.All().ToList();
 
             result.Should().HaveCount(3);
@@ -63,6 +67,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         [TestMethod]
         public void AllFor_Empty_ThrowsExceptions()
         {
+            _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
+
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => _systemUnderTest.AllFor(NhsLoginId));
         }
 
@@ -71,6 +77,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         {
             _wrappers.Add(GetMockWrapperForReading(1, false).Object);
 
+            _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
+
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => _systemUnderTest.AllFor(NhsLoginId));
         }
 
@@ -78,6 +86,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         public void AllFor_SingleWrapper_ForSpecifiedNhsLoginId_ReturnsWrapper()
         {
             _wrappers.Add(GetMockWrapperForReading(1, true).Object);
+
+            _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
 
             var result = _systemUnderTest.AllFor(NhsLoginId).ToList();
 
@@ -95,6 +105,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             _wrappers.Add(GetMockWrapperForReading(2, false).Object);
             _wrappers.Add(GetMockWrapperForReading(3, false).Object);
 
+            _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
+
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => _systemUnderTest.AllFor(NhsLoginId));
         }
 
@@ -104,6 +116,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             _wrappers.Add(GetMockWrapperForReading(1, true).Object);
             _wrappers.Add(GetMockWrapperForReading(2, false).Object);
             _wrappers.Add(GetMockWrapperForReading(3, false).Object);
+
+            _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
 
             var result = _systemUnderTest.AllFor(NhsLoginId).ToList();
 
@@ -121,6 +135,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             _wrappers.Add(GetMockWrapperForReading(2, false).Object);
             _wrappers.Add(GetMockWrapperForReading(3, true).Object);
 
+            _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
+
             var result = _systemUnderTest.AllFor(NhsLoginId).ToList();
 
             result.Should().NotBeEmpty();
@@ -136,6 +152,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         [TestMethod]
         public void CurrentFor_Empty_ThrowsException()
         {
+            _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
+
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => _systemUnderTest.CurrentFor(NhsLoginId));
         }
 
@@ -144,6 +162,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         {
             _wrappers.Add(GetMockWrapperForWriting(1, false).Object);
 
+            _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
+
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => _systemUnderTest.CurrentFor(NhsLoginId));
         }
 
@@ -151,6 +171,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         public void CurrentFor_SingleWrapper_ForSpecifiedNhsLoginId_ReturnsWrapper()
         {
             _wrappers.Add(GetMockWrapperForWriting(1, true).Object);
+
+            _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
 
             var result = _systemUnderTest.CurrentFor(NhsLoginId);
 
@@ -165,6 +187,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             _wrappers.Add(GetMockWrapperForWriting(2, false).Object);
             _wrappers.Add(GetMockWrapperForWriting(3, false).Object);
 
+            _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
+
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => _systemUnderTest.CurrentFor(NhsLoginId));
         }
 
@@ -174,6 +198,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             _wrappers.Add(GetMockWrapperForWriting(1, true).Object);
             _wrappers.Add(GetMockWrapperForWriting(2, false).Object);
             _wrappers.Add(GetMockWrapperForWriting(3, false).Object);
+
+            _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
 
             var result = _systemUnderTest.CurrentFor(NhsLoginId);
 
@@ -188,6 +214,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             _wrappers.Add(GetMockWrapperForWriting(2, false).Object);
             _wrappers.Add(GetMockWrapperForWriting(3, true).Object);
 
+            _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
+
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => _systemUnderTest.CurrentFor(NhsLoginId));
         }
 
@@ -198,6 +226,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             wrapper
                 .Setup(x => x.Generation)
                 .Returns(generation);
+
+            wrapper
+                .Setup(x => x.Path)
+                .Returns(generation.ToString);
 
             wrapper
                 .Setup(x => x.CanReadFor(NhsLoginId))
@@ -213,6 +245,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             wrapper
                 .Setup(x => x.Generation)
                 .Returns(generation);
+
+            wrapper
+                .Setup(x => x.Path)
+                .Returns(generation.ToString);
 
             wrapper
                 .Setup(x => x.CanWriteFor(NhsLoginId))

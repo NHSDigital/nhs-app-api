@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.UsersApi
             NotificationHubPath = notificationHubPath;
             SharedAccessKey = sharedAccessKey;
             ReadCharacters = readCharacters.ToUpperInvariant();
-            WriteCharacters = writeCharacters.ToUpperInvariant();
+            WriteCharacters = writeCharacters?.ToUpperInvariant() ?? string.Empty;
             Generation = generation;
         }
     }

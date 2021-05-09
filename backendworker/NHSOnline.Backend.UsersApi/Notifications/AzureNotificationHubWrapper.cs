@@ -18,6 +18,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         private readonly string _description;
 
         public int Generation { get; }
+        public string Path { get; }
 
         public AzureNotificationHubWrapper(AzureNotificationHubConfiguration configuration)
         {
@@ -36,6 +37,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
                            + $"Writes [{configuration.WriteCharacters.ToUpperInvariant()}])";
 
             Generation = configuration.Generation;
+            Path = configuration.NotificationHubPath;
         }
 
         public bool CanReadFor(string nhsLoginId) => _readService.HandlesNhsLoginId(nhsLoginId);

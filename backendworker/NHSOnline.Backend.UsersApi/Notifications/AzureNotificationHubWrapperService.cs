@@ -6,18 +6,18 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 {
     internal class AzureNotificationHubWrapperService : IAzureNotificationHubWrapperService
     {
-        private readonly IEnumerable<IAzureNotificationHubWrapper> _wrappers;
+        private readonly Dictionary<string, IAzureNotificationHubWrapper> _wrappers;
 
         public AzureNotificationHubWrapperService(IEnumerable<IAzureNotificationHubWrapper> wrappers)
         {
-            _wrappers = wrappers;
+            _wrappers = wrappers.ToDictionary(x => x.Path, x => x);
         }
 
-        public IEnumerable<IAzureNotificationHubWrapper> All() => _wrappers;
+        public IEnumerable<IAzureNotificationHubWrapper> All() => _wrappers.Values;
 
         public IEnumerable<IAzureNotificationHubWrapper> AllFor(string nhsLoginId)
         {
-            var output = _wrappers
+            var output = _wrappers.Values
                 .Where(x => x.CanReadFor(nhsLoginId))
                 .OrderByDescending(x => x.Generation)
                 .ToList();
@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public IAzureNotificationHubWrapper CurrentFor(string nhsLoginId)
         {
-            var output = _wrappers
+            var output = _wrappers.Values
                 .Where(x => x.CanWriteFor(nhsLoginId))
                 .OrderByDescending(x => x.Generation)
                 .ToList();
@@ -43,6 +43,16 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             }
 
             return output.First();
+        }
+
+        public IAzureNotificationHubWrapper Hub(string path)
+        {
+            if (!_wrappers.ContainsKey(path))
+            {
+                throw new ArgumentOutOfRangeException(nameof(path), path);
+            }
+
+            return _wrappers[path];
         }
     }
 }

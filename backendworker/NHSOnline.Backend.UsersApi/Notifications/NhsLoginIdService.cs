@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public NhsLoginIdService(string characters)
         {
-            if (string.IsNullOrEmpty(characters))
+            if (characters == null)
             {
                 throw new ArgumentNullException(nameof(characters));
             }

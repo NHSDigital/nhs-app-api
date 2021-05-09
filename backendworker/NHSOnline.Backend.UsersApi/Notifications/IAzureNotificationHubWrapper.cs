@@ -8,6 +8,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         bool CanReadFor(string nhsLoginId);
         bool CanWriteFor(string nhsLoginId);
         int Generation { get; }
+        string Path { get; }
 
         Task<string> CreateInstallation(InstallationRequest request);
         Task DeleteInstallation(string installationId);

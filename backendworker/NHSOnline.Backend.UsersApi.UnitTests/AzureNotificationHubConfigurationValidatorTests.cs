@@ -218,6 +218,20 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
         }
 
         [TestMethod]
+        public void Validate_MultipleHubs_OneWithNoValidWriteCharacters_DoesNotThrowsException()
+        {
+            SetupConfiguration(new[]
+            {
+                new HubSettings{ Generation = 1, Read = FullRange, Write = string.Empty },
+                new HubSettings{ Generation = 2, Read = FullRange, Write = FullRange }
+            });
+
+            Action action = () => _systemUnderTest.Validate(_configurations);
+
+            action.Should().NotThrow();
+        }
+
+        [TestMethod]
         public void Validate_MultipleHubs_EverythingValid_DoesNotThrowException()
         {
             SetupConfiguration(new[]

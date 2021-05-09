@@ -98,7 +98,7 @@ namespace NHSOnline.Backend.UsersApi
                 var path = config.GetOrThrow("AZURE_NOTIFICATION_HUB_PATH", _logger);
                 var sharedAccessKey = config.GetOrThrow("AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY", _logger);
                 var readCharacters = config.GetOrThrow("AZURE_NOTIFICATION_HUB_READ_CHARACTERS", _logger);
-                var writeCharacters = config.GetOrThrow("AZURE_NOTIFICATION_HUB_WRITE_CHARACTERS", _logger);
+                var writeCharacters = config.GetOrNull("AZURE_NOTIFICATION_HUB_WRITE_CHARACTERS");
                 var generation = config.GetIntOrThrow("AZURE_NOTIFICATION_HUB_GENERATION", _logger);
 
                 output.Add(new AzureNotificationHubConfiguration(
