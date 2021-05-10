@@ -10,7 +10,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.LoggedOut
 {
     [TestClass]
-    [BusinessRule("BR-LOG-06.8", "Invoking native back on the notifications prompt has no associated action")]
+    [BusinessRule("BR-NOT-03.5", "Invoking native back on the notifications prompt has no associated action")]
     public class NotificationsPromptBackTests
     {
         [NhsAppAndroidTest]
