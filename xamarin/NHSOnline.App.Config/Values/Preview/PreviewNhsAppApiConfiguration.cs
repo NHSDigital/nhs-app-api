@@ -2,8 +2,8 @@
 {
     internal sealed class PreviewNhsAppApiConfiguration : INhsAppApiConfiguration
     {
-        public string Scheme { get; } = "https";
-        public string Host { get; } = "api-preview.dev.nonlive.nhsapp.service.nhs.uk";
-        public int Port { get; } = 443;
+        public string Scheme => "https";
+        public string Host => "api-preview.dev.nonlive.nhsapp.service.nhs.uk";
+        public int Port => 443;
     }
 }
