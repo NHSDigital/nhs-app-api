@@ -513,7 +513,7 @@
       "viewMode": "WebView",
       "integrationLevel": "SilverWithWebNavigation",
       "showSpinner": true,
-      "showThirdPartyWarning": true,
+      "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": true,
       "validateSession": true,
       "url": "https://storsitstatic.z33.web.core.windows.net",
