@@ -31,7 +31,7 @@ namespace NHSOnline.App.Areas.Home
             Func<Task>? GetNotificationsStatusRequested { get; set; }
             Func<string, Task>? GetPnsTokenRequested { get; set; }
 
-            Func<Task>? FetchBiometricStatusRequested { get; set; }
+            Func<string, Task>? FetchBiometricStatusRequested { get; set; }
             Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
             Func<Uri, Task>? DeeplinkRequested { get; set; }
         }

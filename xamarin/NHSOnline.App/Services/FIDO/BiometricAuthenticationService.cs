@@ -1,6 +1,6 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Api.Session;
 using NHSOnline.App.DependencyServices.Biometrics;
 using NHSOnline.App.Threading;
 
@@ -28,42 +28,32 @@ namespace NHSOnline.App.Services.FIDO
             _biometricLoginService = biometricLoginService;
         }
 
-        public async Task<BiometricRegisterResult> Register(string accessToken)
+        public async Task<BiometricRegisterResult> Register(AccessToken accessToken)
         {
             return await _biometricRegistrationService.Register(accessToken).ResumeOnThreadPool();
         }
 
-        public async Task DeleteRegistration(string accessToken)
+        public async Task DeleteRegistration(AccessToken accessToken)
         {
             await _biometricRegistrationService.DeleteRegistration(accessToken).ResumeOnThreadPool();
         }
 
-        public async Task<BiometricLoginResult> Authenticate()
+        public async Task<BiometricLoginResult> Authenticate(string fidoUsername)
         {
-            return await _biometricLoginService.Authenticate().ResumeOnThreadPool();
+            return await _biometricLoginService.Authenticate(fidoUsername).ResumeOnThreadPool();
         }
 
-        public async Task<BiometricStatusResult> FetchBiometricStatus()
+        public async Task<BiometricStatusResult> FetchBiometricStatus(string fidoUsername)
         {
             var hasKeyId = _preferencesService.BiometricsKeyId != null;
-            var biometricStatus = await _biometrics.FetchBiometricStatus().ResumeOnThreadPool();
+            var biometricStatus = await _biometrics.FetchBiometricStatus(fidoUsername).ResumeOnThreadPool();
 
             return BiometricStatusResult.DeriveFrom(biometricStatus, hasKeyId);
         }
 
-        public async Task DeleteAuthKey()
+        public async Task DeleteRegistration(string fidoUsername)
         {
-            try
-            {
-                if (_biometrics.TryGetKey(out var authKey))
-                {
-                    await authKey.Delete().ResumeOnThreadPool();
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.LogWarning(e, "Failed to delete auth key");
-            }
+            await _biometricRegistrationService.DeleteRegistration(fidoUsername).ResumeOnThreadPool();
         }
     }
 }

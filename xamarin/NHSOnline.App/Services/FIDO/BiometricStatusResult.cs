@@ -89,7 +89,7 @@ namespace NHSOnline.App.Services.FIDO
                 return registrationStatus switch
                 {
                     BiometricRegistrationStatus.Registered => _hasKeyId,
-                    BiometricRegistrationStatus.Invalidated => _hasKeyId,
+                    BiometricRegistrationStatus.Invalidated => false,
                     _ => false
                 };
             }

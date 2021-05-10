@@ -57,7 +57,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _browserOverlay = browserOverlay;
             _backgroundExecutionService = backgroundExecutionService;
 
-            _biometricLoginErrorPageDispatcher = new BiometricLoginErrorPageDispatcher(_view, _pageFactory, _biometricAuthenticationService);
+            _biometricLoginErrorPageDispatcher = new BiometricLoginErrorPageDispatcher(_view, _pageFactory, _biometricAuthenticationService, _userPreferencesService);
 
             _view.AppNavigation
                 .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
@@ -84,8 +84,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
                 {
                     if (!_cancelBiometricLogin.IsCancellationRequested)
                     {
-                        var result = await _biometricAuthenticationService.Authenticate().PreserveThreadContext();
-                        await result.Accept(new BiometricLoginResultVisitor(this)).PreserveThreadContext();
+                        await ActivateBiometricLogin().PreserveThreadContext();
                     }
                 });
             }).ResumeOnThreadPool();
@@ -104,9 +103,16 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
             if (!_cancelBiometricLogin.IsCancellationRequested)
             {
-                var result = await _biometricAuthenticationService.Authenticate().PreserveThreadContext();
-                await result.Accept(new BiometricLoginResultVisitor(this)).PreserveThreadContext();
+                await ActivateBiometricLogin().PreserveThreadContext();
             }
+        }
+
+        private async Task ActivateBiometricLogin()
+        {
+            var result = await _biometricAuthenticationService
+                .Authenticate(_userPreferencesService.FidoUsername)
+                .PreserveThreadContext();
+            await result.Accept(new BiometricLoginResultVisitor(this)).PreserveThreadContext();
         }
 
         private async Task ViewOnLoginRequested()

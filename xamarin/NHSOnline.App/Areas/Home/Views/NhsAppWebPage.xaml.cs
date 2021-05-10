@@ -48,9 +48,9 @@ namespace NHSOnline.App.Areas.Home.Views
         public AsyncCommand<string> RequestPnsTokenCommand
             => new AsyncCommand<string>(() => GetPnsTokenRequested);
 
-        public Func<Task>? FetchBiometricStatusRequested { get; set; }
-        public AsyncCommand FetchBiometricStatusCommand
-            => new AsyncCommand(() => FetchBiometricStatusRequested);
+        public Func<string, Task>? FetchBiometricStatusRequested { get; set; }
+        public AsyncCommand<string> FetchBiometricStatusCommand
+            => new AsyncCommand<string>(() => FetchBiometricStatusRequested);
 
         public Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
         public Func<Uri, Task>? DeeplinkRequested { get; set; }

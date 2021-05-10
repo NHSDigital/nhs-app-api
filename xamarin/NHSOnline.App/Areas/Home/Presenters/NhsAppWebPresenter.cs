@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Api.Session;
 using NHSOnline.App.Areas.Home.Models;
 using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
@@ -74,7 +75,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                     GetNotificationsStatusRequested, (view, handler) => view.GetNotificationsStatusRequested = handler)
                 .RegisterHandler<string>(
                     RequestPnsToken, (view, handler) => view.GetPnsTokenRequested = handler)
-                .RegisterHandler(
+                .RegisterHandler<string>(
                     FetchBiometricStatusRequested, (view, handler) => view.FetchBiometricStatusRequested = handler)
                 .RegisterHandler<string>(
                     UpdateBiometricRegistrationRequested, (view, handler) => view.UpdateBiometricRegistrationRequested = handler)
@@ -183,9 +184,10 @@ namespace NHSOnline.App.Areas.Home.Presenters
             }
         }
 
-        private async Task FetchBiometricStatusRequested()
+        private async Task FetchBiometricStatusRequested(string accessToken)
         {
-            var result = await _biometricAuthenticationService.FetchBiometricStatus().PreserveThreadContext();
+            var token = AccessToken.Parse(accessToken);
+            var result = await _biometricAuthenticationService.FetchBiometricStatus(token.Subject).PreserveThreadContext();
             var biometricStatus = result.Accept(new BiometricResultToStatusVisitor());
             await _view.SendBiometricStatus(biometricStatus).PreserveThreadContext();
         }
@@ -193,15 +195,16 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private async Task UpdateBiometricRegistrationRequested(string accessToken)
         {
             var completion = new BiometricCompletion {Action = "Register"};
+            var token = AccessToken.Parse(accessToken);
 
             try
             {
-                var biometricStatusResult = await _biometricAuthenticationService.FetchBiometricStatus().PreserveThreadContext();
+                var biometricStatusResult = await _biometricAuthenticationService.FetchBiometricStatus(token.Subject).PreserveThreadContext();
                 switch (biometricStatusResult)
                 {
                     case BiometricStatusResult.HardwarePresent { Registered: false, Usable: true }:
                         completion.Action = "Register";
-                        var registerResult = await _biometricAuthenticationService.Register(accessToken).PreserveThreadContext();
+                        var registerResult = await _biometricAuthenticationService.Register(token).PreserveThreadContext();
                         completion.Outcome = registerResult.Outcome.ToString();
                         completion.ErrorCode = registerResult.ErrorCode?.ToString() ?? string.Empty;
                         break;
@@ -214,7 +217,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
                     case BiometricStatusResult.HardwarePresent { Registered: true }:
                         completion.Action = "Deregister";
-                        await _biometricAuthenticationService.DeleteRegistration(accessToken).PreserveThreadContext();
+                        await _biometricAuthenticationService.DeleteRegistration(token).PreserveThreadContext();
                         completion.Outcome = BiometricOutcome.Success.ToString();
                         completion.ErrorCode = string.Empty;
                         break;

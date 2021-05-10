@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Services;
 using NHSOnline.App.Services.FIDO;
 
 namespace NHSOnline.App.Areas.LoggedOut.Presenters
@@ -9,15 +10,18 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly ILogger<BiometricLoginFaceIdLockedOutPresenter> _logger;
         private readonly IBiometricLoginFaceIdLockedOutView _view;
         private readonly IBiometricAuthenticationService _biometricAuthenticationService;
+        private readonly IUserPreferencesService _userPreferencesService;
 
         public BiometricLoginFaceIdLockedOutPresenter(
             ILogger<BiometricLoginFaceIdLockedOutPresenter> logger,
             IBiometricLoginFaceIdLockedOutView view,
-            IBiometricAuthenticationService biometricAuthenticationService)
+            IBiometricAuthenticationService biometricAuthenticationService,
+            IUserPreferencesService userPreferencesService)
         {
             _logger = logger;
             _view = view;
             _biometricAuthenticationService = biometricAuthenticationService;
+            _userPreferencesService = userPreferencesService;
 
             _view.AppNavigation
                 .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
@@ -27,7 +31,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task ViewOnAppearing()
         {
             await _biometricAuthenticationService
-                .DeleteAuthKey()
+                .DeleteRegistration(_userPreferencesService.FidoUsername)
                 .PreserveThreadContext();
         }
 

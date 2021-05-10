@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.Logging;
+using NHSOnline.App.Services;
 using NHSOnline.App.Services.FIDO;
 
 namespace NHSOnline.App.Areas.LoggedOut.Presenters
@@ -12,17 +13,20 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly ILoggedOutHomeScreenView _view;
         private readonly IPageFactory _pageFactory;
         private readonly IBiometricAuthenticationService _biometricAuthenticationService;
+        private readonly IUserPreferencesService _userPreferencesService;
 
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(BiometricLoginErrorPageDispatcher));
 
         public BiometricLoginErrorPageDispatcher(
             ILoggedOutHomeScreenView view,
             IPageFactory pageFactory,
-            IBiometricAuthenticationService biometricAuthenticationService)
+            IBiometricAuthenticationService biometricAuthenticationService,
+            IUserPreferencesService userPreferencesService)
         {
             _view = view;
             _pageFactory = pageFactory;
             _biometricAuthenticationService = biometricAuthenticationService;
+            _userPreferencesService = userPreferencesService;
         }
 
         public async Task ShowCouldNotLoginWithBiometrics()
@@ -34,13 +38,17 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         public async Task ShowBiometricLoginFailed()
         {
-            var result = await _biometricAuthenticationService.FetchBiometricStatus().PreserveThreadContext();
+            var result = await _biometricAuthenticationService
+                .FetchBiometricStatus(_userPreferencesService.FidoUsername)
+                .PreserveThreadContext();
             await result.Accept(new BiometricLoginFailedStatusResultVisitor(this)).PreserveThreadContext();
         }
 
         public async Task ShowBiometricLoginPermanentlyLockedOut()
         {
-            var result = await _biometricAuthenticationService.FetchBiometricStatus().PreserveThreadContext();
+            var result = await _biometricAuthenticationService
+                .FetchBiometricStatus(_userPreferencesService.FidoUsername)
+                .PreserveThreadContext();
             await result.Accept(new BiometricLoginPermanentLockoutStatusResultVisitor(this)).PreserveThreadContext();
         }
 

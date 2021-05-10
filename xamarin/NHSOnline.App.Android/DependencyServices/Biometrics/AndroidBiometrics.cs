@@ -19,13 +19,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
     {
         internal static Activity MainActivity { get; set; } = null!;
 
-        public string BiometricsUsername
-        {
-            get => BiometricRegistrationState.FidoUsername;
-            set => BiometricRegistrationState.FidoUsername = value;
-        }
-
-        public Task<BiometricStatus> FetchBiometricStatus()
+        public Task<BiometricStatus> FetchBiometricStatus(string fidoUsername)
         {
             using var manager = BiometricManager.From(MainActivity);
 
@@ -45,14 +39,14 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
 
             return Task.FromResult(status);
 
-            BiometricStatus.FingerPrint Unusable() => new BiometricStatus.FingerPrint(BiometricHardwareState.Unusable, DeriveBiometricRegistrationStatus());
+            BiometricStatus.FingerPrint Unusable() => new BiometricStatus.FingerPrint(BiometricHardwareState.Unusable, DeriveBiometricRegistrationStatus(fidoUsername));
 
-            BiometricStatus.FingerPrint Usable() => new BiometricStatus.FingerPrint(BiometricHardwareState.Usable, DeriveBiometricRegistrationStatus());
+            BiometricStatus.FingerPrint Usable() => new BiometricStatus.FingerPrint(BiometricHardwareState.Usable, DeriveBiometricRegistrationStatus(fidoUsername));
 
             BiometricStatus.HardwareNotPresent HardwareNotPresent() => new BiometricStatus.HardwareNotPresent();
         }
 
-        private BiometricRegistrationStatus DeriveBiometricRegistrationStatus()
+        private BiometricRegistrationStatus DeriveBiometricRegistrationStatus(string fidoUsername)
         {
             var registered = BiometricRegistrationState.FidoRegistered;
             if (!registered)
@@ -60,7 +54,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
                 return BiometricRegistrationStatus.NotRegistered;
             }
 
-            if (TryGetKey(out _))
+            if (TryGetKey(fidoUsername, out _))
             {
                 return BiometricRegistrationStatus.Registered;
             }
@@ -68,17 +62,17 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
             return BiometricRegistrationStatus.Invalidated;
         }
 
-        public Task<IBiometricAuthKey> CreateBiometricKey()
+        public Task<IBiometricAuthKey> CreateBiometricKey(string fidoUsername)
         {
             var keyPairGenerator = KeyPairGenerator
                 .GetInstance(KeyProperties.KeyAlgorithmEc, BiometricKeyStore.InstanceName)
                 .ThrowIfNull("KeyPairGenerator is null");
-            var keyGenParameterSpec = BuildKeyGenParameterSpec();
+            var keyGenParameterSpec = BuildKeyGenParameterSpec(fidoUsername);
 
             keyPairGenerator.Initialize(keyGenParameterSpec);
 
             _ = keyPairGenerator.GenerateKeyPair() ?? throw new InvalidOperationException("GenerateKeyPair returns null");
-            if (TryGetKey(out var biometricAuthKey))
+            if (TryGetKey(fidoUsername, out var biometricAuthKey))
             {
                 BiometricRegistrationState.FidoRegistered = true;
                 return Task.FromResult(biometricAuthKey);
@@ -87,9 +81,9 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
             throw new InvalidOperationException("GenerateKeyPair failed");
         }
 
-        private static KeyGenParameterSpec BuildKeyGenParameterSpec()
+        private static KeyGenParameterSpec BuildKeyGenParameterSpec(string fidoUsername)
         {
-            var keystoreAlias = $"{BiometricKeyStore.KeyPrefix}_{BiometricRegistrationState.FidoUsername}";
+            var keystoreAlias = $"{BiometricKeyStore.KeyPrefix}_{fidoUsername}";
 
             using var builder = new KeyGenParameterSpec.Builder(keystoreAlias, KeyStorePurpose.Sign);
             using var ecGenParameterSpec = new ECGenParameterSpec("secp256r1");
@@ -110,10 +104,8 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
             return builder.Build();
         }
 
-        public bool TryGetKey([NotNullWhen(true)] out IBiometricAuthKey? key)
+        public bool TryGetKey(string fidoUsername, [NotNullWhen(true)] out IBiometricAuthKey? key)
         {
-            var fidoUsername = BiometricRegistrationState.FidoUsername;
-
             var secretKey = BiometricKeyStore.GetKey(fidoUsername);
             var certificate = BiometricKeyStore.GetCertificate(fidoUsername);
 

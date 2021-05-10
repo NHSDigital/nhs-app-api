@@ -1,7 +1,7 @@
 import actions from '@/store/modules/loginSettings/actions';
 import { MORE_LOGIN_SETTINGS_ERROR_PATH } from '@/router/paths';
 import { MORE_LOGIN_SETTINGS_NAME } from '@/router/names';
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import { SET_WAITING,
   CLEAR_ERROR_CODE,
   UPDATE_REGISTRATION_STATUS,
@@ -16,6 +16,77 @@ jest.mock('@/lib/utils');
 const mockAccessToken = 'MockAccessToken';
 
 describe('loginSettings actions', () => {
+  describe('fetchBiometricStatus', () => {
+    beforeEach(async () => {
+      actions.app = {
+        $cookies: {
+          get: (cookieName) => {
+            switch (cookieName) {
+              case 'nhso.session':
+                return {
+                  accessToken: mockAccessToken,
+                };
+              default:
+                return undefined;
+            }
+          },
+        },
+      };
+    });
+
+    afterEach(() => {
+      NativeApp.fetchBiometricStatus.mockClear();
+      NativeApp.fetchBiometricSpec.mockClear();
+      NativeApp.supportsBiometricStatus.mockClear();
+    });
+
+    describe('biometricType is undefined', () => {
+      describe('nativeApp supports biometric status', () => {
+        beforeEach(() => {
+          NativeApp.supportsBiometricStatus.mockReturnValue(true);
+          actions.fetchBiometricStatus({ state: {} });
+        });
+
+        it('will call fetchBiometricStatus passing accessToken', () => {
+          expect(NativeApp.fetchBiometricStatus).toHaveBeenCalledWith(mockAccessToken);
+        });
+
+        it('will not call fetchBiometricSpec', () => {
+          expect(NativeApp.fetchBiometricSpec).not.toHaveBeenCalled();
+        });
+      });
+
+      describe('nativeApp does not support biometric status', () => {
+        beforeEach(() => {
+          NativeApp.supportsBiometricStatus.mockReturnValue(false);
+          actions.fetchBiometricStatus({ state: {} });
+        });
+
+        it('will not call fetchBiometricStatus', () => {
+          expect(NativeApp.fetchBiometricStatus).not.toHaveBeenCalled();
+        });
+
+        it('will call fetchBiometricSpec', () => {
+          expect(NativeApp.fetchBiometricSpec).toHaveBeenCalled();
+        });
+      });
+    });
+
+    describe('biometric type is already defined', () => {
+      beforeEach(() => {
+        actions.fetchBiometricStatus({ state: { biometricType: 'fingerprint' } });
+      });
+
+      it('will not call fetchBiometricStatus', () => {
+        expect(NativeApp.fetchBiometricStatus).not.toHaveBeenCalled();
+      });
+
+      it('will not call fetchBiometricSpec', () => {
+        expect(NativeApp.fetchBiometricSpec).not.toHaveBeenCalled();
+      });
+    });
+  });
+
   describe('updateRegistration', () => {
     let commit;
     beforeEach(async () => {
@@ -45,8 +116,8 @@ describe('loginSettings actions', () => {
       expect(actions.dispatch).toBeCalledWith('auth/ensureAccessToken');
     });
 
-    it('will call NativeCallbacks.updateBiometricRegistrationWithToken with the access token', () => {
-      expect(NativeCallbacks.updateBiometricRegistrationWithToken).toBeCalledWith(mockAccessToken);
+    it('will call NativeApp.updateBiometricRegistrationWithToken with the access token', () => {
+      expect(NativeApp.updateBiometricRegistrationWithToken).toBeCalledWith(mockAccessToken);
     });
   });
 

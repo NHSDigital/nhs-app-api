@@ -36,7 +36,7 @@ namespace NHSOnline.App.Controls.WebViews
             BindableProperty.Create(nameof(RequestPnsTokenCommand), typeof(AsyncCommand<string>), typeof(NhsAppWebView));
 
         public static readonly BindableProperty FetchBiometricStatusCommandProperty =
-            BindableProperty.Create(nameof(FetchBiometricStatusCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
+            BindableProperty.Create(nameof(FetchBiometricStatusCommand), typeof(AsyncCommand<string>), typeof(NhsAppWebView));
 
         public static readonly BindableProperty UpdateBiometricRegistrationCommandProperty =
             BindableProperty.Create(nameof(UpdateBiometricRegistrationCommand), typeof(AsyncCommand<string>), typeof(NhsAppWebView));
@@ -100,11 +100,11 @@ namespace NHSOnline.App.Controls.WebViews
             set => SetValue(RequestPnsTokenCommandProperty, value);
         }
 
-        public void FetchBiometricStatus() => FetchBiometricStatusCommand.Execute(null);
+        public void FetchBiometricStatus(string accessToken) => FetchBiometricStatusCommand.Execute(accessToken);
 
-        public AsyncCommand FetchBiometricStatusCommand
+        public AsyncCommand<string> FetchBiometricStatusCommand
         {
-            get => (AsyncCommand)GetValue(FetchBiometricStatusCommandProperty);
+            get => (AsyncCommand<string>)GetValue(FetchBiometricStatusCommandProperty);
             set => SetValue(FetchBiometricStatusCommandProperty, value);
         }
 

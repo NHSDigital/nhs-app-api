@@ -40,9 +40,9 @@ export default {
     return app && app.fetchBiometricStatus;
   },
 
-  fetchBiometricStatus() {
+  fetchBiometricStatus(accessToken) {
     const app = window.nativeApp;
-    app.fetchBiometricStatus();
+    app.fetchBiometricStatus(accessToken);
   },
 
   updateBiometricRegistrationWithToken(accessToken) {

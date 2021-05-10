@@ -42,14 +42,14 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         [Export("requestPnsToken")]
         public void RequestPnsToken(string argumentJson)
         {
-            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.RequestPnsToken(argumentJson));        
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.RequestPnsToken(argumentJson));
         }
 
         [JavascriptInterface]
         [Export("fetchBiometricStatus")]
-        public void FetchBiometricStatus()
+        public void FetchBiometricStatus(string argumentJson)
         {
-            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.FetchBiometricStatus());
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.FetchBiometricStatus(argumentJson));
         }
 
         [JavascriptInterface]

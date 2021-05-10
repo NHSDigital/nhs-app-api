@@ -97,11 +97,11 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
             return await completionSource.Task.ResumeOnThreadPool();
         }
 
-        public Task Delete()
+        public Task Delete(string fidoUsername)
         {
             BiometricRegistrationState.FidoRegistered = false;
 
-            BiometricKeyStore.DeleteEntry(BiometricRegistrationState.FidoUsername);
+            BiometricKeyStore.DeleteEntry(fidoUsername);
 
             return Task.CompletedTask;
         }

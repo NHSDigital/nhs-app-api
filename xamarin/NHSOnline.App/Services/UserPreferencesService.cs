@@ -9,6 +9,7 @@ namespace NHSOnline.App.Services
         private const string LegacyBiometricsKeyIdAndroid = "KeyId";
 
         private const string BiometricsKeyIdKey = "FidoKeyID";
+        private const string FidoUsernameKey = "fidoUsername";
 
         public bool ShowGettingStarted
         {
@@ -49,6 +50,12 @@ namespace NHSOnline.App.Services
                     Preferences.Set(BiometricsKeyIdKey, value);
                 }
             }
+        }
+
+        public string FidoUsername
+        {
+            get => Preferences.Get(FidoUsernameKey, string.Empty);
+            set => Preferences.Set(FidoUsernameKey, value);
         }
 
         private static string? GetLegacyBiometricsKeyId()

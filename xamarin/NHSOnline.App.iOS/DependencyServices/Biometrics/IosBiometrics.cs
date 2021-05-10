@@ -23,10 +23,7 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
 #endif
         }
 
-        // NHSO-14610: Will need to use this property to correctly show the current users biometrics state.
-        public string BiometricsUsername { get; set; } = string.Empty;
-
-        public Task<BiometricStatus> FetchBiometricStatus()
+        public Task<BiometricStatus> FetchBiometricStatus(string fidoUsername)
         {
             BiometricStatus status = new BiometricStatus.HardwareNotPresent();
 
@@ -54,9 +51,9 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
             return Task.FromResult(status);
         }
 
-        public Task<IBiometricAuthKey> CreateBiometricKey() => _biometricAuthKeyProvider.CreateBiometricKey();
+        public Task<IBiometricAuthKey> CreateBiometricKey(string fidoUsername) => _biometricAuthKeyProvider.CreateBiometricKey();
 
-        public bool TryGetKey([NotNullWhen(true)] out IBiometricAuthKey? key) => _biometricAuthKeyProvider.TryGetKey(out key);
+        public bool TryGetKey(string fidoUsername, [NotNullWhen(true)] out IBiometricAuthKey? key) => _biometricAuthKeyProvider.TryGetKey(out key);
 
         private static BiometricRegistrationStatus DeriveRegistrationStatus(LAContext context)
         {

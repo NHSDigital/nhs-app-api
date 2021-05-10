@@ -91,7 +91,7 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
             }
         }
 
-        public Task Delete()
+        public Task Delete(string fidoUsername)
         {
             BiometricRegistrationDomainState.Clear();
 

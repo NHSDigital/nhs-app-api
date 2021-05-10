@@ -22,15 +22,15 @@ namespace NHSOnline.App.Services.FIDO
             _preferencesService = preferencesService;
         }
 
-        public async Task<BiometricLoginResult> Authenticate()
+        public async Task<BiometricLoginResult> Authenticate(string fidoUsername)
         {
-            var keyId = await ValidateRegistration().ResumeOnThreadPool();
+            var keyId = await ValidateRegistration(fidoUsername).ResumeOnThreadPool();
             if (keyId.Failed(out var keyIdFailure))
             {
                 return keyIdFailure;
             }
 
-            if (!_biometrics.TryGetKey(out var biometricAuthKey))
+            if (!_biometrics.TryGetKey(fidoUsername, out var biometricAuthKey))
             {
                 return new BiometricLoginResult.PermanentLockout();
             }
@@ -44,7 +44,7 @@ namespace NHSOnline.App.Services.FIDO
             return await DoFidoLogin(keyId, biometricAuthKey, authSigner.Result).ResumeOnThreadPool();
         }
 
-        private async Task<ProcessResult<string, BiometricLoginResult>> ValidateRegistration()
+        private async Task<ProcessResult<string, BiometricLoginResult>> ValidateRegistration(string fidoUsername)
         {
             var keyId = _preferencesService.BiometricsKeyId;
             if (keyId is null)
@@ -52,7 +52,7 @@ namespace NHSOnline.App.Services.FIDO
                 return new BiometricLoginResult.NotRegistered();
             }
 
-            var status = await _biometrics.FetchBiometricStatus().ResumeOnThreadPool();
+            var status = await _biometrics.FetchBiometricStatus(fidoUsername).ResumeOnThreadPool();
 
             return status.Accept(new BiometricCanLoginResultVisitor(keyId));
         }

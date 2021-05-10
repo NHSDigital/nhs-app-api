@@ -26,7 +26,8 @@ export default {
   fetchBiometricStatus({ state }) {
     if (state.biometricType === undefined) {
       if (NativeApp.supportsBiometricStatus()) {
-        NativeApp.fetchBiometricStatus();
+        const { accessToken } = this.app.$cookies.get('nhso.session');
+        NativeApp.fetchBiometricStatus(accessToken);
       } else {
         NativeApp.fetchBiometricSpec();
       }

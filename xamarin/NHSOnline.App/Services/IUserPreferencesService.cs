@@ -5,5 +5,7 @@ namespace NHSOnline.App.Services
         bool ShowGettingStarted { get; set; }
 
         string? BiometricsKeyId { get; set; }
+
+        string FidoUsername { get; set; }
     }
 }
