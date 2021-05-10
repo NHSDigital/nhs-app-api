@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using NHSOnline.App.Navigation;
 
@@ -62,6 +63,12 @@ namespace NHSOnline.App.Areas.Home.Presenters
         {
             await _appNavigation.PopToRootAnimated().PreserveThreadContext();
             await _rootHandler.RedirectToNhsAppPageRequested(page).PreserveThreadContext();
+        }
+
+        public async Task RedirectToDeepLinkRequested(Uri deeplinkUrl)
+        {
+            await _appNavigation.PopToRootAnimated().PreserveThreadContext();
+            await _rootHandler.RedirectToDeepLinkRequested(deeplinkUrl).PreserveThreadContext();
         }
     }
 }

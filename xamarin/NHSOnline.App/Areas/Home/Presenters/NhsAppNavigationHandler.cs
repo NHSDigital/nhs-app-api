@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using NHSOnline.App.Navigation;
 
@@ -58,6 +59,12 @@ namespace NHSOnline.App.Areas.Home.Presenters
         {
             // TODO deal with homepage mapping to route as part of NHSO-10645
             _view.NavigateToRedirectedPathWithinApp(page == "homePage" ? "/": page);
+            return Task.CompletedTask;
+        }
+
+        public Task RedirectToDeepLinkRequested(Uri deeplinkUrl)
+        {
+            _view.HandleDeeplink(deeplinkUrl);
             return Task.CompletedTask;
         }
     }

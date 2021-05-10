@@ -39,6 +39,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         public AsyncCommand<string> RedirectToNhsAppPageCommand
             => new AsyncCommand<string>(() => RedirectToNhsAppPageRequested);
 
+        public Func<Uri, Task>? DeepLinkRequested { get; set; }
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -93,10 +95,12 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
             WebView.IsVisible = true;
         }
 
-        public Task HandleDeeplink(Uri deeplinkUrl)
+        public async Task HandleDeeplink(Uri deeplinkUrl)
         {
-            _logger.LogInformation("{className} is not required to handle deeplinks", nameof(WebIntegrationPage));
-            return Task.CompletedTask;
+            if (DeepLinkRequested != null)
+            {
+                await DeepLinkRequested(deeplinkUrl).PreserveThreadContext();
+            }
         }
     }
 }

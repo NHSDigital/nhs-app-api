@@ -23,6 +23,7 @@ namespace NHSOnline.App.Areas.WebIntegration
             Func<Task>? MessagesRequested { get; set; }
 
             Func<string, Task>? RedirectToNhsAppPageRequested { get; set; }
+            Func<Uri, Task>? DeepLinkRequested { get; set; }
         }
 
         void GoToUri(Uri uri);

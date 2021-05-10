@@ -49,15 +49,20 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                 .RegisterHandler(
                     model.NavigationHandler.AdviceRequested, (view, handler) => view.AdviceRequested = handler)
                 .RegisterHandler(
-                    model.NavigationHandler.AppointmentsRequested, (view, handler) => view.AppointmentsRequested = handler)
+                    model.NavigationHandler.AppointmentsRequested,
+                    (view, handler) => view.AppointmentsRequested = handler)
                 .RegisterHandler(
-                    model.NavigationHandler.PrescriptionsRequested, (view, handler) => view.PrescriptionsRequested = handler)
+                    model.NavigationHandler.PrescriptionsRequested,
+                    (view, handler) => view.PrescriptionsRequested = handler)
                 .RegisterHandler(
                     model.NavigationHandler.YourHealthRequested, (view, handler) => view.YourHealthRequested = handler)
                 .RegisterHandler(
                     model.NavigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler)
                 .RegisterHandler<string>(
-                    RedirectToNhsAppPageRequested, (view, handler) => view.RedirectToNhsAppPageRequested = handler);
+                    RedirectToNhsAppPageRequested, (view, handler) => view.RedirectToNhsAppPageRequested = handler)
+                .RegisterPermanentHandler<Uri>(DeeplinkRequested,
+                    (view, handler) => view.DeepLinkRequested = handler);
+
         }
 
         private async Task RedirectToNhsAppPageRequested(string page)
@@ -65,6 +70,13 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             _logger.LogInformation("Redirecting to NHS App Page - {page}", page);
 
             await _model.NavigationHandler.RedirectToNhsAppPageRequested(page).PreserveThreadContext();
+        }
+
+        private async Task DeeplinkRequested(Uri deepLinkUrl)
+        {
+            _logger.LogInformation("Redirecting to deeplink - {deeplink}", deepLinkUrl);
+
+            await _model.NavigationHandler.RedirectToDeepLinkRequested(deepLinkUrl).PreserveThreadContext();
         }
 
         private async Task HelpRequested()

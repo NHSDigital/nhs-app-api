@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 
 namespace NHSOnline.App.Navigation
@@ -13,5 +14,6 @@ namespace NHSOnline.App.Navigation
         Task MessagesRequested();
 
         Task RedirectToNhsAppPageRequested(string page);
+        Task RedirectToDeepLinkRequested(Uri deeplinkUrl);
     }
 }
