@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.IntegrationTests.UI;
 
-namespace NHSOnline.IntegrationTests.WebIntegration
+namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
 {
     [TestClass]
     [BusinessRule("BR-LOG-10.1", "Capturing a face scan for identity verification in the PYI journey invokes iProov when iProov is enabled")]

@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.IntegrationTests.UI;
 
-namespace NHSOnline.IntegrationTests.WebIntegration
+namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
 {
     [TestClass]
     [BusinessRule("BR-LOG-12.8", "Rejecting the NHS app request for appropriate permissions in the NHS login uplift journey for file upload dismisses the native alert")]

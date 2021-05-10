@@ -15,6 +15,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Hospital and other appointments");
 
         private WebMenuItem BookOrCancelYourReferralAppointmentMenuItem => WebMenuItem.WithTitle(_interactor, "Book or cancel your referral appointment");
+        private WebMenuItem ViewYourAppointmentsMenuItem => WebMenuItem.WithTitle(_interactor, "View appointments");
 
         internal void AssertOnPage()
         {
@@ -27,10 +28,14 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             return this;
         }
 
-        public HospitalAndOtherAppointmentsPageContent BookOrCancelYourReferralAppointment()
+        public void BookOrCancelYourReferralAppointment()
         {
             BookOrCancelYourReferralAppointmentMenuItem.Click();
-            return this;
+        }
+
+        public void NavigateToViewAppointments()
+        {
+            ViewYourAppointmentsMenuItem.Click();
         }
     }
 }
