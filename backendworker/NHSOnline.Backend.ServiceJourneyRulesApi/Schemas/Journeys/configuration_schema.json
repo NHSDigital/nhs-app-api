@@ -279,7 +279,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": ["nhsd", "netCompany"]
+            "enum": ["nhsd", "netCompany", "removeNhsd", "removeNetCompany"]
           }
         }
       },

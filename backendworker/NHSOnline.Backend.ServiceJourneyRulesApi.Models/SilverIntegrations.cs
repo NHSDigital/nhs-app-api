@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using NHSOnline.Backend.ServiceJourneyRulesApi.Models.Attributes;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
@@ -86,19 +88,41 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
             VaccineRecord = Merge(VaccineRecord, other?.VaccineRecord);
         }
 
-        private IList<T> Clone<T>(IList<T> toClone)
+        private IList<T> Clone<T>(IList<T> toClone) where T : Enum
         {
             return toClone?.ToList();
         }
 
-        private IList<T> Merge<T>(IList<T> current, IList<T> toMerge)
+        private IList<T> Merge<T>(IList<T> current, IList<T> toMerge) where T : Enum
         {
             if (toMerge is null)
             {
                 return current;
             }
             current ??= new List<T>();
-            return current.Union(toMerge).ToList();
+            return Purge(current.Union(toMerge));
+        }
+
+        private static IList<T> Purge<T>(IEnumerable<T> values) where T : Enum
+        {
+            var output = values.ToList();
+
+            var removeAttributes = output
+                .Where(x => x.HasAttribute<RemovesSilverIntegrationAttribute>())
+                .Select(x => x.GetAttribute<RemovesSilverIntegrationAttribute>())
+                .ToList();
+
+            foreach (var attribute in removeAttributes)
+            {
+                output.RemoveAll(x => x.ToString() == attribute.AttributeToRemove);
+            }
+
+            if (removeAttributes.Any())
+            {
+                output.RemoveAll(x => x.HasAttribute<RemovesSilverIntegrationAttribute>());
+            }
+
+            return output;
         }
     }
 }

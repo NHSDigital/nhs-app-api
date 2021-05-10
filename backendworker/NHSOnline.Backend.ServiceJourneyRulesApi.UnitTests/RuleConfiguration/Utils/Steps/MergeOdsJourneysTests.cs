@@ -105,6 +105,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .NotificationPromptEnabled(true)
                     .OneOneOneEnabled(true)
                     .Prescriptions(PrescriptionsProvider.gpAtHand)
+                    .SilverIntegrations(x => x
+                        .VaccineRecord(VaccineRecordProvider.nhsd)
+                    )
                     .UserInfoEnabled(false)
                     .Build(),
                 new JourneysBuilder().Build()
@@ -161,7 +164,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .NotificationPromptEnabled(false)
                     .OneOneOneEnabled(false)
                     .Prescriptions(PrescriptionsProvider.im1)
-                    .SilverIntegrations(x => x.SecondaryAppointments(SecondaryAppointmentsProvider.ers))
+                    .SilverIntegrations(x => x
+                        .SecondaryAppointments(SecondaryAppointmentsProvider.ers)
+                        .VaccineRecord(VaccineRecordProvider.removeNhsd)
+                    )
                     .UserInfoEnabled(true)
                     .Build(),
                 new JourneysBuilder().Build()
@@ -243,7 +249,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .OneOneOneEnabled(false)
                     .Prescriptions(PrescriptionsProvider.im1)
                     .SilverIntegrations(x => x
-                        .SecondaryAppointments(SecondaryAppointmentsProvider.ers))
+                        .SecondaryAppointments(SecondaryAppointmentsProvider.ers)
+                        .VaccineRecord()
+                    )
                     .UserInfoEnabled(true)
                     .Build(),
                 new JourneysBuilder()
@@ -260,6 +268,72 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .OneOneOneEnabled(null)
                     .Prescriptions(null)
                     .UserInfoEnabled(null)
+                    .Build()
+            );
+
+            var context = new ConfigurationContext
+            {
+                FolderOdsJourneys = new Dictionary<string, IDictionary<string, Journeys>>
+                {
+                    { "c:/default", defaultFolderJourneys },
+                    { "c:/another", anotherFolderJourneys }
+                }
+            };
+
+            // Act
+            var result = await _step.Execute(context);
+
+            // Assert
+            result.Should().BeTrue();
+            context.MergedOdsJourneys.Should().BeEquivalentTo(expectedMergedJourneys);
+        }
+
+        [TestMethod]
+        public async Task Execute_WhenGivenAListOfFolderOdsJourneys_WithAttributesThatRemoveOtherAttributes_MergesJourneys()
+        {
+            // Arrange
+            var defaultFolderJourneys = CreateOdsJourneys(
+                new JourneysBuilder()
+                    .SilverIntegrations(x => x.VaccineRecord(VaccineRecordProvider.nhsd))
+                    .Build(),
+                new JourneysBuilder()
+                    .SilverIntegrations(x => x.VaccineRecord(VaccineRecordProvider.nhsd))
+                    .Build(),
+                new JourneysBuilder()
+                    .SilverIntegrations(x => x.VaccineRecord(VaccineRecordProvider.removeNhsd))
+                    .Build(),
+                new JourneysBuilder()
+                    .SilverIntegrations(x => x.VaccineRecord(VaccineRecordProvider.removeNhsd))
+                    .Build()
+            );
+
+            var anotherFolderJourneys = CreateOdsJourneys(
+                new JourneysBuilder()
+                    .SilverIntegrations(x => x.VaccineRecord())
+                    .Build(),
+                new JourneysBuilder()
+                    .SilverIntegrations(x => x.VaccineRecord(VaccineRecordProvider.removeNhsd))
+                    .Build(),
+                new JourneysBuilder()
+                    .SilverIntegrations(x => x.VaccineRecord(VaccineRecordProvider.nhsd))
+                    .Build(),
+                new JourneysBuilder()
+                    .SilverIntegrations(x => x.VaccineRecord())
+                    .Build()
+            );
+
+            var expectedMergedJourneys = CreateOdsJourneys(
+                new JourneysBuilder()
+                    .SilverIntegrations(x => x.VaccineRecord(VaccineRecordProvider.nhsd))
+                    .Build(),
+                new JourneysBuilder()
+                    .SilverIntegrations(x => x.VaccineRecord())
+                    .Build(),
+                new JourneysBuilder()
+                    .SilverIntegrations(x => x.VaccineRecord())
+                    .Build(),
+                new JourneysBuilder()
+                    .SilverIntegrations(x => x.VaccineRecord())
                     .Build()
             );
 
