@@ -1,19 +1,31 @@
 package features.sharedSteps
 
+import features.authentication.steps.HomeSteps
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import org.openqa.selenium.Keys
 import pages.HybridPageObject
+import pages.assertIsVisible
 import pages.clickOnActionContainingText
+import pages.navigation.NavBarNative
+import pages.navigation.WebHeader
+import pages.withNormalisedText
 
 class GenericPageStepDefinitions {
     private lateinit var notFoundErrorPage: NotFoundErrorPage
     private lateinit var genericPage: HybridPageObject
+    private lateinit var webHeader: WebHeader
 
     @Steps
     lateinit var browser: BrowserSteps
+
+    @Steps
+    lateinit var home: HomeSteps
+
+    @Steps
+    lateinit var navSteps: NavigationSteps
 
      @When("^I click the '(.*)' button$")
      fun iClickTheButton(buttonText: String) {
@@ -92,5 +104,27 @@ class GenericPageStepDefinitions {
 
         genericPage.getElement("//input[@type='radio'][following-sibling::${label.webDesktopLocator}]")
                 .click()
+    }
+
+    @Then("^the (.*) menu button is highlighted")
+    fun iSeeAHighlightedMenuButton(type: String) {
+        Assert.assertTrue(navSteps.hasSelectedTab(NavBarNative.NavBarType.valueOf(type.toUpperCase())))
+    }
+
+    @Then("^none of the menu buttons are highlighted")
+    fun iDoNotSeeAHighlightedMenuButton() {
+        if (home.headerNative.onMobile()) {
+            Assert.assertFalse("Nav bar has highlighted item, expected none", navSteps.hasAnyTabSelected())
+        }
+    }
+
+    @Then("^the page title is '(.*)'$")
+    fun thePageTitleIsYourAppointments(title: String) {
+        webHeader.getPageTitle().withNormalisedText(title).assertIsVisible()
+    }
+
+    @Then("^the page contains the header '(.*)'$")
+    fun thePageContainsTheHeaderText(title: String) {
+        webHeader.getHtmlElement("h2").withNormalisedText(title).assertIsVisible()
     }
 }

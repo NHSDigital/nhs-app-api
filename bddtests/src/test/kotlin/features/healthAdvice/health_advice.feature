@@ -2,7 +2,7 @@
 Feature: Get Health Advice
 
   Scenario: A user with coronavirus information disabled can not use the get health advice to navigate to advice about coronavirus
-    Given I am a user with coronavirus information disabled
+    Given I am a user with Coronavirus Information disabled
     And I am logged in
     When I navigate to Advice
     Then the Advice page is displayed without advice about coronavirus

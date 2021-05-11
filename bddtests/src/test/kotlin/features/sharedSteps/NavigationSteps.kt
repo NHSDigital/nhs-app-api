@@ -3,7 +3,6 @@ package features.sharedSteps
 import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
 
 open class NavigationSteps {
@@ -12,7 +11,6 @@ open class NavigationSteps {
     lateinit var browser: BrowserSteps
 
     lateinit var navBarNative: NavBarNative
-    lateinit var headerNative: HeaderNative
 
     @Step
     fun assertSelectedTab(tab: NavBarNative.NavBarType) {

@@ -2,14 +2,19 @@ package features.sharedSteps
 
 import config.Config
 import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import net.thucydides.core.annotations.Steps
+import pages.navigation.NavBarNative
 import utils.GlobalSerenityHelpers
 import utils.set
 
 class NavigationStepDefinitions {
     @Steps
     private lateinit var browser: BrowserSteps
+
+    @Steps
+    lateinit var navSteps: NavigationSteps
 
     @Given("^I am using the native app user agent$")
     fun iAmUsingTheNativeAppUserAgent() {
@@ -28,5 +33,15 @@ class NavigationStepDefinitions {
     @When("^I browse directly to '(.*)' in the NHS App$")
     fun iBrowseDirectlyToThePage(path: String) {
         browser.browseViaHttpGet(path)
+    }
+
+    @When("^I navigate to (\\w+)$")
+    fun iNavigateTo(tab: String) {
+        navSteps.select(NavBarNative.NavBarType.valueOf(tab.toUpperCase()))
+    }
+
+    @Then("^I am redirected to '(.*)'$")
+    fun iAmRedirectedTo(url: String) {
+        browser.shouldHaveUrl(url)
     }
 }

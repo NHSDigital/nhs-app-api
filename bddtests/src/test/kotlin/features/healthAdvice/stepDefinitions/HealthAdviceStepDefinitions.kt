@@ -1,8 +1,6 @@
 package features.healthAdvice.stepDefinitions
 
 import constants.Supplier
-import features.serviceJourneyRules.factories.SJRJourneyType
-import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
@@ -31,16 +29,6 @@ open class HealthAdviceStepDefinitions {
     private lateinit var healthAToZPage: HealthAToZPage
     private lateinit var oneOneOneOnlinePage: OneOneOneOnlinePage
 
-    @Given("^I am a user with coronavirus information disabled$")
-    fun iAmAUserWithCoronavirusInformationDisabled() {
-        setupUser(SJRJourneyType.CORONAVIRUS_INFORMATION_DISABLED)
-    }
-
-    @Given("^I am a user with 111 disabled$")
-    fun iAmAUserOneOneOneDisabled() {
-        setupUser(SJRJourneyType.ONE_ONE_ONE_DISABLED)
-    }
-    
     @Given("^I am a user who wishes to view advice about coronavirus$")
     fun iAmAUserWhoWishesToViewAdviceAboutCoronavirus() {
         setupUser()
@@ -60,30 +48,6 @@ open class HealthAdviceStepDefinitions {
         setupUser()
         MockingClient.instance.favicon()
         MockingClient.instance.forExternalSites.mock { oneOneOneOnlineRequest().respondWithPage() }
-    }
-
-    private fun setupUser(journeyType: SJRJourneyType? = null)
-    {
-        val supplier = Supplier.valueOf("EMIS")
-        var patient = Patient.getDefault(supplier)
-        if(journeyType != null)
-        {
-            patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
-                supplier,
-                journeyType
-            )
-        }
-        setupUser(supplier, patient)
-    }
-
-    private fun setupUser(supplier: Supplier, patient: Patient) {
-        SerenityHelpers.setPatient(patient)
-        SerenityHelpers.setGpSupplier(supplier)
-
-        CitizenIdSessionCreateJourney().createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
-
-        TermsAndConditionsJourneyFactory.consent(patient)
     }
 
     @When("^I click Search Conditions and Treatments$")
@@ -151,5 +115,22 @@ open class HealthAdviceStepDefinitions {
         healthAdvicePage.searchConditionsAndTreatments.assertIsVisible()
         healthAdvicePage.adviceAboutCoronavirus.assertIsVisible()
         healthAdvicePage.useNhsOneOneOneOnline.assertElementNotPresent()
+    }
+
+    private fun setupUser()
+    {
+        val supplier = Supplier.valueOf("EMIS")
+        val patient = Patient.getDefault(supplier)
+        setupUser(supplier, patient)
+    }
+
+    private fun setupUser(supplier: Supplier, patient: Patient) {
+        SerenityHelpers.setPatient(patient)
+        SerenityHelpers.setGpSupplier(supplier)
+
+        CitizenIdSessionCreateJourney().createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
+
+        TermsAndConditionsJourneyFactory.consent(patient)
     }
 }

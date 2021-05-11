@@ -11,6 +11,8 @@ import features.authentication.steps.LoginSteps
 import features.myrecord.factories.DemographicsFactory
 import features.pushNotifications.stepDefinitions.NotificationsFactory
 import features.pushNotifications.stepDefinitions.SettingStatus
+import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
+import features.serviceJourneyRules.mappers.SJRJourneyTypesMapper
 import mocking.MockingClient
 import mocking.data.nhsAzureSearchData.NhsAzureSearchData
 import mocking.defaults.EmisMockDefaults
@@ -18,15 +20,12 @@ import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJo
 import mocking.defaults.dataPopulation.journeys.session.EmisSessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journeys.termsAndConditions.TermsAndConditionsJourneyFactory
+import models.IdentityProofingLevel
 import models.Patient
 import models.patients.PatientHandler
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
-import org.junit.Assert
-import pages.assertIsVisible
-import pages.navigation.NavBarNative
 import pages.navigation.WebHeader
-import pages.withNormalisedText
 import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
 
@@ -37,18 +36,20 @@ import webdrivers.options.nojs.NoJsOption
 private const val WAIT_IN_SECONDS_MODIFIER = 1000L
 private const val WAIT_IN_SECONDS = 190L
 private const val FOUR_SECOND_SLEEP: Long = 4000
+
 open class SharedStepDefinitions {
 
     @Steps
     lateinit var browser: BrowserSteps
+
     @Steps
     lateinit var cookieSteps: CookieSteps
+
     @Steps
     lateinit var home: HomeSteps
+
     @Steps
     lateinit var login: LoginSteps
-    @Steps
-    lateinit var navSteps: NavigationSteps
 
     lateinit var webHeader: WebHeader
     private val mockingClient = MockingClient.instance
@@ -70,7 +71,7 @@ open class SharedStepDefinitions {
         setupPatient(patient, supplier)
 
         AuthenticationFactory.getForSupplier(supplier)
-                .validOAuthDetailsAndGpSystemUnavailable(patient)
+            .validOAuthDetailsAndGpSystemUnavailable(patient)
         TermsAndConditionsJourneyFactory.consent(patient)
     }
 
@@ -115,6 +116,17 @@ open class SharedStepDefinitions {
 
         SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
         TermsAndConditionsJourneyFactory.consent(patient)
+    }
+
+    @Given("^I am a user with (.*) (enabled|disabled)$")
+    fun iAmAUserWithJourneyEnabled(journey: String, status: String) {
+        val disabled = when (status) {
+            "disabled" -> true
+            "enable" -> false
+            else -> false
+        }
+
+        initialisePatientWithJourney(IdentityProofingLevel.P9, journey, disabled)
     }
 
     @Given("^I am a patient using the native app$")
@@ -197,8 +209,8 @@ open class SharedStepDefinitions {
     fun iLogin() {
         val patient = SerenityHelpers.getPatient()
         DemographicsFactory
-                .getForSupplier(SerenityHelpers.getGpSupplier())
-                .enableForPatientProxyAccounts(patient)
+            .getForSupplier(SerenityHelpers.getGpSupplier())
+            .enableForPatientProxyAccounts(patient)
 
         login.using(patient)
     }
@@ -207,15 +219,16 @@ open class SharedStepDefinitions {
     fun azureOrganisationSearchIsWorking() {
         mockingClient.forAzure.forSearchOrganisation {
             nhsAzureSearch.nhsAzureSearchOrganisationRequest(null)
-                    .respondWithSuccess(NhsAzureSearchData.getOrganisationWithinRange())
+                .respondWithSuccess(NhsAzureSearchData.getOrganisationWithinRange())
         }
     }
 
     @Given("^I have (enabled|disabled) javascript$")
     fun iHaveEnabledDisabledJavascript(status: String) {
-        when(status) {
+        when (status) {
             "disabled" -> OptionManager.instance().registerOption(NoJsOption())
-            "enable" -> {}
+            "enable" -> {
+            }
         }
     }
 
@@ -232,31 +245,9 @@ open class SharedStepDefinitions {
         iWaitForXSeconds(WAIT_IN_SECONDS)
     }
 
-    @When("^I navigate to (\\w+)$")
-    open fun iNavigateTo(tab: String) {
-        navSteps.select(NavBarNative.NavBarType.valueOf(tab.toUpperCase()))
-    }
-
     @Then("^Wait for the request to complete$")
     fun waitForRequestToComplete() {
         Thread.sleep(FOUR_SECOND_SLEEP)
-    }
-
-    @Then("^the (.*) menu button is highlighted")
-    fun iSeeAHighlightedMenuButton(type: String) {
-        Assert.assertTrue(navSteps.hasSelectedTab(NavBarNative.NavBarType.valueOf(type.toUpperCase())))
-    }
-
-    @Then("^none of the menu buttons are highlighted")
-    fun iDoNotSeeAHighlightedMenuButton() {
-        if(home.headerNative.onMobile()) {
-            Assert.assertFalse("Nav bar has highlighted item, expected none", navSteps.hasAnyTabSelected())
-        }
-    }
-
-    @Then("^I am redirected to '(.*)'$")
-    fun iAmRedirectedTo(url: String) {
-        browser.shouldHaveUrl(url)
     }
 
     @Then("^I wait for (\\d+) seconds$")
@@ -264,14 +255,29 @@ open class SharedStepDefinitions {
         Thread.sleep(((secondsToWaitFor) * WAIT_IN_SECONDS_MODIFIER))
     }
 
-    @Then("^the page title is '(.*)'$")
-    fun thePageTitleIsYourAppointments(title: String) {
-        webHeader.getPageTitle().withNormalisedText(title).assertIsVisible()
-    }
+    private fun initialisePatientWithJourney(
+        proofLevel: IdentityProofingLevel,
+        journey: String,
+        disabled: Boolean = false
+    ) {
+        val journeyTypes = SJRJourneyTypesMapper.map(journey, disabled)
+        var patient = SerenityHelpers.getPatientOrNull()
+        var supplier: Supplier?
 
-    @Then("^the page contains the header '(.*)'$")
-    fun thePageContainsTheHeaderText(title: String) {
-        webHeader.getHtmlElement("h2").withNormalisedText(title).assertIsVisible()
+        if (patient != null) {
+            supplier = SerenityHelpers.getGpSupplier()
+            val odsCode = ServiceJourneyRulesMapper.findOdsCode(supplier, journeyTypes)
+
+            patient.updateOdsCodes(odsCode)
+            patient = patient.copy(identityProofingLevel = proofLevel)
+            SerenityHelpers.setPatient(patient)
+        } else {
+            patient = ServiceJourneyRulesMapper.findPatientForConfiguration(null, journeyTypes, proofLevel)
+            supplier = SerenityHelpers.getGpSupplier()
+        }
+
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient, alternativeUser = true)
+        CitizenIdSessionCreateJourney().createFor(patient, alternativeUser = true)
     }
 
     private fun initialSetup(status: SettingStatus, authorised: Boolean): NotificationsFactory {
@@ -296,8 +302,8 @@ open class SharedStepDefinitions {
         browser.goToApp()
 
         DemographicsFactory
-                .getForSupplier(SerenityHelpers.getGpSupplier())
-                .enableForPatientProxyAccounts(patient)
+            .getForSupplier(SerenityHelpers.getGpSupplier())
+            .enableForPatientProxyAccounts(patient)
 
         TermsAndConditionsJourneyFactory.consent(patient)
 
