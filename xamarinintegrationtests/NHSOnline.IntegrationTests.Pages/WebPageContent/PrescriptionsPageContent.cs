@@ -13,6 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         }
 
         private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Prescriptions");
+        private WebMenuItem HospitalAndOtherPrescriptions => WebMenuItem.WithTitle(_interactor, "Hospital and other prescriptions");
 
         internal void AssertOnPage()
         {
@@ -23,6 +24,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         {
             Title.AssertVisible();
             return this;
+        }
+
+        public void NavigateToHospitalAndOtherPrescriptions()
+        {
+            HospitalAndOtherPrescriptions.Click();
         }
     }
 }

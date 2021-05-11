@@ -11,9 +11,9 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Prescriptions
             PageContent = new PrescriptionsPageContent(driver.Web(WebViewContext.NhsApp));
         }
 
-        public IOSFullNavigation Navigation { get; }
+        private IOSFullNavigation Navigation { get; }
 
-        private PrescriptionsPageContent PageContent { get; }
+        public PrescriptionsPageContent PageContent { get; }
 
         public static IOSPrescriptionsPage AssertOnPage(IIOSDriverWrapper driver)
         {

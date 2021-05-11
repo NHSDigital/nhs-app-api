@@ -3,28 +3,28 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
 {
-    public sealed class AndroidPkbViewAppointmentsPage
+    public sealed class AndroidPkbPage
     {
-        private const string PhrPath = "/diary/listAppointments.action";
+        //private const string PhrPath = "/diary/listAppointments.action";
 
-        private AndroidPkbViewAppointmentsPage(IAndroidDriverWrapper driver)
+        private AndroidPkbPage(IAndroidDriverWrapper driver, string phrPath)
         {
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new PkbPageContent(driver.Web(WebViewContext.PkbWebIntegration), PhrPath);
+            PageContent = new PkbPageContent(driver.Web(WebViewContext.PkbWebIntegration), phrPath);
         }
 
         private AndroidFullNavigation Navigation { get; }
 
         private PkbPageContent PageContent { get; }
 
-        public static AndroidPkbViewAppointmentsPage AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidPkbPage AssertOnPage(IAndroidDriverWrapper driver, string phrPath)
         {
-            var page = new AndroidPkbViewAppointmentsPage(driver);
+            var page = new AndroidPkbPage(driver, phrPath);
             page.PageContent.AssertOnPage();
             return page;
         }
 
-        public AndroidPkbViewAppointmentsPage AssertNativeHeader()
+        public AndroidPkbPage AssertNativeHeader()
         {
             Navigation.AssertNavigationPresent();
             return this;

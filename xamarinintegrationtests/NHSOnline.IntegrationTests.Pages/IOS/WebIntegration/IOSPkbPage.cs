@@ -3,23 +3,21 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
 {
-    public sealed class IOSPkbViewAppointmentsPage
+    public sealed class IOSPkbPage
     {
-        private const string PhrPath = "/diary/listAppointments.action";
-
-        private IOSPkbViewAppointmentsPage(IIOSDriverWrapper driver)
+        private IOSPkbPage(IIOSDriverWrapper driver, string phrPath)
         {
             Navigation = new IOSFullNavigation(driver);
-            PageContent = new PkbPageContent(driver.Web(WebViewContext.PkbWebIntegration), PhrPath);
+            PageContent = new PkbPageContent(driver.Web(WebViewContext.PkbWebIntegration), phrPath);
         }
 
         private IOSFullNavigation Navigation { get; }
 
         private PkbPageContent PageContent { get; }
 
-        public static IOSPkbViewAppointmentsPage AssertOnPage(IIOSDriverWrapper driver)
+        public static IOSPkbPage AssertOnPage(IIOSDriverWrapper driver, string phrPath)
         {
-            var page = new IOSPkbViewAppointmentsPage(driver);
+            var page = new IOSPkbPage(driver, phrPath);
             page.PageContent.AssertOnPage();
             return page;
         }

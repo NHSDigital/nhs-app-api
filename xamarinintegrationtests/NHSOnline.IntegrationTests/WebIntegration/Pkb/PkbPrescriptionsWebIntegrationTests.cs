@@ -2,9 +2,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android.Appointments;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
+using NHSOnline.IntegrationTests.Pages.Android.Prescriptions;
 using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
 using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
+using NHSOnline.IntegrationTests.Pages.IOS.Prescriptions;
 using NHSOnline.IntegrationTests.Pages.IOS.WebIntegration;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -13,65 +15,57 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
 {
 
     [TestClass]
-    public class PkbViewAppointmentsWebIntegrationTests
+    public class PkbPrescriptionsWebIntegrationTests
     {
         [NhsAppAndroidTest]
-        public void APatientCanAccessTheirPkbAppointmentsFromTheAppointmentsScreenAndroid(IAndroidDriverWrapper driver)
+        public void APatientCanAccessTheirPkbPrescriptionsFromThePrescriptionsScreenAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new PkbPatient()
-                .WithName(b => b.GivenName("Patrick").FamilyName("Klingon"));
+                .WithName(b => b.GivenName("Arthur").FamilyName("Curry"));
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogAndroidPatientIn(driver, patient);
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Appointments();
+                .Navigation.Prescriptions();
 
-            AndroidAppointmentsPage
+            AndroidPrescriptionsPage
                 .AssertOnPage(driver)
-                .PageContent.HospitalAndOtherAppointments();
-
-            AndroidHospitalAndOtherAppointmentsPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToViewAppointments();
+                .PageContent.NavigateToHospitalAndOtherPrescriptions();
 
             AndroidWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, "View appointments")
+                .AssertOnPage(driver, "Hospital and other prescriptions")
                 .PageContent.NavigateToNextPage();
 
             AndroidPkbPage
-                .AssertOnPage(driver, "/diary/listAppointments.action")
+                .AssertOnPage(driver, "/auth/manageMedications.action?tab=treatments")
                 .AssertNativeHeader();
         }
 
         [NhsAppIOSTest]
-        public void APatientCanAccessTheirPkbAppointmentsFromTheAppointmentsScreenIOS(IIOSDriverWrapper driver)
+        public void APatientCanAccessTheirPkbPrescriptionsFromThePrescriptionsScreenIOS(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
-                .WithName(b => b.GivenName("Barry").FamilyName("Allen"));
+                .WithName(b => b.GivenName("Hal").FamilyName("Jordan"));
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogIOSPatientIn(driver, patient);
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Appointments();
+                .Navigation.Prescriptions();
 
-            IOSAppointmentsPage
+            IOSPrescriptionsPage
                 .AssertOnPage(driver)
-                .PageContent.HospitalAndOtherAppointments();
-
-            IOSHospitalAndOtherAppointmentsPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToViewAppointments();
+                .PageContent.NavigateToHospitalAndOtherPrescriptions();
 
             IOSWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, "View appointments")
+                .AssertOnPage(driver, "Hospital and other prescriptions")
                 .PageContent.NavigateToNextPage();
 
             IOSPkbPage
-                .AssertOnPage(driver,"/diary/listAppointments.action")
+                .AssertOnPage(driver, "/auth/manageMedications.action?tab=treatments")
                 .AssertNativeHeader();
         }
     }
