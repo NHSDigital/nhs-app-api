@@ -29,8 +29,10 @@ export default {
     queryParam: {
       type: Object,
       default: () => ({
-        param: undefined,
-        value: undefined,
+        ErrCodeParam: undefined,
+        ErrCodeValue: undefined,
+        OdsCodeParam: undefined,
+        OdsCodeValue: undefined,
       }),
     },
   },
@@ -42,8 +44,11 @@ export default {
       } else {
         url = this.$store.$env.CONTACT_US_URL;
       }
-      if (this.queryParam.param) {
-        url += `?${this.queryParam.param}=${this.queryParam.value}`;
+      if (this.queryParam.ErrCodeParam) {
+        url += `?${this.queryParam.ErrCodeParam}=${this.queryParam.ErrCodeValue}`;
+        if (this.queryParam.OdsCodeParam) {
+          url += `&${this.queryParam.OdsCodeParam}=${this.queryParam.OdsCodeValue}`;
+        }
       }
       return url;
     },

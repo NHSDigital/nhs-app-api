@@ -246,8 +246,10 @@ export default {
     },
     contactUsParam() {
       return {
-        param: 'errorcode',
-        value: this.serviceDeskReference,
+        ErrCodeParam: 'errorcode',
+        ErrCodeValue: this.serviceDeskReference,
+        OdsCodeParam: 'odscode',
+        OdsCodeValue: '',
       };
     },
     isNativeApp() {

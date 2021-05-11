@@ -165,7 +165,15 @@ describe('ErrorLink', () => {
 
   describe('with query parameter', () => {
     beforeEach(() => {
-      wrapper = mountWrapper({ action: '/example', from: 'appTitle', queryParam: { param: 'param', value: 'value' } });
+      wrapper = mountWrapper({
+        action: '/example',
+        from: 'appTitle',
+        queryParam: {
+          ErrCodeParam: 'ErrCodeParam',
+          ErrCodeValue: 'ErrCodeValue',
+          OdsCodeParam: 'OdsCodeParam',
+          OdsCodeValue: 'OdsCodeValue',
+        } });
     });
 
     describe('on link click', () => {
@@ -174,7 +182,7 @@ describe('ErrorLink', () => {
       });
 
       it('will append query parameter to the action url', () => {
-        expect(goToUrl).toBeCalledWith('/example?param=value');
+        expect(goToUrl).toBeCalledWith('/example?ErrCodeParam=ErrCodeValue&OdsCodeParam=OdsCodeValue');
       });
     });
   });

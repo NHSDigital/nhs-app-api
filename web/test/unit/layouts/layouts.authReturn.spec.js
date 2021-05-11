@@ -107,7 +107,8 @@ describe('authReturn layout', () => {
         });
 
         it('url will have error code', () => {
-          expect(contactUsLink.attributes('href')).toBe(`${CONTACT_US_URL}?errorcode=${serviceDeskReference}`);
+          expect(contactUsLink.attributes('href'))
+            .toBe(`${CONTACT_US_URL}?errorcode=${serviceDeskReference}&odscode=`);
         });
       });
 
@@ -182,7 +183,7 @@ describe('authReturn layout', () => {
           expect(nhsWales111Link.attributes('href')).toBe(NHS_WALES_111_URL);
           expect(nhs111Link.attributes('href')).toBe(NHS_111_URL);
           expect(contactUsLink.attributes('href'))
-            .toBe(`${CONTACT_US_URL}?errorcode=${serviceDeskReference}`);
+            .toBe(`${CONTACT_US_URL}?errorcode=${serviceDeskReference}&odscode=`);
         });
       });
     });

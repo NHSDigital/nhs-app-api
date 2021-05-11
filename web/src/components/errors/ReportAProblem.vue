@@ -30,8 +30,10 @@ export default {
   computed: {
     referenceParam() {
       return {
-        param: 'errorcode',
-        value: this.reference,
+        ErrCodeParam: 'errorcode',
+        ErrCodeValue: this.reference,
+        OdsCodeParam: 'odscode',
+        OdsCodeValue: !this.$store.state.session.gpOdsCode ? '' : this.$store.state.session.gpOdsCode,
       };
     },
   },

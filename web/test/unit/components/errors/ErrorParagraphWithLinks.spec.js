@@ -130,8 +130,10 @@ describe('ErrorParagraphWithLinks', () => {
           },
         ];
         const queryParam = {
-          param: 'errorcode',
-          value: '3fxxxx',
+          ErrCodeParam: 'errorcode',
+          ErrCodeValue: '3fxxxx',
+          OdsCodeParam: 'odscode',
+          OdsCodeValue: 'xnnnnn',
         };
 
         beforeEach(() => {
@@ -156,7 +158,8 @@ describe('ErrorParagraphWithLinks', () => {
         });
 
         it('will translate `from`', () => {
-          expect(links.at(0).attributes('href')).toBe(`${CONTACT_US_URL}?${queryParam.param}=${queryParam.value}`);
+          expect(links.at(0).attributes('href'))
+            .toBe(`${CONTACT_US_URL}?${queryParam.ErrCodeParam}=${queryParam.ErrCodeValue}&${queryParam.OdsCodeParam}=${queryParam.OdsCodeValue}`);
 
           expect(paragraph.text()).toContain('If you still need to access the app,');
           expect(paragraph.text()).toContain('contact us');

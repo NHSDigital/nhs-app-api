@@ -36,8 +36,10 @@ export default {
     queryParam: {
       type: Object,
       default: () => ({
-        param: undefined,
-        value: undefined,
+        ErrCodeParam: undefined,
+        ErrCodeValue: undefined,
+        OdsCodeParam: undefined,
+        OdsCodeValue: undefined,
       }),
     },
     target: {
@@ -51,8 +53,11 @@ export default {
     },
     actionUrl() {
       let url = this.action;
-      if (this.queryParam.param && this.queryParam.value) {
-        url += `?${this.queryParam.param}=${this.queryParam.value}`;
+      if (this.queryParam.ErrCodeParam && this.queryParam.ErrCodeValue) {
+        url += `?${this.queryParam.ErrCodeParam}=${this.queryParam.ErrCodeValue}`;
+        if (this.queryParam.OdsCodeParam && (this.queryParam.OdsCodeValue || this.queryParam.OdsCodeValue === '')) {
+          url += `&${this.queryParam.OdsCodeParam}=${this.queryParam.OdsCodeValue}`;
+        }
       }
       return url;
     },
