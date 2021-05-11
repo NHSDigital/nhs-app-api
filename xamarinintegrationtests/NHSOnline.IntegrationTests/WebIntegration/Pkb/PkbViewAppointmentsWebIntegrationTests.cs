@@ -45,6 +45,36 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .AssertNativeHeader();
         }
 
+        [NhsAppAndroidTest]
+        public void APatientCanUseAKeyboardToAccessTheirPkbAppointmentsFromTheAppointmentsScreenAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new KeyboardPatient()
+                .WithName(b => b.GivenName("Patrick").FamilyName("Klingon"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .KeyboardNavigateToAppointments();
+
+            AndroidAppointmentsPage
+                .AssertOnPage(driver)
+                .KeyboardNavigateToHospitalAndOtherAppointments();
+
+            AndroidHospitalAndOtherAppointmentsPage
+                .AssertOnPage(driver)
+                .KeyboardNavigateToViewAppointments();
+
+            AndroidWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "View appointments")
+                .KeyboardNavigateToContinue();
+
+            AndroidPkbPage
+                .AssertOnPage(driver, "/diary/listAppointments.action")
+                .AssertNativeHeader();
+        }
+
         [NhsAppIOSTest]
         public void APatientCanAccessTheirPkbAppointmentsFromTheAppointmentsScreenIOS(IIOSDriverWrapper driver)
         {

@@ -16,7 +16,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         public static WebViewContext NhsApp { get; } = new NhsAppWebViewContext();
         public static WebViewContext ErsWebIntegration { get; } = new ErsWebIntegrationWebViewContext();
         public static WebViewContext PkbWebIntegration { get; } = new PkbWebIntegrationWebViewContext();
-        public static WebViewContext SubstraktWebIntegration { get; } = new SubstraktWebIntegrationWebViewContext();
         public static WebViewContext AToZWebIntegration { get; } = new AToZWebIntegrationWebViewContext();
         public static WebViewContext OneOneOneWebIntegration { get; } = new OneOneOneWebIntegrationWebViewContext();
         public static WebViewContext TestProviderWebIntegration { get; } = new TestWebIntegrationProviderWebViewContext();
@@ -74,13 +73,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         }
 
         private class PkbWebIntegrationWebViewContext : WebViewContext
-        {
-            internal override void AssertContextReady(IWebDriver driver)
-            {
-            }
-        }
-
-        private class SubstraktWebIntegrationWebViewContext : WebViewContext
         {
             internal override void AssertContextReady(IWebDriver driver)
             {

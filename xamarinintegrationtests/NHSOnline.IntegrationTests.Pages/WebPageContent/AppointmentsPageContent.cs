@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using NHSOnline.IntegrationTests.UI.Components;
+using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -14,23 +17,47 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Appointments");
 
+        private WebMenuItem GpSurgeryAppointmentsMenuItem => WebMenuItem.WithTitle(_interactor, "GP surgery appointments");
+
+        private WebMenuItem AdditionalGpServicesMenuItem => WebMenuItem.WithTitle(_interactor, "Additional GP services");
+
         private WebMenuItem HospitalAndOtherAppointmentsMenuItem => WebMenuItem.WithTitle(_interactor, "Hospital and other appointments");
+
+        public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
+        {
+            GpSurgeryAppointmentsMenuItem,
+            AdditionalGpServicesMenuItem,
+            HospitalAndOtherAppointmentsMenuItem,
+        };
+
+        public IEnumerable<IFocusable> FocusableElementsNoOlc => new IFocusable[]
+        {
+            GpSurgeryAppointmentsMenuItem,
+            HospitalAndOtherAppointmentsMenuItem,
+        };
 
         internal void AssertOnPage()
         {
             Title.AssertVisible();
         }
 
-        public AppointmentsPageContent AssertPageElements()
+        public void AssertPageElements()
         {
             Title.AssertVisible();
-            return this;
         }
 
-        public AppointmentsPageContent HospitalAndOtherAppointments()
+        public void HospitalAndOtherAppointments()
         {
             HospitalAndOtherAppointmentsMenuItem.Click();
-            return this;
+        }
+
+        public void KeyboardNavigateToHospitalAndOtherAppointments(AndroidKeyboardNavigation navigation)
+            => KeyboardNavigateToAndActivateMenuItem(HospitalAndOtherAppointmentsMenuItem, navigation);
+
+        private void KeyboardNavigateToAndActivateMenuItem(IFocusable menuItem, AndroidKeyboardNavigation keyboardPageContentNavigation)
+        {
+            keyboardPageContentNavigation.TabBetween(GpSurgeryAppointmentsMenuItem, menuItem);
+            keyboardPageContentNavigation.PressEnterKey();
         }
     }
 }

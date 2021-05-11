@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.WebPageContent;
 using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Android;
@@ -14,7 +15,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
 
         private readonly IAndroidDriverWrapper _driver;
 
-        internal AndroidKeyboardNavigation KeyboardPageContentNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(
+        private AndroidKeyboardNavigation KeyboardPageContentNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(
             _driver,
             GetAllKeyboardHomeNavigationFocusableElements());
 

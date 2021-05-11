@@ -16,16 +16,24 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         }
 
         private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Messages");
-        private WebMenuItem GpSurgeryMessagesMenuItem => WebMenuItem.WithTitle(_interactor, "GP surgery messages");
+        private WebMenuItem AskYourGpSurgeryAQuestionMenuItem => WebMenuItem.WithTitle(_interactor, "Ask your GP surgery a question");
+        private WebMenuItem OnlineConsultationsMenuItem => WebMenuItem.WithTitle(_interactor, "Online consultations");
         private WebMenuItem ConsultationsEventsAndMessagesMenuItem => WebMenuItem.WithTitle(_interactor, "Consultations, events and messages");
+        private WebMenuItem ConsultationsEventsAndMessagesSecondMenuItem => WebMenuItem.WithTitle(_interactor, "Consultations, events and messages 2");
+        private WebMenuItem ConsultationsEventsAndMessagesThirdMenuItem => WebMenuItem.WithTitle(_interactor, "Consultations, events and messages 3");
+        private WebMenuItem ConsultationsEventsAndMessagesFourthMenuItem => WebMenuItem.WithTitle(_interactor, "Consultations, events and messages 4");
         private WebMenuItem TestProviderMenuItem => WebMenuItem.WithTitle(_interactor, "Test Provider");
         private WebMenuItem HealthInfoAndUpdatesMenuItem => WebMenuItem.WithTitle(_interactor, "Health information and updates");
         private WebMenuItem AskYourGpSurgeryMenuItem => WebMenuItem.WithTitle(_interactor, "Ask your GP surgery a question");
 
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
-            GpSurgeryMessagesMenuItem,
+            AskYourGpSurgeryAQuestionMenuItem,
+            OnlineConsultationsMenuItem,
             ConsultationsEventsAndMessagesMenuItem,
+            ConsultationsEventsAndMessagesSecondMenuItem,
+            ConsultationsEventsAndMessagesThirdMenuItem,
+            ConsultationsEventsAndMessagesFourthMenuItem,
             TestProviderMenuItem,
             HealthInfoAndUpdatesMenuItem
         };
@@ -60,7 +68,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private void KeyboardNavigateToAndActivateMenuItem(IFocusable menuItem, AndroidKeyboardNavigation keyboardPageContentNavigation)
         {
-            keyboardPageContentNavigation.TabBetween(GpSurgeryMessagesMenuItem, menuItem);
+            keyboardPageContentNavigation.TabBetween(AskYourGpSurgeryAQuestionMenuItem, menuItem);
             keyboardPageContentNavigation.PressEnterKey();
         }
     }

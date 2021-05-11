@@ -82,6 +82,11 @@ namespace NHSOnline.IntegrationTests.UI
             Regex.Escape("Expected driver.Url not to be \"about:blank\"."),
             RegexOptions.Compiled);
 
+        // Appium issue where when switching to home webview it becomes unreachable
+        private static readonly Regex WindowHandleNotFound = new(
+            @"Web window handle not found after 00:00:20; Handles:*",
+            RegexOptions.Compiled);
+
         private static readonly List<(Regex pattern, RetryStatus result)> RetryExceptionMessageRegexes = new()
         {
             (InvalidServiceWebInspectorMessage, RetryStatus.Retry(nameof(InvalidServiceWebInspectorMessage))),
@@ -97,7 +102,8 @@ namespace NHSOnline.IntegrationTests.UI
             (NginxBadGateway, RetryStatus.Retry(nameof(NginxBadGateway))),
             (FirebaseAuthorisationFailureWontRetry, RetryStatus.Retry(nameof(FirebaseAuthorisationFailureWontRetry))),
             (AppiumProxyIssue, RetryStatus.Retry(nameof(AppiumProxyIssue))),
-            (AboutBlank, RetryStatus.Retry(nameof(AboutBlank)))
+            (AboutBlank, RetryStatus.Retry(nameof(AboutBlank))),
+            (WindowHandleNotFound, RetryStatus.Retry(nameof(WindowHandleNotFound)))
         };
 
         internal static RetryStatus ShouldRetry(this TestResult result, TestLogs logs)
