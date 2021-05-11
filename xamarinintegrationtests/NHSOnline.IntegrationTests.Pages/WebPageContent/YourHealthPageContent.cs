@@ -13,6 +13,13 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         }
 
         private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Your health");
+        private WebMenuItem TestResultsMenuItem => WebMenuItem.WithTitle(_interactor, "Test results");
+        private WebMenuItem CarePlansMenuItem => WebMenuItem.WithTitle(_interactor, "Care plans");
+        private WebMenuItem TrackYourHealthMenuItem => WebMenuItem.WithTitle(_interactor, "Track your health");
+        private WebMenuItem SharedHealthMenuItem => WebMenuItem.WithTitle(_interactor, "Shared health links");
+        private WebMenuItem RecordSharingMenuItem => WebMenuItem.WithTitle(_interactor, "Record sharing");
+
+        private WebText SharedHealthMenuItemTitle => WebText.WithTagAndText(_interactor, "h2", "Shared health links");
 
         internal void AssertOnPage()
         {
@@ -23,6 +30,33 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         {
             Title.AssertVisible();
             return this;
+        }
+
+        public void NavigateToTestResults()
+        {
+            TestResultsMenuItem.Click();
+        }
+
+        public void NavigateToCarePlans()
+        {
+            CarePlansMenuItem.Click();
+        }
+
+        public void NavigateToTrackYourHealth()
+        {
+            TrackYourHealthMenuItem.Click();
+        }
+
+        public void NavigateToSharedHealth()
+        {
+            SharedHealthMenuItemTitle.ScrollTo();
+            SharedHealthMenuItemTitle.AssertVisible();
+            SharedHealthMenuItem.Click();
+        }
+
+        public void NavigateToRecordSharing()
+        {
+            RecordSharingMenuItem.Click();
         }
     }
 }

@@ -48,7 +48,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
         [NhsAppIOSTest]
         public void APatientCanAccessTheirPkbAppointmentsFromTheAppointmentsScreenIOS(IIOSDriverWrapper driver)
         {
-            var patient = new EmisPatient()
+            var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Barry").FamilyName("Allen"));
             using var patients = Mocks.Patients.Add(patient);
 

@@ -2,6 +2,7 @@ using System;
 using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Web
 {
@@ -26,6 +27,9 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
 
         public WebLink WithChildLink(string linkText)
             => WebLink.WithText(_interactor, linkText, WholeElementSelector );
+
+        public void ScrollTo() => _interactor.ActOnElementContext(
+            FindBy, c => new Actions(c.Driver).MoveToElement(c.Element).Perform());
 
         private void ActOnElement(Action<IWebElement> action)
             => _interactor.ActOnElement(FindBy, action);

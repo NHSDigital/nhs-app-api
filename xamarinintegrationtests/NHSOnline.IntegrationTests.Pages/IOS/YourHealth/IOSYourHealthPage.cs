@@ -11,9 +11,9 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.YourHealth
             PageContent = new YourHealthPageContent(driver.Web(WebViewContext.NhsApp));
         }
 
-        public IOSFullNavigation Navigation { get; }
+        private IOSFullNavigation Navigation { get; }
 
-        private YourHealthPageContent PageContent { get; }
+        public YourHealthPageContent PageContent { get; }
 
         public static IOSYourHealthPage AssertOnPage(IIOSDriverWrapper driver)
         {

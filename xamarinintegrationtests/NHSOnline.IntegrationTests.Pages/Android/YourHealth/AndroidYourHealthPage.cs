@@ -11,9 +11,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android.YourHealth
             PageContent = new YourHealthPageContent(driver.Web(WebViewContext.NhsApp));
         }
 
-        public AndroidFullNavigation Navigation { get; }
+        private AndroidFullNavigation Navigation { get; }
 
-        private YourHealthPageContent PageContent { get; }
+        public YourHealthPageContent PageContent { get; }
 
         public static AndroidYourHealthPage AssertOnPage(IAndroidDriverWrapper driver)
         {

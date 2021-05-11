@@ -1,11 +1,13 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
-using NHSOnline.IntegrationTests.Pages.Android.Prescriptions;
+using NHSOnline.IntegrationTests.Pages.Android.Messages;
 using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
+using NHSOnline.IntegrationTests.Pages.Android.YourHealth;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
-using NHSOnline.IntegrationTests.Pages.IOS.Prescriptions;
+using NHSOnline.IntegrationTests.Pages.IOS.Messages;
 using NHSOnline.IntegrationTests.Pages.IOS.WebIntegration;
+using NHSOnline.IntegrationTests.Pages.IOS.YourHealth;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -13,57 +15,57 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
 {
 
     [TestClass]
-    public class PkbPrescriptionsWebIntegrationTests
+    public class PkbMessagesConsultationsEventsAndMessagesWebIntegrationTests
     {
         [NhsAppAndroidTest]
-        public void APatientCanAccessTheirPkbPrescriptionsFromThePrescriptionsScreenAndroid(IAndroidDriverWrapper driver)
+        public void APatientCanAccessTheirPkbConsultationsEventsAndMessagesFromTheMessagesScreenAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new PkbPatient()
-                .WithName(b => b.GivenName("Arthur").FamilyName("Curry"));
+                .WithName(b => b.GivenName("Eobard").FamilyName("Thawne"));
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogAndroidPatientIn(driver, patient);
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Prescriptions();
+                .Navigation.Messages();
 
-            AndroidPrescriptionsPage
+            AndroidMessagesPage
                 .AssertOnPage(driver)
-                .PageContent.NavigateToHospitalAndOtherPrescriptions();
+                .PageContent.NavigateToConsultationsEventsAndMessages();
 
             AndroidWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, "Hospital and other prescriptions")
+                .AssertOnPage(driver, "Messages and online consultations")
                 .PageContent.NavigateToNextPage();
 
             AndroidPkbPage
-                .AssertOnPage(driver, "/auth/manageMedications.action?tab=treatments")
+                .AssertOnPage(driver, "/auth/getInbox.action?tab=messages")
                 .AssertNativeHeader();
         }
 
         [NhsAppIOSTest]
-        public void APatientCanAccessTheirPkbPrescriptionsFromThePrescriptionsScreenIOS(IIOSDriverWrapper driver)
+        public void APatientCanAccessTheirPkbConsultationsEventsAndMessagesFromTheMessagesScreenIOS(IIOSDriverWrapper driver)
         {
             var patient = new PkbPatient()
-                .WithName(b => b.GivenName("Hal").FamilyName("Jordan"));
+                .WithName(b => b.GivenName("Hunter").FamilyName("Zolomon"));
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogIOSPatientIn(driver, patient);
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Prescriptions();
+                .Navigation.Messages();
 
-            IOSPrescriptionsPage
+            IOSMessagesPage
                 .AssertOnPage(driver)
-                .PageContent.NavigateToHospitalAndOtherPrescriptions();
+                .PageContent.NavigateToConsultationsEventsAndMessages();
 
             IOSWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, "Hospital and other prescriptions")
+                .AssertOnPage(driver, "Messages and online consultations")
                 .PageContent.NavigateToNextPage();
 
             IOSPkbPage
-                .AssertOnPage(driver, "/auth/manageMedications.action?tab=treatments")
+                .AssertOnPage(driver, "/auth/getInbox.action?tab=messages")
                 .AssertNativeHeader();
         }
     }
