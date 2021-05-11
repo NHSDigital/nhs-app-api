@@ -1,0 +1,12 @@
+#
+# Users in F00011 have both Vaccine Record and Covid Status jump off points enabled
+#
+
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "F00011"
+journeys:
+  silverIntegrations:
+    vaccineRecord:
+      - netCompany
+      - nhsd

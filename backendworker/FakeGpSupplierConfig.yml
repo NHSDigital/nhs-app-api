@@ -1563,3 +1563,31 @@ defaultUsers:
       familyName: BEGLEY
       dateOfBirth: "2002-08-05T00:00:00"
       sex: Female
+
+  vaccineRecordAndCovidStatus:
+    9486112282:
+      userId: e98a13f9-704c-4808-99eb-e052e0bbbf70
+      emailAddress: nhsapp.aos+covidstatus-vaccinerecord.user1@gmail.com
+      odsCode: F00011
+      givenName: Eliza
+      familyName: MAKIN
+      dateOfBirth: "1975-10-19T00:00:00"
+      sex: Female
+
+    9474562806:
+      userId: 7d1a37e5-5626-48bf-8016-43813a35baf6
+      emailAddress: nhsapp.aos+covidstatus-vaccinerecord.user2@gmail.com
+      odsCode: F00011
+      givenName: Harigopal
+      familyName: VEDATI
+      dateOfBirth: "1954-11-05T00:00:00"
+      sex: Male
+
+    9462339635:
+      userId: 39112995-6d58-4326-acc0-5bf8535491fa
+      emailAddress: nhsapp.aos+covidstatus-vaccinerecord.user3@gmail.com
+      odsCode: F00011
+      givenName: DELICE
+      familyName: DAINE
+      dateOfBirth: "1996-11-16T00:00:00"
+      sex: Male
