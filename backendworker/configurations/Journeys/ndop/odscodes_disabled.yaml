@@ -4,6 +4,5 @@ target:
     - "A00002"
     - "A80006"
     - "no-ods-code"
-    - "F00010"
 journeys:
   ndop: false
