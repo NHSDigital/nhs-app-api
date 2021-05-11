@@ -3,26 +3,26 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
 {
-    public sealed class AndroidPkbPage
+    public sealed class AndroidSubstraktPage
     {
-        private AndroidPkbPage(IAndroidDriverWrapper driver, string phrPath)
+        private AndroidSubstraktPage(IAndroidDriverWrapper driver)
         {
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new PkbPageContent(driver.Web(WebViewContext.PkbWebIntegration), phrPath);
+            PageContent = new SubstraktPageContent(driver.Web(WebViewContext.SubstraktWebIntegration));
         }
 
         private AndroidFullNavigation Navigation { get; }
 
-        private PkbPageContent PageContent { get; }
+        private SubstraktPageContent PageContent { get; }
 
-        public static AndroidPkbPage AssertOnPage(IAndroidDriverWrapper driver, string phrPath)
+        public static AndroidSubstraktPage AssertOnPage(IAndroidDriverWrapper driver)
         {
-            var page = new AndroidPkbPage(driver, phrPath);
+            var page = new AndroidSubstraktPage(driver);
             page.PageContent.AssertOnPage();
             return page;
         }
 
-        public AndroidPkbPage AssertNativeHeader()
+        public AndroidSubstraktPage AssertNativeHeader()
         {
             Navigation.AssertNavigationPresent();
             return this;

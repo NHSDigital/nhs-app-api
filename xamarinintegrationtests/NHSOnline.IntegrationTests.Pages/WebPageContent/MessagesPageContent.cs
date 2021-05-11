@@ -20,6 +20,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         private WebMenuItem ConsultationsEventsAndMessagesMenuItem => WebMenuItem.WithTitle(_interactor, "Consultations, events and messages");
         private WebMenuItem TestProviderMenuItem => WebMenuItem.WithTitle(_interactor, "Test Provider");
         private WebMenuItem HealthInfoAndUpdatesMenuItem => WebMenuItem.WithTitle(_interactor, "Health information and updates");
+        private WebMenuItem AskYourGpSurgeryMenuItem => WebMenuItem.WithTitle(_interactor, "Ask your GP surgery a question");
 
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
@@ -48,6 +49,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         public void NavigateToConsultationsEventsAndMessages()
         {
             ConsultationsEventsAndMessagesMenuItem.Click();
+        }
+
+        public void NavigateToAskYourGpSurgeryAQuestion()
+        {
+            AskYourGpSurgeryMenuItem.Click();
         }
 
         public void KeyboardNavigateToTestProvider(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(TestProviderMenuItem, navigation);
