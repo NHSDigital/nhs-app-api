@@ -1,7 +1,11 @@
 /* eslint-disable object-curly-newline */
 import { find } from 'lodash/fp';
-import actions from '../../../../../src/store/modules/auth/actions';
-import Sources from '../../../../../src/lib/sources';
+import actions from '@/store/modules/auth/actions';
+import Sources from '@/lib/sources';
+import NativeApp from '@/services/native-app';
+import { LOGIN_PATH } from '@/router/paths';
+
+jest.mock('@/services/native-app');
 
 describe('actions', () => {
   const name = 'Fozzy Bear';
@@ -57,6 +61,11 @@ describe('actions', () => {
     };
   });
 
+  afterEach(() => {
+    NativeApp.supportsLogout.mockClear();
+    NativeApp.logout.mockClear();
+  });
+
   describe('handle auth response', () => {
     it('will set the info from the data received from the server', () => actions
       .handleAuthResponse({ commit, state, rootState }, { code: '123' })
@@ -80,17 +89,51 @@ describe('actions', () => {
   });
 
   describe('logout', () => {
-    it('will dispatch the session/clear event', () => actions
-      .logout({ commit })
-      .then(() => {
-        expect(actions.dispatch).toHaveBeenCalledWith('session/clear');
-      }));
+    describe('does not support native logout', () => {
+      beforeEach(async () => {
+        NativeApp.supportsLogout.mockReturnValue(false);
+        await actions.logout({ commit });
+      });
 
-    it('will dispatch the session/endValidationChecking event', () => actions
-      .logout({ commit })
-      .then(() => {
+      it('will dispatch the session/clear event', () => {
+        expect(actions.dispatch).toHaveBeenCalledWith('session/clear');
+      });
+
+      it('will dispatch the session/endValidationChecking event', () => {
         expect(actions.dispatch).toHaveBeenCalledWith('session/endValidationChecking');
-      }));
+      });
+
+      it('will not call the native logout', () => {
+        expect(NativeApp.logout).not.toHaveBeenCalled();
+      });
+
+      it('will call router push', () => {
+        expect(actions.app.$router.push).toHaveBeenCalledWith({ path: LOGIN_PATH });
+      });
+    });
+
+    describe('supports native logout', () => {
+      beforeEach(async () => {
+        NativeApp.supportsLogout.mockReturnValue(true);
+        await actions.logout({ commit });
+      });
+
+      it('will dispatch the session/clear event', () => {
+        expect(actions.dispatch).toHaveBeenCalledWith('session/clear');
+      });
+
+      it('will dispatch the session/endValidationChecking event', () => {
+        expect(actions.dispatch).toHaveBeenCalledWith('session/endValidationChecking');
+      });
+
+      it('will call the native logout', () => {
+        expect(NativeApp.logout).toHaveBeenCalled();
+      });
+
+      it('will not call router push', () => {
+        expect(actions.app.$router.push).not.toHaveBeenCalled();
+      });
+    });
   });
 
   describe('logoutWhenExpired', () => {

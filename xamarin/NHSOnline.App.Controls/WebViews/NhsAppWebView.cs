@@ -44,6 +44,9 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty OpenSettingsCommandProperty =
             BindableProperty.Create(nameof(OpenSettingsCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
 
+        public static readonly BindableProperty LogoutCommandProperty =
+            BindableProperty.Create(nameof(LogoutCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
+
         private static JsonSerializerSettings Settings { get; } = CreateJsonSerializerSettings();
 
         public void OpenWebIntegration(string json)
@@ -127,10 +130,19 @@ namespace NHSOnline.App.Controls.WebViews
         }
 
         public void OpenSettings() => OpenSettingsCommand.Execute(null);
+
         public AsyncCommand OpenSettingsCommand
         {
             get => (AsyncCommand) GetValue(OpenSettingsCommandProperty);
             set => SetValue(OpenSettingsCommandProperty, value);
+        }
+
+        public void Logout() => LogoutCommand.Execute(null);
+
+        public AsyncCommand LogoutCommand
+        {
+            get => (AsyncCommand)GetValue(LogoutCommandProperty);
+            set => SetValue(LogoutCommandProperty, value);
         }
 
         public async Task SendBiometricCompletion(BiometricCompletion biometricCompletion)

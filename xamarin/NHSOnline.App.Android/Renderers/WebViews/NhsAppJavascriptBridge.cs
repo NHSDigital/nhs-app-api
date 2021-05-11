@@ -65,5 +65,12 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         {
             NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.OpenSettings());
         }
+
+        [JavascriptInterface]
+        [Export("logout")]
+        public void Logout()
+        {
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.Logout());
+        }
     }
 }

@@ -52,15 +52,17 @@ namespace NHSOnline.App.Areas.Home.Views
         public AsyncCommand<string> FetchBiometricStatusCommand
             => new AsyncCommand<string>(() => FetchBiometricStatusRequested);
 
-        public Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
-        public Func<Uri, Task>? DeeplinkRequested { get; set; }
-
         public Func<Task>? OpenSettingsRequested { get; set; }
         public AsyncCommand OpenSettingsCommand
             => new AsyncCommand(() => OpenSettingsRequested);
 
+        public Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
         public AsyncCommand<string> UpdateBiometricRegistrationCommand
             => new AsyncCommand<string>(() => UpdateBiometricRegistrationRequested);
+
+        public Func<Task>? LogoutRequested { get; set; }
+        public AsyncCommand LogoutCommand
+            => new AsyncCommand(() => LogoutRequested);
 
         public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
         private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand
@@ -69,6 +71,15 @@ namespace NHSOnline.App.Areas.Home.Views
         public Func<WebNavigatedEventArgs, Task>? Navigated { get; set; }
         private AsyncCommand<WebNavigatedEventArgs> NavigatedCommand
             => new AsyncCommand<WebNavigatedEventArgs>(() => Navigated);
+
+        public Func<Uri, Task>? DeeplinkRequested { get; set; }
+        public async Task HandleDeeplink(Uri deeplinkUrl)
+        {
+            if (DeeplinkRequested != null)
+            {
+                await DeeplinkRequested(deeplinkUrl).PreserveThreadContext();
+            }
+        }
 
         public Func<Task>? ResetAndShowErrorRequested { get; set; }
         public async Task ResetAndShowError()
@@ -207,14 +218,6 @@ namespace NHSOnline.App.Areas.Home.Views
         {
             Spinner.IsVisible = false;
             WebView.IsVisible = true;
-        }
-
-        public async Task HandleDeeplink(Uri deeplinkUrl)
-        {
-            if (DeeplinkRequested != null)
-            {
-                await DeeplinkRequested(deeplinkUrl).PreserveThreadContext();
-            }
         }
     }
 }

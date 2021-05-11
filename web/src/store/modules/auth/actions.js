@@ -1,4 +1,4 @@
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import jwt from 'jwt-decode';
 import { LOGIN_PATH } from '@/router/paths';
 import { removeCookies, setCookie } from '@/lib/cookie-manager';
@@ -29,7 +29,11 @@ const final = ({ self, commit }) => {
   self.dispatch('gpMessages/init');
   self.dispatch('practiceSettings/init');
 
-  self.app.$router.push({ path: LOGIN_PATH });
+  if (NativeApp.supportsLogout()) {
+    NativeApp.logout();
+  } else {
+    self.app.$router.push({ path: LOGIN_PATH });
+  }
 };
 
 const removeSessionCookies = self => removeCookies({
@@ -173,8 +177,8 @@ export default {
     commit(INIT_AUTH);
   },
   nativeLogin() {
-    NativeCallbacks.onLogin();
-    NativeCallbacks.showHeader();
+    NativeApp.onLogin();
+    NativeApp.showHeader();
   },
   updateConfig({ commit }, config) {
     commit(UPDATE_CONFIG, config);

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Api.Session;
 using NHSOnline.App.Areas.Home.Models;
+using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.Controls.WebViews.Payloads;
@@ -61,43 +62,26 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _navigationHandler = new NhsAppNavigationHandler(view);
 
             _view.AppNavigation
-                .RegisterHandler(
-                    ViewOnAppearing, (view, handler) => view.Appearing = handler)
-                .RegisterHandler<WebNavigatingEventArgs>(
-                    ViewOnNavigating, (view, handler) => view.Navigating = handler)
-                .RegisterHandler<WebNavigatedEventArgs>(
-                    ViewOnNavigated, (view, handler) => view.Navigated = handler)
-                .RegisterHandler(
-                    HelpRequested, (view, handler) => view.HelpRequested = handler)
-                .RegisterHandler<OpenWebIntegrationRequest>(
-                    OpenWebIntegrationRequested, (view, handler) => view.OpenWebIntegrationRequested = handler)
-                .RegisterHandler<StartNhsLoginUpliftRequest>(
-                    StartNhsLoginUpliftRequested, (view, handler) => view.StartNhsLoginUpliftRequested = handler)
-                .RegisterHandler(
-                    ResetAndShowErrorRequested, (view, handler) => view.ResetAndShowErrorRequested = handler)
-                .RegisterHandler(
-                    GetNotificationsStatusRequested, (view, handler) => view.GetNotificationsStatusRequested = handler)
-                .RegisterHandler<string>(
-                    RequestPnsToken, (view, handler) => view.GetPnsTokenRequested = handler)
-                .RegisterHandler<string>(
-                    FetchBiometricStatusRequested, (view, handler) => view.FetchBiometricStatusRequested = handler)
-                .RegisterHandler<string>(
-                    UpdateBiometricRegistrationRequested, (view, handler) => view.UpdateBiometricRegistrationRequested = handler)
-                .RegisterHandler(
-                    _navigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
-                .RegisterHandler(
-                    _navigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
-                .RegisterHandler(
-                    _navigationHandler.AdviceRequested, (view, handler) => view.AdviceRequested = handler)
-                .RegisterHandler(
-                    _navigationHandler.AppointmentsRequested, (view, handler) => view.AppointmentsRequested = handler)
-                .RegisterHandler(
-                    _navigationHandler.PrescriptionsRequested, (view, handler) => view.PrescriptionsRequested = handler)
-                .RegisterHandler(
-                    _navigationHandler.YourHealthRequested, (view, handler) => view.YourHealthRequested = handler)
-                .RegisterHandler(
-                    _navigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler)
+                .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
+                .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
+                .RegisterHandler<WebNavigatedEventArgs>(ViewOnNavigated, (view, handler) => view.Navigated = handler)
+                .RegisterHandler(HelpRequested, (view, handler) => view.HelpRequested = handler)
+                .RegisterHandler<OpenWebIntegrationRequest>(OpenWebIntegrationRequested, (view, handler) => view.OpenWebIntegrationRequested = handler)
+                .RegisterHandler<StartNhsLoginUpliftRequest>(StartNhsLoginUpliftRequested, (view, handler) => view.StartNhsLoginUpliftRequested = handler)
+                .RegisterHandler(ResetAndShowErrorRequested, (view, handler) => view.ResetAndShowErrorRequested = handler)
+                .RegisterHandler(GetNotificationsStatusRequested, (view, handler) => view.GetNotificationsStatusRequested = handler)
+                .RegisterHandler<string>(RequestPnsToken, (view, handler) => view.GetPnsTokenRequested = handler)
+                .RegisterHandler<string>(FetchBiometricStatusRequested, (view, handler) => view.FetchBiometricStatusRequested = handler)
+                .RegisterHandler<string>(UpdateBiometricRegistrationRequested, (view, handler) => view.UpdateBiometricRegistrationRequested = handler)
                 .RegisterHandler(OpenSettingsRequested, (view, handler) => view.OpenSettingsRequested = handler)
+                .RegisterHandler(LogoutRequested, (view, handler) => view.LogoutRequested = handler)
+                .RegisterHandler(_navigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
+                .RegisterHandler(_navigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
+                .RegisterHandler(_navigationHandler.AdviceRequested, (view, handler) => view.AdviceRequested = handler)
+                .RegisterHandler(_navigationHandler.AppointmentsRequested, (view, handler) => view.AppointmentsRequested = handler)
+                .RegisterHandler(_navigationHandler.PrescriptionsRequested, (view, handler) => view.PrescriptionsRequested = handler)
+                .RegisterHandler(_navigationHandler.YourHealthRequested, (view, handler) => view.YourHealthRequested = handler)
+                .RegisterHandler(_navigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler)
                 .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeeplinkRequested = handler);
         }
 
@@ -248,6 +232,17 @@ namespace NHSOnline.App.Areas.Home.Presenters
             }
 
             await _view.SendBiometricCompletion(completion).PreserveThreadContext();
+        }
+
+        private Task LogoutRequested()
+        {
+            _logger.LogInformation("{Method}", nameof(LogoutRequested));
+
+            var model = new LoggedOutHomeScreenModel();
+            var page = _pageFactory.CreatePageFor(model);
+            _view.AppNavigation.PopToNewRootAnimated(page);
+
+            return Task.CompletedTask;
         }
 
         private async Task HelpRequested()

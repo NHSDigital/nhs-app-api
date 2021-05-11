@@ -387,4 +387,14 @@ export default {
 
     return false;
   },
+
+  supportsLogout: () => {
+    const app = window.nativeApp;
+    return app && app.logout;
+  },
+
+  logout: () => {
+    const app = window.nativeApp;
+    app.logout();
+  },
 };

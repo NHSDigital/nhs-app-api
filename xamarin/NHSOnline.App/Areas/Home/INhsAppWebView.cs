@@ -33,8 +33,9 @@ namespace NHSOnline.App.Areas.Home
 
             Func<string, Task>? FetchBiometricStatusRequested { get; set; }
             Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
-            Func<Uri, Task>? DeeplinkRequested { get; set; }
             Func<Task>? OpenSettingsRequested { get; set; }
+            Func<Task>? LogoutRequested { get; set; }
+            Func<Uri, Task>? DeeplinkRequested { get; set; }
         }
 
         void GoToUri(Uri uri);
