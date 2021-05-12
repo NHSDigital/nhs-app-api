@@ -38,6 +38,7 @@ namespace NHSOnline.App.Droid
 
             AndroidLifecycle.MainActivity = this;
             AndroidBiometrics.MainActivity = this;
+            AndroidSettingsService.MainActivity = this;
 
             NhsApp = new NhsApp();
             LoadApplication(NhsApp);

@@ -25,6 +25,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                 .AddFunction("requestPnsToken", webView => webView.RequestPnsToken)
                 .AddFunction("fetchBiometricStatus", webView => webView.FetchBiometricStatus)
                 .AddFunction("updateBiometricRegistrationWithToken", webView => webView.UpdateBiometricRegistration)
+                .AddFunction("openAppSettings", webView => webView.OpenSettings)
                 .Apply(config.UserContentController);
         }
 

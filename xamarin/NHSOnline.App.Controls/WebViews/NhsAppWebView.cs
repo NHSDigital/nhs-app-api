@@ -41,6 +41,9 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty UpdateBiometricRegistrationCommandProperty =
             BindableProperty.Create(nameof(UpdateBiometricRegistrationCommand), typeof(AsyncCommand<string>), typeof(NhsAppWebView));
 
+        public static readonly BindableProperty OpenSettingsCommandProperty =
+            BindableProperty.Create(nameof(OpenSettingsCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
+
         private static JsonSerializerSettings Settings { get; } = CreateJsonSerializerSettings();
 
         public void OpenWebIntegration(string json)
@@ -121,6 +124,13 @@ namespace NHSOnline.App.Controls.WebViews
         {
             get => (AsyncCommand<string>)GetValue(UpdateBiometricRegistrationCommandProperty);
             set => SetValue(UpdateBiometricRegistrationCommandProperty, value);
+        }
+
+        public void OpenSettings() => OpenSettingsCommand.Execute(null);
+        public AsyncCommand OpenSettingsCommand
+        {
+            get => (AsyncCommand) GetValue(OpenSettingsCommandProperty);
+            set => SetValue(OpenSettingsCommandProperty, value);
         }
 
         public async Task SendBiometricCompletion(BiometricCompletion biometricCompletion)

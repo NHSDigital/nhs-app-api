@@ -7,6 +7,7 @@ using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
+using NHSOnline.App.DependencyServices;
 using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.Navigation;
 using NHSOnline.App.Services;
@@ -30,6 +31,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly RedirectorUrlFactory _redirectorUrlFactory;
         private readonly INhsAppNavigationHandler _navigationHandler;
         private readonly INotifications _notifications;
+        private readonly ISettingsService _settingsService;
 
         public NhsAppWebPresenter(
             NhsAppWebModel model,
@@ -41,7 +43,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
             IPageFactory pageFactory,
             INotifications notifications,
             IBiometricAuthenticationService biometricAuthenticationService,
-            RedirectorUrlFactory redirectorUrlFactory)
+            RedirectorUrlFactory redirectorUrlFactory,
+            ISettingsService settingsService)
         {
             _model = model;
             _view = view;
@@ -54,6 +57,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
             _biometricAuthenticationService = biometricAuthenticationService;
             _redirectorUrlFactory = redirectorUrlFactory;
+            _settingsService = settingsService;
             _navigationHandler = new NhsAppNavigationHandler(view);
 
             _view.AppNavigation
@@ -93,7 +97,15 @@ namespace NHSOnline.App.Areas.Home.Presenters
                     _navigationHandler.YourHealthRequested, (view, handler) => view.YourHealthRequested = handler)
                 .RegisterHandler(
                     _navigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler)
+                .RegisterHandler(OpenSettingsRequested, (view, handler) => view.OpenSettingsRequested = handler)
                 .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeeplinkRequested = handler);
+        }
+
+        private async Task OpenSettingsRequested()
+        {
+            _logger.LogInformation("Opening native settings");
+
+            await _settingsService.OpenSettings().PreserveThreadContext();
         }
 
         private async Task ViewOnAppearing()

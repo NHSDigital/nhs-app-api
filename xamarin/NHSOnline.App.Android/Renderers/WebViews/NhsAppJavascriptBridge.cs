@@ -58,5 +58,12 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         {
             NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.UpdateBiometricRegistration(argumentJson));
         }
+
+        [JavascriptInterface]
+        [Export("openAppSettings")]
+        public void OpenAppSettings()
+        {
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.OpenSettings());
+        }
     }
 }

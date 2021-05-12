@@ -55,6 +55,10 @@ namespace NHSOnline.App.Areas.Home.Views
         public Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
         public Func<Uri, Task>? DeeplinkRequested { get; set; }
 
+        public Func<Task>? OpenSettingsRequested { get; set; }
+        public AsyncCommand OpenSettingsCommand
+            => new AsyncCommand(() => OpenSettingsRequested);
+
         public AsyncCommand<string> UpdateBiometricRegistrationCommand
             => new AsyncCommand<string>(() => UpdateBiometricRegistrationRequested);
 
