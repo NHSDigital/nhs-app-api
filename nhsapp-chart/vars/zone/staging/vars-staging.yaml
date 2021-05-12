@@ -10,15 +10,19 @@ keyvaultSubscriptionID: 47e498b8-ad52-4421-b6d0-d7f9988429df
 keyvaultTenantID: 50f6071f-bbfe-401a-8803-673748e629e2
 
 secrets:
-  notificationHubs:
+  notificationHubs: 
     - notificationHubSecretName: "notificationHubSharedAccessKey"
-      notificationHubSecretVersion: "ed60d1ae92f44e228e62bec53197d67e"
+      notificationHubSecretVersionuks: "ed60d1ae92f44e228e62bec53197d67e"
+      notificationHubSecretVersionukw: "079d20f5b7c245719376edd56c5dc021"
     - notificationHubSecretName: "notificationHubSharedAccessKey-0"
-      notificationHubSecretVersion: "08563aa976a045f6bad1366954c36b28"
+      notificationHubSecretVersionuks: "08563aa976a045f6bad1366954c36b28"
+      notificationHubSecretVersionukw: "ba061a4fecaf4547aeb7f762239d3595"
     - notificationHubSecretName: "notificationHubSharedAccessKey-1"
-      notificationHubSecretVersion: "14db508157954fd2922e579c3cc15272"
+      notificationHubSecretVersionuks: "14db508157954fd2922e579c3cc15272"
+      notificationHubSecretVersionukw: "b710019b7e674bcd86c5ed249a1b7b81"
     - notificationHubSecretName: "notificationHubSharedAccessKey-2"
-      notificationHubSecretVersion: "e0d0fdd62df74d33b0adafb053adebfa"
+      notificationHubSecretVersionuks: "e0d0fdd62df74d33b0adafb053adebfa"
+      notificationHubSecretVersionukw: "fb3941aab71b494d911dce44ee70544a"
 
 wildcardEnv: true
 

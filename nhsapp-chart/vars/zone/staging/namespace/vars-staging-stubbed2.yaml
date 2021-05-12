@@ -36,9 +36,10 @@ emisApplicationID: "C849DB19-4EB0-4BDF-ABF3-7C5233739AF0"
 createDefaultIngress: false
 
 secrets:
-  notificationHubs:
+  notificationHub:
     - notificationHubSecretName: "notificationHubSharedAccessKeyStubbed2"
-      notificationHubSecretVersion: "e074a1e08c8c4003b73da75fe5303cd8"
+      notificationHubSecretVersionuks: "e074a1e08c8c4003b73da75fe5303cd8"
+      notificationHubSecretVersionukw: "8ee4e933b0a948c397bec84da49ed9a0"
 
 web:
   image_tag: latest

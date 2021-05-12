@@ -22,7 +22,8 @@ users:
 secrets:
   notificationHubs:
     - notificationHubSecretName: "notificationHubSharedAccessKeyOnboardingSandpit"
-      notificationHubSecretVersion: "cb94849bb3db47ec995cdbe0446a6434"
+      notificationHubSecretVersionuks: "cb94849bb3db47ec995cdbe0446a6434"
+      notificationHubSecretVersionukw: "792b977ac949477882f5a980b0aa2737"
 
 web:
   publicURL: www-onboardingsandpit.nhsapp.service.nhs.uk

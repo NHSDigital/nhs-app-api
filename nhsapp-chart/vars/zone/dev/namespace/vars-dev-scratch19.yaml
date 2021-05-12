@@ -11,7 +11,8 @@ wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.scratch19
 secrets:
   notificationHubs:
     - notificationHubSecretName: "notificationHubSharedAccessKeyScratch19"
-      notificationHubSecretVersion: "7eccdf7f4b1d4c13ab1df81c41062938"
+      notificationHubSecretVersionuks: "7eccdf7f4b1d4c13ab1df81c41062938"
+      notificationHubSecretVersionukw: "b9091eba32f742e7b5e3da04b6f06a9c"
 
 web:
   thirdPartyJumpOffLoggingEnabled: true

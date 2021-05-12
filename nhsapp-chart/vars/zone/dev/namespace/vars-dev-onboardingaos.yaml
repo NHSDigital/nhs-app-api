@@ -22,7 +22,8 @@ users:
 secrets:
   notificationHubs:
     - notificationHubSecretName: "notificationHubSharedAccessKeyOnboardingAos"
-      notificationHubSecretVersion: "0e1702a03cd9474c8e8eb887f6e50575"
+      notificationHubSecretVersionuks: "0e1702a03cd9474c8e8eb887f6e50575"
+      notificationHubSecretVersionukw: "bacdce98a7d545b195cf580247335d0d"
 
 web:
   publicURL: www-onboardingaos.nhsapp.service.nhs.uk

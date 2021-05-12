@@ -15,4 +15,5 @@ users:
 secrets:
   notificationHubs:
     - notificationHubSecretName: "notificationHubSharedAccessKeyPreview"
-      notificationHubSecretVersion: "570a20e0acf6446f9646f8aaeb52f233"
+      notificationHubSecretVersionuks: "570a20e0acf6446f9646f8aaeb52f233"
+      notificationHubSecretVersionukw: "b487bfcab7a74411bf53b3862d26565d"
