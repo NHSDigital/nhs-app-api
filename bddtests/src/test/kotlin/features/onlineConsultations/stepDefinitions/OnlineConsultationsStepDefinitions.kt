@@ -64,6 +64,12 @@ open class OnlineConsultationsStepDefinitions {
         answerQuestionAndContinue(elementId = OnlineConsultationConstants.TERMS_AND_CONDITONS_CHECKBOX)
     }
 
+    @When("^I accept demographics and navigate to terms consent page")
+    fun iAcceptTheDemographicsandContinue() {
+        onlineConsultationsPage.clickFormElement(id=OnlineConsultationConstants.DEMOGRAPHICS_CHECKBOX)
+        onlineConsultationsPage.clickFormElement("button", OnlineConsultationConstants.DEMOGRAPHICS_BUTTON)
+    }
+
     @When("^I select my gender and click continue$")
     fun iSelectMyGender(){
         answerQuestionAndContinue(elementId = OnlineConsultationConstants.MALE_GENDER_CHOICE)

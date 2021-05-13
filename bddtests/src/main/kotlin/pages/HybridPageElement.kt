@@ -51,6 +51,7 @@ open class HybridPageElement(
             scrollTo(it)
             it.click()
         }
+        Thread.sleep(DEFAULT_WAIT_TIME)
     }
 
     fun <T> getElements(converter: (WebElementFacade) -> T): List<T> {

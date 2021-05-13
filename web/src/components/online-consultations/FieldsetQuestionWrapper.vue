@@ -1,6 +1,6 @@
 <template>
-  <fieldset class="nhsuk-fieldset">
-    <div :class="formGroupClasses">
+  <div :class="formGroupClasses">
+    <fieldset class="nhsuk-fieldset">
       <legend>
         <question :id="id"
                   :question-tag="questionTag"
@@ -15,8 +15,8 @@
         </question>
       </legend>
       <slot />
-    </div>
-  </fieldset>
+    </fieldset>
+  </div>
 </template>
 
 <script>

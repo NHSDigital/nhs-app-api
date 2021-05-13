@@ -64,7 +64,9 @@
       </div>
 
       <div v-for="carePlan in carePlans" :key="carePlan.id">
-        <generic-question-wrapper question-tag="div" :text="carePlan.title"/>
+        <generic-question-wrapper :id="`${carePlan.id}-title`"
+                                  question-tag="div"
+                                  :text="carePlan.title"/>
         <generic-question-wrapper v-for="(activity, index) in carePlan.activities"
                                   :key="`${carePlan.id}-activity-${index}`"
                                   question-tag="div"

@@ -49,7 +49,7 @@ class OnlineConsultationsPage: HybridPageObject() {
 
     fun iSeeTheCannotFindConditionLink(type: String) {
         val linkText = if(type == "my child") childLink else adultLink
-        assertVisualElement("a", "cannotFindConditionLink", linkText)
+        assertVisualElement("a", "cannotFindConditionLinkTop", linkText)
     }
 
     fun iSeeTheConditionListTitle(type: String) {

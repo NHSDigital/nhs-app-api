@@ -222,7 +222,7 @@ describe('condition list', () => {
           },
         });
         const conditionList = mountComponent({ store });
-        const cannotFindLinks = conditionList.findAll('#cannotFindConditionLink');
+        const cannotFindLinks = conditionList.findAll('.cannotFindConditionLink');
 
         expect(cannotFindLinks.length).toBe(expectedLinksVisible);
       });
@@ -259,7 +259,7 @@ describe('condition list', () => {
           });
 
           const conditionList = mountComponent({ store });
-          const cannotFindLinks = conditionList.findAll('#cannotFindConditionLink');
+          const cannotFindLinks = conditionList.findAll('.cannotFindConditionLink');
 
           expect(cannotFindLinks.at(0).text()).toEqual(expectedLinkText);
           expect(cannotFindLinks.at(1).text()).toEqual(expectedLinkText);

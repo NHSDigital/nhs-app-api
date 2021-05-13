@@ -6,7 +6,8 @@
       </p>
       <p v-if="generalGpAdviceServiceDefinition"
          class="nhsuk-u-margin-0 nhsuk-u-padding-0">
-        <a id="cannotFindConditionLink"
+        <a id="cannotFindConditionLinkTop"
+           class="cannotFindConditionLink"
            role="link" href="#"
            @click.prevent="onConditionClicked(generalGpAdviceServiceDefinition)">
           {{ $t(`onlineConsultations.conditions.${defaultConditionLinkText}`) }}</a>
@@ -30,7 +31,8 @@
     <p v-if="generalGpAdviceServiceDefinition"
        id="endConditionInfo"
        class="nhsuk-u-margin-0 nhsuk-u-padding-0">
-      <a id="cannotFindConditionLink"
+      <a id="cannotFindConditionLinkBottom"
+         class="cannotFindConditionLink"
          role="link" href="#"
          @click.prevent="onConditionClicked(generalGpAdviceServiceDefinition)">
         {{ $t(`onlineConsultations.conditions.${defaultConditionLinkText}`) }}
@@ -127,7 +129,7 @@ export default {
 };
 </script>
 <style>
-  a#cannotFindConditionLink {
+  a.cannotFindConditionLink {
     display: inline-block;
     cursor: pointer;
   }

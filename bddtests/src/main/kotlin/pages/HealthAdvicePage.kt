@@ -15,7 +15,7 @@ open class HealthAdvicePage : HybridPageObject() {
     )
 
     val adviceAboutCoronavirus = HybridPageElement(
-            webDesktopLocator = "//h2[contains(text(),'Get advice about coronavirus (COVID-19)')]",
+            webDesktopLocator = "//h2[contains(text(),'Get advice about coronavirus')]",
             androidLocator = null,
             page = this
     )
