@@ -39,7 +39,9 @@
     <StackLayout>
         
         <controls:NhsLogo />
-        <controls:MediumLabel Text="NHS App" />
+        <controls:MediumLabel
+            Text="NHS App"
+            AutomationProperties.IsInAccessibleTree="False" />
         
     </StackLayout>
 </ContentView>

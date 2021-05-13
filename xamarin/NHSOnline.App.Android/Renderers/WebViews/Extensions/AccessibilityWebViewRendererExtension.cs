@@ -16,7 +16,7 @@ namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions
         {
             if (e.OldElement == null &&
                 _renderer.Control.Settings != null &&
-                _renderer.Element is NhsAppWebView view)
+                _renderer.Element is IAccessibleWebView view)
             {
                 view.AccessibilityFocusChangeRequested += (sender, args) =>
                 {

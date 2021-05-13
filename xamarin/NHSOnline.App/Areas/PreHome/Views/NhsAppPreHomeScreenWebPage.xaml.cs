@@ -96,6 +96,7 @@ namespace NHSOnline.App.Areas.PreHome.Views
         private void WebViewOnNavigated(object sender, WebNavigatedEventArgs args)
         {
             WebView.Focus();
+            WebView.AccessibilityFocus();
             NavigatedCommand.Execute(args);
         }
 

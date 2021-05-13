@@ -10,8 +10,19 @@ using Xamarin.Forms;
 
 namespace NHSOnline.App.Controls.WebViews
 {
-    public sealed class NhsAppPreHomeScreenWebview: WebView
+    public sealed class NhsAppPreHomeScreenWebview: WebView, IAccessibleWebView
     {
+        public event EventHandler<FocusRequestArgs> AccessibilityFocusChangeRequested = null!;
+
+        public void AccessibilityFocus()
+        {
+            if (AccessibilityFocusChangeRequested != null)
+            {
+                var arg = new FocusRequestArgs {Focus = true};
+                AccessibilityFocusChangeRequested(this, arg);
+            }
+        }
+
         public static readonly BindableProperty GetNotificationsStatusCommandProperty =
             BindableProperty.Create(nameof(GetNotificationsStatusCommand), typeof(AsyncCommand), typeof(NhsAppPreHomeScreenWebview));
 
