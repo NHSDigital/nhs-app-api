@@ -3,12 +3,10 @@ using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.Android.Appointments;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
-using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
 using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
-using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.IOS.WebIntegration;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -33,15 +31,15 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidAppointmentsPage
                 .AssertOnPage(driver)
-                .PageContent.HospitalAndOtherAppointments();
+                .PageContent.NavigateToHospitalAndOtherAppointments();
 
             AndroidHospitalAndOtherAppointmentsPage
                 .AssertOnPage(driver)
-                .PageContent.BookOrCancelYourReferralAppointment();
+                .PageContent.NavigateToBookOrCancelYourReferralAppointment();
 
             AndroidErsPage
                 .AssertOnPage(driver)
-                .PageContent.InternalPage();
+                .PageContent.NavigateToInternalPage();
 
             // Internal Page (same domain) should load in WebView
             AndroidErsInternalPage
@@ -51,7 +49,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidErsPage
                 .AssertOnPage(driver)
-                .PageContent.NhsLogin();
+                .PageContent.NavigateToNhsLogin();
 
             // NHS Login should load in WebView
             AndroidErsNhsLoginPage
@@ -61,7 +59,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidErsPage
                 .AssertOnPage(driver)
-                .PageContent.Covid();
+                .PageContent.NavigateToCovid();
 
             // Other pages should load in App Browser Tab
             AndroidAppTabBrowserChoice
@@ -73,7 +71,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidErsPage
                 .AssertOnPage(driver)
-                .PageContent.NhsAppAppointments();
+                .PageContent.NavigateToNhsAppAppointments();
 
             AndroidAppointmentsPage
                 .AssertOnPage(driver);
@@ -94,15 +92,15 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSAppointmentsPage
                 .AssertOnPage(driver)
-                .PageContent.HospitalAndOtherAppointments();
+                .PageContent.NavigateToHospitalAndOtherAppointments();
 
             IOSHospitalAndOtherAppointmentsPage
                 .AssertOnPage(driver)
-                .PageContent.BookOrCancelYourReferralAppointment();
+                .PageContent.NavigateToBookOrCancelYourReferralAppointment();
 
             IOSErsPage
                 .AssertOnPage(driver)
-                .PageContent.InternalPage();
+                .PageContent.NavigateToInternalPage();
 
             // Internal Page (same domain) should load in WebView
             IOSErsInternalPage
@@ -112,7 +110,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSErsPage
                 .AssertOnPage(driver)
-                .PageContent.NhsLogin();
+                .PageContent.NavigateToNhsLogin();
 
             // NHS Login should load in WebView
             IOSErsNhsLoginPage
@@ -122,7 +120,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSErsPage
                 .AssertOnPage(driver)
-                .PageContent.Covid();
+                .PageContent.NavigateToCovid();
 
             // Other pages should load in App Browser Tab
             IOSAppTab
@@ -148,15 +146,15 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSAppointmentsPage
                 .AssertOnPage(driver)
-                .PageContent.HospitalAndOtherAppointments();
+                .PageContent.NavigateToHospitalAndOtherAppointments();
 
             IOSHospitalAndOtherAppointmentsPage
                 .AssertOnPage(driver)
-                .PageContent.BookOrCancelYourReferralAppointment();
+                .PageContent.NavigateToBookOrCancelYourReferralAppointment();
 
             IOSErsPage
                 .AssertOnPage(driver)
-                .PageContent.NhsAppAppointments();
+                .PageContent.NavigateToNhsAppAppointments();
 
             IOSAppointmentsPage
                 .AssertOnPage(driver);

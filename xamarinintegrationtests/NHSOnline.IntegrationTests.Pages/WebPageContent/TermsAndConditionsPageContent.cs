@@ -9,32 +9,19 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         internal TermsAndConditionsPageContent(IWebInteractor webInteractor) => _interactor = webInteractor;
 
-        private WebText Title => WebText.WithTagAndText(
-            _interactor,
-            "h1",
-            "Accept conditions of use");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Accept conditions of use");
 
-        private WebText DisclaimerParagraph => WebText.WithTagAndText(
-            _interactor,
-            "p",
-            "To use the NHS App you must agree to our terms of use, privacy policy and " +
-            "cookies policy. You should read these carefully before using the app.");
+        private WebText DisclaimerText => WebText.WithTagAndText(_interactor, "p", "To use the NHS App you must agree to our terms of use, privacy policy and cookies policy. You should read these carefully before using the app.");
 
-        private WebLink DisclaimerTermsOfUseLink => DisclaimerParagraph.WithChildLink("terms of use");
+        private WebLink DisclaimerTermsOfUseLink => DisclaimerText.WithChildLink("terms of use");
 
-        private WebLink DisclaimerPrivacyPolicyLink => DisclaimerParagraph.WithChildLink("privacy policy");
+        private WebLink DisclaimerPrivacyPolicyLink => DisclaimerText.WithChildLink("privacy policy");
 
-        private WebLink DisclaimerCookiesPolicyLink => DisclaimerParagraph.WithChildLink("cookies policy");
+        private WebLink DisclaimerCookiesPolicyLink => DisclaimerText.WithChildLink("cookies policy");
 
-        private WebText DoNotAgreeText => WebText.WithTagAndText(
-            _interactor,
-            "p",
-            "If you do not agree, you won't be able to access or use the NHS App.");
+        private WebText DoNotAgreeText => WebText.WithTagAndText(_interactor, "p", "If you do not agree, you won't be able to access or use the NHS App.");
 
-        private WebText KeyPointsText => WebText.WithTagAndText(
-            _interactor,
-            "p",
-            "Key points:");
+        private WebText KeyPointsText => WebText.WithTagAndText(_interactor, "p", "Key points:");
 
         private WebText TermsAndConditionsNhsAppPurposePoint => WebText.WithTagAndText(
             _interactor,
@@ -91,14 +78,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
 
-        internal void AssertOnPage()
-        {
-            Title.AssertVisible();
-        }
+        internal void AssertOnPage() => TitleText.AssertVisible();
 
         internal void AssertPageContent()
         {
-            DisclaimerParagraph.AssertVisible();
+            DisclaimerText.AssertVisible();
             DisclaimerTermsOfUseLink.AssertVisible();
             DisclaimerPrivacyPolicyLink.AssertVisible();
             DisclaimerCookiesPolicyLink.AssertVisible();

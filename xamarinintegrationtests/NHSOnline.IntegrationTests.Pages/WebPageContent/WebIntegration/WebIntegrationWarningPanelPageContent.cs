@@ -19,24 +19,19 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
         }
 
         private WebText Title => WebText.WithTagAndText(_interactor, "p", _pageTitle);
-        private WebLink Back => WebLink.WithText(_interactor, "Back");
-        private WebLink Continue => WebLink.WithText(_interactor, "Continue");
 
+        private WebLink Back => WebLink.WithText(_interactor, "Back");
+
+        private WebLink Continue => WebLink.WithText(_interactor, "Continue");
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
             Back,
             Continue,
         };
 
-        internal void AssertOnPage()
-        {
-            Title.AssertVisible();
-        }
+        internal void AssertOnPage() => Title.AssertVisible();
 
-        public void NavigateToNextPage()
-        {
-            Continue.Click();
-        }
+        public void NavigateToNextPage() => Continue.Click();
 
         public void KeyboardNavigateContinue(AndroidKeyboardNavigation navigation)
             => KeyboardNavigateToAndActivateMenuItem(Continue, navigation);

@@ -33,7 +33,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
 
             AndroidStubbedLoginInternalPage
                 .AssertOnPage(driver)
-                .PageContent.Back();
+                .PageContent.NavigateBack();
 
             AndroidStubbedLoginPage
                 .AssertOnPage(driver)
@@ -41,7 +41,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
 
             AndroidStubbedLoginInternalPage
                 .AssertOnPage(driver)
-                .PageContent.Back();
+                .PageContent.NavigateBack();
 
             AndroidStubbedLoginPage
                 .AssertOnPage(driver)
@@ -79,7 +79,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
 
             IOSStubbedLoginInternalPage
                 .AssertOnPage(driver)
-                .PageContent.Back();
+                .PageContent.NavigateBack();
 
             IOSStubbedLoginPage
                 .AssertOnPage(driver)
@@ -115,7 +115,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
 
             IOSStubbedLoginInternalPage
                 .AssertOnPage(driver)
-                .PageContent.Back();
+                .PageContent.NavigateBack();
 
             IOSStubbedLoginPage
                 .AssertOnPage(driver);

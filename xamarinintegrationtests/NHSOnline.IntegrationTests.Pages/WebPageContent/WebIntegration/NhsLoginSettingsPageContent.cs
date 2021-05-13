@@ -14,9 +14,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         private WebText Title => WebText.WithTagAndText(_interactor, "h1", "NHS Login Settings");
 
-        internal void AssertOnPage()
-        {
-            Title.AssertVisible();
-        }
+        internal void AssertOnPage() => Title.AssertVisible();
     }
 }

@@ -13,14 +13,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "NHS Login - Internal Page");
 
-        internal void AssertOnPage()
-        {
-            TitleText.AssertVisible();
-        }
+        internal void AssertOnPage() => TitleText.AssertVisible();
 
-        public void Back()
-        {
-            BackLink.Click();
-        }
+        public void NavigateBack() => BackLink.Click();
     }
 }

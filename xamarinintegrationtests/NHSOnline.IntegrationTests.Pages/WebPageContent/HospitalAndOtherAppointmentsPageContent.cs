@@ -15,9 +15,10 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             _interactor = interactor;
         }
 
-        private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Hospital and other appointments");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Hospital and other appointments");
 
         private WebMenuItem BookOrCancelYourReferralAppointmentMenuItem => WebMenuItem.WithTitle(_interactor, "Book or cancel your referral appointment");
+
         private WebMenuItem ViewYourAppointmentsMenuItem => WebMenuItem.WithTitle(_interactor, "View appointments");
 
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
@@ -26,26 +27,13 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             ViewYourAppointmentsMenuItem,
         };
 
-        internal void AssertOnPage()
-        {
-            Title.AssertVisible();
-        }
+        internal void AssertOnPage() => TitleText.AssertVisible();
 
-        public HospitalAndOtherAppointmentsPageContent AssertPageElements()
-        {
-            Title.AssertVisible();
-            return this;
-        }
+        public void AssertPageElements() => TitleText.AssertVisible();
 
-        public void BookOrCancelYourReferralAppointment()
-        {
-            BookOrCancelYourReferralAppointmentMenuItem.Click();
-        }
+        public void NavigateToBookOrCancelYourReferralAppointment() => BookOrCancelYourReferralAppointmentMenuItem.Click();
 
-        public void NavigateToViewAppointments()
-        {
-            ViewYourAppointmentsMenuItem.Click();
-        }
+        public void NavigateToViewAppointments() => ViewYourAppointmentsMenuItem.Click();
 
         public void KeyboardNavigateViewAppointments(AndroidKeyboardNavigation navigation)
             => KeyboardNavigateToAndActivateMenuItem(ViewYourAppointmentsMenuItem, navigation);

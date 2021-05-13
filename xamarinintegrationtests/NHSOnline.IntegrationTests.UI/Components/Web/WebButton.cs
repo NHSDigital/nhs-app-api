@@ -1,4 +1,5 @@
 using System;
+using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
@@ -40,5 +41,9 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
 
         string IFocusable.ElementDescription
             => new FocusableDescriptionBuilder {Tag = "Button", Text = _text}.Description;
+
+        public void AssertVisible()
+            => ActOnElement(e => e.Displayed.Should().BeTrue("A button with text {0} should be displayed", _text));
+
     }
 }

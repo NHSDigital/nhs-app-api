@@ -1,0 +1,23 @@
+@model Microsoft.AspNetCore.Http.HttpRequest
+
+<div class="container">
+    <ul class='list-group'>
+        <li class='list-group-item'>Host: @Model.Host</li>
+        <li class='list-group-item'>Path: @Model.Path</li>
+    </ul>
+    <hr>
+    <h2 class="display-5">Query String</h2>
+    <ul class="list-group">
+        @foreach(var (key, value) in Model.Query.SelectMany(q => q.Value.Select(v => (q.Key, v))))
+        {
+            <li class="list-group-item">@key: @value</li>
+        }
+    </ul>
+    <h2 class="display-5">Headers</h2>
+    <ul class="list-group">
+        @foreach(var (key, value) in Model.Headers.SelectMany(h => h.Value.Select(v => (h.Key, v))))
+        {
+            <li class="list-group-item">@key: @value</li>
+        }
+    </ul>
+</div>

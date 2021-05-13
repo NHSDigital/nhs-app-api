@@ -12,11 +12,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
             _interactor = interactor;
         }
 
-        private WebText Title => WebText.WithTagAndText(_interactor, "h1", "111");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "111");
 
-        internal void AssertOnPage()
-        {
-            Title.AssertVisible();
-        }
+        internal void AssertOnPage() => TitleText.AssertVisible();
     }
 }

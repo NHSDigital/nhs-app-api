@@ -13,6 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
         }
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "NHS Login - Uplift");
+
         private WebFormLabel FileUploadButton => WebFormLabel.WithText(_interactor, "Open photo library");
 
         private WebFormLabel OpenCameraButton => WebFormLabel.WithText(_interactor, "Open Camera");
@@ -29,11 +30,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         public void OpenCamera() => OpenCameraButton.Click();
 
-        public StubbedLoginUpliftPageContent AssertNoFileSelected()
-        {
-            FileNotSelected.AssertVisible();
-            return this;
-        }
+        public void AssertNoFileSelected() => FileNotSelected.AssertVisible();
 
         public void AssertFileSelected() => FileSelected.AssertVisible();
 

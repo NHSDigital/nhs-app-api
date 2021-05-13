@@ -9,30 +9,20 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         internal UpdatedTermsAndConditionsPageContent(IWebInteractor webInteractor) => _interactor = webInteractor;
 
-        private WebText Title => WebText.WithTagAndText(
-            _interactor,
-            "h1",
-            "Updated conditions of use");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Updated conditions of use");
 
         private WebText UpdatedConditionsOfUseText => WebText.WithTagAndText(_interactor, "p",
             "We've made some important changes to our conditions of use. " +
             "To continue using the NHS App, you need to agree to our updated terms of use, " +
             "privacy policy and cookies policy.");
 
-        private WebLink UpdateTermsOfUseLink =>
-            UpdatedConditionsOfUseText.WithChildLink("terms of use");
+        private WebLink UpdateTermsOfUseLink => UpdatedConditionsOfUseText.WithChildLink("terms of use");
 
-        private WebLink UpdatePrivacyPolicyLink =>
-            UpdatedConditionsOfUseText.WithChildLink("privacy policy");
+        private WebLink UpdatePrivacyPolicyLink => UpdatedConditionsOfUseText.WithChildLink("privacy policy");
 
-        private WebLink UpdateCookiesPolicyLink =>
-            UpdatedConditionsOfUseText.WithChildLink("cookies policy");
+        private WebLink UpdateCookiesPolicyLink => UpdatedConditionsOfUseText.WithChildLink("cookies policy");
 
-
-        private WebText DoNotAgreeText => WebText.WithTagAndText(
-            _interactor,
-            "p",
-            "If you don't agree, you won't be able to continue accessing or using the NHS App.");
+        private WebText DoNotAgreeText => WebText.WithTagAndText(_interactor, "p", "If you don't agree, you won't be able to continue accessing or using the NHS App.");
 
         private WebCheckbox AcceptTermsAndConditionsCheckbox => WebCheckbox.WithLabel(
             _interactor,
@@ -53,10 +43,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
 
-        internal void AssertOnPage()
-        {
-            Title.AssertVisible();
-        }
+        internal void AssertOnPage() => TitleText.AssertVisible();
 
         internal void AssertPageContent()
         {

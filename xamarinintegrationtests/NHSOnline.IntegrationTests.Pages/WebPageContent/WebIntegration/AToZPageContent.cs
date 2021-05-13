@@ -14,9 +14,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Health A to Z");
 
-        internal void AssertOnPage()
-        {
-            Title.AssertVisible();
-        }
+        internal void AssertOnPage() => Title.AssertVisible();
     }
 }

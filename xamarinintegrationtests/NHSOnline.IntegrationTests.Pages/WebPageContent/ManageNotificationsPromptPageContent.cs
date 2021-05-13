@@ -10,7 +10,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         internal ManageNotificationsPromptPageContent(IWebInteractor webInteractor) => _interactor = webInteractor;
 
-        private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Manage notifications");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Manage notifications");
 
         private WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
 
@@ -21,13 +21,10 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         internal void AssertOnPage()
         {
             using var timeout = ExtendedTimeout.FromSeconds(10);
-            Title.AssertVisible();
+            TitleText.AssertVisible();
         }
 
-        public void Continue()
-        {
-            ContinueButton.Click();
-        }
+        public void Continue() => ContinueButton.Click();
 
         public ManageNotificationsPromptPageContent ToggleOnNotifications()
         {

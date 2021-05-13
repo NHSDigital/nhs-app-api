@@ -15,15 +15,26 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             _interactor = interactor;
         }
 
-        private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Messages");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Messages");
+        
         private WebMenuItem AskYourGpSurgeryAQuestionMenuItem => WebMenuItem.WithTitle(_interactor, "Ask your GP surgery a question");
+        
         private WebMenuItem OnlineConsultationsMenuItem => WebMenuItem.WithTitle(_interactor, "Online consultations");
+        
         private WebMenuItem ConsultationsEventsAndMessagesMenuItem => WebMenuItem.WithTitle(_interactor, "Consultations, events and messages");
+        
         private WebMenuItem ConsultationsEventsAndMessagesSecondMenuItem => WebMenuItem.WithTitle(_interactor, "Consultations, events and messages 2");
+       
         private WebMenuItem ConsultationsEventsAndMessagesThirdMenuItem => WebMenuItem.WithTitle(_interactor, "Consultations, events and messages 3");
+        
         private WebMenuItem ConsultationsEventsAndMessagesFourthMenuItem => WebMenuItem.WithTitle(_interactor, "Consultations, events and messages 4");
+        
+        private WebMenuItem GpSurgeryMessagesMenuItem => WebMenuItem.WithTitle(_interactor, "GP surgery messages");
+
         private WebMenuItem TestProviderMenuItem => WebMenuItem.WithTitle(_interactor, "Test Provider");
+
         private WebMenuItem HealthInfoAndUpdatesMenuItem => WebMenuItem.WithTitle(_interactor, "Health information and updates");
+
         private WebMenuItem AskYourGpSurgeryMenuItem => WebMenuItem.WithTitle(_interactor, "Ask your GP surgery a question");
 
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
@@ -38,31 +49,15 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             HealthInfoAndUpdatesMenuItem
         };
 
-        internal void AssertOnPage()
-        {
-            Title.AssertVisible();
-        }
+        internal void AssertOnPage() => TitleText.AssertVisible();
 
-        public MessagesPageContent AssertPageElements()
-        {
-            Title.AssertVisible();
-            return this;
-        }
+        public void AssertPageElements() => TitleText.AssertVisible();
 
-        public void NavigateToTestProvider()
-        {
-            TestProviderMenuItem.Click();
-        }
+        public void NavigateToTestProvider() => TestProviderMenuItem.Click();
 
-        public void NavigateToConsultationsEventsAndMessages()
-        {
-            ConsultationsEventsAndMessagesMenuItem.Click();
-        }
+        public void NavigateToConsultationsEventsAndMessages() => ConsultationsEventsAndMessagesMenuItem.Click();
 
-        public void NavigateToAskYourGpSurgeryAQuestion()
-        {
-            AskYourGpSurgeryMenuItem.Click();
-        }
+        public void NavigateToAskYourGpSurgeryAQuestion() => AskYourGpSurgeryMenuItem.Click();
 
         public void KeyboardNavigateToTestProvider(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(TestProviderMenuItem, navigation);
 

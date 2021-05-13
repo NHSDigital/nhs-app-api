@@ -12,40 +12,24 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
             _interactor = interactor;
         }
 
-        private WebText Title => WebText.WithTagAndText(_interactor, "h1", "eRS");
+        private WebText Title => WebText.WithTagAndText(_interactor, "h1", "eRS Web Integration");
 
         private WebLink InternalPageLink => WebLink.WithText(_interactor, "Internal Page");
+
         private WebLink NhsLoginLink => WebLink.WithText(_interactor, "NHS Login");
+
         private WebLink CovidLink => WebLink.WithText(_interactor, "Covid");
+
         private WebLink NhsAppAppointmentsLink => WebLink.WithText(_interactor, "NHS App Appointments");
 
-        internal void AssertOnPage()
-        {
-            Title.AssertVisible();
-        }
+        internal void AssertOnPage() => Title.AssertVisible();
 
-        public ErsPageContent InternalPage()
-        {
-            InternalPageLink.Click();
-            return this;
-        }
+        public void NavigateToInternalPage() => InternalPageLink.Click();
 
-        public ErsPageContent NhsLogin()
-        {
-            NhsLoginLink.Click();
-            return this;
-        }
+        public void NavigateToNhsLogin() => NhsLoginLink.Click();
 
-        public ErsPageContent Covid()
-        {
-            CovidLink.Click();
-            return this;
-        }
+        public void NavigateToCovid() => CovidLink.Click();
 
-        public ErsPageContent NhsAppAppointments()
-        {
-            NhsAppAppointmentsLink.Click();
-            return this;
-        }
+        public void NavigateToNhsAppAppointments() => NhsAppAppointmentsLink.Click();
     }
 }

@@ -1,10 +1,10 @@
-using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace NHSOnline.HttpMocks.ExternalServices
+namespace NHSOnline.HttpMocks.WebIntegrations
 {
     [Route("nhsuk")]
-    public class ExternalNhsUkServicesController : Controller
+    public class NhsUkServicesController : Controller
     {
         [HttpGet("covid")]
         public IActionResult Covid()
@@ -74,31 +74,8 @@ namespace NHSOnline.HttpMocks.ExternalServices
 
         private IActionResult CreatePage(string title)
         {
-            return Content($@"
-                <html>
-                    <head>
-                        <meta charset=""utf-8"">
-                        <meta name=""viewport"" content=""width=device-width, initial-scale=1, shrink-to-fit=no"">
-                        <link rel=""stylesheet"" href=""https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"" integrity=""sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"" crossorigin=""anonymous"">
-                        <title>{title}</title>
-                    </head>
-                    <body>
-                        <div class=""jumbotron"">
-                            <h1 class=""display-4"">{title}</h1>
-                        </div>
-                        <div class=""container"">
-                            <ul class=""list-group"">
-                                <li class=""list-group-item"">Host: {Request.Host}</li>
-                                <li class=""list-group-item"">Path: {Request.Path}</li>
-                            </ul>
-                            <h2 class=""display-5"">Query String</h2>
-                            <ul class=""list-group"">
-                                {string.Join("", Request.Query.Select(q => $@"<li class=""list-group-item"">{q.Key}: {q.Value}"))}
-                            </ul>
-                        </div>
-                    </body>
-                </html>",
-                "text/html");
+            (string Title, string SubTitle, HttpRequest Request) model = (title, "", Request);
+            return View("~/Views/WebIntegrations/InternalPage.cshtml", model);
         }
     }
 }

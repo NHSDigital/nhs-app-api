@@ -16,25 +16,23 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             _interactor = interactor;
         }
 
-        private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Manage notifications");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Manage notifications");
 
-        private WebText TheseMayInclude => WebText.WithTagAndText(_interactor, "p",
+        private WebText TheseMayIncludeText => WebText.WithTagAndText(_interactor, "p",
             "These may include new features and public health updates.");
 
-        private WebText IfYouShareThisDevice => WebText.WithTagAndText(_interactor, "p",
+        private WebText IfYouShareThisDeviceText => WebText.WithTagAndText(_interactor, "p",
             "If you share this device with other people, they may see your notifications. The settings will apply to everyone who logs in to the NHS App on this device.");
 
         private WebLink PrivacyLink => WebLink.WithText(_interactor, "NHS App privacy policy");
 
-        private WebText MoreInfo => WebText.WithTagAndText(_interactor, "p",
+        private WebText MoreInfoText => WebText.WithTagAndText(_interactor, "p",
             "More information is available in the NHS App privacy policy.");
 
-        private WebToggle NotificationsToggle => WebToggle.WithLabel(
-            _interactor,
+        private WebToggle NotificationsToggle => WebToggle.WithLabel(_interactor,
             "Allow notificationsI accept the NHS App sending notifications on this device");
 
-        private WebLink NotificationSettingsLink => WebLink.WithText(
-            _interactor,
+        private WebLink NotificationSettingsLink => WebLink.WithText(_interactor,
             "Manage how notifications are shown on this device (opens your device settings)");
 
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
@@ -44,19 +42,15 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             NotificationSettingsLink
         };
 
-        internal void AssertOnPage()
-        {
-            Title.AssertVisible();
-        }
+        internal void AssertOnPage() => TitleText.AssertVisible();
 
-        public NotificationsPageContent AssertPageElements()
+        public void AssertPageElements()
         {
-            Title.AssertVisible();
-            TheseMayInclude.AssertVisible();
-            IfYouShareThisDevice.AssertVisible();
-            MoreInfo.AssertVisible();
+            TitleText.AssertVisible();
+            TheseMayIncludeText.AssertVisible();
+            IfYouShareThisDeviceText.AssertVisible();
+            MoreInfoText.AssertVisible();
             NotificationSettingsLink.AssertVisible();
-            return this;
         }
 
         public void AssertNotificationsEnabled()
@@ -87,7 +81,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         }
 
         public void OpenNotificationSettings() => NotificationSettingsLink.Click();
-
 
         public void KeyboardNavigateToDeviceSettings(AndroidKeyboardNavigation navigation) =>
             KeyboardNavigateToAndActivateMenuItem(NotificationSettingsLink, navigation);

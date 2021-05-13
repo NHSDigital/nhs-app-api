@@ -30,7 +30,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidAdvicePage
                 .AssertOnPage(driver)
-                .PageContent.AToZ();
+                .PageContent.NavigateToAToZ();
 
             AndroidAToZPage
                 .AssertOnPage(driver);
@@ -72,7 +72,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSAdvicePage
                 .AssertOnPage(driver)
-                .PageContent.AToZ();
+                .PageContent.NavigateToAToZ();
 
             IOSAToZPage
                 .AssertOnPage(driver);

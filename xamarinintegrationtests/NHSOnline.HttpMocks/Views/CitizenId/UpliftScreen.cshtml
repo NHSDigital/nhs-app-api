@@ -33,8 +33,10 @@
     </script>
 </head>
 <body>
-    <div class="container">
+    <div class="jumbotron">
         <h1 class="display-4">NHS Login - Uplift</h1>
+    </div>
+    <div class="container">
         <ul>
             <li><a href="javascript: window.history.back();">Back</a></li>
             <li><a href="http://@Model.AuthHostName:8080/citizenid/Page/Internal.html">Internal Page</a></li>
@@ -45,32 +47,20 @@
             <li><a href="http://stubs.local.bitraft.io:8080/nhsuk/covid">Covid</a></li>
         </ul>
         <hr>
-        <h2 class="display-5">Query String</h2>
-        <ul class="list-group">
-            @foreach(var (key, value) in Model.Request.Query.SelectMany(q => q.Value.Select(v => (q.Key, v))))
-            {
-                <li class="list-group-item">@key: @value</li>
-            }
-        </ul>
-        <h2 class="display-5">Headers</h2>
-        <ul class="list-group">
-            @foreach(var (key, value) in Model.Request.Headers.SelectMany(h => h.Value.Select(v => (h.Key, v))))
-            {
-                <li class="list-group-item">@key: @value</li>
-            }
-        </ul>
+    </div>
+    @await Html.PartialAsync("~/views/HttpRequestData.cshtml", Model.Request)
+    <div class="container">
         <p id="file-selected">No file selected</p>
         <label tabindex="0" for="file-upload" role="button" class="camera-button">
             Open photo library
-            
             <input id="file-upload" type="file" name="image" accept="image/*"
                    onchange="updateTextOnFileSelection()">
         </label>
-        
+
         <p id="photo-captured">No photo captured</p>
         <label tabindex="0" for="photo-id-document" role="button" class="camera-button">
             Open Camera
-            <input id="photo-id-document" type="file" name="image" accept="image/*" class="camera-input" 
+            <input id="photo-id-document" type="file" name="image" accept="image/*" class="camera-input"
                    capture="capture" onchange="updateTextOnPhotoCapture()">
         </label>
     </div>

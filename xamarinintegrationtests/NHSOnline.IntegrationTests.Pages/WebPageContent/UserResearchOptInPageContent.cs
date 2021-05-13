@@ -12,9 +12,9 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         {
             _interactor = webInteractor;
 
-            WhatsInvolvedExpander =  WebLinkExpander.WithText(_interactor, "What's involved?");
+            WhatsInvolvedExpander = WebLinkExpander.WithText(_interactor, "What's involved?");
 
-            WhatsInvolved =  WhatsInvolvedExpander.Contains(interactor => WebText.WithTagAndText(
+            WhatsInvolved = WhatsInvolvedExpander.Contains(interactor => WebText.WithTagAndText(
                 interactor,
                 "p",
                 "We'll add you to our user research panel and email you " +

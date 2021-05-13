@@ -30,7 +30,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
 
             AndroidAppointmentsPage
                 .AssertOnPage(driver)
-                .PageContent.HospitalAndOtherAppointments();
+                .PageContent.NavigateToHospitalAndOtherAppointments();
 
             AndroidHospitalAndOtherAppointmentsPage
                 .AssertOnPage(driver)
@@ -90,7 +90,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
 
             IOSAppointmentsPage
                 .AssertOnPage(driver)
-                .PageContent.HospitalAndOtherAppointments();
+                .PageContent.NavigateToHospitalAndOtherAppointments();
 
             IOSHospitalAndOtherAppointmentsPage
                 .AssertOnPage(driver)

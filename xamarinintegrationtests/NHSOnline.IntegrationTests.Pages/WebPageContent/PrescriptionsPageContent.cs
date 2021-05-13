@@ -12,23 +12,14 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             _interactor = interactor;
         }
 
-        private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Prescriptions");
-        private WebMenuItem HospitalAndOtherPrescriptions => WebMenuItem.WithTitle(_interactor, "Hospital and other prescriptions");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Prescriptions");
 
-        internal void AssertOnPage()
-        {
-            Title.AssertVisible();
-        }
+        private WebMenuItem HospitalAndOtherPrescriptionsMenuItem => WebMenuItem.WithTitle(_interactor, "Hospital and other prescriptions");
 
-        public PrescriptionsPageContent AssertPageElements()
-        {
-            Title.AssertVisible();
-            return this;
-        }
+        internal void AssertOnPage() => TitleText.AssertVisible();
 
-        public void NavigateToHospitalAndOtherPrescriptions()
-        {
-            HospitalAndOtherPrescriptions.Click();
-        }
+        public void AssertPageElements() => TitleText.AssertVisible();
+
+        public void NavigateToHospitalAndOtherPrescriptions() => HospitalAndOtherPrescriptionsMenuItem.Click();
     }
 }

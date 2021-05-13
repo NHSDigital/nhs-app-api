@@ -30,7 +30,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidAdvicePage
                 .AssertOnPage(driver)
-                .PageContent.OneOneOne();
+                .PageContent.NavigateToOneOneOne();
 
             AndroidOneOneOnePage
                 .AssertOnPage(driver);
@@ -72,7 +72,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSAdvicePage
                 .AssertOnPage(driver)
-                .PageContent.OneOneOne();
+                .PageContent.NavigateToOneOneOne();
 
             IOSOneOneOnePage
                 .AssertOnPage(driver);

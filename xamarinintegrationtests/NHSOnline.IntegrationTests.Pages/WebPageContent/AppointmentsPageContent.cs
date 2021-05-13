@@ -15,7 +15,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             _interactor = interactor;
         }
 
-        private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Appointments");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Appointments");
 
         private WebMenuItem GpSurgeryAppointmentsMenuItem => WebMenuItem.WithTitle(_interactor, "GP surgery appointments");
 
@@ -36,20 +36,12 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             HospitalAndOtherAppointmentsMenuItem,
         };
 
-        internal void AssertOnPage()
-        {
-            Title.AssertVisible();
-        }
+        internal void AssertOnPage() => TitleText.AssertVisible();
 
-        public void AssertPageElements()
-        {
-            Title.AssertVisible();
-        }
+        public void AssertPageElements() => TitleText.AssertVisible();
 
-        public void HospitalAndOtherAppointments()
-        {
-            HospitalAndOtherAppointmentsMenuItem.Click();
-        }
+        public void NavigateToHospitalAndOtherAppointments() => HospitalAndOtherAppointmentsMenuItem.Click();
+
 
         public void KeyboardNavigateToHospitalAndOtherAppointments(AndroidKeyboardNavigation navigation)
             => KeyboardNavigateToAndActivateMenuItem(HospitalAndOtherAppointmentsMenuItem, navigation);

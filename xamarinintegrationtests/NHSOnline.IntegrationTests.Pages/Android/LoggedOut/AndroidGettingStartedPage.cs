@@ -89,15 +89,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             GetStartedLabel.AssertVisible();
         }
 
-        public void Continue()
-        {
-            ContinueButton.Click();
-        }
+        public void Continue() => ContinueButton.Click();
 
-        public void GoToCovidApp()
-        {
-            GoToCovidLabel.Touch();
-        }
+        public void GoToCovidApp() => GoToCovidLabel.Touch();
 
         public AndroidGettingStartedPage TabToGetCovidApp()
         {
@@ -105,14 +99,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             return this;
         }
 
-        public void PressEnterKey()
-        {
-            KeyboardNavigation.PressEnterKey();
-        }
+        public void PressEnterKey() => KeyboardNavigation.PressEnterKey();
 
-        public void AssertTabFocusOrder()
-        {
-            KeyboardNavigation.AssertFocusOrder();
-        }
+        public void AssertTabFocusOrder() => KeyboardNavigation.AssertFocusOrder();
     }
 }

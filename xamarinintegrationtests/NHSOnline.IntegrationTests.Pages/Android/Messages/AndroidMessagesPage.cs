@@ -50,6 +50,5 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Messages
 
         public void KeyboardNavigateToTestProvider() =>
             PageContent.KeyboardNavigateToTestProvider(KeyboardPageContentNavigation);
-
     }
 }

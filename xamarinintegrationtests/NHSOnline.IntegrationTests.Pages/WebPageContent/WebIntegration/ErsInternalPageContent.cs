@@ -16,15 +16,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         private WebLink BackLink => WebLink.WithText(_interactor, "Back");
 
-        internal void AssertOnPage()
-        {
-            Title.AssertVisible();
-        }
+        internal void AssertOnPage() => Title.AssertVisible();
 
-        public ErsInternalPageContent Back()
-        {
-            BackLink.Click();
-            return this;
-        }
+        public void Back() => BackLink.Click();
     }
 }

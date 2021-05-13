@@ -15,7 +15,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             _interactor = interactor;
         }
 
-        private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Advice");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Advice");
 
         private WebMenuItem GetAdviceMenuItem => WebMenuItem.WithTitle(_interactor, "Get advice about coronavirus (COVID-19)");
 
@@ -33,26 +33,16 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             AskGpMenuItem
         };
 
-        internal void AssertOnPage()
+        internal void AssertOnPage() => TitleText.AssertVisible();
+
+        public void AssertPageElements()
         {
-            Title.AssertVisible();
+            AssertOnPage();
         }
 
-        public AdvicePageContent AssertPageElements()
-        {
-            Title.AssertVisible();
-            return this;
-        }
+        public void NavigateToOneOneOne() => UseNhsOnlineMenuItem.Click();
 
-        public void OneOneOne()
-        {
-            UseNhsOnlineMenuItem.Click();
-        }
-
-        public void AToZ()
-        {
-            SearchConditionsMenuItem.Click();
-        }
+        public void NavigateToAToZ() => SearchConditionsMenuItem.Click();
 
         public void KeyboardNavigateToOneOneOne(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(UseNhsOnlineMenuItem, navigation);
 

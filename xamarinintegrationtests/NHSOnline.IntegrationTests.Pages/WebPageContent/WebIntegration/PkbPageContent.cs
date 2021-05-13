@@ -14,14 +14,14 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
             _phrPath = phrPath;
         }
 
-        private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Pkb Internal Page");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Pkb Internal Page");
 
-        private WebText PhrPath => WebText.WithTagAndText(_interactor, "li", $"phrPath: {_phrPath}");
+        private WebText PhrPathText => WebText.WithTagAndText(_interactor, "li", $"phrPath: {_phrPath}");
 
         internal void AssertOnPage()
         {
-            Title.AssertVisible();
-            PhrPath.AssertVisible();
+            TitleText.AssertVisible();
+            PhrPathText.AssertVisible();
         }
     }
 }

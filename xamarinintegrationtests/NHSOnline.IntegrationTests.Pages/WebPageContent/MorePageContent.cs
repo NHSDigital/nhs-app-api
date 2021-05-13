@@ -15,11 +15,16 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             _interactor = interactor;
         }
 
-        private WebText Title => WebText.WithTagAndText(_interactor, "h1", "More");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "More");
+
         private WebMenuItem LinkedProfilesMenuItem => WebMenuItem.WithTitle(_interactor, "Linked profiles");
+
         private WebMenuItem CookiesMenuItem => WebMenuItem.WithTitle(_interactor, "Cookies");
+
         private WebMenuItem BiometricMenuItem => WebMenuItem.WithTitle(_interactor, "Fingerprint");
+
         private WebMenuItem NhsLoginMenuItem => WebMenuItem.WithTitle(_interactor, "NHS login");
+
         private WebMenuItem NotificationsMenuItem => WebMenuItem.WithTitle(_interactor, "Notifications");
 
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
@@ -31,27 +36,19 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             NotificationsMenuItem
         };
 
-        internal void AssertOnPage()
-        {
-            Title.AssertVisible();
-        }
+        internal void AssertOnPage() => TitleText.AssertVisible();
 
-        public MorePageContent AssertPageElements()
+        public void AssertPageElements()
         {
-            Title.AssertVisible();
+            AssertOnPage();
+            CookiesMenuItem.AssertVisible();
+            NhsLoginMenuItem.AssertVisible();
             NotificationsMenuItem.AssertVisible();
-            return this;
         }
 
-        public void NavigateToNotifications()
-        {
-            NotificationsMenuItem.Click();
-        }
+        public void NavigateToNotifications() => NotificationsMenuItem.Click();
 
-        public void NavigateToNhsLogin()
-        {
-            NhsLoginMenuItem.Click();
-        }
+        public void NavigateToNhsLogin() => NhsLoginMenuItem.Click();
 
         public void KeyboardNavigateToNhsLoginSettings(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(NhsLoginMenuItem, navigation);
 

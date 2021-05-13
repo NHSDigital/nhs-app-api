@@ -14,11 +14,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             _interactor = interactor;
         }
 
-        private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Home");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Home");
 
-        private WebDefinitionTerm Name => WebDefinitionTerm.WithTerm(_interactor, "Name:");
+        private WebDefinitionTerm NameDefinitionTerm => WebDefinitionTerm.WithTerm(_interactor, "Name:");
 
-        private WebButton OpenSettings => WebButton.WithText(_interactor, "Open Settings");
+        private WebButton OpenSettingsButton => WebButton.WithText(_interactor, "Open Settings");
 
         private WebLink DismissBiometricsBanner => WebLink.WithText(_interactor, "Dismiss");
 
@@ -36,7 +36,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
-            OpenSettings,
+            OpenSettingsButton,
             DismissBiometricsBanner,
             ShareYourCovidStatusMenuItem,
             CheckCovidVaccineMenuItem,
@@ -47,17 +47,12 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         };
 
         private WebPanel UpliftPanel => WebPanel.WithTitle(_interactor, "Prove your identity to get full access");
+
         private WebButton Continue => UpliftPanel.ContainingButtonWithText("Continue");
 
-        internal void AssertOnPage()
-        {
-            Title.AssertVisible();
-        }
+        internal void AssertOnPage() => TitleText.AssertVisible();
 
-        public void AssertNameDisplayedFor(string patientName)
-        {
-            Name.AssertValue(patientName);
-        }
+        public void AssertNameDisplayedFor(string patientName) => NameDefinitionTerm.AssertValue(patientName);
 
         public void ProveYourIdentityContinue() => Continue.Click();
     }

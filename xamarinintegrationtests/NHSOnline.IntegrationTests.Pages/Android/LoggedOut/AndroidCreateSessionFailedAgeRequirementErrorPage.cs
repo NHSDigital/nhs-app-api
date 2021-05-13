@@ -20,10 +20,6 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             return page;
         }
 
-        public AndroidCreateSessionFailedAgeRequirementErrorPage AssertPageElements()
-        {
-            DueToLegalRestrictionsText.AssertVisible();
-            return this;
-        }
+        public void AssertPageElements() => DueToLegalRestrictionsText.AssertVisible();
     }
 }

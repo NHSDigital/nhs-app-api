@@ -11,16 +11,10 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "NHS Login - Terms and Conditions");
 
-        private WebInputSubmit Decline => WebInputSubmit.WithText(_interactor, "Decline");
+        private WebInputSubmit DeclineButton => WebInputSubmit.WithText(_interactor, "Decline");
 
-        public void AssertOnPage()
-        {
-            TitleText.AssertVisible();
-        }
+        public void AssertOnPage() => TitleText.AssertVisible();
 
-        public void DeclineTermsAndConditions()
-        {
-            Decline.Click();
-        }
+        public void DeclineTermsAndConditions() => DeclineButton.Click();
     }
 }

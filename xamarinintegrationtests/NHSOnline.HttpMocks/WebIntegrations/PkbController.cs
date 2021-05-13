@@ -1,46 +1,40 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace NHSOnline.HttpMocks.WebIntegrations
 {
-    [Host("pkb.stubs.local.bitraft.io")]
     public class PkbController : Controller
     {
+        private const string AuthHostName = "auth.nhslogin.stubs.local.bitraft.io";
+        private const string PkbHostName = "pkb.stubs.local.bitraft.io";
+
+        [Host(PkbHostName)]
         [HttpGet("nhs-login/login")]
-        public IActionResult InternalPage()
+        public IActionResult LoginPage(
+            [RequiredFromQuery(Name = "phrPath")] string phrPath)
         {
-            return Content($@"
-                <html>
-                    <head>
-                        <meta charset='utf-8'>
-                        <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
-                        <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css' integrity='sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk' crossorigin='anonymous'>
-                        <title>Pkb Internal Page</title>
-                        <script type='text/javascript' src='http://web.local.bitraft.io:3000/js/v1/nhsapp.js'></script>
-                    </head>
-                    <body>
-                        <div class='jumbotron'>
-                            <h1 class='display-4'>Pkb Internal Page</h1>
-                        </div>
-                        <div class='container'>
-                            <h2 class='display-5'>Headers</h2>
-                            <ul class='list-group'>
-                                <li class='list-group-item'>Host: {Request.Host}</li>
-                                <li class='list-group-item'>Path: {Request.Path}</li>
-                            </ul>
-                            <h2 class='display-5'>Query String</h2>
-                            <ul class='list-group'>
-                                {string.Join(string.Empty, Request.Query.Select(q => $@"<li class='list-group-item'>{q.Key}: {q.Value}"))}
-                            </ul>
-                            <h2 class='display-5'>Headers</h2>
-                            <ul class='list-group'>
-                                {string.Join(string.Empty, Request.Headers.Select(q => $@"<li class='list-group-item'>{q.Key}: {q.Value}"))}
-                            </ul>
-                        </div>
-                    </body>
-                </html>",
-                "text/html");
+            (Uri Url, HttpRequest Request) model = (new Uri($"http://{AuthHostName}:8080/authorize?phrPath={phrPath}"), Request );
+            return View("~/Views/WebIntegrations/RedirectPage.cshtml", model);
+        }
+
+        [Host(AuthHostName)]
+        [HttpGet("authorize")]
+        public IActionResult NhsLoginAuthorize(
+            [RequiredFromQuery(Name = "phrPath")] string phrPath)
+        {
+            (Uri Url, HttpRequest Request) model = (new Uri($"http://{PkbHostName}:8080/authorized?phrPath={phrPath}"), Request );
+            return View("~/Views/WebIntegrations/RedirectPage.cshtml", model);
+        }
+
+        [Host(PkbHostName)]
+        [HttpGet("authorized")]
+        public IActionResult InternalPage(
+            [RequiredFromQuery(Name = "phrPath")] string phrPath)
+        {
+            (string Title, string SubTitle, HttpRequest Request) model = ("Pkb Internal Page", phrPath, Request);
+            return View("~/Views/WebIntegrations/InternalPage.cshtml", model);
         }
     }
 }

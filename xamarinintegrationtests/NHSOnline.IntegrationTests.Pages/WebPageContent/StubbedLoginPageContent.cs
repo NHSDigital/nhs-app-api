@@ -11,28 +11,29 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         internal StubbedLoginPageContent(IWebInteractor webInteractor) => _interactor = webInteractor;
 
         private WebLink BackLink => WebLink.WithText(_interactor, "Back");
+
         private WebLink InternalPageLink => WebLink.WithText(_interactor, "Internal Page");
+
         private WebLink InternalPageNewWindowLink => WebLink.WithText(_interactor, "Internal Page (New Window)");
+
         private WebLink CovidLink => WebLink.WithText(_interactor, "Covid");
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "NHS Login");
 
         private WebInputText PatientIdWebInputText => WebInputText.WithLabel(_interactor, "Patient ID");
 
-        private WebDefinitionTerm VectorsOfTrust => WebDefinitionTerm.WithTerm(_interactor, "vtr");
+        private WebDefinitionTerm VectorsOfTrustDefinitionTerm => WebDefinitionTerm.WithTerm(_interactor, "vtr");
 
         private WebInputSubmit LoginButton => WebInputSubmit.WithText(_interactor, "Login");
 
-        private WebCheckbox LoginTermsAndConditions => WebCheckbox.WithLabel(_interactor, "Show Login Terms and Conditions");
+        private WebCheckbox LoginTermsAndConditionsCheckbox => WebCheckbox.WithLabel(_interactor, "Show Login Terms and Conditions");
 
-        internal void AssertOnPage()
-        {
-            TitleText.AssertVisible();
-        }
+        internal void AssertOnPage() => TitleText.AssertVisible();
+
 
         public StubbedLoginPageContent AssertVectorOfTrust()
         {
-            VectorsOfTrust.AssertValue("[\"P5.Cp.Cd\", \"P5.Cp.Ck\", \"P5.Cm\", \"P9.Cp.Cd\", \"P9.Cp.Ck\", \"P9.Cm\"]");
+            VectorsOfTrustDefinitionTerm.AssertValue("[\"P5.Cp.Cd\", \"P5.Cp.Ck\", \"P5.Cm\", \"P9.Cp.Cd\", \"P9.Cp.Ck\", \"P9.Cm\"]");
             return this;
         }
 
@@ -64,7 +65,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         public void LoginWithLoginTermsAndConditions(Patient patient)
         {
-            LoginTermsAndConditions.Click();
+            LoginTermsAndConditionsCheckbox.Click();
             Login(patient);
         }
     }
