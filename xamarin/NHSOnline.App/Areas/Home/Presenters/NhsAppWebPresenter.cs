@@ -73,6 +73,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterHandler<string>(RequestPnsToken, (view, handler) => view.GetPnsTokenRequested = handler)
                 .RegisterHandler<string>(FetchBiometricStatusRequested, (view, handler) => view.FetchBiometricStatusRequested = handler)
                 .RegisterHandler<string>(UpdateBiometricRegistrationRequested, (view, handler) => view.UpdateBiometricRegistrationRequested = handler)
+                .RegisterHandler<string>(SetMenuBarItemRequested, (view, handler) => view.SetMenuBarItemRequested = handler)
                 .RegisterHandler(OpenSettingsRequested, (view, handler) => view.OpenSettingsRequested = handler)
                 .RegisterHandler(LogoutRequested, (view, handler) => view.LogoutRequested = handler)
                 .RegisterHandler(_navigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
@@ -186,6 +187,15 @@ namespace NHSOnline.App.Areas.Home.Presenters
             var result = await _biometricAuthenticationService.FetchBiometricStatus(token.Subject).PreserveThreadContext();
             var biometricStatus = result.Accept(new BiometricResultToStatusVisitor());
             await _view.SendBiometricStatus(biometricStatus).PreserveThreadContext();
+        }
+
+        private Task SetMenuBarItemRequested(string menuItemIndex)
+        {
+            _logger.LogInformation($"Menu bar item change requested for {menuItemIndex}");
+
+            // Call method to change color of vector graphic
+            return Task.CompletedTask;
+
         }
 
         private async Task UpdateBiometricRegistrationRequested(string accessToken)

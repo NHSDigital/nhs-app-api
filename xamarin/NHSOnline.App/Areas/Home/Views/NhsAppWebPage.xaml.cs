@@ -52,25 +52,21 @@ namespace NHSOnline.App.Areas.Home.Views
         public AsyncCommand<string> FetchBiometricStatusCommand
             => new AsyncCommand<string>(() => FetchBiometricStatusRequested);
 
-        public Func<Task>? OpenSettingsRequested { get; set; }
-        public AsyncCommand OpenSettingsCommand
-            => new AsyncCommand(() => OpenSettingsRequested);
+        public Func<string, Task>? SetMenuBarItemRequested { get; set; }
+        public AsyncCommand<string> SetMenuBarItemCommand
+            => new AsyncCommand<string>(() => SetMenuBarItemRequested);
 
         public Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
         public AsyncCommand<string> UpdateBiometricRegistrationCommand
             => new AsyncCommand<string>(() => UpdateBiometricRegistrationRequested);
 
+        public Func<Task>? OpenSettingsRequested { get; set; }
+        public AsyncCommand OpenSettingsCommand
+            => new AsyncCommand(() => OpenSettingsRequested);
+
         public Func<Task>? LogoutRequested { get; set; }
         public AsyncCommand LogoutCommand
             => new AsyncCommand(() => LogoutRequested);
-
-        public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
-        private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand
-            => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
-
-        public Func<WebNavigatedEventArgs, Task>? Navigated { get; set; }
-        private AsyncCommand<WebNavigatedEventArgs> NavigatedCommand
-            => new AsyncCommand<WebNavigatedEventArgs>(() => Navigated);
 
         public Func<Uri, Task>? DeeplinkRequested { get; set; }
         public async Task HandleDeeplink(Uri deeplinkUrl)
@@ -80,6 +76,14 @@ namespace NHSOnline.App.Areas.Home.Views
                 await DeeplinkRequested(deeplinkUrl).PreserveThreadContext();
             }
         }
+
+        public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
+        private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand
+            => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
+
+        public Func<WebNavigatedEventArgs, Task>? Navigated { get; set; }
+        private AsyncCommand<WebNavigatedEventArgs> NavigatedCommand
+            => new AsyncCommand<WebNavigatedEventArgs>(() => Navigated);
 
         public Func<Task>? ResetAndShowErrorRequested { get; set; }
         public async Task ResetAndShowError()
