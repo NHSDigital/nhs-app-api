@@ -33,6 +33,7 @@ val CONSOLE_LOG_STRINGS_TO_IGNORE =
                 ,"https://assets.nhs.uk/fonts"
                 ,"unknown action type"
                 ,"Request failed with status code 598")
+const val DELAY_TIME = 3L;
 
 class SetupAndTeardown {
 
@@ -77,6 +78,8 @@ class SetupAndTeardown {
         if (driver != null && (driver.isAndroid() || driver.isIOS())) {
             driver = switchWebview(driver)
         }
+
+        Thread.sleep(DELAY_TIME)
 
         if (driver != null) {
             val logs = driver.manage().logs().get("browser")?.toList() ?: emptyList()
