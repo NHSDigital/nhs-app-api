@@ -20,7 +20,7 @@
                 <Setter Property="Margin" Value="15,0,0,0" />
             </Style>
             
-            <Style TargetType="controls:NhsLogo">
+            <Style TargetType="controls:NhsLogoWhite">
                 <Setter Property="HeightRequest" Value="40" />
                 <Setter Property="WidthRequest" Value="95" />
                 <Setter Property="VerticalOptions" Value="Center" />
@@ -38,7 +38,7 @@
         
     <StackLayout>
         
-        <controls:NhsLogo />
+        <controls:NhsLogoWhite />
         <controls:MediumLabel
             Text="NHS App"
             AutomationProperties.IsInAccessibleTree="False" />

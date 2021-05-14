@@ -67,43 +67,57 @@
                 <controls:FullNavigationFooterItem Grid.Column="0"
                                                    Text="Advice"
                                                    IconCommand="{Binding AdviceCommand, Source={x:Reference Name=Root}}">
-                    
-                    <icons:IconAdvice StyleClass="Advice" />
-                    
+                    <controls:FullNavigationFooterItem.DefaultIcon>
+                        <icons:IconAdviceGrey StyleClass="Advice" />
+                    </controls:FullNavigationFooterItem.DefaultIcon>
+                    <controls:FullNavigationFooterItem.HighlightedIcon>
+                        <icons:IconAdviceBlue StyleClass="Advice" />
+                    </controls:FullNavigationFooterItem.HighlightedIcon>
                 </controls:FullNavigationFooterItem>
                 
                 <controls:FullNavigationFooterItem Grid.Column="2"
                                                    Text="Appointments"
                                                    IconCommand="{Binding AppointmentsCommand, Source={x:Reference Name=Root}}">
-                    
-                    <icons:IconAppointments />
-                    
+                    <controls:FullNavigationFooterItem.DefaultIcon>
+                        <icons:IconAppointmentsGrey />
+                    </controls:FullNavigationFooterItem.DefaultIcon>
+                    <controls:FullNavigationFooterItem.HighlightedIcon>
+                        <icons:IconAppointmentsBlue />
+                    </controls:FullNavigationFooterItem.HighlightedIcon>
                 </controls:FullNavigationFooterItem>
 
                 <controls:FullNavigationFooterItem Grid.Column="4"
                                                    Text="Prescriptions"
                                                    IconCommand="{Binding PrescriptionsCommand, Source={x:Reference Name=Root}}">
-                    
-                    <icons:IconPrescriptions />
-                    
+                    <controls:FullNavigationFooterItem.DefaultIcon>
+                        <icons:IconPrescriptionsGrey />
+                    </controls:FullNavigationFooterItem.DefaultIcon>
+                    <controls:FullNavigationFooterItem.HighlightedIcon>
+                        <icons:IconPrescriptionsBlue />
+                    </controls:FullNavigationFooterItem.HighlightedIcon>
                 </controls:FullNavigationFooterItem>
 
                 <controls:FullNavigationFooterItem Grid.Column="6"
                                                    Text="Your health"
                                                    IconCommand="{Binding YourHealthCommand, Source={x:Reference Name=Root}}">
-                    
-                    <icons:IconYourHealth />
-                    
+                    <controls:FullNavigationFooterItem.DefaultIcon>
+                        <icons:IconYourHealthGrey />
+                    </controls:FullNavigationFooterItem.DefaultIcon>
+                    <controls:FullNavigationFooterItem.HighlightedIcon>
+                        <icons:IconYourHealthBlue />
+                    </controls:FullNavigationFooterItem.HighlightedIcon>
                 </controls:FullNavigationFooterItem>
 
                 <controls:FullNavigationFooterItem Grid.Column="8"
                                                    Text="Messages"
                                                    IconCommand="{Binding MessagesCommand, Source={x:Reference Name=Root}}">
-                    
-                    <icons:IconMessages />
-                    
+                    <controls:FullNavigationFooterItem.DefaultIcon>
+                        <icons:IconMessagesGrey />
+                    </controls:FullNavigationFooterItem.DefaultIcon>
+                    <controls:FullNavigationFooterItem.HighlightedIcon>
+                        <icons:IconMessagesBlue />
+                    </controls:FullNavigationFooterItem.HighlightedIcon>
                 </controls:FullNavigationFooterItem>
-
             </Grid>
         </StackLayout>
     </ContentView>

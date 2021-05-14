@@ -50,7 +50,7 @@
                 <Setter Property="WidthRequest" Value="23" />
             </Style>
             
-            <Style TargetType="controls:NhsLogo">
+            <Style TargetType="controls:NhsLogoWhite">
                 <Setter Property="HorizontalOptions" Value="Center" />
                 <Setter Property="VerticalOptions" Value="Center" />
                 <Setter Property="Padding" Value="0" />
@@ -99,7 +99,7 @@
         </StackLayout>
 
         <StackLayout Grid.Column="1" StyleClass="VerticalCenter">
-            <controls:NhsLogo />
+            <controls:NhsLogoWhite />
         </StackLayout>
 
         <StackLayout Grid.Column="2" StyleClass="VerticalCenter">

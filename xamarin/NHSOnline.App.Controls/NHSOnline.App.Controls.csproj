@@ -30,20 +30,25 @@
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="Icons\icon-appointment.svg" />
+    <EmbeddedResource Include="Icons\icon-advice-blue.svg" />
+    <EmbeddedResource Include="Icons\icon-appointments-blue.svg" />
+    <EmbeddedResource Include="Icons\icon-appointments-grey.svg" />
     <EmbeddedResource Include="Icons\icon-help.svg" />
     <EmbeddedResource Include="Icons\icon-home.svg" />
+    <EmbeddedResource Include="Icons\icon-messages-blue.svg" />
     <EmbeddedResource Include="Icons\icon-minus.svg" />
     <EmbeddedResource Include="Icons\icon-more.svg" />
-    <EmbeddedResource Include="Icons\icon-messages.svg" />
+    <EmbeddedResource Include="Icons\icon-messages-grey.svg" />
     <EmbeddedResource Include="Icons\icon-plus.svg" />
-    <EmbeddedResource Include="Icons\icon-prescription.svg" />
-    <EmbeddedResource Include="Icons\icon-your-health.svg" />
-    <EmbeddedResource Include="Icons\icon-advice.svg" />
+    <EmbeddedResource Include="Icons\icon-prescriptions-blue.svg" />
+    <EmbeddedResource Include="Icons\icon-prescriptions-grey.svg" />
+    <EmbeddedResource Include="Icons\icon-your-health-grey.svg" />
+    <EmbeddedResource Include="Icons\icon-your-health-blue.svg" />
+    <EmbeddedResource Include="Icons\icon-advice-grey.svg" />
     <EmbeddedResource Include="Icons\icon-arrow-right.svg" />
     <EmbeddedResource Include="Icons\icon-arrow-left.svg" />
     <EmbeddedResource Include="Icons\icon-close.svg" />
-    <EmbeddedResource Include="NhsLogo.svg" />
+    <EmbeddedResource Include="NhsLogoWhite.svg" />
     <EmbeddedResource Include="NhsLogoBlue.svg" />
     <ProjectReference Include="..\NHSOnline.App.Logging\NHSOnline.App.Logging.csproj" />
     <EmbeddedResource Update="NhsUkStyles.xaml">

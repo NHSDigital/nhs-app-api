@@ -1,5 +1,9 @@
 # Xamarin Questions for Microsoft
 
+## General
+
+Is it possible to make a bindable property required?
+
 ## Android
 
 How should the disposing of objects passed into Android classes be handled?

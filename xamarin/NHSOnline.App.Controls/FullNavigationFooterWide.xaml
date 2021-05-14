@@ -66,45 +66,59 @@
                 </Grid.ColumnDefinitions>
                 
                 <controls:FullNavigationFooterItemWide Grid.Column="0"
-                                                   Text="Advice"
-                                                   IconCommand="{Binding AdviceCommand, Source={x:Reference Name=Root}}">
-                    
-                    <icons:IconAdvice StyleClass="Advice" />
-                    
+                                                       Text="Advice"
+                                                       IconCommand="{Binding AdviceCommand, Source={x:Reference Name=Root}}">
+                    <controls:FullNavigationFooterItemWide.DefaultIcon>
+                        <icons:IconAdviceGrey StyleClass="Advice" />
+                    </controls:FullNavigationFooterItemWide.DefaultIcon>
+                    <controls:FullNavigationFooterItemWide.HighlightedIcon>
+                        <icons:IconAdviceBlue StyleClass="Advice" />
+                    </controls:FullNavigationFooterItemWide.HighlightedIcon>
                 </controls:FullNavigationFooterItemWide>
                 
                 <controls:FullNavigationFooterItemWide Grid.Column="2"
                                                        Text="Appointments"
                                                        IconCommand="{Binding AppointmentsCommand, Source={x:Reference Name=Root}}">
-                    
-                    <icons:IconAppointments />
-                    
+                    <controls:FullNavigationFooterItemWide.DefaultIcon>
+                        <icons:IconAppointmentsGrey />
+                    </controls:FullNavigationFooterItemWide.DefaultIcon>
+                    <controls:FullNavigationFooterItemWide.HighlightedIcon>
+                        <icons:IconAppointmentsBlue />
+                    </controls:FullNavigationFooterItemWide.HighlightedIcon>
                 </controls:FullNavigationFooterItemWide>
 
                 <controls:FullNavigationFooterItemWide Grid.Column="4"
                                                        Text="Prescriptions"
                                                        IconCommand="{Binding PrescriptionsCommand, Source={x:Reference Name=Root}}">
-                    
-                    <icons:IconPrescriptions />
-                    
+                    <controls:FullNavigationFooterItemWide.DefaultIcon>
+                        <icons:IconPrescriptionsGrey />
+                    </controls:FullNavigationFooterItemWide.DefaultIcon>
+                    <controls:FullNavigationFooterItemWide.HighlightedIcon>
+                        <icons:IconPrescriptionsBlue />
+                    </controls:FullNavigationFooterItemWide.HighlightedIcon>
                 </controls:FullNavigationFooterItemWide>
 
                 <controls:FullNavigationFooterItemWide Grid.Column="6"
                                                        Text="Your health"
                                                        IconCommand="{Binding YourHealthCommand, Source={x:Reference Name=Root}}">
-                    
-                    <icons:IconYourHealth />
-                    
+                    <controls:FullNavigationFooterItemWide.DefaultIcon>
+                        <icons:IconYourHealthGrey />
+                    </controls:FullNavigationFooterItemWide.DefaultIcon>
+                    <controls:FullNavigationFooterItemWide.HighlightedIcon>
+                        <icons:IconYourHealthBlue />
+                    </controls:FullNavigationFooterItemWide.HighlightedIcon>
                 </controls:FullNavigationFooterItemWide>
 
                 <controls:FullNavigationFooterItemWide Grid.Column="8"
                                                        Text="Messages"
                                                        IconCommand="{Binding MessagesCommand, Source={x:Reference Name=Root}}">
-                    
-                    <icons:IconMessages />
-                    
+                    <controls:FullNavigationFooterItemWide.DefaultIcon>
+                        <icons:IconMessagesGrey />
+                    </controls:FullNavigationFooterItemWide.DefaultIcon>
+                    <controls:FullNavigationFooterItemWide.HighlightedIcon>
+                        <icons:IconMessagesBlue />
+                    </controls:FullNavigationFooterItemWide.HighlightedIcon>
                 </controls:FullNavigationFooterItemWide>
-
             </Grid>
         </StackLayout>
     </ContentView>

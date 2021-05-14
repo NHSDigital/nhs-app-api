@@ -98,14 +98,14 @@
                 </StackLayout.GestureRecognizers>
             </StackLayout>
             
-            <controls:NhsLogo Grid.Row="1" 
-                              Grid.Column="1"
-                              HorizontalOptions="Center"
-                              VerticalOptions="Center"
-                              HeightRequest="48"
-                              AutomationProperties.IsInAccessibleTree="true"
-                              AutomationProperties.HelpText="NHS Logo"
-                              IsTabStop="False" />
+            <controls:NhsLogoWhite Grid.Row="1"
+                                   Grid.Column="1"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   HeightRequest="48"
+                                   AutomationProperties.IsInAccessibleTree="true"
+                                   AutomationProperties.HelpText="NHS Logo"
+                                   IsTabStop="False" />
             
             <Label Grid.Row="2" 
                    Grid.Column="1"

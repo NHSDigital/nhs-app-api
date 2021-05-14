@@ -32,7 +32,7 @@
                 <Setter Property="TextColor" Value="{StaticResource NhsUkWhite}" />
             </Style>
             
-            <Style TargetType="controls:NhsLogo">
+            <Style TargetType="controls:NhsLogoWhite">
                 <Setter Property="HeightRequest" Value="40" />
                 <Setter Property="WidthRequest" Value="95" />
                 <Setter Property="VerticalOptions" Value="Center" />
@@ -59,7 +59,7 @@
         <StackLayout Orientation="Horizontal"
                      Margin="15,0,0,10">
             
-            <controls:NhsLogo />
+            <controls:NhsLogoWhite />
             
             <controls:MediumLabel Text="NHS App" />
             
