@@ -1,9 +1,8 @@
 import store from '@/store';
 import router from '@/router';
-import { redirectTo } from '@/lib/utils';
 import { REDIRECT_PARAMETER } from '@/router/names';
 import { INTERSTITIAL_REDIRECTOR_PATH } from '@/router/paths';
-import { isBlankString } from '../lib/utils';
+import { isBlankString, redirectTo } from '@/lib/utils';
 
 const NativeAppCallbacksPlugin = {
   install() {
@@ -71,8 +70,9 @@ const NativeAppCallbacksPlugin = {
       redirectToTargetUrl(url) {
         if (url && !isBlankString(url)) {
           const encodedUri = encodeURIComponent(url);
-          const path = `/${INTERSTITIAL_REDIRECTOR_PATH}?${REDIRECT_PARAMETER}=${encodedUri}`;
-          redirectTo({ $router: router, $store: store }, path);
+          const path = `/${INTERSTITIAL_REDIRECTOR_PATH}`;
+          const query = { [REDIRECT_PARAMETER]: encodedUri };
+          redirectTo({ $router: router, $store: store }, path, query, true);
         }
       },
       appVersionUpdateNativeVersion(versionNumber) {

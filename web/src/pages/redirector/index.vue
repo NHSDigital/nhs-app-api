@@ -53,7 +53,6 @@ export default {
       showWarning: false,
       matchedService: {},
       redirectParameter: '',
-      redirectParameterAndQuery: '',
       buttonHref: '',
       buttonDisabled: false,
       sessionStorageName: '',
@@ -66,27 +65,35 @@ export default {
       return this.showWarning && !agreedToThirdPartyWarning(this.sessionStorageName);
     },
   },
+  watch: {
+    '$route.query.ts': function watchTimestamp() {
+      this.startRedirect();
+    },
+  },
   mounted() {
-    this.redirectParameter = get(REDIRECT_PARAMETER)(this.$route.query);
-    const redirectEnum = get(REDIRECT_PAGE_PARAMETER)(this.$route.query);
-
-    if (redirectEnum) {
-      const pathName = findByRedirectEnum(redirectEnum);
-
-      if (pathName) {
-        redirectByName(this, pathName);
-        return;
-      }
-    }
-
-    if (this.redirectParameter) {
-      this.handleRedirectParameter(this.redirectParameter);
-      return;
-    }
-
-    redirectTo(this, INDEX_PATH);
+    this.startRedirect();
   },
   methods: {
+    startRedirect() {
+      this.redirectParameter = get(REDIRECT_PARAMETER)(this.$route.query);
+      const redirectEnum = get(REDIRECT_PAGE_PARAMETER)(this.$route.query);
+
+      if (redirectEnum) {
+        const pathName = findByRedirectEnum(redirectEnum);
+
+        if (pathName) {
+          redirectByName(this, pathName);
+          return;
+        }
+      }
+
+      if (this.redirectParameter) {
+        this.handleRedirectParameter(this.redirectParameter);
+        return;
+      }
+
+      redirectTo(this, INDEX_PATH);
+    },
     async getAssertedLoginIdentityAndNavigate() {
       return this.$store.app.$http
         .postV1PatientAssertedLoginIdentity({
@@ -142,7 +149,7 @@ export default {
         },
       });
     },
-    navigateToThirdParty() {
+    navigateToThirdParty(url) {
       this.sessionStorageName = `agreedThirdPartyWarning_${this.matchedService.id}`;
 
       if (this.matchedService.showThirdPartyWarning === false ||
@@ -150,15 +157,15 @@ export default {
         if (this.matchedService.requiresAssertedLoginIdentity || {} === true) {
           this.getAssertedLoginIdentityAndNavigate();
         } else {
-          this.navigateToExternalPath(this.redirectParameter);
+          this.navigateToExternalPath(url);
         }
         return;
       }
       this.showWarning = true;
     },
-    checkIsProofLevel9({ featureJumpOffContent }, next) {
+    checkIsProofLevel9({ url, featureJumpOffContent }, next) {
       if (this.$store.getters['session/isProofLevel9']) {
-        next();
+        next(url);
         return;
       }
 
@@ -168,9 +175,9 @@ export default {
         { featureName: featureJumpOffContent.jumpOffContent.headerText },
       );
     },
-    checkCanAccessSilverIntegration({ jumpOffConfig, featureJumpOffContent }, next) {
+    checkCanAccessSilverIntegration({ url, jumpOffConfig, featureJumpOffContent }, next) {
       if (this.canAccessSilverIntegration(this.$store, jumpOffConfig)) {
-        next();
+        next(url);
         return;
       }
 
@@ -180,7 +187,7 @@ export default {
         { featureName: featureJumpOffContent.jumpOffContent.headerText },
       );
     },
-    updateTitle({ jumpOffConfig, featureJumpOffContent }, next) {
+    updateTitle({ url, jumpOffConfig, featureJumpOffContent }, next) {
       if (!isEmpty(featureJumpOffContent)) {
         const { jumpOffContent, thirdPartyWarning } = featureJumpOffContent;
         if (!isEmpty(thirdPartyWarning)) {
@@ -190,13 +197,13 @@ export default {
         }
       }
 
-      next({ jumpOffConfig, featureJumpOffContent });
+      next({ url, jumpOffConfig, featureJumpOffContent });
     },
-    getJumpOffConfig({ thirdPartyConfig }, next) {
-      this.redirectParameterAndQuery = getPathAndQuery(this.redirectParameter);
+    getJumpOffConfig({ url, thirdPartyConfig }, next) {
+      const redirectParameterAndQuery = getPathAndQuery(url);
       const jumpOffConfig = getThirdPartyJumpOff(
         { jumpOffs: Object.values(thirdPartyConfig) },
-        this.redirectParameterAndQuery,
+        redirectParameterAndQuery,
       );
 
       this.jumpOffId = jumpOffConfig.jumpOffId;
@@ -210,19 +217,19 @@ export default {
         item => item.id === this.jumpOffId,
       );
 
-      next({ jumpOffConfig, featureJumpOffContent });
+      next({ url, jumpOffConfig, featureJumpOffContent });
     },
-    getThirdPartyConfig(_, next) {
+    getThirdPartyConfig({ url }, next) {
       const thirdPartyConfig = getJumpOffConfiguration(this.matchedService.id);
 
       if (thirdPartyConfig) {
-        next({ thirdPartyConfig });
+        next({ url, thirdPartyConfig });
         return;
       }
 
       if (this.matchedService.showThirdPartyWarning === false &&
           this.matchedService.requiresAssertedLoginIdentity === false) {
-        this.navigateToExternalPath(this.redirectParameter);
+        this.navigateToExternalPath(url);
         return;
       }
 
@@ -236,15 +243,14 @@ export default {
 
       redirectTo(this, INDEX_PATH);
     },
-    handleExternalRedirect() {
-      this.matchedService = this.$store.getters['knownServices/matchOneByUrl'](this.redirectParameter) || {};
-
+    handleExternalRedirect(url) {
+      this.matchedService = this.$store.getters['knownServices/matchOneByUrl'](url) || {};
       if (isEmpty(this.matchedService)) {
         redirectTo(this, INDEX_PATH);
         return;
       }
 
-      let context = {};
+      let context = { url };
 
       const steps = [
         this.getThirdPartyConfig,
@@ -279,7 +285,7 @@ export default {
         return;
       }
 
-      this.handleExternalRedirect();
+      this.handleExternalRedirect(decodedParameter);
     },
     resolvePatientUrl(url) {
       const trimmedPath = removeNhsAppHost(url);

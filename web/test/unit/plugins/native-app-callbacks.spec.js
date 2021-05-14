@@ -104,7 +104,7 @@ describe('native-app-callbacks', () => {
       });
 
       it('will call redirectTo with http://www.mock.url', () => {
-        expect(redirectTo).toHaveBeenCalledWith({ $router: router, $store: store }, '/redirector?redirect_to=http%3A%2F%2Fwww.mock.url');
+        expect(redirectTo).toHaveBeenCalledWith({ $router: router, $store: store }, '/redirector', { redirect_to: 'http%3A%2F%2Fwww.mock.url' }, true);
       });
     });
 
