@@ -55,6 +55,9 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         public void KeyboardNavigateToNhsLoginSettings(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(NhsLoginMenuItem, navigation);
 
+        public void KeyboardNavigateToNotificationSettings(AndroidKeyboardNavigation navigation) =>
+            KeyboardNavigateToAndActivateMenuItem(NotificationsMenuItem, navigation);
+
         private void KeyboardNavigateToAndActivateMenuItem(IFocusable menuItem, AndroidKeyboardNavigation keyboardPageContentNavigation)
         {
             keyboardPageContentNavigation.TabBetween(LinkedProfilesMenuItem, menuItem);

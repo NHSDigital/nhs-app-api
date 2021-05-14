@@ -1,4 +1,7 @@
+using System.Collections.Generic;
 using NHSOnline.IntegrationTests.UI;
+using NHSOnline.IntegrationTests.UI.Components;
+using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -21,12 +24,25 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         private WebText IfYouShareThisDevice => WebText.WithTagAndText(_interactor, "p",
             "If you share this device with other people, they may see your notifications. The settings will apply to everyone who logs in to the NHS App on this device.");
 
+        private WebLink PrivacyLink => WebLink.WithText(_interactor, "NHS App privacy policy");
+
         private WebText MoreInfo => WebText.WithTagAndText(_interactor, "p",
             "More information is available in the NHS App privacy policy.");
 
         private WebToggle NotificationsToggle => WebToggle.WithLabel(
             _interactor,
             "Allow notificationsI accept the NHS App sending notifications on this device");
+
+        private WebLink NotificationSettingsLink => WebLink.WithText(
+            _interactor,
+            "Manage how notifications are shown on this device (opens your device settings)");
+
+        public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
+        {
+            PrivacyLink,
+            NotificationsToggle,
+            NotificationSettingsLink
+        };
 
         internal void AssertOnPage()
         {
@@ -39,6 +55,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             TheseMayInclude.AssertVisible();
             IfYouShareThisDevice.AssertVisible();
             MoreInfo.AssertVisible();
+            NotificationSettingsLink.AssertVisible();
             return this;
         }
 
@@ -67,6 +84,18 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             NotificationsToggle.ToggleOff();
             using var timeout = ExtendedTimeout.FromSeconds(10);
             NotificationsToggle.AssertToggledOff();
+        }
+
+        public void OpenNotificationSettings() => NotificationSettingsLink.Click();
+
+
+        public void KeyboardNavigateToDeviceSettings(AndroidKeyboardNavigation navigation) =>
+            KeyboardNavigateToAndActivateMenuItem(NotificationSettingsLink, navigation);
+
+        private static void KeyboardNavigateToAndActivateMenuItem(IFocusable linkItem, AndroidKeyboardNavigation keyboardPageContentNavigation)
+        {
+            keyboardPageContentNavigation.TabTo(linkItem);
+            keyboardPageContentNavigation.PressEnterKey();
         }
     }
 }

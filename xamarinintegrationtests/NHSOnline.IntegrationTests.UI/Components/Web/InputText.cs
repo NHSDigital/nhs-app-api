@@ -14,10 +14,13 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
         }
 
         internal By Input => By.XPath($"//input[@type={_type.QuoteXPathLiteral()} and //{TextXPath}/@for=@id]");
+
         internal By LabelAndNotChecked() => By.XPath($"//input[@type={_type.QuoteXPathLiteral()} and not(@aria-checked) and //{TextXPath}/@for=@id]");
 
         internal By LabelAndChecked(string checkedValue) => By.XPath($"//input[@type={_type.QuoteXPathLiteral()} and @aria-checked={checkedValue.QuoteXPathLiteral()} and //{TextXPath}/@for=@id]");
 
         private string TextXPath => $"label[normalize-space(string())={_text.QuoteXPathLiteral()}]";
+
+        public string Description => _text;
     }
 }

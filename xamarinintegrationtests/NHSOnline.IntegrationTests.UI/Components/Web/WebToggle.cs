@@ -1,11 +1,12 @@
 using FluentAssertions;
+using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Web
 {
-    public sealed class WebToggle
+    public sealed class WebToggle : IFocusable
     {
         private readonly IWebInteractor _interactor;
         private readonly InputByText _by;
@@ -41,5 +42,9 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
 
         private By CheckboxFindByNotToggled()
             => _by.LabelAndNotChecked();
+
+        string IFocusable.ElementDescription
+            => new FocusableDescriptionBuilder { Tag = "input", Text = _by.Description }.Description;
+
     }
 }
