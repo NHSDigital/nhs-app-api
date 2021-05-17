@@ -56,6 +56,10 @@ namespace NHSOnline.App.Areas.Home.Views
         public AsyncCommand<string> SetMenuBarItemCommand
             => new AsyncCommand<string>(() => SetMenuBarItemRequested);
 
+        public Func<Task>? ClearMenuBarItemRequested { get; set; }
+        public AsyncCommand ClearMenuBarItemCommand
+            => new AsyncCommand(() => ClearMenuBarItemRequested);
+
         public Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
         public AsyncCommand<string> UpdateBiometricRegistrationCommand
             => new AsyncCommand<string>(() => UpdateBiometricRegistrationRequested);

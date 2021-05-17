@@ -79,5 +79,12 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         {
             NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.SetMenuBarItem(argumentJson));
         }
+
+        [JavascriptInterface]
+        [Export("clearMenuBarItem")]
+        public void ClearMenuBarItem()
+        {
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.ClearMenuBarItem());
+        }
     }
 }

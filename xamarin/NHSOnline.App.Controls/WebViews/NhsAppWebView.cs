@@ -41,6 +41,9 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty SetMenuBarItemCommandProperty =
             BindableProperty.Create(nameof(SetMenuBarItemCommand), typeof(AsyncCommand<string>), typeof(NhsAppWebView));
 
+        public static readonly BindableProperty ClearMenuBarItemCommandProperty =
+            BindableProperty.Create(nameof(ClearMenuBarItemCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
+
         public static readonly BindableProperty UpdateBiometricRegistrationCommandProperty =
             BindableProperty.Create(nameof(UpdateBiometricRegistrationCommand), typeof(AsyncCommand<string>), typeof(NhsAppWebView));
 
@@ -123,6 +126,14 @@ namespace NHSOnline.App.Controls.WebViews
         {
             get => (AsyncCommand<string>) GetValue(SetMenuBarItemCommandProperty);
             set => SetValue(SetMenuBarItemCommandProperty, value);
+        }
+
+        public void ClearMenuBarItem() => ClearMenuBarItemCommand.Execute(null);
+
+        public AsyncCommand ClearMenuBarItemCommand
+        {
+            get => (AsyncCommand) GetValue(ClearMenuBarItemCommandProperty);
+            set => SetValue(ClearMenuBarItemCommandProperty, value);
         }
 
         public async Task SendBiometricStatus(BiometricStatus biometricStatus)
