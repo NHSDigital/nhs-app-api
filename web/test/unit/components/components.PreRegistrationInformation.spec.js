@@ -3,39 +3,49 @@ import PreRegistrationInformation from '@/components/PreRegistrationInformation'
 import { mount } from '../helpers';
 
 describe('Pre registration information', () => {
-  const createWrapper = (shouldShowHeader = true) => mount(PreRegistrationInformation, {
+  const createWrapper = shouldShowFullContent => mount(PreRegistrationInformation, {
     propsData: {
-      shouldShowHeader,
+      shouldShowFullContent,
     },
     mountOpts: {
       i18n,
     },
   });
 
-  describe('header text', () => {
-    describe('visible', () => {
+  describe('Should show full content prop', () => {
+    describe('true', () => {
       let wrapper;
+
       beforeEach(() => {
-        wrapper = createWrapper();
+        wrapper = createWrapper(true);
       });
 
-      it('will be visible on page', async () => {
+      it('header will be visible on page', () => {
         expect(wrapper.find('h2').exists()).toBe(true);
       });
 
-      it('will have the expected text to translate', async () => {
+      it('header will have the expected text to translate', () => {
         expect(wrapper.find('h2').text()).toEqual('Before you start');
+      });
+
+      it('list will be visible on page', () => {
+        expect(wrapper.find('ul').exists()).toBe(true);
       });
     });
 
-    describe('not visible', () => {
+    describe('false', () => {
       let wrapper;
+
       beforeEach(() => {
         wrapper = createWrapper(false);
       });
 
-      it('will not be visible on page', async () => {
+      it('header will not be visible on page', () => {
         expect(wrapper.find('h2').exists()).toBe(false);
+      });
+
+      it('list will not be visible on page', () => {
+        expect(wrapper.find('ul').exists()).toBe(false);
       });
     });
   });

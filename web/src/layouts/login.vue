@@ -30,10 +30,11 @@
                 {{ $t('login.useNhsAppOnlineToAccessServices') }}</p>
               <p class="nhsuk-u-margin-bottom-4">{{ $t('login.useThisServiceTo') }}</p>
               <ul>
-                <li class="nhsuk-u-margin-bottom-3">{{ $t('login.bookAndManageAppointments') }}</li>
+                <li class="nhsuk-u-margin-bottom-3">{{ $t('login.shareCovidStatus') }}</li>
                 <li class="nhsuk-u-margin-bottom-3">{{ $t('login.orderRepeatPrescriptions') }}</li>
+                <li class="nhsuk-u-margin-bottom-3">{{ $t('login.bookAndManageAppointments') }}</li>
                 <li class="nhsuk-u-margin-bottom-3">{{ $t('login.getHealthInfoAndAdvice') }}</li>
-                <li class="nhsuk-u-margin-bottom-3">{{ $t('login.viewYourMedicalRecord') }}</li>
+                <li class="nhsuk-u-margin-bottom-3">{{ $t('login.viewYourHealthRecord') }}</li>
                 <li>{{ $t('login.viewYourNhsNumber') }}</li>
               </ul>
             </div>
@@ -44,7 +45,7 @@
               </div>
             </div>
           </div>
-          <pre-registration-information :should-show-header="true"/>
+          <pre-registration-information :should-show-full-content="true"/>
           <main :class="[$style['homeMain-desktop'], $style['pull-content']]">
             <flash-message/>
             <slot/>

@@ -46,7 +46,7 @@ Feature: Login frontend
     Given I am a patient using the native app
     When I am on the login logged-out page for the first time
     And I click the 'Continue with NHS login' button
-    Then the page title is 'Before you start'
+    Then the page title is 'Getting started'
     And I click the 'Continue' button
     And the page contains the header 'Integration Test Patient'
 

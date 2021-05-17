@@ -1,7 +1,18 @@
 <template>
   <nhs-uk-app-layout>
     <div>
-      <pre-registration-information :should-show-header="false"/>
+      <p class="nhsuk-u-margin-bottom-4">{{ $t('login.useTheNhsAppTo') }}</p>
+      <ul>
+        <li class="nhsuk-u-margin-bottom-3">{{ $t('login.shareCovidStatus') }}</li>
+        <li class="nhsuk-u-margin-bottom-3">{{ $t('login.orderRepeatPrescriptions') }}</li>
+        <li class="nhsuk-u-margin-bottom-3">{{ $t('login.bookAndManageAppointments') }}</li>
+        <li class="nhsuk-u-margin-bottom-3">{{ $t('login.getHealthInfoAndAdvice') }}</li>
+        <li class="nhsuk-u-margin-bottom-3">{{ $t('login.viewYourHealthRecord') }}</li>
+        <li class="nhsuk-u-margin-bottom-3">{{ $t('login.manageOrganDonationDecision') }}</li>
+        <li>{{ $t('login.viewYourNhsNumber') }}</li>
+      </ul>
+      <pre-registration-information :should-show-full-content="false"/>
+      <p class="nhsuk-u-margin-bottom-4">{{ $t('login.toGetStarted') }}</p>
       <generic-button id="login-button"
                       class="nhsuk-u-margin-bottom-3"
                       :button-classes="['nhsuk-button']"

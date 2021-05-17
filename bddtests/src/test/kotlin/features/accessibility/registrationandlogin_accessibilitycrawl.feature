@@ -12,11 +12,11 @@ Feature: Registration and login accessibility
     And I am not logged in
     Then the Login_NativeVersion page is saved to disk
 
-  Scenario: The 'Before you start' page is captured
+  Scenario: The 'Getting started' page is captured
     Given I am a patient using the native app
     When I am on the login logged-out page for the first time
     And I click the 'Continue with NHS login' button
-    Then the page title is 'Before you start'
+    Then the page title is 'Getting started'
     And the Login_BeforeYouStart page is saved to disk
 
   Scenario: The 'Accept conditions of use' page is captured
