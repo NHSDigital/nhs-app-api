@@ -58,7 +58,7 @@ services:
     image: nginx:alpine
     volumes:
       - type: bind
-        source: ./silver-integration-api-test-site
+        source: ./silver-integration-api-test-site/dist
         target: /etc/nginx/html
       - ./docker/nginx/silver:/etc/nginx/conf.d
 
