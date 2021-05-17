@@ -1,15 +1,15 @@
 <template>
   <div :class="{ [$style.toggleWrapper]: true, [$style.waiting]: isWaiting }">
     <toggle-spinner :id="`${checkboxId}_spinner`" v-visible="isWaiting" :class="$style.spinner" />
-    <section :id="'hiddenLabel'"
-             :class="$style.hideAria"
-             role="note">{{ ariaLabel }}</section>
+    <p :id="'hiddenLabel'"
+       :class="$style.hideAria"
+    >{{ ariaLabel }}</p>
     <input :id="checkboxId"
            :aria-checked="value"
            :checked="value"
            :class="$style.toggle"
            :name="name"
-           :aria-labelledby="'hiddenLabel'"
+           :aria-describedby="'hiddenLabel'"
            role="switch"
            type="checkbox"
            @click.stop.prevent="onClick">
