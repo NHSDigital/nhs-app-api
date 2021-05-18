@@ -7,6 +7,7 @@
     <InfoPlistTemplate>$(MSBuildProjectDirectory)/Info.template.plist</InfoPlistTemplate>
     <InfoPlistGenerated>$(MSBuildProjectDirectory)/Info.plist</InfoPlistGenerated>
     <NSAppTransportSecurityXPath>/plist/dict/dict[preceding-sibling::key[1] = 'NSAppTransportSecurity']</NSAppTransportSecurityXPath>
+    <InfoPlistXPath>/plist/dict</InfoPlistXPath>
   </PropertyGroup>
 
   <Target Name="Generate Info Plist" BeforeTargets="PrepareForBuild">
@@ -33,6 +34,8 @@
       Query="/plist/dict/string[preceding-sibling::key[1] = 'CFBundleDisplayName']" />
 
     <CallTarget Targets="Update Info Plist Allow Insecure Websites" Condition=" '$(NhsAppAllowInsecureBitraftDomain)' == 'true' " />
+
+    <CallTarget Targets="Update Info Plist Allow File sharing" Condition=" '$(NhsAppUIFileSharingEnabled)' == 'true' " />
 
     <ReadLinesFromFile File="$(InfoPlistGenerated)">
       <Output TaskParameter="Lines" ItemName="InfoPlistLines" />
@@ -66,6 +69,25 @@
       XmlInputPath="$(InfoPlistGenerated)"
       Query="$(NSAppTransportSecurityXPath)"
       Value="$(TemplateNSAppTransportSecurityContents)$(AdditionalNSAppTransportSecurityContents)" />
+  </Target>
+
+  <Target Name="Update Info Plist Allow File sharing">
+    <XmlPeek XmlInputPath="$(InfoPlistGenerated)" Query="$(InfoPlistXPath)/*">
+      <Output TaskParameter="Result" ItemName="TemplateInfoPlistContents" />
+    </XmlPeek>
+
+    <PropertyGroup>
+      <TemplateInfoPlistContents>@(TemplateInfoPlistContents, '')</TemplateInfoPlistContents>
+      <AdditionalUIFileSharingEnabledContents>
+        <key xmlns="">UIFileSharingEnabled</key>
+        <true xmlns="" />
+      </AdditionalUIFileSharingEnabledContents>
+    </PropertyGroup>
+
+    <XmlPoke
+      XmlInputPath="$(InfoPlistGenerated)"
+      Query="$(InfoPlistXPath)"
+      Value="$(TemplateInfoPlistContents)$(AdditionalUIFileSharingEnabledContents)" />
   </Target>
 
   <!-- End Info.plist -->

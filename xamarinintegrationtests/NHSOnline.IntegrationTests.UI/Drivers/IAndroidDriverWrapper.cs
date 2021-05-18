@@ -5,5 +5,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         WaitForAction PressBackButton();
         void AssertNotRunningInForeground();
         void AssertRunningInForeground();
+        void PushTestFile();
     }
 }

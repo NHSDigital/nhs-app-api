@@ -72,7 +72,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
                  .AssertOnPage(driver)
                  .PageContent.OpenCamera();
 
-            IOSImageSourceDialog
+            IOSFileSourceDialog
                 .IfDisplayed(driver, page => page.TakePhoto());
 
             IOSCameraPermissionDialog

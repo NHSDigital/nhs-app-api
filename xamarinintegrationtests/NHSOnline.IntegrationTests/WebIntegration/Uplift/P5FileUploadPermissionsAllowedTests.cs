@@ -66,9 +66,9 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
                  .AssertOnPage(driver)
                  .UploadFile();
 
-             IOSImageSourceDialog
-                .AssertDisplayed(driver)
-                .Browse();
+             IOSFileSourceDialog
+                 .GetPanel(driver)
+                 .SelectPhotoLibrary();
 
             IOSFileChooser
                 .AssertDisplayed(driver)

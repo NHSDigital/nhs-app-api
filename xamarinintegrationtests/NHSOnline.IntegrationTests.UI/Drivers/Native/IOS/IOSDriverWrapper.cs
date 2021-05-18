@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using FluentAssertions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
@@ -84,6 +85,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             });
             return new WaitForAction();
         }
+
+        void IIOSDriverWrapper.PushTestFile() => _driver.PushFile("@com.google.chrome.ios:documents/test.txt",
+            new FileInfo("../../../../NHSOnline.IntegrationTests.UI/Resources/test.txt"));
 
         void IDriverWrapper.AttachDebugInfo(IDriverCleanupContext context)
         {

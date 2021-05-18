@@ -22,7 +22,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             _nativeDriverContext.SwitchToNativeContext();
             _interactor.ActOnDriver(action);
         }
-        
+
         IAndroidInteractor IAndroidInteractor.CreateContainedInteractor(By findContainerBy)
             => new AndroidInteractor(_nativeDriverContext, _interactor.CreateContainedInteractor(findContainerBy));
 

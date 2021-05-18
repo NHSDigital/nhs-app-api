@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using FluentAssertions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
@@ -38,6 +39,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             options.AddAdditionalCapability("ensureWebviewsHavePages", true);
 
             _driver = new AndroidDriver<AndroidElement>(new Uri("http://hub-cloud.browserstack.com/wd/hub"), options);
+
             logs.BrowserStackSessionId(_driver.SessionId);
 
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
@@ -73,6 +75,12 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         {
             _driver.PressKeyCode(AndroidKeyCode.Back);
             return new WaitForAction();
+        }
+
+        void IAndroidDriverWrapper.PushTestFile()
+        {
+            _driver.PushFile("/sdcard/Download/NhsAppLogo.png",
+                new FileInfo("../../../../NHSOnline.IntegrationTests.UI/Resources/NhsAppLogo.png"));
         }
 
         void IAndroidDriverWrapper.AssertNotRunningInForeground()

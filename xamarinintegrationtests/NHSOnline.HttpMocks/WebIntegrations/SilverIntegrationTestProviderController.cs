@@ -11,7 +11,14 @@ namespace NHSOnline.HttpMocks.WebIntegrations
         public IActionResult InternalPage()
         {
             (string Title, string SubTitle, HttpRequest Request) model = ("Silver Integration Test Provider Internal Page", "", Request);
-            return View("~/Views/WebIntegrations/InternalPage.cshtml", model);
+            return View("~/Views/WebIntegrations/TestProviderInternalPage.cshtml", model);
+        }
+
+        [HttpGet("FileUpload.html")]
+        public IActionResult FileUpload()
+        {
+            (string Title, HttpRequest Request) model = ("Silver Integration Test Provider File Upload Page", Request);
+            return View("~/Views/WebIntegrations/WebIntegrationFunctionalityPages/FileUploadPage.cshtml", model);
         }
     }
 }
