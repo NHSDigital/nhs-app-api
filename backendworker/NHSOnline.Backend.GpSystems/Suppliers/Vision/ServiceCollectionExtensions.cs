@@ -42,15 +42,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         {
             services.AddTransient<IGpSystem, VisionGpSystem>();
             services.AddTransient<IVisionLinkageConfig, VisionLinkageConfig>();
+            services.AddTransient<IVisionDirectServicesConfig, VisionDirectServicesConfig>();
             services.AddTransient<IVisionPfsClient, VisionPfsClient>();
             services.AddTransient<VisionPfsClientRequestSender>();
             services.AddTransient<IVisionLinkageClient, VisionLinkageClient>();
+            services.AddTransient<IVisionDirectServicesClient, VisionDirectServicesClient>();
             services.AddTransient<IVisionClient, VisionClient>();
 
             services.AddTransient<VisionTokenValidationService>();
 
             services.AddTransient<VisionPFSHttpRequestIdentifier>();
             services.AddTransient<VisionLinkageHttpRequestIdentifier>();
+            services.AddTransient<VisionDirectServicesHttpRequestIdentifier>();
             services.AddTransient<VisionHttpClientHandler>();
 
             services.AddHttpClient<VisionPFSHttpClient>()
@@ -62,6 +65,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
                 .ConfigurePrimaryHttpMessageHandler<VisionHttpClientHandler>()
                 .AddHttpMessageHandler<HttpTimeoutHandler<VisionLinkageHttpRequestIdentifier>>()
                 .AddHttpMessageHandler<HttpRequestIdentificationHandler<VisionLinkageHttpRequestIdentifier>>();
+
+            services.AddHttpClient<VisionDirectServicesHttpClient>()
+                .ConfigurePrimaryHttpMessageHandler<VisionHttpClientHandler>()
+                .AddHttpMessageHandler<HttpTimeoutHandler<VisionDirectServicesHttpRequestIdentifier>>()
+                .AddHttpMessageHandler<HttpRequestIdentificationHandler<VisionDirectServicesHttpRequestIdentifier>>();
 
             return services;
         }

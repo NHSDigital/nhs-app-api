@@ -1,0 +1,118 @@
+using System;
+using System.Globalization;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Xml.Serialization;
+using AutoFixture;
+using AutoFixture.AutoMoq;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
+using NHSOnline.Backend.Support.ResponseParsers;
+using RichardSzalay.MockHttp;
+
+namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
+{
+    [TestClass]
+    public sealed class VisionDirectServicesLinkageClientTests : IDisposable
+    {
+        private IVisionDirectServicesClient _systemUnderTest;
+        private MockHttpMessageHandler _mockHttpHandler;
+        private Mock<IVisionDirectServicesConfig> _visionDirectServiceConfigMock;
+        private VisionConfigurationSettings _visionConfiguration;
+
+        private VisionConnectionToken _connectionToken;
+        private string _odsCode;
+        private XmlSerializerNamespaces _xmlNamespaces;
+        private IFixture _fixture;
+        private VisionDirectServicesHttpClient _httpClient;
+
+        private const string ApplicationProviderId = "TestApplicationProviderId";
+        private static readonly Uri ApiUri = new Uri("http://vision_base_url/", UriKind.Absolute);
+        private const string ConfigurationBasePath = "v1/organisations/{0}/onlineservices/configuration";
+        private const string VisionTestData_DirectServices_Directory = "Suppliers/Vision/TestData/DirectServices";
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            _connectionToken = _fixture.Create<VisionConnectionToken>();
+            _odsCode = _fixture.Create<string>();
+
+            _fixture.Register<IXmlResponseParser>(() => new XmlResponseParser());
+
+            _mockHttpHandler = new MockHttpMessageHandler();
+
+            _visionDirectServiceConfigMock = new Mock<IVisionDirectServicesConfig>();
+            _visionDirectServiceConfigMock.SetupGet(x => x.ApiUrl).Returns(ApiUri);
+
+            _visionConfiguration =
+                new VisionConfigurationSettings(ApplicationProviderId, null, "", "", "", "", "", "", "", 0, 0, 0);
+            _httpClient = new VisionDirectServicesHttpClient(new HttpClient(_mockHttpHandler), _visionDirectServiceConfigMock.Object);
+
+            _fixture.Inject(_visionDirectServiceConfigMock);
+            _fixture.Inject(_httpClient);
+            _fixture.Inject(_visionConfiguration);
+
+            _xmlNamespaces = new XmlSerializerNamespaces();
+            _xmlNamespaces.Add("vision", "urn:vision");
+
+            _systemUnderTest = _fixture.Create<VisionDirectServicesClient>();
+        }
+
+        [TestMethod]
+        public async Task GetConfiguration_ReturnsConfigurationResponse_WhenRequested()
+        {
+            var expectedRequestContent = $"<?xml version=\"1.0\" encoding=\"utf-8\"?><vision:visionRequest xmlns:vision=\"urn:vision\"><vision:credentials><vision:rosuAccountId>{ _connectionToken.RosuAccountId }</vision:rosuAccountId><vision:apiKey>{ _connectionToken.ApiKey }</vision:apiKey></vision:credentials><vision:opsReference><vision:provider>{ ApplicationProviderId }</vision:provider><vision:accountId>{ ApplicationProviderId }</vision:accountId></vision:opsReference></vision:visionRequest>";
+            var expectedUri = new Uri(
+                ApiUri,
+                string.Format(CultureInfo.CurrentCulture, ConfigurationBasePath, _odsCode));
+
+            var xmlResponseText = await File.ReadAllTextAsync($"{VisionTestData_DirectServices_Directory}/validGetConfigurationResponse.xml");
+            _mockHttpHandler
+                .WhenVision(HttpMethod.Post, expectedUri)
+                .WithContent(expectedRequestContent)
+                .Respond("application/xml", xmlResponseText);
+
+            var response = await _systemUnderTest.GetConfigurationV2(_connectionToken, _odsCode);
+
+            response.Body.Configuration.Account.Name.Should().Be("Mrs TestNameFirst TestNameSecond");
+            response.StatusCode.Should().Be(200);
+            response.HasSuccessResponse.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public async Task VisionRespondsWithUnknownError()
+        {
+            var expectedRequestContent = $"<?xml version=\"1.0\" encoding=\"utf-8\"?><vision:visionRequest xmlns:vision=\"urn:vision\"><vision:credentials><vision:rosuAccountId>{ _connectionToken.RosuAccountId }</vision:rosuAccountId><vision:apiKey>{ _connectionToken.ApiKey }</vision:apiKey></vision:credentials><vision:opsReference><vision:provider>{ ApplicationProviderId }</vision:provider><vision:accountId>{ ApplicationProviderId }</vision:accountId></vision:opsReference></vision:visionRequest>";
+            var expectedUri = new Uri(
+                ApiUri,
+                string.Format(CultureInfo.CurrentCulture, ConfigurationBasePath, _odsCode));
+
+            var xmlText = await File.ReadAllTextAsync($"{VisionTestData_DirectServices_Directory}/unknownErrorResponse.xml");
+            var responseContent = new StringContent(xmlText);
+            _mockHttpHandler
+                .WhenVision(HttpMethod.Post, expectedUri)
+                .WithContent(expectedRequestContent)
+                .Respond(HttpStatusCode.BadRequest, responseContent);
+
+            var response = await _systemUnderTest.GetConfigurationV2(_connectionToken, _odsCode);
+
+            response.StatusCode.Should().Be(400);
+            response.HasErrorResponse.Should().BeTrue();
+            response.ErrorText.Should().Be("Unknown Error");
+            response.ErrorDescription.Should().Be("ERROR: invalid input syntax for integer: \"\"");
+        }
+
+        [TestCleanup]
+        public void Dispose()
+        {
+            _mockHttpHandler.Dispose();
+        }
+    }
+}

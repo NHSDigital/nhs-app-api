@@ -55,17 +55,6 @@ class PatientVerificationStepDefinitions {
         PatientVerificationSerenityHelpers.NationalPracticeCode.set(odsCode)
     }
 
-    @Given("^Vision responds with a security header error$")
-    fun visionRespondsWithASecurityHeaderError() {
-        PatientVerificationSerenityHelpers.ConnectionToken.set(VisionMockDefaults.patientVision.connectionToken)
-        PatientVerificationSerenityHelpers.NationalPracticeCode.set(VisionMockDefaults.DEFAULT_ODS_CODE_VISION)
-        mockingClient.forVision.mock {
-                    authentication.getConfigurationRequest(
-                            visionUserSession = VisionUserSession.fromPatient(Patient.getDefault(Supplier.VISION)))
-                            .respondWithSecurityHeaderError()
-                }
-    }
-
     @Given("^Vision responds with an invalid request error$")
     fun visionRespondsWithAInvalidRequestError() {
         PatientVerificationSerenityHelpers.ConnectionToken.set(VisionMockDefaults.patientVision.connectionToken)

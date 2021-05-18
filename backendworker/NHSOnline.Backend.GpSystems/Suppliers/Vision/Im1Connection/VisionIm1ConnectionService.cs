@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
             {
                 var visionConnectionToken = connectionToken.DeserializeJson<VisionConnectionToken>();
 
-                var getConfigurationReply = await _visionClient.GetConfiguration(visionConnectionToken, odsCode);
+                var getConfigurationReply = await _visionClient.GetConfigurationV2(visionConnectionToken, odsCode);
 
                 if (getConfigurationReply.HasErrorResponse)
                 {
@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
             {
                 _logger.LogCritical("Vision verification returned unauthorised response");
 
-                if (ex.ApiResponse is VisionPfsApiObjectResponse<PatientConfigurationResponse> configResponse)
+                if (ex.ApiResponse is VisionDirectServicesApiObjectResponse<PatientConfigurationResponse> configResponse)
                 {
                     return VisionIm1VerifyErrorMapper.Map(configResponse, _logger);
                 }
@@ -140,7 +140,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
             {
                 return cachedConnectionToken;
             }
-            
+
             return await CreateIm1ConnectionToken(request, getCachedStep);
         }
 
@@ -199,11 +199,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
             return connectionToken;
         }
 
-        private async Task<ProcessResult<VisionPfsApiObjectResponse<PatientConfigurationResponse>, Im1ConnectionRegisterResult>> GetConfiguration(
+        private async Task<ProcessResult<VisionDirectServicesApiObjectResponse<PatientConfigurationResponse>, Im1ConnectionRegisterResult>> GetConfiguration(
             VisionConnectionToken connectionToken,
             string odsCode)
         {
-            var configResponse = await _visionClient.GetConfiguration(connectionToken, odsCode);
+            var configResponse = await _visionClient.GetConfigurationV2(connectionToken, odsCode);
 
             if (configResponse.HasErrorResponse)
             {
@@ -215,8 +215,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                 else
                 {
                     _logger.LogError("Error occurred when trying to obtain nhs number from get configuration. " +
-                                     $"Error Code: {configResponse.RawResponse.Body.VisionResponse.ServiceHeader.Outcome.Error.Code}. " +
-                                     $"Error description: {configResponse.RawResponse.Body.VisionResponse.ServiceHeader.Outcome.Error.Description}.");
+                                     $"Error Code: {configResponse.ErrorText}. " +
+                                     $"Error description: {configResponse.ErrorDescription}.");
                     _logger.LogVisionErrorResponse(configResponse);
                 }
 
@@ -228,7 +228,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
 
         private CreateIm1ConnectionResponse CreatePatientIm1ConnectionResponse(
             PatientIm1ConnectionRequest request,
-            VisionPfsApiObjectResponse<PatientConfigurationResponse> configResponse,
+            VisionDirectServicesApiObjectResponse<PatientConfigurationResponse> configResponse,
             VisionConnectionToken connectionToken)
         {
             var nhsNumbers = configResponse.Body.Configuration.ExtractNhsNumbers();

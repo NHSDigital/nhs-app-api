@@ -33,25 +33,57 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             {
                 throw new ArgumentNullException(nameof(response));
             }
-            
+
             var visionErrorMessage = response.ErrorMessage;
             var statusCode = (int)response.StatusCode;
 
             if (response.IsInvalidRequestError)
             {
-                return keyAndMessageTo.Map(logger, 
-                    $"{statusCode}{VisionApiFaultCodes.InvalidRequest}", 
+                return keyAndMessageTo.Map(logger,
+                    $"{statusCode}{VisionApiFaultCodes.InvalidRequest}",
                     "Vision Im1Connection error of type 'Invalid Request'.");
             }
-            
+
             if (response.IsInvalidSecurityHeaderError)
             {
-                return keyAndMessageTo.Map(logger, 
-                    $"{statusCode}{VisionApiFaultCodes.InvalidSecurity}", 
+                return keyAndMessageTo.Map(logger,
+                    $"{statusCode}{VisionApiFaultCodes.InvalidSecurity}",
                     "Vision Im1Connection error of type 'Invalid Security Error'.");
             }
-            
+
             var visionErrorCode = response.ErrorCode;
+            var key = $"{statusCode}{visionErrorCode}";
+            return keyAndMessageTo.Map(logger, key, visionErrorMessage);
+        }
+
+        public static TEnum? Map<TResponse, TEnum>(ILogger logger,
+            VisionDirectServicesApiObjectResponse<TResponse> response,
+            KeyAndMessageToEnumMapper<TEnum> keyAndMessageTo) where TEnum : struct
+        {
+            logger.LogVisionErrorResponse(response);
+            if (response == null)
+            {
+                throw new ArgumentNullException(nameof(response));
+            }
+
+            var visionErrorMessage = response.ErrorText;
+            var statusCode = (int)response.StatusCode;
+
+            if (response.IsInvalidRequestError)
+            {
+                return keyAndMessageTo.Map(logger,
+                    $"{statusCode}{VisionApiFaultCodes.InvalidRequest}",
+                    "Vision Im1Connection error of type 'Invalid Request'.");
+            }
+
+            if (response.IsInvalidSecurityHeaderError)
+            {
+                return keyAndMessageTo.Map(logger,
+                    $"{statusCode}{VisionApiFaultCodes.InvalidSecurity}",
+                    "Vision Im1Connection error of type 'Invalid Security Error'.");
+            }
+
+            var visionErrorCode = response.ErrorText;
             var key = $"{statusCode}{visionErrorCode}";
             return keyAndMessageTo.Map(logger, key, visionErrorMessage);
         }

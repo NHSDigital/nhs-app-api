@@ -41,10 +41,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
 
                 var visionConnectionToken = connectionToken.DeserializeJson<VisionConnectionToken>();
 
-                var response = await _visionClient.GetConfiguration(visionConnectionToken, odsCode);
+                var response = await _visionClient.GetConfigurationV2(visionConnectionToken, odsCode);
 
                 if (response.HasErrorResponse)
                 {
+                    _logger.LogError($"Vision system encountered an error: {response.ErrorForLogging}");
                     return GetCorrectErrorResult(response);
                 }
 
@@ -89,7 +90,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
             }
             catch (ApiResponseGpSystemHttpRequestException ex)
             {
-                if (ex.ApiResponse is VisionPfsApiObjectResponse<PatientConfigurationResponse> configResponse)
+                if (ex.ApiResponse is VisionDirectServicesApiObjectResponse<PatientConfigurationResponse> configResponse)
                 {
                     return GetCorrectErrorResult(configResponse);
                 }
@@ -109,7 +110,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
             }
         }
 
-        private static List<string> GetLocationIds(VisionPfsApiObjectResponse<PatientConfigurationResponse> response) =>
+        private static List<string> GetLocationIds(VisionDirectServicesApiObjectResponse<PatientConfigurationResponse> response) =>
             response.Body.Configuration.References?.Locations != null
                 ? response.Body.Configuration.References.Locations.Select(l => l.Id).ToList()
                 : new List<string>();
@@ -127,7 +128,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
             throw new System.NotImplementedException();
         }
 
-        private GpSessionCreateResult GetCorrectErrorResult<T>(VisionPfsApiObjectResponse<T> response)
+        private GpSessionCreateResult GetCorrectErrorResult<T>(VisionDirectServicesApiObjectResponse<T> response)
         {
             if (response.IsInvalidRequestError)
             {

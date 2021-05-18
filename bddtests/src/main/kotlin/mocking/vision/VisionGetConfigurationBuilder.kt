@@ -2,14 +2,14 @@ package mocking.vision
 
 import mocking.data.appointments.AppointmentSessionVariableKeys
 import mocking.models.Mapping
-import mocking.vision.VisionConstants.getVisionResponse
-import mocking.vision.VisionErrorResponses.getInvalidRequestError
-import mocking.vision.VisionErrorResponses.getInvalidUserCredentialsError
-import mocking.vision.VisionErrorResponses.getUnknownError
-import mocking.vision.VisionErrorResponses.getConnectionToExternalServiceFailedError
-import mocking.vision.VisionErrorResponses.getPatientLockedError
-import mocking.vision.VisionErrorResponses.getRegistrationIncomplete
-import mocking.vision.VisionErrorResponses.securityHeaderErrorResponse
+import mocking.vision.VisionConstants.getVisionDirectServicesResponse
+import mocking.vision.VisionDirectServicesErrorResponses.getInvalidRequestError
+import mocking.vision.VisionDirectServicesErrorResponses.getInvalidUserCredentialsError
+import mocking.vision.VisionDirectServicesErrorResponses.getUnknownError
+import mocking.vision.VisionDirectServicesErrorResponses.getConnectionToExternalServiceFailedError
+import mocking.vision.VisionDirectServicesErrorResponses.getMockedError
+import mocking.vision.VisionDirectServicesErrorResponses.getPatientLockedError
+import mocking.vision.VisionDirectServicesErrorResponses.getRegistrationIncomplete
 import mocking.vision.models.Configuration
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
@@ -21,28 +21,23 @@ import javax.xml.bind.JAXBContext
 import javax.xml.bind.Marshaller
 
 class VisionGetConfigurationBuilder(var userSession: VisionUserSession,
-                                    var serviceDefinition: ServiceDefinition) : VisionMappingBuilder("POST") {
+                                    var serviceDefinition: ServiceDefinition) :
+    VisionDirectServicesMappingBuilder(orgId = userSession.odsCode, path = "configuration") {
 
     init {
-        val contentTypeHeader = "content-type"
-        val contentTypeValue = "text/xml; charset=UTF-8"
-
         requestBuilder
-                .andHeader(contentTypeHeader, contentTypeValue)
-                .andBody(userSession.rosuAccountId, "contains")
-                .andBody(userSession.apiKey, "contains")
-                .andBody(userSession.odsCode, "contains")
-                .andBody(userSession.accountId, "contains")
-                .andBody(userSession.provider, "contains")
-                .andBody(serviceDefinition.name, "contains")
+            .andBody("<vision:rosuAccountId>${userSession.rosuAccountId}</vision:rosuAccountId>", "contains")
+            .andBody("<vision:apiKey>${userSession.apiKey}</vision:apiKey>", "contains")
+            .andBody("<vision:provider>${userSession.provider}</vision:provider>", "contains")
+            .andBody("<vision:accountId>${userSession.accountId}</vision:accountId>", "contains")
     }
 
     fun respondWithSuccess(configuration: Configuration): Mapping {
         if (Serenity.hasASessionVariableCalled(AppointmentSessionVariableKeys.EXPECTED_GUIDANCE_CONTENT_KEY)) {
             configuration.appointments.welcomeText = WelcomeText(
-                    message = "<![CDATA[<HTML><BODY>" +
+                    message = "<HTML><BODY>" +
                             Serenity.sessionVariableCalled<String>(
-                                    AppointmentSessionVariableKeys.EXPECTED_GUIDANCE_CONTENT_KEY) + "</BODY></HTML>]]>")
+                                    AppointmentSessionVariableKeys.EXPECTED_GUIDANCE_CONTENT_KEY) + "</BODY></HTML>")
         }
         val jaxbContext = JAXBContext.newInstance(Configuration::class.java)
         val marshaller = jaxbContext.createMarshaller()
@@ -54,60 +49,49 @@ class VisionGetConfigurationBuilder(var userSession: VisionUserSession,
         }
 
         return respondWith(HttpStatus.SC_OK) {
-            andXmlBody(getVisionResponse(stringWriter.toString(), serviceDefinition)).build()
+            andXmlBody(getVisionDirectServicesResponse(stringWriter.toString(), serviceDefinition)).build()
         }
     }
 
     fun respondWithInvalidRequest(): Mapping {
-        return respondWith(HttpStatus.SC_OK) {
+        return respondWith(HttpStatus.SC_BAD_REQUEST) {
             andXmlBody(getInvalidRequestError(serviceDefinition)).build()
         }
     }
 
-    fun respondWithSecurityHeaderError(): Mapping {
-        return respondWith(HttpStatus.SC_OK) {
-            andXmlBody(securityHeaderErrorResponse).build()
-        }
-    }
-
     fun respondWithUnknownError(): Mapping {
-        return respondWith(HttpStatus.SC_OK) {
+        return respondWith(HttpStatus.SC_BAD_REQUEST) {
             andXmlBody(getUnknownError(serviceDefinition)).build()
         }
     }
 
     fun respondWithRecordCurrentlyUnavailableError(): Mapping {
-        return respondWith(HttpStatus.SC_OK) {
+        return respondWith(HttpStatus.SC_BAD_REQUEST) {
             andXmlBody(getPatientLockedError(serviceDefinition)).build()
         }
     }
 
     fun respondWithError(httpStatusCode: Int, errorCode: String, message: String?): Mapping {
         return respondWith(httpStatusCode) {
-            andXmlBody(
-                    VisionErrorResponses.getMockedError(serviceDefinition, errorCode,
-                            message ?: "Mocked Error")).build()
+            andXmlBody(getMockedError(serviceDefinition, errorCode, message ?: "Mocked Error")).build()
         }
     }
 
     fun respondWithInvalidUserCredentials(): Mapping {
-        return respondWith(HttpStatus.SC_OK) {
+        return respondWith(HttpStatus.SC_BAD_REQUEST) {
             andXmlBody(getInvalidUserCredentialsError(serviceDefinition)).build()
         }
     }
 
     fun respondWithConnectionToExternalServiceFailed(): Mapping {
-        return respondWith(HttpStatus.SC_OK) {
+        return respondWith(HttpStatus.SC_BAD_REQUEST) {
             andXmlBody(getConnectionToExternalServiceFailedError(serviceDefinition)).build()
         }
     }
 
     fun respondWithRegistrationIncomplete(): Mapping {
-        return respondWith(HttpStatus.SC_OK) {
+        return respondWith(HttpStatus.SC_BAD_REQUEST) {
             andXmlBody(getRegistrationIncomplete(serviceDefinition)).build()
         }
     }
 }
-
-
-

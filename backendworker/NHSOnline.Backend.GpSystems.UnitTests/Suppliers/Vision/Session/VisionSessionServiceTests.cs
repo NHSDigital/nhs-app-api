@@ -53,39 +53,33 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
             var locations = _fixture.CreateMany<Location>().ToList();
 
             _mockVisionClient.Setup(x =>
-                    x.GetConfiguration(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
+                    x.GetConfigurationV2(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(
-                    new VisionPfsApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
+                    new VisionDirectServicesApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
                     {
-                        RawResponse = new VisionResponseEnvelope<PatientConfigurationResponse>
+                        RawResponse = new VisionResponse<PatientConfigurationResponse>
                         {
-                            Body = new VisionResponseBody<PatientConfigurationResponse>
+                            ServiceContent = new PatientConfigurationResponse
                             {
-                                VisionResponse = new VisionResponse<PatientConfigurationResponse>
+                                Configuration = new PatientConfiguration
                                 {
-                                    ServiceContent = new PatientConfigurationResponse
+                                    Account = new Account
                                     {
-                                        Configuration = new PatientConfiguration
-                                        {
-                                            Account = new Account
-                                            {
-                                                Name = accountName,
-                                                PatientNumbers = new List<PatientNumber> {patientNumber},
-                                                PatientId = patientId 
-                                            },
-                                            Prescriptions = new PrescriptionsConfiguration
-                                            {
-                                                RepeatEnabled = true
-                                            },
-                                            Appointments = new AppointmentsConfiguration
-                                            {
-                                                BookingEnabled = false
-                                            },
-                                            References = new PatientReferences
-                                            {
-                                                Locations = locations
-                                            }
-                                        }
+                                        Name = accountName,
+                                        PatientNumbers = new List<PatientNumber> { patientNumber },
+                                        PatientId = patientId
+                                    },
+                                    Prescriptions = new PrescriptionsConfiguration
+                                    {
+                                        RepeatEnabled = true
+                                    },
+                                    Appointments = new AppointmentsConfiguration
+                                    {
+                                        BookingEnabled = false
+                                    },
+                                    References = new PatientReferences
+                                    {
+                                        Locations = locations
                                     }
                                 }
                             }
@@ -104,7 +98,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
                 IsAppointmentsEnabled = false,
                 LocationIds = locations.Select(l => l.Id).ToList()
             });
-            
+
             var systemUnderTest = CreateVisionSessionService();
 
             // Act
@@ -112,7 +106,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
 
             // Assert
             _mockVisionClient.VerifyAll();
-            
+
             result.Should().BeAssignableTo<GpSessionCreateResult.Success>().Subject
                 .Should().BeEquivalentTo(expectedResult);
         }
@@ -120,28 +114,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
         [TestMethod]
         public async Task Create_InvalidRequest_ReturnsBadRequestResult()
         {
-            // Arrange            
+            // Arrange
             _mockVisionClient.Setup(x =>
-                    x.GetConfiguration(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
+                    x.GetConfigurationV2(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(
-                    new VisionPfsApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
+                    new VisionDirectServicesApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.BadRequest)
                     {
-                        RawResponse = new VisionResponseEnvelope<PatientConfigurationResponse>
+                        ErrorDetail = new Detail
                         {
-                            Body = new VisionResponseBody<PatientConfigurationResponse>
+                            VisionFault = new VisionFault
                             {
-                                Fault = new Fault
+                                Error = new FaultError
                                 {
-                                    Detail = new Detail
-                                    {
-                                        VisionFault = new VisionFault
-                                        {
-                                            Error = new FaultError
-                                            {
-                                                Category = "INVALID_REQUEST",
-                                            },
-                                        },
-                                    },
+                                    Category = "INVALID_REQUEST",
                                 },
                             },
                         },
@@ -155,36 +140,26 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
             // Assert
             result.Should().BeAssignableTo<GpSessionCreateResult.BadRequest>();
         }
-        
+
         [TestMethod]
         public async Task Create_InvalidUserCredentials_ReturnsForbiddenResult()
         {
             // Arrange
             _mockVisionClient.Setup(x =>
-                    x.GetConfiguration(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
+                    x.GetConfigurationV2(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(
-                    new VisionPfsApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
+                    new VisionDirectServicesApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.BadRequest)
                     {
-                        RawResponse = new VisionResponseEnvelope<PatientConfigurationResponse>
+                        ErrorDetail = new Detail
                         {
-                            Body = new VisionResponseBody<PatientConfigurationResponse>
+                            VisionFault = new VisionFault
                             {
-                                VisionResponse = new VisionResponse<PatientConfigurationResponse>
+                                Error = new FaultError
                                 {
-                                    ServiceHeader = new ServiceHeaderResponse
-                                    {
-                                        Outcome = new Outcome
-                                        {
-                                            Successful = "false",
-                                            Error = new OutcomeError
-                                            {
-                                                Code = "-30",
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                                    Text = VisionApiErrorCodes.InvalidUserCredentials
+                                },
+                            },
+                        },
                     }));
 
             var systemUnderTest = CreateVisionSessionService();
@@ -197,61 +172,21 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
         }
 
         [TestMethod]
-        public async Task Create_InvalidSecurityHeader_ReturnsInternalServerErrorResult()
-        {
-            // Arrange
-            _mockVisionClient.Setup(x =>
-                    x.GetConfiguration(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(
-                    new VisionPfsApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
-                    {
-                        RawResponse = new VisionResponseEnvelope<PatientConfigurationResponse>
-                        {
-                            Body = new VisionResponseBody<PatientConfigurationResponse>
-                            {
-                                Fault = new Fault
-                                {
-                                    FaultCode = "ns1:InvalidSecurity",
-                                },
-                            },
-                        },
-                    }));
-
-            var systemUnderTest = CreateVisionSessionService();
-
-            // Act
-            var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber);
-
-            // Assert
-            result.Should().BeAssignableTo<GpSessionCreateResult.InternalServerError>();
-        }
-
-        [TestMethod]
         public async Task Create_UnknownError_ReturnsBadGatewayResult()
         {
             // Arrange
             _mockVisionClient.Setup(x =>
-                    x.GetConfiguration(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
+                    x.GetConfigurationV2(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(
-                    new VisionPfsApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
+                    new VisionDirectServicesApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
                     {
-                        RawResponse = new VisionResponseEnvelope<PatientConfigurationResponse>
+                        ErrorDetail = new Detail
                         {
-                            Body = new VisionResponseBody<PatientConfigurationResponse>
+                            VisionFault = new VisionFault
                             {
-                                VisionResponse = new VisionResponse<PatientConfigurationResponse>
+                                Error = new FaultError
                                 {
-                                    ServiceHeader = new ServiceHeaderResponse
-                                    {
-                                        Outcome = new Outcome
-                                        {
-                                            Successful = "false",
-                                            Error = new OutcomeError
-                                            {
-                                                Code = "-100",
-                                            },
-                                        },
-                                    },
+                                    Text = VisionApiErrorCodes.UnknownError
                                 },
                             },
                         },
@@ -271,16 +206,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
         {
             // Arrange
             _mockVisionClient.Setup(x =>
-                    x.GetConfiguration(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
+                    x.GetConfigurationV2(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(
-                    new VisionPfsApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
+                    new VisionDirectServicesApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
                     {
-                        RawResponse = new VisionResponseEnvelope<PatientConfigurationResponse>
+                        ErrorDetail = new Detail
                         {
-                            Body = new VisionResponseBody<PatientConfigurationResponse>
+                            VisionFault = new VisionFault
                             {
-                                Fault = new Fault(), // fault but no code
-                            },
+                                Error = new FaultError(),
+                            }
                         },
                     }));
 

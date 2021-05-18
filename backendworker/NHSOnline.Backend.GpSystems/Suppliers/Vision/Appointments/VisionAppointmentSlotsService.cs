@@ -49,9 +49,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
                     dateRange
                 );
 
-                var configTask = _visionClient.GetConfiguration(visionUserSession);
+                var configTask = _visionClient.GetConfigurationV2(visionUserSession);
 
-                VisionPfsApiObjectResponse<PatientConfigurationResponse> configResponse = null;
+                VisionDirectServicesApiObjectResponse<PatientConfigurationResponse> configResponse = null;
 
                 try
                 {
@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
 
         private AppointmentSlotsResult InterpretAppointmentsGetResponse(
             VisionPfsApiObjectResponse<AvailableAppointmentsResponse> slotsResponse,
-            VisionPfsApiObjectResponse<PatientConfigurationResponse> configResponse,
+            VisionDirectServicesApiObjectResponse<PatientConfigurationResponse> configResponse,
             VisionUserSession userSession)
         {
             if (slotsResponse.IsAccessDeniedError)

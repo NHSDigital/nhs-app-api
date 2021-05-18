@@ -25,16 +25,25 @@
     <Content Include="Suppliers\Vision\Resources\mycert.pfx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Suppliers\Vision\TestData\invalidSecurityHeaderResponse.xml">
+    <Content Include="Suppliers\Vision\TestData\DirectServices\invalidUserCredentialsResponse.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Suppliers\Vision\TestData\invalidUserCredentialsResponse.xml">
+    <Content Include="Suppliers\Vision\TestData\DirectServices\unknownErrorResponse.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Suppliers\Vision\TestData\requestWasInvalidResponse.xml">
+    <Content Include="Suppliers\Vision\TestData\DirectServices\validGetConfigurationResponse.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Suppliers\Vision\TestData\unknownErrorResponse.xml">
+    <Content Include="Suppliers\Vision\TestData\PatientFacingServices\invalidSecurityHeaderResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Suppliers\Vision\TestData\PatientFacingServices\invalidUserCredentialsResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Suppliers\Vision\TestData\PatientFacingServices\requestWasInvalidResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Suppliers\Vision\TestData\PatientFacingServices\unknownErrorResponse.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

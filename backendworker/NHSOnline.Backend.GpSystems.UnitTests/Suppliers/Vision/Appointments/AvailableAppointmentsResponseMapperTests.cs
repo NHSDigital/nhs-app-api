@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         private VisionUserSession _userSession;
         private AvailableAppointmentsResponse _slotsResponse;
         private PatientConfigurationResponse _configResponse;
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             _slotsResponse = _fixture.Create<AvailableAppointmentsResponse>();
             _configResponse = _fixture.Create<PatientConfigurationResponse>();
         }
-        
+
         [TestMethod]
         public void Map_ReturnsAppointmentSlots()
         {
@@ -66,7 +66,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             {
                 new AppointmentsMessage
                 {
-                    Text = $"<html><body>{bookingGuidance}</body></html>"
+                    Text = "<HTML><HEAD>" +
+                    "<META name=GENERATOR content=\"MSHTML 11.00.9600.19597\"></HEAD>" +
+                    "<BODY>" +
+                    $"<P>{bookingGuidance}</P>" +
+                    "</BODY></HTML>"
                 }
             };
             // Act

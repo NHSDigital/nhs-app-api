@@ -14,21 +14,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             PatientConfigurationResponse patientConfigurationResponse,
             VisionUserSession userSession);
     }
-    
+
     public class AvailableAppointmentsResponseMapper : IAvailableAppointmentsResponseMapper
     {
         private readonly IAvailableAppointmentsMapper _availableAppointmentMapper;
-        
+
         public AvailableAppointmentsResponseMapper(IAvailableAppointmentsMapper availableAppointmentMapper)
         {
             _availableAppointmentMapper = availableAppointmentMapper;
         }
-        
+
         public AppointmentSlotsResponse Map(AvailableAppointmentsResponse availableAppointmentsResponse,
             PatientConfigurationResponse patientConfigurationResponse,
             VisionUserSession userSession)
         {
-            var slots =_availableAppointmentMapper.Map(availableAppointmentsResponse.Appointments);
+            var slots = _availableAppointmentMapper.Map(availableAppointmentsResponse.Appointments);
 
             return new AppointmentSlotsResponse
             {
@@ -45,8 +45,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             {
                 return null;
             }
-            var htmlDoc = new HtmlDocument();
 
+            var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(welcomeText.First().Text ?? string.Empty);
 
             var bodyText = htmlDoc.DocumentNode.SelectSingleNode("//body")?.InnerText ?? string.Empty;

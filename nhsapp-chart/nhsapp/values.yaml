@@ -43,10 +43,10 @@ tppApplicationName: NhsApp
 tppApplicationVersion: 1.0
 tppApplicationDeviceType: NhsApp
 
-visionHostname: vs002-test.inps.co.uk
+visionHostname: viab-ute.inps.co.uk
 visionPort: 443
 visionProtocol: https
-visionIPTrust: "185.45.162.110/32"
+visionIPTrust: "52.211.133.0/32"
 visionUsername: "vps-nhson001"
 visionPfsPath: "PatientFacingServices"
 visionSenderUsername: "Username123123asdas"

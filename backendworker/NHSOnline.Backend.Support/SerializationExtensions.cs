@@ -30,22 +30,28 @@ namespace NHSOnline.Backend.Support
             return JsonConvert.DeserializeObject<T>(json);
         }
 
-        public static string SerializeXml<T>(this T toXml)
+        public static string SerializeXml<T>(
+            this T toXml,
+            XmlSerializerNamespaces xmlNamespaces = null)
         {
             if (toXml == null)
             {
                 return string.Empty;
             }
 
-            var xmlserializer = new XmlSerializer(typeof(T));
-            var xmlNamespaces = new XmlSerializerNamespaces();
-            xmlNamespaces.Add(string.Empty, string.Empty);
+            var xmlSerializer = new XmlSerializer(typeof(T));
+
+            if (xmlNamespaces == null)
+            {
+                xmlNamespaces = new XmlSerializerNamespaces();
+                xmlNamespaces.Add(string.Empty, string.Empty);
+            }
 
             var stringWriter = new StringWriterWithEncoding(Encoding.UTF8);
 
             using (var writer = XmlWriter.Create(stringWriter))
             {
-                xmlserializer.Serialize(writer, toXml, xmlNamespaces);
+                xmlSerializer.Serialize(writer, toXml, xmlNamespaces);
                 return stringWriter.ToString();
             }
         }

@@ -129,11 +129,6 @@ Feature: Patient Verification Backend
       | VISION    |
       | MICROTEST |
 
-  Scenario: Vision responds with security header error
-    Given Vision responds with a security header error
-    When I verify patient data using the v1 endpoint
-    Then I receive an "Internal server error" error
-
   Scenario: Vision responds with invalid request error
     Given Vision responds with an invalid request error
     When I verify patient data using the v1 endpoint

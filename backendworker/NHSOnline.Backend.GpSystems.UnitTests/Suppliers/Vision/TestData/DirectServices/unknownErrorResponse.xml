@@ -1,0 +1,14 @@
+﻿<detail>
+    <vision:visionFault xmlns:vision="urn:vision" xmlns:mb="urn:messagebus">
+        <vision:serviceDefinition>
+            <vision:name>VOS.GetConfiguration</vision:name>
+            <vision:version>2.4.0</vision:version>
+        </vision:serviceDefinition>
+        <vision:error>
+            <vision:category>FATAL</vision:category>
+            <vision:code>VZZZZ</vision:code>
+            <vision:text>Unknown Error</vision:text>
+            <vision:details>ERROR: invalid input syntax for integer: ""</vision:details>
+        </vision:error>
+    </vision:visionFault>
+</detail>

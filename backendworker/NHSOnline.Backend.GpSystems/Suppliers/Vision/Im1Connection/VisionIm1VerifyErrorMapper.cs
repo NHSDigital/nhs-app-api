@@ -13,12 +13,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                 .AddKeyToEnum("200-15", InternalCode.UserRecordUnavailable)
                 .AddKeyToEnum("200-30", InternalCode.InvalidLinkageDetails)
                 .AddKeyToEnum("200-8", InternalCode.RegistrationIncomplete)
-                // THESE RESPONSES DO NOT HAVE ERROR CODES JUST A FAULT CODE 
+                .AddKeyToEnum("400-100", InternalCode.ConnectionToServiceFailed)
+                .AddKeyToEnum("400-15", InternalCode.UserRecordUnavailable)
+                .AddKeyToEnum("400-30", InternalCode.InvalidLinkageDetails)
+                .AddKeyToEnum("400-8", InternalCode.RegistrationIncomplete)
+                // THESE RESPONSES DO NOT HAVE ERROR CODES JUST A FAULT CODE
                 .AddKeyToEnum("200INVALID_REQUEST", InternalCode.InvalidRequest)
-                .AddKeyToEnum("200InvalidSecurity", InternalCode.InvalidSecurity);
+                .AddKeyToEnum("200InvalidSecurity", InternalCode.InvalidSecurity)
+                .AddKeyToEnum("400INVALID_REQUEST", InternalCode.InvalidRequest)
+                .AddKeyToEnum("400InvalidSecurity", InternalCode.InvalidSecurity);
 
         public static Im1ConnectionVerifyResult Map(
-            VisionPfsApiObjectResponse<PatientConfigurationResponse> response, ILogger<VisionIm1ConnectionService> logger)
+            VisionDirectServicesApiObjectResponse<PatientConfigurationResponse> response, ILogger<VisionIm1ConnectionService> logger)
         {
             var mappedValue = VisionErrorMapper.Map(logger, response, KeyAndMessageToError);
 

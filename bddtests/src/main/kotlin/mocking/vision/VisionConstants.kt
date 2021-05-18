@@ -1,5 +1,6 @@
 package mocking.vision
 
+import mocking.vision.helpers.VisionConstantsHelper.Companion.getBaseVisionDirectServicesResponse
 import mocking.vision.helpers.VisionConstantsHelper.Companion.getBaseVisionResponse
 import mocking.vision.helpers.VisionConstantsHelper.Companion.setContextOnServiceContent
 import mocking.vision.models.appointments.AvailableAppointmentsResponse
@@ -9,7 +10,7 @@ object VisionConstants {
 
     // Service names and versions
     const val configurationName: String = "VOS.GetConfiguration"
-    const val configurationVersion: String = "2.3.0"
+    const val configurationVersion: String = "2.4.0"
 
     const val prescriptionHistory: String = "VONREP.GetHistory"
     const val prescriptionHistoryVersion: String = "2.0.0"
@@ -89,15 +90,23 @@ object VisionConstants {
     var linkAccountVersion: String = "1.0.0"
 
     // Vision Response
-    fun getVisionResponse(serviceContent: String, serviceDefinition: mocking.vision.models.ServiceDefinition):
-            String {
-
-        val response = serviceContent
-                .replace("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>", "")
-                .replace("</", "</vision:")
-                .replace("<", "<vision:")
-                .replace("vision:/", "/")
-
+    fun getVisionResponse(serviceContent: String, serviceDefinition: mocking.vision.models.ServiceDefinition): String {
+        val response = fixUpVisionXmlTags(serviceContent)
         return getBaseVisionResponse(response, serviceDefinition)
+    }
+
+    fun getVisionDirectServicesResponse(
+        serviceContent: String,
+        serviceDefinition: mocking.vision.models.ServiceDefinition): String {
+        val response = fixUpVisionXmlTags(serviceContent)
+        return getBaseVisionDirectServicesResponse(response, serviceDefinition)
+    }
+
+    private fun fixUpVisionXmlTags(serviceContent: String): String {
+        return serviceContent
+            .replace("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>", "")
+            .replace("</", "</vision:")
+            .replace("<", "<vision:")
+            .replace("vision:/", "/")
     }
 }

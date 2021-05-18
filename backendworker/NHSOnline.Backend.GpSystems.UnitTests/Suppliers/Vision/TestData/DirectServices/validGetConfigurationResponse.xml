@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<vision:visionResponse xmlns:vision="urn:vision">
+    <vision:serviceDefinition>
+        <vision:name>VOS.GetConfiguration</vision:name>
+        <vision:version>2.4.0</vision:version>
+    </vision:serviceDefinition>
+    <vision:serviceContent>
+        <vision:configuration xmlns:mb="urn:messagebus">
+            <vision:practice dlm="780">
+                <vision:welcomeText>
+                    <vision:message language="en_UK">&lt;HTML&gt;&lt;HEAD&gt;
+                        &lt;META name=GENERATOR content="MSHTML 11.00.9600.19597"&gt;&lt;/HEAD&gt;
+                        &lt;BODY&gt;
+                        &lt;P&gt;This is the practice welcome message :)&lt;/P&gt;&lt;/BODY&gt;&lt;/HTML&gt;</vision:message>
+                    <vision:message language="cy"/>
+                </vision:welcomeText>
+                <vision:securityQuestions>
+                    <vision:securityQuestion id="SQU001">What is your mother's maiden name?</vision:securityQuestion>
+                    <vision:securityQuestion id="SQU002">What was your childhood nickname?</vision:securityQuestion>
+                    <vision:securityQuestion id="SQU003">What is the name of your first school?</vision:securityQuestion>
+                </vision:securityQuestions>
+            </vision:practice>
+            <vision:account>
+                <vision:patientId>4301</vision:patientId>
+                <vision:name>Mrs TestNameFirst TestNameSecond</vision:name>
+                <vision:lastLogin>2021-05-18T11:47:38</vision:lastLogin>
+                <vision:emailAddress/>
+                <vision:changePassword>false</vision:changePassword>
+                <vision:patientNumber>
+                    <vision:numberType>NHS</vision:numberType>
+                    <vision:number>9435411053</vision:number>
+                </vision:patientNumber>
+                <vision:isOsu>false</vision:isOsu>
+            </vision:account>
+            <vision:appointments>
+                <vision:enabled>true</vision:enabled>
+                <vision:welcomeText>
+                    <vision:message language="en_UK">&lt;HTML&gt;&lt;HEAD&gt;
+                        &lt;META name=GENERATOR content="MSHTML 11.00.9600.19597"&gt;&lt;/HEAD&gt;
+                        &lt;BODY&gt;
+                        &lt;P&gt;Please choose the appointment type which is most suitable for you.&lt;/P&gt;
+                        &lt;P&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&lt;/P&gt;&lt;/BODY&gt;&lt;/HTML&gt;</vision:message>
+                    <vision:message language="cy"/>
+                </vision:welcomeText>
+            </vision:appointments>
+            <vision:prescriptions>
+                <vision:repeat_enabled>true</vision:repeat_enabled>
+                <vision:acute_enabled>true</vision:acute_enabled>
+                <vision:eps_nominations>
+                    <vision:view_enabled>true</vision:view_enabled>
+                    <vision:update_enabled>true</vision:update_enabled>
+                </vision:eps_nominations>
+                <vision:welcomeText>
+                    <vision:message language="en_UK">&lt;HTML&gt;&lt;HEAD&gt;
+                        &lt;META name=GENERATOR content="MSHTML 11.00.9600.19597"&gt;&lt;/HEAD&gt;
+                        &lt;BODY&gt;
+                        &lt;P&gt;Your prescription will be ready in 3 days.&lt;/P&gt;&lt;/BODY&gt;&lt;/HTML&gt;</vision:message>
+                    <vision:message language="cy"/>
+                </vision:welcomeText>
+                <vision:historyOffset>
+                    <vision:months>6</vision:months>
+                </vision:historyOffset>
+            </vision:prescriptions>
+            <vision:recordAccess>
+                <vision:summary>
+                    <vision:enabled>true</vision:enabled>
+                </vision:summary>
+                <vision:dcr enabled="true">
+                    <vision:data_enabled type="RiskAndWarnings">true</vision:data_enabled>
+                    <vision:data_enabled type="Procedures">true</vision:data_enabled>
+                    <vision:data_enabled type="Problems">true</vision:data_enabled>
+                    <vision:data_enabled type="Medications">true</vision:data_enabled>
+                    <vision:data_enabled type="Investigations">true</vision:data_enabled>
+                    <vision:data_enabled type="ExamFindings">true</vision:data_enabled>
+                    <vision:data_enabled type="EventHistory">true</vision:data_enabled>
+                    <vision:data_enabled type="Diagnosis">true</vision:data_enabled>
+                </vision:dcr>
+            </vision:recordAccess>
+            <vision:message>
+                <vision:enabled>true</vision:enabled>
+            </vision:message>
+            <vision:demographics>
+                <vision:view_enabled>true</vision:view_enabled>
+                <vision:update_enabled>true</vision:update_enabled>
+            </vision:demographics>
+            <vision:references>
+                <vision:owner id="HGEO">
+                    <vision:name>Hugh Geoghegan</vision:name>
+                    <vision:staffId>8</vision:staffId>
+                </vision:owner>
+                <vision:staff id="8">
+                    <vision:gender id="SEX004">Unknown</vision:gender>
+                </vision:staff>
+                <vision:owner id="TEST3">
+                    <vision:name>Test User 3</vision:name>
+                    <vision:staffId>16</vision:staffId>
+                </vision:owner>
+            </vision:references>
+        </vision:configuration>
+    </vision:serviceContent>
+</vision:visionResponse>

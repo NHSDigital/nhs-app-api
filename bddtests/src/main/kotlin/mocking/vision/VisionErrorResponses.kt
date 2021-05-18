@@ -5,46 +5,7 @@ import mocking.vision.models.error.VisionErrorTypes
 
 object VisionErrorResponses {
 
-    fun getInvalidRequestError(serviceDefinition: ServiceDefinition): String {
-
-        return "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
-                "   <soap:Header>\n" +
-                "   </soap:Header>\n" +
-                "   <soap:Body>\n" +
-                "      <soap:Fault xmlns:vision=\"urn:vision\">\n" +
-                "         <faultcode>soap:Server</faultcode>\n" +
-                "         <faultstring>-90001</faultstring>\n" +
-                "         <detail>\n" +
-                "            <vision:visionFault>\n" +
-                "               <vision:serviceDefinition>\n" +
-                "                  <vision:name>${serviceDefinition.name}</vision:name>\n" +
-                "                  <vision:version>${serviceDefinition.version}</vision:version>\n" +
-                "               </vision:serviceDefinition>\n" +
-                "               <vision:error>\n" +
-                "                  <vision:category>INVALID_REQUEST</vision:category>\n" +
-                "                  <vision:code>-90001</vision:code>\n" +
-                "                  <vision:text>Request does not match expected format</vision:text>\n" +
-                "               </vision:error>\n" +
-                "            </vision:visionFault>\n" +
-                "         </detail>\n" +
-                "      </soap:Fault>\n" +
-                "   </soap:Body>\n" +
-                "</soap:Envelope>"
-    }
-
-    val securityHeaderErrorResponse =
-            "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
-                    "   <soap:Body>\n" +
-                    "      <soap:Fault>\n" +
-                    "         <faultcode xmlns:ns1=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-" +
-                    "wssecurity-secext-1.0.xsd\">ns1:InvalidSecurity</faultcode>\n" +
-                    "         <faultstring>An error was discovered processing the &lt;wsse:Security> " +
-                    "header</faultstring>\n" +
-                    "      </soap:Fault>\n" +
-                    "   </soap:Body>\n" +
-                    "</soap:Envelope>"
-
-        fun getUnknownError(serviceDefinition: ServiceDefinition): String {
+    fun getUnknownError(serviceDefinition: ServiceDefinition): String {
         return getMockedError(
                 serviceDefinition,
                 VisionErrorTypes.GATEWAYUNKNOWNERROR.Code,
@@ -68,14 +29,6 @@ object VisionErrorResponses {
         )
     }
 
-    fun getInvalidUserCredentialsError(serviceDefinition: ServiceDefinition): String {
-        return getMockedError(
-                serviceDefinition,
-                VisionErrorTypes.INVALIDUSERCREDENTIALS.Code,
-                VisionErrorTypes.INVALIDUSERCREDENTIALS.Description
-        )
-    }
-
     fun getInvalidDetailsProvidedError(serviceDefinition: ServiceDefinition): String {
         return getMockedError(
                 serviceDefinition,
@@ -89,14 +42,6 @@ object VisionErrorResponses {
                 serviceDefinition,
                 VisionErrorTypes.INVALIDPARAMETERPROVIDED.Code,
                 VisionErrorTypes.INVALIDPARAMETERPROVIDED.Description
-        )
-    }
-
-    fun getRegistrationIncomplete(serviceDefinition: ServiceDefinition): String {
-        return getMockedError(
-                serviceDefinition,
-                VisionErrorTypes.REGISTRATIONINCOMPLETE.Code,
-                VisionErrorTypes.REGISTRATIONINCOMPLETE.Description
         )
     }
 

@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
         private static readonly Uri ApiUrl = new Uri("http://vision_base_url/", UriKind.Absolute);
         private const string Path = "Suppliers/Vision/Resources/mycert.pfx";
         private const string Passphrase = "password1";
-        private const string VisionTestDataDirectory = "Suppliers/Vision/TestData";
+        private const string VisionTestDataDirectory = "Suppliers/Vision/TestData/PatientFacingServices";
         private const string GetConfigurationServiceDefinitionName = "VOS.GetConfiguration";
         private const string GetEligibleRepeatsServiceDefinitionName = "VONREP.GetEligibleRepeats";
         private const string GetHistoryServiceDefinitionName = "VONREP.GetHistory";

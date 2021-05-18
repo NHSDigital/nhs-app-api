@@ -26,10 +26,10 @@ Feature: Im1 Connection GET V2
       | EMIS      | 403        | 1030   | 403            | 101          | Patient Facing Services API v2 is not enabled at this practice |
       | TPP       | 200        | 6      | 400            | 112          | Problem logging in                                             |
       | TPP       | 200        | 9      | 400            | 112          | Problem logging in                                             |
-      | VISION    | 200        | -100   | 502            | 107          | Connection to external service failed                          |
-      | VISION    | 200        | -15    | 502            | 113          | User record unavailable                                        |
-      | VISION    | 200        | -30    | 400            | 106          | Invalid user credentials                                       |
-      | VISION    | 200        | -8     | 403            | 102          | Registration incomplete                                        |
+      | VISION    | 400        | -100   | 502            | 107          | Connection to external service failed                          |
+      | VISION    | 400        | -15    | 502            | 113          | User record unavailable                                        |
+      | VISION    | 400        | -30    | 400            | 106          | Invalid user credentials                                       |
+      | VISION    | 400        | -8     | 403            | 102          | Registration incomplete                                        |
 
   Scenario Outline: A MICROTEST user verifying their im1 Connection can get a <ExpectedCode> error when demographics fails with a <GPHttpCode> error
     Given I am a MICROTEST user and verifying my im1 connection returns '<GPHttpCode>' '<GPCode>' '<Message>'

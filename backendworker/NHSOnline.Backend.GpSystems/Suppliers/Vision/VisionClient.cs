@@ -15,15 +15,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
     {
         private readonly IVisionLinkageClient _visionLinkageClient;
         private readonly IVisionPfsClient _visionPfsClient;
+        private readonly IVisionDirectServicesClient _visionDirectServicesClient;
 
         public VisionClient(
             IVisionLinkageClient visionLinkageClient,
-            IVisionPfsClient visionPfsClient)
+            IVisionPfsClient visionPfsClient,
+            IVisionDirectServicesClient visionDirectServicesClient)
         {
             _visionLinkageClient = visionLinkageClient;
             _visionPfsClient = visionPfsClient;
+            _visionDirectServicesClient = visionDirectServicesClient;
         }
-        
+
         public Task<VisionLinkageApiObjectResponse<LinkageKeyGetResponse>> GetLinkageKey(GetLinkageKey getLinkageKey)
         {
             return _visionLinkageClient.GetLinkageKey(getLinkageKey);
@@ -92,6 +95,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         public Task<VisionPfsApiObjectResponse<ServiceContentRegisterResponse>> PostLinkAccount(string odsCode, PatientIm1ConnectionRequest request, string dob)
         {
             return _visionPfsClient.PostLinkAccount(odsCode, request, dob);
+        }
+
+        public async Task<VisionDirectServicesApiObjectResponse<PatientConfigurationResponse>> GetConfigurationV2(VisionConnectionToken token, string odsCode)
+        {
+            return await _visionDirectServicesClient.GetConfigurationV2(token, odsCode);
+        }
+
+        public async Task<VisionDirectServicesApiObjectResponse<PatientConfigurationResponse>> GetConfigurationV2(VisionUserSession userSession)
+        {
+            return await _visionDirectServicesClient.GetConfigurationV2(userSession);
         }
     }
 }

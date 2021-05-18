@@ -7,6 +7,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Models
     {
         [XmlText]
         public string Text { get; set; }
+
         [XmlAttribute(AttributeName = "language")]
         public string Language { get; set; }
     }

@@ -6,11 +6,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Models
     {
         [XmlElement(ElementName = "category", Namespace = "urn:vision")]
         public string Category { get; set; }
-        
+
         [XmlElement(ElementName = "code", Namespace = "urn:vision")]
         public string Code { get; set; }
 
         [XmlElement(ElementName = "text", Namespace = "urn:vision")]
         public string Text { get; set; }
+
+        [XmlElement(ElementName = "details", Namespace = "urn:vision")]
+        public string Details { get; set; }
     }
 }

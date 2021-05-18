@@ -59,5 +59,16 @@ class VisionConstantsHelper {
                     "    </soap:Body>\n" +
                     "</soap:Envelope>"
         }
+
+        fun getBaseVisionDirectServicesResponse(response: String, serviceDefinition: ServiceDefinition): String {
+            return "<vision:visionResponse xmlns:vision=\"urn:vision\">\n" +
+                   "    <vision:serviceDefinition>\n" +
+                   "        <vision:name>${serviceDefinition.name}</vision:name>\n" +
+                   "        <vision:version>${serviceDefinition.version}</vision:version>\n" +
+                   "    </vision:serviceDefinition>\n" +
+                   // putting service content on one line as response can be raw text (avoiding new lines)
+                   "    <vision:serviceContent>" + response + "</vision:serviceContent>" +
+                   "</vision:visionResponse>"
+        }
     }
 }
