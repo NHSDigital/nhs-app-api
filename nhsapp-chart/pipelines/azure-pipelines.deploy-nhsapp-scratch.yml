@@ -49,6 +49,7 @@ parameters:
     - aos
     - sandpit
     - dev10
+    - dev18
     - nhsapp
 - name: imageVersionOverride
   displayName: "Optional image version override (develop or tag)"
