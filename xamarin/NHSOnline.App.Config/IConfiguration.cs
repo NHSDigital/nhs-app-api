@@ -10,6 +10,8 @@ namespace NHSOnline.App.Config
         static IConfiguration Configuration { get; } = new Values.Preview.PreviewConfiguration();
 #elif ENV_ONBOARDING_SANDPIT
         static IConfiguration Configuration { get; } = new Values.OnboardingSandpit.OnboardingSandpitConfiguration();
+#elif ENV_ONBOARDING_AOS
+        static IConfiguration Configuration { get; } = new Values.OnboardingAos.OnboardingAosConfiguration();
 #elif ENV_SCRATCH6
         static IConfiguration Configuration { get; } = new Values.Scratch6.Scratch6Configuration();
 #elif ENV_SCRATCH18

@@ -37,6 +37,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Release|AnyCPU' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingSandpit - Debug|AnyCPU' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingSandpit - Release|AnyCPU' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingAos - Debug|AnyCPU' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingAos - Release|AnyCPU' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch6 - Debug|AnyCPU' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch6 - Release|AnyCPU' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch18 - Debug|AnyCPU' " />
@@ -163,6 +165,7 @@
     <None Include="Properties\BuildConfiguration.env.Staging.props" />
     <None Include="Properties\BuildConfiguration.env.Preview.props" />
     <None Include="Properties\BuildConfiguration.env.OnboardingSandpit.props" />
+    <None Include="Properties\BuildConfiguration.env.OnboardingAos.props" />
     <None Include="Properties\BuildConfiguration.env.Scratch6.props" />
     <None Include="Properties\BuildConfiguration.env.Scratch18.props" />
     <None Include="Properties\BuildConfiguration.env.Scratch19.props" />

@@ -53,6 +53,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch19 - Debug|iPhoneSimulator' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingSandpit - Debug|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingSandpit - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingAos - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingAos - Debug|iPhoneSimulator' " />
   <Import Project="Properties/BuildConfiguration.env.$(Environment).props" />
   <Import Project="Properties/BuildConfiguration.debugmode.$(DebugMode).props" />
   <Import Project="Properties/BuildConfiguration.platform.$(Platform).props" />
@@ -145,6 +147,7 @@
     <None Include="Properties\BuildConfiguration.env.Dev.props" />
     <None Include="Properties\BuildConfiguration.env.Local.props" />
     <None Include="Properties\BuildConfiguration.env.OnboardingSandpit.props" />
+    <None Include="Properties\BuildConfiguration.env.OnboardingAos.props" />
     <None Include="Properties\BuildConfiguration.env.Preview.props" />
     <None Include="Properties\BuildConfiguration.env.Scratch18.props" />
     <None Include="Properties\BuildConfiguration.env.Scratch19.props" />
