@@ -61,7 +61,17 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
             }
         }
 
-        public async Task<BiometricAuthVerifyUserResult> VerifyUser(string reason)
+        private static string BiometricPromptText(VerificationReason verificationReason)
+        {
+            return verificationReason switch
+            {
+                VerificationReason.Login => "Log in with Fingerprint ID",
+                VerificationReason.Registration => "Turn on Fingerprint ID",
+                _ => throw new ArgumentOutOfRangeException(nameof(verificationReason), verificationReason, null)
+            };
+        }
+
+        public async Task<BiometricAuthVerifyUserResult> VerifyUser(VerificationReason verificationReason)
         {
             var signature = Signature.GetInstance("SHA256withECDSA");
             if (signature == null)
@@ -82,7 +92,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
             using var promptInfoBuilder = new BiometricPrompt.PromptInfo.Builder();
             var promptInfo = promptInfoBuilder
                 .SetDescription("Touch the fingerprint sensor on your device")
-                .SetTitle("Turn on Fingerprint ID")
+                .SetTitle(BiometricPromptText(verificationReason))
                 .SetNegativeButtonText("Cancel")
                 .Build();
 

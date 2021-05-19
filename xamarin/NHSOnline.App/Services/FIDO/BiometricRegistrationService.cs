@@ -91,8 +91,7 @@ namespace NHSOnline.App.Services.FIDO
 
         private static async Task<ProcessResult<IBiometricAuthSigner, BiometricRegisterResult>> VerifyUser(IBiometricAuthKey key)
         {
-            // NHSO-13880: Reason messages are only used by iOS and for Touch ID
-            var verifyResult = await key.VerifyUser("Turn on Touch ID").ResumeOnThreadPool();
+            var verifyResult = await key.VerifyUser(VerificationReason.Registration).ResumeOnThreadPool();
 
             var verifyUserResultVisitor = new RegisterVerifyUserResultVisitor();
             return verifyResult.Accept(verifyUserResultVisitor);

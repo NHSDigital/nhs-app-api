@@ -40,13 +40,23 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
             }
         }
 
-        public async Task<BiometricAuthVerifyUserResult> VerifyUser(string reason)
+        private static string BiometricPromptText(VerificationReason verificationReason)
+        {
+            return verificationReason switch
+            {
+                VerificationReason.Login => "Log in with Touch ID",
+                VerificationReason.Registration => "Turn on Touch ID",
+                _ => throw new ArgumentOutOfRangeException(nameof(verificationReason), verificationReason, null)
+            };
+        }
+
+        public async Task<BiometricAuthVerifyUserResult> VerifyUser(VerificationReason verificationReason)
         {
             // Remove "Enter Password" option from prompt when first biometric attempt fails
             _context.LocalizedFallbackTitle = string.Empty;
 
             var (success, error) = await _context
-                .EvaluatePolicyAsync(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, reason)
+                .EvaluatePolicyAsync(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, BiometricPromptText(verificationReason))
                 .ResumeOnThreadPool();
 
             try
