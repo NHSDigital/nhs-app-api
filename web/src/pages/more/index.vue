@@ -5,12 +5,12 @@
                  id="linked-profiles-link"
                  header-tag="h2"
                  :href="linkedProfilesPath"
-                 :text="$t('account.linkedProfiles')"
+                 :text="$t('more.linkedProfiles')"
                  :click-func="navigateToLinkedProfiles"/>
       <menu-item id="'cookies'"
                  header-tag="h2"
                  :href="cookiesPath"
-                 :text="$t('account.cookies.cookies')"
+                 :text="$t('more.cookies.cookies')"
                  :click-func="goToUrl"
                  :click-param="cookiesPath"/>
       <settings data-purpose="setting-section"
@@ -52,7 +52,7 @@
 
 <script>
 /* eslint-disable import/extensions */
-import AboutUs from '@/components/account/AboutUs';
+import AboutUs from '@/components/more/AboutUs';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import CeMarkIcon from '@/components/icons/CeMarkIcon';
 import MenuItem from '@/components/MenuItem';

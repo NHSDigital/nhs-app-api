@@ -1,5 +1,4 @@
 import {
-  ACCOUNT_PATH,
   APPOINTMENTS_PATH,
   INDEX_PATH,
   HEALTH_RECORDS_PATH,
@@ -9,7 +8,6 @@ import {
   MORE_PATH,
 } from '@/router/paths';
 import {
-  ACCOUNT_COOKIES_NAME,
   GP_APPOINTMENTS_NAME,
   APPOINTMENT_BOOKING_SUCCESS_NAME,
   APPOINTMENT_CANCELLING_SUCCESS_NAME,
@@ -35,10 +33,6 @@ import {
  * to be ignored and the default path is to always be used, be sure to set ignoreStore: true
  */
 export default {
-  [ACCOUNT_COOKIES_NAME]: {
-    ignoreStore: true,
-    defaultPath: ACCOUNT_PATH,
-  },
   [MORE_COOKIES_NAME]: {
     ignoreStore: true,
     defaultPath: MORE_PATH,

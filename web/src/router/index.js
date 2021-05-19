@@ -8,7 +8,6 @@ import appointmentsRoutes from '@/router/routes/appointments';
 import dataSharingRoutes from '@/router/routes/data-sharing';
 import prescriptionRoutes from '@/router/routes/prescriptions';
 import adviceRoutes from '@/router/routes/advice';
-import accountRoutes from '@/router/routes/account';
 import moreRoutes from '@/router/routes/more';
 import nominatedPharmacyRoutes from '@/router/routes/nominated-pharmacy';
 import messagesRoutes from '@/router/routes/messages';
@@ -83,7 +82,6 @@ export const allRoutes = [
       ...nominatedPharmacyRoutes,
       ...prescriptionRoutes,
       ...medicalRecordRoutes,
-      ...accountRoutes,
       ...moreRoutes,
       ...linkedProfilesRoutes,
       ...organDonationRoutes,

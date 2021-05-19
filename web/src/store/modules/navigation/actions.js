@@ -4,7 +4,6 @@ import { ADVICE_PATH,
   PRESCRIPTIONS_PATH,
   HEALTH_RECORDS_PATH,
   MESSAGES_PATH,
-  ACCOUNT_PATH,
   INDEX_PATH,
   MORE_PATH } from '@/router/paths';
 import {
@@ -39,9 +38,6 @@ export default {
   },
   goToMessagesPage() {
     redirectTo({ $router: this.app.$router, $store: this }, MESSAGES_PATH);
-  },
-  goToSettingsPage() {
-    redirectTo({ $router: this.app.$router, $store: this }, ACCOUNT_PATH);
   },
   goToMorePage() {
     redirectTo({ $router: this.app.$router, $store: this }, MORE_PATH);

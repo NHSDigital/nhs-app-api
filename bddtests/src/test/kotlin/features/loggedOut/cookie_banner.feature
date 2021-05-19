@@ -33,7 +33,7 @@ Feature: Cookie Banner
     And I am logged in
     And I see the home page
     Then pages will not display the cookie banner
-      | /account                                    |
+      | /more                                       |
       | /appointments                               |
       | /appointments/cancelling                    |
       | /appointments/booking                       |

@@ -1,4 +1,4 @@
-import AboutUs from '@/components/account/AboutUs';
+import AboutUs from '@/components/more/AboutUs';
 import MorePage from '@/pages/more/index';
 import i18n from '@/plugins/i18n';
 import WebFooter from '@/components/widgets/WebFooter';

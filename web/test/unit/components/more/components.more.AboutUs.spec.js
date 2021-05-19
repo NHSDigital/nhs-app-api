@@ -1,4 +1,4 @@
-import AboutUs from '@/components/account/AboutUs';
+import AboutUs from '@/components/more/AboutUs';
 import i18n from '@/plugins/i18n';
 import { createStore, mount } from '../../helpers';
 

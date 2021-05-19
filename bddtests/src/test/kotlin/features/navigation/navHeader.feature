@@ -10,7 +10,7 @@ Feature: Use the navigation header bar
     Then a new tab has been opened by the link
 
   @nativesmoketest
-  Scenario: A patient can access the my account page by clicking the my account icon
+  Scenario: A patient can access the more page by clicking the my more icon
     Given I am a EMIS patient
     And I am logged in
     And I see the header

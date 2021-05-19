@@ -65,7 +65,7 @@ Feature: Messages
   Scenario: A user can see their plain text messages and follow an internal link
     Given I am using the native app user agent
     And I am a user wishing to view my appointments and my messages with content
-      | /account  |
+      | /more  |
       | /appointments/gp-appointments/booking  |
     And I am logged in
     When I navigate to the Messages Hub page
@@ -74,7 +74,7 @@ Feature: Messages
     And the senders and latest messages are displayed on the Messages Inbox page
     And I click on a sender in the Messages Inbox
     Then the Messages page is displayed
-    When I click on the '/account' link in the message
+    When I click on the '/more' link in the message
     Then the More page for mobile devices is displayed
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
@@ -151,7 +151,7 @@ Feature: Messages
   Scenario: A user can see their markdown messages and follow an internal link
     Given I am using the native app user agent
     And I am a user wishing to view my appointments and my messages with markdown content
-      | [Account](/account)  |
+      | [More](/more)  |
     And I am logged in
     When I follow the Messages link from the home page
     And I click the App Messages link on the messages hub page
@@ -159,7 +159,7 @@ Feature: Messages
     And the senders and latest messages are displayed on the Messages Inbox page
     And I click on a sender in the Messages Inbox
     Then the Messages page is displayed
-    When I click the internal link called 'Account' with a url of '/account'
+    When I click the internal link called 'More' with a url of '/more'
     Then the More page for mobile devices is displayed
 
   Scenario: A user can see their markdown messages and see a mailto link

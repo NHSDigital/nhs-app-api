@@ -6,7 +6,7 @@ Feature: Authorisation occurs during each URL visit
     Given I am a EMIS patient
     And I am not logged in
     When I browse to the pages at the following urls I see the login page
-      | /account                                    |
+      | /more                                    |
       | /appointments                               |
       | /appointments/cancelling                    |
       | /appointments/booking                       |
@@ -27,7 +27,7 @@ Feature: Authorisation occurs during each URL visit
     And I have just logged out
     And I see the login page
     When I browse to the pages at the following urls I see the login page
-      | /account                                    |
+      | /more                                    |
       | /appointments                               |
       | /appointments/cancelling                    |
       | /appointments/booking                       |
@@ -49,7 +49,7 @@ Feature: Authorisation occurs during each URL visit
     Given I am a EMIS patient
     And my session has expired
     When I browse to the pages at the following urls I see the login page
-      | /account                                    |
+      | /more                                    |
       | /appointments                               |
       | /appointments/cancelling                    |
       | /appointments/booking                       |
@@ -72,7 +72,7 @@ Feature: Authorisation occurs during each URL visit
     And I am logged in
     And I see the home page
     When I browse to the pages at the following urls I see the relevant page
-      | /account                                       | /account                                       |
+      | /more                                          | /more                                          |
       | /appointments                                  | /appointments                                  |
       | /appointments/gp-appointments/booking          | /appointments/gp-appointments/booking          |
       | /                                              |                                                |

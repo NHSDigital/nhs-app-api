@@ -9,14 +9,14 @@
     <menu-item id="btn_nhsLogin"
                :header-tag="headerTag"
                :target="(isNativeApp ? '_parent' : '_blank')"
-               :text="$t('account.nhsLogin')"
-               :aria-label="$t('account.nhsLogin')"
+               :text="$t('more.nhsLogin')"
+               :aria-label="$t('more.nhsLogin')"
                :click-func="goToNHSSettings"/>
     <menu-item v-if="showNotifications"
                id="btn_notificationOptions"
                :header-tag="headerTag"
-               :text="$t('account.notifications')"
-               :aria-label="$t('account.notifications')"
+               :text="$t('more.notifications')"
+               :aria-label="$t('more.notifications')"
                :click-func="showNotificationsClicked"/>
 
     <third-party-jump-off-button v-if="showGncrAccountAdmin"

@@ -89,7 +89,7 @@ class SubstraktStepDefinitions : HybridPageObject() {
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_PARTICIPATION_NONE)
     }
 
-    @Then("^the link to Substrakt 'Patient participation groups' is not available on the Account page$")
+    @Then("^the link to Substrakt 'Patient participation groups' is not available on the More page$")
     fun theLinkToSubstraktPatientParticipationGroupsIsNotAvailableMedicalRecordHubPage() {
         morePage.getHeaderElement("Patient participation groups").assertElementNotPresent()
     }

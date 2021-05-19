@@ -17,11 +17,6 @@ export const MORE_LOGIN_SETTINGS_ERROR_NAME = 'more-login-settings-error';
 export const ADVICE_NAME = 'advice';
 export const GET_HEALTH_ADVICE_NAME = 'get-health-advice';
 export const CHECKYOURSYMPTOMS_NAME = 'check-your-symptoms';
-export const ACCOUNT_NAME = 'account';
-export const ACCOUNT_COOKIES_NAME = 'account-cookies';
-export const ACCOUNT_NOTIFICATIONS_NAME = 'account-notifications';
-export const LOGIN_SETTINGS_NAME = 'account-login-settings';
-export const LOGIN_SETTINGS_ERROR_NAME = 'account-login-settings-error';
 export const INTERSTITIAL_REDIRECTOR_NAME = 'redirector';
 export const LOGIN_BIOMETRIC_ERROR_NAME = 'biometric-login-error';
 export const APPOINTMENTS_NAME = 'appointments';
@@ -147,11 +142,6 @@ const names = [
   ADVICE_NAME,
   GET_HEALTH_ADVICE_NAME,
   CHECKYOURSYMPTOMS_NAME,
-  ACCOUNT_NAME,
-  ACCOUNT_COOKIES_NAME,
-  ACCOUNT_NOTIFICATIONS_NAME,
-  LOGIN_SETTINGS_NAME,
-  LOGIN_SETTINGS_ERROR_NAME,
   IOS_COMPATIBILITY_NAME,
   INTERSTITIAL_REDIRECTOR_NAME,
   LOGIN_BIOMETRIC_ERROR_NAME,
@@ -279,8 +269,6 @@ export const findByRedirectEnum = (name) => {
       return ADVICE_NAME;
     case AppPage.MESSAGES:
       return MESSAGES_NAME;
-    case AppPage.SETTINGS:
-      return ACCOUNT_NAME;
     case AppPage.MORE:
       return MORE_NAME;
     default:

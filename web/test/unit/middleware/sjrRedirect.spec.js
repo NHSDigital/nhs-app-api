@@ -13,7 +13,7 @@ import {
   DOCUMENT_DETAIL,
 } from '@/router/routes/medical-record';
 import { PRESCRIPTIONS_GP_AT_HAND, PRESCRIPTIONS } from '@/router/routes/prescriptions';
-import { ACCOUNT_NOTIFICATIONS } from '@/router/routes/account';
+import { MORE_NOTIFICATIONS } from '@/router/routes/more';
 import {
   GP_MESSAGES,
   GP_MESSAGES_URGENCY,
@@ -272,11 +272,11 @@ describe('middleware/sjrRedirect', () => {
     });
   });
 
-  describe('account notifications rules', () => {
+  describe('more notifications rules', () => {
     describe('notifications enabled', () => {
       beforeEach(() => {
         getters['serviceJourneyRules/notificationsEnabled'] = true;
-        callSjrRedirect(ACCOUNT_NOTIFICATIONS);
+        callSjrRedirect(MORE_NOTIFICATIONS);
       });
 
       it('will not redirect', () => {
@@ -288,10 +288,10 @@ describe('middleware/sjrRedirect', () => {
     describe('notifications disabled', () => {
       beforeEach(() => {
         getters['serviceJourneyRules/notificationsEnabled'] = false;
-        callSjrRedirect(ACCOUNT_NOTIFICATIONS);
+        callSjrRedirect(MORE_NOTIFICATIONS);
       });
 
-      it('will redirect to account', () => {
+      it('will redirect to more', () => {
         expect(next).toBeCalledWith({ path: INDEX_PATH });
       });
     });

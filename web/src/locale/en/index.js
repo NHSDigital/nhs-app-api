@@ -1,4 +1,4 @@
-import account from './account';
+import more from './more';
 import apiErrors from './apiErrors';
 import appointments from './appointments';
 import compatibility from './compatibility';
@@ -31,7 +31,7 @@ import userResearch from './userResearch';
 export default {
   language: 'en-GB',
   appTitle: 'NHS App',
-  account,
+  more,
   apiErrors,
   appointments,
   compatibility,

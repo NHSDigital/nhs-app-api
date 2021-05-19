@@ -3,12 +3,12 @@
 @substrakt-participation
 Feature: Substrakt Patient Participation Groups
 
-  Scenario: A user with proof level 5 cannot see the menu item 'Patient participation groups' on the account page
+  Scenario: A user with proof level 5 cannot see the menu item 'Patient participation groups' on the More page
     Given I am a user with proof level 5 who can view Participation groups from Substrakt
     And I am logged in
     And I navigate to the More page
     Then the More page is displayed
-    And the link to Substrakt 'Patient participation groups' is not available on the Account page
+    And the link to Substrakt 'Patient participation groups' is not available on the More page
 
   Scenario: A user navigates to Substrakt patient participation group and sees the warning message
     Given I am using the native app user agent
@@ -20,12 +20,12 @@ Feature: Substrakt Patient Participation Groups
     And I am redirected to the redirector page with the header 'Patient participation groups'
     And the participation warning message on the Redirector page explains the service is from Substrakt
 
-  Scenario: A user without access to Substrakt cannot see the menu item 'Patient participation groups' on the Account page
+  Scenario: A user without access to Substrakt cannot see the menu item 'Patient participation groups' on the More page
     Given I am a user who cannot view Patient participation groups from Substrakt
     And I am logged in
     When I navigate to the More page
     Then the More page is displayed
-    And the link to Substrakt 'Patient participation groups' is not available on the Account page
+    And the link to Substrakt 'Patient participation groups' is not available on the More page
 
   Scenario: A user can follow the link to Find out more about personal health records
     Given I am a user who can view Patient participation groups from Substrakt

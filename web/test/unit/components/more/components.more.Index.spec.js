@@ -1,9 +1,9 @@
 import i18n from '@/plugins/i18n';
-import Index from '@/pages/account/index';
+import Index from '@/pages/more/index';
 import each from 'jest-each';
 import { createStore, mount } from '../../helpers';
 
-describe('Account.index', () => {
+describe('More.index', () => {
   let wrapper;
   let $store;
 

@@ -1,9 +1,9 @@
 <template xmlns:v-if="http://www.w3.org/1999/xhtml">
   <div v-if="showTemplate" >
     <p class="nhsuk-body nhsuk-u-padding-bottom-3">
-      {{ $t('account.cookies.weHavePutSomeOnYourDevice') }}</p>
+      {{ $t('more.cookies.weHavePutSomeOnYourDevice') }}</p>
     <p class="nhsuk-body nhsuk-u-padding-bottom-3">
-      {{ $t('account.cookies.weWillNotUseOthersUnlessYouTurnThemOn') }}</p>
+      {{ $t('more.cookies.weWillNotUseOthersUnlessYouTurnThemOn') }}</p>
 
     <menu-item-list data-purpose="cookie-policy">
       <menu-item :id="'cookies-policy'"
@@ -11,8 +11,8 @@
                  header-tag="h2"
                  :target="cookieLink"
                  :href="cookieLink"
-                 :text="$t('account.cookies.cookiesPolicy')"
-                 :aria-label="$t('account.cookies.cookiesPolicy')"/>
+                 :text="$t('more.cookies.cookiesPolicy')"
+                 :aria-label="$t('more.cookies.cookiesPolicy')"/>
     </menu-item-list>
 
     <labelled-toggle
@@ -20,9 +20,9 @@
       data-purpose="cookie-toggle"
       checkbox-id="allow_cookies"
       :is-waiting="false"
-      :label="$t('account.cookies.allowOptionalCookies')"
-      :hint-text="$t('account.cookies.iAcceptTheUseOfOptionalCookies')"
-      :aria-label="$t('account.cookies.turningCookiesOffRefreshesThePage')"/>
+      :label="$t('more.cookies.allowOptionalCookies')"
+      :hint-text="$t('more.cookies.iAcceptTheUseOfOptionalCookies')"
+      :aria-label="$t('more.cookies.turningCookiesOffRefreshesThePage')"/>
 
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                             :path="backPath"
@@ -75,8 +75,8 @@ export default {
       },
     },
     toggleLabel() {
-      return this.$t('account.cookies.allowOptionalCookies') +
-        this.$t('account.cookies.iAcceptTheUseOfOptionalCookies');
+      return this.$t('more.cookies.allowOptionalCookies') +
+        this.$t('more.cookies.iAcceptTheUseOfOptionalCookies');
     },
   },
 

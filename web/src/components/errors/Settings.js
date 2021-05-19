@@ -2,8 +2,6 @@
 import assign from 'lodash/fp/assign';
 import has from 'lodash/fp/has';
 import {
-  ACCOUNT_PATH,
-  ACCOUNT_NOTIFICATIONS_PATH,
   ALLERGIESANDREACTIONS_PATH,
   AUTH_RETURN_PATH,
   DOCUMENT_PATH,
@@ -50,17 +48,6 @@ export default {
     showApiError: true,
   },
   pages: [
-    {
-      route: ACCOUNT_NOTIFICATIONS_PATH,
-      action: {
-        10002: 'notifications/retryToggle',
-      },
-      errorOverrideStyles: { 403: 'plain' },
-      redirectUrl: {
-        default: ACCOUNT_PATH,
-        10001: ACCOUNT_NOTIFICATIONS_PATH,
-      },
-    },
     {
       route: ALLERGIESANDREACTIONS_PATH,
       redirectUrl: {

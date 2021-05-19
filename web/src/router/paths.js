@@ -21,11 +21,6 @@ export const MORE_LOGIN_SETTINGS_ERROR_PATH = 'more/login-settings/error';
 export const ADVICE_PATH = 'advice';
 export const GET_HEALTH_ADVICE_PATH = '/get-health-advice';
 export const CHECKYOURSYMPTOMS_PATH = '/check-your-symptoms';
-export const ACCOUNT_PATH = 'account';
-export const ACCOUNT_COOKIES_PATH = 'account/cookies';
-export const ACCOUNT_NOTIFICATIONS_PATH = 'account/notifications';
-export const LOGIN_SETTINGS_PATH = 'account/login-settings';
-export const LOGIN_SETTINGS_ERROR_PATH = 'account/login-settings/error';
 export const INTERSTITIAL_REDIRECTOR_PATH = 'redirector';
 export const APPOINTMENTS_PATH = 'appointments';
 export const GP_APPOINTMENTS_PATH = 'appointments/gp-appointments';
@@ -148,11 +143,6 @@ export default {
   ADVICE_PATH,
   GET_HEALTH_ADVICE_PATH,
   CHECKYOURSYMPTOMS_PATH,
-  ACCOUNT_PATH,
-  ACCOUNT_COOKIES_PATH,
-  ACCOUNT_NOTIFICATIONS_PATH,
-  LOGIN_SETTINGS_PATH,
-  LOGIN_SETTINGS_ERROR_PATH,
   INTERSTITIAL_REDIRECTOR_PATH,
   LOGIN_BIOMETRIC_ERROR_PATH,
   APPOINTMENTS_PATH,

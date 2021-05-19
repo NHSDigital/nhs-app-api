@@ -112,7 +112,7 @@ Feature: Push Notifications
       | /more/notifications?source=ios     |
       | /more/notifications?source=android |
 
-  Scenario: A user navigating back from the push notifications settings page is directed to the account page
+  Scenario: A user navigating back from the push notifications settings page is directed to the more page
     Given I am using the native app user agent
     And I am a user wishing to enable push notifications
     And I am logged in

@@ -1,10 +1,8 @@
 import { INDEX_CRUMB } from '@/breadcrumbs/general';
-import { ACCOUNT_CRUMB } from '@/breadcrumbs/account';
 import { MORE_CRUMB } from '@/breadcrumbs/more';
 
 const LINKED_PROFILES_CRUMB = {
   defaultCrumb: [INDEX_CRUMB],
-  settingsCrumb: [INDEX_CRUMB, ACCOUNT_CRUMB],
   moreCrumb: [INDEX_CRUMB, MORE_CRUMB],
 };
 

@@ -5,7 +5,7 @@ import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.sharedElements.ToggleElement
 
-@DefaultUrl("http://web.local.bitraft.io:3000/account/cookies")
+@DefaultUrl("http://web.local.bitraft.io:3000/more/cookies")
 class ManageCookiesPage : HybridPageObject() {
 
     val pageBody = HybridPageElement(
