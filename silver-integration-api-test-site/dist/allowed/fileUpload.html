@@ -10,6 +10,13 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
+
+    <script>
+        function updateTextOnFileSelection(input, textToUpdate) {
+            let filecount = input.files.length
+            document.getElementById(textToUpdate).innerText = `${filecount} file(s) selected`;
+        }
+    </script>
   </head>
   <body>
     <h1>File Upload</h1>
@@ -23,21 +30,27 @@
     </div>
 
     <fieldset>
+      <p id="file-single-selected">No file selected</p>
       <legend>Upload a single file:</legend>
 
-      <input type="file" id="input">
+      <input type="file" id="file-single-upload" name="file-single-upload"
+             onchange="updateTextOnFileSelection(this, 'file-single-selected')">
     </fieldset>
 
     <fieldset>
+      <p id="file-multiple-selected">No file selected</p>
       <legend>Upload multiple files:</legend>
     
-      <input type="file" id="input" multiple>
+      <input type="file" id="file-multiple-upload" name="file-multiple-upload" multiple
+             onchange="updateTextOnFileSelection(this, 'file-multiple-selected')">
     </fieldset>
 
     <fieldset>
+      <p id="file-image-selected">No file selected</p>
       <legend>Upload only jpeg or png files:</legend>
     
-      <input type="file" id="input" accept="image/png, image/jpeg">
+      <input type="file" id="file-image-upload" name="file-image-upload" accept="image/png, image/jpeg"
+             onchange="updateTextOnFileSelection(this, 'file-image-selected')">
     </fieldset>
   </body>
 </html>
