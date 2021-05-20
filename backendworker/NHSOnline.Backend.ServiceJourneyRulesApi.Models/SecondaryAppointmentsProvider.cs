@@ -1,3 +1,5 @@
+using NHSOnline.Backend.ServiceJourneyRulesApi.Models.Attributes;
+
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 {
     // ReSharper disable InconsistentNaming
@@ -12,6 +14,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
         pkbCie,
         pkbMyCareView,
         pkbSecondaryCare,
-        gncr
+        gncr,
+        [RemovesSecondaryAppointmentsProvider(ers)]
+        removeErs
     }
 }

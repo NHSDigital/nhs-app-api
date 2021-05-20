@@ -106,6 +106,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .OneOneOneEnabled(true)
                     .Prescriptions(PrescriptionsProvider.gpAtHand)
                     .SilverIntegrations(x => x
+                        .SecondaryAppointments(SecondaryAppointmentsProvider.ers)
                         .VaccineRecord(VaccineRecordProvider.nhsd)
                     )
                     .UserInfoEnabled(false)
@@ -165,7 +166,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .OneOneOneEnabled(false)
                     .Prescriptions(PrescriptionsProvider.im1)
                     .SilverIntegrations(x => x
-                        .SecondaryAppointments(SecondaryAppointmentsProvider.ers)
+                        .SecondaryAppointments(SecondaryAppointmentsProvider.removeErs)
                         .VaccineRecord(VaccineRecordProvider.removeNhsd)
                     )
                     .UserInfoEnabled(true)
@@ -249,7 +250,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .OneOneOneEnabled(false)
                     .Prescriptions(PrescriptionsProvider.im1)
                     .SilverIntegrations(x => x
-                        .SecondaryAppointments(SecondaryAppointmentsProvider.ers)
+                        .SecondaryAppointments()
                         .VaccineRecord()
                     )
                     .UserInfoEnabled(true)

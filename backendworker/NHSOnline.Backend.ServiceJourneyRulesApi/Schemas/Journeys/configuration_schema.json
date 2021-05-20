@@ -265,7 +265,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [ "ers", "pkb", "pkbCie", "pkbMyCareView" , "pkbSecondaryCare" , "gncr"]
+            "enum": [ "ers", "pkb", "pkbCie", "pkbMyCareView" , "pkbSecondaryCare" , "gncr", "removeErs"]
           }
         },
         "testResults": {
