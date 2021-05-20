@@ -4,6 +4,10 @@
 
 Is it possible to make a bindable property required?
 
+Cookies in iOS appear to be shared between the webview and the HTTP client, (See NHSO-14141) whereas Android does not. How can we get Android to behave like iOS, or iOS to behave like Android?
+
+Why would a cookie with a matching subdomain inconsistently be added to a HTTP call to an endpoint on that domain?
+
 ## Android
 
 How should the disposing of objects passed into Android classes be handled?

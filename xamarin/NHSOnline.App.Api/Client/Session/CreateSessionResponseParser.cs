@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -59,9 +60,17 @@ namespace NHSOnline.App.Api.Client.Session
                     if (httpResponseMessage.Headers.TryGetValues("Set-Cookie", out var setCookieHeaders) &&
                         setCookieHeaders != null)
                     {
-                        cookies.SetCookies(
-                            httpResponseMessage.RequestMessage.RequestUri,
-                            string.Join(",", setCookieHeaders));
+                        foreach (var cookieHeader in setCookieHeaders)
+                        {
+                            try
+                            {
+                                cookies.SetCookies(httpResponseMessage.RequestMessage.RequestUri, cookieHeader);
+                            }
+                            catch (Exception exception)
+                            {
+                                _logger.LogError(exception,"Failed to add cookie from session response to CookieContainer");
+                            }
+                        }
                     }
 
                     return new ApiCreateSessionResult.Success(response, cookies);
