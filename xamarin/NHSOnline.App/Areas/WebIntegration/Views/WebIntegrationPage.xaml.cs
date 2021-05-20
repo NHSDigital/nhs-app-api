@@ -85,6 +85,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         private void WebViewOnNavigated(object sender, WebNavigatedEventArgs args)
         {
             _logger.LogInformation("Navigated ({Result}): {Uri}", args.Result, args.Url);
+            WebView.Focus();
         }
 
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);
