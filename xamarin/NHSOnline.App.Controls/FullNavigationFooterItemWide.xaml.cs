@@ -39,7 +39,7 @@ namespace NHSOnline.App.Controls
                 case nameof(Highlighted):
                 case nameof(DefaultIcon):
                 case nameof(HighlightedIcon):
-                    SetIcon();
+                    SetVisualState();
                     break;
                 default:
                     break;
@@ -82,6 +82,11 @@ namespace NHSOnline.App.Controls
             set => SetValue(HighlightedProperty, value);
         }
 
-        private void SetIcon() => Icon = Highlighted && IsSet(HighlightedIconProperty) ? HighlightedIcon : DefaultIcon;
+        private void SetVisualState()
+        {
+            var state = Highlighted && IsSet(HighlightedIconProperty) ?
+                VisualStateManager.CommonStates.Selected : VisualStateManager.CommonStates.Normal;
+            VisualStateManager.GoToState(this, state);
+        }
     }
 }

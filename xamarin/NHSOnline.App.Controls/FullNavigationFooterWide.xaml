@@ -67,7 +67,8 @@
                 
                 <controls:FullNavigationFooterItemWide Grid.Column="0"
                                                        Text="Advice"
-                                                       IconCommand="{Binding AdviceCommand, Source={x:Reference Name=Root}}">
+                                                       IconCommand="{Binding AdviceCommand, Source={x:Reference Name=Root}}"
+                                                       Highlighted="{Binding AdviceHighlighted, Source={x:Reference Name=Root}}">
                     <controls:FullNavigationFooterItemWide.DefaultIcon>
                         <icons:IconAdviceGrey StyleClass="Advice" />
                     </controls:FullNavigationFooterItemWide.DefaultIcon>
@@ -78,7 +79,8 @@
                 
                 <controls:FullNavigationFooterItemWide Grid.Column="2"
                                                        Text="Appointments"
-                                                       IconCommand="{Binding AppointmentsCommand, Source={x:Reference Name=Root}}">
+                                                       IconCommand="{Binding AppointmentsCommand, Source={x:Reference Name=Root}}"
+                                                       Highlighted="{Binding AppointmentsHighlighted, Source={x:Reference Name=Root}}">
                     <controls:FullNavigationFooterItemWide.DefaultIcon>
                         <icons:IconAppointmentsGrey />
                     </controls:FullNavigationFooterItemWide.DefaultIcon>
@@ -89,7 +91,8 @@
 
                 <controls:FullNavigationFooterItemWide Grid.Column="4"
                                                        Text="Prescriptions"
-                                                       IconCommand="{Binding PrescriptionsCommand, Source={x:Reference Name=Root}}">
+                                                       IconCommand="{Binding PrescriptionsCommand, Source={x:Reference Name=Root}}"
+                                                       Highlighted="{Binding PrescriptionsHighlighted, Source={x:Reference Name=Root}}">
                     <controls:FullNavigationFooterItemWide.DefaultIcon>
                         <icons:IconPrescriptionsGrey />
                     </controls:FullNavigationFooterItemWide.DefaultIcon>
@@ -100,7 +103,8 @@
 
                 <controls:FullNavigationFooterItemWide Grid.Column="6"
                                                        Text="Your health"
-                                                       IconCommand="{Binding YourHealthCommand, Source={x:Reference Name=Root}}">
+                                                       IconCommand="{Binding YourHealthCommand, Source={x:Reference Name=Root}}"
+                                                       Highlighted="{Binding YourHealthHighlighted, Source={x:Reference Name=Root}}">
                     <controls:FullNavigationFooterItemWide.DefaultIcon>
                         <icons:IconYourHealthGrey />
                     </controls:FullNavigationFooterItemWide.DefaultIcon>
@@ -111,7 +115,8 @@
 
                 <controls:FullNavigationFooterItemWide Grid.Column="8"
                                                        Text="Messages"
-                                                       IconCommand="{Binding MessagesCommand, Source={x:Reference Name=Root}}">
+                                                       IconCommand="{Binding MessagesCommand, Source={x:Reference Name=Root}}"
+                                                       Highlighted="{Binding MessagesHighlighted, Source={x:Reference Name=Root}}">
                     <controls:FullNavigationFooterItemWide.DefaultIcon>
                         <icons:IconMessagesGrey />
                     </controls:FullNavigationFooterItemWide.DefaultIcon>

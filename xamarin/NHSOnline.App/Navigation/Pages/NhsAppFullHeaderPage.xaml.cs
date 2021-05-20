@@ -15,6 +15,8 @@ namespace NHSOnline.App.Navigation.Pages
 
         public static readonly BindableProperty PageContentProperty =
             BindableProperty.Create(nameof(PageContent), typeof(View), typeof(NhsAppFullHeaderPage));
+        public static readonly BindableProperty HighlightedNavigationFooterItemProperty =
+            BindableProperty.Create(nameof(HighlightedNavigationFooterItem), typeof(NavigationFooterItem), typeof(NhsAppFullHeaderPage));
 
         public NhsAppFullHeaderPage()
         {
@@ -35,6 +37,12 @@ namespace NHSOnline.App.Navigation.Pages
         {
             get => (View) GetValue(PageContentProperty);
             set => SetValue(PageContentProperty, value);
+        }
+
+        public NavigationFooterItem HighlightedNavigationFooterItem
+        {
+            get => (NavigationFooterItem) GetValue(HighlightedNavigationFooterItemProperty);
+            set => SetValue(HighlightedNavigationFooterItemProperty, value);
         }
 
         public Func<Task>? HelpRequested { get; set; }

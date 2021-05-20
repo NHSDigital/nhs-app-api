@@ -6,6 +6,7 @@ using NHSOnline.App.Areas.Home.Models;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
+using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices;
@@ -194,16 +195,15 @@ namespace NHSOnline.App.Areas.Home.Presenters
         {
             _logger.LogInformation($"Menu bar item change requested for {menuItemIndex}");
 
-            // Call method to change color of vector graphic
+            _view.HighlightNavigationFooterItem(GetFooterItemFromIndex(menuItemIndex));
             return Task.CompletedTask;
-
         }
 
         private Task ClearMenuBarItemRequested()
         {
             _logger.LogInformation("Menu bar item clear requested");
 
-            // Call method to clear color of vector graphic
+            _view.ClearHighlightedNavigationFooterItem();
             return Task.CompletedTask;
         }
 
@@ -291,6 +291,19 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
             _view.GoToUri(_config.BaseAddress);
             return Task.CompletedTask;
+        }
+
+        private static NavigationFooterItem GetFooterItemFromIndex(string footerItemIndex)
+        {
+            return footerItemIndex switch
+            {
+                "0" => NavigationFooterItem.Advice,
+                "1" => NavigationFooterItem.Appointments,
+                "2" => NavigationFooterItem.Prescriptions,
+                "3" => NavigationFooterItem.YourHealth,
+                "4" => NavigationFooterItem.Messages,
+                _ => throw new ArgumentOutOfRangeException(nameof(footerItemIndex), footerItemIndex)
+            };
         }
 
         private sealed class BiometricResultToStatusVisitor : IBiometricStatusResultVisitor<BiometricStatus>

@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
@@ -41,6 +42,8 @@ namespace NHSOnline.App.Areas.Home
         }
 
         void GoToUri(Uri uri);
+        void HighlightNavigationFooterItem(NavigationFooterItem navigationFooterItem);
+        void ClearHighlightedNavigationFooterItem();
         Task NavigateToRedirectedPathWithinApp(string spaPath);
         Task NavigateToAdvice();
         Task NavigateToAppointments();
