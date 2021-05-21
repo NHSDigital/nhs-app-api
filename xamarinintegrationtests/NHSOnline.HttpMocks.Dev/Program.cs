@@ -30,6 +30,7 @@ namespace NHSOnline.HttpMocks.Dev
                 yield return new TppPatient().WithLogin("TppPatient").WithName(b => b.FamilyName("Tpp"));
                 yield return new MicrotestPatient().WithLogin("MicrotestPatient").WithName(b => b.FamilyName("Microtest"));
                 yield return new VisionPatient().WithLogin("VisionPatient").WithName(b => b.FamilyName("Vision"));
+                yield return new KeyboardPatient().WithLogin("KeyboardPatient").WithName(b => b.FamilyName("Keyboard"));
             }
         }
 

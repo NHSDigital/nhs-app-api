@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Threading.Tasks;
 using FluentAssertions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
@@ -88,6 +89,12 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
 
         void IIOSDriverWrapper.PushTestFile() => _driver.PushFile("@com.google.chrome.ios:documents/test.txt",
             new FileInfo("../../../../NHSOnline.IntegrationTests.UI/Resources/test.txt"));
+
+        async Task IIOSDriverWrapper.DisableNetwork()
+        {
+            var browserStackApiClient = new BrowserStackApiClient(_browserStackConfig);
+            await browserStackApiClient.ApplyNetworkProfile(_driver.SessionId, NetworkProfile.NoNetwork);
+        }
 
         void IDriverWrapper.AttachDebugInfo(IDriverCleanupContext context)
         {

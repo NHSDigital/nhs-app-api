@@ -54,5 +54,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android.More
 
         public void KeyboardNavigateToNotifications() =>
             PageContent.KeyboardNavigateToNotificationSettings(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToLogout() =>
+            PageContent.KeyboardNavigateToLogOut(KeyboardPageContentNavigation);
     }
 }

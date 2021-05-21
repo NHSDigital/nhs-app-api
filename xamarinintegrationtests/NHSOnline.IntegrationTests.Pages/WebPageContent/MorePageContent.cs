@@ -27,13 +27,28 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebMenuItem NotificationsMenuItem => WebMenuItem.WithTitle(_interactor, "Notifications");
 
+        private WebMenuItem GncrPreferencesMenuItem =>
+            WebMenuItem.WithTitle(_interactor, "Great North Care Record service preferences");
+
+        private WebMenuItem PatientParticipationGroupsMenuItem =>
+            WebMenuItem.WithTitle(_interactor, "Patient participation groups");
+
+        private WebAnalyticsTag LogoutButtonAnalyticsTag =>
+            WebAnalyticsTag.WithTagAndDescription("div", "Log out analytics tag");
+
+        private WebButton LogoutButton => WebButton.WithText(_interactor, "Log out");
+
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
             LinkedProfilesMenuItem,
             CookiesMenuItem,
             BiometricMenuItem,
             NhsLoginMenuItem,
-            NotificationsMenuItem
+            NotificationsMenuItem,
+            GncrPreferencesMenuItem,
+            PatientParticipationGroupsMenuItem,
+            LogoutButtonAnalyticsTag,
+            LogoutButton
         };
 
         internal void AssertOnPage() => TitleText.AssertVisible();
@@ -44,20 +59,27 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             CookiesMenuItem.AssertVisible();
             NhsLoginMenuItem.AssertVisible();
             NotificationsMenuItem.AssertVisible();
+            LogoutButton.AssertVisible();
         }
 
         public void NavigateToNotifications() => NotificationsMenuItem.Click();
 
         public void NavigateToNhsLogin() => NhsLoginMenuItem.Click();
 
-        public void KeyboardNavigateToNhsLoginSettings(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(NhsLoginMenuItem, navigation);
+        public void Logout() => LogoutButton.Click();
+
+        public void KeyboardNavigateToNhsLoginSettings(AndroidKeyboardNavigation navigation) =>
+            KeyboardNavigateToAndActivateFocusable(NhsLoginMenuItem, navigation);
 
         public void KeyboardNavigateToNotificationSettings(AndroidKeyboardNavigation navigation) =>
-            KeyboardNavigateToAndActivateMenuItem(NotificationsMenuItem, navigation);
+            KeyboardNavigateToAndActivateFocusable(NotificationsMenuItem, navigation);
 
-        private void KeyboardNavigateToAndActivateMenuItem(IFocusable menuItem, AndroidKeyboardNavigation keyboardPageContentNavigation)
+        public void KeyboardNavigateToLogOut(AndroidKeyboardNavigation navigation) =>
+            KeyboardNavigateToAndActivateFocusable(LogoutButton, navigation);
+
+        private void KeyboardNavigateToAndActivateFocusable(IFocusable focusable, AndroidKeyboardNavigation keyboardPageContentNavigation)
         {
-            keyboardPageContentNavigation.TabBetween(LinkedProfilesMenuItem, menuItem);
+            keyboardPageContentNavigation.TabBetween(LinkedProfilesMenuItem, focusable);
             keyboardPageContentNavigation.PressEnterKey();
         }
     }

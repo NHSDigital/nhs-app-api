@@ -1,7 +1,9 @@
 using System;
+using System.ComponentModel;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.IntegrationTests.UI.Drivers.Native;
@@ -11,6 +13,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
 {
     internal class BrowserStackApiClient
     {
+        private const string BaseBrowserStackSessionUrl = "https://api-cloud.browserstack.com/app-automate/sessions/";
         private readonly string _authorisation;
 
         private static readonly Lazy<HttpClient> _client = new Lazy<HttpClient>(() =>
@@ -25,9 +28,12 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         }
 
         private Uri SessionUri(SessionId sessionId) =>
-            new Uri($"https://api-cloud.browserstack.com/app-automate/sessions/{sessionId}.json");
+            new($"{BaseBrowserStackSessionUrl}{sessionId}.json");
 
-        private JsonSerializerSettings SerialiserSettings => new JsonSerializerSettings
+        private Uri UpdateNetworkUri(SessionId sessionId) =>
+            new($"{BaseBrowserStackSessionUrl}{sessionId}/update_network.json");
+
+        private JsonSerializerSettings SerialiserSettings => new()
         {
             ContractResolver = new DefaultContractResolver
             {
@@ -50,6 +56,29 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
             request.Headers.Authorization = new AuthenticationHeaderValue("Basic", _authorisation);
 
             using var _ = _client.Value.SendAsync(request).Result;
+        }
+
+        public async Task ApplyNetworkProfile(SessionId sessionId, NetworkProfile profileName)
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Put, UpdateNetworkUri(sessionId));
+
+            var networkProfile = profileName switch
+            {
+                NetworkProfile.NoNetwork => "no-network",
+                NetworkProfile.AirplaneMode => "airplane-mode",
+                _ => throw new ArgumentOutOfRangeException(nameof(profileName), profileName, $"{nameof(ApplyNetworkProfile)} does not cover all {nameof(NetworkProfile)} types")
+            };
+
+            var jsonBody = JsonConvert.SerializeObject(new
+            {
+                networkProfile
+            });
+
+            using var content = new StringContent(jsonBody, Encoding.Default, "application/json");
+            request.Content = content;
+            request.Headers.Authorization = new AuthenticationHeaderValue("Basic", _authorisation);
+
+            await _client.Value.SendAsync(request);
         }
 
         public BrowserStackSessionDetails? GetSessionDetails(SessionId sessionId)

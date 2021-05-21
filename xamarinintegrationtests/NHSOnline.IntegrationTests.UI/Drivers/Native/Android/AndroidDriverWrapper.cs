@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using FluentAssertions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
@@ -81,6 +82,12 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         {
             _driver.PushFile("/sdcard/Download/NhsAppLogo.png",
                 new FileInfo("../../../../NHSOnline.IntegrationTests.UI/Resources/NhsAppLogo.png"));
+        }
+
+        async Task IAndroidDriverWrapper.EnableAirplaneMode()
+        {
+            var browserStackApiClient = new BrowserStackApiClient(_browserStackConfig);
+            await browserStackApiClient.ApplyNetworkProfile(_driver.SessionId, NetworkProfile.AirplaneMode);
         }
 
         void IAndroidDriverWrapper.AssertNotRunningInForeground()

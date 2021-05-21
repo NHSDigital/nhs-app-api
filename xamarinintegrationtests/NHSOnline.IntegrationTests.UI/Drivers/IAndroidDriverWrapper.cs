@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace NHSOnline.IntegrationTests.UI.Drivers
 {
     public interface IAndroidDriverWrapper : INativeDriverWrapper, IAndroidInteractor
@@ -6,5 +8,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         void AssertNotRunningInForeground();
         void AssertRunningInForeground();
         void PushTestFile();
+        Task EnableAirplaneMode();
     }
 }
