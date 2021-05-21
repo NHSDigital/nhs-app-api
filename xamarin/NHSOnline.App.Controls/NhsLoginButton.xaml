@@ -29,7 +29,7 @@
                      xct:TouchEffect.PressedBackgroundColor="{Binding PressedButtonColour, Source={x:Reference Name=Root}}"
                      HorizontalOptions="Center"
                      MinimumHeightRequest="{Binding HeightRequest, Source={x:Reference Name=Root}}"
-                     effects:AccessibilityEffect.AccessibilityControlType="Button"
+                     effects:AccessibilityEffect.ControlType="Button"
                      AutomationProperties.Name="{Binding Text, Source={Reference Name=Root}}">
             
             <BoxView HorizontalOptions="Start" />

@@ -48,7 +48,7 @@
             <Label Grid.Column="1"
                    Grid.Row="0" 
                    Padding="0,10,0,10"
-                   effects:AccessibilityEffect.AccessibilityControlType="Button">
+                   effects:AccessibilityEffect.ControlType="Button">
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Coronavirus (COVID-19)&#10;" 
@@ -80,7 +80,7 @@
                          Grid.Column="1" 
                          HorizontalOptions="End"
                          VerticalOptions="Start"
-                         effects:AccessibilityEffect.AccessibilityControlType="Button"
+                         effects:AccessibilityEffect.ControlType="Button"
                          AutomationProperties.Name="Help">
                 
                 <icons:IconHelp HeightRequest="37"
@@ -136,7 +136,7 @@
                    FontFamily="Frutiger"
                    Margin="0,10,0,10"
                    FontSize="Medium"
-                   effects:AccessibilityEffect.AccessibilityControlType="Link" />
+                   effects:AccessibilityEffect.ControlType="Link" />
             
             <Label Grid.Row="5" 
                    Grid.Column="1" 

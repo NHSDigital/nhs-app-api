@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using NHSOnline.App.Controls.Effects;
 using UIKit;
 using Xamarin.Forms;
@@ -13,23 +14,46 @@ namespace NHSOnline.App.iOS.Effects
         protected override void OnAttached()
         {
             if ((Control ?? Container) is { } target &&
-                AccessibilityEffect.GetAccessibilityControlType(Element) is { } controlType)
+                AccessibilityEffect.GetControlType(Element) is { } controlType)
             {
                 AutomationProperties.SetIsInAccessibleTree(Element, true);
-                target.AccessibilityTraits = AccessibilityTraitsFor(controlType);
+                target.AccessibilityTraits = AccessibilityTraitsFor(Element, controlType);
                 target.IsAccessibilityElement = true;
             }
         }
 
-        private static UIAccessibilityTrait AccessibilityTraitsFor(AccessibilityEffect.AccessibilityControlType controlType)
+        protected override void OnElementPropertyChanged(PropertyChangedEventArgs args)
         {
-            return controlType switch
+            base.OnElementPropertyChanged(args);
+
+            if (args.PropertyName.Equals(nameof(UIAccessibilityTrait.Selected), StringComparison.Ordinal))
             {
-                AccessibilityEffect.AccessibilityControlType.Button => UIAccessibilityTrait.Button,
-                AccessibilityEffect.AccessibilityControlType.Link => UIAccessibilityTrait.Link,
+                if ((Control ?? Container) is { } target &&
+                    AccessibilityEffect.GetControlType(Element) is { } controlType)
+                {
+                    target.AccessibilityTraits = AccessibilityTraitsFor(Element, controlType);
+                }
+            }
+        }
+
+        private static UIAccessibilityTrait AccessibilityTraitsFor(BindableObject element,
+            AccessibilityEffect.ControlType controlType)
+        {
+            var traits = UIAccessibilityTrait.None;
+            traits |= controlType switch
+            {
+                AccessibilityEffect.ControlType.Button => UIAccessibilityTrait.Button,
+                AccessibilityEffect.ControlType.Link => UIAccessibilityTrait.Link,
                 _ => throw new ArgumentOutOfRangeException(nameof(controlType), controlType,
                     $"{nameof(AccessibilityTraitsFor)} doesn't cover all types")
             };
+
+            if (AccessibilityEffect.GetSelected(element))
+            {
+                traits |= UIAccessibilityTrait.Selected;
+            }
+
+            return traits;
         }
 
         protected override void OnDetached()

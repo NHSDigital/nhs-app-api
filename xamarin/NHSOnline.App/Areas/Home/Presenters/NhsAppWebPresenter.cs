@@ -204,7 +204,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         {
             _logger.LogInformation($"Menu bar item change requested for {menuItemIndex}");
 
-            _view.HighlightNavigationFooterItem(GetFooterItemFromIndex(menuItemIndex));
+            _view.SelectNavigationFooterItem(GetFooterItemFromIndex(menuItemIndex));
             return Task.CompletedTask;
         }
 
@@ -212,7 +212,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         {
             _logger.LogInformation("Menu bar item clear requested");
 
-            _view.ClearHighlightedNavigationFooterItem();
+            _view.ClearSelectedNavigationFooterItem();
             return Task.CompletedTask;
         }
 

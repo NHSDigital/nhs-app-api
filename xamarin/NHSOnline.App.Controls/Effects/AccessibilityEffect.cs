@@ -5,13 +5,14 @@ namespace NHSOnline.App.Controls.Effects
 {
     public static class AccessibilityEffect
     {
-        public static readonly BindableProperty AccessibilityControlTypeProperty =
-            BindableProperty.CreateAttached(nameof(AccessibilityControlType), typeof(AccessibilityControlType?),
-                typeof(AccessibilityEffect), null, propertyChanged: OnAccessibilityControlTypeChanged);
+        public static readonly BindableProperty ControlTypeProperty = BindableProperty.CreateAttached(
+            "ControlType", typeof(ControlType?), typeof(AccessibilityEffect), null, propertyChanged: OnControlTypeChanged);
+        public static readonly BindableProperty SelectedProperty = BindableProperty.CreateAttached(
+            "Selected", typeof(bool), typeof(AccessibilityEffect), false);
 
-        public static AccessibilityControlType? GetAccessibilityControlType (BindableObject view)
+        public static ControlType? GetControlType(BindableObject view)
         {
-            if (view.GetValue(AccessibilityControlTypeProperty) is AccessibilityControlType controlType)
+            if (view.GetValue(ControlTypeProperty) is ControlType controlType)
             {
                 return controlType;
             }
@@ -19,18 +20,33 @@ namespace NHSOnline.App.Controls.Effects
             return null;
         }
 
-        public static void SetAccessibilityControlType(BindableObject view, AccessibilityControlType? value)
+        public static void SetControlType(BindableObject view, ControlType? value)
         {
-            view.SetValue(AccessibilityControlTypeProperty, value);
+            view.SetValue(ControlTypeProperty, value);
         }
 
-        static void OnAccessibilityControlTypeChanged (BindableObject bindable, object oldValue, object newValue)
+        public static bool GetSelected(BindableObject view)
+        {
+            if (view.GetValue(SelectedProperty) is bool selected)
+            {
+                return selected;
+            }
+
+            return false;
+        }
+
+        public static void SetSelected(BindableObject view, bool value)
+        {
+            view.SetValue(SelectedProperty, value);
+        }
+
+        static void OnControlTypeChanged (BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is View view)
             {
                 var existingEffect = view.Effects.FirstOrDefault(e => e is AccessibilityRoutingEffect);
 
-                if (newValue is AccessibilityControlType)
+                if (newValue is ControlType)
                 {
                     if (existingEffect is null)
                     {
@@ -47,13 +63,13 @@ namespace NHSOnline.App.Controls.Effects
             }
         }
 
-        public enum AccessibilityControlType
+        public enum ControlType
         {
             Link,
             Button
         }
 
-        class AccessibilityRoutingEffect : RoutingEffect
+        private class AccessibilityRoutingEffect : RoutingEffect
         {
             public AccessibilityRoutingEffect() : base($"{NhsAppEffects.ResolutionGroupName}.{nameof(AccessibilityEffect)}")
             {

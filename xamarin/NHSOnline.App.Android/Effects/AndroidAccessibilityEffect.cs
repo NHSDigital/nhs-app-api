@@ -24,14 +24,15 @@ namespace NHSOnline.App.Droid.Effects
         protected override void OnAttached()
         {
             if ((Control ?? Container) is { } target &&
-                AccessibilityEffect.GetAccessibilityControlType(Element) is { } controlType)
+                AccessibilityEffect.GetControlType(Element) is { } controlType)
+
             {
                 AutomationProperties.SetIsInAccessibleTree(Element, true);
                 target.SetAccessibilityDelegate(new AccessibilityDelegate(Element, controlType));
                 switch (controlType)
                 {
-                    case AccessibilityEffect.AccessibilityControlType.Button:
-                    case AccessibilityEffect.AccessibilityControlType.Link:
+                    case AccessibilityEffect.ControlType.Button:
+                    case AccessibilityEffect.ControlType.Link:
                         target.KeyPress -= ControlOnKeyPress;
                         target.KeyPress += ControlOnKeyPress;
                         break;
@@ -44,7 +45,7 @@ namespace NHSOnline.App.Droid.Effects
         protected override void OnDetached()
         {
             if ((Control ?? Container) is { } target &&
-                AccessibilityEffect.GetAccessibilityControlType(Element) is { })
+                AccessibilityEffect.GetControlType(Element) is { })
             {
                 target.KeyPress -= ControlOnKeyPress;
             }
@@ -83,9 +84,9 @@ namespace NHSOnline.App.Droid.Effects
         private sealed class AccessibilityDelegate : View.AccessibilityDelegate
         {
             private readonly WeakReference<Element> _element;
-            private readonly AccessibilityEffect.AccessibilityControlType _controlType;
+            private readonly AccessibilityEffect.ControlType _controlType;
 
-            public AccessibilityDelegate(Element element, AccessibilityEffect.AccessibilityControlType controlType)
+            public AccessibilityDelegate(Element element, AccessibilityEffect.ControlType controlType)
             {
                 _element = new WeakReference<Element>(element);
                 _controlType = controlType;
@@ -115,21 +116,24 @@ namespace NHSOnline.App.Droid.Effects
                 base.OnInitializeAccessibilityNodeInfo(host, info);
                 if (info != null)
                 {
-                    AddAccessibilityActions(AccessibilityNodeInfoCompat.Wrap(info), _controlType);
+                    var isSelected = _element.TryGetTarget(out var element) && AccessibilityEffect.GetSelected(element);
+                    SetAccessibilityNodeInfo(AccessibilityNodeInfoCompat.Wrap(info), _controlType, isSelected);
                 }
             }
 
-            private static void AddAccessibilityActions(
+            private static void SetAccessibilityNodeInfo(
                 AccessibilityNodeInfoCompat info,
-                AccessibilityEffect.AccessibilityControlType controlType)
+                AccessibilityEffect.ControlType controlType,
+                bool selected)
             {
                 switch (controlType)
                 {
-                    case AccessibilityEffect.AccessibilityControlType.Button:
+                    case AccessibilityEffect.ControlType.Button:
                         info.RoleDescription = "Button";
+                        info.Selected = selected;
                         info.Clickable = true;
                         break;
-                    case AccessibilityEffect.AccessibilityControlType.Link:
+                    case AccessibilityEffect.ControlType.Link:
                         info.RoleDescription = "Link";
                         info.Clickable = true;
                         break;

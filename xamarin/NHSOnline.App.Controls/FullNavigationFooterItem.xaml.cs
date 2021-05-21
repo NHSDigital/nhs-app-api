@@ -13,8 +13,8 @@ namespace NHSOnline.App.Controls
         public static readonly BindableProperty DefaultIconProperty =
             BindableProperty.Create(nameof(DefaultIcon), typeof(SvgImage), typeof(FullNavigationFooterItem));
 
-        public static readonly BindableProperty HighlightedIconProperty =
-            BindableProperty.Create(nameof(HighlightedIcon), typeof(SvgImage), typeof(FullNavigationFooterItem));
+        public static readonly BindableProperty IsSelectedIconProperty =
+            BindableProperty.Create(nameof(SelectedIcon), typeof(SvgImage), typeof(FullNavigationFooterItem));
 
         public static readonly BindableProperty IconCommandProperty =
             BindableProperty.Create(nameof(IconCommand), typeof(ICommand), typeof(FullNavigationFooterItem));
@@ -22,8 +22,8 @@ namespace NHSOnline.App.Controls
         public static readonly BindableProperty TextProperty =
             BindableProperty.Create(nameof(Text), typeof(string), typeof(FullNavigationFooterItem));
 
-        public static readonly BindableProperty HighlightedProperty =
-            BindableProperty.Create(nameof(Highlighted), typeof(bool), typeof(FullNavigationFooterItem));
+        public static readonly BindableProperty IsSelectedProperty =
+            BindableProperty.Create(nameof(IsSelected), typeof(bool), typeof(FullNavigationFooterItem));
 
         public FullNavigationFooterItem()
         {
@@ -36,9 +36,9 @@ namespace NHSOnline.App.Controls
 
             switch (propertyName)
             {
-                case nameof(Highlighted):
+                case nameof(IsSelected):
                 case nameof(DefaultIcon):
-                case nameof(HighlightedIcon):
+                case nameof(SelectedIcon):
                     SetVisualState();
                     break;
                 default:
@@ -58,10 +58,10 @@ namespace NHSOnline.App.Controls
             set => SetValue(DefaultIconProperty, value);
         }
 
-        public SvgImage HighlightedIcon
+        public SvgImage SelectedIcon
         {
-            get => (SvgImage) GetValue(HighlightedIconProperty);
-            set => SetValue(HighlightedIconProperty, value);
+            get => (SvgImage) GetValue(IsSelectedIconProperty);
+            set => SetValue(IsSelectedIconProperty, value);
         }
 
         public ICommand IconCommand
@@ -76,15 +76,15 @@ namespace NHSOnline.App.Controls
             set => SetValue(TextProperty, value);
         }
 
-        public bool Highlighted
+        public bool IsSelected
         {
-            get => (bool) GetValue(HighlightedProperty);
-            set => SetValue(HighlightedProperty, value);
+            get => (bool) GetValue(IsSelectedProperty);
+            set => SetValue(IsSelectedProperty, value);
         }
 
         private void SetVisualState()
         {
-            var state = Highlighted && IsSet(HighlightedIconProperty) ?
+            var state = IsSelected && IsSet(IsSelectedIconProperty) ?
                 VisualStateManager.CommonStates.Selected : VisualStateManager.CommonStates.Normal;
             VisualStateManager.GoToState(this, state);
         }

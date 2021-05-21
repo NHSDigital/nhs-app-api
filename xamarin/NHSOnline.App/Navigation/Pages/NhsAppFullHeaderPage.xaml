@@ -23,7 +23,7 @@
                 
                 <controls:FullNavigationFooter 
                     x:Name="FullNavigationFooter"
-                    HighlightedItem="{Binding HighlightedNavigationFooterItem, Source={x:Reference Name=Root}}"
+                    SelectedItem="{Binding SelectedNavigationFooterItem, Source={x:Reference Name=Root}}"
                     AdviceCommand="{Binding AdviceClicked, Source={x:Reference Name=Root}}"
                     AppointmentsCommand="{Binding AppointmentsClicked, Source={x:Reference Name=Root}}"
                     PrescriptionsCommand="{Binding PrescriptionsClicked, Source={x:Reference Name=Root}}"
@@ -34,7 +34,7 @@
                 <controls:FullNavigationFooterWide
                     x:Name="FullNavigationFooterWide"
                     IsVisible="False"
-                    HighlightedItem="{Binding HighlightedNavigationFooterItem, Source={x:Reference Name=Root}}"
+                    SelectedItem="{Binding SelectedNavigationFooterItem, Source={x:Reference Name=Root}}"
                     AdviceCommand="{Binding AdviceClicked, Source={x:Reference Name=Root}}"
                     AppointmentsCommand="{Binding AppointmentsClicked, Source={x:Reference Name=Root}}"
                     PrescriptionsCommand="{Binding PrescriptionsClicked, Source={x:Reference Name=Root}}"

@@ -43,7 +43,7 @@
             </VisualState>
             <VisualState x:Name="Selected">
                 <VisualState.Setters>
-                    <Setter TargetName="ItemIcon" Property="ContentView.Content" Value="{Binding HighlightedIcon, Source={x:Reference Name=Root}}" />
+                    <Setter TargetName="ItemIcon" Property="ContentView.Content" Value="{Binding SelectedIcon, Source={x:Reference Name=Root}}" />
                     <Setter TargetName="ItemLabel" Property="Label.TextColor" Value="{StaticResource NhsUkBlue}" />
                 </VisualState.Setters>
             </VisualState>
@@ -52,7 +52,7 @@
 
     <ContentView.Content>
         <StackLayout StyleClass="Outer" AutomationId="{Binding Text, Source={x:Reference Name=Root}}"
-                     effects:AccessibilityEffect.AccessibilityControlType="Button"
+                     effects:AccessibilityEffect.ControlType="Button"
                      AutomationProperties.Name="{Binding Text, Source={x:Reference Name=Root}}">
             <StackLayout AutomationId="{Binding Text, Source={x:Reference Name=Root}}">
                 <ContentView x:Name="ItemIcon"/>

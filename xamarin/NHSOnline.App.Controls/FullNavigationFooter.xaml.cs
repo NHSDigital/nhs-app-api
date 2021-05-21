@@ -20,18 +20,18 @@ namespace NHSOnline.App.Controls
         public static readonly BindableProperty MessagesCommandProperty =
             BindableProperty.Create(nameof(MessagesCommand), typeof(ICommand), typeof(FullNavigationFooter));
 
-        public static readonly BindableProperty HighlightedItemProperty =
-            BindableProperty.Create(nameof(HighlightedItem), typeof(NavigationFooterItem), typeof(FullNavigationFooter));
-        public static readonly BindableProperty AppointmentsHighlightedProperty =
-            BindableProperty.Create(nameof(AppointmentsHighlighted), typeof(bool), typeof(FullNavigationFooter));
-        public static readonly BindableProperty AdviceHighlightedProperty =
-            BindableProperty.Create(nameof(AdviceHighlighted), typeof(bool), typeof(FullNavigationFooter));
-        public static readonly BindableProperty PrescriptionsHighlightedProperty =
-            BindableProperty.Create(nameof(PrescriptionsHighlighted), typeof(bool), typeof(FullNavigationFooter));
-        public static readonly BindableProperty YourHealthHighlightedProperty =
-            BindableProperty.Create(nameof(YourHealthHighlighted), typeof(bool), typeof(FullNavigationFooter));
-        public static readonly BindableProperty MessagesHighlightedProperty =
-            BindableProperty.Create(nameof(MessagesHighlighted), typeof(bool), typeof(FullNavigationFooter));
+        public static readonly BindableProperty SelectedItemProperty =
+            BindableProperty.Create(nameof(SelectedItem), typeof(NavigationFooterItem), typeof(FullNavigationFooter));
+        public static readonly BindableProperty AppointmentsSelectedProperty =
+            BindableProperty.Create(nameof(AppointmentsSelected), typeof(bool), typeof(FullNavigationFooter));
+        public static readonly BindableProperty AdviceSelectedProperty =
+            BindableProperty.Create(nameof(AdviceSelected), typeof(bool), typeof(FullNavigationFooter));
+        public static readonly BindableProperty PrescriptionsSelectedProperty =
+            BindableProperty.Create(nameof(PrescriptionsSelected), typeof(bool), typeof(FullNavigationFooter));
+        public static readonly BindableProperty YourHealthSelectedProperty =
+            BindableProperty.Create(nameof(YourHealthSelected), typeof(bool), typeof(FullNavigationFooter));
+        public static readonly BindableProperty MessagesSelectedProperty =
+            BindableProperty.Create(nameof(MessagesSelected), typeof(bool), typeof(FullNavigationFooter));
 
 
         public FullNavigationFooter()
@@ -51,12 +51,12 @@ namespace NHSOnline.App.Controls
 
             switch (propertyName)
             {
-                case nameof(HighlightedItem):
-                    AdviceHighlighted = HighlightedItem == NavigationFooterItem.Advice;
-                    AppointmentsHighlighted = HighlightedItem == NavigationFooterItem.Appointments;
-                    PrescriptionsHighlighted = HighlightedItem == NavigationFooterItem.Prescriptions;
-                    YourHealthHighlighted = HighlightedItem == NavigationFooterItem.YourHealth;
-                    MessagesHighlighted = HighlightedItem == NavigationFooterItem.Messages;
+                case nameof(SelectedItem):
+                    AdviceSelected = SelectedItem == NavigationFooterItem.Advice;
+                    AppointmentsSelected = SelectedItem == NavigationFooterItem.Appointments;
+                    PrescriptionsSelected = SelectedItem == NavigationFooterItem.Prescriptions;
+                    YourHealthSelected = SelectedItem == NavigationFooterItem.YourHealth;
+                    MessagesSelected = SelectedItem == NavigationFooterItem.Messages;
                     break;
                 default:
                     break;
@@ -93,40 +93,40 @@ namespace NHSOnline.App.Controls
             set => SetValue(MessagesCommandProperty, value);
         }
 
-        public NavigationFooterItem HighlightedItem
+        public NavigationFooterItem SelectedItem
         {
-            get => (NavigationFooterItem) GetValue(HighlightedItemProperty);
-            set => SetValue(HighlightedItemProperty, value);
+            get => (NavigationFooterItem) GetValue(SelectedItemProperty);
+            set => SetValue(SelectedItemProperty, value);
         }
 
-        public bool AdviceHighlighted
+        public bool AdviceSelected
         {
-            get => (bool) GetValue(AdviceHighlightedProperty);
-            set => SetValue(AdviceHighlightedProperty, value);
+            get => (bool) GetValue(AdviceSelectedProperty);
+            set => SetValue(AdviceSelectedProperty, value);
         }
 
-        public bool AppointmentsHighlighted
+        public bool AppointmentsSelected
         {
-            get => (bool) GetValue(AppointmentsHighlightedProperty);
-            set => SetValue(AppointmentsHighlightedProperty, value);
+            get => (bool) GetValue(AppointmentsSelectedProperty);
+            set => SetValue(AppointmentsSelectedProperty, value);
         }
 
-        public bool PrescriptionsHighlighted
+        public bool PrescriptionsSelected
         {
-            get => (bool) GetValue(PrescriptionsHighlightedProperty);
-            set => SetValue(PrescriptionsHighlightedProperty, value);
+            get => (bool) GetValue(PrescriptionsSelectedProperty);
+            set => SetValue(PrescriptionsSelectedProperty, value);
         }
 
-        public bool YourHealthHighlighted
+        public bool YourHealthSelected
         {
-            get => (bool) GetValue(YourHealthHighlightedProperty);
-            set => SetValue(YourHealthHighlightedProperty, value);
+            get => (bool) GetValue(YourHealthSelectedProperty);
+            set => SetValue(YourHealthSelectedProperty, value);
         }
 
-        public bool MessagesHighlighted
+        public bool MessagesSelected
         {
-            get => (bool) GetValue(MessagesHighlightedProperty);
-            set => SetValue(MessagesHighlightedProperty, value);
+            get => (bool) GetValue(MessagesSelectedProperty);
+            set => SetValue(MessagesSelectedProperty, value);
         }
     }
 }
