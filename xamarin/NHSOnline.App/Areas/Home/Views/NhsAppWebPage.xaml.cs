@@ -7,7 +7,6 @@ using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Threading;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Navigation;
-using NHSOnline.App.Navigation.Pages;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.Home.Views
@@ -36,6 +35,10 @@ namespace NHSOnline.App.Areas.Home.Views
         public Func<OpenWebIntegrationRequest, Task>? OpenWebIntegrationRequested { get; set; }
         public AsyncCommand<OpenWebIntegrationRequest> OpenWebIntegrationCommand
             => new AsyncCommand<OpenWebIntegrationRequest>(() => OpenWebIntegrationRequested);
+
+        public Func<AddEventToCalendarRequest, Task>? AddEventToCalendarRequested { get; set; }
+        public AsyncCommand<AddEventToCalendarRequest> AddEventToCalendarCommand
+            => new AsyncCommand<AddEventToCalendarRequest>(() => AddEventToCalendarRequested);
 
         public Func<StartNhsLoginUpliftRequest, Task>? StartNhsLoginUpliftRequested { get; set; }
         public AsyncCommand<StartNhsLoginUpliftRequest> StartNhsLoginUpliftCommand

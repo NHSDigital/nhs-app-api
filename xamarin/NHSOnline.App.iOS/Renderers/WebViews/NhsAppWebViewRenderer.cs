@@ -28,6 +28,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                 .AddFunction("openAppSettings", webView => webView.OpenSettings)
                 .AddFunction("setMenuBarItem", webView => webView.SetMenuBarItem)
                 .AddFunction("clearMenuBarItem", webView => webView.ClearMenuBarItem)
+                .AddFunction("addEventToCalendar", webView => webView.AddEventToCalendar)
                 .AddFunction("logout", webView => webView.Logout)
                 .Apply(config.UserContentController);
         }

@@ -68,6 +68,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterHandler<WebNavigatedEventArgs>(ViewOnNavigated, (view, handler) => view.Navigated = handler)
                 .RegisterHandler(HelpRequested, (view, handler) => view.HelpRequested = handler)
                 .RegisterHandler<OpenWebIntegrationRequest>(OpenWebIntegrationRequested, (view, handler) => view.OpenWebIntegrationRequested = handler)
+                .RegisterHandler<AddEventToCalendarRequest>(AddEventToCalendarRequested, (view, handler) => view.AddEventToCalendarRequested = handler)
                 .RegisterHandler<StartNhsLoginUpliftRequest>(StartNhsLoginUpliftRequested, (view, handler) => view.StartNhsLoginUpliftRequested = handler)
                 .RegisterHandler(ResetAndShowErrorRequested, (view, handler) => view.ResetAndShowErrorRequested = handler)
                 .RegisterHandler(GetNotificationsStatusRequested, (view, handler) => view.GetNotificationsStatusRequested = handler)
@@ -137,6 +138,14 @@ namespace NHSOnline.App.Areas.Home.Presenters
             await _view.AppNavigation
                 .Push(page)
                 .PreserveThreadContext();
+        }
+
+        private Task AddEventToCalendarRequested(AddEventToCalendarRequest request)
+        {
+            _logger.LogInformation("Add event to calendar Requested - {Subject}", request.Subject);
+            // TODO: Implement code that does things 
+
+            return Task.CompletedTask;
         }
 
         private async Task StartNhsLoginUpliftRequested(StartNhsLoginUpliftRequest request)

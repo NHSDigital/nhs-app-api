@@ -26,6 +26,9 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty OpenWebIntegrationCommandProperty =
             BindableProperty.Create(nameof(OpenWebIntegrationCommand), typeof(AsyncCommand<OpenWebIntegrationRequest>), typeof(NhsAppWebView));
 
+        public static readonly BindableProperty AddEventToCalendarCommandProperty =
+            BindableProperty.Create(nameof(AddEventToCalendarCommand), typeof(AsyncCommand<AddEventToCalendarRequest>), typeof(NhsAppWebView));
+
         public static readonly BindableProperty StartNhsLoginUpliftCommandProperty =
             BindableProperty.Create(nameof(StartNhsLoginUpliftCommand), typeof(AsyncCommand<StartNhsLoginUpliftRequest>), typeof(NhsAppWebView));
 
@@ -65,6 +68,18 @@ namespace NHSOnline.App.Controls.WebViews
         {
             get => (AsyncCommand<OpenWebIntegrationRequest>) GetValue(OpenWebIntegrationCommandProperty);
             set => SetValue(OpenWebIntegrationCommandProperty, value);
+        }
+
+        public void AddEventToCalendar(string json)
+        {
+            var request = ConvertFromJsonString<AddEventToCalendarRequest>(json);
+            AddEventToCalendarCommand.Execute(request);
+        }
+
+        public AsyncCommand<AddEventToCalendarRequest> AddEventToCalendarCommand
+        {
+            get => (AsyncCommand<AddEventToCalendarRequest>) GetValue(AddEventToCalendarCommandProperty);
+            set => SetValue(AddEventToCalendarCommandProperty, value);
         }
 
         public void StartNhsLoginUplift(string json)

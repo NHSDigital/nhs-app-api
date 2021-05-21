@@ -25,6 +25,7 @@
                                 x:Name="WebView"
                                 VerticalOptions="FillAndExpand"
                                 OpenWebIntegrationCommand="{Binding OpenWebIntegrationCommand, Source={x:Reference Name=Page}}"
+                                AddEventToCalendarCommand="{Binding AddEventToCalendarCommand, Source={x:Reference Name=Page}}"
                                 StartNhsLoginUpliftCommand="{Binding StartNhsLoginUpliftCommand, Source={x:Reference Name=Page}}"
                                 GetNotificationsStatusCommand="{Binding GetNotificationsStatusCommand, Source={x:Reference Name=Page}}"
                                 RequestPnsTokenCommand="{Binding RequestPnsTokenCommand, Source={x:Reference Name=Page}}"

@@ -86,5 +86,12 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         {
             NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.ClearMenuBarItem());
         }
+
+        [JavascriptInterface]
+        [Export("addEventToCalendar")]
+        public void AddEventToCalendar(string argumentJson)
+        {
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.AddEventToCalendar(argumentJson));
+        }
     }
 }
