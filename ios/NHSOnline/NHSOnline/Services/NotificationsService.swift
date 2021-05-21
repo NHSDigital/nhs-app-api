@@ -79,6 +79,8 @@ class NotificationsService {
             status = .notDetermined
         case .denied:
             status = .denied
+        case .ephemeral:
+            status = .provisional
         @unknown default:
             status = .unknown
         }

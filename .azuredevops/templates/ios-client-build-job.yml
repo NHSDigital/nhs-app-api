@@ -47,7 +47,6 @@ jobs:
       - task: Xcode@5
         displayName: 'Build ${{ parameters.target }}'
         inputs:
-          xcodeVersion: 11
           xcWorkspacePath: ios/NHSOnline/NHSOnline.xcworkspace
           sdk: iphoneos
           scheme: '${{ parameters.scheme }}'
@@ -59,6 +58,13 @@ jobs:
           signingIdentity: $(APPLE_CERTIFICATE_SIGNING_IDENTITY)
           provisioningProfileName: '${{ parameters.provisioningProfileName }}'
           provisioningProfileUuid: $(APPLE_PROV_PROFILE_UUID)
+
+      - task: Bash@3
+        displayName: 'Rename ipa file'
+        inputs:
+          targetType: inline
+          script: |
+            mv $(Build.SourcesDirectory)/ipa/${{ parameters.target }}/NHSOnline.ipa $(Build.SourcesDirectory)/ipa/${{ parameters.target }}/NHSOnline${{ parameters.target }}.ipa 
 
       - task: PublishBuildArtifacts@1
         displayName: Publish iOS package files

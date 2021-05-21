@@ -20,7 +20,7 @@ jobs:
           additionalVariables:
             tests.name: "iOS ${{ parameters['job.name'] }}"
             tests.script: "03_integration_test_run_browserstack_ios.sh"
-            native.app.path.ios: "$(System.ArtifactsDirectory)/iOS Package Files/BrowserStack/NHSOnline Dev.ipa"
+            native.app.path.ios: "$(System.ArtifactsDirectory)/iOS Package Files/BrowserStack/NHSOnlineBrowserStack.ipa"
             browserstack.build: $(Build.BuildNumber)
             tranche.tag: ${{ parameters['tranche.tag'] }}
     steps:
@@ -29,6 +29,6 @@ jobs:
         inputs:
           downloadType: single
           artifactName: iOS Package Files
-          itemPattern: '**/BrowserStack/NHSOnline Dev.ipa'
+          itemPattern: '**/BrowserStack/NHSOnlineBrowserStack.ipa'
 
       - template: integration-tests-steps.yml

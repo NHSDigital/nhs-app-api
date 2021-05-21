@@ -277,7 +277,7 @@ class HomeViewControllerTests: XCTestCase {
         DispatchQueue.main.async{
             expectation.fulfill()
         }
-        wait(for: [expectation], timeout: 10.0)
+        wait(for: [expectation], timeout: 20.0)
         
         XCTAssert(mockBiometricService.calledRegister == true)
     }
@@ -301,7 +301,7 @@ class HomeViewControllerTests: XCTestCase {
         DispatchQueue.main.async{
             expectation.fulfill()
         }
-        wait(for: [expectation], timeout: 10.0)
+        wait(for: [expectation], timeout: 20.0)
         
         XCTAssert(mockBiometricService.calledDeRegister == true)
     }
@@ -327,7 +327,7 @@ class HomeViewControllerTests: XCTestCase {
         DispatchQueue.main.async{
             expectation.fulfill()
         }
-        wait(for: [expectation], timeout: 10.0)
+        wait(for: [expectation], timeout: 20.0)
         
         XCTAssert(mockBiometricService.calledDeRegister == false)
         XCTAssert(mockBiometricService.calledRegister == false)
