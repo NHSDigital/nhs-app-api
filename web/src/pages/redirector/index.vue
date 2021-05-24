@@ -74,8 +74,12 @@ export default {
     this.startRedirect();
   },
   methods: {
+    getDecodedRedirectParam() {
+      const redirectParam = get(REDIRECT_PARAMETER)(this.$route.query);
+      return redirectParam ? decodeURIComponent(redirectParam) : undefined;
+    },
     startRedirect() {
-      this.redirectParameter = get(REDIRECT_PARAMETER)(this.$route.query);
+      this.redirectParameter = this.getDecodedRedirectParam();
       const redirectEnum = get(REDIRECT_PAGE_PARAMETER)(this.$route.query);
 
       if (redirectEnum) {
@@ -278,14 +282,13 @@ export default {
         return;
       }
 
-      const decodedParameter = decodeURIComponent(redirectParameter);
-      const path = this.resolvePatientUrl(decodedParameter);
-      if (isNhsAppHost(decodedParameter) || isNhsAppPath(path, this.$router)) {
+      const path = this.resolvePatientUrl(redirectParameter);
+      if (isNhsAppHost(redirectParameter) || isNhsAppPath(path, this.$router)) {
         this.handleInternalRedirect(path);
         return;
       }
 
-      this.handleExternalRedirect(decodedParameter);
+      this.handleExternalRedirect(redirectParameter);
     },
     resolvePatientUrl(url) {
       const trimmedPath = removeNhsAppHost(url);

@@ -1,7 +1,9 @@
 using System;
 using Foundation;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.iOS.Extensions;
 using NHSOnline.App.Logging;
+using UIKit;
 
 namespace NHSOnline.App.iOS.DependencyServices.Notifications
 {
@@ -18,6 +20,11 @@ namespace NHSOnline.App.iOS.DependencyServices.Notifications
 
         internal void DidReceiveRemoteNotification(NSDictionary userInfo)
         {
+            if (UIApplication.SharedApplication.IsBrowserOverlayActive())
+            {
+                return;
+            }
+
             try
             {
                 var aps = (NSDictionary) userInfo["aps"];

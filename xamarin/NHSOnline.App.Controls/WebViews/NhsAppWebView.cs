@@ -11,7 +11,6 @@ namespace NHSOnline.App.Controls.WebViews
 {
     public sealed class NhsAppWebView: WebView, IAccessibleWebView
     {
-
         public event EventHandler<FocusRequestArgs> AccessibilityFocusChangeRequested = null!;
 
         public void AccessibilityFocus()
@@ -233,7 +232,50 @@ namespace NHSOnline.App.Controls.WebViews
                 NullValueHandling = NullValueHandling.Ignore
             };
             settings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
+            settings.Converters.Add(new UriConverter());
             return settings;
+        }
+
+        private class UriConverter : JsonConverter
+        {
+            public override bool CanConvert(Type objectType)
+            {
+                return objectType == typeof(Uri);
+            }
+
+            public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
+            {
+                switch (reader)
+                {
+                    case {TokenType: JsonToken.String}:
+                    {
+                        if (reader.Value is string url)
+                        {
+                            return new Uri(url, UriKind.RelativeOrAbsolute);
+                        }
+                        return null;
+                    }
+                    case {TokenType: JsonToken.Null}:
+                        return null;
+                    default:
+                        throw new InvalidOperationException("Unhandled case for UriConverter. Check to see if this converter has been applied to the wrong serialization type.");
+                }
+            }
+
+            public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
+            {
+                switch (value)
+                {
+                    case null:
+                        writer.WriteNull();
+                        return;
+                    case Uri uri:
+                        writer.WriteValue(uri.OriginalString);
+                        return;
+                    default:
+                        throw new InvalidOperationException("Unhandled case for UriConverter. Check to see if this converter has been applied to the wrong serialization type.");
+                }
+            }
         }
     }
 }

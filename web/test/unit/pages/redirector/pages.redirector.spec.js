@@ -12,6 +12,7 @@ import {
 import { allRoutes } from '@/router';
 import * as dependency from '@/lib/utils';
 import * as window from '@/lib/window';
+import NativeApp from '@/services/native-app';
 import { createStore, localVue, mount } from '../../helpers';
 
 jest.mock('@/lib/sessionStorage');
@@ -229,12 +230,71 @@ describe('redirector page', () => {
     });
   });
 
-  describe('has a redirect parameter to an external site in the knownServices list and the path is included in the third-party-provider locale', () => {
+  describe('has a redirect parameter to an external site in the knownServices list and the path is included in the third-party-provider locale on web', () => {
     beforeEach(() => {
+      NativeApp.supportsNativeWebIntegration.mockReturnValue(false);
       hasAgreedToThirdPartyWarning.mockReturnValue(false);
       $route = {
         name: names.INTERSTITIAL_REDIRECTOR_NAME,
         query: { [names.REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
+        meta: {},
+      };
+
+      window.setWindowLocation = jest.fn();
+
+      wrapper = mountRedirector({
+        hasKnownService: true,
+        requiresAssertedLoginIdentity: true,
+        showThirdPartyWarning: true,
+        isSilverIntegrationEnabled: true,
+        isProofLevel9: true,
+      });
+    });
+
+    it('warning section should be shown', () => {
+      expect(wrapper.vm.shouldShowWarning).toEqual(true);
+    });
+
+    it('will set tab title to be the name of the feature', () => {
+      expect(wrapper.vm.$route.meta.titleKey).toBe('Messages and online consultations');
+    });
+
+    describe('on continue button click', () => {
+      beforeEach(() => {
+        const continueButton = wrapper.find('a.nhsuk-button');
+        continueButton.trigger('click');
+      });
+
+      it('will call `postV1PatientAssertedLoginIdentity`', () => {
+        expect($http.postV1PatientAssertedLoginIdentity).toHaveBeenCalledWith({
+          assertedLoginIdentityRequest: {
+            IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
+            JumpOffId: 'messages',
+            ProviderId: 'pkb',
+            ProviderName: 'Patients Know Best',
+            Action: 'SilverIntegrationJumpOff',
+          },
+          ignoreError: true,
+        });
+      });
+
+      it('will redirect to the external url', () => {
+        expect(window.setWindowLocation).toHaveBeenCalledWith('http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages&assertedLoginIdentity=jwtToken');
+      });
+    });
+
+    afterEach(() => {
+      hasAgreedToThirdPartyWarning.mockClear();
+    });
+  });
+
+  describe('has a redirect parameter to an external site in the knownServices list and the path is included in the third-party-provider locale on native app', () => {
+    beforeEach(() => {
+      NativeApp.supportsNativeWebIntegration.mockReturnValue(true);
+      hasAgreedToThirdPartyWarning.mockReturnValue(false);
+      $route = {
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PARAMETER]: 'http%3A%2F%2Fwww.url.com%2Fnhs-login%2Flogin?phrPath=%2Fauth%2FgetInbox.action?tab=messages' },
         meta: {},
       };
 
@@ -272,6 +332,10 @@ describe('redirector page', () => {
           },
           ignoreError: true,
         });
+      });
+
+      it('will call NativeApp.openWebIntegration with the decoded asserted login url', () => {
+        expect(NativeApp.openWebIntegration).toHaveBeenCalledWith('http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages&assertedLoginIdentity=jwtToken');
       });
     });
 
@@ -488,6 +552,7 @@ describe('redirector page', () => {
         meta: {},
       };
 
+      NativeApp.supportsNativeWebIntegration.mockReturnValue(false);
       window.setWindowLocation = jest.fn();
 
       wrapper = mountRedirector({
