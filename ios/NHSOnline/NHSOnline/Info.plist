@@ -59,7 +59,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.50.17</string>
+	<string>1.50.19</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
