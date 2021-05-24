@@ -59,6 +59,9 @@
   <Import Project="Properties/BuildConfiguration.debugmode.$(DebugMode).props" />
   <Import Project="Properties/BuildConfiguration.platform.$(Platform).props" />
   <ItemGroup>
+    <Compile Include="Controllers\AlertPopup.cs" />
+    <Compile Include="Controllers\IosViewController.cs" />
+    <Compile Include="Controllers\CalendarEventController.cs" />
     <Compile Include="DependencyServices\Biometrics\BiometricAuthKey.cs" />
     <Compile Include="DependencyServices\Biometrics\BiometricAuthKeyProvider.cs" />
     <Compile Include="DependencyServices\Biometrics\BiometricAuthSigner.cs" />
@@ -67,6 +70,9 @@
     <Compile Include="DependencyServices\Biometrics\IBiometricAuthKeyProvider.cs" />
     <Compile Include="DependencyServices\Biometrics\IosBiometrics.cs" />
     <Compile Include="DependencyServices\Biometrics\SimulatedBiometricAuthKeyProvider.cs" />
+    <Compile Include="DependencyServices\Calendar\ApplicationEventStore.cs" />
+    <Compile Include="DependencyServices\Calendar\CreateEventEditView.cs" />
+    <Compile Include="DependencyServices\Calendar\IosCalendar.cs" />
     <Compile Include="DependencyServices\IosHttpMessageHandlerFactory.cs" />
     <Compile Include="DependencyServices\IosCookies.cs" />
     <Compile Include="DependencyServices\IosLifecycle.cs" />

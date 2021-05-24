@@ -58,6 +58,8 @@
     <array>
       <string>remote-notification</string>
     </array>
+    <key>NSCalendarsUsageDescription</key>
+    <string>So we can add events to your calendar, like appointments.</string>
   </dict>
 </plist>
 

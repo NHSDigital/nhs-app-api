@@ -6,8 +6,8 @@ namespace NHSOnline.App.Controls.WebViews.Payloads
             string subject,
             string body,
             string location,
-            long startTimeEpochInSeconds,
-            long endTimeEpochInSeconds)
+            int startTimeEpochInSeconds,
+            int endTimeEpochInSeconds)
         {
             Subject = subject;
             Body = body;
@@ -19,7 +19,7 @@ namespace NHSOnline.App.Controls.WebViews.Payloads
         public string Subject { get; set; }
         public string Body { get; set; }
         public string Location { get; set; }
-        public long StartTimeEpochInSeconds { get; set; }
-        public long EndTimeEpochInSeconds { get; set; }
+        public int StartTimeEpochInSeconds { get; set; }
+        public int EndTimeEpochInSeconds { get; set; }
     }
 }

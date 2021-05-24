@@ -33,6 +33,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly RedirectorUrlFactory _redirectorUrlFactory;
         private readonly INhsAppNavigationHandler _navigationHandler;
         private readonly INotifications _notifications;
+        private readonly ICalendar _calendar;
         private readonly ISettingsService _settingsService;
 
         public NhsAppWebPresenter(
@@ -46,7 +47,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
             INotifications notifications,
             IBiometricAuthenticationService biometricAuthenticationService,
             RedirectorUrlFactory redirectorUrlFactory,
-            ISettingsService settingsService)
+            ISettingsService settingsService,
+            ICalendar calendar)
         {
             _model = model;
             _view = view;
@@ -60,6 +62,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _biometricAuthenticationService = biometricAuthenticationService;
             _redirectorUrlFactory = redirectorUrlFactory;
             _settingsService = settingsService;
+            _calendar = calendar;
             _navigationHandler = new NhsAppNavigationHandler(view);
 
             _view.AppNavigation
@@ -140,10 +143,22 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .PreserveThreadContext();
         }
 
-        private Task AddEventToCalendarRequested(AddEventToCalendarRequest request)
+        private async Task<Task> AddEventToCalendarRequested(AddEventToCalendarRequest request)
         {
             _logger.LogInformation("Add event to calendar Requested - {Subject}", request.Subject);
-            // TODO: Implement code that does things 
+
+            var calendarPermission = await _calendar
+                .RequestPermission()
+                .PreserveThreadContext();
+
+            if (calendarPermission)
+            {
+                _calendar.AddToCalendar(request);
+            }
+            else
+            {
+                _calendar.ShowAlertPopup();
+            }
 
             return Task.CompletedTask;
         }
