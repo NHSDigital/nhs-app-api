@@ -38,6 +38,7 @@
                     @onBarStatusChanged="setSurveyBarStatus"/>
 
         <hot-jar v-if="isAnalyticsCookieAccepted()"/>
+        <qualtrics-intercept v-if="isQualtricsVisible()"/>
 
         <div v-if="!$store.state.device.isNativeApp">
           <web-footer/>
@@ -57,6 +58,7 @@ import HotJar from '@/components/widgets/HotJar';
 import Modal from '@/components/modal/Modal';
 import NativeCallbacks from '@/services/native-app';
 import NativeVersionSetup from '@/services/nativeVersionSetup';
+import QualtricsIntercept from '@/components/widgets/QualtricsIntercept';
 import ResetSpinnerMixin from '@/plugins/mixinDefinitions/ResetSpinnerMixin';
 import Spinner from '@/components/widgets/Spinner';
 import SurveyBar from '@/components/SurveyBar';
@@ -81,6 +83,7 @@ export default {
     FlashMessage,
     HotJar,
     Modal,
+    QualtricsIntercept,
     Spinner,
     SurveyBar,
     WebFooter,
@@ -229,6 +232,9 @@ export default {
   methods: {
     isAnalyticsCookieAccepted() {
       return this.$store.state.termsAndConditions.analyticsCookieAccepted;
+    },
+    isQualtricsVisible() {
+      return this.isAnalyticsCookieAccepted() && this.$store.$env.QUALTRICS_SURVEY_ENABLED;
     },
     isHotJarSurveyVisible() {
       return this.isAnalyticsCookieAccepted() && this.$store.$env.HOTJAR_SURVEY_VISIBLE;

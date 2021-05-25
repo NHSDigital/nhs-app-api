@@ -146,6 +146,8 @@ spec:
           value: "https://in.hotjar.com/s?siteId=859152&surveyId=95785"
         - name: HOTJAR_SURVEY_VISIBLE
           value: "false"
+        - name: QUALTRICS_SURVEY_ENABLED
+          value: "{{ $.Values.qualtricsSurveyEnabled }}"
         - name: CE_MARK_ENABLED
           value: "false"
         - name: SESSION_EXPIRING_WARNING_SECONDS

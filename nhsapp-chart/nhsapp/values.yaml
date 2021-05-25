@@ -314,6 +314,7 @@ web:
   bloodDonationUrl: https://www.blood.co.uk/
   thirdPartyJumpOffLoggingEnabled: false
   environmentVariables: {}
+  qualtricsSurveyEnabled: false
 
 api:
   containerPort: 8080

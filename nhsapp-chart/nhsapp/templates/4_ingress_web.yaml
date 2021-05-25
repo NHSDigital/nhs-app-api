@@ -12,7 +12,7 @@ metadata:
       more_set_headers 'X-Frame-Options: DENY';
       more_set_headers 'X-Content-Type-Options: nosniff';
       more_set_headers 'Referrer-Policy: no-referrer';
-      more_set_headers 'Content-Security-Policy: frame-src \'self\' https://nhs.demdex.net/ https://assets.adobedtm.com *.112.2o7.net https://*.hotjar.com; frame-ancestors \'self\'; object-src \'none\'';
+      more_set_headers 'Content-Security-Policy: frame-src \'self\' https://feedback.digital.nhs.uk/ https://nhs.demdex.net/ https://assets.adobedtm.com *.112.2o7.net https://*.hotjar.com; frame-ancestors \'self\'; object-src \'none\'';
       more_clear_headers 'server';
   name: {{ template "nhsapp.name" . }}-{{ $.Values.web.role }}-{{ .Chart.AppVersion | replace "." "-" }}
   namespace: {{ $.Values.global.environment }}
