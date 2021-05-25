@@ -1564,6 +1564,141 @@ defaultUsers:
       dateOfBirth: "2002-08-05T00:00:00"
       sex: Female
 
+    9437244030:
+      userId: c8c735ab-49a7-4622-82f5-c2cb74bd9ff0
+      emailAddress: nhsapp.aos+netcompany.user35@gmail.com
+      odsCode: F00010
+      givenName: CHRISTIAN
+      familyName: DEPETRO
+      dateOfBirth: "2002-05-09T00:00:00"
+      sex: Male
+
+    9449088470:
+      userId: 340dd1c3-e300-4e13-aac4-4b1bb7a4cc07
+      emailAddress: nhsapp.aos+netcompany.user36@gmail.com
+      odsCode: F00010
+      givenName: MARIS
+      familyName: ANDREW-GERRARD
+      dateOfBirth: "2000-08-13T00:00:00"
+      sex: Female
+
+    5558603968:
+      userId: 7a31f0f7-192a-4dde-bb1b-4ccbe94e60f7
+      emailAddress: nhsapp.aos+netcompany.user37@gmail.com
+      odsCode: F00010
+      givenName: Hotel
+      familyName: SEPT
+      dateOfBirth: "2003-11-13T00:00:00"
+      sex: Female
+
+    9437629080:
+      userId: 08450dd9-ffc5-4bf7-b314-4f4d50342322
+      emailAddress: nhsapp.aos+netcompany.user38@gmail.com
+      odsCode: F00010
+      givenName: DIGBY
+      familyName: PACKMAN
+      dateOfBirth: "2002-O3-07T00:00:00"
+      sex: Male
+
+    9435687954:
+      userId: bb315276-a891-4968-b112-b6a520abd283
+      emailAddress: nhsapp.aos+netcompany.user39@gmail.com
+      odsCode: F00010
+      givenName: WOODY
+      familyName: CAMPLEJOHN
+      dateOfBirth: "2000-05-29T00:00:00"
+      sex: Male
+
+    9442849204:
+      userId: 021df1ef-8472-45ef-8f6d-a6dd6a240055
+      emailAddress: nhsapp.aos+netcompany.user40@gmail.com
+      odsCode: F00010
+      givenName: KIM
+      familyName: JACOB
+      dateOfBirth: "2003-03-03T00:00:00"
+      sex: Female
+
+    9413990328:
+      userId: 08f4699a-e7a4-488c-8d62-5c6c86930102
+      emailAddress: nhsapp.aos+netcompany.user41@gmail.com
+      odsCode: F00010
+      givenName: JUNG
+      familyName: JEYS
+      dateOfBirth: "2001-01-05T00:00:00"
+      sex: Female
+
+    9449099936:
+      userId: b8c344ed-2ee8-4bc3-b0e2-18b93b75d394
+      emailAddress: nhsapp.aos+netcompany.user42@gmail.com
+      odsCode: F00010
+      givenName: ASADEL
+      familyName: AL-ALI
+      dateOfBirth: "2003-08-20T00:00:00"
+      sex: Female
+
+    9459931006:
+      userId: a762b44b-4431-405b-9f83-7958ed606743
+      emailAddress: nhsapp.aos+netcompany.user43@gmail.com
+      odsCode: F00010
+      givenName: MAURICE
+      familyName: KOONSUNTAI
+      dateOfBirth: "2001-08-20T00:00:00"
+      sex: Female
+
+    9436315139:
+      userId: 5af3e3a0-1f06-4991-9200-8ba21bb366af
+      emailAddress: nhsapp.aos+netcompany.user44@gmail.com
+      odsCode: F00010
+      givenName: IZABELLE
+      familyName: MANTILLAS
+      dateOfBirth: "2005-01-28T00:00:00"
+      sex: Female
+
+    9452583614:
+      userId: 910d5599-0379-40f5-bce5-2fff60a8b3c8
+      emailAddress: nhsapp.aos+netcompany.user45@gmail.com
+      odsCode: F00010
+      givenName: PATRALIKA
+      familyName: STRAN-INVALIDTEL1
+      dateOfBirth: "2003-01-24T00:00:00"
+      sex: male
+
+    9454502441:
+      userId: d776054f-06a5-4462-9a58-98c3f9a84018
+      emailAddress: nhsapp.aos+netcompany.user46@gmail.com
+      odsCode: F00010
+      givenName: MARIA
+      familyName: WOOD
+      dateOfBirth: "2000-04-14T00:00:00"
+      sex: Female
+
+    9457861027:
+      userId: 75ff758d-bfba-47e3-aa9e-f5f6d3be81cb
+      emailAddress: nhsapp.aos+netcompany.user47@gmail.com
+      odsCode: F00010
+      givenName: AROKYA
+      familyName: SATHAYE
+      dateOfBirth: "2001-07-05T00:00:00"
+      sex: Female
+
+    9437454795:
+      userId: 71f9c7f0-c889-4888-98ba-670f6ec2fc91
+      emailAddress: nhsapp.aos+netcompany.user48@gmail.com
+      odsCode: F00010
+      givenName: ABBUDIN
+      familyName: KHACHATRYAN
+      dateOfBirth: "2005-02-09T00:00:00"
+      sex: Male
+
+    9452199474:
+      userId: 22a36178-ff82-4e47-afb9-9cacfb4569ff
+      emailAddress: nhsapp.aos+netcompany.user49@gmail.com
+      odsCode: F00010
+      givenName: TRACY
+      familyName: BREWER
+      dateOfBirth: "2001-07-13T00:00:00"
+      sex: Female
+
   vaccineRecordAndCovidStatus:
     9486112282:
       userId: e98a13f9-704c-4808-99eb-e052e0bbbf70
