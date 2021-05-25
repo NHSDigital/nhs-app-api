@@ -59,7 +59,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AndroidServices\AndroidNotificationMessagingService.cs" />
-    <Compile Include="DependencyServices\AndroidCalendar.cs" />
     <Compile Include="DependencyServices\AndroidLifecycle.cs" />
     <Compile Include="DependencyServices\AndroidCookies.cs" />
     <Compile Include="DependencyServices\AndroidHttpMessageHandlerFactory.cs" />
@@ -71,8 +70,11 @@
     <Compile Include="DependencyServices\Biometrics\BiometricKeyStore.cs" />
     <Compile Include="DependencyServices\Biometrics\BiometricRegistrationState.cs" />
     <Compile Include="DependencyServices\Biometrics\Extensions.cs" />
+    <Compile Include="DependencyServices\Calendar\AndroidCalendar.cs" />
+    <Compile Include="DependencyServices\Calendar\CalendarIntent.cs" />
     <Compile Include="DependencyServices\Notifications\AndroidGetPnsTokenResponse.cs" />
     <Compile Include="DependencyServices\Notifications\AndroidNotifications.cs" />
+    <Compile Include="Dialogs\AndroidAlertDialog.cs" />
     <Compile Include="Effects\AndroidAccessibilityEffect.cs" />
     <Compile Include="Effects\AndroidFixedFontSizeEffect.cs" />
     <Compile Include="MainActivity.cs" />

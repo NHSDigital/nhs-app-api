@@ -31,7 +31,7 @@ namespace NHSOnline.App.iOS.DependencyServices.Calendar
             CalendarEventController.ShowEventController(request);
         }
 
-        public void ShowAlertPopup()
+        public void ShowPermissionDeniedAlert()
         {
             AlertPopup.ShowAlertPopup(AlertHeader, AlertBody, AlertButtonText);
         }

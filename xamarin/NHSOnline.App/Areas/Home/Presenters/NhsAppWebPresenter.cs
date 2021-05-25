@@ -157,7 +157,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             }
             else
             {
-                _calendar.ShowAlertPopup();
+                _calendar.ShowPermissionDeniedAlert();
             }
 
             return Task.CompletedTask;
