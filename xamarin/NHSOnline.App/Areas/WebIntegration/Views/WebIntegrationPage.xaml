@@ -24,6 +24,7 @@
                                         x:Name="WebView"
                                         VerticalOptions="FillAndExpand"
                                         RedirectToNhsAppPageCommand="{Binding RedirectToNhsAppPageCommand, Source={x:Reference Name=Page}}"
+                                        AddEventToCalendarCommand="{Binding AddEventToCalendarCommand, Source={x:Reference Name=Page}}"
                                         Navigated="WebOnEndNavigating" />
 
     </AbsoluteLayout>

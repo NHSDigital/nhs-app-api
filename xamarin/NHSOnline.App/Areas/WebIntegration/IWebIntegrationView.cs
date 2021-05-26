@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
@@ -24,6 +25,8 @@ namespace NHSOnline.App.Areas.WebIntegration
 
             Func<string, Task>? RedirectToNhsAppPageRequested { get; set; }
             Func<Uri, Task>? DeepLinkRequested { get; set; }
+
+            Func<AddEventToCalendarRequest, Task>? AddEventToCalendarRequested { get; set; }
         }
 
         void GoToUri(Uri uri);

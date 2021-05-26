@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
+using NHSOnline.App.Controls.WebViews.Payloads;
+using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Services;
 using Xamarin.Forms;
 
@@ -18,6 +20,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
         private readonly IBrowserOverlay _browserOverlay;
         private readonly ILogger _logger;
         private readonly WebIntegrationUriDestination _uriDestination;
+        private readonly ICalendar _calendar;
 
         public WebIntegrationPresenter(
             IWebIntegrationView view,
@@ -25,13 +28,15 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             INhsLoginConfiguration nhsLoginConfiguration,
             INhsExternalServicesConfiguration nhsExternalServicesConfiguration,
             IBrowserOverlay browserOverlay,
-            ILogger<WebIntegrationPresenter> logger)
+            ILogger<WebIntegrationPresenter> logger,
+            ICalendar calendar)
         {
             _view = view;
             _model = model;
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
             _browserOverlay = browserOverlay;
             _logger = logger;
+            _calendar = calendar;
 
             _uriDestination = new WebIntegrationUriDestination(nhsLoginConfiguration, model.Url);
 
@@ -61,7 +66,9 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                 .RegisterHandler<string>(
                     RedirectToNhsAppPageRequested, (view, handler) => view.RedirectToNhsAppPageRequested = handler)
                 .RegisterPermanentHandler<Uri>(DeeplinkRequested,
-                    (view, handler) => view.DeepLinkRequested = handler);
+                    (view, handler) => view.DeepLinkRequested = handler)
+                .RegisterHandler<AddEventToCalendarRequest>(AddEventToCalendarRequested,
+                    (view, handler) => view.AddEventToCalendarRequested = handler);
 
         }
 
@@ -113,6 +120,26 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
         {
             webNavigatingEventArgs.Cancel = true;
             await _browserOverlay.OpenBrowserOverlay(url).PreserveThreadContext();
+        }
+
+        private async Task<Task> AddEventToCalendarRequested(AddEventToCalendarRequest request)
+        {
+            _logger.LogInformation("Add event to calendar Requested - {Subject}", request.Subject);
+
+            var calendarPermission = await _calendar
+                .RequestPermission()
+                .PreserveThreadContext();
+
+            if (calendarPermission)
+            {
+                _calendar.AddToCalendar(request);
+            }
+            else
+            {
+                _calendar.ShowPermissionDeniedAlert();
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

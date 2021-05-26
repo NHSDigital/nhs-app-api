@@ -1,3 +1,4 @@
+using System;
 using Android.Content;
 using Android.Provider;
 using NHSOnline.App.Controls.WebViews.Payloads;
@@ -19,10 +20,10 @@ namespace NHSOnline.App.Droid.DependencyServices.Calendar
             calendarIntent.PutExtra(CalendarContract.Events.InterfaceConsts.Availability,
                 EventsAvailability.Busy.ToString());
 
-            calendarIntent.PutExtra(CalendarContract.Events.InterfaceConsts.Dtstart,
-                request.StartTimeEpochInSeconds * 1000);
-            calendarIntent.PutExtra(CalendarContract.Events.InterfaceConsts.Dtend,
-                request.EndTimeEpochInSeconds * 1000);
+            calendarIntent.PutExtra(CalendarContract.ExtraEventBeginTime,
+                DateTimeOffset.FromUnixTimeSeconds(request.StartTimeEpochInSeconds).ToUnixTimeMilliseconds());
+            calendarIntent.PutExtra(CalendarContract.ExtraEventEndTime,
+                DateTimeOffset.FromUnixTimeSeconds(request.EndTimeEpochInSeconds).ToUnixTimeMilliseconds());
 
             calendarIntent.AddFlags(ActivityFlags.NewTask);
 

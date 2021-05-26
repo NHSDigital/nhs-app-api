@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
+using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
@@ -38,6 +39,10 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         public Func<string, Task>? RedirectToNhsAppPageRequested { get; set; }
         public AsyncCommand<string> RedirectToNhsAppPageCommand
             => new AsyncCommand<string>(() => RedirectToNhsAppPageRequested);
+
+        public Func<AddEventToCalendarRequest, Task>? AddEventToCalendarRequested { get; set; }
+        public AsyncCommand<AddEventToCalendarRequest> AddEventToCalendarCommand
+            => new AsyncCommand<AddEventToCalendarRequest>(() => AddEventToCalendarRequested);
 
         public Func<Uri, Task>? DeepLinkRequested { get; set; }
 
