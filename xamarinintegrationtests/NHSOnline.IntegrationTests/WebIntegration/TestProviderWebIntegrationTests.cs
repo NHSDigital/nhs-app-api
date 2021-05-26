@@ -29,7 +29,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Messages();
+                .Navigation.MessagesIcon.Click();
 
             AndroidMessagesPage
                 .AssertOnPage(driver)
@@ -51,7 +51,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Messages();
+                .Navigation.MessagesIcon.Click();
 
             AndroidMessagesPage
                 .AssertOnPage(driver)

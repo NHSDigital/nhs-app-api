@@ -26,7 +26,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Advice();
+                .Navigation.AdviceIcon.Click();
 
             AndroidAdvicePage
                 .AssertOnPage(driver)

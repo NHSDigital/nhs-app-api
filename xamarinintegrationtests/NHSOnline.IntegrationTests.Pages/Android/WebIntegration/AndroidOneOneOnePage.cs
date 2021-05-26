@@ -11,7 +11,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
             PageContent = new OneOneOnePageContent(driver.Web(WebViewContext.OneOneOneWebIntegration));
         }
 
-        private AndroidFullNavigation Navigation { get; }
+        public AndroidFullNavigation Navigation { get; }
 
         private OneOneOnePageContent PageContent { get; }
 

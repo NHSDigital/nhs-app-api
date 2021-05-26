@@ -11,7 +11,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Prescriptions
             PageContent = new PrescriptionsPageContent(driver.Web(WebViewContext.NhsApp));
         }
 
-        private AndroidFullNavigation Navigation { get; }
+        public AndroidFullNavigation Navigation { get; }
 
         public PrescriptionsPageContent PageContent { get; }
 

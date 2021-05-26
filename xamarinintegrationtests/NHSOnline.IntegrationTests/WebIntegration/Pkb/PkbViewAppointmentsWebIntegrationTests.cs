@@ -26,7 +26,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Appointments();
+                .Navigation.AppointmentsIcon.Click();
 
             AndroidAppointmentsPage
                 .AssertOnPage(driver)

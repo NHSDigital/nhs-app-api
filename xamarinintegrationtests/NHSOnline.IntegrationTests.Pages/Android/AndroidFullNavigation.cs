@@ -23,16 +23,15 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidIcon MoreIcon => FullNavigationHeader.ContainingIconWithName("More");
 
-        private AndroidIcon AdviceIcon => FullNavigationFooter.ContainingIconWithName("Advice");
+        public AndroidIcon AdviceIcon => FullNavigationFooter.ContainingIconWithName("Advice");
 
-        private AndroidIcon AppointmentsIcon => FullNavigationFooter.ContainingIconWithName("Appointments");
+        public AndroidIcon AppointmentsIcon => FullNavigationFooter.ContainingIconWithName("Appointments");
 
-        private AndroidIcon PrescriptionsIcon => FullNavigationFooter.ContainingIconWithName("Prescriptions");
+        public AndroidIcon PrescriptionsIcon => FullNavigationFooter.ContainingIconWithName("Prescriptions");
 
-        private AndroidIcon YourHealthIcon => FullNavigationFooter.ContainingIconWithName("Your health");
+        public AndroidIcon YourHealthIcon => FullNavigationFooter.ContainingIconWithName("Your health");
 
-        private AndroidIcon MessagesIcon => FullNavigationFooter.ContainingIconWithName("Messages");
-
+        public AndroidIcon MessagesIcon => FullNavigationFooter.ContainingIconWithName("Messages");
         internal AndroidKeyboardNavigation KeyboardHeaderNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(
             _driver,
             HomeIcon,
@@ -57,31 +56,6 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         public void Home()
         {
             HomeIcon.Click();
-        }
-
-        public void Messages()
-        {
-            MessagesIcon.Click();
-        }
-
-        public void Advice()
-        {
-            AdviceIcon.Click();
-        }
-
-        public void Appointments()
-        {
-            AppointmentsIcon.Click();
-        }
-
-        public void Prescriptions()
-        {
-            PrescriptionsIcon.Click();
-        }
-
-        public void YourHealth()
-        {
-            YourHealthIcon.Click();
         }
 
         public void More()
@@ -120,6 +94,15 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         public void KeyboardNavigateToHomeFromElement(AndroidKeyboardNavigation navigation, IFocusable fromFocusable) =>
             KeyboardNavigateBetweenAndActivateIcon(HomeIcon, navigation, fromFocusable);
+
+        public void AssertNoIconsSelected()
+        {
+            AdviceIcon.AssertNotSelected();
+            AppointmentsIcon.AssertNotSelected();
+            YourHealthIcon.AssertNotSelected();
+            MessagesIcon.AssertNotSelected();
+            PrescriptionsIcon.AssertNotSelected();
+        }
 
         private static void KeyboardNavigateBetweenAndActivateIcon(
             IFocusable icon,

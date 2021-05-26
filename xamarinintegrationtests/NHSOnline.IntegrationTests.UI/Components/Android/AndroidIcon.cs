@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
@@ -25,6 +26,14 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
 
         public void Click()
             => ActOnElement(e => e.Click());
+
+        public void AssertSelected()
+            => ActOnElement(e => e.GetAttribute("selected").Should().Be("true",
+                    "a selected icon with description {1} should be displayed"));
+
+        public void AssertNotSelected()
+            => ActOnElement(e => e.GetAttribute("selected").Should().Be("false",
+                "a selected icon with description {1} should be displayed"));
 
         private void ActOnElement(Action<AndroidElement> action)
             => _interactor.ActOnElement(FindBy, action);

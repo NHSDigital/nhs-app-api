@@ -31,7 +31,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Messages
             return pageFocusableList.Concat(footerFocusableList).Concat(headerFocusableList);
         }
 
-        private AndroidFullNavigation Navigation { get; }
+        public AndroidFullNavigation Navigation { get; }
 
         public MessagesPageContent PageContent { get; }
 

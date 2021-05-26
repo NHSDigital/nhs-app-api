@@ -26,7 +26,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Prescriptions();
+                .Navigation.PrescriptionsIcon.Click();
 
             AndroidPrescriptionsPage
                 .AssertOnPage(driver)

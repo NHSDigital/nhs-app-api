@@ -35,7 +35,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
             => _interactor.ActOnElement(FindBy, action);
 
         private By FindBy
-            => By.XPath($"{_searchPrefix}//a[normalize-space(text())={_text.QuoteXPathLiteral()}]");
+            => By.XPath($"{_searchPrefix}//a[normalize-space(string())={_text.QuoteXPathLiteral()}]");
 
         string IFocusable.ElementDescription
             => new FocusableDescriptionBuilder {Tag = "a", Text = _text}.Description;

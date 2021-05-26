@@ -80,7 +80,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Advice();
+                .Navigation.AdviceIcon.Click();
 
             AndroidAdvicePage
                 .AssertOnPage(driver)
@@ -154,7 +154,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Appointments();
+                .Navigation.AppointmentsIcon.Click();
 
             AndroidAppointmentsPage
                 .AssertOnPage(driver)
@@ -190,7 +190,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Prescriptions();
+                .Navigation.PrescriptionsIcon.Click();
 
             AndroidPrescriptionsPage
                 .AssertOnPage(driver)
@@ -244,7 +244,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.YourHealth();
+                .Navigation.YourHealthIcon.Click();
 
             AndroidYourHealthPage
                 .AssertOnPage(driver)
@@ -262,7 +262,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Messages();
+                .Navigation.MessagesIcon.Click();
 
             AndroidMessagesPage
                 .AssertOnPage(driver)
