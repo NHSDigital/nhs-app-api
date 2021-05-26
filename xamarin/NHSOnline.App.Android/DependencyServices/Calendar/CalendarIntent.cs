@@ -28,14 +28,5 @@ namespace NHSOnline.App.Droid.DependencyServices.Calendar
 
             Android.App.Application.Context.StartActivity(calendarIntent);
         }
-
-        public static void StartCalendarFromBlankCalendarIntent()
-        {
-            using var calendarIntent = new Intent(Intent.ActionInsert);
-            calendarIntent.SetData(CalendarContract.Events.ContentUri);
-            calendarIntent.AddFlags(ActivityFlags.NewTask);
-
-            Android.App.Application.Context.StartActivity(calendarIntent);
-        }
     }
 }

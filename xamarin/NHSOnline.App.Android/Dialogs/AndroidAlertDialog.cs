@@ -10,10 +10,10 @@ namespace NHSOnline.App.Droid.Dialogs
         public static void ShowAlertDialog(
             string title,
             string message,
-            Action? negativeAction,
-            Action? positiveAction,
-            string positiveButtonText,
-            string negativeButtonText)
+            Action? positiveAction = null,
+            string? positiveButtonText = null,
+            string? negativeButtonText = null,
+            Action? negativeAction = null)
         {
             using var alert = new AlertDialog.Builder(MainActivity);
 
@@ -21,21 +21,27 @@ namespace NHSOnline.App.Droid.Dialogs
             alert.SetMessage(message);
             alert.SetCancelable(false);
 
-            alert.SetNegativeButton(negativeButtonText, (_, _) =>
+            if (negativeButtonText != null)
             {
-                negativeAction?.Invoke();
-                // ReSharper disable AccessToDisposedClosure
-                alert.Dispose();
-                // ReSharper restore AccessToDisposedClosure
-            });
+                alert.SetNegativeButton(negativeButtonText, (_, _) =>
+                {
+                    negativeAction?.Invoke();
+                    // ReSharper disable AccessToDisposedClosure
+                    alert.Dispose();
+                    // ReSharper restore AccessToDisposedClosure
+                });
+            }
 
-            alert.SetPositiveButton(positiveButtonText, (_, _) =>
+            if (positiveButtonText != null)
             {
-                positiveAction?.Invoke();
-                // ReSharper disable AccessToDisposedClosure
-                alert.Dispose();
-                // ReSharper restore AccessToDisposedClosure
-            });
+                alert.SetPositiveButton(positiveButtonText, (_, _) =>
+                {
+                    positiveAction?.Invoke();
+                    // ReSharper disable AccessToDisposedClosure
+                    alert.Dispose();
+                    // ReSharper restore AccessToDisposedClosure
+                });
+            }
 
             var dialog = alert.Create();
             dialog?.Show();

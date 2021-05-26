@@ -17,6 +17,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Calendar
 
         private const string Title = "Cannot save event";
         private const string Message = "You can try adding the event to your calendar yourself.";
+        private const string AlertButtonText = "OK";
 
         public void AddToCalendar(AddEventToCalendarRequest request)
         {
@@ -52,10 +53,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Calendar
             AndroidAlertDialog.ShowAlertDialog(
                 Title,
                 Message,
-                null,
-                CalendarIntent.StartCalendarFromBlankCalendarIntent,
-                "Add event",
-                "OK");
+                negativeButtonText: AlertButtonText);
         }
     }
 }
