@@ -19,3 +19,4 @@ journeys:
     vaccineRecord:
       - netCompany
       - nhsd
+      - netCompanyP5

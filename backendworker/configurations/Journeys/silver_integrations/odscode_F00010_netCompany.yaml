@@ -11,3 +11,4 @@ journeys:
   silverIntegrations:
     vaccineRecord: 
       - netCompany
+      - netCompanyP5

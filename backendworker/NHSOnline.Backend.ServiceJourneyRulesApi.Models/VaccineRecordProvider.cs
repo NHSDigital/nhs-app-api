@@ -12,10 +12,13 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     {
         nhsd,
         netCompany,
+        netCompanyP5,
 
         [RemovesVaccineProvider(nhsd)]
         removeNhsd,
         [RemovesVaccineProvider(netCompany)]
-        removeNetCompany
+        removeNetCompany,
+        [RemovesVaccineProvider(netCompanyP5)]
+        removeNetCompanyP5
     }
 }
