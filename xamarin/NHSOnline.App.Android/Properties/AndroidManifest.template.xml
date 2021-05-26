@@ -23,7 +23,30 @@
 		<meta-data
 				android:name="com.google.firebase.messaging.default_notification_channel_id"
 				android:value="@string/notificationChannel" />
-		
+		<activity android:icon="@mipmap/ic_launcher" android:noHistory="true" android:roundIcon="@mipmap/ic_launcher_round" android:theme="@style/MainTheme.SplashScreen" android:name="crc64b7e535562fc6760f.SplashScreenActivity">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+			<intent-filter android:autoVerify="true">
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="ersUrlScheme" android:host="ersUrl" android:pathPrefix="ersUrlPath" />
+			</intent-filter>
+			<intent-filter android:autoVerify="true">
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="nhsAppScheme" android:host="nhsAppBaseHost" android:pathPrefix="nhsAppAuthRedirectPath" />
+			</intent-filter>
+			<intent-filter android:autoVerify="true">
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="nhsAppBaseScheme" android:host="nhsAppBaseHost" />
+			</intent-filter>
+		</activity>
 		<provider android:name="androidx.core.content.FileProvider" android:authorities="placeholder"
 				  android:exported="false" android:grantUriPermissions="true">
 			<meta-data 

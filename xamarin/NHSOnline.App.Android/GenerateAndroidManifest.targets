@@ -4,6 +4,13 @@
     <ManifestNamespace>&lt;Namespace Prefix='android' Uri='http://schemas.android.com/apk/res/android'/&gt;</ManifestNamespace>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <BeforeGenerateAndroidManifest>
+      $(BeforeGenerateAndroidManifest);
+      GenerateNhsAppAndroidManifest;
+    </BeforeGenerateAndroidManifest>
+  </PropertyGroup>
+
   <Target Name="GenerateNhsAppAndroidManifest" BeforeTargets="_GetAndroidPackageName;_ValidateAndroidPackageProperties">
     <Copy
       SourceFiles="$(MSBuildProjectDirectory)/Properties/AndroidManifest.template.xml"
@@ -33,5 +40,49 @@
       Query="/manifest/application/@android:networkSecurityConfig"
       Value="@xml/network_security_config_stubs"
       Condition=" '$(NhsAppEnableStubs)' == 'true' " />
+
+	<!--XmlPoke has issues replacing the attribute, leading to the need to traverse up and back down the tree. See https://github.com/dotnet/msbuild/issues/2105 and https://github.com/dotnet/msbuild/issues/2051-->
+
+    <XmlPoke
+      XmlInputPath="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml"
+      Namespaces="$(ManifestNamespace)"
+      Query="/manifest/application/activity/intent-filter/data[@android:scheme='ersUrlScheme']/../data/@android:scheme"
+      Value="$(ErsUrlScheme)"/>
+
+    <XmlPoke
+      XmlInputPath="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml"
+      Namespaces="$(ManifestNamespace)"
+      Query="/manifest/application/activity/intent-filter/data[@android:host='ersUrl']/../data/@android:host"
+      Value="$(ErsUrl)"/>
+
+    <XmlPoke
+      XmlInputPath="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml"
+      Namespaces="$(ManifestNamespace)"
+      Query="/manifest/application/activity/intent-filter/data[@android:pathPrefix='ersUrlPath']/../data/@android:pathPrefix"
+      Value="$(ErsUrlPath)"/>
+
+    <XmlPoke
+      XmlInputPath="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml"
+      Namespaces="$(ManifestNamespace)"
+      Query="/manifest/application/activity/intent-filter/data[@android:scheme='nhsAppScheme']/../data/@android:scheme"
+      Value="$(NhsAppScheme)"/>
+
+    <XmlPoke
+      XmlInputPath="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml"
+      Namespaces="$(ManifestNamespace)"
+      Query="/manifest/application/activity/intent-filter/data[@android:host='nhsAppBaseHost']/../data/@android:host"
+      Value="$(NhsAppBaseHost)"/>
+
+    <XmlPoke
+      XmlInputPath="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml"
+      Namespaces="$(ManifestNamespace)"
+      Query="/manifest/application/activity/intent-filter/data[@android:pathPrefix='nhsAppAuthRedirectPath']/../data/@android:pathPrefix"
+      Value="$(NhsAppAuthRedirectPath)"/>
+
+    <XmlPoke
+      XmlInputPath="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml"
+      Namespaces="$(ManifestNamespace)"
+      Query="/manifest/application/activity/intent-filter/data[@android:scheme='nhsAppBaseScheme']/../data/@android:scheme"
+      Value="$(NhsAppBaseScheme)"/>
   </Target>
 </Project>

@@ -26,6 +26,13 @@
     <Environment>$(Configuration.Split('-')[0].Trim())</Environment>
     <DebugMode>$(Configuration.Split('-')[1].Trim())</DebugMode>
     <GoogleServicesFile>Configuration/Production/google-services.json</GoogleServicesFile>
+    <NhsAppScheme>nhsapp</NhsAppScheme>
+    <NhsAppAuthRedirectPath>/auth-return</NhsAppAuthRedirectPath>
+    <NhsAppBaseHost>www.nhsapp.service.nhs.uk</NhsAppBaseHost>
+    <NhsAppBaseScheme>https</NhsAppBaseScheme>
+    <ErsUrl>pat.sa.refer.nhs.uk</ErsUrl>
+    <ErsUrlPath>/nhslogin</ErsUrlPath>
+    <ErsUrlScheme>https</ErsUrlScheme>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Debug|AnyCPU' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Release|AnyCPU' " />
@@ -77,6 +84,7 @@
     <Compile Include="Dialogs\AndroidAlertDialog.cs" />
     <Compile Include="Effects\AndroidAccessibilityEffect.cs" />
     <Compile Include="Effects\AndroidFixedFontSizeEffect.cs" />
+    <Compile Include="Extensions\IntentExtensions.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Renderers\Heading1Renderer.cs" />
     <Compile Include="Renderers\KeyEventArgsExtensions.cs" />

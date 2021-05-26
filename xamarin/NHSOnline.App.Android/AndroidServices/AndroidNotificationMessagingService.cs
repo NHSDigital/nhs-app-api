@@ -8,6 +8,7 @@ using AndroidX.Core.App;
 using AndroidX.Core.Content;
 using Firebase.Messaging;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Droid.Extensions;
 using NHSOnline.App.Logging;
 
 namespace NHSOnline.App.Droid.AndroidServices
@@ -16,10 +17,10 @@ namespace NHSOnline.App.Droid.AndroidServices
     [IntentFilter(new[] { "com.google.firebase.MESSAGING_EVENT" })]
     public class AndroidNotificationMessagingService : FirebaseMessagingService
     {
+        private const string NotificationUrlDataKey = "url";
+
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(AndroidNotificationMessagingService));
-
-        private const string UrlDataKey = "url";
-
+        
         [SuppressMessage("Design", "CA1725: Parameter names should match base declaration",
             Justification = "p0 is not a descriptive name for the parameter")]
         public override void OnMessageReceived(RemoteMessage remoteMessage)
@@ -67,9 +68,9 @@ namespace NHSOnline.App.Droid.AndroidServices
             using var intent = new Intent(this, typeof(MainActivity));
             intent.AddFlags(ActivityFlags.SingleTop);
 
-            if (data.TryGetValue(UrlDataKey, out var url) && !string.IsNullOrWhiteSpace(url))
+            if (data.TryGetValue(NotificationUrlDataKey, out var url) && !string.IsNullOrWhiteSpace(url))
             {
-                intent.PutExtra(UrlDataKey, url);
+                intent.AddDeepLink(url);
             }
 
             return PendingIntent.GetActivity(this, notificationId, intent, PendingIntentFlags.OneShot);

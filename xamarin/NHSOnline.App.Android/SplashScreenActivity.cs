@@ -2,10 +2,10 @@ using System.Diagnostics.CodeAnalysis;
 using Android.App;
 using Android.Content;
 using AndroidX.AppCompat.App;
+using NHSOnline.App.Droid.Extensions;
 
 namespace NHSOnline.App.Droid
 {
-    [Activity(Theme = "@style/MainTheme.SplashScreen", Icon = "@mipmap/ic_launcher", RoundIcon = "@mipmap/ic_launcher_round", MainLauncher = true, NoHistory = true)]
     public class SplashScreenActivity : AppCompatActivity
     {
         [SuppressMessage("ReSharper", "CA2000",
@@ -15,6 +15,11 @@ namespace NHSOnline.App.Droid
             base.OnResume();
 
             var mainActivity = new Intent(Application.Context, typeof(MainActivity));
+
+            if (Intent?.DataString != null)
+            {
+                mainActivity.AddDeepLink(Intent.DataString);
+            }
 
             if (Intent?.Extras != null)
             {

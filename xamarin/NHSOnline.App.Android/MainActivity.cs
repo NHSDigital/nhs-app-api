@@ -8,6 +8,7 @@ using Android.Views;
 using NHSOnline.App.Droid.DependencyServices;
 using NHSOnline.App.Droid.DependencyServices.Biometrics;
 using NHSOnline.App.Droid.Dialogs;
+using NHSOnline.App.Droid.Extensions;
 
 namespace NHSOnline.App.Droid
 {
@@ -113,7 +114,7 @@ namespace NHSOnline.App.Droid
                 return;
             }
 
-            var url = intent.Extras?.GetString("url");
+            var url = intent.GetDeepLink();
             if (!string.IsNullOrWhiteSpace(url))
             {
                 NhsApp?.HandleDeeplink(url!);

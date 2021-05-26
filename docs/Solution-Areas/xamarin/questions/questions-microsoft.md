@@ -16,3 +16,7 @@ e.g. [here](https://dev.azure.com/nhsapp/NHS%20App/_git/nhsapp?path=%2Fxamarin%2
 Is it possible to debug a running Android or iOS app? This is useful and important when the app is opened by a user actioning a claimed url or a notification.
 
 Is it possible to detect that the webview has finished redering the page to allow us to trigger accessibility functions to direct focus to the appropriate part of the page? Or some other guidance on directing focus within the webview.
+
+The activity around the intent filter includes the splash screen information:
+<activity android:icon="@mipmap/ic_launcher" android:noHistory="true" android:roundIcon="@mipmap/ic_launcher_round" android:theme="@style/MainTheme.SplashScreen" android:name="crc64b7e535562fc6760f.SplashScreenActivity">
+Does the android name change?
