@@ -17,13 +17,13 @@ wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.onboardingsandpit
 users:
   notificationHubs:
     - notificationHubPath: nhsapp-nonlive-onboardingsandpit
-      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
 
 secrets:
   notificationHubs:
-    - notificationHubSecretName: "notificationHubSharedAccessKeyOnboardingSandpit"
-      notificationHubSecretVersionuks: "cb94849bb3db47ec995cdbe0446a6434"
-      notificationHubSecretVersionukw: "792b977ac949477882f5a980b0aa2737"
+    - name: "notificationHubSharedAccessKey-nonlive-onboardingsandpit"
+      versionuks: "3826da1868a449aba94479b0067d33ca"
+      versionukw: "ff3a4151f5394b38b35d794cef1de1fe"
 
 web:
   publicURL: www-onboardingsandpit.nhsapp.service.nhs.uk

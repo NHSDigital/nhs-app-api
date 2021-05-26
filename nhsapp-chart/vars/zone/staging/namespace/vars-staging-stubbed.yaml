@@ -47,10 +47,10 @@ cid:
 users:
   notificationHubs:
     - notificationHubPath: nhsapp-stubbed
-      notificationHubConnectionString: Endpoint=sb://nhsapp-staging.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+      notificationHubConnectionString: Endpoint=sb://nhsapp-staging.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
 
 secrets:
   notificationHubs:
-    - notificationHubSecretName: "notificationHubSharedAccessKeyStubbed"
-      notificationHubSecretVersionuks: "34b898c1d9cc4956a1c4ceb6d1e0cf3e"
-      notificationHubSecretVersionukw: "0c64c26e6cd3401b93b68cdc7ad6d478"
+    - name: "notificationHubSharedAccessKey-stubbed"
+      versionuks: "d1a346a4d9774e2886b1f0288bdc755f"
+      versionukw: "8c791ba315f54bd7bd316b27580dd906"

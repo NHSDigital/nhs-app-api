@@ -17,13 +17,13 @@ createDefaultPrivateIngress: true
 users:
   notificationHubs:
     - notificationHubPath: nhsapp-nonlive-onboardingaos
-      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
 
 secrets:
   notificationHubs:
-    - notificationHubSecretName: "notificationHubSharedAccessKeyOnboardingAos"
-      notificationHubSecretVersionuks: "0e1702a03cd9474c8e8eb887f6e50575"
-      notificationHubSecretVersionukw: "bacdce98a7d545b195cf580247335d0d"
+    - name: "notificationHubSharedAccessKey-nonlive-onboardingaos"
+      versionuks: "331cbb4e96524c23990daf11c2dbfa4b"
+      versionukw: "b1a88260223d4364ab7490e2a9a7a6e7"
 
 web:
   publicURL: www-onboardingaos.nhsapp.service.nhs.uk

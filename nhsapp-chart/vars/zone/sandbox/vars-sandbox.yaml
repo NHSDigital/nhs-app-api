@@ -27,9 +27,9 @@ nhsSearchHostname: nhsuk-apim-int-uks.azure-api.net
 
 secrets:
   notificationHubs:
-    - notificationHubSecretName: "notificationHubSharedAccessKey"
-      notificationHubSecretVersionuks: "f174920b96bc4b338ea13c02998ba2d1"
-      notificationHubSecretVersionukw: "a397cf872575497593c8e6e78714cfad"
+    - name: "notificationHubSharedAccessKey"
+      versionuks: "f174920b96bc4b338ea13c02998ba2d1"
+      versionukw: "a397cf872575497593c8e6e78714cfad"
 # Not used, just to prevent chart from crashing on install
 splunk:
   pidIndex: apppid_nhsapp_dev

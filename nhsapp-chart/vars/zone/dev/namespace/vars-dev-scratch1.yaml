@@ -2,20 +2,20 @@
 users:
   notificationHubs:
     - notificationHubPath: nhsapp-nonlive-scratch1
-      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
       notificationHubWriteCharacters: "0123"
     - notificationHubPath: nhsapp-nonlive-scratch1-0
-      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive-scratch1-0.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive-scratch1-0.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
       notificationHubReadCharacters: "4567"
       notificationHubWriteCharacters: "4567"
       notificationHubGeneration: "2"
     - notificationHubPath: nhsapp-nonlive-scratch1-1
-      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive-scratch1-1.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive-scratch1-1.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
       notificationHubReadCharacters: "89AB"
       notificationHubWriteCharacters: "89AB"
       notificationHubGeneration: "2"
     - notificationHubPath: nhsapp-nonlive-scratch1-2
-      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive-scratch1-2.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive-scratch1-2.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
       notificationHubReadCharacters: "CDEF"
       notificationHubWriteCharacters: "CDEF"
       notificationHubGeneration: "2"
@@ -26,15 +26,15 @@ wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.scratch1
 
 secrets:
   notificationHubs:
-    - notificationHubSecretName: "notificationHubSharedAccessKeyScratch1"
-      notificationHubSecretVersionuks: "ae8b6b8480104dc1ab4be299d319459a"
-      notificationHubSecretVersionukw: "2bd9cf6e384541519f3602e9b699ebee"
-    - notificationHubSecretName: "notificationHubSharedAccessKeyScratch1-0"
-      notificationHubSecretVersionuks: "4a7d9d87ca1a42e7b8a4112d99b4668a"
-      notificationHubSecretVersionukw: "af4cec6ae8124911b93038d8bfd67529"
-    - notificationHubSecretName: "notificationHubSharedAccessKeyScratch1-1"
-      notificationHubSecretVersionuks: "10a589fab2bb406c96ed52472f3142f4"
-      notificationHubSecretVersionukw: "03ed1b11f80344eca3ecab73f9c47675"
-    - notificationHubSecretName: "notificationHubSharedAccessKeyScratch1-2"
-      notificationHubSecretVersionuks: "7ad624e33a9d4c54a547854b12ad3e05"
-      notificationHubSecretVersionukw: "4daba8c1de4c4cfe85b5f429051abfdd"
+    - name: "notificationHubSharedAccessKey-nonlive-scratch1"
+      versionuks: "8319c2527dde4d1cb3cddfd35ce6a2e3"
+      versionukw: "f9d96ec29e534034ae2fe4c7b8554428"
+    - name: "notificationHubSharedAccessKey-nonlive-scratch1-0"
+      versionuks: "67af222678fb43549b037da30c3cda35"
+      versionukw: "4484bbff6fb9459ea826c10c6267cf06"
+    - name: "notificationHubSharedAccessKey-nonlive-scratch1-1"
+      versionuks: "84fc79a70bea4b5a8b18e2cec197a0a5"
+      versionukw: "e86317fe14754520aee25584adf516b3"
+    - name: "notificationHubSharedAccessKey-nonlive-scratch1-2"
+      versionuks: "6d3a7df0d46047b683427ae201159cbf"
+      versionukw: "ba316c04263e4c1682a9bd1ac748f23f"

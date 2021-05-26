@@ -6,14 +6,3 @@ odsRemapMap: "G85075:X00100;G85672:X00100"
 
 # Allow access to private API without the redirector
 createDefaultPrivateIngress: true
-
-users:
-  notificationHubs:
-    - notificationHubPath: nhsapp-nonlive-preview
-      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
-
-secrets:
-  notificationHubs:
-    - notificationHubSecretName: "notificationHubSharedAccessKeyPreview"
-      notificationHubSecretVersionuks: "570a20e0acf6446f9646f8aaeb52f233"
-      notificationHubSecretVersionukw: "b487bfcab7a74411bf53b3862d26565d"

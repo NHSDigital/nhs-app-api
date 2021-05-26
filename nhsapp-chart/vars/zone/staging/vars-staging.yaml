@@ -11,18 +11,18 @@ keyvaultTenantID: 50f6071f-bbfe-401a-8803-673748e629e2
 
 secrets:
   notificationHubs: 
-    - notificationHubSecretName: "notificationHubSharedAccessKey"
-      notificationHubSecretVersionuks: "ed60d1ae92f44e228e62bec53197d67e"
-      notificationHubSecretVersionukw: "079d20f5b7c245719376edd56c5dc021"
-    - notificationHubSecretName: "notificationHubSharedAccessKey-0"
-      notificationHubSecretVersionuks: "08563aa976a045f6bad1366954c36b28"
-      notificationHubSecretVersionukw: "ba061a4fecaf4547aeb7f762239d3595"
-    - notificationHubSecretName: "notificationHubSharedAccessKey-1"
-      notificationHubSecretVersionuks: "14db508157954fd2922e579c3cc15272"
-      notificationHubSecretVersionukw: "b710019b7e674bcd86c5ed249a1b7b81"
-    - notificationHubSecretName: "notificationHubSharedAccessKey-2"
-      notificationHubSecretVersionuks: "e0d0fdd62df74d33b0adafb053adebfa"
-      notificationHubSecretVersionukw: "fb3941aab71b494d911dce44ee70544a"
+    - name: "notificationHubSharedAccessKey-staging"
+      versionuks: "943cf01b8da84fef8a672daa2c322355"
+      versionukw: "dfaaae9362bd4bf6b13f0449c3b9ee84"
+    - name: "notificationHubSharedAccessKey-staging-0"
+      versionuks: "4831b9e7c31e42b08487dce76571999d"
+      versionukw: "37c93f43414043af8831d6ece7bc62a5"
+    - name: "notificationHubSharedAccessKey-staging-1"
+      versionuks: "fc8255128429486f81771103e322e7fc"
+      versionukw: "fd000b2a70bd4a3896ce28c7cebb2152"
+    - name: "notificationHubSharedAccessKey-staging-2"
+      versionuks: "b0a63ead414b4b6aa918339d80d53e31"
+      versionukw: "687eab260f864106aa751f5b8cef3053"
 
 wildcardEnv: true
 
@@ -110,20 +110,20 @@ messagesEnabled: true
 users:
   notificationHubs:
     - notificationHubPath: nhsapp-staging
-      notificationHubConnectionString: Endpoint=sb://nhsapp-staging.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+      notificationHubConnectionString: Endpoint=sb://nhsapp-staging.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
       notificationHubWriteCharacters: "0123"
     - notificationHubPath: nhsapp-staging-0
-      notificationHubConnectionString: Endpoint=sb://nhsapp-staging-0.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+      notificationHubConnectionString: Endpoint=sb://nhsapp-staging-0.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
       notificationHubReadCharacters: "4567"
       notificationHubWriteCharacters: "4567"
       notificationHubGeneration: "2"
     - notificationHubPath: nhsapp-staging-1
-      notificationHubConnectionString: Endpoint=sb://nhsapp-staging-1.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+      notificationHubConnectionString: Endpoint=sb://nhsapp-staging-1.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
       notificationHubReadCharacters: "89AB"
       notificationHubWriteCharacters: "89AB"
       notificationHubGeneration: "2"
     - notificationHubPath: nhsapp-staging-2
-      notificationHubConnectionString: Endpoint=sb://nhsapp-staging-2.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+      notificationHubConnectionString: Endpoint=sb://nhsapp-staging-2.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
       notificationHubReadCharacters: "CDEF"
       notificationHubWriteCharacters: "CDEF"
       notificationHubGeneration: "2"

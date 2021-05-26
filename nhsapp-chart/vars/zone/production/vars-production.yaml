@@ -11,9 +11,18 @@ keyvaultTenantID: 50f6071f-bbfe-401a-8803-673748e629e2
 
 secrets:
   notificationHubs:
-    - notificationHubSecretName: "notificationHubSharedAccessKey"
-      notificationHubSecretVersionuks: "a6635ca8e4464192a85c3d29b00d5c59"
-      notificationHubSecretVersionukw: "b4229bfd5d374e78af3623de21814a1a"
+    - name: "notificationHubSharedAccessKey-production"
+      versionuks: "736a8f1cd7a54d4690335c88e51e90e8"
+      versionukw: "9e9ce35e889a4cb695c829d6901d42d2"
+    - name: "notificationHubSharedAccessKey-production-0"
+      versionuks: "acd0a6de207647bd91da635f3033928e"
+      versionukw: "5ebbbcff1a014f37a5094dbfea5cd1e5"
+    - name: "notificationHubSharedAccessKey-production-1"
+      versionuks: "2e14cba3fc5e4f578938c3efb7c279db"
+      versionukw: "1f150a0d583e41828d69e3ce1e92890d"
+    - name: "notificationHubSharedAccessKey-production-2"
+      versionuks: "1e5eb0e9c68f4da7a4dffca5c7a46105"
+      versionukw: "79d4afb389764fe4b9fa61e88e7408de"
 
 addAppointmentToCalendarEnabled: true
 
@@ -133,7 +142,7 @@ messagesEnabled: true
 users:
   notificationHubs:
     - notificationHubPath: nhsapp-production
-      notificationHubConnectionString: Endpoint=sb://nhsapp-production.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+      notificationHubConnectionString: Endpoint=sb://nhsapp-production.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
 
 metrics:
   memoryRequest: "12Mi"

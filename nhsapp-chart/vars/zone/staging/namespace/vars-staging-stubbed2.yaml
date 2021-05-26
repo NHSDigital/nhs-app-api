@@ -37,9 +37,9 @@ createDefaultIngress: false
 
 secrets:
   notificationHubs:
-    - notificationHubSecretName: "notificationHubSharedAccessKeyStubbed2"
-      notificationHubSecretVersionuks: "e074a1e08c8c4003b73da75fe5303cd8"
-      notificationHubSecretVersionukw: "8ee4e933b0a948c397bec84da49ed9a0"
+    - name: "notificationHubSharedAccessKey-stubbed2"
+      versionuks: "d320e6aa02fe46259f236d4ed4b7e9cb"
+      versionukw: "d99ee2a88e83437d99050ab6d22aa444"
 
 web:
   image_tag: latest
@@ -55,5 +55,5 @@ cid:
 users:
   notificationHubs:
     - notificationHubPath: nhsapp-stubbed2
-      notificationHubConnectionString: Endpoint=sb://nhsapp-staging.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+      notificationHubConnectionString: Endpoint=sb://nhsapp-staging.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
 ...

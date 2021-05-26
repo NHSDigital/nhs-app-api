@@ -171,8 +171,8 @@ users:
   cpuRequest: "100m"
   cpuLimit: "200m"
   notificationHubs:
-    - notificationHubPath: nhsapp-nonlive
-      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+    - notificationHubPath: nhsapp-nonlive-preview
+      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
 
 messages:
   minAvailable: 0
@@ -214,3 +214,9 @@ sjrconfig:
   cpuLimit: "250m"
   targetCPUUtilizationPercentage: 45
   targetMemoryUtilizationPercentage: 80
+
+secrets:
+  notificationHubs:
+    - name: "notificationHubSharedAccessKey-nonlive-preview"
+      versionuks: "b43593ea2c79438fbc47271c40b1a273"
+      versionukw: "2bb659593efd473f8981afe21132728d"
