@@ -10,7 +10,7 @@ keyvaultSubscriptionID: 47e498b8-ad52-4421-b6d0-d7f9988429df
 keyvaultTenantID: 50f6071f-bbfe-401a-8803-673748e629e2
 
 secrets:
-  notificationHub:
+  notificationHubs:
     - notificationHubSecretName: "notificationHubSharedAccessKey"
       notificationHubSecretVersionuks: "a6635ca8e4464192a85c3d29b00d5c59"
       notificationHubSecretVersionukw: "b4229bfd5d374e78af3623de21814a1a"
@@ -111,7 +111,7 @@ api:
     services__substraktPatientPack_admin__url: https://admin-request.production.substrakthealth.com
     services__substraktPatientPack_auth__url: https://auth.production.substrakthealth.com
     services__engage__url: https://nhsapp.engage.gp
-    services__nhsd__url: https://www.coronavirus-record.service.nhs.uk/
+    services__nhsd__url: https://www.coronavirus-record.service.nhs.uk
     services__netCompany__url: https://covid-status.service.nhsx.nhs.uk
 
 cid:

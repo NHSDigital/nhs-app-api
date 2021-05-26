@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using FluentAssertions;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Support.Hasher;
 using System.Security.Cryptography;
@@ -15,7 +16,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Hasher
         public void TestInitialize()
         {
             var provider = new SHA512CryptoServiceProvider();
-            _hashService = new HashingService(provider);
+            _hashService = new HashingService(provider, new NullLogger<HashingService>());
         }
 
         [TestMethod]

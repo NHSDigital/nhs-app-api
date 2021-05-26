@@ -24,5 +24,17 @@ namespace NHSOnline.Backend.AspNet.HealthChecks
 
             return services;
         }
+
+        public static IServiceCollection AddCustomNhsAppHealthCheck<TNhsAppCustomHealthCheck>(
+            this IServiceCollection services,
+            string name)
+            where TNhsAppCustomHealthCheck : class, IHealthCheck
+        {
+            services
+                .AddHealthChecks()
+                .AddCheck<TNhsAppCustomHealthCheck>(name, timeout: TimeSpan.FromSeconds(1));
+
+            return services;
+        }
     }
 }

@@ -23,6 +23,9 @@ namespace NHSOnline.Backend.CidApi.ServiceJourneyRules
 
             services.AddNhsAppHealthCheck<ServiceJourneyRulesHttpClient>("SJR");
 
+            services.AddSingleton<HashingServiceHealthCheck>();
+            services.AddCustomNhsAppHealthCheck<HashingServiceHealthCheck>("HASH");
+
             base.ConfigureServices(services, configuration);
         }
     }
