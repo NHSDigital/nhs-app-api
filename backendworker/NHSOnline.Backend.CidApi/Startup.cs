@@ -31,6 +31,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Fake;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.DependencyInjection;
+using NHSOnline.Backend.Support.Hasher;
 
 namespace NHSOnline.Backend.CidApi
 {
@@ -85,6 +86,9 @@ namespace NHSOnline.Backend.CidApi
             });
 
             services.AddNhsAppHealthCheckService();
+
+            services.AddNhsAppHealthCheck<HashingServiceHealthCheck>(
+                "HASH", NhsAppHealthCheckTags.LivenessAndReadiness);
 
             services.AddSingleton(Configuration);
 

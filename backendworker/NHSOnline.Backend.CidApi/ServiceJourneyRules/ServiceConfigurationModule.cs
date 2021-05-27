@@ -21,10 +21,7 @@ namespace NHSOnline.Backend.CidApi.ServiceJourneyRules
                 .AddHttpMessageHandler<HttpRequestIdentificationHandler<ServiceJourneyRulesHttpRequestIdentifier>>()
                 .AddCorrelationIdForwarding();
 
-            services.AddNhsAppHealthCheck<ServiceJourneyRulesHttpClient>("SJR");
-
-            services.AddSingleton<HashingServiceHealthCheck>();
-            services.AddCustomNhsAppHealthCheck<HashingServiceHealthCheck>("HASH");
+            services.AddNhsAppClientHealthCheck<ServiceJourneyRulesHttpClient>("SJR", NhsAppHealthCheckTags.Readiness);
 
             base.ConfigureServices(services, configuration);
         }

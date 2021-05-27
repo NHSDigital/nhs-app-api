@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.PfsApi.UserInfo
                 .AddHttpMessageHandler<HttpRequestIdentificationHandler<UserInfoHttpRequestIdentifier>>()
                 .AddCorrelationIdForwarding();
 
-            services.AddNhsAppHealthCheck<UserInfoHttpClient>("UserInfo");
+            services.AddNhsAppClientHealthCheck<UserInfoHttpClient>("UserInfo", NhsAppHealthCheckTags.Readiness);
 
             base.ConfigureServices(services, configuration);
         }

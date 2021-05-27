@@ -3,9 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Support.Hasher;
 
-namespace NHSOnline.Backend.AspNet.HealthChecks
+namespace NHSOnline.Backend.Support.Hasher
 {
     public class HashingServiceHealthCheck: IHealthCheck
     {
@@ -26,7 +25,7 @@ namespace NHSOnline.Backend.AspNet.HealthChecks
             try
             {
                 return Task.FromResult(
-                    _hashingService.IsHealthy
+                    !_hashingService.IsDead
                         ? HealthCheckResult.Healthy("Hashing Service is OK")
                         : HealthCheckResult.Degraded("Hashing Service has thrown an error")
                 );

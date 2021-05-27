@@ -8,11 +8,11 @@ namespace NHSOnline.Backend.AspNet.HealthChecks
         public static void MapHealthCheckEndpoints(this IEndpointRouteBuilder endpoints)
         {
             endpoints.MapHealthChecks(
-                NhsAppServiceHealthCheck.LivenessProbe,
+                NhsAppHealthCheckUrls.LivenessPath,
                 HealthCheckOptionsBuilder.BuildLivenessCheckOptions());
 
             endpoints.MapHealthChecks(
-                NhsAppServiceHealthCheck.ReadinessPath,
+                NhsAppHealthCheckUrls.ReadinessPath,
                 HealthCheckOptionsBuilder.BuildReadinessCheckOptions());
         }
     }

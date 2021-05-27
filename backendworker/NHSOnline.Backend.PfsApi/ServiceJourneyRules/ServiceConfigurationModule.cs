@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
                 .AddHttpMessageHandler<HttpRequestIdentificationHandler<ServiceJourneyRulesHttpRequestIdentifier>>()
                 .AddCorrelationIdForwarding();
 
-            services.AddNhsAppHealthCheck<ServiceJourneyRulesHttpClient>("SJR");
+            services.AddNhsAppClientHealthCheck<ServiceJourneyRulesHttpClient>("SJR", NhsAppHealthCheckTags.Readiness);
 
             base.ConfigureServices(services, configuration);
         }

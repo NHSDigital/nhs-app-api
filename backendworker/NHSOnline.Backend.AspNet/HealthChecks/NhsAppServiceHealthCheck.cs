@@ -9,12 +9,6 @@ using NHSOnline.Backend.AspNet.CorrelationId;
 
 namespace NHSOnline.Backend.AspNet.HealthChecks
 {
-    internal static class NhsAppServiceHealthCheck
-    {
-        internal const string LivenessProbe = "/health/live";
-        internal const string ReadinessPath = "/health/ready";
-    }
-
     internal sealed class NhsAppServiceHealthCheck<TNhsAppHealthCheckClient>: IHealthCheck
         where TNhsAppHealthCheckClient: INhsAppHealthCheckClient
     {
@@ -29,13 +23,14 @@ namespace NHSOnline.Backend.AspNet.HealthChecks
             _client = client;
         }
 
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
+            CancellationToken cancellationToken = new CancellationToken())
         {
             try
             {
                 context.PrepareCorrelationIdContext();
 
-                using var request = new HttpRequestMessage(HttpMethod.Get, NhsAppServiceHealthCheck.ReadinessPath);
+                using var request = new HttpRequestMessage(HttpMethod.Get, NhsAppHealthCheckUrls.ReadinessPath);
 
                 using var response = await _client.Client.SendAsync(
                     request,
