@@ -1,4 +1,7 @@
+using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.IntegrationTests.UI;
+using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -12,6 +15,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Manage notifications");
 
+        private WebText FallBackTitleText => WebText.WithTagAndText(_interactor, "h1", "Sorry, we could not set your notifications choice");
+
         private WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
 
         private WebToggle NotificationsToggle => WebToggle.WithLabel(
@@ -21,7 +26,15 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         internal void AssertOnPage()
         {
             using var timeout = ExtendedTimeout.FromSeconds(10);
-            TitleText.AssertVisible();
+
+            try
+            {
+                TitleText.AssertVisible();
+            }
+            catch (AssertFailedException)
+            {
+                FallBackTitleText.AssertVisible();
+            }
         }
 
         public void Continue() => ContinueButton.Click();
