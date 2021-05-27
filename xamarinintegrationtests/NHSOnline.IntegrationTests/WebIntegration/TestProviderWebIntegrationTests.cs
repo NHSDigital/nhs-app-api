@@ -112,7 +112,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Messages();
+                .Navigation.MessagesIcon.Click();
 
             IOSMessagesPage
                 .AssertOnPage(driver)
@@ -134,7 +134,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Messages();
+                .Navigation.MessagesIcon.Click();
 
             IOSMessagesPage
                 .AssertOnPage(driver)

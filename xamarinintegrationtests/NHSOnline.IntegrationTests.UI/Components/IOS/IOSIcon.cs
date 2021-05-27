@@ -24,6 +24,12 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
         public void Click()
             => ActOnElement(e => e.Click(), FindBy);
 
+        public void AssertSelected()
+            => ActOnElement(e => e.GetAttribute("value").Should().Be("1", "a selected icon with value {1} should be displayed"), FindBy);
+
+        public void AssertNotSelected()
+            => ActOnElement(e => e.GetAttribute("value").Should().BeNullOrEmpty(), FindBy);
+
         public void AssertVisible()
             => ActOnElement(e => e.Displayed.Should().BeTrue("an icon with name {1} should be displayed", _name), FindBy );
 

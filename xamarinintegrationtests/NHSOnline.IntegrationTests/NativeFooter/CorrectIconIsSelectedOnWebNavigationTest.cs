@@ -2,6 +2,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.Prescriptions;
+using NHSOnline.IntegrationTests.Pages.IOS.Home;
+using NHSOnline.IntegrationTests.Pages.IOS.Prescriptions;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -26,6 +28,25 @@ namespace NHSOnline.IntegrationTests.NativeFooter
                 .PageContent.PrescriptionsMenuItem.Click();
 
             AndroidPrescriptionsPage
+                .AssertOnPage(driver)
+                .Navigation.PrescriptionsIcon.AssertSelected();
+        }
+
+        [NhsAppIOSTest]
+        public void APatientCanNavigateToRepeatPrescriptionsUsingThePopularServicesAndSeeThePrescriptionsBottomNavIconHighlightedIOS(
+            IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .PageContent.PrescriptionsMenuItem.Click();
+
+            IOSPrescriptionsPage
                 .AssertOnPage(driver)
                 .Navigation.PrescriptionsIcon.AssertSelected();
         }

@@ -22,15 +22,15 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         private IOSIcon MoreIcon => FullNavigationHeader.ContainingButtonWithName("More");
 
-        private IOSIcon AdviceIcon => FullNavigationFooter.ContainingButtonWithName("Advice");
+        public IOSIcon AdviceIcon => FullNavigationFooter.ContainingButtonWithName("Advice");
 
-        private IOSIcon AppointmentsIcon => FullNavigationFooter.ContainingButtonWithName("Appointments");
+        public IOSIcon AppointmentsIcon => FullNavigationFooter.ContainingButtonWithName("Appointments");
 
-        private IOSIcon PrescriptionsIcon => FullNavigationFooter.ContainingButtonWithName("Prescriptions");
+        public IOSIcon PrescriptionsIcon => FullNavigationFooter.ContainingButtonWithName("Prescriptions");
 
-        private IOSIcon YourHealthIcon => FullNavigationFooter.ContainingButtonWithName("Your health");
+        public IOSIcon YourHealthIcon => FullNavigationFooter.ContainingButtonWithName("Your health");
 
-        private IOSIcon MessagesIcon => FullNavigationFooter.ContainingButtonWithName("Messages");
+        public IOSIcon MessagesIcon => FullNavigationFooter.ContainingButtonWithName("Messages");
 
         internal void AssertNavigationPresent()
         {
@@ -38,34 +38,18 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             FullNavigationFooter.AssertVisible();
         }
 
+        public void AssertNoIconsSelected()
+        {
+            AdviceIcon.AssertNotSelected();
+            AppointmentsIcon.AssertNotSelected();
+            YourHealthIcon.AssertNotSelected();
+            MessagesIcon.AssertNotSelected();
+            PrescriptionsIcon.AssertNotSelected();
+        }
+
         public void Home()
         {
             HomeIcon.Click();
-        }
-
-        public void Advice()
-        {
-            AdviceIcon.Click();
-        }
-
-        public void Appointments()
-        {
-            AppointmentsIcon.Click();
-        }
-
-        public void Prescriptions()
-        {
-            PrescriptionsIcon.Click();
-        }
-
-        public void YourHealth()
-        {
-            YourHealthIcon.Click();
-        }
-
-        public void Messages()
-        {
-            MessagesIcon.Click();
         }
 
         public void More()

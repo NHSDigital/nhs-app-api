@@ -5,6 +5,11 @@ using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.Messages;
 using NHSOnline.IntegrationTests.Pages.Android.Prescriptions;
 using NHSOnline.IntegrationTests.Pages.Android.YourHealth;
+using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
+using NHSOnline.IntegrationTests.Pages.IOS.Home;
+using NHSOnline.IntegrationTests.Pages.IOS.Messages;
+using NHSOnline.IntegrationTests.Pages.IOS.Prescriptions;
+using NHSOnline.IntegrationTests.Pages.IOS.YourHealth;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -53,6 +58,49 @@ namespace NHSOnline.IntegrationTests.NativeFooter
                 .Navigation.MessagesIcon.Click();
 
             AndroidMessagesPage
+                .AssertOnPage(driver)
+                .Navigation.MessagesIcon.AssertSelected();
+        }
+
+        [NhsAppIOSTest]
+        public void APatientCanNavigateToEachHubUsingTheBottomNavAndCanSeeTheRelevantBottomNavIconHighlightedIOS(
+            IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.AppointmentsIcon.Click();
+
+            IOSAppointmentsPage
+                .AssertOnPage(driver)
+                .Navigation.AppointmentsIcon.AssertSelected();
+
+            IOSAppointmentsPage
+                .AssertOnPage(driver)
+                .Navigation.PrescriptionsIcon.Click();
+
+            IOSPrescriptionsPage
+                .AssertOnPage(driver)
+                .Navigation.PrescriptionsIcon.AssertSelected();
+
+            IOSPrescriptionsPage
+                .AssertOnPage(driver)
+                .Navigation.YourHealthIcon.Click();
+
+            IOSYourHealthPage
+                .AssertOnPage(driver)
+                .Navigation.YourHealthIcon.AssertSelected();
+
+            IOSYourHealthPage
+                .AssertOnPage(driver)
+                .Navigation.MessagesIcon.Click();
+
+            IOSMessagesPage
                 .AssertOnPage(driver)
                 .Navigation.MessagesIcon.AssertSelected();
         }

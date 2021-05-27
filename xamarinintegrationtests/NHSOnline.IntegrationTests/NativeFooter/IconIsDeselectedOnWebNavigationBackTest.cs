@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.YourHealth;
+using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -34,6 +35,33 @@ namespace NHSOnline.IntegrationTests.NativeFooter
                 .PageContent.BackBreadcrumb.Click();
 
             AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.AssertNoIconsSelected();
+        }
+
+        [NhsAppIOSTest]
+        public void APatientNavigatingBackToHomeUsingABreadcrumbSeesNoBottomNavIconHighlightedIOS(
+            IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .PageContent.GpHealthMenuItem.Click();
+
+            IOSGpMedicalRecordPage
+                .AssertOnPage(driver)
+                .Navigation.YourHealthIcon.AssertSelected();
+
+            IOSGpMedicalRecordPage
+                .AssertOnPage(driver)
+                .PageContent.BackBreadcrumb.Click();
+
+            IOSLoggedInHomePage
                 .AssertOnPage(driver)
                 .Navigation.AssertNoIconsSelected();
         }

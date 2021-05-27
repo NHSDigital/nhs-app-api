@@ -86,7 +86,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Appointments();
+                .Navigation.AppointmentsIcon.Click();
 
             IOSAppointmentsPage
                 .AssertOnPage(driver)

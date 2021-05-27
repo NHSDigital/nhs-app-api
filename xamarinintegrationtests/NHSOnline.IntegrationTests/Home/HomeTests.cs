@@ -98,7 +98,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Advice();
+                .Navigation.AdviceIcon.Click();
 
             IOSAdvicePage
                 .AssertOnPage(driver)
@@ -172,7 +172,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Appointments();
+                .Navigation.AppointmentsIcon.Click();
 
             IOSAppointmentsPage
                 .AssertOnPage(driver)
@@ -208,7 +208,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Prescriptions();
+                .Navigation.PrescriptionsIcon.Click();
 
             IOSPrescriptionsPage
                 .AssertOnPage(driver)
@@ -226,7 +226,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.YourHealth();
+                .Navigation.YourHealthIcon.Click();
 
             IOSYourHealthPage
                 .AssertOnPage(driver)
@@ -280,7 +280,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Messages();
+                .Navigation.MessagesIcon.Click();
 
             IOSMessagesPage
                 .AssertOnPage(driver)

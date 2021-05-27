@@ -3,6 +3,9 @@ using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.Messages;
+using NHSOnline.IntegrationTests.Pages.IOS;
+using NHSOnline.IntegrationTests.Pages.IOS.Home;
+using NHSOnline.IntegrationTests.Pages.IOS.Messages;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -38,6 +41,33 @@ namespace NHSOnline.IntegrationTests.NativeFooter
                 .ReturnToApp();
 
             AndroidMessagesPage
+                .AssertOnPage(driver)
+                .Navigation.MessagesIcon.AssertSelected();
+        }
+
+        [NhsAppIOSTest]
+        public void APatientOnTheMessagingHubCanOpenAndCloseABrowserOverlayAndTheMessagingBottomNavIconIsStillHighlightedIOS(
+            IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.MessagesIcon.Click();
+
+            IOSMessagesPage
+                .AssertOnPage(driver)
+                .Navigation.Help();
+
+            IOSAppTab
+                .AssertOnHomeHelpPage(driver)
+                .ReturnToApp();
+
+            IOSMessagesPage
                 .AssertOnPage(driver)
                 .Navigation.MessagesIcon.AssertSelected();
         }

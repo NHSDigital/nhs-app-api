@@ -68,7 +68,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Advice();
+                .Navigation.AdviceIcon.Click();
 
             IOSAdvicePage
                 .AssertOnPage(driver)

@@ -11,7 +11,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Appointments
             PageContent = new AppointmentsPageContent(driver.Web(WebViewContext.NhsApp));
         }
 
-        private IOSFullNavigation Navigation { get; }
+        public IOSFullNavigation Navigation { get; }
 
         public AppointmentsPageContent PageContent { get; }
 

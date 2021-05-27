@@ -88,7 +88,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Appointments();
+                .Navigation.AppointmentsIcon.Click();
 
             IOSAppointmentsPage
                 .AssertOnPage(driver)
@@ -142,7 +142,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Appointments();
+                .Navigation.AppointmentsIcon.Click();
 
             IOSAppointmentsPage
                 .AssertOnPage(driver)

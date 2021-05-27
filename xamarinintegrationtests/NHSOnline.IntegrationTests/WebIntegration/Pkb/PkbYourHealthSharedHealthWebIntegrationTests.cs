@@ -52,7 +52,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.YourHealth();
+                .Navigation.YourHealthIcon.Click();
 
             IOSYourHealthPage
                 .AssertOnPage(driver)
