@@ -23,7 +23,7 @@ namespace NHSOnline.App.Droid.Dialogs
 
             if (negativeButtonText != null)
             {
-                alert.SetNegativeButton(negativeButtonText, (_, _) =>
+                alert.SetNegativeButton(negativeButtonText, (dialog, args) =>
                 {
                     negativeAction?.Invoke();
                     // ReSharper disable AccessToDisposedClosure
@@ -34,7 +34,7 @@ namespace NHSOnline.App.Droid.Dialogs
 
             if (positiveButtonText != null)
             {
-                alert.SetPositiveButton(positiveButtonText, (_, _) =>
+                alert.SetPositiveButton(positiveButtonText, (dialog, args) =>
                 {
                     positiveAction?.Invoke();
                     // ReSharper disable AccessToDisposedClosure

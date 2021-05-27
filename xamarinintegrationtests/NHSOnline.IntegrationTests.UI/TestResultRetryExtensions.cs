@@ -87,6 +87,11 @@ namespace NHSOnline.IntegrationTests.UI
             @"Web window handle not found after 00:00:20; Handles:*",
             RegexOptions.Compiled);
 
+        // Ios issue where the file is not there for the upload test
+        private static readonly Regex UnableToFindFileIos = new(
+            @"No IOSElement found matching ByIosNSPredicate\(type == 'XCUIElementTypeCell' AND name == 'test, txt'\)*",
+            RegexOptions.Compiled);
+
         private static readonly List<(Regex pattern, RetryStatus result)> RetryExceptionMessageRegexes = new()
         {
             (InvalidServiceWebInspectorMessage, RetryStatus.Retry(nameof(InvalidServiceWebInspectorMessage))),
@@ -103,7 +108,8 @@ namespace NHSOnline.IntegrationTests.UI
             (FirebaseAuthorisationFailureWontRetry, RetryStatus.Retry(nameof(FirebaseAuthorisationFailureWontRetry))),
             (AppiumProxyIssue, RetryStatus.Retry(nameof(AppiumProxyIssue))),
             (AboutBlank, RetryStatus.Retry(nameof(AboutBlank))),
-            (WindowHandleNotFound, RetryStatus.Retry(nameof(WindowHandleNotFound)))
+            (WindowHandleNotFound, RetryStatus.Retry(nameof(WindowHandleNotFound))),
+            (UnableToFindFileIos, RetryStatus.Retry(nameof(UnableToFindFileIos)))
         };
 
         internal static RetryStatus ShouldRetry(this TestResult result, TestLogs logs)
