@@ -104,8 +104,18 @@
 
     <XmlPoke
       XmlInputPath="$(EntitlementsPlistGenerated)"
-      Value="$(NhsAppBundleIdentifier)"
-      Query="/plist/dict/array[preceding-sibling::key[1] = 'keychain-access-groups']/string[1]" />
+      Value="$(NhsAppApnsEnvironmentEntitlement)"
+      Query="/plist/dict/string[preceding-sibling::key[1] = 'aps-environment']" />
+
+    <XmlPoke
+      XmlInputPath="$(EntitlementsPlistGenerated)"
+      Value="applinks:$(NhsAppDomainEntitlement)"
+      Query="/plist/dict/array[preceding-sibling::key[1] = 'com.apple.developer.associated-domains']/string[1]" />
+
+    <XmlPoke
+      XmlInputPath="$(EntitlementsPlistGenerated)"
+      Value="applinks:$(NhsAppErsDomainEntitlement)"
+      Query="/plist/dict/array[preceding-sibling::key[1] = 'com.apple.developer.associated-domains']/string[2]" />
 
     <ReadLinesFromFile File="$(EntitlementsPlistGenerated)">
       <Output TaskParameter="Lines" ItemName="EntitlementsPlistLines" />

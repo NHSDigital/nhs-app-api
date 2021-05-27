@@ -3,9 +3,10 @@
   <dict>
     <key>aps-environment</key>
     <string>development</string>
-    <key>keychain-access-groups</key>
+    <key>com.apple.developer.associated-domains</key>
     <array>
-      <string>placeholder</string>
+      <string />
+      <string />
     </array>
   </dict>
 </plist>

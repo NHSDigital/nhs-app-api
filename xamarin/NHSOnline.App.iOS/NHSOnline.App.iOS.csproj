@@ -5,6 +5,9 @@
     <NhsAppBundleShortVersion Condition=" '$(NhsAppBundleShortVersion)' == '' ">1.0.0</NhsAppBundleShortVersion>
     <NhsAppBundleVersion Condition=" '$(NhsAppBundleVersion)' == '' ">1</NhsAppBundleVersion>
     <NhsAppBundleDisplayName Condition=" '$(NhsAppBundleDisplayName)' == '' ">NHS App</NhsAppBundleDisplayName>
+    <NhsAppApnsEnvironmentEntitlement Condition=" '$(NhsAppApnsEnvironmentEntitlement)' == '' ">production</NhsAppApnsEnvironmentEntitlement>
+    <NhsAppDomainEntitlement Condition=" '$(NhsAppDomainEntitlement)' == '' ">nhsapp.service.nhs.uk</NhsAppDomainEntitlement>
+    <NhsAppErsDomainEntitlement Condition=" '$(NhsAppErsDomainEntitlement)' == '' ">refer.nhs.uk</NhsAppErsDomainEntitlement>
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
@@ -26,6 +29,7 @@
     <ConsolePause>false</ConsolePause>
     <LangVersion>latest</LangVersion>
     <OutputPath>bin\$(Platform)\$(DebugMode)</OutputPath>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Debug|iPhoneSimulator' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Debug|iPhone' " />
@@ -35,9 +39,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Debug|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Release|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Release|iPhoneSimulator' " />
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Preview - Debug|iPhoneSimulator' ">
-    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Preview - Debug|iPhoneSimulator' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Preview - Debug|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Preview - Release|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Preview - Release|iPhoneSimulator' " />
