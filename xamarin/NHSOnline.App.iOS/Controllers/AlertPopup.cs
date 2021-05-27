@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Logging;
 using UIKit;
@@ -8,9 +9,14 @@ namespace NHSOnline.App.iOS.Controllers
     {
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(AlertPopup));
 
-        public static void ShowAlertPopup(string alertHeader, string alertBody, string alertButtonText)
+        public static void ShowAlertPopup(
+            string alertHeader,
+            string alertBody,
+            string alertFirstButtonText,
+            string alertSecondButtonText,
+            Action secondButtonAction)
         {
-            Logger.LogInformation("Creating alert popup");
+            Logger.LogInformation("Creating and showing alert popup");
 
             InvokeUIKitOnMainUIThread(() =>
             {
@@ -19,12 +25,22 @@ namespace NHSOnline.App.iOS.Controllers
                     alertBody,
                     UIAlertControllerStyle.Alert);
 
-                using var alertAction = UIAlertAction.Create(
-                    alertButtonText,
+                using var alertFirstAction = UIAlertAction.Create(
+                    alertFirstButtonText,
                     UIAlertActionStyle.Default,
                     null);
 
-                alertController.AddAction(alertAction);
+                alertController.AddAction(alertFirstAction);
+
+                using var alertSecondAction = UIAlertAction.Create(
+                    alertSecondButtonText,
+                    UIAlertActionStyle.Default,
+                    alert =>
+                    {
+                        secondButtonAction.Invoke();
+                    });
+
+                alertController.AddAction(alertSecondAction);
 
                 DisplayController(alertController);
             });

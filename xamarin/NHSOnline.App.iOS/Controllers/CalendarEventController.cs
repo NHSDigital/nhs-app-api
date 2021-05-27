@@ -29,6 +29,23 @@ namespace NHSOnline.App.iOS.Controllers
             });
         }
 
+        public static void ShowBlankEventController()
+        {
+            Logger.LogInformation("Showing blank event controller");
+
+            InvokeUIKitOnMainUIThread(() =>
+            {
+                var eventController = new EKEventEditViewController
+                {
+                    EventStore = ApplicationEventStore.Current.EventStore
+                };
+
+                CreateBlankEventControllerDelegate(eventController);
+
+                DisplayController(eventController);
+            });
+        }
+
         private static void CreateEventControllerDelegate(
             EKEventEditViewController eventController,
             AddEventToCalendarRequest request)
@@ -39,6 +56,15 @@ namespace NHSOnline.App.iOS.Controllers
             eventController.Event = CreateCalendarEvent(request);
         }
 
+        private static void CreateBlankEventControllerDelegate(
+            EKEventEditViewController eventController)
+        {
+            var eventControllerDelegate = new CreateEventEditView(eventController);
+            eventController.EditViewDelegate = eventControllerDelegate;
+
+            eventController.Event = CreateBlankCalendarEvent();
+        }
+
         private static EKEvent CreateCalendarEvent(AddEventToCalendarRequest request)
         {
             EKEvent calendarEvent = EKEvent.FromStore(ApplicationEventStore.Current.EventStore);
@@ -47,6 +73,13 @@ namespace NHSOnline.App.iOS.Controllers
             calendarEvent.Title = request.Subject;
             calendarEvent.Notes = request.Body;
             calendarEvent.Location = request.Location;
+            calendarEvent.Calendar = ApplicationEventStore.Current.EventStore.DefaultCalendarForNewEvents;
+            return calendarEvent;
+        }
+
+        private static EKEvent CreateBlankCalendarEvent()
+        {
+            EKEvent calendarEvent = EKEvent.FromStore(ApplicationEventStore.Current.EventStore);
             calendarEvent.Calendar = ApplicationEventStore.Current.EventStore.DefaultCalendarForNewEvents;
             return calendarEvent;
         }

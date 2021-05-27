@@ -124,7 +124,12 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
         private async Task<Task> AddEventToCalendarRequested(AddEventToCalendarRequest request)
         {
-            _logger.LogInformation("Add event to calendar Requested - {Subject}", request.Subject);
+            if (string.IsNullOrEmpty(request.Subject) ||
+                request.StartTimeEpochInSeconds > request.EndTimeEpochInSeconds)
+            {
+                _logger.LogError("Passed calendar information is invalid, showing popup");
+                _calendar.ShowCalendarAlertWhenValidationFails();
+            }
 
             var calendarPermission = await _calendar
                 .RequestPermission()
@@ -136,7 +141,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             }
             else
             {
-                _calendar.ShowPermissionDeniedAlert();
+                _calendar.ShowCalendarPermissionDeniedAlert();
             }
 
             return Task.CompletedTask;
