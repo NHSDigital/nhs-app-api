@@ -2,6 +2,27 @@
 @messages-accessibility
 Feature: Messages accessibility
 
+  Scenario: The 'Messages hub' page is captured
+    Given I am a patient using the EMIS GP System
+    And I am logged in
+    And I navigate to Messages
+    Then the Messages Hub page is displayed
+    And the Messages_Hub page is saved to disk
+
+  Scenario: The 'Messages proxy shutter' page is captured
+    Given I am logged in as a EMIS user with linked profiles and appointments provider IM1
+    Then I see the home page
+    When I can see and follow the Linked profiles link
+    Then the linked profiles page is displayed
+    And linked profiles are displayed
+    And I select a linked profile with appointments enabled false, prescriptions enabled false and medical record enabled false
+    And details for the selected linked profile are displayed
+    When I click the Switch to this profile button for the proxy user
+    Then I see the proxy home page
+    When I navigate to Messages
+    Then the messages shutter page is displayed
+    And the Messages_ProxyShutter page is saved to disk
+
   Scenario: The messages page is captured with messages
     Given I am using the native app user agent
     And I am a user wishing to view my messages
@@ -9,15 +30,15 @@ Feature: Messages accessibility
     When I follow the unread messages link from the home page
     And I click the App Messages link on the messages hub page
     Then the Messages Inbox page is displayed
-    And the MessagesInbox page is saved to disk
+    And the Messages_HealthInformationAndUpdates page is saved to disk
     When I click on a sender in the Messages Inbox
     Then the Messages page is displayed
-    And the Messages_ReadAndUnread page is saved to disk
+    And the Messages_Details_ReadAndUnread page is saved to disk
     When I click the 'Back' breadcrumb
     Then the Messages Inbox page is displayed
     When I click on a sender in the Messages Inbox
     Then the Messages page is displayed
-    And the Messages_Read page is saved to disk
+    And the Messages_Details_Read page is saved to disk
 
   Scenario: The messages page is captured with no messages
     Given I am using the native app user agent
