@@ -30,12 +30,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             HospitalAndOtherAppointmentsMenuItem,
         };
 
-        public IEnumerable<IFocusable> FocusableElementsNoOlc => new IFocusable[]
-        {
-            GpSurgeryAppointmentsMenuItem,
-            HospitalAndOtherAppointmentsMenuItem,
-        };
-
         internal void AssertOnPage() => TitleText.AssertVisible();
 
         public void AssertPageElements() => TitleText.AssertVisible();

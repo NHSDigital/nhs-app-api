@@ -9,11 +9,10 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Advice
 {
     public sealed class AndroidAdvicePage
     {
-        private readonly IAndroidDriverWrapper _driver;
+        private AndroidFullNavigation Navigation { get; }
+        public AdvicePageContent PageContent { get; }
 
-        internal AndroidKeyboardNavigation KeyboardPageContentNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(
-            _driver,
-            GetAllKeyboardHomeNavigationFocusableElements());
+        private readonly IAndroidDriverWrapper _driver;
 
         private AndroidAdvicePage(IAndroidDriverWrapper driver)
         {
@@ -21,19 +20,6 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Advice
             Navigation = new AndroidFullNavigation(driver);
             PageContent = new AdvicePageContent(driver.Web(WebViewContext.NhsApp));
         }
-
-        private IEnumerable<IFocusable> GetAllKeyboardHomeNavigationFocusableElements()
-        {
-            var headerFocusableList = Navigation.KeyboardHeaderNavigation.GetFocusableElements();
-            var footerFocusableList = Navigation.KeyboardFooterNavigation.GetFocusableElements();
-            var pageFocusableList = PageContent.FocusableElements;
-
-            return pageFocusableList.Concat(footerFocusableList).Concat(headerFocusableList);
-        }
-
-        public AndroidFullNavigation Navigation { get; }
-
-        public AdvicePageContent PageContent { get; }
 
         public static AndroidAdvicePage AssertOnPage(IAndroidDriverWrapper driver)
         {
@@ -48,13 +34,22 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Advice
             PageContent.AssertPageElements();
         }
 
-        public void KeyboardNavigateToHome() =>
-            Navigation.KeyboardNavigateToHomeFromElement(KeyboardPageContentNavigation, PageContent.FocusableElements.First());
+        private AndroidKeyboardNavigation KeyboardPageContentNavigation => AndroidKeyboardNavigation
+            .WithExpectedFocusableElements(_driver, GetAllKeyboardHomeNavigationFocusableElements());
 
-        public void KeyboardNavigateToOneOneOne() =>
-            PageContent.KeyboardNavigateToOneOneOne(KeyboardPageContentNavigation);
+        private IEnumerable<IFocusable> GetAllKeyboardHomeNavigationFocusableElements()
+        {
+            var headerFocusableList = Navigation.KeyboardHeaderNavigation.GetFocusableElements();
+            var footerFocusableList = Navigation.KeyboardFooterNavigation.GetFocusableElements();
+            var pageFocusableList = PageContent.FocusableElements;
 
-        public void KeyboardNavigateToAToZ() =>
-            PageContent.KeyboardNavigateToAToZ(KeyboardPageContentNavigation);
+            return pageFocusableList.Concat(footerFocusableList).Concat(headerFocusableList);
+        }
+
+        public void KeyboardNavigateToHome() => Navigation.KeyboardNavigateToHomeFromElement(KeyboardPageContentNavigation, PageContent.FocusableElements.First());
+
+        public void KeyboardNavigateToOneOneOne() => PageContent.KeyboardNavigateToOneOneOne(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToAToZ() => PageContent.KeyboardNavigateToAToZ(KeyboardPageContentNavigation);
     }
 }

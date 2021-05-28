@@ -1,5 +1,8 @@
 SwaggerGenerated
 
+# Used to set target .NET SDK version
+global.json
+
 # NDepend Outputs
 NDependOut/
 

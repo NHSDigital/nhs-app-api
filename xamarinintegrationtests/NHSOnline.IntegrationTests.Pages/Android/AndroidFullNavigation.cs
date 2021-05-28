@@ -53,6 +53,15 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             FullNavigationFooter.AssertVisible();
         }
 
+        public void AssertNoIconsSelected()
+        {
+            AdviceIcon.AssertNotSelected();
+            AppointmentsIcon.AssertNotSelected();
+            YourHealthIcon.AssertNotSelected();
+            MessagesIcon.AssertNotSelected();
+            PrescriptionsIcon.AssertNotSelected();
+        }
+
         public void Home()
         {
             HomeIcon.Click();
@@ -74,7 +83,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         public void KeyboardNavigateToAppointments(AndroidKeyboardNavigation navigation)
             => KeyboardNavigateToAndActivateIcon(AppointmentsIcon, navigation);
 
-        public void KeyboardNavigatePrescriptions(AndroidKeyboardNavigation navigation)
+        public void KeyboardNavigateToPrescriptions(AndroidKeyboardNavigation navigation)
             => KeyboardNavigateToAndActivateIcon(PrescriptionsIcon, navigation);
 
         public void KeyboardNavigateToYourHealth(AndroidKeyboardNavigation navigation)
@@ -94,15 +103,6 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         public void KeyboardNavigateToHomeFromElement(AndroidKeyboardNavigation navigation, IFocusable fromFocusable) =>
             KeyboardNavigateBetweenAndActivateIcon(HomeIcon, navigation, fromFocusable);
-
-        public void AssertNoIconsSelected()
-        {
-            AdviceIcon.AssertNotSelected();
-            AppointmentsIcon.AssertNotSelected();
-            YourHealthIcon.AssertNotSelected();
-            MessagesIcon.AssertNotSelected();
-            PrescriptionsIcon.AssertNotSelected();
-        }
 
         private static void KeyboardNavigateBetweenAndActivateIcon(
             IFocusable icon,

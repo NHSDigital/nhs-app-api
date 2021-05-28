@@ -9,6 +9,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
 {
     public sealed class AndroidWebIntegrationWarningPanelPage
     {
+        private AndroidFullNavigation Navigation { get; }
+        public WebIntegrationWarningPanelPageContent PageContent { get; }
+
         private readonly IAndroidDriverWrapper _driver;
 
         private AndroidWebIntegrationWarningPanelPage(IAndroidDriverWrapper driver, string pageTitle)
@@ -18,9 +21,15 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
             PageContent = new WebIntegrationWarningPanelPageContent(driver.Web(WebViewContext.NhsApp), pageTitle);
         }
 
-        internal AndroidKeyboardNavigation KeyboardPageContentNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(
-            _driver,
-            GetAllKeyboardHomeNavigationFocusableElements());
+        public static AndroidWebIntegrationWarningPanelPage AssertOnPage(IAndroidDriverWrapper driver, string pageTitle)
+        {
+            var page = new AndroidWebIntegrationWarningPanelPage(driver, pageTitle);
+            page.PageContent.AssertOnPage();
+            return page;
+        }
+
+        private AndroidKeyboardNavigation KeyboardPageContentNavigation => AndroidKeyboardNavigation
+            .WithExpectedFocusableElements(_driver, GetAllKeyboardHomeNavigationFocusableElements());
 
         private IEnumerable<IFocusable> GetAllKeyboardHomeNavigationFocusableElements()
         {
@@ -31,24 +40,6 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
             return pageFocusableList.Concat(footerFocusableList).Concat(headerFocusableList);
         }
 
-        private AndroidFullNavigation Navigation { get; }
-
-        public WebIntegrationWarningPanelPageContent PageContent { get; }
-
-        public static AndroidWebIntegrationWarningPanelPage AssertOnPage(IAndroidDriverWrapper driver, string pageTitle)
-        {
-            var page = new AndroidWebIntegrationWarningPanelPage(driver, pageTitle);
-            page.PageContent.AssertOnPage();
-            return page;
-        }
-
-        public AndroidWebIntegrationWarningPanelPage AssertNativeHeader()
-        {
-            Navigation.AssertNavigationPresent();
-            return this;
-        }
-
-        public void KeyboardNavigateToContinue() =>
-            PageContent.KeyboardNavigateContinue(KeyboardPageContentNavigation);
+        public void KeyboardNavigateToContinue() => PageContent.KeyboardNavigateContinue(KeyboardPageContentNavigation);
     }
 }

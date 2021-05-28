@@ -1,9 +1,14 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
+using NHSOnline.IntegrationTests.Pages.Android.Advice;
 using NHSOnline.IntegrationTests.Pages.Android.Appointments;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
+using NHSOnline.IntegrationTests.Pages.Android.Messages;
+using NHSOnline.IntegrationTests.Pages.Android.More;
+using NHSOnline.IntegrationTests.Pages.Android.Prescriptions;
 using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
+using NHSOnline.IntegrationTests.Pages.Android.YourHealth;
 using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
@@ -74,6 +79,75 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .PageContent.NavigateToNhsAppAppointments();
 
             AndroidAppointmentsPage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppAndroidTest]
+        public void APatientInAWebIntegrationCanUseTheirKeyboardToReturnToTheAppViaTheBottomNavigation(IAndroidDriverWrapper driver)
+        {
+            var patient = new KeyboardPatient()
+                .WithName(b => b.GivenName("Valencia").FamilyName("Sanguinelli"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.More();
+
+            AndroidMorePage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToNhsLogin();
+
+            AndroidNhsLoginSettingsPage
+                .AssertOnPage(driver)
+                .KeyboardNavigateToAdvice();
+
+            AndroidAdvicePage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToOneOneOne();
+
+            AndroidOneOneOnePage
+                .AssertOnPage(driver)
+                .KeyboardNavigateToAppointments();
+
+            AndroidAppointmentsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToHospitalAndOtherAppointments();
+
+            AndroidHospitalAndOtherAppointmentsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToViewAppointments();
+
+            AndroidWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "View appointments")
+                .PageContent.NavigateToNextPage();
+
+            AndroidPkbPage
+                .AssertOnPage(driver, "/diary/listAppointments.action")
+                .KeyboardNavigateToPrescriptions();
+
+            AndroidPrescriptionsPage
+                .AssertOnPage(driver)
+                .Navigation.AdviceIcon.Click();
+
+            AndroidAdvicePage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToAToZ();
+
+            AndroidAToZPage
+                .AssertOnPage(driver)
+                .KeyboardNavigateToMessages();
+
+            AndroidMessagesPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToTestProvider();
+
+            AndroidTestWebIntegrationProviderPage
+                .AssertOnPage(driver)
+                .KeyboardNavigateToYourHealth();
+
+            AndroidYourHealthPage
                 .AssertOnPage(driver);
         }
 

@@ -9,6 +9,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
 {
     public sealed class AndroidHospitalAndOtherAppointmentsPage
     {
+        private AndroidFullNavigation Navigation { get; }
+        public HospitalAndOtherAppointmentsPageContent PageContent { get; }
+
         private readonly IAndroidDriverWrapper _driver;
 
         private AndroidHospitalAndOtherAppointmentsPage(IAndroidDriverWrapper driver)
@@ -18,11 +21,17 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
             PageContent = new HospitalAndOtherAppointmentsPageContent(driver.Web(WebViewContext.NhsApp));
         }
 
-        internal AndroidKeyboardNavigation KeyboardPageContentNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(
-            _driver,
-            GetAllKeyboardHomeNavigationFocusableElements());
+        public static AndroidHospitalAndOtherAppointmentsPage AssertOnPage(IAndroidDriverWrapper driver)
+        {
+            var page = new AndroidHospitalAndOtherAppointmentsPage(driver);
+            page.PageContent.AssertOnPage();
+            return page;
+        }
 
-        private IEnumerable<IFocusable> GetAllKeyboardHomeNavigationFocusableElements()
+        private AndroidKeyboardNavigation KeyboardPageContentNavigation => AndroidKeyboardNavigation
+            .WithExpectedFocusableElements(_driver, GetAllKeyboardNavigationFocusableElements());
+
+        private IEnumerable<IFocusable> GetAllKeyboardNavigationFocusableElements()
         {
             var headerFocusableList = Navigation.KeyboardHeaderNavigation.GetFocusableElements();
             var footerFocusableList = Navigation.KeyboardFooterNavigation.GetFocusableElements();
@@ -31,24 +40,6 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
             return pageFocusableList.Concat(footerFocusableList).Concat(headerFocusableList);
         }
 
-        private AndroidFullNavigation Navigation { get; }
-
-        public HospitalAndOtherAppointmentsPageContent PageContent { get; }
-
-        public static AndroidHospitalAndOtherAppointmentsPage AssertOnPage(IAndroidDriverWrapper driver)
-        {
-            var page = new AndroidHospitalAndOtherAppointmentsPage(driver);
-            page.PageContent.AssertOnPage();
-            return page;
-        }
-
-        public void AssertPageElements()
-        {
-            Navigation.AssertNavigationPresent();
-            PageContent.AssertPageElements();
-        }
-
-        public void KeyboardNavigateToViewAppointments() =>
-            PageContent.KeyboardNavigateViewAppointments(KeyboardPageContentNavigation);
+        public void KeyboardNavigateToViewAppointments() => PageContent.KeyboardNavigateViewAppointments(KeyboardPageContentNavigation);
     }
 }

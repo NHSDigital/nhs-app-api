@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.WebPageContent;
 using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Android;
@@ -15,24 +14,11 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
 
         private readonly IAndroidDriverWrapper _driver;
 
-        private AndroidKeyboardNavigation KeyboardPageContentNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(
-            _driver,
-            GetAllKeyboardHomeNavigationFocusableElements());
-
         private AndroidLoggedInHomePage(IAndroidDriverWrapper driver)
         {
             _driver = driver;
             Navigation = new AndroidFullNavigation(driver);
             PageContent = new LoggedInHomePageContent(driver.Web(WebViewContext.NhsApp));
-        }
-
-        private IEnumerable<IFocusable> GetAllKeyboardHomeNavigationFocusableElements()
-        {
-            var headerFocusableList = Navigation.KeyboardHeaderNavigation.GetFocusableElements();
-            var footerFocusableList = Navigation.KeyboardFooterNavigation.GetFocusableElements();
-            var pageFocusableList = PageContent.FocusableElements;
-
-            return pageFocusableList.Concat(footerFocusableList).Concat(headerFocusableList);
         }
 
         public static AndroidLoggedInHomePage AssertOnPage(IAndroidDriverWrapper driver)
@@ -48,25 +34,30 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
             PageContent.AssertNameDisplayedFor(name);
         }
 
-        public void KeyboardNavigateToAdvice() =>
-            Navigation.KeyboardNavigateToAdvice(KeyboardPageContentNavigation);
+        private AndroidKeyboardNavigation KeyboardPageContentNavigation => AndroidKeyboardNavigation
+            .WithExpectedFocusableElements(_driver, GetAllKeyboardHomeNavigationFocusableElements());
 
-        public void KeyboardNavigateToAppointments() =>
-            Navigation.KeyboardNavigateToAppointments(KeyboardPageContentNavigation);
+        private IEnumerable<IFocusable> GetAllKeyboardHomeNavigationFocusableElements()
+        {
+            var headerFocusableList = Navigation.KeyboardHeaderNavigation.GetFocusableElements();
+            var footerFocusableList = Navigation.KeyboardFooterNavigation.GetFocusableElements();
+            var pageFocusableList = PageContent.FocusableElements;
 
-        public void KeyboardNavigatePrescriptions() =>
-            Navigation.KeyboardNavigatePrescriptions(KeyboardPageContentNavigation);
+            return pageFocusableList.Concat(footerFocusableList).Concat(headerFocusableList);
+        }
 
-        public void KeyboardNavigateToYourHealth() =>
-            Navigation.KeyboardNavigateToYourHealth(KeyboardPageContentNavigation);
+        public void KeyboardNavigateToAdvice() => Navigation.KeyboardNavigateToAdvice(KeyboardPageContentNavigation);
 
-        public void KeyboardNavigateToMessages() =>
-            Navigation.KeyboardNavigateToMessages(KeyboardPageContentNavigation);
+        public void KeyboardNavigateToAppointments() => Navigation.KeyboardNavigateToAppointments(KeyboardPageContentNavigation);
 
-        public void KeyboardNavigateToHelp() =>
-            Navigation.KeyboardNavigateToHelp(KeyboardPageContentNavigation);
+        public void KeyboardNavigatePrescriptions() => Navigation.KeyboardNavigateToPrescriptions(KeyboardPageContentNavigation);
 
-        public void KeyboardNavigateToMore() =>
-            Navigation.KeyboardNavigateToMore(KeyboardPageContentNavigation);
+        public void KeyboardNavigateToYourHealth() => Navigation.KeyboardNavigateToYourHealth(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToMessages() => Navigation.KeyboardNavigateToMessages(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToHelp() => Navigation.KeyboardNavigateToHelp(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToMore() => Navigation.KeyboardNavigateToMore(KeyboardPageContentNavigation);
     }
 }

@@ -9,6 +9,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
 {
     public sealed class AndroidAppointmentsPage
     {
+        public AndroidFullNavigation Navigation { get; }
+        public AppointmentsPageContent PageContent { get; }
+
         private readonly IAndroidDriverWrapper _driver;
 
         private AndroidAppointmentsPage(IAndroidDriverWrapper driver)
@@ -17,23 +20,6 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
             Navigation = new AndroidFullNavigation(driver);
             PageContent = new AppointmentsPageContent(driver.Web(WebViewContext.NhsApp));
         }
-
-        private AndroidKeyboardNavigation KeyboardPageContentNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(
-            _driver,
-            GetAllKeyboardHomeNavigationFocusableElements());
-
-        private IEnumerable<IFocusable> GetAllKeyboardHomeNavigationFocusableElements()
-        {
-            var headerFocusableList = Navigation.KeyboardHeaderNavigation.GetFocusableElements();
-            var footerFocusableList = Navigation.KeyboardFooterNavigation.GetFocusableElements();
-            var pageFocusableList = PageContent.FocusableElements;
-
-            return pageFocusableList.Concat(footerFocusableList).Concat(headerFocusableList);
-        }
-
-        public AndroidFullNavigation Navigation { get; }
-
-        public AppointmentsPageContent PageContent { get; }
 
         public static AndroidAppointmentsPage AssertOnPage(IAndroidDriverWrapper driver)
         {
@@ -48,7 +34,18 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
             PageContent.AssertPageElements();
         }
 
-        public void KeyboardNavigateToHospitalAndOtherAppointments() =>
-            PageContent.KeyboardNavigateToHospitalAndOtherAppointments(KeyboardPageContentNavigation);
+        private AndroidKeyboardNavigation KeyboardPageContentNavigation => AndroidKeyboardNavigation
+            .WithExpectedFocusableElements(_driver, GetAllKeyboardHomeNavigationFocusableElements());
+
+        private IEnumerable<IFocusable> GetAllKeyboardHomeNavigationFocusableElements()
+        {
+            var headerFocusableList = Navigation.KeyboardHeaderNavigation.GetFocusableElements();
+            var footerFocusableList = Navigation.KeyboardFooterNavigation.GetFocusableElements();
+            var pageFocusableList = PageContent.FocusableElements;
+
+            return pageFocusableList.Concat(footerFocusableList).Concat(headerFocusableList);
+        }
+
+        public void KeyboardNavigateToHospitalAndOtherAppointments() => PageContent.KeyboardNavigateToHospitalAndOtherAppointments(KeyboardPageContentNavigation);
     }
 }
