@@ -22,8 +22,9 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
             services.AddSingleton<ICitizenIdJwtHelper, CitizenIdJwtHelper>();
             services.AddSingleton<ICitizenIdConfig, CitizenIdConfig>();
             services.AddSingleton<ITokenValidationParameterBuilder, TokenValidationParameterBuilder>();
+            services.AddSingleton<IJwtTokenValidator, JwtTokenValidator>();
             services.AddSingleton<IJwtTokenService<IdToken>, IdTokenService>();
-            services.AddSingleton<ICitizenIdSigningKeysService, CitizenIdSigningKeysService>();
+            services.AddSingleton<ICitizenIdSigningKeysProvider, CitizenIdSigningKeysProvider>();
             services.AddScoped<ICitizenIdSessionService, CitizenIdSessionService>();
 
             base.ConfigureServices(services, configuration);

@@ -54,8 +54,9 @@ namespace NHSOnline.Backend.UserInfoApi
             services.AddSingleton<ICitizenIdConfig, CitizenIdConfig>();
             services.AddSingleton<ITokenValidationParameterBuilder, TokenValidationParameterBuilder>();
             services.AddSingleton<ISecurityTokenValidator, JwtSecurityTokenHandler>();
+            services.AddSingleton<IJwtTokenValidator, JwtTokenValidator>();
             services.AddSingleton<IJwtTokenService<IdToken>, IdTokenService>();
-            services.AddSingleton<ICitizenIdSigningKeysService, CitizenIdSigningKeysService>();
+            services.AddSingleton<ICitizenIdSigningKeysProvider, CitizenIdSigningKeysProvider>();
         }
 
         private static void ConfigureUserProfileServices(IServiceCollection services)

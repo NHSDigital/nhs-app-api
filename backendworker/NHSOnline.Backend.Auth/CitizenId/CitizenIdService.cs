@@ -11,15 +11,14 @@ namespace NHSOnline.Backend.Auth.CitizenId
     public class CitizenIdService : ICitizenIdService
     {
         private readonly ICitizenIdClient _citizenIdClient;
-        private readonly ICitizenIdSigningKeysService _citizenIdKeysService;
         private readonly IJwtTokenService<IdToken> _idTokenService;
         private readonly ILogger<CitizenIdService> _logger;
 
-        public CitizenIdService(ICitizenIdClient citizenIdClient, ICitizenIdSigningKeysService citizenIdKeysService,
-            IJwtTokenService<IdToken> idTokenService, ILogger<CitizenIdService> logger)
+        public CitizenIdService(ICitizenIdClient citizenIdClient,
+            IJwtTokenService<IdToken> idTokenService,
+            ILogger<CitizenIdService> logger)
         {
             _citizenIdClient = citizenIdClient;
-            _citizenIdKeysService = citizenIdKeysService;
             _idTokenService = idTokenService;
             _logger = logger;
         }
@@ -43,13 +42,8 @@ namespace NHSOnline.Backend.Auth.CitizenId
                     return result;
                 }
 
-                var tokenTask = _citizenIdClient.ExchangeAuthToken(authCode, codeVerifier, redirectUrl);
-                var keysTask = _citizenIdKeysService.GetSigningKeys();
+                var tokenResponse = await _citizenIdClient.ExchangeAuthToken(authCode, codeVerifier, redirectUrl);
 
-                await Task.WhenAll(tokenTask, keysTask);
-
-                var tokenResponse = tokenTask.Result;
-                var signingKeys = keysTask.Result;
                 if (!tokenResponse.HasSuccessStatusCode)
                 {
                     LogError(tokenResponse, "Failed to exchange auth token for access token.");
@@ -58,28 +52,23 @@ namespace NHSOnline.Backend.Auth.CitizenId
                     return result;
                 }
 
-                if (!signingKeys.HasValue)
+                var token = await _idTokenService.ReadToken(tokenResponse.Body.IdToken);
+
+                await token.IfSome(async idToken =>
                 {
-                    _logger.LogError("Failed to get signing keys");
+                    result = await GetUserProfileFromCitizenId(
+                        tokenResponse.Body.AccessToken,
+                        idToken.Subject,
+                        tokenResponse.Body.RefreshToken);
+                    result.IdTokenJti = idToken.Jti;
+                })
+                .IfNone(() =>
+                {
+                    _logger.LogError("Failed to read ID Token");
                     result.StatusCode = HttpStatusCode.BadRequest;
                     result.UserProfile = Option.None<UserProfile>();
-                    return result;
-                }
-
-                await _idTokenService
-                    .ReadToken(tokenResponse.Body.IdToken, signingKeys.ValueOrFailure())
-                    .IfSome(async idToken =>
-                    {
-                        result = await GetUserProfileFromCitizenId(tokenResponse.Body.AccessToken, idToken.Subject, tokenResponse.Body.RefreshToken);
-                        result.IdTokenJti = idToken.Jti;
-                    })
-                    .IfNone(() =>
-                    {
-                        _logger.LogError("Failed to read ID Token");
-                        result.StatusCode = HttpStatusCode.BadRequest;
-                        result.UserProfile = Option.None<UserProfile>();
-                        return Task.CompletedTask;
-                    });
+                    return Task.CompletedTask;
+                });
 
                 return result;
             }

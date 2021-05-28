@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using NHSOnline.Backend.Auth.CitizenId.Models;
@@ -12,17 +13,21 @@ namespace NHSOnline.Backend.Auth.CitizenId
     {
         private readonly ITokenValidationParameterBuilder _parameterBuilder;
         private readonly ILogger<IdTokenService> _logger;
-        private readonly ISecurityTokenValidator _jwtTokenHandler;
+        private readonly IJwtTokenValidator _jwtTokenHandler;
+        private readonly ICitizenIdSigningKeysProvider _citizenIdKeysProvider;
 
-        public IdTokenService(ITokenValidationParameterBuilder parameterBuilder, ISecurityTokenValidator tokenValidator,
+        public IdTokenService(ITokenValidationParameterBuilder parameterBuilder,
+            IJwtTokenValidator tokenValidator,
+            ICitizenIdSigningKeysProvider citizenIdKeysProvider,
             ILogger<IdTokenService> logger)
         {
             _logger = logger;
             _jwtTokenHandler = tokenValidator;
+            _citizenIdKeysProvider = citizenIdKeysProvider;
             _parameterBuilder = parameterBuilder;
         }
 
-        public Option<IdToken> ReadToken(string token, JsonWebKeySet signingKeys)
+        public async Task<Option<IdToken>> ReadToken(string token)
         {
             if (string.IsNullOrWhiteSpace(token))
             {
@@ -44,7 +49,18 @@ namespace NHSOnline.Backend.Auth.CitizenId
 
             try
             {
+                var tokenKeyId = _jwtTokenHandler.ReadToken(token).Header.Kid;
+                var signingKeysResponse = await _citizenIdKeysProvider.GetSigningKeys(tokenKeyId);
+
+                if (!signingKeysResponse.HasValue)
+                {
+                    _logger.LogError("Failed to get signing keys");
+                    return Option.None<IdToken>();
+                }
+
+                var signingKeys = signingKeysResponse.ValueOrFailure();
                 var validationParameters = _parameterBuilder.Build(signingKeys);
+
                 var principal = _jwtTokenHandler.ValidateToken(token, validationParameters, out _);
 
                 var subject = principal.FindFirstValue(ClaimTypes.NameIdentifier);

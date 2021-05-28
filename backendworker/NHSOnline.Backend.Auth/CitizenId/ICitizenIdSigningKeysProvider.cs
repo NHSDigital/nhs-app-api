@@ -4,8 +4,8 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Auth.CitizenId
 {
-    public interface ICitizenIdSigningKeysService
+    public interface ICitizenIdSigningKeysProvider
     {
-        Task<Option<JsonWebKeySet>> GetSigningKeys();
+        Task<Option<JsonWebKeySet>> GetSigningKeys(string keyId);
     }
 }

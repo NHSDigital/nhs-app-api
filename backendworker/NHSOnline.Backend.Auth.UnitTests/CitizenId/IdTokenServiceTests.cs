@@ -1,5 +1,7 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -7,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auth.CitizenId;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
 {
@@ -15,8 +18,9 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
     {
         private IFixture _fixture;
         private Mock<ITokenValidationParameterBuilder> _mockParameterBuilder;
-        private Mock<ISecurityTokenValidator> _mockJwtTokenValidator;
+        private Mock<IJwtTokenValidator> _mockJwtTokenValidator;
         private Mock<ICitizenIdConfig> _mockConfig;
+        private Mock<ICitizenIdSigningKeysProvider> _citizenIdClientProvider;
         private IdTokenService _systemUnderTest;
         private string _issuer;
         private string _audience;
@@ -43,11 +47,16 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                 .Returns(_audience);
 
             _mockParameterBuilder = _fixture.Freeze<Mock<ITokenValidationParameterBuilder>>();
-            _mockJwtTokenValidator = _fixture.Freeze<Mock<ISecurityTokenValidator>>();
+            _mockJwtTokenValidator = _fixture.Freeze<Mock<IJwtTokenValidator>>();
+            _citizenIdClientProvider = _fixture.Freeze<Mock<ICitizenIdSigningKeysProvider>>();
+
+            _citizenIdClientProvider
+                .Setup(x => x.GetSigningKeys("some-key"))
+                .Returns(Task.FromResult(Option.Some(new JsonWebKeySet())));
         }
 
         [TestMethod]
-        public void ReadToken_HappyPath_ReturnsIdToken()
+        public async Task ReadToken_HappyPath_ReturnsIdToken()
         {
             // Arrange
             var jwtToken = _fixture.Create<string>();
@@ -75,20 +84,33 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                 .Setup(x => x.FindFirst(JwtRegisteredClaimNames.Jti))
                 .Returns(new Claim(JwtRegisteredClaimNames.Jti, _jti));
 
+            var key = new SigningCredentials(
+                new JsonWebKey()
+                {
+                    Kid = "some-key"
+                },
+                "RSA512");
+
+            _mockJwtTokenValidator
+                .Setup(x => x.ReadToken(It.IsAny<string>()))
+                .Returns(
+                    new JwtSecurityToken(
+                        new JwtHeader(key, new Dictionary<string, string>(), "?"),
+                        new JwtPayload()));
+
             SecurityToken secToken;
             _mockJwtTokenValidator
                 .Setup(x => x.ValidateToken(jwtToken, It.IsAny<TokenValidationParameters>(), out secToken))
                 .Returns(mockPrincipal.Object)
                 .Verifiable();
 
-            var signingKeys = Mock.Of<JsonWebKeySet>();
-
             _systemUnderTest = _fixture.Create<IdTokenService>();
 
             // Act
-            var result = _systemUnderTest.ReadToken(jwtToken, signingKeys);
+            var result = await _systemUnderTest.ReadToken(jwtToken);
 
             // Assert
+            _citizenIdClientProvider.VerifyAll();
             _mockParameterBuilder.VerifyAll();
             _mockJwtTokenValidator.VerifyAll();
             mockPrincipal.VerifyAll();
@@ -99,24 +121,22 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         }
 
         [TestMethod]
-        public void ReadToken_FailWithEmptyToken_ReturnsNone()
+        public async Task ReadToken_FailWithEmptyToken_ReturnsNone()
         {
             // Arrange
             const string jwtToken = "";
 
-            var signingKeys = Mock.Of<JsonWebKeySet>();
-
             _systemUnderTest = _fixture.Create<IdTokenService>();
 
             // Act
-            var result = _systemUnderTest.ReadToken(jwtToken, signingKeys);
+            var result = await _systemUnderTest.ReadToken(jwtToken);
 
             // Assert
             result.HasValue.Should().BeFalse();
         }
 
         [TestMethod]
-        public void ReadToken_FailWhenCannotReadToken_ReturnsNone()
+        public async Task ReadToken_FailWhenCannotReadToken_ReturnsNone()
         {
             // Arrange
             var jwtToken = _fixture.Create<string>();
@@ -125,12 +145,10 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                 .Setup(x => x.CanReadToken(jwtToken))
                 .Returns(false);
 
-            var signingKeys = Mock.Of<JsonWebKeySet>();
-
             _systemUnderTest = _fixture.Create<IdTokenService>();
 
             // Act
-            var result = _systemUnderTest.ReadToken(jwtToken, signingKeys);
+            var result = await _systemUnderTest.ReadToken(jwtToken);
 
             // Assert
             _mockJwtTokenValidator.VerifyAll();
@@ -139,7 +157,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         }
 
         [TestMethod]
-        public void ReadToken_FailWhenTokenCannotBeValidated_ReturnsNone()
+        public async Task ReadToken_FailWhenTokenCannotBeValidated_ReturnsNone()
         {
             // Arrange
             var jwtToken = _fixture.Create<string>();
@@ -151,12 +169,10 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                 .Setup(x => x.CanValidateToken)
                 .Returns(false);
 
-            var signingKeys = Mock.Of<JsonWebKeySet>();
-
             _systemUnderTest = _fixture.Create<IdTokenService>();
 
             // Act
-            var result = _systemUnderTest.ReadToken(jwtToken, signingKeys);
+            var result = await _systemUnderTest.ReadToken(jwtToken);
 
             // Assert
             _mockJwtTokenValidator.VerifyAll();
@@ -165,7 +181,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         }
 
         [TestMethod]
-        public void ReadToken_FailsWhenCidTokenHasNoSubject_ReturnsNone()
+        public async Task ReadToken_FailsWhenCidTokenHasNoSubject_ReturnsNone()
         {
             // Arrange
             var jwtToken = _fixture.Create<string>();
@@ -189,18 +205,30 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                 .Setup(x => x.FindFirst(ClaimTypes.NameIdentifier))
                 .Returns((Claim) null);
 
+            var key = new SigningCredentials(
+                new JsonWebKey()
+                {
+                    Kid = "some-key"
+                },
+                "RSA512");
+
+            _mockJwtTokenValidator
+                .Setup(x => x.ReadToken(It.IsAny<string>()))
+                .Returns(
+                    new JwtSecurityToken(
+                        new JwtHeader(key, new Dictionary<string, string>(), "?"),
+                        new JwtPayload()));
+
             SecurityToken secToken;
             _mockJwtTokenValidator
                 .Setup(x => x.ValidateToken(jwtToken, It.IsAny<TokenValidationParameters>(), out secToken))
                 .Returns(mockPrincipal.Object)
                 .Verifiable();
 
-            var signingKeys = Mock.Of<JsonWebKeySet>();
-
             _systemUnderTest = _fixture.Create<IdTokenService>();
 
             // Act
-            var result = _systemUnderTest.ReadToken(jwtToken, signingKeys);
+            var result = await _systemUnderTest.ReadToken(jwtToken);
 
             // Assert
             _mockParameterBuilder.VerifyAll();
@@ -211,7 +239,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         }
 
         [TestMethod]
-        public void ReadToken_FailsWhenCidTokenHasNoJti_ReturnsNone()
+        public async Task ReadToken_FailsWhenCidTokenHasNoJti_ReturnsNone()
         {
             // Arrange
             var jwtToken = _fixture.Create<string>();
@@ -239,18 +267,30 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                 .Setup(x => x.FindFirst(JwtRegisteredClaimNames.Jti))
                 .Returns((Claim)null);
 
+            var key = new SigningCredentials(
+                new JsonWebKey()
+                {
+                    Kid = "some-key"
+                },
+                "RSA512");
+
+            _mockJwtTokenValidator
+                .Setup(x => x.ReadToken(It.IsAny<string>()))
+                .Returns(
+                    new JwtSecurityToken(
+                        new JwtHeader(key, new Dictionary<string, string>(), "?"),
+                        new JwtPayload()));
+
             SecurityToken secToken;
             _mockJwtTokenValidator
                 .Setup(x => x.ValidateToken(jwtToken, It.IsAny<TokenValidationParameters>(), out secToken))
                 .Returns(mockPrincipal.Object)
                 .Verifiable();
 
-            var signingKeys = Mock.Of<JsonWebKeySet>();
-
             _systemUnderTest = _fixture.Create<IdTokenService>();
 
             // Act
-            var result = _systemUnderTest.ReadToken(jwtToken, signingKeys);
+            var result = await _systemUnderTest.ReadToken(jwtToken);
 
             // Assert
             _mockParameterBuilder.VerifyAll();

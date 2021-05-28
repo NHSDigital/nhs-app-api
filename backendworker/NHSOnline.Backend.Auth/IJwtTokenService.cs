@@ -1,10 +1,11 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using System.Threading.Tasks;
+using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Auth
 {
     public interface IJwtTokenService<T>
     {
-        Option<T> ReadToken(string token,JsonWebKeySet signingKeys);
+        Task<Option<IdToken>> ReadToken(string token);
     }
 }

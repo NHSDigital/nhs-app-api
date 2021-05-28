@@ -25,7 +25,6 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         private IFixture _fixture;
         private CitizenIdService _systemUnderTest;
         private Mock<ICitizenIdClient> _citizenIdClientMock;
-        private Mock<ICitizenIdSigningKeysService> _citizenIdSigningKeysMock;
         private Mock<IJwtTokenService<IdToken>> _idTokenService;
         private Mock<ILogger<CitizenIdService>> _loggerMock;
 
@@ -35,7 +34,6 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _citizenIdClientMock = _fixture.Freeze<Mock<ICitizenIdClient>>();
             _idTokenService = _fixture.Freeze<Mock<IJwtTokenService<IdToken>>>();
-            _citizenIdSigningKeysMock = _fixture.Freeze<Mock<ICitizenIdSigningKeysService>>();
             _loggerMock = _fixture.Freeze<Mock<ILogger<CitizenIdService>>>();
             _systemUnderTest = _fixture.Create<CitizenIdService>();
         }
@@ -176,19 +174,14 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                 .Setup(x => x.GetUserInfo(bearerToken))
                 .ReturnsAsync(userProfileResponse);
 
-            _citizenIdSigningKeysMock
-                .Setup(x => x.GetSigningKeys())
-                .ReturnsAsync(signingKeysResponse);
-
             _idTokenService
-                .Setup(x => x.ReadToken(token.IdToken, signingKeys))
-                .Returns(tokenServiceResponse);
+                .Setup(x => x.ReadToken(token.IdToken))
+                .Returns(Task.FromResult(tokenServiceResponse));
 
             // Act
             var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
 
             // Assert
-            _citizenIdSigningKeysMock.VerifyAll();
             _idTokenService.VerifyAll();
             _citizenIdClientMock.VerifyAll();
             actualResult.UserProfile.HasValue.Should().BeTrue();
@@ -201,45 +194,6 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             actualResult.StatusCode.Should().Be(StatusCodes.Status200OK);
 
             actualResult.IdTokenJti.Should().Be(idToken.Jti);
-        }
-
-        [TestMethod]
-        public async Task GetUserProfile_SigningKeysFails_ReturnsNone()
-        {
-            // Arrange
-            var token = _fixture.Create<Token>();
-            var authCode = _fixture.Create<string>();
-            var codeVerifier = _fixture.Create<string>();
-            var redirectUrl = _fixture.Create<Uri>();
-
-            var tokenResponse = new CitizenIdApiObjectResponse<Token>(HttpStatusCode.OK)
-            {
-                Body = token,
-                ErrorResponse = null
-            };
-
-            var signingKeysResponse = Option.None<JsonWebKeySet>();
-
-            _citizenIdClientMock
-                .Setup(x => x.ExchangeAuthToken(authCode, codeVerifier, redirectUrl))
-                .ReturnsAsync(tokenResponse);
-
-            _citizenIdSigningKeysMock
-                .Setup(x => x.GetSigningKeys())
-                .ReturnsAsync(signingKeysResponse);
-
-            // Act
-            var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
-
-            // Assert
-            _citizenIdSigningKeysMock.VerifyAll();
-            _citizenIdClientMock.VerifyAll();
-
-            actualResult.UserProfile.HasValue.Should().BeFalse();
-            actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
-            actualResult.IdTokenJti.Should().BeNull();
-            _loggerMock.VerifyLogger(LogLevel.Error,
-                "Failed to get signing keys", Times.Once());
         }
 
         [TestMethod]
@@ -263,15 +217,10 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                 .Setup(x => x.ExchangeAuthToken(authCode, codeVerifier, redirectUrl))
                 .ReturnsAsync(tokenResponse);
 
-            _citizenIdSigningKeysMock
-                .Setup(x => x.GetSigningKeys())
-                .ReturnsAsync(signingKeysResponse);
-
             // Act
             var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
 
             // Assert
-            _citizenIdSigningKeysMock.VerifyAll();
             _citizenIdClientMock.VerifyAll();
 
             actualResult.UserProfile.HasValue.Should().BeFalse();
@@ -305,19 +254,14 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                 .Setup(x => x.ExchangeAuthToken(authCode, codeVerifier, redirectUrl))
                 .ReturnsAsync(tokenResponse);
 
-            _citizenIdSigningKeysMock
-                .Setup(x => x.GetSigningKeys())
-                .ReturnsAsync(signingKeysResponse);
-
             _idTokenService
-                .Setup(x => x.ReadToken(token.IdToken, signingKeys))
-                .Returns(tokenServiceResponse);
+                .Setup(x => x.ReadToken(token.IdToken))
+                .Returns(Task.FromResult(tokenServiceResponse));
 
             // Act
             var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
 
             // Assert
-            _citizenIdSigningKeysMock.VerifyAll();
             _idTokenService.VerifyAll();
             _citizenIdClientMock.VerifyAll();
             _citizenIdClientMock.VerifyNoOtherCalls();
@@ -366,19 +310,14 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                 .Setup(x => x.GetUserInfo(bearerToken))
                 .ReturnsAsync(userProfileResponse);
 
-            _citizenIdSigningKeysMock
-                .Setup(x => x.GetSigningKeys())
-                .ReturnsAsync(signingKeysResponse);
-
             _idTokenService
-                .Setup(x => x.ReadToken(token.IdToken, signingKeys))
-                .Returns(tokenServiceResponse);
+                .Setup(x => x.ReadToken(token.IdToken))
+                .Returns(Task.FromResult(tokenServiceResponse));
 
             // Act
             var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
 
             // Assert
-            _citizenIdSigningKeysMock.VerifyAll();
             _idTokenService.VerifyAll();
             _citizenIdClientMock.VerifyAll();
             actualResult.UserProfile.HasValue.Should().BeFalse();
