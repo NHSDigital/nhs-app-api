@@ -66,7 +66,7 @@ export default {
     },
   },
   watch: {
-    '$route.query.ts': function watchTimestamp() {
+    '$route.query.redirect_to': function watchRedirectParam() {
       this.startRedirect();
     },
   },
