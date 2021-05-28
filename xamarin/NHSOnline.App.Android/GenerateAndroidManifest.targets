@@ -4,7 +4,7 @@
     <ManifestNamespace>&lt;Namespace Prefix='android' Uri='http://schemas.android.com/apk/res/android'/&gt;</ManifestNamespace>
   </PropertyGroup>
 
-  <Target Name="GenerateNhsAppAndroidManifest" BeforeTargets="_GetAndroidPackageName">
+  <Target Name="GenerateNhsAppAndroidManifest" BeforeTargets="_GetAndroidPackageName;_ValidateAndroidPackageProperties">
     <Copy
       SourceFiles="$(MSBuildProjectDirectory)/Properties/AndroidManifest.template.xml"
       DestinationFiles="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml" />
