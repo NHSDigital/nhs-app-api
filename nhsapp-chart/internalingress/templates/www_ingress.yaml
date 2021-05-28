@@ -1,0 +1,34 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: 'false'
+    nginx.ingress.kubernetes.io/secure-backends: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers 'X-Xss-Protection: 1; mode=block';
+      more_set_headers 'X-Frame-Options: DENY';
+      more_set_headers 'X-Content-Type-Options: nosniff';
+      more_set_headers 'Referrer-Policy: no-referrer';
+      more_set_headers 'Content-Security-Policy: frame-src \'self\' https://nhs.demdex.net/ https://assets.adobedtm.com *.112.2o7.net https://*.hotjar.com; frame-ancestors \'self\'; object-src \'none\'';
+      more_clear_headers 'server';
+  name: cold-www
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    role: cold-www
+    releaseVersion: {{ default "develop" .Values.www.targetAppVersion }}
+spec:
+  rules:
+    - host: www-cold.{{ $.Values.zone }}.{{ $.Values.domain }}
+      http:
+        paths:
+          - backend:
+              serviceName: cold-www
+              servicePort: {{ $.Values.defaultServicePort }}
+            path: /
+  tls:
+    - hosts:
+        - www-cold.{{ $.Values.zone }}.{{ $.Values.domain }}
+      secretName: {{ $.Values.zone }}-{{ $.Values.domain | replace "." "-" }}

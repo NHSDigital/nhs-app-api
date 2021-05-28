@@ -1,0 +1,32 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: 'false'
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers 'X-Xss-Protection: 1; mode=block';
+      more_set_headers 'X-Frame-Options: DENY';
+      more_set_headers 'X-Content-Type-Options: nosniff';
+      more_set_headers 'Referrer-Policy: no-referrer';
+      more_set_headers 'Content-Security-Policy: frame-src \'self\' https://nhs.demdex.net/ https://assets.adobedtm.com *.112.2o7.net https://*.hotjar.com; frame-ancestors \'self\'; object-src \'none\'';
+      more_clear_headers 'server';
+  name: default-www
+  labels:
+    role: default-www
+    releaseVersion: {{ default "develop" .Values.www.version }}
+spec:
+  rules:
+    - host: www{{ .Values.environmentPublicHostSuffix }}
+      http:
+        paths:
+          - backend:
+              serviceName: default-www
+              servicePort: {{ .Values.defaultServicePort }}
+            path: /
+  tls:
+    - hosts:
+        - www{{ .Values.environmentPublicHostSuffix }}
+      secretName: {{ .Values.tlsSecretName }}

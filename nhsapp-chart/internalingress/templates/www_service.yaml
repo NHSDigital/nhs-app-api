@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cold-www
+  namespace: {{ .Values.global.environment }}
+  labels:
+    role: cold-www
+    releaseVersion: {{ default "develop" .Values.www.targetAppVersion }}
+spec:
+  type: ExternalName
+  externalName: {{ template "nhsapp.name" . }}-www-{{ $.Values.www.targetAppVersion | replace "." "-" }}.{{ .Values.zone }}.svc.cluster.local
+  ports:
+    - port: {{ .Values.defaultServicePort }}
+      targetPort: {{ .Values.sidecar_proxy.containerPort }}

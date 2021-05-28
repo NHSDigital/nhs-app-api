@@ -1,0 +1,30 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: 'false'
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  name: default-messages
+  labels:
+    role: default-messages
+    releaseVersion: {{ default "develop" .Values.messages.version }}
+spec:
+  rules:
+    - host: api{{ .Values.environmentPublicHostSuffix }}
+      http:
+        paths:
+          - backend:
+              serviceName: default-messages
+              servicePort: {{ .Values.defaultServicePort }}
+            path: /v[1,2]/api/users/me/messages
+          - backend:
+              serviceName: default-messages
+              servicePort: {{ .Values.defaultServicePort }}
+            path: /v[1,2]/api/users/([A-Fa-f0-9-]{36})/messages
+  tls:
+    - hosts:
+        - api{{ .Values.environmentPublicHostSuffix }}
+      secretName: {{ .Values.tlsSecretName }}

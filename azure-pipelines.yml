@@ -181,6 +181,12 @@ stages:
       jobs:
         - template: .azuredevops/templates/pull-request-changes-job.yml
 
+  - stage: package_helm_charts
+    displayName: Package Helm Charts
+    dependsOn:
+    jobs:
+      - template: .azuredevops/templates/helm-package-chart.yml
+  
   - stage: backend
     displayName: Backend
     dependsOn:

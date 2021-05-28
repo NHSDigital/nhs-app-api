@@ -1,0 +1,34 @@
+---
+# Environment Config
+global:
+  environment: "production"
+
+zone: {}
+domain: ""
+defaultServicePort: 8443
+
+sidecar_proxy:
+  containerPort: 8443
+
+# Container versions to target
+api:
+  role: api
+  version: ""
+cid:
+  role: cid
+  version: ""
+www:
+  role: www
+  version: ""
+logger:
+  role: logger
+  version: ""
+users:
+  role: users
+  version: ""
+messages:
+  role: messages
+  version: ""
+info:
+  role: info
+  version: ""

@@ -1,0 +1,17 @@
+# Default CID Ingress
+# Targets the correct pods running our release via podSelector
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: default-cid
+  labels:
+    role: default-cid
+    releaseVersion: {{ default "develop" .Values.cid.version }}
+spec:
+  selector:
+    role: {{ default "cid" .Values.cid.role }}
+    version: {{ default "develop" .Values.cid.version }}
+  ports:
+    - port: {{ .Values.defaultServicePort }}
+      targetPort: {{ .Values.sidecar_proxy.containerPort }}

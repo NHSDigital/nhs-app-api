@@ -1,0 +1,42 @@
+jobs:
+  - job: package_helm_charts
+    displayName: Package helm charts
+    steps: 
+      - template: set-branch-tag-steps.yml
+      - task: HelmDeploy@0
+        displayName: Helm package app chart
+        inputs:
+          command: package
+          chartPath: nhsapp-chart/nhsapp/
+          destination: $(System.ArtifactsDirectory)
+          version: v1.0.0
+          arguments: --app-version=$(branch.tag)
+      - task: HelmDeploy@0
+        displayName: Helm package redirector chart
+        inputs:
+          command: package
+          chartPath: nhsapp-chart/redirector/
+          destination: $(System.ArtifactsDirectory)
+          version: v1.0.0
+          arguments: --app-version=$(branch.tag)
+      - task: HelmDeploy@0
+        displayName: Helm package internal ingress chart
+        inputs:
+          command: package
+          chartPath: nhsapp-chart/internalingress/
+          destination: $(System.ArtifactsDirectory)
+          version: v1.0.0
+          arguments: --app-version=$(branch.tag)
+
+      - task: PublishBuildArtifacts@1
+        displayName: Publish packaged helm charts
+        inputs:
+          pathToPublish: $(System.ArtifactsDirectory)
+          artifactName: 'charts'
+      - task: PublishBuildArtifacts@1
+        displayName: Publish packaged chart values
+        inputs:
+          pathToPublish: nhsapp-chart/vars/
+          artifactName: 'charts/vars'
+
+  

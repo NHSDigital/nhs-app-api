@@ -1,0 +1,50 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx-ingress-internal
+    kubernetes.io/tls-acme: 'false'
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  name: default-private-api
+  labels:
+    role: default-private-api
+    releaseVersion: {{ default "develop" .Values.api.version }}
+spec:
+  rules:
+    - host: api{{ .Values.environmentPrivateHostSuffix }}
+      http:
+        paths:
+          - backend:
+              serviceName: default-api
+              servicePort: {{ .Values.defaultServicePort }}
+            path: /
+          - backend:
+              serviceName: default-info
+              servicePort: {{ .Values.defaultServicePort }}
+            path: /v[1,2]/api/users/info
+          - backend:
+              serviceName: default-info
+              servicePort: {{ .Values.defaultServicePort }}
+            path: /v[1,2]/api/users/me/info
+          - backend:
+              serviceName: default-messages
+              servicePort: {{ .Values.defaultServicePort }}
+            path: /v[1,2]/api/users/me/messages
+          - backend:
+              serviceName: default-messages
+              servicePort: {{ .Values.defaultServicePort }}
+            path: /v[1,2]/api/users/([A-Fa-f0-9-]{36})/messages
+          - backend:
+              serviceName: default-logger
+              servicePort: {{ .Values.defaultServicePort }}
+            path: /v1/api/log
+          - backend:
+              serviceName: default-users
+              servicePort: {{ .Values.defaultServicePort }}
+            path: /v[1,2]/api/users
+  tls:
+    - hosts:
+        - api{{ .Values.environmentPrivateHostSuffix }}
+      secretName: private-{{ .Values.tlsSecretName }}

@@ -1,0 +1,32 @@
+---
+# Environment Config
+global:
+  environment: "app-publishing"
+zone: "dev"
+
+domain: ""
+defaultServicePort: 8443
+
+sidecar_proxy:
+  containerPort: 8443
+
+api:
+  targetAppVersion: ""
+
+cid:
+  targetAppVersion: ""
+
+www:
+  targetAppVersion: ""
+
+info:
+  targetAppVersion: ""
+
+messages:
+  targetAppVersion: ""
+
+users:
+  targetAppVersion: ""
+
+logger:
+  targetAppVersion: ""

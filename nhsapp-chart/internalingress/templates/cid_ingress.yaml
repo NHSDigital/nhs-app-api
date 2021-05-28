@@ -1,0 +1,31 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: 'false'
+    nginx.ingress.kubernetes.io/secure-backends: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
+    nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
+    nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "false"
+    nginx.ingress.kubernetes.io/auth-tls-secret: "kube-system/external-ca"
+  name: cold-cid
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    role: cold-cid
+    releaseVersion: {{ default "develop" .Values.cid.targetAppVersion }}
+spec:
+  rules:
+    - host: cid-cold.{{ $.Values.zone }}.{{ $.Values.domain }}
+      http:
+        paths:
+          - backend:
+              serviceName: cold-cid
+              servicePort: {{ $.Values.defaultServicePort }}
+            path: /
+  tls:
+    - hosts:
+        - cid-cold.{{ $.Values.zone }}.{{ $.Values.domain }}
+      secretName: {{ $.Values.zone }}-{{ $.Values.domain | replace "." "-" }}

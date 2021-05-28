@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: default-logger
+  labels:
+    role: default-logger
+    releaseVersion: {{ default "develop" .Values.logger.version }}
+spec:
+  selector:
+    role: {{ default "logger" .Values.logger.role }}
+    version: {{ default "develop" .Values.logger.version }}
+  ports:
+    - port: {{ .Values.defaultServicePort }}
+      targetPort: {{ .Values.sidecar_proxy.containerPort }}
