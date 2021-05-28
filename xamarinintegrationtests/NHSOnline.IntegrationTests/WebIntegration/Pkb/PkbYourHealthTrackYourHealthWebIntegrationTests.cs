@@ -37,7 +37,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .PageContent.NavigateToNextPage();
 
             AndroidPkbPage
-                .AssertOnPage(driver, "/pkbNhsMenu.action")
+                .AssertOnPage(driver, PhrPath.TrackYourHealth)
                 .AssertNativeHeader();
         }
 
@@ -63,7 +63,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .PageContent.NavigateToNextPage();
 
             IOSPkbPage
-                .AssertOnPage(driver, "/pkbNhsMenu.action")
+                .AssertOnPage(driver, PhrPath.TrackYourHealth)
                 .AssertNativeHeader();
         }
     }

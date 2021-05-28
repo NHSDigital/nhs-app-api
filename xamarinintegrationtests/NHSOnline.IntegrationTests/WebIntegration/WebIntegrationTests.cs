@@ -15,6 +15,7 @@ using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.WebIntegration;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
+using NHSOnline.IntegrationTests.WebIntegration.Pkb;
 
 namespace NHSOnline.IntegrationTests.WebIntegration
 {
@@ -124,7 +125,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .PageContent.NavigateToNextPage();
 
             AndroidPkbPage
-                .AssertOnPage(driver, "/diary/listAppointments.action")
+                .AssertOnPage(driver, PhrPath.ViewAppointments)
                 .KeyboardNavigateToPrescriptions();
 
             AndroidPrescriptionsPage

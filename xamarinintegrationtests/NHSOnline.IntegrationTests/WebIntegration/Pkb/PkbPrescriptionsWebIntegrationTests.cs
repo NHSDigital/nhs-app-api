@@ -37,7 +37,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .PageContent.NavigateToNextPage();
 
             AndroidPkbPage
-                .AssertOnPage(driver, "/auth/manageMedications.action?tab=treatments")
+                .AssertOnPage(driver, PhrPath.HospitalAndOtherPrescriptions)
                 .AssertNativeHeader();
         }
 
@@ -63,7 +63,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .PageContent.NavigateToNextPage();
 
             IOSPkbPage
-                .AssertOnPage(driver, "/auth/manageMedications.action?tab=treatments")
+                .AssertOnPage(driver, PhrPath.HospitalAndOtherPrescriptions)
                 .AssertNativeHeader();
         }
     }

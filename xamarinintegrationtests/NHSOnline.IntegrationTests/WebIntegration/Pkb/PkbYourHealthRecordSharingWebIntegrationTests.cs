@@ -37,7 +37,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .PageContent.NavigateToNextPage();
 
             AndroidPkbPage
-                .AssertOnPage(driver, "/patient/myConsentTeam.action?tab=invitations")
+                .AssertOnPage(driver, PhrPath.RecordSharing)
                 .AssertNativeHeader();
         }
 
@@ -63,7 +63,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .PageContent.NavigateToNextPage();
 
             IOSPkbPage
-                .AssertOnPage(driver, "/patient/myConsentTeam.action?tab=invitations")
+                .AssertOnPage(driver, PhrPath.RecordSharing)
                 .AssertNativeHeader();
         }
     }

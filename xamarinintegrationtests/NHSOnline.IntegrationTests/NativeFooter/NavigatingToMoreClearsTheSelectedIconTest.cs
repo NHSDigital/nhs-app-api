@@ -16,7 +16,7 @@ namespace NHSOnline.IntegrationTests.NativeFooter
     public class NavigatingToMoreClearsTheSelectedIconTest
     {
         [NhsAppAndroidTest]
-        public void APatientNavigatingToMoreUsingTheTopNavSeesTheHighlightedBottomNavIconUnhighlightedAndroid(
+        public void APatientNavigatingToMoreUsingTheTopNavSeesTheHighlightedBottomNavIconDeselectedAndroid(
             IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
@@ -43,7 +43,7 @@ namespace NHSOnline.IntegrationTests.NativeFooter
         }
 
         [NhsAppIOSTest]
-        public void APatientNavigatingToMoreUsingTheTopNavSeesTheHighlightedBottomNavIconUnhighlightedIOS(
+        public void APatientNavigatingToMoreUsingTheTopNavSeesTheHighlightedBottomNavIconDeselectedIOS(
             IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()

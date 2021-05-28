@@ -40,6 +40,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
             _uriDestination = new WebIntegrationUriDestination(nhsLoginConfiguration, model.Url);
 
+            _view.SetNavigationFooterItem(model.FooterItem);
+
             _view.AppNavigation
                 .RegisterHandler(
                     ViewOnAppearing, (view, handler) => view.Appearing = handler)

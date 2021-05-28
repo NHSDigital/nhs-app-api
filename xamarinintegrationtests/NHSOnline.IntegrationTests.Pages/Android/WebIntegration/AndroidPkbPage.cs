@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
 {
     public sealed class AndroidPkbPage
     {
-        private AndroidFullNavigation Navigation { get; }
+        public AndroidFullNavigation Navigation { get; }
         private PkbPageContent PageContent { get; }
 
         private readonly IAndroidDriverWrapper _driver;

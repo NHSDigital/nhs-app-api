@@ -37,7 +37,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .PageContent.NavigateToNextPage();
 
             AndroidPkbPage
-                .AssertOnPage(driver, "/auth/getInbox.action?tab=messages")
+                .AssertOnPage(driver, PhrPath.MessagesAndOnlineConsultations)
                 .AssertNativeHeader();
         }
 
@@ -63,7 +63,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .PageContent.NavigateToNextPage();
 
             IOSPkbPage
-                .AssertOnPage(driver, "/auth/getInbox.action?tab=messages")
+                .AssertOnPage(driver, PhrPath.MessagesAndOnlineConsultations)
                 .AssertNativeHeader();
         }
     }

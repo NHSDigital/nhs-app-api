@@ -11,7 +11,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
             PageContent = new PkbPageContent(driver.Web(WebViewContext.PkbWebIntegration), phrPath);
         }
 
-        private IOSFullNavigation Navigation { get; }
+        public IOSFullNavigation Navigation { get; }
 
         private PkbPageContent PageContent { get; }
 

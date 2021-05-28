@@ -1,0 +1,129 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NHSOnline.HttpMocks.Domain;
+using NHSOnline.IntegrationTests.Pages.Android.Advice;
+using NHSOnline.IntegrationTests.Pages.Android.Appointments;
+using NHSOnline.IntegrationTests.Pages.Android.Home;
+using NHSOnline.IntegrationTests.Pages.Android.Messages;
+using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
+using NHSOnline.IntegrationTests.Pages.IOS.Advice;
+using NHSOnline.IntegrationTests.Pages.IOS.Home;
+using NHSOnline.IntegrationTests.Pages.IOS.Messages;
+using NHSOnline.IntegrationTests.Pages.IOS.Prescriptions;
+using NHSOnline.IntegrationTests.Pages.IOS.WebIntegration;
+using NHSOnline.IntegrationTests.UI;
+using NHSOnline.IntegrationTests.UI.Drivers;
+using NHSOnline.IntegrationTests.WebIntegration.Pkb;
+
+namespace NHSOnline.IntegrationTests.NativeFooter
+{
+    [TestClass]
+    [BusinessRule("BR-NAV-02.8", "Accessing a web integration from within a a service with a highlighted nav icon navigates to the web integration and the nav icon remains highlighted")]
+    public class NavigatingToAWebIntegrationNavItemsRemainSelected
+    {
+        [NhsAppAndroidTest]
+        public void APatientSeesTheNavigationFooterRemainSelectedWhenNavigatingToAWebIntegrationAndroid(
+            IAndroidDriverWrapper driver)
+        {
+            var patient = new KeyboardPatient()
+                .WithName(b => b.GivenName("Alan").FamilyName("Titchmarsh"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.AdviceIcon.Click();
+
+            AndroidAdvicePage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToOneOneOne();
+
+            AndroidOneOneOnePage
+                .AssertOnPage(driver)
+                .Navigation.AdviceIcon.AssertSelected();
+
+            AndroidOneOneOnePage
+                .AssertOnPage(driver)
+                .Navigation.AppointmentsIcon.Click();
+
+            AndroidAppointmentsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToHospitalAndOtherAppointments();
+
+            AndroidHospitalAndOtherAppointmentsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToViewAppointments();
+
+            AndroidWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "View appointments")
+                .PageContent.NavigateToNextPage();
+
+            AndroidPkbPage
+                .AssertOnPage(driver, PhrPath.ViewAppointments)
+                .Navigation.AppointmentsIcon.AssertSelected();
+
+            AndroidPkbPage
+                .AssertOnPage(driver, PhrPath.ViewAppointments)
+                .Navigation.MessagesIcon.Click();
+
+            AndroidMessagesPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToTestProvider();
+
+            AndroidTestWebIntegrationProviderPage
+                .AssertOnPage(driver)
+                .Navigation.MessagesIcon.AssertSelected();
+        }
+
+        [NhsAppIOSTest]
+        public void APatientSeesTheNavigationFooterRemainSelectedWhenNavigatingToAWebIntegrationIOS(
+            IIOSDriverWrapper driver)
+        {
+            var patient = new KeyboardPatient()
+                .WithName(b => b.GivenName("Tommy").FamilyName("Walsh"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.AdviceIcon.Click();
+
+            IOSAdvicePage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToOneOneOne();
+
+            IOSOneOneOnePage
+                .AssertOnPage(driver)
+                .Navigation.AdviceIcon.AssertSelected();
+
+            IOSOneOneOnePage
+                .AssertOnPage(driver)
+                .Navigation.PrescriptionsIcon.Click();
+
+            IOSPrescriptionsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToHospitalAndOtherPrescriptions();
+
+            IOSWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "Hospital and other prescriptions")
+                .PageContent.NavigateToNextPage();
+
+            IOSPkbPage
+                .AssertOnPage(driver, PhrPath.HospitalAndOtherPrescriptions)
+                .Navigation.PrescriptionsIcon.AssertSelected();
+
+            IOSPkbPage
+                .AssertOnPage(driver, PhrPath.HospitalAndOtherPrescriptions)
+                .Navigation.MessagesIcon.Click();
+
+            IOSMessagesPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToTestProvider();
+
+            IOSTestWebIntegrationProviderPage
+                .AssertOnPage(driver)
+                .Navigation.MessagesIcon.AssertSelected();
+        }
+    }
+}

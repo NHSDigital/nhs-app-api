@@ -154,7 +154,6 @@ namespace NHSOnline.App.Areas.Home.Views
             WebView.Focus();
             WebView.AccessibilityFocus();
             await WebView.NavigateToAdvice().ResumeOnThreadPool();
-            Page.SelectedNavigationFooterItem = NavigationFooterItem.Advice;
         }
 
         public async Task NavigateToAppointments()
@@ -162,7 +161,6 @@ namespace NHSOnline.App.Areas.Home.Views
             WebView.Focus();
             WebView.AccessibilityFocus();
             await WebView.NavigateToAppointments().ResumeOnThreadPool();
-            Page.SelectedNavigationFooterItem = NavigationFooterItem.Appointments;
         }
 
         public async Task NavigateToPrescriptions()
@@ -170,7 +168,6 @@ namespace NHSOnline.App.Areas.Home.Views
             WebView.Focus();
             WebView.AccessibilityFocus();
             await WebView.NavigateToPrescriptions().ResumeOnThreadPool();
-            Page.SelectedNavigationFooterItem = NavigationFooterItem.Prescriptions;
         }
 
         public async Task NavigateToYourHealth()
@@ -178,7 +175,6 @@ namespace NHSOnline.App.Areas.Home.Views
             WebView.Focus();
             WebView.AccessibilityFocus();
             await WebView.NavigateToYourHealth().ResumeOnThreadPool();
-            Page.SelectedNavigationFooterItem = NavigationFooterItem.YourHealth;
         }
 
         public async Task NavigateToMessages()
@@ -186,7 +182,6 @@ namespace NHSOnline.App.Areas.Home.Views
             WebView.Focus();
             WebView.AccessibilityFocus();
             await WebView.NavigateToMessages().ResumeOnThreadPool();
-            Page.SelectedNavigationFooterItem = NavigationFooterItem.Messages;
         }
 
         public async Task NavigateToHome()
@@ -194,7 +189,6 @@ namespace NHSOnline.App.Areas.Home.Views
             WebView.Focus();
             WebView.AccessibilityFocus();
             await WebView.NavigateToHome().ResumeOnThreadPool();
-            Page.SelectedNavigationFooterItem = NavigationFooterItem.None;
         }
 
         public async Task NavigateToMore()
@@ -202,19 +196,15 @@ namespace NHSOnline.App.Areas.Home.Views
             WebView.Focus();
             WebView.AccessibilityFocus();
             await WebView.NavigateToMore().ResumeOnThreadPool();
-            Page.SelectedNavigationFooterItem = NavigationFooterItem.None;
         }
 
         public async Task NavigateToRedirector(Uri targetUrl)
         {
             WebView.Focus();
             WebView.AccessibilityFocus();
+            SelectedNavigationFooterItem = NavigationFooterItem.None;
             await WebView.NavigateToRedirector(targetUrl).ResumeOnThreadPool();
         }
-
-        public void SelectNavigationFooterItem(NavigationFooterItem navigationFooterItem) => Page.SelectedNavigationFooterItem = navigationFooterItem;
-
-        public void ClearSelectedNavigationFooterItem() => Page.SelectedNavigationFooterItem = NavigationFooterItem.None;
 
         public async Task NavigateToRedirectedPathWithinApp(string spaPath)
         {

@@ -135,7 +135,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _logger.LogInformation("Opening Web Integration - {Url}", request.Url);
 
             var popToRootNavigationHandler = new NhsAppPopToRootNavigationHandler(_navigationHandler, _view.AppNavigation);
-            var model = new WebIntegrationModel(popToRootNavigationHandler, request.Url);
+            var model = new WebIntegrationModel(popToRootNavigationHandler, request.Url, _view.SelectedNavigationFooterItem);
 
             var page = _pageFactory.CreatePageFor(model);
             await _view.AppNavigation
@@ -228,7 +228,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         {
             _logger.LogInformation($"Menu bar item change requested for {menuItemIndex}");
 
-            _view.SelectNavigationFooterItem(GetFooterItemFromIndex(menuItemIndex));
+            _view.SelectedNavigationFooterItem = GetFooterItemFromIndex(menuItemIndex);
             return Task.CompletedTask;
         }
 
@@ -236,7 +236,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         {
             _logger.LogInformation("Menu bar item clear requested");
 
-            _view.ClearSelectedNavigationFooterItem();
+            _view.SelectedNavigationFooterItem = NavigationFooterItem.None;
             return Task.CompletedTask;
         }
 

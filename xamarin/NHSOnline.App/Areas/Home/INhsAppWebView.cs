@@ -42,9 +42,9 @@ namespace NHSOnline.App.Areas.Home
             Func<Uri, Task>? DeeplinkRequested { get; set; }
         }
 
+        NavigationFooterItem SelectedNavigationFooterItem { get; set; }
+
         void GoToUri(Uri uri);
-        void SelectNavigationFooterItem(NavigationFooterItem navigationFooterItem);
-        void ClearSelectedNavigationFooterItem();
         Task NavigateToRedirectedPathWithinApp(string spaPath);
         Task NavigateToAdvice();
         Task NavigateToAppointments();

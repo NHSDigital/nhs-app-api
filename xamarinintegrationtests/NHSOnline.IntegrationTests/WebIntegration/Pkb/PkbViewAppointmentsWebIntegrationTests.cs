@@ -41,7 +41,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .PageContent.NavigateToNextPage();
 
             AndroidPkbPage
-                .AssertOnPage(driver, "/diary/listAppointments.action")
+                .AssertOnPage(driver, PhrPath.ViewAppointments)
                 .AssertNativeHeader();
         }
 
@@ -71,7 +71,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .KeyboardNavigateToContinue();
 
             AndroidPkbPage
-                .AssertOnPage(driver, "/diary/listAppointments.action")
+                .AssertOnPage(driver, PhrPath.ViewAppointments)
                 .AssertNativeHeader();
         }
 

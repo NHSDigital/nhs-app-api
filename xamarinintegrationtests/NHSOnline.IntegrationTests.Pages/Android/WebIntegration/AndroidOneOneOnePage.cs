@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
 {
     public class AndroidOneOneOnePage
     {
-        private AndroidFullNavigation Navigation { get; }
+        public AndroidFullNavigation Navigation { get; }
         private OneOneOnePageContent PageContent { get; }
 
         private readonly IAndroidDriverWrapper _driver;

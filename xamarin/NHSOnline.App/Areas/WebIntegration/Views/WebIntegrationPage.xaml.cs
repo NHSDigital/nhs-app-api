@@ -95,6 +95,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
 
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);
 
+        public void SetNavigationFooterItem(NavigationFooterItem footerItem) => SelectedNavigationFooterItem = footerItem;
+
         private void WebOnEndNavigating(object sender, WebNavigatedEventArgs e)
         {
             Spinner.IsVisible = false;

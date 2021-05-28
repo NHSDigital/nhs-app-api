@@ -11,9 +11,9 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
             PageContent = new NhsLoginSettingsPageContent(driver.Web(WebViewContext.NhsLoginSettingsWebIntegration));
         }
 
-        private IOSFullNavigation Navigation { get; }
+        public IOSFullNavigation Navigation { get; }
 
-        public NhsLoginSettingsPageContent PageContent { get; }
+        private NhsLoginSettingsPageContent PageContent { get; }
 
         public static IOSNhsLoginSettingsPage AssertOnPage(IIOSDriverWrapper driver)
         {

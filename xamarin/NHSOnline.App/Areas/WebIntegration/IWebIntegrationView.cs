@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using NHSOnline.App.Controls.WebViews.Payloads;
+using NHSOnline.App.Controls;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
@@ -30,5 +31,7 @@ namespace NHSOnline.App.Areas.WebIntegration
         }
 
         void GoToUri(Uri uri);
+
+        void SetNavigationFooterItem(NavigationFooterItem footerItem);
     }
 }

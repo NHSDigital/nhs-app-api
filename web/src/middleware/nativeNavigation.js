@@ -7,7 +7,7 @@ export const MESSAGES_MENU_ITEM = 4;
 
 export default ({ to, store, next }) => {
   const { meta } = to;
-  if (meta.nativeNavigation) {
+  if (meta.nativeNavigation !== undefined) {
     const { nativeNavigation } = meta;
 
     if (nativeNavigation === CLEAR_SELECTED_MENU_ITEM) {
