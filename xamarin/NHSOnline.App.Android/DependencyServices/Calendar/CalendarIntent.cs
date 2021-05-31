@@ -21,9 +21,9 @@ namespace NHSOnline.App.Droid.DependencyServices.Calendar
                 EventsAvailability.Busy.ToString());
 
             calendarIntent.PutExtra(CalendarContract.ExtraEventBeginTime,
-                DateTimeOffset.FromUnixTimeSeconds(request.StartTimeEpochInSeconds).ToUnixTimeMilliseconds());
+                DateTimeOffset.FromUnixTimeSeconds(request.StartTimeEpochInSeconds.GetValueOrDefault()).ToUnixTimeMilliseconds());
             calendarIntent.PutExtra(CalendarContract.ExtraEventEndTime,
-                DateTimeOffset.FromUnixTimeSeconds(request.EndTimeEpochInSeconds).ToUnixTimeMilliseconds());
+                DateTimeOffset.FromUnixTimeSeconds(request.EndTimeEpochInSeconds.GetValueOrDefault()).ToUnixTimeMilliseconds());
 
             calendarIntent.AddFlags(ActivityFlags.NewTask);
 

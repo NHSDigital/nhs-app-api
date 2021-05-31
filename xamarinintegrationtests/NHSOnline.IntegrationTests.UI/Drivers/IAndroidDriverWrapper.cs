@@ -9,5 +9,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         void AssertRunningInForeground();
         void PushTestFile();
         Task EnableAirplaneMode();
+        void DismissKeyboard();
+        void SendKey(int key);
     }
 }

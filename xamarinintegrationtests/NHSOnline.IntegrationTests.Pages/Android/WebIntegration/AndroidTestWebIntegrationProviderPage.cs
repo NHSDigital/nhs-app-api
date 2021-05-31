@@ -41,10 +41,11 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
         {
             var headerFocusableList = Navigation.KeyboardHeaderNavigation.GetFocusableElements();
             var footerFocusableList = Navigation.KeyboardFooterNavigation.GetFocusableElements();
+            var pageFocusableList = PageContent.FocusableElements;
 
-            return footerFocusableList.Concat(headerFocusableList);
+            return pageFocusableList.Concat(footerFocusableList).Concat(headerFocusableList);
         }
 
-        public void KeyboardNavigateToYourHealth() => Navigation.KeyboardNavigateToYourHealth(KeyboardPageContentNavigation);
+        public void KeyboardNavigateToYourHealth() => Navigation.KeyboardNavigateToYourHealthFromElement(KeyboardPageContentNavigation, PageContent.FocusableElements.First());
     }
 }

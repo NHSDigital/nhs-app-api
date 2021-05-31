@@ -68,8 +68,8 @@ namespace NHSOnline.App.iOS.Controllers
         private static EKEvent CreateCalendarEvent(AddEventToCalendarRequest request)
         {
             EKEvent calendarEvent = EKEvent.FromStore(ApplicationEventStore.Current.EventStore);
-            calendarEvent.StartDate = NSDate.FromTimeIntervalSince1970(request.StartTimeEpochInSeconds);
-            calendarEvent.EndDate = NSDate.FromTimeIntervalSince1970(request.EndTimeEpochInSeconds);
+            calendarEvent.StartDate = NSDate.FromTimeIntervalSince1970(request.StartTimeEpochInSeconds.GetValueOrDefault());
+            calendarEvent.EndDate = NSDate.FromTimeIntervalSince1970(request.EndTimeEpochInSeconds.GetValueOrDefault());
             calendarEvent.Title = request.Subject;
             calendarEvent.Notes = request.Body;
             calendarEvent.Location = request.Location;

@@ -148,6 +148,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _logger.LogInformation("Add event to calendar Requested - {Subject}", request.Subject);
 
             if (string.IsNullOrEmpty(request.Subject) ||
+                request.StartTimeEpochInSeconds == null ||
+                request.EndTimeEpochInSeconds == null ||
                 request.StartTimeEpochInSeconds > request.EndTimeEpochInSeconds)
             {
                 _logger.LogError("Passed calendar information is invalid, showing popup");

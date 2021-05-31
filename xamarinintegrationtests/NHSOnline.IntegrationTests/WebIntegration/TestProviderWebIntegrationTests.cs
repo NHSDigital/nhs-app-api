@@ -8,18 +8,21 @@ using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.Messages;
 using NHSOnline.IntegrationTests.Pages.IOS.WebIntegration;
-using NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.WebIntegration
 {
-
     [TestClass]
     public class TestProviderWebIntegrationTests
     {
+        private const int ValidStartTime = 1893589200; // Wednesday, 2 January 2030 13:00:00
+        private const int ValidEndTime = 1893589800; // Wednesday, 2 January 2030 13:10:00
+        private const int InvalidEndTime = 1893589100; // Wednesday, 2 January 2030 12:58:20
+
         [NhsAppAndroidTest]
-        public void APatientWithProofLevelNineCanAccessTheTestProviderFromMessagesScreenAndroid(IAndroidDriverWrapper driver)
+        public void APatientWithProofLevelNineCanAccessTheTestProviderFromMessagesScreenAndroid(
+            IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
@@ -41,7 +44,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppAndroidTest]
-        public void APatientWithProofLevelNineCanUploadTheirFileToTheTestProviderFileUploadScreenAndroid(IAndroidDriverWrapper driver)
+        public void APatientWithProofLevelNineCanUploadTheirFileToTheTestProviderFileUploadScreenAndroid(
+            IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
@@ -81,7 +85,117 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppAndroidTest]
-        public void APatientWithProofLevelNineCanKeyboardNavigateToAccessTheTestProviderFromMessagesScreenAndroid(IAndroidDriverWrapper driver)
+        public void APatientWithProofLevelNineCanAddAnEventToTheCalendarOnTheTestProviderCalendarScreenAndroid(
+            IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToMessages();
+
+            AndroidMessagesPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToTestProvider();
+
+            AndroidTestWebIntegrationProviderPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.NavigateToCalendar();
+
+            AndroidCalendarPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.AddToCalendar(ValidStartTime, ValidEndTime, driver);
+
+            AndroidGoogleCalendarsApp
+                .AssertOnPage(driver)
+                .NavigateThroughOverview()
+                .ConfirmGotIt()
+                .AssertDetailsArePassed();
+        }
+
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelNineTryingToCallAnInvalidDateRangeOnTheTestProviderCalendarScreenIsShownAndErrorDialogCanBeDismissedAndroid(
+            IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToMessages();
+
+            AndroidMessagesPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToTestProvider();
+
+            AndroidTestWebIntegrationProviderPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.NavigateToCalendar();
+
+            AndroidCalendarPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.AddToCalendar(ValidStartTime, InvalidEndTime, driver);
+
+            AndroidCalendarErrorDialog
+                .AssertDisplayed(driver)
+                .Ok();
+
+            AndroidCalendarPage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelNineTryingToCallAnInvalidDateRangeOnTheTestProviderCalendarScreenIsShownAnErrorDialogAndCanAddedManuallyAndroid(
+            IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToMessages();
+
+            AndroidMessagesPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToTestProvider();
+
+            AndroidTestWebIntegrationProviderPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.NavigateToCalendar();
+
+            AndroidCalendarPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.AddToCalendar(ValidStartTime, InvalidEndTime, driver);
+
+            AndroidCalendarErrorDialog
+                .AssertDisplayed(driver)
+                .AddEventManually();
+
+            AndroidGoogleCalendarsApp
+                .AssertOnPage(driver)
+                .NavigateThroughOverview()
+                .ConfirmGotIt();
+        }
+
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelNineCanKeyboardNavigateToAccessTheTestProviderFromMessagesScreenAndroid(
+            IAndroidDriverWrapper driver)
         {
             var patient = new KeyboardPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
@@ -124,7 +238,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppIOSTest]
-        public void APatientWithProofLevelNineCanUploadTheirFileToTheTestProviderFileUploadScreenIOS(IIOSDriverWrapper driver)
+        public void APatientWithProofLevelNineCanUploadTheirFileToTheTestProviderFileUploadScreenIOS(
+            IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));

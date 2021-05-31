@@ -22,6 +22,9 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
         public static AndroidLabel WhichMatches(IAndroidInteractor interactor, string pattern)
             => new(interactor, new MatchesLocatorStrategy(pattern));
 
+        public static AndroidLabel WithContentDescription(IAndroidInteractor interactor, string description)
+            => new(interactor, new DescriptionLocatorStrategy(description));
+
         public AndroidLabel ScrollIntoView()
             => new(_interactor, new AndroidScrollLocatorStrategy(_locatorStrategy));
 
@@ -57,9 +60,21 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
 
             public MatchesLocatorStrategy(string pattern)
                 => _pattern = pattern;
-            
+
             public string Selector => $"new UiSelector().className(\"android.widget.TextView\").textMatches({_pattern.QuoteUiAutomatorLiteral()})";
             public string Description => $"which matches '{_pattern}'";
+        }
+
+        private sealed class DescriptionLocatorStrategy : IAndroidLocatorStrategy
+        {
+            private readonly string _description;
+
+            public DescriptionLocatorStrategy(string description)
+                => _description = description;
+
+            public string Selector => $"new UiSelector().className(\"android.widget.TextView\").descriptionContains({_description.QuoteUiAutomatorLiteral()})";
+
+            public string Description => $"with description '{_description}'";
         }
     }
 }

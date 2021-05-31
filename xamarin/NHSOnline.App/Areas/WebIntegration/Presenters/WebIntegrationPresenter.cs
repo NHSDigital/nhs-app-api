@@ -127,6 +127,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
         private async Task<Task> AddEventToCalendarRequested(AddEventToCalendarRequest request)
         {
             if (string.IsNullOrEmpty(request.Subject) ||
+                request.StartTimeEpochInSeconds == null ||
+                request.EndTimeEpochInSeconds == null ||
                 request.StartTimeEpochInSeconds > request.EndTimeEpochInSeconds)
             {
                 _logger.LogError("Passed calendar information is invalid, showing popup");

@@ -20,5 +20,12 @@ namespace NHSOnline.HttpMocks.WebIntegrations
             (string Title, HttpRequest Request) model = ("Silver Integration Test Provider File Upload Page", Request);
             return View("~/Views/WebIntegrations/WebIntegrationFunctionalityPages/FileUploadPage.cshtml", model);
         }
+
+        [HttpGet("Calendar.html")]
+        public IActionResult Calendar()
+        {
+            (string Title, HttpRequest Request) model = ("Silver Integration Test Provider Calendar Page", Request);
+            return View("~/Views/WebIntegrations/WebIntegrationFunctionalityPages/CalendarPage.cshtml", model);
+        }
     }
 }

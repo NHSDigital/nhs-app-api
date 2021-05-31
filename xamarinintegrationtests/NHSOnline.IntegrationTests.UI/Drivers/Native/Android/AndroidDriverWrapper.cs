@@ -78,6 +78,16 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             return new WaitForAction();
         }
 
+        void IAndroidDriverWrapper.DismissKeyboard()
+        {
+            _driver.HideKeyboard();
+        }
+
+        void IAndroidDriverWrapper.SendKey(int key)
+        {
+            _driver.PressKeyCode(key);
+        }
+
         void IAndroidDriverWrapper.PushTestFile()
         {
             _driver.PushFile("/sdcard/Download/NhsAppLogo.png",

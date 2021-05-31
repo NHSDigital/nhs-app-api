@@ -145,6 +145,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         public void KeyboardNavigateToYourHealth(AndroidKeyboardNavigation navigation)
             => KeyboardNavigateToAndActivateIcon(YourHealthIcon, navigation);
 
+        public void KeyboardNavigateToYourHealthFromElement(AndroidKeyboardNavigation navigation, IFocusable startElement)
+            => KeyboardNavigateBetweenAndActivateIcon(YourHealthIcon, navigation, startElement);
+
         public void KeyboardNavigateToMessages(AndroidKeyboardNavigation navigation)
             => KeyboardNavigateToAndActivateIcon(MessagesIcon, navigation);
 

@@ -50,6 +50,7 @@ validate_secret auth_signing_dev_rsapass.password
 validate_secret azure_notification_hub_key
 validate_secret azure_notification_hub_key_bdd
 validate_secret browserstack_accesskey
+validate_secret browserstack_playstore_user_pass
 validate_secret gp_lookup_api_key
 validate_secret microtest_client_cert.password
 validate_secret microtest_client_cert.pfx

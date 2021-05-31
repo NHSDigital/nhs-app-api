@@ -6,13 +6,21 @@ function validate_browserstack_environment () {
     export BrowserStack__Key
   fi
 
+  if [ -z "$Android__PlayStorePassword" ] && [ -f ~/.nhsonline/secrets/browserstack_playstore_user_pass ]; then
+    Android__PlayStorePassword=$(<~/.nhsonline/secrets/browserstack_playstore_user_pass)
+    export Android__PlayStorePassword
+  fi
+
   [ -n "$BrowserStack__Key" ] || die "BrowserStack__Key is not specified, this is required to run native integration tests"
 
   export BrowserStack__User=${BrowserStack__User:-ops20}
+  export Android__PlayStoreUser=${Android__PlayStoreUser:-'nhsappbrowserstack@gmail.com'}
 
   DOCKER_ARGS+=(--env "BrowserStack__Key=${BrowserStack__Key}")
   DOCKER_ARGS+=(--env "BrowserStack__User=${BrowserStack__User:-ops20}")
   DOCKER_ARGS+=(--env "BrowserStack__Build=${BrowserStack__Build:-${HOSTNAME}-docker}")
+  DOCKER_ARGS+=(--env "Android__PlayStoreUser=${Android__PlayStoreUser:-'nhsappbrowserstack@gmail.com'}")
+  DOCKER_ARGS+=(--env "Android__PlayStorePassword=${Android__PlayStorePassword}")
 }
 
 function generate_browserstack_local_identifier () {
