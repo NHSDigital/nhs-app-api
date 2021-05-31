@@ -152,6 +152,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
             {
                 _logger.LogError("Passed calendar information is invalid, showing popup");
                 _calendar.ShowCalendarAlertWhenValidationFails();
+
+                return Task.CompletedTask;
             }
 
             var calendarPermission = await _calendar
