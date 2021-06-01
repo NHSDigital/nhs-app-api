@@ -22,6 +22,16 @@
           <li>{{ $t('dataSharing.pharmaceuticalCompanies') }}</li>
         </ul>
 
+        <inset-text>
+          <p>
+            <a :href="gpDataForPlanningAndResearchPath"
+               rel="noopener noreferrer"
+               target="_blank">
+              {{ $t('dataSharing.findOutHowGPDataIsUsedForPlanningAndResearch') }}
+            </a>
+          </p>
+        </inset-text>
+
         <h2>{{ $t('dataSharing.whoCannotUseConfidentialInformation') }}</h2>
         <p>{{ $t('dataSharing.accessWillNotBeGivenFor') }}</p>
         <ul>
@@ -53,7 +63,11 @@
 
 <script>
 import Contents from '@/components/data-sharing/Contents';
+import InsetText from '@/components/InsetText';
 import Pagination from '@/components/Pagination';
+import {
+  GP_DATA_FOR_PLANNING_AND_RESEARCH,
+} from '@/router/externalLinks';
 import {
   DATA_SHARING_DOES_NOT_APPLY_PATH,
   DATA_SHARING_OVERVIEW_PATH,
@@ -63,12 +77,14 @@ export default {
   name: 'DataSharingWhereUsedPage',
   components: {
     Contents,
+    InsetText,
     Pagination,
   },
   data() {
     return {
       doesNotApplyPath: DATA_SHARING_DOES_NOT_APPLY_PATH,
       overviewPath: DATA_SHARING_OVERVIEW_PATH,
+      gpDataForPlanningAndResearchPath: GP_DATA_FOR_PLANNING_AND_RESEARCH,
     };
   },
 };

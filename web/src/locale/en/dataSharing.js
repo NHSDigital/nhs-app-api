@@ -1,7 +1,7 @@
 export default {
   accessWillNotBeGivenFor: 'Access to confidential patient information will not be given for:',
   allNhsOrganisationMustProvideInformation: 'All NHS organisations must provide information on the type of data they collect and how it\'s used. Data release registers are published by NHS Digital and Public Health England, showing records of the data they have shared with other organisations.',
-  allNhsOrgsTrustsAndLocalAuthorities: 'all NHS organisations, trusts and local authorities',
+  allNhsOrgsTrustsAndLocalAuthorities: 'all NHS organisations, trusts and local authorities (including GP surgeries)',
   allOtherHealthAndCareOrganisations: 'all other health and care organisations by 30 September 2021 (delayed from March 2020 to allow organisations to focus on the COVID-19 outbreak). ',
   complianceDeadlineNationalDataOptOutExtension: 'Read more about the extension to the compliance deadline for national data opt-out.',
   changeOrCheckYourChoice: 'change or check your current choice',
@@ -13,6 +13,7 @@ export default {
   everyOrganisationWillTakeEveryStepTo: 'Every organisation that provides health and care services will take every step to:',
   chooseIfDataFromYourHealthRecordIsShared: 'Choose if data from your health records is shared for research and planning',
   findOutHowTheNhsUsesYourInformationAndChoose: 'Find out how the NHS uses your confidential patient information and choose whether or not it can be used for research and planning',
+  findOutHowGPDataIsUsedForPlanningAndResearch: 'Find out how GP data is used for planning and research on the NHS Digital website',
   forExampleYourNameAndMedicine: 'For example, your name joined with what medicine you take.',
   forMoreInfomationOrToReadPrivacyNotice: ' for more information or to read our privacy notice. You can also find out how to make a choice for someone else. For example, if you’re a parent or guardian of a child under the age of 13.',
   healthAndCareStaffMayUseInformationToHelpWithCare: 'Health and care staff may use your confidential patient information to help with your treatment and care. For example, when you visit your GP, they may look at your records for important information about your health.',

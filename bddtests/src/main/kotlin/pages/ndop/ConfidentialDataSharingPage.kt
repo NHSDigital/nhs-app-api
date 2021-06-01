@@ -18,7 +18,7 @@ class ConfidentialDataSharingPage: DataSharingPage() {
                                 .listItem(makeChoicePageTitle)
                     }
                     .paragraph("The NHS collects confidential patient information from:")
-                    .listItems("all NHS organisations, trusts and local authorities",
+                    .listItems("all NHS organisations, trusts and local authorities (including GP surgeries)",
                             "private organisations, such as private hospitals providing NHS funded care")
                     .paragraph("Research bodies and organisations can request access to this information. " +
                             "This includes:")
@@ -26,6 +26,10 @@ class ConfidentialDataSharingPage: DataSharingPage() {
                             "hospital researchers",
                             "medical royal colleges",
                             "pharmaceutical companies researching new treatments")
+                    .inset {
+                            paragraph("Find out how GP data is used for planning and research " +
+                                    "on the NHS Digital website")
+                    }
                     .h2("Who cannot use confidential patient information")
                     .paragraph("Access to confidential patient information will not be given for:")
                     .listItems("marketing purposes",
