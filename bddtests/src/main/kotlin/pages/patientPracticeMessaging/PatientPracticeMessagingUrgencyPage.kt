@@ -26,6 +26,10 @@ class PatientPracticeMessagingUrgencyPage: HybridPageObject() {
         continueButton.click()
     }
 
+    fun clickContinue() {
+        continueButton.click()
+    }
+
     fun chooseNonUrgentAndContinue() {
         val nonUrgentRadio = radioButtons.button(nonUrgentRadioButtonLabel)
         nonUrgentRadio.select()

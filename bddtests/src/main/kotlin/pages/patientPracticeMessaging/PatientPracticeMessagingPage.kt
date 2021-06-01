@@ -10,6 +10,8 @@ import pages.text
 import pages.assertIsVisible
 import utils.getOrNull
 
+private const val DEFAULT_WAIT_TIME = 500L
+
 class PatientPracticeMessagingPage: HybridPageObject() {
 
     private var baseMessagePath: String = ""
@@ -21,6 +23,7 @@ class PatientPracticeMessagingPage: HybridPageObject() {
                  helpfulName = "Send a message button")
              .waitForElement()
              .click()
+        Thread.sleep(DEFAULT_WAIT_TIME)
     }
 
     fun assertDisplayed() {
@@ -74,6 +77,7 @@ class PatientPracticeMessagingPage: HybridPageObject() {
                 androidLocator = null,
                 page= this
         ).click()
+        Thread.sleep(DEFAULT_WAIT_TIME)
     }
 
     fun assertNoMessagesTextDisplayed() {

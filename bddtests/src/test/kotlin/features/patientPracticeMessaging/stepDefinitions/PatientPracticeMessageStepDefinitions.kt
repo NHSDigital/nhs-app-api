@@ -160,6 +160,11 @@ class PatientPracticeMessageStepDefinitions {
         patientPracticeMessagingPage.clickSendAMessageButton()
     }
 
+    @When ("^I click continue$")
+    fun iClickContinue() {
+        patientPracticeMessagingUrgencyPage.clickContinue()
+    }
+
     @When("^I click the Send a message button and " +
             "I choose that I need urgent advice via patient practice messaging$")
     fun iChooseThatINeedUrgentAdviceViaPatientPracticeMessaging() {
