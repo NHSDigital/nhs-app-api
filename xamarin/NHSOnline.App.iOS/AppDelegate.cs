@@ -21,6 +21,7 @@ namespace NHSOnline.App.iOS
         private RemoteNotificationReceivedHandler? _remoteNotificationRecievedHandler;
 
         internal static AppDelegate? Instance { get; private set; }
+        private NhsApp? NhsApp { get; set; }
 
         public AppDelegate()
         {
@@ -39,12 +40,12 @@ namespace NHSOnline.App.iOS
             Xamarin.Forms.Forms.SetFlags("Expander_Experimental");
             Xamarin.Forms.Forms.Init();
 
-            var nhsApp = new NhsApp();
+            NhsApp = new NhsApp();
             UNUserNotificationCenter.Current.Delegate = new UserNotificationCenterHandler();
 
-            _remoteNotificationRecievedHandler = new RemoteNotificationReceivedHandler(nhsApp);
+            _remoteNotificationRecievedHandler = new RemoteNotificationReceivedHandler(NhsApp);
 
-            LoadApplication(nhsApp);
+            LoadApplication(NhsApp);
 
             return base.FinishedLaunching(uiApplication, launchOptions);
         }
@@ -61,5 +62,17 @@ namespace NHSOnline.App.iOS
         public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo,
             Action<UIBackgroundFetchResult> completionHandler)
             => _remoteNotificationRecievedHandler?.DidReceiveRemoteNotification(userInfo);
+
+        public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity,
+            UIApplicationRestorationHandler completionHandler)
+        {
+            var url = userActivity.WebPageUrl;
+            if (url != null)
+            {
+                NhsApp?.HandleDeeplink(url.AbsoluteString);
+            }
+
+            return base.ContinueUserActivity(application, userActivity, completionHandler);
+        }
     }
 }

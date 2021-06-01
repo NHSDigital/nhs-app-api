@@ -61,27 +61,16 @@ namespace NHSOnline.App
             }
         }
 
-        protected override void OnAppLinkRequestReceived(Uri uri)
-        {
-            HandleDeeplink(uri);
-            base.OnAppLinkRequestReceived(uri);
-        }
-
         [SuppressMessage("Design", "CA1054: URI parameters should not be strings",
             Justification = "Parsing at the app level rather than in the individual apps")]
         public void HandleDeeplink(string deeplinkUrl)
         {
             if (Uri.TryCreate(deeplinkUrl, UriKind.RelativeOrAbsolute, out var targetUri))
             {
-                HandleDeeplink(targetUri);
-            }
-        }
-
-        private void HandleDeeplink(Uri uri)
-        {
-            if (NavigationPage?.CurrentPage is INavigationView currentPage)
-            {
-                currentPage.HandleDeeplink(uri);
+                if (NavigationPage?.CurrentPage is INavigationView currentPage)
+                {
+                    currentPage.HandleDeeplink(targetUri);
+                }
             }
         }
     }
