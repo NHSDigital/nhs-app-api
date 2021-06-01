@@ -27,23 +27,23 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.AppointmentsIcon.Click();
+                .Navigation.NavigateToAppointments();
 
             AndroidAppointmentsPage
                 .AssertOnPage(driver)
-                .Navigation.AppointmentsIcon.AssertSelected();
+                .Navigation.AssertAppointmentsSelected();
 
             AndroidAppointmentsPage
                 .AssertOnPage(driver)
-                .Navigation.PrescriptionsIcon.Click();
+                .Navigation.NavigateToPrescriptions();
 
             AndroidPrescriptionsPage
                 .AssertOnPage(driver)
-                .Navigation.PrescriptionsIcon.AssertSelected();
+                .Navigation.AssertPrescriptionsSelected();
 
             AndroidPrescriptionsPage
                 .AssertOnPage(driver)
-                .Navigation.AppointmentsIcon.AssertNotSelected();
+                .Navigation.AssertAppointmentsNotSelected();
         }
 
         [NhsAppIOSTest]
@@ -58,23 +58,23 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.AppointmentsIcon.Click();
+                .Navigation.NavigateToAppointments();
 
             IOSAppointmentsPage
                 .AssertOnPage(driver)
-                .Navigation.AppointmentsIcon.AssertSelected();
+                .Navigation.AssertAppointmentsSelected();
 
             IOSAppointmentsPage
                 .AssertOnPage(driver)
-                .Navigation.PrescriptionsIcon.Click();
+                .Navigation.NavigateToPrescriptions();
 
             IOSPrescriptionsPage
                 .AssertOnPage(driver)
-                .Navigation.PrescriptionsIcon.AssertSelected();
+                .Navigation.AssertPrescriptionsSelected();
 
             IOSPrescriptionsPage
                 .AssertOnPage(driver)
-                .Navigation.AppointmentsIcon.AssertNotSelected();
+                .Navigation.AssertAppointmentsNotSelected();
         }
     }
 }

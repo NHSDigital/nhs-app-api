@@ -27,19 +27,19 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.AppointmentsIcon.Click();
+                .Navigation.NavigateToAppointments();
 
             AndroidAppointmentsPage
                 .AssertOnPage(driver)
-                .Navigation.AppointmentsIcon.AssertSelected();
+                .Navigation.AssertAppointmentsSelected();
 
             AndroidAppointmentsPage
                 .AssertOnPage(driver)
-                .Navigation.More();
+                .Navigation.NavigateToMore();
 
             AndroidMorePage
                 .AssertOnPage(driver).
-                Navigation.AppointmentsIcon.AssertNotSelected();
+                Navigation.AssertAppointmentsNotSelected();
         }
 
         [NhsAppIOSTest]
@@ -54,19 +54,19 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.AppointmentsIcon.Click();
+                .Navigation.NavigateToAppointments();
 
             IOSAppointmentsPage
                 .AssertOnPage(driver)
-                .Navigation.AppointmentsIcon.AssertSelected();
+                .Navigation.AssertAppointmentsSelected();
 
             IOSAppointmentsPage
                 .AssertOnPage(driver)
-                .Navigation.More();
+                .Navigation.NavigateToMore();
 
             IOSMorePage
                 .AssertOnPage(driver).
-                Navigation.AppointmentsIcon.AssertNotSelected();
+                Navigation.AssertAppointmentsNotSelected();
         }
     }
 }

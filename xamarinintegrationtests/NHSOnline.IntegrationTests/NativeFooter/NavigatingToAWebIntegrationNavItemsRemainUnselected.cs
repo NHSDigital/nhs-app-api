@@ -27,7 +27,7 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.More();
+                .Navigation.NavigateToMore();
 
             AndroidMorePage
                 .AssertOnPage(driver)
@@ -50,7 +50,7 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.More();
+                .Navigation.NavigateToMore();
 
             IOSMorePage
                 .AssertOnPage(driver)

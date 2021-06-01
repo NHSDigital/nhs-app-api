@@ -26,7 +26,7 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.More();
+                .Navigation.NavigateToMore();
 
             IOSMorePage
                 .AssertOnPage(driver)

@@ -26,7 +26,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.MessagesIcon.Click();
+                .Navigation.NavigateToMessages();
 
             AndroidMessagesPage
                 .AssertOnPage(driver)
@@ -52,7 +52,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.MessagesIcon.Click();
+                .Navigation.NavigateToMessages();
 
             IOSMessagesPage
                 .AssertOnPage(driver)

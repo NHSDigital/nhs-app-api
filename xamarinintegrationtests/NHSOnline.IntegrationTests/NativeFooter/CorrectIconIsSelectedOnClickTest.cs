@@ -31,35 +31,35 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.AppointmentsIcon.Click();
+                .Navigation.NavigateToAppointments();
 
             AndroidAppointmentsPage
                 .AssertOnPage(driver)
-                .Navigation.AppointmentsIcon.AssertSelected();
+                .Navigation.AssertAppointmentsSelected();
 
             AndroidAppointmentsPage
                 .AssertOnPage(driver)
-                .Navigation.PrescriptionsIcon.Click();
+                .Navigation.NavigateToPrescriptions();
 
             AndroidPrescriptionsPage
                 .AssertOnPage(driver)
-                .Navigation.PrescriptionsIcon.AssertSelected();
+                .Navigation.AssertPrescriptionsSelected();
 
             AndroidPrescriptionsPage
                 .AssertOnPage(driver)
-                .Navigation.YourHealthIcon.Click();
+                .Navigation.NavigateToYourHealth();
 
             AndroidYourHealthPage
                 .AssertOnPage(driver)
-                .Navigation.YourHealthIcon.AssertSelected();
+                .Navigation.AssertYourHealthSelected();
 
             AndroidYourHealthPage
                 .AssertOnPage(driver)
-                .Navigation.MessagesIcon.Click();
+                .Navigation.NavigateToMessages();
 
             AndroidMessagesPage
                 .AssertOnPage(driver)
-                .Navigation.MessagesIcon.AssertSelected();
+                .Navigation.AssertMessagesSelected();
         }
 
         [NhsAppIOSTest]
@@ -74,35 +74,35 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.AppointmentsIcon.Click();
+                .Navigation.NavigateToAppointments();
 
             IOSAppointmentsPage
                 .AssertOnPage(driver)
-                .Navigation.AppointmentsIcon.AssertSelected();
+                .Navigation.AssertAppointmentsSelected();
 
             IOSAppointmentsPage
                 .AssertOnPage(driver)
-                .Navigation.PrescriptionsIcon.Click();
+                .Navigation.NavigateToPrescriptions();
 
             IOSPrescriptionsPage
                 .AssertOnPage(driver)
-                .Navigation.PrescriptionsIcon.AssertSelected();
+                .Navigation.AssertPrescriptionsSelected();
 
             IOSPrescriptionsPage
                 .AssertOnPage(driver)
-                .Navigation.YourHealthIcon.Click();
+                .Navigation.NavigateToYourHealth();
 
             IOSYourHealthPage
                 .AssertOnPage(driver)
-                .Navigation.YourHealthIcon.AssertSelected();
+                .Navigation.AssertYourHealthSelected();
 
             IOSYourHealthPage
                 .AssertOnPage(driver)
-                .Navigation.MessagesIcon.Click();
+                .Navigation.NavigateToMessages();
 
             IOSMessagesPage
                 .AssertOnPage(driver)
-                .Navigation.MessagesIcon.AssertSelected();
+                .Navigation.AssertMessagesSelected();
         }
     }
 }

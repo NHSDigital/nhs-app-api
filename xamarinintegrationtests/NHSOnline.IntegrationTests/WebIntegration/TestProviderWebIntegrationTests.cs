@@ -29,7 +29,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.MessagesIcon.Click();
+                .Navigation.NavigateToMessages();
 
             AndroidMessagesPage
                 .AssertOnPage(driver)
@@ -51,7 +51,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.MessagesIcon.Click();
+                .Navigation.NavigateToMessages();
 
             AndroidMessagesPage
                 .AssertOnPage(driver)
@@ -112,7 +112,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.MessagesIcon.Click();
+                .Navigation.NavigateToMessages();
 
             IOSMessagesPage
                 .AssertOnPage(driver)
@@ -134,7 +134,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.MessagesIcon.Click();
+                .Navigation.NavigateToMessages();
 
             IOSMessagesPage
                 .AssertOnPage(driver)

@@ -28,7 +28,7 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             AndroidGpMedicalRecordPage
                 .AssertOnPage(driver)
-                .Navigation.YourHealthIcon.AssertSelected();
+                .Navigation.AssertYourHealthSelected();
 
             AndroidGpMedicalRecordPage
                 .AssertOnPage(driver)
@@ -55,7 +55,7 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             IOSGpMedicalRecordPage
                 .AssertOnPage(driver)
-                .Navigation.YourHealthIcon.AssertSelected();
+                .Navigation.AssertYourHealthSelected();
 
             IOSGpMedicalRecordPage
                 .AssertOnPage(driver)

@@ -29,7 +29,7 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             AndroidPrescriptionsPage
                 .AssertOnPage(driver)
-                .Navigation.PrescriptionsIcon.AssertSelected();
+                .Navigation.AssertPrescriptionsSelected();
         }
 
         [NhsAppIOSTest]
@@ -48,7 +48,7 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             IOSPrescriptionsPage
                 .AssertOnPage(driver)
-                .Navigation.PrescriptionsIcon.AssertSelected();
+                .Navigation.AssertPrescriptionsSelected();
         }
     }
 }

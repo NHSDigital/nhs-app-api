@@ -23,15 +23,16 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidIcon MoreIcon => FullNavigationHeader.ContainingIconWithName("More");
 
-        public AndroidIcon AdviceIcon => FullNavigationFooter.ContainingIconWithName("Advice");
+        private AndroidIcon AdviceIcon => FullNavigationFooter.ContainingIconWithName("Advice");
 
-        public AndroidIcon AppointmentsIcon => FullNavigationFooter.ContainingIconWithName("Appointments");
+        private AndroidIcon AppointmentsIcon => FullNavigationFooter.ContainingIconWithName("Appointments");
 
-        public AndroidIcon PrescriptionsIcon => FullNavigationFooter.ContainingIconWithName("Prescriptions");
+        private AndroidIcon PrescriptionsIcon => FullNavigationFooter.ContainingIconWithName("Prescriptions");
 
-        public AndroidIcon YourHealthIcon => FullNavigationFooter.ContainingIconWithName("Your health");
+        private AndroidIcon YourHealthIcon => FullNavigationFooter.ContainingIconWithName("Your health");
 
-        public AndroidIcon MessagesIcon => FullNavigationFooter.ContainingIconWithName("Messages");
+        private AndroidIcon MessagesIcon => FullNavigationFooter.ContainingIconWithName("Messages");
+
         internal AndroidKeyboardNavigation KeyboardHeaderNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(
             _driver,
             HomeIcon,
@@ -62,19 +63,74 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             PrescriptionsIcon.AssertNotSelected();
         }
 
-        public void Home()
+        public void NavigateToHome()
         {
             HomeIcon.Click();
         }
 
-        public void More()
+        public void NavigateToHelp()
+        {
+            HelpIcon.Click();
+        }
+
+        public void NavigateToMore()
         {
             MoreIcon.Click();
         }
 
-        public void Help()
+        public void NavigateToAdvice()
         {
-            HelpIcon.Click();
+            AdviceIcon.Click();
+        }
+
+        public void NavigateToAppointments()
+        {
+            AppointmentsIcon.Click();
+        }
+
+        public void NavigateToPrescriptions()
+        {
+            PrescriptionsIcon.Click();
+        }
+
+        public void NavigateToYourHealth()
+        {
+            YourHealthIcon.Click();
+        }
+
+        public void NavigateToMessages()
+        {
+            MessagesIcon.Click();
+        }
+
+        public void AssertAdviceSelected()
+        {
+            AdviceIcon.AssertSelected();
+        }
+
+        public void AssertAppointmentsSelected()
+        {
+            AppointmentsIcon.AssertSelected();
+        }
+
+        public void AssertAppointmentsNotSelected()
+        {
+            AppointmentsIcon.AssertNotSelected();
+        }
+
+        public void AssertPrescriptionsSelected()
+        {
+            PrescriptionsIcon.AssertSelected();
+        }
+
+        public void AssertYourHealthSelected()
+        {
+            YourHealthIcon.AssertSelected();
+        }
+
+        public void AssertMessagesSelected()
+        {
+            MessagesIcon.AssertSelected();
         }
 
         public void KeyboardNavigateToAdvice(AndroidKeyboardNavigation navigation)

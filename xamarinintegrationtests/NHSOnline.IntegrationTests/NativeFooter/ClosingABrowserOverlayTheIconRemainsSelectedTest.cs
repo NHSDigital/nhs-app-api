@@ -27,11 +27,11 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.MessagesIcon.Click();
+                .Navigation.NavigateToMessages();
 
             AndroidMessagesPage
                 .AssertOnPage(driver)
-                .Navigation.Help();
+                .Navigation.NavigateToHelp();
 
             AndroidAppTabBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome().Always());
@@ -42,7 +42,7 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             AndroidMessagesPage
                 .AssertOnPage(driver)
-                .Navigation.MessagesIcon.AssertSelected();
+                .Navigation.AssertMessagesSelected();
         }
 
         [NhsAppIOSTest]
@@ -57,11 +57,11 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.MessagesIcon.Click();
+                .Navigation.NavigateToMessages();
 
             IOSMessagesPage
                 .AssertOnPage(driver)
-                .Navigation.Help();
+                .Navigation.NavigateToHelp();
 
             IOSAppTab
                 .AssertOnHomeHelpPage(driver)
@@ -69,7 +69,7 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             IOSMessagesPage
                 .AssertOnPage(driver)
-                .Navigation.MessagesIcon.AssertSelected();
+                .Navigation.AssertMessagesSelected();
         }
     }
 }

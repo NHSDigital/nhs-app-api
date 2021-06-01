@@ -32,7 +32,7 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.AdviceIcon.Click();
+                .Navigation.NavigateToAdvice();
 
             AndroidAdvicePage
                 .AssertOnPage(driver)
@@ -40,11 +40,11 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             AndroidOneOneOnePage
                 .AssertOnPage(driver)
-                .Navigation.AdviceIcon.AssertSelected();
+                .Navigation.AssertAdviceSelected();
 
             AndroidOneOneOnePage
                 .AssertOnPage(driver)
-                .Navigation.AppointmentsIcon.Click();
+                .Navigation.NavigateToAppointments();
 
             AndroidAppointmentsPage
                 .AssertOnPage(driver)
@@ -60,11 +60,11 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             AndroidPkbPage
                 .AssertOnPage(driver, PhrPath.ViewAppointments)
-                .Navigation.AppointmentsIcon.AssertSelected();
+                .Navigation.AssertAppointmentsSelected();
 
             AndroidPkbPage
                 .AssertOnPage(driver, PhrPath.ViewAppointments)
-                .Navigation.MessagesIcon.Click();
+                .Navigation.NavigateToMessages();
 
             AndroidMessagesPage
                 .AssertOnPage(driver)
@@ -72,7 +72,7 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             AndroidTestWebIntegrationProviderPage
                 .AssertOnPage(driver)
-                .Navigation.MessagesIcon.AssertSelected();
+                .Navigation.AssertMessagesSelected();
         }
 
         [NhsAppIOSTest]
@@ -87,7 +87,7 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.AdviceIcon.Click();
+                .Navigation.NavigateToAdvice();
 
             IOSAdvicePage
                 .AssertOnPage(driver)
@@ -95,11 +95,11 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             IOSOneOneOnePage
                 .AssertOnPage(driver)
-                .Navigation.AdviceIcon.AssertSelected();
+                .Navigation.AssertAdviceSelected();
 
             IOSOneOneOnePage
                 .AssertOnPage(driver)
-                .Navigation.PrescriptionsIcon.Click();
+                .Navigation.NavigateToPrescriptions();
 
             IOSPrescriptionsPage
                 .AssertOnPage(driver)
@@ -111,11 +111,11 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             IOSPkbPage
                 .AssertOnPage(driver, PhrPath.HospitalAndOtherPrescriptions)
-                .Navigation.PrescriptionsIcon.AssertSelected();
+                .Navigation.AssertPrescriptionsSelected();
 
             IOSPkbPage
                 .AssertOnPage(driver, PhrPath.HospitalAndOtherPrescriptions)
-                .Navigation.MessagesIcon.Click();
+                .Navigation.NavigateToMessages();
 
             IOSMessagesPage
                 .AssertOnPage(driver)
@@ -123,7 +123,7 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             IOSTestWebIntegrationProviderPage
                 .AssertOnPage(driver)
-                .Navigation.MessagesIcon.AssertSelected();
+                .Navigation.AssertMessagesSelected();
         }
     }
 }

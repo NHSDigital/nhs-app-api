@@ -26,7 +26,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.AdviceIcon.Click();
+                .Navigation.NavigateToAdvice();
 
             AndroidAdvicePage
                 .AssertOnPage(driver)
@@ -68,7 +68,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.AdviceIcon.Click();
+                .Navigation.NavigateToAdvice();
 
             IOSAdvicePage
                 .AssertOnPage(driver)

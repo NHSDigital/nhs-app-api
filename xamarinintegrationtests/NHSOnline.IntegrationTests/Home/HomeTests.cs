@@ -36,12 +36,12 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.More();
+                .Navigation.NavigateToMore();
 
             AndroidMorePage
                 .AssertOnPage(driver)
                 .AssertPageElements()
-                .Navigation.Home();
+                .Navigation.NavigateToHome();
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver);
@@ -58,12 +58,12 @@ namespace NHSOnline.IntegrationTests.Home
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.More();
+                .Navigation.NavigateToMore();
 
             IOSMorePage
                 .AssertOnPage(driver)
                 .AssertPageElements()
-                .Navigation.Home();
+                .Navigation.NavigateToHome();
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver);
@@ -80,7 +80,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.AdviceIcon.Click();
+                .Navigation.NavigateToAdvice();
 
             AndroidAdvicePage
                 .AssertOnPage(driver)
@@ -98,7 +98,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.AdviceIcon.Click();
+                .Navigation.NavigateToAdvice();
 
             IOSAdvicePage
                 .AssertOnPage(driver)
@@ -116,7 +116,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Help();
+                .Navigation.NavigateToHelp();
 
             AndroidAppTabBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome().Always());
@@ -136,7 +136,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Help();
+                .Navigation.NavigateToHelp();
 
             IOSAppTab
                 .AssertOnHomeHelpPage(driver);
@@ -154,7 +154,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.AppointmentsIcon.Click();
+                .Navigation.NavigateToAppointments();
 
             AndroidAppointmentsPage
                 .AssertOnPage(driver)
@@ -172,7 +172,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.AppointmentsIcon.Click();
+                .Navigation.NavigateToAppointments();
 
             IOSAppointmentsPage
                 .AssertOnPage(driver)
@@ -190,7 +190,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.PrescriptionsIcon.Click();
+                .Navigation.NavigateToPrescriptions();
 
             AndroidPrescriptionsPage
                 .AssertOnPage(driver)
@@ -208,7 +208,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.PrescriptionsIcon.Click();
+                .Navigation.NavigateToPrescriptions();
 
             IOSPrescriptionsPage
                 .AssertOnPage(driver)
@@ -226,7 +226,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.YourHealthIcon.Click();
+                .Navigation.NavigateToYourHealth();
 
             IOSYourHealthPage
                 .AssertOnPage(driver)
@@ -244,7 +244,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.YourHealthIcon.Click();
+                .Navigation.NavigateToYourHealth();
 
             AndroidYourHealthPage
                 .AssertOnPage(driver)
@@ -262,7 +262,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.MessagesIcon.Click();
+                .Navigation.NavigateToMessages();
 
             AndroidMessagesPage
                 .AssertOnPage(driver)
@@ -280,7 +280,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.MessagesIcon.Click();
+                .Navigation.NavigateToMessages();
 
             IOSMessagesPage
                 .AssertOnPage(driver)

@@ -22,7 +22,7 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.More();
+                .Navigation.NavigateToMore();
 
             AndroidMorePage
                 .AssertOnPage(driver)
@@ -45,7 +45,7 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.More();
+                .Navigation.NavigateToMore();
 
             AndroidMorePage
                 .AssertOnPage(driver)
@@ -69,7 +69,7 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.More();
+                .Navigation.NavigateToMore();
 
             AndroidMorePage
                 .AssertOnPage(driver)
@@ -81,7 +81,7 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             AndroidNotificationsPage
                 .AssertOnPage(driver)
-                .Navigation.More();
+                .Navigation.NavigateToMore();
 
             AndroidMorePage
                 .AssertOnPage(driver)

@@ -22,15 +22,15 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         private IOSIcon MoreIcon => FullNavigationHeader.ContainingButtonWithName("More");
 
-        public IOSIcon AdviceIcon => FullNavigationFooter.ContainingButtonWithName("Advice");
+        private IOSIcon AdviceIcon => FullNavigationFooter.ContainingButtonWithName("Advice");
 
-        public IOSIcon AppointmentsIcon => FullNavigationFooter.ContainingButtonWithName("Appointments");
+        private IOSIcon AppointmentsIcon => FullNavigationFooter.ContainingButtonWithName("Appointments");
 
-        public IOSIcon PrescriptionsIcon => FullNavigationFooter.ContainingButtonWithName("Prescriptions");
+        private IOSIcon PrescriptionsIcon => FullNavigationFooter.ContainingButtonWithName("Prescriptions");
 
-        public IOSIcon YourHealthIcon => FullNavigationFooter.ContainingButtonWithName("Your health");
+        private IOSIcon YourHealthIcon => FullNavigationFooter.ContainingButtonWithName("Your health");
 
-        public IOSIcon MessagesIcon => FullNavigationFooter.ContainingButtonWithName("Messages");
+        private IOSIcon MessagesIcon => FullNavigationFooter.ContainingButtonWithName("Messages");
 
         internal void AssertNavigationPresent()
         {
@@ -47,19 +47,74 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             PrescriptionsIcon.AssertNotSelected();
         }
 
-        public void Home()
+        public void NavigateToHome()
         {
             HomeIcon.Click();
         }
 
-        public void More()
+        public void NavigateToMore()
         {
             MoreIcon.Click();
         }
 
-        public void Help()
+        public void NavigateToHelp()
         {
             HelpIcon.Click();
+        }
+
+        public void NavigateToAdvice()
+        {
+            AdviceIcon.Click();
+        }
+
+        public void NavigateToAppointments()
+        {
+            AppointmentsIcon.Click();
+        }
+
+        public void NavigateToPrescriptions()
+        {
+            PrescriptionsIcon.Click();
+        }
+
+        public void NavigateToYourHealth()
+        {
+            YourHealthIcon.Click();
+        }
+
+        public void NavigateToMessages()
+        {
+            MessagesIcon.Click();
+        }
+
+        public void AssertAdviceSelected()
+        {
+            AdviceIcon.AssertSelected();
+        }
+
+        public void AssertAppointmentsSelected()
+        {
+            AppointmentsIcon.AssertSelected();
+        }
+
+        public void AssertAppointmentsNotSelected()
+        {
+            AppointmentsIcon.AssertNotSelected();
+        }
+
+        public void AssertPrescriptionsSelected()
+        {
+            PrescriptionsIcon.AssertSelected();
+        }
+
+        public void AssertYourHealthSelected()
+        {
+            YourHealthIcon.AssertSelected();
+        }
+
+        public void AssertMessagesSelected()
+        {
+            MessagesIcon.AssertSelected();
         }
     }
 }

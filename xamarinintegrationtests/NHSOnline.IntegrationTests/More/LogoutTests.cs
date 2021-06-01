@@ -27,7 +27,7 @@ namespace NHSOnline.IntegrationTests.More
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.More();
+                .Navigation.NavigateToMore();
 
             AndroidMorePage
                 .AssertOnPage(driver)
@@ -69,7 +69,7 @@ namespace NHSOnline.IntegrationTests.More
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.More();
+                .Navigation.NavigateToMore();
 
             await driver.EnableAirplaneMode();
 
@@ -92,7 +92,7 @@ namespace NHSOnline.IntegrationTests.More
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.More();
+                .Navigation.NavigateToMore();
 
             IOSMorePage
                 .AssertOnPage(driver)
@@ -114,7 +114,7 @@ namespace NHSOnline.IntegrationTests.More
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.More();
+                .Navigation.NavigateToMore();
 
             await driver.DisableNetwork();
 
