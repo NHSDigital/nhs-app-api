@@ -2,6 +2,7 @@ using System;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Logging;
 using UserNotifications;
+using static UserNotifications.UNNotificationPresentationOptions;
 
 namespace NHSOnline.App.iOS.Handlers
 {
@@ -15,7 +16,7 @@ namespace NHSOnline.App.iOS.Handlers
             Action<UNNotificationPresentationOptions> completionHandler)
         {
             Logger.LogInformation("Presenting foreground notification");
-            completionHandler(UNNotificationPresentationOptions.Sound | UNNotificationPresentationOptions.Banner);
+            completionHandler(Alert | Badge | Banner | Sound);
         }
     }
 }
