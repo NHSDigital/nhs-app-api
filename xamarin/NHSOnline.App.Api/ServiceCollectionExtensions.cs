@@ -7,10 +7,10 @@ namespace NHSOnline.App.Api
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddApiServices(this IServiceCollection services)
+        public static IServiceCollection AddApiServices(this IServiceCollection services, string nhsAppUserAgent)
         {
             return services
-                .AddClientServices()
+                .AddClientServices(nhsAppUserAgent)
                 .AddSessionApiServices()
                 .AddLoggingServices();
         }

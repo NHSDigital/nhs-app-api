@@ -11,10 +11,11 @@ namespace NHSOnline.App.Api.Client
 {
     internal static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddClientServices(this IServiceCollection services)
+        public static IServiceCollection AddClientServices(this IServiceCollection services, string nhsAppUserAgent)
         {
             services
-                .AddHttpClient<ApiHttpClient>(ConfigureApiHttpClient)
+                .AddHttpClient<ApiHttpClient>((serviceProvider, client)
+                    => ConfigureApiHttpClient(serviceProvider, client, nhsAppUserAgent))
                 .ConfigurePrimaryHttpMessageHandler(ConfigurePrimaryHttpMessageHandler);
 
             return services
@@ -42,10 +43,11 @@ namespace NHSOnline.App.Api.Client
             return configureHttpClient.CreatePrimaryHttpMessageHandler();
         }
 
-        private static void ConfigureApiHttpClient(IServiceProvider serviceProvider, HttpClient httpClient)
+        private static void ConfigureApiHttpClient(IServiceProvider serviceProvider, HttpClient httpClient, string nhsAppUserAgent)
         {
             var configuration = serviceProvider.GetRequiredService<INhsAppApiConfiguration>();
             httpClient.BaseAddress = configuration.BaseAddress;
+            httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(nhsAppUserAgent);
         }
     }
 }

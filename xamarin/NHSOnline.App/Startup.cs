@@ -13,14 +13,14 @@ namespace NHSOnline.App
 {
     internal static class Startup
     {
-        internal static void ConfigureServices(IServiceCollection services, ILoggerFactory loggerFactory)
+        internal static void ConfigureServices(IServiceCollection services, ILoggerFactory loggerFactory, string nhsAppUserAgent)
         {
             services
                 .AddConfiguration()
                 .AddServices()
                 .AddDependencyServices()
                 .AddNhsLoginServices()
-                .AddApiServices()
+                .AddApiServices(nhsAppUserAgent)
                 .AddThreadingServices()
                 .AddAreas()
                 .AddLoggingServices(loggerFactory);

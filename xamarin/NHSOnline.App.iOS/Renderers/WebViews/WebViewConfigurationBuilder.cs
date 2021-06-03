@@ -1,3 +1,4 @@
+using NHSOnline.App.Services;
 using WebKit;
 
 namespace NHSOnline.App.iOS.Renderers.WebViews
@@ -12,7 +13,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
         {
             return new WKWebViewConfiguration
             {
-                ApplicationNameForUserAgent = " nhsapp-ios/1.0.0",
+                ApplicationNameForUserAgent = $"{UserAgentService.Instance.NhsAppUserAgent}",
                 SuppressesIncrementalRendering = true,
                 ProcessPool = WebViewConfigurationBuilder.SharedProcessPool,
             };

@@ -7,6 +7,7 @@ using NHSOnline.App.Controls;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.Logging;
 using NHSOnline.App.Navigation;
+using NHSOnline.App.Services;
 using Xamarin.Forms;
 
 namespace NHSOnline.App
@@ -27,7 +28,8 @@ namespace NHSOnline.App
                 var serviceProvider = NhsAppDependencyInjection.Init(
                     services => Startup.ConfigureServices(
                         services,
-                        loggerFactory),
+                        loggerFactory,
+                        UserAgentService.Instance.NhsAppUserAgent),
                     loggerFactory);
 
                 NhsAppLogging.AddProvidersFromServiceProvider(loggerFactory, serviceProvider);
