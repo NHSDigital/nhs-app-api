@@ -10,13 +10,19 @@
              x:Name="Page">
 
     <ScrollView>
+        <ScrollView.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="../Styles/LoggedOutErrorStyles.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </ScrollView.Resources>
+        
         <StackLayout>
 
-            <controls:Heading1 Text="Login failed"
-                               Padding="10,0,0,0" />
+            <controls:Heading1 Text="Login failed" />
 
-            <controls:NhsErrorCallout HorizontalOptions="CenterAndExpand" 
-                                      LabelText="Error">
+            <controls:NhsErrorCallout LabelText="Error">
                 <StackLayout>
                     <controls:Paragraph Text="This can be one of two problems:" />
                     <controls:ListItem>

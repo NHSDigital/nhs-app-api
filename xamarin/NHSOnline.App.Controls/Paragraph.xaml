@@ -8,12 +8,13 @@
     <View.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="NhsUkColours.xaml" />
+                <ResourceDictionary Source="Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="Label">
                 <Setter Property="FontSize" Value="Medium" />
                 <Setter Property="FontFamily" Value="Frutiger" />
-                <Setter Property="Margin" Value="0, 5, 0, 5" />
+                <Setter Property="LineHeight" Value="1.2" />
+                <Setter Property="Margin" Value="0, 6" />
                 <Setter Property="TextColor" Value="{StaticResource NhsUkPrimaryText}" />
             </Style>
         </ResourceDictionary>

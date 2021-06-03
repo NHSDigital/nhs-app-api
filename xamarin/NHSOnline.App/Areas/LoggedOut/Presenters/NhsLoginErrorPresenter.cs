@@ -27,13 +27,21 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
             _view.AppNavigation
                 .RegisterHandler(ViewOnBackHomeRequested, (view, handler) => view.BackHomeRequested = handler)
-                .RegisterHandler(ViewOnContactUsRequested, (view, handler) => view.ContactUsRequested = handler);
+                .RegisterHandler(ViewOnContactUsRequested, (view, handler) => view.ContactUsRequested = handler)
+                .RegisterHandler(ViewOnOneOneOneRequested, (view, handler) => view.OneOneOneRequested = handler);
         }
 
         private async Task ViewOnBackHomeRequested()
         {
             await _view.AppNavigation
                 .PopToRootAnimated()
+                .PreserveThreadContext();
+        }
+
+        private async Task ViewOnOneOneOneRequested()
+        {
+            await _browserOverlay
+                .OpenBrowserOverlay(_externalServicesConfiguration.OneOneOneUrl)
                 .PreserveThreadContext();
         }
 

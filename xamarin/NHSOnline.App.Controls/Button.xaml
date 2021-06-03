@@ -6,7 +6,7 @@
     <View.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="NhsUkColours.xaml" />
+                <ResourceDictionary Source="Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <x:Int16 x:Key="CornerRadius">4</x:Int16>
             <Style TargetType="Button">

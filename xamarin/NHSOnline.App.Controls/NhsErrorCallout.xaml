@@ -8,18 +8,27 @@
     <ContentView.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="NhsUkColours.xaml" />
+                <ResourceDictionary Source="Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </ContentView.Resources>
     
     <ContentView.Content>
-        <controls:NhsPanelWithLabel LabelText="{Binding LabelText, Source={x:Reference Name=Root}}"
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+        
+        <controls:NhsPanelWithLabel Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    LabelText="{Binding LabelText, Source={x:Reference Name=Root}}"
                                     PanelContent="{Binding PanelContent, Source={x:Reference Name=Root}}"
                                     LabelBackgroundColour="{StaticResource NhsUkRed}"
                                     LabelTextColour="{StaticResource NhsUkWhite}"
                                     PanelBackgroundColour="{StaticResource NhsUkWhite}"
-                                    PanelHighlightColour="{StaticResource NhsUkRed}" 
-                                    Padding="10,0,0,0"/>
+                                    PanelHighlightColour="{StaticResource NhsUkRed}" />
+        
+        </Grid>
     </ContentView.Content>
 </ContentView>

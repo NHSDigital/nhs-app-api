@@ -26,10 +26,6 @@
     <EmbeddedResource Update="Heading2.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="NhsUkColours.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="Icons\icon-advice-blue.svg" />
     <EmbeddedResource Include="Icons\icon-appointments-blue.svg" />
     <EmbeddedResource Include="Icons\icon-appointments-grey.svg" />
@@ -51,10 +47,6 @@
     <EmbeddedResource Include="NhsLogoWhite.svg" />
     <EmbeddedResource Include="NhsLogoBlue.svg" />
     <ProjectReference Include="..\NHSOnline.App.Logging\NHSOnline.App.Logging.csproj" />
-    <EmbeddedResource Update="NhsUkStyles.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="NhsPanelWithLabel.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
@@ -138,14 +130,6 @@
     <Compile Update="Heading2.xaml.cs">
       <DependentUpon>Heading2.xaml</DependentUpon>
     </Compile>
-    <Compile Update="NhsUkColours.xaml.cs">
-      <DependentUpon>Colours.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="NhsUkStyles.xaml.cs">
-      <DependentUpon>NhsUkStyles.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="NhsPanelWithLabel.xaml.cs">
       <DependentUpon>NhsPanelWithLabel.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -225,6 +209,14 @@
     </Compile>
     <Compile Update="FullNavigationFooterItemWide.xaml.cs">
       <DependentUpon>FullNavigationFooterItemWide.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ResourceDictionaries\NhsUkColours.xaml.cs">
+      <DependentUpon>NhsUkColours.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ResourceDictionaries\NhsUkStyles.xaml.cs">
+      <DependentUpon>NhsUkStyles.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

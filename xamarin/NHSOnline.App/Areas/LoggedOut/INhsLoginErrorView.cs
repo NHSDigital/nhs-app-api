@@ -12,6 +12,7 @@ namespace NHSOnline.App.Areas.LoggedOut
         {
             Func<Task>? BackHomeRequested { get; set; }
             Func<Task>? ContactUsRequested { get; set; }
+            Func<Task>? OneOneOneRequested { get; set; }
         }
     }
 }

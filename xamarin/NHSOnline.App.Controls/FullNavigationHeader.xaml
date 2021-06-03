@@ -15,7 +15,7 @@
         <ResourceDictionary>
             
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="NhsUkColours.xaml" />
+                <ResourceDictionary Source="Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <Style TargetType="Grid" Class="HeaderLeft">

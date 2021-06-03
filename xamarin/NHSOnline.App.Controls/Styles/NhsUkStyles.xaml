@@ -2,7 +2,7 @@
 
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                    x:Class="NHSOnline.App.Controls.NhsUkStyles">
+                    x:Class="NHSOnline.App.Controls.Styles.NhsUkStyles">
     
     <Style TargetType="Label" ApplyToDerivedTypes="True">
         <Setter Property="FontFamily" Value="Frutiger" />

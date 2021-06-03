@@ -2,7 +2,7 @@ using System.Runtime.CompilerServices;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace NHSOnline.App.Controls
+namespace NHSOnline.App.Controls.Styles
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class NhsUkColours

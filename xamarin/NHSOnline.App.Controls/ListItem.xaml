@@ -7,7 +7,7 @@
     <View.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="NhsUkColours.xaml" />
+                <ResourceDictionary Source="Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="Label" Class="Bullet">
                 <Setter Property="TextColor" Value="{StaticResource NhsUkPrimaryText}" />

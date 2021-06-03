@@ -34,6 +34,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             set => SetValue(ServiceDeskReferenceProperty, value);
         }
 
+        public Func<Task>? OneOneOneRequested { get; set; }
+        public ICommand OneOneOneCommand => new AsyncCommand(() => OneOneOneRequested);
+
         public Func<Task>? BackHomeRequested { get; set; }
         public ICommand BackHomeCommand => new AsyncCommand(() => BackHomeRequested);
 

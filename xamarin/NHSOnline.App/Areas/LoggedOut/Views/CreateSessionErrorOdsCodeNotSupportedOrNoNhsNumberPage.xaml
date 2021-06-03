@@ -10,13 +10,18 @@
              x:Name="Page">
 
     <ScrollView>
+        <ScrollView.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="../Styles/LoggedOutErrorStyles.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </ScrollView.Resources>
+        
         <StackLayout>
+            <controls:Heading1 Text="Login failed" />
 
-            <controls:Heading1 Text="Login failed"
-                               Padding="10,0,0,0" />
-
-            <controls:NhsErrorCallout HorizontalOptions="CenterAndExpand" 
-                                      LabelText="Error">
+            <controls:NhsErrorCallout LabelText="Error">
                 <StackLayout>
                     <controls:Heading2 Text="If your GP surgery is in Wales" />
                     <controls:Paragraph Text="The NHS App is not available in Wales because health services are managed separately from England." />

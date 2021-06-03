@@ -9,35 +9,80 @@
     <ContentView.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="NhsUkColours.xaml" />
+                <ResourceDictionary Source="Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
+            <Style TargetType="StackLayout">
+                <Setter Property="Spacing" Value="0" />
+            </Style>
+            
+            <Style TargetType="Grid">
+                <Setter Property="Margin" Value="0,0,0,0" />
+                <Setter Property="HorizontalOptions" Value="Start" />
+            </Style>
+            
+            <Style TargetType="BoxView">
+                <Setter Property="Margin" Value="0,0,0,0" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="VerticalOptions" Value="End" />
+            </Style>
+            
+            <Style TargetType="BoxView" Class="RedStripe">
+                <Setter Property="HeightRequest" Value="5" />
+                <Setter Property="BackgroundColor" Value="{Binding PanelHighlightColour, Source={x:Reference Name=Root}}" />
+            </Style>
+            
+            <Style TargetType="BoxView" Class="WhiteStripe">
+                <Setter Property="HeightRequest" Value="16" />
+                <Setter Property="BackgroundColor" Value="{Binding PanelBackgroundColour, Source={x:Reference Name=Root}}" />
+            </Style>
+            
+            <Style TargetType="ContentView" Class="HeadingBackground">
+                <Setter Property="Padding" Value="16,0,16,0" />
+                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="BackgroundColor" Value="{Binding LabelBackgroundColour, Source={x:Reference Name=Root}}" />
+            </Style> 
+            
+            <Style TargetType="Label" Class="HeadingText">
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="FontSize" Value="Large" />
+                <Setter Property="FontFamily" Value="Frutiger-Bold" />
+                
+                <Setter Property="BackgroundColor" Value="{Binding LabelBackgroundColour, Source={x:Reference Name=Root}}" />
+                <Setter Property="TextColor" Value="{Binding LabelTextColour, Source={x:Reference Name=Root}}" />
+            </Style>
+            
+            <Style TargetType="ContentView" Class="Content">
+                <Setter Property="Padding" Value="16,8,16,26" />
+                <Setter Property="BackgroundColor" Value="{Binding PanelBackgroundColour, Source={x:Reference Name=Root}}" />
+            </Style>
         </ResourceDictionary>
     </ContentView.Resources>
     
     <ContentView.Content>
-        <RelativeLayout Margin="20"
-                        VerticalOptions="FillAndExpand">
-            <StackLayout RelativeLayout.XConstraint="0"
-                         RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=X, Factor=0, Constant=18}"
-                         RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
-                         BackgroundColor="{Binding PanelBackgroundColour, Source={x:Reference Name=Root}}"
-                         Margin="0, 0, 0, 18"
-                         Padding="10, 32, 10, 10">
-                <ContentView Content="{Binding PanelContent, Source={x:Reference Name=Root}}" />
-            </StackLayout>
+        <StackLayout>
+            <Grid HorizontalOptions="Center" VerticalOptions="Center" >
+                <Grid.ColumnSpacing>0</Grid.ColumnSpacing>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <ContentView StyleClass="HeadingBackground" Grid.Column="0" >
+                    <Label StyleClass="HeadingText" 
+                           Text="{Binding LabelText, Source={x:Reference Name=Root}}" />
+                </ContentView>
+                <StackLayout Grid.Column="1" VerticalOptions="End">
+                    <BoxView StyleClass="RedStripe" />
+                    <BoxView StyleClass="WhiteStripe" />
+                </StackLayout>
+            </Grid>
             
-            <BoxView HeightRequest="3" BackgroundColor="{Binding PanelHighlightColour, Source={x:Reference Name=Root}}"
-                     RelativeLayout.XConstraint="0"
-                     RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=X, Factor=0, Constant=18}"
-                     RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}" />
-        
-            <controls:Heading1 Text="{Binding LabelText, Source={x:Reference Name=Root}}"
-                   BackgroundColor="{Binding LabelBackgroundColour, Source={x:Reference Name=Root}}"
-                   TextColour="{Binding LabelTextColour, Source={x:Reference Name=Root}}"
-                   RelativeLayout.XConstraint="0"
-                   RelativeLayout.YConstraint="0"
-                   Padding="32, 8"
-                   Margin="0" />
-        </RelativeLayout>
+            <ContentView StyleClass="Content" 
+                         Content="{Binding PanelContent, Source={x:Reference Name=Root}}" /> 
+            
+        </StackLayout>
     </ContentView.Content>
 </ContentView>

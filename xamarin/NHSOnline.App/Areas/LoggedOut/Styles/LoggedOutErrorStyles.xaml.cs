@@ -1,11 +1,11 @@
 using Xamarin.Forms.Xaml;
 
-namespace NHSOnline.App.Controls
+namespace NHSOnline.App.Areas.LoggedOut.Styles
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class NhsUkStyles
+    public partial class LoggedOutErrorStyles
     {
-        public NhsUkStyles()
+        public LoggedOutErrorStyles()
         {
             InitializeComponent();
         }
