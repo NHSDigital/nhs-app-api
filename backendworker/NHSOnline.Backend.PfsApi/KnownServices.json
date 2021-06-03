@@ -516,7 +516,7 @@
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": true,
       "validateSession": true,
-      "url": "https://storsitstatic.z33.web.core.windows.net",
+      "url": "https://stdevpistatic01.z33.web.core.windows.net",
       "subServices": [
         {
           "path": "/api/PdfDirectDownload",
