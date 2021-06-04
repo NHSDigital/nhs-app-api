@@ -4,7 +4,17 @@ import features.serviceJourneyRules.factories.SJRJourneyType
 
 class SJRJourneyTypesMapper {
     companion object {
-        private val enabledDefinitions = hashMapOf<String, Collection<SJRJourneyType>>()
+        private val enabledDefinitions = hashMapOf(
+            "p5 vaccine records from net company" to arrayListOf(
+                SJRJourneyType.SILVER_INTEGRATION_VACCINE_RECORD_NETCOMPANY_P5_ENABLED
+            ),
+            "vaccine records from net company" to arrayListOf(
+                SJRJourneyType.SILVER_INTEGRATION_VACCINE_RECORD_NETCOMPANY_ENABLED
+            ),
+            "vaccine records from nhsd" to arrayListOf(
+                SJRJourneyType.SILVER_INTEGRATION_VACCINE_RECORD_NHSD_ENABLED
+            )
+        )
 
         private val disabledDefinitions = hashMapOf(
             "111" to arrayListOf(
@@ -12,6 +22,15 @@ class SJRJourneyTypesMapper {
             ),
             "coronavirus information" to arrayListOf(
                 SJRJourneyType.CORONAVIRUS_INFORMATION_DISABLED
+            ),
+            "p5 vaccine records from net company" to arrayListOf(
+                SJRJourneyType.SILVER_INTEGRATION_VACCINE_RECORD_NETCOMPANY_P5_DISABLED
+            ),
+            "vaccine records from net company" to arrayListOf(
+                SJRJourneyType.SILVER_INTEGRATION_VACCINE_RECORD_NETCOMPANY_DISABLED
+            ),
+            "vaccine records from nhsd" to arrayListOf(
+                SJRJourneyType.SILVER_INTEGRATION_VACCINE_RECORD_NHSD_DISABLED
             )
         )
 

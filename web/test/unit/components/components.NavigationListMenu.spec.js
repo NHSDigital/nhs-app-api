@@ -81,6 +81,23 @@ describe('Navigation Links ', () => {
       });
   });
 
+  describe('Netcompany P5 Vaccine Record link', () => {
+    each([
+      ['P9', 'not proxying', 'defined', 'hidden', true, false, true, false],
+      ['P9', 'proxying', 'defined', 'hidden', true, true, true, false],
+      ['P9', 'not proxying', 'not defined', 'hidden', true, false, false, false],
+      ['P9', 'proxying', 'not defined', 'hidden', true, true, false, false],
+      ['P5', 'not proxying', 'defined', 'shown', false, false, true, true],
+      ['P5', 'proxying', 'defined', 'hidden', false, true, true, false],
+      ['P5', 'not proxying', 'not defined', 'hidden', false, false, false, false],
+      ['P5', 'proxying', 'not defined', 'hidden', false, true, false, false],
+    ])
+      .it('A %s user that is %s, and has NetCompany vaccine record provider %s, will have NetCompany vaccine record link %s', (_, __, ___, ____, isProofLevel9, isProxying, integrationEnabled, isVisible) => {
+        wrapper = mountAs({ isProofLevel9, isProxying, integrationEnabled });
+        expect(wrapper.find('#btn_netCompanyP5_vaccine_record').exists()).toBe(isVisible);
+      });
+  });
+
   describe('Messages Hub link', () => {
     each([
       ['shown', 'gpMessagingSession is available', false, true],

@@ -12,14 +12,14 @@
 </template>
 
 <script>
-import { get, isEmpty } from 'lodash/fp';
-import agreedToThirdPartyWarning from '@/lib/sessionStorage';
-import sjrIf from '@/lib/sjrIf';
-import SilverIntegrationPanel from '@/components/redirector/SilverIntegrationPanel';
 import NativeApp from '@/services/native-app';
+import SilverIntegrationPanel from '@/components/redirector/SilverIntegrationPanel';
+import agreedToThirdPartyWarning from '@/lib/sessionStorage';
+import proofLevel from '@/lib/proofLevel';
+import sjrIf from '@/lib/sjrIf';
 import {
-  REDIRECT_PARAMETER,
   REDIRECT_PAGE_PARAMETER,
+  REDIRECT_PARAMETER,
   isNhsAppRouteName,
   findByRedirectEnum,
 } from '@/router/names';
@@ -28,19 +28,18 @@ import {
   UPLIFT_SILVER_INTEGRATION_PATH,
   SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_PATH,
 } from '@/router/paths';
+import { get, isEmpty } from 'lodash/fp';
 import {
-  pathWithPatientPrefixOrUndefined,
   getPathAndQuery,
   getThirdPartyJumpOff,
   isNhsAppHost,
   isNhsAppPath,
+  pathWithPatientPrefixOrUndefined,
   redirectByName,
   redirectTo,
   removeNhsAppHost,
 } from '@/lib/utils';
-import {
-  setWindowLocation,
-} from '@/lib/window';
+import { setWindowLocation } from '@/lib/window';
 import { getJumpOffConfiguration } from '@/lib/third-party-providers/jump-off-configuration';
 
 export default {
@@ -167,8 +166,8 @@ export default {
       }
       this.showWarning = true;
     },
-    checkIsProofLevel9({ url, featureJumpOffContent }, next) {
-      if (this.$store.getters['session/isProofLevel9']) {
+    checkProofLevel({ url, jumpOffConfig, featureJumpOffContent }, next) {
+      if (this.$store.getters['session/isProofLevel9'] || jumpOffConfig.proofLevel === proofLevel.P5) {
         next(url);
         return;
       }
@@ -260,7 +259,7 @@ export default {
         this.getThirdPartyConfig,
         this.getJumpOffConfig,
         this.updateTitle,
-        this.checkIsProofLevel9,
+        this.checkProofLevel,
         this.checkCanAccessSilverIntegration,
         this.navigateToThirdParty,
       ];

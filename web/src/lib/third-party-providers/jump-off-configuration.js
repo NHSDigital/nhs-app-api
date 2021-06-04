@@ -1,4 +1,5 @@
 import get from 'lodash/fp/get';
+import proofLevel from '@/lib/proofLevel';
 
 const thirdPartyProvider = {
   ers: {
@@ -285,6 +286,13 @@ const thirdPartyProvider = {
       redirectPath: '/covid-status-sso',
       provider: 'netCompany',
       serviceType: 'vaccineRecord',
+    },
+    vaccineRecordP5: {
+      jumpOffId: 'vaccineRecordP5',
+      redirectPath: '/covid-status-sso?proofLevel=p5',
+      provider: 'netCompanyP5',
+      serviceType: 'vaccineRecord',
+      proofLevel: proofLevel.P5,
     },
   },
 };

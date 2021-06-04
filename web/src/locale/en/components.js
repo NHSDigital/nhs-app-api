@@ -6,7 +6,7 @@ export default {
   proofLevelUpliftBanner: {
     heading: 'Prove your identity to get full access',
     description: {
-      default: 'You\'ll need to prove who you are before you can share your COVID-19 status, book appointments, order repeat prescriptions, and view your health records in the NHS App.',
+      default: 'You\'ll need to prove who you are before you can share your COVID-19 status for travel, book appointments, order repeat prescriptions, and view your health records in the NHS App.',
       appointments: 'You\'ll need to prove who you are before you can book appointments in the NHS App.',
       prescriptions: 'You\'ll need to prove who you are before you can order repeat prescriptions in the NHS App.',
       healthRecord: 'You\'ll need to prove who you are before you can view your health records in the NHS App.',

@@ -10,6 +10,11 @@
                                    provider-id="netCompany"
                                    :provider-configuration="thirdPartyProvider.netCompany.
                                      vaccineRecord" />
+      <third-party-jump-off-button v-if="showNetCompanyP5VaccineRecord"
+                                   id="btn_netCompanyP5_vaccine_record"
+                                   provider-id="netCompany"
+                                   :provider-configuration="thirdPartyProvider.netCompany.
+                                     vaccineRecordP5" />
       <third-party-jump-off-button v-if="showNhsdVaccineRecord"
                                    id="btn_nhsd_vaccine_record"
                                    provider-id="nhsd"
@@ -109,6 +114,16 @@ export default {
         },
       });
     },
+    hasNetCompanyP5VaccineRecord() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'netCompanyP5',
+          serviceType: 'vaccineRecord',
+        },
+      });
+    },
     hasNhsdVaccineRecord() {
       return sjrIf({
         $store: this.$store,
@@ -138,6 +153,9 @@ export default {
     },
     showNetCompanyVaccineRecord() {
       return this.hasNetCompanyVaccineRecord && !this.isProxying && this.isProofLevel9;
+    },
+    showNetCompanyP5VaccineRecord() {
+      return this.hasNetCompanyP5VaccineRecord && !this.isProxying && !this.isProofLevel9;
     },
   },
   created() {

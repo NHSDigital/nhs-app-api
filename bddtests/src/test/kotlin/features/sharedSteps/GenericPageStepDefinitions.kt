@@ -6,7 +6,9 @@ import io.cucumber.java.en.When
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import org.openqa.selenium.Keys
+import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.assertElementNotPresent
 import pages.assertIsVisible
 import pages.clickOnActionContainingText
 import pages.navigation.NavBarNative
@@ -27,10 +29,10 @@ class GenericPageStepDefinitions {
     @Steps
     lateinit var navSteps: NavigationSteps
 
-     @When("^I click the '(.*)' button$")
-     fun iClickTheButton(buttonText: String) {
-         genericPage.clickOnButtonContainingText(buttonText)
-     }
+    @When("^I click the '(.*)' button$")
+    fun iClickTheButton(buttonText: String) {
+        genericPage.clickOnButtonContainingText(buttonText)
+    }
 
     @When("^I click the '(.*)' link$")
     fun iClickTheLink(linkText: String) {
@@ -79,17 +81,17 @@ class GenericPageStepDefinitions {
     @Then("^I press the tab key$")
     fun iPressTheTabKey() {
         genericPage.driver
-                .switchTo()
-                .activeElement()
-                .sendKeys(Keys.TAB)
+            .switchTo()
+            .activeElement()
+            .sendKeys(Keys.TAB)
     }
 
     @Then("^I check that '(.*)' is in focus$")
     fun iCheckThatElementIsInFocus(name: String) {
         Assert.assertEquals(name, genericPage.driver
-                .switchTo()
-                .activeElement()
-                .text)
+            .switchTo()
+            .activeElement()
+            .text)
     }
 
     @Then("^the Page not found error is displayed$")
@@ -97,13 +99,24 @@ class GenericPageStepDefinitions {
         notFoundErrorPage.assertNotFoundErrorPage()
     }
 
+    @Then("^I can't see the (.*) menu link$")
+    fun iCantSeeTheMenuLink(linkText: String) {
+        menuLink(linkText).assertElementNotPresent()
+    }
+
+    @When("^I click the (.*) menu link$")
+    fun iClickTheMenuLink(linkText: String) {
+        browser.storeCurrentTabCount()
+        menuLink(linkText).click()
+    }
+
     @When("^I click the '(.*)' radio button$")
     fun iClickTheRadioButton(labelText: String) {
         val label = genericPage.getElement("label")
-                .withText(labelText, exact = false)
+            .withText(labelText, exact = false)
 
         genericPage.getElement("//input[@type='radio'][following-sibling::${label.webDesktopLocator}]")
-                .click()
+            .click()
     }
 
     @Then("^the (.*) menu button is highlighted")
@@ -126,5 +139,12 @@ class GenericPageStepDefinitions {
     @Then("^the page contains the header '(.*)'$")
     fun thePageContainsTheHeaderText(title: String) {
         webHeader.getHtmlElement("h2").withNormalisedText(title).assertIsVisible()
+    }
+
+    private fun menuLink(linkText: String): HybridPageElement {
+        return genericPage.getElement(
+            "//ul//a/div/h2",
+            helpfulName = "$linkText Link"
+        ).withText(linkText, false)
     }
 }

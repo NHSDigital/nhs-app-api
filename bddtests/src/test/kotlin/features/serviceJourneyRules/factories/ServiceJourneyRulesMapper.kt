@@ -65,7 +65,10 @@ class ServiceJourneyRulesMapper {
                     SJRJourneyType.SILVER_INTEGRATION_PARTICIPATION_NONE,
                     SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_NONE,
                     SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_NONE,
-                    SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_NONE
+                    SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_NONE,
+                    SJRJourneyType.SILVER_INTEGRATION_VACCINE_RECORD_NETCOMPANY_DISABLED,
+                    SJRJourneyType.SILVER_INTEGRATION_VACCINE_RECORD_NETCOMPANY_P5_DISABLED,
+                    SJRJourneyType.SILVER_INTEGRATION_VACCINE_RECORD_NHSD_DISABLED
                 )
             )
             .add(
@@ -151,7 +154,10 @@ class ServiceJourneyRulesMapper {
                     SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB,
                     SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_TESTSILVERTHIRDPARTYPROVIDER,
                     SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_PKB,
-                    SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB
+                    SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB,
+                    SJRJourneyType.SILVER_INTEGRATION_VACCINE_RECORD_NETCOMPANY_ENABLED,
+                    SJRJourneyType.SILVER_INTEGRATION_VACCINE_RECORD_NETCOMPANY_P5_ENABLED,
+                    SJRJourneyType.SILVER_INTEGRATION_VACCINE_RECORD_NHSD_ENABLED
                 )
             )
             .add(

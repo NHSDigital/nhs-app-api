@@ -130,12 +130,19 @@ export default {
         id: 'vaccineRecord',
         jumpOffContent: {
           headerText: 'Share your COVID-19 status',
-          descriptionText: 'View and share proof of your COVID-19 status for travel',
+          descriptionText: 'View and share proof of your COVID-19 status for events in England and travel',
         },
         thirdPartyWarning: {
           featureName: 'Share your COVID-19 status',
           serviceTypePlural: 'this service',
           linkHref: 'https://www.nhs.uk/nhs-services/online-services/nhs-app/nhs-app-help-and-support/about-the-share-your-covid-19-status-service/',
+        },
+      },
+      {
+        id: 'vaccineRecordP5',
+        jumpOffContent: {
+          headerText: 'Share your COVID-19 status for events in England',
+          descriptionText: 'View and share proof of your COVID-19 status for events in England',
         },
       },
     ],

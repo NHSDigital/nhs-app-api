@@ -18,6 +18,8 @@ import mocking.thirdPartyProviders.pkb.MyCareViewRequestBuilder
 import mocking.thirdPartyProviders.pkb.SecondaryCareRequestBuilder
 import mocking.thirdPartyProviders.engage.EngageRequestBuilder
 import mocking.thirdPartyProviders.gncr.GNCRRequestBuilder
+import mocking.thirdPartyProviders.netCompany.NetCompanyRequestBuilder
+import mocking.thirdPartyProviders.nhsd.NhsdRequestBuilder
 import mocking.thirdPartyProviders.substrakt.SubstraktRequestBuilder
 import mocking.tpp.TppMappingRouter
 import mocking.vision.VisionMappingRouter
@@ -54,6 +56,8 @@ class MockingClient(configuration: MockingConfiguration) {
     val forEngage = ExternalSupplierMockingClient(EngageRequestBuilder(), wiremockHelper)
     val forGNCR = ExternalSupplierMockingClient(GNCRRequestBuilder(), wiremockHelper)
     val forSubstrakt = ExternalSupplierMockingClient(SubstraktRequestBuilder(), wiremockHelper)
+    val forNetCompany = ExternalSupplierMockingClient(NetCompanyRequestBuilder(), wiremockHelper)
+    val forNhsd = ExternalSupplierMockingClient(NhsdRequestBuilder(), wiremockHelper)
 
     fun favicon() = wiremockHelper.postMapping(FaviconMappingBuilder().respondWithNotFound())
 

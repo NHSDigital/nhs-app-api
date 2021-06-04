@@ -36,6 +36,7 @@ import webdrivers.options.nojs.NoJsOption
 private const val WAIT_IN_SECONDS_MODIFIER = 1000L
 private const val WAIT_IN_SECONDS = 190L
 private const val FOUR_SECOND_SLEEP: Long = 4000
+private const val P5_PROOF_LEVEL = 5
 
 open class SharedStepDefinitions {
 
@@ -119,15 +120,12 @@ open class SharedStepDefinitions {
     }
 
     @Given("^I am a user with (.*) (enabled|disabled)$")
-    fun iAmAUserWithJourneyEnabled(journey: String, status: String) {
-        val disabled = when (status) {
-            "disabled" -> true
-            "enable" -> false
-            else -> false
-        }
+    fun iAmAUserWithJourney(journey: String, status: String) =
+        initialisePatientWithJourney(IdentityProofingLevel.P9, journey, status)
 
-        initialisePatientWithJourney(IdentityProofingLevel.P9, journey, disabled)
-    }
+    @Given("^I am a proof level ([5,9]{1}) user with (.*) (enabled|disabled)$")
+    fun iAmAProofLevelUserWithJourney(proofLevel: Int, journey: String, status: String) =
+        initialisePatientWithJourney(proofLevel, journey, status)
 
     @Given("^I am a patient using the native app$")
     fun patientOnNativeApp() {
@@ -256,9 +254,33 @@ open class SharedStepDefinitions {
     }
 
     private fun initialisePatientWithJourney(
+        proofLevel: Int,
+        journey: String,
+        status: String
+    ) = initialisePatientWithJourney(
+        if (proofLevel == P5_PROOF_LEVEL) IdentityProofingLevel.P5 else IdentityProofingLevel.P9,
+        journey,
+        status
+    )
+
+    private fun initialisePatientWithJourney(
         proofLevel: IdentityProofingLevel,
         journey: String,
-        disabled: Boolean = false
+        status: String
+    ) {
+        val disabled = when (status) {
+            "disabled" -> true
+            "enable" -> false
+            else -> false
+        }
+
+        initialisePatientWithJourney(proofLevel, journey, disabled)
+    }
+
+    private fun initialisePatientWithJourney(
+        proofLevel: IdentityProofingLevel,
+        journey: String,
+        disabled: Boolean
     ) {
         val journeyTypes = SJRJourneyTypesMapper.map(journey, disabled)
         var patient = SerenityHelpers.getPatientOrNull()

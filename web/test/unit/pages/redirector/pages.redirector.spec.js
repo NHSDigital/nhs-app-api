@@ -1,18 +1,18 @@
-import VueRouter from 'vue-router';
-import Redirector from '@/pages/redirector/index';
+import * as dependency from '@/lib/utils';
 import * as names from '@/router/names';
+import * as window from '@/lib/window';
+import NativeApp from '@/services/native-app';
+import Redirector from '@/pages/redirector/index';
+import VueRouter from 'vue-router';
 import hasAgreedToThirdPartyWarning from '@/lib/sessionStorage';
 import { AppPage } from '@/static/js/v1/src/constants';
 import {
   GP_MEDICAL_RECORD_PATH,
   INDEX_PATH,
-  UPLIFT_SILVER_INTEGRATION_PATH,
   SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_PATH,
+  UPLIFT_SILVER_INTEGRATION_PATH,
 } from '@/router/paths';
 import { allRoutes } from '@/router';
-import * as dependency from '@/lib/utils';
-import * as window from '@/lib/window';
-import NativeApp from '@/services/native-app';
 import { createStore, localVue, mount } from '../../helpers';
 
 jest.mock('@/lib/sessionStorage');
@@ -280,6 +280,57 @@ describe('redirector page', () => {
 
       it('will redirect to the external url', () => {
         expect(window.setWindowLocation).toHaveBeenCalledWith('http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages&assertedLoginIdentity=jwtToken');
+      });
+    });
+
+    afterEach(() => {
+      hasAgreedToThirdPartyWarning.mockClear();
+    });
+  });
+
+  describe('has a redirect parameter to an external P5 jump off', () => {
+    beforeEach(() => {
+      NativeApp.supportsNativeWebIntegration.mockReturnValue(false);
+      hasAgreedToThirdPartyWarning.mockReturnValue(false);
+      $route = {
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PARAMETER]: 'http://www.url.com/covid-status-sso?proofLevel=p5' },
+        meta: {},
+      };
+
+      window.setWindowLocation = jest.fn();
+    });
+
+    describe.each([
+      ['P9 user', true],
+      ['P5 user', false],
+    ])('%s', (_, isProofLevel9) => {
+      beforeEach(() => {
+        wrapper = mountRedirector({
+          hasKnownService: true,
+          knownServiceId: 'netCompany',
+          requiresAssertedLoginIdentity: true,
+          showThirdPartyWarning: false,
+          isSilverIntegrationEnabled: true,
+          isProofLevel9,
+        });
+      });
+
+      it('will call `postV1PatientAssertedLoginIdentity`', () => {
+        expect($http.postV1PatientAssertedLoginIdentity).toHaveBeenCalledWith({
+          assertedLoginIdentityRequest: {
+            IntendedRelyingPartyUrl: 'http://www.url.com/covid-status-sso?proofLevel=p5',
+            JumpOffId: 'vaccineRecordP5',
+            ProviderId: 'netCompany',
+            ProviderName: 'the Department of Health and Social Care',
+            Action: 'SilverIntegrationJumpOff',
+          },
+          ignoreError: true,
+        });
+      });
+
+      it('will redirect to the external url', () => {
+        expect(window.setWindowLocation).toHaveBeenCalledWith('http://www.url.com/covid-status-sso?proofLevel=p5&assertedLoginIdentity=jwtToken');
       });
     });
 
