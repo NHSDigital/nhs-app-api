@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
+using NHSOnline.IntegrationTests.Logs;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
@@ -51,6 +52,23 @@ namespace NHSOnline.IntegrationTests.Home
                 .AssertPageDisplayedFor("Wendy House");
         }
 
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelNineCanSuccessfullyLogInAndLogsUserAgentInformationAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Wendy").FamilyName("House"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            var testTiming = TimedTestExecutor.Execute(()
+                => LoginProcess.LogAndroidPatientIn(driver, patient));
+
+            UserAgentDockerLogs.GetLogs(testTiming.StartTime,
+                testTiming.StopTime,
+                "pfs",
+                UserAgentDockerLogs.Platform.android)
+                .AssertFound();
+        }
+
         [NhsAppIOSTest]
         public void APatientWithProofLevelNineCanSuccessfullyLogInIOS(IIOSDriverWrapper driver)
         {
@@ -87,6 +105,23 @@ namespace NHSOnline.IntegrationTests.Home
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
                 .AssertPageDisplayedFor("Wendy House");
+        }
+
+        [NhsAppIOSTest]
+        public void APatientWithProofLevelNineCanSuccessfullyLogInAndLogsUserAgentInformationIOS(IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Wendy").FamilyName("House"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            var testTiming = TimedTestExecutor.Execute(()
+                => LoginProcess.LogIOSPatientIn(driver, patient));
+
+            UserAgentDockerLogs.GetLogs(testTiming.StartTime,
+                    testTiming.StopTime,
+                    "pfs",
+                    UserAgentDockerLogs.Platform.ios)
+                .AssertFound();
         }
     }
 }
