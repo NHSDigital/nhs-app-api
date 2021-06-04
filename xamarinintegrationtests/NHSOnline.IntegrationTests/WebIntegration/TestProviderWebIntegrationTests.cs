@@ -110,12 +110,51 @@ namespace NHSOnline.IntegrationTests.WebIntegration
             AndroidCalendarPage
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
-                .PageContent.AddToCalendar(ValidStartTime, ValidEndTime, driver);
+                .AddCalendarDetails(ValidStartTime, ValidEndTime)
+                .AddCalendarEvent();
 
             AndroidGoogleCalendarsApp
                 .AssertOnPage(driver)
                 .NavigateThroughOverview()
                 .ConfirmGotIt()
+                .AssertDetailsArePassed();
+        }
+
+        [NhsAppIOSTest]
+        public void APatientWithProofLevelNineCanAddAnEventToTheCalendarOnTheTestProviderCalendarScreenIOS(
+            IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToMessages();
+
+            IOSMessagesPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToTestProvider();
+
+            IOSTestWebIntegrationProviderPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.NavigateToCalendar();
+
+            IOSCalendarPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .AddCalendarDetails(ValidStartTime, ValidEndTime)
+                .PageContent.AddCalendarEvent();
+
+            IOSCalendarPermissionDialog
+                .AssertDisplayed(driver)
+                .Allow();
+
+            IOSCalendarsApp
+                .AssertOnPage(driver)
                 .AssertDetailsArePassed();
         }
 
@@ -145,13 +184,51 @@ namespace NHSOnline.IntegrationTests.WebIntegration
             AndroidCalendarPage
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
-                .PageContent.AddToCalendar(ValidStartTime, InvalidEndTime, driver);
+                .AddCalendarDetails(ValidStartTime, InvalidEndTime)
+                .AddCalendarEvent();
 
             AndroidCalendarErrorDialog
                 .AssertDisplayed(driver)
                 .Ok();
 
             AndroidCalendarPage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppIOSTest]
+        public void APatientWithProofLevelNineTryingToCallAnInvalidDateRangeOnTheTestProviderCalendarScreenIsShownAndErrorDialogCanBeDismissedIOS(
+            IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToMessages();
+
+            IOSMessagesPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToTestProvider();
+
+            IOSTestWebIntegrationProviderPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.NavigateToCalendar();
+
+            IOSCalendarPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .AddCalendarDetails(ValidStartTime, InvalidEndTime)
+                .PageContent.AddCalendarEvent();
+
+            IOSCalendarValidationErrorDialog
+                .AssertDisplayed(driver)
+                .Ok();
+
+            IOSCalendarPage
                 .AssertOnPage(driver);
         }
 
@@ -181,7 +258,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration
             AndroidCalendarPage
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
-                .PageContent.AddToCalendar(ValidStartTime, InvalidEndTime, driver);
+                .AddCalendarDetails(ValidStartTime, InvalidEndTime)
+                .AddCalendarEvent();
 
             AndroidCalendarErrorDialog
                 .AssertDisplayed(driver)
@@ -191,6 +269,84 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver)
                 .NavigateThroughOverview()
                 .ConfirmGotIt();
+        }
+
+        [NhsAppIOSTest]
+        public void APatientWithProofLevelNineTryingToCallAnInvalidDateRangeOnTheTestProviderCalendarScreenIsShownAnErrorDialogAndCanAddedManuallyIOS(
+            IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToMessages();
+
+            IOSMessagesPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToTestProvider();
+
+            IOSTestWebIntegrationProviderPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.NavigateToCalendar();
+
+            IOSCalendarPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .AddCalendarDetails(ValidStartTime, InvalidEndTime)
+                .PageContent.AddCalendarEvent();
+
+            IOSCalendarValidationErrorDialog
+                .AssertDisplayed(driver)
+                .AddEventManually();
+
+            IOSCalendarPermissionDialog
+                .AssertDisplayed(driver)
+                .Allow();
+
+            IOSCalendarsApp
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppIOSTest]
+        public void APatientWithProofLevelNineTryingToAddToCalendarWithValidDetailsDeniesAccessAndIsShownTheRelevantWarningIOS(
+            IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToMessages();
+
+            IOSMessagesPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToTestProvider();
+
+            IOSTestWebIntegrationProviderPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.NavigateToCalendar();
+
+            IOSCalendarPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .AddCalendarDetails(ValidStartTime, ValidEndTime)
+                .PageContent.AddCalendarEvent();
+
+            IOSCalendarPermissionDialog
+                .AssertDisplayed(driver)
+                .Deny();
+
+            IOSCalendarPermissionErrorDialog
+                .AssertDisplayed(driver);
         }
 
         [NhsAppAndroidTest]

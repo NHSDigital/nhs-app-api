@@ -12,8 +12,11 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidLabel WelcomeText => AndroidLabel.WithText(_driver, "Google Calendar");
 
-        private AndroidFrameLayoutWithImageView NextStandard =>
-            AndroidFrameLayoutWithImageView.WithImageViewDescription(_driver, "next page");
+        private AndroidImageView NextStandardImageView =>
+            AndroidImageView.WithImageViewDescription(_driver, "next page");
+
+        private AndroidFrameLayout NextFrame =>
+            AndroidFrameLayout.WithChildElement(_driver, NextStandardImageView);
 
         private AndroidImageButton NextAlternative =>
             AndroidImageButton.WithDescription(_driver, "next page");
@@ -45,9 +48,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         {
             try
             {
-                NextStandard.Click();
-                NextStandard.Click();
-                NextStandard.Click();
+                NextFrame.Click();
+                NextFrame.Click();
+                NextFrame.Click();
             }
             catch (AssertFailedException)
             {

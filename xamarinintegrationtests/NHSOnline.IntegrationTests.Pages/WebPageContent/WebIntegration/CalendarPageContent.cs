@@ -31,19 +31,15 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         internal void AssertOnPage() => TitleText.AssertVisible();
 
-        public void AddToCalendar(int startTime, int endTime, IAndroidDriverWrapper driver)
+        public void AddToCalendar(int startTime, int endTime)
         {
             SubjectInputText.EnterText("Test Subject");
             BodyInputText.EnterText("Test Body");
             LocationInputText.EnterText("Test Location");
             StartTimeEpochInputText.EnterText(startTime.ToString(CultureInfo.InvariantCulture));
             EndTimeEpochInputText.EnterText(endTime.ToString(CultureInfo.InvariantCulture));
-
-            driver.DismissKeyboard();
-
-            driver.SendKey(AndroidKeyCode.Keycode_TAB);
-
-            driver.SendKey(AndroidKeyCode.Keycode_ENTER);
         }
+
+        public void AddCalendarEvent() => AddToCalendarButton.Click();
     }
 }

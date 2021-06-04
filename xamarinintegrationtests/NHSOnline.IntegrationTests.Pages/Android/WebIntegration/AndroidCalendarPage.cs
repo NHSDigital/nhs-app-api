@@ -1,5 +1,6 @@
 using NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration;
 using NHSOnline.IntegrationTests.UI.Drivers;
+using OpenQA.Selenium.Appium.Android;
 
 namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
 {
@@ -29,6 +30,21 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
         {
             Navigation.AssertNavigationPresent();
             return this;
+        }
+
+        public AndroidCalendarPage AddCalendarDetails(int startTime, int endTime)
+        {
+            PageContent.AddToCalendar(startTime, endTime);
+            return this;
+        }
+
+        public void AddCalendarEvent()
+        {
+            _driver.DismissKeyboard();
+
+            _driver.SendKey(AndroidKeyCode.Keycode_TAB);
+
+            _driver.SendKey(AndroidKeyCode.Keycode_ENTER);
         }
     }
 }
