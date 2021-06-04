@@ -371,10 +371,10 @@ logger:
   minAvailable: 2
   minReplicas: 2
   maxReplicas: 100
-  memoryRequest: "80Mi"
-  memoryLimit: "80Mi"
-  cpuRequest: "100m"
-  cpuLimit: "100m"
+  memoryRequest: "128Mi"
+  memoryLimit: "128Mi"
+  cpuRequest: "300m"
+  cpuLimit: "1000m"
   targetCPUUtilizationPercentage: 45
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
