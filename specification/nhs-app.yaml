@@ -13,7 +13,7 @@ info:
     * send in-app messages to specific users of the NHS App
     * send native Apple or Android push notifications to mobile devices registered by specific users of the NHS App
 
-    ## Who can use this API?
+    ## Who can use this API
     To use this API, you must [integrate with the NHS App](https://digital.nhs.uk/services/nhs-app/partners-and-developers/integrate-with-the-nhs-app).
 
     [Contact us](mailto:app.onboarding@nhs.net) before you begin any development work with this API, even if your service is already integrated.
