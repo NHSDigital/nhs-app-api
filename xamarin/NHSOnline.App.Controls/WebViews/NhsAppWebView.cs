@@ -1,9 +1,11 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.App.Controls.WebViews.Payloads;
+using NHSOnline.App.Logging;
 using NHSOnline.App.Threading;
 using Xamarin.Forms;
 
@@ -11,6 +13,8 @@ namespace NHSOnline.App.Controls.WebViews
 {
     public sealed class NhsAppWebView: WebView, IAccessibleWebView
     {
+        private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(NhsAppWebView));
+
         public event EventHandler<FocusRequestArgs> AccessibilityFocusChangeRequested = null!;
 
         public void AccessibilityFocus()
@@ -71,8 +75,15 @@ namespace NHSOnline.App.Controls.WebViews
 
         public void AddEventToCalendar(string json)
         {
-            var request = ConvertFromJsonString<AddEventToCalendarRequest>(json);
-            AddEventToCalendarCommand.Execute(request);
+            try
+            {
+                var request = ConvertFromJsonString<AddEventToCalendarRequest>(json);
+                AddEventToCalendarCommand.Execute(request);
+            }
+            catch (ArgumentException e)
+            {
+                Logger.LogError("Failed to deserialize the calendar request, not showing any dialogs", e);
+            }
         }
 
         public AsyncCommand<AddEventToCalendarRequest> AddEventToCalendarCommand

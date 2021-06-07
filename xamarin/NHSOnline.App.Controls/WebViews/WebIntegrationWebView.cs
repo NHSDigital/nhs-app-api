@@ -1,8 +1,10 @@
 using System;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.App.Controls.WebViews.Payloads;
+using NHSOnline.App.Logging;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Controls.WebViews
@@ -10,6 +12,7 @@ namespace NHSOnline.App.Controls.WebViews
     public sealed class WebIntegrationWebView : WebView
     {
         public const string JavascriptObjectName = "nhsappNative";
+        private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(WebIntegrationWebView));
         private static JsonSerializerSettings Settings { get; } = CreateJsonSerializerSettings();
 
         public static readonly BindableProperty RedirectToNhsAppPageCommandProperty =
@@ -32,8 +35,15 @@ namespace NHSOnline.App.Controls.WebViews
 
         public void AddEventToCalendar(string json)
         {
-            var request = ConvertFromJsonString<AddEventToCalendarRequest>(json);
-            AddEventToCalendarCommand.Execute(request);
+            try
+            {
+                var request = ConvertFromJsonString<AddEventToCalendarRequest>(json);
+                AddEventToCalendarCommand.Execute(request);
+            }
+            catch (ArgumentException e)
+            {
+                Logger.LogError("Failed to deserialize the calendar request, not showing any dialogs", e);
+            }
         }
 
         public AsyncCommand<AddEventToCalendarRequest> AddEventToCalendarCommand
