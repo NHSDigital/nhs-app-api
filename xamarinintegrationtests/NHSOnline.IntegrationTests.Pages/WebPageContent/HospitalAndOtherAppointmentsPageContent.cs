@@ -15,6 +15,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             _interactor = interactor;
         }
 
+        private WebLink BackBreadcrumb => WebLink.WithText(_interactor, "Back");
+
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Hospital and other appointments");
 
         private WebMenuItem BookOrCancelYourReferralAppointmentMenuItem => WebMenuItem.WithTitle(_interactor, "Book or cancel your referral appointment");
@@ -34,6 +36,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         public void NavigateToBookOrCancelYourReferralAppointment() => BookOrCancelYourReferralAppointmentMenuItem.Click();
 
         public void NavigateToViewAppointments() => ViewYourAppointmentsMenuItem.Click();
+
+        public void ClickBackBreadcrumb() => BackBreadcrumb.Click();
 
         public void KeyboardNavigateViewAppointments(AndroidKeyboardNavigation navigation)
             => KeyboardNavigateToAndActivateMenuItem(ViewYourAppointmentsMenuItem, navigation);

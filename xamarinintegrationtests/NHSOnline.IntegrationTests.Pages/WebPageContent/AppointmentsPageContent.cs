@@ -15,13 +15,42 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             _interactor = interactor;
         }
 
-        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Appointments");
+        private WebText TitleText => WebText.WithTagAndText(
+            _interactor,
+            "h1",
+            "Appointments");
 
-        private WebMenuItem GpSurgeryAppointmentsMenuItem => WebMenuItem.WithTitle(_interactor, "GP surgery appointments");
+        private WebMenuItem GpSurgeryAppointmentsMenuItem => WebMenuItem.WithTitle(
+            _interactor,
+            "GP surgery appointments");
 
-        private WebMenuItem AdditionalGpServicesMenuItem => WebMenuItem.WithTitle(_interactor, "Additional GP services");
+        private WebText GpSurgeryAppointmentsMenuText => WebText.WithTagAndText(
+            _interactor,
+            "p",
+            "View and manage appointments at your surgery");
 
-        private WebMenuItem HospitalAndOtherAppointmentsMenuItem => WebMenuItem.WithTitle(_interactor, "Hospital and other appointments");
+        private WebMenuItem AdditionalGpServicesMenuItem => WebMenuItem.WithTitle(
+            _interactor,
+            "Additional GP services");
+
+        private WebText AdditionalGpServicesMenuText => WebText.WithTagAndText(
+            _interactor,
+            "p",
+            "Get sick notes and GP letters or ask about recent tests");
+
+        private WebText EngageAdditionalGpServicesMenuText => WebText.WithTagAndText(
+            _interactor,
+            "p",
+            "Get sick notes and GP letters or ask your GP surgery about something else");
+
+        private WebMenuItem HospitalAndOtherAppointmentsMenuItem => WebMenuItem.WithTitle(
+            _interactor,
+            "Hospital and other appointments");
+
+        private WebText HospitalAndOtherAppointmentsMenuText => WebText.WithTagAndText(
+            _interactor,
+            "p",
+            "View and manage appointments, like your referral appointments");
 
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
@@ -32,10 +61,37 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         internal void AssertOnPage() => TitleText.AssertVisible();
 
-        public void AssertPageElements() => TitleText.AssertVisible();
+        public AppointmentsPageContent AssertPageElements()
+        {
+            TitleText.AssertVisible();
+            GpSurgeryAppointmentsMenuItem.AssertVisible();
+            GpSurgeryAppointmentsMenuText.AssertVisible();
+            HospitalAndOtherAppointmentsMenuItem.AssertVisible();
+            HospitalAndOtherAppointmentsMenuText.AssertVisible();
+            return this;
+        }
+
+        public AppointmentsPageContent AssertEngageElements()
+        {
+            AdditionalGpServicesMenuItem.AssertVisible();
+            EngageAdditionalGpServicesMenuText.AssertVisible();
+            return this;
+        }
+
+        public AppointmentsPageContent AssertEconsultElements()
+        {
+            AdditionalGpServicesMenuItem.AssertVisible();
+            AdditionalGpServicesMenuText.AssertVisible();
+            return this;
+        }
 
         public void NavigateToHospitalAndOtherAppointments() => HospitalAndOtherAppointmentsMenuItem.Click();
 
+        public void KeyboardNavigateToGpSurgeryAppointments(AndroidKeyboardNavigation navigation)
+            => KeyboardNavigateToAndActivateMenuItem(GpSurgeryAppointmentsMenuItem, navigation);
+
+        public void KeyboardNavigateToAdditionalGpServices(AndroidKeyboardNavigation navigation)
+            => KeyboardNavigateToAndActivateMenuItem(AdditionalGpServicesMenuItem, navigation);
 
         public void KeyboardNavigateToHospitalAndOtherAppointments(AndroidKeyboardNavigation navigation)
             => KeyboardNavigateToAndActivateMenuItem(HospitalAndOtherAppointmentsMenuItem, navigation);

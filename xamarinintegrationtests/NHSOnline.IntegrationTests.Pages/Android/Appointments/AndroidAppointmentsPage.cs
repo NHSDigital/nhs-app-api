@@ -4,6 +4,7 @@ using NHSOnline.IntegrationTests.Pages.WebPageContent;
 using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
+using OpenQA.Selenium.Appium.Android;
 
 namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
 {
@@ -46,6 +47,20 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
             return pageFocusableList.Concat(footerFocusableList).Concat(headerFocusableList);
         }
 
-        public void KeyboardNavigateToHospitalAndOtherAppointments() => PageContent.KeyboardNavigateToHospitalAndOtherAppointments(KeyboardPageContentNavigation);
+        public void KeyboardNavigateToGpSurgeryAppointmnts() =>
+            PageContent.KeyboardNavigateToGpSurgeryAppointments(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToAdditionalGpServices() =>
+            PageContent.KeyboardNavigateToAdditionalGpServices(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToHospitalAndOtherAppointments() =>
+            PageContent.KeyboardNavigateToHospitalAndOtherAppointments(KeyboardPageContentNavigation);
+
+        // Focus needs to be set on webview on page load, NHSO-14668 and tabbing functionality needs to be updated before this can be removed.
+        public AndroidAppointmentsPage TabIntoFocus()
+        {
+            _driver.SendKey(AndroidKeyCode.Keycode_TAB);
+            return this;
+        }
     }
 }
