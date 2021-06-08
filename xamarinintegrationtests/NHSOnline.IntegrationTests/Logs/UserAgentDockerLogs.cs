@@ -1,17 +1,12 @@
 using System;
+using NHSOnline.IntegrationTests.UI.DeviceProperties;
 
 namespace NHSOnline.IntegrationTests.Logs
 {
     public class UserAgentDockerLogs : DockerLogs
     {
         private static string BuildRegexString(Platform platform) =>
-            $"UserAgent=nhsapp-{platform.ToString()}.+\\d.\\d.+nhsapp-manufacturer.+nhsapp-model.+nhsapp-os.+nhsapp-architecture.+";
-
-        public enum Platform
-        {
-            ios,
-            android
-        }
+            $"UserAgent={platform.UserAgentDeviceTypePrefix()}.+\\d.\\d.+nhsapp-manufacturer.+nhsapp-model.+nhsapp-os.+nhsapp-architecture.+";
 
         private UserAgentDockerLogs(DateTime startTime, DateTime endTime, string containerName, Platform platform) :
             base(startTime, endTime, containerName, BuildRegexString(platform))

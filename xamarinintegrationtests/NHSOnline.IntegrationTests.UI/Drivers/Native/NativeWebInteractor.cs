@@ -1,4 +1,5 @@
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.Extensions;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers.Native
 {
@@ -38,6 +39,12 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
 
         public IWebInteractor CreateContainedInteractor(By findBy)
                 => new NativeWebInteractor(_nativeDriverContext, _driver, _webViewContext, _interactor.CreateContainedInteractor(findBy));
+
+        public string GetUserAgent()
+        {
+            ChangeContext();
+            return _driver.ExecuteJavaScript<string>("return window.navigator.userAgent;");
+        }
 
         private void ChangeContext()
         {

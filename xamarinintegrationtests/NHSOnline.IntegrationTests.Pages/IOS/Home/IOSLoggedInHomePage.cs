@@ -5,7 +5,6 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
 {
     public class IOSLoggedInHomePage
     {
-
         public IOSFullNavigation Navigation { get; }
         public LoggedInHomePageContent PageContent { get; }
 

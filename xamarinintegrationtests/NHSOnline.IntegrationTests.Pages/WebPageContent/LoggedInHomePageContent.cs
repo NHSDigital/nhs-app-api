@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Web;
+using NHSOnline.IntegrationTests.UI.DeviceProperties;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.WebPageContent
@@ -53,6 +56,9 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         internal void AssertOnPage() => TitleText.AssertVisible();
 
         public void AssertNameDisplayedFor(string patientName) => NameDefinitionTerm.AssertValue(patientName);
+
+        public void AssertUserAgent(Platform platform) =>
+            Assert.IsTrue(_interactor.GetUserAgent().Contains(platform.UserAgentDeviceTypePrefix(), StringComparison.InvariantCulture));
 
         public void ProveYourIdentityContinue() => Continue.Click();
     }

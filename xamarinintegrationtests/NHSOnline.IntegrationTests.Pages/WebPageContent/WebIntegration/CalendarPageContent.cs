@@ -1,5 +1,4 @@
 using System.Globalization;
-using System.Threading;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium.Appium.Android;

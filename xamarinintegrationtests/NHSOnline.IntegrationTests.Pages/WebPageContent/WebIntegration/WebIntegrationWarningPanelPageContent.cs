@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Android;

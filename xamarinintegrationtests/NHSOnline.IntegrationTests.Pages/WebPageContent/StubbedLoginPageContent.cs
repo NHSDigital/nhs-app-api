@@ -1,5 +1,8 @@
+using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.UI.Components.Web;
+using NHSOnline.IntegrationTests.UI.DeviceProperties;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.WebPageContent
@@ -68,5 +71,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             LoginTermsAndConditionsCheckbox.Click();
             Login(patient);
         }
+
+        public void AssertUserAgent(Platform platform) =>
+            Assert.IsTrue(_interactor.GetUserAgent().Contains(platform.UserAgentDeviceTypePrefix(), StringComparison.InvariantCulture));
     }
 }
