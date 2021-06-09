@@ -6,7 +6,7 @@
 >
 > -- <cite>https://docs.microsoft.com/en-us/xamarin/essentials/main-thread</cite>
 
-As sumarised nicely in the above quote from the Xamarin documentation, all operations that affect the UI must be executed on the main thread.
+As summarised nicely in the above quote from the Xamarin documentation, all operations that affect the UI must be executed on the main thread.
 The cited documentation suggests adding items of work into a queue to be executed on that main thread, however C# has a useful async threading model that we can use to our advantage here.
 It's worth a brief understanding of the async/await threading model in C#, specifically synchronisation contexts, before continuing. These are nicely explained in [this Microsoft blog post](https://devblogs.microsoft.com/dotnet/configureawait-faq/)
 
