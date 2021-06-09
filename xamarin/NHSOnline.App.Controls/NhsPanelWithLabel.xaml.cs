@@ -33,10 +33,17 @@ namespace NHSOnline.App.Controls
             BindableProperty.Create(nameof(PanelHighlightColour), typeof(Color), typeof(NhsPanelWithLabel),
                 Color.Transparent);
 
-
         public NhsPanelWithLabel()
         {
             InitializeComponent();
+        }
+
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            base.OnSizeAllocated(width, height);
+            var isWideDevice = Device.info.ScaledScreenSize.Width >= Breakpoints.WideScreenSize;
+
+            VisualStateManager.GoToState(this, isWideDevice ? "Wide" : "Narrow");
         }
 
         public View PanelContent

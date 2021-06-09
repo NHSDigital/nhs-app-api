@@ -6,6 +6,22 @@
                 x:Class="NHSOnline.App.Controls.NhsPanelWithLabel"
                 x:DataType="controls:NhsPanelWithLabel"
                 x:Name="Root">
+
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="ResponsiveStates">
+            <VisualState x:Name="Narrow" />
+            <VisualState x:Name="Wide">
+                <VisualState.Setters>
+                    <Setter TargetName="PanelGrid" Property="Grid.ColumnSpan" Value="1" />
+                    <Setter TargetName="HeadingBackground" Property="Style" Value="{StaticResource HeadingBackgroundWide}" />
+                    <Setter TargetName="WhiteStripe" Property="Style" Value="{StaticResource WhiteStripeWide}" />
+                    <Setter TargetName="HeadingText" Property="Style" Value="{StaticResource HeadingTextWide}" />
+                    <Setter TargetName="PanelContentView" Property="Style" Value="{StaticResource PanelContentViewWide}" />
+                </VisualState.Setters>
+            </VisualState>
+        </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+
     <ContentView.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -16,13 +32,13 @@
                 <Setter Property="Spacing" Value="0" />
             </Style>
             
-            <Style TargetType="Grid">
-                <Setter Property="Margin" Value="0,0,0,0" />
+            <Style TargetType="Grid" Class="HeaderGrid">
+                <Setter Property="Margin" Value="0" />
                 <Setter Property="HorizontalOptions" Value="Start" />
             </Style>
             
             <Style TargetType="BoxView">
-                <Setter Property="Margin" Value="0,0,0,0" />
+                <Setter Property="Margin" Value="0" />
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />
                 <Setter Property="VerticalOptions" Value="End" />
             </Style>
@@ -32,57 +48,79 @@
                 <Setter Property="BackgroundColor" Value="{Binding PanelHighlightColour, Source={x:Reference Name=Root}}" />
             </Style>
             
-            <Style TargetType="BoxView" Class="WhiteStripe">
+            <Style TargetType="BoxView" Class="WhiteStripe" CanCascade="True">
                 <Setter Property="HeightRequest" Value="16" />
                 <Setter Property="BackgroundColor" Value="{Binding PanelBackgroundColour, Source={x:Reference Name=Root}}" />
             </Style>
+            <Style x:Key="WhiteStripeWide" TargetType="BoxView" CanCascade="True">
+                <Setter Property="HeightRequest" Value="22" />
+            </Style>
             
-            <Style TargetType="ContentView" Class="HeadingBackground">
-                <Setter Property="Padding" Value="16,0,16,0" />
+            <Style TargetType="ContentView" Class="HeadingBackground" CanCascade="True">
+                <Setter Property="Padding" Value="16,0" />
                 <Setter Property="HeightRequest" Value="40" />
                 <Setter Property="BackgroundColor" Value="{Binding LabelBackgroundColour, Source={x:Reference Name=Root}}" />
-            </Style> 
+            </Style>
+            <Style x:Key="HeadingBackgroundWide" TargetType="ContentView" CanCascade="True">
+                <Setter Property="Padding" Value="24,0" />
+                <Setter Property="HeightRequest" Value="52" />
+            </Style>
             
-            <Style TargetType="Label" Class="HeadingText">
+            <Style TargetType="Label" Class="HeadingText" CanCascade="True">
                 <Setter Property="VerticalTextAlignment" Value="Center" />
-                <Setter Property="FontSize" Value="Large" />
+                <Setter Property="FontSize" Value="20" />
                 <Setter Property="FontFamily" Value="Frutiger-Bold" />
                 
                 <Setter Property="BackgroundColor" Value="{Binding LabelBackgroundColour, Source={x:Reference Name=Root}}" />
                 <Setter Property="TextColor" Value="{Binding LabelTextColour, Source={x:Reference Name=Root}}" />
             </Style>
+            <Style x:Key="HeadingTextWide" TargetType="Label" CanCascade="True">
+                <Setter Property="FontSize" Value="24" />
+            </Style>
             
-            <Style TargetType="ContentView" Class="Content">
+            <Style TargetType="ContentView" Class="PanelContentView" CanCascade="True">
                 <Setter Property="Padding" Value="16,8,16,26" />
                 <Setter Property="BackgroundColor" Value="{Binding PanelBackgroundColour, Source={x:Reference Name=Root}}" />
             </Style>
+            
+            <Style x:Key="PanelContentViewWide" TargetType="ContentView" CanCascade="True">
+                <Setter Property="Padding" Value="24,12,24,36" />
+            </Style>
         </ResourceDictionary>
     </ContentView.Resources>
-    
+
     <ContentView.Content>
-        <StackLayout>
-            <Grid HorizontalOptions="Center" VerticalOptions="Center" >
-                <Grid.ColumnSpacing>0</Grid.ColumnSpacing>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <ContentView StyleClass="HeadingBackground" Grid.Column="0" >
-                    <Label StyleClass="HeadingText" 
-                           Text="{Binding LabelText, Source={x:Reference Name=Root}}" />
-                </ContentView>
-                <StackLayout Grid.Column="1" VerticalOptions="End">
-                    <BoxView StyleClass="RedStripe" />
-                    <BoxView StyleClass="WhiteStripe" />
-                </StackLayout>
-            </Grid>
-            
-            <ContentView StyleClass="Content" 
-                         Content="{Binding PanelContent, Source={x:Reference Name=Root}}" /> 
-            
-        </StackLayout>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <StackLayout x:Name="PanelGrid"
+                         Grid.Column="0"
+                         Grid.ColumnSpan="2">
+                <Grid HorizontalOptions="Center" VerticalOptions="Center" StyleClass="HeaderGrid">
+                    <Grid.ColumnSpacing>0</Grid.ColumnSpacing>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <ContentView x:Name="HeadingBackground" StyleClass="HeadingBackground" Grid.Column="0" >
+                        <Label x:Name="HeadingText"
+                               StyleClass="HeadingText"
+                               Text="{Binding LabelText, Source={x:Reference Name=Root}}" />
+                    </ContentView>
+                    <StackLayout Grid.Column="1" VerticalOptions="End">
+                        <BoxView StyleClass="RedStripe" />
+                        <BoxView x:Name="WhiteStripe" StyleClass="WhiteStripe" />
+                    </StackLayout>
+                </Grid>
+                <ContentView x:Name="PanelContentView"
+                             StyleClass="PanelContentView"
+                             Content="{Binding PanelContent, Source={x:Reference Name=Root}}" />
+            </StackLayout>
+        </Grid>
     </ContentView.Content>
 </ContentView>

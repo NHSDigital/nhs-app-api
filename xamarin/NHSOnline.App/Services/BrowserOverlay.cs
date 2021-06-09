@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.Styles;
 using NHSOnline.App.Threading;
 using Xamarin.Essentials;

@@ -120,6 +120,9 @@
       <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="NhsSpinner.svg" />
+    <EmbeddedResource Update="ResponsiveHeading2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -217,6 +220,26 @@
     </Compile>
     <Compile Update="ResourceDictionaries\NhsUkStyles.xaml.cs">
       <DependentUpon>NhsUkStyles.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ResponsiveParagraph.xaml.cs">
+      <DependentUpon>ResponsiveParagraph.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ResponsiveLinkLabel.xaml.cs">
+      <DependentUpon>ResponsiveLinkLabel.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ResponsiveHeading1.xaml.cs">
+      <DependentUpon>ResponsiveHeading1.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ResponsiveHeading2.xaml.cs">
+      <DependentUpon>ResponsiveHeading2.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ResponsiveListItem.xaml.cs">
+      <DependentUpon>ResponsiveListItem.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
