@@ -211,15 +211,6 @@ class NHSOnlineApi {
           data: JSON.stringify(body)
         }).then((response) => {
 
-          // Must use lowercase to look for the header, regardless of
-          // how it is defined in the backend.
-          if (response.headers) {
-            if (response.headers['nhso-im1-messaging-enabled']) {
-              this.store.dispatch('practiceSettings/setIm1MessagingEnabled',
-                response.headers['nhso-im1-messaging-enabled'].toUpperCase() === 'TRUE');
-            }
-          }
-
           if (returnResponse) {
             return response;
           }

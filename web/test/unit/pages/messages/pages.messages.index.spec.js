@@ -80,6 +80,8 @@ describe('messages page', () => {
         { practice: true, sjr: false },
         { practice: false, sjr: true },
         { practice: false, sjr: false },
+        { practice: null, sjr: false },
+        { practice: null, sjr: true },
       ]).it('will not show link', ({ practice, sjr }) => {
         mountPage({
           practiceIm1MessagingEnabled: practice,

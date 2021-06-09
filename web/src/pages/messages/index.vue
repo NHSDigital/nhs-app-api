@@ -2,7 +2,7 @@
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <menu-item-list v-if="hasAnyAccess">
-        <menu-item v-if="gpMessagesEnabled"
+        <menu-item v-if="showGpMessagesLink"
                    id="btn_im1_messaging"
                    data-sid="im1-messaging-list-item"
                    header-tag="h2"
@@ -148,7 +148,7 @@ export default {
   },
   computed: {
     hasAnyAccess() {
-      return this.gpMessagesEnabled ||
+      return this.shouldLoadGpMessages ||
         this.appMessagingSjrEnabled ||
         this.engageEnabled ||
         this.pkbEnabled ||
@@ -156,8 +156,13 @@ export default {
         this.substraktEnabled ||
         this.testProviderEnabled;
     },
-    gpMessagesEnabled() {
-      return this.im1MessagingSjrEnabled && this.$store.state.practiceSettings.im1MessagingEnabled;
+    shouldLoadGpMessages() {
+      return this.im1MessagingSjrEnabled && (
+        this.$store.state.practiceSettings.im1MessagingEnabled !== false);
+    },
+    showGpMessagesLink() {
+      return this.im1MessagingSjrEnabled && (
+        this.$store.state.practiceSettings.im1MessagingEnabled === true);
     },
     engageEnabled() {
       return this.hasEngageMessages && !this.isProxying && this.isProofLevel9;
@@ -184,7 +189,7 @@ export default {
   async mounted() {
     const params = { ignoreError: true };
 
-    if (this.gpMessagesEnabled) {
+    if (this.shouldLoadGpMessages) {
       await this.$store.dispatch('gpMessages/loadMessages', params);
     }
 

@@ -9,6 +9,7 @@ namespace NHSOnline.Backend.Support
         public OnDemandGpSession(Supplier supplier)
         {
             SessionSupplier = supplier;
+            Im1MessagingEnabled = null;
         }
 
         public override T Accept<T>(IGpUserSessionVisitor<T> visitor)

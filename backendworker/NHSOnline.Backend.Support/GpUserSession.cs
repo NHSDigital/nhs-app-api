@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.Support
 
         public abstract bool HasLinkedAccounts { get; }
 
-        public bool Im1MessagingEnabled { get; set; }
+        public bool? Im1MessagingEnabled { get; set; } = false;
 
         public Guid Id { get; set; }
 

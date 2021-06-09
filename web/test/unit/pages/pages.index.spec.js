@@ -24,6 +24,8 @@ describe('index', () => {
     hasUnreadAppMessages = false,
     hasUnreadGpMessages = false,
     messagesUnavailable = false,
+    onDemandEnabled = false,
+
   } = {}) => {
     $router = createRouter();
     $store = createStore({
@@ -64,6 +66,9 @@ describe('index', () => {
         'session/isProxying': isProxying,
         'session/currentProfile': { name: '' },
         'serviceJourneyRules/silverIntegrationEnabled': () => false,
+      },
+      $env: {
+        GP_SESSION_ON_DEMAND_ENABLED: onDemandEnabled,
       },
     });
     return mount(Index, { $store, $router, mountOpts: { i18n }, stubs: ['BiometricBanner'] });
@@ -129,13 +134,14 @@ describe('index', () => {
   });
 
   each([
-    ['will show the indicator when there is unread messages', true, true, true],
-    ['will show the indicator when there is only unread app messages', false, true, true],
-    ['will show the indicator when there is only unread GP messages', true, false, true],
-    ['will not show the indicator when there is no unread messages', false, false, false],
+    ['will show the indicator when there is unread messages', true, true, true, false],
+    ['will show the indicator when there is only unread app messages', false, true, true, false],
+    ['will show the indicator when there is only unread GP messages and OnDemand is enabled', true, false, false, true],
+    ['will show the indicator when there is only unread GP messages and OnDemand is disabled', true, false, true, false],
+    ['will not show the indicator when there is no unread messages', false, false, false, false],
   ]).it('%s',
-    async (_, hasUnreadGpMessages, hasUnreadAppMessages, showIndicator) => {
-      wrapper = mountAs({ hasUnreadAppMessages, hasUnreadGpMessages });
+    async (_, hasUnreadGpMessages, hasUnreadAppMessages, showIndicator, onDemandEnabled) => {
+      wrapper = mountAs({ hasUnreadAppMessages, hasUnreadGpMessages, onDemandEnabled });
       await wrapper.vm.$nextTick();
       expect(wrapper.find('#btn_messages_discIndicator').exists()).toBe(showIndicator);
     });
@@ -146,13 +152,14 @@ describe('index', () => {
     let messagesLink;
 
     each([
-      ['will have text \'View your unread messages\' when there are unread messages', true, true, 'View your unread messages'],
-      ['will have text \'View your unread messages\' when there are only unread app messages', false, true, 'View your unread messages'],
-      ['will have text \'View your unread messages\' when there are only unread GP messages', true, false, 'View your unread messages'],
-      ['will have text \'View your messages\' when there are no unread messages', false, false, 'View your messages'],
+      ['will have text \'View your unread messages\' when there are unread messages', true, true, 'View your unread messages', false],
+      ['will have text \'View your unread messages\' when there are only unread app messages', false, true, 'View your unread messages', false],
+      ['will have text \'View your messages\' when there are only unread GP messages and OnDemand is enabled', true, false, 'View your messages', true],
+      ['will have text \'View your unread messages\' when there are only unread GP messages and OnDemand is disabled', true, false, 'View your unread messages', false],
+      ['will have text \'View your messages\' when there are no unread messages', false, false, 'View your messages', false],
     ]).it('%s',
-      (_, hasUnreadGpMessages, hasUnreadAppMessages, expectedText) => {
-        wrapper = mountAs({ hasUnreadAppMessages, hasUnreadGpMessages });
+      (_, hasUnreadGpMessages, hasUnreadAppMessages, expectedText, onDemandEnabled) => {
+        wrapper = mountAs({ hasUnreadAppMessages, hasUnreadGpMessages, onDemandEnabled });
         messagesLink = getMessagesLink(wrapper);
         expect(messagesLink.exists()).toBe(true);
         expect(messagesLink.text()).toBe(expectedText);

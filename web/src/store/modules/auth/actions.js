@@ -90,8 +90,10 @@ const updateSessionStore = (self, data, updateType) => {
     dateOfBirth,
     accessToken,
     proofLevel,
+    im1MessagingEnabled,
   } = data;
   self.dispatch('session/hideExpiryMessage');
+  self.dispatch('practiceSettings/setIm1MessagingEnabled', im1MessagingEnabled);
   self.dispatch(updateType, {
     name,
     durationSeconds: sessionTimeout,

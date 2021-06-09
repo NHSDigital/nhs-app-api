@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session.Models
 
         public string AccessToken { get; set; }
 
-        public bool Im1MessagingEnabled { get; set; }
+        public bool? Im1MessagingEnabled { get; set; } = false;
 
         public string UserSessionCreateReferenceCode { get; set; }
 

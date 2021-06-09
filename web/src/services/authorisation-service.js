@@ -51,7 +51,8 @@ class AuthorisationService {
 
     this.nativeCidRedirectUri = environment.NATIVE_CID_REDIRECT_URI + authReturn;
     this.webCidRedirectUri = environment.CID_REDIRECT_URI + authReturn;
-    this.nativeCidOnDemandReturnRedirectUri = environment.NATIVE_CID_REDIRECT_URI + onDemandReturn;
+    this.nativeCidOnDemandGpReturnRedirectUri = environment.NATIVE_CID_REDIRECT_URI
+      + onDemandReturn;
     this.webCidOnDemandGpReturnRedirectUri = environment.CID_REDIRECT_URI + onDemandReturn;
     this.cidClientId = environment.CID_CLIENT_ID;
     this.cidAuthEndpoint = environment.CID_AUTH_ENDPOINT_URL;

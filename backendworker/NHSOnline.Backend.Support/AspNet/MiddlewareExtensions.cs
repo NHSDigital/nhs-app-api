@@ -25,18 +25,14 @@ namespace NHSOnline.Backend.Support.AspNet
                         .SetIsOriginAllowed(_ => true) // Cannot combine * origin with allow credentials
                         .AllowAnyMethod()
                         .AllowAnyHeader()
-                        .AllowCredentials()
-                        .WithExposedHeaders(
-                            Constants.HttpHeaders.Im1MessagingEnabled)),
+                        .AllowCredentials()),
                 { } => app.UseCors(
                     builder => builder
                         .WithOrigins(origins)
                         .SetIsOriginAllowedToAllowWildcardSubdomains()
                         .AllowAnyMethod()
                         .AllowAnyHeader()
-                        .AllowCredentials()
-                        .WithExposedHeaders(
-                            Constants.HttpHeaders.Im1MessagingEnabled)),
+                        .AllowCredentials()),
                 null => app
             };
         }

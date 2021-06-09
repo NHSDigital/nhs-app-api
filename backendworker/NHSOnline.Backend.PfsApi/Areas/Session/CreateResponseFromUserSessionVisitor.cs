@@ -1,6 +1,7 @@
 using System;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.GpSession;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 using NHSOnline.Backend.Support.Settings;
 
@@ -33,7 +34,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             _userSessionResponse.UserSessionCreateReferenceCode =
                 userSession.GpUserSession.Accept(new GpUserSessionReferenceCodeVisitor());
             _userSessionResponse.NhsNumber = userSession.NhsNumber;
-            _userSessionResponse.Im1MessagingEnabled = userSession.GpUserSession?.Im1MessagingEnabled ?? false;
+
+            _userSessionResponse.Im1MessagingEnabled = userSession.GpUserSession?.Im1MessagingEnabled;
 
             return _userSessionResponse;
         }

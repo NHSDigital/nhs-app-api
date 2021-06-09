@@ -56,7 +56,6 @@ namespace NHSOnline.Backend.Support
             public const string JavascriptDisabled = NhsoPrefix + "Javascript-Disabled";
             public const string PatientId = NhsoPrefix + "Patient-Id";
             public const string UserAgent = "User-Agent";
-            public const string Im1MessagingEnabled = NhsoPrefix + "Im1-Messaging-Enabled";
         }
 
         public static class HttpContextItems

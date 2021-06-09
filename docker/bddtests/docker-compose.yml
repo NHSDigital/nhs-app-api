@@ -33,11 +33,13 @@ services:
   web.local.bitraft.io:
     env_file:
      - ./docker/bddtests/env/web.env
+     - ./docker/bddtests/env/gp_session_connectivity.env
 
   pfs.local.bitraft.io:
     env_file:
       - ./docker/bddtests/env/emis_connectivity.env
       - ./docker/bddtests/env/ndop_connectivity.env
+      - ./docker/bddtests/env/gp_session_connectivity.env
       - ./docker/bddtests/env/proxy_access.env
       - ./docker/bddtests/env/pfs.env
     secrets:
@@ -47,6 +49,7 @@ services:
   cid.local.bitraft.io:
     env_file:
       - ./docker/bddtests/env/emis_connectivity.env
+      - ./docker/bddtests/env/gp_session_connectivity.env
       - ./docker/bddtests/env/proxy_access.env
 
   users.local.bitraft.io:

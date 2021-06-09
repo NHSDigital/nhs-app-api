@@ -22,6 +22,7 @@ class NavigationStepDefinitions {
 
         GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.set(true)
         GlobalSerenityHelpers.LOGIN_REDIRECT_URI.set(Config.instance.cidNativeRedirectUri)
+        GlobalSerenityHelpers.GP_SESSION_REDIRECT_URI.set(Config.instance.cidNativeGpSessionRedirectUri)
     }
 
     @When("^I navigate to the (.*) page$")

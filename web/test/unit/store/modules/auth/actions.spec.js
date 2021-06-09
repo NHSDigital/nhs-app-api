@@ -16,12 +16,14 @@ describe('actions', () => {
   const odsCode = 'A12345';
   const sessionTimeout = 1200;
   const token = 'sdfdhgmbnrdstgjxjcbv';
+  const im1MessagingEnabled = true;
   const postSessionResponse = {
     data: {
       odsCode,
       name,
       sessionTimeout,
       token,
+      im1MessagingEnabled,
     },
   };
   let commit;
@@ -163,6 +165,10 @@ describe('actions', () => {
       expect(actions.dispatch).toHaveBeenCalledWith('session/hideExpiryMessage');
     });
 
+    it('will update im1MessagingEnabled', () => {
+      expect(actions.dispatch).toHaveBeenCalledWith('practiceSettings/setIm1MessagingEnabled', im1MessagingEnabled);
+    });
+
     it('will hide the expiry message', () => {
       expect(actions.dispatch).toHaveBeenCalledWith('session/startValidationChecking');
     });
@@ -204,6 +210,10 @@ describe('actions', () => {
 
     it('will hide start validation checking', () => {
       expect(actions.dispatch).toHaveBeenCalledWith('session/hideExpiryMessage');
+    });
+
+    it('will update im1MessagingEnabled', () => {
+      expect(actions.dispatch).toHaveBeenCalledWith('practiceSettings/setIm1MessagingEnabled', im1MessagingEnabled);
     });
 
     it('will hide the expiry message', () => {

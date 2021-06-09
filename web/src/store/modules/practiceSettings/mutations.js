@@ -13,6 +13,6 @@ export default {
     })(state);
   },
   [SET_IM1_MESSAGING_ENABLED](state, enabled) {
-    state.im1MessagingEnabled = !!enabled;
+    state.im1MessagingEnabled = enabled;
   },
 };
