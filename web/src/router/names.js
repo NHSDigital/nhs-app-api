@@ -273,6 +273,8 @@ export const findByRedirectEnum = (name) => {
       return ADVICE_NAME;
     case AppPage.MESSAGES:
       return MESSAGES_NAME;
+    case AppPage.SETTINGS:
+      return MORE_NAME;
     case AppPage.MORE:
       return MORE_NAME;
     default:
