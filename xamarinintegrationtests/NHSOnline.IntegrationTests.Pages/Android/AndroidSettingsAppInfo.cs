@@ -11,7 +11,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidLabel Title => AndroidLabel.WithText(_driver, "App info");
 
-        private AndroidLabel Notifications => AndroidLabel.WithText(_driver, "App notifications");
+        private AndroidLabel Notifications => AndroidLabel.WithText(_driver, "Notifications");
 
         public static AndroidSettingsAppInfo AssertOnPage(IAndroidDriverWrapper driver)
         {

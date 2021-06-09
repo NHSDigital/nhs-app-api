@@ -14,7 +14,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         }
 
         private AndroidImageButton CameraShutterButton => AndroidImageButton.WithDescription(_driver,
-            "Shutter");
+            "Take photo");
 
         private AndroidImageButton DoneButton => AndroidImageButton.WithDescription(_driver,
             "Done");

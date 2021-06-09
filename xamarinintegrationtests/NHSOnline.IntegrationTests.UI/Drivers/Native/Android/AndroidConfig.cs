@@ -9,19 +9,23 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
     internal sealed class AndroidConfig
     {
         public string App { get; set; } = $"{Dns.GetHostName()}-android";
-        public string Device { get; set; } = "Google Pixel 2";
-        public string OperatingSystemVersion { get; set; } = "8.0";
+        public string Device { get; set; } = "Google Pixel 3";
+        public string OperatingSystemVersion { get; set; } = "9.0";
 
         public string? PlayStorePassword { get; set; }
 
         public string PlayStoreUser { get; set; } = "nhsappbrowserstack@gmail.com";
 
-        internal void SetCapabilities(AppiumOptions options)
+        internal void SetBaseCapabilities(AppiumOptions options)
         {
             options.AddAdditionalCapability("app", App);
             options.AddAdditionalCapability("device", Device);
             options.AddAdditionalCapability("os_version", OperatingSystemVersion);
             options.AddAdditionalCapability("disableAnimations", true);
+        }
+
+        internal void SetSignInToGoogleCapabilitiy(AppiumOptions options)
+        {
             options.AddAdditionalCapability("browserstack.appStoreConfiguration", new Dictionary<string, string> {{ "username", PlayStoreUser },{ "password", GetUserPassword() }});
         }
 

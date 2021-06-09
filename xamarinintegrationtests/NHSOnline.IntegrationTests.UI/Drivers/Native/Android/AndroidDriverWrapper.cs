@@ -16,7 +16,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         private readonly NativeDriverContext _nativeDriverContext;
         private readonly BrowserStackConfig _browserStackConfig;
 
-        internal AndroidDriverWrapper(string testName, TestLogs logs)
+        internal AndroidDriverWrapper(string testName, TestLogs logs, AndroidBrowserStackCapability capabilities)
         {
             Logs = logs;
 
@@ -30,8 +30,13 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             };
 
             _browserStackConfig.SetCapabilities(options);
-            androidConfig.SetCapabilities(options);
+            androidConfig.SetBaseCapabilities(options);
             logs.TestDevice(androidConfig.Device, androidConfig.OperatingSystemVersion);
+
+            if (capabilities.HasFlag(AndroidBrowserStackCapability.SignInToGoogle))
+            {
+                androidConfig.SetSignInToGoogleCapabilitiy(options);
+            }
 
             options.AddAdditionalCapability("name", testName);
 

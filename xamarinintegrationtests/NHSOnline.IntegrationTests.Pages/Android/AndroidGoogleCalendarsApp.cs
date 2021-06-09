@@ -27,15 +27,15 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidEditText BodyText => AndroidEditText.WithText(_driver, "Test Body");
 
-        private AndroidEditText LocationText => AndroidEditText.WithText(_driver, "Test Location");
+        private AndroidLabel LocationText => AndroidLabel.WithText(_driver, "Test Location");
 
-        private AndroidLabel StartDateText => AndroidLabel.WithContentDescription(_driver, "Start date: Wednesday, Jan 2, 2030");
+        private AndroidCalendarDateTimeLabel StartDateTimeText => AndroidCalendarDateTimeLabel.WithContentDescription(_driver, "Start date: Wed, Jan 2, 2030");
 
-        private AndroidLabel StartTimeText => AndroidLabel.WithContentDescription(_driver, "Start time: 1:00 PM");
+        private AndroidCalendarDateTimeLabel StartTimeText => AndroidCalendarDateTimeLabel.WithContentDescription(_driver, "Start time: 1:00 PM");
 
-        private AndroidLabel EndDateText => AndroidLabel.WithContentDescription(_driver, "End date: Wednesday, Jan 2, 2030");
+        private AndroidCalendarDateTimeLabel EndDateTimeText => AndroidCalendarDateTimeLabel.WithContentDescription(_driver, "End date: Wed, Jan 2, 2030");
 
-        private AndroidLabel EndTimeText => AndroidLabel.WithContentDescription(_driver, "End time: 1:10 PM");
+        private AndroidCalendarDateTimeLabel EndTimeText => AndroidCalendarDateTimeLabel.WithContentDescription(_driver, "End time: 1:10 PM");
 
         public static AndroidGoogleCalendarsApp AssertOnPage(IAndroidDriverWrapper driver)
         {
@@ -73,9 +73,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             BodyText.AssertVisible();
             LocationText.AssertVisible();
 
-            StartDateText.AssertVisible();
+            StartDateTimeText.AssertVisible();
             StartTimeText.AssertVisible();
-            EndDateText.AssertVisible();
+            EndDateTimeText.AssertVisible();
             EndTimeText.AssertVisible();
         }
     }

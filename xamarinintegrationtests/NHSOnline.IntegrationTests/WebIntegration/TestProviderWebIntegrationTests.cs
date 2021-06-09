@@ -84,7 +84,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .PageContent.AssertFileSelected();
         }
 
-        [NhsAppAndroidTest]
+        [NhsAppAndroidTest(AndroidBrowserStackCapability.SignInToGoogle)]
         public void APatientWithProofLevelNineCanAddAnEventToTheCalendarOnTheTestProviderCalendarScreenAndroid(
             IAndroidDriverWrapper driver)
         {
@@ -158,7 +158,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertDetailsArePassed();
         }
 
-        [NhsAppAndroidTest]
+        [NhsAppAndroidTest(AndroidBrowserStackCapability.SignInToGoogle)]
         public void APatientWithProofLevelNineTryingToCallAnInvalidDateRangeOnTheTestProviderCalendarScreenIsShownAndErrorDialogCanBeDismissedAndroid(
             IAndroidDriverWrapper driver)
         {
@@ -232,7 +232,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver);
         }
 
-        [NhsAppAndroidTest]
+        [NhsAppAndroidTest(AndroidBrowserStackCapability.SignInToGoogle)]
         public void APatientWithProofLevelNineTryingToCallAnInvalidDateRangeOnTheTestProviderCalendarScreenIsShownAnErrorDialogAndCanAddedManuallyAndroid(
             IAndroidDriverWrapper driver)
         {
