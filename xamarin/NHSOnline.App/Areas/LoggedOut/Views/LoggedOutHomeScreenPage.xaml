@@ -36,46 +36,6 @@
                 <RowDefinition Height="25" />
             </Grid.RowDefinitions>
             
-            <BoxView HorizontalOptions="FillAndExpand"
-                     BackgroundColor="{StaticResource NhsUkYellow}"
-                     Grid.ColumnSpan="3">
-                <BoxView.GestureRecognizers>
-                    <TapGestureRecognizer 
-                        Command="{Binding NhsUkCovidConditionsServiceCommand, Source={x:Reference Name=Page}}" />
-                </BoxView.GestureRecognizers>
-            </BoxView>
-                
-            <Label Grid.Column="1"
-                   Grid.Row="0" 
-                   Padding="0,10,0,10"
-                   effects:AccessibilityEffect.ControlType="Button">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="Coronavirus (COVID-19)&#10;" 
-                                  FontFamily="Frutiger-Bold"
-                                  FontSize="Small" LineHeight="1" />
-                            <Span Text="Get information about coronavirus on NHS.UK"
-                                  FontFamily="Frutiger"
-                                  FontSize="Small" LineHeight="1.5" />
-                        </FormattedString>
-                    </Label.FormattedText>
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer 
-                            Command="{Binding NhsUkCovidConditionsServiceCommand, Source={x:Reference Name=Page}}" />
-                    </Label.GestureRecognizers>
-            </Label>
-            
-            <icons:IconArrowRight Grid.Row="0" 
-                                  Grid.Column="1" 
-                                  HeightRequest="20"
-                                  VerticalOptions="Center"
-                                  HorizontalOptions="End">
-                <icons:IconArrowRight.GestureRecognizers>
-                    <TapGestureRecognizer 
-                        Command="{Binding NhsUkCovidConditionsServiceCommand, Source={x:Reference Name=Page}}" />
-                </icons:IconArrowRight.GestureRecognizers>
-            </icons:IconArrowRight>
-            
             <StackLayout Grid.Row="1" 
                          Grid.Column="1" 
                          HorizontalOptions="End"

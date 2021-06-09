@@ -63,7 +63,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
                 .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
                 .RegisterPermanentHandler(ViewOnDisappearing, (view, handler) => view.Disappearing = handler)
                 .RegisterHandler(ViewOnLoginRequested, (view, handler) => view.LoginRequested = handler)
-                .RegisterHandler(LoadCovidConditionsUrl, (view, handler) => view.NhsUkCovidConditionsServicePageRequested = handler)
                 .RegisterHandler(LoadLoginHelpUrl, (view, handler) => view.NhsUkLoginHelpServicePageRequested = handler)
                 .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler)
                 .RegisterHandler(ResetAndShowErrorRequested, (view, handler) => view.ResetAndShowErrorRequested = handler)
@@ -165,14 +164,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async Task ShowBiometricLoginPermanentlyLockedOut()
             => await _biometricLoginErrorPageDispatcher.ShowBiometricLoginPermanentlyLockedOut().PreserveThreadContext();
-
-        private async Task LoadCovidConditionsUrl()
-        {
-            Logger.LogInformation("Accessing covid conditions url");
-            await _browserOverlay
-                .OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkCovidConditionsUrl)
-                .PreserveThreadContext();
-        }
 
         private async Task LoadLoginHelpUrl()
         {

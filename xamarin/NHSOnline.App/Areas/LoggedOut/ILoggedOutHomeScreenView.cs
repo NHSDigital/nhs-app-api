@@ -11,7 +11,6 @@ namespace NHSOnline.App.Areas.LoggedOut
             Func<Task>? Appearing { get; set; }
             Func<Task>? Disappearing { get; set; }
             Func<Task>? LoginRequested { get; set; }
-            Func<Task>? NhsUkCovidConditionsServicePageRequested { get; set; }
             Func<Task>? NhsUkLoginHelpServicePageRequested { get; set; }
             Func<Task>? BackRequested { get; set; }
             Func<Task>? ResetAndShowErrorRequested { get; set; }

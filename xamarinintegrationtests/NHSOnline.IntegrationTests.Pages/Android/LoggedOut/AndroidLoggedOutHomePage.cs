@@ -8,9 +8,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         private readonly IAndroidDriverWrapper _driver;
 
         private AndroidLoggedOutHomePage(IAndroidDriverWrapper driver) => _driver = driver;
-
-        private AndroidBanner CovidConditions => AndroidBanner.WithText(_driver, "Coronavirus (COVID-19)\nGet information about coronavirus on NHS.UK");
-
+        
         private AndroidLabel AccessServicesText => AndroidLabel.WithText(_driver, "Access your NHS services");
 
         private AndroidLabel ContinueButton => AndroidLabel.WithText(_driver, "Continue with NHS login");
@@ -26,17 +24,12 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         public void AssertPageElements()
         {
-            CovidConditions.AssertVisible();
             AccessServicesText.AssertVisible();
             ContinueButton.AssertVisible();
             HelpIcon.AssertVisible();
         }
 
-        public void AssertCovidBannerPresent() => CovidConditions.AssertVisible();
-
         public void AssertHelpIconPresent() => HelpIcon.AssertVisible();
-
-        public void GetInformationAboutCoronavirus() => CovidConditions.Click();
 
         public void GetHelp() => HelpIcon.Click();
 
