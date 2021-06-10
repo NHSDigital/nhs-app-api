@@ -60,7 +60,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppIOSTest]
-        [Ignore("Disabling as we need to fix this but we need to get test performance back")]
+        [Ignore("Disabling as on 11 pro it clicks wrong menu item (one below)")]
         public void APatientWithProofLevelNineCanAccessNhsLoginSettingsFromMoreScreenIOS(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()

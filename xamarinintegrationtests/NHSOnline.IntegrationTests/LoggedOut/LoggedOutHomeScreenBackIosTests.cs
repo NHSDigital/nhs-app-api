@@ -23,7 +23,6 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         }
 
         [NhsAppIOSTest]
-        [Ignore("Disabling as we need to fix this but we need to get test performance back")]
         public void APatientCanContinueToLoginAfterSwipingBackOnTheLoggedOutHomeScreenIos(IIOSDriverWrapper driver)
         {
             IOSLoggedOutHomePage

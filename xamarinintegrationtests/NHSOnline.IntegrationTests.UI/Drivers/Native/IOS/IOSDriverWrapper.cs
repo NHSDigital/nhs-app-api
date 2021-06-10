@@ -78,10 +78,10 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
         {
             _driver.ExecuteScript("mobile: dragFromToForDuration", new Dictionary<string, string>
             {
-                { "duration", "5" },
+                { "duration", "8" },
                 { "fromX", "0" },
                 { "fromY", "50" },
-                { "toX", "101" },
+                { "toX", "151" },
                 { "toY", "50" }
             });
             return new WaitForAction();

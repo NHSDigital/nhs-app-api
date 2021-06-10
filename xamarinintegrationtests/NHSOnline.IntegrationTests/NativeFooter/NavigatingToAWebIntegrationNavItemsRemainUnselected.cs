@@ -39,7 +39,7 @@ namespace NHSOnline.IntegrationTests.NativeFooter
         }
 
         [NhsAppIOSTest]
-        [Ignore("Disabling as we need to fix this but we need to get test performance back")]
+        [Ignore("Disabling as on 11 pro it clicks wrong menu item (one below)")]
         public void APatientSeesTheNavigationFooterRemainDeselectedWhenNavigatingToAWebIntegrationIOS(
             IIOSDriverWrapper driver)
         {

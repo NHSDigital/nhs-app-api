@@ -13,7 +13,6 @@ namespace NHSOnline.IntegrationTests.Notifications
     public class NavigateToNotificationSettings
     {
         [NhsAppAndroidTest]
-        [Ignore("Disabling as we need to fix this but we need to get test performance back")]
         public void APatientCanNavigateToDeviceSettingsFromNotificationsPageAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new KeyboardPatient()
@@ -40,11 +39,7 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             AndroidSettingsNotifications
                 .AssertOnPage(driver)
-                .AssertPageContent()
-                .NavigateBack();
-
-            AndroidNotificationsPage
-                .AssertOnPage(driver);
+                .AssertPageContent();
         }
 
         [NhsAppAndroidTest]

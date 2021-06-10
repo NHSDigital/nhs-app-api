@@ -14,7 +14,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         }
 
         private AndroidImageButton CameraShutterButton => AndroidImageButton.WithDescription(_driver,
-            "Take photo");
+            "Take photo", "Shutter");
 
         private AndroidImageButton DoneButton => AndroidImageButton.WithDescription(_driver,
             "Done");
@@ -22,13 +22,13 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         public static AndroidCamera AssertDisplayed(IAndroidDriverWrapper driver)
         {
             var camera = new AndroidCamera(driver);
-            camera.CameraShutterButton.AssertVisible();
+            camera.CameraShutterButton.AssertEitherVisible();
             return camera;
         }
 
         public AndroidCamera TakePhoto()
         {
-            CameraShutterButton.Click();
+            CameraShutterButton.ClickEither();
             return this;
         }
 

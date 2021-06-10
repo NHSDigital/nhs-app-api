@@ -19,11 +19,9 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         private IOSTextView BodyText => IOSTextView.WithText(_driver, "Test Body").ScrollIntoView();
 
-        private IOSCell StartDateText => IOSCell.WithLabel(_driver, "Starts, 2 Jan 2030, 13:00");
+        private IOSStartDateTime StartDateText => IOSStartDateTime.WithLabel(_driver, "Starts", "Jan", "2", "2030", "13:00");
 
-        private IOSCell AlternateStartDateText => IOSCell.WithLabel(_driver, "Starts, 2. Jan 2030, 13:00");
-
-        private IOSCell EndDateText => IOSCell.WithLabel(_driver, "Ends, 13:10");
+        private IOSEndTime EndTimeText => IOSEndTime.WithLabel(_driver, "Ends", "13:10");
 
         public static IOSCalendarsApp AssertOnPage(IIOSDriverWrapper driver)
         {
@@ -38,16 +36,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             BodyText.AssertVisible();
             LocationText.AssertVisible();
 
-            try
-            {
-                StartDateText.AssertVisible();
-            }
-            catch (AssertFailedException)
-            {
-                AlternateStartDateText.AssertVisible();
-            }
-
-            EndDateText.AssertVisible();
+            StartDateText.AssertVisible();
+            EndTimeText.AssertVisible();
         }
     }
 }

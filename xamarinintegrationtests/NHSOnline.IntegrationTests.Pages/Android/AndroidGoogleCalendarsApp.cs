@@ -29,13 +29,17 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidLabel LocationText => AndroidLabel.WithText(_driver, "Test Location");
 
-        private AndroidCalendarDateTimeLabel StartDateTimeText => AndroidCalendarDateTimeLabel.WithContentDescription(_driver, "Start date: Wed, Jan 2, 2030");
+        private AndroidCalendarDateLabel StartDateText => AndroidCalendarDateLabel.WithContentDescription(_driver, "Start date","Jan"," 2 ", "2030");
 
-        private AndroidCalendarDateTimeLabel StartTimeText => AndroidCalendarDateTimeLabel.WithContentDescription(_driver, "Start time: 1:00 PM");
+        private AndroidCalendarDateLabel StartDateTextFallback => AndroidCalendarDateLabel.WithContentDescription(_driver, "Start date","Jan"," 2,", "2030");
 
-        private AndroidCalendarDateTimeLabel EndDateTimeText => AndroidCalendarDateTimeLabel.WithContentDescription(_driver, "End date: Wed, Jan 2, 2030");
+        private AndroidCalendarTimeLabel StartTimeText => AndroidCalendarTimeLabel.WithContentDescription(_driver, "Start time","1:00 PM", "13:00");
 
-        private AndroidCalendarDateTimeLabel EndTimeText => AndroidCalendarDateTimeLabel.WithContentDescription(_driver, "End time: 1:10 PM");
+        private AndroidCalendarDateLabel EndDateText => AndroidCalendarDateLabel.WithContentDescription(_driver, "End date", "Jan", " 2 ", "2030");
+
+        private AndroidCalendarDateLabel EndDateTextFallabck => AndroidCalendarDateLabel.WithContentDescription(_driver, "End date", "Jan", " 2,", "2030");
+
+        private AndroidCalendarTimeLabel EndTimeText => AndroidCalendarTimeLabel.WithContentDescription(_driver, "End time","1:10 PM", "13:10");
 
         public static AndroidGoogleCalendarsApp AssertOnPage(IAndroidDriverWrapper driver)
         {
@@ -73,9 +77,26 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             BodyText.AssertVisible();
             LocationText.AssertVisible();
 
-            StartDateTimeText.AssertVisible();
+            try
+            {
+                StartDateText.AssertVisible();
+            }
+            catch (AssertFailedException)
+            {
+                StartDateTextFallback.AssertVisible();
+            }
+
             StartTimeText.AssertVisible();
-            EndDateTimeText.AssertVisible();
+
+            try
+            {
+                EndDateText.AssertVisible();
+            }
+            catch (AssertFailedException)
+            {
+                EndDateTextFallabck.AssertVisible();
+            }
+
             EndTimeText.AssertVisible();
         }
     }
