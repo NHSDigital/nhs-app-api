@@ -39,9 +39,15 @@ header {
       }
     }
   }
-  
+
   .menuButton {
     margin-right: 0;
+  }
+
+  @media (max-width: 989px) {
+    .menuButton {
+      display: inline;
+    }
   }
 
   @include fromTablet() {
