@@ -8,4 +8,5 @@ export const AppPage = {
   MESSAGES: 'messages',
   SETTINGS: 'settings',
   MORE: 'more',
+  UPLIFT: 'uplift',
 };

@@ -277,6 +277,8 @@ export const findByRedirectEnum = (name) => {
       return MORE_NAME;
     case AppPage.MORE:
       return MORE_NAME;
+    case AppPage.UPLIFT:
+      return UPLIFT_SILVER_INTEGRATION_NAME;
     default:
       return undefined;
   }
