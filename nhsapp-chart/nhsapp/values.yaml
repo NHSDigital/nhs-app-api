@@ -59,6 +59,7 @@ emisIPTrust: "13.73.180.243/32"
 emisApplicationID: "16C4B8A9-A6B1-4727-80E3-DA0C755CD6E7"
 
 fakeGpSystemEnabled: false
+fakeGpSupplierConfigPath: "/app/FakeGpSupplierConfig_ext.yml"
 webVueGlobalObject: false
 
 gpSessionOnDemandEnabled: false

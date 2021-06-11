@@ -29,7 +29,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\FakeGpSupplierConfig.yml">
+    <Content Include="..\FakeGpSupplierConfig_aos.yml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FakeGpSupplierConfig_ext.yml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FakeGpSupplierConfig_sandpit.yml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

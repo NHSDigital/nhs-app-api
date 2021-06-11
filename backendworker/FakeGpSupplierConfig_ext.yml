@@ -1,0 +1,10 @@
+---
+##
+# Config for Fake GP Supplier - NHS Login EXT
+#
+# Note: Users are grouped by purpose and keyed by NHS Number
+##
+defaultUsers:
+  # users in this group are cached in mongo and can be edited in real time
+  dynamic: {}
+  communal: {}

@@ -4,6 +4,7 @@ odsRemapMap: "G85075:X00100;G85672:X00100"
 cidHostname: auth.sandpit.signin.nhs.uk
 cidFidoHostname: uaf.sandpit.signin.nhs.uk
 cidSettingsHostName: settings.sandpit.signin.nhs.uk
+fakeGpSupplierConfigPath: "/app/FakeGpSupplierConfig_sandpit.yml"
 
 api:
   knownServicesOverrides:

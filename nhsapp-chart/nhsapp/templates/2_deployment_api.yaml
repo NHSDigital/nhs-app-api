@@ -131,7 +131,7 @@ spec:
           {{- end }}
         {{- end }}
         - name: FAKE_GP_SUPPLIER_CONFIG_PATH
-          value: "/app/FakeGpSupplierConfig.yml"
+          value: "{{ $.Values.fakeGpSupplierConfigPath }}"
         - name: NOMINATED_PHARMACY_ENABLED
           value: "{{ $.Values.nominatedpharmacyEnabled }}"
         - name: PHARMACY_API_RESULT_LIMIT

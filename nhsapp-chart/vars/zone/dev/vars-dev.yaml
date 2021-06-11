@@ -13,6 +13,7 @@ keyvaultTenantID: 50f6071f-bbfe-401a-8803-673748e629e2
 addAppointmentToCalendarEnabled: true
 emisCertEnabled: true
 fakeGpSystemEnabled: true
+fakeGpSupplierConfigPath: "/app/FakeGpSupplierConfig_ext.yml"
 nominatedpharmacyEnabled: true
 econsultEnabled: true
 messagesEnabled: true
