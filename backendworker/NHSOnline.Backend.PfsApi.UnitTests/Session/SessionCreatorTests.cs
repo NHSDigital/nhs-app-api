@@ -651,6 +651,47 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
         }
 
         [TestMethod]
+        public async Task CreateGpSessionOnDemand_Returns599_WhenCreateGpSession_ReturnsErrorResult()
+        {
+            // Arrange
+            var auditStub = ArrangeAudit();
+
+            Context.ArrangeAntiforgery();
+            Context.ArrangeCitizenIdService();
+            Context.ArrangeOdsCodeMassager();
+            Context.ArrangeGpSystemFactory();
+            Context.ArrangeSessionCacheService();
+
+            Context.Data.SessionConfigSettings.ProxyEnabled = true;
+
+            Context.Data.EmisUserSession.ProxyPatients = new List<EmisProxyUserSession>
+            {
+                new EmisProxyUserSession()
+            };
+
+            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Forbidden("blah"));
+
+            ArrangeMatchingNhsLoginIds();
+
+            var request = Context.Data.CreateGpSessionOnDemandRequest;
+            request.UserSession.GpUserSession = Context.Data.OnDemandGpSession;
+
+            // Act
+            var result = await CreateSystemUnderTest().CreateGpSessionOnDemand(request);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                var errorResult = result.Should().BeAssignableTo<CreateSessionResult.ErrorResult>().Subject;
+
+                errorResult.ErrorTypes.Category.Should().Be(ErrorCategory.Login);
+                errorResult.ErrorTypes.Prefix.Should().BeEquivalentTo("3u");
+                errorResult.ErrorTypes.SourceApi.Should().Be(SourceApi.None);
+                errorResult.ErrorTypes.StatusCode.Should().Be(599);
+            }
+        }
+
+        [TestMethod]
         public async Task CreateGpSessionOnDemand_NhsLoginIdMismatch_ReturnsErrorResult()
         {
             // Arrange

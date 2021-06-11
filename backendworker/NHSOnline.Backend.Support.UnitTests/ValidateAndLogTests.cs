@@ -1,26 +1,21 @@
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using Microsoft.Extensions.Logging;
 using Moq;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.Support.UnitTests
 {
     [TestClass]
     public sealed class ValidateAndLogTests
     {
-        private IFixture _fixture;
         private Mock<ILogger> _logger;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization());
-
-            _logger = _fixture.Freeze<Mock<ILogger>>();
+            _logger = new Mock<ILogger>();
         }
 
         [TestMethod]

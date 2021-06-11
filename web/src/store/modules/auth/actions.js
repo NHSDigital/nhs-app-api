@@ -2,6 +2,7 @@ import NativeApp from '@/services/native-app';
 import jwt from 'jwt-decode';
 import { LOGIN_PATH } from '@/router/paths';
 import { removeCookies, setCookie } from '@/lib/cookie-manager';
+import get from 'lodash/fp/get';
 import { AUTH_RESPONSE, INIT_AUTH, LOGOUT, UPDATE_CONFIG } from './mutation-types';
 
 const thirtySeconds = 30000;
@@ -50,11 +51,14 @@ const logoutCleanUp = ({ self }) => {
   removeSessionCookies(self);
 };
 
-const createSessionRequest = (state, rootState, code) => {
+const createSessionRequest = (state, rootState, nhsLoginResponse) => {
   const { codeVerifier, redirectUri: redirectUrl } = state.config || {};
   const request = {
     userSession: {
-      authCode: code,
+      authCode: get('code', nhsLoginResponse),
+      nhsLoginError: get('error', nhsLoginResponse),
+      nhsLoginErrorDescription: get('error_description', nhsLoginResponse),
+      nhsLoginErrorUri: get('error_uri', nhsLoginResponse),
       codeVerifier,
       redirectUrl,
     },
@@ -140,9 +144,9 @@ export default {
     }
     return cookieValue.accessToken;
   },
-  async handleAuthResponse({ commit, state, rootState }, code) {
+  async handleAuthResponse({ commit, state, rootState }, nhsLoginResponse) {
     try {
-      const request = createSessionRequest(state, rootState, code);
+      const request = createSessionRequest(state, rootState, nhsLoginResponse);
       const response = await this.app.$http.postV1Session(request);
 
       updateSessionStore(this, response.data, 'session/setInfo');
@@ -154,9 +158,9 @@ export default {
       cleanupSession({ self: this });
     }
   },
-  async handleGpOnDemandResponse({ commit, state, rootState }, code) {
+  async handleGpOnDemandResponse({ commit, state, rootState }, nhsLoginResponse) {
     try {
-      const request = createSessionRequest(state, rootState, code);
+      const request = createSessionRequest(state, rootState, nhsLoginResponse);
       const response = await this.app.$http.putV1SessionGpSessionOnDemand(request);
 
       updateSessionStore(this, response.data, 'session/updateInfo');

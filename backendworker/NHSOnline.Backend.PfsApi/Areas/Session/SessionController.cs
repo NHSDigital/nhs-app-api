@@ -78,6 +78,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 }
 
                 var validator = new SessionValidator(_logger);
+                validator.LogErrorMessages(model);
 
                 if (!validator.IsPostValid(model))
                 {
@@ -141,16 +142,21 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 }
 
                 var validator = new SessionValidator(_logger);
+                validator.LogErrorMessages(model);
 
                 if (!validator.IsPostValid(model))
                 {
-                    return _errorResultBuilder.BuildResult(new ErrorTypes.LoginBadRequest());
+                    return _errorResultBuilder.BuildResult(new ErrorTypes.NhsLoginSSoRequest());
                 }
 
                 var csrfToken = _antiforgery.GetTokens(HttpContext).RequestToken;
                 var request = new CreateGpSessionOnDemandRequest(p9UserSession, model, csrfToken, HttpContext);
 
                 var result = await _sessionCreator.CreateGpSessionOnDemand(request);
+                if (result is CreateSessionResult.ErrorResult)
+                {
+                    return _errorResultBuilder.BuildResult(new ErrorTypes.GPSessionUnavailable());
+                }
 
                 var referrer = "";
 

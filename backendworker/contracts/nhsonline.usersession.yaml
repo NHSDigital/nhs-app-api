@@ -216,6 +216,15 @@ components:
         referrer:
           type: string
           description: Where the app was referred to the user
+        nhsLoginError:
+          type: string
+          description: An error code.
+        nhsLoginErrorDescription:
+          type: string
+          description: Human-readable ASCII encoded text description of the error.
+        nhsLoginErrorUri:
+          type: string
+          description: URI of a web page that includes additional information about the error.    
     UserSessionResponse:
       type: object
       properties:

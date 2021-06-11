@@ -25,7 +25,7 @@ export default {
     if (appVersion) {
       this.$store.dispatch('appVersion/updateWebVersion', appVersion);
     }
-    await this.$store.dispatch('auth/handleAuthResponse', route.query.code);
+    await this.$store.dispatch('auth/handleAuthResponse', route.query);
     if (isEmpty(this.$store.state.errors.apiErrors)) {
       const query = route.query.state.length > 1
         ? { [REDIRECT_PARAMETER]: route.query.state }

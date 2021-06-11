@@ -94,6 +94,7 @@ describe('actions', () => {
         postV1PatientAuthorizationAccessTokenRefresh: jest.fn(() =>
           Promise.resolve({ token: refreshedToken })),
         postV1Session: jest.fn(() => Promise.resolve(postSessionResponse)),
+        putV1SessionGpSessionOnDemand: jest.fn(() => Promise.resolve(postSessionResponse)),
         deleteV1Session: jest.fn(() => Promise.resolve()),
       },
       $router: {
@@ -146,7 +147,7 @@ describe('actions', () => {
           referrer: 'test',
         },
       };
-      await actions.handleAuthResponse({ commit, state, rootState }, '123');
+      await actions.handleAuthResponse({ commit, state, rootState }, { code: '123' });
     });
 
     it('will set the session info from the received session timeout and the response', () => {
@@ -174,6 +175,50 @@ describe('actions', () => {
       expect(commit).toHaveBeenCalledWith(AUTH_RESPONSE, postSessionResponse.data);
     });
   });
+
+
+  describe('handle gp session on demand response', () => {
+    const nhsLoginResponse = {
+      code: '123',
+      error: 'an error',
+      error_description: 'error desc',
+      error_uri: 'error url',
+    };
+    beforeEach(async () => {
+      const rootState = {
+        device: {
+          referrer: 'test',
+        },
+      };
+      await actions.handleGpOnDemandResponse({ commit, state, rootState }, nhsLoginResponse);
+    });
+
+    it('will set the session info from the received session timeout and the response', () => {
+      expect(actions.dispatch).toHaveBeenCalledWith('session/updateInfo', {
+        name,
+        durationSeconds: sessionTimeout,
+        token,
+        gpOdsCode: odsCode,
+      });
+    });
+
+    it('will hide start validation checking', () => {
+      expect(actions.dispatch).toHaveBeenCalledWith('session/hideExpiryMessage');
+    });
+
+    it('will hide the expiry message', () => {
+      expect(actions.dispatch).toHaveBeenCalledWith('session/startValidationChecking');
+    });
+
+    it('will remove the "nhso.auth" cookie', () => {
+      expect(actions.$cookies.remove).toHaveBeenCalledWith('nhso.auth');
+    });
+
+    it('will commit the AUTH_RESPONSE', () => {
+      expect(commit).toHaveBeenCalledWith(AUTH_RESPONSE, postSessionResponse.data);
+    });
+  });
+
 
   describe('ensureAccessToken', () => {
     let expiryDate;

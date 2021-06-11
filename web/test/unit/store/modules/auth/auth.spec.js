@@ -91,7 +91,14 @@ describe('actions', () => {
 
   describe('handle Gp On Demand Response', () => {
     it('will update the info from the data received from the server', () => actions
-      .handleGpOnDemandResponse({ commit, state, rootState }, { code: '123' })
+      .handleGpOnDemandResponse(
+        { commit, state, rootState },
+        { code: '123',
+          error: 'an error',
+          error_description: 'error desc',
+          error_uri: 'error url',
+        },
+      )
       .then(() => {
         const updateInfoCall = find(x => x[0] === 'session/updateInfo')(actions.dispatch.mock.calls);
         expect(updateInfoCall).not.toBeUndefined();

@@ -26,6 +26,15 @@ namespace NHSOnline.Backend.Support
             public override int StatusCode => StatusCodes.Status400BadRequest;
         }
 
+        public class NhsLoginSSoRequest : ErrorTypes
+        {
+            public override string Prefix => "3x";
+
+            public override ErrorCategory Category => ErrorCategory.Login;
+
+            public override int StatusCode => Constants.CustomHttpStatusCodes.Status597NhsLoginSsoError;
+        }
+
         public class LoginForbidden : ErrorTypes
         {
             public override string Prefix => "3c";
@@ -66,8 +75,6 @@ namespace NHSOnline.Backend.Support
 
         public class GPSessionRequired: ErrorTypes
         {
-           // Although not needed (i.e. never seen by the end user), we need to implement Prefix from the
-           // abstract base class
             public override string Prefix => "3o";
 
             public override ErrorCategory Category => ErrorCategory.None;

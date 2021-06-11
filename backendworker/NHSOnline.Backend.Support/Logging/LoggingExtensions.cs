@@ -27,10 +27,19 @@ namespace NHSOnline.Backend.Support.Logging
 
         public static void LogInformationKeyValuePairs(this ILogger logger, string title, IDictionary<string, string> kvp)
         {
+            logger.LogInformation(BuildKeyValuePairsMessage(title, kvp));
+        }
+
+        public static void LogWarningKeyValuePairs(this ILogger logger, string title, IDictionary<string, string> kvp)
+        {
+            logger.LogWarning(BuildKeyValuePairsMessage(title, kvp));
+        }
+
+        private static string BuildKeyValuePairsMessage(string title, IDictionary<string, string> kvp)
+        {
             var items = kvp.Select(x =>
                 $"{x.Key}={x.Value.EnquoteStringIfItContainsWhitespace()}");
-            var message = $"{title}: {string.Join(" ", items)}";
-            logger.LogInformation(message);
+            return $"{title}: {string.Join(" ", items)}";
         }
 
         public static void LogAppointmentReasonInformation(this ILogger logger, string bookingReason)

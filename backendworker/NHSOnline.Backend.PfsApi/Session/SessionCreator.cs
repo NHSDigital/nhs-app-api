@@ -1,10 +1,7 @@
-using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.CitizenId.Models;
-using NHSOnline.Backend.GpSystems.SessionManager;
-using NHSOnline.Backend.PfsApi.Areas.Session;
 using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.PfsApi.GpSession;
 using NHSOnline.Backend.Support;
@@ -81,14 +78,16 @@ namespace NHSOnline.Backend.PfsApi.Session
             }
 
             request.UserSession.Im1ConnectionToken = GetIm1ConnectionToken(citizenIdSession);
-
             var supplier = ((OnDemandGpSession) request.UserSession.GpUserSession).SessionSupplier;
-            await _gpSessionCreator.RecreateGpSession(request.UserSession, supplier);
 
-            _httpContextAccessor.HttpContext?.Response.Headers.Add(Constants.HttpHeaders.Im1MessagingEnabled,
-                request.UserSession.GpUserSession.Im1MessagingEnabled.ToString().ToUpperInvariant());
+            var createGpSessionResult = await _gpSessionCreator.RecreateGpSession(request.UserSession, supplier);
 
-            return new CreateSessionResult.Success(request.UserSession);
+            if (createGpSessionResult is GpSessionRecreateResult.RecreatedResult)
+            {
+                return new CreateSessionResult.Success(request.UserSession);
+            }
+
+            return new CreateSessionResult.ErrorResult(new ErrorTypes.GPSessionUnavailable());
         }
 
         private static string GetIm1ConnectionToken(CitizenIdSessionResult citizenIdSessionResult)

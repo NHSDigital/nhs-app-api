@@ -25,7 +25,7 @@ export default {
     if (appVersion) {
       this.$store.dispatch('appVersion/updateWebVersion', appVersion);
     }
-    await this.$store.dispatch('auth/handleGpOnDemandResponse', route.query.code);
+    await this.$store.dispatch('auth/handleGpOnDemandResponse', route.query);
     if (isEmpty(this.$store.state.errors.apiErrors)) {
       await this.$store.dispatch('linkedAccounts/fetchPatientConfig');
 

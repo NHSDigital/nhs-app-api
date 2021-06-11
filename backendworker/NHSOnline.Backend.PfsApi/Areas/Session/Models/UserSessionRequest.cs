@@ -14,5 +14,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session.Models
         public string RedirectUrl { get; set; }
 
         public string Referrer { get; set; }
+
+        public string NhsLoginError { get; set; }
+
+        public string NhsLoginErrorDescription { get; set; }
+
+        public string NhsLoginErrorUri { get; set; }
     }
 }

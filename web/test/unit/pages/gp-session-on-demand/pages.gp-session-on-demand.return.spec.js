@@ -61,7 +61,7 @@ describe('on-demand-gp-return', () => {
   it('will set language from locale', async () => {
     wrapper = await mountPage({ shallow: true });
     expect(store.dispatch).toHaveBeenCalledWith('appVersion/init');
-    expect(store.dispatch).toHaveBeenCalledWith('auth/handleGpOnDemandResponse', 'randomcodefromnhslogin');
+    expect(store.dispatch).toHaveBeenCalledWith('auth/handleGpOnDemandResponse', router.currentRoute.query);
   });
 
   it('dispatch to terms and conditions with empty state', async () => {
