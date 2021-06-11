@@ -17,3 +17,9 @@ api:
     services__cid_access__url: https://access.sandpit.signin.nhs.uk
     services__cid_access__javaScriptInteractionMode: NhsLogin
     services__cid_idvm__url: https://idvm.sandpit.signin.nhs.uk
+    servicesV3__cid_settings__url: https://settings.sandpit.signin.nhs.uk
+    servicesV3__cid_account__url: https://account.sandpit.signin.nhs.uk
+    servicesV3__cid_auth__url: https://auth.sandpit.signin.nhs.uk
+    servicesV3__cid_uaf__url: https://uaf.sandpit.signin.nhs.uk
+    servicesV3__cid_access__url: https://access.sandpit.signin.nhs.uk
+    servicesV3__cid_idvm__url: https://idvm.sandpit.signin.nhs.uk

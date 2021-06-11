@@ -128,6 +128,22 @@ api:
     services__engage__url: https://nhsapp.engage.gp
     services__nhsd__url: https://www.coronavirus-record.service.nhs.uk
     services__netCompany__url: https://covid-status.service.nhsx.nhs.uk
+    servicesV3__ndop__url: https://app.your-data-matters.service.nhs.uk
+    servicesV3__cid_settings__url: https://settings.login.nhs.uk
+    servicesV3__cid_account__url: https://account.login.nhs.uk
+    servicesV3__cid_auth__url: https://auth.login.nhs.uk
+    servicesV3__cid_uaf__url: https://uaf.login.nhs.uk
+    servicesV3__cid_access__url: https://access.login.nhs.uk
+    servicesV3__cid_idvm__url: https://idvm.login.nhs.uk
+    servicesV3__ers__url: https://refer.nhs.uk
+    servicesV3__pkb__url: https://my.patientsknowbest.com
+    servicesV3__pkb__domains__1: http://my.patientsknowbest.com:443
+    servicesV3__substraktPatientPack__url: https://jump-point.production.substrakthealth.com
+    servicesV3__substraktPatientPack__domains__1: https://admin-request.production.substrakthealth.com
+    servicesV3__substraktPatientPack__domains__1: https://auth.production.substrakthealth.com
+    servicesV3__engage__url: https://nhsapp.engage.gp
+    servicesV3__nhsd__url: https://www.coronavirus-record.service.nhs.uk
+    servicesV3__netCompany__url: https://covid-status.service.nhsx.nhs.uk
 
 cid:
   imagePullPolicy: IfNotPresent

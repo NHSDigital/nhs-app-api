@@ -1,0 +1,48 @@
+openapi: 3.0.2
+info:
+  version: 3.0.1
+  title: NHS App Sub-API - KnownServices V3
+  description: NHS App Sub-API - endpoints pertaining to known services.
+paths:
+  /known-services:
+    get:
+      tags:
+        - knownservices
+      summary: Gets a collection of known services.
+      description: Gets a collection of known services.
+      responses:
+        "200":
+          description: Returns a collection of known services.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetKnownServicesResponseV3"
+        "500":
+          description: An unexpected error occurred processing the request.
+components:
+  schemas:
+    GetKnownServicesResponseV3:
+      type: object
+      properties:
+        knownServices:
+          type: array
+          description: Returns a list of known services for the NHS App.
+          items:
+            $ref: "#/components/schemas/KnownService"
+    KnownService:
+      type: object
+      properties:
+        id:
+          type: string
+        url:
+          type: string
+        domains:
+          type: array
+          items:
+            $ref: "#/components/schemas/Domain"
+        showThirdPartyWarning:
+          type: boolean
+        requiresAssertedLoginIdentity:
+          type: boolean
+    Domain:
+      type: string

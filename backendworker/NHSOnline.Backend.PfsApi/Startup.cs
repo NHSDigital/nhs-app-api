@@ -20,6 +20,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.NominatedPharmacy;
 using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
+using NHSOnline.Backend.PfsApi.Areas.KnownServices.Models;
 using NHSOnline.Backend.PfsApi.DependencyInjection;
 using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.PfsApi.Session;
@@ -142,7 +143,8 @@ namespace NHSOnline.Backend.PfsApi
             // Add functionality to inject IOptions<T>
             services.AddOptions();
 
-            services.ConfigureValidatableSetting<KnownServices>(Configuration);
+            services.ConfigureValidatableSetting<KnownServicesV2>(Configuration);
+            services.ConfigureValidatableSetting<KnownServicesV3>(Configuration);
             services.RegisterFakeUserConfiguration(Configuration);
         }
 
@@ -171,7 +173,7 @@ namespace NHSOnline.Backend.PfsApi
 
             app.UseEndpoints(b => {
                 b.MapHealthCheckEndpoints();
-                b.MapControllers();   
+                b.MapControllers();
             });
 
             _modularStartup.Configure(app, env);

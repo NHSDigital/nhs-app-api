@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Configuration
         private Mock<IConfigurationService> _mockDeviceConfigurationService;
         private Mock<ISupportedDeviceService> _mockSupportedDeviceService;
         private GetConfigurationQueryParameters _queryParameters;
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -29,10 +29,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Configuration
                 DeviceName = "name",
                 NativeAppVersion = "version"
             };
-            
+
             _mockDeviceConfigurationService = new Mock<IConfigurationService>();
             _mockSupportedDeviceService = new Mock<ISupportedDeviceService>();
-            
+
             _systemUnderTest = new ConfigurationController(
                 new Mock<ILogger<ConfigurationController>>().Object,
                 _mockSupportedDeviceService.Object,
@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Configuration
             _mockSupportedDeviceService.VerifyAll();
             result.Should().BeAssignableTo<OkObjectResult>();
         }
-        
+
         [TestMethod]
         public void Get_WhenServiceThrowsException_ReturnsInternalServerError()
         {
@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Configuration
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
-        
+
         [TestMethod]
         public void Get_DeviceDetailsNull_ReturnsBadRequest()
         {
@@ -86,20 +86,20 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Configuration
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
-        
+
         [TestMethod]
         public void GetV2_Returns_Success()
         {
             // Arrange
             var response = new GetConfigurationResultV2(
-                new List<string>(), 
-                new Uri("http://localhost/"), 
+                new List<string>(),
+                new Uri("http://localhost/"),
                 "min android version",
                 "max iOS version",
                 new List<RootService>());
-            
+
             _mockDeviceConfigurationService.Setup(x => x.GetConfiguration()).Returns(response);
-            
+
             // Act
             var result = _systemUnderTest.GetV2();
 

@@ -52,7 +52,7 @@ paths:
   /v1/session/extend:
     $ref: ./nhsonline.usersession.yaml#/paths/~1session~1extend
   /v1/session/gp-session-on-demand:
-    $ref: ./nhsonline.usersession.yaml#/paths/~1session~1gp-session-on-demand    
+    $ref: ./nhsonline.usersession.yaml#/paths/~1session~1gp-session-on-demand
   /v1/patient/pharmacies:
     $ref: ./nhsonline.pharmacies.yaml#/paths/~1pharmacies
   /v1/patient/online-pharmacies:
@@ -117,3 +117,5 @@ paths:
     $ref: ./nhsonline.cdss_v2.yaml#/paths/~1cdss~1service-definition~1{provider}
   /v3/cdss/service-definition/{provider}/evaluate:
     $ref: ./nhsonline.cdss_v2.yaml#/paths/~1cdss~1service-definition~1{provider}~1evaluate
+  /v3/known-services:
+    $ref: ./nhsonline.knownservices_v3.yaml#/paths/~1known-services

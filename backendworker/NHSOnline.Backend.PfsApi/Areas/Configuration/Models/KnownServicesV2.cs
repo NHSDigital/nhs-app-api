@@ -7,7 +7,7 @@ using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Configuration.Models
 {
-    public class KnownServices : IValidatable
+    public class KnownServicesV2 : IValidatable
     {
         public Dictionary<string, RootService> Services { get; set; }
 

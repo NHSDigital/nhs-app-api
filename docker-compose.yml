@@ -126,6 +126,7 @@ services:
       - ./docker/appointments.env
       - ./docker/pfs.env
       - ./docker/knownservices.env
+      - ./docker/knownservicesV3.env
     depends_on:
       - servicejourneyrulesapi.local.bitraft.io
     secrets:

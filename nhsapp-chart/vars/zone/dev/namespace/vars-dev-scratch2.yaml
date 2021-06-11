@@ -17,3 +17,4 @@ secrets:
 api:
   knownServicesOverrides:
     services__nhsd__url: https://int.coronavirus-record.service.nhs.uk
+    servicesV3__nhsd__url: https://int.coronavirus-record.service.nhs.uk

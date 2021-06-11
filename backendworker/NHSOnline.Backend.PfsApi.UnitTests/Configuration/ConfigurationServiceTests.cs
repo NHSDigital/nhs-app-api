@@ -115,7 +115,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
             var settings = CreateSettings();
             var knownService = CreateKnownService();
 
-            var knownServices = new KnownServices()
+            var knownServices = new KnownServicesV2()
             {
                 Services = new Dictionary<string, RootService>()
                 {
@@ -138,7 +138,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
             var settings = CreateSettings();
             var knownService = CreateKnownService();
 
-            var knownServices = new KnownServices()
+            var knownServices = new KnownServicesV2()
             {
                 Services = new Dictionary<string, RootService>()
                 {
@@ -163,7 +163,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
             var knownServiceTwo = CreateKnownService();
             var knownServiceThree = CreateKnownService();
 
-            var knownServices = new KnownServices
+            var knownServices = new KnownServicesV2
             {
                 Services = new Dictionary<string, RootService>
                 {
@@ -189,7 +189,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
             var knownServiceTwo = CreateKnownService();
             var knownServiceThree = CreateKnownService();
 
-            var knownServices = new KnownServices
+            var knownServices = new KnownServicesV2
             {
                 Services = new Dictionary<string, RootService>
                 {
@@ -219,7 +219,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
                 Url = new Uri("http://WebAppBaseUrl")
             };
 
-            var knownServices = new KnownServices
+            var knownServices = new KnownServicesV2
             {
                 Services = new Dictionary<string, RootService>
                 {
@@ -234,9 +234,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
             result.Response.KnownServices.Should().ContainSingle()
                 .Which.Url.Should().Be(configuredWebAppBaseUrl);
         }
-        
+
         private ConfigurationService CreateConfigurationService(
-            KnownServices knownServices,
+            KnownServicesV2 knownServices,
             DeviceConfigurationSettings settings)
         {
             return new ConfigurationService(knownServices, settings);
@@ -260,9 +260,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
                 webAppBaseUrl());
         }
 
-        private KnownServices CreateValidKnownServices()
+        private KnownServicesV2 CreateValidKnownServices()
         {
-            return new KnownServices()
+            return new KnownServicesV2()
             {
                 Services = new Dictionary<string, RootService>
                 {

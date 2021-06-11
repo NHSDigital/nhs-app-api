@@ -23,3 +23,15 @@ api:
     services__substraktPatientPack_auth__url: https://auth.aoc.substrakthealth.com
     services__pkb__url: https://rc.pkb.io
     services__pkb_alt__url: http://rc.pkb.io:443
+    servicesV3__cid_settings__url: https://settings.aos.signin.nhs.uk
+    servicesV3__cid_account__url: https://account.aos.signin.nhs.uk
+    servicesV3__cid_auth__url: https://auth.aos.signin.nhs.uk
+    servicesV3__cid_uaf__url: https://uaf.aos.signin.nhs.uk
+    servicesV3__cid_access__url: https://access.aos.signin.nhs.uk
+    servicesV3__cid_idvm__url: https://idvm.aos.signin.nhs.uk
+    servicesV3__ers__url: https://pat.sa.refer.nhs.uk
+    servicesV3__substraktPatientPack__url: https://jump-point.aoc.substrakthealth.com
+    servicesV3__substraktPatientPack__domains__1: https://admin-request.aoc.substrakthealth.com
+    servicesV3__substraktPatientPack__domains__1: https://auth.aoc.substrakthealth.com
+    servicesV3__pkb__url: https://rc.pkb.io
+    servicesV3__pkb__domains__1: http://rc.pkb.io:443

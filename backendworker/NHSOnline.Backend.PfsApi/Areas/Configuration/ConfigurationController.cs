@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Configuration
             _supportedDeviceService = supportedDeviceService;
             _configurationService = configurationService;
         }
-        
+
         [HttpGet, AllowAnonymous]
         public IActionResult Get([FromQuery] GetConfigurationQueryParameters deviceDetails)
         {
@@ -67,7 +67,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Configuration
             try
             {
                 _logger.LogEnter();
-                
+
                 var result = _configurationService.GetConfiguration();
                 return Ok(result.Response);
             }

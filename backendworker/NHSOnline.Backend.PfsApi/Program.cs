@@ -20,6 +20,7 @@ namespace NHSOnline.Backend.PfsApi
         {
             return new ConfigurationBuilder()
                 .AddJsonFile("KnownServices.json", optional: false, reloadOnChange: false)
+                .AddJsonFile("KnownServicesV3.json", optional: false, reloadOnChange: false)
                 .AddJsonFile("ThirdPartyApiTestKnownServices.json", optional: true, reloadOnChange: false)
                 .AddEnvironmentVariables()
                 .AddCommandLine(args)

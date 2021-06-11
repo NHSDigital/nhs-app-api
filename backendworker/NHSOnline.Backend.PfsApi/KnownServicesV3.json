@@ -1,0 +1,85 @@
+{
+  "servicesV3": {
+    "111": {
+      "url": "https://111.nhs.uk",
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "domains": [
+        "https://111.service.nhs.uk"
+      ]
+    },
+    "nhs_uk": {
+      "url": "https://www.nhs.uk",
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false
+    },
+    "ndop": {
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false
+    },
+    "hotjar": {
+      "url": "https://in.hotjar.com",
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false
+    },
+    "cid_settings": {
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false
+    },
+    "cid_account": {
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false
+    },
+    "cid_auth": {
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false
+    },
+    "cid_uaf": {
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false
+    },
+    "cid_access": {
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false
+    },
+    "cid_signin": {
+      "url": "https://signin.nhs.uk",
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false
+    },
+    "cid_idvm": {
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false
+    },
+    "ers": {
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": true
+    },
+    "gncr": {
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true
+    },
+    "pkb": {
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true
+    },
+    "engage": {
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true
+    },
+    "substraktPatientPack": {
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true
+    },
+    "nhsd": {
+      "url": "https://vaccine-status-dev-uks.azurewebsites.net",
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": true
+    },
+    "netCompany": {
+      "url": "https://stdevpistatic01.z33.web.core.windows.net",
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": true
+    } 
+  }
+}

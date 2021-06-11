@@ -7478,4 +7478,38 @@
             description: "An unexpected error occurred processing the request to evaluate the answer, or to obtain paitent demographics."
           502: 
             description: "Bad response received from system."
+    /v3/known-services: 
+      get: 
+        tags: 
+          - "knownservices"
+        summary: "Gets a collection of known services."
+        description: "Gets a collection of known services."
+        responses: 
+          200: 
+            description: "Returns a collection of known services."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  properties: 
+                    knownServices: 
+                      type: "array"
+                      description: "Returns a list of known services for the NHS App."
+                      items: 
+                        type: "object"
+                        properties: 
+                          id: 
+                            type: "string"
+                          url: 
+                            type: "string"
+                          domains: 
+                            type: "array"
+                            items: 
+                              type: "string"
+                          showThirdPartyWarning: 
+                            type: "boolean"
+                          requiresAssertedLoginIdentity: 
+                            type: "boolean"
+          500: 
+            description: "An unexpected error occurred processing the request."
 
