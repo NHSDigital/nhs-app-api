@@ -92,6 +92,9 @@ qualtricsDirectoryId: "POOL_3f8iG2TIImtgHLn"
 qualtricsMailingListId: "CG_3nxFnDUpfzZsDpI"
 
 web:
+  minAvailable: 8
+  minReplicas: 8
+  maxReplicas: 100
   publicURL: www.nhsapp.service.nhs.uk
   hyphenatedHostname: false
   analyticsEnvironment: "production"
@@ -103,6 +106,9 @@ web:
   imagePullPolicy: IfNotPresent
 
 api:
+  minAvailable: 32
+  minReplicas: 32
+  maxReplicas: 300
   publicURL: api.nhsapp.service.nhs.uk
   imagePullPolicy: IfNotPresent
   knownServicesOverrides:
@@ -125,9 +131,20 @@ api:
 
 cid:
   imagePullPolicy: IfNotPresent
+  minAvailable: 16
+  minReplicas: 16
+  maxReplicas: 100
+
+logger:
+  minAvailable: 16
+  minReplicas: 16
+  maxReplicas: 100
 
 sjr:
   imagePullPolicy: IfNotPresent
+  minAvailable: 8
+  minReplicas: 8
+  maxReplicas: 100
 
 sjrconfig:
   loadFiles: true
@@ -136,10 +153,31 @@ sjrconfig:
 
 iproxy:
   imagePullPolicy: IfNotPresent
+  minAvailable: 8
+  minReplicas: 8
+  maxReplicas: 100
+
+iproxy_microtest:
+  minAvailable: 0
+  minReplicas: 2
+  maxReplicas: 100
+
+info:
+  minAvailable: 8
+  minReplicas: 8
+  maxReplicas: 100
+
+messages:
+  minAvailable: 8
+  minReplicas: 8
+  maxReplicas: 100
 
 messagesEnabled: true
 
 users:
+  minAvailable: 13
+  minReplicas: 13
+  maxReplicas: 100
   notificationHubs:
     - notificationHubPath: nhsapp-production
       notificationHubConnectionString: Endpoint=sb://nhsapp-production.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
