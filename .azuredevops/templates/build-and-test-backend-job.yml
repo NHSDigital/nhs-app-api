@@ -7,19 +7,25 @@ jobs:
       - template: nuget-authenticate.yml
 
       - task: ShellScript@2
+        displayName: Validate Known Services
+        condition: succeededOrFailed()
+        inputs:
+          scriptPath: backendworker/buildscripts/01_validate_known_services.sh
+
+      - task: ShellScript@2
         displayName: Restore backend packages
         inputs:
-          scriptPath: backendworker/buildscripts/01_restore_packages.sh
+          scriptPath: backendworker/buildscripts/02_restore_packages.sh
 
       - task: ShellScript@2
         displayName: Build backend
         inputs:
-          scriptPath: backendworker/buildscripts/02_build.sh
+          scriptPath: backendworker/buildscripts/03_build.sh
 
       - task: ShellScript@2
         displayName: Run backend unit tests
         inputs:
-          scriptPath: backendworker/buildscripts/03_run_unit_tests.sh
+          scriptPath: backendworker/buildscripts/04_run_unit_tests.sh
 
       - task: Bash@3
         displayName: Check for test container
@@ -35,7 +41,7 @@ jobs:
         displayName: Retrieve backend unit tests results and coverage
         condition: and(succeededOrFailed(), eq(variables['unit.tests.container.exists'], 'True'))
         inputs:
-          scriptPath: backendworker/buildscripts/04_extract_test_results.sh
+          scriptPath: backendworker/buildscripts/05_extract_test_results.sh
 
       - template: check-for-output-steps.yml
         parameters:
@@ -93,49 +99,49 @@ jobs:
       - task: ShellScript@2
         displayName: Package PFS API
         inputs:
-          scriptPath: backendworker/buildscripts/05_package_pfs_api.sh
+          scriptPath: backendworker/buildscripts/06_package_pfs_api.sh
 
       - task: ShellScript@2
         displayName: Package CID API
         inputs:
-          scriptPath: backendworker/buildscripts/06_package_cid_api.sh
+          scriptPath: backendworker/buildscripts/07_package_cid_api.sh
 
       - task: ShellScript@2
         displayName: Package SJR API
         inputs:
-          scriptPath: backendworker/buildscripts/07_package_sjr_api.sh
+          scriptPath: backendworker/buildscripts/08_package_sjr_api.sh
 
       - task: ShellScript@2
         displayName: Package CDSS Wiremock
         inputs:
-          scriptPath: backendworker/buildscripts/08_package_cdss_wiremock.sh
+          scriptPath: backendworker/buildscripts/09_package_cdss_wiremock.sh
 
       - task: ShellScript@2
         displayName: Validate non-live SJR config
         inputs:
-          scriptPath: backendworker/buildscripts/09_validate_non_live_sjr_config.sh
+          scriptPath: backendworker/buildscripts/10_validate_non_live_sjr_config.sh
 
       - task: ShellScript@2
         displayName: Package non-live SJR config
         inputs:
-          scriptPath: backendworker/buildscripts/10_package_non_live_sjr_config.sh
+          scriptPath: backendworker/buildscripts/11_package_non_live_sjr_config.sh
 
       - task: ShellScript@2
         displayName: Package Logger API
         inputs:
-          scriptPath: backendworker/buildscripts/11_package_logger_api.sh
+          scriptPath: backendworker/buildscripts/12_package_logger_api.sh
 
       - task: ShellScript@2
         displayName: Package Users API
         inputs:
-          scriptPath: backendworker/buildscripts/12_package_users_api.sh
+          scriptPath: backendworker/buildscripts/13_package_users_api.sh
 
       - task: ShellScript@2
         displayName: Package User Info API
         inputs:
-          scriptPath: backendworker/buildscripts/13_package_userinfo_api.sh
+          scriptPath: backendworker/buildscripts/14_package_userinfo_api.sh
 
       - task: ShellScript@2
         displayName: Package Messages API
         inputs:
-          scriptPath: backendworker/buildscripts/14_package_messages_api.sh
+          scriptPath: backendworker/buildscripts/15_package_messages_api.sh
