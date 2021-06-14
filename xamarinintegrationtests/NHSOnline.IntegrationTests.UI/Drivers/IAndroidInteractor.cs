@@ -9,5 +9,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
 
         internal void PressTabKey();
         internal void PressEnterKey();
+        internal void PressShiftTabKey();
     }
 }

@@ -77,6 +77,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         void IAndroidInteractor.PressEnterKey()
             => _interactor.PressEnterKey();
 
+        void IAndroidInteractor.PressShiftTabKey() =>
+            _interactor.PressShiftTabKey();
+
         WaitForAction IAndroidDriverWrapper.PressBackButton()
         {
             _driver.PressKeyCode(AndroidKeyCode.Back);

@@ -47,6 +47,19 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             }
         }
 
+        public void TabBack(IFocusable toFocusable)
+        {
+            _expectedFocusableElements
+                .Should()
+                .Contain(f => f.IsTheSameAs(toFocusable), "element to tab to must be in the list of expected focusable elements for the page");
+
+            while (toFocusable.IsNotTheSameAs(_currentFocusable))
+            {
+                _interactor.PressShiftTabKey();
+                _currentFocusable = FollowingFocusable(_currentFocusable);
+            }
+        }
+
         public void TabBetween(IFocusable fromFocusable, IFocusable toFocusable)
         {
             _currentFocusable = fromFocusable;
