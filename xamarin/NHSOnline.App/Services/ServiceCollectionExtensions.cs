@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.App.Services.FIDO;
+using NHSOnline.App.Services.ForcedUpdate;
 using NHSOnline.App.Services.Media;
 
 namespace NHSOnline.App.Services
@@ -13,6 +14,7 @@ namespace NHSOnline.App.Services
                 .AddTransient<BiometricRegistrationService>()
                 .AddTransient<BiometricLoginService>()
                 .AddTransient<IBrowserOverlay, BrowserOverlay>()
+                .AddTransient<IForcedUpdateCheckService, ForcedUpdateCheckService>()
                 .AddTransient<ISelectMediaService, SelectMediaService>()
                 .AddTransient<IUserPreferencesService, UserPreferencesService>()
                 .AddTransient<RedirectorUrlFactory>();

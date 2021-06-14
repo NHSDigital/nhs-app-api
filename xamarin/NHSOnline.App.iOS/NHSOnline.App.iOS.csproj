@@ -80,6 +80,7 @@
     <Compile Include="DependencyServices\IosLifecycle.cs" />
     <Compile Include="DependencyServices\IosNativeLog.cs" />
     <Compile Include="DependencyServices\IosSettingsService.cs" />
+    <Compile Include="DependencyServices\IosNativeMinimumVersionCheck.cs" />
     <Compile Include="DependencyServices\Notifications\IosGetPnsTokenResponse.cs" />
     <Compile Include="DependencyServices\Notifications\IosNotifications.cs" />
     <Compile Include="DependencyServices\Notifications\RemoteNotificationRecievedHandler.cs" />

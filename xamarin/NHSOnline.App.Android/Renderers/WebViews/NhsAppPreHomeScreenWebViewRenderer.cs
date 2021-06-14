@@ -28,7 +28,7 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
                 new EnableTargetBlankLinksRendererExtension(this)
             };
         }
-
+        
         protected override void OnElementChanged(ElementChangedEventArgs<WebView> e)
         {
             base.OnElementChanged(e);

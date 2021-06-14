@@ -19,6 +19,7 @@ namespace NHSOnline.App.DependencyServices
                 .AddTransient(_ => DependencyService.Get<IPrimaryHttpMessageHandlerFactory>())
                 .AddTransient(_ => DependencyService.Get<INotifications>())
                 .AddTransient(_ => DependencyService.Get<ISettingsService>())
+                .AddTransient(_ => DependencyService.Get<INativeMinimumVersionCheck>())
                 .AddTransient(_ => DependencyService.Get<ICalendar>());
         }
     }

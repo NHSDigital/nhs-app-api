@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.App.Api.Client;
+using NHSOnline.App.Api.Configuration;
 using NHSOnline.App.Api.Logging;
 using NHSOnline.App.Api.Session;
 
@@ -11,6 +12,7 @@ namespace NHSOnline.App.Api
         {
             return services
                 .AddClientServices(nhsAppUserAgent)
+                .AddConfigurationService()
                 .AddSessionApiServices()
                 .AddLoggingServices();
         }

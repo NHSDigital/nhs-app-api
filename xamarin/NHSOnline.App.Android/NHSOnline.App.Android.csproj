@@ -71,6 +71,7 @@
     <Compile Include="DependencyServices\AndroidHttpMessageHandlerFactory.cs" />
     <Compile Include="DependencyServices\AndroidNativeLog.cs" />
     <Compile Include="DependencyServices\AndroidSettingsService.cs" />
+    <Compile Include="DependencyServices\AndroidVersionCheckService.cs" />
     <Compile Include="DependencyServices\Biometrics\AndroidBiometrics.cs" />
     <Compile Include="DependencyServices\Biometrics\BiometricAuthKey.cs" />
     <Compile Include="DependencyServices\Biometrics\BiometricAuthSigner.cs" />
