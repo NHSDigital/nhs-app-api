@@ -27,7 +27,6 @@ namespace NHSOnline.Backend.Support.AspNet
                         .AllowAnyHeader()
                         .AllowCredentials()
                         .WithExposedHeaders(
-                            Constants.HttpHeaders.GpSessionCreated,
                             Constants.HttpHeaders.Im1MessagingEnabled)),
                 { } => app.UseCors(
                     builder => builder
@@ -37,7 +36,6 @@ namespace NHSOnline.Backend.Support.AspNet
                         .AllowAnyHeader()
                         .AllowCredentials()
                         .WithExposedHeaders(
-                            Constants.HttpHeaders.GpSessionCreated,
                             Constants.HttpHeaders.Im1MessagingEnabled)),
                 null => app
             };

@@ -153,6 +153,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
             internal ConfigurationSettings ConfigurationSettings { get; }
             internal CreateSessionRequest CreateSessionRequest { get; }
             internal CreateGpSessionOnDemandRequest CreateGpSessionOnDemandRequest { get; }
+            internal OnDemandGpSession OnDemandGpSession { get; }
 
             internal TestData(TestMocks mocks)
             {
@@ -173,6 +174,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                     NhsNumber = UserProfile.NhsNumber,
                     Name = $"{UserProfile.GivenName} {UserProfile.FamilyName}"
                 };
+
+                OnDemandGpSession = new OnDemandGpSession(Supplier.Emis);
 
                 CitizenIdUserSession = new CitizenIdUserSession
                 {
@@ -247,6 +250,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                     .AddSingleton(new Mock<ICurrentDateTimeProvider>().Object)
                     .AddSingleton(new Mock<IJwtTokenGenerator>().Object)
                     .AddSingleton(new Mock<IWebHostEnvironment>().Object)
+                    .AddSingleton(new Mock<IHttpContextAccessor>().Object)
                     .AddMockLoggers();
             }
         }

@@ -618,8 +618,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
 
             ArrangeMatchingNhsLoginIds();
 
+            var request = Context.Data.CreateGpSessionOnDemandRequest;
+            request.UserSession.GpUserSession = Context.Data.OnDemandGpSession;
+
             // Act
-            var result = await CreateSystemUnderTest().CreateGpSessionOnDemand(Context.Data.CreateGpSessionOnDemandRequest);
+            var result = await CreateSystemUnderTest().CreateGpSessionOnDemand(request);
 
             // Assert
             using (new AssertionScope())
@@ -640,10 +643,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
 
                 auditStub.AccessTokenString.Should().Be(Context.Data.CitizenIdUserSession.AccessToken);
                 auditStub.NhsNumber.Should().Be(Context.Data.UserProfile.NhsNumber);
-                auditStub.Supplier.Should().Be(Supplier.Unknown);
-                auditStub.Operation.Should().Be("CitizenId_Session_Create");
-                auditStub.Details.Should().Be("Create Citizen Id Session");
-                auditStub.ResponseDetails.Should().Be("Created Citizen Id Session 200");
+                auditStub.Supplier.Should().Be(Supplier.Disconnected);
+                auditStub.Operation.Should().Be("GP_Session_Recreate");
+                auditStub.Details.Should().Be("Attempting to recreate P9 User GP Session");
+                auditStub.ResponseDetails.Should().Be("GP Session Recreated");
             }
         }
 

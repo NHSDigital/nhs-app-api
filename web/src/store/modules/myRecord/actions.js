@@ -24,6 +24,21 @@ const getMedicalRecordSection = async (commit, $http, mutation, section) => {
   }
 };
 
+const loadMedicalRecord = async ({ commit, self, patientDetails }) => {
+  const { response: record } = await self.app.$http.getV1PatientMyRecord({}) || {};
+  commit(LOADED, { record, patientDetails });
+
+  let medicalRecordType = AnalyticsValues.NoMedicalRecordAccess;
+  if (record && record.hasSummaryRecordAccess) {
+    medicalRecordType = record.hasDetailedRecordAccess ?
+      AnalyticsValues.SCRAndDCRAccess :
+      AnalyticsValues.SCRAccess;
+  }
+  commit(SET_MEDICAL_RECORD_TYPE, { medicalRecordType });
+  self.dispatch('analytics/trackUserProperty', { key: 'medicalRecordType', value: medicalRecordType });
+  self.dispatch('analytics/trackUserProperty', { key: 'gpOnlineProduct', value: record.supplier });
+};
+
 export default {
   init({ commit }) {
     commit(INIT);
@@ -37,18 +52,9 @@ export default {
   async load({ commit }) {
     try {
       const { response: patientDetails } = await this.app.$http.getV1PatientDemographics({}) || {};
-      const { response: record } = await this.app.$http.getV1PatientMyRecord({}) || {};
-      commit(LOADED, { record, patientDetails });
-
-      let medicalRecordType = AnalyticsValues.NoMedicalRecordAccess;
-      if (record && record.hasSummaryRecordAccess) {
-        medicalRecordType = record.hasDetailedRecordAccess ?
-          AnalyticsValues.SCRAndDCRAccess :
-          AnalyticsValues.SCRAccess;
+      if (patientDetails !== undefined) {
+        await loadMedicalRecord({ commit, self: this, patientDetails });
       }
-      commit(SET_MEDICAL_RECORD_TYPE, { medicalRecordType });
-      this.dispatch('analytics/trackUserProperty', { key: 'medicalRecordType', value: medicalRecordType });
-      this.dispatch('analytics/trackUserProperty', { key: 'gpOnlineProduct', value: record.supplier });
     } catch (error) {
       this.dispatch('errors/addApiError', error);
     }
