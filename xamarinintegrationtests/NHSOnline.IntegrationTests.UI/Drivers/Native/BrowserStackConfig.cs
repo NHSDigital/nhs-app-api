@@ -27,6 +27,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
             options.AddAdditionalCapability("browserstack.debug", "true");
             options.AddAdditionalCapabilityIf(EnableNetworkLogs, "browserstack.networkLogs", "true");
             options.AddAdditionalCapability("browserstack.appium_version", AppiumVersion);
+            options.AddAdditionalCapability("browserstack.acceptInsecureCerts", "true");
+            options.AddAdditionalCapability("browserstack.gpsLocation", "40.730610,-73.935242");
         }
 
         internal string? GetKey()

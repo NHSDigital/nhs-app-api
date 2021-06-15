@@ -31,7 +31,13 @@ jobs:
           targetType: 'inline'
           script: |
             mkdir -p ~/.nhsonline/secrets
+            mkdir -p ~/.nhsonline/secure-stubs-certificate
             echo "$AZURE_NOTIFICATION_HUBS__0__AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY" > ~/.nhsonline/secrets/azure_notification_hub_key_bdd
+
+      - task: ShellScript@2
+        displayName: Generate Secure Stubs Certificate
+        inputs:
+          scriptPath: buildscripts/create-secure-stub-certificate.sh
 
       - task: ShellScript@2
         displayName: Restore Packages

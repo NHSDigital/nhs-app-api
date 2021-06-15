@@ -6,3 +6,15 @@ services:
     image: alpine/socat
     entrypoint: ["socat"]
     command: tcp-l:8080,fork,reuseaddr tcp:host.docker.internal:8080
+
+  securestubs.local.bitraft.io:
+    image: nginx:alpine
+    volumes:
+      - ./docker/inttests/https/nginx:/etc/nginx/conf.d
+      - ~/.nhsonline/secure-stubs-certificate:/etc/ssl
+    ports:
+      - "443:443"
+    networks:
+      default:
+        aliases:
+          - silverintegrationtestprovider.securestubs.local.bitraft.io

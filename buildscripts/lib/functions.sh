@@ -10,3 +10,6 @@ source "${LIB_DIR}/functions_validation.sh"
 
 # shellcheck source=functions_docker.sh
 source "${LIB_DIR}/functions_docker.sh"
+
+# shellcheck source=functions_certificates.sh
+source "${LIB_DIR}/functions_certificates.sh"

@@ -1,52 +1,7 @@
-echo Creating Certificate
+# shellcheck source=lib/functions.sh
+source "buildscripts/lib/functions.sh"
 
-BASE_PATH=$HOME/.nhsonline/local-development-certificate
-
-mkdir -p $BASE_PATH
-
-echo Creating config
-
-cat > $BASE_PATH/https.config  << EOF
-[ req ]
-default_bits = 2048
-default_md = sha256
-default_keyfile = key.pem
-prompt = no
-encrypt_key = no
-
-distinguished_name = local-development-certificate
-req_extensions = v3_req
-x509_extensions = v3_req
-
-[ local-development-certificate ]
-commonName = "localhost"
-
-[ v3_req ]
-subjectAltName = @alt_names
-basicConstraints = critical, CA:true
-keyUsage = critical, keyEncipherment
-extendedKeyUsage = critical, 1.3.6.1.5.5.7.3.1
-
-[alt_names]
-DNS.1      = local.bitraft.io
-DNS.2      = android.local.bitraft.io
-DNS.3      = localhost
-
-[ CA_default ]
-copy_extensions = copy
-EOF
-
-echo Creating certificate signing request
-(cd $BASE_PATH && openssl req -config https.config -new -out csr.pem)
-
-echo Creating self-signed certificate
-(cd $BASE_PATH && openssl x509 -req -days 365 -extfile https.config -extensions v3_req -in csr.pem -signkey key.pem -out local-development-https.crt)
-
-echo Generating PFX
-(cd $BASE_PATH && openssl pkcs12 -export -out local-development-https.pfx -inkey key.pem -in local-development-https.crt -password pass:)
-
-echo Certificate Created
-
+create_certificate "$HOME/.nhsonline/local-development-certificate"  localhost secure-stubs-https
 
 echo
 echo The certificate should be imported as a trusted root certificate on your local machine and on any iOS/Android simulators that will be used:

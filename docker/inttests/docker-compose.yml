@@ -25,6 +25,18 @@ services:
           - substrakt.stubs.local.bitraft.io
           - substraktDomain1.stubs.local.bitraft.io
 
+  securestubs.local.bitraft.io:
+    image: nginx:alpine
+    volumes:
+      - ./docker/inttests/https/nginx:/etc/nginx/conf.d
+      - ~/.nhsonline/secure-stubs-certificate:/etc/ssl
+    ports:
+      - "443:443"
+    networks:
+      default:
+        aliases:
+          - silverintegrationtestprovider.securestubs.local.bitraft.io
+
   browserstack.local:
     image: ${DOCKER_IMAGE_BROWSERSTACK_LOCAL}
     restart: always

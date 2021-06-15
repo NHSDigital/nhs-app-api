@@ -9,6 +9,7 @@ define AdditionalHelp
 endef
 
 SSL_CERT := ~/.nhsonline/local-development-certificate/local-development-https.crt
+SECURE_STUBS_SSL_CERT := ~/.nhsonline/secure-stubs-certificate/secure-stubs.crt
 
 build:	## Build web and backend worker
 	$(MAKE) -C backendworker build
@@ -101,6 +102,9 @@ validate_local_images:
 
 $(SSL_CERT):
 	./buildscripts/create-certificate.sh
+
+$(SECURE_STUBS_SSL_CERT):
+	./buildscripts/create-secure-stub-certificate.sh
 
 .PHONY: run run-dev-stubs run-https run-android run-android-https run-localbdd run-bdd run-deps validate_local_secrets validate_local_images configure-package-feed
 

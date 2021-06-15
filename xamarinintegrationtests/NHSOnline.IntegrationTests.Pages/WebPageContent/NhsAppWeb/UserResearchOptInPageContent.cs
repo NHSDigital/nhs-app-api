@@ -90,7 +90,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
 
         internal void AssertOnPage()
         {
-            using var timeout = ExtendedTimeout.FromSeconds(5);
+            using var timeout = ExtendedTimeout.FromSeconds(15);
 
             Title.AssertVisible();
         }

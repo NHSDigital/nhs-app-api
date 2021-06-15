@@ -23,10 +23,13 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         private WebLink CalendarLink => WebLink.WithText(_interactor, "Calendar");
 
+        private WebLink LocationServicesLink => WebLink.WithText(_interactor, "Location services");
+
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
             FileUploadLink,
             CalendarLink,
+            LocationServicesLink
         };
 
         internal void AssertOnPage() => TitleText.AssertVisible();
@@ -37,5 +40,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
         public void NavigateToFileUpload() => FileUploadLink.Click();
 
         public void NavigateToCalendar() => CalendarLink.Click();
+
+        public void NavigateToLocationServices() => LocationServicesLink.Click();
     }
 }
