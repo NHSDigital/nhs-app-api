@@ -1,6 +1,7 @@
 using Android.Content;
 using Android.Views.Accessibility;
-using NHSOnline.App.Controls;
+using NHSOnline.App.Controls.Elements;
+using NHSOnline.App.Controls.Elements.Deprecated;
 using NHSOnline.App.Droid.Renderers;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;

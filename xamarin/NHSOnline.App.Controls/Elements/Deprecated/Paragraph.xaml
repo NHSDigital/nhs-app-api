@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NHSOnline.App.Controls.Elements.Deprecated.Paragraph"
+             x:Name="Root">
+
+    <View.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="Label">
+                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="FontFamily" Value="Frutiger" />
+                <Setter Property="LineHeight" Value="1.2" />
+                <Setter Property="Margin" Value="0, 6" />
+                <Setter Property="TextColor" Value="{StaticResource NhsUkPrimaryText}" />
+            </Style>
+        </ResourceDictionary>
+    </View.Resources>
+
+    <ContentView.Content>
+        <StackLayout>
+            <Label Text="{Binding Text, Source={x:Reference Name=Root}}"
+                   FormattedText="{Binding FormattedText, Source={x:Reference Name=Root}}" />
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

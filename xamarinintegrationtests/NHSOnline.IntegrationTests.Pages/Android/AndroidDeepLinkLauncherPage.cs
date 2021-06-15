@@ -1,5 +1,4 @@
-using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
-using NHSOnline.IntegrationTests.Pages.WebPageContent;
+using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.Android

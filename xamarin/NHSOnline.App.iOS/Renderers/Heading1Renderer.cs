@@ -1,5 +1,6 @@
 using Foundation;
-using NHSOnline.App.Controls;
+using NHSOnline.App.Controls.Elements;
+using NHSOnline.App.Controls.Elements.Deprecated;
 using NHSOnline.App.iOS.Renderers;
 using UIKit;
 using Xamarin.Forms;

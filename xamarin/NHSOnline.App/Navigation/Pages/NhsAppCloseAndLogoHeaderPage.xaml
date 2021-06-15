@@ -2,19 +2,19 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
+             xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
+             xmlns:navigation="clr-namespace:NHSOnline.App.Controls.Navigation;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Navigation.Pages.NhsAppCloseAndLogoHeaderPage"
              x:Name="Root"
              BackgroundColor="{StaticResource NhsUkBlue}">
     <ContentPage.Content>
         <ContentView>
             <ContentView.Effects>
-                <controls:SafeAreaPaddingTop />
+                <effects:SafeAreaPaddingTop />
             </ContentView.Effects>
             <StackLayout BackgroundColor="{StaticResource NhsUkBlue}" Spacing="0" Padding="0,5,0,0">
-                <controls:SlimCloseAndLogoNavigationHeader 
-                    CloseCommand="{Binding CloseClicked, Source={x:Reference Name=Root}}">
-                </controls:SlimCloseAndLogoNavigationHeader>
+                <navigation:SlimCloseAndLogoNavigationHeader 
+                    CloseCommand="{Binding CloseClicked, Source={x:Reference Name=Root}}" />
                 <ContentView 
                     Content="{Binding PageContent, Source={x:Reference Name=Root}}" 
                     VerticalOptions = "FillAndExpand" />

@@ -10,14 +10,15 @@
              mc:Ignorable="d"
              x:Class="NHSOnline.App.Areas.LoggedOut.Views.LoggedOutHomeScreenPage"
              x:Name="Page"
-             xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls">
+             xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
+             xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls">
     
     <controls:GradientBackground BackgroundColor="{StaticResource HomeBlueInnerGradient}"
                                  InnerColour="{StaticResource HomeBlueInnerGradient}"
                                  OuterColour="{StaticResource HomeBlueOuterGradient}"
                                  Radius="Max" >
         <ContentView.Effects>
-            <controls:SafeAreaPaddingTop />
+            <effects:SafeAreaPaddingTop />
         </ContentView.Effects>
         
         <Grid>
@@ -58,14 +59,14 @@
                 </StackLayout.GestureRecognizers>
             </StackLayout>
             
-            <controls:NhsLogoWhite Grid.Row="1"
-                                   Grid.Column="1"
-                                   HorizontalOptions="Center"
-                                   VerticalOptions="Center"
-                                   HeightRequest="48"
-                                   AutomationProperties.IsInAccessibleTree="true"
-                                   AutomationProperties.HelpText="NHS Logo"
-                                   IsTabStop="False" />
+            <icons:NhsLogoWhite Grid.Row="1"
+                                Grid.Column="1"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                HeightRequest="48"
+                                AutomationProperties.IsInAccessibleTree="true"
+                                AutomationProperties.HelpText="NHS Logo"
+                                IsTabStop="False" />
             
             <Label Grid.Row="2" 
                    Grid.Column="1"
@@ -77,7 +78,7 @@
                    AutomationProperties.IsInAccessibleTree="True"
                    IsTabStop="False" />
 
-            <controls:NhsLoginButton Grid.Row="3"
+            <elements:NhsLoginButton Grid.Row="3"
                                      Grid.Column="1"
                                      Text="Continue with NHS login"
                                      ButtonColour = "{StaticResource NhsUkWhite}"

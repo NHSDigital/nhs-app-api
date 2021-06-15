@@ -2,18 +2,18 @@
 
 <pages:NhsAppCloseAndLogoHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
                                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                                    xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
                                     xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
+                                    xmlns:deprecated="clr-namespace:NHSOnline.App.Controls.Elements.Deprecated;assembly=NHSOnline.App.Controls"
                                     x:Class="NHSOnline.App.Areas.LoggedOut.Views.BiometricLoginTouchIdFailedPage"
                                     x:Name="Page">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <StackLayout Padding="20,0,20,0">
-            <controls:Heading1 Text="We cannot find your Touch ID" x:Name="Heading" />
+            <deprecated:Heading1 Text="We cannot find your Touch ID" x:Name="Heading" />
             
-            <controls:Paragraph Text="Check that you have added a fingerprint in your device's Touch ID settings."
+            <deprecated:Paragraph Text="Check that you have added a fingerprint in your device's Touch ID settings."
                                 Padding="0,10,0,0" />
             
-            <controls:LinkLabel Text="Back to login"
+            <deprecated:LinkLabel Text="Back to login"
                                 Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}"
                                 Padding="0,10,0,0" />
         </StackLayout>

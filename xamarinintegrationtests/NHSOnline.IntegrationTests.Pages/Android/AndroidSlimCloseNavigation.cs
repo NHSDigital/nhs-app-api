@@ -13,16 +13,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidIcon CloseIcon => Header.ContainingIconWithName("NHS App close icon");
 
-        private AndroidLabel CloseText => Header.ContainingLabelWithText("Close");
+        public void Close() => CloseIcon.Click();
 
-        public void AssertNavigationPresent()
-        {
-            Header.AssertVisible();
-        }
-
-        public void Close()
-        {
-            CloseIcon.Click();
-        }
+        internal AndroidKeyboardNavigation KeyboardNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(_driver, CloseIcon);
     }
 }

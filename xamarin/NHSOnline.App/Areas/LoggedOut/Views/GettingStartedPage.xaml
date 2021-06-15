@@ -3,8 +3,10 @@
                                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                                     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
                                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                                    xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
                                     xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
+                                    xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
+                                    xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
+                                    xmlns:deprecated="clr-namespace:NHSOnline.App.Controls.Elements.Deprecated;assembly=NHSOnline.App.Controls"
                                     mc:Ignorable="d"
                                     x:Class="NHSOnline.App.Areas.LoggedOut.Views.GettingStartedPage"
                                     x:Name="Page">
@@ -25,54 +27,54 @@
                 <RowDefinition Height="25" />
             </Grid.RowDefinitions>
             
-            <controls:Heading1 Grid.Column="1" 
-                               Grid.Row="0"
-                               Text="Getting started" />
+            <deprecated:Heading1 Grid.Column="1" 
+                                 Grid.Row="0"
+                                 Text="Getting started" />
             
-            <controls:NhsYellowWarningCard Grid.Column="1" Grid.Row="1"
-                                           Text="This is not the NHS COVID-19 app">
+            <panels:NhsYellowWarningCard Grid.Column="1" Grid.Row="1"
+                                         Text="This is not the NHS COVID-19 app">
                 <StackLayout>
-                    <controls:MediumLabel Text="To download the NHS COVID-19 contact tracing app."
+                    <elements:MediumLabel Text="To download the NHS COVID-19 contact tracing app."
                                           Margin="0,5,0,10" />
                     
-                    <controls:LinkLabel LabelTextColour="{StaticResource NhsUkPrimaryText}"
-                                        LabelTextDecoration="None"
-                                        Command="{Binding NhsUkCovidAppCommand, Source={x:Reference Name=Page}}">
-                        <controls:LinkLabel.FormattedText>
+                    <deprecated:LinkLabel LabelTextColour="{StaticResource NhsUkPrimaryText}"
+                                          LabelTextDecoration="None"
+                                          Command="{Binding NhsUkCovidAppCommand, Source={x:Reference Name=Page}}">
+                        <deprecated:LinkLabel.FormattedText>
                             <FormattedString>
                                 <Span Text="Go to " />
                                 <Span Text="covid19.nhs.uk" 
                                       TextDecorations="Underline"
                                       TextColor="{StaticResource NhsUkPrimaryLinkBlue}" />    
                             </FormattedString>
-                        </controls:LinkLabel.FormattedText>
-                    </controls:LinkLabel>
+                        </deprecated:LinkLabel.FormattedText>
+                    </deprecated:LinkLabel>
                     
                 </StackLayout>
-            </controls:NhsYellowWarningCard> 
+            </panels:NhsYellowWarningCard> 
             
             <StackLayout Grid.Column="1" Grid.Row="2">
             
-                <controls:Paragraph Text="Use the NHS App to:" />
+                <deprecated:Paragraph Text="Use the NHS App to:" />
                 
-                <controls:LabelListItem LabelText="order repeat prescriptions" />
+                <elements:LabelListItem LabelText="order repeat prescriptions" />
                 
-                <controls:LabelListItem LabelText="book and manage appointments" />
+                <elements:LabelListItem LabelText="book and manage appointments" />
                 
-                <controls:LabelListItem LabelText="get health information and advice" />
+                <elements:LabelListItem LabelText="get health information and advice" />
                 
-                <controls:LabelListItem LabelText="manage your organ donation decision" />
+                <elements:LabelListItem LabelText="manage your organ donation decision" />
                 
-                <controls:LabelListItem LabelText="view your NHS number" />
+                <elements:LabelListItem LabelText="view your NHS number" />
                 
-                <controls:Paragraph Text="You must be aged 13 and over to use the app, and registered at a GP surgery in England."
-                                    Margin="0,10,0,0" />
+                <deprecated:Paragraph Text="You must be aged 13 and over to use the app, and registered at a GP surgery in England."
+                                      Margin="0,10,0,0" />
                 
-                <controls:Paragraph Text="To get started you'll need to create your NHS login." 
-                                    Margin="0,10,0,0" />
+                <deprecated:Paragraph Text="To get started you'll need to create your NHS login." 
+                                      Margin="0,10,0,0" />
             </StackLayout>
             
-            <controls:Button Grid.Column="1" 
+            <elements:Button Grid.Column="1" 
                              Grid.Row="3"
                              Text="Continue"
                              ButtonColour = "{StaticResource NhsUkGreen}"

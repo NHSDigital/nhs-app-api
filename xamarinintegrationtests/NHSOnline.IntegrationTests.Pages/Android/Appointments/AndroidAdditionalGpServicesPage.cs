@@ -1,4 +1,4 @@
-using NHSOnline.IntegrationTests.Pages.WebPageContent;
+using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
@@ -7,11 +7,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
     {
         public AdditionalGpServicesPageContent PageContent { get; }
 
-        private readonly IAndroidDriverWrapper _driver;
-
         private AndroidAdditionalGpServicesPage(IAndroidDriverWrapper driver)
         {
-            _driver = driver;
             PageContent = new AdditionalGpServicesPageContent(driver.Web(WebViewContext.NhsApp));
         }
 

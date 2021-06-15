@@ -1,5 +1,5 @@
 using NHSOnline.IntegrationTests.Pages.IOS;
-using NHSOnline.IntegrationTests.Pages.WebPageContent;
+using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.Android.YourHealth

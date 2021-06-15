@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:icons="clr-namespace:NHSOnline.App.Controls.Icons;assembly=NHSOnline.App.Controls"
+             x:Class="NHSOnline.App.Controls.Elements.Spinner"
+             x:Name="Root">
+        <icons:NhsSpinner x:Name="NhsSpinner"/>
+</ContentView>

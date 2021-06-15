@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NHSOnline.App.Controls.Elements.ResponsiveUnorderedList"
+             Padding="0,0,0,8"
+             x:Name="Root">
+    
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="ResponsiveDisplayStates">
+            <VisualState x:Name="SmallDisplay"/>
+            <VisualState x:Name="LargeDisplay">
+                <VisualState.Setters>
+                    <Setter TargetName="Root" Property="Padding" Value="0,0,0,16" />
+                </VisualState.Setters>
+            </VisualState>
+        </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+
+    <ContentView.Content />
+</ContentView>

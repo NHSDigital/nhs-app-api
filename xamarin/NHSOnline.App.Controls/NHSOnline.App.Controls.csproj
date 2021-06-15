@@ -19,13 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Button.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Heading2.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="Icons\icon-advice-blue.svg" />
     <EmbeddedResource Include="Icons\icon-appointments-blue.svg" />
     <EmbeddedResource Include="Icons\icon-appointments-grey.svg" />
@@ -44,176 +37,19 @@
     <EmbeddedResource Include="Icons\icon-arrow-right.svg" />
     <EmbeddedResource Include="Icons\icon-arrow-left.svg" />
     <EmbeddedResource Include="Icons\icon-close.svg" />
-    <EmbeddedResource Include="NhsLogoWhite.svg" />
-    <EmbeddedResource Include="NhsLogoBlue.svg" />
+    <EmbeddedResource Include="Icons\NhsLogoBlue.svg" />
+    <EmbeddedResource Include="Icons\NhsSpinner.svg" />
     <ProjectReference Include="..\NHSOnline.App.Logging\NHSOnline.App.Logging.csproj" />
-    <EmbeddedResource Update="NhsPanelWithLabel.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
+    <EmbeddedResource Include="Icons\NhsLogoWhite.svg" />
+    <EmbeddedResource Update="Elements\ResponsiveHeading2.xaml">
+      <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="NhsWarningCallout.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="NhsErrorCallout.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="ListItem.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Heading1.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Paragraph.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Expander.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="LinkLabel.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="MediumLabel.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="LargeLabel.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="SafeAreaPaddingTop.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="FullNavigationHeader.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="FullNavigationFooter.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="FullNavigationFooterItem.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="SafeAreaPaddingBottom.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="SlimCloseNavigationHeader.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="SlimLogoNavigationHeader.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="SlimCloseAndLogoNavigationHeader.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="NhsSpinner.svg" />
-    <EmbeddedResource Update="ResponsiveHeading2.xaml">
+    <EmbeddedResource Update="Elements\Depricated\Heading2.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Button.xaml.cs">
-      <DependentUpon>Button.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Heading2.xaml.cs">
-      <DependentUpon>Heading2.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="NhsPanelWithLabel.xaml.cs">
-      <DependentUpon>NhsPanelWithLabel.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="NhsWarningCallout.xaml.cs">
-      <DependentUpon>NhsWarningCallout.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="NhsErrorCallout.xaml.cs">
-      <DependentUpon>NhsErrorCallout.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="ListItem.xaml.cs">
-      <DependentUpon>ListItem.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Heading1.xaml.cs">
-      <DependentUpon>Heading1.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Paragraph.xaml.cs">
-      <DependentUpon>Paragraph.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Expander.xaml.cs">
-      <DependentUpon>Expander.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="LinkLabel.xaml.cs">
-      <DependentUpon>LinkLabel.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="SafeAreaPaddingTop.xaml.cs">
-      <DependentUpon>SafeAreaPaddingEffect.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="FullNavigationHeader.xaml.cs">
-      <DependentUpon>LoggedInHeader.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="FullNavigationFooter.xaml.cs">
-      <DependentUpon>LoggedInFooter.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="FullNavigationFooterItem.xaml.cs">
-      <DependentUpon>MenuBarItem.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="SafeAreaPaddingBottom.xaml.cs">
-      <DependentUpon>SafeAreaPaddingBottom.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="SlimCloseNavigationHeader.xaml.cs">
-      <DependentUpon>SlimCloseNavigationHeader.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="NhsLoginButton.xaml.cs">
-      <DependentUpon>ButtonWithimage.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="MediumLabel.xaml.cs">
-      <DependentUpon>MediumLabel.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="LargeLabel.xaml.cs">
-      <DependentUpon>LargeLabel.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="NhsYellowWarningCard.xaml.cs">
-      <DependentUpon>NhsYellowWarningCard.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="LabelListItem.xaml.cs">
-      <DependentUpon>LabelListItem.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="SlimCloseAndLogoNavigationHeader.xaml.cs">
-      <DependentUpon>SlimCloseAndLogoNavigationHeader.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="SlimLogoNavigationHeader.xaml.cs">
-      <DependentUpon>SlimLogoNavigationHeader.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="FullNavigationFooterWide.xaml.cs">
-      <DependentUpon>FullNavigationFooterWide.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="FullNavigationFooterItemWide.xaml.cs">
-      <DependentUpon>FullNavigationFooterItemWide.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="ResourceDictionaries\NhsUkColours.xaml.cs">
       <DependentUpon>NhsUkColours.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -222,28 +58,160 @@
       <DependentUpon>NhsUkStyles.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="ResponsiveParagraph.xaml.cs">
-      <DependentUpon>ResponsiveParagraph.xaml</DependentUpon>
+    <Compile Update="Effects\SafeAreaPaddingBottom.xaml.cs">
+      <DependentUpon>SafeAreaPaddingBottom.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="ResponsiveLinkLabel.xaml.cs">
-      <DependentUpon>ResponsiveLinkLabel.xaml</DependentUpon>
+    <Compile Update="Effects\SafeAreaPaddingTop.xaml.cs">
+      <DependentUpon>SafeAreaPaddingTop.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="ResponsiveHeading1.xaml.cs">
+    <Compile Update="Header\SlimCloseAndLogoNavigationHeader.xaml.cs">
+      <DependentUpon>SlimCloseAndLogoNavigationHeader.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Header\SlimLogoNavigationHeader.xaml.cs">
+      <DependentUpon>SlimLogoNavigationHeader.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Header\SlimCloseNavigationHeader.xaml.cs">
+      <DependentUpon>SlimCloseNavigationHeader.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Header\FullNavigationHeader.xaml.cs">
+      <DependentUpon>FullNavigationHeader.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Elements\ResponsiveHeading1.xaml.cs">
       <DependentUpon>ResponsiveHeading1.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="ResponsiveHeading2.xaml.cs">
+    <Compile Update="Elements\ResponsiveHeading2.xaml.cs">
       <DependentUpon>ResponsiveHeading2.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="ResponsiveListItem.xaml.cs">
+    <Compile Update="Elements\ResponsiveLinkLabel.xaml.cs">
+      <DependentUpon>ResponsiveLinkLabel.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Elements\ResponsiveListItem.xaml.cs">
       <DependentUpon>ResponsiveListItem.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="ResponsiveLinkParagraph.xaml.cs">
+    <Compile Update="Elements\ResponsiveParagraph.xaml.cs">
+      <DependentUpon>ResponsiveParagraph.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Elements\Button.xaml.cs">
+      <DependentUpon>Button.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Components\Expander.xaml.cs">
+      <DependentUpon>Expander.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Elements\LabelListItem.xaml.cs">
+      <DependentUpon>LabelListItem.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Elements\LargeLabel.xaml.cs">
+      <DependentUpon>LargeLabel.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Elements\LinkSpan.xaml.cs">
+      <DependentUpon>LinkSpan.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Elements\MediumLabel.xaml.cs">
+      <DependentUpon>MediumLabel.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Components\NhsWarningCallout.xaml.cs">
+      <DependentUpon>NhsWarningCallout.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Components\NhsYellowWarningCard.xaml.cs">
+      <DependentUpon>NhsYellowWarningCard.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Components\NhsPanelWithLabel.xaml.cs">
+      <DependentUpon>NhsPanelWithLabel.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Elements\NhsLoginButton.xaml.cs">
+      <DependentUpon>NhsLoginButton.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Components\NhsErrorCallout.xaml.cs">
+      <DependentUpon>NhsErrorCallout.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Elements\Spinner.xaml.cs">
+      <DependentUpon>Spinner.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Layout\FullNavigationFooter.xaml.cs">
+      <DependentUpon>FullNavigationFooter.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Layout\FullNavigationFooterItem.xaml.cs">
+      <DependentUpon>FullNavigationFooterItem.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Layout\FullNavigationFooterItemWide.xaml.cs">
+      <DependentUpon>FullNavigationFooterItemWide.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Layout\FullNavigationFooterWide.xaml.cs">
+      <DependentUpon>FullNavigationFooterWide.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Layout\FullNavigationHeader.xaml.cs">
+      <DependentUpon>FullNavigationHeader.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Layout\SlimCloseAndLogoNavigationHeader.xaml.cs">
+      <DependentUpon>SlimCloseAndLogoNavigationHeader.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Layout\SlimCloseNavigationHeader.xaml.cs">
+      <DependentUpon>SlimCloseNavigationHeader.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Layout\SlimLogoNavigationHeader.xaml.cs">
+      <DependentUpon>SlimLogoNavigationHeader.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Elements\ResponsiveErrorCodeParagraph.xaml.cs">
+      <DependentUpon>ResponsiveErrorCodeParagraph.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Elements\Depricated\LinkLabel.xaml.cs">
+      <DependentUpon>LinkLabel.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Elements\Depricated\Heading2.xaml.cs">
+      <DependentUpon>Heading2.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Elements\Depricated\Heading1.xaml.cs">
+      <DependentUpon>Heading1.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Elements\Depricated\ListItem.xaml.cs">
+      <DependentUpon>ListItem.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Elements\Depricated\Paragraph.xaml.cs">
+      <DependentUpon>Paragraph.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Elements\ResponsiveLinkParagraph.xaml.cs">
       <DependentUpon>ResponsiveLinkParagraph.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Elements\ResponsiveUnorderedList.xaml.cs">
+      <DependentUpon>ResponsiveUnorderedList.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

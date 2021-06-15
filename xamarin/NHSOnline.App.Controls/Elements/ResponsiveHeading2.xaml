@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NHSOnline.App.Controls.Elements.ResponsiveHeading2"
+             x:Name="Root">
+    
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="ResponsiveDisplayStates">
+            <VisualState x:Name="SmallDisplay"/>
+            <VisualState x:Name="LargeDisplay">
+                <VisualState.Setters>
+                    <Setter TargetName="Heading2Label" Property="Style" Value="{ StaticResource Heading2Wide}" />
+                </VisualState.Setters>
+            </VisualState>
+        </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+    
+    <View.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="Label">
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="FontFamily" Value="Frutiger-Bold" />
+                <Setter Property="Padding" Value="0,4,0,16" />
+                <Setter Property="TextColor" Value="{Binding TextColour, Source={x:Reference Name=Root}}" />
+            </Style>
+            
+            <Style x:Key="Heading2Wide" TargetType="Label">
+                <Setter Property="FontSize" Value="24" />
+                <Setter Property="Padding" Value="0,6,0,24" />
+            </Style>
+        </ResourceDictionary>
+    </View.Resources>
+    
+    <Label x:Name="Heading2Label" Text="{Binding Text, Source={x:Reference Name=Root}}" />
+</ContentView>

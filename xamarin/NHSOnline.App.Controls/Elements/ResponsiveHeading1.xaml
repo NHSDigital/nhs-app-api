@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NHSOnline.App.Controls.Elements.ResponsiveHeading1"
+             x:Name="Root">
+    
+    <View.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <Style TargetType="Label" CanCascade="True">
+                <Setter Property="FontSize" Value="32" />
+                <Setter Property="Padding" Value="16,32,0,28" />
+                <Setter Property="FontFamily" Value="Frutiger-Bold" />
+                <Setter Property="TextColor" Value="{Binding TextColour, Source={x:Reference Name=Root}}" />
+            </Style>
+            
+            <Style x:Key="HeadingWide" TargetType="Label" CanCascade="True">
+                <Setter Property="FontSize" Value="48" />
+                <Setter Property="Padding" Value="16,32,0,36" />
+            </Style>
+        </ResourceDictionary>
+    </View.Resources>
+    
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="ResponsiveFontStates">
+            <VisualState x:Name="SmallDisplay" />
+            <VisualState x:Name="LargeDisplay">
+                <VisualState.Setters>
+                    <Setter TargetName="Label" Property="Style" Value="{StaticResource HeadingWide}" />
+                </VisualState.Setters>
+            </VisualState>
+        </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+    
+    <Label x:Name="Label"
+           Text="{Binding Text, Source={x:Reference Name=Root}}" />
+</ContentView>

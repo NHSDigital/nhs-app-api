@@ -1,4 +1,3 @@
-using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.UI.Components.IOS;
 using NHSOnline.IntegrationTests.UI.Drivers;
 

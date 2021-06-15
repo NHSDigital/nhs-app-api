@@ -1,7 +1,6 @@
 using System.Globalization;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
-using OpenQA.Selenium.Appium.Android;
 
 namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 {

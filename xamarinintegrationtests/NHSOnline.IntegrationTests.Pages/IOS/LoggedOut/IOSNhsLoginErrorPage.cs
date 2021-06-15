@@ -6,17 +6,15 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
     public sealed class IOSNhsLoginErrorPage
     {
         private readonly IIOSDriverWrapper _driver;
-
         private IOSNhsLoginErrorPage(IIOSDriverWrapper driver) => _driver = driver;
 
         private IOSLabel Title => IOSLabel.WithText(_driver, "Login failed");
-
         private IOSLabel CannotGetDetailsText => IOSLabel.WithText(_driver, "We cannot get your details from your GP surgery.");
         private IOSLabel GoBackText => IOSLabel.WithText(_driver, "Go back to the home screen and try logging in again.");
-        private IOSLabel ErrorCodeText => IOSLabel.WhichMatches(_driver, "If you keep seeing this message, contact us. Quote the error code 3w[0-9a-z]{4} to help us resolve the problem quicker.");
+        private IOSLabel ErrorCodeText => IOSLabel.WhichMatches(_driver, "If you keep seeing this message, contact us. Quote the error code 3w[0-9a-z]{4} to help us resolve the problem more quickly.");
         private IOSLabel IfYouNeedText => IOSLabel.WithText(_driver, "If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.");
-        private IOSErrorLink ContactUsLink => IOSErrorLink.WithText(_driver, "Contact us");
-        private IOSErrorLink BackHomeLink => IOSErrorLink.WithText(_driver, "Back home");
+        private IOSLink ContactUsLink => IOSLink.WithText(_driver, "Contact us");
+        private IOSLink BackToHomeLink => IOSLink.WithText(_driver, "Back to home");
 
         public static IOSNhsLoginErrorPage AssertOnPage(IIOSDriverWrapper driver)
         {
@@ -32,18 +30,11 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
             ErrorCodeText.AssertVisible();
             IfYouNeedText.AssertVisible();
             ContactUsLink.AssertVisible();
-            BackHomeLink.AssertVisible();
+            BackToHomeLink.AssertVisible();
             return this;
         }
 
-        public void ContactUs()
-        {
-            ContactUsLink.Touch();
-        }
-
-        public void BackHome()
-        {
-            BackHomeLink.Touch();
-        }
+        public void ContactUs() => ContactUsLink.Touch();
+        public void BackToHome() => BackToHomeLink.Touch();
     }
 }

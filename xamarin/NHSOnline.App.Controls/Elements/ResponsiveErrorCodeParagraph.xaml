@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NHSOnline.App.Controls.Elements.ResponsiveErrorCodeParagraph"
+             x:Name="Root">
+    
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="ResponsiveDisplayStates">
+            <VisualState x:Name="SmallDisplay" />
+            <VisualState x:Name="LargeDisplay">
+                <VisualState.Setters>
+                    <Setter TargetName="LabelSmall" Property="IsVisible" Value="False" />
+                    <Setter TargetName="LabelLarge" Property="IsVisible" Value="True" />
+                </VisualState.Setters>
+            </VisualState>
+        </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+
+    <View.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="Label" CanCascade="True">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontFamily" Value="Frutiger" />
+                <Setter Property="LineHeight" Value="1.2" />
+                <Setter Property="Padding" Value="0,0,0,16" />
+                <Setter Property="TextColor" Value="{StaticResource NhsUkPrimaryText}" />
+            </Style>
+            
+            <Style TargetType="Label" Class="LabelLarge" CanCascade="True">
+                <Setter Property="FontSize" Value="19" />
+                <Setter Property="Padding" Value="0,0,0,24" />
+            </Style>
+        </ResourceDictionary>
+    </View.Resources>
+
+    <ContentView.Content>
+        <StackLayout>
+            <Label x:Name="LabelSmall" IsVisible="True">
+               <Label.FormattedText>
+                   <FormattedString >
+                       <Span Text="{Binding LeadInText, Source={x:Reference Name=Root}}" />
+                       <Span Text="{Binding BoldText, Source={x:Reference Name=Root}}" 
+                             AutomationProperties.LabeledBy="{Binding AccessibleBoldTextLabel, Source={x:Reference Name=Root}}"
+                             FontFamily="Frutiger-Bold"
+                             FontSize="16" />
+                       <Span Text="{Binding LeadOutText, Source={x:Reference Name=Root}}" />
+                   </FormattedString>
+               </Label.FormattedText>
+            </Label>
+            
+            <Label x:Name="LabelLarge" StyleClass="LabelLarge" IsVisible="False">
+                <Label.FormattedText>
+                    <FormattedString >
+                        <Span Text="{Binding LeadInText, Source={x:Reference Name=Root}}" />
+                        <Span Text="{Binding BoldText, Source={x:Reference Name=Root}}" 
+                              AutomationProperties.LabeledBy="{Binding AccessibleBoldTextLabel, Source={x:Reference Name=Root}}"
+                              FontFamily="Frutiger-Bold" 
+                              FontSize="19" />
+                        <Span Text="{Binding LeadOutText, Source={x:Reference Name=Root}}" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

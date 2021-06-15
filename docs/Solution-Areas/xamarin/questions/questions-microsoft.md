@@ -8,6 +8,8 @@ Cookies in iOS appear to be shared between the webview and the HTTP client, (See
 
 Why would a cookie with a matching subdomain inconsistently be added to a HTTP call to an endpoint on that domain?
 
+Changing FontFamily & FontAttributes breaks the font-size inherritance on the span elements, as illustrated here https://github.com/xamarin/Xamarin.Forms/issues/2168
+
 ## Android
 
 How should the disposing of objects passed into Android classes be handled?
