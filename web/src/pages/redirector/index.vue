@@ -110,14 +110,7 @@ export default {
           ignoreError: true,
         })
         .then((response) => {
-          if (NativeApp.supportsNativeWebIntegration()) {
-            NativeApp.openWebIntegration(
-              this.appendAssertedLoginIdentity(this.redirectParameter, response),
-            );
-            return;
-          }
-
-          setWindowLocation(
+          this.navigateToExternalPath(
             this.appendAssertedLoginIdentity(this.redirectParameter, response),
           );
         })
@@ -137,7 +130,10 @@ export default {
     },
     navigateToExternalPath(url) {
       if (NativeApp.supportsNativeWebIntegration()) {
-        NativeApp.openWebIntegration(url);
+        NativeApp.openWebIntegration(
+          url,
+          !isEmpty(this.matchedService.domains) ? this.matchedService.domains : [],
+        );
       } else {
         setWindowLocation(url);
       }

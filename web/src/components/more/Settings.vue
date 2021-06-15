@@ -27,7 +27,8 @@
 </template>
 
 <script>
-import { MORE_NOTIFICATIONS_PATH, MORE_LOGIN_SETTINGS_PATH } from '@/router/paths';
+import { INTERSTITIAL_REDIRECTOR_PATH, MORE_NOTIFICATIONS_PATH, MORE_LOGIN_SETTINGS_PATH } from '@/router/paths';
+import { REDIRECT_PARAMETER } from '@/router/names';
 import MenuItem from '@/components/MenuItem';
 import NativeApp from '@/services/native-app';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
@@ -105,7 +106,7 @@ export default {
 
       if (this.isNativeApp) {
         if (NativeApp.supportsNativeWebIntegration()) {
-          NativeApp.openWebIntegration(settingsUrl);
+          redirectTo(this, `/${INTERSTITIAL_REDIRECTOR_PATH}?${REDIRECT_PARAMETER}=${settingsUrl}`);
         } else {
           window.location = settingsUrl;
         }

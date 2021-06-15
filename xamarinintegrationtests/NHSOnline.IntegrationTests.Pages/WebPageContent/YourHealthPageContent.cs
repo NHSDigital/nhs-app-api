@@ -18,6 +18,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebMenuItem CarePlansMenuItem => WebMenuItem.WithTitle(_interactor, "Care plans");
 
+        private WebMenuItem UpdateYourPersonalDetailsMenuItem => WebMenuItem.WithTitle(_interactor, "Update your personal details");
+
         private WebMenuItem TrackYourHealthMenuItem => WebMenuItem.WithTitle(_interactor, "Track your health");
 
         private WebMenuItem SharedHealthMenuItem => WebMenuItem.WithTitle(_interactor, "Shared health links");
@@ -33,6 +35,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         public void NavigateToTestResults() => TestResultsMenuItem.Click();
 
         public void NavigateToCarePlans() => CarePlansMenuItem.Click();
+
+        public void NavigateUpdateYourPersonalDetails() => UpdateYourPersonalDetailsMenuItem.Click();
 
         public void NavigateToTrackYourHealth() => TrackYourHealthMenuItem.Click();
 

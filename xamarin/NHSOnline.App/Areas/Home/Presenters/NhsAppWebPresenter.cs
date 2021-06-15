@@ -135,7 +135,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _logger.LogInformation("Opening Web Integration - {Url}", request.Url);
 
             var popToRootNavigationHandler = new NhsAppPopToRootNavigationHandler(_navigationHandler, _view.AppNavigation);
-            var model = new WebIntegrationModel(popToRootNavigationHandler, request.Url, _view.SelectedNavigationFooterItem);
+            var model = new WebIntegrationModel(popToRootNavigationHandler, request.Url, _view.SelectedNavigationFooterItem, request.AdditionalDomains);
 
             var page = _pageFactory.CreatePageFor(model);
             await _view.AppNavigation

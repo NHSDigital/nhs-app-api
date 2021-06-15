@@ -8,7 +8,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Models
         {
             Url = url;
         }
-        
+
         internal Uri Url { get; }
     }
 }

@@ -57,8 +57,11 @@ import MenuItemList from '@/components/MenuItemList';
 import NativeApp from '@/services/native-app';
 import sjrIf from '@/lib/sjrIf';
 import { SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS } from '@/router/externalLinks';
+import { REDIRECT_PARAMETER } from '@/router/names';
+import { INTERSTITIAL_REDIRECTOR_PATH } from '@/router/paths';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'AdviceCheck',
@@ -99,7 +102,7 @@ export default {
     },
     navigateToWebIntegration(url) {
       if (NativeApp.supportsNativeWebIntegration()) {
-        NativeApp.openWebIntegration(url);
+        redirectTo(this, `/${INTERSTITIAL_REDIRECTOR_PATH}?${REDIRECT_PARAMETER}=${url}`);
       } else {
         window.open(url, '_blank', 'noopener,noreferrer');
       }

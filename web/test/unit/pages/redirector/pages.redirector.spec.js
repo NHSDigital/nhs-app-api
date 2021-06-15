@@ -34,6 +34,7 @@ describe('redirector page', () => {
     showThirdPartyWarning = false,
     isSilverIntegrationEnabled = false,
     isProofLevel9 = false,
+    domains = ['http://additional.domain.com'],
   } = {}) => {
     $http = {
       postV1PatientAssertedLoginIdentity: jest.fn()
@@ -50,6 +51,7 @@ describe('redirector page', () => {
               requiresAssertedLoginIdentity,
               showThirdPartyWarning,
               url,
+              domains,
             };
           }
           return undefined;
@@ -386,7 +388,10 @@ describe('redirector page', () => {
       });
 
       it('will call NativeApp.openWebIntegration with the decoded asserted login url', () => {
-        expect(NativeApp.openWebIntegration).toHaveBeenCalledWith('http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages&assertedLoginIdentity=jwtToken');
+        expect(NativeApp.openWebIntegration).toHaveBeenCalledWith(
+          'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages&assertedLoginIdentity=jwtToken',
+          ['http://additional.domain.com'],
+        );
       });
     });
 

@@ -7,14 +7,14 @@
     </ul>
     <hr>
     <h2 class="display-5">Query String</h2>
-    <ul class="list-group">
+    <ul class="list-group" style="max-width: 100%; overflow-x: scroll">
         @foreach(var (key, value) in Model.Query.SelectMany(q => q.Value.Select(v => (q.Key, v))))
         {
             <li class="list-group-item">@key: @value</li>
         }
     </ul>
     <h2 class="display-5">Headers</h2>
-    <ul class="list-group">
+    <ul class="list-group" style="max-width: 100%; overflow-x: scroll">
         @foreach(var (key, value) in Model.Headers.SelectMany(h => h.Value.Select(v => (h.Key, v))))
         {
             <li class="list-group-item">@key: @value</li>

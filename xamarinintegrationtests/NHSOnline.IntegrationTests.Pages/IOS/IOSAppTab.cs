@@ -21,26 +21,36 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         public void ReturnToApp() => DoneButton.Click();
 
-        public static IOSAppTab AssertOnConditionsPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "Conditions");
+        public static IOSAppTab AssertOnConditionsPage(IIOSDriverWrapper driver) => AssertOnPageByTitle(driver, "Conditions");
 
-        public static IOSAppTab AssertOnCovidAppPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "CovidApp");
+        public static IOSAppTab AssertOnCovidAppPage(IIOSDriverWrapper driver) => AssertOnPageByTitle(driver, "CovidApp");
 
-        public static IOSAppTab AssertOnCovidPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "Covid");
+        public static IOSAppTab AssertOnCovidPage(IIOSDriverWrapper driver) => AssertOnPageByTitle(driver, "Covid");
 
-        public static IOSAppTab AssertOn111Page(IIOSDriverWrapper driver) => AssertOnPage(driver, "111");
+        public static IOSAppTab AssertOn111Page(IIOSDriverWrapper driver) => AssertOnPageByTitle(driver, "111");
 
-        public static IOSAppTab AssertOnCovidConditionsPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "Covid Conditions");
+        public static IOSAppTab AssertOnCovidConditionsPage(IIOSDriverWrapper driver) => AssertOnPageByTitle(driver, "Covid Conditions");
 
-        public static IOSAppTab AssertOnLoginHelpPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "Login Help");
+        public static IOSAppTab AssertOnLoginHelpPage(IIOSDriverWrapper driver) => AssertOnPageByTitle(driver, "Login Help");
 
-        public static IOSAppTab AssertOnContactUsPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "Contact Us");
+        public static IOSAppTab AssertOnContactUsPage(IIOSDriverWrapper driver) => AssertOnPageByTitle(driver, "Contact Us");
 
-        public static IOSAppTab AssertOnHomeHelpPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "Home Help");
+        public static IOSAppTab AssertOnHomeHelpPage(IIOSDriverWrapper driver) => AssertOnPageByTitle(driver, "Home Help");
 
-        private static IOSAppTab AssertOnPage(IIOSDriverWrapper driver, string title)
+        public static IOSAppTab AssertInBrowserAppTab(IIOSDriverWrapper driver) => AssertOnPageByClose(driver);
+
+        private static IOSAppTab AssertOnPageByTitle(IIOSDriverWrapper driver, string title)
         {
             var page = new IOSAppTab(driver, title);
             page.TitleText(driver.Web(WebViewContext.OneOff)).AssertVisible();
+
+            return page;
+        }
+
+        private static IOSAppTab AssertOnPageByClose(IIOSDriverWrapper driver)
+        {
+            var page = new IOSAppTab(driver);
+            page.DoneButton.AssertVisible();
 
             return page;
         }

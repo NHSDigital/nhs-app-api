@@ -1,4 +1,5 @@
 using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.WebIntegration.Models;
@@ -35,7 +36,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             _browserOverlay = browserOverlay;
             _selectMediaService = selectMediaService;
 
-            _uriDestination = new WebIntegrationUriDestination(nhsLoginConfiguration, model.Url);
+            _uriDestination = new WebIntegrationUriDestination(nhsLoginConfiguration, model.Url, new Collection<Uri>());
 
             _view.AppNavigation
                 .RegisterHandler(

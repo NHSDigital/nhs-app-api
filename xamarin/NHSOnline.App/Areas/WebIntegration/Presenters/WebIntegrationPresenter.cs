@@ -38,7 +38,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             _logger = logger;
             _calendar = calendar;
 
-            _uriDestination = new WebIntegrationUriDestination(nhsLoginConfiguration, model.Url);
+            _uriDestination = new WebIntegrationUriDestination(nhsLoginConfiguration, model.Url, model.AdditionalDomains);
 
             _view.SetNavigationFooterItem(model.FooterItem);
 

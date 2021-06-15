@@ -22,6 +22,8 @@ services:
           - deeplinklauncher.stubs.local.bitraft.io
           - silverintegrationtestprovider.stubs.local.bitraft.io
           - pkb.stubs.local.bitraft.io
+          - substrakt.stubs.local.bitraft.io
+          - substraktDomain1.stubs.local.bitraft.io
 
   browserstack.local:
     image: ${DOCKER_IMAGE_BROWSERSTACK_LOCAL}

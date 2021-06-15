@@ -19,7 +19,7 @@ namespace NHSOnline.IntegrationTests.UI
 
         // 389382-Got response with status 200: disconnected: unable to connect to renderer
         private static readonly Regex UnableToConnectToRenderer = new(
-            @"Appium error: An unknown server-side error occurred while processing the command\. Original error: disconnected: unable to connect to renderer",
+            @"Appium error: An unknown server-side error occurred while processing the command\. Original error: disconnected: unable to connect to renderer*",
             RegexOptions.Compiled);
 
         // 388660-Error executing adbExec - adb: error: listener 'tcp:9222' not found

@@ -59,10 +59,10 @@ export default {
     return app && app.openWebIntegration;
   },
 
-  openWebIntegration(url) {
+  openWebIntegration(url, additionalDomains = []) {
     const app = window.nativeApp;
-    const request = JSON.stringify({ url });
-    app.openWebIntegration(request);
+    const urlRequest = JSON.stringify({ url, additionalDomains });
+    app.openWebIntegration(urlRequest);
   },
 
   supportsNativeNhsLoginUplift() {
