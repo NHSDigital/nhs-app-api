@@ -27,8 +27,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebMenuItem ShareYourCovidStatusMenuItem => WebMenuItem.WithTitle(_interactor, "Share your COVID-19 status");
 
-        private WebMenuItem CheckCovidVaccineMenuItem => WebMenuItem.WithTitle(_interactor, "Check your COVID-19 vaccine record");
-
         private WebMenuItem MessagesMenuItem => WebMenuItem.WithTitle(_interactor, "View your messages");
 
         private WebMenuItem LinkedProfilesMenuItem => WebMenuItem.WithTitle(_interactor, "Linked profiles");
@@ -42,7 +40,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             OpenSettingsButton,
             DismissBiometricsBanner,
             ShareYourCovidStatusMenuItem,
-            CheckCovidVaccineMenuItem,
             MessagesMenuItem,
             LinkedProfilesMenuItem,
             GpHealthMenuItem,
