@@ -25,7 +25,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebLink DismissBiometricsBanner => WebLink.WithText(_interactor, "Dismiss");
 
-        private WebMenuItem ShareYourCovidStatusMenuItem => WebMenuItem.WithTitle(_interactor, "Share your COVID-19 status");
+        private WebMenuItem GetYourCovidPassMenuItem => WebMenuItem.WithTitle(_interactor, "Get your NHS COVID Pass");
 
         private WebMenuItem MessagesMenuItem => WebMenuItem.WithTitle(_interactor, "View your messages");
 
@@ -39,7 +39,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         {
             OpenSettingsButton,
             DismissBiometricsBanner,
-            ShareYourCovidStatusMenuItem,
+            GetYourCovidPassMenuItem,
             MessagesMenuItem,
             LinkedProfilesMenuItem,
             GpHealthMenuItem,
