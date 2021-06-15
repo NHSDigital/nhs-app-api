@@ -2,7 +2,7 @@ export default {
   accessYourNhsServices: 'Access your NHS services',
   aged13AndOver: 'aged 13 and over',
   beforeYouStart: 'Before you start',
-  shareCovidStatus: 'share your COVID-19 status',
+  getYourCovidPass: 'get your NHS COVID Pass',
   bookAndManageAppointments: 'book and manage appointments',
   checkIfYouHaveCoronavirusSymptoms: 'Check if you have coronavirus symptoms',
   adviceChecker: 'Get health advice',

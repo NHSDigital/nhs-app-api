@@ -3,7 +3,7 @@
     <div>
       <p class="nhsuk-u-margin-bottom-4">{{ $t('login.useTheNhsAppTo') }}</p>
       <ul>
-        <li class="nhsuk-u-margin-bottom-3">{{ $t('login.shareCovidStatus') }}</li>
+        <li class="nhsuk-u-margin-bottom-3">{{ $t('login.getYourCovidPass') }}</li>
         <li class="nhsuk-u-margin-bottom-3">{{ $t('login.orderRepeatPrescriptions') }}</li>
         <li class="nhsuk-u-margin-bottom-3">{{ $t('login.bookAndManageAppointments') }}</li>
         <li class="nhsuk-u-margin-bottom-3">{{ $t('login.getHealthInfoAndAdvice') }}</li>
