@@ -86,7 +86,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             => await NavigateToOdsCodeNotSupportedOrNoNhsNumberPage(odsCodeNotSupportedOrNoNhsNumber.ServiceDeskReference).PreserveThreadContext();
 
         async Task ICreateSessionResultVisitor<Task>.Visit(CreateSessionResult.FailedAgeRequirement failedAgeRequirement)
-            => await NavigateToFailedAgeRequirementPage(failedAgeRequirement.ServiceDeskReference).PreserveThreadContext();
+            => await NavigateToFailedAgeRequirementPage().PreserveThreadContext();
 
         async Task ICreateSessionResultVisitor<Task>.Visit(CreateSessionResult.BadResponseFromUpstreamSystem badResponseFromUpstreamSystem)
             => await NavigateToBadResponseFromUpstreamSystemPage(badResponseFromUpstreamSystem.ServiceDeskReference).PreserveThreadContext();
@@ -127,9 +127,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             await _view.AppNavigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
         }
 
-        private async Task NavigateToFailedAgeRequirementPage(string serviceDeskReference)
+        private async Task NavigateToFailedAgeRequirementPage()
         {
-            var errorModel = _model.FailedAgeRequirementError(serviceDeskReference);
+            var errorModel = _model.FailedAgeRequirementError();
             var errorPage = _pageFactory.CreatePageFor(errorModel);
 
             await _view.AppNavigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();

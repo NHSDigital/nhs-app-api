@@ -13,15 +13,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         public CreateSessionErrorFailedAgeRequirementPresenter(
             ICreateSessionErrorFailedAgeRequirementView view,
-            CreateSessionErrorFailedAgeRequirementModel model,
             IBrowserOverlay browserOverlay,
             INhsExternalServicesConfiguration externalServicesConfiguration)
         {
             _view = view;
             _browserOverlay = browserOverlay;
             _externalServicesConfiguration = externalServicesConfiguration;
-
-            _view.ServiceDeskReference = model.ServiceDeskReference;
 
             _view.AppNavigation
                 .RegisterHandler(ViewOnOneOneOneRequested, (view, handler) => view.OneOneOneRequested = handler);

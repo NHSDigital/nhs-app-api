@@ -31,6 +31,7 @@ namespace NHSOnline.App.Controls
             get => (string) GetValue(TextProperty);
             set => SetValue(TextProperty, value);
         }
+
         public Color TextColour
         {
             get => (Color) GetValue(TextColourProperty);

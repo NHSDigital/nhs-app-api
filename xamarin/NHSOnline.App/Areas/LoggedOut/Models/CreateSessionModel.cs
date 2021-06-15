@@ -31,8 +31,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Models
         public CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberModel OdsCodeNotSupportedOrNoNhsNumberError(string serviceDeskReference)
             => new CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberModel(this, serviceDeskReference);
 
-        public CreateSessionErrorFailedAgeRequirementModel FailedAgeRequirementError(string serviceDeskReference)
-            => new CreateSessionErrorFailedAgeRequirementModel(this, serviceDeskReference);
+        public CreateSessionErrorFailedAgeRequirementModel FailedAgeRequirementError()
+            => new CreateSessionErrorFailedAgeRequirementModel(this);
 
         public CreateSessionErrorBadResponseFromUpstreamSystemModel BadResponseFromUpstreamSystemError(string serviceDeskReference)
             => new CreateSessionErrorBadResponseFromUpstreamSystemModel(this, serviceDeskReference);

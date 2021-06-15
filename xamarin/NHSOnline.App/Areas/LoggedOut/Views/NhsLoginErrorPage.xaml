@@ -20,7 +20,7 @@
         </ScrollView.Resources>
         
             <StackLayout >
-                <controls:ResponsiveHeading1 Text="Login failed" />
+                <controls:ResponsiveHeading1 Text="Login failed" x:Name="Heading" />
 
                 <controls:NhsErrorCallout LabelText="Error" >
                     <StackLayout>
@@ -29,7 +29,9 @@
                         <controls:ResponsiveParagraph>
                             <FormattedString>
                                 <Span Text="If you keep seeing this message, contact us. Quote the error code " />
-                                <Span Style="{StaticResource ErrorCode}" Text="{Binding ServiceDeskReference, Source={x:Reference Name=Page}}" />
+                                <Span Style="{StaticResource ErrorCode}"
+                                      Text="{Binding ServiceDeskReference, Source={x:Reference Name=Page}}"
+                                      AutomationProperties.LabeledBy="{Binding AccessibleServiceDeskReference, Source={x:Reference Name=Page}}" />
                                 <Span Text=" to help us resolve the problem quicker." />
                             </FormattedString>
                         </controls:ResponsiveParagraph>

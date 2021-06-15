@@ -37,16 +37,27 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public static readonly BindableProperty ServiceDeskReferenceProperty
             = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(CreateSessionErrorBadRequestPage), "3c");
 
+        public static readonly BindableProperty AccessibleServiceDeskReferenceProperty
+            = BindableProperty.Create(nameof(AccessibleServiceDeskReference), typeof(string), typeof(CreateSessionErrorBadRequestPage), "3 c");
+
         public string ServiceDeskReference
         {
             get => (string) GetValue(ServiceDeskReferenceProperty);
             set => SetValue(ServiceDeskReferenceProperty, value);
         }
 
+        public string AccessibleServiceDeskReference
+        {
+            get => (string) GetValue(AccessibleServiceDeskReferenceProperty);
+            set => SetValue(AccessibleServiceDeskReferenceProperty, value);
+        }
+
         protected override void OnAppearing()
         {
             _logger.LogInformation("{Method}", nameof(OnAppearing));
             _appNavigation.EnableHandlers();
+
+            Heading.AccessibilityFocus();
         }
 
         protected override void OnDisappearing()

@@ -24,6 +24,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _externalServicesConfiguration = externalServicesConfiguration;
 
             _view.ServiceDeskReference = model.ServiceDeskReference;
+            _view.AccessibleServiceDeskReference = model.AccessibleServiceDeskReference;
 
             _view.AppNavigation
                 .RegisterHandler(ViewOnOneOneOneRequested, (view, handler) => view.OneOneOneRequested = handler)

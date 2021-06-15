@@ -15,6 +15,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public static readonly BindableProperty ServiceDeskReferenceProperty
             = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(NhsLoginErrorPage), "3w");
 
+        public static readonly BindableProperty AccessibleServiceDeskReferenceProperty
+            = BindableProperty.Create(nameof(AccessibleServiceDeskReference), typeof(string), typeof(NhsLoginErrorPage), "3 w");
+
         private readonly ILogger _logger;
         private readonly AppNavigation<INhsLoginErrorView.IEvents> _appNavigation;
 
@@ -34,6 +37,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             set => SetValue(ServiceDeskReferenceProperty, value);
         }
 
+        public string AccessibleServiceDeskReference
+        {
+            get => (string) GetValue(AccessibleServiceDeskReferenceProperty);
+            set => SetValue(AccessibleServiceDeskReferenceProperty, value);
+        }
+
         public Func<Task>? OneOneOneRequested { get; set; }
         public ICommand OneOneOneCommand => new AsyncCommand(() => OneOneOneRequested);
 
@@ -47,6 +56,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         {
             _logger.LogInformation("{Method}", nameof(OnAppearing));
             _appNavigation.EnableHandlers();
+
+            Heading.AccessibilityFocus();
         }
 
         protected override void OnDisappearing()

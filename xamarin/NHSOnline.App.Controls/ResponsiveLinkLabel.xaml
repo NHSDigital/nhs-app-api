@@ -2,6 +2,7 @@
 
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
        x:Class="NHSOnline.App.Controls.ResponsiveLinkLabel"
        x:Name="Root">
     
@@ -41,7 +42,8 @@
             <Label x:Name="LinkLabel"
                    Text="{Binding Text, Source={x:Reference Name=Root}}"
                    FormattedText="{Binding FormattedText, Source={x:Reference Name=Root}}"
-                   AutomationProperties.IsInAccessibleTree="true">
+                   AutomationProperties.IsInAccessibleTree="true"
+                   effects:AccessibilityEffect.ControlType="Link">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding Command, Source={x:Reference Name=Root}}" />
                 </Label.GestureRecognizers>

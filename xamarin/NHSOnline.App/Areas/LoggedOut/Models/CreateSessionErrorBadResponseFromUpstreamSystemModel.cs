@@ -6,8 +6,10 @@ namespace NHSOnline.App.Areas.LoggedOut.Models
             : base(createSessionModel)
         {
             ServiceDeskReference = serviceDeskReference;
+            AccessibleServiceDeskReference = string.Join(" ", serviceDeskReference.ToCharArray());
         }
 
         public string ServiceDeskReference { get; }
+        public string AccessibleServiceDeskReference { get; }
     }
 }

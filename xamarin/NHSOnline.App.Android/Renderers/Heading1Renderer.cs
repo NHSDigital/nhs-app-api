@@ -6,6 +6,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(Heading1), typeof(Heading1Renderer))]
+[assembly: ExportRenderer(typeof(ResponsiveHeading1), typeof(Heading1Renderer))]
 namespace NHSOnline.App.Droid.Renderers
 {
     internal sealed class Heading1Renderer : ViewRenderer<ContentView, Android.Views.View>
@@ -22,10 +23,18 @@ namespace NHSOnline.App.Droid.Renderers
             {
                 oldHeading.AccessibilityFocusChangeRequested -= OnAccessibilityFocusChangeRequested;
             }
+            else if (e.OldElement is ResponsiveHeading1 oldResponsiveHeading)
+            {
+                oldResponsiveHeading.AccessibilityFocusChangeRequested -= OnAccessibilityFocusChangeRequested;
+            }
 
             if (e.NewElement is Heading1 newHeading)
             {
                 newHeading.AccessibilityFocusChangeRequested += OnAccessibilityFocusChangeRequested;
+            }
+            else if (e.NewElement is ResponsiveHeading1 newResponsiveHeading)
+            {
+                newResponsiveHeading.AccessibilityFocusChangeRequested += OnAccessibilityFocusChangeRequested;
             }
         }
 

@@ -242,6 +242,10 @@
       <DependentUpon>ResponsiveListItem.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="ResponsiveLinkParagraph.xaml.cs">
+      <DependentUpon>ResponsiveLinkParagraph.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

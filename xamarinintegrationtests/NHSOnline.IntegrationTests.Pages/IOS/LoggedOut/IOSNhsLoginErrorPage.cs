@@ -15,8 +15,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
         private IOSLabel GoBackText => IOSLabel.WithText(_driver, "Go back to the home screen and try logging in again.");
         private IOSLabel ErrorCodeText => IOSLabel.WhichMatches(_driver, "If you keep seeing this message, contact us. Quote the error code 3w[0-9a-z]{4} to help us resolve the problem quicker.");
         private IOSLabel IfYouNeedText => IOSLabel.WithText(_driver, "If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.");
-        private IOSLink ContactUsLink => IOSLink.WithText(_driver, "Contact us");
-        private IOSLink BackHomeLink => IOSLink.WithText(_driver, "Back home");
+        private IOSErrorLink ContactUsLink => IOSErrorLink.WithText(_driver, "Contact us");
+        private IOSErrorLink BackHomeLink => IOSErrorLink.WithText(_driver, "Back home");
 
         public static IOSNhsLoginErrorPage AssertOnPage(IIOSDriverWrapper driver)
         {

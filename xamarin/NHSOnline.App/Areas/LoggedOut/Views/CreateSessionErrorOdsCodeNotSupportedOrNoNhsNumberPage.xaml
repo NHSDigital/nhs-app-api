@@ -19,7 +19,7 @@
         </ScrollView.Resources>
         
         <StackLayout>
-            <controls:ResponsiveHeading1 Text="Login failed" />
+            <controls:ResponsiveHeading1 Text="Login failed" x:Name="Heading" />
 
             <controls:NhsErrorCallout LabelText="Error">
                 <StackLayout>
@@ -59,7 +59,9 @@
                     <controls:ResponsiveParagraph>
                         <FormattedString>
                             <Span Text="Reference: " FontSize="12" />
-                            <Span Text="{Binding ServiceDeskReference, Source={x:Reference Name=Page}}" FontSize="12" />
+                            <Span Text="{Binding ServiceDeskReference, Source={x:Reference Name=Page}}" 
+                                  FontSize="12" 
+                                  AutomationProperties.Name="{Binding AccessibleServiceDeskReference, Source={x:Reference Name=Page}}" />
                         </FormattedString>
                     </controls:ResponsiveParagraph>
                 </StackLayout>

@@ -40,7 +40,9 @@
     <ContentView.Content>
         <StackLayout StyleClass="ListItem"
                      Orientation="Horizontal">
-            <Label x:Name="Bullet" Text="&#x2022; " TextColor="{StaticResource NhsUkPrimaryText}" />
+            <Label x:Name="Bullet"
+                   Text="&#x2022; " 
+                   TextColor="{StaticResource NhsUkPrimaryText}" />
             <Label x:Name="LabelText" Text="{Binding Text, Source={x:Reference Name=Root}}" />
         </StackLayout>
     </ContentView.Content>

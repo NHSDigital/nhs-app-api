@@ -19,7 +19,7 @@
         </ScrollView.Resources>
         
         <StackLayout>
-            <controls:ResponsiveHeading1 Text="Login failed" />
+            <controls:ResponsiveHeading1 Text="Login failed" x:Name="Heading" />
 
             <controls:NhsErrorCallout LabelText="Error">
                 <StackLayout>
