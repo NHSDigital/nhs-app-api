@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Demographics;
-using NHSOnline.Backend.PfsApi.GpSession;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
@@ -36,10 +35,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Demographics
         }
 
         [HttpGet("demographics")]
-        public async Task<IActionResult> Get(
-            [FromHeader(Name=PatientId)] Guid patientId,
-            [UserSession] P9UserSession userSession,
-            [GpSession] GpUserSession gpUserSession)
+        public async Task<IActionResult> Get([FromHeader(Name=PatientId)] Guid patientId, [UserSession] P9UserSession userSession)
         {
             // This endpoint is only hit when the user navigates to the GP record within the app.
             try
@@ -57,10 +53,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Demographics
                     "Attempting to view Demographics");
                 _logger.LogDebug($"Fetching DemographicsService for supplier: {userSession.GpUserSession.Supplier}");
                     var demographicsService = _gpSystemFactory
-                        .CreateGpSystem(gpUserSession.Supplier)
+                        .CreateGpSystem(userSession.GpUserSession.Supplier)
                         .GetDemographicsService();
 
-                    var gpLinkedAccountUserSession = new GpLinkedAccountModel(gpUserSession, patientId);
+                    var gpLinkedAccountUserSession = new GpLinkedAccountModel(
+                        userSession.GpUserSession, patientId
+                    );
 
                     _logger.LogDebug("Fetching Demographics");
                     var result = await demographicsService.GetDemographics(gpLinkedAccountUserSession);

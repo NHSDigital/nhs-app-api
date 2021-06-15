@@ -1,12 +1,9 @@
-using System.Globalization;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.Areas.Session;
 using NHSOnline.Backend.PfsApi.CitizenId;
-using NHSOnline.Backend.PfsApi.GpSession;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 
@@ -18,25 +15,23 @@ namespace NHSOnline.Backend.PfsApi.Session
         private readonly SessionCreatorServiceJourneyRuleService _serviceJourneyRulesService;
         private readonly IUserSessionManager _userSessionManager;
         private readonly SessionCreatorUserInfoService _userInfoService;
+        private readonly ISessionCacheService _sessionCacheService;
         private readonly ILogger<SessionCreator> _logger;
-        private readonly IGpSessionCreator _gpSessionCreator;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+
 
         public SessionCreator(
             SessionCreatorCitizenIdService citizenIdService,
             SessionCreatorServiceJourneyRuleService serviceJourneyRulesService,
             IUserSessionManager userSessionManager,
             SessionCreatorUserInfoService userInfoService,
-            IGpSessionCreator gpSessionCreator,
-            IHttpContextAccessor httpContextAccessor,
+            ISessionCacheService sessionCacheService,
             ILogger<SessionCreator> logger)
         {
             _citizenIdService = citizenIdService;
             _serviceJourneyRulesService = serviceJourneyRulesService;
             _userSessionManager = userSessionManager;
             _userInfoService = userInfoService;
-            _gpSessionCreator = gpSessionCreator;
-            _httpContextAccessor = httpContextAccessor;
+            _sessionCacheService = sessionCacheService;
             _logger = logger;
         }
 
@@ -81,12 +76,7 @@ namespace NHSOnline.Backend.PfsApi.Session
             }
 
             request.UserSession.Im1ConnectionToken = GetIm1ConnectionToken(citizenIdSession);
-
-            var supplier = ((OnDemandGpSession) request.UserSession.GpUserSession).SessionSupplier;
-            await _gpSessionCreator.RecreateGpSession(request.UserSession, supplier);
-
-            _httpContextAccessor.HttpContext?.Response.Headers.Add(Constants.HttpHeaders.Im1MessagingEnabled,
-                request.UserSession.GpUserSession.Im1MessagingEnabled.ToString().ToUpperInvariant());
+            await _sessionCacheService.UpdateUserSession(request.UserSession);
 
             return new CreateSessionResult.Success(request.UserSession);
         }

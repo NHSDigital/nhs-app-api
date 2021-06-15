@@ -31,8 +31,7 @@ val CONSOLE_LOG_STRINGS_TO_IGNORE =
                 ,"Request failed with status code 50"
                 ,"Uncaught (in promise)"
                 ,"https://assets.nhs.uk/fonts"
-                ,"unknown action type"
-                ,"Request failed with status code 598")
+                ,"unknown action type")
 
 class SetupAndTeardown {
 

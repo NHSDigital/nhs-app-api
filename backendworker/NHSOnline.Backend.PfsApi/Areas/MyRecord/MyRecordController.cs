@@ -6,7 +6,6 @@ using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.PatientRecord;
 using NHSOnline.Backend.Metrics;
-using NHSOnline.Backend.PfsApi.GpSession;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
@@ -42,8 +41,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         [HttpGet]
         public async Task<IActionResult> GetMyRecord(
             [FromHeader(Name=PatientId)] Guid patientId,
-            [UserSession] P9UserSession userSession,
-            [GpSession] GpUserSession gpUserSession)
+            [UserSession] P9UserSession userSession)
         {
             _logger.LogEnter();
 
@@ -57,12 +55,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             // Audit attempt made to view patient record
             await _auditor.PreOperationAudit(AuditingOperations.ViewPatientRecordAuditTypeRequest, "Viewing Patient Record");
 
-            _logger.LogInformation($"Fetching PatientRecordService for supplier: {gpUserSession.Supplier}");
+            _logger.LogInformation($"Fetching PatientRecordService for supplier: {userSession.GpUserSession.Supplier}");
             var patientRecordService = _gpSystemFactory
-                .CreateGpSystem(gpUserSession.Supplier)
+                .CreateGpSystem(userSession.GpUserSession.Supplier)
                 .GetPatientRecordService();
 
-            var gpLinkedAccountUserSession = new GpLinkedAccountModel(gpUserSession, patientId);
+            var gpLinkedAccountUserSession = new GpLinkedAccountModel(
+                userSession.GpUserSession, patientId
+            );
             _logger.LogInformation("Fetching patient record");
             var result = await patientRecordService.GetMyRecord(gpLinkedAccountUserSession);
 

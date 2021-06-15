@@ -48,9 +48,22 @@ namespace NHSOnline.Backend.PfsApi.GpSession
                 return await Task.FromResult<GpSessionRecreateResult>(new GpSessionRecreateResult.SessionNotRequiredResult());
             }
 
-            _logger.LogInformation($"OnDemandGpSession, empty Im1ConnectionToken detected when requesting " +
-                                   $"{_httpContextAccessor.HttpContext?.Request.Path}");
-            return await Task.FromResult<GpSessionRecreateResult>(new GpSessionRecreateResult.Im1ConnectionTokenEmptyResult());
+            if (string.IsNullOrEmpty(_p9UserSession.Im1ConnectionToken))
+            {
+                _logger.LogInformation($"OnDemandGpSession, empty Im1ConnectionToken detected when requesting " +
+                                       $"{_httpContextAccessor.HttpContext?.Request.Path}");
+                return await Task.FromResult<GpSessionRecreateResult>(new GpSessionRecreateResult.Im1ConnectionTokenEmptyResult());
+            }
+
+            _logger.LogInformation(
+                "OnDemandGpSession, attempting to recreate a " +
+                $"{gpSession.SessionSupplier} GpUserSession for {_httpContextAccessor.HttpContext?.Request.Path}");
+            var result = await _gpSessionCreator.RecreateGpSession(_p9UserSession, gpSession.SessionSupplier);
+
+            _httpContextAccessor.HttpContext?.Response.Headers.Add(Constants.HttpHeaders.Im1MessagingEnabled, _p9UserSession.GpUserSession.Im1MessagingEnabled.ToString());
+            _httpContextAccessor.HttpContext?.Response.Headers.Add(Constants.HttpHeaders.GpSessionCreated, "true");
+
+            return result;
         }
     }
 }

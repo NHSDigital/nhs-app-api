@@ -5,7 +5,6 @@ using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.Filters;
-using NHSOnline.Backend.PfsApi.GpSession;
 using NHSOnline.Backend.PfsApi.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
 using NHSOnline.Backend.PfsApi.Session;
@@ -45,26 +44,23 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(
-            [UserSession] P9UserSession userSession,
-            [GpSession] GpUserSession gpUserSession)
+        public async Task<IActionResult> Get([UserSession] P9UserSession userSession)
         {
             try
             {
                 _logger.LogEnter();
 
-                await _auditor.PreOperationAudit(
-                    AuditingOperations.GetOrganDonationAuditTypeRequest,
+                await _auditor.PreOperationAudit(AuditingOperations.GetOrganDonationAuditTypeRequest,
                     "Attempting to get organ donation record");
 
-                _logger.LogInformation($"Fetching DemographicsService for supplier: {gpUserSession.Supplier.ToString()}");
+                _logger.LogInformation($"Fetching DemographicsService for supplier: {userSession.GpUserSession.Supplier.ToString()}");
 
-                var demographicsService = _gpSystemFactory
-                    .CreateGpSystem(gpUserSession.Supplier).GetDemographicsService();
+                var demographicsService = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier)
+                    .GetDemographicsService();
 
                 _logger.LogDebug("Fetching Demographics");
-                var demographicsResult = await demographicsService
-                    .GetDemographics(new GpLinkedAccountModel(gpUserSession));
+                var demographicsResult = await demographicsService.GetDemographics(
+                    new GpLinkedAccountModel(userSession.GpUserSession));
 
                 var result = await _organDonationService.GetOrganDonation(demographicsResult, userSession);
 
