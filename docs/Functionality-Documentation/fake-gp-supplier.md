@@ -12,7 +12,7 @@ All code is maintained in the `NHSOnline.Backend.GpSystems.Suppliers.Fake` names
 
 ## User configuration
 
-The registered users for the Fake GP supplier are maintained in the `backendworker/FakeGpSupplierConfig.yml` file.
+The registered users for the Fake GP supplier are maintained in several yaml files in backendworker, split by the NHS Login environment in which the users exist (EXT, Sandpit or AOS) - `backendworker/FakeGpSupplierConfig_ext.yml`, `backendworker/FakeGpSupplierConfig_sandpit.yml` and `backendworker/FakeGpSupplierConfig_aos.yml`
 
 ### Adding/Updating Users
 
