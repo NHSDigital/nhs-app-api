@@ -21,10 +21,11 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
             IIOSInteractor interactor,
             string prefixText,
             string month,
-            string date,
+            string day,
             string year,
-            string time)
-            => new IOSStartDateTime(new TextLocatorStrategy(interactor, prefixText, month, year, date, time));
+            string twelveHourTime,
+            string twentyFourHourTime)
+            => new IOSStartDateTime(new TextLocatorStrategy(interactor, prefixText, month, year, day, twelveHourTime, twentyFourHourTime));
 
         public void AssertVisible() => _locatorStrategy.ActOnElementContext(
             context => context.Element.Displayed.Should().BeTrue($"a cell with the label {_locatorStrategy.Description} should be displayed"));
@@ -36,7 +37,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
             private readonly string _month;
             private readonly string _year;
             private readonly string _date;
-            private readonly string _time;
+            private readonly string _twelveHourTime;
+            private readonly string _twentyFourHourTime;
 
             public TextLocatorStrategy(
                 IIOSInteractor interactor,
@@ -44,20 +46,28 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
                 string month,
                 string year,
                 string date,
-                string time)
+                string twelveHourTime,
+                string twentyFourHourTime)
             {
                 _interactor = interactor;
                 _prefixText = prefixText;
                 _month = month;
                 _year = year;
                 _date = date;
-                _time = time;
+                _twelveHourTime = twelveHourTime;
+                _twentyFourHourTime = twentyFourHourTime;
             }
 
-            public string Description => "with date time";
+            public string Description => $"with date time";
 
             public By FindBy =>
-                MobileBy.IosNSPredicate($"type == 'XCUIElementTypeCell' AND label CONTAINS {_prefixText.QuotePredicateLiteral()} AND label CONTAINS {_date.QuotePredicateLiteral()} AND label CONTAINS {_month.QuotePredicateLiteral()} AND label CONTAINS {_year.QuotePredicateLiteral()} AND label CONTAINS {_time.QuotePredicateLiteral()}");
+                MobileBy.IosNSPredicate($"type == 'XCUIElementTypeCell' " +
+                                        $"AND label CONTAINS {_prefixText.QuotePredicateLiteral()} " +
+                                        $"AND label CONTAINS {_date.QuotePredicateLiteral()} " +
+                                        $"AND label CONTAINS {_month.QuotePredicateLiteral()} " +
+                                        $"AND label CONTAINS {_year.QuotePredicateLiteral()} " +
+                                        $"AND (label CONTAINS {_twelveHourTime.QuotePredicateLiteral()} " +
+                                        $"OR label CONTAINS {_twentyFourHourTime.QuotePredicateLiteral()})");
 
             public void ActOnElementContext(Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action) => _interactor.ActOnElementContext(FindBy, action);
             public void AssertCannotBeFound(string because) => _interactor.AssertElementCannotBeFound(FindBy, because);

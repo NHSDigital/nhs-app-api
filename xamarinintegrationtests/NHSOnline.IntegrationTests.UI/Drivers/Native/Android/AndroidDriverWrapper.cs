@@ -16,33 +16,21 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         private readonly NativeDriverContext _nativeDriverContext;
         private readonly BrowserStackConfig _browserStackConfig;
 
-        internal AndroidDriverWrapper(string testName, TestLogs logs, AndroidBrowserStackCapability capabilities)
+        internal AndroidDriverWrapper(
+            string testName,
+            TestLogs logs,
+            AndroidBrowserStackCapability capabilities,
+            AndroidDevice targetDevice,
+            AndroidOSVersion osVersion)
         {
             Logs = logs;
 
             _browserStackConfig = Configuration.Get<BrowserStackConfig>("BrowserStack");
             var androidConfig = Configuration.Get<AndroidConfig>("Android");
 
-            var options = new AppiumOptions
-            {
-                AcceptInsecureCertificates = true,
-                PageLoadStrategy = PageLoadStrategy.Normal
-            };
+            logs.TestDevice(targetDevice.ToName(), osVersion.ToName());
 
-            _browserStackConfig.SetCapabilities(options);
-            androidConfig.SetBaseCapabilities(options);
-            logs.TestDevice(androidConfig.Device, androidConfig.OperatingSystemVersion);
-
-            if (capabilities.HasFlag(AndroidBrowserStackCapability.SignInToGoogle))
-            {
-                androidConfig.SetSignInToGoogleCapabilitiy(options);
-            }
-
-            options.AddAdditionalCapability("name", testName);
-
-            options.AddAdditionalCapability("autoGrantPermissions", false);
-            options.AddAdditionalCapability("nativeWebScreenshot", true);
-            options.AddAdditionalCapability("ensureWebviewsHavePages", true);
+            var options = CreateAppiumOptions(androidConfig, testName, capabilities, targetDevice, osVersion);
 
             _driver = new AndroidDriver<AndroidElement>(new Uri("http://hub-cloud.browserstack.com/wd/hub"), options);
 
@@ -57,6 +45,39 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
                 new Interactor<AndroidDriver<AndroidElement>, AndroidElement>(Logs, _driver, _driver.FindElement));
 
             RetrieveAppState().Should().Be(AppState.RunningInForeground, TestResultRetryExtensions.AppNotRunningMessage);
+        }
+
+        private AppiumOptions CreateAppiumOptions(
+            AndroidConfig androidConfig,
+            string testName,
+            AndroidBrowserStackCapability capabilities,
+            AndroidDevice targetDevice,
+            AndroidOSVersion osVersion)
+        {
+            var options = new AppiumOptions
+            {
+                AcceptInsecureCertificates = true,
+                PageLoadStrategy = PageLoadStrategy.Normal
+            };
+
+            _browserStackConfig.SetCapabilities(options);
+
+            options.AddAdditionalCapability("app", androidConfig.App);
+            options.AddAdditionalCapability("disableAnimations", true);
+            options.AddAdditionalCapability("device", targetDevice.ToName());
+            options.AddAdditionalCapability("os_version", osVersion.ToName());
+            options.AddAdditionalCapability("name", testName);
+            options.AddAdditionalCapability("autoGrantPermissions", false);
+            options.AddAdditionalCapability("nativeWebScreenshot", true);
+            options.AddAdditionalCapability("ensureWebviewsHavePages", true);
+
+            if (capabilities.HasFlag(AndroidBrowserStackCapability.SignInToGoogle))
+            {
+                options.AddAdditionalCapability("browserstack.appStoreConfiguration",
+                    androidConfig.GoogleCredentials());
+            }
+
+            return options;
         }
 
         private TestLogs Logs { get; }
@@ -79,6 +100,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 
         void IAndroidInteractor.PressShiftTabKey() =>
             _interactor.PressShiftTabKey();
+
+        void IAndroidInteractor.TouchScreenCentre()
+            => _interactor.TouchScreenCentre();
 
         WaitForAction IAndroidDriverWrapper.PressBackButton()
         {
@@ -107,6 +131,16 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             var browserStackApiClient = new BrowserStackApiClient(_browserStackConfig);
             await browserStackApiClient.ApplyNetworkProfile(_driver.SessionId, NetworkProfile.AirplaneMode);
         }
+
+        public void CloseApp() => _driver.CloseApp();
+
+        public void BackgroundApp() => _driver.BackgroundApp();
+
+        public AndroidChromeApp OpenChromeApp()
+        {
+            _nativeDriverContext.SwitchToNativeContext();
+            return AndroidChromeApp.Launch(_driver, _interactor);
+         }
 
         void IAndroidDriverWrapper.AssertNotRunningInForeground()
             => RetrieveAppState().Should().NotBe(AppState.RunningInForeground);

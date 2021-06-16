@@ -18,26 +18,22 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
         private readonly NativeDriverContext _nativeDriverContext;
         private readonly BrowserStackConfig _browserStackConfig;
 
-        internal IOSDriverWrapper(string testName, TestLogs logs)
+        internal IOSDriverWrapper(string testName,
+            TestLogs logs,
+            IOSDevice device,
+            IOSVersion osVersion)
         {
             Logs = logs;
 
             _browserStackConfig = Configuration.Get<BrowserStackConfig>("BrowserStack");
             var iosConfig = Configuration.Get<IOSConfig>("iOS");
 
-            var options = new AppiumOptions
-            {
-                AcceptInsecureCertificates = true,
-                PageLoadStrategy = PageLoadStrategy.Normal
-            };
+            logs.TestDevice(device.ToName(), osVersion.ToName());
 
-            _browserStackConfig.SetCapabilities(options);
-            iosConfig.SetCapabilities(options);
-            logs.TestDevice(iosConfig.Device, iosConfig.OperatingSystemVersion);
-
-            options.AddAdditionalCapability("name", testName);
+            var options = CreateAppiumOptions(iosConfig, testName, device, osVersion);
 
             _driver = new IOSDriver<IOSElement>(new Uri("http://hub-cloud.browserstack.com/wd/hub"), options);
+
             logs.BrowserStackSessionId(_driver.SessionId);
 
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
@@ -55,6 +51,29 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
                 new Interactor<IOSDriver<IOSElement>, IOSElement>(Logs, _driver, _driver.FindElement));
 
             RetrieveAppState().Should().Be(AppState.RunningInForeground, TestResultRetryExtensions.AppNotRunningMessage);
+        }
+
+        private AppiumOptions CreateAppiumOptions(
+            IOSConfig iosConfig,
+            string testName,
+            IOSDevice targetDevice,
+            IOSVersion osVersion)
+        {
+            var options = new AppiumOptions
+            {
+                AcceptInsecureCertificates = true,
+                PageLoadStrategy = PageLoadStrategy.Normal
+            };
+
+            _browserStackConfig.SetCapabilities(options);
+
+            options.AddAdditionalCapability("app", iosConfig.App);
+            options.AddAdditionalCapability("device", targetDevice.ToName());
+            options.AddAdditionalCapability("os_version", osVersion.ToName());
+            options.AddAdditionalCapability("nativeWebTap", true);
+            options.AddAdditionalCapability("name", testName);
+
+            return options;
         }
 
         private TestLogs Logs { get; }

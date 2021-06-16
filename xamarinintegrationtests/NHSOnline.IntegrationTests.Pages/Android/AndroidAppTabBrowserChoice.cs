@@ -11,7 +11,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         private AndroidAppTabBrowserChoice(IAndroidDriverWrapper driver) => _driver = driver;
 
         private AndroidSystemLabel OpenWithText => AndroidSystemLabel.WhichMatches(_driver, "Open( links)? with");
-        private AndroidAppTabBrowserChoiceOption ChromeOption => AndroidAppTabBrowserChoiceOption.WithText(_driver, "Chrome");
+        private AndroidAppChoiceOption ChromeOption => AndroidAppChoiceOption.WithText(_driver, "Chrome");
         private AndroidSystemButton AlwaysButton => AndroidSystemButton.WhichMatches(_driver, "(ALWAYS|Always)");
 
         public static AndroidAppTabBrowserChoice AssertDisplayed(IAndroidDriverWrapper driver)

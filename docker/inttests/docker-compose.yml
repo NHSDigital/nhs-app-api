@@ -19,6 +19,7 @@ services:
       default:
         aliases:
           - ers.stubs.local.bitraft.io
+          - deeplinklauncher.stubs.local.bitraft.io
           - silverintegrationtestprovider.stubs.local.bitraft.io
           - pkb.stubs.local.bitraft.io
 

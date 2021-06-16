@@ -19,9 +19,10 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         private IOSTextView BodyText => IOSTextView.WithText(_driver, "Test Body").ScrollIntoView();
 
-        private IOSStartDateTime StartDateText => IOSStartDateTime.WithLabel(_driver, "Starts", "Jan", "2", "2030", "13:00");
+        private IOSStartDateTime StartDateText => IOSStartDateTime.WithLabel(
+            _driver, "Starts", "Jan", "2", "2030", "1:00 PM", "13:00");
 
-        private IOSEndTime EndTimeText => IOSEndTime.WithLabel(_driver, "Ends", "13:10");
+        private IOSEndTime EndTimeText => IOSEndTime.WithLabel(_driver, "Ends","1:10 PM", "13:10");
 
         public static IOSCalendarsApp AssertOnPage(IIOSDriverWrapper driver)
         {

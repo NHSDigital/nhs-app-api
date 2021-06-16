@@ -1,5 +1,6 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Android;
+using OpenQA.Selenium.Appium.MultiTouch;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 {
@@ -42,6 +43,18 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         {
             _nativeDriverContext.SwitchToNativeContext();
             _interactor.ActOnDriver((driver, _) => driver.PressKeyCode(AndroidKeyCode.Keycode_TAB, AndroidKeyCode.MetaShift_ON));
+        }
+        
+        void IAndroidInteractor.TouchScreenCentre()
+        {
+            _nativeDriverContext.SwitchToNativeContext();
+
+            _interactor.ActOnDriver((driver, _) =>
+            {
+                var x = (double) driver.Manage().Window.Size.Width / 2;
+                var y = (double) driver.Manage().Window.Size.Height / 2;
+                new TouchAction(driver).Tap(x, y).Perform();
+            });
         }
     }
 }

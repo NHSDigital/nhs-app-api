@@ -30,7 +30,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
 
         public void ScrollTo() => _interactor.ActOnElementContext(
             FindBy, c => new Actions(c.Driver).MoveToElement(c.Element).Perform());
-
+        
         private void ActOnElement(Action<IWebElement> action)
             => _interactor.ActOnElement(FindBy, action);
 

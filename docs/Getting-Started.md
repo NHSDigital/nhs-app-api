@@ -78,6 +78,7 @@ Before running the app locally, some entries need to be added to your machine's 
 127.0.0.1 auth.nhslogin.stubs.local.bitraft.io
 127.0.0.1 cid.local.bitraft.io
 127.0.0.1 ers.stubs.local.bitraft.io
+127.0.0.1 deeplinklauncher.stubs.local.bitraft.io
 127.0.0.1 log.local.bitraft.io
 127.0.0.1 messages.local.bitraft.io
 127.0.0.1 minimock.local.bitraft.io

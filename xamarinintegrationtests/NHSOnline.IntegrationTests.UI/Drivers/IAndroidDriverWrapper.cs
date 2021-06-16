@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using NHSOnline.IntegrationTests.UI.Drivers.Native.Android;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers
 {
@@ -11,5 +12,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         Task EnableAirplaneMode();
         void DismissKeyboard();
         void SendKey(int key);
+        void CloseApp();
+        void BackgroundApp();
+        AndroidChromeApp OpenChromeApp();
     }
 }

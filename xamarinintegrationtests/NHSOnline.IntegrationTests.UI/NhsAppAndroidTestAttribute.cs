@@ -11,6 +11,10 @@ namespace NHSOnline.IntegrationTests.UI
     {
         internal AndroidBrowserStackCapability Capabilities { get; }
 
+        public AndroidDevice AndroidDevice { get; set; } = AndroidDevice.Pixel3;
+
+        public AndroidOSVersion OSVersion { get; set; } = AndroidOSVersion.Nine;
+
         public NhsAppAndroidTestAttribute(params AndroidBrowserStackCapability[] capabilities)
         {
             Capabilities = capabilities.Aggregate(
@@ -24,7 +28,7 @@ namespace NHSOnline.IntegrationTests.UI
             var requestedCapabilities = GetRequestedCapabilities(testMethod);
 
             var testExecution = new AutomatedTestExecution<IAndroidDriverWrapper>(
-                logs => new AndroidDriverWrapper(testName, logs, requestedCapabilities));
+                logs => new AndroidDriverWrapper(testName, logs, requestedCapabilities, AndroidDevice, OSVersion));
 
             var testExecutor = new TestExecutor(testName, testMethod, testExecution);
 
