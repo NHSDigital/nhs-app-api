@@ -15,7 +15,9 @@ using NHSOnline.Backend.Support;
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.AspNet.CorrelationId;
 using NHSOnline.Backend.AspNet.HealthChecks;
+using NHSOnline.Backend.AspNet.HealthChecks.PerformanceCounter;
 using NHSOnline.Backend.AspNet.Middleware;
+using NHSOnline.Backend.AspNet.Middleware.PerformanceCounter;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
@@ -86,6 +88,7 @@ namespace NHSOnline.Backend.CidApi
             });
 
             services.AddNhsAppHealthCheckService();
+            services.AddPerformanceCounterService();
 
             services.AddNhsAppHealthCheck<HashingServiceHealthCheck>(
                 "HASH", NhsAppHealthCheckTags.LivenessAndReadiness);
@@ -125,6 +128,8 @@ namespace NHSOnline.Backend.CidApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UsePerformanceCounterMiddleware(Configuration, _logger);
+
             app.Use(async (context, next) =>
             {
                 var logger = loggerFactory.CreateLogger<Startup>();

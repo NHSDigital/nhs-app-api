@@ -75,6 +75,9 @@ spec:
 {{- with $.Values.api.environmentVariables }}
 {{ toYaml . | trim | indent 8 }}
 {{- end }}
+{{- with $.Values.customHealthCheck }}
+{{ toYaml . | trim | indent 8 }}
+{{- end }}
 {{- range $key, $val := $.Values.api.knownServicesOverrides }}
         - name: {{ $key }}
           value: "{{ $val }}"

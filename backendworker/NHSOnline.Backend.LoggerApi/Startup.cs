@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.AspNet.CorrelationId;
 using NHSOnline.Backend.AspNet.HealthChecks;
+using NHSOnline.Backend.AspNet.HealthChecks.PerformanceCounter;
+using NHSOnline.Backend.AspNet.Middleware.PerformanceCounter;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
@@ -23,6 +25,7 @@ namespace NHSOnline.Backend.LoggerApi
         private readonly string _apiAppVersion;
         private IConfiguration Configuration { get; }
         private readonly ModularStartup _modularStartup;
+        private readonly ILogger<Startup> _logger;
 
         public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
@@ -31,6 +34,8 @@ namespace NHSOnline.Backend.LoggerApi
             _apiAppVersion = Configuration.GetApiAppVersion();
 
             _modularStartup = new ModularStartup(configuration, loggerFactory);
+
+            _logger = loggerFactory.CreateLogger<Startup>();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -51,6 +56,7 @@ namespace NHSOnline.Backend.LoggerApi
             });
 
             services.AddNhsAppHealthCheckService();
+            services.AddPerformanceCounterService();
 
             services.AddSingleton(Configuration);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -73,7 +79,10 @@ namespace NHSOnline.Backend.LoggerApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
+            app.UsePerformanceCounterMiddleware(Configuration, _logger);
+
             app.UseMiddleware<LoggerSessionLoggingScopeMiddleware>();
+
             app.Use(async (context, next) =>
             {
                 var logger = loggerFactory.CreateLogger<Startup>();

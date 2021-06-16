@@ -73,6 +73,9 @@ spec:
 {{- with $.Values.logger.environmentVariables }}
 {{ toYaml . | trim | indent 8 }}
 {{- end }}
+{{- with $.Values.customHealthCheck }}
+{{ toYaml . | trim | indent 8 }}
+{{- end }}
         - name: PORT
           value: "{{ $.Values.logger.containerPort }}"
         - name: ASPNETCORE_URLS

@@ -69,6 +69,22 @@ namespace NHSOnline.Backend.Support
             return value;
         }
 
+        public static bool GetBoolOrFallback(this IConfiguration configuration, string key, bool fallbackValue, ILogger logger)
+        {
+            var value = false;
+            var strValue = configuration[key];
+
+            if (strValue == null || !bool.TryParse(strValue, out value))
+            {
+                value = fallbackValue;
+
+                logger.LogWarning(
+                    string.Format(CultureInfo.InvariantCulture, LogMessageParseError, strValue, key) + $" Using supplied Fallback value: {fallbackValue} instead.");
+            }
+
+            return value;
+        }
+
         public static int GetIntOrThrow(this IConfiguration configuration, string key, ILogger logger)
         {
             var strValue = GetOrThrow(configuration, key, logger);
@@ -90,6 +106,22 @@ namespace NHSOnline.Backend.Support
             if (strValue != null && !int.TryParse(strValue, out value))
             {
                 logger.LogWarning(string.Format(CultureInfo.InvariantCulture, LogMessageParseError, strValue, key));
+            }
+
+            return value;
+        }
+
+        public static int GetIntOrFallback(this IConfiguration configuration, string key, int fallbackValue, ILogger logger)
+        {
+            var value = 0;
+            var strValue = configuration[key];
+
+            if (strValue == null || !int.TryParse(strValue, out value))
+            {
+                value = fallbackValue;
+
+                logger.LogWarning(
+                    string.Format(CultureInfo.InvariantCulture, LogMessageParseError, strValue, key) + $" Using supplied Fallback value: {fallbackValue} instead.");
             }
 
             return value;

@@ -76,6 +76,9 @@ spec:
 {{- with $.Values.messages.environmentVariables }}
 {{ toYaml . | trim | indent 8 }}
 {{- end }}
+{{- with $.Values.customHealthCheck }}
+{{ toYaml . | trim | indent 8 }}
+{{- end }}
         - name: PORT
           value: "{{ $.Values.messages.containerPort }}"
         - name: INPUT_FOLDER_PATH

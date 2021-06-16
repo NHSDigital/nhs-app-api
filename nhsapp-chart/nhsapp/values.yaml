@@ -542,8 +542,8 @@ sjr:
   targetMemoryUtilizationPercentage: 80
   inputPath: /configurations  # From mounted image
   environmentVariables:
-  - name: ASPNETCORE_ENVIRONMENT
-    value: "Production"
+    - name: ASPNETCORE_ENVIRONMENT
+      value: "Production"
 
 sjrconfig:
   loadFiles: true
@@ -623,3 +623,17 @@ scaling:
           value: 8
           periodSeconds: 7
       selectPolicy: Max
+
+customHealthCheck:
+  - name: PerformanceCounter__IsHealthCheckEnabled
+    value: "false"
+  - name: PerformanceCounter__IsMetricLoggingEnabled
+    value: "true"
+  - name: PerformanceCounter__QueueLength
+    value: "100000"
+  - name: PerformanceCounter__InitialMetricHealthCheckWindowSizeInSeconds
+    value: "300"
+  - name: PerformanceCounter__ResponseTimeUnhealthyAverageThresholdInMs
+    value: "5000"
+  - name: PerformanceCounter__RequestCountUnhealthyNumberOfRequestsPerSecond
+    value: "150"

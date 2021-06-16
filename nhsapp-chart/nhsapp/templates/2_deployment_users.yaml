@@ -75,6 +75,9 @@ spec:
 {{- with $.Values.users.environmentVariables }}
 {{ toYaml . | trim | indent 8 }}
 {{- end }}
+{{- with $.Values.customHealthCheck }}
+{{ toYaml . | trim | indent 8 }}
+{{- end }}
         - name: PORT
           value: "{{ $.Values.users.containerPort }}"
         - name: INPUT_FOLDER_PATH

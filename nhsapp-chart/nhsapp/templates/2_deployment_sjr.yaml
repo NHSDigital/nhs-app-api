@@ -77,6 +77,9 @@ spec:
 {{- with $.Values.sjr.environmentVariables }}
 {{ toYaml . | trim | indent 8 }}
 {{- end }}
+{{- with $.Values.customHealthCheck }}
+{{ toYaml . | trim | indent 8 }}
+{{- end }}
         - name: PORT
           value: "{{ $.Values.sjr.containerPort }}"
         - name: INPUT_FOLDER_PATH

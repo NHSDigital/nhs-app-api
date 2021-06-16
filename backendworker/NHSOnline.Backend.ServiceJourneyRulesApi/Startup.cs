@@ -7,6 +7,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.AspNet.CorrelationId;
 using NHSOnline.Backend.AspNet.HealthChecks;
+using NHSOnline.Backend.AspNet.HealthChecks.PerformanceCounter;
+using NHSOnline.Backend.AspNet.Middleware.PerformanceCounter;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Extensions;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
@@ -19,12 +21,15 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
     {
         private IConfiguration Configuration { get; }
         private readonly ModularStartup _modularStartup;
+        private readonly ILogger<Startup> _logger;
 
         public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
 
             _modularStartup = new ModularStartup(configuration, loggerFactory);
+
+            _logger = loggerFactory.CreateLogger<Startup>();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -40,6 +45,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
             });
 
             services.AddNhsAppHealthCheckService();
+            services.AddPerformanceCounterService();
 
             services.AddNhsAppCorrelationId();
 
@@ -63,6 +69,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
+            app.UsePerformanceCounterMiddleware(Configuration, _logger);
+
             app.UsePathBase("/v1");
 
             app.UseSecurityResponseHeadersMiddleware();

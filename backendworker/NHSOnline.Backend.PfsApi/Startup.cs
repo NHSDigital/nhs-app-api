@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.AspNet.CorrelationId;
 using NHSOnline.Backend.AspNet.HealthChecks;
+using NHSOnline.Backend.AspNet.HealthChecks.PerformanceCounter;
+using NHSOnline.Backend.AspNet.Middleware.PerformanceCounter;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Session;
@@ -96,6 +98,7 @@ namespace NHSOnline.Backend.PfsApi
             });
 
             services.AddNhsAppHealthCheckService();
+            services.AddPerformanceCounterService();
 
             _supplierStartup.ConfigureServices(services);
             _modularStartup.ConfigureServices(services);
@@ -151,6 +154,8 @@ namespace NHSOnline.Backend.PfsApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UsePerformanceCounterMiddleware(Configuration, _logger);
+
             app.UseMiddleware<SessionLoggingScopeMiddleware>();
 
             app.Use(async (context, next) =>

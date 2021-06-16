@@ -12,6 +12,8 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.AspNet.CorrelationId;
 using NHSOnline.Backend.AspNet.HealthChecks;
+using NHSOnline.Backend.AspNet.HealthChecks.PerformanceCounter;
+using NHSOnline.Backend.AspNet.Middleware.PerformanceCounter;
 using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.AspNet.ApiKey;
 using NHSOnline.Backend.Support;
@@ -50,6 +52,7 @@ namespace NHSOnline.Backend.MessagesApi
                 .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
 
             services.AddNhsAppHealthCheckService();
+            services.AddPerformanceCounterService();
 
             SetupApiKeys(services);
 
@@ -97,6 +100,8 @@ namespace NHSOnline.Backend.MessagesApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
+            app.UsePerformanceCounterMiddleware(Configuration, _logger);
+
             app.UsePathBase("/v1");
 
             app.UseSecurityResponseHeadersMiddleware();
@@ -106,7 +111,7 @@ namespace NHSOnline.Backend.MessagesApi
             app.UseCors(Configuration);
             app.UseAuthentication();
             app.UseAuthorization();
-            
+
             app.UseNhsAppCorrelationId();
 
             app.UseEndpoints(b =>
