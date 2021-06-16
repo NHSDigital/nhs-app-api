@@ -7,5 +7,7 @@ namespace NHSOnline.App.Services.ForcedUpdate
         public void Initiate();
 
         public Task<UpdateRequired> RequiresForcedUpdate();
+
+        public Task OpenAppStoreUrl();
     }
 }

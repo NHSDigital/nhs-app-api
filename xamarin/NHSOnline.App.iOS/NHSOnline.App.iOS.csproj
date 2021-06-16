@@ -2,7 +2,8 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Local - Debug</Configuration>
-    <NhsAppBundleShortVersion Condition=" '$(NhsAppBundleShortVersion)' == '' ">1.0.0</NhsAppBundleShortVersion>
+    <!-- Ensure xamarin/buildscripts/lib/set_env.sh native versions are also updated when bumping these -->
+    <NhsAppBundleShortVersion Condition=" '$(NhsAppBundleShortVersion)' == '' ">1.99.0</NhsAppBundleShortVersion>
     <NhsAppBundleVersion Condition=" '$(NhsAppBundleVersion)' == '' ">1</NhsAppBundleVersion>
     <NhsAppBundleDisplayName Condition=" '$(NhsAppBundleDisplayName)' == '' ">NHS App</NhsAppBundleDisplayName>
     <NhsAppApnsEnvironmentEntitlement Condition=" '$(NhsAppApnsEnvironmentEntitlement)' == '' ">production</NhsAppApnsEnvironmentEntitlement>
@@ -82,7 +83,8 @@
     <Compile Include="DependencyServices\IosLifecycle.cs" />
     <Compile Include="DependencyServices\IosNativeLog.cs" />
     <Compile Include="DependencyServices\IosSettingsService.cs" />
-    <Compile Include="DependencyServices\IosNativeMinimumVersionCheck.cs" />
+    <Compile Include="DependencyServices\IosNativeAppVersionCheckService.cs" />
+    <Compile Include="DependencyServices\IosUpdateService.cs" />
     <Compile Include="DependencyServices\Notifications\IosGetPnsTokenResponse.cs" />
     <Compile Include="DependencyServices\Notifications\IosNotifications.cs" />
     <Compile Include="DependencyServices\Notifications\RemoteNotificationRecievedHandler.cs" />

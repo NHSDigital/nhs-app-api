@@ -23,7 +23,6 @@ namespace NHSOnline.App.Config
 #endif
 
         ILoggingConfiguration Logging { get; }
-
         INhsLoginConfiguration NhsLogin { get; }
         INhsAppWebConfiguration NhsAppWeb { get; }
         INhsAppApiConfiguration NhsAppApi { get; }

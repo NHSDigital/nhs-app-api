@@ -10,11 +10,11 @@ namespace NHSOnline.App.Services
         internal static IServiceCollection AddServices(this IServiceCollection services)
         {
             return services
+                .AddSingleton<IForcedUpdateCheckService, ForcedUpdateCheckService>()
                 .AddTransient<IBiometricAuthenticationService, BiometricAuthenticationService>()
                 .AddTransient<BiometricRegistrationService>()
                 .AddTransient<BiometricLoginService>()
                 .AddTransient<IBrowserOverlay, BrowserOverlay>()
-                .AddTransient<IForcedUpdateCheckService, ForcedUpdateCheckService>()
                 .AddTransient<ISelectMediaService, SelectMediaService>()
                 .AddTransient<IUserPreferencesService, UserPreferencesService>()
                 .AddTransient<RedirectorUrlFactory>();

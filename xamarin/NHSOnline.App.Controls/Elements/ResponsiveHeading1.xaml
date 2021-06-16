@@ -13,14 +13,14 @@
             
             <Style TargetType="Label" CanCascade="True">
                 <Setter Property="FontSize" Value="32" />
-                <Setter Property="Padding" Value="16,32,0,28" />
+                <Setter Property="Padding" Value="16,32,16,28" />
                 <Setter Property="FontFamily" Value="Frutiger-Bold" />
                 <Setter Property="TextColor" Value="{Binding TextColour, Source={x:Reference Name=Root}}" />
             </Style>
             
             <Style x:Key="HeadingWide" TargetType="Label" CanCascade="True">
                 <Setter Property="FontSize" Value="48" />
-                <Setter Property="Padding" Value="16,32,0,36" />
+                <Setter Property="Padding" Value="16,32,16,36" />
             </Style>
         </ResourceDictionary>
     </View.Resources>

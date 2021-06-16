@@ -29,6 +29,9 @@
     <Compile Update="Areas\Home\Views\NhsAppWebPage.xaml.cs">
       <DependentUpon>NhsAppWebPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Areas\LoggedOut\Views\UpdateCheckFailedPage.xaml.cs">
+      <DependentUpon>UpdateCheckFailedPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Areas\PreHome\Views\NhsAppPreHomeScreenWebPage.xaml.cs">
       <DependentUpon>NhsAppPreHomeScreenWebPage.xaml</DependentUpon>
     </Compile>
@@ -64,6 +67,9 @@
     </Compile>
     <Compile Update="Areas\LoggedOut\Views\GettingStartedPage.xaml.cs">
       <DependentUpon>GettingStartedPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Areas\LoggedOut\Views\UpdateRequiredPage.xaml.cs">
+      <DependentUpon>UpdateRequiredPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Areas\LoggedOut\Views\LoggedOutHomeScreenPage.xaml.cs">
       <DependentUpon>LoggedOutHomeScreenPage.xaml</DependentUpon>
@@ -132,6 +138,10 @@
     </Compile>
     <Compile Update="Areas\LoggedOut\Views\BiometricLoginFingerprintLockedOutPage.xaml.cs">
       <DependentUpon>BiometricLoginFingerprintLockedOutPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Areas\LoggedOut\Views\BeginLoginPage.xaml.cs">
+      <DependentUpon>BeginLoginPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

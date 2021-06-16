@@ -40,8 +40,7 @@ namespace NHSOnline.App.Api.Configuration
         public GetConfigurationResult Visit(ApiGetConfigurationResult.Success success)
         {
             var configuration = new VersionConfiguration(success.GetConfigurationResponse);
-            _logger.LogInformation(
-                $"Get Configuration Success. Min Version: {configuration.MinimumSupportedAndroidVersion}");
+            _logger.LogInformation("Get Configuration Success");
             return new GetConfigurationResult.Success(configuration);
         }
 

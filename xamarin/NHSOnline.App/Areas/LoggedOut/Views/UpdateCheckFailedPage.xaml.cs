@@ -9,24 +9,23 @@ using NHSOnline.App.Navigation;
 namespace NHSOnline.App.Areas.LoggedOut.Views
 {
     [DesignTimeVisible(false)]
-    public partial class BiometricLoginFaceIdFailedPage : IBiometricLoginFaceIdFailedView, IBiometricLoginFaceIdFailedView.IEvents
+    public partial class UpdateCheckFailedPage: IUpdateCheckFailedView, IUpdateCheckFailedView.IEvents
     {
         private readonly ILogger _logger;
-        private readonly AppNavigation<IBiometricLoginFaceIdFailedView.IEvents> _appNavigation;
+        private readonly AppNavigation<IUpdateCheckFailedView.IEvents> _appNavigation;
 
-        public BiometricLoginFaceIdFailedPage(ILogger<BiometricLoginFaceIdFailedPage> logger)
+        public UpdateCheckFailedPage(ILogger<UpdateCheckFailedPage> logger)
         {
             _logger = logger;
-            _appNavigation = new AppNavigation<IBiometricLoginFaceIdFailedView.IEvents>(this, Navigation);
+            _appNavigation = new AppNavigation<IUpdateCheckFailedView.IEvents>(this, Navigation);
 
             InitializeComponent();
         }
 
-        IAppNavigation<IBiometricLoginFaceIdFailedView.IEvents> INavigationView<IBiometricLoginFaceIdFailedView.IEvents>.AppNavigation => _appNavigation;
+        IAppNavigation<IUpdateCheckFailedView.IEvents> INavigationView<IUpdateCheckFailedView.IEvents>.AppNavigation => _appNavigation;
 
-        public Func<Task>? BackHomeRequested { get; set; }
-
-        public ICommand BackHomeCommand => new AsyncCommand(() => BackHomeRequested);
+        public Func<Task>? BackToHomeRequested { get; set; }
+        public ICommand BackToHomeCommand => new AsyncCommand(() => BackToHomeRequested);
 
         protected override void OnAppearing()
         {
@@ -44,7 +43,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
 
         public Task HandleDeeplink(Uri deeplinkUrl)
         {
-            _logger.LogInformation("{className} is not required to handle deeplinks", nameof(BiometricLoginFaceIdFailedPage));
+            _logger.LogInformation("{className} is not required to handle deeplinks", nameof(UpdateCheckFailedPage));
             return Task.CompletedTask;
         }
     }

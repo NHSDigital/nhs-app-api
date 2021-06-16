@@ -5,16 +5,16 @@ namespace NHSOnline.App.Services.ForcedUpdate
 {
     internal class AssessUpdateRequiredVisitor : IGetConfigurationResultVisitor<UpdateRequired>
     {
-        private readonly INativeMinimumVersionCheck _nativeMinimumVersionCheck;
+        private readonly INativeAppVersionCheckService _nativeAppVersionCheckService;
 
-        public AssessUpdateRequiredVisitor(INativeMinimumVersionCheck nativeMinimumVersionCheck)
+        public AssessUpdateRequiredVisitor(INativeAppVersionCheckService nativeAppVersionCheckService)
         {
-            _nativeMinimumVersionCheck = nativeMinimumVersionCheck;
+            _nativeAppVersionCheckService = nativeAppVersionCheckService;
         }
 
         public UpdateRequired Visit(GetConfigurationResult.Success success)
         {
-            return _nativeMinimumVersionCheck.MeetsMinimumVersion(success.VersionConfiguration)
+            return _nativeAppVersionCheckService.MeetsMinimumVersion(success.VersionConfiguration)
                 ? UpdateRequired.No
                 : UpdateRequired.Yes;
         }

@@ -11,6 +11,7 @@ namespace NHSOnline.App.Areas.LoggedOut
         internal static IServiceCollection AddLoggedOutArea(this IServiceCollection services)
         {
             return services
+                .AddModelViewPresenter<BeginLoginModel, BeginLoginPage, BeginLoginPresenter>()
                 .AddModelViewPresenter<BiometricLoginCouldNotLoginModel, BiometricLoginCouldNotLoginPage, BiometricLoginCouldNotLoginPresenter>()
                 .AddModelViewPresenter<BiometricLoginFaceIdFailedModel, BiometricLoginFaceIdFailedPage, BiometricLoginFaceIdFailedPresenter>()
                 .AddModelViewPresenter<BiometricLoginFaceIdLockedOutModel, BiometricLoginFaceIdLockedOutPage, BiometricLoginFaceIdLockedOutPresenter>()
@@ -19,6 +20,8 @@ namespace NHSOnline.App.Areas.LoggedOut
                 .AddModelViewPresenter<BiometricLoginTouchIdFailedModel, BiometricLoginTouchIdFailedPage, BiometricLoginTouchIdFailedPresenter>()
                 .AddModelViewPresenter<BiometricLoginTouchIdLockedOutModel, BiometricLoginTouchIdLockedOutPage, BiometricLoginTouchIdLockedOutPresenter>()
                 .AddModelViewPresenter<GettingStartedModel, GettingStartedPage, GettingStartedPresenter>()
+                .AddModelViewPresenter<UpdateRequiredModel, UpdateRequiredPage, UpdateRequiredPresenter>()
+                .AddModelViewPresenter<UpdateCheckFailedModel, UpdateCheckFailedPage, UpdateCheckFailedPresenter>()
                 .AddModelViewPresenter<CreateSessionErrorBadRequestModel, CreateSessionErrorBadRequestPage, CreateSessionErrorBadRequestPresenter>()
                 .AddModelViewPresenter<CreateSessionErrorBadResponseFromUpstreamSystemModel, CreateSessionErrorBadResponseFromUpstreamSystemPage, CreateSessionErrorBadResponseFromUpstreamSystemPresenter>()
                 .AddModelViewPresenter<CreateSessionErrorFailedAgeRequirementModel, CreateSessionErrorFailedAgeRequirementPage, CreateSessionErrorFailedAgeRequirementPresenter>()

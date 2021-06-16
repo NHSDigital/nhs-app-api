@@ -7,9 +7,9 @@ using NHSOnline.App.Config;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Logging;
-using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
 using NHSOnline.App.Services.FIDO;
+using NHSOnline.App.Services.ForcedUpdate;
 using NHSOnline.App.Threading;
 using Xamarin.Essentials;
 
@@ -21,11 +21,11 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly IPageFactory _pageFactory;
         private readonly IUserPreferencesService _userPreferencesService;
         private readonly IBiometricAuthenticationService _biometricAuthenticationService;
-        private readonly INhsLoginService _nhsLoginService;
         private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
         private readonly ILifecycle _lifecycle;
         private readonly IBrowserOverlay _browserOverlay;
         private readonly IBackgroundExecutionService _backgroundExecutionService;
+        private readonly IForcedUpdateCheckService _forcedUpdateCheckService;
         private readonly BiometricLoginErrorPageDispatcher _biometricLoginErrorPageDispatcher;
 
         private static readonly TimeSpan BiometricDelayOnAppearing = TimeSpan.FromMilliseconds(100);
@@ -41,23 +41,24 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             IPageFactory pageFactory,
             IUserPreferencesService userPreferencesService,
             IBiometricAuthenticationService biometricAuthenticationService,
-            INhsLoginService nhsLoginService,
             INhsExternalServicesConfiguration nhsExternalServicesConfiguration,
             ILifecycle lifecycle,
             IBrowserOverlay browserOverlay,
-            IBackgroundExecutionService backgroundExecutionService)
+            IBackgroundExecutionService backgroundExecutionService,
+            IForcedUpdateCheckService forcedUpdateCheckService)
         {
             _view = view;
             _pageFactory = pageFactory;
             _userPreferencesService = userPreferencesService;
             _biometricAuthenticationService = biometricAuthenticationService;
-            _nhsLoginService = nhsLoginService;
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
             _lifecycle = lifecycle;
             _browserOverlay = browserOverlay;
             _backgroundExecutionService = backgroundExecutionService;
+            _forcedUpdateCheckService = forcedUpdateCheckService;
 
-            _biometricLoginErrorPageDispatcher = new BiometricLoginErrorPageDispatcher(_view, _pageFactory, _biometricAuthenticationService, _userPreferencesService);
+            _biometricLoginErrorPageDispatcher = new BiometricLoginErrorPageDispatcher(_view, _pageFactory,
+                _biometricAuthenticationService, _userPreferencesService);
 
             _view.AppNavigation
                 .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
@@ -73,6 +74,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         {
             _cancelBiometricLogin.Dispose();
             _cancelBiometricLogin = new CancellationTokenSource();
+
+            _forcedUpdateCheckService.Initiate();
 
             // NHSO-14252 will address this workaround
             await _backgroundExecutionService.Run(async () =>
@@ -117,15 +120,14 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task ViewOnLoginRequested()
         {
             Logger.LogInformation("Login Requested");
+            await BeginLoginJourney().PreserveThreadContext();
+        }
 
-            if (_userPreferencesService.ShowGettingStarted)
-            {
-                await ShowGettingStartedPage().PreserveThreadContext();
-            }
-            else
-            {
-                await ShowNhsLoginPage().PreserveThreadContext();
-            }
+        private async Task BeginLoginJourney(string? fidoAuthResponse = null)
+        {
+            var model = new BeginLoginModel(_deeplinkUrl, fidoAuthResponse);
+            var page = _pageFactory.CreatePageFor(model);
+            await _view.AppNavigation.PushAnimated(page).PreserveThreadContext();
         }
 
         private Task BackRequested()
@@ -139,21 +141,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         {
             _deeplinkUrl = deeplinkUrl;
             return Task.CompletedTask;
-        }
-
-        private async Task ShowGettingStartedPage()
-        {
-            var gettingStartedModel = new GettingStartedModel(_deeplinkUrl);
-            var gettingStartedPage = _pageFactory.CreatePageFor(gettingStartedModel);
-            await _view.AppNavigation.PushAnimated(gettingStartedPage).PreserveThreadContext();
-        }
-
-        private async Task ShowNhsLoginPage(string? fidoAuthResponse = null)
-        {
-            var pkceCodes = _nhsLoginService.GeneratePkceCodes();
-            var loginModel = new NhsLoginModel(pkceCodes, fidoAuthResponse, _deeplinkUrl);
-            var loginView = _pageFactory.CreatePageFor(loginModel);
-            await _view.AppNavigation.PushAnimated(loginView).PreserveThreadContext();
         }
 
         private async Task ShowCouldNotLoginWithBiometrics()
@@ -198,7 +185,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             public async Task Visit(BiometricLoginResult.Authorised authorised)
             {
                 Logger.LogInformation("Biometric authorisation successful");
-                await _presenter.ShowNhsLoginPage(authorised.FidoAuthResponse).PreserveThreadContext();
+                await _presenter.BeginLoginJourney(authorised.FidoAuthResponse).PreserveThreadContext();
             }
 
             public async Task Visit(BiometricLoginResult.Unauthorised unauthorised)

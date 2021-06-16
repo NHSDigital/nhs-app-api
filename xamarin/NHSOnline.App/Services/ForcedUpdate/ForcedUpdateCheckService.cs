@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Api.Configuration;
+using NHSOnline.App.Areas;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Threading;
 
@@ -10,17 +11,20 @@ namespace NHSOnline.App.Services.ForcedUpdate
     internal class ForcedUpdateCheckService : IForcedUpdateCheckService
     {
         private readonly ILogger<ForcedUpdateCheckService> _logger;
-        private readonly INativeMinimumVersionCheck _nativeMinimumVersionCheck;
+        private readonly INativeAppVersionCheckService _nativeAppVersionCheckService;
         private readonly IConfigurationService _configurationService;
+        private readonly IUpdateService _updateService;
         private Task<UpdateRequired>? _task;
 
         public ForcedUpdateCheckService(
             ILogger<ForcedUpdateCheckService> logger,
             IConfigurationService configurationService,
-            INativeMinimumVersionCheck nativeMinimumVersionCheck)
+            INativeAppVersionCheckService nativeAppVersionCheckService,
+            IUpdateService updateService)
         {
             _logger = logger;
-            _nativeMinimumVersionCheck = nativeMinimumVersionCheck;
+            _nativeAppVersionCheckService = nativeAppVersionCheckService;
+            _updateService = updateService;
             _configurationService = configurationService;
         }
 
@@ -39,13 +43,15 @@ namespace NHSOnline.App.Services.ForcedUpdate
             throw new InvalidOperationException("Initiate not called before required update check");
         }
 
+        public async Task OpenAppStoreUrl() => await _updateService.OpenAppStoreUrl().PreserveThreadContext();
+
         private async Task<UpdateRequired> IsUpdateRequiredCheck()
         {
             try
             {
                 var configurationResult = await _configurationService.GetConfiguration().ConfigureAwait(true);
 
-                var updateRequired = configurationResult.Accept(new AssessUpdateRequiredVisitor(_nativeMinimumVersionCheck));
+                var updateRequired = configurationResult.Accept(new AssessUpdateRequiredVisitor(_nativeAppVersionCheckService));
 
                 _logger.LogInformation(message: $"Update Required Check finished. UpdateRequired:'{updateRequired}'");
 

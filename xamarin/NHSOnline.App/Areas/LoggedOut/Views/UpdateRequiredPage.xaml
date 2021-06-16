@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:NhsAppCloseSlimHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
+                                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                                 xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+                                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                                 xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
+                                 xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
+                                 xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
+                                 mc:Ignorable="d"
+                                 x:Class="NHSOnline.App.Areas.LoggedOut.Views.UpdateRequiredPage"
+                                 x:Name="Page">
+    <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
+        <ScrollView.Resources>
+            <ResourceDictionary>
+                <Style TargetType="StackLayout" Class="ContentSpacing">
+                    <Setter Property="Margin" Value="16,0,16,0" />
+                </Style>
+            </ResourceDictionary>
+        </ScrollView.Resources>
+
+        <StackLayout>
+            <elements:ResponsiveHeading1 Text="You need to update the NHS App" x:Name="Heading" />
+            <StackLayout StyleClass="ContentSpacing">
+                <elements:ResponsiveParagraph Text="You will not be able to use it until you do." />
+                <elements:ResponsiveLinkLabel Text="Update the NHS App now"
+                                              Command="{Binding OpenAppStoreUrlCommand, Source={x:Reference Name=Page}}" />
+            </StackLayout>
+        </StackLayout>
+        
+        <ScrollView.Effects>
+            <effects:SafeAreaPaddingBottom />
+        </ScrollView.Effects>
+    </ScrollView>
+</pages:NhsAppCloseSlimHeaderPage>
