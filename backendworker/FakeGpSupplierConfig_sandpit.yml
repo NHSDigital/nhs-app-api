@@ -899,6 +899,123 @@ defaultUsers:
       dateOfBirth: "1958-07-20T00:00:00"
       sex: Male
 
+    9692238547:
+      userId: 796f591a-063e-4bdd-8465-5807e291485c
+      emailAddress: onboarding.nhsapp+netcompany.user12@gmail.com
+      odsCode: F00010
+      givenName: Diane
+      familyName: VIVYAN
+      dateOfBirth: "2006-04-01T00:00:00"
+      sex: Female
+
+    9692238555:
+      userId: 4b1c4130-c39e-4381-8dd5-0651913923f7
+      emailAddress: onboarding.nhsapp+netcompany.user13@gmail.com
+      odsCode: F00010
+      givenName: Eliza
+      familyName: LOINES
+      dateOfBirth: "2005-04-02T00:00:00"
+      sex: Female
+
+    9692238407:
+      userId: d83b6063-9e03-4b6d-839d-3867c6728c8a
+      emailAddress: onboarding.nhsapp+netcompany.user14@gmail.com
+      odsCode: F00010
+      givenName: Edgar
+      familyName: SAWLE
+      dateOfBirth: "1960-01-24T00:00:00"
+      sex: Male
+
+    9693292219:
+      userId: aca39312-2719-4a0e-9787-92d48d85e2a7
+      emailAddress: onboarding.nhsapp+netcompany.user15@gmail.com
+      odsCode: F00010
+      givenName: Clive
+      familyName: THEYER
+      dateOfBirth: "1939-01-22T00:00:00"
+      sex: Male
+
+    9693292227:
+      userId: 81261d94-3a38-4d93-9575-a6811396ebe0
+      emailAddress: onboarding.nhsapp+netcompany.user16@gmail.com
+      odsCode: F00010
+      givenName: Martin
+      familyName: HIGINS
+      dateOfBirth: "1945-03-17T00:00:00"
+      sex: Male
+
+    9693292235:
+      userId: 8e08a4da-9e4a-4ba3-92ca-373ca34ed06b
+      emailAddress: onboarding.nhsapp+netcompany.user17@gmail.com
+      odsCode: F00010
+      givenName: Lionel
+      familyName: COONAN
+      dateOfBirth: "1951-06-22T00:00:00"
+      sex: Male
+
+    9693292243:
+      userId: 9a095f61-cb27-44b6-a37c-41f8246397ae
+      emailAddress: onboarding.nhsapp+netcompany.user18@gmail.com
+      odsCode: F00010
+      givenName: Earl
+      familyName: COONEY
+      dateOfBirth: "1950-02-27T00:00:00"
+      sex: Male
+
+    9693292251:
+      userId: dbfe202a-6a3f-444a-867d-efd9230063b9
+      emailAddress: onboarding.nhsapp+netcompany.user19@gmail.com
+      odsCode: F00010
+      givenName: Randal
+      familyName: ROHRER
+      dateOfBirth: "1924-05-19T00:00:00"
+      sex: Male
+
+    9693292790:
+      userId: ae6d4850-36e1-455d-9758-431dffda5caf
+      emailAddress: onboarding.nhsapp+netcompany.user20@gmail.com
+      odsCode: F00010
+      givenName: Marcus
+      familyName: CROOK
+      dateOfBirth: "1997-08-03T00:00:00"
+      sex: Male
+
+    9693292804:
+      userId: 37c5a349-1e3a-4c29-a632-50f06e4383b1
+      emailAddress: onboarding.nhsapp+netcompany.user21@gmail.com
+      odsCode: F00010
+      givenName: Chas
+      familyName: FOX
+      dateOfBirth: "1989-08-18T00:00:00"
+      sex: Male
+
+    9693292812:
+      userId: f6cd2ed4-9ff2-48a3-bd7f-b80d35e9b424
+      emailAddress: onboarding.nhsapp+netcompany.user22@gmail.com
+      odsCode: F00010
+      givenName: Bruce
+      familyName: FINNEY
+      dateOfBirth: "1989-06-18T00:00:00"
+      sex: Male
+
+    9693292820:
+      userId: 7eeed152-fa1e-47a4-a8ca-0576e686f5ae
+      emailAddress: onboarding.nhsapp+netcompany.user23@gmail.com
+      odsCode: F00010
+      givenName: Roy
+      familyName: BLUNT
+      dateOfBirth: "1986-10-14T00:00:00"
+      sex: Male
+
+    9693292839:
+      userId: c255e2af-d1aa-46be-8487-5e7a6654a2ff
+      emailAddress: onboarding.nhsapp+netcompany.user24@gmail.com
+      odsCode: F00010
+      givenName: Lucien
+      familyName: NANGLE
+      dateOfBirth: "1988-09-06T00:00:00"
+      sex: Male
+
     9693292324:
       userId: 0671084d-4e17-4b94-b6c9-467ede9478ad
       emailAddress: onboarding.nhsapp+netcompany.user25@gmail.com
