@@ -8,7 +8,7 @@ open class P5UpliftPage : HybridPageObject() {
     private val healthRecordsDescription =
             "You'll need to prove who you are before you can view your health records in the NHS App."
     private val descriptionMap = mapOf(
-            "default" to "You'll need to prove who you are before you can get your COVID Pass for travel, " +
+            "default" to "You'll need to prove who you are before you can get your COVID Pass for travel abroad, " +
                     "book appointments, order repeat prescriptions, and view your health records in the NHS App.",
             "appointment hub" to "You'll need to prove who you are before you can book appointments in the NHS App.",
             "gp medical record"
