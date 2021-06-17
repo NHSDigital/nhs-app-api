@@ -1,4 +1,4 @@
-import get from 'lodash/fp/get';
+import { createLocalError } from '@/lib/utils';
 import {
   ADD_ERROR,
   CANCELLING_JOURNEY_COMPLETE,
@@ -12,11 +12,6 @@ import {
   SELECT,
 } from './mutation-types';
 
-const createError = ({ response }) => ({
-  status: (response && response.status) || '',
-  serviceDeskReference: (response && get('serviceDeskReference')(response.data)) || '',
-});
-
 export default {
   async cancel({ commit }, data) {
     const param = {
@@ -29,7 +24,7 @@ export default {
       commit(CANCELLING_JOURNEY_START);
       this.dispatch('analytics/satelliteTrack', 'appointment_cancelled');
     } catch (error) {
-      commit(ADD_ERROR, createError(error));
+      commit(ADD_ERROR, createLocalError(error));
     }
   },
   clear({ commit }) {
@@ -50,7 +45,7 @@ export default {
   init({ commit }) {
     commit(INIT);
   },
-  async load({ commit, rootState }) {
+  async load({ commit }) {
     this.dispatch('myAppointments/init');
     try {
       const data = await this.app.$http.getV1PatientAppointments({
@@ -58,13 +53,9 @@ export default {
       });
       commit(LOADED, data);
 
-      if (rootState.device.isNativeApp) {
-        sessionStorage.removeItem('hasRetried');
-      }
-
-      this.dispatch('session/setRetry', false);
+      sessionStorage.removeItem('hasRetried');
     } catch (error) {
-      commit(ADD_ERROR, createError(error));
+      commit(ADD_ERROR, createLocalError(error));
     } finally {
       this.dispatch('device/unlockNavBar');
     }

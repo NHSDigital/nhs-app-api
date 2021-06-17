@@ -26,15 +26,6 @@ namespace NHSOnline.Backend.Support
             public override int StatusCode => StatusCodes.Status400BadRequest;
         }
 
-        public class NhsLoginSSoRequest : ErrorTypes
-        {
-            public override string Prefix => "3x";
-
-            public override ErrorCategory Category => ErrorCategory.Login;
-
-            public override int StatusCode => Constants.CustomHttpStatusCodes.Status597NhsLoginSsoError;
-        }
-
         public class LoginForbidden : ErrorTypes
         {
             public override string Prefix => "3c";

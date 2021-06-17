@@ -105,8 +105,10 @@ describe('linked profile index', () => {
     });
 
     it('will dispatch the retry flag if hr query parameter is set', () => {
+      Storage.prototype.setItem = jest.fn();
       wrapper = mountPage({ hasRetried: true });
-      expect($store.dispatch).toHaveBeenCalledWith('session/setRetry', true);
+
+      expect(sessionStorage.setItem).toBeCalledWith('hasRetried', true);
     });
 
     it('will watch and reload if the timestamp value changes', () => {

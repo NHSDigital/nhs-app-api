@@ -32,6 +32,7 @@ import {
   LINKED_PROFILES_SHUTTER_APPOINTMENTS_NAME,
   LINKED_PROFILES_SHUTTER_PRESCRIPTIONS_NAME,
   SWITCH_PROFILE_NAME,
+  GP_LINKED_ACCOUNT_JOURNEY_NAME,
 } from '@/router/names';
 import {
   ADVICE_MENU_ITEM,
@@ -53,6 +54,9 @@ export const LINKED_PROFILES = {
     proofLevel: proofLevel.P5,
     helpUrl: proxyHelpUrl,
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: GP_LINKED_ACCOUNT_JOURNEY_NAME,
+    },
   },
 };
 
@@ -72,6 +76,9 @@ export const LINKED_PROFILES_SUMMARY = {
     crumb: breadcrumbs.LINKED_PROFILES_CRUMB,
     proofLevel: proofLevel.P5,
     helpUrl: proxyHelpUrl,
+    gpSessionOnDemand: {
+      journey: GP_LINKED_ACCOUNT_JOURNEY_NAME,
+    },
   },
 };
 
@@ -86,6 +93,9 @@ export const LINKED_PROFILES_SHUTTER_MESSAGES = {
     proofLevel: proofLevel.P5,
     helpUrl: proxyHelpUrl,
     nativeNavigation: MESSAGES_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: GP_LINKED_ACCOUNT_JOURNEY_NAME,
+    },
   },
 };
 
@@ -100,6 +110,9 @@ export const LINKED_PROFILES_SHUTTER_SETTINGS = {
     proofLevel: proofLevel.P5,
     helpUrl: proxyHelpUrl,
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: GP_LINKED_ACCOUNT_JOURNEY_NAME,
+    },
   },
 };
 
@@ -128,6 +141,9 @@ export const LINKED_PROFILES_SHUTTER_ADVICE = {
     proofLevel: proofLevel.P5,
     helpUrl: proxyHelpUrl,
     nativeNavigation: ADVICE_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: GP_LINKED_ACCOUNT_JOURNEY_NAME,
+    },
   },
 };
 
@@ -148,6 +164,9 @@ export const LINKED_PROFILES_SHUTTER_APPOINTMENTS = {
     proofLevel: proofLevel.P5,
     helpUrl: appointmentsHelpUrl,
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: GP_LINKED_ACCOUNT_JOURNEY_NAME,
+    },
   },
 };
 
@@ -168,6 +187,9 @@ export const LINKED_PROFILES_SHUTTER_PRESCRIPTIONS = {
     proofLevel: proofLevel.P5,
     helpUrl: prescriptionsHelpUrl,
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: GP_LINKED_ACCOUNT_JOURNEY_NAME,
+    },
   },
 };
 
@@ -187,6 +209,9 @@ export const SWITCH_PROFILE = {
     crumb: breadcrumbs.SWITCH_PROFILE_CRUMB,
     proofLevel: proofLevel.P5,
     helpUrl: proxyHelpUrl,
+    gpSessionOnDemand: {
+      journey: GP_LINKED_ACCOUNT_JOURNEY_NAME,
+    },
   },
 };
 

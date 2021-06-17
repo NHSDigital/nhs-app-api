@@ -1,3 +1,4 @@
+import { createLocalError } from '@/lib/utils';
 import {
   ADD_ERROR,
   BOOKING_JOURNEY_COMPLETE,
@@ -13,11 +14,6 @@ import {
   SET_SELECTED_OPTIONS,
 } from './mutation-types';
 
-const createError = ({ response }) => ({
-  status: (response && response.status) || '',
-  serviceDeskReference: (response && response.data.serviceDeskReference) || '',
-});
-
 export default {
   async book({ commit }, slot) {
     const param = {
@@ -30,7 +26,7 @@ export default {
       commit(BOOKING_JOURNEY_START);
       this.dispatch('analytics/satelliteTrack', 'appointment_booked');
     } catch (error) {
-      commit(ADD_ERROR, createError(error));
+      commit(ADD_ERROR, createLocalError(error));
     }
   },
   clear({ commit }) {
@@ -58,7 +54,7 @@ export default {
       });
       commit(LOAD, data);
     } catch (error) {
-      commit(ADD_ERROR, createError(error));
+      commit(ADD_ERROR, createLocalError(error));
     }
   },
   select({ commit }, slot) {

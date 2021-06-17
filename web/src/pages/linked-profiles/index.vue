@@ -3,7 +3,7 @@
 
     <no-linked-profiles v-if="hasLoaded && !hasLinkedProfiles && !error" id="no-linked-profiles"/>
 
-    <linked-profile-errors v-else-if="error"/>
+    <linked-profile-errors v-else-if="error" :error="error"/>
 
     <div v-else-if="hasLinkedProfiles" class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
@@ -80,7 +80,7 @@ export default {
     }
 
     if (this.$route.query.hr) {
-      this.$store.dispatch('session/setRetry', true);
+      sessionStorage.setItem('hasRetried', true);
     }
 
     await this.$store.dispatch('linkedAccounts/initialiseConfig');

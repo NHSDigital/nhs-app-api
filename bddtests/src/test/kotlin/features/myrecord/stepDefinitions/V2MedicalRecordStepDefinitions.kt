@@ -14,6 +14,7 @@ import mocking.defaults.dataPopulation.journeys.termsAndConditions.TermsAndCondi
 import models.Patient
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert.assertEquals
+import pages.ErrorDialogPage
 import pages.assertIsVisible
 import pages.gpMedicalRecord.MedicalRecordV2Page
 import pages.text
@@ -23,6 +24,7 @@ import utils.toSingleElementList
 open class V2MedicalRecordStepDefinitions {
 
     private lateinit var medicalRecordV2Page: MedicalRecordV2Page
+    private lateinit var errorDialogPage: ErrorDialogPage
     @Steps
     lateinit var browser: BrowserSteps
 
@@ -106,6 +108,13 @@ open class V2MedicalRecordStepDefinitions {
         assertEquals("You do not currently have online access to your medical record\n" +
                 "Contact your GP surgery for more information.",
                 medicalRecordV2Page.getSummaryCareNoAccessMessage())
+    }
+
+    @Then("^I see the generic medical record error$")
+    fun iSeeAppropriateTryAgainErrorMessageWhenThereIsNoGpSession() {
+        errorDialogPage
+            .assertPageHeader("GP medical record error")
+            .assertPageTitle("GP medical record error")
     }
 
     private fun assertTextOnPage(message: String) {

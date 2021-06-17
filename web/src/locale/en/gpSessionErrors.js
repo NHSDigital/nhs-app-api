@@ -25,4 +25,13 @@ export default {
     ifYouHaveAccessedLinkedProfiles: 'If you have accessed linked profiles before, select ',
     forUrgentMedicalAdvice: 'For urgent medical advice, go to ',
   },
+  genericOnDemand: {
+    serviceUnavailable: 'Sorry, this service is unavailable',
+    ifYouNeedInformationNow: 'If you need this information now',
+    contactGpSurgery: 'Contact your GP surgery.',
+    tryAgainHeader: 'Sorry, there is a problem',
+    temporaryProblem: 'This service is unavailable, it may be a temporary problem.',
+    forUrgentMedicalAdvice: 'For urgent medical advice, go to ',
+    backToHome: 'Back to home',
+  },
 };

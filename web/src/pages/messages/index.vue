@@ -79,6 +79,7 @@ export default {
   },
   data() {
     return {
+      hasGpSession: this.$store.state.session.hasGpSession,
       hasUnreadAppMessages: false,
       hasUnreadGPMessages: false,
       isProxying: this.$store.getters['session/isProxying'],
@@ -189,7 +190,7 @@ export default {
   async mounted() {
     const params = { ignoreError: true };
 
-    if (this.shouldLoadGpMessages) {
+    if (this.shouldLoadGpMessages && this.hasGpSession) {
       await this.$store.dispatch('gpMessages/loadMessages', params);
     }
 

@@ -4,7 +4,8 @@ import {
   ORGAN_DONATION_VIEW_DECISION_PATH,
   ORGAN_DONATION_WITHDRAWN_PATH,
 } from '@/router/paths';
-import { redirectTo } from '@/lib/utils';
+import { redirectTo, GP_SESSION_ON_DEMAND_ERROR_STATUS } from '@/lib/utils';
+
 import {
   CLONE_FROM_ORIGINAL,
   INIT,
@@ -83,12 +84,24 @@ export default {
     redirectTo(this.app, ORGAN_DONATION_WITHDRAWN_PATH);
   },
   async getReferenceData({ commit }) {
-    return this.app.$http.getV1PatientOrgandonationReferencedata()
-      .then(data => commitData({ commit, data, mutation: LOADED_REFERENCE_DATA }));
+    try {
+      const data = await this.app.$http.getV1PatientOrgandonationReferencedata();
+      commitData({ commit, data, mutation: LOADED_REFERENCE_DATA });
+    } catch (error) {
+      if (error.response.status !== GP_SESSION_ON_DEMAND_ERROR_STATUS) {
+        this.dispatch('errors/addApiError', error);
+      }
+    }
   },
   async getRegistration({ commit }) {
-    return this.app.$http.getV1PatientOrgandonation()
-      .then(data => commitData({ commit, data, mutation: LOADED }));
+    try {
+      const data = await this.app.$http.getV1PatientOrgandonation();
+      commitData({ commit, data, mutation: LOADED });
+    } catch (error) {
+      if (error.response.status !== GP_SESSION_ON_DEMAND_ERROR_STATUS) {
+        this.dispatch('errors/addApiError', error);
+      }
+    }
   },
   init({ commit }) {
     commit(INIT);

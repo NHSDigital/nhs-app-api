@@ -26,6 +26,11 @@ describe('linked profiles error component', () => {
           },
         },
       }),
+      propsData: {
+        error: {
+          status: 599,
+        },
+      },
       computed: {
         hasRetried() {
           return hasRetried;

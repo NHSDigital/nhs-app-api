@@ -23,7 +23,6 @@ namespace NHSOnline.Backend.Support
             public const int Status464OdsCodeNotSupportedOrNoNhsNumber = 464;
             public const int Status599GpSessionUnavailable = 599;
             public const int Status598GpSessionRequired = 598;
-            public const int Status597NhsLoginSsoError = 597;
             public const int Status465FailedAgeRequirement = 465;
             public const int Status466MedicationAlreadyOrderedWithinLast30Days = 466;
             public const int Status467InvalidPatientId = 467;

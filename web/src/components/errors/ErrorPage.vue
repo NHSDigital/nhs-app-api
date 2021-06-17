@@ -5,7 +5,8 @@
     <hr>
     <report-a-problem v-if="hasReferenceCode" :reference="code"/>
     <slot name="actions"/>
-    <error-link from="generic.back"
+    <error-link v-if="showBackLink"
+                :from="backText"
                 :action="backUrl"
                 data-purpose="error"
                 :desktop-only="true"/>
@@ -40,10 +41,18 @@ export default {
       type: String,
       default: undefined,
     },
+    backText: {
+      type: String,
+      default: 'generic.back',
+    },
     headerLocaleRef: {
       type: String,
       default: undefined,
       required: true,
+    },
+    showBackLink: {
+      type: Boolean,
+      default: true,
     },
   },
   computed: {

@@ -5,6 +5,7 @@ import {
   INIT_AUTH,
   UPDATE_CONFIG,
   SET_REDIRECT_URI,
+  ADD_GP_SESSION_ERROR,
 } from './mutation-types';
 
 export default {
@@ -26,5 +27,8 @@ export default {
   },
   [UPDATE_CONFIG](state, config) {
     state.config = config;
+  },
+  [ADD_GP_SESSION_ERROR](state, error) {
+    state.gpSessionError = error;
   },
 };

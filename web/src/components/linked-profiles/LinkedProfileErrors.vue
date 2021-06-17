@@ -65,6 +65,13 @@ export default {
     ErrorTitle,
   },
   mixins: [ErrorPageMixin],
+  props: {
+    error: {
+      type: Object,
+      default: undefined,
+      required: true,
+    },
+  },
   data() {
     return {
       backUrl: this.$store.state.navigation.backLinkOverride || MORE_PATH,
@@ -75,19 +82,13 @@ export default {
   },
   computed: {
     hasRetried() {
-      return gpSessionErrorHasRetried(this.$store);
-    },
-    error() {
-      return this.$store.state.linkedAccounts.error;
+      return gpSessionErrorHasRetried();
     },
   },
   methods: {
     tryAgain() {
-      if (this.$store.state.device.isNativeApp) {
-        sessionStorage.setItem('hasRetried', true);
-      }
+      sessionStorage.setItem('hasRetried', true);
 
-      this.$store.dispatch('session/setRetry', true);
       redirectTo(this, LINKED_PROFILES_PATH, { hr: true }, true);
     },
   },

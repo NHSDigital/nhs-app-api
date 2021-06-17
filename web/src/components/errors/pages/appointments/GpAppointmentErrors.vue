@@ -53,30 +53,10 @@
                   target="_blank"/>
     </error-container>
 
-    <error-container
-      v-else-if="error.status === appointmentStatusCodes.GP_SESSION_ERROR && !hasRetried"
-      :id="errorId">
-      <error-title title="gpSessionErrors.appointments.temporaryHeader"/>
-      <error-paragraph from="gpSessionErrors.appointments.youCannotBookOnline"/>
-      <error-paragraph from="gpSessionErrors.appointments.temporaryProblem"/>
-      <error-button from="generic.tryAgain" @click="tryAgain" />
-      <error-link from="generic.back"
-                  :action="backUrl"
-                  :desktop-only="true"/>
-    </error-container>
+    <div v-else-if="error.status === appointmentStatusCodes.GP_SESSION_ERROR">
+      <gp-appointment-gp-session-errors :error="error" />
+    </div>
 
-    <error-page v-else-if="hasRetried && error.status === appointmentStatusCodes.GP_SESSION_ERROR"
-                :code="error.serviceDeskReference"
-                header-locale-ref="gpSessionErrors.appointments.gpAppointmentBookingUnavailable"
-                :back-url="backUrl">
-      <template v-slot:content>
-        <p>{{ $t('gpSessionErrors.appointments.youCannotBookOnline') }}</p>
-        <contact-111 :text="$t('gpSessionErrors.appointments.ifTheProblemContinues')"/>
-      </template>
-      <template v-slot:actions>
-        <alternative-appointment-actions/>
-      </template>
-    </error-page>
     <error-container v-else id="error-dialog-unknown">
       <error-title title="apiErrors.pageHeader"
                    header="apiErrors.pageHeader" />
@@ -98,13 +78,13 @@ import ErrorPage from '@/components/errors/ErrorPage';
 import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
 import ErrorParagraph from '@/components/errors/ErrorParagraph';
 import ErrorTitle from '@/components/errors/ErrorTitle';
+import GpAppointmentGpSessionErrors from '@/components/errors/pages/appointments/GpAppointmentGpSessionErrors';
 import ReportAProblem from '@/components/errors/ReportAProblem';
 
 import {
   APPOINTMENTS_PATH,
   GP_APPOINTMENTS_PATH,
 } from '@/router/paths';
-import { redirectTo, gpSessionErrorHasRetried } from '@/lib/utils';
 
 import genericStatus from '@/components/errors/statusCodes/GenericStatusCodes';
 import appointmentStatus from '@/components/errors/statusCodes/AppointmentCustomStatusCodes';
@@ -120,6 +100,7 @@ export default {
     ErrorPage,
     ErrorParagraph,
     ErrorTitle,
+    GpAppointmentGpSessionErrors,
     ReportAProblem,
   },
   mixins: [ErrorPageMixin],
@@ -141,20 +122,8 @@ export default {
     };
   },
   computed: {
-    hasRetried() {
-      return gpSessionErrorHasRetried(this.$store);
-    },
     hasConnection() {
       return !this.hasConnectionProblem();
-    },
-  },
-  methods: {
-    tryAgain() {
-      if (this.$store.state.device.isNativeApp) {
-        sessionStorage.setItem('hasRetried', true);
-      }
-      this.$store.dispatch('session/setRetry', true);
-      redirectTo(this, GP_APPOINTMENTS_PATH, { hr: true }, true);
     },
   },
 };

@@ -257,6 +257,10 @@ const names = [
   REDIRECT_PAGE_PARAMETER,
 ];
 
+export const GP_PRESCRIPTION_JOURNEY_NAME = 'GP_PRESCRIPTION_JOURNEY';
+export const GP_APPOINTMENT_JOURNEY_NAME = 'GP_APPOINTMENT_JOURNEY';
+export const GP_LINKED_ACCOUNT_JOURNEY_NAME = 'GP_LINKED_ACCOUNT_JOURNEY';
+
 export const isNhsAppRouteName = name => !(!names.find(n => n === name));
 
 export const findByRedirectEnum = (name) => {

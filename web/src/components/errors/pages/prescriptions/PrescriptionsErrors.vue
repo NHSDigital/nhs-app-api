@@ -80,19 +80,17 @@ export default {
   data() {
     return {
       backUrl: PRESCRIPTIONS_PATH,
+      hasRetried: gpSessionErrorHasRetried(),
     };
   },
-  computed: {
-    hasRetried() {
-      return gpSessionErrorHasRetried(this.$store);
+  watch: {
+    '$route.query.ts': function watchTimestamp() {
+      this.hasRetried = gpSessionErrorHasRetried();
     },
   },
   methods: {
     tryAgain() {
-      if (this.$store.state.device.isNativeApp) {
-        sessionStorage.setItem('hasRetried', true);
-      }
-      this.$store.dispatch('session/setRetry', true);
+      sessionStorage.setItem('hasRetried', true);
       redirectTo(this, this.tryAgainRoute, { hr: true }, true);
     },
   },

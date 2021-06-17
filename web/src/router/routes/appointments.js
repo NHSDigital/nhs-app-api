@@ -43,6 +43,7 @@ import {
   APPOINTMENT_CANCELLING_NAME,
   APPOINTMENT_CANCELLING_SUCCESS_NAME,
   APPOINTMENT_ADMIN_HELP_NAME,
+  GP_APPOINTMENT_JOURNEY_NAME,
 } from '@/router/names';
 
 import { APPOINTMENTS_MENU_ITEM } from '@/middleware/nativeNavigation';
@@ -63,6 +64,9 @@ export const UPLIFT_APPOINTMENTS = {
     crumb: breadcrumbs.UPLIFT_APPOINTMENTS_CRUMB,
     helpUrl: appointmentsHelpUrl,
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: GP_APPOINTMENT_JOURNEY_NAME,
+    },
   },
 };
 
@@ -99,6 +103,9 @@ export const GP_APPOINTMENTS = {
       sjrRedirectRules.informaticaAppointmentRedirect,
     ],
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: GP_APPOINTMENT_JOURNEY_NAME,
+    },
   },
 };
 
@@ -168,6 +175,9 @@ export const BOOKING = {
     crumb: breadcrumbs.BOOKING_CRUMB,
     helpUrl: appointmentsHelpUrl,
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: GP_APPOINTMENT_JOURNEY_NAME,
+    },
   },
 };
 
@@ -183,6 +193,9 @@ export const CONFIRMATION = {
     crumb: breadcrumbs.CONFIRMATION_CRUMB,
     helpUrl: appointmentsHelpUrl,
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: GP_APPOINTMENT_JOURNEY_NAME,
+    },
   },
 };
 
@@ -215,6 +228,9 @@ export const BOOKING_SUCCESS = {
       value: false,
       route: GP_APPOINTMENTS,
     }],
+    gpSessionOnDemand: {
+      journey: GP_APPOINTMENT_JOURNEY_NAME,
+    },
   },
 };
 
@@ -244,6 +260,9 @@ export const CANCELLING = {
     crumb: breadcrumbs.CANCELLING_CRUMB,
     helpUrl: appointmentsHelpUrl,
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: GP_APPOINTMENT_JOURNEY_NAME,
+    },
   },
 };
 
@@ -276,6 +295,9 @@ export const CANCELLING_SUCCESS = {
       value: false,
       route: GP_APPOINTMENTS,
     }],
+    gpSessionOnDemand: {
+      journey: GP_APPOINTMENT_JOURNEY_NAME,
+    },
   },
 };
 

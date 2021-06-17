@@ -3,7 +3,8 @@ import jwt from 'jwt-decode';
 import { LOGIN_PATH } from '@/router/paths';
 import { removeCookies, setCookie } from '@/lib/cookie-manager';
 import get from 'lodash/fp/get';
-import { AUTH_RESPONSE, INIT_AUTH, LOGOUT, UPDATE_CONFIG } from './mutation-types';
+import { GP_SESSION_ERROR_STATUS, createLocalError } from '@/lib/utils';
+import { AUTH_RESPONSE, INIT_AUTH, LOGOUT, UPDATE_CONFIG, ADD_GP_SESSION_ERROR } from './mutation-types';
 
 const thirtySeconds = 30000;
 
@@ -169,7 +170,11 @@ export default {
 
       commit(AUTH_RESPONSE, response.data);
     } catch (error) {
-      this.dispatch('errors/addApiError', error);
+      if (error.response.status === GP_SESSION_ERROR_STATUS) {
+        commit(ADD_GP_SESSION_ERROR, createLocalError(error));
+      } else {
+        this.dispatch('errors/addApiError', error);
+      }
     } finally {
       cleanupSession({ self: this });
     }

@@ -1,8 +1,11 @@
 /* eslint-disable no-unused-vars */
-import { INDEX_PATH } from '@/router/paths';
-import { GP_SESSION_ERROR_STATUS } from '@/lib/utils';
-import get from 'lodash/fp/get';
-import moment from 'moment';
+import { INDEX_NAME } from '@/router/names';
+import {
+  GP_SESSION_ERROR_STATUS,
+  GP_SESSION_ON_DEMAND_ERROR_STATUS,
+  createLocalError,
+  redirectByName,
+} from '@/lib/utils';
 import {
   CLEAR,
   LOADED,
@@ -19,11 +22,6 @@ import {
   ADD_ERROR,
 } from './mutation-types';
 
-const createError = ({ response }) => ({
-  status: (response && response.status) || '',
-  serviceDeskReference: (response && get('serviceDeskReference')(response.data)) || '',
-});
-
 export default {
   async load({ commit }) {
     this.dispatch('linkedAccounts/clearLinkedAccounts');
@@ -39,7 +37,7 @@ export default {
       this.dispatch('device/unlockNavBar');
     }
   },
-  async initialiseConfig({ commit, rootState }) {
+  async initialiseConfig({ commit }) {
     commit(CLEAR);
     try {
       const patientConfigResponse = await this.app.$http.getV1PatientConfiguration({
@@ -47,18 +45,18 @@ export default {
       });
       commit(SET_LINKED_ACCOUNTS_CONFIG, patientConfigResponse);
 
-      if (rootState.device.isNativeApp) {
-        sessionStorage.removeItem('hasRetried');
-      }
-      this.dispatch('session/setRetry', false);
+      sessionStorage.removeItem('hasRetried');
     } catch (error) {
-      if (error.response && error.response.status !== GP_SESSION_ERROR_STATUS) {
-        this.dispatch('errors/addApiError', error);
-      } else {
-        commit(ADD_ERROR, createError(error));
+      if (error.response && error.response.status !== GP_SESSION_ON_DEMAND_ERROR_STATUS) {
+        if (error.response.status !== GP_SESSION_ERROR_STATUS) {
+          this.dispatch('errors/addApiError', error);
+        } else {
+          commit(ADD_ERROR, createLocalError(error));
+        }
       }
     }
   },
+
   init({ commit }) {
     commit(INIT);
   },
@@ -109,7 +107,7 @@ export default {
   },
   redirectAfterInvalidPatientIdDetected({ commit }) {
     commit(LOSS_PROXY);
-    this.app.context.redirect(302, `${INDEX_PATH}?ts=${moment().unix()}`);
+    redirectByName({ $router: this.app.$router, $store: this }, INDEX_NAME);
   },
   proxyRecoveryComplete({ commit }) {
     commit(LOSS_PROXY_RESET);

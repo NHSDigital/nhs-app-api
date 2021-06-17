@@ -249,12 +249,8 @@ class NHSOnlineApi {
 
             if (error.response !== undefined && Status598GpSessionRequired === error.response.status) {
               this.store.dispatch('navigation/goToGpSessionOnDemandPage', this.router.currentRoute.fullPath);
-              resolve({
-                deferred,
-                store: this.store
-            });
             }
-
+            
             if (!ignoreError) {
               this.store.dispatch('errors/addApiError', error);
             }

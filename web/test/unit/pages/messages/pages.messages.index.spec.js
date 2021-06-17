@@ -33,6 +33,7 @@ const mountPage = ({
   isProofLevel9 = true,
   hasUnreadAppMessages = false,
   hasUnreadGPMessages = false,
+  hasGpSession = false,
 } = {}) => {
   $router = createRouter();
   $store = createStore({
@@ -41,6 +42,7 @@ const mountPage = ({
       device: { isNativeApp: false },
       gpMessages: { hasUnread: hasUnreadGPMessages },
       messaging: { hasUnread: hasUnreadAppMessages },
+      session: { hasGpSession },
     },
     getters: {
       'knownServices/matchOneById': id => find(service => service.id === id)(knownServices),
@@ -88,6 +90,32 @@ describe('messages page', () => {
           sjrIm1MessagingEnabled: sjr,
         });
         expect(wrapper.find('#btn_im1_messaging').exists()).toBe(false);
+      });
+    });
+
+    describe('load GP messages', () => {
+      each([
+        { practice: false, sjr: false, hasGpSession: true, expectedResult: false },
+        { practice: false, sjr: false, hasGpSession: false, expectedResult: false },
+        { practice: false, sjr: true, hasGpSession: true, expectedResult: false },
+        { practice: false, sjr: true, hasGpSession: false, expectedResult: false },
+        { practice: true, sjr: false, hasGpSession: true, expectedResult: false },
+        { practice: true, sjr: false, hasGpSession: false, expectedResult: false },
+        { practice: true, sjr: true, hasGpSession: true, expectedResult: true },
+        { practice: true, sjr: true, hasGpSession: false, expectedResult: false },
+      ]).describe('loading GP Messages', ({ practice, sjr, hasGpSession, expectedResult }) => {
+        it(`${expectedResult ? 'will' : 'will not'} load gp messages when practice is ${practice}, sjr is ${sjr}, hasGpSession is ${hasGpSession}`, () => {
+          mountPage({
+            practiceIm1MessagingEnabled: practice,
+            sjrIm1MessagingEnabled: sjr,
+            hasGpSession,
+          });
+          if (expectedResult) {
+            expect($store.dispatch).toHaveBeenCalledWith('gpMessages/loadMessages', { ignoreError: true });
+          } else {
+            expect($store.dispatch).not.toHaveBeenCalledWith('gpMessages/loadMessages', { ignoreError: true });
+          }
+        });
       });
     });
 

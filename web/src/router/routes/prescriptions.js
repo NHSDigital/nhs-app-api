@@ -33,6 +33,7 @@ import {
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS_NAME,
   PRESCRIPTIONS_GP_AT_HAND_NAME,
   UPLIFT_PRESCRIPTIONS_NAME,
+  GP_PRESCRIPTION_JOURNEY_NAME,
 } from '@/router/names';
 
 import breadcrumbs from '@/breadcrumbs/prescriptions';
@@ -67,6 +68,9 @@ export const PRESCRIPTIONS = {
     proxyShutterPath: '/linked-profiles/shutter/prescriptions',
     sjrRedirectRules: [sjrRedirectRules.gpAtHandPrescriptionsRedirect],
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: GP_PRESCRIPTION_JOURNEY_NAME,
+    },
   },
 };
 
@@ -84,6 +88,9 @@ export const VIEW_ORDERS = {
     proxyShutterPath: '/linked-profiles/shutter/prescriptions',
     sjrRedirectRules: [sjrRedirectRules.gpAtHandPrescriptionsRedirect],
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: GP_PRESCRIPTION_JOURNEY_NAME,
+    },
   },
 };
 
@@ -100,6 +107,9 @@ export const REPEAT_COURSES = {
     helpUrl: prescriptionsHelpUrl,
     proxyShutterPath: '/linked-profiles/shutter/prescriptions',
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: GP_PRESCRIPTION_JOURNEY_NAME,
+    },
   },
 };
 
@@ -116,6 +126,9 @@ export const CONFIRM_DETAILS = {
     helpUrl: prescriptionsHelpUrl,
     proxyShutterPath: '/linked-profiles/shutter/prescriptions',
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: GP_PRESCRIPTION_JOURNEY_NAME,
+    },
   },
 };
 
@@ -147,6 +160,9 @@ export const ORDER_SUCCESS = {
       value: false,
       route: PRESCRIPTIONS,
     }],
+    gpSessionOnDemand: {
+      journey: GP_PRESCRIPTION_JOURNEY_NAME,
+    },
   },
 };
 
@@ -163,6 +179,9 @@ export const REPEAT_PARTIAL_SUCCESS = {
     helpUrl: prescriptionsHelpUrl,
     proxyShutterPath: '/linked-profiles/shutter/prescriptions',
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: GP_PRESCRIPTION_JOURNEY_NAME,
+    },
     redirectRules: [{
       condition: 'repeatPrescriptionCourses/isOrderPrescriptionInProgress',
       value: false,
@@ -183,6 +202,9 @@ export const PRESCRIPTIONS_GP_AT_HAND = {
     proofLevel: proofLevel.P9,
     helpUrl: prescriptionsHelpUrl,
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: GP_PRESCRIPTION_JOURNEY_NAME,
+    },
     sjrRedirectRules: [sjrRedirectRules.im1PrescriptionsRedirect],
   },
 };

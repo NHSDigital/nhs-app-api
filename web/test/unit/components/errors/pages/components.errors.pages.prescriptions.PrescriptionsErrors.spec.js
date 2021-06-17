@@ -2,7 +2,7 @@
 import PrescriptionsErrors from '@/components/errors/pages/prescriptions/PrescriptionsErrors';
 import i18n from '@/plugins/i18n';
 import { PRESCRIPTION_REPEAT_COURSES_PATH } from '@/router/paths';
-import { createStore, mount } from '../../../helpers';
+import { createStore, shallowMount } from '../../../helpers';
 
 describe('Prescriptions errors', () => {
   let $store;
@@ -11,12 +11,16 @@ describe('Prescriptions errors', () => {
     repeatError,
     prescriptionsError,
     hasRetried = false,
+    timestamp = 123,
     specialRequestIds = [],
     isValid = false,
     specialRequestValid = false,
     errorStatus,
     serviceDeskReference,
   } = {}) => {
+    Storage.prototype.getItem = jest.fn('hasRetried').mockImplementation(() => hasRetried);
+    Storage.prototype.setItem = jest.fn();
+
     $store = createStore({
       dispatch: jest.fn(() => Promise.resolve()),
       app: {
@@ -31,12 +35,7 @@ describe('Prescriptions errors', () => {
         prescriptions: {
           error: prescriptionsError,
         },
-        session: {
-          hasRetried,
-        },
-        device: {
-          isNativeApp: true,
-        },
+        session: {},
       },
       getters: {
         'repeatPrescriptionCourses/selectedIds': specialRequestIds,
@@ -46,7 +45,7 @@ describe('Prescriptions errors', () => {
       },
     });
 
-    return mount(PrescriptionsErrors, {
+    return shallowMount(PrescriptionsErrors, {
       $store,
       propsData: {
         error: {
@@ -56,6 +55,11 @@ describe('Prescriptions errors', () => {
         tryAgainRoute: PRESCRIPTION_REPEAT_COURSES_PATH,
       },
       mountOpts: { i18n, reload: jest.fn() },
+      $route: {
+        query: {
+          ts: timestamp,
+        },
+      },
     });
   };
 
@@ -81,13 +85,14 @@ describe('Prescriptions errors', () => {
     it('will set hasRetried to true on try again', async () => {
       page = await mountWrapper();
       page.vm.tryAgain();
-      expect($store.dispatch).toHaveBeenCalledWith('session/setRetry', true);
+      expect(sessionStorage.setItem).toBeCalledWith('hasRetried', true);
     });
 
     it('will show the permanent error when hasRetried is true and the status is 599', async () => {
       const error = { status: 599, serviceDeskReference: 'xxxxxx' };
-
       page = await mountWrapper({ repeatError: error, hasRetried: true, serviceDeskReference: 'xxxxxx' });
+      page.setData({ $route: { query: { ts: '12345678' } } });
+
       expect(page.find('#presciptionsGpSessionError').exists()).toBe(true);
     });
   });

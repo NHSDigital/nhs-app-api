@@ -69,6 +69,9 @@ export const MESSAGES = {
       value: true,
       route: LINKED_PROFILES_SHUTTER_MESSAGES,
     }],
+    gpSessionOnDemand: {
+      ignoreError: true,
+    },
   },
 };
 
@@ -85,6 +88,9 @@ export const GP_MESSAGES = {
     helpUrl: messagingHelpUrl,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
     nativeNavigation: MESSAGES_MENU_ITEM,
+    gpSessionOnDemand: {
+      ignoreError: true,
+    },
   },
 };
 
@@ -100,6 +106,9 @@ export const GP_MESSAGES_URGENCY = {
     helpUrl: messagingHelpUrl,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
     nativeNavigation: MESSAGES_MENU_ITEM,
+    gpSessionOnDemand: {
+      ignoreError: true,
+    },
   },
 };
 
@@ -116,6 +125,9 @@ export const GP_MESSAGES_URGENCY_CONTACT_YOUR_GP = {
     helpUrl: messagingHelpUrl,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
     nativeNavigation: MESSAGES_MENU_ITEM,
+    gpSessionOnDemand: {
+      ignoreError: true,
+    },
   },
 };
 
@@ -132,6 +144,9 @@ export const GP_MESSAGES_RECIPIENTS = {
     helpUrl: messagingHelpUrl,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
     nativeNavigation: MESSAGES_MENU_ITEM,
+    gpSessionOnDemand: {
+      ignoreError: true,
+    },
   },
 };
 
@@ -154,6 +169,9 @@ export const GP_MESSAGES_SEND_MESSAGE = {
     helpUrl: messagingHelpUrl,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
     nativeNavigation: MESSAGES_MENU_ITEM,
+    gpSessionOnDemand: {
+      ignoreError: true,
+    },
   },
 };
 
@@ -176,6 +194,9 @@ export const GP_MESSAGES_VIEW_DETAILS = {
     helpUrl: messagingHelpUrl,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
     nativeNavigation: MESSAGES_MENU_ITEM,
+    gpSessionOnDemand: {
+      ignoreError: true,
+    },
   },
 };
 
@@ -192,6 +213,9 @@ export const GP_MESSAGES_DOWNLOAD_ATTACHMENT = {
     helpUrl: messagingHelpUrl,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
     nativeNavigation: MESSAGES_MENU_ITEM,
+    gpSessionOnDemand: {
+      ignoreError: true,
+    },
   },
 };
 
@@ -207,6 +231,9 @@ export const GP_MESSAGES_VIEW_ATTACHMENT = {
     helpUrl: messagingHelpUrl,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
     nativeNavigation: MESSAGES_MENU_ITEM,
+    gpSessionOnDemand: {
+      ignoreError: true,
+    },
   },
 };
 
@@ -232,6 +259,9 @@ export const GP_MESSAGES_DELETE = {
       sjrRedirectRules.deleteMessageRedirect,
     ],
     nativeNavigation: MESSAGES_MENU_ITEM,
+    gpSessionOnDemand: {
+      ignoreError: true,
+    },
   },
 };
 

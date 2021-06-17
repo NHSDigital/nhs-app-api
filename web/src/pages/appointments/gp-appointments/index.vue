@@ -144,7 +144,7 @@ export default {
     }
 
     if (this.$route.query.hr) {
-      this.$store.dispatch('session/setRetry', true);
+      sessionStorage.setItem('hasRetried', true);
     }
   },
   beforeDestroy() {

@@ -3,10 +3,12 @@ export const INIT_AUTH = 'INIT_AUTH';
 export const LOGOUT = 'LOGOUT';
 export const SET_REDIRECT_URI = 'SET_REDIRECT_URI';
 export const UPDATE_CONFIG = 'UPDATE_VERIFIER';
+export const ADD_GP_SESSION_ERROR = 'ADD_SESSION_ERROR';
 
 export const initialState = () => ({
   config: {},
   user: {},
   redirectUri: undefined,
   random: Math.random(),
+  gpSessionError: undefined,
 });

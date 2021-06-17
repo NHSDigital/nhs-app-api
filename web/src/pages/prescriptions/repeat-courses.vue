@@ -146,7 +146,7 @@ const loadData = async (store) => {
 
   const { error } = store.state.repeatPrescriptionCourses;
 
-  if (error && error.status === GP_SESSION_ERROR_STATUS && gpSessionErrorHasRetried(store)) {
+  if (error && error.status === GP_SESSION_ERROR_STATUS && gpSessionErrorHasRetried()) {
     EventBus.$emit(UPDATE_HEADER, 'gpSessionErrors.prescriptions.youCanNotOrderOrViewPrescriptions');
     EventBus.$emit(UPDATE_TITLE, 'gpSessionErrors.prescriptions.youCanNotOrderOrViewPrescriptions');
   }
@@ -180,7 +180,7 @@ export default {
       return this.$store.state.repeatPrescriptionCourses.error;
     },
     hasRetried() {
-      return gpSessionErrorHasRetried(this.$store);
+      return gpSessionErrorHasRetried();
     },
     hasApiError() {
       return this.$store.getters['errors/showApiError'];
@@ -288,7 +288,7 @@ export default {
   },
   async created() {
     if (this.$route.query.hr) {
-      this.$store.dispatch('session/setRetry', true);
+      sessionStorage.setItem('hasRetried', true);
     }
     await loadData(this.$store, this.$t);
   },
@@ -324,10 +324,7 @@ export default {
       }
     },
     tryAgain() {
-      if (this.$store.state.device.isNativeApp) {
-        sessionStorage.setItem('hasRetried', true);
-      }
-      this.$store.dispatch('session/setRetry', true);
+      sessionStorage.setItem('hasRetried', true);
       redirectTo(this, PRESCRIPTION_REPEAT_COURSES_PATH, { hr: true }, true);
     },
     backButtonClicked() {

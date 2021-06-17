@@ -16,12 +16,18 @@ import { getWindowLocationOrigin } from './window';
 const protocol = 'http://';
 const secureProtocol = 'https://';
 export const GP_SESSION_ERROR_STATUS = 599;
+export const GP_SESSION_ON_DEMAND_ERROR_STATUS = 598;
 export const CONSENT_NOT_GIVEN_DESCRIPTION = 'ConsentNotGiven';
 export const CHILD_DEFAULT_SERVICE_DEFINITION = 'PCI_UWC__T';
 export const ADULT_DEFAULT_SERVICE_DEFINITION = 'GEC_GEN__F';
 
 const customMimeTypes = new Mime({
   'image/bmp': ['dib'],
+});
+
+export const createLocalError = ({ response }) => ({
+  status: (response && response.status) || '',
+  serviceDeskReference: (response && get('serviceDeskReference')(response.data)) || '',
 });
 
 export const datePart = (value, dateFormat) => {
@@ -57,10 +63,7 @@ export const isNumber = value => typeof value === 'number';
    flag being reset after a store rebuild which occurs when navigating
    to external links on the native apps
 */
-export const gpSessionErrorHasRetried = store =>
-  ((store.state.device.isNativeApp) ?
-    sessionStorage.getItem('hasRetried') || store.state.session.hasRetried :
-    store.state.session.hasRetried);
+export const gpSessionErrorHasRetried = () => sessionStorage.getItem('hasRetried');
 
 const get12HourTimeFormat = (dateTime, $t, capitaliseOutput = false) => {
   let localeValue;

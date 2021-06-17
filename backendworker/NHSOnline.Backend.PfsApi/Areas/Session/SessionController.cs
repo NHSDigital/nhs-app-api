@@ -146,7 +146,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
                 if (!validator.IsPostValid(model))
                 {
-                    return _errorResultBuilder.BuildResult(new ErrorTypes.NhsLoginSSoRequest());
+                    return _errorResultBuilder.BuildResult(new ErrorTypes.GPSessionUnavailable());
                 }
 
                 var csrfToken = _antiforgery.GetTokens(HttpContext).RequestToken;

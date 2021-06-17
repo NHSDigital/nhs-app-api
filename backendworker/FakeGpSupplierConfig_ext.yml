@@ -54,26 +54,6 @@ defaultUsers:
       dateOfBirth: "1974-04-13T00:00:00"
       sex: Female
 
-    9692240614:
-      userId: 1b8549f1-a693-4472-86bf-cca5d5a3c02c
-      emailAddress: nhso2018+jennny.gandy@gmail.com
-      odsCode: A00002
-      givenName: Jenny
-      familyName: Gandy
-      dateOfBirth: "1957-10-25T00:00:00"
-      sex: Female
-      linkedAccountsNhsNumbers:
-        - "9692240622"
-
-    9692240622:
-      userId: 4b5ef9a7-8da5-4b55-bb01-bb69dbfa38a8
-      emailAddress: nhso2018+randal.vale@gmail.com
-      odsCode: A00002
-      givenName: Randal
-      familyName: Vale
-      dateOfBirth: "1993-04-04T00:00:00"
-      sex: Male
-
   communal:
     9686368973:
       userId: 9e39ad97-ec0d-457b-9947-34ec863fa100

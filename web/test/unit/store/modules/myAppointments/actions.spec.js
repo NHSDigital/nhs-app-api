@@ -59,10 +59,6 @@ describe('actions', () => {
         expect(that.dispatch).toHaveBeenCalledWith('device/unlockNavBar');
       });
 
-      it('will dispatch session/setRetry', async () => {
-        expect(that.dispatch).toHaveBeenCalledWith('session/setRetry', false);
-      });
-
       it('will call sessionStorage removeItem', async () => {
         rootState = {
           device: {
@@ -73,7 +69,6 @@ describe('actions', () => {
         await actions.load.call(that, { commit, rootState });
 
         expect(sessionStorage.removeItem).toBeCalledWith('hasRetried');
-        expect(that.dispatch).toHaveBeenCalledWith('session/setRetry', false);
       });
 
       it('will not commit ADD_ERROR', () => {

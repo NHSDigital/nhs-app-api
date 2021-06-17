@@ -177,44 +177,14 @@ describe('util library datetime', () => {
     });
 
     describe('gpSessionHasRetried', () => {
-      const createStore = ({ isNativeApp = false, hasRetried = false }) =>
-        ({
-          state: {
-            device: {
-              isNativeApp,
-            },
-            session: {
-              hasRetried,
-            },
-          },
-        });
-
-      it('will return true if session/hasRetried is true', () => {
-        const $store = createStore({ hasRetried: true });
-
-        expect(gpSessionErrorHasRetried($store)).toBe(true);
+      it('will return true if sessionStorage hasRetried is true', () => {
+        Storage.prototype.getItem = jest.fn('hasRetried').mockImplementation(() => true);
+        expect(gpSessionErrorHasRetried()).toBe(true);
       });
 
-      it('will return false if session/hasRetried is false', () => {
-        const $store = createStore({ hasRetried: false });
-
-        expect(gpSessionErrorHasRetried($store)).toBe(false);
-      });
-
-      describe('on native app', () => {
-        it('will return true if sessionStorage hasRetried is true', () => {
-          const $store = createStore({ isNativeApp: true });
-
-          Storage.prototype.getItem = jest.fn('hasRetried').mockImplementation(() => true);
-          expect(gpSessionErrorHasRetried($store)).toBe(true);
-        });
-
-        it('will return false if sessionStorage hasRetried is false', () => {
-          const $store = createStore({ isNativeApp: true });
-
-          Storage.prototype.getItem = jest.fn('hasRetried').mockImplementation(() => false);
-          expect(gpSessionErrorHasRetried($store)).toBe(false);
-        });
+      it('will return false if sessionStorage hasRetried is false', () => {
+        Storage.prototype.getItem = jest.fn('hasRetried').mockImplementation(() => false);
+        expect(gpSessionErrorHasRetried()).toBe(false);
       });
     });
 

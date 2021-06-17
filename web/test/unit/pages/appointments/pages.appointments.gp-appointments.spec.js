@@ -67,8 +67,10 @@ describe('index.vue', () => {
 
   describe('errors', () => {
     it('will dispatch the retry function if the hasRetried flag is set on the route', async () => {
+      Storage.prototype.setItem = jest.fn();
+
       await mountPage({ query: { hr: true } });
-      expect($store.dispatch).toBeCalledWith('session/setRetry', true);
+      expect(sessionStorage.setItem).toBeCalledWith('hasRetried', true);
     });
   });
 });

@@ -88,23 +88,5 @@ describe('GpAppointmentErrors', () => {
       wrapper = mountPage({ status: 600 });
       expect(wrapper.find('#error-dialog-unknown').exists()).toBe(true);
     });
-
-    it('will set the flag in the sessionStorage when isNative app is true', async () => {
-      Storage.prototype.setItem = jest.fn();
-
-      wrapper = await mountPage({ isNativeApp: true });
-      wrapper.vm.tryAgain();
-
-      expect(sessionStorage.setItem).toBeCalledWith('hasRetried', true);
-    });
-
-    it('will not call sessionStorage when isNative app is false', async () => {
-      Storage.prototype.setItem = jest.fn();
-
-      wrapper = await mountPage();
-      wrapper.vm.tryAgain();
-
-      expect(sessionStorage.setItem).not.toBeCalled();
-    });
   });
 });

@@ -69,7 +69,11 @@ describe('my record actions', () => {
       });
 
       it('will catch an exeption in the demographics request', async () => {
-        const error = new Error();
+        const error = {
+          response: {
+            status: 480,
+          },
+        };
         app.$http.getV1PatientDemographics = jest.fn().mockImplementation(() => {
           throw error;
         });
@@ -79,7 +83,11 @@ describe('my record actions', () => {
       });
 
       it('will catch an exeption in the patient record request', async () => {
-        const error = new Error();
+        const error = {
+          response: {
+            status: 480,
+          },
+        };
         app.$http.getV1PatientMyRecord = jest.fn().mockImplementation(() => {
           throw error;
         });

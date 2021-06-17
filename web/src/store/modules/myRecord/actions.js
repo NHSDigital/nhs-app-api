@@ -13,6 +13,7 @@ import {
   SET_RELOAD,
 } from '@/store/modules/myRecord/mutation-types';
 import AnalyticsValues from '@/lib/analytics-values';
+import { GP_SESSION_ON_DEMAND_ERROR_STATUS } from '@/lib/utils';
 
 const getMedicalRecordSection = async (commit, $http, mutation, section) => {
   try {
@@ -56,7 +57,9 @@ export default {
         await loadMedicalRecord({ commit, self: this, patientDetails });
       }
     } catch (error) {
-      this.dispatch('errors/addApiError', error);
+      if (error.response.status !== GP_SESSION_ON_DEMAND_ERROR_STATUS) {
+        this.dispatch('errors/addApiError', error);
+      }
     }
   },
   async loadTestResults({ commit }) {
