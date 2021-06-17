@@ -1,0 +1,50 @@
+---
+region: uksouth
+zone: loadtest
+domain: nonlive.nhsapp.service.nhs.uk
+
+registry: nhsapp.azurecr.io
+
+cidHostname: auth.ext.signin.nhs.uk
+cidProtocol: https
+
+global:
+  environment: stubs
+
+environmentStubbed:
+  emisStubbed: true
+  cidStubbed: true
+  visionStubbed: true
+  tppStubbed: true
+  deployStubs: true
+  cdssStubbed: true
+
+web:
+  publicURL: www-loadtest.loadtest.nonlive.nhsapp.service.nhs.uk
+
+stubs:
+  containerPort: 8080
+  role: stubs
+  image: nhsonline-minimock
+  image_tag: pr4763
+  imagePullPolicy: Always
+  memoryRequest: "1536Mi"
+  memoryLimit: "1536Mi"
+  cpuRequest: "500m"
+  cpuLimit: "500m"
+  targetCPUUtilizationPercentage: 35
+  minReplicas: 3
+  maxReplicas: 300
+  environmentVariables:
+    - name: WAIT_FOR_TIMEOUT
+      value: "60"
+
+sidecar_proxy:
+  containerPort: 8443
+  memoryRequest: "128Mi"
+  memoryLimit: "256Mi"
+  cpuRequest: "125m"
+  cpuLimit: "250m"
+  image: nhsonline-nginx
+  image_tag: "v1.16.2"
+  imagePullPolicy: IfNotPresent

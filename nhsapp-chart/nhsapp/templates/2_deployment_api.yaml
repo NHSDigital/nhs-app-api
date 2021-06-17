@@ -97,11 +97,12 @@ spec:
           value: "http://*:{{ $.Values.api.containerPort }}"
         - name: GP_LOOKUP_API_RESULTS_LIMIT
           value: "{{ $.Values.gpLookupApiResultsLimit }}"
+        - name: NHS_SEARCH_BASE_URL
         {{- if $.Values.environmentStubbed.nhsSearchStubbed }}
-        - name: NHS_SEARCH_BASE_URL
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/nhs-search-indexes/"
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/nhs-search-indexes/"
         {{- else }}
-        - name: NHS_SEARCH_BASE_URL
           value: "https://iproxy-nhssearch-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.iproxy.containerPort }}/"
         {{- end }}
         - name: POSTCODE_LOOKUP_SEARCH_RADIUS_KM
@@ -119,17 +120,16 @@ spec:
           value: "{{ $.Values.odsRemapMap }}"
         - name: EMIS_APPLICATION_ID
           value: "{{ $.Values.emisApplicationID }}"
-        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.emisStubbed)) }}
         - name: EMIS_BASE_URL
+        {{- if $.Values.environmentStubbed.emisStubbed }}
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/emis/"
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/emis/"
         {{- else }}
-        - name: EMIS_BASE_URL
           value: "{{ $.Values.emisProtocol }}://{{ $.Values.emisHostname }}:{{ $.Values.emisPort }}/PFS/"
-          {{- if $.Values.emisCertEnabled }}
+        {{- end }}
         - name: EMIS_CERT_PATH
           value: "/mnt/secrets-store/emisPfx"
-          {{- end }}
-        {{- end }}
         - name: FAKE_GP_SUPPLIER_CONFIG_PATH
           value: "{{ $.Values.fakeGpSupplierConfigPath }}"
         - name: NOMINATED_PHARMACY_ENABLED
@@ -141,13 +141,16 @@ spec:
         - name: ONLINE_PHARMACY_SEARCH_RESULT_LIMIT
           value: "{{ $.Values.onlinePharmacySearchResultLimit }}"
         {{- if $.Values.nominatedpharmacyEnabled }}
-          {{- if $.Values.environmentStubbed.spineStubbed }}
         - name: SPINE_PDS_URL
+          {{- if $.Values.environmentStubbed.spineStubbed }}
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/spine/"
         - name: TEST_ONLY_SPINE_LDAP_LOOKUP_DUMMY_VALUE
           value: "xxx"
+          {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/spine/"
+        - name: TEST_ONLY_SPINE_LDAP_LOOKUP_DUMMY_VALUE
+          value: "xxx"
           {{- else }}
-        - name: SPINE_PDS_URL
           value: "https://{{ $.Values.spinePdsHost }}/"
           {{- end }}
         - name: SPINE_PDS_URL_PATH
@@ -166,8 +169,10 @@ spec:
         - name: ONLINECONSULTATIONSPROVIDERSSETTINGS__PROVIDERS__0__PROVIDER
           value: stubs
         - name: ONLINECONSULTATIONSPROVIDERSSETTINGS__PROVIDERS__0__BASEADDRESS
-        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cdssStubbed)) }}
+        {{- if $.Values.environmentStubbed.cdssStubbed }}
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/"
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/"
         {{- else }}
           value: "https://nhsapp-cdsswiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/"
         {{- end }}
@@ -176,25 +181,29 @@ spec:
         - name: ONLINECONSULTATIONSPROVIDERSSETTINGS__PROVIDERS__1__BASEADDRESS
         {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cdssStubbed)) }}
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/"
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/"
         {{- else }}
           value: "https://iproxy-econsult-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.iproxy.containerPort }}/"
         {{- end }}
-        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cidStubbed)) }}
         - name: CITIZEN_ID_BASE_URL
+        {{- if $.Values.environmentStubbed.cidStubbed }}
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/citizenid/"
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/citizenid/"
         {{- else }}
-        - name: CITIZEN_ID_BASE_URL
           value: "https://iproxy-cid-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.iproxy.containerPort }}"
         {{- end }}
         - name: CITIZEN_ID_CLIENT_ID
           value: "{{ $.Values.cidClientID }}"
         - name: ConfigurationSettings__FidoServerUrl
           value: "{{ $.Values.cidProtocol }}://{{ $.Values.cidFidoHostname }}"
-        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.tppStubbed)) }}
         - name: TPP_BASE_URL
+        {{- if $.Values.environmentStubbed.tppStubbed }}
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/tpp/"
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/tpp/"
         {{- else }}
-        - name: TPP_BASE_URL
           value: "{{ $.Values.tppProtocol }}://{{ $.Values.tppHostname }}:{{ $.Values.tppPort }}/Patient/"
         {{- end }}
         - name: TPP_CERT_PATH
@@ -211,11 +220,12 @@ spec:
           value: "{{ $.Values.tppApplicationDeviceType }}"
         - name: TPP_SUPPORTS_LINKED_ACCOUNTS
           value: "{{ $.Values.tppSupportsLinkedAccounts }}"
-        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.visionStubbed)) }}
         - name: VISION_BASE_URL
+        {{- if $.Values.environmentStubbed.visionStubbed }}
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/vision/"
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/vision/"
         {{- else }}
-        - name: VISION_BASE_URL
           value: "{{ $.Values.visionProtocol }}://{{ $.Values.visionHostname }}:{{ $.Values.visionPort}}/"
         {{- end }}
         - name: VISION_APPLICATION_PROVIDER_ID
@@ -236,11 +246,12 @@ spec:
           value: "{{ $.Values.visionSenderUserRole }}"
         - name: SESSION_ENCRYPTION_KEY_FILE
           value: "/mnt/secrets-store/sessionKey"
-        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cidStubbed)) }}
         - name: CITIZEN_ID_JWT_ISSUER
+        {{- if $.Values.environmentStubbed.cidStubbed }}
           value: "https://nhsapp-wiremock.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/citizenid/"
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/citizenid/"
         {{- else }}
-        - name: CITIZEN_ID_JWT_ISSUER
           value: "{{ $.Values.cidProtocol }}://{{ $.Values.cidHostname }}"
         {{- end }}
         - name: NDOP_SIGNING_KEY
@@ -264,13 +275,14 @@ spec:
             secretKeyRef:
               name: {{ $.Values.authSigningKeyName }}-password-{{ .Chart.AppVersion }}
               key: password
-          {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.microtestStubbed)) }}
         - name: MICROTEST_BASE_URL
+        {{- if $.Values.environmentStubbed.microtestStubbed }}
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/microtest/"
-          {{- else }}
-        - name: MICROTEST_BASE_URL
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/microtest/"
+        {{- else }}
           value: "https://iproxy-microtest-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.iproxy_microtest.containerPort }}/v1/"
-          {{- end }}
+        {{- end }}
         - name: MICROTEST_CERTIFICATE_ENABLED
           value: "{{ $.Values.microtestCertificateEnabled }}"
         - name: ConfigurationSettings__CookieDomain
@@ -320,13 +332,14 @@ spec:
           value: {{ $.Values.cosmosDBName }}-mongo
         - name: VERSION_TAG
           value: "{{ $.Values.api.image_tag }}"
-          {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.organDonationStubbed)) }}
         - name: ORGAN_DONATION_BASE_URL
+        {{- if $.Values.environmentStubbed.organDonationStubbed }}
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/organdonation/"
-          {{- else }}
-        - name: ORGAN_DONATION_BASE_URL
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/organdonation/"
+        {{- else }}
           value: "{{ $.Values.organDonationProtocol }}://{{ $.Values.organDonationHostname }}:{{ $.Values.organDonationPort }}/{{ $.Values.organDonationPath }}"
-          {{- end }}
+        {{- end }}
         - name: ORGAN_DONATION_CLIENT_ID
           value: "{{ $.Values.organDonationClientId }}"
         - name: ORGAN_DONATION_OCP_APIM_SUBSCRIPTION_KEY

@@ -113,29 +113,32 @@ spec:
           value: {{ $.Values.cosmosDBName }}-mongo
         - name: USERINFO_MONGO_DATABASE_COLLECTION
           value: {{ $.Values.info.mongoDatabaseInfoCollection }}
-        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cidStubbed)) }}
         - name: CITIZEN_ID_JWT_ISSUER
+        {{- if $.Values.environmentStubbed.cidStubbed }}
           value: "https://nhsapp-wiremock.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/citizenid/"
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/citizenid/"
         {{- else }}
-        - name: CITIZEN_ID_JWT_ISSUER
           value: "{{ $.Values.cidProtocol }}://{{ $.Values.cidHostname }}"
         {{- end }}
         - name: CITIZEN_ID_AUTHENTICATION_TYPE
           value: "{{ $.Values.cidAuthenticationType }}"
-        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cidStubbed)) }}
         - name: CITIZEN_ID_BASE_URL
+        {{- if $.Values.environmentStubbed.cidStubbed }}
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/citizenid/"
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/citizenid/"
         {{- else }}
-        - name: CITIZEN_ID_BASE_URL
           value: "https://iproxy-cid-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.iproxy.containerPort }}"
         {{- end }}
         - name: CITIZEN_ID_CLIENT_ID
           value: "{{ $.Values.cidClientID }}"
-        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.emisStubbed)) }}
         - name: QUALTRICS_BASE_URL
+        {{- if $.Values.environmentStubbed.qualtricsStubbed }}
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/qualtrics/"
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/qualtrics/"
         {{- else }}
-        - name: QUALTRICS_BASE_URL
           value: "{{ $.Values.qualtricsBaseUrl }}"
         {{- end }}
         - name: QUALTRICS_DIRECTORY_ID

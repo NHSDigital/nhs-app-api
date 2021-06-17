@@ -81,29 +81,32 @@ spec:
           value: "{{ $.Values.fakeGpSystemEnabled }}"
         - name: EMIS_APPLICATION_ID
           value: "{{ $.Values.emisApplicationID }}"
-        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.emisStubbed)) }}
         - name: EMIS_BASE_URL
+        {{- if $.Values.environmentStubbed.emisStubbed }}
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/emis/"
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/emis/"
         {{- else }}
-        - name: EMIS_BASE_URL
           value: "{{ $.Values.emisProtocol }}://{{ $.Values.emisHostname }}:{{ $.Values.emisPort }}/PFS/"
         {{- end }}
         - name: EMIS_CERT_PATH
           value: "/mnt/secrets-store/emisPfx"
-        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.microtestStubbed)) }}
         - name: MICROTEST_BASE_URL
+        {{- if $.Values.environmentStubbed.microtestStubbed }}
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/microtest/"
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/microtest/"
         {{- else }}
-        - name: MICROTEST_BASE_URL
           value: "https://iproxy-microtest-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.iproxy_microtest.containerPort }}/v1/"
         {{- end }}
         - name: MICROTEST_CERTIFICATE_ENABLED
           value: "{{ $.Values.microtestCertificateEnabled }}"
-        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.tppStubbed)) }}
         - name: TPP_BASE_URL
+        {{- if $.Values.environmentStubbed.tppStubbed }}
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/tpp/"
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/tpp/"
         {{- else }}
-        - name: TPP_BASE_URL
           value: "{{ $.Values.tppProtocol }}://{{ $.Values.tppHostname }}:{{ $.Values.tppPort }}/Patient/"
         {{- end }}
         - name: TPP_CERT_PATH
@@ -120,11 +123,12 @@ spec:
           value: "{{ $.Values.tppApplicationDeviceType }}"
         - name: TPP_SUPPORTS_LINKED_ACCOUNTS
           value: "{{ $.Values.tppSupportsLinkedAccounts }}"
-        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.visionStubbed)) }}
         - name: VISION_BASE_URL
+        {{- if $.Values.environmentStubbed.visionStubbed }}
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/vision/"
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/vision/"
         {{- else }}
-        - name: VISION_BASE_URL
           value: "{{ $.Values.visionProtocol }}://{{ $.Values.visionHostname }}:{{ $.Values.visionPort}}/"
         {{- end }}
         - name: VISION_APPLICATION_PROVIDER_ID
@@ -151,11 +155,12 @@ spec:
           value: "{{ $.Values.odsRemapMap }}"
         - name: SESSION_ENCRYPTION_KEY_FILE
           value: "/mnt/secrets-store/sessionKey"
-        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cidStubbed)) }}
         - name: CITIZEN_ID_JWT_ISSUER
+        {{- if $.Values.environmentStubbed.cidStubbed }}
           value: "https://nhsapp-wiremock.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/citizenid/"
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/citizenid/"
         {{- else }}
-        - name: CITIZEN_ID_JWT_ISSUER
           value: "{{ $.Values.cidProtocol }}://{{ $.Values.cidHostname }}"
         {{- end }}
         - name: MONGO_CONNECTION_STRING

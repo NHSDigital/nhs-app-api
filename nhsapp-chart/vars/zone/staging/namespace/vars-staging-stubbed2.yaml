@@ -27,6 +27,8 @@ environmentStubbed:
   cdssStubbed: true
   spineStubbed: true
   nhsSearchStubbed: true
+  ndopStubbed: true
+  qualtricsStubbed: true
 
 emisCertEnabled: true
 emisPort: 444

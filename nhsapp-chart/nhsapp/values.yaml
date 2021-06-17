@@ -9,6 +9,10 @@ environmentStubbed: {}
 #   tppStubbed: false
 #   deployWiremock: false
 #   cdssStubbed: false
+#   qualtricsStubbed: false
+#   ndopStubbed: false
+#   useExternalStubs: false
+#   externalStubsBaseUrl: https://stubs-loadtest.loadtest.nonlive.nhsapp.service.nhs.uk
 
 appInsightsEnabled: false
 appImageTag: v1.0.0

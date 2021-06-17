@@ -90,17 +90,22 @@ spec:
           value: "https://api{host}"
         - name: API_BASE_URL
           value: "https://api-{{ $.Values.global.environment }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
-          {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cidStubbed)) }}
+        {{- if $.Values.environmentStubbed.cidStubbed }}
         - name: CID_AUTH_ENDPOINT_URL
           value: "https://wiremock-{{ $.Values.global.environment }}.{{ $.Values.zone }}.{{ $.Values.domain }}/citizenid/authorize"
         - name: CID_SETTINGS_URL
           value: "https://wiremock-{{ $.Values.global.environment }}.{{ $.Values.zone }}.{{ $.Values.domain }}/citizenid/settings"
-          {{- else }}
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+        - name: CID_AUTH_ENDPOINT_URL
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/citizenid/authorize"
+        - name: CID_SETTINGS_URL
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/citizenid/settings"
+        {{- else }}
         - name: CID_AUTH_ENDPOINT_URL
           value: "{{ $.Values.cidProtocol }}://{{ $.Values.cidHostname }}/authorize"
         - name: CID_SETTINGS_URL
           value: "{{ $.Values.cidProtocol }}://{{ $.Values.cidSettingsHostName }}"
-          {{- end }}
+        {{- end }}
         - name: CID_CLIENT_ID
           value: "{{ $.Values.cidClientID }}"
         - name: CID_P5_VECTOR_OF_TRUST_ENABLED
@@ -108,8 +113,10 @@ spec:
         - name: HOTJAR_SITE_ID
           value: "{{ $.Values.web.hotjarSiteId }}"
         - name: DATA_PREFERENCES_URL
-        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.deployWiremock)) }}
+        {{- if $.Values.environmentStubbed.ndopStubbed }}
           value: https://wiremock-{{ $.Values.global.environment }}.{{ $.Values.zone }}.{{ $.Values.domain }}/ndop/createsession
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/ndop/createsession"
         {{- else }}
           value: "{{ $.Values.web.dataPreferencesUrl }}"
         {{- end }}

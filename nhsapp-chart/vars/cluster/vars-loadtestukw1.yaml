@@ -1,0 +1,12 @@
+---
+cluster: loadtestukw1
+zone: loadtest
+REGION: ukwest
+
+redcentricIP: 10.204.142.132
+
+spine_response:
+  internalIP: 10.150.10.10
+
+namespaces:
+  - loadtest

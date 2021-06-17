@@ -1,0 +1,49 @@
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  labels:
+    app: {{ template "nhsapp.name" . }}-{{ $.Values.stubs.role }}
+    role: {{ $.Values.stubs.role }}
+    version: {{ .Chart.AppVersion | quote }}
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.stubs.role }}-{{ .Chart.AppVersion | replace "." "-" }}
+
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ template "nhsapp.name" . }}-{{ $.Values.stubs.role }}-{{ .Chart.AppVersion | replace "." "-" }}
+
+  minReplicas: {{ $.Values.stubs.minReplicas }}
+  maxReplicas: {{ $.Values.stubs.maxReplicas }}
+
+  behavior: 
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+        - type: Percent
+          value: 100
+          periodSeconds: 7
+        - type: Pods
+          value: 8
+          periodSeconds: 7
+      selectPolicy: Max
+
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Pods
+          value: 4
+          periodSeconds: 60
+        - type: Percent
+          value: 10
+          periodSeconds: 60
+      selectPolicy: Max
+
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ $.Values.stubs.targetCPUUtilizationPercentage }}

@@ -1,0 +1,127 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.stubs.role }}-{{ .Chart.AppVersion | replace "." "-" }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    app: {{ template "nhsapp.name" . }}-{{ $.Values.stubs.role }}
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "nhsapp.name" . }}-{{ $.Values.stubs.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "nhsapp.name" . }}-{{ $.Values.stubs.role }}
+        role: {{ $.Values.stubs.role }}
+        version: {{ .Chart.AppVersion | quote }}
+      annotations:
+        rolleveryrelease: {{ randAlphaNum 5 | quote }}
+    spec:
+      volumes:
+      - name: sidecar-tls
+        secret:
+          secretName: loadtest-{{ $.Values.domain | replace "." "-" }}
+      - name: sidecar-proxy-config
+        configMap:
+          name: sidecar-proxy-config-{{ .Chart.AppVersion }}
+      containers:
+      - name: stubs
+        image: {{ $.Values.registry }}/{{ $.Values.stubs.image }}:{{ $.Values.stubs.image_tag }}
+        imagePullPolicy: {{ $.Values.stubs.imagePullPolicy }}
+        lifecycle:
+          {{- include "nhsapp.preStopHook" . | indent 12 }}
+        resources:
+          requests:
+            memory: {{ $.Values.stubs.memoryRequest }}
+            cpu: {{ $.Values.stubs.cpuRequest }}
+          limits:
+            memory: {{ $.Values.stubs.memoryLimit }}
+            cpu: {{ $.Values.stubs.cpuLimit }}
+        ports:
+        - containerPort: {{ $.Values.stubs.containerPort }}
+        env:
+{{- with $.Values.stubs.environmentVariables }}
+{{ toYaml . | trim | indent 8 }}
+{{- end }}
+        - name: WIREMOCK_AUTHORITY
+          value: "stubs-{{ $.Values.global.environment }}.{{ $.Values.zone }}.{{ $.Values.domain }}:443"
+        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cidStubbed)) }}
+        - name: CITIZEN_ID_BASE_URL
+          value: "https://stubs-loadtest.{{  $.Values.zone }}.{{ $.Values.domain }}/citizenid/"
+        - name: CITIZEN_ID_JWT_ISSUER
+          value: "https://stubs-loadtest.{{  $.Values.zone }}.{{ $.Values.domain }}/citizenid/"
+        {{- end }}
+        - name: CID_REDIRECT_URI
+  {{- if $.Values.web.publicURL }}
+          value: "https://{{ $.Values.web.publicURL }}/auth-return"
+  {{- else }}
+          value: "https://www-{{ $.Values.global.environment }}.{{ $.Values.zone }}.{{ $.Values.domain }}/auth-return"
+  {{- end }}
+        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cidStubbed)) }}
+        - name: MockSettings__CitizenId__CitizenIdTokenIssuer
+          value: "https://stubs-loadtest.{{  $.Values.zone }}.{{ $.Values.domain }}/citizenid/"
+        {{- else }}
+        - name: MockSettings__CitizenId__CitizenIdTokenIssuer
+          value: "{{ $.Values.cidProtocol }}://{{ $.Values.cidHostname }}"
+        {{- end }}
+        livenessProbe:
+          httpGet:
+            port: 8080
+            path: /citizenid/.well-known/openid-configuration
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 1
+
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: /citizenid/.well-known/openid-configuration
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 2
+
+      - name: proxy
+        image: {{ $.Values.registry }}/{{ $.Values.sidecar_proxy.image }}:{{ $.Values.sidecar_proxy.image_tag }}
+        imagePullPolicy: {{ $.Values.sidecar_proxy.imagePullPolicy }}
+        lifecycle:
+          {{- include "nhsapp.preStopHook" . | indent 12 }}
+        resources:
+          requests:
+            memory: {{ $.Values.sidecar_proxy.memoryRequest }}
+            cpu: {{ $.Values.sidecar_proxy.cpuRequest }}
+          limits:
+            memory: {{ $.Values.sidecar_proxy.memoryLimit }}
+            cpu: {{ $.Values.sidecar_proxy.cpuLimit }}
+        ports:
+        - containerPort: {{ $.Values.sidecar_proxy.containerPort }}
+        volumeMounts:
+        - name: sidecar-tls
+          mountPath: /etc/nginx/ssl
+        - name: sidecar-proxy-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+        livenessProbe:
+          httpGet:
+            scheme: HTTPS
+            port: 8443
+            path: /healthz
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 1
+
+        readinessProbe:
+          httpGet:
+            scheme: HTTPS
+            port: 8443
+            path: /citizenid/.well-known/openid-configuration
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 2
+
+      dnsConfig:
+        options:
+          - name: single-request-reopen
