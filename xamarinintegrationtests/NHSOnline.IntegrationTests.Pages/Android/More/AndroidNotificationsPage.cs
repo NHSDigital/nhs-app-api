@@ -42,6 +42,13 @@ namespace NHSOnline.IntegrationTests.Pages.Android.More
             return page;
         }
 
+        public static AndroidNotificationsPage AssertErrorOnPage(IAndroidDriverWrapper driver)
+        {
+            var page = new AndroidNotificationsPage(driver);
+            page.PageContent.AssertErrorOnPage();
+            return page;
+        }
+
         public void AssertPageElements()
         {
             Navigation.AssertNavigationPresent();

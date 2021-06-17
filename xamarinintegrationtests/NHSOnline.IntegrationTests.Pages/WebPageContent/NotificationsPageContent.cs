@@ -35,6 +35,20 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         private WebLink NotificationSettingsLink => WebLink.WithText(_interactor,
             "Manage how notifications are shown on this device (opens your device settings)");
 
+        private WebText ErrorTitleText => WebText.WithTagAndText(_interactor, "h1", "Notifications error");
+
+        private WebText NotificationsTurnedOffText => WebText.WithTagAndText(
+            _interactor,
+            "p",
+            "Notifications are turned off on your device");
+
+        private WebText TurnOnNotificationsText => WebText.WithTagAndText(
+            _interactor,
+            "p",
+            "To turn on notifications, go to your device settings and allow notifications. Then return to the app and try again.");
+
+        private WebButton TryAgainButton => WebButton.WithText(_interactor, "Try again");
+
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
             PrivacyLink,
@@ -44,6 +58,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         internal void AssertOnPage() => TitleText.AssertVisible();
 
+        internal void AssertErrorOnPage() => ErrorTitleText.AssertVisible();
+
         public void AssertPageElements()
         {
             TitleText.AssertVisible();
@@ -51,6 +67,14 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             IfYouShareThisDeviceText.AssertVisible();
             MoreInfoText.AssertVisible();
             NotificationSettingsLink.AssertVisible();
+        }
+
+        public void AssertNotificationsTurnedOffErrorPageElements()
+        {
+            ErrorTitleText.AssertVisible();
+            NotificationsTurnedOffText.AssertVisible();
+            TurnOnNotificationsText.AssertVisible();
+            TryAgainButton.AssertVisible();
         }
 
         public void AssertNotificationsEnabled()
@@ -73,11 +97,12 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             return this;
         }
 
-        public void ToggleOffNotifications()
+        public NotificationsPageContent ToggleOffNotifications()
         {
             NotificationsToggle.ToggleOff();
             using var timeout = ExtendedTimeout.FromSeconds(10);
             NotificationsToggle.AssertToggledOff();
+            return this;
         }
 
         public void OpenNotificationSettings() => NotificationSettingsLink.Click();

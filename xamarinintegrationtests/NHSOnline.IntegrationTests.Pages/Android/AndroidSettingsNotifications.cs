@@ -9,6 +9,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidSettingsNotifications(IAndroidDriverWrapper driver) => _driver = driver;
 
+        private AndroidImageButton Back => AndroidImageButton.WithDescription(_driver, "Navigate up");
+
         private AndroidLabel Title => AndroidLabel.WithText(_driver, "Settings");
 
         private AndroidToggle NotificationsEnabled => AndroidToggle.WithText(_driver, "ON");
@@ -19,6 +21,10 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             page.Title.AssertVisible();
             return page;
         }
+
+        public void TurnOffNotifications() => NotificationsEnabled.Click();
+
+        public void ClickBack() => Back.Click();
 
         public void AssertPageContent()
         {
