@@ -110,7 +110,7 @@ web:
   imagePullPolicy: IfNotPresent
 
 api:
-  minAvailable: 32
+  minAvailable: 16
   minReplicas: 32
   maxReplicas: 300
   publicURL: api.nhsapp.service.nhs.uk
@@ -151,18 +151,18 @@ api:
 
 cid:
   imagePullPolicy: IfNotPresent
-  minAvailable: 16
+  minAvailable: 8
   minReplicas: 16
   maxReplicas: 100
 
 logger:
-  minAvailable: 16
+  minAvailable: 8
   minReplicas: 16
   maxReplicas: 100
 
 sjr:
   imagePullPolicy: IfNotPresent
-  minAvailable: 8
+  minAvailable: 4
   minReplicas: 8
   maxReplicas: 100
 
@@ -173,7 +173,7 @@ sjrconfig:
 
 iproxy:
   imagePullPolicy: IfNotPresent
-  minAvailable: 8
+  minAvailable: 4
   minReplicas: 8
   maxReplicas: 100
 
@@ -183,19 +183,19 @@ iproxy_microtest:
   maxReplicas: 100
 
 info:
-  minAvailable: 8
+  minAvailable: 4
   minReplicas: 8
   maxReplicas: 100
 
 messages:
-  minAvailable: 8
+  minAvailable: 4
   minReplicas: 8
   maxReplicas: 100
 
 messagesEnabled: true
 
 users:
-  minAvailable: 13
+  minAvailable: 7
   minReplicas: 13
   maxReplicas: 100
   notificationHubs:
