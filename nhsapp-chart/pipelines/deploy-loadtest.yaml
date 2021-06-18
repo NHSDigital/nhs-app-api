@@ -25,7 +25,7 @@ parameters:
 - name: imageVersionOverride
   displayName: "Optional image version override (develop or tag)"
   type: string
-  default: "None"
+  default: "develop"
 - name: ukSouthClusters
   displayName: UK South Clusters
   type: object
@@ -93,7 +93,7 @@ stages:
           script: sed -i -e "s|APPVERSION|$appImageTag|g" Chart.yaml
         env:
           chartVersion: $(Build.SourceBranchName)
-          appImageTag: $(version)
+          appImageTag: ${{ parameters.imageVersionOverride }}
       - task: Bash@3
         displayName: 'Set release name'
         inputs:
@@ -153,19 +153,19 @@ stages:
           arguments: --set global.environment="${{ parameters.namespace }}"
                     -f $(System.DefaultWorkingDirectory)/nhsapp-chart/vars/zone/$(environment)/vars-$(environment).yaml
                     -f $(System.DefaultWorkingDirectory)/nhsapp-chart/vars/zone/$(environment)/namespace/vars-$(environment)-${{ parameters.namespace }}.yaml
-                    --set appImageTag=$(version)
-                    --set cid.image_tag=$(version)
-                    --set api.image_tag=$(version)
-                    --set web.image_tag=$(version)
-                    --set cdsswiremock.image_tag=$(version)
-                    --set logger.image_tag=$(version)
-                    --set sjr.image_tag=$(version)
-                    --set sjrconfig.image_tag=$(version)
-                    --set stub_loader.image_tag=$(version)
-                    --set wiremock.image_tag=$(version)
-                    --set users.image_tag=$(version)
-                    --set messages.image_tag=$(version)
-                    --set info.image_tag=$(version)
+                    --set appImageTag=${{ parameters.imageVersionOverride }}
+                    --set cid.image_tag=${{ parameters.imageVersionOverride }}
+                    --set api.image_tag=${{ parameters.imageVersionOverride }}
+                    --set web.image_tag=${{ parameters.imageVersionOverride }}
+                    --set cdsswiremock.image_tag=${{ parameters.imageVersionOverride }}
+                    --set logger.image_tag=${{ parameters.imageVersionOverride }}
+                    --set sjr.image_tag=${{ parameters.imageVersionOverride }}
+                    --set sjrconfig.image_tag=${{ parameters.imageVersionOverride }}
+                    --set stub_loader.image_tag=${{ parameters.imageVersionOverride }}
+                    --set wiremock.image_tag=${{ parameters.imageVersionOverride }}
+                    --set users.image_tag=${{ parameters.imageVersionOverride }}
+                    --set messages.image_tag=${{ parameters.imageVersionOverride }}
+                    --set info.image_tag=${{ parameters.imageVersionOverride }}
                     --reset-values
                     --install
                     --set cosmosDBName=$(cosmosDBName)
@@ -174,7 +174,32 @@ stages:
                     --set clusterIP=$(clusterIP)
           install: true
           waitForExecution: false
-
+      - task: HelmDeploy@0
+        displayName: Deploy/Update Redirector
+        inputs:
+          connectionType: Kubernetes Service Connection
+          kubernetesServiceEndpoint: nhsapp-${{ AKS_SHORTNAME }}-${{ parameters.namespace }}
+          namespace: ${{ parameters.namespace }}
+          command: upgrade
+          chartType: filepath
+          chartPath: $(System.DefaultWorkingDirectory)/nhsapp-chart/redirector/
+          releaseName: redirector-chart
+          valueFile: $(System.DefaultWorkingDirectory)/nhsapp-chart/vars/cluster/vars-${{ AKS_SHORTNAME }}.yaml
+          arguments: -f $(System.DefaultWorkingDirectory)/nhsapp-chart/vars/zone/$(environment)/vars-$(environment).yaml
+                    --set global.environment=$(environment) 
+                    --set zone=$(environment) 
+                    --set cid.version=${{ parameters.imageVersionOverride }} 
+                    --set api.version=${{ parameters.imageVersionOverride }} 
+                    --set www.version=${{ parameters.imageVersionOverride }} 
+                    --set messages.version=${{ parameters.imageVersionOverride }} 
+                    --set users.version=${{ parameters.imageVersionOverride }} 
+                    --set info.version=${{ parameters.imageVersionOverride }} 
+                    --set logger.version=${{ parameters.imageVersionOverride }} 
+                    --namespace $(environment)
+                    --reset-values
+                    --install
+          install: true
+          waitForExecution: false
 - stage: deployNhsAppUKWest
   displayName: 'UK West - Deploy NHS App'
   dependsOn:
@@ -219,7 +244,7 @@ stages:
           script: sed -i -e "s|APPVERSION|$appImageTag|g" Chart.yaml
         env:
           chartVersion: $(Build.SourceBranchName)
-          appImageTag: $(version)
+          appImageTag: ${{ parameters.imageVersionOverride }}
       - task: Bash@3
         displayName: 'Set release name'
         inputs:
@@ -266,7 +291,7 @@ stages:
               echo "No releases to uninstall."
             fi
       - task: HelmDeploy@0
-        displayName: Helm Upgrade
+        displayName: Deploy NHS App Chart
         inputs:
           connectionType: Kubernetes Service Connection
           kubernetesServiceEndpoint: nhsapp-${{ AKS_SHORTNAME }}-${{ parameters.namespace }}
@@ -279,24 +304,50 @@ stages:
           arguments: --set global.environment="${{ parameters.namespace }}"
                     -f $(System.DefaultWorkingDirectory)/nhsapp-chart/vars/zone/$(environment)/vars-$(environment).yaml
                     -f $(System.DefaultWorkingDirectory)/nhsapp-chart/vars/zone/$(environment)/namespace/vars-$(environment)-${{ parameters.namespace }}.yaml
-                    --set appImageTag=$(version)
-                    --set cid.image_tag=$(version)
-                    --set api.image_tag=$(version)
-                    --set web.image_tag=$(version)
-                    --set cdsswiremock.image_tag=$(version)
-                    --set logger.image_tag=$(version)
-                    --set sjr.image_tag=$(version)
-                    --set sjrconfig.image_tag=$(version)
-                    --set stub_loader.image_tag=$(version)
-                    --set wiremock.image_tag=$(version)
-                    --set users.image_tag=$(version)
-                    --set messages.image_tag=$(version)
-                    --set info.image_tag=$(version)
+                    --set appImageTag=${{ parameters.imageVersionOverride }}
+                    --set cid.image_tag=${{ parameters.imageVersionOverride }}
+                    --set api.image_tag=${{ parameters.imageVersionOverride }}
+                    --set web.image_tag=${{ parameters.imageVersionOverride }}
+                    --set cdsswiremock.image_tag=${{ parameters.imageVersionOverride }}
+                    --set logger.image_tag=${{ parameters.imageVersionOverride }}
+                    --set sjr.image_tag=${{ parameters.imageVersionOverride }}
+                    --set sjrconfig.image_tag=${{ parameters.imageVersionOverride }}
+                    --set stub_loader.image_tag=${{ parameters.imageVersionOverride }}
+                    --set wiremock.image_tag=${{ parameters.imageVersionOverride }}
+                    --set users.image_tag=${{ parameters.imageVersionOverride }}
+                    --set messages.image_tag=${{ parameters.imageVersionOverride }}
+                    --set info.image_tag=${{ parameters.imageVersionOverride }}
                     --reset-values
                     --install
                     --set cosmosDBName=$(cosmosDBName)
                     --set region=ukwest
                     --set zone=$(environment)
                     --set clusterIP=$(clusterIP)
+          install: true
+          waitForExecution: false
+      - task: HelmDeploy@0
+        displayName: Deploy/Update Redirector
+        inputs:
+          connectionType: Kubernetes Service Connection
+          kubernetesServiceEndpoint: nhsapp-${{ AKS_SHORTNAME }}-${{ parameters.namespace }}
+          namespace: ${{ parameters.namespace }}
+          command: upgrade
+          chartType: filepath
+          chartPath: $(System.DefaultWorkingDirectory)/nhsapp-chart/redirector/
+          releaseName: redirector-chart
+          valueFile: $(System.DefaultWorkingDirectory)/nhsapp-chart/vars/cluster/vars-${{ AKS_SHORTNAME }}.yaml
+          arguments: -f $(System.DefaultWorkingDirectory)/nhsapp-chart/vars/zone/$(environment)/vars-$(environment).yaml
+                    --set global.environment=$(environment) 
+                    --set zone=$(environment) 
+                    --set cid.version=${{ parameters.imageVersionOverride }} 
+                    --set api.version=${{ parameters.imageVersionOverride }} 
+                    --set www.version=${{ parameters.imageVersionOverride }} 
+                    --set messages.version=${{ parameters.imageVersionOverride }} 
+                    --set users.version=${{ parameters.imageVersionOverride }} 
+                    --set info.version=${{ parameters.imageVersionOverride }} 
+                    --set logger.version=${{ parameters.imageVersionOverride }} 
+                    --namespace $(environment)
+                    --reset-values
+                    --install
           install: true
           waitForExecution: false

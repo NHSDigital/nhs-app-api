@@ -8,6 +8,10 @@ cosmosDBName: loadtest
 AZURE_SUBSCRIPTION_NAME: nonlive
 networkPolicyEnabled: false
 
+environmentPublicHostSuffix: "-loadtest.loadtest.nonlive.nhsapp.service.nhs.uk"
+environmentPrivateHostSuffix: "-loadtest.private.loadtest.nonlive.nhsapp.service.nhs.uk"
+tlsSecretName: "loadtest-nonlive-nhsapp-service-nhs-uk"
+
 keyvaultSubscriptionID: 4bbd6a1f-80a5-485b-a0bb-32c5b6e35c09
 keyvaultTenantID: 50f6071f-bbfe-401a-8803-673748e629e2
 
