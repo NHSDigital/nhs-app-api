@@ -1,8 +1,12 @@
-# Known Services
+# Legacy Known Services
+
+> **Note:** Legacy Known Services is still being used in the Legacy (non-Xamarin) native apps. Legacy Known Services will be retired from the `/v2/configuration` endpoint when the Xamarin app is rolled out.
+
+[[_TOC_]]
 
 ## What is KnownServices?
 
-Known Services is used in both native devices and also the web to allow us to manage how we handle pages. The knownServices data in included in the v2 Configuration Endpoint in the Backend.PfsApi project (/v2/configuration)
+Known Services is used in both native devices and also the web to allow us to manage how we handle pages. The Known Services data in included in the v2 Configuration Endpoint in the Backend.PfsApi project (`/v2/configuration`)
 
 We can also use to control other behaviours in the native apps, for instance:
 
@@ -122,9 +126,9 @@ As with the local develpment environment, there iis no longer a need to have ind
 * `cid_sandpit_auth`
 
 But now, a single definition of the cid property (i.e. `cid_auth`) is all that is needed.  The URL (and any other CID property) can be set in the following files:
-* `nhsapp-chart/vars/zone/dev/environement_overrides/vars-nhslogin-aos.yaml`
-* `nhsapp-chart/vars/zone/dev/environement_overrides/vars-nhslogin-dev18.yaml`
-* `nhsapp-chart/vars/zone/dev/environement_overrides/vars-nhslogin-sandpit.yaml`
+* `nhsapp-chart/vars/zone/dev/environment_overrides/vars-nhslogin-aos.yaml`
+* `nhsapp-chart/vars/zone/dev/environment_overrides/vars-nhslogin-dev18.yaml`
+* `nhsapp-chart/vars/zone/dev/environment_overrides/vars-nhslogin-sandpit.yaml`
 
 Then, when deploying from Team City, selecting the correct value from the `NHS login environment` dropdown will deploy the app with the desired CID configuration.
 

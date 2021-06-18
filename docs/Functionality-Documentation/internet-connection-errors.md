@@ -12,11 +12,11 @@ Currently within the app we call `showTemplate()` from every page. Ideally we wo
 
 ## Api error handling
 
-The apiErrors are handled within the api file if an error has occured this can be ignored by setting the `ignoreError` property to true in the request parameters. Or in some cases that action is dispatched outside of the api service. For example in the prescriptions `load()` action.
+The apiErrors are handled within the api file if an error has occurred this can be ignored by setting the `ignoreError` property to true in the request parameters. Or in some cases that action is dispatched outside of the api service. For example in the prescriptions `load()` action.
 
 Various information is obtained from the error response in the `ADD_API_ERROR` mutation before pushing it to an array.
 
-Within the `ApiError.vue` component the locale is looked up based on the component and the status and errors codes. For example if the component the error occured in was prescriptions/view_orders and the status code was 504, the header string would be obtained by combining those values and the resulting locale string would be `apiErrors.components.prescriptions.view_orders.504.header`. The component value is obtained by manipulating the path value from the $router in the `component` computed property logic within `ApiError.vue`
+Within the `ApiError.vue` component the locale is looked up based on the component and the status and errors codes. For example if the component the error occurred in was prescriptions/view_orders and the status code was 504, the header string would be obtained by combining those values and the resulting locale string would be `apiErrors.components.prescriptions.view_orders.504.header`. The component value is obtained by manipulating the path value from the $router in the `component` computed property logic within `ApiError.vue`
 
 The above example would be the most specific lookup. It gradually gets less specific if nothing is returned for the previous lookup. The most generic lookups are by status code instead of component. So if a 500 error occurs, for example and there is no specific error for any of the individual journeys it will eventually try to lookup they key `apiErrors.500.{type}`. In the case above `{type}` is replaced with header but could also be message, subHeader, pageTitle, pageHeader or additionalInfo. If nothing is returned from this still the last lookup ran is `apiErrors.{type}`.
 
@@ -34,7 +34,7 @@ The component which gets used is `ConnectionProblem.vue` and within that file th
 
 On the native apps the internet connectivity is checked on every page load within the webviews.
 
-However in the vuejs code we sometimes render new content based on an `v-if else` which is not a page load. Most notably with the health record warning page. Once the user hits accept it sets a boolean value and the medical record is shown on the same page. 
+However in the vue.js code we sometimes render new content based on an `v-if else` which is not a page load. Most notably with the health record warning page. Once the user hits accept it sets a boolean value and the medical record is shown on the same page. 
 
 So to address this within the `errors/setConnectionProblem` action  when the connectivity is turned off in this area the callback will fire and the native connection error will still show on the native apps.
 
