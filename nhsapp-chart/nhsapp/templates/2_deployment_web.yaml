@@ -147,7 +147,7 @@ spec:
         - name: HOTJAR_SURVEY_VISIBLE
           value: "false"
         - name: QUALTRICS_SURVEY_ENABLED
-          value: "{{ $.Values.qualtricsSurveyEnabled }}"
+          value: "{{ $.Values.web.qualtricsSurveyEnabled }}"
         - name: CE_MARK_ENABLED
           value: "false"
         - name: SESSION_EXPIRING_WARNING_SECONDS
