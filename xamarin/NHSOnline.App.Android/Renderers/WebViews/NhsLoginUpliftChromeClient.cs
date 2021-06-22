@@ -1,22 +1,21 @@
 using System;
 using Android.Webkit;
-using Xamarin.Forms.Platform.Android;
 
 
 namespace NHSOnline.App.Droid.Renderers.WebViews
 {
-    public class NhsLoginUpliftChromeClient : FormsWebChromeClient
+    public class NhsLoginUpliftChromeClient : BaseChromeClient
     {
-        private readonly Action<IValueCallback, FileChooserParams> _callback;
+        private readonly Action<IValueCallback, FileChooserParams> _fileChooserCallback;
 
-        public NhsLoginUpliftChromeClient(Action<IValueCallback, FileChooserParams> callback)
+        public NhsLoginUpliftChromeClient(Action<IValueCallback, FileChooserParams> fileChooserCallback)
         {
-            _callback = callback;
+            _fileChooserCallback = fileChooserCallback;
         }
 
         public override bool OnShowFileChooser(WebView webView, IValueCallback filePathCallback, FileChooserParams fileChooserParams)
         {
-            _callback(filePathCallback, fileChooserParams);
+            _fileChooserCallback(filePathCallback, fileChooserParams);
             return true;
         }
     }

@@ -9,6 +9,7 @@ using NHSOnline.App.Droid.DependencyServices;
 using NHSOnline.App.Droid.DependencyServices.Biometrics;
 using NHSOnline.App.Droid.Dialogs;
 using NHSOnline.App.Droid.Extensions;
+using NHSOnline.App.Droid.Handlers;
 
 namespace NHSOnline.App.Droid
 {
@@ -44,6 +45,7 @@ namespace NHSOnline.App.Droid
             AndroidAlertDialog.MainActivity = this;
 
             NhsApp = new NhsApp();
+
             LoadApplication(NhsApp);
 
             HandleIntent(Intent);
@@ -62,8 +64,9 @@ namespace NHSOnline.App.Droid
             [GeneratedEnum] Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+            OnReceivedGeolocationPermissionsResultHandler.Instance.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
         /// <summary>

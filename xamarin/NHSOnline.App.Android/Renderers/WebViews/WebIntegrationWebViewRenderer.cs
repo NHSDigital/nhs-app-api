@@ -26,6 +26,8 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
             };
         }
 
+        protected override FormsWebChromeClient GetFormsWebChromeClient() => new BaseChromeClient();
+
         protected override void OnElementChanged(ElementChangedEventArgs<WebView> e)
         {
             base.OnElementChanged(e);
