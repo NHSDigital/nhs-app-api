@@ -21,7 +21,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                 NhsAppResilience.ExecuteOnMainThread(() => _action()());
             }
         }
-        
+
         private sealed class StringActionMessageHandler : NSObject, IWKScriptMessageHandler
         {
             private readonly Func<Action<string>> _action;

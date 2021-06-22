@@ -71,25 +71,6 @@
       Value="$(TemplateNSAppTransportSecurityContents)$(AdditionalNSAppTransportSecurityContents)" />
   </Target>
 
-  <Target Name="Update Info Plist Allow File sharing">
-    <XmlPeek XmlInputPath="$(InfoPlistGenerated)" Query="$(InfoPlistXPath)/*">
-      <Output TaskParameter="Result" ItemName="TemplateInfoPlistContents" />
-    </XmlPeek>
-
-    <PropertyGroup>
-      <TemplateInfoPlistContents>@(TemplateInfoPlistContents, '')</TemplateInfoPlistContents>
-      <AdditionalUIFileSharingEnabledContents>
-        <key xmlns="">UIFileSharingEnabled</key>
-        <true xmlns="" />
-      </AdditionalUIFileSharingEnabledContents>
-    </PropertyGroup>
-
-    <XmlPoke
-      XmlInputPath="$(InfoPlistGenerated)"
-      Query="$(InfoPlistXPath)"
-      Value="$(TemplateInfoPlistContents)$(AdditionalUIFileSharingEnabledContents)" />
-  </Target>
-
   <!-- End Info.plist -->
 
   <!-- Entitlements.plist -->

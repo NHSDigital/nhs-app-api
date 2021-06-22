@@ -43,6 +43,17 @@ window.nhsapp = {
       window.nhsappNative.addEventToCalendar(calendarEvent);
     },
     downloadFromBytes(base64Data, fileName, mimeType) {
+      if (window.nhsappNative.startDownloadFromJson) {
+        window.nhsappNative.startDownloadFromJson(
+          JSON.stringify({
+            base64Data,
+            fileName,
+            mimeType,
+          }),
+        );
+        return;
+      }
+
       window.nhsappNative.downloadFromBytes(base64Data, fileName, mimeType);
     },
   },

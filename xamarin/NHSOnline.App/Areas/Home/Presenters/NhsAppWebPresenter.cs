@@ -14,6 +14,8 @@ using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.Navigation;
 using NHSOnline.App.Services;
 using NHSOnline.App.Services.FIDO;
+using NHSOnline.App.Threading;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.Home.Presenters
@@ -35,6 +37,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly INotifications _notifications;
         private readonly ICalendar _calendar;
         private readonly ISettingsService _settingsService;
+        private readonly IFileSystemService _fileSystemService;
 
         public NhsAppWebPresenter(
             NhsAppWebModel model,
@@ -48,7 +51,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
             IBiometricAuthenticationService biometricAuthenticationService,
             RedirectorUrlFactory redirectorUrlFactory,
             ISettingsService settingsService,
-            ICalendar calendar)
+            ICalendar calendar,
+            IFileSystemService fileSystemService)
         {
             _model = model;
             _view = view;
@@ -63,6 +67,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _redirectorUrlFactory = redirectorUrlFactory;
             _settingsService = settingsService;
             _calendar = calendar;
+            _fileSystemService = fileSystemService;
             _navigationHandler = new NhsAppNavigationHandler(view);
 
             _view.AppNavigation
@@ -72,6 +77,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterHandler(HelpRequested, (view, handler) => view.HelpRequested = handler)
                 .RegisterHandler<OpenWebIntegrationRequest>(OpenWebIntegrationRequested, (view, handler) => view.OpenWebIntegrationRequested = handler)
                 .RegisterHandler<AddEventToCalendarRequest>(AddEventToCalendarRequested, (view, handler) => view.AddEventToCalendarRequested = handler)
+                .RegisterHandler<DownloadRequest>(StartDownloadRequested, (view, handler) => view.StartDownloadRequested = handler)
                 .RegisterHandler<StartNhsLoginUpliftRequest>(StartNhsLoginUpliftRequested, (view, handler) => view.StartNhsLoginUpliftRequested = handler)
                 .RegisterHandler(ResetAndShowErrorRequested, (view, handler) => view.ResetAndShowErrorRequested = handler)
                 .RegisterHandler(GetNotificationsStatusRequested, (view, handler) => view.GetNotificationsStatusRequested = handler)
@@ -141,6 +147,29 @@ namespace NHSOnline.App.Areas.Home.Presenters
             await _view.AppNavigation
                 .Push(page)
                 .PreserveThreadContext();
+        }
+
+        private async Task<Task> StartDownloadRequested(DownloadRequest downloadRequest)
+        {
+            var storageWritePermissionCheck = await Permissions.CheckStatusAsync<Permissions.StorageWrite>().ResumeOnThreadPool();
+
+            if (storageWritePermissionCheck == PermissionStatus.Granted)
+            {
+                _fileSystemService.StoreFileInDownloads(downloadRequest);
+                _fileSystemService.PresentFileActionController(downloadRequest);
+            }
+            else
+            {
+                var storageReadPermissionRequest = await Permissions.RequestAsync<Permissions.StorageWrite>().ResumeOnThreadPool();
+
+                if (storageReadPermissionRequest == PermissionStatus.Granted)
+                {
+                    _fileSystemService.StoreFileInDownloads(downloadRequest);
+                    _fileSystemService.PresentFileActionController(downloadRequest);
+                }
+            }
+
+            return Task.CompletedTask;
         }
 
         private async Task<Task> AddEventToCalendarRequested(AddEventToCalendarRequest request)

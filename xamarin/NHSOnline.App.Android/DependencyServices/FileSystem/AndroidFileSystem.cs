@@ -1,0 +1,72 @@
+using System;
+using Android.Content;
+using Android.Provider;
+using Microsoft.Extensions.Logging;
+using NHSOnline.App.Controls.WebViews.Payloads;
+using NHSOnline.App.DependencyServices;
+using NHSOnline.App.Droid.DependencyServices.FileSystem;
+using NHSOnline.App.Logging;
+using Xamarin.Essentials;
+using Xamarin.Forms;
+using Environment = Android.OS.Environment;
+using File = System.IO.File;
+using Uri = Android.Net.Uri;
+
+[assembly: Dependency(typeof(AndroidFileSystem))]
+namespace NHSOnline.App.Droid.DependencyServices.FileSystem
+{
+    public class AndroidFileSystem: IFileSystemService
+    {
+        private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(AndroidFileSystem));
+        internal static MainActivity? MainActivity { set; get; }
+
+        public void StoreFileInDownloads(DownloadRequest downloadRequest)
+        {
+            try
+            {
+                var resolver = CreateContentResolver(downloadRequest, out var fileUri);
+
+                var convertedData = Convert.FromBase64String(downloadRequest.Base64Data);
+
+                var outputStream = resolver.OpenOutputStream(fileUri!);
+                outputStream!.Write(convertedData);
+                outputStream.Close();
+            }
+            catch (Exception e)
+            {
+                Logger.LogError("Failed to store file in downloads", e);
+            }
+        }
+
+        private static ContentResolver CreateContentResolver(DownloadRequest downloadRequest, out Uri? fileUri)
+        {
+            var resolver = MainActivity?.ContentResolver;
+
+            using var contentValues = new ContentValues();
+            contentValues.Put(MediaStore.MediaColumns.DisplayName, downloadRequest.FileName);
+            contentValues.Put(MediaStore.MediaColumns.MimeType, downloadRequest.MimeType);
+            contentValues.Put(MediaStore.MediaColumns.RelativePath, Environment.DirectoryDownloads + "/NhsApp");
+
+            fileUri = resolver!.Insert(MediaStore.Downloads.ExternalContentUri, contentValues);
+            return resolver;
+        }
+
+        public async void PresentFileActionController(DownloadRequest downloadRequest)
+        {
+           if (!File.Exists(downloadRequest.FileCachePath))
+           {
+               var convertedData = Convert.FromBase64String(downloadRequest.Base64Data);
+               await File.WriteAllBytesAsync(downloadRequest.FileCachePath, convertedData).ConfigureAwait(true);
+           }
+
+           var target = new ReadOnlyFile(downloadRequest.FileCachePath);
+
+           var request = new OpenFileRequest
+           {
+               File = target
+           };
+
+           await Launcher.OpenAsync(request).ConfigureAwait(true);
+        }
+    }
+}

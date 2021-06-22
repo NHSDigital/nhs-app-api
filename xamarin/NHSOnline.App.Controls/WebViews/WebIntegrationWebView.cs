@@ -26,11 +26,19 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty AddEventToCalendarCommandProperty =
             BindableProperty.Create(nameof(AddEventToCalendarCommand), typeof(AsyncCommand<AddEventToCalendarRequest>), typeof(WebIntegrationWebView));
 
+        public static readonly BindableProperty StartDownloadCommandProperty =
+            BindableProperty.Create(nameof(StartDownloadCommand), typeof(AsyncCommand<DownloadRequest>), typeof(WebIntegrationWebView));
 
         public AsyncCommand<string> RedirectToNhsAppPageCommand
         {
             get => (AsyncCommand<string>) GetValue(RedirectToNhsAppPageCommandProperty);
             set => SetValue(RedirectToNhsAppPageCommandProperty, value);
+        }
+
+        public AsyncCommand<DownloadRequest> StartDownloadCommand
+        {
+            get => (AsyncCommand<DownloadRequest>) GetValue(StartDownloadCommandProperty);
+            set => SetValue(StartDownloadCommandProperty, value);
         }
 
         public void AddEventToCalendar(string json)
@@ -44,6 +52,12 @@ namespace NHSOnline.App.Controls.WebViews
             {
                 Logger.LogError("Failed to deserialize the calendar request, not showing any dialogs", e);
             }
+        }
+
+        public void StartDownload(string json)
+        {
+            var request = ConvertFromJsonString<DownloadRequest>(json);
+            StartDownloadCommand.Execute(request);
         }
 
         public AsyncCommand<AddEventToCalendarRequest> AddEventToCalendarCommand

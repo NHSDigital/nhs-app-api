@@ -7,6 +7,7 @@ using Android.Util;
 using Android.Views;
 using NHSOnline.App.Droid.DependencyServices;
 using NHSOnline.App.Droid.DependencyServices.Biometrics;
+using NHSOnline.App.Droid.DependencyServices.FileSystem;
 using NHSOnline.App.Droid.Dialogs;
 using NHSOnline.App.Droid.Extensions;
 using NHSOnline.App.Droid.Handlers;
@@ -43,6 +44,7 @@ namespace NHSOnline.App.Droid
             AndroidBiometrics.MainActivity = this;
             AndroidSettingsService.MainActivity = this;
             AndroidAlertDialog.MainActivity = this;
+            AndroidFileSystem.MainActivity = this;
 
             NhsApp = new NhsApp();
 

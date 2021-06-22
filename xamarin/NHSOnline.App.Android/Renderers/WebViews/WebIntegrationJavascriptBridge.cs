@@ -29,5 +29,12 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         {
             NhsAppResilience.ExecuteOnMainThread(() => _webIntegrationWebView.AddEventToCalendar(argumentJson));
         }
+
+        [JavascriptInterface]
+        [Export("startDownloadFromJson")]
+        public void StartDownloadFromJson(string argumentJson)
+        {
+            NhsAppResilience.ExecuteOnMainThread(() => _webIntegrationWebView.StartDownload(argumentJson));
+        }
     }
 }

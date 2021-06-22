@@ -28,6 +28,7 @@ namespace NHSOnline.App.Areas.WebIntegration
             Func<Uri, Task>? DeepLinkRequested { get; set; }
 
             Func<AddEventToCalendarRequest, Task>? AddEventToCalendarRequested { get; set; }
+            Func<DownloadRequest, Task>? StartDownloadRequested { get; set; }
         }
 
         void GoToUri(Uri uri);

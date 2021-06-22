@@ -37,13 +37,13 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
             _functions.Add(name, ScriptMessageHandler.For(() => action(_webViewAccessor())));
             return this;
         }
-        
+
         public JavascriptBridge<TWebView> AddFunction(string name, Func<TWebView, Action<string>> command)
         {
             _functions.Add(name, ScriptMessageHandler.For(() => command(_webViewAccessor())));
             return this;
         }
-        
+
         public JavascriptBridge<TWebView> Apply(WKUserContentController userContentController)
         {
             foreach (var (name, handler) in _functions)

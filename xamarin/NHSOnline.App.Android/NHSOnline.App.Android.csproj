@@ -80,6 +80,7 @@
     <Compile Include="DependencyServices\Biometrics\Extensions.cs" />
     <Compile Include="DependencyServices\Calendar\AndroidCalendar.cs" />
     <Compile Include="DependencyServices\Calendar\CalendarIntent.cs" />
+    <Compile Include="DependencyServices\FileSystem\AndroidFileSystem.cs" />
     <Compile Include="DependencyServices\Notifications\AndroidGetPnsTokenResponse.cs" />
     <Compile Include="DependencyServices\Notifications\AndroidNotifications.cs" />
     <Compile Include="Dialogs\AndroidAlertDialog.cs" />

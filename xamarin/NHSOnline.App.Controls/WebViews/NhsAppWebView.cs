@@ -56,6 +56,9 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty OpenSettingsCommandProperty =
             BindableProperty.Create(nameof(OpenSettingsCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
 
+        public static readonly BindableProperty StartDownloadCommandProperty =
+            BindableProperty.Create(nameof(StartDownloadCommand), typeof(AsyncCommand<DownloadRequest>), typeof(NhsAppWebView));
+
         public static readonly BindableProperty LogoutCommandProperty =
             BindableProperty.Create(nameof(LogoutCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
 
@@ -86,10 +89,29 @@ namespace NHSOnline.App.Controls.WebViews
             }
         }
 
+        public void StartDownload(string json)
+        {
+            try
+            {
+                var request = ConvertFromJsonString<DownloadRequest>(json);
+                StartDownloadCommand.Execute(request);
+            }
+            catch (ArgumentException e)
+            {
+                Logger.LogError("Failed to deserialize the download request, not showing any dialogs", e);
+            }
+        }
+
         public AsyncCommand<AddEventToCalendarRequest> AddEventToCalendarCommand
         {
             get => (AsyncCommand<AddEventToCalendarRequest>) GetValue(AddEventToCalendarCommandProperty);
             set => SetValue(AddEventToCalendarCommandProperty, value);
+        }
+
+        public AsyncCommand<DownloadRequest> StartDownloadCommand
+        {
+            get => (AsyncCommand<DownloadRequest>) GetValue(StartDownloadCommandProperty);
+            set => SetValue(StartDownloadCommandProperty, value);
         }
 
         public void StartNhsLoginUplift(string json)

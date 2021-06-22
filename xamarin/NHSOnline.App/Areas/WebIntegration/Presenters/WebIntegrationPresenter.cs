@@ -6,6 +6,8 @@ using NHSOnline.App.Config;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Services;
+using NHSOnline.App.Threading;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.WebIntegration.Presenters
@@ -21,6 +23,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
         private readonly ILogger _logger;
         private readonly WebIntegrationUriDestination _uriDestination;
         private readonly ICalendar _calendar;
+        private readonly IFileSystemService _fileSystemService;
 
         public WebIntegrationPresenter(
             IWebIntegrationView view,
@@ -29,7 +32,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             INhsExternalServicesConfiguration nhsExternalServicesConfiguration,
             IBrowserOverlay browserOverlay,
             ILogger<WebIntegrationPresenter> logger,
-            ICalendar calendar)
+            ICalendar calendar,
+            IFileSystemService fileSystemService)
         {
             _view = view;
             _model = model;
@@ -37,6 +41,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             _browserOverlay = browserOverlay;
             _logger = logger;
             _calendar = calendar;
+            _fileSystemService = fileSystemService;
 
             _uriDestination = new WebIntegrationUriDestination(nhsLoginConfiguration, model.Url, model.AdditionalDomains);
 
@@ -70,7 +75,9 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                 .RegisterPermanentHandler<Uri>(DeeplinkRequested,
                     (view, handler) => view.DeepLinkRequested = handler)
                 .RegisterHandler<AddEventToCalendarRequest>(AddEventToCalendarRequested,
-                    (view, handler) => view.AddEventToCalendarRequested = handler);
+                    (view, handler) => view.AddEventToCalendarRequested = handler)
+                .RegisterHandler<DownloadRequest>(StartDownloadRequested,
+                (view, handler) => view.StartDownloadRequested = handler);
 
         }
 
@@ -79,6 +86,29 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             _logger.LogInformation("Redirecting to NHS App Page - {page}", page);
 
             await _model.NavigationHandler.RedirectToNhsAppPageRequested(page).PreserveThreadContext();
+        }
+
+        private async Task<Task> StartDownloadRequested(DownloadRequest downloadRequest)
+        {
+            var storagePermissionCheck = await Permissions.CheckStatusAsync<Permissions.StorageWrite>().ResumeOnThreadPool();
+
+            if (storagePermissionCheck == PermissionStatus.Granted)
+            {
+                _fileSystemService.StoreFileInDownloads(downloadRequest);
+                _fileSystemService.PresentFileActionController(downloadRequest);
+            }
+            else
+            {
+                var storagePermissionRequest = await Permissions.RequestAsync<Permissions.StorageWrite>().ResumeOnThreadPool();
+
+                if (storagePermissionRequest == PermissionStatus.Granted)
+                {
+                    _fileSystemService.StoreFileInDownloads(downloadRequest);
+                    _fileSystemService.PresentFileActionController(downloadRequest);
+                }
+            }
+
+            return Task.CompletedTask;
         }
 
         private async Task DeeplinkRequested(Uri deepLinkUrl)

@@ -44,6 +44,10 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         public AsyncCommand<AddEventToCalendarRequest> AddEventToCalendarCommand
             => new AsyncCommand<AddEventToCalendarRequest>(() => AddEventToCalendarRequested);
 
+        public Func<DownloadRequest, Task>? StartDownloadRequested { get; set; }
+        public AsyncCommand<DownloadRequest> StartDownloadCommand
+            => new AsyncCommand<DownloadRequest>(() => StartDownloadRequested);
+
         public Func<Uri, Task>? DeepLinkRequested { get; set; }
 
         protected override void OnAppearing()

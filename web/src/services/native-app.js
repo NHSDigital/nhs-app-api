@@ -354,6 +354,16 @@ export default {
       app.startDownload(base64Data, fileName, mimeType);
       return true;
     }
+
+    if (app && app.startDownloadFromJson) {
+      app.startDownloadFromJson(JSON.stringify({
+        base64Data,
+        fileName,
+        mimeType,
+      }));
+
+      return true;
+    }
     return false;
   },
 

@@ -40,6 +40,10 @@ namespace NHSOnline.App.Areas.Home.Views
         public AsyncCommand<AddEventToCalendarRequest> AddEventToCalendarCommand
             => new AsyncCommand<AddEventToCalendarRequest>(() => AddEventToCalendarRequested);
 
+        public Func<DownloadRequest, Task>? StartDownloadRequested { get; set; }
+        public AsyncCommand<DownloadRequest> StartDownloadCommand
+            => new AsyncCommand<DownloadRequest>(() => StartDownloadRequested);
+
         public Func<StartNhsLoginUpliftRequest, Task>? StartNhsLoginUpliftRequested { get; set; }
         public AsyncCommand<StartNhsLoginUpliftRequest> StartNhsLoginUpliftCommand
             => new AsyncCommand<StartNhsLoginUpliftRequest>(() => StartNhsLoginUpliftRequested);

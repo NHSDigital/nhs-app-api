@@ -62,6 +62,12 @@
     </array>
     <key>NSCalendarsUsageDescription</key>
     <string>So we can add events to your calendar, like appointments.</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>This is so that you can download your photos.</string>
+    <key>UIFileSharingEnabled</key>
+    <true />
+    <key>LSSupportsOpeningDocumentsInPlace</key>
+    <true />
   </dict>
 </plist>
 
