@@ -504,7 +504,7 @@
       "showSpinner": true,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": true,
-      "validateSession": true,
+      "validateSession": false,
       "url": "https://vaccine-status-dev-uks.azurewebsites.net"
     },
     "netCompany": {
@@ -515,7 +515,7 @@
       "showSpinner": true,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": true,
-      "validateSession": true,
+      "validateSession": false,
       "url": "https://stdevpistatic01.z33.web.core.windows.net",
       "subServices": [
         {
