@@ -38,5 +38,9 @@ jobs:
         inputs:
           pathToPublish: nhsapp-chart/vars/
           artifactName: 'charts/vars'
-
+      - task: PublishBuildArtifacts@1
+        displayName: Publish cleanup utils directory
+        inputs:
+          pathToPublish: nhsapp-chart/utils/release_management
+          artifactName: 'charts/utils/release_management'
   
