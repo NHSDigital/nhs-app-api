@@ -111,7 +111,7 @@ describe('linked profile index', () => {
 
     it('will watch and reload if the timestamp value changes', () => {
       wrapper = mountPage({ timestamp: 12345 });
-      expect($store.dispatch).toHaveBeenCalledWith('linkedAccounts/fetchPatientConfig');
+      expect($store.dispatch).toHaveBeenCalledWith('linkedAccounts/initialiseConfig');
     });
   });
 

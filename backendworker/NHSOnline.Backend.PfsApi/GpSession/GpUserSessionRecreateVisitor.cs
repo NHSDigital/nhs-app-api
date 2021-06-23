@@ -42,12 +42,6 @@ namespace NHSOnline.Backend.PfsApi.GpSession
 
         public async Task<GpSessionRecreateResult> Visit(OnDemandGpSession gpSession)
         {
-            if (string.Equals("/v1/patient/configuration", _httpContextAccessor.HttpContext?.Request.Path, StringComparison.Ordinal))
-            {
-                _logger.LogInformation("OnDemandGpSession, valid GP session not yet needed for request /v1/patient/configuration");
-                return await Task.FromResult<GpSessionRecreateResult>(new GpSessionRecreateResult.SessionNotRequiredResult());
-            }
-
             _logger.LogInformation($"OnDemandGpSession, empty Im1ConnectionToken detected when requesting " +
                                    $"{_httpContextAccessor.HttpContext?.Request.Path}");
             return await Task.FromResult<GpSessionRecreateResult>(new GpSessionRecreateResult.Im1ConnectionTokenEmptyResult());

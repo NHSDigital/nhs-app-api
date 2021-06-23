@@ -3767,6 +3767,10 @@
                     token: 
                       type: "string"
                       description: "User's session CsrfToken"
+                    dateOfBirth: 
+                      type: "string"
+                      format: "date-time"
+                      description: "User's date of birth"
                     nhsNumber: 
                       type: "string"
                       description: "User's NHS number"
@@ -3776,6 +3780,12 @@
                     im1MessagingEnabled: 
                       type: "boolean"
                       description: "Patient to Practice Messaging has been enabled at the practice level for the current user"
+                    hasGpSession: 
+                      type: "boolean"
+                      description: "True if user has an active GP session"
+                    userSessionCreateReferenceCode: 
+                      type: "string"
+                      description: "Service desk reference error if GP session is unavailable"
                     proofLevel: 
                       type: "string"
                       description: "User's proof level"
@@ -3847,6 +3857,10 @@
                         token: 
                           type: "string"
                           description: "User's session CsrfToken"
+                        dateOfBirth: 
+                          type: "string"
+                          format: "date-time"
+                          description: "User's date of birth"
                         nhsNumber: 
                           type: "string"
                           description: "User's NHS number"
@@ -3856,6 +3870,12 @@
                         im1MessagingEnabled: 
                           type: "boolean"
                           description: "Patient to Practice Messaging has been enabled at the practice level for the current user"
+                        hasGpSession: 
+                          type: "boolean"
+                          description: "True if user has an active GP session"
+                        userSessionCreateReferenceCode: 
+                          type: "string"
+                          description: "Service desk reference error if GP session is unavailable"
                         proofLevel: 
                           type: "string"
                           description: "User's proof level"
@@ -4266,6 +4286,10 @@
                         token: 
                           type: "string"
                           description: "User's session CsrfToken"
+                        dateOfBirth: 
+                          type: "string"
+                          format: "date-time"
+                          description: "User's date of birth"
                         nhsNumber: 
                           type: "string"
                           description: "User's NHS number"
@@ -4275,6 +4299,12 @@
                         im1MessagingEnabled: 
                           type: "boolean"
                           description: "Patient to Practice Messaging has been enabled at the practice level for the current user"
+                        hasGpSession: 
+                          type: "boolean"
+                          description: "True if user has an active GP session"
+                        userSessionCreateReferenceCode: 
+                          type: "string"
+                          description: "Service desk reference error if GP session is unavailable"
                         proofLevel: 
                           type: "string"
                           description: "User's proof level"
@@ -5058,25 +5088,6 @@
           500: 
             description: "An unexpected error occurred processing the request."
     /v1/patient/configuration: 
-      get: 
-        tags: 
-          - "linked-accounts"
-        summary: "Gets the users guid which is used to determine which linked account is active"
-        description: "This call returns the users guid which is used to determine which linked account is active"
-        responses: 
-          200: 
-            description: "Successful operation. Guid returned"
-            content: 
-              application/json: 
-                schema: 
-                  type: "object"
-                  properties: 
-                    id: 
-                      type: "string"
-                      description: "The guid of the current user"
-                    hasLinkedAccounts: 
-                      type: "boolean"
-    /v1/patient/linked-account-config: 
       get: 
         tags: 
           - "linked-accounts"

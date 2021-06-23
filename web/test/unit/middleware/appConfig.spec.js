@@ -9,7 +9,9 @@ describe('middleware/appConfig', () => {
   const callServiceJourneyRules
    = async ({ to, isLoggedIn, isLoaded, linkedAccountsConfigLoaded,
      actingAsUser, hasLinkedAccounts = false,
-     mainPatientId = null }) => {
+     mainPatientId = null,
+     hasLoaded = false,
+     hasGpSession = true }) => {
      store = {
        getters: {
          'session/isLoggedIn': () => isLoggedIn,
@@ -19,6 +21,10 @@ describe('middleware/appConfig', () => {
        state: {
          serviceJourneyRules: initialState(),
          linkedAccounts: initialState(),
+         session: {
+           hasGpSession,
+           hasLoaded,
+         },
        },
      };
 
@@ -59,7 +65,7 @@ describe('middleware/appConfig', () => {
     });
 
     it('will not dispatch `serviceJourneyRules/load`', () => {
-      expect(store.dispatch).not.toBeCalled();
+      expect(store.dispatch).not.toHaveBeenCalledWith('serviceJourneyRules/load');
     });
   });
 
@@ -74,7 +80,7 @@ describe('middleware/appConfig', () => {
     });
 
     it('will not dispatch `serviceJourneyRules/load`', () => {
-      expect(store.dispatch).not.toBeCalled();
+      expect(store.dispatch).not.toHaveBeenCalledWith('serviceJourneyRules/load');
     });
   });
 
@@ -118,6 +124,7 @@ describe('middleware/appConfig', () => {
         linkedAccountsConfigLoaded: false,
         actingAsUser: {},
         hasLinkedAccounts: true,
+        hasGpSession: true,
       });
       expect(store.dispatch).toHaveBeenCalledWith('linkedAccounts/initialiseConfig');
     });
@@ -161,6 +168,62 @@ describe('middleware/appConfig', () => {
       expect(store.dispatch).toHaveBeenCalledWith('linkedAccounts/switchProfile', store.state.linkedAccounts.items[0]);
       expect(store.dispatch).toHaveBeenCalledWith('linkedAccounts/select', store.state.linkedAccounts.items[0]);
       expect(store.dispatch).toHaveBeenCalledWith('linkedAccounts/loadAccountAccessSummary', store.state.linkedAccounts.items[0].id);
+    });
+
+    it('will not dispatch `linkedAccounts/initialiseConfig` when a user does not have a GP session', async () => {
+      await callServiceJourneyRules({
+        to: { APPOINTMENTS, params: { patientId: 'differentId' } },
+        isLoggedIn: true,
+        isLoaded: false,
+        linkedAccountsConfigLoaded: false,
+        actingAsUser: {},
+        hasLinkedAccounts: true,
+        hasGpSession: false,
+      });
+      expect(store.dispatch).not.toHaveBeenCalledWith('linkedAccounts/initialiseConfig');
+    });
+  });
+
+  describe('not logged in', () => {
+    beforeEach(async () => {
+      await callServiceJourneyRules({
+        to: APPOINTMENTS,
+        isLoggedIn: false,
+        isLoaded: false,
+        linkedAccountsConfigLoaded: false,
+      });
+    });
+
+    it('will not dispatch get session', async () => {
+      expect(store.dispatch).not.toHaveBeenCalledWith('session/getSession');
+    });
+  });
+
+  describe('Is logged in and has loaded session already', () => {
+    beforeEach(async () => {
+      await callServiceJourneyRules({
+        to: APPOINTMENTS,
+        isLoggedIn: true,
+        hasLoaded: true,
+      });
+    });
+
+    it('will not dispatch get session', async () => {
+      expect(store.dispatch).not.toHaveBeenCalledWith('session/getSession');
+    });
+  });
+
+  describe('Is logged in and has not loaded session already', () => {
+    beforeEach(async () => {
+      await callServiceJourneyRules({
+        to: APPOINTMENTS,
+        isLoggedIn: true,
+        hasLoaded: false,
+      });
+    });
+
+    it('will dispatch get session', async () => {
+      expect(store.dispatch).toHaveBeenCalledWith('session/getSession');
     });
   });
 });

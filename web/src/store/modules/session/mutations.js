@@ -13,6 +13,7 @@ import {
   SHOW_SESSION_EXPIRING,
   SET_USER_SESSION_REFERENCE,
   SET_RETRY_GP_SESSION,
+  HAS_GP_SESSION,
   initialState,
 } from './mutation-types';
 
@@ -82,5 +83,8 @@ export default {
   },
   [SET_RETRY_GP_SESSION](state, hasRetried) {
     state.hasRetried = hasRetried;
+  },
+  [HAS_GP_SESSION](state, hasGpSession) {
+    state.hasGpSession = hasGpSession;
   },
 };

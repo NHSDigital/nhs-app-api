@@ -27,7 +27,7 @@ export default {
     }
     await this.$store.dispatch('auth/handleGpOnDemandResponse', route.query);
     if (isEmpty(this.$store.state.errors.apiErrors)) {
-      await this.$store.dispatch('linkedAccounts/fetchPatientConfig');
+      this.$store.dispatch('session/setGpSession', true);
 
       const query = route.query.state.length > 1
         ? { [REDIRECT_PARAMETER]: route.query.state }

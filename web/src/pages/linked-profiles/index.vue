@@ -71,7 +71,7 @@ export default {
   },
   watch: {
     '$route.query.ts': async function watchTimestamp() {
-      await this.$store.dispatch('linkedAccounts/fetchPatientConfig');
+      await this.$store.dispatch('linkedAccounts/initialiseConfig');
     },
   },
   async created() {
@@ -83,7 +83,7 @@ export default {
       this.$store.dispatch('session/setRetry', true);
     }
 
-    await this.$store.dispatch('linkedAccounts/fetchPatientConfig');
+    await this.$store.dispatch('linkedAccounts/initialiseConfig');
   },
   methods: {
     ariaLabelCaption(fullName, age) {

@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.PfsApi.Filters
                 .GetRequiredService<IGpSystemFactory>()
                 .CreateGpSystem(userSession.GpUserSession.Supplier);
 
-            if (!gpSystem.SupportsLinkedAccounts)
+            if (!gpSystem.SupportsLinkedAccounts || userSession.GpUserSession.Supplier == Supplier.Disconnected)
             {
                 return false;
             }

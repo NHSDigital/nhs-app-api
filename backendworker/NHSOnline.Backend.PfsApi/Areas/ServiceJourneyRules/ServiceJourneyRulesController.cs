@@ -70,22 +70,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
             [GpSession(IgnoreP5Users=true)] GpUserSession gpUserSession,
             [UserSession] P5UserSession userSession)
         {
-            return await GetLinkedAccountConfig(gpUserSession, userSession);
-        }
-
-
-        [HttpGet]
-        [ApiVersionRoute("patient/linked-account-config")]
-        public async Task<IActionResult> GetPatientLinkedAccountConfig(
-            [GpSession(IgnoreP5Users=true)] GpUserSession gpUserSession,
-            [UserSession] P5UserSession userSession)
-        {
-            return await GetLinkedAccountConfig(gpUserSession, userSession);
-        }
-
-        private async Task<IActionResult> GetLinkedAccountConfig(GpUserSession gpUserSession,
-            P5UserSession userSession)
-        {
             var visitor = new LinkedAccountPatientConfigVisitor(_logger, _auditor, _sessionSettings, _gpSystemFactory, _sessionCacheService, gpUserSession);
             var result = await userSession.Accept(visitor);
 

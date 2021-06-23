@@ -34,8 +34,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             _userSessionResponse.UserSessionCreateReferenceCode =
                 userSession.GpUserSession.Accept(new GpUserSessionReferenceCodeVisitor());
             _userSessionResponse.NhsNumber = userSession.NhsNumber;
-
             _userSessionResponse.Im1MessagingEnabled = userSession.GpUserSession?.Im1MessagingEnabled;
+            _userSessionResponse.HasGpSession = userSession.GpUserSession.Supplier != Supplier.Disconnected;
 
             return _userSessionResponse;
         }

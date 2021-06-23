@@ -15,6 +15,7 @@ import {
   HIDE_SESSION_EXPIRING,
   SET_USER_SESSION_REFERENCE,
   SET_RETRY_GP_SESSION,
+  HAS_GP_SESSION,
 } from './mutation-types';
 
 export default {
@@ -42,6 +43,7 @@ export default {
         accessToken,
         im1MessagingEnabled,
         userSessionCreateReferenceCode,
+        hasGpSession,
         proofLevel,
       } = response.data;
 
@@ -57,6 +59,7 @@ export default {
       });
 
       commit(SET_USER_SESSION_REFERENCE, userSessionCreateReferenceCode);
+      commit(HAS_GP_SESSION, hasGpSession);
 
       this.dispatch('practiceSettings/setIm1MessagingEnabled', im1MessagingEnabled);
     }
@@ -105,6 +108,9 @@ export default {
   },
   updateInfo({ commit }, info) {
     commit(SET_INFO, info);
+  },
+  setGpSession({ commit }, info) {
+    commit(HAS_GP_SESSION, info);
   },
   startValidationChecking({ getters, commit, dispatch, state }) {
     if (!getters.isLoggedIn() || state.validationInterval) return;

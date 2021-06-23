@@ -28,7 +28,6 @@ import knownServices from '@/middleware/knownServices';
 import nativeNavigation from '@/middleware/nativeNavigation';
 import globalResets from '@/middleware/globalResets';
 import onlineConsultations from '@/middleware/onlineConsultations';
-import session from '@/middleware/session';
 import conditionalRedirect from '@/middleware/conditionalRedirect';
 import setSource from '@/middleware/setSource';
 import sjrRedirect from '@/middleware/sjrRedirect';
@@ -57,7 +56,6 @@ const globalMiddleware = [
   appConfig,
   auth,
   termsAndConditions,
-  session,
   nativeNavigation,
   globalResets,
   knownServices,
