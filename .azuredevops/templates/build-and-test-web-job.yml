@@ -7,6 +7,7 @@ jobs:
       - template: npm-authenticate.yml
 
       - task: ShellScript@2
+        enabled: false
         displayName: Run web security audit
         inputs:
           scriptPath: web/buildscripts/01_run_security_audit.sh
