@@ -261,7 +261,7 @@ addAppointmentToCalendarEnabled: true
 
 # Introductory messages
 sendIntroductoryMessage: false
-introductoryMessageCampaignId: "Intro v1"
+introductoryMessageCampaignId: "Intro_v1_0621"
 messagesApiResourceUrl: "/v1/api/users/{0}/messages"
 
 # Placeholder values
