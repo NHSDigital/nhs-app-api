@@ -283,7 +283,7 @@ export default {
           descriptionText: 'See your upcoming and past hospital or other appointments',
         },
         thirdPartyWarning: {
-          brandName: 'Care Information Exchange (Patients Know Best)',
+          brandName: 'Care Information Exchange powered by Patients Know Best',
           featureName: 'View appointments',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
@@ -298,7 +298,7 @@ export default {
           descriptionText: 'View your care plans from your hospital or other care provider, or add your own',
         },
         thirdPartyWarning: {
-          brandName: 'Care Information Exchange (Patients Know Best)',
+          brandName: 'Care Information Exchange powered by Patients Know Best',
           featureName: 'Care plans',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
@@ -313,7 +313,7 @@ export default {
           descriptionText: 'Record symptoms and add to your health journal',
         },
         thirdPartyWarning: {
-          brandName: 'Care Information Exchange (Patients Know Best)',
+          brandName: 'Care Information Exchange powered by Patients Know Best',
           featureName: 'Track your health',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
@@ -328,7 +328,7 @@ export default {
           descriptionText: 'See details of your visits and treatments, view clinical documents, message your health team, or fill in a consultation form',
         },
         thirdPartyWarning: {
-          brandName: 'Care Information Exchange (Patients Know Best)',
+          brandName: 'Care Information Exchange powered by Patients Know Best',
           featureName: 'Consultations, events and messages',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
@@ -358,7 +358,7 @@ export default {
           descriptionText: 'View links or documents your health team has shared with you, or add your own',
         },
         thirdPartyWarning: {
-          brandName: 'Care Information Exchange (Patients Know Best)',
+          brandName: 'Care Information Exchange powered by Patients Know Best',
           featureName: 'Shared health links',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
@@ -388,7 +388,7 @@ export default {
           descriptionText: 'View test results from your hospital and other healthcare providers',
         },
         thirdPartyWarning: {
-          brandName: 'Care Information Exchange (Patients Know Best)',
+          brandName: 'Care Information Exchange powered by Patients Know Best',
           featureName: 'Test results',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',

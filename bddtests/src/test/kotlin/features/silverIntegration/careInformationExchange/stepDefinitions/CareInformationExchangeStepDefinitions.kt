@@ -195,7 +195,7 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
     @Then("the track your health warning explains the service is from Care Information Exchange$")
     fun assertTrackYourHealthWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-            "Track your health\nThis service is provided by Care Information Exchange (Patients Know Best)",
+            "Track your health\nThis service is provided by Care Information Exchange powered by Patients Know Best",
             "Your GP surgery or hospital has chosen this personal health record service provider.",
             "Find out more about personal health record services")
     }
@@ -203,7 +203,7 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
     @Then("the view appointments warning on the page explains the service is from Care Information Exchange$")
     fun assertViewAppointmentsWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-            "View appointments\nThis service is provided by Care Information Exchange (Patients Know Best)",
+            "View appointments\nThis service is provided by Care Information Exchange powered by Patients Know Best",
             "Your GP surgery or hospital has chosen this personal health record service provider.",
             "Find out more about personal health record services")
     }
@@ -211,7 +211,7 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
     @Then("the test results warning on the page explains the service is from Care Information Exchange$")
     fun assertTestResultsWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-            "Test results\nThis service is provided by Care Information Exchange (Patients Know Best)",
+            "Test results\nThis service is provided by Care Information Exchange powered by Patients Know Best",
             "Your GP surgery or hospital has chosen this personal health record service provider.",
             "Find out more about personal health record services")
     }
@@ -227,7 +227,7 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
     @Then("the shared health warning on the page explains the service is from Care Information Exchange$")
     fun assertVSharedHealthWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-            "Shared health links\nThis service is provided by Care Information Exchange (Patients Know Best)",
+            "Shared health links\nThis service is provided by Care Information Exchange powered by Patients Know Best",
             "Your GP surgery or hospital has chosen this personal health record service provider.",
             "Find out more about personal health record services")
     }
@@ -236,7 +236,7 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
     fun assertConsultationsWarningMessageContent() {
         redirector.interruptionCard.assertContent(
             "Consultations, events and messages\n" +
-                    "This service is provided by Care Information Exchange (Patients Know Best)",
+                    "This service is provided by Care Information Exchange powered by Patients Know Best",
             "Your GP surgery or hospital has chosen this personal health record service provider.",
             "Find out more about personal health record services")
     }
@@ -244,7 +244,7 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
     @Then("the care plan warning on the page explains the service is from Care Information Exchange$")
     fun assertCarePlanWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-            "Care plans\nThis service is provided by Care Information Exchange (Patients Know Best)",
+            "Care plans\nThis service is provided by Care Information Exchange powered by Patients Know Best",
             "Your GP surgery or hospital has chosen this personal health record service provider.",
             "Find out more about personal health record services")
     }
