@@ -1,5 +1,4 @@
 using System;
-using System.Net;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -33,8 +32,6 @@ namespace NHSOnline.App.Controls.WebViews
             BindableProperty.Create(nameof(GoToLoggedInHomeScreenCommand), typeof(AsyncCommand), typeof(NhsAppPreHomeScreenWebview));
 
         private static JsonSerializerSettings Settings { get; } = CreateJsonSerializerSettings();
-
-        public Func<Cookie, Task>? SetCookie { get; set; }
 
         public void GetNotificationsStatus() => GetNotificationsStatusCommand.Execute(null);
 

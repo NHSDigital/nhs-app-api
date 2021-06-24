@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Local - Debug</Configuration>
@@ -81,6 +81,7 @@
     <Compile Include="DependencyServices\Calendar\AndroidCalendar.cs" />
     <Compile Include="DependencyServices\Calendar\CalendarIntent.cs" />
     <Compile Include="DependencyServices\FileSystem\AndroidFileSystem.cs" />
+    <Compile Include="DependencyServices\AndroidCookieService.cs" />
     <Compile Include="DependencyServices\Notifications\AndroidGetPnsTokenResponse.cs" />
     <Compile Include="DependencyServices\Notifications\AndroidNotifications.cs" />
     <Compile Include="Dialogs\AndroidAlertDialog.cs" />
@@ -100,7 +101,6 @@
     <Compile Include="Renderers\WebViews\Extensions\Javascript\NhsAppJavascriptBridgeWebViewRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\Extensions\Javascript\PreHomeScreenJavascriptBridgeWebViewRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\Extensions\Javascript\WebIntegrationJavascriptBridgeWebViewRendererExtension.cs" />
-    <Compile Include="Renderers\WebViews\Extensions\NhsAppSetCookieWebViewRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\NhsAppPreHomeJavascriptBridge.cs" />
     <Compile Include="Renderers\WebViews\NhsAppPreHomeScreenWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\NhsAppJavascriptBridge.cs" />

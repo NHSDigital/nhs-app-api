@@ -1,6 +1,3 @@
-using System.Net;
-using System.Threading.Tasks;
-using Foundation;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.iOS.Renderers.WebViews;
 using WebKit;
@@ -35,16 +32,6 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                 NavigationDelegate = new WebViewNavigationDelegate(this);
             }
 
-            if (e.OldElement is NhsAppPreHomeScreenWebview oldNhsAppPreHomeWebview)
-            {
-                oldNhsAppPreHomeWebview.SetCookie = null;
-            }
-
-            if (e.NewElement is NhsAppPreHomeScreenWebview newNhsAppWebPreHomeView)
-            {
-                newNhsAppWebPreHomeView.SetCookie = SetCookie;
-            }
-
             base.OnElementChanged(e);
         }
 
@@ -56,13 +43,6 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
             }
 
             base.Dispose(disposing);
-        }
-
-        private async Task SetCookie(Cookie cookie)
-        {
-            using var nsHttpCookie = new NSHttpCookie(cookie);
-
-            await Configuration.WebsiteDataStore.HttpCookieStore.SetCookieAsync(nsHttpCookie).ConfigureAwait(true);
         }
 
         private static WKWebViewConfiguration CustomConfiguration

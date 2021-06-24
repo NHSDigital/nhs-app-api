@@ -1,10 +1,12 @@
 using System;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.App.Services.Cookies;
 using NHSOnline.App.Areas.Home.Models;
 using NHSOnline.App.Areas.PreHome.Models;
 using NHSOnline.App.Config;
+using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices.Notifications;
@@ -24,8 +26,8 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
         private readonly IPageFactory _pageFactory;
         private readonly ILogger _logger;
         private readonly IBrowserOverlay _browserOverlay;
-        private readonly ICookieHandler _cookieHandler;
         private readonly INotifications _notifications;
+        private readonly ICookieService _cookieService;
 
         private Uri? ResolveDeeplinkUrl => _deeplinkUrl ?? _model.DeeplinkUrl;
 
@@ -36,8 +38,8 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             ILogger<NhsAppPreHomeScreenWebPresenter> logger,
             IBrowserOverlay browserOverlay,
             IPageFactory pageFactory,
-            ICookieHandler cookieHandler,
-            INotifications notifications)
+            INotifications notifications,
+            ICookieService cookieService)
         {
             _view = view;
             _model = model;
@@ -45,8 +47,8 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             _logger = logger;
             _browserOverlay = browserOverlay;
             _pageFactory = pageFactory;
-            _cookieHandler = cookieHandler;
             _notifications = notifications;
+            _cookieService = cookieService;
 
             _view.AppNavigation
                 .RegisterHandler(ViewOnAppearing,
@@ -83,7 +85,11 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
 
             _hasAlreadyAppeared = true;
 
-            await _cookieHandler.AddCookies(_view, _config.BaseAddress, _model.Cookies).PreserveThreadContext();
+            foreach (var cookie in _model.Cookies.GetCookies(_config.BaseAddress).Cast<Cookie>())
+            {
+                await  _cookieService.SetCookie(cookie).PreserveThreadContext();
+            }
+
             await DisplayNhsAppWeb().PreserveThreadContext();
         }
 

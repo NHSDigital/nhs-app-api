@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using NHSOnline.App.Services.Cookies;
 using NHSOnline.App.Areas.Home;
 using NHSOnline.App.Areas.LoggedOut;
 using NHSOnline.App.Areas.PreHome;
@@ -11,8 +10,6 @@ namespace NHSOnline.App.Areas
     {
         internal static IServiceCollection AddAreas(this IServiceCollection services)
         {
-            services.AddTransient<ICookieHandler, CookieHandler>();
-
             return services
                 .AddHomeArea()
                 .AddLoggedOutArea()

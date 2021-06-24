@@ -2,12 +2,11 @@ using System;
 using System.Threading.Tasks;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Navigation;
-using NHSOnline.App.Services.Cookies;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.PreHome
 {
-    internal interface INhsAppPreHomeScreenWebView : INavigationView<INhsAppPreHomeScreenWebView.IEvents>, ICookieView
+    internal interface INhsAppPreHomeScreenWebView : INavigationView<INhsAppPreHomeScreenWebView.IEvents>
     {
         internal interface IEvents
         {

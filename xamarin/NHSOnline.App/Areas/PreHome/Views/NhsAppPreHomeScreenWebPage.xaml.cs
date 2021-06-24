@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
@@ -99,9 +98,6 @@ namespace NHSOnline.App.Areas.PreHome.Views
             WebView.AccessibilityFocus();
             NavigatedCommand.Execute(args);
         }
-
-        public async Task AddCookie(Cookie cookie)
-            => await (WebView.SetCookie?.Invoke(cookie) ?? Task.CompletedTask).PreserveThreadContext();
 
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);
 

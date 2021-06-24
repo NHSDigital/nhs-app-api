@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.Services;
 
