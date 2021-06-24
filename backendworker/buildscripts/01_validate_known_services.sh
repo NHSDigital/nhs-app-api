@@ -25,9 +25,9 @@ function validate_json_files() {
 }
 
 function validate_chart_files() {
-  recursiveSearch 'servicesV3__.(.*http.*)' ../nhsapp-chart/vars | nonRecursiveSearch 'http.*' | sort - > servicesv3chart.tmp
+  recursiveSearch 'servicesV3__.(.*http(s)?://.*)' ../nhsapp-chart/vars | nonRecursiveSearch 'http(s)?://.*' | sort - > servicesv3chart.tmp
   
-  recursiveSearch 'services__.(.*http.*)' ../nhsapp-chart/vars | nonRecursiveSearch 'http.*' | sort - > serviceslegacychart.tmp
+  recursiveSearch 'services__.(.*http(s)?://.*)' ../nhsapp-chart/vars | nonRecursiveSearch 'http(s)?://.*' | sort - > serviceslegacychart.tmp
 
   if diff serviceslegacychart.tmp servicesv3chart.tmp; then
     echo "Legacy and v3 Known Services chart files match"
@@ -40,9 +40,9 @@ function validate_chart_files() {
 }
 
 function validate_docker_env_files() {
-  recursiveSearch 'servicesV3__.(.*http.*)' ../docker/*.env | nonRecursiveSearch 'http.*' | sort - > servicesv3docker.tmp
+  recursiveSearch 'servicesV3__.(.*http(s)?://.*)' ../docker/*.env | nonRecursiveSearch 'http(s)?://.*' | sort - > servicesv3docker.tmp
   
-  recursiveSearch 'services__.(.*http.*)' ../docker/*.env | nonRecursiveSearch 'http.*' | sort - > serviceslegacydocker.tmp
+  recursiveSearch 'services__.(.*http(s)?://.*)' ../docker/*.env | nonRecursiveSearch 'http(s)?://.*' | sort - > serviceslegacydocker.tmp
 
   if diff serviceslegacydocker.tmp servicesv3docker.tmp; then
     echo "Legacy and v3 Known Services docker env match"
