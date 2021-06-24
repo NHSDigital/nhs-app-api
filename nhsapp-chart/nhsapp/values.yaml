@@ -299,7 +299,7 @@ web:
   image: nhsonline-web
   image_tag: latest
   imagePullPolicy: Always
-  minAvailable: 4
+  minAvailable: 2
   minReplicas: 4
   maxReplicas: 100
   memoryRequest: "36Mi"
@@ -324,7 +324,7 @@ api:
   image: nhsonline-backendpfsapi
   image_tag: latest
   imagePullPolicy: Always
-  minAvailable: 4
+  minAvailable: 2
   minReplicas: 4
   maxReplicas: 300
   memoryRequest: "896Mi"
@@ -354,7 +354,7 @@ cid:
   image: nhsonline-backendcidapi
   image_tag: latest
   imagePullPolicy: Always
-  minAvailable: 2
+  minAvailable: 1
   minReplicas: 2
   maxReplicas: 100
   memoryRequest: "896Mi"
@@ -378,7 +378,7 @@ logger:
   image: nhsonline-clientloggerapi
   image_tag: latest
   imagePullPolicy: Always
-  minAvailable: 2
+  minAvailable: 1
   minReplicas: 2
   maxReplicas: 100
   memoryRequest: "128Mi"
@@ -415,7 +415,7 @@ iproxy:
   image: nhsonline-nginx
   image_tag: "v1.16.1"
   imagePullPolicy: IfNotPresent
-  minAvailable: 2
+  minAvailable: 1
   minReplicas: 2
   maxReplicas: 100
   memoryRequest: "36Mi"
@@ -449,7 +449,7 @@ wiremock:
   image: nhsonline-minimock
   image_tag: latest
   imagePullPolicy: Always
-  minAvailable: 8
+  minAvailable: 4
   minReplicas: 8
   maxReplicas: 300
   memoryRequest: "768Mi"
@@ -468,7 +468,7 @@ users:
   image: nhsonline-backendusersapi
   image_tag: latest
   imagePullPolicy: Always
-  minAvailable: 2
+  minAvailable: 1
   minReplicas: 2
   maxReplicas: 100
   memoryRequest: "416Mi"
@@ -488,7 +488,7 @@ messages:
   image: nhsonline-backendmessagesapi
   image_tag: develop
   imagePullPolicy: Always
-  minAvailable: 2
+  minAvailable: 1
   minReplicas: 2
   maxReplicas: 100
   memoryRequest: "256Mi"
@@ -508,7 +508,7 @@ info:
   image: nhsonline-backenduserinfoapi
   image_tag: 3229
   imagePullPolicy: Always
-  minAvailable: 2
+  minAvailable: 1
   minReplicas: 2
   maxReplicas: 100
   memoryRequest: "512Mi"
@@ -530,7 +530,7 @@ sjr:
   image: nhsonline-backendservicejourneyrulesapi
   image_tag: latest
   imagePullPolicy: Always
-  minAvailable: 2
+  minAvailable: 1
   minReplicas: 2
   maxReplicas: 100
   # production SJR config is quite large, don't reduce if staging shows low memory usage

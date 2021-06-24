@@ -37,3 +37,4 @@ secrets:
 # Not used, just to prevent chart from crashing on install
 splunk:
   pidIndex: apppid_nhsapp_dev
+ 
