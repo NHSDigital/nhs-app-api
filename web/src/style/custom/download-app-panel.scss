@@ -13,12 +13,14 @@ ul {
     a {
       display: inline-block;
       vertical-align: top;
+      border: 4px solid transparent;
 
       &:focus,
       &:hover {
-        border-radius: 4px;
         // Added as part of NHSO-13314
-        box-shadow: 0 0 0 $nhsuk-focus-width $focus_highlight !important;
+        background-color: #ffeb3b !important;
+        border: 4px solid #ffeb3b !important;
+        box-shadow: 0 -2px #ffeb3b, 0 4px #212b32 !important;
         // End of Addition
       }
 
