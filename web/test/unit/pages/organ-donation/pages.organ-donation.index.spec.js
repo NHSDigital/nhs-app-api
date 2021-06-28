@@ -50,10 +50,11 @@ const createState =
     return state;
   };
 
-const createPageStore = ({ state, isSomeOrgans = false } = {}) => createStore({
+const createPageStore = ({ state, isSomeOrgans = false, canWithdraw = false } = {}) => createStore({
   state,
   getters: {
     'organDonation/isSomeOrgans': isSomeOrgans,
+    'organDonation/canWithdraw': canWithdraw,
   },
 });
 

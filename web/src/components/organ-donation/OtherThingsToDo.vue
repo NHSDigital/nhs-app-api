@@ -48,7 +48,6 @@ export default {
   },
   methods: {
     withdrawDecision() {
-      this.$store.dispatch('organDonation/withdrawStart');
       redirectTo(this, ORGAN_DONATION_WITHDRAW_REASON_PATH);
     },
   },

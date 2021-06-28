@@ -29,7 +29,7 @@
         </div>
         <next-steps v-if="!hasAppointedRep && (hasExistingOptIn || hasExistingOptOut)"
                     :is-opt-in-decision="hasExistingOptIn"/>
-        <other-things-to-do :can-withdraw="!isConflicted"/>
+        <other-things-to-do :can-withdraw="canWithdraw"/>
       </div>
       <div v-else>
         <menu-item-list>
@@ -110,6 +110,9 @@ export default {
     };
   },
   computed: {
+    canWithdraw() {
+      return this.$store.getters['organDonation/canWithdraw'];
+    },
     choices() {
       return get('choices')(this.decisionDetails);
     },

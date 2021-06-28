@@ -131,9 +131,12 @@ export default {
   mounted() {
     if (!isNativeApp({ route: this.$route, store: this.$store })) {
       redirectTo(this, INDEX_PATH);
-    } else if (!this.$store.state.organDonation.isWithdrawing) {
+    } else if (!this.$store.getters['organDonation/canWithdraw']) {
       redirectTo(this, ORGAN_DONATION_PATH);
     }
+
+    this.$store.dispatch('organDonation/amendCancel');
+    this.$store.dispatch('organDonation/withdrawCancel');
   },
   methods: {
     amendDecision() {
@@ -150,12 +153,12 @@ export default {
           EventBus.$emit(FOCUS_ERROR_ELEMENT);
           return;
         }
+        this.$store.dispatch('organDonation/withdrawStart');
         this.$store.dispatch('organDonation/setWithdrawReasonId', this.reasonId);
         redirectTo(this, ORGAN_DONATION_REVIEW_YOUR_DECISION_PATH);
       });
     },
     goBack() {
-      this.$store.dispatch('organDonation/withdrawCancel');
       redirectTo(this, ORGAN_DONATION_PATH);
     },
   },

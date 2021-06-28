@@ -65,6 +65,9 @@ describe('organ donation withdraw reason page', () => {
     state = createState(options);
     $store = createStore({
       state,
+      getters: {
+        'organDonation/canWithdraw': options.canWithdraw || false,
+      },
     });
 
     return mount(Withdraw, {
@@ -81,7 +84,7 @@ describe('organ donation withdraw reason page', () => {
 
   describe('not native', () => {
     beforeEach(() => {
-      wrapper = mountWrapper({ isWithdrawing: false, isNativeApp: false });
+      wrapper = mountWrapper({ isNativeApp: false });
     });
 
     it('will redirect back to the home page', () => {
@@ -90,9 +93,9 @@ describe('organ donation withdraw reason page', () => {
   });
 
   describe('native', () => {
-    describe('not withdrawing', () => {
+    describe('existing registration cannot be withdrawn', () => {
       beforeEach(() => {
-        wrapper = mountWrapper({ isWithdrawing: false, isNativeApp: true });
+        wrapper = mountWrapper({ isNativeApp: true });
       });
 
       it('will redirect back to the organ donation page', () => {
@@ -102,18 +105,22 @@ describe('organ donation withdraw reason page', () => {
 
     describe('withdrawing', () => {
       beforeEach(() => {
-        mountWrapper({ isWithdrawing: true, isNativeApp: true });
+        mountWrapper({ canWithdraw: true, isNativeApp: true });
       });
 
-      it('will not redirect', () => {
-        expect(redirectTo).not.toBeCalled();
+      it('will call amendCancel', () => {
+        expect($store.dispatch).toHaveBeenCalledWith('organDonation/amendCancel');
+      });
+
+      it('will call withdrawCancel', () => {
+        expect($store.dispatch).toHaveBeenCalledWith('organDonation/withdrawCancel');
       });
     });
   });
 
   describe('withdrawing', () => {
     beforeEach(() => {
-      wrapper = mountWrapper({ isWithdrawing: true, isNativeApp: true });
+      wrapper = mountWrapper({ isNativeApp: true });
     });
 
     describe('reason', () => {
@@ -258,6 +265,11 @@ describe('organ donation withdraw reason page', () => {
 
           it('will not show inline error', () => {
             expect(wrapper.find(ErrorMessage).exists()).toBe(false);
+          });
+
+          it('will dispatch "organDonation/withdrawStart"', () => {
+            expect($store.dispatch)
+              .toHaveBeenCalledWith('organDonation/withdrawStart');
           });
 
           it('will dispatch "organDonation/setWithdrawReasonId"', () => {

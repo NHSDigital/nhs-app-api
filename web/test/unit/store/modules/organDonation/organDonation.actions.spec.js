@@ -48,6 +48,7 @@ const createHttp = ({
 describe('organ donation actions', () => {
   let $http;
   let commit;
+  let dispatch;
   let result;
   let referenceData;
 
@@ -56,6 +57,7 @@ describe('organ donation actions', () => {
     result = 'result';
     referenceData = 'reference-data';
     commit = jest.fn();
+    dispatch = jest.fn();
     $http = createHttp({ result, referenceData });
     actions.app = {
       get $http() {
@@ -77,6 +79,7 @@ describe('organ donation actions', () => {
   describe('amendStart', () => {
     beforeEach(() => {
       actions.amendStart({
+        dispatch,
         commit,
         state: {},
       });
@@ -88,6 +91,10 @@ describe('organ donation actions', () => {
 
     it('will commit "RESET_REGISTRATION"', () => {
       expect(commit).toHaveBeenCalledWith(RESET_REGISTRATION);
+    });
+
+    it('will call withdrawCancel', () => {
+      expect(dispatch).toHaveBeenCalledWith('withdrawCancel');
     });
 
     it('will update the registration with data from the original registration', () => {
@@ -263,12 +270,7 @@ describe('organ donation actions', () => {
   });
 
   describe('submitDecision', () => {
-    let dispatch;
     let state;
-
-    beforeEach(async () => {
-      dispatch = jest.fn();
-    });
 
     describe('withdrawing', () => {
       beforeEach(async () => {

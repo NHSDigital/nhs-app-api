@@ -52,8 +52,9 @@ export default {
   amendCancel({ commit }) {
     commit(SET_AMENDING, false);
   },
-  amendStart({ commit }) {
+  amendStart({ commit, dispatch }) {
     commit(RESET_REGISTRATION);
+    dispatch('withdrawCancel');
     commit(SET_AMENDING, true);
     commit(CLONE_FROM_ORIGINAL, [
       'identifier',
