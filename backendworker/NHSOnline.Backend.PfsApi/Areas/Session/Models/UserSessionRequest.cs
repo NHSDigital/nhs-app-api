@@ -19,6 +19,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session.Models
 
         public string NhsLoginErrorDescription { get; set; }
 
+        [SuppressMessage("Microsoft.Design", "CA1056", Justification = "Uris are not serializable")]
         public string NhsLoginErrorUri { get; set; }
     }
 }

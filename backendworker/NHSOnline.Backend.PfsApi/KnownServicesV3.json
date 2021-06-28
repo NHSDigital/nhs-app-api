@@ -55,10 +55,6 @@
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": true
     },
-    "gncr": {
-      "showThirdPartyWarning": true,
-      "requiresAssertedLoginIdentity": true
-    },
     "pkb": {
       "showThirdPartyWarning": true,
       "requiresAssertedLoginIdentity": true

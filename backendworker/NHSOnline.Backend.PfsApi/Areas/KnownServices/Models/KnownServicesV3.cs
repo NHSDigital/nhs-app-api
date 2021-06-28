@@ -28,12 +28,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.KnownServices.Models
 
             if (knownService.Url is null)
             {
-                throw new ConfigurationNotValidException(nameof(RootService.Url));
+                throw new ConfigurationNotValidException(nameof(RootService.Url),
+                    "Validation failed for KnownService with id: {knownServiceId}");
             }
 
             if (!knownService.Url.IsAbsoluteUri)
             {
-                throw new ConfigurationNotValidException(nameof(RootService.Url));
+                throw new ConfigurationNotValidException(nameof(RootService.Url),
+                    $"Validation failed for KnownService with id: {knownServiceId}");
             }
         }
     }

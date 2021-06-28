@@ -147,4 +147,7 @@
   <data name="ConfigurationValueNotValid" xml:space="preserve">
     <value>Configuration value '{0}' is not valid</value>
   </data>
+  <data name="ConfigurationValueNotValidWithDetail" xml:space="preserve">
+    <value>Configuration value '{0}' is not valid - details: {1}</value>
+  </data>
 </root>

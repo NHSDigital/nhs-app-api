@@ -26,6 +26,12 @@ namespace NHSOnline.Backend.Support.Settings
         {
         }
 
+        public ConfigurationNotValidException(string invalidPropertyName, string detail)
+            : base(string.Format(CultureInfo.InvariantCulture, ExceptionMessages.ConfigurationValueNotValidWithDetail,
+                invalidPropertyName, detail))
+        {
+        }
+
         protected ConfigurationNotValidException(
             SerializationInfo info,
             StreamingContext context) : base(info, context)

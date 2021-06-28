@@ -144,7 +144,7 @@ api:
     servicesV3__pkb__domains__1: http://my.patientsknowbest.com:443
     servicesV3__substraktPatientPack__url: https://jump-point.production.substrakthealth.com
     servicesV3__substraktPatientPack__domains__1: https://admin-request.production.substrakthealth.com
-    servicesV3__substraktPatientPack__domains__1: https://auth.production.substrakthealth.com
+    servicesV3__substraktPatientPack__domains__2: https://auth.production.substrakthealth.com
     servicesV3__engage__url: https://nhsapp.engage.gp
     servicesV3__nhsd__url: https://www.coronavirus-record.service.nhs.uk
     servicesV3__netCompany__url: https://covid-status.service.nhsx.nhs.uk
