@@ -1,10 +1,5 @@
-using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Android;
-using OpenQA.Selenium.Appium.MultiTouch;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 {

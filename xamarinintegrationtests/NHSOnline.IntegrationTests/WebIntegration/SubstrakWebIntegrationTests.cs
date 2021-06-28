@@ -44,7 +44,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .PageContent.NavigateToExternalDomain();
 
             AndroidAppTabBrowserChoice
-                .IfDisplayed(driver, choice => choice.ChooseChrome().Always());
+                .IfDisplayed(driver, choice => choice.ChooseChrome());
 
             AndroidAppTab
                 .AssertInBrowserAppTab(driver)

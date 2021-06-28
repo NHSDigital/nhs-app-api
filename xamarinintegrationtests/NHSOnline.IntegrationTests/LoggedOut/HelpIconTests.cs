@@ -36,7 +36,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .GetHelp();
 
             AndroidAppTabBrowserChoice
-                .IfDisplayed(driver, choice => choice.ChooseChrome().Always());
+                .IfDisplayed(driver, choice => choice.ChooseChrome());
 
             AndroidAppTab
                 .AssertOnLoginHelpPage(driver);

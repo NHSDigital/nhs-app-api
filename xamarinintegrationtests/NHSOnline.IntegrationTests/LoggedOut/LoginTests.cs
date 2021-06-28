@@ -48,7 +48,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .PageContent.Covid();
 
             AndroidAppTabBrowserChoice
-                .IfDisplayed(driver, choice => choice.ChooseChrome().Always());
+                .IfDisplayed(driver, choice => choice.ChooseChrome());
 
             AndroidAppTab
                 .AssertOnCovidPage(driver)

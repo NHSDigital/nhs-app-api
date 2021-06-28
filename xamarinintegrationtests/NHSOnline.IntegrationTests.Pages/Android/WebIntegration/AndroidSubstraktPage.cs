@@ -1,8 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
 using NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration;
-using NHSOnline.IntegrationTests.UI.Components;
-using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration

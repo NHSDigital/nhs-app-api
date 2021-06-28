@@ -39,7 +39,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .ContactUs();
 
             AndroidAppTabBrowserChoice
-                .IfDisplayed(driver, choice => choice.ChooseChrome().Always());
+                .IfDisplayed(driver, choice => choice.ChooseChrome());
 
             AndroidAppTab
                 .AssertOnContactUsPage(driver)
@@ -78,7 +78,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .KeyboardNavigateToAndActivateContactUs();
 
             AndroidAppTabBrowserChoice
-                .IfDisplayed(driver, choice => choice.ChooseChrome().Always());
+                .IfDisplayed(driver, choice => choice.ChooseChrome());
 
             AndroidAppTab
                 .AssertOnContactUsPage(driver)
