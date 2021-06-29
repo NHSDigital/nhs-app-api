@@ -96,7 +96,7 @@ qualtricsDirectoryId: "POOL_3f8iG2TIImtgHLn"
 qualtricsMailingListId: "CG_3nxFnDUpfzZsDpI"
 
 web:
-  minAvailable: 8
+  minAvailable: 4
   minReplicas: 8
   maxReplicas: 100
   publicURL: www.nhsapp.service.nhs.uk
