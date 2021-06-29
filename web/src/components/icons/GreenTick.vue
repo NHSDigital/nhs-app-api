@@ -5,6 +5,7 @@
     viewBox="0 0 24 24"
     fill="none"
     focusable="false"
+    alt=""
   >
     <path stroke-width="4" stroke-linecap="round" d="M18.4 7.8l-8.5 8.4L5.6 12" />
   </svg>
