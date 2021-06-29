@@ -260,7 +260,7 @@ wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.onboardingsandpit
 addAppointmentToCalendarEnabled: true
 
 # Introductory messages
-sendIntroductoryMessage: false
+sendIntroductoryMessage: true
 introductoryMessageCampaignId: "Intro_v1_0621"
 messagesApiResourceUrl: "/v1/api/users/{0}/messages"
 
