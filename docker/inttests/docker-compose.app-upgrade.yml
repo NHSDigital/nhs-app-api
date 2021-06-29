@@ -1,0 +1,7 @@
+version: "3.4"
+
+services:
+
+  pfs.local.bitraft.io:
+    env_file:
+      - ./docker/inttests/env/app_upgrade.env

@@ -360,6 +360,33 @@ stages:
       jobs:
         - template: .azuredevops/templates/integration-tests-xamarin-job.yml
 
+    - stage: xamarin_integration_upgrade_tests
+      displayName: Xamarin Integration Upgrade Tests
+      ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+        condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
+      dependsOn:
+        - web
+        - backend
+        - xamarin_browserstack
+        - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+          - pr_changes
+      jobs:
+        - template: .azuredevops/templates/integration-tests-xamarin-job.yml
+          parameters:
+            runUpgradeTests: true
+
+    - stage: xamarin_integration_report_generation
+      displayName: Xamarin Integration Generate Reports
+      ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+        condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
+      dependsOn:
+        - xamarin_integration_upgrade_tests
+        - xamarin_integration_tests
+        - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+          - pr_changes
+      jobs:
+        - template: .azuredevops/templates/integration-tests-xamarin-generate-reports.yml
+
   - ${{ if and(eq(variables['native.xamarin.distribute'], 'true'), eq(variables['native.xamarin.target'], 'Staging'), eq(variables['source.develop'], 'True')) }}:
     - stage: xamarin_upload_ipa_job
       displayName: Xamarin Distribute Staging Apps

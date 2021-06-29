@@ -20,6 +20,11 @@ function set_docker_compose_files_args () {
   DOCKER_COMPOSE_FILES=(../docker-compose.yml)
   DOCKER_COMPOSE_FILES+=(../docker/stubbed/docker-compose.yml ../docker/docker-compose.nhslogin-stubbed.yml)
   DOCKER_COMPOSE_FILES+=(../docker/bddtests/docker-compose.yml ../docker/inttests/docker-compose.yml)
+
+  if [ "$USE_APP_UPGRADE_CONFIG" == 'True' ]
+  then
+    DOCKER_COMPOSE_FILES+=(../docker/inttests/docker-compose.app-upgrade.yml)
+  fi
   DOCKER_COMPOSE_FILES+=("${DOCKER_COMPOSE_FILES_TRANCHE[@]}")
 
   if [ "$RUN_LOCAL" == 1 ]

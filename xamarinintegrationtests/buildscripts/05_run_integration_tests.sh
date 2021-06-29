@@ -30,13 +30,21 @@ start_services_under_test
 
 set +e
 
+if [ "$USE_APP_UPGRADE_CONFIG" == 'True' ]
+then
+  TEST_FILTER="TestCategory=NhsAppUpgradeTest"
+else
+  TEST_FILTER="TestCategory!=NhsAppUpgradeTest"
+fi
+info "Using test filter ${TEST_FILTER}"
+
 docker run \
   "${DOCKER_ARGS[@]}" \
-  "${DOCKER_REGISTRY:-local}/nhsonline-integration-tests:${DOCKER_TAG:-latest}" bash -c '
-    dotnet test --no-build -c Release -r /src/TestResults --logger trx NHSOnline.IntegrationTests/NHSOnline.IntegrationTests.csproj;
+  "${DOCKER_REGISTRY:-local}/nhsonline-integration-tests:${DOCKER_TAG:-latest}" bash -c "
+    dotnet test --filter ${TEST_FILTER} --no-build -c Release -r /src/TestResults --logger trx NHSOnline.IntegrationTests/NHSOnline.IntegrationTests.csproj;
     TESTS_EXIT_CODE=$? ;
     rm -Rf /src/TestResults/Deploy* ;
-    exit $TESTS_EXIT_CODE'
+    exit $TESTS_EXIT_CODE"
 
 TESTS_EXIT_CODE=$?
 

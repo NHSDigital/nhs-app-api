@@ -41,50 +41,54 @@ function generate_browserstack_local_identifier () {
 }
 
 function upload_android_app_to_browserstack () {
-  local BROWSERSTACK_UPLOAD_RESPONSE
+  if [ -z "${Android__App}" ]; then
+    local BROWSERSTACK_UPLOAD_RESPONSE
 
-  [ -f "$NATIVE_APP_PATH_ANDROID" ] || die "Native app (NATIVE_APP_PATH_ANDROID=$NATIVE_APP_PATH_ANDROID) does not exist, this is required to run integration tests"
+    [ -f "$NATIVE_APP_PATH_ANDROID" ] || die "Native app (NATIVE_APP_PATH_ANDROID=$NATIVE_APP_PATH_ANDROID) does not exist, this is required to run integration tests"
 
-  info "Uploading native app to BrowserStack: $NATIVE_APP_PATH_ANDROID"
+    info "Uploading native app to BrowserStack: $NATIVE_APP_PATH_ANDROID"
 
-  local BROWSERSTACK_CUSTOM_ID=${BROWSERSTACK_CUSTOM_ID:-${HOSTNAME}-android}
-  BROWSERSTACK_UPLOAD_RESPONSE=$(curl \
-    -u "$BrowserStack__User:$BrowserStack__Key" \
-    -X POST \
-    -F "file=@$NATIVE_APP_PATH_ANDROID" \ \
-    -F "data={\"custom_id\": \"$BROWSERSTACK_CUSTOM_ID\"}" \
-    "https://api-cloud.browserstack.com/app-automate/upload")
-  info "BROWSERSTACK_UPLOAD_RESPONSE: $BROWSERSTACK_UPLOAD_RESPONSE"
+    local BROWSERSTACK_CUSTOM_ID=${BROWSERSTACK_CUSTOM_ID:-${HOSTNAME}-android}
+    BROWSERSTACK_UPLOAD_RESPONSE=$(curl \
+      -u "$BrowserStack__User:$BrowserStack__Key" \
+      -X POST \
+      -F "file=@$NATIVE_APP_PATH_ANDROID" \ \
+      -F "data={\"custom_id\": \"$BROWSERSTACK_CUSTOM_ID\"}" \
+      "https://api-cloud.browserstack.com/app-automate/upload")
+    info "BROWSERSTACK_UPLOAD_RESPONSE: $BROWSERSTACK_UPLOAD_RESPONSE"
 
-  # shellcheck disable=SC2001 #See if you can use ${variable//search/replace} instead.
-  Android__App=$(echo "$BROWSERSTACK_UPLOAD_RESPONSE" | sed -e 's/^.*"app_url":"\([^"]*\)".*$/\1/')
+    # shellcheck disable=SC2001 #See if you can use ${variable//search/replace} instead.
+    Android__App=$(echo "$BROWSERSTACK_UPLOAD_RESPONSE" | sed -e 's/^.*"app_url":"\([^"]*\)".*$/\1/')
 
-  export Android__App
+    export Android__App
+  fi
   DOCKER_ARGS+=(--env "Android__App=${Android__App}")
 
   info "Android__App: $Android__App"
 }
 
-function upload_ios_app_to_browserstack () {
-  local BROWSERSTACK_UPLOAD_RESPONSE
+function upload_ios_app_to_browserstack () {  
+  if [ -z "${iOS__App}" ]; then
+    local BROWSERSTACK_UPLOAD_RESPONSE
 
-  [ -f "$NATIVE_APP_PATH_IOS" ] || die "Native app (NATIVE_APP_PATH_IOS=$NATIVE_APP_PATH_IOS) does not exist, this is required to run integration tests"
+    [ -f "$NATIVE_APP_PATH_IOS" ] || die "Native app (NATIVE_APP_PATH_IOS=$NATIVE_APP_PATH_IOS) does not exist, this is required to run integration tests"
 
-  info "Uploading native app to BrowserStack: $NATIVE_APP_PATH_IOS"
+    info "Uploading native app to BrowserStack: $NATIVE_APP_PATH_IOS"
 
-  local BROWSERSTACK_CUSTOM_ID=${BROWSERSTACK_CUSTOM_ID:-${HOSTNAME}-ios}
-  BROWSERSTACK_UPLOAD_RESPONSE=$(curl \
-    -u "$BrowserStack__User:$BrowserStack__Key" \
-    -X POST \
-    -F "file=@$NATIVE_APP_PATH_IOS" \ \
-    -F "data={\"custom_id\": \"$BROWSERSTACK_CUSTOM_ID\"}" \
-    "https://api-cloud.browserstack.com/app-automate/upload")
-  info "BROWSERSTACK_UPLOAD_RESPONSE: $BROWSERSTACK_UPLOAD_RESPONSE"
+    local BROWSERSTACK_CUSTOM_ID=${BROWSERSTACK_CUSTOM_ID:-${HOSTNAME}-ios}
+    BROWSERSTACK_UPLOAD_RESPONSE=$(curl \
+      -u "$BrowserStack__User:$BrowserStack__Key" \
+      -X POST \
+      -F "file=@$NATIVE_APP_PATH_IOS" \ \
+      -F "data={\"custom_id\": \"$BROWSERSTACK_CUSTOM_ID\"}" \
+      "https://api-cloud.browserstack.com/app-automate/upload")
+    info "BROWSERSTACK_UPLOAD_RESPONSE: $BROWSERSTACK_UPLOAD_RESPONSE"
 
-  # shellcheck disable=SC2001 #See if you can use ${variable//search/replace} instead.
-  iOS__App=$(echo "$BROWSERSTACK_UPLOAD_RESPONSE" | sed -e 's/^.*"app_url":"\([^"]*\)".*$/\1/')
+    # shellcheck disable=SC2001 #See if you can use ${variable//search/replace} instead.
+    iOS__App=$(echo "$BROWSERSTACK_UPLOAD_RESPONSE" | sed -e 's/^.*"app_url":"\([^"]*\)".*$/\1/')
 
-  export iOS__App
+    export iOS__App
+  fi
   DOCKER_ARGS+=(--env "iOS__App=${iOS__App}")
 
   info "iOS__App: $iOS__App"

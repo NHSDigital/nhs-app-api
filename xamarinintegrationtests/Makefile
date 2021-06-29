@@ -20,6 +20,10 @@ $(eval $(call expand_run_options_docker_images,run-local))
 run-local: run-deps	$(SECURE_STUBS_SSL_CERT) ## Start the app so the integration tests can be run locally
 	RUN_LOCAL=1 ./buildscripts/05_run_integration_tests.sh
 
+$(eval $(call expand_run_options_docker_images,run-local-upgrade))
+run-local-upgrade: run-deps	## Start the app so the upgrade integration tests can be run locally
+	RUN_LOCAL=1 USE_APP_UPGRADE_CONFIG='True' ./buildscripts/05_run_integration_tests.sh
+
 run-deps:
 	$(MAKE) -C .. run-deps
 

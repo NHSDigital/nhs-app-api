@@ -1,0 +1,22 @@
+jobs:
+  - job:
+    displayName: Generate Integration Test Reports
+    steps:
+      - task: DownloadBuildArtifacts@0
+        displayName: Download Xamarin Test Reports
+        inputs:
+          downloadPath: xamarinintegrationtests/TestResults
+          downloadType: single
+          artifactName: Xamarin Test Report
+          itemPattern: |
+            Xamarin Test Report/*.json
+
+      - task: ShellScript@2
+        displayName: Create html report
+        inputs:
+          scriptPath: xamarinintegrationtests/buildscripts/07_generate_html_report.sh
+
+      - task: PublishHtmlReport@1
+        displayName: 'Publish HTML Report'
+        inputs:
+          reportDir: 'xamarinintegrationtests/$(test_report_html_path)'
