@@ -15,13 +15,13 @@ namespace NHSOnline.App.Controls.WebViews
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(WebIntegrationWebView));
         private static JsonSerializerSettings Settings { get; } = CreateJsonSerializerSettings();
 
-        public static readonly BindableProperty RedirectToNhsAppPageCommandProperty =
+        public static readonly BindableProperty GoToNhsAppPageCommandProperty =
             BindableProperty.Create(
-                nameof(RedirectToNhsAppPageCommand),
+                nameof(GoToNhsAppPageCommand),
                 typeof(AsyncCommand<string>),
                 typeof(WebIntegrationWebView));
 
-        public void RedirectToNhsAppPage(string argument) => RedirectToNhsAppPageCommand.Execute(argument);
+        public void GoToNhsAppPage(string argument) => GoToNhsAppPageCommand.Execute(argument);
 
         public static readonly BindableProperty AddEventToCalendarCommandProperty =
             BindableProperty.Create(nameof(AddEventToCalendarCommand), typeof(AsyncCommand<AddEventToCalendarRequest>), typeof(WebIntegrationWebView));
@@ -29,10 +29,10 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty StartDownloadCommandProperty =
             BindableProperty.Create(nameof(StartDownloadCommand), typeof(AsyncCommand<DownloadRequest>), typeof(WebIntegrationWebView));
 
-        public AsyncCommand<string> RedirectToNhsAppPageCommand
+        public AsyncCommand<string> GoToNhsAppPageCommand
         {
-            get => (AsyncCommand<string>) GetValue(RedirectToNhsAppPageCommandProperty);
-            set => SetValue(RedirectToNhsAppPageCommandProperty, value);
+            get => (AsyncCommand<string>) GetValue(GoToNhsAppPageCommandProperty);
+            set => SetValue(GoToNhsAppPageCommandProperty, value);
         }
 
         public AsyncCommand<DownloadRequest> StartDownloadCommand

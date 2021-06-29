@@ -1,6 +1,6 @@
 import store from '@/store';
 import router from '@/router';
-import { REDIRECT_PARAMETER } from '@/router/names';
+import { REDIRECT_PAGE_PARAMETER, REDIRECT_PARAMETER } from '@/router/names';
 import { INTERSTITIAL_REDIRECTOR_PATH } from '@/router/paths';
 import { isBlankString, redirectTo } from '@/lib/utils';
 
@@ -74,6 +74,11 @@ const NativeAppCallbacksPlugin = {
           const query = { [REDIRECT_PARAMETER]: encodedUri };
           redirectTo({ $router: router, $store: store }, path, query, true);
         }
+      },
+      navigateToAppPage(page) {
+        const path = `/${INTERSTITIAL_REDIRECTOR_PATH}`;
+        const query = { [REDIRECT_PAGE_PARAMETER]: page };
+        redirectTo({ $router: router, $store: store }, path, query, true);
       },
       appVersionUpdateNativeVersion(versionNumber) {
         store.dispatch('appVersion/updateNativeVersion', versionNumber);

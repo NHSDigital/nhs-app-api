@@ -13,7 +13,7 @@ namespace NHSOnline.App.Navigation
         Task MoreRequested();
         Task MessagesRequested();
 
-        Task RedirectToNhsAppPageRequested(string page);
+        Task GoToNhsAppPageRequested(string page);
         Task RedirectToDeepLinkRequested(Uri deeplinkUrl);
     }
 }

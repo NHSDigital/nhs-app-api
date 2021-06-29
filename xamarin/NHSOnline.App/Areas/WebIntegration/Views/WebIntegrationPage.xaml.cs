@@ -36,9 +36,9 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
         private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
 
-        public Func<string, Task>? RedirectToNhsAppPageRequested { get; set; }
-        public AsyncCommand<string> RedirectToNhsAppPageCommand
-            => new AsyncCommand<string>(() => RedirectToNhsAppPageRequested);
+        public Func<string, Task>? GoToNhsAppPageRequested { get; set; }
+        public AsyncCommand<string> GoToNhsAppPageCommand
+            => new AsyncCommand<string>(() => GoToNhsAppPageRequested);
 
         public Func<AddEventToCalendarRequest, Task>? AddEventToCalendarRequested { get; set; }
         public AsyncCommand<AddEventToCalendarRequest> AddEventToCalendarCommand

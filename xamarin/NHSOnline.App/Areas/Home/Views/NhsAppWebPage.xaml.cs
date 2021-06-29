@@ -210,11 +210,11 @@ namespace NHSOnline.App.Areas.Home.Views
             await WebView.NavigateToRedirector(targetUrl).ResumeOnThreadPool();
         }
 
-        public async Task NavigateToRedirectedPathWithinApp(string spaPath)
+        public async Task NavigateToAppPage(string page)
         {
             WebView.Focus();
             WebView.AccessibilityFocus();
-            await WebView.NavigateToRedirectedPathWithinApp(spaPath).ResumeOnThreadPool();
+            await WebView.NavigateToAppPage(page).ResumeOnThreadPool();
         }
 
         public async Task SendNotificationsStatus(string status)

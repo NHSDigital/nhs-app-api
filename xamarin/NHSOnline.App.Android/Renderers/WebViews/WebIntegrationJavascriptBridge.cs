@@ -20,7 +20,7 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         [Export("goToPage")]
         public void GoToPage(string page)
         {
-            NhsAppResilience.ExecuteOnMainThread(() => _webIntegrationWebView.RedirectToNhsAppPage(page));
+            NhsAppResilience.ExecuteOnMainThread(() => _webIntegrationWebView.GoToNhsAppPage(page));
         }
 
         [JavascriptInterface]

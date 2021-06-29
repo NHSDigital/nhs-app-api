@@ -24,7 +24,7 @@ namespace NHSOnline.App.Areas.WebIntegration
             Func<Task>? MoreRequested { get; set; }
             Func<Task>? MessagesRequested { get; set; }
 
-            Func<string, Task>? RedirectToNhsAppPageRequested { get; set; }
+            Func<string, Task>? GoToNhsAppPageRequested { get; set; }
             Func<Uri, Task>? DeepLinkRequested { get; set; }
 
             Func<AddEventToCalendarRequest, Task>? AddEventToCalendarRequested { get; set; }

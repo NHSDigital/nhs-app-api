@@ -71,7 +71,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                 .RegisterHandler(
                     model.NavigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler)
                 .RegisterHandler<string>(
-                    RedirectToNhsAppPageRequested, (view, handler) => view.RedirectToNhsAppPageRequested = handler)
+                    GoToNhsAppPageRequested, (view, handler) => view.GoToNhsAppPageRequested = handler)
                 .RegisterPermanentHandler<Uri>(DeeplinkRequested,
                     (view, handler) => view.DeepLinkRequested = handler)
                 .RegisterHandler<AddEventToCalendarRequest>(AddEventToCalendarRequested,
@@ -81,11 +81,11 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
         }
 
-        private async Task RedirectToNhsAppPageRequested(string page)
+        private async Task GoToNhsAppPageRequested(string page)
         {
-            _logger.LogInformation("Redirecting to NHS App Page - {page}", page);
+            _logger.LogInformation("Going to NHS App Page - {page}", page);
 
-            await _model.NavigationHandler.RedirectToNhsAppPageRequested(page).PreserveThreadContext();
+            await _model.NavigationHandler.GoToNhsAppPageRequested(page).PreserveThreadContext();
         }
 
         private async Task<Task> StartDownloadRequested(DownloadRequest downloadRequest)

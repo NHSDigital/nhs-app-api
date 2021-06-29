@@ -47,7 +47,7 @@ namespace NHSOnline.App.Areas.Home
         NavigationFooterItem SelectedNavigationFooterItem { get; set; }
 
         void GoToUri(Uri uri);
-        Task NavigateToRedirectedPathWithinApp(string spaPath);
+        Task NavigateToAppPage(string page);
         Task NavigateToAdvice();
         Task NavigateToAppointments();
         Task NavigateToPrescriptions();

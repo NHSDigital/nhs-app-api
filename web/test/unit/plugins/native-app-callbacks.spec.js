@@ -129,6 +129,16 @@ describe('native-app-callbacks', () => {
     });
   });
 
+  describe('navigateToAppPage', () => {
+    beforeEach(() => {
+      redirectTo.mockClear();
+      window.nativeAppCallbacks.navigateToAppPage('APageToNavigateTo');
+    });
+    it('will redirectTo the redirector with APageToNavigateTo as a redirect_to_page query parameter', () => {
+      expect(redirectTo).toHaveBeenCalledWith({ $router: router, $store: store }, '/redirector', { redirect_to_page: 'APageToNavigateTo' }, true);
+    });
+  });
+
   describe('appVersionUpdateNativeVersion', () => {
     it('will call store appVersion/updateNativeVersion', () => {
       const payload = {};

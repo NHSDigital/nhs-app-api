@@ -55,10 +55,9 @@ namespace NHSOnline.App.Areas.Home.Presenters
             return Task.CompletedTask;
         }
 
-        public Task RedirectToNhsAppPageRequested(string page)
+        public Task GoToNhsAppPageRequested(string page)
         {
-            // TODO deal with homepage mapping to route as part of NHSO-10645
-            _view.NavigateToRedirectedPathWithinApp(page == "homePage" ? "/": page);
+            _view.NavigateToAppPage(page);
             return Task.CompletedTask;
         }
 

@@ -29,6 +29,7 @@
       <br />
       <input class="nhsuk-button" id="goToPage" type="button" value="Go To Page" onclick="goToPageCall()" />
     </div>
+    <input class="nhsuk-button" id="goToInvalidPage" type="button" value="Go To Invalid Page" onClick="goToInvalidPageCall()" />
     <script>
       var script = document.createElement("script");
 
@@ -52,6 +53,10 @@
         var selection = document.getElementById("goToPageSelection");
         var selectedPage = selection.options[selection.selectedIndex].text;
         nhsapp.navigation.goToPage(nhsapp.navigation.AppPage[selectedPage]);
+      }
+
+      this.goToInvalidPageCall = function() {
+        nhsapp.navigation.goToPage('INVALID_GO_TO_PAGE');
       }
 
       document.head.appendChild(script);

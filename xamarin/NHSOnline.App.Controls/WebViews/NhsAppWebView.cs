@@ -245,12 +245,8 @@ namespace NHSOnline.App.Controls.WebViews
         public async Task NavigateToRedirector(Uri targetUrl)
             => await EvaluateJavaScriptAsync($"window.nativeAppCallbacks.redirectToTargetUrl('{targetUrl}')").ResumeOnThreadPool();
 
-        public async Task NavigateToRedirectedPathWithinApp(string spaPath)
-        {
-            var callbackName = "window.nativeAppCallbacks.navigationGoTo";
-            var argumentJson = ConvertToJsonString(spaPath);
-            await EvaluateJavaScriptAsync($"{callbackName}({argumentJson})").ResumeOnThreadPool();
-        }
+        public async Task NavigateToAppPage(string page)
+            => await EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigateToAppPage('{page}')").ResumeOnThreadPool();
 
         private static T ConvertFromJsonString<T>(string json)
             => JsonConvert.DeserializeObject<T>(json, Settings) ?? throw new ArgumentException($"Failed to deserialise JSON to {typeof(T).FullName}", nameof(json));
