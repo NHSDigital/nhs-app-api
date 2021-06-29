@@ -112,6 +112,7 @@ paths:
         Use this endpoint to send an in-app message to one or more NHS App users.
 
         Recipients are specified by NHS number. A single request to this endpoint can send an identical message to between 1 and 100 distinct NHS numbers.
+        In-app messages will only be sent to users who have had their identity verified to 'high' (P9) level.
 
         We support a subset of [Markdown](https://en.wikipedia.org/wiki/Markdown) for describing the body text of in-app messages. The length of each in-app message is limited to 5000 characters, including any markdown characters and embedded hyperlinks.
 
@@ -202,7 +203,7 @@ paths:
                   value:
                     $ref: components/examples/responses/communication/401invalidAccessToken.json
         "403":
-          description: You are not authorised to perform this operation. For example, some onboarded client Apps may be permitted to send Push Notifications but not In-App Messages, or vice versa.
+          description: You are not authorised to perform this operation. For example, some onboarded client Apps may be permitted to send Push Notifications but not In-app Messages, or vice versa.
           headers:
             X-Correlation-ID:
               schema:
@@ -238,6 +239,7 @@ paths:
         Use this endpoint to send a native Apple or Android push notifications to mobile devices registered by specific users of the NHS App.
 
         Recipients are specified by NHS number. A single request to this endpoint can send an identical push notification to between 1 and 100 distinct NHS numbers.
+        Push notifications will only be sent to users who have had their identity verified to 'high' (P9) level.
 
         The body text of notifications can be up to 200 characters in length.
 
@@ -336,7 +338,7 @@ paths:
                   value:
                     $ref: components/examples/responses/communication/401invalidAccessToken.json
         "403":
-          description: You are not authorised to perform this operation. For example, some onboarded client Apps may be permitted to send Push Notifications but not In-App Messages, or vice versa.
+          description: You are not authorised to perform this operation. For example, some onboarded client Apps may be permitted to send Push Notifications but not In-app Messages, or vice versa.
           headers:
             X-Correlation-ID:
               schema:
@@ -372,6 +374,7 @@ paths:
         Use this endpoint to send an in-app message followed immediately by an associated native Apple or Android push notification to one or more NHS App users.
 
         Recipients are specified by NHS number. A single request to this endpoint can send an identical message and push notification to between 1 and 100 distinct NHS numbers.
+        In-app messages and push notifications will only be sent to users who have had their identity verified to 'high' (P9) level.
 
         If a recipient is an active NHS App user but has not registered a device to receive native push notifications, they will still receive the in-app message.
 
@@ -466,7 +469,7 @@ paths:
                   value:
                     $ref: components/examples/responses/communication/401invalidAccessToken.json
         "403":
-          description: You are not authorised to perform this operation. For example, some onboarded client Apps may be permitted to send Push Notifications but not In-App Messages, or vice versa.
+          description: You are not authorised to perform this operation. For example, some onboarded client Apps may be permitted to send Push Notifications but not In-app Messages, or vice versa.
           headers:
             X-Correlation-ID:
               schema:
@@ -506,6 +509,7 @@ paths:
           * native Apple or Android push notifications to mobile devices registered by specific users of the NHS App
 
         Recipients are specified by NHS number. A single communication request can be sent to between 1 and 100 distinct NHS numbers.
+        In-app messages and push notifications will only be sent to users who have had their identity verified to 'high' (P9) level.
       requestBody:
         required: true
         content:
@@ -624,7 +628,7 @@ paths:
                   value:
                     $ref: components/examples/responses/communication/401invalidApiKeyForResource.json
         "403":
-          description: You are not authorised to perform this operation. For example, some onboarded client Apps may be permitted to send Push Notifications but not In-App Messages, or vice versa.
+          description: You are not authorised to perform this operation. For example, some onboarded client Apps may be permitted to send Push Notifications but not In-app Messages, or vice versa.
           headers:
             X-Correlation-ID:
               schema:
