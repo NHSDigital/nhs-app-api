@@ -1,7 +1,5 @@
-# Default CID Ingress -- App Publishing Namespace
-# Links to the Default CID Svc in App Publishing Namespace
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:

@@ -1,5 +1,3 @@
-# Default CID Ingress
-# Targets the correct pods running our release via podSelector
 ---
 apiVersion: v1
 kind: Service
