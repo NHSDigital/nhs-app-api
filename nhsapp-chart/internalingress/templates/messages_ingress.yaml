@@ -17,14 +17,20 @@ spec:
     - host: api-cold.{{ .Values.zone }}.{{ .Values.domain }}
       http:
         paths:
-          - backend:
-              serviceName: cold-messages
-              servicePort: {{ .Values.defaultServicePort }}
-            path: /v[1,2]/api/users/me/messages
-          - backend:
-              serviceName: cold-messages
-              servicePort: {{ .Values.defaultServicePort }}
-            path: /v[1,2]/api/users/.{36}/messages
+          - path: /v[1,2]/api/users/me/messages
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: cold-messages
+                port:
+                  number: {{ .Values.defaultServicePort }}
+          - path: v[1,2]/api/users/.{36}/messages
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: cold-messages
+                port:
+                  number: {{ .Values.defaultServicePort }}
   tls:
     - hosts:
         - api-cold.{{ $.Values.zone }}.{{ $.Values.domain }}

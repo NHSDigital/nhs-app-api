@@ -21,10 +21,14 @@ spec:
     - host: cid-cold.{{ $.Values.zone }}.{{ $.Values.domain }}
       http:
         paths:
-          - backend:
-              serviceName: cold-cid
-              servicePort: {{ $.Values.defaultServicePort }}
-            path: /
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: cold-cid
+                port:
+                  number: {{ $.Values.defaultServicePort }}
+           
   tls:
     - hosts:
         - cid-cold.{{ $.Values.zone }}.{{ $.Values.domain }}

@@ -16,34 +16,55 @@ spec:
     - host: api{{ .Values.environmentPrivateHostSuffix }}
       http:
         paths:
-          - backend:
-              serviceName: default-api
-              servicePort: {{ .Values.defaultServicePort }}
-            path: /
-          - backend:
-              serviceName: default-info
-              servicePort: {{ .Values.defaultServicePort }}
-            path: /v[1,2]/api/users/info
-          - backend:
-              serviceName: default-info
-              servicePort: {{ .Values.defaultServicePort }}
-            path: /v[1,2]/api/users/me/info
-          - backend:
-              serviceName: default-messages
-              servicePort: {{ .Values.defaultServicePort }}
-            path: /v[1,2]/api/users/me/messages
-          - backend:
-              serviceName: default-messages
-              servicePort: {{ .Values.defaultServicePort }}
-            path: /v[1,2]/api/users/([A-Fa-f0-9-]{36})/messages
-          - backend:
-              serviceName: default-logger
-              servicePort: {{ .Values.defaultServicePort }}
-            path: /v1/api/log
-          - backend:
-              serviceName: default-users
-              servicePort: {{ .Values.defaultServicePort }}
-            path: /v[1,2]/api/users
+          - path: / 
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: default-api
+                port:
+                  number: {{ .Values.defaultServicePort }}
+          - path: /v[1,2]/api/users/info
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: default-info
+                port:
+                  number: {{ .Values.defaultServicePort }}
+          - path: /v[1,2]/api/users/me/info
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: default-info
+                port:
+                 number: {{ .Values.defaultServicePort }}
+          - path: /v[1,2]/api/users/me/messages
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: default-messages
+                port:
+                  number: {{ .Values.defaultServicePort }}
+          - path: /v[1,2]/api/users/([A-Fa-f0-9-]{36})/messages
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: default-messages
+                port:
+                  number: {{ .Values.defaultServicePort }}
+          - path: /v1/api/log
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: default-logger
+                port:
+                  number: {{ .Values.defaultServicePort }}
+          - path:  /v[1,2]/api/users
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: default-users
+                port:
+                  number: {{ .Values.defaultServicePort }}
   tls:
     - hosts:
         - api{{ .Values.environmentPrivateHostSuffix }}

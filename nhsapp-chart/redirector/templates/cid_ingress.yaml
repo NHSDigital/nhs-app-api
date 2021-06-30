@@ -19,10 +19,13 @@ spec:
     - host: cid{{ .Values.environmentPublicHostSuffix }}
       http:
         paths:
-          - backend:
-              serviceName: default-cid
-              servicePort: {{ .Values.defaultServicePort }}
-            path: /
+          - path: /
+            pathType: ImplementationSpecific 
+            backend:
+              service:
+                name: default-cid
+                port:
+                  number: {{ .Values.defaultServicePort }}
   tls:
     - hosts:
         - cid{{ .Values.environmentPublicHostSuffix }}

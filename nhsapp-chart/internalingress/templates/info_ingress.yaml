@@ -17,14 +17,20 @@ spec:
     - host: api-cold.{{ .Values.zone }}.{{ .Values.domain }}
       http:
         paths:
-          - backend:
-              serviceName: cold-info
-              servicePort: {{ .Values.defaultServicePort }}
-            path: /v[1,2]/api/users/info
-          - backend:
-              serviceName: cold-info
-              servicePort: {{ .Values.defaultServicePort }}
-            path: /v[1,2]/api/users/me/info
+          - path: /v[1,2]/api/users/info
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                  name:: cold-info
+                    port:
+                      number: {{ .Values.defaultServicePort }}
+          - path: /v[1,2]/api/users/me/info
+            pathType: ImplementationSpecific
+            backend:
+             service:
+              name: cold-info
+              port:
+                number: {{ .Values.defaultServicePort }}
   tls:
     - hosts:
         - api-cold.{{ .Values.zone }}.{{ .Values.domain }}

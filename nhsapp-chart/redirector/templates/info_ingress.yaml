@@ -16,14 +16,20 @@ spec:
     - host: api{{ .Values.environmentPublicHostSuffix }}
       http:
         paths:
-          - backend:
-              serviceName: default-info
-              servicePort: {{ .Values.defaultServicePort }}
-            path: /v[1,2]/api/users/info
-          - backend:
-              serviceName: default-info
-              servicePort: {{ .Values.defaultServicePort }}
-            path: /v[1,2]/api/users/me/info
+          - path: /v[1,2]/api/users/info
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: default-info
+                port:
+                  number: {{ .Values.defaultServicePort }}
+          - path: /v[1,2]/api/users/me/info
+            pathType: ImplementationSpecific 
+            backend:
+              service:
+               name: default-info
+               port:
+                 number: {{ .Values.defaultServicePort }}
   tls:
     - hosts:
         - api{{ .Values.environmentPublicHostSuffix }}

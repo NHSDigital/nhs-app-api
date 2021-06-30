@@ -16,10 +16,13 @@ spec:
     - host: api{{ .Values.environmentPublicHostSuffix }}
       http:
         paths:
-          - backend:
-              serviceName: default-logger
-              servicePort: {{ .Values.defaultServicePort }}
-            path: /v1/api/log
+          - path: /v1/api/log
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: default-logger
+                port:
+                  number: {{ .Values.defaultServicePort }}
   tls:
     - hosts:
         - api{{ .Values.environmentPublicHostSuffix }}

@@ -18,10 +18,13 @@ spec:
     - host: cdsswiremock-{{ $.Values.global.environment | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}
       http:
         paths:
-          - backend:
-              serviceName: {{ template "nhsapp.name" . }}-cdsswiremock-{{ .Chart.AppVersion | replace "." "-" }}
-              servicePort: {{ $.Values.sidecar_proxy.containerPort }}
-            path: /
+          - path: /
+            pathType: ImplementationSpecific 
+            backend:
+              service:
+                name: {{ template "nhsapp.name" . }}-cdsswiremock-{{ .Chart.AppVersion | replace "." "-" }}
+                port:
+                  number: {{ $.Values.sidecar_proxy.containerPort }}
   tls:
     - hosts:
       - cdsswiremock-{{ $.Values.global.environment | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}

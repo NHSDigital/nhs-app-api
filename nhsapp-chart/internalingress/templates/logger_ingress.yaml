@@ -17,11 +17,14 @@ spec:
     - host: api-cold.{{ .Values.zone }}.{{ .Values.domain }}
       http:
         paths:
-          - backend:
-              serviceName: cold-logger
-              servicePort: {{ $.Values.defaultServicePort }}
-            path: /v[1,2]/api/log
-  tls:
+          - path: /v[1,2]/api/log
+            pathType: ImplementationSpecific
+            backend:
+              service:
+              name: cold-logger
+              port:
+                number: {{ $.Values.defaultServicePort }}
+tls:
     - hosts:
         - api-cold.{{ .Values.zone }}.{{ .Values.domain }}
       secretName: {{ $.Values.zone }}-{{ $.Values.domain | replace "." "-" }}

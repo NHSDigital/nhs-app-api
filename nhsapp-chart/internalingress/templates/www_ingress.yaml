@@ -24,10 +24,13 @@ spec:
     - host: www-cold.{{ $.Values.zone }}.{{ $.Values.domain }}
       http:
         paths:
-          - backend:
-              serviceName: cold-www
-              servicePort: {{ $.Values.defaultServicePort }}
-            path: /
+         - path: /
+           pathType: ImplementationSpecific
+           backend:
+            service:
+              name: cold-www
+              port:
+                number: {{ $.Values.defaultServicePort }}
   tls:
     - hosts:
         - www-cold.{{ $.Values.zone }}.{{ $.Values.domain }}

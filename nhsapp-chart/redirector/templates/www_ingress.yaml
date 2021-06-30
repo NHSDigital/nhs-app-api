@@ -22,10 +22,13 @@ spec:
     - host: www{{ .Values.environmentPublicHostSuffix }}
       http:
         paths:
-          - backend:
-              serviceName: default-www
-              servicePort: {{ .Values.defaultServicePort }}
-            path: /
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: default-www
+                port:
+                  number: {{ .Values.defaultServicePort }}
   tls:
     - hosts:
         - www{{ .Values.environmentPublicHostSuffix }}
