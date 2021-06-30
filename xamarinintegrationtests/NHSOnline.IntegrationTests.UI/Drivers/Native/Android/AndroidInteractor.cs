@@ -44,7 +44,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             _nativeDriverContext.SwitchToNativeContext();
             _interactor.ActOnDriver((driver, _) => driver.PressKeyCode(AndroidKeyCode.Keycode_TAB, AndroidKeyCode.MetaShift_ON));
         }
-        
+
         void IAndroidInteractor.TouchScreenCentre()
         {
             _nativeDriverContext.SwitchToNativeContext();

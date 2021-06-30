@@ -16,21 +16,21 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         private IOSNavigationBar FullNavigationFooter => IOSNavigationBar.WithName(_driver, "NHS App Full Navigation Footer");
 
-        private IOSIcon HomeIcon => FullNavigationHeader.ContainingButtonWithName("Home");
+        private IOSAppIcon HomeAppIcon => FullNavigationHeader.ContainingButtonWithName("Home");
 
-        private IOSIcon HelpIcon => FullNavigationHeader.ContainingButtonWithName("Help");
+        private IOSAppIcon HelpAppIcon => FullNavigationHeader.ContainingButtonWithName("Help");
 
-        private IOSIcon MoreIcon => FullNavigationHeader.ContainingButtonWithName("More");
+        private IOSAppIcon MoreAppIcon => FullNavigationHeader.ContainingButtonWithName("More");
 
-        private IOSIcon AdviceIcon => FullNavigationFooter.ContainingButtonWithName("Advice");
+        private IOSAppIcon AdviceAppIcon => FullNavigationFooter.ContainingButtonWithName("Advice");
 
-        private IOSIcon AppointmentsIcon => FullNavigationFooter.ContainingButtonWithName("Appointments");
+        private IOSAppIcon AppointmentsAppIcon => FullNavigationFooter.ContainingButtonWithName("Appointments");
 
-        private IOSIcon PrescriptionsIcon => FullNavigationFooter.ContainingButtonWithName("Prescriptions");
+        private IOSAppIcon PrescriptionsAppIcon => FullNavigationFooter.ContainingButtonWithName("Prescriptions");
 
-        private IOSIcon YourHealthIcon => FullNavigationFooter.ContainingButtonWithName("Your health");
+        private IOSAppIcon YourHealthAppIcon => FullNavigationFooter.ContainingButtonWithName("Your health");
 
-        private IOSIcon MessagesIcon => FullNavigationFooter.ContainingButtonWithName("Messages");
+        private IOSAppIcon MessagesAppIcon => FullNavigationFooter.ContainingButtonWithName("Messages");
 
         internal void AssertNavigationPresent()
         {
@@ -40,81 +40,81 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         public void AssertNoIconsSelected()
         {
-            AdviceIcon.AssertNotSelected();
-            AppointmentsIcon.AssertNotSelected();
-            YourHealthIcon.AssertNotSelected();
-            MessagesIcon.AssertNotSelected();
-            PrescriptionsIcon.AssertNotSelected();
+            AdviceAppIcon.AssertNotSelected();
+            AppointmentsAppIcon.AssertNotSelected();
+            YourHealthAppIcon.AssertNotSelected();
+            MessagesAppIcon.AssertNotSelected();
+            PrescriptionsAppIcon.AssertNotSelected();
         }
 
         public void NavigateToHome()
         {
-            HomeIcon.Click();
+            HomeAppIcon.Click();
         }
 
         public void NavigateToMore()
         {
-            MoreIcon.Click();
+            MoreAppIcon.Click();
         }
 
         public void NavigateToHelp()
         {
-            HelpIcon.Click();
+            HelpAppIcon.Click();
         }
 
         public void NavigateToAdvice()
         {
-            AdviceIcon.Click();
+            AdviceAppIcon.Click();
         }
 
         public void NavigateToAppointments()
         {
-            AppointmentsIcon.Click();
+            AppointmentsAppIcon.Click();
         }
 
         public void NavigateToPrescriptions()
         {
-            PrescriptionsIcon.Click();
+            PrescriptionsAppIcon.Click();
         }
 
         public void NavigateToYourHealth()
         {
-            YourHealthIcon.Click();
+            YourHealthAppIcon.Click();
         }
 
         public void NavigateToMessages()
         {
-            MessagesIcon.Click();
+            MessagesAppIcon.Click();
         }
 
         public void AssertAdviceSelected()
         {
-            AdviceIcon.AssertSelected();
+            AdviceAppIcon.AssertSelected();
         }
 
         public void AssertAppointmentsSelected()
         {
-            AppointmentsIcon.AssertSelected();
+            AppointmentsAppIcon.AssertSelected();
         }
 
         public void AssertAppointmentsNotSelected()
         {
-            AppointmentsIcon.AssertNotSelected();
+            AppointmentsAppIcon.AssertNotSelected();
         }
 
         public void AssertPrescriptionsSelected()
         {
-            PrescriptionsIcon.AssertSelected();
+            PrescriptionsAppIcon.AssertSelected();
         }
 
         public void AssertYourHealthSelected()
         {
-            YourHealthIcon.AssertSelected();
+            YourHealthAppIcon.AssertSelected();
         }
 
         public void AssertMessagesSelected()
         {
-            MessagesIcon.AssertSelected();
+            MessagesAppIcon.AssertSelected();
         }
     }
 }

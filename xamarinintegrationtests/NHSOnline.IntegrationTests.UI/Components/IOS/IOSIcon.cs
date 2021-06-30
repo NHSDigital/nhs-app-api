@@ -24,19 +24,13 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
         public void Click()
             => ActOnElement(e => e.Click(), FindBy);
 
-        public void AssertSelected()
-            => ActOnElement(e => e.GetAttribute("value").Should().Be("1", "a selected icon with value {1} should be displayed"), FindBy);
-
-        public void AssertNotSelected()
-            => ActOnElement(e => e.GetAttribute("value").Should().BeNullOrEmpty(), FindBy);
+        private void ActOnElement(Action<IOSElement> action, By findBy)
+            => _interactor.ActOnElement(findBy, action);
 
         public void AssertVisible()
             => ActOnElement(e => e.Displayed.Should().BeTrue("an icon with name {1} should be displayed", _name), FindBy );
 
-        private void ActOnElement(Action<IOSElement> action, By findBy)
-            => _interactor.ActOnElement(findBy, action);
-
         private By FindBy
-            => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeButton' AND name == {_name.QuotePredicateLiteral()}");
+            => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeIcon' AND name == {_name.QuotePredicateLiteral()}");
     }
 }

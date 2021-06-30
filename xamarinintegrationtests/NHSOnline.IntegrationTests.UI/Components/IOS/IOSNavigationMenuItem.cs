@@ -25,7 +25,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
         public static IOSNavigationMenuItem WithIconDescriptionAndText(IIOSInteractor interactor, string iconDescription, string text)
             => new IOSNavigationMenuItem(interactor, iconDescription, text);
 
-        private IOSIcon Icon => IOSIcon.WithName(_containedInteractor, _iconDescription);
+        private IOSAppIcon AppIcon => IOSAppIcon.WithName(_containedInteractor, _iconDescription);
         private IOSLabel Label => IOSLabel.WithText(_containedInteractor, _text);
 
         public void Click()
@@ -34,7 +34,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
         public void AssertVisible()
         {
             ActOnElement(e => e.Displayed.Should().BeTrue("a button with text {1} should be displayed", _text));
-            Icon.AssertVisible();
+            AppIcon.AssertVisible();
             Label.AssertVisible();
         }
 

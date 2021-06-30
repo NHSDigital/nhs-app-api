@@ -21,6 +21,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         private WebLink FileUploadLink => WebLink.WithText(_interactor, "File upload");
 
+        private WebLink DownloadFileLink => WebLink.WithText(_interactor, "Download document");
+
         private WebLink CalendarLink => WebLink.WithText(_interactor, "Calendar");
 
         private WebLink LocationServicesLink => WebLink.WithText(_interactor, "Location services");
@@ -29,7 +31,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
         {
             FileUploadLink,
             CalendarLink,
-            LocationServicesLink
+            LocationServicesLink,
+            DownloadFileLink
         };
 
         internal void AssertOnPage() => TitleText.AssertVisible();
@@ -38,6 +41,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
             Assert.IsTrue(_interactor.GetUserAgent().Contains(platform.UserAgentDeviceTypePrefix(), StringComparison.InvariantCulture));
 
         public void NavigateToFileUpload() => FileUploadLink.Click();
+
+        public void NavigateDownloadFile() => DownloadFileLink.Click();
 
         public void NavigateToCalendar() => CalendarLink.Click();
 
