@@ -1,4 +1,5 @@
-using System;
+using System.Text.RegularExpressions;
+using FluentAssertions;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Components.IOS;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -23,14 +24,16 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             using var timeout = ExtendedTimeout.FromSeconds(10);
             return AssertDisplayed(
                 driver,
-                $"Allow “NHS App BrowserStack” to access your location?{Environment.NewLine}" +
+                @"Allow “NHS App BrowserStack” to (access|use) your location\?\n" +
                 "We need to know where you are so we can find services near you to help.");
         }
 
-        private static IOSLocationServicesPermissionDialog AssertDisplayed(IIOSDriverWrapper driver, string text)
+        private static IOSLocationServicesPermissionDialog AssertDisplayed(IIOSDriverWrapper driver, string expectedText)
         {
-            var dialog = new IOSLocationServicesPermissionDialog(driver, text);
-            dialog.Alert.AssertText();
+            var dialog = new IOSLocationServicesPermissionDialog(driver, expectedText);
+            var alertText = dialog.Alert.Text();
+            Regex.IsMatch(alertText, expectedText).Should().BeTrue(
+                $"Expected alert to match regex: '{expectedText}'. But was: '{alertText}'");
             return dialog;
         }
 

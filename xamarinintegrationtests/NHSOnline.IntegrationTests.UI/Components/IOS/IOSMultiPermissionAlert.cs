@@ -28,6 +28,13 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
 
         public void AssertText() => _interactor.ActOnDriver(driver => driver.SwitchTo().Alert().Text.Should().Be(_text));
 
+        public string Text()
+        {
+            var text = "";
+            _interactor.ActOnDriver(driver => text = driver.SwitchTo().Alert().Text);
+            return text;
+        }
+
         public void AcceptAllowOnce() => _interactor.ActOnElement(AllowOnceFindBy, e => e.Click());
 
         public void DoNotAllow() => _interactor.ActOnElement(DenyFindBy, e => e.Click());
