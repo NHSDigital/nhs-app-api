@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 TAGS_NEVER_RUN=(bug pending manual tech-debt)
-TAGS_TRANCHE_RUN=(organ-donation prescription appointments my-record)
+TAGS_TRANCHE_RUN=(organ-donation prescription appointments my-record backend silverintegration backend silverIntegration)
 TAGS_CUSTOM_RUN=(native accessibility long-running appointments-book)
 
 TAGS_NATIVE_CUSTOM_RUN=(long-running)
