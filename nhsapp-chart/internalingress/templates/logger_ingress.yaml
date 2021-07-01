@@ -24,7 +24,7 @@ spec:
                 name: cold-logger
                 port:
                   number: {{ $.Values.defaultServicePort }}
-tls:
+  tls:
     - hosts:
         - api-cold.{{ .Values.zone }}.{{ .Values.domain }}
       secretName: {{ $.Values.zone }}-{{ $.Values.domain | replace "." "-" }}

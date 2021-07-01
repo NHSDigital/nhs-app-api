@@ -24,7 +24,7 @@ spec:
                 name: cold-messages
                 port:
                   number: {{ .Values.defaultServicePort }}
-          - path: v[1,2]/api/users/.{36}/messages
+          - path: /v[1,2]/api/users/.{36}/messages
             pathType: ImplementationSpecific
             backend:
               service:
