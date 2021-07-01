@@ -21,9 +21,9 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-              name: cold-logger
-              port:
-                number: {{ $.Values.defaultServicePort }}
+                name: cold-logger
+                port:
+                  number: {{ $.Values.defaultServicePort }}
 tls:
     - hosts:
         - api-cold.{{ .Values.zone }}.{{ .Values.domain }}
