@@ -20,10 +20,10 @@ spec:
           - path: /v[1,2]/api/users/info
             pathType: ImplementationSpecific
             backend:
-              service:
-                  name:: cold-info
-                    port:
-                      number: {{ .Values.defaultServicePort }}
+             service:
+               name: cold-info
+               port:
+                number: {{ .Values.defaultServicePort }}
           - path: /v[1,2]/api/users/me/info
             pathType: ImplementationSpecific
             backend:
