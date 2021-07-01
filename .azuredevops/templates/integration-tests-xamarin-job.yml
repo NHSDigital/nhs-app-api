@@ -100,6 +100,16 @@ jobs:
         inputs:
           scriptPath: xamarinintegrationtests/buildscripts/06_generate_integration_test_result_json.sh
 
+      - task: PublishPipelineArtifact@1
+        displayName: Publish Xamarin Integration Test Artifacts
+        condition: and(succeededOrFailed(), eq(variables['integration.tests.results.exists'], 'True'))
+        inputs:
+          targetPath: 'xamarinintegrationtests/TestResults'
+          ${{ if eq(parameters['runUpgradeTests'], true) }}:
+            artifactName: 'Xamarin Integration Upgrade Test Files'
+          ${{ if eq(parameters['runUpgradeTests'], false) }}:
+            artifactName: 'Xamarin Integration Test Files'
+
       - task: PublishTestResults@2
         displayName: Publish Test Results
         condition: and(succeededOrFailed(), eq(variables['integration.tests.results.exists'], 'True'))
