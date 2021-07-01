@@ -9,7 +9,6 @@ describe('middleware/urlResolution', () => {
         $env: {
           URI_FORMAT_API_CLIENT: 'http://api{host}',
           URI_FORMAT_CID_REDIRECT_WEB: 'http://web{host}',
-          URI_FORMAT_CID_REDIRECT_NATIVE: 'nhsapp://web{host}',
         },
       },
       next: jest.fn(),
@@ -35,10 +34,6 @@ describe('middleware/urlResolution', () => {
 
       it('will correctly set the CID_REDIRECT_URI', () => {
         expect(context.store.$env.CID_REDIRECT_URI).toBe('http://web.local.bitraft.io');
-      });
-
-      it('will correctly set the NATIVE_CID_REDIRECT_URI', () => {
-        expect(context.store.$env.NATIVE_CID_REDIRECT_URI).toBe('nhsapp://web.local.bitraft.io');
       });
     });
   });

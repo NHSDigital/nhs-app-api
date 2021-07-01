@@ -8,7 +8,6 @@ describe('Authorisation Service', () => {
 
   beforeEach(() => {
     environment = {
-      NATIVE_CID_REDIRECT_URI: 'mock native cid redirect uri',
       CID_REDIRECT_URI: 'mock cid redirect uri',
       CID_CLIENT_ID: 'mock cid client ID',
       CID_AUTH_ENDPOINT: 'mock cid auth endpoint',
@@ -32,7 +31,6 @@ describe('Authorisation Service', () => {
       authorisationService = createService();
       ({ request } = authorisationService.generateLoginUrl(
         {
-          isNativeApp: true,
           cookies,
           fidoAuthResponse,
         },
@@ -40,7 +38,7 @@ describe('Authorisation Service', () => {
     });
 
     it('puts the correct redirect URI in the cookie', () => {
-      expect(cookies.b.redirectUri).toEqual(`${environment.NATIVE_CID_REDIRECT_URI}/auth-return`);
+      expect(cookies.b.redirectUri).toEqual(`${environment.CID_REDIRECT_URI}/auth-return`);
     });
 
     it('adds a verifier to the cookie in the request', () => {
@@ -67,7 +65,6 @@ describe('Authorisation Service', () => {
       beforeEach(() => {
         ({ request } = authorisationService.generateLoginUrl(
           {
-            isNativeApp: false,
             cookies,
             redirectTo: 'url',
             fidoAuthResponse,
@@ -86,7 +83,6 @@ describe('Authorisation Service', () => {
           environment.CID_P5_VECTOR_OF_TRUST_ENABLED = true;
           authorisationService = createService();
           ({ loginUrl } = authorisationService.generateLoginUrl({
-            isNativeApp: true,
             cookies,
           }));
         });
@@ -103,7 +99,6 @@ describe('Authorisation Service', () => {
           environment.CID_P5_VECTOR_OF_TRUST_ENABLED = false;
           authorisationService = createService();
           ({ loginUrl } = authorisationService.generateLoginUrl({
-            isNativeApp: true,
             cookies,
           }));
         });
@@ -114,29 +109,12 @@ describe('Authorisation Service', () => {
       });
     });
 
-    describe('redirect URI', () => {
-      beforeEach(() => {
-        authorisationService = createService();
-      });
-
-      it('uses the correct URI for Web', () => {
-        const uri = authorisationService.getRedirectUri(false);
-        expect(uri).toEqual(`${environment.CID_REDIRECT_URI}/auth-return`);
-      });
-
-      it('uses the correct URI for native', () => {
-        const uri = authorisationService.getRedirectUri(true);
-        expect(uri).toEqual(`${environment.NATIVE_CID_REDIRECT_URI}/auth-return`);
-      });
-    });
-
     describe('generate uplift url', () => {
       let upliftUrl;
 
       beforeEach(() => {
         authorisationService = new AuthorisationService(environment);
         ({ upliftUrl } = authorisationService.generateUpliftUrl({
-          isNativeApp: true,
           cookies: { set: jest.fn() },
         }));
       });

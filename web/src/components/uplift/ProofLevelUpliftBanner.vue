@@ -27,7 +27,6 @@ export default {
     upliftUrl() {
       const authorisationService = new AuthorisationService(this.$store.$env);
       const { upliftUrl } = authorisationService.generateUpliftUrl({
-        isNativeApp: this.$store.state.device.isNativeApp,
         cookies: this.$store.$cookies,
       });
 

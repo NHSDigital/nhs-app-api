@@ -106,7 +106,6 @@ describe('login page', () => {
         it('will generate login url using fido auth response', () => {
           expect(generateLoginUrl).toBeCalledTimes(1);
           expect(generateLoginUrl).toBeCalledWith({
-            isNativeApp: true,
             redirectTo: undefined,
             fidoAuthResponse: 'Boom',
           });

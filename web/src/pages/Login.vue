@@ -85,7 +85,6 @@ export default {
     generateRedirectData() {
       const authorisationService = new AuthorisationService(this.$store.$env);
       const { request, loginUrl } = authorisationService.generateLoginUrl({
-        isNativeApp: this.isUsingNativeApp,
         cookies: this.$cookies,
         redirectTo: this.redirectParameter,
         fidoAuthResponse: this.$route.query.fidoAuthResponse,

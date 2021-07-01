@@ -1,6 +1,5 @@
 package features.sharedSteps
 
-import config.Config
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
@@ -21,8 +20,6 @@ class NavigationStepDefinitions {
         browser.setUserAgentSource("ios")
 
         GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.set(true)
-        GlobalSerenityHelpers.LOGIN_REDIRECT_URI.set(Config.instance.cidNativeRedirectUri)
-        GlobalSerenityHelpers.GP_SESSION_REDIRECT_URI.set(Config.instance.cidNativeGpSessionRedirectUri)
     }
 
     @When("^I navigate to the (.*) page$")

@@ -49,10 +49,7 @@ class AuthorisationService {
     const authReturn = '/auth-return';
     const onDemandReturn = '/on-demand-gp-return';
 
-    this.nativeCidRedirectUri = environment.NATIVE_CID_REDIRECT_URI + authReturn;
     this.webCidRedirectUri = environment.CID_REDIRECT_URI + authReturn;
-    this.nativeCidOnDemandGpReturnRedirectUri = environment.NATIVE_CID_REDIRECT_URI
-      + onDemandReturn;
     this.webCidOnDemandGpReturnRedirectUri = environment.CID_REDIRECT_URI + onDemandReturn;
     this.cidClientId = environment.CID_CLIENT_ID;
     this.cidAuthEndpoint = environment.CID_AUTH_ENDPOINT_URL;
@@ -66,9 +63,8 @@ class AuthorisationService {
     }
   }
 
-  generateLoginUrl({ isNativeApp, redirectTo, cookies, fidoAuthResponse }) {
+  generateLoginUrl({ redirectTo, cookies, fidoAuthResponse }) {
     return this.generateAuthUrl({
-      isNativeApp,
       redirectTo,
       cookies,
       fidoAuthResponse,
@@ -77,9 +73,8 @@ class AuthorisationService {
     });
   }
 
-  generateUpliftUrl({ isNativeApp, cookies }) {
+  generateUpliftUrl({ cookies }) {
     const { loginUrl } = this.generateAuthUrl({
-      isNativeApp,
       cookies,
       p5VectorOfTrust: false,
       scope: this.defaultScope,
@@ -88,28 +83,26 @@ class AuthorisationService {
     return { upliftUrl: loginUrl };
   }
 
-  generateGpSessionUrl({ isNativeApp, redirectTo, cookies, fidoAuthResponse }) {
+  generateGpSessionUrl({ redirectTo, cookies, fidoAuthResponse }) {
     const { loginUrl } = this.generateAuthUrl({
-      isNativeApp,
       redirectTo,
       cookies,
       fidoAuthResponse,
       p5VectorOfTrust: this.cidP5VectorOfTrustEnabled,
       scope: 'openid profile email nhs_app_credentials gp_registration_details profile_extended',
-      redirectUri: this.getOnDemandGpReturnRedirectUri(isNativeApp),
+      redirectUri: this.webCidOnDemandGpReturnRedirectUri,
     });
 
     return { gpSessionConnectUrl: loginUrl };
   }
 
   generateAuthUrl({
-    isNativeApp,
     redirectTo,
     cookies,
     fidoAuthResponse,
     p5VectorOfTrust,
     scope,
-    redirectUri = this.getRedirectUri(isNativeApp),
+    redirectUri = this.webCidRedirectUri,
   }) {
     const verifier = createVerifier();
     const challenge = createChallenge(verifier);
@@ -146,16 +139,6 @@ class AuthorisationService {
     }
 
     return { loginUrl: responseUrl, request };
-  }
-
-  getRedirectUri(isNativeApp) {
-    return isNativeApp ? this.nativeCidRedirectUri : this.webCidRedirectUri;
-  }
-
-  getOnDemandGpReturnRedirectUri(isNativeApp) {
-    return isNativeApp
-      ? this.nativeCidOnDemandGpReturnRedirectUri
-      : this.webCidOnDemandGpReturnRedirectUri;
   }
 
   /* eslint-disable class-methods-use-this */

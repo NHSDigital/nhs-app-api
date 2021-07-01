@@ -84,8 +84,6 @@ spec:
           value: "true"
         - name: URI_FORMAT_CID_REDIRECT_WEB
           value: "https://www{host}"
-        - name: URI_FORMAT_CID_REDIRECT_NATIVE
-          value: "nhsapp://www{host}"
         - name: URI_FORMAT_API_CLIENT
           value: "https://api{host}"
         - name: API_BASE_URL

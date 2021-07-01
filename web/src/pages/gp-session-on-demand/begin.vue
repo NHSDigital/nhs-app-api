@@ -10,7 +10,6 @@ export default {
   async mounted() {
     const authorisationService = new AuthorisationService(this.$store.$env);
     const { gpSessionConnectUrl } = authorisationService.generateGpSessionUrl({
-      isNativeApp: this.$store.state.device.isNativeApp,
       redirectTo: this.$router.currentRoute.query.targetPage,
       cookies: this.$store.$cookies,
     });

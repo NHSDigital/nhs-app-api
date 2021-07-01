@@ -26,7 +26,6 @@ describe('Proof level uplift banner', () => {
     $store = {
       dispatch: jest.fn(),
       $env: {
-        NATIVE_CID_REDIRECT_URI: 'mock native cid redirect uri',
         CID_REDIRECT_URI: 'mock cid redirect uri',
         CID_CLIENT_ID: 'mock cid client ID',
         CID_AUTH_ENDPOINT: 'mock cid auth endpoint',

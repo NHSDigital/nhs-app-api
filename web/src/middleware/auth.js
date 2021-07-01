@@ -62,7 +62,6 @@ export default ({ router, store, to, next }) => {
   if (to.name === BEGINLOGIN_NAME) {
     const authorisationService = new AuthorisationService(store.$env);
     const { loginUrl } = authorisationService.generateLoginUrl({
-      isNativeApp: store.state.device.isNativeApp,
       redirectTo: to.query[REDIRECT_PARAMETER],
       cookies: store.$cookies,
     });

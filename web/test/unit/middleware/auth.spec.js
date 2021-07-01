@@ -26,7 +26,6 @@ describe('middleware/auth', () => {
   const next = jest.fn();
 
   const environment = {
-    NATIVE_CID_REDIRECT_URI: 'mock native cid redirect uri',
     CID_REDIRECT_URI: 'mock cid redirect uri',
     CID_CLIENT_ID: 'mock cid client ID',
     CID_AUTH_ENDPOINT_URL: 'mock cid auth endpoint',

@@ -1,6 +1,5 @@
 package features.sharedSteps
 
-import config.Config
 import constants.Supplier
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
@@ -109,7 +108,6 @@ open class SharedStepDefinitions {
     fun initialisePatientAndGpSystemOnNativeApp(gpSystem: String) {
         browser.setUserAgentSource("ios")
         GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.set(true)
-        GlobalSerenityHelpers.LOGIN_REDIRECT_URI.set(Config.instance.cidNativeRedirectUri)
 
         val supplier = Supplier.valueOf(gpSystem)
         val patient = Patient.getDefault(supplier)
@@ -131,7 +129,6 @@ open class SharedStepDefinitions {
     fun patientOnNativeApp() {
         browser.setUserAgentSource("ios")
         GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.set(true)
-        GlobalSerenityHelpers.LOGIN_REDIRECT_URI.set(Config.instance.cidNativeRedirectUri)
 
         val supplier = Supplier.EMIS
         val patient = Patient.getDefault(supplier)

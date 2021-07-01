@@ -33,18 +33,9 @@ export const resolveCidWeb = ({ env }) => {
   return env.CID_REDIRECT_URI;
 };
 
-export const resolveCidNative = ({ env }) => {
-  env.NATIVE_CID_REDIRECT_URI = env.NATIVE_CID_REDIRECT_URI || applyUriFormat(
-    resolveBaseHost(),
-    resolveUrlFormat('URI_FORMAT_CID_REDIRECT_NATIVE', env),
-  );
-  return env.NATIVE_CID_REDIRECT_URI;
-};
-
 export default ({ store, next }) => {
   const env = store.$env;
   resolveApiClient({ env });
   resolveCidWeb({ env });
-  resolveCidNative({ env });
   return next();
 };
