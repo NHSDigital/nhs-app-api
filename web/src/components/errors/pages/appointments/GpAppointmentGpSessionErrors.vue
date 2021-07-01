@@ -17,7 +17,8 @@
                 :back-url="backUrl">
       <template v-slot:content>
         <p>{{ $t('gpSessionErrors.appointments.youCannotBookOnline') }}</p>
-        <contact-111 :text="$t('gpSessionErrors.appointments.ifTheProblemContinues')"/>
+        <p>{{ $t('gpSessionErrors.appointments.contactYourSurgery') }}</p>
+        <contact-111 :text="$t('gpSessionErrors.appointments.forUrgentMedicalAdvice')"/>
       </template>
       <template v-slot:actions>
         <alternative-appointment-actions/>

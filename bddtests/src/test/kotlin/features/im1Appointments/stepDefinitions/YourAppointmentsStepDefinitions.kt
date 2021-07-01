@@ -304,8 +304,8 @@ class YourAppointmentsStepDefinitions {
                 .assertReferenceCode(prefix)
                 .assertMenuListHeader("What you can do next")
                 .assertParagraphText("You are not currently able to book and manage GP appointments online.")
-                .assertParagraphText("If the problem continues and you need to book an appointment now, " +
-                        "contact your GP surgery directly. For urgent medical advice go to ")
+                .assertParagraphText("If you need to book an appointment now, contact your GP surgery.")
+                .assertParagraphText("For urgent medical advice, go to ")
                 .assertReportAProblemLink()
         appointmentGpSessionError.assertNHS111Online()
     }

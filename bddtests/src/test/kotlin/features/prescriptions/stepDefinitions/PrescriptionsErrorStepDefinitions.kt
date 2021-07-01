@@ -149,8 +149,8 @@ class PrescriptionsErrorStepDefinitions {
         prescriptionsGpSessionError.assertPageHeader("Sorry, you cannot order or view repeat prescriptions online")
                 .assertReferenceCode(prefix)
                 .assertMenuListHeader("Other things you can do")
-                .assertParagraphText("If the problem continues and you need to get a prescription now, contact " +
-                        "your GP surgery directly. For urgent medical advice, go to ")
+                .assertParagraphText("If you need a repeat prescription now, contact your GP surgery.")
+                .assertParagraphText("For urgent medical advice, go to ")
                 .assertReportAProblemLink()
         prescriptionsGpSessionError.assertEmergencyMenuItem()
     }

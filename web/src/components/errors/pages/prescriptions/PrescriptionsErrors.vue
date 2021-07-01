@@ -7,7 +7,8 @@
                 :back-url="backUrl"
                 :update-header="false">
       <template v-slot:content>
-        <contact-111 :text="$t('gpSessionErrors.prescriptions.ifTheProblemContinues')"/>
+        <p>{{ $t('gpSessionErrors.prescriptions.contactYourSurgery') }}</p>
+        <contact-111 :text="$t('gpSessionErrors.prescriptions.forUrgentMedicalAdvice')"/>
       </template>
       <template v-slot:actions>
         <error-screen-alternative-actions
