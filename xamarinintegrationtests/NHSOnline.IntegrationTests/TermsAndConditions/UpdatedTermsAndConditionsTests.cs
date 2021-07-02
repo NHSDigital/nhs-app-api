@@ -12,7 +12,7 @@ namespace NHSOnline.IntegrationTests.TermsAndConditions
 {
     [TestClass]
     [BusinessRule("BR-LOG-05.4", "Log in when the conditions have changed since the user last accepted them displays the updated conditions of use screen")]
-    public class UpdatedTermsAndConditions
+    public class UpdatedTermsAndConditionsTests
     {
         [NhsAppAndroidTest]
         public void ShowUpdatedTermsAndConditionsPageAndroid(IAndroidDriverWrapper driver)

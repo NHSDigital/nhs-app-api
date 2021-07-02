@@ -11,7 +11,7 @@ namespace NHSOnline.IntegrationTests.Appointments
 {
     [TestClass]
     [BusinessRule("BR-APT-02.1", "Show appointment hub page")]
-    public class AppointmentHubTest
+    public class AppointmentHubTests
     {
         [NhsAppAndroidTest]
         public void APatientIsShownTheAppointmentHubPageAndroid(IAndroidDriverWrapper driver)

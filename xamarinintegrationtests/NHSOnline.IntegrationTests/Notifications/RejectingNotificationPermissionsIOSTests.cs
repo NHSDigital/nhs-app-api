@@ -5,7 +5,7 @@ namespace NHSOnline.IntegrationTests.Notifications
 {
     [TestClass]
     [BusinessRule("BR-NOT-04.5", "Rejecting request for permissions when turning on notifications on iOS displays an error message")]
-    public class RejectingNotificationPermissionsIOS
+    public class RejectingNotificationPermissionsIOSTests
     {
         [NhsAppManualTest("NHSO-14097", "BrowserStack requires Enterprise Certificate signing to enable notifications on iOS")]
         public void APatientRejectsPermissionWhenEnablingNotificationsIOS() { }

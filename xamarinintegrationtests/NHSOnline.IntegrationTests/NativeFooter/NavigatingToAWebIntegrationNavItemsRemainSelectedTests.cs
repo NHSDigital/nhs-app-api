@@ -18,7 +18,7 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 {
     [TestClass]
     [BusinessRule("BR-NAV-02.8", "Accessing a web integration from within a a service with a highlighted nav icon navigates to the web integration and the nav icon remains highlighted")]
-    public class NavigatingToAWebIntegrationNavItemsRemainSelected
+    public class NavigatingToAWebIntegrationNavItemsRemainSelectedTests
     {
         [NhsAppAndroidTest]
         public void APatientSeesTheNavigationFooterRemainSelectedWhenNavigatingToAWebIntegrationAndroid(

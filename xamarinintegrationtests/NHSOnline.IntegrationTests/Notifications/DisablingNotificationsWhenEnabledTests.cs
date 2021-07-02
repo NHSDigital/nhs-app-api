@@ -8,14 +8,14 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.Notifications
 {
     [TestClass]
-    [BusinessRule("BR-NOT-04.2", "Navigating to manage notifications from the settings menu when the notifications for the device are disabled displays the manage notifications screen with the current registration status for the device toggled to off")]
-    public class NavigateToNotificationsWhenToggledOff
+    [BusinessRule("BR-NOT-04.8", "Disabling notifications successfully disables notifications on the device")]
+    public class DisablingNotificationsWhenEnabledTests
     {
         [NhsAppAndroidTest]
-        public void APatientNavigatesToNotificationsWhenToggledOffAndroid(IAndroidDriverWrapper driver)
+        public void APatientDisablesNotificationsWhenAlreadyEnabledAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
-                .WithName(b => b.GivenName("Stan").FamilyName("Dupp"));
+                .WithName(b => b.GivenName("Robyn").FamilyName("Banks"));
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogAndroidPatientIn(driver, patient);
@@ -32,22 +32,16 @@ namespace NHSOnline.IntegrationTests.Notifications
                 .AssertOnPage(driver)
                 .PageContent
                 .ToggleOnNotifications()
-                .ToggleOffNotifications();
+                .AssertNotificationsEnabled();
 
             AndroidNotificationsPage
                 .AssertOnPage(driver)
-                .Navigation.NavigateToMore();
-
-            AndroidMorePage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToNotifications();
-
-            AndroidNotificationsPage
-                .AssertOnPage(driver)
-                .PageContent.AssertNotificationsDisabled();
+                .PageContent
+                .ToggleOffNotifications()
+                .AssertNotificationsDisabled();
         }
 
-        [NhsAppManualTest("NHSO-14096", "BrowserStack requires Enterprise Certificate signing to enable notifications on iOS")]
-        public void APatientNavigatesToNotificationsWhenToggledOffIOS() { }
+        [NhsAppManualTest("NHSO-14100", "BrowserStack requires Enterprise Certificate signing to enable notifications on iOS")]
+        public void APatientDisablesNotificationsWhenAlreadyEnabledIOS() { }
     }
 }

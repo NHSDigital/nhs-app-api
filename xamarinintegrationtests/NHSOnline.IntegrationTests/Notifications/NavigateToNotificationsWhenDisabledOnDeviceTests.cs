@@ -9,14 +9,14 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.Notifications
 {
     [TestClass]
-    [BusinessRule("BR-LOG-04.22", "Actioning the manage notifications settings from the notifications settings menu navigates to the device settings")]
-    public class NavigateToNotificationSettings
+    [BusinessRule("BR-NOT-04.9", "Navigating to notification settings when notifications have been disabled for the device in the device settings displays an error message")]
+    public class NavigateToNotificationsWhenDisabledOnDeviceTests
     {
         [NhsAppAndroidTest]
-        public void APatientCanNavigateToDeviceSettingsFromNotificationsPageAndroid(IAndroidDriverWrapper driver)
+        public void APatientNavigatesToNotificationsWhenDisabledOnDeviceAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new KeyboardPatient()
-                .WithName(b => b.GivenName("Richard").FamilyName("Headley"));
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Sandy").FamilyName("Beech"));
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogAndroidPatientIn(driver, patient);
@@ -39,32 +39,26 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             AndroidSettingsNotifications
                 .AssertOnPage(driver)
-                .AssertPageContent();
-        }
+                .TurnOffNotifications();
 
-        [NhsAppAndroidTest]
-        public void APatientCanNavigateToDeviceSettingsFromNotificationsViaKeyboardAndroid(IAndroidDriverWrapper driver)
-        {
-            var patient = new KeyboardPatient()
-                .WithName(b => b.GivenName("Seymour").FamilyName("Buttons"));
-            using var patients = Mocks.Patients.Add(patient);
-
-            LoginProcess.LogAndroidPatientIn(driver, patient);
-
-            AndroidLoggedInHomePage
+            AndroidSettingsNotifications
                 .AssertOnPage(driver)
-                .KeyboardNavigateToMore();
-
-            AndroidMorePage
-                .AssertOnPage(driver)
-                .KeyboardNavigateToNotifications();
+                .ClickBack();
 
             AndroidNotificationsPage
                 .AssertOnPage(driver)
-                .KeyboardNavigateToDeviceSettings();
+                .Navigation.NavigateToMore();
 
-            AndroidSettingsAppInfo
-                .AssertOnPage(driver);
+            AndroidMorePage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToNotifications();
+
+            AndroidNotificationsPage
+                .AssertErrorOnPage(driver)
+                .PageContent.AssertNotificationsTurnedOffErrorPageElements();
         }
+
+        [NhsAppManualTest("NHSO-14101", "BrowserStack requires Enterprise Certificate signing to enable notifications on iOS")]
+        public void APatientNavigatesToNotificationsWhenDisabledOnDeviceIOS() { }
     }
 }

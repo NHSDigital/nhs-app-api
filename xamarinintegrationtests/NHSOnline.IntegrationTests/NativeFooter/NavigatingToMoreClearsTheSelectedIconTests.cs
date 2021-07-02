@@ -2,21 +2,21 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android.Appointments;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
-using NHSOnline.IntegrationTests.Pages.Android.Prescriptions;
+using NHSOnline.IntegrationTests.Pages.Android.More;
 using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
-using NHSOnline.IntegrationTests.Pages.IOS.Prescriptions;
+using NHSOnline.IntegrationTests.Pages.IOS.More;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.NativeFooter
 {
     [TestClass]
-    [BusinessRule("BR-NAV-02.5", "Navigating to another service via the footer deselects the currently highlighted icon")]
-    public class NavigatingFromASelectedIconDeselectsTheCurrentlySelectedIconTest
+    [BusinessRule("BR-NAV-02.4", "Navigating to More via the top menu deselects the currently highlighted icon")]
+    public class NavigatingToMoreClearsTheSelectedIconTests
     {
         [NhsAppAndroidTest]
-        public void APatientNavigatingFromOneHubToAnotherUsingTheBottomNavSeesThePreviousBottomNavIconBecomeUnhighlightedAndroid(
+        public void APatientNavigatingToMoreUsingTheTopNavSeesTheHighlightedBottomNavIconDeselectedAndroid(
             IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
@@ -35,19 +35,15 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             AndroidAppointmentsPage
                 .AssertOnPage(driver)
-                .Navigation.NavigateToPrescriptions();
+                .Navigation.NavigateToMore();
 
-            AndroidPrescriptionsPage
-                .AssertOnPage(driver)
-                .Navigation.AssertPrescriptionsSelected();
-
-            AndroidPrescriptionsPage
-                .AssertOnPage(driver)
-                .Navigation.AssertAppointmentsNotSelected();
+            AndroidMorePage
+                .AssertOnPage(driver).
+                Navigation.AssertAppointmentsNotSelected();
         }
 
         [NhsAppIOSTest]
-        public void APatientNavigatingFromOneHubToAnotherUsingTheBottomNavSeesThePreviousBottomNavIconBecomeUnhighlightedIOS(
+        public void APatientNavigatingToMoreUsingTheTopNavSeesTheHighlightedBottomNavIconDeselectedIOS(
             IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
@@ -66,15 +62,11 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             IOSAppointmentsPage
                 .AssertOnPage(driver)
-                .Navigation.NavigateToPrescriptions();
+                .Navigation.NavigateToMore();
 
-            IOSPrescriptionsPage
-                .AssertOnPage(driver)
-                .Navigation.AssertPrescriptionsSelected();
-
-            IOSPrescriptionsPage
-                .AssertOnPage(driver)
-                .Navigation.AssertAppointmentsNotSelected();
+            IOSMorePage
+                .AssertOnPage(driver).
+                Navigation.AssertAppointmentsNotSelected();
         }
     }
 }

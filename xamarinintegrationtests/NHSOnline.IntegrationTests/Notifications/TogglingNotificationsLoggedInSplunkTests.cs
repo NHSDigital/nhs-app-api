@@ -10,7 +10,7 @@ namespace NHSOnline.IntegrationTests.Notifications
 {
     [TestClass]
     [BusinessRule("BR-NOT-04.15", "Enabling or disabling notifications settings on a device writes appropriate logs in Splunk for analytic purposes")]
-    public class TogglingNotificationsLoggedInSplunk
+    public class TogglingNotificationsLoggedInSplunkTests
     {
         [NhsAppAndroidTest]
         public void APatientEnablesNotificationsSettingsOnADeviceWritesLogToSplunkForAnalyticsAndroid(

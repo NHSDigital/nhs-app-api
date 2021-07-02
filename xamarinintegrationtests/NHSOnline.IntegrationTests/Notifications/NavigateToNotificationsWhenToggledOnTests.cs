@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Notifications
 {
     [TestClass]
     [BusinessRule("BR-NOT-04.1", "Navigating to manage notifications from the settings menu when the notifications for the device are enabled displays the manage notifications screen with the current registration status for the device toggled to on")]
-    public class NavigateToNotificationsWhenToggledOn
+    public class NavigateToNotificationsWhenToggledOnTests
     {
         [NhsAppAndroidTest]
         public void APatientNavigatesToNotificationsWhenToggledOnAndroid(IAndroidDriverWrapper driver)

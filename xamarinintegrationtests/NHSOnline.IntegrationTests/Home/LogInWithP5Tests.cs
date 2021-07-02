@@ -11,7 +11,7 @@ namespace NHSOnline.IntegrationTests.Home
 {
     [TestClass]
     [BusinessRule("BR-LOG-05.1", "Log in for a P5 user logs them into the app")]
-    public class LogInWithP5
+    public class LogInWithP5Tests
     {
         [NhsAppAndroidTest]
         public void APatientWithProofLevelFiveCanSuccessfullyLogInAndroid(IAndroidDriverWrapper driver)

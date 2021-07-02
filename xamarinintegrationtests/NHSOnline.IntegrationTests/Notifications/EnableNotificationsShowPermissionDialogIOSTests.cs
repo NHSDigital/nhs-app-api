@@ -11,7 +11,7 @@ namespace NHSOnline.IntegrationTests.Notifications
 {
     [TestClass]
     [BusinessRule("BR-NOT-04.3", "Enabling notifications for the first time on the device displays a prompt to grant appropriate permissions")]
-    public class EnableNotificationsShowPermissionDialogIOS
+    public class EnableNotificationsShowPermissionDialogIOSTests
     {
         [NhsAppIOSTest]
         public void APatientEnablesNotificationsForTheFirstTimeOnTheDeviceIsShownAPromptToGrantAppropriatePermissionsIOS(

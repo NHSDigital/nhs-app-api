@@ -9,7 +9,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.Notifications
 {
     [TestClass]
-    public class EnableNotificationsDuringLoginFlow
+    public class EnableNotificationsDuringLoginFlowTests
     {
         [NhsAppAndroidTest]
         public void APatientCanEnableNotificationsDuringTheLoginFlow(

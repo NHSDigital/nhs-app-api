@@ -11,7 +11,7 @@ namespace NHSOnline.IntegrationTests.Prescriptions
 {
     [TestClass]
     [BusinessRule("BR-PRE-01", "Show prescriptions hub page")]
-    public class PrescriptionsHubTest
+    public class PrescriptionsHubTests
     {
         [NhsAppAndroidTest]
         public void APatientIsShownThePrescriptionHubPageAndroid(IAndroidDriverWrapper driver)
