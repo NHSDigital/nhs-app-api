@@ -22,9 +22,10 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
             return page;
         }
 
-        public void AssertNativeHeader()
+        public IOSPkbPage AssertNativeHeader()
         {
             Navigation.AssertNavigationPresent();
+            return this;
         }
     }
 }

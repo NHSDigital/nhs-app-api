@@ -33,8 +33,11 @@ set +e
 if [ "$USE_APP_UPGRADE_CONFIG" == 'True' ]
 then
   TEST_FILTER="TestCategory=NhsAppUpgradeTest"
+elif [ "$CANARY_RUN" == 'True' ]
+then
+  TEST_FILTER="TestCategory=NhsAppCanaryTest"
 else
-  TEST_FILTER="TestCategory!=NhsAppUpgradeTest"
+  TEST_FILTER='"TestCategory!=NhsAppUpgradeTest&TestCategory!=NhsAppCanaryTest"'
 fi
 info "Using test filter ${TEST_FILTER}"
 

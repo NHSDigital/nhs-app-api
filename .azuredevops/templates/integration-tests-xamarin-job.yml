@@ -2,6 +2,9 @@ parameters:
   - name: runUpgradeTests
     type: boolean
     default: false
+  - name: runCanaryTests
+    type: boolean
+    default: false  
 
 jobs:
   - job:
@@ -75,6 +78,7 @@ jobs:
           NATIVE_APP_PATH_ANDROID: "$(System.ArtifactsDirectory)/Xamarin Android Clients/com.nhs.online.nhsonline.browserstack.apk"
           NATIVE_APP_PATH_IOS: "$(System.ArtifactsDirectory)/Xamarin iOS Clients/NHSOnline.App.BrowserStack.ipa"
           USE_APP_UPGRADE_CONFIG: ${{ parameters['runUpgradeTests'] }}
+          CANARY_RUN: ${{ parameters['runCanaryTests'] }}
         inputs:
           scriptPath: xamarinintegrationtests/buildscripts/06_run_integration_tests.sh
 
