@@ -32,7 +32,6 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
                 .AssertDisplayed(driver);
         }
 
-
         [NhsAppManualTest("NHSO-13697", "BrowserStack does not show the permissions dialog for iOS")]
         public void APatientWithProofLevelFiveUploadingAFileIsShownPermissionsDialogIOS() { }
 

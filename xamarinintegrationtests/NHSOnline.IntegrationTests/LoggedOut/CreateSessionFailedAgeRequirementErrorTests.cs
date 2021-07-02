@@ -8,7 +8,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.LoggedOut
 {
     [TestClass]
-    [BusinessRule("BR-LOG-8.7", "Log in when a user is under 13 displays a shutter screen")]
+    [BusinessRule("BR-LOG-08.7", "Log in when a user is under 13 displays a shutter screen")]
     public class CreateSessionFailedAgeRequirementErrorTests
     {
         [NhsAppAndroidTest]

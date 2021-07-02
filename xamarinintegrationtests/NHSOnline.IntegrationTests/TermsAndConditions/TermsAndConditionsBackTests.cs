@@ -10,7 +10,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.TermsAndConditions
 {
     [TestClass]
-    [BusinessRule("BR-LOG-06.9", "Invoking native back on the Ts&Cs screen has no associated action")]
+    [BusinessRule("BR-LOG-06.4", "Invoking native back on the Ts&Cs screen has no associated action")]
     public class TermsAndConditionsBackTests
     {
         [NhsAppAndroidTest]
