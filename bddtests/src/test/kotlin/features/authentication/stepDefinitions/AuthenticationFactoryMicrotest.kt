@@ -72,4 +72,9 @@ class AuthenticationFactoryMicrotest : AuthenticationFactory(Supplier.MICROTEST)
             demographics.demographicsRequest(patient).respondWithCorruptedContent()
         }
     }
+
+    override fun patientWithNullResponseBody(patient: Patient) {
+        throw NotImplementedError("Not implemented for Microtest")
+    }
+
 }

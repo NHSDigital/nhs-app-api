@@ -96,6 +96,11 @@ class AuthenticationFactoryEmis  : AuthenticationFactory(Supplier.EMIS){
                 .respondWithSuccess(patient, associationType) }
     }
 
+    override fun patientWithNullResponseBody(patient: Patient) {
+        throw NotImplementedError("Not implemented for Emis")
+    }
+
+
     private fun createInvalidLinkageTest( patient: Patient, emisResponse: (EmisMeApplicationsBuilder.() -> Mapping)) {
         mockingClient.forEmis.mock { practiceSettingsRequest(patient).respondWithSuccess(SettingsResponseModel()) }
         mockingClient.forEmis.mock { emisResponse(authentication
