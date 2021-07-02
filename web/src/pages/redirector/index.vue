@@ -148,7 +148,7 @@ export default {
         },
       });
     },
-    navigateToThirdParty(url) {
+    navigateToThirdParty({ url }) {
       this.sessionStorageName = `agreedThirdPartyWarning_${this.matchedService.id}`;
 
       if (this.matchedService.showThirdPartyWarning === false ||
@@ -162,9 +162,9 @@ export default {
       }
       this.showWarning = true;
     },
-    checkProofLevel({ url, jumpOffConfig, featureJumpOffContent }, next) {
+    checkProofLevel({ jumpOffConfig, featureJumpOffContent }, next) {
       if (this.$store.getters['session/isProofLevel9'] || jumpOffConfig.proofLevel === proofLevel.P5) {
-        next(url);
+        next();
         return;
       }
 
@@ -174,9 +174,9 @@ export default {
         { featureName: featureJumpOffContent.jumpOffContent.headerText },
       );
     },
-    checkCanAccessSilverIntegration({ url, jumpOffConfig, featureJumpOffContent }, next) {
+    checkCanAccessSilverIntegration({ jumpOffConfig, featureJumpOffContent }, next) {
       if (this.canAccessSilverIntegration(this.$store, jumpOffConfig)) {
-        next(url);
+        next();
         return;
       }
 
@@ -186,7 +186,7 @@ export default {
         { featureName: featureJumpOffContent.jumpOffContent.headerText },
       );
     },
-    updateTitle({ url, jumpOffConfig, featureJumpOffContent }, next) {
+    updateTitle({ featureJumpOffContent }, next) {
       if (!isEmpty(featureJumpOffContent)) {
         const { jumpOffContent, thirdPartyWarning } = featureJumpOffContent;
         if (!isEmpty(thirdPartyWarning)) {
@@ -196,7 +196,7 @@ export default {
         }
       }
 
-      next({ url, jumpOffConfig, featureJumpOffContent });
+      next();
     },
     getJumpOffConfig({ url, thirdPartyConfig }, next) {
       const redirectParameterAndQuery = getPathAndQuery(url);
@@ -216,7 +216,7 @@ export default {
         item => item.id === this.jumpOffId,
       );
 
-      next({ url, jumpOffConfig, featureJumpOffContent });
+      next({ jumpOffConfig, featureJumpOffContent });
     },
     getThirdPartyConfig({ url }, next) {
       const thirdPartyConfig = getJumpOffConfiguration(this.matchedService.id);
