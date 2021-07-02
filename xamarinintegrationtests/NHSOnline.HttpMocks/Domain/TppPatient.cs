@@ -7,7 +7,7 @@ namespace NHSOnline.HttpMocks.Domain
         public override string VectorOfTrust => "P9.Cp.Cd";
         public override string ProofingLevel => "P9";
 
-        public string OdsCode => "A82648";
+        public string OdsCode => "tpp_with_pkb_and_covid_pass";
         public string Im1ConnectionToken => JsonSerializer.Serialize(new { AccountId = Id, ProviderId, Passphrase});
 
         public string ProviderId { get; } = "Tpp";

@@ -7,7 +7,7 @@ namespace NHSOnline.HttpMocks.Domain
         public override string VectorOfTrust => "P9.Cp.Cd";
         public override string ProofingLevel => "P9";
 
-        public string OdsCode => "F00001";
+        public string OdsCode => "fake_with_pkb";
         public string Im1ConnectionToken => JsonSerializer.Serialize(new {Im1CacheKey = "Im1CacheKey", AccessIdentityGuid = Id});
     }
 }

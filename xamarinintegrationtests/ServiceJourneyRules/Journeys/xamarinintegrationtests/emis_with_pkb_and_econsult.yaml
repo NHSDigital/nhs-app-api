@@ -1,0 +1,60 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  "odsCode": "emis_with_pkb_and_econsult"
+journeys:
+  appointments:
+    provider: im1
+  cdssAdmin:
+    serviceDefinition: CONDITION_LIST_ADMIN
+    provider: eConsult
+  cdssAdvice:
+    serviceDefinition: GEC_GEN
+    conditionsServiceDefinition: CONDITION_LIST
+    provider: eConsult
+  coronavirusInformation: true
+  documents: true
+  im1Messaging:
+    isEnabled: true
+    canDeleteMessages: false
+    canUpdateReadStatus: true
+    requiresDetailsRequest: true
+    sendMessageSubject: true
+  medicalRecord:
+    version: "2"
+    provider: im1
+  messaging: true
+  ndop: true
+  nominatedPharmacy: true
+  notifications: true
+  notificationPrompt: true
+  oneOneOne: true
+  prescriptions:
+    provider: im1
+  silverIntegrations:
+    accountAdmin: []
+    carePlans:
+    - pkb
+    consultations:
+    - pkb
+    consultationsAdmin: []
+    healthTrackers:
+    - pkb
+    libraries:
+    - pkb
+    medicines:
+    - pkb
+    messages:
+    - pkb
+    - testSilverThirdPartyProvider
+    participation: []
+    recordSharing:
+    - pkb
+    secondaryAppointments:
+    - ers
+    - pkb
+    testResults: []
+    vaccineRecord:
+    - nhsd
+  supplier: Emis
+  supportsLinkedProfiles: true
+  userInfo: true

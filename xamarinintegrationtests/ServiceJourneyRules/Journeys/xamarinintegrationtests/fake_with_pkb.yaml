@@ -1,0 +1,55 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: fake_with_pkb
+journeys:
+  appointments:
+    provider: im1
+  cdssAdmin:
+    provider: none
+  cdssAdvice:
+    provider: none
+  coronavirusInformation: true
+  documents: false
+  im1Messaging:
+    isEnabled: false
+    canDeleteMessages: false
+    canUpdateReadStatus: false
+    requiresDetailsRequest: false
+    sendMessageSubject: false
+  medicalRecord:
+    version: "2"
+    provider: im1
+  messaging: true
+  ndop: true
+  nominatedPharmacy: true
+  notifications: true
+  notificationPrompt: true
+  oneOneOne: true
+  prescriptions:
+    provider: im1
+  silverIntegrations:
+    accountAdmin: []
+    carePlans:
+    - pkb
+    consultations:
+    - pkb
+    consultationsAdmin: []
+    healthTrackers:
+    - pkb
+    libraries:
+    - pkb
+    medicines:
+    - pkb
+    messages:
+    - pkb
+    participation: []
+    recordSharing:
+    - pkb
+    secondaryAppointments:
+    - pkb
+    testResults:
+    - pkb
+    vaccineRecord: []
+  supplier: Fake
+  supportsLinkedProfiles: true
+  userInfo: true

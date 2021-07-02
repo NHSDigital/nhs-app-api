@@ -1,0 +1,22 @@
+#! /usr/bin/env bash
+set -e
+
+# Change current working directory to be the root of backendworker, regardless of how this script is invoked
+cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
+
+# shellcheck source=lib/set_env.sh
+source "buildscripts/lib/set_env.sh"
+
+# shellcheck source=lib/functions.sh
+source "buildscripts/lib/functions.sh"
+
+docker build \
+  --target=validated \
+  --build-arg="SJR_IMAGE=${DOCKER_REGISTRY:-local}/nhsonline-backendservicejourneyrulesapi:${DOCKER_TAG:-latest}" \
+  ServiceJourneyRules || die "Failed to validate integration test SJR configuration"
+
+docker build \
+  --target=final \
+  --build-arg="SJR_IMAGE=${DOCKER_REGISTRY:-local}/nhsonline-backendservicejourneyrulesapi:${DOCKER_TAG:-latest}" \
+  --tag="local/nhsonline-service-journey-integration-test-config:${DOCKER_TAG:-latest}" \
+  ServiceJourneyRules || die "Failed to build ${DOCKER_REGISTRY:-local}/nhsonline-service-journey-integration-test-config:${DOCKER_TAG:-latest}"

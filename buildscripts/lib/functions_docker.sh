@@ -20,7 +20,7 @@ function cleanup_docker_containers () {
 function pull_docker_images () {
   local DOCKER_IMAGES IMAGE_TO_PULL
 
-  DOCKER_IMAGES=$(docker-compose "${DOCKER_COMPOSE_FILES_ARGS[@]}" config | grep image | sed -e 's/^[[:space:]]*image: //' | sort -u)
+  DOCKER_IMAGES=$(docker-compose "${DOCKER_COMPOSE_FILES_ARGS[@]}" config | grep image | sed -e 's/^[[:space:]]*image: //' | grep -v '^local/' | sort -u)
   info "Configured images:
   $DOCKER_IMAGES"
 

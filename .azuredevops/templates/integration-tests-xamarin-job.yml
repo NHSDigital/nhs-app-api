@@ -55,9 +55,14 @@ jobs:
           scriptPath: xamarinintegrationtests/buildscripts/02_build.sh
 
       - task: ShellScript@2
+        displayName: Build test SJR config
+        inputs:
+          scriptPath: xamarinintegrationtests/buildscripts/03_build_test_sjr.sh
+
+      - task: ShellScript@2
         displayName: Package Integration Tests
         inputs:
-          scriptPath: xamarinintegrationtests/buildscripts/04_package_integration_tests.sh
+          scriptPath: xamarinintegrationtests/buildscripts/05_package_integration_tests.sh
 
       - task: ShellScript@2
         displayName: Run Integration Tests
@@ -71,7 +76,7 @@ jobs:
           NATIVE_APP_PATH_IOS: "$(System.ArtifactsDirectory)/Xamarin iOS Clients/NHSOnline.App.BrowserStack.ipa"
           USE_APP_UPGRADE_CONFIG: ${{ parameters['runUpgradeTests'] }}
         inputs:
-          scriptPath: xamarinintegrationtests/buildscripts/05_run_integration_tests.sh
+          scriptPath: xamarinintegrationtests/buildscripts/06_run_integration_tests.sh
 
       - template: check-for-output-steps.yml
         parameters:
@@ -98,7 +103,7 @@ jobs:
         displayName: Generate Report
         condition: and(succeededOrFailed(), eq(variables['integration.tests.results.exists'], 'True'))
         inputs:
-          scriptPath: xamarinintegrationtests/buildscripts/06_generate_integration_test_result_json.sh
+          scriptPath: xamarinintegrationtests/buildscripts/07_generate_integration_test_result_json.sh
 
       - task: PublishPipelineArtifact@1
         displayName: Publish Xamarin Integration Test Artifacts

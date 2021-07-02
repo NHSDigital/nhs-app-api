@@ -7,7 +7,7 @@ namespace NHSOnline.HttpMocks.Domain
         public override string VectorOfTrust => "P9.Cp.Cd";
         public override string ProofingLevel => "P9";
 
-        public string OdsCode => "A29928";
+        public string OdsCode => "emis_with_pkb_and_econsult";
         public string Im1ConnectionToken => JsonSerializer.Serialize(new {Im1CacheKey = "Im1CacheKey", AccessIdentityGuid = Id});
 
         public string UserPatientLinkToken => $"linktoken_{Id}";
