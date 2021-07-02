@@ -22,6 +22,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.IntegrationTests.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.IntegrationTests.Mongo", "NHSOnline.IntegrationTests.Mongo\NHSOnline.IntegrationTests.Mongo.csproj", "{F7629B78-E203-4DBD-A7F1-55FBA2E8D8B5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.IntegrationTestAnalyser", "NHSOnline.IntegrationTestAnalyser\NHSOnline.IntegrationTestAnalyser.csproj", "{42CC3672-39FA-468F-9B44-5323ABB23BC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
