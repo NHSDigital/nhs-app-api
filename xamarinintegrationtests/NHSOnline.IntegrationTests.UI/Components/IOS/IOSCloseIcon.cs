@@ -26,7 +26,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
             => ActOnElement(e => e.Click(), FindBy);
 
         public void AssertVisible()
-            => ActOnElement(e => e.Displayed.Should().BeTrue("an icon with name {1} should be displayed", _name), FindBy );
+            => ActOnElement(e => e.Displayed.Should().BeTrue("an icon with name {0} should be displayed", _name), FindBy );
 
         private void ActOnElement(Action<IOSElement> action, By findBy)
             => _interactor.ActOnElement(findBy, action);

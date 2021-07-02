@@ -28,7 +28,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
         public void AssertVisible()
         {
             ActOnElement(
-                    e => e.Displayed.Should().BeTrue("an icon with Photo, Landscape {1} should be displayed",
+                    e => e.Displayed.Should().BeTrue("an icon with Photo, Landscape {0} should be displayed",
                         _dateTime.ToString("HH:mm", new DateTimeFormatInfo())), FindBy(_dateTime));
         }
 

@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Net;
-using OpenQA.Selenium.Appium;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers.Native
 {
@@ -15,20 +14,26 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
         public string Build { get; set; } = $"{Dns.GetHostName()}-local";
         public bool EnableNetworkLogs { get; set; }
 
-        internal void SetCapabilities(AppiumOptions options)
+        internal AppiumOptionsBuilder GetDefaultBuilder()
         {
-            options.AddAdditionalCapability("browserstack.user", User);
-            options.AddAdditionalCapability("browserstack.key", GetKey());
-            options.AddAdditionalCapability("browserstack.localIdentifier", LocalIdentifier);
-            options.AddAdditionalCapability("browserstack.appium_version", AppiumVersion);
-            options.AddAdditionalCapability("project", Project);
-            options.AddAdditionalCapability("build", Build);
-            options.AddAdditionalCapability("browserstack.local", "true");
-            options.AddAdditionalCapability("browserstack.debug", "true");
-            options.AddAdditionalCapabilityIf(EnableNetworkLogs, "browserstack.networkLogs", "true");
-            options.AddAdditionalCapability("browserstack.appium_version", AppiumVersion);
-            options.AddAdditionalCapability("browserstack.acceptInsecureCerts", "true");
-            options.AddAdditionalCapability("browserstack.gpsLocation", "40.730610,-73.935242");
+            var builder = new AppiumOptionsBuilder()
+                .AddBrowserStackUser(User)
+                .AddBrowserStackKey(GetKey())
+                .AddBrowserStackLocalIdentifier(LocalIdentifier)
+                .AddBrowserStackAppiumVersion(AppiumVersion)
+                .AddProject(Project)
+                .AddBuild(Build)
+                .EnableBrowserStackLocal()
+                .EnableBrowserStackDebug()
+                .EnableBrowserStackAcceptInsecureCerts()
+                .AddBrowserStackGpsLocation("40.730610,-73.935242");
+
+            if (EnableNetworkLogs)
+            {
+                builder.EnableBrowserStackNetworkLogs();
+            }
+
+            return builder;
         }
 
         internal string? GetKey()

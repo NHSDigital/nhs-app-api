@@ -26,7 +26,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
             => new (interactor, text, searchPrefix);
 
         public void AssertVisible()
-            => ActOnElement(e => e.Displayed.Should().BeTrue("a link with text {1} should be displayed", _text));
+            => ActOnElement(e => e.Displayed.Should().BeTrue("a link with text {0} should be displayed", _text));
 
         public void Click()
             => ActOnElement(e => e.Click());

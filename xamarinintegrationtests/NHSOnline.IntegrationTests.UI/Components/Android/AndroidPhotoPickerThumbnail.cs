@@ -21,7 +21,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
         => new AndroidPhotoPickerThumbnail(interactor, description);
 
         public void AssertVisible()
-            => ActOnElement(e => e.Displayed.Should().BeTrue("a thumbnail with description {1} should be displayed", _description));
+            => ActOnElement(e => e.Displayed.Should().BeTrue("a thumbnail with description {0} should be displayed", _description));
 
         public void Click() => ActOnElement(e => e.Click());
 

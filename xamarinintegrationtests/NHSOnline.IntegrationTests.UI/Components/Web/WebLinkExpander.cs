@@ -45,12 +45,12 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
         public static WebLinkExpander WithText(IWebInteractor interactor, string continerLink)
             => new WebLinkExpander(interactor, continerLink);
 
-        public void AssertVisible() => ActOnElement(e => e.Displayed.Should().BeTrue("an expander with text '{1}' should be displayed", _containerLink));
+        public void AssertVisible() => ActOnElement(e => e.Displayed.Should().BeTrue("an expander with text {0} should be displayed", _containerLink));
 
         public void Toggle() => ActOnElement(e => e.Click());
 
         private void ActOnElement(Action<IWebElement> action) => _interactor.ActOnElement(FindBy, action);
-        
+
         private By FindByContainer => By.XPath($"//span[normalize-space()={_containerLink.QuoteXPathLiteral()}]/../..");
 
         private By FindBy => By.XPath($"//span[normalize-space()={_containerLink.QuoteXPathLiteral()}]");

@@ -25,7 +25,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             => ActOnElement(e => e.Click());
 
         public void AssertVisible()
-            => ActOnElement(e => e.Displayed.Should().BeTrue("a button with text {1} should be displayed", _locatorStrategy.Description));
+            => ActOnElement(e => e.Displayed.Should().BeTrue("a button with text {0} should be displayed", _locatorStrategy.Description));
 
         private void ActOnElement(Action<AndroidElement> action)
             => _interactor.ActOnElement(FindBy, action);

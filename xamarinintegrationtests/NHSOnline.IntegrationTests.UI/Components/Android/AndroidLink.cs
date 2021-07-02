@@ -22,7 +22,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             => new (interactor, new TextLocatorStrategy(text));
 
         public void AssertVisible()
-            => ActOnElement(e => e.Displayed.Should().BeTrue("a link with text {1} should be displayed", _locatorStrategy.Description));
+            => ActOnElement(e => e.Displayed.Should().BeTrue("a link with text {0} should be displayed", _locatorStrategy.Description));
 
         public void Touch()
             => ActOnElementContext(context => context.Tap());

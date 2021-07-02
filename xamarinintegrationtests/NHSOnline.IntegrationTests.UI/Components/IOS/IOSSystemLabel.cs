@@ -22,7 +22,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
             => new IOSSystemLabel(interactor, text);
 
         public void AssertVisible()
-            => ActOnElement(e => e.Displayed.Should().BeTrue("a system label with text {1} should be displayed", _text));
+            => ActOnElement(e => e.Displayed.Should().BeTrue("a system label with text {0} should be displayed", _text));
 
         public void Click() => ActOnElement(element => element.Click());
 

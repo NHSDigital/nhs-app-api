@@ -21,18 +21,18 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             => new AndroidIcon(interactor, name);
 
         public void AssertVisible()
-            => ActOnElement(e => e.Displayed.Should().BeTrue("an icon with description {1} should be displayed", _name));
+            => ActOnElement(e => e.Displayed.Should().BeTrue("an icon with description {0} should be displayed", _name));
 
         public void Click()
             => ActOnElement(e => e.Click());
 
         public void AssertSelected()
             => ActOnElement(e => e.GetAttribute("selected").Should().Be("true",
-                    "a selected icon with description {1} should be displayed"));
+                    "a selected icon with description {0} should be displayed", _name));
 
         public void AssertNotSelected()
             => ActOnElement(e => e.GetAttribute("selected").Should().Be("false",
-                "a selected icon with description {1} should be displayed"));
+                "a selected icon with description {0} should be displayed", _name));
 
         private void ActOnElement(Action<AndroidElement> action)
             => _interactor.ActOnElement(FindBy, action);

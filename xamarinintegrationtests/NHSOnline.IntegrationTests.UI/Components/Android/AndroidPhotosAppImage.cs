@@ -22,7 +22,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
 
         public void AssertVisible()
             => ActOnElement(e
-                => e.Displayed.Should().BeTrue("a image group view with content desc containing {1} should be displayed", _imageDescription));
+                => e.Displayed.Should().BeTrue("a image group view with content desc containing {0} should be displayed", _imageDescription));
 
         private void ActOnElement(Action<AndroidElement> action)
             => _interactor.ActOnElement(FindBy, action);

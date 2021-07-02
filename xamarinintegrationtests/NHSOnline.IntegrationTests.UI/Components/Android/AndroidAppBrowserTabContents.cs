@@ -21,7 +21,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             => new AndroidAppBrowserTabContents(interactor, text);
 
         public void AssertVisible()
-            => ActOnElement(e => e.Displayed.Should().BeTrue("a view with text {1} should be displayed", _text));
+            => ActOnElement(e => e.Displayed.Should().BeTrue("a view with text {0} should be displayed", _text));
 
         private void ActOnElement(Action<AndroidElement> action)
             => _interactor.ActOnElement(FindBy, action);

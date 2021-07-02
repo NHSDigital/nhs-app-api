@@ -23,7 +23,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
         public static AndroidExpander WithHeaderAndBodyText(IAndroidInteractor interactor, string headerText, string bodyText)
             => new AndroidExpander(interactor, headerText, bodyText);
 
-        public void AssertVisible() => ActOnHeaderElement(e => e.Displayed.Should().BeTrue("an expander with header '{1}' should be displayed", _headerText));
+        public void AssertVisible() => ActOnHeaderElement(e => e.Displayed.Should().BeTrue("an expander with header {0} should be displayed", _headerText));
 
         public void AssertCollapsed()
         {

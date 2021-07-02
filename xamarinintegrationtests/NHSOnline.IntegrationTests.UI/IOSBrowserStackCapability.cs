@@ -3,10 +3,9 @@ using System;
 namespace NHSOnline.IntegrationTests.UI
 {
     [Flags]
-    public enum AndroidBrowserStackCapability
+    public enum IOSBrowserStackCapability
     {
         None = 0,
-        SignInToGoogle = 1,
-        NoNetwork = 2
+        NoNetwork = 1
     }
 }

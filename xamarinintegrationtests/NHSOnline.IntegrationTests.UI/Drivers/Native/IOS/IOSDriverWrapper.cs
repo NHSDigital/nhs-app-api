@@ -20,6 +20,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
 
         internal IOSDriverWrapper(string testName,
             TestLogs logs,
+            IOSBrowserStackCapability capabilities,
             IOSDevice device,
             IOSVersion osVersion)
         {
@@ -30,7 +31,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
 
             logs.TestDevice(device.ToName(), osVersion.ToName());
 
-            var options = CreateAppiumOptions(iosConfig, testName, device, osVersion);
+            var options = CreateAppiumOptions(iosConfig, testName, device, osVersion, capabilities);
 
             _driver = new IOSDriver<IOSElement>(new Uri("http://hub-cloud.browserstack.com/wd/hub"), options);
 
@@ -57,23 +58,35 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             IOSConfig iosConfig,
             string testName,
             IOSDevice targetDevice,
-            IOSVersion osVersion)
+            IOSVersion osVersion,
+            IOSBrowserStackCapability capabilities)
         {
-            var options = new AppiumOptions
+            var optionsBuilder = _browserStackConfig.GetDefaultBuilder()
+                .AddAcceptInsecureCertificates()
+                .AddPageLoadStrategy(PageLoadStrategy.Normal)
+                .AddApp(iosConfig.App)
+                .AddDevice(targetDevice.ToName())
+                .AddOsVersion(osVersion.ToName())
+                .EnableNativeWebTap()
+                .AddTestName(testName);
+
+            AddIOSBrowserStackCapability(optionsBuilder, capabilities);
+
+            return optionsBuilder.Build();
+        }
+
+        private void AddIOSBrowserStackCapability(AppiumOptionsBuilder optionsBuilder, IOSBrowserStackCapability capabilities)
+        {
+            switch (capabilities)
             {
-                AcceptInsecureCertificates = true,
-                PageLoadStrategy = PageLoadStrategy.Normal
-            };
-
-            _browserStackConfig.SetCapabilities(options);
-
-            options.AddAdditionalCapability("app", iosConfig.App);
-            options.AddAdditionalCapability("device", targetDevice.ToName());
-            options.AddAdditionalCapability("os_version", osVersion.ToName());
-            options.AddAdditionalCapability("nativeWebTap", true);
-            options.AddAdditionalCapability("name", testName);
-
-            return options;
+                case IOSBrowserStackCapability.None:
+                    return;
+                case IOSBrowserStackCapability.NoNetwork:
+                    optionsBuilder.DisableBrowserStackNetwork();
+                    return;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(capabilities), capabilities, null);
+            }
         }
 
         private TestLogs Logs { get; }

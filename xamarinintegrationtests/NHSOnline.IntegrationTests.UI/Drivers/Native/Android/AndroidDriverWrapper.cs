@@ -54,30 +54,38 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             AndroidDevice targetDevice,
             AndroidOSVersion osVersion)
         {
-            var options = new AppiumOptions
+            var optionsBuilder = _browserStackConfig.GetDefaultBuilder()
+                .AddAcceptInsecureCertificates()
+                .AddPageLoadStrategy(PageLoadStrategy.Normal)
+                .AddApp(androidConfig.App)
+                .DisableAnimations()
+                .AddDevice(targetDevice.ToName())
+                .AddOsVersion(osVersion.ToName())
+                .AddTestName(testName)
+                .DisableAutoGrantPermissions()
+                .EnableNativeWebScreenshots()
+                .EnableEnsureWebviewsHavePages();
+
+            AddAndroidBrowserStackCapability(optionsBuilder, androidConfig, capabilities);
+
+            return optionsBuilder.Build();
+        }
+
+        private static void AddAndroidBrowserStackCapability(AppiumOptionsBuilder optionsBuilder, AndroidConfig androidConfig, AndroidBrowserStackCapability capability)
+        {
+            switch (capability)
             {
-                AcceptInsecureCertificates = true,
-                PageLoadStrategy = PageLoadStrategy.Normal
-            };
-
-            _browserStackConfig.SetCapabilities(options);
-
-            options.AddAdditionalCapability("app", androidConfig.App);
-            options.AddAdditionalCapability("disableAnimations", true);
-            options.AddAdditionalCapability("device", targetDevice.ToName());
-            options.AddAdditionalCapability("os_version", osVersion.ToName());
-            options.AddAdditionalCapability("name", testName);
-            options.AddAdditionalCapability("autoGrantPermissions", false);
-            options.AddAdditionalCapability("nativeWebScreenshot", true);
-            options.AddAdditionalCapability("ensureWebviewsHavePages", true);
-
-            if (capabilities.HasFlag(AndroidBrowserStackCapability.SignInToGoogle))
-            {
-                options.AddAdditionalCapability("browserstack.appStoreConfiguration",
-                    androidConfig.GoogleCredentials());
+                case AndroidBrowserStackCapability.None:
+                    return;
+                case AndroidBrowserStackCapability.SignInToGoogle:
+                    optionsBuilder.AddBrowserStackSignInToAppStore(androidConfig.GoogleCredentials());
+                    break;
+                case AndroidBrowserStackCapability.NoNetwork:
+                    optionsBuilder.DisableBrowserStackNetwork();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(capability), capability, null);
             }
-
-            return options;
         }
 
         private TestLogs Logs { get; }
