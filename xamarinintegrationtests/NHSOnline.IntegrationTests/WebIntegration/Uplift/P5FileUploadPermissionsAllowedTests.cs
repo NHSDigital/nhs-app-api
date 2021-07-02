@@ -12,6 +12,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
 {
     [TestClass]
+    [BusinessRule("BR-LOG-12.4", "Uploading a file in the NHS login uplift journey allows the user to attach an image of their identification")]
     [BusinessRule("BR-LOG-12.6", "Uploading a file allows the user to attach an image of their ID ")]
     public class P5FileUploadPermissionsAllowedTests
     {

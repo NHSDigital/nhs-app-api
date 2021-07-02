@@ -12,7 +12,9 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
 {
     [TestClass]
-    [BusinessRule("TBC", "Taking a photo of their ID allows the user to attach an image of the ID")]
+    [BusinessRule("BR-LOG-12.9", "Choosing to take a photo an ID prompts the user to grant appropriate permissions to the app")]
+    [BusinessRule("BR-LOG-12.11", "Allowing permissions when prompted opens the device camera enabling the user to capture a photo of their ID")]
+    [BusinessRule("BR-LOG-12.12", "Capturing a photo of an ID prompts the user to confirm the attached photograph and upload it")]
     public class P5TakePhotoPermissionsAllowedTests
     {
         [NhsAppAndroidTest]

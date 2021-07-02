@@ -24,6 +24,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         private WebText PhotoCaptured => WebText.WithTagAndText(_interactor, "p", "Photo captured");
 
+        private WebText PhotoNotCaptured => WebText.WithTagAndText(_interactor, "p", "No photo captured");
+
         internal void AssertOnPage() => TitleText.AssertVisible();
 
         public void UploadFile() => FileUploadButton.Click();
@@ -35,5 +37,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
         public void AssertFileSelected() => FileSelected.AssertVisible();
 
         public void AssertPhotoCaptured() => PhotoCaptured.AssertVisible();
+
+        public void AssertPhotoNotCaptured() => PhotoNotCaptured.AssertVisible();
     }
 }

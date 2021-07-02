@@ -7,6 +7,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.LoggedOut
 {
     [TestClass]
+    [BusinessRule("BR-LOG-02.3", "Navigating back from before you start screen displays the Logged out home screen")]
     [BusinessRule("BR-LOG-09.3", "Invoking native back on the getting started screen displays the logged out home screen")]
     public class GettingStartedBackTests
     {
@@ -26,6 +27,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .AssertPageElements();
         }
+
         [NhsAppIOSTest]
         public void APatientNavigatingBackFromTheNhsLoginJourneyIsShownTheLoggedOutHomeScreenIos(IIOSDriverWrapper driver)
         {
