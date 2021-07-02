@@ -45,6 +45,10 @@
   sudo gem install cocoapods
   ```
 
+* [.NET Core SDK](https://dotnet.microsoft.com/download)
+
+  Follow the link and install version 3.1
+
 ## Configure Git
 
 ```bash
