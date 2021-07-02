@@ -53,18 +53,15 @@ namespace NHSOnline.App.Droid.DependencyServices.FileSystem
 
         public async void PresentFileActionController(DownloadRequest downloadRequest)
         {
-           if (!File.Exists(downloadRequest.FileCachePath))
+           try
            {
-               try
-               {
-                   var convertedData = Convert.FromBase64String(downloadRequest.Base64Data);
-                   await File.WriteAllBytesAsync(downloadRequest.FileCachePath, convertedData).ConfigureAwait(true);
-               }
-               catch (Exception e)
-               {
-                   Logger.LogError("Failed to write data to cache directory", e);
-                   return;
-               }
+               var convertedData = Convert.FromBase64String(downloadRequest.Base64Data);
+               await File.WriteAllBytesAsync(downloadRequest.FileCachePath, convertedData).ConfigureAwait(true);
+           }
+           catch (Exception e)
+           {
+               Logger.LogError("Failed to write data to cache directory", e);
+               return;
            }
 
            var target = new ReadOnlyFile(downloadRequest.FileCachePath);

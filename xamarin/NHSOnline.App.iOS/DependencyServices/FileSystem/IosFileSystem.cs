@@ -23,19 +23,16 @@ namespace NHSOnline.App.iOS.DependencyServices.FileSystem
 
         public async void PresentFileActionController(DownloadRequest downloadRequest)
         {
-            if (!File.Exists(downloadRequest.FileCachePath))
+            try
             {
-                try
-                {
-                    await File.WriteAllBytesAsync(
-                        downloadRequest.FileCachePath,
-                        Convert.FromBase64String(downloadRequest.Base64Data)).ConfigureAwait(true);
-                }
-                catch (Exception e)
-                {
-                    Logger.LogError("Failed to write data to cache directory", e);
-                    return;
-                }
+                await File.WriteAllBytesAsync(
+                    downloadRequest.FileCachePath,
+                    Convert.FromBase64String(downloadRequest.Base64Data)).ConfigureAwait(true);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError("Failed to write data to cache directory", e);
+                return;
             }
 
             ShareFile shareFile = new ShareFile(downloadRequest.FileCachePath);
