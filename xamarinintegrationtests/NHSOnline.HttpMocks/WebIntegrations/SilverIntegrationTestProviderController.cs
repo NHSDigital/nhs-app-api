@@ -42,5 +42,12 @@ namespace NHSOnline.HttpMocks.WebIntegrations
             (string Title, HttpRequest Request) model = ("Silver Integration Test Provider Document Download Page", Request);
             return View("~/Views/WebIntegrations/WebIntegrationFunctionalityPages/DocumentDownloadPage.cshtml", model);
         }
+
+        [HttpGet("GoToPage.html")]
+        public IActionResult GoToPage()
+        {
+            (string Title, HttpRequest Request) model = ("Silver Integration Test Provider Go To Page", Request);
+            return View("~/Views/WebIntegrations/WebIntegrationFunctionalityPages/GoToPage.cshtml", model);
+        }
     }
 }

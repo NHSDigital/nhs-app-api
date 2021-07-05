@@ -1,0 +1,33 @@
+﻿@model (string Title, Microsoft.AspNetCore.Http.HttpRequest Request)
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <title>@Model.Title</title>
+    <script type="text/javascript" src="https://silverintegrationtestprovider.securestubs.local.bitraft.io/nhsapp.js"></script>
+    <script>
+        function goToPage(page) {
+          nhsapp.navigation.goToPage(page);
+        }
+    </script>
+</head>
+<body>
+<div class="jumbotron">
+    <h1 class="display-4">@Model.Title</h1>
+</div>
+<div class="container">
+    <button onclick="goToPage('homePage')">Go to Home</button><br>
+    <button onclick="goToPage('advice')">Go to Advice</button><br>
+    <button onclick="goToPage('appointments')">Go to Appointments</button><br>
+    <button onclick="goToPage('prescriptions')">Go to Prescriptions</button><br>
+    <button onclick="goToPage('healthRecords')">Go to Health Records</button><br>
+    <button onclick="goToPage('messages')">Go to Messages</button><br>
+    <button onclick="goToPage('more')">Go to More</button><br>
+    <button onclick="goToPage('settings')">Go to Settings</button><br>
+    <button onclick="goToPage('uplift')">Go to Uplift</button><br>
+    <button onclick="goToPage('invalid')">Go to Invalid Page</button>
+</div>
+@await Html.PartialAsync("~/views/HttpRequestData.cshtml", Model.Request)
+</body>
+</html>
