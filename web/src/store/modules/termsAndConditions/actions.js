@@ -17,36 +17,28 @@ export default {
       })
       .catch(() => false);
   },
-  async acceptTerms({ commit }, consentTerms) {
-    let analyticsCookie = false;
-    if (consentTerms.consentRequest.UpdatingConsent) {
-      await this.app
-        .$http
-        .getV1PatientTermsAndConditionsConsent({})
-        .then((data) => {
-          if (data) {
-            analyticsCookie = data.response.analyticsCookieAccepted;
-          }
-        })
-        .catch(err => Promise.reject(err));
-    } else { analyticsCookie = consentTerms.consentRequest.AnalyticsCookieAccepted; }
-    return this.app
-      .$http
-      .postV1PatientTermsAndConditionsConsent(consentTerms)
-      .then(() => {
-        const consentGiven = {
-          areAccepted: consentTerms.consentRequest.ConsentGiven,
-          analyticsCookieAccepted: analyticsCookie,
-        };
+  async acceptTerms({ commit }, { analyticsCookieAccepted, updatingConsent }) {
+    const consentRequest = {
+      consentGiven: true,
+      analyticsCookieAccepted,
+      updatingConsent,
+    };
 
-        commit(SET_ACCEPTANCE, consentGiven);
-        commit(SET_UPDATED_CONSENT_REQUIRED, false);
-        return Promise.resolve();
-      })
-      .catch(() => {
-        commit(SET_ACCEPTANCE, { areAccepted: false, analyticsCookieAccepted: false });
-        return Promise.resolve();
-      });
+    if (consentRequest.updatingConsent) {
+      const { response } = await this.app.$http.getV1PatientTermsAndConditionsConsent();
+
+      consentRequest.analyticsCookieAccepted = response.analyticsCookieAccepted;
+    }
+
+    await this.app.$http.postV1PatientTermsAndConditionsConsent({ consentRequest });
+
+    const consentGiven = {
+      areAccepted: consentRequest.consentGiven,
+      analyticsCookieAccepted: consentRequest.analyticsCookieAccepted,
+    };
+
+    commit(SET_ACCEPTANCE, consentGiven);
+    commit(SET_UPDATED_CONSENT_REQUIRED, false);
   },
   async checkAcceptance({ commit, state }) {
     const getTermsAndConditions = (termsAndConditions, property) =>
@@ -67,7 +59,7 @@ export default {
     } else {
       promise = this.app
         .$http
-        .getV1PatientTermsAndConditionsConsent({})
+        .getV1PatientTermsAndConditionsConsent()
         .then((data) => {
           if (data) {
             const consentGiven = {

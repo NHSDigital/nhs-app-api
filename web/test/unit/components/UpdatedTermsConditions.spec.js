@@ -88,10 +88,7 @@ describe('UpdatedTermsConditions acceptance Process', () => {
 
       it('progresses when submit button clicked', () => {
         expect($store.dispatch).toBeCalledWith('termsAndConditions/acceptTerms', {
-          consentRequest: {
-            ConsentGiven: true,
-            UpdatingConsent: true,
-          },
+          updatingConsent: true,
         });
       });
     });

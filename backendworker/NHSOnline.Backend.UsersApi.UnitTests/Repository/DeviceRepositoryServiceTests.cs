@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
         {
             _mockDeviceRepository = new Mock<IUserDeviceRepository>();
             _mockDeviceIdGenerator = new Mock<IDeviceIdGenerator>();
-            var mockLogger = new Mock<ILogger<DevicesController>>();
+            var mockLogger = new Mock<ILogger<DeviceRepositoryService>>();
             var accessTokenString = JwtToken.Generate(new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, NhsLoginId),

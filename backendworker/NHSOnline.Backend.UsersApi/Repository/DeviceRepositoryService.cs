@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.UsersApi.Areas.Devices;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 using NHSOnline.Backend.UsersApi.Notifications;
 
@@ -13,13 +12,13 @@ namespace NHSOnline.Backend.UsersApi.Repository
     {
         private readonly IUserDeviceRepository _deviceRepository;
         private readonly IDeviceIdGenerator _deviceIdGenerator;
-        private readonly ILogger<DevicesController> _logger;
+        private readonly ILogger<DeviceRepositoryService> _logger;
 
         public DeviceRepositoryService
         (
             IUserDeviceRepository deviceRepository,
             IDeviceIdGenerator deviceIdGenerator,
-            ILogger<DevicesController> logger
+            ILogger<DeviceRepositoryService> logger
         )
         {
             _deviceRepository = deviceRepository;

@@ -93,7 +93,7 @@
       {{ $t('termsAndConditions.initial.analyticsCookieCheckBox.text') }}
     </generic-checkbox>
     <generic-button id="btn_accept" :button-classes="['nhsuk-button']"
-                    @click="onConfirmButtonClicked">
+                    @click.stop.prevent="onConfirmButtonClicked">
       {{ $t('termsAndConditions.initial.btnAccept') }}
     </generic-button>
   </div>
@@ -152,16 +152,9 @@ export default {
           return;
         }
 
-        const consentRequest = {
-          ConsentGiven: true,
-          AnalyticsCookieAccepted: this.isAnalyticsCookieAccepted,
-        };
-
-        await this.$store.dispatch('termsAndConditions/acceptTerms', { consentRequest });
-
-        if (!this.$store.state.termsAndConditions.areAccepted) {
-          return;
-        }
+        await this.$store.dispatch('termsAndConditions/acceptTerms', {
+          analyticsCookieAccepted: this.isAnalyticsCookieAccepted,
+        });
 
         const path = isFalsy(this.$store.$env.USER_RESEARCH_ENABLED)
           ? NOTIFICATIONS_PATH

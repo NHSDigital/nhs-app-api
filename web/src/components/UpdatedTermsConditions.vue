@@ -118,16 +118,9 @@ export default {
     async onConfirmButtonClicked() {
       this.hasTriedToContinue = true;
       if (this.areTermsAccepted) {
-        const consentRequest = {
-          ConsentGiven: true,
-          UpdatingConsent: true,
-        };
+        await this.$store.dispatch('termsAndConditions/acceptTerms', { updatingConsent: true });
 
-        await this.$store.dispatch('termsAndConditions/acceptTerms', { consentRequest });
-
-        if (this.$store.state.termsAndConditions.areAccepted) {
-          this.$router.push({ path: NOTIFICATIONS_PATH, query: this.$route.query });
-        }
+        this.$router.push({ path: NOTIFICATIONS_PATH, query: this.$route.query });
       } else {
         EventBus.$emit(FOCUS_ERROR_ELEMENT);
       }

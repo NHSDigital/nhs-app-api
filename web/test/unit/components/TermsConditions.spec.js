@@ -95,20 +95,20 @@ describe('TermsConditions acceptance', () => {
     expect(wrapper.vm.isAnalyticsCookieAccepted).toBe(false);
   });
 
-  describe('when both accepted', () => {
-    beforeEach(() => {
+  describe.each([
+    ['both terms accepted', true],
+    ['only terms is accepted', false],
+  ])('when %s', (_, isAnalyticsCookieAccepted) => {
+    beforeEach(async () => {
       wrapper.vm.areTermsAccepted = true;
-      wrapper.vm.isAnalyticsCookieAccepted = true;
-    });
-
-    it('updates the terms acceptance when submit button is clicked', async () => {
+      wrapper.vm.isAnalyticsCookieAccepted = isAnalyticsCookieAccepted;
       wrapper.find('#btn_accept').trigger('click');
       await wrapper.vm.$nextTick();
+    });
+
+    it(`will dipatch termsAndConditions/acceptTerms with isAnalyticsCookieAccepted set to ${isAnalyticsCookieAccepted}`, () => {
       expect($store.dispatch).toBeCalledWith('termsAndConditions/acceptTerms', {
-        consentRequest: {
-          ConsentGiven: true,
-          AnalyticsCookieAccepted: true,
-        },
+        analyticsCookieAccepted: isAnalyticsCookieAccepted,
       });
     });
   });
@@ -145,10 +145,7 @@ describe('terms and conditions are accepted', () => {
 
       it('will dispatch "termsAndConditions/acceptTerms"', () => {
         expect($store.dispatch).toBeCalledWith('termsAndConditions/acceptTerms', {
-          consentRequest: {
-            ConsentGiven: true,
-            AnalyticsCookieAccepted: true,
-          },
+          analyticsCookieAccepted: true,
         });
       });
 

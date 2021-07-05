@@ -1,5 +1,5 @@
 import actions from '@/store/modules/termsAndConditions/actions';
-import { SET_ACCEPTANCE } from '@/store/modules/termsAndConditions/mutation-types';
+import { SET_ACCEPTANCE, SET_UPDATED_CONSENT_REQUIRED } from '@/store/modules/termsAndConditions/mutation-types';
 
 describe('termsAndConditions/actions', () => {
   let app;
@@ -34,58 +34,59 @@ describe('termsAndConditions/actions', () => {
   });
 
   describe('acceptTerms', () => {
-    let consentTerms;
+    let consentRequest;
 
     beforeEach(() => {
-      consentTerms = {
-        consentRequest: {
-          ConsentGiven: true,
-          AnalyticsCookieAccepted: true,
-        },
+      consentRequest = {
+        analyticsCookieAccepted: true,
+        updatingConsent: undefined,
       };
     });
 
-    it('will call postV1PatientTermsAndConditionsConsent with the received consent terms ', async () => {
-      await actions.acceptTerms({ commit }, consentTerms);
-      expect(app.$http.postV1PatientTermsAndConditionsConsent).toBeCalledWith(consentTerms);
+    it('will call postV1PatientTermsAndConditionsConsent with the received consent request', async () => {
+      await actions.acceptTerms({ commit }, consentRequest);
+      expect(app.$http.postV1PatientTermsAndConditionsConsent)
+        .toBeCalledWith({ consentRequest: { consentGiven: true, ...consentRequest } });
     });
 
     describe('update terms and conditions post is successful', () => {
       beforeEach(async () => {
-        await app
+        app
           .$http
           .postV1PatientTermsAndConditionsConsent
           .mockResolvedValue(() => '');
+
         app.$http.getV1PatientTermsAndConditionsConsent = jest.fn(() => Promise.resolve({
           response: { consentGiven: true, analyticsCookieAccepted: true },
         }));
-        consentTerms = {
-          consentRequest: {
-            ConsentGiven: true,
-            AnalyticsCookieAccepted: true,
-            UpdatingConsent: true,
-          },
-        };
+
+        await actions.acceptTerms({ commit }, { updatingConsent: true });
       });
 
-      it('will call postV1PatientTermsAndConditionsConsent if update consent is set to true', async () => {
-        actions.acceptTerms({ commit }, consentTerms);
+      it('will call getV1PatientTermsAndConditionsConsent if update consent is set to true', () => {
         expect(app.$http.getV1PatientTermsAndConditionsConsent).toBeCalled();
+      });
+
+      it('will commit SET_ACCEPTANCE', () => {
+        expect(commit).toBeCalledWith(
+          SET_ACCEPTANCE,
+          { areAccepted: true, analyticsCookieAccepted: true },
+        );
+      });
+
+      it('will commit SET_UPDATED_CONSENT_REQUIRED', () => {
+        expect(commit).toBeCalledWith(SET_UPDATED_CONSENT_REQUIRED, false);
       });
     });
 
-
     describe('post is successful', () => {
       beforeEach(async () => {
-        await app
-          .$http
-          .postV1PatientTermsAndConditionsConsent
-          .mockResolvedValue(() => '');
+        app.$http.postV1PatientTermsAndConditionsConsent.mockResolvedValue(() => '');
 
-        await actions.acceptTerms({ commit }, consentTerms);
+        await actions.acceptTerms({ commit }, consentRequest);
       });
 
-      it('will commit SET_ACCEPTANCE as true when the post request completes successfully', async () => {
+      it('will commit SET_ACCEPTANCE', () => {
         expect(commit).toBeCalledWith(
           SET_ACCEPTANCE,
           { areAccepted: true, analyticsCookieAccepted: true },
@@ -94,20 +95,26 @@ describe('termsAndConditions/actions', () => {
     });
 
     describe('post fails', () => {
+      let threwException = false;
+
       beforeEach(async () => {
-        await app
-          .$http
+        app.$http
           .postV1PatientTermsAndConditionsConsent
           .mockImplementation(() => Promise.reject());
 
-        await actions.acceptTerms({ commit }, consentTerms);
+        try {
+          await actions.acceptTerms({ commit }, consentRequest);
+        } catch {
+          threwException = true;
+        }
       });
 
-      it('will commit SET_ACCEPTANCE as false when the post request fails', async () => {
-        expect(commit).toBeCalledWith(
-          SET_ACCEPTANCE,
-          { areAccepted: false, analyticsCookieAccepted: false },
-        );
+      it('will throw exception', () => {
+        expect(threwException).toBe(true);
+      });
+
+      it('will not commit', () => {
+        expect(commit).not.toBeCalled();
       });
     });
   });
@@ -159,7 +166,7 @@ describe('termsAndConditions/actions', () => {
       });
 
       it('will call getV1PatientTermsAndConditionsConsent ', () => {
-        expect(app.$http.getV1PatientTermsAndConditionsConsent).toBeCalledWith({});
+        expect(app.$http.getV1PatientTermsAndConditionsConsent).toBeCalledWith();
       });
 
       it('will commit the result from getV1PatientTermsAndConditionsConsent', () => {
