@@ -57,7 +57,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         [NhsAppAndroidTest]
         public void APatientCanNavigateToLoggedOutHomeWithTheKeyboardWhenCreateSessionReturnsUnexpectedErrorAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new KeyboardPatient()
+            var patient = new EmisPatient()
                 .WithBehaviour(new NhsLoginAuthoriseErrorCodeBehaviour());
             using var patients = Mocks.Patients.Add(patient);
 

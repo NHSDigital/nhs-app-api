@@ -1,24 +1,21 @@
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
-  odsCode: tpp_with_pkb_and_covid_pass
+  "odsCode": "emis_with_notifications_prompt_enabled"
 journeys:
   appointments:
     provider: im1
   cdssAdmin:
-    serviceDefinition: CONDITION_LIST_ADMIN
-    provider: eConsult
+    provider: none
   cdssAdvice:
-    serviceDefinition: GEC_GEN
-    conditionsServiceDefinition: CONDITION_LIST
-    provider: eConsult
+    provider: none
   coronavirusInformation: true
   documents: true
   im1Messaging:
     isEnabled: true
     canDeleteMessages: false
     canUpdateReadStatus: true
-    requiresDetailsRequest: false
-    sendMessageSubject: false
+    requiresDetailsRequest: true
+    sendMessageSubject: true
   medicalRecord:
     version: "2"
     provider: im1
@@ -26,34 +23,24 @@ journeys:
   ndop: true
   nominatedPharmacy: true
   notifications: true
-  notificationPrompt: false
+  notificationPrompt: true
   oneOneOne: true
   prescriptions:
     provider: im1
   silverIntegrations:
     accountAdmin: []
-    carePlans:
-    - pkb
+    carePlans: []
     consultations: []
     consultationsAdmin: []
     healthTrackers: []
-    libraries:
-    - pkb
-    medicines:
-    - pkb
-    messages:
-    - pkb
-    - testSilverThirdPartyProvider
+    libraries: []
+    medicines: []
+    messages: []
     participation: []
-    recordSharing:
-    - pkb
-    secondaryAppointments:
-    - ers
+    recordSharing: []
+    secondaryAppointments: []
     testResults: []
-    vaccineRecord:
-    - netCompany
-    - nhsd
-    - netCompanyP5
-  supplier: Tpp
+    vaccineRecord: []
+  supplier: Emis
   supportsLinkedProfiles: true
   userInfo: true

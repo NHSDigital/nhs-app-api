@@ -15,7 +15,7 @@ namespace NHSOnline.IntegrationTests.Notifications
         public void APatientCanEnableNotificationsDuringTheLoginFlow(
             IAndroidDriverWrapper driver)
         {
-            var patient = new EmisPatient()
+            var patient = new EmisPatient(EmisPatientOds.NotificationsPromptEnabled)
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
@@ -61,7 +61,7 @@ namespace NHSOnline.IntegrationTests.Notifications
         public void APatientCanChooseToNotEnableNotificationsDuringTheLoginFlow(
             IAndroidDriverWrapper driver)
         {
-            var patient = new EmisPatient()
+            var patient = new EmisPatient(EmisPatientOds.NotificationsPromptEnabled)
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 

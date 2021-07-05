@@ -15,7 +15,7 @@ namespace NHSOnline.IntegrationTests.Notifications
         [NhsAppAndroidTest]
         public void APatientCanNavigateToDeviceSettingsFromNotificationsPageAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new KeyboardPatient()
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Richard").FamilyName("Headley"));
             using var patients = Mocks.Patients.Add(patient);
 
@@ -45,7 +45,7 @@ namespace NHSOnline.IntegrationTests.Notifications
         [NhsAppAndroidTest]
         public void APatientCanNavigateToDeviceSettingsFromNotificationsViaKeyboardAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new KeyboardPatient()
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Seymour").FamilyName("Buttons"));
             using var patients = Mocks.Patients.Add(patient);
 

@@ -42,9 +42,9 @@ docker run \
   "${DOCKER_ARGS[@]}" \
   "${DOCKER_REGISTRY:-local}/nhsonline-integration-tests:${DOCKER_TAG:-latest}" bash -c "
     dotnet test --filter ${TEST_FILTER} --no-build -c Release -r /src/TestResults --logger trx NHSOnline.IntegrationTests/NHSOnline.IntegrationTests.csproj;
-    TESTS_EXIT_CODE=$? ;
+    TESTS_EXIT_CODE=\$? ;
     rm -Rf /src/TestResults/Deploy* ;
-    exit $TESTS_EXIT_CODE"
+    exit \$TESTS_EXIT_CODE"
 
 TESTS_EXIT_CODE=$?
 

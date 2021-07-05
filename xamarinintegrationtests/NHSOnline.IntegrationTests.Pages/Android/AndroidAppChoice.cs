@@ -11,12 +11,12 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         private readonly string? _link;
 
         private string OptionalLinkText => _link != null ? $" {_link} links" : " links";
-        
+
         private AndroidSystemLabel OpenWithAppChoiceText => AndroidSystemLabel.WhichMatches(_driver,
             $"Open({OptionalLinkText})? with");
 
         private AndroidSystemLabel OpenWithPreselectedAppText =>
-            AndroidSystemLabel.WhichMatches(_driver, $"Open with {_targetApp}");
+            AndroidSystemLabel.WhichMatches(_driver, $"Open({OptionalLinkText})? with {_targetApp}");
 
         private AndroidAppChoiceOption TargetAppChoice => AndroidAppChoiceOption.WithText(_driver, _targetApp);
 

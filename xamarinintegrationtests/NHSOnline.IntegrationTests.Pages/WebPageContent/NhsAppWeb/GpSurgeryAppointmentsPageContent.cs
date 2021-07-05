@@ -16,7 +16,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "GP Surgery Appointments");
 
-        private WebText ErrorTitleText => WebText.WithTagAndText(_interactor, "h1", "Sorry, there is a problem with GP appointment booking");
+        private WebText ErrorTitleText => WebText.WithTagAndText(_interactor, "h1", "Sorry, there is a problem with loading GP appointments");
 
         internal void AssertOnPage() => TitleText.AssertVisible();
 

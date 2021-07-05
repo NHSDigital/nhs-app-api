@@ -40,7 +40,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         [NhsAppAndroidTest]
         public void APatientWithProofLevelNineCanKeyboardNavigateToAccessNhsLoginSettingsFromMoreScreenAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new KeyboardPatient()
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Norman").FamilyName("Long"));
             using var patients = Mocks.Patients.Add(patient);
 

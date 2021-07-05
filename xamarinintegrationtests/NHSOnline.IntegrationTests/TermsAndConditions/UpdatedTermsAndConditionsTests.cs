@@ -18,9 +18,8 @@ namespace NHSOnline.IntegrationTests.TermsAndConditions
         public void ShowUpdatedTermsAndConditionsPageAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
+                .WithTermsAndConditionsAccepted(x => x with {DateOfConsent = "2018-11-11T00:00:00+00:00"})
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
-
-            ConsentCollection.Add(patient.ToConsent() with { DateOfConsent = "2018-11-11T00:00:00+00:00" });
 
             using var patients = Mocks.Patients.Add(patient);
 
@@ -46,9 +45,8 @@ namespace NHSOnline.IntegrationTests.TermsAndConditions
         public void ShowUpdatedTermsAndConditionsPageIos(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
+                .WithTermsAndConditionsAccepted(x => x with {DateOfConsent = "2018-11-11T00:00:00+00:00"})
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
-
-            ConsentCollection.Add(patient.ToConsent() with { DateOfConsent = "2018-11-11T00:00:00+00:00" });
 
             using var patients = Mocks.Patients.Add(patient);
 

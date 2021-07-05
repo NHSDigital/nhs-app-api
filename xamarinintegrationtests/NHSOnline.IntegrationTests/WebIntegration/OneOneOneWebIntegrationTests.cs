@@ -39,7 +39,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         [NhsAppAndroidTest]
         public void APatientWithProofLevelNineCanKeyboardNavigateToAccessTheOneOneOneScreenFromAdviceAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new KeyboardPatient()
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Otis").FamilyName("Ocean"));
             using var patients = Mocks.Patients.Add(patient);
 

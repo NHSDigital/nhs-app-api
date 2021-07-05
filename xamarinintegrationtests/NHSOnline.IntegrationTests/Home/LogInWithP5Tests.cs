@@ -42,10 +42,6 @@ namespace NHSOnline.IntegrationTests.Home
                 .AssertOnPage(driver)
                 .PageContent.OptInToUserResearch();
 
-            AndroidManageNotificationsPromptPage
-                .AssertOnPage(driver)
-                .PageContent.Continue();
-
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
                 .AssertPageDisplayedFor("Terry Tibbs");
@@ -79,10 +75,6 @@ namespace NHSOnline.IntegrationTests.Home
             IOSUserResearchOptInPage
                 .AssertOnPage(driver)
                 .PageContent.OptInToUserResearch();
-
-            IOSManageNotificationsPromptPage
-                .AssertOnPage(driver)
-                .PageContent.Continue();
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)

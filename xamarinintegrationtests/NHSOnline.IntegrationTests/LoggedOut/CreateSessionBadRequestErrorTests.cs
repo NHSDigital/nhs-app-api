@@ -57,7 +57,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         [NhsAppAndroidTest]
         public void APatientCanNavigateToLoggedOutHomeWithTheKeyboardWhenCreateSessionReturnsBadRequestAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new KeyboardPatient()
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithBehaviour(new NhsLoginAuthoriseBlankCodeBehaviour());
 
             using var patients = Mocks.Patients.Add(patient);

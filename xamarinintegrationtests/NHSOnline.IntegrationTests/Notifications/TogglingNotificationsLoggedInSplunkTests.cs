@@ -20,7 +20,7 @@ namespace NHSOnline.IntegrationTests.Notifications
                 .WithName(b => b.GivenName("Spur").FamilyName("Lincoln"));
             using var patients = Mocks.Patients.Add(patient);
 
-            var testTiming = TimedTestExecutor.Execute(() => LoginProcess.LogAndroidPatientIn(driver, patient));
+            LoginProcess.LogAndroidPatientIn(driver, patient);
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
@@ -30,10 +30,11 @@ namespace NHSOnline.IntegrationTests.Notifications
                 .AssertOnPage(driver)
                 .PageContent.NavigateToNotifications();
 
-            AndroidNotificationsPage
-                .AssertOnPage(driver)
-                .PageContent
-                .ToggleOnNotifications();
+            var testTiming = TimedTestExecutor.Execute(() =>
+                AndroidNotificationsPage
+                    .AssertOnPage(driver)
+                    .PageContent
+                    .ToggleOnNotifications());
 
             AndroidNotificationsPage
                 .AssertOnPage(driver)
@@ -56,7 +57,7 @@ namespace NHSOnline.IntegrationTests.Notifications
                 .WithName(b => b.GivenName("Spur").FamilyName("Lincoln"));
             using var patients = Mocks.Patients.Add(patient);
 
-            var testTiming = TimedTestExecutor.Execute(() => LoginProcess.LogAndroidPatientIn(driver, patient));
+            LoginProcess.LogAndroidPatientIn(driver, patient);
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
@@ -66,11 +67,12 @@ namespace NHSOnline.IntegrationTests.Notifications
                 .AssertOnPage(driver)
                 .PageContent.NavigateToNotifications();
 
-            AndroidNotificationsPage
+            var notificationsPage = AndroidNotificationsPage
                 .AssertOnPage(driver)
                 .PageContent
-                .ToggleOnNotifications()
-                .ToggleOffNotifications();
+                .ToggleOnNotifications();
+
+            var testTiming = TimedTestExecutor.Execute(() => notificationsPage.ToggleOffNotifications());
 
             NotificationLogs.GetLogs(testTiming.StartTime,
                     testTiming.StopTime,

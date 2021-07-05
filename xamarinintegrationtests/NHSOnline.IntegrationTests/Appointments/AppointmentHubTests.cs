@@ -56,7 +56,7 @@ namespace NHSOnline.IntegrationTests.Appointments
         [NhsAppAndroidTest]
         public void APatientIsShownAppointmentsHubAndCanNavigateBackFromLinksViaKeyboardNavigationAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new KeyboardPatient()
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("App").FamilyName("Ointments"));
             using var patients = Mocks.Patients.Add(patient);
 

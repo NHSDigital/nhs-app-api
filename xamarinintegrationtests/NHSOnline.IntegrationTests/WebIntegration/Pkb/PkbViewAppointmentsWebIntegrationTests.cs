@@ -48,7 +48,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
         [NhsAppAndroidTest]
         public void APatientCanUseAKeyboardToAccessTheirPkbAppointmentsFromTheAppointmentsScreenAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new KeyboardPatient()
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Patrick").FamilyName("Klingon"));
             using var patients = Mocks.Patients.Add(patient);
 

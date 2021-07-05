@@ -17,7 +17,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         public void APatientInvokingNativeBackFromNotificationsPromptRemainsOnTheSamePageAndroid(
             IAndroidDriverWrapper driver)
         {
-            var patient = new EmisPatient()
+            var patient = new EmisPatient(EmisPatientOds.NotificationsPromptEnabled)
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
@@ -56,7 +56,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         public void APatientInvokingNativeBackFromNotificationsPromptRemainsOnTheSamePageIos(
             IIOSDriverWrapper driver)
         {
-            var patient = new EmisPatient()
+            var patient = new EmisPatient(EmisPatientOds.NotificationsPromptEnabled)
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 

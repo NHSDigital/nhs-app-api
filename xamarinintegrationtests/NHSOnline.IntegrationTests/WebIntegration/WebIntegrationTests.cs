@@ -86,7 +86,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         [NhsAppAndroidTest]
         public void APatientInAWebIntegrationCanUseTheirKeyboardToReturnToTheAppViaTheBottomNavigation(IAndroidDriverWrapper driver)
         {
-            var patient = new KeyboardPatient()
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Valencia").FamilyName("Sanguinelli"));
             using var patients = Mocks.Patients.Add(patient);
 

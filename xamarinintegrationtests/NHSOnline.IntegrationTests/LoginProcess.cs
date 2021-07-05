@@ -31,10 +31,6 @@ namespace NHSOnline.IntegrationTests
             AndroidUserResearchOptInPage
                 .AssertOnPage(driver)
                 .PageContent.OptInToUserResearch();
-
-            AndroidManageNotificationsPromptPage
-                .AssertOnPage(driver)
-                .PageContent.Continue();
         }
 
         public static void LogIOSPatientIn(IIOSDriverWrapper driver, Patient patient)
@@ -58,10 +54,6 @@ namespace NHSOnline.IntegrationTests
             IOSUserResearchOptInPage
                 .AssertOnPage(driver)
                 .PageContent.OptInToUserResearch();
-
-            IOSManageNotificationsPromptPage
-                .AssertOnPage(driver)
-                .PageContent.Continue();
         }
     }
 }

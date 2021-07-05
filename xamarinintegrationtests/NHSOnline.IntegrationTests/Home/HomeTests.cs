@@ -290,7 +290,7 @@ namespace NHSOnline.IntegrationTests.Home
         [NhsAppAndroidTest]
         public void APatientWithProofLevelNineCanUseTheKeyboardToNavigateToAdviceAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new KeyboardPatient()
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
@@ -308,7 +308,7 @@ namespace NHSOnline.IntegrationTests.Home
         [NhsAppAndroidTest]
         public void APatientWithProofLevelNineCanUseTheKeyboardToNavigateToAppointmentsAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new KeyboardPatient()
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
@@ -326,7 +326,7 @@ namespace NHSOnline.IntegrationTests.Home
         [NhsAppAndroidTest]
         public void APatientWithProofLevelNineCanUseTheKeyboardToNavigateToPrescriptionsAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new KeyboardPatient()
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
@@ -344,7 +344,7 @@ namespace NHSOnline.IntegrationTests.Home
         [NhsAppAndroidTest]
         public void APatientWithProofLevelNineCanUseTheKeyboardToNavigateToYourHealthAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new KeyboardPatient()
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
@@ -362,7 +362,7 @@ namespace NHSOnline.IntegrationTests.Home
         [NhsAppAndroidTest]
         public void APatientWithProofLevelNineCanUseTheKeyboardToNavigateToMessagesAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new KeyboardPatient()
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
@@ -380,7 +380,7 @@ namespace NHSOnline.IntegrationTests.Home
         [NhsAppAndroidTest]
         public void APatientWithProofLevelNineCanUseTheKeyboardToNavigateFromHomeScreenAndGoBackHomeAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new KeyboardPatient()
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
@@ -401,7 +401,7 @@ namespace NHSOnline.IntegrationTests.Home
         [NhsAppAndroidTest]
         public void APatientWithProofLevelNineCanUseTheKeyboardToNavigateToHelpAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new KeyboardPatient()
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
@@ -421,7 +421,7 @@ namespace NHSOnline.IntegrationTests.Home
         [NhsAppAndroidTest]
         public void APatientWithProofLevelNineCanUseTheKeyboardToNavigateToMoreAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new KeyboardPatient()
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 

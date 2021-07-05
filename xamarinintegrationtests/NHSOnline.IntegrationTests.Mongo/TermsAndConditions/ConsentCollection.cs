@@ -4,7 +4,7 @@ using NHSOnline.HttpMocks.Domain;
 namespace NHSOnline.IntegrationTests.Mongo.TermsAndConditions
 {
 
-    public static class ConsentCollection
+    internal static class ConsentCollection
     {
         private static IMongoCollection<ConsentRecord> SetUpAndRetrieveMongoCollection()
         {

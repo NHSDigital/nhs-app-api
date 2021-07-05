@@ -15,7 +15,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
         private WebText ErrorTitleText => WebText.WithTagAndText(
             _interactor,
             "h1",
-            "Sorry, there is a problem getting your repeat prescription information");
+            "Prescription data error");
 
         private WebLink BackBreadcrumb => WebLink.WithText(_interactor, "Back");
 

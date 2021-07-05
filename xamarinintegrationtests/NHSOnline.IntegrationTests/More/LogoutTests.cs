@@ -40,7 +40,7 @@ namespace NHSOnline.IntegrationTests.More
         [NhsAppAndroidTest]
         public void APatientWithProofLevelNineUsingKeyboardCanLogOutFromMoreScreenAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new KeyboardPatient()
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Alan").FamilyName("Shepard"));
             using var patients = Mocks.Patients.Add(patient);
 

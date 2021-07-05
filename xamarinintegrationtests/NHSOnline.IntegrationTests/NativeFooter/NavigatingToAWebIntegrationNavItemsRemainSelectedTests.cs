@@ -24,7 +24,7 @@ namespace NHSOnline.IntegrationTests.NativeFooter
         public void APatientSeesTheNavigationFooterRemainSelectedWhenNavigatingToAWebIntegrationAndroid(
             IAndroidDriverWrapper driver)
         {
-            var patient = new KeyboardPatient()
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Alan").FamilyName("Titchmarsh"));
             using var patients = Mocks.Patients.Add(patient);
 
@@ -79,7 +79,7 @@ namespace NHSOnline.IntegrationTests.NativeFooter
         public void APatientSeesTheNavigationFooterRemainSelectedWhenNavigatingToAWebIntegrationIOS(
             IIOSDriverWrapper driver)
         {
-            var patient = new KeyboardPatient()
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Tommy").FamilyName("Walsh"));
             using var patients = Mocks.Patients.Add(patient);
 
