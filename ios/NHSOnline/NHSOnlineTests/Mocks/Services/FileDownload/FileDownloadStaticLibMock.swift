@@ -11,7 +11,11 @@ class FileDownloadStaticLibMock: FileDownloadHelperBridge {
         FileDownloadStaticLibMock.outcome = outcome
     }
     
-    static func downloadFile(data: String, view: UIView, documentInteractionController: UIDocumentInteractionController) -> DownloadOutcome {
+    static func downloadFile(
+        data: String,
+        view: UIView,
+        documentInteractionController: UIDocumentInteractionController,
+        viewController: UIViewController) -> DownloadOutcome {
         return FileDownloadStaticLibMock.outcome
     }
 }

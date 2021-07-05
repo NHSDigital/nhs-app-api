@@ -2,7 +2,11 @@ import Foundation
 import UIKit
 
 protocol FileDownloadProtocol {
-    func downloadFile(data: String, view: UIView, documentInteractionController: UIDocumentInteractionController) -> DownloadOutcome
+    func downloadFile(
+        data: String,
+        view: UIView,
+        documentInteractionController: UIDocumentInteractionController,
+        viewController: UIViewController) -> DownloadOutcome
 }
 
 class FileDownloadHelperImpl: FileDownloadProtocol {
@@ -13,14 +17,26 @@ class FileDownloadHelperImpl: FileDownloadProtocol {
         self.fileDownloadLib = lib
     }
     
-    func downloadFile(data: String, view: UIView, documentInteractionController: UIDocumentInteractionController) -> DownloadOutcome {
-        return self.fileDownloadLib.downloadFile(data: data, view: view, documentInteractionController: documentInteractionController)
+    func downloadFile(
+        data: String,
+        view: UIView,
+        documentInteractionController: UIDocumentInteractionController,
+        viewController: UIViewController) -> DownloadOutcome {
+        return self.fileDownloadLib.downloadFile(
+            data: data,
+            view: view,
+            documentInteractionController: documentInteractionController,
+            viewController: viewController)
     }
 }
     
 protocol FileDownloadHelperBridge {
         
-    static func downloadFile(data: String, view: UIView, documentInteractionController: UIDocumentInteractionController) -> DownloadOutcome
+    static func downloadFile(
+        data: String,
+        view: UIView,
+        documentInteractionController: UIDocumentInteractionController,
+        viewController: UIViewController) -> DownloadOutcome
 }
 
 

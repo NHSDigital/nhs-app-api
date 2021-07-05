@@ -34,6 +34,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         self.loggingService = loggingService
         self.schemeHandlers.registerHandler(handler: MailToSchemeHandler())
         self.schemeHandlers.registerHandler(handler: TelSchemeHandler())
+        self.schemeHandlers.registerHandler(handler: BlobSchemeHandler())
     }
 
     func webView(_ webView: WKWebView,

@@ -678,7 +678,11 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
     }
     
     func downloadFile(messageBody: String, source: JavaScriptInteractionMode) {
-        switch fileDownloader!.getDownloader().downloadFile(data: messageBody, view: self.view, documentInteractionController: documentInteractionController) {
+        switch fileDownloader!.getDownloader().downloadFile(
+            data: messageBody,
+            view: self.view,
+            documentInteractionController: documentInteractionController,
+            viewController: self) {
         case .NOT_SUPPORTED:
             self.showDataDownloadAlert(alertType: .OSNotSupported)
         case .ERROR:

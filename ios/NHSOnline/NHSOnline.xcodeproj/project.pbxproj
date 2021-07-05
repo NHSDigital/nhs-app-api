@@ -44,6 +44,7 @@
 		2E1F14802417B57600788F25 /* KnownServicesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1F147F2417B57600788F25 /* KnownServicesProtocol.swift */; };
 		2EA7BDA52418FCDD00CFEDC8 /* KnownServicesProtocolMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA7BDA42418FCDD00CFEDC8 /* KnownServicesProtocolMocks.swift */; };
 		2EA7BDA72418FCF700CFEDC8 /* ConfigurationServiceProtocolMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA7BDA62418FCF700CFEDC8 /* ConfigurationServiceProtocolMocks.swift */; };
+		2ECEDF5926936108007E2192 /* BlobSchemeHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECEDF5826936108007E2192 /* BlobSchemeHandlers.swift */; };
 		2EF7D81C23C76377005C03ED /* HeaderEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF7D81B23C76377005C03ED /* HeaderEnum.swift */; };
 		30178302224E1FE400CCB5EA /* HomeViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30178301224E1FE400CCB5EA /* HomeViewControllerTests.swift */; };
 		3067F25521E39C1F009734AF /* LifecycleHandlersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3067F25421E39C1F009734AF /* LifecycleHandlersTests.swift */; };
@@ -356,6 +357,7 @@
 		2EA7BDA42418FCDD00CFEDC8 /* KnownServicesProtocolMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownServicesProtocolMocks.swift; sourceTree = "<group>"; };
 		2EA7BDA62418FCF700CFEDC8 /* ConfigurationServiceProtocolMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationServiceProtocolMocks.swift; sourceTree = "<group>"; };
 		2EC60A6C23194F94004094F3 /* NHSOnline.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NHSOnline.entitlements; sourceTree = "<group>"; };
+		2ECEDF5826936108007E2192 /* BlobSchemeHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlobSchemeHandlers.swift; sourceTree = "<group>"; };
 		2EE2C6262371CCAA00C02299 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		2EF7D81B23C76377005C03ED /* HeaderEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderEnum.swift; sourceTree = "<group>"; };
 		2F0D70D5C5E6293284CD57CB /* Pods-NHSOnlinePaycasso.scratch13.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlinePaycasso.scratch13.xcconfig"; path = "Target Support Files/Pods-NHSOnlinePaycasso/Pods-NHSOnlinePaycasso.scratch13.xcconfig"; sourceTree = "<group>"; };
@@ -898,6 +900,7 @@
 				2E0CFB25223DC75A002ABFA1 /* MailToSchemeHandler.swift */,
 				2E0CFB1F223DB9CE002ABFA1 /* SchemeHandlers.swift */,
 				64C1C76A23E2E33600FCBA57 /* TelSchemeHandler.swift */,
+				2ECEDF5826936108007E2192 /* BlobSchemeHandlers.swift */,
 			);
 			path = SchemeHandlers;
 			sourceTree = "<group>";
@@ -1929,6 +1932,7 @@
 				F065B3DA205FDFC6004EF388 /* TabBarDelegate.swift in Sources */,
 				14D4D21921E8D711008A65E0 /* BiometricService.swift in Sources */,
 				ED6A4519244D9D16005BA1E9 /* LoggedOutHeaderStrategy.swift in Sources */,
+				2ECEDF5926936108007E2192 /* BlobSchemeHandlers.swift in Sources */,
 				8A78F38222F9B58A00BB161F /* BiometricState.swift in Sources */,
 				8A78F38022F9B52200BB161F /* UserDefaultsManager.swift in Sources */,
 				135171A721C9EF78001EC74B /* CookieHandler.swift in Sources */,
