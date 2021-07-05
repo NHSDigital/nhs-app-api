@@ -22,8 +22,8 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
 
                 if (results == PermissionStatus.Granted)
                 {
-                    OnReceivedGeolocationPermissionsResultHandler.Instance.MGeolocationOrigin = origin;
-                    OnReceivedGeolocationPermissionsResultHandler.Instance.MGeoLocationCallback = callback;
+                    OnReceivedGeolocationPermissionsResultHandler.Instance.GeolocationOrigin = origin;
+                    OnReceivedGeolocationPermissionsResultHandler.Instance.GeolocationCallback = callback;
                 }
                 else
                 {

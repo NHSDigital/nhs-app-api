@@ -10,9 +10,9 @@ namespace NHSOnline.App.Droid.Handlers
         public static OnReceivedGeolocationPermissionsResultHandler Instance { get;  } =
             new OnReceivedGeolocationPermissionsResultHandler();
 
-        internal string? MGeolocationOrigin { set; get; }
+        internal string? GeolocationOrigin { set; get; }
 
-        internal GeolocationPermissions.ICallback? MGeoLocationCallback { set; get; }
+        internal GeolocationPermissions.ICallback? GeolocationCallback { set; get; }
 
         private OnReceivedGeolocationPermissionsResultHandler()
         {
@@ -26,7 +26,7 @@ namespace NHSOnline.App.Droid.Handlers
                 permissions.Contains(Manifest.Permission.AccessCoarseLocation))
             {
                 var allow = grantResults[0] == Permission.Granted;
-                MGeoLocationCallback?.Invoke(MGeolocationOrigin, allow, false);
+                GeolocationCallback?.Invoke(GeolocationOrigin, allow, false);
             }
         }
     }
