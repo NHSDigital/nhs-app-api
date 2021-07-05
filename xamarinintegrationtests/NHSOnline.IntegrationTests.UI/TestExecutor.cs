@@ -31,6 +31,8 @@ namespace NHSOnline.IntegrationTests.UI
             var results = new List<TestResult>();
             var retryStatus = RetryStatus.NoRetry;
 
+            var config = Configuration.Get<TestExecutionConfig>("TestExecution");
+
             do
             {
                 if (retryStatus.ShouldRetry)
@@ -59,7 +61,7 @@ namespace NHSOnline.IntegrationTests.UI
                 testResult.Duration = timer.Elapsed;
 
                 results.Add(testResult);
-            } while (retryStatus.ShouldRetry && InRetryWindow());
+            } while (config.RetryOnFlakyErrors && retryStatus.ShouldRetry && InRetryWindow());
 
             return results.ToArray();
 
