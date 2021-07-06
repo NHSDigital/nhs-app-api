@@ -1,0 +1,42 @@
+name: Release-notes-$(Build.SourceBranchName)-$(Date:yyyyMMdd)_$(Rev:r)
+
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-18.04'
+
+variables:
+- group: release_notes
+
+stages:
+- stage: releaseNotes
+  displayName: Run release notes script
+  jobs:
+  - job:
+    displayName: 'Run release notes script'
+    steps:
+    - task: Bash@3
+      displayName: 'Run release notes script'
+      inputs:
+        targetType: 'inline'
+        workingDirectory: $(System.DefaultWorkingDirectory)/release
+        script: |
+            set -e
+            
+            # Get the latest pushed tag
+            export TAG=$(git describe --abbrev=0 --tags)
+            
+            # Produce the release notes
+            ./release_notes.sh "[$(MAILING_LIST)]"
+            
+            # Send the produced file to Slack
+            curl -F file=@${TAG}.txt -F "initial_comment=${TAG}" -F channels=$(SLACK_RELEASE_NOTES_CHANNEL) -H "Authorization: Bearer $(SLACK_API_TOKEN)" https://slack.com/api/files.upload
+            
+            cat "$TAG".json
+            
+            # Send email 
+            curl -v --request POST \
+            --url https://api.sendgrid.com/v3/mail/send \
+            --header 'authorization: Bearer $(SENDGRID_APIKEY)' \
+            --header 'content-type: application/json' \
+            --data "@${TAG}.json"
