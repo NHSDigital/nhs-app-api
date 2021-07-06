@@ -51,7 +51,7 @@ spec:
                 name: {{ template "nhsapp.name" . }}-messages-{{ .Chart.AppVersion | replace "." "-"}}
                 port:
                   number: {{ $.Values.sidecar_proxy.containerPort }}
-          - path: /v[1,2]/api/users/([A-Za-z0-9-#]{36,37})/messages
+          - path: /v[1,2]/api/users/([A-Za-z0-9-:]{36,37})/messages
             pathType: ImplementationSpecific
             backend:
               service:
@@ -98,7 +98,7 @@ spec:
                 port:
                   number: {{ $.Values.sidecar_proxy.containerPort }}
 
-          - path: /v[1,2]/api/users/([A-Za-z0-9-#]{36,37})/messages
+          - path: /v[1,2]/api/users/([A-Za-z0-9-:]{36,37})/messages
             pathType: ImplementationSpecific
             backend:
               service:
