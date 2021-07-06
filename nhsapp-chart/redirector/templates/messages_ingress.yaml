@@ -23,7 +23,7 @@ spec:
                 name: default-messages
                 port:
                   number: {{ .Values.defaultServicePort }}
-          - path: /v[1,2]/api/users/([A-Za-z0-9-$]{36,37})/messages
+          - path: /v[1,2]/api/users/([A-Za-z0-9-#]{36,37})/messages
             pathType: ImplementationSpecific
             backend:
               service:
