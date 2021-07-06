@@ -64,10 +64,6 @@ namespace NHSOnline.IntegrationTests.Canary
                 .AssertOnPage(driver)
                 .PageContent.OptInToUserResearch();
 
-            AndroidManageNotificationsPromptPage
-                .AssertOnPage(driver)
-                .PageContent.Continue();
-
             AndroidAppointmentsPage
                 .AssertOnPage(driver)
                 .PageContent.NavigateToHospitalAndOtherAppointments();
@@ -122,10 +118,6 @@ namespace NHSOnline.IntegrationTests.Canary
             IOSUserResearchOptInPage
                 .AssertOnPage(driver)
                 .PageContent.OptInToUserResearch();
-
-            IOSManageNotificationsPromptPage
-                .AssertOnPage(driver)
-                .PageContent.Continue();
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
