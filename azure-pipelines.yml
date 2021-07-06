@@ -388,28 +388,36 @@ stages:
           parameters:
             runCanaryTests: true
 
-    - stage: xamarin_integration_report_generation
-      displayName: Xamarin Integration Generate Reports
-      ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-        condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
-      dependsOn:
-        - xamarin_integration_upgrade_tests
-        - xamarin_integration_tests
-        - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-          - pr_changes
-      jobs:
-        - template: .azuredevops/templates/integration-tests-xamarin-generate-reports.yml
+    - ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
+      - stage: xamarin_integration_report_generation
+        displayName: Xamarin Integration Generate Reports
+        condition: succeededOrFailed()
+        dependsOn:
+          - xamarin_integration_upgrade_tests
+          - xamarin_integration_tests
+          - xamarin_integration_canary_tests
+        jobs:
+          - template: .azuredevops/templates/integration-tests-xamarin-generate-reports.yml
 
-    - stage: xamarin_integration_canary_report_generation
-      displayName: Xamarin Integration Generate Canary Reports
-      ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-        condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'False'))
-      dependsOn:
-        - xamarin_integration_canary_tests
-        - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+    - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+      - stage: xamarin_pr_integration_report_generation
+        displayName: Xamarin Integration Generate Reports
+        condition: and(succeededOrFailed(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
+        dependsOn:
+          - xamarin_integration_upgrade_tests
+          - xamarin_integration_tests
           - pr_changes
-      jobs:
-        - template: .azuredevops/templates/integration-tests-xamarin-generate-reports.yml
+        jobs:
+          - template: .azuredevops/templates/integration-tests-xamarin-generate-reports.yml
+
+      - stage: xamarin_pr_integration_canary_report_generation
+        displayName: Xamarin Integration Generate Canary Reports
+        condition: and(succeededOrFailed(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'False'))
+        dependsOn:
+          - xamarin_integration_canary_tests
+          - pr_changes
+        jobs:
+          - template: .azuredevops/templates/integration-tests-xamarin-generate-reports.yml
 
   - ${{ if and(eq(variables['native.xamarin.distribute'], 'true'), eq(variables['native.xamarin.target'], 'Staging'), eq(variables['source.develop'], 'True')) }}:
     - stage: xamarin_upload_ipa_job

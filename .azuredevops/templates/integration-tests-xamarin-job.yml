@@ -114,18 +114,22 @@ jobs:
         condition: and(succeededOrFailed(), eq(variables['integration.tests.results.exists'], 'True'))
         inputs:
           targetPath: 'xamarinintegrationtests/TestResults'
+          ${{ if eq(parameters['runCanaryTests'], true) }}:
+            artifactName: 'Xamarin Integration Canary Test Files'
           ${{ if eq(parameters['runUpgradeTests'], true) }}:
             artifactName: 'Xamarin Integration Upgrade Test Files'
-          ${{ if eq(parameters['runUpgradeTests'], false) }}:
+          ${{ if and(eq(parameters['runUpgradeTests'], false), eq(parameters['runCanaryTests'], false))  }}:
             artifactName: 'Xamarin Integration Test Files'
 
       - task: PublishTestResults@2
         displayName: Publish Test Results
         condition: and(succeededOrFailed(), eq(variables['integration.tests.results.exists'], 'True'))
         inputs:
+          ${{ if eq(parameters['runCanaryTests'], true) }}:
+            testRunTitle: 'Xamarin Integration Canary Tests'
           ${{ if eq(parameters['runUpgradeTests'], true) }}:
             testRunTitle: 'Xamarin Integration Upgrade Tests'
-          ${{ if eq(parameters['runUpgradeTests'], false) }}:
+          ${{ if and(eq(parameters['runUpgradeTests'], false), eq(parameters['runCanaryTests'], false))  }}:
             testRunTitle: 'Xamarin Integration Tests'
           testResultsFormat: VSTest
           testResultsFiles: xamarinintegrationtests/TestResults/*.trx
