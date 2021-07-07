@@ -5,8 +5,6 @@ AZURE_SUBSCRIPTION_NAME: nonlive
 cosmosDBName: scratch
 zone: dev
 
-gpSessionOnDemandEnabled: true
-
 environmentPublicHostSuffix: ".dev.nonlive.nhsapp.service.nhs.uk"
 environmentPrivateHostSuffix: "-dev.private.dev.nonlive.nhsapp.service.nhs.uk"
 tlsSecretName: "dev-nhsapp-service-nhs-uk"

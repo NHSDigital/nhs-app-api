@@ -7,8 +7,6 @@ cidFidoHostname: uaf.aos.signin.nhs.uk
 cidSettingsHostName: settings.aos.signin.nhs.uk
 akamaiEnv: nhsapp.service.nhs.uk
 
-gpSessionOnDemandEnabled: false
-
 # well known
 wellKnownAndroidPackageName: com.nhs.online.nhsonline.onboardingaos
 wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.onboardingaos

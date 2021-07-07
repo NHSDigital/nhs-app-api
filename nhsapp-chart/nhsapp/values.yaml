@@ -66,7 +66,7 @@ fakeGpSystemEnabled: false
 fakeGpSupplierConfigPath: "/app/FakeGpSupplierConfig_ext.yml"
 webVueGlobalObject: false
 
-gpSessionOnDemandEnabled: false
+gpSessionOnDemandEnabled: true
 
 organDonationIPTrust: "13.73.176.25/32"
 organDonationProtocol: https
