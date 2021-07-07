@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Azure.NotificationHubs;
 using NHSOnline.Backend.UsersApi.Notifications.Extensions;
@@ -74,6 +76,17 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             var tag = NhsLoginTagGenerator.Generate(request.NhsLoginId);
 
             await _hubClient.SendTemplateNotificationAsync(properties, tag);
+        }
+
+        public async Task SendScheduledNotification(NotificationRequest request)
+        {
+            var properties = request.ToDictionary();
+            var tag = NhsLoginTagGenerator.Generate(request.NhsLoginId);
+
+            var notification = new TemplateNotification(properties);
+
+            Debug.Assert(request.ScheduledTime != null, "request.ScheduledTime != null");
+            await _hubClient.ScheduleNotificationAsync(notification, request.ScheduledTime.Value, tag);
         }
 
         public override string ToString() => _description;

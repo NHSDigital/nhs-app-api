@@ -171,7 +171,8 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
                 if (wrappers.Count == 1)
                 {
-                    await wrappers[0].SendNotification(request);
+                    await SendNotification(wrappers[0], request);
+
                     _logger.LogInformation($"Notification {request} sent to nhs login id {request.NhsLoginId} on hub {wrappers[0]}");
                     return;
                 }
@@ -185,7 +186,8 @@ namespace NHSOnline.Backend.UsersApi.Notifications
                         continue;
                     }
 
-                    await wrapper.SendNotification(request);
+                    await SendNotification(wrapper, request);
+
                     _logger.LogInformation($"Notification {request} sent to nhs login id {request.NhsLoginId} on hub {wrapper}");
                     return;
                 }
@@ -193,6 +195,18 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             finally
             {
                 _logger.LogExit();
+            }
+        }
+
+        private static async Task SendNotification(IAzureNotificationHubWrapper wrapper, NotificationRequest request)
+        {
+            if (request.ScheduledTime != null)
+            {
+                await wrapper.SendScheduledNotification(request);
+            }
+            else
+            {
+                await wrapper.SendNotification(request);
             }
         }
     }

@@ -35,7 +35,8 @@ namespace NHSOnline.Backend.UsersApi.Notifications
                     Url = string.IsNullOrWhiteSpace(notificationSendRequest.Url)
                         ? null
                         : new Uri(notificationSendRequest.Url.Trim()),
-                    NhsLoginId = nhsLoginId
+                    NhsLoginId = nhsLoginId,
+                    ScheduledTime = notificationSendRequest.ScheduledTime
                 };
 
                 await _notificationClient.SendNotification(request);

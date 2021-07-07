@@ -149,12 +149,51 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             _mockWrapper2.VerifyNoOtherCalls();
         }
 
+        [TestMethod]
+        public async Task SendNotification_NullScheduled_SendsNotification()
+        {
+            //Arrange
+            SetupMockWrapper(_mockWrapper, true);
+            _notificationRequest.ScheduledTime = null;
+
+            _mockWrapperService
+                .Setup(x => x.AllFor(NhsLoginId))
+                .Returns(new[] { _mockWrapper.Object });
+
+            //Act
+            await _systemUnderTest.SendNotification(_notificationRequest);
+
+            //Assert
+            VerifySetups();
+        }
+
+        [TestMethod]
+        public async Task SendNotification_ScheduledTimeSpecified_SchedulesNotification()
+        {
+            // Arrange
+            _notificationRequest.ScheduledTime = DateTimeOffset.Now.AddHours(1);
+
+            SetupMockWrapper(_mockWrapper, true);
+
+            _mockWrapperService
+                .Setup(x => x.AllFor(NhsLoginId))
+                .Returns(new[] { _mockWrapper.Object });
+
+            // Act
+            await _systemUnderTest.SendNotification(_notificationRequest);
+
+            // Assert
+            VerifySetups();
+        }
+
         private void SetupMockWrapper(
             Mock<IAzureNotificationHubWrapper> wrapper,
             bool hasInstallations,
             bool hasMultipleWrappers = false
         )
         {
+            bool isScheduled = _notificationRequest.ScheduledTime != null;
+
             if (hasMultipleWrappers)
             {
                 var installationIds = hasInstallations
@@ -167,16 +206,34 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 
                 if (hasInstallations)
                 {
-                    wrapper
-                        .Setup(x => x.SendNotification(_notificationRequest))
-                        .Returns(Task.CompletedTask);
+                    if (isScheduled)
+                    {
+                        wrapper
+                            .Setup(x => x.SendScheduledNotification(_notificationRequest))
+                            .Returns(Task.CompletedTask);
+                    }
+                    else
+                    {
+                        wrapper
+                            .Setup(x => x.SendNotification(_notificationRequest))
+                            .Returns(Task.CompletedTask);
+                    }
                 }
             }
             else
             {
-                wrapper
-                    .Setup(x => x.SendNotification(_notificationRequest))
-                    .Returns(Task.CompletedTask);
+                if (isScheduled)
+                {
+                    wrapper
+                        .Setup(x => x.SendScheduledNotification(_notificationRequest))
+                        .Returns(Task.CompletedTask);
+                }
+                else
+                {
+                    wrapper
+                        .Setup(x => x.SendNotification(_notificationRequest))
+                        .Returns(Task.CompletedTask);
+                }
             }
         }
 

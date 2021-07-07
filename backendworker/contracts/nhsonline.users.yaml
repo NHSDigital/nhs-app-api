@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   version: 0.0.1
-  title: NHS App Users-API 
+  title: NHS App Users-API
   description: NHS App Users-API - endpoints pertaining to Users, all require an Authorisation-Bearer Token to be included in the header.
 paths:
   /users/me/devices:
@@ -183,10 +183,10 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
 components:
   securitySchemes:
-    nhsLoginBearerAuth:            
+    nhsLoginBearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT   
+      bearerFormat: JWT
   responses:
     UnauthorizedError:
       description: Access token is missing or invalid.
@@ -197,7 +197,7 @@ components:
   schemas:
     DeviceType:
       type: string
-      enum: 
+      enum:
           - ios
           - android
     AddDeviceRequest:
@@ -215,8 +215,8 @@ components:
       properties:
         deviceId:
           type: string
-        deviceType: 
-          $ref: '#/components/schemas/DeviceType'        
+        deviceType:
+          $ref: '#/components/schemas/DeviceType'
       example:
         deviceId: 2f2c28c8-3de9-4ffc-9d0b-23533363d7d3
         deviceType: android
@@ -238,6 +238,8 @@ components:
         body:
           type: string
         url:
+          type: string
+        scheduledTime:
           type: string
     NotificationsPromptData:
       type: object

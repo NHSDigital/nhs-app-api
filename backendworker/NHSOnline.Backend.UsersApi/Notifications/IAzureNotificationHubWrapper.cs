@@ -16,5 +16,6 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         Task<string[]> GetInstallationIdsByDevicePns(string devicePns);
         Task<string[]> GetInstallationIdsByNhsLoginId(string nhsLoginId);
         Task SendNotification(NotificationRequest request);
+        Task SendScheduledNotification(NotificationRequest request);
     }
 }

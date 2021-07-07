@@ -11,6 +11,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications.Models
         public string Body { get; set; }
         public Uri Url { get; set; }
         public string NhsLoginId { get; set; }
+        public DateTimeOffset? ScheduledTime { get; set; }
 
         public IDictionary<string, string> ToDictionary()
         {

@@ -5743,6 +5743,8 @@
                     type: "string"
                   url: 
                     type: "string"
+                  scheduledTime: 
+                    type: "string"
           description: "Details of the notification to be sent"
           required: true
           responses: 

@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace NHSOnline.Backend.UsersApi.Areas.Devices.Models
@@ -9,5 +10,6 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices.Models
         public string Body { get; set; }
         [SuppressMessage("Microsoft.Design", "CA1056", Justification = "Uris are not serializable")]
         public string Url { get; set; }
+        public DateTimeOffset? ScheduledTime { get; set; }
     }
 }

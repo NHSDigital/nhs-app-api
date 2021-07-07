@@ -306,5 +306,44 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 
             result.Should().BeOfType<NotificationSendResult.InternalServerError>();
         }
+
+        [TestMethod]
+        public async Task Send_ScheduledTimeSpecified_Success()
+        {
+            // Arrange
+            const string title = "title";
+            const string subtitle = "subtitle";
+            const string body = "body";
+            const string url = "http://www.example.com";
+            DateTimeOffset? scheduledTime = DateTimeOffset.Now.AddHours(1);
+
+            var request = new NotificationSendRequest
+            {
+                Title = title,
+                Subtitle = subtitle,
+                Body = body,
+                Url = url,
+                ScheduledTime = scheduledTime
+            };
+
+            _mockNotificationClient
+                .Setup(x => x.SendNotification(
+                    It.Is<NotificationRequest>(y =>
+                        y.Title == title &&
+                        y.Subtitle == subtitle &&
+                        y.Body == body &&
+                        y.Url == new Uri(url) &&
+                        y.NhsLoginId == NhsLoginId &&
+                        y.ScheduledTime == scheduledTime)))
+                .Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _systemUnderTest.Send(NhsLoginId, request);
+
+            // Assert
+            _mockNotificationClient.VerifyAll();
+
+            result.Should().BeOfType<NotificationSendResult.Success>();
+        }
     }
 }
