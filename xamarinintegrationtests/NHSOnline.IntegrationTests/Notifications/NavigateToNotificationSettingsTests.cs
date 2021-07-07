@@ -9,7 +9,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.Notifications
 {
     [TestClass]
-    [BusinessRule("BR-LOG-01.31", "Actioning the manage notifications settings from the notifications settings menu navigates to the device settings")]
+    [BusinessRule("BR-NOT-04.22", "Actioning the manage notifications settings link from the notifications settings menu navigates to the NHS App device settings")]
     public class NavigateToNotificationSettingsTests
     {
         [NhsAppAndroidTest]

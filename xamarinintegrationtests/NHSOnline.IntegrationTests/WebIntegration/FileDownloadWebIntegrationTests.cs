@@ -53,6 +53,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppIOSTest]
+        [Ignore("NHSO-13694 - iOS does not display the file dialogue when the WebButton is clicked")]
         public void APatientWithProofLevelNineCanDownloadAFileFromTheTestProviderDownloadFileScreenIOS(
             IIOSDriverWrapper driver)
         {
