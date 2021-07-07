@@ -1,6 +1,9 @@
 name: Release-notes-$(Build.SourceBranchName)-$(Date:yyyyMMdd)_$(Rev:r)
 
-trigger: none
+trigger:
+  tags:
+    include:
+    - '*'
 
 pool:
   vmImage: 'ubuntu-18.04'
