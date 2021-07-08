@@ -72,6 +72,7 @@ export default {
       const routeDetails = this.$router.resolve(removeNhsAppHost(route.query.state));
       const routeMetaData = get('route.meta', routeDetails);
       const ignoreGpSessionError = get('gpSessionOnDemand.ignoreError', routeMetaData);
+      this.$store.dispatch('session/setGpSession', false);
 
       if (ignoreGpSessionError) {
         this.redirect(route);

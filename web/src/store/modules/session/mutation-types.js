@@ -29,5 +29,5 @@ export const initialState = () => ({
   validationInterval: undefined,
   userSessionCreateReferenceCode: undefined,
   hasRetried: undefined,
-  hasGpSession: false,
+  hasGpSession: undefined,
 });

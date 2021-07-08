@@ -62,6 +62,7 @@
   </div>
 </template>
 <script>
+import { get } from 'lodash/fp';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import MenuItemList from '@/components/MenuItemList';
 import sjrIf from '@/lib/sjrIf';
@@ -148,6 +149,9 @@ export default {
     };
   },
   computed: {
+    gpSessionApiError() {
+      return this.$store.state.auth.gpSessionError;
+    },
     hasAnyAccess() {
       return this.shouldLoadGpMessages ||
         this.appMessagingSjrEnabled ||
@@ -190,7 +194,7 @@ export default {
   async mounted() {
     const params = { ignoreError: true };
 
-    if (this.shouldLoadGpMessages && this.hasGpSession) {
+    if (this.shouldLoadGpMessages && !this.ignoreGpSessionError()) {
       await this.$store.dispatch('gpMessages/loadMessages', params);
     }
 
@@ -202,6 +206,10 @@ export default {
     this.hasUnreadAppMessages = this.$store.state.messaging.hasUnread;
   },
   methods: {
+    ignoreGpSessionError() {
+      const ignoreGpSessionError = get('gpSessionOnDemand.ignoreError', this.$route.meta);
+      return this.gpSessionApiError && ignoreGpSessionError;
+    },
     navigateToGpMessages() {
       redirectTo(this, this.im1MessagingPath);
     },

@@ -12,6 +12,7 @@ let linkElement;
 let wrapper;
 let $store;
 let $router;
+let $route;
 
 const knownServices = [{
   id: 'pkb',
@@ -33,7 +34,8 @@ const mountPage = ({
   isProofLevel9 = true,
   hasUnreadAppMessages = false,
   hasUnreadGPMessages = false,
-  hasGpSession = false,
+  ignoreGpSessionError = false,
+  gpSessionApiError = undefined,
 } = {}) => {
   $router = createRouter();
   $store = createStore({
@@ -42,7 +44,8 @@ const mountPage = ({
       device: { isNativeApp: false },
       gpMessages: { hasUnread: hasUnreadGPMessages },
       messaging: { hasUnread: hasUnreadAppMessages },
-      session: { hasGpSession },
+      session: { ignoreGpSessionError },
+      auth: { gpSessionError: gpSessionApiError },
     },
     getters: {
       'knownServices/matchOneById': id => find(service => service.id === id)(knownServices),
@@ -53,7 +56,14 @@ const mountPage = ({
       'session/isProxying': isProxying,
     },
   });
-  wrapper = mount(Messages, { $store, $router, mountOpts: { i18n } });
+  $route = {
+    meta: {
+      gpSessionOnDemand: {
+        ignoreError: true,
+      },
+    },
+  };
+  wrapper = mount(Messages, { $store, $router, $route, mountOpts: { i18n } });
 };
 
 describe('messages page', () => {
@@ -95,20 +105,20 @@ describe('messages page', () => {
 
     describe('load GP messages', () => {
       each([
-        { practice: false, sjr: false, hasGpSession: true, expectedResult: false },
-        { practice: false, sjr: false, hasGpSession: false, expectedResult: false },
-        { practice: false, sjr: true, hasGpSession: true, expectedResult: false },
-        { practice: false, sjr: true, hasGpSession: false, expectedResult: false },
-        { practice: true, sjr: false, hasGpSession: true, expectedResult: false },
-        { practice: true, sjr: false, hasGpSession: false, expectedResult: false },
-        { practice: true, sjr: true, hasGpSession: true, expectedResult: true },
-        { practice: true, sjr: true, hasGpSession: false, expectedResult: false },
-      ]).describe('loading GP Messages', ({ practice, sjr, hasGpSession, expectedResult }) => {
-        it(`${expectedResult ? 'will' : 'will not'} load gp messages when practice is ${practice}, sjr is ${sjr}, hasGpSession is ${hasGpSession}`, () => {
+        { practice: false, sjr: false, gpSessionApiError: { status: 599 }, expectedResult: false },
+        { practice: false, sjr: false, gpSessionApiError: { status: 599 }, expectedResult: false },
+        { practice: false, sjr: true, gpSessionApiError: { status: 599 }, expectedResult: false },
+        { practice: false, sjr: true, gpSessionApiError: { status: 599 }, expectedResult: false },
+        { practice: true, sjr: false, gpSessionApiError: { status: 599 }, expectedResult: false },
+        { practice: true, sjr: false, gpSessionApiError: { status: 599 }, expectedResult: false },
+        { practice: true, sjr: true, gpSessionApiError: { status: 599 }, expectedResult: false },
+        { practice: true, sjr: true, expectedResult: true },
+      ]).describe('loading GP Messages', ({ practice, sjr, gpSessionApiError, expectedResult }) => {
+        it(`${expectedResult ? 'will' : 'will not'} load gp messages when practice is ${practice}, sjr is ${sjr}, gpSessionApiError ${gpSessionApiError ? 'exists' : 'does not exist'}`, () => {
           mountPage({
             practiceIm1MessagingEnabled: practice,
             sjrIm1MessagingEnabled: sjr,
-            hasGpSession,
+            gpSessionApiError,
           });
           if (expectedResult) {
             expect($store.dispatch).toHaveBeenCalledWith('gpMessages/loadMessages', { ignoreError: true });

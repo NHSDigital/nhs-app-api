@@ -163,6 +163,7 @@ export default {
   },
   async handleGpOnDemandResponse({ commit, state, rootState }, nhsLoginResponse) {
     try {
+      commit(ADD_GP_SESSION_ERROR, undefined);
       const request = createSessionRequest(state, rootState, nhsLoginResponse);
       const response = await this.app.$http.putV1SessionGpSessionOnDemand(request);
 
