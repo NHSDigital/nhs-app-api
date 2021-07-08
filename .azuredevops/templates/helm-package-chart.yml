@@ -3,6 +3,12 @@ jobs:
     displayName: Package helm charts
     steps: 
       - template: set-branch-tag-steps.yml
+
+      - task: HelmInstaller@1
+        displayName: Helm installer
+        inputs: 
+          helmVersionToInstall: 3.2.3
+
       - task: HelmDeploy@0
         displayName: Helm package app chart
         inputs:
@@ -11,6 +17,13 @@ jobs:
           destination: $(System.ArtifactsDirectory)
           version: v1.0.0
           arguments: --app-version=$(branch.tag)
+      - task: Bash@3
+        displayName: Helm lint app chart
+        inputs:
+          workingDirectory: $(System.ArtifactsDirectory)
+          targetType: 'inline'
+          script: helm lint nhsapp-v1.0.0.tgz
+
       - task: HelmDeploy@0
         displayName: Helm package redirector chart
         inputs:
@@ -19,6 +32,13 @@ jobs:
           destination: $(System.ArtifactsDirectory)
           version: v1.0.0
           arguments: --app-version=$(branch.tag)
+      - task: Bash@3
+        displayName: Helm lint app chart
+        inputs:
+          workingDirectory: $(System.ArtifactsDirectory)
+          targetType: 'inline'
+          script: helm lint defaultingress-v1.0.0.tgz
+
       - task: HelmDeploy@0
         displayName: Helm package internal ingress chart
         inputs:
@@ -27,6 +47,12 @@ jobs:
           destination: $(System.ArtifactsDirectory)
           version: v1.0.0
           arguments: --app-version=$(branch.tag)
+      - task: Bash@3
+        displayName: Helm lint app chart
+        inputs:
+          workingDirectory: $(System.ArtifactsDirectory)
+          targetType: 'inline'
+          script: helm lint internalingress-v1.0.0.tgz
 
       - task: PublishBuildArtifacts@1
         displayName: Publish packaged helm charts

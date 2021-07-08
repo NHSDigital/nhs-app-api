@@ -15,7 +15,7 @@ metadata:
       more_set_headers 'Content-Security-Policy: frame-src \'self\' https://feedback.digital.nhs.uk/ https://nhs.demdex.net/ https://assets.adobedtm.com *.112.2o7.net https://*.hotjar.com; frame-ancestors \'self\'; object-src \'none\'';
       more_clear_headers 'server';
   name: {{ template "nhsapp.name" . }}-{{ $.Values.web.role }}-{{ .Chart.AppVersion | replace "." "-" }}
-  namespace: {{ $.Values.global.environment }}
+  namespace: {{ $.Values.global.environment }} 
   labels:
     version: {{ .Chart.AppVersion | quote }}
 spec:
@@ -42,7 +42,7 @@ spec:
                 name: {{ template "nhsapp.name" . }}-{{ $.Values.web.role }}-{{ .Chart.AppVersion | replace "." "-" }}
                 port:
                   number: {{ $.Values.sidecar_proxy.containerPort }}
-    {{- if eq .Values.zone .Values.global.environment }}
+    {{- if eq (default $.Values.zone "dev") .Values.global.environment }} 
     - host: www.{{ $.Values.zone }}.{{ $.Values.domain }}
       http:
         paths:
@@ -58,7 +58,7 @@ spec:
     - hosts:
         - www-{{ $.Values.global.environment | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}
         - www-{{ $.Values.global.environment | replace "." "-" }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}
-      {{- if eq .Values.zone .Values.global.environment }}
+      {{- if eq (default $.Values.zone "dev") .Values.global.environment }}
         - www.{{ $.Values.zone }}.{{ $.Values.domain }}
       {{- end }}
       secretName: {{ $.Values.zone }}-{{ $.Values.domain | replace "." "-" }}

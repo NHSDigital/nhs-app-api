@@ -19,7 +19,7 @@ appImageTag: v1.0.0
 environmentPerftest: {}
 cluster: {}
 clusterIP: ""
-zone: {}
+zone: dev
 domain: ""
 networkPolicyEnabled: true
 region: uksouth
@@ -277,6 +277,16 @@ organdonation: cGxhY2Vob2xkZXI=
 organdonationSubscription: cGxhY2Vob2xkZXI=
 sessionKey: cGxhY2Vob2xkZXI=
 spinePartyId: cGxhY2Vob2xkZXI=
+
+# Splunk 
+splunk:
+    pidIndex: apppid_nhsapp_dev
+
+secrets:
+    notificationHubs:
+      - name: "notificationHubSharedAccessKey"
+        versionuks: "0"
+        versionukw: "0"
 
 # Ingress Configuration
 # Toggles creation of www-{env}.{zone}.{domain} url. Disable to use redirector chart.
