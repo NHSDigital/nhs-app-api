@@ -74,5 +74,17 @@ namespace NHSOnline.App.iOS
 
             return base.ContinueUserActivity(application, userActivity, completionHandler);
         }
+
+        public override void DidEnterBackground(UIApplication uiApplication)
+        {
+            SecureScreen.Show();
+            base.DidEnterBackground(uiApplication);
+        }
+
+        public override void WillEnterForeground(UIApplication uiApplication)
+        {
+            base.WillEnterForeground(uiApplication);
+            SecureScreen.Hide();
+        }
     }
 }

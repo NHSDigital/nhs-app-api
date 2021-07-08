@@ -111,6 +111,7 @@
     <Compile Include="Renderers\WebViews\ScriptMessageHandler.cs" />
     <Compile Include="Renderers\WebViews\WebIntegrationWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\WebViewConfigurationBuilder.cs" />
+    <Compile Include="SecureScreen.cs" />
     <None Include="Info.template.plist" />
     <None Include="Info.plist">
       <DependentUpon>Info.template.plist</DependentUpon>

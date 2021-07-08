@@ -12,6 +12,7 @@ using NHSOnline.App.Droid.DependencyServices.InstallReferrer;
 using NHSOnline.App.Droid.Dialogs;
 using NHSOnline.App.Droid.Extensions;
 using NHSOnline.App.Droid.Handlers;
+using Xamarin.Essentials;
 
 namespace NHSOnline.App.Droid
 {
@@ -37,7 +38,9 @@ namespace NHSOnline.App.Droid
 
             base.OnCreate(savedInstanceState);
 
-            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+            Window.SetDefaultFlags();
+
+            Platform.Init(this, savedInstanceState);
             Xamarin.Forms.Forms.SetFlags("Expander_Experimental");
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
@@ -64,12 +67,33 @@ namespace NHSOnline.App.Droid
             MakeNotFocusableIfViewGroup(view);
         }
 
+        protected override void OnPause()
+        {
+            Window.AddSecureFlag();
+
+            base.OnPause();
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+
+            Window.ClearSecureFlag();
+        }
+
+        protected override void OnNewIntent(Intent intent)
+        {
+            base.OnNewIntent(intent);
+
+            HandleIntent(intent);
+        }
+
         public override void OnRequestPermissionsResult(
             int requestCode,
             string[] permissions,
             [GeneratedEnum] Permission[] grantResults)
         {
-            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
             OnReceivedGeolocationPermissionsResultHandler.Instance.OnRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -107,13 +131,6 @@ namespace NHSOnline.App.Droid
             }
 
             viewGroup.ChildViewAdded += (_, args) => MakeNotFocusableIfViewGroup(args.Child, depth + 1);
-        }
-
-        protected override void OnNewIntent(Intent intent)
-        {
-            base.OnNewIntent(intent);
-
-            HandleIntent(intent);
         }
 
         private void HandleIntent(Intent? intent)

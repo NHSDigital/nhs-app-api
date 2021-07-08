@@ -94,6 +94,7 @@
     <Compile Include="Effects\AndroidAccessibilityEffect.cs" />
     <Compile Include="Effects\AndroidFixedFontSizeEffect.cs" />
     <Compile Include="Extensions\IntentExtensions.cs" />
+    <Compile Include="Extensions\WindowExtensions.cs" />
     <Compile Include="Handlers\OnReceivedGeolocationPermissionsResultHandler.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Renderers\Heading1Renderer.cs" />
