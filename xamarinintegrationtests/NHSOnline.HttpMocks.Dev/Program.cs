@@ -17,12 +17,12 @@ namespace NHSOnline.HttpMocks.Dev
         {
             get
             {
-                yield return new P5Patient().WithLogin("P5Patient").WithName(b => b.FamilyName("P5"));
-                yield return new P5Patient().WithLogin("BadRequest").WithBehaviour(new NhsLoginAuthoriseBlankCodeBehaviour());
-                yield return new P5Patient().WithLogin("BadResponse").WithBehaviour(new NhsLoginTokenBadGatewayBehaviour());
-                yield return new P5Patient().WithLogin("Timeout").WithBehaviour(GetUserProfileDelayBehaviour);
-                yield return new P5Patient().WithLogin("NoNhsNumber").WithNhsNumber(NhsNumber.None);
-                yield return new P5Patient().WithLogin("TooYoung").WithAge(12, 300);
+                yield return new EmisPatient().WithProofLevel5().WithLogin("P5Patient").WithName(b => b.FamilyName("P5"));
+                yield return new EmisPatient().WithProofLevel5().WithLogin("BadRequest").WithBehaviour(new NhsLoginAuthoriseBlankCodeBehaviour());
+                yield return new EmisPatient().WithProofLevel5().WithLogin("BadResponse").WithBehaviour(new NhsLoginTokenBadGatewayBehaviour());
+                yield return new EmisPatient().WithProofLevel5().WithLogin("Timeout").WithBehaviour(GetUserProfileDelayBehaviour);
+                yield return new EmisPatient().WithProofLevel5().WithLogin("NoNhsNumber").WithNhsNumber(NhsNumber.None);
+                yield return new EmisPatient().WithProofLevel5().WithLogin("TooYoung").WithAge(12, 300);
                 yield return new P9Patient().WithLogin("UnknownSupplier").WithUnknownSupplierOdsCode();
                 yield return new P9Patient().WithLogin("UnknownOdsCode").WithUnknownOdsCode();
                 yield return new EmisPatient().WithLogin("EmisPatient").WithName(b => b.FamilyName("EMIS"));

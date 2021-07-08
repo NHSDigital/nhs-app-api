@@ -4,8 +4,8 @@ namespace NHSOnline.HttpMocks.Domain
 {
     public sealed class TppPatient : Patient, IGpRegistered
     {
-        public override string VectorOfTrust => "P9.Cp.Cd";
-        public override string ProofingLevel => "P9";
+        public override string VectorOfTrust { get; internal set; } = "P9.Cp.Cd";
+        public override string ProofingLevel { get; internal set; } = "P9";
 
         public string OdsCode => "tpp_with_pkb_and_covid_pass";
         public string Im1ConnectionToken => JsonSerializer.Serialize(new { AccountId = Id, ProviderId, Passphrase});

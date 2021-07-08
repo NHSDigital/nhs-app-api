@@ -17,8 +17,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         [NhsAppAndroidTest]
         public void AnErrorIsDisplayedWhenCreateSessionReturnsBadRequestAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithBehaviour(new NhsLoginAuthoriseBlankCodeBehaviour());
+            var patient = new EmisPatient()
+                .WithBehaviour(new NhsLoginAuthoriseBlankCodeBehaviour())
+                .WithProofLevel5();
 
             using var patients = Mocks.Patients.Add(patient);
 
@@ -97,8 +98,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         [NhsAppIOSTest]
         public void AnErrorIsDisplayedWhenCreateSessionReturnsBadRequestIos(IIOSDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithBehaviour(new NhsLoginAuthoriseBlankCodeBehaviour());
+            var patient = new EmisPatient()
+                .WithBehaviour(new NhsLoginAuthoriseBlankCodeBehaviour())
+                .WithProofLevel5();
 
             using var patients = Mocks.Patients.Add(patient);
 

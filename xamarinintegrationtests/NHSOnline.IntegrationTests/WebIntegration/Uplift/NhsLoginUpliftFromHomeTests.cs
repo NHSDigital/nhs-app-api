@@ -16,7 +16,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
         [NhsAppAndroidTest]
         public void APatientWithProofLevelFiveCanStartTheUpliftJourneyFromTheHomepageAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new P5Patient();
+            var patient = new EmisPatient()
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogAndroidPatientIn(driver, patient);
@@ -32,7 +33,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
         [NhsAppIOSTest]
         public void APatientWithProofLevelFiveCanStartTheUpliftJourneyFromTheHomepageIos(IIOSDriverWrapper driver)
         {
-            var patient = new P5Patient();
+            var patient = new EmisPatient()
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogIOSPatientIn(driver, patient);

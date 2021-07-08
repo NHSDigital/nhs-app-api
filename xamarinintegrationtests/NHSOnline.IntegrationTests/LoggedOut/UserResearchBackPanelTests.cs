@@ -17,8 +17,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         public void APatientInvokingNativeBackFromTheUserResearchPanelRemainsOnTheSamePageAndroid(
             IAndroidDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             AndroidLoggedOutHomePage
@@ -52,8 +53,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         public void APatientInvokingNativeBackFromTheUserResearchPanelRemainsOnTheSamePageIos(
             IIOSDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             IOSLoggedOutHomePage

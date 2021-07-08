@@ -110,8 +110,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         [NhsAppAndroidTest]
         public void AnErrorIsDisplayedWhenPatientHasNoNhsNumberAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithNhsNumber(NhsNumber.None);
+            var patient = new EmisPatient()
+                .WithNhsNumber(NhsNumber.None)
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             AndroidLoggedOutHomePage
@@ -134,8 +135,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         [NhsAppIOSTest]
         public void AnErrorIsDisplayedWhenPatientHasNoNhsNumberIos(IIOSDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithNhsNumber(NhsNumber.None);
+            var patient = new EmisPatient()
+                .WithNhsNumber(NhsNumber.None)
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             IOSLoggedOutHomePage

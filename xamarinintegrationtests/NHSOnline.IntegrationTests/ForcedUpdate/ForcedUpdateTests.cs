@@ -18,8 +18,9 @@ namespace NHSOnline.IntegrationTests.ForcedUpdate
         [NhsAppAndroidTest(AndroidBrowserStackCapability.SignInToGoogle)]
         public void APatientWithAnOutDatedAppSeesTheForcedUpgradePageWhenLoggingInAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             AndroidLoggedOutHomePage
@@ -40,8 +41,9 @@ namespace NHSOnline.IntegrationTests.ForcedUpdate
         [NhsAppIOSTest]
         public void APatientWithAnOutDatedAppSeesTheForcedUpgradePageWhenLoggingInIOS(IIOSDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             IOSLoggedOutHomePage
@@ -60,8 +62,9 @@ namespace NHSOnline.IntegrationTests.ForcedUpdate
         [NhsAppAndroidTest(AndroidBrowserStackCapability.NoNetwork)]
         public void APatientSeesTheForcedUpgradeErrorPageWhenLoggingInWithNoNetworkInAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             AndroidLoggedOutHomePage
@@ -80,8 +83,9 @@ namespace NHSOnline.IntegrationTests.ForcedUpdate
         [NhsAppIOSTest(IOSBrowserStackCapability.NoNetwork)]
         public void APatientSeesTheForcedUpgradeErrorPageWhenLoggingInWithNoNetworkInIOS(IIOSDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             IOSLoggedOutHomePage

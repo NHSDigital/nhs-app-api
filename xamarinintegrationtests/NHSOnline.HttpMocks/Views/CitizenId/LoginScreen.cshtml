@@ -63,7 +63,6 @@
                     .ToLookup(p => p switch
                         {
                             _ when p.Login.StartsWith("P5", StringComparison.InvariantCultureIgnoreCase) => "P5",
-                            P5Patient _ => "P5",
                             EmisPatient _ => "Emis",
                             TppPatient _ => "Tpp",
                             VisionPatient _ => "Vision",

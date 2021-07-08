@@ -14,8 +14,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         [NhsAppAndroidTest]
         public void AnErrorIsDisplayedWhenAPatientIsUnder13Android(IAndroidDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithAge(12, 300);
+            var patient = new EmisPatient()
+                .WithAge(12, 300)
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             AndroidLoggedOutHomePage
@@ -38,8 +39,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         [NhsAppIOSTest]
         public void AnErrorIsDisplayedWhenAPatientIsUnder13Ios(IIOSDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithAge(12, 300);
+            var patient = new EmisPatient()
+                .WithAge(12, 300)
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             IOSLoggedOutHomePage

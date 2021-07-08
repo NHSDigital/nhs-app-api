@@ -21,7 +21,7 @@ namespace NHSOnline.HttpMocks.Domain
 
         internal Behaviours Behaviours { get; } = new Behaviours();
 
-        public abstract string VectorOfTrust { get; }
-        public abstract string ProofingLevel { get; }
+        public abstract string VectorOfTrust { get; internal set; }
+        public abstract string ProofingLevel { get; internal set; }
     }
 }

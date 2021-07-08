@@ -28,8 +28,9 @@ namespace NHSOnline.IntegrationTests.Home
         public void APatientWithProofLevelFiveCanAccessMoreFromHomeScreenAndGoBackHomeAndroid(
             IAndroidDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogAndroidPatientIn(driver, patient);
@@ -50,8 +51,9 @@ namespace NHSOnline.IntegrationTests.Home
         [NhsAppIOSTest]
         public void APatientWithProofLevelFiveCanAccessMoreFromHomeScreenAndGoBackHomeIOS(IIOSDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogIOSPatientIn(driver, patient);
@@ -72,8 +74,9 @@ namespace NHSOnline.IntegrationTests.Home
         [NhsAppAndroidTest]
         public void APatientWithProofLevelFiveCanAccessAdviceFromHomeScreenAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogAndroidPatientIn(driver, patient);
@@ -90,8 +93,9 @@ namespace NHSOnline.IntegrationTests.Home
         [NhsAppIOSTest]
         public void APatientWithProofLevelFiveCanAccessAdviceFromHomeScreenIOS(IIOSDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogIOSPatientIn(driver, patient);
@@ -108,8 +112,9 @@ namespace NHSOnline.IntegrationTests.Home
         [NhsAppAndroidTest]
         public void APatientWithProofLevelFiveCanAccessHelpFromHomeScreenAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogAndroidPatientIn(driver, patient);
@@ -128,8 +133,9 @@ namespace NHSOnline.IntegrationTests.Home
         [NhsAppIOSTest]
         public void APatientWithProofLevelFiveCanAccessHelpFromHomeScreenIOS(IIOSDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogIOSPatientIn(driver, patient);

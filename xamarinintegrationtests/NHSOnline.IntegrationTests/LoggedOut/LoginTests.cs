@@ -15,8 +15,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         [NhsAppAndroidTest]
         public void APatientCanFollowInternalAndExternalLinksFromNhsLoginAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithName(b => b.GivenName("Fred").FamilyName("Jones"));
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Fred").FamilyName("Jones"))
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             AndroidLoggedOutHomePage
@@ -61,8 +62,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         [NhsAppIOSTest]
         public void APatientCanFollowInternalAndExternalLinksFromNhsLoginIos(IIOSDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithName(b => b.GivenName("Fred").FamilyName("Jones"));
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Fred").FamilyName("Jones"))
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             IOSLoggedOutHomePage
@@ -97,8 +99,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         [NhsAppIOSTest]
         public void APatientCanFollowInternalLinkWithTargetBlankFromNhsLoginIos(IIOSDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithName(b => b.GivenName("Fred").FamilyName("Jones"));
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Fred").FamilyName("Jones"))
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             IOSLoggedOutHomePage

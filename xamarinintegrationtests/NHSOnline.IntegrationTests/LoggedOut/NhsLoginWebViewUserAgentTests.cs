@@ -15,8 +15,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         [NhsAppAndroidTest]
         public void APatientWithProofLevelFiveCanAccessNhsLoginAndTheWebViewUserAgentIsSetAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithName(b => b.GivenName("Fred").FamilyName("Jones"));
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Fred").FamilyName("Jones"))
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             AndroidLoggedOutHomePage
@@ -35,8 +36,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         [NhsAppIOSTest]
         public void APatientWithProofLevelFiveCanAccessNhsLoginAndTheWebViewUserAgentIsSetIOS(IIOSDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithName(b => b.GivenName("Fred").FamilyName("Jones"));
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Fred").FamilyName("Jones"))
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             IOSLoggedOutHomePage

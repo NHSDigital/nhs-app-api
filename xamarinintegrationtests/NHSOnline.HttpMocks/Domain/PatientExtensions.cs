@@ -37,6 +37,15 @@ namespace NHSOnline.HttpMocks.Domain
             return patient;
         }
 
+        public static TPatient WithProofLevel5<TPatient>(this TPatient patient) where TPatient : Patient
+        {
+            patient = patient ?? throw new ArgumentNullException(nameof(patient));
+
+            patient.ProofingLevel = "P5";
+            patient.VectorOfTrust = "P5.Cp.Cd";
+            return patient;
+        }
+
         internal static TPatient WithBehaviour<TPatient, TBehaviour>(this TPatient patient, TBehaviour behaviour)
             where TPatient : Patient
             where TBehaviour: class

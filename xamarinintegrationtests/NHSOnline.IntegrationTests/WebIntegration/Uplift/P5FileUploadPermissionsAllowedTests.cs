@@ -19,7 +19,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
         [NhsAppAndroidTest]
         public void APatientWithProofLevelFiveCanUploadAFileAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new P5Patient();
+            var patient = new EmisPatient()
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogAndroidPatientIn(driver, patient);
@@ -50,7 +51,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
         [NhsAppIOSTest]
         public void APatientWithProofLevelFiveCanUploadAFileIOS(IIOSDriverWrapper driver)
         {
-            var patient = new P5Patient();
+            var patient = new EmisPatient()
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogIOSPatientIn(driver, patient);

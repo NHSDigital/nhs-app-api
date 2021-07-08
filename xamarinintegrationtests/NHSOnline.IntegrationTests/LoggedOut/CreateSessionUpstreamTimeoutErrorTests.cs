@@ -18,8 +18,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         public void AnErrorIsDisplayedWhenNhsLoginGetProfileTimesOutAndroid(IAndroidDriverWrapper driver)
         {
             using var delayBehaviour = new NhsLoginGetUserProfileDelayBehaviour();
-            var patient = new P5Patient()
-                .WithBehaviour(delayBehaviour);
+            var patient = new EmisPatient()
+                .WithBehaviour(delayBehaviour)
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             AndroidLoggedOutHomePage
@@ -61,8 +62,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         public void APatientCanNavigateToLoggedOutHomeWithTheKeyboardWhenUpstreamTimeoutCreatingSessionAndroid(IAndroidDriverWrapper driver)
         {
             using var delayBehaviour = new NhsLoginGetUserProfileDelayBehaviour();
-            var patient = new P5Patient()
-                .WithBehaviour(delayBehaviour);
+            var patient = new EmisPatient()
+                .WithBehaviour(delayBehaviour)
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             AndroidLoggedOutHomePage
@@ -104,8 +106,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         public void AnErrorIsDisplayedWhenNhsLoginGetProfileTimesOutIos(IIOSDriverWrapper driver)
         {
             using var delayBehaviour = new NhsLoginGetUserProfileDelayBehaviour();
-            var patient = new P5Patient()
-                .WithBehaviour(delayBehaviour);
+            var patient = new EmisPatient()
+                .WithBehaviour(delayBehaviour)
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             IOSLoggedOutHomePage

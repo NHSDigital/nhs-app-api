@@ -16,8 +16,9 @@ namespace NHSOnline.IntegrationTests.Home
         [NhsAppAndroidTest]
         public void APatientWithProofLevelFiveCanSuccessfullyLogInAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             AndroidLoggedOutHomePage
@@ -50,8 +51,9 @@ namespace NHSOnline.IntegrationTests.Home
         [NhsAppIOSTest]
         public void APatientWithProofLevelFiveCanSuccessfullyLogInIos(IIOSDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
+                .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
 
             IOSLoggedOutHomePage

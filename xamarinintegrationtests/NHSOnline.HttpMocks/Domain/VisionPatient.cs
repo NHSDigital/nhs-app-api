@@ -4,8 +4,8 @@ namespace NHSOnline.HttpMocks.Domain
 {
     public sealed class VisionPatient : Patient, IGpRegistered
     {
-        public override string VectorOfTrust => "P9.Cp.Cd";
-        public override string ProofingLevel => "P9";
+        public override string VectorOfTrust { get; internal set; } = "P9.Cp.Cd";
+        public override string ProofingLevel { get; internal set; } = "P9";
 
         public string OdsCode => "vision_with_pkb";
         public string Im1ConnectionToken => JsonSerializer.Serialize(new { RosuAccountId = Id, ApiKey });

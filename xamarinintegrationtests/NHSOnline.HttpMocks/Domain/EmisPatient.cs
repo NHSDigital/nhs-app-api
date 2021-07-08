@@ -5,8 +5,8 @@ namespace NHSOnline.HttpMocks.Domain
 {
     public sealed class EmisPatient : Patient, IGpRegistered
     {
-        public override string VectorOfTrust => "P9.Cp.Cd";
-        public override string ProofingLevel => "P9";
+        public override string VectorOfTrust { get; internal set; } = "P9.Cp.Cd";
+        public override string ProofingLevel { get; internal set; } = "P9";
 
         public string OdsCode { get; }
 

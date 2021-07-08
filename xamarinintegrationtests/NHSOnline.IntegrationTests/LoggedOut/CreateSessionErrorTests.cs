@@ -17,8 +17,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
          [NhsAppAndroidTest]
         public void AnErrorIsDisplayedWhenNhsLoginReturnsAnErrorRedirectAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithBehaviour(new NhsLoginAuthoriseErrorCodeBehaviour());
+            var patient = new EmisPatient()
+                .WithBehaviour(new NhsLoginAuthoriseErrorCodeBehaviour())
+                .WithProofLevel5();
 
             using var patients = Mocks.Patients.Add(patient);
 
@@ -96,8 +97,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         [NhsAppIOSTest]
         public void AnErrorIsDisplayedWhenNhsLoginReturnsAnErrorRedirectIos(IIOSDriverWrapper driver)
         {
-            var patient = new P5Patient()
-                .WithBehaviour(new NhsLoginAuthoriseErrorCodeBehaviour());
+            var patient = new EmisPatient()
+                .WithBehaviour(new NhsLoginAuthoriseErrorCodeBehaviour())
+                .WithProofLevel5();
 
             using var patients = Mocks.Patients.Add(patient);
 
