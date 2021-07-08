@@ -16,7 +16,7 @@ namespace NHSOnline.App.iOS.DependencyServices
         public bool MeetsMinimumVersion(VersionConfiguration versionConfiguration)
         {
             var currentVersion = AppInfo.Version;
-            var minimumSupportedVersion = versionConfiguration.MinimumSupportedAndroidVersion;
+            var minimumSupportedVersion = versionConfiguration.MinimumSupportediOSVersion;
 
             Logger.LogInformation( $"Update Required Check. Current Version: {currentVersion}. Minimum Version: {minimumSupportedVersion}.");
 

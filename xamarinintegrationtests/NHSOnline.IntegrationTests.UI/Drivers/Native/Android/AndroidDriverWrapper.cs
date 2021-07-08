@@ -54,7 +54,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             AndroidDevice targetDevice,
             AndroidOSVersion osVersion)
         {
-            var optionsBuilder = _browserStackConfig.GetDefaultBuilder()
+            return _browserStackConfig.GetDefaultBuilder()
                 .AddAcceptInsecureCertificates()
                 .AddPageLoadStrategy(PageLoadStrategy.Normal)
                 .AddApp(androidConfig.App)
@@ -64,28 +64,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
                 .AddTestName(testName)
                 .DisableAutoGrantPermissions()
                 .EnableNativeWebScreenshots()
-                .EnableEnsureWebviewsHavePages();
-
-            AddAndroidBrowserStackCapability(optionsBuilder, androidConfig, capabilities);
-
-            return optionsBuilder.Build();
-        }
-
-        private static void AddAndroidBrowserStackCapability(AppiumOptionsBuilder optionsBuilder, AndroidConfig androidConfig, AndroidBrowserStackCapability capability)
-        {
-            switch (capability)
-            {
-                case AndroidBrowserStackCapability.None:
-                    return;
-                case AndroidBrowserStackCapability.SignInToGoogle:
-                    optionsBuilder.AddBrowserStackSignInToAppStore(androidConfig.GoogleCredentials());
-                    break;
-                case AndroidBrowserStackCapability.NoNetwork:
-                    optionsBuilder.DisableBrowserStackNetwork();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(capability), capability, null);
-            }
+                .EnableEnsureWebviewsHavePages()
+                .AddAndroidBrowserStackCapability(capabilities, androidConfig)
+                .Build();
         }
 
         private TestLogs Logs { get; }

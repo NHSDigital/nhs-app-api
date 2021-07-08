@@ -1,10 +1,12 @@
+using System;
 using System.Collections.Generic;
+using NHSOnline.IntegrationTests.UI.Drivers.Native.Android;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 
 namespace NHSOnline.IntegrationTests.UI
 {
-    public class AppiumOptionsBuilder
+    internal class AppiumOptionsBuilder
     {
         private readonly AppiumOptions _options = new AppiumOptions();
 
@@ -150,6 +152,34 @@ namespace NHSOnline.IntegrationTests.UI
         {
             _options.AddAdditionalCapability("browserstack.networkProfile", "no-network");
             return this;
+        }
+
+        public AppiumOptionsBuilder AddIOSBrowserStackCapability(IOSBrowserStackCapability capabilities)
+        {
+            switch (capabilities)
+            {
+                case IOSBrowserStackCapability.None:
+                    return this;
+                case IOSBrowserStackCapability.NoNetwork:
+                    return DisableBrowserStackNetwork();
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(capabilities), capabilities, null);
+            }
+        }
+
+        public AppiumOptionsBuilder AddAndroidBrowserStackCapability(AndroidBrowserStackCapability capabilities, AndroidConfig androidConfig)
+        {
+            switch (capabilities)
+            {
+                case AndroidBrowserStackCapability.None:
+                    return this;
+                case AndroidBrowserStackCapability.SignInToGoogle:
+                    return AddBrowserStackSignInToAppStore(androidConfig.GoogleCredentials());
+                case AndroidBrowserStackCapability.NoNetwork:
+                    return DisableBrowserStackNetwork();
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(capabilities), capabilities, null);
+            }
         }
 
         public AppiumOptions Build()

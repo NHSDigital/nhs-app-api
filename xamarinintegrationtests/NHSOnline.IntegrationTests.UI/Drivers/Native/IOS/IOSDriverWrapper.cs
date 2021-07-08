@@ -61,32 +61,16 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             IOSVersion osVersion,
             IOSBrowserStackCapability capabilities)
         {
-            var optionsBuilder = _browserStackConfig.GetDefaultBuilder()
+            return _browserStackConfig.GetDefaultBuilder()
                 .AddAcceptInsecureCertificates()
                 .AddPageLoadStrategy(PageLoadStrategy.Normal)
                 .AddApp(iosConfig.App)
                 .AddDevice(targetDevice.ToName())
                 .AddOsVersion(osVersion.ToName())
                 .EnableNativeWebTap()
-                .AddTestName(testName);
-
-            AddIOSBrowserStackCapability(optionsBuilder, capabilities);
-
-            return optionsBuilder.Build();
-        }
-
-        private void AddIOSBrowserStackCapability(AppiumOptionsBuilder optionsBuilder, IOSBrowserStackCapability capabilities)
-        {
-            switch (capabilities)
-            {
-                case IOSBrowserStackCapability.None:
-                    return;
-                case IOSBrowserStackCapability.NoNetwork:
-                    optionsBuilder.DisableBrowserStackNetwork();
-                    return;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(capabilities), capabilities, null);
-            }
+                .AddTestName(testName)
+                .AddIOSBrowserStackCapability(capabilities)
+                .Build();
         }
 
         private TestLogs Logs { get; }
