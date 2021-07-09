@@ -42,6 +42,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
         {
             // Arrange
             var messageCreatedData = new MessageCreatedEventLogData(
+                "Message ID",
                 new MessageSenderContextEventLogData(
                     "Supplier ID",
                     "Communication ID",
@@ -74,10 +75,11 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
             // Assert
             VerifyMocks();
 
-            loggedNonPidData.Split(' ').Should().HaveCount(11);
+            loggedNonPidData.Split(' ').Should().HaveCount(12);
             AssertTimeStamp(loggedNonPidData);
             AssertContains(loggedNonPidData, "Action=MessageCreated");
             AssertContains(loggedNonPidData, "EnvironmentName=TestEnv");
+            AssertContains(loggedNonPidData, "MessageId=Message+ID");
             AssertContains(loggedNonPidData, "SupplierId=Supplier+ID");
             AssertContains(loggedNonPidData, "CommunicationId=Communication+ID");
             AssertContains(loggedNonPidData, "TransmissionId=Transmission+ID");
@@ -88,10 +90,11 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
             AssertContains(loggedNonPidData, "NhsLoginId=NHS+Login+ID");
             AssertDoesNotContain(loggedNonPidData, "NhsNumber=NHS+Number");
 
-            loggedPidData.Split(' ').Should().HaveCount(12);
+            loggedPidData.Split(' ').Should().HaveCount(13);
             AssertTimeStamp(loggedPidData);
             AssertContains(loggedPidData, "Action=MessageCreated");
             AssertContains(loggedPidData, "EnvironmentName=TestEnv");
+            AssertContains(loggedPidData, "MessageId=Message+ID");
             AssertContains(loggedPidData, "SupplierId=Supplier+ID");
             AssertContains(loggedPidData, "CommunicationId=Communication+ID");
             AssertContains(loggedPidData, "TransmissionId=Transmission+ID");
@@ -108,6 +111,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
         {
             // Arrange
             var messageReadData = new MessageReadEventLogData(
+                "Message ID",
                 new MessageSenderContextEventLogData(
                     "Supplier ID",
                     "Communication ID",
@@ -140,10 +144,11 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
             // Assert
             VerifyMocks();
 
-            loggedNonPidData.Split(' ').Should().HaveCount(11);
+            loggedNonPidData.Split(' ').Should().HaveCount(12);
             AssertTimeStamp(loggedNonPidData);
             AssertContains(loggedNonPidData, "Action=MessageRead");
             AssertContains(loggedNonPidData, "EnvironmentName=TestEnv");
+            AssertContains(loggedNonPidData, "MessageId=Message+ID");
             AssertContains(loggedNonPidData, "SupplierId=Supplier+ID");
             AssertContains(loggedNonPidData, "CommunicationId=Communication+ID");
             AssertContains(loggedNonPidData, "TransmissionId=Transmission+ID");
@@ -154,10 +159,11 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
             AssertContains(loggedNonPidData, "NhsLoginId=NHS+Login+ID");
             AssertDoesNotContain(loggedNonPidData, "NhsNumber=NHS+Number");
 
-            loggedPidData.Split(' ').Should().HaveCount(12);
+            loggedPidData.Split(' ').Should().HaveCount(13);
             AssertTimeStamp(loggedPidData);
             AssertContains(loggedPidData, "Action=MessageRead");
             AssertContains(loggedPidData, "EnvironmentName=TestEnv");
+            AssertContains(loggedPidData, "MessageId=Message+ID");
             AssertContains(loggedPidData, "SupplierId=Supplier+ID");
             AssertContains(loggedPidData, "CommunicationId=Communication+ID");
             AssertContains(loggedPidData, "TransmissionId=Transmission+ID");

@@ -39,7 +39,8 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                 var messageSenderContextEventLogData =
                     _messageSenderContextEventLogDataMapper.Map(result.UserMessage.SenderContext);
 
-                await _eventHubLogger.MessageCreated(new MessageCreatedEventLogData(messageSenderContextEventLogData));
+                await _eventHubLogger.MessageCreated(new MessageCreatedEventLogData(
+                    result.UserMessage.Id.ToString(), messageSenderContextEventLogData));
             }
             catch (Exception e)
             {

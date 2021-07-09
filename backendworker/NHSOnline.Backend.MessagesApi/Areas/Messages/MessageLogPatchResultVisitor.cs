@@ -46,7 +46,8 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                     var messageSenderContextEventLogData =
                         _messageSenderContextEventLogDataMapper.Map(result.UserMessage.SenderContext);
 
-                    tasks.Add(_eventHubLogger.MessageRead(new MessageReadEventLogData(messageSenderContextEventLogData)));
+                    tasks.Add(_eventHubLogger.MessageRead(new MessageReadEventLogData(
+                        result.UserMessage.Id.ToString(),messageSenderContextEventLogData)));
                 }
 
                 tasks.Add(_metricLogger.MessageRead(
