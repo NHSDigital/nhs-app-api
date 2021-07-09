@@ -33,7 +33,7 @@ import PrescriptionErrors from '@/components/errors/pages/prescriptions/Prescrip
 import LinkedProfileErrors from '@/components/linked-profiles/LinkedProfileErrors';
 import GenericErrors from '@/components/errors/pages/on-demand-generic/GenericErrors';
 import OnUpdateTitleMixin from '@/plugins/mixinDefinitions/OnUpdateTitleMixin';
-import { UPDATE_HEADER, EventBus } from '@/services/event-bus';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 
 export default {
   name: 'OnDemandGpReturnPage',
@@ -65,12 +65,13 @@ export default {
     await this.initializeAppVersions();
 
     const route = this.$router.currentRoute;
+    const routeDetails = this.$router.resolve(removeNhsAppHost(route.query.state));
+    const routeMetaData = get('route.meta', routeDetails);
+    EventBus.$emit(UPDATE_TITLE, routeMetaData);
 
     await this.$store.dispatch('auth/handleGpOnDemandResponse', route.query);
 
     if (!isEmpty(this.gpSessionApiError)) {
-      const routeDetails = this.$router.resolve(removeNhsAppHost(route.query.state));
-      const routeMetaData = get('route.meta', routeDetails);
       const ignoreGpSessionError = get('gpSessionOnDemand.ignoreError', routeMetaData);
       this.$store.dispatch('session/setGpSession', false);
 

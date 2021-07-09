@@ -228,6 +228,7 @@ export default {
       notificationsGenericError: 'Sorry, we could not set your notifications choice',
       organDonation: 'Your organ donation decision',
       organDonationWithdraw: 'Withdraw your organ donation decision',
+      pageLoading: 'Page Loading',
       preRegistrationInformation: 'Getting started',
       prescriptionOrderSuccess: 'Your prescription has been ordered',
       prescriptionProxyOrderSuccess: '{name}\'s prescription has been ordered',

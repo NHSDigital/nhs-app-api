@@ -11,7 +11,13 @@ import GpAppointmentGpSessionErrors from '@/components/errors/pages/appointments
 import LinkedProfileErrors from '@/components/linked-profiles/LinkedProfileErrors';
 import PrescriptionErrors from '@/components/errors/pages/prescriptions/PrescriptionsErrors';
 import each from 'jest-each';
+import { UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import { mount, createStore } from '../../helpers';
+
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $emit: jest.fn(), $on: jest.fn() },
+}));
 
 describe('on-demand-gp-return', () => {
   let goToUrl;
@@ -149,5 +155,20 @@ describe('on-demand-gp-return', () => {
         expect(router.push).not.toHaveBeenCalled();
         expect(wrapper.find(componentToEnsureIsShown).exists()).toBe(true);
       });
+  });
+
+  it('will dispatch to update title', async () => {
+    const routeInfo = {
+      route: {
+        meta: {
+          titleKey: 'navigation.pages.titles.gpAppointments',
+        },
+      },
+    };
+    wrapper = await mountPage({ shallow: true, state: '/appointments', routeInfo });
+    await wrapper.vm.$nextTick();
+    expect(EventBus.$emit).toHaveBeenCalledWith(
+      UPDATE_TITLE, { titleKey: 'navigation.pages.titles.gpAppointments' },
+    );
   });
 });

@@ -1,8 +1,13 @@
 import BeginPage from '@/pages/gp-session-on-demand/begin';
 import AuthorisationService from '@/services/authorisation-service';
+import { UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import { mount, createStore } from '../../helpers';
 
 jest.mock('@/services/authorisation-service');
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $emit: jest.fn() },
+}));
 
 describe('on-demand-gp-return', () => {
   let store;
@@ -41,6 +46,7 @@ describe('on-demand-gp-return', () => {
   };
 
   beforeEach(() => {
+    EventBus.$emit.mockClear();
     delete window.location;
     window.location = {
       hostname,
@@ -64,5 +70,13 @@ describe('on-demand-gp-return', () => {
       },
     });
     expect(window.location).toBe(`${generatedGpSessionUrl}&asserted_login_identity=${loginIdentityToken}`);
+  });
+
+  it('will dispatch to update title', async () => {
+    await mountPage();
+    expect(EventBus.$emit)
+      .toHaveBeenCalledWith(
+        UPDATE_TITLE, 'Page Loading',
+      );
   });
 });
