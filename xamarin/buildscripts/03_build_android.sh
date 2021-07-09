@@ -22,6 +22,7 @@ function configure_key_store () {
     export ANDROID_KEY_STORE_PASSWORD
   fi
 
+  MSBUILD_ARGS+=("-p:NhsAppVersionName=${NATIVE_VERSION_NUMBER}")
   MSBUILD_ARGS+=("-p:AndroidKeyStore=True")
   MSBUILD_ARGS+=("-p:AndroidSigningKeyStore=${ANDROID_KEY_STORE_LOCATION}")
   MSBUILD_ARGS+=("-p:AndroidSigningStorePass=env:ANDROID_KEY_STORE_PASSWORD")
