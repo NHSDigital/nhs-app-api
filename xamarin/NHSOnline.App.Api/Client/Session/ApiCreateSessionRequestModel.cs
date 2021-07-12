@@ -2,11 +2,12 @@ namespace NHSOnline.App.Api.Client.Session
 {
     internal sealed class ApiCreateSessionRequestModel
     {
-        public ApiCreateSessionRequestModel(string authCode, string codeVerifier, string redirectUrl)
+        public ApiCreateSessionRequestModel(string authCode, string codeVerifier, string referrer, string redirectUrl)
         {
             AuthCode = authCode;
             CodeVerifier = codeVerifier;
             RedirectUrl = redirectUrl;
+            Referrer = referrer;
         }
 
         public string AuthCode { get; }
@@ -14,5 +15,7 @@ namespace NHSOnline.App.Api.Client.Session
         public string CodeVerifier { get; }
 
         public string RedirectUrl { get; }
+
+        public string Referrer { get; }
     }
 }

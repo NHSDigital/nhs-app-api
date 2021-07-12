@@ -6,9 +6,9 @@ namespace NHSOnline.App.Api.Client.Session
     {
         private readonly ApiCreateSessionRequestModel _model;
 
-        public ApiCreateSessionRequest(string authCode, string codeVerifier, Uri redirectUrl)
+        public ApiCreateSessionRequest(string authCode, string codeVerifier, string referrer, Uri redirectUrl)
         {
-            _model = new ApiCreateSessionRequestModel(authCode, codeVerifier, redirectUrl.ToString());
+            _model = new ApiCreateSessionRequestModel(authCode, codeVerifier, referrer, redirectUrl.ToString());
         }
 
         internal ApiCreateSessionRequestModel CreateModel() => _model;

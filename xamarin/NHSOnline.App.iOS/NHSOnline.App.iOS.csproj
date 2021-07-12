@@ -80,6 +80,7 @@
     <Compile Include="DependencyServices\IosCookieService.cs" />
     <Compile Include="DependencyServices\IosHttpMessageHandlerFactory.cs" />
     <Compile Include="DependencyServices\IosCookies.cs" />
+    <Compile Include="DependencyServices\IosInstallReferrer.cs" />
     <Compile Include="DependencyServices\IosLifecycle.cs" />
     <Compile Include="DependencyServices\IosNativeLog.cs" />
     <Compile Include="DependencyServices\IosSettingsService.cs" />

@@ -9,6 +9,7 @@ using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Areas.PreHome.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.DependencyInjection;
+using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.Areas.LoggedOut.Presenters
@@ -24,6 +25,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly ISessionService _sessionService;
         private readonly IBackgroundExecutionService _backgroundExecutionService;
         private readonly INhsAppWebConfiguration _config;
+        private readonly IInstallReferrer _installReferrer;
         private Uri? _deeplinkUrl;
 
         private Uri? ResolveDeeplinkUrl => _deeplinkUrl ?? _model.DeeplinkUrl;
@@ -35,7 +37,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             IPageFactory pageFactory,
             ISessionService sessionService,
             IBackgroundExecutionService backgroundExecutionService,
-            INhsAppWebConfiguration config)
+            INhsAppWebConfiguration config,
+            IInstallReferrer installReferrer)
         {
             _view = view;
             _model = model;
@@ -44,6 +47,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _sessionService = sessionService;
             _backgroundExecutionService = backgroundExecutionService;
             _config = config;
+            _installReferrer = installReferrer;
 
             view.AppNavigation
                 .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeeplinkRequested = handler);
@@ -69,7 +73,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task<CreateSessionResult> TryCreateSession()
         {
             return await _sessionService
-                .CreateSession(_model.AuthCode, _model.PkceCodes.Verifier, _model.RedirectUri)
+                .CreateSession(_model.AuthCode, _model.PkceCodes.Verifier, _installReferrer.Referrer, _model.RedirectUri)
                 .ResumeOnThreadPool();
         }
 
