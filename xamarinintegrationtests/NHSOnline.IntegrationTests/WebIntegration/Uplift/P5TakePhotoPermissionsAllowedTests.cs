@@ -27,11 +27,11 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .PageContent.ProveYourIdentityContinue();
+                .ProveYourIdentityContinue();
 
             AndroidStubbedLoginUpliftPage
                 .AssertOnPage(driver)
-                .PageContent.OpenCamera();
+                .OpenCamera();
 
             AndroidCameraPermissionsDialog
                 .AssertDisplayed(driver)
@@ -55,7 +55,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
 
             AndroidStubbedLoginUpliftPage
                 .AssertOnPage(driver)
-                .PageContent.AssertPhotoCaptured();
+                .AssertPhotoCaptured();
         }
 
         [NhsAppIOSTest]
@@ -68,11 +68,11 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .PageContent.ProveYourIdentityContinue();
+                .ProveYourIdentityContinue();
 
             IOSStubbedLoginUpliftPage
                  .AssertOnPage(driver)
-                 .PageContent.OpenCamera();
+                 .OpenCamera();
 
             IOSFileSourceDialog
                 .IfDisplayed(driver, page => page.TakePhoto());
@@ -88,7 +88,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
 
             IOSStubbedLoginUpliftPage
                 .AssertOnPage(driver)
-                .PageContent.AssertPhotoCaptured();
+                .AssertPhotoCaptured();
         }
     }
 }

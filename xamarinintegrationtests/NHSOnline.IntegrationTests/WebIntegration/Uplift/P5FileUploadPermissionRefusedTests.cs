@@ -22,11 +22,11 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .PageContent.ProveYourIdentityContinue();
+                .ProveYourIdentityContinue();
 
             AndroidStubbedLoginUpliftPage
                 .AssertOnPage(driver)
-                .PageContent.UploadFile();
+                .UploadFile();
 
             AndroidFilePermissionsDialog
                 .AssertDisplayed(driver)

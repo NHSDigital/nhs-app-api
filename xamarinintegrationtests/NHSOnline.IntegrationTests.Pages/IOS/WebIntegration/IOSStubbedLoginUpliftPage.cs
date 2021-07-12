@@ -1,5 +1,4 @@
 using NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration;
-using NHSOnline.IntegrationTests.UI.Components.IOS;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
@@ -17,13 +16,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
 
         public IOSSlimCloseNavigation Navigation { get; }
 
-        public StubbedLoginUpliftPageContent PageContent { get; }
-
-        /*
-            IOS is looking for a native button instead of a HTML button
-            Bug raised to investigate: NHSO-13694
-        */
-        private IOSButton FileUploadButton => IOSButton.WithText(_driver, "Open photo library Choose File");
+        private StubbedLoginUpliftPageContent PageContent { get; }
 
         public static IOSStubbedLoginUpliftPage AssertOnPage(IIOSDriverWrapper driver)
         {
@@ -32,6 +25,14 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
             return page;
         }
 
-        public void UploadFile() => FileUploadButton.Click();
+        public void UploadFile() => PageContent.UploadFile();
+
+        public void AssertNoFileSelected() => PageContent.AssertNoFileSelected();
+
+        public void AssertFileSelected() => PageContent.AssertFileSelected();
+
+        public void OpenCamera() => PageContent.OpenCamera();
+
+        public void AssertPhotoCaptured() => PageContent.AssertPhotoCaptured();
     }
 }

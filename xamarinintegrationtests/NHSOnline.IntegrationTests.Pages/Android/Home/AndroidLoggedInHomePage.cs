@@ -46,6 +46,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
             return pageFocusableList.Concat(footerFocusableList).Concat(headerFocusableList);
         }
 
+        public void ProveYourIdentityContinue() => PageContent.ProveYourIdentityContinue();
+
         public void KeyboardNavigateToAdvice() => Navigation.KeyboardNavigateToAdvice(KeyboardPageContentNavigation);
 
         public void KeyboardNavigateToAppointments() => Navigation.KeyboardNavigateToAppointments(KeyboardPageContentNavigation);

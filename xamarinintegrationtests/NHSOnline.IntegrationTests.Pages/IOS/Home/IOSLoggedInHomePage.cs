@@ -26,5 +26,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
             Navigation.AssertNavigationPresent();
             PageContent.AssertNameDisplayedFor(name);
         }
+
+        public void ProveYourIdentityContinue() => PageContent.ProveYourIdentityContinue();
     }
 }

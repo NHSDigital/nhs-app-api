@@ -22,11 +22,11 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .PageContent.ProveYourIdentityContinue();
+                .ProveYourIdentityContinue();
 
             AndroidStubbedLoginUpliftPage
                 .AssertOnPage(driver)
-                .PageContent.OpenCamera();
+                .OpenCamera();
 
             AndroidCameraPermissionsDialog
                 .AssertDisplayed(driver)
@@ -38,7 +38,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
 
             AndroidStubbedLoginUpliftPage
                 .AssertOnPage(driver)
-                .PageContent.AssertPhotoNotCaptured();
+                .AssertPhotoNotCaptured();
         }
 
         [NhsAppManualTest("NHSO-14221", "Denying permissions in the stub does not disable camera access")]

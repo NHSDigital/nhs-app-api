@@ -13,7 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
 
         public AndroidSlimCloseNavigation Navigation { get; }
 
-        public StubbedLoginUpliftPageContent PageContent { get; }
+        private StubbedLoginUpliftPageContent PageContent { get; }
 
         public static AndroidStubbedLoginUpliftPage AssertOnPage(IAndroidDriverWrapper driver)
         {
@@ -21,5 +21,15 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
             page.PageContent.AssertOnPage();
             return page;
         }
+
+        public void AssertFileSelected() => PageContent.AssertFileSelected();
+
+        public void UploadFile() => PageContent.UploadFile();
+
+        public void OpenCamera() => PageContent.OpenCamera();
+
+        public void AssertPhotoCaptured() => PageContent.AssertPhotoCaptured();
+
+        public void AssertPhotoNotCaptured() => PageContent.AssertPhotoNotCaptured();
     }
 }

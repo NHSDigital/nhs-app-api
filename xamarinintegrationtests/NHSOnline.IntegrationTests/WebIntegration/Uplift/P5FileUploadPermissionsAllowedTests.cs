@@ -26,11 +26,11 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .PageContent.ProveYourIdentityContinue();
+                .ProveYourIdentityContinue();
 
             AndroidStubbedLoginUpliftPage
                 .AssertOnPage(driver)
-                .PageContent.UploadFile();
+                .UploadFile();
 
             AndroidFilePermissionsDialog
                 .AssertDisplayed(driver)
@@ -44,7 +44,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
 
             AndroidStubbedLoginUpliftPage
                 .AssertOnPage(driver)
-                .PageContent.AssertFileSelected();
+                .AssertFileSelected();
         }
 
         [NhsAppIOSTest]
@@ -57,11 +57,11 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .PageContent.ProveYourIdentityContinue();
+                .ProveYourIdentityContinue();
 
             IOSStubbedLoginUpliftPage
                 .AssertOnPage(driver)
-                .PageContent.AssertNoFileSelected();
+                .AssertNoFileSelected();
 
              IOSStubbedLoginUpliftPage
                  .AssertOnPage(driver)
@@ -79,7 +79,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
 
             IOSStubbedLoginUpliftPage
                 .AssertOnPage(driver)
-                .PageContent.AssertFileSelected();
+                .AssertFileSelected();
         }
     }
 }
