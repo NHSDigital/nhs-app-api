@@ -457,7 +457,7 @@ defaultUsers:
     9692238555:
       userId: aff10bdc-190d-4f2a-8b4a-729beb9f4bb4
       emailAddress: nhsapp.aos+netcompany.user13@gmail.com
-      odsCode: B81603
+      odsCode: F00010
       givenName: Eliza
       familyName: LOINES
       dateOfBirth: "2005-04-02T00:00:00"
@@ -484,7 +484,7 @@ defaultUsers:
     9693292227:
       userId: 5926a250-c68b-4048-9aae-2ca0abb066a9
       emailAddress: nhsapp.aos+netcompany.user16@gmail.com
-      odsCode: A20047
+      odsCode: F00010
       givenName: Martin
       familyName: HIGINS
       dateOfBirth: "1945-03-17T00:00:00"
@@ -529,7 +529,7 @@ defaultUsers:
     9693292804:
       userId: 912ec391-fdbf-4e53-af1c-ffd867a85d9c
       emailAddress: nhsapp.aos+netcompany.user21@gmail.com
-      odsCode: A20047
+      odsCode: F00010
       givenName: Chas
       familyName: FOX
       dateOfBirth: "1989-08-18T00:00:00"
@@ -664,7 +664,7 @@ defaultUsers:
     9449088470:
       userId: 340dd1c3-e300-4e13-aac4-4b1bb7a4cc07
       emailAddress: nhsapp.aos+netcompany.user36@gmail.com
-      odsCode: A10205
+      odsCode: F00010
       givenName: MARIS
       familyName: ANDREW-GERRARD
       dateOfBirth: "2000-08-13T00:00:00"
@@ -682,7 +682,7 @@ defaultUsers:
     9437629080:
       userId: 08450dd9-ffc5-4bf7-b314-4f4d50342322
       emailAddress: nhsapp.aos+netcompany.user38@gmail.com
-      odsCode: H82007
+      odsCode: F00010
       givenName: DIGBY
       familyName: PACKMAN
       dateOfBirth: "2002-03-07T00:00:00"
@@ -691,7 +691,7 @@ defaultUsers:
     9435687954:
       userId: bb315276-a891-4968-b112-b6a520abd283
       emailAddress: nhsapp.aos+netcompany.user39@gmail.com
-      odsCode: B81695
+      odsCode: F00010
       givenName: WOODY
       familyName: CAMPLEJOHN
       dateOfBirth: "2000-05-29T00:00:00"
@@ -700,7 +700,7 @@ defaultUsers:
     9442849204:
       userId: 021df1ef-8472-45ef-8f6d-a6dd6a240055
       emailAddress: nhsapp.aos+netcompany.user40@gmail.com
-      odsCode: D83009
+      odsCode: F00010
       givenName: KIM
       familyName: JACOB
       dateOfBirth: "2003-03-03T00:00:00"
@@ -718,7 +718,7 @@ defaultUsers:
     9449099936:
       userId: b8c344ed-2ee8-4bc3-b0e2-18b93b75d394
       emailAddress: nhsapp.aos+netcompany.user42@gmail.com
-      odsCode: A10204
+      odsCode: F00010
       givenName: ASADEL
       familyName: AL-ALI
       dateOfBirth: "2003-08-20T00:00:00"
@@ -736,7 +736,7 @@ defaultUsers:
     9436315139:
       userId: 5af3e3a0-1f06-4991-9200-8ba21bb366af
       emailAddress: nhsapp.aos+netcompany.user44@gmail.com
-      odsCode: A20102
+      odsCode: F00010
       givenName: IZABELLE
       familyName: MANTILLAS
       dateOfBirth: "2005-01-28T00:00:00"
@@ -785,123 +785,6 @@ defaultUsers:
       givenName: TRACY
       familyName: BREWER
       dateOfBirth: "2001-07-13T00:00:00"
-      sex: Female
-
-    5900105601:
-      userId: 2b27c2c8-a918-4fe1-ab3e-f49e6b52d5ab
-      emailAddress: nhsapp.aos+netcompany.user50@gmail.com
-      odsCode: F00010
-      givenName: THERESA
-      familyName: MCGOVAN
-      dateOfBirth: "1974-01-02T00:00:00"
-      sex: Female
-
-    9406731223:
-      userId: b576e7eb-5ff0-4670-b6e6-dc32c83e7c79
-      emailAddress: nhsapp.aos+netcompany.user51@gmail.com
-      odsCode: F00010
-      givenName: JUDD
-      familyName: GOMESCARNEIRD
-      dateOfBirth: "1945-11-06T00:00:00"
-      sex: Male
-
-    9437562679:
-      userId: 043f19cb-c4f6-41e7-ba66-b312906bd838
-      emailAddress: nhsapp.aos+netcompany.user52@gmail.com
-      odsCode: F00010
-      givenName: FULTON
-      familyName: NORRIS
-      dateOfBirth: "1927-09-06T00:00:00"
-      sex: Male
-
-    9450257418:
-      userId: e6b23324-a0ae-4c9b-9cd3-58ccc93761d6
-      emailAddress: nhsapp.aos+netcompany.user53@gmail.com
-      odsCode: F00010
-      givenName: BRYONY
-      familyName: HOLTON
-      dateOfBirth: "1987-02-01T00:00:00"
-      sex: Female
-
-    9437700559:
-      userId: a4398736-f994-4ba0-b1f3-245c951305a5
-      emailAddress: nhsapp.aos+netcompany.user54@gmail.com
-      odsCode: F00010
-      givenName: CALANTHIA
-      familyName: BRIDEWELL
-      dateOfBirth: "1912-01-02T00:00:00"
-      sex: Female
-
-    9801264217:
-      userId: 4ae8bbe5-39fc-45d6-ad33-a8f231699327
-      emailAddress: nhsapp.aos+netcompany.user55@gmail.com
-      odsCode: F00010
-      givenName: NAVPREET
-      familyName: SWIRES
-      dateOfBirth: "1937-11-05T00:00:00"
-      sex: Female
-
-    9437748063:
-      userId: 0aab06f2-b387-40b4-a34b-ae6201e17a4d
-      emailAddress: nhsapp.aos+netcompany.user56@gmail.com
-      odsCode: F00010
-      givenName: MERLE
-      familyName: BROUARD
-      dateOfBirth: "2003-04-06T00:00:00"
-      sex: Female
-
-    9467189186:
-      userId: 2cfec867-6546-4189-b136-c2758c16b463
-      emailAddress: nhsapp.aos+netcompany.user57@gmail.com
-      odsCode: F00010
-      givenName: TEST
-      familyName: PATIENT
-      dateOfBirth: "1963-08-08T00:00:00"
-      sex: Male
-
-    9435466079:
-      userId: 89bf63e2-c84b-4e1b-a8ce-7e30351950a0
-      emailAddress: nhsapp.aos+netcompany.user58@gmail.com
-      odsCode: F00010
-      givenName: SAMANTHA
-      familyName: SPENCER
-      dateOfBirth: "1945-06-09T00:00:00"
-      sex: Female
-
-    9452256478:
-      userId: daacb3d7-c03e-44ea-b850-2a2a8c78804b
-      emailAddress: nhsapp.aos+netcompany.user59@gmail.com
-      odsCode: F00010
-      givenName: IDA
-      familyName: POOLE
-      dateOfBirth: "1986-07-07T00:00:00"
-      sex: Female
-
-    9467172690:
-      userId: 45186403-a672-4397-97bb-4b02531ff7f3
-      emailAddress: nhsapp.aos+netcompany.user60@gmail.com
-      odsCode: F00010
-      givenName: NENA
-      familyName: DEAR
-      dateOfBirth: "1992-01-15T00:00:00"
-      sex: Female
-
-    9407806219:
-      userId: f5ab22b0-e091-46c0-938a-33a9bc6441cb
-      emailAddress: nhsapp.aos+netcompany.user61@gmail.com
-      odsCode: F00010
-      givenName: DYMPNA
-      familyName: CHAPLIN
-      dateOfBirth: "1984-12-04T00:00:00"
-      sex: Female
-
-    9473528302:
-      userId: f99e5a50-cfea-456c-be30-4cb4344d421e
-      emailAddress: nhsapp.aos+netcompany.user62@gmail.com
-      odsCode: F00010
-      givenName: MANGAL
-      familyName: NEELAM
-      dateOfBirth: "1953-01-11T00:00:00"
       sex: Female
 
   vaccineRecordAndCovidStatus:
