@@ -14,6 +14,7 @@ import {
   TOGGLE_PATIENT_DETAIL,
   SET_MEDICAL_RECORD_TYPE,
   SET_RELOAD,
+  ADD_ERROR,
   initialState,
 } from './mutation-types';
 
@@ -85,6 +86,10 @@ export default {
     return mapKeys((key) => {
       state[key] = blank[key];
     })(state);
+  },
+  [ADD_ERROR](state, errorDetails) {
+    state.error = errorDetails;
+    state.hasLoaded = true;
   },
   [CLEAR](state) {
     clearState(state);

@@ -60,10 +60,10 @@ Feature: GP Session On Demand medical record
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
     Then I SSO to NhsLogin
-    And I see the generic try again error message
+    And I see appropriate try again error message for gp medical record when there is no GP session
     When I click the 'Try again' button
-    Then I see the generic medical record error
+    Then I see what I can do next with a medical record error message and reference code '<Prefix>'
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
+      | GP System | Prefix |
+      | EMIS      | 3e     |
+      | TPP       | 3t     |

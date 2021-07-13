@@ -2,9 +2,9 @@ package pages
 
 open class AppointmentsGpSessionError: GpSessionError() {
 
-    private val gpAdviceHeader = setupElement("Ask your GP for advice")
-    private val gpAdminHeader = setupElement("Additional GP services")
-    private val nhs111Header = setupElement("Use NHS 111 online")
+    private val gpAdviceHeader = setupSubHeader("Ask your GP for advice")
+    private val gpAdminHeader = setupSubHeader("Additional GP services")
+    private val nhs111Header = setupSubHeader("Use NHS 111 online")
 
     fun assertGpAdviceMenuItem() : AppointmentsGpSessionError{
         gpAdviceHeader.assertIsVisible()

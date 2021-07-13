@@ -10,6 +10,7 @@ export const LOADED_DETAILED_TEST_RESULT = 'LOADED_DETAILED_TEST_RESULT';
 export const SET_MEDICAL_RECORD_TYPE = 'SET_MEDICAL_RECORD_TYPE';
 export const SET_RELOAD = 'SET_RELOAD';
 export const TOGGLE_PATIENT_DETAIL = 'TOGGLE_PATIENT_DETAIL';
+export const ADD_ERROR = 'ADD_ERROR';
 export const initialState = () => ({
   hasAcceptedTerms: false,
   nojsData: JSON.stringify({ myRecord: { hasAcceptedTerms: false } }),
@@ -26,4 +27,5 @@ export const initialState = () => ({
   examinations: '',
   procedures: '',
   medicalRecordType: undefined,
+  error: null,
 });

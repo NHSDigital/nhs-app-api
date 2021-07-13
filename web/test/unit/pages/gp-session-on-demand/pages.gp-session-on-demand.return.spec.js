@@ -5,11 +5,13 @@ import {
   GP_PRESCRIPTION_JOURNEY_NAME,
   GP_APPOINTMENT_JOURNEY_NAME,
   GP_LINKED_ACCOUNT_JOURNEY_NAME,
+  GP_HEALTH_RECORD_JOURNEY_NAME,
 } from '@/router/names';
 import GenericErrors from '@/components/errors/pages/on-demand-generic/GenericErrors';
 import GpAppointmentGpSessionErrors from '@/components/errors/pages/appointments/GpAppointmentGpSessionErrors';
 import LinkedProfileErrors from '@/components/linked-profiles/LinkedProfileErrors';
 import PrescriptionErrors from '@/components/errors/pages/prescriptions/PrescriptionsErrors';
+import HealthRecordErrors from '@/components/errors/pages/health-record/HealthRecordErrors';
 import each from 'jest-each';
 import { UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import { mount, createStore } from '../../helpers';
@@ -133,6 +135,7 @@ describe('on-demand-gp-return', () => {
       [GP_PRESCRIPTION_JOURNEY_NAME, PrescriptionErrors],
       [GP_APPOINTMENT_JOURNEY_NAME, GpAppointmentGpSessionErrors],
       [GP_LINKED_ACCOUNT_JOURNEY_NAME, LinkedProfileErrors],
+      [GP_HEALTH_RECORD_JOURNEY_NAME, HealthRecordErrors],
       [null, GenericErrors],
     ])
       .it('will display correct journey specific error', async (journeyName, componentToEnsureIsShown) => {

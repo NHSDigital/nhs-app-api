@@ -15,6 +15,8 @@ import mocking.microtest.myRecord.TestResultOptions
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import pages.ErrorDialogPage
+import pages.MedicalRecordGpSessionError
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
 import utils.LinkedProfilesSerenityHelpers
@@ -35,6 +37,8 @@ open class MedicalRecordStepDefinitions {
     @Steps
     lateinit var nav: NavigationSteps
     private lateinit var headerNative: HeaderNative
+    private lateinit var errorDialogPage: ErrorDialogPage
+    private lateinit var medicalRecordGpSessionError: MedicalRecordGpSessionError
 
     var myRecordModuleCounts = MyRecordModuleCounts()
     var testResultOptions = TestResultOptions()
@@ -160,6 +164,24 @@ open class MedicalRecordStepDefinitions {
             Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.YOUR_HEALTH))
             Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.MESSAGES))
         }
+    }
+
+    @Then("^I see appropriate try again error message for gp medical record when there is no GP session$")
+    fun iSeeAppropriateTryAgainErrorMessageWhenThereIsNoGpSessionForGpMedicalRecord() {
+        errorDialogPage
+                .assertParagraphText("You are not currently able to view your GP health record online.")
+                .assertParagraphText("This may be a temporary problem.")
+                .assertPageHeader("Sorry, there is a problem getting your GP health record")
+                .assertPageTitle("Sorry, there is a problem getting your GP health record")
+    }
+
+    @Then("^I see what I can do next with a medical record error message and reference code '(.*)'$")
+    fun iSeeMedicalRecordUnavailableNoGpSession(prefix: String){
+        medicalRecordGpSessionError.assertMedicalRecordHeader()
+                .assertReferenceCode(prefix)
+                .assertParagraphText("If you need this information now, contact your GP surgery. " +
+                        "For urgent medical advice, go to ")
+                .assertReportAProblemLink()
     }
 
     private fun setupMedicalRecordAccessForPatient(dcrAccessEnabled: Boolean) {

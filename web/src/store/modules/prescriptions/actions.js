@@ -23,12 +23,14 @@ export default {
 
       sessionStorage.removeItem('hasRetried');
     } catch (error) {
-      if (error.response.status !== GP_SESSION_ON_DEMAND_ERROR_STATUS) {
-        if (error.response.status !== GP_SESSION_ERROR_STATUS) {
-          this.dispatch('errors/addApiError', error);
-        } else {
-          commit(ADD_ERROR, createLocalError(error));
-        }
+      if (error.response.status === GP_SESSION_ON_DEMAND_ERROR_STATUS) {
+        return;
+      }
+
+      if (error.response.status === GP_SESSION_ERROR_STATUS) {
+        commit(ADD_ERROR, createLocalError(error));
+      } else {
+        this.dispatch('errors/addApiError', error);
       }
     } finally {
       this.dispatch('device/unlockNavBar');

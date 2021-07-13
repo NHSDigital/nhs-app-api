@@ -14,6 +14,9 @@
     <div v-else-if="defaultOnDemandApiError">
       <generic-errors :try-again-route="tryAgainPath"/>
     </div>
+    <div v-else-if="healthRecordOnDemandApiError">
+      <health-record-errors :error="gpSessionApiError"/>
+    </div>
   </div>
 </template>
 
@@ -25,6 +28,7 @@ import {
   GP_PRESCRIPTION_JOURNEY_NAME,
   GP_APPOINTMENT_JOURNEY_NAME,
   GP_LINKED_ACCOUNT_JOURNEY_NAME,
+  GP_HEALTH_RECORD_JOURNEY_NAME,
 } from '@/router/names';
 import NativeReferrerSetup from '@/services/nativeReferrerSetup';
 import { removeNhsAppHost } from '@/lib/utils';
@@ -32,6 +36,7 @@ import GpAppointmentGpSessionErrors from '@/components/errors/pages/appointments
 import PrescriptionErrors from '@/components/errors/pages/prescriptions/PrescriptionsErrors';
 import LinkedProfileErrors from '@/components/linked-profiles/LinkedProfileErrors';
 import GenericErrors from '@/components/errors/pages/on-demand-generic/GenericErrors';
+import HealthRecordErrors from '@/components/errors/pages/health-record/HealthRecordErrors';
 import OnUpdateTitleMixin from '@/plugins/mixinDefinitions/OnUpdateTitleMixin';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 
@@ -41,6 +46,7 @@ export default {
     GpAppointmentGpSessionErrors,
     PrescriptionErrors,
     LinkedProfileErrors,
+    HealthRecordErrors,
     GenericErrors,
   },
   mixins: [OnUpdateTitleMixin],
@@ -49,6 +55,7 @@ export default {
       prescriptionOnDemandApiError: false,
       appointmentsOnDemandApiError: false,
       linkedAccountsOnDemandApiError: false,
+      healthRecordOnDemandApiError: false,
       defaultOnDemandApiError: false,
     };
   },
@@ -113,6 +120,9 @@ export default {
           break;
         case GP_LINKED_ACCOUNT_JOURNEY_NAME:
           this.linkedAccountsOnDemandApiError = true;
+          break;
+        case GP_HEALTH_RECORD_JOURNEY_NAME:
+          this.healthRecordOnDemandApiError = true;
           break;
         default:
           this.defaultOnDemandApiError = true;

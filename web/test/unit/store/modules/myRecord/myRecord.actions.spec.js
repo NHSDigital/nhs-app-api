@@ -5,7 +5,9 @@ import {
   LOADED_DETAILED_TEST_RESULT,
   SET_RELOAD,
   TOGGLE_PATIENT_DETAIL,
+  ADD_ERROR,
 } from '@/store/modules/myRecord/mutation-types';
+import { createLocalError } from '@/lib/utils';
 
 const createApp = ({ record, patientDetails, data }) => ({
   $http: {
@@ -52,12 +54,12 @@ describe('my record actions', () => {
 
       it('will request patient details', async () => {
         await load();
-        expect(app.$http.getV1PatientDemographics).toHaveBeenCalledWith({});
+        expect(app.$http.getV1PatientDemographics).toHaveBeenCalledWith({ ignoreError: true });
       });
 
       it('will request my record data details', async () => {
         await load();
-        expect(app.$http.getV1PatientMyRecord).toHaveBeenCalledWith({});
+        expect(app.$http.getV1PatientMyRecord).toHaveBeenCalledWith({ ignoreError: true });
       });
 
       it('will commit the loaded mutation with patient data and my record data', async () => {
@@ -80,6 +82,38 @@ describe('my record actions', () => {
 
         await expect(load).not.toThrow();
         expect(actions.dispatch).toHaveBeenCalledWith('errors/addApiError', error);
+      });
+
+      it('will pass when 598 error returned', async () => {
+        const error = {
+          response: {
+            status: 598,
+          },
+        };
+        app.$http.getV1PatientMyRecord = jest.fn().mockImplementation(() => {
+          throw error;
+        });
+
+        await load();
+        await expect(load).not.toThrow();
+        expect(actions.dispatch).not.toHaveBeenCalledWith('errors/addApiError', error);
+        expect(context.commit).not.toHaveBeenCalledWith(ADD_ERROR, createLocalError(error));
+      });
+
+      it('will handle when 599 error returned', async () => {
+        const error = {
+          response: {
+            status: 599,
+          },
+        };
+        app.$http.getV1PatientMyRecord = jest.fn().mockImplementation(() => {
+          throw error;
+        });
+
+        await load();
+        await expect(load).not.toThrow();
+        expect(actions.dispatch).not.toHaveBeenCalledWith('errors/addApiError', error);
+        expect(context.commit).toHaveBeenCalledWith(ADD_ERROR, createLocalError(error));
       });
 
       it('will catch an exeption in the patient record request', async () => {

@@ -27,6 +27,14 @@ export default {
     ifYouHaveAccessedLinkedProfiles: 'If you have accessed linked profiles before, select ',
     forUrgentMedicalAdvice: 'For urgent medical advice, go to ',
   },
+  healthRecord: {
+    otherThingsYouCanDo: 'Other things you can do',
+    tryAgainHeader: 'Sorry, there is a problem getting your GP health record',
+    youAreNotCurrentlyAble: 'You are not currently able to view your GP health record online.',
+    healthRecordUnavailable: 'Sorry, your GP health record is unavailable',
+    ifYouNeedInformationNow: 'If you need this information now, contact your GP surgery.',
+    forUrgentMedicalAdvice: 'For urgent medical advice, go to ',
+  },
   genericOnDemand: {
     serviceUnavailable: 'Sorry, this service is unavailable',
     ifYouNeedInformationNow: 'If you need this information now',

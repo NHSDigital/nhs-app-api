@@ -11,9 +11,10 @@ import {
   TOGGLE_PATIENT_DETAIL,
   SET_MEDICAL_RECORD_TYPE,
   SET_RELOAD,
+  ADD_ERROR,
 } from '@/store/modules/myRecord/mutation-types';
 import AnalyticsValues from '@/lib/analytics-values';
-import { GP_SESSION_ON_DEMAND_ERROR_STATUS } from '@/lib/utils';
+import { GP_SESSION_ON_DEMAND_ERROR_STATUS, GP_SESSION_ERROR_STATUS, createLocalError } from '@/lib/utils';
 
 const getMedicalRecordSection = async (commit, $http, mutation, section) => {
   try {
@@ -26,7 +27,8 @@ const getMedicalRecordSection = async (commit, $http, mutation, section) => {
 };
 
 const loadMedicalRecord = async ({ commit, self, patientDetails }) => {
-  const { response: record } = await self.app.$http.getV1PatientMyRecord({}) || {};
+  const { response: record } =
+  await self.app.$http.getV1PatientMyRecord({ ignoreError: true }) || {};
   commit(LOADED, { record, patientDetails });
 
   let medicalRecordType = AnalyticsValues.NoMedicalRecordAccess;
@@ -52,14 +54,23 @@ export default {
   },
   async load({ commit }) {
     try {
-      const { response: patientDetails } = await this.app.$http.getV1PatientDemographics({}) || {};
+      const { response: patientDetails } =
+      await this.app.$http.getV1PatientDemographics({ ignoreError: true }) || {};
       if (patientDetails !== undefined) {
         await loadMedicalRecord({ commit, self: this, patientDetails });
       }
     } catch (error) {
-      if (error.response.status !== GP_SESSION_ON_DEMAND_ERROR_STATUS) {
+      if (error.response.status === GP_SESSION_ON_DEMAND_ERROR_STATUS) {
+        return;
+      }
+
+      if (error.response.status === GP_SESSION_ERROR_STATUS) {
+        commit(ADD_ERROR, createLocalError(error));
+      } else {
         this.dispatch('errors/addApiError', error);
       }
+    } finally {
+      this.dispatch('device/unlockNavBar');
     }
   },
   async loadTestResults({ commit }) {

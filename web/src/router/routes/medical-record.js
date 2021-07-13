@@ -82,6 +82,7 @@ import {
   TESTRESULTS_NAME,
   TESTRESULTSDETAIL_NAME,
   UPLIFT_GP_MEDICAL_RECORD_NAME,
+  GP_HEALTH_RECORD_JOURNEY_NAME,
 } from '@/router/names';
 
 import { YOUR_RECORD_MENU_ITEM } from '@/middleware/nativeNavigation';
@@ -102,6 +103,9 @@ export const UPLIFT_GP_MEDICAL_RECORD = {
     crumb: breadcrumbs.UPLIFT_GP_MEDICAL_RECORD_CRUMB,
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -117,6 +121,9 @@ export const HEALTH_RECORDS = {
     crumb: breadcrumbs.HEALTH_RECORDS_CRUMB,
     helpUrl: healthRecordsHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -136,6 +143,9 @@ export const GP_MEDICAL_RECORD = {
       sjrRedirectRules.gpAtHandMyRecordRedirect,
       sjrRedirectRules.gpAtHandMedicalRecordRedirectV2,
     ],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -152,6 +162,9 @@ export const ALLERGIESANDREACTIONS = {
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -168,6 +181,9 @@ export const MEDICINES = {
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -184,6 +200,9 @@ export const ACUTE_MEDICINES = {
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -200,6 +219,9 @@ export const CURRENT_MEDICINES = {
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -216,6 +238,9 @@ export const DISCONTINUED_MEDICINES = {
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -232,6 +257,9 @@ export const TESTRESULTS = {
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -248,6 +276,9 @@ export const TESTRESULTSDETAIL = {
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -264,6 +295,9 @@ export const TESTRESULTID = {
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -280,6 +314,9 @@ export const CONSULTATIONS = {
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -296,6 +333,9 @@ export const EVENTS = {
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -312,6 +352,9 @@ export const IMMUNISATIONS = {
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -328,6 +371,9 @@ export const HEALTH_CONDITIONS = {
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -345,6 +391,9 @@ export const DOCUMENTS = {
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     sjrRedirectRules: [sjrRedirectRules.documentsDisabledRedirect],
     middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -362,6 +411,9 @@ export const DOCUMENT = {
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     sjrRedirectRules: [sjrRedirectRules.documentsDisabledRedirect],
     middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -379,6 +431,9 @@ export const DOCUMENT_DETAIL = {
     middleware: [gpMedicalRecordAcceptance],
     headerKey: store => store.state.documents.viewDocumentTitle,
     titleKey: store => store.state.documents.viewDocumentTitle,
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -395,6 +450,9 @@ export const DIAGNOSIS_V2 = {
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -411,6 +469,9 @@ export const EXAMINATIONS_V2 = {
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -427,6 +488,9 @@ export const PROCEDURES_V2 = {
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -443,6 +507,9 @@ export const MEDICAL_HISTORY = {
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -459,6 +526,9 @@ export const ENCOUNTERS = {
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -475,6 +545,9 @@ export const RECALLS = {
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -491,6 +564,9 @@ export const REFERRALS = {
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
@@ -507,6 +583,9 @@ export const GP_MEDICAL_RECORD_GP_AT_HAND = {
     helpUrl: gpMedicalRecordHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     sjrRedirectRules: [sjrRedirectRules.im1GpMedicalRecordRedirectV2],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
   },
 };
 
