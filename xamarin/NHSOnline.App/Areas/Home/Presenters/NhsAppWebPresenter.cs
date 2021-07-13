@@ -87,6 +87,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterHandler<string>(SetMenuBarItemRequested, (view, handler) => view.SetMenuBarItemRequested = handler)
                 .RegisterHandler(ClearMenuBarItemRequested, (view, handler) => view.ClearMenuBarItemRequested = handler)
                 .RegisterHandler(OpenSettingsRequested, (view, handler) => view.OpenSettingsRequested = handler)
+                .RegisterHandler(DisplayPageLeaveWarningRequested, (view, handler) => view.DisplayPageLeaveWarningRequested = handler)
                 .RegisterHandler(LogoutRequested, (view, handler) => view.LogoutRequested = handler)
                 .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler)
                 .RegisterHandler(_navigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
@@ -97,6 +98,13 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterHandler(_navigationHandler.YourHealthRequested, (view, handler) => view.YourHealthRequested = handler)
                 .RegisterHandler(_navigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler)
                 .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeeplinkRequested = handler);
+        }
+
+        private async Task DisplayPageLeaveWarningRequested()
+        {
+            _logger.LogInformation("Display page leave warning");
+
+            await _view.ShowLeaveWarningPrompt().PreserveThreadContext();
         }
 
         private async Task OpenSettingsRequested()

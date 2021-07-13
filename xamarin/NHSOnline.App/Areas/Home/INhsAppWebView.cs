@@ -43,6 +43,7 @@ namespace NHSOnline.App.Areas.Home
             Func<Task>? LogoutRequested { get; set; }
             Func<Task>? BackRequested { get; set; }
             Func<Uri, Task>? DeeplinkRequested { get; set; }
+            Func<Task>? DisplayPageLeaveWarningRequested { get; set; }
         }
 
         NavigationFooterItem SelectedNavigationFooterItem { get; set; }
@@ -63,6 +64,7 @@ namespace NHSOnline.App.Areas.Home
         Task SendBiometricStatus(BiometricStatus biometricStatus);
         Task SendBiometricCompletion(BiometricCompletion completionDetails);
         Task<bool> ShowLogoutPrompt();
+        Task ShowLeaveWarningPrompt();
         Task Logout();
     }
 }

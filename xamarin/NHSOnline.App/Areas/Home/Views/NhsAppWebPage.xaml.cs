@@ -17,9 +17,14 @@ namespace NHSOnline.App.Areas.Home.Views
         private readonly ILogger _logger;
         private readonly AppNavigation<INhsAppWebView.IEvents> _appNavigation;
 
-        private const string Message = "Are you sure you want to log out?";
-        private const string AcceptButtonText = "Log out";
-        private const string CancelButtonText = "Cancel";
+        private const string LeaveTitle = "Leave this page?";
+        private const string LeaveMessage = "If you have entered any information, it will not be saved.";
+        private const string LeaveButtonText = "Leave page";
+        private const string LeaveCancelButtonText = "Cancel";
+
+        private const string LogoutMessage = "Are you sure you want to log out?";
+        private const string LogoutButtonText = "Log out";
+        private const string LogoutCancelButtonText = "Cancel";
 
         public NhsAppWebPage(ILogger<NhsAppWebPage> logger)
         {
@@ -71,6 +76,10 @@ namespace NHSOnline.App.Areas.Home.Views
         public Func<Task>? ClearMenuBarItemRequested { get; set; }
         public AsyncCommand ClearMenuBarItemCommand
             => new AsyncCommand(() => ClearMenuBarItemRequested);
+
+        public Func<Task>? DisplayPageLeaveWarningRequested { get; set; }
+        public AsyncCommand DisplayPageLeaveWarningCommand
+            => new AsyncCommand(() => DisplayPageLeaveWarningRequested);
 
         public Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
         public AsyncCommand<string> UpdateBiometricRegistrationCommand
@@ -167,7 +176,7 @@ namespace NHSOnline.App.Areas.Home.Views
 
         public async Task<bool> ShowLogoutPrompt()
         {
-            return await Page.DisplayAlert(null, Message, AcceptButtonText, CancelButtonText)
+            return await Page.DisplayAlert(null, LogoutMessage, LogoutButtonText, LogoutCancelButtonText)
                 .PreserveThreadContext();
         }
 
@@ -251,6 +260,13 @@ namespace NHSOnline.App.Areas.Home.Views
 
         public async Task SendBiometricCompletion(BiometricCompletion completionDetails)
             => await WebView.SendBiometricCompletion(completionDetails).ResumeOnThreadPool();
+
+        public async Task ShowLeaveWarningPrompt()
+        {
+            var leavePage = await Page.DisplayAlert(LeaveTitle, LeaveMessage, LeaveButtonText, LeaveCancelButtonText)
+                .PreserveThreadContext();
+            await WebView.SendPageLeaveWarningResult(leavePage).PreserveThreadContext();
+        }
 
         public async Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse)
             => await WebView.SendNotificationAuthorised(authorisedResponse).ResumeOnThreadPool();

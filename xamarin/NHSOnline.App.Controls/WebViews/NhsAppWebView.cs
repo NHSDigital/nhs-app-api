@@ -59,6 +59,9 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty StartDownloadCommandProperty =
             BindableProperty.Create(nameof(StartDownloadCommand), typeof(AsyncCommand<DownloadRequest>), typeof(NhsAppWebView));
 
+        public static readonly BindableProperty DisplayPageLeaveWarningCommandProperty =
+            BindableProperty.Create(nameof(DisplayPageLeaveWarningCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
+
         public static readonly BindableProperty LogoutCommandProperty =
             BindableProperty.Create(nameof(LogoutCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
 
@@ -89,6 +92,12 @@ namespace NHSOnline.App.Controls.WebViews
             }
         }
 
+        public AsyncCommand<AddEventToCalendarRequest> AddEventToCalendarCommand
+        {
+            get => (AsyncCommand<AddEventToCalendarRequest>) GetValue(AddEventToCalendarCommandProperty);
+            set => SetValue(AddEventToCalendarCommandProperty, value);
+        }
+
         public void StartDownload(string json)
         {
             try
@@ -100,12 +109,6 @@ namespace NHSOnline.App.Controls.WebViews
             {
                 Logger.LogError("Failed to deserialize the download request, not showing any dialogs", e);
             }
-        }
-
-        public AsyncCommand<AddEventToCalendarRequest> AddEventToCalendarCommand
-        {
-            get => (AsyncCommand<AddEventToCalendarRequest>) GetValue(AddEventToCalendarCommandProperty);
-            set => SetValue(AddEventToCalendarCommandProperty, value);
         }
 
         public AsyncCommand<DownloadRequest> StartDownloadCommand
@@ -183,6 +186,14 @@ namespace NHSOnline.App.Controls.WebViews
             set => SetValue(ClearMenuBarItemCommandProperty, value);
         }
 
+        public void DisplayPageLeaveWarning() => DisplayPageLeaveWarningCommand.Execute(null);
+
+        public AsyncCommand DisplayPageLeaveWarningCommand
+        {
+            get => (AsyncCommand) GetValue(DisplayPageLeaveWarningCommandProperty);
+            set => SetValue(DisplayPageLeaveWarningCommandProperty, value);
+        }
+
         public async Task SendBiometricStatus(BiometricStatus biometricStatus)
         {
             const string callbackName = "window.nativeAppCallbacks.biometricStatus";
@@ -219,6 +230,16 @@ namespace NHSOnline.App.Controls.WebViews
             const string callbackName = "window.nativeAppCallbacks.loginSettingsBiometricCompletion";
             var jsonArgument = ConvertToJsonString(biometricCompletion);
             await EvaluateJavaScriptAsync($"{callbackName}({jsonArgument})").ResumeOnThreadPool();
+        }
+
+        public async Task SendPageLeaveWarningResult(bool leavePage)
+        {
+            if (leavePage)
+            {
+                await EvaluateJavaScriptAsync("window.nativeAppCallbacks.pageLeaveWarningLeavePage()").ResumeOnThreadPool();
+                return;
+            }
+            await EvaluateJavaScriptAsync("window.nativeAppCallbacks.pageLeaveWarningStayOnPage()").ResumeOnThreadPool();
         }
 
         public async Task NavigateToAdvice()

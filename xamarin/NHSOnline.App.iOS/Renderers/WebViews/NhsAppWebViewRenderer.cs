@@ -30,6 +30,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                 .AddFunction("clearMenuBarItem", webView => webView.ClearMenuBarItem)
                 .AddFunction("startDownloadFromJson", webview => webview.StartDownload)
                 .AddFunction("addEventToCalendar", webView => webView.AddEventToCalendar)
+                .AddFunction("displayPageLeaveWarning", webView => webView.DisplayPageLeaveWarning)
                 .AddFunction("logout", webView => webView.Logout)
                 .Apply(config.UserContentController);
         }

@@ -100,5 +100,12 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         {
             NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.StartDownload(argumentJson));
         }
+
+        [JavascriptInterface]
+        [Export("displayPageLeaveWarning")]
+        public void DisplayPageLeaveWarning()
+        {
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.DisplayPageLeaveWarning());
+        }
     }
 }
