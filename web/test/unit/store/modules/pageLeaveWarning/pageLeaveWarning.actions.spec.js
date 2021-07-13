@@ -6,7 +6,7 @@ import {
   SET_ATTEMPTED_REDIRECT_ROUTE,
   RESET,
 } from '@/store/modules/pageLeaveWarning/mutation-types';
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import LeavingPageWarningModal from '@/components/modal/content/LeavingPageWarningModal';
 import { redirectTo } from '@/lib/utils';
 import { createRouter } from '../../../helpers';
@@ -69,7 +69,7 @@ describe('actions', () => {
 
       beforeEach(() => {
         window.nativeApp = true;
-        spy = jest.spyOn(NativeCallbacks, 'displayPageLeaveWarning').mockImplementation(() => true);
+        spy = jest.spyOn(NativeApp, 'displayPageLeaveWarning').mockImplementation(() => true);
         actions.showLeavingModal(mutation);
       });
 
@@ -82,7 +82,7 @@ describe('actions', () => {
         expect(mutation.commit).toHaveBeenCalledWith(SHOW_LEAVING_PAGE_WARNING);
       });
       it('will call native function for showing the modal', () => {
-        expect(NativeCallbacks.displayPageLeaveWarning).toBeCalled();
+        expect(NativeApp.displayPageLeaveWarning).toBeCalled();
       });
     });
     describe('not using native app', () => {
@@ -126,7 +126,7 @@ describe('actions', () => {
         };
 
         dismissPageLeaveWarningDialogueSpy = jest.spyOn(
-          NativeCallbacks, 'dismissPageLeaveWarningDialogue',
+          NativeApp, 'dismissPageLeaveWarningDialogue',
         ).mockImplementation(() => true);
 
         app.stayOnPage(mutation);

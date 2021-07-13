@@ -17,7 +17,7 @@
 <script>
 import PrimaryButton from '@/components/PrimaryButton';
 import NoReturnFlowLayout from '@/layouts/no-return-flow-layout';
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import RedirectMixin from '@/components/RedirectMixin';
 
 export default {
@@ -28,8 +28,8 @@ export default {
   },
   mixins: [RedirectMixin],
   mounted() {
-    NativeCallbacks.showHeaderSlim();
-    NativeCallbacks.hideWhiteScreen();
+    NativeApp.showHeaderSlim();
+    NativeApp.hideWhiteScreen();
   },
   methods: {
     onContinue() {

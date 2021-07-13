@@ -1,7 +1,7 @@
 import getOr from 'lodash/fp/getOr';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import MedicationCourseStatus from '@/lib/medication-course-status';
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import { redirectTo } from '@/lib/utils';
 import { createUri } from '@/lib/noJs';
 import {
@@ -37,7 +37,7 @@ export default {
         } else {
           retryPath = getOr('', 'state.errors.pageSettings.redirectUrl.default', this.$store);
         }
-        NativeCallbacks.configureWebContext(currentHelpUrl, retryPath);
+        NativeApp.configureWebContext(currentHelpUrl, retryPath);
       } else {
         // TODO: Add code when help function is added to the web version (Jira ticket NHSO-6388)
       }

@@ -1,5 +1,5 @@
 import LeavingPageWarningModal from '@/components/modal/content/LeavingPageWarningModal';
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import { redirectTo } from '@/lib/utils';
 import {
   SHOULD_BYPASS_ROUTE_GUARD,
@@ -22,7 +22,7 @@ export default {
       commit(SHOW_LEAVING_PAGE_WARNING);
 
       if (window.nativeApp) {
-        NativeCallbacks.displayPageLeaveWarning();
+        NativeApp.displayPageLeaveWarning();
       } else {
         this.dispatch('modal/show', { content: LeavingPageWarningModal });
       }
@@ -37,7 +37,7 @@ export default {
     if (window.nativeApp) {
       this.dispatch('navigation/setPreviousMenuItem');
 
-      NativeCallbacks.dismissPageLeaveWarningDialogue();
+      NativeApp.dismissPageLeaveWarningDialogue();
     } else {
       this.dispatch('modal/hide');
     }

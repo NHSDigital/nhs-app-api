@@ -1,4 +1,4 @@
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import actions from '@/store/modules/auth/actions';
 import each from 'jest-each';
 import jwt from 'jwt-decode';
@@ -392,12 +392,12 @@ describe('actions', () => {
   describe('nativeLogin', () => {
     it('will fire the native onLogin callback', () => {
       actions.nativeLogin();
-      expect(NativeCallbacks.onLogin).toHaveBeenCalled();
+      expect(NativeApp.onLogin).toHaveBeenCalled();
     });
 
     it('will fire the show headers callback', () => {
       actions.nativeLogin();
-      expect(NativeCallbacks.showHeader).toHaveBeenCalled();
+      expect(NativeApp.showHeader).toHaveBeenCalled();
     });
   });
 

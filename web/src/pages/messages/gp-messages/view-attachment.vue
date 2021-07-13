@@ -16,7 +16,7 @@
 
 <script>
 import get from 'lodash/fp/get';
-import NativeAppCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
 import { redirectTo } from '@/lib/utils';
@@ -68,8 +68,8 @@ export default {
 
     if (this.document) {
       this.navHidden = true;
-      NativeAppCallbacks.hideHeader();
-      NativeAppCallbacks.hideMenuBar();
+      NativeApp.hideHeader();
+      NativeApp.hideMenuBar();
     }
   },
   mounted() {
@@ -98,14 +98,14 @@ export default {
 
       // Android needs a native callback to set zoom on the webview natively.
       if (this.isAndroid) {
-        NativeAppCallbacks.setZoomable(zoomable);
+        NativeApp.setZoomable(zoomable);
       }
     },
   },
   beforeRouteLeave(to, from, next) {
     if (!(to.path === LOGIN_PATH || to.path === LOGOUT_PATH) && this.navHidden) {
-      NativeAppCallbacks.showHeader();
-      NativeAppCallbacks.showMenuBar();
+      NativeApp.showHeader();
+      NativeApp.showMenuBar();
     }
     next();
   },

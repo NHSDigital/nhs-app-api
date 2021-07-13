@@ -1,5 +1,5 @@
 import actions from '@/store/modules/session/actions';
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import SessionExpiryModal from '@/components/modal/content/SessionExpiryModal';
 
 import {
@@ -207,7 +207,7 @@ describe('actions', () => {
         store.getters.isExpiring = () => true;
         window.nativeApp = true;
 
-        spy = jest.spyOn(NativeCallbacks, 'onSessionExpiring').mockImplementation(() => true);
+        spy = jest.spyOn(NativeApp, 'onSessionExpiring').mockImplementation(() => true);
       });
 
       afterEach(() => {
@@ -229,19 +229,19 @@ describe('actions', () => {
         window.nativeApp = undefined;
 
         app.validate(store);
-        expect(NativeCallbacks.onSessionExpiring).not.toBeCalled();
+        expect(NativeApp.onSessionExpiring).not.toBeCalled();
       });
 
       it('will not call native onSessionExpiring callback if not expiring', () => {
         store.getters.isExpiring = () => false;
 
         app.validate(store);
-        expect(NativeCallbacks.onSessionExpiring).not.toBeCalled();
+        expect(NativeApp.onSessionExpiring).not.toBeCalled();
       });
 
       it('will call native onSessionExpiring callback if expiring and native', () => {
         app.validate(store);
-        expect(NativeCallbacks.onSessionExpiring).toHaveBeenCalledTimes(1);
+        expect(NativeApp.onSessionExpiring).toHaveBeenCalledTimes(1);
       });
 
       it('will call dispatch moal/show  if expiring and desktop', () => {

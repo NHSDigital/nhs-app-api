@@ -12,7 +12,7 @@
 
 <script>
 import NhsukLayout from '@/layouts/nhsuk-layout';
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import HeaderSlim from '@/components/HeaderSlim';
 import adviceCheck from '@/components/advice/AdviceCheck';
 
@@ -25,8 +25,8 @@ export default {
   },
   mounted() {
     if (this.$store.state.device.isNativeApp) {
-      NativeCallbacks.showHeaderSlim();
-      NativeCallbacks.hideWhiteScreen();
+      NativeApp.showHeaderSlim();
+      NativeApp.hideWhiteScreen();
     } else {
       window.scrollTo(0, 0);
     }

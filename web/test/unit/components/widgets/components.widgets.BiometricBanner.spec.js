@@ -1,6 +1,6 @@
 import BiometricBanner from '@/components/widgets/BiometricBanner';
 import { MORE_LOGIN_SETTINGS_PATH } from '@/router/paths';
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import { redirectTo } from '@/lib/utils';
 import { createRouter, createStore, mount } from '../../helpers';
 
@@ -51,7 +51,7 @@ describe('BiometricBanner', () => {
 
   describe('is native', () => {
     beforeEach(() => {
-      NativeCallbacks.fetchBiometricSpec.mockClear();
+      NativeApp.fetchBiometricSpec.mockClear();
     });
     describe('banner is dismissed', () => {
       beforeEach(() => {

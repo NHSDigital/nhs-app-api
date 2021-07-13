@@ -56,7 +56,7 @@ import ContentHeader from '@/components/widgets/ContentHeader';
 import FlashMessage from '@/components/widgets/FlashMessage';
 import HotJar from '@/components/widgets/HotJar';
 import Modal from '@/components/modal/Modal';
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import NativeVersionSetup from '@/services/nativeVersionSetup';
 import QualtricsIntercept from '@/components/widgets/QualtricsIntercept';
 import ResetSpinnerMixin from '@/plugins/mixinDefinitions/ResetSpinnerMixin';
@@ -226,7 +226,7 @@ export default {
   },
   mounted() {
     if (this.$store.state.device.isNativeApp) {
-      NativeCallbacks.dismissProgressBar();
+      NativeApp.dismissProgressBar();
     }
   },
   methods: {

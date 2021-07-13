@@ -74,7 +74,7 @@ import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
 import HomeHeader from '@/components/HomeHeader';
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import NativeVersionSetup from '@/services/nativeVersionSetup';
 import SessionExpiredBanner from '@/components/SessionExpiredBanner';
 import WebFooter from '@/components/widgets/WebFooter';
@@ -126,7 +126,7 @@ export default {
   mounted() {
     if (this.$store.state.device.isNativeApp) {
       this.$nextTick(() => {
-        NativeCallbacks.attemptBiometricLogin();
+        NativeApp.attemptBiometricLogin();
       });
     }
     NativeVersionSetup(this.$store);

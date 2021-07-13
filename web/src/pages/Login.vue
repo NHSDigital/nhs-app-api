@@ -27,7 +27,7 @@
 <script>
 import AuthorisationService from '@/services/authorisation-service';
 import LoginLayout from '@/layouts/login';
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 import { BEGINLOGIN_PATH, PRE_REGISTRATION_INFORMATION_PATH } from '@/router/paths';
 import { REDIRECT_PARAMETER } from '@/router/names';
@@ -63,7 +63,7 @@ export default {
       window.onbeforeunload = null;
 
       if (this.$store.state.device.isNativeApp) {
-        NativeCallbacks.dismissPageLeaveWarningDialogue();
+        NativeApp.dismissPageLeaveWarningDialogue();
       }
     }
   },
@@ -78,7 +78,7 @@ export default {
     }
 
     if (this.isUsingNativeApp) {
-      NativeCallbacks.hideElements();
+      NativeApp.hideElements();
     }
   },
   methods: {

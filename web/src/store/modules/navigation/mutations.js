@@ -1,4 +1,4 @@
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import {
   CLEAR_SELECTED_MENUITEM,
   SET_NEWMENUITEM,
@@ -22,7 +22,7 @@ function storePreviousSelectedMenuItem(state) {
 export default {
   [CLEAR_SELECTED_MENUITEM](state) {
     if (window.nativeApp) {
-      NativeCallbacks.clearMenuBarItem();
+      NativeApp.clearMenuBarItem();
     } else {
       storePreviousSelectedMenuItem(state);
       clearPreviousSelectedMenuItem(state);
@@ -30,7 +30,7 @@ export default {
   },
   [SET_NEWMENUITEM](state, menuItemIndex) {
     if (window.nativeApp !== 'undefined') {
-      NativeCallbacks.setMenuBarItem(menuItemIndex);
+      NativeApp.setMenuBarItem(menuItemIndex);
     }
     storePreviousSelectedMenuItem(state);
     clearPreviousSelectedMenuItem(state);

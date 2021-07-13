@@ -1,5 +1,5 @@
 import Sources from '@/lib/sources';
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import { INIT_DEVICE,
   UPDATE_IS_NATIVE_APP,
   SET_SOURCE_DEVICE,
@@ -16,11 +16,11 @@ export default {
     commit(SET_SOURCE_DEVICE, source);
   },
   unlockNavBar() {
-    NativeCallbacks.pageLoadComplete();
+    NativeApp.pageLoadComplete();
     window.nhsAppPageLoadComplete = true;
   },
   pageLoadComplete() {
-    NativeCallbacks.pageLoadComplete();
+    NativeApp.pageLoadComplete();
     window.nhsAppPageLoadComplete = true;
   },
   updateReferrer({ commit, rootState }, referrer) {

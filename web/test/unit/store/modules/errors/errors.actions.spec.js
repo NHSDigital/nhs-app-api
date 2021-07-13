@@ -1,5 +1,5 @@
 import actions from '@/store/modules/errors/actions';
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import { SET_ROUTE_PATH, SET_CONNECTION_PROBLEM } from '@/store/modules/errors/mutation-types';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 
@@ -81,7 +81,7 @@ describe('errors actions', () => {
 
     it('will call commit and native callback if connection error and isNativeApp', () => {
       const showInternetConnectionError = jest.spyOn(
-        NativeCallbacks, 'showInternetConnectionError',
+        NativeApp, 'showInternetConnectionError',
       ).mockImplementation(() => true);
 
       app.rootState.device.isNativeApp = true;

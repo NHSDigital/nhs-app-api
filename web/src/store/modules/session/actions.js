@@ -1,4 +1,4 @@
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import { setCookie } from '@/lib/cookie-manager';
 import SessionExpiryModal from '@/components/modal/content/SessionExpiryModal';
 import {
@@ -136,7 +136,7 @@ export default {
             // ensure any page leave warning still open is dismissed
             this.dispatch('pageLeaveWarning/stayOnPage');
 
-            NativeCallbacks.onSessionExpiring();
+            NativeApp.onSessionExpiring();
           } else {
             this.dispatch('modal/show', { content: SessionExpiryModal });
           }

@@ -1,7 +1,7 @@
 import DefaultMixin from '@/plugins/mixinDefinitions/DefaultMixin';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Vuex from 'vuex';
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import { createLocalVue, mount } from '@vue/test-utils';
 import { INDEX_PATH } from '@/router/paths';
 import { createUri } from '@/lib/noJs';
@@ -44,7 +44,7 @@ describe('mixins', () => {
       let configureWebContext;
 
       beforeEach(() => {
-        configureWebContext = jest.spyOn(NativeCallbacks, 'configureWebContext');
+        configureWebContext = jest.spyOn(NativeApp, 'configureWebContext');
       });
 
       afterEach(() => {

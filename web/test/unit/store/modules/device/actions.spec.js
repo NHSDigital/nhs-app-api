@@ -1,6 +1,6 @@
 import actions from '@/store/modules/device/actions';
 import { UPDATE_IS_NATIVE_APP } from '@/store/modules/device/mutation-types';
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 
 jest.mock('@/services/native-app');
 
@@ -23,12 +23,12 @@ describe('updateIsNativeApp', () => {
 
 describe('unlockNavBar', () => {
   beforeEach(() => {
-    NativeCallbacks.pageLoadComplete.mockClear();
+    NativeApp.pageLoadComplete.mockClear();
   });
 
-  it('will call NativeCallbacks.pageLoadComplete', () => {
+  it('will call NativeApp.pageLoadComplete', () => {
     unlockNavBar();
-    expect(NativeCallbacks.pageLoadComplete).toHaveBeenCalledTimes(1);
+    expect(NativeApp.pageLoadComplete).toHaveBeenCalledTimes(1);
   });
 });
 

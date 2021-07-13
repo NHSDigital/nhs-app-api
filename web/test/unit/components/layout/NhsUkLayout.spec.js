@@ -1,5 +1,5 @@
 import NhsukLayout from '@/components/layout/NhsUkLayout';
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import { ADVICE } from '@/router/routes/advice';
 import { INDEX } from '@/router/routes/general';
 import { LOGIN } from '@/router/routes/login';
@@ -83,7 +83,7 @@ describe('NhsUkLayout', () => {
 
   beforeEach(() => {
     global.validateSession = () => {};
-    NativeCallbacks.fetchBiometricSpec.mockClear();
+    NativeApp.fetchBiometricSpec.mockClear();
   });
 
   describe('is native', () => {
@@ -158,7 +158,7 @@ describe('NhsUkLayout', () => {
       });
 
       it('will not call to fetch biometric spec', () => {
-        expect(NativeCallbacks.fetchBiometricSpec).toBeCalledTimes(0);
+        expect(NativeApp.fetchBiometricSpec).toBeCalledTimes(0);
       });
     });
   });

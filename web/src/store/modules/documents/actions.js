@@ -1,5 +1,5 @@
 import sanitize from 'sanitize-filename';
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import {
   INIT,
   CLEAR,
@@ -97,7 +97,7 @@ export default {
         fileReader.onloadend = () => {
           const base64data = fileReader.result;
 
-          NativeCallbacks.startDownload(base64data, fullFileName, mimeType);
+          NativeApp.startDownload(base64data, fullFileName, mimeType);
 
           resolve();
         };

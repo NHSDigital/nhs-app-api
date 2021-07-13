@@ -1,6 +1,6 @@
 import sanitize from 'sanitize-filename';
 
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import actions from '@/store/modules/documents/actions';
 import { SET_SELECTED_DOCUMENT_INFO, LOADED_DOCUMENT } from '@/store/modules/documents/mutation-types';
 
@@ -194,7 +194,7 @@ describe('documents store actions', () => {
       beforeEach(() => {
         startDownload = jest.fn();
 
-        NativeCallbacks.startDownload.mockImplementation(startDownload);
+        NativeApp.startDownload.mockImplementation(startDownload);
         mockStoreState(buildFileDetails(true));
       });
 

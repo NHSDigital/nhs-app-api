@@ -1,7 +1,7 @@
 import isEmpty from 'lodash/fp/isEmpty';
 import isString from 'lodash/fp/isString';
 import values from 'lodash/fp/values';
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import {
   ADD_API_ERROR,
@@ -43,7 +43,7 @@ export default {
       EventBus.$emit(UPDATE_TITLE, 'generic.errors.internetConnectionError');
 
       if (rootState.device.isNativeApp) {
-        NativeCallbacks.showInternetConnectionError();
+        NativeApp.showInternetConnectionError();
       }
     }
   },

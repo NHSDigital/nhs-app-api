@@ -3,7 +3,7 @@ import each from 'jest-each';
 import DocumentPage from '@/pages/health-records/gp-medical-record/documents/detail/_id';
 import { initialState } from '@/store/modules/myRecord/mutation-types';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import Glossary from '@/components/Glossary';
 import { createStore, shallowMount } from '../../../../helpers';
 
@@ -47,8 +47,8 @@ describe('health-records documents', () => {
 
     beforeEach(() => {
       dependency.redirectTo.mockClear();
-      NativeCallbacks.hideHeader.mockClear();
-      NativeCallbacks.hideMenuBar.mockClear();
+      NativeApp.hideHeader.mockClear();
+      NativeApp.hideMenuBar.mockClear();
     });
 
     describe('redirect', () => {
@@ -74,8 +74,8 @@ describe('health-records documents', () => {
         $store.state.myRecord.hasAcceptedTerms = true;
         $store.state.documents.currentDocument.data = {};
         await mountPage();
-        expect(NativeCallbacks.hideHeader).toHaveBeenCalled();
-        expect(NativeCallbacks.hideMenuBar).toHaveBeenCalled();
+        expect(NativeApp.hideHeader).toHaveBeenCalled();
+        expect(NativeApp.hideMenuBar).toHaveBeenCalled();
       });
       it('will set the meta tag content so the user can zoom in', async () => {
         $store.state.myRecord.hasAcceptedTerms = true;
@@ -88,8 +88,8 @@ describe('health-records documents', () => {
         $store.state.myRecord.hasAcceptedTerms = true;
         $store.state.documents.currentDocument.data = undefined;
         await mountPage();
-        expect(NativeCallbacks.hideHeader).not.toHaveBeenCalled();
-        expect(NativeCallbacks.hideMenuBar).not.toHaveBeenCalled();
+        expect(NativeApp.hideHeader).not.toHaveBeenCalled();
+        expect(NativeApp.hideMenuBar).not.toHaveBeenCalled();
       });
     });
   });
@@ -127,16 +127,16 @@ describe('health-records documents', () => {
     each(['/login', '/logout'])
       .it('will not show header and menubar if going to LOGIN or LOGOUT routes', (to) => {
         DocumentPage.beforeRouteLeave({ path: to }, undefined, next);
-        expect(NativeCallbacks.showHeader).not.toHaveBeenCalled();
-        expect(NativeCallbacks.showMenuBar).not.toHaveBeenCalled();
+        expect(NativeApp.showHeader).not.toHaveBeenCalled();
+        expect(NativeApp.showMenuBar).not.toHaveBeenCalled();
         expect(next).toHaveBeenCalled();
       });
     it('will show header and menubar if not going to LOGIN or LOGOUT routes', () => {
       DocumentPage.beforeRouteLeave.call(
         { navHidden: true }, { path: '/appointments' }, undefined, next,
       );
-      expect(NativeCallbacks.showHeader).toHaveBeenCalled();
-      expect(NativeCallbacks.showMenuBar).toHaveBeenCalled();
+      expect(NativeApp.showHeader).toHaveBeenCalled();
+      expect(NativeApp.showMenuBar).toHaveBeenCalled();
       expect(next).toHaveBeenCalled();
     });
   });

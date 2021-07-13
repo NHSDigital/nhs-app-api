@@ -57,7 +57,7 @@ import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import CeMarkIcon from '@/components/icons/CeMarkIcon';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
-import NativeCallbacks from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 import Settings from '@/components/more/Settings';
 import sjrIf from '@/lib/sjrIf';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
@@ -118,7 +118,7 @@ export default {
       this.$store.dispatch('auth/logout');
     },
     goToLoginOptions() {
-      NativeCallbacks.goToLoginOptions();
+      NativeApp.goToLoginOptions();
     },
     navigateToLinkedProfiles() {
       this.$store.dispatch('navigation/setRouteCrumb', 'moreCrumb');
