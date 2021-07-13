@@ -27,7 +27,7 @@ namespace NHSOnline.IntegrationTests.UI
             }
         }
 
-        public static IEnumerable<string> GetDockerLogs(string container, DateTime startTime, DateTime endTime)
+        public static IEnumerable<string> GetDockerLogs(string container, DateTime startTime, DateTime endTime, int logEndTimeExtensionMilliseconds = 0)
         {
             using var listContainerNames =
                 new ProcessRunner("docker", $"ps -a --filter=network=int_test_default --filter=name=int_test_{container} --format {{{{.Names}}}}").Start();
@@ -35,7 +35,7 @@ namespace NHSOnline.IntegrationTests.UI
             var logLines = new List<string>();
             foreach (var containerName in listContainerNames.Output())
             {
-                logLines.AddRange(GetLogLines(containerName, startTime, endTime));
+                logLines.AddRange(GetLogLines(containerName, startTime, endTime.AddMilliseconds(logEndTimeExtensionMilliseconds)));
             }
 
             return logLines;
