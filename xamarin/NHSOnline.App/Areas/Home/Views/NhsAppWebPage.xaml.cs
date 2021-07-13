@@ -17,6 +17,10 @@ namespace NHSOnline.App.Areas.Home.Views
         private readonly ILogger _logger;
         private readonly AppNavigation<INhsAppWebView.IEvents> _appNavigation;
 
+        private const string Message = "Are you sure you want to log out?";
+        private const string AcceptButtonText = "Log out";
+        private const string CancelButtonText = "Cancel";
+
         public NhsAppWebPage(ILogger<NhsAppWebPage> logger)
         {
             _logger = logger;
@@ -79,6 +83,10 @@ namespace NHSOnline.App.Areas.Home.Views
         public Func<Task>? LogoutRequested { get; set; }
         public AsyncCommand LogoutCommand
             => new AsyncCommand(() => LogoutRequested);
+
+        public Func<Task>? BackRequested { get; set; }
+        public AsyncCommand BackRequestedCommand
+            => new AsyncCommand(() => BackRequested);
 
         public Func<Uri, Task>? DeeplinkRequested { get; set; }
         public async Task HandleDeeplink(Uri deeplinkUrl)
@@ -149,6 +157,23 @@ namespace NHSOnline.App.Areas.Home.Views
             WebView.Focus();
             WebView.AccessibilityFocus();
             NavigatedCommand.Execute(args);
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            BackRequestedCommand.Execute(null);
+            return true;
+        }
+
+        public async Task ShowLogoutPrompt()
+        {
+            var result = await Page.DisplayAlert(null, Message, AcceptButtonText, CancelButtonText)
+                .ResumeOnThreadPool();
+
+            if (result)
+            {
+                // Logout
+            }
         }
 
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);

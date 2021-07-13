@@ -41,6 +41,7 @@ namespace NHSOnline.App.Areas.Home
             Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
             Func<Task>? OpenSettingsRequested { get; set; }
             Func<Task>? LogoutRequested { get; set; }
+            Func<Task>? BackRequested { get; set; }
             Func<Uri, Task>? DeeplinkRequested { get; set; }
         }
 
@@ -61,5 +62,6 @@ namespace NHSOnline.App.Areas.Home
         Task SendNotificationUnauthorised();
         Task SendBiometricStatus(BiometricStatus biometricStatus);
         Task SendBiometricCompletion(BiometricCompletion completionDetails);
+        Task ShowLogoutPrompt();
     }
 }

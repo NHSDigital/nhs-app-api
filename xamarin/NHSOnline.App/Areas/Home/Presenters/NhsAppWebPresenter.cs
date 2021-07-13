@@ -88,6 +88,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterHandler(ClearMenuBarItemRequested, (view, handler) => view.ClearMenuBarItemRequested = handler)
                 .RegisterHandler(OpenSettingsRequested, (view, handler) => view.OpenSettingsRequested = handler)
                 .RegisterHandler(LogoutRequested, (view, handler) => view.LogoutRequested = handler)
+                .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler)
                 .RegisterHandler(_navigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
                 .RegisterHandler(_navigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
                 .RegisterHandler(_navigationHandler.AdviceRequested, (view, handler) => view.AdviceRequested = handler)
@@ -315,6 +316,11 @@ namespace NHSOnline.App.Areas.Home.Presenters
             }
 
             await _view.SendBiometricCompletion(completion).PreserveThreadContext();
+        }
+
+        private async Task BackRequested()
+        {
+            await _view.ShowLogoutPrompt().ResumeOnThreadPool();
         }
 
         private Task LogoutRequested()
