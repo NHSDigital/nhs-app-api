@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
             responseBody = userSession.Accept(new CreateResponseFromUserSessionVisitor<PostUserSessionResponse>(_settings, responseBody));
 
-            await LogMetrics(httpContext, userSession, referrer);
+            await LoginLogMetrics(httpContext, userSession, referrer);
 
             return new CreatedResult(string.Empty, responseBody);
         }
@@ -68,13 +68,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             var userSession = success.UserSession;
 
             _userSessionService.SetUserSession(userSession);
-            _logger.LogInformation($"Created {userSession.GetType().Name}");
 
             var responseBody = new PostUserSessionResponse();
 
             responseBody = userSession.Accept(new CreateResponseFromUserSessionVisitor<PostUserSessionResponse>(_settings, responseBody));
 
-            await LogMetrics(httpContext, userSession, referrer);
+            await GpSessionCreatedLogMetrics(httpContext, userSession, referrer);
 
             return new CreatedResult(string.Empty, responseBody);
         }
@@ -98,12 +97,20 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 new ClaimsPrincipal(claimsIdentity));
         }
 
-        private async Task LogMetrics(HttpContext httpContext, UserSession userSession, string referrer)
+        private static LoginData CreateLoginData(HttpContext httpContext, UserSession userSession, string referrer)
         {
             var userAgent = httpContext.Request.Headers[Constants.HttpHeaders.UserAgent];
+            return new LoginData(httpContext.TraceIdentifier, userSession.Key, userAgent, referrer);
+        }
 
-            var metricLoggingData = new LoginData(httpContext.TraceIdentifier, userSession.Key, userAgent, referrer);
-            await _metricLogger.Login(metricLoggingData);
+        private async Task LoginLogMetrics(HttpContext httpContext, UserSession userSession, string referrer)
+        {
+            await _metricLogger.Login(CreateLoginData(httpContext, userSession,  referrer));
+        }
+
+        private async Task GpSessionCreatedLogMetrics(HttpContext httpContext, UserSession userSession, string referrer)
+        {
+            await _metricLogger.GpSessionCreated(CreateLoginData(httpContext, userSession,  referrer));
         }
     }
 }

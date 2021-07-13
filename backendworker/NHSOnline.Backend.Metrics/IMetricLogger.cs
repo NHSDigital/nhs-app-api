@@ -10,6 +10,8 @@ namespace NHSOnline.Backend.Metrics
 
         Task Login(LoginData data);
 
+        Task GpSessionCreated(LoginData data);
+
         Task UpliftStarted(UpliftStartedData data);
 
         Task UserResearchOptOut();

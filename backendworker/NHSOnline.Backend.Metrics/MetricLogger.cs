@@ -18,6 +18,8 @@ namespace NHSOnline.Backend.Metrics
 
         public Task Login(LoginData data) => WriteMetricLog(data);
 
+        public Task GpSessionCreated(LoginData data) => WriteMetricLog(data);
+
         public Task UpliftStarted(UpliftStartedData data) => WriteMetricLog(data);
 
         public Task UserResearchOptIn() => WriteMetricLog();
