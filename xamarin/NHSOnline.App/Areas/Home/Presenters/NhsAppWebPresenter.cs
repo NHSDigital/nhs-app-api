@@ -260,7 +260,17 @@ namespace NHSOnline.App.Areas.Home.Presenters
         {
             _logger.LogInformation($"Menu bar item change requested for {menuItemIndex}");
 
-            _view.SelectedNavigationFooterItem = GetFooterItemFromIndex(menuItemIndex);
+            var footerItem = GetFooterItemFromIndex(menuItemIndex);
+            
+            if (footerItem.HasValue)
+            {
+                _view.SelectedNavigationFooterItem = footerItem.Value;
+            }
+            else
+            {
+                _logger.LogError($"Menu bar item change requested for invalid index '{menuItemIndex}'");
+            }
+            
             return Task.CompletedTask;
         }
 
@@ -368,7 +378,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             return Task.CompletedTask;
         }
 
-        private static NavigationFooterItem GetFooterItemFromIndex(string footerItemIndex)
+        private static NavigationFooterItem? GetFooterItemFromIndex(string footerItemIndex)
         {
             return footerItemIndex switch
             {
@@ -377,7 +387,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 "2" => NavigationFooterItem.Prescriptions,
                 "3" => NavigationFooterItem.YourHealth,
                 "4" => NavigationFooterItem.Messages,
-                _ => throw new ArgumentOutOfRangeException(nameof(footerItemIndex), footerItemIndex)
+                _ => null,
             };
         }
 
