@@ -62,6 +62,7 @@ namespace NHSOnline.App.Areas.Home
         Task SendNotificationUnauthorised();
         Task SendBiometricStatus(BiometricStatus biometricStatus);
         Task SendBiometricCompletion(BiometricCompletion completionDetails);
-        Task ShowLogoutPrompt();
+        Task<bool> ShowLogoutPrompt();
+        Task Logout();
     }
 }

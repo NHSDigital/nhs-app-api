@@ -320,7 +320,12 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         private async Task BackRequested()
         {
-            await _view.ShowLogoutPrompt().ResumeOnThreadPool();
+            var shouldLogout = await _view.ShowLogoutPrompt().PreserveThreadContext();
+
+            if (shouldLogout)
+            {
+                await _view.Logout().PreserveThreadContext();
+            }
         }
 
         private Task LogoutRequested()

@@ -165,15 +165,16 @@ namespace NHSOnline.App.Areas.Home.Views
             return true;
         }
 
-        public async Task ShowLogoutPrompt()
+        public async Task<bool> ShowLogoutPrompt()
         {
-            var result = await Page.DisplayAlert(null, Message, AcceptButtonText, CancelButtonText)
-                .ResumeOnThreadPool();
+            return await Page.DisplayAlert(null, Message, AcceptButtonText, CancelButtonText)
+                .PreserveThreadContext();
+        }
 
-            if (result)
-            {
-                // Logout
-            }
+        public async Task Logout()
+        {
+            await WebView.AuthLogout().PreserveThreadContext();
+            LogoutCommand.Execute(null);
         }
 
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);
