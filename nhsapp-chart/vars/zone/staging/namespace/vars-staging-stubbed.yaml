@@ -1,4 +1,8 @@
 ---
+environmentPublicHostSuffix: "-stubbed.staging.nhsapp.service.nhs.uk"
+environmentPrivateHostSuffix: "-stubbed.private.staging.nhsapp.service.nhs.uk"
+tlsSecretName: "staging-nhsapp-service-nhs-uk"
+
 registry: nhsapp.azurecr.io
 cidHostname: auth.nhsapp.signin.nhs.uk
 cidFidoHostname: uaf.nhsapp.signin.nhs.uk
