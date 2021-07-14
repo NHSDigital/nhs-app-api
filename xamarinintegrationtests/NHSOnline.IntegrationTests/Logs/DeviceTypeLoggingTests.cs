@@ -27,7 +27,6 @@ namespace NHSOnline.IntegrationTests.Logs
                 .AssertFound();
         }
 
-        [Ignore("NHSO-15603: Xamarin iOS UserAgent not set on API calls")]
         [NhsAppIOSTest]
         public void APatientWithProofLevelNineCanSuccessfullyLogInAndLogsUserAgentInformationIOS(IIOSDriverWrapper driver)
         {

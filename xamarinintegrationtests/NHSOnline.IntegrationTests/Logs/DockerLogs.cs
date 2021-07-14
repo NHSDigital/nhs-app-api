@@ -10,11 +10,11 @@ namespace NHSOnline.IntegrationTests.Logs
     {
         private readonly IEnumerable<string> _logs;
         private readonly Regex _searchRegex;
-        private const int LogEndTimeExtensionMilliseconds = 1000;
+        private readonly TimeSpan _logEndTimeExtension = new(0,0,1);
 
         protected DockerLogs(DateTime startTime, DateTime endTime, string containerName, string regex)
         {
-            _logs = UI.DockerLogs.GetDockerLogs(containerName, startTime, endTime, LogEndTimeExtensionMilliseconds);
+            _logs = UI.DockerLogs.GetDockerLogs(containerName, startTime, endTime.Add(_logEndTimeExtension));
             _searchRegex = new Regex(regex);
         }
 

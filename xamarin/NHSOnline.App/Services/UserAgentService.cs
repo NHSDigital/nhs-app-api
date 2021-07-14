@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using Xamarin.Essentials;
 
@@ -21,6 +22,10 @@ namespace NHSOnline.App.Services
         {
         }
 
-        public string NhsAppUserAgent => $"{Platform} {Manufacturer} {Model} {OperatingSystem} {Architecture}";
+        private static string SanitiseHeaderValue(string userAgent) =>
+            userAgent.Replace(",", ".", StringComparison.Ordinal);
+
+        public string NhsAppUserAgent =>
+            SanitiseHeaderValue($"{Platform} {Manufacturer} {Model} {OperatingSystem} {Architecture}");
     }
 }
