@@ -8,7 +8,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.More
         private IOSMorePage(IIOSDriverWrapper driver)
         {
             Navigation = new IOSFullNavigation(driver);
-            PageContent = new MorePageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new MorePageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         public IOSFullNavigation Navigation { get; }

@@ -11,7 +11,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
         private IOSLoggedInHomePage(IIOSDriverWrapper driver)
         {
             Navigation = new IOSFullNavigation(driver);
-            PageContent = new LoggedInHomePageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new LoggedInHomePageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         public static IOSLoggedInHomePage AssertOnPage(IIOSDriverWrapper driver)

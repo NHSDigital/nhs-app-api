@@ -8,7 +8,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Advice
         private IOSAdvicePage(IIOSDriverWrapper driver)
         {
             Navigation = new IOSFullNavigation(driver);
-            PageContent = new AdvicePageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new AdvicePageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         public IOSFullNavigation Navigation { get; }

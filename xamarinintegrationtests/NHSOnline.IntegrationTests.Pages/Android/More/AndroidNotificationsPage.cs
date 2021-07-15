@@ -15,7 +15,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.More
         {
             _driver = driver;
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new NotificationsPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new NotificationsPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         public AndroidFullNavigation Navigation { get; }

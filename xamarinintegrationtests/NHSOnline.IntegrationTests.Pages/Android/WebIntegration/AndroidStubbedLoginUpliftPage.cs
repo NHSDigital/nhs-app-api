@@ -8,7 +8,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
         private AndroidStubbedLoginUpliftPage(IAndroidDriverWrapper driver)
         {
             Navigation = new AndroidSlimCloseNavigation(driver);
-            PageContent = new StubbedLoginUpliftPageContent(driver.Web(WebViewContext.NhsLoginUplift));
+            PageContent = new StubbedLoginUpliftPageContent(driver.Web.WebIntegrationWebView());
         }
 
         public AndroidSlimCloseNavigation Navigation { get; }

@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
 
         private IOSManageNotificationsPromptPage(IIOSDriverWrapper driver)
         {
-            PageContent = new ManageNotificationsPromptPageContent(driver.Web(WebViewContext.NhsAppPreHome));
+            PageContent = new ManageNotificationsPromptPageContent(driver.Web.NhsAppPreHomeWebView());
         }
 
         public static IOSManageNotificationsPromptPage AssertOnPage(IIOSDriverWrapper driver)

@@ -13,7 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
         {
             _driver = driver;
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new LocationServicesPageContent(driver.Web(WebViewContext.TestProviderWebIntegration));
+            PageContent = new LocationServicesPageContent(driver.Web.WebIntegrationWebView());
         }
 
         private AndroidFullNavigation Navigation { get; }

@@ -8,7 +8,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
         private IOSOneOneOnePage(IIOSDriverWrapper driver)
         {
             Navigation = new IOSFullNavigation(driver);
-            PageContent = new OneOneOnePageContent(driver.Web(WebViewContext.OneOneOneWebIntegration));
+            PageContent = new OneOneOnePageContent(driver.Web.WebIntegrationWebView());
         }
 
         public IOSFullNavigation Navigation { get; }

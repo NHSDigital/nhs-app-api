@@ -19,7 +19,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Prescriptions
         {
             _driver = driver;
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new PkbSecondaryCareHospitalAndOtherMedicinesPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new PkbSecondaryCareHospitalAndOtherMedicinesPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         public static AndroidPkbSecondaryCareHospitalAndOtherMedicinesPage AssertOnPage(IAndroidDriverWrapper driver)

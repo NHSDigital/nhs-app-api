@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
 
         private IOSTermsAndConditionsPage(IIOSDriverWrapper driver)
         {
-            PageContent = new TermsAndConditionsPageContent(driver.Web(WebViewContext.NhsAppPreHome));
+            PageContent = new TermsAndConditionsPageContent(driver.Web.NhsAppPreHomeWebView());
         }
 
         public static IOSTermsAndConditionsPage AssertOnPage(IIOSDriverWrapper driver)

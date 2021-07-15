@@ -8,7 +8,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
         private IOSErsNhsLoginPage(IIOSDriverWrapper driver)
         {
             Navigation = new IOSFullNavigation(driver);
-            PageContent = new StubbedLoginPageContent(driver.Web(WebViewContext.ErsWebIntegration));
+            PageContent = new StubbedLoginPageContent(driver.Web.WebIntegrationWebView());
         }
 
         private IOSFullNavigation Navigation { get; }

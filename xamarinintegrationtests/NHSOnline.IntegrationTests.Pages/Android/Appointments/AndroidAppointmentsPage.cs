@@ -19,7 +19,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
         {
             _driver = driver;
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new AppointmentsPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new AppointmentsPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         public static AndroidAppointmentsPage AssertOnPage(IAndroidDriverWrapper driver)

@@ -14,7 +14,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
         {
             _driver = driver;
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new AdditionalGpServicesConditionsPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new AdditionalGpServicesConditionsPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         public static AndroidAdditionalGpServicesConditionsPage AssertOnPage(IAndroidDriverWrapper driver)

@@ -18,7 +18,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
         {
             _driver = driver;
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new AToZPageContent(driver.Web(WebViewContext.AToZWebIntegration));
+            PageContent = new AToZPageContent(driver.Web.WebIntegrationWebView());
         }
 
         public static AndroidAToZPage AssertOnPage(IAndroidDriverWrapper driver)

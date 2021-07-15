@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
         private IOSLocationServicesPage(IIOSDriverWrapper driver)
         {
             Navigation = new IOSFullNavigation(driver);
-            PageContent = new LocationServicesPageContent(driver.Web(WebViewContext.TestProviderWebIntegration));
+            PageContent = new LocationServicesPageContent(driver.Web.WebIntegrationWebView());
         }
 
         private IOSFullNavigation Navigation { get; }

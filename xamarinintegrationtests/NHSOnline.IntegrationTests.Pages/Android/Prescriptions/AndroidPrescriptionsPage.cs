@@ -19,7 +19,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Prescriptions
         private AndroidPrescriptionsPage(IAndroidDriverWrapper driver)
         {
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new PrescriptionsPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new PrescriptionsPageContent(driver.Web.NhsAppLoggedInWebView());
             _driver = driver;
         }
 

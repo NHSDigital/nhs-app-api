@@ -1,7 +1,8 @@
 using System;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NHSOnline.IntegrationTests.UI.Drivers.WebContext;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Interfaces;
 
@@ -15,130 +16,61 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
         private readonly string _nativeContextName;
         private CurrentDriverContext _currentDriverContext;
 
-        internal NativeDriverContext(IContextAware contextAwareDriver, IWebDriver webDriver, WebViewLocatorStrategy webViewLocatorStrategy)
+        internal TestLogs Logs { get; }
+        internal WebViewContextGrabber WebContextGrabber { get; }
+
+        private static TimeSpan WaitForWebContextToBeReady { get; } = TimeSpan.FromSeconds(60);
+
+        internal NativeDriverContext(IContextAware contextAwareDriver, IWebDriver webDriver,
+            WebViewLocatorStrategy webViewLocatorStrategy, TestLogs logs)
         {
             _contextAwareDriver = contextAwareDriver;
             _webDriver = webDriver;
             _webViewLocatorStrategy = webViewLocatorStrategy;
+            Logs = logs;
+            WebContextGrabber = new WebViewContextGrabber(webViewLocatorStrategy, logs);
 
             var contexts = contextAwareDriver.Contexts;
             _nativeContextName = contexts
                 .FirstOrDefault(context => context.Contains("native", StringComparison.OrdinalIgnoreCase))
                 ?? throw new InvalidOperationException("No native context found");
-            _currentDriverContext = CurrentDriverContext.Create(this);
+            _currentDriverContext = CurrentDriverContext.Create();
         }
 
-        internal void SwitchToWebContext(WebViewContext webViewContext)
+        internal void SwitchToWebContext(IWebContext webViewContext, Action<IWebDriver> assertReady)
         {
-            _currentDriverContext = SwitchContextWithRetry(() => _currentDriverContext.SwitchToWebContext(webViewContext));
+            Logs.Info($"Switching to web context: {webViewContext}");
+            _currentDriverContext = _currentDriverContext.SwitchToWebContext(_webViewLocatorStrategy, webViewContext);
+
+            var waitUtil = DateTime.UtcNow.Add(WaitForWebContextToBeReady);
+            while (DateTime.UtcNow < waitUtil)
+            {
+                try
+                {
+                    Logs.Info($"Testing if {webViewContext} is ready");
+                    assertReady(_webDriver);
+                    Logs.Info($"{webViewContext} is ready");
+                    return;
+                }
+                catch
+                {
+                    Logs.Info($"{webViewContext} is not ready");
+                    Thread.Sleep(TimeSpan.FromMilliseconds(100));
+                }
+            }
+
+            throw new AssertFailedException($"Web context not ready after {WaitForWebContextToBeReady}");
         }
 
         internal void SwitchToNativeContext()
         {
-            _currentDriverContext = SwitchContextWithRetry(() => _currentDriverContext.SwitchToNativeContext());
+            Logs.Info($"Switching to native context: {_nativeContextName}");
+            _currentDriverContext = _currentDriverContext.SwitchToNativeContext(_contextAwareDriver, _nativeContextName);
         }
 
-        internal void ForEachWebView(Action<string> action)
+        internal void ForEachWebView(Action<IWebContext> action)
         {
-            _webViewLocatorStrategy.ForEachWebView(action);
-        }
-
-        private static CurrentDriverContext SwitchContextWithRetry(Func<CurrentDriverContext> contextSwitchAction)
-        {
-            var retryUntil = DateTime.UtcNow.Add(TimeSpan.FromMinutes(1));
-            while (true)
-            {
-                try
-                {
-                    return contextSwitchAction();
-                }
-                catch (AssertFailedException) when (DateTime.UtcNow < retryUntil)
-                {
-                }
-                catch (WebDriverException) when (DateTime.UtcNow < retryUntil)
-                {
-                }
-                catch (InvalidOperationException e) when (DateTime.UtcNow < retryUntil && IsNoSuchContextFound(e))
-                {
-                }
-
-                Task.Delay(TimeSpan.FromMilliseconds(100)).Wait();
-            }
-
-            static bool IsNoSuchContextFound(InvalidOperationException e)
-                => e.Message.StartsWith("No such context found.", StringComparison.Ordinal);
-        }
-
-
-        private abstract class CurrentDriverContext
-        {
-            internal abstract CurrentDriverContext SwitchToNativeContext();
-            internal abstract CurrentDriverContext SwitchToWebContext(WebViewContext webViewContext);
-
-            internal static CurrentDriverContext Create(NativeDriverContext nativeDriverContext)
-            {
-                return new CurrentlyNativeDriverContext(nativeDriverContext);
-            }
-
-            private sealed class CurrentlyNativeDriverContext : CurrentDriverContext
-            {
-                private readonly NativeDriverContext _nativeDriverContext;
-
-                internal CurrentlyNativeDriverContext(NativeDriverContext nativeDriverContext)
-                {
-                    _nativeDriverContext = nativeDriverContext;
-                }
-
-                internal static CurrentDriverContext SwitchTo(NativeDriverContext nativeDriverContext)
-                {
-                    nativeDriverContext._contextAwareDriver.Context = nativeDriverContext._nativeContextName;
-                    return new CurrentlyNativeDriverContext(nativeDriverContext);
-                }
-
-                internal override CurrentDriverContext SwitchToNativeContext()
-                {
-                    return this;
-                }
-
-                internal override CurrentDriverContext SwitchToWebContext(WebViewContext webViewContext)
-                {
-                    return CurrentlyWebDriverContext.SwitchTo(_nativeDriverContext, webViewContext);
-                }
-            }
-
-            private sealed class CurrentlyWebDriverContext : CurrentDriverContext
-            {
-                private readonly NativeDriverContext _nativeDriverContext;
-                private readonly WebViewContext _currentWebViewContext;
-
-                private CurrentlyWebDriverContext(NativeDriverContext nativeDriverContext, WebViewContext currentWebViewContext)
-                {
-                    _nativeDriverContext = nativeDriverContext;
-                    _currentWebViewContext = currentWebViewContext;
-                }
-
-                internal static CurrentDriverContext SwitchTo(NativeDriverContext nativeDriverContext, WebViewContext webViewContext)
-                {
-                    nativeDriverContext._webViewLocatorStrategy.SwitchToWebView(webViewContext);
-                    webViewContext.AssertContextReady(nativeDriverContext._webDriver);
-                    return new CurrentlyWebDriverContext(nativeDriverContext, webViewContext);
-                }
-
-                internal override CurrentDriverContext SwitchToNativeContext()
-                {
-                    return CurrentlyNativeDriverContext.SwitchTo(_nativeDriverContext);
-                }
-
-                internal override CurrentDriverContext SwitchToWebContext(WebViewContext webViewContext)
-                {
-                    if (_currentWebViewContext == webViewContext)
-                    {
-                        return this;
-                    }
-
-                    return SwitchTo(_nativeDriverContext, webViewContext);
-                }
-            }
+            _webViewLocatorStrategy.ForEachWebContext(action);
         }
     }
 }

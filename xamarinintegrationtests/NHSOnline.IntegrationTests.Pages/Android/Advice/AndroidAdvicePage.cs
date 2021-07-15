@@ -18,7 +18,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Advice
         {
             _driver = driver;
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new AdvicePageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new AdvicePageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         public static AndroidAdvicePage AssertOnPage(IAndroidDriverWrapper driver)

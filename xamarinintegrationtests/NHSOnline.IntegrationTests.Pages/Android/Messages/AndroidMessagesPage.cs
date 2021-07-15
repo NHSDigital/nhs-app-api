@@ -15,7 +15,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Messages
         {
             _driver = driver;
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new MessagesPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new MessagesPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         internal AndroidKeyboardNavigation KeyboardPageContentNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(

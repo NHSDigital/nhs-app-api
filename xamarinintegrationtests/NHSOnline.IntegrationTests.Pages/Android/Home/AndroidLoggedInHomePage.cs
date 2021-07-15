@@ -18,7 +18,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
         {
             _driver = driver;
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new LoggedInHomePageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new LoggedInHomePageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         public static AndroidLoggedInHomePage AssertOnPage(IAndroidDriverWrapper driver)

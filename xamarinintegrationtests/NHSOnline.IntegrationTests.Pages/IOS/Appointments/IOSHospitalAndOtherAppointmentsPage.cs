@@ -8,7 +8,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Appointments
         private IOSHospitalAndOtherAppointmentsPage(IIOSDriverWrapper driver)
         {
             Navigation = new IOSFullNavigation(driver);
-            PageContent = new HospitalAndOtherAppointmentsPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new HospitalAndOtherAppointmentsPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         private IOSFullNavigation Navigation { get; }

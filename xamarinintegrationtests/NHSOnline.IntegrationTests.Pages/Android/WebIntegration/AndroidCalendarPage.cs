@@ -12,12 +12,12 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
         {
             _driver = driver;
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new CalendarPageContent(driver.Web(WebViewContext.TestProviderWebIntegration));
+            PageContent = new CalendarPageContent(driver.Web.WebIntegrationWebView());
         }
 
         private AndroidFullNavigation Navigation { get; }
 
-        public CalendarPageContent PageContent { get; }
+        private CalendarPageContent PageContent { get; }
 
         public static AndroidCalendarPage AssertOnPage(IAndroidDriverWrapper driver)
         {

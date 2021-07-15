@@ -8,7 +8,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Prescriptions
         private IOSPrescriptionsPage(IIOSDriverWrapper driver)
         {
             Navigation = new IOSFullNavigation(driver);
-            PageContent = new PrescriptionsPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new PrescriptionsPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         public IOSFullNavigation Navigation { get; }

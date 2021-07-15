@@ -8,7 +8,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.YourHealth
         private IOSYourHealthPage(IIOSDriverWrapper driver)
         {
             Navigation = new IOSFullNavigation(driver);
-            PageContent = new YourHealthPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new YourHealthPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         public IOSFullNavigation Navigation { get; }

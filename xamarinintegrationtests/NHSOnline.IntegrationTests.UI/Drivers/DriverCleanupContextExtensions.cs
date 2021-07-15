@@ -2,6 +2,7 @@ using System.IO;
 using NHSOnline.IntegrationTests.UI.Drivers.Native;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
+using OpenQA.Selenium.Support.Extensions;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers
 {
@@ -18,16 +19,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
                     "ScreenShot.png",
                     file => takesScreenShot.GetScreenshot().SaveAsFile(file.FullName));
             }
-        }
-
-        internal static void TryAttachWebPageSource(
-            this IDriverCleanupContext context,
-            IWebDriver driver)
-        {
-            context.TryAttach(
-                "page source",
-                "PageSourceWeb.html",
-                file => File.WriteAllText(file.FullName, driver.PageSource));
         }
 
         internal static void TryAttachNativePageSource(
@@ -48,12 +39,12 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
                 "Web page sources",
                 () => nativeDriverContext.ForEachWebView(TryAttachWebContextPageSource));
 
-            void TryAttachWebContextPageSource(string webContext)
+            void TryAttachWebContextPageSource(IWebContext webContext)
             {
                 context.TryAttach(
                     $"Web page source {webContext}",
                     $"PageSourceWeb{webContext}.html",
-                    file => File.WriteAllText(file.FullName, driver.PageSource));
+                    file => File.WriteAllText(file.FullName, driver.ExecuteJavaScript<string>("return document.documentElement.innerHTML;")));
             }
         }
 

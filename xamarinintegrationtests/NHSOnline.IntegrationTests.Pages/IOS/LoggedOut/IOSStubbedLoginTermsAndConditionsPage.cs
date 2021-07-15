@@ -7,7 +7,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
     {
         private IOSStubbedLoginTermsAndConditionsPage(IIOSDriverWrapper driver)
         {
-            PageContent = new StubbedLoginTermsAndConditionsPageContent(driver.Web(WebViewContext.NhsLogin));
+            PageContent = new StubbedLoginTermsAndConditionsPageContent(driver.Web.WebIntegrationWebView());
         }
 
         public StubbedLoginTermsAndConditionsPageContent PageContent { get; }

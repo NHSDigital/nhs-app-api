@@ -11,7 +11,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
         {
             _driver = driver;
             Navigation = new IOSFullNavigation(driver);
-            PageContent = new FileUploadPageContent(driver.Web(WebViewContext.TestProviderWebIntegration));
+            PageContent = new FileUploadPageContent(driver.Web.WebIntegrationWebView());
         }
 
         private IOSFullNavigation Navigation { get; }

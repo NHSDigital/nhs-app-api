@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 

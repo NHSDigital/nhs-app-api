@@ -8,7 +8,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
         private AndroidErsPage(IAndroidDriverWrapper driver)
         {
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new ErsPageContent(driver.Web(WebViewContext.ErsWebIntegration));
+            PageContent = new ErsPageContent(driver.Web.WebIntegrationWebView());
         }
 
         private AndroidFullNavigation Navigation { get; }

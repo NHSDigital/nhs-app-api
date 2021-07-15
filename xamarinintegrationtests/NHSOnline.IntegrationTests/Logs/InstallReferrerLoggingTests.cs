@@ -1,5 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
+using NHSOnline.IntegrationTests.Pages.Android.Home;
+using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -16,8 +18,26 @@ namespace NHSOnline.IntegrationTests.Logs
                 .WithName(b => b.GivenName("Wendy").FamilyName("House"));
             using var patients = Mocks.Patients.Add(patient);
 
-            var testTiming = TimedTestExecutor.Execute(()
-                => LoginProcess.LogAndroidPatientIn(driver, patient));
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            AndroidGettingStartedPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            var testTiming = TimedTestExecutor.Execute(() =>
+            {
+                AndroidStubbedLoginPage
+                    .AssertOnPage(driver)
+                    .PageContent
+                    .AssertVectorOfTrust()
+                    .Login(patient);
+
+                AndroidTermsAndConditionsPage
+                    .AssertOnPage(driver)
+                    .PageContent.AcceptTermsAndConditions();
+            });
 
             InstallReferrerLogs.GetLogs(testTiming.StartTime,
                     testTiming.StopTime,

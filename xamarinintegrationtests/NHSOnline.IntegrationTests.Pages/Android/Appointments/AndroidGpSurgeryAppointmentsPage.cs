@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
 
         private AndroidGpSurgeryAppointmentsPage(IAndroidDriverWrapper driver)
         {
-            PageContent = new GpSurgeryAppointmentsPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new GpSurgeryAppointmentsPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         public static AndroidGpSurgeryAppointmentsPage AssertOnPage(IAndroidDriverWrapper driver)

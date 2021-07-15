@@ -62,7 +62,7 @@ namespace NHSOnline.IntegrationTests.TermsAndConditions
                 .AssertOnPage(driver)
                 .PageContent.DeclineTermsAndConditions();
 
-            IOSAcceptNhsTermsOfUsePageContent
+            IOSAcceptNhsTermsOfUsePage
                 .AssertOnPage(driver)
                 .AssertPageContent();
         }

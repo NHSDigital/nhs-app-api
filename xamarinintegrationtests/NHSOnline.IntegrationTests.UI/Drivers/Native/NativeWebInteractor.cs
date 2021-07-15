@@ -1,3 +1,4 @@
+using NHSOnline.IntegrationTests.UI.Drivers.WebContext;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.Extensions;
 
@@ -7,48 +8,44 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
     {
         private readonly NativeDriverContext _nativeDriverContext;
         private readonly IWebDriver _driver;
-        private readonly WebViewContext _webViewContext;
+        private readonly IWebContextStrategy _webContextStrategy;
         private readonly Interactor<IWebDriver, IWebElement> _interactor;
 
         public NativeWebInteractor(
             NativeDriverContext nativeDriverContext,
             TestLogs logs,
             IWebDriver driver,
-            WebViewContext webViewContext)
-            : this(nativeDriverContext, driver, webViewContext, new Interactor<IWebDriver, IWebElement>(logs, driver, driver.FindElement))
+            IWebContextStrategy webContextStrategy)
+            : this(nativeDriverContext, driver, webContextStrategy, new Interactor<IWebDriver, IWebElement>(logs, driver, driver.FindElement))
         {
         }
 
         private NativeWebInteractor(
-            NativeDriverContext nativeDriverContext, IWebDriver driver,
-            WebViewContext webViewContext,
+            NativeDriverContext nativeDriverContext,
+            IWebDriver driver,
+            IWebContextStrategy webContextStrategy,
             Interactor<IWebDriver, IWebElement> interactor)
         {
             _nativeDriverContext = nativeDriverContext;
             _driver = driver;
-            _webViewContext = webViewContext;
+            _webContextStrategy = webContextStrategy;
             _interactor = interactor;
         }
 
         void IInteractor<IWebDriver, IWebElement>.ActOnDriver(
             ActOnDriverAction<IWebDriver, IWebElement> action)
         {
-            ChangeContext();
+            _webContextStrategy.SwitchTo();
             _interactor.ActOnDriver(action);
         }
 
         public IWebInteractor CreateContainedInteractor(By findBy)
-                => new NativeWebInteractor(_nativeDriverContext, _driver, _webViewContext, _interactor.CreateContainedInteractor(findBy));
+                => new NativeWebInteractor(_nativeDriverContext, _driver, _webContextStrategy, _interactor.CreateContainedInteractor(findBy));
 
-        public string GetUserAgent()
+        public string ExecuteJavascript(string javascript)
         {
-            ChangeContext();
-            return _driver.ExecuteJavaScript<string>("return window.navigator.userAgent;");
-        }
-
-        private void ChangeContext()
-        {
-            _nativeDriverContext.SwitchToWebContext(_webViewContext);
+            _webContextStrategy.SwitchTo();
+            return _driver.ExecuteJavaScript<string>(javascript);
         }
     }
 }

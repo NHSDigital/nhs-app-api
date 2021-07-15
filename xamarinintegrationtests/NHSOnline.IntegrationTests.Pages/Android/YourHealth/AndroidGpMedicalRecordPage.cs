@@ -8,7 +8,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.YourHealth
         private AndroidGpMedicalRecordPage(IAndroidDriverWrapper driver)
         {
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new GpMedicalRecordPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new GpMedicalRecordPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         public AndroidFullNavigation Navigation { get; }

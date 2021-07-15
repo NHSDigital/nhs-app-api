@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using FluentAssertions;
+using NHSOnline.IntegrationTests.UI.Drivers.WebContext;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Android;
@@ -15,6 +16,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         private readonly IAndroidInteractor _interactor;
         private readonly NativeDriverContext _nativeDriverContext;
         private readonly BrowserStackConfig _browserStackConfig;
+
+        private TestLogs Logs { get; }
+        public WebContextStrategies Web { get; }
 
         internal AndroidDriverWrapper(
             string testName,
@@ -38,7 +42,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
-            _nativeDriverContext = new NativeDriverContext(_driver, _driver, new AndroidWebViewLocatorStrategy(_driver));
+            _nativeDriverContext = new NativeDriverContext(_driver, _driver, new AndroidWebViewLocatorStrategy(_driver), logs);
+            Web = new WebContextStrategies(_nativeDriverContext, _driver, logs);
 
             _interactor = new AndroidInteractor(
                 _nativeDriverContext,
@@ -68,11 +73,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
                 .AddAndroidBrowserStackCapability(capabilities, androidConfig)
                 .Build();
         }
-
-        private TestLogs Logs { get; }
-
-        public IWebInteractor Web(WebViewContext webViewContext)
-            => new NativeWebInteractor(_nativeDriverContext, Logs, _driver, webViewContext);
 
         void IInteractor<AndroidDriver<AndroidElement>, AndroidElement>.ActOnDriver(
             ActOnDriverAction<AndroidDriver<AndroidElement>, AndroidElement> action)

@@ -8,7 +8,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Messages
         private IOSMessagesPage(IIOSDriverWrapper driver)
         {
             Navigation = new IOSFullNavigation(driver);
-            PageContent = new MessagesPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new MessagesPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         public IOSFullNavigation Navigation { get; }

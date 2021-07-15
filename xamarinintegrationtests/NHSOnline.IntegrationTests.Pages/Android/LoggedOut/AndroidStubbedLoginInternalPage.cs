@@ -7,7 +7,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
     {
         private AndroidStubbedLoginInternalPage(IAndroidDriverWrapper driver)
         {
-            PageContent = new StubbedLoginInternalPageContent(driver.Web(WebViewContext.NhsLogin));
+            PageContent = new StubbedLoginInternalPageContent(driver.Web.WebIntegrationWebView());
         }
 
         public StubbedLoginInternalPageContent PageContent { get; }

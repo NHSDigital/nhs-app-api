@@ -11,7 +11,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
         private IOSGoToPage(IIOSDriverWrapper driver)
         {
             Navigation = new IOSFullNavigation(driver);
-            PageContent = new GoToPagePageContent(driver.Web(WebViewContext.TestProviderWebIntegration));
+            PageContent = new GoToPagePageContent(driver.Web.WebIntegrationWebView());
         }
 
         public static IOSGoToPage AssertOnPage(IIOSDriverWrapper driver)

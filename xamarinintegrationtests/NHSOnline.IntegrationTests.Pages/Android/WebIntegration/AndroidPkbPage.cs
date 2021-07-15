@@ -18,7 +18,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
         {
             _driver = driver;
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new PkbPageContent(driver.Web(WebViewContext.PkbWebIntegration), phrPath);
+            PageContent = new PkbPageContent(driver.Web.WebIntegrationWebView(), phrPath);
         }
 
         public static AndroidPkbPage AssertOnPage(IAndroidDriverWrapper driver, string phrPath)

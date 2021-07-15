@@ -8,7 +8,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
         private AndroidFileDownloadPage(IAndroidDriverWrapper driver)
         {
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new FileDownloadPageContent(driver.Web(WebViewContext.TestProviderWebIntegration));
+            PageContent = new FileDownloadPageContent(driver.Web.WebIntegrationWebView());
         }
 
         private AndroidFullNavigation Navigation { get; }

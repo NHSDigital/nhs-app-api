@@ -8,7 +8,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
         private IOSStubbedLoginPage(IIOSDriverWrapper driver)
         {
             Navigation = new IOSSlimCloseNavigation(driver);
-            PageContent = new StubbedLoginPageContent(driver.Web(WebViewContext.NhsLogin));
+            PageContent = new StubbedLoginPageContent(driver.Web.WebIntegrationWebView());
         }
 
         public StubbedLoginPageContent PageContent { get; }

@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
         private IOSCalendarPage(IIOSDriverWrapper driver)
         {
             Navigation = new IOSFullNavigation(driver);
-            PageContent = new CalendarPageContent(driver.Web(WebViewContext.TestProviderWebIntegration));
+            PageContent = new CalendarPageContent(driver.Web.WebIntegrationWebView());
         }
 
         private IOSFullNavigation Navigation { get; }

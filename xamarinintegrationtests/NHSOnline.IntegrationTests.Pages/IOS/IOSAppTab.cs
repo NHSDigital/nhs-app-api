@@ -40,7 +40,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
         private static IOSAppTab AssertOnPageByTitle(IIOSDriverWrapper driver, string title)
         {
             var page = new IOSAppTab(driver, title);
-            page.TitleText(driver.Web(WebViewContext.OneOff)).AssertVisible();
+            page.TitleText(driver.Web.BrowserOverlayWebView()).AssertVisible();
 
             return page;
         }

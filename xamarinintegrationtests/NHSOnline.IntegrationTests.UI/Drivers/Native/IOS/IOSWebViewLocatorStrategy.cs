@@ -1,57 +1,76 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenQA.Selenium.Appium.Interfaces;
+using OpenQA.Selenium.Appium.iOS;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
 {
     internal sealed class IOSWebViewLocatorStrategy : WebViewLocatorStrategy
     {
-        private readonly WebViewContextsCache _contextsCache = new WebViewContextsCache();
+        private readonly IOSDriver<IOSElement> _driver;
 
-        private readonly IContextAware _driver;
-
-        public IOSWebViewLocatorStrategy(IContextAware driver) => _driver = driver;
-
-        internal override void ForEachWebView(Action<string> action)
+        public IOSWebViewLocatorStrategy(IOSDriver<IOSElement> driver)
         {
-            foreach (var contextName in _driver.Contexts.Where(IsWebViewContext))
+            _driver = driver;
+        }
+
+        internal override void SwitchToWebView(IWebContext webContext)
+        {
+            var iosWebContext = webContext.AssertPlatformWebContext<IOSWebContext>();
+            _driver.Context = iosWebContext.ContextName;
+        }
+
+        internal override IReadOnlyList<IWebContext> GetWebContexts(WebContextKind webContextKind)
+        {
+            return _driver.Contexts
+                .Where(context => context.Contains("webview", StringComparison.OrdinalIgnoreCase))
+                .Select(context => new IOSWebContext(context))
+                .ToList()
+                .AsReadOnly();
+
+        }
+
+        // TODO: extract method for getting all web contexts
+
+        internal override void ForEachWebContext(Action<IWebContext> action)
+        {
+            foreach (var context in _driver.Contexts
+                .Where(context => context.Contains("webview", StringComparison.OrdinalIgnoreCase))
+                .Select(context => new IOSWebContext(context)))
             {
-                _driver.Context = contextName;
-                action(contextName);
+                _driver.Context = context.ContextName;
+                action(context);
             }
         }
 
-        internal override void SwitchToWebView(WebViewContext webViewContext)
+        private sealed class IOSWebContext : IWebContext
         {
-            var contextName = WaitForWebViewContextToExist(webViewContext);
-            _driver.Context = contextName;
-        }
-
-        private string WaitForWebViewContextToExist(WebViewContext webViewContext)
-        {
-            if (_contextsCache.TryGet(webViewContext, out var knownWebViewContext))
+            private bool Equals(IOSWebContext other)
             {
-                return knownWebViewContext;
+                return ContextName == other.ContextName;
             }
 
-            var waitUtil = DateTime.UtcNow.Add(WaitForWebContext);
-            while (DateTime.UtcNow < waitUtil)
+            public override bool Equals(object? obj)
             {
-                if (TryGetWebContextName(out var webContextName))
-                {
-                    _contextsCache.Add(webViewContext, webContextName);
-                    return webContextName;
-                }
+                return ReferenceEquals(this, obj) || obj is IOSWebContext other && Equals(other);
             }
-            throw new AssertFailedException($"Web context not found after {WaitForWebContext}; Contexts: {string.Join(", ", _driver.Contexts)}");
-        }
 
-        private bool TryGetWebContextName([NotNullWhen(true)] out string? webContextName)
-        {
-            webContextName = _driver.Contexts.Except(_contextsCache.Contexts).FirstOrDefault(IsWebViewContext);
-            return webContextName != null;
+            public override int GetHashCode()
+            {
+                return ContextName.GetHashCode(StringComparison.Ordinal);
+            }
+
+            internal string ContextName { get; }
+
+            public IOSWebContext(string contextName)
+            {
+                ContextName = contextName;
+            }
+
+            public override string ToString()
+            {
+                return $"[{ContextName}]";
+            }
         }
     }
 }

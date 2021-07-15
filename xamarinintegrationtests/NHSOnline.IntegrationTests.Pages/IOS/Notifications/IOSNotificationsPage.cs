@@ -7,7 +7,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Notifications
     {
         private IOSNotificationsPage(IIOSDriverWrapper driver)
         {
-            var webInteractor = driver.Web(WebViewContext.NhsApp);
+            var webInteractor = driver.Web.NhsAppLoggedInWebView();
 
             Navigation = new IOSFullNavigation(driver);
             PageContent = new NotificationsPageContent(webInteractor);

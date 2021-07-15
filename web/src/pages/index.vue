@@ -90,6 +90,8 @@ export default {
     }
 
     window.scrollTo(0, 0);
+
+    this.$store.dispatch('device/pageLoadComplete');
   },
 };
 </script>

@@ -52,4 +52,4 @@ services:
       BrowserStack__LocalIdentifier: "${BrowserStack__LocalIdentifier}"
 
   servicejourneyrulesapi.config:
-    image: local/nhsonline-service-journey-integration-test-config:${SJRCONFIG_DOCKER_TAG:-latest}
+    image: local/nhsonline-service-journey-integration-test-config:latest

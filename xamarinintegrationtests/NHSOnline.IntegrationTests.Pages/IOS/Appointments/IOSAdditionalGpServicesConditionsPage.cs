@@ -8,7 +8,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Appointments
         private IOSAdditionalGpServicesConditionsPage(IIOSDriverWrapper driver)
         {
             Navigation = new IOSFullNavigation(driver);
-            PageContent = new AdditionalGpServicesConditionsPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new AdditionalGpServicesConditionsPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         public IOSFullNavigation Navigation { get; }

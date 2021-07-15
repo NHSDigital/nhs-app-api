@@ -3,7 +3,7 @@ using OpenQA.Selenium;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers
 {
-    internal static class InteractorExtensions
+    public static class InteractorExtensions
     {
         internal static void ActOnElement<TDriver, TElement>(
             this IInteractor<TDriver, TElement> interactor,

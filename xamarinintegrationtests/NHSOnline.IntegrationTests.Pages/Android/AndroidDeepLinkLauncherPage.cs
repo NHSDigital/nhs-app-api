@@ -7,7 +7,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
     {
         private AndroidDeepLinkLauncherPage(IAndroidDriverWrapper driver)
         {
-            PageContent = new DeeplinkPageContent(driver.Web(WebViewContext.DeepLinkLauncher));
+            PageContent = new DeeplinkPageContent(driver.Web.BrowserOverlayWebView());
             _driver = driver;
         }
 

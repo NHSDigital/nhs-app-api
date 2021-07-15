@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium.Appium.Android;
@@ -9,97 +8,91 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 {
     internal sealed class AndroidWebViewLocatorStrategy : WebViewLocatorStrategy
     {
-        private readonly WebViewContextsCache _contextsCache = new WebViewContextsCache();
-
         private readonly AndroidDriver<AndroidElement> _driver;
-        private string? _webContextName;
 
-        public AndroidWebViewLocatorStrategy(AndroidDriver<AndroidElement> driver) => _driver = driver;
-
-        internal override void ForEachWebView(Action<string> action)
+        public AndroidWebViewLocatorStrategy(AndroidDriver<AndroidElement> driver)
         {
-            foreach (var contextName in GetWebContextNames())
+            _driver = driver;
+        }
+
+        internal override void SwitchToWebView(IWebContext webContext)
+        {
+            var androidWebContext = webContext.AssertPlatformWebContext<AndroidWebContext>();
+            _driver.Context = androidWebContext.ContextName;
+            _driver.SwitchTo().Window(androidWebContext.WindowHandle);
+        }
+
+        internal override IReadOnlyList<IWebContext> GetWebContexts(WebContextKind webContextKind)
+        {
+            var expectedIdentifier = webContextKind switch
             {
-                _driver.Context = contextName;
-                foreach (var windowHandle in _driver.WindowHandles)
+                WebContextKind.WebView => "webview_com",
+                WebContextKind.BrowserOverlay => "webview_chrome",
+                _ => throw new ArgumentOutOfRangeException(nameof(webContextKind), webContextKind, null)
+            };
+
+            var allContexts = _driver.Contexts;
+            var context =
+                allContexts.FirstOrDefault(x => x.Contains(expectedIdentifier, StringComparison.OrdinalIgnoreCase));
+
+            if (context is null)
+            {
+                throw new AssertFailedException(
+                    $"Web context for {webContextKind} not found. Contexts: {string.Join(", ", allContexts)}");
+            }
+
+            _driver.Context = context;
+
+            return _driver.WindowHandles.Select(handle => new AndroidWebContext(context, handle))
+                .ToList()
+                .AsReadOnly();
+        }
+
+        internal override void ForEachWebContext(Action<IWebContext> action)
+        {
+            foreach (var context in _driver.Contexts.Where(context =>
+                context.Contains("webview", StringComparison.OrdinalIgnoreCase)))
+            {
+                _driver.Context = context;
+
+                foreach (var androidWebContext in _driver.WindowHandles.Select(handle => new AndroidWebContext(context, handle)))
                 {
-                    _driver.SwitchTo().Window(windowHandle);
-                    action(windowHandle);
+                    _driver.SwitchTo().Window(androidWebContext.WindowHandle);
+                    action(androidWebContext);
                 }
             }
         }
 
-        internal override void SwitchToWebView(WebViewContext webViewContext)
+        private sealed class AndroidWebContext : IWebContext
         {
-            var contextName = WaitForWebViewContextToExist(webViewContext);
-            _driver.Context = contextName;
-
-            var windowHandle = WaitForWindowHandleToExist(webViewContext);
-            _driver.SwitchTo().Window(windowHandle);
-        }
-
-        private string WaitForWebViewContextToExist(WebViewContext webViewContext)
-        {
-            var waitUtil = DateTime.UtcNow.Add(WaitForWebContext);
-            while (DateTime.UtcNow < waitUtil)
+            private bool Equals(AndroidWebContext other)
             {
-                if (IsCurrentContextCorrect(webViewContext.ContextIdentifier))
-                {
-                    return _webContextName!;
-                }
-
-                if (TryGetWebContextName(webViewContext.ContextIdentifier, out var webContextName))
-                {
-                    return webContextName;
-                }
+                return ContextName == other.ContextName && WindowHandle == other.WindowHandle;
             }
 
-            throw new AssertFailedException(
-                $"Web context not found after {WaitForWebContext}; Contexts: {string.Join(", ", _driver.Contexts)}");
-        }
-
-        private string WaitForWindowHandleToExist(WebViewContext webViewContext)
-        {
-            if (_contextsCache.TryGet(webViewContext, out var knownWindowHandle) &&
-                _driver.WindowHandles.Contains(knownWindowHandle))
+            public override bool Equals(object? obj)
             {
-                return knownWindowHandle;
+                return ReferenceEquals(this, obj) || obj is AndroidWebContext other && Equals(other);
             }
 
-            var waitUtil = DateTime.UtcNow.Add(WaitForWebContext);
-            while (DateTime.UtcNow < waitUtil)
+            public override int GetHashCode()
             {
-                if (TryGetWindowHandle(out var windowHandle))
-                {
-                    _contextsCache.Add(webViewContext, windowHandle);
-                    return windowHandle;
-                }
+                return HashCode.Combine(ContextName, WindowHandle);
             }
 
-            throw new AssertFailedException(
-                $"Web window handle not found after {WaitForWebContext}; Handles: {string.Join(", ", _driver.WindowHandles)}");
-        }
+            internal string ContextName { get; }
+            internal string WindowHandle { get; }
 
-        private bool TryGetWebContextName(string contextIdentifier, [NotNullWhen(true)] out string? webContextName)
-        {
-            _webContextName = _driver.Contexts.FirstOrDefault(x => IsExpectedWebViewContext(x, contextIdentifier));
-            webContextName = _webContextName;
-            return webContextName != null;
-        }
+            public AndroidWebContext(string contextName, string windowHandle)
+            {
+                ContextName = contextName;
+                WindowHandle = windowHandle;
+            }
 
-        private static bool IsExpectedWebViewContext(string context, string expectedIdentifier)
-            => context.Contains(expectedIdentifier, StringComparison.OrdinalIgnoreCase);
-
-        private bool IsCurrentContextCorrect(string contextIdentifier)
-            => _webContextName != null && IsExpectedWebViewContext(_webContextName, contextIdentifier);
-
-        private IEnumerable<string> GetWebContextNames()
-            => _driver.Contexts.Where(IsWebViewContext);
-
-        private bool TryGetWindowHandle([NotNullWhen(true)] out string? windowHandle)
-        {
-            windowHandle = _driver.WindowHandles.Except(_contextsCache.Contexts).FirstOrDefault();
-            return windowHandle != null;
+            public override string ToString()
+            {
+                return $"[{ContextName} - {WindowHandle}]";
+            }
         }
     }
 }

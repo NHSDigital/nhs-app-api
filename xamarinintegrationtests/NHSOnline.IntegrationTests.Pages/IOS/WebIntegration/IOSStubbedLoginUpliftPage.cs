@@ -10,7 +10,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
         private IOSStubbedLoginUpliftPage(IIOSDriverWrapper driver)
         {
             Navigation = new IOSSlimCloseNavigation(driver);
-            PageContent = new StubbedLoginUpliftPageContent(driver.Web(WebViewContext.NhsLoginUplift));
+            PageContent = new StubbedLoginUpliftPageContent(driver.Web.WebIntegrationWebView());
             _driver = driver;
         }
 

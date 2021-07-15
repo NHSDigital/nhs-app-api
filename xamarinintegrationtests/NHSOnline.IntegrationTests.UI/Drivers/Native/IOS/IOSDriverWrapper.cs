@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using FluentAssertions;
+using NHSOnline.IntegrationTests.UI.Drivers.WebContext;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Enums;
@@ -17,6 +18,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
         private readonly IIOSInteractor _interactor;
         private readonly NativeDriverContext _nativeDriverContext;
         private readonly BrowserStackConfig _browserStackConfig;
+
+        private TestLogs Logs { get; }
+        public WebContextStrategies Web { get; }
 
         internal IOSDriverWrapper(string testName,
             TestLogs logs,
@@ -44,7 +48,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
                 .Should()
                 .BeCloseTo(DateTime.UtcNow, TimeSpan.FromMinutes(1), TestResultRetryExtensions.DeviceTimeSkewMessage);
 
-            _nativeDriverContext = new NativeDriverContext(_driver, _driver, new IOSWebViewLocatorStrategy(_driver));
+            _nativeDriverContext = new NativeDriverContext(_driver, _driver, new IOSWebViewLocatorStrategy(_driver), logs);
+            Web = new WebContextStrategies(_nativeDriverContext, _driver, logs);
 
             _interactor = new IOSInteractor(
                 _driver,
@@ -73,12 +78,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
                 .Build();
         }
 
-        private TestLogs Logs { get; }
-
         private AppState RetrieveAppState() => _driver.GetAppState("com.nhs.online.dev.browserstack");
-
-        IWebInteractor INativeDriverWrapper.Web(WebViewContext webViewContext)
-            => new NativeWebInteractor(_nativeDriverContext, Logs, _driver, webViewContext);
 
         void IInteractor<IOSDriver<IOSElement>, IOSElement>.ActOnDriver(
             ActOnDriverAction<IOSDriver<IOSElement>, IOSElement> action)

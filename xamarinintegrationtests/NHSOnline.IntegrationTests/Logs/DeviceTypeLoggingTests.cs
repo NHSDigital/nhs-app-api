@@ -1,5 +1,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
+using NHSOnline.IntegrationTests.Pages.Android.Home;
+using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
+using NHSOnline.IntegrationTests.Pages.IOS.Home;
+using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.DeviceProperties;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -17,8 +21,25 @@ namespace NHSOnline.IntegrationTests.Logs
                 .WithName(b => b.GivenName("Wendy").FamilyName("House"));
             using var patients = Mocks.Patients.Add(patient);
 
-            var testTiming = TimedTestExecutor.Execute(()
-                => LoginProcess.LogAndroidPatientIn(driver, patient));
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            AndroidGettingStartedPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            var testTiming = TimedTestExecutor.Execute(() =>
+            {
+                AndroidStubbedLoginPage
+                    .AssertOnPage(driver)
+                    .PageContent
+                    .Login(patient);
+
+                AndroidTermsAndConditionsPage
+                    .AssertOnPage(driver)
+                    .PageContent.AcceptTermsAndConditions();
+            });
 
             UserAgentDockerLogs.GetLogs(testTiming.StartTime,
                     testTiming.StopTime,
@@ -34,8 +55,24 @@ namespace NHSOnline.IntegrationTests.Logs
                 .WithName(b => b.GivenName("Wendy").FamilyName("House"));
             using var patients = Mocks.Patients.Add(patient);
 
-            var testTiming = TimedTestExecutor.Execute(()
-                => LoginProcess.LogIOSPatientIn(driver, patient));
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            IOSGettingStartedPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            var testTiming = TimedTestExecutor.Execute(() =>
+            {
+                IOSStubbedLoginPage
+                    .AssertOnPage(driver)
+                    .PageContent.Login(patient);
+
+                IOSTermsAndConditionsPage
+                    .AssertOnPage(driver)
+                    .PageContent.AcceptTermsAndConditions();
+            });
 
             UserAgentDockerLogs.GetLogs(testTiming.StartTime,
                     testTiming.StopTime,

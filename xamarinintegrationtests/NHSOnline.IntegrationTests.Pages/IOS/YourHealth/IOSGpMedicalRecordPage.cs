@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.YourHealth
         private IOSGpMedicalRecordPage(IIOSDriverWrapper driver)
         {
             Navigation = new IOSFullNavigation(driver);
-            PageContent = new GpMedicalRecordPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new GpMedicalRecordPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         public IOSFullNavigation Navigation { get; }

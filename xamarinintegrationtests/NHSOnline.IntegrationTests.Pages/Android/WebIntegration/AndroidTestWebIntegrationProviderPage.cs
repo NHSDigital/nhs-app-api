@@ -18,7 +18,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
         {
             _driver = driver;
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new TestWebIntegrationProviderPageContent(driver.Web(WebViewContext.TestProviderWebIntegration));
+            PageContent = new TestWebIntegrationProviderPageContent(driver.Web.WebIntegrationWebView());
         }
 
         public static AndroidTestWebIntegrationProviderPage AssertOnPage(IAndroidDriverWrapper driver)

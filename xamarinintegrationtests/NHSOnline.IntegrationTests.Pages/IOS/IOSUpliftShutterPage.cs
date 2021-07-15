@@ -11,7 +11,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
         private IOSUpliftShutterPage(IIOSDriverWrapper driver)
         {
             Navigation = new IOSFullNavigation(driver);
-            PageContent = new UpliftShutterPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new UpliftShutterPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         public static IOSUpliftShutterPage Continue(IIOSDriverWrapper driver)

@@ -18,5 +18,5 @@ docker build \
 docker build \
   --target=final \
   --build-arg="SJR_IMAGE=${DOCKER_REGISTRY:-local}/nhsonline-backendservicejourneyrulesapi:${DOCKER_TAG:-latest}" \
-  --tag="local/nhsonline-service-journey-integration-test-config:${DOCKER_TAG:-latest}" \
-  ServiceJourneyRules || die "Failed to build ${DOCKER_REGISTRY:-local}/nhsonline-service-journey-integration-test-config:${DOCKER_TAG:-latest}"
+  --tag="local/nhsonline-service-journey-integration-test-config:latest" \
+  ServiceJourneyRules || die "Failed to build local/nhsonline-service-journey-integration-test-config:latest"

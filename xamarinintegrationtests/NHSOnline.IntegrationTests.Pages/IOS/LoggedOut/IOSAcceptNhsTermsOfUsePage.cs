@@ -3,11 +3,11 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 {
-    public class IOSAcceptNhsTermsOfUsePageContent
+    public class IOSAcceptNhsTermsOfUsePage
     {
         private readonly IIOSDriverWrapper _driver;
 
-        private IOSAcceptNhsTermsOfUsePageContent(IIOSDriverWrapper driver) => _driver = driver;
+        private IOSAcceptNhsTermsOfUsePage(IIOSDriverWrapper driver) => _driver = driver;
 
         private IOSLabel Title => IOSLabel.WithText(
             _driver,
@@ -25,9 +25,9 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
             _driver,
             "For urgent medical advice, visit 111.nhs.uk or call 111.");
 
-        public static IOSAcceptNhsTermsOfUsePageContent AssertOnPage(IIOSDriverWrapper driver)
+        public static IOSAcceptNhsTermsOfUsePage AssertOnPage(IIOSDriverWrapper driver)
         {
-            var page = new IOSAcceptNhsTermsOfUsePageContent(driver);
+            var page = new IOSAcceptNhsTermsOfUsePage(driver);
             page.Title.AssertVisible();
             return page;
         }

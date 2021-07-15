@@ -8,7 +8,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.YourHealth
         private AndroidYourHealthPage(IAndroidDriverWrapper driver)
         {
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new YourHealthPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new YourHealthPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         public AndroidFullNavigation Navigation { get; }

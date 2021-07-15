@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
 
         private AndroidAdditionalGpServicesPage(IAndroidDriverWrapper driver)
         {
-            PageContent = new AdditionalGpServicesPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new AdditionalGpServicesPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         public static AndroidAdditionalGpServicesPage AssertOnPage(IAndroidDriverWrapper driver)
