@@ -146,7 +146,7 @@
 							"    \"iss\": postman.getEnvironmentVariable(\"apiKey\"),",
 							"    \"sub\": postman.getEnvironmentVariable(\"apiKey\"),",
 							"    \"exp\": Math.floor(Date.now() / 1000) + 300,",
-							"    \"aud\": pm.variables.replaceIn(pm.request.url.getRaw()),",
+							"    \"aud\": pm.variables.replaceIn(pm.request.url.toString()),",
 							"    \"jti\": uniqueId",
 							"};",
 							"",
