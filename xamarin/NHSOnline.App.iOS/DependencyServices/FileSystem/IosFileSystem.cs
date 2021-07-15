@@ -31,7 +31,7 @@ namespace NHSOnline.App.iOS.DependencyServices.FileSystem
             }
             catch (Exception e)
             {
-                Logger.LogError("Failed to write data to cache directory", e);
+                Logger.LogError(e, "Failed to write data to cache directory");
                 return;
             }
 

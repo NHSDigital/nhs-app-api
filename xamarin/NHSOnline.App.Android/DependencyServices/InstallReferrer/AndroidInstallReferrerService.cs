@@ -30,7 +30,7 @@ namespace NHSOnline.App.Droid.DependencyServices.InstallReferrer
             }
             catch (Exception e)
             {
-                Logger.LogError("Failed to start referrer client connection", e);
+                Logger.LogError(e, "Failed to start referrer client connection");
             }
         }
     }

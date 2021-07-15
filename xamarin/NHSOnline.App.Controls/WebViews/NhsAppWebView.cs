@@ -88,7 +88,7 @@ namespace NHSOnline.App.Controls.WebViews
             }
             catch (ArgumentException e)
             {
-                Logger.LogError("Failed to deserialize the calendar request, not showing any dialogs", e);
+                Logger.LogError(e, "Failed to deserialize the calendar request, not showing any dialogs");
             }
         }
 
@@ -107,7 +107,7 @@ namespace NHSOnline.App.Controls.WebViews
             }
             catch (ArgumentException e)
             {
-                Logger.LogError("Failed to deserialize the download request, not showing any dialogs", e);
+                Logger.LogError(e, "Failed to deserialize the download request, not showing any dialogs");
             }
         }
 

@@ -30,7 +30,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Calendar
             }
             catch (Exception e)
             {
-                Logger.LogError("Failed to add event to calendar from request", e);
+                Logger.LogError(e, "Failed to add event to calendar from request");
                 CreateAndShowCalendarFailAlert();
             }
         }

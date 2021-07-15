@@ -34,7 +34,7 @@ namespace NHSOnline.App.Droid.DependencyServices.FileSystem
             }
             catch (Exception e)
             {
-                Logger.LogError("Failed to store file in downloads", e);
+                Logger.LogError(e, "Failed to store file in downloads");
             }
         }
 
@@ -60,7 +60,7 @@ namespace NHSOnline.App.Droid.DependencyServices.FileSystem
            }
            catch (Exception e)
            {
-               Logger.LogError("Failed to write data to cache directory", e);
+               Logger.LogError(e, "Failed to write data to cache directory");
                return;
            }
 
