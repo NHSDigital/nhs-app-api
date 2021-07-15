@@ -3,26 +3,22 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS
 {
-    public class IOSFilesApp
+    public class IOSShareFilePanel
     {
         private readonly IIOSDriverWrapper _driver;
 
-        private IOSFilesApp(IIOSDriverWrapper driver)
+        private IOSShareFilePanel(IIOSDriverWrapper driver)
         {
             _driver = driver;
         }
 
-        private IOSFilesAppHeader FileName => IOSFilesAppHeader.WithText(_driver, "myImage");
+        private IOSFilesAppHeader FileDetailsHeader => IOSFilesAppHeader.WithText(_driver, "MyHandAndFootXrayPicture, Image · 8 KB");
 
-        private IOSDocumentInteractionControllerOption SaveImageOption => IOSDocumentInteractionControllerOption.WithText(_driver, "Save Image");
-
-        public static IOSFilesApp AssertDisplayed(IIOSDriverWrapper driver)
+        public static IOSShareFilePanel AssertDisplayed(IIOSDriverWrapper driver)
         {
-            var page = new IOSFilesApp(driver);
-            page.FileName.AssertVisible();
+            var page = new IOSShareFilePanel(driver);
+            page.FileDetailsHeader.AssertVisible();
             return page;
         }
-
-        public void SelectSaveImage() => SaveImageOption.Click();
     }
 }

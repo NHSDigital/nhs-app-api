@@ -103,25 +103,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             return new WaitForAction();
         }
 
-        WaitForAction IIOSDriverWrapper.SwipeToNextScreen()
-        {
-            _driver.ExecuteScript("mobile: dragFromToForDuration", new Dictionary<string, string>
-            {
-                { "duration", "5" },
-                { "fromX", "90" },
-                { "fromY", "50" },
-                { "toX", "10" },
-                { "toY", "50" }
-            });
-            return new WaitForAction();
-        }
-
-        WaitForAction IIOSDriverWrapper.PressHome()
-        {
-            _driver.ExecuteScript("mobile: pressButton", new Dictionary<string, string>{{"name", "home"}});
-            return new WaitForAction();
-        }
-
         void IIOSDriverWrapper.PushTestFile() => _driver.PushFile("@com.google.chrome.ios:documents/test.txt",
             new FileInfo("../../../../NHSOnline.IntegrationTests.UI/Resources/test.txt"));
 
@@ -130,8 +111,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             var browserStackApiClient = new BrowserStackApiClient(_browserStackConfig);
             await browserStackApiClient.ApplyNetworkProfile(_driver.SessionId, NetworkProfile.NoNetwork);
         }
-
-        void IIOSDriverWrapper.BackgroundApp() => _driver.BackgroundApp();
 
         void IDriverWrapper.AttachDebugInfo(IDriverCleanupContext context)
         {
