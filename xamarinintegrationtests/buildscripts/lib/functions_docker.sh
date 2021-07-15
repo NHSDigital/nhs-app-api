@@ -35,6 +35,10 @@ function set_docker_compose_files_args () {
     done
   fi
 
+  if [ -n "$PROXY" ]; then
+  DOCKER_COMPOSE_FILES+=(../docker/squid/docker-compose.yml)
+  fi
+
   info "Docker compose files: " "${DOCKER_COMPOSE_FILES[@]}"
 
   DOCKER_COMPOSE_FILES_ARGS=()

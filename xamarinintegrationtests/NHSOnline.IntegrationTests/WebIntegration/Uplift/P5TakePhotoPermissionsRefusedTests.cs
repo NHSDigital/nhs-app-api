@@ -33,10 +33,6 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
                 .AssertDisplayed(driver)
                 .Deny();
 
-            AndroidFilePermissionsDialog
-                .AssertDisplayed(driver)
-                .Deny();
-
             AndroidStubbedLoginUpliftPage
                 .AssertOnPage(driver)
                 .AssertPhotoNotCaptured();

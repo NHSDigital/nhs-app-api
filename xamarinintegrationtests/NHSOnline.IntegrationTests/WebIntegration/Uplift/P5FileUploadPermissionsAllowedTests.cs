@@ -39,7 +39,9 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
 
             AndroidFileChooser
                 .AssertDisplayed(driver)
-                .ClickPictures()
+                .HamburgerClick()
+                .ImagesMenuLabelClick()
+                .PicturesLabelClick()
                 .AssertThumbnailDisplayed()
                 .ChoosePhoto();
 

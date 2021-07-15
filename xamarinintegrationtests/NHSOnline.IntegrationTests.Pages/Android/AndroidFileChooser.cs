@@ -13,13 +13,18 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         }
 
         private AndroidLabel FileChooserHeaderText => AndroidLabel.WhichMatches(_driver,
-            "Select a photo");
+            "Recent");
 
-        private AndroidLabel FolderText => AndroidLabel.WhichMatches(_driver,
+        private AndroidImageButton HeaderMenuButton => AndroidImageButton.WithDescription(_driver, "Show roots");
+
+        private AndroidLabel ImagesMenuLabel => AndroidLabel.WhichMatches(_driver,
+            "Images");
+
+        private AndroidLabel PicturesLabel => AndroidLabel.WhichMatches(_driver,
             "Pictures");
 
-        private AndroidPhotoPickerThumbnail ThumbnailPicker => AndroidPhotoPickerThumbnail
-            .WithDescription(_driver, "Photo taken on");
+        private AndroidLabel BrowserStackThumbnailLabel => AndroidLabel.WhichMatches(_driver,
+            "BrowserStack.jpg");
 
         public static AndroidFileChooser AssertDisplayed(IAndroidDriverWrapper driver)
         {
@@ -28,19 +33,30 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             return permissionsDialog;
         }
 
-        public AndroidFileChooser ClickPictures()
+        public AndroidFileChooser HamburgerClick()
         {
-            FolderText.Click();
+            HeaderMenuButton.Click();
+            return this;
+        }
+
+        public AndroidFileChooser ImagesMenuLabelClick()
+        {
+            ImagesMenuLabel.Click();
+            return this;
+        }
+
+        public AndroidFileChooser PicturesLabelClick()
+        {
+            PicturesLabel.Click();
             return this;
         }
 
         public AndroidFileChooser AssertThumbnailDisplayed()
         {
-            ThumbnailPicker.AssertVisible();
+            BrowserStackThumbnailLabel.AssertVisible();
             return this;
         }
 
-        public void ChoosePhoto() => ThumbnailPicker.Click();
-
+        public void ChoosePhoto() => BrowserStackThumbnailLabel.Click();
     }
 }

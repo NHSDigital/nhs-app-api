@@ -6,7 +6,6 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.Logs
 {
     [TestClass]
-    [BusinessRule("BR-GEN-02.1", "Launching the app logs device referrer information")]
     [BusinessRule("BR-GEN-02.2", "Logging into the app logs device referrer information")]
     public class InstallReferrerLoggingTests
     {
