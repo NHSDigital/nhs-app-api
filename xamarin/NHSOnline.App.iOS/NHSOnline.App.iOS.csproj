@@ -76,8 +76,8 @@
     <Compile Include="DependencyServices\Calendar\ApplicationEventStore.cs" />
     <Compile Include="DependencyServices\Calendar\CreateEventEditView.cs" />
     <Compile Include="DependencyServices\Calendar\IosCalendar.cs" />
-    <Compile Include="DependencyServices\FileSystem\IosFileSystem.cs" />
     <Compile Include="DependencyServices\IosCookieService.cs" />
+    <Compile Include="DependencyServices\IosFileHandler.cs" />
     <Compile Include="DependencyServices\IosHttpMessageHandlerFactory.cs" />
     <Compile Include="DependencyServices\IosCookies.cs" />
     <Compile Include="DependencyServices\IosInstallReferrer.cs" />

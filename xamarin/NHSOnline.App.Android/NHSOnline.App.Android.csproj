@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AndroidServices\AndroidNotificationMessagingService.cs" />
+    <Compile Include="DependencyServices\AndroidFileHandler.cs" />
     <Compile Include="DependencyServices\AndroidLifecycle.cs" />
     <Compile Include="DependencyServices\AndroidCookies.cs" />
     <Compile Include="DependencyServices\AndroidHttpMessageHandlerFactory.cs" />
@@ -82,7 +83,6 @@
     <Compile Include="DependencyServices\Biometrics\Extensions.cs" />
     <Compile Include="DependencyServices\Calendar\AndroidCalendar.cs" />
     <Compile Include="DependencyServices\Calendar\CalendarIntent.cs" />
-    <Compile Include="DependencyServices\FileSystem\AndroidFileSystem.cs" />
     <Compile Include="DependencyServices\AndroidCookieService.cs" />
     <Compile Include="DependencyServices\InstallReferrer\AndroidAppReferrerState.cs" />
     <Compile Include="DependencyServices\InstallReferrer\AndroidInstallReferrer.cs" />

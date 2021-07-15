@@ -23,7 +23,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
         private readonly ILogger _logger;
         private readonly WebIntegrationUriDestination _uriDestination;
         private readonly ICalendar _calendar;
-        private readonly IFileSystemService _fileSystemService;
+        private readonly IFileHandler _fileHandler;
 
         public WebIntegrationPresenter(
             IWebIntegrationView view,
@@ -33,7 +33,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             IBrowserOverlay browserOverlay,
             ILogger<WebIntegrationPresenter> logger,
             ICalendar calendar,
-            IFileSystemService fileSystemService)
+            IFileHandler fileHandler)
         {
             _view = view;
             _model = model;
@@ -41,7 +41,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             _browserOverlay = browserOverlay;
             _logger = logger;
             _calendar = calendar;
-            _fileSystemService = fileSystemService;
+            _fileHandler = fileHandler;
 
             _uriDestination = new WebIntegrationUriDestination(nhsLoginConfiguration, model.Url, model.AdditionalDomains);
 
@@ -94,8 +94,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
             if (storagePermissionCheck == PermissionStatus.Granted)
             {
-                _fileSystemService.StoreFileInDownloads(downloadRequest);
-                _fileSystemService.PresentFileActionController(downloadRequest);
+                _fileHandler.StoreFileInDownloads(downloadRequest);
+                _fileHandler.HandleFile(downloadRequest);
             }
             else
             {
@@ -103,8 +103,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
                 if (storagePermissionRequest == PermissionStatus.Granted)
                 {
-                    _fileSystemService.StoreFileInDownloads(downloadRequest);
-                    _fileSystemService.PresentFileActionController(downloadRequest);
+                    _fileHandler.StoreFileInDownloads(downloadRequest);
+                    _fileHandler.HandleFile(downloadRequest);
                 }
             }
 

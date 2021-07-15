@@ -37,7 +37,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly INotifications _notifications;
         private readonly ICalendar _calendar;
         private readonly ISettingsService _settingsService;
-        private readonly IFileSystemService _fileSystemService;
+        private readonly IFileHandler _fileHandler;
 
         public NhsAppWebPresenter(
             NhsAppWebModel model,
@@ -52,7 +52,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             RedirectorUrlFactory redirectorUrlFactory,
             ISettingsService settingsService,
             ICalendar calendar,
-            IFileSystemService fileSystemService)
+            IFileHandler fileHandler)
         {
             _model = model;
             _view = view;
@@ -67,7 +67,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _redirectorUrlFactory = redirectorUrlFactory;
             _settingsService = settingsService;
             _calendar = calendar;
-            _fileSystemService = fileSystemService;
+            _fileHandler = fileHandler;
             _navigationHandler = new NhsAppNavigationHandler(view);
 
             _view.AppNavigation
@@ -164,8 +164,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
             if (storageWritePermissionCheck == PermissionStatus.Granted)
             {
-                _fileSystemService.StoreFileInDownloads(downloadRequest);
-                _fileSystemService.PresentFileActionController(downloadRequest);
+                _fileHandler.StoreFileInDownloads(downloadRequest);
+                _fileHandler.HandleFile(downloadRequest);
             }
             else
             {
@@ -173,8 +173,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
                 if (storageReadPermissionRequest == PermissionStatus.Granted)
                 {
-                    _fileSystemService.StoreFileInDownloads(downloadRequest);
-                    _fileSystemService.PresentFileActionController(downloadRequest);
+                    _fileHandler.StoreFileInDownloads(downloadRequest);
+                    _fileHandler.HandleFile(downloadRequest);
                 }
             }
 

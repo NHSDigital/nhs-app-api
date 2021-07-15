@@ -12,7 +12,6 @@ using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.Services;
-using NHSOnline.App.Threading;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.PreHome.Presenters

@@ -4,7 +4,7 @@ using Android.Provider;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyServices;
-using NHSOnline.App.Droid.DependencyServices.FileSystem;
+using NHSOnline.App.Droid.DependencyServices;
 using NHSOnline.App.Logging;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -12,12 +12,12 @@ using Environment = Android.OS.Environment;
 using File = System.IO.File;
 using Uri = Android.Net.Uri;
 
-[assembly: Dependency(typeof(AndroidFileSystem))]
-namespace NHSOnline.App.Droid.DependencyServices.FileSystem
+[assembly: Dependency(typeof(AndroidFileHandler))]
+namespace NHSOnline.App.Droid.DependencyServices
 {
-    public class AndroidFileSystem: IFileSystemService
+    public class AndroidFileHandler: IFileHandler
     {
-        private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(AndroidFileSystem));
+        private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(AndroidFileHandler));
         internal static MainActivity? MainActivity { set; get; }
 
         public void StoreFileInDownloads(DownloadRequest downloadRequest)
@@ -51,27 +51,27 @@ namespace NHSOnline.App.Droid.DependencyServices.FileSystem
             return resolver;
         }
 
-        public async void PresentFileActionController(DownloadRequest downloadRequest)
+        public async void HandleFile(DownloadRequest downloadRequest)
         {
-           try
-           {
-               var convertedData = Convert.FromBase64String(downloadRequest.Base64Data);
-               await File.WriteAllBytesAsync(downloadRequest.FileCachePath, convertedData).ConfigureAwait(true);
-           }
-           catch (Exception e)
-           {
-               Logger.LogError(e, "Failed to write data to cache directory");
-               return;
-           }
+            try
+            {
+                var convertedData = Convert.FromBase64String(downloadRequest.Base64Data);
+                await File.WriteAllBytesAsync(downloadRequest.FileCachePath, convertedData).ConfigureAwait(true);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, "Failed to write data to cache directory");
+                return;
+            }
 
-           var target = new ReadOnlyFile(downloadRequest.FileCachePath);
+            var target = new ReadOnlyFile(downloadRequest.FileCachePath);
 
-           var request = new OpenFileRequest
-           {
-               File = target
-           };
+            var request = new OpenFileRequest
+            {
+                File = target
+            };
 
-           await Launcher.OpenAsync(request).ConfigureAwait(true);
+            await Launcher.OpenAsync(request).ConfigureAwait(true);
         }
     }
 }

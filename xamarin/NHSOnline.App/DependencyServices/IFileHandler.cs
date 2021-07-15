@@ -2,10 +2,10 @@ using NHSOnline.App.Controls.WebViews.Payloads;
 
 namespace NHSOnline.App.DependencyServices
 {
-    public interface IFileSystemService
+    public interface IFileHandler
     {
         void StoreFileInDownloads(DownloadRequest downloadRequest);
 
-        void PresentFileActionController(DownloadRequest downloadRequest);
+        void HandleFile(DownloadRequest downloadRequest);
     }
 }
