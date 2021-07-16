@@ -41,6 +41,9 @@ namespace NHSOnline.App.Areas.PreHome.Views
         public Func<Task>? GoToLoggedInHomeRequested { get; set; }
         public AsyncCommand GoToLoggedInHomeCommand => new AsyncCommand(() => GoToLoggedInHomeRequested);
 
+        public Func<Task>? LogoutRequested { get; set; }
+        public AsyncCommand LogoutCommand => new AsyncCommand(() => LogoutRequested);
+
         public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
         private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
 

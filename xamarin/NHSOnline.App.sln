@@ -149,9 +149,6 @@ Global
 		{30B3186B-8809-4016-817A-894E629D1EDF}.Scratch19 - Debug|iPhone.Build.0 = Scratch19 - Debug|iPhone
 		{30B3186B-8809-4016-817A-894E629D1EDF}.Scratch19 - Debug|iPhoneSimulator.ActiveCfg = Scratch19 - Debug|iPhoneSimulator
 		{30B3186B-8809-4016-817A-894E629D1EDF}.Scratch19 - Debug|iPhoneSimulator.Build.0 = Scratch19 - Debug|iPhoneSimulator
-		{30B3186B-8809-4016-817A-894E629D1EDF}.Scratch6 - Debug|Any CPU.ActiveCfg = Scratch19 - Debug|Any CPU
-		{30B3186B-8809-4016-817A-894E629D1EDF}.Scratch6 - Debug|Any CPU.Build.0 = Scratch19 - Debug|Any CPU
-		{30B3186B-8809-4016-817A-894E629D1EDF}.Scratch6 - Debug|Any CPU.Deploy.0 = Scratch19 - Debug|Any CPU
 		{30B3186B-8809-4016-817A-894E629D1EDF}.Scratch6 - Debug|iPhone.ActiveCfg = Scratch19 - Debug|iPhone
 		{30B3186B-8809-4016-817A-894E629D1EDF}.Scratch6 - Debug|iPhoneSimulator.ActiveCfg = Scratch19 - Debug|iPhoneSimulator
 		{30B3186B-8809-4016-817A-894E629D1EDF}.Staging - Debug|Any CPU.ActiveCfg = Staging - Debug|Any CPU
@@ -160,6 +157,9 @@ Global
 		{30B3186B-8809-4016-817A-894E629D1EDF}.Staging - Release|Any CPU.ActiveCfg = Staging - Release|Any CPU
 		{30B3186B-8809-4016-817A-894E629D1EDF}.Staging - Release|iPhone.ActiveCfg = Staging - Release|Any CPU
 		{30B3186B-8809-4016-817A-894E629D1EDF}.Staging - Release|iPhoneSimulator.ActiveCfg = Staging - Release|Any CPU
+		{30B3186B-8809-4016-817A-894E629D1EDF}.Scratch6 - Debug|Any CPU.ActiveCfg = Scratch6 - Debug|Any CPU
+		{30B3186B-8809-4016-817A-894E629D1EDF}.Scratch6 - Debug|Any CPU.Build.0 = Scratch6 - Debug|Any CPU
+		{30B3186B-8809-4016-817A-894E629D1EDF}.Scratch6 - Debug|Any CPU.Deploy.0 = Scratch6 - Debug|Any CPU
 		{61B85797-E631-4EC3-A3CC-6B8DB92A9B01}.BrowserStack - Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{61B85797-E631-4EC3-A3CC-6B8DB92A9B01}.BrowserStack - Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61B85797-E631-4EC3-A3CC-6B8DB92A9B01}.BrowserStack - Debug|iPhone.ActiveCfg = Debug|Any CPU

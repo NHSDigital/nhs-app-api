@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.Home.Models;
+using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Areas.PreHome.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.Controls.WebViews;
@@ -11,6 +12,7 @@ using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.Services;
+using NHSOnline.App.Threading;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.PreHome.Presenters
@@ -61,6 +63,8 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
                     (view, handler) => view.GetNotificationsStatusRequested = handler)
                 .RegisterHandler(GoToLoggedInHomeRequested,
                     (view, handler) => view.GoToLoggedInHomeRequested = handler)
+                .RegisterHandler(LogoutRequested,
+                    (view, handler) => view.LogoutRequested = handler)
                 .RegisterHandler<string>(RequestPnsToken,
                     (view, handler) => view.GetPnsTokenRequested = handler)
                 .RegisterHandler(ResetAndShowErrorRequested,
@@ -74,6 +78,15 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             var homePage = _pageFactory.CreatePageFor(homePageModel);
 
             await _view.AppNavigation.PopToNewRootAnimated(homePage).PreserveThreadContext();
+        }
+
+        private async Task LogoutRequested()
+        {
+            _logger.LogInformation("{Method}", nameof(LogoutRequested));
+
+            var model = new LoggedOutHomeScreenModel();
+            var page = _pageFactory.CreatePageFor(model);
+            await _view.AppNavigation.PopToNewRootAnimated(page).PreserveThreadContext();
         }
 
         private async Task ViewOnAppearing()

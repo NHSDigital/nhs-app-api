@@ -56,6 +56,14 @@ export default {
         this.isUsingNativeApp ? 'button' : ''];
     },
   },
+  beforeRouteEnter(_, __, next) {
+    if (NativeApp.supportsLogout()) {
+      NativeApp.logout();
+      return;
+    }
+
+    next();
+  },
   created() {
     this.$store.dispatch('pageLeaveWarning/reset');
 

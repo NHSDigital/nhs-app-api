@@ -7,6 +7,7 @@ import { createStore, mount } from '../helpers';
 
 jest.mock('@/services/authorisation-service');
 jest.mock('@/lib/utils');
+jest.mock('@/services/native-app');
 
 const loginResponse = {
   loginUrl: 'boom',
@@ -172,6 +173,31 @@ describe('login page', () => {
       it('will redirect to PRE_REGISTRATION_INFORMATION_PATH and passing the query', () => {
         expect(redirectTo).toBeCalledWith(wrapper.vm, PRE_REGISTRATION_INFORMATION_PATH, query);
       });
+    });
+  });
+
+  describe('beforeRouteEnter', () => {
+    let next;
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+      next = jest.fn();
+    });
+
+    it('will invoke the logout native app callback if it supports logout', () => {
+      NativeApp.supportsLogout = jest.fn().mockImplementation(() => true);
+      Login.beforeRouteEnter(undefined, undefined, next);
+
+      expect(NativeApp.logout).toHaveBeenCalled();
+      expect(next).not.toHaveBeenCalled();
+    });
+
+    it('will not invoke the logout native app callback if it does not support logout', () => {
+      NativeApp.supportsLogout = jest.fn().mockImplementation(() => false);
+      Login.beforeRouteEnter(undefined, undefined, next);
+
+      expect(NativeApp.logout).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalled();
     });
   });
 });

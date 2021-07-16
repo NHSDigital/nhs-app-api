@@ -37,5 +37,12 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         {
             NhsAppResilience.ExecuteOnMainThread(() => _nhsAppPreHomeScreenWebView.RequestPnsToken(trigger));
         }
+
+        [JavascriptInterface]
+        [Export("logout")]
+        public void Logout()
+        {
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppPreHomeScreenWebView.Logout());
+        }
     }
 }

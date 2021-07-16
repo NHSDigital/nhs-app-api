@@ -25,6 +25,7 @@
                                              RequestPnsTokenCommand="{Binding RequestPnsTokenCommand, Source={RelativeSource AncestorType={x:Type views:NhsAppPreHomeScreenWebPage}}}"
                                              GetNotificationsStatusCommand="{Binding GetNotificationsStatusCommand, Source={RelativeSource AncestorType={x:Type views:NhsAppPreHomeScreenWebPage}}}"
                                              GoToLoggedInHomeScreenCommand="{Binding GoToLoggedInHomeCommand, Source={RelativeSource AncestorType={x:Type views:NhsAppPreHomeScreenWebPage}}}"
+                                             LogoutCommand="{Binding LogoutCommand, Source={RelativeSource AncestorType={x:Type views:NhsAppPreHomeScreenWebPage}}}"
                                              Navigating="WebViewNavigating"
                                              Navigated="WebOnEndNavigating" />
     </AbsoluteLayout>

@@ -31,6 +31,9 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty GoToLoggedInHomeScreenCommandProperty =
             BindableProperty.Create(nameof(GoToLoggedInHomeScreenCommand), typeof(AsyncCommand), typeof(NhsAppPreHomeScreenWebview));
 
+        public static readonly BindableProperty LogoutCommandProperty =
+            BindableProperty.Create(nameof(LogoutCommand), typeof(AsyncCommand), typeof(NhsAppPreHomeScreenWebview));
+
         private static JsonSerializerSettings Settings { get; } = CreateJsonSerializerSettings();
 
         public void GetNotificationsStatus() => GetNotificationsStatusCommand.Execute(null);
@@ -72,6 +75,14 @@ namespace NHSOnline.App.Controls.WebViews
         {
             get => (AsyncCommand) GetValue(GoToLoggedInHomeScreenCommandProperty);
             set => SetValue(GoToLoggedInHomeScreenCommandProperty, value);
+        }
+
+        public void Logout() => LogoutCommand.Execute(null);
+
+        public AsyncCommand LogoutCommand
+        {
+            get => (AsyncCommand) GetValue(LogoutCommandProperty);
+            set => SetValue(LogoutCommandProperty, value);
         }
 
         private static string ConvertToJsonString<T>(T value) => JsonConvert.SerializeObject(value, Settings);

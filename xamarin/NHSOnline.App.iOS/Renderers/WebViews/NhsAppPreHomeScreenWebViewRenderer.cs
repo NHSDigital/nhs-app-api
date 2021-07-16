@@ -22,6 +22,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                     .AddFunction("getNotificationsStatus", webView => webView.GetNotificationsStatus)
                     .AddFunction("requestPnsToken", webView => webView.RequestPnsToken)
                     .AddFunction("goToLoggedInHomeScreen", webView => webView.GoToLoggedInHomeScreen)
+                    .AddFunction("logout", webView => webView.Logout)
                     .Apply(config.UserContentController);
         }
 

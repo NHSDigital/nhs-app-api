@@ -16,6 +16,7 @@ namespace NHSOnline.App.Areas.PreHome
 
             Func<Task>? GetNotificationsStatusRequested { get; set; }
             Func<Task>? GoToLoggedInHomeRequested { get; set; }
+            Func<Task>? LogoutRequested { get; set; }
             Func<Task>? ResetAndShowErrorRequested { get; set; }
             Func<string, Task>? GetPnsTokenRequested { get; set; }
             Func<Uri, Task>? DeeplinkRequested { get; set; }

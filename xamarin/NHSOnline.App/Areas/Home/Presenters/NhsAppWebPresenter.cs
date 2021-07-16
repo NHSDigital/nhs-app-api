@@ -346,15 +346,13 @@ namespace NHSOnline.App.Areas.Home.Presenters
             }
         }
 
-        private Task LogoutRequested()
+        private async Task LogoutRequested()
         {
             _logger.LogInformation("{Method}", nameof(LogoutRequested));
 
             var model = new LoggedOutHomeScreenModel();
             var page = _pageFactory.CreatePageFor(model);
-            _view.AppNavigation.PopToNewRootAnimated(page);
-
-            return Task.CompletedTask;
+            await _view.AppNavigation.PopToNewRootAnimated(page).PreserveThreadContext();
         }
 
         private async Task HelpRequested()
