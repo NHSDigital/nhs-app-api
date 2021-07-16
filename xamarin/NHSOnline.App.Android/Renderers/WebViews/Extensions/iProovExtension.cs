@@ -17,7 +17,9 @@ namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions
         {
             if (e.OldElement == null)
             {
-                IProov.NativeBridge.Install(_renderer.Control);
+                // There are cryptographic APIs available via the NativeBridge that we do not use.
+                // The isCryptographyEnabled parameter allows the enabling, and in our case disabling, of these APIs.
+                IProov.NativeBridge.Install(_renderer.Control, false);
             }
         }
 
