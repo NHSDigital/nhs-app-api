@@ -68,7 +68,7 @@ wellKnownAndroidFingerPrint: 15:48:51:AC:CF:1E:FE:09:19:AB:B7:7D:B8:83:B0:BD:7F:
 wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online
 
 spineLdapLookupEnabled: true
-spineLdapCIDR: "155.231.48.0/24"
+spineLdapCIDR: "155.231.9.0/24"
 spineLdapHost: "ldap.national.ncrs.nhs.uk"
 
 spinePdsEnabled: true
