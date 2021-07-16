@@ -13,7 +13,6 @@
 .message-panel__item {
   @include nhsuk-responsive-margin(4, "bottom");
   list-style: none;
-  width: 80%;
   &:last-child {
     @include nhsuk-responsive-margin(0, "bottom");
   }

@@ -205,9 +205,8 @@ class MessagesStepDefinitions {
                 .getOrFail<ArrayList<SingleMessageFacade>>()
         val expectedReadMessages = MessagesSerenityHelpers.EXPECTED_READ_MESSAGES
                 .getOrFail<ArrayList<SingleMessageFacade>>()
-        val sender = MessagesSerenityHelpers.TARGET_SENDER.getOrFail<String>()
-        messagesPage.messages.assertReadMessages(expectedReadMessages, sender)
-        messagesPage.messages.assertUnreadMessages(expectedUnreadMessages, sender)
+        messagesPage.messages.assertReadMessages(expectedReadMessages)
+        messagesPage.messages.assertUnreadMessages(expectedUnreadMessages)
     }
 
     @Then("^my messages from the sender are displayed as read$")
@@ -216,8 +215,7 @@ class MessagesStepDefinitions {
                 .getOrFail<MessagesSummaryFacade>().messages
         val expectedReadMessages = arrayListOf<SingleMessageFacade>()
         expectedReadMessages.addAll(expectedMessages)
-        val sender = MessagesSerenityHelpers.TARGET_SENDER.getOrFail<String>()
-        messagesPage.messages.assertAllReadMessages(expectedReadMessages, sender)
+        messagesPage.messages.assertAllReadMessages(expectedReadMessages)
     }
 
     @Then( "^an error with a retry button is displayed indicating that there was a problem getting messages$")

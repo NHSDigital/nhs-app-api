@@ -1,7 +1,6 @@
 <template>
   <li :class="$style['message-panel__item']">
     <div>
-      <h3 :class="$style['message-panel__sender']">{{ message.sender }}</h3>
       <div :class="$style['message-panel__content']">
         <markdown-content v-if="isMarkdown" class="panel-content" :content="message.body"
                           :message-id="message.id" />
