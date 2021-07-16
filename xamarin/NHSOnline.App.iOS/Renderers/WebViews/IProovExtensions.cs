@@ -12,7 +12,9 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
         internal static void InstallIProov(this WkWebViewRenderer renderer)
         {
 #if IPHONE
-            renderer.InstallIProovNativeBridge();
+            // There are cryptographic APIs available via the NativeBridge that we do not use.
+            // The cryptographyEnabled parameter allows the enabling, and in our case disabling, of these APIs.
+            renderer.InstallIProovNativeBridgeWithCryptographyEnabled(false);
 #endif
         }
     }

@@ -5,6 +5,6 @@
     <DefineConstants>IPHONE;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="iProov.iOS" Version="8.1.1" />
+    <PackageReference Include="iProov.iOS" Version="8.4.0" />
   </ItemGroup>
 </Project>
