@@ -11,7 +11,7 @@ If you're unable to access these features, you may need to prove who you are. [R
 
 **Get your NHS COVID Pass**
 
-You can view and share your NHS COVID Pass for event trials in England and travel abroad. [Read more about your NHS COVID Pass](https://nhs.uk/nhs-app/nhs-app-help-and-support/health-records-in-the-nhs-app/about-the-nhs-covid-pass-service/?wt.mc_id=intro_v1_0621).
+You can view and share your NHS COVID Pass for places in England that have chosen to use this service and for travel abroad. [Read more about your NHS COVID Pass](https://nhs.uk/nhs-app/nhs-app-help-and-support/health-records-in-the-nhs-app/about-the-nhs-covid-pass-service/?wt.mc_id=intro_v1_0621).
 
 **GP health record**  
   
