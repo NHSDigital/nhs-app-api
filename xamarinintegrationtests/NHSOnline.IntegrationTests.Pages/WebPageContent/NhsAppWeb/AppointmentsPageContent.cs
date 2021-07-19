@@ -78,7 +78,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
             return this;
         }
 
-        public AppointmentsPageContent AssertEconsultElements()
+        public AppointmentsPageContent AssertAdditionalGpServicesElements()
         {
             AdditionalGpServicesMenuItem.AssertVisible();
             AdditionalGpServicesMenuText.AssertVisible();
@@ -86,6 +86,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
         }
 
         public void NavigateToHospitalAndOtherAppointments() => HospitalAndOtherAppointmentsMenuItem.Click();
+
+        public void NavigateToAdditionalGpServices() => AdditionalGpServicesMenuItem.Click();
 
         public void KeyboardNavigateToGpSurgeryAppointments(AndroidKeyboardNavigation navigation)
             => KeyboardNavigateToAndActivateMenuItem(GpSurgeryAppointmentsMenuItem, navigation);

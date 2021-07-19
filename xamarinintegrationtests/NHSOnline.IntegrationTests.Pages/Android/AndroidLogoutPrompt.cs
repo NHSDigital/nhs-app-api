@@ -1,34 +1,29 @@
-using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.Android
 {
     public class AndroidLogoutPrompt
     {
-        private readonly IAndroidDriverWrapper _driver;
+        private readonly AndroidPrompt _androidPrompt;
 
-        private AndroidLogoutPrompt(IAndroidDriverWrapper driver)
+        private const string PromptLabelText = "Are you sure you want to log out?";
+        private const string ContinueButtonText = "Log out";
+        private const string CancelButtonText = "Cancel";
+
+        private AndroidLogoutPrompt(AndroidPrompt androidPrompt)
         {
-            _driver = driver;
+            _androidPrompt = androidPrompt;
         }
-
-        private AndroidLabel LogoutText => AndroidLabel.WithText(_driver,
-            "Are you sure you want to log out?");
-
-        private AndroidSystemButton LogoutButton => AndroidSystemButton.WhichMatches(_driver, "Log out");
-
-        private AndroidSystemButton CancelButton => AndroidSystemButton.WhichMatches(_driver, "Cancel");
 
         public static AndroidLogoutPrompt AssertDisplayed(IAndroidDriverWrapper driver)
         {
-            var logoutPrompt = new AndroidLogoutPrompt(driver);
-            logoutPrompt.LogoutText.AssertVisible();
-            return logoutPrompt;
+            var prompt = AndroidPrompt.AssertDisplayed(driver, PromptLabelText, ContinueButtonText, CancelButtonText);
+            var leavePrompt = new AndroidLogoutPrompt(prompt);
+            return leavePrompt;
         }
 
-        public void Logout() => LogoutButton.Click();
+        public void Logout() => _androidPrompt.Accept();
 
-        public void Cancel() => CancelButton.Click();
-
+        public void Cancel() => _androidPrompt.Cancel();
     }
 }

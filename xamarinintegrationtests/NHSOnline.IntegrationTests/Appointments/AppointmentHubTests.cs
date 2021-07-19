@@ -30,7 +30,7 @@ namespace NHSOnline.IntegrationTests.Appointments
                 .AssertOnPage(driver)
                 .PageContent
                 .AssertPageElements()
-                .AssertEconsultElements();
+                .AssertAdditionalGpServicesElements();
         }
 
         [NhsAppIOSTest]
@@ -50,7 +50,7 @@ namespace NHSOnline.IntegrationTests.Appointments
                 .AssertOnPage(driver)
                 .PageContent
                 .AssertPageElements()
-                .AssertEconsultElements();
+                .AssertAdditionalGpServicesElements();
         }
 
         [NhsAppAndroidTest]
@@ -86,7 +86,7 @@ namespace NHSOnline.IntegrationTests.Appointments
             AndroidAppointmentsPage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateToGpSurgeryAppointmnts();
+                .KeyboardNavigateToGpSurgeryAppointments();
 
             AndroidGpSurgeryAppointmentsPage
                 .AssertErrorOnPage(driver)

@@ -47,7 +47,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
             return pageFocusableList.Concat(footerFocusableList).Concat(headerFocusableList);
         }
 
-        public void KeyboardNavigateToGpSurgeryAppointmnts() =>
+        public void KeyboardNavigateToGpSurgeryAppointments() =>
             PageContent.KeyboardNavigateToGpSurgeryAppointments(KeyboardPageContentNavigation);
 
         public void KeyboardNavigateToAdditionalGpServices() =>
