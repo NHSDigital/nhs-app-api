@@ -26,6 +26,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
                 e.Text.Should().Be(value, "A term {0} with text {1} should be displayed", _term, value);
             });
 
+        public void AssertNotVisible() => _interactor.IsPresent(FindBy).Should().BeFalse("A term {0} should not be displayed", _term);
+
         private void ActOnElement(Action<IWebElement> action)
             => _interactor.ActOnElement(FindBy, action);
 

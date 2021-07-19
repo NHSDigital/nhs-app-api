@@ -11,6 +11,7 @@ namespace NHSOnline.IntegrationTests.Home
 {
     [TestClass]
     [BusinessRule("BR-LOG-05.1", "Log in for a P5 user logs them into the app")]
+    [BusinessRule("BR-HOM-02.1", "User registered to P5 level cannot see their NHS number")]
     public class LogInWithP5Tests
     {
         [NhsAppAndroidTest]
@@ -45,7 +46,8 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .AssertPageDisplayedFor("Terry Tibbs");
+                .AssertPageDisplayedFor("Terry Tibbs")
+                .PageContent.AssertNhsNumberNotVisible();
         }
 
         [NhsAppIOSTest]
@@ -80,7 +82,8 @@ namespace NHSOnline.IntegrationTests.Home
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .AssertPageDisplayedFor("Terry Tibbs");
+                .AssertPageDisplayedFor("Terry Tibbs")
+                .PageContent.AssertNhsNumberNotVisible();
         }
     }
 }

@@ -28,6 +28,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
         public void AssertVisible()
             => ActOnElement(e => e.Displayed.Should().BeTrue("a link with text {0} should be displayed", _text));
 
+        public void AssertNotVisible() => _interactor.IsPresent(FindBy).Should().BeFalse("a link with text {0} should not be displayed", _text);
+
         public void Click()
             => ActOnElement(e => e.Click());
 

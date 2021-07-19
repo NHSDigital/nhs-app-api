@@ -25,12 +25,14 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
         public void AssertVisible()
             => ActOnElement(e => e.Displayed.Should().BeTrue("A {0} tag with text {1} should be displayed", _tag, _text));
 
+        public void AssertNotVisible() => _interactor.IsPresent(FindBy).Should().BeFalse("A {0} tag with text {1} should not be displayed", _tag, _text);
+
         public WebLink WithChildLink(string linkText)
             => WebLink.WithText(_interactor, linkText, WholeElementSelector );
 
         public void ScrollTo() => _interactor.ActOnElementContext(
             FindBy, c => new Actions(c.Driver).MoveToElement(c.Element).Perform());
-        
+
         private void ActOnElement(Action<IWebElement> action)
             => _interactor.ActOnElement(FindBy, action);
 

@@ -28,10 +28,11 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
             return page;
         }
 
-        public void AssertPageDisplayedFor(string name)
+        public AndroidLoggedInHomePage AssertPageDisplayedFor(string name)
         {
             Navigation.AssertNavigationPresent();
             PageContent.AssertNameDisplayedFor(name);
+            return this;
         }
 
         private AndroidKeyboardNavigation KeyboardPageContentNavigation => AndroidKeyboardNavigation

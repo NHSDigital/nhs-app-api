@@ -35,5 +35,24 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         {
             interactor.ActOnDriver((driver, _) => action(driver));
         }
+
+        internal static bool IsPresent<TDriver, TElement>(
+        this IInteractor<TDriver, TElement> interactor, By by)
+        {
+            var isPresent = false;
+            interactor.ActOnDriver((_, findBy) =>
+            {
+                try
+                {
+                    var element = findBy(by);
+                    isPresent = element != null;
+                }
+                catch (NoSuchElementException)
+                {
+                    isPresent = false;
+                }
+            });
+            return isPresent;
+        }
     }
 }

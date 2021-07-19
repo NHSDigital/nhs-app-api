@@ -21,7 +21,17 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
 
         private WebDefinitionTerm NameDefinitionTerm => WebDefinitionTerm.WithTerm(_interactor, "Name:");
 
-        private WebButton OpenSettingsButton => WebButton.WithText(_interactor, "Open Settings");
+        private WebDefinitionTerm NhsNumberTerm => WebDefinitionTerm.WithTerm(_interactor, "NHS number:");
+
+        private WebText BiometricsPanelTitle => WebText.WithTagAndText(_interactor, "h2", "Login options");
+
+        private WebText BiometricsPanelText => WebText.WithTagAndText(
+            _interactor,
+            "p",
+            "If your mobile device supports fingerprint or face recognition, " +
+            "you can use it to log in to the NHS App instead of a password and security code.");
+
+        private WebButton OpenSettingsButton => WebButton.WithText(_interactor, "Open settings");
 
         private WebLink DismissBiometricsBanner => WebLink.WithText(_interactor, "Dismiss");
 
@@ -57,6 +67,27 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
         public void AssertUserAgent(Platform platform) =>
             Assert.IsTrue(_interactor.GetUserAgent().Contains(platform.UserAgentDeviceTypePrefix(), StringComparison.InvariantCulture));
 
+        public void AssertBiometricPanelVisible()
+        {
+            BiometricsPanelTitle.AssertVisible();
+            BiometricsPanelText.AssertVisible();
+            OpenSettingsButton.AssertVisible();
+            DismissBiometricsBanner.AssertVisible();
+        }
+
+        public void AssertBiometricPanelNotVisible()
+        {
+            BiometricsPanelTitle.AssertNotVisible();
+            BiometricsPanelText.AssertNotVisible();
+            OpenSettingsButton.AssertNotVisible();
+            DismissBiometricsBanner.AssertNotVisible();
+        }
+
+        public void AssertNhsNumberNotVisible() => NhsNumberTerm.AssertNotVisible();
+
+
         public void ProveYourIdentityContinue() => Continue.Click();
+
+        public void DismissBiometricPanel() => DismissBiometricsBanner.Click();
     }
 }

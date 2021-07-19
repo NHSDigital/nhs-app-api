@@ -21,10 +21,11 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
             return page;
         }
 
-        public void AssertPageDisplayedFor(string name)
+        public IOSLoggedInHomePage AssertPageDisplayedFor(string name)
         {
             Navigation.AssertNavigationPresent();
             PageContent.AssertNameDisplayedFor(name);
+            return this;
         }
 
         public void ProveYourIdentityContinue() => PageContent.ProveYourIdentityContinue();
