@@ -27,12 +27,10 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public Func<Task>? LoginRequested { get; set; }
         public ICommand LoginCommand => new AsyncCommand(() => LoginRequested);
 
-        public Func<Task>? NhsUkCovidAppPageRequested { get; set; }
-        public ICommand NhsUkCovidAppCommand => new AsyncCommand(() => NhsUkCovidAppPageRequested);
-
         public Func<Task>? BackRequested { get; set; }
-        public Func<Uri, Task>? DeeplinkRequested { get; set; }
         private ICommand BackRequestedCommand => new AsyncCommand(() => BackRequested);
+
+        public Func<Uri, Task>? DeeplinkRequested { get; set; }
 
         protected override void OnAppearing()
         {

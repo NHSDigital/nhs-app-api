@@ -1,7 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
-using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -24,65 +22,6 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         {
             NavigateToGettingStartedPage(driver)
                 .AssertPageElements();
-        }
-
-        [NhsAppAndroidTest]
-        public void APatientOnTheGettingStartedPageCanClickToViewTheCovidAppAndroid(IAndroidDriverWrapper driver)
-        {
-            AndroidLoggedOutHomePage
-                .AssertOnPage(driver)
-                .ContinueWithNhsLogin();
-
-            AndroidGettingStartedPage
-                .AssertOnPage(driver)
-                .GoToCovidApp();
-
-            AndroidAppTabBrowserChoice
-                .IfDisplayed(driver, choice => choice.ChooseChrome());
-
-            AndroidAppTab
-                .AssertOnCovidAppPage(driver)
-                .ReturnToApp();
-
-            AndroidGettingStartedPage
-                .AssertOnPage(driver);
-        }
-
-        [NhsAppIOSTest]
-        public void APatientOnTheGettingStartedPageCanClickToViewTheCovidAppIos(IIOSDriverWrapper driver)
-        {
-            IOSLoggedOutHomePage
-                .AssertOnPage(driver)
-                .ContinueWithNhsLogin();
-
-            IOSGettingStartedPage
-                .AssertOnPage(driver)
-                .GoToCovidApp();
-
-            IOSAppTab
-                .AssertOnCovidAppPage(driver)
-                .ReturnToApp();
-
-            IOSGettingStartedPage
-                .AssertOnPage(driver);
-        }
-
-        [NhsAppAndroidTest]
-        public void APatientCanUseTheKeyboardToActivateTheLinksOnTheGettingStartedPageAndBeTakenToTheCorrectPagesAndroid(IAndroidDriverWrapper driver)
-        {
-            NavigateToGettingStartedPage(driver)
-                .TabToGetCovidApp()
-                .PressEnterKey();
-
-            AndroidAppTabBrowserChoice
-                .IfDisplayed(driver, choice => choice.ChooseChrome());
-
-            AndroidAppTab
-                .AssertOnCovidAppPage(driver)
-                .ReturnToApp();
-
-            AndroidGettingStartedPage
-                .AssertOnPage(driver);
         }
 
         [NhsAppAndroidTest]

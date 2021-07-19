@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
-using NHSOnline.App.Config;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
@@ -16,8 +15,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly IPageFactory _pageFactory;
         private readonly IUserPreferencesService _userPreferencesService;
         private readonly INhsLoginService _nhsLoginService;
-        private readonly IBrowserOverlay _browserOverlay;
-        private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
         private readonly GettingStartedModel _model;
         private Uri? _deeplinkUrl;
 
@@ -29,9 +26,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             ILogger<GettingStartedPresenter> logger,
             IPageFactory pageFactory,
             IUserPreferencesService userPreferencesService,
-            INhsLoginService nhsLoginService,
-            IBrowserOverlay browserOverlay,
-            INhsExternalServicesConfiguration nhsExternalServicesConfiguration)
+            INhsLoginService nhsLoginService)
         {
             _model = model;
             _view = view;
@@ -39,12 +34,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _pageFactory = pageFactory;
             _userPreferencesService = userPreferencesService;
             _nhsLoginService = nhsLoginService;
-            _browserOverlay = browserOverlay;
-            _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
 
             view.AppNavigation
                 .RegisterHandler(ViewOnLoginRequested, (view, handler) => view.LoginRequested = handler)
-                .RegisterHandler(LoadCovidUrl, (view, handler) => view.NhsUkCovidAppPageRequested = handler)
                 .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler)
                 .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeeplinkRequested = handler);
         }
@@ -60,14 +52,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
             var loginPage = _pageFactory.CreatePageFor(loginModel);
             await _view.AppNavigation.ReplaceCurrentPage(loginPage).PreserveThreadContext();
-        }
-
-        private async Task LoadCovidUrl()
-        {
-            _logger.LogInformation("Accessing covid url");
-            await _browserOverlay
-                .OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkCovidAppUrl)
-                .PreserveThreadContext();
         }
 
         private Task DeeplinkRequested(Uri deeplinkUrl)

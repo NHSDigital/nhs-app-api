@@ -31,29 +31,7 @@
                                  Grid.Row="0"
                                  Text="Getting started" />
             
-            <panels:NhsYellowWarningCard Grid.Column="1" Grid.Row="1"
-                                         Text="This is not the NHS COVID-19 app">
-                <StackLayout>
-                    <elements:MediumLabel Text="To download the NHS COVID-19 contact tracing app."
-                                          Margin="0,5,0,10" />
-                    
-                    <deprecated:LinkLabel LabelTextColour="{StaticResource NhsUkPrimaryText}"
-                                          LabelTextDecoration="None"
-                                          Command="{Binding NhsUkCovidAppCommand, Source={x:Reference Name=Page}}">
-                        <deprecated:LinkLabel.FormattedText>
-                            <FormattedString>
-                                <Span Text="Go to " />
-                                <Span Text="covid19.nhs.uk" 
-                                      TextDecorations="Underline"
-                                      TextColor="{StaticResource NhsUkPrimaryLinkBlue}" />    
-                            </FormattedString>
-                        </deprecated:LinkLabel.FormattedText>
-                    </deprecated:LinkLabel>
-                    
-                </StackLayout>
-            </panels:NhsYellowWarningCard> 
-            
-            <StackLayout Grid.Column="1" Grid.Row="2">
+            <StackLayout Grid.Column="1" Grid.Row="1">
             
                 <deprecated:Paragraph Text="Use the NHS App to:" />
                 
@@ -75,7 +53,7 @@
             </StackLayout>
             
             <elements:Button Grid.Column="1" 
-                             Grid.Row="3"
+                             Grid.Row="2"
                              Text="Continue"
                              ButtonColour = "{StaticResource NhsUkGreen}"
                              ColourGradient="{StaticResource ButtonGreenLowerGradient}"

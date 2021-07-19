@@ -9,7 +9,6 @@ namespace NHSOnline.App.Areas.LoggedOut
         internal interface IEvents
         {
             Func<Task>? LoginRequested { get; set; }
-            Func<Task>? NhsUkCovidAppPageRequested { get; set; }
             Func<Task>? BackRequested { get; set; }
             Func<Uri, Task>? DeeplinkRequested { get; set; }
         }

@@ -11,19 +11,6 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         private IOSLabel Title => IOSLabel.WithText(_driver, "Getting started");
 
-        private IOSLabel ThisIsNotTheCovidAppLabel => IOSLabel
-            .WithText(_driver, "This is not the NHS COVID-19 app")
-            .ScrollIntoView();
-        private IOSLabel ToDownLoadTheCovidAppLabel => IOSLabel
-            .WithText(_driver, "To download the NHS COVID-19 contact tracing app.")
-            .ScrollIntoView();
-
-        private IOSLink GoToCovidLabel => IOSLink
-            .WithText(_driver, "Go to covid19.nhs.uk");
-
-        private IOSLabel UseTheNhsAppToLabel => IOSLabel
-            .WithText(_driver, "Use the NHS App to:")
-            .ScrollIntoView();
         private IOSLabel PrescriptionsLabel => IOSLabel
             .WithText(_driver, "order repeat prescriptions")
             .ScrollIntoView();
@@ -59,10 +46,6 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         public void AssertPageElements()
         {
-            ThisIsNotTheCovidAppLabel.AssertVisible();
-            ToDownLoadTheCovidAppLabel.AssertVisible();
-            GoToCovidLabel.AssertVisible();
-            UseTheNhsAppToLabel.AssertVisible();
             PrescriptionsLabel.AssertVisible();
             AppointmentsLabel.AssertVisible();
             HealthInformationLabel.AssertVisible();
@@ -71,11 +54,6 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
             LegalAgeLabel.AssertVisible();
             GetStartedLabel.AssertVisible();
             ContinueButton.AssertVisible();
-        }
-
-        public void GoToCovidApp()
-        {
-            GoToCovidLabel.Touch();
         }
 
         public void Continue()

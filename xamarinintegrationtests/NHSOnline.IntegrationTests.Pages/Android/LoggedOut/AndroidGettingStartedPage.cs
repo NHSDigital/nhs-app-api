@@ -11,17 +11,6 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         private AndroidLabel Title => AndroidLabel.WithText(_driver, "Getting started");
 
-        private AndroidLabel ThisIsNotTheCovidAppLabel => AndroidLabel
-            .WithText(_driver, "This is not the NHS COVID-19 app")
-            .ScrollIntoView();
-        private AndroidLabel ToDownLoadTheCovidAppLabel => AndroidLabel
-            .WithText(_driver, "To download the NHS COVID-19 contact tracing app.")
-            .ScrollIntoView();
-
-        private AndroidLink GoToCovidLabel => AndroidLink
-            .WithText(_driver, "Go to covid19.nhs.uk")
-            .ScrollIntoView();
-
         private AndroidLabel UseTheNhsAppToLabel => AndroidLabel
             .WithText(_driver, "Use the NHS App to:")
             .ScrollIntoView();
@@ -64,7 +53,6 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         private AndroidKeyboardNavigation KeyboardNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(
             _driver,
             CloseIcon,
-            GoToCovidLabel,
             ContinueButton);
 
         public static AndroidGettingStartedPage AssertOnPage(IAndroidDriverWrapper driver)
@@ -77,9 +65,6 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         public void AssertPageElements()
         {
             UseTheNhsAppToLabel.AssertVisible();
-            ThisIsNotTheCovidAppLabel.AssertVisible();
-            ToDownLoadTheCovidAppLabel.AssertVisible();
-            GoToCovidLabel.AssertVisible();
             PrescriptionsLabel.AssertVisible();
             AppointmentsLabel.AssertVisible();
             HealthInformationLabel.AssertVisible();
@@ -90,14 +75,6 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         }
 
         public void Continue() => ContinueButton.Click();
-
-        public void GoToCovidApp() => GoToCovidLabel.Touch();
-
-        public AndroidGettingStartedPage TabToGetCovidApp()
-        {
-            KeyboardNavigation.TabTo(GoToCovidLabel);
-            return this;
-        }
 
         public void PressEnterKey() => KeyboardNavigation.PressEnterKey();
 
