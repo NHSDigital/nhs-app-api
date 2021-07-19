@@ -116,11 +116,11 @@ jobs:
         inputs:
           targetPath: 'xamarinintegrationtests/TestResults'
           ${{ if eq(parameters['runCanaryTests'], true) }}:
-            artifactName: 'Xamarin Integration Canary Test Files'
+            artifactName: 'Xamarin Integration Canary Test Files Attempt-$(System.JobAttempt)'
           ${{ if eq(parameters['runUpgradeTests'], true) }}:
-            artifactName: 'Xamarin Integration Upgrade Test Files'
+            artifactName: 'Xamarin Integration Upgrade Test Files Attempt-$(System.JobAttempt)'
           ${{ if and(eq(parameters['runUpgradeTests'], false), eq(parameters['runCanaryTests'], false))  }}:
-            artifactName: 'Xamarin Integration Test Files'
+            artifactName: 'Xamarin Integration Test Files Attempt-$(System.JobAttempt)'
 
       - task: PublishTestResults@2
         displayName: Publish Test Results
