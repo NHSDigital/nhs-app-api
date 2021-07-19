@@ -1,11 +1,12 @@
+using System.Threading.Tasks;
 using NHSOnline.App.Controls.WebViews.Payloads;
 
 namespace NHSOnline.App.DependencyServices
 {
     public interface IFileHandler
     {
-        void StoreFileInDownloads(DownloadRequest downloadRequest);
+        Task StoreFileInDownloads(DownloadRequest downloadRequest);
 
-        void HandleFile(DownloadRequest downloadRequest);
+        Task HandleFile(DownloadRequest downloadRequest);
     }
 }

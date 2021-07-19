@@ -20,17 +20,17 @@ namespace NHSOnline.App.iOS.DependencyServices
     {
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(IosFileHandler));
 
-        public void StoreFileInDownloads(DownloadRequest downloadRequest)
+        public Task StoreFileInDownloads(DownloadRequest downloadRequest)
         {
             Logger.LogInformation("We currently do not store files directly to the download folder");
+            return Task.CompletedTask;
         }
 
-        public async void HandleFile(DownloadRequest downloadRequest)
+        public async Task HandleFile(DownloadRequest downloadRequest)
         {
             if (string.Equals(downloadRequest.MimeType, "application/vnd.apple.pkpass", StringComparison.Ordinal))
             {
                 HandlePassKitPassFile(downloadRequest);
-                return;
             }
 
             await HandleDefaultFileTypes(downloadRequest).ConfigureAwait(true);

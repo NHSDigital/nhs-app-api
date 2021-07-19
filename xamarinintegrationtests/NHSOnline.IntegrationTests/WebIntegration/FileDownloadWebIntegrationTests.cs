@@ -119,5 +119,37 @@ namespace NHSOnline.IntegrationTests.WebIntegration
             AndroidFileDownloadPage
                 .AssertOnPage(driver);
         }
+
+        [NhsAppIOSTest]
+        public void APatientWithProofLevelNineCanDownloadAPassKitFileFromTheTestProviderDownloadFileScreenIOS(
+            IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToMessages();
+
+            IOSMessagesPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToTestProvider();
+
+            IOSTestWebIntegrationProviderPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.NavigateDownloadFile();
+
+            IOSFileDownloadPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.DownloadPass();
+
+            IOSPassKitController
+                .AssertDisplayed(driver);
+        }
     }
 }

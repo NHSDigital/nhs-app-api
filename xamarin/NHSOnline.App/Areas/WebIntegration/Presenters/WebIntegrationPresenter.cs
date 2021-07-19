@@ -88,14 +88,14 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             await _model.NavigationHandler.GoToNhsAppPageRequested(page).PreserveThreadContext();
         }
 
-        private async Task<Task> StartDownloadRequested(DownloadRequest downloadRequest)
+        private async Task StartDownloadRequested(DownloadRequest downloadRequest)
         {
             var storagePermissionCheck = await Permissions.CheckStatusAsync<Permissions.StorageWrite>().ResumeOnThreadPool();
 
             if (storagePermissionCheck == PermissionStatus.Granted)
             {
-                _fileHandler.StoreFileInDownloads(downloadRequest);
-                _fileHandler.HandleFile(downloadRequest);
+                await _fileHandler.StoreFileInDownloads(downloadRequest).PreserveThreadContext();
+                await _fileHandler.HandleFile(downloadRequest).PreserveThreadContext();
             }
             else
             {
@@ -103,12 +103,10 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
                 if (storagePermissionRequest == PermissionStatus.Granted)
                 {
-                    _fileHandler.StoreFileInDownloads(downloadRequest);
-                    _fileHandler.HandleFile(downloadRequest);
+                    await _fileHandler.StoreFileInDownloads(downloadRequest).PreserveThreadContext();
+                    await _fileHandler.HandleFile(downloadRequest).PreserveThreadContext();
                 }
             }
-
-            return Task.CompletedTask;
         }
 
         private async Task DeeplinkRequested(Uri deepLinkUrl)
@@ -154,7 +152,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             await _browserOverlay.OpenBrowserOverlay(url).PreserveThreadContext();
         }
 
-        private async Task<Task> AddEventToCalendarRequested(AddEventToCalendarRequest request)
+        private async Task AddEventToCalendarRequested(AddEventToCalendarRequest request)
         {
             if (string.IsNullOrEmpty(request.Subject) ||
                 request.StartTimeEpochInSeconds == null ||
@@ -163,24 +161,22 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             {
                 _logger.LogError("Passed calendar information is invalid, showing popup");
                 _calendar.ShowCalendarAlertWhenValidationFails();
-
-                return Task.CompletedTask;
-            }
-
-            var calendarPermission = await _calendar
-                .RequestPermission()
-                .PreserveThreadContext();
-
-            if (calendarPermission)
-            {
-                _calendar.AddToCalendar(request);
             }
             else
             {
-                _calendar.ShowCalendarPermissionDeniedAlert();
-            }
+                var calendarPermission = await _calendar
+                    .RequestPermission()
+                    .PreserveThreadContext();
 
-            return Task.CompletedTask;
+                if (calendarPermission)
+                {
+                    _calendar.AddToCalendar(request);
+                }
+                else
+                {
+                    _calendar.ShowCalendarPermissionDeniedAlert();
+                }
+            }
         }
     }
 }

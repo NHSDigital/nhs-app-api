@@ -158,14 +158,14 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .PreserveThreadContext();
         }
 
-        private async Task<Task> StartDownloadRequested(DownloadRequest downloadRequest)
+        private async Task StartDownloadRequested(DownloadRequest downloadRequest)
         {
             var storageWritePermissionCheck = await Permissions.CheckStatusAsync<Permissions.StorageWrite>().ResumeOnThreadPool();
 
             if (storageWritePermissionCheck == PermissionStatus.Granted)
             {
-                _fileHandler.StoreFileInDownloads(downloadRequest);
-                _fileHandler.HandleFile(downloadRequest);
+                await _fileHandler.StoreFileInDownloads(downloadRequest).PreserveThreadContext();
+                await _fileHandler.HandleFile(downloadRequest).PreserveThreadContext();
             }
             else
             {
@@ -173,15 +173,13 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
                 if (storageReadPermissionRequest == PermissionStatus.Granted)
                 {
-                    _fileHandler.StoreFileInDownloads(downloadRequest);
-                    _fileHandler.HandleFile(downloadRequest);
+                   await _fileHandler.StoreFileInDownloads(downloadRequest).PreserveThreadContext();
+                   await _fileHandler.HandleFile(downloadRequest).PreserveThreadContext();
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        private async Task<Task> AddEventToCalendarRequested(AddEventToCalendarRequest request)
+        private async Task AddEventToCalendarRequested(AddEventToCalendarRequest request)
         {
             _logger.LogInformation("Add event to calendar Requested - {Subject}", request.Subject);
 
@@ -192,24 +190,22 @@ namespace NHSOnline.App.Areas.Home.Presenters
             {
                 _logger.LogError("Passed calendar information is invalid, showing popup");
                 _calendar.ShowCalendarAlertWhenValidationFails();
-
-                return Task.CompletedTask;
-            }
-
-            var calendarPermission = await _calendar
-                .RequestPermission()
-                .PreserveThreadContext();
-
-            if (calendarPermission)
-            {
-                _calendar.AddToCalendar(request);
             }
             else
             {
-                _calendar.ShowCalendarPermissionDeniedAlert();
-            }
+                var calendarPermission = await _calendar
+                    .RequestPermission()
+                    .PreserveThreadContext();
 
-            return Task.CompletedTask;
+                if (calendarPermission)
+                {
+                    _calendar.AddToCalendar(request);
+                }
+                else
+                {
+                    _calendar.ShowCalendarPermissionDeniedAlert();
+                }
+            }
         }
 
         private async Task StartNhsLoginUpliftRequested(StartNhsLoginUpliftRequest request)
@@ -269,7 +265,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _logger.LogInformation($"Menu bar item change requested for {menuItemIndex}");
 
             var footerItem = GetFooterItemFromIndex(menuItemIndex);
-            
+
             if (footerItem.HasValue)
             {
                 _view.SelectedNavigationFooterItem = footerItem.Value;
@@ -278,7 +274,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             {
                 _logger.LogError($"Menu bar item change requested for invalid index '{menuItemIndex}'");
             }
-            
+
             return Task.CompletedTask;
         }
 

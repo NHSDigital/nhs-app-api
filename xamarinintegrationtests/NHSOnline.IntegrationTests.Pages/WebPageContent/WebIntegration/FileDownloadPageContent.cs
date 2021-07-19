@@ -16,8 +16,12 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         private WebButton DownloadImageButton => WebButton.WithText(_interactor, "Download test image file");
 
+        private WebButton DownloadPassButton => WebButton.WithText(_interactor, "Download test pass kit file (ios only)");
+
         internal void AssertOnPage() => TitleText.AssertVisible();
 
         public void DownloadImage() => DownloadImageButton.Click();
+
+        public void DownloadPass() => DownloadPassButton.Click();
     }
 }

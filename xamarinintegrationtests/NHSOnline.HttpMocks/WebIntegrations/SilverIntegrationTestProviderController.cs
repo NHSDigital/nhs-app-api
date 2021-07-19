@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -39,7 +41,13 @@ namespace NHSOnline.HttpMocks.WebIntegrations
         [HttpGet("DocumentDownload.html")]
         public IActionResult DocumentDownload()
         {
-            (string Title, HttpRequest Request) model = ("Silver Integration Test Provider Document Download Page", Request);
+            var basePath =
+                $"{Directory.GetParent(Directory.GetCurrentDirectory())?.Parent?.Parent?.Parent}/NHSOnline.HttpMocks/Resources";
+            var passKitBase64 = System.IO.File.ReadAllText($"{basePath}/PKPass.txt");
+            var imageBase64 = System.IO.File.ReadAllText($"{basePath}/HandAndFootXrayImage.txt");
+
+            (string Title, HttpRequest Request, string ImageBase64String, string PkPassBase64String) model =
+                ("Silver Integration Test Provider Document Download Page", Request, imageBase64, passKitBase64);
             return View("~/Views/WebIntegrations/WebIntegrationFunctionalityPages/DocumentDownloadPage.cshtml", model);
         }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Android.Content;
 using Android.Provider;
 using Microsoft.Extensions.Logging;
@@ -20,7 +21,7 @@ namespace NHSOnline.App.Droid.DependencyServices
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(AndroidFileHandler));
         internal static MainActivity? MainActivity { set; get; }
 
-        public void StoreFileInDownloads(DownloadRequest downloadRequest)
+        public async Task StoreFileInDownloads(DownloadRequest downloadRequest)
         {
             try
             {
@@ -29,7 +30,7 @@ namespace NHSOnline.App.Droid.DependencyServices
                 var convertedData = Convert.FromBase64String(downloadRequest.Base64Data);
 
                 var outputStream = resolver.OpenOutputStream(fileUri!);
-                outputStream!.Write(convertedData);
+                await outputStream!.WriteAsync(convertedData).ConfigureAwait(true);
                 outputStream.Close();
             }
             catch (Exception e)
@@ -51,7 +52,7 @@ namespace NHSOnline.App.Droid.DependencyServices
             return resolver;
         }
 
-        public async void HandleFile(DownloadRequest downloadRequest)
+        public async Task HandleFile(DownloadRequest downloadRequest)
         {
             try
             {
@@ -61,7 +62,6 @@ namespace NHSOnline.App.Droid.DependencyServices
             catch (Exception e)
             {
                 Logger.LogError(e, "Failed to write data to cache directory");
-                return;
             }
 
             var target = new ReadOnlyFile(downloadRequest.FileCachePath);
