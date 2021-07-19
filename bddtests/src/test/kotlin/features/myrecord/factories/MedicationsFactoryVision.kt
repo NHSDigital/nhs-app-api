@@ -45,7 +45,7 @@ class MedicationsFactoryVision: MedicationsFactory() {
                 "first_prescribed_date=\"2018-10-08T00:00:00\" form=\"tab\" identity=\"827602937\" inactive=\"0\" " +
                 "inpractice=\"1\" iosclaim=\"0\" last_issue=\"2018-10-09T00:00:00\" " +
                 "last_prescribed_date=\"$tenMonthsAgo\" master_id=\"4301\" max_issues=\"100\" num_issues=\"1\" " +
-                "operat_id=\"16\" packsize=\"tablet\" parent_id=\"0\" prac_id=\"X00100\" practadmin=\"0\" " +
+                "operat_id=\"16\" packsize=\"tablet\" parent_id=\"0\" prac_id=\"A88888\" practadmin=\"0\" " +
                 "precribno=\"0\" private=\"0\" quantity=\"45\" read_code=\"di2T.00\" " +
                 "repeat_issue_dates=\"2018-10-09\" repeat_ty=\"R\" rightfp10=\"1\" sensitive_read_code=\"0\" " +
                 "strength=\"500\" subgroup_code=\"CurrentRepeat\" synch_id=\"128\" sysdate=\"2018-10-08T11:22:52\" " +
@@ -63,7 +63,7 @@ class MedicationsFactoryVision: MedicationsFactory() {
                 "extracted_at_ts=\"2018-10-09T12:42:10\" first_prescribed_date=\"2018-10-08T00:00:00\" " +
                 "identity=\"827602937\" inactive=\"0\" master_id=\"4301\" " +
                 "max_issues=\"100\" num_issues=\"1\" operat_id=\"16\" packsize=\"tablet\" parent_id=\"0\" " +
-                "prac_id=\"X00100\" practadmin=\"0\" precribno=\"0\" private=\"0\" quantity=\"45\" " +
+                "prac_id=\"A88888\" practadmin=\"0\" precribno=\"0\" private=\"0\" quantity=\"45\" " +
                 "read_code=\"di2T.00\" repeat_issue_dates=\"2018-10-09\" repeat_ty=\"R\" rightfp10=\"1\" " +
                 "sensitive_read_code=\"0\" strength=\"500\" subgroup_code=\"Acute\" synch_id=\"128\" " +
                 "sysdate=\"2018-10-08T11:22:52\" term_id=\"3001\" topic=\"1\"/>\n"
@@ -80,7 +80,7 @@ class MedicationsFactoryVision: MedicationsFactory() {
                 "first_prescribed_date=\"2018-10-08T00:00:00\" form=\"tab\" identity=\"827602937\" inactive=\"0\" " +
                 "inpractice=\"1\" iosclaim=\"0\" last_issue=\"2018-10-09T00:00:00\" " +
                 "last_prescribed_date=\"$oneMonthAgo\" master_id=\"4301\" max_issues=\"100\" num_issues=\"1\" " +
-                "operat_id=\"16\" packsize=\"tablet\" parent_id=\"0\" prac_id=\"X00100\" practadmin=\"0\" " +
+                "operat_id=\"16\" packsize=\"tablet\" parent_id=\"0\" prac_id=\"A88888\" practadmin=\"0\" " +
                 "precribno=\"0\" private=\"0\" quantity=\"45\" read_code=\"di2T.00\" " +
                 "repeat_issue_dates=\"2018-10-09\" repeat_ty=\"R\" rightfp10=\"1\" sensitive_read_code=\"0\" " +
                 "strength=\"500\" subgroup_code=\"DiscontinuedRepeat\" sysdate=\"2018-10-08T11:22:52\" " +

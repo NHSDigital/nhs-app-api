@@ -5,12 +5,9 @@ journeys:
   appointments:
     provider: im1
   cdssAdmin:
-    serviceDefinition: NHS_ADMIN
-    provider: stubs
+    provider: none
   cdssAdvice:
-    serviceDefinition: NHS_ADVICE
-    conditionsServiceDefinition: NHS_CONDITION_LIST
-    provider: stubs
+    provider: none
   coronavirusInformation: true
   documents: false
   im1Messaging:

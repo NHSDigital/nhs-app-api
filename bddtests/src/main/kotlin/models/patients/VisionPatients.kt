@@ -35,8 +35,8 @@ class VisionPatients {
         }
 
         private val adreynCanonIm1ConnectionToken = Im1ConnectionToken(
-                im1CacheKey = "aHQMSopfOJlA5vk4zLJJfKEynO8ApadWcwZExxmhfXll0Eahv" +
-                        "bnqSg6GEL6h2vjze3egwyTNIp68Q5GT5o3CAg==",
+                im1CacheKey = "+V25XjelrLSCa2M75/907Rb14CiDVmw1sKgHp4uufdc" +
+                        "R0nfGxdscKYbcXxl7HSqa/kIR2KzZJDJprQfdQ5noOQ==",
                 rosuAccountId = "104969",
                 apiKey = "h4h9869kj3ytz6427y7rctkdy3zkpxcncnh" +
                         "vfph76g2h6p9gywjq484c9ghan8tt"

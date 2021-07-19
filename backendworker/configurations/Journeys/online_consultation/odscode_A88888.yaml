@@ -1,9 +1,7 @@
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
-  odsCodes: 
-   - X00100
-   - XXXXXX
-journeys:
+  odsCode: "A88888"
+journeys:  
   cdssAdvice:
     provider: stubs
     serviceDefinition: NHS_ADVICE

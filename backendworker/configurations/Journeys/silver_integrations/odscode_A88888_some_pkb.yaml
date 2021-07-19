@@ -1,0 +1,18 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "A88888"
+journeys:
+  silverIntegrations:
+    healthTrackers:
+      - pkb
+    libraries:
+      - pkb
+    medicines:
+      - pkb
+    messages:
+      - pkb
+      - testSilverThirdPartyProvider
+    recordSharing:
+      - pkb
+    secondaryAppointments:
+      - pkb

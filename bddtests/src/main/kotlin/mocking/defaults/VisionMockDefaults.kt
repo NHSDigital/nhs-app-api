@@ -18,7 +18,7 @@ class VisionMockDefaults{
 
     companion object {
 
-        const val DEFAULT_ODS_CODE_VISION: String = "X00100"
+        const val DEFAULT_ODS_CODE_VISION: String = "A88888"
 
         val patientVision = Patient.getDefault(Supplier.VISION)
 
