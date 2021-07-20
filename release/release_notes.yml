@@ -3,7 +3,7 @@ name: Release-notes-$(Build.SourceBranchName)-$(Date:yyyyMMdd)_$(Rev:r)
 trigger:
   tags:
     include:
-    - '*'
+    - v*
 
 pool:
   vmImage: 'ubuntu-18.04'
