@@ -37,6 +37,7 @@ class SessionExpiryStepDefinitions  {
         val supplier = Supplier.valueOf(gpSystem)
         val patient = Patient.getDefault(supplier).copy(linkedAccounts = setOf())
         val redirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
+        val ssoRedirectUri = GlobalSerenityHelpers.GP_SESSION_REDIRECT_URI.getOrFail<String>()
 
         CitizenIdSessionCreateJourney().createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
@@ -47,6 +48,12 @@ class SessionExpiryStepDefinitions  {
                         authCode = patient.authCode,
                         codeVerifier = patient.codeVerifier,
                         redirectUrl = redirectUri))
+
+        Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
+                .postSessionConnection(UserSessionRequest(
+                        authCode = patient.authCode,
+                        codeVerifier = patient.codeVerifier,
+                        redirectUrl = ssoRedirectUri))
 
         val patientConfig = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
                 .getPatientLinkedAccountsConfiguration()

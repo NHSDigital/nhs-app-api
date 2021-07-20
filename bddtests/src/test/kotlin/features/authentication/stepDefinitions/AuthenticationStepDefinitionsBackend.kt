@@ -11,6 +11,7 @@ import mocking.defaults.EmisMockDefaults
 import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import models.Patient
+import net.serenitybdd.core.Serenity
 import org.apache.commons.lang3.StringUtils
 import org.junit.Assert
 import utils.GlobalSerenityHelpers
@@ -76,13 +77,16 @@ class AuthenticationStepDefinitionsBackend {
 
     @Given("^I have valid OAuth details and the EMIS session endpoint fails to create$")
     fun iHaveValidOAuthDetailsAndEmisSessionEndpointFails() {
-        CitizenIdSessionCreateJourney().createFor(EmisMockDefaults.patientEmis)
+        val patient = EmisMockDefaults.patientEmis
+        CitizenIdSessionCreateJourney().createFor(patient)
         mockingClient.forEmis.mock {
             authentication.endUserSessionRequest()
                     .respondWithSuccess(EmisMockDefaults.patientEmis.endUserSessionId)
         }
         mockingClient.forEmis.mock {
             authentication.sessionRequest(EmisMockDefaults.patientEmis).respondWithServerError() }
+
+        setupSsoSessionConnection(patient)
     }
 
     @Given("^I have valid OAuth details and (.*) is not available$")
@@ -91,20 +95,25 @@ class AuthenticationStepDefinitionsBackend {
         val patient = Patient.getDefault(supplier)
         CitizenIdSessionCreateJourney().createFor(patient)
         AuthenticationFactory.getForSupplier(supplier).validOAuthDetailsAndGpSystemUnavailable(patient)
+        setupSsoSessionConnection(patient)
     }
 
     @Given("^I have valid OAuth details and (.*) returns a Bad Gateway response$")
     fun iHaveValidOAuthDetailsAndGpSystemReturnsBadGateway(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier)
         CitizenIdSessionCreateJourney().createFor(Patient.getDefault(supplier))
         AuthenticationFactory.getForSupplier(supplier).validOAuthDetailsAndGpSystemBadGateway()
+        setupSsoSessionConnection(patient)
     }
 
     @Given("^I have valid OAuth details and (.*) returns with an incomplete response$")
     fun iHaveValidOAuthDetailsAndGpSystemReturnsAnIncompleteResponse(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier)
         CitizenIdSessionCreateJourney().createFor(Patient.getDefault(supplier))
-        AuthenticationFactory.getForSupplier(supplier).patientWithIncompleteResponse(Patient.getDefault(supplier))
+        AuthenticationFactory.getForSupplier(supplier).patientWithIncompleteResponse(patient)
+        setupSsoSessionConnection(patient)
     }
 
     @Given("^I have valid OAuth details and CID connection token fails to authenticate with (.*)$")
@@ -117,10 +126,13 @@ class AuthenticationStepDefinitionsBackend {
     @Given("^I have valid OAuth details and (.*) fails to respond in (\\d+) seconds$")
     fun iHaveValidOAuthDetailsAndEmisFailsToRespondInXSeconds(gpSystem: String, delayBySeconds: Int) {
         val supplier = Supplier.valueOf(gpSystem)
-        CitizenIdSessionCreateJourney().createFor(Patient.getDefault(supplier))
+        val patient = Patient.getDefault(supplier)
+        CitizenIdSessionCreateJourney().createFor(patient)
 
         AuthenticationFactory.getForSupplier(supplier)
                 .validOAuthDetailsAndGpSystemSlowToRespond(delayBySeconds.toLong())
+
+        setupSsoSessionConnection(patient)
     }
 
     @When("^I create a user session$")
@@ -216,5 +228,15 @@ class AuthenticationStepDefinitionsBackend {
             }
         }
         return cookieParams
+    }
+
+
+    private fun setupSsoSessionConnection(patient: Patient) {
+        val ssoRedirectUri = GlobalSerenityHelpers.GP_SESSION_REDIRECT_URI.getOrFail<String>()
+        Assert.assertNotNull(Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
+                .postSessionConnection(UserSessionRequest(
+                        authCode = patient.authCode,
+                        codeVerifier = patient.codeVerifier,
+                        redirectUrl = ssoRedirectUri)))
     }
 }

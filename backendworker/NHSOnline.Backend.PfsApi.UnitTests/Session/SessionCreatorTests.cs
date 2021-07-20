@@ -692,51 +692,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
         }
 
         [TestMethod]
-        public async Task CreateGpSessionOnDemand_NhsLoginIdMismatch_ReturnsErrorResult()
-        {
-            // Arrange
-            var auditStub = ArrangeAudit();
-
-            Context.ArrangeAntiforgery();
-            Context.ArrangeCitizenIdService();
-            Context.ArrangeOdsCodeMassager();
-            Context.ArrangeGpSystemFactory();
-            Context.ArrangeSessionCacheService();
-
-            Context.Data.SessionConfigSettings.ProxyEnabled = true;
-
-            Context.Data.EmisUserSession.ProxyPatients = new List<EmisProxyUserSession>
-            {
-                new EmisProxyUserSession()
-            };
-
-            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Success(Context.Data.EmisUserSession));
-
-            ArrangeDifferentNhsLoginIds();
-
-            // Act
-            var result = await CreateSystemUnderTest().CreateGpSessionOnDemand(Context.Data.CreateGpSessionOnDemandRequest);
-
-            // Assert
-            using (new AssertionScope())
-            {
-                var errorResult = result.Should().BeAssignableTo<CreateSessionResult.ErrorResult>().Subject;
-
-                errorResult.ErrorTypes.Category.Should().Be(ErrorCategory.Login);
-                errorResult.ErrorTypes.Prefix.Should().BeEquivalentTo("3c");
-                errorResult.ErrorTypes.SourceApi.Should().Be(SourceApi.None);
-                errorResult.ErrorTypes.StatusCode.Should().Be(403);
-
-                auditStub.AccessTokenString.Should().Be(Context.Data.CitizenIdSessionResult.Session.AccessToken);
-                auditStub.NhsNumber.Should().Be(Context.Data.UserProfile.NhsNumber);
-                auditStub.Supplier.Should().Be(Supplier.Unknown);
-                auditStub.Operation.Should().Be("CitizenId_Session_Create");
-                auditStub.Details.Should().Be("Create Citizen Id Session");
-                auditStub.ResponseDetails.Should().Be("Created Citizen Id Session 200");
-            }
-        }
-
-        [TestMethod]
         public async Task CreateGpSessionOnDemand_CIDUserProfileCallReturnsBadRequest_ReturnsLoginBadRequestError()
         {
             // Arrange

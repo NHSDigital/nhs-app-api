@@ -86,6 +86,10 @@ open class HomeSteps {
         homePage.assertUnreadIndicatorPresent()
     }
 
+    fun assertUnreadMessageIndicatorIsNotDisplayed() {
+        homePage.assertUnreadIndicatorNotPresent()
+    }
+
     private fun getExpectedProxyDetails(proxyPatient: LinkedProfileFacade): ArrayList<String> {
         return arrayListOf(
                 "Name: ${proxyPatient.profile.formattedFullName(true)}",

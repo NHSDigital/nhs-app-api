@@ -13,7 +13,6 @@ import utils.getOrFail
 import utils.isTrueOrFalse
 import utils.set
 import utils.SerenityHelpers
-import worker.models.patient.Im1ConnectionToken
 
 private const val DELAY_BY = 1000L
 class CitizenIdSessionCreateJourney {
@@ -24,24 +23,22 @@ class CitizenIdSessionCreateJourney {
         if (!GlobalSerenityHelpers.CITIZEN_ID_SESSION_CREATED.isTrueOrFalse() || alternativeUser) {
             val accessToken = createMockingSteps(patient)
 
-            val isDecoupled = SerenityHelpers.getValueOrNull<Boolean>("DECOUPLED")
-            if (isDecoupled == null) {
-                mockingClient.forCitizenId.mock {
-                    userInfoRequest(accessToken).respondWithSuccess(patient, hasNullToken)
-                }
-            }
-            else {
-                mockingClient.forCitizenId.mock {
-                    userInfoRequest(accessToken).respondWithSuccess(patient, true)
-                            .inScenario("DECOUPLED")
-                            .willSetStateTo("DECOUPLED_LOGIN_COMPLETE")
-                }
+            mockingClient.favicon()
 
-                mockingClient.forCitizenId.mock {
-                    userInfoRequest(accessToken).respondWithSuccess(patient, false)
-                            .inScenario("DECOUPLED")
-                            .whenScenarioStateIs("DECOUPLED_LOGIN_COMPLETE")
-                }
+            mockingClient.forCitizenId.mock {
+                userInfoRequest(accessToken).respondWithSuccess(patient, true)
+                        .inScenario("ON_DEMAND")
+                        .willSetStateTo("SSO")
+            }
+
+            val nhsLoginPatientSubjectOverride =
+                SerenityHelpers.getValueOrNull<String>("NHS_LOGIN_PATIENT_SUBJECT_OVERRIDE")
+
+            mockingClient.forCitizenId.mock {
+                userInfoRequest(accessToken)
+                    .respondWithSuccess(patient, hasNullToken, nhsLoginPatientSubjectOverride)
+                        .inScenario("ON_DEMAND")
+                        .whenScenarioStateIs("SSO")
             }
 
             GlobalSerenityHelpers.CITIZEN_ID_SESSION_CREATED.set(true)
@@ -100,16 +97,6 @@ class CitizenIdSessionCreateJourney {
         return idToken
     }
 
-    fun createInvalidAuthenticationTokenFor(patient: Patient) {
-        val accessToken = createMockingSteps(patient)
-
-        mockingClient.forCitizenId.mock {
-            userInfoRequest(accessToken).respondWithSuccess(patient
-                    .copy(im1ConnectionToken =
-                    Im1ConnectionToken("Invalid", "invalid")))
-        }
-    }
-
     private fun createMockingSteps(patient: Patient): String {
         val loginRedirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
         val gpSessionRedirectUri = GlobalSerenityHelpers.GP_SESSION_REDIRECT_URI.getOrFail<String>()
@@ -120,8 +107,8 @@ class CitizenIdSessionCreateJourney {
         }
 
         mockingClient.forCitizenId.mock {
-            initialLoginRequest(patient, gpSessionRedirectUri, Config.instance.cidClientId)
-                    .respondWithLoginPage()
+            ssoLoginRequest(patient, gpSessionRedirectUri, Config.instance.cidClientId)
+                    .respondWithRedirectURI()
         }
 
         mockingClient.forCitizenId.mock {
@@ -159,7 +146,7 @@ class CitizenIdSessionCreateJourney {
 
         mockingClient.forCitizenId.mock {
             tokenRequest(patient.codeVerifier, patient.authCode, gpSessionRedirectUri)
-                    .respondWithSuccess(accessToken = accessToken, idToken = idToken)
+                    .respondWithNhsAppCredentialsSuccess(accessToken = accessToken, idToken = idToken)
         }
 
         mockingClient.forCitizenId.mock {

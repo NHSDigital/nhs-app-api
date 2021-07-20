@@ -34,6 +34,7 @@ open class SharedStepDefinitionsBackend{
         val patient = SerenityHelpers.getPatientOrNull() ?: Patient.getDefault(gpSystem)
         val isProofLevel9 = patient.identityProofingLevel == IdentityProofingLevel.P9
         val redirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
+        val ssoRedirectUri = GlobalSerenityHelpers.GP_SESSION_REDIRECT_URI.getOrFail<String>()
         CitizenIdSessionCreateJourney().createFor(patient)
 
         if (isProofLevel9) {
@@ -45,6 +46,12 @@ open class SharedStepDefinitionsBackend{
                         authCode = patient.authCode,
                         codeVerifier = patient.codeVerifier,
                         redirectUrl = redirectUri))
+
+        Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
+                .postSessionConnection(UserSessionRequest(
+                        authCode = patient.authCode,
+                        codeVerifier = patient.codeVerifier,
+                        redirectUrl = ssoRedirectUri))
 
         if( isProofLevel9 ) {
             DemographicsFactory

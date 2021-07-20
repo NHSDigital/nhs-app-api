@@ -308,6 +308,10 @@ Feature: View Available Appointment Slots Frontend
     #    GP System agnostic scenario, so only need to test with EMIS
     Given there are available EMIS appointment slots with different criteria but there is a slight delay in retrieving them
     And I am logged in
+    When I navigate to Appointments
+    Then the Appointments Hub page is displayed
+    And I click the GP Appointments link
+    And the Your Appointments page is displayed
     When I retrieve the 'Appointment Booking' page directly
     Then I retrieve the 'Your Prescriptions' page directly
     And I wait for 5 seconds

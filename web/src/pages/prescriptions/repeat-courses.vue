@@ -129,6 +129,7 @@ import MessageList from '@/components/widgets/MessageList';
 import RepeatPrescription from '@/components/RepeatPrescription';
 import PrescriptionErrors from '@/components/errors/pages/prescriptions/PrescriptionsErrors';
 import CollapsibleDetails from '@/components/widgets/collapsible/CollapsibleDetails';
+import sjrIf from '@/lib/sjrIf';
 
 import {
   NOMINATED_PHARMACY_CHECK_PATH,
@@ -145,6 +146,15 @@ import vueScrollTo from 'vue-scrollto';
 const loadData = async (store) => {
   if (!store.state.repeatPrescriptionCourses.hasLoaded) {
     await store.dispatch('repeatPrescriptionCourses/load');
+  }
+
+  if (sjrIf({ $store: store, journey: 'nominatedPharmacy' })) {
+    store.dispatch('nominatedPharmacy/clearInterruptBackTo');
+
+    if (store.state.nominatedPharmacy.hasLoaded === false) {
+      store.dispatch('nominatedPharmacy/clear');
+      await store.dispatch('nominatedPharmacy/load');
+    }
   }
 
   const { error } = store.state.repeatPrescriptionCourses;

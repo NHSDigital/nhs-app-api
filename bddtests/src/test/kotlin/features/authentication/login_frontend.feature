@@ -31,8 +31,7 @@ Feature: Login frontend
     Then I see my Name on the home page
 
   Scenario: A TPP user can see the home page after logging in with a null response body and OnDemand enabled
-    Given I have a Decoupled GP User Session
-    And I am a TPP patient with a null response body
+    Given I am a TPP patient with a null response body
     And I am logged in
     Then I see my Name on the home page
 

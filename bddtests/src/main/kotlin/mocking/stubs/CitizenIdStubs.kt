@@ -17,6 +17,11 @@ class CitizenIdStubs(private val mockingClient: MockingClient) {
         }
 
         mockingClient.forCitizenId.mock {
+            ssoLoginRequest(patient,".*", Config.instance.cidClientId,"matches")
+                    .respondWithRedirectURI()
+        }
+
+        mockingClient.forCitizenId.mock {
             createAccountRequest()
                     .respondWithLoginPage()
         }

@@ -83,6 +83,7 @@ class ServiceJourneyRulesStepDefinitions {
         val gpSystem = SerenityHelpers.getGpSupplier()
         val patient = SerenityHelpers.getPatient()
         val redirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
+        val ssoRedirectUri = GlobalSerenityHelpers.GP_SESSION_REDIRECT_URI.getOrFail<String>()
         CitizenIdSessionCreateJourney().createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(gpSystem).createFor(patient)
         Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
@@ -90,6 +91,12 @@ class ServiceJourneyRulesStepDefinitions {
                         authCode = patient.authCode,
                         codeVerifier = patient.codeVerifier,
                         redirectUrl = redirectUri))
+
+        Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
+                .postSessionConnection(UserSessionRequest(
+                        authCode = patient.authCode,
+                        codeVerifier = patient.codeVerifier,
+                        redirectUrl = ssoRedirectUri))
     }
 
     @Then("^the service journey rules response will have appointments set to (\\w+)$")

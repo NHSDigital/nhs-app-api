@@ -19,7 +19,9 @@ Feature: Patient to practice messaging
     Given I am a <GP System> user who can access patient practice messaging
     And there is a forbidden error getting patient practice messages
     And I am logged in
-    And I navigate to the Patient Practice Messaging page
+    When I follow the Messages link from the home page
+    Then the Messages Hub page is displayed
+    And I click on the patient practice Messages link on the Messages Hub page
     And I see the appropriate forbidden error for patient practice messaging
     Examples:
       | GP System |
@@ -30,7 +32,9 @@ Feature: Patient to practice messaging
     Given I am an EMIS user who can access patient practice messaging
     And I have patient practice messages in my inbox, some of which are unread
     And I am logged in
-    And I navigate to the Patient Practice Messaging page
+    When I follow the Messages link from the home page
+    Then the Messages Hub page is displayed
+    And I click on the patient practice Messages link on the Messages Hub page
     When I click the Send a message button and I choose that I do not need urgent advice via patient practice messaging
     Then I see the patient practice messaging recipients page
     And I see a list of patient practice messaging recipients
@@ -40,12 +44,13 @@ Feature: Patient to practice messaging
     And I click send message
     And I see validation errors for subject and message
 
-
-  Scenario Outline: A user sees a message indicating that they have no recipients for patient practice messaging
+  Scenario Outline: A <GP System> user sees a message indicating that they have no recipients for patient practice messaging
     Given I am a <GP System> user who can access patient practice messaging
     And I have patient practice messages in my inbox, some of which are unread
     And I am logged in
-    And I navigate to the Patient Practice Messaging page
+    When I follow the Messages link from the home page
+    Then the Messages Hub page is displayed
+    And I click on the patient practice Messages link on the Messages Hub page
     And I have no recipients for patient practice messaging
     When I click the Send a message button on the patient practice messaging inbox
     Then I see a message indicating that I have no recipients for patient practice messaging
@@ -58,7 +63,7 @@ Feature: Patient to practice messaging
     Given I am a TPP user who can access patient practice messaging
     And I have patient practice messages in my inbox, some of which are unread
     And I am logged in
-    When I follow the unread messages link from the home page
+    When I follow the Messages link from the home page
     Then the Messages Hub page is displayed
     And I click on the patient practice Messages link on the Messages Hub page
     And the patient to practice inbox page is displayed
@@ -72,7 +77,7 @@ Feature: Patient to practice messaging
     Given I am an EMIS user who can access patient practice messaging
     And I have patient practice messages in my inbox, some of which are unread
     And I am logged in
-    When I follow the unread messages link from the home page
+    When I follow the Messages link from the home page
     Then the Messages Hub page is displayed
     And I click on the patient practice Messages link on the Messages Hub page
     And the patient to practice inbox page is displayed
@@ -90,7 +95,7 @@ Feature: Patient to practice messaging
     Given I am an EMIS user who can access patient practice messaging
     And I have patient practice messages in my inbox, some of which are unread
     And I am logged in
-    When I follow the unread messages link from the home page
+    When I follow the Messages link from the home page
     Then the Messages Hub page is displayed
     And I click on the patient practice Messages link on the Messages Hub page
     And the patient to practice inbox page is displayed
@@ -110,15 +115,15 @@ Feature: Patient to practice messaging
     Given I am an EMIS user who can access patient practice messaging
     And I have patient practice messages in my inbox, some of which are unread
     And I am logged in
-    And I can see I have unread messages on the home page
-    When I follow the unread messages link from the home page
+    And I cannot tell if I have unread messages on the home page
+    When I follow the Messages link from the home page
     Then the Messages Hub page is displayed with the unread indicator for GP messaging
 
   Scenario Outline: A TPP patient can send a patient practice message to a <Recipient Type> recipient
     Given I am a TPP user who can access patient practice messaging
     And I want to send a message to a <Recipient Type> recipient and have unread messages in my inbox
     And I am logged in
-    When I follow the unread messages link from the home page
+    When I follow the Messages link from the home page
     Then the Messages Hub page is displayed
     And I click on the patient practice Messages link on the Messages Hub page
     And the patient to practice inbox page is displayed
@@ -139,7 +144,7 @@ Feature: Patient to practice messaging
     Given I am a TPP user who can access patient practice messaging
     And I have patient practice messages in my inbox, some of which are unread
     And I am logged in
-    When I follow the unread messages link from the home page
+    When I follow the Messages link from the home page
     Then the Messages Hub page is displayed
     And I click on the patient practice Messages link on the Messages Hub page
     And the patient to practice inbox page is displayed
@@ -150,7 +155,7 @@ Feature: Patient to practice messaging
     Given I am a TPP user who can access patient practice messaging
     And I have patient practice messages in my inbox, some of which are unread
     And I am logged in
-    When I follow the unread messages link from the home page
+    When I follow the Messages link from the home page
     Then the Messages Hub page is displayed
     And I click on the patient practice Messages link on the Messages Hub page
     And the patient to practice inbox page is displayed
@@ -173,7 +178,7 @@ Feature: Patient to practice messaging
     Given I am a TPP user who can access patient practice messaging
     And I have patient practice messages in my inbox, some of which are unread with an attachment
     And I am logged in
-    When I follow the unread messages link from the home page
+    When I follow the Messages link from the home page
     Then the Messages Hub page is displayed
     And I click on the patient practice Messages link on the Messages Hub page
     And the patient to practice inbox page is displayed
@@ -190,7 +195,7 @@ Feature: Patient to practice messaging
     And the Patient has no access to Documents
     And I have patient practice messages in my inbox, some of which are unread with an attachment
     And I am logged in
-    When I follow the unread messages link from the home page
+    When I follow the Messages link from the home page
     Then the Messages Hub page is displayed
     And I click on the patient practice Messages link on the Messages Hub page
     And the patient to practice inbox page is displayed
@@ -205,7 +210,7 @@ Feature: Patient to practice messaging
     And I am a TPP user who can access patient practice messaging
     And I have patient practice messages in my inbox, some of which are unread with an attachment
     And I am logged in
-    When I follow the unread messages link from the home page
+    When I follow the Messages link from the home page
     Then the Messages Hub page is displayed
     And I click on the patient practice Messages link on the Messages Hub page
     And the patient to practice inbox page is displayed
@@ -224,7 +229,7 @@ Feature: Patient to practice messaging
     And I have patient practice messages in my inbox, some of which are unread with an attachment
     And I am logged in
     And that attachment is invalid
-    When I follow the unread messages link from the home page
+    When I follow the Messages link from the home page
     Then the Messages Hub page is displayed
     And I click on the patient practice Messages link on the Messages Hub page
     And the patient to practice inbox page is displayed
@@ -263,7 +268,7 @@ Feature: Patient to practice messaging
     Given I am an EMIS user who can access patient practice messaging
     And I have patient practice messages in my inbox, some of which are unread
     And I am logged in
-    When I follow the unread messages link from the home page
+    When I follow the Messages link from the home page
     Then the Messages Hub page is displayed
     And I click on the patient practice Messages link on the Messages Hub page
     And the patient to practice inbox page is displayed
@@ -283,7 +288,7 @@ Feature: Patient to practice messaging
     Given I am an EMIS user who can access patient practice messaging
     And I have patient practice messages in my inbox, some of which are unread
     And I am logged in
-    When I follow the unread messages link from the home page
+    When I follow the Messages link from the home page
     Then the Messages Hub page is displayed
     And I click on the patient practice Messages link on the Messages Hub page
     And the patient to practice inbox page is displayed
@@ -336,7 +341,9 @@ Feature: Patient to practice messaging
     Given I am an EMIS user who can access patient practice messaging
     And I have patient practice messages in my inbox, all of which are read
     And I am logged in
-    And I navigate to the Patient Practice Messaging page
+    When I follow the Messages link from the home page
+    Then the Messages Hub page is displayed
+    And I click on the patient practice Messages link on the Messages Hub page
     When I click the Send a message button and I choose that I need urgent advice via patient practice messaging
     Then I see the patient practice messaging urgency contact your gp page
     And I see a message explaining patient practice messaging is not for urgent advice
@@ -345,7 +352,9 @@ Feature: Patient to practice messaging
     Given I am an EMIS user who can access patient practice messaging
     And I have patient practice messages in my inbox, all of which are read
     And I am logged in
-    And I navigate to the Patient Practice Messaging page
+    When I follow the Messages link from the home page
+    Then the Messages Hub page is displayed
+    And I click on the patient practice Messages link on the Messages Hub page
     When I click the Send a message button and I choose that I do not need urgent advice via patient practice messaging
     Then I see the patient practice messaging recipients page
     And I see a list of patient practice messaging recipients

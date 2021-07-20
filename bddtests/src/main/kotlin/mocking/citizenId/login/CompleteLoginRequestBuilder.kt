@@ -23,6 +23,7 @@ class CompleteLoginRequestBuilder(val patient: Patient, customId: String? = null
         } else {
             "{{request.query.redirect_uri}}"
         }
+
         return redirectTo(
                 "${redirectUri}?state={{request.query.state}}&code=" +
                         patient.authCode)

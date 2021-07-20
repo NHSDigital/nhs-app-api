@@ -1,7 +1,7 @@
 @my-record
 Feature: Medical Record Errors
 
-  Scenario Outline: A user has no GP session and sees a reference code when navigating to medical record
+  Scenario Outline: A <GP System> user has no GP session and sees a reference code when navigating to medical record
     Given I have valid OAuth details and <GP System> fails to respond in 31 seconds
     And I am logged in
     When I retrieve the 'gp medical record' page directly

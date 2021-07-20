@@ -1,30 +1,34 @@
 package features.gpSessionOnDemand.stepDefinitions
 
+import constants.Supplier
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
-import pages.ErrorDialogPage
+import models.Patient
+import net.serenitybdd.core.Serenity
+import org.junit.Assert
+import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
-import pages.loggedOut.LoginStubPage
+import utils.getOrFail
+import worker.WorkerClient
+import worker.models.session.UserSessionRequest
 
 class GpSessionOnDemandStepDefinitions {
-    private lateinit var loginStubPage: LoginStubPage
-    private lateinit var errorDialogPage: ErrorDialogPage
 
-    @Given("^I have a Decoupled GP User Session$")
-    fun iHaveADecoupledGpUserSession() {
-        SerenityHelpers.setSerenityVariableIfNotAlreadySet("DECOUPLED", true)
+    @Then("^NHS Login returns an invalid Subject upon establishing a (.*) GP session$")
+    fun nhsLoginReturnsAnInvalidSubjectUponEstablishingAGPSession(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        SerenityHelpers.setSerenityVariableIfNotAlreadySet(
+            "NHS_LOGIN_PATIENT_SUBJECT_OVERRIDE", "invalid-${Patient.getDefault(supplier).subject}")
     }
 
-    @Then("^I SSO to NhsLogin$")
-    fun iSsoToNhsLogin() {
-        loginStubPage.signIn(SerenityHelpers.getPatient())
-    }
-
-    @Then("^I see the generic try again error message$")
-    fun iSeeTheGenericTryAgainErrorMessage() {
-        errorDialogPage
-            .assertParagraphText("This service is unavailable, it may be a temporary problem.")
-            .assertPageHeader("Sorry, there is a problem")
-            .assertPageTitle("Sorry, there is a problem")
+    @Given("^I have a valid GP Session$")
+    fun iHaveAValidGpSession() {
+        val patient = SerenityHelpers.getPatient()
+        val ssoRedirectUri = GlobalSerenityHelpers.GP_SESSION_REDIRECT_URI.getOrFail<String>()
+        Assert.assertNotNull(Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
+                .postSessionConnection(UserSessionRequest(
+                        authCode =patient.authCode,
+                        codeVerifier = patient.codeVerifier,
+                        redirectUrl = ssoRedirectUri)))
     }
 }

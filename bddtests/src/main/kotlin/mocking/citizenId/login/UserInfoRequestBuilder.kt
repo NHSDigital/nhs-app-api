@@ -17,7 +17,10 @@ class UserInfoRequestBuilder(
                 .andHeader("Authorization", "Bearer $accessToken", "contains")
     }
 
-    fun respondWithSuccess(patient: Patient, nullToken: Boolean = false): Mapping {
+    fun respondWithSuccess(
+            patient: Patient,
+            nullToken: Boolean = false,
+            nhsLoginPatientSubjectOverride: String? = null): Mapping {
 
         val im1ConnectionToken = if (patient.im1ConnectionToken == null) {
             patient.connectionToken
@@ -35,9 +38,9 @@ class UserInfoRequestBuilder(
                 GpRegistrationDetails = GpRegistrationDetails(patient.odsCode),
                 GivenName = patient.name.firstName,
                 FamilyName = patient.name.surname,
-                Subject = patient.subject,
-                Email = patient.contactDetails.emailAddress,
-                IdentityProofingLevel = patient.identityProofingLevel.UserInfoValue
+            Subject = nhsLoginPatientSubjectOverride ?: patient.subject,
+            Email = patient.contactDetails.emailAddress,
+            IdentityProofingLevel = patient.identityProofingLevel.UserInfoValue
         )
 
         return respondWith(HttpStatus.SC_OK) {
@@ -48,4 +51,5 @@ class UserInfoRequestBuilder(
     fun respondWithServerError(): Mapping {
         return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) { build() }
     }
+
 }

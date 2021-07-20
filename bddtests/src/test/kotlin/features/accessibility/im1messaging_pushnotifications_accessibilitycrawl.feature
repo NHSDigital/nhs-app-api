@@ -6,6 +6,8 @@ Feature: IM1 Messaging & Push Notifications
     Given I am an EMIS user who can access patient practice messaging
     And I have patient practice messages in my inbox, some of which are unread
     And I am logged in
+    When I follow the Messages link from the home page
+    Then the Messages Hub page is displayed
     And I navigate to the Patient Practice Messaging page
     And the IM_GPMessagesInbox page is saved to disk
     When I click the Send a message button and I choose that I do not need urgent advice via patient practice messaging
@@ -32,6 +34,8 @@ Feature: IM1 Messaging & Push Notifications
     Given I am an EMIS user who can access patient practice messaging
     And I have patient practice messages in my inbox, some of which are unread
     And I am logged in
+    When I follow the Messages link from the home page
+    Then the Messages Hub page is displayed
     And I navigate to the Patient Practice Messaging page
     When I click the Send a message button and I choose that I need urgent advice via patient practice messaging
     Then the IM_CallYourGPOrUseNHS111 page is saved to disk
@@ -40,6 +44,8 @@ Feature: IM1 Messaging & Push Notifications
     Given I am an EMIS user who can access patient practice messaging
     And I have no patient practice messages in my inbox
     And I am logged in
+    When I follow the Messages link from the home page
+    Then the Messages Hub page is displayed
     When I navigate to the Patient Practice Messaging page
     Then the IM_MessagesInbox_NoMessages page is saved to disk
 
@@ -47,7 +53,7 @@ Feature: IM1 Messaging & Push Notifications
     Given I am a TPP user who can access patient practice messaging
     And I have patient practice messages in my inbox, some of which are unread with an attachment
     And I am logged in
-    When I follow the unread messages link from the home page
+    When I follow the Messages link from the home page
     Then the Messages Hub page is displayed
     And I click on the patient practice Messages link on the Messages Hub page
     And the patient to practice inbox page is displayed
@@ -64,7 +70,7 @@ Feature: IM1 Messaging & Push Notifications
     And I have patient practice messages in my inbox, some of which are unread with an attachment
     And I am logged in
     And that attachment is invalid
-    When I follow the unread messages link from the home page
+    When I follow the Messages link from the home page
     Then the Messages Hub page is displayed
     And I click on the patient practice Messages link on the Messages Hub page
     And the patient to practice inbox page is displayed
@@ -80,6 +86,8 @@ Feature: IM1 Messaging & Push Notifications
     Given I am a TPP user who can access patient practice messaging
     And I have patient practice messages in my inbox, some of which are unread
     And I am logged in
+    When I follow the Messages link from the home page
+    Then the Messages Hub page is displayed
     And I navigate to the Patient Practice Messaging page
     And I have no recipients for patient practice messaging
     When I click the Send a message button on the patient practice messaging inbox

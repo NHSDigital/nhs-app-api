@@ -27,7 +27,6 @@ import net.thucydides.core.annotations.Steps
 import pages.navigation.WebHeader
 import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
-
 import utils.set
 import webdrivers.options.OptionManager
 import webdrivers.options.nojs.NoJsOption

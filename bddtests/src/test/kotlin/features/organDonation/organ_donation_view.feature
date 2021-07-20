@@ -148,6 +148,7 @@ Feature: Organ Donation View Frontend
   Scenario Outline: A user when navigating to Organ Donation, but OD returns a <Error Code> recoverable error when retrieving reference data, is shown an error message and can retry
     Given I am using the native app user agent
     And I am a EMIS user registered with OD, but the ReferenceData call returns recoverable <Error Code> error
+    And I have a valid GP Session
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I see an appropriate Organ Donation error message with a retry option

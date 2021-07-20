@@ -274,12 +274,20 @@ class Im1ConnectionV1StepDefinitionsBackend {
     @When("^I have logged in with the user associated with the IM1 Connection Token$")
     fun loggedInWithTheUserAssociatedWithTheIm1ConnectionToken() {
         val patient = SerenityHelpers.getPatient()
+
         val redirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
         Assert.assertNotNull(Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
                 .postSessionConnection(UserSessionRequest(
                         authCode = patient.authCode,
                         codeVerifier = patient.codeVerifier,
                         redirectUrl = redirectUri)))
+
+        val ssoRedirectUri = GlobalSerenityHelpers.GP_SESSION_REDIRECT_URI.getOrFail<String>()
+        Assert.assertNotNull(Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
+                .postSessionConnection(UserSessionRequest(
+                        authCode = patient.authCode,
+                        codeVerifier = patient.codeVerifier,
+                        redirectUrl = ssoRedirectUri)))
     }
 
     @Then("^the response has the expected connection token$")

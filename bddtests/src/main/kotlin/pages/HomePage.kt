@@ -100,6 +100,10 @@ class HomePage : HybridPageObject() {
         unreadIndicator.assertIsVisible()
     }
 
+    fun assertUnreadIndicatorNotPresent() {
+        unreadIndicator.assertElementNotPresent()
+    }
+
     fun assertPatientDetailIsVisible(detail:String, value: String) {
         val element = getPatientDetailElement(detail).assertIsVisible()
         assertEquals("Expected $detail to be $value", value, element.text)

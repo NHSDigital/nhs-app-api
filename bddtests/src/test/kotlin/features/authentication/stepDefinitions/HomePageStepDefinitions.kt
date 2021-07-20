@@ -68,6 +68,11 @@ class HomePageStepDefinitions {
         homeSteps.assertUnreadMessageIndicatorIsDisplayed()
     }
 
+    @When("^I cannot tell if I have unread messages on the home page$")
+    fun iCannotTellIfIHaveUnreadMessagesOnTheHomePage() {
+        homeSteps.assertUnreadMessageIndicatorIsNotDisplayed()
+    }
+
     @Then("^I see the home page$")
     fun iSeeTheHomePage() {
         homeSteps.assertHeaderVisible()
