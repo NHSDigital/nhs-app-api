@@ -12,8 +12,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private string OptionalLinkText => _link != null ? $" {_link} links" : " links";
 
-        private AndroidSystemLabel OpenWithAppChoiceText => AndroidSystemLabel.WhichMatches(_driver,
-            $"Open({OptionalLinkText})? with");
+        private AndroidSystemLabel OpenWithRequiresAppChoiceText => AndroidSystemLabel.WhichMatches(_driver,
+            $"Open({OptionalLinkText})? with(?! {_targetApp}).*");
 
         private AndroidSystemLabel OpenWithPreselectedAppText =>
             AndroidSystemLabel.WhichMatches(_driver, $"Open({OptionalLinkText})? with {_targetApp}");
@@ -35,7 +35,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             IsDisplayed().Should().BeTrue("expected android app choice to be displayed");
         }
 
-        public bool IsDisplayed() => OpenWithAppChoiceText.IsPresent() || OpenWithPreselectedAppText.IsPresent();
+        public bool IsDisplayed() => OpenWithRequiresAppChoiceText.IsPresent() || OpenWithPreselectedAppText.IsPresent();
 
         public void ChooseTargetApp()
         {
@@ -43,7 +43,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             {
                 UseSelectedApp();
             }
-            else if (OpenWithAppChoiceText.IsPresent())
+            else if (OpenWithRequiresAppChoiceText.IsPresent())
             {
                 SelectAndUseApp();
             }
