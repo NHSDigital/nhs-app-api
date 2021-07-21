@@ -51,7 +51,11 @@ namespace NHSOnline.App.NhsLogin
             var authoriseUri = NhsLoginUriBuilder.Create(_loginConfig)
                 .Challenge(codes.Challenge, codes.Method)
                 .ClientId("nhs-online")
-                .Scopes("openid", "profile", "nhs_app_credentials", "gp_integration_credentials", "profile_extended")
+#if GP_DECOUPLED
+                .Scopes("openid", "profile", "profile_extended", "gp_registration_details")
+#else
+                .Scopes("openid", "profile", "profile_extended", "nhs_app_credentials", "gp_integration_credentials")
+#endif
                 .VectorsOfTrust("P5.Cp.Cd", "P5.Cp.Ck", "P5.Cm", "P9.Cp.Cd", "P9.Cp.Ck", "P9.Cm")
                 .RedirectUri(authReturnUri)
                 .FidoAuthResponse(fidoAuthResponse)

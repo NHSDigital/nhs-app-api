@@ -17,7 +17,7 @@ namespace NHSOnline.App.Api.Client.Session
 
         public string? AccessToken { get; set; }
 
-        public bool Im1MessagingEnabled { get; set; }
+        public bool? Im1MessagingEnabled { get; set; }
 
         public string? ProofLevel { get; set; }
     }

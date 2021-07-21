@@ -10,7 +10,7 @@ namespace NHSOnline.App.Api.Client.Session
             string? nhsNumber,
             string? dateOfBirth,
             string? accessToken,
-            bool im1MessagingEnabled,
+            bool? im1MessagingEnabled,
             string? proofLevel)
         {
             Name = name;
@@ -38,7 +38,7 @@ namespace NHSOnline.App.Api.Client.Session
 
         public string? AccessToken { get; }
 
-        public bool Im1MessagingEnabled { get; }
+        public bool? Im1MessagingEnabled { get; }
 
         public string? ProofLevel { get; }
     }
