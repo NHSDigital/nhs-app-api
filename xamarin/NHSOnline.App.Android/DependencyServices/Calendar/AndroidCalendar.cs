@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Droid.DependencyServices.Calendar;
-using NHSOnline.App.Droid.Dialogs;
 using NHSOnline.App.Logging;
 using Xamarin.Forms;
 
@@ -14,11 +13,6 @@ namespace NHSOnline.App.Droid.DependencyServices.Calendar
     public class AndroidCalendar: ICalendar
     {
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(AndroidCalendar));
-
-        private const string Title = "Cannot save event";
-        private const string Message = "You can try adding the event to your calendar yourself.";
-        private const string AlertButtonNegativeText = "OK";
-        private const string AlertButtonPositiveText = "Add event";
 
         public void AddToCalendar(AddEventToCalendarRequest request)
         {
@@ -57,12 +51,12 @@ namespace NHSOnline.App.Droid.DependencyServices.Calendar
         {
             Logger.LogInformation("Failed to add to calendar, showing alert dialog");
 
-            AndroidAlertDialog.ShowAlertDialog(
-                Title,
-                Message,
-                negativeButtonText: AlertButtonNegativeText,
-                positiveButtonText: AlertButtonPositiveText,
-                positiveAction: CalendarIntent.StartCalendarFromBlankCalendarIntent);
+            Dialogs.AlertDialogBox.CreateAndShowAlertDialog(
+                "Cannot save event",
+                "You can try adding the event to your calendar yourself.",
+                "Add event",
+                "OK",
+                CalendarIntent.StartCalendarFromBlankCalendarIntent);
         }
     }
 }

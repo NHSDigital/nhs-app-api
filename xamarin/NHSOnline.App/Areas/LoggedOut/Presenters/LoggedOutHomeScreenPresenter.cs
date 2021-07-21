@@ -26,6 +26,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly IBrowserOverlay _browserOverlay;
         private readonly IBackgroundExecutionService _backgroundExecutionService;
         private readonly IForcedUpdateCheckService _forcedUpdateCheckService;
+        private readonly IAlertDialog _alertDialogService;
         private readonly BiometricLoginErrorPageDispatcher _biometricLoginErrorPageDispatcher;
 
         private static readonly TimeSpan BiometricDelayOnAppearing = TimeSpan.FromMilliseconds(100);
@@ -45,7 +46,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             ILifecycle lifecycle,
             IBrowserOverlay browserOverlay,
             IBackgroundExecutionService backgroundExecutionService,
-            IForcedUpdateCheckService forcedUpdateCheckService)
+            IForcedUpdateCheckService forcedUpdateCheckService,
+            IAlertDialog alertDialogService)
         {
             _view = view;
             _pageFactory = pageFactory;
@@ -56,6 +58,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _browserOverlay = browserOverlay;
             _backgroundExecutionService = backgroundExecutionService;
             _forcedUpdateCheckService = forcedUpdateCheckService;
+            _alertDialogService = alertDialogService;
 
             _biometricLoginErrorPageDispatcher = new BiometricLoginErrorPageDispatcher(_view, _pageFactory,
                 _biometricAuthenticationService, _userPreferencesService);
@@ -72,6 +75,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async Task ViewOnAppearing()
         {
+            _alertDialogService.DismissAll();
             _cancelBiometricLogin.Dispose();
             _cancelBiometricLogin = new CancellationTokenSource();
 

@@ -62,6 +62,9 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty DisplayPageLeaveWarningCommandProperty =
             BindableProperty.Create(nameof(DisplayPageLeaveWarningCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
 
+        public static readonly BindableProperty OnSessionExpiringCommandProperty =
+            BindableProperty.Create(nameof(OnSessionExpiringCommandProperty), typeof(AsyncCommand), typeof(NhsAppWebView));
+
         public static readonly BindableProperty LogoutCommandProperty =
             BindableProperty.Create(nameof(LogoutCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
 
@@ -194,6 +197,14 @@ namespace NHSOnline.App.Controls.WebViews
             set => SetValue(DisplayPageLeaveWarningCommandProperty, value);
         }
 
+        public void OnSessionExpiring() => OnSessionExpiringCommand.Execute(null);
+
+        public AsyncCommand OnSessionExpiringCommand
+        {
+            get => (AsyncCommand) GetValue(OnSessionExpiringCommandProperty);
+            set => SetValue(OnSessionExpiringCommandProperty, value);
+        }
+
         public async Task SendBiometricStatus(BiometricStatus biometricStatus)
         {
             const string callbackName = "window.nativeAppCallbacks.biometricStatus";
@@ -232,15 +243,14 @@ namespace NHSOnline.App.Controls.WebViews
             await EvaluateJavaScriptAsync($"{callbackName}({jsonArgument})").ResumeOnThreadPool();
         }
 
-        public async Task SendPageLeaveWarningResult(bool leavePage)
-        {
-            if (leavePage)
-            {
-                await EvaluateJavaScriptAsync("window.nativeAppCallbacks.pageLeaveWarningLeavePage()").ResumeOnThreadPool();
-                return;
-            }
-            await EvaluateJavaScriptAsync("window.nativeAppCallbacks.pageLeaveWarningStayOnPage()").ResumeOnThreadPool();
-        }
+        public async Task SendPageLeave()
+            => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.pageLeaveWarningLeavePage()").ResumeOnThreadPool();
+
+        public async Task SendStayOnPage()
+            => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.pageLeaveWarningStayOnPage()").ResumeOnThreadPool();
+
+        public async Task SendSessionExtend()
+            => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.sessionExtend()").ResumeOnThreadPool();
 
         public async Task NavigateToAdvice()
             => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.navigationGoToAdvice()").ResumeOnThreadPool();

@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AndroidServices\AndroidNotificationMessagingService.cs" />
+    <Compile Include="DependencyServices\AlertDialog\AndroidAlertDialog.cs" />
     <Compile Include="DependencyServices\AndroidFileHandler.cs" />
     <Compile Include="DependencyServices\AndroidLifecycle.cs" />
     <Compile Include="DependencyServices\AndroidCookies.cs" />
@@ -90,7 +91,7 @@
     <Compile Include="DependencyServices\InstallReferrer\AndroidReferrerClientListener.cs" />
     <Compile Include="DependencyServices\Notifications\AndroidGetPnsTokenResponse.cs" />
     <Compile Include="DependencyServices\Notifications\AndroidNotifications.cs" />
-    <Compile Include="Dialogs\AndroidAlertDialog.cs" />
+    <Compile Include="Dialogs\AlertDialogBox.cs" />
     <Compile Include="Effects\AndroidAccessibilityEffect.cs" />
     <Compile Include="Effects\AndroidFixedFontSizeEffect.cs" />
     <Compile Include="Extensions\IntentExtensions.cs" />

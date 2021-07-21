@@ -46,7 +46,7 @@ namespace NHSOnline.App.Droid
             AndroidLifecycle.MainActivity = this;
             AndroidBiometrics.MainActivity = this;
             AndroidSettingsService.MainActivity = this;
-            AndroidAlertDialog.MainActivity = this;
+            AlertDialogBox.MainActivity = this;
             AndroidFileHandler.MainActivity = this;
             AndroidInstallReferrerService.MainActivity = this;
 

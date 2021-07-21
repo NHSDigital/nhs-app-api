@@ -38,6 +38,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly ICalendar _calendar;
         private readonly ISettingsService _settingsService;
         private readonly IFileHandler _fileHandler;
+        private readonly IAlertDialog _alertDialog;
 
         public NhsAppWebPresenter(
             NhsAppWebModel model,
@@ -52,7 +53,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
             RedirectorUrlFactory redirectorUrlFactory,
             ISettingsService settingsService,
             ICalendar calendar,
-            IFileHandler fileHandler)
+            IFileHandler fileHandler,
+            IAlertDialog alertDialog)
         {
             _model = model;
             _view = view;
@@ -68,6 +70,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _settingsService = settingsService;
             _calendar = calendar;
             _fileHandler = fileHandler;
+            _alertDialog = alertDialog;
             _navigationHandler = new NhsAppNavigationHandler(view);
 
             _view.AppNavigation
@@ -88,6 +91,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterHandler(ClearMenuBarItemRequested, (view, handler) => view.ClearMenuBarItemRequested = handler)
                 .RegisterHandler(OpenSettingsRequested, (view, handler) => view.OpenSettingsRequested = handler)
                 .RegisterHandler(DisplayPageLeaveWarningRequested, (view, handler) => view.DisplayPageLeaveWarningRequested = handler)
+                .RegisterHandler(OnSessionExpiringRequested, (view, handler) => view.OnSessionExpiringRequested = handler)
                 .RegisterHandler(LogoutRequested, (view, handler) => view.LogoutRequested = handler)
                 .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler)
                 .RegisterHandler(_navigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
@@ -100,11 +104,35 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeeplinkRequested = handler);
         }
 
-        private async Task DisplayPageLeaveWarningRequested()
+        private Task OnSessionExpiringRequested()
+        {
+            _logger.LogInformation("Display session expiring warning");
+
+            _alertDialog.DisplayAlertDialog(
+                "For security reasons, we'll log you out of the NHS App in 1 minute.",
+                "Stay logged in",
+                "Log out",
+                () => _view.SendSessionExtend().PreserveThreadContext(),
+                () => _view.Logout().PreserveThreadContext()
+            );
+
+            return Task.CompletedTask;
+        }
+
+        private Task DisplayPageLeaveWarningRequested()
         {
             _logger.LogInformation("Display page leave warning");
 
-            await _view.ShowLeaveWarningPrompt().PreserveThreadContext();
+            _alertDialog.DisplayAlertDialog(
+                "Leave this page?",
+                "If you have entered any information, it will not be saved.",
+                "Leave page",
+                "Cancel",
+                () => _view.SendLeavePage().PreserveThreadContext(),
+                () => _view.SendStayOnPage().PreserveThreadContext()
+            );
+
+            return Task.CompletedTask;
         }
 
         private async Task OpenSettingsRequested()
@@ -332,14 +360,19 @@ namespace NHSOnline.App.Areas.Home.Presenters
             await _view.SendBiometricCompletion(completion).PreserveThreadContext();
         }
 
-        private async Task BackRequested()
+        private Task BackRequested()
         {
-            var shouldLogout = await _view.ShowLogoutPrompt().PreserveThreadContext();
+            _logger.LogInformation("Display back requested");
 
-            if (shouldLogout)
-            {
-                await _view.Logout().PreserveThreadContext();
-            }
+            _alertDialog.DisplayAlertDialog(
+                "Are you sure you want to log out?",
+                "Log out",
+                "Cancel",
+                () => _view.Logout().PreserveThreadContext(),
+                () => { }
+            );
+
+            return Task.CompletedTask;
         }
 
         private async Task LogoutRequested()

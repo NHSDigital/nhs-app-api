@@ -1,29 +1,44 @@
 using System;
+using System.Collections.Generic;
 using Android.App;
 
 namespace NHSOnline.App.Droid.Dialogs
 {
-    public static class AndroidAlertDialog
+    public static class AlertDialogBox
     {
         internal static MainActivity? MainActivity { get; set; }
+        
+        public static Dictionary<string, AlertDialog?> KnownDialogs => new Dictionary<string, AlertDialog?>();
 
-        public static void ShowAlertDialog(
-            string title,
+        public static void CreateAndShowAlertDialog(
+            string? title,
             string message,
-            Action? positiveAction = null,
             string? positiveButtonText = null,
             string? negativeButtonText = null,
+            Action? positiveAction = null,
             Action? negativeAction = null)
         {
+
+            if (KnownDialogs.ContainsKey(message))
+            {
+                var existingDialog = KnownDialogs.GetValueOrDefault(message);
+                existingDialog?.Show();
+                return;
+            }
+
             using var alert = new AlertDialog.Builder(MainActivity);
 
-            alert.SetTitle(title);
+            if (title != null)
+            {
+                alert.SetTitle(title);
+            }
+
             alert.SetMessage(message);
             alert.SetCancelable(false);
 
             if (negativeButtonText != null)
             {
-                alert.SetNegativeButton(negativeButtonText, (dialog, args) =>
+                alert.SetNegativeButton(negativeButtonText, (sender, args) =>
                 {
                     negativeAction?.Invoke();
                     // ReSharper disable AccessToDisposedClosure
@@ -34,7 +49,7 @@ namespace NHSOnline.App.Droid.Dialogs
 
             if (positiveButtonText != null)
             {
-                alert.SetPositiveButton(positiveButtonText, (dialog, args) =>
+                alert.SetPositiveButton(positiveButtonText, (sender, args) =>
                 {
                     positiveAction?.Invoke();
                     // ReSharper disable AccessToDisposedClosure
@@ -44,6 +59,9 @@ namespace NHSOnline.App.Droid.Dialogs
             }
 
             var dialog = alert.Create();
+
+            KnownDialogs.Add(message, dialog);
+
             dialog?.Show();
         }
     }

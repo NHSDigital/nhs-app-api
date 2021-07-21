@@ -25,6 +25,7 @@ namespace NHSOnline.App.DependencyServices
                 .AddTransient(_ => DependencyService.Get<IFileHandler>())
                 .AddTransient(_ => DependencyService.Get<IUpdateService>())
                 .AddTransient(_ => DependencyService.Get<ICalendar>())
+                .AddTransient(_ => DependencyService.Get<IAlertDialog>())
                 .AddTransient(_ => DependencyService.Get<IInstallReferrer>());
         }
     }

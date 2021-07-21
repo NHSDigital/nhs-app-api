@@ -17,15 +17,6 @@ namespace NHSOnline.App.Areas.Home.Views
         private readonly ILogger _logger;
         private readonly AppNavigation<INhsAppWebView.IEvents> _appNavigation;
 
-        private const string LeaveTitle = "Leave this page?";
-        private const string LeaveMessage = "If you have entered any information, it will not be saved.";
-        private const string LeaveButtonText = "Leave page";
-        private const string LeaveCancelButtonText = "Cancel";
-
-        private const string LogoutMessage = "Are you sure you want to log out?";
-        private const string LogoutButtonText = "Log out";
-        private const string LogoutCancelButtonText = "Cancel";
-
         public NhsAppWebPage(ILogger<NhsAppWebPage> logger)
         {
             _logger = logger;
@@ -80,6 +71,10 @@ namespace NHSOnline.App.Areas.Home.Views
         public Func<Task>? DisplayPageLeaveWarningRequested { get; set; }
         public AsyncCommand DisplayPageLeaveWarningCommand
             => new AsyncCommand(() => DisplayPageLeaveWarningRequested);
+
+        public Func<Task>? OnSessionExpiringRequested { get; set; }
+        public AsyncCommand OnSessionExpiringCommand
+            => new AsyncCommand(() => OnSessionExpiringRequested);
 
         public Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
         public AsyncCommand<string> UpdateBiometricRegistrationCommand
@@ -174,12 +169,6 @@ namespace NHSOnline.App.Areas.Home.Views
             return true;
         }
 
-        public async Task<bool> ShowLogoutPrompt()
-        {
-            return await Page.DisplayAlert(null, LogoutMessage, LogoutButtonText, LogoutCancelButtonText)
-                .PreserveThreadContext();
-        }
-
         public async Task Logout()
         {
             await WebView.AuthLogout().PreserveThreadContext();
@@ -261,17 +250,20 @@ namespace NHSOnline.App.Areas.Home.Views
         public async Task SendBiometricCompletion(BiometricCompletion completionDetails)
             => await WebView.SendBiometricCompletion(completionDetails).ResumeOnThreadPool();
 
-        public async Task ShowLeaveWarningPrompt()
-        {
-            var leavePage = await Page.DisplayAlert(LeaveTitle, LeaveMessage, LeaveButtonText, LeaveCancelButtonText)
-                .PreserveThreadContext();
-            await WebView.SendPageLeaveWarningResult(leavePage).PreserveThreadContext();
-        }
+        public async Task SendLeavePage()
+            => await WebView.SendPageLeave().PreserveThreadContext();
+
+        public async Task SendStayOnPage()
+            => await WebView.SendStayOnPage().PreserveThreadContext();
+
+        public async Task SendSessionExtend()
+            => await WebView.SendSessionExtend().PreserveThreadContext();
 
         public async Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse)
             => await WebView.SendNotificationAuthorised(authorisedResponse).ResumeOnThreadPool();
 
-        public async Task SendNotificationUnauthorised() => await WebView.SendNotificationUnauthorised().ResumeOnThreadPool();
+        public async Task SendNotificationUnauthorised()
+            => await WebView.SendNotificationUnauthorised().ResumeOnThreadPool();
 
         private void WebOnEndNavigating(object sender, WebNavigatedEventArgs e)
         {

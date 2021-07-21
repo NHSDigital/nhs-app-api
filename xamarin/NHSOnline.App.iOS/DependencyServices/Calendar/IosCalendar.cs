@@ -4,6 +4,7 @@ using Foundation;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.iOS.Controllers;
+using NHSOnline.App.iOS.DependencyServices.AlertDialog;
 using NHSOnline.App.iOS.DependencyServices.Calendar;
 using NHSOnline.App.Threading;
 using UIKit;
@@ -40,12 +41,13 @@ namespace NHSOnline.App.iOS.DependencyServices.Calendar
 
         public void ShowCalendarPermissionDeniedAlert()
         {
-            AlertPopup.ShowAlertPopup(
+            Controllers.AlertDialogBox.ShowAlertPopup(
+                ClearingActions.Dismissible,
                 AlertGoToSettingsHeader,
                 AlertGoToSettingsBody,
                 OkButtonText,
                 GoToSettingsButtonText,
-                () =>
+                cancelAction: () =>
                 {
                     using var settingsUrl = new NSUrl(UIApplication.OpenSettingsUrlString);
                     UIApplication.SharedApplication.OpenUrlAsync(settingsUrl, new UIApplicationOpenUrlOptions());
@@ -54,12 +56,13 @@ namespace NHSOnline.App.iOS.DependencyServices.Calendar
 
         public void ShowCalendarAlertWhenValidationFails()
         {
-            AlertPopup.ShowAlertPopup(
+            Controllers.AlertDialogBox.ShowAlertPopup(
+                ClearingActions.Dismissible,
                 AlertAddEventHeader,
                 AlertAddEventBody,
                 OkButtonText,
                 AddEventButtonText,
-                () =>
+                cancelAction: () =>
                 {
                     ApplicationEventStore.Current.EventStore.RequestAccess(EKEntityType.Event, (granted, _) =>
                     {
