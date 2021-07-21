@@ -6,6 +6,7 @@ using Android.Runtime;
 using Android.Security.Keystore;
 using AndroidX.Fragment.App;
 using AndroidX.Biometric;
+using AndroidX.Core.Content;
 using Java.Lang;
 using Java.Math;
 using Java.Security;
@@ -99,7 +100,9 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
             var completionSource = new TaskCompletionSource<BiometricAuthVerifyUserResult>();
 
             using var authenticationCallback = new AuthCallback(completionSource);
-            using var biometricPrompt = new BiometricPrompt(_fragmentActivity, Application.Context.MainExecutor, authenticationCallback);
+
+            using var biometricPrompt = new BiometricPrompt(_fragmentActivity,
+                ContextCompat.GetMainExecutor(Application.Context), authenticationCallback);
             using var cryptoObject = new BiometricPrompt.CryptoObject(signature);
 
             biometricPrompt.Authenticate(promptInfo, cryptoObject);
