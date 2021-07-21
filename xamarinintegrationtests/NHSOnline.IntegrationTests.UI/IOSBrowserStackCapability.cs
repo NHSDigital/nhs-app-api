@@ -6,6 +6,7 @@ namespace NHSOnline.IntegrationTests.UI
     public enum IOSBrowserStackCapability
     {
         None = 0,
-        NoNetwork = 1
+        NoNetwork = 1,
+        ExtendedIdleTimeout = 2
     }
 }

@@ -8,7 +8,7 @@ namespace NHSOnline.App.Droid.Dialogs
     {
         internal static MainActivity? MainActivity { get; set; }
 
-        public static Dictionary<string, AlertDialog?> KnownDialogs { get; } = new ();
+        public static Dictionary<string, AlertDialog?> KnownDialogs { get; } = new Dictionary<string, AlertDialog?>();
 
         public static void CreateAndShowAlertDialog(
             string? title,

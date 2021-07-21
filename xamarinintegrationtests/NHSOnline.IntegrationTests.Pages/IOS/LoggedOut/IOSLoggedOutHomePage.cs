@@ -11,6 +11,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         private IOSLabel AccessServicesText => IOSLabel.WithText(_driver, "Access your NHS services");
 
+        private IOSLabel SessionExpiredText => IOSLabel.WithText(_driver, "For your security, you need to log in again");
+
         private IOSButton ContinueButton => IOSButton.WithText(_driver, "Continue with NHS login");
 
         private IOSButton HelpIcon => IOSButton.WithText(_driver, "Help");
@@ -36,13 +38,13 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
             HelpIcon.AssertVisible();
         }
 
-        public void AssertHelpIconPresent()
-        {
-            HelpIcon.AssertVisible();
-        }
+        public void AssertHelpIconPresent() => HelpIcon.AssertVisible();
 
         public void GetHelp() => HelpIcon.Click();
 
         public void ContinueWithNhsLogin() => ContinueButton.Click();
+
+        // will be used when we add in the logged out home screen states
+        public void AssertSessionExpired() => SessionExpiredText.AssertVisible();
     }
 }

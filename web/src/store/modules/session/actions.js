@@ -125,11 +125,14 @@ export default {
     commit(END_VALIDATION_CHECKING);
     commit(HIDE_SESSION_EXPIRING);
   },
-  validate({ getters, state, commit }) {
+  validate({ getters, state, commit }, ignoreShowSessionExpiring = false) {
     if (getters.isLoggedIn()) {
       if (getters.isValid()) {
-        if (!state.showSessionExpiring
-            && getters.isExpiring(this.$env.SESSION_EXPIRING_WARNING_SECONDS)) {
+        if (!ignoreShowSessionExpiring && state.showSessionExpiring) {
+          return true;
+        }
+
+        if (getters.isExpiring(this.$env.SESSION_EXPIRING_WARNING_SECONDS)) {
           commit(SHOW_SESSION_EXPIRING);
 
           if (window.nativeApp) {

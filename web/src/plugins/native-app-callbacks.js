@@ -22,6 +22,9 @@ const NativeAppCallbacksPlugin = {
       sessionExtend() {
         store.dispatch('session/extend');
       },
+      validateSession() {
+        store.dispatch('session/validate', true);
+      },
       pageLeaveWarningLeavePage() {
         store.dispatch('pageLeaveWarning/leavePage');
       },

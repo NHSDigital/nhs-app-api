@@ -69,5 +69,6 @@ namespace NHSOnline.App.Areas.Home
         Task SendStayOnPage();
         Task SendLeavePage();
         Task Logout();
+        Task ValidateSession();
     }
 }

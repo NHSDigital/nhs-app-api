@@ -7,6 +7,7 @@ namespace NHSOnline.IntegrationTests.UI
     {
         None = 0,
         SignInToGoogle = 1,
-        NoNetwork = 2
+        NoNetwork = 2,
+        ExtendedIdleTimeout = 3
     }
 }

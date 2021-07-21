@@ -49,10 +49,10 @@ namespace NHSOnline.App.Droid.DependencyServices.AlertDialog
         {
             foreach (var (_, dialog) in Dialogs.AlertDialogBox.KnownDialogs)
             {
-                if (dialog is {IsShowing: true})
-                {
-                    dialog.Dismiss();
-                }
+                    if (dialog is {IsShowing: true})
+                    {
+                        dialog.Dismiss();
+                    }
             }
         }
 

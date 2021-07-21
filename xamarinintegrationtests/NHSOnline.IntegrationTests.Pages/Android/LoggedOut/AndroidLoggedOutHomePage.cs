@@ -8,8 +8,10 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         private readonly IAndroidDriverWrapper _driver;
 
         private AndroidLoggedOutHomePage(IAndroidDriverWrapper driver) => _driver = driver;
-        
+
         private AndroidLabel AccessServicesText => AndroidLabel.WithText(_driver, "Access your NHS services");
+
+        private AndroidLabel SessionExpiredText => AndroidLabel.WithText(_driver, "For your security, you need to log in again");
 
         private AndroidLabel ContinueButton => AndroidLabel.WithText(_driver, "Continue with NHS login");
 
@@ -34,5 +36,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         public void GetHelp() => HelpIcon.Click();
 
         public void ContinueWithNhsLogin() => ContinueButton.Click();
+
+        public void AssertSessionExpired() => SessionExpiredText.AssertVisible();
     }
 }

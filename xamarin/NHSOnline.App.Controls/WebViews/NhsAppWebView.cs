@@ -304,6 +304,9 @@ namespace NHSOnline.App.Controls.WebViews
         public async Task NavigateToAppPage(string page)
             => await EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigateToAppPage('{page}')").ResumeOnThreadPool();
 
+        public async Task ValidateSession()
+            => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.validateSession()").ResumeOnThreadPool();
+
         private static T ConvertFromJsonString<T>(string json)
             => JsonConvert.DeserializeObject<T>(json, Settings) ?? throw new ArgumentException($"Failed to deserialise JSON to {typeof(T).FullName}", nameof(json));
 

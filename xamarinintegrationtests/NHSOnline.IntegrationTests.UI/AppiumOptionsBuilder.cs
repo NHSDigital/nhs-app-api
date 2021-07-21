@@ -82,6 +82,12 @@ namespace NHSOnline.IntegrationTests.UI
             return this;
         }
 
+        public AppiumOptionsBuilder SetBrowserstackTimeout()
+        {
+            _options.AddAdditionalCapability("browserstack.idleTimeout", "240000");
+            return this;
+        }
+
         public AppiumOptionsBuilder EnableNativeWebTap()
         {
             _options.AddAdditionalCapability("nativeWebTap", true);
@@ -162,6 +168,8 @@ namespace NHSOnline.IntegrationTests.UI
                     return this;
                 case IOSBrowserStackCapability.NoNetwork:
                     return DisableBrowserStackNetwork();
+                case IOSBrowserStackCapability.ExtendedIdleTimeout:
+                    return SetBrowserstackTimeout();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(capabilities), capabilities, null);
             }
@@ -177,6 +185,8 @@ namespace NHSOnline.IntegrationTests.UI
                     return AddBrowserStackSignInToAppStore(androidConfig.GoogleCredentials());
                 case AndroidBrowserStackCapability.NoNetwork:
                     return DisableBrowserStackNetwork();
+                case AndroidBrowserStackCapability.ExtendedIdleTimeout:
+                    return SetBrowserstackTimeout();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(capabilities), capabilities, null);
             }

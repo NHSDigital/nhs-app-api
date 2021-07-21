@@ -122,7 +122,7 @@ namespace NHSOnline.App.Areas.Home.Views
             }
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
 
@@ -131,6 +131,8 @@ namespace NHSOnline.App.Areas.Home.Views
 
             RemoveEventHandlers();
             AddEventHandlers();
+
+            await ValidateSession().PreserveThreadContext();
 
             AppearingCommand.Execute(null);
         }
@@ -268,6 +270,9 @@ namespace NHSOnline.App.Areas.Home.Views
 
         public async Task SendNotificationUnauthorised()
             => await WebView.SendNotificationUnauthorised().ResumeOnThreadPool();
+
+        public async Task ValidateSession()
+            => await WebView.ValidateSession().PreserveThreadContext();
 
         private void WebOnEndNavigating(object sender, WebNavigatedEventArgs e)
         {
