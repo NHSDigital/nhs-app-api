@@ -1357,3 +1357,39 @@ defaultUsers:
       familyName: NEELAM
       dateOfBirth: "1953-01-11T00:00:00"
       sex: Female
+
+    9400800878:
+      userId: 097791d5-1d92-4d49-a237-094f0311fd46
+      emailAddress: onboarding.nhsapp+netcompany.user63@gmail.com
+      odsCode: F00010
+      givenName: NAGINA
+      familyName: WILKINSON
+      dateOfBirth: "1983-08-22T00:00:00"
+      sex: Female
+
+    9464006846:
+      userId: e02cb116-ec3e-4f84-85eb-fce4c64601fd
+      emailAddress: onboarding.nhsapp+netcompany.user64@gmail.com
+      odsCode: F00010
+      givenName: JANETTE
+      familyName: SCROXTON
+      dateOfBirth: "1982-04-14T00:00:00"
+      sex: Female
+
+    9464138467:
+      userId: 3f3a285c-c28e-42ae-88e0-f7f7970db3c
+      emailAddress: onboarding.nhsapp+netcompany.user65@gmail.com
+      odsCode: F00010
+      givenName: DANI
+      familyName: HESS
+      dateOfBirth: "1980-10-10T00:00:00"
+      sex: Male
+
+    9692364615:
+      userId: 9efce12e-16f1-462a-bdbc-d6e7f71b2cb6
+      emailAddress: onboarding.nhsapp+netcompany.user66@gmail.com
+      odsCode: F00010
+      givenName: DEBBIE
+      familyName: SIM
+      dateOfBirth: "1983-11-20T00:00:00"
+      sex: Male
