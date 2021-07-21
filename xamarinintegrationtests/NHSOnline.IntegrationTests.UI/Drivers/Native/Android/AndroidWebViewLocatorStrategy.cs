@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenQA.Selenium.Appium.Android;
+using NHSOnline.IntegrationTests.UI.Drivers.BrowserStack;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 {
     internal sealed class AndroidWebViewLocatorStrategy : WebViewLocatorStrategy
     {
-        private readonly AndroidDriver<AndroidElement> _driver;
+        private readonly IAndroidBrowserStackDriver _driver;
 
-        public AndroidWebViewLocatorStrategy(AndroidDriver<AndroidElement> driver)
+        public AndroidWebViewLocatorStrategy(IAndroidBrowserStackDriver driver)
         {
             _driver = driver;
         }

@@ -1,3 +1,4 @@
+using NHSOnline.IntegrationTests.UI.Drivers.BrowserStack;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Android;
 
@@ -8,16 +9,16 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         private const string AppPackage = "com.android.chrome";
         private const string AppActivity = "com.google.android.apps.chrome.Main";
 
-        private readonly AndroidDriver<AndroidElement> _driver;
+        private readonly IAndroidBrowserStackDriver _driver;
         private readonly IAndroidInteractor _interactor;
 
-        private AndroidChromeApp(AndroidDriver<AndroidElement> driver, IAndroidInteractor interactor)
+        private AndroidChromeApp(IAndroidBrowserStackDriver driver, IAndroidInteractor interactor)
         {
             _driver = driver;
             _interactor = interactor;
         }
 
-        public static AndroidChromeApp Launch(AndroidDriver<AndroidElement> driver, IAndroidInteractor interactor)
+        public static AndroidChromeApp Launch(IAndroidBrowserStackDriver driver, IAndroidInteractor interactor)
         {
             driver.StartActivity(AppPackage, AppActivity);
             return new AndroidChromeApp(driver, interactor);
@@ -28,8 +29,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 
         private void NavigateTo(string destination)
         {
-            _driver.FindElement(MobileBy.Id($"{AppPackage}:id/search_box_text"))
-                .ReplaceValue(destination);
+            var element = (AndroidElement)_driver.FindElement(MobileBy.Id($"{AppPackage}:id/search_box_text"));
+            element.ReplaceValue(destination);
             _interactor.PressEnterKey();
         }
     }

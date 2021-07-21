@@ -9,29 +9,29 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.WebContext
     internal class NhsAppPreHomeWebViewContextStrategy : IWebContextStrategy
     {
         private readonly NativeDriverContext _nativeDriverContext;
-        private Lazy<IWebContext> WebContext { get; }
+        private IWebContext? _webContext;
 
         public event EventHandler? SwitchedTo;
 
         public NhsAppPreHomeWebViewContextStrategy(NativeDriverContext nativeDriverContext)
         {
             _nativeDriverContext = nativeDriverContext;
-
-            WebContext = new Lazy<IWebContext>(valueFactory: () =>
-            {
-                _nativeDriverContext.Logs.Info("Grabbing context for PreHomeWebView");
-
-                var context = _nativeDriverContext.WebContextGrabber.GrabNextUnusedWebContext(WebContextKind.WebView);
-
-                _nativeDriverContext.Logs.Info($"Grabbed {context} for PreHomeWebView");
-
-                return context;
-            });
         }
 
         public void SwitchTo()
         {
-            _nativeDriverContext.SwitchToWebContext(WebContext.Value, AssertReady);
+            if (_webContext == null)
+            {
+                var webContext = GrabWebContext();
+
+                _nativeDriverContext.SwitchToWebContext(webContext, AssertReady);
+            }
+            else
+            {
+                _nativeDriverContext.SwitchToWebContext(_webContext);
+            }
+
+
             SwitchedTo?.Invoke(this, EventArgs.Empty);
         }
 
@@ -44,7 +44,19 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.WebContext
 
         internal void EnsureContextGrabbed()
         {
-            var _ = WebContext.Value;
+            var _ = GrabWebContext();
+        }
+
+        private IWebContext GrabWebContext()
+        {
+            if (_webContext == null)
+            {
+                _nativeDriverContext.Logs.Info("Grabbing context for PreHomeWebView");
+                _webContext = _nativeDriverContext.WebContextGrabber.GrabNextUnusedWebContext(WebContextKind.WebView);
+                _nativeDriverContext.Logs.Info($"Grabbed {_webContext} for PreHomeWebView");
+            }
+
+            return _webContext;
         }
     }
 }

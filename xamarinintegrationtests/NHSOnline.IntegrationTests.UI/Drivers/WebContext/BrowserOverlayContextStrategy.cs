@@ -29,7 +29,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.WebContext
                 _nativeDriverContext.Logs.Info($"Grabbed {_webContext} for BrowserOverlay");
             }
 
-            _nativeDriverContext.SwitchToWebContext(_webContext, _ => { });
+            _nativeDriverContext.SwitchToWebContext(_webContext);
         }
 
         private void ResetWebContext(object? sender, EventArgs e)

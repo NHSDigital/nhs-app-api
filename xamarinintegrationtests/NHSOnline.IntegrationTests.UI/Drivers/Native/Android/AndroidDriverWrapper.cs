@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using FluentAssertions;
+using NHSOnline.IntegrationTests.UI.Drivers.BrowserStack;
 using NHSOnline.IntegrationTests.UI.Drivers.WebContext;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
@@ -12,7 +13,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 {
     internal sealed class AndroidDriverWrapper : IAndroidDriverWrapper
     {
-        private readonly AndroidDriver<AndroidElement> _driver;
+        private readonly IAndroidBrowserStackDriver _driver;
         private readonly IAndroidInteractor _interactor;
         private readonly NativeDriverContext _nativeDriverContext;
         private readonly BrowserStackConfig _browserStackConfig;
@@ -36,18 +37,23 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 
             var options = CreateAppiumOptions(androidConfig, testName, capabilities, targetDevice, osVersion);
 
-            _driver = new AndroidDriver<AndroidElement>(new Uri("http://hub-cloud.browserstack.com/wd/hub"), options);
+            _driver = new AndroidBrowserStackDriver(new Uri("http://hub-cloud.browserstack.com/wd/hub"), options, logs);
 
             logs.BrowserStackSessionId(_driver.SessionId);
 
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
-            _nativeDriverContext = new NativeDriverContext(_driver, _driver, new AndroidWebViewLocatorStrategy(_driver), logs);
+            _nativeDriverContext = new NativeDriverContext(
+                _driver,
+                _driver,
+                new AndroidWebViewLocatorStrategy(_driver),
+                logs);
+
             Web = new WebContextStrategies(_nativeDriverContext, _driver, logs);
 
             _interactor = new AndroidInteractor(
                 _nativeDriverContext,
-                new Interactor<AndroidDriver<AndroidElement>, AndroidElement>(Logs, _driver, _driver.FindElement));
+                new Interactor<IAndroidBrowserStackDriver, AndroidElement>(Logs, _driver, _driver.FindElement));
 
             RetrieveAppState().Should().Be(AppState.RunningInForeground, TestResultRetryExtensions.AppNotRunningMessage);
         }
@@ -74,8 +80,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
                 .Build();
         }
 
-        void IInteractor<AndroidDriver<AndroidElement>, AndroidElement>.ActOnDriver(
-            ActOnDriverAction<AndroidDriver<AndroidElement>, AndroidElement> action)
+        void IInteractor<IAndroidBrowserStackDriver, AndroidElement>.ActOnDriver(
+            ActOnDriverAction<IAndroidBrowserStackDriver, AndroidElement> action)
             => _interactor.ActOnDriver(action);
 
         IAndroidInteractor IAndroidInteractor.CreateContainedInteractor(By findContainerBy)

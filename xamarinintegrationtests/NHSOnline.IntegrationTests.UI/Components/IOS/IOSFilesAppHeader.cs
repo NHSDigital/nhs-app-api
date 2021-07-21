@@ -1,6 +1,7 @@
 using System;
 using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Drivers;
+using NHSOnline.IntegrationTests.UI.Drivers.BrowserStack;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.iOS;
@@ -39,7 +40,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
 
             public By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeOther' AND label CONTAINS {_text.QuotePredicateLiteral()}");
 
-            public void ActOnElementContext(Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action) => _interactor.ActOnElementContext(FindBy, action);
+            public void ActOnElementContext(Action<ElementContext<IIOSBrowserStackDriver, IOSElement>> action) => _interactor.ActOnElementContext(FindBy, action);
 
             public void AssertCannotBeFound(string because) => _interactor.AssertElementCannotBeFound(FindBy, because);
         }

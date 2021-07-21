@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using OpenQA.Selenium.Appium.iOS;
+using OpenQA.Selenium.Appium.Interfaces;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
 {
     internal sealed class IOSWebViewLocatorStrategy : WebViewLocatorStrategy
     {
-        private readonly IOSDriver<IOSElement> _driver;
+        private readonly IContextAware _driver;
 
-        public IOSWebViewLocatorStrategy(IOSDriver<IOSElement> driver)
+        public IOSWebViewLocatorStrategy(IContextAware driver)
         {
             _driver = driver;
         }
@@ -22,25 +22,23 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
 
         internal override IReadOnlyList<IWebContext> GetWebContexts(WebContextKind webContextKind)
         {
-            return _driver.Contexts
-                .Where(context => context.Contains("webview", StringComparison.OrdinalIgnoreCase))
-                .Select(context => new IOSWebContext(context))
-                .ToList()
-                .AsReadOnly();
-
+            return GetAllWebContexts().ToList().AsReadOnly();
         }
-
-        // TODO: extract method for getting all web contexts
 
         internal override void ForEachWebContext(Action<IWebContext> action)
         {
-            foreach (var context in _driver.Contexts
-                .Where(context => context.Contains("webview", StringComparison.OrdinalIgnoreCase))
-                .Select(context => new IOSWebContext(context)))
+            foreach (var context in GetAllWebContexts())
             {
                 _driver.Context = context.ContextName;
                 action(context);
             }
+        }
+
+        private IEnumerable<IOSWebContext> GetAllWebContexts()
+        {
+            return _driver.Contexts
+                .Where(context => context.Contains("webview", StringComparison.OrdinalIgnoreCase))
+                .Select(context => new IOSWebContext(context));
         }
 
         private sealed class IOSWebContext : IWebContext

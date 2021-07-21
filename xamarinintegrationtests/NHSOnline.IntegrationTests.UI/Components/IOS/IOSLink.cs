@@ -1,6 +1,7 @@
 using System;
 using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Drivers;
+using NHSOnline.IntegrationTests.UI.Drivers.BrowserStack;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.iOS;
@@ -27,7 +28,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
         public void Touch()
             => ActOnElementContext(context => context.Tap());
 
-        private void ActOnElementContext(Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action)
+        private void ActOnElementContext(Action<ElementContext<IIOSBrowserStackDriver, IOSElement>> action)
             => _interactor.ActOnElementContext(FindBy, action);
 
         private void ActOnElement(Action<IOSElement> action)

@@ -13,18 +13,27 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
         {
         }
 
-        internal static CurrentDriverContext Create()
+        internal static CurrentDriverContext Create(TestLogs logs)
         {
-            return new CurrentlyNativeDriverContext();
+            return new CurrentlyNativeDriverContext(logs);
         }
 
 
         private sealed class CurrentlyNativeDriverContext : CurrentDriverContext
         {
-            internal static CurrentDriverContext SwitchTo(IContextAware contextAwareDriver, string nativeContextName)
+            private readonly TestLogs _logs;
+
+            public CurrentlyNativeDriverContext(TestLogs logs)
             {
+                _logs = logs;
+            }
+
+            internal static CurrentDriverContext SwitchTo(TestLogs logs, IContextAware contextAwareDriver, string nativeContextName)
+            {
+                logs.Info($"Switching to native context: {nativeContextName}");
+
                 contextAwareDriver.Context = nativeContextName;
-                return new CurrentlyNativeDriverContext();
+                return new CurrentlyNativeDriverContext(logs);
             }
 
             internal override CurrentDriverContext SwitchToNativeContext(IContextAware nativeDriverContext,
@@ -36,29 +45,33 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
             internal override CurrentDriverContext SwitchToWebContext(WebViewLocatorStrategy webViewLocatorStrategy,
                 IWebContext webViewContext)
             {
-                return CurrentlyWebDriverContext.SwitchTo(webViewLocatorStrategy, webViewContext);
+                return CurrentlyWebDriverContext.SwitchTo(_logs, webViewLocatorStrategy, webViewContext);
             }
         }
 
         private sealed class CurrentlyWebDriverContext : CurrentDriverContext
         {
             private readonly IWebContext _currentWebContext;
+            private readonly TestLogs _logs;
 
-            private CurrentlyWebDriverContext(IWebContext webViewContext)
+            private CurrentlyWebDriverContext(TestLogs logs, IWebContext webViewContext)
             {
+                _logs = logs;
                 _currentWebContext = webViewContext;
             }
 
-            internal static CurrentDriverContext SwitchTo(WebViewLocatorStrategy webViewLocatorStrategy, IWebContext webViewContext)
+            internal static CurrentDriverContext SwitchTo(TestLogs logs, WebViewLocatorStrategy webViewLocatorStrategy, IWebContext webViewContext)
             {
+                logs.Info($"Switching to web context: {webViewContext}");
+
                 webViewLocatorStrategy.SwitchToWebView(webViewContext);
-                return new CurrentlyWebDriverContext(webViewContext);
+                return new CurrentlyWebDriverContext(logs, webViewContext);
             }
 
             internal override CurrentDriverContext SwitchToNativeContext(IContextAware contextAwareDriver,
                 string nativeContextName)
             {
-                return CurrentlyNativeDriverContext.SwitchTo(contextAwareDriver, nativeContextName);
+                return CurrentlyNativeDriverContext.SwitchTo(_logs, contextAwareDriver, nativeContextName);
             }
 
             internal override CurrentDriverContext SwitchToWebContext(WebViewLocatorStrategy webViewLocatorStrategy,
@@ -69,7 +82,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
                     return this;
                 }
 
-                return SwitchTo(webViewLocatorStrategy, webViewContext);
+                return SwitchTo(_logs, webViewLocatorStrategy, webViewContext);
             }
         }
     }

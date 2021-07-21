@@ -29,9 +29,13 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.WebContext
                 _nativeDriverContext.Logs.Info($"Grabbing context for a WebIntegration");
                 _webContext = _nativeDriverContext.WebContextGrabber.GrabNextUnusedWebContext(WebContextKind.WebView);
                 _nativeDriverContext.Logs.Info($"Grabbed {_webContext} for a WebIntegration");
-            }
 
-            _nativeDriverContext.SwitchToWebContext(_webContext, AssertReady);
+                _nativeDriverContext.SwitchToWebContext(_webContext, AssertReady);
+            }
+            else
+            {
+                _nativeDriverContext.SwitchToWebContext(_webContext);
+            }
 
             SwitchedTo?.Invoke(this, EventArgs.Empty);
         }

@@ -1,3 +1,4 @@
+using NHSOnline.IntegrationTests.UI.Drivers.BrowserStack;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Android;
 using OpenQA.Selenium.Appium.MultiTouch;
@@ -7,18 +8,18 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
     internal sealed class AndroidInteractor : IAndroidInteractor
     {
         private readonly NativeDriverContext _nativeDriverContext;
-        private readonly Interactor<AndroidDriver<AndroidElement>, AndroidElement> _interactor;
+        private readonly Interactor<IAndroidBrowserStackDriver, AndroidElement> _interactor;
 
         public AndroidInteractor(
             NativeDriverContext nativeDriverContext,
-            Interactor<AndroidDriver<AndroidElement>, AndroidElement> createContainedInteractor)
+            Interactor<IAndroidBrowserStackDriver, AndroidElement> createContainedInteractor)
         {
             _nativeDriverContext = nativeDriverContext;
             _interactor = createContainedInteractor;
         }
 
-        void IInteractor<AndroidDriver<AndroidElement>, AndroidElement>.ActOnDriver(
-            ActOnDriverAction<AndroidDriver<AndroidElement>, AndroidElement> action)
+        void IInteractor<IAndroidBrowserStackDriver, AndroidElement>.ActOnDriver(
+            ActOnDriverAction<IAndroidBrowserStackDriver, AndroidElement> action)
         {
             _nativeDriverContext.SwitchToNativeContext();
             _interactor.ActOnDriver(action);

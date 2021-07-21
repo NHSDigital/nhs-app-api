@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using FluentAssertions;
+using NHSOnline.IntegrationTests.UI.Drivers.BrowserStack;
 using NHSOnline.IntegrationTests.UI.Drivers.WebContext;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
@@ -14,7 +14,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
 {
     internal sealed class IOSDriverWrapper: IIOSDriverWrapper
     {
-        private readonly IOSDriver<IOSElement> _driver;
+        private readonly IIOSBrowserStackDriver _driver;
         private readonly IIOSInteractor _interactor;
         private readonly NativeDriverContext _nativeDriverContext;
         private readonly BrowserStackConfig _browserStackConfig;
@@ -37,26 +37,40 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
 
             var options = CreateAppiumOptions(iosConfig, testName, device, osVersion, capabilities);
 
-            _driver = new IOSDriver<IOSElement>(new Uri("http://hub-cloud.browserstack.com/wd/hub"), options);
+            _driver = new IOSBrowserStackDriver(new Uri("http://hub-cloud.browserstack.com/wd/hub"), options);
 
             logs.BrowserStackSessionId(_driver.SessionId);
 
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
-            DateTime
-                .Parse(_driver.DeviceTime, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal)
-                .Should()
-                .BeCloseTo(DateTime.UtcNow, TimeSpan.FromMinutes(1), TestResultRetryExtensions.DeviceTimeSkewMessage);
+            _nativeDriverContext = CreateNativeDriverContext(logs);
+            _interactor = CreateInteractor();
 
-            _nativeDriverContext = new NativeDriverContext(_driver, _driver, new IOSWebViewLocatorStrategy(_driver), logs);
             Web = new WebContextStrategies(_nativeDriverContext, _driver, logs);
 
-            _interactor = new IOSInteractor(
-                _driver,
-                _nativeDriverContext,
-                new Interactor<IOSDriver<IOSElement>, IOSElement>(Logs, _driver, _driver.FindElement));
+            AssertAppRunning();
+        }
 
-            RetrieveAppState().Should().Be(AppState.RunningInForeground, TestResultRetryExtensions.AppNotRunningMessage);
+        private void AssertAppRunning()
+        {
+            _driver.GetAppState("com.nhs.online.dev.browserstack")
+                .Should().Be(AppState.RunningInForeground, TestResultRetryExtensions.AppNotRunningMessage);
+        }
+
+        private IOSInteractor CreateInteractor()
+        {
+            return new IOSInteractor(
+                _nativeDriverContext,
+                new Interactor<IIOSBrowserStackDriver, IOSElement>(Logs, _driver, _driver.FindElement));
+        }
+
+        private NativeDriverContext CreateNativeDriverContext(TestLogs logs)
+        {
+            return new NativeDriverContext(
+                _driver,
+                _driver,
+                new IOSWebViewLocatorStrategy(_driver),
+                logs);
         }
 
         private AppiumOptions CreateAppiumOptions(
@@ -78,10 +92,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
                 .Build();
         }
 
-        private AppState RetrieveAppState() => _driver.GetAppState("com.nhs.online.dev.browserstack");
-
-        void IInteractor<IOSDriver<IOSElement>, IOSElement>.ActOnDriver(
-            ActOnDriverAction<IOSDriver<IOSElement>, IOSElement> action)
+        void IInteractor<IIOSBrowserStackDriver, IOSElement>.ActOnDriver(
+            ActOnDriverAction<IIOSBrowserStackDriver, IOSElement> action)
         {
             _nativeDriverContext.SwitchToNativeContext();
             _interactor.ActOnDriver(action);

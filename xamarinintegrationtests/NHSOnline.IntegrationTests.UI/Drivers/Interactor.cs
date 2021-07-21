@@ -14,11 +14,11 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         internal Interactor(
             TestLogs logs,
             TDriver driver,
-            Func<By, TElement> findElement)
+            Func<By, IWebElement> findElement)
         {
             _logs = logs;
             _driver = driver;
-            _findElement = findElement;
+            _findElement = by => (TElement) findElement(by);
         }
 
         internal void ActOnDriver(ActOnDriverAction<TDriver, TElement> action)
@@ -93,7 +93,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
                 }
             }
         }
-        
+
         internal Interactor<TDriver, TElement> CreateContainedInteractor(By findContainerBy)
         {
             return new(

@@ -9,8 +9,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.WebContext
     internal class NhsAppWebViewContextStrategy : IWebContextStrategy
     {
         private readonly NativeDriverContext _nativeDriverContext;
-
-        private Lazy<IWebContext> WebContext { get; }
+        private readonly NhsAppPreHomeWebViewContextStrategy _nhsAppPreHomeWebViewContextStrategy;
+        private IWebContext? _webContext;
 
         internal event EventHandler? SwitchedTo;
 
@@ -18,23 +18,26 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.WebContext
             NhsAppPreHomeWebViewContextStrategy nhsAppPreHomeWebViewContextStrategy)
         {
             _nativeDriverContext = nativeDriverContext;
-
-            WebContext = new Lazy<IWebContext>(() =>
-            {
-                nhsAppPreHomeWebViewContextStrategy.EnsureContextGrabbed();
-
-                _nativeDriverContext.Logs.Info("Grabbing context for NhsAppWebView");
-
-                var context = _nativeDriverContext.WebContextGrabber.GrabNextUnusedWebContext(WebContextKind.WebView);
-
-                _nativeDriverContext.Logs.Info($"Grabbed {context} for NhsAppWebView");
-                return context;
-            });
+            _nhsAppPreHomeWebViewContextStrategy = nhsAppPreHomeWebViewContextStrategy;
         }
 
         public void SwitchTo()
         {
-            _nativeDriverContext.SwitchToWebContext(WebContext.Value, AssertReady);
+            if (_webContext == null)
+            {
+                _nhsAppPreHomeWebViewContextStrategy.EnsureContextGrabbed();
+
+                _nativeDriverContext.Logs.Info("Grabbing context for NhsAppWebView");
+                _webContext = _nativeDriverContext.WebContextGrabber.GrabNextUnusedWebContext(WebContextKind.WebView);
+                _nativeDriverContext.Logs.Info($"Grabbed {_webContext} for NhsAppWebView");
+
+                _nativeDriverContext.SwitchToWebContext(_webContext, AssertReady);
+            }
+            else
+            {
+                _nativeDriverContext.SwitchToWebContext(_webContext, null);
+            }
+
             SwitchedTo?.Invoke(this, EventArgs.Empty);
         }
 

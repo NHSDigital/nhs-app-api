@@ -17,11 +17,6 @@ namespace NHSOnline.IntegrationTests.UI
             @"Appium error: An unknown server-side error occurred while processing the command\. Original error: Unexpected data: {""Error"":""InvalidService"",""Request"":""StartService"",""Service"":""com.apple.webinspector""}",
             RegexOptions.Compiled);
 
-        // 389382-Got response with status 200: disconnected: unable to connect to renderer
-        private static readonly Regex UnableToConnectToRenderer = new(
-            @"Appium error: An unknown server-side error occurred while processing the command\. Original error: disconnected: unable to connect to renderer*",
-            RegexOptions.Compiled);
-
         // 388660-Error executing adbExec - adb: error: listener 'tcp:9222' not found
         private static readonly Regex AdbErrorListenerNotFound = new(
             @"Appium error: An unknown server-side error occurred while processing the command\. Original error: Error executing adbExec\. .* Stderr: 'adb: error: listener 'tcp:9222' not found'",
@@ -95,7 +90,6 @@ namespace NHSOnline.IntegrationTests.UI
         private static readonly List<(Regex pattern, RetryStatus result)> RetryExceptionMessageRegexes = new()
         {
             (InvalidServiceWebInspectorMessage, RetryStatus.Retry(nameof(InvalidServiceWebInspectorMessage))),
-            (UnableToConnectToRenderer, RetryStatus.Retry(nameof(UnableToConnectToRenderer))),
             (AdbErrorListenerNotFound, RetryStatus.Retry(nameof(AdbErrorListenerNotFound))),
             (FailedToCreateDriver, RetryStatus.Retry(nameof(FailedToCreateDriver))),
             (DeviceTimeSkew, RetryStatus.Retry(nameof(DeviceTimeSkew))),

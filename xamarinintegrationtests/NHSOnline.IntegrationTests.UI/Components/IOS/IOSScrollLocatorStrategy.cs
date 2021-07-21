@@ -1,5 +1,6 @@
 using System;
 using NHSOnline.IntegrationTests.UI.Drivers;
+using NHSOnline.IntegrationTests.UI.Drivers.BrowserStack;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.iOS;
@@ -21,7 +22,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
 
         public By FindBy => throw new NotSupportedException("Cannot FindBy an element that needs scrolling to");
 
-        void IIOSLocatorStrategy.ActOnElementContext(Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action)
+        void IIOSLocatorStrategy.ActOnElementContext(Action<ElementContext<IIOSBrowserStackDriver, IOSElement>> action)
         {
             _interactor.ActOnElementContext(
                 _wrappedStrategy.FindBy,

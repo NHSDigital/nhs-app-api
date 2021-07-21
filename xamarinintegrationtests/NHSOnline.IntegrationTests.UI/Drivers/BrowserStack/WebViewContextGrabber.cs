@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.IntegrationTests.UI.Drivers.Native;
 using OpenQA.Selenium;
 
-namespace NHSOnline.IntegrationTests.UI.Drivers.WebContext
+namespace NHSOnline.IntegrationTests.UI.Drivers.BrowserStack
 {
     internal class WebViewContextGrabber
     {
@@ -27,7 +27,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.WebContext
             return GrabRetrier(() =>
             {
                 var allWebContexts = _webViewLocatorStrategy.GetWebContexts(webContextKind);
-                _logs.Info($"All web contexts: {string.Join(", ", allWebContexts)}");
                 var excludingAlreadyUsed = allWebContexts.Where(context => !_usedContexts.Contains(context));
                 var firstAvailable = excludingAlreadyUsed.FirstOrDefault();
 
@@ -45,19 +44,21 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.WebContext
         private static IWebContext GrabRetrier(Func<IWebContext> grabber)
         {
             var retryUntil = DateTime.UtcNow.Add(TimeSpan.FromMinutes(1));
+            bool InRetryWindow() => DateTime.UtcNow < retryUntil;
+
             while (true)
             {
                 try
                 {
                     return grabber();
                 }
-                catch (AssertFailedException) when (DateTime.UtcNow < retryUntil)
+                catch (AssertFailedException) when (InRetryWindow())
                 {
                 }
-                catch (WebDriverException) when (DateTime.UtcNow < retryUntil)
+                catch (InvalidOperationException e) when (InRetryWindow() && IsNoSuchContextFound(e))
                 {
                 }
-                catch (InvalidOperationException e) when (DateTime.UtcNow < retryUntil && IsNoSuchContextFound(e))
+                catch (WebDriverException) when (InRetryWindow())
                 {
                 }
 
