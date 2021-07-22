@@ -16,6 +16,7 @@ The configuration overrides for the application can be found in `/docker/bddtest
 The integration tests themselves can be run either through an IDE (e.g. IntelliJ) or in a docker container (to more closely replicate the CI environment).
 
 ## Running Integration Tests
+_**NOTE: the make commands for the integration tests are in the BDDTests folder of the mono repo, so you will need to be in that folder for the make commands to work.**_
 
 By default all of the `make run` commands will execute the tests in docker. To start the services so that the tests can be executed on the host machine append `RUN_LOCAL_BDD=1` to the command line.
 
@@ -101,7 +102,7 @@ Add the following environment variables (It is important to ensure all of these 
 | BROWSERSTACK_DEVICE_NAME      | Device to test - the build script defaults this to `Google Pixel 2`                                               |
 | BROWSERSTACK_OS_VERSION       | OS Version to test - the build script defaults this to `8.0`                                                      |
 | APP_PATH                      | Path to uploaded app in BrowserStack - the build script uploads to `$HOSTNAME-android` (e.g. `LPT4128-android`)   |
-| APP_SCHEME                    | Set to `nhsapp`                                                                                                   |
+| APP_SCHEME                    | Set to `http`, this used to be `nhsapp` but was changed to use http                                               |
 | AUTOLOGIN                     | Set to `true`                                                                                                     |
 | XPATH_PAGE_SOURCE             | Set to `false`                                                                                                    |
 | SESSION_EXPIRY_MINUTES        | Set to 3                                                                 |
@@ -148,7 +149,7 @@ Add the following environment variables (It is important to ensure all of these 
 | BROWSERSTACK_DEVICE_NAME      | Device to test - the build script defaults this to `iPhone 8`                                                     |
 | BROWSERSTACK_OS_VERSION       | OS Version to test - the build script defaults this to `12.1`                                                     |
 | APP_PATH                      | Path to uploaded app in BrowserStack - the build script uploads to `$HOSTNAME-ios` (e.g. `LPT4128-ios`)           |
-| APP_SCHEME                    | Set to `nhsapp`                                                                                                   |
+| APP_SCHEME                    | Set to `http`, this used to be `nhsapp` but was changed to use http                                               |
 | AUTOLOGIN                     | Set to `true`                                                                                                     |
 | XPATH_PAGE_SOURCE             | Set to `false`                                                                                                    |
 | SESSION_EXPIRY_MINUTES        | Set to 3                                                                                                          |

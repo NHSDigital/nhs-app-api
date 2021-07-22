@@ -88,9 +88,8 @@ Feature: Session Expiry and Extend Frontend
     Then I see the home page
     And I navigate to Appointments
     When I am idle long enough for the session expiry dialog box to appear
-    Then I am idle for a short time
     And I see a dialog box prompting to extend the session
-    When I click to extend the session
+    And I click to extend the session
     Then the dialog box is not visible on the screen
     When I click the GP Appointments link
     Then the Your Appointments page is displayed
