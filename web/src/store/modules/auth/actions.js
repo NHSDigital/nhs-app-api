@@ -8,7 +8,7 @@ import { AUTH_RESPONSE, INIT_AUTH, LOGOUT, UPDATE_CONFIG, ADD_GP_SESSION_ERROR }
 
 const thirtySeconds = 30000;
 
-const final = ({ self, commit }) => {
+const final = ({ self, commit, expired }) => {
   commit(LOGOUT, true);
   self.dispatch('analytics/init');
   self.dispatch('availableAppointments/init');
@@ -31,11 +31,17 @@ const final = ({ self, commit }) => {
   self.dispatch('gpMessages/init');
   self.dispatch('practiceSettings/init');
 
+  if (expired && NativeApp.supportsSessionExpired()) {
+    NativeApp.sessionExpired();
+    return;
+  }
+
   if (NativeApp.supportsLogout()) {
     NativeApp.logout();
-  } else {
-    self.app.$router.push({ path: LOGIN_PATH });
+    return;
   }
+
+  self.app.$router.push({ path: LOGIN_PATH });
 };
 
 const removeSessionCookies = self => removeCookies({
@@ -183,20 +189,20 @@ export default {
   logoutWhenExpired() {
     this.dispatch('modal/hide');
     this.dispatch('session/showExpiryMessage');
-    this.dispatch('auth/logout', { expired: true });
+    this.dispatch('auth/logout', true);
   },
   logoutNoJs() {
     removeSessionCookies(this);
   },
-  logout({ commit }, { expired } = {}) {
+  logout({ commit }, sessionExpired = false) {
     logoutCleanUp({ self: this });
 
     return this
       .app
       .$http
       .deleteV1Session()
-      .then(() => final({ self: this, commit, expired }))
-      .catch(() => final({ self: this, commit, expired }));
+      .then(() => final({ self: this, commit, expired: sessionExpired }))
+      .catch(() => final({ self: this, commit, expired: sessionExpired }));
   },
   init({ commit }) {
     commit(INIT_AUTH);

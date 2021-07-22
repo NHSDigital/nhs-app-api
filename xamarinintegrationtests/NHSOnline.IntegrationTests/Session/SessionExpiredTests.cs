@@ -32,7 +32,8 @@ namespace NHSOnline.IntegrationTests.Session
             Thread.Sleep(SessionExpiredDuration);
 
             AndroidLoggedOutHomePage
-                .AssertOnPage(driver);
+                .AssertOnPage(driver)
+                .AssertSessionExpired();
         }
 
         [NhsAppIOSTest(IOSBrowserStackCapability.ExtendedIdleTimeout)]
@@ -50,7 +51,8 @@ namespace NHSOnline.IntegrationTests.Session
             Thread.Sleep(SessionExpiredDuration);
 
             IOSLoggedOutHomePage
-                .AssertOnPage(driver);
+                .AssertOnPage(driver)
+                .AssertSessionExpired();
         }
     }
 }

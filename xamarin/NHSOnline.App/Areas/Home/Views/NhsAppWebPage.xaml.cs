@@ -89,6 +89,10 @@ namespace NHSOnline.App.Areas.Home.Views
         public AsyncCommand LogoutCommand
             => new AsyncCommand(() => LogoutRequested);
 
+        public Func<Task>? SessionExpiredRequested { get; set; }
+        public AsyncCommand SessionExpiredCommand
+            => new AsyncCommand(() => SessionExpiredRequested);
+
         public Func<Task>? BackRequested { get; set; }
         public AsyncCommand BackRequestedCommand
             => new AsyncCommand(() => BackRequested);

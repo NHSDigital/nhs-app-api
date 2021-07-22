@@ -28,6 +28,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly IForcedUpdateCheckService _forcedUpdateCheckService;
         private readonly IAlertDialog _alertDialogService;
         private readonly BiometricLoginErrorPageDispatcher _biometricLoginErrorPageDispatcher;
+        private readonly LoggedOutHomeScreenModel _model;
 
         private static readonly TimeSpan BiometricDelayOnAppearing = TimeSpan.FromMilliseconds(100);
         private static readonly TimeSpan BiometricDelayOnTemporaryLockout = TimeSpan.FromSeconds(5);
@@ -47,7 +48,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             IBrowserOverlay browserOverlay,
             IBackgroundExecutionService backgroundExecutionService,
             IForcedUpdateCheckService forcedUpdateCheckService,
-            IAlertDialog alertDialogService)
+            IAlertDialog alertDialogService,
+            LoggedOutHomeScreenModel model)
         {
             _view = view;
             _pageFactory = pageFactory;
@@ -59,9 +61,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _backgroundExecutionService = backgroundExecutionService;
             _forcedUpdateCheckService = forcedUpdateCheckService;
             _alertDialogService = alertDialogService;
+            _model = model;
 
             _biometricLoginErrorPageDispatcher = new BiometricLoginErrorPageDispatcher(_view, _pageFactory,
                 _biometricAuthenticationService, _userPreferencesService);
+
+            _view.SetScreenState(_model.ScreenState);
 
             _view.AppNavigation
                 .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
@@ -124,6 +129,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task ViewOnLoginRequested()
         {
             Logger.LogInformation("Login Requested");
+
+            _view.ResetScreenState();
+
             await BeginLoginJourney().PreserveThreadContext();
         }
 

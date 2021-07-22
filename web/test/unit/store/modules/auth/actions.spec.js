@@ -375,7 +375,7 @@ describe('actions', () => {
     });
 
     it('will dispatch the `auth/logout` event', () => {
-      expect(actions.dispatch).toHaveBeenCalledWith('auth/logout', { expired: true });
+      expect(actions.dispatch).toHaveBeenCalledWith('auth/logout', true);
     });
   });
 

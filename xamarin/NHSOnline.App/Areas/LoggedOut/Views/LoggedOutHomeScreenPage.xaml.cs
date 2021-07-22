@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
@@ -21,6 +22,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             _appNavigation = new AppNavigation<ILoggedOutHomeScreenView.IEvents>(this, Navigation);
 
             InitializeComponent();
+
             NavigationPage.SetHasNavigationBar(this, false);
         }
 
@@ -82,6 +84,20 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             {
                 await DeeplinkRequested(deeplinkUrl).PreserveThreadContext();
             }
+        }
+
+        public void ResetScreenState()
+        {
+            VisualStateManager.GoToState(
+                this,
+                LoggedOutHomeScreenStates.Default.ToString());
+        }
+
+        public void SetScreenState(LoggedOutHomeScreenStates loggedOutHomeScreenState)
+        {
+            VisualStateManager.GoToState(
+                this,
+                loggedOutHomeScreenState.ToString());
         }
     }
 }

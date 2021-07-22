@@ -35,6 +35,7 @@ import {
 
 import viewedPreRegInstructions from '@/middleware/viewedPreRegInstructions';
 import notificationsPrompt from '@/middleware/notificationsPrompt';
+import nativeLogout from '@/middleware/nativeLogout';
 import { CLEAR_SELECTED_MENU_ITEM } from '@/middleware/nativeNavigation';
 import { baseNhsAppHelpUrl, appLoginHelpUrl } from '@/router/externalLinks';
 import proofLevel from '@/lib/proofLevel';
@@ -61,6 +62,7 @@ export const LOGIN = {
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
     shouldShowContentHeader: false,
     helpUrl: appLoginHelpUrl,
+    middleware: [nativeLogout],
   },
 };
 

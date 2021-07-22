@@ -74,6 +74,13 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         }
 
         [JavascriptInterface]
+        [Export("sessionExpired")]
+        public void SessionExpired()
+        {
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.SessionExpired());
+        }
+
+        [JavascriptInterface]
         [Export("setMenuBarItem")]
         public void SetMenuBarItem(string argumentJson)
         {

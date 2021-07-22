@@ -1,11 +1,15 @@
 using System;
 using System.Threading.Tasks;
+using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut
 {
     internal interface ILoggedOutHomeScreenView: INavigationView<ILoggedOutHomeScreenView.IEvents>
     {
+        void ResetScreenState();
+        void SetScreenState(LoggedOutHomeScreenStates loggedOutHomeScreenState);
+
         internal interface IEvents
         {
             Func<Task>? Appearing { get; set; }

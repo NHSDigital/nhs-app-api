@@ -174,7 +174,7 @@ describe('actions', () => {
 
       expect(actions.dispatch).toHaveBeenCalledWith('modal/hide');
       expect(actions.dispatch).toHaveBeenCalledWith('session/showExpiryMessage');
-      expect(actions.dispatch).toHaveBeenCalledWith('auth/logout', { expired: true });
+      expect(actions.dispatch).toHaveBeenCalledWith('auth/logout', true);
     });
   });
 });

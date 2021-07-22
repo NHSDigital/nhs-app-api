@@ -34,6 +34,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                 .AddFunction("onSessionExpiring", webView => webView.OnSessionExpiring)
                 .AddFunction("createOnDemandGpSession", webView => webView.CreateOnDemandGpSession)
                 .AddFunction("logout", webView => webView.Logout)
+                .AddFunction("sessionExpired", webView => webView.SessionExpired)
                 .Apply(config.UserContentController);
         }
 

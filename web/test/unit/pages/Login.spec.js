@@ -175,29 +175,4 @@ describe('login page', () => {
       });
     });
   });
-
-  describe('beforeRouteEnter', () => {
-    let next;
-
-    beforeEach(() => {
-      jest.clearAllMocks();
-      next = jest.fn();
-    });
-
-    it('will invoke the logout native app callback if it supports logout', () => {
-      NativeApp.supportsLogout = jest.fn().mockImplementation(() => true);
-      Login.beforeRouteEnter(undefined, undefined, next);
-
-      expect(NativeApp.logout).toHaveBeenCalled();
-      expect(next).not.toHaveBeenCalled();
-    });
-
-    it('will not invoke the logout native app callback if it does not support logout', () => {
-      NativeApp.supportsLogout = jest.fn().mockImplementation(() => false);
-      Login.beforeRouteEnter(undefined, undefined, next);
-
-      expect(NativeApp.logout).not.toHaveBeenCalled();
-      expect(next).toHaveBeenCalled();
-    });
-  });
 });

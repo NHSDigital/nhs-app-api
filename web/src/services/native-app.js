@@ -408,6 +408,16 @@ export default {
     app.logout();
   },
 
+  supportsSessionExpired: () => {
+    const app = window.nativeApp;
+    return app && app.sessionExpired;
+  },
+
+  sessionExpired: () => {
+    const app = window.nativeApp;
+    app.sessionExpired();
+  },
+
   supportsCreateOnDemandGpSession: () => {
     const app = window.nativeApp;
     return app && app.createOnDemandGpSession;

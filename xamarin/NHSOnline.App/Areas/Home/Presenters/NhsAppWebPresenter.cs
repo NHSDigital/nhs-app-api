@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Api.Session;
 using NHSOnline.App.Areas.Home.Models;
+using NHSOnline.App.Areas.LoggedOut;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
@@ -93,6 +94,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterHandler(DisplayPageLeaveWarningRequested, (view, handler) => view.DisplayPageLeaveWarningRequested = handler)
                 .RegisterHandler(OnSessionExpiringRequested, (view, handler) => view.OnSessionExpiringRequested = handler)
                 .RegisterHandler(LogoutRequested, (view, handler) => view.LogoutRequested = handler)
+                .RegisterHandler(SessionExpiredRequested, (view, handler) => view.SessionExpiredRequested = handler)
                 .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler)
                 .RegisterHandler<CreateOnDemandGpSessionRequest>(CreateOnDemandGpSessionRequested, (view, handler) => view.CreateOnDemandGpSessionRequested = handler)
                 .RegisterHandler(_navigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
@@ -390,6 +392,17 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _logger.LogInformation("{Method}", nameof(LogoutRequested));
 
             var model = new LoggedOutHomeScreenModel();
+
+            var page = _pageFactory.CreatePageFor(model);
+            await _view.AppNavigation.PopToNewRootAnimated(page).PreserveThreadContext();
+        }
+
+        private async Task SessionExpiredRequested()
+        {
+            _logger.LogInformation("{Method}", nameof(SessionExpiredRequested));
+
+            var model = new LoggedOutHomeScreenModel(LoggedOutHomeScreenStates.SessionExpired);
+
             var page = _pageFactory.CreatePageFor(model);
             await _view.AppNavigation.PopToNewRootAnimated(page).PreserveThreadContext();
         }

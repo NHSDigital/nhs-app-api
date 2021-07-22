@@ -17,14 +17,13 @@ using NHSOnline.IntegrationTests.WebIntegration.Pkb;
 namespace NHSOnline.IntegrationTests.Session
 {
     [TestClass]
-    [BusinessRule("BR-LOG-07.2","User is prompted to logout or extend their session when their session reaches predefined time until it expires")]
     [BusinessRule("BR-LOG-07.6","Navigating back to the app from a web integration or browser overlay when the app session has expired logs the user out redirecting to the logged out home screen with a yellow banner")]
     public class SessionExpiredWebIntegrationsTests
     {
         private static readonly TimeSpan SessionExpiredDuration = TimeSpan.FromMinutes(2.5);
 
         [NhsAppAndroidTest(AndroidBrowserStackCapability.ExtendedIdleTimeout)]
-        public void APatientWhoAccessesAThirdPartyAndReturnsAsTheSessionIsAboutToExpireWillSeeTheExpiryPromptAndroid(IAndroidDriverWrapper driver)
+        public void APatientWhoAccessesAThirdPartyAndReturnsWhenTheSessionHasExpiredWillSeeTheLoggedOutHomeScreenAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Patrick").FamilyName("Klingon"));
@@ -59,11 +58,12 @@ namespace NHSOnline.IntegrationTests.Session
                 .Navigation.NavigateToAppointments();
 
             AndroidLoggedOutHomePage
-                .AssertOnPage(driver);
+                .AssertOnPage(driver)
+                .AssertSessionExpired();
         }
 
         [NhsAppIOSTest(IOSBrowserStackCapability.ExtendedIdleTimeout)]
-        public void APatientWhoAccessesAThirdPartyAndReturnsAsTheSessionIsAboutToExpireWillSeeTheExpiryPromptIOS(IIOSDriverWrapper driver)
+        public void APatientWhoAccessesAThirdPartyAndReturnsWhenTheSessionHasExpiredWillSeeTheLoggedOutHomeScreenIOS(IIOSDriverWrapper driver)
         {
             var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Barry").FamilyName("Allen"));
@@ -98,7 +98,8 @@ namespace NHSOnline.IntegrationTests.Session
                 .Navigation.NavigateToAppointments();
 
             IOSLoggedOutHomePage
-                .AssertOnPage(driver);
+                .AssertOnPage(driver)
+                .AssertSessionExpired();
         }
     }
 }

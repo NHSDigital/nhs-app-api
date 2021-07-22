@@ -44,7 +44,6 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         public void ContinueWithNhsLogin() => ContinueButton.Click();
 
-        // will be used when we add in the logged out home screen states
         public void AssertSessionExpired() => SessionExpiredText.AssertVisible();
     }
 }

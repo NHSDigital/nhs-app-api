@@ -69,6 +69,9 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty LogoutCommandProperty =
             BindableProperty.Create(nameof(LogoutCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
 
+        public static readonly BindableProperty SessionExpiredCommandProperty =
+            BindableProperty.Create(nameof(SessionExpiredCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
+
         public static readonly BindableProperty CreateOnDemandGpSessionCommandProperty =
             BindableProperty.Create(nameof(CreateOnDemandGpSessionCommand), typeof(AsyncCommand<CreateOnDemandGpSessionRequest>), typeof(NhsAppWebView));
 
@@ -257,6 +260,14 @@ namespace NHSOnline.App.Controls.WebViews
         {
             get => (AsyncCommand)GetValue(LogoutCommandProperty);
             set => SetValue(LogoutCommandProperty, value);
+        }
+
+        public void SessionExpired() => SessionExpiredCommand.Execute(null);
+
+        public AsyncCommand SessionExpiredCommand
+        {
+            get => (AsyncCommand)GetValue(SessionExpiredCommandProperty);
+            set => SetValue(SessionExpiredCommandProperty, value);
         }
 
         public async Task SendBiometricCompletion(BiometricCompletion biometricCompletion)

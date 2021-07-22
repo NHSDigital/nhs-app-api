@@ -13,10 +13,22 @@
              xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
              xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls">
     
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup>
+            <VisualState x:Name="Default" />
+            <VisualState x:Name="SessionExpired">
+                <VisualState.Setters>
+                    <Setter TargetName="SessionExpiredBanner" Property="IsVisible" Value="True" />
+                </VisualState.Setters>
+            </VisualState>
+        </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+    
     <controls:GradientBackground BackgroundColor="{StaticResource HomeBlueInnerGradient}"
                                  InnerColour="{StaticResource HomeBlueInnerGradient}"
                                  OuterColour="{StaticResource HomeBlueOuterGradient}"
                                  Radius="Max" >
+        
         <ContentView.Effects>
             <effects:SafeAreaPaddingTop />
         </ContentView.Effects>
@@ -36,6 +48,30 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="25" />
             </Grid.RowDefinitions>
+            
+            <StackLayout 
+                Grid.ColumnSpan="3" 
+                IsVisible="False"
+                x:Name="SessionExpiredBanner">
+                
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="10" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <BoxView HorizontalOptions="FillAndExpand"
+                             BackgroundColor="{StaticResource NhsUkYellow}"
+                             Grid.ColumnSpan="3">
+                    </BoxView>
+                        
+                    <Label Grid.Column="1"
+                           Padding="0,10,0,10"
+                           Text="For your security, you need to log in again"
+                           HorizontalTextAlignment="Center"/>
+                </Grid>
+            </StackLayout>
             
             <StackLayout Grid.Row="1" 
                          Grid.Column="1" 

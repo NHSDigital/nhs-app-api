@@ -42,6 +42,7 @@ namespace NHSOnline.App.Areas.Home
             Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
             Func<Task>? OpenSettingsRequested { get; set; }
             Func<Task>? LogoutRequested { get; set; }
+            Func<Task>? SessionExpiredRequested { get; set; }
             Func<Task>? BackRequested { get; set; }
             Func<CreateOnDemandGpSessionRequest, Task>? CreateOnDemandGpSessionRequested { get; set; }
             Func<Uri, Task>? DeeplinkRequested { get; set; }
@@ -71,6 +72,5 @@ namespace NHSOnline.App.Areas.Home
         Task SendStayOnPage();
         Task SendLeavePage();
         Task Logout();
-        Task ValidateSession();
     }
 }
