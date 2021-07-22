@@ -37,6 +37,7 @@ import {
   ORGAN_DONATION_WITHDRAW_REASON_NAME,
   ORGAN_DONATION_WITHDRAWN_NAME,
   ORGAN_DONATION_YOUR_CHOICE_NAME,
+  ORGAN_DONATION_JOURNEY_NAME,
 } from '@/router/names';
 import { UPLIFT_GP_MEDICAL_RECORD } from '@/router/routes/medical-record';
 
@@ -57,6 +58,9 @@ export const ORGAN_DONATION = {
     crumb: breadcrumbs.ORGAN_DONATION_CRUMB,
     helpUrl: organDonationHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: ORGAN_DONATION_JOURNEY_NAME,
+    },
   },
 };
 
@@ -72,6 +76,9 @@ export const ORGAN_DONATION_ADDITIONAL_DETAILS = {
     crumb: breadcrumbs.ORGAN_DONATION_ADDITIONAL_DETAILS_CRUMB,
     helpUrl: organDonationHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: ORGAN_DONATION_JOURNEY_NAME,
+    },
   },
 };
 
@@ -87,6 +94,9 @@ export const ORGAN_DONATION_AMEND = {
     crumb: breadcrumbs.ORGAN_DONATION_AMEND_CRUMB,
     helpUrl: organDonationHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: ORGAN_DONATION_JOURNEY_NAME,
+    },
   },
 };
 
@@ -102,6 +112,9 @@ export const ORGAN_DONATION_FAITH = {
     crumb: breadcrumbs.ORGAN_DONATION_FAITH_CRUMB,
     helpUrl: organDonationHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: ORGAN_DONATION_JOURNEY_NAME,
+    },
   },
 };
 
@@ -117,6 +130,9 @@ export const ORGAN_DONATION_MORE_ABOUT_ORGANS = {
     crumb: breadcrumbs.ORGAN_DONATION_MORE_ABOUT_ORGANS_CRUMB,
     helpUrl: organDonationHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: ORGAN_DONATION_JOURNEY_NAME,
+    },
   },
 };
 
@@ -132,6 +148,9 @@ export const ORGAN_DONATION_SOME_ORGANS = {
     crumb: breadcrumbs.ORGAN_DONATION_SOME_ORGANS_CRUMB,
     helpUrl: organDonationHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: ORGAN_DONATION_JOURNEY_NAME,
+    },
   },
 };
 
@@ -147,6 +166,9 @@ export const ORGAN_DONATION_REVIEW_YOUR_DECISION = {
     crumb: breadcrumbs.ORGAN_DONATION_REVIEW_YOUR_DECISION_CRUMB,
     helpUrl: organDonationHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: ORGAN_DONATION_JOURNEY_NAME,
+    },
   },
 };
 
@@ -162,6 +184,9 @@ export const ORGAN_DONATION_VIEW_DECISION = {
     crumb: breadcrumbs.ORGAN_DONATION_VIEW_DECISION_CRUMB,
     helpUrl: organDonationHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: ORGAN_DONATION_JOURNEY_NAME,
+    },
   },
 };
 
@@ -177,6 +202,9 @@ export const ORGAN_DONATION_WITHDRAW_REASON = {
     crumb: breadcrumbs.ORGAN_DONATION_WITHDRAW_REASON_CRUMB,
     helpUrl: organDonationHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: ORGAN_DONATION_JOURNEY_NAME,
+    },
   },
 };
 
@@ -192,6 +220,9 @@ export const ORGAN_DONATION_WITHDRAWN = {
     crumb: breadcrumbs.ORGAN_DONATION_WITHDRAWN_CRUMB,
     helpUrl: organDonationHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: ORGAN_DONATION_JOURNEY_NAME,
+    },
   },
 };
 
@@ -207,6 +238,9 @@ export const ORGAN_DONATION_YOUR_CHOICE = {
     crumb: breadcrumbs.ORGAN_DONATION_YOUR_CHOICE_CRUMB,
     helpUrl: organDonationHelpUrl,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: ORGAN_DONATION_JOURNEY_NAME,
+    },
   },
 };
 

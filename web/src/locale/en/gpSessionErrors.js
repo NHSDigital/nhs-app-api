@@ -35,6 +35,18 @@ export default {
     ifYouNeedInformationNow: 'If you need this information now, contact your GP surgery.',
     forUrgentMedicalAdvice: 'For urgent medical advice, go to ',
   },
+  organDonation: {
+    otherThingsYouCanDo: 'Other things you can do',
+    tryAgainHeader: 'Sorry, there is a problem with organ donation',
+    youAreNotCurrentlyAble: 'You are not currently able to view or manage your organ donation decision.',
+    temporaryProblem: 'This may be a temporary problem.',
+    organDonationUnavailable: 'Sorry, organ donation is unavailable',
+    organDonationMessage: 'You are not currently able to view or manage your organ donation decision using the NHS App.',
+    ifYouNeedInformationNow: 'Contact NHS Blood and Transplant for help',
+    ifYouNeedInformationNowEmail: 'Email',
+    emailText: 'NHSApp.Enquiries@nhsbt.nhs.uk',
+    emailLink: 'mailto: NHSApp.Enquiries@nhsbt.nhs.uk',
+  },
   genericOnDemand: {
     serviceUnavailable: 'Sorry, this service is unavailable',
     ifYouNeedInformationNow: 'If you need this information now',

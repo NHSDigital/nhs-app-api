@@ -46,6 +46,11 @@ namespace NHSOnline.Backend.PfsApi.Filters
             var loggedInPatientIdFromSession = userSession.GpUserSession.Id;
             var patientIdInRequestHeader = httpContext.Request.Headers[Constants.HttpHeaders.PatientId];
 
+            if (string.IsNullOrEmpty(patientIdInRequestHeader))
+            {
+                return false;
+            }
+
             return !string.Equals(
                 loggedInPatientIdFromSession.ToString(),
                 patientIdInRequestHeader.ToString(),

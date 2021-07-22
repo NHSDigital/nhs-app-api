@@ -104,8 +104,7 @@ Add the following environment variables (It is important to ensure all of these 
 | APP_SCHEME                    | Set to `nhsapp`                                                                                                   |
 | AUTOLOGIN                     | Set to `true`                                                                                                     |
 | XPATH_PAGE_SOURCE             | Set to `false`                                                                                                    |
-| SESSION_EXPIRY_MINUTES        | Set to 3                                                                 |
-| IS_NATIVE_APP_RUN             | Set to `true`                                                                                                     |
+| SESSION_EXPIRY_MINUTES        | Set to 3                                                                                                          |
 
 
 The build also requires an apk to be uploaded, this is to be added at the directory `../android/app/build/outputs/apk/browserstack`. This can be generated locally or it can also be obtained from the azure build. The name which the build looks for is `app-browserstack-unsigned.apk` so ensure you get this apk. It is likely that the browserstack extension of this path will not exist so if needed, create it.
@@ -152,7 +151,6 @@ Add the following environment variables (It is important to ensure all of these 
 | AUTOLOGIN                     | Set to `true`                                                                                                     |
 | XPATH_PAGE_SOURCE             | Set to `false`                                                                                                    |
 | SESSION_EXPIRY_MINUTES        | Set to 3                                                                                                          |
-| IS_NATIVE_APP_RUN             | Set to `true`                                                                                                     |
 
 
 The build also requires an ipa to be uploaded, this is to be added at the directory stated in the environment variable `NATIVE_APP_PATH_IOS`. This can be generated locally or it can also be obtained from the azure build.

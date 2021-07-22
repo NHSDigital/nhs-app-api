@@ -14,6 +14,9 @@
     <linked-profile-errors
       v-else-if="linkedAccountsOnDemandApiError"
       :error="gpSessionApiError" />
+    <organ-donation-errors
+      v-else-if="organDonationOnDemandApiError"
+      :error="gpSessionApiError"/>
     <generic-errors
       v-else-if="defaultOnDemandApiError"
       :try-again-route="tryAgainPath" />
@@ -29,6 +32,7 @@ import {
   GP_APPOINTMENT_JOURNEY_NAME,
   GP_LINKED_ACCOUNT_JOURNEY_NAME,
   GP_HEALTH_RECORD_JOURNEY_NAME,
+  ORGAN_DONATION_JOURNEY_NAME,
 } from '@/router/names';
 import NativeReferrerSetup from '@/services/nativeReferrerSetup';
 import { isBlankString, removeNhsAppHost } from '@/lib/utils';
@@ -37,6 +41,7 @@ import PrescriptionErrors from '@/components/errors/pages/prescriptions/Prescrip
 import LinkedProfileErrors from '@/components/linked-profiles/LinkedProfileErrors';
 import GenericErrors from '@/components/errors/pages/on-demand-generic/GenericErrors';
 import HealthRecordErrors from '@/components/errors/pages/health-record/HealthRecordErrors';
+import OrganDonationErrors from '@/components/errors/pages/organ-donation/OrganDonationErrors';
 import OnUpdateTitleMixin from '@/plugins/mixinDefinitions/OnUpdateTitleMixin';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 
@@ -47,6 +52,7 @@ export default {
     PrescriptionErrors,
     LinkedProfileErrors,
     HealthRecordErrors,
+    OrganDonationErrors,
     GenericErrors,
   },
   mixins: [OnUpdateTitleMixin],
@@ -56,6 +62,7 @@ export default {
       appointmentsOnDemandApiError: false,
       linkedAccountsOnDemandApiError: false,
       healthRecordOnDemandApiError: false,
+      organDonationOnDemandApiError: false,
       defaultOnDemandApiError: false,
     };
   },
@@ -144,6 +151,9 @@ export default {
           break;
         case GP_HEALTH_RECORD_JOURNEY_NAME:
           this.healthRecordOnDemandApiError = true;
+          break;
+        case ORGAN_DONATION_JOURNEY_NAME:
+          this.organDonationOnDemandApiError = true;
           break;
         default:
           this.defaultOnDemandApiError = true;

@@ -26,6 +26,8 @@ import {
   SET_WITHDRAW_REASON_ID,
   SET_WITHDRAWING,
   UPDATE_ORIGINAL_REGISTRATION,
+  ADD_ERROR,
+  CLEAR,
   initialState,
 } from './mutation-types';
 
@@ -48,6 +50,13 @@ export default {
     return mapKeys((key) => {
       state[key] = blank[key];
     })(state);
+  },
+  [ADD_ERROR](state, errorDetails) {
+    state.error = errorDetails;
+    state.hasLoaded = true;
+  },
+  [CLEAR](state) {
+    state.error = null;
   },
   [LOADED](state, registration) {
     state.registration = registration;

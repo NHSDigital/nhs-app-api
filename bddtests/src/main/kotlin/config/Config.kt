@@ -36,7 +36,6 @@ class Config private constructor() {
     val browserstackDeviceName: String?
     val browserstackDeviceOSVersion: String?
     val browserstackBuild: String
-    val isNativeAppTestRun: Boolean
     val autoLogin: String
     val appPath: String
     val appiumServer: String
@@ -91,7 +90,6 @@ class Config private constructor() {
         appiumServer = envOrDefault("APPIUM_SERVER", "http://127.0.0.1:4723/wd/hub")
         browserstackDeviceName = envOrNull("BROWSERSTACK_DEVICE_NAME")
         browserstackDeviceOSVersion = envOrNull("BROWSERSTACK_OS_VERSION")
-        isNativeAppTestRun = envOrDefault("IS_NATIVE_APP_RUN", false)
 
         cidSettingsUrl = envOrDefault(
                 "CID_SETTINGS_URL",

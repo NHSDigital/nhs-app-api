@@ -1,63 +1,67 @@
 <template>
-  <div v-if="showTemplate && hasLoaded" id="mainDiv" class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
-      <div v-if="isConflicted || hasExistingDecision">
-        <div v-if="isConflicted">
-          <message-dialog :icon-text="$t('organDonation.index.decisionFound')"
-                          message-id="success-dialog" message-type="success">
-            <message-text>
-              {{ $t('organDonation.index.yourRegistrationIsBeingProcessed') }}</message-text>
-          </message-dialog>
-          <h2>{{ $t('organDonation.index.weAreProcessingYourRegistration') }}</h2>
-          <p>
-            {{ $t('organDonation.index.pleaseCheckBackInTwoDays') }}</p>
+  <div v-if="error">
+    <organ-donation-errors :error="error"/>
+  </div>
+  <div v-else>
+    <div v-if="showTemplate && hasLoaded" id="mainDiv" class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <div v-if="isConflicted || hasExistingDecision">
+          <div v-if="isConflicted">
+            <message-dialog :icon-text="$t('organDonation.index.decisionFound')"
+                            message-id="success-dialog" message-type="success">
+              <message-text>
+                {{ $t('organDonation.index.yourRegistrationIsBeingProcessed') }}</message-text>
+            </message-dialog>
+            <h2>{{ $t('organDonation.index.weAreProcessingYourRegistration') }}</h2>
+            <p>
+              {{ $t('organDonation.index.pleaseCheckBackInTwoDays') }}</p>
+          </div>
+          <div v-else>
+            <decision-info :decision="decision"
+                           :decision-details="decisionDetails"
+                           header-key="organDonation.index.yourDecision" />
+            <faith-details-registered v-if="hasExistingOptIn" :declaration="faithDeclaration"/>
+            <still-your-decision :is-some-organs="isSomeOrgans"
+                                 :show-amend="true"
+                                 :show-reaffirm="!hasAppointedRep"/>
+            <div v-if="hasAppointedRep">
+              <p>{{ $t('organDonation.index.callTheOrganDonationLine') }}</p>
+              <span aria-label="zero three zero zero one two three two three two three">
+                0300 123 2323
+              </span>
+            </div>
+          </div>
+          <next-steps v-if="!hasAppointedRep && (hasExistingOptIn || hasExistingOptOut)"
+                      :is-opt-in-decision="hasExistingOptIn"/>
+          <other-things-to-do :can-withdraw="canWithdraw"/>
         </div>
         <div v-else>
-          <decision-info :decision="decision"
-                         :decision-details="decisionDetails"
-                         header-key="organDonation.index.yourDecision" />
-          <faith-details-registered v-if="hasExistingOptIn" :declaration="faithDeclaration"/>
-          <still-your-decision :is-some-organs="isSomeOrgans"
-                               :show-amend="true"
-                               :show-reaffirm="!hasAppointedRep"/>
-          <div v-if="hasAppointedRep">
-            <p>{{ $t('organDonation.index.callTheOrganDonationLine') }}</p>
-            <span aria-label="zero three zero zero one two three two three two three">
-              0300 123 2323
-            </span>
+          <menu-item-list>
+            <find-out-more-link/>
+          </menu-item-list>
+          <div class="nhsuk-inset-text">
+            <span class="nhsuk-u-visually-hidden">{{ $t('components.insetText.heading') }}</span>
+            <p>{{ $t('organDonation.index.ifYouHaveNotRegisteredYourDecision') }}
+              <analytics-tracked-tag id="law-change"
+                                     :href="lawChangeUrl"
+                                     :text="$t('organDonation.index.changesToTheLawMayAffectYou')"
+                                     class="inline"
+                                     tag="a"
+                                     target="_blank">
+                {{ $t('organDonation.index.changesToTheLawMayAffectYou') }}</analytics-tracked-tag>.
+            </p>
           </div>
+          <make-decision/>
+          <menu-item-list>
+            <already-registered-link/>
+          </menu-item-list>
         </div>
-        <next-steps v-if="!hasAppointedRep && (hasExistingOptIn || hasExistingOptOut)"
-                    :is-opt-in-decision="hasExistingOptIn"/>
-        <other-things-to-do :can-withdraw="canWithdraw"/>
-      </div>
-      <div v-else>
-        <menu-item-list>
-          <find-out-more-link/>
-        </menu-item-list>
-        <div class="nhsuk-inset-text">
-          <span class="nhsuk-u-visually-hidden">{{ $t('components.insetText.heading') }}</span>
-          <p>{{ $t('organDonation.index.ifYouHaveNotRegisteredYourDecision') }}
-            <analytics-tracked-tag id="law-change"
-                                   :href="lawChangeUrl"
-                                   :text="$t('organDonation.index.changesToTheLawMayAffectYou')"
-                                   class="inline"
-                                   tag="a"
-                                   target="_blank">
-              {{ $t('organDonation.index.changesToTheLawMayAffectYou') }}</analytics-tracked-tag>.
-          </p>
-        </div>
-        <make-decision/>
-        <menu-item-list>
-          <already-registered-link/>
-        </menu-item-list>
       </div>
     </div>
   </div>
 </template>
 <script>
 import get from 'lodash/fp/get';
-import { redirectTo } from '@/lib/utils';
 import AlreadyRegisteredLink from '@/components/organ-donation/AlreadyRegisteredLink';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import DecisionInfo from '@/components/organ-donation/DecisionInfo';
@@ -82,6 +86,9 @@ import { isNativeApp } from '@/components/NativeOnlyMixin';
 import {
   ORGAN_DONATION_LAW_CHANGE_URL,
 } from '@/router/externalLinks';
+import { EventBus, FOCUS_NHSAPP_TITLE, UPDATE_HEADER, UPDATE_TITLE } from '@/services/event-bus';
+import OrganDonationErrors from '@/components/errors/pages/organ-donation/OrganDonationErrors';
+import { redirectTo, GP_SESSION_ERROR_STATUS, gpSessionErrorHasRetried } from '@/lib/utils';
 
 const load = async (store) => {
   await store.dispatch('organDonation/getReferenceData');
@@ -102,6 +109,7 @@ export default {
     NextSteps,
     OtherThingsToDo,
     StillYourDecision,
+    OrganDonationErrors,
   },
   data() {
     return {
@@ -146,17 +154,22 @@ export default {
     state() {
       return this.$store.state.organDonation.originalRegistration.state;
     },
+    error() {
+      return this.$store.state.organDonation.error;
+    },
   },
   watch: {
     '$route.query.ts': function watchTimestamp() {
       load(this.$store);
     },
   },
+
   async created() {
     if (!isNativeApp({ route: this.$route, store: this.$store })) {
       redirectTo(this, INDEX_PATH);
       return;
     }
+    this.$store.dispatch('organDonation/clear');
 
     try {
       await load(this.$store);
@@ -168,6 +181,17 @@ export default {
       this.$store.dispatch('organDonation/resetAcceptanceChecks');
       this.$store.dispatch('organDonation/reaffirmCancel');
       this.$store.dispatch('organDonation/withdrawCancel');
+
+      EventBus.$emit(FOCUS_NHSAPP_TITLE);
+      if (this.$route.query.hr) {
+        sessionStorage.setItem('hasRetried', true);
+      }
+
+      const { error } = this;
+      if (error && error.status === GP_SESSION_ERROR_STATUS && gpSessionErrorHasRetried()) {
+        EventBus.$emit(UPDATE_HEADER, 'gpSessionErrors.organDonation.organDonationUnavailable');
+        EventBus.$emit(UPDATE_TITLE, 'gpSessionErrors.organDonation.organDonationUnavailable');
+      }
     }
   },
 };

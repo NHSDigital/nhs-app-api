@@ -51,5 +51,4 @@ function set_browserstack_additional_args () {
   TRANCHE_RUN_ADDITIONAL_ARGS+=(--env "AUTOLOGIN=true")
   TRANCHE_RUN_ADDITIONAL_ARGS+=(--env "XPATH_PAGE_SOURCE=false")
   TRANCHE_RUN_ADDITIONAL_ARGS+=(--env "SESSION_EXPIRY_MINUTES=3")
-  TRANCHE_RUN_ADDITIONAL_ARGS+=(--env "IS_NATIVE_APP_RUN=true")
 }

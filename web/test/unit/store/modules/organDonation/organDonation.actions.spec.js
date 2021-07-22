@@ -18,6 +18,7 @@ import {
   SET_WITHDRAWING,
   STATE_OK,
   UPDATE_ORIGINAL_REGISTRATION,
+  ADD_ERROR,
 } from '@/store/modules/organDonation/mutation-types';
 import { ORGAN_DONATION_VIEW_DECISION_PATH, ORGAN_DONATION_WITHDRAWN_PATH } from '@/router/paths';
 import * as dependency from '@/lib/utils';
@@ -64,6 +65,7 @@ describe('organ donation actions', () => {
         return $http;
       },
     };
+    actions.dispatch = jest.fn();
   });
 
   describe('amendCancel', () => {
@@ -161,6 +163,34 @@ describe('organ donation actions', () => {
       await actions.getReferenceData({ commit });
       expect(commit).toHaveBeenCalledWith(LOADED_REFERENCE_DATA, referenceData);
     });
+
+    it('will pass when 598 error returned', async () => {
+      const error = {
+        response: {
+          status: 598,
+        },
+      };
+      $http.getV1PatientOrgandonationReferencedata = jest.fn().mockImplementation(() => {
+        throw error;
+      });
+      await actions.getReferenceData({ commit });
+      expect(commit).not.toHaveBeenCalledWith('errors/addApiError', error);
+      expect(commit).not.toHaveBeenCalledWith(ADD_ERROR, dependency.createLocalError(error));
+    });
+
+    it('will handle when 599 error returned', async () => {
+      const error = {
+        response: {
+          status: 599,
+        },
+      };
+      $http.getV1PatientOrgandonationReferencedata = jest.fn().mockImplementation(() => {
+        throw error;
+      });
+      await actions.getReferenceData({ commit });
+      expect(commit).not.toHaveBeenCalledWith('errors/addApiError', error);
+      expect(commit).toHaveBeenCalledWith(ADD_ERROR, dependency.createLocalError(error));
+    });
   });
 
   describe('getRegistration', () => {
@@ -172,6 +202,34 @@ describe('organ donation actions', () => {
     it('will commit the result on completion', async () => {
       await actions.getRegistration({ commit });
       expect(commit).toHaveBeenCalledWith(LOADED, result);
+    });
+
+    it('will pass when 598 error returned', async () => {
+      const error = {
+        response: {
+          status: 598,
+        },
+      };
+      $http.getV1PatientOrgandonation = jest.fn().mockImplementation(() => {
+        throw error;
+      });
+      await actions.getRegistration({ commit });
+      expect(commit).not.toHaveBeenCalledWith('errors/addApiError', error);
+      expect(commit).not.toHaveBeenCalledWith(ADD_ERROR, dependency.createLocalError(error));
+    });
+
+    it('will handle when 599 error returned', async () => {
+      const error = {
+        response: {
+          status: 599,
+        },
+      };
+      $http.getV1PatientOrgandonation = jest.fn().mockImplementation(() => {
+        throw error;
+      });
+      await actions.getRegistration({ commit });
+      expect(commit).not.toHaveBeenCalledWith('errors/addApiError', error);
+      expect(commit).toHaveBeenCalledWith(ADD_ERROR, dependency.createLocalError(error));
     });
   });
 

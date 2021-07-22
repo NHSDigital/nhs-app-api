@@ -7,16 +7,19 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
+import mocking.data.organDonation.OrganDonationReferenceDataBuilder
 import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
 import mocking.organDonation.models.OrganDonationDemographics
 import net.thucydides.core.annotations.Steps
 import org.apache.http.HttpStatus
 import pages.HomePage
+import pages.ErrorDialogPage
 import pages.navigation.HeaderNative
 import pages.organDonation.OrganDonationBasePage
 import pages.organDonation.OrganDonationChoicePage
 import pages.organDonation.OrganDonationFaithModule
 import java.net.URL
+import pages.GpSessionError
 
 open class OrganDonationStepDefinitions {
 
@@ -31,6 +34,9 @@ open class OrganDonationStepDefinitions {
     lateinit var page: OrganDonationBasePage
 
     lateinit var homePage: HomePage
+
+    private lateinit var errorDialogPage: ErrorDialogPage
+    private lateinit var gpSessionError: GpSessionError
 
     @Given("^I am a (\\w+) user registered with organ donation to not donate my organs$")
     fun iAmRegisteredWithOrganDonationToNotDonateOrgans(gpSystem: String) {
@@ -166,5 +172,33 @@ open class OrganDonationStepDefinitions {
     @Then("^the '(.*)' button has the '(.*)' attribute$")
     fun theButtonHasTheAttribute(buttonText: String, attributeName: String) {
         page.assertButtonHasAttribute(buttonText, attributeName)
+    }
+
+    @Then("^Reference data is available for (.*)$")
+    fun referenceDataIsAvailable(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+
+        OrganDonationFactory(supplier).mockingClient.forOrganDonation.mock {
+            referenceData().respondWithSuccess(OrganDonationReferenceDataBuilder.build())
+        }
+    }
+
+    @Then("^I see appropriate try again error message for organ donation when there is no GP session$")
+    fun iSeeAppropriateTryAgainErrorMessageWhenThereIsNoGpSessionForOrganDonation() {
+        errorDialogPage
+            .assertPageHeader("Sorry, there is a problem with organ donation")
+            .assertPageTitle("Sorry, there is a problem with organ donation")
+            .assertParagraphText("You are not currently able to view or manage your organ donation decision.")
+            .assertParagraphText("This may be a temporary problem.")
+    }
+
+    @Then("^I see what I can do next with an organ donation error message$")
+    fun iSeeOrganDonationUnavailableNoGpSession(){
+        gpSessionError
+            .assertPageHeader("Sorry, organ donation is unavailable")
+            .assertParagraphText(
+                "You are not currently able to view or manage your organ donation decision using the NHS App.")
+            .assertLink("NHSApp.Enquiries@nhsbt.nhs.uk")
+            .assertHeaderTag("Email", "h3")
     }
 }

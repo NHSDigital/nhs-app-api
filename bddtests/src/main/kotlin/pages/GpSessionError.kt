@@ -64,4 +64,14 @@ open class GpSessionError: HybridPageObject() {
                 page = this
         )
     }
+
+    fun assertHeaderTag(headerText: String, tag: String): GpSessionError {
+        val element = HybridPageElement(
+            webDesktopLocator = "//$tag[contains(text(),'$headerText')]",
+            androidLocator = null,
+            page = this
+        )
+        element.assertIsVisible()
+        return this
+    }
 }

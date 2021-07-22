@@ -27,6 +27,8 @@ export const STATE_OK = 'Ok';
 export const YES = 'Yes';
 export const NO = 'No';
 export const NOT_STATED = 'NotStated';
+export const ADD_ERROR = 'ADD_ERROR';
+export const CLEAR = 'CLEAR';
 
 const createRegistration = () => ({
   identifier: '',
@@ -87,4 +89,5 @@ export const initialState = () => ({
   isReaffirming: false,
   isWithdrawing: false,
   withdrawReasonId: '',
+  error: null,
 });

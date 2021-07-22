@@ -4,8 +4,7 @@ import {
   ORGAN_DONATION_VIEW_DECISION_PATH,
   ORGAN_DONATION_WITHDRAWN_PATH,
 } from '@/router/paths';
-import { redirectTo, GP_SESSION_ON_DEMAND_ERROR_STATUS } from '@/lib/utils';
-
+import { redirectTo, GP_SESSION_ON_DEMAND_ERROR_STATUS, GP_SESSION_ERROR_STATUS, createLocalError } from '@/lib/utils';
 import {
   CLONE_FROM_ORIGINAL,
   INIT,
@@ -26,6 +25,8 @@ import {
   SET_WITHDRAWING,
   RESET_REGISTRATION,
   UPDATE_ORIGINAL_REGISTRATION,
+  ADD_ERROR,
+  CLEAR,
 } from './mutation-types';
 
 const buildRequest = (state) => {
@@ -52,6 +53,9 @@ const commitData = ({ commit, data, mutation }) => {
 export default {
   amendCancel({ commit }) {
     commit(SET_AMENDING, false);
+  },
+  clear({ commit }) {
+    commit(CLEAR);
   },
   amendStart({ commit, dispatch }) {
     commit(RESET_REGISTRATION);
@@ -85,22 +89,39 @@ export default {
   },
   async getReferenceData({ commit }) {
     try {
-      const data = await this.app.$http.getV1PatientOrgandonationReferencedata();
+      const data = await
+      this.app.$http.getV1PatientOrgandonationReferencedata({ ignoreError: true });
       commitData({ commit, data, mutation: LOADED_REFERENCE_DATA });
     } catch (error) {
-      if (error.response.status !== GP_SESSION_ON_DEMAND_ERROR_STATUS) {
+      if (error.response.status === GP_SESSION_ON_DEMAND_ERROR_STATUS) {
+        return;
+      }
+
+      if (error.response.status === GP_SESSION_ERROR_STATUS) {
+        commit(ADD_ERROR, createLocalError(error));
+      } else {
         this.dispatch('errors/addApiError', error);
       }
+    } finally {
+      this.dispatch('device/unlockNavBar');
     }
   },
   async getRegistration({ commit }) {
     try {
-      const data = await this.app.$http.getV1PatientOrgandonation();
+      const data = await this.app.$http.getV1PatientOrgandonation({ ignoreError: true });
       commitData({ commit, data, mutation: LOADED });
     } catch (error) {
-      if (error.response.status !== GP_SESSION_ON_DEMAND_ERROR_STATUS) {
+      if (error.response.status === GP_SESSION_ON_DEMAND_ERROR_STATUS) {
+        return;
+      }
+
+      if (error.response.status === GP_SESSION_ERROR_STATUS) {
+        commit(ADD_ERROR, createLocalError(error));
+      } else {
         this.dispatch('errors/addApiError', error);
       }
+    } finally {
+      this.dispatch('device/unlockNavBar');
     }
   },
   init({ commit }) {

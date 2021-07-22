@@ -129,7 +129,7 @@ describe('organ donation index page', () => {
   let $style;
   let wrapper;
 
-  const mountOrganDonation = $route => mount(
+  const mountOrganDonation = ($route = { query: {} }) => mount(
     OrganDonation,
     {
       $route,
@@ -140,6 +140,17 @@ describe('organ donation index page', () => {
   );
 
   describe('created', () => {
+    describe('hr detected', () => {
+      it('will set hasRetried to true', async () => {
+        Storage.prototype.setItem = jest.fn();
+        $store = createPageStore({ state: createState({ isNativeApp: true }) });
+        wrapper = mountOrganDonation({ query: { hr: true } });
+        await wrapper.vm.$nextTick();
+        await wrapper.vm.$nextTick();
+        expect(sessionStorage.setItem).toBeCalledWith('hasRetried', true);
+      });
+    });
+
     describe('native app', () => {
       beforeEach(() => {
         $store = createPageStore({ state: createState({ isNativeApp: true }) });
