@@ -14,7 +14,7 @@ const val NAVBAR_HEIGHT_PX = 70
 
 private const val DEFAULT_WAIT_TIME = 500L
 private const val DEFAULT_RETRIES = 3
-const val TIME_TO_WAIT_FOR_ELEMENT = 20
+const val TIME_TO_WAIT_FOR_ELEMENT = 10
 const val ELEMENT_RETRY_TIME = 1.0
 const val MILLISECONDS_IN_A_SECOND = 1000L
 
