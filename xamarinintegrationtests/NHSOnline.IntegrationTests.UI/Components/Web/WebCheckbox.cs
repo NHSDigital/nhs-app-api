@@ -18,12 +18,15 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
         public static WebCheckbox WithLabel(IWebInteractor interactor, string label)
             => new(interactor, label);
 
+        public WebLink WithChildLink(string linkText)
+            => WebLink.WithText(_interactor, linkText);
+
         public void Click()
             => ActOnCheckboxElement(e => e.Click());
 
         private void ActOnCheckboxElement(Action<IWebElement> action)
             => _interactor.ActOnElement(CheckboxFindBy, action);
-        
+
         private By CheckboxFindBy
             => _by.Input;
     }

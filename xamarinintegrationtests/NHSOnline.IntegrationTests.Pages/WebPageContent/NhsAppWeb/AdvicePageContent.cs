@@ -44,6 +44,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
 
         public void NavigateToAToZ() => SearchConditionsMenuItem.Click();
 
+        public void NavigateToAskYourGpForAdvice() => AskGpMenuItem.Click();
+
         public void KeyboardNavigateToOneOneOne(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(UseNhsOnlineMenuItem, navigation);
 
         public void KeyboardNavigateToAToZ(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(SearchConditionsMenuItem, navigation);

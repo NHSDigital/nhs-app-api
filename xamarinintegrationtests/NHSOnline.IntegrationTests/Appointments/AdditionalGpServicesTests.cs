@@ -14,12 +14,10 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.Appointments
 {
     [TestClass]
-    [BusinessRule("BR-GI-01.54",
-        "Navigating away from an in progress eConsultation prompts the user to confirm they want to exit the consultation")]
-    [BusinessRule("BR-GI-01.55",
-        "Selecting to leave an eConsultation when prompted ends the consultation and navigates the user to the relevant destination")]
-    [BusinessRule("BR-GI-01.56",
-        "Selecting to stay in an eConsult when prompted does not end the consultation and remains on the page")]
+    [BusinessRule("BR-GI-01.5", "Navigating to the Additional GP Services journey displays the eConsult Additional GP Advice journey")]
+    [BusinessRule("BR-GI-01.54", "Navigating away from an in progress eConsultation prompts the user to confirm they want to exit the consultation")]
+    [BusinessRule("BR-GI-01.55", "Selecting to leave an eConsultation when prompted ends the consultation and navigates the user to the relevant destination")]
+    [BusinessRule("BR-GI-01.56", "Selecting to stay in an eConsult when prompted does not end the consultation and remains on the page")]
     public class AdditionalGpServicesTests
     {
         [NhsAppAndroidTest]

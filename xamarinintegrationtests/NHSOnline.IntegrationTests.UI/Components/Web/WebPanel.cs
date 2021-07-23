@@ -19,10 +19,9 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
 
         public static WebPanel WithTitle(IWebInteractor interactor, string text)
             => new (interactor, text);
-        
         private void ActOnElement(Action<IWebElement> action)
             => _interactor.ActOnElement(FindBy, action);
-        
+
         private By FindBy
             => By.XPath($"//div[h2[normalize-space()={_text.QuoteXPathLiteral()}]]");
 

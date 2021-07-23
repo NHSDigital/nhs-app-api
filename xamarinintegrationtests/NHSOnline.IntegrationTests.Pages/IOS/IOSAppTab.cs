@@ -1,6 +1,8 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.IntegrationTests.UI.Components.IOS;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
+using OpenQA.Selenium;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS
 {
@@ -37,10 +39,25 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         public static IOSAppTab AssertInBrowserAppTab(IIOSDriverWrapper driver) => AssertOnPageByClose(driver);
 
+        public static IOSAppTab AssertOnOnlineConsultationPrivacyPolicyPage(IIOSDriverWrapper driver) =>
+            AssertOnPageByTitle(driver, "NHS App privacy policy: online consultation services");
+
+        public static IOSAppTab AssertOnPrivacyPolicyPage(IIOSDriverWrapper driver) => AssertOnPageByTitle(driver, "NHS App privacy policy");
+
+        private WebButton AcceptAnalyticsCookiesButton(IWebInteractor webInteractor) => WebButton.WithText(webInteractor, "I'm OK with analytics cookies");
+
         private static IOSAppTab AssertOnPageByTitle(IIOSDriverWrapper driver, string title)
         {
             var page = new IOSAppTab(driver, title);
-            page.TitleText(driver.Web.BrowserOverlayWebView()).AssertVisible();
+            try
+            {
+                page.TitleText(driver.Web.BrowserOverlayWebView()).AssertVisible();
+            }
+            catch (AssertFailedException)
+            {
+                page.AcceptAnalyticsCookiesButton(driver.Web.BrowserOverlayWebView()).Click();
+                page.TitleText(driver.Web.BrowserOverlayWebView()).AssertVisible();
+            }
 
             return page;
         }
