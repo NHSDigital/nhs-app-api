@@ -161,7 +161,7 @@ class LifecycleHandlers: NSObject {
     }
 
     private func hideWhiteScreen() {
-        UIApplication.shared.keyWindow?.viewWithTag(1)?.removeFromSuperview()
+        UIApplication.shared.windows.forEach { $0.viewWithTag(1)?.removeFromSuperview() }
         homeViewController.resumeProgressBar()
     }
 }
