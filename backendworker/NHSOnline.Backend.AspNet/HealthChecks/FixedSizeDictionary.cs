@@ -1,26 +1,27 @@
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace NHSOnline.Backend.AspNet.HealthChecks
 {
-    public class FixedSizeDictionary<TKey, TValue> : Dictionary<TKey, TValue>
+    public class FixedSizeDictionary<TKey, TValue> : ConcurrentDictionary<TKey, TValue>
     {
         private readonly int _maxSize;
-        private readonly Queue<TKey> _keys;
+        private readonly ConcurrentQueue<TKey> _keys;
 
         public FixedSizeDictionary(int size)
         {
             _maxSize = size;
-            _keys = new Queue<TKey>();
+            _keys = new ConcurrentQueue<TKey>();
         }
 
-        public new void Add(TKey key, TValue value)
+        public new void TryAdd(TKey key, TValue value)
         {
-            base.Add(key, value);
+            base.TryAdd(key, value);
             _keys.Enqueue(key);
 
             if (_keys.Count > _maxSize)
             {
-                base.Remove(_keys.Dequeue());
+                _keys.TryDequeue(out var dequeueKey);
+                base.TryRemove(dequeueKey, out _);
             }
         }
     }

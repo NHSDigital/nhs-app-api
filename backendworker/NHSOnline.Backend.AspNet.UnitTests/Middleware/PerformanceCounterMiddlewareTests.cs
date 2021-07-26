@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.AspNet.UnitTests.Middleware
         }
 
         [TestMethod]
-        public async Task Invoke_WhenFeatureFlagIsNotEnabled_DoesNotInvokeTheHealthCheckService()
+        public async Task Invoke_WhenFeatureFlagIsNotEnabled_DoesNotInvokeMetricLogging()
         {
             // Arrange
             _options.IsMetricLoggingEnabled = false;
@@ -77,7 +77,7 @@ namespace NHSOnline.Backend.AspNet.UnitTests.Middleware
         }
 
         [TestMethod]
-        public async Task Invoke_ValidHttpResponse_DoesInvokeTheHealthCheckService()
+        public async Task Invoke_ValidHttpResponse_DoesInvokeMetricLogging()
         {
             // Arrange
             var feature = new DummyResponseFeature();

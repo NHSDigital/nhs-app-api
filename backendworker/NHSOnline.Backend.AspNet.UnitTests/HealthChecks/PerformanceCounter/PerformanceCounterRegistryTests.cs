@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using Microsoft.Extensions.Configuration;
@@ -17,7 +18,6 @@ namespace NHSOnline.Backend.AspNet.UnitTests.HealthChecks.PerformanceCounter
     [TestClass]
     public sealed class PerformanceCounterRegistryTests
     {
-        private const int QueueLength = 100;
         private readonly PerformanceCounterConfiguration _options;
         private readonly StatisticsStoreService _statisticsStoreService;
         private readonly PerformanceCounterStoreService _performanceCounterStoreService;
@@ -128,30 +128,28 @@ namespace NHSOnline.Backend.AspNet.UnitTests.HealthChecks.PerformanceCounter
                 Times.Exactly(_options.InitialMetricHealthCheckWindowSizeInSeconds + 10));
         }
 
-        private void BuildStatisticsStore(StatisticsStoreService statisticsStoreService, long unixTimeInSeconds)
+        /// <summary>
+        /// Build a default set of Data Point stats for subsequent tests. Load in parallel to test out concurrency.
+        /// </summary>
+        private static void BuildStatisticsStore(StatisticsStoreService statisticsStoreService, long unixTimeInSeconds)
         {
-            var metricLoopCounter = 1;
-            for (int i = 0; i < QueueLength; i++)
+            // Add 10 of each type of datapoint metrics for each unix second
+            Parallel.For(0, 10, counter =>
             {
-                statisticsStoreService.Add(new RequestCountDataPoint
+                for (var i = 0; i < 10; i++)
                 {
-                    UtcTimestampAsUnixTimeSeconds = unixTimeInSeconds
-                });
+                    statisticsStoreService.Add(new RequestCountDataPoint
+                    {
+                        UtcTimestampAsUnixTimeSeconds = counter + unixTimeInSeconds
+                    });
 
-                statisticsStoreService.Add(new ResponseTimeDataPoint
-                {
-                    UtcTimestampAsUnixTimeSeconds = unixTimeInSeconds,
-                    ResponseTimeInMs = i,
-                });
-
-                metricLoopCounter++;
-                // Add 10 metrics for each unix second
-                if (metricLoopCounter > 10)
-                {
-                    metricLoopCounter = 1;
-                    unixTimeInSeconds++;
+                    statisticsStoreService.Add(new ResponseTimeDataPoint
+                    {
+                        UtcTimestampAsUnixTimeSeconds = unixTimeInSeconds,
+                        ResponseTimeInMs = counter,
+                    });
                 }
-            }
+            });
         }
     }
 }

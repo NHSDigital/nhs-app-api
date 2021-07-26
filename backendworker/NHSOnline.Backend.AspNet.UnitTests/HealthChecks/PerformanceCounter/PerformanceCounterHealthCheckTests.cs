@@ -296,9 +296,13 @@ namespace NHSOnline.Backend.AspNet.UnitTests.HealthChecks.PerformanceCounter
             StringAssert.Contains(result.Description, "ResponseTimeHealthCheck", StringComparison.CurrentCulture);
         }
 
-        private void BuildPerformanceCounterStore(PerformanceCounterStoreService performanceCounterStoreService, long unixTimeInSeconds)
+        /// <summary>
+        /// Build a default set of performance counters for subsequent tests. Load in parallel to test out concurrency.
+        /// </summary>
+        private static void BuildPerformanceCounterStore(PerformanceCounterStoreService performanceCounterStoreService, long unixTimeInSeconds)
         {
-            for (int i = 0; i < 100; i++)
+            var defaultNumberOfDataPointsToLoad = 100;
+            Parallel.For(0, defaultNumberOfDataPointsToLoad, _ =>
             {
                 performanceCounterStoreService.Add(unixTimeInSeconds,
                     new Dictionary<DataPointType, PerformanceCounterMetric>
@@ -321,7 +325,7 @@ namespace NHSOnline.Backend.AspNet.UnitTests.HealthChecks.PerformanceCounter
                     });
 
                 unixTimeInSeconds++;
-            }
+            });
         }
     }
 }

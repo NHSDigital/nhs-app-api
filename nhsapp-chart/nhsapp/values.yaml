@@ -628,7 +628,7 @@ customHealthCheck:
   - name: PerformanceCounter__IsHealthCheckEnabled
     value: "false"
   - name: PerformanceCounter__IsMetricLoggingEnabled
-    value: "false"
+    value: "true"
   - name: PerformanceCounter__QueueLength
     value: "100000"
   - name: PerformanceCounter__InitialMetricHealthCheckWindowSizeInSeconds
