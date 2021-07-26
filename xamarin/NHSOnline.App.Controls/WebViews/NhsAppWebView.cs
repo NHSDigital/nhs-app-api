@@ -68,6 +68,9 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty LogoutCommandProperty =
             BindableProperty.Create(nameof(LogoutCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
 
+        public static readonly BindableProperty CreateOnDemandGpSessionCommandProperty =
+            BindableProperty.Create(nameof(CreateOnDemandGpSessionCommand), typeof(AsyncCommand<CreateOnDemandGpSessionRequest>), typeof(NhsAppWebView));
+
         private static JsonSerializerSettings Settings { get; } = CreateJsonSerializerSettings();
 
         public void OpenWebIntegration(string json)
@@ -203,6 +206,25 @@ namespace NHSOnline.App.Controls.WebViews
         {
             get => (AsyncCommand) GetValue(OnSessionExpiringCommandProperty);
             set => SetValue(OnSessionExpiringCommandProperty, value);
+        }
+
+        public void CreateOnDemandGpSession(string json)
+        {
+            try
+            {
+                var request = ConvertFromJsonString<CreateOnDemandGpSessionRequest>(json);
+                CreateOnDemandGpSessionCommand.Execute(request);
+            }
+            catch (ArgumentException e)
+            {
+                Logger.LogError(e, "Failed to deserialise request to create a gp session");
+            }
+        }
+
+        public AsyncCommand<CreateOnDemandGpSessionRequest> CreateOnDemandGpSessionCommand
+        {
+            get => (AsyncCommand<CreateOnDemandGpSessionRequest>) GetValue(CreateOnDemandGpSessionCommandProperty);
+            set => SetValue(CreateOnDemandGpSessionCommandProperty, value);
         }
 
         public async Task SendBiometricStatus(BiometricStatus biometricStatus)

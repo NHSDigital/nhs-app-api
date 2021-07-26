@@ -23,6 +23,6 @@
                                   x:Name="WebView" 
                                   VerticalOptions = "FillAndExpand"
                                   Navigating="WebViewNavigating"
-                                  Navigated="WebOnEndNavigating"/>
+                                  Navigated="WebOnEndNavigating" />
     </AbsoluteLayout>
 </pages:NhsAppCloseSlimHeaderPage>

@@ -5,11 +5,6 @@ using NHSOnline.App.Config;
 
 namespace NHSOnline.App.NhsLogin
 {
-    internal interface INhsLoginUriBuilderChallengeSetter
-    {
-        INhsLoginUriBuilderClientIdSetter Challenge(string challenge, string method);
-    }
-
     internal interface INhsLoginUriBuilderClientIdSetter
     {
         INhsLoginUriBuilderScopeSetter ClientId(string clientId);
@@ -22,34 +17,29 @@ namespace NHSOnline.App.NhsLogin
 
     internal interface INhsLoginUriBuilderVectorsOfTrustSetter
     {
-        INhsLoginUriBuilderRedirectUriSetter VectorsOfTrust(string firstVectorOfTrust,
-            params string[] otherVectorsOfTrust);
+        INhsLoginUriBuilderRedirectUriSetter VectorsOfTrust(string firstVectorOfTrust, params string[] otherVectorsOfTrust);
     }
 
-    internal interface INhsLoginUriBuilderRedirectUriSetter
+    internal interface INhsLoginUriBuilderRedirectUriSetter : INhsLoginUriBuilder
     {
-        INhsLoginFidoAuthBuilder RedirectUri(Uri redirectUri);
-    }
-
-    internal interface INhsLoginFidoAuthBuilder : INhsLoginUriBuilder
-    {
-        INhsLoginUriBuilder FidoAuthResponse(string? fidoAuthResponse);
+        INhsLoginUriBuilder RedirectUri(Uri redirectUri);
     }
 
     internal interface INhsLoginUriBuilder
     {
-        Uri Uri { get; }
+        INhsLoginUriBuilder Challenge(string challenge, string method);
+        INhsLoginUriBuilder FidoAuthResponse(string? fidoAuthResponse);
+        INhsLoginUriBuilder AssertedLoginIdentity(string token);
+        INhsLoginUriBuilder State(string state);
+
+        Uri Build();
     }
 
-
     internal class NhsLoginUriBuilder :
-        INhsLoginUriBuilderChallengeSetter,
         INhsLoginUriBuilderClientIdSetter,
         INhsLoginUriBuilderScopeSetter,
         INhsLoginUriBuilderVectorsOfTrustSetter,
-        INhsLoginUriBuilderRedirectUriSetter,
-        INhsLoginFidoAuthBuilder,
-        INhsLoginUriBuilder
+        INhsLoginUriBuilderRedirectUriSetter
     {
         private readonly UriBuilder _uriBuilder;
         private readonly Dictionary<string, string> _queryString;
@@ -65,16 +55,9 @@ namespace NHSOnline.App.NhsLogin
             };
         }
 
-        public static INhsLoginUriBuilderChallengeSetter Create(INhsLoginConfiguration config)
+        public static INhsLoginUriBuilderClientIdSetter Create(INhsLoginConfiguration config)
         {
             return new NhsLoginUriBuilder(config);
-        }
-
-        public INhsLoginUriBuilderClientIdSetter Challenge(string challenge, string method)
-        {
-            _queryString.Add("code_challenge", challenge);
-            _queryString.Add("code_challenge_method", method);
-            return this;
         }
 
         public INhsLoginUriBuilderScopeSetter ClientId(string clientId)
@@ -98,7 +81,7 @@ namespace NHSOnline.App.NhsLogin
             return this;
         }
 
-        public INhsLoginFidoAuthBuilder RedirectUri(Uri redirectUri)
+        public INhsLoginUriBuilder RedirectUri(Uri redirectUri)
         {
             _queryString.Add("redirect_uri", redirectUri.ToString());
             return this;
@@ -114,18 +97,33 @@ namespace NHSOnline.App.NhsLogin
             return this;
         }
 
-        public Uri Uri
+        public INhsLoginUriBuilder Challenge(string challenge, string method)
         {
-            get
-            {
-                var queryStringParts = _queryString.Select(kvp =>
-                    $"{Uri.EscapeUriString(kvp.Key)}={Uri.EscapeUriString(kvp.Value)}");
-                var queryString = string.Join("&", queryStringParts);
+            _queryString.Add("code_challenge", challenge);
+            _queryString.Add("code_challenge_method", method);
+            return this;
+        }
 
-                _uriBuilder.Query = $"?{queryString}";
+        public INhsLoginUriBuilder AssertedLoginIdentity(string token)
+        {
+            _queryString.Add("asserted_login_identity", token);
+            return this;
+        }
 
-                return _uriBuilder.Uri;
-            }
+        public INhsLoginUriBuilder State(string state)
+        {
+            _queryString["state"] = state;
+            return this;
+        }
+
+        public Uri Build()
+        {
+            var queryStringParts = _queryString.Select(kvp => $"{Uri.EscapeUriString(kvp.Key)}={Uri.EscapeUriString(kvp.Value)}");
+            var queryString = string.Join("&", queryStringParts);
+
+            _uriBuilder.Query = $"?{queryString}";
+
+            return _uriBuilder.Uri;
         }
     }
 }

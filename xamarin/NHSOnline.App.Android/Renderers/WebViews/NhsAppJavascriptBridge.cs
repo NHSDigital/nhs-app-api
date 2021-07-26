@@ -109,6 +109,13 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         }
 
         [JavascriptInterface]
+        [Export("createOnDemandGpSession")]
+        public void CreateOnDemandGpSession(string argumentJson)
+        {
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.CreateOnDemandGpSession(argumentJson));
+        }
+
+        [JavascriptInterface]
         [Export("onSessionExpiring")]
         public void OnSessionExpiring()
         {

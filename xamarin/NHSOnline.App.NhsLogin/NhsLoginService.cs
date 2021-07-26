@@ -15,7 +15,8 @@ namespace NHSOnline.App.NhsLogin
 
         public NhsLoginService(
             ILogger<NhsLoginService> logger,
-            INhsLoginConfiguration loginConfig, INhsAppWebConfiguration webConfig)
+            INhsLoginConfiguration loginConfig,
+            INhsAppWebConfiguration webConfig)
         {
             _logger = logger;
             _loginConfig = loginConfig;
@@ -49,19 +50,40 @@ namespace NHSOnline.App.NhsLogin
             }.Uri;
 
             var authoriseUri = NhsLoginUriBuilder.Create(_loginConfig)
-                .Challenge(codes.Challenge, codes.Method)
                 .ClientId("nhs-online")
-#if GP_DECOUPLED
+#if ON_DEMAND_GP_SESSION_ENABLED
                 .Scopes("openid", "profile", "profile_extended", "gp_registration_details")
 #else
                 .Scopes("openid", "profile", "profile_extended", "nhs_app_credentials", "gp_integration_credentials")
 #endif
                 .VectorsOfTrust("P5.Cp.Cd", "P5.Cp.Ck", "P5.Cm", "P9.Cp.Cd", "P9.Cp.Ck", "P9.Cm")
                 .RedirectUri(authReturnUri)
+                .Challenge(codes.Challenge, codes.Method)
                 .FidoAuthResponse(fidoAuthResponse)
-                .Uri;
+                .Build();
 
             return new LoginState(_logger, authoriseUri, authReturnUri);
+        }
+
+        public CreateOnDemandGpSessionState CreateOnDemandGpSession(string assertedLoginIdentity, string redirectTo)
+        {
+            var authReturnUri = new UriBuilder
+            {
+                Scheme = _webConfig.Scheme,
+                Host = _webConfig.Host,
+                Path = "/on-demand-gp-return"
+            }.Uri;
+
+            var authoriseUri = NhsLoginUriBuilder.Create(_loginConfig)
+                .ClientId("nhs-online")
+                .Scopes("openid", "profile", "profile_extended", "nhs_app_credentials", "gp_registration_details")
+                .VectorsOfTrust("P5.Cp.Cd", "P5.Cp.Ck", "P5.Cm", "P9.Cp.Cd", "P9.Cp.Ck", "P9.Cm")
+                .RedirectUri(authReturnUri)
+                .State(redirectTo)
+                .AssertedLoginIdentity(assertedLoginIdentity)
+                .Build();
+
+            return new CreateOnDemandGpSessionState(authoriseUri, authReturnUri);
         }
     }
 }

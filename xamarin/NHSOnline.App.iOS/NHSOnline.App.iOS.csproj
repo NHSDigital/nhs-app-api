@@ -104,6 +104,7 @@
     <Compile Include="Renderers\Heading1Renderer.cs" />
     <Compile Include="Renderers\SwipeBackNavigationPageRenderer.cs" />
     <Compile Include="Renderers\WebViews\IProovExtensions.cs" />
+    <Compile Include="Renderers\WebViews\NhsLoginOnDemandGpSessionWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\NhsLoginUpliftWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\NhsAppPreHomeScreenWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\WebViewNavigationDelegate.cs" />

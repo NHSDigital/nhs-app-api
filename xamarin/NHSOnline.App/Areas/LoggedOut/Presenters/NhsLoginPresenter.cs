@@ -149,7 +149,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task BackRequested()
         {
             _logger.LogInformation("Back Requested");
-            await _view.AppNavigation.Pop().PreserveThreadContext();
+            await _view.AppNavigation.PopAnimated().PreserveThreadContext();
         }
     }
 }

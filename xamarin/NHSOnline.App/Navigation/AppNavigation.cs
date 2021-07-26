@@ -76,13 +76,6 @@ namespace NHSOnline.App.Navigation
             _suppressHandlers.ForEach(suppress => suppress());
         }
 
-        public async Task PushAnimated(Page page)
-        {
-            SuppressHandlers();
-
-            await _navigation.PushAsync(page).PreserveThreadContext();
-        }
-
         public async Task Push(Page page)
         {
             SuppressHandlers();
@@ -90,7 +83,21 @@ namespace NHSOnline.App.Navigation
             await _navigation.PushAsync(page, false).PreserveThreadContext();
         }
 
+        public async Task PushAnimated(Page page)
+        {
+            SuppressHandlers();
+
+            await _navigation.PushAsync(page).PreserveThreadContext();
+        }
+
         public async Task Pop()
+        {
+            SuppressHandlers();
+
+            await _navigation.PopAsync(false).PreserveThreadContext();
+        }
+
+        public async Task PopAnimated()
         {
             SuppressHandlers();
 

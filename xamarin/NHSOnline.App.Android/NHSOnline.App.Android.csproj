@@ -112,6 +112,7 @@
     <Compile Include="Renderers\WebViews\NhsAppPreHomeJavascriptBridge.cs" />
     <Compile Include="Renderers\WebViews\NhsAppPreHomeScreenWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\NhsAppJavascriptBridge.cs" />
+    <Compile Include="Renderers\WebViews\NhsLoginOnDemandGpSessionWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\NhsLoginUpliftChromeClient.cs" />
     <Compile Include="Renderers\WebViews\NhsLoginUpliftWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\NhsLoginWebViewRenderer.cs" />

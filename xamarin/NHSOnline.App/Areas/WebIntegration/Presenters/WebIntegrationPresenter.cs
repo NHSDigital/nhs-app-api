@@ -48,37 +48,20 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             _view.SetNavigationFooterItem(model.FooterItem);
 
             _view.AppNavigation
-                .RegisterHandler(
-                    ViewOnAppearing, (view, handler) => view.Appearing = handler)
-                .RegisterHandler(
-                    HelpRequested, (view, handler) => view.HelpRequested = handler)
-                .RegisterHandler<WebNavigatingEventArgs>(
-                    ViewOnNavigating, (view, handler) => view.Navigating = handler)
-                .RegisterHandler(
-                    model.NavigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
-                .RegisterHandler(
-                    model.NavigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
-                .RegisterHandler(
-                    model.NavigationHandler.AdviceRequested, (view, handler) => view.AdviceRequested = handler)
-                .RegisterHandler(
-                    model.NavigationHandler.AppointmentsRequested,
-                    (view, handler) => view.AppointmentsRequested = handler)
-                .RegisterHandler(
-                    model.NavigationHandler.PrescriptionsRequested,
-                    (view, handler) => view.PrescriptionsRequested = handler)
-                .RegisterHandler(
-                    model.NavigationHandler.YourHealthRequested, (view, handler) => view.YourHealthRequested = handler)
-                .RegisterHandler(
-                    model.NavigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler)
-                .RegisterHandler<string>(
-                    GoToNhsAppPageRequested, (view, handler) => view.GoToNhsAppPageRequested = handler)
-                .RegisterPermanentHandler<Uri>(DeeplinkRequested,
-                    (view, handler) => view.DeepLinkRequested = handler)
-                .RegisterHandler<AddEventToCalendarRequest>(AddEventToCalendarRequested,
-                    (view, handler) => view.AddEventToCalendarRequested = handler)
-                .RegisterHandler<DownloadRequest>(StartDownloadRequested,
-                (view, handler) => view.StartDownloadRequested = handler);
-
+                .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
+                .RegisterHandler(HelpRequested, (view, handler) => view.HelpRequested = handler)
+                .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
+                .RegisterHandler(model.NavigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
+                .RegisterHandler(model.NavigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
+                .RegisterHandler(model.NavigationHandler.AdviceRequested, (view, handler) => view.AdviceRequested = handler)
+                .RegisterHandler(model.NavigationHandler.AppointmentsRequested, (view, handler) => view.AppointmentsRequested = handler)
+                .RegisterHandler(model.NavigationHandler.PrescriptionsRequested, (view, handler) => view.PrescriptionsRequested = handler)
+                .RegisterHandler(model.NavigationHandler.YourHealthRequested, (view, handler) => view.YourHealthRequested = handler)
+                .RegisterHandler(model.NavigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler)
+                .RegisterHandler<string>(GoToNhsAppPageRequested, (view, handler) => view.GoToNhsAppPageRequested = handler)
+                .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeepLinkRequested = handler)
+                .RegisterHandler<AddEventToCalendarRequest>(AddEventToCalendarRequested, (view, handler) => view.AddEventToCalendarRequested = handler)
+                .RegisterHandler<DownloadRequest>(StartDownloadRequested, (view, handler) => view.StartDownloadRequested = handler);
         }
 
         private async Task GoToNhsAppPageRequested(string page)

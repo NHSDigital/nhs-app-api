@@ -92,6 +92,10 @@ namespace NHSOnline.App.Areas.Home.Views
         public AsyncCommand BackRequestedCommand
             => new AsyncCommand(() => BackRequested);
 
+        public Func<CreateOnDemandGpSessionRequest, Task>? CreateOnDemandGpSessionRequested { get; set; }
+        public AsyncCommand<CreateOnDemandGpSessionRequest> CreateOnDemandGpSessionRequestedCommand
+            => new AsyncCommand<CreateOnDemandGpSessionRequest>(() => CreateOnDemandGpSessionRequested);
+
         public Func<Uri, Task>? DeeplinkRequested { get; set; }
         public async Task HandleDeeplink(Uri deeplinkUrl)
         {

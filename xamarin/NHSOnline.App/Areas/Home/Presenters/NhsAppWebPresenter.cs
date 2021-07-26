@@ -94,6 +94,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterHandler(OnSessionExpiringRequested, (view, handler) => view.OnSessionExpiringRequested = handler)
                 .RegisterHandler(LogoutRequested, (view, handler) => view.LogoutRequested = handler)
                 .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler)
+                .RegisterHandler<CreateOnDemandGpSessionRequest>(CreateOnDemandGpSessionRequested, (view, handler) => view.CreateOnDemandGpSessionRequested = handler)
                 .RegisterHandler(_navigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
                 .RegisterHandler(_navigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
                 .RegisterHandler(_navigationHandler.AdviceRequested, (view, handler) => view.AdviceRequested = handler)
@@ -140,6 +141,14 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _logger.LogInformation("Opening native settings");
 
             await _settingsService.OpenSettings().PreserveThreadContext();
+        }
+
+        private async Task CreateOnDemandGpSessionRequested(CreateOnDemandGpSessionRequest request)
+        {
+            var model = new NhsLoginOnDemandGpSessionModel(
+                request.AssertedLoginIdentity, request.RedirectTo, _view.SelectedNavigationFooterItem);
+            var page = _pageFactory.CreatePageFor(model);
+            await _view.AppNavigation.Push(page).PreserveThreadContext();
         }
 
         private async Task ViewOnAppearing()

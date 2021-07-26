@@ -32,6 +32,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                 .AddFunction("addEventToCalendar", webView => webView.AddEventToCalendar)
                 .AddFunction("displayPageLeaveWarning", webView => webView.DisplayPageLeaveWarning)
                 .AddFunction("onSessionExpiring", webView => webView.OnSessionExpiring)
+                .AddFunction("createOnDemandGpSession", webView => webView.CreateOnDemandGpSession)
                 .AddFunction("logout", webView => webView.Logout)
                 .Apply(config.UserContentController);
         }

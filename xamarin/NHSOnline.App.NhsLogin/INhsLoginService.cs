@@ -4,5 +4,6 @@ namespace NHSOnline.App.NhsLogin
     {
         ProofKeyCodeExchangeCodes GeneratePkceCodes();
         LoginState BeginLogin(ProofKeyCodeExchangeCodes codes, string? fidoAuthResponse);
+        CreateOnDemandGpSessionState CreateOnDemandGpSession(string assertedLoginIdentity, string redirectTo);
     }
 }

@@ -407,4 +407,14 @@ export default {
     const app = window.nativeApp;
     app.logout();
   },
+
+  supportsCreateOnDemandGpSession: () => {
+    const app = window.nativeApp;
+    return app && app.createOnDemandGpSession;
+  },
+
+  createOnDemandGpSession: (request) => {
+    const app = window.nativeApp;
+    app.createOnDemandGpSession(request);
+  },
 };

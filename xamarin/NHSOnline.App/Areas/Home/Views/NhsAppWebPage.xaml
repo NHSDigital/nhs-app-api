@@ -37,6 +37,7 @@
                                 OnSessionExpiringCommand="{Binding OnSessionExpiringCommand, Source={x:Reference Name=Page}}" 
                                 UpdateBiometricRegistrationCommand="{Binding UpdateBiometricRegistrationCommand, Source={x:Reference Name=Page}}"
                                 OpenSettingsCommand="{Binding OpenSettingsCommand, Source={x:Reference Name=Page}}"
+                                CreateOnDemandGpSessionCommand="{Binding CreateOnDemandGpSessionRequestedCommand, Source={x:Reference Name=Page}}"
                                 LogoutCommand="{Binding LogoutCommand, Source={x:Reference Name=Page}}"
                                 Navigated="WebOnEndNavigating" />
         

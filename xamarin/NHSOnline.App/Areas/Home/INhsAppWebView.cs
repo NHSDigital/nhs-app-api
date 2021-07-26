@@ -42,6 +42,7 @@ namespace NHSOnline.App.Areas.Home
             Func<Task>? OpenSettingsRequested { get; set; }
             Func<Task>? LogoutRequested { get; set; }
             Func<Task>? BackRequested { get; set; }
+            Func<CreateOnDemandGpSessionRequest, Task>? CreateOnDemandGpSessionRequested { get; set; }
             Func<Uri, Task>? DeeplinkRequested { get; set; }
             Func<Task>? DisplayPageLeaveWarningRequested { get; set; }
             Func<Task>? OnSessionExpiringRequested { get; set; }
