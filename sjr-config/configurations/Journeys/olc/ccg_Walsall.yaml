@@ -1,0 +1,48 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - Y00228
+    - M91611
+    - M91629
+    - M91034
+    - M91014
+    - M91659
+    - M91628
+    - M91619
+    - M91024
+    - M91033
+    - M91641
+    - M91036
+    - M91626
+    - M91602
+    - M91015
+    - M91013
+    - M91021
+    - M91623
+    - M91029
+    - M91624
+    - M91609
+    - M91017
+    - M91621
+    - M91006
+    - M91650
+    - M91010
+    - M91640
+    - M91019
+    - M91003
+    - M91647
+    - M91612
+    - M91004
+    - M91009
+    - M91614
+    - M91020
+    - M91011
+    - M91639
+journeys:
+  cdssAdvice:
+    provider: eConsult
+    serviceDefinition: GEC_GEN
+    conditionsServiceDefinition: CONDITION_LIST
+  cdssAdmin:
+    provider: eConsult
+    serviceDefinition: CONDITION_LIST_ADMIN

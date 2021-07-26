@@ -1,0 +1,54 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - J82145
+    - J82053
+    - J82074
+    - J82017
+    - J82020
+    - J82166
+    - J82064
+    - J82051
+    - J82169
+    - J82188
+    - J82025
+    - J82075
+    - J82150
+    - J82131
+    - J82106
+    - J82089
+    - J82146
+    - J82129
+    - J82029
+    - J82121
+    - J82143
+    - J82063
+    - J82056
+    - J82039
+    - J82082
+    - J82071
+    - J82035
+    - J82050
+    - J82016
+    - J82018
+    - J82132
+    - J82124
+    - J82007
+    - J82130
+    - J82019
+    - J82151
+    - J82116
+    - J82059
+    - J82156
+    - J82008
+    - J82036
+    - J82034
+    - J82139
+journeys:
+  cdssAdvice:
+    provider: eConsult
+    serviceDefinition: GEC_GEN
+    conditionsServiceDefinition: CONDITION_LIST
+  cdssAdmin:
+    provider: eConsult
+    serviceDefinition: CONDITION_LIST_ADMIN

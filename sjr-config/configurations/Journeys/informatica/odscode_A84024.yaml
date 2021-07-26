@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "A84024"
+journeys:
+  appointments:
+    provider: informatica
+    informaticaUrl: https://burnbraemedicalgroup.appointments-online.co.uk

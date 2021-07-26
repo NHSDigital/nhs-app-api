@@ -1,0 +1,47 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - N85648
+    - N85017
+    - N85633
+    - N85006
+    - N85009
+    - N85015
+    - N85634
+    - N85005
+    - N85031
+    - N85032
+    - N85052
+    - N85021
+    - N85007
+    - N85059
+    - N85054
+    - N85616
+    - N85023
+    - N85002
+    - N85625
+    - N85028
+    - N85040
+    - N85048
+    - N85016
+    - N85024
+    - N85617
+    - N85012
+    - N85025
+    - N85051
+    - N85057
+    - N85003
+    - N85018
+    - N85620
+    - N85013
+    - N85038
+    - N85008
+    - N85019
+journeys:
+  cdssAdvice:
+    provider: eConsult
+    serviceDefinition: GEC_GEN
+    conditionsServiceDefinition: CONDITION_LIST
+  cdssAdmin:
+    provider: eConsult
+    serviceDefinition: CONDITION_LIST_ADMIN

@@ -1,0 +1,74 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - "E84002"
+    - "E84003"
+    - "E84006"
+    - "E84007"
+    - "E84011"
+    - "E84013"
+    - "E84015"
+    - "E84017"
+    - "E84017"
+    - "E84020"
+    - "E84021"
+    - "E84025"
+    - "E84028"
+    - "E84030"
+    - "E84031"
+    - "E84032"
+    - "E84033"
+    - "E84036"
+    - "E84042"
+    - "E84048"
+    - "E84049"
+    - "E84051"
+    - "E84063"
+    - "E84066"
+    - "E84067"
+    - "E84074"
+    - "E84076"
+    - "E84077"
+    - "E84078"
+    - "E84080"
+    - "E84083"
+    - "E84086"
+    - "E84620"
+    - "E84626"
+    - "E84626"
+    - "E84635"
+    - "E84637"
+    - "E84638"
+    - "E84645"
+    - "E84656"
+    - "E84665"
+    - "E84667"
+    - "E84674"
+    - "E84678"
+    - "E84684"
+    - "E84685"
+    - "E84696"
+    - "E84699"
+    - "E84701"
+    - "E84702"
+    - "E84704"
+    - "E84709"
+    - "Y00206"
+    - "Y01090"
+    - "Y02692"
+journeys:
+  silverIntegrations:
+    carePlans:
+      - pkbCie
+    libraries:
+      - pkbCie
+    medicines:
+      - pkbCie
+    messages:
+      - pkbCie
+    secondaryAppointments:
+      - pkbCie
+    healthTrackers:
+      - pkbCie
+    testResults:
+      - pkbCie

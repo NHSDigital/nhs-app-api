@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "L85021"
+journeys:
+  appointments:
+    provider: informatica
+    informaticaUrl: https://college-way-surgery.appointments-online.co.uk

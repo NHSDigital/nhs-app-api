@@ -1,0 +1,35 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - M84060
+    - M84010
+    - M84018
+    - M84014
+    - M84069
+    - M84013
+    - M84063
+    - M84015
+    - M84029
+    - M84009
+    - M84044
+    - M84030
+    - M84620
+    - M84066
+    - M84028
+    - M84021
+    - M84040
+    - M84026
+    - M84059
+    - M84047
+    - M84002
+    - M84070
+    - M84032
+    - M84064
+journeys:
+  cdssAdvice:
+    provider: eConsult
+    serviceDefinition: GEC_GEN
+    conditionsServiceDefinition: CONDITION_LIST
+  cdssAdmin:
+    provider: eConsult
+    serviceDefinition: CONDITION_LIST_ADMIN

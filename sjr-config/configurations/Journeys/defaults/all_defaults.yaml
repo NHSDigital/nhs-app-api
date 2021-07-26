@@ -1,0 +1,49 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  "*": "*"
+journeys:
+  appointments:
+    provider: im1
+  cdssAdvice:
+    provider: none
+  cdssAdmin:
+    provider: none
+  coronavirusInformation: true
+  medicalRecord:
+    provider: im1
+    version: 2
+  prescriptions:
+    provider: im1
+  ndop: true
+  nominatedPharmacy: true
+  notifications: true
+  oneOneOne: true
+  messaging: true
+  userInfo: true
+  documents: false
+  im1Messaging:
+    isEnabled: false
+    canDeleteMessages: false
+    canUpdateReadStatus: false
+    requiresDetailsRequest: false
+    sendMessageSubject: false
+  silverIntegrations:
+    accountAdmin: []
+    carePlans: []
+    consultations: []
+    consultationsAdmin: []
+    healthTrackers: []
+    libraries: []
+    medicines: []
+    messages: []
+    participation: []
+    recordSharing: []
+    secondaryAppointments:
+      - ers
+    testResults: []
+    vaccineRecord:
+      - netCompany
+      - netCompanyP5
+      - nhsd
+  supportsLinkedProfiles: true
+  notificationPrompt: true

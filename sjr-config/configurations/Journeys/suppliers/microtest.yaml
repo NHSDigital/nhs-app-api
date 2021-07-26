@@ -1,0 +1,5 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  supplier: "microtest"
+journeys:
+  supportsLinkedProfiles: false

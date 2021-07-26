@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "G81061"
+journeys:
+  appointments:
+    provider: informatica
+    informaticaUrl: https://chapel-street-surgery.appointments-online.co.uk       

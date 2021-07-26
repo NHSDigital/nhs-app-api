@@ -1,0 +1,31 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - G82160
+    - G82211
+    - G82036
+    - G82111
+    - G82217
+    - G82007
+    - G82165
+    - G82227
+    - G82696
+    - G82665
+    - G82684
+    - G82015
+    - G82002
+    - G82038
+    - G82018
+    - G82117
+    - G82232
+    - G82086
+    - G82652
+    - G82069
+journeys:
+  cdssAdvice:
+    provider: eConsult
+    serviceDefinition: GEC_GEN
+    conditionsServiceDefinition: CONDITION_LIST
+  cdssAdmin:
+    provider: eConsult
+    serviceDefinition: CONDITION_LIST_ADMIN

@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "D81027"
+journeys:
+  appointments:
+    provider: informatica
+    informaticaUrl: https://wellside-surgery.appointments-online.co.uk

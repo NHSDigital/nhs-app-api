@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "E83020"
+journeys:
+  appointments:
+    provider: informatica
+    informaticaUrl: https://st-georges-medical-centre.appointments-online.co.uk

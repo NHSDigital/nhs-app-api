@@ -1,0 +1,37 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - A83644
+    - A83014
+    - A83635
+    - A83009
+    - A83617
+    - A83038
+    - A83050
+    - A83036
+    - A83055
+    - A83011
+    - A83018
+    - A83027
+    - A83030
+    - A83637
+    - A83072
+    - A83636
+    - A83028
+    - A83033
+    - A83049
+    - A83026
+    - A83023
+    - A83016
+    - A83622
+    - A83022
+    - A83024
+    - A83073
+journeys:
+  cdssAdvice:
+    provider: eConsult
+    serviceDefinition: GEC_GEN
+    conditionsServiceDefinition: CONDITION_LIST
+  cdssAdmin:
+    provider: eConsult
+    serviceDefinition: CONDITION_LIST_ADMIN

@@ -1,0 +1,26 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - "Y00001"
+    - "Y00002"
+    - "Y00003"
+    - "Y00004"
+    - "Y00005"
+    - "Y00006"
+    - "Y00007"
+    - "Y00008"
+    - "Y00009"
+    - "Y00010"
+    - "Y00011"
+    - "Y00944"
+    - "Y02419"
+journeys:
+  coronavirusInformation: false
+  ndop: false
+  oneOneOne: false
+  silverIntegrations:
+    secondaryAppointments:
+      - removeErs
+    vaccineRecord:
+      - removeNetCompany
+      - removeNetCompanyP5

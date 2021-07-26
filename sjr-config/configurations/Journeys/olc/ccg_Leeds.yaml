@@ -1,0 +1,43 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - B86039
+    - B86096
+    - B86623
+    - B86655
+    - B86006
+    - B86007
+    - B86062
+    - B86075
+    - B86678
+    - B86106
+    - B86067
+    - B86101
+    - B86011
+    - B86092
+    - B86012
+    - B86675
+    - B86042
+    - B86009
+    - B86666
+    - B86089
+    - B86005
+    - B86022
+    - B86093
+    - Y02494
+    - B86028
+    - B86100
+    - B86648
+    - Y02002
+    - B86061
+    - B86029
+    - B86625
+    - B86669
+journeys:
+  cdssAdvice:
+    provider: eConsult
+    serviceDefinition: GEC_GEN
+    conditionsServiceDefinition: CONDITION_LIST
+  cdssAdmin:
+    provider: eConsult
+    serviceDefinition: CONDITION_LIST_ADMIN

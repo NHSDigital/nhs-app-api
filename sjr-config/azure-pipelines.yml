@@ -1,0 +1,42 @@
+name: $[format('{0}-{1}', variables['Build.SourceBranchName'], counter(variables['Build.SourceBranchName']))]
+
+trigger: none
+
+parameters:
+  - name: sjrImageTag
+    displayName: SJR Service Docker Image Tag
+    type: string
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  docker.registry: nhsapp.azurecr.io
+  sjr.config.image.name: nhsonline-service-journey-prod-config
+  sjr.image.tag: ${{ parameters.sjrImageTag }}
+
+steps:
+  - task: Docker@2
+    displayName: Login to docker registry
+    inputs:
+      command: login
+      containerRegistry: nhsappcontainers
+
+  - task: Bash@3
+    displayName: Build Config files
+    inputs:
+      filePath: buildscripts/01_generate_config_files.sh
+
+  - task: Bash@3
+    displayName: Build config image
+    inputs:
+      filePath: buildscripts/02_build_config_image.sh
+
+  - task: Docker@2
+    displayName: Push
+    inputs:
+      command: push
+      containerRegistry: nhsappcontainers
+      repository: $(sjr.config.image.name)
+      tags: |
+        $(Build.SourceBranchName)

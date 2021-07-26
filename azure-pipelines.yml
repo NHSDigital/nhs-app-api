@@ -144,6 +144,9 @@ variables:
   native.version.number: '1.49.0'
   native.ios.build.number: $[counter(variables['native.version.number'], 1)]
   native.android.build.number: $[counter('android.build.counter', 100)]
+  sjr.config.image.name: 'nhsonline-service-journey-prod-config'
+  sjr.image.tag: $[variables['Build.SourceVersion']]
+
 
   # Build.Reason is blank when specifying parameters but Manual when running the pipeline
   ${{ if or(eq(variables['Build.Reason'], ''), eq(variables['Build.Reason'], 'Manual')) }}:
@@ -186,7 +189,7 @@ stages:
     dependsOn:
     jobs:
       - template: .azuredevops/templates/helm-package-chart.yml
-  
+
   - stage: backend
     displayName: Backend
     dependsOn:
@@ -430,3 +433,12 @@ stages:
             target: 'Staging'
             uploadAppIdentifier: com.nhs.online.staging
             uploadServiceEndpoint: nhsapp-staging-apple-app-store
+
+# Only run production SJR build for Tagged builds
+  - ${{ if variables['source.tag'] }}:
+    - stage: SJR_config_build_production
+      displayName: SJR Production Config Build
+      dependsOn:
+        - backend
+      jobs:
+        - template: .azuredevops/templates/build-sjr-config-image.yml

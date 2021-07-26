@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "L85035"
+journeys:
+  appointments:
+    provider: informatica
+    informaticaUrl: https://eqmc.appointments-online.co.uk

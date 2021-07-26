@@ -1,0 +1,28 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - "G81007"
+    - "G81024"
+    - "G81030"
+    - "G81037"
+    - "G81040"
+    - "G81043"
+    - "G81055"
+    - "G81086"
+    - "G81634"
+journeys:
+  silverIntegrations:
+    carePlans:
+      - pkb
+    libraries:
+      - pkb
+    medicines:
+      - pkb
+    messages:
+      - pkb
+    secondaryAppointments:
+      - pkb
+    healthTrackers:
+      - pkb
+    testResults:
+      - pkb

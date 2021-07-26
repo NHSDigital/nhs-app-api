@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "K84075"
+journeys:
+  appointments:
+    provider: informatica
+    informaticaUrl: https://the-broadshires-health-centre.appointments-online.co.uk

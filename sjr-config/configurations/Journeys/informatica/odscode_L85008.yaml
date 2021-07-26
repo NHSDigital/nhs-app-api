@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "L85008"
+journeys:
+  appointments:
+    provider: informatica
+    informaticaUrl: https://fromemedicalpractice.appointments-online.co.uk

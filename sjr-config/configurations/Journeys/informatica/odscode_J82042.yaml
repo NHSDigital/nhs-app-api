@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "J82042"
+journeys:
+  appointments:
+    provider: informatica
+    informaticaUrl: https://badgerswood-and-forest-surgery.appointments-online.co.uk

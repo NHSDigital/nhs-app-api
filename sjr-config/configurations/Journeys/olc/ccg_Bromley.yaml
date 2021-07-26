@@ -1,0 +1,48 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - G84017
+    - G84624
+    - G84040
+    - Y02811
+    - G84020
+    - G84018
+    - G84630
+    - G84005
+    - G84002
+    - G84011
+    - G84027
+    - G84030
+    - G84041
+    - G84627
+    - G84604
+    - G84016
+    - G84008
+    - G84039
+    - G84625
+    - G84033
+    - G84007
+    - G84029
+    - G84023
+    - G84028
+    - G84015
+    - G84004
+    - G84006
+    - G84629
+    - G84024
+    - G84010
+    - G84009
+    - G84003
+    - G84025
+    - Y00542
+    - G84035
+    - G84621
+    - G84607
+journeys:
+  cdssAdvice:
+    provider: eConsult
+    serviceDefinition: GEC_GEN
+    conditionsServiceDefinition: CONDITION_LIST
+  cdssAdmin:
+    provider: eConsult
+    serviceDefinition: CONDITION_LIST_ADMIN

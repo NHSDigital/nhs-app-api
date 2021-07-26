@@ -1,0 +1,15 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - "P81006"
+    - "P81017"
+    - "P81029"
+    - "P81059"
+    - "P81069"
+    - "P81087"
+    - "P81100"
+    - "P81185"
+    - "P81620"
+    - "P81732"
+journeys:
+  nominatedPharmacy: false

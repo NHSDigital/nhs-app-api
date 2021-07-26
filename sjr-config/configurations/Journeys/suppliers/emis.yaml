@@ -1,0 +1,11 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  supplier: "emis"
+journeys:
+  documents: true
+  im1Messaging:
+    isEnabled: true
+    canDeleteMessages: false
+    canUpdateReadStatus: true
+    requiresDetailsRequest: true
+    sendMessageSubject: true

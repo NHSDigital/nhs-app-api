@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+
+# Change current working directory to be the root, regardless of how this script is invoked
+cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
+
+BUILD_SOURCEBRANCHNAME=${BUILD_SOURCEBRANCHNAME:-latest}
+DOCKER_REGISTRY=${DOCKER_REGISTRY:-local}
+
+docker build -t $DOCKER_REGISTRY/$SJR_CONFIG_IMAGE_NAME:$BUILD_SOURCEBRANCHNAME --file Dockerfile configurations/output

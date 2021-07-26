@@ -1,0 +1,11 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - "Y00293"
+    - "Y01051"
+    - "Y01163"
+    - "Y01652"
+    - "Y02633"
+    - "Y03602"
+journeys:
+  nominatedPharmacy: false

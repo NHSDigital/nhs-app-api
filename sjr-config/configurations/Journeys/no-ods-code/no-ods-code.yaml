@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "no-ods-code"
+journeys:
+  coronavirusInformation: false
+  ndop: false
+  oneOneOne: false

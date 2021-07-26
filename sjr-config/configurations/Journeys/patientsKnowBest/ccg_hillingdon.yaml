@@ -1,0 +1,64 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - "E86001"
+    - "E86003"
+    - "E86004"
+    - "E86005"
+    - "E86006"
+    - "E86007"
+    - "E86009"
+    - "E86010"
+    - "E86011"
+    - "E86012"
+    - "E86014"
+    - "E86015"
+    - "E86016"
+    - "E86017"
+    - "E86018"
+    - "E86019"
+    - "E86020"
+    - "E86022"
+    - "E86024"
+    - "E86026"
+    - "E86027"
+    - "E86028"
+    - "E86029"
+    - "E86030"
+    - "E86033"
+    - "E86034"
+    - "E86036"
+    - "E86038"
+    - "E86041"
+    - "E86042"
+    - "E86605"
+    - "E86609"
+    - "E86610"
+    - "E86612"
+    - "E86615"
+    - "E86618"
+    - "E86619"
+    - "E86620"
+    - "E86625"
+    - "E86626"
+    - "E86629"
+    - "E86632"
+    - "E86637"
+    - "E86640"
+    - "Y00352"
+journeys:
+  silverIntegrations:
+    carePlans:
+      - pkbCie
+    libraries:
+      - pkbCie
+    medicines:
+      - pkbCie
+    messages:
+      - pkbCie
+    secondaryAppointments:
+      - pkbCie
+    healthTrackers:
+      - pkbCie
+    testResults:
+      - pkbCie

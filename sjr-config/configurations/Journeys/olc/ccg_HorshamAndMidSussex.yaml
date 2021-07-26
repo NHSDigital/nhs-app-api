@@ -1,0 +1,20 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - H82084
+    - H82004
+    - H82044
+    - H82056
+    - H82100
+    - H82036
+    - H82017
+    - H82072
+    - H82003
+journeys:
+  cdssAdvice:
+    provider: eConsult
+    serviceDefinition: GEC_GEN
+    conditionsServiceDefinition: CONDITION_LIST
+  cdssAdmin:
+    provider: eConsult
+    serviceDefinition: CONDITION_LIST_ADMIN

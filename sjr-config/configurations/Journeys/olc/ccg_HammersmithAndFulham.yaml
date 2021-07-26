@@ -1,0 +1,27 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - E85032
+    - E85074
+    - E85649
+    - E85118
+    - Y02589
+    - E85033
+    - E85042
+    - E85008
+    - E85038
+    - E85636
+    - E85659
+    - E85048
+    - E85128
+    - E85077
+    - E85748
+    - E85005
+journeys:
+  cdssAdvice:
+    provider: eConsult
+    serviceDefinition: GEC_GEN
+    conditionsServiceDefinition: CONDITION_LIST
+  cdssAdmin:
+    provider: eConsult
+    serviceDefinition: CONDITION_LIST_ADMIN

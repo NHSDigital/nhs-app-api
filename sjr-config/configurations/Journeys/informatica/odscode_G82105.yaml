@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "G82105"
+journeys:
+  appointments:
+    provider: informatica
+    informaticaUrl: https://bethesda-medical-centre.appointments-online.co.uk

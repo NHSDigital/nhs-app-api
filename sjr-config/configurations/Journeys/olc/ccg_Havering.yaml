@@ -1,0 +1,43 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - F82674
+    - F82649
+    - F82675
+    - F82016
+    - F82630
+    - F82006
+    - F82663
+    - F82014
+    - F82002
+    - F82619
+    - F82023
+    - F82055
+    - F82648
+    - Y02973
+    - F82008
+    - F82638
+    - F82009
+    - F82045
+    - F82010
+    - F82666
+    - F82022
+    - F82039
+    - F82607
+    - F82011
+    - F82671
+    - F82609
+    - F82007
+    - F82021
+    - F82033
+    - F82624
+    - F82053
+    - F82028
+journeys:
+  cdssAdvice:
+    provider: eConsult
+    serviceDefinition: GEC_GEN
+    conditionsServiceDefinition: CONDITION_LIST
+  cdssAdmin:
+    provider: eConsult
+    serviceDefinition: CONDITION_LIST_ADMIN

@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "M81037"
+journeys:
+  appointments:
+    provider: informatica
+    informaticaUrl: https://thorneloe-lodge-surgery.appointments-online.co.uk

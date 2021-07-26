@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "H81009"
+journeys:
+  appointments:
+    provider: informatica
+    informaticaUrl: https://studholme-medical-centre.appointments-online.co.uk

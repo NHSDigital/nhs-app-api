@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "J82020"
+journeys:
+  appointments:
+    provider: informatica
+    informaticaUrl: https://archers-practice.appointments-online.co.uk

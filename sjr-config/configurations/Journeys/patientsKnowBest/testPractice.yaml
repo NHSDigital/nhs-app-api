@@ -1,0 +1,19 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes: 
+    - "A12355"
+journeys:
+  silverIntegrations:
+    carePlans:
+      - pkb
+    consultations: []
+    healthTrackers:
+      - pkb
+    libraries:
+      - pkb
+    medicines:
+      - pkb
+    messages:
+      - pkb
+    secondaryAppointments:
+      - pkb

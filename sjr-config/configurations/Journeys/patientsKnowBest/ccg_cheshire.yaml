@@ -1,0 +1,57 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - "N81001"
+    - "N81002"
+    - "N81008"
+    - "N81010"
+    - "N81013"
+    - "N81016"
+    - "N81022"
+    - "N81026"
+    - "N81027"
+    - "N81029"
+    - "N81032"
+    - "N81033"
+    - "N81039"
+    - "N81042"
+    - "N81043"
+    - "N81044"
+    - "N81047"
+    - "N81049"
+    - "N81052"
+    - "N81053"
+    - "N81062"
+    - "N81068"
+    - "N81069"
+    - "N81070"
+    - "N81071"
+    - "N81077"
+    - "N81084"
+    - "N81085"
+    - "N81086"
+    - "N81088"
+    - "N81090"
+    - "N81111"
+    - "N81118"
+    - "N81614"
+    - "N81632"
+    - "N81642"
+    - "Y05750"
+
+journeys:
+  silverIntegrations:
+    carePlans:
+      - pkb
+    libraries:
+      - pkb
+    medicines:
+      - pkb
+    messages:
+      - pkb
+    secondaryAppointments:
+      - pkb
+    healthTrackers:
+      - pkb
+    testResults:
+      - pkb

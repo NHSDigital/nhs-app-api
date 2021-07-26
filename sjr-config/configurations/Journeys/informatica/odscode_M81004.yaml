@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "M81004"
+journeys:
+  appointments:
+    provider: informatica
+    informaticaUrl: https://the-riverside-surgery-evesham.appointments-online.co.uk

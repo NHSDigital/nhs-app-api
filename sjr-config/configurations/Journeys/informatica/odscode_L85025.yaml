@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "L85025"
+journeys:
+  appointments:
+    provider: informatica
+    informaticaUrl: https://cranleigh-gardens-mc.appointments-online.co.uk
