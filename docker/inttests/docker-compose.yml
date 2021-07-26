@@ -24,6 +24,7 @@ services:
           - pkb.stubs.local.bitraft.io
           - substrakt.stubs.local.bitraft.io
           - substraktDomain1.stubs.local.bitraft.io
+          - netcompany.stubs.local.bitraft.io
 
   securestubs.local.bitraft.io:
     image: nginx:alpine
