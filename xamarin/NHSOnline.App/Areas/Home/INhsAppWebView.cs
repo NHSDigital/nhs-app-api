@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews.Payloads;
@@ -60,6 +61,7 @@ namespace NHSOnline.App.Areas.Home
         Task NavigateToMore();
         Task NavigateToHome();
         Task NavigateToRedirector(Uri targetUrl);
+        Task NavigateToOnDemandGpReturn(Dictionary<string, string> queryParameters);
         Task SendNotificationsStatus(string status);
         Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse);
         Task SendNotificationUnauthorised();

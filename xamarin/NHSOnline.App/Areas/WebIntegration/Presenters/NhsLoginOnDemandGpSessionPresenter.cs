@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.WebIntegration.Models;
@@ -9,9 +10,9 @@ using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.WebIntegration.Presenters
 {
-    internal class NhsLoginOnDemandGpSessionPresenter : IOnGpDemandReturnCheckResultVisitor<Task>
+    internal class NhsLoginOnDemandGpSessionPresenter : IOnDemandGpReturnCheckResultVisitor<Task>
     {
-        private readonly INhsLoginOnDemandGpSessionView _view;
+        private readonly NhsLoginOnDemandGpSessionModel _model;
         private readonly ILogger<NhsLoginOnDemandGpSessionPresenter> _logger;
         private readonly INhsLoginConfiguration _nhsLoginConfiguration;
         private readonly IBrowserOverlay _browserOverlay;
@@ -28,7 +29,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             INhsLoginConfiguration nhsLoginConfiguration,
             IBrowserOverlay browserOverlay)
         {
-            _view = view;
+            _model = model;
             _logger = logger;
             _nhsLoginConfiguration = nhsLoginConfiguration;
             _browserOverlay = browserOverlay;
@@ -39,7 +40,14 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                 .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
                 .RegisterHandler(ViewOnNavigationFailed, (view, handler) => view.NavigationFailed = handler)
                 .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler)
-                .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeeplinkRequested = handler);
+                .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeeplinkRequested = handler)
+                .RegisterHandler(model.NavigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
+                .RegisterHandler(model.NavigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
+                .RegisterHandler(model.NavigationHandler.AdviceRequested, (view, handler) => view.AdviceRequested = handler)
+                .RegisterHandler(model.NavigationHandler.AppointmentsRequested, (view, handler) => view.AppointmentsRequested = handler)
+                .RegisterHandler(model.NavigationHandler.PrescriptionsRequested, (view, handler) => view.PrescriptionsRequested = handler)
+                .RegisterHandler(model.NavigationHandler.YourHealthRequested, (view, handler) => view.YourHealthRequested = handler)
+                .RegisterHandler(model.NavigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler);
 
             _createOnDemandGpSessionState = nhsLoginService.CreateOnDemandGpSession(model.AssertedLoginIdentity, model.RedirectTo);
             view.LoadUrlAndNotifyOnRedirect(_createOnDemandGpSessionState.AuthoriseUri, IsRedirect, OnRedirect);
@@ -83,34 +91,37 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
         private Task ViewOnNavigationFailed()
         {
-            // TODO: When navigating failed, what do? Show error screen with a code? Just return to the home page?
+            _logger.LogInformation("Navigation failed. Returning to on-demand gp return");
 
-            return Task.CompletedTask;
+            return _model.NavigationHandler.NavigateToOnDemandGpReturn(new Dictionary<string, string>
+            {
+                {"state", _model.RedirectTo}
+            });
         }
 
-        private bool IsRedirect(Uri uri) => _createOnDemandGpSessionState.IsOnGpDemandReturn(uri);
+        private bool IsRedirect(Uri uri) => _createOnDemandGpSessionState.IsOnDemandGpReturn(uri);
 
         private async void OnRedirect(Uri redirectUri)
         {
-            var result = _createOnDemandGpSessionState.CheckOnGpDemandReturn(redirectUri);
+            var result = _createOnDemandGpSessionState.CheckOnDemandGpReturn(redirectUri);
             await result.Accept(this).PreserveThreadContext();
         }
 
-        public Task Visit(OnGpDemandReturnCheckResult.Complete complete)
+        public Task Visit(OnDemandGpReturnCheckResult.Complete complete)
         {
             _logger.LogInformation($"Completed on-demand gp session creation. Returning to web to complete journey. DeepLinkUrl: {_deeplinkUrl}");
 
-            // TODO: Return to NhsAppWebView and pass on DeepLinkUrl
+            if (_deeplinkUrl != null)
+            {
+                complete.Parameters.Add("deepLinkUrl", _deeplinkUrl.ToString());
+            }
 
-            return _view.AppNavigation.Pop();
+            return _model.NavigationHandler.NavigateToOnDemandGpReturn(complete.Parameters);
         }
 
         private Task BackRequested()
         {
-            _logger.LogInformation("Back Requested");
-
-            // TODO: Back requested, what do?
-
+            _logger.LogInformation("Back Requested. Doing nothing");
             return Task.CompletedTask;
         }
     }

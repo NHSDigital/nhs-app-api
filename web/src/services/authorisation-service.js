@@ -141,6 +141,15 @@ class AuthorisationService {
     return { loginUrl: responseUrl, request };
   }
 
+  setAuthCookieForNativeOnDemandGpSession(cookies) {
+    setCookie({
+      key: 'nhso.auth',
+      value: { redirectUri: this.webCidOnDemandGpReturnRedirectUri },
+      cookies,
+      secure: this.secureCookies,
+    });
+  }
+
   /* eslint-disable class-methods-use-this */
   newState(randomGenerator) {
     return randomGenerator(10);

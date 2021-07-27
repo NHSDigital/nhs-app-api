@@ -24,6 +24,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 .IsValid();
         }
 
+        public bool IsOnDemandGpSessionPostValid(UserSessionRequest request)
+        {
+            return new ValidateAndLog(_logger)
+                .IsNotNullOrWhitespace(request.AuthCode, nameof(request.AuthCode))
+                .IsNotNullOrWhitespace(request.RedirectUrl, nameof(request.RedirectUrl))
+                .IsValid();
+        }
+
         public void LogErrorMessages(UserSessionRequest request)
         {
             var errors = new Dictionary<string, string>();

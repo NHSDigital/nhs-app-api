@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -306,6 +307,13 @@ namespace NHSOnline.App.Controls.WebViews
 
         public async Task ValidateSession()
             => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.validateSession()").ResumeOnThreadPool();
+
+        public async Task NavigateToOnDemandGpReturn(Dictionary<string, string> queryParameters)
+        {
+            const string callbackName = "window.nativeAppCallbacks.navigateToOnDemandGpReturn";
+            var jsonArgument = JsonConvert.SerializeObject(queryParameters);
+            await EvaluateJavaScriptAsync($"{callbackName}('{jsonArgument}')").ResumeOnThreadPool();
+        }
 
         private static T ConvertFromJsonString<T>(string json)
             => JsonConvert.DeserializeObject<T>(json, Settings) ?? throw new ArgumentException($"Failed to deserialise JSON to {typeof(T).FullName}", nameof(json));

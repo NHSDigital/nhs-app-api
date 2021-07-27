@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using NHSOnline.App.Controls;
@@ -238,6 +239,13 @@ namespace NHSOnline.App.Areas.Home.Views
             WebView.AccessibilityFocus();
             SelectedNavigationFooterItem = NavigationFooterItem.None;
             await WebView.NavigateToRedirector(targetUrl).ResumeOnThreadPool();
+        }
+
+        public Task NavigateToOnDemandGpReturn(Dictionary<string, string> queryParameters)
+        {
+            WebView.Focus();
+            WebView.AccessibilityFocus();
+            return WebView.NavigateToOnDemandGpReturn(queryParameters);
         }
 
         public async Task NavigateToAppPage(string page)

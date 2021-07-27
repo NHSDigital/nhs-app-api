@@ -11,7 +11,7 @@
                             x:Name="Page"
                             SelectedNavigationFooterItem="{Binding SelectedNavigationFooterItem, Source={x:Reference Name=Page}}">
     
-    <AbsoluteLayout>
+    <AbsoluteLayout BackgroundColor="{ StaticResource NhsUkPageBackgroundGrey }">
         <elements:Spinner AbsoluteLayout.LayoutFlags="All"
                           AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                           x:Name="Spinner"
@@ -27,5 +27,4 @@
                                                    Navigating="WebViewNavigating"
                                                    Navigated="WebOnEndNavigating" />
     </AbsoluteLayout>
-
 </pages:NhsAppFullHeaderPage>

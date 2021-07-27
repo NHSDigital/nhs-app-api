@@ -31,7 +31,6 @@ namespace NHSOnline.Backend.Auth.CitizenId
             try
             {
                 var isValid = new ValidateAndLog(_logger).IsNotNullOrWhitespace(authCode, nameof(authCode))
-                    .IsNotNullOrWhitespace(codeVerifier, nameof(codeVerifier))
                     .IsNotNull(redirectUrl, nameof(redirectUrl))
                     .IsValid();
 

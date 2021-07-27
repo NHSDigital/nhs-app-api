@@ -1,31 +1,36 @@
 using System;
+using System.Linq;
+using System.Web;
 
 namespace NHSOnline.App.NhsLogin
 {
     public sealed class CreateOnDemandGpSessionState
     {
-        private readonly Uri _onGpDemandReturnUri;
+        private readonly Uri _onDemandGpReturnUri;
 
         internal CreateOnDemandGpSessionState(
             Uri authoriseUri,
-            Uri onGpDemandReturnUri)
+            Uri onDemandGpReturnUri)
         {
-            _onGpDemandReturnUri = onGpDemandReturnUri;
+            _onDemandGpReturnUri = onDemandGpReturnUri;
             AuthoriseUri = authoriseUri;
         }
 
         public Uri AuthoriseUri { get; }
 
-        public bool IsOnGpDemandReturn(Uri uri) => uri.LocalPath == _onGpDemandReturnUri.LocalPath;
+        public bool IsOnDemandGpReturn(Uri uri) => uri.LocalPath == _onDemandGpReturnUri.LocalPath;
 
-        public OnGpDemandReturnCheckResult CheckOnGpDemandReturn(Uri uri)
+        public OnDemandGpReturnCheckResult CheckOnDemandGpReturn(Uri uri)
         {
-            if (!IsOnGpDemandReturn(uri))
+            if (!IsOnDemandGpReturn(uri))
             {
-                throw new InvalidOperationException($"{uri} is not on-demand gp return uri - verify with {nameof(IsOnGpDemandReturn)} first");
+                throw new InvalidOperationException($"{uri} is not on-demand gp return uri - verify with {nameof(IsOnDemandGpReturn)} first");
             }
 
-            return new OnGpDemandReturnCheckResult.Complete(uri);
+            var queryParameters = HttpUtility.ParseQueryString(uri.Query);
+            var queryDictionary = queryParameters.AllKeys.ToDictionary(key => key, key => queryParameters[key]);
+
+            return new OnDemandGpReturnCheckResult.Complete(queryDictionary);
         }
     }
 }

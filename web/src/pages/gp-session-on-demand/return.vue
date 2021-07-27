@@ -1,22 +1,22 @@
 <template>
   <div>
-    <div v-if="prescriptionOnDemandApiError">
-      <prescription-errors :error="gpSessionApiError"
-                           :reference-code="gpSessionApiError.serviceDeskReference"
-                           :try-again-route="tryAgainPath"/>
-    </div>
-    <div v-else-if="appointmentsOnDemandApiError">
-      <gp-appointment-gp-session-errors :error="gpSessionApiError"/>
-    </div>
-    <div v-else-if="linkedAccountsOnDemandApiError">
-      <linked-profile-errors :error="gpSessionApiError"/>
-    </div>
-    <div v-else-if="defaultOnDemandApiError">
-      <generic-errors :try-again-route="tryAgainPath"/>
-    </div>
-    <div v-else-if="healthRecordOnDemandApiError">
-      <health-record-errors :error="gpSessionApiError"/>
-    </div>
+    <gp-appointment-gp-session-errors
+      v-if="appointmentsOnDemandApiError"
+      :error="gpSessionApiError" />
+    <prescription-errors
+      v-else-if="prescriptionOnDemandApiError"
+      :error="gpSessionApiError"
+      :reference-code="gpSessionApiError.serviceDeskReference"
+      :try-again-route="tryAgainPath" />
+    <health-record-errors
+      v-else-if="healthRecordOnDemandApiError"
+      :error="gpSessionApiError" />
+    <linked-profile-errors
+      v-else-if="linkedAccountsOnDemandApiError"
+      :error="gpSessionApiError" />
+    <generic-errors
+      v-else-if="defaultOnDemandApiError"
+      :try-again-route="tryAgainPath" />
   </div>
 </template>
 
@@ -31,7 +31,7 @@ import {
   GP_HEALTH_RECORD_JOURNEY_NAME,
 } from '@/router/names';
 import NativeReferrerSetup from '@/services/nativeReferrerSetup';
-import { removeNhsAppHost } from '@/lib/utils';
+import { isBlankString, removeNhsAppHost } from '@/lib/utils';
 import GpAppointmentGpSessionErrors from '@/components/errors/pages/appointments/GpAppointmentGpSessionErrors';
 import PrescriptionErrors from '@/components/errors/pages/prescriptions/PrescriptionsErrors';
 import LinkedProfileErrors from '@/components/linked-profiles/LinkedProfileErrors';
@@ -78,7 +78,19 @@ export default {
 
     await this.$store.dispatch('auth/handleGpOnDemandResponse', route.query);
 
-    if (!isEmpty(this.gpSessionApiError)) {
+    const hasGpSessionError = !isEmpty(this.gpSessionApiError);
+    const hasApiError = !isEmpty(this.$store.state.errors.apiErrors);
+    const { deepLinkUrl } = route.query;
+
+    if (!isBlankString(deepLinkUrl)) {
+      if (!hasGpSessionError && !hasApiError) {
+        this.setHasGpSession();
+      }
+      this.handleDeepLinkUrl(deepLinkUrl);
+      return;
+    }
+
+    if (hasGpSessionError) {
       const ignoreGpSessionError = get('gpSessionOnDemand.ignoreError', routeMetaData);
       this.$store.dispatch('session/setGpSession', false);
 
@@ -88,9 +100,8 @@ export default {
         this.displayJourneySpecificError(routeMetaData);
         EventBus.$emit(UPDATE_HEADER, routeMetaData);
       }
-    } else if (isEmpty(this.$store.state.errors.apiErrors)) {
-      this.$store.dispatch('session/setGpSession', true);
-      sessionStorage.removeItem('hasRetried');
+    } else if (!hasApiError) {
+      this.setHasGpSession();
       this.redirect(route);
     }
   },
@@ -101,6 +112,16 @@ export default {
       if (appVersion) {
         this.$store.dispatch('appVersion/updateWebVersion', appVersion);
       }
+    },
+    setHasGpSession() {
+      this.$store.dispatch('session/setGpSession', true);
+      sessionStorage.removeItem('hasRetried');
+    },
+    handleDeepLinkUrl(deepLinkUrl) {
+      this.$router.push({
+        path: TERMSANDCONDITIONS_PATH,
+        query: { [REDIRECT_PARAMETER]: deepLinkUrl },
+      });
     },
     redirect(route) {
       const query = route.query.state.length > 1

@@ -219,7 +219,7 @@ export const isNhsAppPath = (path, router) => {
   return matchesWithNotFound.length === 0;
 };
 
-export const removeNhsAppHost = url => url.replace(`${getWindowLocationOrigin()}/`, '');
+export const removeNhsAppHost = url => url.replace(`${getWindowLocationOrigin() || ''}/`, '');
 
 export const isNhsAppHost = url => url.startsWith(getWindowLocationOrigin());
 

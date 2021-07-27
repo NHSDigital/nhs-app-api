@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
-using NHSOnline.App.Controls.Elements;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
@@ -22,6 +21,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
             _appNavigation = new AppNavigation<INhsLoginOnDemandGpSessionView.IEvents>(this, Navigation);
 
             InitializeComponent();
+
             AddEventHandlers();
         }
 

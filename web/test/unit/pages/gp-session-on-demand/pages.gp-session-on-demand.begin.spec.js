@@ -49,6 +49,12 @@ describe('on-demand-gp-return', () => {
   beforeEach(() => {
     EventBus.$emit.mockClear();
 
+    AuthorisationService.mockImplementation(() => ({
+      generateGpSessionUrl: jest.fn(() => ({ gpSessionConnectUrl: generatedGpSessionUrl })),
+      setAuthCookieForNativeOnDemandGpSession: jest.fn(),
+    }));
+
+
     delete window.location;
     window.location = { hostname };
   });
@@ -56,10 +62,6 @@ describe('on-demand-gp-return', () => {
 
   describe('does not support native on demand GP session', () => {
     beforeEach(() => {
-      AuthorisationService.mockImplementation(() => ({
-        generateGpSessionUrl: jest.fn(() => ({ gpSessionConnectUrl: generatedGpSessionUrl })),
-      }));
-
       NativeApp.supportsCreateOnDemandGpSession.mockReturnValue(false);
 
       mountPage();

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using NHSOnline.App.Navigation;
 
@@ -69,6 +70,12 @@ namespace NHSOnline.App.Areas.Home.Presenters
         {
             await _appNavigation.PopToRootAnimated().PreserveThreadContext();
             await _rootHandler.RedirectToDeepLinkRequested(deeplinkUrl).PreserveThreadContext();
+        }
+
+        public async Task NavigateToOnDemandGpReturn(Dictionary<string, string> queryParameters)
+        {
+            await _appNavigation.PopToRoot().PreserveThreadContext();
+            await _rootHandler.NavigateToOnDemandGpReturn(queryParameters).PreserveThreadContext();
         }
     }
 }

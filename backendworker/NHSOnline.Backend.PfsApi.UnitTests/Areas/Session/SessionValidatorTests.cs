@@ -58,5 +58,47 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             // Assert
             result.Should().BeTrue();
         }
+
+        [DataTestMethod]
+        [DataRow("", "")]
+        [DataRow(null, "1234567890")]
+        [DataRow("1234567890", null)]
+        public void IsOnDemandGpSessionPostValid_InvalidData_ReturnsFalse(string authCode, string redirectUrl)
+        {
+            // Arrange
+            var request = new UserSessionRequest
+            {
+                AuthCode = authCode,
+                RedirectUrl = redirectUrl
+            };
+
+            // Act
+            var result = _systemUnderTest.IsOnDemandGpSessionPostValid(request);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+
+        [DataTestMethod]
+        [DataRow("1234567890", null, "1234567890")]
+        [DataRow("1234567890", "", "1234567890")]
+        [DataRow("1234567890", " ", "1234567890")]
+        [DataRow("1234567890", "1234567890", "1234567890")]
+        public void IsOnDemandGpSessionPostValid_ValidData_ReturnsTrue(string authCode, string codeVerifier, string redirectUrl)
+        {
+            // Arrange
+            var request = new UserSessionRequest
+            {
+                AuthCode = authCode,
+                CodeVerifier = codeVerifier,
+                RedirectUrl = redirectUrl
+            };
+
+            // Act
+            var result = _systemUnderTest.IsOnDemandGpSessionPostValid(request);
+
+            // Assert
+            result.Should().BeTrue();
+        }
     }
 }

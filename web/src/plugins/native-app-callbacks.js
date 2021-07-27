@@ -1,7 +1,7 @@
 import store from '@/store';
 import router from '@/router';
 import { REDIRECT_PAGE_PARAMETER, REDIRECT_PARAMETER } from '@/router/names';
-import { INTERSTITIAL_REDIRECTOR_PATH } from '@/router/paths';
+import { INTERSTITIAL_REDIRECTOR_PATH, GP_SESSION_ON_DEMAND_RETURN_PATH } from '@/router/paths';
 import { isBlankString, redirectTo } from '@/lib/utils';
 
 const NativeAppCallbacksPlugin = {
@@ -69,6 +69,14 @@ const NativeAppCallbacksPlugin = {
       },
       navigationGoToHome() {
         store.dispatch('navigation/goToHomePage');
+      },
+      navigateToOnDemandGpReturn(parameters) {
+        redirectTo(
+          { $router: router, $store: store },
+          GP_SESSION_ON_DEMAND_RETURN_PATH,
+          JSON.parse(parameters),
+          true,
+        );
       },
       redirectToTargetUrl(url) {
         if (url && !isBlankString(url)) {

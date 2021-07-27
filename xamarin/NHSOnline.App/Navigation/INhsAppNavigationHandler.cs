@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace NHSOnline.App.Navigation
@@ -15,5 +16,6 @@ namespace NHSOnline.App.Navigation
 
         Task GoToNhsAppPageRequested(string page);
         Task RedirectToDeepLinkRequested(Uri deeplinkUrl);
+        Task NavigateToOnDemandGpReturn(Dictionary<string, string> queryParameters);
     }
 }

@@ -143,12 +143,13 @@ namespace NHSOnline.App.Areas.Home.Presenters
             await _settingsService.OpenSettings().PreserveThreadContext();
         }
 
-        private async Task CreateOnDemandGpSessionRequested(CreateOnDemandGpSessionRequest request)
+        private Task CreateOnDemandGpSessionRequested(CreateOnDemandGpSessionRequest request)
         {
-            var model = new NhsLoginOnDemandGpSessionModel(
-                request.AssertedLoginIdentity, request.RedirectTo, _view.SelectedNavigationFooterItem);
+            var popToRootNavigationHandler = new NhsAppPopToRootNavigationHandler(_navigationHandler, _view.AppNavigation);
+            var model = new NhsLoginOnDemandGpSessionModel(request.AssertedLoginIdentity, request.RedirectTo, _view.SelectedNavigationFooterItem, popToRootNavigationHandler);
             var page = _pageFactory.CreatePageFor(model);
-            await _view.AppNavigation.Push(page).PreserveThreadContext();
+
+            return _view.AppNavigation.Push(page);
         }
 
         private async Task ViewOnAppearing()

@@ -59,25 +59,6 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
 
         [DataTestMethod]
         [DataRow(null)]
-        [DataRow("")]
-        [DataRow(" ")]
-        public async Task GetUserProfile_CodeVerifierNullOrWhiteSpace_ReturnsNone(string codeVerifier)
-        {
-            // Arrange
-            var authCode = _fixture.Create<string>();
-            var redirectUrl = _fixture.Create<Uri>();
-
-            // Act
-            var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
-
-            // Assert
-            actualResult.UserProfile.HasValue.Should().BeFalse();
-            actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
-            actualResult.IdTokenJti.Should().BeNull();
-        }
-
-        [DataTestMethod]
-        [DataRow(null)]
         public async Task GetUserProfile_RedirectUrlNullOrWhiteSpace_ReturnsNone(Uri redirectUrl)
         {
             // Arrange
