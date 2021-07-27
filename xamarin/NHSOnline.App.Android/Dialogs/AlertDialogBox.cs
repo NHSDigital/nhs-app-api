@@ -7,8 +7,8 @@ namespace NHSOnline.App.Droid.Dialogs
     public static class AlertDialogBox
     {
         internal static MainActivity? MainActivity { get; set; }
-        
-        public static Dictionary<string, AlertDialog?> KnownDialogs => new Dictionary<string, AlertDialog?>();
+
+        public static Dictionary<string, AlertDialog?> KnownDialogs { get; } = new ();
 
         public static void CreateAndShowAlertDialog(
             string? title,
