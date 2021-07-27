@@ -6,7 +6,14 @@
 #
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
-  odsCode: "F00010"
+  odsCodes:
+    - A10204
+    - A10205
+    - A20102
+    - B81695
+    - D83009
+    - F00010
+    - H82007
 journeys:
   silverIntegrations:
     vaccineRecord: 
