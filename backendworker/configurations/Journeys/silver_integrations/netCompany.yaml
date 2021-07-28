@@ -7,9 +7,11 @@
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
   odsCodes:
+    - A20102
     - A10204
     - A10205
     - A20102
+    - B81603
     - B81695
     - D83009
     - F00010
