@@ -6,14 +6,14 @@ using Moq;
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 {
     [TestClass]
-    public class SessionCreateResultVisitorTests
+    public class SessionResultVisitorTests
     {
-        private SessionCreateResultVisitorTestContext Context { get; set; }
+        private SessionResultVisitorTestContext Context { get; set; }
 
         [TestInitialize]
         public void Initialize()
         {
-            Context = new SessionCreateResultVisitorTestContext();
+            Context = new SessionResultVisitorTestContext();
         }
 
         [TestMethod]
@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 Secure = false,
                 SameSite = SameSiteMode.Lax,
                 HttpOnly = true,
-                Domain = SessionCreateResultVisitorTestContext.CookieDomain
+                Domain = SessionResultVisitorTestContext.CookieDomain
             };
 
             // Act

@@ -15,18 +15,18 @@ using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Session
 {
-    internal class SessionCreateResultVisitor : ICreateSessionResultVisitor<Task<IActionResult>>
+    internal class SessionResultVisitor : ISessionResultVisitor<Task<IActionResult>>
     {
         private readonly UserSessionService _userSessionService;
-        private readonly ILogger<SessionCreateResultVisitor> _logger;
+        private readonly ILogger<SessionResultVisitor> _logger;
         private readonly ConfigurationSettings _settings;
         private readonly IMetricLogger _metricLogger;
         private readonly ISessionErrorResultBuilder _errorResultBuilder;
         private readonly ISessionExpiryCookieCreator _sessionExpiryCookieCreator;
 
-        public SessionCreateResultVisitor(
+        public SessionResultVisitor(
             UserSessionService userSessionService,
-            ILogger<SessionCreateResultVisitor> logger,
+            ILogger<SessionResultVisitor> logger,
             ConfigurationSettings settings,
             IMetricLogger metricLogger,
             ISessionErrorResultBuilder errorResultBuilder,

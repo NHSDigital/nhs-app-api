@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         private readonly IAntiforgery _antiforgery;
         private readonly ISessionCreator _sessionCreator;
         private readonly IUserSessionManager _userSessionManager;
-        private readonly ICreateSessionResultVisitor<Task<IActionResult>> _sessionResultVisitor;
+        private readonly ISessionResultVisitor<Task<IActionResult>> _sessionResultVisitor;
         private readonly ISessionExpiryCookieCreator _sessionExpiryCookieCreator;
 
         public SessionController(
@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             IAntiforgery antiforgery,
             ISessionCreator sessionCreator,
             IUserSessionManager userSessionManager,
-            ICreateSessionResultVisitor<Task<IActionResult>> sessionResultVisitor,
+            ISessionResultVisitor<Task<IActionResult>> sessionResultVisitor,
             ISessionExpiryCookieCreator sessionExpiryCookieCreator)
         {
             _settings = settings;

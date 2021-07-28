@@ -19,7 +19,7 @@ using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 {
-    internal class SessionCreateResultVisitorTestContext
+    internal class SessionResultVisitorTestContext
     {
         internal const string CookieDomain = "cookie.domain";
 
@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         internal TestData Data { get; }
         private ServiceProvider ServiceProvider { get; set; }
 
-        public SessionCreateResultVisitorTestContext()
+        public SessionResultVisitorTestContext()
         {
             Mocks = new TestMocks();
             Data = new TestData();
@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .AddSingleton(Data.ConfigurationSettings)
                 .AddTransient<UserSessionService>()
                 .AddTransient<ISessionExpiryCookieCreator, SessionExpiryCookieCreator>()
-                .AddTransient<SessionCreateResultVisitor>();
+                .AddTransient<SessionResultVisitor>();
 
             Mocks.ConfigureServices(serviceCollection);
 
@@ -56,8 +56,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             Mocks.HttpContext.Setup(x => x.Request.Headers).Returns(new HeaderDictionary { { "User-Agent", "userAgent" } });
         }
 
-        internal SessionCreateResultVisitor CreateSystemUnderTest() =>
-            ServiceProvider.GetRequiredService<SessionCreateResultVisitor>();
+        internal SessionResultVisitor CreateSystemUnderTest() =>
+            ServiceProvider.GetRequiredService<SessionResultVisitor>();
 
         internal class TestData
         {

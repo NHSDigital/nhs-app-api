@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.PfsApi.Session
             services.AddScoped<UserSessionService>();
             services.AddTransient<IUserSessionService>(sp => sp.GetRequiredService<UserSessionService>());
             services.AddTransient<IMetricContext, UserSessionMetricContext>();
-            services.AddTransient<ICreateSessionResultVisitor<Task<IActionResult>>, SessionCreateResultVisitor>();
+            services.AddTransient<ISessionResultVisitor<Task<IActionResult>>, SessionResultVisitor>();
             services.AddSingleton<ISessionErrorResultBuilder, SessionErrorResultBuilder>();
 
             services.AddTransient<SessionLoggerScope>();

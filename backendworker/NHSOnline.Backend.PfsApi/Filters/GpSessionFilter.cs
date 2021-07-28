@@ -112,7 +112,7 @@ namespace NHSOnline.Backend.PfsApi.Filters
 
             if (!sessionValid)
             {
-                _logger.LogError("GP session invalid, rejecting request");
+                _logger.LogInformation("GP session invalid, rejecting request");
 
                 return false;
             }

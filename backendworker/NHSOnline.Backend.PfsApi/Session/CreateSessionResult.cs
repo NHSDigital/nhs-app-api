@@ -9,8 +9,8 @@ namespace NHSOnline.Backend.PfsApi.Session
     {
         private CreateSessionResult() { }
 
-        internal abstract T Accept<T>(ICreateSessionResultVisitor<T> visitor, HttpContext httpContext, string sessionCookieExpiryToken, string referrer);
-        internal abstract T Accept<T>(ICreateSessionResultVisitor<T> visitor, HttpContext httpContext, string referrer);
+        internal abstract T Accept<T>(ISessionResultVisitor<T> visitor, HttpContext httpContext, string sessionCookieExpiryToken, string referrer);
+        internal abstract T Accept<T>(ISessionResultVisitor<T> visitor, HttpContext httpContext, string referrer);
 
         public sealed class Success: CreateSessionResult
         {
@@ -27,8 +27,8 @@ namespace NHSOnline.Backend.PfsApi.Session
 
             internal ServiceJourneyRulesResponse ServiceJourneyRules { get; }
             internal UserSession UserSession { get; }
-            internal override T Accept<T>(ICreateSessionResultVisitor<T> visitor, HttpContext httpContext, string sessionCookieExpiryToken, string referrer) => visitor.Visit(this, httpContext, sessionCookieExpiryToken, referrer);
-            internal override T Accept<T>(ICreateSessionResultVisitor<T> visitor, HttpContext httpContext, string referrer) => visitor.Visit(this, httpContext, referrer);
+            internal override T Accept<T>(ISessionResultVisitor<T> visitor, HttpContext httpContext, string sessionCookieExpiryToken, string referrer) => visitor.Visit(this, httpContext, sessionCookieExpiryToken, referrer);
+            internal override T Accept<T>(ISessionResultVisitor<T> visitor, HttpContext httpContext, string referrer) => visitor.Visit(this, httpContext, referrer);
         }
 
         public sealed class ErrorResult: CreateSessionResult
@@ -36,8 +36,8 @@ namespace NHSOnline.Backend.PfsApi.Session
             internal ErrorResult(ErrorTypes errorTypes) => ErrorTypes = errorTypes;
 
             internal ErrorTypes ErrorTypes { get; }
-            internal override T Accept<T>(ICreateSessionResultVisitor<T> visitor, HttpContext httpContext, string sessionCookieExpiryToken, string referrer) => visitor.Visit(this);
-            internal override T Accept<T>(ICreateSessionResultVisitor<T> visitor, HttpContext httpContext, string referrer) => visitor.Visit(this);
+            internal override T Accept<T>(ISessionResultVisitor<T> visitor, HttpContext httpContext, string sessionCookieExpiryToken, string referrer) => visitor.Visit(this);
+            internal override T Accept<T>(ISessionResultVisitor<T> visitor, HttpContext httpContext, string referrer) => visitor.Visit(this);
         }
     }
 }
