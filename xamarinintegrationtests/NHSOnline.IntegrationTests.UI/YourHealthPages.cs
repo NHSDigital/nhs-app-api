@@ -1,0 +1,33 @@
+namespace NHSOnline.IntegrationTests.UI
+{
+    public enum YourHealthPages
+    {
+        CovidPass,
+        VaccineRecord,
+        GpHealthRecord,
+        PkbTestResults,
+        CieTestResults,
+        SecondaryCareViewTestResults,
+        MyCareViewTestResults,
+        PkbCarePlans,
+        CieCarePlans,
+        SecondaryCareViewCarePlans,
+        MyCareViewCarePlans,
+        PkbTrackYourHealth,
+        CieTrackYourHealth,
+        SecondaryCareViewTrackYourHealth,
+        MyCareViewTrackYourHealth,
+        PkbSharedHealth,
+        CieSharedHealth,
+        SecondaryCareViewSharedHealth,
+        MyCareViewSharedHealth,
+        SubstraktUpdatePersonalDetails,
+        PkbRecordSharing,
+        CieRecordSharing,
+        SecondaryCareViewRecordSharing,
+        MyCareViewRecordSharing,
+        GncrHospitalAndOtherHealthcareLetters,
+        OrganDonation,
+        Ndop,
+    }
+}

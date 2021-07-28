@@ -1,0 +1,56 @@
+using System.Collections.Generic;
+using System.Linq;
+using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb;
+using NHSOnline.IntegrationTests.UI;
+using NHSOnline.IntegrationTests.UI.Components;
+using NHSOnline.IntegrationTests.UI.Components.Android;
+using NHSOnline.IntegrationTests.UI.Drivers;
+using OpenQA.Selenium.Appium.Android;
+
+namespace NHSOnline.IntegrationTests.Pages.Android.YourHealth
+{
+    public class AndroidYourHealthSecondaryCareViewPage
+    {
+        private readonly IAndroidDriverWrapper _driver;
+
+        private AndroidYourHealthSecondaryCareViewPage(IAndroidDriverWrapper driver)
+        {
+            _driver = driver;
+            Navigation = new AndroidFullNavigation(driver);
+            PageContent = new YourHealthSecondaryCareViewPageContent(driver.Web.NhsAppLoggedInWebView());
+        }
+
+        private AndroidFullNavigation Navigation { get; }
+
+        public YourHealthSecondaryCareViewPageContent PageContent { get; }
+
+        public static AndroidYourHealthSecondaryCareViewPage AssertOnPage(IAndroidDriverWrapper driver)
+        {
+            var page = new AndroidYourHealthSecondaryCareViewPage(driver);
+            page.PageContent.AssertOnPage();
+            return page;
+        }
+
+        // Focus needs to be set on webview on page load, NHSO-14668 and tabbing functionality needs to be updated before this can be removed.
+        public AndroidYourHealthSecondaryCareViewPage TabIntoFocus()
+        {
+            _driver.SendKey(AndroidKeyCode.Keycode_TAB);
+            return this;
+        }
+
+        private IEnumerable<IFocusable> GetAllKeyboardNavigationFocusableElements()
+        {
+            var headerFocusableList = Navigation.KeyboardHeaderNavigation.GetFocusableElements();
+            var footerFocusableList = Navigation.KeyboardFooterNavigation.GetFocusableElements();
+            var pageFocusableList = PageContent.FocusableElements;
+
+            return pageFocusableList.Concat(footerFocusableList).Concat(headerFocusableList);
+        }
+
+        private AndroidKeyboardNavigation KeyboardPageContentNavigation => AndroidKeyboardNavigation
+            .WithExpectedFocusableElements(_driver, GetAllKeyboardNavigationFocusableElements());
+
+        public void KeyboardNavigateTo(YourHealthPages location) =>
+            PageContent.KeyboardNavigateTo(location, KeyboardPageContentNavigation);
+    }
+}

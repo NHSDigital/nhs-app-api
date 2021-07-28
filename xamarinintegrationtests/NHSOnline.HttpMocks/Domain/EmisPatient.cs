@@ -23,6 +23,12 @@ namespace NHSOnline.HttpMocks.Domain
                 EmisPatientOds.AllSilversEnabled => "emis_with_all_silvers",
                 EmisPatientOds.NoOdsCode => "no-ods-code",
                 EmisPatientOds.UnknownOdsCode => "Unknown",
+                EmisPatientOds.Pkb => "emis_with_pkb",
+                EmisPatientOds.Cie => "emis_with_cie",
+                EmisPatientOds.SecondaryCareView => "emis_with_secondary_care_view",
+                EmisPatientOds.MyCareView => "emis_with_my_care_view",
+                EmisPatientOds.Substrakt => "emis_with_substrakt",
+                EmisPatientOds.Gncr => "emis_with_gncr",
                 _ => throw new ArgumentOutOfRangeException(nameof(emisPatientOds), emisPatientOds, null)
             };
         }

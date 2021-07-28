@@ -7,13 +7,6 @@
     <title>@Model.Title</title>
     <script type="text/javascript" src="http://web.local.bitraft.io:3000/js/v1/nhsapp.js"></script>
     <script>
-        // Appium on iOS doesn't like us deleting the webview during the click event
-        function onClickNHSAppUplift() {
-            setTimeout(function() { nhsapp.navigation.goToPage(nhsapp.navigation.AppPage.UPLIFT); }, 1);
-            return false;
-        }
-    </script>
-    <script>
         function onClickGpHealthRecord() {
             setTimeout(function() { nhsapp.navigation.goToPage(nhsapp.navigation.AppPage.HEALTH_RECORDS); }, 1);
             return false;
@@ -27,7 +20,6 @@
     <div class="container">
         <ul class="list-group">
             <li class="list-group-item"><a href="#" onclick="return onClickGpHealthRecord()">Back</a>
-            <li class="list-group-item"><a href="#" onclick="return onClickNHSAppUplift()">NHS Login Uplift</a></li>
         </ul>
     </div>
     @await Html.PartialAsync("~/views/HttpRequestData.cshtml", Model.Request)

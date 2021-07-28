@@ -15,7 +15,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 {
 
     [TestClass]
-    public class SubstrakWebIntegrationTests
+    public class SubstraktWebIntegrationTests
     {
         [NhsAppAndroidTest]
         public void APatientCanAccessSubstraktAndroid(IAndroidDriverWrapper driver)
@@ -30,9 +30,9 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver)
                 .Navigation.NavigateToYourHealth();
 
-            AndroidYourHealthPage
+            AndroidYourHealthSubstraktPage
                 .AssertOnPage(driver)
-                .PageContent.NavigateUpdateYourPersonalDetails();
+                .PageContent.NavigateToUpdateYourPersonalDetails();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, "Update your personal details")
@@ -64,9 +64,9 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver)
                 .Navigation.NavigateToYourHealth();
 
-            IOSYourHealthPage
+            IOSYourHealthSubstraktPage
                 .AssertOnPage(driver)
-                .PageContent.NavigateUpdateYourPersonalDetails();
+                .PageContent.NavigateToUpdateYourPersonalDetails();
 
             IOSWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, "Update your personal details")

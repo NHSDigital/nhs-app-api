@@ -7,5 +7,11 @@ namespace NHSOnline.HttpMocks.Domain
         AllSilversEnabled,
         NoOdsCode,
         UnknownOdsCode,
+        Pkb,
+        Cie,
+        SecondaryCareView,
+        MyCareView,
+        Substrakt,
+        Gncr
     }
 }

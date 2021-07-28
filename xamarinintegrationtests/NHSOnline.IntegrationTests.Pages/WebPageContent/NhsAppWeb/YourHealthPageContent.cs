@@ -1,3 +1,5 @@
+using NHSOnline.IntegrationTests.UI.Components;
+using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -7,46 +9,61 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
     {
         private readonly IWebInteractor _interactor;
 
-        internal YourHealthPageContent(IWebInteractor interactor)
-        {
-            _interactor = interactor;
-        }
+        internal YourHealthPageContent(IWebInteractor interactor) => _interactor = interactor;
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Your health");
 
-        private WebMenuItem TestResultsMenuItem => WebMenuItem.WithTitle(_interactor, "Test results");
+        internal WebMenuItem CovidPassMenuItem => WebMenuItem.WithTitle(_interactor, "Get your NHS COVID Pass");
 
-        private WebMenuItem CarePlansMenuItem => WebMenuItem.WithTitle(_interactor, "Care plans");
+        private WebText CovidPassText => WebText.WithTagAndText(_interactor, "p", "View and share your COVID Pass for places in England that have chosen to use this service and for travel abroad");
 
-        private WebMenuItem UpdateYourPersonalDetailsMenuItem => WebMenuItem.WithTitle(_interactor, "Update your personal details");
+        internal WebMenuItem VaccineRecordMenuItem => WebMenuItem.WithTitle(_interactor, "Check your COVID-19 vaccine record");
 
-        private WebMenuItem TrackYourHealthMenuItem => WebMenuItem.WithTitle(_interactor, "Track your health");
+        private WebText VaccineRecordText => WebText.WithTagAndText(_interactor, "p", "View your vaccination details, like the name and batch number, and report any side effects you have experienced");
 
-        private WebMenuItem SharedHealthMenuItem => WebMenuItem.WithTitle(_interactor, "Shared health links");
+        internal WebMenuItem GpHeathRecordMenuItem => WebMenuItem.WithTitle(_interactor, "GP health record");
 
-        private WebMenuItem RecordSharingMenuItem => WebMenuItem.WithTitle(_interactor, "Record sharing");
+        private WebText GpHealthRecordText => WebText.WithTagAndText(_interactor, "p", "View allergies, medicines, test results and more in your GP health record");
 
-        private WebText SharedHealthMenuItemTitle => WebText.WithTagAndText(_interactor, "h2", "Shared health links");
+        internal WebMenuItem OrganDonationMenuItem => WebMenuItem.WithTitle(_interactor, "Manage your organ donation decision");
+
+        private WebText OrganDonationText => WebText.WithTagAndText(_interactor, "p", "Help save thousands of lives in the UK every year by signing up to become a donor on the NHS Organ Donor Register");
+
+        internal WebMenuItem NdopMenuItem => WebMenuItem.WithTitle(_interactor, "Choose if data from your health records is shared for research and planning");
+
+        private WebText NdopText => WebText.WithTagAndText(_interactor, "p", "Find out how the NHS uses your confidential patient information and choose whether or not it can be used for research and planning");
 
         internal void AssertOnPage() => TitleText.AssertVisible();
 
-        public void AssertPageElements() => TitleText.AssertVisible();
-
-        public void NavigateToTestResults() => TestResultsMenuItem.Click();
-
-        public void NavigateToCarePlans() => CarePlansMenuItem.Click();
-
-        public void NavigateUpdateYourPersonalDetails() => UpdateYourPersonalDetailsMenuItem.Click();
-
-        public void NavigateToTrackYourHealth() => TrackYourHealthMenuItem.Click();
-
-        public void NavigateToSharedHealth()
+        public YourHealthPageContent AssertPageElements()
         {
-            SharedHealthMenuItemTitle.ScrollTo();
-            SharedHealthMenuItemTitle.AssertVisible();
-            SharedHealthMenuItem.Click();
+            GpHeathRecordMenuItem.AssertVisible();
+            GpHealthRecordText.AssertVisible();
+            OrganDonationMenuItem.AssertVisible();
+            OrganDonationText.AssertVisible();
+            NdopMenuItem.AssertVisible();
+            NdopText.AssertVisible();
+            return this;
         }
 
-        public void NavigateToRecordSharing() => RecordSharingMenuItem.Click();
+        public YourHealthPageContent AssertCovidPassElements()
+        {
+            CovidPassMenuItem.AssertVisible();
+            CovidPassText.AssertVisible();
+            return this;
+        }
+
+        public YourHealthPageContent AssertVaccineRecordElements()
+        {
+            VaccineRecordMenuItem.AssertVisible();
+            VaccineRecordText.AssertVisible();
+            return this;
+        }
+
+        internal void KeyboardNavigateToAndActivateMenuItem(IFocusable menuItem, AndroidKeyboardNavigation keyboardPageContentNavigation)
+        {
+            keyboardPageContentNavigation.TabBetween(CovidPassMenuItem, menuItem);
+            keyboardPageContentNavigation.PressEnterKey();
+        }
     }
 }

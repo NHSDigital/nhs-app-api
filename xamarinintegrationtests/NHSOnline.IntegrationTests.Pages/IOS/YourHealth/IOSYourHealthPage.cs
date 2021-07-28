@@ -1,4 +1,6 @@
+using Castle.DynamicProxy.Generators;
 using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb;
+using NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS.YourHealth
@@ -20,12 +22,6 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.YourHealth
             var page = new IOSYourHealthPage(driver);
             page.PageContent.AssertOnPage();
             return page;
-        }
-
-        public void AssertPageElements()
-        {
-            Navigation.AssertNavigationPresent();
-            PageContent.AssertPageElements();
         }
     }
 }

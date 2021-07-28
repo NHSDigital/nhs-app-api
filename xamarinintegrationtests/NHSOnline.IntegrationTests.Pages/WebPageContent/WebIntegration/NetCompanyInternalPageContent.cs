@@ -9,6 +9,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         internal NetCompanyInternalPageContent(IWebInteractor interactor) => _interactor = interactor;
 
+        public WebLink BackBreadcrumb => WebLink.WithText(_interactor, "Back");
+
         private WebText Title => WebText.WithTagAndText(_interactor, "h1", "NetCompany Internal Page");
 
         private WebLink NhsLoginUpliftLink => WebLink.WithText(_interactor, "NHS Login Uplift");
@@ -22,5 +24,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
         }
 
         public void Uplift() => NhsLoginUpliftLink.Click();
+
+        public void ClickBackBreadcrumb() => BackBreadcrumb.Click();
     }
 }

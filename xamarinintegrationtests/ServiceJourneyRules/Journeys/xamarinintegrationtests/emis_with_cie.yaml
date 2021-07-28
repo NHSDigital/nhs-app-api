@@ -1,0 +1,58 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: emis_with_cie
+journeys:
+  appointments:
+    provider: im1
+  cdssAdmin:
+    provider: none
+  cdssAdvice:
+    provider: none
+  coronavirusInformation: true
+  documents: false
+  im1Messaging:
+    isEnabled: false
+    canDeleteMessages: false
+    canUpdateReadStatus: false
+    requiresDetailsRequest: false
+    sendMessageSubject: false
+  medicalRecord:
+    version: "2"
+    provider: im1
+  messaging: true
+  ndop: true
+  nominatedPharmacy: true
+  notifications: true
+  notificationPrompt: false
+  oneOneOne: true
+  prescriptions:
+    provider: im1
+  silverIntegrations:
+    accountAdmin: []
+    carePlans:
+      - pkbCie
+    consultations:
+      - pkbCie
+    consultationsAdmin: []
+    healthTrackers:
+      - pkbCie
+    libraries:
+      - pkbCie
+    medicines:
+      - pkbCie
+    messages:
+      - pkbCie
+    participation: []
+    recordSharing:
+      - pkbCie
+    secondaryAppointments:
+      - pkbCie
+    testResults:
+      - pkbCie
+    vaccineRecord: 
+      - netCompany
+      - nhsd
+      - netCompanyP5
+  supplier: Emis
+  supportsLinkedProfiles: true
+  userInfo: true

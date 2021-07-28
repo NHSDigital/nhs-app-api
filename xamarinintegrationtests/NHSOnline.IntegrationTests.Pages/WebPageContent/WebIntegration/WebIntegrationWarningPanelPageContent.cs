@@ -35,9 +35,18 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
         public void KeyboardNavigateContinue(AndroidKeyboardNavigation navigation)
             => KeyboardNavigateToAndActivateMenuItem(Continue, navigation);
 
+        public void KeyboardNavigateBack(AndroidKeyboardNavigation navigation)
+            => KeyboardNavigateBackToAndActivateMenuItem(Back, navigation);
+
         private void KeyboardNavigateToAndActivateMenuItem(IFocusable menuItem, AndroidKeyboardNavigation keyboardPageContentNavigation)
         {
             keyboardPageContentNavigation.TabBetween(Back, menuItem);
+            keyboardPageContentNavigation.PressEnterKey();
+        }
+
+        private static void KeyboardNavigateBackToAndActivateMenuItem(IFocusable menuItem, AndroidKeyboardNavigation keyboardPageContentNavigation)
+        {
+            keyboardPageContentNavigation.TabBack(menuItem);
             keyboardPageContentNavigation.PressEnterKey();
         }
     }

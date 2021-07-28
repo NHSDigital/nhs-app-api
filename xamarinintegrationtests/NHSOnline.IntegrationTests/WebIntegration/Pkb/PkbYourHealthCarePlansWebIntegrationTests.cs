@@ -11,7 +11,6 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
 {
-
     [TestClass]
     public class PkbYourHealthCarePlansWebIntegrationTests
     {
@@ -28,7 +27,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .AssertOnPage(driver)
                 .Navigation.NavigateToYourHealth();
 
-            AndroidYourHealthPage
+            AndroidYourHealthPkbPage
                 .AssertOnPage(driver)
                 .PageContent.NavigateToCarePlans();
 
@@ -54,7 +53,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .AssertOnPage(driver)
                 .Navigation.NavigateToYourHealth();
 
-            IOSYourHealthPage
+            IOSYourHealthPkbPage
                 .AssertOnPage(driver)
                 .PageContent.NavigateToCarePlans();
 

@@ -41,5 +41,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
         }
 
         public void KeyboardNavigateToContinue() => PageContent.KeyboardNavigateContinue(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateBack() => PageContent.KeyboardNavigateBack(KeyboardPageContentNavigation);
     }
 }

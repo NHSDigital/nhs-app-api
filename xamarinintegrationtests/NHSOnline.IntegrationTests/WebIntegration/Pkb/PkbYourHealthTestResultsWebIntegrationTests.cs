@@ -28,7 +28,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .AssertOnPage(driver)
                 .Navigation.NavigateToYourHealth();
 
-            AndroidYourHealthPage
+            AndroidYourHealthPkbPage
                 .AssertOnPage(driver)
                 .PageContent.NavigateToTestResults();
 
@@ -54,7 +54,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .AssertOnPage(driver)
                 .Navigation.NavigateToYourHealth();
 
-            IOSYourHealthPage
+            IOSYourHealthPkbPage
                 .AssertOnPage(driver)
                 .PageContent.NavigateToTestResults();
 
