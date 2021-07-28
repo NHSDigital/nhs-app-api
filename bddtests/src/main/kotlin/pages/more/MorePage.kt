@@ -25,10 +25,6 @@ class MorePage : HybridPageObject() {
             page = this
     )
 
-    val aboutUs = AccountAboutUsModule(this)
-
-    val settings = AccountSettingsModule(this)
-
     private fun link(linkText: String): HybridPageElement {
         return HybridPageElement(
                 webDesktopLocator = "$listMenuPath${String.format(containsTextXpathSubstring, linkText)}",
@@ -38,6 +34,8 @@ class MorePage : HybridPageObject() {
     }
 
     val linkedProfilesLink = link("Linked profiles")
+    val accountAndSettingsLink = link("Account and settings")
+    val helpAndSupportLink = link("Help and support")
     val cookieLink = link("Cookies")
     val loginAndPasswordOptionsLink = link("Login options")
     val faceIDLink = link("Face ID")
@@ -47,13 +45,11 @@ class MorePage : HybridPageObject() {
     val nhsLoginLink = link("NHS login")
 
     fun assertDisplayed() {
-        aboutUs.assertLinksPresent(true)
         signOutButton.assertIsVisible()
     }
 
     fun assertDisplayedForMobile() {
         signOutButtonMobile.assertIsVisible()
-        aboutUs.assertLinksPresent(true)
     }
 
     fun assertLinkedProfilesLinkIsPresent() {
@@ -62,6 +58,14 @@ class MorePage : HybridPageObject() {
 
     fun assertLinkedProfilesLinkIsNotPresent() {
         linkedProfilesLink.assertElementNotPresent()
+    }
+
+    fun assertAccountAndSettingsLinkIsPresent() {
+        accountAndSettingsLink.assertIsVisible()
+    }
+
+    fun assertHelpAndSupportLinkIsPresent() {
+        helpAndSupportLink.assertIsVisible()
     }
 
     fun assertLoginAndPasswordOptionsIsPresent() {

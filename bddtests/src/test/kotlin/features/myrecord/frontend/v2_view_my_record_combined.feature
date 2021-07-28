@@ -37,7 +37,7 @@ Feature: Combined Frontend - Medical Record v2
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
     Then I see the medical record v2 page with information on asking for DCR access
-    When I click the link called 'Find out more about requesting access.' with a url of 'https://www.nhs.uk/nhs-services/online-services/nhs-app/nhs-app-help-and-support/health-records/'
+    When I click the link called 'Find out more about requesting access.' with a url of 'https://www.nhs.uk/nhs-app/nhs-app-help-and-support/health-records-in-the-nhs-app/gp-health-record'
     Then a new tab has been opened by the link
     Examples:
       | GP System |

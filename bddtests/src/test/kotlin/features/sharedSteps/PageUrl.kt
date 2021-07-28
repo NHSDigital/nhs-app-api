@@ -4,6 +4,7 @@ open class PageUrl {
     companion object {
         val map: HashMap<String, String> =
             hashMapOf(
+                "account and settings" to "/more/account-and-settings",
                 "advice" to "/advice",
                 "appointment booking" to "/appointments/gp-appointments/booking",
                 "appointment hub" to "/appointments",
@@ -24,13 +25,12 @@ open class PageUrl {
                 "home" to "/",
                 "hospital and other appointments" to "/appointments/hospital-appointments",
                 "informatica appointments" to "/appointments/informatica",
+                "legal and cookies" to "/more/account-and-settings/legal-and-cookies/",
+                "legal and cookies manage cookies" to "/more/account-and-settings/legal-and-cookies/manage-cookies",
                 "linked profiles" to "/linked-profiles",
-                "manage cookies" to "/more/cookies",
                 "messages hub" to "/messages",
                 "more" to "/more",
-                "notifications settings" to "/more/notifications",
-                "notifications settings" to "/more/notifications",
-                "notifications settings" to "/more/notifications",
+                "notifications settings" to "/more/account-and-settings/manage-notifications",
                 "organ donation" to "/organ-donation",
                 "partial success" to "/prescriptions/repeat-partial-success",
                 "patient practice messaging contact your gp" to "/messages/gp-messages/urgency/contact-your-gp",

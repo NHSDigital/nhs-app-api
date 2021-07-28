@@ -6,6 +6,7 @@ using NHSOnline.IntegrationTests.Pages.Android.Appointments;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.Messages;
 using NHSOnline.IntegrationTests.Pages.Android.More;
+using NHSOnline.IntegrationTests.Pages.Android.More.AccountSettings;
 using NHSOnline.IntegrationTests.Pages.Android.Prescriptions;
 using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
 using NHSOnline.IntegrationTests.Pages.Android.YourHealth;
@@ -97,6 +98,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .Navigation.NavigateToMore();
 
             AndroidMorePage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToAccountAndSettings();
+
+            AndroidAccountSettingsPage
                 .AssertOnPage(driver)
                 .PageContent.NavigateToNhsLogin();
 

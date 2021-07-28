@@ -24,6 +24,7 @@ export default {
   patientDetails: 'Patient Details',
   crumbName: {
     account: 'Settings',
+    accountAndSettings: 'Account and settings',
     advice: 'Advice',
     appointments: 'Appointments',
     backTo: 'Back to {crumbName}',
@@ -32,6 +33,7 @@ export default {
     gpMessagesViewDetails: 'Your conversation',
     healthAndInformationUpdates: 'Health information and updates',
     home: 'Home',
+    legalAndCookies: 'Legal and cookies',
     messages: 'Messages',
     more: 'More',
     myRecord: 'Your GP health record',
@@ -63,6 +65,7 @@ export default {
   },
   pages: {
     headers: {
+      accountAndSettings: 'Account and settings',
       acuteMedicines: 'Acute (short-term) medicines',
       advice: 'Advice',
       allergiesAndReactions: 'Allergies and adverse reactions',
@@ -106,6 +109,7 @@ export default {
       home: 'Home',
       hospitalAppointments: 'Hospital and other appointments',
       immunisations: 'Immunisations',
+      legalAndCookies: 'Legal and cookies',
       linkedProfiles: 'Linked profiles',
       linkedProfilesSummary: 'Switch to {fullName}\'s profile to act on their behalf',
       loginBiometricError: 'We could not log you in',
@@ -154,6 +158,7 @@ export default {
       viewPrescriptionsOrder: 'Your orders',
     },
     titles: {
+      accountAndSettings: 'Account and settings',
       acuteMedicines: 'Acute (short-term) medicines - Your GP health record',
       advice: 'Advice',
       allergiesAndReactions: 'Allergies and adverse reactions - Your GP health record',
@@ -201,6 +206,7 @@ export default {
       immunisations: 'Immunisations - Your GP health record',
       linkedProfiles: 'Linked profiles',
       linkedProfilesSummary: 'Switch to {fullName}\'s profile to act on their behalf',
+      legalAndCookies: 'Legal and cookies',
       login: 'Login screen',
       loginBiometricError: 'We could not log you in',
       loginSettings: '{biometricType}',

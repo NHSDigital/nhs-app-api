@@ -1,12 +1,17 @@
 using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb;
+using NHSOnline.IntegrationTests.UI.Components.IOS;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS.More
 {
     public sealed class IOSMorePage
     {
+        private readonly IIOSInteractor _interactor;
+        IOSLink AccountAndSettingsMenuItem => IOSLink.WithText(_interactor, "Account and settings");
+
         private IOSMorePage(IIOSDriverWrapper driver)
         {
+            _interactor = driver;
             Navigation = new IOSFullNavigation(driver);
             PageContent = new MorePageContent(driver.Web.NhsAppLoggedInWebView());
         }
@@ -29,5 +34,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.More
 
             return this;
         }
+
+        public void NavigateToAccountAndSettings() => AccountAndSettingsMenuItem.Touch();
     }
 }

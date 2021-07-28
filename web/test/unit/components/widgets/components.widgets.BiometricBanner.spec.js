@@ -1,7 +1,13 @@
 import BiometricBanner from '@/components/widgets/BiometricBanner';
-import { MORE_LOGIN_SETTINGS_PATH } from '@/router/paths';
 import NativeApp from '@/services/native-app';
+import {
+  MORE_ACCOUNTANDSETTINGS_FINGERPRINT_PATH,
+  MORE_ACCOUNTANDSETTINGS_FACE_ID_PATH,
+  MORE_ACCOUNTANDSETTINGS_TOUCH_ID_PATH,
+  MORE_ACCOUNTANDSETTINGS_LOGINOPTIONS_PATH,
+} from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
+import biometricTypes from '@/lib/biometrics/biometricTypes';
 import { createRouter, createStore, mount } from '../../helpers';
 
 jest.mock('@/services/native-app');
@@ -27,6 +33,7 @@ describe('BiometricBanner', () => {
         },
         loginSettings: {
           biometricType: undefined,
+          biometricSupported: false,
         },
       },
     });
@@ -93,17 +100,55 @@ describe('BiometricBanner', () => {
       });
     });
 
-    describe('Biometric Link', () => {
+    describe.each([
+      [true, biometricTypes.Fingerprint, 'Set up fingerprint', MORE_ACCOUNTANDSETTINGS_FINGERPRINT_PATH],
+      [true, biometricTypes.TouchID, 'Set up Touch ID', MORE_ACCOUNTANDSETTINGS_TOUCH_ID_PATH],
+      [true, biometricTypes.FaceID, 'Set up Face ID', MORE_ACCOUNTANDSETTINGS_FACE_ID_PATH],
+      [true, undefined, 'Set up login options', MORE_ACCOUNTANDSETTINGS_LOGINOPTIONS_PATH],
+      [false, undefined, 'Open login settings', MORE_ACCOUNTANDSETTINGS_LOGINOPTIONS_PATH],
+    ])('Biometric button text', (biometricSupported, biometricType, expectedText, expectedRedirectPath) => {
       let biometricsLink;
 
       beforeEach(() => {
-        wrapper = mountBiometricBanner({ versionEnabled: true });
+        wrapper = mountBiometricBanner({ dismissed: false });
+        $store.getters = {
+          'loginSettings/biometricSupported': biometricSupported,
+          'loginSettings/biometricType': biometricType,
+        };
         biometricsLink = wrapper.find('#btn_goToSettings');
       });
 
-      it('will navigate to the web biometrics', () => {
+      it(`will contain the text '${expectedText}'`, () => {
+        expect(biometricsLink.text()).toBe(expectedText);
+      });
+
+      it('will navigate to the biometrics page', () => {
         biometricsLink.trigger('click');
-        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, MORE_LOGIN_SETTINGS_PATH);
+        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm,
+          expectedRedirectPath);
+      });
+    });
+
+    describe.each([
+      [true, biometricTypes.Fingerprint, 'Set up fingerprint'],
+      [true, biometricTypes.TouchID, 'Set up Touch ID'],
+      [true, biometricTypes.FaceID, 'Set up Face ID'],
+      [true, undefined, 'Set up login options'],
+      [false, undefined, 'Open login settings'],
+    ])('Biometric button text', (biometricSupported, biometricType, expectedText) => {
+      let biometricsLink;
+
+      beforeEach(() => {
+        wrapper = mountBiometricBanner({ dismissed: false });
+        $store.getters = {
+          'loginSettings/biometricSupported': biometricSupported,
+          'loginSettings/biometricType': biometricType,
+        };
+        biometricsLink = wrapper.find('#btn_goToSettings');
+      });
+
+      it(`will contain the text '${expectedText}'`, () => {
+        expect(biometricsLink.text()).toBe(expectedText);
       });
     });
   });

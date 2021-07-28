@@ -11,7 +11,7 @@ import UpliftPrescriptionsPage from '@/pages/uplift/prescriptions';
 
 import proofLevel from '@/lib/proofLevel';
 
-import { prescriptionsHelpUrl } from '@/router/externalLinks';
+import { prescriptionsHelpUrl, PRESCRIPTIONS_IN_THE_NHS_APP_URL } from '@/router/externalLinks';
 import sjrRedirectRules from '@/router/sjrRedirectRules';
 
 import {
@@ -64,7 +64,7 @@ export const PRESCRIPTIONS = {
     crumb: breadcrumbs.PRESCRIPTIONS_CRUMB,
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
-    helpUrl: prescriptionsHelpUrl,
+    helpUrl: PRESCRIPTIONS_IN_THE_NHS_APP_URL,
     proxyShutterPath: '/linked-profiles/shutter/prescriptions',
     sjrRedirectRules: [sjrRedirectRules.gpAtHandPrescriptionsRedirect],
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,

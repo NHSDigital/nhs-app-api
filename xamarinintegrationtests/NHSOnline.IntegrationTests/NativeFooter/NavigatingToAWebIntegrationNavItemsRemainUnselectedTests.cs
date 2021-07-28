@@ -2,9 +2,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.More;
+using NHSOnline.IntegrationTests.Pages.Android.More.AccountSettings;
 using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.More;
+using NHSOnline.IntegrationTests.Pages.IOS.More.AccountSettings;
 using NHSOnline.IntegrationTests.Pages.IOS.WebIntegration;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -31,6 +33,10 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             AndroidMorePage
                 .AssertOnPage(driver)
+                .PageContent.NavigateToAccountAndSettings();
+
+            AndroidAccountSettingsPage
+                .AssertOnPage(driver)
                 .PageContent.NavigateToNhsLogin();
 
             AndroidNhsLoginSettingsPage
@@ -54,6 +60,10 @@ namespace NHSOnline.IntegrationTests.NativeFooter
                 .Navigation.NavigateToMore();
 
             IOSMorePage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToAccountAndSettings();
+
+            IOSAccountSettingsPage
                 .AssertOnPage(driver)
                 .PageContent.NavigateToNhsLogin();
 

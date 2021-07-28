@@ -33,7 +33,7 @@ Feature: Patients Know Best My Care View Messages
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Fauth%2FgetInbox.action%3Ftab%3Dmessages%26brand=pkbMyCareView'
     Then I am redirected to the redirector page with the header 'Consultations, events and messages'
-    When I click the link called 'Find out more about personal health record services' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/'
+    When I click the link called 'Find out more about personal health record services' with a url of 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/'
     Then a new tab has been opened by the link
 
   Scenario: A user navigates directly to an external partner site and will see a warning page

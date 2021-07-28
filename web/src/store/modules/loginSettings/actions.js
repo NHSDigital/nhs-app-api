@@ -1,4 +1,4 @@
-import { MORE_LOGIN_SETTINGS_ERROR_PATH } from '@/router/paths';
+import { MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_PATH } from '@/router/paths';
 import NativeApp from '@/services/native-app';
 import biometricErrorCodes from '@/lib/biometrics/biometricErrorCodes';
 import biometricActions from '@/lib/biometrics/biometricActions';
@@ -73,7 +73,8 @@ export default {
       if (errorCode === biometricErrorCodes.CannotFindBiometrics
         || errorCode === biometricErrorCodes.CannotChangeBiometrics) {
         commit(ADD_ERROR_CODE, errorCode);
-        redirectTo({ $router: this.app.$router, $store: this }, MORE_LOGIN_SETTINGS_ERROR_PATH);
+        redirectTo({ $router: this.app.$router, $store: this },
+          MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_PATH);
       } else {
         addApiError(this,
           500,

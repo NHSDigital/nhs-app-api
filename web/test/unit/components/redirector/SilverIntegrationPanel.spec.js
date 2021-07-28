@@ -33,7 +33,7 @@ describe('Silver Integration warning panel', () => {
                 servicePurchaser,
                 serviceType: 'personal health record service',
                 serviceTypePlural: 'personal health record services',
-                linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+                linkHref: 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/',
               },
             },
           ],

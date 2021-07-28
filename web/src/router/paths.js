@@ -14,10 +14,16 @@ export const AUTH_RETURN_PATH = '/auth-return';
 export const TERMSANDCONDITIONS_PATH = '/terms-and-conditions';
 export const LOGOUT_PATH = 'logout';
 export const MORE_PATH = 'more';
-export const MORE_COOKIES_PATH = 'more/cookies';
-export const MORE_NOTIFICATIONS_PATH = 'more/notifications';
-export const MORE_LOGIN_SETTINGS_PATH = 'more/login-settings';
-export const MORE_LOGIN_SETTINGS_ERROR_PATH = 'more/login-settings/error';
+export const MORE_ACCOUNTANDSETTINGS_PATH = 'more/account-and-settings';
+export const MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_PATH = 'more/account-and-settings/legal-and-cookies';
+export const MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_MANAGECOOKIES_PATH = 'more/account-and-settings/legal-and-cookies/manage-cookies';
+export const MORE_ACCOUNTANDSETTINGS_MANAGENOTIFICATIONS_PATH = 'more/account-and-settings/manage-notifications';
+export const MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_PATH = 'more/account-and-settings/login-settings';
+export const MORE_ACCOUNTANDSETTINGS_TOUCH_ID_PATH = 'more/account-and-settings/touch-id';
+export const MORE_ACCOUNTANDSETTINGS_FACE_ID_PATH = 'more/account-and-settings/face-id';
+export const MORE_ACCOUNTANDSETTINGS_FINGERPRINT_PATH = 'more/account-and-settings/fingerprint';
+export const MORE_ACCOUNTANDSETTINGS_LOGINOPTIONS_PATH = 'more/account-and-settings/login-options';
+export const MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_PATH = 'more/account-and-settings/login-settings/error';
 export const ADVICE_PATH = 'advice';
 export const GET_HEALTH_ADVICE_PATH = '/get-health-advice';
 export const CHECKYOURSYMPTOMS_PATH = '/check-your-symptoms';
@@ -112,6 +118,7 @@ export const PRESCRIPTION_REPEAT_COURSES_PATH = 'prescriptions/repeat-courses';
 export const PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS_PATH = 'prescriptions/repeat-partial-success';
 export const PRESCRIPTIONS_ORDER_SUCCESS_PATH = 'prescriptions/order-success';
 export const SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_PATH = 'silver-integration/feature-not-available';
+export const MORE_LINKED_PROFILES_PATH = 'more/linked-profiles';
 export const LINKED_PROFILES_PATH = 'linked-profiles';
 export const LINKED_PROFILES_SUMMARY_PATH = 'linked-profiles/summary';
 export const LINKED_PROFILES_SHUTTER_MORE_PATH = 'linked-profiles/shutter/more';
@@ -139,10 +146,16 @@ export default {
   TERMSANDCONDITIONS_PATH,
   LOGOUT_PATH,
   MORE_PATH,
-  MORE_COOKIES_PATH,
-  MORE_NOTIFICATIONS_PATH,
-  MORE_LOGIN_SETTINGS_PATH,
-  MORE_LOGIN_SETTINGS_ERROR_PATH,
+  MORE_ACCOUNTANDSETTINGS_PATH,
+  MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_PATH,
+  MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_MANAGECOOKIES_PATH,
+  MORE_ACCOUNTANDSETTINGS_MANAGENOTIFICATIONS_PATH,
+  MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_PATH,
+  MORE_ACCOUNTANDSETTINGS_TOUCH_ID_PATH,
+  MORE_ACCOUNTANDSETTINGS_FACE_ID_PATH,
+  MORE_ACCOUNTANDSETTINGS_FINGERPRINT_PATH,
+  MORE_ACCOUNTANDSETTINGS_LOGINOPTIONS_PATH,
+  MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_PATH,
   ADVICE_PATH,
   GET_HEALTH_ADVICE_PATH,
   CHECKYOURSYMPTOMS_PATH,
@@ -238,6 +251,7 @@ export default {
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS_PATH,
   PRESCRIPTIONS_ORDER_SUCCESS_PATH,
   SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_PATH,
+  MORE_LINKED_PROFILES_PATH,
   LINKED_PROFILES_PATH,
   LINKED_PROFILES_SUMMARY_PATH,
   LINKED_PROFILES_SHUTTER_MORE_PATH,

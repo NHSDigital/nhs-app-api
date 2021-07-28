@@ -13,7 +13,7 @@ import {
   DOCUMENT_DETAIL,
 } from '@/router/routes/medical-record';
 import { PRESCRIPTIONS_GP_AT_HAND, PRESCRIPTIONS } from '@/router/routes/prescriptions';
-import { MORE_NOTIFICATIONS } from '@/router/routes/more';
+import { MORE_ACCOUNT_AND_SETTINGS_MANAGE_NOTIFICATIONS } from '@/router/routes/more';
 import {
   GP_MESSAGES,
   GP_MESSAGES_URGENCY,
@@ -276,7 +276,7 @@ describe('middleware/sjrRedirect', () => {
     describe('notifications enabled', () => {
       beforeEach(() => {
         getters['serviceJourneyRules/notificationsEnabled'] = true;
-        callSjrRedirect(MORE_NOTIFICATIONS);
+        callSjrRedirect(MORE_ACCOUNT_AND_SETTINGS_MANAGE_NOTIFICATIONS);
       });
 
       it('will not redirect', () => {
@@ -288,7 +288,7 @@ describe('middleware/sjrRedirect', () => {
     describe('notifications disabled', () => {
       beforeEach(() => {
         getters['serviceJourneyRules/notificationsEnabled'] = false;
-        callSjrRedirect(MORE_NOTIFICATIONS);
+        callSjrRedirect(MORE_ACCOUNT_AND_SETTINGS_MANAGE_NOTIFICATIONS);
       });
 
       it('will redirect to more', () => {

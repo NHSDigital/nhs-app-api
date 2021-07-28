@@ -10,16 +10,16 @@ import utils.SerenityHelpers
 import java.net.URL
 
 class AccountSettingsPage : HybridPageObject() {
-    private val baseHelpUrl = "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app"
+    private val baseHelpUrl = "https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies"
 
     val url: URL = URL(Config.instance.cidSettingsUrl)
 
     val urls = mapOf(
-        "Help and support" to ("0" to "$baseHelpUrl/help/"),
-        "Accessibility statement" to ("1" to "$baseHelpUrl/accessibility/"),
-        "Open source licences" to ("2" to "$baseHelpUrl/open-source/"),
-        "Privacy policy" to ("3" to "$baseHelpUrl/privacy/"),
-        "Terms of use" to ("4" to "$baseHelpUrl/terms/")
+        "Help and support" to ("0" to "https://www.nhs.uk/nhs-app/nhs-app-help-and-support/"),
+        "Accessibility statement" to ("1" to "$baseHelpUrl/nhs-app-accessibility-statement/"),
+        "Open source licences" to ("2" to "$baseHelpUrl/nhs-app-open-source-licences/"),
+        "Privacy policy" to ("3" to "$baseHelpUrl/nhs-app-privacy-policy/privacy-policy/"),
+        "Terms of use" to ("4" to "$baseHelpUrl/nhs-app-terms-of-use/")
     )
 
     private fun pageTitle(patient: Patient): HybridPageElement {

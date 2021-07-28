@@ -1,6 +1,7 @@
 export default {
   aboutTheNhsApp: 'About the NHS App',
   accessibilityStatement: 'Accessibility statement',
+  accountAndSettings: 'Account and settings',
   helpAndSupport: 'Help and support',
   linkedProfiles: 'Linked profiles',
   loginAndPasswordOptions: 'Login and password options',

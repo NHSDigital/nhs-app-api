@@ -1,28 +1,43 @@
 import MoreIndexPage from '@/pages/more';
-import MoreCookiesPage from '@/pages/more/cookies';
-import MoreNotificationsPage from '@/pages/more/notifications';
-import MoreLoginSettingsIndexPage from '@/pages/more/login-settings';
-import MoreLoginSettingsErrorPage from '@/pages/more/login-settings/error';
+import MoreAccountAndSettingsIndexPage from '@/pages/more/account-and-settings';
+import MoreAccountAndSettingsLoginSettingsIndexPage from '@/pages/more/account-and-settings/login-settings';
+import MoreAccountAndSettingsLoginSettingsErrorPage from '@/pages/more/account-and-settings/login-settings/error';
+import MoreAccountAndSettingsManageNotificationsPage from '@/pages/more/account-and-settings/manage-notifications';
+import MoreAccountAndSettingsLegalAndCookiesIndexPage from '@/pages/more/account-and-settings/legal-and-cookies';
+import MoreAccountAndSettingsLegalAndCookiesMangeCookiesPage from '@/pages/more/account-and-settings/legal-and-cookies/manage-cookies';
 
 import {
   MORE_PATH,
-  MORE_COOKIES_PATH,
-  MORE_NOTIFICATIONS_PATH,
-  MORE_LOGIN_SETTINGS_PATH,
-  MORE_LOGIN_SETTINGS_ERROR_PATH,
   INDEX_PATH,
+  MORE_ACCOUNTANDSETTINGS_PATH,
+  MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_PATH,
+  MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_MANAGECOOKIES_PATH,
+  MORE_ACCOUNTANDSETTINGS_MANAGENOTIFICATIONS_PATH,
+  MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_PATH,
+  MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_PATH,
+  MORE_ACCOUNTANDSETTINGS_TOUCH_ID_PATH,
+  MORE_ACCOUNTANDSETTINGS_FACE_ID_PATH,
+  MORE_ACCOUNTANDSETTINGS_FINGERPRINT_PATH,
+  MORE_ACCOUNTANDSETTINGS_LOGINOPTIONS_PATH,
 } from '@/router/paths';
 import {
   MORE_NAME,
-  MORE_COOKIES_NAME,
-  MORE_NOTIFICATIONS_NAME,
-  MORE_LOGIN_SETTINGS_NAME,
-  MORE_LOGIN_SETTINGS_ERROR_NAME,
   INDEX_NAME,
+  MORE_ACCOUNTANDSETTINGS_NAME,
+  MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_NAME,
+  MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_NAME,
+  MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_NAME,
+  MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_MANAGECOOKIES_NAME,
+  MORE_ACCOUNTANDSETTINGS_MANAGENOTIFICATIONS_NAME,
 } from '@/router/names';
 import { LINKED_PROFILES_SHUTTER_MORE } from '@/router/routes/linked-profiles';
-
-import { moreHelpUrl, appLoginHelpUrl, accountSecurityHelpUrl } from '@/router/externalLinks';
+import {
+  appLoginHelpUrl,
+  HELP_AND_SUPPORT_URL,
+  SECURITY_AND_PRIVACY_URL,
+  MANAGING_YOUR_NHS_APP_ACCOUNT_URL,
+  NHS_APP_ACCOUNT_AND_SETTINGS_URL,
+} from '@/router/externalLinks';
 import { CLEAR_SELECTED_MENU_ITEM } from '@/middleware/nativeNavigation';
 import proofLevel from '@/lib/proofLevel';
 import breadcrumbs from '@/breadcrumbs/more';
@@ -61,7 +76,7 @@ export const MORE = {
     titleKey: 'navigation.pages.titles.more',
     proofLevel: proofLevel.P5,
     crumb: breadcrumbs.MORE_CRUMB,
-    helpUrl: moreHelpUrl,
+    helpUrl: HELP_AND_SUPPORT_URL,
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
     redirectRules: [{
       condition: 'session/isProxying',
@@ -71,30 +86,58 @@ export const MORE = {
   },
 };
 
-export const MORE_COOKIES = {
-  path: MORE_COOKIES_PATH,
-  name: MORE_COOKIES_NAME,
-  component: MoreCookiesPage,
+export const MORE_ACCOUNT_AND_SETTINGS_INDEX = {
+  path: MORE_ACCOUNTANDSETTINGS_PATH,
+  name: MORE_ACCOUNTANDSETTINGS_NAME,
+  component: MoreAccountAndSettingsIndexPage,
   meta: {
-    headerKey: 'navigation.pages.headers.cookies',
-    titleKey: 'navigation.pages.titles.cookies',
+    headerKey: 'navigation.pages.headers.accountAndSettings',
+    titleKey: 'navigation.pages.titles.accountAndSettings',
     proofLevel: proofLevel.P5,
-    crumb: breadcrumbs.MORE_COOKIES_CRUMB,
-    helpUrl: accountSecurityHelpUrl,
+    crumb: breadcrumbs.MORE_ACCOUNT_AND_SETTINGS_INDEX_CRUMB,
+    helpUrl: NHS_APP_ACCOUNT_AND_SETTINGS_URL,
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
   },
 };
 
-export const MORE_NOTIFICATIONS = {
-  path: MORE_NOTIFICATIONS_PATH,
-  name: MORE_NOTIFICATIONS_NAME,
-  component: MoreNotificationsPage,
+export const MORE_ACCOUNT_AND_SETTINGS_LEGAL_AND_COOKIES_INDEX = {
+  path: MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_PATH,
+  name: MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_NAME,
+  component: MoreAccountAndSettingsLegalAndCookiesIndexPage,
+  meta: {
+    headerKey: 'navigation.pages.headers.legalAndCookies',
+    titleKey: 'navigation.pages.titles.legalAndCookies',
+    proofLevel: proofLevel.P5,
+    crumb: breadcrumbs.MORE_ACCOUNT_AND_SETTINGS_LEGAL_AND_COOKIES_INDEX_CRUMB,
+    helpUrl: HELP_AND_SUPPORT_URL,
+    nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
+  },
+};
+
+export const MORE_ACCOUNT_AND_SETTINGS_LEGAL_AND_COOKIES_MANAGE_COOKIES = {
+  path: MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_MANAGECOOKIES_PATH,
+  name: MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_MANAGECOOKIES_NAME,
+  component: MoreAccountAndSettingsLegalAndCookiesMangeCookiesPage,
+  meta: {
+    headerKey: 'navigation.pages.headers.cookies',
+    titleKey: 'navigation.pages.titles.cookies',
+    proofLevel: proofLevel.P5,
+    crumb: breadcrumbs.MORE_ACCOUNT_AND_SETTINGS_LEGAL_AND_COOKIES_MANAGE_COOKIES_CRUMB,
+    helpUrl: SECURITY_AND_PRIVACY_URL,
+    nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
+  },
+};
+
+export const MORE_ACCOUNT_AND_SETTINGS_MANAGE_NOTIFICATIONS = {
+  path: MORE_ACCOUNTANDSETTINGS_MANAGENOTIFICATIONS_PATH,
+  name: MORE_ACCOUNTANDSETTINGS_MANAGENOTIFICATIONS_NAME,
+  component: MoreAccountAndSettingsManageNotificationsPage,
   meta: {
     headerKey: 'navigation.pages.headers.notifications',
     titleKey: 'navigation.pages.titles.notifications',
     proofLevel: proofLevel.P5,
-    crumb: breadcrumbs.MORE_COOKIES_CRUMB,
-    helpUrl: moreHelpUrl,
+    crumb: breadcrumbs.MORE_ACCOUNT_AND_SETTINGS_LEGAL_AND_COOKIES_INDEX_CRUMB,
+    helpUrl: MANAGING_YOUR_NHS_APP_ACCOUNT_URL,
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
     redirectRules: [{
       condition: 'device/isNativeApp',
@@ -113,10 +156,10 @@ export const MORE_NOTIFICATIONS = {
   },
 };
 
-export const MORE_LOGIN_SETTINGS_INDEX = {
-  path: MORE_LOGIN_SETTINGS_PATH,
-  name: MORE_LOGIN_SETTINGS_NAME,
-  component: MoreLoginSettingsIndexPage,
+export const MORE_ACCOUNT_AND_SETTINGS_LOGIN_SETTINGS_INDEX = {
+  path: MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_PATH,
+  name: MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_NAME,
+  component: MoreAccountAndSettingsLoginSettingsIndexPage,
   meta: {
     headerKey: (store, i18n) => getLoginSettingsHeaderTitle('navigation.pages.headers', store, i18n),
     titleKey: (store, i18n) => getLoginSettingsHeaderTitle('navigation.pages.titles', store, i18n),
@@ -129,12 +172,14 @@ export const MORE_LOGIN_SETTINGS_INDEX = {
       route: MORE,
     }],
   },
+  alias: [MORE_ACCOUNTANDSETTINGS_TOUCH_ID_PATH, MORE_ACCOUNTANDSETTINGS_FACE_ID_PATH,
+    MORE_ACCOUNTANDSETTINGS_FINGERPRINT_PATH, MORE_ACCOUNTANDSETTINGS_LOGINOPTIONS_PATH],
 };
 
-export const MORE_LOGIN_SETTINGS_ERROR = {
-  path: MORE_LOGIN_SETTINGS_ERROR_PATH,
-  name: MORE_LOGIN_SETTINGS_ERROR_NAME,
-  component: MoreLoginSettingsErrorPage,
+export const MORE_ACCOUNT_AND_SETTINGS_LOGIN_SETTINGS_ERROR = {
+  path: MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_PATH,
+  name: MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_NAME,
+  component: MoreAccountAndSettingsLoginSettingsErrorPage,
   meta: {
     headerKey: (store, i18n) => getLoginSettingsErrorHeaderTitle('navigation.pages.headers', store, i18n),
     titleKey: (store, i18n) => getLoginSettingsErrorHeaderTitle('navigation.pages.titles', store, i18n),
@@ -151,8 +196,10 @@ export const MORE_LOGIN_SETTINGS_ERROR = {
 
 export default [
   MORE,
-  MORE_COOKIES,
-  MORE_NOTIFICATIONS,
-  MORE_LOGIN_SETTINGS_INDEX,
-  MORE_LOGIN_SETTINGS_ERROR,
+  MORE_ACCOUNT_AND_SETTINGS_INDEX,
+  MORE_ACCOUNT_AND_SETTINGS_LEGAL_AND_COOKIES_INDEX,
+  MORE_ACCOUNT_AND_SETTINGS_LEGAL_AND_COOKIES_MANAGE_COOKIES,
+  MORE_ACCOUNT_AND_SETTINGS_MANAGE_NOTIFICATIONS,
+  MORE_ACCOUNT_AND_SETTINGS_LOGIN_SETTINGS_INDEX,
+  MORE_ACCOUNT_AND_SETTINGS_LOGIN_SETTINGS_ERROR,
 ];

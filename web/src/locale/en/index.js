@@ -1,4 +1,5 @@
 import more from './more';
+import accountAndSettings from './accountAndSettings';
 import apiErrors from './apiErrors';
 import appointments from './appointments';
 import compatibility from './compatibility';
@@ -11,6 +12,7 @@ import gpAtHand from './gpAtHand';
 import gpSessionErrors from './gpSessionErrors';
 import home from './home';
 import layout from './layout';
+import legalAndCookies from './legalAndCookies';
 import login from './login';
 import loginSettings from './loginSettings';
 import menuItems from './menuItems';
@@ -32,6 +34,7 @@ export default {
   language: 'en-GB',
   appTitle: 'NHS App',
   more,
+  accountAndSettings,
   apiErrors,
   appointments,
   compatibility,
@@ -44,6 +47,7 @@ export default {
   gpSessionErrors,
   home,
   layout,
+  legalAndCookies,
   login,
   loginSettings,
   menuItems,

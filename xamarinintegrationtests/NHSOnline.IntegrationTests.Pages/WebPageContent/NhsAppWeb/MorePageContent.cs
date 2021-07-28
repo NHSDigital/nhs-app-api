@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
+using System.Threading;
 using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Android;
+using NHSOnline.IntegrationTests.UI.Components.IOS;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -19,19 +22,16 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
 
         private WebMenuItem LinkedProfilesMenuItem => WebMenuItem.WithTitle(_interactor, "Linked profiles");
 
-        private WebMenuItem CookiesMenuItem => WebMenuItem.WithTitle(_interactor, "Cookies");
-
-        private WebMenuItem BiometricMenuItem => WebMenuItem.WithTitle(_interactor, "Fingerprint");
-
-        private WebMenuItem NhsLoginMenuItem => WebMenuItem.WithTitle(_interactor, "NHS login");
-
-        private WebMenuItem NotificationsMenuItem => WebMenuItem.WithTitle(_interactor, "Notifications");
+        private WebMenuItem AccountAndSettingsMenuItem => WebMenuItem.WithTitle(_interactor, "Account and settings");
 
         private WebMenuItem GncrPreferencesMenuItem =>
             WebMenuItem.WithTitle(_interactor, "Great North Care Record service preferences");
 
         private WebMenuItem PatientParticipationGroupsMenuItem =>
-            WebMenuItem.WithTitle(_interactor, "Patient participation groups");
+            WebMenuItem.WithTitle(_interactor, "Join a patient participation group");
+
+        private WebMenuItem HelpAndSupportMenuItem =>
+            WebMenuItem.WithTitle(_interactor, "Help and support");
 
         private WebAnalyticsTag LogoutButtonAnalyticsTag =>
             WebAnalyticsTag.WithTagAndDescription("div", "Log out analytics tag");
@@ -41,12 +41,10 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
             LinkedProfilesMenuItem,
-            CookiesMenuItem,
-            BiometricMenuItem,
-            NhsLoginMenuItem,
-            NotificationsMenuItem,
+            AccountAndSettingsMenuItem,
             GncrPreferencesMenuItem,
             PatientParticipationGroupsMenuItem,
+            HelpAndSupportMenuItem,
             LogoutButtonAnalyticsTag,
             LogoutButton
         };
@@ -56,23 +54,18 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
         public void AssertPageElements()
         {
             AssertOnPage();
-            CookiesMenuItem.AssertVisible();
-            NhsLoginMenuItem.AssertVisible();
-            NotificationsMenuItem.AssertVisible();
             LogoutButton.AssertVisible();
         }
 
-        public void NavigateToNotifications() => NotificationsMenuItem.Click();
-
-        public void NavigateToNhsLogin() => NhsLoginMenuItem.Click();
+        public void NavigateToAccountAndSettings()
+        {
+            AccountAndSettingsMenuItem.Click();
+        }
 
         public void Logout() => LogoutButton.Click();
 
-        public void KeyboardNavigateToNhsLoginSettings(AndroidKeyboardNavigation navigation) =>
-            KeyboardNavigateToAndActivateFocusable(NhsLoginMenuItem, navigation);
-
-        public void KeyboardNavigateToNotificationSettings(AndroidKeyboardNavigation navigation) =>
-            KeyboardNavigateToAndActivateFocusable(NotificationsMenuItem, navigation);
+        public void KeyboardNavigateToAccountAndSettings(AndroidKeyboardNavigation navigation) =>
+            KeyboardNavigateToAndActivateFocusable(AccountAndSettingsMenuItem, navigation);
 
         public void KeyboardNavigateToLogOut(AndroidKeyboardNavigation navigation) =>
             KeyboardNavigateToAndActivateFocusable(LogoutButton, navigation);

@@ -16,11 +16,6 @@ class LoginSettingsStepDefinitions {
     @Steps
     lateinit var biometricSteps: BiometricSteps
 
-    @Then("^I see the (.*) login settings page$")
-    fun iSeeTheLoginAndPasswordOptionsPage(biometricType: String) {
-        loginSettings.assertTitleDisplayed(biometricType)
-    }
-
     @When("^I click the Login with (.*) toggle$")
     fun iClickTheBiometricToggle(biometricType: String) {
         when (biometricType) {

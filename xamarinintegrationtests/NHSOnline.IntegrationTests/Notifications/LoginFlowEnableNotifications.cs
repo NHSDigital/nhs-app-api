@@ -3,6 +3,7 @@ using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.Android.More;
+using NHSOnline.IntegrationTests.Pages.Android.More.AccountSettings;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -53,6 +54,10 @@ namespace NHSOnline.IntegrationTests.Notifications
                 .Navigation.NavigateToMore();
 
             AndroidMorePage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToAccountAndSettings();
+
+            AndroidAccountSettingsPage
                 .AssertOnPage(driver)
                 .PageContent.NavigateToNotifications();
 

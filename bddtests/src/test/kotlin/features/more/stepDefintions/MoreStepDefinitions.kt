@@ -14,10 +14,11 @@ class MoreStepDefinitions {
     @Steps
     lateinit var biometricSteps: BiometricSteps
 
-    @When("^I click the Notifications link on the More page$")
-    fun iClickTheNotificationsLinkOnTheMorePage() {
-        more.settings.notifications.click()
+    @When("^I click the Account and settings link on the More page$")
+    fun iClickTheAccountAndSettingsLinkOnTheMorePage() {
+        more.accountAndSettingsLink.click()
     }
+
     @When("I click the account menu item '(.*)'$")
     fun clickMenuItem(title: String) {
         more.getHeaderElement(title).click()
@@ -38,38 +39,19 @@ class MoreStepDefinitions {
         more.assertLinkedProfilesLinkIsPresent()
     }
 
-    @Then("^the Cookies link is displayed$")
-    fun theCookiesLinkIsDisplayed() {
-        more.assertCookiesLinkIsPresent()
-    }
-
-    @Then("^the NHS login link is displayed$")
-    fun theNHSLoginLinkIsDisplayed() {
-        more.assertNHSLoginLinkIsPresent()
-    }
-
     @Then("^the Linked Profiles link is not displayed$")
     fun theLinkedProfilesLinkIsNotDisplayed() {
         more.assertLinkedProfilesLinkIsNotPresent()
     }
 
-    @Then("^the (.*) more link is displayed$")
-    fun theLoginAndPasswordOptionsLinkIsDisplayed(linkText: String) {
-        when (linkText) {
-            "Face ID" -> {
-                biometricSteps.setBiometricType("face")
-                more.assertFaceIDIsPresent()
-            }
-            "Login options" -> more.assertLoginAndPasswordOptionsIsPresent()
-            "Touch ID" -> {
-                biometricSteps.setBiometricType("touch")
-                more.assertTouchIDIsPresent()
-            }
-            "Fingerprint" -> {
-                biometricSteps.setBiometricType("fingerPrint")
-                more.assertFingerprintIsPresent()
-            }
-        }
+    @Then("^the Account and Settings link is displayed$")
+    fun theAccountAndSettingsLinkIsDisplayed() {
+        more.assertAccountAndSettingsLinkIsPresent()
+    }
+
+    @Then("^the Help and Support link is displayed$")
+    fun theHelpAndSupportLinkIsDisplayed() {
+        more.assertHelpAndSupportLinkIsPresent()
     }
 
     @Then("^I click the (.*) link on the more page$")
@@ -82,11 +64,6 @@ class MoreStepDefinitions {
             "NHS login" -> more.nhsLoginLink.click()
             "Linked profiles" -> more.linkedProfilesLink.click()
         }
-    }
-
-    @Then("^the More Settings links are available$")
-    fun theMoreSettingsLinksAreAvailable() {
-        more.settings.assertLinksPresent()
     }
 
     @Then("^there is no notification link available$")

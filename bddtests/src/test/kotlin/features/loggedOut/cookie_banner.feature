@@ -7,7 +7,7 @@ Feature: Cookie Banner
     Given I have enabled javascript
     When I am on the login logged-out page
     Then I see the cookie banner
-    When I click the link called 'cookies policy' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy#manage'
+    When I click the link called 'cookies policy' with a url of 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-cookies-policy#manage'
     Then a new tab has been opened by the link
 
   @native

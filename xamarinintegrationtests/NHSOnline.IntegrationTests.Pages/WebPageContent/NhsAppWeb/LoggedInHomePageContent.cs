@@ -10,11 +10,16 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
 {
     public class LoggedInHomePageContent
     {
+        public const string BioFingerprint = "Set up fingerprint";
+        public const string BoiFaceId = "Set up Face ID";
+
+        private readonly string _biometricsButtonText;
         private readonly IWebInteractor _interactor;
 
-        internal LoggedInHomePageContent(IWebInteractor interactor)
+        internal LoggedInHomePageContent(IWebInteractor interactor, string biometricsButtonText)
         {
             _interactor = interactor;
+            _biometricsButtonText = biometricsButtonText;
         }
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Home");
@@ -31,7 +36,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
             "If your mobile device supports fingerprint or face recognition, " +
             "you can use it to log in to the NHS App instead of a password and security code.");
 
-        private WebButton OpenSettingsButton => WebButton.WithText(_interactor, "Open settings");
+        private WebButton OpenSettingsButton => WebButton.WithText(_interactor, _biometricsButtonText);
 
         private WebLink DismissBiometricsBanner => WebLink.WithText(_interactor, "Dismiss");
 
@@ -86,7 +91,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
         }
 
         public void AssertNhsNumberNotVisible() => NhsNumberTerm.AssertNotVisible();
-
 
         public void ProveYourIdentityContinue() => Continue.Click();
 

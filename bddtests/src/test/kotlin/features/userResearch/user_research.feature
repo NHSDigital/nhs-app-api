@@ -44,5 +44,5 @@ Feature: User Research
     When I check the agree to terms and conditions checkbox
     And I click the 'Continue' button
     Then the User Research page is displayed
-    When I click the link called 'Read our privacy policy' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/'
+    When I click the link called 'Read our privacy policy' with a url of 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/privacy-policy/'
     Then a new tab has been opened by the link

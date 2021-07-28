@@ -24,7 +24,7 @@ describe('login layout', () => {
           $route: {
             name: 'login',
             meta: {
-              helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
+              helpUrl: 'https://www.nhs.uk/nhs-app/nhs-app-help-and-support/',
             },
             query: {},
           },

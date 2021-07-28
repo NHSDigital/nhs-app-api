@@ -1,5 +1,5 @@
 import conditionalRedirect from '@/middleware/conditionalRedirect';
-import { MORE_NOTIFICATIONS } from '@/router/routes/more';
+import { MORE_ACCOUNT_AND_SETTINGS_MANAGE_NOTIFICATIONS } from '@/router/routes/more';
 import { INDEX_PATH } from '@/router/paths';
 import * as dependency from '@/lib/utils';
 
@@ -25,7 +25,7 @@ describe('middleware/conditionalRedirect rules', () => {
     describe('is not native app', () => {
       beforeEach(() => {
         getters['device/isNativeApp'] = false;
-        callConditionalRedirect(MORE_NOTIFICATIONS);
+        callConditionalRedirect(MORE_ACCOUNT_AND_SETTINGS_MANAGE_NOTIFICATIONS);
       });
 
       it('will next to accounts', () => {
@@ -36,7 +36,7 @@ describe('middleware/conditionalRedirect rules', () => {
     describe('is native app', () => {
       beforeEach(() => {
         getters['device/isNativeApp'] = true;
-        callConditionalRedirect(MORE_NOTIFICATIONS);
+        callConditionalRedirect(MORE_ACCOUNT_AND_SETTINGS_MANAGE_NOTIFICATIONS);
       });
 
       it('will next with no parameter', () => {

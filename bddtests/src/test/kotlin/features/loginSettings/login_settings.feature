@@ -6,8 +6,9 @@ Feature: Biometric status update
     And I am logged in
     When I retrieve the 'more' page directly
     Then the More page for mobile devices is displayed
-    And the <Biometric Type> more link is displayed
-    And I click the <Biometric Type> link on the more page
+    And I click the Account and settings link on the More page
+    And the <Biometric Type> account and settings link is displayed
+    And I click the <Biometric Type> link on the account and settings page
     When I click the Login with <Biometric Type> toggle
     Then I see my <Biometric Type> registration was successful
     Examples:
@@ -22,8 +23,9 @@ Feature: Biometric status update
     And I have already registered for biometrics
     When I retrieve the 'more' page directly
     Then the More page for mobile devices is displayed
-    And the <Biometric Type> more link is displayed
-    And I click the <Biometric Type> link on the more page
+    And I click the Account and settings link on the More page
+    And the <Biometric Type> account and settings link is displayed
+    And I click the <Biometric Type> link on the account and settings page
     When I click the Login with <Biometric Type> toggle
     Then I see my <Biometric Type> deregistration was successful
     Examples:
@@ -38,8 +40,9 @@ Feature: Biometric status update
     And I have already registered for biometrics
     When I retrieve the 'more' page directly
     Then the More page for mobile devices is displayed
-    And the <Biometric Type> more link is displayed
-    And I click the <Biometric Type> link on the more page
+    And I click the Account and settings link on the More page
+    And the <Biometric Type> account and settings link is displayed
+    And I click the <Biometric Type> link on the account and settings page
     When I click the Login with <Biometric Type> toggle
     Then I see my <Biometric Type> deregistration was unsuccessful as it could not be found
     Examples:
@@ -54,8 +57,9 @@ Feature: Biometric status update
     And I have already registered for biometrics
     When I retrieve the 'more' page directly
     Then the More page for mobile devices is displayed
-    And the <Biometric Type> more link is displayed
-    And I click the <Biometric Type> link on the more page
+    And I click the Account and settings link on the More page
+    And the <Biometric Type> account and settings link is displayed
+    And I click the <Biometric Type> link on the account and settings page
     When I click the Login with <Biometric Type> toggle
     Then I see my <Biometric Type> deregistration was unsuccessful as it could not be changed
     Examples:
@@ -63,5 +67,3 @@ Feature: Biometric status update
       | Face ID       |
       | Touch ID      |
       | fingerprint   |
-
-

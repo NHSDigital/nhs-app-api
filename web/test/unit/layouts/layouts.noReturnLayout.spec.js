@@ -19,7 +19,7 @@ jest.mock('@/services/native-app');
 const routeMeta = {
   headerKey: 'no-return-layout-header',
   titleKey: 'no-return-layout-title',
-  helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
+  helpUrl: 'https://www.nhs.uk/nhs-app/nhs-app-help-and-support/',
 };
 
 const createDefaultPage = ($store, stubs) => (shallowMount(NoReturnLayout, {
@@ -69,7 +69,7 @@ describe('no-return-flow-layout.vue ', () => {
     it('will send correct help URL to setHelpUrl mixin function', () => {
       const $store = createLayoutStore();
       const defaultPage = createDefaultPage($store);
-      const expectedHelpUrl = 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/';
+      const expectedHelpUrl = 'https://www.nhs.uk/nhs-app/nhs-app-help-and-support/';
 
       expect(defaultPage.vm.currentHelpUrl)
         .toBe(expectedHelpUrl);

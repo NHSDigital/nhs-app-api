@@ -1,8 +1,8 @@
-import AboutUs from '@/components/more/AboutUs';
 import MorePage from '@/pages/more/index';
 import i18n from '@/plugins/i18n';
 import WebFooter from '@/components/widgets/WebFooter';
 import each from 'jest-each';
+import { TERMS_AND_CONDITIONS_URL, PRIVACY_POLICY_URL, HELP_AND_SUPPORT_URL, ACCESSIBILITY_STATEMENT_URL } from '@/router/externalLinks';
 import { createStore, initFilters, mount } from '../../helpers';
 
 describe('More Page', () => {
@@ -36,10 +36,8 @@ describe('More Page', () => {
   });
 
   const buildStoreGetters = ({
-    notificationsEnabled = false,
     isProofLevel9 = true,
   } = {}) => ({
-    'serviceJourneyRules/notificationsEnabled': notificationsEnabled,
     'appVersion/isNativeVersionAfter': jest.fn().mockReturnValue(true),
     'session/isProofLevel9': isProofLevel9,
     'serviceJourneyRules/silverIntegrationEnabled': jest.fn().mockReturnValue(false),
@@ -59,7 +57,6 @@ describe('More Page', () => {
   };
 
   const mountPage = ({
-    notificationsEnabled = false,
     isNativeApp = false,
     supportsLinkedProfiles = false,
     isProofLevel9 = true,
@@ -67,7 +64,6 @@ describe('More Page', () => {
     const $store = createStore({ state: $state });
 
     $store.getters = buildStoreGetters({
-      notificationsEnabled,
       isProofLevel9,
     });
 
@@ -89,36 +85,33 @@ describe('More Page', () => {
   describe('on a native app', () => {
     beforeEach(() => {
       wrapper = mountPage({
-        notificationsEnabled: true,
         isNativeApp: true,
         supportsLinkedProfiles: true,
       });
     });
 
-    it('will verify that footer links are subset of links in account page', () => {
+    it('will verify that the footer links are present', () => {
       const webFooterWrapper = mount(WebFooter, { mountOpts: { i18n } });
-      const aboutUsWrapper = mount(AboutUs, { mountOpts: { i18n } });
-
       const footerLinkElements = webFooterWrapper.findAll('ul li a');
-      const accountLinkElements = aboutUsWrapper.findAll('ul li a');
-
       const footerLinks = findLinks(footerLinkElements.wrappers);
-      const accountLinks = findLinks(accountLinkElements.wrappers);
-      expect(wrapper.find(AboutUs).exists()).toBe(true);
-      expect(accountLinks.length).toBeGreaterThan(0);
-      expect(footerLinks.every(link => accountLinks.includes(link))).toBeTruthy();
+
+      expect(footerLinks.length).toBeGreaterThan(0);
+      expect(footerLinks).toContainEqual(TERMS_AND_CONDITIONS_URL);
+      expect(footerLinks).toContainEqual(PRIVACY_POLICY_URL);
+      expect(footerLinks).toContainEqual(HELP_AND_SUPPORT_URL);
+      expect(footerLinks).toContainEqual(ACCESSIBILITY_STATEMENT_URL);
     });
 
     it('will have a linked profiles link', () => {
       expect(wrapper.findAll('li').at(0).text()).toContain('Linked profiles');
     });
 
-    it('will have a cookies link', () => {
-      expect(wrapper.findAll('li').at(1).text()).toContain('Cookies');
+    it('will have an account and settings link', () => {
+      expect(wrapper.findAll('li').at(1).text()).toContain('Account and settings');
     });
 
-    it('will show About the NHS App component', () => {
-      expect(wrapper.find(AboutUs).exists()).toBe(true);
+    it('will have a help and support link', () => {
+      expect(wrapper.findAll('li').at(2).text()).toContain('Help and support');
     });
   });
 

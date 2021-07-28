@@ -34,7 +34,10 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
     private val prescriptionNameLocator = By.cssSelector("[data-label='prescription-name']")
     private val prescriptionInstructionsLocator = By.cssSelector("[data-label='prescription-description']")
     private val specialRequestTextAreaXpath = "//textarea[@id='specialRequest']"
-    private val medicalAbbreviationExtLink = "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/"
+    private val healthRecordsInTheNhsAppLink =
+        "https://www.nhs.uk/nhs-app/nhs-app-help-and-support/health-records-in-the-nhs-app/"
+    private val abbreviationsLink = "abbreviations-commonly-found-in-medical-records/"
+    private val medicalAbbreviationExtLink = "$healthRecordsInTheNhsAppLink$abbreviationsLink"
 
     val orderRepeatPrescriptionButton = HybridPageElement(
             webDesktopLocator = "//button[@id='btn_order_prescription']",

@@ -7,20 +7,30 @@
                  :href="linkedProfilesPath"
                  :text="$t('more.linkedProfiles')"
                  :click-func="navigateToLinkedProfiles"/>
-      <menu-item id="'cookies'"
+      <menu-item id="'account-and-settings'"
                  header-tag="h2"
-                 :href="cookiesPath"
-                 :text="$t('more.cookies.cookies')"
+                 :href="accountAndSettingsPath"
+                 :text="$t('more.accountAndSettings')"
+                 :aria-label="$t('more.accountAndSettings')"
                  :click-func="goToUrl"
-                 :click-param="cookiesPath"/>
-      <settings data-purpose="setting-section"
-                :show-notifications="showNotifications"
-                :show-biometrics="showBiometrics"/>
+                 :click-param="accountAndSettingsPath"/>
+      <third-party-jump-off-button v-if="showGncrAccountAdmin"
+                                   id="btn_gncr_admin"
+                                   provider-id="gncr"
+                                   :provider-configuration="thirdPartyProvider
+                                     .gncr.admin" />
       <third-party-jump-off-button v-if="showSubstraktParticipation"
                                    id="btn_substrakt_participation"
                                    provider-id="substraktPatientPack"
                                    :provider-configuration="thirdPartyProvider
                                      .substraktPatientPack.patientParticipationGroups" />
+      <menu-item :id="'help-and-support'"
+                 :key="'help-and-support'"
+                 header-tag="h2"
+                 :target="'_blank'"
+                 :href="nhsAppHelpAndSupportUrl"
+                 :text="$t('more.helpAndSupport')"
+                 :aria-label="$t('more.helpAndSupport')"/>
     </menu-item-list>
 
     <template v-if="$store.state.device.isNativeApp">
@@ -34,8 +44,6 @@
         </generic-button>
       </analytics-tracked-tag>
     </template>
-
-    <about-us/>
 
     <p>
       {{ $t('generic.version') }} {{ $store.state.appVersion.webVersion }}
@@ -52,39 +60,44 @@
 
 <script>
 /* eslint-disable import/extensions */
-import AboutUs from '@/components/more/AboutUs';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import CeMarkIcon from '@/components/icons/CeMarkIcon';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
-import NativeApp from '@/services/native-app';
-import Settings from '@/components/more/Settings';
 import sjrIf from '@/lib/sjrIf';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 import GenericButton from '@/components/widgets/GenericButton';
-import { MORE_COOKIES_PATH, LINKED_PROFILES_PATH } from '@/router/paths';
+import { MORE_ACCOUNTANDSETTINGS_PATH, MORE_LINKED_PROFILES_PATH } from '@/router/paths';
+import { baseNhsAppHelpUrl } from '@/router/externalLinks';
 import { isTruthy } from '@/lib/utils';
 
 export default {
   layout: 'nhsuk-layout',
   components: {
-    AboutUs,
     CeMarkIcon,
     MenuItem,
     MenuItemList,
-    Settings,
     GenericButton,
     AnalyticsTrackedTag,
     ThirdPartyJumpOffButton,
   },
   data() {
     return {
-      cookiesPath: MORE_COOKIES_PATH,
-      linkedProfilesPath: LINKED_PROFILES_PATH,
+      accountAndSettingsPath: MORE_ACCOUNTANDSETTINGS_PATH,
+      nhsAppHelpAndSupportUrl: baseNhsAppHelpUrl,
+      moreLinkedProfilesPath: MORE_LINKED_PROFILES_PATH,
       isProxying: this.$store.getters['session/isProxying'],
       isProofLevel9: this.$store.getters['session/isProofLevel9'],
       thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
+      hasGncrAccountAdmin: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'gncr',
+          serviceType: 'accountAdmin',
+        },
+      }),
       hasSubstraktParticipation: sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',
@@ -96,18 +109,14 @@ export default {
     };
   },
   computed: {
-    showBiometrics() {
-      return this.$store.state.device.isNativeApp;
-    },
-    showNotifications() {
-      return sjrIf({ $store: this.$store, journey: 'notifications' }) &&
-        this.$store.state.device.isNativeApp;
-    },
     supportsLinkedProfiles() {
       return this.$store.state.serviceJourneyRules.rules.supportsLinkedProfiles;
     },
     showCEMark() {
       return isTruthy(this.$store.$env.CE_MARK_ENABLED);
+    },
+    showGncrAccountAdmin() {
+      return this.hasGncrAccountAdmin && this.isProofLevel9;
     },
     showSubstraktParticipation() {
       return this.hasSubstraktParticipation && !this.isProxying && this.isProofLevel9;
@@ -117,12 +126,9 @@ export default {
     signout() {
       this.$store.dispatch('auth/logout');
     },
-    goToLoginOptions() {
-      NativeApp.goToLoginOptions();
-    },
     navigateToLinkedProfiles() {
       this.$store.dispatch('navigation/setRouteCrumb', 'moreCrumb');
-      this.goToUrl(this.linkedProfilesPath);
+      this.goToUrl(this.moreLinkedProfilesPath);
     },
   },
 };

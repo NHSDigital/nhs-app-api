@@ -12,6 +12,7 @@ import proofLevel from '@/lib/proofLevel';
 import { appointmentsHelpUrl, prescriptionsHelpUrl, proxyHelpUrl } from '@/router/externalLinks';
 import breadcrumbs from '@/breadcrumbs/linked-profiles';
 import {
+  MORE_LINKED_PROFILES_PATH,
   LINKED_PROFILES_PATH,
   LINKED_PROFILES_SUMMARY_PATH,
   LINKED_PROFILES_SHUTTER_MESSAGES_PATH,
@@ -58,6 +59,7 @@ export const LINKED_PROFILES = {
       journey: GP_LINKED_ACCOUNT_JOURNEY_NAME,
     },
   },
+  alias: MORE_LINKED_PROFILES_PATH,
 };
 
 export const LINKED_PROFILES_SUMMARY = {

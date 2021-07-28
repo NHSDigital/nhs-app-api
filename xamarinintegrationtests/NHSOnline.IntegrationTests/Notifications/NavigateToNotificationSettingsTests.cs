@@ -3,6 +3,7 @@ using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.More;
+using NHSOnline.IntegrationTests.Pages.Android.More.AccountSettings;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -27,6 +28,10 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             AndroidMorePage
                 .AssertOnPage(driver)
+                .PageContent.NavigateToAccountAndSettings();
+
+            AndroidAccountSettingsPage
+                .AssertOnPage(driver)
                 .PageContent.NavigateToNotifications();
 
             AndroidNotificationsPage
@@ -43,7 +48,7 @@ namespace NHSOnline.IntegrationTests.Notifications
         }
 
         [NhsAppAndroidTest]
-        public void APatientCanNavigateToDeviceSettingsFromNotificationsViaKeyboardAndroid(IAndroidDriverWrapper driver)
+        public void APatientCanNavigateToDeviceSettingsFromHelpAndSupportViaKeyboardAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Seymour").FamilyName("Buttons"));
@@ -57,7 +62,11 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             AndroidMorePage
                 .AssertOnPage(driver)
-                .KeyboardNavigateToNotifications();
+                .KeyboardNavigateToAccountAndSettings();
+
+            AndroidAccountSettingsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToNotifications();
 
             AndroidNotificationsPage
                 .AssertOnPage(driver)

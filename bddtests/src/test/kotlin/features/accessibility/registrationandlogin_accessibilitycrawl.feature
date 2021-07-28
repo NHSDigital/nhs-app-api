@@ -50,7 +50,8 @@ Feature: Registration and login accessibility
     And I am a user wishing to enable push notifications for the first time, with my initial state undetermined
     And I am logged in
     When I navigate to the More page
-    Then the More Settings links are available
-    And I click the Notifications link on the More page
-    And the Notifications Settings page is displayed
+    And I click the Account and settings link on the More page
+    Then the Account and settings page settings links are available
+    When I click the Manage notifications link on the account and settings page
+    Then the Notifications Settings page is displayed
     And the ManageNotificationsPrompt page is saved to disk

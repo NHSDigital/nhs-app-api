@@ -55,9 +55,6 @@ describe('More.index', () => {
     it('should be visible in native view', () => {
       wrapper = mountIndex({ isNativeApp: true });
 
-      expect(wrapper.find('[data-purpose=setting-section]').exists())
-        .toBe(true);
-
       expect(wrapper.find('[data-purpose=logout-button]').text())
         .toBe('Log out');
     });
@@ -65,48 +62,8 @@ describe('More.index', () => {
     it('should not be visible in desktop view', () => {
       wrapper = mountIndex();
 
-      expect(wrapper.find('[data-purpose=setting-section]').exists())
-        .toBe(true);
-
       expect(wrapper.find('[data-purpose=logout-button]').exists())
         .toBe(false);
-    });
-  });
-
-  describe('Page loaded', () => {
-    it('Substrakt participation SJR rule is checked', () => {
-      wrapper = mountIndex({ nativeLoginOptionsMethodExists: true });
-      expect($store.getters['serviceJourneyRules/silverIntegrationEnabled'])
-        .toHaveBeenCalledWith({ provider: 'substraktPatientPack', serviceType: 'participation' });
-    });
-  });
-
-  describe('Patient Participation panel', () => {
-    let patientParticipationPanel;
-    it('should be visible', () => {
-      wrapper = mountIndex({ nativeLoginOptionsMethodExists: true });
-      patientParticipationPanel = wrapper.find('#btn_substrakt_participation');
-      expect(patientParticipationPanel.exists()).toBe(true);
-    });
-
-    it('should not be visible if silver integration is not enabled', () => {
-      wrapper = mountIndex({
-        nativeLoginOptionsMethodExists: true,
-        silverIntegrationEnabled: false,
-      });
-
-      patientParticipationPanel = wrapper.find('#btn_substrakt_participation');
-      expect(patientParticipationPanel.exists()).toBe(false);
-    });
-
-    it('should not be visible if not proof level 9', () => {
-      wrapper = mountIndex({
-        nativeLoginOptionsMethodExists: true,
-        isProofLevel9: false,
-        silverIntegrationEnabled: true,
-      });
-      patientParticipationPanel = wrapper.find('#btn_substrakt_participation');
-      expect(patientParticipationPanel.exists()).toBe(false);
     });
   });
 

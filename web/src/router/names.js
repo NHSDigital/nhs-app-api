@@ -10,10 +10,12 @@ export const AUTH_RETURN_NAME = 'auth-return';
 export const TERMSANDCONDITIONS_NAME = 'terms-and-conditions';
 export const LOGOUT_NAME = 'logout';
 export const MORE_NAME = 'more';
-export const MORE_COOKIES_NAME = 'more-cookies';
-export const MORE_NOTIFICATIONS_NAME = 'more-notifications';
-export const MORE_LOGIN_SETTINGS_NAME = 'more-login-settings';
-export const MORE_LOGIN_SETTINGS_ERROR_NAME = 'more-login-settings-error';
+export const MORE_ACCOUNTANDSETTINGS_NAME = 'more-account-and-settings';
+export const MORE_ACCOUNTANDSETTINGS_MANAGENOTIFICATIONS_NAME = 'more-account-and-settings-manage-notifications';
+export const MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_NAME = 'more-account-and-settings-legal-and-cookies';
+export const MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_MANAGECOOKIES_NAME = 'more-account-and-settings-legal-and-cookies-manage-cookies';
+export const MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_NAME = 'more-account-and-settings-login-settings';
+export const MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_NAME = 'more-account-and-settings-login-settings-error';
 export const ADVICE_NAME = 'advice';
 export const GET_HEALTH_ADVICE_NAME = 'get-health-advice';
 export const CHECKYOURSYMPTOMS_NAME = 'check-your-symptoms';
@@ -138,10 +140,12 @@ const names = [
   TERMSANDCONDITIONS_NAME,
   LOGOUT_NAME,
   MORE_NAME,
-  MORE_COOKIES_NAME,
-  MORE_NOTIFICATIONS_NAME,
-  MORE_LOGIN_SETTINGS_NAME,
-  MORE_LOGIN_SETTINGS_ERROR_NAME,
+  MORE_ACCOUNTANDSETTINGS_NAME,
+  MORE_ACCOUNTANDSETTINGS_MANAGENOTIFICATIONS_NAME,
+  MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_NAME,
+  MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_MANAGECOOKIES_NAME,
+  MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_NAME,
+  MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_NAME,
   ADVICE_NAME,
   GET_HEALTH_ADVICE_NAME,
   CHECKYOURSYMPTOMS_NAME,

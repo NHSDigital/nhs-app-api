@@ -74,24 +74,24 @@ class SubstraktStepDefinitions : HybridPageObject() {
         medicalRecordHubPage.getHeaderElement("Update your personal details").assertElementNotPresent()
     }
 
-    @Given("^I am a user with proof level 5 who can view Participation groups from Substrakt$")
-    fun iAmAUserWithProofLevel5WhoCanViewPatientParticipationGroupsFromSubstrakt(){
+    @Given("^I am a user with proof level 5 who can view Join a patient participation group from Substrakt$")
+    fun iAmAUserWithProofLevel5WhoCanViewJoinAPatientParticipationGroupFromSubstrakt(){
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_PARTICIPATION_SUBSTRAKT, IdentityProofingLevel.P5)
     }
 
-    @Given("^I am a user who can view Patient participation groups from Substrakt$")
-    fun iAmAUserWhoCanViewPatientParticipationGroupsFromSubstrakt(){
+    @Given("^I am a user who can view Join a patient participation group from Substrakt$")
+    fun iAmAUserWhoCanViewJoinAPatientParticipationGroupFromSubstrakt(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_PARTICIPATION_SUBSTRAKT)
     }
 
-    @Given("^I am a user who cannot view Patient participation groups from Substrakt$")
-    fun iAmAUserWhoCannotViewPatientParticipationGroupsFromSubstrakt(){
+    @Given("^I am a user who cannot view Join a patient participation group from Substrakt$")
+    fun iAmAUserWhoCannotViewJoinAPatientParticipationGroupFromSubstrakt(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_PARTICIPATION_NONE)
     }
 
-    @Then("^the link to Substrakt 'Patient participation groups' is not available on the More page$")
-    fun theLinkToSubstraktPatientParticipationGroupsIsNotAvailableMedicalRecordHubPage() {
-        morePage.getHeaderElement("Patient participation groups").assertElementNotPresent()
+    @Then("^the link to Substrakt 'Join a patient participation group' is not available on the More page$")
+    fun theLinkToSubstraktJoinAPatientParticipationGroupIsNotAvailableMedicalRecordHubPage() {
+        morePage.getHeaderElement("Join a patient participation group").assertElementNotPresent()
     }
 
     @Then("the question warning message on the Redirector page explains the service is from Substrakt$")
@@ -105,7 +105,7 @@ class SubstraktStepDefinitions : HybridPageObject() {
     @Then("the participation warning message on the Redirector page explains the service is from Substrakt$")
     fun assertParticipationWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-            "Patient participation groups\nThis service is provided by Substrakt Health",
+            "Join a patient participation group\nThis service is provided by Substrakt Health",
             "Your GP surgery or hospital has chosen this personal health record service provider.",
             "Find out more about personal health record services")
     }

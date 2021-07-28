@@ -16,7 +16,7 @@
                               $style['nhsuk-button-full-width']]"
             tabindex="0"
             @click="goToLoginOptions">
-            {{ $t('home.openSettings') }}
+            {{ $t(`home.${getBiometricLinkText}`) }}
           </generic-button>
         </analytics-tracked-tag>
         <p :class="['nhsuk-u-margin-bottom-0', $style['center']]">
@@ -37,8 +37,14 @@ import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
-import { MORE_LOGIN_SETTINGS_PATH } from '@/router/paths';
+import {
+  MORE_ACCOUNTANDSETTINGS_FINGERPRINT_PATH,
+  MORE_ACCOUNTANDSETTINGS_FACE_ID_PATH,
+  MORE_ACCOUNTANDSETTINGS_TOUCH_ID_PATH,
+  MORE_ACCOUNTANDSETTINGS_LOGINOPTIONS_PATH,
+} from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
+import biometricTypes from '@/lib/biometrics/biometricTypes';
 
 export default {
   name: 'BiometricBanner',
@@ -59,6 +65,24 @@ export default {
     showBiometricBanner() {
       return this.$store.state.device.isNativeApp && !this.$store.state.biometricBanner.dismissed;
     },
+    getBiometricLinkText() {
+      const biometricSupported = this.$store.getters['loginSettings/biometricSupported'];
+      const biometricType = this.$store.getters['loginSettings/biometricType'];
+
+      if (biometricSupported) {
+        if (biometricType === biometricTypes.Fingerprint) {
+          return 'setupFingerPrint';
+        }
+        if (biometricType === biometricTypes.FaceID) {
+          return 'setupFaceId';
+        }
+        if (biometricType === biometricTypes.TouchID) {
+          return 'setupTouchId';
+        }
+        return 'setupLoginOptions';
+      }
+      return 'openLoginSettings';
+    },
   },
   created() {
     this.$store.dispatch('biometricBanner/sync');
@@ -69,7 +93,22 @@ export default {
       this.$store.dispatch('biometricBanner/sync');
     },
     goToLoginOptions() {
-      redirectTo(this, MORE_LOGIN_SETTINGS_PATH);
+      const biometricSupported = this.$store.getters['loginSettings/biometricSupported'];
+      const biometricType = this.$store.getters['loginSettings/biometricType'];
+
+      let redirectUrl = MORE_ACCOUNTANDSETTINGS_LOGINOPTIONS_PATH;
+
+      if (biometricSupported) {
+        if (biometricType === biometricTypes.Fingerprint) {
+          redirectUrl = MORE_ACCOUNTANDSETTINGS_FINGERPRINT_PATH;
+        } else if (biometricType === biometricTypes.FaceID) {
+          redirectUrl = MORE_ACCOUNTANDSETTINGS_FACE_ID_PATH;
+        } else if (biometricType === biometricTypes.TouchID) {
+          redirectUrl = MORE_ACCOUNTANDSETTINGS_TOUCH_ID_PATH;
+        }
+      }
+
+      redirectTo(this, redirectUrl);
     },
   },
 };

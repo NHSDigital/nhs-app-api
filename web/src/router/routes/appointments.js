@@ -49,7 +49,8 @@ import {
 import { APPOINTMENTS_MENU_ITEM } from '@/middleware/nativeNavigation';
 
 import proofLevel from '@/lib/proofLevel';
-import { appointmentsHelpUrl, onlineConsultationsHelpUrl } from '@/router/externalLinks';
+import { appointmentsHelpUrl, onlineConsultationsHelpUrl, hospitalAndOtherAppoitmentsHelpUrl,
+  APPOINTMENTS_AND_ONLINE_CONSULTATIONS_IN_THE_NHS_APP_URL } from '@/router/externalLinks';
 import sjrRedirectRules from '@/router/sjrRedirectRules';
 import get from 'lodash/fp/get';
 
@@ -80,7 +81,7 @@ export const APPOINTMENTS = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.APPOINTMENTS_CRUMB,
-    helpUrl: appointmentsHelpUrl,
+    helpUrl: APPOINTMENTS_AND_ONLINE_CONSULTATIONS_IN_THE_NHS_APP_URL,
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
   },
 };
@@ -119,7 +120,7 @@ export const HOSPITAL_APPOINTMENTS = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.HOSPITAL_APPOINTMENTS_CRUMB,
-    helpUrl: appointmentsHelpUrl,
+    helpUrl: hospitalAndOtherAppoitmentsHelpUrl,
     sjrRedirectRules: [sjrRedirectRules.silverIntegrationsSecondaryAppointmentsDisabledRedirect],
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
   },

@@ -46,5 +46,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
             => ActOnElement(e => e.Displayed.Should().BeTrue("A button with text {0} should be displayed", _text));
 
         public void AssertNotVisible() => _interactor.IsPresent(FindBy).Should().BeFalse("A button with text {0} should not be displayed", _text);
+
+        public bool IsVisible() => _interactor.IsPresent(FindBy);
     }
 }

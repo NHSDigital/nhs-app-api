@@ -41,21 +41,21 @@ Feature: Use Terms and conditions page
     Given I am a EMIS patient who has not already accepted terms and conditions
     And I am logged in expecting to see T&Cs
     Then the Terms and Conditions page is displayed
-    When I click the link called 'privacy policy' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/'
+    When I click the link called 'privacy policy' with a url of 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/privacy-policy/'
     Then a new tab has been opened by the link
 
   Scenario: A patient can navigate to the Cookies policy page
     Given I am a EMIS patient who has not already accepted terms and conditions
     And I am logged in expecting to see T&Cs
     Then the Terms and Conditions page is displayed
-    When I click the link called 'cookies policy' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies/'
+    When I click the link called 'cookies policy' with a url of 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-cookies-policy/'
     Then a new tab has been opened by the link
 
   Scenario: A patient can navigate to the Terms of use page
     Given I am a EMIS patient who has not already accepted terms and conditions
     And I am logged in expecting to see T&Cs
     Then the Terms and Conditions page is displayed
-    When I click the link called 'terms of use' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms/'
+    When I click the link called 'terms of use' with a url of 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-terms-of-use/'
     Then a new tab has been opened by the link
 
   Scenario: A patient can consent to analytics cookies on the terms and conditions page
@@ -70,7 +70,7 @@ Feature: Use Terms and conditions page
     When I click the 'Yes' radio button
     And I click the 'Continue' button
     Then I see the home page
-    When I navigate to the Manage cookies page
+    When I navigate to the Legal and cookies manage cookies page
     Then I can see the toggle button is set to 'on'
 
   Scenario: A user with proof level 5 is able to accept terms and conditions
@@ -92,7 +92,7 @@ Feature: Use Terms and conditions page
     When I click the 'Yes' radio button
     And I click the 'Continue' button
     Then I see the home page
-    When I navigate to the Manage cookies page
+    When I navigate to the Legal and cookies manage cookies page
     Then I can see the toggle button is set to 'off'
     When I change the cookie consent toggle to 'on'
     Then I can see the toggle button is set to 'on'
@@ -111,7 +111,7 @@ Feature: Use Terms and conditions page
     When I click the 'Yes' radio button
     And I click the 'Continue' button
     Then I see the home page
-    When I navigate to the Manage cookies page
+    When I navigate to the Legal and cookies manage cookies page
     Then I can see the toggle button is set to 'on'
     And I change the cookie consent toggle to 'off'
     And I can see the toggle button is set to 'off'
@@ -132,5 +132,5 @@ Feature: Use Terms and conditions page
     Then the updated Terms and Conditions page is displayed
     When I agree to the updated terms and conditions
     Then I see the home page
-    When I navigate to the Manage cookies page
+    When I navigate to the Legal and cookies manage cookies page
     Then I can see the toggle button is set to 'on'
