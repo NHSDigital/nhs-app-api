@@ -179,8 +179,8 @@ open class MedicalRecordStepDefinitions {
     fun iSeeMedicalRecordUnavailableNoGpSession(prefix: String){
         medicalRecordGpSessionError.assertMedicalRecordHeader()
                 .assertReferenceCode(prefix)
-                .assertParagraphText("If you need this information now, contact your GP surgery. " +
-                        "For urgent medical advice, go to ")
+                .assertParagraphText("If you need this information now, contact your GP surgery.")
+                .assertParagraphText("For urgent medical advice, go to ")
                 .assertReportAProblemLink()
     }
 
