@@ -1,0 +1,17 @@
+{{- if .Values.sjrExternalIngressEnabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: default-sjr
+  labels:
+    role: default-sjr
+    releaseVersion: {{ default "develop" .Values.sjr.version }}
+spec:
+  selector:
+    role: {{ default "sjr" .Values.sjr.role }}
+    version: {{ default "develop" .Values.sjr.version }}
+  ports:
+    - port: {{ .Values.defaultServicePort }}
+      targetPort: {{ .Values.sidecar_proxy.containerPort }}
+{{- end }}

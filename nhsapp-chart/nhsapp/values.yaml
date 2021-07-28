@@ -264,6 +264,9 @@ sendIntroductoryMessage: true
 introductoryMessageCampaignId: "Intro_v1_0621"
 messagesApiResourceUrl: "/v1/api/users/{0}/messages"
 
+# Sjr Api externally visible
+sjrExternalIngressEnabled: false
+
 # Placeholder values
 cosmosdbKey: cGxhY2Vob2xkZXI=
 cosmosdbMongoKey: cGxhY2Vob2xkZXI=

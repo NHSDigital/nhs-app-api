@@ -32,3 +32,6 @@ messages:
 info:
   role: info
   version: ""
+sjr:
+  role: sjr
+  version: ""
