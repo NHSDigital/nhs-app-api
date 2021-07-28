@@ -19,84 +19,87 @@
         </div>
 
         <div v-if="showRepeatCourses" class="break">
-          <h2 ref="repeatPrescriptions" class="nhsuk-u-padding-bottom-3">
-            {{ $t('prescriptions.repeatCourses.currentlyAvailableToOrder') }}</h2>
-          <div :class="selectMedicationErrorStyle">
-            <error-message v-if="error && !courseSelectionValid" id="error-type">
-              {{ $t('prescriptions.repeatCourses.errors.selectAtLeastOne') }}
-            </error-message>
-            <repeat-prescription v-model="selected"
-                                 :a-described-by="error && !courseSelectionValid ?
-                                   'error-type' : undefined"/>
-          </div>
-          <div v-if="specialRequestNecessity !== 'NotAllowed'"
-               role="form"
-               :class="mandatoryReasonErrorStyle">
-            <div v-if="specialRequestNecessity === 'Optional'">
-              <label class="nhsuk-body-m" for="specialRequest">
-                <h2>
-                  <strong>
-                    {{ $t('prescriptions.repeatCourses.specialRequestsOptionalLabel') }}
-                  </strong>
-                </h2>
-              </label>
-              <p id="disclaimer"
-                 class="nhsuk-body-m" >
-                {{ $t('prescriptions.repeatCourses.specialRequestsOptionalMessage') }}</p>
+          <fieldset class="nhsuk-fieldset nhsuk-form-group--error">
+            <legend>
+              <h2 ref="repeatPrescriptions" class="nhsuk-u-padding-bottom-3">
+                {{ $t('prescriptions.repeatCourses.currentlyAvailableToOrder') }}</h2>
+            </legend>
+            <div :class="selectMedicationErrorStyle">
+              <error-message v-if="error && !courseSelectionValid" id="error-type">
+                {{ $t('prescriptions.repeatCourses.errors.selectAtLeastOne') }}
+              </error-message>
+              <repeat-prescription v-model="selected"
+                                   :a-described-by="error && !courseSelectionValid ?
+                                     'error-type' : undefined"/>
             </div>
-            <div v-else-if="specialRequestNecessity === 'Mandatory'">
-              <label class="nhsuk-body-m" for="specialRequest">
-                <h2>
-                  <strong>
-                    {{ $t('prescriptions.repeatCourses.specialRequestsMandatoryLabel') }}
-                  </strong>
-                </h2>
-              </label>
-              <p id="disclaimer"
-                 class="nhsuk-body-m" >
-                {{ $t('prescriptions.repeatCourses.specialRequestsMandatoryMessage') }}</p>
+            <div v-if="specialRequestNecessity !== 'NotAllowed'"
+                 role="form"
+                 :class="mandatoryReasonErrorStyle">
+              <div v-if="specialRequestNecessity === 'Optional'">
+                <label class="nhsuk-body-m" for="specialRequest">
+                  <h2>
+                    <strong>
+                      {{ $t('prescriptions.repeatCourses.specialRequestsOptionalLabel') }}
+                    </strong>
+                  </h2>
+                </label>
+                <p id="disclaimer"
+                   class="nhsuk-body-m" >
+                  {{ $t('prescriptions.repeatCourses.specialRequestsOptionalMessage') }}</p>
+              </div>
+              <div v-else-if="specialRequestNecessity === 'Mandatory'">
+                <label class="nhsuk-body-m" for="specialRequest">
+                  <h2>
+                    <strong>
+                      {{ $t('prescriptions.repeatCourses.specialRequestsMandatoryLabel') }}
+                    </strong>
+                  </h2>
+                </label>
+                <p id="disclaimer"
+                   class="nhsuk-body-m" >
+                  {{ $t('prescriptions.repeatCourses.specialRequestsMandatoryMessage') }}</p>
+              </div>
+              <error-message v-if="showMandatoryReasonError" id="special-request-error">
+                {{ $t('prescriptions.repeatCourses.errors.enterSpecialRequests') }}
+              </error-message>
+              <generic-text-area id="specialRequest"
+                                 ref="specialRequest"
+                                 v-model="specialRequest"
+                                 :required="(specialRequestNecessity === 'Mandatory')"
+                                 :error.sync="showMandatoryReasonError"
+                                 :text-area-classes="['nhsuk-u-margin-bottom-0']"
+                                 text-area-ref="specialRequest"
+                                 :data-maxlength="`${specialRequestCharacterLimit}`"
+                                 :a-described-by="showMandatoryReasonError ?
+                                   'specialRequestCharactersRemaining special-request-error'
+                                   : 'specialRequestCharactersRemaining'"
+                                 @focus.once="onFocusSpecialRequest"/>
+              <p id="specialRequestCharactersRemaining"
+                 class="nhsuk-u-padding-bottom-4"
+                 :aria-live="specialRequestAriaLive">
+                {{ remainingCharacters }}</p>
+              <div v-if="stopExcessEntry"/>
             </div>
-            <error-message v-if="showMandatoryReasonError" id="special-request-error">
-              {{ $t('prescriptions.repeatCourses.errors.enterSpecialRequests') }}
-            </error-message>
-            <generic-text-area id="specialRequest"
-                               ref="specialRequest"
-                               v-model="specialRequest"
-                               :required="(specialRequestNecessity === 'Mandatory')"
-                               :error.sync="showMandatoryReasonError"
-                               :text-area-classes="['nhsuk-u-margin-bottom-0']"
-                               text-area-ref="specialRequest"
-                               :data-maxlength="`${specialRequestCharacterLimit}`"
-                               :a-described-by="showMandatoryReasonError ?
-                                 'specialRequestCharactersRemaining special-request-error'
-                                 : 'specialRequestCharactersRemaining'"
-                               @focus.once="onFocusSpecialRequest"/>
-            <p id="specialRequestCharactersRemaining"
-               class="nhsuk-u-padding-bottom-4"
-               :aria-live="specialRequestAriaLive">
-              {{ remainingCharacters }}</p>
-            <div v-if="stopExcessEntry"/>
-          </div>
-          <generic-button id="btn_order_prescription"
-                          :button-classes="['nhsuk-button']"
-                          @click.prevent="validate">
-            {{ $t('prescriptions.repeatCourses.continue') }}
-          </generic-button>
-          <collapsible-details id="medicalAbbreviationCollapsible">
-            <template slot="header">
-              {{ $t('prescriptions.repeatCourses.helpWithMedicalAbbreviation.label') }}
-            </template>
-            <p>{{ $t('prescriptions.repeatCourses.helpWithMedicalAbbreviation.message') }}</p>
-            <span>{{ $t('prescriptions.repeatCourses.helpWithMedicalAbbreviation.guidance') }}
-              <a id="medicalAbbreviationHelpLink"
-                 style="display: inline; vertical-align: baseline"
-                 :href="medicalAbbreviationsPath"
-                 target="_blank" rel="noopener noreferrer">
-                {{ $t('prescriptions.repeatCourses.helpWithMedicalAbbreviation.linkText') }}</a>
-            </span>
-          </collapsible-details>
+            <generic-button id="btn_order_prescription"
+                            :button-classes="['nhsuk-button']"
+                            @click.prevent="validate">
+              {{ $t('prescriptions.repeatCourses.continue') }}
+            </generic-button>
+            <collapsible-details id="medicalAbbreviationCollapsible">
+              <template slot="header">
+                {{ $t('prescriptions.repeatCourses.helpWithMedicalAbbreviation.label') }}
+              </template>
+              <p>{{ $t('prescriptions.repeatCourses.helpWithMedicalAbbreviation.message') }}</p>
+              <span>{{ $t('prescriptions.repeatCourses.helpWithMedicalAbbreviation.guidance') }}
+                <a id="medicalAbbreviationHelpLink"
+                   style="display: inline; vertical-align: baseline"
+                   :href="medicalAbbreviationsPath"
+                   target="_blank" rel="noopener noreferrer">
+                  {{ $t('prescriptions.repeatCourses.helpWithMedicalAbbreviation.linkText') }}</a>
+              </span>
+            </collapsible-details>
+          </fieldset>
         </div>
-
         <div v-if="showNoRepeatCourses">
           <h3>{{ $t('prescriptions.repeatCourses.youDoNotHaveAny') }}</h3>
           <p>{{ $t('prescriptions.repeatCourses.ifYouHaveThatAreNotShown') }}</p>

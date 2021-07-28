@@ -24,19 +24,23 @@
           </li>
         </ul>
       </collapsible-dialog>
-      <p>{{ $t('organDonation.faith.recordWhetherToAskFamilyWhenYouDie') }}</p>
-      <p><strong>{{ $t('organDonation.faith.iWouldLikeStaffToSpeakToMyFamily') }}</strong></p>
-      <radio-group v-model="selectedValue"
-                   :radios="choices"
-                   :current-value="currentChoice"
-                   :show-error="showError"
-                   :error-message="$t('organDonation.faith.chooseYesNoOrPreferNot')"
-                   @select="radioButtonSelected"/>
-      <generic-button id="continue-to-additional-details"
-                      :class="['nhsuk-button']"
-                      @click.stop.prevent="continueClicked">
-        {{ $t('generic.continue') }}
-      </generic-button>
+      <fieldset class="nhsuk-fieldset">
+        <legend>
+          <p>{{ $t('organDonation.faith.recordWhetherToAskFamilyWhenYouDie') }}</p>
+          <p><strong>{{ $t('organDonation.faith.iWouldLikeStaffToSpeakToMyFamily') }}</strong></p>
+        </legend>
+        <radio-group v-model="selectedValue"
+                     :radios="choices"
+                     :current-value="currentChoice"
+                     :show-error="showError"
+                     :error-message="$t('organDonation.faith.chooseYesNoOrPreferNot')"
+                     @select="radioButtonSelected"/>
+        <generic-button id="continue-to-additional-details"
+                        :class="['nhsuk-button']"
+                        @click.stop.prevent="continueClicked">
+          {{ $t('generic.continue') }}
+        </generic-button>
+      </fieldset>
       <back-button v-if="!$store.state.device.isNativeApp"/>
     </div>
   </div>

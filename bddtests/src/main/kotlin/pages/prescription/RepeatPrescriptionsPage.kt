@@ -58,7 +58,7 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
     )
 
     override fun shouldBeDisplayed() {
-        headerBar.assertIsVisible(headerText)
+        Assert.assertTrue(findByXpath("//h1[contains(.,'$headerText')]").isVisible)
         super.shouldBeDisplayed()
     }
 

@@ -1,10 +1,10 @@
 <template>
   <error-group :show-error="showError" class="nhsuk-form-group">
-    <component :is="container"
+    <component :is="containerIs"
                class="nhsuk-fieldset nhsuk-form-group--error">
-      <legend v-if="header"
+      <legend v-if="hasLegendSlot"
               :class="['nhsuk-fieldset__legend', `nhsuk-fieldset__legend--${headerSize}`]">
-        {{ header }}
+        <slot name="legendContent"/>
       </legend>
       <error-message v-if="errorMessage && showError" id="error_txt">
         {{ errorMessage }}
@@ -88,7 +88,7 @@ export default {
   },
   data() {
     return {
-      container: this.header ? 'fieldset' : 'div',
+      container: this.hasLegendSlot ? 'fieldset' : 'div',
       selectedValue: this.currentValue,
     };
   },
@@ -99,6 +99,12 @@ export default {
         this.errorMessage && this.showError ? 'error_txt' : undefined,
       ].join(' ').trim();
       return ariaDescribedContent || undefined;
+    },
+    hasLegendSlot() {
+      return !!this.$slots.legendContent;
+    },
+    containerIs() {
+      return this.hasLegendSlot ? 'fieldset' : 'div';
     },
   },
   methods: {

@@ -13,14 +13,17 @@
       </div>
       <div>
         <h2>{{ $t('organDonation.yourChoice.yourChoice') }}</h2>
-        <p>{{ $t('organDonation.yourChoice.youCanDonateSomeOrAll') }}</p>
       </div>
       <radio-group v-model="selectedValue"
                    :current-value="currentChoice"
                    :radios="radioButtons"
                    :show-error="showErrors"
                    :error-message="$t('organDonation.yourChoice.chooseToDonate')"
-                   @select="selected"/>
+                   @select="selected">
+        <template v-slot:legendContent>
+          {{ $t('organDonation.yourChoice.youCanDonateSomeOrAll') }}
+        </template>
+      </radio-group>
       <generic-button id="continue-button"
                       :class="['nhsuk-button']"
                       @click.prevent="continueClicked">

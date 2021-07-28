@@ -26,7 +26,14 @@
                      :show-error="showErrors"
                      :current-value="currentChoice"
                      :error-message="$t('nominatedPharmacy.chooseType.errorMessage')"
-                     @select="selected"/>
+                     :header-size="xl"
+                     @select="selected">
+          <template v-slot:legendContent>
+            <h1 class="nhsuk-fieldset__heading nhsuk-u-margin-top-3">
+              {{ $t('nominatedPharmacy.chooseType.nominatedPharmacyChooseType') }}
+            </h1>
+          </template>
+        </radio-group>
       </div>
     </div>
 

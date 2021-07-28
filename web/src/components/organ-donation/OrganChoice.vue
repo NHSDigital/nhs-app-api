@@ -4,11 +4,14 @@
                :name="organName"
                :radios="choices"
                :inline="true"
-               :header="$t(title)"
                :current-value="currentChoice"
                :show-error="showError"
                :error-message="inlineErrorMessage"
-               @select="selected"/>
+               @select="selected">
+    <template v-slot:legendContent>
+      {{ $t(title) }}
+    </template>
+  </radio-group>
 </template>
 <script>
 import RadioGroup from '@/components/RadioGroup';

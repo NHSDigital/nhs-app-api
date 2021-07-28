@@ -15,6 +15,7 @@ export default {
     buttonText: 'Continue',
     errorHeading: 'There is a problem',
     errorMessage: 'Choose a type of pharmacy',
+    nominatedPharmacyChooseType: 'Choose a type of pharmacy to search for',
     highStreet: 'High street pharmacies',
     highStreetHint: 'You can collect your prescriptions in person at a high street pharmacy local to you. They may also deliver. You\'ll be able to nominate a high street pharmacy in the NHS App.',
     online: 'Online-only pharmacies',

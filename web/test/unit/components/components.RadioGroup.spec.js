@@ -11,6 +11,9 @@ const mountGroup = propsData => mount(RadioGroup, {
       isNativeApp: false,
     },
   },
+  slots: {
+    legendContent: 'Header',
+  },
 });
 
 const shallowMountGroup = propsData => shallowMount(RadioGroup, { propsData });
@@ -79,7 +82,7 @@ describe('Radio group', () => {
 
     beforeEach(() => {
       header = 'Header';
-      const propsData = createPropsData({ header });
+      const propsData = createPropsData({ });
       wrapper = mountGroup(propsData);
     });
 

@@ -11,7 +11,7 @@ class ExpectedPageStructureAssertor {
             "details", "summary", "label", "select", "option")
     private val tagsToExclude = arrayListOf(
             "div", "br", "ul", "ol", "a", "nav", "svg", "path", "form",
-            "input", "hr", "b", "g", "circle", "strong", "i")
+            "input", "hr", "b", "g", "circle", "strong", "i", "fieldset", "legend")
     private val knownTags = tagsToAssert + tagsToExclude
 
     fun assert(page: HybridPageObject, expectedPage: MutableList<ExpectedPageStructureElement>) {

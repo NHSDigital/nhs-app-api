@@ -38,13 +38,16 @@
                $t('userResearch.readOurPrivacyPolicy') }}</a>{{
           $t('userResearch.toFindOutHowWeUseAndProtectYourData') }}
       </p>
-      <radio-group :header="$t('userResearch.canWeContactYouToTakePart')"
-                   header-size="m"
+      <radio-group header-size="m"
                    class="nhsuk-u-margin-bottom-4"
                    :show-error="showError"
                    :error-message="$t('userResearch.selectYesOrNo')"
                    :radios="choices"
-                   @select="onSelection"/>
+                   @select="onSelection">
+        <template v-slot:legendContent>
+          {{ $t('userResearch.canWeContactYouToTakePart') }}
+        </template>
+      </radio-group>
       <primary-button @click.stop.prevent="onContinue">
         {{ $t('generic.continue') }}
       </primary-button>

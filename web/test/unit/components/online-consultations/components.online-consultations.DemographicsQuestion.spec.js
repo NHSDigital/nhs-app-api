@@ -140,7 +140,7 @@ describe('demographics question', () => {
       });
 
       // Act
-      const questionText = component.find('generic-question-wrapper-stub > .demographicsQuestion > p.q-text');
+      const questionText = component.find('generic-question-wrapper-stub > .nhsuk-fieldset > .nhsuk-fieldset__legend > .demographicsQuestion > p.q-text');
 
       // Assert
       expect(questionText).toBeDefined();

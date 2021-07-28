@@ -62,7 +62,6 @@ export const NOMINATED_PHARMACY_CHOOSE_TYPE = {
   name: NOMINATED_PHARMACY_CHOOSE_TYPE_NAME,
   component: NominatedPharmacyChooseTypePage,
   meta: {
-    headerKey: 'navigation.pages.headers.nominatedPharmacyChooseType',
     titleKey: 'navigation.pages.titles.nominatedPharmacyChooseType',
     crumb: breadcrumbs.NOMINATED_PHARMACY_CHOOSE_TYPE_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,

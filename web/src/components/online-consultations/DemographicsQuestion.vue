@@ -14,38 +14,42 @@
       </message-text>
     </message-dialog>
     <generic-question-wrapper>
-      <div slot="questionSlot" class="demographicsQuestion">
-        <slot/>
-      </div>
-      <form @submit.prevent="demographicsContinueClicked">
-        <generic-checkbox :key="code"
-                          checkbox-id="demographics-checkbox"
-                          :name="name"
-                          :required="required"
-                          :value="code"
-                          :a-described-by="required ? '' : 'optional-label '"
-                          @input="selectValueChanged()">
-          <span>
-            {{ $t('onlineConsultations.demographics.checkboxLabel') }}
+      <fieldset class="nhsuk-fieldset nhsuk-form-group--error">
+        <legend class="nhsuk-fieldset__legend">
+          <div slot="questionSlot" class="demographicsQuestion">
+            <slot/>
+          </div>
+        </legend>
+        <form @submit.prevent="demographicsContinueClicked">
+          <generic-checkbox :key="code"
+                            checkbox-id="demographics-checkbox"
+                            :name="name"
+                            :required="required"
+                            :value="code"
+                            :a-described-by="required ? '' : 'optional-label '"
+                            @input="selectValueChanged()">
             <span>
-              <a :href="privacyPolicyUrl"
-                 target="_blank" rel="noopener noreferrer">
-                {{ $t('onlineConsultations.demographics.checkboxLink') }}.</a>
+              {{ $t('onlineConsultations.demographics.checkboxLabel') }}
+              <span>
+                <a :href="privacyPolicyUrl"
+                   target="_blank" rel="noopener noreferrer">
+                  {{ $t('onlineConsultations.demographics.checkboxLink') }}.</a>
+              </span>
             </span>
-          </span>
-        </generic-checkbox>
-        <generic-button id="demographicsContinueButton"
-                        :button-classes="['nhsuk-button']"
-                        click-delay="short"
-                        @click.prevent="demographicsContinueClicked">
-          {{ $t('onlineConsultations.orchestrator.continueButton') }}
-        </generic-button>
-      </form>
-      <desktopGenericBackLink v-if="!isNativeApp"
-                              data-purpose="back-link"
-                              :path="backLink"
-                              :button-text="'onlineConsultations.orchestrator.backButton'"
-                              @clickAndPrevent="backClicked"/>
+          </generic-checkbox>
+          <generic-button id="demographicsContinueButton"
+                          :button-classes="['nhsuk-button']"
+                          click-delay="short"
+                          @click.prevent="demographicsContinueClicked">
+            {{ $t('onlineConsultations.orchestrator.continueButton') }}
+          </generic-button>
+        </form>
+        <desktopGenericBackLink v-if="!isNativeApp"
+                                data-purpose="back-link"
+                                :path="backLink"
+                                :button-text="'onlineConsultations.orchestrator.backButton'"
+                                @clickAndPrevent="backClicked"/>
+      </fieldset>
     </generic-question-wrapper>
   </div>
 </template>
