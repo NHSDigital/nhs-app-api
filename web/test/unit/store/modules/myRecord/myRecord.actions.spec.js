@@ -70,6 +70,12 @@ describe('my record actions', () => {
         });
       });
 
+      it('will call sessionStorage removeItem', async () => {
+        Storage.prototype.removeItem = jest.fn();
+        await load();
+        expect(sessionStorage.removeItem).toBeCalledWith('hasRetried');
+      });
+
       it('will catch an exeption in the demographics request', async () => {
         const error = {
           response: {

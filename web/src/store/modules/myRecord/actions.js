@@ -59,6 +59,7 @@ export default {
       if (patientDetails !== undefined) {
         await loadMedicalRecord({ commit, self: this, patientDetails });
       }
+      sessionStorage.removeItem('hasRetried');
     } catch (error) {
       if (error.response.status === GP_SESSION_ON_DEMAND_ERROR_STATUS) {
         return;

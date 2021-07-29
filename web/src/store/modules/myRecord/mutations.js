@@ -20,7 +20,6 @@ import {
 
 const clearState = (state) => {
   state.hasAcceptedTerms = false;
-  state.nojsData = JSON.stringify({ myRecord: { hasAcceptedTerms: false } });
   state.hasLoaded = false;
   state.reload = true;
   state.isPatientDetailsCollapsed = true;
@@ -35,6 +34,7 @@ const clearState = (state) => {
   state.procedures = '';
   state.medicalRecordType = undefined;
   state.documentConsultationsWithComments = [];
+  state.error = null;
 };
 
 function parseCommentsFromDocConsultations(doc) {
@@ -96,7 +96,6 @@ export default {
   },
   [ACCEPT_TERMS](state) {
     state.hasAcceptedTerms = true;
-    state.nojsData = JSON.stringify({ myRecord: { hasAcceptedTerms: true } });
   },
   [LOADED](state, { record, patientDetails }) {
     state.record = record;

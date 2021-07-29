@@ -3,6 +3,7 @@ import mutations from '@/store/modules/myRecord/mutations';
 import {
   initialState,
   ACCEPT_TERMS,
+  CLEAR,
   LOADED,
   LOADED_DETAILED_TEST_RESULT,
   TOGGLE_PATIENT_DETAIL,
@@ -114,6 +115,30 @@ describe('my record mutations', () => {
   }
 
   beforeEach(() => resetState());
+
+
+  describe('CLEAR', () => {
+    beforeEach(() => {
+      mutations[CLEAR](state);
+    });
+
+    it('will have reset values to defaults', () => {
+      expect(state.hasAcceptedTerms).toBe(false);
+      expect(state.hasLoaded).toBe(false);
+      expect(state.reload).toBe(true);
+      expect(state.isPatientDetailsCollapsed).toBe(true);
+      expect(state.record).toMatchObject({});
+      expect(state.patientDetails).toMatchObject({});
+      expect(state.detailedTestResult).toMatchObject({ data: '' });
+      expect(state.testResults).toBe('');
+      expect(state.diagnosis).toBe('');
+      expect(state.examinations).toBe('');
+      expect(state.procedures).toBe('');
+      expect(state.medicalRecordType).toBe(undefined);
+      expect(state.documentConsultationsWithComments).toMatchObject([]);
+      expect(state.error).toBe(null);
+    });
+  });
 
   describe('ACCEPT_TERMS', () => {
     beforeEach(() => {

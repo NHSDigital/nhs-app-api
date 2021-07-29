@@ -37,7 +37,6 @@ export default {
         message: error.message,
         serviceDeskReference: serviceDeskReference || '',
       };
-
       state.apiErrors.push(apiError);
     }
   },

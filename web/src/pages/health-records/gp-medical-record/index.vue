@@ -126,9 +126,10 @@ import Warning from '@/components/my-record/Warning';
 import agreedToMedicalWarning from '@/lib/sessionStorage';
 import Shutter from '@/components/linked-profiles/Shutter';
 import ProxyPatientDetails from '@/components/gp-medical-record/SharedComponents/ProxyPatientDetails';
-import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
+import { EventBus, FOCUS_NHSAPP_TITLE, UPDATE_HEADER, UPDATE_TITLE } from '@/services/event-bus';
 import { HEALTH_RECORDS_HELP_AND_SUPPORT_URL } from '@/router/externalLinks';
 import HealthRecordErrors from '@/components/errors/pages/health-record/HealthRecordErrors';
+import { GP_SESSION_ERROR_STATUS, gpSessionErrorHasRetried } from '@/lib/utils';
 
 const PATIENTDETAILS = 'patientdetails';
 
@@ -188,34 +189,45 @@ export default {
       return this.$store.state.myRecord.error;
     },
   },
+  watch: {
+    '$route.query.ts': function watchTimestamp() {
+      this.loadData();
+    },
+  },
   updated() {
     window.scrollTo(0, 0);
   },
   async mounted() {
-    if (this.shouldLoadRecord()) {
-      await this.$store.dispatch('myRecord/clear');
-      await this.$store.dispatch('myRecord/acceptTerms');
-      await this.$store.dispatch('myRecord/load');
-    }
-
-    this.$store.dispatch('myRecord/reload', true);
-    EventBus.$emit(FOCUS_NHSAPP_TITLE);
-    this.$store.dispatch('device/unlockNavBar');
-
     if (this.$route.query.hr) {
       sessionStorage.setItem('hasRetried', true);
     }
+    await this.loadData();
   },
-
   methods: {
     shouldLoadRecord() {
       if (!this.hasAgreedToMedicalWarning) return false;
       if (!this.hasLoaded) return true;
       return this.$store.state.myRecord.reload;
     },
+    async loadData() {
+      if (this.shouldLoadRecord()) {
+        await this.$store.dispatch('myRecord/clear');
+        await this.$store.dispatch('myRecord/acceptTerms');
+        await this.$store.dispatch('myRecord/load');
+      }
+
+      this.$store.dispatch('myRecord/reload', true);
+      EventBus.$emit(FOCUS_NHSAPP_TITLE);
+      this.$store.dispatch('device/unlockNavBar');
+
+      const { error } = this;
+      if (error && error.status === GP_SESSION_ERROR_STATUS && gpSessionErrorHasRetried()) {
+        EventBus.$emit(UPDATE_HEADER, 'gpSessionErrors.healthRecord.healthRecordUnavailable');
+        EventBus.$emit(UPDATE_TITLE, 'gpSessionErrors.healthRecord.healthRecordUnavailable');
+      }
+    },
   },
 };
-
 </script>
 
 <style module lang="scss" scoped>

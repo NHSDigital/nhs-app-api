@@ -4,7 +4,7 @@
                 id="healthRecordGpSessionError"
                 header-locale-ref="gpSessionErrors.healthRecord.healthRecordUnavailable"
                 :code="error.serviceDeskReference"
-                :update-header="true"
+                :update-header="false"
                 :show-back-link="false">
       <template v-slot:content>
         <p>{{ $t('gpSessionErrors.healthRecord.ifYouNeedInformationNow') }}</p>

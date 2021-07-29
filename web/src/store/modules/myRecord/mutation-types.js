@@ -13,7 +13,6 @@ export const TOGGLE_PATIENT_DETAIL = 'TOGGLE_PATIENT_DETAIL';
 export const ADD_ERROR = 'ADD_ERROR';
 export const initialState = () => ({
   hasAcceptedTerms: false,
-  nojsData: JSON.stringify({ myRecord: { hasAcceptedTerms: false } }),
   hasLoaded: false,
   reload: true,
   isPatientDetailsCollapsed: true,
