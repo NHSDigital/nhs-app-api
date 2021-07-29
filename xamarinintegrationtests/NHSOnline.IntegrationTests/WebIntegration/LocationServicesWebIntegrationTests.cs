@@ -16,6 +16,43 @@ namespace NHSOnline.IntegrationTests.WebIntegration
     [TestClass]
     public class LocationServicesWebIntegrationTests
     {
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelNineCanNotAccessLocationServicesWithinTheAppWhenTheyDoNotAcceptPermissionsAndroid(
+            IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToMessages();
+
+            AndroidMessagesPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToTestProvider();
+
+            AndroidTestWebIntegrationProviderPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.NavigateToLocationServices();
+
+            AndroidLocationServicesPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .ShowLocation();
+
+            AndroidLocationServicesPermissionsDialog
+                .AssertDisplayed(driver)
+                .Deny();
+
+            AndroidLocationServicesPage
+                .AssertOnPage(driver)
+                .PageContent.AssertErrorTextPresented();
+        }
+
         [NhsAppIOSTest]
         public void APatientWithProofLevelNineCanAccessLocationServicesWithinTheAppWhenTheyAcceptPermissionsIos(
             IIOSDriverWrapper driver)
@@ -129,43 +166,6 @@ namespace NHSOnline.IntegrationTests.WebIntegration
             AndroidLocationServicesPage
                 .AssertOnPage(driver)
                 .PageContent.AssertLocationPresented();
-        }
-
-        [NhsAppAndroidTest]
-        public void APatientWithProofLevelNineCanNotAccessLocationServicesWithinTheAppWhenTheyDoNotAcceptPermissionsAndroid(
-            IAndroidDriverWrapper driver)
-        {
-            var patient = new EmisPatient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
-            using var patients = Mocks.Patients.Add(patient);
-
-            LoginProcess.LogAndroidPatientIn(driver, patient);
-
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
-
-            AndroidMessagesPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
-
-            AndroidTestWebIntegrationProviderPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.NavigateToLocationServices();
-
-            AndroidLocationServicesPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .ShowLocation();
-
-            AndroidLocationServicesPermissionsDialog
-                .AssertDisplayed(driver)
-                .Deny();
-
-            AndroidLocationServicesPage
-                .AssertOnPage(driver)
-                .PageContent.AssertErrorTextPresented();
         }
     }
 }

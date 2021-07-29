@@ -21,7 +21,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
     public class GoToPageTests
     {
         [NhsAppAndroidTest]
-        public void APatientWithProofLevelNineCanNavigateToTheHomePageUsingGoToPageAndroid(IAndroidDriverWrapper driver)
+        public void APatientCanNavigateOnThirdPartiesThatUseTheGoToPageMethodAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
@@ -29,18 +29,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             LoginProcess.LogAndroidPatientIn(driver, patient);
 
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
-
-            AndroidMessagesPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
-
-            AndroidTestWebIntegrationProviderPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.NavigateToGoToPage();
+            AssertOnHomePageAndNavigateToGoToPageAndroid(driver);
 
             AndroidGoToPage
                 .AssertOnPage(driver)
@@ -48,62 +37,19 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
                 .TabIntoFocus()
                 .KeyboardNavigateToGoToHomePage();
 
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver);
-        }
+            AssertOnHomePageAndNavigateToGoToPageAndroid(driver);
 
-        [NhsAppIOSTest]
-        public void APatientWithProofLevelNineCanNavigateToHealthRecordsUsingGoToPageIOS(IIOSDriverWrapper driver)
-        {
-            var patient = new EmisPatient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
-            using var patients = Mocks.Patients.Add(patient);
-
-            LoginProcess.LogIOSPatientIn(driver, patient);
-
-            IOSLoggedInHomePage
-                .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
-
-            IOSMessagesPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
-
-            IOSTestWebIntegrationProviderPage
+            AndroidGoToPage
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
-                .PageContent.NavigateToGoToPage();
+                .TabIntoFocus()
+                .KeyboardNavigateToGoToAppointments();
 
-            IOSGoToPage
+            AndroidAppointmentsPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.GoToYourHealthPage();
+                .Navigation.NavigateToHome();
 
-            IOSYourHealthPage
-                .AssertOnPage(driver);
-        }
-
-        [NhsAppAndroidTest]
-        public void APatientWithProofLevelNineCanNavigateToThePrescriptionsPageUsingGoToPageAndroid(IAndroidDriverWrapper driver)
-        {
-            var patient = new EmisPatient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
-            using var patients = Mocks.Patients.Add(patient);
-
-            LoginProcess.LogAndroidPatientIn(driver, patient);
-
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
-
-            AndroidMessagesPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
-
-            AndroidTestWebIntegrationProviderPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.NavigateToGoToPage();
+            AssertOnHomePageAndNavigateToGoToPageAndroid(driver);
 
             AndroidGoToPage
                 .AssertOnPage(driver)
@@ -112,61 +58,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
                 .KeyboardNavigateToGoToPrescriptions();
 
             AndroidPrescriptionsPage
-                .AssertOnPage(driver);
-        }
-
-        [NhsAppIOSTest]
-        public void APatientWithProofLevelNineCanNavigateToAdviceUsingGoToPageIOS(IIOSDriverWrapper driver)
-        {
-            var patient = new EmisPatient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
-            using var patients = Mocks.Patients.Add(patient);
-
-            LoginProcess.LogIOSPatientIn(driver, patient);
-
-            IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
+                .Navigation.NavigateToHome();
 
-            IOSMessagesPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
-
-            IOSTestWebIntegrationProviderPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.NavigateToGoToPage();
-
-            IOSGoToPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.GoToYourAdvicePage();
-
-            IOSAdvicePage
-                .AssertOnPage(driver);
-        }
-
-        [NhsAppAndroidTest]
-        public void APatientWithProofLevelNineCanNavigateToTheMessagesPageUsingGoToPageAndroid(IAndroidDriverWrapper driver)
-        {
-            var patient = new EmisPatient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
-            using var patients = Mocks.Patients.Add(patient);
-
-            LoginProcess.LogAndroidPatientIn(driver, patient);
-
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
-
-            AndroidMessagesPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
-
-            AndroidTestWebIntegrationProviderPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.NavigateToGoToPage();
+            AssertOnHomePageAndNavigateToGoToPageAndroid(driver);
 
             AndroidGoToPage
                 .AssertOnPage(driver)
@@ -175,61 +70,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
                 .KeyboardNavigateToGoToMessages();
 
             AndroidMessagesPage
-                .AssertOnPage(driver);
-        }
-
-        [NhsAppIOSTest]
-        public void APatientWithProofLevelNineCanNavigateToMoreUsingGoToPageIOS(IIOSDriverWrapper driver)
-        {
-            var patient = new EmisPatient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
-            using var patients = Mocks.Patients.Add(patient);
-
-            LoginProcess.LogIOSPatientIn(driver, patient);
-
-            IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
+                .Navigation.NavigateToHome();
 
-            IOSMessagesPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
-
-            IOSTestWebIntegrationProviderPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.NavigateToGoToPage();
-
-            IOSGoToPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.GoToMorePage();
-
-            IOSMorePage
-                .AssertOnPage(driver);
-        }
-
-        [NhsAppAndroidTest]
-        public void APatientWithProofLevelNineSeesTheLoggedInHomePageWhenGoToPageCalledWithInvalidPageAndroid(IAndroidDriverWrapper driver)
-        {
-            var patient = new EmisPatient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
-            using var patients = Mocks.Patients.Add(patient);
-
-            LoginProcess.LogAndroidPatientIn(driver, patient);
-
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
-
-            AndroidMessagesPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
-
-            AndroidTestWebIntegrationProviderPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.NavigateToGoToPage();
+            AssertOnHomePageAndNavigateToGoToPageAndroid(driver);
 
             AndroidGoToPage
                 .AssertOnPage(driver)
@@ -242,7 +86,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
         }
 
         [NhsAppIOSTest]
-        public void APatientWithProofLevelNineCanNavigateToUpliftUsingGoToPageIOS(IIOSDriverWrapper driver)
+        public void APatientCanNavigateOnThirdPartiesThatUseTheGoToPageMethodIos(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
@@ -254,14 +98,51 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
                 .AssertOnPage(driver)
                 .Navigation.NavigateToMessages();
 
-            IOSMessagesPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
+            AssertOnHomeMessagesPageAndNavigateToGoToPageIOS(driver);
 
-            IOSTestWebIntegrationProviderPage
+            IOSGoToPage
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
-                .PageContent.NavigateToGoToPage();
+                .PageContent.GoToYourHealthPage();
+
+            IOSYourHealthPage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToMessages();
+
+            AssertOnHomeMessagesPageAndNavigateToGoToPageIOS(driver);
+
+            IOSGoToPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.GoToYourAdvicePage();
+
+            IOSAdvicePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToMessages();
+
+            AssertOnHomeMessagesPageAndNavigateToGoToPageIOS(driver);
+
+            IOSGoToPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.GoToMorePage();
+
+            IOSMorePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToMessages();
+
+            AssertOnHomeMessagesPageAndNavigateToGoToPageIOS(driver);
+
+            IOSGoToPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.GoToSettingsPage();
+
+            IOSMorePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToMessages();
+
+            AssertOnHomeMessagesPageAndNavigateToGoToPageIOS(driver);
 
             IOSGoToPage
                 .AssertOnPage(driver)
@@ -275,15 +156,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
                 .AssertOnPage(driver);
         }
 
-        [NhsAppAndroidTest]
-        public void APatientWithProofLevelNineCanNavigateToAppointmentsUsingGoToPageAndroid(IAndroidDriverWrapper driver)
+        private static void AssertOnHomePageAndNavigateToGoToPageAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new EmisPatient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
-            using var patients = Mocks.Patients.Add(patient);
-
-            LoginProcess.LogAndroidPatientIn(driver, patient);
-
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
                 .Navigation.NavigateToMessages();
@@ -296,30 +170,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
                 .PageContent.NavigateToGoToPage();
-
-            AndroidGoToPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .TabIntoFocus()
-                .KeyboardNavigateToGoToAppointments();
-
-            AndroidAppointmentsPage
-                .AssertOnPage(driver);
         }
 
-        [NhsAppIOSTest]
-        public void APatientWithProofLevelNineCanNavigateToSettingsUsingGoToPageIOS(IIOSDriverWrapper driver)
+        private static void AssertOnHomeMessagesPageAndNavigateToGoToPageIOS(IIOSDriverWrapper driver)
         {
-            var patient = new EmisPatient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
-            using var patients = Mocks.Patients.Add(patient);
-
-            LoginProcess.LogIOSPatientIn(driver, patient);
-
-            IOSLoggedInHomePage
-                .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
-
             IOSMessagesPage
                 .AssertOnPage(driver)
                 .PageContent.NavigateToTestProvider();
@@ -328,14 +182,6 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
                 .PageContent.NavigateToGoToPage();
-
-            IOSGoToPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.GoToSettingsPage();
-
-            IOSMorePage
-                .AssertOnPage(driver);
         }
     }
 }

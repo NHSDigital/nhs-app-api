@@ -10,6 +10,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
 {
     [TestClass]
+    [BusinessRule("BR-LOG-12.1", "Navigating to the uplift journey from the logged in home screen displays NHS login uplift journey with the slim blue header")]
     [BusinessRule("BR-LOG-12.2", "Closing the slim blue header when the user has navigated to the NHS login uplift journey from the logged in home screen displays the logged in home screen")]
     public class NhsLoginUpliftFromHomeCloseTests
     {
