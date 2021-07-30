@@ -1,4 +1,4 @@
-using System.Net;
+using NHSOnline.App.Api.Client.Cookies;
 using NHSOnline.App.Api.Client.Errors;
 
 namespace NHSOnline.App.Api.Client.Session
@@ -11,14 +11,14 @@ namespace NHSOnline.App.Api.Client.Session
 
         internal sealed class Success: ApiCreateSessionResult
         {
-            internal Success(UserSessionResponse userSessionResponse, CookieContainer cookies)
+            internal Success(UserSessionResponse userSessionResponse, CookieJar cookies)
             {
                 UserSessionResponse = userSessionResponse;
                 Cookies = cookies;
             }
 
             internal UserSessionResponse UserSessionResponse { get; }
-            internal CookieContainer Cookies { get; }
+            internal CookieJar Cookies { get; }
 
             internal override T Accept<T>(IApiCreateSessionResultVisitor<T> visitor) => visitor.Visit(this);
         }

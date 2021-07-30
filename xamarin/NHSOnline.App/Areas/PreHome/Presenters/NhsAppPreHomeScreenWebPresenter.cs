@@ -1,15 +1,13 @@
 using System;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.Home.Models;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Areas.PreHome.Models;
 using NHSOnline.App.Config;
-using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
+using NHSOnline.App.DependencyServices;
 using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.Services;
 using Xamarin.Forms;
@@ -97,8 +95,9 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
 
             _hasAlreadyAppeared = true;
 
-            foreach (var cookie in _model.Cookies.GetCookies(_config.BaseAddress).Cast<Cookie>())
+            foreach (var cookie in _model.CookieJar.Cookies)
             {
+                _logger.LogInformation($"Setting cookie: {cookie.Value}");
                 await  _cookieService.SetCookie(cookie).PreserveThreadContext();
             }
 

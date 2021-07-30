@@ -70,8 +70,6 @@
     <Compile Include="DependencyServices\AlertDialog\AndroidAlertDialog.cs" />
     <Compile Include="DependencyServices\AndroidFileHandler.cs" />
     <Compile Include="DependencyServices\AndroidLifecycle.cs" />
-    <Compile Include="DependencyServices\AndroidCookies.cs" />
-    <Compile Include="DependencyServices\AndroidHttpMessageHandlerFactory.cs" />
     <Compile Include="DependencyServices\AndroidNativeLog.cs" />
     <Compile Include="DependencyServices\AndroidSettingsService.cs" />
     <Compile Include="DependencyServices\AndroidUpdateService.cs" />
@@ -85,6 +83,7 @@
     <Compile Include="DependencyServices\Calendar\AndroidCalendar.cs" />
     <Compile Include="DependencyServices\Calendar\CalendarIntent.cs" />
     <Compile Include="DependencyServices\AndroidCookieService.cs" />
+    <Compile Include="DependencyServices\AndroidHttpMessageHandlerFactory.cs" />
     <Compile Include="DependencyServices\InstallReferrer\AndroidAppReferrerState.cs" />
     <Compile Include="DependencyServices\InstallReferrer\AndroidInstallReferrer.cs" />
     <Compile Include="DependencyServices\InstallReferrer\AndroidInstallReferrerService.cs" />
@@ -200,7 +199,7 @@
     <AndroidResource Include="Resources\xml\network_security_config_stubs.xml" Condition="'$(NhsAppEnableStubs)' == 'true'" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Android.InstallReferrer" Version="1.0.0" />
+    <PackageReference Include="Xamarin.Android.InstallReferrer" Version="1.0.1" />
     <PackageReference Include="Xamarin.AndroidX.Preference">
       <Version>1.1.1.8</Version>
     </PackageReference>

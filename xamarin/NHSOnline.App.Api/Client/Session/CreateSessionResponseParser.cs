@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Api.Client.Cookies;
 using NHSOnline.App.Api.Client.Errors;
 using NHSOnline.App.Threading;
 
@@ -47,8 +48,7 @@ namespace NHSOnline.App.Api.Client.Session
             return await handler.ResumeOnThreadPool();
         }
 
-        private async Task<ApiCreateSessionResult> HandleCreated(
-            HttpResponseMessage httpResponseMessage)
+        private async Task<ApiCreateSessionResult> HandleCreated(HttpResponseMessage httpResponseMessage)
         {
             var model = await _jsonResponseParser.Parse<UserSessionResponseModel>(httpResponseMessage).ResumeOnThreadPool();
             var validationResult = _responseModelValidator.Validate(model);
@@ -56,7 +56,7 @@ namespace NHSOnline.App.Api.Client.Session
             return validationResult.Accept<ApiCreateSessionResult>(
                 response =>
                 {
-                    var cookies = new CookieContainer();
+                    var cookies = new CookieJar();
                     if (httpResponseMessage.Headers.TryGetValues("Set-Cookie", out var setCookieHeaders) &&
                         setCookieHeaders != null)
                     {
@@ -64,11 +64,11 @@ namespace NHSOnline.App.Api.Client.Session
                         {
                             try
                             {
-                                cookies.SetCookies(httpResponseMessage.RequestMessage.RequestUri, cookieHeader);
+                                cookies.Add(new ApiCookie(httpResponseMessage.RequestMessage.RequestUri, cookieHeader));
                             }
                             catch (Exception exception)
                             {
-                                _logger.LogError(exception,"Failed to add cookie from session response to CookieContainer");
+                                _logger.LogError(exception,"Failed to add cookie from session response to CookieJar");
                             }
                         }
                     }

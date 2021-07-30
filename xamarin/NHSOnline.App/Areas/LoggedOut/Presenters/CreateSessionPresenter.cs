@@ -1,9 +1,10 @@
 using System;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using NHSOnline.App.Api.Client.Cookies;
 using NHSOnline.App.Api.Session;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Areas.PreHome.Models;
@@ -98,7 +99,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         async Task ICreateSessionResultVisitor<Task>.Visit(CreateSessionResult.UpstreamSystemTimeout upstreamSystemTimeout)
             => await NavigateToUpstreamSystemTimeoutPage(upstreamSystemTimeout.ServiceDeskReference).PreserveThreadContext();
 
-        private async Task NavigateToPreHomeScreenPages(UserSession userSession, CookieContainer cookies)
+        private async Task NavigateToPreHomeScreenPages(UserSession userSession, CookieJar cookies)
         {
             var sessionCookies = BuildSessionCookieContainer(userSession, cookies);
             var preHomeScreenModel = new NhsAppPreHomeScreenWebModel(sessionCookies, ResolveDeeplinkUrl);
@@ -155,13 +156,13 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             await _view.AppNavigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
         }
 
-        private CookieContainer BuildSessionCookieContainer(UserSession userSession, CookieContainer cookies)
+        private CookieJar BuildSessionCookieContainer(UserSession userSession, CookieJar cookies)
         {
             cookies.Add(CreateNhsOnlineSessionCookie(_config.BaseAddress, userSession));
             return cookies;
         }
 
-        private Cookie CreateNhsOnlineSessionCookie(Uri homeUri, UserSession userSession)
+        private ApiCookie CreateNhsOnlineSessionCookie(Uri homeUri, UserSession userSession)
         {
             var sessionCookieJson = JsonConvert.SerializeObject(
                 new NhsOnlineSessionCookie(userSession),
@@ -169,13 +170,18 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
             var sessionCookieEscaped = Uri.EscapeDataString(sessionCookieJson);
 
-            _logger.LogTrace("Creating cookie {CookieName}: {CookieValue}", NhsOnlineSessionCookieName, sessionCookieEscaped);
+            _logger.LogTrace("Creating cookie {CookieName}: {CookieValue}",
+                NhsOnlineSessionCookieName,
+                sessionCookieEscaped);
 
-            return new Cookie(NhsOnlineSessionCookieName, sessionCookieEscaped, "/", homeUri.Host)
-            {
-                Secure = _config.NhsOnlineSessionCookieSecure,
-                HttpOnly = false
-            };
+            return new ApiCookie(homeUri,
+                NhsOnlineSessionCookieName,
+                sessionCookieEscaped,
+                homeUri.Host,
+                "/",
+                false,
+                _config.NhsOnlineSessionCookieSecure,
+                SameSiteMode.Lax);
         }
 
         private Task DeeplinkRequested(Uri deeplinkUrl)

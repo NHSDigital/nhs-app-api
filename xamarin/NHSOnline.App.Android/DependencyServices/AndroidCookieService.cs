@@ -1,31 +1,32 @@
-using System.Net;
 using System.Threading.Tasks;
 using System;
 using Android.Webkit;
-using NHSOnline.App.Controls.WebViews;
+using NHSOnline.App.Api.Client.Cookies;
+using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Droid.DependencyServices;
 using NHSOnline.App.Threading;
 using Xamarin.Forms;
-using Task = System.Threading.Tasks.Task;
+using CookieManager = Android.Webkit.CookieManager;
 
 [assembly: Dependency(typeof(AndroidCookieService))]
 namespace NHSOnline.App.Droid.DependencyServices
 {
+
     public class AndroidCookieService : ICookieService
     {
-        public async Task SetCookie(Cookie cookie)
+        public async Task SetCookie(ApiCookie apiCookie)
         {
-            var cookieManager = CookieManager.Instance ?? throw new InvalidOperationException("CookieManager.Instance was null");
+            var cookieManager = CookieManager.Instance ?? throw new InvalidOperationException("Could not get instance of Android CookieManager");
 
             var taskCompletionSource = new TaskCompletionSource<bool?>();
             using var callBack = new CallBackResult(taskCompletionSource);
 
-            cookieManager.SetCookie(cookie.Domain, cookie.ToString(), callBack);
+            cookieManager.SetCookie(apiCookie.Uri.ToString(), apiCookie.Value, callBack);
 
             await taskCompletionSource.Task.ResumeOnThreadPool();
         }
 
-        public class CallBackResult : Java.Lang.Object, IValueCallback
+        private class CallBackResult : Java.Lang.Object, IValueCallback
         {
             private readonly TaskCompletionSource<bool?> _taskCompletionSource;
 
@@ -41,7 +42,8 @@ namespace NHSOnline.App.Droid.DependencyServices
 
             public void OnReceiveValue(Java.Lang.Object? value)
             {
-                _taskCompletionSource.SetResult(true);
+                var result = Boolean.TryParse(value?.ToString(), out var parsedBool);
+                _taskCompletionSource.SetResult(result && parsedBool);
             }
         }
     }

@@ -1,7 +1,7 @@
-using System.Net;
 using System.Threading.Tasks;
 using Foundation;
-using NHSOnline.App.Controls.WebViews;
+using NHSOnline.App.Api.Client.Cookies;
+using NHSOnline.App.DependencyServices;
 using NHSOnline.App.iOS.DependencyServices;
 using NHSOnline.App.Threading;
 using WebKit;
@@ -12,19 +12,17 @@ namespace NHSOnline.App.iOS.DependencyServices
 {
     public class IosCookieService : ICookieService
     {
-        public async Task SetCookie(Cookie cookie)
+        public async Task SetCookie(ApiCookie apiCookie)
         {
-            var cookieStorage = WKWebsiteDataStore.DefaultDataStore.HttpCookieStore;
-            using var nsHttpCookie = new NSHttpCookie(cookie);
+            using var headerDictionary = new NSDictionary("Set-Cookie", apiCookie.Value);
 
-            var cookieSetCompletionSource = new TaskCompletionSource<object?>();
-            void CompletionHandler()
+            var cookies = NSHttpCookie.CookiesWithResponseHeaderFields(headerDictionary, apiCookie.Uri);
+
+            var cookieStore = WKWebsiteDataStore.DefaultDataStore.HttpCookieStore;
+            foreach (var nsHttpCookie in cookies)
             {
-                cookieSetCompletionSource.SetResult(null);
+               await cookieStore.SetCookieAsync(nsHttpCookie).ResumeOnThreadPool();
             }
-
-            cookieStorage.SetCookie(nsHttpCookie, CompletionHandler);
-            await cookieSetCompletionSource.Task.ResumeOnThreadPool();
         }
     }
 }

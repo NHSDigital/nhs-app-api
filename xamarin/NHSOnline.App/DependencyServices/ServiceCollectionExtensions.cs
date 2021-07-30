@@ -1,6 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.App.Api;
-using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.DependencyServices.Biometrics;
 using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.Logging;
@@ -13,12 +12,11 @@ namespace NHSOnline.App.DependencyServices
         internal static IServiceCollection AddDependencyServices(this IServiceCollection services)
         {
             return services
+                .AddTransient(_ => DependencyService.Get<IPrimaryHttpMessageHandlerFactory>())
                 .AddTransient(_ => DependencyService.Get<IBiometrics>())
-                .AddTransient(_ => DependencyService.Get<ICookies>())
                 .AddTransient(_ => DependencyService.Get<ICookieService>())
                 .AddTransient(_ => DependencyService.Get<ILifecycle>())
                 .AddTransient(_ => DependencyService.Get<INativeLog>())
-                .AddTransient(_ => DependencyService.Get<IPrimaryHttpMessageHandlerFactory>())
                 .AddTransient(_ => DependencyService.Get<INotifications>())
                 .AddTransient(_ => DependencyService.Get<ISettingsService>())
                 .AddTransient(_ => DependencyService.Get<INativeAppVersionCheckService>())

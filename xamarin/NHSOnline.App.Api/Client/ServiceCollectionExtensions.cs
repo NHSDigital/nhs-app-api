@@ -12,7 +12,7 @@ namespace NHSOnline.App.Api.Client
 {
     internal static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddClientServices(this IServiceCollection services, string nhsAppUserAgent)
+        internal static IServiceCollection AddClientServices(this IServiceCollection services, string nhsAppUserAgent)
         {
             services
                 .AddHttpClient<ApiHttpClient>((serviceProvider, client)

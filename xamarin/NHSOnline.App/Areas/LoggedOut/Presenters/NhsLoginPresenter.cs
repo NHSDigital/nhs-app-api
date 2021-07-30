@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.DependencyInjection;
-using NHSOnline.App.DependencyServices;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
 using Xamarin.Forms;
@@ -28,7 +27,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             NhsLoginModel model,
             INhsLoginView view,
             ILogger<NhsLoginPresenter> logger,
-            ICookies cookies,
             IPageFactory pageFactory,
             INhsLoginConfiguration nhsLoginConfiguration,
             IBrowserOverlay browserOverlay,
@@ -46,9 +44,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
                 .RegisterHandler(ViewOnNavigationFailed, (view, handler) => view.NavigationFailed = handler)
                 .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler)
                 .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeeplinkRequested = handler);
-
-            // TODO: NHSO-10323 addresses cookie management in web views
-            cookies.Clear();
 
             _loginState = nhsLoginService.BeginLogin(_model.PkceCodes, _model.FidoAuthResponse);
             _view.LoadUrlAndNotifyOnRedirect(_loginState.AuthoriseUri, IsRedirect, OnRedirect);
