@@ -86,5 +86,12 @@ namespace NHSOnline.App.iOS
             base.WillEnterForeground(uiApplication);
             SecureScreen.Hide();
         }
+
+        public override void WillTerminate(UIApplication uiApplication)
+        {
+            NhsApp?.AppClosing();
+
+            base.WillTerminate(uiApplication);
+        }
     }
 }

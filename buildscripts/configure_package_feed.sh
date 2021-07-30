@@ -41,6 +41,7 @@ case "$(uname -s)" in
      echo 'Mac OS detected'
      NUGET_CONFIG_LOCATION="${HOME}/.nuget/NuGet/"
      #https://github.com/NuGet/Home/issues/4413
+     unlink "${HOME}/.config/Nuget"
      ln -sf "${HOME}/.nuget/NuGet/" "${HOME}/.config/Nuget"
      NPM_CONFIG_LOCATION="${HOME}/"
      MAVEN_CONFIG_LOCATION="${HOME}/.m2/"

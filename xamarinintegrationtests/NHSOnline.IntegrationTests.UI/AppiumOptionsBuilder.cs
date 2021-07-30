@@ -160,6 +160,13 @@ namespace NHSOnline.IntegrationTests.UI
             return this;
         }
 
+        public AppiumOptionsBuilder DisableAppDataClearing()
+        {
+            _options.AddAdditionalCapability("noReset", "true");
+            _options.AddAdditionalCapability("fullReset", "false");
+            return this;
+        }
+
         public AppiumOptionsBuilder AddIOSBrowserStackCapability(IOSBrowserStackCapability capabilities)
         {
             switch (capabilities)

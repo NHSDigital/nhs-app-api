@@ -1,50 +1,40 @@
 using System.Threading.Tasks;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Android.Webkit;
 using NHSOnline.App.Api.Client.Cookies;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Droid.DependencyServices;
 using NHSOnline.App.Threading;
 using Xamarin.Forms;
-using CookieManager = Android.Webkit.CookieManager;
 
 [assembly: Dependency(typeof(AndroidCookieService))]
 namespace NHSOnline.App.Droid.DependencyServices
 {
 
+    [SuppressMessage("Reliability", "CA2000", Justification = "Disposing is hard and causes crashes if we do it wrong")]
     public class AndroidCookieService : ICookieService
     {
+        private static CookieManager CookieManager => CookieManager.Instance ??
+                                                      throw new NotSupportedException(
+                                                          "Could not get instance of Android CookieManager");
+
         public async Task SetCookie(ApiCookie apiCookie)
         {
-            var cookieManager = CookieManager.Instance ?? throw new InvalidOperationException("Could not get instance of Android CookieManager");
+            var callBack = new CallBackResult();
 
-            var taskCompletionSource = new TaskCompletionSource<bool?>();
-            using var callBack = new CallBackResult(taskCompletionSource);
+            CookieManager.SetCookie(apiCookie.Uri.ToString(), apiCookie.Value, callBack);
 
-            cookieManager.SetCookie(apiCookie.Uri.ToString(), apiCookie.Value, callBack);
-
-            await taskCompletionSource.Task.ResumeOnThreadPool();
+            await callBack.GetAwaitable().ResumeOnThreadPool();
         }
 
-        private class CallBackResult : Java.Lang.Object, IValueCallback
+        public async Task ClearSessionCookies()
         {
-            private readonly TaskCompletionSource<bool?> _taskCompletionSource;
+            var callBack = new CallBackResult();
 
-            public CallBackResult(TaskCompletionSource<bool?> taskCompletionSource) : base()
-            {
-                _taskCompletionSource = taskCompletionSource;
-            }
+            CookieManager.RemoveSessionCookies(callBack);
 
-            public CallBackResult(IntPtr callBackResult, Android.Runtime.JniHandleOwnership ownership) : base(callBackResult, ownership)
-            {
-                _taskCompletionSource = new TaskCompletionSource<bool?>();
-            }
-
-            public void OnReceiveValue(Java.Lang.Object? value)
-            {
-                var result = Boolean.TryParse(value?.ToString(), out var parsedBool);
-                _taskCompletionSource.SetResult(result && parsedBool);
-            }
+            await callBack.GetAwaitable().ResumeOnThreadPool();
         }
     }
 }

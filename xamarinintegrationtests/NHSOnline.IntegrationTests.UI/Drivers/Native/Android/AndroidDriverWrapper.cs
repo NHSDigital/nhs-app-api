@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Drivers.BrowserStack;
@@ -49,7 +50,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
                 new AndroidWebViewLocatorStrategy(_driver),
                 logs);
 
-            Web = new WebContextStrategies(_nativeDriverContext, _driver, logs);
+            Web = new WebContextStrategies(_nativeDriverContext, _driver, Logs);
 
             _interactor = new AndroidInteractor(
                 _nativeDriverContext,
@@ -127,7 +128,19 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             await browserStackApiClient.ApplyNetworkProfile(_driver.SessionId, NetworkProfile.AirplaneMode);
         }
 
-        public void CloseApp() => _driver.CloseApp();
+        public void CloseApp()
+        {
+            // To simulate how a user would close the app we first background it, wait a few moments and then close it.
+            // If we don't do this then the Android Cookie persistence doesn't have chance to kick in and we lose fresh
+            // cookies. This is a problem in the app, but usual user behaviour won't cause it to be symptomatic.
+            _driver.BackgroundApp();
+            Thread.Sleep(TimeSpan.FromSeconds(2));
+            _driver.CloseApp();
+
+            Web.AppClosed();
+        }
+
+        public void LaunchApp() => _driver.LaunchApp();
 
         public void BackgroundApp() => _driver.BackgroundApp();
 

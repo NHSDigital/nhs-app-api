@@ -13,9 +13,11 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.WebContext
 
         public event EventHandler? SwitchedTo;
 
-        public NhsAppPreHomeWebViewContextStrategy(NativeDriverContext nativeDriverContext)
+        public NhsAppPreHomeWebViewContextStrategy(AppEvents appEvents, NativeDriverContext nativeDriverContext)
         {
             _nativeDriverContext = nativeDriverContext;
+
+            appEvents.AppClosed += ResetWebContext;
         }
 
         public void SwitchTo()
@@ -57,6 +59,15 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.WebContext
             }
 
             return _webContext;
+        }
+
+        private void ResetWebContext(object? sender, EventArgs e)
+        {
+            if (_webContext != null)
+            {
+                _webContext = null;
+                _nativeDriverContext.Logs.Info("Reset Pre-Home context");
+            }
         }
     }
 }

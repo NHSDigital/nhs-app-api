@@ -84,6 +84,7 @@
     <Compile Include="DependencyServices\Calendar\CalendarIntent.cs" />
     <Compile Include="DependencyServices\AndroidCookieService.cs" />
     <Compile Include="DependencyServices\AndroidHttpMessageHandlerFactory.cs" />
+    <Compile Include="DependencyServices\CallBackResult.cs" />
     <Compile Include="DependencyServices\InstallReferrer\AndroidAppReferrerState.cs" />
     <Compile Include="DependencyServices\InstallReferrer\AndroidInstallReferrer.cs" />
     <Compile Include="DependencyServices\InstallReferrer\AndroidInstallReferrerService.cs" />

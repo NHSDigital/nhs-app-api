@@ -24,5 +24,17 @@ namespace NHSOnline.App.iOS.DependencyServices
                await cookieStore.SetCookieAsync(nsHttpCookie).ResumeOnThreadPool();
             }
         }
+
+        public async Task ClearSessionCookies()
+        {
+            var cookieStore = WKWebsiteDataStore.DefaultDataStore.HttpCookieStore;
+            foreach (var cookie in await cookieStore.GetAllCookiesAsync().ConfigureAwait(true))
+            {
+                if (cookie.IsSessionOnly)
+                {
+                    await cookieStore.DeleteCookieAsync(cookie).ConfigureAwait(true);
+                }
+            }
+        }
     }
 }

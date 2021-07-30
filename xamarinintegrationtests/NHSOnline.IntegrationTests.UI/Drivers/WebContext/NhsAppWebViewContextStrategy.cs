@@ -14,11 +14,13 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.WebContext
 
         internal event EventHandler? SwitchedTo;
 
-        public NhsAppWebViewContextStrategy(NativeDriverContext nativeDriverContext,
+        public NhsAppWebViewContextStrategy(AppEvents appEvents, NativeDriverContext nativeDriverContext,
             NhsAppPreHomeWebViewContextStrategy nhsAppPreHomeWebViewContextStrategy)
         {
             _nativeDriverContext = nativeDriverContext;
             _nhsAppPreHomeWebViewContextStrategy = nhsAppPreHomeWebViewContextStrategy;
+
+            appEvents.AppClosed += ResetWebContext;
         }
 
         public void SwitchTo()
@@ -46,7 +48,15 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.WebContext
             Assert.IsTrue(driver.ExecuteJavaScript<bool>(
                     "return window.nhsAppPageLoadComplete === true;"),
                 "window.nhsAppPageLoadComplete was not found to be true");
+        }
 
+        private void ResetWebContext(object? sender, EventArgs e)
+        {
+            if (_webContext != null)
+            {
+                _webContext = null;
+                _nativeDriverContext.Logs.Info("Reset NHSApp context");
+            }
         }
     }
 }

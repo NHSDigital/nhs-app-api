@@ -90,7 +90,6 @@ export default {
   methods: {
     dismissBiometricsBannerClicked() {
       this.$store.dispatch('biometricBanner/dismiss');
-      this.$store.dispatch('biometricBanner/sync');
     },
     goToLoginOptions() {
       const biometricSupported = this.$store.getters['loginSettings/biometricSupported'];

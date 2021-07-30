@@ -26,6 +26,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
                 .EnableBrowserStackLocal()
                 .EnableBrowserStackDebug()
                 .EnableBrowserStackAcceptInsecureCerts()
+                .DisableAppDataClearing()
                 .AddBrowserStackGpsLocation("40.730610,-73.935242");
 
             if (EnableNetworkLogs)

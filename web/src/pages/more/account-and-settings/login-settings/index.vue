@@ -42,6 +42,11 @@ export default {
     MessageText,
     LabelledToggle,
   },
+  data() {
+    return {
+      bannerDismissed: this.$store.state.biometricBanner.dismissed,
+    };
+  },
   computed: {
     biometricType() {
       return this.$store.getters['loginSettings/biometricType'];
@@ -68,6 +73,10 @@ export default {
       set() {
         this.$store.dispatch('spinner/prevent', true);
         this.$store.dispatch('loginSettings/updateRegistration');
+
+        if (!this.bannerDismissed) {
+          this.$store.dispatch('biometricBanner/dismiss');
+        }
       },
     },
   },

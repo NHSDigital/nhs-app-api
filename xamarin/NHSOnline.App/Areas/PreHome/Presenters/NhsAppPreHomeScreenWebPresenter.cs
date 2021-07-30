@@ -97,7 +97,6 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
 
             foreach (var cookie in _model.CookieJar.Cookies)
             {
-                _logger.LogInformation($"Setting cookie: {cookie.Value}");
                 await  _cookieService.SetCookie(cookie).PreserveThreadContext();
             }
 

@@ -5,6 +5,7 @@ using Android.Runtime;
 using Android.OS;
 using Android.Util;
 using Android.Views;
+using Android.Webkit;
 using NHSOnline.App.Droid.DependencyServices;
 using NHSOnline.App.Droid.DependencyServices.Biometrics;
 using NHSOnline.App.Droid.DependencyServices.InstallReferrer;
@@ -64,6 +65,20 @@ namespace NHSOnline.App.Droid
             base.SetContentView(view);
 
             MakeNotFocusableIfViewGroup(view);
+        }
+
+        protected override void OnStop()
+        {
+            CookieManager.Instance?.Flush();
+
+            base.OnStop();
+        }
+
+        protected override void OnDestroy()
+        {
+            NhsApp?.AppClosing();
+
+            base.OnDestroy();
         }
 
         protected override void OnPause()

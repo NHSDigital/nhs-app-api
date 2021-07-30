@@ -12,12 +12,13 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.WebContext
 
         public event EventHandler? SwitchedTo;
 
-        public WebIntegrationWebViewContextStrategy(NativeDriverContext nativeDriverContext,
+        public WebIntegrationWebViewContextStrategy(AppEvents appEvents, NativeDriverContext nativeDriverContext,
             NhsAppPreHomeWebViewContextStrategy preHomeWebViewContextStrategy,
             NhsAppWebViewContextStrategy nhsAppWebViewContextStrategy)
         {
             _nativeDriverContext = nativeDriverContext;
 
+            appEvents.AppClosed += ResetWebContext;
             preHomeWebViewContextStrategy.SwitchedTo += ResetWebContext;
             nhsAppWebViewContextStrategy.SwitchedTo += ResetWebContext;
         }

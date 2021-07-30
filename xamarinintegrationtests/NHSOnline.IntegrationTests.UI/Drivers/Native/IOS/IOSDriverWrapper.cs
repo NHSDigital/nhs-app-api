@@ -151,6 +151,18 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             context.AddBrowserStackSessionDetailsToLogs(_driver, _browserStackConfig, testLogs);
         }
 
+        void IIOSDriverWrapper.CloseApp()
+        {
+            _driver.CloseApp();
+
+            Web.AppClosed();
+        }
+
+        void IIOSDriverWrapper.LaunchApp()
+        {
+            _driver.LaunchApp();
+        }
+
         public void Dispose() => _driver.Dispose();
     }
 }

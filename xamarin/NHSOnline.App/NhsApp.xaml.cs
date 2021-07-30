@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Controls;
 using NHSOnline.App.DependencyInjection;
+using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Logging;
 using NHSOnline.App.Navigation;
 using NHSOnline.App.Services;
@@ -14,7 +15,10 @@ namespace NHSOnline.App
 {
     public partial class NhsApp
     {
+        private readonly ICookieService? _cookieService;
+
         private NavigationPage? NavigationPage { get; }
+
 
         public NhsApp()
         {
@@ -34,6 +38,8 @@ namespace NHSOnline.App
 
                 NhsAppLogging.AddProvidersFromServiceProvider(loggerFactory, serviceProvider);
 
+                _cookieService = serviceProvider.GetRequiredService<ICookieService>();
+
                 var pageFactory = serviceProvider.GetRequiredService<IPageFactory>();
                 var loggedOutHomeScreenPage = pageFactory.CreatePageFor(new LoggedOutHomeScreenModel());
 
@@ -49,6 +55,7 @@ namespace NHSOnline.App
             {
                 System.Diagnostics.Debug.WriteLine("App Startup Failed: {0}", e);
                 TryLogFailure(e);
+                // TODO: Should we not rethrow here in order to get the crash report?
             }
         }
 
@@ -74,6 +81,11 @@ namespace NHSOnline.App
                     currentPage.HandleDeeplink(targetUri);
                 }
             }
+        }
+
+        public void AppClosing()
+        {
+            _cookieService?.ClearSessionCookies();
         }
     }
 }

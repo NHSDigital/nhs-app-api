@@ -8,13 +8,16 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.WebContext
         private readonly NativeDriverContext _nativeDriverContext;
         private IWebContext? _webContext;
 
-        public BrowserOverlayContextStrategy(NativeDriverContext nativeDriverContext,
+        public BrowserOverlayContextStrategy(
+            AppEvents appEvents,
+            NativeDriverContext nativeDriverContext,
             NhsAppPreHomeWebViewContextStrategy preHomeWebViewContextStrategy,
             NhsAppWebViewContextStrategy nhsAppWebViewContextStrategy,
             WebIntegrationWebViewContextStrategy webIntegrationWebViewContextStrategy)
         {
             _nativeDriverContext = nativeDriverContext;
 
+            appEvents.AppClosed += ResetWebContext;
             preHomeWebViewContextStrategy.SwitchedTo += ResetWebContext;
             nhsAppWebViewContextStrategy.SwitchedTo += ResetWebContext;
             webIntegrationWebViewContextStrategy.SwitchedTo += ResetWebContext;

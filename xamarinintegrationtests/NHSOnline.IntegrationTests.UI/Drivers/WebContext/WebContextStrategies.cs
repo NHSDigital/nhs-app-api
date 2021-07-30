@@ -1,3 +1,4 @@
+using System;
 using NHSOnline.IntegrationTests.UI.Drivers.Native;
 using OpenQA.Selenium;
 
@@ -7,6 +8,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.WebContext
     {
         private readonly NativeDriverContext _nativeDriverContext;
 
+        private readonly AppEvents _appEvents;
         private readonly NhsAppPreHomeWebViewContextStrategy _nhsAppPreHomeWebView;
         private readonly NhsAppWebViewContextStrategy _nhsAppLoggedInWebView;
         private readonly WebIntegrationWebViewContextStrategy _webIntegrationWebView;
@@ -21,16 +23,19 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.WebContext
             _driver = driver;
             _logs = logs;
 
+            _appEvents = new AppEvents();
 
-            _nhsAppPreHomeWebView = new NhsAppPreHomeWebViewContextStrategy(nativeDriverContext);
-            _nhsAppLoggedInWebView = new NhsAppWebViewContextStrategy(nativeDriverContext, _nhsAppPreHomeWebView);
+            _nhsAppPreHomeWebView = new NhsAppPreHomeWebViewContextStrategy(_appEvents, nativeDriverContext);
+            _nhsAppLoggedInWebView = new NhsAppWebViewContextStrategy(_appEvents, nativeDriverContext, _nhsAppPreHomeWebView);
 
             _webIntegrationWebView = new WebIntegrationWebViewContextStrategy(
+                _appEvents,
                 nativeDriverContext,
                 _nhsAppPreHomeWebView,
                 _nhsAppLoggedInWebView);
 
             _browserOverlay = new BrowserOverlayContextStrategy(
+                _appEvents,
                 nativeDriverContext,
                 _nhsAppPreHomeWebView,
                 _nhsAppLoggedInWebView,
@@ -45,6 +50,21 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.WebContext
         private IWebInteractor WrapStrategy(IWebContextStrategy strategy)
         {
             return new NativeWebInteractor(_nativeDriverContext, _logs, _driver, strategy);
+        }
+
+        internal void AppClosed()
+        {
+            _appEvents.OnAppClosed();
+        }
+    }
+
+    internal class AppEvents
+    {
+        internal event EventHandler? AppClosed;
+
+        internal void OnAppClosed()
+        {
+            AppClosed?.Invoke(this, EventArgs.Empty);
         }
     }
 }

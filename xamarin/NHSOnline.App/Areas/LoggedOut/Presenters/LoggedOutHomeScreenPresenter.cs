@@ -29,6 +29,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly IAlertDialog _alertDialogService;
         private readonly BiometricLoginErrorPageDispatcher _biometricLoginErrorPageDispatcher;
         private readonly LoggedOutHomeScreenModel _model;
+        private readonly ICookieService _cookieService;
 
         private static readonly TimeSpan BiometricDelayOnAppearing = TimeSpan.FromMilliseconds(100);
         private static readonly TimeSpan BiometricDelayOnTemporaryLockout = TimeSpan.FromSeconds(5);
@@ -49,7 +50,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             IBackgroundExecutionService backgroundExecutionService,
             IForcedUpdateCheckService forcedUpdateCheckService,
             IAlertDialog alertDialogService,
-            LoggedOutHomeScreenModel model)
+            LoggedOutHomeScreenModel model,
+            ICookieService cookieService)
         {
             _view = view;
             _pageFactory = pageFactory;
@@ -62,6 +64,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _forcedUpdateCheckService = forcedUpdateCheckService;
             _alertDialogService = alertDialogService;
             _model = model;
+            _cookieService = cookieService;
 
             _biometricLoginErrorPageDispatcher = new BiometricLoginErrorPageDispatcher(_view, _pageFactory,
                 _biometricAuthenticationService, _userPreferencesService);
@@ -83,6 +86,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _alertDialogService.DismissAll();
             _cancelBiometricLogin.Dispose();
             _cancelBiometricLogin = new CancellationTokenSource();
+            await _cookieService.ClearSessionCookies().PreserveThreadContext();
 
             _forcedUpdateCheckService.Initiate();
 
