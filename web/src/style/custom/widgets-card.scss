@@ -30,6 +30,8 @@
   padding: 20px;
   border: 1px solid $color_nhsuk-grey-3;
   box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /**
