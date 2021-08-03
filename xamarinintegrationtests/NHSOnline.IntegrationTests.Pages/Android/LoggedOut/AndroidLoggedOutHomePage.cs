@@ -31,8 +31,6 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             HelpIcon.AssertVisible();
         }
 
-        public void AssertHelpIconPresent() => HelpIcon.AssertVisible();
-
         public void GetHelp() => HelpIcon.Click();
 
         public void ContinueWithNhsLogin() => ContinueButton.Click();

@@ -8,19 +8,33 @@ namespace NHSOnline.IntegrationTests.LoggedOut
 {
     [TestClass]
     [BusinessRule("BR-LOG-02.1", "Continuing with NHS login displays the getting started screen")]
+    [BusinessRule("BR-LOG-02.3", "Navigating back from before you start screen displays the Logged out home screen")]
+    [BusinessRule("BR-LOG-09.3", "Invoking native back on the getting started screen displays the logged out home screen")]
     public sealed class GettingStartedTests
     {
         [NhsAppAndroidTest]
-        public void APatientIsShownTheGettingStartedPageAndroid(IAndroidDriverWrapper driver)
+        public void APatientIsShownTheGettingStartedPageAndCanNavigateBackAndroid(IAndroidDriverWrapper driver)
         {
             NavigateToGettingStartedPage(driver)
+                .AssertPageElements();
+
+            driver.PressBackButton();
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
                 .AssertPageElements();
         }
 
         [NhsAppIOSTest]
-        public void APatientIsShownTheGettingStartedPageIos(IIOSDriverWrapper driver)
+        public void APatientIsShownTheGettingStartedPageAndCanNavigateBackIos(IIOSDriverWrapper driver)
         {
             NavigateToGettingStartedPage(driver)
+                .AssertPageElements();
+
+            driver.SwipeBack();
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
                 .AssertPageElements();
         }
 

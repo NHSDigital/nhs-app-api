@@ -97,6 +97,6 @@ namespace NHSOnline.IntegrationTests.Advice
         }
 
         [NhsAppManualTest("NHSO-15774", "OLC Journey is not fully stubbed yet")]
-        public void APatientThatAllowsDempgraphicDataHasTheirNameAutoPopulatedOnTheGpAdviceJourney() { }
+        public void APatientThatAllowsDemographicDataHasTheirNameAutoPopulatedOnTheGpAdviceJourney() { }
     }
 }

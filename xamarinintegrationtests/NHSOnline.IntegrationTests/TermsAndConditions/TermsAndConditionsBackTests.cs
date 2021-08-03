@@ -10,7 +10,8 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.TermsAndConditions
 {
     [TestClass]
-    [BusinessRule("BR-LOG-06.4", "Invoking native back on the Ts&Cs screen has no associated action")]
+    [BusinessRule("BR-LOG-06.4", "Invoking native back on the conditions of use screen screen has no associated action")]
+    [BusinessRule("BR-LOG-05.3", "Log in when a user has not previously accepted the NHS App conditions of use displays the conditions of use screen")]
     public class TermsAndConditionsBackTests
     {
         [NhsAppAndroidTest]
@@ -33,7 +34,8 @@ namespace NHSOnline.IntegrationTests.TermsAndConditions
                 .PageContent.Login(patient);
 
             AndroidTermsAndConditionsPage
-                .AssertOnPage(driver);
+                .AssertOnPage(driver)
+                .AssertPageContent();
 
             driver
                 .PressBackButton()
@@ -63,7 +65,8 @@ namespace NHSOnline.IntegrationTests.TermsAndConditions
                 .PageContent.Login(patient);
 
             IOSTermsAndConditionsPage
-                .AssertOnPage(driver);
+                .AssertOnPage(driver)
+                .AssertPageContent();
 
             driver
                 .SwipeBack()

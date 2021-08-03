@@ -14,7 +14,7 @@ namespace NHSOnline.IntegrationTests.Home
     public class HomeBiometricPanelTests
     {
         [NhsAppAndroidTest]
-        public void APatientThatHasNotSubmittedBiometricDecisionSeesBiometricPanelOnHomePageAndroid(
+        public void APatientThatHasNotSubmittedBiometricDecisionSeesBiometricPanelOnHomePageButNotAfterItHasBeenDismissedAndroid(
             IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
@@ -25,36 +25,8 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .PageContent.AssertBiometricPanelVisible();
-        }
-
-        [NhsAppIOSTest]
-        public void APatientThatHasNotSubmittedBiometricDecisionSeesBiometricPanelOnHomePageIos(IIOSDriverWrapper driver)
-        {
-            var patient = new EmisPatient()
-                .WithName(b => b.GivenName("Bjorn").FamilyName("Metrik"));
-            using var patients = Mocks.Patients.Add(patient);
-
-            LoginProcess.LogIOSPatientIn(driver, patient);
-
-            IOSLoggedInHomePage
-                .AssertOnPage(driver)
-                .PageContent.AssertBiometricPanelVisible();
-        }
-
-        [NhsAppAndroidTest]
-        public void APatientThatHasDismissedTheBiometricPanelDoesNotSeeItAgainOnHomePageAndroid(
-            IAndroidDriverWrapper driver)
-        {
-            var patient = new EmisPatient()
-                .WithName(b => b.GivenName("Bjorn").FamilyName("Metrik"));
-            using var patients = Mocks.Patients.Add(patient);
-
-            LoginProcess.LogAndroidPatientIn(driver, patient);
-
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver)
-                .PageContent.DismissBiometricPanel();
+                .PageContent.AssertBiometricPanelVisible()
+                .DismissBiometricPanel();
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
@@ -62,7 +34,7 @@ namespace NHSOnline.IntegrationTests.Home
         }
 
         [NhsAppIOSTest]
-        public void APatientThatHasDismissedTheBiometricPanelDoesNotSeeItAgainOnHomePageIos(IIOSDriverWrapper driver)
+        public void APatientThatHasNotSubmittedBiometricDecisionSeesBiometricPanelOnHomePageButNotAfterItHasBeenDismissedIos(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
                 .WithName(b => b.GivenName("Bjorn").FamilyName("Metrik"));
@@ -72,7 +44,8 @@ namespace NHSOnline.IntegrationTests.Home
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .PageContent.DismissBiometricPanel();
+                .PageContent.AssertBiometricPanelVisible()
+                .DismissBiometricPanel();
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)

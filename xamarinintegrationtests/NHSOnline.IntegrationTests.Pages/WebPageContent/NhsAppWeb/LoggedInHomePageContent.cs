@@ -67,12 +67,14 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
         public void AssertUserAgent(Platform platform) =>
             Assert.IsTrue(_interactor.GetUserAgent().Contains(platform.UserAgentDeviceTypePrefix(), StringComparison.InvariantCulture));
 
-        public void AssertBiometricPanelVisible()
+        public LoggedInHomePageContent AssertBiometricPanelVisible()
         {
             BiometricsPanelTitle.AssertVisible();
             BiometricsPanelText.AssertVisible();
             OpenSettingsButton.AssertVisible();
             DismissBiometricsBanner.AssertVisible();
+
+            return this;
         }
 
         public void AssertBiometricPanelNotVisible()

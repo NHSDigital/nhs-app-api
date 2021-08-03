@@ -13,22 +13,6 @@ namespace NHSOnline.IntegrationTests.LoggedOut
     public class HelpIconTests
     {
         [NhsAppAndroidTest]
-        public void APatientCanViewHelpIconAndroid(IAndroidDriverWrapper driver)
-        {
-            AndroidLoggedOutHomePage
-                .AssertOnPage(driver)
-                .AssertHelpIconPresent();
-        }
-
-        [NhsAppIOSTest]
-        public void APatientCanViewHelpIconIos(IIOSDriverWrapper driver)
-        {
-            IOSLoggedOutHomePage
-                .AssertOnPage(driver)
-                .AssertHelpIconPresent();
-        }
-
-        [NhsAppAndroidTest]
         public void APatientCanClickToGetHelpWithLoggingInAndroid(IAndroidDriverWrapper driver)
         {
             AndroidLoggedOutHomePage

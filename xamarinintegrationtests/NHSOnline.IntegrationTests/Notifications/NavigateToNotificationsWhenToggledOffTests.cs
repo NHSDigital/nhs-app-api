@@ -9,6 +9,7 @@ namespace NHSOnline.IntegrationTests.Notifications
 {
     [TestClass]
     [BusinessRule("BR-NOT-04.2", "Navigating to manage notifications from the settings menu when the notifications for the device are disabled displays the manage notifications screen with the current registration status for the device toggled to off")]
+    [BusinessRule("BR-NOT-04.8", "Disabling notifications successfully disables notifications on the device")]
     public class NavigateToNotificationsWhenToggledOffTests
     {
         [NhsAppAndroidTest]

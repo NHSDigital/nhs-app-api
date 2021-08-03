@@ -77,5 +77,43 @@ namespace NHSOnline.IntegrationTests.WebIntegration
             IOSOneOneOnePage
                 .AssertOnPage(driver);
         }
+
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelFiveCanAccessAdviceFromHomeScreenAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
+                .WithProofLevel5();
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToAdvice();
+
+            AndroidAdvicePage
+                .AssertOnPage(driver)
+                .AssertPageElements();
+        }
+
+        [NhsAppIOSTest]
+        public void APatientWithProofLevelFiveCanAccessAdviceFromHomeScreenIOS(IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
+                .WithProofLevel5();
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToAdvice();
+
+            IOSAdvicePage
+                .AssertOnPage(driver)
+                .AssertPageElements();
+        }
     }
 }
