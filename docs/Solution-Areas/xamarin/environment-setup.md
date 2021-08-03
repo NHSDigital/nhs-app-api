@@ -25,4 +25,7 @@ Xcode is also required to be installed. Kainos users - Xcode has to be installed
 
 ![RiderMonoVersion](Images/RiderMonoVersion.png)
 - iOS: when building the App, if you get the error: 'Could not find any available provisioning profiles for NHSOnline.App.iOS', then you haven't clicked 'Download manual profiles' in Xcode.
+- iOS: if the App builds, but you cannot debug as there is no iOS device simulator available for selection in Rider (or the dropdown is totally missing):
+  - check the `Xcode Path` is set in Rider: `Preferences -> Build,Execution,Deployment -> iOS -> Xcode path` to e.g. `/Applications/Xcode.app`
+  - Open the Xcode app, create a default Xamarin forms project targetting iOS. Debug this and wait for the Simulator app to spin up. Restart Rider and try again.
 - Android: if you get complaints about the wrong version of the SDK (eg its looking for v29), open `Visual Studio for Mac -> Preferences -> Projects/Sdk Locations/Android`. Find the correct SDK e.g. under `Android 10.0 - Q` then install it too.
