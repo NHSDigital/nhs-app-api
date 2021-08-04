@@ -434,8 +434,7 @@ stages:
             uploadAppIdentifier: com.nhs.online.staging
             uploadServiceEndpoint: nhsapp-staging-apple-app-store
 
-# Only run production SJR build for Tagged builds
-  - ${{ if variables['source.tag'] }}:
+  - ${{ if eq(variables['source.tag'], 'True') }}:
     - stage: SJR_config_build_production
       displayName: SJR Production Config Build
       dependsOn:
