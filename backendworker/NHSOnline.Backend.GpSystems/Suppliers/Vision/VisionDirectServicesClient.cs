@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
@@ -23,6 +24,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         private const string DirectServicesBasePath = "v1/organisations/{0}/onlineservices";
 
         private readonly string ConfigurationPath = $"{DirectServicesBasePath}/configuration";
+        private readonly string DemographicsPath = $"{DirectServicesBasePath}/demographics";
 
         public VisionDirectServicesClient(
             ILogger<VisionDirectServicesClient> logger,
@@ -66,6 +68,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
                 _providerId);
 
             return await Post<PatientConfigurationResponse>(visionRequest, path);
+        }
+
+        public async Task<VisionDirectServicesApiObjectResponse<VisionDemographicsResponse>> GetDemographicsV2(VisionUserSession visionUserSession, DemographicsRequest requestContent)
+        {
+            var path = string.Format(CultureInfo.InvariantCulture, DemographicsPath, visionUserSession.OdsCode);
+
+            var visionRequest = new VisionDirectServicesRequest(
+                visionUserSession.RosuAccountId,
+                visionUserSession.ApiKey,
+                _providerId,
+                visionUserSession.PatientId);
+
+            return await Post<VisionDemographicsResponse>(visionRequest, path);
         }
 
         private async Task<VisionDirectServicesApiObjectResponse<TResponse>> Post<TResponse>(VisionDirectServicesRequest model, string path)

@@ -65,6 +65,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
 
         public bool IsUnknownError => HasVisionApiErrorText(VisionApiErrorCodes.UnknownError);
 
+        public bool IsAccessDeniedError => HasVisionApiErrorText(VisionApiErrorCodes.AccessDenied);
+
         private bool HasVisionApiErrorText(string visionErrorCode) =>
             visionErrorCode.Equals(ErrorText, StringComparison.Ordinal);
 

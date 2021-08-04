@@ -22,7 +22,7 @@ object VisionConstants {
     const val newPrescriptionVersion: String = "2.0.0"
 
     const val demographicsName: String = "VODEM.GetDemographics"
-    const val demographicsVersion: String = "2.0.0"
+    const val demographicsVersion: String = "2.1.0"
 
     const val patientDataName: String = "VOS.GetPatientData"
     const val patientDataVersion: String = "2.1.0"
@@ -108,5 +108,7 @@ object VisionConstants {
             .replace("</", "</vision:")
             .replace("<", "<vision:")
             .replace("vision:/", "/")
+            .replace("vision:ns2:", "")
+            .replace("xmlns:ns2=\"urn:vision\"", "xmlns=\"urn:vision\" ")
     }
 }

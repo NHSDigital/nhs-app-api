@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<vision:visionResponse xmlns:vision="urn:vision">
+    <vision:serviceDefinition>
+        <vision:name>VODEM.GetDemographics</vision:name>
+        <vision:version>2.1.0</vision:version>
+    </vision:serviceDefinition>
+    <vision:serviceContent>
+        <demographics xmlns="urn:vision" xmlns:mb="urn:messagebus">
+            <name>
+                <title>MS</title>
+                <forename>TESTFORENAME</forename>
+                <forename2>TEST</forename2>
+                <surname>TESTSURNAME</surname>
+            </name>
+            <maritalStatus code="MAR006">Unknown</maritalStatus>
+            <dateOfBirth>1970-09-21</dateOfBirth>
+            <gender code="SEX002">Female</gender>
+            <primaryAddress>
+                <houseName>HOUSE</houseName>
+                <houseNumber>23</houseNumber>
+                <street>UPPER CRESCENT</street>
+                <locality>TEST 1</locality>
+                <town>TEST2</town>
+                <county>ANTRIM</county>
+                <postcode>BT7 1NT</postcode>
+            </primaryAddress>
+            <usualGP>Dr Hugh Geoghegan</usualGP>
+            <surgeryAttended>TEST BRANCH 3</surgeryAttended>
+        </demographics>
+    </vision:serviceContent>
+</vision:visionResponse>

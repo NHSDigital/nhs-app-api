@@ -2,7 +2,7 @@ package mocking.vision
 
 import mocking.MappingBuilder
 import mocking.defaults.VisionMockDefaults
-import mocking.vision.demographics.VisionDemographicsBuilder
+import mocking.vision.demographics.VisionGetDemographicsBuilder
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
 
@@ -14,8 +14,8 @@ open class VisionMappingBuilderMyRecord(method: String = "POST") : MappingBuilde
                 serviceDefinition, view, responseFormat)
     }
 
-    fun demographicsRequest(visionUserSession: VisionUserSession): VisionDemographicsBuilder {
-        return VisionDemographicsBuilder(visionUserSession,
+    fun demographicsRequest(visionUserSession: VisionUserSession): VisionGetDemographicsBuilder {
+        return VisionGetDemographicsBuilder(visionUserSession,
                 VisionMockDefaults.visionDemographicsConfiguration)
     }
 }

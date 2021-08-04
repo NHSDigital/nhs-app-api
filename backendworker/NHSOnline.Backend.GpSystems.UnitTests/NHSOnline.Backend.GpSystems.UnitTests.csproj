@@ -34,6 +34,9 @@
     <Content Include="Suppliers\Vision\TestData\DirectServices\validGetConfigurationResponse.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Suppliers\Vision\TestData\DirectServices\validGetDemographicsResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Suppliers\Vision\TestData\PatientFacingServices\invalidSecurityHeaderResponse.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

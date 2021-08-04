@@ -11,6 +11,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Models
         [XmlElement(ElementName = "opsReference", Namespace = "urn:vision")]
         public OpsReference OpsReference { get; set; }
 
+        [XmlElement(ElementName = "vos", Namespace = "urn:vision")]
+        public Vos Vos { get; set; }
+
+        public VisionDirectServicesRequest(string rosuAccountId, string apiKey,  string providerId, string patientId) : this(rosuAccountId, apiKey, providerId)
+        {
+            Vos = new Vos
+            {
+                PatientId = patientId
+            };
+        }
+
         public VisionDirectServicesRequest(string rosuAccountId, string apiKey,  string providerId)
         {
             Credentials = new Credentials

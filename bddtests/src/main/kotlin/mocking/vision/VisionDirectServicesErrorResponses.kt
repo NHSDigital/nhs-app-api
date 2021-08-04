@@ -54,6 +54,14 @@ object VisionDirectServicesErrorResponses {
         )
     }
 
+    fun getAccessDeniedError(serviceDefinition: ServiceDefinition): String {
+        return getMockedError(
+                serviceDefinition,
+                VisionErrorTypes.ACCESSDENIED.Code,
+                VisionErrorTypes.ACCESSDENIED.Description
+        )
+    }
+
     fun getMockedError(
         serviceDefinition: ServiceDefinition,
         errorCode:String,

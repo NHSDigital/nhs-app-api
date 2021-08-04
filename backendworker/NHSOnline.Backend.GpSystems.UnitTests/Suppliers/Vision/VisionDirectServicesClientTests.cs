@@ -12,6 +12,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.PatientRecord;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Support.ResponseParsers;
 using RichardSzalay.MockHttp;
 
@@ -26,6 +28,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
         private VisionConfigurationSettings _visionConfiguration;
 
         private VisionConnectionToken _connectionToken;
+        private VisionUserSession _visionUserSession;
         private string _odsCode;
         private XmlSerializerNamespaces _xmlNamespaces;
         private IFixture _fixture;
@@ -34,6 +37,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
         private const string ApplicationProviderId = "TestApplicationProviderId";
         private static readonly Uri ApiUri = new Uri("http://vision_base_url/", UriKind.Absolute);
         private const string ConfigurationBasePath = "v1/organisations/{0}/onlineservices/configuration";
+        private const string DemographicsBasePath = "v1/organisations/{0}/onlineservices/demographics";
         private const string VisionTestData_DirectServices_Directory = "Suppliers/Vision/TestData/DirectServices";
 
         [TestInitialize]
@@ -43,6 +47,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
 
             _connectionToken = _fixture.Create<VisionConnectionToken>();
             _odsCode = _fixture.Create<string>();
+
+            _visionUserSession = _fixture.Create<VisionUserSession>();
 
             _fixture.Register<IXmlResponseParser>(() => new XmlResponseParser());
 
@@ -82,6 +88,41 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
             var response = await _systemUnderTest.GetConfigurationV2(_connectionToken, _odsCode);
 
             response.Body.Configuration.Account.Name.Should().Be("Mrs TestNameFirst TestNameSecond");
+            response.StatusCode.Should().Be(200);
+            response.HasSuccessResponse.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public async Task GetDemographics_ReturnsValidResponse_WhenRequested()
+        {
+            var demographicsRequest = new DemographicsRequest();
+            var expectedRequestContent = $"<?xml version=\"1.0\" encoding=\"utf-8\"?><vision:visionRequest xmlns:vision=\"urn:vision\"><vision:credentials><vision:rosuAccountId>{ _visionUserSession.RosuAccountId }</vision:rosuAccountId><vision:apiKey>{ _visionUserSession.ApiKey }</vision:apiKey></vision:credentials><vision:opsReference><vision:provider>{ ApplicationProviderId }</vision:provider><vision:accountId>{ ApplicationProviderId }</vision:accountId></vision:opsReference><vision:vos><vision:patientId>{ _visionUserSession.PatientId }</vision:patientId></vision:vos></vision:visionRequest>";
+            var expectedUri = new Uri(
+                ApiUri,
+                string.Format(CultureInfo.CurrentCulture, DemographicsBasePath, _visionUserSession.OdsCode));
+
+            var xmlResponseText = await File.ReadAllTextAsync($"{VisionTestData_DirectServices_Directory}/validGetDemographicsResponse.xml");
+            _mockHttpHandler
+                .WhenVision(HttpMethod.Post, expectedUri)
+                .WithContent(expectedRequestContent)
+                .Respond("application/xml", xmlResponseText);
+
+            var response = await _systemUnderTest.GetDemographicsV2(_visionUserSession, demographicsRequest);
+
+            response.Body.Demographics.Name.Title.Should().Be("MS");
+            response.Body.Demographics.Name.Forename.Should().Be("TESTFORENAME");
+            response.Body.Demographics.Name.Surname.Should().Be("TESTSURNAME");
+            response.Body.Demographics.MaritalStatus.Text.Should().Be("Unknown");
+            response.Body.Demographics.Gender.Text.Should().Be("Female");
+            response.Body.Demographics.PrimaryAddress.County.Should().Be("ANTRIM");
+            response.Body.Demographics.PrimaryAddress.Postcode.Should().Be("BT7 1NT");
+            response.Body.Demographics.PrimaryAddress.Street.Should().Be("UPPER CRESCENT");
+            response.Body.Demographics.PrimaryAddress.Town.Should().Be("TEST2");
+            response.Body.Demographics.PrimaryAddress.HouseName.Should().Be("HOUSE");
+            response.Body.Demographics.PrimaryAddress.HouseNumber.Should().Be("23");
+            response.Body.Demographics.DateOfBirth.Day.Should().Be(21);
+            response.Body.Demographics.DateOfBirth.Month.Should().Be(9);
+            response.Body.Demographics.DateOfBirth.Year.Should().Be(1970);
             response.StatusCode.Should().Be(200);
             response.HasSuccessResponse.Should().BeTrue();
         }

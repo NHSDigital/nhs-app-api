@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Demographics
                 var demographicsRequestContent =
                     new DemographicsRequest { PatientId = visionUserSession.PatientId };
 
-                var demographicsResponse = await _visionClient.GetDemographics(visionUserSession, demographicsRequestContent);
+                var demographicsResponse = await _visionClient.GetDemographicsV2(visionUserSession, demographicsRequestContent);
 
                 try
                 {

@@ -106,5 +106,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         {
             return await _visionDirectServicesClient.GetConfigurationV2(userSession);
         }
+
+        public async Task<VisionDirectServicesApiObjectResponse<VisionDemographicsResponse>> GetDemographicsV2(VisionUserSession visionUserSession, DemographicsRequest requestContent)
+        {
+            return await _visionDirectServicesClient.GetDemographicsV2(visionUserSession, requestContent);
+        }
     }
 }
