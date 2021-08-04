@@ -101,6 +101,7 @@
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Renderers\Heading1Renderer.cs" />
+    <Compile Include="Renderers\StackLayoutRenderer.cs" />
     <Compile Include="Renderers\SwipeBackNavigationPageRenderer.cs" />
     <Compile Include="Renderers\WebViews\IProovExtensions.cs" />
     <Compile Include="Renderers\WebViews\NhsLoginOnDemandGpSessionWebViewRenderer.cs" />

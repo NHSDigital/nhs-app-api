@@ -35,10 +35,20 @@ namespace NHSOnline.App.Droid.Effects
                     case AccessibilityEffect.ControlType.Link:
                         target.KeyPress -= ControlOnKeyPress;
                         target.KeyPress += ControlOnKeyPress;
+                        target.FocusChange -= ControlFocusChange;
+                        target.FocusChange += ControlFocusChange;
                         break;
                     default:
                         break;
                 }
+            }
+        }
+
+        private void ControlFocusChange(object sender, View.FocusChangeEventArgs e)
+        {
+            if (Element is VisualElement visualElement)
+            {
+                KeyboardFocusStates.SetKeyboardFocusState(visualElement, e.HasFocus);
             }
         }
 
@@ -48,6 +58,7 @@ namespace NHSOnline.App.Droid.Effects
                 AccessibilityEffect.GetControlType(Element) is { })
             {
                 target.KeyPress -= ControlOnKeyPress;
+                target.FocusChange -= ControlFocusChange;
             }
         }
 

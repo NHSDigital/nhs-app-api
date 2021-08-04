@@ -29,7 +29,7 @@
     
     <VisualStateManager.VisualStateGroups>
         <VisualStateGroup x:Name="ResponsiveDisplayStates">
-            <VisualState x:Name="SmallDisplay" />
+            <VisualState x:Name="MediumDisplay" />
             <VisualState x:Name="LargeDisplay">
                 <VisualState.Setters>
                     <Setter TargetName="Label" Property="Style" Value="{ StaticResource LabelWide}" />

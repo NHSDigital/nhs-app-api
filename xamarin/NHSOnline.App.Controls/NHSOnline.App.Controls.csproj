@@ -36,7 +36,8 @@
     <EmbeddedResource Include="Icons\icon-arrow-right.svg" />
     <EmbeddedResource Include="Icons\icon-arrow-left.svg" />
     <EmbeddedResource Include="Icons\icon-close.svg" />
-    <EmbeddedResource Include="Icons\NhsLogoBlue.svg" />
+    <EmbeddedResource Include="Icons\icon-continue-with-nhs-login-unfocused.svg" />
+    <EmbeddedResource Include="Icons\icon-continue-with-nhs-login-focused.svg" />
     <EmbeddedResource Include="Icons\NhsSpinner.svg" />
     <ProjectReference Include="..\NHSOnline.App.Logging\NHSOnline.App.Logging.csproj" />
     <EmbeddedResource Include="Icons\NhsLogoWhite.svg" />

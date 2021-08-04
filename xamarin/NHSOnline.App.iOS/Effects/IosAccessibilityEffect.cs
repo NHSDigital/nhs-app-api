@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.Effects;
 using UIKit;
 using Xamarin.Forms;
@@ -19,6 +20,22 @@ namespace NHSOnline.App.iOS.Effects
                 AutomationProperties.SetIsInAccessibleTree(Element, true);
                 target.AccessibilityTraits = AccessibilityTraitsFor(Element, controlType);
                 target.IsAccessibilityElement = true;
+            }
+
+            if (Element is VisualElement visualElement)
+            {
+                visualElement.Focused -= VisualElementOnFocusStateChanged;
+                visualElement.Focused += VisualElementOnFocusStateChanged;
+                visualElement.Unfocused -= VisualElementOnFocusStateChanged;
+                visualElement.Unfocused += VisualElementOnFocusStateChanged;
+            }
+        }
+
+        private void VisualElementOnFocusStateChanged(object sender, FocusEventArgs e)
+        {
+            if (Element is VisualElement visualElement)
+            {
+                KeyboardFocusStates.SetKeyboardFocusState(visualElement, e.IsFocused);
             }
         }
 
@@ -58,6 +75,11 @@ namespace NHSOnline.App.iOS.Effects
 
         protected override void OnDetached()
         {
+            if (Element is VisualElement visualElement)
+            {
+                visualElement.Focused -= VisualElementOnFocusStateChanged;
+                visualElement.Unfocused -= VisualElementOnFocusStateChanged;
+            }
         }
     }
 }

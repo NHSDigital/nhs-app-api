@@ -113,17 +113,13 @@
                    Padding="0,10,0,0"
                    AutomationProperties.IsInAccessibleTree="True"
                    IsTabStop="False" />
-
+            
             <elements:NhsLoginButton Grid.Row="3"
                                      Grid.Column="1"
-                                     Text="Continue with NHS login"
-                                     ButtonColour = "{StaticResource NhsUkWhite}"
-                                     PressedButtonColour="{StaticResource NhsUkSecondaryGrey4}"
-                                     TextColour = "{StaticResource NhsUkBlue}"
-                                     Command="{Binding LoginCommand, Source={x:Reference Name=Page}}"
-                                     Padding="0,10,0,10" />
+                                     Command="{Binding LoginCommand, Source={x:Reference Name=Page}}"/>
+            
 
-            <Label Grid.Row="4"
+            <Label Grid.Row="4" 
                    Grid.Column="1" 
                    Text="Version 2.Xamarin"
                    HorizontalOptions="Center"

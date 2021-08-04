@@ -13,7 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         private AndroidLabel SessionExpiredText => AndroidLabel.WithText(_driver, "For your security, you need to log in again");
 
-        private AndroidLabel ContinueButton => AndroidLabel.WithText(_driver, "Continue with NHS login");
+        private AndroidNhsLoginButton ContinueButton => AndroidNhsLoginButton.WithContentDescription(_driver, "Continue with NHS login");
 
         private AndroidIcon HelpIcon => AndroidIcon.WithName(_driver, "NHS App help icon");
 
