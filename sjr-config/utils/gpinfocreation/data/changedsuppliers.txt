@@ -624,3 +624,8 @@ G83062,"SLADE GREEN MEDICAL CTR","IN PRACTICE SYSTEMS LTD","EGTON MEDICAL INFORM
 P83605,"WHITTAKER LANE MED CENTRE","IN PRACTICE SYSTEMS LTD","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)"
 P83605,"WHITTAKER LANE MED CENTRE","IN PRACTICE SYSTEMS LTD","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)"
 ==================================================================
+==================================================================
+Job Run - Tue Aug 3 09:45:42 GMTST 2021
+ODS,Organisation,PreviousSupplier,NewSupplier
+A83052,"BISHOPS CLOSE MEDICAL PRACTICE","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)","THE PHOENIX PARTNERSHIP"
+==================================================================
