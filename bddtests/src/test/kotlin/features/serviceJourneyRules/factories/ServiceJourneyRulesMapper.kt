@@ -45,7 +45,9 @@ class ServiceJourneyRulesMapper {
                     SJRJourneyType.NOMINATED_PHARMACY_DISABLED,
                     SJRJourneyType.PRESCRIPTIONS_IM1,
                     SJRJourneyType.SILVER_INTEGRATION_MEDICINES_NONE,
-                    SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS
+                    SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS,
+                    SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_NONE,
+                    SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_NONE
                 )
             )
             .add(
@@ -202,6 +204,7 @@ class ServiceJourneyRulesMapper {
             .add(
                 Supplier.EMIS, "B86013",
                 EnumSet.of(
+                    SJRJourneyType.MEDICAL_RECORD_IM1,
                     SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_CIE,
                     SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_CIE,
                     SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_CIE,
@@ -218,7 +221,6 @@ class ServiceJourneyRulesMapper {
                 EnumSet.of(
                     SJRJourneyType.MEDICAL_RECORD_IM1,
                     SJRJourneyType.SILVER_INTEGRATION_APPOINTMENTS_PKB_SECONDARY_CARE,
-                    SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_NONE,
                     SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB_SECONDARY_CARE,
                     SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB_SECONDARY_CARE,
                     SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB_SECONDARY_CARE,
@@ -239,6 +241,7 @@ class ServiceJourneyRulesMapper {
             .add(
                 Supplier.EMIS, "A10001",
                 EnumSet.of(
+                    SJRJourneyType.MEDICAL_RECORD_IM1,
                     SJRJourneyType.SILVER_INTEGRATION_APPOINTMENTS_PKB_MY_CARE_VIEW,
                     SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB_MY_CARE_VIEW,
                     SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB_MY_CARE_VIEW,

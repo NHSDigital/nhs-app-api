@@ -1,8 +1,14 @@
 package features.gpSessionOnDemand.stepDefinitions
 
 import constants.Supplier
+import features.authentication.stepDefinitions.AuthenticationFactory
+import features.serviceJourneyRules.factories.SJRJourneyType
+import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
+import mocking.MockingClient
+import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journeys.termsAndConditions.TermsAndConditionsJourneyFactory
 import models.Patient
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
@@ -13,6 +19,8 @@ import worker.WorkerClient
 import worker.models.session.UserSessionRequest
 
 class GpSessionOnDemandStepDefinitions {
+
+    private val mockingClient = MockingClient.instance
 
     @Then("^NHS Login returns an invalid Subject upon establishing a (.*) GP session$")
     fun nhsLoginReturnsAnInvalidSubjectUponEstablishingAGPSession(gpSystem: String) {
@@ -30,5 +38,85 @@ class GpSessionOnDemandStepDefinitions {
                         authCode =patient.authCode,
                         codeVerifier = patient.codeVerifier,
                         redirectUrl = ssoRedirectUri)))
+    }
+
+    @Given("^I am a patient who does not have care plans and the GP System is unavailable$")
+    fun iAmAPatientWhoDoesNotHaveCarePlans() {
+        initialisePatientWithPkbBrandUnavailableGpSystem(
+            SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_NONE)
+    }
+
+    @Given("^I am a patient who does not have health tracker and the GP System is unavailable$")
+    fun iAmAPatientWhoDoesNotHaveHealthTracker() {
+        initialisePatientWithPkbBrandUnavailableGpSystem(
+            SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_NONE)
+    }
+
+    @Given("^I am a patient with pkb care plans and the GP System is unavailable$")
+    fun patientWithPkbCarePlansUnavailableGpSystem() {
+        initialisePatientWithPkbBrandUnavailableGpSystem(
+            SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB)
+    }
+
+    @Given("^I am a patient with pkbCie care plans and the GP System is unavailable$")
+    fun patientWithPkbCieCarePlansUnavailableGpSystem() {
+        initialisePatientWithPkbBrandUnavailableGpSystem(
+            SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_CIE)
+    }
+
+    @Given("^I am a patient with pkbSecondaryCare care plans and the GP System is unavailable$")
+    fun patientWithPkbSecondaryCareCarePlansUnavailableGpSystem() {
+        initialisePatientWithPkbBrandUnavailableGpSystem(
+            SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB_SECONDARY_CARE)
+    }
+
+    @Given("^I am a patient with pkbMyCareView care plans and the GP System is unavailable$")
+    fun patientWithPkbMyCareViewCarePlansUnavailableGpSystem() {
+        initialisePatientWithPkbBrandUnavailableGpSystem(
+            SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB_MY_CARE_VIEW)
+    }
+
+    @Given("^I am a patient with pkb health tracker and the GP System is unavailable$")
+    fun patientWithPkbHealthTrackerUnavailableGpSystem() {
+        initialisePatientWithPkbBrandUnavailableGpSystem(
+            SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB)
+    }
+
+    @Given("^I am a patient with pkbCie health tracker and the GP System is unavailable$")
+    fun patientWithPkbCieHealthTrackerUnavailableGpSystem() {
+        initialisePatientWithPkbBrandUnavailableGpSystem(
+            SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_CIE)
+    }
+
+    @Given("^I am a patient with pkbSecondaryCare health tracker and the GP System is unavailable$")
+    fun patientWithPkbSecondaryCareHealthTrackerUnavailableGpSystem() {
+        initialisePatientWithPkbBrandUnavailableGpSystem(
+            SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB_SECONDARY_CARE)
+    }
+
+    @Given("^I am a patient with pkbMyCareView health tracker and the GP System is unavailable$")
+    fun patientWithPkbMyCareViewHealthTrackerUnavailableGpSystem() {
+        initialisePatientWithPkbBrandUnavailableGpSystem(
+            SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB_MY_CARE_VIEW)
+    }
+
+    private fun initialisePatientWithPkbBrandUnavailableGpSystem(journey: SJRJourneyType) {
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
+            null, arrayListOf(SJRJourneyType.MEDICAL_RECORD_IM1, journey))
+        val supplier = SerenityHelpers.getGpSupplier()
+        setupPatient(patient, supplier)
+
+        AuthenticationFactory.getForSupplier(supplier)
+            .validOAuthDetailsAndGpSystemUnavailable(patient)
+        TermsAndConditionsJourneyFactory.consent(patient)
+    }
+
+    private fun setupPatient(patient: Patient, supplier: Supplier) {
+        mockingClient.favicon()
+
+        SerenityHelpers.setPatient(patient)
+        SerenityHelpers.setGpSupplier(supplier)
+
+        CitizenIdSessionCreateJourney().createFor(patient)
     }
 }

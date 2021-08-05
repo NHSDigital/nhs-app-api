@@ -9,12 +9,14 @@ describe('HealthRecordErrors', () => {
     status = 500,
     hasRetried = false,
     serviceDeskReference,
+    sjrEnabled = false,
   } = {}) => {
     Storage.prototype.getItem = jest.fn('hasRetried').mockImplementation(() => hasRetried);
 
     $store = createStore({
       getters: {
         'session/isLoggedIn': () => true,
+        'serviceJourneyRules/silverIntegrationEnabled': () => sjrEnabled,
       },
     });
 
@@ -54,6 +56,16 @@ describe('HealthRecordErrors', () => {
 
       wrapper = await mountPage({ repeatError: error, serviceDeskReference: 'xxxxxx' });
       expect(wrapper.vm.referenceCode).toBe('xxxxxx');
+    });
+
+    it('will show other options', async () => {
+      wrapper = await mountPage({ hasRetried: true, sjrEnabled: true });
+      expect(wrapper.find('#otherThingsToDo').exists()).toBe(true);
+    });
+
+    it('will not show other options', async () => {
+      wrapper = await mountPage({ hasRetried: true });
+      expect(wrapper.find('#otherThingsToDo').exists()).toBe(false);
     });
   });
 });

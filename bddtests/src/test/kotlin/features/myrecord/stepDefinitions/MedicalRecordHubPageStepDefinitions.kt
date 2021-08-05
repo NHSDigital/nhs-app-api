@@ -90,6 +90,11 @@ open class MedicalRecordHubPageStepDefinitions {
         medicalRecordHubPage.getHeaderElement(item).assertSingleElementPresent()
     }
 
+    @Then("^I do not see the Third Party menu item '(.*)'$")
+    fun assertIDoNoSeeTheseMenuItems(item: String) {
+        medicalRecordHubPage.getHeaderElement(item).assertElementNotPresent()
+    }
+
     @When("^I click on the Gp medical record link$")
     fun clickGpMedicalRecordLink() {
         medicalRecordHubPage.gpMedicalRecordPanel.click()

@@ -1,16 +1,64 @@
 <template>
   <div>
-    <error-page v-if="hasRetried"
-                id="healthRecordGpSessionError"
-                header-locale-ref="gpSessionErrors.healthRecord.healthRecordUnavailable"
-                :code="error.serviceDeskReference"
-                :update-header="false"
-                :show-back-link="false">
-      <template v-slot:content>
-        <p>{{ $t('gpSessionErrors.healthRecord.ifYouNeedInformationNow') }}</p>
-        <contact-111 :text="$t('gpSessionErrors.healthRecord.forUrgentMedicalAdvice')"/>
-      </template>
-    </error-page>
+
+    <div v-if="hasRetried">
+      <error-page id="healthRecordGpSessionError"
+                  header-locale-ref="gpSessionErrors.healthRecord.healthRecordUnavailable"
+                  :code="error.serviceDeskReference"
+                  :update-header="false"
+                  :show-back-link="false">
+        <template v-slot:content>
+          <p>{{ $t('gpSessionErrors.healthRecord.ifYouNeedInformationNow') }}</p>
+          <contact-111 :text="$t('gpSessionErrors.healthRecord.forUrgentMedicalAdvice')"/>
+        </template>
+      </error-page>
+
+      <h2 v-if="showPkb"
+          id="otherThingsToDo">{{ $t('gpSessionErrors.healthRecord.otherThingsYouCanDo') }}</h2>
+
+      <menu-item-list>
+        <third-party-jump-off-button v-if="showPkbCarePlans"
+                                     id="btn_pkb_care_plans"
+                                     provider-id="pkb"
+                                     :provider-configuration="thirdPartyProvider
+                                       .pkb.carePlans" />
+        <third-party-jump-off-button v-if="showPkbCieCarePlans"
+                                     id="btn_pkb_cie_care_plans"
+                                     provider-id="pkb"
+                                     :provider-configuration="thirdPartyProvider
+                                       .pkb.carePlansCie" />
+        <third-party-jump-off-button v-if="showPkbSecondaryCareCarePlans"
+                                     id="btn_pkb_secondary_care_care_plans"
+                                     provider-id="pkb"
+                                     :provider-configuration="thirdPartyProvider
+                                       .pkb.carePlansPkbSecondaryCare" />
+        <third-party-jump-off-button v-if="showPkbMyCareViewCarePlans"
+                                     id="btn_pkb_my_care_view_care_plans"
+                                     provider-id="pkb"
+                                     :provider-configuration="thirdPartyProvider
+                                       .pkb.carePlansPkbMyCareView" />
+        <third-party-jump-off-button v-if="showPkbHealthTracker"
+                                     id="btn_pkb_health_trackers"
+                                     provider-id="pkb"
+                                     :provider-configuration="thirdPartyProvider
+                                       .pkb.healthTrackers" />
+        <third-party-jump-off-button v-if="showPkbCieHealthTracker"
+                                     id="btn_pkb_cie_health_trackers"
+                                     provider-id="pkb"
+                                     :provider-configuration="thirdPartyProvider
+                                       .pkb.healthTrackersCie" />
+        <third-party-jump-off-button v-if="showPkbSecondaryCareHealthTracker"
+                                     id="btn_pkb_secondary_care_health_trackers"
+                                     provider-id="pkb"
+                                     :provider-configuration="thirdPartyProvider
+                                       .pkb.healthTrackersPkbSecondaryCare" />
+        <third-party-jump-off-button v-if="showPkbMyCareViewHealthTracker"
+                                     id="btn_pkb_my_care_view_health_trackers"
+                                     provider-id="pkb"
+                                     :provider-configuration="thirdPartyProvider
+                                       .pkb.healthTrackersPkbMyCareView" />
+      </menu-item-list>
+    </div>
 
     <error-container v-else id="error-dialog-599">
       <error-title title="gpSessionErrors.healthRecord.tryAgainHeader"/>
@@ -29,8 +77,12 @@ import ErrorContainer from '@/components/errors/ErrorContainer';
 import ErrorPage from '@/components/errors/ErrorPage';
 import ErrorParagraph from '@/components/errors/ErrorParagraph';
 import ErrorTitle from '@/components/errors/ErrorTitle';
+import MenuItemList from '@/components/MenuItemList';
+import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import { redirectTo, gpSessionErrorHasRetried } from '@/lib/utils';
 import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
+import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
+import sjrIf from '@/lib/sjrIf';
 
 export default {
   name: 'HealthRecordErrors',
@@ -41,6 +93,8 @@ export default {
     ErrorPage,
     ErrorParagraph,
     ErrorTitle,
+    MenuItemList,
+    ThirdPartyJumpOffButton,
   },
   props: {
     error: {
@@ -56,7 +110,100 @@ export default {
   data() {
     return {
       hasRetried: gpSessionErrorHasRetried(),
+      thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
     };
+  },
+  computed: {
+    showPkbCarePlans() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkb',
+          serviceType: 'carePlans',
+        },
+      });
+    },
+    showPkbCieCarePlans() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbCie',
+          serviceType: 'carePlans',
+        },
+      });
+    },
+    showPkbSecondaryCareCarePlans() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbSecondaryCare',
+          serviceType: 'carePlans',
+        },
+      });
+    },
+    showPkbMyCareViewCarePlans() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbMyCareView',
+          serviceType: 'carePlans',
+        },
+      });
+    },
+    showPkbHealthTracker() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkb',
+          serviceType: 'healthTrackers',
+        },
+      });
+    },
+    showPkbCieHealthTracker() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbCie',
+          serviceType: 'healthTrackers',
+        },
+      });
+    },
+    showPkbSecondaryCareHealthTracker() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbSecondaryCare',
+          serviceType: 'healthTrackers',
+        },
+      });
+    },
+    showPkbMyCareViewHealthTracker() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbMyCareView',
+          serviceType: 'healthTrackers',
+        },
+      });
+    },
+    showPkb() {
+      return this.showPkbCarePlans ||
+        this.showPkbCieCarePlans ||
+        this.showPkbSecondaryCareCarePlans ||
+        this.showPkbMyCareViewCarePlans ||
+        this.showPkbHealthTracker ||
+        this.showPkbCieHealthTracker ||
+        this.showPkbSecondaryCareHealthTracker ||
+        this.showPkbMyCareViewHealthTracker;
+    },
   },
   watch: {
     '$route.query.ts': function watchTimestamp() {
@@ -71,3 +218,4 @@ export default {
   },
 };
 </script>
+
