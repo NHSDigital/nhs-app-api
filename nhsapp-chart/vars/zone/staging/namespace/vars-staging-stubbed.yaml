@@ -21,7 +21,7 @@ environmentStubbed:
   cidStubbed: true
   emisStubbed: true
   tppStubbed: true
-  visionStubbed: false
+  visionStubbed: true
   tsandcsStubbed: false
   deployWiremock: true
   organDonationStubbed: true

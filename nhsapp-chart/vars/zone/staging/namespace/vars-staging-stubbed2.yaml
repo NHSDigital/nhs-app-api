@@ -21,9 +21,9 @@ patientPracticeMessagingEnabled: true
 environmentPerftest: true
 environmentStubbed:
   cidStubbed: true
-  emisStubbed: false
+  emisStubbed: true
   tppStubbed: true
-  visionStubbed: false
+  visionStubbed: true
   tsandcsStubbed: false
   deployWiremock: true
   organDonationStubbed: true
