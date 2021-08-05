@@ -24,7 +24,7 @@ sixteenWeeksSlotsEnabled: true
 webVueGlobalObject: true
 
 spineLdapLookupEnabled: true
-spineLdapCIDR: "10.239.67.128/25"
+spineLdapCIDR: "10.239.57.0/24"
 spineLdapHost: "ldap.vn03.national.ncrs.nhs.uk"
 
 spinePdsEnabled: true
