@@ -74,7 +74,7 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             var homePageModel = new NhsAppWebModel(ResolveDeeplinkUrl);
             var homePage = _pageFactory.CreatePageFor(homePageModel);
 
-            await _view.AppNavigation.PopToNewRootAnimated(homePage).PreserveThreadContext();
+            await _view.AppNavigation.PopToNewRoot(homePage).PreserveThreadContext();
         }
 
         private async Task LogoutRequested()
@@ -83,7 +83,7 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
 
             var model = new LoggedOutHomeScreenModel();
             var page = _pageFactory.CreatePageFor(model);
-            await _view.AppNavigation.PopToNewRootAnimated(page).PreserveThreadContext();
+            await _view.AppNavigation.PopToNewRoot(page).PreserveThreadContext();
         }
 
         private async Task ViewOnAppearing()

@@ -7,13 +7,9 @@ namespace NHSOnline.App.Navigation
     internal interface IAppNavigation
     {
         Task Push(Page page);
-        Task PushAnimated(Page page);
         Task Pop();
-        Task PopAnimated();
         Task PopToRoot();
-        Task PopToRootAnimated();
         Task PopToNewRoot(Page newRootPage);
-        Task PopToNewRootAnimated(Page newRootPage);
         Task ReplaceCurrentPage(Page page);
     }
 

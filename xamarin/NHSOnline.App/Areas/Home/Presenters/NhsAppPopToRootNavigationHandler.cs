@@ -62,13 +62,13 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         public async Task GoToNhsAppPageRequested(string page)
         {
-            await _appNavigation.PopToRootAnimated().PreserveThreadContext();
+            await _appNavigation.PopToRoot().PreserveThreadContext();
             await _rootHandler.GoToNhsAppPageRequested(page).PreserveThreadContext();
         }
 
         public async Task RedirectToDeepLinkRequested(Uri deeplinkUrl)
         {
-            await _appNavigation.PopToRootAnimated().PreserveThreadContext();
+            await _appNavigation.PopToRoot().PreserveThreadContext();
             await _rootHandler.RedirectToDeepLinkRequested(deeplinkUrl).PreserveThreadContext();
         }
 

@@ -83,25 +83,11 @@ namespace NHSOnline.App.Navigation
             await _navigation.PushAsync(page, false).PreserveThreadContext();
         }
 
-        public async Task PushAnimated(Page page)
-        {
-            SuppressHandlers();
-
-            await _navigation.PushAsync(page).PreserveThreadContext();
-        }
-
         public async Task Pop()
         {
             SuppressHandlers();
 
             await _navigation.PopAsync(false).PreserveThreadContext();
-        }
-
-        public async Task PopAnimated()
-        {
-            SuppressHandlers();
-
-            await _navigation.PopAsync().PreserveThreadContext();
         }
 
         public async Task PopToRoot()
@@ -111,27 +97,12 @@ namespace NHSOnline.App.Navigation
             await _navigation.PopToRootAsync(false).PreserveThreadContext();
         }
 
-        public async Task PopToRootAnimated()
-        {
-            SuppressHandlers();
-
-            await _navigation.PopToRootAsync(true).PreserveThreadContext();
-        }
-
         public async Task PopToNewRoot(Page newRootPage)
         {
             SuppressHandlers();
 
             _navigation.InsertPageBefore(newRootPage, _navigation.NavigationStack[0]);
             await _navigation.PopToRootAsync().PreserveThreadContext();
-        }
-
-        public async Task PopToNewRootAnimated(Page newRootPage)
-        {
-            SuppressHandlers();
-
-            _navigation.InsertPageBefore(newRootPage, _navigation.NavigationStack[0]);
-            await _navigation.PopToRootAsync(true).PreserveThreadContext();
         }
 
         public async Task ReplaceCurrentPage(Page page)

@@ -86,7 +86,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
         private async Task BackRequested()
         {
             _logger.LogInformation("Back Requested");
-            await _view.AppNavigation.PopAnimated().PreserveThreadContext();
+            await _view.AppNavigation.Pop().PreserveThreadContext();
         }
     }
 }

@@ -256,7 +256,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
             var page = _pageFactory.CreatePageFor(model);
             await _view.AppNavigation
-                .PushAnimated(page)
+                .Push(page)
                 .PreserveThreadContext();
         }
 
@@ -394,7 +394,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             var model = new LoggedOutHomeScreenModel();
 
             var page = _pageFactory.CreatePageFor(model);
-            await _view.AppNavigation.PopToNewRootAnimated(page).PreserveThreadContext();
+            await _view.AppNavigation.PopToNewRoot(page).PreserveThreadContext();
         }
 
         private async Task SessionExpiredRequested()
@@ -404,7 +404,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             var model = new LoggedOutHomeScreenModel(LoggedOutHomeScreenStates.SessionExpired);
 
             var page = _pageFactory.CreatePageFor(model);
-            await _view.AppNavigation.PopToNewRootAnimated(page).PreserveThreadContext();
+            await _view.AppNavigation.PopToNewRoot(page).PreserveThreadContext();
         }
 
         private async Task HelpRequested()

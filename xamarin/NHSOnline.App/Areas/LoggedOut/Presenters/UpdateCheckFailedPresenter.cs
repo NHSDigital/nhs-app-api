@@ -22,7 +22,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task BackToHomeRequested()
         {
             _logger.LogInformation("Close Requested");
-            await _view.AppNavigation.PopAnimated().PreserveThreadContext();
+            await _view.AppNavigation.Pop().PreserveThreadContext();
         }
     }
 }

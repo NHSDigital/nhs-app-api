@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut

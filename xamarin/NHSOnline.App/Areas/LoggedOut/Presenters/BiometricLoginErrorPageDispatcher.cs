@@ -33,7 +33,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         {
             var couldNotLoginModel = new BiometricLoginCouldNotLoginModel();
             var couldNotLoginView = _pageFactory.CreatePageFor(couldNotLoginModel);
-            await _view.AppNavigation.PushAnimated(couldNotLoginView).PreserveThreadContext();
+            await _view.AppNavigation.Push(couldNotLoginView).PreserveThreadContext();
         }
 
         public async Task ShowBiometricLoginFailed()
@@ -63,14 +63,14 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         {
             var model = new BiometricLoginTouchIdFailedModel();
             var view = _pageFactory.CreatePageFor(model);
-            await _view.AppNavigation.PushAnimated(view).PreserveThreadContext();
+            await _view.AppNavigation.Push(view).PreserveThreadContext();
         }
 
         private async Task ShowBiometricLoginFaceIdFailed()
         {
             var model = new BiometricLoginFaceIdFailedModel();
             var view = _pageFactory.CreatePageFor(model);
-            await _view.AppNavigation.PushAnimated(view).PreserveThreadContext();
+            await _view.AppNavigation.Push(view).PreserveThreadContext();
         }
 
         private async Task ShowBiometricLoginFingerprintPermanentlyLockedOut()
@@ -84,14 +84,14 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         {
             var model = new BiometricLoginTouchIdLockedOutModel();
             var view = _pageFactory.CreatePageFor(model);
-            await _view.AppNavigation.PushAnimated(view).PreserveThreadContext();
+            await _view.AppNavigation.Push(view).PreserveThreadContext();
         }
 
         private async Task ShowBiometricLoginFaceIdPermanentlyLockedOut()
         {
             var model = new BiometricLoginFaceIdLockedOutModel();
             var view = _pageFactory.CreatePageFor(model);
-            await _view.AppNavigation.PushAnimated(view).PreserveThreadContext();
+            await _view.AppNavigation.Push(view).PreserveThreadContext();
         }
 
         private sealed class BiometricLoginFailedStatusResultVisitor : IBiometricStatusResultVisitor<Task>
