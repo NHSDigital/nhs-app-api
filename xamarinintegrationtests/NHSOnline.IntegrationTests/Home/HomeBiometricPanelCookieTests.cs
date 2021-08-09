@@ -7,15 +7,15 @@ using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
-namespace NHSOnline.IntegrationTests.Cookies
+namespace NHSOnline.IntegrationTests.Home
 {
     [BusinessRule("BR-HOM-01.2", "Biometrics call out is not displayed when it has been previously dismissed")]
     [BusinessRule("BR-LOG-03.1", "Continuing with NHS login displays NHS login when the before you start screen has previously been acknowledged")]
     [TestClass]
-    public class CookieTests
+    public class HomeBiometricPanelCookieTests
     {
         [NhsAppAndroidTest]
-        public void APatientWithProofLevelFiveDoesNotSeeTheCookieBannerWhenTheAppIsRelaunchedAfterDismissingItAndroid(
+        public void APatientWithProofLevelFiveDoesNotSeeTheBiometricsPanelWhenTheAppIsRelaunchedAfterDismissingItAndroid(
             IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
@@ -49,7 +49,7 @@ namespace NHSOnline.IntegrationTests.Cookies
         }
 
         [NhsAppIOSTest]
-        public void APatientWithProofLevelFiveDoesNotSeeTheCookieBannerWhenTheAppIsRelaunchedAfterDismissingItIOS(IIOSDriverWrapper driver)
+        public void APatientWithProofLevelFiveDoesNotSeeTheBiometricsPanelWhenTheAppIsRelaunchedAfterDismissingItIOS(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))

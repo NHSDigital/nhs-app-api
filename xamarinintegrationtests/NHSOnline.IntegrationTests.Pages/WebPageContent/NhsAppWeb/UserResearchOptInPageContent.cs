@@ -113,5 +113,12 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
             OptIn.Click();
             ContinueButton.Click();
         }
+
+        public void OptOutOfUserResearch()
+        {
+            ContinueButton.ScrollTo();
+            OptOut.Click();
+            ContinueButton.Click();
+        }
     }
 }
