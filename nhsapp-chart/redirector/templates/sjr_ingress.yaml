@@ -17,6 +17,13 @@ spec:
     - host: api{{ .Values.environmentPublicHostSuffix }}
       http:
         paths:
+          - path: /api/odscodes
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: default-sjr
+                port:
+                  number: {{ .Values.defaultServicePort }}
           - path: /api/servicejourneyrules
             pathType: ImplementationSpecific
             backend:

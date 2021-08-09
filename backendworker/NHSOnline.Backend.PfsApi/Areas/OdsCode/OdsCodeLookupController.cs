@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -49,6 +49,34 @@ namespace NHSOnline.Backend.PfsApi.Areas.OdsCode
             catch (Exception e)
             {
                 _logger.LogError(e, "Failed request to get supplier from ods code.");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        [Route("all")]
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetOdsCodes()
+        {
+            _logger.LogEnter();
+
+            try
+            {
+                var odsCodes = await _odsCodeLookup.LookupOdsCodes();
+
+                return new OkObjectResult(new GetOdsCodesLookupResponse
+                {
+                    OdsCodes = odsCodes
+                });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed request to get ods codes.");
+
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
             finally

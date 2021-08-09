@@ -13,6 +13,7 @@ namespace NHSOnline.Backend.ServiceJourneyRules.Common
         private readonly ServiceJourneyRulesHttpClient _serviceJourneyRulesHttpClient;
         private readonly IJsonResponseParser _responseParser;
 
+        private const string OdsCodesPath = "api/odscodes";
         private const string ServiceJourneyRulesPath = "api/servicejourneyrules";
 
         public ServiceJourneyRulesClient(
@@ -25,29 +26,27 @@ namespace NHSOnline.Backend.ServiceJourneyRules.Common
             _responseParser = responseParser;
         }
 
-        public async Task<ServiceJourneyRulesApiObjectResponse<ServiceJourneyRulesResponse>> GetServiceJourneyRules(string odsCode)
+        public async Task<ServiceJourneyRulesApiObjectResponse<OdsCodesResponse>> GetOdsCodes()
         {
-            return await Get<ServiceJourneyRulesResponse>(odsCode);
+            return await Get<OdsCodesResponse>(OdsCodesPath);
         }
 
-        private async Task<ServiceJourneyRulesApiObjectResponse<TResponse>> Get<TResponse>(string odsCode)
+        public async Task<ServiceJourneyRulesApiObjectResponse<ServiceJourneyRulesResponse>> GetServiceJourneyRules(string odsCode)
         {
-
             var path = string.IsNullOrWhiteSpace(odsCode)
                 ? $"{ServiceJourneyRulesPath}/no-ods"
                 : $"{ServiceJourneyRulesPath}?odsCode={odsCode}";
 
-            using (var request = new HttpRequestMessage(HttpMethod.Get, path))
-            {
-                return await SendRequestAndParseResponse<TResponse>(request);
-            }
+            return await Get<ServiceJourneyRulesResponse>(path);
         }
 
-        private async Task<ServiceJourneyRulesApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
-            HttpRequestMessage request)
+        private async Task<ServiceJourneyRulesApiObjectResponse<TResponse>> Get<TResponse>(string path)
         {
+            using var request = new HttpRequestMessage(HttpMethod.Get, path);
+
             var responseMessage = await _serviceJourneyRulesHttpClient.Client.SendAsync(request);
             var response = new ServiceJourneyRulesApiObjectResponse<TResponse>(responseMessage.StatusCode);
+
             return await response.Parse(responseMessage, _responseParser, _logger);
         }
     }

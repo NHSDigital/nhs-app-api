@@ -6,6 +6,8 @@ namespace NHSOnline.Backend.ServiceJourneyRules.Common
 {
     public interface IServiceJourneyRulesClient
     {
+        Task<ServiceJourneyRulesApiObjectResponse<OdsCodesResponse>> GetOdsCodes();
+
         Task<ServiceJourneyRulesApiObjectResponse<ServiceJourneyRulesResponse>>
             GetServiceJourneyRules(string odsCode);
     }

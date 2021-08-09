@@ -52,6 +52,16 @@ namespace NHSOnline.Backend.UserInfoApi
                 .AddControllers(ConfigureMvcOptions)
                 .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
 
+            services.AddApiVersioning(options =>
+            {
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.ErrorResponses = new NotFoundErrorResponseProvider();
+                options.ReportApiVersions = true;
+                // Treat all controllers as API controller
+                options.UseApiBehavior = false;
+            });
+
             services.AddNhsAppHealthCheckService(Configuration);
             services.AddPerformanceCounterService(Configuration);
 
@@ -105,8 +115,6 @@ namespace NHSOnline.Backend.UserInfoApi
         public void Configure(IApplicationBuilder app)
         {
             app.UsePerformanceCounterMiddleware(Configuration, _logger);
-
-            app.UsePathBase("/v1");
 
             app.UseSecurityResponseHeadersMiddleware();
             app.UseResponseHeadersMiddleware();

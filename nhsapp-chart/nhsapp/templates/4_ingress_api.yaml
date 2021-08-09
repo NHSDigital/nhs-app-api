@@ -57,6 +57,13 @@ spec:
                   number: {{ $.Values.sidecar_proxy.containerPort }}
           {{- end }}
           {{- if $.Values.sjrExternalIngressEnabled }}
+          - path: /api/odscodes
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{ template "nhsapp.name" . }}-sjr-{{ .Chart.AppVersion | replace "." "-"}}
+                port:
+                  number: {{ $.Values.sidecar_proxy.containerPort }}
           - path: /api/servicejourneyrules
             pathType: ImplementationSpecific
             backend:
@@ -121,6 +128,13 @@ spec:
                   number: {{ $.Values.sidecar_proxy.containerPort }}
           {{- end }}
           {{- if $.Values.sjrExternalIngressEnabled }}
+          - path: /api/odscodes
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{ template "nhsapp.name" . }}-sjr-{{ .Chart.AppVersion | replace "." "-"}}
+                port:
+                  number: {{ $.Values.sidecar_proxy.containerPort }}
           - path: /api/servicejourneyrules
             pathType: ImplementationSpecific
             backend:

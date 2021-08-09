@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.ServiceJourneyRules.Common;
@@ -6,11 +7,6 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi
 {
-    public interface IOdsCodeLookup
-    {
-        Task<Option<Supplier>> LookupSupplier(string odsCode);
-    }
-
     public class OdsCodeLookup : IOdsCodeLookup
     {
         private readonly ILogger<OdsCodeLookup> _logger;
@@ -21,7 +17,14 @@ namespace NHSOnline.Backend.PfsApi
         {
             _serviceJourneyRulesClient = serviceJourneyRulesClient;
             _logger = logger;
-        }    
+        }
+
+        public async Task<IEnumerable<string>> LookupOdsCodes()
+        {
+            _logger.LogInformation("Looking up ODS Codes");
+
+            return await GetOdsCodes();
+        }
 
         public async Task<Option<Supplier>> LookupSupplier(string odsCode)
         {
@@ -41,6 +44,28 @@ namespace NHSOnline.Backend.PfsApi
             }
 
             return Option.Some(supplier);
+        }
+
+        private async Task<IEnumerable<string>> GetOdsCodes()
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                var rules = await _serviceJourneyRulesClient.GetOdsCodes();
+
+                if (rules.HasSuccessResponse
+                    && rules.Body != null)
+                {
+                    return rules.Body.OdsCodes ?? new List<string>();
+                }
+
+                return new List<string>();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
         }
 
         private async Task<Supplier> GetSupplierFromServiceJourneyRules(string odsCode)

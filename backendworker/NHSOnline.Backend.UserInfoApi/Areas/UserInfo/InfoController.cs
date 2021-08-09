@@ -11,6 +11,7 @@ using NHSOnline.Backend.Auth.AspNet.ApiKey;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.UserInfoApi.Areas.UserInfo.Models;
 using NHSOnline.Backend.UserInfoApi.Areas.UserResearch;
@@ -18,6 +19,8 @@ using NHSOnline.Backend.UserInfoApi.Areas.UserResearch.Models;
 
 namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
 {
+    [ApiVersion("1")]
+    [ApiController]
     public class InfoController : Controller
     {
         private readonly IAccessTokenProvider _accessTokenProvider;
@@ -48,8 +51,8 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
         }
 
         [HttpPost]
+        [ApiVersionRoute("api/me/info")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Route("api/me/info")]
         public async Task<IActionResult> Post([UserProfile] UserProfile userProfile)
         {
             try
@@ -73,8 +76,8 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
         }
 
         [HttpGet]
+        [ApiVersionRoute("api/me/info")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Route("api/me/info")]
         public async Task<IActionResult> Get()
         {
             try
@@ -95,27 +98,14 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
         }
 
         [HttpGet]
+        [ApiVersionRoute("api/info")]
         [Authorize(AuthenticationSchemes = ApiKeyAuthenticationOptions.DefaultScheme)]
-        [Route("api/info")]
-        public async Task<IActionResult> Get([FromQuery] string odsCode, [FromQuery] string nhsNumber)
+        public async Task<IActionResult> GetV1([FromQuery] string odsCode, [FromQuery] string nhsNumber)
         {
             try
             {
-                if (!string.IsNullOrEmpty(odsCode) && !string.IsNullOrEmpty(nhsNumber)
-                    || string.IsNullOrEmpty(odsCode) && string.IsNullOrEmpty(nhsNumber))
-                {
-                    _logger.LogError("Expected either odsCode or nhsNumber to be supplied");
-                    return BadRequest();
-                }
-
                 _logger.LogEnter();
-
-                var result =
-                    odsCode != null
-                        ? await _infoService.GetInfoByOdsCode(odsCode)
-                        : await _infoService.GetInfoByNhsNumber(nhsNumber);
-
-                return result.Accept(new GetInfoResultVisitor());
+                return await Get(odsCode, nhsNumber, new GetInfoResultVisitor());
             }
             catch (Exception e)
             {
@@ -128,8 +118,46 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
             }
         }
 
+        [HttpGet]
+        [ApiVersion("2")]
+        [ApiVersionRoute("api/info")]
+        [Authorize(AuthenticationSchemes = ApiKeyAuthenticationOptions.DefaultScheme)]
+        public async Task<IActionResult> GetV2([FromQuery] string odsCode, [FromQuery] string nhsNumber)
+        {
+            try
+            {
+                _logger.LogEnter();
+                return await Get(odsCode, nhsNumber, new GetInfoResultVisitorV2());
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to get user info with exception");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        private async Task<IActionResult> Get(string odsCode, string nhsNumber, IGetInfoResultVisitor<IActionResult> visitor)
+        {
+            if (!string.IsNullOrEmpty(odsCode) && !string.IsNullOrEmpty(nhsNumber)
+                || string.IsNullOrEmpty(odsCode) && string.IsNullOrEmpty(nhsNumber))
+            {
+                _logger.LogError("Expected either odsCode or nhsNumber to be supplied");
+                return BadRequest();
+            }
+
+            var result = odsCode != null
+                ? await _infoService.GetInfoByOdsCode(odsCode)
+                : await _infoService.GetInfoByNhsNumber(nhsNumber);
+
+            return result.Accept(visitor);
+        }
+
         [HttpPost]
-        [Route("api/me/info/userresearch")]
+        [ApiVersionRoute("api/me/info/userresearch")]
         public async Task<IActionResult> PostUserResearchPreference([FromBody] UserResearchRequest userResearchRequest,
             [UserProfile] UserProfile userProfile)
         {
