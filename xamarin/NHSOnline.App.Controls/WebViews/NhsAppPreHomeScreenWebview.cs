@@ -34,6 +34,12 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty LogoutCommandProperty =
             BindableProperty.Create(nameof(LogoutCommand), typeof(AsyncCommand), typeof(NhsAppPreHomeScreenWebview));
 
+        public static readonly BindableProperty OnSessionExpiringCommandProperty =
+            BindableProperty.Create(nameof(OnSessionExpiringCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
+
+        public static readonly BindableProperty SessionExpiredCommandProperty =
+            BindableProperty.Create(nameof(SessionExpiredCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
+
         private static JsonSerializerSettings Settings { get; } = CreateJsonSerializerSettings();
 
         public void GetNotificationsStatus() => GetNotificationsStatusCommand.Execute(null);
@@ -69,6 +75,13 @@ namespace NHSOnline.App.Controls.WebViews
         public async Task SendNotificationUnauthorised()
             => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.notificationsUnauthorised()").ResumeOnThreadPool();
 
+        public async Task AuthLogout()
+            => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.authLogout()").ResumeOnThreadPool();
+
+        public async Task SendSessionExtend()
+            => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.sessionExtend()").ResumeOnThreadPool();
+
+
         public void GoToLoggedInHomeScreen() => GoToLoggedInHomeScreenCommand.Execute(null);
 
         public AsyncCommand GoToLoggedInHomeScreenCommand
@@ -83,6 +96,22 @@ namespace NHSOnline.App.Controls.WebViews
         {
             get => (AsyncCommand) GetValue(LogoutCommandProperty);
             set => SetValue(LogoutCommandProperty, value);
+        }
+
+        public void OnSessionExpiring() => OnSessionExpiringCommand.Execute(null);
+
+        public AsyncCommand OnSessionExpiringCommand
+        {
+            get => (AsyncCommand) GetValue(OnSessionExpiringCommandProperty);
+            set => SetValue(OnSessionExpiringCommandProperty, value);
+        }
+
+        public void SessionExpired() => SessionExpiredCommand.Execute(null);
+
+        public AsyncCommand SessionExpiredCommand
+        {
+            get => (AsyncCommand)GetValue(SessionExpiredCommandProperty);
+            set => SetValue(SessionExpiredCommandProperty, value);
         }
 
         private static string ConvertToJsonString<T>(T value) => JsonConvert.SerializeObject(value, Settings);

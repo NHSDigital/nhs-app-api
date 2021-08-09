@@ -18,12 +18,14 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
         private NhsAppPreHomeScreenWebViewRenderer(WKWebViewConfiguration config) : base(config)
         {
             _javascriptBridge = JavascriptBridge
-                    .ForWebView(() => (NhsAppPreHomeScreenWebview)Element, "nativeApp")
-                    .AddFunction("getNotificationsStatus", webView => webView.GetNotificationsStatus)
-                    .AddFunction("requestPnsToken", webView => webView.RequestPnsToken)
-                    .AddFunction("goToLoggedInHomeScreen", webView => webView.GoToLoggedInHomeScreen)
-                    .AddFunction("logout", webView => webView.Logout)
-                    .Apply(config.UserContentController);
+                .ForWebView(() => (NhsAppPreHomeScreenWebview)Element, "nativeApp")
+                .AddFunction("getNotificationsStatus", webView => webView.GetNotificationsStatus)
+                .AddFunction("requestPnsToken", webView => webView.RequestPnsToken)
+                .AddFunction("goToLoggedInHomeScreen", webView => webView.GoToLoggedInHomeScreen)
+                .AddFunction("onSessionExpiring", webView => webView.OnSessionExpiring)
+                .AddFunction("sessionExpired", webView => webView.SessionExpired)
+                .AddFunction("logout", webView => webView.Logout)
+                .Apply(config.UserContentController);
         }
 
         protected override void OnElementChanged(VisualElementChangedEventArgs e)

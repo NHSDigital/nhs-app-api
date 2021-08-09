@@ -50,6 +50,15 @@ namespace NHSOnline.App.Areas.PreHome.Views
         public Func<WebNavigatedEventArgs, Task>? Navigated { get; set; }
         private AsyncCommand<WebNavigatedEventArgs> NavigatedCommand => new AsyncCommand<WebNavigatedEventArgs>(() => Navigated);
 
+        public Func<Task>? OnSessionExpiringRequested { get; set; }
+        public AsyncCommand OnSessionExpiringCommand
+            => new AsyncCommand(() => OnSessionExpiringRequested);
+
+        public Func<Task>? SessionExpiredRequested { get; set; }
+        public AsyncCommand SessionExpiredCommand
+            => new AsyncCommand(() => SessionExpiredRequested);
+
+
         public Func<Task>? ResetAndShowErrorRequested { get; set; }
         public async Task ResetAndShowError()
         {
@@ -112,6 +121,15 @@ namespace NHSOnline.App.Areas.PreHome.Views
 
         public async Task SendNotificationUnauthorised()
             => await WebView.SendNotificationUnauthorised().ResumeOnThreadPool();
+
+        public async Task SendSessionExtend()
+            => await WebView.SendSessionExtend().PreserveThreadContext();
+
+        public async Task Logout()
+        {
+            await WebView.AuthLogout().PreserveThreadContext();
+            LogoutCommand.Execute(null);
+        }
 
         private void WebViewNavigating (object sender, WebNavigatingEventArgs e)
         {

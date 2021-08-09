@@ -5,6 +5,7 @@ using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.Android.Appointments;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
+using NHSOnline.IntegrationTests.Pages.Android.Prescriptions;
 using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
 using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
@@ -59,8 +60,11 @@ namespace NHSOnline.IntegrationTests.Session
                 .Navigation.NavigateToPrescriptions();
 
             AndroidSessionExpiryPrompt
-                .AssertDisplayed(driver);
+                .AssertDisplayed(driver)
+                .ExtendSession();
 
+            AndroidPrescriptionsPage
+                .AssertOnPage(driver);
         }
 
         [NhsAppIOSTest]
@@ -89,18 +93,21 @@ namespace NHSOnline.IntegrationTests.Session
                 .PageContent.NavigateToNextPage();
 
             IOSPkbPage
-                .AssertOnPage(driver,"/diary/listAppointments.action")
+                .AssertOnPage(driver, PhrPath.ViewAppointments)
                 .AssertNativeHeader();
 
             Thread.Sleep(SessionExpiryDialogDuration);
 
             IOSPkbPage
-                .AssertOnPage(driver,"/diary/listAppointments.action")
+                .AssertOnPage(driver, PhrPath.ViewAppointments)
                 .Navigation.NavigateToAppointments();
 
             IOSSessionExpiryPrompt
-                .AssertDisplayed(driver);
+                .AssertDisplayed(driver)
+                .ExtendSession();
 
+            IOSAppointmentsPage
+                .AssertOnPage(driver);
         }
     }
 }

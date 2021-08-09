@@ -92,5 +92,91 @@ namespace NHSOnline.IntegrationTests.Session
             IOSLoggedOutHomePage
                 .AssertOnPage(driver);
         }
+
+        [NhsAppAndroidTest]
+        public void APatientOnTermsAndConditionsSeesTheSessionExpiryDialogAndChoosesToExtendTheirSessionAndWhenTheySeeTheDialogAgainTheyChooseToLogOutAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Arthur").FamilyName("Sleep"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            AndroidGettingStartedPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            AndroidStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
+
+            AndroidTermsAndConditionsPage
+                .AssertOnPage(driver)
+                .AssertPageContent();
+
+            Thread.Sleep(SessionExpiryDialogDuration);
+
+            AndroidSessionExpiryPrompt
+                .AssertDisplayed(driver)
+                .ExtendSession();
+
+            AndroidTermsAndConditionsPage
+                .AssertOnPage(driver)
+                .AssertPageContent();
+
+            Thread.Sleep(SessionExpiryDialogDuration);
+
+            AndroidSessionExpiryPrompt
+                .AssertDisplayed(driver)
+                .Logout();
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppIOSTest]
+        public void APatientOnTermsAndConditionsSeesTheSessionExpiryDialogAndChoosesToExtendTheirSessionAndWhenTheySeeTheDialogAgainTheyChooseToLogOutIos(IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Arthur").FamilyName("Sleep"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            IOSGettingStartedPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            IOSStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
+
+            IOSTermsAndConditionsPage
+                .AssertOnPage(driver)
+                .AssertPageContent();
+
+            Thread.Sleep(SessionExpiryDialogDuration);
+
+            IOSSessionExpiryPrompt
+                .AssertDisplayed(driver)
+                .ExtendSession();
+
+            IOSTermsAndConditionsPage
+                .AssertOnPage(driver)
+                .AssertPageContent();
+
+            Thread.Sleep(SessionExpiryDialogDuration);
+
+            IOSSessionExpiryPrompt
+                .AssertDisplayed(driver)
+                .Logout();
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver);
+        }
     }
 }

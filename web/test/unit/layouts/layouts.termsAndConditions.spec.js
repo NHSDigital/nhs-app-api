@@ -49,6 +49,7 @@ const createLayoutStore = ({
   state: {
     device: { isNativeApp: true, source: 'web' },
     appVersion: { nativeVersion: '3.2.1', webVersion: '1.2.3' },
+    session: { csrfToken: 'someToken' },
     termsAndConditions: { analyticsCookieAccepted },
   },
 });
@@ -114,6 +115,14 @@ describe('termsAndConditions.vue ', () => {
   });
 
   describe('created()', () => {
+    it('will dispatch session/startValidationChecking on created', () => {
+      const $store = createLayoutStore();
+      jest.spyOn($store, 'dispatch');
+
+      createDefaultPage($store);
+      expect($store.dispatch).toHaveBeenCalledWith('session/startValidationChecking');
+    });
+
     it('will dispatch appVersion/updateWebVersion on created', () => {
       const $store = createLayoutStore();
       jest.spyOn($store, 'dispatch');

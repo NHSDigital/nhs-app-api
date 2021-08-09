@@ -39,6 +39,20 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         }
 
         [JavascriptInterface]
+        [Export("onSessionExpiring")]
+        public void OnSessionExpiring()
+        {
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppPreHomeScreenWebView.OnSessionExpiring());
+        }
+
+        [JavascriptInterface]
+        [Export("sessionExpired")]
+        public void SessionExpired()
+        {
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppPreHomeScreenWebView.SessionExpired());
+        }
+
+        [JavascriptInterface]
         [Export("logout")]
         public void Logout()
         {

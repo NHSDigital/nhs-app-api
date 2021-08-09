@@ -20,11 +20,15 @@ namespace NHSOnline.App.Areas.PreHome
             Func<Task>? ResetAndShowErrorRequested { get; set; }
             Func<string, Task>? GetPnsTokenRequested { get; set; }
             Func<Uri, Task>? DeeplinkRequested { get; set; }
+            Func<Task>? SessionExpiredRequested { get; set; }
+            Func<Task>? OnSessionExpiringRequested { get; set; }
         }
 
         void GoToUri(Uri uri);
         Task SendNotificationsStatus(string status);
         Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse);
         Task SendNotificationUnauthorised();
+        Task SendSessionExtend();
+        Task Logout();
     }
 }

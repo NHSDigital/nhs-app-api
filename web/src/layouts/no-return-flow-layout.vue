@@ -102,11 +102,18 @@ export default {
     currentHelpUrl() {
       return this.$route.meta.helpUrl;
     },
+    loggedIn() {
+      return !!this.$store.state.session.csrfToken;
+    },
     showWebHeader() {
       return NativeApp.shouldShowPreLoginHeader();
     },
   },
   created() {
+    if (this.loggedIn) {
+      this.$store.dispatch('session/startValidationChecking');
+    }
+
     const appVersion = this.$store.$env.VERSION_TAG;
     if (appVersion) {
       this.$store.dispatch('appVersion/updateWebVersion', appVersion);

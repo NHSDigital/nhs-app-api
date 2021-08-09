@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.Home.Models;
+using NHSOnline.App.Areas.LoggedOut;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Areas.PreHome.Models;
 using NHSOnline.App.Config;
@@ -27,6 +28,7 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
         private readonly IBrowserOverlay _browserOverlay;
         private readonly INotifications _notifications;
         private readonly ICookieService _cookieService;
+        private readonly IAlertDialog _alertDialog;
 
         private Uri? ResolveDeeplinkUrl => _deeplinkUrl ?? _model.DeeplinkUrl;
 
@@ -38,7 +40,8 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             IBrowserOverlay browserOverlay,
             IPageFactory pageFactory,
             INotifications notifications,
-            ICookieService cookieService)
+            ICookieService cookieService,
+            IAlertDialog alertDialog)
         {
             _view = view;
             _model = model;
@@ -48,25 +51,44 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             _pageFactory = pageFactory;
             _notifications = notifications;
             _cookieService = cookieService;
+            _alertDialog = alertDialog;
 
             _view.AppNavigation
-                .RegisterHandler(ViewOnAppearing,
-                    (view, handler) => view.Appearing = handler)
-                .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating,
-                    (view, handler) => view.Navigating = handler)
-                .RegisterHandler<WebNavigatedEventArgs>(ViewOnNavigated,
-                    (view, handler) => view.Navigated = handler)
-                .RegisterHandler(GetNotificationsStatusRequested,
-                    (view, handler) => view.GetNotificationsStatusRequested = handler)
-                .RegisterHandler(GoToLoggedInHomeRequested,
-                    (view, handler) => view.GoToLoggedInHomeRequested = handler)
-                .RegisterHandler(LogoutRequested,
-                    (view, handler) => view.LogoutRequested = handler)
-                .RegisterHandler<string>(RequestPnsToken,
-                    (view, handler) => view.GetPnsTokenRequested = handler)
-                .RegisterHandler(ResetAndShowErrorRequested,
-                    (view, handler) => view.ResetAndShowErrorRequested = handler)
+                .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
+                .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
+                .RegisterHandler<WebNavigatedEventArgs>(ViewOnNavigated, (view, handler) => view.Navigated = handler)
+                .RegisterHandler(GetNotificationsStatusRequested, (view, handler) => view.GetNotificationsStatusRequested = handler)
+                .RegisterHandler(GoToLoggedInHomeRequested, (view, handler) => view.GoToLoggedInHomeRequested = handler)
+                .RegisterHandler(LogoutRequested, (view, handler) => view.LogoutRequested = handler)
+                .RegisterHandler<string>(RequestPnsToken, (view, handler) => view.GetPnsTokenRequested = handler)
+                .RegisterHandler(ResetAndShowErrorRequested, (view, handler) => view.ResetAndShowErrorRequested = handler)
+                .RegisterHandler(OnSessionExpiringRequested, (view, handler) => view.OnSessionExpiringRequested = handler)
+                .RegisterHandler(SessionExpiredRequested, (view, handler) => view.SessionExpiredRequested = handler)
                 .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeeplinkRequested = handler);
+        }
+
+        private Task OnSessionExpiringRequested()
+        {
+            _logger.LogInformation("Display session expiring warning");
+
+            _alertDialog.DisplayAlertDialog(
+                "For security reasons, we'll log you out of the NHS App in 1 minute.",
+                "Stay logged in",
+                "Log out",
+                () => _view.SendSessionExtend().PreserveThreadContext(),
+                () => _view.Logout().PreserveThreadContext()
+            );
+
+            return Task.CompletedTask;
+        }
+        private async Task SessionExpiredRequested()
+        {
+            _logger.LogInformation("{Method}", nameof(SessionExpiredRequested));
+
+            var model = new LoggedOutHomeScreenModel(LoggedOutHomeScreenStates.SessionExpired);
+
+            var page = _pageFactory.CreatePageFor(model);
+            await _view.AppNavigation.PopToNewRoot(page).PreserveThreadContext();
         }
 
         private async Task GoToLoggedInHomeRequested()

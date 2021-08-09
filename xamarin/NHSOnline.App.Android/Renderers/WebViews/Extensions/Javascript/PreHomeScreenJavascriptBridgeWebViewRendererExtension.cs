@@ -1,11 +1,12 @@
-using System;
+using System.Diagnostics.CodeAnalysis;
 using NHSOnline.App.Controls.WebViews;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
 namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions.Javascript
 {
-    internal sealed class PreHomeScreenJavascriptBridgeWebViewRendererExtension : IWebViewRendererExtension, IDisposable
+    [SuppressMessage("Microsoft.Design", "CA1001", Justification = "If we manually dispose the bridge we get occasional crashes as Android still has a reference to it, see https://github.com/xamarin/xamarin-android/issues/1408#issuecomment-373236773")]
+    internal sealed class PreHomeScreenJavascriptBridgeWebViewRendererExtension : IWebViewRendererExtension
     {
         private readonly WebViewRenderer _renderer;
         private NhsAppPreHomeJavascriptBridge? _nhsAppPreHomeJavascriptBridge;
@@ -20,7 +21,6 @@ namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions.Javascript
             if (e.OldElement is NhsAppPreHomeScreenWebview)
             {
                 _renderer.Control.RemoveJavascriptInterface(NhsAppPreHomeJavascriptBridge.JavascriptObjectName);
-                _nhsAppPreHomeJavascriptBridge?.Dispose();
             }
 
             if (e.NewElement is NhsAppPreHomeScreenWebview newNhsAppPreHomeScreenWebView)
@@ -28,11 +28,6 @@ namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions.Javascript
                 _nhsAppPreHomeJavascriptBridge = new NhsAppPreHomeJavascriptBridge(newNhsAppPreHomeScreenWebView);
                 _renderer.Control.AddJavascriptInterface(_nhsAppPreHomeJavascriptBridge, NhsAppPreHomeJavascriptBridge.JavascriptObjectName);
             }
-        }
-
-        public void Dispose()
-        {
-            _nhsAppPreHomeJavascriptBridge?.Dispose();
         }
     }
 }

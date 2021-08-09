@@ -54,5 +54,65 @@ namespace NHSOnline.IntegrationTests.Session
                 .AssertOnPage(driver)
                 .AssertSessionExpired();
         }
+
+        [NhsAppAndroidTest(AndroidBrowserStackCapability.ExtendedIdleTimeout)]
+        public void APatientOnTermsAndConditionsLeavesTheAppOpenLongEnoughForTheSessionToExpireAndSeesTheLoggedOutHomeScreenAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Arthur").FamilyName("Sleep"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            AndroidGettingStartedPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            AndroidStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
+
+            AndroidTermsAndConditionsPage
+                .AssertOnPage(driver)
+                .AssertPageContent();
+
+            Thread.Sleep(SessionExpiredDuration);
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
+                .AssertSessionExpired();
+        }
+
+        [NhsAppIOSTest(IOSBrowserStackCapability.ExtendedIdleTimeout)]
+        public void APatientOnTermsAndConditionsLeavesTheAppOpenLongEnoughForTheSessionToExpireAndSeesTheLoggedOutHomeScreenIOS(IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Arthur").FamilyName("Sleep"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            IOSGettingStartedPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            IOSStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
+
+            IOSTermsAndConditionsPage
+                .AssertOnPage(driver)
+                .AssertPageContent();
+
+            Thread.Sleep(SessionExpiredDuration);
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .AssertSessionExpired();
+        }
     }
 }

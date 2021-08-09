@@ -103,6 +103,9 @@ export default {
     currentHelpUrl() {
       return this.$route.meta.helpUrl;
     },
+    loggedIn() {
+      return !!this.$store.state.session.csrfToken;
+    },
     shouldShowFooter() {
       return !this.$store.state.device.isNativeApp;
     },
@@ -113,6 +116,10 @@ export default {
   created() {
     if (process.browser) {
       this.$store.dispatch('session/updateLastCalledAt');
+    }
+
+    if (this.loggedIn) {
+      this.$store.dispatch('session/startValidationChecking');
     }
 
     const appVersion = this.$store.$env.VERSION_TAG;
