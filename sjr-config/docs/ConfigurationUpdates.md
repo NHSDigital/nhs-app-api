@@ -4,13 +4,13 @@
 
 1. Ensure you have sqlite 3 and python 2.7.18 installed and added to your path.
 2. Join the #sjr-third-party-updates Slack channel to keep updated on required SJR config updates.
-3. Check what changes have been committed since last deployment. If there are commits in `develop` incompatible with the version of the SJR service you will be deploying the config alongside, create a new release branch (e.g. `release/v1.36.5`). Do this by finding the tag of SJR config currently in production and creating the release branch from it to use as the base for your updates.
+3. Unless you are in the situation where you are preparing an SJR config change in `develop` ready to for a cut of `develop` to be taken for a release, find the release branch that is currently live and branch off it to make your changes.  Your PR will be merged into the release branch. 
 
 ## Making Configuration Updates
 
 ### GP Info update
 
-1. Acquire the latest weekly GP info csv file. This is emailed to the NHS App mailbox every Sunday.
+1. Acquire the latest weekly GP info csv file. This is emailed to the NHS App mailbox every Sunday - a member of the T2 or T3 support team will be able to access the latest.
 
 2. Update `sjr-config/utils/gpinfocreation/data/full_gpinfo.csv` and/or `sjr-config/utils/gpinfocreation/data/excluded-practices.csv`.
 
@@ -55,7 +55,7 @@
 
 ## Getting configuration changes released
 
-1. Create a PR with the required changes. Submit for review and merge into your release branch (or `develop` if you did not need to create a release branch).
+1. Create a PR with the required changes. Submit for review and merge into the release branch (or `develop` if you did not need to create a release branch).
 
 2. Tag the nhsapp repo in your release branch with the new patch version e.g.
 
@@ -71,17 +71,14 @@
 
 3. Run the nhsapp CI pipeline [https://dev.azure.com/nhsapp/NHS%20App/_build?definitionId=4](https://dev.azure.com/nhsapp/NHS%20App/_build?definitionId=4) with the following options:
 
-	*Branch/tag* set to your new tag of `nhsapp`
+	*Branch/tag* set to your new tag of `nhsapp`.
+	*Stages to run* with Android Client, iOS Client and Generate Code Coverage *unset*
 
-4. Run the acr image sync job [https://dev.azure.com/nhsapp/NHS%20App/_build?definitionId=75](https://dev.azure.com/nhsapp/NHS%20App/_build?definitionId=75) with correct *Image to sync* name e.g. `nhsonline-service-journey-prod-config:v1.36.5` . The *Branch/tag* dropdown can be left on `develop`.
+4. Run the acr image sync job [https://dev.azure.com/nhsapp/NHS%20App/_build?definitionId=75](https://dev.azure.com/nhsapp/NHS%20App/_build?definitionId=75) with *Image to sync* set to `all`. The *Branch/tag* dropdown can be left on `develop`.
 
-5. Create a new Release from your Tag using the NHSApp Release Pipeline in ADO [https://dev.azure.com/nhsapp/NHS%20App/_release?_a=releases&view=mine&definitionId=4](https://dev.azure.com/nhsapp/NHS%20App/_release?_a=releases&view=mine&definitionId=4) Selecting the following Stages:
-	- (UKS1) Production Deploy
-	- (UKW1) Production Deploy
-	- (UKS1) Production Release
-	- (UKW1) Production Release
+5. Create a new Release from your Tag using the NHSApp Release Pipeline in ADO [https://dev.azure.com/nhsapp/NHS%20App/_release?_a=releases&view=mine&definitionId=4](https://dev.azure.com/nhsapp/NHS%20App/_release?_a=releases&view=mine&definitionId=4) 
 
-6. Ops can handle the deployment from this point - deploying to the cold namespace first to allow testing before running the redirector job to complete the release. [https://www-cold.production.nhsapp.service.nhs.uk/](https://www-cold.production.nhsapp.service.nhs.uk/)
+6. Progress the release through to staging, and give it a quick test there to ensure it looks ok. You may need to seek approval to deploy to staging. When you are happy, notify Ops that you are deploying to cold and get approval for that step. Test in cold with a live account [https://www-cold.production.nhsapp.service.nhs.uk/](https://www-cold.production.nhsapp.service.nhs.uk/). When you are happy notify Ops so that the release may be switched live. If you deploy to cold and don't progress to switching live, also let Ops know so they can clear the release down to save space.
 
 7. Create the new file of eConsult live surgeries:
 
@@ -93,4 +90,4 @@
 
 8. Add the latest sjr-config/utils/rulecreation/engage.csv to the [Engage SharePoint folder](https://hscic365.sharepoint.com/sites/EngageHealthSystemsLtd/Shared%20Documents/Forms/AllItems.aspx?csf=1&web=1&e=097t7s&cid=1e0bd1d8%2D3964%2D4bba%2D80e2%2Ddc7b3b6abca1&RootFolder=%2Fsites%2FEngageHealthSystemsLtd%2FShared%20Documents%2FEngage%20Practice%20Management&FolderCTID=0x0120009F236CF489C42E4E8C5F68FA5FC260FE) and rename the csv file to the format `YYMMDD-practices-live.csv`. Do this even if there were no changes to Engage for the release.
 
-9. If you created a release branch then cherry pick the update back into `develop`.
+9. If you updated a release branch then cherry pick the update back into `develop`. This will ensure the next release cut is up-to-date with SJR.
