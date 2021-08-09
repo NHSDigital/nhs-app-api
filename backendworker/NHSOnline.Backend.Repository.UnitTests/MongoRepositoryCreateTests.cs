@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Driver;
 using Moq;
@@ -10,13 +11,25 @@ namespace NHSOnline.Backend.Repository.UnitTests
     public class MongoRepositoryCreateTests
     {
         private MongoRepository<IRepositoryConfiguration, TestRepositoryRecord> _systemUnderTest;
-        private Mock<IMongoCollection<TestRepositoryRecord>> _mongoCollectionMock;
+        private TestRepositoryConfiguration _repositoryConfiguration;
+
+        private Mock<IMongoClientService> _mongoClientWrapperMock;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _mongoCollectionMock = new Mock<IMongoCollection<TestRepositoryRecord>>();
-            _systemUnderTest = MongoRepositoryUnitTestSupport.CreateRepository(_mongoCollectionMock);
+            _mongoClientWrapperMock = new Mock<IMongoClientService>();
+
+            _repositoryConfiguration = new TestRepositoryConfiguration
+            {
+                DatabaseName = "MockDatabaseName",
+                CollectionName = "MockCollectionName"
+            };
+
+            _systemUnderTest = new MongoRepository<IRepositoryConfiguration, TestRepositoryRecord>(
+                _mongoClientWrapperMock.Object,
+                _repositoryConfiguration,
+                new Mock<ILogger<MongoRepository<IRepositoryConfiguration, TestRepositoryRecord>>>().Object);
         }
 
         [TestMethod]
@@ -24,14 +37,15 @@ namespace NHSOnline.Backend.Repository.UnitTests
         {
             // Arrange
             var record = new TestRepositoryRecord();
-            _mongoCollectionMock.Setup(x => x.InsertOneAsync(record, null, default))
+            _mongoClientWrapperMock
+                .Setup(x => x.InsertOneAsync(_repositoryConfiguration, record))
                 .Returns(Task.CompletedTask);
 
             // Act
             var result = await _systemUnderTest.Create(record, "recordName");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
+            _mongoClientWrapperMock.VerifyAll();
             result.Should().BeOfType<RepositoryCreateResult<TestRepositoryRecord>.Created>();
         }
 
@@ -40,14 +54,15 @@ namespace NHSOnline.Backend.Repository.UnitTests
         {
             // Arrange
             var record = new TestRepositoryRecord();
-            _mongoCollectionMock.Setup(x => x.InsertOneAsync(record, null, default))
+            _mongoClientWrapperMock
+                .Setup(x => x.InsertOneAsync(_repositoryConfiguration, record))
                 .ThrowsAsync(new MongoException("Test"));
 
             // Act
             var result = await _systemUnderTest.Create(record, "recordName");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
+            _mongoClientWrapperMock.VerifyAll();
             result.Should().BeOfType<RepositoryCreateResult<TestRepositoryRecord>.RepositoryError>();
         }
     }

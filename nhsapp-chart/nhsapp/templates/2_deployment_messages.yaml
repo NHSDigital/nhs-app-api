@@ -97,20 +97,18 @@ spec:
           {{- else }}
           value: "https://*.{{ $.Values.domain }}"
           {{- end }}
-        - name: MONGO_CONNECTION_STRING
-        {{- if eq .Values.region "uksouth" }}
-          valueFrom:
-            secretKeyRef:
-              name: cosmosdb-mongodb-connection-string-uks-{{ .Chart.AppVersion }}
-              key: secret
-        {{- else }}
-          valueFrom:
-            secretKeyRef:
-              name: cosmosdb-mongodb-connection-string-ukw-{{ .Chart.AppVersion }}
-              key: secret
-        {{- end }}
-        - name: MESSAGES_MONGO_DATABASE_NAME
+        - name: MONGO_DATABASE_NAME
           value: {{ $.Values.cosmosDBName }}-mongo
+        - name: COSMOSDB_REGION
+        {{- if eq .Values.region "uksouth" }}
+          value: "UK South"
+        {{- else }}
+          value: "UK West"
+        {{- end }}
+        - name: MONGO_DB_CONNECTION_CHECK_INTERVAL_IN_SECONDS
+          value: "{{ $.Values.mongoDBConnectionCheckIntervalInSeconds }}"
+        - name: AZURE_KEY_VAULT_URI
+          value: "https://iproxy-akv-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.iproxy.containerPort }}"
         - name: MESSAGES_MONGO_DATABASE_MESSAGES_COLLECTION
           value: {{ $.Values.messages.mongoDatabaseMessagesCollection }}
         - name: CITIZEN_ID_AUTHENTICATION_TYPE

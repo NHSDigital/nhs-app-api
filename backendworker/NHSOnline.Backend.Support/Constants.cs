@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.Support
             public const int Status580ServiceDefinitionUnavailable = 580;
         }
 
-        public static class AppConfig
+        public static class ApplicationConfig
         {
             public const string GitCommitId = "Version:CommitId";
         }

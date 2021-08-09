@@ -1,4 +1,5 @@
-{{- if (and ($.Values.messagesEnabled) ($.Values.networkPolicyEnabled)) }}
+{{- if ($.Values.networkPolicyEnabled) }}
+{{- if ($.Values.messagesEnabled) }}
 ---
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
@@ -158,4 +159,24 @@ spec:
     ports:
     - protocol: TCP
       port: {{ $.Values.sidecar_proxy.containerPort }}
+{{- end }}
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-metaservice-egress-from-messages-{{ .Chart.AppVersion }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  podSelector:
+    matchLabels:
+      role: {{ $.Values.messages.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - ipBlock:
+        cidr: {{ $.Values.metaServiceCIDR }}
 {{- end }}

@@ -96,26 +96,22 @@ spec:
           {{- else }}
           value: "https://*.{{ $.Values.domain }}"
           {{- end }}
-        - name: MONGO_CONNECTION_STRING
+        - name: MONGO_DATABASE_NAME
+          value: {{ $.Values.cosmosDBName }}-mongo
+        - name: COSMOSDB_REGION
         {{- if eq .Values.region "uksouth" }}
-          valueFrom:
-            secretKeyRef:
-              name: cosmosdb-mongodb-connection-string-uks-{{ .Chart.AppVersion }}
-              key: secret
+          value: "UK South"
         {{- else }}
-          valueFrom:
-            secretKeyRef:
-              name: cosmosdb-mongodb-connection-string-ukw-{{ .Chart.AppVersion }}
-              key: secret
+          value: "UK West"
         {{- end }}
+        - name: AZURE_KEY_VAULT_URI
+          value: "https://iproxy-akv-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.iproxy.containerPort }}"
+        - name: MONGO_DB_CONNECTION_CHECK_INTERVAL_IN_SECONDS
+          value: "{{ $.Values.mongoDBConnectionCheckIntervalInSeconds }}"
         - name: AUDIT_SINK_TYPE
           value: "cosmosdb"
-        - name: AUDIT_MONGO_DATABASE_NAME
-          value: {{ $.Values.cosmosDBName }}-mongo
         - name: AUDIT_MONGO_DATABASE_COLLECTION
           value: {{ $.Values.info.mongoDatabaseInfoAuditCollection }}
-        - name: USERINFO_MONGO_DATABASE_NAME
-          value: {{ $.Values.cosmosDBName }}-mongo
         - name: USERINFO_MONGO_DATABASE_COLLECTION
           value: {{ $.Values.info.mongoDatabaseInfoCollection }}
         - name: CITIZEN_ID_JWT_ISSUER

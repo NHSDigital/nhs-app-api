@@ -19,6 +19,11 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             return new TermsAndConditionsRecordConsentResult.UpdateConsentRecorded();
         }
 
+        public TermsAndConditionsRecordConsentResult Visit(RepositoryUpdateResult<TermsAndConditionsRecord>.Unauthenticated result)
+        {
+            return new TermsAndConditionsRecordConsentResult.InternalServerError();
+        }
+
         public TermsAndConditionsRecordConsentResult Visit(RepositoryUpdateResult<TermsAndConditionsRecord>.Updated result)
         {
             return new TermsAndConditionsRecordConsentResult.UpdateConsentRecorded();

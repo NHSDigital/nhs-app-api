@@ -1,6 +1,8 @@
-using System.Threading;
+using System;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Driver;
 using Moq;
@@ -11,28 +13,41 @@ namespace NHSOnline.Backend.Repository.UnitTests
     public class MongoRepositoryDeleteTests
     {
         private MongoRepository<IRepositoryConfiguration, TestRepositoryRecord> _systemUnderTest;
-        private Mock<IMongoCollection<TestRepositoryRecord>> _mongoCollectionMock;
+        private TestRepositoryConfiguration _repositoryConfiguration;
 
+        private Mock<IMongoClientService> _mongoClientWrapperMock;
         [TestInitialize]
         public void TestInitialize()
         {
-            _mongoCollectionMock = new Mock<IMongoCollection<TestRepositoryRecord>>();
-            _systemUnderTest = MongoRepositoryUnitTestSupport.CreateRepository(_mongoCollectionMock);
+            _mongoClientWrapperMock = new Mock<IMongoClientService>();
+
+            _repositoryConfiguration = new TestRepositoryConfiguration
+            {
+                DatabaseName = "MockDatabaseName",
+                CollectionName = "MockCollectionName"
+            };
+
+            _systemUnderTest = new MongoRepository<IRepositoryConfiguration, TestRepositoryRecord>(
+                _mongoClientWrapperMock.Object,
+                _repositoryConfiguration,
+                new Mock<ILogger<MongoRepository<IRepositoryConfiguration, TestRepositoryRecord>>>().Object);
         }
 
         [TestMethod]
         public async Task Delete_Success()
         {
             // Arrange
-            _mongoCollectionMock
-                .Setup(x => x.DeleteOneAsync(It.IsAny<FilterDefinition<TestRepositoryRecord>>(), It.IsAny<CancellationToken>()))
+            _mongoClientWrapperMock
+                .Setup(x => x.DeleteOneAsync(
+                    _repositoryConfiguration,
+                    It.IsAny<Expression<Func<TestRepositoryRecord, bool>>>()))
                 .ReturnsAsync(new DeleteResult.Acknowledged(1));
 
             // Act
             var result = await _systemUnderTest.Delete(_ => true, "recordName");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
+            _mongoClientWrapperMock.VerifyAll();
             result.Should().BeOfType<RepositoryDeleteResult<TestRepositoryRecord>.Deleted>();
         }
 
@@ -40,15 +55,17 @@ namespace NHSOnline.Backend.Repository.UnitTests
         public async Task Delete_NotFound()
         {
             // Arrange
-            _mongoCollectionMock
-                .Setup(x => x.DeleteOneAsync(It.IsAny<FilterDefinition<TestRepositoryRecord>>(), It.IsAny<CancellationToken>()))
+            _mongoClientWrapperMock
+                .Setup(x => x.DeleteOneAsync(
+                    _repositoryConfiguration,
+                    It.IsAny<Expression<Func<TestRepositoryRecord, bool>>>()))
                 .ReturnsAsync(new DeleteResult.Acknowledged(0));
 
             // Act
             var result = await _systemUnderTest.Delete(_ => true, "recordName");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
+            _mongoClientWrapperMock.VerifyAll();
             result.Should().BeOfType<RepositoryDeleteResult<TestRepositoryRecord>.NotFound>();
         }
 
@@ -56,15 +73,16 @@ namespace NHSOnline.Backend.Repository.UnitTests
         public async Task Delete_Unacknowledged_ReturnsRepositoryError()
         {
             // Arrange
-            _mongoCollectionMock
-                .Setup(x => x.DeleteOneAsync(It.IsAny<FilterDefinition<TestRepositoryRecord>>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(DeleteResult.Unacknowledged.Instance);
+            _mongoClientWrapperMock
+                .Setup(x => x.DeleteOneAsync(
+                    _repositoryConfiguration,
+                    It.IsAny<Expression<Func<TestRepositoryRecord, bool>>>())).ReturnsAsync(DeleteResult.Unacknowledged.Instance);
 
             // Act
             var result = await _systemUnderTest.Delete(_ => true, "recordName");
 
             // Assert
-            _mongoCollectionMock.Verify();
+            _mongoClientWrapperMock.Verify();
             result.Should().BeOfType<RepositoryDeleteResult<TestRepositoryRecord>.RepositoryError>();
         }
 
@@ -72,15 +90,16 @@ namespace NHSOnline.Backend.Repository.UnitTests
         public async Task Delete_RepositoryThrowsException_ReturnsRepositoryError()
         {
             // Arrange
-            _mongoCollectionMock
-                .Setup(x => x.DeleteOneAsync(It.IsAny<FilterDefinition<TestRepositoryRecord>>(), It.IsAny<CancellationToken>()))
-                .ThrowsAsync(new MongoException("Test"));
+            _mongoClientWrapperMock
+                .Setup(x => x.DeleteOneAsync(
+                    _repositoryConfiguration,
+                    It.IsAny<Expression<Func<TestRepositoryRecord, bool>>>())).ThrowsAsync(new MongoException("Test"));
 
             // Act
             var result = await _systemUnderTest.Delete(_ => true, "recordName");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
+            _mongoClientWrapperMock.VerifyAll();
             result.Should().BeOfType<RepositoryDeleteResult<TestRepositoryRecord>.RepositoryError>();
         }
     }

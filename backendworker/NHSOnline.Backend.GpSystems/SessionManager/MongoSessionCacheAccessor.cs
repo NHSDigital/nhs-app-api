@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
@@ -11,19 +12,17 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
     internal sealed class MongoSessionCacheAccessor: IMongoSessionCache
     {
         private readonly ILogger _logger;
-        private readonly IMongoClient _mongoClient;
-        private readonly string _databaseName;
-        private readonly string _collectionName;
+        private readonly IMongoClientService _mongoClientService;
+        private readonly IMongoSessionCacheServiceConfig _mongoConfig;
 
         public MongoSessionCacheAccessor(
             ILogger<MongoSessionCacheAccessor> logger,
-            IMongoClient mongoClient,
+            IMongoClientService mongoClientService,
             IMongoSessionCacheServiceConfig config)
         {
             _logger = logger;
-            _mongoClient = mongoClient;
-            _databaseName = config.DatabaseName;
-            _collectionName = config.CollectionName;
+            _mongoClientService = mongoClientService;
+            _mongoConfig = config;
         }
 
         public async Task Create(string sessionId, string encodedUserSession)
@@ -41,7 +40,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
 
                 using (_logger.WithTimer("Add session to Mongo"))
                 {
-                    await GetCollection().InsertOneAsync(update);
+                    await _mongoClientService.InsertOneDocumentAsync(_mongoConfig, update);
                 }
             }
             finally
@@ -62,7 +61,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
                 BsonDocument sessionValue;
                 using (_logger.WithTimer("Get and update session from Mongo"))
                 {
-                    sessionValue = await GetCollection().FindOneAndUpdateAsync(filter, update);
+                    sessionValue = await _mongoClientService.FindOneAndUpdateDocumentAsync(_mongoConfig, filter, update);
                 }
                 if (sessionValue == null)
                 {
@@ -87,7 +86,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
                 BsonDocument sessionValue;
                 using (_logger.WithTimer("Get session from Mongo"))
                 {
-                    sessionValue = await GetCollection().Find(filter).FirstOrDefaultAsync();
+                    sessionValue = await _mongoClientService.FindFirstDocument(_mongoConfig, filter);
                 }
 
                 if (sessionValue == null)
@@ -114,7 +113,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
 
                 using (_logger.WithTimer("Delete session in Mongo"))
                 {
-                    var result = await GetCollection().DeleteOneAsync(filter);
+                    var result = await _mongoClientService.DeleteOneDocumentAsync(_mongoConfig, filter);
                     return result.IsAcknowledged;
                 }
             }
@@ -135,18 +134,13 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
 
                 using (_logger.WithTimer("Update Mongo session"))
                 {
-                    await GetCollection().UpdateOneAsync(filter, update);
+                    await _mongoClientService.UpdateOneDocumentAsync(_mongoConfig, filter, update);
                 }
             }
             finally
             {
                 _logger.LogExit();
             }
-        }
-
-        private IMongoCollection<BsonDocument> GetCollection()
-        {
-            return _mongoClient.GetDatabase(_databaseName).GetCollection<BsonDocument>(_collectionName);
         }
 
         private static BsonElement Id(string id)

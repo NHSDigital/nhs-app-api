@@ -13,19 +13,19 @@ namespace NHSOnline.Backend.Repository
         where TRecord : RepositoryRecord
         where TConfig : IRepositoryConfiguration
     {
-        private readonly IMongoClient _mongoClient;
+        private readonly IMongoClientService _mongoClientService;
+        private readonly TConfig _mongoConfig;
         private readonly ILogger _logger;
-        private readonly string _databaseName;
-        private readonly string _collectionName;
         private const int DefaultListSize = 4;
 
-        public MongoRepository(IApiMongoClient<TConfig> mongoClient, TConfig mongoConfiguration,
+        public MongoRepository(
+            IMongoClientService mongoClientService,
+            TConfig mongoConfiguration,
             ILogger<MongoRepository<TConfig, TRecord>> logger)
         {
-            _mongoClient = mongoClient;
+            _mongoClientService = mongoClientService;
+            _mongoConfig = mongoConfiguration;
             _logger = logger;
-            _databaseName = mongoConfiguration.DatabaseName;
-            _collectionName = mongoConfiguration.CollectionName;
         }
 
         public async Task<RepositoryCreateResult<TRecord>> Create(TRecord record, string recordName)
@@ -186,7 +186,7 @@ namespace NHSOnline.Backend.Repository
             using (_logger.WithTimer($"Mongo Create {recordName}."))
             {
                 record.Timestamp = DateTime.UtcNow;
-                await GetCollection().InsertOneAsync(record);
+                await _mongoClientService.InsertOneAsync(_mongoConfig, record);
             }
         }
 
@@ -196,7 +196,7 @@ namespace NHSOnline.Backend.Repository
             using (_logger.WithTimer($"Mongo Create Or Update {recordName}."))
             {
                 record.Timestamp = DateTime.UtcNow;
-                return await GetCollection().ReplaceOneAsync(filter, record, new ReplaceOptions { IsUpsert = true });
+                return await _mongoClientService.ReplaceOneAsync(_mongoConfig, filter, record, new ReplaceOptions { IsUpsert = true });
             }
         }
 
@@ -204,7 +204,7 @@ namespace NHSOnline.Backend.Repository
         {
             using (_logger.WithTimer($"Mongo Delete {recordName}."))
             {
-                return await GetCollection().DeleteOneAsync(filter);
+                return await _mongoClientService.DeleteOneAsync(_mongoConfig, filter);
             }
         }
 
@@ -212,7 +212,7 @@ namespace NHSOnline.Backend.Repository
         {
             using (_logger.WithTimer($"Mongo Find {recordName}."))
             {
-                return await GetCollection().FindAsync(filter, new FindOptions<TRecord> { Limit = maxRecords });
+                return await _mongoClientService.FindAsync(_mongoConfig, filter, new FindOptions<TRecord> { Limit = maxRecords });
             }
         }
 
@@ -222,11 +222,8 @@ namespace NHSOnline.Backend.Repository
         {
             using (_logger.WithTimer($"Mongo Update {recordName}."))
             {
-                return await GetCollection().UpdateManyAsync(filter, updates);
+                return await _mongoClientService.UpdateManyAsync(_mongoConfig, filter, updates);
             }
         }
-
-        private IMongoCollection<TRecord> GetCollection()
-            => _mongoClient.GetDatabase(_databaseName).GetCollection<TRecord>(_collectionName);
     }
 }

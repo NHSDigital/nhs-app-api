@@ -59,10 +59,7 @@ spec:
   policyTypes:
   - Egress
   egress:
-  - to:
-    - ipBlock:
-        cidr: 0.0.0.0/0
-    ports:
+  - ports:
     - protocol: TCP
       port: 443
 {{- end }}

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Driver;
 using Moq;
@@ -15,13 +17,25 @@ namespace NHSOnline.Backend.Repository.UnitTests
     public class MongoRepositoryFindTests
     {
         private MongoRepository<IRepositoryConfiguration, TestRepositoryRecord> _systemUnderTest;
-        private Mock<IMongoCollection<TestRepositoryRecord>> _mongoCollectionMock;
+        private TestRepositoryConfiguration _repositoryConfiguration;
+
+        private Mock<IMongoClientService> _mongoClientWrapperMock;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _mongoCollectionMock = new Mock<IMongoCollection<TestRepositoryRecord>>();
-            _systemUnderTest = MongoRepositoryUnitTestSupport.CreateRepository(_mongoCollectionMock);
+            _mongoClientWrapperMock = new Mock<IMongoClientService>();
+
+            _repositoryConfiguration = new TestRepositoryConfiguration
+            {
+                DatabaseName = "MockDatabaseName",
+                CollectionName = "MockCollectionName"
+            };
+
+            _systemUnderTest = new MongoRepository<IRepositoryConfiguration, TestRepositoryRecord>(
+                _mongoClientWrapperMock.Object,
+                _repositoryConfiguration,
+                new Mock<ILogger<MongoRepository<IRepositoryConfiguration, TestRepositoryRecord>>>().Object);
         }
 
         [TestMethod]
@@ -37,7 +51,7 @@ namespace NHSOnline.Backend.Repository.UnitTests
             var result = await _systemUnderTest.Find(_ => true, "recordName");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
+            _mongoClientWrapperMock.VerifyAll();
             result.Should().BeOfType<RepositoryFindResult<TestRepositoryRecord>.Found>()
                 .Subject.Records.Should().BeEquivalentTo(record);
         }
@@ -56,7 +70,7 @@ namespace NHSOnline.Backend.Repository.UnitTests
             var result = await _systemUnderTest.Find(_ => true, "recordName");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
+            _mongoClientWrapperMock.VerifyAll();
             result.Should().BeOfType<RepositoryFindResult<TestRepositoryRecord>.Found>()
                 .Subject.Records.Should().BeEquivalentTo(record1, record2);
         }
@@ -71,16 +85,17 @@ namespace NHSOnline.Backend.Repository.UnitTests
             using var cursorMock = new MockAsyncCursor<TestRepositoryRecord>(values);
             SetupFind()
                 .Callback<
-                    FilterDefinition<TestRepositoryRecord>,
-                    FindOptions<TestRepositoryRecord, TestRepositoryRecord>,
-                    CancellationToken>( (filter, options, cancellationToken) => findOptionsUsed = options)
+                    IRepositoryConfiguration,
+                    Expression<Func<TestRepositoryRecord, bool>>,
+                    FindOptions<TestRepositoryRecord>
+                >( (config, filter, options) => findOptionsUsed = options)
                 .ReturnsAsync(cursorMock);
 
             // Act
             await _systemUnderTest.Find(_ => true, "recordName", maxRecords);
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
+            _mongoClientWrapperMock.VerifyAll();
             findOptionsUsed.Limit.Should().Be(maxRecords);
         }
 
@@ -93,16 +108,17 @@ namespace NHSOnline.Backend.Repository.UnitTests
             using var cursorMock = new MockAsyncCursor<TestRepositoryRecord>(values);
             SetupFind()
                 .Callback<
-                    FilterDefinition<TestRepositoryRecord>,
-                    FindOptions<TestRepositoryRecord, TestRepositoryRecord>,
-                    CancellationToken>( (filter, options, cancellationToken) => findOptionsUsed = options)
+                    IRepositoryConfiguration,
+                    Expression<Func<TestRepositoryRecord, bool>>,
+                    FindOptions<TestRepositoryRecord>
+                >( (config, filter, options) => findOptionsUsed = options)
                 .ReturnsAsync(cursorMock);
 
             // Act
             await _systemUnderTest.Find(_ => true, "recordName");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
+            _mongoClientWrapperMock.VerifyAll();
             findOptionsUsed.Limit.Should().BeNull();
         }
 
@@ -117,7 +133,7 @@ namespace NHSOnline.Backend.Repository.UnitTests
             var result = await _systemUnderTest.Find(_ => true, "recordName");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
+            _mongoClientWrapperMock.VerifyAll();
             result.Should().BeOfType<RepositoryFindResult<TestRepositoryRecord>.NotFound>();
         }
 
@@ -131,14 +147,17 @@ namespace NHSOnline.Backend.Repository.UnitTests
             var result = await _systemUnderTest.Find(_ => true, "recordName");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
+            _mongoClientWrapperMock.VerifyAll();
             result.Should().BeOfType<RepositoryFindResult<TestRepositoryRecord>.RepositoryError>();
         }
 
-        private ISetup<IMongoCollection<TestRepositoryRecord>, Task<IAsyncCursor<TestRepositoryRecord>>> SetupFind()
+        private ISetup<IMongoClientService, Task<IAsyncCursor<TestRepositoryRecord>>> SetupFind()
         {
-           return _mongoCollectionMock.Setup(x => x.FindAsync(It.IsAny<FilterDefinition<TestRepositoryRecord>>(),
-                It.IsAny<FindOptions<TestRepositoryRecord, TestRepositoryRecord>>(), It.IsAny<CancellationToken>()));
+            return _mongoClientWrapperMock
+               .Setup(x => x.FindAsync(
+                   _repositoryConfiguration,
+                   It.IsAny<Expression<Func<TestRepositoryRecord, bool>>>(),
+                It.IsAny<FindOptions<TestRepositoryRecord>>()));
         }
 
         private static Mock<IAsyncCursor<TestRepositoryRecord>> CreateCursorMockFindNone()

@@ -145,7 +145,7 @@ namespace NHSOnline.Backend.Support
             var apiVersionStringBuilder = new StringBuilder();
             apiVersionStringBuilder.Append(configuration[Constants.EnvironmentalVariables.VersionTag]);
             apiVersionStringBuilder.Append(" (commit:");
-            apiVersionStringBuilder.Append(configuration[Constants.AppConfig.GitCommitId]);
+            apiVersionStringBuilder.Append(configuration[Constants.ApplicationConfig.GitCommitId]);
             apiVersionStringBuilder.Append(")");
 
             return apiVersionStringBuilder.ToString();

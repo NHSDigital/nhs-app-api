@@ -188,6 +188,9 @@ cosmosDBIPTrust:
   - "51.141.55.229/32"           # CosmosDB UKWest 11.11.2020
   - "2603:1020:605:402::c0/122"  # CosmosDB UKWest 11.11.2020
 
+mongoDBConnectionCheckIntervalInSeconds: 30
+metaServiceCIDR: "169.254.169.254/32"
+
 eventHubPorts:
   - 5671
   - 5672
@@ -207,6 +210,9 @@ postcodeLookupSearchRadiusKm: 10
 # Azure Search Endpoint
 nhsSearchProtocol: https
 nhsSearchHostname: api.nhs.uk
+
+# Azure KeyVault Endpoint
+azureKeyVaultProtocol: https
 
 # eConsult Endpoint
 econsultEnabled: false

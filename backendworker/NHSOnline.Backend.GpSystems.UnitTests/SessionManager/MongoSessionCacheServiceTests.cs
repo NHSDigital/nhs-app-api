@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -12,6 +11,7 @@ using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
+using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Cipher;
 using NHSOnline.Backend.Support.Session;
@@ -23,29 +23,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
     {
         private Mock<ICipherService> _mockCipherService;
         private Mock<ILogger<MongoSessionCacheService>> _mockLogger;
-        private Mock<IMongoClient> _mockMongoClient;
-        private Mock<IMongoDatabase> _mockMongoDatabase;
-        private Mock<IMongoCollection<BsonDocument>> _mockMongoCollection;
         private Mock<IMongoSessionCacheServiceConfig> _mockConfig;
-        private Mock<IAsyncCursor<BsonDocument>> _mockCursor;
+        private Mock<IMongoClientService> _mockMongoClientService;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _mockCipherService = new Mock<ICipherService>();
             _mockLogger = new Mock<ILogger<MongoSessionCacheService>>();
-            _mockMongoClient = new Mock<IMongoClient>();
-            _mockMongoDatabase = new Mock<IMongoDatabase>();
-            _mockMongoCollection = new Mock<IMongoCollection<BsonDocument>>();
             _mockConfig = new Mock<IMongoSessionCacheServiceConfig>();
-            _mockCursor = new Mock<IAsyncCursor<BsonDocument>>();
-
-            _mockMongoClient
-                .Setup(x => x.GetDatabase(It.IsAny<string>(), It.IsAny<MongoDatabaseSettings>()))
-                .Returns(_mockMongoDatabase.Object);
-            _mockMongoDatabase
-                .Setup(x => x.GetCollection<BsonDocument>(It.IsAny<string>(), It.IsAny<MongoCollectionSettings>()))
-                .Returns(_mockMongoCollection.Object);
+            _mockMongoClientService = new Mock<IMongoClientService>();
         }
 
         [TestMethod]
@@ -114,17 +101,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await CreateMongoSessionCacheService().GetUserSession("");
 
             // Assert
-            _mockMongoCollection.Verify(x => x.InsertOneAsync(
-                It.IsAny<BsonDocument>(),
-                It.IsAny<InsertOneOptions>(),
-                It.IsAny<CancellationToken>()));
+            _mockMongoClientService.Verify(x => x.InsertOneDocumentAsync(
+                It.IsAny<IRepositoryConfiguration>(),
+                It.IsAny<BsonDocument>()));
 
-            _mockMongoCollection.Verify(x => x.FindAsync(
-                It.IsAny<FilterDefinition<BsonDocument>>(),
-                It.IsAny<FindOptions<BsonDocument>>(),
-                It.IsAny<CancellationToken>()));
+            _mockMongoClientService.Verify(x => x.FindFirstDocument(
+                It.IsAny<IRepositoryConfiguration>(),
+                It.IsAny<FilterDefinition<BsonDocument>>()));
 
-            _mockMongoCollection.VerifyNoOtherCalls();
+            _mockMongoClientService.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure()
@@ -151,18 +136,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await CreateMongoSessionCacheService().GetAndUpdateUserSession("");
 
             // Assert
-            _mockMongoCollection.Verify(x => x.InsertOneAsync(
-                It.IsAny<BsonDocument>(),
-                It.IsAny<InsertOneOptions>(),
-                It.IsAny<CancellationToken>()));
+            _mockMongoClientService.Verify(x => x.InsertOneDocumentAsync(
+                It.IsAny<IRepositoryConfiguration>(),
+                It.IsAny<BsonDocument>()));
 
-            _mockMongoCollection.Verify(x => x.FindOneAndUpdateAsync(
+            _mockMongoClientService.Verify(x => x.FindOneAndUpdateDocumentAsync(
+                It.IsAny<IRepositoryConfiguration>(),
                 It.IsAny<FilterDefinition<BsonDocument>>(),
-                It.IsAny<UpdateDefinition<BsonDocument>>(),
-                It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
-                It.IsAny<CancellationToken>()));
+                It.IsAny<UpdateDefinition<BsonDocument>>()));
 
-            _mockMongoCollection.VerifyNoOtherCalls();
+            _mockMongoClientService.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure()
@@ -189,17 +172,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await CreateMongoSessionCacheService().GetUserSession("");
 
             // Assert
-            _mockMongoCollection.Verify(x => x.InsertOneAsync(
-                It.IsAny<BsonDocument>(),
-                It.IsAny<InsertOneOptions>(),
-                It.IsAny<CancellationToken>()));
+            _mockMongoClientService.Verify(x => x.InsertOneDocumentAsync(
+                It.IsAny<IRepositoryConfiguration>(),
+                It.IsAny<BsonDocument>()));
 
-            _mockMongoCollection.Verify(x => x.FindAsync(
-                It.IsAny<FilterDefinition<BsonDocument>>(),
-                It.IsAny<FindOptions<BsonDocument>>(),
-                It.IsAny<CancellationToken>()));
+            _mockMongoClientService.Verify(x => x.FindFirstDocument(
+                It.IsAny<IRepositoryConfiguration>(),
+                It.IsAny<FilterDefinition<BsonDocument>>()));
 
-            _mockMongoCollection.VerifyNoOtherCalls();
+            _mockMongoClientService.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure()
@@ -226,18 +207,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await CreateMongoSessionCacheService().GetAndUpdateUserSession("");
 
             // Assert
-            _mockMongoCollection.Verify(x => x.InsertOneAsync(
-                It.IsAny<BsonDocument>(),
-                It.IsAny<InsertOneOptions>(),
-                It.IsAny<CancellationToken>()));
+            _mockMongoClientService.Verify(x => x.InsertOneDocumentAsync(
+                It.IsAny<IRepositoryConfiguration>(),
+                It.IsAny<BsonDocument>()));
 
-            _mockMongoCollection.Verify(x => x.FindOneAndUpdateAsync(
+            _mockMongoClientService.Verify(x => x.FindOneAndUpdateDocumentAsync(
+                It.IsAny<IRepositoryConfiguration>(),
                 It.IsAny<FilterDefinition<BsonDocument>>(),
-                It.IsAny<UpdateDefinition<BsonDocument>>(),
-                It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
-                It.IsAny<CancellationToken>()));
+                It.IsAny<UpdateDefinition<BsonDocument>>()));
 
-            _mockMongoCollection.VerifyNoOtherCalls();
+            _mockMongoClientService.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure()
@@ -264,17 +243,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await CreateMongoSessionCacheService().GetUserSession("");
 
             // Assert
-            _mockMongoCollection.Verify(x => x.InsertOneAsync(
-                It.IsAny<BsonDocument>(),
-                It.IsAny<InsertOneOptions>(),
-                It.IsAny<CancellationToken>()));
+            _mockMongoClientService.Verify(x => x.InsertOneDocumentAsync(
+                It.IsAny<IRepositoryConfiguration>(),
+                It.IsAny<BsonDocument>()));
 
-            _mockMongoCollection.Verify(x => x.FindAsync(
-                It.IsAny<FilterDefinition<BsonDocument>>(),
-                It.IsAny<FindOptions<BsonDocument>>(),
-                It.IsAny<CancellationToken>()));
+            _mockMongoClientService.Verify(x => x.FindFirstDocument(
+                It.IsAny<IRepositoryConfiguration>(),
+                It.IsAny<FilterDefinition<BsonDocument>>()));
 
-            _mockMongoCollection.VerifyNoOtherCalls();
+            _mockMongoClientService.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure()
@@ -302,18 +279,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await CreateMongoSessionCacheService().GetAndUpdateUserSession("");
 
             // Assert
-            _mockMongoCollection.Verify(x => x.InsertOneAsync(
-                It.IsAny<BsonDocument>(),
-                It.IsAny<InsertOneOptions>(),
-                It.IsAny<CancellationToken>()));
+            _mockMongoClientService.Verify(x => x.InsertOneDocumentAsync(
+                It.IsAny<IRepositoryConfiguration>(),
+                It.IsAny<BsonDocument>()));
 
-            _mockMongoCollection.Verify(x => x.FindOneAndUpdateAsync(
+            _mockMongoClientService.Verify(x => x.FindOneAndUpdateDocumentAsync(
+                It.IsAny<IRepositoryConfiguration>(),
                 It.IsAny<FilterDefinition<BsonDocument>>(),
-                It.IsAny<UpdateDefinition<BsonDocument>>(),
-                It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
-                It.IsAny<CancellationToken>()));
+                It.IsAny<UpdateDefinition<BsonDocument>>()));
 
-            _mockMongoCollection.VerifyNoOtherCalls();
+            _mockMongoClientService.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure()
@@ -336,17 +311,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await CreateMongoSessionCacheService().GetUserSession("");
 
             // Assert
-            _mockMongoCollection.Verify(x => x.InsertOneAsync(
-                It.IsAny<BsonDocument>(),
-                It.IsAny<InsertOneOptions>(),
-                It.IsAny<CancellationToken>()));
+            _mockMongoClientService.Verify(x => x.InsertOneDocumentAsync(
+                It.IsAny<IRepositoryConfiguration>(),
+                It.IsAny<BsonDocument>()));
 
-            _mockMongoCollection.Verify(x => x.FindAsync(
-                It.IsAny<FilterDefinition<BsonDocument>>(),
-                It.IsAny<FindOptions<BsonDocument>>(),
-                It.IsAny<CancellationToken>()));
+            _mockMongoClientService.Verify(x => x.FindFirstDocument(
+                It.IsAny<IRepositoryConfiguration>(),
+                It.IsAny<FilterDefinition<BsonDocument>>()));
 
-            _mockMongoCollection.VerifyNoOtherCalls();
+            _mockMongoClientService.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             var actual = session.ValueOrFailure().Should().BeOfType<P5UserSession>().Subject;
@@ -368,18 +341,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await CreateMongoSessionCacheService().GetAndUpdateUserSession("");
 
             // Assert
-            _mockMongoCollection.Verify(x => x.InsertOneAsync(
-                It.IsAny<BsonDocument>(),
-                It.IsAny<InsertOneOptions>(),
-                It.IsAny<CancellationToken>()));
+            _mockMongoClientService.Verify(x => x.InsertOneDocumentAsync(
+                It.IsAny<IRepositoryConfiguration>(),
+                It.IsAny<BsonDocument>()));
 
-            _mockMongoCollection.Verify(x => x.FindOneAndUpdateAsync(
+            _mockMongoClientService.Verify(x => x.FindOneAndUpdateDocumentAsync(
+                It.IsAny<IRepositoryConfiguration>(),
                 It.IsAny<FilterDefinition<BsonDocument>>(),
-                It.IsAny<UpdateDefinition<BsonDocument>>(),
-                It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
-                It.IsAny<CancellationToken>()));
+                It.IsAny<UpdateDefinition<BsonDocument>>()));
 
-            _mockMongoCollection.VerifyNoOtherCalls();
+            _mockMongoClientService.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             var actual = session.ValueOrFailure().Should().BeOfType<P5UserSession>().Subject;
@@ -406,17 +377,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await CreateMongoSessionCacheService().GetUserSession("");
 
             // Assert
-            _mockMongoCollection.Verify(x => x.InsertOneAsync(
-                It.IsAny<BsonDocument>(),
-                It.IsAny<InsertOneOptions>(),
-                It.IsAny<CancellationToken>()));
+            _mockMongoClientService.Verify(x => x.InsertOneDocumentAsync(
+                It.IsAny<IRepositoryConfiguration>(),
+                It.IsAny<BsonDocument>()));
 
-            _mockMongoCollection.Verify(x => x.FindAsync(
-                It.IsAny<FilterDefinition<BsonDocument>>(),
-                It.IsAny<FindOptions<BsonDocument>>(),
-                It.IsAny<CancellationToken>()));
+            _mockMongoClientService.Verify(x => x.FindFirstDocument(
+                It.IsAny<IRepositoryConfiguration>(),
+                It.IsAny<FilterDefinition<BsonDocument>>()));
 
-            _mockMongoCollection.VerifyNoOtherCalls();
+            _mockMongoClientService.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             var actual = session.ValueOrFailure().Should().BeOfType<P9UserSession>().Subject;
@@ -443,18 +412,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await CreateMongoSessionCacheService().GetAndUpdateUserSession("");
 
             // Assert
-            _mockMongoCollection.Verify(x => x.InsertOneAsync(
-                It.IsAny<BsonDocument>(),
-                It.IsAny<InsertOneOptions>(),
-                It.IsAny<CancellationToken>()));
+            _mockMongoClientService.Verify(x => x.InsertOneDocumentAsync(
+                It.IsAny<IRepositoryConfiguration>(),
+                It.IsAny<BsonDocument>()));
 
-            _mockMongoCollection.Verify(x => x.FindOneAndUpdateAsync(
+            _mockMongoClientService.Verify(x => x.FindOneAndUpdateDocumentAsync(
+                It.IsAny<IRepositoryConfiguration>(),
                 It.IsAny<FilterDefinition<BsonDocument>>(),
-                It.IsAny<UpdateDefinition<BsonDocument>>(),
-                It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
-                It.IsAny<CancellationToken>()));
+                It.IsAny<UpdateDefinition<BsonDocument>>()));
 
-            _mockMongoCollection.VerifyNoOtherCalls();
+            _mockMongoClientService.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             var actual = session.ValueOrFailure().Should().BeOfType<P9UserSession>().Subject;
@@ -475,12 +442,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await CreateMongoSessionCacheService().GetUserSession("");
 
             // Assert
-            _mockMongoCollection.Verify(x => x.FindAsync(
-                It.IsAny<FilterDefinition<BsonDocument>>(),
-                It.IsAny<FindOptions<BsonDocument>>(),
-                It.IsAny<CancellationToken>()));
+            _mockMongoClientService.Verify(x => x.FindFirstDocument(
+                It.IsAny<IRepositoryConfiguration>(),
+                It.IsAny<FilterDefinition<BsonDocument>>()));
 
-            _mockMongoCollection.VerifyNoOtherCalls();
+            _mockMongoClientService.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure().Should().BeOfType<P9UserSession>("P9UserSession should be deserialised");
@@ -499,13 +465,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await CreateMongoSessionCacheService().GetAndUpdateUserSession("");
 
             // Assert
-            _mockMongoCollection.Verify(x => x.FindOneAndUpdateAsync(
+            _mockMongoClientService.Verify(x => x.FindOneAndUpdateDocumentAsync(
+                It.IsAny<IRepositoryConfiguration>(),
                 It.IsAny<FilterDefinition<BsonDocument>>(),
-                It.IsAny<UpdateDefinition<BsonDocument>>(),
-                It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
-                It.IsAny<CancellationToken>()));
+                It.IsAny<UpdateDefinition<BsonDocument>>()));
 
-            _mockMongoCollection.VerifyNoOtherCalls();
+            _mockMongoClientService.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure().Should().BeOfType<P9UserSession>("P9UserSession should be deserialised");
@@ -524,12 +489,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await CreateMongoSessionCacheService().GetUserSession("");
 
             // Assert
-            _mockMongoCollection.Verify(x => x.FindAsync(
-                It.IsAny<FilterDefinition<BsonDocument>>(),
-                It.IsAny<FindOptions<BsonDocument>>(),
-                It.IsAny<CancellationToken>()));
+            _mockMongoClientService.Verify(x => x.FindFirstDocument(
+                It.IsAny<IRepositoryConfiguration>(),
+                It.IsAny<FilterDefinition<BsonDocument>>()));
 
-            _mockMongoCollection.VerifyNoOtherCalls();
+            _mockMongoClientService.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure().Should().BeOfType<P9UserSession>("P9UserSession should be deserialised");
@@ -548,13 +512,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await CreateMongoSessionCacheService().GetAndUpdateUserSession("");
 
             // Assert
-            _mockMongoCollection.Verify(x=> x.FindOneAndUpdateAsync(
+            _mockMongoClientService.Verify(x => x.FindOneAndUpdateDocumentAsync(
+                It.IsAny<IRepositoryConfiguration>(),
                 It.IsAny<FilterDefinition<BsonDocument>>(),
-                It.IsAny<UpdateDefinition<BsonDocument>>(),
-                It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
-                It.IsAny<CancellationToken>()));
+                It.IsAny<UpdateDefinition<BsonDocument>>()));
 
-            _mockMongoCollection.VerifyNoOtherCalls();
+            _mockMongoClientService.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure().Should().BeOfType<P9UserSession>("P9UserSession should be deserialised");
@@ -573,12 +536,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await CreateMongoSessionCacheService().GetUserSession("");
 
             // Assert
-            _mockMongoCollection.Verify(x => x.FindAsync(
-                It.IsAny<FilterDefinition<BsonDocument>>(),
-                It.IsAny<FindOptions<BsonDocument>>(),
-                It.IsAny<CancellationToken>()));
+            _mockMongoClientService.Verify(x => x.FindFirstDocument(
+                It.IsAny<IRepositoryConfiguration>(),
+                It.IsAny<FilterDefinition<BsonDocument>>()));
 
-            _mockMongoCollection.VerifyNoOtherCalls();
+            _mockMongoClientService.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure().Should().BeOfType<P5UserSession>("P5UserSession should be deserialised");
@@ -597,13 +559,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await CreateMongoSessionCacheService().GetAndUpdateUserSession("");
 
             // Assert
-            _mockMongoCollection.Verify(x => x.FindOneAndUpdateAsync(
+            _mockMongoClientService.Verify(x => x.FindOneAndUpdateDocumentAsync(
+                It.IsAny<IRepositoryConfiguration>(),
                 It.IsAny<FilterDefinition<BsonDocument>>(),
-                It.IsAny<UpdateDefinition<BsonDocument>>(),
-                It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
-                It.IsAny<CancellationToken>()));
+                It.IsAny<UpdateDefinition<BsonDocument>>()));
 
-            _mockMongoCollection.VerifyNoOtherCalls();
+            _mockMongoClientService.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure().Should().BeOfType<P5UserSession>("P5UserSession should be deserialised");
@@ -622,12 +583,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await CreateMongoSessionCacheService().GetUserSession("");
 
             // Assert
-            _mockMongoCollection.Verify(x => x.FindAsync(
-                It.IsAny<FilterDefinition<BsonDocument>>(),
-                It.IsAny<FindOptions<BsonDocument>>(),
-                It.IsAny<CancellationToken>()));
+            _mockMongoClientService.Verify(x => x.FindFirstDocument(
+                It.IsAny<IRepositoryConfiguration>(),
+                It.IsAny<FilterDefinition<BsonDocument>>()));
 
-            _mockMongoCollection.VerifyNoOtherCalls();
+            _mockMongoClientService.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure().Should().BeOfType<P5UserSession>("P5UserSession should be deserialised");
@@ -646,13 +606,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await CreateMongoSessionCacheService().GetAndUpdateUserSession("");
 
             // Assert
-            _mockMongoCollection.Verify(x => x.FindOneAndUpdateAsync(
+            _mockMongoClientService.Verify(x => x.FindOneAndUpdateDocumentAsync(
+                It.IsAny<IRepositoryConfiguration>(),
                 It.IsAny<FilterDefinition<BsonDocument>>(),
-                It.IsAny<UpdateDefinition<BsonDocument>>(),
-                It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
-                It.IsAny<CancellationToken>()));
+                It.IsAny<UpdateDefinition<BsonDocument>>()));
 
-            _mockMongoCollection.VerifyNoOtherCalls();
+            _mockMongoClientService.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure().Should().BeOfType<P5UserSession>("P5UserSession should be deserialised");
@@ -663,7 +622,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var serialiserService = new UserSessionSerialiserService();
             var encryptionService = new UserSessionEncryptionService(serialiserService, _mockCipherService.Object);
             var mongoSessionCache = new MongoSessionCacheAccessor(
-                new Mock<ILogger<MongoSessionCacheAccessor>>().Object, _mockMongoClient.Object, _mockConfig.Object);
+                new Mock<ILogger<MongoSessionCacheAccessor>>().Object, _mockMongoClientService.Object, _mockConfig.Object);
             return new MongoSessionCacheService(_mockLogger.Object, encryptionService, mongoSessionCache);
         }
 
@@ -704,12 +663,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         private async Task<string> CreateSessionAndCaptureJson(UserSession userSession)
         {
             BsonDocument update = null;
-            _mockMongoCollection
-                .Setup(x => x.InsertOneAsync(
-                    It.IsAny<BsonDocument>(),
-                    It.IsAny<InsertOneOptions>(),
-                    It.IsAny<CancellationToken>()))
-                .Callback<BsonDocument, InsertOneOptions, CancellationToken>((doc, opts, token) => update = doc);
+
+            _mockMongoClientService
+                .Setup(x => x.InsertOneDocumentAsync(
+                    It.IsAny<IRepositoryConfiguration>(),
+                    It.IsAny<BsonDocument>()))
+                .Callback<IRepositoryConfiguration, BsonDocument>((config, doc) => update = doc);
 
             var sut = CreateMongoSessionCacheService();
             await sut.CreateUserSession(userSession);
@@ -727,30 +686,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         {
             var document = new BsonDocument(new Dictionary<string, object> { { "session", json } });
 
-            _mockMongoCollection
-                .Setup(x => x.FindOneAndUpdateAsync(
+            _mockMongoClientService
+                .Setup(x => x.FindOneAndUpdateDocumentAsync(
+                    It.IsAny<IRepositoryConfiguration>(),
                     It.IsAny<FilterDefinition<BsonDocument>>(),
-                    It.IsAny<UpdateDefinition<BsonDocument>>(),
-                    It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
-                    It.IsAny<CancellationToken>()))
+                    It.IsAny<UpdateDefinition<BsonDocument>>()))
                 .ReturnsAsync(document);
 
-            _mockCursor
-                .Setup(c => c.Current)
-                .Returns(new List<BsonDocument> { document });
-
-            _mockCursor
-                .SetupSequence(c => c.MoveNextAsync(
-                    It.IsAny<CancellationToken>()))
-                .Returns(Task.FromResult(true))
-                .Returns(Task.FromResult(false));
-
-            _mockMongoCollection
-                .Setup(x => x.FindAsync(
-                             It.IsAny<FilterDefinition<BsonDocument>>(),
-                             It.IsAny<FindOptions<BsonDocument>>(),
-                             It.IsAny<CancellationToken>()))
-                .ReturnsAsync(_mockCursor.Object);
+            _mockMongoClientService
+                .Setup(x => x.FindFirstDocument(
+                    It.IsAny<IRepositoryConfiguration>(),
+                    It.IsAny<FilterDefinition<BsonDocument>>()))
+                .ReturnsAsync(document);
         }
     }
 }

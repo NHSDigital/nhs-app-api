@@ -35,5 +35,13 @@ namespace NHSOnline.Backend.Repository
                 return visitor.Visit(this);
             }
         }
+
+        public class Unauthenticated : RepositoryUpdateResult<TRecord>
+        {
+            public override TOut Accept<TOut>(IRepositoryUpdateResultVisitor<TRecord, TOut> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
     }
 }

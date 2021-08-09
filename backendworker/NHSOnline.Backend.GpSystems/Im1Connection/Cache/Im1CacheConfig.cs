@@ -14,12 +14,10 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection.Cache
         {
             _logger = logger;
 
-            ConnectionString = configuration.GetOrWarn("MONGO_CONNECTION_STRING", logger);
-            DatabaseName = configuration.GetOrWarn("IM1CACHE_MONGO_DATABASE_NAME", logger);
+            DatabaseName = configuration.GetOrWarn("MONGO_DATABASE_NAME", logger);
             CollectionName = configuration.GetOrWarn("IM1CACHE_MONGO_DATABASE_COLLECTION", logger);
         }
 
-        public string ConnectionString { get; }
         public string DatabaseName { get; }
         public string CollectionName { get; }
 
@@ -27,8 +25,7 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection.Cache
         {
             ValidateAndLog
                 .Using(_logger)
-                .IsNotNullOrWhitespace(ConnectionString, "MONGO_CONNECTION_STRING", ValidationOptions.ThrowError)
-                .IsNotNullOrWhitespace(DatabaseName, "IM1CACHE_MONGO_DATABASE_NAME", ValidationOptions.ThrowError)
+                .IsNotNullOrWhitespace(DatabaseName, "MONGO_DATABASE_NAME", ValidationOptions.ThrowError)
                 .IsNotNullOrWhitespace(CollectionName, "IM1CACHE_MONGO_DATABASE_COLLECTION", ValidationOptions.ThrowError)
                 .IsValid();
         }

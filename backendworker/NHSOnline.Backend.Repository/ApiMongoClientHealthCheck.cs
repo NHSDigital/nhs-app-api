@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
-using MongoDB.Driver;
 
 namespace NHSOnline.Backend.Repository
 {
@@ -11,16 +10,16 @@ namespace NHSOnline.Backend.Repository
         where TConfiguration : IRepositoryConfiguration
     {
         private readonly ILogger _logger;
-        private readonly IMongoClient _mongoClient;
+        private readonly IMongoClientService _mongoClientService;
         private readonly TConfiguration _configuration;
 
         public ApiMongoClientHealthCheck(
             ILogger<ApiMongoClientHealthCheck<TConfiguration>> logger,
-            IApiMongoClient<TConfiguration> mongoClient,
+            IMongoClientService mongoClientService,
             TConfiguration configuration)
         {
             _logger = logger;
-            _mongoClient = mongoClient;
+            _mongoClientService = mongoClientService;
             _configuration = configuration;
         }
 
@@ -28,17 +27,14 @@ namespace NHSOnline.Backend.Repository
         {
             try
             {
-                using var cursor = await _mongoClient
-                    .GetDatabase(_configuration.DatabaseName)
-                    .ListCollectionNamesAsync(cancellationToken: cancellationToken);
-                await cursor.FirstOrDefaultAsync(cancellationToken);
+                await _mongoClientService.CheckHealthAsync(_configuration.DatabaseName);
 
                 return Healthy();
             }
             catch (Exception exception)
             {
                 _logger.LogError(exception, "Mongo Health Check Failed");
-                return Failed(exception); 
+                return Failed(exception);
             }
         }
 

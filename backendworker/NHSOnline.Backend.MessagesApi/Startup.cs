@@ -16,6 +16,7 @@ using NHSOnline.Backend.AspNet.HealthChecks.PerformanceCounter;
 using NHSOnline.Backend.AspNet.Middleware.PerformanceCounter;
 using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.AspNet.ApiKey;
+using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
@@ -61,6 +62,8 @@ namespace NHSOnline.Backend.MessagesApi
 
             services.AddTransient(typeof(HttpTimeoutHandler<>));
             services.AddTransient(typeof(HttpRequestIdentificationHandler<>));
+
+            services.RegisterDatabaseClient(Configuration, _logger);
 
             _modularStartup.ConfigureServices(services);
 

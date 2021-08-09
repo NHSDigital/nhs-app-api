@@ -25,6 +25,7 @@ using NHSOnline.Backend.PfsApi.Areas.KnownServices.Models;
 using NHSOnline.Backend.PfsApi.DependencyInjection;
 using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.PfsApi.Session;
+using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.DependencyInjection;
@@ -98,6 +99,8 @@ namespace NHSOnline.Backend.PfsApi
 
             services.AddNhsAppHealthCheckService(Configuration);
             services.AddPerformanceCounterService(Configuration);
+
+            services.RegisterDatabaseClient(Configuration, _logger);
 
             _supplierStartup.ConfigureServices(services);
             _modularStartup.ConfigureServices(services);

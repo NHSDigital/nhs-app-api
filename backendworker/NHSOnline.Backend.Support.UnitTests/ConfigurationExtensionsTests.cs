@@ -218,7 +218,7 @@ namespace NHSOnline.Backend.Support.UnitTests
                        Constants.EnvironmentalVariables.VersionTag, version
                    },
                    {
-                       Constants.AppConfig.GitCommitId, commitId
+                       Constants.ApplicationConfig.GitCommitId, commitId
                    }
                });
 

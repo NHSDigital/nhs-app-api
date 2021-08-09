@@ -286,26 +286,20 @@ spec:
           {{- end }}
         - name: ConfigurationSettings__EmisExtendedHttpTimeoutSeconds
           value: "{{ $.Values.api.emisExtendedTimeout }}"
-        - name: CONSENT_MONGO_DATABASE_NAME
+        - name: MONGO_DATABASE_NAME
           value: {{ $.Values.cosmosDBName }}-mongo
-        - name: MONGO_CONNECTION_STRING
+        - name: COSMOSDB_REGION
         {{- if eq .Values.region "uksouth" }}
-          valueFrom:
-            secretKeyRef:
-              name: cosmosdb-mongodb-connection-string-uks-{{ .Chart.AppVersion }}
-              key: secret
+          value: "UK South"
         {{- else }}
-          valueFrom:
-            secretKeyRef:
-              name: cosmosdb-mongodb-connection-string-ukw-{{ .Chart.AppVersion }}
-              key: secret
+          value: "UK West"
         {{- end }}
-        - name: SESSION_MONGO_DATABASE_NAME
-          value: {{ $.Values.cosmosDBName }}-mongo
+        - name: AZURE_KEY_VAULT_URI
+          value: "https://iproxy-akv-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.iproxy.containerPort }}"
+        - name: MONGO_DB_CONNECTION_CHECK_INTERVAL_IN_SECONDS
+          value: "{{ $.Values.mongoDBConnectionCheckIntervalInSeconds }}"
         - name: SESSION_MONGO_DATABASE_COLLECTION
           value: session
-        - name: IM1CACHE_MONGO_DATABASE_NAME
-          value: {{ $.Values.cosmosDBName }}-mongo
         - name: IM1CACHE_MONGO_DATABASE_COLLECTION
           value: im1cache
         {{- if $.Values.appInsightsEnabled }}
@@ -319,12 +313,8 @@ spec:
         {{- end }}
         - name: AUDIT_SINK_TYPE
           value: "cosmosdb"
-        - name: AUDIT_MONGO_DATABASE_NAME
-          value: {{ $.Values.cosmosDBName }}-mongo
         - name: AUDIT_MONGO_DATABASE_COLLECTION
           value: {{ $.Values.api.mongoDatabaseAuditCollection }}
-        - name: FAKE_GP_USERS_DATABASE_NAME
-          value: {{ $.Values.cosmosDBName }}-mongo
         - name: VERSION_TAG
           value: "{{ $.Values.api.image_tag }}"
         - name: ORGAN_DONATION_BASE_URL

@@ -29,6 +29,7 @@ using NHSOnline.Backend.CidApi.Areas.Im1Connection;
 using NHSOnline.Backend.CidApi.Filters;
 using NHSOnline.Backend.GpSystems.Im1Connection.Cache;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake;
+using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.DependencyInjection;
@@ -110,6 +111,8 @@ namespace NHSOnline.Backend.CidApi
 
             // Add functionality to inject IOptions<T>
             services.AddOptions();
+
+            services.RegisterDatabaseClient(Configuration, _logger);
 
             _supplierStartup.ConfigureServices(services);
             _modularStartup.ConfigureServices(services);

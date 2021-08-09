@@ -1,6 +1,8 @@
-using System.Threading;
+using System;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Driver;
 using Moq;
@@ -11,13 +13,25 @@ namespace NHSOnline.Backend.Repository.UnitTests
     public class MongoRepositoryCreateOrUpdateTests
     {
         private MongoRepository<IRepositoryConfiguration, TestRepositoryRecord> _systemUnderTest;
-        private Mock<IMongoCollection<TestRepositoryRecord>> _mongoCollectionMock;
+        private TestRepositoryConfiguration _repositoryConfiguration;
+
+        private Mock<IMongoClientService> _mongoClientWrapperMock;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _mongoCollectionMock = new Mock<IMongoCollection<TestRepositoryRecord>>();
-            _systemUnderTest = MongoRepositoryUnitTestSupport.CreateRepository(_mongoCollectionMock);
+            _mongoClientWrapperMock = new Mock<IMongoClientService>();
+
+            _repositoryConfiguration = new TestRepositoryConfiguration
+            {
+                DatabaseName = "MockDatabaseName",
+                CollectionName = "MockCollectionName"
+            };
+
+            _systemUnderTest = new MongoRepository<IRepositoryConfiguration, TestRepositoryRecord>(
+                _mongoClientWrapperMock.Object,
+                _repositoryConfiguration,
+                new Mock<ILogger<MongoRepository<IRepositoryConfiguration, TestRepositoryRecord>>>().Object);
         }
 
         [TestMethod]
@@ -25,18 +39,20 @@ namespace NHSOnline.Backend.Repository.UnitTests
         {
             // Arrange
             var record = new TestRepositoryRecord();
-            _mongoCollectionMock.Setup(x => x.ReplaceOneAsync(
-                    It.IsAny<FilterDefinition<TestRepositoryRecord>>(),
+
+            _mongoClientWrapperMock
+                .Setup(x => x.ReplaceOneAsync(
+                    _repositoryConfiguration,
+                    It.IsAny<Expression<Func<TestRepositoryRecord, bool>>>(),
                     record,
-                    It.IsAny<ReplaceOptions>(),
-                    It.IsAny<CancellationToken>()))
+                    It.IsAny<ReplaceOptions>()))
                 .ReturnsAsync(new ReplaceOneResult.Acknowledged(0, 1, "upsertedId"));
 
             // Act
             var result = await _systemUnderTest.CreateOrUpdate(_ => true, record, "recordName");
 
             // Assert
-            _mongoCollectionMock.Verify();
+            _mongoClientWrapperMock.Verify();
             result.Should().BeOfType<RepositoryCreateResult<TestRepositoryRecord>.Created>();
         }
 
@@ -45,18 +61,20 @@ namespace NHSOnline.Backend.Repository.UnitTests
         {
             // Arrange
             var record = new TestRepositoryRecord();
-            _mongoCollectionMock.Setup(x => x.ReplaceOneAsync(
-                    It.IsAny<FilterDefinition<TestRepositoryRecord>>(),
+
+            _mongoClientWrapperMock
+                .Setup(x => x.ReplaceOneAsync(
+                    _repositoryConfiguration,
+                    It.IsAny<Expression<Func<TestRepositoryRecord, bool>>>(),
                     record,
-                    It.IsAny<ReplaceOptions>(),
-                    It.IsAny<CancellationToken>()))
+                    It.IsAny<ReplaceOptions>()))
                 .ReturnsAsync(ReplaceOneResult.Unacknowledged.Instance);
 
             // Act
             var result = await _systemUnderTest.CreateOrUpdate(_ => true, record, "recordName");
 
             // Assert
-            _mongoCollectionMock.Verify();
+            _mongoClientWrapperMock.Verify();
             result.Should().BeOfType<RepositoryCreateResult<TestRepositoryRecord>.RepositoryError>();
         }
 
@@ -65,17 +83,20 @@ namespace NHSOnline.Backend.Repository.UnitTests
         {
             // Arrange
             var record = new TestRepositoryRecord();
-            _mongoCollectionMock.Setup(x => x.ReplaceOneAsync(
-                It.IsAny<FilterDefinition<TestRepositoryRecord>>(),
-                record,
-                It.IsAny<ReplaceOptions>(),
-                It.IsAny<CancellationToken>())).ThrowsAsync(new MongoException("Test"));
+
+            _mongoClientWrapperMock
+                .Setup(x => x.ReplaceOneAsync(
+                    _repositoryConfiguration,
+                It.IsAny<Expression<Func<TestRepositoryRecord, bool>>>(),
+                    record,
+                    It.IsAny<ReplaceOptions>()))
+                .ThrowsAsync(new MongoException("Test"));
 
             // Act
             var result = await _systemUnderTest.CreateOrUpdate(_ => true, record, "recordName");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
+            _mongoClientWrapperMock.VerifyAll();
             result.Should().BeOfType<RepositoryCreateResult<TestRepositoryRecord>.RepositoryError>();
         }
     }

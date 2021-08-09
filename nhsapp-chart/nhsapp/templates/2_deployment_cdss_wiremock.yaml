@@ -63,18 +63,10 @@ spec:
           value: "{{ $.Values.cdsswiremock.image_tag }}"
         - name: SESSION_ENCRYPTION_KEY_FILE
           value: "/mnt/secrets-store/sessionKey"
-        - name: MONGO_CONNECTION_STRING
-        {{- if eq .Values.region "uksouth" }}
-          valueFrom:
-            secretKeyRef:
-              name: cosmosdb-mongodb-connection-string-uks-{{ .Chart.AppVersion }}
-              key: secret
-        {{- else }}
-          valueFrom:
-            secretKeyRef:
-              name: cosmosdb-mongodb-connection-string-ukw-{{ .Chart.AppVersion }}
-              key: secret
-        {{- end }}
+        - name: MONGO_DATABASE_NAME
+          value: {{ $.Values.cosmosDBName }}-mongo
+        - name: MONGO_DB_CONNECTION_CHECK_INTERVAL_IN_SECONDS
+          value: "{{ $.Values.mongoDBConnectionCheckIntervalInSeconds }}"
         volumeMounts:
         - name: internal-ca-public-key
           mountPath: /usr/local/share/ca-certificates/internalca

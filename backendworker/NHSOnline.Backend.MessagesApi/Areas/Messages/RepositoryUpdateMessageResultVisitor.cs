@@ -21,6 +21,11 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             return new MessagePatchResult.NoChange();
         }
 
+        public MessagePatchResult Visit(RepositoryUpdateResult<UserMessage>.Unauthenticated result)
+        {
+            return new MessagePatchResult.BadGateway();
+        }
+
         public MessagePatchResult Visit(RepositoryUpdateResult<UserMessage>.Updated result)
         {
             throw new NotImplementedException();

@@ -13,8 +13,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
     {
         private Mock<IConfiguration> _mockConfiguration;
 
-        private const string ConnectionStringKey = "MONGO_CONNECTION_STRING";
-        private const string DatabaseKey = "USERS_MONGO_DATABASE_NAME";
+        private const string DatabaseKey = "MONGO_DATABASE_NAME";
         private const string CollectionKey = "USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION";
 
         [TestInitialize]
@@ -28,11 +27,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
         {
             var expectedDatabaseName = "ExpectedDatabaseName";
             var expectedDatabaseCollection = "ExpectedDatabaseCollection";
-            var expectedConnectionString = "ExpectedConnectionString";
 
             // Arrange
             SetupConfiguration(
-                connectionString:expectedConnectionString,
                 databaseCollection : expectedDatabaseCollection,
                 databaseName: expectedDatabaseName);
 
@@ -44,24 +41,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             // Assert
             config.DatabaseName.Should().BeEquivalentTo(expectedDatabaseName);
             config.CollectionName.Should().BeEquivalentTo(expectedDatabaseCollection);
-            config.ConnectionString.Should().BeEquivalentTo(expectedConnectionString);
-        }
-
-        [TestMethod]
-        [DataRow(null)]
-        [DataRow("")]
-        public void InvalidConnectionString_ThrowsException(string value)
-        {
-            // Arrange
-            SetupConfiguration(connectionString: value);
-
-            // Act
-            Action act = () => new UsersRepositoryConfiguration(_mockConfiguration.Object,
-                new Mock<ILogger<UsersRepositoryConfiguration>>().Object).Validate();
-
-            // Assert
-            act.Should().Throw<ConfigurationNotValidException>()
-                .Which.Message.Should().Contain(ConnectionStringKey);
         }
 
         [TestMethod]
@@ -98,12 +77,11 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
                 .Which.Message.Should().Contain(CollectionKey);
         }
 
-        private void SetupConfiguration(string connectionString = "ConnectionString",
+        private void SetupConfiguration(
             string databaseName = "DatabaseName",
             string databaseCollection = "DatabaseCollection")
         {
 
-            _mockConfiguration.Setup(x => x[ConnectionStringKey]).Returns(connectionString);
             _mockConfiguration.Setup(x => x[DatabaseKey]).Returns(databaseName);
             _mockConfiguration.Setup(x => x[CollectionKey])
                 .Returns(databaseCollection);

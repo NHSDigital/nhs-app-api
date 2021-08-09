@@ -1,8 +1,8 @@
+using NHSOnline.Backend.Repository;
+
 namespace NHSOnline.Backend.GpSystems.SessionManager
 {
-    internal interface IMongoSessionCacheServiceConfig
+    internal interface IMongoSessionCacheServiceConfig : IRepositoryConfiguration
     {
-        string DatabaseName { get; }
-        string CollectionName { get; }
     }
 }

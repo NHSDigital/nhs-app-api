@@ -17,6 +17,7 @@ using NHSOnline.Backend.AspNet.Middleware.PerformanceCounter;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.AspNet.ApiKey;
+using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
@@ -72,6 +73,8 @@ namespace NHSOnline.Backend.UserInfoApi
             services.AddTransient(typeof(HttpRequestIdentificationHandler<>));
 
             SetupApiKeys(services);
+
+            services.RegisterDatabaseClient(Configuration, _logger);
 
             _modularStartup.ConfigureServices(services);
 

@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Settings;
 
@@ -206,7 +207,54 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             jwtBearerOptions.RequireHttpsMetadata.Should().BeFalse();
         }
 
-        private void SetupConfiguration()
+
+
+        [TestMethod]
+        public void ConfigureServices_WhenMongoConnectionStringIsPresent_ShouldRegisterLocalMongoDatabaseClient()
+        {
+            // Arrange
+            SetupConfiguration("TestConnectionString");
+
+            var serviceCollection = new ServiceCollection();
+
+            // Act
+            _systemUnderTest.ConfigureServices(serviceCollection);
+
+            //Assert
+            var mongoClientDescriptor = new ServiceDescriptor(typeof(IMongoClientService), typeof(LocalMongoService), ServiceLifetime.Singleton);
+
+            var registeredMongoClients = serviceCollection.Where(x => x.ServiceType == typeof(IMongoClientService));
+
+            registeredMongoClients.Count().Should().Be(1);
+            registeredMongoClients.First().Should().BeEquivalentTo(mongoClientDescriptor);
+        }
+
+        [TestMethod]
+        public void ConfigureServices_WhenMongoConnectionStringIsNotPresent_ShouldRegisterAzureMongoDatabaseClient()
+        {
+            // Arrange
+            SetupConfiguration();
+
+            var serviceCollection = new ServiceCollection();
+
+            // Act
+            _systemUnderTest.ConfigureServices(serviceCollection);
+
+            //Assert
+            var mongoClientDescriptor = new ServiceDescriptor(typeof(IMongoClientService), typeof(AzureMongoService), ServiceLifetime.Singleton);
+            var hostedServiceDescriptor = new ServiceDescriptor(typeof(IHostedService), typeof(AzureMongoConnectionHealthBackgroundService), ServiceLifetime.Singleton);
+
+           var registeredMongoClients = serviceCollection.Where(x => x.ServiceType == typeof(IMongoClientService));
+           var registeredHostedServices = serviceCollection.Where(x => x.ImplementationType == typeof(AzureMongoConnectionHealthBackgroundService));
+
+           registeredMongoClients.Count().Should().Be(1);
+           registeredMongoClients.First().Should().BeEquivalentTo(mongoClientDescriptor);
+
+           registeredHostedServices.First().Should().BeEquivalentTo(hostedServiceDescriptor);
+        }
+
+
+        private void SetupConfiguration(string mongoConnectionString = "")
         {
             _mockConfiguration
                 .Setup(x => x["CITIZEN_ID_CLIENT_ID"])
@@ -243,6 +291,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             _mockConfiguration
                 .Setup(x => x[Constants.HealthCheckConstants.HealthCheckLoggingEnabledConfigKeyName])
                 .Returns("false");
+
+            _mockConfiguration
+                .Setup(x => x["MONGO_CONNECTION_STRING"])
+                .Returns(mongoConnectionString);
 
             SetupNotificationHubConfigurationFields();
         }
