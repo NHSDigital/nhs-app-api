@@ -87,8 +87,7 @@ Feature: Session Expiry and Extend Frontend
     When I do not accept notifications and continue
     Then I see the home page
     And I navigate to Appointments
-    When I am idle long enough for the session expiry dialog box to appear
-    Then I am idle for a short time
+    And I am idle long enough for the session expiry dialog box to appear
     And I see a dialog box prompting to extend the session
     When I click to extend the session
     Then the dialog box is not visible on the screen
