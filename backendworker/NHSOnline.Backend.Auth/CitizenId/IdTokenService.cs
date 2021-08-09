@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -75,6 +75,24 @@ namespace NHSOnline.Backend.Auth.CitizenId
                 {
                     _logger.LogError("Invalid ID Token; does not contain a jti");
                     return Option.None<IdToken>();
+                }
+                if (string.IsNullOrWhiteSpace(jti))
+                {
+                    _logger.LogInformation("ID Token has empty or whitespace jti");
+                }
+                else
+                {
+                    _logger.LogInformation($"ID Token read with jti ending: {jti.Substring(jti.Length - 5)}");
+                }
+
+                var exp = principal.FindFirstValue(JwtRegisteredClaimNames.Exp);
+                if (exp == null)
+                {
+                    _logger.LogInformation("ID Token does not contain a exp");
+                }
+                else
+                {
+                    _logger.LogInformation($"ID Token read with expiry: {exp}");
                 }
 
                 return Option.Some(new IdToken { Subject = subject, Jti = jti });

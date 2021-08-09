@@ -51,6 +51,8 @@ namespace NHSOnline.Backend.Auth.CitizenId
                     return result;
                 }
 
+                _logger.LogJwtExpiry(tokenResponse.Body.AccessToken);
+
                 var token = await _idTokenService.ReadToken(tokenResponse.Body.IdToken);
 
                 await token.IfSome(async idToken =>
@@ -118,6 +120,8 @@ namespace NHSOnline.Backend.Auth.CitizenId
                     _logger.LogError($"Failed to refresh access token, due to {result.StatusCode} response");
                     return new RefreshAccessTokenResult.BadGateway();
                 }
+
+                _logger.LogJwtExpiry(result.Body.AccessToken);
 
                 return new RefreshAccessTokenResult.Success(result.Body.AccessToken);
             }

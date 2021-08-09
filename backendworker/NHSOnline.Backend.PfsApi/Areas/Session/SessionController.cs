@@ -57,6 +57,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                         _settings,
                         new UserSessionResponse()));
 
+                _logger.LogJwtExpiry(responseBody.AccessToken);
+
                 return new OkObjectResult(responseBody);
             }
             finally

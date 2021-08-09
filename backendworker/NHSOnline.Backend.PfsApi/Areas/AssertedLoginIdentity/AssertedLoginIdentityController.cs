@@ -44,6 +44,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
                     return new BadRequestObjectResult(ModelState);
                 }
 
+                LogJti(userSession);
                 var assertedLoginSessionVisitor = new AssertedLoginSessionVisitor(model, _auditor, _assertedLoginIdentityService);
                 var result = await userSession.Accept(assertedLoginSessionVisitor);
 
@@ -52,6 +53,19 @@ namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
             finally
             {
                 _logger.LogExit();
+            }
+        }
+
+        private void LogJti(P5UserSession userSession)
+        {
+            var jti = userSession.CitizenIdUserSession.IdTokenJti;
+            if (string.IsNullOrWhiteSpace(jti))
+            {
+                _logger.LogInformation("Null or empty jti provided for id assertion");
+            }
+            else
+            {
+                _logger.LogInformation($"Asserted login with jti ending: {jti.Substring(jti.Length - 5)}");
             }
         }
     }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -107,5 +108,22 @@ namespace NHSOnline.Backend.Support.Logging
             logger.LogInformation(message);
         }
 
+        public static void LogJwtExpiry(this ILogger logger, string encoded)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            if (tokenHandler.CanReadToken(encoded))
+            {
+                var jwt = tokenHandler.ReadJwtToken(encoded);
+
+                var jwtExpiry = jwt.Claims.Where(c => string.CompareOrdinal(c.Type, JwtRegisteredClaimNames.Exp) == 0)
+                    .Select(c => c.Value).FirstOrDefault();
+                logger.LogInformation($"Jwt read with expiry: {jwtExpiry}");
+            }
+            else
+            {
+                logger.LogInformation($"Unable to read jwt");
+            }
+        }
     }
 }
