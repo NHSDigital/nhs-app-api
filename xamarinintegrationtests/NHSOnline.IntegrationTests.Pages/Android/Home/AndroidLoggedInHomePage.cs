@@ -50,6 +50,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
 
         public void ProveYourIdentityContinue() => PageContent.ProveYourIdentityContinue();
 
+        public void NavigateToAppointments() => Navigation.NavigateToAppointments();
+
         public void KeyboardNavigateToAdvice() => Navigation.KeyboardNavigateToAdvice(KeyboardPageContentNavigation);
 
         public void KeyboardNavigateToAppointments() => Navigation.KeyboardNavigateToAppointments(KeyboardPageContentNavigation);

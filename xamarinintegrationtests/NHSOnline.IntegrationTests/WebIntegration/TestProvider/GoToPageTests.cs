@@ -1,19 +1,24 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
+using NHSOnline.IntegrationTests.Pages.Android;
+using NHSOnline.IntegrationTests.Pages.Android.Advice;
 using NHSOnline.IntegrationTests.Pages.Android.Appointments;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
-using NHSOnline.IntegrationTests.Pages.Android.Messages;
+using NHSOnline.IntegrationTests.Pages.Android.More;
 using NHSOnline.IntegrationTests.Pages.Android.Prescriptions;
 using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
+using NHSOnline.IntegrationTests.Pages.Android.YourHealth;
 using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.Advice;
+using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
-using NHSOnline.IntegrationTests.Pages.IOS.Messages;
 using NHSOnline.IntegrationTests.Pages.IOS.More;
+using NHSOnline.IntegrationTests.Pages.IOS.Prescriptions;
 using NHSOnline.IntegrationTests.Pages.IOS.WebIntegration;
 using NHSOnline.IntegrationTests.Pages.IOS.YourHealth;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
+using NHSOnline.IntegrationTests.WebIntegration.Pkb;
 
 namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 {
@@ -24,20 +29,29 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
         public void APatientCanNavigateOnThirdPartiesThatUseTheGoToPageMethodAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+                .WithName(b => b.GivenName("Brie").FamilyName("Oche"));
+
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogAndroidPatientIn(driver, patient);
 
-            AssertOnHomePageAndNavigateToGoToPageAndroid(driver);
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToAppointments();
+
+            NavigateToHospitalAppointmentsGoToPageAndroid(driver, true);
 
             AndroidGoToPage
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
                 .TabIntoFocus()
-                .KeyboardNavigateToGoToHomePage();
+                .KeyboardNavigateToGoToAdvice();
 
-            AssertOnHomePageAndNavigateToGoToPageAndroid(driver);
+            AndroidAdvicePage
+                .AssertOnPage(driver)
+                .NavigateToAppointments();
+
+            NavigateToHospitalAppointmentsGoToPageAndroid(driver);
 
             AndroidGoToPage
                 .AssertOnPage(driver)
@@ -45,143 +59,212 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
                 .TabIntoFocus()
                 .KeyboardNavigateToGoToAppointments();
 
-            AndroidAppointmentsPage
-                .AssertOnPage(driver)
-                .Navigation.NavigateToHome();
-
-            AssertOnHomePageAndNavigateToGoToPageAndroid(driver);
+            NavigateToHospitalAppointmentsGoToPageAndroid(driver);
 
             AndroidGoToPage
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
                 .TabIntoFocus()
-                .KeyboardNavigateToGoToPrescriptions();
+                .KeyboardNavigateToGoToHealthRecords();
 
-            AndroidPrescriptionsPage
+            AndroidYourHealthPage
                 .AssertOnPage(driver)
-                .Navigation.NavigateToHome();
+                .Navigation.NavigateToAppointments();
 
-            AssertOnHomePageAndNavigateToGoToPageAndroid(driver);
+            NavigateToHospitalAppointmentsGoToPageAndroid(driver);
 
             AndroidGoToPage
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
                 .TabIntoFocus()
-                .KeyboardNavigateToGoToMessages();
+                .KeyboardNavigateToGoToMore();
 
-            AndroidMessagesPage
+            AndroidMorePage
                 .AssertOnPage(driver)
-                .Navigation.NavigateToHome();
+                .Navigation.NavigateToAppointments();
 
-            AssertOnHomePageAndNavigateToGoToPageAndroid(driver);
+            NavigateToHospitalAppointmentsGoToPageAndroid(driver);
 
             AndroidGoToPage
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
                 .TabIntoFocus()
-                .KeyboardNavigateToGoToInvalidPage();
+                .KeyboardNavigateToGoToSettings();
 
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver);
+            AndroidMorePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToAppointments();
+
+            NavigateToHospitalAppointmentsGoToPageAndroid(driver);
+
+            AndroidGoToPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .TabIntoFocus()
+                .KeyboardNavigateToGoToUplift();
+
+            AndroidUpliftShutterPage
+                .AssertOnPage(driver)
+                .NavigateToAppointments();
         }
 
         [NhsAppIOSTest]
-        public void APatientCanNavigateOnThirdPartiesThatUseTheGoToPageMethodIos(IIOSDriverWrapper driver)
+        public void APatientCanNavigateOnThirdPartiesThatUseTheGoToPageMethodIOS(IIOSDriverWrapper driver)
         {
-            var patient = new EmisPatient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            var patient = new PkbPatient()
+                .WithName(b => b.GivenName("Fo").FamilyName("Catcha"));
+
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogIOSPatientIn(driver, patient);
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
+                .Navigation.NavigateToAppointments();
 
-            AssertOnHomeMessagesPageAndNavigateToGoToPageIOS(driver);
-
-            IOSGoToPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.GoToYourHealthPage();
-
-            IOSYourHealthPage
-                .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
-
-            AssertOnHomeMessagesPageAndNavigateToGoToPageIOS(driver);
+            NavigateToHospitalAppointmentsGoToPageIOS(driver, true);
 
             IOSGoToPage
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
-                .PageContent.GoToYourAdvicePage();
+                .PageContent.GoToHome();
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToAppointments();
+
+            NavigateToHospitalAppointmentsGoToPageIOS(driver);
+
+            IOSGoToPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.GoToAdvice();
 
             IOSAdvicePage
                 .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
+                .Navigation.NavigateToAppointments();
 
-            AssertOnHomeMessagesPageAndNavigateToGoToPageIOS(driver);
+            NavigateToHospitalAppointmentsGoToPageIOS(driver);
 
             IOSGoToPage
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
-                .PageContent.GoToMorePage();
+                .PageContent.GoToAppointments();
+
+            NavigateToHospitalAppointmentsGoToPageIOS(driver);
+
+            IOSGoToPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.GoToPrescriptions();
+
+            IOSPrescriptionsPage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToAppointments();
+
+            NavigateToHospitalAppointmentsGoToPageIOS(driver);
+
+            IOSGoToPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.GoToHealthRecords();
+
+            IOSYourHealthPage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToAppointments();
+
+            NavigateToHospitalAppointmentsGoToPageIOS(driver);
+
+            IOSGoToPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.GoToMore();
 
             IOSMorePage
                 .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
+                .Navigation.NavigateToAppointments();
 
-            AssertOnHomeMessagesPageAndNavigateToGoToPageIOS(driver);
+            NavigateToHospitalAppointmentsGoToPageIOS(driver);
 
             IOSGoToPage
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
-                .PageContent.GoToSettingsPage();
+                .PageContent.GoToSettings();
 
             IOSMorePage
                 .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
+                .Navigation.NavigateToAppointments();
 
-            AssertOnHomeMessagesPageAndNavigateToGoToPageIOS(driver);
+            NavigateToHospitalAppointmentsGoToPageIOS(driver);
 
             IOSGoToPage
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
-                .PageContent.GoToUpliftPage();
+                .PageContent.GoToInvalidPage();
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToAppointments();
+
+            NavigateToHospitalAppointmentsGoToPageIOS(driver);
+
+            IOSGoToPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.GoToUplift();
 
             IOSUpliftShutterPage
-                .Continue(driver);
-
-            IOSStubbedLoginUpliftPage
                 .AssertOnPage(driver);
         }
 
-        private static void AssertOnHomePageAndNavigateToGoToPageAndroid(IAndroidDriverWrapper driver)
+        private static void NavigateToHospitalAppointmentsGoToPageAndroid(
+            IAndroidDriverWrapper driver,
+            bool assertWarningPanel = false)
         {
-            AndroidLoggedInHomePage
+            AndroidAppointmentsPage
                 .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
+                .PageContent.NavigateToHospitalAndOtherAppointments();
 
-            AndroidMessagesPage
+            AndroidHospitalAndOtherAppointmentsPage
                 .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
+                .PageContent.NavigateToViewAppointments();
 
-            AndroidTestWebIntegrationProviderPage
-                .AssertOnPage(driver)
+            if (assertWarningPanel)
+            {
+                AndroidWebIntegrationWarningPanelPage
+                    .AssertOnPage(driver, "View appointments")
+                    .PageContent.NavigateToNextPage();
+            }
+
+            AndroidPkbPage
+                .AssertOnPage(driver, PhrPath.ViewAppointments)
                 .AssertNativeHeader()
-                .PageContent.NavigateToGoToPage();
+                .NavigateToGoToPage();
         }
 
-        private static void AssertOnHomeMessagesPageAndNavigateToGoToPageIOS(IIOSDriverWrapper driver)
+        private static void NavigateToHospitalAppointmentsGoToPageIOS(
+            IIOSDriverWrapper driver,
+            bool assertWarningPanel = false)
         {
-            IOSMessagesPage
+            IOSAppointmentsPage
                 .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
+                .PageContent.NavigateToHospitalAndOtherAppointments();
 
-            IOSTestWebIntegrationProviderPage
+            IOSHospitalAndOtherAppointmentsPage
                 .AssertOnPage(driver)
+                .PageContent.NavigateToViewAppointments();
+
+            if (assertWarningPanel)
+            {
+                IOSWebIntegrationWarningPanelPage
+                    .AssertOnPage(driver, "View appointments")
+                    .PageContent.NavigateToNextPage();
+            }
+
+            IOSPkbPage
+                .AssertOnPage(driver, PhrPath.ViewAppointments)
                 .AssertNativeHeader()
-                .PageContent.NavigateToGoToPage();
+                .NavigateToGoToPage();
         }
     }
 }

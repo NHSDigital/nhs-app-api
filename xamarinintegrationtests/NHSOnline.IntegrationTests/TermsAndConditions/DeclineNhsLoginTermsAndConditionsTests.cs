@@ -15,7 +15,7 @@ namespace NHSOnline.IntegrationTests.TermsAndConditions
         public void APatientDecliningNhsLoginTermsOfUseIsInformedTheyHaveToAcceptToUseTheAppAndroid(
             IAndroidDriverWrapper driver)
         {
-            var patient = new P9Patient();
+            var patient = new EmisPatient();
             using var patients = Mocks.Patients.Add(patient);
 
             AndroidLoggedOutHomePage
@@ -43,7 +43,7 @@ namespace NHSOnline.IntegrationTests.TermsAndConditions
         public void APatientDecliningNhsLoginTermsOfUseIsInformedTheyHaveToAcceptToUseTheAppIos(
             IIOSDriverWrapper driver)
         {
-            var patient = new P9Patient();
+            var patient = new EmisPatient();
             using var patients = Mocks.Patients.Add(patient);
 
             IOSLoggedOutHomePage

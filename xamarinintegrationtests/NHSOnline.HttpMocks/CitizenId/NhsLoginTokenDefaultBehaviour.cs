@@ -37,7 +37,7 @@ namespace NHSOnline.HttpMocks.CitizenId
                 access_token = accessToken,
                 token_type = "Bearer",
                 expires_in = "90",
-                scope = "openid profile nhs_app_credentials gp_integration_credentials",
+                scope = patient.Scope,
                 id_token = idToken
             });
         }
@@ -54,12 +54,16 @@ namespace NHSOnline.HttpMocks.CitizenId
                 new Claim("surname", patient.PersonalDetails.Name.FamilyName),
                 new Claim("email", patient.PersonalDetails.ContactDetails.EmailAddress),
                 new Claim("birthdate", patient.PersonalDetails.Age.DateOfBirthISO86012004),
-                new Claim("jti", Guid.NewGuid().ToString())
+                new Claim("jti", patient.Id)
             };
 
             if (patient is IGpRegistered registered)
             {
-                claims.Add(new Claim("im1_token", registered.Im1ConnectionToken));
+                if (!string.Empty.Equals(registered.Im1ConnectionToken, StringComparison.Ordinal))
+                {
+                    claims.Add(new Claim("im1_token", registered.Im1ConnectionToken));
+                }
+
                 claims.Add(new Claim("ods_code", registered.OdsCode));
             }
 
@@ -85,7 +89,7 @@ namespace NHSOnline.HttpMocks.CitizenId
                 new Claim("aud", "nhs-online"),
                 new Claim("token_use", "access"),
                 new Claim("auth_time", authTime.ToString(CultureInfo.InvariantCulture)),
-                new Claim("scope", "openid profile nhs_app_credentials gp_integration_credentials profile_extended"),
+                new Claim("scope", patient.Scope),
                 new Claim("vot", patient.VectorOfTrust),
                 new Claim("exp", authTime.ToString(CultureInfo.InvariantCulture)),
                 new Claim("iat", expiryTime.ToString(CultureInfo.InvariantCulture)),

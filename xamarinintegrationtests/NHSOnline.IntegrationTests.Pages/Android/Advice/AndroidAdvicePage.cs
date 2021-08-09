@@ -46,10 +46,10 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Advice
             return pageFocusableList.Concat(footerFocusableList).Concat(headerFocusableList);
         }
 
+        public void NavigateToAppointments() => Navigation.NavigateToAppointments();
+
         public void KeyboardNavigateToHome() => Navigation.KeyboardNavigateToHomeFromElement(KeyboardPageContentNavigation, PageContent.FocusableElements.First());
-
         public void KeyboardNavigateToOneOneOne() => PageContent.KeyboardNavigateToOneOneOne(KeyboardPageContentNavigation);
-
         public void KeyboardNavigateToAToZ() => PageContent.KeyboardNavigateToAToZ(KeyboardPageContentNavigation);
     }
 }

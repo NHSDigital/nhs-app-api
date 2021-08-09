@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -18,10 +20,39 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         private WebText PhrPathText => WebText.WithTagAndText(_interactor, "li", $"phrPath: {_phrPath}");
 
+        private WebLink CalendarLink => WebLink.WithText(_interactor, "Calendar");
+
+        private WebLink GoToPageLink => WebLink.WithText(_interactor, "Go to page");
+
+        private WebLink FileUploadLink => WebLink.WithText(_interactor, "File upload");
+
+        private WebLink DocumentDownloadLink => WebLink.WithText(_interactor, "Download document");
+
+        private WebLink LocationServicesLink => WebLink.WithText(_interactor, "Location services");
+
+        public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
+        {
+            CalendarLink,
+            GoToPageLink,
+            FileUploadLink,
+            DocumentDownloadLink,
+            LocationServicesLink
+        };
+
         internal void AssertOnPage()
         {
             TitleText.AssertVisible();
             PhrPathText.AssertVisible();
         }
+
+        public void NavigateToCalendar() => CalendarLink.Click();
+
+        public void NavigateToGoToPage() => GoToPageLink.Click();
+
+        public void NavigateToFileUpload() => FileUploadLink.Click();
+
+        public void NavigateToDocumentDownload() => DocumentDownloadLink.Click();
+
+        public void NavigateToLocationServices() => LocationServicesLink.Click();
     }
 }

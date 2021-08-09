@@ -5,5 +5,7 @@ namespace NHSOnline.HttpMocks.Domain
         PkbAndEconsult,
         NotificationsPromptEnabled,
         AllSilversEnabled,
+        NoOdsCode,
+        UnknownOdsCode,
     }
 }

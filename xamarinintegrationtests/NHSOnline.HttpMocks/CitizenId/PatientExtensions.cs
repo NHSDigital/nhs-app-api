@@ -15,5 +15,9 @@ namespace NHSOnline.HttpMocks.CitizenId
         public static TPatient WithBehaviour<TPatient>(this TPatient patient, INhsLoginTokenBehaviour behaviour)
             where TPatient : Patient
             => patient.WithBehaviour<TPatient, INhsLoginTokenBehaviour>(behaviour);
+
+        public static TPatient WithBehaviour<TPatient>(this TPatient patient, INhsLoginSSOBehaviour behaviour)
+            where TPatient : Patient
+            => patient.WithBehaviour<TPatient, INhsLoginSSOBehaviour>(behaviour);
     }
 }

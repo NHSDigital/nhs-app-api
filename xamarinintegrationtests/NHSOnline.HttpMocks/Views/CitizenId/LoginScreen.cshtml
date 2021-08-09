@@ -1,6 +1,6 @@
 ﻿@using NHSOnline.HttpMocks.Domain
 @inject IPatients Patients
-@model (string AuthHostName, string Redirect, string State, Microsoft.AspNetCore.Http.HttpRequest Request)
+@model (string AuthHostName, string Redirect, string Scope, string State, Microsoft.AspNetCore.Http.HttpRequest Request)
 <html>
 <head>
     <meta charset="utf-8">
@@ -39,7 +39,8 @@
         <input type="checkbox" id="ShowLoginTCs" onchange="ShowLoginTCsChanged(event)">
         <form action="complete-login" method="get" id="LoginForm">
             <input value="@Model.Redirect" type="hidden" name="redirect_uri">
-            <input value="@Model.Redirect" type="hidden" name="state">
+            <input value="@Model.Scope" type="hidden" name="scope"/>
+            <input value="@Model.State" type="hidden" name="state">
             <div class="form-group">
                 <label for="PatientId">Patient ID</label>
                 <input class="form-control" placeholder="Patient ID" type="text" name="patientId" id="PatientId">

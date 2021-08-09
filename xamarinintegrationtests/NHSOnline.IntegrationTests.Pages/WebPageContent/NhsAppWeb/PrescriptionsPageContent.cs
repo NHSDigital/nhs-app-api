@@ -119,6 +119,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
             PkbMyCareViewHospitalAndOtherMedicinesMenuItem
         };
 
+        public void NavigateToOrderARepeatPrescription() => OrderARepeatPrescriptionButton.Click();
+
         public void NavigateToHospitalAndOtherPrescriptions() => PkbHospitalAndOtherPrescriptionsMenuItem.Click();
 
         public void KeyboardNavigateToOrderARepeatPrescription(AndroidKeyboardNavigation navigation)

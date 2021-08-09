@@ -1,15 +1,16 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
+using NHSOnline.IntegrationTests.Pages.Android.Appointments;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
-using NHSOnline.IntegrationTests.Pages.Android.Messages;
 using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
 using NHSOnline.IntegrationTests.Pages.IOS;
+using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
-using NHSOnline.IntegrationTests.Pages.IOS.Messages;
 using NHSOnline.IntegrationTests.Pages.IOS.WebIntegration;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
+using NHSOnline.IntegrationTests.WebIntegration.Pkb;
 
 namespace NHSOnline.IntegrationTests.WebIntegration
 {
@@ -17,10 +18,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration
     public class FileUploadWebIntegrationTests
     {
         [NhsAppAndroidTest]
-        public void APatientWithProofLevelNineCanUploadTheirFileToTheTestProviderFileUploadScreenAndroid(
+        public void APatientWithProofLevelNineCanUploadTheirFileToAWebIntegrationFileUploadScreenAndroid(
             IAndroidDriverWrapper driver)
         {
-            var patient = new EmisPatient()
+            var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
@@ -28,16 +29,24 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
+                .Navigation.NavigateToAppointments();
 
-            AndroidMessagesPage
+            AndroidAppointmentsPage
                 .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
+                .PageContent.NavigateToHospitalAndOtherAppointments();
 
-            AndroidTestWebIntegrationProviderPage
+            AndroidHospitalAndOtherAppointmentsPage
                 .AssertOnPage(driver)
+                .PageContent.NavigateToViewAppointments();
+
+            AndroidWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "View appointments")
+                .PageContent.NavigateToNextPage();
+
+            AndroidPkbPage
+                .AssertOnPage(driver, PhrPath.ViewAppointments)
                 .AssertNativeHeader()
-                .PageContent.NavigateToFileUpload();
+                .NavigateToFileUpload();
 
             AndroidFileUploadPage
                 .AssertOnPage(driver)
@@ -58,10 +67,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppIOSTest]
-        public void APatientWithProofLevelNineCanUploadTheirFileToTheTestProviderFileUploadScreenIOS(
+        public void APatientWithProofLevelNineCanUploadTheirFileToAWebIntegrationFileUploadScreenIOS(
             IIOSDriverWrapper driver)
         {
-            var patient = new EmisPatient()
+            var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
@@ -69,16 +78,24 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
+                .Navigation.NavigateToAppointments();
 
-            IOSMessagesPage
+            IOSAppointmentsPage
                 .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
+                .PageContent.NavigateToHospitalAndOtherAppointments();
 
-            IOSTestWebIntegrationProviderPage
+            IOSHospitalAndOtherAppointmentsPage
                 .AssertOnPage(driver)
+                .PageContent.NavigateToViewAppointments();
+
+            IOSWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "View appointments")
+                .PageContent.NavigateToNextPage();
+
+            IOSPkbPage
+                .AssertOnPage(driver, PhrPath.ViewAppointments)
                 .AssertNativeHeader()
-                .PageContent.NavigateToFileUpload();
+                .NavigateToFileUpload();
 
             IOSFileUploadPage
                 .AssertOnPage(driver)

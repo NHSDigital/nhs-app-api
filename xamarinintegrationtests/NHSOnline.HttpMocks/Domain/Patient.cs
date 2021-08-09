@@ -19,6 +19,8 @@ namespace NHSOnline.HttpMocks.Domain
 
         public PatientPersonalDetails PersonalDetails { get; } = new PatientPersonalDetails();
 
+        public string Scope { get; internal set; } = string.Empty;
+
         internal Behaviours Behaviours { get; } = new Behaviours();
 
         public abstract string VectorOfTrust { get; internal set; }

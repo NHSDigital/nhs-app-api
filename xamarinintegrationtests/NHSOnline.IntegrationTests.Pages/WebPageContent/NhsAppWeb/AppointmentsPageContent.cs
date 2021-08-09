@@ -85,6 +85,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
             return this;
         }
 
+        public void NavigateToGpSurgeryAppointments() => GpSurgeryAppointmentsMenuItem.Click();
+
         public void NavigateToHospitalAndOtherAppointments() => HospitalAndOtherAppointmentsMenuItem.Click();
 
         public void NavigateToAdditionalGpServices() => AdditionalGpServicesMenuItem.Click();

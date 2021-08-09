@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Components.Web;
@@ -49,7 +50,13 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
             HealthInfoAndUpdatesMenuItem
         };
 
-        internal void AssertOnPage() => TitleText.AssertVisible();
+        internal void AssertOnPage()
+        {
+            // Extending timeout to allow SSO to complete
+            using var extendedTimeout = ExtendedTimeout.FromSeconds(5);
+
+            TitleText.AssertVisible();
+        }
 
         public void AssertPageElements() => TitleText.AssertVisible();
 

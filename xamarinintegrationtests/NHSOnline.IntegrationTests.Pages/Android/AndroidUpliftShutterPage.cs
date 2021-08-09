@@ -15,11 +15,18 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private UpliftShutterPageContent PageContent { get; }
 
-        public static AndroidUpliftShutterPage Continue(IAndroidDriverWrapper driver)
+        public static AndroidUpliftShutterPage AssertOnPage(IAndroidDriverWrapper driver)
         {
             var page = new AndroidUpliftShutterPage(driver);
-            page.PageContent.ProveYourIdentityContinue();
+            page.PageContent.AssertOnPage();
             return page;
         }
+
+        public void Continue()
+        {
+            PageContent.ProveYourIdentityContinue();
+        }
+
+        public void NavigateToAppointments() => Navigation.NavigateToAppointments();
     }
 }

@@ -9,8 +9,7 @@ namespace NHSOnline.HttpMocks.Domain
         public override string ProofingLevel { get; internal set; } = "P9";
 
         public string OdsCode { get; }
-
-        public string Im1ConnectionToken => JsonSerializer.Serialize(new {Im1CacheKey = "Im1CacheKey", AccessIdentityGuid = Id});
+        public string Im1ConnectionToken { get; private set; } = string.Empty;
 
         public string UserPatientLinkToken => $"linktoken_{Id}";
         public string SessionId => $"session{Id}";
@@ -22,10 +21,15 @@ namespace NHSOnline.HttpMocks.Domain
                 EmisPatientOds.NotificationsPromptEnabled => "emis_with_notifications_prompt_enabled",
                 EmisPatientOds.PkbAndEconsult => "emis_with_pkb_and_econsult",
                 EmisPatientOds.AllSilversEnabled => "emis_with_all_silvers",
+                EmisPatientOds.NoOdsCode => "no-ods-code",
+                EmisPatientOds.UnknownOdsCode => "Unknown",
                 _ => throw new ArgumentOutOfRangeException(nameof(emisPatientOds), emisPatientOds, null)
             };
         }
 
-
+        public void CreateIm1ConnectionToken()
+        {
+            Im1ConnectionToken = JsonSerializer.Serialize(new {Im1CacheKey = "Im1CacheKey", AccessIdentityGuid = Id});
+        }
     }
 }

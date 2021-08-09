@@ -34,20 +34,43 @@ namespace NHSOnline.HttpMocks.CitizenId
 
         [Host(AuthHostName)]
         [HttpGet("authorize")]
-        public IActionResult UpliftScreen(
-            [RequiredFromQuery(Name = "asserted_login_identity")] string token)
+        public async Task<IActionResult> SingleSignOn(
+            [RequiredFromQuery(Name = "asserted_login_identity")] string token,
+            [FromQuery(Name = "redirect_uri")] string redirect,
+            string scope,
+            string state)
         {
-            (string AuthHostName, string Token, HttpRequest Request) model = (AuthHostName, token, Request);
-            return View(model);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwtToken = tokenHandler.ReadJwtToken(token);
+            if (!jwtToken.Payload.TryGetCode(out var code))
+            {
+                return BadRequest();
+            }
+
+            var patient = _patients.LookupById(code);
+            if (patient is null)
+            {
+                return Unauthorized();
+            }
+
+            if (patient.ProofingLevel == "P5")
+            {
+                (string AuthHostName, string Token, HttpRequest Request) model = (AuthHostName, token, Request);
+                return View("UpliftScreen", model);
+            }
+
+            var behaviour = patient.Behaviours.Get<INhsLoginSSOBehaviour>(() => new NhsLoginDefaultSSOBehaviour());
+            return await behaviour.Behave(state, scope, patient, redirect);
         }
 
         [Host(AuthHostName)]
         [HttpGet("authorize")]
         public IActionResult LoginScreen(
             [FromQuery(Name = "redirect_uri")] string redirect,
+            string scope,
             string state)
         {
-            (string AuthHostName, string Redirect, string State, HttpRequest request) model = (AuthHostName, redirect, state, Request);
+            (string AuthHostName, string Redirect, string Scope, string State, HttpRequest request) model = (AuthHostName, redirect, scope, state, Request);
             return View(model);
         }
 
@@ -88,12 +111,20 @@ namespace NHSOnline.HttpMocks.CitizenId
         public async Task<IActionResult> CompleteLogin(
             [FromQuery(Name = "redirect_uri")] string redirect,
             [FromQuery] string state,
+            [FromQuery] string scope,
             [FromQuery] string patientId)
         {
             var patient = _patients.LookupById(patientId);
             if (patient == null)
             {
                 return Unauthorized();
+            }
+
+            patient.Scope = scope;
+
+            if (scope.Contains("nhs_app_credentials", StringComparison.Ordinal) && patient is IGpRegistered registered)
+            {
+                registered.CreateIm1ConnectionToken();
             }
 
             var behaviour = patient.Behaviours.Get<INhsLoginAuthoriseBehaviour>(() => new NhsLoginAuthoriseDefaultBehaviour());
@@ -160,11 +191,11 @@ namespace NHSOnline.HttpMocks.CitizenId
             var accessToken = Request.Headers["Authorization"].Single().Split(' ')[1];
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.ReadJwtToken(accessToken);
-            var patientName = token.Subject;
+            var patientId = token.Subject;
 
-            _logger.LogInformation($"token subject is {patientName}");
+            _logger.LogInformation($"token subject is {patientId}");
 
-            var patient = _patients.LookupById(patientName);
+            var patient = _patients.LookupById(patientId);
             if (patient == null)
             {
                 return NotFound();

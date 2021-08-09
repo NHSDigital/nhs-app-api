@@ -8,8 +8,11 @@ namespace NHSOnline.HttpMocks.Domain
         public override string ProofingLevel { get; internal set; } = "P9";
 
         public string OdsCode => "vision_with_pkb";
-        public string Im1ConnectionToken => JsonSerializer.Serialize(new { RosuAccountId = Id, ApiKey });
+        public string Im1ConnectionToken { get; private set; } = string.Empty;
 
-        public string ApiKey { get; } = "6efbfb6d60d25e5269850de1f033eb792796e69d0e946248834336cf0f49046d";
+        public void CreateIm1ConnectionToken()
+        {
+            Im1ConnectionToken = JsonSerializer.Serialize(new { RosuAccountId = Id, ApiKey = "6efbfb6d60d25e5269850de1f033eb792796e69d0e946248834336cf0f49046d" });
+        }
     }
 }

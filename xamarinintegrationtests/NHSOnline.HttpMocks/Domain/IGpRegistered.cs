@@ -4,5 +4,6 @@ namespace NHSOnline.HttpMocks.Domain
     {
         string OdsCode { get; }
         string Im1ConnectionToken { get; }
+        void CreateIm1ConnectionToken();
     }
 }

@@ -77,6 +77,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
                 .DisableAutoGrantPermissions()
                 .EnableNativeWebScreenshots()
                 .EnableEnsureWebviewsHavePages()
+                .EnableWebviewDetailsCollection()
                 .AddAndroidBrowserStackCapability(capabilities, androidConfig)
                 .Build();
         }

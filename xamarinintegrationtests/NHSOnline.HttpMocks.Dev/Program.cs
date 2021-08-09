@@ -23,8 +23,8 @@ namespace NHSOnline.HttpMocks.Dev
                 yield return new EmisPatient().WithProofLevel5().WithLogin("Timeout").WithBehaviour(GetUserProfileDelayBehaviour);
                 yield return new EmisPatient().WithProofLevel5().WithLogin("NoNhsNumber").WithNhsNumber(NhsNumber.None);
                 yield return new EmisPatient().WithProofLevel5().WithLogin("TooYoung").WithAge(12, 300);
-                yield return new P9Patient().WithLogin("UnknownSupplier").WithUnknownSupplierOdsCode();
-                yield return new P9Patient().WithLogin("UnknownOdsCode").WithUnknownOdsCode();
+                yield return new EmisPatient(EmisPatientOds.NoOdsCode).WithLogin("UnknownSupplier");
+                yield return new EmisPatient(EmisPatientOds.UnknownOdsCode).WithLogin("UnknownOdsCode");
                 yield return new EmisPatient().WithLogin("EmisPatient").WithName(b => b.FamilyName("EMIS"));
                 yield return new EmisPatient().WithLogin("EmisForbidden").WithBehaviour(new EmisCreateSessionForbiddenBehaviour());
                 yield return new TppPatient().WithLogin("TppPatient").WithName(b => b.FamilyName("Tpp"));

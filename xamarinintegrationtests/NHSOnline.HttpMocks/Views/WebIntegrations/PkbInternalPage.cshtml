@@ -1,4 +1,4 @@
-﻿@model (string Title, string SubTitle, Microsoft.AspNetCore.Http.HttpRequest Request)
+@model (string Title, string SubTitle, string SecureHostName, Microsoft.AspNetCore.Http.HttpRequest Request)
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -7,6 +7,7 @@
     <title>@Model.Title</title>
 </head>
 <body>
+
 <div class="jumbotron">
     <h1 class="display-4">@Model.Title</h1>
     @if (Model.SubTitle != "")
@@ -14,6 +15,18 @@
         <h2 class="display-4">@Model.SubTitle</h2>
     }
 </div>
+
+<div class="container">
+    <ul class="list-group">
+        <li class="list-group-item"><a href="/Calendar.html">Calendar</a></li>
+        <li class="list-group-item"><a href="/GoToPage.html">Go to page</a></li>
+        <li class="list-group-item"><a href="/FileUpload.html">File upload</a></li>
+        <li class="list-group-item"><a href="/DocumentDownload.html">Download document</a></li>
+        <li class="list-group-item"><a href="https://@Model.SecureHostName/LocationServices.html">Location services</a></li>
+    </ul>
+</div>
+
 @await Html.PartialAsync("~/views/HttpRequestData.cshtml", Model.Request)
+
 </body>
 </html>

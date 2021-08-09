@@ -12,7 +12,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
             _interactor = interactor;
         }
 
-        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Silver Integration Test Provider Location Services Page");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Web Integration Functionality - Location Services");
 
         private WebText LatitudeText => WebText.WithTagAndText(_interactor, "li", "Latitude: 40.73061");
 

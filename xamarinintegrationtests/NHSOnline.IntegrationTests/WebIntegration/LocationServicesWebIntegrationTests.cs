@@ -1,15 +1,16 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
+using NHSOnline.IntegrationTests.Pages.Android.Appointments;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
-using NHSOnline.IntegrationTests.Pages.Android.Messages;
 using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
 using NHSOnline.IntegrationTests.Pages.IOS;
+using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
-using NHSOnline.IntegrationTests.Pages.IOS.Messages;
 using NHSOnline.IntegrationTests.Pages.IOS.WebIntegration;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
+using NHSOnline.IntegrationTests.WebIntegration.Pkb;
 
 namespace NHSOnline.IntegrationTests.WebIntegration
 {
@@ -20,24 +21,13 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         public void APatientWithProofLevelNineCanNotAccessLocationServicesWithinTheAppWhenTheyDoNotAcceptPermissionsAndroid(
             IAndroidDriverWrapper driver)
         {
-            var patient = new EmisPatient()
+            var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogAndroidPatientIn(driver, patient);
 
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
-
-            AndroidMessagesPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
-
-            AndroidTestWebIntegrationProviderPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.NavigateToLocationServices();
+            NavigateToAddToLocationServicesViaPkbHospitalAppointmentsAndroid(driver);
 
             AndroidLocationServicesPage
                 .AssertOnPage(driver)
@@ -57,24 +47,13 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         public void APatientWithProofLevelNineCanAccessLocationServicesWithinTheAppWhenTheyAcceptPermissionsIos(
             IIOSDriverWrapper driver)
         {
-            var patient = new EmisPatient()
+            var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogIOSPatientIn(driver, patient);
 
-            IOSLoggedInHomePage
-                .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
-
-            IOSMessagesPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
-
-            IOSTestWebIntegrationProviderPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.NavigateToLocationServices();
+            NavigateToAddToLocationServicesViaPkbHospitalAppointmentsIOS(driver);
 
             IOSLocationServicesPage
                 .AssertOnPage(driver)
@@ -98,24 +77,13 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         public void APatientWithProofLevelNineCanNotAccessLocationServicesWithinTheAppWhenTheyDoNotAcceptPermissionsIos(
             IIOSDriverWrapper driver)
         {
-            var patient = new EmisPatient()
+            var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogIOSPatientIn(driver, patient);
 
-            IOSLoggedInHomePage
-                .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
-
-            IOSMessagesPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
-
-            IOSTestWebIntegrationProviderPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.NavigateToLocationServices();
+            NavigateToAddToLocationServicesViaPkbHospitalAppointmentsIOS(driver);
 
             IOSLocationServicesPage
                 .AssertOnPage(driver)
@@ -135,24 +103,13 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         public void APatientWithProofLevelNineCanAccessLocationServicesWithinTheAppWhenTheyAcceptPermissionsAndroid(
             IAndroidDriverWrapper driver)
         {
-            var patient = new EmisPatient()
+            var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogAndroidPatientIn(driver, patient);
 
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
-
-            AndroidMessagesPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
-
-            AndroidTestWebIntegrationProviderPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.NavigateToLocationServices();
+            NavigateToAddToLocationServicesViaPkbHospitalAppointmentsAndroid(driver);
 
             AndroidLocationServicesPage
                 .AssertOnPage(driver)
@@ -166,6 +123,55 @@ namespace NHSOnline.IntegrationTests.WebIntegration
             AndroidLocationServicesPage
                 .AssertOnPage(driver)
                 .PageContent.AssertLocationPresented();
+        }
+
+        private static void NavigateToAddToLocationServicesViaPkbHospitalAppointmentsAndroid(IAndroidDriverWrapper driver)
+        {
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToAppointments();
+
+            AndroidAppointmentsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToHospitalAndOtherAppointments();
+
+            AndroidHospitalAndOtherAppointmentsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToViewAppointments();
+
+            AndroidWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "View appointments")
+                .PageContent.NavigateToNextPage();
+
+            AndroidPkbPage
+                .AssertOnPage(driver, PhrPath.ViewAppointments)
+                .AssertNativeHeader()
+                .NavigateToLocationServices();
+        }
+
+        private static void NavigateToAddToLocationServicesViaPkbHospitalAppointmentsIOS(IIOSDriverWrapper driver)
+        {
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToAppointments();
+
+            IOSAppointmentsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToHospitalAndOtherAppointments();
+
+            IOSHospitalAndOtherAppointmentsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToViewAppointments();
+
+            IOSWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "View appointments")
+                .PageContent.NavigateToNextPage();
+
+            IOSPkbPage
+                .AssertOnPage(driver, PhrPath.ViewAppointments)
+                .AssertNativeHeader()
+                .NavigateToLocationServices();
         }
     }
 }

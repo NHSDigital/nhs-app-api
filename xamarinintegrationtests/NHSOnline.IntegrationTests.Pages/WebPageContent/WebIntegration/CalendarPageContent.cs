@@ -13,7 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
             _interactor = interactor;
         }
 
-        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Silver Integration Test Provider Calendar Page");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Web Integration Functionality - Calendar");
 
         private WebInputText SubjectInputText => WebInputText.WithLabel(_interactor, "Title");
 

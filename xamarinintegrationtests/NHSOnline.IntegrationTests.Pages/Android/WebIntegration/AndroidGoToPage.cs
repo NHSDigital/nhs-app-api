@@ -35,16 +35,12 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
         private AndroidKeyboardNavigation KeyboardPageContentNavigation => AndroidKeyboardNavigation
             .WithExpectedFocusableElements(_driver, PageContent.FocusableElements);
 
-        public void KeyboardNavigateToGoToHomePage() => PageContent.KeyboardNavigateToGoToHome(KeyboardPageContentNavigation);
-
-        public void KeyboardNavigateToGoToPrescriptions() => PageContent.KeyboardNavigateToGoToPrescriptions(KeyboardPageContentNavigation);
-
-        public void KeyboardNavigateToGoToMessages() => PageContent.KeyboardNavigateToGoToMessages(KeyboardPageContentNavigation);
-
-        public void KeyboardNavigateToGoToInvalidPage() => PageContent.KeyboardNavigateToGoToInvalidPage(KeyboardPageContentNavigation);
-
-
+        public void KeyboardNavigateToGoToAdvice() => PageContent.KeyboardNavigateToGoToAdvice(KeyboardPageContentNavigation);
         public void KeyboardNavigateToGoToAppointments() => PageContent.KeyboardNavigateToGoToAppointments(KeyboardPageContentNavigation);
+        public void KeyboardNavigateToGoToHealthRecords() => PageContent.KeyboardNavigateToGoToHealthRecords(KeyboardPageContentNavigation);
+        public void KeyboardNavigateToGoToMore() => PageContent.KeyboardNavigateToGoToMore(KeyboardPageContentNavigation);
+        public void KeyboardNavigateToGoToSettings() => PageContent.KeyboardNavigateToGoToSettings(KeyboardPageContentNavigation);
+        public void KeyboardNavigateToGoToUplift() => PageContent.KeyboardNavigateToGoToUplift(KeyboardPageContentNavigation);
 
         // Focus needs to be set on webview on page load, NHSO-14668 and tabbing functionality needs to be updated before this can be removed.
         public AndroidGoToPage TabIntoFocus()

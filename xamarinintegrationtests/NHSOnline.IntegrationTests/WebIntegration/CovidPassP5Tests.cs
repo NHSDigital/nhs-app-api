@@ -59,7 +59,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .Uplift();
 
             AndroidUpliftShutterPage
-                .Continue(driver);
+                .AssertOnPage(driver)
+                .Continue();
 
             AndroidStubbedLoginUpliftPage
                 .AssertOnPage(driver);
@@ -106,7 +107,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .Uplift();
 
             IOSUpliftShutterPage
-                .Continue(driver);
+                .AssertOnPage(driver)
+                .Continue();
 
             IOSStubbedLoginUpliftPage
                 .AssertOnPage(driver);

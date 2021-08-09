@@ -12,7 +12,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
             _interactor = interactor;
         }
 
-        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Silver Integration Test Provider Document Download Page");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Web Integration Functionality - Document Download");
 
         private WebButton DownloadImageButton => WebButton.WithText(_interactor, "Download test image file");
 

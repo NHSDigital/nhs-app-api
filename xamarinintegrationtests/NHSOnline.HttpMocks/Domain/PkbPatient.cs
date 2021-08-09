@@ -8,6 +8,11 @@ namespace NHSOnline.HttpMocks.Domain
         public override string ProofingLevel { get; internal set; } = "P9";
 
         public string OdsCode => "fake_with_pkb";
-        public string Im1ConnectionToken => JsonSerializer.Serialize(new {Im1CacheKey = "Im1CacheKey", AccessIdentityGuid = Id});
+        public string Im1ConnectionToken { get; private set; } = string.Empty;
+
+        public void CreateIm1ConnectionToken()
+        {
+            Im1ConnectionToken = JsonSerializer.Serialize(new {Im1CacheKey = "Im1CacheKey", AccessIdentityGuid = Id});
+        }
     }
 }

@@ -19,38 +19,9 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Silver Integration Test Provider Internal Page");
 
-        private WebLink FileUploadLink => WebLink.WithText(_interactor, "File upload");
-
-        private WebLink DownloadFileLink => WebLink.WithText(_interactor, "Download document");
-
-        private WebLink CalendarLink => WebLink.WithText(_interactor, "Calendar");
-
-        private WebLink LocationServicesLink => WebLink.WithText(_interactor, "Location services");
-
-        private WebLink GoToPageLink => WebLink.WithText(_interactor, "Go to page");
-
-        public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
-        {
-            FileUploadLink,
-            CalendarLink,
-            LocationServicesLink,
-            DownloadFileLink,
-            GoToPageLink
-        };
-
         internal void AssertOnPage() => TitleText.AssertVisible();
 
         public void AssertUserAgent(Platform platform) =>
             Assert.IsTrue(_interactor.GetUserAgent().Contains(platform.UserAgentDeviceTypePrefix(), StringComparison.InvariantCulture));
-
-        public void NavigateToFileUpload() => FileUploadLink.Click();
-
-        public void NavigateDownloadFile() => DownloadFileLink.Click();
-
-        public void NavigateToCalendar() => CalendarLink.Click();
-
-        public void NavigateToLocationServices() => LocationServicesLink.Click();
-
-        public void NavigateToGoToPage() => GoToPageLink.Click();
     }
 }

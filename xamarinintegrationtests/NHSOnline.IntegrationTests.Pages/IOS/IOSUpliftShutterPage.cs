@@ -14,11 +14,17 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             PageContent = new UpliftShutterPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
-        public static IOSUpliftShutterPage Continue(IIOSDriverWrapper driver)
+        public static IOSUpliftShutterPage AssertOnPage(IIOSDriverWrapper driver)
         {
             var page = new IOSUpliftShutterPage(driver);
-            page.PageContent.ProveYourIdentityContinue();
+            page.PageContent.AssertOnPage();
             return page;
+        }
+
+        public IOSUpliftShutterPage Continue()
+        {
+            PageContent.ProveYourIdentityContinue();
+            return this;
         }
     }
 }

@@ -1,4 +1,3 @@
-using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -13,48 +12,6 @@ namespace NHSOnline.HttpMocks.WebIntegrations
         {
             (string Title, string SubTitle, HttpRequest Request) model = ("Silver Integration Test Provider Internal Page", "", Request);
             return View("~/Views/WebIntegrations/TestProviderInternalPage.cshtml", model);
-        }
-
-        [HttpGet("FileUpload.html")]
-        public IActionResult FileUpload()
-        {
-            (string Title, HttpRequest Request) model = ("Silver Integration Test Provider File Upload Page", Request);
-            return View("~/Views/WebIntegrations/WebIntegrationFunctionalityPages/FileUploadPage.cshtml", model);
-        }
-
-        [HttpGet("Calendar.html")]
-        public IActionResult Calendar()
-        {
-            (string Title, HttpRequest Request) model = ("Silver Integration Test Provider Calendar Page", Request);
-            return View("~/Views/WebIntegrations/WebIntegrationFunctionalityPages/CalendarPage.cshtml", model);
-        }
-
-        [HttpGet("LocationServices.html")]
-        public IActionResult LocationServices()
-        {
-            (string Title, HttpRequest Request) model = ("Silver Integration Test Provider Location Services Page",
-                Request);
-            return View("~/Views/WebIntegrations/WebIntegrationFunctionalityPages/LocationServicesPage.cshtml", model);
-        }
-
-        [HttpGet("DocumentDownload.html")]
-        public IActionResult DocumentDownload()
-        {
-            var basePath =
-                $"{Directory.GetParent(Directory.GetCurrentDirectory())?.Parent?.Parent?.Parent}/NHSOnline.HttpMocks/Resources";
-            var passKitBase64 = System.IO.File.ReadAllText($"{basePath}/PKPass.txt");
-            var imageBase64 = System.IO.File.ReadAllText($"{basePath}/HandAndFootXrayImage.txt");
-
-            (string Title, HttpRequest Request, string ImageBase64String, string PkPassBase64String) model =
-                ("Silver Integration Test Provider Document Download Page", Request, imageBase64, passKitBase64);
-            return View("~/Views/WebIntegrations/WebIntegrationFunctionalityPages/DocumentDownloadPage.cshtml", model);
-        }
-
-        [HttpGet("GoToPage.html")]
-        public IActionResult GoToPage()
-        {
-            (string Title, HttpRequest Request) model = ("Silver Integration Test Provider Go To Page", Request);
-            return View("~/Views/WebIntegrations/WebIntegrationFunctionalityPages/GoToPage.cshtml", model);
         }
     }
 }

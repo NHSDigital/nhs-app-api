@@ -14,16 +14,6 @@
         <h2 class="display-4">@Model.SubTitle</h2>
     }
 </div>
-<div class="container">
-    <ul class="list-group">
-        <li class="list-group-item"><a href="/FileUpload.html">File upload</a></li>
-        <li class="list-group-item"><a href="/Calendar.html">Calendar</a></li>
-        <li class="list-group-item"><a href="/LocationServices.html">Location services</a></li>
-        <li class="list-group-item"><a href="/DocumentDownload.html">Download document</a></li>
-        <li class="list-group-item"><a href="/GoToPage.html">Go to page</a></li>
-    </ul>
-    <hr>
-</div>
 @await Html.PartialAsync("~/views/HttpRequestData.cshtml", Model.Request)
 </body>
 </html>

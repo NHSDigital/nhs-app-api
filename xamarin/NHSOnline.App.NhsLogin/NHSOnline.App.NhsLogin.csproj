@@ -17,6 +17,4 @@
     <ProjectReference Include="..\NHSOnline.App.Threading\NHSOnline.App.Threading.csproj" />
   </ItemGroup>
 
-  <Import Project="Properties/BuildConfiguration.env.Scratch19.props" />
-
 </Project>

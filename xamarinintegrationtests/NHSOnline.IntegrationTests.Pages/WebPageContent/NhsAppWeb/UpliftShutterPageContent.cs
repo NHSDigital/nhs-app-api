@@ -5,6 +5,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
 {
     public class UpliftShutterPageContent
     {
+        private const string Title = "Prove your identity to get full access";
         private readonly IWebInteractor _interactor;
 
         internal UpliftShutterPageContent(IWebInteractor interactor)
@@ -12,10 +13,14 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
             _interactor = interactor;
         }
 
-        private WebPanel UpliftPanel => WebPanel.WithTitle(_interactor, "Prove your identity to get full access");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h2", Title);
+
+        private WebPanel UpliftPanel => WebPanel.WithTitle(_interactor, Title);
 
         private WebButton Continue => UpliftPanel.ContainingButtonWithText("Continue");
 
-        public void ProveYourIdentityContinue() => Continue.Click();
+        internal void AssertOnPage() => TitleText.AssertVisible();
+
+        internal void ProveYourIdentityContinue() => Continue.Click();
     }
 }

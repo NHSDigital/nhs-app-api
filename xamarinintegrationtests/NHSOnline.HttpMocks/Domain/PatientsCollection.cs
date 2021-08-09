@@ -12,17 +12,21 @@ namespace NHSOnline.HttpMocks.Domain
         private readonly ConcurrentDictionary<string, Patient> _idLookup = new ConcurrentDictionary<string, Patient>(StringComparer.OrdinalIgnoreCase);
         private readonly ConcurrentDictionary<int, Patient> _nhsNumberLookup = new ConcurrentDictionary<int, Patient>();
 
-        public IDisposable Add(Patient patient)
+        public IDisposable Add(params Patient[] patients)
         {
-            patient = patient ?? throw new ArgumentNullException(nameof(patient));
-            _idLookup.TryAdd(patient.Id, patient);
-            if (patient.Login != patient.Id)
-            {
-                _idLookup.TryAdd(patient.Login, patient);
-            }
-            _nhsNumberLookup.TryAdd(patient.NhsNumber.IntValue, patient);
+            patients = patients ?? throw new ArgumentNullException(nameof(patients));
 
-            return new RemovePatient(this, patient);
+            foreach (var patient in patients)
+            {
+                _idLookup.TryAdd(patient.Id, patient);
+                if (patient.Login != patient.Id)
+                {
+                    _idLookup.TryAdd(patient.Login, patient);
+                }
+                _nhsNumberLookup.TryAdd(patient.NhsNumber.IntValue, patient);
+            }
+
+            return new RemovePatients(this, patients);
         }
 
         private void Remove(Patient patient)
@@ -61,18 +65,24 @@ namespace NHSOnline.HttpMocks.Domain
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        private sealed class RemovePatient : IDisposable
+        private sealed class RemovePatients : IDisposable
         {
             private readonly PatientsCollection _patientsCollection;
-            private readonly Patient _patient;
+            private readonly IEnumerable<Patient> _patients;
 
-            public RemovePatient(PatientsCollection patientsCollection, Patient patient)
+            public RemovePatients(PatientsCollection patientsCollection, IEnumerable<Patient> patients)
             {
                 _patientsCollection = patientsCollection;
-                _patient = patient;
+                _patients = patients;
             }
 
-            public void Dispose() => _patientsCollection.Remove(_patient);
+            public void Dispose()
+            {
+                foreach (var patient in _patients)
+                {
+                    _patientsCollection.Remove(patient);
+                }
+            }
         }
     }
 }

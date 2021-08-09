@@ -14,8 +14,8 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         [NhsAppAndroidTest]
         public void AnErrorIsDisplayedWhenPatientHasUnknownOdsCodeAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new P9Patient()
-                .WithUnknownOdsCode();
+            var patient = new EmisPatient(EmisPatientOds.UnknownOdsCode);
+
             using var patients = Mocks.Patients.Add(patient);
 
             AndroidLoggedOutHomePage
@@ -38,8 +38,8 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         [NhsAppIOSTest]
         public void AnErrorIsDisplayedWhenPatientHasUnknownOdsCodeIos(IIOSDriverWrapper driver)
         {
-            var patient = new P9Patient()
-                .WithUnknownOdsCode();
+            var patient = new EmisPatient(EmisPatientOds.UnknownOdsCode);
+
             using var patients = Mocks.Patients.Add(patient);
 
             IOSLoggedOutHomePage
@@ -62,8 +62,8 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         [NhsAppAndroidTest]
         public void AnErrorIsDisplayedWhenPatientHasUnknownSupplierAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new P9Patient()
-                .WithUnknownSupplierOdsCode();
+            var patient = new EmisPatient(EmisPatientOds.NoOdsCode);
+
             using var patients = Mocks.Patients.Add(patient);
 
             AndroidLoggedOutHomePage
@@ -86,8 +86,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         [NhsAppIOSTest]
         public void AnErrorIsDisplayedWhenPatientHasUnknownSupplierIos(IIOSDriverWrapper driver)
         {
-            var patient = new P9Patient()
-                .WithUnknownSupplierOdsCode();
+            var patient = new EmisPatient(EmisPatientOds.NoOdsCode);
             using var patients = Mocks.Patients.Add(patient);
 
             IOSLoggedOutHomePage

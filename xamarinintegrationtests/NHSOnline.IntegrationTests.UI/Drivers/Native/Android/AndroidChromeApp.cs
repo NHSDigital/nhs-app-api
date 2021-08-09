@@ -20,7 +20,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 
         public static AndroidChromeApp Launch(IAndroidBrowserStackDriver driver, IAndroidInteractor interactor)
         {
-            driver.StartActivity(AppPackage, AppActivity);
+            driver.StartActivity(AppPackage, AppActivity, stopApp: false);
             return new AndroidChromeApp(driver, interactor);
         }
 

@@ -82,6 +82,12 @@ namespace NHSOnline.IntegrationTests.UI
             return this;
         }
 
+        public AppiumOptionsBuilder EnableWebviewDetailsCollection()
+        {
+            _options.AddAdditionalCapability("enableWebviewDetailsCollection", true);
+            return this;
+        }
+
         public AppiumOptionsBuilder SetBrowserstackTimeout()
         {
             _options.AddAdditionalCapability("browserstack.idleTimeout", "240000");

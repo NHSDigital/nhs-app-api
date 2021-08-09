@@ -8,9 +8,11 @@ namespace NHSOnline.HttpMocks.Domain
         public override string ProofingLevel { get; internal set; } = "P9";
 
         public string OdsCode => "tpp_with_pkb_and_covid_pass";
-        public string Im1ConnectionToken => JsonSerializer.Serialize(new { AccountId = Id, ProviderId, Passphrase});
+        public string Im1ConnectionToken { get; private set; } = string.Empty;
 
-        public string ProviderId { get; } = "Tpp";
-        public string Passphrase { get; } = "secret";
+        public void CreateIm1ConnectionToken()
+        {
+            Im1ConnectionToken = JsonSerializer.Serialize(new { AccountId = Id, ProviderId = "Tpp", Passphrase = "secret"});
+        }
     }
 }

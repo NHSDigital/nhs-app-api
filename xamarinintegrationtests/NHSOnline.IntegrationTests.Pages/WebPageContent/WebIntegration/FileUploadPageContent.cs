@@ -12,7 +12,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
             _interactor = interactor;
         }
 
-        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Silver Integration Test Provider File Upload Page");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Web Integration Functionality - File Upload");
 
         private WebFormLabel FileUploadLink => WebFormLabel.WithText(_interactor, "Upload a single file:");
 

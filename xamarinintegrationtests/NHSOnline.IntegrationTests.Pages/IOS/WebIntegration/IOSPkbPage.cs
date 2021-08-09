@@ -22,6 +22,16 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
             return page;
         }
 
+        public void NavigateToCalendar() => PageContent.NavigateToCalendar();
+
+        public void NavigateToGoToPage() => PageContent.NavigateToGoToPage();
+
+        public void NavigateToFileUpload() => PageContent.NavigateToFileUpload();
+
+        public void NavigateToDocumentDownload() => PageContent.NavigateToDocumentDownload();
+
+        public void NavigateToLocationServices() => PageContent.NavigateToLocationServices();
+
         public IOSPkbPage AssertNativeHeader()
         {
             Navigation.AssertNavigationPresent();

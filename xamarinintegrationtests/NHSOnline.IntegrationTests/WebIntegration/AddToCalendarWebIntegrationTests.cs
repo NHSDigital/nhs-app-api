@@ -1,15 +1,16 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
+using NHSOnline.IntegrationTests.Pages.Android.Appointments;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
-using NHSOnline.IntegrationTests.Pages.Android.Messages;
 using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
 using NHSOnline.IntegrationTests.Pages.IOS;
+using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
-using NHSOnline.IntegrationTests.Pages.IOS.Messages;
 using NHSOnline.IntegrationTests.Pages.IOS.WebIntegration;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
+using NHSOnline.IntegrationTests.WebIntegration.Pkb;
 
 namespace NHSOnline.IntegrationTests.WebIntegration
 {
@@ -21,27 +22,16 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         private const int InvalidEndTime = 1893589100; // Wednesday, 2 January 2030 12:58:20
 
         [NhsAppAndroidTest(AndroidBrowserStackCapability.SignInToGoogle)]
-        public void APatientWithProofLevelNineCanAddAnEventToTheCalendarOnTheTestProviderCalendarScreenAndroid(
+        public void APatientWithProofLevelNineCanAddAnEventToTheCalendarOnAWebIntegrationCalendarScreenAndroid(
             IAndroidDriverWrapper driver)
         {
-            var patient = new EmisPatient()
+            var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogAndroidPatientIn(driver, patient);
 
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
-
-            AndroidMessagesPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
-
-            AndroidTestWebIntegrationProviderPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.NavigateToCalendar();
+            NavigateToAddToCalendarViaPkbHospitalAppointmentsAndroid(driver);
 
             AndroidCalendarPage
                 .AssertOnPage(driver)
@@ -57,27 +47,16 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppIOSTest]
-        public void APatientWithProofLevelNineCanAddAnEventToTheCalendarOnTheTestProviderCalendarScreenIOS(
+        public void APatientWithProofLevelNineCanAddAnEventToTheCalendarOnAWebIntegrationCalendarScreenIOS(
             IIOSDriverWrapper driver)
         {
-            var patient = new EmisPatient()
+            var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogIOSPatientIn(driver, patient);
 
-            IOSLoggedInHomePage
-                .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
-
-            IOSMessagesPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
-
-            IOSTestWebIntegrationProviderPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.NavigateToCalendar();
+            NavigateToAddToCalendarViaPkbHospitalAppointmentsIOS(driver);
 
             IOSCalendarPage
                 .AssertOnPage(driver)
@@ -95,27 +74,16 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppAndroidTest(AndroidBrowserStackCapability.SignInToGoogle)]
-        public void APatientWithProofLevelNineTryingToCallAnInvalidDateRangeOnTheTestProviderCalendarScreenIsShownAndErrorDialogCanBeDismissedAndroid(
+        public void APatientWithProofLevelNineTryingToCallAnInvalidDateRangeOnAWebIntegrationCalendarScreenIsShownAndErrorDialogCanBeDismissedAndroid(
             IAndroidDriverWrapper driver)
         {
-            var patient = new EmisPatient()
+            var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogAndroidPatientIn(driver, patient);
 
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
-
-            AndroidMessagesPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
-
-            AndroidTestWebIntegrationProviderPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.NavigateToCalendar();
+            NavigateToAddToCalendarViaPkbHospitalAppointmentsAndroid(driver);
 
             AndroidCalendarPage
                 .AssertOnPage(driver)
@@ -132,27 +100,16 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppIOSTest]
-        public void APatientWithProofLevelNineTryingToCallAnInvalidDateRangeOnTheTestProviderCalendarScreenIsShownAndErrorDialogCanBeDismissedIOS(
+        public void APatientWithProofLevelNineTryingToCallAnInvalidDateRangeOnAWebIntegrationCalendarScreenIsShownAndErrorDialogCanBeDismissedIOS(
             IIOSDriverWrapper driver)
         {
-            var patient = new EmisPatient()
+            var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogIOSPatientIn(driver, patient);
 
-            IOSLoggedInHomePage
-                .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
-
-            IOSMessagesPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
-
-            IOSTestWebIntegrationProviderPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.NavigateToCalendar();
+            NavigateToAddToCalendarViaPkbHospitalAppointmentsIOS(driver);
 
             IOSCalendarPage
                 .AssertOnPage(driver)
@@ -169,27 +126,17 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppAndroidTest(AndroidBrowserStackCapability.SignInToGoogle)]
-        public void APatientWithProofLevelNineTryingToCallAnInvalidDateRangeOnTheTestProviderCalendarScreenIsShownAnErrorDialogAndCanAddedManuallyAndroid(
+        public void APatientWithProofLevelNineTryingToCallAnInvalidDateRangeOnAWebIntegrationCalendarScreenIsShownAnErrorDialogAndCanAddedManuallyAndroid(
             IAndroidDriverWrapper driver)
         {
-            var patient = new EmisPatient()
+            var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogAndroidPatientIn(driver, patient);
 
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
-
-            AndroidMessagesPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
-
-            AndroidTestWebIntegrationProviderPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.NavigateToCalendar();
+            NavigateToAddToCalendarViaPkbHospitalAppointmentsAndroid(driver);
 
             AndroidCalendarPage
                 .AssertOnPage(driver)
@@ -208,27 +155,16 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppIOSTest]
-        public void APatientWithProofLevelNineTryingToCallAnInvalidDateRangeOnTheTestProviderCalendarScreenIsShownAnErrorDialogAndCanAddedManuallyIOS(
+        public void APatientWithProofLevelNineTryingToCallAnInvalidDateRangeOnAWebIntegrationCalendarScreenIsShownAnErrorDialogAndCanAddedManuallyIOS(
             IIOSDriverWrapper driver)
         {
-            var patient = new EmisPatient()
+            var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogIOSPatientIn(driver, patient);
 
-            IOSLoggedInHomePage
-                .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
-
-            IOSMessagesPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
-
-            IOSTestWebIntegrationProviderPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.NavigateToCalendar();
+            NavigateToAddToCalendarViaPkbHospitalAppointmentsIOS(driver);
 
             IOSCalendarPage
                 .AssertOnPage(driver)
@@ -252,24 +188,13 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         public void APatientWithProofLevelNineTryingToAddToCalendarWithValidDetailsDeniesAccessAndIsShownTheRelevantWarningIOS(
             IIOSDriverWrapper driver)
         {
-            var patient = new EmisPatient()
+            var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogIOSPatientIn(driver, patient);
 
-            IOSLoggedInHomePage
-                .AssertOnPage(driver)
-                .Navigation.NavigateToMessages();
-
-            IOSMessagesPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToTestProvider();
-
-            IOSTestWebIntegrationProviderPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.NavigateToCalendar();
+            NavigateToAddToCalendarViaPkbHospitalAppointmentsIOS(driver);
 
             IOSCalendarPage
                 .AssertOnPage(driver)
@@ -283,6 +208,54 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSCalendarPermissionErrorDialog
                 .AssertDisplayed(driver);
+        }
+
+        private static void NavigateToAddToCalendarViaPkbHospitalAppointmentsAndroid(IAndroidDriverWrapper driver)
+        {
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToAppointments();
+
+            AndroidAppointmentsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToHospitalAndOtherAppointments();
+
+            AndroidHospitalAndOtherAppointmentsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToViewAppointments();
+
+            AndroidWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "View appointments")
+                .PageContent.NavigateToNextPage();
+
+            AndroidPkbPage
+                .AssertOnPage(driver, PhrPath.ViewAppointments)
+                .AssertNativeHeader()
+                .NavigateToCalendar();
+        }
+
+        private static void NavigateToAddToCalendarViaPkbHospitalAppointmentsIOS(IIOSDriverWrapper driver)
+        {
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToAppointments();
+
+            IOSAppointmentsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToHospitalAndOtherAppointments();
+
+            IOSHospitalAndOtherAppointmentsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToViewAppointments();
+
+            IOSWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "View appointments")
+                .PageContent.NavigateToNextPage();
+
+            IOSPkbPage
+                .AssertOnPage(driver, PhrPath.ViewAppointments)
+                .AssertNativeHeader()
+                .NavigateToCalendar();
         }
     }
 }

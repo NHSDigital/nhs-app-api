@@ -1,12 +1,16 @@
 using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb;
+using NHSOnline.IntegrationTests.UI.Components.IOS;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS.Appointments
 {
     public sealed class IOSAppointmentsPage
     {
+        private readonly IIOSDriverWrapper _driver;
+
         private IOSAppointmentsPage(IIOSDriverWrapper driver)
         {
+            _driver = driver;
             Navigation = new IOSFullNavigation(driver);
             PageContent = new AppointmentsPageContent(driver.Web.NhsAppLoggedInWebView());
         }
@@ -14,6 +18,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Appointments
         public IOSFullNavigation Navigation { get; }
 
         public AppointmentsPageContent PageContent { get; }
+
+        private IOSLink GpSurgeryAppointmentsLink => IOSLink.WithText(_driver,  "GP surgery appointments");
 
         public static IOSAppointmentsPage AssertOnPage(IIOSDriverWrapper driver)
         {
@@ -27,5 +33,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Appointments
             Navigation.AssertNavigationPresent();
             PageContent.AssertPageElements();
         }
+
+        public void GoToGpSurgeryAppointments() => GpSurgeryAppointmentsLink.Touch();
     }
 }

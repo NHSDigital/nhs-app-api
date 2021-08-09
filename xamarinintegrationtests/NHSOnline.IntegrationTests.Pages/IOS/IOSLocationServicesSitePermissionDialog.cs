@@ -22,7 +22,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             using var timeout = ExtendedTimeout.FromSeconds(10);
             return AssertDisplayed(
                 driver,
-                $"“https://silverintegrationtestprovider.securestubs.local.bitraft.io” " +
+                $"“https://pkb.securestubs.local.bitraft.io” " +
                 "Would Like To Use Your Current Location");
         }
 
