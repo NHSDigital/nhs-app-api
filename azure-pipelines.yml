@@ -195,6 +195,12 @@ stages:
     jobs:
       - template: .azuredevops/templates/helm-package-chart.yml
 
+  - stage: secret_scanning
+    displayName: Scan git history for secrets
+    dependsOn:
+    jobs:
+      - template: .azuredevops/templates/secret-scanning.yml
+
   - stage: backend
     displayName: Backend
     dependsOn:
