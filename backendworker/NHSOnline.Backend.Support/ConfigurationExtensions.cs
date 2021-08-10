@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.Support
             return value;
         }
 
-        public static bool GetBoolOrFallback(this IConfiguration configuration, string key, bool fallbackValue, ILogger logger)
+        public static bool GetBoolOrFallback(this IConfiguration configuration, string key, bool fallbackValue, ILogger logger = null)
         {
             var value = false;
             var strValue = configuration[key];
@@ -78,7 +78,7 @@ namespace NHSOnline.Backend.Support
             {
                 value = fallbackValue;
 
-                logger.LogWarning(
+                logger?.LogWarning(
                     string.Format(CultureInfo.InvariantCulture, LogMessageParseError, strValue, key) + $" Using supplied Fallback value: {fallbackValue} instead.");
             }
 

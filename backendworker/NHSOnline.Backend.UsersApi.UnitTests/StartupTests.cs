@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.UsersApi.UnitTests
@@ -238,6 +239,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             _mockConfiguration
                 .Setup(x => x["ConfigurationSettings:DefaultHttpTimeoutSeconds"])
                 .Returns("2");
+
+            _mockConfiguration
+                .Setup(x => x[Constants.HealthCheckConstants.HealthCheckLoggingEnabledConfigKeyName])
+                .Returns("false");
 
             SetupNotificationHubConfigurationFields();
         }

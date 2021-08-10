@@ -48,7 +48,10 @@ namespace NHSOnline.Backend.CidApi.DependencyInjection
                 config.Value(enableGpSupplierConfig, enableGpSupplier);
             }
 
-            _gpSystemRegistrationService.RegisterCidServices(services, enableGpSupplierConfig);
+            var isHealthCheckLoggingEnabled = _configuration.GetBoolOrFallback(
+                Constants.HealthCheckConstants.HealthCheckLoggingEnabledConfigKeyName, true);
+
+            _gpSystemRegistrationService.RegisterCidServices(services, enableGpSupplierConfig, isHealthCheckLoggingEnabled);
         }
     }
 }

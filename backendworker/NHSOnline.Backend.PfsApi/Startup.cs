@@ -97,8 +97,8 @@ namespace NHSOnline.Backend.PfsApi
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
             });
 
-            services.AddNhsAppHealthCheckService();
-            services.AddPerformanceCounterService();
+            services.AddNhsAppHealthCheckService(Configuration);
+            services.AddPerformanceCounterService(Configuration);
 
             _supplierStartup.ConfigureServices(services);
             _modularStartup.ConfigureServices(services);

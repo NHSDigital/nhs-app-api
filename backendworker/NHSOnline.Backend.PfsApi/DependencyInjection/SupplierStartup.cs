@@ -48,7 +48,10 @@ namespace NHSOnline.Backend.PfsApi.DependencyInjection
                 config.Value(enableGpSupplierConfig, enableGpSupplier);
             }
 
-            _gpSystemRegistrationService.RegisterPfsServices(services, enableGpSupplierConfig);
+            var isHealthCheckLoggingEnabled = _configuration.GetBoolOrFallback(
+                Constants.HealthCheckConstants.HealthCheckLoggingEnabledConfigKeyName, true);
+
+            _gpSystemRegistrationService.RegisterPfsServices(services, enableGpSupplierConfig, isHealthCheckLoggingEnabled);
         }
     }
 }

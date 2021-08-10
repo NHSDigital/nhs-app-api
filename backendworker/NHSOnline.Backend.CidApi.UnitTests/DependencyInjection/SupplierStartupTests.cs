@@ -43,7 +43,10 @@ namespace NHSOnline.Backend.CidApi.UnitTests.DependencyInjection
             _configuration.Setup(x => x["GP_PROVIDER_ENABLED_FAKE"]).Returns("True");
 
             _gpSystemRegistrationService
-                .Setup(x => x.RegisterCidServices(serviceCollection, It.Is<EnableGpSupplierConfiguration>(config => config.EnableFake)))
+                .Setup(x => x.RegisterCidServices(
+                    serviceCollection,
+                    It.Is<EnableGpSupplierConfiguration>(config => config.EnableFake),
+                    true))
                 .Verifiable();
 
             // Act
@@ -66,7 +69,10 @@ namespace NHSOnline.Backend.CidApi.UnitTests.DependencyInjection
             _configuration.Setup(x => x["GP_PROVIDER_ENABLED_FAKE"]).Returns(value);
 
             _gpSystemRegistrationService
-                .Setup(x => x.RegisterCidServices(serviceCollection, It.Is<EnableGpSupplierConfiguration>(config => config.EnableFake == false)))
+                .Setup(x => x.RegisterCidServices(
+                    serviceCollection,
+                    It.Is<EnableGpSupplierConfiguration>(config => config.EnableFake == false),
+                    true))
                 .Verifiable();
 
             // Act

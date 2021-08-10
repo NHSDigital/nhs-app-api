@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace NHSOnline.Backend.AspNet.HealthChecks.PerformanceCounter
@@ -5,7 +6,7 @@ namespace NHSOnline.Backend.AspNet.HealthChecks.PerformanceCounter
     public static class PerformanceCounterServiceExtensions
     {
         public static void AddPerformanceCounterService(
-            this IServiceCollection services)
+            this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<PerformanceCounterConfiguration>();
             services.AddSingleton<IStatisticsStoreService, StatisticsStoreService>();
@@ -15,7 +16,7 @@ namespace NHSOnline.Backend.AspNet.HealthChecks.PerformanceCounter
             services.AddTransient<IDateTimeHelperService, DateTimeHelperService>();
 
             services.AddNhsAppHealthCheck<PerformanceCounterHealthCheck>(
-                "PERFORMANCE_COUNTERS", NhsAppHealthCheckTags.Readiness);
+                "PERFORMANCE_COUNTERS", NhsAppHealthCheckTags.Readiness, configuration);
         }
     }
 }

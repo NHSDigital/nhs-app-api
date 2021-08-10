@@ -27,16 +27,16 @@ namespace NHSOnline.Backend.UserInfoApi
             services.AddTransient<IMapper<UserProfile, InfoUserProfile>, InfoUserProfileMapper>();
             services.AddScoped<IAccessTokenProvider, AccessTokenProvider>();
 
-            ConfigureRepositoryServices(services);
+            ConfigureRepositoryServices(services, configuration);
             ConfigureCitizenIdServices(services);
             ConfigureUserProfileServices(services);
 
             base.ConfigureServices(services, configuration);
         }
 
-        private static void ConfigureRepositoryServices(IServiceCollection services)
+        private static void ConfigureRepositoryServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.RegisterRepository<UserAndInfo, UserAndInfoRepositoryConfiguration>();
+            services.RegisterRepository<UserAndInfo, UserAndInfoRepositoryConfiguration>(configuration);
             services.AddSingleton<IInfoService, InfoService>();
             services.AddSingleton<IInfoRepository, UserInfoRepository>();
         }

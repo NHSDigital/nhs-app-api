@@ -1,17 +1,20 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.Repository;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Im1Connection.Cache
 {
     public static class Im1ConnectionCacheServiceCollectionExtensions
     {
-        public static void AddIm1CacheService(this IServiceCollection services)
+        public static void AddIm1CacheService(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<IIm1CacheService, Im1CacheService>();
             services.AddTransient<Im1TokenSerialiserService>();
             services.AddTransient<Im1TokenEncryptionService>();
             services.AddTransient<IMongoIm1Cache, MongoIm1Cache>();
-            services.RegisterRepository<Im1CacheRecord, Im1CacheConfig>();
+
+            services.RegisterRepository<Im1CacheRecord, Im1CacheConfig>(configuration);
         }
     }
 }

@@ -21,9 +21,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
     {
         private const string FakeGpSystemNamespace = "NHSOnline.Backend.GpSystems.Suppliers.Fake";
 
-        public static IServiceCollection RegisterFakePfsServices(this IServiceCollection services)
+        public static IServiceCollection RegisterFakePfsServices(this IServiceCollection services, bool isHealthCheckLoggingEnabled)
         {
-            services.RegisterFakeBaseServices();
+            services.RegisterFakeBaseServices(isHealthCheckLoggingEnabled);
 
             services.RegisterFakeAppointmentsServices();
             services.RegisterFakeDemographicsServices();
@@ -37,9 +37,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
             return services;
         }
 
-        public static IServiceCollection RegisterFakeCidServices(this IServiceCollection services)
+        public static IServiceCollection RegisterFakeCidServices(this IServiceCollection services, bool isHealthCheckLoggingEnabled)
         {
-            services.RegisterFakeBaseServices();
+            services.RegisterFakeBaseServices(isHealthCheckLoggingEnabled);
 
             services.RegisterFakeIm1ConnectionServices();
             services.RegisterFakeLinkageServices();
@@ -109,12 +109,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
                 );
         }
 
-        private static IServiceCollection RegisterFakeBaseServices(this IServiceCollection services)
+        private static IServiceCollection RegisterFakeBaseServices(this IServiceCollection services, bool isHealthCheckLoggingEnabled)
         {
             services.AddSingleton<IGpSystem, FakeGpSystem>();
             services.AddTransient<FakeTokenValidationService>();
 
-            services.RegisterFakeUsers();
+            services.RegisterFakeUsers(isHealthCheckLoggingEnabled);
 
             return services;
         }

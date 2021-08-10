@@ -11,7 +11,8 @@ namespace NHSOnline.Backend.Auditing
             services.AddTransient(AuditorFactory.BuildAuditor);
             services.AddSingleton<IAuditSink, DbAuditorSink>();
             services.AddSingleton<AuditorFactory>();
-            services.RegisterRepository<AuditRecord, RepositoryDbAuditSinkConfiguration>();
+
+            services.RegisterRepository<AuditRecord, RepositoryDbAuditSinkConfiguration>(configuration);
         }
     }
 }

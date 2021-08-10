@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.MessagesApi
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.RegisterRepository<UserMessage, MessagesRepositoryConfiguration>();
+            services.RegisterRepository<UserMessage, MessagesRepositoryConfiguration>(configuration);
             services.AddSingleton<IMessagesValidationService, MessagesValidationService>();
             services.AddSingleton<IMessageService, MessageService>();
             services.AddSingleton<IMessageRepository, MessageRepository>();

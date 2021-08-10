@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             var config = new EnableGpSupplierConfiguration();
 
             // Act
-            services.RegisterPfsGpSystemsServices(config);
+            services.RegisterPfsGpSystemsServices(config, true);
 
             // Assert
             CheckBaseRegisteredServices(services);
@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             var config = new EnableGpSupplierConfiguration();
 
             // Act
-            services.RegisterCidGpSystemsServices(config);
+            services.RegisterCidGpSystemsServices(config, true);
 
             // Assert
             CheckBaseRegisteredServices(services);
@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             var config = new EnableGpSupplierConfiguration();
 
             // Act
-            services.RegisterPfsGpSystemsServices(config);
+            services.RegisterPfsGpSystemsServices(config, true);
 
             // Assert
             CheckBaseRegisteredServices(services);

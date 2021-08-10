@@ -52,8 +52,8 @@ namespace NHSOnline.Backend.UserInfoApi
                 .AddControllers(ConfigureMvcOptions)
                 .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
 
-            services.AddNhsAppHealthCheckService();
-            services.AddPerformanceCounterService();
+            services.AddNhsAppHealthCheckService(Configuration);
+            services.AddPerformanceCounterService(Configuration);
 
             services.AddOptions();
             services.AddNhsAppCorrelationId();

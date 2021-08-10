@@ -44,8 +44,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
             });
 
-            services.AddNhsAppHealthCheckService();
-            services.AddPerformanceCounterService();
+            services.AddNhsAppHealthCheckService(Configuration);
+            services.AddPerformanceCounterService(Configuration);
 
             services.AddNhsAppCorrelationId();
 

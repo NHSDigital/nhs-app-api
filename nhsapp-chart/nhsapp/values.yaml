@@ -278,7 +278,7 @@ organdonationSubscription: cGxhY2Vob2xkZXI=
 sessionKey: cGxhY2Vob2xkZXI=
 spinePartyId: cGxhY2Vob2xkZXI=
 
-# Splunk 
+# Splunk
 splunk:
     pidIndex: apppid_nhsapp_dev
 
@@ -638,6 +638,8 @@ scaling:
       selectPolicy: Max
 
 customHealthCheck:
+  - name: Global__IsHealthCheckLoggingEnabled
+    value: "true"
   - name: PerformanceCounter__IsHealthCheckEnabled
     value: "false"
   - name: PerformanceCounter__IsMetricLoggingEnabled

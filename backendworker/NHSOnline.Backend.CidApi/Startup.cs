@@ -87,17 +87,17 @@ namespace NHSOnline.Backend.CidApi
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
             });
 
-            services.AddNhsAppHealthCheckService();
-            services.AddPerformanceCounterService();
+            services.AddNhsAppHealthCheckService(Configuration);
+            services.AddPerformanceCounterService(Configuration);
 
             services.AddNhsAppHealthCheck<HashingServiceHealthCheck>(
-                "HASH", NhsAppHealthCheckTags.LivenessAndReadiness);
+                "HASH", NhsAppHealthCheckTags.LivenessAndReadiness, Configuration);
 
             services.AddSingleton(Configuration);
 
             services.AddTransient<IStartupFilter, SettingValidationStartupFilter>();
 
-            services.AddIm1CacheService();
+            services.AddIm1CacheService(Configuration);
             services.AddSingleton<IOdsCodeMassager, OdsCodeMassager>();
             services.AddTransient<IRetrieveLinkageKeysService, RetrieveLinkageKeysService>();
             services.AddTransient<IGetLinkageKeysService, GetLinkageKeysService>();

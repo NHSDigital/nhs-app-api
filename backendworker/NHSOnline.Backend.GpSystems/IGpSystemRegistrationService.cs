@@ -4,13 +4,17 @@ namespace NHSOnline.Backend.GpSystems
 {
     public interface IGpSystemRegistrationService
     {
-        void RegisterPfsServices(IServiceCollection serviceCollection, EnableGpSupplierConfiguration enableGpSupplierConfiguration);
+        void RegisterPfsServices(IServiceCollection serviceCollection,
+            EnableGpSupplierConfiguration enableGpSupplierConfiguration,
+            bool isHealthCheckLoggingEnabled);
 
-        void RegisterPfsServices(IServiceCollection serviceCollection);
+        void RegisterPfsServices(IServiceCollection serviceCollection, bool isHealthCheckLoggingEnabled);
 
-        void RegisterCidServices(IServiceCollection serviceCollection);
+        void RegisterCidServices(IServiceCollection serviceCollection, bool isHealthCheckLoggingEnabled);
 
-        void RegisterCidServices(IServiceCollection serviceCollection, EnableGpSupplierConfiguration enableGpSupplierConfiguration);
+        void RegisterCidServices(IServiceCollection serviceCollection,
+            EnableGpSupplierConfiguration enableGpSupplierConfiguration,
+            bool isHealthCheckLoggingEnabled);
 
     }
 }

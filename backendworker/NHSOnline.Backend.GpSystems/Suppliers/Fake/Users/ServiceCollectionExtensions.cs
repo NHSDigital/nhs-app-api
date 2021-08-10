@@ -5,9 +5,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Users
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection RegisterFakeUsers(this IServiceCollection services)
+        public static IServiceCollection RegisterFakeUsers(this IServiceCollection services, bool isHealthCheckLoggingEnabled)
         {
-            services.RegisterRepository<FakeUser, FakeGpUserRepoConfiguration>();
+            services.RegisterRepository<FakeUser, FakeGpUserRepoConfiguration>(isHealthCheckLoggingEnabled);
             services.AddTransient<IFakeUserRepository, FakeUserRepository>();
 
             return services;

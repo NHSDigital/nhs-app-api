@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.PfsApi.Messages
                 .AddHttpMessageHandler<HttpRequestIdentificationHandler<MessagesHttpRequestIdentifier>>()
                 .AddCorrelationIdForwarding();
 
-            services.AddNhsAppClientHealthCheck<MessagesHttpClient>("Messages", NhsAppHealthCheckTags.Readiness);
+            services.AddNhsAppClientHealthCheck<MessagesHttpClient>("Messages", NhsAppHealthCheckTags.Readiness, configuration);
 
             base.ConfigureServices(services, configuration);
         }

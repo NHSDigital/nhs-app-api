@@ -1,13 +1,30 @@
 using System;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Configuration;
 
 namespace NHSOnline.Backend.Repository
 {
     public static class StartupExtensions
     {
-        public static void RegisterRepository<TRecord, TConfiguration>(this IServiceCollection services)
+        public static void RegisterRepository<TRecord, TConfiguration>(
+            this IServiceCollection services,
+            IConfiguration configuration)
+            where TRecord : RepositoryRecord
+            where TConfiguration: class, IRepositoryConfiguration, IValidatable
+
+        {
+            var isHealthCheckLoggingEnabled = configuration.GetBoolOrFallback(
+                Constants.HealthCheckConstants.HealthCheckLoggingEnabledConfigKeyName, true);
+
+            RegisterRepository<TRecord, TConfiguration>(services, isHealthCheckLoggingEnabled);
+        }
+
+        public static void RegisterRepository<TRecord, TConfiguration>(
+            this IServiceCollection services,
+            bool isHealthCheckLoggingEnabled)
             where TRecord : RepositoryRecord
             where TConfiguration: class, IRepositoryConfiguration, IValidatable
 
@@ -15,10 +32,15 @@ namespace NHSOnline.Backend.Repository
             services.AddSingleton<TConfiguration>();
             services.AddTransient<IValidatable>(sp => sp.GetRequiredService<TConfiguration>());
             services.AddTransient<IRepository<TRecord>, MongoRepository<TConfiguration, TRecord>>();
-            services
-                .AddHealthChecks()
-                .AddCheck<ApiMongoClientHealthCheck<TConfiguration>>(typeof(TConfiguration).Name, timeout: TimeSpan.FromSeconds(1));
             services.TryAddSingleton(typeof(IApiMongoClient<>), typeof(ApiMongoClient<>));
+
+            if (isHealthCheckLoggingEnabled)
+            {
+                services
+                    .AddHealthChecks()
+                    .AddCheck<ApiMongoClientHealthCheck<TConfiguration>>(typeof(TConfiguration).Name,
+                        timeout: TimeSpan.FromSeconds(1));
+            }
         }
     }
 }

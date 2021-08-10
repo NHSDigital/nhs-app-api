@@ -14,7 +14,10 @@ namespace NHSOnline.Backend.GpSystems
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection RegisterPfsGpSystemsServices(this IServiceCollection services, EnableGpSupplierConfiguration enableGpSupplierConfiguration)
+        public static IServiceCollection RegisterPfsGpSystemsServices(
+            this IServiceCollection services,
+            EnableGpSupplierConfiguration enableGpSupplierConfiguration,
+            bool isHealthCheckLoggingEnabled)
         {
             services.RegisterBaseGpSystemsServices();
             services.RegisterEmisPfsServices();
@@ -26,13 +29,16 @@ namespace NHSOnline.Backend.GpSystems
 
             if (enableGpSupplierConfiguration.EnableFake)
             {
-                services.RegisterFakePfsServices();
+                services.RegisterFakePfsServices(isHealthCheckLoggingEnabled);
             }
 
             return services;
         }
 
-        public static IServiceCollection RegisterCidGpSystemsServices(this IServiceCollection services, EnableGpSupplierConfiguration enableGpSupplierConfiguration)
+        public static IServiceCollection RegisterCidGpSystemsServices(
+            this IServiceCollection services,
+            EnableGpSupplierConfiguration enableGpSupplierConfiguration,
+            bool isHealthCheckLoggingEnabled)
         {
             services.RegisterBaseGpSystemsServices();
             services.RegisterEmisCidServices();
@@ -44,7 +50,7 @@ namespace NHSOnline.Backend.GpSystems
 
             if (enableGpSupplierConfiguration.EnableFake)
             {
-                services.RegisterFakeCidServices();
+                services.RegisterFakeCidServices(isHealthCheckLoggingEnabled);
             }
 
             return services;

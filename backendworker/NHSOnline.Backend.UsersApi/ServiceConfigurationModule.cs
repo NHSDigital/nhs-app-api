@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.UsersApi
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.RegisterRepository<UserDevice, UsersRepositoryConfiguration>();
+            services.RegisterRepository<UserDevice, UsersRepositoryConfiguration>(configuration);
             services.AddSingleton<IUserDeviceRepository, UserDeviceRepository>();
             services.AddSingleton<IDeviceRepositoryService, DeviceRepositoryService>();
 

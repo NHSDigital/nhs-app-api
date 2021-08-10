@@ -262,5 +262,10 @@ namespace NHSOnline.Backend.Support
             public const string TagSeparator = ":";
             public const string NhsLoginIdTagPrefix = "nhsLoginId";
         }
+
+        public static class HealthCheckConstants
+        {
+            public const string HealthCheckLoggingEnabledConfigKeyName = "Global:IsHealthCheckLoggingEnabled";
+        }
     }
 }
