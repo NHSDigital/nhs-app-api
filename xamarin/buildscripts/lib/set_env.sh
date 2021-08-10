@@ -10,7 +10,7 @@ IPA_PACKAGE_DIR=${IPA_PACKAGE_DIR:-${REPO_ROOT}/xamarinintegrationtests}
 
 # Ensure NhsAppBundleShortVersion and NhsAppBundleVersion in Xamarin iOS project are also updated when bumping these
 NATIVE_VERSION_NUMBER="1.99.0"
-NATIVE_IOS_BUILD_NUMBER="1"
+NATIVE_IOS_BUILD_NUMBER="2"
 
 MSBUILD=${MSBUILD:-$(command -v msbuild || true)}
 if [[ $(uname -s) =~ ^MING.* ]]; then

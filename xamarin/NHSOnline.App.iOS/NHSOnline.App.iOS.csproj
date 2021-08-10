@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Local - Debug</Configuration>
     <!-- Ensure xamarin/buildscripts/lib/set_env.sh native versions are also updated when bumping these -->
     <NhsAppBundleShortVersion Condition=" '$(NhsAppBundleShortVersion)' == '' ">1.99.0</NhsAppBundleShortVersion>
-    <NhsAppBundleVersion Condition=" '$(NhsAppBundleVersion)' == '' ">1</NhsAppBundleVersion>
+    <NhsAppBundleVersion Condition=" '$(NhsAppBundleVersion)' == '' ">2</NhsAppBundleVersion>
     <NhsAppBundleDisplayName Condition=" '$(NhsAppBundleDisplayName)' == '' ">NHS App</NhsAppBundleDisplayName>
     <NhsAppApnsEnvironmentEntitlement Condition=" '$(NhsAppApnsEnvironmentEntitlement)' == '' ">production</NhsAppApnsEnvironmentEntitlement>
     <NhsAppDomainEntitlement Condition=" '$(NhsAppDomainEntitlement)' == '' ">nhsapp.service.nhs.uk</NhsAppDomainEntitlement>
