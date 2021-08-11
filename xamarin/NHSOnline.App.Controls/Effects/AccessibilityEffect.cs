@@ -66,7 +66,9 @@ namespace NHSOnline.App.Controls.Effects
         public enum ControlType
         {
             Link,
-            Button
+            Button,
+            Heading1,
+            Heading2
         }
 
         private class AccessibilityRoutingEffect : RoutingEffect

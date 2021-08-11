@@ -19,6 +19,7 @@ namespace NHSOnline.App.iOS.Effects
             {
                 AutomationProperties.SetIsInAccessibleTree(Element, true);
                 target.AccessibilityTraits = AccessibilityTraitsFor(Element, controlType);
+                target.AccessibilityHint = AccessibilityHintFor(controlType);
                 target.IsAccessibilityElement = true;
             }
 
@@ -61,6 +62,8 @@ namespace NHSOnline.App.iOS.Effects
             {
                 AccessibilityEffect.ControlType.Button => UIAccessibilityTrait.Button,
                 AccessibilityEffect.ControlType.Link => UIAccessibilityTrait.Link,
+                AccessibilityEffect.ControlType.Heading1 => UIAccessibilityTrait.None,
+                AccessibilityEffect.ControlType.Heading2 => UIAccessibilityTrait.None,
                 _ => throw new ArgumentOutOfRangeException(nameof(controlType), controlType,
                     $"{nameof(AccessibilityTraitsFor)} doesn't cover all types")
             };
@@ -71,6 +74,19 @@ namespace NHSOnline.App.iOS.Effects
             }
 
             return traits;
+        }
+
+        private static string? AccessibilityHintFor(AccessibilityEffect.ControlType controlType)
+        {
+            return controlType switch
+            {
+                AccessibilityEffect.ControlType.Button => null,
+                AccessibilityEffect.ControlType.Link => null,
+                AccessibilityEffect.ControlType.Heading1 => "Heading 1",
+                AccessibilityEffect.ControlType.Heading2 => "Heading 2",
+                _ => throw new ArgumentOutOfRangeException(nameof(controlType), controlType,
+                    $"{nameof(AccessibilityHintFor)} doesn't cover all types")
+            };
         }
 
         protected override void OnDetached()

@@ -2,6 +2,7 @@
 
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Controls.Elements.ResponsiveHeading2"
              x:Name="Root">
     
@@ -36,5 +37,6 @@
         </ResourceDictionary>
     </View.Resources>
     
-    <Label x:Name="Heading2Label" Text="{Binding Text, Source={x:Reference Name=Root}}" />
+    <Label x:Name="Heading2Label" Text="{Binding Text, Source={x:Reference Name=Root}}"
+           effects:AccessibilityEffect.ControlType="Heading2"/>
 </ContentView>

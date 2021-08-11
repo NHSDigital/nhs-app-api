@@ -27,17 +27,19 @@ namespace NHSOnline.App.Droid.Effects
                 AccessibilityEffect.GetControlType(Element) is { } controlType)
 
             {
-                AutomationProperties.SetIsInAccessibleTree(Element, true);
                 target.SetAccessibilityDelegate(new AccessibilityDelegate(Element, controlType));
                 switch (controlType)
                 {
                     case AccessibilityEffect.ControlType.Button:
                     case AccessibilityEffect.ControlType.Link:
+                        AutomationProperties.SetIsInAccessibleTree(Element, true);
                         target.KeyPress -= ControlOnKeyPress;
                         target.KeyPress += ControlOnKeyPress;
                         target.FocusChange -= ControlFocusChange;
                         target.FocusChange += ControlFocusChange;
                         break;
+                    case AccessibilityEffect.ControlType.Heading1:
+                    case AccessibilityEffect.ControlType.Heading2:
                     default:
                         break;
                 }
@@ -147,6 +149,12 @@ namespace NHSOnline.App.Droid.Effects
                     case AccessibilityEffect.ControlType.Link:
                         info.RoleDescription = "Link";
                         info.Clickable = true;
+                        break;
+                    case AccessibilityEffect.ControlType.Heading1:
+                        info.RoleDescription = "Heading 1";
+                        break;
+                    case AccessibilityEffect.ControlType.Heading2:
+                        info.RoleDescription = "Heading 2";
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(
