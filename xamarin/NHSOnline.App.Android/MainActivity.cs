@@ -16,7 +16,7 @@ using Xamarin.Essentials;
 
 namespace NHSOnline.App.Droid
 {
-    [Activity(Label = "NHSOnline.App",
+    [Activity(Label = "NHS App",
         LaunchMode = LaunchMode.SingleTask,
         Theme = "@style/MainTheme",
         Icon = "@mipmap/ic_launcher",
