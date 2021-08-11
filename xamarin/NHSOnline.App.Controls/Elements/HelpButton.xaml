@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:icons="clr-namespace:NHSOnline.App.Controls.Icons;assembly=NHSOnline.App.Controls"
+             xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
+             x:Class="NHSOnline.App.Controls.Elements.HelpButton"
+             x:Name="Root">
+    
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            
+            <Style TargetType="StackLayout" Class="ButtonLayout">
+                <Setter Property="HorizontalOptions" Value="End" />
+                <Setter Property="VerticalOptions" Value="Start" />
+                <Setter Property="Padding" Value="5" />
+            </Style>
+            
+            <Style TargetType="icons:IconHelpWhite" Class="UnfocusedIcon">
+                <Setter Property="HeightRequest" Value="37" />
+                <Setter Property="IsVisible" Value="True" />
+            </Style>
+            
+            <Style TargetType="icons:IconHelpBlack" Class="FocusedIcon">
+                <Setter Property="HeightRequest" Value="37" />
+                <Setter Property="IsVisible" Value="False" />
+            </Style>
+            
+            <Style TargetType="Label" Class="IconLabel">
+                <Setter Property="TextColor" Value="{StaticResource NhsUkWhite}" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    
+    <StackLayout x:Name="ButtonContainer"
+                 StyleClass="ButtonLayout"
+                 effects:AccessibilityEffect.ControlType="Button"
+                 AutomationProperties.Name="Help">
+        
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="KeyboardFocusStates">
+                <VisualState x:Name="KeyboardUnfocused" />
+                <VisualState x:Name="KeyboardFocused">
+                    <VisualState.Setters>
+                        <Setter TargetName="ButtonContainer" Property="BackgroundColor" Value="{StaticResource NhsUkYellow}"/>
+                        <Setter TargetName="FocusedIcon" Property="icons:NhsLoginUnfocused.IsVisible" Value="True"/>
+                        <Setter TargetName="UnfocusedIcon" Property="icons:NhsLoginUnfocused.IsVisible" Value="False"/>
+                        <Setter TargetName="HelpLabel" Property="Label.TextColor" Value="{StaticResource NhsUkPrimaryText}"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+                
+        <icons:IconHelpWhite x:Name="UnfocusedIcon" StyleClass="UnfocusedIcon"/>
+        <icons:IconHelpBlack x:Name="FocusedIcon" StyleClass="FocusedIcon"/>
+                
+        <Label x:Name="HelpLabel" StyleClass="IconLabel" Text="Help" />
+
+        <StackLayout.GestureRecognizers>
+            <TapGestureRecognizer 
+                Command="{Binding Command, Source={x:Reference Name=Root}}" />
+        </StackLayout.GestureRecognizers>
+    </StackLayout>
+</ContentView>

@@ -73,27 +73,10 @@
                 </Grid>
             </StackLayout>
             
-            <StackLayout Grid.Row="1" 
-                         Grid.Column="1" 
-                         HorizontalOptions="End"
-                         VerticalOptions="Start"
-                         effects:AccessibilityEffect.ControlType="Button"
-                         AutomationProperties.Name="Help">
-                
-                <icons:IconHelp HeightRequest="37"
-                                AutomationProperties.IsInAccessibleTree="False"
-                                AutomationId="NHS App help icon"/>
-                
-                <Label Text="Help"
-                       TextColor="{StaticResource NhsUkWhite}"
-                       FontSize="Small"
-                       HorizontalOptions="Center" />
-
-                <StackLayout.GestureRecognizers>
-                    <TapGestureRecognizer 
-                        Command="{Binding NhsUkLoginHelpServiceCommand, Source={x:Reference Name=Page}}" />
-                </StackLayout.GestureRecognizers>
-            </StackLayout>
+            <elements:HelpButton 
+                Grid.Row="1" 
+                Grid.Column="1"
+                Command="{Binding NhsUkLoginHelpServiceCommand, Source={x:Reference Name=Page}}" />
             
             <icons:NhsLogoWhite Grid.Row="1"
                                 Grid.Column="1"

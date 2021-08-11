@@ -112,7 +112,7 @@
             
                 <StackLayout Grid.Column="0" StyleClass="IconAndLabel" AutomationProperties.Name="Help"
                              effects:AccessibilityEffect.ControlType="Button">
-                    <icons:IconHelp />
+                    <icons:IconHelpWhite />
                     
                     <Label Text="Help" AutomationProperties.IsInAccessibleTree="False"/>
             

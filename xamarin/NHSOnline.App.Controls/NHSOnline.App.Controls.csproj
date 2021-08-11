@@ -21,7 +21,8 @@
     <EmbeddedResource Include="Icons\icon-advice-blue.svg" />
     <EmbeddedResource Include="Icons\icon-appointments-blue.svg" />
     <EmbeddedResource Include="Icons\icon-appointments-grey.svg" />
-    <EmbeddedResource Include="Icons\icon-help.svg" />
+    <EmbeddedResource Include="Icons\icon-help-black.svg" />
+    <EmbeddedResource Include="Icons\icon-help-white.svg" />
     <EmbeddedResource Include="Icons\icon-home.svg" />
     <EmbeddedResource Include="Icons\icon-messages-blue.svg" />
     <EmbeddedResource Include="Icons\icon-minus.svg" />
@@ -212,6 +213,10 @@
     </Compile>
     <Compile Update="Elements\ResponsiveUnorderedList.xaml.cs">
       <DependentUpon>ResponsiveUnorderedList.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Elements\HelpButton.xaml.cs">
+      <DependentUpon>HelpButton.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
