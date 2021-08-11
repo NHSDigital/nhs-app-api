@@ -24,6 +24,6 @@ namespace NHSOnline.App.Navigation.Pages
             set => SetValue(PageContentProperty, value);
         }
 
-        public ICommand CloseClicked => new Command(async () => await Navigation.PopAsync().PreserveThreadContext());
+        public ICommand CloseClicked => new Command(async () => await Navigation.PopAsync(false).PreserveThreadContext());
     }
 }

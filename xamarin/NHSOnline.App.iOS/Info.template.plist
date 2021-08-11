@@ -10,7 +10,7 @@
     <key>CFBundleName</key>
     <string>NHSOnline.App</string>
     <key>CFBundleVersion</key>
-    <string>2</string>
+    <string>3</string>
     <key>MinimumOSVersion</key>
     <string>10.0</string>
     <key>UIDeviceFamily</key>

@@ -56,7 +56,7 @@ namespace NHSOnline.App.Controls
 
             dispatcher.BeginInvokeOnMainThread(async () =>
             {
-                await navigation.PopToRootAsync().ConfigureAwait(true);
+                await navigation.PopToRootAsync(false).ConfigureAwait(true);
                 if (navigation.NavigationStack[0] is IRootPage rootPage)
                 {
                     await rootPage.ResetAndShowError().ConfigureAwait(true);

@@ -102,7 +102,7 @@ namespace NHSOnline.App.Navigation
             SuppressHandlers();
 
             _navigation.InsertPageBefore(newRootPage, _navigation.NavigationStack[0]);
-            await _navigation.PopToRootAsync().PreserveThreadContext();
+            await _navigation.PopToRootAsync(false).PreserveThreadContext();
         }
 
         public async Task ReplaceCurrentPage(Page page)
@@ -111,7 +111,7 @@ namespace NHSOnline.App.Navigation
 
             var currentPage = _navigation.NavigationStack[^1];
 
-            await _navigation.PushAsync(page).PreserveThreadContext();
+            await _navigation.PushAsync(page, false).PreserveThreadContext();
 
             _navigation.RemovePage(currentPage);
         }
