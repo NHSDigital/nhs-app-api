@@ -1,3 +1,5 @@
+using System;
+using System.Net;
 using System.Threading.Tasks;
 using Foundation;
 using NHSOnline.App.Api.Client.Cookies;
@@ -35,6 +37,22 @@ namespace NHSOnline.App.iOS.DependencyServices
                     await cookieStore.DeleteCookieAsync(cookie).ConfigureAwait(true);
                 }
             }
+        }
+
+        public async Task<Cookie?> GetCookie(Uri uri, string cookieName)
+        {
+            var cookieStore = WKWebsiteDataStore.DefaultDataStore.HttpCookieStore;
+            var cookies = await cookieStore.GetAllCookiesAsync().ResumeOnThreadPool() ?? Array.Empty<NSHttpCookie>();
+
+            foreach (NSHttpCookie cookie in cookies)
+            {
+                if (cookie.Name == cookieName && uri.Host.Contains(cookie.Domain, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return new Cookie(cookie.Name, cookie.Value, cookie.Path, cookie.Domain);
+                }
+            }
+
+            return null;
         }
     }
 }

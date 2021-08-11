@@ -28,8 +28,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly IForcedUpdateCheckService _forcedUpdateCheckService;
         private readonly IAlertDialog _alertDialogService;
         private readonly BiometricLoginErrorPageDispatcher _biometricLoginErrorPageDispatcher;
-        private readonly LoggedOutHomeScreenModel _model;
         private readonly ICookieService _cookieService;
+        private readonly LoggedOutHomeScreenModel _model;
 
         private static readonly TimeSpan BiometricDelayOnAppearing = TimeSpan.FromMilliseconds(100);
         private static readonly TimeSpan BiometricDelayOnTemporaryLockout = TimeSpan.FromSeconds(5);

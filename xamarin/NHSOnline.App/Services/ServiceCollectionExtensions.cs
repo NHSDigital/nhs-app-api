@@ -11,6 +11,7 @@ namespace NHSOnline.App.Services
         {
             return services
                 .AddSingleton<IForcedUpdateCheckService, ForcedUpdateCheckService>()
+                .AddTransient<NhsAppCookieService>()
                 .AddTransient<IBiometricAuthenticationService, BiometricAuthenticationService>()
                 .AddTransient<BiometricRegistrationService>()
                 .AddTransient<BiometricLoginService>()

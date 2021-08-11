@@ -6,6 +6,7 @@ using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
 using NHSOnline.App.Services.ForcedUpdate;
+using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.Areas.LoggedOut.Presenters
 {
@@ -18,6 +19,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly INhsLoginService _nhsLoginService;
         private readonly IForcedUpdateCheckService _forcedUpdateCheckService;
         private readonly IUserPreferencesService _userPreferencesService;
+        private readonly NhsAppCookieService _nhsAppCookieService;
 
         private Uri? _deeplinkUrl;
         private Uri? ResolveDeeplinkUrl => _deeplinkUrl ?? _model.DeeplinkUrl;
@@ -29,7 +31,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             IPageFactory pageFactory,
             INhsLoginService nhsLoginService,
             IForcedUpdateCheckService forcedUpdateCheckService,
-            IUserPreferencesService userPreferencesService)
+            IUserPreferencesService userPreferencesService,
+            NhsAppCookieService nhsAppCookieService)
         {
             _view = view;
             _model = model;
@@ -38,6 +41,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _nhsLoginService = nhsLoginService;
             _forcedUpdateCheckService = forcedUpdateCheckService;
             _userPreferencesService = userPreferencesService;
+            _nhsAppCookieService = nhsAppCookieService;
 
             view.AppNavigation
                 .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
@@ -53,6 +57,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task ViewOnAppearing()
         {
             var updateCheck = await UpdateRequiredCheck().PreserveThreadContext();
+            await ValidateAndUpdateShowGettingStarted().PreserveThreadContext();
 
             if (updateCheck != UpdateRequired.No)
             {
@@ -65,6 +70,14 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             else
             {
                 await ShowNhsLoginPage(_model.FidoAuthResponse).PreserveThreadContext();
+            }
+        }
+
+        private async Task ValidateAndUpdateShowGettingStarted()
+        {
+            if (_userPreferencesService.ShowGettingStarted)
+            {
+                _userPreferencesService.ShowGettingStarted = !await _nhsAppCookieService.HasGettingStartedPageCookie().ResumeOnThreadPool();
             }
         }
 
