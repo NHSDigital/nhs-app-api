@@ -6,7 +6,3 @@ var linkHeader = context.targetResponse.headers['Link'];
 var responseLink = linkHeader.replace(regexString, requestUrl);
 
 context.targetResponse.headers['Link'] = responseLink;
-
-
-
-
