@@ -62,6 +62,16 @@
 			</Response>
 			<Condition>(response.header.Location != null)</Condition>
 		</Flow>
+		<Flow name="RewriteLinkHeader">
+			<Description/>
+			<Request/>
+			<Response>
+				<Step>
+					<Name>JavaScript.Header.Rewrite.Link</Name>
+				</Step>
+			</Response>
+			<Condition>(response.header.Link != null)</Condition>
+		</Flow>
 	</Flows>
 	<HTTPTargetConnection>
 		<Properties>
