@@ -3,7 +3,6 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:icons="clr-namespace:NHSOnline.App.Controls.Icons;assembly=NHSOnline.App.Controls"
-             xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
              xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Controls.Navigation.SlimCloseNavigationHeader"
              x:Name="Root">
@@ -13,7 +12,6 @@
 
     <View.Resources>
         <ResourceDictionary>
-            
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -21,35 +19,99 @@
             <Style TargetType="StackLayout">
                 <Setter Property="Orientation" Value="Horizontal" />
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />
-                <Setter Property="BackgroundColor" Value="{StaticResource NhsUkBlue}" />
+                <Setter Property="BackgroundColor" Value="{StaticResource NhsUkBlue}" /> 
+                <Setter Property="HeightRequest" Value="50" />
             </Style>
             
-            <Style TargetType="icons:IconClose">
+            <Style TargetType="StackLayout" Class="Button">
                 <Setter Property="HorizontalOptions" Value="Start" />
                 <Setter Property="VerticalOptions" Value="Center" />
-                <Setter Property="Margin" Value="10,0,0,10" />
-                <Setter Property="HeightRequest" Value="30" />
-                <Setter Property="WidthRequest" Value="30" />
+                <Setter Property="HeightRequest" Value="35" />
+                <Setter Property="Padding" Value="0,3,0,0" />
+                <Setter Property="Margin" Value="10,0,0,0" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
             </Style>
             
-            <Style TargetType="elements:MediumLabel">
+            <Style TargetType="Grid" Class="HeaderGrid">
+                <Setter Property="ColumnSpacing" Value="0" />  
+                <Setter Property="RowSpacing" Value="0" />  
+            </Style>
+            
+            <Style x:Key="Icon" TargetType="View" ApplyToDerivedTypes="True">
+                <Setter Property="HorizontalOptions" Value="Start" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="Margin" Value="6" />
+                <Setter Property="HeightRequest" Value="16" />
+                <Setter Property="WidthRequest" Value="16" />
+            </Style>
+            <Style TargetType="icons:IconCloseWhite" BasedOn="{StaticResource Icon}">
+                <Setter Property="IsVisible" Value="True" />
+            </Style>
+            <Style TargetType="icons:IconCloseBlack" BasedOn="{StaticResource Icon}">
+                <Setter Property="IsVisible" Value="False" />
+            </Style>
+            
+            <Style TargetType="Label" Class="CloseLabel">
                 <Setter Property="VerticalOptions" Value="CenterAndExpand" />
                 <Setter Property="TextColor" Value="{StaticResource NhsUkWhite}" />
-                <Setter Property="Margin" Value="0,0,0,10" />
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="Padding" Value="15,0,5,0" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontFamily" Value="Frutiger" />
             </Style>
             
+            <Style TargetType="BoxView" Class="FocusUnderLine">
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="HeightRequest" Value="5" />  
+                <Setter Property="VerticalOptions" Value="End" />  
+            </Style>
         </ResourceDictionary>
+        
     </View.Resources>
 
     <StackLayout AutomationId="NHS App Slim Close Navigation Header">
-        
-        <icons:IconClose AutomationProperties.IsInAccessibleTree="True" AutomationId="NHS App close icon" />
-        
-        <elements:MediumLabel Text="Close" />
-        
-        <StackLayout.GestureRecognizers>
-            <TapGestureRecognizer Command="{Binding CloseCommand, Source={x:Reference Name=Root}}"  />
-        </StackLayout.GestureRecognizers>
+      
+        <StackLayout StyleClass="Button" x:Name="ButtonStackLayout"
+                     effects:AccessibilityEffect.ControlType="Button"
+                     AutomationProperties.IsInAccessibleTree="True" 
+                     AutomationProperties.Name="Close" 
+                     AutomationId="NHS App close icon" >
+            <Grid HorizontalOptions="Center" VerticalOptions="Center" StyleClass="HeaderGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="5"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <icons:IconCloseWhite x:Name="IconCloseWhite" Grid.Row="0" Grid.Column="0" />
+                <icons:IconCloseBlack x:Name="IconCloseBlack" Grid.Row="0" Grid.Column="0" />
+                <Label x:Name="CloseLabel" Grid.Row="0" Grid.Column="1" Text="Close" StyleClass="CloseLabel"  />
+                <BoxView x:Name="BoxView" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" StyleClass="FocusUnderLine" />
+            </Grid>
+            
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding CloseCommand, Source={x:Reference Name=Root}}"  />
+            </StackLayout.GestureRecognizers>
+            
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="KeyboardFocusStates">
+                    <VisualState x:Name="KeyboardUnfocused" />
+                    <VisualState x:Name="KeyboardFocused">
+                        <VisualState.Setters>
+                            <Setter TargetName="BoxView" Property="BoxView.BackgroundColor" Value="{StaticResource NhsUkPrimaryText}"/>
+                            <Setter TargetName="CloseLabel" Property="Label.TextColor" Value="{StaticResource NhsUkPrimaryText}"/>
+                            <Setter TargetName="IconCloseWhite" Property="icons:IconCloseWhite.IsVisible" Value="False"/>
+                            <Setter TargetName="IconCloseBlack" Property="icons:IconCloseBlack.IsVisible" Value="True"/>
+                            <Setter TargetName="ButtonStackLayout" Property="StackLayout.BackgroundColor" Value="{StaticResource NhsUkYellow}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            
+        </StackLayout>
         
     </StackLayout>
 </ContentView>

@@ -19,7 +19,7 @@
                 <Setter Property="BackgroundColor" Value="{StaticResource NhsUkBlue}" />
             </Style>
             
-            <Style TargetType="icons:IconClose">
+            <Style TargetType="icons:IconCloseWhite">
                 <Setter Property="HorizontalOptions" Value="Start" />
                 <Setter Property="VerticalOptions" Value="Center" />
                 <Setter Property="Margin" Value="10,0,0,0" />
@@ -47,7 +47,7 @@
         <StackLayout Orientation="Horizontal"
                      Margin="0,0,0,5">
 
-            <icons:IconClose AutomationProperties.IsInAccessibleTree="True" AutomationId="NHS App close icon" />
+            <icons:IconCloseWhite AutomationProperties.IsInAccessibleTree="True" AutomationId="NHS App close icon" />
 
             <elements:MediumLabel Text="Close" />
 

@@ -23,6 +23,7 @@
     <EmbeddedResource Include="Icons\icon-appointments-grey.svg" />
     <EmbeddedResource Include="Icons\icon-help-black.svg" />
     <EmbeddedResource Include="Icons\icon-help-white.svg" />
+    <EmbeddedResource Include="Icons\icon-close-black.svg" />
     <EmbeddedResource Include="Icons\icon-home.svg" />
     <EmbeddedResource Include="Icons\icon-messages-blue.svg" />
     <EmbeddedResource Include="Icons\icon-minus.svg" />
@@ -36,7 +37,7 @@
     <EmbeddedResource Include="Icons\icon-advice-grey.svg" />
     <EmbeddedResource Include="Icons\icon-arrow-right.svg" />
     <EmbeddedResource Include="Icons\icon-arrow-left.svg" />
-    <EmbeddedResource Include="Icons\icon-close.svg" />
+    <EmbeddedResource Include="Icons\icon-close-white.svg" />
     <EmbeddedResource Include="Icons\icon-continue-with-nhs-login-unfocused.svg" />
     <EmbeddedResource Include="Icons\icon-continue-with-nhs-login-focused.svg" />
     <EmbeddedResource Include="Icons\NhsSpinner.svg" />
