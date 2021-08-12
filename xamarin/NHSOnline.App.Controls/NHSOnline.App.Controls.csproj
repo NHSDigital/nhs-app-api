@@ -24,11 +24,13 @@
     <EmbeddedResource Include="Icons\icon-help-black.svg" />
     <EmbeddedResource Include="Icons\icon-help-white.svg" />
     <EmbeddedResource Include="Icons\icon-close-black.svg" />
-    <EmbeddedResource Include="Icons\icon-home.svg" />
+    <EmbeddedResource Include="Icons\icon-home-black.svg" />
+    <EmbeddedResource Include="Icons\icon-home-white.svg" />
     <EmbeddedResource Include="Icons\icon-messages-blue.svg" />
-    <EmbeddedResource Include="Icons\icon-minus.svg" />
-    <EmbeddedResource Include="Icons\icon-more.svg" />
     <EmbeddedResource Include="Icons\icon-messages-grey.svg" />
+    <EmbeddedResource Include="Icons\icon-minus.svg" />
+    <EmbeddedResource Include="Icons\icon-more-black.svg" />
+    <EmbeddedResource Include="Icons\icon-more-white.svg" />
     <EmbeddedResource Include="Icons\icon-plus.svg" />
     <EmbeddedResource Include="Icons\icon-prescriptions-blue.svg" />
     <EmbeddedResource Include="Icons\icon-prescriptions-grey.svg" />

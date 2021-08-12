@@ -12,7 +12,7 @@
             <ContentView.Effects>
                 <effects:SafeAreaPaddingTop />
             </ContentView.Effects>
-            <StackLayout BackgroundColor="{StaticResource NhsUkBlue}" Spacing="0" Padding="0,5,0,0">
+            <StackLayout BackgroundColor="{StaticResource NhsUkBlue}" Spacing="0">
                 <navigation:SlimCloseAndLogoNavigationHeader 
                     CloseCommand="{Binding CloseClicked, Source={x:Reference Name=Root}}" />
                 <ContentView 

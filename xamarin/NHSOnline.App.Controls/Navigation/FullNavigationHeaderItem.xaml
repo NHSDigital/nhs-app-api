@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
+             xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
+             x:Class="NHSOnline.App.Controls.Navigation.FullNavigationHeaderItem"
+             x:Name="Root">
+    <View.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <Style TargetType="StackLayout" Class="IconAndLabel">
+                <Setter Property="HeightRequest" Value="50" />
+                <Setter Property="WidthRequest" Value="44" />
+                <Setter Property="Orientation" Value="Vertical" />
+                <Setter Property="Spacing" Value="0" />
+                <Setter Property="Padding" Value="0, 5" />
+                <Setter Property="VerticalOptions" Value="End" />
+            </Style>
+            
+            <Style TargetType="controls:SvgImage" ApplyToDerivedTypes="True" >
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
+                <Setter Property="Margin" Value="0,0,0,5" />
+                <Setter Property="HeightRequest" Value="23" />
+                <Setter Property="WidthRequest" Value="23" />
+            </Style>
+            <Style TargetType="ContentView" Class="IconDefault" >
+                <Setter Property="IsVisible" Value="True" />
+            </Style>
+            <Style TargetType="ContentView" Class="IconKeyboardFocus" >
+                <Setter Property="IsVisible" Value="False" />
+            </Style>
+            
+            <Style TargetType="Label">
+                <Setter Property="FontFamily" Value="Frutiger" />
+                <Setter Property="FontSize" Value="10" />
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
+                <Setter Property="TextColor" Value="{StaticResource NhsUkWhite}" />
+                <Setter Property="effects:FixedFontSizeEffect.HasFixedFontSize" Value="True" /> 
+            </Style>
+            
+        </ResourceDictionary>
+    </View.Resources>
+    
+    <ContentView.Content>
+        <StackLayout x:Name="ButtonStackLayout"
+                     StyleClass="IconAndLabel"  
+                     AutomationProperties.Name="{Binding Text, Source={x:Reference Name=Root}}"
+                     effects:AccessibilityEffect.ControlType="Button"> 
+            
+            <ContentView x:Name="IconDefault" StyleClass="IconDefault" Content="{Binding DefaultIcon, Source={x:Reference Name=Root}}" />
+            <ContentView x:Name="IconKeyboardFocus" StyleClass="IconKeyboardFocus" Content="{Binding KeyboardFocusIcon, Source={x:Reference Name=Root}}" />
+                  
+            <Label x:Name="ItemLabel" 
+                   Text="{Binding Text, Source={x:Reference Name=Root}}" 
+                   AutomationProperties.IsInAccessibleTree="false" />
+                    
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding IconCommand, Source={x:Reference Name=Root}}" />
+            </StackLayout.GestureRecognizers>
+            
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="KeyboardFocusStates">
+                    <VisualState x:Name="KeyboardUnfocused" />
+                    <VisualState x:Name="KeyboardFocused">
+                        <VisualState.Setters>
+                            <Setter TargetName="ItemLabel" Property="Label.TextColor" Value="{StaticResource NhsUkPrimaryText}"/>
+                            <Setter TargetName="IconDefault" Property="ContentView.IsVisible" Value="False"/>
+                            <Setter TargetName="IconKeyboardFocus" Property="ContentView.IsVisible" Value="True"/>
+                            <Setter TargetName="ButtonStackLayout" Property="StackLayout.BackgroundColor" Value="{StaticResource NhsUkYellow}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

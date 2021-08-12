@@ -15,9 +15,7 @@
                 <effects:SafeAreaPaddingTop />
             </ContentView.Effects>
             
-            <StackLayout BackgroundColor="{StaticResource NhsUkBlue}" 
-                         Spacing="0" 
-                         Padding="0,5,0,0">
+            <StackLayout BackgroundColor="{StaticResource NhsUkBlue}" Spacing="0" >
                 
                 <navigation:SlimLogoNavigationHeader />
                 

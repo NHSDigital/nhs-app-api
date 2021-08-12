@@ -5,6 +5,7 @@
              xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
              xmlns:icons="clr-namespace:NHSOnline.App.Controls.Icons;assembly=NHSOnline.App.Controls"
              xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
+             xmlns:navigation="clr-namespace:NHSOnline.App.Controls.Navigation;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Controls.Navigation.FullNavigationHeader"
              x:Name="Root">
     <ContentView.Effects>
@@ -58,13 +59,6 @@
                 <Setter Property="WidthRequest" Value="59" />
             </Style>
             
-            <Style TargetType="Label">
-                <Setter Property="FontFamily" Value="Frutiger" />
-                <Setter Property="FontSize" Value="10" />
-                <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
-                <Setter Property="TextColor" Value="{StaticResource NhsUkWhite}" />
-                <Setter Property="effects:FixedFontSizeEffect.HasFixedFontSize" Value="True" /> 
-            </Style>
         </ResourceDictionary>
     </View.Resources>
             
@@ -79,22 +73,21 @@
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
         
-        <StackLayout Grid.Column="0" StyleClass="VerticalCenter">
+        <StackLayout Grid.Column="0" StyleClass="VerticalCenter" >
             <Grid StyleClass="HeaderLeft">
                 <Grid.ColumnDefinitions >
                     <ColumnDefinition Width="44" />
                 </Grid.ColumnDefinitions>
                 
-                <StackLayout StyleClass="IconAndLabel" AutomationProperties.Name="Home"
-                             effects:AccessibilityEffect.ControlType="Button">
-                    <icons:IconHome />
-                    
-                    <Label Text="Home" AutomationProperties.IsInAccessibleTree="false" />
-                    
-                    <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding HomeCommand, Source={x:Reference Name=Root}}"  />
-                    </StackLayout.GestureRecognizers>
-                </StackLayout>
+                <navigation:FullNavigationHeaderItem Text="Home"
+                                                     IconCommand="{Binding HomeCommand, Source={x:Reference Name=Root}}">
+                    <navigation:FullNavigationHeaderItem.DefaultIcon>
+                        <icons:IconHomeWhite />
+                    </navigation:FullNavigationHeaderItem.DefaultIcon>
+                    <navigation:FullNavigationHeaderItem.KeyboardFocusIcon>
+                        <icons:IconHomeBlack />
+                    </navigation:FullNavigationHeaderItem.KeyboardFocusIcon>
+                </navigation:FullNavigationHeaderItem>
             </Grid>
         </StackLayout>
 
@@ -110,27 +103,28 @@
                     <ColumnDefinition Width="44" />
                 </Grid.ColumnDefinitions>
             
-                <StackLayout Grid.Column="0" StyleClass="IconAndLabel" AutomationProperties.Name="Help"
-                             effects:AccessibilityEffect.ControlType="Button">
-                    <icons:IconHelpWhite />
-                    
-                    <Label Text="Help" AutomationProperties.IsInAccessibleTree="False"/>
-            
-                    <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding HelpCommand, Source={x:Reference Name=Root}}"  />
-                    </StackLayout.GestureRecognizers>
-                </StackLayout>
+                <navigation:FullNavigationHeaderItem Grid.Column="0" 
+                                                     Text="Help"
+                                                     IconCommand="{Binding HelpCommand, Source={x:Reference Name=Root}}">
+                    <navigation:FullNavigationHeaderItem.DefaultIcon>
+                        <icons:IconHelpWhite />
+                    </navigation:FullNavigationHeaderItem.DefaultIcon>
+                    <navigation:FullNavigationHeaderItem.KeyboardFocusIcon>
+                        <icons:IconHelpBlack />
+                    </navigation:FullNavigationHeaderItem.KeyboardFocusIcon>
+                </navigation:FullNavigationHeaderItem>
                 
-                <StackLayout Grid.Column="1" StyleClass="IconAndLabel" AutomationProperties.Name="More"
-                             effects:AccessibilityEffect.ControlType="Button" >
-                    <icons:IconMore />         
-                    
-                    <Label Text="More" AutomationProperties.IsInAccessibleTree="False" />
-                
-                    <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding MoreCommand, Source={x:Reference Name=Root}}"  />
-                    </StackLayout.GestureRecognizers>
-                </StackLayout>
+                <navigation:FullNavigationHeaderItem Grid.Column="1" 
+                                                     Text="More"
+                                                     IconCommand="{Binding MoreCommand, Source={x:Reference Name=Root}}">
+                    <navigation:FullNavigationHeaderItem.DefaultIcon>
+                        <icons:IconMoreWhite />
+                    </navigation:FullNavigationHeaderItem.DefaultIcon>
+                    <navigation:FullNavigationHeaderItem.KeyboardFocusIcon>
+                        <icons:IconMoreBlack />
+                    </navigation:FullNavigationHeaderItem.KeyboardFocusIcon>
+                </navigation:FullNavigationHeaderItem>
+
             </Grid>
         </StackLayout>
     </Grid>
