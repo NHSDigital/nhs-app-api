@@ -3,64 +3,100 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="NHSOnline.App.Controls.Elements.Button"
              x:Name="Root">
+    
     <View.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
             <x:Int16 x:Key="CornerRadius">4</x:Int16>
+            
+            <Style TargetType="StackLayout">
+                <Setter Property="Spacing" Value="0" />
+            </Style>
+            
             <Style TargetType="Button">
                 <Setter Property="Padding" Value="46, 12" />
                 <Setter Property="CornerRadius" Value="{StaticResource CornerRadius}" />
                 <Setter Property="FontFamily" Value="Frutiger-Bold" />
                 <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="TextColor" Value="{Binding TextColour, Source={x:Reference Name=Root}}" />
+                <Setter Property="BackgroundColor" Value="{Binding ButtonColour, Source={x:Reference Name=Root}}" />
             </Style>
+            
             <Style TargetType="BoxView" Class="BorderBackground">
                 <Setter Property="CornerRadius" Value="{StaticResource CornerRadius}" />
+                <Setter Property="Color" Value="{Binding ColourGradient, Source={x:Reference Name=Root}}" />
             </Style>
-            <Style TargetType="BoxView" Class="PositionalGuide">
+            
+            <Style TargetType="BoxView" Class="ButtonTopBoxGuide">
                 <Setter Property="Opacity" Value="0" />
+                <Setter Property="VerticalOptions" Value="Start" />
+                <Setter Property="HeightRequest" Value="0" />
+            </Style>
+            
+            <Style TargetType="BoxView" Class="ButtonBottomBoxGuide">
+                <Setter Property="VerticalOptions" Value="Start" />
+                <Setter Property="HeightRequest" Value="4" />
             </Style>
         </ResourceDictionary>
     </View.Resources>
+    
     <VisualStateManager.VisualStateGroups>
         <VisualStateGroup Name="CommonStates">
+            
             <VisualState Name="Normal">
                 <VisualState.Setters>
                     <Setter TargetName="TopPositionalGuide" Property="HeightRequest" Value="0" />
                     <Setter TargetName="BottomPositionalGuide" Property="HeightRequest" Value="4" />
                 </VisualState.Setters>
             </VisualState>
+            
             <VisualState Name="Pressed">
                 <VisualState.Setters>
                     <Setter TargetName="TopPositionalGuide" Property="HeightRequest" Value="4" />
                     <Setter TargetName="BottomPositionalGuide" Property="HeightRequest" Value="0" />
                 </VisualState.Setters>
             </VisualState>
+            
+        </VisualStateGroup>
+        <VisualStateGroup x:Name="KeyboardFocusStates">
+            
+            <VisualState x:Name="KeyboardUnfocused" />
+            
+            <VisualState x:Name="KeyboardFocused">
+                <VisualState.Setters>
+                    <Setter TargetName="ButtonElement" Property="Button.BackgroundColor" Value="{StaticResource NhsUkYellow}"/>
+                    <Setter TargetName="ButtonElement" Property="Button.TextColor" Value="{StaticResource NhsUkPrimaryText}"/>
+                    <Setter TargetName="ButtonGradient" Property="BoxView.Color" Value="{StaticResource NhsUkPrimaryText}"/>
+                </VisualState.Setters>
+            </VisualState>
+            
         </VisualStateGroup>
     </VisualStateManager.VisualStateGroups>
+    
     <AbsoluteLayout>
         <BoxView AbsoluteLayout.LayoutFlags="PositionProportional, WidthProportional"
                  AbsoluteLayout.LayoutBounds="0, 1, 1, 28"
-                 Color="{Binding ColourGradient, Source={x:Reference Name=Root}}"
-                 StyleClass="BorderBackground" />
-        <StackLayout Spacing="0"
-                     AbsoluteLayout.LayoutFlags="All"
+                 StyleClass="BorderBackground"
+                 x:Name="ButtonGradient"/>
+        
+        <StackLayout AbsoluteLayout.LayoutFlags="All"
                      AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
-            <BoxView VerticalOptions="Start"
-                     HeightRequest="0"
-                     StyleClass="PositionalGuide"
+            
+            <BoxView StyleClass="ButtonTopBoxGuide"
                      x:Name="TopPositionalGuide" />
-            <Button VerticalOptions="Start"
+            
+            <Button x:Name="ButtonElement" VerticalOptions="Start"
                     Command="{Binding Command, Source={x:Reference Name=Root}}"
                     Pressed="EncapsulatedButton_OnPressed"
                     Released="EncapsulatedButton_OnReleased"
-                    Text="{Binding Text, Source={x:Reference Name=Root}}" 
-                    TextColor="{Binding TextColour, Source={x:Reference Name=Root}}"
-                    BackgroundColor="{Binding ButtonColour, Source={x:Reference Name=Root}}" />
-            <BoxView VerticalOptions="Start"
-                     HeightRequest="4"
-                     StyleClass="PositionalGuide"
+                    Text="{Binding Text, Source={x:Reference Name=Root}}"
+                    Focused="EncapsulatedButton_OnFocused"
+                    Unfocused="EncapsulatedButton_OnUnfocused"/>
+            
+            <BoxView StyleClass="ButtonBottomBoxGuide"
                      x:Name="BottomPositionalGuide" />
         </StackLayout>
     </AbsoluteLayout>
