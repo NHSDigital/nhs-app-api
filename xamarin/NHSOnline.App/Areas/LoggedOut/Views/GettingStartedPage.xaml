@@ -35,6 +35,8 @@
             
                 <deprecated:Paragraph Text="Use the NHS App to:" />
                 
+                <elements:LabelListItem LabelText="get your NHS COVID pass" />
+
                 <elements:LabelListItem LabelText="order repeat prescriptions" />
                 
                 <elements:LabelListItem LabelText="book and manage appointments" />
