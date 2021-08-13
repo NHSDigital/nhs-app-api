@@ -9,5 +9,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         Task DisableNetwork();
         void CloseApp();
         void LaunchApp();
+        void AssertRunningInForeground();
     }
 }

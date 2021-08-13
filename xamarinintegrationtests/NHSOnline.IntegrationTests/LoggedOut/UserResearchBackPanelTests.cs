@@ -45,6 +45,8 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                     .PressBackButton()
                     .WaitForBackAction();
 
+            driver.AssertRunningInForeground();
+
             AndroidUserResearchOptInPage
                 .AssertOnPage(driver);
         }
@@ -80,6 +82,8 @@ namespace NHSOnline.IntegrationTests.LoggedOut
             driver
                 .SwipeBack()
                 .WaitForBackAction();
+
+            driver.AssertRunningInForeground();
 
             IOSUserResearchOptInPage
                 .AssertOnPage(driver);

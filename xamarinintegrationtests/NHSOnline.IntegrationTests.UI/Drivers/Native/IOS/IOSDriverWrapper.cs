@@ -163,6 +163,11 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             _driver.LaunchApp();
         }
 
+        public void AssertRunningInForeground()
+        {
+            AssertAppRunning();
+        }
+
         public void Dispose() => _driver.Dispose();
     }
 }

@@ -41,6 +41,8 @@ namespace NHSOnline.IntegrationTests.TermsAndConditions
                 .PressBackButton()
                 .WaitForBackAction();
 
+            driver.AssertRunningInForeground();
+
             AndroidTermsAndConditionsPage
                 .AssertOnPage(driver);
         }
@@ -71,6 +73,8 @@ namespace NHSOnline.IntegrationTests.TermsAndConditions
             driver
                 .SwipeBack()
                 .WaitForBackAction();
+
+            driver.AssertRunningInForeground();
 
             IOSTermsAndConditionsPage
                 .AssertOnPage(driver);

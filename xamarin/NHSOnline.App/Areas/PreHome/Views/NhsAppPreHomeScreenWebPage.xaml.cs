@@ -143,6 +143,11 @@ namespace NHSOnline.App.Areas.PreHome.Views
             WebView.IsVisible = true;
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            return true;
+        }
+
         public async Task HandleDeeplink(Uri deeplinkUrl)
         {
             if (DeeplinkRequested != null)
