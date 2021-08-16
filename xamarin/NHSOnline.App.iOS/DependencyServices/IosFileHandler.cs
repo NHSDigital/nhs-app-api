@@ -68,7 +68,7 @@ namespace NHSOnline.App.iOS.DependencyServices
                     using var data = new NSData(downloadRequest.Base64Data, NSDataBase64DecodingOptions.IgnoreUnknownCharacters);
                     using var passKitPass = new PKPass(data, out NSError error);
 
-                    // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+                    // ReSharper disable once ConditionIsAlwaysTrueOrFalse - The generated PKPass is incorrect and the NSError can actually be null
                     if (error != null)
                     {
                         Logger.LogError(

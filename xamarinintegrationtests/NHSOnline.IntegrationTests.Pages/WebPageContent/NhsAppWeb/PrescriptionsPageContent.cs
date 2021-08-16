@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Components.Web;
@@ -70,7 +71,13 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
             "p",
             "View your current and past medicines or add a record of your own");
 
-        internal void AssertOnPage() => TitleText.AssertVisible();
+        internal void AssertOnPage()
+        {
+            // Extending timeout to allow SSO to complete
+            using var extendedTimeout = ExtendedTimeout.FromSeconds(15);
+
+            TitleText.AssertVisible();
+        }
 
         public PrescriptionsPageContent AssertPageElements()
         {

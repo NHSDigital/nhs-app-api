@@ -41,9 +41,6 @@ namespace NHSOnline.App.Droid.Dialogs
                 alert.SetNegativeButton(negativeButtonText, (sender, args) =>
                 {
                     negativeAction?.Invoke();
-                    // ReSharper disable AccessToDisposedClosure
-                    alert.Dispose();
-                    // ReSharper restore AccessToDisposedClosure
                 });
             }
 
@@ -52,9 +49,6 @@ namespace NHSOnline.App.Droid.Dialogs
                 alert.SetPositiveButton(positiveButtonText, (sender, args) =>
                 {
                     positiveAction?.Invoke();
-                    // ReSharper disable AccessToDisposedClosure
-                    alert.Dispose();
-                    // ReSharper restore AccessToDisposedClosure
                 });
             }
 
