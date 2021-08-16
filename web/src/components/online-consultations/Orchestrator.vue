@@ -19,6 +19,7 @@
       <form @submit.prevent="continueClicked">
         <component :is="questionWrapper"
                    :id="question.id"
+                   :key="questionKey"
                    :is-legend="question.isLegend"
                    :label-for="question.name"
                    :question-tag="question.tag"
@@ -27,7 +28,6 @@
                    :error="isValidationError">
           <component :is="questionComponent"
                      :id="question.name"
-                     :key="questionKey"
                      v-model="answer"
                      :type="question.type"
                      :name="question.name"
