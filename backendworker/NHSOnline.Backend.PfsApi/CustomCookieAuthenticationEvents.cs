@@ -48,32 +48,30 @@ namespace NHSOnline.Backend.PfsApi
 
             var (sessionExpiryToken, expiryTime) = GetSessionCookieAndExpiryTime(context);
 
-            if (_currentDateTimeProvider.UtcNow < expiryTime)
+            RetrieveSessionResult retrieveSessionResult;
+            var (sessionId, token) = GetSessionIdAndToken(context);
+
+            if (IsUserMoreThanHalfWayIntoSession(expiryTime))
             {
-                RetrieveSessionResult retrieveSessionResult;
-                var (sessionId, token) = GetSessionIdAndToken(context);
+                // Recreate the JWT and update Cosmos session object
+                retrieveSessionResult = await _gpSessionManager.UpdateAndRetrieveSession(sessionId, token);
+                sessionExpiryToken = _sessionExpiryCookieCreator.CreateSessionExpiryToken();
+            }
+            else
+            {
+                // No need to recreate the JWT or update the Cosmos session object
+                retrieveSessionResult = await _gpSessionManager.RetrieveSession(sessionId, token);
+            }
 
-                if (IsUserMoreThanHalfWayIntoSession(expiryTime))
-                {
-                    // Recreate the JWT and update Cosmos session object
-                    retrieveSessionResult = await _gpSessionManager.UpdateAndRetrieveSession(sessionId, token);
-                    sessionExpiryToken = _sessionExpiryCookieCreator.CreateSessionExpiryToken();
-                }
-                else
-                {
-                    // No need to recreate the JWT or update the Cosmos session object
-                    retrieveSessionResult = await _gpSessionManager.RetrieveSession(sessionId, token);
-                }
+            if (retrieveSessionResult is RetrieveSessionResult.Success success && !(sessionExpiryToken is null))
+            {
+                context.HttpContext.RequestServices.GetRequiredService<UserSessionService>()
+                    .SetUserSession(success.UserSession);
 
-                if (retrieveSessionResult is RetrieveSessionResult.Success success && !(sessionExpiryToken is null))
-                {
-                    context.HttpContext.RequestServices.GetRequiredService<UserSessionService>().SetUserSession(success.UserSession);
+                _sessionExpiryCookieCreator.AppendSessionExpiryCookie(context.HttpContext, sessionExpiryToken);
 
-                    _sessionExpiryCookieCreator.AppendSessionExpiryCookie(context.HttpContext, sessionExpiryToken);
-
-                    _logger.LogDebug("Finish: Validate Principal");
-                    return;
-                }
+                _logger.LogDebug("Finish: Validate Principal");
+                return;
             }
 
             await RejectPrincipalAndSignOut(context);
