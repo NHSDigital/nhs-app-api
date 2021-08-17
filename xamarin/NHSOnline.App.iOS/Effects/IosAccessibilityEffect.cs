@@ -82,8 +82,8 @@ namespace NHSOnline.App.iOS.Effects
             {
                 AccessibilityEffect.ControlType.Button => null,
                 AccessibilityEffect.ControlType.Link => null,
-                AccessibilityEffect.ControlType.Heading1 => "Heading 1",
-                AccessibilityEffect.ControlType.Heading2 => "Heading 2",
+                AccessibilityEffect.ControlType.Heading1 => "Heading level 1",
+                AccessibilityEffect.ControlType.Heading2 => "Heading level 2",
                 _ => throw new ArgumentOutOfRangeException(nameof(controlType), controlType,
                     $"{nameof(AccessibilityHintFor)} doesn't cover all types")
             };
