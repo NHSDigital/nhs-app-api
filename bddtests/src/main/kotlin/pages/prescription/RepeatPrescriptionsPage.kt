@@ -35,7 +35,7 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
     private val prescriptionInstructionsLocator = By.cssSelector("[data-label='prescription-description']")
     private val specialRequestTextAreaXpath = "//textarea[@id='specialRequest']"
     private val healthRecordsInTheNhsAppLink =
-        "https://www.nhs.uk/nhs-app/nhs-app-help-and-support/health-records-in-the-nhs-app/"
+        "http://stubs.local.bitraft.io:8080/help/health-records-in-the-nhs-app/"
     private val abbreviationsLink = "abbreviations-commonly-found-in-medical-records/"
     private val medicalAbbreviationExtLink = "$healthRecordsInTheNhsAppLink$abbreviationsLink"
 

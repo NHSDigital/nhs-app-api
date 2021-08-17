@@ -49,7 +49,7 @@ import { LINKED_PROFILES_SHUTTER_MESSAGES } from '@/router/routes/linked-profile
 import { MESSAGES_MENU_ITEM } from '@/middleware/nativeNavigation';
 
 import proofLevel from '@/lib/proofLevel';
-import { messagingHelpUrl } from '@/router/externalLinks';
+import { MESSAGING_HELP_PATH } from '@/router/externalLinks';
 import sjrRedirectRules from '@/router/sjrRedirectRules';
 import { INDEX } from './general';
 
@@ -62,7 +62,7 @@ export const MESSAGES = {
     titleKey: 'navigation.pages.titles.messages',
     proofLevel: proofLevel.P5,
     crumb: breadcrumbs.MESSAGES_CRUMB,
-    helpUrl: messagingHelpUrl,
+    helpPath: MESSAGING_HELP_PATH,
     nativeNavigation: MESSAGES_MENU_ITEM,
     redirectRules: [{
       condition: 'session/isProxying',
@@ -85,7 +85,7 @@ export const GP_MESSAGES = {
     proofLevel: proofLevel.P9,
     upliftRoute: INDEX,
     crumb: breadcrumbs.GP_MESSAGES_CRUMB,
-    helpUrl: messagingHelpUrl,
+    helpPath: MESSAGING_HELP_PATH,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
     nativeNavigation: MESSAGES_MENU_ITEM,
     gpSessionOnDemand: {
@@ -103,7 +103,7 @@ export const GP_MESSAGES_URGENCY = {
     proofLevel: proofLevel.P9,
     upliftRoute: INDEX,
     crumb: breadcrumbs.GP_MESSAGES_URGENCY_CRUMB,
-    helpUrl: messagingHelpUrl,
+    helpPath: MESSAGING_HELP_PATH,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
     nativeNavigation: MESSAGES_MENU_ITEM,
     gpSessionOnDemand: {
@@ -122,7 +122,7 @@ export const GP_MESSAGES_URGENCY_CONTACT_YOUR_GP = {
     proofLevel: proofLevel.P9,
     upliftRoute: INDEX,
     crumb: breadcrumbs.GP_MESSAGES_URGENCY_CONTACT_YOUR_GP_CRUMB,
-    helpUrl: messagingHelpUrl,
+    helpPath: MESSAGING_HELP_PATH,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
     nativeNavigation: MESSAGES_MENU_ITEM,
     gpSessionOnDemand: {
@@ -141,7 +141,7 @@ export const GP_MESSAGES_RECIPIENTS = {
     proofLevel: proofLevel.P9,
     upliftRoute: INDEX,
     crumb: breadcrumbs.GP_MESSAGES_RECIPIENTS_CRUMB,
-    helpUrl: messagingHelpUrl,
+    helpPath: MESSAGING_HELP_PATH,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
     nativeNavigation: MESSAGES_MENU_ITEM,
     gpSessionOnDemand: {
@@ -166,7 +166,7 @@ export const GP_MESSAGES_SEND_MESSAGE = {
     proofLevel: proofLevel.P9,
     upliftRoute: INDEX,
     crumb: breadcrumbs.GP_MESSAGES_SEND_MESSAGE_CRUMB,
-    helpUrl: messagingHelpUrl,
+    helpPath: MESSAGING_HELP_PATH,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
     nativeNavigation: MESSAGES_MENU_ITEM,
     gpSessionOnDemand: {
@@ -191,7 +191,7 @@ export const GP_MESSAGES_VIEW_DETAILS = {
     proofLevel: proofLevel.P9,
     upliftRoute: INDEX,
     crumb: breadcrumbs.GP_MESSAGES_VIEW_DETAILS_CRUMB,
-    helpUrl: messagingHelpUrl,
+    helpPath: MESSAGING_HELP_PATH,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
     nativeNavigation: MESSAGES_MENU_ITEM,
     gpSessionOnDemand: {
@@ -210,7 +210,7 @@ export const GP_MESSAGES_DOWNLOAD_ATTACHMENT = {
     proofLevel: proofLevel.P9,
     upliftRoute: INDEX,
     crumb: breadcrumbs.GP_MESSAGES_DOWNLOAD_ATTACHMENT_CRUMB,
-    helpUrl: messagingHelpUrl,
+    helpPath: MESSAGING_HELP_PATH,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
     nativeNavigation: MESSAGES_MENU_ITEM,
     gpSessionOnDemand: {
@@ -228,7 +228,7 @@ export const GP_MESSAGES_VIEW_ATTACHMENT = {
     proofLevel: proofLevel.P9,
     upliftRoute: INDEX,
     crumb: breadcrumbs.GP_MESSAGES_VIEW_ATTACHMENT_CRUMB,
-    helpUrl: messagingHelpUrl,
+    helpPath: MESSAGING_HELP_PATH,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
     nativeNavigation: MESSAGES_MENU_ITEM,
     gpSessionOnDemand: {
@@ -253,7 +253,7 @@ export const GP_MESSAGES_DELETE = {
     proofLevel: proofLevel.P9,
     upliftRoute: INDEX,
     crumb: breadcrumbs.GP_MESSAGES_DELETE_CRUMB,
-    helpUrl: messagingHelpUrl,
+    helpPath: MESSAGING_HELP_PATH,
     sjrRedirectRules: [
       sjrRedirectRules.im1MessagingDisabledRedirect,
       sjrRedirectRules.deleteMessageRedirect,
@@ -281,7 +281,7 @@ export const GP_MESSAGES_DELETE_SUCCESS = {
     proofLevel: proofLevel.P9,
     upliftRoute: INDEX,
     crumb: breadcrumbs.GP_MESSAGES_DELETE_SUCCESS_CRUMB,
-    helpUrl: messagingHelpUrl,
+    helpPath: MESSAGING_HELP_PATH,
     sjrRedirectRules: [
       sjrRedirectRules.im1MessagingDisabledRedirect,
       sjrRedirectRules.deleteMessageRedirect,
@@ -298,7 +298,7 @@ export const HEALTH_INFORMATION_UPDATES = {
     headerKey: 'navigation.pages.headers.healthAndInformationUpdates',
     titleKey: 'navigation.pages.titles.healthAndInformationUpdates',
     crumb: breadcrumbs.HEALTH_INFORMATION_UPDATES_CRUMB,
-    helpUrl: messagingHelpUrl,
+    helpPath: MESSAGING_HELP_PATH,
     proofLevel: proofLevel.P5,
     sjrRedirectRules: [sjrRedirectRules.messagingDisabledRedirect],
     nativeNavigation: MESSAGES_MENU_ITEM,
@@ -312,7 +312,7 @@ export const HEALTH_INFORMATION_UPDATES_MESSAGES = {
   meta: {
     titleKey: 'navigation.pages.titles.healthAndInformationUpdates',
     crumb: breadcrumbs.HEALTH_INFORMATION_UPDATES_MESSAGES_CRUMB,
-    helpUrl: messagingHelpUrl,
+    helpPath: MESSAGING_HELP_PATH,
     proofLevel: proofLevel.P5,
     sjrRedirectRules: [sjrRedirectRules.messagingDisabledRedirect],
     nativeNavigation: MESSAGES_MENU_ITEM,

@@ -327,6 +327,7 @@ web:
   bloodDonationUrl: https://www.blood.co.uk/
   thirdPartyJumpOffLoggingEnabled: false
   environmentVariables: {}
+  baseNhsAppHelpUrl: https://www.nhs.uk/nhs-app/nhs-app-help-and-support/
   qualtricsSurveyEnabled: false
 
 api:

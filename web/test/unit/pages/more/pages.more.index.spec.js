@@ -2,7 +2,7 @@ import MorePage from '@/pages/more/index';
 import i18n from '@/plugins/i18n';
 import WebFooter from '@/components/widgets/WebFooter';
 import each from 'jest-each';
-import { TERMS_AND_CONDITIONS_URL, PRIVACY_POLICY_URL, HELP_AND_SUPPORT_URL, ACCESSIBILITY_STATEMENT_URL } from '@/router/externalLinks';
+import { TERMS_AND_CONDITIONS_URL, PRIVACY_POLICY_URL, ACCESSIBILITY_STATEMENT_URL } from '@/router/externalLinks';
 import { createStore, initFilters, mount } from '../../helpers';
 
 describe('More Page', () => {
@@ -91,14 +91,17 @@ describe('More Page', () => {
     });
 
     it('will verify that the footer links are present', () => {
-      const webFooterWrapper = mount(WebFooter, { mountOpts: { i18n } });
+      const webFooterWrapper = mount(WebFooter, {
+        mountOpts: { i18n },
+        $env: { BASE_NHS_APP_HELP_URL: 'http://stubs.local.bitraft.io/help' },
+      });
       const footerLinkElements = webFooterWrapper.findAll('ul li a');
       const footerLinks = findLinks(footerLinkElements.wrappers);
 
       expect(footerLinks.length).toBeGreaterThan(0);
       expect(footerLinks).toContainEqual(TERMS_AND_CONDITIONS_URL);
       expect(footerLinks).toContainEqual(PRIVACY_POLICY_URL);
-      expect(footerLinks).toContainEqual(HELP_AND_SUPPORT_URL);
+      expect(footerLinks).toContainEqual('http://stubs.local.bitraft.io/help');
       expect(footerLinks).toContainEqual(ACCESSIBILITY_STATEMENT_URL);
     });
 

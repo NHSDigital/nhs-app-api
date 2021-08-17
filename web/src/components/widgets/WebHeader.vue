@@ -90,7 +90,7 @@ export default {
     },
     links() {
       return [
-        { name: this.$t('navigation.header.helpAndSupport'), value: this.$route.meta.helpUrl, id: 'help-and-support-link' },
+        { name: this.$t('navigation.header.helpAndSupport'), value: this.currentHelpUrl, id: 'help-and-support-link' },
         { name: this.$t('navigation.header.more'), value: this.morePath, id: 'more-link', internal: true },
         { name: this.$t('navigation.header.logout'), value: this.logoutPath, id: 'account-logout', internal: true },
       ];

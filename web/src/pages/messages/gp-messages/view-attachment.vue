@@ -27,9 +27,6 @@ import {
   LOGOUT_PATH,
   LOGIN_PATH,
 } from '@/router/paths';
-import {
-  CLINICAL_ABBREVIATIONS_URL,
-} from '@/router/externalLinks';
 
 export default {
   name: 'GpMessagesViewAttachmentPage',
@@ -40,7 +37,6 @@ export default {
   data() {
     return {
       isViewable: get('$store.state.documents.currentDocument.isViewable', this),
-      glossaryLinkURL: CLINICAL_ABBREVIATIONS_URL,
     };
   },
   computed: {

@@ -20,13 +20,13 @@ describe('mixins', () => {
   let getters;
   let wrapper;
 
-  const mountPage = ({ $store }) => {
+  const mountPage = ({ $store, $route }) => {
     const testPage = { template: '<div></div>' };
 
     return mount(testPage, {
       localVue,
       mocks: {
-        $route: { path: '/foo' },
+        $route,
         $store,
       },
     });
@@ -35,12 +35,22 @@ describe('mixins', () => {
   beforeEach(() => {
     state = { errors: initialState() };
     getters = { 'session/isProxying': false };
-    wrapper = mountPage({ $store: createStore({ state, getters }) });
+
+    const $env = { BASE_NHS_APP_HELP_URL: 'http://stubs.local.bitraft.io' };
+    const $route = { path: '/foo', meta: { helpPath: '/help' } };
+    wrapper = mountPage({ $store: createStore({ state, getters, $env }), $route });
+  });
+
+  describe('computed', () => {
+    describe('currentHelpUrl', () => {
+      it('should return the correct help url', () => {
+        expect(wrapper.vm.currentHelpUrl).toEqual('http://stubs.local.bitraft.io/help');
+      });
+    });
   });
 
   describe('methods', () => {
     describe('configureWebContext', () => {
-      const currentUrl = '/test-url';
       let configureWebContext;
 
       beforeEach(() => {
@@ -63,11 +73,12 @@ describe('mixins', () => {
                 default: undefined,
               },
             };
-            wrapper.vm.configureWebContext(currentUrl);
+            wrapper.vm.configureWebContext();
           });
 
           it('will call native callback `configureWebContext` with empty retry URL', () => {
-            expect(configureWebContext).toBeCalledWith(currentUrl, '');
+            expect(configureWebContext)
+              .toBeCalledWith('http://stubs.local.bitraft.io/help', '');
           });
         });
 
@@ -80,18 +91,19 @@ describe('mixins', () => {
                 default: redirectUrl,
               },
             };
-            wrapper.vm.configureWebContext(currentUrl);
+            wrapper.vm.configureWebContext();
           });
 
           it('will call native callback `configureWebContext` with empty redirect URL', () => {
-            expect(configureWebContext).toBeCalledWith(currentUrl, redirectUrl);
+            expect(configureWebContext).toBeCalledWith('http://stubs.local.bitraft.io/help',
+              redirectUrl);
           });
         });
 
         describe('when proxying', () => {
           beforeEach(() => {
             getters['session/isProxying'] = true;
-            wrapper.vm.configureWebContext(currentUrl);
+            wrapper.vm.configureWebContext();
           });
 
           it('will call native callback `configureWebContext` with correct redirect URL', () => {
@@ -105,7 +117,7 @@ describe('mixins', () => {
                 },
               },
             });
-            expect(configureWebContext).toBeCalledWith(currentUrl, redirectUrl);
+            expect(configureWebContext).toBeCalledWith('http://stubs.local.bitraft.io/help', redirectUrl);
           });
         });
       });
@@ -113,7 +125,7 @@ describe('mixins', () => {
       describe('not native app', () => {
         beforeEach(() => {
           state.device = { isNativeApp: false };
-          wrapper.vm.configureWebContext(currentUrl);
+          wrapper.vm.configureWebContext();
         });
 
         it('will not call native callback `configureWebContext`', () => {

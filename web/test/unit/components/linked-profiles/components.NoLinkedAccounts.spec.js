@@ -1,10 +1,11 @@
 import NoLinkedProfiles from '@/components/linked-profiles/NoLinkedProfiles';
-import { LINKED_PROFILES_FIND_OUT_MORE_URL } from '@/router/externalLinks';
-import { createStore, mount } from '../../helpers';
+import { mount } from '../../helpers';
+
+const BASE_NHS_APP_HELP_URL = 'http://stubs.local.bitraft.io/help-and-support/';
 
 describe('switch profile button component', () => {
   const mountComponent = () =>
-    mount(NoLinkedProfiles, { $store: createStore() });
+    mount(NoLinkedProfiles, { $env: { BASE_NHS_APP_HELP_URL } });
 
   describe('content', () => {
     let page;
@@ -25,7 +26,7 @@ describe('switch profile button component', () => {
       // assert
       const link = page.find('#findOutMoreLink');
       expect(link.text()).toEqual('Find out more about linked profiles');
-      expect(link.attributes('href')).toEqual(LINKED_PROFILES_FIND_OUT_MORE_URL);
+      expect(link.attributes('href')).toEqual('http://stubs.local.bitraft.io/help-and-support/linked-profiles-in-the-nhs-app');
     });
   });
 });

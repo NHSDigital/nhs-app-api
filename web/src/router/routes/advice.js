@@ -5,7 +5,7 @@ import { ADVICE_PATH, GP_ADVICE_PATH } from '@/router/paths';
 import { ADVICE_NAME, GP_ADVICE_NAME } from '@/router/names';
 import { LINKED_PROFILES_SHUTTER_ADVICE } from '@/router/routes/linked-profiles';
 import { UPLIFT_APPOINTMENTS } from '@/router/routes/appointments';
-import { baseNhsAppHelpUrl, onlineConsultationsHelpUrl } from '@/router/externalLinks';
+import { ONLINE_CONSULTATIONS_HELP_PATH } from '@/router/externalLinks';
 import sjrRedirectRules from '@/router/sjrRedirectRules';
 
 import { ADVICE_MENU_ITEM } from '@/middleware/nativeNavigation';
@@ -24,7 +24,6 @@ export const ADVICE = {
     titleKey: 'navigation.pages.headers.advice',
     proofLevel: proofLevel.P5,
     crumb: breadcrumbs.ADVICE_CRUMB,
-    helpUrl: baseNhsAppHelpUrl,
     nativeNavigation: ADVICE_MENU_ITEM,
     redirectRules: [{
       condition: 'session/isProxying',
@@ -45,7 +44,7 @@ export const GP_ADVICE = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.GP_ADVICE_CRUMB,
-    helpUrl: onlineConsultationsHelpUrl,
+    helpPath: ONLINE_CONSULTATIONS_HELP_PATH,
     sjrRedirectRules: [sjrRedirectRules.gpAdviceDisabledRedirect],
     warningBanner: true,
   },

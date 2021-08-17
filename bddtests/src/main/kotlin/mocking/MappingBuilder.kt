@@ -5,11 +5,23 @@ import org.apache.http.HttpStatus
 
 private const val SC_FOUND = HttpStatus.SC_MOVED_TEMPORARILY
 const val CONTENT_TYPE_APPLICATION_JSON = "application/json; charset=UTF-8"
-abstract class MappingBuilder(method: String, url: String) {
+abstract class MappingBuilder(method: String, url: String, isUrlPattern: Boolean = false) {
 
     open var delayMillisecs = 0
 
     internal val requestBuilder = RequestBuilder(method, url)
+
+    private var isPattern: Boolean = false
+    private var urlPattern: String = ""
+
+    init {
+        isPattern = isUrlPattern
+
+        if (isPattern) {
+            urlPattern = url
+        }
+
+    }
 
     fun respondWithBody(body: String, statusCode: Int = HttpStatus.SC_OK): Mapping {
         return respondWith(statusCode) {
@@ -26,6 +38,10 @@ abstract class MappingBuilder(method: String, url: String) {
         responseBuilder.resolve()
 
         if (milliSecondDelay > 0) responseBuilder.andDelay(milliSecondDelay)
+
+        if (isPattern) {
+            return Mapping(requestBuilder.buildForDynamicPath(urlPattern), responseBuilder.build())
+        }
 
         return Mapping(requestBuilder.build(), responseBuilder.build())
     }

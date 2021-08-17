@@ -66,7 +66,6 @@ import WebFooter from '@/components/widgets/WebFooter';
 import WebHeader from '@/components/widgets/WebHeader';
 import isFunction from 'lodash/fp/isFunction';
 import showShutterPage from '@/lib/proxy/shutter';
-import { INDEX } from '@/router/routes/general';
 import { INDEX_CRUMB } from '@/breadcrumbs/general';
 import {
   DOCUMENT_DETAIL_NAME,
@@ -103,9 +102,6 @@ export default {
     };
   },
   computed: {
-    currentHelpUrl() {
-      return get('$route.meta.helpUrl', this) || INDEX.helpUrl;
-    },
     currentCrumb() {
       return get('$route.meta.crumb', this) || INDEX_CRUMB;
     },

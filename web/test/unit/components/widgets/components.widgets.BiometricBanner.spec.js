@@ -38,11 +38,6 @@ describe('BiometricBanner', () => {
       },
     });
     return mount(BiometricBanner, {
-      methods: {
-        configureWebContext(url) {
-          return url;
-        },
-      },
       $router: createRouter(),
       $route: { meta: { helpUrl: 'current-help-url' } },
       $store,

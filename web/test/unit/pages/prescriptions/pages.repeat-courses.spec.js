@@ -37,6 +37,9 @@ const createStore = ({
   $analytics: {
     validationError: jest.fn(),
   },
+  $env: {
+    BASE_NHS_APP_HELP_URL: 'http://stubs.local.bitraft.io/help-and-support',
+  },
   state: {
     repeatPrescriptionCourses: {
       hasLoaded,

@@ -49,8 +49,11 @@ import {
 import { APPOINTMENTS_MENU_ITEM } from '@/middleware/nativeNavigation';
 
 import proofLevel from '@/lib/proofLevel';
-import { appointmentsHelpUrl, onlineConsultationsHelpUrl, hospitalAndOtherAppoitmentsHelpUrl,
-  APPOINTMENTS_AND_ONLINE_CONSULTATIONS_IN_THE_NHS_APP_URL } from '@/router/externalLinks';
+import {
+  APPOINTMENTS_HELP_PATH, ONLINE_CONSULTATIONS_HELP_PATH,
+  HOSPITAL_AND_OTHER_APPOINTMENTS_HELP_PATH,
+  APPOINTMENTS_AND_ONLINE_CONSULTATIONS_IN_THE_NHS_APP_PATH,
+} from '@/router/externalLinks';
 import sjrRedirectRules from '@/router/sjrRedirectRules';
 import get from 'lodash/fp/get';
 
@@ -63,7 +66,7 @@ export const UPLIFT_APPOINTMENTS = {
     titleKey: 'navigation.pages.titles.appointments',
     proofLevel: proofLevel.P5,
     crumb: breadcrumbs.UPLIFT_APPOINTMENTS_CRUMB,
-    helpUrl: appointmentsHelpUrl,
+    helpPath: APPOINTMENTS_HELP_PATH,
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
     gpSessionOnDemand: {
       journey: GP_APPOINTMENT_JOURNEY_NAME,
@@ -81,7 +84,7 @@ export const APPOINTMENTS = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.APPOINTMENTS_CRUMB,
-    helpUrl: APPOINTMENTS_AND_ONLINE_CONSULTATIONS_IN_THE_NHS_APP_URL,
+    helpPath: APPOINTMENTS_AND_ONLINE_CONSULTATIONS_IN_THE_NHS_APP_PATH,
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
   },
 };
@@ -97,7 +100,7 @@ export const GP_APPOINTMENTS = {
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.GP_APPOINTMENTS_CRUMB,
     proxyShutterPath: 'linked-profiles/shutter/appointments',
-    helpUrl: appointmentsHelpUrl,
+    helpPath: APPOINTMENTS_HELP_PATH,
     sjrRedirectRules: [
       sjrRedirectRules.linkedAccountAppointmentRedirect,
       sjrRedirectRules.gpAtHandAppointmentRedirect,
@@ -120,7 +123,7 @@ export const HOSPITAL_APPOINTMENTS = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.HOSPITAL_APPOINTMENTS_CRUMB,
-    helpUrl: hospitalAndOtherAppoitmentsHelpUrl,
+    helpPath: HOSPITAL_AND_OTHER_APPOINTMENTS_HELP_PATH,
     sjrRedirectRules: [sjrRedirectRules.silverIntegrationsSecondaryAppointmentsDisabledRedirect],
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
   },
@@ -136,7 +139,7 @@ export const GP_AT_HAND = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.GP_AT_HAND_CRUMB,
-    helpUrl: appointmentsHelpUrl,
+    helpPath: APPOINTMENTS_HELP_PATH,
     sjrRedirectRules: [
       sjrRedirectRules.im1AppointmentRedirect,
       sjrRedirectRules.informaticaAppointmentRedirect,
@@ -155,7 +158,7 @@ export const INFORMATICA = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.INFORMATICA_CRUMB,
-    helpUrl: appointmentsHelpUrl,
+    helpPath: APPOINTMENTS_HELP_PATH,
     sjrRedirectRules: [
       sjrRedirectRules.gpAtHandAppointmentRedirect,
       sjrRedirectRules.im1AppointmentRedirect,
@@ -174,7 +177,7 @@ export const BOOKING = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.BOOKING_CRUMB,
-    helpUrl: appointmentsHelpUrl,
+    helpPath: APPOINTMENTS_HELP_PATH,
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
     gpSessionOnDemand: {
       journey: GP_APPOINTMENT_JOURNEY_NAME,
@@ -192,7 +195,7 @@ export const CONFIRMATION = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.CONFIRMATION_CRUMB,
-    helpUrl: appointmentsHelpUrl,
+    helpPath: APPOINTMENTS_HELP_PATH,
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
     gpSessionOnDemand: {
       journey: GP_APPOINTMENT_JOURNEY_NAME,
@@ -222,7 +225,7 @@ export const BOOKING_SUCCESS = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.BOOKING_SUCCESS_CRUMB,
-    helpUrl: appointmentsHelpUrl,
+    helpPath: APPOINTMENTS_HELP_PATH,
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
     redirectRules: [{
       condition: 'availableAppointments/isBookingAppointmentInProgress',
@@ -244,7 +247,7 @@ export const ADD_TO_CALENDAR = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.ADD_TO_CALENDAR_CRUMB,
-    helpUrl: appointmentsHelpUrl,
+    helpPath: APPOINTMENTS_HELP_PATH,
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
   },
 };
@@ -259,7 +262,7 @@ export const CANCELLING = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.CANCELLING_CRUMB,
-    helpUrl: appointmentsHelpUrl,
+    helpPath: APPOINTMENTS_HELP_PATH,
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
     gpSessionOnDemand: {
       journey: GP_APPOINTMENT_JOURNEY_NAME,
@@ -289,7 +292,7 @@ export const CANCELLING_SUCCESS = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.CANCELLING_SUCCESS_CRUMB,
-    helpUrl: appointmentsHelpUrl,
+    helpPath: APPOINTMENTS_HELP_PATH,
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
     redirectRules: [{
       condition: 'myAppointments/isCancellingAppointmentInProgress',
@@ -313,7 +316,7 @@ export const ADMIN_HELP = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.ADMIN_HELP_CRUMB,
-    helpUrl: onlineConsultationsHelpUrl,
+    helpPath: ONLINE_CONSULTATIONS_HELP_PATH,
     sjrRedirectRules: [sjrRedirectRules.adminHelpDisabledRedirect],
     warningBanner: true,
   },

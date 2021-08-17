@@ -4,7 +4,7 @@
       <menu-item v-if="supportsLinkedProfiles && isProofLevel9"
                  id="linked-profiles-link"
                  header-tag="h2"
-                 :href="linkedProfilesPath"
+                 :href="moreLinkedProfilesPath"
                  :text="$t('more.linkedProfiles')"
                  :click-func="navigateToLinkedProfiles"/>
       <menu-item id="'account-and-settings'"
@@ -69,7 +69,6 @@ import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 import GenericButton from '@/components/widgets/GenericButton';
 import { MORE_ACCOUNTANDSETTINGS_PATH, MORE_LINKED_PROFILES_PATH } from '@/router/paths';
-import { baseNhsAppHelpUrl } from '@/router/externalLinks';
 import { isTruthy } from '@/lib/utils';
 
 export default {
@@ -85,7 +84,7 @@ export default {
   data() {
     return {
       accountAndSettingsPath: MORE_ACCOUNTANDSETTINGS_PATH,
-      nhsAppHelpAndSupportUrl: baseNhsAppHelpUrl,
+      nhsAppHelpAndSupportUrl: this.$store.$env.BASE_NHS_APP_HELP_URL,
       moreLinkedProfilesPath: MORE_LINKED_PROFILES_PATH,
       isProxying: this.$store.getters['session/isProxying'],
       isProofLevel9: this.$store.getters['session/isProofLevel9'],

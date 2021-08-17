@@ -15,7 +15,7 @@ import {
 
 import { CLEAR_SELECTED_MENU_ITEM } from '@/middleware/nativeNavigation';
 import proofLevel from '@/lib/proofLevel';
-import { baseNhsAppHelpUrl, thirdPartyHelpUrl } from '@/router/externalLinks';
+import { THIRD_PARTY_HELP_PATH } from '@/router/externalLinks';
 
 export const INDEX = {
   path: INDEX_PATH,
@@ -26,7 +26,6 @@ export const INDEX = {
     headerKey: 'navigation.pages.headers.home',
     titleKey: 'navigation.pages.titles.home',
     crumb: breadcrumbs.INDEX_CRUMB,
-    helpUrl: baseNhsAppHelpUrl,
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
   },
 };
@@ -40,7 +39,7 @@ export const REDIRECTOR = {
     titleKey: '',
     proofLevel: proofLevel.P5,
     crumb: breadcrumbs.REDIRECTOR_CRUMB,
-    helpUrl: thirdPartyHelpUrl,
+    helpPath: THIRD_PARTY_HELP_PATH,
   },
 };
 
@@ -52,7 +51,6 @@ export const NOT_FOUND = {
     headerKey: 'generic.errors.pageNotFound',
     titleKey: 'generic.errors.pageNotFound',
     crumb: {},
-    helpUrl: baseNhsAppHelpUrl,
   },
 };
 

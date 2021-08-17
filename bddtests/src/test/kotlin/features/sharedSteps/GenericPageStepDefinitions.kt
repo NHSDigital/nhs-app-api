@@ -67,7 +67,7 @@ class GenericPageStepDefinitions {
         genericPage.containsText("Reference: $prefix")
     }
 
-    @Then("^a new tab has been opened by the link")
+    @Then("^a new tab has been opened by the link$")
     fun aNewTabOpens() {
         browser.assertNewTab()
     }

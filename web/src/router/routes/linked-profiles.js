@@ -9,7 +9,7 @@ import LinkedProfilesMessagesShutterPage from '@/pages/linked-profiles/shutter/m
 import SwitchProfilePage from '@/pages/switch-profile';
 
 import proofLevel from '@/lib/proofLevel';
-import { appointmentsHelpUrl, prescriptionsHelpUrl, proxyHelpUrl } from '@/router/externalLinks';
+import { APPOINTMENTS_HELP_PATH, PRESCRIPTIONS_HELP_PATH, PROXY_HELP_PATH } from '@/router/externalLinks';
 import breadcrumbs from '@/breadcrumbs/linked-profiles';
 import {
   MORE_LINKED_PROFILES_PATH,
@@ -53,7 +53,7 @@ export const LINKED_PROFILES = {
     titleKey: 'navigation.pages.titles.linkedProfiles',
     crumb: breadcrumbs.LINKED_PROFILES_CRUMB,
     proofLevel: proofLevel.P5,
-    helpUrl: proxyHelpUrl,
+    helpPath: PROXY_HELP_PATH,
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
     gpSessionOnDemand: {
       journey: GP_LINKED_ACCOUNT_JOURNEY_NAME,
@@ -77,7 +77,7 @@ export const LINKED_PROFILES_SUMMARY = {
     },
     crumb: breadcrumbs.LINKED_PROFILES_CRUMB,
     proofLevel: proofLevel.P5,
-    helpUrl: proxyHelpUrl,
+    helpPath: PROXY_HELP_PATH,
     gpSessionOnDemand: {
       journey: GP_LINKED_ACCOUNT_JOURNEY_NAME,
     },
@@ -93,7 +93,7 @@ export const LINKED_PROFILES_SHUTTER_MESSAGES = {
     titleKey: 'profiles.shutter.messages.header',
     crumb: breadcrumbs.LINKED_PROFILES_MESSAGES_SHUTTER_CRUMB,
     proofLevel: proofLevel.P5,
-    helpUrl: proxyHelpUrl,
+    helpPath: PROXY_HELP_PATH,
     nativeNavigation: MESSAGES_MENU_ITEM,
     gpSessionOnDemand: {
       journey: GP_LINKED_ACCOUNT_JOURNEY_NAME,
@@ -110,7 +110,7 @@ export const LINKED_PROFILES_SHUTTER_SETTINGS = {
     titleKey: 'profiles.shutter.settings.header',
     crumb: breadcrumbs.LINKED_PROFILES_SETTINGS_SHUTTER_CRUMB,
     proofLevel: proofLevel.P5,
-    helpUrl: proxyHelpUrl,
+    helpPath: PROXY_HELP_PATH,
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
     gpSessionOnDemand: {
       journey: GP_LINKED_ACCOUNT_JOURNEY_NAME,
@@ -127,7 +127,7 @@ export const LINKED_PROFILES_SHUTTER_MORE = {
     titleKey: 'profiles.shutter.more.header',
     crumb: breadcrumbs.LINKED_PROFILES_MORE_SHUTTER_CRUMB,
     proofLevel: proofLevel.P5,
-    helpUrl: proxyHelpUrl,
+    helpPath: PROXY_HELP_PATH,
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
   },
 };
@@ -141,7 +141,7 @@ export const LINKED_PROFILES_SHUTTER_ADVICE = {
     titleKey: 'profiles.shutter.advice.header',
     crumb: breadcrumbs.LINKED_PROFILES_ADVICE_SHUTTER_CRUMB,
     proofLevel: proofLevel.P5,
-    helpUrl: proxyHelpUrl,
+    helpPath: PROXY_HELP_PATH,
     nativeNavigation: ADVICE_MENU_ITEM,
     gpSessionOnDemand: {
       journey: GP_LINKED_ACCOUNT_JOURNEY_NAME,
@@ -164,7 +164,7 @@ export const LINKED_PROFILES_SHUTTER_APPOINTMENTS = {
     },
     crumb: breadcrumbs.LINKED_PROFILES_APPOINTMENTS_SHUTTER_CRUMB,
     proofLevel: proofLevel.P5,
-    helpUrl: appointmentsHelpUrl,
+    helpPath: APPOINTMENTS_HELP_PATH,
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
     gpSessionOnDemand: {
       journey: GP_LINKED_ACCOUNT_JOURNEY_NAME,
@@ -187,7 +187,7 @@ export const LINKED_PROFILES_SHUTTER_PRESCRIPTIONS = {
     },
     crumb: breadcrumbs.LINKED_PROFILES_PRESCRIPTIONS_SHUTTER_CRUMB,
     proofLevel: proofLevel.P5,
-    helpUrl: prescriptionsHelpUrl,
+    helpPath: PRESCRIPTIONS_HELP_PATH,
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
     gpSessionOnDemand: {
       journey: GP_LINKED_ACCOUNT_JOURNEY_NAME,
@@ -210,7 +210,7 @@ export const SWITCH_PROFILE = {
     },
     crumb: breadcrumbs.SWITCH_PROFILE_CRUMB,
     proofLevel: proofLevel.P5,
-    helpUrl: proxyHelpUrl,
+    helpPath: PROXY_HELP_PATH,
     gpSessionOnDemand: {
       journey: GP_LINKED_ACCOUNT_JOURNEY_NAME,
     },

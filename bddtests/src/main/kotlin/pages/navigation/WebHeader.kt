@@ -14,36 +14,41 @@ open class WebHeader : HybridPageObject() {
             Pair("Home", "Home")
     )
 
-    val advicePageLink = HybridPageElement(
+    private val advicePageLink = HybridPageElement(
             webDesktopLocator = "//a[@data-purpose='advicePageLink']",
             page = this
     )
 
-    val appointmentsPageLink = HybridPageElement(
+    private val appointmentsPageLink = HybridPageElement(
             webDesktopLocator = "//a[@data-purpose='appointmentsPageLink']",
             page = this
     )
 
 
-    val yourHealthPageLink = HybridPageElement(
+    private val yourHealthPageLink = HybridPageElement(
             webDesktopLocator = "//a[@data-purpose='myRecordPageLink']",
             page = this
     )
 
 
-    val prescriptionsPageLink = HybridPageElement(
+    private val prescriptionsPageLink = HybridPageElement(
             webDesktopLocator = "//a[@data-purpose='prescriptionsPageLink']",
             page = this
     )
 
 
-    val logoutLink = HybridPageElement(
+    private val logoutLink = HybridPageElement(
             webDesktopLocator = "//a[normalize-space(text())='Log out']",
             page = this
     )
 
-    val moreLink = HybridPageElement(
+    private val moreLink = HybridPageElement(
             webDesktopLocator = "//a[normalize-space(text())='More']",
+            page = this
+    )
+
+    private val helpAndSupportLink = HybridPageElement(
+            webDesktopLocator = "//a[normalize-space(text())='Help and support']",
             page = this
     )
 
@@ -67,6 +72,10 @@ open class WebHeader : HybridPageObject() {
 
     fun clickAdvicePageLink() {
         advicePageLink.click()
+    }
+
+    fun clickHelpAndSupportLink() {
+        helpAndSupportLink.click()
     }
 
     fun clickAppointmentsPageLink() {

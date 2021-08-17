@@ -55,6 +55,10 @@ class RequestBuilder internal constructor(private val method: String, private va
     }
 
     internal fun build(): Request {
-        return Request(path, method, headers, queryParameters, bodyPatterns)
+        return Request(path, null, method, headers, queryParameters, bodyPatterns)
+    }
+
+    internal fun buildForDynamicPath(pattern: String): Request {
+        return Request(null, pattern, method, headers, queryParameters, bodyPatterns)
     }
 }

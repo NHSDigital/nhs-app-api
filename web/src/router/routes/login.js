@@ -37,7 +37,7 @@ import viewedPreRegInstructions from '@/middleware/viewedPreRegInstructions';
 import notificationsPrompt from '@/middleware/notificationsPrompt';
 import nativeLogout from '@/middleware/nativeLogout';
 import { CLEAR_SELECTED_MENU_ITEM } from '@/middleware/nativeNavigation';
-import { baseNhsAppHelpUrl, appLoginHelpUrl } from '@/router/externalLinks';
+import { APP_LOGIN_HELP_PATH } from '@/router/externalLinks';
 import proofLevel from '@/lib/proofLevel';
 
 const getTermsConditionTitle = (store, i18n) => (
@@ -61,7 +61,7 @@ export const LOGIN = {
     crumb: {},
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
     shouldShowContentHeader: false,
-    helpUrl: appLoginHelpUrl,
+    helpPath: APP_LOGIN_HELP_PATH,
     middleware: [nativeLogout],
   },
 };
@@ -76,7 +76,7 @@ export const LOGIN_BIOMETRIC_ERROR = {
     isAnonymous: true,
     crumb: {},
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
-    helpUrl: appLoginHelpUrl,
+    helpPath: APP_LOGIN_HELP_PATH,
     redirectRules: [{
       condition: 'device/isNativeApp',
       value: false,
@@ -96,7 +96,7 @@ export const PRE_REGISTRATION = {
     middleware: [viewedPreRegInstructions],
     crumb: {},
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
-    helpUrl: appLoginHelpUrl,
+    helpPath: APP_LOGIN_HELP_PATH,
   },
 };
 
@@ -107,7 +107,7 @@ export const BEGIN_LOGIN = {
     isAnonymous: true,
     crumb: {},
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
-    helpUrl: appLoginHelpUrl,
+    helpPath: APP_LOGIN_HELP_PATH,
   },
 };
 
@@ -119,7 +119,7 @@ export const AUTH_RETURN = {
     isAnonymous: true,
     crumb: {},
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
-    helpUrl: appLoginHelpUrl,
+    helpPath: APP_LOGIN_HELP_PATH,
   },
 };
 
@@ -133,7 +133,6 @@ export const TERMS_AND_CONDITIONS = {
     proofLevel: proofLevel.P5,
     crumb: {},
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
-    helpUrl: baseNhsAppHelpUrl,
   },
 };
 
@@ -147,7 +146,6 @@ export const USER_RESEARCH = {
     proofLevel: proofLevel.P5,
     crumb: {},
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
-    helpUrl: baseNhsAppHelpUrl,
   },
 };
 
@@ -160,7 +158,6 @@ export const IOS_COMPATIBILITY = {
     headerKey: getCompatibilityTitle,
     titleKey: getCompatibilityTitle,
     crumb: {},
-    helpUrl: baseNhsAppHelpUrl,
   },
 };
 
@@ -174,7 +171,6 @@ export const NOTIFICATIONS = {
     middleware: [notificationsPrompt],
     proofLevel: proofLevel.P5,
     crumb: {},
-    helpUrl: baseNhsAppHelpUrl,
   },
 };
 
@@ -187,7 +183,6 @@ export const NOTIFICATIONS_GENERIC_ERROR = {
     titleKey: 'navigation.pages.headers.notificationsGenericError',
     proofLevel: proofLevel.P5,
     crumb: {},
-    helpUrl: baseNhsAppHelpUrl,
   },
 };
 

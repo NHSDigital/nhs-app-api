@@ -13,13 +13,13 @@
   </div>
 </template>
 <script>
-import { LINKED_PROFILES_FIND_OUT_MORE_URL } from '@/router/externalLinks';
+import { LINKED_PROFILES_FIND_OUT_MORE_PATH } from '@/router/externalLinks';
 
 export default {
   name: 'NoLinkedProfiles',
   data() {
     return {
-      findOutMoreUrl: LINKED_PROFILES_FIND_OUT_MORE_URL,
+      findOutMoreUrl: `${this.$store.$env.BASE_NHS_APP_HELP_URL}${LINKED_PROFILES_FIND_OUT_MORE_PATH}`,
     };
   },
 };

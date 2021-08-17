@@ -26,7 +26,6 @@ const processResults = (results) => {
   const noRoutes = 'No error but routes did not load';
   const routesNotArray = 'No error but routes did not export default array';
   const missingCrumb = 'Missing meta crumb';
-  const missingHelpUrl = 'Missing help url';
 
   return results.reduce((agg, result) => {
     if (result.error) {
@@ -51,10 +50,6 @@ const processResults = (results) => {
       if (!get('meta.crumb', route)) {
         agg[missingCrumb] = agg[missingCrumb] || [];
         agg[missingCrumb].push(`${result.path}: Route name: ${get('name', route)}`);
-      }
-      if (!get('meta.helpUrl', route)) {
-        agg[missingHelpUrl] = agg[missingHelpUrl] || [];
-        agg[missingHelpUrl].push(`${result.path}: Route name: ${get('name', route)}`);
       }
     });
 
@@ -119,20 +114,15 @@ describe('verify routes', () => {
     });
   });
 
-  describe('checkEachRouteHasValidHelpUrlAttribute', () => {
-    it('should have a valid helpUrl attribute', (done) => {
+  describe('checkEachRouteHasValidHelpPathAttribute', () => {
+    it('should have a valid helpPath attribute', (done) => {
       const routes = allRoutes.find(x => x.name === '').children;
-      const expression = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)?/gi;
-      const regex = new RegExp(expression);
 
       expect(routes.length).toBeTruthy();
       routes.forEach((route) => {
         if (route.meta) {
-          if (route.meta.helpUrl === undefined ||
-            route.meta.helpUrl === null ||
-            route.meta.helpUrl === '' ||
-            !route.meta.helpUrl.match(regex)) {
-            done.fail(`${route.name} needs a valid populated helpUrl attribute.`);
+          if (route.meta.helpPath && route.meta.helpPath === '') {
+            done.fail(`${route.name} needs a valid populated helpPath attribute.`);
           }
         }
       });

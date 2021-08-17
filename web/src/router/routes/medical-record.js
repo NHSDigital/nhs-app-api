@@ -89,7 +89,7 @@ import { YOUR_RECORD_MENU_ITEM } from '@/middleware/nativeNavigation';
 import gpMedicalRecordAcceptance from '@/middleware/gpMedicalRecordAcceptance';
 
 import proofLevel from '@/lib/proofLevel';
-import { gpMedicalRecordHelpUrl, healthRecordsHelpUrl } from '@/router/externalLinks';
+import { GP_MEDICAL_RECORD_HELP_PATH, HEALTH_RECORDS_HELP_PATH } from '@/router/externalLinks';
 import sjrRedirectRules from '@/router/sjrRedirectRules';
 
 export const UPLIFT_GP_MEDICAL_RECORD = {
@@ -101,7 +101,7 @@ export const UPLIFT_GP_MEDICAL_RECORD = {
     titleKey: 'navigation.pages.titles.myRecord',
     proofLevel: proofLevel.P5,
     crumb: breadcrumbs.UPLIFT_GP_MEDICAL_RECORD_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     gpSessionOnDemand: {
       journey: GP_HEALTH_RECORD_JOURNEY_NAME,
@@ -119,7 +119,7 @@ export const HEALTH_RECORDS = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.HEALTH_RECORDS_CRUMB,
-    helpUrl: healthRecordsHelpUrl,
+    helpPath: HEALTH_RECORDS_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     gpSessionOnDemand: {
       journey: GP_HEALTH_RECORD_JOURNEY_NAME,
@@ -137,7 +137,7 @@ export const GP_MEDICAL_RECORD = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.GP_MEDICAL_RECORD_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     sjrRedirectRules: [
       sjrRedirectRules.gpAtHandMyRecordRedirect,
@@ -159,7 +159,7 @@ export const ALLERGIESANDREACTIONS = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ALLERGIES_AND_REACTIONS_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
     gpSessionOnDemand: {
@@ -178,7 +178,7 @@ export const MEDICINES = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.MEDICINES_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
     gpSessionOnDemand: {
@@ -197,7 +197,7 @@ export const ACUTE_MEDICINES = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ACUTE_MEDICINES_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
     gpSessionOnDemand: {
@@ -216,7 +216,7 @@ export const CURRENT_MEDICINES = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.CURRENT_MEDICINES_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
     gpSessionOnDemand: {
@@ -235,7 +235,7 @@ export const DISCONTINUED_MEDICINES = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.DISCONTINUED_MEDICINES_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
     gpSessionOnDemand: {
@@ -254,7 +254,7 @@ export const TESTRESULTS = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.TEST_RESULTS_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
     gpSessionOnDemand: {
@@ -273,7 +273,7 @@ export const TESTRESULTSDETAIL = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.TEST_RESULTS_DETAIL_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
     gpSessionOnDemand: {
@@ -292,7 +292,7 @@ export const TESTRESULTID = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.TEST_RESULTS_ID_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
     gpSessionOnDemand: {
@@ -311,7 +311,7 @@ export const CONSULTATIONS = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.CONSULTATIONS_AND_EVENTS_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
     gpSessionOnDemand: {
@@ -330,7 +330,7 @@ export const EVENTS = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.CONSULTATIONS_AND_EVENTS_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
     gpSessionOnDemand: {
@@ -349,7 +349,7 @@ export const IMMUNISATIONS = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.IMMUNISATIONS_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
     gpSessionOnDemand: {
@@ -368,7 +368,7 @@ export const HEALTH_CONDITIONS = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.HEALTH_CONDITIONS_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
     gpSessionOnDemand: {
@@ -387,7 +387,7 @@ export const DOCUMENTS = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.DOCUMENTS_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     sjrRedirectRules: [sjrRedirectRules.documentsDisabledRedirect],
     middleware: [gpMedicalRecordAcceptance],
@@ -407,7 +407,7 @@ export const DOCUMENT = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.DOCUMENT_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     sjrRedirectRules: [sjrRedirectRules.documentsDisabledRedirect],
     middleware: [gpMedicalRecordAcceptance],
@@ -425,7 +425,7 @@ export const DOCUMENT_DETAIL = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.DOCUMENT_DETAIL_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     sjrRedirectRules: [sjrRedirectRules.documentsDisabledRedirect],
     middleware: [gpMedicalRecordAcceptance],
@@ -447,7 +447,7 @@ export const DIAGNOSIS_V2 = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.DIAGNOSIS_V2_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
     gpSessionOnDemand: {
@@ -466,7 +466,7 @@ export const EXAMINATIONS_V2 = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.EXAMINATIONS_V2_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
     gpSessionOnDemand: {
@@ -485,7 +485,7 @@ export const PROCEDURES_V2 = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.PROCEDURES_V2_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
     gpSessionOnDemand: {
@@ -504,7 +504,7 @@ export const MEDICAL_HISTORY = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.MEDICAL_HISTORY_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
     gpSessionOnDemand: {
@@ -523,7 +523,7 @@ export const ENCOUNTERS = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ENCOUNTERS_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
     gpSessionOnDemand: {
@@ -542,7 +542,7 @@ export const RECALLS = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.RECALLS_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
     gpSessionOnDemand: {
@@ -561,7 +561,7 @@ export const REFERRALS = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.REFERRALS_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     middleware: [gpMedicalRecordAcceptance],
     gpSessionOnDemand: {
@@ -580,7 +580,7 @@ export const GP_MEDICAL_RECORD_GP_AT_HAND = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.GP_MEDICAL_RECORD_GP_AT_HAND_CRUMB,
-    helpUrl: gpMedicalRecordHelpUrl,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     sjrRedirectRules: [sjrRedirectRules.im1GpMedicalRecordRedirectV2],
     gpSessionOnDemand: {

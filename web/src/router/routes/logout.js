@@ -3,7 +3,7 @@ import LogoutPage from '@/pages/logout';
 import { LOGOUT_PATH } from '@/router/paths';
 import { LOGOUT_NAME } from '@/router/names';
 
-import { appLoginHelpUrl } from '@/router/externalLinks';
+import { APP_LOGIN_HELP_PATH } from '@/router/externalLinks';
 import proofLevel from '@/lib/proofLevel';
 
 export const LOGOUT = {
@@ -15,7 +15,7 @@ export const LOGOUT = {
     titleKey: 'navigation.pages.titles.logout',
     proofLevel: proofLevel.P5,
     crumb: {},
-    helpUrl: appLoginHelpUrl,
+    helpPath: APP_LOGIN_HELP_PATH,
   },
 };
 

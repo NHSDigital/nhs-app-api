@@ -50,11 +50,6 @@ describe('AccountAndSettings', () => {
         .mockImplementation(() => Promise.resolve({ token: 'jwtToken' })),
     };
     return mount(AccountAndSettings, {
-      methods: {
-        configureWebContext(url) {
-          return url;
-        },
-      },
       $store,
       propsData: {
         showBiometrics,

@@ -44,7 +44,7 @@ import { UPLIFT_GP_MEDICAL_RECORD } from '@/router/routes/medical-record';
 import { YOUR_RECORD_MENU_ITEM } from '@/middleware/nativeNavigation';
 
 import proofLevel from '@/lib/proofLevel';
-import { organDonationHelpUrl } from '@/router/externalLinks';
+import { ORGAN_DONATION_HELP_PATH } from '@/router/externalLinks';
 
 export const ORGAN_DONATION = {
   path: ORGAN_DONATION_PATH,
@@ -56,7 +56,7 @@ export const ORGAN_DONATION = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_CRUMB,
-    helpUrl: organDonationHelpUrl,
+    helpPath: ORGAN_DONATION_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     gpSessionOnDemand: {
       journey: ORGAN_DONATION_JOURNEY_NAME,
@@ -74,7 +74,7 @@ export const ORGAN_DONATION_ADDITIONAL_DETAILS = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_ADDITIONAL_DETAILS_CRUMB,
-    helpUrl: organDonationHelpUrl,
+    helpPath: ORGAN_DONATION_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     gpSessionOnDemand: {
       journey: ORGAN_DONATION_JOURNEY_NAME,
@@ -92,7 +92,7 @@ export const ORGAN_DONATION_AMEND = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_AMEND_CRUMB,
-    helpUrl: organDonationHelpUrl,
+    helpPath: ORGAN_DONATION_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     gpSessionOnDemand: {
       journey: ORGAN_DONATION_JOURNEY_NAME,
@@ -110,7 +110,7 @@ export const ORGAN_DONATION_FAITH = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_FAITH_CRUMB,
-    helpUrl: organDonationHelpUrl,
+    helpPath: ORGAN_DONATION_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     gpSessionOnDemand: {
       journey: ORGAN_DONATION_JOURNEY_NAME,
@@ -128,7 +128,7 @@ export const ORGAN_DONATION_MORE_ABOUT_ORGANS = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_MORE_ABOUT_ORGANS_CRUMB,
-    helpUrl: organDonationHelpUrl,
+    helpPath: ORGAN_DONATION_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     gpSessionOnDemand: {
       journey: ORGAN_DONATION_JOURNEY_NAME,
@@ -146,7 +146,7 @@ export const ORGAN_DONATION_SOME_ORGANS = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_SOME_ORGANS_CRUMB,
-    helpUrl: organDonationHelpUrl,
+    helpPath: ORGAN_DONATION_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     gpSessionOnDemand: {
       journey: ORGAN_DONATION_JOURNEY_NAME,
@@ -164,7 +164,7 @@ export const ORGAN_DONATION_REVIEW_YOUR_DECISION = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_REVIEW_YOUR_DECISION_CRUMB,
-    helpUrl: organDonationHelpUrl,
+    helpPath: ORGAN_DONATION_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     gpSessionOnDemand: {
       journey: ORGAN_DONATION_JOURNEY_NAME,
@@ -182,7 +182,7 @@ export const ORGAN_DONATION_VIEW_DECISION = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_VIEW_DECISION_CRUMB,
-    helpUrl: organDonationHelpUrl,
+    helpPath: ORGAN_DONATION_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     gpSessionOnDemand: {
       journey: ORGAN_DONATION_JOURNEY_NAME,
@@ -200,7 +200,7 @@ export const ORGAN_DONATION_WITHDRAW_REASON = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_WITHDRAW_REASON_CRUMB,
-    helpUrl: organDonationHelpUrl,
+    helpPath: ORGAN_DONATION_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     gpSessionOnDemand: {
       journey: ORGAN_DONATION_JOURNEY_NAME,
@@ -218,7 +218,7 @@ export const ORGAN_DONATION_WITHDRAWN = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_WITHDRAWN_CRUMB,
-    helpUrl: organDonationHelpUrl,
+    helpPath: ORGAN_DONATION_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     gpSessionOnDemand: {
       journey: ORGAN_DONATION_JOURNEY_NAME,
@@ -236,7 +236,7 @@ export const ORGAN_DONATION_YOUR_CHOICE = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_YOUR_CHOICE_CRUMB,
-    helpUrl: organDonationHelpUrl,
+    helpPath: ORGAN_DONATION_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     gpSessionOnDemand: {
       journey: ORGAN_DONATION_JOURNEY_NAME,

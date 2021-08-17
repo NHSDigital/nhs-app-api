@@ -12,15 +12,13 @@ export const NOMINATED_PHARMACY_DSP_URL = 'https://www.nhs.uk/Service-Search/oth
 export const NATIONAL_DATA_OPT_OUT_URL = 'https://digital.nhs.uk/services/national-data-opt-out';
 export const GP_DATA_FOR_PLANNING_AND_RESEARCH = 'https://digital.nhs.uk/data-and-information/data-collections-and-data-sets/data-collections/general-practice-data-for-planning-and-research';
 
-export const baseNhsAppHelpUrl = 'https://www.nhs.uk/nhs-app/nhs-app-help-and-support/';
-export const HELP_AND_SUPPORT_URL = 'https://www.nhs.uk/nhs-app/nhs-app-help-and-support/';
-export const proxyHelpUrl = `${HELP_AND_SUPPORT_URL}linked-profiles-in-the-nhs-app`;
-export const LINKED_PROFILES_FIND_OUT_MORE_URL = `${HELP_AND_SUPPORT_URL}linked-profiles-in-the-nhs-app`;
-export const appLoginHelpUrl = `${HELP_AND_SUPPORT_URL}getting-started-with-the-nhs-app/logging-in-to-the-nhs-app/`;
+export const PROXY_HELP_PATH = 'linked-profiles-in-the-nhs-app';
+export const LINKED_PROFILES_FIND_OUT_MORE_PATH = 'linked-profiles-in-the-nhs-app';
+export const APP_LOGIN_HELP_PATH = 'getting-started-with-the-nhs-app/logging-in-to-the-nhs-app/';
 
-export const NHS_APP_ACCOUNT_AND_SETTINGS_URL = `${HELP_AND_SUPPORT_URL}nhs-app-account-and-settings/`;
-export const MANAGING_YOUR_NHS_APP_ACCOUNT_URL = `${NHS_APP_ACCOUNT_AND_SETTINGS_URL}managing-your-nhs-app-account/`;
-export const SECURITY_AND_PRIVACY_URL = `${NHS_APP_ACCOUNT_AND_SETTINGS_URL}security-and-privacy/`;
+export const NHS_APP_ACCOUNT_AND_SETTINGS_PATH = 'nhs-app-account-and-settings/';
+export const MANAGING_YOUR_NHS_APP_ACCOUNT_PATH = `${NHS_APP_ACCOUNT_AND_SETTINGS_PATH}managing-your-nhs-app-account/`;
+export const SECURITY_AND_PRIVACY_PATH = `${NHS_APP_ACCOUNT_AND_SETTINGS_PATH}security-and-privacy/`;
 
 export const NHS_APP_LEGAL_AND_COOKIES_URL = 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/';
 export const ACCESSIBILITY_STATEMENT_URL = `${NHS_APP_LEGAL_AND_COOKIES_URL}nhs-app-accessibility-statement/`;
@@ -33,22 +31,22 @@ export const NHS_APP_PRIVACY_POLICY_URL = `${NHS_APP_LEGAL_AND_COOKIES_URL}nhs-a
 export const PRIVACY_POLICY_URL = `${NHS_APP_PRIVACY_POLICY_URL}privacy-policy/`;
 export const ONLINE_CONSULTATIONS_PRIVACY_URL = `${NHS_APP_PRIVACY_POLICY_URL}online-consultation-services/`;
 
-export const messagingHelpUrl = `${HELP_AND_SUPPORT_URL}messaging-in-the-nhs-app`;
+export const MESSAGING_HELP_PATH = 'messaging-in-the-nhs-app';
 
-export const HEALTH_RECORDS_IN_THE_NHS_APP_URL = `${HELP_AND_SUPPORT_URL}health-records-in-the-nhs-app/`;
-export const CLINICAL_ABBREVIATIONS_URL = `${HEALTH_RECORDS_IN_THE_NHS_APP_URL}abbreviations-commonly-found-in-medical-records/`;
-export const organDonationHelpUrl = `${HEALTH_RECORDS_IN_THE_NHS_APP_URL}organ-donation`;
-export const thirdPartyHelpUrl = `${HEALTH_RECORDS_IN_THE_NHS_APP_URL}third-party-services`;
-export const gpMedicalRecordHelpUrl = `${HEALTH_RECORDS_IN_THE_NHS_APP_URL}gp-health-record`;
-export const healthRecordsHelpUrl = `${HEALTH_RECORDS_IN_THE_NHS_APP_URL}`;
-export const HEALTH_RECORDS_HELP_AND_SUPPORT_URL = `${HEALTH_RECORDS_IN_THE_NHS_APP_URL}gp-health-record`;
-export const ndopHelpUrl = `${HEALTH_RECORDS_IN_THE_NHS_APP_URL}choosing-your-data-sharing-preferences`;
+export const HEALTH_RECORDS_IN_THE_NHS_APP_PATH = 'health-records-in-the-nhs-app/';
+export const CLINICAL_ABBREVIATIONS_PATH = `${HEALTH_RECORDS_IN_THE_NHS_APP_PATH}abbreviations-commonly-found-in-medical-records/`;
+export const ORGAN_DONATION_HELP_PATH = `${HEALTH_RECORDS_IN_THE_NHS_APP_PATH}organ-donation`;
+export const THIRD_PARTY_HELP_PATH = `${HEALTH_RECORDS_IN_THE_NHS_APP_PATH}third-party-services`;
+export const GP_MEDICAL_RECORD_HELP_PATH = `${HEALTH_RECORDS_IN_THE_NHS_APP_PATH}gp-health-record`;
+export const HEALTH_RECORDS_HELP_PATH = `${HEALTH_RECORDS_IN_THE_NHS_APP_PATH}`;
+export const HEALTH_RECORDS_HELP_AND_SUPPORT_PATH = `${HEALTH_RECORDS_IN_THE_NHS_APP_PATH}gp-health-record`;
+export const NDOP_HELP_PATH = `${HEALTH_RECORDS_IN_THE_NHS_APP_PATH}choosing-your-data-sharing-preferences`;
 
-export const PRESCRIPTIONS_IN_THE_NHS_APP_URL = `${HELP_AND_SUPPORT_URL}prescriptions-in-the-nhs-app/`;
-export const nominatedPharmacyHelpUrl = `${PRESCRIPTIONS_IN_THE_NHS_APP_URL}nominating-a-pharmacy`;
-export const prescriptionsHelpUrl = `${PRESCRIPTIONS_IN_THE_NHS_APP_URL}ordering-a-prescription`;
+export const PRESCRIPTIONS_IN_THE_NHS_APP_PATH = 'prescriptions-in-the-nhs-app/';
+export const NOMINATED_PHARMACY_HELP_PATH = `${PRESCRIPTIONS_IN_THE_NHS_APP_PATH}nominating-a-pharmacy`;
+export const PRESCRIPTIONS_HELP_PATH = `${PRESCRIPTIONS_IN_THE_NHS_APP_PATH}ordering-a-prescription`;
 
-export const APPOINTMENTS_AND_ONLINE_CONSULTATIONS_IN_THE_NHS_APP_URL = `${HELP_AND_SUPPORT_URL}appointments-and-online-consultations-in-the-nhs-app/`;
-export const onlineConsultationsHelpUrl = `${APPOINTMENTS_AND_ONLINE_CONSULTATIONS_IN_THE_NHS_APP_URL}online-consultations`;
-export const appointmentsHelpUrl = `${APPOINTMENTS_AND_ONLINE_CONSULTATIONS_IN_THE_NHS_APP_URL}gp-surgery-appointments`;
-export const hospitalAndOtherAppoitmentsHelpUrl = `${APPOINTMENTS_AND_ONLINE_CONSULTATIONS_IN_THE_NHS_APP_URL}hospital-and-other-appointments`;
+export const APPOINTMENTS_AND_ONLINE_CONSULTATIONS_IN_THE_NHS_APP_PATH = 'appointments-and-online-consultations-in-the-nhs-app/';
+export const ONLINE_CONSULTATIONS_HELP_PATH = `${APPOINTMENTS_AND_ONLINE_CONSULTATIONS_IN_THE_NHS_APP_PATH}online-consultations`;
+export const APPOINTMENTS_HELP_PATH = `${APPOINTMENTS_AND_ONLINE_CONSULTATIONS_IN_THE_NHS_APP_PATH}gp-surgery-appointments`;
+export const HOSPITAL_AND_OTHER_APPOINTMENTS_HELP_PATH = `${APPOINTMENTS_AND_ONLINE_CONSULTATIONS_IN_THE_NHS_APP_PATH}hospital-and-other-appointments`;

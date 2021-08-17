@@ -19,7 +19,7 @@ jest.mock('@/services/native-app');
 const routeMeta = {
   headerKey: 'terms-conditions-header',
   titleKey: 'terms-conditions-title',
-  helpUrl: 'https://www.nhs.uk/nhs-app/nhs-app-help-and-support/',
+  helpPath: '',
 };
 
 const createDefaultPage = ($store, stubs) => (shallowMount(TsAndCsLayout, {
@@ -27,13 +27,6 @@ const createDefaultPage = ($store, stubs) => (shallowMount(TsAndCsLayout, {
   $route: {
     name: 'terms-and-conditions',
     meta: routeMeta,
-  },
-  showTemplate: () => true,
-  loggedIn: true,
-  methods: {
-    configureWebContext(url) {
-      return url;
-    },
   },
   stubs,
   mountOpts: { i18n },
@@ -45,7 +38,10 @@ const createLayoutStore = ({
   durationSeconds = undefined,
 } = {}) => createStore({
   $cookies: { get: cookie => (cookie === 'nhso.session' ? { durationSeconds } : {}) },
-  $env: { ANALYTICS_SCRIPT_URL: analyticsScriptUrl, VERSION_TAG: 1 },
+  $env: {
+    ANALYTICS_SCRIPT_URL: analyticsScriptUrl,
+    VERSION_TAG: 1,
+  },
   state: {
     device: { isNativeApp: true, source: 'web' },
     appVersion: { nativeVersion: '3.2.1', webVersion: '1.2.3' },
@@ -68,13 +64,10 @@ describe('termsAndConditions.vue ', () => {
   });
 
   describe('mounted()', () => {
-    it('will send correct help URL to setHelpUrl mixin function', () => {
+    it('will call configureWebContext', () => {
       const $store = createLayoutStore();
-      const defaultPage = createDefaultPage($store);
-      const expectedHelpUrl = 'https://www.nhs.uk/nhs-app/nhs-app-help-and-support/';
-
-      expect(defaultPage.vm.currentHelpUrl)
-        .toBe(expectedHelpUrl);
+      const page = createDefaultPage($store);
+      expect(page.vm.configureWebContext).toHaveBeenCalled();
     });
 
     it('will emit UPDATE_HEADER passing the current route meta as event', () => {

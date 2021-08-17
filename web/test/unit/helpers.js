@@ -98,6 +98,8 @@ export const mount = (component, {
     $style,
     $env,
     showTemplate: () => true,
+    currentHelpUrl: () => $store.$env.BASE_NHS_APP_HELP_URL,
+    configureWebContext: jest.fn(),
     ...mocks,
   };
 

@@ -28,13 +28,6 @@ const createDefaultPage = ($store, stubs) => (shallowMount(NoReturnLayout, {
     name: 'no-return-flow-layout',
     meta: routeMeta,
   },
-  showTemplate: () => true,
-  loggedIn: true,
-  methods: {
-    configureWebContext(url) {
-      return url;
-    },
-  },
   stubs,
   mountOpts: { i18n },
 }));
@@ -67,13 +60,10 @@ describe('no-return-flow-layout.vue ', () => {
   });
 
   describe('mounted()', () => {
-    it('will send correct help URL to setHelpUrl mixin function', () => {
+    it('will call configureWebContext', () => {
       const $store = createLayoutStore();
-      const defaultPage = createDefaultPage($store);
-      const expectedHelpUrl = 'https://www.nhs.uk/nhs-app/nhs-app-help-and-support/';
-
-      expect(defaultPage.vm.currentHelpUrl)
-        .toBe(expectedHelpUrl);
+      const page = createDefaultPage($store);
+      expect(page.vm.configureWebContext).toHaveBeenCalled();
     });
 
     it('will emit UPDATE_HEADER passing the current route meta as event', () => {

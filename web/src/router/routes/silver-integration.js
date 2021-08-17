@@ -1,7 +1,6 @@
 import UpliftSilverIntegrationPage from '@/pages/uplift/silver-integration';
 import SilverIntegrationFeatureNotAvailablePage from '@/pages/silver-integration/feature-not-available';
 import proofLevel from '@/lib/proofLevel';
-import { baseNhsAppHelpUrl } from '@/router/externalLinks';
 
 import {
   UPLIFT_SILVER_INTEGRATION_PATH,
@@ -23,7 +22,6 @@ export const UPLIFT_SILVER_INTEGRATION = {
     titleKey: '',
     proofLevel: proofLevel.P5,
     crumb: breadcrumbs.UPLIFT_SILVER_INTEGRATION_CRUMB,
-    helpUrl: baseNhsAppHelpUrl,
   },
 };
 
@@ -36,7 +34,6 @@ export const ERROR = {
     titleKey: '',
     crumb: breadcrumbs.FEATURE_NOT_AVAILABLE_CRUMB,
     proofLevel: proofLevel.P5,
-    helpUrl: baseNhsAppHelpUrl,
   },
 };
 

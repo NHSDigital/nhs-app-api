@@ -9,7 +9,7 @@ import NominatedPharmacyOnlineOnlyChoicesPage from '@/pages/nominated-pharmacy/o
 import NominatedPharmacyOnlyOnlySearchPage from '@/pages/nominated-pharmacy/online-only-search';
 import NominatedPharmacySearchResultsPage from '@/pages/nominated-pharmacy/results';
 import NominatedPharmacySearchPage from '@/pages/nominated-pharmacy/search';
-import { nominatedPharmacyHelpUrl } from '@/router/externalLinks';
+import { NOMINATED_PHARMACY_HELP_PATH } from '@/router/externalLinks';
 import { PRESCRIPTIONS_MENU_ITEM } from '@/middleware/nativeNavigation';
 import breadcrumbs from '@/breadcrumbs/nominatedPharmacy';
 import proofLevel from '@/lib/proofLevel';
@@ -52,7 +52,7 @@ export const NOMINATED_PHARMACY_CHANGE_SUCCESS = {
     crumb: breadcrumbs.NOMINATED_PHARMACY_CHANGE_SUCCESS_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,
-    helpUrl: nominatedPharmacyHelpUrl,
+    helpPath: NOMINATED_PHARMACY_HELP_PATH,
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
   },
 };
@@ -66,7 +66,7 @@ export const NOMINATED_PHARMACY_CHOOSE_TYPE = {
     crumb: breadcrumbs.NOMINATED_PHARMACY_CHOOSE_TYPE_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,
-    helpUrl: nominatedPharmacyHelpUrl,
+    helpPath: NOMINATED_PHARMACY_HELP_PATH,
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
   },
 };
@@ -81,7 +81,7 @@ export const NOMINATED_PHARMACY_CHECK = {
     crumb: breadcrumbs.NOMINATED_PHARMACY_CHECK_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,
-    helpUrl: nominatedPharmacyHelpUrl,
+    helpPath: NOMINATED_PHARMACY_HELP_PATH,
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
   },
 };
@@ -96,7 +96,7 @@ export const NOMINATED_PHARMACY_CONFIRM = {
     crumb: breadcrumbs.NOMINATED_PHARMACY_CONFIRM_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,
-    helpUrl: nominatedPharmacyHelpUrl,
+    helpPath: NOMINATED_PHARMACY_HELP_PATH,
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
   },
 };
@@ -111,7 +111,7 @@ export const NOMINATED_PHARMACY_DSP_INTERRUPT = {
     crumb: breadcrumbs.NOMINATED_PHARMACY_DSP_INTERRUPT_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,
-    helpUrl: nominatedPharmacyHelpUrl,
+    helpPath: NOMINATED_PHARMACY_HELP_PATH,
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
   },
 };
@@ -126,7 +126,7 @@ export const NOMINATED_PHARMACY_INDEX = {
     crumb: breadcrumbs.NOMINATED_PHARMACY_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,
-    helpUrl: nominatedPharmacyHelpUrl,
+    helpPath: NOMINATED_PHARMACY_HELP_PATH,
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
   },
 };
@@ -145,7 +145,7 @@ export const NOMINATED_PHARMACY_INTERRUPT = {
     crumb: breadcrumbs.NOMINATED_PHARMACY_INTERRUPT_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,
-    helpUrl: nominatedPharmacyHelpUrl,
+    helpPath: NOMINATED_PHARMACY_HELP_PATH,
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
   },
 };
@@ -160,7 +160,7 @@ export const NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES = {
     crumb: breadcrumbs.NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,
-    helpUrl: nominatedPharmacyHelpUrl,
+    helpPath: NOMINATED_PHARMACY_HELP_PATH,
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
   },
 };
@@ -175,7 +175,7 @@ export const NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH = {
     crumb: breadcrumbs.NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,
-    helpUrl: nominatedPharmacyHelpUrl,
+    helpPath: NOMINATED_PHARMACY_HELP_PATH,
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
   },
 };
@@ -212,7 +212,7 @@ export const NOMINATED_PHARMACY_SEARCH_RESULTS = {
     crumb: breadcrumbs.NOMINATED_PHARMACY_SEARCH_RESULTS_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,
-    helpUrl: nominatedPharmacyHelpUrl,
+    helpPath: NOMINATED_PHARMACY_HELP_PATH,
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
   },
 };
@@ -227,7 +227,7 @@ export const NOMINATED_PHARMACY_SEARCH = {
     crumb: breadcrumbs.NOMINATED_PHARMACY_SEARCH_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,
-    helpUrl: nominatedPharmacyHelpUrl,
+    helpPath: NOMINATED_PHARMACY_HELP_PATH,
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
   },
 };

@@ -43,9 +43,6 @@ import MenuItemList from '@/components/MenuItemList';
 import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
 import { DOCUMENT_NAME } from '@/router/names';
 import { isBlankString, isNumber, redirectTo, readableBytes, datePart } from '@/lib/utils';
-import {
-  CLINICAL_ABBREVIATIONS_URL,
-} from '@/router/externalLinks';
 
 function mapDocumentInfo(document) {
   const {
@@ -89,7 +86,6 @@ export default {
   mixins: [ReloadRecordMixin],
   data() {
     return {
-      glossaryLinkURL: CLINICAL_ABBREVIATIONS_URL,
       backPath: GP_MEDICAL_RECORD_PATH,
       documents: null,
     };

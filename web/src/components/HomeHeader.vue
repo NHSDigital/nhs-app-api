@@ -28,9 +28,6 @@ import NhsLogo from '@/components/icons/NhsLogo';
 import HelpIcon from '@/components/icons/HelpIcon';
 import { GET_HEALTH_ADVICE_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
-import {
-  HELP_AND_SUPPORT_URL,
-} from '@/router/externalLinks';
 
 export default {
   name: 'HomeHeader',
@@ -41,7 +38,7 @@ export default {
   },
   data() {
     return {
-      helpAndSupportURL: HELP_AND_SUPPORT_URL,
+      helpAndSupportURL: this.$store.$env.BASE_NHS_APP_HELP_URL,
     };
   },
   methods: {

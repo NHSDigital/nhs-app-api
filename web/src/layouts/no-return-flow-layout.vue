@@ -99,9 +99,6 @@ export default {
     next();
   },
   computed: {
-    currentHelpUrl() {
-      return this.$route.meta.helpUrl;
-    },
     loggedIn() {
       return !!this.$store.state.session.csrfToken;
     },

@@ -19,9 +19,6 @@ import { GP_MEDICAL_RECORD_PATH, DOCUMENT_PATH, LOGOUT_PATH, LOGIN_PATH } from '
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
 import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 import { redirectTo } from '@/lib/utils';
-import {
-  CLINICAL_ABBREVIATIONS_URL,
-} from '@/router/externalLinks';
 
 export default {
   components: {
@@ -30,7 +27,6 @@ export default {
   },
   data() {
     return {
-      glossaryLinkURL: CLINICAL_ABBREVIATIONS_URL,
       documentData: null,
     };
   },

@@ -39,9 +39,6 @@ const createPage = ($store, route = INDEX) => {
     $route: {
       ...route,
     },
-    methods: {
-      configureWebContext: helpUrl => helpUrl,
-    },
   });
 };
 

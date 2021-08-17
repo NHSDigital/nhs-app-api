@@ -100,9 +100,6 @@ export default {
     next();
   },
   computed: {
-    currentHelpUrl() {
-      return this.$route.meta.helpUrl;
-    },
     loggedIn() {
       return !!this.$store.state.session.csrfToken;
     },
@@ -133,7 +130,7 @@ export default {
     NativeVersionSetup(this.$store);
     window.validateSession =
       window.validateSession || (() => this.$store.dispatch('session/validate'));
-    this.configureWebContext(this.currentHelpUrl);
+    this.configureWebContext();
     if (this.$store.state.device.isNativeApp) {
       NativeApp.dismissProgressBar();
     }

@@ -17,9 +17,12 @@ export default {
     showTemplate() {
       return !this.hasConnectionProblem();
     },
+    currentHelpUrl() {
+      return `${this.$store.$env.BASE_NHS_APP_HELP_URL}${this.$route.meta.helpPath || ''}`;
+    },
   },
   methods: {
-    configureWebContext(currentHelpUrl) {
+    configureWebContext() {
       if (this.$store.state.device.isNativeApp) {
         let retryPath = '';
 
@@ -37,7 +40,7 @@ export default {
         } else {
           retryPath = getOr('', 'state.errors.pageSettings.redirectUrl.default', this.$store);
         }
-        NativeApp.configureWebContext(currentHelpUrl, retryPath);
+        NativeApp.configureWebContext(this.currentHelpUrl, retryPath);
       } else {
         // TODO: Add code when help function is added to the web version (Jira ticket NHSO-6388)
       }

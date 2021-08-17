@@ -1,11 +1,10 @@
 import {
-  HELP_AND_SUPPORT_URL,
   ACCESSIBILITY_STATEMENT_URL,
   PRIVACY_POLICY_URL,
   TERMS_AND_CONDITIONS_URL,
 } from '@/router/externalLinks';
 
-export const footerLinks = () =>
+export const footerLinks = env =>
   [
     {
       url: TERMS_AND_CONDITIONS_URL,
@@ -16,7 +15,7 @@ export const footerLinks = () =>
       localeLabel: 'more.privacyPolicy',
     },
     {
-      url: HELP_AND_SUPPORT_URL,
+      url: env.BASE_NHS_APP_HELP_URL,
       localeLabel: 'more.helpAndSupport',
     },
     {

@@ -3,10 +3,11 @@ import WebFooter from '@/components/widgets/WebFooter';
 import {
   TERMS_AND_CONDITIONS_URL,
   PRIVACY_POLICY_URL,
-  HELP_AND_SUPPORT_URL,
   ACCESSIBILITY_STATEMENT_URL,
 } from '@/router/externalLinks';
 import { mount } from '../../helpers';
+
+const BASE_NHS_APP_HELP_URL = 'http://stubs.local.bitraft.io/help';
 
 describe('WebFooter.vue', () => {
   let wrapper;
@@ -14,7 +15,7 @@ describe('WebFooter.vue', () => {
   const urlAndTexts = {
     'Terms of use': { url: TERMS_AND_CONDITIONS_URL, text: 'Terms of use' },
     'Privacy policy': { url: PRIVACY_POLICY_URL, text: 'Privacy policy' },
-    'Help and support': { url: HELP_AND_SUPPORT_URL, text: 'Help and support' },
+    'Help and support': { url: BASE_NHS_APP_HELP_URL, text: 'Help and support' },
     'Accessibility statement': { url: ACCESSIBILITY_STATEMENT_URL, text: 'Accessibility statement' },
   };
 
@@ -26,7 +27,10 @@ describe('WebFooter.vue', () => {
   };
 
   beforeEach(() => {
-    wrapper = mount(WebFooter, { mountOpts: { i18n } });
+    wrapper = mount(WebFooter, {
+      mountOpts: { i18n },
+      $store: { $env: { BASE_NHS_APP_HELP_URL } },
+    });
   });
 
   it('will verify that links in footer are correctly generated', () => {

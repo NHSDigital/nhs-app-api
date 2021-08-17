@@ -58,7 +58,7 @@
         </a>
       </li>
       <li class="nhsuk-header__navigation-item" :class="$style.additionalMenuItem">
-        <a class="nhsuk-header__navigation-link" :href="helpAndSupportUrl"
+        <a class="nhsuk-header__navigation-link" :href="currentHelpUrl"
            data-sid="help-and-support-menu-item" target="_blank" rel="noopener noreferrer"
            @click="closeMiniMenu">
           {{ $t('navigation.helpAndSupport') }}
@@ -117,9 +117,6 @@ export default {
   computed: {
     miniMenuExpanded() {
       return this.$store.state.header.miniMenuExpanded;
-    },
-    helpAndSupportUrl() {
-      return this.$route.meta.helpUrl;
     },
   },
   methods: {

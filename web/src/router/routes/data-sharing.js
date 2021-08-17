@@ -24,7 +24,7 @@ import {
 } from '@/middleware/nativeNavigation';
 
 import proofLevel from '@/lib/proofLevel';
-import { ndopHelpUrl } from '@/router/externalLinks';
+import { NDOP_HELP_PATH } from '@/router/externalLinks';
 
 export const DATA_SHARING_OVERVIEW = {
   path: DATA_SHARING_OVERVIEW_PATH,
@@ -36,7 +36,7 @@ export const DATA_SHARING_OVERVIEW = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.DATA_SHARING_OVERVIEW_CRUMB,
-    helpUrl: ndopHelpUrl,
+    helpPath: NDOP_HELP_PATH,
     redirectRules: [{
       condition: 'device/isNativeApp',
       value: false,
@@ -56,7 +56,7 @@ export const DATA_SHARING_WHERE_USED = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.DATA_SHARING_WHERE_USED_CRUMB,
-    helpUrl: ndopHelpUrl,
+    helpPath: NDOP_HELP_PATH,
     redirectRules: [{
       condition: 'device/isNativeApp',
       value: false,
@@ -76,7 +76,7 @@ export const DATA_SHARING_DOES_NOT_APPLY = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.DATA_SHARING_DOES_NOT_APPLY_CRUMB,
-    helpUrl: ndopHelpUrl,
+    helpPath: NDOP_HELP_PATH,
     redirectRules: [{
       condition: 'device/isNativeApp',
       value: false,
@@ -96,7 +96,7 @@ export const DATA_SHARING_MAKE_YOUR_CHOICE = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.DATA_SHARING_MAKE_YOUR_CHOICE_CRUMB,
-    helpUrl: ndopHelpUrl,
+    helpPath: NDOP_HELP_PATH,
     redirectRules: [{
       condition: 'device/isNativeApp',
       value: false,

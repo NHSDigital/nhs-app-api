@@ -109,7 +109,6 @@ export default {
   },
   data() {
     return {
-      currentHelpUrl: this.$route.meta.helpUrl,
       isNativeApp: this.$store.state.device.isNativeApp,
       symptomButtonId: 'btn_home_symptoms',
       symptomsUrl: GET_HEALTH_ADVICE_PATH,

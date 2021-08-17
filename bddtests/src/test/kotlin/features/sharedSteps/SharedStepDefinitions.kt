@@ -323,6 +323,10 @@ open class SharedStepDefinitions {
 
         login.using(patient)
 
+        mockingClient.forHelp.mock {
+            respondWithPage()
+        }
+
         home.waitForLoginToCompleteSuccessfully(waitForLoginPage)
     }
 

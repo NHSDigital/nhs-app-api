@@ -1,7 +1,8 @@
 <template>
   <div>
     <p>{{ $t('glossary.youMaySeeAbbreviationsYouAreNotFamilarWith') }}</p>
-    <nhs-arrow-banner :banner-text="$t('glossary.helpWithAbbreviations')"
+    <nhs-arrow-banner id="glossary-link"
+                      :banner-text="$t('glossary.helpWithAbbreviations')"
                       :click-action="glossaryLinkURL"
                       :is-analytics-tracked="true"/>
   </div>
@@ -10,7 +11,7 @@
 <script>
 import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
 import {
-  CLINICAL_ABBREVIATIONS_URL,
+  CLINICAL_ABBREVIATIONS_PATH,
 } from '@/router/externalLinks';
 
 export default {
@@ -20,7 +21,7 @@ export default {
   },
   data() {
     return {
-      glossaryLinkURL: CLINICAL_ABBREVIATIONS_URL,
+      glossaryLinkURL: `${this.$store.$env.BASE_NHS_APP_HELP_URL}${CLINICAL_ABBREVIATIONS_PATH}`,
     };
   },
 };

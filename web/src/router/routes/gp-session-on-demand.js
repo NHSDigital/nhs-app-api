@@ -13,7 +13,7 @@ import {
 
 import proofLevel from '@/lib/proofLevel';
 import { CLEAR_SELECTED_MENU_ITEM } from '@/middleware/nativeNavigation';
-import { appLoginHelpUrl } from '@/router/externalLinks';
+import { APP_LOGIN_HELP_PATH } from '@/router/externalLinks';
 
 export const GP_SESSION_ON_DEMAND_BEGIN = {
   path: GP_SESSION_ON_DEMAND_BEGIN_PATH,
@@ -25,7 +25,7 @@ export const GP_SESSION_ON_DEMAND_BEGIN = {
     proofLevel: proofLevel.P5,
     crumb: {},
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
-    helpUrl: appLoginHelpUrl,
+    helpPath: APP_LOGIN_HELP_PATH,
   },
 };
 
@@ -37,7 +37,7 @@ export const GP_SESSION_ON_DEMAND_RETURN = {
     isAnonymous: true,
     crumb: {},
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
-    helpUrl: appLoginHelpUrl,
+    helpPath: APP_LOGIN_HELP_PATH,
   },
 };
 

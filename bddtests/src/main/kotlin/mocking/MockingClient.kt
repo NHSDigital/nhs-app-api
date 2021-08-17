@@ -6,6 +6,7 @@ import mocking.defaults.EmisMockDefaults
 import mocking.emis.EmisMappingRouter
 import mocking.externalSites.ExternalSitesMappingBuilder
 import mocking.favicon.FaviconMappingBuilder
+import mocking.help.HelpRequestBuilder
 import mocking.microtest.MicrotestMappingRouter
 import mocking.ndop.NdopMappingBuilder
 import mocking.onlineConsultations.OnlineConsultationsMappingBuilder
@@ -58,6 +59,8 @@ class MockingClient(configuration: MockingConfiguration) {
     val forSubstrakt = ExternalSupplierMockingClient(SubstraktRequestBuilder(), wiremockHelper)
     val forNetCompany = ExternalSupplierMockingClient(NetCompanyRequestBuilder(), wiremockHelper)
     val forNhsd = ExternalSupplierMockingClient(NhsdRequestBuilder(), wiremockHelper)
+
+    val forHelp = ExternalSupplierMockingClient(HelpRequestBuilder(), wiremockHelper)
 
     fun favicon() = wiremockHelper.postMapping(FaviconMappingBuilder().respondWithNotFound())
 
