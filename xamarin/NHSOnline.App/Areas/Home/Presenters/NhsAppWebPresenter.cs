@@ -88,6 +88,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterHandler<string>(RequestPnsToken, (view, handler) => view.GetPnsTokenRequested = handler)
                 .RegisterHandler<string>(FetchBiometricStatusRequested, (view, handler) => view.FetchBiometricStatusRequested = handler)
                 .RegisterHandler<string>(UpdateBiometricRegistrationRequested, (view, handler) => view.UpdateBiometricRegistrationRequested = handler)
+                .RegisterHandler<Uri>(OpenBrowserOverlayRequested, (view, handler) => view.OpenBrowserOverlayRequested = handler)
                 .RegisterHandler<string>(SetMenuBarItemRequested, (view, handler) => view.SetMenuBarItemRequested = handler)
                 .RegisterHandler(ClearMenuBarItemRequested, (view, handler) => view.ClearMenuBarItemRequested = handler)
                 .RegisterHandler(OpenSettingsRequested, (view, handler) => view.OpenSettingsRequested = handler)
@@ -190,7 +191,13 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _logger.LogInformation("Opening Web Integration - {Url}", request.Url);
 
             var popToRootNavigationHandler = new NhsAppPopToRootNavigationHandler(_navigationHandler, _view.AppNavigation);
-            var model = new WebIntegrationModel(popToRootNavigationHandler, request.Url, _view.SelectedNavigationFooterItem, request.AdditionalDomains);
+
+            var model = new WebIntegrationModel(
+                popToRootNavigationHandler,
+                request.Url,
+                _view.SelectedNavigationFooterItem,
+                request.AdditionalDomains,
+                request.HelpUrl);
 
             var page = _pageFactory.CreatePageFor(model);
             await _view.AppNavigation
@@ -409,8 +416,13 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         private async Task HelpRequested()
         {
-            await _browserOverlay.OpenBrowserOverlay(
-                _nhsExternalServicesConfiguration.NhsUkBaseHelpUrl)
+            await _view.GetContextualHelpLink().PreserveThreadContext();
+        }
+
+        private async Task OpenBrowserOverlayRequested(Uri overlayUri)
+        {
+            await _browserOverlay
+                .OpenBrowserOverlay(overlayUri)
                 .PreserveThreadContext();
         }
 

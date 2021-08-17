@@ -87,6 +87,15 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             MessagesAppIcon.Click();
         }
 
+        public void AssertNoNavigationIconsSelected()
+        {
+            AdviceAppIcon.AssertNotSelected();
+            AppointmentsAppIcon.AssertNotSelected();
+            PrescriptionsAppIcon.AssertNotSelected();
+            YourHealthAppIcon.AssertNotSelected();
+            MessagesAppIcon.AssertNotSelected();
+        }
+
         public void AssertAdviceSelected()
         {
             AdviceAppIcon.AssertSelected();

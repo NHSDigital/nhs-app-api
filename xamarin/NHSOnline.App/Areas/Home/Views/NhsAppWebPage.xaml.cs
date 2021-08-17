@@ -81,6 +81,10 @@ namespace NHSOnline.App.Areas.Home.Views
         public AsyncCommand<string> UpdateBiometricRegistrationCommand
             => new AsyncCommand<string>(() => UpdateBiometricRegistrationRequested);
 
+        public Func<Uri, Task>? OpenBrowserOverlayRequested { get; set; }
+        public AsyncCommand<Uri> OpenBrowserOverlayCommand
+            => new AsyncCommand<Uri>(() => OpenBrowserOverlayRequested);
+
         public Func<Task>? OpenSettingsRequested { get; set; }
         public AsyncCommand OpenSettingsCommand
             => new AsyncCommand(() => OpenSettingsRequested);
@@ -285,6 +289,9 @@ namespace NHSOnline.App.Areas.Home.Views
 
         public async Task ValidateSession()
             => await WebView.ValidateSession().PreserveThreadContext();
+
+        public async Task GetContextualHelpLink()
+            => await WebView.GetContextualHelpLink().PreserveThreadContext();
 
         private void WebOnEndNavigating(object sender, WebNavigatedEventArgs e)
         {

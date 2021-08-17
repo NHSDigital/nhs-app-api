@@ -133,6 +133,7 @@ export default {
         NativeApp.openWebIntegration(
           url,
           !isEmpty(this.matchedService.domains) ? this.matchedService.domains : [],
+          this.currentHelpUrl,
         );
       } else {
         setWindowLocation(url);

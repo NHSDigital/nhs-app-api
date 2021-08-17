@@ -54,6 +54,9 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty UpdateBiometricRegistrationCommandProperty =
             BindableProperty.Create(nameof(UpdateBiometricRegistrationCommand), typeof(AsyncCommand<string>), typeof(NhsAppWebView));
 
+        public static readonly BindableProperty OpenBrowserOverlayCommandProperty =
+            BindableProperty.Create(nameof(OpenBrowserOverlayCommand), typeof(AsyncCommand<Uri>), typeof(NhsAppWebView));
+
         public static readonly BindableProperty OpenSettingsCommandProperty =
             BindableProperty.Create(nameof(OpenSettingsCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
 
@@ -246,6 +249,24 @@ namespace NHSOnline.App.Controls.WebViews
             set => SetValue(UpdateBiometricRegistrationCommandProperty, value);
         }
 
+        public void OpenBrowserOverlay(string argument)
+        {
+            try
+            {
+                OpenBrowserOverlayCommand.Execute(new Uri(argument));
+            }
+            catch (UriFormatException e)
+            {
+                Logger.LogError(e, $"Argument supplied is not a valid Uri: {argument}");
+            }
+        }
+
+        public AsyncCommand<Uri> OpenBrowserOverlayCommand
+        {
+            get => (AsyncCommand<Uri>)GetValue(OpenBrowserOverlayCommandProperty);
+            set => SetValue(OpenBrowserOverlayCommandProperty, value);
+        }
+
         public void OpenSettings() => OpenSettingsCommand.Execute(null);
 
         public AsyncCommand OpenSettingsCommand
@@ -325,6 +346,9 @@ namespace NHSOnline.App.Controls.WebViews
             var jsonArgument = JsonConvert.SerializeObject(queryParameters);
             await EvaluateJavaScriptAsync($"{callbackName}('{jsonArgument}')").ResumeOnThreadPool();
         }
+
+        public async Task GetContextualHelpLink()
+            => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.getContextualHelpLink()").ResumeOnThreadPool();
 
         private static T ConvertFromJsonString<T>(string json)
             => JsonConvert.DeserializeObject<T>(json, Settings) ?? throw new ArgumentException($"Failed to deserialise JSON to {typeof(T).FullName}", nameof(json));

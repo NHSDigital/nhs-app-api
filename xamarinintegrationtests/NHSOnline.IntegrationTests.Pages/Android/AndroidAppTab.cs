@@ -19,18 +19,23 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidImageButton AndroidAppTabClose => AndroidImageButton.WithDescription(_driver, "Close tab");
 
-        public static AndroidAppTab AssertOnCovidPage(IAndroidDriverWrapper driver) => AssertOnPageByTitle(driver, "Covid");
+        public static AndroidAppTab AssertOnCovidPage(IAndroidDriverWrapper driver)
+            => AssertOnPageByTitle(driver, "Covid");
 
-        public static AndroidAppTab AssertOnLoginHelpPage(IAndroidDriverWrapper driver) => AssertOnPageByTitle(driver, "Login Help");
+        public static AndroidAppTab AssertOnHelpPageByTitle(IAndroidDriverWrapper driver, string titleToMatch)
+            => AssertOnPageByTitle(driver, $"{titleToMatch} Help");
 
-        public static AndroidAppTab AssertOnHomeHelpPage(IAndroidDriverWrapper driver) => AssertOnPageByTitle(driver, "Home Help");
+        public static AndroidAppTab AssertOnHelpPageByText(IAndroidDriverWrapper driver, string textToMatch)
+            => AssertOnPageByTitle(driver, $"Help Page for {textToMatch}");
 
-        public static AndroidAppTab AssertOnContactUsPage(IAndroidDriverWrapper driver) => AssertOnPageByTitle(driver, "Contact Us");
+        public static AndroidAppTab AssertOnContactUsPage(IAndroidDriverWrapper driver)
+            => AssertOnPageByTitle(driver, "Contact Us");
 
         public static AndroidAppTab AssertOnOnlineConsultationPrivacyPolicyPage(IAndroidDriverWrapper driver) =>
             AssertOnPageByTitle(driver, "NHS App privacy policy: online consultation services");
 
-        public static AndroidAppTab AssertOnPrivacyPolicyPage(IAndroidDriverWrapper driver) => AssertOnPageByTitle(driver, "NHS App privacy policy");
+        public static AndroidAppTab AssertOnPrivacyPolicyPage(IAndroidDriverWrapper driver)
+            => AssertOnPageByTitle(driver, "NHS App privacy policy");
 
         public static AndroidAppTab AssertInBrowserAppTab(IAndroidDriverWrapper driver) => AssertOnPageByClose(driver);
 

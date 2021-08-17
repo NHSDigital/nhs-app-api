@@ -391,6 +391,7 @@ describe('redirector page', () => {
         expect(NativeApp.openWebIntegration).toHaveBeenCalledWith(
           'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages&assertedLoginIdentity=jwtToken',
           ['http://additional.domain.com'],
+          'http://stubs.local.bitraft.io/help-and-support/',
         );
       });
     });

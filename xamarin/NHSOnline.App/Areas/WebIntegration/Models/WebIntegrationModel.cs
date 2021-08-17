@@ -11,17 +11,20 @@ namespace NHSOnline.App.Areas.WebIntegration.Models
             INhsAppNavigationHandler navigationHandler,
             Uri url,
             NavigationFooterItem footerItem,
-            Collection<Uri> additionalDomains)
+            Collection<Uri> additionalDomains,
+            Uri helpUrl)
         {
             NavigationHandler = navigationHandler;
             Url = url;
             FooterItem = footerItem;
             AdditionalDomains = additionalDomains;
+            HelpUrl = helpUrl;
         }
 
         internal INhsAppNavigationHandler NavigationHandler { get; }
         internal Uri Url { get; }
         internal NavigationFooterItem FooterItem { get; }
         internal Collection<Uri> AdditionalDomains { get; }
+        internal Uri HelpUrl { get; }
     }
 }

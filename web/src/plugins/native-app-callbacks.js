@@ -2,7 +2,8 @@ import store from '@/store';
 import router from '@/router';
 import { REDIRECT_PAGE_PARAMETER, REDIRECT_PARAMETER } from '@/router/names';
 import { INTERSTITIAL_REDIRECTOR_PATH, GP_SESSION_ON_DEMAND_RETURN_PATH } from '@/router/paths';
-import { isBlankString, redirectTo } from '@/lib/utils';
+import { generateContextualHelpLink, isBlankString, redirectTo } from '@/lib/utils';
+import NativeApp from '@/services/native-app';
 
 const NativeAppCallbacksPlugin = {
   install() {
@@ -96,6 +97,9 @@ const NativeAppCallbacksPlugin = {
       },
       deviceNotificationPromptCookieExists(doesCookieExist) {
         store.dispatch('notifications/deviceCookieExists', doesCookieExist);
+      },
+      getContextualHelpLink() {
+        NativeApp.openBrowserOverlay(generateContextualHelpLink(store, router.currentRoute));
       },
     };
   },

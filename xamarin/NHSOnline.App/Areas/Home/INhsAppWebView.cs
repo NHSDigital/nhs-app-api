@@ -40,6 +40,7 @@ namespace NHSOnline.App.Areas.Home
             Func<string, Task>? SetMenuBarItemRequested { get; set; }
             Func<Task>? ClearMenuBarItemRequested { get; set; }
             Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
+            Func<Uri, Task>? OpenBrowserOverlayRequested { get; set; }
             Func<Task>? OpenSettingsRequested { get; set; }
             Func<Task>? LogoutRequested { get; set; }
             Func<Task>? SessionExpiredRequested { get; set; }
@@ -72,5 +73,6 @@ namespace NHSOnline.App.Areas.Home
         Task SendStayOnPage();
         Task SendLeavePage();
         Task Logout();
+        Task GetContextualHelpLink();
     }
 }

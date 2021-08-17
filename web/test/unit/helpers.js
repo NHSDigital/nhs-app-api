@@ -98,7 +98,7 @@ export const mount = (component, {
     $style,
     $env,
     showTemplate: () => true,
-    currentHelpUrl: () => $store.$env.BASE_NHS_APP_HELP_URL,
+    currentHelpUrl: 'http://stubs.local.bitraft.io/help-and-support/',
     configureWebContext: jest.fn(),
     ...mocks,
   };

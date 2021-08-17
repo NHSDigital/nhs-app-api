@@ -19,16 +19,16 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
 
         [JavascriptInterface]
         [Export("openWebIntegration")]
-        public void OpenWebIntegration(string argumentJson)
+        public void OpenWebIntegration(string rawArgument)
         {
-            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.OpenWebIntegration(argumentJson));
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.OpenWebIntegration(rawArgument));
         }
 
         [JavascriptInterface]
         [Export("startNhsLoginUplift")]
-        public void StartNhsLoginUplift(string argumentJson)
+        public void StartNhsLoginUplift(string rawArgument)
         {
-            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.StartNhsLoginUplift(argumentJson));
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.StartNhsLoginUplift(rawArgument));
         }
 
         [JavascriptInterface]
@@ -40,23 +40,30 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
 
         [JavascriptInterface]
         [Export("requestPnsToken")]
-        public void RequestPnsToken(string argumentJson)
+        public void RequestPnsToken(string rawArgument)
         {
-            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.RequestPnsToken(argumentJson));
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.RequestPnsToken(rawArgument));
         }
 
         [JavascriptInterface]
         [Export("fetchBiometricStatus")]
-        public void FetchBiometricStatus(string argumentJson)
+        public void FetchBiometricStatus(string rawArgument)
         {
-            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.FetchBiometricStatus(argumentJson));
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.FetchBiometricStatus(rawArgument));
         }
 
         [JavascriptInterface]
         [Export("updateBiometricRegistrationWithToken")]
-        public void UpdateBiometricRegistrationWithToken(string argumentJson)
+        public void UpdateBiometricRegistrationWithToken(string rawArgument)
         {
-            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.UpdateBiometricRegistration(argumentJson));
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.UpdateBiometricRegistration(rawArgument));
+        }
+
+        [JavascriptInterface]
+        [Export("openBrowserOverlay")]
+        public void OpenBrowserOverlay(string rawArgument)
+        {
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.OpenBrowserOverlay(rawArgument));
         }
 
         [JavascriptInterface]
@@ -82,9 +89,9 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
 
         [JavascriptInterface]
         [Export("setMenuBarItem")]
-        public void SetMenuBarItem(string argumentJson)
+        public void SetMenuBarItem(string rawArgument)
         {
-            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.SetMenuBarItem(argumentJson));
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.SetMenuBarItem(rawArgument));
         }
 
         [JavascriptInterface]
@@ -96,16 +103,16 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
 
         [JavascriptInterface]
         [Export("addEventToCalendar")]
-        public void AddEventToCalendar(string argumentJson)
+        public void AddEventToCalendar(string rawArgument)
         {
-            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.AddEventToCalendar(argumentJson));
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.AddEventToCalendar(rawArgument));
         }
 
         [JavascriptInterface]
         [Export("startDownloadFromJson")]
-        public void StartDownloadFromJson(string argumentJson)
+        public void StartDownloadFromJson(string rawArgument)
         {
-            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.StartDownload(argumentJson));
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.StartDownload(rawArgument));
         }
 
         [JavascriptInterface]
@@ -117,9 +124,9 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
 
         [JavascriptInterface]
         [Export("createOnDemandGpSession")]
-        public void CreateOnDemandGpSession(string argumentJson)
+        public void CreateOnDemandGpSession(string rawArgument)
         {
-            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.CreateOnDemandGpSession(argumentJson));
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.CreateOnDemandGpSession(rawArgument));
         }
 
         [JavascriptInterface]

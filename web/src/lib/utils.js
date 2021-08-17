@@ -428,3 +428,6 @@ export const normaliseWhiteSpace = text => (
     ? text
     : text.replace(/[\n\r\s]+/g, ' ')
 );
+
+export const generateContextualHelpLink = (store, currentRoute) =>
+  `${store.$env.BASE_NHS_APP_HELP_URL}${currentRoute.meta.helpPath || ''}`;

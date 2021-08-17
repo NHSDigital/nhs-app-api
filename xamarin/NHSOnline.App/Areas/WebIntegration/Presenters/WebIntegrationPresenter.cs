@@ -71,6 +71,13 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             await _model.NavigationHandler.GoToNhsAppPageRequested(page).PreserveThreadContext();
         }
 
+        private async Task HelpRequested()
+        {
+            await _browserOverlay
+                .OpenBrowserOverlay(_model.HelpUrl)
+                .PreserveThreadContext();
+        }
+
         private async Task StartDownloadRequested(DownloadRequest downloadRequest)
         {
             var storagePermissionCheck = await Permissions.CheckStatusAsync<Permissions.StorageWrite>().ResumeOnThreadPool();
@@ -97,13 +104,6 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             _logger.LogInformation("Redirecting to deeplink - {deeplink}", deepLinkUrl);
 
             await _model.NavigationHandler.RedirectToDeepLinkRequested(deepLinkUrl).PreserveThreadContext();
-        }
-
-        private async Task HelpRequested()
-        {
-            await _browserOverlay
-                .OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkBaseHelpUrl)
-                .PreserveThreadContext();
         }
 
         private Task ViewOnAppearing()

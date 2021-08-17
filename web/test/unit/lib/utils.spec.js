@@ -4,6 +4,7 @@ import {
   getThirdPartyJumpOff,
   mimeType,
   isNhsAppHost,
+  generateContextualHelpLink,
 } from '@/lib/utils';
 import * as window from '@/lib/window';
 
@@ -142,6 +143,27 @@ describe('util library', () => {
 
       // assert
       expect(result).toBe(data.expectedResultMatch);
+    });
+  });
+
+  describe('generateContextualHelpLink', () => {
+    const mockStore = {
+      $env: { BASE_NHS_APP_HELP_URL: 'http://stubs.local.bitraft.io' },
+    };
+
+    each([
+      ['http://stubs.local.bitraft.io', null],
+      ['http://stubs.local.bitraft.io', ''],
+      ['http://stubs.local.bitraft.io/help/test', '/help/test'],
+      ['http://stubs.local.bitraft.io/help-and-support/test', '/help-and-support/test'],
+    ]).it('will correctly generate %s as the the contextual help link from store and route link %s', (expectedResult, helpPath) => {
+      const mockCurrentRoute = { meta: { helpPath } };
+
+      // act
+      const result = generateContextualHelpLink(mockStore, mockCurrentRoute);
+
+      // assert
+      expect(result).toBe(expectedResult);
     });
   });
 });

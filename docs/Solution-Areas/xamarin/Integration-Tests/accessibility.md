@@ -15,7 +15,7 @@ For each page we:
 
 The [UI Automator viewer](https://developer.android.com/training/testing/ui-automator#ui-automator-viewer) tool can be used to identify which elements of a page are focusable and which currently have the focus.
 
-![UI Automator viewer](Images/integration-tests-ui-automator-viewer.png)
+![UI Automator viewer](../Images/integration-tests-ui-automator-viewer.png)
 
 ### Keyboard Accessibility - iOS
 

@@ -6,7 +6,7 @@ import { createLocalVue, mount } from '@vue/test-utils';
 import { INDEX_PATH } from '@/router/paths';
 import { createUri } from '@/lib/noJs';
 import { initialState } from '@/store/modules/errors/mutation-types';
-import { redirectTo } from '@/lib/utils';
+import * as utils from '@/lib/utils';
 import { createStore } from '../helpers';
 
 jest.mock('@/lib/utils');
@@ -43,8 +43,14 @@ describe('mixins', () => {
 
   describe('computed', () => {
     describe('currentHelpUrl', () => {
-      it('should return the correct help url', () => {
-        expect(wrapper.vm.currentHelpUrl).toEqual('http://stubs.local.bitraft.io/help');
+      it('should call the generate help link function with the correct parameters', () => {
+        const result = wrapper.vm.currentHelpUrl; // eslint-disable-line no-unused-vars
+
+        expect(utils.generateContextualHelpLink)
+          .toBeCalledWith(
+            expect.objectContaining({ $env: wrapper.vm.$store.$env }),
+            expect.objectContaining({ meta: wrapper.vm.$route.meta }),
+          );
       });
     });
   });
@@ -55,6 +61,7 @@ describe('mixins', () => {
 
       beforeEach(() => {
         configureWebContext = jest.spyOn(NativeApp, 'configureWebContext');
+        utils.generateContextualHelpLink = jest.fn().mockReturnValue('http://stubs.local.bitraft.io/help');
       });
 
       afterEach(() => {
@@ -140,7 +147,7 @@ describe('mixins', () => {
       });
 
       it('will redirect to current route', () => {
-        expect(redirectTo).toBeCalledWith(wrapper.vm, '/foo');
+        expect(utils.redirectTo).toBeCalledWith(wrapper.vm, '/foo');
       });
     });
 

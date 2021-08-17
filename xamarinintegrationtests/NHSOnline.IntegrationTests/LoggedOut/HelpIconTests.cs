@@ -23,7 +23,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
             AndroidAppTab
-                .AssertOnLoginHelpPage(driver);
+                .AssertOnHelpPageByTitle(driver, "Login");
         }
 
         [NhsAppIOSTest]
@@ -34,7 +34,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .GetHelp();
 
             IOSAppTab
-                .AssertOnLoginHelpPage(driver);
+                .AssertOnHelpPageByTitle(driver, "Login");
         }
     }
 }

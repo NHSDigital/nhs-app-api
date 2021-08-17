@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Advice
 {
     public sealed class AndroidAdvicePage
     {
-        private AndroidFullNavigation Navigation { get; }
+        public AndroidFullNavigation Navigation { get; }
         public AdvicePageContent PageContent { get; }
 
         private readonly IAndroidDriverWrapper _driver;

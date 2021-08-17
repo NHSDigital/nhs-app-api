@@ -59,9 +59,9 @@ export default {
     return app && app.openWebIntegration;
   },
 
-  openWebIntegration(url, additionalDomains = []) {
+  openWebIntegration(url, additionalDomains = [], helpUrl) {
     const app = window.nativeApp;
-    const urlRequest = JSON.stringify({ url, additionalDomains });
+    const urlRequest = JSON.stringify({ url, additionalDomains, helpUrl });
     app.openWebIntegration(urlRequest);
   },
 
@@ -426,5 +426,10 @@ export default {
   createOnDemandGpSession: (request) => {
     const app = window.nativeApp;
     app.createOnDemandGpSession(request);
+  },
+
+  openBrowserOverlay: (url) => {
+    const app = window.nativeApp;
+    app.openBrowserOverlay(url);
   },
 };

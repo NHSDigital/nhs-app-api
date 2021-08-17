@@ -81,7 +81,6 @@ namespace NHSOnline.App.Controls.WebViews
         public async Task SendSessionExtend()
             => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.sessionExtend()").ResumeOnThreadPool();
 
-
         public void GoToLoggedInHomeScreen() => GoToLoggedInHomeScreenCommand.Execute(null);
 
         public AsyncCommand GoToLoggedInHomeScreenCommand

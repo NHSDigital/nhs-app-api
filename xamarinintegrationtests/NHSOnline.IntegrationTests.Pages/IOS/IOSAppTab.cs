@@ -30,11 +30,14 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         public static IOSAppTab AssertOnCovidConditionsPage(IIOSDriverWrapper driver) => AssertOnPageByTitle(driver, "Covid Conditions");
 
-        public static IOSAppTab AssertOnLoginHelpPage(IIOSDriverWrapper driver) => AssertOnPageByTitle(driver, "Login Help");
+        public static IOSAppTab AssertOnContactUsPage(IIOSDriverWrapper driver)
+            => AssertOnPageByTitle(driver, "Contact Us");
 
-        public static IOSAppTab AssertOnContactUsPage(IIOSDriverWrapper driver) => AssertOnPageByTitle(driver, "Contact Us");
+        public static IOSAppTab AssertOnHelpPageByTitle(IIOSDriverWrapper driver, string titleToMatch)
+            => AssertOnPageByTitle(driver, $"{titleToMatch} Help");
 
-        public static IOSAppTab AssertOnHomeHelpPage(IIOSDriverWrapper driver) => AssertOnPageByTitle(driver, "Home Help");
+        public static IOSAppTab AssertOnHelpPageByText(IIOSDriverWrapper driver, string textToMatch)
+            => AssertOnPageByTitle(driver, $"Help Page for {textToMatch}");
 
         public static IOSAppTab AssertInBrowserAppTab(IIOSDriverWrapper driver) => AssertOnPageByClose(driver);
 

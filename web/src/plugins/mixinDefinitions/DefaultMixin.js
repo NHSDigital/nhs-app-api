@@ -2,7 +2,7 @@ import getOr from 'lodash/fp/getOr';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import MedicationCourseStatus from '@/lib/medication-course-status';
 import NativeApp from '@/services/native-app';
-import { redirectTo } from '@/lib/utils';
+import { generateContextualHelpLink, redirectTo } from '@/lib/utils';
 import { createUri } from '@/lib/noJs';
 import {
   GP_MEDICAL_RECORD_PATH,
@@ -18,7 +18,7 @@ export default {
       return !this.hasConnectionProblem();
     },
     currentHelpUrl() {
-      return `${this.$store.$env.BASE_NHS_APP_HELP_URL}${this.$route.meta.helpPath || ''}`;
+      return generateContextualHelpLink(this.$store, this.$route);
     },
   },
   methods: {

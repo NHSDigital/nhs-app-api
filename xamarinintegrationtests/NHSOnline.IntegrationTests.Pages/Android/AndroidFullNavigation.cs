@@ -103,6 +103,15 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             MessagesIcon.Click();
         }
 
+        public void AssertNoNavigationIconsSelected()
+        {
+            AdviceIcon.AssertNotSelected();
+            AppointmentsIcon.AssertNotSelected();
+            PrescriptionsIcon.AssertNotSelected();
+            YourHealthIcon.AssertNotSelected();
+            MessagesIcon.AssertNotSelected();
+        }
+
         public void AssertAdviceSelected()
         {
             AdviceIcon.AssertSelected();
