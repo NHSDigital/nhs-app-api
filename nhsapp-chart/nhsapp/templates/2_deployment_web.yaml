@@ -165,7 +165,7 @@ spec:
         - name: GP_SESSION_ON_DEMAND_ENABLED
           value: "{{ $.Values.gpSessionOnDemandEnabled }}"
         - name: BASE_NHS_APP_HELP_URL
-          value: "{{ $.Values.baseNhsAppHelpUrl }}"
+          value: "{{ $.Values.web.baseNhsAppHelpUrl }}"
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"
