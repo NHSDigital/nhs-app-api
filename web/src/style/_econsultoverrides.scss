@@ -91,10 +91,10 @@
     @include paragraphHeaderStyle;
   }
 
-  #GLO_PRE_DISCLAIMERS_NHS_2 p:first-child {
+  div[id^="GLO_PRE_DISCLAIMERS"].required p:first-child {
     @include paragraphHeaderStyle;
   }
-
+  
   #conditionInfo p:first-child {
     @include paragraphHeaderStyle;
   }

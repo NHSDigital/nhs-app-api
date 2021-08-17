@@ -1,7 +1,6 @@
 import actions from '@/store/modules/onlineConsultations/actions';
 import each from 'jest-each';
 import { getParameters, getInputDataParameter } from '@/lib/online-consultations/mappers/parameters';
-import getTCsAnswerForProvider from '@/lib/online-consultations/constants/termsConditionsAnswers';
 import i18n from '@/plugins/i18n';
 import {
   CLEAR,
@@ -25,7 +24,24 @@ import { getQuestion, getConditionsList } from '@/lib/online-consultations/mappe
 jest.mock('@/lib/online-consultations/mappers/parameters');
 jest.mock('@/lib/online-consultations/mappers/response');
 jest.mock('@/lib/online-consultations/mappers/item');
-jest.mock('@/lib/online-consultations/constants/termsConditionsAnswers');
+
+const getParams = (linkId = 'SOME_OTHER_PLACE_OUT_THERE') => {
+  const parameters = {
+    parameter: [
+      {
+        name: 'inputData',
+        resource: {
+          item: [
+            {
+              linkId,
+            },
+          ],
+        },
+      },
+    ],
+  };
+  return parameters;
+};
 
 const {
   getServiceDefinition,
@@ -481,7 +497,6 @@ describe('online consultations store actions', () => {
               getQuestionnaire.mockClear();
               getConditionsList.mockClear();
               getQuestionnaireId.mockClear();
-              getTCsAnswerForProvider.mockClear();
               getSelfOrChild.mockClear();
               getDataRequirements.mockClear();
             });
@@ -564,13 +579,11 @@ describe('online consultations store actions', () => {
             describe('evaluating a new service definition selected from conditionList', () => {
               it('will add the terms and conditions answer to the fhir parameters and set the appropriate value for demographics consent', () => {
                 // Arrange
-                const expectedTCsAnswer = { termsAccepted: true };
                 const expectedRequest = { ...request, demographicsConsentGiven: false };
                 store.app.$httpV3.postV3CdssServiceDefinitionByProviderEvaluate
                   .mockImplementation(
                     () => Promise.resolve({ status: 'data-required' }),
                   );
-                getTCsAnswerForProvider.mockReturnValue(expectedTCsAnswer);
                 actionParams.answeringConditionsQuestion = true;
 
                 // Act
@@ -578,7 +591,6 @@ describe('online consultations store actions', () => {
                   .call(store, { commit, state, rootState }, actionParams)
                   .then(() => {
                     // Assert
-                    expect(getTCsAnswerForProvider).toHaveBeenCalledWith(actionParams.provider);
                     expect(store.app.$httpV3
                       .postV3CdssServiceDefinitionByProviderEvaluate)
                       .toHaveBeenCalledWith(expectedRequest);
@@ -698,20 +710,7 @@ describe('online consultations store actions', () => {
               () => Promise.resolve(undefined),
             );
 
-          parameters = {
-            parameter: [
-              {
-                name: 'inputData',
-                resource: {
-                  item: [
-                    {
-                      linkId: 'SOME_OTHER_PLACE_OUT_THERE',
-                    },
-                  ],
-                },
-              },
-            ],
-          };
+          parameters = getParams();
 
           getParameters.mockClear();
           getParameters.mockReturnValue(parameters);
@@ -736,20 +735,7 @@ describe('online consultations store actions', () => {
               () => Promise.resolve(undefined),
             );
 
-          parameters = {
-            parameter: [
-              {
-                name: 'inputData',
-                resource: {
-                  item: [
-                    {
-                      linkId: 'SOME_OTHER_PLACE_OUT_THERE',
-                    },
-                  ],
-                },
-              },
-            ],
-          };
+          parameters = getParams();
 
           getParameters.mockClear();
           getParameters.mockReturnValue(parameters);
@@ -757,7 +743,7 @@ describe('online consultations store actions', () => {
 
           state.answer = ['GLO_PRE_DISCLAIMERS_1'];
           state.question = {
-            id: 'test',
+            id: 'GLO_PRE_DISCLAIMERS_test',
           };
 
           await evaluateServiceDefinition.call(store, { commit, state, rootState }, actionParams);
@@ -775,20 +761,7 @@ describe('online consultations store actions', () => {
               () => Promise.resolve(undefined),
             );
 
-          parameters = {
-            parameter: [
-              {
-                name: 'inputData',
-                resource: {
-                  item: [
-                    {
-                      linkId: 'SOME_OTHER_PLACE_OUT_THERE',
-                    },
-                  ],
-                },
-              },
-            ],
-          };
+          parameters = getParams();
 
           getParameters.mockClear();
           getParameters.mockReturnValue(parameters);
@@ -814,20 +787,7 @@ describe('online consultations store actions', () => {
               () => Promise.resolve(undefined),
             );
 
-          parameters = {
-            parameter: [
-              {
-                name: 'inputData',
-                resource: {
-                  item: [
-                    {
-                      linkId: 'SOME_OTHER_PLACE_OUT_THERE',
-                    },
-                  ],
-                },
-              },
-            ],
-          };
+          parameters = getParams();
 
           getParameters.mockClear();
           getParameters.mockReturnValue(parameters);
@@ -847,20 +807,7 @@ describe('online consultations store actions', () => {
               () => Promise.resolve(undefined),
             );
 
-          parameters = {
-            parameter: [
-              {
-                name: 'inputData',
-                resource: {
-                  item: [
-                    {
-                      linkId: 'SOME_OTHER_PLACE_OUT_THERE',
-                    },
-                  ],
-                },
-              },
-            ],
-          };
+          parameters = getParams();
 
           getParameters.mockClear();
           getParameters.mockReturnValue(parameters);
@@ -884,20 +831,7 @@ describe('online consultations store actions', () => {
               () => Promise.resolve(undefined),
             );
 
-          parameters = {
-            parameter: [
-              {
-                name: 'inputData',
-                resource: {
-                  item: [
-                    {
-                      linkId: 'GLO_PRE_DISCLAIMERS_NHS_2',
-                    },
-                  ],
-                },
-              },
-            ],
-          };
+          parameters = getParams('GLO_PRE_DISCLAIMERS_NHS_2');
 
           getParameters.mockClear();
           getParameters.mockReturnValue(parameters);

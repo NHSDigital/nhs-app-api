@@ -22,12 +22,12 @@ class GenderQuestionChildConfiguration: IQuestionConfiguration {
              "resource":{
                 "resourceType":"QuestionnaireResponse",
                 "questionnaire":{
-                   "reference":"Questionnaire/GLO_PRE_DISCLAIMERS"
+                   "reference":"Questionnaire/GLO_PRE_DISCLAIMERS_NHS_2"
                 },
                 "status":"completed",
                 "item":[
                    {
-                      "linkId":"GLO_PRE_DISCLAIMERS",
+                      "linkId":"GLO_PRE_DISCLAIMERS_NHS_2",
                       "answer":[
                          {
                             "valueCoding":{

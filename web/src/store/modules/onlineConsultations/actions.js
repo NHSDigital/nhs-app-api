@@ -15,7 +15,6 @@ import { getQuestion, getConditionsList, getGeneralServiceDefinition } from '@/l
 import { getParameters, getAnswerFromItem, getInputDataParameter } from '@/lib/online-consultations/mappers/parameters';
 import { DATA_REQUIRED, SUCCESS } from '@/lib/online-consultations/constants/status-types';
 import ServiceDefinitionTypes from '@/lib/online-consultations/constants/service-definition-types';
-import getTCsAnswerForProvider from '@/lib/online-consultations/constants/termsConditionsAnswers';
 import QuestionTypes from '@/lib/online-consultations/constants/question-types';
 import {
   CLEAR,
@@ -82,7 +81,7 @@ const isTermsAndConditions = (parameters) => {
   return parameters.find(p =>
     p.name === 'inputData'
       && Array.isArray(p.resource.item)
-      && p.resource.item.find(i => i.linkId === 'GLO_PRE_DISCLAIMERS_NHS_2'));
+      && p.resource.item.find(i => i.linkId.startsWith('GLO_PRE_DISCLAIMERS')));
 };
 
 const showError = (store) => {
@@ -203,8 +202,7 @@ export default {
     };
 
     if (answeringConditionsQuestion) {
-      const tcsAnswer = getTCsAnswerForProvider(provider);
-      requestParams.parameters.parameter.push(tcsAnswer);
+      requestParams.parameters.parameter.push(state.disclaimerInputData);
       requestParams.demographicsConsentGiven = !!state.demographicsConsentGiven;
     } else if (
       state.dataRequirements &&
@@ -214,7 +212,7 @@ export default {
       requestParams.demographicsConsentGiven = !!state.demographicsConsentGiven;
     }
 
-    if (state.answer && Array.isArray(state.answer) && state.answer[0] === 'GLO_PRE_DISCLAIMERS_1') {
+    if (state.question && state.question.id.startsWith('GLO_PRE_DISCLAIMERS')) {
       requestParams.demographicsConsentGiven = !!state.demographicsConsentGiven;
       const inputData = getInputDataParameter(state);
       commit(SET_DISCLAIMER_INPUT_DATA, { name: inputData.name, resource: inputData.resource });
