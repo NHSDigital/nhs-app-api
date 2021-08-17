@@ -48,7 +48,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             .ScrollIntoView();
 
         private AndroidIcon CloseIcon => AndroidIcon
-            .WithName(_driver,"NHS App close icon");
+            .WithName(_driver, "Close");
 
         private AndroidKeyboardNavigation KeyboardNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(
             _driver,

@@ -11,9 +11,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         private IOSNavigationBar Header => IOSNavigationBar.WithName(_driver, "NHS App Slim Close Navigation Header");
 
-        private IOSCloseIcon CloseIcon => Header.ContainingIconWithDescription("NHS App close icon");
-
-        private IOSLabel CloseText => Header.ContainingLabelWithText("Close");
+        private IOSAppIcon CloseIcon => Header.ContainingButtonWithName("Close");
 
         internal void AssertNavigationPresent()
         {

@@ -9,7 +9,7 @@
     <ContentPage.Content>
         <ContentView>
          
-            <StackLayout BackgroundColor="{StaticResource NhsUkBlue}" Spacing="0" Padding="0,5,0,0">
+            <StackLayout BackgroundColor="{StaticResource NhsUkBlue}" Spacing="0">
                 <navigation:SlimCloseNavigationHeader 
                     CloseCommand="{Binding CloseClicked, Source={x:Reference Name=Root}}" />
                 <ContentView Content="{Binding PageContent, Source={x:Reference Name=Root}}" 

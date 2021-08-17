@@ -9,22 +9,25 @@
 
     <View.Resources>
         <ResourceDictionary>
-            
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <Style TargetType="StackLayout">
+                <Setter Property="Orientation" Value="Vertical" />
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />
                 <Setter Property="BackgroundColor" Value="{StaticResource NhsUkBlue}" />
             </Style>
             
-            <Style TargetType="icons:IconCloseWhite">
-                <Setter Property="HorizontalOptions" Value="Start" />
-                <Setter Property="VerticalOptions" Value="Center" />
-                <Setter Property="Margin" Value="10,0,0,0" />
-                <Setter Property="HeightRequest" Value="30" />
-                <Setter Property="WidthRequest" Value="30" />
+            <Style TargetType="StackLayout" Class="CloseWrapper">
+                <Setter Property="Orientation" Value="Horizontal" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="HeightRequest" Value="50" />
+            </Style>
+            
+            <Style TargetType="StackLayout" Class="LogoWrapper">
+                <Setter Property="Orientation" Value="Horizontal" />
+                <Setter Property="Margin" Value="15,0,0,10" />
             </Style>
             
             <Style TargetType="elements:MediumLabel">
@@ -38,31 +41,18 @@
                 <Setter Property="VerticalOptions" Value="Center" />
                 <Setter Property="Margin" Value="0,10,10,10" />
             </Style>
-            
         </ResourceDictionary>
     </View.Resources>
 
-    <StackLayout AutomationId="NHS App Slim Close Navigation Header"
-                 Orientation="Vertical">
-        <StackLayout Orientation="Horizontal"
-                     Margin="0,0,0,5">
-
-            <icons:IconCloseWhite AutomationProperties.IsInAccessibleTree="True" AutomationId="NHS App close icon" />
-
-            <elements:MediumLabel Text="Close" />
-
-            <StackLayout.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding CloseCommand, Source={x:Reference Name=Root}}"  />
-            </StackLayout.GestureRecognizers>
+    <StackLayout AutomationId="NHS App Slim Close Navigation Header">
+        <StackLayout StyleClass="CloseWrapper">
+            <elements:CloseButton Command="{Binding CloseCommand, Source={x:Reference Name=Root}}" />
         </StackLayout>
         
-        <StackLayout Orientation="Horizontal"
-                     Margin="15,0,0,10">
-            
+        <StackLayout StyleClass="LogoWrapper">
             <icons:NhsLogoWhite />
             
             <elements:MediumLabel Text="NHS App" />
-            
         </StackLayout>
     </StackLayout>
 </ContentView>
