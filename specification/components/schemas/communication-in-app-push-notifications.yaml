@@ -1,0 +1,96 @@
+type: object
+description: Communication request for Sending an in-app message together with an associated push notification
+required:
+  - resourceType
+  - status
+  - payload
+  - sender
+  - recipient
+properties:
+  resourceType:
+    type: string
+    description: FHIR Resource Type - this must be `CommunicationRequest`.
+  identifier:
+    type: array
+    description: |
+      An optional array of identifiers used to identify this request for later analysis.
+      
+      We have defined the following two systems for identifiers that will be stored with the request:
+
+      * Campaign ID - denoted by system https://fhir.nhs.uk/NHSApp/campaign-id .  This is an optional campaign identifier, used for later identification of a group of multiple communication requests. For example, this could be used to identify all messages that pertain to invitations for a particular vaccination programme.
+      * Request Reference - denoted by system https://fhir.nhs.uk/NHSApp/request-id . This is an optional request identifier, used for later identification of a specific request.
+
+      Note that these identifier system names are case-sensitive. The values provided for each of these two identifiers are limited to 50 characters, and must not match the regular expression `<(.|\n)*?>`.
+      No more than one campaign ID and one request reference can be supplied with each request.
+
+      The API will not reject requests that contain other identifier systems, but these values will be ignored and not recorded against the request.
+
+      When a `CommunicationRequest` resource is returned in the response body to a successful request, this array will also include a globally unique identifier assigned by the API, with the system `urn:ietf:rfc:3986`. This is the same logical ID contained within the `Location` header of the successful response.
+    items:
+      type: object
+      properties:
+        system:
+          type: string
+          format: uri
+          description: The namespace for the identifier value
+          example: https://fhir.nhs.uk/NHSApp/campaign-id 
+        value:
+          type: string
+          description: The value of the identifier
+          example: Optional campaign ID
+  status:
+    type: string
+    default: active
+    description: Request Status of the message. This must always be `active` (case-sensitive).
+  payload:
+    type: array
+    description: "The body text of the message to be displayed in the NHS App"
+    items:
+      type: object
+      required:
+        - contentString
+      properties:
+        contentString:
+          $ref: Markdown.yaml
+  sender:
+    type: object
+    description: The sender of the in-app message.
+    required:
+      - display
+    properties:
+      display:
+        type: string
+        description: The name to be displayed in the NHS App as the sender of the message. The NHS App user interface will group together messages sent from the same sender name into a single thread of messages.
+        maxLength: 50
+        pattern: must not match <(.|\n)*?>
+        example: Onboarded Third Party
+  recipient:
+    type: array
+    description:
+      An array of NHS numbers corresponding to the patient(s) to whom this in-app message and push notification should be sent. Each communication may be sent to between 1 and 100 distinct NHS numbers. The communication request will be rejected if any duplicated values exist in this array.
+    minItems: 1
+    maxItems: 100
+    items:
+      type: object
+      properties:
+        type:
+          type: string
+          description: FHIR resource type that the reference refers to. This should be `Patient`.
+          example: Patient
+        identifier:
+          type: object
+          description: Identifier of a recipient. This should be an NHS number.
+          required:
+            - system
+            - value
+          properties:
+            system:
+              type: string
+              format: uri
+              default: https://fhir.nhs.uk/Id/nhs-number
+              description: The system that the identifier belongs to. This should be https://fhir.nhs.uk/Id/nhs-number
+            value:
+              type: string
+              pattern: "^\\d{10}$"
+              description: The patient's NHS number. The primary identifier of a patient, unique within NHS England and Wales. Always 10 digits and must be a [valid NHS number](https://www.datadictionary.nhs.uk/data_dictionary/attributes/n/nhs/nhs_number_de.asp).
+              example: "9903002157"

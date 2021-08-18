@@ -1,0 +1,10 @@
+{
+    "resourceType": "OperationOutcome",
+    "issue": [
+        {
+            "severity": "error",
+            "code": "expired",
+            "diagnostics": "Access Token expired"
+        }
+    ]
+}

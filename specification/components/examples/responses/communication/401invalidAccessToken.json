@@ -1,0 +1,10 @@
+{
+    "resourceType": "OperationOutcome",
+    "issue": [
+        {
+            "severity": "error",
+            "code": "forbidden",
+            "diagnostics": "Invalid Access Token"
+        }
+    ]
+}

@@ -5,7 +5,14 @@
 				<Name>ExtractVariables.OAuthErrorFaultString</Name>
 			</Step>
 			<Step>
+				<Name>JavaScript.OAuthErrorCode</Name>
+			</Step>
+			<Step>
 				<Name>AssignMessage.OAuthPolicyErrorResponse</Name>
+			</Step>
+			<Step>
+				<Name>AssignMessage.AddHeader.MirrorXCorrelationId</Name>
+				<Condition>(request-correlation-id != "NoCorrelationId")</Condition>
 			</Step>
 			<Condition>oauthV2.OauthV2.VerifyAccessToken.failed</Condition>
 		</FaultRule>
@@ -14,38 +21,41 @@
 		<Request>
 			<Step>
 				<Name>VerifyApiKey.XApiKey</Name>
+				<Condition>(proxy.pathsuffix MatchesPath "**/communication") or (proxy.pathsuffix MatchesPath "**/Communication")</Condition>
 			</Step>
 			<Step>
 				<Name>AssignMessage.RenameQuotaVarsFromVerifyAPIKeyPolicyClientId</Name>
+				<Condition>(proxy.pathsuffix MatchesPath "**/communication") or (proxy.pathsuffix MatchesPath "**/Communication")</Condition>
+			</Step>
+			<Step>
+				<Name>OauthV2.VerifyAccessToken</Name>
+				<Condition>(proxy.pathsuffix Not MatchesPath "**/communication") and (proxy.pathsuffix Not MatchesPath "**/Communication")</Condition>
 			</Step>
 			<Step>
 				<Name>Quota</Name>
 			</Step>
-			<Step> 
-				<Name>SpikeArrest</Name>   
-			</Step>
 			<Step>
-				<Name>AssignMessage.RemoveApiKeyHeader</Name>
+				<Name>SpikeArrest</Name>
 			</Step>
 			<Step>
 				<Name>KeyValueMap.GetUpstreamApiKey</Name>
 			</Step>
 			<Step>
-				<Name>AssignMessage.AddUpstreamApiKeyHeader</Name>
+				<Name>AssignMessage.SetHeader.XApiKey</Name>
 			</Step>
 			<Step>
-				<Name>AssignMessage.AddHeader.NhsdCorrelationId</Name>
+				<Name>AssignMessage.SetHeader.NhsdCorrelationId</Name>
 			</Step>
 			<Step>
-				<Name>AssignMessage.AddHeader.NhsdSupplierAppId</Name>
+				<Name>AssignMessage.SetHeader.NhsdSupplierAppId</Name>
 			</Step>
 			<Step>
 				<Name>AssignMessage.RemoveHeader.XCorrelationId</Name>
 			</Step>
 		</Request>
 	</PreFlow>
-  <Flows>
-    <Flow name="RewriteLocationHeader">
+	<Flows>
+		<Flow name="RewriteLocationHeader">
 			<Description/>
 			<Request/>
 			<Response>
@@ -55,8 +65,14 @@
 			</Response>
 			<Condition>(response.header.Location != null)</Condition>
 		</Flow>
-  </Flows>
+	</Flows>
 	<HTTPTargetConnection>
+		<Properties>
+			<!-- Whitelist the 'expected' error code responses so the responses pass unhindered to caller
+                 Anything unexpected will be sanitised by the DefaultFaultRule -
+                 https://docs.apigee.com/api-platform/fundamentals/fault-handling#customhandlingofhttperrorcodesfromthetargetserver -->
+			<Property name="success.codes">1xx,2xx,3xx,400,401,403,404</Property>
+		</Properties>
 		<SSLInfo>
 			<Enabled>true</Enabled>
 		</SSLInfo>
@@ -64,4 +80,13 @@
 			<Server name="nhs-app"/>
 		</LoadBalancer>
 	</HTTPTargetConnection>
+	<DefaultFaultRule>
+		<Step>
+			<Name>AssignMessage.AddHeader.MirrorXCorrelationId</Name>
+			<Condition>(request-correlation-id != "NoCorrelationId")</Condition>
+		</Step>
+		<Step>
+			<Name>AssignMessage.CatchallErrorMessage</Name>
+		</Step>
+	</DefaultFaultRule>
 </TargetEndpoint>
