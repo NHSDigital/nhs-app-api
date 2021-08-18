@@ -5,6 +5,9 @@
 				<Name>ExtractVariables.OAuthErrorFaultString</Name>
 			</Step>
 			<Step>
+				<Name>JavaScript.OAuthErrorCode</Name>
+			</Step>
+			<Step>
 				<Name>AssignMessage.OAuthPolicyErrorResponse</Name>
 			</Step>
 			<Step>

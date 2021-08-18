@@ -31,38 +31,7 @@ properties:
             pattern: must not match <(.|\n)*?>
             example: Onboarded Third Party
           body:
-            type: string
-            description: |
-              The body text of the message to be displayed in the NHS App. We support a subset of [Markdown](https://en.wikipedia.org/wiki/Markdown) for in-app messages.
-
-              Currently supported Markdown syntax:
-              * Emphasis
-                * Bold text \*\*Bold\*\*
-                * Italic text \_Italic\_
-
-              * Lists
-                * Bullet list:
-
-                  \* Item1
-
-                  \* Item2
-
-                  \* Item3
-
-              * Ordered lists
-
-                1\. Item1
-
-                2\. Item2
-
-                3\. Item3
-
-              * Links with text \[Link text](https://en.wikipedia.org/wiki/Markdown)
-              * Links with title \[Link text](https://en.wikipedia.org/wiki/Markdown\, "Title text")
-              * Images \!\[NHS Logo](https://assets.nhs.uk/images/nhs-logo.png)
-            maxLength: 5000
-            pattern: must not match <(.|\n)*?>
-            example: You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment here https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments
+            $ref: Markdown.yaml
       pushNotification:
         type: object
         description: |

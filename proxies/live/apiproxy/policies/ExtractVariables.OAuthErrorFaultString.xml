@@ -4,6 +4,9 @@
 		<Variable name="faultstring">
 			<JSONPath>$.fault.faultstring</JSONPath>
 		</Variable>
+		<Variable name="faultcode">
+			<JSONPath>$.fault.detail.errorcode</JSONPath>
+		</Variable>
 	</JSONPayload>
 	<Source clearPayload="false">error</Source>
 </ExtractVariables>
