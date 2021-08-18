@@ -53,8 +53,6 @@ info:
     This API is [application-restricted](https://digital.nhs.uk/developer/guides-and-documentation/security-and-authorisation#application-restricted-apis),
     meaning we authenticate the calling application but not the end user. In particular, the three FHIR `CommunicationRequest` endpoints use signed JWT authentication - you authenticate your application by sending a signed JSON web token (JWT) to our OAuth 2.0 authorisation server. For more details see [Application-restricted RESTful APIs - signed JWT authentication](https://digital.nhs.uk/developer/guides-and-documentation/security-and-authorisation/application-restricted-restful-apis-signed-jwt-authentication).
 
-    Do not use the non-FHIR `communication` endpoint. This used an API key pattern to authorise the calling system. It has been deprecated and will soon be removed from the API.
-
     ## Environments and testing
     | API Environment      | NHS Login Environment | Base URL                                    |
     | -------------------- | --------------------- | ------------------------------------------- |
@@ -504,148 +502,6 @@ paths:
             application/fhir+json:
               schema:
                 $ref: components/schemas/OperationOutcome.yaml
-  /communication:
-    parameters:
-      - $ref: "#/components/parameters/ApiKey"
-      - $ref: "#/components/parameters/CorrelationId"
-    post:
-      summary: Send a communication (deprecated)
-      operationId: create-communication
-      description: |
-        ## Overview
-
-        **This non-FHIR endpoint has been deprecated and will soon be removed from the API. It should no longer be used. Instead, please use one of the three FHIR R4 CommunicationRequest endpoints, depending on whether your use case requires sending a communication via in-app message only, push notification only, or both in-app message with an associated push notification.**
-
-        You can send:
-          * in-app messages to specific users of the NHS App
-          * native Apple or Android push notifications to mobile devices registered by specific users of the NHS App
-
-        Recipients are specified by NHS number. A single communication request can be sent to between 1 and 100 distinct NHS numbers.
-        In-app messages and push notifications will only be sent to users who have had their identity verified to 'high' (P9) level.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            examples:
-              app-message:
-                summary: Sending an in-app message only
-                value:
-                  $ref: components/examples/requests/communication/legacy_appMessage.json
-              push-notification:
-                summary: Sending a push notification only
-                value:
-                  $ref: components/examples/requests/communication/legacy_pushNotification.json
-              app-message-and-push-notification:
-                summary: Sending an in-app message together with an associated push notification
-                value:
-                  $ref: components/examples/requests/communication/legacy_appMessageAndPushNotification.json
-            schema:
-              $ref: components/schemas/communication.yaml
-      tags:
-        - communication
-      responses:
-        "201":
-          description: Request successfully received by the server and queued for sending to recipients.
-          headers:
-            Location:
-              schema:
-                type: string
-              description: The location of the newly-created resource.
-              example: https://int.api.service.nhs.uk/nhs-app/communication/a2d10720-9e72-4ae4-be72-8cbe1be292d1
-            X-Correlation-ID:
-              schema:
-                type: string
-              description: If an X-Correlation-ID was specified in the request, this is mirrored in the response.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: An identifier for the newly-created communication resource within the destination system.
-                    example: a2d10720-9e72-4ae4-be72-8cbe1be292d1
-              example:
-                $ref: components/examples/responses/communication/legacy_201success.json
-        "400":
-          description: There is an error in your request.
-          headers:
-            X-Correlation-ID:
-              schema:
-                type: string
-                description: If an X-Correlation-ID was specified in the request, this is mirrored in the response.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    propertyName:
-                      type: string
-                      description: The property name within the source payload that has failed validation.
-                      example: Recipients.NhsNumbers
-                    message:
-                      type: string
-                      description: A description of the reason why the source payload has failed validation.
-                      example: "Specified values are invalid: '2981615972','3846131965'"
-              examples:
-                body-too-long:
-                  summary: App message body text exceeds maximum length
-                  value:
-                    $ref: components/examples/responses/communication/legacy_400senderTooLong.json
-                no-recipients:
-                  summary: No recipients have been specified
-                  value:
-                    $ref: components/examples/responses/communication/legacy_400noRecipients.json
-                invalid-nhs-numbers:
-                  summary: Some recipient NHS numbers are invalid
-                  value:
-                    $ref: components/examples/responses/communication/legacy_400invalidNhsNumbers.json
-                sender-missing-and-campaign-id-too-long:
-                  summary: Multiple issues - sender name is missing and campaign ID exceed maximum length
-                  value:
-                    $ref: components/examples/responses/communication/legacy_400multipleIssues.json
-        "401":
-          description: Authorisation issue, for example a missing or invalid X-Api-Key header.
-          headers:
-            X-Correlation-ID:
-              schema:
-                type: string
-              description: If an X-Correlation-ID was specified in the request, this is mirrored in the response.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  fault:
-                    type: object
-                    properties:
-                      faultString:
-                        type: string
-                        example: "Invalid ApiKey"
-                      detail:
-                        type: object
-                        properties:
-                          errorcode:
-                            type: string
-                            example: "oauth.v2.InvalidApiKey"
-              examples:
-                invalid-api-key:
-                  summary: Invalid API key
-                  value:
-                    $ref: components/examples/responses/communication/401invalidApiKey.json
-                invalid-api-key-for-resource:
-                  summary: Invalid API key for given resource (valid API key, but not enabled for this API)
-                  value:
-                    $ref: components/examples/responses/communication/401invalidApiKeyForResource.json
-        "403":
-          description: You are not authorised to perform this operation. For example, some onboarded client Apps may be permitted to send Push Notifications but not In-app Messages, or vice versa.
-          headers:
-            X-Correlation-ID:
-              schema:
-                type: string
-              description: If an X-Correlation-ID was specified in the request, this is mirrored in the response.
 components:
   parameters:
     CorrelationId:
@@ -661,15 +517,6 @@ components:
       schema:
         type: string
         example: b5bc6879-103e-4a78-975e-87e815c5da58
-    ApiKey:
-      in: header
-      name: X-Api-Key
-      required: true
-      description: |
-        An API Key used to authenticate the calling application. For more details see [Application-restricted RESTful APIs - API key authentication](https://digital.nhs.uk/developer/guides-and-documentation/security-and-authorisation/application-restricted-restful-apis-api-key-authentication). If this key is not supplied, or does not grant access to this API, a 401 Unauthorized response is returned.
-      schema:
-        type: string
-        example: AHkYeqh8N1yrnKGb108puMFUdmxnATkS
     BearerAuthorization:
       in: header
       name: Authorization

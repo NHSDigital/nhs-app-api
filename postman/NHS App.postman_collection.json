@@ -445,57 +445,6 @@
 				}
 			},
 			"response": []
-		},
-		{
-			"name": "Communication - deprecated",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 201\", () => { \r",
-							"    pm.response.to.have.status(201);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "x-api-key",
-						"value": "{{apiKey}}",
-						"type": "text"
-					},
-					{
-						"key": "X-Correlation-ID",
-						"value": "60fac112-2d2a-432d-87f7-7424235fb31b",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"campaignId\": \"optional campaign id\",\n    \"requestReference\": \"optional requestReference\",\n    \"channels\": {\n        \"appMessage\": {\n            \"sender\": \"Onboarded Third Party\",\n            \"body\": \"You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment [here](https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments)\"\n        },\n        \"pushNotification\": {\n            \"title\": \"You have a new message.\",\n            \"body\": \"The message may contain something important.\",\n            \"url\": \"https://www.nhsapp.service.nhs.uk/patient/messages/app-messaging\"\n        }\n    },\n    \"recipients\": \n    {\n        \"nhsNumbers\": [\"9903002157\"]\n    }\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{base_url}}/nhs-app/communication",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"nhs-app",
-						"communication"
-					]
-				}
-			},
-			"response": []
 		}
 	]
 }
