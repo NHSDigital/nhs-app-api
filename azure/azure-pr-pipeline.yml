@@ -8,6 +8,7 @@ resources:
     - repository: common
       type: github
       name: NHSDigital/api-management-utils
+      ref: refs/heads/edge
       endpoint: NHSDigital
 
   pipelines:
@@ -21,7 +22,7 @@ resources:
           - refs/tags/v*
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: 'AWS-ECS'
 
 variables:
   - template: project.yml
@@ -38,6 +39,10 @@ extends:
     portal_api_requires_callback_url: false
     config_ids:
      - /ptl/azure-devops/env-internal-dev/test-app/internal-testing-internal-dev/CLIENT_ID
+    secret_ids:
+      - ptl/app-credentials/jwt_testing/non-prod/JWT_TESTING_API_KEY
+    secret_file_ids:
+      - ptl/app-credentials/jwt_testing/non-prod/JWT_TESTING_PRIVATE_KEY
     apigee_deployments:
       - environment: internal-dev
         post_deploy:
@@ -46,7 +51,6 @@ extends:
               working_directory: $(Pipeline.Workspace)/s
               test_folder_path: $(Pipeline.Workspace)/s/${{ variables.service_name }}/$(SERVICE_ARTIFACT_NAME)/tests
               target_url: https://$(APIGEE_ENVIRONMENT).api.service.nhs.uk/$(SERVICE_BASE_PATH)/
+              token_url: https://$(APIGEE_ENVIRONMENT).api.service.nhs.uk/oauth2/token
+              private_key_file_path: $(Pipeline.Workspace)/secrets/$(JWT_TESTING_PRIVATE_KEY)
         make_spec_visible: true
-      - environment: internal-dev-sandbox
-        proxy_path: sandbox
-        

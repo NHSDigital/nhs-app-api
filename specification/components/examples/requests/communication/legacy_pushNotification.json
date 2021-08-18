@@ -1,0 +1,16 @@
+{
+    "campaignId": "optional campaign id",
+    "requestReference": "optional request reference",
+    "channels": {
+        "pushNotification": {
+            "title": "You have a new message",
+            "body": "The message may contain something important.",
+            "url": "https://www.nhsapp.service.nhs.uk/patient/messages/app-messaging"
+        }
+    },
+    "recipients": {
+        "nhsNumbers": [
+            "9903002157"
+        ]
+    }
+}

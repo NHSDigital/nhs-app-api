@@ -1,5 +1,5 @@
 type: object
-required: 
+required:
   - channels
   - recipients
 properties:
@@ -15,7 +15,7 @@ properties:
     example: "optional request reference"
   channels:
     type: object
-    description: The channels by which the communication will be sent, and the content for each communication channel. Currently we support sending in-app messages that appear within the NHS App. We intend to allow you to send native Apple and Android push notifications by 08 December 2020.
+    description: The channels by which the communication will be sent, and the content for each communication channel. We support sending in-app messages that appear within the NHS App, and native Apple and Android push notifications.
     properties:
       appMessage:
         type: object
@@ -31,18 +31,14 @@ properties:
             pattern: must not match <(.|\n)*?>
             example: Onboarded Third Party
           body:
-            type: string
-            description: The body text of the message to be displayed in the NHS App. Currently we support plain text only. Carriage returns can be entered as \n. The NHS App user interface will attempt to 'linkify' any hyperlinks in the text. We have a story on our backlog to consider supporting [Markdown](https://en.wikipedia.org/wiki/Markdown), and welcome any feedback you may have on this suggestion.
-            maxLength: 1000
-            pattern: must not match <(.|\n)*?>
-            example: You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment here https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments
+            $ref: Markdown.yaml
       pushNotification:
         type: object
         description: |
           The communication content to appear as a native Apple or Android push notification. 
 
           Notifications must use unicode characters. 
-          
+
           They must not contain:
 
           * personally identifiable information (for example: the name of a user's doctor)
@@ -72,13 +68,13 @@ properties:
             example: https://www.nhsapp.service.nhs.uk/patient/messages/app-messaging
   recipients:
     type: object
-    description: The intended recipients of this communication. Currently we support only sending communications by NHS Number.
+    description: The intended recipients of this communication. Currently we support only sending communications by NHS number.
     properties:
       nhsNumbers:
         type: array
-        description: An array of NHS numbers corresponding to the patient(s) to whom this communication should be sent. Each communication may be sent to between 1 and 100 distinct NHS Numbers. The communication request will be rejected if any duplicated values exist in this array.
+        description: An array of NHS numbers corresponding to the patient(s) to whom this communication should be sent. Each communication may be sent to between 1 and 100 distinct NHS numbers. The communication request will be rejected if any duplicated values exist in this array.
         example: ["9903002157", "9678304287"]
         items:
           type: string
           pattern: "^\\d{10}$"
-          description: The patient's NHS Number. The primary identifier of a patient, unique within NHS England and Wales. Always 10 digits and must be a [valid NHS Number](https://www.datadictionary.nhs.uk/data_dictionary/attributes/n/nhs/nhs_number_de.asp).
+          description: The patient's NHS number. The primary identifier of a patient, unique within NHS England and Wales. Always 10 digits and must be a [valid NHS number](https://www.datadictionary.nhs.uk/data_dictionary/attributes/n/nhs/nhs_number_de.asp).

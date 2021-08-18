@@ -1,6 +1,13 @@
-[
-    {
-        "propertyName": "Recipients",
-        "message": "Not specified"
-    }
-]
+{
+    "resourceType": "OperationOutcome",
+    "issue": [
+        {
+            "severity": "error",
+            "code": "invalid",
+            "diagnostics": "Not specified",
+            "expression": [
+                "recipient"
+            ]
+        }
+    ]
+}
