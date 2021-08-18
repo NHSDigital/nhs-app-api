@@ -7,7 +7,7 @@
         "issue": [
           {
             "severity": "error",
-            "code": "forbidden",
+            "code": "{errorcode}",
             "diagnostics": "{faultstring}"
           }
         ]

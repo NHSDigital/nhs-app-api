@@ -202,6 +202,10 @@ paths:
                   summary: Invalid Access Token
                   value:
                     $ref: components/examples/responses/communication/401invalidAccessToken.json
+                expired-access-token:
+                  summary: Expired Access Token
+                  value:
+                    $ref: components/examples/responses/communication/401ExpiredAccessToken.json
         "403":
           description: You are not authorised to perform this operation. For example, some onboarded client Apps may be permitted to send Push Notifications but not In-app Messages, or vice versa.
           headers:
@@ -337,6 +341,10 @@ paths:
                   summary: Invalid Access Token
                   value:
                     $ref: components/examples/responses/communication/401invalidAccessToken.json
+                expired-access-token:
+                  summary: Expired Access Token
+                  value:
+                    $ref: components/examples/responses/communication/401ExpiredAccessToken.json
         "403":
           description: You are not authorised to perform this operation. For example, some onboarded client Apps may be permitted to send Push Notifications but not In-app Messages, or vice versa.
           headers:
@@ -468,6 +476,10 @@ paths:
                   summary: Invalid Access Token
                   value:
                     $ref: components/examples/responses/communication/401invalidAccessToken.json
+                expired-access-token:
+                  summary: Expired Access Token
+                  value:
+                    $ref: components/examples/responses/communication/401ExpiredAccessToken.json
         "403":
           description: You are not authorised to perform this operation. For example, some onboarded client Apps may be permitted to send Push Notifications but not In-app Messages, or vice versa.
           headers:
