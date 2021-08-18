@@ -1,0 +1,10 @@
+{
+    "resourceType": "OperationOutcome",
+    "issue": [
+        {
+            "severity": "error",
+            "code": "invalid",
+            "diagnostics": "type (at Cannot locate type information for type 'communicationrequest')"
+        }
+    ]
+}

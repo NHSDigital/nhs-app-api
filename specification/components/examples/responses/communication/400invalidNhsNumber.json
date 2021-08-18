@@ -1,0 +1,13 @@
+{
+    "resourceType": "OperationOutcome",
+    "issue": [
+        {
+            "severity": "error",
+            "code": "invalid",
+            "diagnostics": "NHS Number is invalid",
+            "expression": [
+                "recipient[0].identifier.value"
+            ]
+        }
+    ]
+}

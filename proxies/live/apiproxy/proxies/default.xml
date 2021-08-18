@@ -29,6 +29,39 @@
 			</Response>
 			<Condition>(proxy.pathsuffix MatchesPath "/_ping") and ((request.verb = "GET") or (request.verb = "HEAD"))</Condition>
 		</Flow>
+		<Flow name="StatusEndpoint">
+			<Description/>
+			<Request>
+				<Step>
+					<Name>KeyValueMapOperations.GetSecureVariables</Name>
+				</Step>
+				<Step>
+					<Name>KeyValueMapOperations.GetSharedSecureVariables</Name>
+				</Step>
+				<Step>
+					<Condition>private.apigee.status-endpoint-api-key NotEquals request.header.apikey</Condition>
+					<Name>RaiseFault.401Unauthorized</Name>
+				</Step>
+				<Step>
+					<Name>ServiceCallout.CallHealthCheckEndpoint</Name>
+				</Step>
+			</Request>
+			<Response>
+				<Step>
+					<Name>JavaScript.SetStatusResponse</Name>
+				</Step>
+			</Response>
+			<Condition>(proxy.pathsuffix MatchesPath "/_status") and ((request.verb = "GET") or (request.verb = "HEAD"))</Condition>
+		</Flow>
+		<Flow name="TestEndpoint">
+			<Description/>
+			<Request>
+				<Step>
+					<Condition>(proxy.pathsuffix MatchesPath "**/test")</Condition>
+					<Name>RaiseFault.404NotFound</Name>
+				</Step>
+			</Request>
+		</Flow>
 		<Flow name="MirrorIncomingHeaders">
 			<Description/>
 			<Request/>
@@ -39,14 +72,14 @@
 			</Response>
 			<Condition>(request-correlation-id != "NoCorrelationId")</Condition>
 		</Flow>
-	</Flows>
-  	<PostClientFlow name="PostClientFlow">
-    	<Response>
-      		<Step>
-        		<Name>FlowCallout.LogToSplunk</Name>
-      		</Step>
-    	</Response>
-  	</PostClientFlow>
+  	</Flows>
+	<PostClientFlow name="PostClientFlow">
+		<Response>
+			<Step>
+				<Name>FlowCallout.LogToSplunk</Name>
+			</Step>
+		</Response>
+	</PostClientFlow>
 	<HTTPProxyConnection>
 		<BasePath>{{ SERVICE_BASE_PATH }}</BasePath>
 		<VirtualHost>secure</VirtualHost>
@@ -57,7 +90,22 @@
 	<RouteRule name="NoRoutePing">
 		<Condition>(proxy.pathsuffix MatchesPath "/_ping") and ((request.verb = "GET") or (request.verb = "HEAD"))</Condition>
 	</RouteRule>
+	<RouteRule name="NoRouteStatus">
+		<Condition>(proxy.pathsuffix MatchesPath "/_status") and ((request.verb = "GET") or (request.verb = "HEAD"))</Condition>
+	</RouteRule>
+	<RouteRule name="NoRouteTest">
+		<Condition>(proxy.pathsuffix MatchesPath "**/test")</Condition>
+	</RouteRule>
 	<RouteRule name="nhs-app-target">
 		<TargetEndpoint>nhs-app-target</TargetEndpoint>
 	</RouteRule>
+	<DefaultFaultRule>
+		<Step>
+			<Name>AssignMessage.AddHeader.MirrorXCorrelationId</Name>
+			<Condition>(request-correlation-id != "NoCorrelationId")</Condition>
+		</Step>
+		<Step>
+			<Name>AssignMessage.CatchallErrorMessage</Name>
+		</Step>
+	</DefaultFaultRule>
 </ProxyEndpoint>
