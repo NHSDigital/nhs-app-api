@@ -425,7 +425,7 @@
 					}
 				],
 				"url": {
-					"raw": "{{base_url}}/nhs-app/communication/event-report/?day=2021-08-03",
+					"raw": "{{base_url}}/nhs-app/communication/event-report/?day=2021-08-03&page=1",
 					"host": [
 						"{{base_url}}"
 					],
@@ -440,6 +440,11 @@
 							"key": "day",
 							"value": "2021-08-03",
 							"description": "Day for which to retrieve daily event report."
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"description": "Page of daily event report to retrieve."
 						}
 					]
 				}
