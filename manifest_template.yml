@@ -44,7 +44,7 @@ apigee:
           - name: access
             value: public
           - name: ratelimit
-            value: 5ps
+            value: 2400pm
         description: {{ DESCRIPTION }}
         displayName: {{ TITLE }}
         environments: [ {{ ENV.name }} ]
@@ -57,7 +57,7 @@ apigee:
         scopes:
           - 'urn:nhsd:apim:app:level3:nhs-app'
           - 'urn:nhsd:apim:user-nhs-id:aal3:nhs-app'
-        quota: '300'
+        quota: '2400'
         quotaInterval: '1'
         quotaTimeUnit: minute
     specs:
