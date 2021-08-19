@@ -6,7 +6,7 @@ import com.iproov.sdk.IProov;
 class IProovService () {
 
     fun installIProov (webView: WebView) {
-        IProov.nativeBridge.install(webView);
+        IProov.nativeBridge.install(webView, false);
     }
 
     fun uninstallIProov (webView: WebView) {

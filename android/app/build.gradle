@@ -268,7 +268,7 @@ dependencies {
     implementation "com.google.firebase:firebase-core:16.0.1"
     implementation "com.google.firebase:firebase-messaging:17.3.4"
 
-    implementation ("com.iproov.sdk:iproov:6.3.1"){
+    implementation ("com.iproov.sdk:iproov:7.0.2"){
         exclude group:"org.json", module:"json"
     }
 

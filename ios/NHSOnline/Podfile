@@ -13,7 +13,7 @@ if ENV['PAYCASSO'].present?
     pod 'paycasso-view-framework', '~> 2020.9.15-11'
     pod 'paycasso-lottie', '~> 2020.9.16-1.0'
     pod 'SwiftyJSON', '~> 5.0.0'
-    pod 'iProov', '~> 7.5.0'
+    pod 'iProov', '~> 8.4.0'
     pod 'DeviceKit', '3.2'
   end
 else
@@ -21,7 +21,7 @@ else
     platform :ios, '9.0'
     pod 'FidoClientIOS', '~> 2.0.0'
     pod 'SwiftyJSON', '~> 5.0.0'
-    pod 'iProov', '~> 7.5.0'
+    pod 'iProov', '~> 8.4.0'
     pod 'DeviceKit', '~> 3.2'
     target 'NHSOnlineTests' do
       inherit! :search_paths
@@ -31,7 +31,7 @@ else
 end
 post_install do |installer|
     installer.pods_project.targets.each do |target|
-      if ['KeychainAccess', 'Socket.IO-Client-Swift', 'SwiftyJSON'].include? target.name
+      if ['Socket.IO-Client-Swift', 'SwiftyJSON'].include? target.name
         target.build_configurations.each do |config|
             config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
         end

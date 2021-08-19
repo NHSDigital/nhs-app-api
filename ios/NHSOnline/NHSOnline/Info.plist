@@ -164,7 +164,7 @@
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
-		<false/>
+		<true/>
 	</dict>
 	<key>NSCalendarsUsageDescription</key>
 	<string>So we can add events to your calendar, like appointments.</string>
