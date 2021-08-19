@@ -21,7 +21,8 @@
       checkbox-id="allow_cookies"
       :is-waiting="false"
       :label="$t('more.cookies.allowOptionalCookies')"
-      :hint-text="$t('more.cookies.iAcceptTheUseOfOptionalCookies')"/>
+      :hint-text="$t('more.cookies.iAcceptTheUseOfOptionalCookies')"
+      :aria-label="$t('more.cookies.turningCookiesOffRefreshesThePage')"/>
 
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                             :path="backPath"
