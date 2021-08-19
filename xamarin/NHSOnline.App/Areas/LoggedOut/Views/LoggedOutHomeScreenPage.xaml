@@ -24,10 +24,7 @@
         </VisualStateGroup>
     </VisualStateManager.VisualStateGroups>
     
-    <controls:GradientBackground BackgroundColor="{StaticResource HomeBlueInnerGradient}"
-                                 InnerColour="{StaticResource HomeBlueInnerGradient}"
-                                 OuterColour="{StaticResource HomeBlueOuterGradient}"
-                                 Radius="Max" >
+    <ContentView BackgroundColor="{StaticResource NhsUkBlue}" >
         
         <ContentView.Effects>
             <effects:SafeAreaPaddingTop />
@@ -114,5 +111,5 @@
                    AutomationProperties.IsInAccessibleTree="True"
                    IsTabStop="False" />
         </Grid>
-    </controls:GradientBackground>
+    </ContentView>
 </ContentPage>
