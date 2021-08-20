@@ -1,10 +1,9 @@
 <script>
-import GP_MEDICAL_RECORD_PATH from '@/router/paths';
-import HEALTH_RECORDS from '@/router/routes/medical-record';
+import { GP_MEDICAL_RECORD_NAME } from '@/router/names';
 
 export default {
   beforeRouteLeave(to, from, next) {
-    if (from !== to && to.path === (GP_MEDICAL_RECORD_PATH || HEALTH_RECORDS)) {
+    if (to.name === GP_MEDICAL_RECORD_NAME) {
       this.$store.dispatch('myRecord/reload', false);
     }
     next();
