@@ -8,42 +8,29 @@ namespace NHSOnline.App.Controls.Navigation
     public partial class FullNavigationFooterItemWide
     {
         public static readonly BindableProperty IconProperty =
-            BindableProperty.Create(nameof(Icon), typeof(SvgImage), typeof(FullNavigationFooterItem), null);
+            BindableProperty.Create(nameof(Icon), typeof(SvgImage), typeof(FullNavigationFooterItemWide), null);
 
         public static readonly BindableProperty DefaultIconProperty =
-            BindableProperty.Create(nameof(DefaultIcon), typeof(SvgImage), typeof(FullNavigationFooterItem));
+            BindableProperty.Create(nameof(DefaultIcon), typeof(SvgImage), typeof(FullNavigationFooterItemWide));
 
         public static readonly BindableProperty SelectedIconProperty =
-            BindableProperty.Create(nameof(SelectedIcon), typeof(SvgImage), typeof(FullNavigationFooterItem));
+            BindableProperty.Create(nameof(SelectedIcon), typeof(SvgImage), typeof(FullNavigationFooterItemWide));
 
         public static readonly BindableProperty IconCommandProperty =
-            BindableProperty.Create(nameof(IconCommand), typeof(ICommand), typeof(FullNavigationFooterItem));
+            BindableProperty.Create(nameof(IconCommand), typeof(ICommand), typeof(FullNavigationFooterItemWide));
 
         public static readonly BindableProperty TextProperty =
-            BindableProperty.Create(nameof(Text), typeof(string), typeof(FullNavigationFooterItem));
+            BindableProperty.Create(nameof(Text), typeof(string), typeof(FullNavigationFooterItemWide));
 
         public static readonly BindableProperty IsSelectedProperty =
-            BindableProperty.Create(nameof(IsSelected), typeof(bool), typeof(FullNavigationFooterItem));
+            BindableProperty.Create(nameof(IsSelected), typeof(bool), typeof(FullNavigationFooterItemWide));
+
+        public static readonly BindableProperty FocusedIconProperty =
+            BindableProperty.Create(nameof(FocusedIcon), typeof(SvgImage), typeof(FullNavigationFooterItemWide));
 
         public FullNavigationFooterItemWide()
         {
             InitializeComponent();
-        }
-
-        protected override void OnPropertyChanged(string? propertyName = null)
-        {
-            base.OnPropertyChanged(propertyName);
-
-            switch (propertyName)
-            {
-                case nameof(IsSelected):
-                case nameof(DefaultIcon):
-                case nameof(SelectedIcon):
-                    SetVisualState();
-                    break;
-                default:
-                    break;
-            }
         }
 
         public SvgImage Icon
@@ -64,6 +51,12 @@ namespace NHSOnline.App.Controls.Navigation
             set => SetValue(SelectedIconProperty, value);
         }
 
+        public SvgImage FocusedIcon
+        {
+            get => (SvgImage) GetValue(FocusedIconProperty);
+            set => SetValue(FocusedIconProperty, value);
+        }
+
         public ICommand IconCommand
         {
             get => (ICommand) GetValue(IconCommandProperty);
@@ -80,13 +73,6 @@ namespace NHSOnline.App.Controls.Navigation
         {
             get => (bool) GetValue(IsSelectedProperty);
             set => SetValue(IsSelectedProperty, value);
-        }
-
-        private void SetVisualState()
-        {
-            var state = IsSelected && IsSet(SelectedIconProperty) ?
-                VisualStateManager.CommonStates.Selected : VisualStateManager.CommonStates.Normal;
-            VisualStateManager.GoToState(this, state);
         }
     }
 }

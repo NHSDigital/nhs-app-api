@@ -12,7 +12,7 @@
                 <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
-            <Style TargetType="StackLayout" Class="IconAndLabel">
+            <Style TargetType="controls:AccessibilityLayout" Class="IconAndLabel">
                 <Setter Property="HeightRequest" Value="50" />
                 <Setter Property="WidthRequest" Value="44" />
                 <Setter Property="Orientation" Value="Vertical" />
@@ -46,10 +46,10 @@
     </View.Resources>
     
     <ContentView.Content>
-        <StackLayout x:Name="ButtonStackLayout"
-                     StyleClass="IconAndLabel"  
-                     AutomationProperties.Name="{Binding Text, Source={x:Reference Name=Root}}"
-                     effects:AccessibilityEffect.ControlType="Button"> 
+        <controls:AccessibilityLayout x:Name="ButtonStackLayout"
+                                      StyleClass="IconAndLabel"  
+                                      AutomationProperties.Name="{Binding Text, Source={x:Reference Name=Root}}"
+                                      effects:AccessibilityEffect.ControlType="Button"> 
             
             <ContentView x:Name="IconDefault" StyleClass="IconDefault" Content="{Binding DefaultIcon, Source={x:Reference Name=Root}}" />
             <ContentView x:Name="IconKeyboardFocus" StyleClass="IconKeyboardFocus" Content="{Binding KeyboardFocusIcon, Source={x:Reference Name=Root}}" />
@@ -75,6 +75,6 @@
                     </VisualState>
                 </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
-        </StackLayout>
+        </controls:AccessibilityLayout>
     </ContentView.Content>
 </ContentView>

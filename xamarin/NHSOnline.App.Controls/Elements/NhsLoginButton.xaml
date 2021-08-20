@@ -3,12 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:icons="clr-namespace:NHSOnline.App.Controls.Icons;assembly=NHSOnline.App.Controls"
              xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
+             xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Controls.Elements.NhsLoginButton"
              x:Name="Root">
     
-    <StackLayout effects:AccessibilityEffect.ControlType="Button"
-                 AutomationProperties.Name="Continue with NHS login"
-                 HorizontalOptions="Center">
+    <controls:AccessibilityLayout effects:AccessibilityEffect.ControlType="Button"
+                                  AutomationProperties.Name="Continue with NHS login"
+                                  HorizontalOptions="Center">
         
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="KeyboardFocusStates">
@@ -28,5 +29,5 @@
         <StackLayout.GestureRecognizers>
             <TapGestureRecognizer Command="{Binding Command, Source={x:Reference Name=Root}}" />
         </StackLayout.GestureRecognizers>
-    </StackLayout>
+    </controls:AccessibilityLayout>
 </ContentView>

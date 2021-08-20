@@ -76,6 +76,9 @@
                     <navigation:FullNavigationFooterItem.SelectedIcon>
                         <icons:IconAdviceBlue StyleClass="Advice" />
                     </navigation:FullNavigationFooterItem.SelectedIcon>
+                    <navigation:FullNavigationFooterItem.FocusedIcon>
+                        <icons:IconAdviceBlack StyleClass="Advice" />
+                    </navigation:FullNavigationFooterItem.FocusedIcon>
                 </navigation:FullNavigationFooterItem>
                 
                 <navigation:FullNavigationFooterItem Grid.Column="2"
@@ -88,6 +91,9 @@
                     <navigation:FullNavigationFooterItem.SelectedIcon>
                         <icons:IconAppointmentsBlue />
                     </navigation:FullNavigationFooterItem.SelectedIcon>
+                    <navigation:FullNavigationFooterItem.FocusedIcon>
+                        <icons:IconAppointmentsBlack />
+                    </navigation:FullNavigationFooterItem.FocusedIcon>
                 </navigation:FullNavigationFooterItem>
 
                 <navigation:FullNavigationFooterItem Grid.Column="4"
@@ -100,6 +106,9 @@
                     <navigation:FullNavigationFooterItem.SelectedIcon>
                         <icons:IconPrescriptionsBlue />
                     </navigation:FullNavigationFooterItem.SelectedIcon>
+                    <navigation:FullNavigationFooterItem.FocusedIcon>
+                        <icons:IconPrescriptionsBlack />
+                    </navigation:FullNavigationFooterItem.FocusedIcon>
                 </navigation:FullNavigationFooterItem>
 
                 <navigation:FullNavigationFooterItem Grid.Column="6"
@@ -112,6 +121,9 @@
                     <navigation:FullNavigationFooterItem.SelectedIcon>
                         <icons:IconYourHealthBlue />
                     </navigation:FullNavigationFooterItem.SelectedIcon>
+                    <navigation:FullNavigationFooterItem.FocusedIcon>
+                        <icons:IconYourHealthBlack />
+                    </navigation:FullNavigationFooterItem.FocusedIcon>
                 </navigation:FullNavigationFooterItem>
 
                 <navigation:FullNavigationFooterItem Grid.Column="8"
@@ -124,6 +136,9 @@
                     <navigation:FullNavigationFooterItem.SelectedIcon>
                         <icons:IconMessagesBlue />
                     </navigation:FullNavigationFooterItem.SelectedIcon>
+                    <navigation:FullNavigationFooterItem.FocusedIcon>
+                        <icons:IconMessagesBlack />
+                    </navigation:FullNavigationFooterItem.FocusedIcon>
                 </navigation:FullNavigationFooterItem>
             </Grid>
         </StackLayout>

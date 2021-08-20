@@ -46,14 +46,6 @@ namespace NHSOnline.App.Droid.Effects
             }
         }
 
-        private void ControlFocusChange(object sender, View.FocusChangeEventArgs e)
-        {
-            if (Element is VisualElement visualElement)
-            {
-                KeyboardFocusStates.SetKeyboardFocusState(visualElement, e.HasFocus);
-            }
-        }
-
         protected override void OnDetached()
         {
             if ((Control ?? Container) is { } target &&
@@ -61,6 +53,14 @@ namespace NHSOnline.App.Droid.Effects
             {
                 target.KeyPress -= ControlOnKeyPress;
                 target.FocusChange -= ControlFocusChange;
+            }
+        }
+
+        private void ControlFocusChange(object sender, View.FocusChangeEventArgs e)
+        {
+            if (Element is AccessibilityLayout accessibilityLayout)
+            {
+                accessibilityLayout.IsKeyboardFocused = e.HasFocus;
             }
         }
 

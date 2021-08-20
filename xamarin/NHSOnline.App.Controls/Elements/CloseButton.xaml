@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:icons="clr-namespace:NHSOnline.App.Controls.Icons;assembly=NHSOnline.App.Controls"
              xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
+             xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Controls.Elements.CloseButton"
              x:Name="Root">
     
@@ -12,7 +13,7 @@
                 <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
-            <Style TargetType="StackLayout" Class="Button">
+            <Style TargetType="controls:AccessibilityLayout" Class="Button">
                 <Setter Property="HorizontalOptions" Value="Start" />
                 <Setter Property="VerticalOptions" Value="Center" />
                 <Setter Property="HeightRequest" Value="35" />
@@ -57,11 +58,11 @@
         </ResourceDictionary>
     </ContentView.Resources>
     
-    <StackLayout StyleClass="Button" 
-                 x:Name="ButtonStackLayout"
-                 effects:AccessibilityEffect.ControlType="Button"
-                 AutomationProperties.IsInAccessibleTree="True" 
-                 AutomationProperties.Name="Close">
+    <controls:AccessibilityLayout StyleClass="Button" 
+                                  x:Name="ButtonStackLayout"
+                                  effects:AccessibilityEffect.ControlType="Button"
+                                  AutomationProperties.IsInAccessibleTree="True" 
+                                  AutomationProperties.Name="Close">
             <Grid HorizontalOptions="Center" VerticalOptions="Center" StyleClass="HeaderGrid">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
@@ -97,5 +98,5 @@
                 </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
             
-        </StackLayout>
+        </controls:AccessibilityLayout>
 </ContentView>

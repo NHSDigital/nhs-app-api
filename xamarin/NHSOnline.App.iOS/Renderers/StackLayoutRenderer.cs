@@ -13,8 +13,12 @@ namespace NHSOnline.App.iOS.Renderers
 
         public override void DidUpdateFocus(UIFocusUpdateContext context, UIFocusAnimationCoordinator coordinator)
         {
+            if (AccessibilityEffect.GetControlType(Element) == AccessibilityEffect.ControlType.Button)
+            {
+                Element.SetValueFromRenderer(VisualElement.IsFocusedPropertyKey, Focused);
+            }
+
             base.DidUpdateFocus(context, coordinator);
-            Element.SetValueFromRenderer(VisualElement.IsFocusedPropertyKey, Focused);
         }
     }
 }

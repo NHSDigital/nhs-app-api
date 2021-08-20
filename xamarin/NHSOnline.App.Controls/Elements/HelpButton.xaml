@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:icons="clr-namespace:NHSOnline.App.Controls.Icons;assembly=NHSOnline.App.Controls"
              xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
+             xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Controls.Elements.HelpButton"
              x:Name="Root">
     
@@ -13,7 +14,7 @@
             </ResourceDictionary.MergedDictionaries>
             
             
-            <Style TargetType="StackLayout" Class="ButtonLayout">
+            <Style TargetType="controls:AccessibilityLayout" Class="ButtonLayout">
                 <Setter Property="HorizontalOptions" Value="End" />
                 <Setter Property="VerticalOptions" Value="Start" />
                 <Setter Property="Padding" Value="5" />
@@ -37,10 +38,10 @@
         </ResourceDictionary>
     </ContentView.Resources>
     
-    <StackLayout x:Name="ButtonContainer"
-                 StyleClass="ButtonLayout"
-                 effects:AccessibilityEffect.ControlType="Button"
-                 AutomationProperties.Name="Help">
+    <controls:AccessibilityLayout x:Name="ButtonContainer"
+                                  StyleClass="ButtonLayout"
+                                  effects:AccessibilityEffect.ControlType="Button"
+                                  AutomationProperties.Name="Help">
         
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="KeyboardFocusStates">
@@ -65,5 +66,5 @@
             <TapGestureRecognizer 
                 Command="{Binding Command, Source={x:Reference Name=Root}}" />
         </StackLayout.GestureRecognizers>
-    </StackLayout>
+    </controls:AccessibilityLayout>
 </ContentView>

@@ -45,26 +45,22 @@
     
     <VisualStateManager.VisualStateGroups>
         <VisualStateGroup Name="CommonStates">
-            
             <VisualState Name="Normal">
                 <VisualState.Setters>
                     <Setter TargetName="TopPositionalGuide" Property="HeightRequest" Value="0" />
                     <Setter TargetName="BottomPositionalGuide" Property="HeightRequest" Value="4" />
                 </VisualState.Setters>
             </VisualState>
-            
             <VisualState Name="Pressed">
                 <VisualState.Setters>
                     <Setter TargetName="TopPositionalGuide" Property="HeightRequest" Value="4" />
                     <Setter TargetName="BottomPositionalGuide" Property="HeightRequest" Value="0" />
                 </VisualState.Setters>
             </VisualState>
-            
         </VisualStateGroup>
+        
         <VisualStateGroup x:Name="KeyboardFocusStates">
-            
             <VisualState x:Name="KeyboardUnfocused" />
-            
             <VisualState x:Name="KeyboardFocused">
                 <VisualState.Setters>
                     <Setter TargetName="ButtonElement" Property="Button.BackgroundColor" Value="{StaticResource NhsUkYellow}"/>
@@ -72,8 +68,8 @@
                     <Setter TargetName="ButtonGradient" Property="BoxView.Color" Value="{StaticResource NhsUkPrimaryText}"/>
                 </VisualState.Setters>
             </VisualState>
-            
         </VisualStateGroup>
+        
     </VisualStateManager.VisualStateGroups>
     
     <AbsoluteLayout>

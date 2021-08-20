@@ -15,7 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Icons\icon-advice-black.svg" />
     <EmbeddedResource Include="Icons\icon-advice-blue.svg" />
+    <EmbeddedResource Include="Icons\icon-appointments-black.svg" />
     <EmbeddedResource Include="Icons\icon-appointments-blue.svg" />
     <EmbeddedResource Include="Icons\icon-appointments-grey.svg" />
     <EmbeddedResource Include="Icons\icon-help-black.svg" />
@@ -23,14 +25,17 @@
     <EmbeddedResource Include="Icons\icon-close-black.svg" />
     <EmbeddedResource Include="Icons\icon-home-black.svg" />
     <EmbeddedResource Include="Icons\icon-home-white.svg" />
+    <EmbeddedResource Include="Icons\icon-messages-black.svg" />
     <EmbeddedResource Include="Icons\icon-messages-blue.svg" />
     <EmbeddedResource Include="Icons\icon-messages-grey.svg" />
     <EmbeddedResource Include="Icons\icon-minus.svg" />
     <EmbeddedResource Include="Icons\icon-more-black.svg" />
     <EmbeddedResource Include="Icons\icon-more-white.svg" />
     <EmbeddedResource Include="Icons\icon-plus.svg" />
+    <EmbeddedResource Include="Icons\icon-prescriptions-black.svg" />
     <EmbeddedResource Include="Icons\icon-prescriptions-blue.svg" />
     <EmbeddedResource Include="Icons\icon-prescriptions-grey.svg" />
+    <EmbeddedResource Include="Icons\icon-your-health-black.svg" />
     <EmbeddedResource Include="Icons\icon-your-health-grey.svg" />
     <EmbeddedResource Include="Icons\icon-your-health-blue.svg" />
     <EmbeddedResource Include="Icons\icon-advice-grey.svg" />

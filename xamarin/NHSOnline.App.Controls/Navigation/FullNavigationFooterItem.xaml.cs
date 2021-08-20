@@ -25,25 +25,12 @@ namespace NHSOnline.App.Controls.Navigation
         public static readonly BindableProperty IsSelectedProperty =
             BindableProperty.Create(nameof(IsSelected), typeof(bool), typeof(FullNavigationFooterItem));
 
+        public static readonly BindableProperty FocusedIconProperty =
+            BindableProperty.Create(nameof(FocusedIcon), typeof(SvgImage), typeof(FullNavigationFooterItem));
+
         public FullNavigationFooterItem()
         {
             InitializeComponent();
-        }
-
-        protected override void OnPropertyChanged(string? propertyName = null)
-        {
-            base.OnPropertyChanged(propertyName);
-
-            switch (propertyName)
-            {
-                case nameof(IsSelected):
-                case nameof(DefaultIcon):
-                case nameof(SelectedIcon):
-                    SetVisualState();
-                    break;
-                default:
-                    break;
-            }
         }
 
         public SvgImage Icon
@@ -64,6 +51,12 @@ namespace NHSOnline.App.Controls.Navigation
             set => SetValue(IsSelectedIconProperty, value);
         }
 
+        public SvgImage FocusedIcon
+        {
+            get => (SvgImage) GetValue(FocusedIconProperty);
+            set => SetValue(FocusedIconProperty, value);
+        }
+
         public ICommand IconCommand
         {
             get => (ICommand) GetValue(IconCommandProperty);
@@ -80,13 +73,6 @@ namespace NHSOnline.App.Controls.Navigation
         {
             get => (bool) GetValue(IsSelectedProperty);
             set => SetValue(IsSelectedProperty, value);
-        }
-
-        private void SetVisualState()
-        {
-            var state = IsSelected && IsSet(IsSelectedIconProperty) ?
-                VisualStateManager.CommonStates.Selected : VisualStateManager.CommonStates.Normal;
-            VisualStateManager.GoToState(this, state);
         }
     }
 }
