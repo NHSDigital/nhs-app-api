@@ -26,31 +26,31 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         private VisionUserSession _visionUserSession;
         private VisionAppointmentsRetrievalService _systemUnderTest;
         private VisionResponse<BookedAppointmentsResponse> _visionClientGetResponse;
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            
+
             _visionUserSession = _fixture.Create<VisionUserSession>();
             _visionUserSession.IsAppointmentsEnabled = true;
-            
+
             _mockVisionClient = _fixture.Freeze<Mock<IVisionClient>>();
             _visionClientGetResponse = _fixture.Create<VisionResponse<BookedAppointmentsResponse>>();
             _visionUserSession.IsAppointmentsEnabled = true;
 
             var response = GetVisionResponse(_visionClientGetResponse);
-            
+
             MockVisionClientAppointmentsGetMethod(response);
-            
+
             _mockBookedAppointmentsResponseMapper = _fixture.Freeze<Mock<IBookedAppointmentsResponseMapper>>();
-   
+
             _systemUnderTest = new VisionAppointmentsRetrievalService(
                 _fixture.Create<ILogger<VisionAppointmentsRetrievalService>>(),
                 _mockVisionClient.Object,
                 _mockBookedAppointmentsResponseMapper.Object);
         }
-        
+
         [TestMethod]
         public async Task GetAppointments_HappyPath_ReturnsSuccessResponse()
         {
@@ -71,10 +71,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         {
             // Arrange
             _visionUserSession.IsAppointmentsEnabled = false;
-            
+
             // Act
             var result = await _systemUnderTest.GetAppointments(_visionUserSession);
-            
+
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.Forbidden>();
         }
@@ -83,13 +83,25 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         public async Task GetAppointments_VisionClientReturnsAccessDenied_ReturnsForbidden()
         {
             // Arrange
-            var response = VisionApiObjectResponseBuilder
-                .BuildUnsuccessfulResponseWithErrorCode<BookedAppointmentsResponse>("-35");
+            var response = new VisionDirectServicesApiObjectResponse<BookedAppointmentsResponse>(HttpStatusCode.Forbidden)
+            {
+                ErrorDetail = new Detail
+                {
+                    VisionFault = new VisionFault
+                    {
+                        Error = new FaultError
+                        {
+                            Text = VisionApiErrorCodes.AccessDenied
+                        },
+                    },
+                },
+            };
+
             MockVisionClientAppointmentsGetMethod(response);
-            
+
             // Act
             var result = await _systemUnderTest.GetAppointments(_visionUserSession);
-            
+
             // Assert
             _mockVisionClient.Verify();
             result.Should().BeAssignableTo<AppointmentsResult.Forbidden>();
@@ -99,16 +111,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         public async Task GetAppointments_VisionClientReturnsUnparsableMessage_ReturnsInternalServerError()
         {
             // Arrange
-            var visionResponse = new VisionPfsApiObjectResponse<BookedAppointmentsResponse>(HttpStatusCode.OK)
+            var visionResponse = new VisionDirectServicesApiObjectResponse<BookedAppointmentsResponse>(HttpStatusCode.OK)
             {
-                RawResponse = new VisionResponseEnvelope<BookedAppointmentsResponse>
-                {
-                    Body = new VisionResponseBody<BookedAppointmentsResponse>
-                    {
-                        VisionResponse = _visionClientGetResponse
-                    }
-                },
-                UnparsableResultMessage = "Could not parse"
+                RawResponse = new VisionResponse<BookedAppointmentsResponse>(),
+                UnparseableResultMessage = "Could not parse"
             };
 
             MockVisionClientAppointmentsGetMethod(visionResponse);
@@ -120,14 +126,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             _mockVisionClient.Verify();
             result.Should().BeAssignableTo<AppointmentsResult.InternalServerError>();
         }
-        
+
         [TestMethod]
         public async Task GetAppointments_VisionClientThrows_ReturnsBadGateway()
         {
             // Arrange
-            _mockVisionClient.Setup(x => x.GetExistingAppointments(
-                    _visionUserSession
-                ))
+            _mockVisionClient
+                .Setup(x => x.GetExistingAppointmentsV2(_visionUserSession))
                 .Throws<HttpRequestException>()
                 .Verifiable();
 
@@ -137,13 +142,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.BadGateway>();
         }
- 
+
         [TestMethod]
         public async Task GetAppointments_MapperThrows_ReturnsInternalServerError()
         {
             // Arrange
-            _mockBookedAppointmentsResponseMapper.Setup(x=>x.Map(It.IsAny<BookedAppointmentsResponse>()))
-            .Throws<Exception>();
+            _mockBookedAppointmentsResponseMapper
+                .Setup(x=>x.Map(
+                    It.IsAny<BookedAppointmentsResponse>()))
+                .Throws<Exception>();
 
             // Act
             var result = await _systemUnderTest.GetAppointments(_visionUserSession);
@@ -173,28 +180,21 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             _visionUserSession.AppointmentBookingReasonNecessity.Should().Be(expectedNecessity);
         }
 
-        private static VisionPfsApiObjectResponse<BookedAppointmentsResponse> GetVisionResponse(
+        private static VisionDirectServicesApiObjectResponse<BookedAppointmentsResponse> GetVisionResponse(
             VisionResponse<BookedAppointmentsResponse> bookedAppointments)
         {
-            return new VisionPfsApiObjectResponse<BookedAppointmentsResponse>(HttpStatusCode.OK)
+            return new VisionDirectServicesApiObjectResponse<BookedAppointmentsResponse>(HttpStatusCode.OK)
             {
-                RawResponse = new VisionResponseEnvelope<BookedAppointmentsResponse>
-                {
-                    Body = new VisionResponseBody<BookedAppointmentsResponse>
-                    {
-                        VisionResponse = bookedAppointments
-                    }
-                }
+                RawResponse = bookedAppointments
             };
         }
 
         private void MockVisionClientAppointmentsGetMethod(
-            VisionPfsApiObjectResponse<BookedAppointmentsResponse> response)
-        {   
+            VisionDirectServicesApiObjectResponse<BookedAppointmentsResponse> response)
+        {
             _mockVisionClient.Reset();
-            _mockVisionClient.Setup(x => x.GetExistingAppointments(
-                    _visionUserSession
-                    ))
+            _mockVisionClient
+                .Setup(x => x.GetExistingAppointmentsV2(_visionUserSession))
                 .ReturnsAsync(response);
         }
     }

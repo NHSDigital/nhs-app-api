@@ -4,8 +4,10 @@ import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping
 import mocking.vision.VisionConstants
 import mocking.vision.VisionConstants.getVisionExistingAppointmentsResponse
-import mocking.vision.VisionMappingBuilder
+import mocking.vision.VisionDirectServicesErrorResponses
+import mocking.vision.VisionDirectServicesMappingBuilder
 import mocking.vision.appointments.helpers.MyAppointmentsHelper.Companion.extractResponseFromFacade
+import mocking.vision.helpers.VisionConstantsHelper
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
 import mocking.vision.models.appointments.BookedAppointmentsResponse
@@ -17,7 +19,8 @@ import javax.xml.bind.JAXBContext
 import javax.xml.bind.Marshaller
 
 
-class MyAppointmentsBuilderVision(val patient: Patient) : VisionMappingBuilder(), IMyAppointmentsBuilder {
+class MyAppointmentsBuilderVision(val patient: Patient) : VisionDirectServicesMappingBuilder(
+        orgId = patient.odsCode, path = "existingAppointments"), IMyAppointmentsBuilder {
 
     private val serviceDefinition = ServiceDefinition(
             VisionConstants.existingAppointmentsName,
@@ -25,38 +28,53 @@ class MyAppointmentsBuilderVision(val patient: Patient) : VisionMappingBuilder()
     )
 
     init {
-        val contentTypeHeader = "content-type"
-        val contentTypeValue = "text/xml; charset=UTF-8"
+
         val userSession = VisionUserSession(
                 patient.rosuAccountId,
                 patient.apiKey,
                 patient.odsCode,
                 patient.patientId
         )
-
         requestBuilder
-                .andHeader(contentTypeHeader, contentTypeValue)
-                .andBody(userSession.rosuAccountId, "contains")
-                .andBody(userSession.apiKey, "contains")
-                .andBody(userSession.odsCode, "contains")
-                .andBody(userSession.accountId, "contains")
-                .andBody(userSession.provider, "contains")
-                .andBody(serviceDefinition.name, "contains")
-                .andBody(userSession.patientId, "contains")
+                .andBody("<vision:rosuAccountId>${userSession.rosuAccountId}</vision:rosuAccountId>", "contains")
+                .andBody("<vision:apiKey>${userSession.apiKey}</vision:apiKey>", "contains")
+                .andBody("<vision:provider>${userSession.provider}</vision:provider>", "contains")
+                .andBody("<vision:accountId>${userSession.accountId}</vision:accountId>", "contains")
+                .andBody("<vision:patientId>${userSession.patientId}</vision:patientId>", "contains")
     }
 
     override fun respondWithGPErrorWhenNotEnabled(): Mapping {
-        return respondVisionErrorWhenServiceNotEnabled(serviceDefinition)
+        return respondWith(HttpStatus.SC_BAD_REQUEST) {
+            andXmlBody(VisionDirectServicesErrorResponses.getServiceNotEnabled(serviceDefinition)).build()
+        }
     }
 
     override fun respondWithUnknownException(): Mapping {
-        return respondWithUnknownVisionError(serviceDefinition)
+        return respondWith(HttpStatus.SC_BAD_REQUEST) {
+            andXmlBody(VisionDirectServicesErrorResponses.getUnknownVisionError(serviceDefinition)).build()
+        }
     }
 
     override fun respondWithUnauthorised(): Mapping {
-        return respondVisionUnauthorised(serviceDefinition)
+        return respondWith(HttpStatus.SC_BAD_REQUEST) {
+            andXmlBody(VisionDirectServicesErrorResponses.getInvalidUserCredentialsError(serviceDefinition)).build()
+        }
     }
 
+    override fun respondWithCorrupted(): Mapping {
+        return respondWith(HttpStatus.SC_OK) {
+            val corruptedResponse = VisionConstantsHelper
+                    .getBaseVisionDirectServicesResponse("", serviceDefinition)
+                    .replace(">", "|")
+                    .replace("}", "|")
+
+            andBody(corruptedResponse, contentType = "text/xml")
+        }
+    }
+
+    override fun respondWithSuccess(body: String): Mapping {
+        return respondWithBody(body)
+    }
     override fun respondWithSuccess(facade: MyAppointmentsFacade): Mapping {
         val bookedAppointmentsResponse = extractResponseFromFacade(facade.myAppointments!!)
 
@@ -72,13 +90,5 @@ class MyAppointmentsBuilderVision(val patient: Patient) : VisionMappingBuilder()
         return respondWith(HttpStatus.SC_OK) {
             andXmlBody(getVisionExistingAppointmentsResponse(stringWriter.toString(), serviceDefinition)).build()
         }
-    }
-
-    override fun respondWithSuccess(body: String): Mapping {
-        return respondWithBody(body)
-    }
-
-    override fun respondWithCorrupted(): Mapping {
-        return respondWithCorruptedContent(serviceDefinition)
     }
 }

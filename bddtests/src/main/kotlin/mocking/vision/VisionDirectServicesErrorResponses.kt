@@ -62,6 +62,22 @@ object VisionDirectServicesErrorResponses {
         )
     }
 
+    fun getServiceNotEnabled(serviceDefinition: ServiceDefinition): String {
+        return getMockedError(
+                serviceDefinition,
+                VisionErrorTypes.ACCESSDENIED.Code,
+                VisionErrorTypes.ACCESSDENIED.Description
+        )
+    }
+
+    fun getUnknownVisionError(serviceDefinition: ServiceDefinition): String {
+        return getMockedError(
+                serviceDefinition,
+                VisionErrorTypes.UNKNOWNVISIONERROR.Code,
+                VisionErrorTypes.UNKNOWNVISIONERROR.Description
+        )
+    }
+
     fun getMockedError(
         serviceDefinition: ServiceDefinition,
         errorCode:String,

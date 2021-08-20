@@ -33,13 +33,5 @@ abstract class VisionMappingBuilder(method: String = "POST") : MappingBuilder(me
                     serviceDefinition,
                     ErrorResponseCodeVision.NON_VISION_ERROR_CODE)).build()
         }
-}
-
-    fun respondVisionUnauthorised(serviceDefinition: ServiceDefinition): Mapping {
-        return respondWith(HttpStatus.SC_OK) {
-            andXmlBody(VisionConstantsHelper.getBaseVisionFailedResponse(
-                serviceDefinition,
-                ErrorResponseCodeVision.INVALID_USER_CREDENTIALS)).build()
-        }
     }
 }

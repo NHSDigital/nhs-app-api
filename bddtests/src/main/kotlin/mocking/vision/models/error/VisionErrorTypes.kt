@@ -10,5 +10,6 @@ enum class VisionErrorTypes (val Code: String, val Description: String){
     RECORDCURRENTLYUNAVAILABLE("-15", "Record currently unavailable - please try again later or contact " +
             "your Practice: VOSUsers record is locked, is patient selected in registration?"),
     REGISTRATIONINCOMPLETE("-8", "Registration incomplete"),
-    USERHASALREADYBEENREGISTERED("-2", "User has already been registered")
+    USERHASALREADYBEENREGISTERED("-2", "User has already been registered"),
+    UNKNOWNVISIONERROR("9999", "Unknown vision error code")
 }

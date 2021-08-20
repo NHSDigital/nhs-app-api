@@ -8,6 +8,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
 {
@@ -27,13 +28,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             _responseMapper = responseMapper;
             _logger = logger;
         }
-        
+
         public async Task<AppointmentsResult> GetAppointments(GpUserSession gpUserSession)
         {
             try
             {
                 _logger.LogEnter();
-            
+
                 var visionUserSession = (VisionUserSession)gpUserSession;
 
                 if (!visionUserSession.IsAppointmentsEnabled)
@@ -41,10 +42,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
                     _logger.LogError("Appointments not enabled");
                     return new AppointmentsResult.Forbidden();
                 }
-                
-                var response = await _visionClient.GetExistingAppointments(
-                    visionUserSession
-                    );
+
+                var response = await _visionClient.GetExistingAppointmentsV2(visionUserSession);
                 return InterpretAppointmentsGetResponse(response, gpUserSession);
             }
             catch (HttpRequestException exception)
@@ -59,7 +58,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
         }
 
         private AppointmentsResult InterpretAppointmentsGetResponse(
-            VisionPfsApiObjectResponse<BookedAppointmentsResponse> response,
+            VisionDirectServicesApiObjectResponse<BookedAppointmentsResponse> response,
             GpUserSession gpUserSession)
         {
             if (response.IsAccessDeniedError)
@@ -69,11 +68,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
                 return new AppointmentsResult.Forbidden();
             }
 
-            if (response.UnparsableResultMessage != null)
+            if (response.UnparseableResultMessage != null)
             {
                 return new AppointmentsResult.InternalServerError();
             }
-            
+
+            if (response.IsUnauthorisedResponse)
+            {
+                throw new ApiResponseGpSystemHttpRequestException(response);
+            }
+
             if (!response.HasSuccessResponse)
             {
                 _logger.LogError($"Call to VISION ({nameof(VisionAppointmentsRetrievalService)}) returned an unanticipated error " +
@@ -81,7 +85,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
                 _logger.LogVisionErrorResponse(response);
                 return new AppointmentsResult.BadGateway();
             }
-            
+
             try
             {
                 var visionUserSession = (VisionUserSession)gpUserSession;
@@ -99,7 +103,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
         }
 
         private static void UpdateUserSessionBookingReasonNecessity(VisionUserSession visionUserSession,
-            VisionPfsApiObjectResponse<BookedAppointmentsResponse> response)
+            VisionDirectServicesApiObjectResponse<BookedAppointmentsResponse> response)
         {
             visionUserSession.AppointmentBookingReasonNecessity = response.Body.Appointments.Settings.BookingReason.Add
                 ? Necessity.Optional

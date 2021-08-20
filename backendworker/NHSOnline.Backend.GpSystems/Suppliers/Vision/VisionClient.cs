@@ -111,5 +111,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         {
             return await _visionDirectServicesClient.GetDemographicsV2(visionUserSession, requestContent);
         }
+
+        public async Task<VisionDirectServicesApiObjectResponse<BookedAppointmentsResponse>> GetExistingAppointmentsV2(VisionUserSession visionUserSession)
+        {
+            return await _visionDirectServicesClient.GetExistingAppointmentsV2(visionUserSession);
+        }
+
+        public async Task<VisionDirectServicesApiObjectResponse<EligibleRepeatsResponse>> GetEligibleRepeatsV2(VisionUserSession visionUserSession)
+        {
+            return await _visionDirectServicesClient.GetEligibleRepeatsV2(visionUserSession);
+        }
     }
 }

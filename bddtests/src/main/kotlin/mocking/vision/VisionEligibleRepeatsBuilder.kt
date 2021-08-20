@@ -1,7 +1,6 @@
 package mocking.vision
 
 import mocking.models.Mapping
-import mocking.vision.VisionConstants.getVisionResponse
 import mocking.vision.models.EligibleRepeats
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
@@ -11,22 +10,16 @@ import javax.xml.bind.JAXBContext
 import javax.xml.bind.Marshaller
 
 class VisionEligibleRepeatsBuilder(var userSession: VisionUserSession,
-                                   var serviceDefinition: ServiceDefinition) : VisionMappingBuilder("POST") {
+                                   var serviceDefinition: ServiceDefinition) :
+        VisionDirectServicesMappingBuilder(orgId = userSession.odsCode, path = "eligibleRepeats") {
 
     init {
-        val contentTypeHeader = "content-type"
-        val contentTypeValue = "text/xml; charset=UTF-8"
-
         requestBuilder
-                .andHeader(contentTypeHeader, contentTypeValue)
-                .andBody(userSession.rosuAccountId, "contains")
-                .andBody(userSession.apiKey, "contains")
-                .andBody(userSession.odsCode, "contains")
-                .andBody(userSession.accountId, "contains")
-                .andBody(userSession.provider, "contains")
-                .andBody(userSession.patientId, "contains")
-                .andBody(serviceDefinition.name, "contains")
-                .andBody(serviceDefinition.version, "contains")
+                .andBody("<vision:rosuAccountId>${userSession.rosuAccountId}</vision:rosuAccountId>", "contains")
+                .andBody("<vision:apiKey>${userSession.apiKey}</vision:apiKey>", "contains")
+                .andBody("<vision:provider>${userSession.provider}</vision:provider>", "contains")
+                .andBody("<vision:accountId>${userSession.accountId}</vision:accountId>", "contains")
+                .andBody("<vision:patientId>${userSession.patientId}</vision:patientId>", "contains")
     }
     fun respondWithSuccess(EligibleRepeats: EligibleRepeats): Mapping {
         val jaxbContext = JAXBContext.newInstance(EligibleRepeats::class.java)
@@ -38,11 +31,10 @@ class VisionEligibleRepeatsBuilder(var userSession: VisionUserSession,
             marshaller.marshal(EligibleRepeats, stringWriter)
         }
 
-        val resp = respondWith(HttpStatus.SC_OK) {
-            andXmlBody(getVisionResponse(stringWriter.toString(), serviceDefinition)).build()
+        return respondWith(HttpStatus.SC_OK) {
+            andXmlBody(
+                    VisionConstants.getVisionDirectServicesResponse(stringWriter.toString(), serviceDefinition)).build()
         }
-
-        return resp
     }
 }
 

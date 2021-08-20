@@ -16,7 +16,7 @@ object VisionConstants {
     const val prescriptionHistoryVersion: String = "2.0.0"
 
     const val eligibleRepeats: String = "VONREP.GetEligibleRepeats"
-    const val eligibleRepeatsVersion: String = "2.0.0"
+    const val eligibleRepeatsVersion: String = "2.1.0"
 
     const val newPrescription: String = "VONREP.NewPrescription"
     const val newPrescriptionVersion: String = "2.0.0"
@@ -28,7 +28,7 @@ object VisionConstants {
     const val patientDataVersion: String = "2.1.0"
 
     const val existingAppointmentsName: String = "VOAPP.GetExistingAppointments"
-    const val existingAppointmentsVersion: String = "2.0.0"
+    const val existingAppointmentsVersion: String = "2.1.0"
 
     const val availableAppointmentsName: String = "VOAPP.GetAvailableAppointment"
     const val availableAppointmentsVersion: String = "2.0.0"
@@ -60,7 +60,7 @@ object VisionConstants {
 
         val response = setContextOnServiceContent(serviceContent, BookedAppointmentsResponse.name)
 
-        return getBaseVisionResponse(response, serviceDefinition)
+        return getBaseVisionDirectServicesResponse(response, serviceDefinition)
     }
 
     fun getVisionAvailableAppointmentsResponse(serviceContent: String,

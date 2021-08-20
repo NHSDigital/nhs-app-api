@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         private VisionUserSession _visionUserSession;
         private IFixture _fixture;
         private Guid _patientId;
-        private VisionResponseEnvelope<EligibleRepeatsResponse> _eligibleRepeatsResponse;
+        private VisionResponse<EligibleRepeatsResponse> _eligibleRepeatsResponse;
         private const string ApplicationProviderId = "ApplicationProviderId";
         private const string RequestUserName = "username";
         private const string CertificatePassphrase = "CertificatePassphrase";
@@ -53,34 +53,28 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             _visionUserSession.IsRepeatPrescriptionsEnabled = true;
 
             _visionClient = _fixture.Freeze<Mock<IVisionClient>>();
-            
+
             _visionMapper = _fixture.Freeze<Mock<IVisionPrescriptionMapper>>();
 
-            _settings = new VisionConfigurationSettings(ApplicationProviderId, ApiUrl, 
-                CertificatePath, CertificatePassphrase, RequestUserName, VisionSenderUserName, 
-                VisionSenderFullName, VisionSenderUserIdentity, VisionSenderUserRole, VisionAppointmentSlotsRequestCount, 
+            _settings = new VisionConfigurationSettings(ApplicationProviderId, ApiUrl,
+                CertificatePath, CertificatePassphrase, RequestUserName, VisionSenderUserName,
+                VisionSenderFullName, VisionSenderUserIdentity, VisionSenderUserRole, VisionAppointmentSlotsRequestCount,
                 CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit);
 
             _fixture.Inject(_settings);
             _systemUnderTest = _fixture.Create<VisionCourseService>();
 
-            _eligibleRepeatsResponse = new VisionResponseEnvelope<EligibleRepeatsResponse>
+            _eligibleRepeatsResponse = new VisionResponse<EligibleRepeatsResponse>
             {
-                Body = new VisionResponseBody<EligibleRepeatsResponse>
+                ServiceContent = new EligibleRepeatsResponse
                 {
-                    VisionResponse = new VisionResponse<EligibleRepeatsResponse>
+                    EligibleRepeats = new EligibleRepeats
                     {
-                        ServiceContent = new EligibleRepeatsResponse
+                        Repeats = new List<Repeat>(_fixture.CreateMany<Repeat>()),
+                        Settings = new CourseSettings
                         {
-                            EligibleRepeats = new EligibleRepeats
-                            {
-                                Repeats = new List<Repeat>(_fixture.CreateMany<Repeat>()),
-                                Settings = new CourseSettings
-                                {
-                                    AllowFreeText = true,
-                                },
-                            }
-                        }
+                            AllowFreeText = true,
+                        },
                     }
                 }
             };
@@ -89,11 +83,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         [TestMethod]
         public async Task Get_ReturnsSuccessResponseForHappyPath_WhenSuccessfulResponseFromVision()
         {
-            _visionClient.Setup(x => x.GetEligibleRepeats(_visionUserSession))
+            _visionClient
+                .Setup(x => x.GetEligibleRepeatsV2(_visionUserSession))
                 .Returns(Task.FromResult(
-                    new VisionPfsApiObjectResponse<EligibleRepeatsResponse>(HttpStatusCode.OK)
+                    new VisionDirectServicesApiObjectResponse<EligibleRepeatsResponse>(HttpStatusCode.OK)
                     {
-                        RawResponse = _eligibleRepeatsResponse,
+                        RawResponse = _eligibleRepeatsResponse
                     }));
 
             var mappedResponse = new CourseListResponse
@@ -105,15 +100,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                 }
             };
 
-            _visionMapper.Setup(x =>
-                    x.Map(_eligibleRepeatsResponse.Body.VisionResponse.ServiceContent.EligibleRepeats))
+            _visionMapper
+                .Setup(x => x.Map(_eligibleRepeatsResponse.ServiceContent.EligibleRepeats))
                 .Returns(mappedResponse);
 
             // Act
             var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_visionUserSession, _patientId));
 
             // Assert
-            _visionClient.Verify(x => x.GetEligibleRepeats(_visionUserSession));
+            _visionClient.Verify(x => x.GetEligibleRepeatsV2(_visionUserSession));
             result.Should().BeAssignableTo<GetCoursesResult.Success>()
                 .Subject.Response.Should().NotBeNull();
         }
@@ -122,26 +117,27 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         public async Task Get_UpdatesSessionWithCurrentValueForEligibleRepeatsAllowFreeTextValue_WhenSuccessfulResponseFromVision()
         {
             _visionUserSession.AllowFreeTextPrescriptions = false;
-            _eligibleRepeatsResponse.Body.VisionResponse.ServiceContent.EligibleRepeats.Settings.AllowFreeText = true;
+            _eligibleRepeatsResponse.ServiceContent.EligibleRepeats.Settings.AllowFreeText = true;
 
-            _visionClient.Setup(x => x.GetEligibleRepeats(_visionUserSession))
+            _visionClient
+                .Setup(x => x.GetEligibleRepeatsV2(_visionUserSession))
                 .Returns(Task.FromResult(
-                    new VisionPfsApiObjectResponse<EligibleRepeatsResponse>(HttpStatusCode.OK)
+                    new VisionDirectServicesApiObjectResponse<EligibleRepeatsResponse>(HttpStatusCode.OK)
                     {
-                        RawResponse = _eligibleRepeatsResponse,
+                        RawResponse = _eligibleRepeatsResponse
                     }));
 
             var mappedResponse = new CourseListResponse();
 
-            _visionMapper.Setup(x =>
-                    x.Map(_eligibleRepeatsResponse.Body.VisionResponse.ServiceContent.EligibleRepeats))
+            _visionMapper
+                .Setup(x => x.Map(_eligibleRepeatsResponse.ServiceContent.EligibleRepeats))
                 .Returns(mappedResponse);
 
             // Act
             var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_visionUserSession, _patientId));
 
             // Assert
-            _visionClient.Verify(x => x.GetEligibleRepeats(_visionUserSession));
+            _visionClient.Verify(x => x.GetEligibleRepeatsV2(_visionUserSession));
             _visionUserSession.AllowFreeTextPrescriptions.Should().BeTrue();
             result.Should().BeAssignableTo<GetCoursesResult.Success>()
                 .Subject.Response.Should().NotBeNull();
@@ -152,7 +148,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         {
             // Arrange
             _visionUserSession.IsRepeatPrescriptionsEnabled = false;
-            
+
             // Act
             var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_visionUserSession, _patientId));
 
@@ -182,13 +178,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                 });
             }
 
-            _eligibleRepeatsResponse.Body.VisionResponse.ServiceContent.EligibleRepeats.Repeats = repeats;
+            _eligibleRepeatsResponse.ServiceContent.EligibleRepeats.Repeats = repeats;
 
-            _visionClient.Setup(x => x.GetEligibleRepeats(_visionUserSession)).Returns(
+            _visionClient
+                .Setup(x => x.GetEligibleRepeatsV2(_visionUserSession)).Returns(
                 Task.FromResult(
-                    new VisionPfsApiObjectResponse<EligibleRepeatsResponse>(HttpStatusCode.OK)
+                    new VisionDirectServicesApiObjectResponse<EligibleRepeatsResponse>(HttpStatusCode.OK)
                     {
-                        RawResponse = _eligibleRepeatsResponse,
+                        RawResponse = _eligibleRepeatsResponse
                     }));
 
             var response = new CourseListResponse();
@@ -200,7 +197,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_visionUserSession, _patientId));
 
             // Assert
-            _visionClient.Verify(x => x.GetEligibleRepeats(_visionUserSession));
+            _visionClient.Verify(x => x.GetEligibleRepeatsV2(_visionUserSession));
             result.Should().BeAssignableTo<GetCoursesResult.Success>()
                 .Subject.Response.Should().Be(response);
             capturedItemToMap.Repeats.Should().HaveCount(expectedNumberOfPrescriptions);
@@ -210,14 +207,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         public async Task Get_ReturnsSupplierSystemUnavailable_WhenErrorReceivedFromVision()
         {
             // Arrange
-            _visionClient.Setup(x => x.GetEligibleRepeats(_visionUserSession))
-                .Returns(
-                    Task.FromResult(
-                        new VisionPfsApiObjectResponse<EligibleRepeatsResponse>
-                            (HttpStatusCode.InternalServerError)
-                            {
-                                RawResponse = _fixture.Create<VisionResponseEnvelope<EligibleRepeatsResponse>>()
-                            }));
+            _visionClient
+                .Setup(x => x.GetEligibleRepeatsV2(_visionUserSession))
+                .Returns(Task.FromResult(
+                    new VisionDirectServicesApiObjectResponse<EligibleRepeatsResponse>(HttpStatusCode.InternalServerError)
+                    {
+                        RawResponse = _fixture.Create<VisionResponse<EligibleRepeatsResponse>>(),
+                    }));
 
             // Act
             var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_visionUserSession, _patientId));
@@ -230,7 +226,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         public async Task Get_ReturnsBadGateway_WhenHttpExceptionOccursCallingVision()
         {
             // Arrange
-            _visionClient.Setup(x => x.GetEligibleRepeats(_visionUserSession))
+            _visionClient
+                .Setup(x => x.GetEligibleRepeatsV2(_visionUserSession))
                 .Throws<HttpRequestException>()
                 .Verifiable();
 
@@ -245,15 +242,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         [TestMethod]
         public async Task Get_ReturnsBadData_ServiceReturns_InternalServerError()
         {
-            _visionClient.Setup(x => x.GetEligibleRepeats(_visionUserSession))
+            _visionClient
+                .Setup(x => x.GetEligibleRepeatsV2(_visionUserSession))
                 .Returns(Task.FromResult(
-                    new VisionPfsApiObjectResponse<EligibleRepeatsResponse>(HttpStatusCode.OK)
+                    new VisionDirectServicesApiObjectResponse<EligibleRepeatsResponse>(HttpStatusCode.OK)
                     {
-                        RawResponse = _eligibleRepeatsResponse,
+                        RawResponse = _eligibleRepeatsResponse
                     }));
 
-            _visionMapper.Setup(x =>
-                    x.Map(It.IsAny<EligibleRepeats>()))
+            _visionMapper
+                .Setup(x => x.Map(It.IsAny<EligibleRepeats>()))
                 .Throws<ArgumentNullException>()
                 .Verifiable();
 
@@ -261,7 +259,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_visionUserSession, _patientId));
 
             // Assert
-            _visionClient.Verify(x => x.GetEligibleRepeats(_visionUserSession));
+            _visionClient.Verify(x => x.GetEligibleRepeatsV2(_visionUserSession));
             result.Should().BeAssignableTo<GetCoursesResult.InternalServerError>();
         }
     }

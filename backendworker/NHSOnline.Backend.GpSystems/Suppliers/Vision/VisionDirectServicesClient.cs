@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Support;
@@ -25,6 +26,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
 
         private readonly string ConfigurationPath = $"{DirectServicesBasePath}/configuration";
         private readonly string DemographicsPath = $"{DirectServicesBasePath}/demographics";
+        private readonly string ExistingAppointmentsPath = $"{DirectServicesBasePath}/existingAppointments";
+        private readonly string EligibleRepeatsPath = $"{DirectServicesBasePath}/eligibleRepeats";
 
         public VisionDirectServicesClient(
             ILogger<VisionDirectServicesClient> logger,
@@ -81,6 +84,32 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
                 visionUserSession.PatientId);
 
             return await Post<VisionDemographicsResponse>(visionRequest, path);
+        }
+
+        public async Task<VisionDirectServicesApiObjectResponse<BookedAppointmentsResponse>> GetExistingAppointmentsV2(VisionUserSession visionUserSession)
+        {
+            var path = string.Format(CultureInfo.InvariantCulture, ExistingAppointmentsPath, visionUserSession.OdsCode);
+
+            var visionRequest = new VisionDirectServicesRequest(
+                visionUserSession.RosuAccountId,
+                visionUserSession.ApiKey,
+                _providerId,
+                visionUserSession.PatientId);
+
+            return await Post<BookedAppointmentsResponse>(visionRequest, path);
+        }
+
+        public async Task<VisionDirectServicesApiObjectResponse<EligibleRepeatsResponse>> GetEligibleRepeatsV2(VisionUserSession visionUserSession)
+        {
+            var path = string.Format(CultureInfo.InvariantCulture, EligibleRepeatsPath, visionUserSession.OdsCode);
+
+            var visionRequest = new VisionDirectServicesRequest(
+                visionUserSession.RosuAccountId,
+                visionUserSession.ApiKey,
+                _providerId,
+                visionUserSession.PatientId);
+
+            return await Post<EligibleRepeatsResponse>(visionRequest, path);
         }
 
         private async Task<VisionDirectServicesApiObjectResponse<TResponse>> Post<TResponse>(VisionDirectServicesRequest model, string path)

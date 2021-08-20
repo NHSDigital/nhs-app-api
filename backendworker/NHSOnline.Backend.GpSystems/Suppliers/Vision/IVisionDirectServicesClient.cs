@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 
@@ -16,5 +17,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         Task<VisionDirectServicesApiObjectResponse<VisionDemographicsResponse>> GetDemographicsV2(
             VisionUserSession visionUserSession,
             DemographicsRequest requestContent);
+
+        Task<VisionDirectServicesApiObjectResponse<BookedAppointmentsResponse>> GetExistingAppointmentsV2(
+            VisionUserSession visionUserSession);
+
+        Task<VisionDirectServicesApiObjectResponse<EligibleRepeatsResponse>> GetEligibleRepeatsV2(
+            VisionUserSession visionUserSession);
     }
 }

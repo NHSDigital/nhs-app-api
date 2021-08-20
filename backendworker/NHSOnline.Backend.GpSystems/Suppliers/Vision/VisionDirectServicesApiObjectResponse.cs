@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         {
             var stringResponse = await GetStringResponse(responseMessage, logger);
 
-            if (!String.IsNullOrEmpty(stringResponse))
+            if (!string.IsNullOrEmpty(stringResponse))
             {
                 ParseResponse(responseParser, logger, stringResponse);
             }
@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
 
         public TBody Body => RawResponse.ServiceContent;
 
-        public string UnparseableResultMessage { get; private set; }
+        public string UnparseableResultMessage { get; set; }
 
         public bool HasErrorResponse => !StatusCode.IsSuccessStatusCode()
                                         || FaultExists
@@ -61,7 +61,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         public bool IsInvalidUserCredentialsError =>
             HasVisionApiErrorText(VisionApiErrorCodes.InvalidUserCredentials);
 
-        public bool IsUnauthorisedResponse => StatusCode == HttpStatusCode.Unauthorized;
+        public bool IsUnauthorisedResponse =>
+            IsInvalidUserCredentialsError || StatusCode == HttpStatusCode.Unauthorized;
 
         public bool IsUnknownError => HasVisionApiErrorText(VisionApiErrorCodes.UnknownError);
 
