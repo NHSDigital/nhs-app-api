@@ -144,12 +144,7 @@ paths:
           content:
             application/fhir+json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: An identifier for the newly-created communication resource within the destination system.
-                    example: a2d10720-9e72-4ae4-be72-8cbe1be292d1
+                $ref: components/schemas/communication-in-app.yaml
               example:
                 $ref: components/examples/responses/communication/201successInApp.json
         "400":
