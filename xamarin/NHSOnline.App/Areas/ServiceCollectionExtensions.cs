@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.App.Areas.Errors;
 using NHSOnline.App.Areas.Home;
 using NHSOnline.App.Areas.LoggedOut;
 using NHSOnline.App.Areas.PreHome;
@@ -14,7 +15,8 @@ namespace NHSOnline.App.Areas
                 .AddHomeArea()
                 .AddLoggedOutArea()
                 .AddWebIntegrationArea()
-                .AddPreHomeArea();
+                .AddPreHomeArea()
+                .AddErrorsArea();
         }
     }
 }

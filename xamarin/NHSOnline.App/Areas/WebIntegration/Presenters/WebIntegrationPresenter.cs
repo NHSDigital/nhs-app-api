@@ -1,9 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Areas.Errors.Models;
 using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.Controls.WebViews.Payloads;
+using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Services;
 using NHSOnline.App.Threading;
@@ -24,6 +26,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
         private readonly WebIntegrationUriDestination _uriDestination;
         private readonly ICalendar _calendar;
         private readonly IFileHandler _fileHandler;
+        private readonly IPageFactory _pageFactory;
 
         public WebIntegrationPresenter(
             IWebIntegrationView view,
@@ -33,7 +36,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             IBrowserOverlay browserOverlay,
             ILogger<WebIntegrationPresenter> logger,
             ICalendar calendar,
-            IFileHandler fileHandler)
+            IFileHandler fileHandler,
+            IPageFactory pageFactory)
         {
             _view = view;
             _model = model;
@@ -42,6 +46,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             _logger = logger;
             _calendar = calendar;
             _fileHandler = fileHandler;
+            _pageFactory = pageFactory;
 
             _uriDestination = new WebIntegrationUriDestination(nhsLoginConfiguration, model.Url, model.AdditionalDomains);
 
@@ -51,6 +56,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                 .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
                 .RegisterHandler(HelpRequested, (view, handler) => view.HelpRequested = handler)
                 .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
+                .RegisterHandler(ViewOnShowTryAgainNetworkErrorRequested, (view, handler) => view.ShowTryAgainNetworkErrorRequested = handler)
+                .RegisterHandler(ViewOnShowBackToHomeNetworkErrorRequested, (view, handler) => view.ShowBackToHomeNetworkErrorRequested = handler)
                 .RegisterHandler(model.NavigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
                 .RegisterHandler(model.NavigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
                 .RegisterHandler(model.NavigationHandler.AdviceRequested, (view, handler) => view.AdviceRequested = handler)
@@ -61,7 +68,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                 .RegisterHandler<string>(GoToNhsAppPageRequested, (view, handler) => view.GoToNhsAppPageRequested = handler)
                 .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeepLinkRequested = handler)
                 .RegisterHandler<AddEventToCalendarRequest>(AddEventToCalendarRequested, (view, handler) => view.AddEventToCalendarRequested = handler)
-                .RegisterHandler<DownloadRequest>(StartDownloadRequested, (view, handler) => view.StartDownloadRequested = handler);
+                .RegisterHandler<DownloadRequest>(StartDownloadRequested, (view, handler) => view.StartDownloadRequested = handler)
+                .RegisterHandler(ReloadInitialUrlRequested, (view, handler) => view.ReloadInitialUrlRequested = handler);
         }
 
         private async Task GoToNhsAppPageRequested(string page)
@@ -115,7 +123,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
             _hasAlreadyAppeared = true;
 
-            _view.GoToUri(_model.Url);
+            _view.GoToUri(_uriDestination.IntegrationUri);
 
             return Task.CompletedTask;
         }
@@ -127,6 +135,20 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             {
                 await OpenInBrowserOverlay(webNavigatingEventArgs, url).PreserveThreadContext();
             }
+        }
+
+        private Task ViewOnShowTryAgainNetworkErrorRequested()
+        {
+            var model = new FullNavigationTryAgainNetworkErrorModel(_model.NavigationHandler, _view, _model.FooterItem);
+            var page = _pageFactory.CreatePageFor(model);
+            return _view.AppNavigation.Push(page);
+        }
+
+        private Task ViewOnShowBackToHomeNetworkErrorRequested()
+        {
+            var model = new FullNavigationBackToHomeNetworkErrorModel(_model.NavigationHandler, _model.FooterItem);
+            var page = _pageFactory.CreatePageFor(model);
+            return _view.AppNavigation.Push(page);
         }
 
         private async Task OpenInBrowserOverlay(WebNavigatingEventArgs webNavigatingEventArgs, Uri url)
@@ -160,6 +182,12 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                     _calendar.ShowCalendarPermissionDeniedAlert();
                 }
             }
+        }
+
+        private Task ReloadInitialUrlRequested()
+        {
+            _view.GoToUri(_uriDestination.IntegrationUri);
+            return Task.CompletedTask;
         }
     }
 }

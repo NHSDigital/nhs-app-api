@@ -144,6 +144,14 @@
       <DependentUpon>BeginLoginPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Areas\Errors\Views\FullNavigationBackToHomeNetworkErrorPage.xaml.cs">
+      <DependentUpon>FullNavigationBackToHomeNetworkErrorPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Areas\Errors\Views\FullNavigationTryAgainNetworkErrorPage.xaml.cs">
+      <DependentUpon>FullNavigationTryAgainNetworkErrorPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

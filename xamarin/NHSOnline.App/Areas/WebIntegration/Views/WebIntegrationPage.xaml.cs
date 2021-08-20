@@ -6,6 +6,7 @@ using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Navigation;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.WebIntegration.Views
@@ -15,6 +16,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
     {
         private readonly ILogger _logger;
         private readonly AppNavigation<IWebIntegrationView.IEvents> _appNavigation;
+
+        public bool OnInitialNavigation { get; private set; } = true;
 
         public WebIntegrationPage(ILogger<WebIntegrationPage> logger)
         {
@@ -31,10 +34,20 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         IAppNavigation<IWebIntegrationView.IEvents> INavigationView<IWebIntegrationView.IEvents>.AppNavigation => _appNavigation;
 
         Func<Task>? IWebIntegrationView.IEvents.Appearing { get; set; }
-        private AsyncCommand AppearingCommand => new AsyncCommand(() => ((IWebIntegrationView.IEvents)this).Appearing);
+        private AsyncCommand AppearingCommand => new AsyncCommand(()
+            => ((IWebIntegrationView.IEvents)this).Appearing);
 
         public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
-        private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
+        private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand
+            => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
+
+        public Func<Task>? ShowTryAgainNetworkErrorRequested { get; set; }
+        private AsyncCommand ShowTryAgainNetworkErrorCommand
+            => new AsyncCommand(() => ShowTryAgainNetworkErrorRequested);
+
+        public Func<Task>? ShowBackToHomeNetworkErrorRequested { get; set; }
+        private AsyncCommand ShowBackToHomeNetworkErrorCommand
+            => new AsyncCommand(() => ShowBackToHomeNetworkErrorRequested);
 
         public Func<string, Task>? GoToNhsAppPageRequested { get; set; }
         public AsyncCommand<string> GoToNhsAppPageCommand
@@ -47,6 +60,10 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         public Func<DownloadRequest, Task>? StartDownloadRequested { get; set; }
         public AsyncCommand<DownloadRequest> StartDownloadCommand
             => new AsyncCommand<DownloadRequest>(() => StartDownloadRequested);
+
+        public Func<Task>? ReloadInitialUrlRequested { get; set; }
+        public AsyncCommand ReloadInitialUrlCommand
+            => new AsyncCommand(() => ReloadInitialUrlRequested);
 
         public Func<Uri, Task>? DeepLinkRequested { get; set; }
 
@@ -94,7 +111,29 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         private void WebViewOnNavigated(object sender, WebNavigatedEventArgs args)
         {
             _logger.LogInformation("Navigated ({Result}): {Uri}", args.Result, args.Url);
-            WebView.Focus();
+
+            if (args.Result is WebNavigationResult.Success)
+            {
+                OnInitialNavigation = false;
+                WebView.Focus();
+                return;
+            }
+
+            ShowNetworkError();
+        }
+
+        private void ShowNetworkError()
+        {
+            WebView.IsVisible = false;
+
+            if (OnInitialNavigation)
+            {
+                ShowTryAgainNetworkErrorCommand.Execute(null);
+            }
+            else
+            {
+                ShowBackToHomeNetworkErrorCommand.Execute(null);
+            }
         }
 
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);
@@ -113,6 +152,14 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
             {
                 await DeepLinkRequested(deeplinkUrl).PreserveThreadContext();
             }
+        }
+
+        public void TryAgain()
+        {
+            Spinner.IsVisible = true;
+            OnInitialNavigation = true;
+
+            ReloadInitialUrlCommand.Execute(null);
         }
     }
 }

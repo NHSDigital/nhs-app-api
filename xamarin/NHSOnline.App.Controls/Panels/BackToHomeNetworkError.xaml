@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<StackLayout xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
+             xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
+             x:Class="NHSOnline.App.Controls.Panels.BackToHomeNetworkError"
+             x:Name="Root" >
+    <elements:ResponsiveHeading1 Text="Connection error" x:Name="Heading" />
+    <panels:NhsErrorCallout LabelText="Error">
+        <StackLayout>
+            <elements:ResponsiveParagraph Text="There is a problem connecting you." />
+            <elements:ResponsiveParagraph Text="Check your connection, go back to the home screen, and try again." />
+            <elements:ResponsiveParagraph Text="If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111." />
+
+            <elements:Button Text="Back to home"
+                             ButtonColour="{StaticResource NhsUkDarkGrey}"
+                             TextColour="{StaticResource NhsUkWhite}"
+                             Margin="0,20,0,0"
+                             Command="{Binding BackToHomeCommand, Source={x:Reference Name=Root}}"
+                             HorizontalOptions="Start" />
+        </StackLayout>
+    </panels:NhsErrorCallout>
+</StackLayout>

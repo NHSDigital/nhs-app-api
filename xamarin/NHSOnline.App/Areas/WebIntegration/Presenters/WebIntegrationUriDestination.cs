@@ -7,8 +7,9 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 {
     internal sealed class WebIntegrationUriDestination
     {
+        internal Uri IntegrationUri { get; }
+
         private readonly INhsLoginConfiguration _nhsLoginConfiguration;
-        private readonly Uri _integrationUri;
         private readonly Collection<Uri>? _additionalDomains;
 
         internal WebIntegrationUriDestination(
@@ -16,8 +17,9 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             Uri integrationUri,
             Collection<Uri>? additionalDomains)
         {
+            IntegrationUri = integrationUri;
+
             _nhsLoginConfiguration = nhsLoginConfiguration;
-            _integrationUri = integrationUri;
             _additionalDomains = additionalDomains;
         }
 
@@ -42,7 +44,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
         }
 
         private bool IsSameHost(Uri url)
-            => string.Equals(url.Host, _integrationUri.Host, StringComparison.OrdinalIgnoreCase);
+            => string.Equals(url.Host, IntegrationUri.Host, StringComparison.OrdinalIgnoreCase);
 
         private bool IsNhsLoginHost(Uri url)
             => url.Host.EndsWith(_nhsLoginConfiguration.BaseHost, StringComparison.OrdinalIgnoreCase);
