@@ -142,7 +142,7 @@ variables:
   docker.registry: nhsapp.azurecr.io
   docker.tag: $[variables['Build.SourceVersion']]
   source.develop: ${{ eq(variables['Build.SourceBranchName'], 'develop') }}
-  source.tag: $[startsWith(variables['Build.SourceBranch'], 'refs/tags/')]
+  source.tag: ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}
   native.android.target: ${{ parameters.androidTarget }}
   native.ios.target: ${{ parameters.iosTarget }}
   native.xamarin.target: ${{ parameters.xamarinTarget }}
