@@ -66,6 +66,10 @@ info:
     * is for initial development and [integration testing](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing)
     * points to the Onboarding Sandpit NHS App environment, which in turn is using the NHS Login Sandpit environment
 
+    We have created a [Postman collection](https://github.com/NHSDigital/nhs-app-api/tree/master/postman) during internal development and testing of the API, which you may find useful when working with this environment.
+
+    Developers working with C# may also be interested in [the integration tests](https://github.com/NHSDigital/nhs-app-api/tree/master/tests) that we have developed for the API, which make use of the [fire.ly .NET SDK](https://fire.ly/products/firely-net-sdk/). 
+
     ### Integration testing
     Our [integration test environment](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing):
     * includes authorisation
