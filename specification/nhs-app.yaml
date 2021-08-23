@@ -240,6 +240,8 @@ paths:
         ## Overview
         Use this endpoint to send a native Apple or Android push notifications to mobile devices registered by specific users of the NHS App.
 
+        Push notifications will not be sent to users between the hours of 10pm and 6am UK time. If a valid request to send a push notification is processed between these hours, the push notification will be scheduled for delivery at 6am.
+
         Recipients are specified by NHS number. A single request to this endpoint can send an identical push notification to between 1 and 100 distinct NHS numbers.
         Push notifications will only be sent to users who have had their identity verified to 'high' (P9) level.
 
@@ -377,7 +379,9 @@ paths:
       operationId: create-in-app-with-notification
       description: |
         ## Overview
-        Use this endpoint to send an in-app message followed immediately by an associated native Apple or Android push notification to one or more NHS App users.
+        Use this endpoint to send an in-app message followed by an associated native Apple or Android push notification to one or more NHS App users.
+
+        Push notifications will not be sent to users between the hours of 10pm and 6am UK time. If a valid request to send an in-app message with an associated push notification is processed between these hours, the in-app message will be delivered immediately, and the push notification will be scheduled for delivery at 6am.
 
         Recipients are specified by NHS number. A single request to this endpoint can send an identical message and push notification to between 1 and 100 distinct NHS numbers.
         In-app messages and push notifications will only be sent to users who have had their identity verified to 'high' (P9) level.
