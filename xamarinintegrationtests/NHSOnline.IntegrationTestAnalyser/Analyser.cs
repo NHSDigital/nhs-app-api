@@ -140,7 +140,7 @@ namespace NHSOnline.IntegrationTestAnalyser
             Console.WriteLine($"==========================");
             Console.WriteLine($"   Category Counts");
 
-            foreach (var category in categorisation)
+            foreach (var category in categorisation.OrderBy(x => x.Value.Count))
             {
                 Console.WriteLine($"\"{category.Key}\": {category.Value.Count}");
             }

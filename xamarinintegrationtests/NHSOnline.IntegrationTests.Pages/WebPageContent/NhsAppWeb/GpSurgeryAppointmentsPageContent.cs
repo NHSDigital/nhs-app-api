@@ -1,3 +1,4 @@
+using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -18,7 +19,13 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb
 
         private WebText ErrorTitleText => WebText.WithTagAndText(_interactor, "h1", "Sorry, there is a problem with loading GP appointments");
 
-        internal void AssertOnPage() => TitleText.AssertVisible();
+        internal void AssertOnPage()
+        {
+            // Extending timeout to allow SSO to complete
+            using var extendedTimeout = ExtendedTimeout.FromSeconds(15);
+
+            TitleText.AssertVisible();
+        }
 
         internal void AssertErrorOnPage() => ErrorTitleText.AssertVisible();
 

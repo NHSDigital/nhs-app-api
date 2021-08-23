@@ -106,6 +106,7 @@ Global
 		{F7629B78-E203-4DBD-A7F1-55FBA2E8D8B5}.Release|x64.Build.0 = Release|Any CPU
 		{F7629B78-E203-4DBD-A7F1-55FBA2E8D8B5}.Release|x86.ActiveCfg = Release|Any CPU
 		{F7629B78-E203-4DBD-A7F1-55FBA2E8D8B5}.Release|x86.Build.0 = Release|Any CPU
+		{42CC3672-39FA-468F-9B44-5323ABB23BC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
