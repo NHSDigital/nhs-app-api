@@ -62,28 +62,15 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
             NdopMenuItem
         };
 
-        public void KeyboardNavigateTo(YourHealthPages location, AndroidKeyboardNavigation navigation)
-        {
-            switch (location)
-            {
-                case YourHealthPages.SecondaryCareViewTestResults:
-                    KeyboardNavigateToAndActivateMenuItem(SecondaryCareViewTestResultsMenuItem, navigation);
-                    break;
-                case YourHealthPages.SecondaryCareViewCarePlans:
-                    KeyboardNavigateToAndActivateMenuItem(SecondaryCareViewCarePlansMenuItem, navigation);
-                    break;
-                case YourHealthPages.SecondaryCareViewTrackYourHealth:
-                    KeyboardNavigateToAndActivateMenuItem(SecondaryCareViewTrackYourHealthMenuItem, navigation);
-                    break;
-                case YourHealthPages.SecondaryCareViewSharedHealth:
-                    KeyboardNavigateToAndActivateMenuItem(SecondaryCareViewSharedHealthMenuItem, navigation);
-                    break;
-                case YourHealthPages.SecondaryCareViewRecordSharing:
-                    KeyboardNavigateToAndActivateMenuItem(SecondaryCareViewRecordSharingMenuItem, navigation);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(location), location, null);
-            }
-        }
+        public void KeyboardNavigateToTestResults(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(SecondaryCareViewTestResultsMenuItem, navigation);
+
+        public void KeyboardNavigateToCarePlans(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(SecondaryCareViewCarePlansMenuItem, navigation);
+
+        public void KeyboardNavigateToTrackYourHealth(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(SecondaryCareViewTrackYourHealthMenuItem, navigation);
+
+        public void KeyboardNavigateToSharedHealth(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(SecondaryCareViewSharedHealthMenuItem, navigation);
+
+        public void KeyboardNavigateToRecordSharing(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(SecondaryCareViewRecordSharingMenuItem, navigation);
+
     }
 }

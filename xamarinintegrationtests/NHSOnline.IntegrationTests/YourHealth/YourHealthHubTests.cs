@@ -78,7 +78,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
 
             AndroidYourHealthPkbPage
                 .AssertOnPage(driver)
-                .KeyboardNavigateTo(YourHealthPages.GpHealthRecord);
+                .KeyboardNavigateToGpHealthRecord();
 
             AndroidGpMedicalRecordPage
                 .AssertOnPage(driver)
@@ -87,7 +87,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
             AndroidYourHealthPkbPage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateTo(YourHealthPages.OrganDonation);
+                .KeyboardNavigateToOrganDonation();
 
             AndroidOrganDonationPage
                 .AssertOnPage(driver)
@@ -96,7 +96,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
             AndroidYourHealthPkbPage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateTo(YourHealthPages.Ndop);
+                .KeyboardNavigateToNdop();
 
             AndroidNdopPage
                 .AssertOnPage(driver)
@@ -123,7 +123,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
 
             AndroidYourHealthPkbPage
                 .AssertOnPage(driver)
-                .KeyboardNavigateTo(YourHealthPages.CovidPass);
+                .KeyboardNavigateToCovidPass();
 
             AndroidStubbedNetCompanyInternalPage
                 .AssertOnPage(driver)
@@ -131,7 +131,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
 
             AndroidYourHealthPkbPage
                 .AssertOnPage(driver)
-                .KeyboardNavigateTo(YourHealthPages.VaccineRecord);
+                .KeyboardNavigateToVaccineRecord();
 
             AndroidStubbedVaccineRecordPage
                 .AssertOnPage(driver)
@@ -213,7 +213,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
 
             AndroidYourHealthPkbPage
                 .AssertOnPage(driver)
-                .KeyboardNavigateTo(YourHealthPages.PkbTestResults);
+                .KeyboardNavigateToTestResults();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, TestResultsPageTitle)
@@ -222,7 +222,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
             AndroidYourHealthPkbPage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateTo(YourHealthPages.PkbCarePlans);
+                .KeyboardNavigateToCarePlans();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, CarePlansPageTitle)
@@ -231,7 +231,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
             AndroidYourHealthPkbPage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateTo(YourHealthPages.PkbTrackYourHealth);
+                .KeyboardNavigateToTrackYourHealth();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, TrackYourHealthPageTitle)
@@ -240,7 +240,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
             AndroidYourHealthPkbPage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateTo(YourHealthPages.PkbSharedHealth);
+                .KeyboardNavigateToSharedHealth();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, SharedHealthPageTitle)
@@ -249,7 +249,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
             AndroidYourHealthPkbPage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateTo(YourHealthPages.PkbRecordSharing);
+                .KeyboardNavigateToRecordSharing();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, RecordSharingPageTitle)
@@ -276,7 +276,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
 
             AndroidYourHealthCiePage
                 .AssertOnPage(driver)
-                .KeyboardNavigateTo(YourHealthPages.CieTestResults);
+                .KeyboardNavigateToTestResults();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, TestResultsPageTitle)
@@ -285,7 +285,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
             AndroidYourHealthCiePage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateTo(YourHealthPages.CieCarePlans);
+                .KeyboardNavigateToCarePlans();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, CarePlansPageTitle)
@@ -294,7 +294,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
             AndroidYourHealthCiePage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateTo(YourHealthPages.CieTrackYourHealth);
+                .KeyboardNavigateToTrackYourHealth();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, TrackYourHealthPageTitle)
@@ -303,7 +303,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
             AndroidYourHealthCiePage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateTo(YourHealthPages.CieSharedHealth);
+                .KeyboardNavigateToSharedHealth();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, SharedHealthPageTitle)
@@ -312,7 +312,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
             AndroidYourHealthCiePage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateTo(YourHealthPages.CieRecordSharing);
+                .KeyboardNavigateToRecordSharing();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, RecordSharingPageTitle)
@@ -338,7 +338,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
 
             AndroidYourHealthSecondaryCareViewPage
                 .AssertOnPage(driver)
-                .KeyboardNavigateTo(YourHealthPages.SecondaryCareViewTestResults);
+                .KeyboardNavigateToTestResults();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, TestResultsPageTitle)
@@ -347,7 +347,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
             AndroidYourHealthSecondaryCareViewPage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateTo(YourHealthPages.SecondaryCareViewCarePlans);
+                .KeyboardNavigateToCarePlans();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, CarePlansPageTitle)
@@ -356,7 +356,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
             AndroidYourHealthSecondaryCareViewPage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateTo(YourHealthPages.SecondaryCareViewTrackYourHealth);
+                .KeyboardNavigateToTrackYourHealth();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, TrackYourHealthPageTitle)
@@ -365,7 +365,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
             AndroidYourHealthSecondaryCareViewPage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateTo(YourHealthPages.SecondaryCareViewSharedHealth);
+                .KeyboardNavigateToSharedHealth();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, SharedHealthPageTitle)
@@ -374,7 +374,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
             AndroidYourHealthSecondaryCareViewPage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateTo(YourHealthPages.SecondaryCareViewRecordSharing);
+                .KeyboardNavigateToRecordSharing();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, RecordSharingPageTitle)
@@ -401,7 +401,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
 
             AndroidYourHealthMyCareViewPage
                 .AssertOnPage(driver)
-                .KeyboardNavigateTo(YourHealthPages.MyCareViewTestResults);
+                .KeyboardNavigateToTestResults();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, TestResultsPageTitle)
@@ -410,7 +410,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
             AndroidYourHealthMyCareViewPage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateTo(YourHealthPages.MyCareViewCarePlans);
+                .KeyboardNavigateToCarePlans();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, CarePlansPageTitle)
@@ -419,7 +419,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
             AndroidYourHealthMyCareViewPage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateTo(YourHealthPages.MyCareViewTrackYourHealth);
+                .KeyboardNavigateToTrackYourHealth();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, TrackYourHealthPageTitle)
@@ -428,7 +428,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
             AndroidYourHealthMyCareViewPage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateTo(YourHealthPages.MyCareViewSharedHealth);
+                .KeyboardNavigateToSharedHealth();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, SharedHealthPageTitle)
@@ -437,7 +437,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
             AndroidYourHealthMyCareViewPage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateTo(YourHealthPages.MyCareViewRecordSharing);
+                .KeyboardNavigateToRecordSharing();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, RecordSharingPageTitle)

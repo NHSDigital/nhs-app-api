@@ -62,28 +62,15 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
             CieRecordSharingText.AssertVisible();
         }
 
-        public void KeyboardNavigateTo(YourHealthPages location, AndroidKeyboardNavigation navigation)
-        {
-            switch (location)
-            {
-                case YourHealthPages.CieTestResults:
-                    KeyboardNavigateToAndActivateMenuItem(CieTestResultsMenuItem, navigation);
-                    break;
-                case YourHealthPages.CieCarePlans:
-                    KeyboardNavigateToAndActivateMenuItem(CieCarePlansMenuItem, navigation);
-                    break;
-                case YourHealthPages.CieTrackYourHealth:
-                    KeyboardNavigateToAndActivateMenuItem(CieTrackYourHealthMenuItem, navigation);
-                    break;
-                case YourHealthPages.CieSharedHealth:
-                    KeyboardNavigateToAndActivateMenuItem(CieSharedHealthMenuItem, navigation);
-                    break;
-                case YourHealthPages.CieRecordSharing:
-                    KeyboardNavigateToAndActivateMenuItem(CieRecordSharingMenuItem, navigation);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(location), location, null);
-            }
-        }
+        public void KeyboardNavigateToTestResults(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(CieTestResultsMenuItem, navigation);
+
+        public void KeyboardNavigateToCarePlans(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(CieCarePlansMenuItem, navigation);
+
+        public void KeyboardNavigateToTrackYourHealth(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(CieTrackYourHealthMenuItem, navigation);
+
+        public void KeyboardNavigateToSharedHealth(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(CieSharedHealthMenuItem, navigation);
+
+        public void KeyboardNavigateToRecordSharing(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(CieRecordSharingMenuItem, navigation);
+
     }
 }

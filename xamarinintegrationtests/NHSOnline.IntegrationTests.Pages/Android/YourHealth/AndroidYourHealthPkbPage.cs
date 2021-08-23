@@ -50,7 +50,24 @@ namespace NHSOnline.IntegrationTests.Pages.Android.YourHealth
         private AndroidKeyboardNavigation KeyboardPageContentNavigation => AndroidKeyboardNavigation
             .WithExpectedFocusableElements(_driver, GetAllKeyboardNavigationFocusableElements());
 
-        public void KeyboardNavigateTo(YourHealthPages location) =>
-            PageContent.KeyboardNavigateTo(location, KeyboardPageContentNavigation);
+        public void KeyboardNavigateToCovidPass() => PageContent.KeyboardNavigateToCovidPass(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToVaccineRecord() => PageContent.KeyboardNavigateToVaccineRecord(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToGpHealthRecord() => PageContent.KeyboardNavigateToGpHealthRecord(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToTestResults() => PageContent.KeyboardNavigateToTestResults(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToCarePlans() => PageContent.KeyboardNavigateToCarePlans(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToTrackYourHealth() => PageContent.KeyboardNavigateToTrackYourHealth(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToSharedHealth() => PageContent.KeyboardNavigateToSharedHealth(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToRecordSharing() => PageContent.KeyboardNavigateToRecordSharing(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToOrganDonation() => PageContent.KeyboardNavigateToOrganDonation(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToNdop() => PageContent.KeyboardNavigateToNdop(KeyboardPageContentNavigation);
     }
 }

@@ -79,43 +79,24 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
             PkbSharedHealthMenuItem.Click();
         }
 
-        public void KeyboardNavigateTo(YourHealthPages location, AndroidKeyboardNavigation navigation)
-        {
-            switch (location)
-            {
-                case YourHealthPages.CovidPass:
-                    KeyboardNavigateToAndActivateMenuItem(CovidPassMenuItem, navigation);
-                    break;
-                case YourHealthPages.VaccineRecord:
-                    KeyboardNavigateToAndActivateMenuItem(VaccineRecordMenuItem, navigation);
-                    break;
-                case YourHealthPages.GpHealthRecord:
-                    KeyboardNavigateToAndActivateMenuItem(GpHeathRecordMenuItem, navigation);
-                    break;
-                case YourHealthPages.PkbTestResults:
-                    KeyboardNavigateToAndActivateMenuItem(PkbTestResultsMenuItem, navigation);
-                    break;
-                case YourHealthPages.PkbCarePlans:
-                    KeyboardNavigateToAndActivateMenuItem(PkbCarePlansMenuItem, navigation);
-                    break;
-                case YourHealthPages.PkbTrackYourHealth:
-                    KeyboardNavigateToAndActivateMenuItem(PkbTrackYourHealthMenuItem, navigation);
-                    break;
-                case YourHealthPages.PkbSharedHealth:
-                    KeyboardNavigateToAndActivateMenuItem(PkbSharedHealthMenuItem, navigation);
-                    break;
-                case YourHealthPages.PkbRecordSharing:
-                    KeyboardNavigateToAndActivateMenuItem(PkbRecordSharingMenuItem, navigation);
-                    break;
-                case YourHealthPages.OrganDonation:
-                    KeyboardNavigateToAndActivateMenuItem(OrganDonationMenuItem, navigation);
-                    break;
-                case YourHealthPages.Ndop:
-                    KeyboardNavigateToAndActivateMenuItem(NdopMenuItem, navigation);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(location), location, null);
-            }
-        }
+        public void KeyboardNavigateToCovidPass(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(CovidPassMenuItem, navigation);
+
+        public void KeyboardNavigateToVaccineRecord(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(VaccineRecordMenuItem, navigation);
+
+        public void KeyboardNavigateToGpHealthRecord(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(GpHeathRecordMenuItem, navigation);
+
+        public void KeyboardNavigateToTestResults(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(PkbTestResultsMenuItem, navigation);
+
+        public void KeyboardNavigateToCarePlans(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(PkbCarePlansMenuItem, navigation);
+
+        public void KeyboardNavigateToTrackYourHealth(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(PkbTrackYourHealthMenuItem, navigation);
+
+        public void KeyboardNavigateToSharedHealth(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(PkbSharedHealthMenuItem, navigation);
+
+        public void KeyboardNavigateToRecordSharing(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(PkbRecordSharingMenuItem, navigation);
+
+        public void KeyboardNavigateToOrganDonation(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(OrganDonationMenuItem, navigation);
+
+        public void KeyboardNavigateToNdop(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(NdopMenuItem, navigation);
     }
 }
