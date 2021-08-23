@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "04dbb4a2-f8c3-4fc8-8b5b-5b2b59a43a7a",
+		"_postman_id": "aec4f810-b62d-4fcf-ab0b-a5bdaaa82a97",
 		"name": "NHS App",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -445,6 +445,65 @@
 							"key": "page",
 							"value": "1",
 							"description": "Page of daily event report to retrieve."
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patient Report",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Correlation-ID",
+						"type": "text",
+						"value": "60fac112-2d2a-432d-87f7-7424235fb31b"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/nhs-app/communication/patient-report/?ods-organisation-code=A12355&page=1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"nhs-app",
+						"communication",
+						"patient-report",
+						""
+					],
+					"query": [
+						{
+							"key": "ods-organisation-code",
+							"value": "A12355",
+							"description": "ODS organisation code for which to retrieve patient report."
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"description": "Page of patient report to retrieve."
 						}
 					]
 				}
