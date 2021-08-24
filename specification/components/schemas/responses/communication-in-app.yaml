@@ -1,0 +1,68 @@
+type: object
+description: Communication response body for a successful in-app message request.
+properties:
+  resourceType:
+    type: string
+    description: FHIR Resource Type - this will be `CommunicationRequest`.
+  identifier:
+    type: array
+    description: |
+      An array of identifiers used to identify this request.
+
+      This array will always include a globally unique identifier assigned by the API, with the system `urn:ietf:rfc:3986`.
+
+      It will include optional identifiers that were provided in the request if the API recognised the identifier system name.
+    items:
+      type: object
+      properties:
+        system:
+          type: string
+          format: uri
+          description: The namespace of the identifier value.
+          example: urn:ietf:rfc:3986
+        value:
+          type: string
+          description: The value of the identifier.
+          example: 8f7ec136-66eb-4a9e-97ca-5c7a53d2710c
+  status:
+    type: string
+    description: Request Status of the message - this will be `active`.
+  payload:
+    type: array
+    description: The body text of the message to be displayed in the NHS App.
+    items:
+      type: object
+      properties:
+        contentString:
+          type: string
+          description: The body text of the message to be displayed in the NHS App.
+          example: You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment [here](https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments)
+  sender:
+    type: object
+    description: The sender of the in-app message.
+    properties:
+      display:
+        type: string
+        description: The name to be displayed in the NHS App as the sender of the message.
+        example: Onboarded Third Party
+  recipient:
+    type: array
+    description:
+      An array of NHS numbers corresponding to the patient(s) to whom this in-app message was sent.
+    items:
+      type: object
+      properties:
+        identifier:
+          type: object
+          description: Identifier of a recipient. This will be an NHS number.
+          properties:
+            system:
+              type: string
+              format: uri
+              default: https://fhir.nhs.uk/Id/nhs-number
+              description: The system that the identifier belongs to. This will be `https://fhir.nhs.uk/Id/nhs-number`.
+            value:
+              type: string
+              pattern: "^\\d{10}$"
+              description: The patient's NHS number.
+              example: "9903002157"

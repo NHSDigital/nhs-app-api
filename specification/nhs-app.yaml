@@ -129,7 +129,7 @@ paths:
                 value:
                   $ref: components/examples/requests/communication/in-app.json
             schema:
-              $ref: components/schemas/communication-in-app.yaml
+              $ref: components/schemas/requests/communication-in-app.yaml
       tags:
         - communication
       responses:
@@ -148,12 +148,7 @@ paths:
           content:
             application/fhir+json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: An identifier for the newly-created communication resource within the destination system.
-                    example: a2d10720-9e72-4ae4-be72-8cbe1be292d1
+                $ref: components/schemas/responses/communication-in-app.yaml
               example:
                 $ref: components/examples/responses/communication/201successInApp.json
         "400":
@@ -270,7 +265,7 @@ paths:
                 value:
                   $ref: components/examples/requests/communication/notification.json
             schema:
-              $ref: components/schemas/communication-push-notifications.yaml
+              $ref: components/schemas/requests/communication-push-notifications.yaml
       tags:
         - communication
       responses:
@@ -289,12 +284,8 @@ paths:
           content:
             application/fhir+json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: An identifier for the newly-created communication resource within the destination system.
-                    example: a2d10720-9e72-4ae4-be72-8cbe1be292d1
+                schema:
+                $ref: components/schemas/responses/communication-push-notifications.yaml
               example:
                 $ref: components/examples/responses/communication/201successNotification.json
         "400":
@@ -411,7 +402,7 @@ paths:
                 value:
                   $ref: components/examples/requests/communication/in-app-with-notification.json
             schema:
-              $ref: components/schemas/communication-in-app-push-notifications.yaml
+              $ref: components/schemas/requests/communication-in-app-push-notifications.yaml
       tags:
         - communication
       responses:
@@ -430,12 +421,7 @@ paths:
           content:
             application/fhir+json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: An identifier for the newly-created communication resource within the destination system.
-                    example: a2d10720-9e72-4ae4-be72-8cbe1be292d1
+                $ref: components/schemas/responses/communication-in-app-push-notifications.yaml
               example:
                 $ref: components/examples/responses/communication/201successInAppWithNotification.json
         "400":

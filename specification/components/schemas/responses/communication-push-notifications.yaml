@@ -1,0 +1,69 @@
+type: object
+description: Communication response body from a successful push notification request.
+properties:
+  resourceType:
+    type: string
+    description: FHIR Resource Type - this will be `CommunicationRequest`.
+  identifier:
+    type: array
+    description: |
+      An array of identifiers used to identify this request.
+
+      This array will always include a globally unique identifier assigned by the API, with the system `urn:ietf:rfc:3986`.
+
+      It will include optional identifiers that were provided in the request if the API recognised the identifier system name.
+    items:
+      type: object
+      properties:
+        system:
+          type: string
+          format: uri
+          description: The namespace of the identifier value.
+          example: urn:ietf:rfc:3986
+        value:
+          type: string
+          description: The value of the identifier.
+          example: 54615138-df34-4a79-840d-dd07e9451519
+  status:
+    type: string
+    description: Request Status of the message - this will be `active`
+  payload:
+    type: array
+    description: The body text to be displayed in the push notification.
+    items:
+      type: object
+      properties:
+        contentReference:
+          type: object
+          description: Structure of body text in the push notification.
+          properties:
+            reference:
+              type: string
+              format: url
+              description: The URL to a page within the NHS App to be opened when the notification is tapped.
+              example: https://www.nhsapp.service.nhs.uk/patient/messages/app-messaging
+            display:
+              type: string
+              description: The communication content to appear as a native Apple or Android push notification.
+              example: You have a new message. The message may contain something important.
+  recipient:
+    type: array
+    description:
+      An array of NHS numbers corresponding to the patient(s) to whom this push notification was sent.
+    items:
+      type: object
+      properties:
+        identifier:
+          type: object
+          description: Identifier of a recipient. This will be an NHS number.
+          properties:
+            system:
+              type: string
+              format: uri
+              default: https://fhir.nhs.uk/Id/nhs-number
+              description: The system that the identifier belongs to. This will be `https://fhir.nhs.uk/Id/nhs-number`.
+            value:
+              type: string
+              pattern: "^\\d{10}$"
+              description: The patient's NHS number.
+              example: "9903002157"
