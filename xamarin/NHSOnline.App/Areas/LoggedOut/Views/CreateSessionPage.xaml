@@ -9,13 +9,7 @@
              BackgroundColor="{StaticResource NhsUkBlue}"
              x:Name="Page">
 
-    <ContentView HorizontalOptions="Center"
-                 VerticalOptions="Center"
-                 WidthRequest="75"
-                 HeightRequest="75">
-
         <elements:Spinner HorizontalOptions="Center"
-                          VerticalOptions="Center"/>
-    </ContentView>
-
+                          VerticalOptions="Center"
+                          Margin="0,10,0,0" />
 </ContentPage>

@@ -1,68 +1,52 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<pages:NhsAppCloseAndLogoHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
-                                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                                    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-                                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                                    xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
-                                    xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
-                                    xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
-                                    xmlns:deprecated="clr-namespace:NHSOnline.App.Controls.Elements.Deprecated;assembly=NHSOnline.App.Controls"
-                                    mc:Ignorable="d"
-                                    x:Class="NHSOnline.App.Areas.LoggedOut.Views.GettingStartedPage"
-                                    x:Name="Page">
+<pages:NhsAppCloseSlimHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
+                                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                                 xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+                                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                                 xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
+                                 xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
+                                 xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
+                                 mc:Ignorable="d"
+                                 x:Class="NHSOnline.App.Areas.LoggedOut.Views.GettingStartedPage"
+                                 x:Name="Page">
 
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
-        
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="10" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="10" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="25" />
-            </Grid.RowDefinitions>
+        <StackLayout>
+            <elements:ResponsiveHeading1 Text="Getting started" x:Name="Heading" />
             
-            <deprecated:Heading1 Grid.Column="1" 
-                                 Grid.Row="0"
-                                 Text="Getting started" />
-            
-            <StackLayout Grid.Column="1" Grid.Row="1">
-            
-                <deprecated:Paragraph Text="Use the NHS App to:" />
+            <panels:NhsResponsiveContentPanel>
+                <StackLayout>
+                    <elements:ResponsiveParagraph Text="Use the NHS App to:" />
+                    
+                    <elements:ResponsiveUnorderedList>
+                        <StackLayout>
+                            <elements:ResponsiveListItem Text="get your NHS COVID pass" />
                 
-                <elements:LabelListItem LabelText="get your NHS COVID pass" />
-
-                <elements:LabelListItem LabelText="order repeat prescriptions" />
+                            <elements:ResponsiveListItem Text="order repeat prescriptions" />
                 
-                <elements:LabelListItem LabelText="book and manage appointments" />
+                            <elements:ResponsiveListItem Text="book and manage appointments" />
                 
-                <elements:LabelListItem LabelText="get health information and advice" />
+                            <elements:ResponsiveListItem Text="get health information and advice" />
                 
-                <elements:LabelListItem LabelText="manage your organ donation decision" />
+                            <elements:ResponsiveListItem Text="manage your organ donation decision" />
                 
-                <elements:LabelListItem LabelText="view your NHS number" />
+                            <elements:ResponsiveListItem Text="view your NHS number" />
+                        </StackLayout>
+                    </elements:ResponsiveUnorderedList>
+                    
+                    <elements:ResponsiveParagraph Text="You must be aged 13 and over to use the app, and registered at a GP surgery in England." />
                 
-                <deprecated:Paragraph Text="You must be aged 13 and over to use the app, and registered at a GP surgery in England."
-                                      Margin="0,10,0,0" />
+                    <elements:ResponsiveParagraph Text="To get started you'll need to create your NHS login." />
                 
-                <deprecated:Paragraph Text="To get started you'll need to create your NHS login." 
-                                      Margin="0,10,0,0" />
-            </StackLayout>
-            
-            <elements:Button Grid.Column="1" 
-                             Grid.Row="2"
-                             Text="Continue"
-                             ButtonColour = "{StaticResource NhsUkGreen}"
-                             ColourGradient="{StaticResource ButtonGreenLowerGradient}"
-                             TextColour = "{StaticResource NhsUkWhite}"
-                             Margin="0,20,0,0"
-                             Command="{Binding LoginCommand, Source={x:Reference Name=Page}}"
-                             HorizontalOptions="Start" />
-        </Grid>
+                    <elements:Button Text="Continue"
+                                     ButtonColour = "{StaticResource NhsUkGreen}"
+                                     ColourGradient="{StaticResource ButtonGreenLowerGradient}"
+                                     TextColour = "{StaticResource NhsUkWhite}"
+                                     Margin="0,20,0,0"
+                                     Command="{Binding LoginCommand, Source={x:Reference Name=Page}}"
+                                     HorizontalOptions="Start" />
+                </StackLayout>
+            </panels:NhsResponsiveContentPanel>
+        </StackLayout>
     </ScrollView>
-</pages:NhsAppCloseAndLogoHeaderPage>
+</pages:NhsAppCloseSlimHeaderPage>

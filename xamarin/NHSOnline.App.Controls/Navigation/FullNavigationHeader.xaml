@@ -33,30 +33,14 @@
             
             <Style TargetType="StackLayout" Class="VerticalCenter">
                 <Setter Property="VerticalOptions" Value="Center" />
-            </Style>
-            
-            <Style TargetType="StackLayout" Class="IconAndLabel">
-                <Setter Property="HeightRequest" Value="50" />
-                <Setter Property="WidthRequest" Value="44" />
-                <Setter Property="Orientation" Value="Vertical" />
-                <Setter Property="Spacing" Value="0" />
-                <Setter Property="Padding" Value="0, 5" />
-                <Setter Property="VerticalOptions" Value="End" />
-            </Style>
-            
-            <Style TargetType="controls:SvgImage" ApplyToDerivedTypes="True">
-                <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
-                <Setter Property="Margin" Value="0,0,0,5" />
-                <Setter Property="HeightRequest" Value="23" />
-                <Setter Property="WidthRequest" Value="23" />
-            </Style>
+            </Style> 
             
             <Style TargetType="icons:NhsLogoWhite">
                 <Setter Property="HorizontalOptions" Value="Center" />
                 <Setter Property="VerticalOptions" Value="Center" />
                 <Setter Property="Padding" Value="0" />
-                <Setter Property="HeightRequest" Value="24" />
-                <Setter Property="WidthRequest" Value="59" />
+                <Setter Property="HeightRequest" Value="25" />
+                <Setter Property="WidthRequest" Value="65" />
             </Style>
             
         </ResourceDictionary>

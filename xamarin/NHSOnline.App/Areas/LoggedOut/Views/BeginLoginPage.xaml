@@ -6,7 +6,6 @@
              xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
              mc:Ignorable="d"
              x:Class="NHSOnline.App.Areas.LoggedOut.Views.BeginLoginPage"
-             BackgroundColor="{StaticResource NhsUkBlue}"
              x:Name="Page">
 
     <ContentView HorizontalOptions="Center"

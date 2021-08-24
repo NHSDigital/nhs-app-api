@@ -6,6 +6,7 @@
                     xmlns:webViews="clr-namespace:NHSOnline.App.Controls.WebViews;assembly=NHSOnline.App.Controls"
                     xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
                     xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
+                    xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
                     mc:Ignorable="d"
                     x:Class="NHSOnline.App.Areas.LoggedOut.Views.NhsLoginPage"
                     x:Name="Page">
@@ -14,9 +15,12 @@
                           AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                           HorizontalOptions="Center"
                           VerticalOptions="Center"
-                          WidthRequest="75"
-                          HeightRequest="75"
-                          x:Name="Spinner" />       
+                          Margin="0,0,0,50"
+                          x:Name="Spinner" >
+            <elements:Spinner.Effects>
+                <effects:SafeAreaPaddingBottom />
+            </elements:Spinner.Effects>
+        </elements:Spinner>       
         
         <webViews:NhsLoginWebView AbsoluteLayout.LayoutFlags="All"
                                   AbsoluteLayout.LayoutBounds="0, 0, 1, 1"

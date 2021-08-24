@@ -6,7 +6,6 @@ namespace NHSOnline.App.Controls.Elements
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Spinner
     {
-
         public const string AnimationName = "RotateSpinnerAnimation";
 
         public Spinner()

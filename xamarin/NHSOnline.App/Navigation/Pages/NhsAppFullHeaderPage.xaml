@@ -10,7 +10,7 @@
         <ContentView>
             
             <StackLayout BackgroundColor="{StaticResource NhsUkBlue}" Spacing="0">
-
+  
                 <navigation:FullNavigationHeader 
                     MoreCommand="{Binding MoreClicked, Source={x:Reference Name=Root}}"
                     HelpCommand="{Binding HelpClicked, Source={x:Reference Name=Root}}"
@@ -18,7 +18,7 @@
 
                 <ContentView 
                     Content="{Binding PageContent, Source={x:Reference Name=Root}}" 
-                    VerticalOptions = "FillAndExpand" />
+                    VerticalOptions="FillAndExpand" />
                 
                 <navigation:FullNavigationFooter 
                     x:Name="FullNavigationFooter"

@@ -4,8 +4,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:icons="clr-namespace:NHSOnline.App.Controls.Icons;assembly=NHSOnline.App.Controls"
              xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
+             xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Controls.Navigation.SlimCloseAndLogoNavigationHeader"
              x:Name="Root">
+    <ContentView.Effects>
+        <effects:SafeAreaPaddingTop/>
+    </ContentView.Effects>
 
     <View.Resources>
         <ResourceDictionary>
@@ -17,6 +21,7 @@
                 <Setter Property="Orientation" Value="Vertical" />
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />
                 <Setter Property="BackgroundColor" Value="{StaticResource NhsUkBlue}" />
+                <Setter Property="HeightRequest" Value="100" />
             </Style>
             
             <Style TargetType="StackLayout" Class="CloseWrapper">
@@ -27,32 +32,36 @@
             
             <Style TargetType="StackLayout" Class="LogoWrapper">
                 <Setter Property="Orientation" Value="Horizontal" />
-                <Setter Property="Margin" Value="15,0,0,10" />
-            </Style>
-            
-            <Style TargetType="elements:MediumLabel">
-                <Setter Property="VerticalOptions" Value="CenterAndExpand" />
-                <Setter Property="TextColor" Value="{StaticResource NhsUkWhite}" />
+                <Setter Property="HeightRequest" Value="50" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
             </Style>
             
             <Style TargetType="icons:NhsLogoWhite">
-                <Setter Property="HeightRequest" Value="40" />
-                <Setter Property="WidthRequest" Value="95" />
+                <Setter Property="HeightRequest" Value="30" />
+                <Setter Property="WidthRequest" Value="77" />
                 <Setter Property="VerticalOptions" Value="Center" />
-                <Setter Property="Margin" Value="0,10,10,10" />
+                <Setter Property="Margin" Value="15,0,10, 0" />
+            </Style>
+            
+            <Style TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="TextColor" Value="{StaticResource NhsUkWhite}" />
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontFamily" Value="Frutiger" />
             </Style>
         </ResourceDictionary>
     </View.Resources>
 
-    <StackLayout AutomationId="NHS App Slim Close Navigation Header">
+    <StackLayout AutomationId="NHS App Slim Close Navigation Header" Spacing="0">
         <StackLayout StyleClass="CloseWrapper">
             <elements:CloseButton Command="{Binding CloseCommand, Source={x:Reference Name=Root}}" />
         </StackLayout>
         
         <StackLayout StyleClass="LogoWrapper">
             <icons:NhsLogoWhite />
-            
-            <elements:MediumLabel Text="NHS App" />
+            <Label Text="NHS App"
+                   AutomationProperties.IsInAccessibleTree="False" />
         </StackLayout>
     </StackLayout>
 </ContentView>

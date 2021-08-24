@@ -16,9 +16,7 @@
                           AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                           x:Name="Spinner"
                           HorizontalOptions="Center"
-                          VerticalOptions="Center"
-                          WidthRequest="75"
-                          HeightRequest="75" />
+                          VerticalOptions="Center" />
         
         <webViews:NhsLoginOnDemandGpSessionWebView AbsoluteLayout.LayoutFlags="All"
                                                    AbsoluteLayout.LayoutBounds="0, 0, 1, 1"

@@ -4,5 +4,5 @@
              xmlns:icons="clr-namespace:NHSOnline.App.Controls.Icons;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Controls.Elements.Spinner"
              x:Name="Root">
-        <icons:NhsSpinner x:Name="NhsSpinner"/>
+        <icons:NhsSpinner x:Name="NhsSpinner" WidthRequest="60" HeightRequest="60"/>
 </ContentView>

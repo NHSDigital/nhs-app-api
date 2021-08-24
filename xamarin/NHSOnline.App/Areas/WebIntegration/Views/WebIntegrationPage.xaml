@@ -16,8 +16,6 @@
                           AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                           HorizontalOptions="Center"
                           VerticalOptions="Center"
-                          WidthRequest="75"
-                          HeightRequest="75"
                           x:Name="Spinner" />
         
         <webViews:WebIntegrationWebView AbsoluteLayout.LayoutFlags="All"

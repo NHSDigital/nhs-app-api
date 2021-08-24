@@ -224,6 +224,10 @@
       <DependentUpon>HelpButton.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Panels\NhsResponsiveContentPanel.xaml.cs">
+      <DependentUpon>ContentPanel.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>
