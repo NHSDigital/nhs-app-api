@@ -1,3 +1,4 @@
+using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -16,7 +17,13 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
 
         public WebLink BackBreadcrumb => WebLink.WithText(_interactor, "Back");
 
-        internal void AssertOnPage() => TitleText.AssertVisible();
+        internal void AssertOnPage()
+        {
+            // Extending timeout to allow SSO to complete
+            using var extendedTimeout = ExtendedTimeout.FromSeconds(15);
+
+            TitleText.AssertVisible();
+        }
 
         public void ClickBackBreadcrumb() => BackBreadcrumb.Click();
     }

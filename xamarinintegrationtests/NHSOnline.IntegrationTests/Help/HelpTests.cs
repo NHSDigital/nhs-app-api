@@ -13,6 +13,7 @@ using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.Messages;
 using NHSOnline.IntegrationTests.Pages.IOS.Prescriptions;
+using NHSOnline.IntegrationTests.Pages.IOS.YourHealth;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
