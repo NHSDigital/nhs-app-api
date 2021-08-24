@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using EventKit;
 using EventKitUI;
 using Foundation;
@@ -5,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.iOS.DependencyServices.Calendar;
 using NHSOnline.App.Logging;
+using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.iOS.Controllers
 {
@@ -12,11 +14,11 @@ namespace NHSOnline.App.iOS.Controllers
     {
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(CalendarEventController));
 
-        public static void ShowEventController(AddEventToCalendarRequest request)
+        public static async Task ShowEventController(AddEventToCalendarRequest request)
         {
             Logger.LogInformation("Showing event controller");
 
-            InvokeUIKitOnMainUIThread(() =>
+            await InvokeUIKitOnMainUIThread(async () =>
             {
                 var eventController = new EKEventEditViewController
                 {
@@ -25,15 +27,15 @@ namespace NHSOnline.App.iOS.Controllers
 
                 CreateEventControllerDelegate(eventController, request);
 
-                DisplayController(eventController);
-            });
+                await DisplayController(eventController).ResumeOnThreadPool();
+            }).ResumeOnThreadPool();
         }
 
-        public static void ShowBlankEventController()
+        public static async Task ShowBlankEventController()
         {
             Logger.LogInformation("Showing blank event controller");
 
-            InvokeUIKitOnMainUIThread(() =>
+            await InvokeUIKitOnMainUIThread(async () =>
             {
                 var eventController = new EKEventEditViewController
                 {
@@ -42,8 +44,8 @@ namespace NHSOnline.App.iOS.Controllers
 
                 CreateBlankEventControllerDelegate(eventController);
 
-                DisplayController(eventController);
-            });
+                await DisplayController(eventController).ResumeOnThreadPool();
+            }).ResumeOnThreadPool();
         }
 
         private static void CreateEventControllerDelegate(

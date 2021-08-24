@@ -30,11 +30,11 @@ namespace NHSOnline.App.iOS.DependencyServices
         public async Task ClearSessionCookies()
         {
             var cookieStore = WKWebsiteDataStore.DefaultDataStore.HttpCookieStore;
-            foreach (var cookie in await cookieStore.GetAllCookiesAsync().ConfigureAwait(true))
+            foreach (var cookie in await cookieStore.GetAllCookiesAsync().PreserveThreadContext())
             {
                 if (cookie.IsSessionOnly)
                 {
-                    await cookieStore.DeleteCookieAsync(cookie).ConfigureAwait(true);
+                    await cookieStore.DeleteCookieAsync(cookie).PreserveThreadContext();
                 }
             }
         }

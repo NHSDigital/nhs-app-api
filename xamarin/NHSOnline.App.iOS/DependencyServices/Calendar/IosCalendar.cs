@@ -3,8 +3,8 @@ using EventKit;
 using Foundation;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyServices;
+using NHSOnline.App.Dialogs;
 using NHSOnline.App.iOS.Controllers;
-using NHSOnline.App.iOS.DependencyServices.AlertDialog;
 using NHSOnline.App.iOS.DependencyServices.Calendar;
 using NHSOnline.App.Threading;
 using UIKit;
@@ -15,15 +15,6 @@ namespace NHSOnline.App.iOS.DependencyServices.Calendar
 {
     public sealed class IosCalendar : ICalendar
     {
-        private const string AlertAddEventHeader = "Cannot save event";
-        private const string AlertAddEventBody = "You can try adding the event to your calendar yourself.";
-        private const string AlertGoToSettingsHeader = "Give NHS App calendar access";
-        private const string AlertGoToSettingsBody =
-            "NHS App does not have permission to add events to your calendar.\nGo to your device settings and allow access, then try again.";
-        private const string OkButtonText = "OK";
-        private const string AddEventButtonText = "Add event";
-        private const string GoToSettingsButtonText = "Go to settings";
-
         public async Task<bool> RequestPermission()
         {
             var completionSource = new TaskCompletionSource<bool>();
@@ -34,47 +25,39 @@ namespace NHSOnline.App.iOS.DependencyServices.Calendar
             return await completionSource.Task.ResumeOnThreadPool();
         }
 
-        public void AddToCalendar(AddEventToCalendarRequest request)
+        public async Task AddToCalendar(AddEventToCalendarRequest request)
         {
-            CalendarEventController.ShowEventController(request);
+            await CalendarEventController.ShowEventController(request).ResumeOnThreadPool();
         }
 
-        public void ShowCalendarPermissionDeniedAlert()
+        public async Task ShowCalendarPermissionDeniedAlert()
         {
-            Controllers.AlertDialogBox.ShowAlertPopup(
-                ClearingActions.Dismissible,
-                AlertGoToSettingsHeader,
-                AlertGoToSettingsBody,
-                OkButtonText,
-                GoToSettingsButtonText,
-                cancelAction: () =>
-                {
-                    using var settingsUrl = new NSUrl(UIApplication.OpenSettingsUrlString);
-                    UIApplication.SharedApplication.OpenUrlAsync(settingsUrl, new UIApplicationOpenUrlOptions());
-                });
+            await AlertDialogBoxController.ShowAlertPopup(
+                new AddToCalendarPermissionDenied(OpenSettings)).ResumeOnThreadPool();
         }
 
-        public void ShowCalendarAlertWhenValidationFails()
+        public async Task ShowCalendarAlertWhenValidationFails()
         {
-            Controllers.AlertDialogBox.ShowAlertPopup(
-                ClearingActions.Dismissible,
-                AlertAddEventHeader,
-                AlertAddEventBody,
-                OkButtonText,
-                AddEventButtonText,
-                cancelAction: () =>
+            await AlertDialogBoxController.ShowAlertPopup(
+                new AddToCalendarValidationFailed(AddToBlankCalendar)).ResumeOnThreadPool();
+        }
+
+        private async Task OpenSettings()
+        {
+            using var settingsUrl = new NSUrl(UIApplication.OpenSettingsUrlString);
+            await UIApplication.SharedApplication.OpenUrlAsync(settingsUrl, new UIApplicationOpenUrlOptions()).ResumeOnThreadPool();
+        }
+
+        private async Task AddToBlankCalendar()
+        {
+            var result = await ApplicationEventStore.Current.EventStore.RequestAccessAsync(EKEntityType.Event).ResumeOnThreadPool();
+            if (result.Item1)
+            {
+                await Device.InvokeOnMainThreadAsync(async () =>
                 {
-                    ApplicationEventStore.Current.EventStore.RequestAccess(EKEntityType.Event, (granted, _) =>
-                    {
-                        Device.BeginInvokeOnMainThread(() =>
-                        {
-                            if (granted)
-                            {
-                                CalendarEventController.ShowBlankEventController();
-                            }
-                        });
-                    });
-                });
+                    await CalendarEventController.ShowBlankEventController().ResumeOnThreadPool();
+                }).ResumeOnThreadPool();
+            }
         }
     }
 }

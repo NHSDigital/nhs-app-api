@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Api.Configuration;
-using NHSOnline.App.Areas;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Threading;
 
@@ -49,7 +48,7 @@ namespace NHSOnline.App.Services.ForcedUpdate
         {
             try
             {
-                var configurationResult = await _configurationService.GetConfiguration().ConfigureAwait(true);
+                var configurationResult = await _configurationService.GetConfiguration().PreserveThreadContext();
 
                 var updateRequired = configurationResult.Accept(new AssessUpdateRequiredVisitor(_nativeAppVersionCheckService));
 

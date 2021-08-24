@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Logging;
+using NHSOnline.App.Threading;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -39,7 +40,7 @@ namespace NHSOnline.App.Controls
             {
                 try
                 {
-                    await action().ConfigureAwait(true);
+                    await action().PreserveThreadContext();
                 }
                 catch (Exception e)
                 {
@@ -56,10 +57,10 @@ namespace NHSOnline.App.Controls
 
             dispatcher.BeginInvokeOnMainThread(async () =>
             {
-                await navigation.PopToRootAsync(false).ConfigureAwait(true);
+                await navigation.PopToRootAsync(false).PreserveThreadContext();
                 if (navigation.NavigationStack[0] is IRootPage rootPage)
                 {
-                    await rootPage.ResetAndShowError().ConfigureAwait(true);
+                    await rootPage.ResetAndShowError().PreserveThreadContext();
                 }
             });
         }

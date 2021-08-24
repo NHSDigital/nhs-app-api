@@ -10,6 +10,7 @@ using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.Events.Models;
 using NHSOnline.App.Services;
 using NHSOnline.App.Services.Media;
+using NHSOnline.App.Threading;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.WebIntegration.Presenters

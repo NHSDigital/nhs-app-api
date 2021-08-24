@@ -5,9 +5,9 @@ namespace NHSOnline.App.DependencyServices
 {
     public interface ICalendar
     {
-        void AddToCalendar(AddEventToCalendarRequest request);
-        void ShowCalendarPermissionDeniedAlert();
-        void ShowCalendarAlertWhenValidationFails();
+        Task AddToCalendar(AddEventToCalendarRequest request);
+        Task ShowCalendarPermissionDeniedAlert();
+        Task ShowCalendarAlertWhenValidationFails();
         Task<bool> RequestPermission();
     }
 }

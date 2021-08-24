@@ -8,6 +8,7 @@ using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.iOS.DependencyServices;
 using NHSOnline.App.Logging;
+using NHSOnline.App.Threading;
 using PassKit;
 using UIKit;
 using Xamarin.Essentials;
@@ -33,7 +34,7 @@ namespace NHSOnline.App.iOS.DependencyServices
                 HandlePassKitPassFile(downloadRequest);
             }
 
-            await HandleDefaultFileTypes(downloadRequest).ConfigureAwait(true);
+            await HandleDefaultFileTypes(downloadRequest).PreserveThreadContext();
         }
 
         private static async Task HandleDefaultFileTypes(DownloadRequest downloadRequest)
@@ -42,7 +43,7 @@ namespace NHSOnline.App.iOS.DependencyServices
             {
                 await File.WriteAllBytesAsync(
                     downloadRequest.FileCachePath,
-                    Convert.FromBase64String(downloadRequest.Base64Data)).ConfigureAwait(true);
+                    Convert.FromBase64String(downloadRequest.Base64Data)).PreserveThreadContext();
             }
             catch (Exception e)
             {
@@ -56,7 +57,7 @@ namespace NHSOnline.App.iOS.DependencyServices
                 Regex.Replace(downloadRequest.FileName, @"\s+", ""),
                 shareFile);
 
-            await Share.RequestAsync(requestShare).ConfigureAwait(true);
+            await Share.RequestAsync(requestShare).PreserveThreadContext();
         }
 
         private static void HandlePassKitPassFile(DownloadRequest downloadRequest)

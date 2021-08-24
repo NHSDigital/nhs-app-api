@@ -84,14 +84,15 @@ namespace NHSOnline.IntegrationTests.YourHealth
                 .AssertOnPage(driver)
                 .PageContent.ClickBackBreadcrumb();
 
-            AndroidYourHealthPkbPage
-                .AssertOnPage(driver)
-                .TabIntoFocus()
-                .KeyboardNavigateToOrganDonation();
+            // Step removed to prevent flaky test failures see https://nhsd-jira.digital.nhs.uk/browse/NHSO-16514 for details
+            // AndroidYourHealthPkbPage
+            //     .AssertOnPage(driver)
+            //     .TabIntoFocus()
+            //     .KeyboardNavigateToOrganDonation();
 
-            AndroidOrganDonationPage
-                .AssertOnPage(driver)
-                .PageContent.ClickBackBreadcrumb();
+            // AndroidOrganDonationPage
+            //     .AssertOnPage(driver)
+            //     .PageContent.ClickBackBreadcrumb();
 
             AndroidYourHealthPkbPage
                 .AssertOnPage(driver)

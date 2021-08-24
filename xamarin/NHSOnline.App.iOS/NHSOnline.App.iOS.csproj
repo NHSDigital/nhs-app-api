@@ -62,11 +62,10 @@
   <Import Project="Properties/BuildConfiguration.debugmode.$(DebugMode).props" />
   <Import Project="Properties/BuildConfiguration.platform.$(Platform).props" />
   <ItemGroup>
-    <Compile Include="Controllers\AlertDialogBox.cs" />
+    <Compile Include="Controllers\AlertDialogBoxController.cs" />
     <Compile Include="Controllers\IosViewController.cs" />
     <Compile Include="Controllers\CalendarEventController.cs" />
-    <Compile Include="DependencyServices\AlertDialog\IosAlertDialog.cs" />
-    <Compile Include="DependencyServices\AlertDialog\ClearingActions.cs" />
+    <Compile Include="DependencyServices\AlertDialog\IosDialogPresenter.cs" />
     <Compile Include="DependencyServices\Biometrics\BiometricAuthKey.cs" />
     <Compile Include="DependencyServices\Biometrics\BiometricAuthKeyProvider.cs" />
     <Compile Include="DependencyServices\Biometrics\BiometricAuthSigner.cs" />

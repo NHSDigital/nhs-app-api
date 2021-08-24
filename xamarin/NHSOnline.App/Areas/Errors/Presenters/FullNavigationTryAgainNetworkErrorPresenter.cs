@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.Errors.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.Services;
+using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.Areas.Errors.Presenters
 {

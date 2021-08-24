@@ -5,6 +5,7 @@ using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Events.Models;
 using NHSOnline.App.Navigation;
+using NHSOnline.App.Threading;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

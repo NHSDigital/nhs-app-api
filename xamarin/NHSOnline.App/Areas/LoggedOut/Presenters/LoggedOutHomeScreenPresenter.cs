@@ -26,7 +26,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly IBrowserOverlay _browserOverlay;
         private readonly IBackgroundExecutionService _backgroundExecutionService;
         private readonly IForcedUpdateCheckService _forcedUpdateCheckService;
-        private readonly IAlertDialog _alertDialogService;
+        private readonly IDialogPresenter _dialogPresenterService;
         private readonly BiometricLoginErrorPageDispatcher _biometricLoginErrorPageDispatcher;
         private readonly ICookieService _cookieService;
         private readonly LoggedOutHomeScreenModel _model;
@@ -49,7 +49,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             IBrowserOverlay browserOverlay,
             IBackgroundExecutionService backgroundExecutionService,
             IForcedUpdateCheckService forcedUpdateCheckService,
-            IAlertDialog alertDialogService,
+            IDialogPresenter dialogPresenterService,
             LoggedOutHomeScreenModel model,
             ICookieService cookieService)
         {
@@ -62,7 +62,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _browserOverlay = browserOverlay;
             _backgroundExecutionService = backgroundExecutionService;
             _forcedUpdateCheckService = forcedUpdateCheckService;
-            _alertDialogService = alertDialogService;
+            _dialogPresenterService = dialogPresenterService;
             _model = model;
             _cookieService = cookieService;
 
@@ -83,7 +83,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async Task ViewOnAppearing()
         {
-            _alertDialogService.DismissAll();
+            await _dialogPresenterService.DismissAll().PreserveThreadContext();
             _cancelBiometricLogin.Dispose();
             _cancelBiometricLogin = new CancellationTokenSource();
             await _cookieService.ClearSessionCookies().PreserveThreadContext();
@@ -108,7 +108,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private Task ViewOnDisappearing()
         {
             _cancelBiometricLogin.Cancel();
-
             return Task.CompletedTask;
         }
 

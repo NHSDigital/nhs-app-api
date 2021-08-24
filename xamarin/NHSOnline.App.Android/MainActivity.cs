@@ -7,9 +7,9 @@ using Android.Util;
 using Android.Views;
 using Android.Webkit;
 using NHSOnline.App.Droid.DependencyServices;
+using NHSOnline.App.Droid.DependencyServices.AlertDialog;
 using NHSOnline.App.Droid.DependencyServices.Biometrics;
 using NHSOnline.App.Droid.DependencyServices.InstallReferrer;
-using NHSOnline.App.Droid.Dialogs;
 using NHSOnline.App.Droid.Extensions;
 using NHSOnline.App.Droid.Handlers;
 using Xamarin.Essentials;
@@ -47,7 +47,7 @@ namespace NHSOnline.App.Droid
             AndroidLifecycle.MainActivity = this;
             AndroidBiometrics.MainActivity = this;
             AndroidSettingsService.MainActivity = this;
-            AlertDialogBox.MainActivity = this;
+            AndroidDialogPresenter.MainActivity = this;
             AndroidFileHandler.MainActivity = this;
             AndroidInstallReferrerService.MainActivity = this;
 

@@ -13,6 +13,7 @@ using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.DependencyServices.Notifications;
+using NHSOnline.App.Dialogs;
 using NHSOnline.App.Navigation;
 using NHSOnline.App.Services;
 using NHSOnline.App.Services.FIDO;
@@ -39,7 +40,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly ICalendar _calendar;
         private readonly ISettingsService _settingsService;
         private readonly IFileHandler _fileHandler;
-        private readonly IAlertDialog _alertDialog;
+        private readonly IDialogPresenter _dialogPresenter;
 
         public NhsAppWebPresenter(
             NhsAppWebModel model,
@@ -54,7 +55,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             ISettingsService settingsService,
             ICalendar calendar,
             IFileHandler fileHandler,
-            IAlertDialog alertDialog)
+            IDialogPresenter dialogPresenter)
         {
             _model = model;
             _view = view;
@@ -69,7 +70,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _settingsService = settingsService;
             _calendar = calendar;
             _fileHandler = fileHandler;
-            _alertDialog = alertDialog;
+            _dialogPresenter = dialogPresenter;
             _navigationHandler = new NhsAppNavigationHandler(view);
 
             _view.AppNavigation
@@ -106,35 +107,25 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeeplinkRequested = handler);
         }
 
-        private Task OnSessionExpiringRequested()
+        private async Task OnSessionExpiringRequested()
         {
             _logger.LogInformation("Display session expiring warning");
 
-            _alertDialog.DisplayAlertDialog(
-                "For security reasons, we'll log you out of the NHS App in 1 minute.",
-                "Stay logged in",
-                "Log out",
-                () => _view.SendSessionExtend().PreserveThreadContext(),
-                () => _view.Logout().PreserveThreadContext()
-            );
-
-            return Task.CompletedTask;
+            await _dialogPresenter.DisplayAlertDialog(
+                new SessionExpiry(
+                    _view.SendSessionExtend,
+                    _view.Logout)).PreserveThreadContext();
         }
 
-        private Task DisplayPageLeaveWarningRequested()
+        private async Task DisplayPageLeaveWarningRequested()
         {
             _logger.LogInformation("Display page leave warning");
 
-            _alertDialog.DisplayAlertDialog(
-                "Leave this page?",
-                "If you have entered any information, it will not be saved.",
-                "Leave page",
-                "Cancel",
-                () => _view.SendLeavePage().PreserveThreadContext(),
-                () => _view.SendStayOnPage().PreserveThreadContext()
-            );
-
-            return Task.CompletedTask;
+            await _dialogPresenter.DisplayAlertDialog(
+                new LeavePage(
+                    _view.SendLeavePage,
+                    _view.SendStayOnPage,
+                    _view.SendStayOnPage)).PreserveThreadContext();
         }
 
         private async Task OpenSettingsRequested()
@@ -227,7 +218,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 request.StartTimeEpochInSeconds > request.EndTimeEpochInSeconds)
             {
                 _logger.LogError("Passed calendar information is invalid, showing popup");
-                _calendar.ShowCalendarAlertWhenValidationFails();
+                await _calendar.ShowCalendarAlertWhenValidationFails().PreserveThreadContext();
             }
             else
             {
@@ -237,11 +228,11 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
                 if (calendarPermission)
                 {
-                    _calendar.AddToCalendar(request);
+                    await _calendar.AddToCalendar(request).PreserveThreadContext();
                 }
                 else
                 {
-                    _calendar.ShowCalendarPermissionDeniedAlert();
+                    await _calendar.ShowCalendarPermissionDeniedAlert().PreserveThreadContext();
                 }
             }
         }
@@ -370,19 +361,12 @@ namespace NHSOnline.App.Areas.Home.Presenters
             await _view.SendBiometricCompletion(completion).PreserveThreadContext();
         }
 
-        private Task BackRequested()
+        private async Task BackRequested()
         {
             _logger.LogInformation("Display back requested");
 
-            _alertDialog.DisplayAlertDialog(
-                "Are you sure you want to log out?",
-                "Log out",
-                "Cancel",
-                () => _view.Logout().PreserveThreadContext(),
-                () => { }
-            );
-
-            return Task.CompletedTask;
+            await _dialogPresenter.DisplayAlertDialog(
+                new ConfirmLogout(_view.Logout)).PreserveThreadContext();
         }
 
         private async Task LogoutRequested()

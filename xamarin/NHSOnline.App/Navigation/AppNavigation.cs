@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.App.Areas;
 using NHSOnline.App.Logging;
+using NHSOnline.App.Threading;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Navigation

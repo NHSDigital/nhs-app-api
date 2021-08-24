@@ -165,7 +165,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                 request.StartTimeEpochInSeconds > request.EndTimeEpochInSeconds)
             {
                 _logger.LogError("Passed calendar information is invalid, showing popup");
-                _calendar.ShowCalendarAlertWhenValidationFails();
+                await _calendar.ShowCalendarAlertWhenValidationFails().PreserveThreadContext();
             }
             else
             {
@@ -175,11 +175,11 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
                 if (calendarPermission)
                 {
-                    _calendar.AddToCalendar(request);
+                    await _calendar.AddToCalendar(request).PreserveThreadContext();
                 }
                 else
                 {
-                    _calendar.ShowCalendarPermissionDeniedAlert();
+                    await _calendar.ShowCalendarPermissionDeniedAlert().PreserveThreadContext();
                 }
             }
         }

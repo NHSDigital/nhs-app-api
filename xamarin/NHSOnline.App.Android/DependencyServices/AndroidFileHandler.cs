@@ -7,6 +7,7 @@ using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Droid.DependencyServices;
 using NHSOnline.App.Logging;
+using NHSOnline.App.Threading;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Environment = Android.OS.Environment;
@@ -30,7 +31,7 @@ namespace NHSOnline.App.Droid.DependencyServices
                 var convertedData = Convert.FromBase64String(downloadRequest.Base64Data);
 
                 var outputStream = resolver.OpenOutputStream(fileUri!);
-                await outputStream!.WriteAsync(convertedData).ConfigureAwait(true);
+                await outputStream!.WriteAsync(convertedData).PreserveThreadContext();
                 outputStream.Close();
             }
             catch (Exception e)
@@ -57,7 +58,7 @@ namespace NHSOnline.App.Droid.DependencyServices
             try
             {
                 var convertedData = Convert.FromBase64String(downloadRequest.Base64Data);
-                await File.WriteAllBytesAsync(downloadRequest.FileCachePath, convertedData).ConfigureAwait(true);
+                await File.WriteAllBytesAsync(downloadRequest.FileCachePath, convertedData).PreserveThreadContext();
             }
             catch (Exception e)
             {
@@ -71,7 +72,7 @@ namespace NHSOnline.App.Droid.DependencyServices
                 File = target
             };
 
-            await Launcher.OpenAsync(request).ConfigureAwait(true);
+            await Launcher.OpenAsync(request).PreserveThreadContext();
         }
     }
 }

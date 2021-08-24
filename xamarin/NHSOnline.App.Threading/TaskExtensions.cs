@@ -29,5 +29,31 @@ namespace NHSOnline.App.Threading
         {
             return task.ConfigureAwait(false);
         }
+
+        /// <summary>
+        /// Should only be used to resume on the UI thread context
+        /// </summary>
+        public static ConfiguredTaskAwaitable PreserveThreadContext(this Task task)
+        {
+            return task.ConfigureAwait(true);
+        }
+
+        /// <summary>
+        /// Should only be used to resume on the UI thread context
+        /// </summary>
+        public static ConfiguredTaskAwaitable<T> PreserveThreadContext<T>(this Task<T> task)
+        {
+            return task.ConfigureAwait(true);
+        }
+
+        public static ConfiguredValueTaskAwaitable<T> PreserveThreadContext<T>(this ValueTask<T> task)
+        {
+            return task.ConfigureAwait(true);
+        }
+
+        public static ConfiguredValueTaskAwaitable PreserveThreadContext(this ValueTask task)
+        {
+            return task.ConfigureAwait(true);
+        }
     }
 }

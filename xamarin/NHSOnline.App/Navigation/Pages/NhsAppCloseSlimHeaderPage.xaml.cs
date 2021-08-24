@@ -1,5 +1,5 @@
 using System.Windows.Input;
-using NHSOnline.App.Areas;
+using NHSOnline.App.Threading;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

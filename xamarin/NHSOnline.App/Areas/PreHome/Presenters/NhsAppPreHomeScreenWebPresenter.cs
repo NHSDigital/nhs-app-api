@@ -11,7 +11,9 @@ using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.DependencyServices.Notifications;
+using NHSOnline.App.Dialogs;
 using NHSOnline.App.Services;
+using NHSOnline.App.Threading;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.PreHome.Presenters
@@ -29,7 +31,7 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
         private readonly IBrowserOverlay _browserOverlay;
         private readonly INotifications _notifications;
         private readonly ICookieService _cookieService;
-        private readonly IAlertDialog _alertDialog;
+        private readonly IDialogPresenter _dialogPresenter;
 
         private Uri? ResolveDeeplinkUrl => _deeplinkUrl ?? _model.DeeplinkUrl;
 
@@ -42,7 +44,7 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             IPageFactory pageFactory,
             INotifications notifications,
             ICookieService cookieService,
-            IAlertDialog alertDialog)
+            IDialogPresenter dialogPresenter)
         {
             _view = view;
             _model = model;
@@ -52,7 +54,7 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             _pageFactory = pageFactory;
             _notifications = notifications;
             _cookieService = cookieService;
-            _alertDialog = alertDialog;
+            _dialogPresenter = dialogPresenter;
 
             _view.AppNavigation
                 .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
@@ -68,19 +70,14 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
                 .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeeplinkRequested = handler);
         }
 
-        private Task OnSessionExpiringRequested()
+        private async Task OnSessionExpiringRequested()
         {
             _logger.LogInformation("Display session expiring warning");
 
-            _alertDialog.DisplayAlertDialog(
-                "For security reasons, we'll log you out of the NHS App in 1 minute.",
-                "Stay logged in",
-                "Log out",
-                () => _view.SendSessionExtend().PreserveThreadContext(),
-                () => _view.Logout().PreserveThreadContext()
-            );
-
-            return Task.CompletedTask;
+            await _dialogPresenter.DisplayAlertDialog(
+                new SessionExpiry(
+                    _view.SendSessionExtend,
+                    _view.Logout)).PreserveThreadContext();
         }
 
         private async Task SessionExpiredRequested()

@@ -3,8 +3,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyServices;
+using NHSOnline.App.Dialogs;
+using NHSOnline.App.Droid.DependencyServices.AlertDialog;
 using NHSOnline.App.Droid.DependencyServices.Calendar;
 using NHSOnline.App.Logging;
+using NHSOnline.App.Threading;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(AndroidCalendar))]
@@ -14,7 +17,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Calendar
     {
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(AndroidCalendar));
 
-        public void AddToCalendar(AddEventToCalendarRequest request)
+        public async Task AddToCalendar(AddEventToCalendarRequest request)
         {
             Logger.LogInformation("Starting attempt to add to android calendar");
 
@@ -25,20 +28,20 @@ namespace NHSOnline.App.Droid.DependencyServices.Calendar
             catch (Exception e)
             {
                 Logger.LogError(e, "Failed to add event to calendar from request");
-                CreateAndShowCalendarFailAlert();
+                await CreateAndShowCalendarFailAlert().ResumeOnThreadPool();
             }
         }
 
-        public void ShowCalendarPermissionDeniedAlert()
+        public async Task ShowCalendarPermissionDeniedAlert()
         {
             Logger.LogInformation("Showing alert for failure to create calendar event");
-            CreateAndShowCalendarFailAlert();
+            await CreateAndShowCalendarFailAlert().ResumeOnThreadPool();
         }
 
-        public void ShowCalendarAlertWhenValidationFails()
+        public async Task ShowCalendarAlertWhenValidationFails()
         {
             Logger.LogInformation("Showing alert for invalid calendar event request data");
-            CreateAndShowCalendarFailAlert();
+            await CreateAndShowCalendarFailAlert().ResumeOnThreadPool();
         }
 
         public Task<bool> RequestPermission()
@@ -47,16 +50,18 @@ namespace NHSOnline.App.Droid.DependencyServices.Calendar
             return Task.FromResult(true);
         }
 
-        private static void CreateAndShowCalendarFailAlert()
+        private static async Task CreateAndShowCalendarFailAlert()
         {
             Logger.LogInformation("Failed to add to calendar, showing alert dialog");
 
-            Dialogs.AlertDialogBox.CreateAndShowAlertDialog(
-                "Cannot save event",
-                "You can try adding the event to your calendar yourself.",
-                "Add event",
-                "OK",
-                CalendarIntent.StartCalendarFromBlankCalendarIntent);
+            await AndroidDialogPresenter.CreateAndShowAlertDialog(
+                new AddToCalendarValidationFailed(StartCalendarFromBlankCalendarIntent)).ResumeOnThreadPool();
+        }
+
+        private static Task StartCalendarFromBlankCalendarIntent()
+        {
+            CalendarIntent.StartCalendarFromBlankCalendarIntent();
+            return Task.CompletedTask;
         }
     }
 }

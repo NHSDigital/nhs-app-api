@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Navigation;
+using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.Areas.LoggedOut.Views
 {

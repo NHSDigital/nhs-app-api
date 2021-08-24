@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.Errors.Models;
+using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.Areas.Errors.Presenters
 {

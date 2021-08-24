@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Navigation;
+using NHSOnline.App.Threading;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.LoggedOut.Views

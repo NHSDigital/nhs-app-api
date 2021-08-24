@@ -1,6 +1,8 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Logging;
+using NHSOnline.App.Threading;
 using UIKit;
 using Xamarin.Forms;
 
@@ -10,7 +12,7 @@ namespace NHSOnline.App.iOS.Controllers
     {
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(IosViewController));
 
-        internal static void DisplayController(UIViewController eventController)
+        internal static async Task DisplayController(UIViewController eventController)
         {
             var rootViewController = UIApplication.SharedApplication.KeyWindow.RootViewController;
 
@@ -20,13 +22,13 @@ namespace NHSOnline.App.iOS.Controllers
             }
             else
             {
-                rootViewController.PresentViewController(eventController, true, null);
+                await rootViewController.PresentViewControllerAsync(eventController, true).ResumeOnThreadPool();
             }
         }
 
-        internal static void InvokeUIKitOnMainUIThread(Action action)
+        internal static async Task InvokeUIKitOnMainUIThread(Func<Task> action)
         {
-            Device.BeginInvokeOnMainThread(action);
+            await Device.InvokeOnMainThreadAsync(action).ResumeOnThreadPool();
         }
     }
 }

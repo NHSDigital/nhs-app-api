@@ -5,6 +5,7 @@ using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.Logging;
 using NHSOnline.App.Services;
 using NHSOnline.App.Services.FIDO;
+using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.Areas.LoggedOut.Presenters
 {
