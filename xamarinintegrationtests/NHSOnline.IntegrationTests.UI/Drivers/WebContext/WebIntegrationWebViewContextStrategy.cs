@@ -19,6 +19,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.WebContext
             _nativeDriverContext = nativeDriverContext;
 
             appEvents.AppClosed += ResetWebContext;
+            appEvents.LoggedOutHomeScreenLoaded += ResetWebContext;
             preHomeWebViewContextStrategy.SwitchedTo += ResetWebContext;
             nhsAppWebViewContextStrategy.SwitchedTo += ResetWebContext;
         }

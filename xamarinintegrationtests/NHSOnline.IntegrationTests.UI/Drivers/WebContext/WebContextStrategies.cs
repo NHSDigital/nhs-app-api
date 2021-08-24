@@ -56,15 +56,26 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.WebContext
         {
             _appEvents.OnAppClosed();
         }
+
+        public void LoggedOutHomeScreenLoaded()
+        {
+            _appEvents.OnLoggedOutHomeScreenLoaded();
+        }
     }
 
     internal class AppEvents
     {
         internal event EventHandler? AppClosed;
+        internal event EventHandler? LoggedOutHomeScreenLoaded;
 
         internal void OnAppClosed()
         {
             AppClosed?.Invoke(this, EventArgs.Empty);
+        }
+
+        internal void OnLoggedOutHomeScreenLoaded()
+        {
+            LoggedOutHomeScreenLoaded?.Invoke(this, EventArgs.Empty);
         }
     }
 }

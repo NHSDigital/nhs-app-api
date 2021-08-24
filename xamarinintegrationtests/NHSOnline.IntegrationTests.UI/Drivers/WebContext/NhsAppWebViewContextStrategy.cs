@@ -21,6 +21,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.WebContext
             _nhsAppPreHomeWebViewContextStrategy = nhsAppPreHomeWebViewContextStrategy;
 
             appEvents.AppClosed += ResetWebContext;
+            appEvents.LoggedOutHomeScreenLoaded += ResetWebContext;
         }
 
         public void SwitchTo()

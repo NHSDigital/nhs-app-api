@@ -22,6 +22,9 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
         {
             var page = new IOSLoggedOutHomePage(driver);
             page.AccessServicesText.AssertVisible();
+
+            driver.LoggedOutHomeScreenLoaded();
+
             return page;
         }
 

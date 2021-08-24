@@ -168,6 +168,11 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             AssertAppRunning();
         }
 
+        void INativeDriverWrapper.LoggedOutHomeScreenLoaded()
+        {
+            Web.LoggedOutHomeScreenLoaded();
+        }
+
         public void Dispose() => _driver.Dispose();
     }
 }

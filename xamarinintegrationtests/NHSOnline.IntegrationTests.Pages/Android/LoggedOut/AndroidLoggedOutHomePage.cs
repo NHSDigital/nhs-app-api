@@ -21,6 +21,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         {
             var page = new AndroidLoggedOutHomePage(driver);
             page.AccessServicesText.AssertVisible();
+
+            driver.LoggedOutHomeScreenLoaded();
+
             return page;
         }
 
