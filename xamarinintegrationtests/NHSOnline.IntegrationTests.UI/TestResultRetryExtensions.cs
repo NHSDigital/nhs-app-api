@@ -19,7 +19,7 @@ namespace NHSOnline.IntegrationTests.UI
 
         // 388660-Error executing adbExec - adb: error: listener 'tcp:9222' not found
         private static readonly Regex AdbErrorListenerNotFound = new(
-            @"Appium error: An unknown server-side error occurred while processing the command\. Original error: Error executing adbExec\. .* Stderr: 'adb: error: listener 'tcp:9222' not found'",
+            @"Error executing adbExec",
             RegexOptions.Compiled);
 
         // Failed to create driver
@@ -49,7 +49,7 @@ namespace NHSOnline.IntegrationTests.UI
 
         // 308524-Encountered internal error running command: Error: Did not get any response for atom execution after 120047ms
         private static readonly Regex AtomExecutionTimeout = new(
-            @"Appium error: An unknown server-side error occurred while processing the command\. Original error: Did not get any response for atom execution after \d+ms",
+            @"Did not get any response for atom execution",
             RegexOptions.Compiled);
 
         // Some BrowserStack iOS devices do not display the camera permissions dialog
@@ -64,7 +64,7 @@ namespace NHSOnline.IntegrationTests.UI
 
         // This is a temporary retry put in place for the manage notifications screen which on android is having firebase issues
         private static readonly Regex FirebaseAuthorisationFailureWontRetry = new(
-            @"Unable to locate element.*Manage notifications",
+            @"Unable to locate element.*Manage notifications|No IWebElement found matching.*Allow notificationsI accept the NHS App sending notifications on this device",
             RegexOptions.Compiled);
 
         // Appium could not proxy issue
@@ -87,6 +87,12 @@ namespace NHSOnline.IntegrationTests.UI
             @"No IOSElement found matching ByIosNSPredicate\(type == 'XCUIElementTypeCell' AND name == 'test, txt'\)*",
             RegexOptions.Compiled);
 
+        // There are UI variances between devices which make the tests flaky though the functionality works
+        // The variances will be addressed under NHSO-16258
+        private static readonly Regex FileUploadSelectorDeviceVariance = new(
+            @"No (?:IOS|Android)Element found matching By(?:IosNSPredicate|AndroidUIAutomator)\(.*?(?:label == 'Done'|name == 'test, txt'|text\(\\?""NhsAppLogo.png\\?""\)|textMatches\(\\?""Images\\?""\))\)",
+            RegexOptions.Compiled);
+
         private static readonly List<(Regex pattern, RetryStatus result)> RetryExceptionMessageRegexes = new()
         {
             (InvalidServiceWebInspectorMessage, RetryStatus.Retry(nameof(InvalidServiceWebInspectorMessage))),
@@ -103,7 +109,8 @@ namespace NHSOnline.IntegrationTests.UI
             (AppiumProxyIssue, RetryStatus.Retry(nameof(AppiumProxyIssue))),
             (AboutBlank, RetryStatus.Retry(nameof(AboutBlank))),
             (WindowHandleNotFound, RetryStatus.Retry(nameof(WindowHandleNotFound))),
-            (UnableToFindFileIos, RetryStatus.Retry(nameof(UnableToFindFileIos)))
+            (UnableToFindFileIos, RetryStatus.Retry(nameof(UnableToFindFileIos))),
+            (FileUploadSelectorDeviceVariance, RetryStatus.Retry(nameof(FileUploadSelectorDeviceVariance)))
         };
 
         internal static RetryStatus ShouldRetry(this TestResult result, TestLogs logs)

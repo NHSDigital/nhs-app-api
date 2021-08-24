@@ -15,8 +15,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments
 
         private WebLink BackBreadcrumb => WebLink.WithText(_interactor, "Back");
 
-        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "GP Surgery Appointments");
-
         private WebText ErrorTitleText => WebText.WithTagAndText(_interactor, "h1", "Sorry, there is a problem with loading GP appointments");
 
         internal void AssertOnPage()
@@ -24,10 +22,9 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments
             // Extending timeout to allow SSO to complete
             using var extendedTimeout = ExtendedTimeout.FromSeconds(15);
 
-            TitleText.AssertVisible();
+            // There are no appointments mocks yet and so there will always be an error
+            ErrorTitleText.AssertVisible();
         }
-
-        internal void AssertErrorOnPage() => ErrorTitleText.AssertVisible();
 
         public void ClickBackBreadcrumb() => BackBreadcrumb.Click();
     }

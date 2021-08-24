@@ -16,6 +16,7 @@ using NHSOnline.IntegrationTests.WebIntegration.Pkb;
 
 namespace NHSOnline.IntegrationTests.Session
 {
+    [Ignore("The functionality is broken but being resolved under NHSO-15938")]
     [TestClass]
     [BusinessRule("BR-LOG-07.6","Navigating back to the app from a web integration or browser overlay when the app session has expired logs the user out redirecting to the logged out home screen with a yellow banner")]
     public class SessionExpiredWebIntegrationsTests

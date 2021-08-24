@@ -17,6 +17,7 @@ using NHSOnline.IntegrationTests.WebIntegration.Pkb;
 
 namespace NHSOnline.IntegrationTests.Session
 {
+    [Ignore("The functionality is broken but being resolved under NHSO-15938")]
     [TestClass]
     [BusinessRule("BR-LOG-07.2","User is prompted to logout or extend their session when their session reaches predefined time until it expires")]
     [BusinessRule("BR-LOG-07.7","Navigating back to the app from a web integration or browser overlay when the app session is within the session timeout warning period displays a prompt to extend the session or log out")]

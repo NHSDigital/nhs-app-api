@@ -89,7 +89,7 @@ namespace NHSOnline.IntegrationTests.Appointments
                 .KeyboardNavigateToGpSurgeryAppointments();
 
             AndroidGpSurgeryAppointmentsPage
-                .AssertErrorOnPage(driver)
+                .AssertOnPage(driver)
                 .PageContent.ClickBackBreadcrumb();
 
             AndroidAppointmentsPage

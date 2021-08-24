@@ -18,12 +18,5 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
             page.PageContent.AssertOnPage();
             return page;
         }
-
-        public static AndroidGpSurgeryAppointmentsPage AssertErrorOnPage(IAndroidDriverWrapper driver)
-        {
-            var page = new AndroidGpSurgeryAppointmentsPage(driver);
-            page.PageContent.AssertErrorOnPage();
-            return page;
-        }
     }
 }
