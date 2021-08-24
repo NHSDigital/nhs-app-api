@@ -1,6 +1,4 @@
-using Castle.DynamicProxy.Generators;
-using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb;
-using NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration;
+using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS.YourHealth

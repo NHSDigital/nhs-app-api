@@ -5,7 +5,6 @@ using NHSOnline.IntegrationTests.Pages.Android.Advice;
 using NHSOnline.IntegrationTests.Pages.Android.Appointments;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.More;
-using NHSOnline.IntegrationTests.Pages.Android.Prescriptions;
 using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
 using NHSOnline.IntegrationTests.Pages.Android.YourHealth;
 using NHSOnline.IntegrationTests.Pages.IOS;

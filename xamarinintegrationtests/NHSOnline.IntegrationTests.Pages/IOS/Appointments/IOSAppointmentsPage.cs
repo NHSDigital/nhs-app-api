@@ -1,4 +1,4 @@
-using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb;
+using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments;
 using NHSOnline.IntegrationTests.UI.Components.IOS;
 using NHSOnline.IntegrationTests.UI.Drivers;
 

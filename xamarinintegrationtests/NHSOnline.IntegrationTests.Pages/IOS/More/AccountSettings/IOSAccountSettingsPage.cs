@@ -1,8 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
-using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb;
-using NHSOnline.IntegrationTests.UI.Components;
-using NHSOnline.IntegrationTests.UI.Components.Android;
+using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.AccountSettings;
 using NHSOnline.IntegrationTests.UI.Components.IOS;
 using NHSOnline.IntegrationTests.UI.Drivers;
 

@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.DeviceProperties;
 using NHSOnline.IntegrationTests.UI.Drivers;

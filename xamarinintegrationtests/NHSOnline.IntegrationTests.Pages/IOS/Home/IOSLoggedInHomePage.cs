@@ -1,4 +1,4 @@
-using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb;
+using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS.Home

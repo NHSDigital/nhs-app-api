@@ -3,7 +3,6 @@ using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Interactions;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Web
 {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb;
+using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Android;

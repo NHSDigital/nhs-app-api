@@ -8,7 +8,6 @@ using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.IOS.More;
 using NHSOnline.IntegrationTests.Pages.IOS.More.AccountSettings;
-using NHSOnline.IntegrationTests.Pages.IOS.Notifications;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 

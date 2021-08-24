@@ -1,4 +1,4 @@
-using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb;
+using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescriptions;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS.Prescriptions

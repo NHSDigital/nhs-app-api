@@ -3,6 +3,7 @@ using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.YourHealth;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
+using NHSOnline.IntegrationTests.Pages.IOS.YourHealth;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
