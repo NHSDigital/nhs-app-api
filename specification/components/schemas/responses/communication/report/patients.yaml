@@ -1,0 +1,16 @@
+type: array
+description: An array of details of patients registered with the NHS App.
+items:
+  type: object
+  description: Details of a single patient registered with the NHS App.
+  properties:
+    nhsNumber:
+      type: string
+      description: The patient's NHS number.
+      example: "9903002157"
+      format: "^\\d{10}$"
+    notificationsEnabled:
+      type: boolean
+      description: Indicates whether the patient has enabled native Android or Apple push notifications on at least one device.
+      example: true
+              
