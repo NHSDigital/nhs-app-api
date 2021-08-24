@@ -44,7 +44,7 @@ jobs:
           CONFIGURATION: '${{ parameters.configuration }}'
           IPA_PACKAGE_DIR: '$(output.directory)'
         inputs:
-          scriptPath: xamarin/buildscripts/04_build_ios.sh
+          scriptPath: xamarin/buildscripts/05_build_ios.sh
 
       - template: check-for-output-steps.yml
         parameters:

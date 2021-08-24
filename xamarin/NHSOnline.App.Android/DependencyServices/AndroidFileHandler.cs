@@ -44,9 +44,9 @@ namespace NHSOnline.App.Droid.DependencyServices
             var resolver = MainActivity?.ContentResolver;
 
             using var contentValues = new ContentValues();
-            contentValues.Put(MediaStore.MediaColumns.DisplayName, downloadRequest.FileName);
-            contentValues.Put(MediaStore.MediaColumns.MimeType, downloadRequest.MimeType);
-            contentValues.Put(MediaStore.MediaColumns.RelativePath, Environment.DirectoryDownloads + "/NhsApp");
+            contentValues.Put(MediaStore.IMediaColumns.DisplayName, downloadRequest.FileName);
+            contentValues.Put(MediaStore.IMediaColumns.MimeType, downloadRequest.MimeType);
+            contentValues.Put(MediaStore.IMediaColumns.RelativePath, Environment.DirectoryDownloads + "/NhsApp");
 
             fileUri = resolver!.Insert(MediaStore.Downloads.ExternalContentUri, contentValues);
             return resolver;
