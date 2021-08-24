@@ -145,3 +145,12 @@ jobs:
         displayName: Package Messages API
         inputs:
           scriptPath: backendworker/buildscripts/15_package_messages_api.sh
+
+      - template: acr_firewall.yml
+        parameters:
+          mode: remove
+          acr: nhsapp
+      - template: acr_firewall.yml
+        parameters:
+          mode: remove
+          acr: nhsapprelease

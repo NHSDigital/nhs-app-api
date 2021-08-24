@@ -99,3 +99,13 @@ steps:
     inputs:
       pathToPublish: '$(Build.ArtifactStagingDirectory)/$(tests.name)'
       artifactName: Integration Tests $(tests.name)
+
+  # ACR Firewall - Remove host agent IP
+  - template: acr_firewall.yml
+    parameters:
+      mode: remove
+      acr: nhsapp
+  - template: acr_firewall.yml
+    parameters:
+      mode: remove
+      acr: nhsapprelease

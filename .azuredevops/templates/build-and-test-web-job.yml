@@ -96,3 +96,12 @@ jobs:
         displayName: Build web docker image
         inputs:
           scriptPath: web/buildscripts/08_build_docker_image.sh
+
+      - template: acr_firewall.yml
+        parameters:
+          mode: remove
+          acr: nhsapp
+      - template: acr_firewall.yml
+        parameters:
+          mode: remove
+          acr: nhsapprelease

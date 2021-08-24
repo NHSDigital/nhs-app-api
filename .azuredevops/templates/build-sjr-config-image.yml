@@ -6,12 +6,7 @@ jobs:
     variables:
     - group: release_notes
     steps:
-      - task: Docker@2
-        displayName: Login to docker registry
-        inputs:
-          command: login
-          containerRegistry: nhsappcontainers
-
+      - template: docker-login-steps.yml
       - task: Bash@3
         displayName: Build Config files
         inputs:
@@ -54,3 +49,12 @@ jobs:
           repository: $(sjr.config.image.name)
           tags: |
             $(Build.SourceBranchName)
+
+      - template: acr_firewall.yml
+        parameters:
+          mode: remove
+          acr: nhsapp
+      - template: acr_firewall.yml
+        parameters:
+          mode: remove
+          acr: nhsapprelease

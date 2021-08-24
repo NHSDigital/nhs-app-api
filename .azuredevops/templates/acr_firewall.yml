@@ -1,0 +1,28 @@
+---
+parameters:
+  - name: mode
+    type: string
+    values:
+      - add
+      - remove
+  - name: acr
+    type: string
+    default: nhsapp
+    values:
+      - nhsapp
+      - nhsapprelease
+steps:
+  - task: AzureCLI@2
+    condition: always()
+    displayName: ${{ parameters.acr }} ACR Firewall Host Agent IP ${{ parameters.mode }}
+    inputs:
+      ${{ if eq(parameters.acr, 'nhsapprelease') }}:
+        azureSubscription: nhsapp-live-terraform-sp
+      ${{ if eq(parameters.acr, 'nhsapp') }}:
+        azureSubscription: nhsapp-nonlive-terraform-sp
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        IP=($(curl -s http://ipinfo.io/json | jq '.ip' | sed -e 's/^"//' -e 's/"$//'))
+        echo "agent host IP: ${IP}"
+        az acr network-rule ${{ parameters.mode }} -n ${{ parameters.acr }} --ip-address "${IP}"

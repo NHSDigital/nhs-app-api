@@ -142,3 +142,13 @@ jobs:
         inputs:
           pathToPublish: '$(Build.SourcesDirectory)/android/app/build/outputs/mapping'
           artifactName: Android Package Files
+
+      # ACR Firewall - Remove host agent IP
+      - template: acr_firewall.yml
+        parameters:
+          mode: remove
+          acr: nhsapp
+      - template: acr_firewall.yml
+        parameters:
+          mode: remove
+          acr: nhsapprelease
