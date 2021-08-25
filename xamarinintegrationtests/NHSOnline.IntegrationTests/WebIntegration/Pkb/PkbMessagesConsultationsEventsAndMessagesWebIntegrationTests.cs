@@ -30,7 +30,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
 
             AndroidMessagesPage
                 .AssertOnPage(driver)
-                .PageContent.NavigateToConsultationsEventsAndMessages();
+                .PageContent.NavigateToConsultationsEventsAndMessagesPkb();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, "Messages and online consultations")
@@ -56,7 +56,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
 
             IOSMessagesPage
                 .AssertOnPage(driver)
-                .PageContent.NavigateToConsultationsEventsAndMessages();
+                .PageContent.NavigateToConsultationsEventsAndMessagesPkb();
 
             IOSWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, "Messages and online consultations")

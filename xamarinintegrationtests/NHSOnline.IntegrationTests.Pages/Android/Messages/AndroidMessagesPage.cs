@@ -4,6 +4,7 @@ using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Messages;
 using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
+using OpenQA.Selenium.Appium.Android;
 
 namespace NHSOnline.IntegrationTests.Pages.Android.Messages
 {
@@ -18,7 +19,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Messages
             PageContent = new MessagesPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
-        internal AndroidKeyboardNavigation KeyboardPageContentNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(
+        private AndroidKeyboardNavigation KeyboardPageContentNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(
             _driver,
             GetAllKeyboardMessagesNavigationFocusableElements());
 
@@ -42,13 +43,27 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Messages
             return page;
         }
 
-        public void AssertPageElements()
+        // Focus needs to be set on webview on page load, NHSO-14668 and tabbing functionality needs to be updated before this can be removed.
+        public AndroidMessagesPage TabIntoFocus()
         {
-            Navigation.AssertNavigationPresent();
-            PageContent.AssertPageElements();
+            _driver.SendKey(AndroidKeyCode.Keycode_TAB);
+            return this;
         }
 
-        public void KeyboardNavigateToTestProvider() =>
-            PageContent.KeyboardNavigateToTestProvider(KeyboardPageContentNavigation);
+        public void KeyboardNavigateToGpSurgeryMessages() => PageContent.KeyboardNavigateToGpSurgeryMessages(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToSubstrakt() => PageContent.KeyboardNavigateToSubstrakt(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToGncr() => PageContent.KeyboardNavigateToGncr(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToPkb() => PageContent.KeyboardNavigateToPkb(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToCie() => PageContent.KeyboardNavigateToCie(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToMyCareView() => PageContent.KeyboardNavigateToMyCareView(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToSecondaryCareView() => PageContent.KeyboardNavigateToSecondaryCareView(KeyboardPageContentNavigation);
+
+        public void KeyboardNavigateToHealthInfoAndUpdates() => PageContent.KeyboardNavigateToHealthInfoAndUpdates(KeyboardPageContentNavigation);
     }
 }
