@@ -5,14 +5,20 @@ using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.Advice;
 using NHSOnline.IntegrationTests.Pages.Android.Appointments;
 using NHSOnline.IntegrationTests.Pages.Android.Messages;
+using NHSOnline.IntegrationTests.Pages.Android.More;
+using NHSOnline.IntegrationTests.Pages.Android.More.AccountSettings;
 using NHSOnline.IntegrationTests.Pages.Android.Prescriptions;
+using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
 using NHSOnline.IntegrationTests.Pages.Android.YourHealth;
 using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.Advice;
 using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.Messages;
+using NHSOnline.IntegrationTests.Pages.IOS.More;
+using NHSOnline.IntegrationTests.Pages.IOS.More.AccountSettings;
 using NHSOnline.IntegrationTests.Pages.IOS.Prescriptions;
+using NHSOnline.IntegrationTests.Pages.IOS.WebIntegration;
 using NHSOnline.IntegrationTests.Pages.IOS.YourHealth;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -30,6 +36,8 @@ namespace NHSOnline.IntegrationTests.Help
         private const string PrescriptionsHelpLinkPath = "prescriptions-in-the-nhs-app/ordering-a-prescription";
         private const string YourHealthHelpLinkPath = "health-records-in-the-nhs-app/gp-health-record";
         private const string MessagesHelpLinkPath = "messaging-in-the-nhs-app";
+        private const string NhsLoginSettingsHelpLinkPath =
+            "nhs-app-account-and-settings/managing-your-nhs-app-account";
 
         [NhsAppAndroidTest]
         public void APatientCanAccessContextualHelpFromHomeScreenAndroid(IAndroidDriverWrapper driver)
@@ -348,6 +356,75 @@ namespace NHSOnline.IntegrationTests.Help
             IOSMessagesPage
                 .AssertOnPage(driver)
                 .Navigation.AssertMessagesSelected();
+        }
+
+        [NhsAppAndroidTest]
+        public void APatientCanAccessContextualHelpFromNhsLoginSettingsAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = LoadEmisPatient();
+
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToMore();
+
+            AndroidMorePage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToAccountAndSettings();
+
+            AndroidAccountSettingsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToNhsLogin();
+
+            AndroidNhsLoginSettingsPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .Navigation.NavigateToHelp();
+
+            AndroidAppTabBrowserChoice
+                .IfDisplayed(driver, choice => choice.ChooseChrome());
+
+            AndroidAppTab
+                .AssertOnHelpPageByText(driver, NhsLoginSettingsHelpLinkPath)
+                .ReturnToApp();
+
+            AndroidNhsLoginSettingsPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader();
+        }
+
+        [NhsAppIOSTest]
+        public void APatientCanAccessContextualHelpFromNhsLoginSettingsIOS(IIOSDriverWrapper driver)
+        {
+            var patient = LoadEmisPatient();
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToMore();
+
+            IOSMorePage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToAccountAndSettings();
+
+            IOSAccountSettingsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToNhsLogin();
+
+            IOSNhsLoginSettingsPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .Navigation.NavigateToHelp();
+
+            IOSAppTab
+                .AssertOnHelpPageByText(driver, NhsLoginSettingsHelpLinkPath)
+                .ReturnToApp();
+
+            IOSNhsLoginSettingsPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader();
         }
 
         private static EmisPatient LoadEmisPatient()
