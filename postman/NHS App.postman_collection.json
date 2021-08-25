@@ -484,7 +484,7 @@
 					}
 				],
 				"url": {
-					"raw": "{{base_url}}/nhs-app/communication/patient-report/?ods-organisation-code=A12355&page=1",
+					"raw": "{{base_url}}/nhs-app/communication/patient-report/?general-practitioner=Y00001&page=1",
 					"host": [
 						"{{base_url}}"
 					],
@@ -496,9 +496,9 @@
 					],
 					"query": [
 						{
-							"key": "ods-organisation-code",
-							"value": "A12355",
-							"description": "ODS organisation code for which to retrieve patient report."
+							"key": "general-practitioner",
+							"value": "Y00001",
+							"description": "The Organisation Data Service (ODS) code of the registered GP practice for which to retrieve patient details."
 						},
 						{
 							"key": "page",
