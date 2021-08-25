@@ -35,6 +35,6 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
             => _interactor.ActOnElement(FindBy, action);
 
         private By FindBy
-            => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeStaticText' AND value == {_text.QuotePredicateLiteral()}");
+            => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeLink' AND label == {_text.QuotePredicateLiteral()}");
     }
 }

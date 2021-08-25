@@ -1,36 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<Label xmlns="http://xamarin.com/schemas/2014/forms"
-       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       x:Class="NHSOnline.App.Controls.Elements.ResponsiveLinkLabel"
-       x:Name="Root" 
-       AutomationProperties.IsInAccessibleTree="true"
-       Style="{DynamicResource LinkLabel}" >
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
+             xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
+             x:Class="NHSOnline.App.Controls.Elements.ResponsiveLinkLabel"
+             x:Name="Root">
 
-    <Label.Resources>
+    <ContentView.Resources>
         <ResourceDictionary>
-            <Style x:Key="LinkLabel" TargetType="Label" CanCascade="True">
-                <Setter Property="FontSize" Value="16" />
-                <Setter Property="Padding" Value="0,0,0,16" />
-                <Setter Property="TextColor" Value="{Binding LabelTextColour, Source={x:Reference Name=Root}}" />
-                <Setter Property="TextDecorations" Value="{Binding LabelTextDecoration, Source={x:Reference Name=Root}}" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="controls:AccessibilityLayout" CanCascade="True">
+                <Setter Property="Margin" Value="0,0,0,12" />
+                <Setter Property="Spacing" Value="0" />
+                <Setter Property="HorizontalOptions" Value="Start" />
             </Style>
+            <Style x:Key="StackLayoutWide" TargetType="controls:AccessibilityLayout">
+                <Setter Property="Margin" Value="0,0,0,24" />
+            </Style>
+
+            <Style TargetType="Label" CanCascade="True">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="Padding" Value="0,2" />
+                <Setter Property="TextColor" Value="{Binding LabelTextColour, Source={x:Reference Name=Root}}" />
+                <Setter Property="TextDecorations"
+                        Value="{Binding LabelTextDecoration, Source={x:Reference Name=Root}}" />
+            </Style>
+
+            <Style x:Key="LabelWide" TargetType="Label" CanCascade="True">
+                <Setter Property="FontSize" Value="19" />
+            </Style>
+
+            <Style TargetType="BoxView" Class="FocusUnderLine">
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="HeightRequest" Value="5" />
+            </Style>
+
         </ResourceDictionary>
-    </Label.Resources>
+    </ContentView.Resources>
 
     <VisualStateManager.VisualStateGroups>
         <VisualStateGroup x:Name="ResponsiveDisplayStates">
             <VisualState x:Name="MediumDisplay" />
             <VisualState x:Name="LargeDisplay">
                 <VisualState.Setters>
-                    <Setter TargetName="Root" Property="FontSize" Value="19" />
-                    <Setter Property="Padding" Value="0,0,0,24" />
+                    <Setter TargetName="Label" Property="Style" Value="{StaticResource LabelWide}" />
+                    <Setter TargetName="StackLayout" Property="Style" Value="{StaticResource StackLayoutWide}" />
                 </VisualState.Setters>
             </VisualState>
         </VisualStateGroup>
     </VisualStateManager.VisualStateGroups>
-    
-    <Label.GestureRecognizers>
-        <TapGestureRecognizer Command="{Binding Command, Source={x:Reference Name=Root}}" />
-    </Label.GestureRecognizers>
-</Label>
+
+    <controls:AccessibilityLayout x:Name="StackLayout"
+                                  AutomationProperties.Name="{Binding Text, Source={x:Reference Name=Root}}"
+                                  effects:AccessibilityEffect.ControlType="Link">
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="KeyboardFocusStates">
+                <VisualState x:Name="KeyboardUnfocused" />
+                <VisualState x:Name="KeyboardFocused">
+                    <VisualState.Setters>
+                        <Setter TargetName="BoxView" Property="StackLayout.BackgroundColor"
+                                Value="{StaticResource NhsUkPrimaryText}" />
+                        <Setter TargetName="Label" Property="Label.BackgroundColor"
+                                Value="{StaticResource NhsUkYellow}" />
+                        <Setter TargetName="Label" Property="Label.TextColor"
+                                Value="{StaticResource NhsUkPrimaryText}" />
+                        <Setter TargetName="Label" Property="Label.TextDecorations" Value="None" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <Label x:Name="Label" Text="{Binding Text, Source={x:Reference Name=Root}}" />
+        <BoxView x:Name="BoxView" StyleClass="FocusUnderLine" />
+
+        <controls:AccessibilityLayout.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding Command, Source={x:Reference Name=Root}}" />
+        </controls:AccessibilityLayout.GestureRecognizers>
+    </controls:AccessibilityLayout>
+</ContentView>
