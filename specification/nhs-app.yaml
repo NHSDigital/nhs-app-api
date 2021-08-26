@@ -511,7 +511,6 @@ paths:
             format: int32
       tags:
         - communication
-        - report
       responses:
         "200":
           description: Information successfully returned.
@@ -605,13 +604,15 @@ paths:
         To avoid returning excessively large response bodies, the results may be split across multiple pages. On retrieving the response for the first page of results, the `Link` header should be inspected to determine whether any additional pages of results exist. If so, these can be retrieved by making additional request(s) with the optional `page` parameter specified.
       parameters:
         - name: ods-organisation-code
-          description: The Organisation Data Service (ODS) code of the GP practice for which to retrieve a list of NHS App users.
+          description: |
+            The Organisation Data Service (ODS) code of the GP practice for which to retrieve a list of NHS App users.
+            Not case sensitive.
           example: Y00001
           in: query
           required: true
           schema:
             type: string
-            pattern: '^[A-Z]\\d{5}$|^[A-Z]\\d[A-Z]\\d[A-Z]$'
+            pattern: '^[A-Za-z]\\d{5}$|^[A-Za-z]\\d[A-Za-z]\\d[A-Za-z]$'
         - name: page
           description: The ordinal number of the page of results to be retrieved. If omitted, the first page of results will be returned. Use the Link header in the response to determine whether any further pages of results exist.
           example: 2
@@ -622,7 +623,6 @@ paths:
             format: int32
       tags:
         - communication
-        - report
       responses:
         "200":
           description: Information successfully returned.
