@@ -96,7 +96,7 @@ export default {
       redirectTo(this, MORE_ACCOUNTANDSETTINGS_MANAGENOTIFICATIONS_PATH);
     },
     async goToNHSSettings() {
-      const helpUrl = `${this.$store.env.BASE_NHS_APP_HELP_URL}${MANAGING_YOUR_NHS_APP_ACCOUNT_PATH}`;
+      const helpUrl = `${this.$store.$env.BASE_NHS_APP_HELP_URL}${MANAGING_YOUR_NHS_APP_ACCOUNT_PATH}`;
       const { token } = await this.$store.app.$http
         .postV1PatientAssertedLoginIdentity({
           assertedLoginIdentityRequest: {
