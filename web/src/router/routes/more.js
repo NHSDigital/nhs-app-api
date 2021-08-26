@@ -33,9 +33,9 @@ import {
 import { LINKED_PROFILES_SHUTTER_MORE } from '@/router/routes/linked-profiles';
 import {
   APP_LOGIN_HELP_PATH,
-  SECURITY_AND_PRIVACY_PATH,
-  MANAGING_YOUR_NHS_APP_ACCOUNT_PATH,
-  NHS_APP_ACCOUNT_AND_SETTINGS_PATH,
+  SECURITY_AND_PRIVACY_HELP_PATH,
+  MANAGING_YOUR_NHS_APP_ACCOUNT_HELP_PATH,
+  NHS_APP_ACCOUNT_AND_SETTINGS_HELP_PATH,
 } from '@/router/externalLinks';
 import { CLEAR_SELECTED_MENU_ITEM } from '@/middleware/nativeNavigation';
 import proofLevel from '@/lib/proofLevel';
@@ -93,7 +93,7 @@ export const MORE_ACCOUNT_AND_SETTINGS_INDEX = {
     titleKey: 'navigation.pages.titles.accountAndSettings',
     proofLevel: proofLevel.P5,
     crumb: breadcrumbs.MORE_ACCOUNT_AND_SETTINGS_INDEX_CRUMB,
-    helpPath: NHS_APP_ACCOUNT_AND_SETTINGS_PATH,
+    helpPath: NHS_APP_ACCOUNT_AND_SETTINGS_HELP_PATH,
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
   },
 };
@@ -120,7 +120,7 @@ export const MORE_ACCOUNT_AND_SETTINGS_LEGAL_AND_COOKIES_MANAGE_COOKIES = {
     titleKey: 'navigation.pages.titles.cookies',
     proofLevel: proofLevel.P5,
     crumb: breadcrumbs.MORE_ACCOUNT_AND_SETTINGS_LEGAL_AND_COOKIES_MANAGE_COOKIES_CRUMB,
-    helpPath: SECURITY_AND_PRIVACY_PATH,
+    helpPath: SECURITY_AND_PRIVACY_HELP_PATH,
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
   },
 };
@@ -134,7 +134,7 @@ export const MORE_ACCOUNT_AND_SETTINGS_MANAGE_NOTIFICATIONS = {
     titleKey: 'navigation.pages.titles.notifications',
     proofLevel: proofLevel.P5,
     crumb: breadcrumbs.MORE_ACCOUNT_AND_SETTINGS_LEGAL_AND_COOKIES_INDEX_CRUMB,
-    helpPath: MANAGING_YOUR_NHS_APP_ACCOUNT_PATH,
+    helpPath: MANAGING_YOUR_NHS_APP_ACCOUNT_HELP_PATH,
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
     redirectRules: [{
       condition: 'device/isNativeApp',

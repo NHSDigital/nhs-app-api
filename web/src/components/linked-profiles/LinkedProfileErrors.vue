@@ -51,7 +51,7 @@ import {
   MORE_PATH,
 } from '@/router/paths';
 import { redirectTo, gpSessionErrorHasRetried, GP_SESSION_ERROR_STATUS } from '@/lib/utils';
-import { LINKED_PROFILES_FIND_OUT_MORE_PATH } from '@/router/externalLinks';
+import { PROXY_HELP_PATH } from '@/router/externalLinks';
 
 export default {
   name: 'LinkedProfileErrors',
@@ -76,7 +76,7 @@ export default {
     return {
       backUrl: this.$store.state.navigation.backLinkOverride || MORE_PATH,
       contactUsUrl: this.$store.$env.CONTACT_US_URL,
-      findOutMoreUrl: `${this.$store.$env.BASE_NHS_APP_HELP_URL}${LINKED_PROFILES_FIND_OUT_MORE_PATH}`,
+      findOutMoreUrl: `${this.$store.$env.BASE_NHS_APP_HELP_URL}${PROXY_HELP_PATH}`,
       gpSessionErrorStatus: GP_SESSION_ERROR_STATUS,
     };
   },

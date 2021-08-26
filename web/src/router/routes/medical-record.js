@@ -89,7 +89,7 @@ import { YOUR_RECORD_MENU_ITEM } from '@/middleware/nativeNavigation';
 import gpMedicalRecordAcceptance from '@/middleware/gpMedicalRecordAcceptance';
 
 import proofLevel from '@/lib/proofLevel';
-import { GP_MEDICAL_RECORD_HELP_PATH, HEALTH_RECORDS_IN_THE_NHS_APP_PATH } from '@/router/externalLinks';
+import { GP_MEDICAL_RECORD_HELP_PATH, HEALTH_RECORDS_HELP_PATH } from '@/router/externalLinks';
 import sjrRedirectRules from '@/router/sjrRedirectRules';
 
 export const UPLIFT_GP_MEDICAL_RECORD = {
@@ -119,7 +119,7 @@ export const HEALTH_RECORDS = {
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.HEALTH_RECORDS_CRUMB,
-    helpPath: HEALTH_RECORDS_IN_THE_NHS_APP_PATH,
+    helpPath: HEALTH_RECORDS_HELP_PATH,
     nativeNavigation: YOUR_RECORD_MENU_ITEM,
     gpSessionOnDemand: {
       journey: GP_HEALTH_RECORD_JOURNEY_NAME,
