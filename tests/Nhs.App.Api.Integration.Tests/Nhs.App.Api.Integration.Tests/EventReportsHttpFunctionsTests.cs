@@ -21,7 +21,7 @@ namespace Nhs.App.Api.Integration.Tests
 
             TestClassSetup(_testConfiguration);
         }
-        
+
         [DataTestMethod]
         public async Task EventReportTest_Post_Returns404NotFound()
         {
@@ -30,7 +30,7 @@ namespace Nhs.App.Api.Integration.Tests
 
             // Act
             var response = await httpClient.PostAsync(
-                "communication/event-report/test",
+                "communication/report/events/test",
                 new StringContent(JsonConvert.SerializeObject(new EventReportCreateRequest
                 {
                     SupplierId = "SupplierId",
