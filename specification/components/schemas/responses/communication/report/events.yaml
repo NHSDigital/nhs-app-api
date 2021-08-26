@@ -1,0 +1,68 @@
+type: array
+description: An array of events relating to in-app messages and push notifications that you have previously sent to NHS App users.
+items:
+  type: object
+  description: A single event relating to an in-app message or push notification that your have previously sent to an NHS App user.
+  properties:
+    eventDateTime:
+      type: string
+      format: date-time
+      description: The datetime at which the event occurred. Note that this may be several days after the datetime at which the communication request was originally made (particularly for in-app message Read events).
+      example: "2021-08-21T13:28:58:579"
+      nullable: false
+    communicationId:
+      type: string
+      description: Globally unique identifier of the original communication request. This corresponds to the identifier returned with system `urn:ietf:rfc:3986` when the request was made to send the communication. As each communication request may have been sent to multiple recipients via multiple channels, many events may be returned for each communicationId.
+      example: "5f0b1083-e179-47a7-b274-b30b5052a8f3"
+      nullable: false
+      maxLength: 36
+    campaignId:
+      type: string
+      description: If the original communication request included an optional Campaign ID denoted by system `https://fhir.nhs.uk/NHSApp/campaign-id`, it will be returned in this field.
+      maxLength: 50
+      nullable: true
+    requestReference:
+      type: string
+      description: If the original communication request included an optional Request Reference denoted by system `https://fhir.nhs.uk/NHSApp/request-id`, it will be returned in this field.
+      maxLength: 50
+      nullable: true
+    transmissionId:
+      type: string
+      description: A globally unique identifier used by the NHS App to identify an instance of sending a specific communication to a specific recipient via a specific channel.
+      maxLength: 36
+      nullable: false
+    channel:
+      type: string
+      enum: [AppMessage, PushNotification]
+      description: Indicates whether this event related to an in-app message or push notification.
+      nullable: false
+    nhsNumber:
+      type: string
+      description: NHS number of the recipient.
+      example: "9903002157"
+      format: "^\\d{10}$"
+      nullable: false
+    communicationCreatedDateTime:
+      type: string
+      format: date-time
+      description: The datetime at which the original communication request was received.
+      example: "2021-08-05T13:28:52:175"
+      nullable: false
+    event:
+      type: string
+      enum: [Cancelled, Completed, Failed, Read, Rejected]
+      description: |
+        Indicates the nature of the event being reported, as follows:
+
+        - Cancelled: A request to send a push notification has been abandoned, because an in-app message to which it related Failed.
+        - Completed: Processing of the communication has successfully completed for this recipient and channel. For in-app messages this indicates that the message has been delivered to the patient's NHS App messaging inbox. For push notifications it indicates that the messages has been relayed for sending to the Apple or Google Push Notification Service (PNS), or scheduled for sending at 6am if processing occured during the hours of 10pm to 6am.
+        - Failed: Processing of the communication failed abnormally for this recipient and channel. Further information can be found in the `statusDetail` field.
+        - Read: An in-app message has been read for the first time by the recipient.
+        - Rejected: A request to send a communication to this recipient has been rejected. This usually occurs when no NHS App user is known with the specified NHS number, or when attempting to send a push notification to an NHS App user who has not enabled push notifications. Further information can be found in the `statusDetail` field.
+      example: "Completed"
+      nullable: false
+    statusDetail:
+      type: string
+      description: Gives additional information about the event, particularly where the event was Rejected or Failed.
+      nullable: true
+      example: "NHS number not found"

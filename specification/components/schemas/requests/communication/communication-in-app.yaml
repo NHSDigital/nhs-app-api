@@ -51,7 +51,7 @@ properties:
         - contentString
       properties:
         contentString:
-          $ref: ../Markdown.yaml
+          $ref: ../../Markdown.yaml
   sender:
     type: object
     description: The sender of the in-app message.

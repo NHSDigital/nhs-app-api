@@ -1,0 +1,4 @@
+schema:
+  type: string
+description: Comma-separated links to the last page and (if applicable) next page of paginated results.
+example: '<https://api.service.nhs.uk/nhs-app/communication/event-report?day=2021-05-28&page=2>; rel="next", <https://api.service.nhs.uk/nhs-app/communication/event-report?day=2021-05-28&page=7>; rel="last"'

@@ -1,0 +1,10 @@
+[
+    {
+        "nhsNumber": "9074662803",
+        "notificationsEnabled": true
+    },
+    {
+        "nhsNumber": "9903002157",
+        "notificationsEnabled": false
+    }
+]
