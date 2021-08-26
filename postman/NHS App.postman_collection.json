@@ -425,14 +425,15 @@
 					}
 				],
 				"url": {
-					"raw": "{{base_url}}/nhs-app/communication/event-report/?day=2021-08-03&page=1",
+					"raw": "{{base_url}}/nhs-app/communication/report/events/?day=2021-08-03&page=1",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
 						"nhs-app",
 						"communication",
-						"event-report",
+						"report",
+						"events",
 						""
 					],
 					"query": [
@@ -484,14 +485,15 @@
 					}
 				],
 				"url": {
-					"raw": "{{base_url}}/nhs-app/communication/patient-report/?ods-organisation-code=A12355&page=1",
+					"raw": "{{base_url}}/nhs-app/communication/report/patients/?ods-organisation-code=A12355&page=1",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
 						"nhs-app",
 						"communication",
-						"patient-report",
+						"report",
+						"patients",
 						""
 					],
 					"query": [

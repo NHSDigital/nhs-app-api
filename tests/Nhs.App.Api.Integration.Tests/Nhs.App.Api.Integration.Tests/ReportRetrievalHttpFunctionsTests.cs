@@ -30,7 +30,7 @@ namespace Nhs.App.Api.Integration.Tests
             var correlationId = Guid.NewGuid().ToString();
 
             // Act
-            var response = await httpClient.GetAsync("communication/event-report/?day=2021-03-08",
+            var response = await httpClient.GetAsync("communication/report/events/?day=2021-03-08",
                 correlationId, "invalidAccessToken");
 
             // Assert
@@ -58,7 +58,7 @@ namespace Nhs.App.Api.Integration.Tests
             using var httpClient = CreateHttpClient();
 
             // Act
-            var response = await httpClient.GetAsync($"communication/event-report/?day={dayParameter}");
+            var response = await httpClient.GetAsync($"communication/report/events/?day={dayParameter}");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -79,7 +79,7 @@ namespace Nhs.App.Api.Integration.Tests
             using var httpClient = CreateHttpClient();
 
             // Act
-            var response = await httpClient.GetAsync("communication/event-report/?day=2021-03-08");
+            var response = await httpClient.GetAsync("communication/report/events/?day=2021-03-08");
 
             // Assert
             response.Headers.ShouldNotContainHeader("X-Correlation-ID");
@@ -95,7 +95,7 @@ namespace Nhs.App.Api.Integration.Tests
             using var httpClient = CreateHttpClient();
 
             // Act
-            var response = await httpClient.GetAsync($"communication/event-report/?day={dayParameter}&page={pageParameter}");
+            var response = await httpClient.GetAsync($"communication/report/events/?day={dayParameter}&page={pageParameter}");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -115,7 +115,7 @@ namespace Nhs.App.Api.Integration.Tests
             using var httpClient = CreateHttpClient();
 
             // Act
-            var response = await httpClient.GetAsync("communication/event-report/?day=2021-03-01&day=2021-03-02&page=1");
+            var response = await httpClient.GetAsync("communication/report/events/?day=2021-03-01&day=2021-03-02&page=1");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -136,7 +136,7 @@ namespace Nhs.App.Api.Integration.Tests
             using var httpClient = CreateHttpClient();
 
             // Act
-            var response = await httpClient.GetAsync("communication/event-report/?day=2021-03-01&page=1&page=2");
+            var response = await httpClient.GetAsync("communication/report/events/?day=2021-03-01&page=1&page=2");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -163,7 +163,7 @@ namespace Nhs.App.Api.Integration.Tests
             using var httpClient = CreateHttpClient();
 
             // Act
-            var response = await httpClient.GetAsync($"communication/event-report/?day={dayParameter}&page={pageParameter}");
+            var response = await httpClient.GetAsync($"communication/report/events/?day={dayParameter}&page={pageParameter}");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -182,7 +182,7 @@ namespace Nhs.App.Api.Integration.Tests
         {
             // Arrange
             using var httpClient = CreateHttpClient();
-            var path = $"communication/event-report?day={dayParameter}&page={pageParameter}";
+            var path = $"communication/report/events?day={dayParameter}&page={pageParameter}";
             var expectedLinkHeader = $"<{httpClient.BaseAddress}{path}>; rel=\"last\"";
 
             // Act
@@ -207,7 +207,7 @@ namespace Nhs.App.Api.Integration.Tests
             using var httpClient = CreateHttpClient();
 
             // Act
-            var response = await httpClient.GetAsync($"communication/event-report?day={dayParameter}&page={pageParameter}");
+            var response = await httpClient.GetAsync($"communication/report/events?day={dayParameter}&page={pageParameter}");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -231,7 +231,7 @@ namespace Nhs.App.Api.Integration.Tests
             using var httpClient = CreateHttpClient();
 
             // Act
-            var response = await httpClient.GetAsync($"communication/event-report?day={dayParameter}&page={pageParameter}");
+            var response = await httpClient.GetAsync($"communication/report/events?day={dayParameter}&page={pageParameter}");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -252,7 +252,7 @@ namespace Nhs.App.Api.Integration.Tests
             using var httpClient = CreateHttpClient();
 
             // Act
-            var response = await httpClient.GetAsync($"communication/event-report?day=2021-01-01");
+            var response = await httpClient.GetAsync($"communication/report/events?day=2021-01-01");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -265,7 +265,7 @@ namespace Nhs.App.Api.Integration.Tests
             using var httpClient = CreateHttpClient();
 
             // Act
-            var response = await httpClient.GetAsync($"communication/event-report?day=abc&page=abc");
+            var response = await httpClient.GetAsync($"communication/report/events?day=abc&page=abc");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -294,11 +294,11 @@ namespace Nhs.App.Api.Integration.Tests
             // Arrange
             using var httpClient = CreateHttpClient();
             var expectedLinkHeader =
-                $"<{httpClient.BaseAddress}{$"communication/event-report?day=2021-01-01&page=1"}>; rel=\"last\"";
+                $"<{httpClient.BaseAddress}{$"communication/report/events?day=2021-01-01&page=1"}>; rel=\"last\"";
             const string expectedFileContents = @"{""Name"": ""Integration test file 1""}";
 
             // Act
-            var response = await httpClient.GetAsync("communication/event-report?day=2021-01-01&page=1");
+            var response = await httpClient.GetAsync("communication/report/events?day=2021-01-01&page=1");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -313,12 +313,12 @@ namespace Nhs.App.Api.Integration.Tests
             // Arrange
             using var httpClient = CreateHttpClient();
             var expectedLinkHeader =
-                $"<{httpClient.BaseAddress}{"communication/event-report?day=2021-01-02&page=2"}>; rel=\"next\", " +
-                $"<{httpClient.BaseAddress}{"communication/event-report?day=2021-01-02&page=2"}>; rel=\"last\"";
+                $"<{httpClient.BaseAddress}{"communication/report/events?day=2021-01-02&page=2"}>; rel=\"next\", " +
+                $"<{httpClient.BaseAddress}{"communication/report/events?day=2021-01-02&page=2"}>; rel=\"last\"";
             const string expectedFileContents = @"{""Name"": ""Integration test file 2""}";
 
             // Act
-            var response = await httpClient.GetAsync("communication/event-report?day=2021-01-02&page=1");
+            var response = await httpClient.GetAsync("communication/report/events?day=2021-01-02&page=1");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
