@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
                 var update = new BsonDocument("$set", new BsonDocument(CurrentTimestamp()));
 
                 BsonDocument sessionValue;
-                using (_logger.WithTimer("Get session from Mongo"))
+                using (_logger.WithTimer("Get and update session from Mongo"))
                 {
                     sessionValue = await GetCollection().FindOneAndUpdateAsync(filter, update);
                 }

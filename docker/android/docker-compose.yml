@@ -26,6 +26,7 @@ services:
         -A /deeplinklauncher.stubs.local.bitraft.io/10.0.2.2 \
         -A /paycasso.stubs.local.bitraft.io/10.0.2.2 \
         -A /pkb.stubs.local.bitraft.io/10.0.2.2 \
+        -A /pkb.securestubs.local.bitraft.io/10.0.2.2 \
         -A /engage.stubs.local.bitraft.io/10.0.2.2 \
         -A /gncr.stubs.local.bitraft.io/10.0.2.2 \
         -A /substrakt.stubs.local.bitraft.io/10.0.2.2 \
