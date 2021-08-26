@@ -32,12 +32,11 @@ namespace NHSOnline.IntegrationTests.Help
     {
         private const string HomeHelpLinkPath = "/";
         private const string AdviceHelpLinkPath = "/";
-        private const string AppointmentsHelpLinkPath = "appointments-and-online-consultations-in-the-nhs-app/gp-surgery-appointments";
-        private const string PrescriptionsHelpLinkPath = "prescriptions-in-the-nhs-app/ordering-a-prescription";
-        private const string YourHealthHelpLinkPath = "health-records-in-the-nhs-app/gp-health-record";
-        private const string MessagesHelpLinkPath = "messaging-in-the-nhs-app";
-        private const string NhsLoginSettingsHelpLinkPath =
-            "nhs-app-account-and-settings/managing-your-nhs-app-account";
+        private const string AppointmentsHelpLinkPath = "appointments-and-online-consultations-in-the-nhs-app/gp-surgery-appointments/";
+        private const string PrescriptionsHelpLinkPath = "prescriptions-in-the-nhs-app/ordering-a-prescription/";
+        private const string YourHealthHelpLinkPath = "health-records-in-the-nhs-app/gp-health-record/";
+        private const string MessagesHelpLinkPath = "messaging-in-the-nhs-app/";
+        private const string NhsLoginSettingsHelpLinkPath = "nhs-app-account-and-settings/managing-your-nhs-app-account/";
 
         [NhsAppAndroidTest]
         public void APatientCanAccessContextualHelpFromHomeScreenAndroid(IAndroidDriverWrapper driver)
@@ -407,11 +406,11 @@ namespace NHSOnline.IntegrationTests.Help
 
             IOSMorePage
                 .AssertOnPage(driver)
-                .PageContent.NavigateToAccountAndSettings();
+                .NavigateToAccountAndSettings();
 
             IOSAccountSettingsPage
                 .AssertOnPage(driver)
-                .PageContent.NavigateToNhsLogin();
+                .NavigateToNhsLoginSettings();
 
             IOSNhsLoginSettingsPage
                 .AssertOnPage(driver)

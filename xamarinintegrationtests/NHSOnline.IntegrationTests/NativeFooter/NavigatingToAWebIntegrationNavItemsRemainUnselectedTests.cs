@@ -45,7 +45,6 @@ namespace NHSOnline.IntegrationTests.NativeFooter
         }
 
         [NhsAppIOSTest]
-        [Ignore("Disabling as on 11 pro it clicks wrong menu item (one below)")]
         public void APatientSeesTheNavigationFooterRemainDeselectedWhenNavigatingToAWebIntegrationIOS(
             IIOSDriverWrapper driver)
         {
@@ -61,11 +60,11 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             IOSMorePage
                 .AssertOnPage(driver)
-                .PageContent.NavigateToAccountAndSettings();
+                .NavigateToAccountAndSettings();
 
             IOSAccountSettingsPage
                 .AssertOnPage(driver)
-                .PageContent.NavigateToNhsLogin();
+                .NavigateToNhsLoginSettings();
 
             IOSNhsLoginSettingsPage
                 .AssertOnPage(driver)

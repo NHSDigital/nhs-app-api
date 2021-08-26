@@ -70,7 +70,6 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppIOSTest]
-        [Ignore("Disabling as on 11 pro it clicks wrong menu item (one below)")]
         public void APatientWithProofLevelNineCanAccessNhsLoginSettingsFromMoreScreenIOS(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
@@ -85,11 +84,11 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSMorePage
                 .AssertOnPage(driver)
-                .PageContent.NavigateToAccountAndSettings();
+                .NavigateToAccountAndSettings();
 
             IOSAccountSettingsPage
                 .AssertOnPage(driver)
-                .PageContent.NavigateToNhsLogin();
+                .NavigateToNhsLoginSettings();
 
             IOSNhsLoginSettingsPage
                 .AssertOnPage(driver)
