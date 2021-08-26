@@ -55,5 +55,6 @@ export default {
     youCanGoDirectlyToOrOneOneOne: 'You can go directly to book an appointment or order a repeat prescription, or use the menu buttons to find the service you need. For urgent medical advice, go to 111.nhs.uk or call one one one.',
     forSecurityReasonsYouWillBeLoggedOutInMinutes: 'For security reasons, you\'ll be logged out in 1 minute.|For security reasons, you\'ll be logged out in {time} minutes.',
     stayLoggedIn: 'Stay logged in',
+    noAuthTokenPresent: 'No authorisation token present',
   },
 };

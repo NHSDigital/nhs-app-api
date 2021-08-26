@@ -5,6 +5,7 @@ import jwt from 'jwt-decode';
 import mockdate from 'mockdate';
 import sources from '@/lib/sources';
 import { AUTH_RESPONSE, LOGOUT, UPDATE_CONFIG } from '@/store/modules/auth/mutation-types';
+import generic from '@/locale/en/generic';
 import { mockCookies } from '../../../helpers';
 
 jest.mock('@/services/native-app');
@@ -140,6 +141,31 @@ describe('actions', () => {
 
     actions.dispatch = jest.fn();
     actions.state = state;
+  });
+
+  describe('handle auth response with no nhso.auth cookie', () => {
+    beforeEach(async () => {
+      const rootState = {
+        device: {
+          referrer: 'test',
+        },
+      };
+      state.config = null;
+      actions.app.$http.postV1Session = jest.fn(() => promise);
+      await actions.handleAuthResponse({ commit, state, rootState }, { code: '123' });
+    });
+
+    it('will log an error that the auth cookie is not present', () => {
+      expect(actions.dispatch).toHaveBeenCalledWith('log/onError', generic.errors.noAuthTokenPresent);
+    });
+
+    it('will redirect the user to the home page', () => {
+      expect(actions.dispatch).toHaveBeenCalledWith('navigation/goToHomePage');
+    });
+
+    it('will not call the session API', () => {
+      expect(actions.app.$http.postV1Session).toBeCalledTimes(0);
+    });
   });
 
   describe('handle auth response', () => {

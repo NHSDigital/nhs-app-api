@@ -4,9 +4,11 @@ import { LOGIN_PATH } from '@/router/paths';
 import { removeCookies, setCookie } from '@/lib/cookie-manager';
 import get from 'lodash/fp/get';
 import { GP_SESSION_ERROR_STATUS, createLocalError } from '@/lib/utils';
+import generic from '@/locale/en/generic';
 import { AUTH_RESPONSE, INIT_AUTH, LOGOUT, UPDATE_CONFIG, ADD_GP_SESSION_ERROR } from './mutation-types';
 
 const thirtySeconds = 30000;
+const authCookieKey = 'nhso.auth';
 
 const final = ({ self, commit, expired }) => {
   commit(LOGOUT, true);
@@ -83,7 +85,7 @@ const cleanupSession = ({ self }) => {
 
   removeCookies({
     cookies: self.$cookies,
-    key: 'nhso.auth',
+    key: authCookieKey,
   });
 };
 
@@ -155,6 +157,12 @@ export default {
   },
   async handleAuthResponse({ commit, state, rootState }, nhsLoginResponse) {
     try {
+      if (!state.config) {
+        this.dispatch('log/onError', generic.errors.noAuthTokenPresent);
+        this.dispatch('navigation/goToHomePage');
+        return;
+      }
+
       const request = createSessionRequest(state, rootState, nhsLoginResponse);
       const response = await this.app.$http.postV1Session(request);
 
