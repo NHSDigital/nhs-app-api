@@ -23,9 +23,6 @@
 
 <script>
 import {
-  MANAGING_YOUR_NHS_APP_ACCOUNT_HELP_PATH,
-} from '@/router/externalLinks';
-import {
   MORE_ACCOUNTANDSETTINGS_MANAGENOTIFICATIONS_PATH,
   MORE_ACCOUNTANDSETTINGS_FINGERPRINT_PATH,
   MORE_ACCOUNTANDSETTINGS_FACE_ID_PATH,
@@ -96,7 +93,6 @@ export default {
       redirectTo(this, MORE_ACCOUNTANDSETTINGS_MANAGENOTIFICATIONS_PATH);
     },
     async goToNHSSettings() {
-      const helpUrl = `${this.$store.$env.BASE_NHS_APP_HELP_URL}${MANAGING_YOUR_NHS_APP_ACCOUNT_HELP_PATH}`;
       const { token } = await this.$store.app.$http
         .postV1PatientAssertedLoginIdentity({
           assertedLoginIdentityRequest: {
@@ -104,10 +100,10 @@ export default {
           },
         });
       const settingsUrl = `${this.cidSettingsUrl}?asserted_login_identity=${token}`;
-      this.configureWebContext(helpUrl);
+      this.configureWebContext('https://www.nhs.uk/nhs-app/nhs-app-help-and-support/nhs-app-account-and-settings/managing-your-nhs-app-account/');
       if (this.isNativeApp) {
         if (NativeApp.supportsNativeWebIntegration()) {
-          NativeApp.openWebIntegration(settingsUrl, [], helpUrl);
+          NativeApp.openWebIntegration(settingsUrl);
         } else {
           window.location = settingsUrl;
         }

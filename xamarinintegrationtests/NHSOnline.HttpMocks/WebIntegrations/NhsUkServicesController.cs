@@ -24,6 +24,7 @@ namespace NHSOnline.HttpMocks.WebIntegrations
             return CreatePage("Health A to Z");
         }
 
+        [HttpGet("help-and-support/{path?}")]
         [HttpGet("help-and-support/{*path}")]
         public IActionResult HelpAndSupport(string? path = null)
         {

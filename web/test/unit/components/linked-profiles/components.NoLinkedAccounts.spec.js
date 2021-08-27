@@ -26,7 +26,7 @@ describe('switch profile button component', () => {
       // assert
       const link = page.find('#findOutMoreLink');
       expect(link.text()).toEqual('Find out more about linked profiles');
-      expect(link.attributes('href')).toEqual('http://stubs.local.bitraft.io/help-and-support/linked-profiles-in-the-nhs-app/');
+      expect(link.attributes('href')).toEqual('http://stubs.local.bitraft.io/help-and-support/linked-profiles-in-the-nhs-app');
     });
   });
 });

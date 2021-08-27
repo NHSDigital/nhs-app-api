@@ -10,7 +10,7 @@ import PrescriptionsGpAtHand from '@/pages/prescriptions/gp-at-hand';
 import UpliftPrescriptionsPage from '@/pages/uplift/prescriptions';
 
 import proofLevel from '@/lib/proofLevel';
-import { ORDERING_A_PRESCRIPTION_HELP_PATH, PRESCRIPTIONS_HELP_PATH } from '@/router/externalLinks';
+import { PRESCRIPTIONS_HELP_PATH, PRESCRIPTIONS_IN_THE_NHS_APP_PATH } from '@/router/externalLinks';
 import sjrRedirectRules from '@/router/sjrRedirectRules';
 
 import {
@@ -49,7 +49,7 @@ export const UPLIFT_PRESCRIPTIONS = {
     crumb: breadcrumbs.UPLIFT_PRESCRIPTIONS_CRUMB,
     i18nKey: 'prescriptions',
     proofLevel: proofLevel.P5,
-    helpPath: ORDERING_A_PRESCRIPTION_HELP_PATH,
+    helpPath: PRESCRIPTIONS_HELP_PATH,
   },
 };
 
@@ -63,7 +63,7 @@ export const PRESCRIPTIONS = {
     crumb: breadcrumbs.PRESCRIPTIONS_CRUMB,
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
-    helpPath: PRESCRIPTIONS_HELP_PATH,
+    helpPath: PRESCRIPTIONS_IN_THE_NHS_APP_PATH,
     proxyShutterPath: '/linked-profiles/shutter/prescriptions',
     sjrRedirectRules: [sjrRedirectRules.gpAtHandPrescriptionsRedirect],
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
@@ -83,7 +83,7 @@ export const VIEW_ORDERS = {
     crumb: breadcrumbs.PRESCRIPTIONS_VIEW_ORDERS_CRUMB,
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
-    helpPath: ORDERING_A_PRESCRIPTION_HELP_PATH,
+    helpPath: PRESCRIPTIONS_HELP_PATH,
     proxyShutterPath: '/linked-profiles/shutter/prescriptions',
     sjrRedirectRules: [sjrRedirectRules.gpAtHandPrescriptionsRedirect],
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
@@ -103,7 +103,7 @@ export const REPEAT_COURSES = {
     crumb: breadcrumbs.PRESCRIPTION_REPEAT_COURSES_CRUMB,
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
-    helpPath: ORDERING_A_PRESCRIPTION_HELP_PATH,
+    helpPath: PRESCRIPTIONS_HELP_PATH,
     proxyShutterPath: '/linked-profiles/shutter/prescriptions',
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
     gpSessionOnDemand: {
@@ -122,7 +122,7 @@ export const CONFIRM_DETAILS = {
     crumb: breadcrumbs.PRESCRIPTION_CONFIRM_COURSES_CRUMB,
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
-    helpPath: ORDERING_A_PRESCRIPTION_HELP_PATH,
+    helpPath: PRESCRIPTIONS_HELP_PATH,
     proxyShutterPath: '/linked-profiles/shutter/prescriptions',
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
     gpSessionOnDemand: {
@@ -151,7 +151,7 @@ export const ORDER_SUCCESS = {
     crumb: breadcrumbs.PRESCRIPTION_ORDER_SUCCESS_CRUMB,
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
-    helpPath: ORDERING_A_PRESCRIPTION_HELP_PATH,
+    helpPath: PRESCRIPTIONS_HELP_PATH,
     proxyShutterPath: '/linked-profiles/shutter/prescriptions',
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
     redirectRules: [{
@@ -175,7 +175,7 @@ export const REPEAT_PARTIAL_SUCCESS = {
     crumb: breadcrumbs.PRESCRIPTION_REPEAT_PARTIAL_SUCCESS_CRUMB,
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
-    helpPath: ORDERING_A_PRESCRIPTION_HELP_PATH,
+    helpPath: PRESCRIPTIONS_HELP_PATH,
     proxyShutterPath: '/linked-profiles/shutter/prescriptions',
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
     gpSessionOnDemand: {
@@ -199,7 +199,7 @@ export const PRESCRIPTIONS_GP_AT_HAND = {
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     crumb: breadcrumbs.PRESCRIPTIONS_GP_AT_HAND_CRUMB,
     proofLevel: proofLevel.P9,
-    helpPath: ORDERING_A_PRESCRIPTION_HELP_PATH,
+    helpPath: PRESCRIPTIONS_HELP_PATH,
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
     gpSessionOnDemand: {
       journey: GP_PRESCRIPTION_JOURNEY_NAME,
