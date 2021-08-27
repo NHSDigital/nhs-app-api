@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using NHSOnline.App.Events.Models;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
@@ -12,9 +13,12 @@ namespace NHSOnline.App.Areas.LoggedOut
         internal interface IEvents
         {
             Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
-            Func<Task>? NavigationFailed { get; set; }
+            Func<NavigationFailedArgs, Task>? NavigationFailed { get; set; }
+
             Func<Task>? BackRequested { get; set; }
             Func<Uri, Task>? DeeplinkRequested { get; set; }
         }
+
+        void GoToUri(Uri uri);
     }
 }

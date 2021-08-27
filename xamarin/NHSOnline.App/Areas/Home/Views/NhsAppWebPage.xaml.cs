@@ -118,9 +118,9 @@ namespace NHSOnline.App.Areas.Home.Views
         private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand
             => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
 
-        public Func<WebNavigatedEventArgs, Task>? Navigated { get; set; }
-        private AsyncCommand<WebNavigatedEventArgs> NavigatedCommand
-            => new AsyncCommand<WebNavigatedEventArgs>(() => Navigated);
+        public Func<Uri, Task>? NavigationFailed { get; set; }
+        private AsyncCommand<Uri> NavigationFailedCommand
+            => new AsyncCommand<Uri>(() => NavigationFailed);
 
         public Func<Task>? ResetAndShowErrorRequested { get; set; }
         public async Task ResetAndShowError()
@@ -169,13 +169,26 @@ namespace NHSOnline.App.Areas.Home.Views
         }
 
         private void WebViewOnNavigating(object sender, WebNavigatingEventArgs args)
-            => NavigatingCommand.Execute(args);
+        {
+            _logger.LogInformation("Navigating: {Uri}", args.Url);
+            NavigatingCommand.Execute(args);
+        }
 
         private void WebViewOnNavigated(object sender, WebNavigatedEventArgs args)
         {
-            WebView.Focus();
-            WebView.AccessibilityFocus();
-            NavigatedCommand.Execute(args);
+            _logger.LogInformation("Navigated ({Result}): {Uri}", args.Result, args.Url);
+
+            if (args.Result is WebNavigationResult.Success)
+            {
+                WebView.Focus();
+                WebView.AccessibilityFocus();
+            }
+            else
+            {
+                WebView.IsVisible = false;
+                NavigationFailedCommand.Execute(new Uri(args.Url));
+            }
+
         }
 
         protected override bool OnBackButtonPressed()

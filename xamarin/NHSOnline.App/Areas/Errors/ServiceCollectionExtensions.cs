@@ -11,8 +11,11 @@ namespace NHSOnline.App.Areas.Errors
         internal static IServiceCollection AddErrorsArea(this IServiceCollection services)
         {
             return services
+                .AddModelViewPresenter<CloseSlimBackToHomeNetworkErrorModel, CloseSlimBackToHomeNetworkErrorPage, CloseSlimBackToHomeNetworkErrorPresenter>()
+                .AddModelViewPresenter<CloseSlimTryAgainNetworkErrorModel, CloseSlimTryAgainNetworkErrorPage, CloseSlimTryAgainNetworkErrorPresenter>()
+                .AddModelViewPresenter<FullNavigationBackToHomeNetworkErrorModel, FullNavigationBackToHomeNetworkErrorPage, FullNavigationBackToHomeNetworkErrorPresenter>()
                 .AddModelViewPresenter<FullNavigationTryAgainNetworkErrorModel, FullNavigationTryAgainNetworkErrorPage, FullNavigationTryAgainNetworkErrorPresenter>()
-                .AddModelViewPresenter<FullNavigationBackToHomeNetworkErrorModel, FullNavigationBackToHomeNetworkErrorPage, FullNavigationBackToHomeNetworkErrorPresenter>();
+                .AddModelViewPresenter<PreHomeTryAgainNetworkErrorModel, PreHomeTryAgainNetworkErrorPage, PreHomeTryAgainNetworkErrorPresenter>();
         }
     }
 }

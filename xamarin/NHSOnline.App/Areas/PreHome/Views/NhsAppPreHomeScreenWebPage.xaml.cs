@@ -29,26 +29,32 @@ namespace NHSOnline.App.Areas.PreHome.Views
         IAppNavigation<INhsAppPreHomeScreenWebView.IEvents> INavigationView<INhsAppPreHomeScreenWebView.IEvents>.AppNavigation => _appNavigation;
 
         Func<Task>? INhsAppPreHomeScreenWebView.IEvents.Appearing { get; set; }
-        private AsyncCommand AppearingCommand => new AsyncCommand(() => Events.Appearing);
+        private AsyncCommand AppearingCommand
+            => new AsyncCommand(() => Events.Appearing);
 
         public Func<Task>? GetNotificationsStatusRequested { get; set; }
-        public AsyncCommand GetNotificationsStatusCommand => new AsyncCommand(() => GetNotificationsStatusRequested);
+        public AsyncCommand GetNotificationsStatusCommand
+            => new AsyncCommand(() => GetNotificationsStatusRequested);
 
         public Func<string, Task>? GetPnsTokenRequested { get; set; }
-        public Func<Uri, Task>? DeeplinkRequested { get; set; }
-        public AsyncCommand<string> RequestPnsTokenCommand => new AsyncCommand<string>(() => GetPnsTokenRequested);
+        public AsyncCommand<string> RequestPnsTokenCommand
+            => new AsyncCommand<string>(() => GetPnsTokenRequested);
 
         public Func<Task>? GoToLoggedInHomeRequested { get; set; }
-        public AsyncCommand GoToLoggedInHomeCommand => new AsyncCommand(() => GoToLoggedInHomeRequested);
+        public AsyncCommand GoToLoggedInHomeCommand
+            => new AsyncCommand(() => GoToLoggedInHomeRequested);
 
         public Func<Task>? LogoutRequested { get; set; }
-        public AsyncCommand LogoutCommand => new AsyncCommand(() => LogoutRequested);
+        public AsyncCommand LogoutCommand
+            => new AsyncCommand(() => LogoutRequested);
 
         public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
-        private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
+        private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand
+            => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
 
-        public Func<WebNavigatedEventArgs, Task>? Navigated { get; set; }
-        private AsyncCommand<WebNavigatedEventArgs> NavigatedCommand => new AsyncCommand<WebNavigatedEventArgs>(() => Navigated);
+        public Func<Uri, Task>? NavigationFailed { get; set; }
+        private AsyncCommand<Uri> NavigationFailedCommand
+            => new AsyncCommand<Uri>(() => NavigationFailed);
 
         public Func<Task>? OnSessionExpiringRequested { get; set; }
         public AsyncCommand OnSessionExpiringCommand
@@ -58,7 +64,6 @@ namespace NHSOnline.App.Areas.PreHome.Views
         public AsyncCommand SessionExpiredCommand
             => new AsyncCommand(() => SessionExpiredRequested);
 
-
         public Func<Task>? ResetAndShowErrorRequested { get; set; }
         public async Task ResetAndShowError()
         {
@@ -67,6 +72,12 @@ namespace NHSOnline.App.Areas.PreHome.Views
                 await Events.ResetAndShowErrorRequested().PreserveThreadContext();
             }
         }
+
+        public Func<Uri, Task>? ReloadUrlRequested { get; set; }
+        public AsyncCommand<Uri> ReloadUrlCommand
+            => new AsyncCommand<Uri>(() => ReloadUrlRequested);
+
+        public Func<Uri, Task>? DeeplinkRequested { get; set; }
 
         private INhsAppPreHomeScreenWebView.IEvents Events => this;
 
@@ -102,13 +113,26 @@ namespace NHSOnline.App.Areas.PreHome.Views
         }
 
         private void WebViewOnNavigating(object sender, WebNavigatingEventArgs args)
-            => NavigatingCommand.Execute(args);
+        {
+            _logger.LogInformation("Navigating: {Uri}", args.Url);
+
+            NavigatingCommand.Execute(args);
+        }
 
         private void WebViewOnNavigated(object sender, WebNavigatedEventArgs args)
         {
-            WebView.Focus();
-            WebView.AccessibilityFocus();
-            NavigatedCommand.Execute(args);
+            _logger.LogInformation("Navigated ({Result}): {Uri}", args.Result, args.Url);
+
+            if (args.Result is WebNavigationResult.Success)
+            {
+                WebView.Focus();
+                WebView.AccessibilityFocus();
+            }
+            else
+            {
+                WebView.IsVisible = false;
+                NavigationFailedCommand.Execute(new Uri(args.Url));
+            }
         }
 
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);

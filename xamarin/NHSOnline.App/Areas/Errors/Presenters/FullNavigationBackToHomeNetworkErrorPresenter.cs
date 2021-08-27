@@ -29,7 +29,7 @@ namespace NHSOnline.App.Areas.Errors.Presenters
                 .RegisterHandler(model.NavigationHandler.HomeRequested, (view, handler) => view.BackToHomeRequested = handler)
                 .RegisterHandler(model.NavigationHandler.HomeRequested, (view, handler) => view.BackRequested = handler)
                 .RegisterHandler(model.NavigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
-                .RegisterHandler(ViewOnHelpRequested, (view, handler) => view.HelpRequested = handler)
+                .RegisterHandler(HelpRequested, (view, handler) => view.HelpRequested = handler)
                 .RegisterHandler(model.NavigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
                 .RegisterHandler(model.NavigationHandler.AdviceRequested, (view, handler) => view.AdviceRequested = handler)
                 .RegisterHandler(model.NavigationHandler.AppointmentsRequested, (view, handler) => view.AppointmentsRequested = handler)
@@ -38,10 +38,10 @@ namespace NHSOnline.App.Areas.Errors.Presenters
                 .RegisterHandler(model.NavigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler);
         }
 
-        private Task ViewOnHelpRequested()
+        private Task HelpRequested()
         {
-            _logger.LogInformation("Help Requested");
-            return _browserOverlay.OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkTechnicalIssuesHelpUrl);
+            _logger.LogInformation("Help requested");
+            return _browserOverlay.OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkBaseHelpUrl);
         }
     }
 }

@@ -9,11 +9,10 @@ namespace NHSOnline.App.Areas.Errors.Presenters
     internal class FullNavigationTryAgainNetworkErrorPresenter
     {
         private readonly IFullNavigationTryAgainNetworkErrorView _view;
+        private readonly FullNavigationTryAgainNetworkErrorModel _model;
         private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
         private readonly IBrowserOverlay _browserOverlay;
         private readonly ILogger<FullNavigationTryAgainNetworkErrorPresenter> _logger;
-
-        private readonly ITryAgainWebview _tryAgainWebview;
 
         public FullNavigationTryAgainNetworkErrorPresenter(
             IFullNavigationTryAgainNetworkErrorView view,
@@ -23,19 +22,18 @@ namespace NHSOnline.App.Areas.Errors.Presenters
             ILogger<FullNavigationTryAgainNetworkErrorPresenter> logger)
         {
             _view = view;
+            _model = model;
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
             _browserOverlay = browserOverlay;
             _logger = logger;
 
-            _tryAgainWebview = model.TryAgainWebview;
-
             view.SetNavigationFooterItem(model.SelectedFooterItem);
 
             view.AppNavigation
-                .RegisterHandler(ViewOnTryAgainRequested, (view, handler) => view.TryAgainRequested = handler)
-                .RegisterHandler(ViewOnBackRequested, (view, handler) => view.BackRequested = handler)
+                .RegisterHandler(TryAgainRequested, (view, handler) => view.TryAgainRequested = handler)
+                .RegisterHandler(TryAgainRequested, (view, handler) => view.BackRequested = handler)
                 .RegisterHandler(model.NavigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
-                .RegisterHandler(ViewOnHelpRequested, (view, handler) => view.HelpRequested = handler)
+                .RegisterHandler(HelpRequested, (view, handler) => view.HelpRequested = handler)
                 .RegisterHandler(model.NavigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
                 .RegisterHandler(model.NavigationHandler.AdviceRequested, (view, handler) => view.AdviceRequested = handler)
                 .RegisterHandler(model.NavigationHandler.AppointmentsRequested, (view, handler) => view.AppointmentsRequested = handler)
@@ -44,28 +42,18 @@ namespace NHSOnline.App.Areas.Errors.Presenters
                 .RegisterHandler(model.NavigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler);
         }
 
-        private Task ViewOnTryAgainRequested()
+        private Task HelpRequested()
         {
-            _logger.LogInformation("TryAgain Requested");
-            return WebViewTryAgain();
+            _logger.LogInformation("Help requested");
+            return _browserOverlay.OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkBaseHelpUrl);
         }
 
-        private Task ViewOnBackRequested()
+        private async Task TryAgainRequested()
         {
-            _logger.LogInformation("Back Requested");
-            return WebViewTryAgain();
-        }
+            _logger.LogInformation("Try Again requested");
 
-        private Task ViewOnHelpRequested()
-        {
-            _logger.LogInformation("Help Requested");
-            return _browserOverlay.OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkTechnicalIssuesHelpUrl);
-        }
-
-        private async Task WebViewTryAgain()
-        {
             await _view.AppNavigation.Pop().PreserveThreadContext();
-            _tryAgainWebview.TryAgain();
+            _model.RetryAction.Invoke();
         }
     }
 }

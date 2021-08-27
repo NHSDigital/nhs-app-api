@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.Payloads;
+using NHSOnline.App.Events.Models;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
@@ -16,7 +17,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         private readonly ILogger _logger;
         private readonly AppNavigation<IWebIntegrationView.IEvents> _appNavigation;
 
-        public bool OnInitialNavigation { get; private set; } = true;
+        private bool OnInitialNavigation { get; set; } = true;
+        private Uri? InitialUrl { get; set; }
 
         public WebIntegrationPage(ILogger<WebIntegrationPage> logger)
         {
@@ -40,13 +42,9 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand
             => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
 
-        public Func<Task>? ShowTryAgainNetworkErrorRequested { get; set; }
-        private AsyncCommand ShowTryAgainNetworkErrorCommand
-            => new AsyncCommand(() => ShowTryAgainNetworkErrorRequested);
-
-        public Func<Task>? ShowBackToHomeNetworkErrorRequested { get; set; }
-        private AsyncCommand ShowBackToHomeNetworkErrorCommand
-            => new AsyncCommand(() => ShowBackToHomeNetworkErrorRequested);
+        public Func<NavigationFailedArgs, Task>? NavigationFailed { get; set; }
+        private AsyncCommand<NavigationFailedArgs> NavigationFailedCommand
+            => new AsyncCommand<NavigationFailedArgs>(() => NavigationFailed);
 
         public Func<string, Task>? GoToNhsAppPageRequested { get; set; }
         public AsyncCommand<string> GoToNhsAppPageCommand
@@ -59,10 +57,6 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         public Func<DownloadRequest, Task>? StartDownloadRequested { get; set; }
         public AsyncCommand<DownloadRequest> StartDownloadCommand
             => new AsyncCommand<DownloadRequest>(() => StartDownloadRequested);
-
-        public Func<Task>? ReloadInitialUrlRequested { get; set; }
-        public AsyncCommand ReloadInitialUrlCommand
-            => new AsyncCommand(() => ReloadInitialUrlRequested);
 
         public Func<Uri, Task>? DeepLinkRequested { get; set; }
 
@@ -115,27 +109,28 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
             {
                 OnInitialNavigation = false;
                 WebView.Focus();
-                return;
             }
-
-            ShowNetworkError();
-        }
-
-        private void ShowNetworkError()
-        {
-            WebView.IsVisible = false;
-
-            if (OnInitialNavigation)
+            else if (InitialUrl is null)
             {
-                ShowTryAgainNetworkErrorCommand.Execute(null);
+                _logger.LogError($"{nameof(InitialUrl)} is null but should never be null");
+
+                WebView.IsVisible = false;
+                NavigationFailedCommand.Execute(new NavigationFailedArgs(new Uri(args.Url), OnInitialNavigation));
             }
             else
             {
-                ShowBackToHomeNetworkErrorCommand.Execute(null);
+                WebView.IsVisible = false;
+                NavigationFailedCommand.Execute(new NavigationFailedArgs(InitialUrl, OnInitialNavigation));
             }
         }
 
-        public void GoToUri(Uri uri) => WebView.GoToUri(uri);
+        public void GoToUri(Uri uri)
+        {
+            OnInitialNavigation = true;
+            InitialUrl = uri;
+
+            WebView.GoToUri(uri);
+        }
 
         public void SetNavigationFooterItem(NavigationFooterItem footerItem) => SelectedNavigationFooterItem = footerItem;
 
@@ -151,14 +146,6 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
             {
                 await DeepLinkRequested(deeplinkUrl).PreserveThreadContext();
             }
-        }
-
-        public void TryAgain()
-        {
-            Spinner.IsVisible = true;
-            OnInitialNavigation = true;
-
-            ReloadInitialUrlCommand.Execute(null);
         }
     }
 }

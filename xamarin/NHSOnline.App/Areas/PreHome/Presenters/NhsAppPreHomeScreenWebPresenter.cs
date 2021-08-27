@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Areas.Errors.Models;
 using NHSOnline.App.Areas.Home.Models;
 using NHSOnline.App.Areas.LoggedOut;
 using NHSOnline.App.Areas.LoggedOut.Models;
@@ -56,7 +57,7 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             _view.AppNavigation
                 .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
                 .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
-                .RegisterHandler<WebNavigatedEventArgs>(ViewOnNavigated, (view, handler) => view.Navigated = handler)
+                .RegisterHandler<Uri>(ViewOnNavigationFailed, (view, handler) => view.NavigationFailed = handler)
                 .RegisterHandler(GetNotificationsStatusRequested, (view, handler) => view.GetNotificationsStatusRequested = handler)
                 .RegisterHandler(GoToLoggedInHomeRequested, (view, handler) => view.GoToLoggedInHomeRequested = handler)
                 .RegisterHandler(LogoutRequested, (view, handler) => view.LogoutRequested = handler)
@@ -81,6 +82,7 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
 
             return Task.CompletedTask;
         }
+
         private async Task SessionExpiredRequested()
         {
             _logger.LogInformation("{Method}", nameof(SessionExpiredRequested));
@@ -127,8 +129,8 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
 
         private async Task ViewOnNavigating(WebNavigatingEventArgs args)
         {
-            _logger.LogInformation("Navigating: {Uri}", args.Url);
             var uri = new Uri(args.Url);
+
             if (!IsNhsAppWeb(uri))
             {
                 args.Cancel = true;
@@ -143,10 +145,13 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             return string.Equals(uri.Host, _config.Host, StringComparison.OrdinalIgnoreCase);
         }
 
-        private Task ViewOnNavigated(WebNavigatedEventArgs args)
+        private Task ViewOnNavigationFailed(Uri failingUrl)
         {
-            _logger.LogInformation("Navigated ({Result}): {Uri}", args.Result, args.Url);
-            return Task.CompletedTask;
+            void RetryAction() => _view.GoToUri(failingUrl);
+
+            var model = new PreHomeTryAgainNetworkErrorModel(RetryAction);
+            var page = _pageFactory.CreatePageFor(model);
+            return _view.AppNavigation.Push(page);
         }
 
         private async Task GetNotificationsStatusRequested()

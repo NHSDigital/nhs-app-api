@@ -2,9 +2,12 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Areas.Errors.Models;
 using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.Controls.WebViews.Payloads;
+using NHSOnline.App.DependencyInjection;
+using NHSOnline.App.Events.Models;
 using NHSOnline.App.Services;
 using NHSOnline.App.Services.Media;
 using Xamarin.Forms;
@@ -18,6 +21,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
         private readonly ILogger _logger;
         private readonly INhsLoginUpliftView _view;
         private readonly NhsLoginUpliftModel _model;
+        private readonly IPageFactory _pageFactory;
         private readonly IBrowserOverlay _browserOverlay;
         private readonly WebIntegrationUriDestination _uriDestination;
         private readonly ISelectMediaService _selectMediaService;
@@ -26,6 +30,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             ILogger<NhsLoginUpliftPresenter> logger,
             INhsLoginUpliftView view,
             NhsLoginUpliftModel model,
+            IPageFactory pageFactory,
             INhsLoginConfiguration nhsLoginConfiguration,
             IBrowserOverlay browserOverlay,
             ISelectMediaService selectMediaService)
@@ -33,20 +38,18 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             _logger = logger;
             _view = view;
             _model = model;
+            _pageFactory = pageFactory;
             _browserOverlay = browserOverlay;
             _selectMediaService = selectMediaService;
 
             _uriDestination = new WebIntegrationUriDestination(nhsLoginConfiguration, model.Url, new Collection<Uri>());
 
             _view.AppNavigation
-                .RegisterHandler(
-                    ViewOnAppearing, (view, handler) => view.Appearing = handler)
-                .RegisterHandler<WebNavigatingEventArgs>(
-                    ViewOnNavigating, (view, handler) => view.Navigating = handler)
-                .RegisterHandler(
-                    BackRequested, (view, handler) => view.BackRequested = handler)
-                .RegisterHandler<ISelectMediaRequest>(
-                    SelectMediaRequested, (view, handler) => view.SelectMediaRequested = handler);
+                .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
+                .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
+                .RegisterHandler<NavigationFailedArgs>(ViewOnNavigationFailed, (view, handler) => view.NavigationFailed = handler)
+                .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler)
+                .RegisterHandler<ISelectMediaRequest>(SelectMediaRequested, (view, handler) => view.SelectMediaRequested = handler);
         }
 
         private async Task SelectMediaRequested(ISelectMediaRequest request)
@@ -74,6 +77,24 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             if (_uriDestination.ShouldOpenInBrowserOverlay(url))
             {
                 await OpenInBrowserOverlay(webNavigatingEventArgs, url).PreserveThreadContext();
+            }
+        }
+
+        private Task ViewOnNavigationFailed(NavigationFailedArgs args)
+        {
+            if (args.OnInitialNavigation)
+            {
+                void RetryAction() => _view.GoToUri(args.FailedUrl);
+
+                var model = new CloseSlimTryAgainNetworkErrorModel(RetryAction);
+                var page = _pageFactory.CreatePageFor(model);
+                return _view.AppNavigation.Push(page);
+            }
+            else
+            {
+                var model = new CloseSlimBackToHomeNetworkErrorModel();
+                var page = _pageFactory.CreatePageFor(model);
+                return _view.AppNavigation.Push(page);
             }
         }
 

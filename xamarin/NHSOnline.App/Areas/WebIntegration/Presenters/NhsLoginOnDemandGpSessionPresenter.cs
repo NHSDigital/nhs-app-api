@@ -1,9 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Areas.Errors.Models;
 using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
+using NHSOnline.App.DependencyInjection;
+using NHSOnline.App.Events.Models;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
 using Xamarin.Forms;
@@ -12,7 +14,9 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 {
     internal class NhsLoginOnDemandGpSessionPresenter : IOnDemandGpReturnCheckResultVisitor<Task>
     {
+        private readonly INhsLoginOnDemandGpSessionView _view;
         private readonly NhsLoginOnDemandGpSessionModel _model;
+        private readonly IPageFactory _pageFactory;
         private readonly ILogger<NhsLoginOnDemandGpSessionPresenter> _logger;
         private readonly INhsLoginConfiguration _nhsLoginConfiguration;
         private readonly IBrowserOverlay _browserOverlay;
@@ -24,21 +28,24 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
         public NhsLoginOnDemandGpSessionPresenter(
             INhsLoginOnDemandGpSessionView view,
             NhsLoginOnDemandGpSessionModel model,
+            IPageFactory pageFactory,
             ILogger<NhsLoginOnDemandGpSessionPresenter> logger,
             INhsLoginService nhsLoginService,
             INhsLoginConfiguration nhsLoginConfiguration,
             IBrowserOverlay browserOverlay)
         {
+            _view = view;
             _model = model;
+            _pageFactory = pageFactory;
             _logger = logger;
             _nhsLoginConfiguration = nhsLoginConfiguration;
             _browserOverlay = browserOverlay;
 
-            view.SetNavigationFooterItem(model.FooterItem);
+            _view.SetNavigationFooterItem(model.FooterItem);
 
-            view.AppNavigation
+            _view.AppNavigation
                 .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
-                .RegisterHandler(ViewOnNavigationFailed, (view, handler) => view.NavigationFailed = handler)
+                .RegisterHandler<NavigationFailedArgs>(ViewOnNavigationFailed, (view, handler) => view.NavigationFailed = handler)
                 .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler)
                 .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeeplinkRequested = handler)
                 .RegisterHandler(model.NavigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
@@ -50,7 +57,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                 .RegisterHandler(model.NavigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler);
 
             _createOnDemandGpSessionState = nhsLoginService.CreateOnDemandGpSession(model.AssertedLoginIdentity, model.RedirectTo);
-            view.LoadUrlAndNotifyOnRedirect(_createOnDemandGpSessionState.AuthoriseUri, IsRedirect, OnRedirect);
+            _view.LoadUrlAndNotifyOnRedirect(_createOnDemandGpSessionState.AuthoriseUri, IsRedirect, OnRedirect);
         }
 
         private async Task ViewOnNavigating(WebNavigatingEventArgs webNavigatingEventArgs)
@@ -59,6 +66,24 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             if (ShouldOpenInBrowserOverlay(url))
             {
                 await OpenInBrowserOverlay(webNavigatingEventArgs, url).PreserveThreadContext();
+            }
+        }
+
+        private Task ViewOnNavigationFailed(NavigationFailedArgs args)
+        {
+            if (args.OnInitialNavigation)
+            {
+                void RetryAction() => _view.GoToUri(args.FailedUrl);
+
+                var model = new FullNavigationTryAgainNetworkErrorModel(_model.NavigationHandler, _model.FooterItem, RetryAction);
+                var page = _pageFactory.CreatePageFor(model);
+                return _view.AppNavigation.Push(page);
+            }
+            else
+            {
+                var model = new FullNavigationBackToHomeNetworkErrorModel(_model.NavigationHandler, _model.FooterItem);
+                var page = _pageFactory.CreatePageFor(model);
+                return _view.AppNavigation.Push(page);
             }
         }
 
@@ -87,16 +112,6 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
         {
             _deeplinkUrl = deeplinkUrl;
             return Task.CompletedTask;
-        }
-
-        private Task ViewOnNavigationFailed()
-        {
-            _logger.LogInformation("Navigation failed. Returning to on-demand gp return");
-
-            return _model.NavigationHandler.NavigateToOnDemandGpReturn(new Dictionary<string, string>
-            {
-                {"state", _model.RedirectTo}
-            });
         }
 
         private bool IsRedirect(Uri uri) => _createOnDemandGpSessionState.IsOnDemandGpReturn(uri);

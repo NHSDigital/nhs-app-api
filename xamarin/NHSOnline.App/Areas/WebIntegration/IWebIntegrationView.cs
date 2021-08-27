@@ -2,20 +2,20 @@ using System;
 using System.Threading.Tasks;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Controls;
+using NHSOnline.App.Events.Models;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.WebIntegration
 {
-    internal interface IWebIntegrationView: INavigationView<IWebIntegrationView.IEvents>, ITryAgainWebview
+    internal interface IWebIntegrationView: INavigationView<IWebIntegrationView.IEvents>
     {
         internal interface IEvents
         {
             Func<Task>? Appearing { get; set; }
 
             Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
-            Func<Task>? ShowTryAgainNetworkErrorRequested { get; set; }
-            Func<Task>? ShowBackToHomeNetworkErrorRequested { get; set; }
+            Func<NavigationFailedArgs, Task>? NavigationFailed { get; set; }
 
             Func<Task>? HelpRequested { get; set; }
             Func<Task>? HomeRequested { get; set; }
@@ -28,7 +28,6 @@ namespace NHSOnline.App.Areas.WebIntegration
 
             Func<string, Task>? GoToNhsAppPageRequested { get; set; }
             Func<Uri, Task>? DeepLinkRequested { get; set; }
-            Func<Task>? ReloadInitialUrlRequested { get; set; }
 
             Func<AddEventToCalendarRequest, Task>? AddEventToCalendarRequested { get; set; }
             Func<DownloadRequest, Task>? StartDownloadRequested { get; set; }

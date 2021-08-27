@@ -13,13 +13,13 @@
     
     <AbsoluteLayout BackgroundColor="{ StaticResource NhsUkPageBackgroundGrey }">
         <elements:Spinner AbsoluteLayout.LayoutFlags="All"
-                          AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                          AbsoluteLayout.LayoutBounds="0,0,1,1"
                           x:Name="Spinner"
                           HorizontalOptions="Center"
                           VerticalOptions="Center" />
         
         <webViews:NhsLoginOnDemandGpSessionWebView AbsoluteLayout.LayoutFlags="All"
-                                                   AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                                                   AbsoluteLayout.LayoutBounds="0,0,1,1"
                                                    x:Name="WebView" 
                                                    VerticalOptions="FillAndExpand"
                                                    Navigating="WebViewNavigating"

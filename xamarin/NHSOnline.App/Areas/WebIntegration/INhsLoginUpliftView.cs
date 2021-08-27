@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using NHSOnline.App.Controls.WebViews.Payloads;
+using NHSOnline.App.Events.Models;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
@@ -12,8 +13,9 @@ namespace NHSOnline.App.Areas.WebIntegration
         {
             Func<Task>? Appearing { get; set; }
             Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
-            Func<Task>? BackRequested { get; set; }
+            Func<NavigationFailedArgs, Task>? NavigationFailed { get; set; }
 
+            Func<Task>? BackRequested { get; set; }
             Func<ISelectMediaRequest, Task>? SelectMediaRequested { get; set; }
         }
 

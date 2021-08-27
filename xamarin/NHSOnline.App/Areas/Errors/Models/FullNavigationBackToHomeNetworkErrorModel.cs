@@ -17,6 +17,3 @@ namespace NHSOnline.App.Areas.Errors.Models
         }
     }
 }
-
-
-

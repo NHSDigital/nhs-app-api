@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.Payloads;
+using NHSOnline.App.Events.Models;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
@@ -15,6 +16,9 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
     {
         private readonly ILogger _logger;
         private readonly AppNavigation<INhsLoginUpliftView.IEvents> _appNavigation;
+
+        private bool OnInitialNavigation { get; set; } = true;
+        private Uri? InitialUrl { get; set; }
 
         public NhsLoginUpliftPage(ILogger<NhsLoginUpliftPage> logger)
         {
@@ -36,8 +40,13 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand
             => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
 
+        public Func<NavigationFailedArgs, Task>? NavigationFailed { get; set; }
+        private AsyncCommand<NavigationFailedArgs> NavigationFailedCommand
+            => new AsyncCommand<NavigationFailedArgs>(() => NavigationFailed);
+
         public Func<Task>? BackRequested { get; set; }
-        private AsyncCommand BackRequestedCommand => new AsyncCommand(() => BackRequested);
+        private AsyncCommand BackRequestedCommand
+            => new AsyncCommand(() => BackRequested);
 
         public Func<ISelectMediaRequest, Task>? SelectMediaRequested { get; set; }
         public AsyncCommand<ISelectMediaRequest> SelectMediaCommand
@@ -87,6 +96,23 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         private void WebViewOnNavigated(object sender, WebNavigatedEventArgs args)
         {
             _logger.LogInformation("Navigated ({Result}): {Uri}", args.Result, args.Url);
+
+            if (args.Result is WebNavigationResult.Success)
+            {
+                OnInitialNavigation = false;
+            }
+            else if (InitialUrl is null)
+            {
+                _logger.LogError($"{nameof(InitialUrl)} is null but should never be null");
+
+                WebView.IsVisible = false;
+                NavigationFailedCommand.Execute(new NavigationFailedArgs(new Uri(args.Url), OnInitialNavigation));
+            }
+            else
+            {
+                WebView.IsVisible = false;
+                NavigationFailedCommand.Execute(new NavigationFailedArgs(InitialUrl, OnInitialNavigation));
+            }
         }
 
         protected override bool OnBackButtonPressed()
@@ -95,12 +121,30 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
             return true;
         }
 
-        public void GoToUri(Uri uri) => WebView.GoToUri(uri);
+        public void GoToUri(Uri uri)
+        {
+            OnInitialNavigation = true;
+            InitialUrl = uri;
+
+            WebView.GoToUri(uri);
+        }
 
         public Task HandleDeeplink(Uri deeplinkUrl)
         {
             _logger.LogInformation("{className} is not required to handle deeplinks", nameof(NhsLoginUpliftPage));
             return Task.CompletedTask;
+        }
+
+        private void WebViewNavigating (object sender, WebNavigatingEventArgs e)
+        {
+            Spinner.IsVisible = true;
+            WebView.IsVisible = false;
+        }
+
+        private void WebOnEndNavigating (object sender, WebNavigatedEventArgs e)
+        {
+            Spinner.IsVisible = false;
+            WebView.IsVisible = true;
         }
     }
 }

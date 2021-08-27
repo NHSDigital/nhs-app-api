@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
+using NHSOnline.App.Events.Models;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
@@ -14,6 +15,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
     {
         private readonly ILogger _logger;
         private readonly AppNavigation<INhsLoginView.IEvents> _appNavigation;
+
+        private bool OnInitialNavigation { get; set; } = true;
+        private Uri? InitialUrl { get; set; }
 
         public NhsLoginPage(ILogger<NhsLoginPage> logger)
         {
@@ -28,13 +32,16 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         IAppNavigation<INhsLoginView.IEvents> INavigationView<INhsLoginView.IEvents>.AppNavigation => _appNavigation;
 
         public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
-        private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
+        private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand
+            => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
 
-        public Func<Task>? NavigationFailed { get; set; }
-        private AsyncCommand NavigationFailedCommand => new AsyncCommand(() => NavigationFailed);
+        public Func<NavigationFailedArgs, Task>? NavigationFailed { get; set; }
+        private AsyncCommand<NavigationFailedArgs> NavigationFailedCommand
+            => new AsyncCommand<NavigationFailedArgs>(() => NavigationFailed);
 
         public Func<Task>? BackRequested { get; set; }
-        private AsyncCommand BackRequestedCommand => new AsyncCommand(() => BackRequested);
+        private AsyncCommand BackRequestedCommand
+            => new AsyncCommand(() => BackRequested);
 
         public Func<Uri, Task>? DeeplinkRequested { get; set; }
 
@@ -77,9 +84,21 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         {
             _logger.LogInformation("Navigated ({Result}): {Uri}", args.Result, args.Url);
 
-            if (args.Result != WebNavigationResult.Success)
+            if (args.Result is WebNavigationResult.Success)
             {
-                NavigationFailedCommand.Execute(null);
+                OnInitialNavigation = false;
+            }
+            else if (InitialUrl is null)
+            {
+                _logger.LogError($"{nameof(InitialUrl)} is null but should never be null");
+
+                WebView.IsVisible = false;
+                NavigationFailedCommand.Execute(new NavigationFailedArgs(new Uri(args.Url), OnInitialNavigation));
+            }
+            else
+            {
+                WebView.IsVisible = false;
+                NavigationFailedCommand.Execute(new NavigationFailedArgs(InitialUrl, OnInitialNavigation));
             }
         }
 
@@ -97,6 +116,14 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             }
 
             WebView.Navigating += OnWebViewOnNavigating;
+            GoToUri(uri);
+        }
+
+        public void GoToUri(Uri uri)
+        {
+            OnInitialNavigation = true;
+            InitialUrl = uri;
+
             WebView.GoToUri(uri);
         }
 
@@ -110,7 +137,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         {
             Spinner.IsVisible = true;
             WebView.IsVisible = false;
-
         }
 
         private void WebOnEndNavigating (object sender, WebNavigatedEventArgs e)

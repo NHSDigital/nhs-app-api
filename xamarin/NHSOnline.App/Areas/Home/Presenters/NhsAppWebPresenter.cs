@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Api.Session;
+using NHSOnline.App.Areas.Errors.Models;
 using NHSOnline.App.Areas.Home.Models;
 using NHSOnline.App.Areas.LoggedOut;
 using NHSOnline.App.Areas.LoggedOut.Models;
@@ -29,7 +30,6 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly INhsAppWebView _view;
         private readonly INhsAppWebConfiguration _config;
         private readonly ILogger _logger;
-        private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
         private readonly IBrowserOverlay _browserOverlay;
         private readonly IPageFactory _pageFactory;
         private readonly IBiometricAuthenticationService _biometricAuthenticationService;
@@ -46,7 +46,6 @@ namespace NHSOnline.App.Areas.Home.Presenters
             INhsAppWebView view,
             INhsAppWebConfiguration config,
             ILogger<NhsAppWebPresenter> logger,
-            INhsExternalServicesConfiguration nhsExternalServicesConfiguration,
             IBrowserOverlay browserOverlay,
             IPageFactory pageFactory,
             INotifications notifications,
@@ -61,7 +60,6 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _view = view;
             _config = config;
             _logger = logger;
-            _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
             _browserOverlay = browserOverlay;
             _pageFactory = pageFactory;
             _notifications = notifications;
@@ -77,7 +75,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _view.AppNavigation
                 .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
                 .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
-                .RegisterHandler<WebNavigatedEventArgs>(ViewOnNavigated, (view, handler) => view.Navigated = handler)
+                .RegisterHandler<Uri>(ViewOnNavigationFailed, (view, handler) => view.NavigationFailed = handler)
                 .RegisterHandler(HelpRequested, (view, handler) => view.HelpRequested = handler)
                 .RegisterHandler<OpenWebIntegrationRequest>(OpenWebIntegrationRequested, (view, handler) => view.OpenWebIntegrationRequested = handler)
                 .RegisterHandler<AddEventToCalendarRequest>(AddEventToCalendarRequested, (view, handler) => view.AddEventToCalendarRequested = handler)
@@ -169,7 +167,6 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         private async Task ViewOnNavigating(WebNavigatingEventArgs args)
         {
-            _logger.LogInformation("Navigating: {Uri}", args.Url);
             var uri = new Uri(args.Url);
             if (!IsNhsAppWeb(uri))
             {
@@ -178,12 +175,6 @@ namespace NHSOnline.App.Areas.Home.Presenters
                     .OpenBrowserOverlay(uri)
                     .PreserveThreadContext();
             }
-        }
-
-        private Task ViewOnNavigated(WebNavigatedEventArgs args)
-        {
-            _logger.LogInformation("Navigated ({Result}): {Uri}", args.Result, args.Url);
-            return Task.CompletedTask;
         }
 
         private async Task OpenWebIntegrationRequested(OpenWebIntegrationRequest request)
@@ -446,6 +437,16 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
             _view.GoToUri(_config.BaseAddress);
             return Task.CompletedTask;
+        }
+
+        private Task ViewOnNavigationFailed(Uri failingUrl)
+        {
+            var popToRootNavigationHandler = new NhsAppPopToRootNavigationHandler(_navigationHandler, _view.AppNavigation);
+            void RetryAction() => _view.GoToUri(failingUrl);
+
+            var model = new FullNavigationTryAgainNetworkErrorModel(popToRootNavigationHandler, _view.SelectedNavigationFooterItem, RetryAction);
+            var page = _pageFactory.CreatePageFor(model);
+            return _view.AppNavigation.Push(page);
         }
 
         private static NavigationFooterItem? GetFooterItemFromIndex(string footerItemIndex)

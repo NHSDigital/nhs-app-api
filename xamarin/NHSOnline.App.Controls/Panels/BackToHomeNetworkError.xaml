@@ -12,12 +12,10 @@
             <elements:ResponsiveParagraph Text="Check your connection, go back to the home screen, and try again." />
             <elements:ResponsiveParagraph Text="If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111." />
 
-            <elements:Button Text="Back to home"
-                             ButtonColour="{StaticResource NhsUkDarkGrey}"
-                             TextColour="{StaticResource NhsUkWhite}"
-                             Margin="0,20,0,0"
-                             Command="{Binding BackToHomeCommand, Source={x:Reference Name=Root}}"
-                             HorizontalOptions="Start" />
+            <elements:ResponsiveLinkLabel Text="Back to home"
+                                          Margin="0,20,0,0"
+                                          Command="{Binding BackToHomeCommand, Source={x:Reference Name=Root}}"
+                                          HorizontalOptions="Start" />
         </StackLayout>
     </panels:NhsErrorCallout>
 </StackLayout>

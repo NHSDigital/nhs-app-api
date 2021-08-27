@@ -5,12 +5,30 @@
                                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                                  xmlns:webViews="clr-namespace:NHSOnline.App.Controls.WebViews;assembly=NHSOnline.App.Controls"
                                  xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
+                                 xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
+                                 xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
                                  mc:Ignorable="d"
                                  x:Class="NHSOnline.App.Areas.WebIntegration.Views.NhsLoginUpliftPage"
                                  x:Name="Page">
 
-    <webViews:NhsLoginUpliftWebView x:Name="WebView"
-                                    SelectMediaCommand="{Binding SelectMediaCommand, Source={x:Reference Name=Page}}"
-                                    VerticalOptions="FillAndExpand" />
+    <AbsoluteLayout BackgroundColor="{ StaticResource NhsUkPageBackgroundGrey }">
+        <elements:Spinner AbsoluteLayout.LayoutFlags="All"
+                          AbsoluteLayout.LayoutBounds="0,0,1,1"
+                          HorizontalOptions="Center"
+                          VerticalOptions="Center"
+                          Margin="0,0,0,50"
+                          x:Name="Spinner">
+            <elements:Spinner.Effects>
+                <effects:SafeAreaPaddingBottom />
+            </elements:Spinner.Effects>
+        </elements:Spinner>
 
+        <webViews:NhsLoginUpliftWebView AbsoluteLayout.LayoutFlags="All"
+                                        AbsoluteLayout.LayoutBounds="0,0,1,1"
+                                        x:Name="WebView"
+                                        VerticalOptions="FillAndExpand"
+                                        Navigating="WebViewNavigating"
+                                        Navigated="WebOnEndNavigating"
+                                        SelectMediaCommand="{Binding SelectMediaCommand, Source={x:Reference Name=Page}}" />
+    </AbsoluteLayout>
 </pages:NhsAppCloseSlimHeaderPage>

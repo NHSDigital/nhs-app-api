@@ -14,7 +14,7 @@ namespace NHSOnline.App.Areas.Home
         {
             Func<Task>? Appearing { get; set; }
             Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
-            Func<WebNavigatedEventArgs, Task>? Navigated { get; set; }
+            Func<Uri, Task>? NavigationFailed { get; set; }
 
             Func<Task>? HelpRequested { get; set; }
             Func<Task>? HomeRequested { get; set; }
