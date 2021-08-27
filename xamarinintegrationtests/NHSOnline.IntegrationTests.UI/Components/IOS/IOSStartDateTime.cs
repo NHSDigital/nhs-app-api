@@ -67,7 +67,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
                                         $"AND label CONTAINS {_date.QuotePredicateLiteral()} " +
                                         $"AND label CONTAINS {_month.QuotePredicateLiteral()} " +
                                         $"AND label CONTAINS {_year.QuotePredicateLiteral()} " +
-                                        $"AND (label CONTAINS {_twelveHourTime.QuotePredicateLiteral()} " +
+                                        $"AND (label CONTAINS[c] {_twelveHourTime.QuotePredicateLiteral()} " +
                                         $"OR label CONTAINS {_twentyFourHourTime.QuotePredicateLiteral()})");
 
             public void ActOnElementContext(Action<ElementContext<IIOSBrowserStackDriver, IOSElement>> action) => _interactor.ActOnElementContext(FindBy, action);

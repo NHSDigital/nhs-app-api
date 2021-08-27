@@ -23,6 +23,7 @@ function configure_key_store () {
 }
 
 MSBUILD_ARGS_ANDROID+=("-p:NhsAppVersionName=${NATIVE_VERSION_NUMBER}")
+MSBUILD_ARGS_ANDROID+=("-p:NhsAppAndroidBuildNumber=${NATIVE_ANDROID_BUILD_NUMBER}")
 MSBUILD_ARGS_ANDROID+=("-p:Configuration=${CONFIGURATION}")
 MSBUILD_ARGS_ANDROID+=("-p:Platform=Any CPU")
 MSBUILD_ARGS_ANDROID+=("-restore")

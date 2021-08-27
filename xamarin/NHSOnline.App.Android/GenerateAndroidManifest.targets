@@ -25,6 +25,12 @@
     <XmlPoke
       XmlInputPath="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml"
       Namespaces="$(ManifestNamespace)"
+      Query="/manifest/@android:versionCode"
+      Value="$(NhsAppAndroidBuildNumber)" />
+
+    <XmlPoke
+      XmlInputPath="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml"
+      Namespaces="$(ManifestNamespace)"
       Query="/manifest/@package"
       Value="$(NhsAppPackageName)" />
 

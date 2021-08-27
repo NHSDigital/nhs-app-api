@@ -9,7 +9,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>NHSOnline.App.Droid</RootNamespace>
     <AssemblyName>NHSOnline.App.Android</AssemblyName>
-    <NhsAppVersionName>1.99.0</NhsAppVersionName>
+    <NhsAppVersionName>1.99.1</NhsAppVersionName>
+    <NhsAppAndroidBuildNumber>99</NhsAppAndroidBuildNumber>
     <Deterministic>True</Deterministic>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>

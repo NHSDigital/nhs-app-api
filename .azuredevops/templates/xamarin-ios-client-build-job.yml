@@ -11,6 +11,10 @@ parameters:
   - name: provProfileSecureFile
     type: string
     default: 'iOSDevelopmentBrowserStack.mobileprovision'
+  - name: nativeVersion
+    type: string
+  - name: buildNumber
+    type: string
 
 jobs:
   - job:
@@ -39,10 +43,12 @@ jobs:
           removeProfile: true
 
       - task: ShellScript@2
-        displayName: Build iOS '${{ parameters.configuration }}'
+        displayName: Build iOS '${{ parameters.configuration }}' - ${{ parameters.nativeVersion }}' - ${{ parameters.buildNumber }}'
         env:
           CONFIGURATION: '${{ parameters.configuration }}'
           IPA_PACKAGE_DIR: '$(output.directory)'
+          NATIVE_VERSION_NUMBER: '${{ parameters.nativeVersion }}'
+          NATIVE_IOS_BUILD_NUMBER: '${{ parameters.buildNumber }}'
         inputs:
           scriptPath: xamarin/buildscripts/05_build_ios.sh
 

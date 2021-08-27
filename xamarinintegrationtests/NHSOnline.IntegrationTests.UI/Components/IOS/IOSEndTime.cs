@@ -54,7 +54,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
                     $"type == 'XCUIElementTypeCell' " +
                     $"AND label CONTAINS {_prefixText.QuotePredicateLiteral()} " +
                     $"AND (label CONTAINS {_twentyFourHourTime.QuotePredicateLiteral()} " +
-                    $"OR label CONTAINS {_twelveHourTime.QuotePredicateLiteral()})");
+                    $"OR label CONTAINS[c] {_twelveHourTime.QuotePredicateLiteral()})");
 
             public void ActOnElementContext(Action<ElementContext<IIOSBrowserStackDriver, IOSElement>> action) => _interactor.ActOnElementContext(FindBy, action);
             public void AssertCannotBeFound(string because) => _interactor.AssertElementCannotBeFound(FindBy, because);

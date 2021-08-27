@@ -14,6 +14,11 @@ parameters:
   - name: keystoreAlias
     type: string
     default: 'debug'
+  - name: nativeVersion
+    type: string
+  - name: buildNumber
+    type: string
+
 
 jobs:
   - job:
@@ -35,12 +40,14 @@ jobs:
           secureFile: '${{ parameters.keyStoreFile }}'
 
       - task: ShellScript@2
-        displayName: Build Android app bundle '${{ parameters.configuration }}'
+        displayName: Build Android app bundle '${{ parameters.configuration }}' - ${{ parameters.nativeVersion }}' - ${{ parameters.buildNumber }}'
         env:
           ANDROID_KEY_STORE_LOCATION: '$(android_key_store.secureFilePath)'
           ANDROID_KEY_STORE_PASSWORD: '${{ parameters.apksignerKeystorePassword }}'
           ANDROID_KEY_STORE_KEY_ALIAS: '${{ parameters.keystoreAlias }}'
           CONFIGURATION: '${{ parameters.configuration }}'
+          NATIVE_VERSION_NUMBER: '${{ parameters.nativeVersion }}'
+          NATIVE_ANDROID_BUILD_NUMBER: '${{ parameters.buildNumber }}'
         inputs:
           scriptPath: xamarin/buildscripts/03_build_android_aab.sh
 
@@ -50,18 +57,20 @@ jobs:
           targetType: 'inline'
           script: |
             mkdir -p "$OUTPUT_DIRECTORY"
-            for aab in $(find xamarin/NHSOnline.App.Android/bin -name '*aab'); do
-              echo "$aab" => "$OUTPUT_DIRECTORY/$(basename $aab)"
-              cp "$aab" "$OUTPUT_DIRECTORY/$(basename $aab)"
+            for aab in $(find xamarin/NHSOnline.App.Android/bin -name '*-Signed.aab'); do
+              echo "$aab" => "$OUTPUT_DIRECTORY/$(basename $aab | sed -r -e 's/-Signed//')"
+              cp "$aab" "$OUTPUT_DIRECTORY/$(basename $aab | sed -r -e 's/-Signed//')"
             done
 
       - task: ShellScript@2
-        displayName: Build Android apk '${{ parameters.configuration }}'
+        displayName: Build Android apk '${{ parameters.configuration }}  - ${{ parameters.nativeVersion }}' - ${{ parameters.buildNumber }}'
         env:
           ANDROID_KEY_STORE_LOCATION: '$(android_key_store.secureFilePath)'
           ANDROID_KEY_STORE_PASSWORD: '${{ parameters.apksignerKeystorePassword }}'
           ANDROID_KEY_STORE_KEY_ALIAS: '${{ parameters.keystoreAlias }}'
           CONFIGURATION: '${{ parameters.configuration }}'
+          NATIVE_VERSION_NUMBER: '${{ parameters.nativeVersion }}'
+          NATIVE_ANDROID_BUILD_NUMBER: '${{ parameters.buildNumber }}'
         inputs:
           scriptPath: xamarin/buildscripts/04_build_android_apk.sh
 

@@ -42,11 +42,6 @@ parameters:
       - Preview
       - Staging
 
-  - name: xamarinDistributeApps
-    displayName: Distribute Xamarin Apps
-    type: boolean
-    default: false
-
   - name: intTestsRunXamarinNative
     displayName: Run Xamarin Native Integration Tests
     type: boolean
@@ -98,8 +93,9 @@ variables:
   source.tag: ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}
   native.android.target: ${{ parameters.androidTarget }}
   native.xamarin.target: ${{ parameters.xamarinTarget }}
-  native.version.number: '1.49.0'
-  native.android.build.number: $[counter('android.build.counter', 100)]
+  native.xamarin.version: '1.99.1'
+  native.xamarin.ios.build.number:  $[counter(variables['native.version.number'], 1)]
+  native.xamarin.android.build.number: $[counter('android', 100)]
   sjr.config.image.name: 'nhsonline-service-journey-prod-config'
   sjr.image.tag: $[variables['Build.SourceVersion']]
   native.android.upload: ${{ parameters.uploadToGooglePlayConsole }}
@@ -108,18 +104,15 @@ variables:
   ${{ if or(eq(variables['Build.Reason'], ''), eq(variables['Build.Reason'], 'Manual')) }}:
     int.tests.run.native.xamarin: ${{ parameters.intTestsRunXamarinNative }}
     int.tests.run.native.android: ${{ parameters.intTestsRunAndroidNative }}
-    native.xamarin.distribute: ${{ parameters.xamarinDistributeApps }}
     security.scan.enabled: ${{ parameters.securityScanEnabled }}
   ${{ if and(ne(variables['Build.Reason'], ''), ne(variables['Build.Reason'], 'Manual')) }}:
     ${{ if or(eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['Build.SourceBranch'], 'refs/tags/')) }}:
       int.tests.run.native.xamarin: true
       int.tests.run.native.android: true
-      native.xamarin.distribute: false
       security.scan.enabled: false
     ${{ if and(ne(variables['Build.SourceBranchName'], 'develop'), ne(variables['Build.SourceBranch'], 'refs/tags/')) }}:
       int.tests.run.native.xamarin: false
       int.tests.run.native.android: false
-      native.xamarin.distribute: false
       security.scan.enabled: false
 
   ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
@@ -240,10 +233,14 @@ stages:
             keyStoreFile: AndroidSigningKeyStore
             apksignerKeystorePassword: '$(android.key.store.password)'
             keystoreAlias: 'playconsoleuploadkey'
+            nativeVersion: '$(native.xamarin.version)'
+            buildNumber: '$(native.xamarin.android.build.number)'
         - template: .azuredevops/templates/xamarin-ios-client-build-job.yml
           parameters:
             configuration: 'Preview - Release'
             provProfileSecureFile: iOSDevelopmentPreview.mobileprovision
+            nativeVersion: '$(native.xamarin.version)'
+            buildNumber: '$(native.xamarin.ios.build.number)'
 
   - ${{ if or(eq(variables['native.xamarin.target'], 'Staging'), eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
     - stage: xamarin_staging
@@ -257,12 +254,16 @@ stages:
           keyStoreFile: AndroidSigningKeyStore
           apksignerKeystorePassword: '$(android.key.store.password)'
           keystoreAlias: 'playconsoleuploadkey'
+          nativeVersion: '$(native.xamarin.version)'
+          buildNumber: '$(native.xamarin.android.build.number)'
       - template: .azuredevops/templates/xamarin-ios-client-build-job.yml
         parameters:
           configuration: 'Staging - Release'
           certSecureFile: iOSProductionCertificate.p12
           certPwd: '$(ios.production.certificate.password)'
           provProfileSecureFile: iOSStaging.mobileprovision
+          nativeVersion: '$(native.xamarin.version)'
+          buildNumber: '$(native.xamarin.ios.build.number)'
 
   - ${{ if or(eq(variables['int.tests.run.native.xamarin'], 'true'), eq(variables['Build.Reason'], 'PullRequest')) }}:
     - stage: xamarin_browserstack
@@ -272,7 +273,13 @@ stages:
           - pr_changes
       jobs:
         - template: .azuredevops/templates/xamarin-android-client-build-job.yml
+          parameters:
+            nativeVersion: '$(native.xamarin.version)'
+            buildNumber: '$(native.xamarin.android.build.number)'
         - template: .azuredevops/templates/xamarin-ios-client-build-job.yml
+          parameters:
+            nativeVersion: '$(native.xamarin.version)'
+            buildNumber: '$(native.xamarin.ios.build.number)'
 
     - stage: xamarin_integration_tests
       displayName: Xamarin Integration Tests
@@ -347,18 +354,6 @@ stages:
           - pr_changes
         jobs:
           - template: .azuredevops/templates/integration-tests-xamarin-generate-reports.yml
-
-  - ${{ if and(eq(variables['native.xamarin.distribute'], 'true'), eq(variables['native.xamarin.target'], 'Staging'), eq(variables['source.develop'], 'True')) }}:
-    - stage: xamarin_upload_ipa_job
-      displayName: Xamarin Distribute Staging Apps
-      dependsOn:
-        - xamarin_staging
-      jobs:
-        - template: .azuredevops/templates/xamarin-upload-ipa-job.yml
-          parameters:
-            target: 'Staging'
-            uploadAppIdentifier: com.nhs.online.staging
-            uploadServiceEndpoint: nhsapp-staging-apple-app-store
 
   - ${{ if eq(variables['source.tag'], 'True') }}:
     - stage: SJR_config_build_production
