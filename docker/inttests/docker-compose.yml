@@ -54,3 +54,7 @@ services:
 
   servicejourneyrulesapi.config:
     image: local/nhsonline-service-journey-integration-test-config:latest
+
+  mongo_seed:
+    env_file:
+      - ./docker/inttests/env/mongo_seed.env
