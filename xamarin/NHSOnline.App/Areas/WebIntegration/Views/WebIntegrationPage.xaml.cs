@@ -6,7 +6,6 @@ using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Navigation;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.WebIntegration.Views

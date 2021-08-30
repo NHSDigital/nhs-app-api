@@ -1,11 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
+             xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
              mc:Ignorable="d"
              x:Class="NHSOnline.App.Areas.LoggedOut.Views.BeginLoginPage"
+             BackgroundColor="{StaticResource NhsUkBlue}"
              x:Name="Page">
 
     <ContentView HorizontalOptions="Center"
@@ -13,8 +16,15 @@
                  WidthRequest="75"
                  HeightRequest="75">
 
-        <elements:Spinner HorizontalOptions="Center"
-                          VerticalOptions="Center"/>
+        <elements:Spinner
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            Margin="0,0,0,50"
+            x:Name="Spinner">
+            <elements:Spinner.Effects>
+                <effects:SafeAreaPaddingBottom />
+            </elements:Spinner.Effects>
+        </elements:Spinner>
     </ContentView>
 
 </ContentPage>
