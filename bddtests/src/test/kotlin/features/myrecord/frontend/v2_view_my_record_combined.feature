@@ -37,7 +37,7 @@ Feature: Combined Frontend - Medical Record v2
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
     Then I see the medical record v2 page with information on asking for DCR access
-    When I click the link called 'Find out more about requesting access.' with a url of 'http://stubs.local.bitraft.io:8080/help/health-records-in-the-nhs-app/gp-health-record'
+    When I click the link called 'Find out more about requesting access.' with a url of 'http://stubs.local.bitraft.io:8080/help/health-records-in-the-nhs-app/gp-health-record/'
     And a new tab has been opened by the link
     Then I see the your health help page
     Examples:

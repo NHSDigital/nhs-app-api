@@ -19,6 +19,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.More.AccountSettings
 
         IOSLink NotificationsSettingsMenuItem => IOSLink.WithText(_interactor, "Manage notifications");
 
+        IOSLink NhsLoginSettingsMenuItem => IOSLink.WithText(_interactor, "Manage NHS login account");
+
         public IOSFullNavigation Navigation { get; }
 
         public AccountSettingsPageContent PageContent { get; }
@@ -39,5 +41,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.More.AccountSettings
         }
 
         public void NavigateToNotificationsSettings() => NotificationsSettingsMenuItem.Touch();
+
+        public void NavigateToNhsLoginSettings() => NhsLoginSettingsMenuItem.Touch();
     }
 }

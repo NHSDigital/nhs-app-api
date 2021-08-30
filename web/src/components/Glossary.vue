@@ -11,7 +11,7 @@
 <script>
 import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
 import {
-  CLINICAL_ABBREVIATIONS_PATH,
+  CLINICAL_ABBREVIATIONS_HELP_PATH,
 } from '@/router/externalLinks';
 
 export default {
@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      glossaryLinkURL: `${this.$store.$env.BASE_NHS_APP_HELP_URL}${CLINICAL_ABBREVIATIONS_PATH}`,
+      glossaryLinkURL: `${this.$store.$env.BASE_NHS_APP_HELP_URL}${CLINICAL_ABBREVIATIONS_HELP_PATH}`,
     };
   },
 };

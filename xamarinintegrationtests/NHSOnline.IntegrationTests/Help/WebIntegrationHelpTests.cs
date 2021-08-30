@@ -18,7 +18,7 @@ namespace NHSOnline.IntegrationTests.Help
     [BusinessRule("BR-NAV-01.4", "Clicking the help icon opens a contextual help link in a browser overlay")]
     public class WebIntegrationHelpTests
     {
-        private const string ThirdPartyHelpLinkPath = "health-records-in-the-nhs-app/third-party-services";
+        private const string ThirdPartyHelpLinkPath = "health-records-in-the-nhs-app/third-party-services/";
 
         [NhsAppAndroidTest]
         public void APkbPatientCanAccessContextualHelpFromWebIntegrationScreenAndroid(IAndroidDriverWrapper driver)

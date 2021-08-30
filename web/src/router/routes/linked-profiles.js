@@ -9,7 +9,7 @@ import LinkedProfilesMessagesShutterPage from '@/pages/linked-profiles/shutter/m
 import SwitchProfilePage from '@/pages/switch-profile';
 
 import proofLevel from '@/lib/proofLevel';
-import { APPOINTMENTS_HELP_PATH, PRESCRIPTIONS_HELP_PATH, PROXY_HELP_PATH } from '@/router/externalLinks';
+import { APPOINTMENTS_HELP_PATH, ORDERING_A_PRESCRIPTION_HELP_PATH, PROXY_HELP_PATH } from '@/router/externalLinks';
 import breadcrumbs from '@/breadcrumbs/linked-profiles';
 import {
   MORE_LINKED_PROFILES_PATH,
@@ -187,7 +187,7 @@ export const LINKED_PROFILES_SHUTTER_PRESCRIPTIONS = {
     },
     crumb: breadcrumbs.LINKED_PROFILES_PRESCRIPTIONS_SHUTTER_CRUMB,
     proofLevel: proofLevel.P5,
-    helpPath: PRESCRIPTIONS_HELP_PATH,
+    helpPath: ORDERING_A_PRESCRIPTION_HELP_PATH,
     nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
     gpSessionOnDemand: {
       journey: GP_LINKED_ACCOUNT_JOURNEY_NAME,
