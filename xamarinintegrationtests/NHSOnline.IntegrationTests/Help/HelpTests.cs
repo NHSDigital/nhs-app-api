@@ -4,6 +4,7 @@ using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.Advice;
 using NHSOnline.IntegrationTests.Pages.Android.Appointments;
+using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.Android.Messages;
 using NHSOnline.IntegrationTests.Pages.Android.More;
 using NHSOnline.IntegrationTests.Pages.Android.More.AccountSettings;
@@ -14,6 +15,7 @@ using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.Advice;
 using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
+using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.IOS.Messages;
 using NHSOnline.IntegrationTests.Pages.IOS.More;
 using NHSOnline.IntegrationTests.Pages.IOS.More.AccountSettings;
@@ -26,6 +28,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.Help
 {
     [TestClass]
+    [BusinessRule("BR-LOG-01.11", "Following the link for Help on the logged out home screen navigates the user to the appropriate location")]
     [BusinessRule("BR-NAV-01.4", "Clicking the help icon opens a contextual help link in a browser overlay")]
     [BusinessRule("BR-NAV-02.7", "When closing a browser overlay the relevant icon stays selected")]
     public class HelpTests
@@ -37,6 +40,35 @@ namespace NHSOnline.IntegrationTests.Help
         private const string YourHealthHelpLinkPath = "health-records-in-the-nhs-app/gp-health-record/";
         private const string MessagesHelpLinkPath = "messaging-in-the-nhs-app/";
         private const string NhsLoginSettingsHelpLinkPath = "nhs-app-account-and-settings/managing-your-nhs-app-account/";
+        private const string LoggedOutHelpLinkPath = "logging-in-to-the-nhs-app/";
+
+
+        [NhsAppAndroidTest]
+        public void APatientCanAccessContextualHelpFromLoggedOutHomeScreenAndroid(IAndroidDriverWrapper driver)
+        {
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
+                .GetHelp();
+
+            AndroidAppTabBrowserChoice
+                .IfDisplayed(driver, choice => choice.ChooseChrome());
+
+            AndroidAppTab
+                .AssertOnHelpPageByText(driver, LoggedOutHelpLinkPath)
+                .ReturnToApp();
+        }
+
+        [NhsAppIOSTest]
+        public void APatientCanAccessContextualHelpFromLoggedOutHomeScreenIOS(IIOSDriverWrapper driver)
+        {
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .GetHelp();
+
+            IOSAppTab
+                .AssertOnHelpPageByText(driver, LoggedOutHelpLinkPath)
+                .ReturnToApp();
+        }
 
         [NhsAppAndroidTest]
         public void APatientCanAccessContextualHelpFromHomeScreenAndroid(IAndroidDriverWrapper driver)
