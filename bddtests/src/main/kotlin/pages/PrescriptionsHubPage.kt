@@ -55,7 +55,7 @@ open class PrescriptionsHubPage : HybridPageObject() {
         pageTitle.assertIsVisible()
     }
 
-    fun clickOrderARepeatPrescriptionButton() {
-        clickOnButtonContainingText("Order a repeat prescription")
+    fun clickOrderAPrescriptionButton() {
+        clickOnButtonContainingText("Order a prescription")
     }
 }

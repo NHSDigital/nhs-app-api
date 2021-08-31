@@ -111,6 +111,8 @@ export const GP_MESSAGES_DELETE_SUCCESS_PATH = 'messages/gp-messages/delete-succ
 export const GP_SESSION_ON_DEMAND_BEGIN_PATH = 'on-demand-gp-begin';
 export const GP_SESSION_ON_DEMAND_RETURN_PATH = 'on-demand-gp-return';
 export const PRESCRIPTIONS_PATH = 'prescriptions';
+export const PRESCRIPTIONS_CONTACT_SURGERY_PATH = 'prescriptions/prescription-type/contact-surgery';
+export const PRESCRIPTION_TYPE_PATH = 'prescriptions/prescription-type';
 export const PRESCRIPTIONS_VIEW_ORDERS_PATH = 'prescriptions/view-orders';
 export const PRESCRIPTION_CONFIRM_COURSES_PATH = 'prescriptions/confirm-prescription-details';
 export const PRESCRIPTIONS_GP_AT_HAND_PATH = 'prescriptions/gp-at-hand';
@@ -243,6 +245,8 @@ export default {
   GP_MESSAGES_DELETE_SUCCESS_PATH,
   GP_SESSION_ON_DEMAND_BEGIN_PATH,
   PRESCRIPTIONS_PATH,
+  PRESCRIPTIONS_CONTACT_SURGERY_PATH,
+  PRESCRIPTION_TYPE_PATH,
   PRESCRIPTIONS_VIEW_ORDERS_PATH,
   PRESCRIPTION_CONFIRM_COURSES_PATH,
   PRESCRIPTIONS_GP_AT_HAND_PATH,

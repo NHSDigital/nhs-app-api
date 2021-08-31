@@ -1,9 +1,11 @@
 const NOMINATED_PHARMACY_SUMMARY = 'nominatedPharmacy';
 const NOMINATED_PHARMACY_CHECK = 'check';
 const PRESCRIPTIONS = 'prescriptions';
+const PRESCRIPTION_TYPE = 'prescriptionType';
 
 export default {
   NOMINATED_PHARMACY_SUMMARY,
   NOMINATED_PHARMACY_CHECK,
   PRESCRIPTIONS,
+  PRESCRIPTION_TYPE,
 };

@@ -23,8 +23,8 @@ class PrescriptionsHubStepDefinitions {
         prescriptionsHubPage.assertPrescriptionsHubIsDisplayed()
     }
 
-    @Then("^I click the Order a repeat prescription button$")
-    fun clickOrderARepeatPrescriptionButton() {
-        prescriptionsHubPage.clickOrderARepeatPrescriptionButton()
+    @Then("^I click the Order a prescription button$")
+    fun clickOrderAPrescriptionButton() {
+        prescriptionsHubPage.clickOrderAPrescriptionButton()
     }
 }

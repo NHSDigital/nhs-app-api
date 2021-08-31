@@ -19,7 +19,16 @@ const createStore = ({
   $env: {},
   state: {
     device: { isNativeApp },
+    linkedAccounts: {
+      actingAsUser: {
+        canOrderRepeatPrescription: true,
+      },
+      config: {
+        hasLoaded: true,
+      },
+    },
     nominatedPharmacy: {
+      hasLoaded: false,
       pharmacy: {
         pharmacyName,
       },
@@ -51,7 +60,7 @@ const mountPage = ($store) => {
 describe('prescriptions hub index page', () => {
   let $store;
   let wrapper;
-  let repeatPrescriptionsButton;
+  let orderPrescriptionsButton;
   let nominatedPharmacyPanel;
   let viewOrdersLink;
 
@@ -91,9 +100,9 @@ describe('prescriptions hub index page', () => {
   it('will have the repeat prescription button displayed', async () => {
     $store = createStore({ pharmacyName: 'boots', sjrEnabled: true });
     wrapper = mountPage($store);
-    repeatPrescriptionsButton = wrapper.find('#repeat-prescription-button');
-    expect(repeatPrescriptionsButton.text()).toEqual('Order a repeat prescription');
-    expect(repeatPrescriptionsButton.exists()).toBe(true);
+    orderPrescriptionsButton = wrapper.find('#order-prescription-button');
+    expect(orderPrescriptionsButton.text()).toEqual('Order a prescription');
+    expect(orderPrescriptionsButton.exists()).toBe(true);
   });
 
   describe('when nominated pharmacy is enabled and nominated pharmacy set', () => {

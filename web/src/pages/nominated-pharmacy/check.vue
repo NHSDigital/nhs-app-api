@@ -23,7 +23,7 @@
 
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                             id="back-link"
-                            :path="prescriptionsPath"
+                            :path="prescriptionTypePath"
                             :button-text="'nominatedPharmacy.notFound.backButton'"
                             @clickAndPrevent="onBackButtonClicked"/>
   </div>
@@ -35,7 +35,7 @@ import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import NoNominatedPharmacyWarning from '@/components/nominatedPharmacy/NoNominatedPharmacyWarning';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import { PRESCRIPTIONS_PATH, PRESCRIPTION_REPEAT_COURSES_PATH, NOMINATED_PHARMACY_CHECK_PATH } from '@/router/paths';
+import { PRESCRIPTION_TYPE_PATH, PRESCRIPTION_REPEAT_COURSES_PATH, NOMINATED_PHARMACY_CHECK_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -62,21 +62,23 @@ export default {
     showChangePharmacyLink() {
       return (this.pharmacy.pharmacyType !== PharmacyType.P3);
     },
-    prescriptionsPath() {
-      return PRESCRIPTIONS_PATH;
+    prescriptionTypePath() {
+      return PRESCRIPTION_TYPE_PATH;
     },
   },
   created() {
     if (this.$store.state.nominatedPharmacy.hasLoaded === false || !this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']) {
-      redirectTo(this, this.prescriptionsPath);
+      redirectTo(this, this.prescriptionTypePath);
     }
+    this.$store.dispatch('navigation/clearBackLinkOverride');
   },
   methods: {
     onContinueButtonClicked() {
+      this.$store.dispatch('navigation/setBackLinkOverride', NOMINATED_PHARMACY_CHECK_PATH);
       redirectTo(this, PRESCRIPTION_REPEAT_COURSES_PATH);
     },
     onBackButtonClicked() {
-      redirectTo(this, this.prescriptionsPath);
+      redirectTo(this, this.prescriptionTypePath);
     },
   },
 };

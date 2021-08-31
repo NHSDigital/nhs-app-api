@@ -105,6 +105,8 @@ export const GP_MESSAGES_DELETE_SUCCESS_NAME = 'messages-gp-messages-delete-succ
 export const GP_SESSION_ON_DEMAND_BEGIN_NAME = 'on-demand-gp-begin';
 export const GP_SESSION_ON_DEMAND_RETURN_NAME = 'on-demand-gp-return';
 export const PRESCRIPTIONS_NAME = 'prescriptions';
+export const PRESCRIPTIONS_CONTACT_SURGERY_NAME = 'prescriptions-contact-surgery';
+export const PRESCRIPTION_TYPE_NAME = 'prescription-type';
 export const PRESCRIPTIONS_VIEW_ORDERS_NAME = 'prescriptions-view-orders';
 export const PRESCRIPTION_CONFIRM_COURSES_NAME = 'prescriptions-confirm-prescription-details';
 export const PRESCRIPTIONS_GP_AT_HAND_NAME = 'prescriptions-gp-at-hand';
@@ -234,6 +236,8 @@ const names = [
   GP_MESSAGES_DELETE_SUCCESS_NAME,
   GP_SESSION_ON_DEMAND_BEGIN_NAME,
   PRESCRIPTIONS_NAME,
+  PRESCRIPTIONS_CONTACT_SURGERY_NAME,
+  PRESCRIPTION_TYPE_NAME,
   PRESCRIPTIONS_VIEW_ORDERS_NAME,
   PRESCRIPTION_CONFIRM_COURSES_NAME,
   PRESCRIPTIONS_GP_AT_HAND_NAME,

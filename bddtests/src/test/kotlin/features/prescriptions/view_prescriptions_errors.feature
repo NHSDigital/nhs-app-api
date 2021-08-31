@@ -52,7 +52,7 @@ Feature: View prescriptions error cases
     And each repeat prescription contains 1 courses of which 1 are repeats
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
-    And I click the Order a repeat prescription button
+    And I click the Order a prescription button
     And My session has expired
     Then I see the login page with the session expiry notification
 

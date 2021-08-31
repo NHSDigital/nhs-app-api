@@ -133,9 +133,9 @@ import sjrIf from '@/lib/sjrIf';
 
 import {
   NOMINATED_PHARMACY_CHECK_PATH,
-  PRESCRIPTIONS_PATH,
   PRESCRIPTION_CONFIRM_COURSES_PATH,
   PRESCRIPTION_REPEAT_COURSES_PATH,
+  PRESCRIPTION_TYPE_PATH,
 } from '@/router/paths';
 import { CLINICAL_ABBREVIATIONS_HELP_PATH } from '@/router/externalLinks';
 import { EventBus, UPDATE_HEADER, UPDATE_TITLE, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
@@ -249,7 +249,7 @@ export default {
     },
     getBackPath() {
       return this.$store.state.nominatedPharmacy.nominatedPharmacyEnabled ?
-        NOMINATED_PHARMACY_CHECK_PATH : PRESCRIPTIONS_PATH;
+        NOMINATED_PHARMACY_CHECK_PATH : PRESCRIPTION_TYPE_PATH;
     },
     confirmCoursesPath() {
       return PRESCRIPTION_CONFIRM_COURSES_PATH;

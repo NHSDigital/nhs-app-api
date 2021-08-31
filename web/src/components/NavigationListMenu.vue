@@ -46,8 +46,8 @@
                  :header-tag="headerTag"
                  data-sid="prescriptions-menu-item"
                  :href="prescriptionsPath"
-                 :text="$t('navigation.orderARepeatPrescription')"
-                 :aria-label="$t('navigation.orderARepeatPrescription')"
+                 :text="$t('navigation.orderAPrescription')"
+                 :aria-label="$t('navigation.orderAPrescription')"
                  :click-func="goToUrl"
                  :click-param="prescriptionsPath"/>
     </menu-item-list>

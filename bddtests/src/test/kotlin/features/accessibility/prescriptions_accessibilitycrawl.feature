@@ -7,11 +7,11 @@ Feature: Repeat prescriptions and Your orders accessibility
     And prescriptions is disabled at a GP Practice level
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
-    And I click 'Order a new repeat prescription'
+    And I click 'Order a prescription'
     Then I see a message informing me that I don't currently have access to this service
     And the Prescriptions_RepeatNotAvailable page is saved to disk
 
-  Scenario: The prescriptions journey pages are captured
+  Scenario: The repeat prescriptions journey pages are captured
     Given the scenario is submit prescription
     And I am using TPP GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
@@ -24,6 +24,21 @@ Feature: Repeat prescriptions and Your orders accessibility
     And I click Confirm and order repeat prescription
     Then I see the Order Success page
     And the Prescriptions_OrderConfirmation_General page is saved to disk
+
+  Scenario: The non repeat prescriptions journey pages are captured
+    Given the scenario is submit prescription
+    And I am using TPP GP System to submit my prescription
+    And I have 1 historic prescriptions in this scenario
+    And I am logged in
+    When I retrieve the 'Your Prescriptions' page directly
+    Then the Prescriptions Hub page is displayed
+    And the Prescriptions_Hub page is saved to disk
+    When I click the Order a prescription button
+    Then the Type of Prescriptions page is displayed
+    And the Type_Of_Prescriptions page is saved to disk
+    When I select the option to order a non repeat prescription
+    Then the Contact Your GP page is displayed
+    And the Contact_Your_GP page is saved to disk
 
   Scenario: The 'User with High street pharmacy variation has ordered a prescription' page is captured
     Given the scenario is submit prescription
@@ -97,7 +112,9 @@ Feature: Repeat prescriptions and Your orders accessibility
     And 0 of my prescriptions can be requested
     And I am logged in
     And I navigate to prescriptions
-    When I click 'Order a new repeat prescription'
+    When I click 'Order a prescription'
+    Then the Type of Prescriptions page is displayed
+    When I select the option to order a repeat prescription
     Then I see the available repeatable prescriptions
     And a message is displayed indicating that you don't have any medication available to order
     And the PrescriptionsHub_SelectMedicationNoneAvailable page is saved to disk

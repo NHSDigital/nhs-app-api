@@ -2,9 +2,8 @@ import PrescriptionsPage from '@/pages/prescriptions/index';
 import * as dependency from '@/lib/utils';
 import {
   NOMINATED_PHARMACY_PATH,
-  NOMINATED_PHARMACY_CHECK_PATH,
   NOMINATED_PHARMACY_INTERRUPT_PATH,
-  PRESCRIPTION_REPEAT_COURSES_PATH,
+  PRESCRIPTION_TYPE_PATH,
 } from '@/router/paths';
 import {
   PRESCRIPTIONS_NAME,
@@ -26,6 +25,14 @@ describe('prescriptions/index.vue', () => {
         prescriptions: {
           hasLoaded: true,
           prescriptionCourses: {},
+        },
+        linkedAccounts: {
+          actingAsUser: {
+            canOrderRepeatPrescription: true,
+          },
+          config: {
+            hasLoaded: true,
+          },
         },
         nominatedPharmacy: {
           pharmacy: {
@@ -134,7 +141,7 @@ describe('prescriptions/index.vue', () => {
       let button;
 
       beforeEach(() => {
-        button = wrapper.find('#repeat-prescription-button');
+        button = wrapper.find('#order-prescription-button');
       });
 
       describe('clicked', () => {
@@ -144,12 +151,12 @@ describe('prescriptions/index.vue', () => {
 
         it('will track nominated pharmacy check path', () => {
           expect($store.app.$analytics.trackButtonClick)
-            .toHaveBeenCalledWith(NOMINATED_PHARMACY_CHECK_PATH, true);
+            .toHaveBeenCalledWith(PRESCRIPTION_TYPE_PATH, true);
         });
 
         it('will redirect to nominated pharmacy check page', () => {
           expect(dependency.redirectTo)
-            .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_CHECK_PATH);
+            .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTION_TYPE_PATH);
         });
       });
     });
@@ -202,7 +209,7 @@ describe('prescriptions/index.vue', () => {
       let button;
 
       beforeEach(() => {
-        button = wrapper.find('#repeat-prescription-button');
+        button = wrapper.find('#order-prescription-button');
       });
 
       describe('clicked', () => {
@@ -212,12 +219,12 @@ describe('prescriptions/index.vue', () => {
 
         it('will track prescriptions repeat courses path', () => {
           expect($store.app.$analytics.trackButtonClick)
-            .toHaveBeenCalledWith(PRESCRIPTION_REPEAT_COURSES_PATH, true);
+            .toHaveBeenCalledWith(PRESCRIPTION_TYPE_PATH, true);
         });
 
         it('will redirect to prescriptions repeat courses', () => {
           expect(dependency.redirectTo)
-            .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTION_REPEAT_COURSES_PATH);
+            .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTION_TYPE_PATH);
         });
       });
     });

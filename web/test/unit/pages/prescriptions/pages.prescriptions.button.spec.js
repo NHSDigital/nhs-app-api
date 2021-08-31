@@ -48,16 +48,16 @@ describe('prescriptions page', () => {
         i18n,
       },
     });
-    button = wrapper.find('#repeat-prescription-button');
+    button = wrapper.find('#order-prescription-button');
   });
 
-  describe('order a repeat prescription button', () => {
+  describe('order a prescription button', () => {
     it('will exist on page', () => {
       expect(button.exists()).toBe(true);
     });
 
     it('will have the correct text', () => {
-      expect(button.text()).toEqual('Order a repeat prescription');
+      expect(button.text()).toEqual('Order a prescription');
     });
   });
 });

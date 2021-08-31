@@ -15,7 +15,7 @@ Feature: Login frontend
     And I can see and follow the View your GP health record link
     When I click the home icon
     Then I see the home page
-    And I can see and follow the Order a repeat prescription link
+    And I can see and follow the Order a prescription link
     When I click the home icon
     Then I see the home page
     And I can see and follow the View your messages link
@@ -47,7 +47,7 @@ Feature: Login frontend
     And I can see and follow the View your GP health record link
     When I click the home icon
     Then I see the home page
-    And I can see and follow the Order a repeat prescription link
+    And I can see and follow the Order a prescription link
     When I click the home icon
     Then I see the home page
     And I can see and follow the View your messages link
@@ -77,7 +77,7 @@ Feature: Login frontend
     Given I am a patient with proof level 5
     And I am logged in
     Then I am asked to prove my identity
-    And I can't see the Order a repeat prescription link on the homepage
+    And I can't see the Order a prescription link on the homepage
     And I can't see the View your GP medical record link on the homepage
     And I can't see the Linked profiles link on the homepage
 

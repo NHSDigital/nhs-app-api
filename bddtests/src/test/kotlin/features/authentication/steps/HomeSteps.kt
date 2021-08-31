@@ -23,7 +23,7 @@ enum class PatientDetail(val label: String) {
 
 enum class NavigationLinkText (val linkText: String) {
     GP_HEALTH_RECORD("View your GP health record"),
-    PRESCRIPTIONS("Order a repeat prescription"),
+    PRESCRIPTIONS("Order a prescription"),
     MESSAGES("View your messages"),
     UNREAD_MESSAGES("View your unread messages"),
     LINKED_PROFILES("Linked profiles"),

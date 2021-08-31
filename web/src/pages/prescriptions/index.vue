@@ -3,20 +3,26 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full nhsuk-u-padding-top-3">
         <generic-button
-          id="repeat-prescription-button"
+          id="order-prescription-button"
           :button-classes="['nhsuk-button']"
-          @click.stop.prevent="onOrderRepeatPrescriptionClicked">
-          {{ $t('prescriptions.hub.orderARepeatPrescription') }}
+          @click.stop.prevent="onOrderPrescriptionClicked"
+        >
+          {{ $t("prescriptions.hub.orderAPrescription") }}
         </generic-button>
         <menu-item-list>
           <menu-item
             id="view-orders"
             :text="$t('prescriptions.hub.viewYourOrders')"
             :href="viewOrdersPath"
-            :aria-label="ariaLabelCaption
-              ($t('prescriptions.hub.viewYourOrders'),
-               $t('prescriptions.hub.seeRepeatPrescriptionsYouHaveOrdered'))"
-            :description="$t('prescriptions.hub.seeRepeatPrescriptionsYouHaveOrdered')"
+            :aria-label="
+              ariaLabelCaption(
+                $t('prescriptions.hub.viewYourOrders'),
+                $t('prescriptions.hub.seeRepeatPrescriptionsYouHaveOrdered')
+              )
+            "
+            :description="
+              $t('prescriptions.hub.seeRepeatPrescriptionsYouHaveOrdered')
+            "
             :click-func="onViewOrdersClicked"
             :header-tag="'h2'"
           />
@@ -24,9 +30,12 @@
             v-if="showNominatedPharmacy && !isProxying"
             id="nominated-pharmacy"
             :text="nominatedPharmacyText"
-            :aria-label="ariaLabelCaption
-              (nominatedPharmacyText,
-               nominatedPharmacyDescription)"
+            :aria-label="
+              ariaLabelCaption(
+                nominatedPharmacyText,
+                nominatedPharmacyDescription
+              )
+            "
             :description="nominatedPharmacyDescription"
             :click-func="onNominatedPharmacyDetailClicked"
             :header-tag="'h2'"
@@ -35,22 +44,30 @@
             v-if="showPkbMedicines"
             id="btn_pkb_medicines"
             provider-id="pkb"
-            :provider-configuration="thirdPartyProvider.pkb.medicines" />
+            :provider-configuration="thirdPartyProvider.pkb.medicines"
+          />
           <third-party-jump-off-button
             v-if="showPkbCieMedicines"
             id="btn_pkb_cie_medicines"
             provider-id="pkb"
-            :provider-configuration="thirdPartyProvider.pkb.medicinesCie" />
+            :provider-configuration="thirdPartyProvider.pkb.medicinesCie"
+          />
           <third-party-jump-off-button
             v-if="showPkbSecondaryCareMedicines"
             id="btn_pkb_secondary_care_medicines"
             provider-id="pkb"
-            :provider-configuration="thirdPartyProvider.pkb.medicinesPkbSecondaryCare" />
+            :provider-configuration="
+              thirdPartyProvider.pkb.medicinesPkbSecondaryCare
+            "
+          />
           <third-party-jump-off-button
             v-if="showPkbMyCareView"
             id="btn_pkb_my_care_view_medicines"
             provider-id="pkb"
-            :provider-configuration="thirdPartyProvider.pkb.medicinesPkbMyCareView" />
+            :provider-configuration="
+              thirdPartyProvider.pkb.medicinesPkbMyCareView
+            "
+          />
         </menu-item-list>
       </div>
     </div>
@@ -61,13 +78,17 @@
 import MenuItemList from '@/components/MenuItemList';
 import GenericButton from '@/components/widgets/GenericButton';
 import MenuItem from '@/components/MenuItem';
-import GetNavigationPathFromPrescriptions from '@/lib/prescriptions/navigation';
 import InterruptBackTo from '@/lib/pharmacy-detail/interrupt-back-to';
 import { redirectTo } from '@/lib/utils';
-import { NOMINATED_PHARMACY_PATH, NOMINATED_PHARMACY_INTERRUPT_PATH, PRESCRIPTIONS_VIEW_ORDERS_PATH } from '@/router/paths';
+import {
+  NOMINATED_PHARMACY_PATH,
+  NOMINATED_PHARMACY_INTERRUPT_PATH,
+  PRESCRIPTIONS_VIEW_ORDERS_PATH,
+} from '@/router/paths';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 import sjrIf from '@/lib/sjrIf';
+import { getNavigationPathFromPrescription } from '@/lib/prescriptions/navigation';
 
 const loadData = async (store) => {
   store.dispatch('repeatPrescriptionCourses/init');
@@ -91,6 +112,7 @@ export default {
   },
   data() {
     return {
+      linkedAccount: this.$store.getters['linkedAccounts/getSelectedLinkedAccount'],
       thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
       isProxying: this.$store.getters['session/isProxying'],
     };
@@ -169,42 +191,52 @@ export default {
     viewOrdersPath() {
       return PRESCRIPTIONS_VIEW_ORDERS_PATH;
     },
+    canOrderRepeatPrescription() {
+      return this.isProxying && this.linkedAccount.canOrderRepeatPrescription;
+    },
+    getContinueButtonPath() {
+      return getNavigationPathFromPrescription(this.$store);
+    },
   },
   watch: {
     '$route.query.ts': function watchTimestamp() {
       loadData(this.$store);
     },
-    hasLoaded() {
-      if (this.hasLoaded) {
-        this.$store.dispatch('flashMessage/show');
-      }
-    },
   },
   mounted() {
     loadData(this.$store);
-
-    if (this.hasLoaded) {
-      this.$store.dispatch('flashMessage/show');
-    }
   },
   methods: {
-    onOrderRepeatPrescriptionClicked() {
-      const path = GetNavigationPathFromPrescriptions(this.$store);
+    onOrderPrescriptionClicked() {
+      const path = getNavigationPathFromPrescription(this.$store);
       this.$store.app.$analytics.trackButtonClick(path, true);
-      this.$store.dispatch('nominatedPharmacy/setInterruptBackTo', InterruptBackTo.NOMINATED_PHARMACY_CHECK);
       redirectTo(this, path);
     },
     onViewOrdersClicked() {
       redirectTo(this, this.viewOrdersPath);
     },
     onNominatedPharmacyDetailClicked() {
-      if (this.$store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined) {
-        this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY_INTERRUPT_PATH, true);
-        this.$store.dispatch('nominatedPharmacy/setInterruptBackTo', InterruptBackTo.PRESCRIPTIONS);
+      if (
+        this.$store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined
+      ) {
+        this.$store.app.$analytics.trackButtonClick(
+          NOMINATED_PHARMACY_INTERRUPT_PATH,
+          true,
+        );
+        this.$store.dispatch(
+          'nominatedPharmacy/setInterruptBackTo',
+          InterruptBackTo.PRESCRIPTIONS,
+        );
         redirectTo(this, NOMINATED_PHARMACY_INTERRUPT_PATH);
       } else {
-        this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY_PATH, true);
-        this.$store.dispatch('nominatedPharmacy/setInterruptBackTo', InterruptBackTo.NOMINATED_PHARMACY_SUMMARY);
+        this.$store.app.$analytics.trackButtonClick(
+          NOMINATED_PHARMACY_PATH,
+          true,
+        );
+        this.$store.dispatch(
+          'nominatedPharmacy/setInterruptBackTo',
+          InterruptBackTo.NOMINATED_PHARMACY_SUMMARY,
+        );
         redirectTo(this, NOMINATED_PHARMACY_PATH);
       }
     },

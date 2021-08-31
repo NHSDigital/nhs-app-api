@@ -124,7 +124,7 @@ Feature: Nominated pharmacy accessibility
     And I am logged in
     And I navigate to prescriptions
     Then the Prescriptions Hub page is displayed
-    And I click 'Order a new repeat prescription'
+    And I click 'Order a prescription'
     And the NominatedPharmacy_CheckPharmacyThisWillBeSentTo page is saved to disk
 
   Scenario: The 'Nominated pharmacy interrupt' page is captured
@@ -151,5 +151,5 @@ Feature: Nominated pharmacy accessibility
     And I am logged in
     When I navigate to prescriptions
     And the Prescriptions Hub page is displayed
-    And I click 'Order a new repeat prescription'
+    And I click 'Order a prescription'
     And the NominatedPharmacy_NoSelection page is saved to disk

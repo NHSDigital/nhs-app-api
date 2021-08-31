@@ -120,7 +120,7 @@ Feature: View prescriptions Frontend
     And prescriptions is disabled at a GP Practice level
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
-    And I click 'Order a new repeat prescription'
+    And I click 'Order a prescription'
     Then I see a message informing me that I don't currently have access to this service
     Examples:
       | GP System |
@@ -225,3 +225,18 @@ Feature: View prescriptions Frontend
       | VISION    |
       | MICROTEST |
 
+  Scenario: The user can see the Contact your GP screen and follow an external link
+    Given the scenario is submit prescription
+    And I am using TPP GP System to submit my prescription
+    And I have 1 historic prescriptions in this scenario
+    And I am logged in
+    When I retrieve the 'Your Prescriptions' page directly
+    Then the Prescriptions Hub page is displayed
+    And the Prescriptions_Hub page is saved to disk
+    When I click the Order a prescription button
+    Then the Type of Prescriptions page is displayed
+    And the Type_Of_Prescriptions page is saved to disk
+    When I select the option to order a non repeat prescription
+    Then the Contact Your GP page is displayed
+    When I click the link called '111.nhs.uk/emergency-prescription' with a url of 'https://111.nhs.uk/emergency-prescription'
+    Then a new tab has been opened by the link

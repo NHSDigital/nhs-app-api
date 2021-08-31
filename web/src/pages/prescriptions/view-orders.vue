@@ -4,69 +4,111 @@
       <div v-if="showNominatedPharmacy" id="nominated-pharmacy-section">
         <div v-if="nominatedPharmacyName" id="nominated-pharmacy">
           <p id="pharmacy-description" class="nhsuk-u-margin-bottom-2">
-            {{ $t('prescriptions.viewOrders.nominatedPharmacy.yoursIs') }} </p>
-          <p id="pharmacy-name" class="nhsuk-u-margin-bottom-2"> {{ nominatedPharmacyName }}</p>
+            {{ $t("prescriptions.viewOrders.nominatedPharmacy.yoursIs") }}
+          </p>
+          <p id="pharmacy-name" class="nhsuk-u-margin-bottom-2">
+            {{ nominatedPharmacyName }}
+          </p>
         </div>
         <p v-else id="no-nominated-pharmacy" class="nhsuk-u-margin-bottom-2">
-          {{ $t('prescriptions.viewOrders.nominatedPharmacy.none') }}
+          {{ $t("prescriptions.viewOrders.nominatedPharmacy.none") }}
         </p>
-        <p> <a id="change-link" href="#" @click="onNominatedPharmacyDetailClicked">
-          {{ $t('prescriptions.viewOrders.nominatedPharmacy.link.change') }} </a></p>
+        <p>
+          <a
+            id="change-link"
+            href="#"
+            @click="onNominatedPharmacyDetailClicked"
+          >
+            {{ $t("prescriptions.viewOrders.nominatedPharmacy.link.change") }}
+          </a>
+        </p>
         <span v-if="nominatedPharmacyName" class="nhsuk-u-visually-hidden">
-          {{ $t('prescriptions.viewOrders.nominatedPharmacy.link.yourPharmacy') }}
+          {{
+            $t("prescriptions.viewOrders.nominatedPharmacy.link.yourPharmacy")
+          }}
         </span>
         <span v-else class="nhsuk-u-visually-hidden">
-          {{ $t('prescriptions.viewOrders.nominatedPharmacy.link.noPharmacy') }}
+          {{ $t("prescriptions.viewOrders.nominatedPharmacy.link.noPharmacy") }}
         </span>
       </div>
     </sjr-if>
-    <div v-if="showNoPrescriptions"
-         id="show-no-prescription"
-         data-purpose="no-prescriptions-error"
-         class="nhsuk-u-padding-bottom-6">
-      <h2>{{ $t('prescriptions.viewOrders.noPrescriptions.youDoNotHaveAny') }}</h2>
+    <div
+      v-if="showNoPrescriptions"
+      id="show-no-prescription"
+      data-purpose="no-prescriptions-error"
+      class="nhsuk-u-padding-bottom-6"
+    >
+      <h2>
+        {{ $t("prescriptions.viewOrders.noPrescriptions.youDoNotHaveAny") }}
+      </h2>
       <p class="nhsuk-u-padding-bottom-2">
-        {{ $t('prescriptions.viewOrders.noPrescriptions.onceYouHavePlacedAnOrder') }}
+        {{
+          $t(
+            "prescriptions.viewOrders.noPrescriptions.onceYouHavePlacedAnOrder"
+          )
+        }}
       </p>
       <p class="nhsuk-u-padding-bottom-2">
-        {{ $t('prescriptions.viewOrders.noPrescriptions.ifYouHaveAnExistingOrder') }}
+        {{
+          $t(
+            "prescriptions.viewOrders.noPrescriptions.ifYouHaveAnExistingOrder"
+          )
+        }}
       </p>
     </div>
 
     <div v-if="showPrescriptions" data-purpose="prescriptions">
-      <div class="nhsuk-u-margin-bottom-0" :class="$style['nhs-app-panel-heading']">
-        <h2 class="nhsuk-heading-l">{{ $t('prescriptions.viewOrders.orders') }}</h2>
+      <div
+        class="nhsuk-u-margin-bottom-0"
+        :class="$style['nhs-app-panel-heading']"
+      >
+        <h2 class="nhsuk-heading-l">
+          {{ $t("prescriptions.viewOrders.orders") }}
+        </h2>
       </div>
-      <div v-for="(prescriptionCourse, index) in prescriptionCoursesToDisplay"
-           :key="index" :class="$style['list-menu']" data-label="historic-prescription">
-        <historic-prescription :prescription-course="prescriptionCourse"
-                               :class="$style['nhs-app-message']"
-                               class="nhsuk-u-margin-bottom-0"/>
+      <div
+        v-for="(prescriptionCourse, index) in prescriptionCoursesToDisplay"
+        :key="index"
+        :class="$style['list-menu']"
+        data-label="historic-prescription"
+      >
+        <historic-prescription
+          :prescription-course="prescriptionCourse"
+          :class="$style['nhs-app-message']"
+          class="nhsuk-u-margin-bottom-0"
+        />
       </div>
     </div>
-    <desktop-generic-back-link v-if="hasLoaded && !$store.state.device.isNativeApp"
-                               id="desktopBackLink"
-                               :path="backUrl"
-                               class="nhsuk-u-margin-top-3"
-                               @clickAndPrevent="backLinkClicked"/>
+    <desktop-generic-back-link
+      v-if="hasLoaded && !$store.state.device.isNativeApp"
+      id="desktopBackLink"
+      :path="backUrl"
+      class="nhsuk-u-margin-top-3"
+      @clickAndPrevent="backLinkClicked"
+    />
   </div>
   <div v-else-if="prescriptionsApiError && hasLoaded">
-    <prescription-errors :error="prescriptionsApiError"
-                         :reference-code="referenceCode"
-                         :try-again-route="tryAgainPath"/>
+    <prescription-errors
+      :error="prescriptionsApiError"
+      :reference-code="referenceCode"
+      :try-again-route="tryAgainPath"
+    />
   </div>
 </template>
 
 <script>
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import GetNavigationPathFromPrescriptions from '@/lib/prescriptions/navigation';
 import HistoricPrescription from '@/components/HistoricPrescription';
 import MedicationCourseStatus from '@/lib/medication-course-status';
 import PrescriptionErrors from '@/components/errors/pages/prescriptions/PrescriptionsErrors';
 import SjrIf from '@/components/SjrIf';
 import isEmpty from 'lodash/fp/isEmpty';
 import orderBy from 'lodash/fp/orderBy';
-import { redirectTo, gpSessionErrorHasRetried, GP_SESSION_ERROR_STATUS } from '@/lib/utils';
+import {
+  redirectTo,
+  gpSessionErrorHasRetried,
+  GP_SESSION_ERROR_STATUS,
+} from '@/lib/utils';
 import {
   NOMINATED_PHARMACY_INTERRUPT_PATH,
   PRESCRIPTIONS_PATH,
@@ -76,6 +118,7 @@ import { EventBus, UPDATE_HEADER, UPDATE_TITLE } from '@/services/event-bus';
 import InterruptBackTo from '@/lib/pharmacy-detail/interrupt-back-to';
 import sjrIf from '@/lib/sjrIf';
 import showShutterPage from '@/lib/proxy/shutter';
+import { getNavigationPathFromPrescription } from '@/lib/prescriptions/navigation';
 
 const loadData = async (store) => {
   store.dispatch('prescriptions/clear');
@@ -92,9 +135,19 @@ const loadData = async (store) => {
 
   const { error } = store.state.prescriptions;
 
-  if (error && error.status === GP_SESSION_ERROR_STATUS && gpSessionErrorHasRetried()) {
-    EventBus.$emit(UPDATE_HEADER, 'gpSessionErrors.prescriptions.youCanNotOrderOrViewPrescriptions');
-    EventBus.$emit(UPDATE_TITLE, 'gpSessionErrors.prescriptions.youCanNotOrderOrViewPrescriptions');
+  if (
+    error &&
+    error.status === GP_SESSION_ERROR_STATUS &&
+    gpSessionErrorHasRetried()
+  ) {
+    EventBus.$emit(
+      UPDATE_HEADER,
+      'gpSessionErrors.prescriptions.youCanNotOrderOrViewPrescriptions',
+    );
+    EventBus.$emit(
+      UPDATE_TITLE,
+      'gpSessionErrors.prescriptions.youCanNotOrderOrViewPrescriptions',
+    );
   }
 };
 
@@ -147,7 +200,10 @@ export default {
       courses.forEach((e) => {
         e.statusDisplayPriority = this.statusDisplayPriority[e.status];
       });
-      return orderBy(['orderDate', 'statusDisplayPriority'], ['desc', 'asc'])(courses);
+      return orderBy(
+        ['orderDate', 'statusDisplayPriority'],
+        ['desc', 'asc'],
+      )(courses);
     },
     hasLoaded() {
       return this.$store.state.prescriptions.hasLoaded;
@@ -189,14 +245,23 @@ export default {
   },
   methods: {
     onNominatedPharmacyDetailClicked() {
-      this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY_INTERRUPT_PATH, true);
-      this.$store.dispatch('nominatedPharmacy/setInterruptBackTo', InterruptBackTo.PRESCRIPTIONS);
+      this.$store.app.$analytics.trackButtonClick(
+        NOMINATED_PHARMACY_INTERRUPT_PATH,
+        true,
+      );
+      this.$store.dispatch(
+        'nominatedPharmacy/setInterruptBackTo',
+        InterruptBackTo.PRESCRIPTIONS,
+      );
       redirectTo(this, NOMINATED_PHARMACY_INTERRUPT_PATH);
     },
     onOrderRepeatPrescriptionClicked() {
-      const path = GetNavigationPathFromPrescriptions(this.$store);
+      const path = getNavigationPathFromPrescription(this.$store);
       this.$store.app.$analytics.trackButtonClick(path, true);
-      this.$store.dispatch('nominatedPharmacy/setInterruptBackTo', InterruptBackTo.NOMINATED_PHARMACY_CHECK);
+      this.$store.dispatch(
+        'nominatedPharmacy/setInterruptBackTo',
+        InterruptBackTo.NOMINATED_PHARMACY_CHECK,
+      );
       redirectTo(this, path);
     },
     ariaLabelCaption(header, body) {
@@ -214,5 +279,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import "@/style/custom/prescriptions-view-orders";
+@import "@/style/custom/prescriptions-view-orders";
 </style>

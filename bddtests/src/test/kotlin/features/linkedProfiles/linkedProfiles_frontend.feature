@@ -289,7 +289,7 @@ Feature: Login with proxy access
     Then the messages shutter page is displayed
     When I navigate to Prescriptions
     And the Prescriptions Hub page is displayed
-    And I click the Order a repeat prescription button
+    And I click the Order a prescription button
     Then the prescriptions shutter page is displayed
     When I navigate to Your_Health
     And I click on the Gp medical record link

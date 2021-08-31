@@ -1,6 +1,6 @@
 @prescription
 Feature: Prescriptions submission Frontend
-  A user can submit a request for a repeat prescription
+  A user can submit a request for prescriptions
 
   #This test covers navigation via buttons/links
   @nominatedPharmacy
@@ -21,6 +21,42 @@ Feature: Prescriptions submission Frontend
     Then I see the Order Success page with a playback of my order and what happens next
     And I click the Go to your prescription orders link
     And I see the Repeat prescription page with 6 prescriptions
+
+  Scenario Outline: The <GP System> user views the available repeat prescriptions
+    Given the scenario is submit prescription
+    And I am using <GP System> GP System to submit my prescription
+    And I have 1 historic prescriptions in this scenario
+    And there are 5 repeatable prescriptions available
+    And I am logged in
+    When I navigate to prescriptions
+    Then the Prescriptions Hub page is displayed
+    When I click the Order a prescription button
+    Then the Type of Prescriptions page is displayed
+    When I select the option to order a repeat prescription
+    Then I see the available repeatable prescriptions
+    Examples:
+      | GP System |
+      | EMIS      |
+      | VISION    |
+      | MICROTEST |
+
+  Scenario Outline: The <GP System> user orders a non-repeat prescription
+    Given the scenario is submit prescription
+    And I am using <GP System> GP System to submit my prescription
+    And I have 1 historic prescriptions in this scenario
+    And there are 5 repeatable prescriptions available
+    And I am logged in
+    When I navigate to prescriptions
+    Then the Prescriptions Hub page is displayed
+    When I click the Order a prescription button
+    Then the Type of Prescriptions page is displayed
+    When I select the option to order a non repeat prescription
+    Then the Contact Your GP page is displayed
+    Examples:
+      | GP System |
+      | EMIS      |
+      | VISION    |
+      | MICROTEST |
 
 # These tests navigate directly to the pages where the features are to be tested, to save time.
   Scenario Outline: The <GP System> user orders a repeat prescription with 5 entries

@@ -1,4 +1,4 @@
-import GetNavigationPathFromPrescriptions from '@/lib/prescriptions/navigation';
+import { getNavigationPathFromPrescriptionType } from '@/lib/prescriptions/navigation';
 import { NOMINATED_PHARMACY_CHECK_PATH, PRESCRIPTION_REPEAT_COURSES_PATH } from '@/router/paths';
 
 describe('navigation', () => {
@@ -12,7 +12,7 @@ describe('navigation', () => {
     };
   });
 
-  describe('getNavigationPathFromPrescriptions', () => {
+  describe('getNavigationPathFromPrescriptionType', () => {
     describe('sjr nominated pharmacy enabled', () => {
       beforeEach(() => {
         getters['serviceJourneyRules/nominatedPharmacyEnabled'] = true;
@@ -24,7 +24,8 @@ describe('navigation', () => {
         });
 
         it('will be nominated pharmacy check path', () => {
-          expect(GetNavigationPathFromPrescriptions(store)).toBe(NOMINATED_PHARMACY_CHECK_PATH);
+          expect(getNavigationPathFromPrescriptionType(store))
+            .toBe(NOMINATED_PHARMACY_CHECK_PATH);
         });
       });
 
@@ -34,7 +35,8 @@ describe('navigation', () => {
         });
 
         it('will be prescriptions repeat courses path', () => {
-          expect(GetNavigationPathFromPrescriptions(store)).toBe(PRESCRIPTION_REPEAT_COURSES_PATH);
+          expect(getNavigationPathFromPrescriptionType(store))
+            .toBe(PRESCRIPTION_REPEAT_COURSES_PATH);
         });
       });
     });
@@ -51,7 +53,8 @@ describe('navigation', () => {
         });
 
         it('will be prescriptions repeat courses path', () => {
-          expect(GetNavigationPathFromPrescriptions(store)).toBe(PRESCRIPTION_REPEAT_COURSES_PATH);
+          expect(getNavigationPathFromPrescriptionType(store))
+            .toBe(PRESCRIPTION_REPEAT_COURSES_PATH);
         });
       });
 
@@ -61,7 +64,8 @@ describe('navigation', () => {
         });
 
         it('will be prescriptions repeat courses path', () => {
-          expect(GetNavigationPathFromPrescriptions(store)).toBe(PRESCRIPTION_REPEAT_COURSES_PATH);
+          expect(getNavigationPathFromPrescriptionType(store))
+            .toBe(PRESCRIPTION_REPEAT_COURSES_PATH);
         });
       });
     });

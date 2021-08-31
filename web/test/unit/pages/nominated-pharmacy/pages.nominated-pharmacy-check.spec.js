@@ -2,7 +2,7 @@ import * as dependency from '@/lib/utils';
 import i18n from '@/plugins/i18n';
 import NominatedPharmacyCheck from '@/pages/nominated-pharmacy/check';
 import NoNominatedPharmacyWarning from '@/components/nominatedPharmacy/NoNominatedPharmacyWarning';
-import { PRESCRIPTION_REPEAT_COURSES_PATH, PRESCRIPTIONS_PATH } from '@/router/paths';
+import { PRESCRIPTION_REPEAT_COURSES_PATH, PRESCRIPTION_TYPE_PATH } from '@/router/paths';
 import { createStore, mount } from '../../helpers';
 
 describe('nominated pharmacy not found', () => {
@@ -87,7 +87,7 @@ describe('nominated pharmacy not found', () => {
     });
   });
 
-  describe('back to prescriptions link present on desktop', () => {
+  describe('back to prescription type link present on desktop', () => {
     let backLink;
 
     beforeEach(() => {
@@ -106,11 +106,11 @@ describe('nominated pharmacy not found', () => {
       expect(backLink.text()).toEqual('Back');
     });
 
-    it('will navigate back to prescriptions page', async () => {
+    it('will navigate back to prescription type page', async () => {
       dependency.redirectTo = jest.fn();
       await backLink.trigger('click');
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_PATH);
+        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTION_TYPE_PATH);
     });
   });
 });
@@ -166,11 +166,11 @@ describe('back button present on mobile app', () => {
     expect(backButton.text()).toEqual('Back');
   });
 
-  it('will navigate back to prescriptions page', async () => {
+  it('will navigate back to prescription type page', async () => {
     dependency.redirectTo = jest.fn();
     await backButton.trigger('click');
     expect(dependency.redirectTo)
-      .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_PATH);
+      .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTION_TYPE_PATH);
   });
 });
 

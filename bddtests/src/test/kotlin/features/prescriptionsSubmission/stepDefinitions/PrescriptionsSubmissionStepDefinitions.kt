@@ -32,7 +32,9 @@ import models.prescriptions.PrescriptionLoaderConfiguration
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import pages.ContactYourGPPage
 import pages.ErrorPage
+import pages.TypeOfPrescriptionsPage
 import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 import pages.prescription.PartiallySuccessfulRepeatPrescriptionsOrderPage
 import pages.prescription.ViewOrdersPrescriptionsPage
@@ -56,6 +58,10 @@ open class PrescriptionsSubmissionStepDefinitions {
     lateinit var coursesStepDefinitions: CoursesStepDefinitions
 
     lateinit var prescriptions : ViewOrdersPrescriptionsPage
+
+    lateinit var typeOfPrescriptionsPage : TypeOfPrescriptionsPage
+
+    lateinit var contactYourGPPage : ContactYourGPPage
 
     private val mockingClient = MockingClient.instance
 
@@ -426,5 +432,25 @@ open class PrescriptionsSubmissionStepDefinitions {
         Assert.assertFalse(
                 "PharmacyDetailComponent is not visible",
                 confirmRepeatPrescriptionsOrderPage.pharmacyDetailComponent.isVisible())
+    }
+
+    @Then("^the Type of Prescriptions page is displayed$")
+    fun assertTypeOfPrescriptionsPageIsDisplayed() {
+        typeOfPrescriptionsPage.assertIsDisplayed()
+    }
+
+    @When("^I select the option to order a non repeat prescription")
+    fun iSelectTheOptionToOrderANonRepeatPrescription() {
+        typeOfPrescriptionsPage.chooseNonRepeatPrescriptionAndContinue()
+    }
+
+    @When("^I select the option to order a repeat prescription")
+    fun iSelectTheOptionToOrderARepeatPrescription() {
+        typeOfPrescriptionsPage.chooseRepeatPrescriptionAndContinue()
+    }
+
+    @Then("^the Contact Your GP page is displayed$")
+    fun assertContactYourGPPageIsDisplayed() {
+        contactYourGPPage.assertIsDisplayed()
     }
 }

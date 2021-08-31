@@ -1,6 +1,8 @@
 import get from 'lodash/fp/get';
 
 import PrescriptionIndexPage from '@/pages/prescriptions';
+import ContactSurgeryPage from '@/pages/prescriptions/contact-surgery';
+import PrescriptionTypePage from '@/pages/prescriptions/prescription-type';
 import ViewPrescriptionOrdersPage from '@/pages/prescriptions/view-orders';
 import RepeatCoursesPage from '@/pages/prescriptions/repeat-courses';
 import ConfirmPrescriptionDetailsPage from '@/pages/prescriptions/confirm-prescription-details';
@@ -15,6 +17,7 @@ import sjrRedirectRules from '@/router/sjrRedirectRules';
 
 import {
   PRESCRIPTIONS_PATH,
+  PRESCRIPTION_TYPE_PATH,
   PRESCRIPTIONS_VIEW_ORDERS_PATH,
   PRESCRIPTION_REPEAT_COURSES_PATH,
   PRESCRIPTION_CONFIRM_COURSES_PATH,
@@ -22,9 +25,11 @@ import {
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS_PATH,
   PRESCRIPTIONS_GP_AT_HAND_PATH,
   UPLIFT_PRESCRIPTIONS_PATH,
+  PRESCRIPTIONS_CONTACT_SURGERY_PATH,
 } from '@/router/paths';
 import {
   PRESCRIPTIONS_NAME,
+  PRESCRIPTION_TYPE_NAME,
   PRESCRIPTIONS_VIEW_ORDERS_NAME,
   PRESCRIPTION_REPEAT_COURSES_NAME,
   PRESCRIPTION_CONFIRM_COURSES_NAME,
@@ -33,6 +38,7 @@ import {
   PRESCRIPTIONS_GP_AT_HAND_NAME,
   UPLIFT_PRESCRIPTIONS_NAME,
   GP_PRESCRIPTION_JOURNEY_NAME,
+  PRESCRIPTIONS_CONTACT_SURGERY_NAME,
 } from '@/router/names';
 
 import breadcrumbs from '@/breadcrumbs/prescriptions';
@@ -61,6 +67,46 @@ export const PRESCRIPTIONS = {
     headerKey: 'navigation.pages.headers.prescriptions',
     titleKey: 'navigation.pages.titles.prescriptions',
     crumb: breadcrumbs.PRESCRIPTIONS_CRUMB,
+    proofLevel: proofLevel.P9,
+    upliftRoute: UPLIFT_PRESCRIPTIONS,
+    helpPath: PRESCRIPTIONS_HELP_PATH,
+    proxyShutterPath: '/linked-profiles/shutter/prescriptions',
+    sjrRedirectRules: [sjrRedirectRules.gpAtHandPrescriptionsRedirect],
+    nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: GP_PRESCRIPTION_JOURNEY_NAME,
+    },
+  },
+};
+
+export const PRESCRIPTIONS_CONTACT_SURGERY = {
+  path: PRESCRIPTIONS_CONTACT_SURGERY_PATH,
+  name: PRESCRIPTIONS_CONTACT_SURGERY_NAME,
+  component: ContactSurgeryPage,
+  meta: {
+    headerKey: 'navigation.pages.headers.prescriptionsContactSurgery',
+    titleKey: 'navigation.pages.titles.prescriptionsContactSurgery',
+    crumb: breadcrumbs.PRESCRIPTION_CONTACT_SURGERY_CRUMB,
+    proofLevel: proofLevel.P9,
+    upliftRoute: UPLIFT_PRESCRIPTIONS,
+    helpPath: PRESCRIPTIONS_HELP_PATH,
+    proxyShutterPath: '/linked-profiles/shutter/prescriptions',
+    sjrRedirectRules: [sjrRedirectRules.gpAtHandPrescriptionsRedirect],
+    nativeNavigation: PRESCRIPTIONS_MENU_ITEM,
+    gpSessionOnDemand: {
+      journey: GP_PRESCRIPTION_JOURNEY_NAME,
+    },
+  },
+};
+
+export const PRESCRIPTION_TYPE = {
+  path: PRESCRIPTION_TYPE_PATH,
+  name: PRESCRIPTION_TYPE_NAME,
+  component: PrescriptionTypePage,
+  meta: {
+    headerKey: 'navigation.pages.headers.prescriptionType',
+    titleKey: 'navigation.pages.titles.prescriptionType',
+    crumb: breadcrumbs.PRESCRIPTION_TYPE_CRUMB,
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     helpPath: PRESCRIPTIONS_HELP_PATH,
@@ -211,6 +257,8 @@ export const PRESCRIPTIONS_GP_AT_HAND = {
 export default [
   UPLIFT_PRESCRIPTIONS,
   PRESCRIPTIONS,
+  PRESCRIPTIONS_CONTACT_SURGERY,
+  PRESCRIPTION_TYPE,
   VIEW_ORDERS,
   REPEAT_COURSES,
   CONFIRM_DETAILS,

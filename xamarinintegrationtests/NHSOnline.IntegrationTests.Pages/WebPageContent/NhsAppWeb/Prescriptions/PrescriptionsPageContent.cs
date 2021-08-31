@@ -19,7 +19,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
 
         private WebButton OrderARepeatPrescriptionButton =>  WebButton.WithText(
             _interactor,
-            "Order a repeat prescription");
+            "Order a prescription");
 
         private WebMenuItem ViewYourOrdersMenuItem => WebMenuItem.WithTitle(
             _interactor,

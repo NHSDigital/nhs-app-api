@@ -19,6 +19,7 @@ import net.thucydides.core.annotations.Steps
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert
 import pages.PrescriptionsHubPage
+import pages.TypeOfPrescriptionsPage
 import pages.assertElementNotPresent
 import pages.assertIsVisible
 import pages.nominatedPharmacy.NominatedPharmacyCheckPage
@@ -45,6 +46,7 @@ open class CoursesStepDefinitions {
     private lateinit var repeatPrescriptions : RepeatPrescriptionsPage
     private lateinit var nominatedPharmacyCheckPage : NominatedPharmacyCheckPage
     private lateinit var confirmRepeatPrescriptionsOrderPage : ConfirmRepeatPrescriptionsOrderPage
+    private lateinit var typeOfPrescriptionsPage : TypeOfPrescriptionsPage
 
     lateinit var coursesLoader: ICoursesLoader<*>
 
@@ -98,7 +100,8 @@ open class CoursesStepDefinitions {
     }
 
     fun iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect: Int) {
-        iClickOrderARepeatPrescription()
+        iClickOrderAPrescription()
+        typeOfPrescriptionsPage.chooseRepeatPrescriptionAndContinue()
         nominatedPharmacyCheckPage.continueButton.click()
         val courses = getAvailableCoursesFilteredSortedOrdered()
         val coursesToSelect = courses.take(numberOfPrescriptionsToSelect)
@@ -181,9 +184,9 @@ open class CoursesStepDefinitions {
         Assert.assertTrue(repeatPrescriptions.specialRequestCharactersRemainingTextIsVisible(text))
     }
 
-    @When("^I click 'Order a new repeat prescription'$")
-    fun iClickOrderARepeatPrescription() {
-        prescriptionsHubPage.clickOrderARepeatPrescriptionButton()
+    @When("^I click 'Order a prescription'$")
+    fun iClickOrderAPrescription() {
+        prescriptionsHubPage.clickOrderAPrescriptionButton()
     }
 
     @When("^I click Continue on the Order a repeat prescription page$")

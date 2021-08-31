@@ -13,7 +13,9 @@ Feature: View Courses Frontend
     And 10 of my prescriptions can be requested
     And I am logged in
     And I navigate to prescriptions
-    When I click 'Order a new repeat prescription'
+    When I click 'Order a prescription'
+    Then the Type of Prescriptions page is displayed
+    When I select the option to order a repeat prescription
     Then I see the available repeatable prescriptions
     And I click 'Help with medical abbreviations'
     And I see the medical abbreviations help link
@@ -32,7 +34,9 @@ Feature: View Courses Frontend
     And 0 of my prescriptions can be requested
     And I am logged in
     And I navigate to prescriptions
-    When I click 'Order a new repeat prescription'
+    When I click 'Order a prescription'
+    Then the Type of Prescriptions page is displayed
+    When I select the option to order a repeat prescription
     Then I see the available repeatable prescriptions
     And a message is displayed indicating that you don't have any medication available to order
     Examples:
@@ -50,7 +54,9 @@ Feature: View Courses Frontend
     And 1 of my prescriptions can be requested
     And I am logged in
     And I navigate to prescriptions
-    When I click 'Order a new repeat prescription'
+    When I click 'Order a prescription'
+    Then the Type of Prescriptions page is displayed
+    When I select the option to order a repeat prescription
     Then I see the available repeatable prescriptions
     Examples:
       | GP System |
@@ -66,7 +72,9 @@ Feature: View Courses Frontend
     And 101 of my prescriptions can be requested
     And I am logged in
     And I navigate to prescriptions
-    When I click 'Order a new repeat prescription'
+    When I click 'Order a prescription'
+    Then the Type of Prescriptions page is displayed
+    When I select the option to order a repeat prescription
     Then I see the available repeatable prescriptions
     Examples:
       | GP System |
@@ -83,7 +91,9 @@ Feature: View Courses Frontend
     And 100 of my prescriptions can be requested
     And I am logged in
     And I navigate to prescriptions
-    When I click 'Order a new repeat prescription'
+    When I click 'Order a prescription'
+    Then the Type of Prescriptions page is displayed
+    When I select the option to order a repeat prescription
     Then I see the available repeatable prescriptions
     Examples:
       | GP System |
@@ -100,7 +110,9 @@ Feature: View Courses Frontend
     And 3 of my prescriptions can be requested
     And I am logged in
     And I navigate to prescriptions
-    When I click 'Order a new repeat prescription'
+    When I click 'Order a prescription'
+    Then the Type of Prescriptions page is displayed
+    When I select the option to order a repeat prescription
     Then I see the available repeatable prescriptions
     Examples:
       | GP System |
@@ -150,7 +162,7 @@ Feature: View Courses Frontend
     When I click Continue on the Order a repeat prescription page
     Then A validation message is displayed indicating the user has not selected any repeat prescriptions
     When I navigate to prescriptions
-    And I click 'Order a new repeat prescription'
+    And I click 'Order a prescription'
     Then A validation message is not displayed indicating the user has not selected any repeat prescriptions
 
     Examples:
@@ -251,7 +263,9 @@ Feature: View Courses Frontend
     And I have 10 assigned prescriptions
     And 10 of my prescriptions are of type repeat
     And 10 of my prescriptions can be requested
-    When I click 'Order a new repeat prescription'
+    When I click 'Order a prescription'
+    Then the Type of Prescriptions page is displayed
+    When I select the option to order a repeat prescription
     Then I see the special request text area
     Examples:
       | GP System |
@@ -269,7 +283,7 @@ Feature: View Courses Frontend
     When I click Continue on the Order a repeat prescription page
     Then A validation message is displayed indicating the user has not entered special request text
     When I navigate to prescriptions
-    And I click 'Order a new repeat prescription'
+    And I click 'Order a prescription'
     Then A validation message is not displayed indicating the user has not entered special request text
 
   Scenario Outline: An <GP System> User manipulates the url to go to the repeat prescriptions page and the service is disabled at a GP Practice level
@@ -285,6 +299,19 @@ Feature: View Courses Frontend
       | EMIS      |
       | VISION    |
 
+  Scenario Outline: An <GP System> User manipulates the url to go to the prescription type page and the service is disabled at a GP Practice level
+    Given I am a patient using the <GP System> GP System
+    And prescriptions is disabled at a GP Practice level
+    And I have historic prescriptions
+    And I am logged in
+    And I navigate to prescriptions
+    When I browse to the page at /prescriptions/prescription-type
+    Then I see a message informing me that I don't currently have access to this service
+    Examples:
+      | GP System |
+      | EMIS      |
+      | VISION    |
+
   Scenario: The User manipulates the url to go to the confirm repeat prescriptions page and the service is disabled at a GP Practice level
     Given I am a EMIS patient
     And I have historic prescriptions
@@ -292,7 +319,7 @@ Feature: View Courses Frontend
     And I am logged in
     When I browse to the page at /prescriptions/confirm-prescription-details
     And the Prescriptions Hub page is displayed
-    And I click the Order a repeat prescription button
+    And I click the Order a prescription button
     Then I see a message informing me that I don't currently have access to this service
 
   Scenario: The user has 1 repeatable prescription with missing quantity info
@@ -303,7 +330,9 @@ Feature: View Courses Frontend
     And I have 1 assigned prescriptions which have only dosage info
     And 1 of my prescriptions are of type repeat
     And 1 of my prescriptions can be requested
-    When I click 'Order a new repeat prescription'
+    When I click 'Order a prescription'
+    Then the Type of Prescriptions page is displayed
+    When I select the option to order a repeat prescription
     Then I see the available repeatable prescriptions
 
   Scenario: The user has 1 repeatable prescription with missing dosage info
@@ -314,7 +343,9 @@ Feature: View Courses Frontend
     And I have 1 assigned prescriptions which have only quantity info
     And 1 of my prescriptions are of type repeat
     And 1 of my prescriptions can be requested
-    When I click 'Order a new repeat prescription'
+    When I click 'Order a prescription'
+    Then the Type of Prescriptions page is displayed
+    When I select the option to order a repeat prescription
     Then I see the available repeatable prescriptions
 
   Scenario: The user has 1 repeatable prescription with missing dosage and quantity info
@@ -325,7 +356,9 @@ Feature: View Courses Frontend
     And I have 1 assigned prescriptions which have no info
     And 1 of my prescriptions are of type repeat
     And 1 of my prescriptions can be requested
-    When I click 'Order a new repeat prescription'
+    When I click 'Order a prescription'
+    Then the Type of Prescriptions page is displayed
+    When I select the option to order a repeat prescription
     Then I see the available repeatable prescriptions
 
   Scenario: The User has selected repeat prescriptions to order with missing quantity info
@@ -370,8 +403,10 @@ Feature: View Courses Frontend
     And I have 1 assigned prescriptions which have only quantity info
     And 1 of my prescriptions are of type repeat
     And 1 of my prescriptions can be requested
-    And I click the Order a repeat prescription button
-    Then I see the available repeatable prescriptions
+    And I click the Order a prescription button
+    Then the Type of Prescriptions page is displayed
+    And I select the option to order a repeat prescription
+    And I see the available repeatable prescriptions
     Examples:
       | GP System |
       | EMIS      |
@@ -384,7 +419,7 @@ Feature: View Courses Frontend
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
     And The <GP System> GP system is still unavailable
-    And I click the Order a repeat prescription button
+    And I click the Order a prescription button
     Then I see appropriate try again error message for prescriptions when there is no GP session
     And The <GP System> GP system becomes available
     And I have historic prescriptions
@@ -392,7 +427,9 @@ Feature: View Courses Frontend
     And 1 of my prescriptions are of type repeat
     And 1 of my prescriptions can be requested
     When I click the 'Try again' button
-    Then I see the available repeatable prescriptions
+    Then the Type of Prescriptions page is displayed
+    And I select the option to order a repeat prescription
+    And I see the available repeatable prescriptions
     Examples:
       | GP System |
       | EMIS      |
@@ -405,12 +442,12 @@ Feature: View Courses Frontend
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
     And The <GP System> GP system is still unavailable
-    And I click the Order a repeat prescription button
+    And I click the Order a prescription button
     Then I see appropriate try again error message for prescriptions when there is no GP session
     When I click the 'Try again' button
     Then I see what I can do next with a prescriptions error message and reference code '3p'
     And I click the session error back link
-    And I click the Order a repeat prescription button
+    And I click the Order a prescription button
     And I see what I can do next with a prescriptions error message and reference code '3p'
     And I click the session error back link
     And the Prescriptions Hub page is displayed
@@ -419,7 +456,9 @@ Feature: View Courses Frontend
     And I have 1 assigned prescriptions which have only quantity info
     And 1 of my prescriptions are of type repeat
     And 1 of my prescriptions can be requested
-    When I click 'Order a new repeat prescription'
+    When I click 'Order a prescription'
+    Then the Type of Prescriptions page is displayed
+    When I select the option to order a repeat prescription
     Then I see the available repeatable prescriptions
     Examples:
       | GP System |

@@ -34,3 +34,21 @@ Feature: GP Session On Demand prescriptions
       | VISION    | 3s     |
       | MICROTEST | 3m     |
 
+  Scenario Outline: A <GP System> user can see the order a repeat prescription after a decoupled GpSession login
+    Given I have a Decoupled GP User Session
+    And I am a <GP System> patient
+    And I have historic prescriptions
+    And there are 4 repeatable prescriptions available
+    And I am logged in
+    And I navigate to prescriptions
+    When I click 'Order a prescription'
+    Then I SSO to NhsLogin
+    And the Type of Prescriptions page is displayed
+    When I select the option to order a repeat prescription
+    Then I see the available repeatable prescriptions
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+      | MICROTEST |

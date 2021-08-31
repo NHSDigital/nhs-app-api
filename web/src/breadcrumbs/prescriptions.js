@@ -1,11 +1,21 @@
 import { INDEX_CRUMB } from '@/breadcrumbs/general';
-import { PRESCRIPTIONS_NAME } from '@/router/names';
+import { PRESCRIPTIONS_NAME, PRESCRIPTION_TYPE_NAME } from '@/router/names';
 
 export const PRESCRIPTIONS_CRUMB = {
   defaultCrumb: [INDEX_CRUMB],
   i18nKey: 'prescriptions',
   name: PRESCRIPTIONS_NAME,
   nativeDisabled: true,
+};
+
+export const PRESCRIPTION_TYPE_CRUMB = {
+  defaultCrumb: [INDEX_CRUMB, PRESCRIPTIONS_CRUMB],
+  i18nKey: 'prescriptionType',
+  name: PRESCRIPTION_TYPE_NAME,
+};
+
+export const PRESCRIPTION_CONTACT_SURGERY_CRUMB = {
+  defaultCrumb: [INDEX_CRUMB, PRESCRIPTIONS_CRUMB],
 };
 
 export const PRESCRIPTIONS_VIEW_ORDERS_CRUMB = {
@@ -41,6 +51,8 @@ export const UPLIFT_PRESCRIPTIONS_CRUMB = {
 
 export default {
   PRESCRIPTIONS_CRUMB,
+  PRESCRIPTION_CONTACT_SURGERY_CRUMB,
+  PRESCRIPTION_TYPE_CRUMB,
   PRESCRIPTIONS_VIEW_ORDERS_CRUMB,
   PRESCRIPTION_REPEAT_COURSES_CRUMB,
   PRESCRIPTION_CONFIRM_COURSES_CRUMB,

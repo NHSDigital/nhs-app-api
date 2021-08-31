@@ -17,6 +17,16 @@ export default {
     change: 'Change',
     back: 'Back',
   },
+  contactSurgery: {
+    repeatPrescriptionsOnly: 'You cannot order non-repeat prescription items in the NHS App. ',
+    contactGPSurgery: 'Contact your GP surgery to request the prescription.',
+    emergencyContact1: 'If you cannot contact them, go to ',
+    emergencyContact2: ' or call 111 to request an emergency supply of the prescription item.',
+    emergencyContactLabel: 'If you cannot contact them, go to 111.nhs.uk/emergency-prescription or call 111 to request an emergency supply of the prescription item.',
+    emergencyPrescriptionLinkText: '111.nhs.uk/emergency-prescription',
+    emergencyPrescriptionLink: 'https://111.nhs.uk/emergency-prescription',
+    backButtonText: 'Back',
+  },
   historic: {
     orderedBy: 'Ordered by ',
     status: {
@@ -36,7 +46,7 @@ export default {
     theStatusIs: 'The status of this prescription is ',
   },
   hub: {
-    orderARepeatPrescription: 'Order a repeat prescription',
+    orderAPrescription: 'Order a prescription',
     viewYourOrders: 'View your orders',
     seeRepeatPrescriptionsYouHaveOrdered: 'See repeat prescriptions you have ordered',
     nominateAPharmacy: 'Nominate a pharmacy',
@@ -68,6 +78,17 @@ export default {
     medicationNotOrdered: 'Medication not ordered',
     medicationOrdered: 'Medication ordered successfully',
     theOrderStatusWillBeUpdated: 'The order status will be updated once it\'s been reviewed by your GP.',
+  },
+  prescriptionType: {
+    repeatPrescription: 'A repeat prescription',
+    repeatPrescriptionHint: 'Signed off for repeated use by your GP',
+    nonRepeatPrescription: 'A non-repeat prescription',
+    nonRepeatPrescriptionHint: 'A one-off, short-term or acute medicine that you may have been prescribed before',
+    errors: {
+      thereIsAProblem: 'There\'s a problem',
+      chooseTypeOfPrescription: 'Choose a type of prescription',
+    },
+    continueButton: 'Continue',
   },
   repeatCourses: {
     errors: {
