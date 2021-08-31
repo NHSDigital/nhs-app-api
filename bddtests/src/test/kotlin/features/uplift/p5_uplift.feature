@@ -16,6 +16,7 @@ Feature: Proof level 5 shutter screens
       | your prescriptions | Prescriptions             |
 
   @native
+  @pending
   Scenario Outline: P5 user accesses <Page Title> shutter page and can use the navigation bar
     Given I am a patient logging in natively with proof level 5
     And I log in to the app expecting to see the notifications prompt
