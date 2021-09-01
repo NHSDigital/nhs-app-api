@@ -73,6 +73,16 @@ namespace Nhs.App.Api.Integration.Tests.Services
             return await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
         }
 
+        public void AddHeader(string key, string value)
+        {
+            _httpClient.DefaultRequestHeaders.Add(key, value);
+        }
+
+        public void RemoveHeader(string key)
+        {
+            _httpClient.DefaultRequestHeaders.Remove(key);
+        }
+
         public void Dispose()
         {
             _httpClient?.Dispose();
