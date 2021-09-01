@@ -15,7 +15,7 @@ patientPracticeMessagingEnabled: true
 environmentPerftest: true
 environmentStubbed:
   useExternalStubs: true
-  externalStubsBaseUrl: https://stubs-loadtest.loadtest.nonlive.nhsapp.service.nhs.uk
+  externalStubsBaseUrl: https://stubs-loadtest.stubs.nonlive.nhsapp.service.nhs.uk
 
 emisCertEnabled: true
 emisPort: 444

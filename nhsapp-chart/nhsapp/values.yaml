@@ -12,7 +12,7 @@ environmentStubbed: {}
 #   qualtricsStubbed: false
 #   ndopStubbed: false
 #   useExternalStubs: false
-#   externalStubsBaseUrl: https://stubs-loadtest.loadtest.nonlive.nhsapp.service.nhs.uk
+#   externalStubsBaseUrl: https://stubs-loadtest.stubs.nonlive.nhsapp.service.nhs.uk
 
 appInsightsEnabled: false
 appImageTag: v1.0.0

@@ -1,6 +1,6 @@
 ---
 region: uksouth
-zone: loadtest
+zone: stubs
 domain: nonlive.nhsapp.service.nhs.uk
 
 registry: nhsapp.azurecr.io
