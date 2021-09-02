@@ -27,7 +27,7 @@ android {
         applicationId "com.nhs.online.nhsonline"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 82
+        versionCode 98
         versionName "1.57.0"
         multiDexEnabled true
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'

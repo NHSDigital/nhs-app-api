@@ -105,7 +105,7 @@ jobs:
           secureFile: 'AndroidSigningKeyStore'
 
       # Tagged build - Demo
-      - template: android-client-build-and-release-job.yml
+      - template: android-client-build-and-release-secure-apps-job.yml
         parameters:
           displayName: 'Demo (Staging)'
           buildCondition: "and(succeeded(), eq(variables['source.tag'], 'True'))"
@@ -114,14 +114,13 @@ jobs:
           keyStorePassword: $(android.key.store.password)
 
       # Tagged build - Release
-      - template: android-client-build-and-release-job.yml
+      - template: android-client-build-and-release-secure-apps-job.yml
         parameters:
           displayName: Release
           buildCondition: "and(succeeded(), eq(variables['source.tag'], 'True'))"
           target: release
           keyStoreLocation: $(android_key_store.secureFilePath)
           keyStorePassword: $(android.key.store.password)
-          track: production
 
       - task: PublishBuildArtifacts@1
         displayName: Publish android package files
