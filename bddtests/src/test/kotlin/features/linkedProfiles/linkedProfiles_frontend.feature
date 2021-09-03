@@ -344,3 +344,37 @@ Feature: Login with proxy access
       | EMIS      |
       | TPP       |
 
+  Scenario: The TPP GP practice session has expired and a proxy user visits the prescription type page
+    Given I am logged in as a TPP user with linked profiles and appointments provider IM1
+    Then I see the home page
+    When I can see and follow the Linked profiles link
+    Then the linked profiles page is displayed
+    And linked profiles are displayed
+    When I select a linked profile
+    Then details for the selected linked profile are displayed
+    When I click the Switch to this profile button for the proxy user
+    Then I see the proxy home page
+    And I am using TPP GP System to submit my prescription
+    And I have 1 historic prescriptions in this scenario
+    And there are 5 repeatable prescriptions available
+    And the GP System session has expired when viewing prescriptions
+    When I retrieve the 'Your Prescriptions' page directly
+    And I click the Order a prescription button
+    Then I see appropriate try again error message for prescriptions when there is no GP session
+
+  Scenario: The TPP GP practice session has expired and a proxy user visits the prescription repeat courses page
+    Given I am logged in as a TPP user with linked profiles and appointments provider IM1
+    Then I see the home page
+    When I can see and follow the Linked profiles link
+    Then the linked profiles page is displayed
+    And linked profiles are displayed
+    When I select a linked profile
+    Then details for the selected linked profile are displayed
+    When I click the Switch to this profile button for the proxy user
+    Then I see the proxy home page
+    And I am using TPP GP System to submit my prescription
+    And I have 1 historic prescriptions in this scenario
+    And there are 5 repeatable prescriptions available
+    And the GP System session has expired when viewing prescriptions
+    When I retrieve the 'prescription repeat courses' page directly
+    Then I see appropriate try again error message for prescriptions when there is no GP session
