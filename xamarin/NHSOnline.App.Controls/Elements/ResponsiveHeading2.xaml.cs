@@ -11,7 +11,8 @@ namespace NHSOnline.App.Controls.Elements
             BindableProperty.Create(nameof(Text), typeof(string), typeof(ResponsiveHeading2));
 
         public static readonly BindableProperty TextColourProperty =
-            BindableProperty.Create(nameof(TextColour), typeof(Color), typeof(ResponsiveHeading2), NhsUkColours.NhsUkPrimaryText);
+            BindableProperty.Create(nameof(TextColour), typeof(Color), typeof(ResponsiveHeading2),
+                NhsUkColours.NhsUkPrimaryText);
 
         public ResponsiveHeading2()
         {
@@ -26,13 +27,13 @@ namespace NHSOnline.App.Controls.Elements
 
         public string Text
         {
-            get => (string) GetValue(TextProperty);
+            get => (string)GetValue(TextProperty);
             set => SetValue(TextProperty, value);
         }
 
         public Color TextColour
         {
-            get => (Color) GetValue(TextColourProperty);
+            get => (Color)GetValue(TextColourProperty);
             set => SetValue(TextColourProperty, value);
         }
     }

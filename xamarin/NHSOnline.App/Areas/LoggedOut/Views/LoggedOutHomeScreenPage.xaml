@@ -10,19 +10,20 @@
              x:Class="NHSOnline.App.Areas.LoggedOut.Views.LoggedOutHomeScreenPage"
              x:Name="Page"
              xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
-             xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls">
+             xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
+             xmlns:responsive="clr-namespace:NHSOnline.App.Controls.MarkupExtensions.Responsive;assembly=NHSOnline.App.Controls">
     
     <ContentView BackgroundColor="{StaticResource NhsUkBlue}" x:Name="ContentView" >
         
         <ContentView.Resources>
             <Style TargetType="Label" Class="ExpiredLabelText">
-                <Setter Property="FontSize" Value="Small" />
+                <Setter Property="FontSize" Value="{responsive:NhsFontSize Small}" />
                 <Setter Property="FontFamily" Value="Frutiger-Bold" />
                 <Setter Property="HorizontalOptions" Value="Center" />
                 <Setter Property="VerticalOptions" Value="Center" />
             </Style>
             <Style TargetType="Label" x:Key="ExpiredLabelTextWide" >
-                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="FontSize" Value="{responsive:NhsFontSize Medium}" />
             </Style>
             
             <Style TargetType="StackLayout" Class="SessionExpiredBanner">
@@ -59,7 +60,7 @@
             </Style>
             
             <Style TargetType="Label" Class="AccessLabel">
-                <Setter Property="FontSize" Value="Large" />
+                <Setter Property="FontSize" Value="{responsive:NhsFontSize Large}" />
                 <Setter Property="FontFamily" Value="Frutiger-Bold" />
                 <Setter Property="HorizontalOptions" Value="Center" />   
                 <Setter Property="HorizontalTextAlignment" Value="Center" />           

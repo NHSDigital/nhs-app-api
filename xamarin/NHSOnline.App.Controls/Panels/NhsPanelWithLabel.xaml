@@ -3,6 +3,7 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                 xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
+                xmlns:responsive="clr-namespace:NHSOnline.App.Controls.MarkupExtensions.Responsive;assembly=NHSOnline.App.Controls"
                 x:Class="NHSOnline.App.Controls.Panels.NhsPanelWithLabel"
                 x:DataType="panels:NhsPanelWithLabel"
                 x:Name="Root">
@@ -69,13 +70,13 @@
             
             <Style TargetType="Label" Class="HeadingText" CanCascade="True">
                 <Setter Property="VerticalTextAlignment" Value="Center" />
-                <Setter Property="FontSize" Value="20" />
+                <Setter Property="FontSize" Value="{responsive:NhsFontSize Medium}" />
                 <Setter Property="FontFamily" Value="Frutiger-Bold" />
                 <Setter Property="BackgroundColor" Value="{Binding LabelBackgroundColour, Source={x:Reference Name=Root}}" />
                 <Setter Property="TextColor" Value="{Binding LabelTextColour, Source={x:Reference Name=Root}}" />
             </Style>
             <Style x:Key="HeadingTextWide" TargetType="Label" CanCascade="True">
-                <Setter Property="FontSize" Value="24" />
+                <Setter Property="FontSize" Value="{responsive:NhsFontSize Large}" />
             </Style>
             
             <Style TargetType="ContentView" Class="PanelContentView" CanCascade="True">

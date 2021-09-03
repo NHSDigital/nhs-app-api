@@ -2,17 +2,18 @@
 
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:responsive="clr-namespace:NHSOnline.App.Controls.MarkupExtensions.Responsive;assembly=NHSOnline.App.Controls"
                     x:Class="NHSOnline.App.Controls.Styles.NhsUkStyles">
-    
+
     <Style TargetType="Label" ApplyToDerivedTypes="True">
         <Setter Property="FontFamily" Value="Frutiger" />
         <Setter Property="TextColor" Value="#212B32" />
-        <Setter Property="FontSize" Value="Medium" />
+        <Setter Property="FontSize" Value="{responsive:NhsFontSize Medium}" />
         <Setter Property="Margin" Value="0" />
     </Style>
-    
+
     <Style TargetType="Label" ApplyToDerivedTypes="True" Class="Heading2">
-        <Setter Property="FontSize" Value="Large" />
+        <Setter Property="FontSize" Value="{responsive:NhsFontSize Large}" />
         <Setter Property="FontFamily" Value="Frutiger-Bold" />
         <Setter Property="TextColor" Value="#212B32" />
         <Setter Property="Padding" Value="0, 12" />

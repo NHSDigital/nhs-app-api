@@ -4,6 +4,7 @@
              xmlns:icons="clr-namespace:NHSOnline.App.Controls.Icons;assembly=NHSOnline.App.Controls"
              xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
              xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
+             xmlns:responsive="clr-namespace:NHSOnline.App.Controls.MarkupExtensions.Responsive;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Controls.Elements.HelpButton"
              x:Name="Root">
     
@@ -38,12 +39,12 @@
             
             <Style TargetType="Label" Class="IconLabel">
                 <Setter Property="TextColor" Value="{StaticResource NhsUkWhite}" />
-                <Setter Property="FontSize" Value="Small" />
+                <Setter Property="FontSize" Value="{responsive:NhsFontSize Small}" />
                 <Setter Property="Padding" Value="0,5,0,0" />
                 <Setter Property="HorizontalOptions" Value="Center" />
             </Style>
             <Style TargetType="Label" x:Key="IconLabelWide">
-                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="FontSize" Value="{responsive:NhsFontSize Medium}" />
             </Style>
         </ResourceDictionary>
     </ContentView.Resources>
