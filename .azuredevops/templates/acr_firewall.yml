@@ -25,4 +25,29 @@ steps:
       inlineScript: |
         IP=($(curl -s http://ipinfo.io/json | jq '.ip' | sed -e 's/^"//' -e 's/"$//'))
         echo "agent host IP: ${IP}"
-        az acr network-rule ${{ parameters.mode }} -n ${{ parameters.acr }} --ip-address "${IP}"
+        # try to assign the ip
+        result=$(az acr network-rule "${{ parameters.mode }}" -n "${{ parameters.acr }}" --ip-address "${IP}" --query name -o tsv 2>&1 || true)
+        if [[ "${result}" == "${{ parameters.acr }}" ]]; then
+          echo "IP address ${IP} successfully added to ACR ${{ parameters.acr }}"
+        elif [[ "${result}" == *"duplicate"* ]]; then
+          echo "IP Address ${AGENT_HOST_IP} is already assigned."
+        elif [[ "${result}" == *"Another operation"* ]]; then
+          echo "Concurrent operation in progress, trying again..."
+          outcome=false
+          counter=1
+          until [[ $outcome == true ]] || [[ $counter == 10 ]]; do
+            sleep 5
+            echo "Attempt #${counter}"
+            result=$(az acr network-rule "${{ parameters.mode }}" -n "${{ parameters.acr }}" --ip-address "${IP}" --query name -o tsv 2>&1 || true)
+            if [[ "${result}" == "${{ parameters.acr }}" ]]; then
+              echo "IP address ${IP} successfully added to ACR ${{ parameters.acr }}"
+              outcome=true
+            else
+              echo "Attempt #${counter} unsuccessful, trying again in 5 seconds..."
+              ((counter=counter+1))
+            fi
+          done
+        else
+          echo "Unknown error occurred: ${result}"
+          exit 1
+        fi
