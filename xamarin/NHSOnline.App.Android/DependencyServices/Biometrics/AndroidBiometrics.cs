@@ -23,7 +23,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
         {
             using var manager = BiometricManager.From(MainActivity);
 
-            var canAuthenticate = manager.CanAuthenticate(BiometricManager.Authenticators.BiometricWeak);
+            var canAuthenticate = manager.CanAuthenticate(BiometricManager.Authenticators.BiometricStrong);
 
             BiometricStatus status = canAuthenticate switch
             {
