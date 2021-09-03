@@ -9,13 +9,13 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
     internal sealed class BiometricLoginFingerprintLockedOutPresenter
     {
         private readonly ILogger<BiometricLoginFingerprintLockedOutPresenter> _logger;
-        private readonly IBiometricLoginFingerprintLockedOutView _view;
+        private readonly IBiometricLoginFingerprintFaceIrisLockedOutView _view;
         private readonly IBiometricAuthenticationService _biometricAuthenticationService;
         private readonly IUserPreferencesService _userPreferencesService;
 
         public BiometricLoginFingerprintLockedOutPresenter(
             ILogger<BiometricLoginFingerprintLockedOutPresenter> logger,
-            IBiometricLoginFingerprintLockedOutView view,
+            IBiometricLoginFingerprintFaceIrisLockedOutView view,
             IBiometricAuthenticationService biometricAuthenticationService,
             IUserPreferencesService userPreferencesService)
         {

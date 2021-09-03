@@ -97,6 +97,7 @@ describe('BiometricBanner', () => {
 
     describe.each([
       [true, biometricTypes.Fingerprint, 'Set up fingerprint', MORE_ACCOUNTANDSETTINGS_FINGERPRINT_PATH],
+      [true, biometricTypes.FingerprintFaceOrIris, 'Set up fingerprint, face or iris', MORE_ACCOUNTANDSETTINGS_FINGERPRINT_PATH],
       [true, biometricTypes.TouchID, 'Set up Touch ID', MORE_ACCOUNTANDSETTINGS_TOUCH_ID_PATH],
       [true, biometricTypes.FaceID, 'Set up Face ID', MORE_ACCOUNTANDSETTINGS_FACE_ID_PATH],
       [true, undefined, 'Set up login options', MORE_ACCOUNTANDSETTINGS_LOGINOPTIONS_PATH],
@@ -128,6 +129,7 @@ describe('BiometricBanner', () => {
       [true, biometricTypes.Fingerprint, 'Set up fingerprint'],
       [true, biometricTypes.TouchID, 'Set up Touch ID'],
       [true, biometricTypes.FaceID, 'Set up Face ID'],
+      [true, biometricTypes.FingerprintFaceOrIris, 'Set up fingerprint, face or iris'],
       [true, undefined, 'Set up login options'],
       [false, undefined, 'Open login settings'],
     ])('Biometric button text', (biometricSupported, biometricType, expectedText) => {

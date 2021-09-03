@@ -6,6 +6,7 @@ export default {
       case biometricTypes.TouchID:
       case biometricTypes.FaceID:
       case biometricTypes.Fingerprint:
+      case biometricTypes.FingerprintFaceOrIris:
         return true;
       default:
         return false;

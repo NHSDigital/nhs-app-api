@@ -117,9 +117,9 @@ namespace NHSOnline.App.Services.FIDO
                 return new BiometricLoginResult.NotRegistered();
             }
 
-            public ProcessResult<string, BiometricLoginResult> Visit(BiometricStatus.FingerPrint fingerPrint)
+            public ProcessResult<string, BiometricLoginResult> Visit(BiometricStatus.FingerPrintFaceOrIris fingerPrintFaceOrIris)
             {
-                return GetCanLoginResult(fingerPrint.RegistrationStatus);
+                return GetCanLoginResult(fingerPrintFaceOrIris.RegistrationStatus);
             }
 
             public ProcessResult<string, BiometricLoginResult> Visit(BiometricStatus.TouchId touchId)

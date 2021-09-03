@@ -26,6 +26,9 @@ export default {
       case biometricTypes.Fingerprint:
         state.biometricType = biometricTypes.Fingerprint;
         break;
+      case biometricTypes.FingerprintFaceOrIris:
+        state.biometricType = biometricTypes.FingerprintFaceOrIris;
+        break;
       default:
         state.biometricType = biometricTypes.None;
         break;

@@ -21,6 +21,10 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.More.AccountSettings
 
         IOSLink NhsLoginSettingsMenuItem => IOSLink.WithText(_interactor, "Manage NHS login account");
 
+        IOSLink FaceIdMenuItem => IOSLink.WithText(_interactor, "Face ID");
+
+        IOSLink TouchIdMenuItem => IOSLink.WithText(_interactor, "Touch ID");
+
         public IOSFullNavigation Navigation { get; }
 
         public AccountSettingsPageContent PageContent { get; }
@@ -40,8 +44,24 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.More.AccountSettings
             return this;
         }
 
+        public IOSAccountSettingsPage AssertTouchIdMenuItemElements()
+        {
+            TouchIdMenuItem.AssertVisible();
+            return this;
+        }
+
+        public IOSAccountSettingsPage AssertFaceIdMenuItemElements()
+        {
+            FaceIdMenuItem.AssertVisible();
+            return this;
+        }
+
         public void NavigateToNotificationsSettings() => NotificationsSettingsMenuItem.Touch();
 
         public void NavigateToNhsLoginSettings() => NhsLoginSettingsMenuItem.Touch();
+
+        public void NavigateToFaceIdBiometrics() => FaceIdMenuItem.Touch();
+
+        public void NavigateToTouchIdBiometrics() => TouchIdMenuItem.Touch();
     }
 }

@@ -30,6 +30,9 @@ class HomeStepDefinitions {
             "Set up fingerprint" -> {
                 biometricSteps.setBiometricType("fingerPrint")
             }
+            "Set up fingerprint, face or iris" -> {
+                biometricSteps.setBiometricType("fingerPrintFaceOrIris")
+            }
         }
     }
 }

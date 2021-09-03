@@ -73,6 +73,9 @@ export default {
         if (biometricType === biometricTypes.Fingerprint) {
           return 'setupFingerPrint';
         }
+        if (biometricType === biometricTypes.FingerprintFaceOrIris) {
+          return 'setupFaceFingerPrintOrIris';
+        }
         if (biometricType === biometricTypes.FaceID) {
           return 'setupFaceId';
         }
@@ -99,6 +102,8 @@ export default {
 
       if (biometricSupported) {
         if (biometricType === biometricTypes.Fingerprint) {
+          redirectUrl = MORE_ACCOUNTANDSETTINGS_FINGERPRINT_PATH;
+        } else if (biometricType === biometricTypes.FingerprintFaceOrIris) {
           redirectUrl = MORE_ACCOUNTANDSETTINGS_FINGERPRINT_PATH;
         } else if (biometricType === biometricTypes.FaceID) {
           redirectUrl = MORE_ACCOUNTANDSETTINGS_FACE_ID_PATH;

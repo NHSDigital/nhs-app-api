@@ -49,8 +49,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.More.AccountSettings
             return this;
         }
 
-        public void KeyboardNavigateToBiometricsSettings() =>
-            PageContent.KeyboardNavigateToBiometricsSettings(KeyboardPageContentNavigation);
+        public void NavigateToFingerprintFaceIrisBiometrics() => PageContent.NavigateToBiometricsSettings();
 
         public void KeyboardNavigateToNhsLoginSettings() =>
             PageContent.KeyboardNavigateToNhsLoginSettings(KeyboardPageContentNavigation);

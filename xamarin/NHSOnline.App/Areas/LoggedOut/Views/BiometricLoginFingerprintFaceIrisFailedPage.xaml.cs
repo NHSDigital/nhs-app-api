@@ -9,20 +9,20 @@ using NHSOnline.App.Navigation;
 namespace NHSOnline.App.Areas.LoggedOut.Views
 {
     [DesignTimeVisible(false)]
-    public partial class BiometricLoginFingerprintFailedPage : IBiometricLoginFingerprintFailedView, IBiometricLoginFingerprintFailedView.IEvents
+    public partial class BiometricLoginFingerprintFailedPage : IBiometricLoginFingerprintFaceIrisFailedView, IBiometricLoginFingerprintFaceIrisFailedView.IEvents
     {
         private readonly ILogger _logger;
-        private readonly AppNavigation<IBiometricLoginFingerprintFailedView.IEvents> _appNavigation;
+        private readonly AppNavigation<IBiometricLoginFingerprintFaceIrisFailedView.IEvents> _appNavigation;
 
         public BiometricLoginFingerprintFailedPage(ILogger<BiometricLoginFingerprintFailedPage> logger)
         {
             _logger = logger;
-            _appNavigation = new AppNavigation<IBiometricLoginFingerprintFailedView.IEvents>(this, Navigation);
+            _appNavigation = new AppNavigation<IBiometricLoginFingerprintFaceIrisFailedView.IEvents>(this, Navigation);
 
             InitializeComponent();
         }
 
-        IAppNavigation<IBiometricLoginFingerprintFailedView.IEvents> INavigationView<IBiometricLoginFingerprintFailedView.IEvents>.AppNavigation => _appNavigation;
+        IAppNavigation<IBiometricLoginFingerprintFaceIrisFailedView.IEvents> INavigationView<IBiometricLoginFingerprintFaceIrisFailedView.IEvents>.AppNavigation => _appNavigation;
 
         public Func<Task>? BackHomeRequested { get; set; }
         public ICommand BackHomeCommand => new AsyncCommand(() => BackHomeRequested);

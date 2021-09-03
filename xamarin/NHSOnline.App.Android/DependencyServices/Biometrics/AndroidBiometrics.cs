@@ -39,9 +39,9 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
 
             return Task.FromResult(status);
 
-            BiometricStatus.FingerPrint Unusable() => new BiometricStatus.FingerPrint(BiometricHardwareState.Unusable, DeriveBiometricRegistrationStatus(fidoUsername));
+            BiometricStatus.FingerPrintFaceOrIris Unusable() => new BiometricStatus.FingerPrintFaceOrIris(BiometricHardwareState.Unusable, DeriveBiometricRegistrationStatus(fidoUsername));
 
-            BiometricStatus.FingerPrint Usable() => new BiometricStatus.FingerPrint(BiometricHardwareState.Usable, DeriveBiometricRegistrationStatus(fidoUsername));
+            BiometricStatus.FingerPrintFaceOrIris Usable() => new BiometricStatus.FingerPrintFaceOrIris(BiometricHardwareState.Usable, DeriveBiometricRegistrationStatus(fidoUsername));
 
             BiometricStatus.HardwareNotPresent HardwareNotPresent() => new BiometricStatus.HardwareNotPresent();
         }

@@ -132,11 +132,11 @@
       <DependentUpon>BiometricLoginCouldNotLoginPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Areas\LoggedOut\Views\BiometricLoginFingerprintFailedPage.xaml.cs">
+    <Compile Update="Areas\LoggedOut\Views\BiometricLoginFingerprintFaceIrisFailedPage.xaml.cs">
       <DependentUpon>BiometricLoginFingerprintFailedPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Areas\LoggedOut\Views\BiometricLoginFingerprintLockedOutPage.xaml.cs">
+    <Compile Update="Areas\LoggedOut\Views\BiometricLoginFingerprintFaceIrisLockedOutPage.xaml.cs">
       <DependentUpon>BiometricLoginFingerprintLockedOutPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>

@@ -30,9 +30,9 @@ namespace NHSOnline.App.Services.FIDO
             internal bool Registered { get; }
         }
 
-        internal sealed class FingerPrint : HardwarePresent
+        internal sealed class FingerPrintFaceOrIris : HardwarePresent
         {
-            internal FingerPrint(bool usable, bool registered) : base(usable, registered) { }
+            internal FingerPrintFaceOrIris(bool usable, bool registered) : base(usable, registered) { }
             public override T Accept<T>(IBiometricStatusResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
@@ -63,11 +63,11 @@ namespace NHSOnline.App.Services.FIDO
                 return new HardwareNotPresent();
             }
 
-            public BiometricStatusResult Visit(BiometricStatus.FingerPrint fingerPrint)
+            public BiometricStatusResult Visit(BiometricStatus.FingerPrintFaceOrIris fingerPrintFaceOrIris)
             {
-                var usable = fingerPrint.State == BiometricHardwareState.Usable;
-                var registered = IsRegistered(fingerPrint.RegistrationStatus);
-                return new FingerPrint(usable, registered);
+                var usable = fingerPrintFaceOrIris.State == BiometricHardwareState.Usable;
+                var registered = IsRegistered(fingerPrintFaceOrIris.RegistrationStatus);
+                return new FingerPrintFaceOrIris(usable, registered);
             }
 
             public BiometricStatusResult Visit(BiometricStatus.TouchId touchId)

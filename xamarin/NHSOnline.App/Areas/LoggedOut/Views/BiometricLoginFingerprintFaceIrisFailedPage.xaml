@@ -8,9 +8,9 @@
                                     x:Name="Page">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <StackLayout Padding="20,0,20,0">
-            <deprecated:Heading1 Text="We cannot find your fingerprint" x:Name="Heading" />
+            <deprecated:Heading1 Text="We cannot find your fingerprint, face or iris" x:Name="Heading" />
             
-            <deprecated:Paragraph Text="Check that you have added a fingerprint in your device's security settings."
+            <deprecated:Paragraph Text="Check that you have added a fingerprint, face or iris in your device's security settings."
                                 Padding="0,10,0,0" />
             
             <deprecated:LinkLabel Text="Back to login"

@@ -1,6 +1,10 @@
 const None = 'none';
 const FaceID = 'face';
 const TouchID = 'touch';
+const FingerprintFaceOrIris = 'fingerPrintFaceOrIris';
+
+// Will be removed once Xamarin is released
+// we do not support Face or Iris on legacy Android
 const Fingerprint = 'fingerPrint';
 
 export default {
@@ -8,4 +12,5 @@ export default {
   FaceID,
   TouchID,
   Fingerprint,
+  FingerprintFaceOrIris,
 };

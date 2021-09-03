@@ -17,7 +17,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Account and settings");
 
-        private WebMenuItem BiometricMenuItem => WebMenuItem.WithTitle(_interactor, "Fingerprint");
+        private WebMenuItem BiometricMenuItem => WebMenuItem.WithTitle(_interactor, "Fingerprint, face or iris");
 
         private WebMenuItem ManageNhsLoginMenuItem => WebMenuItem.WithTitle(_interactor, "Manage NHS login account");
 
@@ -62,6 +62,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
         {
             EnsureAnalyticsCookieAccepted();
             ManageNhsLoginMenuItem.Click();
+        }
+
+        public void NavigateToBiometricsSettings()
+        {
+            BiometricMenuItem.Click();
         }
 
         public void KeyboardNavigateToBiometricsSettings(AndroidKeyboardNavigation navigation) =>

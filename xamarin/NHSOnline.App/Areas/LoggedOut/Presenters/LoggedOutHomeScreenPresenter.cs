@@ -162,7 +162,10 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             => await _biometricLoginErrorPageDispatcher.ShowCouldNotLoginWithBiometrics().PreserveThreadContext();
 
         private async Task ShowBiometricLoginFailed()
-            => await _biometricLoginErrorPageDispatcher.ShowBiometricLoginFailed().PreserveThreadContext();
+        {
+            await _biometricLoginErrorPageDispatcher.ShowBiometricLoginFailed().PreserveThreadContext();
+            _cancelBiometricLogin.Cancel();
+        }
 
         private async Task ShowBiometricLoginPermanentlyLockedOut()
             => await _biometricLoginErrorPageDispatcher.ShowBiometricLoginPermanentlyLockedOut().PreserveThreadContext();

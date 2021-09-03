@@ -7,11 +7,11 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
     internal sealed class BiometricLoginFingerprintFailedPresenter
     {
         private readonly ILogger<BiometricLoginFingerprintFailedPresenter> _logger;
-        private readonly IBiometricLoginFingerprintFailedView _view;
+        private readonly IBiometricLoginFingerprintFaceIrisFailedView _view;
 
         public BiometricLoginFingerprintFailedPresenter(
             ILogger<BiometricLoginFingerprintFailedPresenter> logger,
-            IBiometricLoginFingerprintFailedView view)
+            IBiometricLoginFingerprintFaceIrisFailedView view)
         {
             _logger = logger;
             _view = view;

@@ -2,21 +2,25 @@ export default {
   biometrics: {
     biometricInformation: {
       fingerPrint: 'You can log in with your fingerprint instead of a password and security code.',
+      fingerPrintFaceOrIris: 'You can log in with your fingerprint, face or iris instead of a password and security code.',
       face: 'Face ID lets you log in with your face scan instead of a password and security code.',
       touch: 'Touch ID lets you log in with your fingerprint instead of a password and security code.',
     },
     biometricType: {
       fingerPrint: 'Fingerprint',
+      fingerPrintFaceOrIris: 'Fingerprint, face or iris',
       face: 'Face ID',
       touch: 'Touch ID',
     },
     toggleLabel: {
       fingerPrint: 'Log in with fingerprint',
+      fingerPrintFaceOrIris: 'Log in with fingerprint, face or iris',
       face: 'Log in with Face ID',
       touch: 'Log in with Touch ID',
     },
     warningText: {
       fingerPrint: 'All fingerprints registered on this device will be able to access connected health websites and apps that use your NHS login information.',
+      fingerPrintFaceOrIris: 'All fingerprints, faces or irises registered on this device will be able to access connected health websites and apps that use your NHS login information.',
       face: 'All Face IDs registered on this device will be able to access connected health websites and apps that use your NHS login information.',
       touch: 'All fingerprints registered on this device will be able to access connected health websites and apps that use your NHS login information.',
     },
@@ -30,6 +34,7 @@ export default {
     errors: {
       title: {
         fingerPrint: 'fingerprint',
+        fingerPrintFaceOrIris: 'fingerprint, face or iris',
         face: 'Face ID',
         touch: 'Touch ID',
       },
@@ -38,6 +43,7 @@ export default {
           face: 'Check that you have added a face scan in your device\'s Face ID settings.',
           touch: 'Check that you have added a fingerprint in your device\'s Touch ID settings.',
           fingerPrint: 'Check that you have added a fingerprint in your device\'s security settings.',
+          fingerPrintFaceOrIris: 'Check that you have added a fingerprint, face or iris in your device\'s security settings.',
         },
       },
       cannotChangeBiometricSettings: {

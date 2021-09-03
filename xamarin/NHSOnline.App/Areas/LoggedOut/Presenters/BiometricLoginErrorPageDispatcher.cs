@@ -110,7 +110,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
                 return Task.CompletedTask;
             }
 
-            public async Task Visit(BiometricStatusResult.FingerPrint fingerPrint)
+            public async Task Visit(BiometricStatusResult.FingerPrintFaceOrIris fingerPrintFaceOrIris)
                 => await _dispatcher.ShowBiometricLoginFingerprintFailed().PreserveThreadContext();
 
             public async Task Visit(BiometricStatusResult.TouchId touchId)
@@ -135,7 +135,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
                 return Task.CompletedTask;
             }
 
-            public async Task Visit(BiometricStatusResult.FingerPrint fingerPrint)
+            public async Task Visit(BiometricStatusResult.FingerPrintFaceOrIris fingerPrintFaceOrIris)
                 => await _dispatcher.ShowBiometricLoginFingerprintPermanentlyLockedOut().PreserveThreadContext();
 
             public async Task Visit(BiometricStatusResult.TouchId touchId)

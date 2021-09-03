@@ -12,10 +12,11 @@ Feature: Biometric status update
     When I click the Login with <Biometric Type> toggle
     Then I see my <Biometric Type> registration was successful
     Examples:
-      | Biometric Type|
-      | Face ID       |
-      | Touch ID      |
-      | fingerprint   |
+      | Biometric Type            |
+      | Face ID                   |
+      | Touch ID                  |
+      | Fingerprint               |
+      | Fingerprint, face or iris |
 
   Scenario Outline: A patient can navigate to the <Biometric Type> page on their native device and deregister their <Biometric Type>
     Given I am a EMIS patient using the native app
@@ -29,10 +30,11 @@ Feature: Biometric status update
     When I click the Login with <Biometric Type> toggle
     Then I see my <Biometric Type> deregistration was successful
     Examples:
-      | Biometric Type|
-      | Face ID       |
-      | Touch ID      |
-      | fingerprint   |
+      | Biometric Type            |
+      | Face ID                   |
+      | Touch ID                  |
+      | Fingerprint               |
+      | Fingerprint, face or iris |
 
   Scenario Outline: A patient that gets an error due to an inability to find their <Biometric Type> state when changing their <Biometric Type> state
     Given I am a EMIS patient using the native app
@@ -46,10 +48,11 @@ Feature: Biometric status update
     When I click the Login with <Biometric Type> toggle
     Then I see my <Biometric Type> deregistration was unsuccessful as it could not be found
     Examples:
-      | Biometric Type|
-      | Face ID       |
-      | Touch ID      |
-      | fingerprint   |
+      | Biometric Type            |
+      | Face ID                   |
+      | Touch ID                  |
+      | Fingerprint               |
+      | Fingerprint, face or iris |
 
   Scenario Outline: A patient that gets an error due to an inability to change their <Biometric Type> state
     Given I am a EMIS patient using the native app
@@ -63,7 +66,8 @@ Feature: Biometric status update
     When I click the Login with <Biometric Type> toggle
     Then I see my <Biometric Type> deregistration was unsuccessful as it could not be changed
     Examples:
-      | Biometric Type|
-      | Face ID       |
-      | Touch ID      |
-      | fingerprint   |
+      | Biometric Type            |
+      | Face ID                   |
+      | Touch ID                  |
+      | Fingerprint               |
+      | Fingerprint, face or iris |

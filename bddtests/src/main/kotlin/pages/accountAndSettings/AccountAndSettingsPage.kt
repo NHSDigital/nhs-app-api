@@ -26,6 +26,7 @@ class AccountAndSettingsPage : HybridPageObject() {
     val faceIDLink = link("Face ID")
     val touchIDLink = link("Touch ID")
     val fingerprintLink = link("Fingerprint")
+    val fingerprintFaceOrIrisLink = link("Fingerprint, face or iris")
     val manageNotificationsLink = link("Manage notifications")
 
     fun assertDisplayed() {
@@ -48,6 +49,10 @@ class AccountAndSettingsPage : HybridPageObject() {
 
     fun assertFingerprintIsPresent() {
         fingerprintLink.assertIsVisible()
+    }
+
+    fun assertFingerprintFaceOrIrisIsPresent() {
+        fingerprintFaceOrIrisLink.assertIsVisible()
     }
 
     fun assertManageNHSLoginAccountIsPresent() {

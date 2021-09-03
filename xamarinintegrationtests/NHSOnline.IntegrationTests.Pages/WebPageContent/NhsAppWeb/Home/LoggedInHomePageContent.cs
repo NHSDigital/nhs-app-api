@@ -10,7 +10,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
 {
     public class LoggedInHomePageContent
     {
-        public const string BioFingerprint = "Set up fingerprint";
+        public const string BioFingerprint = "Set up fingerprint, face or iris";
         public const string BoiFaceId = "Set up Face ID";
 
         private readonly string _biometricsButtonText;
@@ -33,7 +33,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
         private WebText BiometricsPanelText => WebText.WithTagAndText(
             _interactor,
             "p",
-            "If your mobile device supports fingerprint or face recognition, " +
+            "If your mobile device supports fingerprint, face or iris recognition, " +
             "you can use it to log in to the NHS App instead of a password and security code.");
 
         private WebButton OpenSettingsButton => WebButton.WithText(_interactor, _biometricsButtonText);

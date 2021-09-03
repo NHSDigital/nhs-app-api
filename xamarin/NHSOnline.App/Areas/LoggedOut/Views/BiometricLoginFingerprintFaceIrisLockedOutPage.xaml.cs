@@ -9,28 +9,28 @@ using NHSOnline.App.Navigation;
 namespace NHSOnline.App.Areas.LoggedOut.Views
 {
     [DesignTimeVisible(false)]
-    public partial class BiometricLoginFingerprintLockedOutPage : IBiometricLoginFingerprintLockedOutView, IBiometricLoginFingerprintLockedOutView.IEvents
+    public partial class BiometricLoginFingerprintLockedOutPage : IBiometricLoginFingerprintFaceIrisLockedOutView, IBiometricLoginFingerprintFaceIrisLockedOutView.IEvents
     {
         private readonly ILogger _logger;
-        private readonly AppNavigation<IBiometricLoginFingerprintLockedOutView.IEvents> _appNavigation;
+        private readonly AppNavigation<IBiometricLoginFingerprintFaceIrisLockedOutView.IEvents> _appNavigation;
 
         public BiometricLoginFingerprintLockedOutPage(ILogger<BiometricLoginFingerprintLockedOutPage> logger)
         {
             _logger = logger;
-            _appNavigation = new AppNavigation<IBiometricLoginFingerprintLockedOutView.IEvents>(this, Navigation);
+            _appNavigation = new AppNavigation<IBiometricLoginFingerprintFaceIrisLockedOutView.IEvents>(this, Navigation);
 
             InitializeComponent();
         }
 
-        IAppNavigation<IBiometricLoginFingerprintLockedOutView.IEvents> INavigationView<IBiometricLoginFingerprintLockedOutView.IEvents>.AppNavigation => _appNavigation;
+        IAppNavigation<IBiometricLoginFingerprintFaceIrisLockedOutView.IEvents> INavigationView<IBiometricLoginFingerprintFaceIrisLockedOutView.IEvents>.AppNavigation => _appNavigation;
 
-        Func<Task>? IBiometricLoginFingerprintLockedOutView.IEvents.Appearing { get; set; }
+        Func<Task>? IBiometricLoginFingerprintFaceIrisLockedOutView.IEvents.Appearing { get; set; }
         private ICommand AppearingCommand => new AsyncCommand(() => Events.Appearing);
 
         public Func<Task>? BackHomeRequested { get; set; }
         public ICommand BackHomeCommand => new AsyncCommand(() => BackHomeRequested);
 
-        private IBiometricLoginFingerprintLockedOutView.IEvents Events => this;
+        private IBiometricLoginFingerprintFaceIrisLockedOutView.IEvents Events => this;
 
         protected override void OnAppearing()
         {

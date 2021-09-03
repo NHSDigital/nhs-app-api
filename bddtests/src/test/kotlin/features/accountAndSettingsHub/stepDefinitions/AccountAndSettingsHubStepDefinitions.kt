@@ -4,6 +4,7 @@ import io.cucumber.java.en.Then
 import features.sharedSteps.BiometricSteps
 import features.sharedSteps.BrowserSteps
 import net.thucydides.core.annotations.Steps
+import org.junit.Assert
 import pages.accountAndSettings.AccountAndSettingsPage
 import pages.accountAndSettings.AccountAndSettingsLoginSettingsPage
 
@@ -53,6 +54,11 @@ class AccountAndSettingsHubStepDefinitions {
                 biometricSteps.setBiometricType("fingerPrint")
                 accountAndSettingsPage.assertFingerprintIsPresent()
             }
+            "Fingerprint, face or iris" -> {
+                biometricSteps.setBiometricType("fingerPrintFaceOrIris")
+                accountAndSettingsPage.assertFingerprintFaceOrIrisIsPresent()
+            }
+            else -> Assert.fail("Biometric type not specified")
         }
     }
 
@@ -63,6 +69,7 @@ class AccountAndSettingsHubStepDefinitions {
             "Login options" -> accountAndSettingsPage.loginAndPasswordOptionsLink.click()
             "Touch ID" -> accountAndSettingsPage.touchIDLink.click()
             "Fingerprint" -> accountAndSettingsPage.fingerprintLink.click()
+            "Fingerprint, face or iris" -> accountAndSettingsPage.fingerprintFaceOrIrisLink.click()
             "Manage NHS login account" -> accountAndSettingsPage.manageNhsLoginAccountLink.click()
             "Manage notifications" -> accountAndSettingsPage.manageNotificationsLink.click()
             "Legal and cookies" -> accountAndSettingsPage.legalAndCookiesLink.click()

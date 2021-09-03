@@ -451,8 +451,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
             public BiometricStatus Visit(BiometricStatusResult.HardwareNotPresent hardwareNotPresent)
                 => BiometricStatus.None();
 
-            public BiometricStatus Visit(BiometricStatusResult.FingerPrint fingerPrint)
-                => BiometricStatus.FingerPrint(fingerPrint.Registered);
+            public BiometricStatus Visit(BiometricStatusResult.FingerPrintFaceOrIris fingerPrintFaceOrIris)
+                => BiometricStatus.FingerPrintFaceOrIris(fingerPrintFaceOrIris.Registered);
 
             public BiometricStatus Visit(BiometricStatusResult.TouchId touchId)
                 => BiometricStatus.TouchId(touchId.Registered);

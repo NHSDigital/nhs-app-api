@@ -66,8 +66,8 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
         {
             return verificationReason switch
             {
-                VerificationReason.Login => "Log in with Fingerprint ID",
-                VerificationReason.Registration => "Turn on Fingerprint ID",
+                VerificationReason.Login => "Log in with fingerprint, face or iris",
+                VerificationReason.Registration => "Turn on fingerprint, face or iris",
                 _ => throw new ArgumentOutOfRangeException(nameof(verificationReason), verificationReason, null)
             };
         }
@@ -92,7 +92,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
 
             using var promptInfoBuilder = new BiometricPrompt.PromptInfo.Builder();
             var promptInfo = promptInfoBuilder
-                .SetDescription("Touch the fingerprint sensor on your device")
+                .SetDescription("Touch the fingerprint sensor or look at your device")
                 .SetTitle(BiometricPromptText(verificationReason))
                 .SetNegativeButtonText("Cancel")
                 .Build();

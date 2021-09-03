@@ -4,7 +4,7 @@ using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut
 {
-    internal interface IBiometricLoginFingerprintLockedOutView : INavigationView<IBiometricLoginFingerprintLockedOutView.IEvents>
+    internal interface IBiometricLoginFingerprintFaceIrisLockedOutView : INavigationView<IBiometricLoginFingerprintFaceIrisLockedOutView.IEvents>
     {
         internal interface IEvents
         {

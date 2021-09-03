@@ -21,9 +21,9 @@ namespace NHSOnline.App.DependencyServices.Biometrics
             public BiometricRegistrationStatus RegistrationStatus { get; }
         }
 
-        public sealed class FingerPrint : HardwarePresent
+        public sealed class FingerPrintFaceOrIris : HardwarePresent
         {
-            public FingerPrint(BiometricHardwareState state, BiometricRegistrationStatus registrationStatus)
+            public FingerPrintFaceOrIris(BiometricHardwareState state, BiometricRegistrationStatus registrationStatus)
                 : base(state, registrationStatus)
             {
             }

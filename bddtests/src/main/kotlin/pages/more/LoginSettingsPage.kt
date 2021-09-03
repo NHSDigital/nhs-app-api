@@ -11,7 +11,8 @@ class LoginSettingsPage : HybridPageObject() {
 
     val faceIDToggle = ToggleElement(this, "Log in with Face ID", "updateBiometricReg")
     val touchIDToggle = ToggleElement(this, "Log in with Touch ID", "updateBiometricReg")
-    val fingerprintToggle = ToggleElement(this, "Log in with Fingerprint", "updateBiometricReg")
+    val fingerprintToggle = ToggleElement(this, "Log in with fingerprint", "updateBiometricReg")
+    val fingerprintFaceOrIrisToggle = ToggleElement(this, "Log in with fingerprint, face or iris", "updateBiometricReg")
 
     private val titleLocator = "//h1[normalize-space(text())='%s']"
 
@@ -21,6 +22,8 @@ class LoginSettingsPage : HybridPageObject() {
             "Touch ID" -> assertDisplayWithNoInfoText(String.format(titleLocator, "Touch ID"))
             "Face ID" -> assertDisplayWithNoInfoText(String.format(titleLocator, "Face ID"))
             "Fingerprint" -> assertDisplayWithNoInfoText(String.format(titleLocator, "Fingerprint"))
+            "Fingerprint, face or iris" ->
+                assertDisplayWithNoInfoText(String.format(titleLocator, "Fingerprint, face or iris"))
         }
     }
 
@@ -29,6 +32,7 @@ class LoginSettingsPage : HybridPageObject() {
             "Face ID" -> faceIDToggle.assertOn()
             "Touch ID" -> touchIDToggle.assertOn()
             "Fingerprint" -> fingerprintToggle.assertOn()
+            "Fingerprint, face or iris" -> fingerprintFaceOrIrisToggle.assertOn()
         }
     }
 
@@ -37,6 +41,7 @@ class LoginSettingsPage : HybridPageObject() {
             "Face ID" -> faceIDToggle.assertOff()
             "Touch ID" -> touchIDToggle.assertOff()
             "Fingerprint" -> fingerprintToggle.assertOff()
+            "Fingerprint, face or iris" -> fingerprintFaceOrIrisToggle.assertOff()
         }
     }
 

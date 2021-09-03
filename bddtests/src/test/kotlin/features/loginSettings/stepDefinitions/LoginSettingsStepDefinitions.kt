@@ -22,6 +22,7 @@ class LoginSettingsStepDefinitions {
             "Face ID" -> loginSettings.faceIDToggle.click()
             "Touch ID" -> loginSettings.touchIDToggle.click()
             "Fingerprint" -> loginSettings.fingerprintToggle.click()
+            "Fingerprint, face or iris" -> loginSettings.fingerprintFaceOrIrisToggle.click()
         }
     }
 
