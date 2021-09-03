@@ -47,19 +47,19 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             AndroidPrescriptionsPage
                 .AssertOnPage(driver)
-                .Navigation.NavigateToYourHealth();
-
-            AndroidYourHealthPage
-                .AssertOnPage(driver)
-                .Navigation.AssertYourHealthSelected();
-
-            AndroidYourHealthPage
-                .AssertOnPage(driver)
                 .Navigation.NavigateToMessages();
 
             AndroidMessagesPage
                 .AssertOnPage(driver)
                 .Navigation.AssertMessagesSelected();
+
+            AndroidMessagesPage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToYourHealth();
+
+            AndroidYourHealthPage
+                .AssertOnPage(driver)
+                .Navigation.AssertYourHealthSelected();
         }
 
         [NhsAppIOSTest]
@@ -90,19 +90,19 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             IOSPrescriptionsPage
                 .AssertOnPage(driver)
-                .Navigation.NavigateToYourHealth();
-
-            IOSYourHealthPage
-                .AssertOnPage(driver)
-                .Navigation.AssertYourHealthSelected();
-
-            IOSYourHealthPage
-                .AssertOnPage(driver)
                 .Navigation.NavigateToMessages();
 
             IOSMessagesPage
                 .AssertOnPage(driver)
                 .Navigation.AssertMessagesSelected();
+
+            IOSMessagesPage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToYourHealth();
+
+            IOSYourHealthPage
+                .AssertOnPage(driver)
+                .Navigation.AssertYourHealthSelected();
         }
     }
 }
