@@ -13,31 +13,55 @@
                 <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
-            
             <Style TargetType="controls:AccessibilityLayout" Class="ButtonLayout">
-                <Setter Property="HorizontalOptions" Value="End" />
-                <Setter Property="VerticalOptions" Value="Start" />
-                <Setter Property="Padding" Value="5" />
+                <Setter Property="Spacing" Value="0" />
             </Style>
             
-            <Style TargetType="icons:IconHelpWhite" Class="UnfocusedIcon">
-                <Setter Property="HeightRequest" Value="37" />
+            <Style x:Key="Icon" TargetType="View" ApplyToDerivedTypes="True">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="HeightRequest" Value="32" />
+                <Setter Property="WidthRequest" Value="32" />
+            </Style>
+            <Style TargetType="View" ApplyToDerivedTypes="True" x:Key="IconHelpWide">
+                <Setter Property="HeightRequest" Value="38" />
+                <Setter Property="WidthRequest" Value="38" />
+            </Style>
+            
+            <Style TargetType="icons:IconHelpWhite" BasedOn="{StaticResource Icon}">
                 <Setter Property="IsVisible" Value="True" />
             </Style>
-            
-            <Style TargetType="icons:IconHelpBlack" Class="FocusedIcon">
-                <Setter Property="HeightRequest" Value="37" />
+        
+            <Style TargetType="icons:IconHelpBlack" BasedOn="{StaticResource Icon}">
                 <Setter Property="IsVisible" Value="False" />
             </Style>
             
             <Style TargetType="Label" Class="IconLabel">
                 <Setter Property="TextColor" Value="{StaticResource NhsUkWhite}" />
-                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontSize" Value="Small" />
+                <Setter Property="Padding" Value="0,5,0,0" />
                 <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>
+            <Style TargetType="Label" x:Key="IconLabelWide">
+                <Setter Property="FontSize" Value="Medium" />
             </Style>
         </ResourceDictionary>
     </ContentView.Resources>
     
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="ResponsiveFontStates">
+            <VisualState x:Name="SmallDisplay" />
+            <VisualState x:Name="MediumDisplay" />
+            <VisualState x:Name="LargeDisplay">
+                <VisualState.Setters>
+                    <Setter TargetName="HelpLabel" Property="Style" Value="{StaticResource IconLabelWide}"/>
+                    <Setter TargetName="FocusedIcon" Property="Style" Value="{StaticResource IconHelpWide}"/>
+                    <Setter TargetName="UnfocusedIcon" Property="Style" Value="{StaticResource IconHelpWide}"/>
+                </VisualState.Setters>
+            </VisualState>
+        </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+        
     <controls:AccessibilityLayout x:Name="ButtonContainer"
                                   StyleClass="ButtonLayout"
                                   effects:AccessibilityEffect.ControlType="Button"
@@ -57,8 +81,8 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
                 
-        <icons:IconHelpWhite x:Name="UnfocusedIcon" StyleClass="UnfocusedIcon"/>
-        <icons:IconHelpBlack x:Name="FocusedIcon" StyleClass="FocusedIcon"/>
+        <icons:IconHelpWhite x:Name="UnfocusedIcon" />
+        <icons:IconHelpBlack x:Name="FocusedIcon" />
                 
         <Label x:Name="HelpLabel" StyleClass="IconLabel" Text="Help" />
 

@@ -7,6 +7,41 @@
              x:Class="NHSOnline.App.Controls.Elements.NhsLoginButton"
              x:Name="Root">
     
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <Style TargetType="controls:SvgImage" ApplyToDerivedTypes="True">
+                <Setter Property="HeightRequest" Value="50" />
+                <Setter Property="WidthRequest" Value="300" />
+            </Style>
+            <Style x:Key="SmallNhsLoginButton" TargetType="controls:SvgImage" ApplyToDerivedTypes="True">
+                <Setter Property="HeightRequest" Value="47" />
+                <Setter Property="WidthRequest" Value="280" />
+            </Style>
+            <Style x:Key="LargeNhsLogin" TargetType="controls:SvgImage" ApplyToDerivedTypes="True">
+                <Setter Property="HeightRequest" Value="65" />
+                <Setter Property="WidthRequest" Value="390" />
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="ResponsiveFontStates">
+            <VisualState x:Name="SmallDisplay">
+                <VisualState.Setters>
+                    <Setter TargetName="FocusedButton" Property="Style" Value="{StaticResource SmallNhsLoginButton}" />
+                    <Setter TargetName="UnfocusedButton" Property="Style" Value="{StaticResource SmallNhsLoginButton}" />
+                </VisualState.Setters>
+            </VisualState> 
+            <VisualState x:Name="MediumDisplay" />
+            <VisualState x:Name="LargeDisplay" >
+                <VisualState.Setters>
+                    <Setter TargetName="FocusedButton" Property="Style" Value="{StaticResource LargeNhsLogin}" />
+                    <Setter TargetName="UnfocusedButton" Property="Style" Value="{StaticResource LargeNhsLogin}" />
+                </VisualState.Setters>
+            </VisualState>
+        </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+    
     <controls:AccessibilityLayout effects:AccessibilityEffect.ControlType="Button"
                                   AutomationProperties.Name="Continue with NHS login"
                                   HorizontalOptions="Center">
@@ -16,15 +51,15 @@
                 <VisualState x:Name="KeyboardUnfocused" />
                 <VisualState x:Name="KeyboardFocused">
                     <VisualState.Setters>
-                        <Setter TargetName="FocusedButton" Property="icons:NhsLoginUnfocused.IsVisible" Value="True"/>
-                        <Setter TargetName="UnfocusedButton" Property="icons:NhsLoginUnfocused.IsVisible" Value="False"/>
+                        <Setter TargetName="FocusedButton" Property="icons:NhsLoginUnfocused.IsVisible" Value="True" />
+                        <Setter TargetName="UnfocusedButton" Property="icons:NhsLoginUnfocused.IsVisible" Value="False" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
     
-        <icons:NhsLoginUnfocused x:Name="UnfocusedButton" IsVisible="True" HeightRequest="48" WidthRequest="300" />
-        <icons:NhsLoginFocused x:Name="FocusedButton" IsVisible="False" HeightRequest="48" WidthRequest="300"/>
+        <icons:NhsLoginUnfocused x:Name="UnfocusedButton" IsVisible="True" />
+        <icons:NhsLoginFocused x:Name="FocusedButton" IsVisible="False" />
     
         <StackLayout.GestureRecognizers>
             <TapGestureRecognizer Command="{Binding Command, Source={x:Reference Name=Root}}" />

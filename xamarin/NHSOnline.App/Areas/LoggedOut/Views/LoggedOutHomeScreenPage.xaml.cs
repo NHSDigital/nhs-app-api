@@ -72,6 +72,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             _appNavigation.SuppressHandlers();
         }
 
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            base.OnSizeAllocated(width, height);
+            ResponsiveStates.SetVisualStateBreakpoints(ContentView);
+        }
+
         protected override bool OnBackButtonPressed()
         {
             BackRequestedCommand.Execute(null);
@@ -89,14 +95,14 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public void ResetScreenState()
         {
             VisualStateManager.GoToState(
-                this,
+                SessionExpiredBanner,
                 LoggedOutHomeScreenStates.Default.ToString());
         }
 
         public void SetScreenState(LoggedOutHomeScreenStates loggedOutHomeScreenState)
         {
             VisualStateManager.GoToState(
-                this,
+                SessionExpiredBanner,
                 loggedOutHomeScreenState.ToString());
         }
     }

@@ -24,18 +24,7 @@ namespace NHSOnline.App.Controls.Elements
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
-
-            // these will be updated when we do the additional ticket
-            if (ResponsiveStates.IsSmallScreen)
-            {
-                FocusedButton.HeightRequest = 48;
-                UnfocusedButton.HeightRequest = 48;
-            }
-            else
-            {
-                FocusedButton.HeightRequest = 50;
-                UnfocusedButton.HeightRequest = 50;
-            }
+            ResponsiveStates.SetVisualStateBreakpoints(this);
         }
     }
 }

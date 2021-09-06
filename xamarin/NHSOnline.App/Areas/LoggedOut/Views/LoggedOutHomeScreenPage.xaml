@@ -12,103 +12,159 @@
              xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
              xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls">
     
-    <VisualStateManager.VisualStateGroups>
-        <VisualStateGroup>
-            <VisualState x:Name="Default" />
-            <VisualState x:Name="SessionExpired">
-                <VisualState.Setters>
-                    <Setter TargetName="SessionExpiredBanner" Property="IsVisible" Value="True" />
-                </VisualState.Setters>
-            </VisualState>
-        </VisualStateGroup>
-    </VisualStateManager.VisualStateGroups>
-    
-    <ContentView BackgroundColor="{StaticResource NhsUkBlue}" >
+    <ContentView BackgroundColor="{StaticResource NhsUkBlue}" x:Name="ContentView" >
+        
+        <ContentView.Resources>
+            <Style TargetType="Label" Class="ExpiredLabelText">
+                <Setter Property="FontSize" Value="Small" />
+                <Setter Property="FontFamily" Value="Frutiger-Bold" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="VerticalOptions" Value="Center" />
+            </Style>
+            <Style TargetType="Label" x:Key="ExpiredLabelTextWide" >
+                <Setter Property="FontSize" Value="Medium" />
+            </Style>
+            
+            <Style TargetType="StackLayout" Class="SessionExpiredBanner">
+                <Setter Property="BackgroundColor" Value="{StaticResource NhsUkYellow}" />
+                <Setter Property="Padding" Value="10,15" />
+            </Style>
+            
+            <Style TargetType="elements:HelpButton" >
+                <Setter Property="HorizontalOptions" Value="End" />
+                <Setter Property="VerticalOptions" Value="Start" />
+                <Setter Property="Padding" Value="20" />
+            </Style>
+            <Style TargetType="elements:HelpButton" x:Key="HelpButtonWide" >
+                <Setter Property="Padding" Value="25" />
+            </Style>
+            
+            <Style TargetType="icons:NhsLogoWhite" >
+                <Setter Property="Padding" Value="0,10,0,0" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="WidthRequest" Value="99" /> 
+            </Style>
+            <Style TargetType="icons:NhsLogoWhite" x:Key="NhsLogoWhiteWide" >
+                <Setter Property="Padding" Value="0,20,0,0" />
+                <Setter Property="WidthRequest" Value="119" /> 
+            </Style>
+            
+            <Style TargetType="StackLayout" Class="BottomStackLayout">
+                <Setter Property="Margin" Value="10,0,10,40" />
+                <Setter Property="Spacing" Value="0" />
+            </Style>
+            <Style TargetType="StackLayout" x:Key="BottomStackLayoutWide">
+                <Setter Property="Margin" Value="10,0,10,60" />
+            </Style>
+            
+            <Style TargetType="Label" Class="AccessLabel">
+                <Setter Property="FontSize" Value="Large" />
+                <Setter Property="FontFamily" Value="Frutiger-Bold" />
+                <Setter Property="HorizontalOptions" Value="Center" />   
+                <Setter Property="HorizontalTextAlignment" Value="Center" />           
+                <Setter Property="TextColor" Value="{StaticResource NhsUkWhite}" />
+            </Style>
+            <Style TargetType="Label" x:Key="AccessLabelWide">
+                <Setter Property="FontSize" Value="Title" />
+            </Style>
+             
+            <Style TargetType="elements:NhsLoginButton">
+                <Setter Property="Margin" Value="0,25,0,30" />
+            </Style>
+            <Style TargetType="elements:NhsLoginButton" x:Key="NhsLoginButtonWide">
+                <Setter Property="Margin" Value="0,30,0,35" />
+            </Style>
+              
+            <Style TargetType="Label" Class="VersionLabel">
+                <Setter Property="FontSize" Value="Small" />
+                <Setter Property="FontFamily" Value="Frutiger" />
+                <Setter Property="HorizontalOptions" Value="Center" />       
+                <Setter Property="TextColor" Value="{StaticResource NhsUkWhite}" />
+            </Style>
+            <Style TargetType="Label" x:Key="VersionLabelWide">
+                <Setter Property="FontSize" Value="Medium" />
+            </Style>
+        </ContentView.Resources>
+         
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="ResponsiveFontStates">
+                <VisualState x:Name="SmallDisplay" />
+                <VisualState x:Name="MediumDisplay" />
+                <VisualState x:Name="LargeDisplay">
+                    <VisualState.Setters>
+                        <Setter TargetName="ExpiredLabelText" Property="Style" Value="{StaticResource ExpiredLabelTextWide}" />
+                        <Setter TargetName="HelpButton" Property="Style" Value="{StaticResource HelpButtonWide}" />
+                        <Setter TargetName="NhsLogoWhite" Property="Style" Value="{StaticResource NhsLogoWhiteWide}" />
+                        <Setter TargetName="BottomStackLayout" Property="Style" Value="{StaticResource BottomStackLayoutWide}" />
+                        <Setter TargetName="AccessLabel" Property="Style" Value="{StaticResource AccessLabelWide}" />
+                        <Setter TargetName="NhsLoginButton" Property="Style" Value="{StaticResource NhsLoginButtonWide}" />
+                        <Setter TargetName="VersionLabel" Property="Style" Value="{StaticResource VersionLabelWide}" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         
         <ContentView.Effects>
             <effects:SafeAreaPaddingTop />
         </ContentView.Effects>
-        
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="10" />
-                <ColumnDefinition />
-                <ColumnDefinition Width="10" />
-            </Grid.ColumnDefinitions>
+         
+        <Grid RowSpacing="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="25" />
             </Grid.RowDefinitions>
-            
-            <StackLayout 
-                Grid.ColumnSpan="3" 
-                IsVisible="False"
-                x:Name="SessionExpiredBanner">
+              
+            <StackLayout StyleClass="SessionExpiredBanner"
+                         Grid.Row="0"  
+                         IsVisible="False"
+                         x:Name="SessionExpiredBanner">
                 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="10" />
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="10" />
-                    </Grid.ColumnDefinitions>
-                    
-                    <BoxView HorizontalOptions="FillAndExpand"
-                             BackgroundColor="{StaticResource NhsUkYellow}"
-                             Grid.ColumnSpan="3">
-                    </BoxView>
-                        
-                    <Label Grid.Column="1"
-                           Padding="0,10,0,10"
-                           Text="For your security, you need to log in again"
-                           HorizontalTextAlignment="Center"/>
-                </Grid>
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="SessionExpiration">
+                        <VisualState x:Name="Default" />
+                        <VisualState x:Name="SessionExpired">
+                            <VisualState.Setters>
+                                <Setter TargetName="SessionExpiredBanner" Property="IsVisible" Value="True" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+                
+                <Label x:Name="ExpiredLabelText" 
+                       StyleClass="ExpiredLabelText"
+                       Text="For your security, you need to log in again" />
             </StackLayout>
-            
-            <elements:HelpButton 
-                Grid.Row="1" 
-                Grid.Column="1"
-                Command="{Binding NhsUkLoginHelpServiceCommand, Source={x:Reference Name=Page}}" />
-            
+              
+            <elements:HelpButton Grid.Row="1"  
+                                 x:Name="HelpButton"
+                                 Command="{Binding NhsUkLoginHelpServiceCommand, Source={x:Reference Name=Page}}" />
+             
             <icons:NhsLogoWhite Grid.Row="1"
-                                Grid.Column="1"
-                                HorizontalOptions="Center"
-                                VerticalOptions="Center"
-                                HeightRequest="48"
+                                x:Name="NhsLogoWhite"
                                 AutomationProperties.IsInAccessibleTree="true"
                                 AutomationProperties.HelpText="NHS Logo"
                                 IsTabStop="False" />
             
-            <Label Grid.Row="2" 
-                   Grid.Column="1"
-                   Text="Access your NHS services"
-                   StyleClass="Heading2"
-                   HorizontalOptions="Center"
-                   TextColor="{StaticResource NhsUkWhite}" 
-                   Padding="0,10,0,0"
-                   AutomationProperties.IsInAccessibleTree="True"
-                   IsTabStop="False" />
-            
-            <elements:NhsLoginButton Grid.Row="3"
-                                     Grid.Column="1"
-                                     Command="{Binding LoginCommand, Source={x:Reference Name=Page}}"/>
-            
-
-            <Label Grid.Row="4" 
-                   Grid.Column="1" 
-                   Text="Version 2.Xamarin"
-                   HorizontalOptions="Center"
-                   FontAttributes="Bold"
-                   FontFamily="Frutiger"
-                   TextColor="{StaticResource NhsUkWhite}"
-                   FontSize="Small"
-                   Margin="0,10,0,10" 
-                   AutomationProperties.IsInAccessibleTree="True"
-                   IsTabStop="False" />
+            <StackLayout StyleClass="BottomStackLayout" 
+                         x:Name="BottomStackLayout"
+                         Grid.Row="2" >
+                
+                <Label x:Name="AccessLabel" 
+                       StyleClass="AccessLabel"
+                       Text="Access your NHS services"
+                       IsTabStop="False" />  
+                 
+                <elements:NhsLoginButton x:Name="NhsLoginButton" 
+                                         Command="{Binding LoginCommand, Source={x:Reference Name=Page}}"/>
+              
+                <Label x:Name="VersionLabel"
+                       StyleClass="VersionLabel"
+                       Text="Version 2.Xamarin"
+                       IsTabStop="False" />  
+                
+            </StackLayout>
         </Grid>
-    </ContentView>
+    </ContentView>  
 </ContentPage>
