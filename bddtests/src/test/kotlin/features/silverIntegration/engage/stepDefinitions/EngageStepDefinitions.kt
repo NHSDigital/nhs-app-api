@@ -78,7 +78,7 @@ class EngageStepDefinitions : HybridPageObject() {
     @Then("the messages warning message on the Redirector page explains the service is from Engage$")
     fun assertMessagesWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-            "Messages\nThis service is provided by Engage Health Systems Limited",
+            "Online consultations\nThis service is provided by Engage Health Systems Limited",
             "Your GP surgery has chosen this online consultation service provider.",
             "Find out more about online consultation services")
     }

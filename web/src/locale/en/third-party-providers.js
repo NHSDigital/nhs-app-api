@@ -51,7 +51,7 @@ export default {
           descriptionText: 'View your online consultations and any responses from your GP surgery',
         },
         thirdPartyWarning: {
-          featureName: 'Messages',
+          featureName: 'Online consultations',
           servicePurchaser: 'Your GP surgery',
           serviceType: 'online consultation service',
           serviceTypePlural: 'online consultation services',

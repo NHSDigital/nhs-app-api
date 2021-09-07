@@ -18,7 +18,7 @@ Feature: Engage Messages
     When I navigate to the Messages Hub page
     Then the Messages Hub page is displayed
     When I click the Engage Messages link on the Messages Hub page
-    Then I am redirected to the redirector page with the header 'Messages'
+    Then I am redirected to the redirector page with the header 'Online consultations'
     And the messages warning message on the Redirector page explains the service is from Engage
 
   Scenario: A user without access to Engage cannot see the menu item 'Messages and online consultations' on the messages hub
@@ -32,7 +32,7 @@ Feature: Engage Messages
     Given I am a user who can view Messages and Online Consultations from Engage
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fengage.stubs.local.bitraft.io%3A8080%2F%3Fsso_route%3Dmessages'
-    Then I am redirected to the redirector page with the header 'Messages'
+    Then I am redirected to the redirector page with the header 'Online consultations'
     When I click the link called 'Find out more about online consultation services' with a url of 'https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/online-consultation-services/'
     Then a new tab has been opened by the link
 
@@ -41,6 +41,6 @@ Feature: Engage Messages
     And Engage responds to requests for messages
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fengage.stubs.local.bitraft.io%3A8080%2F%3Fsso_route%3Dmessages'
-    Then I am redirected to the redirector page with the header 'Messages'
+    Then I am redirected to the redirector page with the header 'Online consultations'
     When I click the 'Continue' button on the redirector page with a url starting with 'http://engage.stubs.local.bitraft.io:8080/?sso_route=messages'
     Then I am navigated to a third party site for Engage
