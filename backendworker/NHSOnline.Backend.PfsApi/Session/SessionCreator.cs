@@ -54,6 +54,11 @@ namespace NHSOnline.Backend.PfsApi.Session
 
         public async Task<CreateSessionResult> CreateGpSessionOnDemand(ICreateGpSessionOnDemandRequest request)
         {
+            if (request.UserSession.GpUserSession.Supplier != Supplier.Disconnected)
+            {
+                return new CreateSessionResult.GpSessionExists(request.UserSession);
+            }
+
             var citizenIdSession = await _citizenIdService.FetchUserProfile(request);
             if (citizenIdSession.Failed(out var citizenIdSessionFailure))
             {
@@ -61,6 +66,7 @@ namespace NHSOnline.Backend.PfsApi.Session
             }
 
             request.UserSession.Im1ConnectionToken = GetIm1ConnectionToken(citizenIdSession);
+
             var supplier = ((OnDemandGpSession) request.UserSession.GpUserSession).SessionSupplier;
 
             var createGpSessionResult = await _gpSessionCreator.RecreateGpSession(request.UserSession, supplier);

@@ -83,6 +83,19 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             return Task.FromResult(_errorResultBuilder.BuildResult(errorResultResult.ErrorTypes));
         }
 
+        public async Task<IActionResult> Visit(CreateSessionResult.GpSessionExists gpSessionExists)
+        {
+            var userSession = gpSessionExists.UserSession; ;
+
+            var responseBody = new PostUserSessionResponse();
+
+            responseBody = gpSessionExists.UserSession.Accept(new CreateResponseFromUserSessionVisitor<PostUserSessionResponse>(_settings, responseBody));
+
+            _logger.LogInformation($"User already has user session {userSession.GetType().Name}");
+
+            return await Task.FromResult(new OkObjectResult(responseBody));
+        }
+
         private static async Task AppendCookieToResponse(string sessionId, HttpContext httpContext)
         {
             var claims = new List<Claim>

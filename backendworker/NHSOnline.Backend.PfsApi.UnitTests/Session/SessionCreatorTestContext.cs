@@ -154,6 +154,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
             internal CreateSessionRequest CreateSessionRequest { get; }
             internal CreateGpSessionOnDemandRequest CreateGpSessionOnDemandRequest { get; }
             internal OnDemandGpSession OnDemandGpSession { get; }
+            internal OnDemandGpSession DisconnectedOnDemandGpSession { get; }
 
             internal TestData(TestMocks mocks)
             {
@@ -176,6 +177,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                 };
 
                 OnDemandGpSession = new OnDemandGpSession(Supplier.Emis);
+
+                DisconnectedOnDemandGpSession = new OnDemandGpSession(Supplier.Disconnected);
 
                 CitizenIdUserSession = new CitizenIdUserSession
                 {

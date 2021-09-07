@@ -39,5 +39,17 @@ namespace NHSOnline.Backend.PfsApi.Session
             internal override T Accept<T>(ISessionResultVisitor<T> visitor, HttpContext httpContext, string sessionCookieExpiryToken, string referrer) => visitor.Visit(this);
             internal override T Accept<T>(ISessionResultVisitor<T> visitor, HttpContext httpContext, string referrer) => visitor.Visit(this);
         }
+
+        public sealed class GpSessionExists: CreateSessionResult
+        {
+            internal GpSessionExists(UserSession userSession)
+            {
+                UserSession = userSession;
+            }
+
+            internal UserSession UserSession { get; }
+            internal override T Accept<T>(ISessionResultVisitor<T> visitor, HttpContext httpContext, string sessionCookieExpiryToken, string referrer) => visitor.Visit(this);
+            internal override T Accept<T>(ISessionResultVisitor<T> visitor, HttpContext httpContext, string referrer) => visitor.Visit(this);
+        }
     }
 }

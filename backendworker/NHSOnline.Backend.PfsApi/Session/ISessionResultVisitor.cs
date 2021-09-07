@@ -10,5 +10,7 @@ namespace NHSOnline.Backend.PfsApi.Session
         T Visit(CreateSessionResult.Success success, HttpContext httpContext, string referrer);
 
         T Visit(CreateSessionResult.ErrorResult errorResultResult);
+
+        T Visit(CreateSessionResult.GpSessionExists gpSessionExists);
     }
 }

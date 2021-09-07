@@ -717,9 +717,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                 .Returns(SessionCreatorTestContext.ServiceDeskReference)
                 .Verifiable();
 
+            var request = Context.Data.CreateGpSessionOnDemandRequest;
+            request.UserSession.GpUserSession = Context.Data.DisconnectedOnDemandGpSession;
+
             // Act
             var result = await CreateSystemUnderTest()
-                .CreateGpSessionOnDemand(Context.Data.CreateGpSessionOnDemandRequest);
+                .CreateGpSessionOnDemand(request);
 
             // Assert
             using (new AssertionScope())
@@ -813,6 +816,42 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
 
             // Assert
             Context.Mocks.Im1CacheService.Verify(x => x.DeleteIm1ConnectionToken(It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task CreateSession_ReturnsGpSessionExistsResult_WhenUserHasGpSession()
+        {
+            // Arrange
+            Context.ArrangeAntiforgery();
+            Context.ArrangeCitizenIdService();
+            Context.ArrangeOdsCodeMassager();
+            Context.ArrangeGpSystemFactory();
+            Context.ArrangeSessionCacheService();
+
+            var request = Context.Data.CreateGpSessionOnDemandRequest;
+            request.UserSession.GpUserSession = Context.Data.EmisUserSession;
+
+            // Act
+            var result = await CreateSystemUnderTest()
+                .CreateGpSessionOnDemand(request);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                var successResult = result.Should().BeAssignableTo<CreateSessionResult.GpSessionExists>().Subject;
+
+                var expectedUserSession = new P9UserSession(
+                    SessionCreatorTestContext.CsrfRequestToken,
+                    Context.Data.UserInfo.NhsNumber,
+                    Context.Data.CitizenIdSessionResult.Session,
+                    Context.Data.UserSession.GpUserSession,
+                    Context.Data.CitizenIdSessionResult.Im1ConnectionToken)
+                {
+                    OrganDonationSessionId = ((P9UserSession) successResult.UserSession).OrganDonationSessionId
+                };
+
+                successResult.UserSession.Should().BeEquivalentTo(expectedUserSession);
+            }
         }
 
         private void ArrangeGpSessionManagerCreateSession(GpSessionCreateResult returnResult)
