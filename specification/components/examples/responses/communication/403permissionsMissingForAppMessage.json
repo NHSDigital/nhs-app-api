@@ -4,7 +4,7 @@
         {
             "severity": "error",
             "code": "security",
-            "diagnostics": "Supplier with ID c53d9ed3-b4fe-408e-8908-d185aa7d6fec does not have channel Push Notification permission"
+            "diagnostics": "Supplier with ID e2efe52b-0cf2-4815-a3c9-7675c7962c54 does not have channel App Message permission"
         }
     ]
 }
