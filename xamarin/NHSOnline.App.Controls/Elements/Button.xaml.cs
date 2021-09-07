@@ -70,12 +70,12 @@ namespace NHSOnline.App.Controls.Elements
 
         private void EncapsulatedButton_OnFocused(object sender, FocusEventArgs e)
         {
-            Controls.KeyboardFocusStates.SetKeyboardFocusState(this, true);
+            KeyboardFocusStates.SetKeyboardFocusState(this, true);
         }
 
         private void EncapsulatedButton_OnUnfocused(object sender, FocusEventArgs e)
         {
-            Controls.KeyboardFocusStates.SetKeyboardFocusState(this, false);
+            KeyboardFocusStates.SetKeyboardFocusState(this, false);
         }
     }
 }

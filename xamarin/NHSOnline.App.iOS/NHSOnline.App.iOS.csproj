@@ -99,6 +99,7 @@
     <Compile Include="Handlers\UserNotificationCenterHandler.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="Renderers\ButtonElementRenderer.cs" />
     <Compile Include="Renderers\Heading1Renderer.cs" />
     <Compile Include="Renderers\StackLayoutRenderer.cs" />
     <Compile Include="Renderers\SwipeBackNavigationPageRenderer.cs" />

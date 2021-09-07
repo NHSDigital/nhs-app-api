@@ -98,7 +98,7 @@ namespace NHSOnline.IntegrationTests.Messages
                 .KeyboardNavigateToGncr();
 
             AndroidWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, "Messages")
+                .AssertOnPage(driver, "Online consultations")
                 .KeyboardNavigateBack();
 
             AndroidMessagesPage
