@@ -43,6 +43,7 @@ namespace NHSOnline.App.Controls.Navigation
         {
             base.OnSizeAllocated(width, height);
             FooterGrid.Margin = Device.info.PixelScreenSize.Width >= MediumScreenSize ? new Thickness(4, 0) : new Thickness(0);
+            ResponsiveFooterSizeStates.SetFooterWidthVisualState(this);
         }
 
         protected override void OnPropertyChanged(string? propertyName = null)

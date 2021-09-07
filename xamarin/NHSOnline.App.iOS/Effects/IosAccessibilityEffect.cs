@@ -34,7 +34,7 @@ namespace NHSOnline.App.iOS.Effects
 
         private void VisualElementOnFocusStateChanged(object sender, FocusEventArgs e)
         {
-            if (Element is AccessibilityLayout accessibilityLayout)
+            if (Element is AccessibileStackLayout accessibilityLayout)
             {
                 accessibilityLayout.IsKeyboardFocused = e.IsFocused;
             }

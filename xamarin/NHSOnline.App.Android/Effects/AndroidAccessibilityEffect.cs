@@ -58,7 +58,7 @@ namespace NHSOnline.App.Droid.Effects
 
         private void ControlFocusChange(object sender, View.FocusChangeEventArgs e)
         {
-            if (Element is AccessibilityLayout accessibilityLayout)
+            if (Element is AccessibileStackLayout accessibilityLayout)
             {
                 accessibilityLayout.IsKeyboardFocused = e.HasFocus;
             }

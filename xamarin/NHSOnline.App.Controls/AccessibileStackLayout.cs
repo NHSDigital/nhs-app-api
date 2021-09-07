@@ -4,13 +4,13 @@ using Xamarin.Forms.Xaml;
 namespace NHSOnline.App.Controls
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public class AccessibilityLayout: StackLayout
+    public class AccessibileStackLayout: StackLayout
     {
         public static readonly BindableProperty IsSelectedProperty =
-            BindableProperty.Create(nameof(IsSelected), typeof(bool), typeof(AccessibilityLayout), false);
+            BindableProperty.Create(nameof(IsSelected), typeof(bool), typeof(AccessibileStackLayout), false);
 
         public static readonly BindableProperty IsKeyboardFocusedProperty =
-            BindableProperty.Create(nameof(IsKeyboardFocused), typeof(bool), typeof(AccessibilityLayout), false);
+            BindableProperty.Create(nameof(IsKeyboardFocused), typeof(bool), typeof(AccessibileStackLayout), false);
 
         protected override void OnPropertyChanged(string propertyName = null!)
         {

@@ -42,9 +42,9 @@
         </VisualStateGroup>
     </VisualStateManager.VisualStateGroups>
     
-    <controls:AccessibilityLayout effects:AccessibilityEffect.ControlType="Button"
-                                  AutomationProperties.Name="Continue with NHS login"
-                                  HorizontalOptions="Center">
+    <controls:AccessibileStackLayout effects:AccessibilityEffect.ControlType="Button"
+                                     AutomationProperties.Name="Continue with NHS login"
+                                     HorizontalOptions="Center">
         
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="KeyboardFocusStates">
@@ -64,5 +64,5 @@
         <StackLayout.GestureRecognizers>
             <TapGestureRecognizer Command="{Binding Command, Source={x:Reference Name=Root}}" />
         </StackLayout.GestureRecognizers>
-    </controls:AccessibilityLayout>
+    </controls:AccessibileStackLayout>
 </ContentView>

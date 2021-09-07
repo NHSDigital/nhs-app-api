@@ -33,6 +33,12 @@ namespace NHSOnline.App.Controls.Navigation
             InitializeComponent();
         }
 
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            base.OnSizeAllocated(width, height);
+            ResponsiveFooterSizeStates.SetFooterWidthVisualState(IconButton);
+        }
+
         public SvgImage Icon
         {
             get => (SvgImage) GetValue(IconProperty);

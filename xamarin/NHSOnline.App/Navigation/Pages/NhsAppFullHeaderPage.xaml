@@ -20,18 +20,7 @@
                     Content="{Binding PageContent, Source={x:Reference Name=Root}}" 
                     VerticalOptions="FillAndExpand" />
                 
-                <navigation:FullNavigationFooter 
-                    x:Name="FullNavigationFooter"
-                    SelectedItem="{Binding SelectedNavigationFooterItem, Source={x:Reference Name=Root}}"
-                    AdviceCommand="{Binding AdviceClicked, Source={x:Reference Name=Root}}"
-                    AppointmentsCommand="{Binding AppointmentsClicked, Source={x:Reference Name=Root}}"
-                    PrescriptionsCommand="{Binding PrescriptionsClicked, Source={x:Reference Name=Root}}"
-                    YourHealthCommand="{Binding YourHealthClicked, Source={x:Reference Name=Root}}"
-                    MessagesCommand="{Binding MessagesClicked, Source={x:Reference Name=Root}}" />
-
-                <navigation:FullNavigationFooterWide
-                    x:Name="FullNavigationFooterWide"
-                    IsVisible="False"
+                <navigation:FullNavigationFooter
                     SelectedItem="{Binding SelectedNavigationFooterItem, Source={x:Reference Name=Root}}"
                     AdviceCommand="{Binding AdviceClicked, Source={x:Reference Name=Root}}"
                     AppointmentsCommand="{Binding AppointmentsClicked, Source={x:Reference Name=Root}}"

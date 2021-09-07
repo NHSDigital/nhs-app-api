@@ -13,26 +13,26 @@
                 <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
-            <Style TargetType="controls:AccessibilityLayout">
+            <Style TargetType="controls:AccessibileStackLayout">
                 <Setter Property="Orientation" Value="Vertical" />
-                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
                 <Setter Property="BackgroundColor" Value="{StaticResource NhsUkWhite}" />
                 <Setter Property="Padding" Value="0, 4" /> 
-                <Setter Property="HeightRequest" Value="50" />
-                <Setter Property="WidthRequest" Value="62" />
             </Style>
             
             <Style TargetType="Label">
                 <Setter Property="FontSize" Value="9" />
                 <Setter Property="LineBreakMode" Value="WordWrap" />
                 <Setter Property="HorizontalTextAlignment" Value="Center" />
-                <Setter Property="effects:FixedFontSizeEffect.HasFixedFontSize" Value="True" /> 
+                <Setter Property="effects:FixedFontSizeEffect.HasFixedFontSize" Value="True" />
+                <Setter Property="VerticalOptions" Value="Center" />
             </Style>
         </ResourceDictionary>
     </View.Resources>
     
     <ContentView.Content>
-        <controls:AccessibilityLayout AutomationId="{Binding Text, Source={x:Reference Name=Root}}" 
+        <controls:AccessibileStackLayout AutomationId="{Binding Text, Source={x:Reference Name=Root}}" 
                                       effects:AccessibilityEffect.ControlType="Button"
                                       effects:AccessibilityEffect.Selected="{Binding IsSelected, Source={x:Reference Name=Root}}"
                                       IsSelected="{Binding IsSelected, Source={x:Reference Name=Root}}"
@@ -40,41 +40,89 @@
                                       x:Name="IconButton">
             
             <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="ResponsiveFooterSizeStates">
+                    <VisualState x:Name="DefaultDisplay" />
+                    <VisualState x:Name="WideDisplay">
+                        <VisualState.Setters>
+                            <Setter TargetName="IconButton" 
+                                    Property="controls:AccessibileStackLayout.Orientation" 
+                                    Value="Horizontal" />
+                            
+                            <Setter TargetName="ItemIcon" 
+                                    Property="ContentView.Padding" 
+                                    Value="2" />
+                            
+                            <Setter TargetName="ItemLabel" 
+                                    Property="Label.FontSize" 
+                                    Value="10" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+                
                 <VisualStateGroup x:Name="KeyboardFocusStates">
                     <VisualState x:Name="KeyboardUnfocused" />
+                    
                     <VisualState x:Name="KeyboardFocused">
                         <VisualState.Setters>
-                            <Setter TargetName="ItemIcon" Property="ContentView.Content" Value="{Binding FocusedIcon, Source={x:Reference Name=Root}}"/>
-                            <Setter TargetName="ItemLabel" Property="Label.TextColor" Value="{StaticResource NhsUkPrimaryText}"/>
-                            <Setter TargetName="IconButton" Property="StackLayout.BackgroundColor" Value="{StaticResource NhsUkYellow}"/>
+                            <Setter TargetName="ItemIcon" 
+                                    Property="ContentView.Content" 
+                                    Value="{Binding FocusedIcon, Source={x:Reference Name=Root}}" />
+                            
+                            <Setter TargetName="ItemLabel" 
+                                    Property="Label.TextColor" 
+                                    Value="{StaticResource NhsUkPrimaryText}" />
+                            
+                            <Setter TargetName="IconButton" 
+                                    Property="StackLayout.BackgroundColor" 
+                                    Value="{StaticResource NhsUkYellow}" />
                         </VisualState.Setters>
                     </VisualState>
+                    
                     <VisualState x:Name="KeyboardSelectedUnfocused">
                         <VisualState.Setters>
-                            <Setter TargetName="ItemIcon" Property="ContentView.Content" Value="{Binding SelectedIcon, Source={x:Reference Name=Root}}" />
-                            <Setter TargetName="ItemLabel" Property="Label.TextColor" Value="{StaticResource NhsUkBlue}"/>
-                            <Setter TargetName="IconButton" Property="StackLayout.BackgroundColor" Value="{StaticResource NhsUkWhite}"/>
+                            <Setter TargetName="ItemIcon" 
+                                    Property="ContentView.Content" 
+                                    Value="{Binding SelectedIcon, Source={x:Reference Name=Root}}" />
+                            
+                            <Setter TargetName="ItemLabel" 
+                                    Property="Label.TextColor" 
+                                    Value="{StaticResource NhsUkBlue}" />
+                            
+                            <Setter TargetName="IconButton" 
+                                    Property="StackLayout.BackgroundColor" 
+                                    Value="{StaticResource NhsUkWhite}" />
                         </VisualState.Setters>
                     </VisualState>
+                    
                     <VisualState x:Name="KeyboardSelectedFocused">
                         <VisualState.Setters>
-                            <Setter TargetName="ItemIcon" Property="ContentView.Content" Value="{Binding SelectedIcon, Source={x:Reference Name=Root}}" />
-                            <Setter TargetName="ItemLabel" Property="Label.TextColor" Value="{StaticResource NhsUkBlue}" />
-                            <Setter TargetName="IconButton" Property="StackLayout.BackgroundColor" Value="{StaticResource NhsUkYellow}"/>
+                            <Setter TargetName="ItemIcon" 
+                                    Property="ContentView.Content" 
+                                    Value="{Binding SelectedIcon, Source={x:Reference Name=Root}}" />
+                            
+                            <Setter TargetName="ItemLabel" 
+                                    Property="Label.TextColor" 
+                                    Value="{StaticResource NhsUkBlue}" />
+                            
+                            <Setter TargetName="IconButton" 
+                                    Property="StackLayout.BackgroundColor" 
+                                    Value="{StaticResource NhsUkYellow}"/>
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
             
-            <ContentView x:Name="ItemIcon" IsTabStop="False" Content="{Binding DefaultIcon, Source={x:Reference Name=Root}}" />
-            <Label x:Name="ItemLabel"
-                   Text="{Binding Text, Source={x:Reference Name=Root}}"
-                   AutomationProperties.IsInAccessibleTree="False"
-                   IsTabStop="False"/>
+            <ContentView x:Name="ItemIcon" 
+                         IsTabStop="False" 
+                         Content="{Binding DefaultIcon, Source={x:Reference Name=Root}}"/>
+                
+                <Label x:Name="ItemLabel"
+                       Text="{Binding Text, Source={x:Reference Name=Root}}"
+                       AutomationProperties.IsInAccessibleTree="False" />
             
-            <StackLayout.GestureRecognizers>
+            <controls:AccessibileStackLayout.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding IconCommand, Source={x:Reference Name=Root}}" />
-            </StackLayout.GestureRecognizers>
-        </controls:AccessibilityLayout>
+            </controls:AccessibileStackLayout.GestureRecognizers>
+        </controls:AccessibileStackLayout>
     </ContentView.Content>
 </ContentView>

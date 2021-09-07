@@ -16,6 +16,9 @@
                 <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
+            <GridLength x:Key="WideFooterWidth">110</GridLength>
+            <GridLength x:Key="DefaultFooterWidth">62</GridLength>
+            
             <Style TargetType="BoxView">
                 <Setter Property="HeightRequest" Value="2" />
                 <Setter Property="Color" Value="{StaticResource NhsUkSecondaryGrey4}" />
@@ -40,102 +43,160 @@
         </ResourceDictionary>
     </View.Resources>
     
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="ResponsiveFooterSizeStates">
+            <VisualState x:Name="DefaultDisplay" />
+            <VisualState x:Name="WideDisplay">
+                <VisualState.Setters>
+                    <Setter Property="navigation:FullNavigationFooterItem.WidthRequest" 
+                            Value="{StaticResource WideFooterWidth}" />
+                    
+                    <Setter TargetName="AdviceColumn" Property="ColumnDefinition.Width" 
+                            Value="{StaticResource WideFooterWidth}" />
+                    
+                    <Setter TargetName="AppointmentsColumn" 
+                            Property="ColumnDefinition.Width" 
+                            Value="{StaticResource WideFooterWidth}" />
+                    
+                    <Setter TargetName="PrescriptionsColumn" 
+                            Property="ColumnDefinition.Width" 
+                            Value="{StaticResource WideFooterWidth}" />
+                    
+                    <Setter TargetName="YourHealthColumn" 
+                            Property="ColumnDefinition.Width" 
+                            Value="{StaticResource WideFooterWidth}" />
+                    
+                    <Setter TargetName="MessagesColumn" 
+                            Property="ColumnDefinition.Width" 
+                            Value="{StaticResource WideFooterWidth}" />
+                    
+                    <Setter TargetName="MessagesColumn" 
+                            Property="ColumnDefinition.Width" 
+                            Value="{StaticResource WideFooterWidth}" />
+                </VisualState.Setters>
+            </VisualState>
+        </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+    
     <ContentView>
         <StackLayout Spacing="0">
-            <BoxView  />
+            <BoxView />
             
             <Grid AutomationId="NHS App Full Navigation Footer"
                   x:Name="FooterGrid">
+                
                 <Grid.Effects>
                     <effects:SafeAreaPaddingBottom />
                 </Grid.Effects>
+                
                 <Grid.ColumnSpacing>0</Grid.ColumnSpacing>
+                
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
                  
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="62" />
+                    <ColumnDefinition x:Name="AdviceColumn" Width="{StaticResource DefaultFooterWidth}" />
                     <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="62" />
+                    <ColumnDefinition x:Name="AppointmentsColumn" Width="{StaticResource DefaultFooterWidth}" />
                     <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="62" />
+                    <ColumnDefinition x:Name="PrescriptionsColumn" Width="{StaticResource DefaultFooterWidth}" />
                     <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="62" />
+                    <ColumnDefinition x:Name="YourHealthColumn" Width="{StaticResource DefaultFooterWidth}" />
                     <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="62" />
+                    <ColumnDefinition x:Name="MessagesColumn" Width="{StaticResource DefaultFooterWidth}" />
                 </Grid.ColumnDefinitions>
                 
-                <navigation:FullNavigationFooterItem Grid.Column="0"
-                                                   Text="Advice"
-                                                   IconCommand="{Binding AdviceCommand, Source={x:Reference Name=Root}}"
-                                                   IsSelected="{Binding AdviceSelected, Source={x:Reference Name=Root}}">
+                <navigation:FullNavigationFooterItem 
+                    Grid.Column="0"
+                    Text="Advice"
+                    IconCommand="{Binding AdviceCommand, Source={x:Reference Name=Root}}"
+                    IsSelected="{Binding AdviceSelected, Source={x:Reference Name=Root}}">
+                    
                     <navigation:FullNavigationFooterItem.DefaultIcon>
                         <icons:IconAdviceGrey StyleClass="Advice" />
                     </navigation:FullNavigationFooterItem.DefaultIcon>
+                    
                     <navigation:FullNavigationFooterItem.SelectedIcon>
                         <icons:IconAdviceBlue StyleClass="Advice" />
                     </navigation:FullNavigationFooterItem.SelectedIcon>
+                    
                     <navigation:FullNavigationFooterItem.FocusedIcon>
                         <icons:IconAdviceBlack StyleClass="Advice" />
                     </navigation:FullNavigationFooterItem.FocusedIcon>
                 </navigation:FullNavigationFooterItem>
                 
-                <navigation:FullNavigationFooterItem Grid.Column="2"
-                                                   Text="Appointments"
-                                                   IconCommand="{Binding AppointmentsCommand, Source={x:Reference Name=Root}}"
-                                                   IsSelected="{Binding AppointmentsSelected, Source={x:Reference Name=Root}}">
+                <navigation:FullNavigationFooterItem 
+                    Grid.Column="2"
+                    Text="Appointments"
+                    IconCommand="{Binding AppointmentsCommand, Source={x:Reference Name=Root}}"
+                    IsSelected="{Binding AppointmentsSelected, Source={x:Reference Name=Root}}">
+                    
                     <navigation:FullNavigationFooterItem.DefaultIcon>
                         <icons:IconAppointmentsGrey />
                     </navigation:FullNavigationFooterItem.DefaultIcon>
+                    
                     <navigation:FullNavigationFooterItem.SelectedIcon>
                         <icons:IconAppointmentsBlue />
                     </navigation:FullNavigationFooterItem.SelectedIcon>
+                    
                     <navigation:FullNavigationFooterItem.FocusedIcon>
                         <icons:IconAppointmentsBlack />
                     </navigation:FullNavigationFooterItem.FocusedIcon>
                 </navigation:FullNavigationFooterItem>
 
-                <navigation:FullNavigationFooterItem Grid.Column="4"
-                                                   Text="Prescriptions"
-                                                   IconCommand="{Binding PrescriptionsCommand, Source={x:Reference Name=Root}}"
-                                                   IsSelected="{Binding PrescriptionsSelected, Source={x:Reference Name=Root}}">
+                <navigation:FullNavigationFooterItem 
+                    Grid.Column="4"
+                    Text="Prescriptions"
+                    IconCommand="{Binding PrescriptionsCommand, Source={x:Reference Name=Root}}"
+                    IsSelected="{Binding PrescriptionsSelected, Source={x:Reference Name=Root}}">
+                    
                     <navigation:FullNavigationFooterItem.DefaultIcon>
                         <icons:IconPrescriptionsGrey />
                     </navigation:FullNavigationFooterItem.DefaultIcon>
+                    
                     <navigation:FullNavigationFooterItem.SelectedIcon>
                         <icons:IconPrescriptionsBlue />
                     </navigation:FullNavigationFooterItem.SelectedIcon>
+                    
                     <navigation:FullNavigationFooterItem.FocusedIcon>
                         <icons:IconPrescriptionsBlack />
                     </navigation:FullNavigationFooterItem.FocusedIcon>
                 </navigation:FullNavigationFooterItem>
 
-                <navigation:FullNavigationFooterItem Grid.Column="6"
-                                                   Text="Your health"
-                                                   IconCommand="{Binding YourHealthCommand, Source={x:Reference Name=Root}}"
-                                                   IsSelected="{Binding YourHealthSelected, Source={x:Reference Name=Root}}">
+                <navigation:FullNavigationFooterItem 
+                    Grid.Column="6"
+                    Text="Your health"
+                    IconCommand="{Binding YourHealthCommand, Source={x:Reference Name=Root}}"
+                    IsSelected="{Binding YourHealthSelected, Source={x:Reference Name=Root}}">
+                    
                     <navigation:FullNavigationFooterItem.DefaultIcon>
                         <icons:IconYourHealthGrey />
                     </navigation:FullNavigationFooterItem.DefaultIcon>
+                    
                     <navigation:FullNavigationFooterItem.SelectedIcon>
                         <icons:IconYourHealthBlue />
                     </navigation:FullNavigationFooterItem.SelectedIcon>
+                    
                     <navigation:FullNavigationFooterItem.FocusedIcon>
                         <icons:IconYourHealthBlack />
                     </navigation:FullNavigationFooterItem.FocusedIcon>
                 </navigation:FullNavigationFooterItem>
 
-                <navigation:FullNavigationFooterItem Grid.Column="8"
-                                                   Text="Messages"
-                                                   IconCommand="{Binding MessagesCommand, Source={x:Reference Name=Root}}"
-                                                   IsSelected="{Binding MessagesSelected, Source={x:Reference Name=Root}}">
+                <navigation:FullNavigationFooterItem 
+                    Grid.Column="8"
+                    Text="Messages"
+                    IconCommand="{Binding MessagesCommand, Source={x:Reference Name=Root}}"
+                    IsSelected="{Binding MessagesSelected, Source={x:Reference Name=Root}}">
+                    
                     <navigation:FullNavigationFooterItem.DefaultIcon>
                         <icons:IconMessagesGrey />
                     </navigation:FullNavigationFooterItem.DefaultIcon>
+                    
                     <navigation:FullNavigationFooterItem.SelectedIcon>
                         <icons:IconMessagesBlue />
                     </navigation:FullNavigationFooterItem.SelectedIcon>
+                    
                     <navigation:FullNavigationFooterItem.FocusedIcon>
                         <icons:IconMessagesBlack />
                     </navigation:FullNavigationFooterItem.FocusedIcon>
