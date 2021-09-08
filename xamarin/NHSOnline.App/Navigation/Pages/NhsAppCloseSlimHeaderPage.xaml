@@ -9,11 +9,11 @@
     <ContentPage.Content>
         <ContentView>
             <StackLayout BackgroundColor="{StaticResource NhsUkBlue}" Spacing="0">
-                <navigation:SlimCloseNavigationHeader 
+                <navigation:SlimCloseNavigationHeader
                     CloseCommand="{Binding CloseClicked, Source={x:Reference Name=Root}}" />
-                
-                <ContentView Content="{Binding PageContent, Source={x:Reference Name=Root}}" 
-                             VerticalOptions = "FillAndExpand" />
+
+                <ContentView Content="{Binding PageContent, Source={x:Reference Name=Root}}"
+                             VerticalOptions="FillAndExpand" />
             </StackLayout>
         </ContentView>
     </ContentPage.Content>

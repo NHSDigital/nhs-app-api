@@ -93,6 +93,11 @@ namespace NHSOnline.IntegrationTests.UI
             @"No (?:IOS|Android)Element found matching By(?:IosNSPredicate|AndroidUIAutomator)\(.*?(?:label == 'Done'|name == 'test, txt'|text\(\\?""NhsAppLogo.png\\?""\)|textMatches\(\\?""Images\\?""\))\)",
             RegexOptions.Compiled);
 
+        // kAXErrorServerNotFound - iOS issue throws Appium error: " No webviews found"
+        private static readonly Regex KAXErrorServerNotFound = new(
+            "kAXErrorServerNotFound",
+            RegexOptions.Compiled);
+
         private static readonly List<(Regex pattern, RetryStatus result)> RetryExceptionMessageRegexes = new()
         {
             (InvalidServiceWebInspectorMessage, RetryStatus.Retry(nameof(InvalidServiceWebInspectorMessage))),
@@ -110,7 +115,8 @@ namespace NHSOnline.IntegrationTests.UI
             (AboutBlank, RetryStatus.Retry(nameof(AboutBlank))),
             (WindowHandleNotFound, RetryStatus.Retry(nameof(WindowHandleNotFound))),
             (UnableToFindFileIos, RetryStatus.Retry(nameof(UnableToFindFileIos))),
-            (FileUploadSelectorDeviceVariance, RetryStatus.Retry(nameof(FileUploadSelectorDeviceVariance)))
+            (FileUploadSelectorDeviceVariance, RetryStatus.Retry(nameof(FileUploadSelectorDeviceVariance))),
+            (KAXErrorServerNotFound, RetryStatus.Retry(nameof(KAXErrorServerNotFound)))
         };
 
         internal static RetryStatus ShouldRetry(this TestResult result, TestLogs logs)

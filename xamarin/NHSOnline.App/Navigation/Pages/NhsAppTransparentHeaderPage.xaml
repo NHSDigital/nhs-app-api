@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
+             x:Class="NHSOnline.App.Navigation.Pages.NhsAppTransparentHeaderPage"
+             x:Name="Root"
+             BackgroundColor="{StaticResource NhsUkBlue}">
+    <ContentPage.Content>
+        <ContentView>
+            <ContentView.Effects>
+                <effects:SafeAreaPaddingTop/>
+            </ContentView.Effects>
+            <StackLayout BackgroundColor="{StaticResource NhsUkBlue}" Spacing="0">
+                <View.Resources>
+                    <ResourceDictionary>
+                        <Style TargetType="StackLayout" Class="ContentSpacing">
+                            <Setter Property="Orientation" Value="Horizontal" />
+                            <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                            <Setter Property="BackgroundColor" Value="Transparent" /> 
+                            <Setter Property="HeightRequest" Value="50" />
+                        </Style>
+                    </ResourceDictionary>
+                </View.Resources>
+
+                <StackLayout StyleClass="ContentSpacing" AutomationId="NHS App Transparent Navigation Header">
+                </StackLayout>
+                
+                <ContentView Content="{Binding PageContent, Source={x:Reference Name=Root}}" 
+                             VerticalOptions = "FillAndExpand" />
+            </StackLayout>
+        </ContentView>
+    </ContentPage.Content>
+</ContentPage>

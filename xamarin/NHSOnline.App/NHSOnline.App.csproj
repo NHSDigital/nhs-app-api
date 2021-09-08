@@ -164,6 +164,10 @@
       <DependentUpon>PreHomeTryAgainNetworkErrorPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Navigation\Pages\NhsAppTransparentHeaderPage.xaml.cs">
+      <DependentUpon>NhsAppTransparentHeaderPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
