@@ -1,0 +1,10 @@
+{
+    "resourceType": "OperationOutcome",
+    "issue": [
+        {
+            "severity": "error",
+            "code": "security",
+            "diagnostics": "Supplier with ID e55091c0-1991-4a3f-b1fc-cec1928633ec does not have patient report access permission"
+        }
+    ]
+}

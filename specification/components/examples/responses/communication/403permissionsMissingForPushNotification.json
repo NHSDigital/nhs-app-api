@@ -1,0 +1,10 @@
+{
+    "resourceType": "OperationOutcome",
+    "issue": [
+        {
+            "severity": "error",
+            "code": "security",
+            "diagnostics": "Supplier with ID 52a41839-f448-438b-98b8-903c3be15dc2 does not have channel Push Notification permission"
+        }
+    ]
+}
