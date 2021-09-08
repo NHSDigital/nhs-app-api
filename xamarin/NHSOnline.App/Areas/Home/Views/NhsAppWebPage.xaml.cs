@@ -37,6 +37,10 @@ namespace NHSOnline.App.Areas.Home.Views
         public AsyncCommand<OpenWebIntegrationRequest> OpenWebIntegrationCommand
             => new AsyncCommand<OpenWebIntegrationRequest>(() => OpenWebIntegrationRequested);
 
+        public Func<OpenPostWebIntegrationRequest, Task>? OpenPostWebIntegrationRequested { get; set; }
+        public AsyncCommand<OpenPostWebIntegrationRequest> OpenPostWebIntegrationCommand
+            => new AsyncCommand<OpenPostWebIntegrationRequest>(() => OpenPostWebIntegrationRequested);
+
         public Func<AddEventToCalendarRequest, Task>? AddEventToCalendarRequested { get; set; }
         public AsyncCommand<AddEventToCalendarRequest> AddEventToCalendarCommand
             => new AsyncCommand<AddEventToCalendarRequest>(() => AddEventToCalendarRequested);

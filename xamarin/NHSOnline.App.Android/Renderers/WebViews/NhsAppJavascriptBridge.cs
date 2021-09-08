@@ -25,6 +25,13 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         }
 
         [JavascriptInterface]
+        [Export("openPostWebIntegration")]
+        public void OpenPostWebIntegration(string rawArgument)
+        {
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.OpenPostWebIntegration(rawArgument));
+        }
+
+        [JavascriptInterface]
         [Export("startNhsLoginUplift")]
         public void StartNhsLoginUplift(string rawArgument)
         {

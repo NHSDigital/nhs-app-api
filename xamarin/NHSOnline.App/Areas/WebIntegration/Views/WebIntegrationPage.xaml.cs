@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
-using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Events.Models;
 using NHSOnline.App.Navigation;
@@ -19,7 +18,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         private readonly AppNavigation<IWebIntegrationView.IEvents> _appNavigation;
 
         private bool OnInitialNavigation { get; set; } = true;
-        private Uri? InitialUrl { get; set; }
+        private WebIntegrationRequest? InitialRequest { get; set; }
 
         public WebIntegrationPage(ILogger<WebIntegrationPage> logger)
         {
@@ -44,6 +43,10 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         public Func<NavigationFailedArgs, Task>? NavigationFailed { get; set; }
         private AsyncCommand<NavigationFailedArgs> NavigationFailedCommand
             => new AsyncCommand<NavigationFailedArgs>(() => NavigationFailed);
+
+        public Func<WebIntegrationNavigationFailedArgs, Task>? InitialNavigationFailed { get; set; }
+        private AsyncCommand<WebIntegrationNavigationFailedArgs> InitialNavigationFailedCommand
+            => new AsyncCommand<WebIntegrationNavigationFailedArgs>(() => InitialNavigationFailed);
 
         public Func<string, Task>? GoToNhsAppPageRequested { get; set; }
         public AsyncCommand<string> GoToNhsAppPageCommand
@@ -109,26 +112,40 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
                 OnInitialNavigation = false;
                 WebView.Focus();
             }
-            else if (InitialUrl is null)
-            {
-                _logger.LogError($"{nameof(InitialUrl)} is null but should never be null");
-
-                WebView.IsVisible = false;
-                NavigationFailedCommand.Execute(new NavigationFailedArgs(new Uri(args.Url), OnInitialNavigation));
-            }
             else
             {
-                WebView.IsVisible = false;
-                NavigationFailedCommand.Execute(new NavigationFailedArgs(InitialUrl, OnInitialNavigation));
+                if (InitialRequest == null)
+                {
+                    _logger.LogError($"{nameof(InitialRequest)} is null but should never be null");
+
+                    HandleNavigationFailed(args);
+                }
+                else
+                {
+                    HandleInitialNavigationFailed(InitialRequest);
+                }
             }
         }
 
-        public void GoToUri(Uri uri)
+        private void HandleInitialNavigationFailed(WebIntegrationRequest request)
+        {
+            WebView.IsVisible = false;
+            WebView.WebIntegrationRequest = null;
+            InitialNavigationFailedCommand.Execute(new WebIntegrationNavigationFailedArgs(request, OnInitialNavigation));
+        }
+
+        private void HandleNavigationFailed(WebNavigatedEventArgs args)
+        {
+            WebView.IsVisible = false;
+            WebView.WebIntegrationRequest = null;
+            NavigationFailedCommand.Execute(new NavigationFailedArgs(new Uri(args.Url),OnInitialNavigation));
+        }
+
+        public void SetWebIntegrationRequest(WebIntegrationRequest webIntegrationRequest)
         {
             OnInitialNavigation = true;
-            InitialUrl = uri;
-
-            WebView.GoToUri(uri);
+            InitialRequest = webIntegrationRequest;
+            WebView.WebIntegrationRequest = webIntegrationRequest;
         }
 
         public void SetNavigationFooterItem(NavigationFooterItem footerItem) => SelectedNavigationFooterItem = footerItem;

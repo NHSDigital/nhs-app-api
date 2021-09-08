@@ -64,7 +64,7 @@ namespace NHSOnline.IntegrationTests.Prescriptions
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .KeyboardNavigatePrescriptions();
+                .KeyboardNavigatePrescriptions(patient);
 
             AndroidPrescriptionsPage
                 .AssertOnPage(driver)

@@ -81,7 +81,7 @@ namespace NHSOnline.IntegrationTests.Messages
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .KeyboardNavigateToMessages();
+                .KeyboardNavigateToMessages(patient);
 
             AndroidMessagesPage
                 .AssertOnPage(driver)

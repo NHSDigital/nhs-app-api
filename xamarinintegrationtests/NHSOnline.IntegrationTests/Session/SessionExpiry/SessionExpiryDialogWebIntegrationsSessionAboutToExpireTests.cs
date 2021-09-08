@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;

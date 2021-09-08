@@ -29,6 +29,9 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty StartDownloadCommandProperty =
             BindableProperty.Create(nameof(StartDownloadCommand), typeof(AsyncCommand<DownloadRequest>), typeof(WebIntegrationWebView));
 
+        public static readonly BindableProperty WebIntegrationRequestProperty =
+            BindableProperty.Create(nameof(WebIntegrationRequest), typeof(WebIntegrationRequest), typeof(WebIntegrationWebView));
+
         public AsyncCommand<string> GoToNhsAppPageCommand
         {
             get => (AsyncCommand<string>) GetValue(GoToNhsAppPageCommandProperty);
@@ -39,6 +42,12 @@ namespace NHSOnline.App.Controls.WebViews
         {
             get => (AsyncCommand<DownloadRequest>) GetValue(StartDownloadCommandProperty);
             set => SetValue(StartDownloadCommandProperty, value);
+        }
+
+        public WebIntegrationRequest? WebIntegrationRequest
+        {
+            get => (WebIntegrationRequest) GetValue(WebIntegrationRequestProperty);
+            set => SetValue(WebIntegrationRequestProperty, value);
         }
 
         public void AddEventToCalendar(string json)

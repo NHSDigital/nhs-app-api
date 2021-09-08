@@ -143,6 +143,7 @@
     <Compile Include="Renderers\WebViews\Extensions\Javascript\NhsAppJavascriptBridgeWebViewRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\Extensions\Javascript\PreHomeScreenJavascriptBridgeWebViewRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\Extensions\Javascript\WebIntegrationJavascriptBridgeWebViewRendererExtension.cs" />
+    <Compile Include="Renderers\WebViews\Extensions\WebIntegrationRequestRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\NhsAppPreHomeJavascriptBridge.cs" />
     <Compile Include="Renderers\WebViews\NhsAppPreHomeScreenWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\NhsAppJavascriptBridge.cs" />

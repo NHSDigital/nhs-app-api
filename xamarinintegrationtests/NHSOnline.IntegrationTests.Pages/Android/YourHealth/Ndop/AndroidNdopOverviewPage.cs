@@ -1,11 +1,11 @@
-using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth;
+using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth.Ndop;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
-namespace NHSOnline.IntegrationTests.Pages.Android.YourHealth
+namespace NHSOnline.IntegrationTests.Pages.Android.YourHealth.Ndop
 {
-    public class AndroidNdopPage
+    public sealed class AndroidNdopOverviewPage
     {
-        private AndroidNdopPage(IAndroidDriverWrapper driver)
+        private AndroidNdopOverviewPage(IAndroidDriverWrapper driver)
         {
             Navigation = new AndroidFullNavigation(driver);
             PageContent = new NdopPageContent(driver.Web.NhsAppLoggedInWebView());
@@ -15,9 +15,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android.YourHealth
 
         public NdopPageContent PageContent { get; }
 
-        public static AndroidNdopPage AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidNdopOverviewPage AssertOnPage(IAndroidDriverWrapper driver)
         {
-            var page = new AndroidNdopPage(driver);
+            var page = new AndroidNdopOverviewPage(driver);
             page.PageContent.AssertOnPage();
             return page;
         }

@@ -1,4 +1,3 @@
-using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More;
 using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.AccountSettings;
 using NHSOnline.IntegrationTests.UI.Drivers;
 

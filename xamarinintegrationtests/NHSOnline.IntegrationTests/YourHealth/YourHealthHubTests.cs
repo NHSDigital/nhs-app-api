@@ -1,9 +1,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
-using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
 using NHSOnline.IntegrationTests.Pages.Android.YourHealth;
+using NHSOnline.IntegrationTests.Pages.Android.YourHealth.Ndop;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.YourHealth;
 using NHSOnline.IntegrationTests.UI;
@@ -74,7 +74,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .KeyboardNavigateToYourHealth();
+                .KeyboardNavigateToYourHealth(patient);
 
             AndroidYourHealthPkbPage
                 .AssertOnPage(driver)
@@ -99,7 +99,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
                 .TabIntoFocus()
                 .KeyboardNavigateToNdop();
 
-            AndroidNdopPage
+            AndroidNdopOverviewPage
                 .AssertOnPage(driver)
                 .PageContent.ClickBackBreadcrumb();
 
@@ -120,7 +120,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .KeyboardNavigateToYourHealth();
+                .KeyboardNavigateToYourHealth(patient);
 
             AndroidYourHealthPkbPage
                 .AssertOnPage(driver)
@@ -156,7 +156,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .KeyboardNavigateToYourHealth();
+                .KeyboardNavigateToYourHealth(patient);
 
             AndroidYourHealthSubstraktPage
                 .AssertOnPage(driver)
@@ -183,7 +183,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .KeyboardNavigateToYourHealth();
+                .KeyboardNavigateToYourHealth(patient);
 
             AndroidYourHealthGncrPage
                 .AssertOnPage(driver)
@@ -210,7 +210,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .KeyboardNavigateToYourHealth();
+                .KeyboardNavigateToYourHealth(patient);
 
             AndroidYourHealthPkbPage
                 .AssertOnPage(driver)
@@ -273,7 +273,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .KeyboardNavigateToYourHealth();
+                .KeyboardNavigateToYourHealth(patient);
 
             AndroidYourHealthCiePage
                 .AssertOnPage(driver)
@@ -335,7 +335,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .KeyboardNavigateToYourHealth();
+                .KeyboardNavigateToYourHealth(patient);
 
             AndroidYourHealthSecondaryCareViewPage
                 .AssertOnPage(driver)
@@ -398,7 +398,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .KeyboardNavigateToYourHealth();
+                .KeyboardNavigateToYourHealth(patient);
 
             AndroidYourHealthMyCareViewPage
                 .AssertOnPage(driver)

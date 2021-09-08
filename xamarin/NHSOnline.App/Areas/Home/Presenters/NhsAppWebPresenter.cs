@@ -79,6 +79,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterHandler<Uri>(ViewOnNavigationFailed, (view, handler) => view.NavigationFailed = handler)
                 .RegisterHandler(HelpRequested, (view, handler) => view.HelpRequested = handler)
                 .RegisterHandler<OpenWebIntegrationRequest>(OpenWebIntegrationRequested, (view, handler) => view.OpenWebIntegrationRequested = handler)
+                .RegisterHandler<OpenPostWebIntegrationRequest>(OpenPostWebIntegrationRequested, (view, handler) => view.OpenPostWebIntegrationRequested = handler)
                 .RegisterHandler<AddEventToCalendarRequest>(AddEventToCalendarRequested, (view, handler) => view.AddEventToCalendarRequested = handler)
                 .RegisterHandler<DownloadRequest>(StartDownloadRequested, (view, handler) => view.StartDownloadRequested = handler)
                 .RegisterHandler<StartNhsLoginUpliftRequest>(StartNhsLoginUpliftRequested, (view, handler) => view.StartNhsLoginUpliftRequested = handler)
@@ -180,8 +181,27 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
             var model = new WebIntegrationModel(
                 popToRootNavigationHandler,
-                request.Url,
                 _view.SelectedNavigationFooterItem,
+                WebIntegrationRequest.Create(request),
+                request.AdditionalDomains,
+                request.HelpUrl);
+
+            var page = _pageFactory.CreatePageFor(model);
+            await _view.AppNavigation
+                .Push(page)
+                .PreserveThreadContext();
+        }
+
+        private async Task OpenPostWebIntegrationRequested(OpenPostWebIntegrationRequest request)
+        {
+            _logger.LogInformation("Opening Post Web Integration - {Url}", request.Url);
+
+            var popToRootNavigationHandler = new NhsAppPopToRootNavigationHandler(_navigationHandler, _view.AppNavigation);
+
+            var model = new WebIntegrationModel(
+                popToRootNavigationHandler,
+                _view.SelectedNavigationFooterItem,
+                WebIntegrationRequest.Create(request),
                 request.AdditionalDomains,
                 request.HelpUrl);
 

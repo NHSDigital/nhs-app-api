@@ -20,6 +20,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
             _javascriptBridge = JavascriptBridge
                 .ForWebView(() => (NhsAppWebView) Element, "nativeApp")
                 .AddFunction("openWebIntegration", webView => webView.OpenWebIntegration)
+                .AddFunction("openPostWebIntegration", webView => webView.OpenPostWebIntegration)
                 .AddFunction("startNhsLoginUplift", webView => webView.StartNhsLoginUplift)
                 .AddFunction("getNotificationsStatus", webView => webView.GetNotificationsStatus)
                 .AddFunction("requestPnsToken", webView => webView.RequestPnsToken)
@@ -37,6 +38,8 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                 .AddFunction("logout", webView => webView.Logout)
                 .AddFunction("sessionExpired", webView => webView.SessionExpired)
                 .Apply(config.UserContentController);
+
+            AllowsLinkPreview = false;
         }
 
         protected override void OnElementChanged(VisualElementChangedEventArgs e)

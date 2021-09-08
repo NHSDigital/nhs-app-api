@@ -1,5 +1,5 @@
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Linq;
 using NHSOnline.App.Config;
 
@@ -9,12 +9,12 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
     {
         private readonly INhsLoginConfiguration _nhsLoginConfiguration;
         private readonly Uri _integrationUri;
-        private readonly Collection<Uri>? _additionalDomains;
+        private readonly IReadOnlyCollection<Uri>? _additionalDomains;
 
         internal WebIntegrationUriDestination(
             INhsLoginConfiguration nhsLoginConfiguration,
             Uri integrationUri,
-            Collection<Uri>? additionalDomains)
+            IReadOnlyCollection<Uri>? additionalDomains)
         {
             _nhsLoginConfiguration = nhsLoginConfiguration;
             _integrationUri = integrationUri;

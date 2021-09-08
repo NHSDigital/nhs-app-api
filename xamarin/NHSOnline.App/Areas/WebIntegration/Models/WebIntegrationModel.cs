@@ -1,6 +1,7 @@
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using NHSOnline.App.Controls;
+using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.WebIntegration.Models
@@ -9,22 +10,22 @@ namespace NHSOnline.App.Areas.WebIntegration.Models
     {
         internal WebIntegrationModel(
             INhsAppNavigationHandler navigationHandler,
-            Uri url,
             NavigationFooterItem footerItem,
-            Collection<Uri> additionalDomains,
+            WebIntegrationRequest webIntegrationRequest,
+            IReadOnlyCollection<Uri>? additionalDomains,
             Uri helpUrl)
         {
             NavigationHandler = navigationHandler;
-            Url = url;
             FooterItem = footerItem;
+            WebIntegrationRequest = webIntegrationRequest;
             AdditionalDomains = additionalDomains;
             HelpUrl = helpUrl;
         }
 
         internal INhsAppNavigationHandler NavigationHandler { get; }
-        internal Uri Url { get; }
         internal NavigationFooterItem FooterItem { get; }
-        internal Collection<Uri> AdditionalDomains { get; }
-        internal Uri HelpUrl { get; }
+        public WebIntegrationRequest WebIntegrationRequest { get; }
+        public IReadOnlyCollection<Uri>? AdditionalDomains { get; }
+        public Uri HelpUrl { get; }
     }
 }

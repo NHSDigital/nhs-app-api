@@ -72,10 +72,12 @@ import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import Contents from '@/components/data-sharing/Contents';
 import GenericButton from '@/components/widgets/GenericButton';
 import InsetText from '@/components/InsetText';
+import NativeApp from '@/services/native-app';
 import Pagination from '@/components/Pagination';
 import { DATA_SHARING_DOES_NOT_APPLY_PATH } from '@/router/paths';
 import {
   NATIONAL_DATA_OPT_OUT_URL,
+  NDOP_HELP_PATH,
   OTHER_WAYS_TO_MAKE_A_CHOICE_URL,
 } from '@/router/externalLinks';
 
@@ -104,7 +106,16 @@ export default {
           this.ndopToken = token;
         });
 
-      this.$refs.ndopTokenForm.submit();
+      if (NativeApp.supportsNativeWebPostIntegration()) {
+        NativeApp.openPostWebIntegration(
+          this.dataPreferencesUrl,
+          { token: this.ndopToken },
+          [],
+          NDOP_HELP_PATH,
+        );
+      } else {
+        this.$refs.ndopTokenForm.submit();
+      }
     },
   },
 };

@@ -47,7 +47,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .KeyboardNavigateToAdvice();
+                .KeyboardNavigateToAdvice(patient);
 
             AndroidAdvicePage
                 .AssertOnPage(driver)

@@ -28,6 +28,7 @@ namespace NHSOnline.App.Areas.Home
             Func<Task>? ResetAndShowErrorRequested { get; set; }
 
             Func<OpenWebIntegrationRequest, Task>? OpenWebIntegrationRequested { get; set; }
+            Func<OpenPostWebIntegrationRequest, Task>? OpenPostWebIntegrationRequested { get; set; }
             Func<AddEventToCalendarRequest, Task>? AddEventToCalendarRequested { get; set; }
 
             Func<DownloadRequest, Task>? StartDownloadRequested { get; set; }

@@ -56,7 +56,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .KeyboardNavigateToAppointments();
+                .KeyboardNavigateToAppointments(patient);
 
             AndroidAppointmentsPage
                 .AssertOnPage(driver)

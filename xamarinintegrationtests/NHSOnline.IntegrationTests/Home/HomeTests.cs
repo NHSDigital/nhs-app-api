@@ -1,10 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
-using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.Advice;
-using NHSOnline.IntegrationTests.Pages.IOS;
-using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -24,7 +21,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .KeyboardNavigateToAdvice();
+                .KeyboardNavigateToAdvice(patient);
 
             AndroidAdvicePage
                 .AssertOnPage(driver)

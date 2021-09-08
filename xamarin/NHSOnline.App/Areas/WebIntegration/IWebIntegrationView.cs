@@ -16,6 +16,7 @@ namespace NHSOnline.App.Areas.WebIntegration
 
             Action<WebNavigatingEventArgs>? Navigating { get; set; }
             Func<NavigationFailedArgs, Task>? NavigationFailed { get; set; }
+            Func<WebIntegrationNavigationFailedArgs, Task>? InitialNavigationFailed { get; set; }
 
             Func<Task>? HelpRequested { get; set; }
             Func<Task>? HomeRequested { get; set; }
@@ -33,7 +34,7 @@ namespace NHSOnline.App.Areas.WebIntegration
             Func<DownloadRequest, Task>? StartDownloadRequested { get; set; }
         }
 
-        void GoToUri(Uri uri);
+        void SetWebIntegrationRequest(WebIntegrationRequest webIntegrationRequest);
 
         void SetNavigationFooterItem(NavigationFooterItem footerItem);
     }

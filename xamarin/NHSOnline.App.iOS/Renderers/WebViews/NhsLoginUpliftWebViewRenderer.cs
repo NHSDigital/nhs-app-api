@@ -13,6 +13,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 
         public NhsLoginUpliftWebViewRenderer() : this(CustomConfiguration)
         {
+            AllowsLinkPreview = false;
         }
 
         private NhsLoginUpliftWebViewRenderer(WKWebViewConfiguration config) : base(config)

@@ -23,6 +23,7 @@
                                 x:Name="WebView"
                                 VerticalOptions="FillAndExpand"
                                 OpenWebIntegrationCommand="{Binding OpenWebIntegrationCommand, Source={x:Reference Name=Page}}"
+                                OpenPostWebIntegrationCommand="{Binding OpenPostWebIntegrationCommand, Source={x:Reference Name=Page}}"
                                 AddEventToCalendarCommand="{Binding AddEventToCalendarCommand, Source={x:Reference Name=Page}}"
                                 StartDownloadCommand="{Binding StartDownloadCommand, Source={x:Reference Name=Page}}"
                                 StartNhsLoginUpliftCommand="{Binding StartNhsLoginUpliftCommand, Source={x:Reference Name=Page}}"

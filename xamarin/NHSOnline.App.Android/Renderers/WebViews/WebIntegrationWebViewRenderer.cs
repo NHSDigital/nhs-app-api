@@ -22,7 +22,8 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
             {
                 new UserAgentWebViewRendererExtension(this),
                 new WebIntegrationJavascriptBridgeWebViewRendererExtension(this),
-                new EnableTargetBlankLinksRendererExtension(this)
+                new EnableTargetBlankLinksRendererExtension(this),
+                new WebIntegrationRequestRendererExtension(this)
             };
         }
 

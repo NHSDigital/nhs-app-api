@@ -65,6 +65,17 @@ export default {
     app.openWebIntegration(urlRequest);
   },
 
+  supportsNativeWebPostIntegration() {
+    const app = window.nativeApp;
+    return app && app.openPostWebIntegration;
+  },
+
+  openPostWebIntegration(url, postData, additionalDomains = [], helpUrl) {
+    const app = window.nativeApp;
+    const urlRequest = JSON.stringify({ url, postData, additionalDomains, helpUrl });
+    app.openPostWebIntegration(urlRequest);
+  },
+
   supportsNativeNhsLoginUplift() {
     const app = window.nativeApp;
     return app && app.startNhsLoginUplift;

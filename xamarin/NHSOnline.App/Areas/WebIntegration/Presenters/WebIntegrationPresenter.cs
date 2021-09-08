@@ -47,14 +47,16 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             _fileHandler = fileHandler;
             _pageFactory = pageFactory;
 
-            _uriDestination = new WebIntegrationUriDestination(nhsLoginConfiguration, model.Url, model.AdditionalDomains);
+            _uriDestination = new WebIntegrationUriDestination(nhsLoginConfiguration, model.WebIntegrationRequest.Url, model.AdditionalDomains);
 
             _view.SetNavigationFooterItem(model.FooterItem);
+            _view.SetWebIntegrationRequest(model.WebIntegrationRequest);
 
             _view.AppNavigation
                 .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
                 .RegisterHandler(HelpRequested, (view, handler) => view.HelpRequested = handler)
                 .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
+                .RegisterHandler<WebIntegrationNavigationFailedArgs>(ViewOnInitialNavigationFailed, (view, handler) => view.InitialNavigationFailed = handler)
                 .RegisterHandler<NavigationFailedArgs>(ViewOnNavigationFailed, (view, handler) => view.NavigationFailed = handler)
                 .RegisterHandler(model.NavigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
                 .RegisterHandler(model.NavigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
@@ -120,8 +122,6 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
             _hasAlreadyAppeared = true;
 
-            _view.GoToUri(_model.Url);
-
             return Task.CompletedTask;
         }
 
@@ -136,20 +136,18 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
         private Task ViewOnNavigationFailed(NavigationFailedArgs args)
         {
-            if (args.OnInitialNavigation)
-            {
-                void RetryAction() => _view.GoToUri(args.FailedUrl);
+            var model = new FullNavigationBackToHomeNetworkErrorModel(_model.NavigationHandler, _model.FooterItem);
+            var page = _pageFactory.CreatePageFor(model);
+            return _view.AppNavigation.Push(page);
+        }
 
-                var model = new FullNavigationTryAgainNetworkErrorModel(_model.NavigationHandler, _model.FooterItem, RetryAction);
-                var page = _pageFactory.CreatePageFor(model);
-                return _view.AppNavigation.Push(page);
-            }
-            else
-            {
-                var model = new FullNavigationBackToHomeNetworkErrorModel(_model.NavigationHandler, _model.FooterItem);
-                var page = _pageFactory.CreatePageFor(model);
-                return _view.AppNavigation.Push(page);
-            }
+        private Task ViewOnInitialNavigationFailed(WebIntegrationNavigationFailedArgs args)
+        {
+            void RetryAction() => _view.SetWebIntegrationRequest(args.FailedRequest);
+
+            var model = new FullNavigationTryAgainNetworkErrorModel(_model.NavigationHandler, _model.FooterItem, RetryAction);
+            var page = _pageFactory.CreatePageFor(model);
+            return _view.AppNavigation.Push(page);
         }
 
         private void OpenInBrowserOverlay(WebNavigatingEventArgs webNavigatingEventArgs, Uri url)

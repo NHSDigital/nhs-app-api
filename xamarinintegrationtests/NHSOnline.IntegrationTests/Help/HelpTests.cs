@@ -105,7 +105,7 @@ namespace NHSOnline.IntegrationTests.Help
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .KeyboardNavigateToHelp();
+                .KeyboardNavigateToHelp(patient);
 
             AndroidAppTabBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());

@@ -58,7 +58,7 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .KeyboardNavigateToMore();
+                .KeyboardNavigateToMore(patient);
 
             AndroidMorePage
                 .AssertOnPage(driver)

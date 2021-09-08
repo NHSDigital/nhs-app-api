@@ -10,7 +10,9 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
     internal sealed class NhsLoginWebViewRenderer : WkWebViewRenderer
     {
         public NhsLoginWebViewRenderer() : base(CustomConfiguration)
-        {}
+        {
+            AllowsLinkPreview = false;
+        }
 
         protected override void OnElementChanged(VisualElementChangedEventArgs e)
         {

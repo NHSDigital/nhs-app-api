@@ -30,6 +30,9 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty OpenWebIntegrationCommandProperty =
             BindableProperty.Create(nameof(OpenWebIntegrationCommand), typeof(AsyncCommand<OpenWebIntegrationRequest>), typeof(NhsAppWebView));
 
+        public static readonly BindableProperty OpenPostWebIntegrationCommandProperty =
+            BindableProperty.Create(nameof(OpenPostWebIntegrationCommand), typeof(AsyncCommand<OpenPostWebIntegrationRequest>), typeof(NhsAppWebView));
+
         public static readonly BindableProperty AddEventToCalendarCommandProperty =
             BindableProperty.Create(nameof(AddEventToCalendarCommand), typeof(AsyncCommand<AddEventToCalendarRequest>), typeof(NhsAppWebView));
 
@@ -91,6 +94,19 @@ namespace NHSOnline.App.Controls.WebViews
             get => (AsyncCommand<OpenWebIntegrationRequest>) GetValue(OpenWebIntegrationCommandProperty);
             set => SetValue(OpenWebIntegrationCommandProperty, value);
         }
+
+        public void OpenPostWebIntegration(string json)
+        {
+            var request = ConvertFromJsonString<OpenPostWebIntegrationRequest>(json);
+            OpenPostWebIntegrationCommand.Execute(request);
+        }
+
+        public AsyncCommand<OpenPostWebIntegrationRequest> OpenPostWebIntegrationCommand
+        {
+            get => (AsyncCommand<OpenPostWebIntegrationRequest>) GetValue(OpenPostWebIntegrationCommandProperty);
+            set => SetValue(OpenPostWebIntegrationCommandProperty, value);
+        }
+
 
         public void AddEventToCalendar(string json)
         {

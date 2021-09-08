@@ -26,6 +26,8 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                 .AddFunction("sessionExpired", webView => webView.SessionExpired)
                 .AddFunction("logout", webView => webView.Logout)
                 .Apply(config.UserContentController);
+
+            AllowsLinkPreview = false;
         }
 
         protected override void OnElementChanged(VisualElementChangedEventArgs e)
