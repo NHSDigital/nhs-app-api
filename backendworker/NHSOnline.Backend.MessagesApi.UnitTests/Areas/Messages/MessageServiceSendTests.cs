@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Assert
             VerifyAll();
 
-            var subject = result.Should().BeAssignableTo<MessageResult.Success>().Subject;
+            var subject = result.Should().BeAssignableTo<AddMessageResult.Success>().Subject;
             subject.UserMessage.Should().Be(returnedUserMessage);
         }
 
@@ -106,7 +106,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Assert
             VerifyAll();
 
-            result.Should().BeAssignableTo<MessageResult.InternalServerError>();
+            result.Should().BeAssignableTo<AddMessageResult.InternalServerError>();
         }
 
         [TestMethod]
@@ -132,7 +132,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Assert
             VerifyAll();
 
-            result.Should().BeAssignableTo<MessageResult.InternalServerError>();
+            result.Should().BeAssignableTo<AddMessageResult.InternalServerError>();
         }
 
         [TestMethod]
@@ -158,7 +158,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Assert
             VerifyAll();
 
-            result.Should().BeAssignableTo<MessageResult.BadGateway>();
+            result.Should().BeAssignableTo<AddMessageResult.BadGateway>();
         }
 
         [TestMethod]
@@ -177,7 +177,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Assert
             VerifyAll();
 
-            result.Should().BeAssignableTo<MessageResult.BadRequest>();
+            result.Should().BeAssignableTo<AddMessageResult.BadRequest>();
         }
 
         private void VerifyAll()

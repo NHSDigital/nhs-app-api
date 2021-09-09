@@ -5,13 +5,6 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 {
-    
-    public interface IMessagesValidationService
-    {
-        bool IsPatchRequestValid(JsonPatchDocument<Message> jsonPatch, string messageId);
-        bool IsMessageRequestValid(AddMessageRequest addMessageRequest, string nhsLoginId);
-    }
-    
     public class MessagesValidationService: IMessagesValidationService
     {
         private readonly ILogger<IMessagesValidationService> _logger;
@@ -37,6 +30,14 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                 .IsNotNullOrWhitespace(addMessageRequest?.Sender, nameof(addMessageRequest.Sender))
                 .IsNotNullOrWhitespace(addMessageRequest?.Body, nameof(addMessageRequest.Body))
                 .IsNotNullOrWhitespace(nhsLoginId, nameof(nhsLoginId))
+                .IsValid();
+        }
+
+        public bool IsMessageIdValid(string messageId)
+        {
+            return new ValidateAndLog(_logger)
+                .IsNotNullOrWhitespace(messageId, nameof(messageId))
+                .IsValidMongoDbObjectId(messageId, nameof(messageId))
                 .IsValid();
         }
     }

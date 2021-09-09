@@ -11,6 +11,7 @@ import org.junit.Assert
 import org.junit.Assert.assertNotNull
 import utils.SerenityHelpers
 import utils.getOrFail
+import utils.set
 import worker.models.messages.MessageCreateResponse
 import worker.models.messages.MessagesSummaryFacade
 import worker.models.messages.SingleMessageFacade
@@ -114,9 +115,44 @@ class MessagesGetStepDefinitionsBackend {
 
     @Then("^I receive the message id$")
     fun iReceiveTheMessageId() {
-        val response =
+        val response = 
                 MessagesSerenityHelpers.CREATE_MESSAGE_RESPONSE.getOrFail<MessageCreateResponse>()
         assertNotNull("Message Id",response.messageId)
+        MessagesSerenityHelpers.MESSAGE_ID.set(response.messageId)
+    }
+
+    @When("^I try to get the message using the message id$")
+    fun iTryToGetTheMessageUsingTheMessageId(){
+        val authToken = SerenityHelpers.getPatient().accessToken
+        val messageId = MessagesSerenityHelpers.MESSAGE_ID.getOrFail<String>()
+        MessagesApi.getMessage(authToken, messageId)
+    }
+
+    @When("^I try to get the message using the message id without passing an access token$")
+    fun iTryToGetTheMessageWithoutPassingAnAccessToken(){
+        val authToken = ""
+        val messageId = MessagesSerenityHelpers.MESSAGE_ID.getOrFail<String>()
+        MessagesApi.getMessage(authToken, messageId)
+    }
+
+    @When("^I try to get the message using a blank string$")
+    fun iTryToGetTheMessageUsingABlankString(){
+        val authToken = SerenityHelpers.getPatient().accessToken
+        val messageId = ""
+        MessagesApi.getMessage(authToken, messageId)
+    }
+
+    @When("^I try to get the message using an unrecognised message id$")
+    fun iTryToGetTheMessageUsingAnUnrecognisedMessageId(){
+        val authToken = SerenityHelpers.getPatient().accessToken
+        val messageId = "012345678901234567890123"
+        MessagesApi.getMessage(authToken, messageId)
+    }
+
+    @Then("^I receive the message$")
+    fun iReceiveTheMessage() {
+        val response = MessagesSerenityHelpers.GET_MESSAGE_RESPONSE.getOrFail<MessagesResponseMessage>()
+        assertNotNull("Message Id", response.id)
     }
 
     private fun assertReceivedMessages(expectedMessages: ArrayList<MessagesSummaryFacade>,

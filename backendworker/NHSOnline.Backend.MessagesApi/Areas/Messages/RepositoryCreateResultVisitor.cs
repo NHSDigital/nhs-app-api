@@ -3,16 +3,16 @@ using NHSOnline.Backend.Repository;
 
 namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 {
-    internal class RepositoryCreateResultVisitor : IRepositoryCreateResultVisitor<UserMessage, MessageResult>
+    internal class RepositoryCreateResultVisitor : IRepositoryCreateResultVisitor<UserMessage, AddMessageResult>
     {
-        public MessageResult Visit(RepositoryCreateResult<UserMessage>.RepositoryError result)
+        public AddMessageResult Visit(RepositoryCreateResult<UserMessage>.RepositoryError result)
         {
-            return new MessageResult.BadGateway();
+            return new AddMessageResult.BadGateway();
         }
 
-        public MessageResult Visit(RepositoryCreateResult<UserMessage>.Created result)
+        public AddMessageResult Visit(RepositoryCreateResult<UserMessage>.Created result)
         {
-            return new MessageResult.Success(result.Record);
+            return new AddMessageResult.Success(result.Record);
         }
     }
 }

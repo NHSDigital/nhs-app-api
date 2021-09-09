@@ -7,6 +7,7 @@ import org.apache.http.client.utils.URIBuilder
 import worker.models.messages.MessageCreateResponse
 import worker.models.messages.MessageRequest
 import worker.models.messages.MessagesResponse
+import worker.models.messages.MessagesResponseMessage
 
 class WorkerClientMessages(val config: Config, val sender: WorkerClientSender, val gson: Gson) {
 
@@ -34,6 +35,22 @@ class WorkerClientMessages(val config: Config, val sender: WorkerClientSender, v
             return gson.fromJson(response, Array<MessagesResponse>::class.java)
         }
         return arrayOf()
+    }
+
+    fun getMessage(authToken: String?, messageId:String): MessagesResponseMessage? {
+        val uriBuilder = URIBuilder(uri("me") + "/" + messageId)
+
+        val httpGet = RequestBuilder
+            .get(uriBuilder.build().toString())
+            .addAuthorizationIfNotNull(authToken)
+
+        val response = httpGet.sendAndGetResult(sender)
+
+        if (response != null) {
+            return gson.fromJson(response, MessagesResponseMessage::class.java)
+        }
+
+        return null
     }
 
     fun patch(authToken: String?, messageId: String, patch: JsonPatch): HttpResponse? {

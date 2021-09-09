@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             _validator = validator;
         }
 
-        public async Task<MessageResult> Send(AddMessageRequest addMessageRequest, string nhsLoginId)
+        public async Task<AddMessageResult> Send(AddMessageRequest addMessageRequest, string nhsLoginId)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 
                 if (!_validator.IsMessageRequestValid(addMessageRequest, nhsLoginId))
                 {
-                    return new MessageResult.BadRequest();
+                    return new AddMessageResult.BadRequest();
                 }
 
                 var userMessage = _addMessageToUserMessageMapper.Map(addMessageRequest, nhsLoginId);
@@ -58,7 +58,33 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             catch (Exception e)
             {
                 _logger.LogError(e, "Message Posting has failed with exception");
-                return new MessageResult.InternalServerError();
+                return new AddMessageResult.InternalServerError();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        public async Task<MessagesResult> GetMessage(AccessToken accessToken, string messageId)
+        {
+            _logger.LogEnter();
+
+            try
+            {
+                if (!_validator.IsMessageIdValid(messageId))
+                {
+                    return new MessagesResult.BadRequest();
+                }
+
+                var result = await _messageRepository.FindMessage(accessToken.Subject, messageId);
+
+                return result.Accept(new RepositoryFindMessageResultVisitor(_userMessagesToResponseMapper));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Message Get has failed with exception");
+                return new MessagesResult.InternalServerError();
             }
             finally
             {

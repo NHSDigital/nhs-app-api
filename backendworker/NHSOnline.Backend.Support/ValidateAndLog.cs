@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -68,6 +68,23 @@ namespace NHSOnline.Backend.Support
             if (!string.IsNullOrWhiteSpace(value) && !Uri.IsWellFormedUriString(value, UriKind.RelativeOrAbsolute))
             {
                 HandleError(name, "Invalid Uri supplied", options);
+            }
+
+            return this;
+        }
+
+        public ValidateAndLog IsValidMongoDbObjectId(string value, string name, ValidationOptions options = ValidationOptions.None)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return this;
+            }
+
+            var match = Regex.Match(value, Constants.MongoDbFormats.ObjectIdFormat);
+
+            if (!match.Success)
+            {
+                HandleError(name, "Invalid MongoDb object id supplied", options);
             }
 
             return this;

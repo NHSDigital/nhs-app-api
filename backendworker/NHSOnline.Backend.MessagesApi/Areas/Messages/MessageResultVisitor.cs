@@ -1,29 +1,40 @@
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
 
 namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 {
-    public class MessageResultVisitor : IMessageResultVisitor<IActionResult>
+    public class MessageResultVisitor : IMessagesResultVisitor<IActionResult>
     {
-        public IActionResult Visit(MessageResult.Success result){
-            return new CreatedResult(string.Empty, new AddMessageResponse
+        public IActionResult Visit(MessagesResult.Some result)
+        {
+            var message = result?.Response?.FirstOrDefault()?.Messages?.FirstOrDefault();
+
+            if (message == null)
             {
-                MessageId = result.UserMessage.Id.ToString()
-            });
+                return new NotFoundResult();
+            }
+
+            return new OkObjectResult(message);
         }
 
-        public IActionResult Visit(MessageResult.BadGateway result)
+        public IActionResult Visit(MessagesResult.None result)
+        {
+            return new NotFoundResult();
+        }
+
+        public IActionResult Visit(MessagesResult.BadGateway result)
         {
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
 
-        public IActionResult Visit(MessageResult.BadRequest result)
+        public IActionResult Visit(MessagesResult.BadRequest result)
         {
             return new BadRequestResult();
         }
 
-        public IActionResult Visit(MessageResult.InternalServerError result)
+        public IActionResult Visit(MessagesResult.InternalServerError result)
         {
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }

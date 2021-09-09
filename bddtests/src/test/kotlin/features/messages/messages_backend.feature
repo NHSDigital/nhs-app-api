@@ -93,20 +93,20 @@ Feature: Messages Backend
     Then I receive a "Unauthorized" error
 
   Scenario: An api user can mark a message as read
-    Given I am an api user wishing to mark a message as read
+    Given I am an api user with an unread message
     And I have logged in and have a valid session cookie
     When I patch the message to indicate that it has been read
     Then I receive a "No Content" success code
     And the message has been marked as read in the repository
 
   Scenario: An api user attempting to mark a message as read without an access token will receive a 401
-    Given I am an api user wishing to mark a message as read
+    Given I am an api user with an unread message
     And I have logged in and have a valid session cookie
     When I patch the message to indicate that it has been read without an access token
     Then I receive an "Unauthorized" error
 
   Scenario: An api user attempting to mark a message as read with an invalid access token will receive a 401
-    Given I am an api user wishing to mark a message as read
+    Given I am an api user with an unread message
     And I have logged in and have a valid session cookie
     Then an attempt to mark a message as read with an invalid access token will return an Unauthorised error
 
@@ -116,3 +116,27 @@ Feature: Messages Backend
     When I get a summary of my messages from the api
     Then I receive a "OK" success code
     And I receive a summary of my messages
+
+  Scenario: An api user can retrieve a message using the message id
+    Given I am an api user with an unread message
+    And I have logged in and have a valid session cookie
+    When I try to get the message using the message id
+    Then I receive the message
+
+  Scenario: An api user attempting to retrieve a message without passing an access token will receive a 401
+    Given I am an api user with an unread message
+    And I have logged in and have a valid session cookie
+    When I try to get the message using the message id without passing an access token
+    Then I receive an "Unauthorized" error
+
+  Scenario: An api user attempting to retrieve a message by passing a blank message id will receive a 400
+    Given I am an api user with an unread message
+    And I have logged in and have a valid session cookie
+    When I try to get the message using a blank string
+    Then I receive a "Bad Request" error
+
+  Scenario: An api user attempting to retrieve a message by passing an unrecognised message id will receive a 404
+    Given I am an api user with an unread message
+    And I have logged in and have a valid session cookie
+    When I try to get the message using an unrecognised message id
+    Then I receive a "Not Found" error

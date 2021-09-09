@@ -197,5 +197,27 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Assert
             result.Should().BeFalse();
         }
+
+        [DataTestMethod]
+        [DataRow("000000000000000000000000")]
+        [DataRow("ffffffffffffffffffffffff")]
+        [DataRow("FFFFFFFFFFFFFFFFFFFFFFFF")]
+        [DataRow("600006081ed56c723ed80b60")]
+        [DataRow("602e76b0485a2cc49162b548")]
+        public void IsMessageIdValid_ValidValue_ReturnsTrue(string messageId)
+        {
+            _systemUnderTest.IsMessageIdValid(messageId).Should().BeTrue();
+        }
+
+        [DataTestMethod]
+        [DataRow(null, DisplayName = "Null")]
+        [DataRow("", DisplayName = "Empty string")]
+        [DataRow("00000000000000000000000", DisplayName = "Too short")]
+        [DataRow("0000000000000000000000000", DisplayName = "Too long")]
+        [DataRow("X00006081ed56c723ed80b60", DisplayName = "Invalid character")]
+        public void IsMessageIdValid_InvalidValue_ReturnsFalse(string messageId)
+        {
+            _systemUnderTest.IsMessageIdValid(messageId).Should().BeFalse();
+        }
     }
 }

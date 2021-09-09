@@ -62,8 +62,8 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                     await _messageService.Send(addMessageRequest, nhsLoginId);
 
                 await messageResult.Accept(
-                    new MessageLogResultVisitor(_eventHubLogger, _messageSenderContextEventLogDataMapper, _logger));
-                return messageResult.Accept(new MessageResultVisitor());
+                    new AddMessageLogResultVisitor(_eventHubLogger, _messageSenderContextEventLogDataMapper, _logger));
+                return messageResult.Accept(new AddMessageResultVisitor());
             }
             catch (Exception e)
             {
@@ -92,6 +92,31 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             catch (Exception e)
             {
                 _logger.LogError(e, "Failed to get messages with exception");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        [HttpGet]
+        [UserProfile]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Route("api/me/messages/{messageId}")]
+        public async Task<IActionResult> GetMessage([FromRoute] string messageId)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                var result = await _messageService.GetMessage(_accessTokenProvider.AccessToken, messageId);
+
+                return result.Accept(new MessageResultVisitor());
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to get message with exception");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
             finally

@@ -62,6 +62,11 @@ namespace NHSOnline.Backend.Support
             public const string LinkedAccountAuditInfo = "LinkedAccountAuditInfo";
         }
 
+        public static class MongoDbFormats
+        {
+            public const string ObjectIdFormat = @"^[a-fA-F0-9]{24}$";
+        }
+
         public static class OdsCodeFormats
         {
             public const string GpPracticeEnglandWales = @"^[A-Z0-9]{6}$";

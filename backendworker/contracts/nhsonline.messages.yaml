@@ -51,6 +51,41 @@ paths:
         "502":
           $ref: '#/components/responses/UnexpectedError'
   /users/me/messages/{messageId}:
+    get:
+      security:
+        - nhsLoginBearerAuth: []
+      tags:
+        - messages
+      summary: Retrieve message
+      description: Retrieves a message pertaining to the authorized user.
+      parameters:
+        - in: header
+          name: NHSO-Request-ID
+          required: false
+          description: A request identifier, should provide something unique on each separate request to allow NHS App to easily retrieve relevant log entries for debugging purposes.
+          schema:
+            type: string
+        - in: path
+          name: messageId
+          required: true
+          description: A unique identifier for a message.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation. Message is retrieved.
+          content:
+            application/json:
+              schema:
+                  $ref: "#/components/schemas/MessageResponse"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+        "500":
+          $ref: '#/components/responses/UnexpectedError'
+        "502":
+          $ref: '#/components/responses/UnexpectedError'
     patch:
       security:
         - nhsLoginBearerAuth: []
