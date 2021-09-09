@@ -33,38 +33,6 @@ parameters:
       - scratch20
       - scratch21
 
-  - name: iosTarget
-    displayName: iOS native app target
-    type: string
-    default: BrowserStack
-    values:
-      - BrowserStack
-      - Onboardingsandpit
-      - Onboardingaos
-      - LoginDevelopment
-      - Preview
-      - Scratch1
-      - Scratch2
-      - Scratch3
-      - Scratch4
-      - Scratch5
-      - Scratch6
-      - Scratch7
-      - Scratch8
-      - Scratch9
-      - Scratch10
-      - Scratch11
-      - Scratch12
-      - Scratch13
-      - Scratch14
-      - Scratch15
-      - Scratch16
-      - Scratch17
-      - Scratch18
-      - Scratch19
-      - Scratch20
-      - Scratch21
-
   - name: xamarinTarget
     displayName: Xamarin native app target
     type: string
@@ -91,21 +59,6 @@ parameters:
 
   - name: intTestsRunAndroidNativeLongRunning
     displayName: Run Android Native Long Running Integration Tests
-    type: boolean
-    default: false
-
-  - name: intTestsRuniOSNative
-    displayName: Run iOS Native Integration Tests
-    type: boolean
-    default: false
-
-  - name: intTestsRuniOSNativeLongRunning
-    displayName: Run iOS Native Long Running Integration Tests
-    type: boolean
-    default: false
-
-  - name: uploadToAppStoreConnect
-    displayName: Upload iOS Client to AppStore Connect
     type: boolean
     default: false
 
@@ -144,10 +97,8 @@ variables:
   source.develop: ${{ eq(variables['Build.SourceBranchName'], 'develop') }}
   source.tag: ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}
   native.android.target: ${{ parameters.androidTarget }}
-  native.ios.target: ${{ parameters.iosTarget }}
   native.xamarin.target: ${{ parameters.xamarinTarget }}
   native.version.number: '1.49.0'
-  native.ios.build.number: $[counter(variables['native.version.number'], 1)]
   native.android.build.number: $[counter('android.build.counter', 100)]
   sjr.config.image.name: 'nhsonline-service-journey-prod-config'
   sjr.image.tag: $[variables['Build.SourceVersion']]
@@ -157,29 +108,24 @@ variables:
   ${{ if or(eq(variables['Build.Reason'], ''), eq(variables['Build.Reason'], 'Manual')) }}:
     int.tests.run.native.xamarin: ${{ parameters.intTestsRunXamarinNative }}
     int.tests.run.native.android: ${{ parameters.intTestsRunAndroidNative }}
-    int.tests.run.native.ios: ${{ parameters.intTestsRuniOSNative }}
     native.xamarin.distribute: ${{ parameters.xamarinDistributeApps }}
     security.scan.enabled: ${{ parameters.securityScanEnabled }}
   ${{ if and(ne(variables['Build.Reason'], ''), ne(variables['Build.Reason'], 'Manual')) }}:
     ${{ if or(eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['Build.SourceBranch'], 'refs/tags/')) }}:
       int.tests.run.native.xamarin: true
       int.tests.run.native.android: true
-      int.tests.run.native.ios: true
       native.xamarin.distribute: false
       security.scan.enabled: false
     ${{ if and(ne(variables['Build.SourceBranchName'], 'develop'), ne(variables['Build.SourceBranch'], 'refs/tags/')) }}:
       int.tests.run.native.xamarin: false
       int.tests.run.native.android: false
-      int.tests.run.native.ios: false
       native.xamarin.distribute: false
       security.scan.enabled: false
 
   ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
     int.tests.run.native.android.long-running: true
-    int.tests.run.native.ios.long-running: true
   ${{ if ne(variables['Build.Reason'], 'Schedule') }}:
     int.tests.run.native.android.long-running: ${{ parameters.intTestsRunAndroidNativeLongRunning }}
-    int.tests.run.native.ios.long-running: ${{ parameters.intTestsRuniOSNativeLongRunning }}
 
 stages:
   - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
@@ -225,27 +171,12 @@ stages:
         parameters:
           uploadToGooglePlayConsole: ${{ parameters.uploadToGooglePlayConsole }}
 
-  - stage: ios
-    displayName: iOS Client
-    dependsOn:
-      - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-        - pr_changes
-    ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-      condition: and(succeeded(), or(eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.ios'], 'True'), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.pipeline'], 'True')))
-    jobs:
-      - template: .azuredevops/templates/ios-client-test-job.yml
-      - template: .azuredevops/templates/ios-client-build-setup.yml
-        parameters:
-          iosTarget: ${{ parameters.iosTarget }}
-          uploadToAppStoreConnect: ${{ parameters.uploadToAppStoreConnect }}
-
   - stage: generate_code_coverage
     displayName: Generate Code Coverage
     condition: succeededOrFailed()
     dependsOn:
       - web
       - backend
-      - ios
     jobs:
       - template: .azuredevops/templates/generate-coverage-report-job.yml
 
@@ -293,24 +224,6 @@ stages:
 
         - ${{ if eq(variables['int.tests.run.native.android.long-running'], 'true') }}:
           - template: .azuredevops/templates/integration-tests-android-job.yml
-            parameters:
-              job.name: Long Running
-              tranche.tag: long-running
-
-  - ${{ if or(eq(variables['int.tests.run.native.ios'], 'true'), eq(variables['int.tests.run.native.ios.long-running'], 'true')) }}:
-    - stage: ios_integration_tests
-      displayName: iOS Integration Tests
-      dependsOn:
-        - web
-        - backend
-        - ios
-      condition: and(succeeded(), eq(variables['native.ios.target'], 'browserstack'))
-      jobs:
-        - ${{ if eq(variables['int.tests.run.native.ios'], 'true') }}:
-          - template: .azuredevops/templates/integration-tests-ios-job.yml
-
-        - ${{ if eq(variables['int.tests.run.native.ios.long-running'], 'true') }}:
-          - template: .azuredevops/templates/integration-tests-ios-job.yml
             parameters:
               job.name: Long Running
               tranche.tag: long-running
