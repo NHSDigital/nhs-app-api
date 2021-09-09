@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.PatientRecord;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
@@ -28,6 +29,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         private readonly string DemographicsPath = $"{DirectServicesBasePath}/demographics";
         private readonly string ExistingAppointmentsPath = $"{DirectServicesBasePath}/existingAppointments";
         private readonly string EligibleRepeatsPath = $"{DirectServicesBasePath}/eligibleRepeats";
+        private readonly string PrescriptionHistoryPath = $"{DirectServicesBasePath}/history";
 
         public VisionDirectServicesClient(
             ILogger<VisionDirectServicesClient> logger,
@@ -110,6 +112,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
                 visionUserSession.PatientId);
 
             return await Post<EligibleRepeatsResponse>(visionRequest, path);
+        }
+
+        public async Task<VisionDirectServicesApiObjectResponse<PrescriptionHistoryResponse>> GetPrescriptionHistoryV2(VisionUserSession visionUserSession, PrescriptionRequest prescriptionRequest)
+        {
+            var path = string.Format(CultureInfo.InvariantCulture, PrescriptionHistoryPath, visionUserSession.OdsCode);
+
+            var visionRequest = new VisionDirectServicesRequest(
+                visionUserSession.RosuAccountId,
+                visionUserSession.ApiKey,
+                _providerId,
+                visionUserSession.PatientId);
+
+            return await Post<PrescriptionHistoryResponse>(visionRequest, path);
         }
 
         private async Task<VisionDirectServicesApiObjectResponse<TResponse>> Post<TResponse>(VisionDirectServicesRequest model, string path)

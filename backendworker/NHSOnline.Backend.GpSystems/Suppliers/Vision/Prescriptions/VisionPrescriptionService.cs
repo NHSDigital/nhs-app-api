@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
 
         public VisionPrescriptionService(ILogger<VisionPrescriptionService> logger,
             VisionConfigurationSettings settings,
-            IVisionClient visionClient, 
+            IVisionClient visionClient,
             IVisionPrescriptionMapper visionPrescriptionMapper)
         {
             _logger = logger;
@@ -49,28 +49,28 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
             try
             {
                 _logger.LogDebug("Beginning Fetch Prescriptions For User");
-                
+
                 var request = new PrescriptionRequest
                 {
                     PatientId = visionUserSession.PatientId,
                 };
-                
-                var prescriptionsResponse = await _visionClient.GetHistoricPrescriptions(visionUserSession, request);
+
+                var prescriptionsResponse = await _visionClient.GetPrescriptionHistoryV2(visionUserSession, request);
 
                 _logger.LogDebug("Fetch Prescriptions For User Complete");
-                
+
                 if (!prescriptionsResponse.HasErrorResponse)
                 {
                     try
                     {
                         var prescriptionHistory = prescriptionsResponse.Body.PrescriptionHistory;
                         var prescriptionsCount = new FilteringCounts();
-                        
+
                         FilterAndSortPrescriptionHistoryRepeats(prescriptionHistory, fromDate, toDate, prescriptionsCount);
-                        
+
                         _logger.LogDebug($"Mapping successful response from {nameof(PrescriptionHistory)} to {nameof(PrescriptionListResponse)}");
                         var mappedPrescriptionList = _visionPrescriptionMapper.Map(prescriptionHistory);
-                        
+
                         if (mappedPrescriptionList != null)
                         {
                             var allowedStatuses = new List<GpSystems.Prescriptions.Models.Status>
@@ -92,7 +92,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                         return new GetPrescriptionsResult.InternalServerError();
                     }
                 }
-                
+
                 _logger.LogError($"Vision system encountered an error: { prescriptionsResponse.ErrorForLogging }");
                 _logger.LogVisionErrorResponse(prescriptionsResponse);
                 return new GetPrescriptionsResult.BadGateway();
@@ -156,7 +156,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                     _logger.LogVisionErrorResponse(response);
                     return new OrderPrescriptionResult.BadGateway();
                 }
-                
+
                 _logger.LogDebug("Vision prescription order placed successfully");
                 return new OrderPrescriptionResult.Success();
             }
@@ -198,7 +198,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
             var prescriptionsToTake = 0;
             var numberOfPrescriptionsDiscarded = 0;
             var numberOfPrescriptionsWithinDate = prescriptionHistory.Requests.Count;
-            
+
             foreach (var prescription in prescriptionHistory.Requests)
             {
                 if (totalCoursesRunningTotal >= _settings.PrescriptionsMaxCoursesSoftLimit)

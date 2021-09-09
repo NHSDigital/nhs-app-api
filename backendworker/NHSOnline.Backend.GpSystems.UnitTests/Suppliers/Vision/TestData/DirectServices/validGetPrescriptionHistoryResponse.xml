@@ -1,0 +1,336 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<vision:visionResponse xmlns:vision="urn:vision">
+    <vision:serviceDefinition>
+        <vision:name>VONREP.GetHistory</vision:name>
+        <vision:version>2.1.0</vision:version>
+    </vision:serviceDefinition>
+    <vision:serviceContent>
+        <vision:prescriptionHistory xmlns:mb="urn:messagebus">
+            <vision:request>
+                <vision:date>2021-03-05T15:23:32</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Asparaginase 10,000unit powder for solution for infusion vials</vision:drug>
+                    <vision:dosage>1</vision:dosage>
+                    <vision:quantity>(1) vial</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-03-05T15:32:57</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Asparaginase 10,000unit powder for solution for infusion vials</vision:drug>
+                    <vision:dosage>1</vision:dosage>
+                    <vision:quantity>(1) vial</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-03-19T15:19:32</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Paracetamol 500mg capsules</vision:drug>
+                    <vision:dosage>1 TO 2 CAPSULES UP TO FOUR TIMES DAILY AS REQUIRED</vision:dosage>
+                    <vision:quantity>(21) capsule</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-03-19T15:40:13</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Boots Paracetamol Extra tablets (The Boots Company Plc)</vision:drug>
+                    <vision:dosage>50MG</vision:dosage>
+                    <vision:quantity>(32) tablet</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-04-29T15:01:26</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Asparaginase 10,000unit powder for solution for infusion vials</vision:drug>
+                    <vision:dosage>1</vision:dosage>
+                    <vision:quantity>(1) vial</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-04-19T14:14:09</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Asparaginase 10,000unit powder for solution for infusion vials</vision:drug>
+                    <vision:dosage>1</vision:dosage>
+                    <vision:quantity>(1) vial</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-04-19T14:47:08</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Boots Paracetamol Extra tablets (The Boots Company Plc)</vision:drug>
+                    <vision:dosage>50MG</vision:dosage>
+                    <vision:quantity>(32) tablet</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-04-29T13:44:22</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Asparaginase 10,000unit powder for solution for infusion vials</vision:drug>
+                    <vision:dosage>1</vision:dosage>
+                    <vision:quantity>(1) vial</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-05-21T13:41:19</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Ibucalm 200mg tablets (Aspar Pharmaceuticals Ltd)</vision:drug>
+                    <vision:dosage>1 TABLET THREE TIMES DAILY</vision:dosage>
+                    <vision:quantity>(1) tablet</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-05-25T10:58:46</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Solaraze 3% gel (Almirall Ltd)</vision:drug>
+                    <vision:dosage>APPLY THINLY TWICE A DAY</vision:dosage>
+                    <vision:quantity>(1) gram</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-06-02T10:19:34</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Panadol ActiFast 500mg tablets (GlaxoSmithKline Consumer Healthcare)</vision:drug>
+                    <vision:dosage>1 TO 2 TABLETS UP TO FOUR TIMES DAILY AS REQUIRED</vision:dosage>
+                    <vision:quantity>(12) tablet</vision:quantity>
+                    <vision:lastIssued>2018-10-09T00:00:00</vision:lastIssued>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-06-09T15:25:48</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Asparaginase 10,000unit powder for solution for infusion vials</vision:drug>
+                    <vision:dosage>1</vision:dosage>
+                    <vision:quantity>(1) vial</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-06-10T09:54:29</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Ibucalm 200mg tablets (Aspar Pharmaceuticals Ltd)</vision:drug>
+                    <vision:dosage>1 TABLET THREE TIMES DAILY</vision:dosage>
+                    <vision:quantity>(1) tablet</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-06-24T13:14:02</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Boots Paracetamol Extra tablets (The Boots Company Plc)</vision:drug>
+                    <vision:dosage>50MG</vision:dosage>
+                    <vision:quantity>(32) tablet</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+                <vision:repeat>
+                    <vision:drug>Asparaginase 10,000unit powder for solution for infusion vials</vision:drug>
+                    <vision:dosage>1</vision:dosage>
+                    <vision:quantity>(1) vial</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-06-24T15:36:56</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Solaraze 3% gel (Almirall Ltd)</vision:drug>
+                    <vision:dosage>APPLY THINLY TWICE A DAY</vision:dosage>
+                    <vision:quantity>(1) gram</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-06-24T15:54:12</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Paracetamol 500mg capsules</vision:drug>
+                    <vision:dosage>1 TO 2 CAPSULES UP TO FOUR TIMES DAILY AS REQUIRED</vision:dosage>
+                    <vision:quantity>(21) capsule</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-07-08T15:17:37</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Asparaginase 10,000unit powder for solution for infusion vials</vision:drug>
+                    <vision:dosage>1</vision:dosage>
+                    <vision:quantity>(1) vial</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-07-09T14:03:10</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Solaraze 3% gel (Almirall Ltd)</vision:drug>
+                    <vision:dosage>APPLY THINLY TWICE A DAY</vision:dosage>
+                    <vision:quantity>(1) gram</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-07-13T11:35:01</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Boots Paracetamol Extra tablets (The Boots Company Plc)</vision:drug>
+                    <vision:dosage>50MG</vision:dosage>
+                    <vision:quantity>(32) tablet</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-07-16T14:59:39</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Asparaginase 10,000unit powder for solution for infusion vials</vision:drug>
+                    <vision:dosage>1</vision:dosage>
+                    <vision:quantity>(1) vial</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-07-26T13:22:08</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Asparaginase 10,000unit powder for solution for infusion vials</vision:drug>
+                    <vision:dosage>1</vision:dosage>
+                    <vision:quantity>(1) vial</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-07-26T13:30:00</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Solaraze 3% gel (Almirall Ltd)</vision:drug>
+                    <vision:dosage>APPLY THINLY TWICE A DAY</vision:dosage>
+                    <vision:quantity>(1) gram</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-06-01T18:01:50</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Paracetamol 500mg capsules</vision:drug>
+                    <vision:dosage>1 TO 2 CAPSULES UP TO FOUR TIMES DAILY AS REQUIRED</vision:dosage>
+                    <vision:quantity>(21) capsule</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-07-26T14:43:13</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Boots Paracetamol Extra tablets (The Boots Company Plc)</vision:drug>
+                    <vision:dosage>50MG</vision:dosage>
+                    <vision:quantity>(32) tablet</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-07-29T09:42:31</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Asparaginase 10,000unit powder for solution for infusion vials</vision:drug>
+                    <vision:dosage>1</vision:dosage>
+                    <vision:quantity>(1) vial</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-08-04T13:57:02</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Asparaginase 10,000unit powder for solution for infusion vials</vision:drug>
+                    <vision:dosage>1</vision:dosage>
+                    <vision:quantity>(1) vial</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-08-04T14:05:02</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Boots Paracetamol Extra tablets (The Boots Company Plc)</vision:drug>
+                    <vision:dosage>50MG</vision:dosage>
+                    <vision:quantity>(32) tablet</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-08-05T07:37:24</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Boots Paracetamol Extra tablets (The Boots Company Plc)</vision:drug>
+                    <vision:dosage>50MG</vision:dosage>
+                    <vision:quantity>(32) tablet</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+            <vision:request>
+                <vision:date>2021-08-18T13:59:46</vision:date>
+                <vision:status code="-2">Not Processed</vision:status>
+                <vision:practiceMessage/>
+                <vision:repeat>
+                    <vision:drug>Asparaginase 10,000unit powder for solution for infusion vials</vision:drug>
+                    <vision:dosage>1</vision:dosage>
+                    <vision:quantity>(1) vial</vision:quantity>
+                    <vision:lastIssued/>
+                </vision:repeat>
+            </vision:request>
+        </vision:prescriptionHistory>
+    </vision:serviceContent>
+</vision:visionResponse>

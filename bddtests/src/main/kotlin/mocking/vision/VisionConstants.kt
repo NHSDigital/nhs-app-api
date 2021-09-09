@@ -13,7 +13,7 @@ object VisionConstants {
     const val configurationVersion: String = "2.4.0"
 
     const val prescriptionHistory: String = "VONREP.GetHistory"
-    const val prescriptionHistoryVersion: String = "2.0.0"
+    const val prescriptionHistoryVersion: String = "2.1.0"
 
     const val eligibleRepeats: String = "VONREP.GetEligibleRepeats"
     const val eligibleRepeatsVersion: String = "2.1.0"
