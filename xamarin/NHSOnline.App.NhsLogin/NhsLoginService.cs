@@ -44,7 +44,7 @@ namespace NHSOnline.App.NhsLogin
         {
             var authReturnUri = new UriBuilder
             {
-                Scheme = "nhsapp",
+                Scheme = "https",
                 Host = _webConfig.Host,
                 Path = "/auth-return"
             }.Uri;

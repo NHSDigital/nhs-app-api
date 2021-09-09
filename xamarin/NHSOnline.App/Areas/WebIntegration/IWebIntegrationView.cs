@@ -14,7 +14,7 @@ namespace NHSOnline.App.Areas.WebIntegration
         {
             Func<Task>? Appearing { get; set; }
 
-            Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
+            Action<WebNavigatingEventArgs>? Navigating { get; set; }
             Func<NavigationFailedArgs, Task>? NavigationFailed { get; set; }
 
             Func<Task>? HelpRequested { get; set; }

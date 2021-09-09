@@ -48,9 +48,7 @@ namespace NHSOnline.App.Areas.PreHome.Views
         public AsyncCommand LogoutCommand
             => new AsyncCommand(() => LogoutRequested);
 
-        public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
-        private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand
-            => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
+        public Action<WebNavigatingEventArgs>? Navigating { get; set; }
 
         public Func<Uri, Task>? NavigationFailed { get; set; }
         private AsyncCommand<Uri> NavigationFailedCommand
@@ -115,8 +113,7 @@ namespace NHSOnline.App.Areas.PreHome.Views
         private void WebViewOnNavigating(object sender, WebNavigatingEventArgs args)
         {
             _logger.LogInformation("Navigating: {Uri}", args.Url);
-
-            NavigatingCommand.Execute(args);
+            Navigating?.Invoke(args);
         }
 
         private void WebViewOnNavigated(object sender, WebNavigatedEventArgs args)

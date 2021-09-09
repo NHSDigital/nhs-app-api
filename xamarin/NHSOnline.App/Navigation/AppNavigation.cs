@@ -44,7 +44,14 @@ namespace NHSOnline.App.Navigation
             Action<TEvents, Func<TArgs, Task>?> assignHandler)
         {
             _enableHandlers.Add(() => assignHandler(_viewEvents, handler));
-            _suppressHandlers.Add(() => assignHandler(_viewEvents, SuppressedEvent));
+            _suppressHandlers.Add(() => assignHandler(_viewEvents, SuppressedEventAsync));
+            return this;
+        }
+
+        public IAppNavigation<TEvents> RegisterHandler<TArgs>(Action<TArgs> handler, Action<TEvents, Action<TArgs>?> assignHandler)
+        {
+            _enableHandlers.Add(() => assignHandler(_viewEvents, handler));
+            _suppressHandlers.Add(() => assignHandler(_viewEvents, SuppressedEventSync));
             return this;
         }
 
@@ -60,10 +67,15 @@ namespace NHSOnline.App.Navigation
             return this;
         }
 
-        private static Task SuppressedEvent<TArgs>(TArgs arg)
+        private static Task SuppressedEventAsync<TArgs>(TArgs arg)
         {
             Logger.LogInformation("Suppressing event ({TArgs})", typeof(TArgs).Name);
             return Task.CompletedTask;
+        }
+
+        private static void SuppressedEventSync<TArgs>(TArgs arg)
+        {
+            Logger.LogInformation("Suppressing event ({TArgs})", typeof(TArgs).Name);
         }
 
         public void EnableHandlers()

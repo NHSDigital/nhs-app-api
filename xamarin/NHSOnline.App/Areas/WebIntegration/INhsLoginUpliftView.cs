@@ -12,7 +12,7 @@ namespace NHSOnline.App.Areas.WebIntegration
         internal interface IEvents
         {
             Func<Task>? Appearing { get; set; }
-            Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
+            Action<WebNavigatingEventArgs>? Navigating { get; set; }
             Func<NavigationFailedArgs, Task>? NavigationFailed { get; set; }
 
             Func<Task>? BackRequested { get; set; }

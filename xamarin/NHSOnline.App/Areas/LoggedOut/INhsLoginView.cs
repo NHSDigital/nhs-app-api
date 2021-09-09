@@ -12,7 +12,7 @@ namespace NHSOnline.App.Areas.LoggedOut
 
         internal interface IEvents
         {
-            Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
+            Action<WebNavigatingEventArgs>? Navigating { get; set; }
             Func<NavigationFailedArgs, Task>? NavigationFailed { get; set; }
 
             Func<Task>? BackRequested { get; set; }

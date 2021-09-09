@@ -7,6 +7,7 @@ using NHSOnline.App.Areas.LoggedOut;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Areas.PreHome.Models;
 using NHSOnline.App.Config;
+using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices;
@@ -124,16 +125,19 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             await DisplayNhsAppWeb().PreserveThreadContext();
         }
 
-        private async Task ViewOnNavigating(WebNavigatingEventArgs args)
+        private void ViewOnNavigating(WebNavigatingEventArgs args)
         {
             var uri = new Uri(args.Url);
 
             if (!IsNhsAppWeb(uri))
             {
                 args.Cancel = true;
-                await _browserOverlay
-                    .OpenBrowserOverlay(uri)
-                    .PreserveThreadContext();
+                NhsAppResilience.ExecuteOnMainThread(() =>
+                {
+                    _browserOverlay
+                        .OpenBrowserOverlay(uri)
+                        .PreserveThreadContext();
+                });
             }
         }
 

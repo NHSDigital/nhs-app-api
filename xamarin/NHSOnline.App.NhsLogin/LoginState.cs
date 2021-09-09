@@ -21,7 +21,7 @@ namespace NHSOnline.App.NhsLogin
 
         public Uri AuthoriseUri { get; }
 
-        public bool IsAuthReturn(Uri uri) => uri.Scheme == _authReturnUri.Scheme;
+        public bool IsAuthReturn(Uri uri) => uri.IsSameAddress(_authReturnUri);
 
         public AuthReturnCheckResult CheckAuthReturn(Uri uri)
         {

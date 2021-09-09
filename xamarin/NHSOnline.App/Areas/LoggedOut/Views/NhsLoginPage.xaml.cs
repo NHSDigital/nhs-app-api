@@ -32,9 +32,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
 
         IAppNavigation<INhsLoginView.IEvents> INavigationView<INhsLoginView.IEvents>.AppNavigation => _appNavigation;
 
-        public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
-        private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand
-            => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
+        public Action<WebNavigatingEventArgs>? Navigating { get; set; }
 
         public Func<NavigationFailedArgs, Task>? NavigationFailed { get; set; }
         private AsyncCommand<NavigationFailedArgs> NavigationFailedCommand
@@ -78,7 +76,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         private void WebViewOnNavigating(object sender, WebNavigatingEventArgs args)
         {
             _logger.LogInformation("Navigating: {Uri}", args.Url);
-            NavigatingCommand.Execute(args);
+            Navigating?.Invoke(args);
         }
 
         private void WebViewOnNavigated(object sender, WebNavigatedEventArgs args)

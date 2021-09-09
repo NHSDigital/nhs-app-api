@@ -36,9 +36,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         private AsyncCommand AppearingCommand
             => new AsyncCommand(() => ((INhsLoginUpliftView.IEvents)this).Appearing);
 
-        public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
-        private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand
-            => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
+        public Action<WebNavigatingEventArgs>? Navigating { get; set; }
 
         public Func<NavigationFailedArgs, Task>? NavigationFailed { get; set; }
         private AsyncCommand<NavigationFailedArgs> NavigationFailedCommand
@@ -90,7 +88,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         private void WebViewOnNavigating(object sender, WebNavigatingEventArgs args)
         {
             _logger.LogInformation("Navigating: {Uri}", args.Url);
-            NavigatingCommand.Execute(args);
+            Navigating?.Invoke(args);
         }
 
         private void WebViewOnNavigated(object sender, WebNavigatedEventArgs args)

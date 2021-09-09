@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.Errors.Models;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Config;
+using NHSOnline.App.Controls;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.Events.Models;
 using NHSOnline.App.NhsLogin;
@@ -52,12 +53,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _view.LoadUrlAndNotifyOnRedirect(_loginState.AuthoriseUri, IsRedirect, OnRedirect);
         }
 
-        private async Task ViewOnNavigating(WebNavigatingEventArgs webNavigatingEventArgs)
+        private void ViewOnNavigating(WebNavigatingEventArgs webNavigatingEventArgs)
         {
             var url = new Uri(webNavigatingEventArgs.Url);
             if (ShouldOpenInBrowserOverlay(url))
             {
-                await OpenInBrowserOverlay(webNavigatingEventArgs, url).PreserveThreadContext();
+                OpenInBrowserOverlay(webNavigatingEventArgs, url);
             }
         }
 
@@ -146,10 +147,13 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             return url.Host.EndsWith(_nhsLoginConfiguration.BaseHost, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        private async Task OpenInBrowserOverlay(WebNavigatingEventArgs webNavigatingEventArgs, Uri url)
+        private void OpenInBrowserOverlay(WebNavigatingEventArgs webNavigatingEventArgs, Uri url)
         {
             webNavigatingEventArgs.Cancel = true;
-            await _browserOverlay.OpenBrowserOverlay(url).PreserveThreadContext();
+            NhsAppResilience.ExecuteOnMainThread(() =>
+            {
+                _browserOverlay.OpenBrowserOverlay(url).PreserveThreadContext();
+            });
         }
 
         private async Task BackRequested()

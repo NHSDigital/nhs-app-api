@@ -156,15 +156,19 @@ namespace NHSOnline.App.Areas.Home.Presenters
             await DisplayNhsAppWeb().PreserveThreadContext();
         }
 
-        private async Task ViewOnNavigating(WebNavigatingEventArgs args)
+        private void ViewOnNavigating(WebNavigatingEventArgs args)
         {
             var uri = new Uri(args.Url);
             if (!IsNhsAppWeb(uri))
             {
                 args.Cancel = true;
-                await _browserOverlay
-                    .OpenBrowserOverlay(uri)
-                    .PreserveThreadContext();
+
+                NhsAppResilience.ExecuteOnMainThread(() =>
+                {
+                    _browserOverlay
+                        .OpenBrowserOverlay(uri)
+                        .PreserveThreadContext();
+                });
             }
         }
 

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.Errors.Models;
 using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
+using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices;
@@ -124,12 +125,12 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             return Task.CompletedTask;
         }
 
-        private async Task ViewOnNavigating(WebNavigatingEventArgs webNavigatingEventArgs)
+        private void ViewOnNavigating(WebNavigatingEventArgs webNavigatingEventArgs)
         {
             var url = new Uri(webNavigatingEventArgs.Url);
             if (_uriDestination.ShouldOpenInBrowserOverlay(url))
             {
-                await OpenInBrowserOverlay(webNavigatingEventArgs, url).PreserveThreadContext();
+                OpenInBrowserOverlay(webNavigatingEventArgs, url);
             }
         }
 
@@ -151,10 +152,13 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             }
         }
 
-        private async Task OpenInBrowserOverlay(WebNavigatingEventArgs webNavigatingEventArgs, Uri url)
+        private void OpenInBrowserOverlay(WebNavigatingEventArgs webNavigatingEventArgs, Uri url)
         {
             webNavigatingEventArgs.Cancel = true;
-            await _browserOverlay.OpenBrowserOverlay(url).PreserveThreadContext();
+            NhsAppResilience.ExecuteOnMainThread(() =>
+            {
+                _browserOverlay.OpenBrowserOverlay(url).PreserveThreadContext();
+            });
         }
 
         private async Task AddEventToCalendarRequested(AddEventToCalendarRequest request)

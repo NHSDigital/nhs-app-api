@@ -13,7 +13,7 @@ namespace NHSOnline.App.Areas.Home
         internal interface IEvents
         {
             Func<Task>? Appearing { get; set; }
-            Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
+            Action<WebNavigatingEventArgs>? Navigating { get; set; }
             Func<Uri, Task>? NavigationFailed { get; set; }
 
             Func<Task>? HelpRequested { get; set; }
