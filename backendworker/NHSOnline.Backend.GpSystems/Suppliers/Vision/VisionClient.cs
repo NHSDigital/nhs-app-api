@@ -121,10 +121,5 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         {
             return await _visionDirectServicesClient.GetEligibleRepeatsV2(visionUserSession);
         }
-
-        public async Task<VisionDirectServicesApiObjectResponse<PrescriptionHistoryResponse>> GetPrescriptionHistoryV2(VisionUserSession visionUserSession, PrescriptionRequest prescriptionRequest)
-        {
-            return await _visionDirectServicesClient.GetPrescriptionHistoryV2(visionUserSession, prescriptionRequest);
-        }
     }
 }

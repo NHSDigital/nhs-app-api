@@ -2,7 +2,6 @@ using System.Threading.Tasks;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.PatientRecord;
-using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
@@ -24,8 +23,5 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
 
         Task<VisionDirectServicesApiObjectResponse<EligibleRepeatsResponse>> GetEligibleRepeatsV2(
             VisionUserSession visionUserSession);
-
-        Task<VisionDirectServicesApiObjectResponse<PrescriptionHistoryResponse>> GetPrescriptionHistoryV2(
-            VisionUserSession visionUserSession, PrescriptionRequest prescriptionRequest);
     }
 }
