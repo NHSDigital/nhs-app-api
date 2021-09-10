@@ -24,7 +24,7 @@ properties:
           type: string
           description: FHIR error code.
           example: invalid
-          enum: [expired, forbidden, invalid, processing, security ]
+          enum: [expired, forbidden, invalid, processing, security, throttled ]
         diagnostics:
           type: string
           description: Additional diagnostic information about the issue.
