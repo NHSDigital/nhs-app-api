@@ -13,6 +13,7 @@ jest.mock('@/services/event-bus', () => ({
 
 let store;
 let router;
+let wrapper;
 
 const hostname = 'localhost';
 const generatedGpSessionUrl = 'http://cid/on-demand-gp-session-return/';
@@ -68,7 +69,8 @@ describe('on-demand-gp-return', () => {
     });
 
     it('will load spinner', () => {
-      expect(store.dispatch).toHaveBeenCalledWith('http/isLoadingExternalSite');
+      wrapper = mountPage();
+      expect(wrapper.find('.loading-spinner-background').isVisible()).toBe(true);
     });
 
     it('user is navigated to page based on gp session url and identity token', () => {
@@ -110,10 +112,6 @@ describe('on-demand-gp-return', () => {
           redirectTo: '/appointments',
           assertedLoginIdentity: 'jwtToken',
         }));
-    });
-
-    it('will not show the spinner', () => {
-      expect(store.dispatch).not.toHaveBeenCalled();
     });
 
     it('will not update the page title', () => {

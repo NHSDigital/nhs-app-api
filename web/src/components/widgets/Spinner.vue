@@ -8,12 +8,19 @@
 <script>
 export default {
   name: 'Spinner',
+  props: {
+    alwaysShow: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  },
   computed: {
     isVisible() {
-      return !this.$store.state.spinner.prevent &&
+      return this.alwaysShow || (!this.$store.state.spinner.prevent &&
         (this.$store.getters['http/isLoading']
         || this.$store.state.onlineConsultations.isLoadingFile
-        || this.$store.state.http.isLoadingExternalSite);
+        || this.$store.state.http.isLoadingExternalSite));
     },
   },
 };
