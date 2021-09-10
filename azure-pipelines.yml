@@ -41,6 +41,8 @@ parameters:
       - None
       - Preview
       - Staging
+      - OnboardingSandpit
+      - OnboardingAos
 
   - name: intTestsRunXamarinNative
     displayName: Run Xamarin Native Integration Tests
@@ -262,6 +264,52 @@ stages:
           certSecureFile: iOSProductionCertificate.p12
           certPwd: '$(ios.production.certificate.password)'
           provProfileSecureFile: iOSStaging.mobileprovision
+          nativeVersion: '$(native.xamarin.version)'
+          buildNumber: '$(native.xamarin.ios.build.number)'
+
+  - ${{ if or(eq(variables['native.xamarin.target'], 'OnboardingSandpit'), eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
+    - stage: xamarin_onboarding_sandpit
+      displayName: Build Xamarin Onboarding Sandpit Apps
+      dependsOn:
+      jobs:
+      - template: .azuredevops/templates/xamarin-android-client-build-job.yml
+        parameters:
+          configuration: 'OnboardingSandpit - Release'
+          apkFilename: 'com.nhs.online.nhsonline.onboardingsandpit.apk'
+          keyStoreFile: AndroidSigningKeyStore
+          apksignerKeystorePassword: '$(android.key.store.password)'
+          keystoreAlias: 'playconsoleuploadkey'
+          nativeVersion: '$(native.xamarin.version)'
+          buildNumber: '$(native.xamarin.android.build.number)'
+      - template: .azuredevops/templates/xamarin-ios-client-build-job.yml
+        parameters:
+          configuration: 'OnboardingSandpit - Release'
+          certSecureFile: iOSOnboardingCertificate.p12
+          certPwd: '$(ios.onboarding.certificate.password)'
+          provProfileSecureFile: iOSOnboardingDistributionSandpit.mobileprovision
+          nativeVersion: '$(native.xamarin.version)'
+          buildNumber: '$(native.xamarin.ios.build.number)'
+
+  - ${{ if or(eq(variables['native.xamarin.target'], 'OnboardingAos'), eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
+    - stage: xamarin_onboarding_aos
+      displayName: Build Xamarin Onboarding Aos Apps
+      dependsOn:
+      jobs:
+      - template: .azuredevops/templates/xamarin-android-client-build-job.yml
+        parameters:
+          configuration: 'OnboardingAos - Release'
+          apkFilename: 'com.nhs.online.nhsonline.onboardingaos.apk'
+          keyStoreFile: AndroidSigningKeyStore
+          apksignerKeystorePassword: '$(android.key.store.password)'
+          keystoreAlias: 'playconsoleuploadkey'
+          nativeVersion: '$(native.xamarin.version)'
+          buildNumber: '$(native.xamarin.android.build.number)'
+      - template: .azuredevops/templates/xamarin-ios-client-build-job.yml
+        parameters:
+          configuration: 'OnboardingAos - Release'
+          certSecureFile: iOSOnboardingCertificate.p12
+          certPwd: '$(ios.onboarding.certificate.password)'
+          provProfileSecureFile: iOSOnboardingDistributionAOS.mobileprovision
           nativeVersion: '$(native.xamarin.version)'
           buildNumber: '$(native.xamarin.ios.build.number)'
 

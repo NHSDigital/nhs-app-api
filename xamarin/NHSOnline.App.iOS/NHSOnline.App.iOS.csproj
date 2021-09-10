@@ -56,8 +56,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch19 - Debug|iPhoneSimulator' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingSandpit - Debug|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingSandpit - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingSandpit - Release|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingSandpit - Release|iPhoneSimulator' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingAos - Debug|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingAos - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingAos - Release|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingAos - Release|iPhoneSimulator' " />
   <Import Project="Properties/BuildConfiguration.env.$(Environment).props" />
   <Import Project="Properties/BuildConfiguration.debugmode.$(DebugMode).props" />
   <Import Project="Properties/BuildConfiguration.platform.$(Platform).props" />
