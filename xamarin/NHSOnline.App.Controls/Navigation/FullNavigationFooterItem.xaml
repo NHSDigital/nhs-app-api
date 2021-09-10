@@ -18,7 +18,7 @@
                 <Setter Property="VerticalOptions" Value="CenterAndExpand" />
                 <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
                 <Setter Property="BackgroundColor" Value="{StaticResource NhsUkWhite}" />
-                <Setter Property="Padding" Value="0, 4" /> 
+                <Setter Property="Padding" Value="0, 4" />
             </Style>
             
             <Style TargetType="Label">
@@ -41,11 +41,29 @@
             
             <VisualStateManager.VisualStateGroups>
                 <VisualStateGroup x:Name="ResponsiveFooterSizeStates">
-                    <VisualState x:Name="DefaultDisplay" />
+                    <VisualState x:Name="DefaultDisplay" >
+                        <VisualState.Setters>
+                            <Setter TargetName="ButtonContent" 
+                                    Property="StackLayout.WidthRequest" 
+                                    Value="62" />
+                        </VisualState.Setters>
+                    </VisualState>
                     <VisualState x:Name="WideDisplay">
                         <VisualState.Setters>
                             <Setter TargetName="IconButton" 
                                     Property="controls:AccessibileStackLayout.Orientation" 
+                                    Value="Horizontal" />
+                            
+                            <Setter TargetName="IconButton" 
+                                    Property="controls:AccessibileStackLayout.WidthRequest" 
+                                    Value="110" />
+                            
+                            <Setter TargetName="ButtonContent" 
+                                    Property="StackLayout.HorizontalOptions" 
+                                    Value="CenterAndExpand" />
+                                    
+                            <Setter TargetName="ButtonContent" 
+                                    Property="StackLayout.Orientation" 
                                     Value="Horizontal" />
                             
                             <Setter TargetName="ItemIcon" 
@@ -98,11 +116,11 @@
                         <VisualState.Setters>
                             <Setter TargetName="ItemIcon" 
                                     Property="ContentView.Content" 
-                                    Value="{Binding SelectedIcon, Source={x:Reference Name=Root}}" />
+                                    Value="{Binding FocusedIcon, Source={x:Reference Name=Root}}" />
                             
                             <Setter TargetName="ItemLabel" 
                                     Property="Label.TextColor" 
-                                    Value="{StaticResource NhsUkBlue}" />
+                                    Value="{StaticResource NhsUkPrimaryText}" />
                             
                             <Setter TargetName="IconButton" 
                                     Property="StackLayout.BackgroundColor" 
@@ -112,13 +130,15 @@
                 </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
             
-            <ContentView x:Name="ItemIcon" 
-                         IsTabStop="False" 
-                         Content="{Binding DefaultIcon, Source={x:Reference Name=Root}}"/>
+            <StackLayout x:Name="ButtonContent">
+                <ContentView x:Name="ItemIcon" 
+                             IsTabStop="False" 
+                             Content="{Binding DefaultIcon, Source={x:Reference Name=Root}}"/>
                 
                 <Label x:Name="ItemLabel"
                        Text="{Binding Text, Source={x:Reference Name=Root}}"
                        AutomationProperties.IsInAccessibleTree="False" />
+            </StackLayout>
             
             <controls:AccessibileStackLayout.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding IconCommand, Source={x:Reference Name=Root}}" />
