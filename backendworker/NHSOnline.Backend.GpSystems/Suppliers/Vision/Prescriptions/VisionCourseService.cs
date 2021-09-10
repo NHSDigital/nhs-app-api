@@ -44,11 +44,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
 
             try
             {
-                _logger.LogDebug("Beginning Fetch Courses for user");
-
                 var coursesResponse = await _visionClient.GetEligibleRepeatsV2(visionUserSession);
-
-                _logger.LogDebug("Fetch Courses for user complete");
 
                 if (!coursesResponse.HasErrorResponse)
                 {
@@ -56,12 +52,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                     {
                         var totalCourses = coursesResponse.Body.EligibleRepeats.Repeats.Count;
 
-                        _logger
-                            .LogDebug("Filtering courses from successful vision response. Unfiltered number of courses: " +
-                                      $"{coursesResponse.Body.EligibleRepeats.Repeats.Count}");
-
                         coursesResponse.Body.EligibleRepeats.Repeats =
-                            coursesResponse.Body.EligibleRepeats.Repeats
+                            coursesResponse.Body.EligibleRepeats.Repeats.Where(x => !x.Expired)
                             .OrderBy(x => x.Drug).ToList();
 
                         if (_settings.CoursesMaxCoursesLimit.HasValue)
@@ -81,8 +73,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                             ExcessRepeatsCount = numberOfCoursesDiscarded,
                             ReturnedCount = numberOfCoursesAfterFiltering
                         };
-
-                        _logger.LogDebug($"Mapping response from {nameof(EligibleRepeatsResponse)} to {nameof(CourseListResponse)}");
 
                         var courseListResponse = _visionPrescriptionMapper.Map(coursesResponse.Body.EligibleRepeats);
 

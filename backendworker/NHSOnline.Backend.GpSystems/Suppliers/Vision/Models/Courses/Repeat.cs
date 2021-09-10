@@ -1,4 +1,6 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Globalization;
+using System.Xml.Serialization;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Courses
 {
@@ -15,6 +17,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Courses
 
         [XmlElement(ElementName = "quantity", Namespace = "urn:vision")]
         public string Quantity { get; set; }
-    }
 
+        [XmlElement(ElementName = "viewOnly", Namespace = "urn:vision")]
+        public string ViewOnly { get; set; }
+        public bool Expired => bool.TrueString.Equals(ViewOnly, StringComparison.OrdinalIgnoreCase);
+    }
 }

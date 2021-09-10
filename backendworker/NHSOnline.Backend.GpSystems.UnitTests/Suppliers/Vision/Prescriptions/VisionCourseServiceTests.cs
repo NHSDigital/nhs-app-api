@@ -175,6 +175,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                     Id = i.ToString(CultureInfo.InvariantCulture),
                     Drug = "Drug " + i,
                     Quantity = _fixture.Create<string>(),
+                    ViewOnly = "false"
                 });
             }
 
@@ -261,6 +262,52 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             // Assert
             _visionClient.Verify(x => x.GetEligibleRepeatsV2(_visionUserSession));
             result.Should().BeAssignableTo<GetCoursesResult.InternalServerError>();
+        }
+
+        [TestMethod]
+        public async Task Get_PrescriptionsWhereRecordsWithViewOnlyEqualToFalseAreReturned()
+        {
+            // Arrange
+            var repeats = new List<Repeat>();
+            for (int i = 0;
+                i < 5;
+                i++)
+            {
+                repeats.Add(new Repeat
+                {
+                    Id = i.ToString(CultureInfo.InvariantCulture),
+                    Drug = "Drug " + i,
+                    Quantity = _fixture.Create<string>()
+                });
+            }
+
+            repeats[0].ViewOnly = "true";
+            repeats[1].ViewOnly = "false";
+            repeats[2].ViewOnly = "TRUE";
+
+            _eligibleRepeatsResponse.ServiceContent.EligibleRepeats.Repeats = repeats;
+
+            _visionClient
+                .Setup(x => x.GetEligibleRepeatsV2(_visionUserSession)).Returns(
+                    Task.FromResult(
+                        new VisionDirectServicesApiObjectResponse<EligibleRepeatsResponse>(HttpStatusCode.OK)
+                        {
+                            RawResponse = _eligibleRepeatsResponse
+                        }));
+
+            var response = new CourseListResponse();
+            EligibleRepeats capturedItemToMap = null;
+            _visionMapper.Setup(x => x.Map(It.IsAny<EligibleRepeats>())).Returns(response)
+                .Callback<EligibleRepeats>((x) => { capturedItemToMap = x; });
+
+            // Act
+            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_visionUserSession, _patientId));
+
+            // Assert
+            _visionClient.Verify(x => x.GetEligibleRepeatsV2(_visionUserSession));
+            result.Should().BeAssignableTo<GetCoursesResult.Success>()
+                .Subject.Response.Should().Be(response);
+            capturedItemToMap.Repeats.Should().HaveCount(3);
         }
     }
 }
