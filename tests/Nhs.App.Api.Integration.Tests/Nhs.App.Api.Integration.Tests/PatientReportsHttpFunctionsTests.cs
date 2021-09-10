@@ -1,8 +1,11 @@
 using System;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Hl7.Fhir.Model;
+using Hl7.Fhir.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Nhs.App.Api.Integration.Tests.Extensions;
 using Task = System.Threading.Tasks.Task;
@@ -10,7 +13,7 @@ using Task = System.Threading.Tasks.Task;
 namespace Nhs.App.Api.Integration.Tests
 {
     [TestClass]
-    public class ReportRetrievalHttpFunctionsTests : CommunicationHttpFunctionBase
+    public class PatientReportsHttpFunctionsTests : CommunicationHttpFunctionBase
     {
         private static TestConfiguration _testConfiguration;
 
@@ -22,7 +25,7 @@ namespace Nhs.App.Api.Integration.Tests
         }
 
         [TestMethod]
-        public async Task EventReportGet_InvalidBearerToken_Returns401Unauthorized()
+        public async Task PatientReportGet_InvalidBearerToken_Returns401Unauthorized()
         {
             // Arrange
             using var httpClient = CreateHttpClient();
@@ -30,8 +33,7 @@ namespace Nhs.App.Api.Integration.Tests
             var correlationId = Guid.NewGuid().ToString();
 
             // Act
-            var response = await httpClient.GetAsync("communication/report/events/?day=2021-03-08",
-                correlationId, "invalidAccessToken");
+            var response = await httpClient.GetAsync("communication/report/patients?ods-organisation-code=A12345&page=1", correlationId, "invalidAccessToken");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
@@ -46,19 +48,14 @@ namespace Nhs.App.Api.Integration.Tests
             response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
         }
 
-        [DataTestMethod]
-        [DataRow("2021-02-30")]
-        [DataRow("2021-13-01")]
-        [DataRow("09-03-2021")]
-        [DataRow("2021-3-9")]
-        [DataRow("2021-03-08T01:00:00")]
-        public async Task EventReportGet_InvalidDayParameter_Returns400BadRequest(string dayParameter)
+        [TestMethod]
+        public async Task PatientReportGet_BlankOdsCodeParameter_Returns400BadRequest()
         {
             // Arrange
             using var httpClient = CreateHttpClient();
 
             // Act
-            var response = await httpClient.GetAsync($"communication/report/events/?day={dayParameter}");
+            var response = await httpClient.GetAsync("communication/report/patients/?ods-organisation-code=&page=1");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -68,34 +65,19 @@ namespace Nhs.App.Api.Integration.Tests
             var issue = operationOutcome.Issue.Single();
             issue.Severity.Should().Be(OperationOutcome.IssueSeverity.Error);
             issue.Code.Should().Be(OperationOutcome.IssueType.Invalid);
-            issue.Expression.Single().Should().Be("day");
-            issue.Diagnostics.Should().Be("Invalid format");
+            issue.Diagnostics.Should().Contain("Invalid format");
+            issue.Expression.Single().Should().Be("ods-organisation-code");
         }
 
         [TestMethod]
-        public async Task EventReportGet_NoCorrelationIdPassed_NoCorrelationIdHeaderInTheResponse()
+        public async Task PatientReportGet_NoFileAvailableForRequestedOdsCode_Returns404NotFound()
         {
             // Arrange
             using var httpClient = CreateHttpClient();
 
             // Act
-            var response = await httpClient.GetAsync("communication/report/events/?day=2021-03-08");
-
-            // Assert
-            response.Headers.ShouldNotContainHeader("X-Correlation-ID");
-        }
-
-        [DataTestMethod]
-        [DataRow("2001-01-01", "1")]
-        [DataRow("2051-01-01", "1")]
-        [DataRow("2021-01-01", "15")]
-        public async Task EventReportGet_NoFileAvailableForRequestedDate_Returns404NotFound(string dayParameter, string pageParameter)
-        {
-            // Arrange
-            using var httpClient = CreateHttpClient();
-
-            // Act
-            var response = await httpClient.GetAsync($"communication/report/events/?day={dayParameter}&page={pageParameter}");
+            var response =
+                await httpClient.GetAsync($"communication/report/patients/?ods-organisation-code=C12345&page=1");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -109,13 +91,14 @@ namespace Nhs.App.Api.Integration.Tests
         }
 
         [TestMethod]
-        public async Task EventReportGet_MultipleDaysRequested_Returns400BadRequest()
+        public async Task PatientReportGet_MultipleOdsCodesRequested_Returns400BadRequest()
         {
             // Arrange
             using var httpClient = CreateHttpClient();
 
             // Act
-            var response = await httpClient.GetAsync("communication/report/events/?day=2021-03-01&day=2021-03-02&page=1");
+            var response =
+                await httpClient.GetAsync("communication/report/patients/?ods-organisation-code=A12345&ods-organisation-code=A12355&page=1");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -125,18 +108,18 @@ namespace Nhs.App.Api.Integration.Tests
             var issue = operationOutcome.Issue.Single();
             issue.Severity.Should().Be(OperationOutcome.IssueSeverity.Error);
             issue.Code.Should().Be(OperationOutcome.IssueType.Invalid);
-            issue.Expression.Single().Should().Be("day");
+            issue.Expression.Single().Should().Be("ods-organisation-code");
             issue.Diagnostics.Should().Be("A single value is expected");
         }
 
         [TestMethod]
-        public async Task EventReportGet_MultiplePagesRequested_Returns400BadRequest()
+        public async Task PatientReportGet_MultiplePagesRequested_Returns400BadRequest()
         {
             // Arrange
             using var httpClient = CreateHttpClient();
 
             // Act
-            var response = await httpClient.GetAsync("communication/report/events/?day=2021-03-01&page=1&page=2");
+            var response = await httpClient.GetAsync("communication/report/patients/?ods-organisation-code=A12345&page=1&page=2");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -150,20 +133,15 @@ namespace Nhs.App.Api.Integration.Tests
             issue.Diagnostics.Should().Be("A single value is expected");
         }
 
-        [DataTestMethod]
-        [DataRow("2021-02-30", "1")]
-        [DataRow("2021-13-01", "1")]
-        [DataRow("09-03-2021", "1")]
-        [DataRow("2021-3-9", "1")]
-        [DataRow("2021-03-08T01:00:00", "1")]
-        [DataRow("yesterday", "1")]
-        public async Task EventReportGet_InvalidDayParameter_Returns400BadRequest(string dayParameter, string pageParameter)
+        [TestMethod]
+        public async Task PatientReportGet_InvalidOdsCodeParameter_Returns400BadRequest()
         {
             // Arrange
             using var httpClient = CreateHttpClient();
 
             // Act
-            var response = await httpClient.GetAsync($"communication/report/events/?day={dayParameter}&page={pageParameter}");
+            var response =
+                await httpClient.GetAsync($"communication/report/patients/?ods-organisation-code=C12345C&page=1");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -173,65 +151,61 @@ namespace Nhs.App.Api.Integration.Tests
             var issue = operationOutcome.Issue.Single();
             issue.Severity.Should().Be(OperationOutcome.IssueSeverity.Error);
             issue.Code.Should().Be(OperationOutcome.IssueType.Invalid);
-            issue.Expression.Single().Should().Be("day");
+            issue.Expression.Single().Should().Be("ods-organisation-code");
             issue.Diagnostics.Should().Be("Invalid format");
         }
 
-        public async Task EventReportGet_ValidRequestForDayWhereFileExists_ContentsOfFileAreReturned(
-            string dayParameter, string pageParameter, string expectedFileContents)
+        [TestMethod]
+        public async Task PatientReportGet_ValidRequestForOdsCodeWhereSinglePageExists_ContentsAndLinkHeaderReturned()
         {
             // Arrange
             using var httpClient = CreateHttpClient();
-            var path = $"communication/report/events?day={dayParameter}&page={pageParameter}";
-            var expectedLinkHeader = $"<{httpClient.BaseAddress}{path}>; rel=\"last\"";
 
             // Act
-            var response = await httpClient.GetAsync(path);
+            var response = await httpClient.GetAsync("communication/report/patients?ods-organisation-code=A12345&page=1");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var responseString = await response.Content.ReadAsStringAsync();
-            responseString.Should().Be(expectedFileContents);
+            responseString.Should().Be(@"[{""NhsNumber"": ""987654321"", ""NotificationsEnabled"": ""true""}]");
+            response.Headers.GetValues("Link").Single().Should().BeEquivalentTo($"<{httpClient.BaseAddress}{$"communication/report/patients?ods-organisation-code=A12345&page=1"}>; rel=\"last\"");
+        }
+
+        [TestMethod]
+        public async Task PatientReportGet_ValidRequestForOdsCodeWhereMultiplePagesExist_ContentsAndLinkHeaderReturned()
+        {
+            // Arrange
+            using var httpClient = CreateHttpClient();
+
+            // Act
+            var response = await httpClient.GetAsync("communication/report/patients?ods-organisation-code=B12345&page=1");
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var responseString = await response.Content.ReadAsStringAsync();
+            responseString.Should().Be(@"[{""NhsNumber"": ""987654321"", ""NotificationsEnabled"": ""true""}]");
+            var expectedLinkHeader =
+                $"<{httpClient.BaseAddress}{"communication/report/patients?ods-organisation-code=B12345&page=2"}>; rel=\"next\", " +
+                $"<{httpClient.BaseAddress}{"communication/report/patients?ods-organisation-code=B12345&page=2"}>; rel=\"last\"";
             response.Headers.GetValues("Link").Single().Should().BeEquivalentTo(expectedLinkHeader);
         }
 
         [DataTestMethod]
-        [DataRow("2021-01-01", "A")]
-        [DataRow("2021-01-01", "-1")]
-        [DataRow("2021-01-01", "0")]
-        [DataRow("2021-01-01", "2147483648")]
-        public async Task EventReportGet_InvalidRequestInvalidPageValue_ReturnsBadRequest(string dayParameter, string pageParameter)
+        [DataRow("A")]
+        [DataRow("-1")]
+        [DataRow("0")]
+        [DataRow("2147483648")]
+        [DataRow("")]
+        public async Task PatientReportGet_InvalidRequestInvalidPageValue_ReturnsBadRequest(string pageParameter)
         {
             // Arrange
             using var httpClient = CreateHttpClient();
 
             // Act
-            var response = await httpClient.GetAsync($"communication/report/events?day={dayParameter}&page={pageParameter}");
-
-            // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-
-            var operationOutcome = await ParseOperationOutcome(response);
-
-            var issue = operationOutcome.Issue.Single();
-            issue.Severity.Should().Be(OperationOutcome.IssueSeverity.Error);
-            issue.Code.Should().Be(OperationOutcome.IssueType.Invalid);
-            issue.Expression.Single().Should().Be("page");
-            issue.Diagnostics.Should().Be("Invalid format");
-        }
-
-        [DataTestMethod]
-        [DataRow("2021-01-01", null)]
-        [DataRow("2021-01-01", "")]
-
-        public async Task EventReportGet_InvalidRequestNoPageValue_ReturnsBadRequest(string dayParameter, string pageParameter)
-        {
-            // Arrange
-            using var httpClient = CreateHttpClient();
-
-            // Act
-            var response = await httpClient.GetAsync($"communication/report/events?day={dayParameter}&page={pageParameter}");
+            var response =
+                await httpClient.GetAsync($"communication/report/patients?ods-organisation-code=A12345&page={pageParameter}");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -246,26 +220,48 @@ namespace Nhs.App.Api.Integration.Tests
         }
 
         [TestMethod]
-        public async Task EventReportGet_ValidRequestNoPageParameter_ReturnsOk()
+        public async Task PatientReportGet_InvalidRequestNoPageValue_ReturnsBadRequest()
         {
             // Arrange
             using var httpClient = CreateHttpClient();
 
             // Act
-            var response = await httpClient.GetAsync($"communication/report/events?day=2021-01-01");
+            var response =
+                await httpClient.GetAsync($"communication/report/patients?ods-organisation-code=A12345&page=");
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+            var operationOutcome = await ParseOperationOutcome(response);
+
+            var issue = operationOutcome.Issue.Single();
+            issue.Severity.Should().Be(OperationOutcome.IssueSeverity.Error);
+            issue.Code.Should().Be(OperationOutcome.IssueType.Invalid);
+            issue.Expression.Single().Should().Be("page");
+            issue.Diagnostics.Should().Be("Invalid format");
+        }
+
+        [TestMethod]
+        public async Task PatientReportGet_ValidRequestNoPageParameter_ReturnsOk()
+        {
+            // Arrange
+            using var httpClient = CreateHttpClient();
+
+            // Act
+            var response = await httpClient.GetAsync("communication/report/patients?ods-organisation-code=A12345");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         [TestMethod]
-        public async Task EventReportGet_InvalidPageAndDateParameters_ReturnsBadRequest()
+        public async Task PatientReportGet_InvalidPageAndOdsCodeParameters_ReturnsBadRequest()
         {
             // Arrange
             using var httpClient = CreateHttpClient();
 
             // Act
-            var response = await httpClient.GetAsync($"communication/report/events?day=abc&page=abc");
+            var response = await httpClient.GetAsync("communication/report/patients?ods-organisation-code=abc&page=abc");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -273,12 +269,12 @@ namespace Nhs.App.Api.Integration.Tests
             var operationOutcome = await ParseOperationOutcome(response);
             operationOutcome.Issue.Count.Should().Be(2);
 
-            var dayError = operationOutcome.Issue.Where(i => i.ExpressionElement.Where(e => e.Value == "day").Any());
-            var dayIssue = dayError.Single();
-            dayIssue.Severity.Should().Be(OperationOutcome.IssueSeverity.Error);
-            dayIssue.Code.Should().Be(OperationOutcome.IssueType.Invalid);
-            dayIssue.Expression.Single().Should().Be("day");
-            dayIssue.Diagnostics.Should().Be("Invalid format");
+            var odsCodeError = operationOutcome.Issue.Where(i => i.ExpressionElement.Where(e => e.Value == "ods-organisation-code").Any());
+            var odsCodeIssue = odsCodeError.Single();
+            odsCodeIssue.Severity.Should().Be(OperationOutcome.IssueSeverity.Error);
+            odsCodeIssue.Code.Should().Be(OperationOutcome.IssueType.Invalid);
+            odsCodeIssue.Expression.Single().Should().Be("ods-organisation-code");
+            odsCodeIssue.Diagnostics.Should().Be("Invalid format");
 
             var pageError = operationOutcome.Issue.Where(i => i.ExpressionElement.Where(e => e.Value == "page").Any());
             var pageIssue = pageError.Single();
@@ -289,42 +285,28 @@ namespace Nhs.App.Api.Integration.Tests
         }
 
         [TestMethod]
-        public async Task EventReportGet_ValidRequestForDayWhereSingleExists_ContentsAndLinkHeaderReturned()
+        public async Task EventReportGet_InvalidBearerToken_Returns401Unauthorized()
         {
             // Arrange
             using var httpClient = CreateHttpClient();
-            var expectedLinkHeader =
-                $"<{httpClient.BaseAddress}{$"communication/report/events?day=2021-01-01&page=1"}>; rel=\"last\"";
-            const string expectedFileContents = @"{""Name"": ""Integration test file 1""}";
+
+            var correlationId = Guid.NewGuid().ToString();
 
             // Act
-            var response = await httpClient.GetAsync("communication/report/events?day=2021-01-01&page=1");
+            var response = await httpClient.GetAsync("communication/report/patients?ods-organisation-code=A12345",
+                correlationId, "invalidAccessToken");
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var responseString = await response.Content.ReadAsStringAsync();
-            responseString.Should().Be(expectedFileContents);
-            response.Headers.GetValues("Link").Single().Should().BeEquivalentTo(expectedLinkHeader);
-        }
+            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
 
-        [DataTestMethod]
-        public async Task EventReportGet_ValidRequestForDayWhereMultiplePagesExist_ContentsAndLinkHeaderReturned()
-        {
-            // Arrange
-            using var httpClient = CreateHttpClient();
-            var expectedLinkHeader =
-                $"<{httpClient.BaseAddress}{"communication/report/events?day=2021-01-02&page=2"}>; rel=\"next\", " +
-                $"<{httpClient.BaseAddress}{"communication/report/events?day=2021-01-02&page=2"}>; rel=\"last\"";
-            const string expectedFileContents = @"{""Name"": ""Integration test file 2""}";
+            var operationOutcome = await ParseOperationOutcome(response);
 
-            // Act
-            var response = await httpClient.GetAsync("communication/report/events?day=2021-01-02&page=1");
+            var issue = operationOutcome.Issue.Single();
+            issue.Severity.Should().Be(OperationOutcome.IssueSeverity.Error);
+            issue.Code.Should().Be(OperationOutcome.IssueType.Forbidden);
+            issue.Diagnostics.Should().Be("Invalid Access Token");
 
-            // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var responseString = await response.Content.ReadAsStringAsync();
-            responseString.Should().Be(expectedFileContents);
-            response.Headers.GetValues("Link").Single().Should().BeEquivalentTo(expectedLinkHeader);
+            response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
         }
     }
 }
