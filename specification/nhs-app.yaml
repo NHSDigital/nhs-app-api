@@ -57,7 +57,7 @@ info:
     | API Environment      | NHS Login Environment | Base URL                                    |
     | -------------------- | --------------------- | ------------------------------------------- |
     | Development          | Sandpit               | `https://dev.api.service.nhs.uk/nhs-app/`   |
-    | Integration Testing  | AOS                   | `https://int.api.service.nhs.uk/nhs-app/`   |
+    | Integration Testing  | Integration (AOS)     | `https://int.api.service.nhs.uk/nhs-app/`   |
     | Production           | Production            | `https://api.service.nhs.uk/nhs-app/`       |
 
     ### Development
@@ -74,7 +74,7 @@ info:
     Our [integration test environment](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing):
     * includes authorisation
     * is for formal release testing and assurance when onboarding with NHS Login
-    * points to the Onboarding AOS NHS App environment, which in turn is using the NHS Login AOS environment
+    * points to the Onboarding AOS NHS App environment, which in turn is using the NHS Login Integration (AOS) environment
 
     For more details see [integration testing with our RESTful APIs](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing-with-our-restful-apis).
 
