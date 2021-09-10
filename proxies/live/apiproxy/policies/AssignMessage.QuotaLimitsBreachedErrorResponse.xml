@@ -1,0 +1,19 @@
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AssignMessage.QuotaLimitsBreachedErrorResponse">
+	<Set>
+		<StatusCode>429</StatusCode>
+		<Payload contentType="application/json">
+      {
+        "resourceType": "OperationOutcome",
+        "issue": [
+          {
+            "severity": "error",
+            "code": "throttled",
+            "diagnostics": "You have exceeded your application's rate limit. Please see: https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits for more details."
+          }
+        ]
+      }
+		</Payload>
+	</Set>
+	<IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+	<AssignTo createNew="false" transport="http" type="response" />
+</AssignMessage>
