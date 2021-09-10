@@ -1,5 +1,4 @@
 using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
@@ -22,21 +21,6 @@ namespace Nhs.App.Api.Integration.Tests
         protected static NhsAppApiJwtWrapperClient CreateHttpClient()
         {
             return new(_testConfiguration, _accessTokenCacheService);
-        }
-
-        protected static NhsAppApiApiKeyWrapperClient CreateLegacyHttpClient()
-        {
-            return new(_testConfiguration);
-        }
-
-        protected static async Task<T> DeserializeResponseAsync<T>(HttpResponseMessage response)
-        {
-            var responseString = await response.Content.ReadAsStringAsync();
-            var responseObject = JsonSerializer.Deserialize<T>(
-                responseString,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-            return responseObject;
         }
 
         protected static async Task<OperationOutcome> ParseOperationOutcome(HttpResponseMessage response)
