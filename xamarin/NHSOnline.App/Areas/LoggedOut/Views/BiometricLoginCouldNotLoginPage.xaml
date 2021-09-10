@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <pages:NhsAppCloseAndLogoHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
                                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                                     xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
-                                    xmlns:deprecated="clr-namespace:NHSOnline.App.Controls.Elements.Deprecated;assembly=NHSOnline.App.Controls"
+                                    xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
+                                    xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
                                     x:Class="NHSOnline.App.Areas.LoggedOut.Views.BiometricLoginCouldNotLoginPage"
                                     x:Name="Page">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
-        <StackLayout Padding="20,0,20,0">
-            <deprecated:Heading1 Text="We could not log you in" x:Name="Heading" />
-        
-            <deprecated:Paragraph Text="Go back to the homepage and try logging in again."
-                                Padding="0,10,0,0" />
-        
-            <deprecated:Paragraph Text="If you keep seeing this message, go back to the homepage and log in using your email, password and security code."
-                                Padding="0,5,0,0" />
-        
-            <deprecated:LinkLabel Text="Back to login"
-                                Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}"
-                                Padding="0,10,0,0" />
+        <StackLayout>
+            <elements:ResponsiveHeading1 x:Name="Heading" 
+                                         Text="We could not log you in"  />
+            
+            <panels:NhsResponsiveContentPanel>
+                <StackLayout>
+                    <elements:ResponsiveParagraph Text="Go back to the homepage and try logging in again."/>
+                    <elements:ResponsiveParagraph Text="If you keep seeing this message, go back to the homepage and log in using your email, password and security code."/>
+                    <elements:ResponsiveLinkLabel Text="Back to login"
+                                                  Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}"/>
+                </StackLayout>
+            </panels:NhsResponsiveContentPanel>
         </StackLayout>
     </ScrollView>
 </pages:NhsAppCloseAndLogoHeaderPage>

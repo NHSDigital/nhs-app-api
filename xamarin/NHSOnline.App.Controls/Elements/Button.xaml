@@ -60,7 +60,7 @@
             </VisualState>
         </VisualStateGroup>
         
-        <VisualStateGroup x:Name="KeyboardFocusStates">
+        <VisualStateGroup x:Name="KeyboardStates">
             <VisualState x:Name="KeyboardUnfocused" />
             <VisualState x:Name="KeyboardFocused">
                 <VisualState.Setters>

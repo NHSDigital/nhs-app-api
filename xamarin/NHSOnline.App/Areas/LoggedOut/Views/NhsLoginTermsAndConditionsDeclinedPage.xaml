@@ -1,32 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <pages:NhsAppCloseAndLogoHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
                                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                                    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-                                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                                     xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
                                     xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
-                                    xmlns:deprecated="clr-namespace:NHSOnline.App.Controls.Elements.Deprecated;assembly=NHSOnline.App.Controls"
-                                    mc:Ignorable="d"
+                                    xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
                                     x:Class="NHSOnline.App.Areas.LoggedOut.Views.NhsLoginTermsAndConditionsDeclinedPage"
                                     x:Name="Page">
 
-    <StackLayout BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}" Padding="20,0,20,20">
-        
-        <deprecated:Heading1 Text="You need to accept NHS login terms of use to continue" />
-
+    <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <StackLayout>
-            <deprecated:Paragraph Text="You cannot use the NHS App if you have not accepted NHS login terms of use." />
-            <deprecated:Paragraph Text="If you need to book an appointment or get a prescription now, contact your GP surgery directly." />
-            <deprecated:Paragraph>
-                <FormattedString>
-                    <Span Text="For urgent medical advice, visit " />
-                    <elements:LinkSpan Text="111.nhs.uk" Tapped="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
-                    <Span Text=" or call 111." />
-                </FormattedString>
-            </deprecated:Paragraph>
-            <deprecated:LinkLabel Text="Back to home" Command="{Binding BackToHomeCommand, Source={x:Reference Name=Page}}"/>
-        </StackLayout>
-        
-    </StackLayout>
+            <elements:ResponsiveHeading1 x:Name="Heading" 
+                                         Text="You need to accept NHS login terms of use to continue" />
 
+            <panels:NhsResponsiveContentPanel>
+                <StackLayout>
+                    <elements:ResponsiveParagraph Text="You cannot use the NHS App if you have not accepted NHS login terms of use." />
+                    <elements:ResponsiveParagraph Text="If you need to book an appointment or get a prescription now, contact your GP surgery directly." />
+                    <elements:ResponsiveParagraph>
+                        <FormattedString>
+                            <Span Text="For urgent medical advice, visit " />
+                            <elements:LinkSpan Text="111.nhs.uk" Tapped="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
+                            <Span Text=" or call 111." />
+                        </FormattedString>
+                    </elements:ResponsiveParagraph>
+                    <elements:ResponsiveLinkLabel Text="Back to home" Command="{Binding BackToHomeCommand, Source={x:Reference Name=Page}}"/>
+                </StackLayout>
+            </panels:NhsResponsiveContentPanel>
+        </StackLayout>
+    </ScrollView>
 </pages:NhsAppCloseAndLogoHeaderPage>

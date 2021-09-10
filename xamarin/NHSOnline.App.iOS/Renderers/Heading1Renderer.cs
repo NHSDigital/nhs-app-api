@@ -1,12 +1,10 @@
 using Foundation;
 using NHSOnline.App.Controls.Elements;
-using NHSOnline.App.Controls.Elements.Deprecated;
 using NHSOnline.App.iOS.Renderers;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-[assembly: ExportRenderer(typeof(Heading1), typeof(Heading1Renderer))]
 [assembly: ExportRenderer(typeof(ResponsiveHeading1), typeof(Heading1Renderer))]
 namespace NHSOnline.App.iOS.Renderers
 {
@@ -16,20 +14,12 @@ namespace NHSOnline.App.iOS.Renderers
         {
             base.OnElementChanged(e);
 
-            if (e.OldElement is Heading1 oldHeading)
-            {
-                oldHeading.AccessibilityFocusChangeRequested -= OnAccessibilityFocusChangeRequested;
-            }
-            else if (e.OldElement is ResponsiveHeading1 oldResponsiveHeading)
+            if (e.OldElement is ResponsiveHeading1 oldResponsiveHeading)
             {
                 oldResponsiveHeading.AccessibilityFocusChangeRequested -= OnAccessibilityFocusChangeRequested;
             }
 
-            if (e.NewElement is Heading1 newHeading)
-            {
-                newHeading.AccessibilityFocusChangeRequested += OnAccessibilityFocusChangeRequested;
-            }
-            else if (e.NewElement is ResponsiveHeading1 newResponsiveHeading)
+            if (e.NewElement is ResponsiveHeading1 newResponsiveHeading)
             {
                 newResponsiveHeading.AccessibilityFocusChangeRequested += OnAccessibilityFocusChangeRequested;
             }

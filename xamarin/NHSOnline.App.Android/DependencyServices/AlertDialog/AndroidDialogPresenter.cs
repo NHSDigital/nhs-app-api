@@ -76,10 +76,10 @@ namespace NHSOnline.App.Droid.DependencyServices.AlertDialog
             alert.SetCancelable(false);
 
             alert.SetNegativeButton(nhsAppAlertDialog.CancelText,
-                (_, _) => { NhsAppResilience.ExecuteOnMainThread(nhsAppAlertDialog.CancelAction); });
+                (_, __) => { NhsAppResilience.ExecuteOnMainThread(nhsAppAlertDialog.CancelAction); });
 
             alert.SetPositiveButton(nhsAppAlertDialog.AcceptText,
-                (_, _) => { NhsAppResilience.ExecuteOnMainThread(nhsAppAlertDialog.AcceptAction); });
+                (_, __) => { NhsAppResilience.ExecuteOnMainThread(nhsAppAlertDialog.AcceptAction); });
 
             return alert.Create();
         }

@@ -1,12 +1,10 @@
 using Android.Content;
 using Android.Views.Accessibility;
 using NHSOnline.App.Controls.Elements;
-using NHSOnline.App.Controls.Elements.Deprecated;
 using NHSOnline.App.Droid.Renderers;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer(typeof(Heading1), typeof(Heading1Renderer))]
 [assembly: ExportRenderer(typeof(ResponsiveHeading1), typeof(Heading1Renderer))]
 namespace NHSOnline.App.Droid.Renderers
 {
@@ -20,20 +18,12 @@ namespace NHSOnline.App.Droid.Renderers
         {
             base.OnElementChanged(e);
 
-            if (e.OldElement is Heading1 oldHeading)
-            {
-                oldHeading.AccessibilityFocusChangeRequested -= OnAccessibilityFocusChangeRequested;
-            }
-            else if (e.OldElement is ResponsiveHeading1 oldResponsiveHeading)
+            if (e.OldElement is ResponsiveHeading1 oldResponsiveHeading)
             {
                 oldResponsiveHeading.AccessibilityFocusChangeRequested -= OnAccessibilityFocusChangeRequested;
             }
 
-            if (e.NewElement is Heading1 newHeading)
-            {
-                newHeading.AccessibilityFocusChangeRequested += OnAccessibilityFocusChangeRequested;
-            }
-            else if (e.NewElement is ResponsiveHeading1 newResponsiveHeading)
+            if (e.NewElement is ResponsiveHeading1 newResponsiveHeading)
             {
                 newResponsiveHeading.AccessibilityFocusChangeRequested += OnAccessibilityFocusChangeRequested;
             }
