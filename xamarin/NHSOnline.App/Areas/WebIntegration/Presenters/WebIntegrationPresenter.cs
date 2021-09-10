@@ -130,7 +130,11 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             var url = new Uri(webNavigatingEventArgs.Url);
             if (_uriDestination.ShouldOpenInBrowserOverlay(url))
             {
-                OpenInBrowserOverlay(webNavigatingEventArgs, url);
+                webNavigatingEventArgs.Cancel = true;
+                NhsAppResilience.ExecuteOnMainThread(() =>
+                {
+                    _browserOverlay.OpenBrowserOverlay(url).PreserveThreadContext();
+                });
             }
         }
 
@@ -148,15 +152,6 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             var model = new FullNavigationTryAgainNetworkErrorModel(_model.NavigationHandler, _model.FooterItem, RetryAction);
             var page = _pageFactory.CreatePageFor(model);
             return _view.AppNavigation.Push(page);
-        }
-
-        private void OpenInBrowserOverlay(WebNavigatingEventArgs webNavigatingEventArgs, Uri url)
-        {
-            webNavigatingEventArgs.Cancel = true;
-            NhsAppResilience.ExecuteOnMainThread(() =>
-            {
-                _browserOverlay.OpenBrowserOverlay(url).PreserveThreadContext();
-            });
         }
 
         private async Task AddEventToCalendarRequested(AddEventToCalendarRequest request)

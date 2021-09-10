@@ -58,7 +58,11 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var url = new Uri(webNavigatingEventArgs.Url);
             if (ShouldOpenInBrowserOverlay(url))
             {
-                OpenInBrowserOverlay(webNavigatingEventArgs, url);
+                webNavigatingEventArgs.Cancel = true;
+                NhsAppResilience.ExecuteOnMainThread(() =>
+                {
+                    _browserOverlay.OpenBrowserOverlay(url).PreserveThreadContext();
+                });
             }
         }
 
@@ -145,15 +149,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private bool IsNhsLoginHost(Uri url)
         {
             return url.Host.EndsWith(_nhsLoginConfiguration.BaseHost, StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        private void OpenInBrowserOverlay(WebNavigatingEventArgs webNavigatingEventArgs, Uri url)
-        {
-            webNavigatingEventArgs.Cancel = true;
-            NhsAppResilience.ExecuteOnMainThread(() =>
-            {
-                _browserOverlay.OpenBrowserOverlay(url).PreserveThreadContext();
-            });
         }
 
         private async Task BackRequested()

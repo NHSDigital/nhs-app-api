@@ -34,6 +34,18 @@ namespace NHSOnline.App.Controls
                 });
         }
 
+        public static void ExecuteImmediately(Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch (Exception e)
+            {
+                AttemptRecovery(e);
+            }
+        }
+
         public static void ExecuteOnMainThread(Func<Task> action)
         {
             MainThread.InvokeOnMainThreadAsync(async () =>

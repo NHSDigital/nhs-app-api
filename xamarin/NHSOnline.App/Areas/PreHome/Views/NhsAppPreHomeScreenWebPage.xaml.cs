@@ -113,7 +113,7 @@ namespace NHSOnline.App.Areas.PreHome.Views
         private void WebViewOnNavigating(object sender, WebNavigatingEventArgs args)
         {
             _logger.LogInformation("Navigating: {Uri}", args.Url);
-            Navigating?.Invoke(args);
+            NhsAppResilience.ExecuteImmediately(() => Navigating?.Invoke(args));
         }
 
         private void WebViewOnNavigated(object sender, WebNavigatedEventArgs args)
