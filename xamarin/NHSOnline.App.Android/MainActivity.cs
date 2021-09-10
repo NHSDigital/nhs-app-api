@@ -55,6 +55,8 @@ namespace NHSOnline.App.Droid
 
             LoadApplication(NhsApp);
 
+            Window?.SetSoftInputMode(SoftInput.AdjustResize);
+
             AndroidInstallReferrerService.CreateReferrerClientAndStoreDetails();
 
             HandleIntent(Intent);
