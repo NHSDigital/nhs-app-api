@@ -158,6 +158,37 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver);
         }
 
+        [NhsAppAndroidTest]
+        public void APatientCanFollowLinksInAWebIntegrationAndPressingTheNativeBackButtonDoesNothingAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new TppPatient()
+                .WithName(b => b.GivenName("David").FamilyName("April"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToAppointments();
+
+            AndroidAppointmentsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToHospitalAndOtherAppointments();
+
+            AndroidHospitalAndOtherAppointmentsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToBookOrCancelYourReferralAppointment();
+
+            AndroidErsPage
+                .AssertOnPage(driver);
+
+            driver.PressBackButton()
+                .WaitForBackAction();
+
+            AndroidErsPage
+                .AssertOnPage(driver);
+        }
+
         [NhsAppIOSTest]
         public void APatientCanFollowLinksInAWebIntegrationAndReturnUsingJsApiIos(IIOSDriverWrapper driver)
         {
@@ -213,6 +244,37 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .PageContent.NavigateToNhsAppAppointments();
 
             IOSAppointmentsPage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppIOSTest]
+        public void APatientCanFollowLinksInAWebIntegrationAndSwipesBackDoesNothingIOS(IIOSDriverWrapper driver)
+        {
+            var patient = new TppPatient()
+                .WithName(b => b.GivenName("David").FamilyName("June"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToAppointments();
+
+            IOSAppointmentsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToHospitalAndOtherAppointments();
+
+            IOSHospitalAndOtherAppointmentsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToBookOrCancelYourReferralAppointment();
+
+            IOSErsPage
+                .AssertOnPage(driver);
+
+            driver.SwipeBack()
+                .WaitForBackAction();
+
+            IOSErsPage
                 .AssertOnPage(driver);
         }
     }

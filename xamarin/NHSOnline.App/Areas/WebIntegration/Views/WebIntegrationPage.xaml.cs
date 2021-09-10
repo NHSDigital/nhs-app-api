@@ -13,7 +13,7 @@ using Xamarin.Forms;
 namespace NHSOnline.App.Areas.WebIntegration.Views
 {
     [DesignTimeVisible(false)]
-    public partial class WebIntegrationPage : IWebIntegrationView, IWebIntegrationView.IEvents
+    public partial class WebIntegrationPage : IWebIntegrationView, IWebIntegrationView.IEvents, ISwipeablePage
     {
         private readonly ILogger _logger;
         private readonly AppNavigation<IWebIntegrationView.IEvents> _appNavigation;
@@ -145,6 +145,16 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
             {
                 await DeepLinkRequested(deeplinkUrl).PreserveThreadContext();
             }
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            return true;
+        }
+
+        public bool ShouldSwipeGoBack()
+        {
+            return false;
         }
     }
 }

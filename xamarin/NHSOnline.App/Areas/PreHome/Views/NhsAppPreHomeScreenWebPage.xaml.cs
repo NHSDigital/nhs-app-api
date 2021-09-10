@@ -12,7 +12,7 @@ using Xamarin.Forms;
 namespace NHSOnline.App.Areas.PreHome.Views
 {
     [DesignTimeVisible(false)]
-    public partial class NhsAppPreHomeScreenWebPage : INhsAppPreHomeScreenWebView, INhsAppPreHomeScreenWebView.IEvents, IRootPage
+    public partial class NhsAppPreHomeScreenWebPage : INhsAppPreHomeScreenWebView, INhsAppPreHomeScreenWebView.IEvents, IRootPage, ISwipeablePage
     {
         private readonly ILogger _logger;
         private readonly AppNavigation<INhsAppPreHomeScreenWebView.IEvents> _appNavigation;
@@ -167,6 +167,11 @@ namespace NHSOnline.App.Areas.PreHome.Views
         protected override bool OnBackButtonPressed()
         {
             return true;
+        }
+
+        public bool ShouldSwipeGoBack()
+        {
+            return false;
         }
 
         public async Task HandleDeeplink(Uri deeplinkUrl)
