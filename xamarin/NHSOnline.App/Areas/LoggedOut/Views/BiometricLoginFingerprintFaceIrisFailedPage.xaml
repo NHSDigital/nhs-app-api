@@ -8,16 +8,15 @@
                                     x:Name="Page">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <StackLayout>
-            <elements:ResponsiveHeading1 x:Name="Heading" 
-                                         Text="We cannot find your fingerprint, face or iris" />
-            
-            <panels:NhsResponsiveContentPanel>
+            <elements:Heading1 x:Name="Heading" Text="We cannot find your fingerprint, face or iris" />
+
+            <panels:ContentPanel>
                 <StackLayout>
-                    <elements:ResponsiveParagraph Text="Check that you have added a fingerprint, face or iris in your device's security settings." />
-                    <elements:ResponsiveLinkLabel Text="Back to login"
-                                                  Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />
+                    <elements:Paragraph Text="Check that you have added a fingerprint, face or iris in your device's security settings." />
+                    <elements:LinkLabel Text="Back to login"
+                                        Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />
                 </StackLayout>
-            </panels:NhsResponsiveContentPanel>
+            </panels:ContentPanel>
         </StackLayout>
     </ScrollView>
 </pages:NhsAppCloseAndLogoHeaderPage>

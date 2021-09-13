@@ -44,7 +44,7 @@
     </View.Resources>
     
     <VisualStateManager.VisualStateGroups>
-        <VisualStateGroup x:Name="ResponsiveFooterSizeStates">
+        <VisualStateGroup x:Name="FooterSizeStates">
             <VisualState x:Name="DefaultDisplay" />
             <VisualState x:Name="WideDisplay">
                 <VisualState.Setters>

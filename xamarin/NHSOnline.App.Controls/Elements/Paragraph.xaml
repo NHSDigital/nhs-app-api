@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:responsive="clr-namespace:NHSOnline.App.Controls.MarkupExtensions.Responsive;assembly=NHSOnline.App.Controls"
-             x:Class="NHSOnline.App.Controls.Elements.ResponsiveParagraph"
+             x:Class="NHSOnline.App.Controls.Elements.Paragraph"
              x:Name="Root">
-    
+
     <VisualStateManager.VisualStateGroups>
         <VisualStateGroup x:Name="ResponsiveDisplayStates">
             <VisualState x:Name="SmallDisplay" />
-            <VisualState x:Name="MediumDisplay"/>
+            <VisualState x:Name="MediumDisplay" />
             <VisualState x:Name="LargeDisplay">
                 <VisualState.Setters>
                     <Setter TargetName="Label" Property="Style" Value="{ StaticResource LabelWide}" />
@@ -23,7 +22,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
+
             <Style TargetType="Label" CanCascade="True">
                 <Setter Property="FontSize" Value="{responsive:NhsFontSize Medium}" />
                 <Setter Property="FontFamily" Value="Frutiger" />
@@ -31,7 +30,7 @@
                 <Setter Property="Padding" Value="0,0,0,16" />
                 <Setter Property="TextColor" Value="{StaticResource NhsUkPrimaryText}" />
             </Style>
-            
+
             <Style x:Key="LabelWide" TargetType="Label" CanCascade="True">
                 <Setter Property="FontSize" Value="{responsive:NhsFontSize Large}" />
                 <Setter Property="Padding" Value="0,0,0,24" />

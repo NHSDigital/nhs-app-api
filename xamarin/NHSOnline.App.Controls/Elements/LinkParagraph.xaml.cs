@@ -6,21 +6,21 @@ using Xamarin.Forms.Xaml;
 namespace NHSOnline.App.Controls.Elements
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ResponsiveLinkParagraph
+    public partial class LinkParagraph
     {
         public static readonly BindableProperty LeadInTextProperty =
-            BindableProperty.Create(nameof(LeadInText), typeof(string), typeof(ResponsiveLinkParagraph));
+            BindableProperty.Create(nameof(LeadInText), typeof(string), typeof(LinkParagraph));
 
         public static readonly BindableProperty LinkTextProperty =
-            BindableProperty.Create(nameof(LinkText), typeof(string), typeof(ResponsiveLinkParagraph));
+            BindableProperty.Create(nameof(LinkText), typeof(string), typeof(LinkParagraph));
 
         public static readonly BindableProperty LeadOutTextProperty =
-            BindableProperty.Create(nameof(LeadOutText), typeof(string), typeof(ResponsiveLinkParagraph));
+            BindableProperty.Create(nameof(LeadOutText), typeof(string), typeof(LinkParagraph));
 
         public static readonly BindableProperty TappedProperty =
-            BindableProperty.Create(nameof(Tapped), typeof(ICommand), typeof(ResponsiveLinkParagraph));
+            BindableProperty.Create(nameof(Tapped), typeof(ICommand), typeof(LinkParagraph));
 
-        public ResponsiveLinkParagraph()
+        public LinkParagraph()
         {
             InitializeComponent();
         }
@@ -33,25 +33,25 @@ namespace NHSOnline.App.Controls.Elements
 
         public string LinkText
         {
-            get => (string)GetValue(LinkTextProperty);
+            get => (string) GetValue(LinkTextProperty);
             set => SetValue(LinkTextProperty, value);
         }
 
         public string LeadInText
         {
-            get => (string)GetValue(LeadInTextProperty);
+            get => (string) GetValue(LeadInTextProperty);
             set => SetValue(LeadInTextProperty, value);
         }
 
         public string LeadOutText
         {
-            get => (string)GetValue(LeadOutTextProperty);
+            get => (string) GetValue(LeadOutTextProperty);
             set => SetValue(LeadOutTextProperty, value);
         }
 
         public ICommand Tapped
         {
-            get => (ICommand)GetValue(TappedProperty);
+            get => (ICommand) GetValue(TappedProperty);
             set => SetValue(TappedProperty, value);
         }
     }

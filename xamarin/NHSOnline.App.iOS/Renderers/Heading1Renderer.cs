@@ -5,7 +5,8 @@ using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-[assembly: ExportRenderer(typeof(ResponsiveHeading1), typeof(Heading1Renderer))]
+[assembly: ExportRenderer(typeof(Heading1), typeof(Heading1Renderer))]
+
 namespace NHSOnline.App.iOS.Renderers
 {
     internal sealed class Heading1Renderer : ViewRenderer<ContentView, UIView>
@@ -14,14 +15,14 @@ namespace NHSOnline.App.iOS.Renderers
         {
             base.OnElementChanged(e);
 
-            if (e.OldElement is ResponsiveHeading1 oldResponsiveHeading)
+            if (e.OldElement is Heading1 oldHeading)
             {
-                oldResponsiveHeading.AccessibilityFocusChangeRequested -= OnAccessibilityFocusChangeRequested;
+                oldHeading.AccessibilityFocusChangeRequested -= OnAccessibilityFocusChangeRequested;
             }
 
-            if (e.NewElement is ResponsiveHeading1 newResponsiveHeading)
+            if (e.NewElement is Heading1 newHeading)
             {
-                newResponsiveHeading.AccessibilityFocusChangeRequested += OnAccessibilityFocusChangeRequested;
+                newHeading.AccessibilityFocusChangeRequested += OnAccessibilityFocusChangeRequested;
             }
         }
 

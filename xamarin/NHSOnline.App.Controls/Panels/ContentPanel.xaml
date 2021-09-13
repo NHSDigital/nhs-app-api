@@ -3,7 +3,7 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                 xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
-                x:Class="NHSOnline.App.Controls.Panels.NhsResponsiveContentPanel"
+                x:Class="NHSOnline.App.Controls.Panels.ContentPanel"
                 x:DataType="panels:NhsPanelWithLabel"
                 x:Name="Root">
 

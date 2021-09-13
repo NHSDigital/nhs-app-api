@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <pages:NhsAppCloseSlimHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
                                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                                  xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
@@ -9,18 +9,16 @@
                                  x:Name="Page">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <StackLayout>
-            <elements:ResponsiveHeading1 x:Name="Heading"
-                                         Text="You need to update the NHS App" />
-            
-            <panels:NhsResponsiveContentPanel>
-                <StackLayout >
-                    <elements:ResponsiveParagraph Text="You will not be able to use it until you do." />
-                    <elements:ResponsiveLinkLabel Text="Update the NHS App now"
-                                                  Command="{Binding OpenAppStoreUrlCommand, Source={x:Reference Name=Page}}" />
+            <elements:Heading1 x:Name="Heading" Text="You need to update the NHS App" />
+
+            <panels:ContentPanel>
+                <StackLayout>
+                    <elements:Paragraph Text="You will not be able to use it until you do." />
+                    <elements:LinkLabel Text="Update the NHS App now" Command="{Binding OpenAppStoreUrlCommand, Source={x:Reference Name=Page}}" />
                 </StackLayout>
-            </panels:NhsResponsiveContentPanel>
+            </panels:ContentPanel>
         </StackLayout>
-        
+
         <ScrollView.Effects>
             <effects:SafeAreaPaddingBottom />
         </ScrollView.Effects>

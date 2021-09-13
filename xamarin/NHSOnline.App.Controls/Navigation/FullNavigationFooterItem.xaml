@@ -40,7 +40,7 @@
                                       x:Name="IconButton">
             
             <VisualStateManager.VisualStateGroups>
-                <VisualStateGroup x:Name="ResponsiveFooterSizeStates">
+                <VisualStateGroup x:Name="FooterSizeStates">
                     <VisualState x:Name="DefaultDisplay" >
                         <VisualState.Setters>
                             <Setter TargetName="ButtonContent" 
@@ -48,6 +48,7 @@
                                     Value="62" />
                         </VisualState.Setters>
                     </VisualState>
+                    
                     <VisualState x:Name="WideDisplay">
                         <VisualState.Setters>
                             <Setter TargetName="IconButton" 

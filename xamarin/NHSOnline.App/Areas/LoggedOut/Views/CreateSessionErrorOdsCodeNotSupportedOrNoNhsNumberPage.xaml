@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <pages:NhsAppCloseSlimHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
                                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                                  xmlns:d="http://xamarin.com/schemas/2014/forms/design"
@@ -10,16 +10,16 @@
                                  mc:Ignorable="d"
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberPage"
                                  x:Name="Page">
-
-    <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}" >
+    <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <StackLayout>
-            <elements:ResponsiveHeading1 Text="Login failed" x:Name="Heading" />
+            <elements:Heading1 Text="Login failed" x:Name="Heading" />
 
             <panels:NhsErrorCallout LabelText="Error">
                 <StackLayout>
-                    <elements:ResponsiveHeading2 Text="If your GP surgery is in Wales" />
-                    <elements:ResponsiveParagraph Text="The NHS App is not available in Wales because health services are managed separately from England." />
-                    <elements:ResponsiveParagraph>
+                    <elements:Heading2 Text="If your GP surgery is in Wales" />
+                    <elements:Paragraph
+                        Text="The NHS App is not available in Wales because health services are managed separately from England." />
+                    <elements:Paragraph>
                         <FormattedString>
                             <Span Text="If you need an appointment or prescription, go to " />
                             <elements:LinkSpan Text="My Health Online" Tapped="{Binding MyHealthOnlineCommand, Source={x:Reference Name=Page}}" />
@@ -27,30 +27,31 @@
                             <elements:LinkSpan Text="111.wales.nhs.uk" Tapped="{Binding OneOneOneWalesCommand, Source={x:Reference Name=Page}}" />
                             <Span Text=" or call 111." />
                         </FormattedString>
-                    </elements:ResponsiveParagraph>
+                    </elements:Paragraph>
 
-                    <elements:ResponsiveHeading2 Text="If your GP surgery is in England" />
-                    <elements:ResponsiveParagraph Text="Either we cannot connect to your GP surgery, or we cannot match your NHS number to a GP surgery." />
-                    <elements:ResponsiveParagraph>
+                    <elements:Heading2 Text="If your GP surgery is in England" />
+                    <elements:Paragraph Text="Either we cannot connect to your GP surgery, or we cannot match your NHS number to a GP surgery." />
+                    <elements:Paragraph>
                         <FormattedString>
-                            <Span Text="If you need an appointment or prescription, contact your GP surgery directly. For urgent medical advice, go to " />
+                            <Span
+                                Text="If you need an appointment or prescription, contact your GP surgery directly. For urgent medical advice, go to " />
                             <elements:LinkSpan Text="111.nhs.uk" Tapped="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
                             <Span Text=" or call 111." />
                         </FormattedString>
-                    </elements:ResponsiveParagraph>
-                    <elements:ResponsiveParagraph>
+                    </elements:Paragraph>
+                    <elements:Paragraph>
                         <FormattedString>
                             <Span Text="If you still need help to access the app, " />
                             <elements:LinkSpan Text="contact us" Tapped="{Binding ContactUsCommand, Source={x:Reference Name=Page}}" />
                             <Span Text="." />
                         </FormattedString>
-                    </elements:ResponsiveParagraph>
+                    </elements:Paragraph>
 
-                    <elements:ResponsiveHeading2 Text="If your GP surgery is in Northern Ireland or Scotland" />
-                    <elements:ResponsiveParagraph Text="The NHS App is not available in Northern Ireland or Scotland because health services are managed separately from England." />
-                    <elements:ResponsiveParagraph Text="If you need an appointment or prescription, contact your GP surgery directly. For urgent medical advice, call 111." />
+                    <elements:Heading2 Text="If your GP surgery is in Northern Ireland or Scotland" />
+                    <elements:Paragraph Text="The NHS App is not available in Northern Ireland or Scotland because health services are managed separately from England." />
+                    <elements:Paragraph Text="If you need an appointment or prescription, contact your GP surgery directly. For urgent medical advice, call 111." />
 
-                    <elements:ResponsiveErrorCodeParagraph
+                    <elements:ErrorCodeParagraph
                         LeadInText="Reference: "
                         BoldText="{Binding ServiceDeskReference, Source={x:Reference Name=Page}}"
                         AccessibleBoldTextLabel="{Binding AccessibleServiceDeskReference, Source={x:Reference Name=Page}}" />
@@ -58,7 +59,7 @@
             </panels:NhsErrorCallout>
 
         </StackLayout>
-        
+
         <ScrollView.Effects>
             <effects:SafeAreaPaddingBottom />
         </ScrollView.Effects>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <pages:NhsAppCloseSlimHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
                                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                                  xmlns:d="http://xamarin.com/schemas/2014/forms/design"
@@ -9,44 +9,43 @@
                                  mc:Ignorable="d"
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.GettingStartedPage"
                                  x:Name="Page">
-
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <StackLayout>
-            <elements:ResponsiveHeading1 Text="Getting started" x:Name="Heading" />
-            
-            <panels:NhsResponsiveContentPanel>
+            <elements:Heading1 Text="Getting started" x:Name="Heading" />
+
+            <panels:ContentPanel>
                 <StackLayout>
-                    <elements:ResponsiveParagraph Text="Use the NHS App to:" />
-                    
-                    <elements:ResponsiveUnorderedList>
+                    <elements:Paragraph Text="Use the NHS App to:" />
+
+                    <elements:UnorderedList>
                         <StackLayout>
-                            <elements:ResponsiveListItem Text="get your NHS COVID pass" />
-                
-                            <elements:ResponsiveListItem Text="order repeat prescriptions" />
-                
-                            <elements:ResponsiveListItem Text="book and manage appointments" />
-                
-                            <elements:ResponsiveListItem Text="get health information and advice" />
-                
-                            <elements:ResponsiveListItem Text="manage your organ donation decision" />
-                
-                            <elements:ResponsiveListItem Text="view your NHS number" />
+                            <elements:ListItem Text="get your NHS COVID pass" />
+
+                            <elements:ListItem Text="order repeat prescriptions" />
+
+                            <elements:ListItem Text="book and manage appointments" />
+
+                            <elements:ListItem Text="get health information and advice" />
+
+                            <elements:ListItem Text="manage your organ donation decision" />
+
+                            <elements:ListItem Text="view your NHS number" />
                         </StackLayout>
-                    </elements:ResponsiveUnorderedList>
-                    
-                    <elements:ResponsiveParagraph Text="You must be aged 13 and over to use the app, and registered at a GP surgery in England." />
-                
-                    <elements:ResponsiveParagraph Text="To get started you'll need to create your NHS login." />
-                
+                    </elements:UnorderedList>
+
+                    <elements:Paragraph Text="You must be aged 13 and over to use the app, and registered at a GP surgery in England." />
+
+                    <elements:Paragraph Text="To get started you'll need to create your NHS login." />
+
                     <elements:Button Text="Continue"
-                                     ButtonColour = "{StaticResource NhsUkGreen}"
+                                     ButtonColour="{StaticResource NhsUkGreen}"
                                      ColourGradient="{StaticResource ButtonGreenLowerGradient}"
-                                     TextColour = "{StaticResource NhsUkWhite}"
+                                     TextColour="{StaticResource NhsUkWhite}"
                                      Margin="0,20,0,0"
                                      Command="{Binding LoginCommand, Source={x:Reference Name=Page}}"
                                      HorizontalOptions="Start" />
                 </StackLayout>
-            </panels:NhsResponsiveContentPanel>
+            </panels:ContentPanel>
         </StackLayout>
     </ScrollView>
 </pages:NhsAppCloseSlimHeaderPage>

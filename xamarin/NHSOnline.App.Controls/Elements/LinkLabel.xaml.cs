@@ -6,20 +6,20 @@ using Xamarin.Forms.Xaml;
 namespace NHSOnline.App.Controls.Elements
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ResponsiveLinkLabel
+    public partial class LinkLabel
     {
         public static readonly BindableProperty CommandProperty = TapGestureRecognizer.CommandProperty;
 
         public static readonly BindableProperty TextProperty =
-            BindableProperty.Create(nameof(Text), typeof(string), typeof(ResponsiveLinkLabel));
+            BindableProperty.Create(nameof(Text), typeof(string), typeof(LinkLabel));
 
         public static readonly BindableProperty LabelTextColourProperty =
-            BindableProperty.Create(nameof(LabelTextColour), typeof(Color), typeof(ResponsiveLinkLabel), NhsUkColours.NhsUkPrimaryLinkBlue);
+            BindableProperty.Create(nameof(LabelTextColour), typeof(Color), typeof(LinkLabel), NhsUkColours.NhsUkPrimaryLinkBlue);
 
         public static readonly BindableProperty LabelTextDecorationProperty =
-            BindableProperty.Create(nameof(LabelTextDecoration), typeof(TextDecorations), typeof(ResponsiveLinkLabel), TextDecorations.Underline);
+            BindableProperty.Create(nameof(LabelTextDecoration), typeof(TextDecorations), typeof(LinkLabel), TextDecorations.Underline);
 
-        public ResponsiveLinkLabel()
+        public LinkLabel()
         {
             InitializeComponent();
         }
@@ -38,7 +38,7 @@ namespace NHSOnline.App.Controls.Elements
 
         public string Text
         {
-            get => (string)GetValue(TextProperty);
+            get => (string) GetValue(TextProperty);
             set => SetValue(TextProperty, value);
         }
 

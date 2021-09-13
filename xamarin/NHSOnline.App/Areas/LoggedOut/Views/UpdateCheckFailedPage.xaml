@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
 <pages:NhsAppCloseSlimHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
                                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                                  xmlns:d="http://xamarin.com/schemas/2014/forms/design"
@@ -12,19 +11,16 @@
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.UpdateCheckFailedPage"
                                  x:Name="Page">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
-
         <StackLayout>
-            <elements:ResponsiveHeading1 x:Name="Heading"
-                                         Text="Unable to verify app version" />
+            <elements:Heading1 x:Name="Heading" Text="Unable to verify app version" />
 
-            <panels:NhsResponsiveContentPanel>
+            <panels:ContentPanel>
                 <StackLayout>
-                    <elements:ResponsiveParagraph Text="Go back to the home page and try again." />
-                    <elements:ResponsiveLinkLabel Text="Back to home"
-                                                  Command="{Binding BackToHomeCommand, Source={x:Reference Name=Page}}" />
+                    <elements:Paragraph Text="Go back to the home page and try again." />
+                    <elements:LinkLabel Text="Back to home" Command="{Binding BackToHomeCommand, Source={x:Reference Name=Page}}" />
                 </StackLayout>
 
-            </panels:NhsResponsiveContentPanel>
+            </panels:ContentPanel>
         </StackLayout>
 
         <ScrollView.Effects>

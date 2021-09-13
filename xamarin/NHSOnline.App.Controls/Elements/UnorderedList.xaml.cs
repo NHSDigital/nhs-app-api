@@ -3,9 +3,9 @@ using Xamarin.Forms.Xaml;
 namespace NHSOnline.App.Controls.Elements
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ResponsiveUnorderedList
+    public partial class UnorderedList
     {
-        public ResponsiveUnorderedList()
+        public UnorderedList()
         {
             InitializeComponent();
         }
@@ -15,6 +15,5 @@ namespace NHSOnline.App.Controls.Elements
             base.OnSizeAllocated(width, height);
             ResponsiveStates.SetVisualStateBreakpoints(this);
         }
-
     }
 }

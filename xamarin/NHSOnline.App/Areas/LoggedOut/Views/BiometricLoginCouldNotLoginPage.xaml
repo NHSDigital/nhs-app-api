@@ -8,17 +8,16 @@
                                     x:Name="Page">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <StackLayout>
-            <elements:ResponsiveHeading1 x:Name="Heading" 
-                                         Text="We could not log you in"  />
-            
-            <panels:NhsResponsiveContentPanel>
+            <elements:Heading1 x:Name="Heading" Text="We could not log you in" />
+
+            <panels:ContentPanel>
                 <StackLayout>
-                    <elements:ResponsiveParagraph Text="Go back to the homepage and try logging in again."/>
-                    <elements:ResponsiveParagraph Text="If you keep seeing this message, go back to the homepage and log in using your email, password and security code."/>
-                    <elements:ResponsiveLinkLabel Text="Back to login"
-                                                  Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}"/>
+                    <elements:Paragraph Text="Go back to the homepage and try logging in again." />
+                    <elements:Paragraph Text="If you keep seeing this message, go back to the homepage and log in using your email, password and security code." />
+                    <elements:LinkLabel Text="Back to login"
+                                        Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />
                 </StackLayout>
-            </panels:NhsResponsiveContentPanel>
+            </panels:ContentPanel>
         </StackLayout>
     </ScrollView>
 </pages:NhsAppCloseAndLogoHeaderPage>

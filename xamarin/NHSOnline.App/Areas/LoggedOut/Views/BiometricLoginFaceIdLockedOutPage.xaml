@@ -8,17 +8,16 @@
                                     x:Name="Page">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <StackLayout>
-            <elements:ResponsiveHeading1 x:Name="Heading" 
-                                         Text="You need to turn on Face ID again" />
-            
-            <panels:NhsResponsiveContentPanel>
+            <elements:Heading1 x:Name="Heading" Text="You need to turn on Face ID again" />
+
+            <panels:ContentPanel>
                 <StackLayout>
-                    <elements:ResponsiveParagraph Text="We have turned it off as something has changed." />
-                    <elements:ResponsiveParagraph Text="Log in using your email, password and security code, then turn Face ID on in the NHS App settings." />
-                    <elements:ResponsiveLinkLabel Text="Back to login"
-                                                  Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}"/>
+                    <elements:Paragraph Text="We have turned it off as something has changed." />
+                    <elements:Paragraph Text="Log in using your email, password and security code, then turn Face ID on in the NHS App settings." />
+                    <elements:LinkLabel Text="Back to login"
+                                        Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />
                 </StackLayout>
-            </panels:NhsResponsiveContentPanel>
+            </panels:ContentPanel>
         </StackLayout>
     </ScrollView>
 </pages:NhsAppCloseAndLogoHeaderPage>

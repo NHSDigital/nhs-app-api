@@ -8,27 +8,26 @@
                                     x:Name="Page">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <StackLayout>
-            <elements:ResponsiveHeading1 x:Name="Heading" 
-                                         Text="Turn on fingerprint, face or iris again" />
+            <elements:Heading1 x:Name="Heading" Text="Turn on fingerprint, face or iris again" />
            
-            <panels:NhsResponsiveContentPanel>
+            <panels:ContentPanel>
                 <StackLayout>
-                    <elements:ResponsiveParagraph Text="For your security, we turned it off after changes were made to the fingerprint, face or iris settings on your device." />
-                    <elements:ResponsiveParagraph Text="Log in using your email, password and security code." />
+                    <elements:Paragraph Text="For your security, we turned it off after changes were made to the fingerprint, face or iris settings on your device." />
+                    <elements:Paragraph Text="Log in using your email, password and security code." />
 
-                    <elements:ResponsiveHeading2 Text="Turning fingerprint, face or iris on"/>
-                    <elements:ResponsiveUnorderedList>
+                    <elements:Heading2 Text="Turning fingerprint, face or iris on"/>
+                    <elements:UnorderedList>
                         <StackLayout>
-                            <elements:ResponsiveListItem Text="Log in to the NHS App." />
+                            <elements:ListItem Text="Log in to the NHS App." />
 
-                            <elements:ResponsiveListItem Text="Select More, then fingerprint, face or iris." />
+                            <elements:ListItem Text="Select More, then fingerprint, face or iris." />
                         </StackLayout>
-                    </elements:ResponsiveUnorderedList>
+                    </elements:UnorderedList>
 
-                    <elements:ResponsiveLinkLabel Text="Back to login"
-                                                  Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />
+                    <elements:LinkLabel Text="Back to login"
+                                        Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />
                 </StackLayout>
-            </panels:NhsResponsiveContentPanel>
+            </panels:ContentPanel>
         </StackLayout>
     </ScrollView>
 </pages:NhsAppCloseAndLogoHeaderPage>

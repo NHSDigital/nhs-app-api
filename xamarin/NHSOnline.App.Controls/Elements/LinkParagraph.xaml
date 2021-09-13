@@ -1,51 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
              xmlns:responsive="clr-namespace:NHSOnline.App.Controls.MarkupExtensions.Responsive;assembly=NHSOnline.App.Controls"
-             x:Class="NHSOnline.App.Controls.Elements.ResponsiveListItem"
+             x:Class="NHSOnline.App.Controls.Elements.LinkParagraph"
              x:Name="Root">
-    
+
     <View.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Style TargetType="Label">
-                <Setter Property="TextColor" Value="{StaticResource NhsUkPrimaryText}" />
+
+            <Style TargetType="Label" CanCascade="True">
                 <Setter Property="FontSize" Value="{responsive:NhsFontSize Medium}" />
                 <Setter Property="FontFamily" Value="Frutiger" />
                 <Setter Property="LineHeight" Value="1.2" />
+                <Setter Property="Margin" Value="0,0,0,16" />
+                <Setter Property="TextColor" Value="{StaticResource NhsUkPrimaryText}" />
             </Style>
-            <Style x:Key="ListItemTextWide" TargetType="Label">
+
+            <Style x:Key="LabelWide" TargetType="Label" CanCascade="True">
                 <Setter Property="FontSize" Value="{responsive:NhsFontSize Large}" />
-            </Style>
-            <Style TargetType="StackLayout">
-                <Setter Property="Margin" Value="0, 0, 0, 8" />
+                <Setter Property="Margin" Value="0,0,0,24" />
             </Style>
         </ResourceDictionary>
     </View.Resources>
-    
+
     <VisualStateManager.VisualStateGroups>
         <VisualStateGroup x:Name="ResponsiveDisplayStates">
             <VisualState x:Name="SmallDisplay" />
-            <VisualState x:Name="MediumDisplay"/>
+            <VisualState x:Name="MediumDisplay" />
             <VisualState x:Name="LargeDisplay">
                 <VisualState.Setters>
-                    <Setter TargetName="LabelText" Property="Style" Value="{ StaticResource ListItemTextWide}" />
-                    <Setter TargetName="Bullet" Property="Style" Value="{ StaticResource ListItemTextWide}" />
+                    <Setter TargetName="Label" Property="Style" Value="{ StaticResource LabelWide}" />
                 </VisualState.Setters>
             </VisualState>
         </VisualStateGroup>
     </VisualStateManager.VisualStateGroups>
-    
+
     <ContentView.Content>
-        <StackLayout StyleClass="ListItem"
-                     Orientation="Horizontal">
-            <Label x:Name="Bullet"
-                             Text="&#x2022; " 
-                             TextColor="{StaticResource NhsUkPrimaryText}" />
-            <Label x:Name="LabelText" Text="{Binding Text, Source={x:Reference Name=Root}}" />
+        <StackLayout>
+            <Label>
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{Binding LeadInText, Source={x:Reference Name=Root}}" />
+                        <elements:LinkSpan Text="{Binding LinkText, Source={x:Reference Name=Root}}" />
+                        <Span Text="{Binding LeadOutText, Source={x:Reference Name=Root}}" />
+                    </FormattedString>
+                </Label.FormattedText>
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding Tapped, Source={x:Reference Name=Root}}" />
+                </Label.GestureRecognizers>
+            </Label>
         </StackLayout>
     </ContentView.Content>
 </ContentView>

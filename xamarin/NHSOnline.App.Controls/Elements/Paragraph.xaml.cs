@@ -1,19 +1,19 @@
-using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace NHSOnline.App.Controls.Elements
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [ContentProperty(nameof(Text))]
-    public partial class ResponsiveListItem
+    [ContentProperty(nameof(FormattedText))]
+    public partial class Paragraph
     {
         public static readonly BindableProperty TextProperty =
-            BindableProperty.Create(nameof(Text), typeof(string), typeof(ResponsiveListItem));
+            BindableProperty.Create(nameof(Text), typeof(string), typeof(Paragraph));
 
-        public static readonly BindableProperty CommandProperty = TapGestureRecognizer.CommandProperty;
+        public static readonly BindableProperty FormattedTextProperty =
+            BindableProperty.Create(nameof(FormattedText), typeof(FormattedString), typeof(Paragraph), default(FormattedString));
 
-        public ResponsiveListItem()
+        public Paragraph()
         {
             InitializeComponent();
         }
@@ -30,10 +30,10 @@ namespace NHSOnline.App.Controls.Elements
             set => SetValue(TextProperty, value);
         }
 
-        public ICommand Command
+        public FormattedString FormattedText
         {
-            get => (ICommand) GetValue(CommandProperty);
-            set => SetValue(CommandProperty, value);
+            get => (FormattedString) GetValue(FormattedTextProperty);
+            set => SetValue(FormattedTextProperty, value);
         }
     }
 }

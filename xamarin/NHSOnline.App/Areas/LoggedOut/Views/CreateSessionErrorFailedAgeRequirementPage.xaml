@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <pages:NhsAppCloseSlimHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
                                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                                  xmlns:d="http://xamarin.com/schemas/2014/forms/design"
@@ -10,25 +10,24 @@
                                  mc:Ignorable="d"
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorFailedAgeRequirementPage"
                                  x:Name="Page">
-
-    <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}" >      
+    <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <StackLayout>
-            <elements:ResponsiveHeading1 Text="Login failed" x:Name="Heading" />
+            <elements:Heading1 Text="Login failed" x:Name="Heading" />
 
             <panels:NhsErrorCallout LabelText="Error">
                 <StackLayout>
-                    <elements:ResponsiveParagraph>
+                    <elements:Paragraph>
                         <FormattedString>
                             <Span Text="Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services. For urgent medical advice, go to " />
                             <elements:LinkSpan Text="111.nhs.uk" Tapped="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
                             <Span Text=" or call 111." />
                         </FormattedString>
-                    </elements:ResponsiveParagraph>
+                    </elements:Paragraph>
                 </StackLayout>
             </panels:NhsErrorCallout>
 
         </StackLayout>
-        
+
         <ScrollView.Effects>
             <effects:SafeAreaPaddingBottom />
         </ScrollView.Effects>
