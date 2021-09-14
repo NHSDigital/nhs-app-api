@@ -9,12 +9,22 @@
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <StackLayout>
             <elements:ResponsiveHeading1 x:Name="Heading" 
-                                         Text="You need to turn on fingerprint again" />
+                                         Text="Turn on fingerprint, face or iris again" />
            
             <panels:NhsResponsiveContentPanel>
                 <StackLayout>
-                    <elements:ResponsiveParagraph Text="We have turned it off as something has changed." />
-                    <elements:ResponsiveParagraph Text="Log in using your email, password and security code, then turn fingerprint on in the NHS App settings." />
+                    <elements:ResponsiveParagraph Text="For your security, we turned it off after changes were made to the fingerprint, face or iris settings on your device." />
+                    <elements:ResponsiveParagraph Text="Log in using your email, password and security code." />
+
+                    <elements:ResponsiveHeading2 Text="Turning fingerprint, face or iris on"/>
+                    <elements:ResponsiveUnorderedList>
+                        <StackLayout>
+                            <elements:ResponsiveListItem Text="Log in to the NHS App." />
+
+                            <elements:ResponsiveListItem Text="Select More, then fingerprint, face or iris." />
+                        </StackLayout>
+                    </elements:ResponsiveUnorderedList>
+
                     <elements:ResponsiveLinkLabel Text="Back to login"
                                                   Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />
                 </StackLayout>
