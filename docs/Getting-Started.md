@@ -98,12 +98,14 @@ Before running the app locally, some entries need to be added to your machine's 
 127.0.0.1 users.local.bitraft.io
 127.0.0.1 web.local.bitraft.io
 127.0.0.1 pkb.stubs.local.bitraft.io
+127.0.0.1 pkb.securestubs.local.bitraft.io
 127.0.0.1 engage.stubs.local.bitraft.io
 127.0.0.1 gncr.stubs.local.bitraft.io
 127.0.0.1 substrakt.stubs.local.bitraft.io
 127.0.0.1 nhsd.stubs.local.bitraft.io
 127.0.0.1 netcompany.stubs.local.bitraft.io
 127.0.0.1 silverintegrationtestprovider.stubs.local.bitraft.io
+127.0.0.1 silverintegrationtestprovider.securestubs.local.bitraft.io
 ```
 
 ## Azure DevOps Feeds
