@@ -90,6 +90,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterHandler<string>(UpdateBiometricRegistrationRequested, (view, handler) => view.UpdateBiometricRegistrationRequested = handler)
                 .RegisterHandler<Uri>(OpenBrowserOverlayRequested, (view, handler) => view.OpenBrowserOverlayRequested = handler)
                 .RegisterHandler<string>(SetMenuBarItemRequested, (view, handler) => view.SetMenuBarItemRequested = handler)
+                .RegisterHandler(FetchNativeAppVersionRequested, (view, handler) => view.FetchNativeAppVersionRequested = handler)
                 .RegisterHandler(ClearMenuBarItemRequested, (view, handler) => view.ClearMenuBarItemRequested = handler)
                 .RegisterHandler(OpenSettingsRequested, (view, handler) => view.OpenSettingsRequested = handler)
                 .RegisterHandler(DisplayPageLeaveWarningRequested, (view, handler) => view.DisplayPageLeaveWarningRequested = handler)
@@ -391,6 +392,13 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
             await _dialogPresenter.DisplayAlertDialog(
                 new ConfirmLogout(_view.Logout)).PreserveThreadContext();
+        }
+
+        private async Task FetchNativeAppVersionRequested()
+        {
+            _logger.LogInformation("Fetching native app version");
+
+            await _view.UpdateNativeVersion(AppInfo.VersionString).PreserveThreadContext();
         }
 
         private async Task LogoutRequested()

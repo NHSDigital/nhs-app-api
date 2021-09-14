@@ -30,6 +30,7 @@
                                 GetNotificationsStatusCommand="{Binding GetNotificationsStatusCommand, Source={x:Reference Name=Page}}"
                                 RequestPnsTokenCommand="{Binding RequestPnsTokenCommand, Source={x:Reference Name=Page}}"
                                 FetchBiometricStatusCommand="{Binding FetchBiometricStatusCommand, Source={x:Reference Name=Page}}"
+                                FetchNativeAppVersionCommand="{Binding FetchNativeAppVersionCommand, Source={x:Reference Name=Page}}"
                                 SetMenuBarItemCommand="{Binding SetMenuBarItemCommand, Source={x:Reference Name=Page}}"
                                 ClearMenuBarItemCommand="{Binding ClearMenuBarItemCommand, Source={x:Reference Name=Page}}"
                                 DisplayPageLeaveWarningCommand="{Binding DisplayPageLeaveWarningCommand, Source={x:Reference Name=Page}}" 

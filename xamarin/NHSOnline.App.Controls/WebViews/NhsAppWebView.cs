@@ -48,6 +48,9 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty FetchBiometricStatusCommandProperty =
             BindableProperty.Create(nameof(FetchBiometricStatusCommand), typeof(AsyncCommand<string>), typeof(NhsAppWebView));
 
+        public static readonly BindableProperty FetchNativeAppVersionCommandProperty =
+            BindableProperty.Create(nameof(FetchNativeAppVersionCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
+
         public static readonly BindableProperty SetMenuBarItemCommandProperty =
             BindableProperty.Create(nameof(SetMenuBarItemCommand), typeof(AsyncCommand<string>), typeof(NhsAppWebView));
 
@@ -197,6 +200,14 @@ namespace NHSOnline.App.Controls.WebViews
         {
             get => (AsyncCommand<string>)GetValue(FetchBiometricStatusCommandProperty);
             set => SetValue(FetchBiometricStatusCommandProperty, value);
+        }
+
+        public void FetchNativeAppVersion() => FetchNativeAppVersionCommand.Execute(null);
+
+        public AsyncCommand FetchNativeAppVersionCommand
+        {
+            get => (AsyncCommand) GetValue(FetchNativeAppVersionCommandProperty);
+            set => SetValue(FetchNativeAppVersionCommandProperty, value);
         }
 
         public void SetMenuBarItem(string index) => SetMenuBarItemCommand.Execute(index);
@@ -355,6 +366,10 @@ namespace NHSOnline.App.Controls.WebViews
 
         public async Task ValidateSession()
             => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.validateSession()").ResumeOnThreadPool();
+
+        public async Task AppVersionUpdateNativeVersion(string version)
+            => await EvaluateJavaScriptAsync($"window.nativeAppCallbacks.appVersionUpdateNativeVersion('{version}')")
+                .ResumeOnThreadPool();
 
         public async Task NavigateToOnDemandGpReturn(Dictionary<string, string> queryParameters)
         {

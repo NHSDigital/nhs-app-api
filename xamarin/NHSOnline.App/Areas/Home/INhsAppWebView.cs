@@ -38,6 +38,7 @@ namespace NHSOnline.App.Areas.Home
             Func<string, Task>? GetPnsTokenRequested { get; set; }
 
             Func<string, Task>? FetchBiometricStatusRequested { get; set; }
+            Func<Task>? FetchNativeAppVersionRequested { get; set; }
             Func<string, Task>? SetMenuBarItemRequested { get; set; }
             Func<Task>? ClearMenuBarItemRequested { get; set; }
             Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
@@ -75,5 +76,6 @@ namespace NHSOnline.App.Areas.Home
         Task SendLeavePage();
         Task Logout();
         Task GetContextualHelpLink();
+        Task UpdateNativeVersion(string version);
     }
 }

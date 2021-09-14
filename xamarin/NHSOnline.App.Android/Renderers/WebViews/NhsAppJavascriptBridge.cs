@@ -142,5 +142,12 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         {
             NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.OnSessionExpiring());
         }
+
+        [JavascriptInterface]
+        [Export("fetchNativeAppVersion")]
+        public void FetchNativeAppVersion()
+        {
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.FetchNativeAppVersion());
+        }
     }
 }

@@ -37,6 +37,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                 .AddFunction("createOnDemandGpSession", webView => webView.CreateOnDemandGpSession)
                 .AddFunction("logout", webView => webView.Logout)
                 .AddFunction("sessionExpired", webView => webView.SessionExpired)
+                .AddFunction("fetchNativeAppVersion", webView => webView.FetchNativeAppVersion)
                 .Apply(config.UserContentController);
 
             AllowsLinkPreview = false;

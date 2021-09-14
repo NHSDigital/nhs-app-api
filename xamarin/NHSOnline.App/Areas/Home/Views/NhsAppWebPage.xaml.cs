@@ -65,6 +65,10 @@ namespace NHSOnline.App.Areas.Home.Views
         public AsyncCommand<string> FetchBiometricStatusCommand
             => new AsyncCommand<string>(() => FetchBiometricStatusRequested);
 
+        public Func<Task>? FetchNativeAppVersionRequested { get; set; }
+        public AsyncCommand FetchNativeAppVersionCommand
+            => new AsyncCommand(() => FetchNativeAppVersionRequested);
+
         public Func<string, Task>? SetMenuBarItemRequested { get; set; }
         public AsyncCommand<string> SetMenuBarItemCommand
             => new AsyncCommand<string>(() => SetMenuBarItemRequested);
@@ -277,6 +281,9 @@ namespace NHSOnline.App.Areas.Home.Views
             WebView.AccessibilityFocus();
             await WebView.NavigateToAppPage(page).ResumeOnThreadPool();
         }
+
+        public async Task UpdateNativeVersion(string version)
+            => await WebView.AppVersionUpdateNativeVersion(version).ResumeOnThreadPool();
 
         public async Task SendNotificationsStatus(string status)
             => await WebView.SendNotificationsStatus(status).ResumeOnThreadPool();
