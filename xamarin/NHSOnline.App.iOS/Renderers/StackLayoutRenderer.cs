@@ -9,17 +9,27 @@ namespace NHSOnline.App.iOS.Renderers
 {
     internal sealed class StackLayoutRenderer : VisualElementRenderer<StackLayout>
     {
-        public override bool CanBecomeFocused => AccessibilityEffect.GetControlType(Element) == AccessibilityEffect.ControlType.Button
-                                                  || AccessibilityEffect.GetControlType(Element) == AccessibilityEffect.ControlType.Link;
+        public override bool CanBecomeFocused => CanLayoutBecomeFocused();
 
         public override void DidUpdateFocus(UIFocusUpdateContext context, UIFocusAnimationCoordinator coordinator)
         {
             if (CanBecomeFocused)
             {
-                Element.SetValueFromRenderer(VisualElement.IsFocusedPropertyKey, Focused);
+                Element?.SetValueFromRenderer(VisualElement.IsFocusedPropertyKey, Focused);
             }
 
             base.DidUpdateFocus(context, coordinator);
+        }
+
+        private bool CanLayoutBecomeFocused()
+        {
+            if (Element == null || AccessibilityEffect.GetControlType(Element) == null)
+            {
+                return false;
+            }
+
+            return AccessibilityEffect.GetControlType(Element) == AccessibilityEffect.ControlType.Button
+                || AccessibilityEffect.GetControlType(Element) == AccessibilityEffect.ControlType.Link;
         }
     }
 }

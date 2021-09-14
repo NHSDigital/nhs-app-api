@@ -13,7 +13,7 @@ namespace NHSOnline.App.iOS.Renderers
         public override void DidUpdateFocus(UIFocusUpdateContext context, UIFocusAnimationCoordinator coordinator)
         {
             base.DidUpdateFocus(context, coordinator);
-            Element.SetValueFromRenderer(VisualElement.IsFocusedPropertyKey, Focused);
+            Element?.SetValueFromRenderer(VisualElement.IsFocusedPropertyKey, Focused);
         }
     }
 }
