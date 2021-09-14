@@ -162,7 +162,7 @@
               
                 <Label x:Name="VersionLabel"
                        StyleClass="VersionLabel"
-                       Text="Version 2.Xamarin"
+                       Text="{Binding VersionLabelText, Source={x:Reference Name=Page}}"
                        IsTabStop="False" />  
                 
             </StackLayout>

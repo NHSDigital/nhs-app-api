@@ -13,6 +13,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
     [DesignTimeVisible(false)]
     public partial class LoggedOutHomeScreenPage: ILoggedOutHomeScreenView, ILoggedOutHomeScreenView.IEvents, IRootPage
     {
+        public static readonly BindableProperty VersionLabelTextProperty
+            = BindableProperty.Create(nameof(VersionLabelText), typeof(string), typeof(LoggedOutHomeScreenPage), "");
+
         private readonly ILogger _logger;
         private readonly AppNavigation<ILoggedOutHomeScreenView.IEvents> _appNavigation;
 
@@ -45,6 +48,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
 
         public Func<Task>? ResetAndShowErrorRequested { get; set; }
         public Func<Uri, Task>? DeeplinkRequested { get; set; }
+
+        public string VersionLabelText
+        {
+            get => (string)GetValue(VersionLabelTextProperty);
+            set => SetValue(VersionLabelTextProperty, value);
+        }
 
         public async Task ResetAndShowError()
         {

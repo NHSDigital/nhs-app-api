@@ -71,6 +71,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
             _view.SetScreenState(_model.ScreenState);
 
+            _view.VersionLabelText = $"Version {AppInfo.VersionString}";
+
             _view.AppNavigation
                 .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
                 .RegisterPermanentHandler(ViewOnDisappearing, (view, handler) => view.Disappearing = handler)

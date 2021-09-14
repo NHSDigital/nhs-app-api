@@ -6,6 +6,8 @@ namespace NHSOnline.App.Areas.LoggedOut
 {
     internal interface ILoggedOutHomeScreenView: INavigationView<ILoggedOutHomeScreenView.IEvents>
     {
+
+        string VersionLabelText { get; set; }
         void ResetScreenState();
         void SetScreenState(LoggedOutHomeScreenStates loggedOutHomeScreenState);
 
