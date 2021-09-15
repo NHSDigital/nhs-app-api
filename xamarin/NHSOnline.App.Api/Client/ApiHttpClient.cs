@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using NHSOnline.App.Threading;
 
@@ -16,7 +17,7 @@ namespace NHSOnline.App.Api.Client
             _httpClient = httpClient;
         }
 
-        internal async Task<HttpResponseMessage> Send(HttpRequestMessage request)
-            => await _httpClient.SendAsync(request).ResumeOnThreadPool();
+        internal async Task<HttpResponseMessage> Send(HttpRequestMessage request, CancellationToken token)
+            => await _httpClient.SendAsync(request, token).ResumeOnThreadPool();
     }
 }

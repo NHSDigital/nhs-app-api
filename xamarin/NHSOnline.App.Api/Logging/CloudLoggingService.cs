@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Api.Client;
@@ -22,7 +23,7 @@ namespace NHSOnline.App.Api.Logging
             try
             {
                 var request = new ApiCreateLogRequest(message, logLevel, timeStamp);
-                await _createLogEndpoint.Call(request).ResumeOnThreadPool();
+                await _createLogEndpoint.Call(request, CancellationToken.None).ResumeOnThreadPool();
             }
             catch (Exception e)
             {

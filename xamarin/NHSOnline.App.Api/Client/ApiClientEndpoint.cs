@@ -1,4 +1,5 @@
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using NHSOnline.App.Threading;
 
@@ -20,12 +21,12 @@ namespace NHSOnline.App.Api.Client
             _responseMessageParser = responseMessageParser;
         }
 
-        public async Task<TResult> Call(TRequest request)
+        public async Task<TResult> Call(TRequest request, CancellationToken token)
         {
             using var requestMessage = new HttpRequestMessage();
             await _requestMessageBuilder.Build(request, requestMessage).ResumeOnThreadPool();
 
-            using var responseMessage = await _apiHttpClient.Send(requestMessage).ResumeOnThreadPool();
+            using var responseMessage = await _apiHttpClient.Send(requestMessage, token).ResumeOnThreadPool();
 
             return await _responseMessageParser.Parse(responseMessage).ResumeOnThreadPool();
         }

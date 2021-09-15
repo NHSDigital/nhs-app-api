@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Api.Client;
@@ -25,7 +26,7 @@ namespace NHSOnline.App.Api.Session
             try
             {
                 var request = new ApiCreateSessionRequest(authCode, codeVerifier, referrer, redirectUrl);
-                var result = await _createSessionEndpoint.Call(request).ResumeOnThreadPool();
+                var result = await _createSessionEndpoint.Call(request, CancellationToken.None).ResumeOnThreadPool();
 
                 return result.Accept(this);
             }

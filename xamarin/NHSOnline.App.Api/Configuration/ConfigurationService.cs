@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Api.Client;
@@ -21,12 +22,12 @@ namespace NHSOnline.App.Api.Configuration
             _endpoint = endpoint;
         }
 
-        public async Task<GetConfigurationResult> GetConfiguration()
+        public async Task<GetConfigurationResult> GetConfiguration(CancellationToken token)
         {
             try
             {
                 var request = new ApiConfigurationRequest();
-                var result = await _endpoint.Call(request).ResumeOnThreadPool();
+                var result = await _endpoint.Call(request, token).ResumeOnThreadPool();
 
                 return result.Accept(this);
             }
