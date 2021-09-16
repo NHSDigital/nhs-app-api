@@ -92,7 +92,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             {
                 void RetryAction() => _view.GoToUri(args.FailedUrl);
 
-                var model = new CloseSlimTryAgainNetworkErrorModel(RetryAction);
+                var model = new CloseSlimTryAgainNetworkErrorModel(_view.AppNavigation.PopToRoot, RetryAction);
                 var page = _pageFactory.CreatePageFor(model);
                 return _view.AppNavigation.Push(page);
             }

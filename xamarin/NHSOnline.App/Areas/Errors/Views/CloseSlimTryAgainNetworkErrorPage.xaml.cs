@@ -33,6 +33,9 @@ namespace NHSOnline.App.Areas.Errors.Views
         public Func<Task>? BackRequested { get; set; }
         private ICommand BackRequestedCommand => new AsyncCommand(() => BackRequested);
 
+        public Func<Task>? CloseRequested { get; set; }
+        public ICommand CloseRequestedCommand => new AsyncCommand(() => CloseRequested);
+
         protected override void OnAppearing()
         {
             _logger.LogInformation("{Method}", nameof(OnAppearing));

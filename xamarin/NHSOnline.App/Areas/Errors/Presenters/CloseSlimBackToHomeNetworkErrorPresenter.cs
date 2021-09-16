@@ -16,6 +16,7 @@ namespace NHSOnline.App.Areas.Errors.Presenters
             _logger = logger;
 
             view.AppNavigation
+                .RegisterHandler(CloseRequested, (view, handler) => view.CloseRequested = handler)
                 .RegisterHandler(BackToHomeRequested, (view, handler) => view.BackToHomeRequested = handler)
                 .RegisterHandler(BackToHomeRequested, (view, handler) => view.BackRequested = handler);
         }
@@ -23,6 +24,14 @@ namespace NHSOnline.App.Areas.Errors.Presenters
         private Task BackToHomeRequested()
         {
             _logger.LogInformation("Back To Home requested");
+
+            return _view.AppNavigation.PopToRoot();
+        }
+
+        private Task CloseRequested()
+        {
+            _logger.LogInformation("Close requested");
+
             return _view.AppNavigation.PopToRoot();
         }
     }

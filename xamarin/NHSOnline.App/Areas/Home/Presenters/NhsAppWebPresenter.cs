@@ -457,10 +457,14 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         private Task ViewOnNavigationFailed(Uri failingUrl)
         {
-            var popToRootNavigationHandler = new NhsAppPopToRootNavigationHandler(_navigationHandler, _view.AppNavigation);
             void RetryAction() => _view.GoToUri(failingUrl);
+            Task CloseAction()
+            {
+                RetryAction();
+                return Task.CompletedTask;
+            }
 
-            var model = new FullNavigationTryAgainNetworkErrorModel(popToRootNavigationHandler, _view.SelectedNavigationFooterItem, RetryAction);
+            var model = new CloseSlimTryAgainNetworkErrorModel(CloseAction, RetryAction);
             var page = _pageFactory.CreatePageFor(model);
             return _view.AppNavigation.Push(page);
         }

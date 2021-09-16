@@ -8,6 +8,7 @@ namespace NHSOnline.App.Areas.Errors
     {
         internal interface IEvents
         {
+            Func<Task>? CloseRequested { get; set; }
             Func<Task>? TryAgainRequested { get; set; }
             Func<Task>? BackRequested { get; set; }
         }

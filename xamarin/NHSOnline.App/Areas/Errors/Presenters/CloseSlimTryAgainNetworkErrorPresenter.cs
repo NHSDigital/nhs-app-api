@@ -21,14 +21,35 @@ namespace NHSOnline.App.Areas.Errors.Presenters
             _logger = logger;
 
             view.AppNavigation
+                .RegisterHandler(CloseRequested, (view, handler) => view.CloseRequested = handler)
                 .RegisterHandler(TryAgainRequested, (view, handler) => view.TryAgainRequested = handler)
-                .RegisterHandler(TryAgainRequested, (view, handler) => view.BackRequested = handler);
+                .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler);
         }
 
-        private async Task TryAgainRequested()
+        private async Task CloseRequested()
+        {
+            _logger.LogInformation("Close requested");
+
+            await _view.AppNavigation.Pop().PreserveThreadContext();
+            await _model.CloseAction.Invoke().PreserveThreadContext();
+        }
+
+        private Task TryAgainRequested()
         {
             _logger.LogInformation("Try Again requested");
 
+            return TryAgain();
+        }
+
+        private Task BackRequested()
+        {
+            _logger.LogInformation("Back requested");
+
+            return TryAgain();
+        }
+
+        private async Task TryAgain()
+        {
             await _view.AppNavigation.Pop().PreserveThreadContext();
             _model.RetryAction.Invoke();
         }
