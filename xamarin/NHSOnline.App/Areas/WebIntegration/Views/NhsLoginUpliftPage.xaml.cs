@@ -89,6 +89,10 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         {
             _logger.LogInformation("Navigating: {Uri}", args.Url);
             NhsAppResilience.ExecuteImmediately(() => Navigating?.Invoke(args));
+            if (args.Cancel)
+            {
+                ShowWebView();
+            }
         }
 
         private void WebViewOnNavigated(object sender, WebNavigatedEventArgs args)
@@ -123,6 +127,18 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
             return true;
         }
 
+        private void ShowWebView()
+        {
+            Spinner.IsVisible = false;
+            WebView.IsVisible = true;
+        }
+
+        private void ShowSpinner()
+        {
+            Spinner.IsVisible = false;
+            WebView.IsVisible = true;
+        }
+
         public void GoToUri(Uri uri)
         {
             OnInitialNavigation = true;
@@ -139,14 +155,12 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
 
         private void WebViewNavigating (object sender, WebNavigatingEventArgs e)
         {
-            Spinner.IsVisible = true;
-            WebView.IsVisible = false;
+            ShowSpinner();
         }
 
         private void WebOnEndNavigating (object sender, WebNavigatedEventArgs e)
         {
-            Spinner.IsVisible = false;
-            WebView.IsVisible = true;
+            ShowWebView();
         }
     }
 }

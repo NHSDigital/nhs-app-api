@@ -75,6 +75,10 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         {
             _logger.LogInformation("Navigating: {Uri}", args.Url);
             NhsAppResilience.ExecuteImmediately(() => Navigating?.Invoke(args));
+            if (args.Cancel)
+            {
+                ShowWebView();
+            }
         }
 
         private void WebViewOnNavigated(object sender, WebNavigatedEventArgs args)
@@ -130,6 +134,18 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
 
         public void SetNavigationFooterItem(NavigationFooterItem footerItem) => SelectedNavigationFooterItem = footerItem;
 
+        private void ShowWebView()
+        {
+            Spinner.IsVisible = false;
+            WebView.IsVisible = true;
+        }
+
+        private void ShowSpinner()
+        {
+            Spinner.IsVisible = true;
+            WebView.IsVisible = false;
+        }
+
         protected override bool OnBackButtonPressed()
         {
             BackRequestedCommand.Execute(null);
@@ -138,14 +154,12 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
 
         private void WebViewNavigating (object sender, WebNavigatingEventArgs e)
         {
-            Spinner.IsVisible = true;
-            WebView.IsVisible = false;
+            ShowSpinner();
         }
 
         private void WebOnEndNavigating (object sender, WebNavigatedEventArgs e)
         {
-            Spinner.IsVisible = false;
-            WebView.IsVisible = true;
+            ShowWebView();
         }
 
         public Func<Uri, Task>? DeeplinkRequested { get; set; }

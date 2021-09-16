@@ -77,6 +77,10 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         {
             _logger.LogInformation("Navigating: {Uri}", args.Url);
             NhsAppResilience.ExecuteImmediately(() => Navigating?.Invoke(args));
+            if (args.Cancel)
+            {
+                ShowWebView();
+            }
         }
 
         private void WebViewOnNavigated(object sender, WebNavigatedEventArgs args)
@@ -122,6 +126,18 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             GoToUri(uri);
         }
 
+        private void ShowWebView()
+        {
+            Spinner.IsVisible = false;
+            WebView.IsVisible = true;
+        }
+
+        private void ShowSpinner()
+        {
+            Spinner.IsVisible = true;
+            WebView.IsVisible = false;
+        }
+
         public void GoToUri(Uri uri)
         {
             OnInitialNavigation = true;
@@ -138,14 +154,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
 
         private void WebViewNavigating (object sender, WebNavigatingEventArgs e)
         {
-            Spinner.IsVisible = true;
-            WebView.IsVisible = false;
+            ShowSpinner();
         }
 
         private void WebOnEndNavigating (object sender, WebNavigatedEventArgs e)
         {
-            Spinner.IsVisible = false;
-            WebView.IsVisible = true;
+            ShowWebView();
         }
 
         public async Task HandleDeeplink(Uri deeplinkUrl)
