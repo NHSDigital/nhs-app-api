@@ -10,6 +10,8 @@ environmentPublicHostSuffix: ".sandbox.nonlive.nhsapp.service.nhs.uk"
 environmentPrivateHostSuffix: "-sandbox.private.sandbox.nonlive.nhsapp.service.nhs.uk"
 tlsSecretName: "sandbox-nhsapp-service-nhs-uk"
 
+contactUsUrl: https://www.nhs.uk/contact-us/nhs-app-contact-us
+
 keyvaultSubscriptionID: 47e498b8-ad52-4421-b6d0-d7f9988429df
 keyvaultTenantID: 50f6071f-bbfe-401a-8803-673748e629e2
 
@@ -19,6 +21,56 @@ fakeGpSystemEnabled: true
 econsultEnabled: true
 sixteenWeeksSlotsEnabled: true
 
+api:
+  knownServicesOverrides:
+    services__ndop__url: https://ndopapp-int1.thunderbird.service.nhs.uk
+    services__cid_settings__url: https://settings.ext.signin.nhs.uk
+    services__cid_account__url: https://account.ext.signin.nhs.uk
+    services__cid_auth__url: https://auth.ext.signin.nhs.uk
+    services__cid_uaf__url: https://uaf.ext.signin.nhs.uk
+    services__cid_access__url: https://access.ext.signin.nhs.uk
+    services__cid_idvm__url: https://idvm.ext.signin.nhs.uk
+    services__ers__url: https://pat.rc.refer.nhs.uk
+    services__pkb__url: https://nhsapp-test.devstacks.pkb.io
+    services__pkb_alt__url: http://nhsapp-test.devstacks.pkb.io:443
+    services__substraktPatientPack__url: https://jump-point.test.substrakthealth.com
+    services__substraktPatientPack_admin__url: https://admin-request.test.substrakthealth.com
+    services__substraktPatientPack_auth__url: https://auth.test.substrakthealth.com
+    services__gncr__url: https://pepfront.enigmahost.net
+    services__gncr__javaScriptInteractionMode: SilverThirdParty
+    services__gncr__menuTab: None
+    services__gncr__viewMode: WebView
+    services__gncr__integrationLevel: SilverWithWebNavigation
+    services__gncr__showSpinner: true
+    services__gncr__showThirdPartyWarning: true
+    services__gncr__requiresAssertedLoginIdentity: true
+    services__gncr__validateSession: true
+    services__engage__url: https://nhs1-nhsapp.engage.gp
+    services__silver_third_party_api_test__url: https://silverintegrationtestsa.z33.web.core.windows.net
+    services__http_status__url: https://httpstat.us
+    services__nhsd__url: https://vaccine-status-dev-uks.azurewebsites.net
+    services__netCompany__url: https://stdevpistatic01.z33.web.core.windows.net
+    servicesV3__ndop__url: https://ndopapp-int1.thunderbird.service.nhs.uk
+    servicesV3__cid_settings__url: https://settings.ext.signin.nhs.uk
+    servicesV3__cid_account__url: https://account.ext.signin.nhs.uk
+    servicesV3__cid_auth__url: https://auth.ext.signin.nhs.uk
+    servicesV3__cid_uaf__url: https://uaf.ext.signin.nhs.uk
+    servicesV3__cid_access__url: https://access.ext.signin.nhs.uk
+    servicesV3__cid_idvm__url: https://idvm.ext.signin.nhs.uk
+    servicesV3__ers__url: https://pat.rc.refer.nhs.uk
+    servicesV3__pkb__url: https://nhsapp-test.devstacks.pkb.io
+    servicesV3__pkb__domains__1: http://nhsapp-test.devstacks.pkb.io:443
+    servicesV3__substraktPatientPack__url: https://jump-point.test.substrakthealth.com
+    servicesV3__substraktPatientPack__domains__1: https://admin-request.test.substrakthealth.com
+    servicesV3__substraktPatientPack__domains__2: https://auth.test.substrakthealth.com
+    servicesV3__gncr__url: https://pepfront.enigmahost.net
+    servicesV3__gncr__requiresAssertedLoginIdentity: true
+    servicesV3__gncr__validateSession: true
+    servicesV3__engage__url: https://nhs1-nhsapp.engage.gp
+    servicesV3__silver_third_party_api_test__url: https://silverintegrationtestsa.z33.web.core.windows.net
+    servicesV3__silver_third_party_api_test__domains__1: https://httpstat.us
+    servicesV3__nhsd__url: https://vaccine-status-dev-uks.azurewebsites.net
+    servicesV3__netCompany__url: https://stdevpistatic01.z33.web.core.windows.net
 iproxy_microtest:
   deployMicrotest: false
 
@@ -37,4 +89,4 @@ secrets:
 # Not used, just to prevent chart from crashing on install
 splunk:
   pidIndex: apppid_nhsapp_dev
- 
+  specialCategoryIndex: appspecialcategory_nhsapp_dev
