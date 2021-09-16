@@ -12,6 +12,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 {
     internal sealed class WebViewNavigationDelegate : WKNavigationDelegate
     {
+        private const int FrameLoadInterruptedErrorCode = 102;
         private readonly WkWebViewRenderer _renderer;
 
         public WebViewNavigationDelegate(WkWebViewRenderer renderer)
@@ -25,7 +26,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 
         public override void DecidePolicy(WKWebView webView, WKNavigationAction navigationAction, Action<WKNavigationActionPolicy> decisionHandler)
         {
-            NhsAppResilience.ExecuteOnMainThread(() =>
+            NhsAppResilience.ExecuteImmediately(() =>
             {
                 Log(navigationAction);
 
@@ -63,7 +64,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 
         public override void DecidePolicy(WKWebView webView, WKNavigationResponse navigationResponse, Action<WKNavigationResponsePolicy> decisionHandler)
         {
-            NhsAppResilience.ExecuteOnMainThread(() =>
+            NhsAppResilience.ExecuteImmediately(() =>
             {
                 Log(navigationResponse);
 
@@ -89,9 +90,19 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 
                 var url = _renderer?.Url?.AbsoluteUrl?.ToString();
                 var webViewSource = new UrlWebViewSource { Url = url };
-                var eventArgs = new WebNavigatedEventArgs(WebNavigationEvent.NewPage, webViewSource, url, WebNavigationResult.Failure);
 
-                WebView.SendNavigated(eventArgs);
+                // If the frame load has been interrupted we pass cancel rather than failed
+                if (error.Code == FrameLoadInterruptedErrorCode)
+                {
+                    var cancelledEventArgs = new WebNavigatedEventArgs(WebNavigationEvent.NewPage, webViewSource, url, WebNavigationResult.Cancel);
+                    WebView.SendNavigated(cancelledEventArgs);
+                }
+                else
+                {
+                    var failedEventArgs = new WebNavigatedEventArgs(WebNavigationEvent.NewPage, webViewSource, url,
+                        WebNavigationResult.Failure);
+                    WebView.SendNavigated(failedEventArgs);
+                }
             });
         }
 

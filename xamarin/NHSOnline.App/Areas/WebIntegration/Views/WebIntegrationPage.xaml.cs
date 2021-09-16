@@ -112,6 +112,10 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
                 OnInitialNavigation = false;
                 WebView.Focus();
             }
+            else if (args.Result is WebNavigationResult.Cancel)
+            {
+                _logger.LogInformation("Web navigation was cancelled");
+            }
             else
             {
                 if (InitialRequest == null)

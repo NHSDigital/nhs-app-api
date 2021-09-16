@@ -85,6 +85,10 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
             {
                 OnInitialNavigation = false;
             }
+            else if (args.Result is WebNavigationResult.Cancel)
+            {
+                _logger.LogInformation("Web navigation was cancelled");
+            }
             else if (InitialUrl is null)
             {
                 _logger.LogError($"{nameof(InitialUrl)} is null but should never be null");

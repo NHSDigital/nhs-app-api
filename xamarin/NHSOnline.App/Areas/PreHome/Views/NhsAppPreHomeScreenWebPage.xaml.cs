@@ -125,6 +125,10 @@ namespace NHSOnline.App.Areas.PreHome.Views
                 WebView.Focus();
                 WebView.AccessibilityFocus();
             }
+            else if (args.Result is WebNavigationResult.Cancel)
+            {
+                _logger.LogInformation("Web navigation was cancelled");
+            }
             else
             {
                 WebView.IsVisible = false;
