@@ -5,8 +5,6 @@ namespace NHSOnline.App.DependencyServices
 {
     public interface IFileHandler
     {
-        Task StoreFileInDownloads(DownloadRequest downloadRequest);
-
-        Task HandleFile(DownloadRequest downloadRequest);
+        Task<DownloadFileResult> DownloadFile(DownloadRequest downloadRequest);
     }
 }

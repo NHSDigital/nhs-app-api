@@ -214,22 +214,31 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         private async Task StartDownloadRequested(DownloadRequest downloadRequest)
         {
-            var storageWritePermissionCheck = await Permissions.CheckStatusAsync<Permissions.StorageWrite>().ResumeOnThreadPool();
+            var storagePermissionCheck = await Permissions.CheckStatusAsync<Permissions.StorageWrite>().ResumeOnThreadPool();
 
-            if (storageWritePermissionCheck == PermissionStatus.Granted)
+            if (storagePermissionCheck == PermissionStatus.Granted)
             {
-                await _fileHandler.StoreFileInDownloads(downloadRequest).PreserveThreadContext();
-                await _fileHandler.HandleFile(downloadRequest).PreserveThreadContext();
+                await AttemptStoreAndHandleFile(downloadRequest).PreserveThreadContext();
             }
             else
             {
-                var storageReadPermissionRequest = await Permissions.RequestAsync<Permissions.StorageWrite>().ResumeOnThreadPool();
+                var storagePermissionRequest = await Permissions.RequestAsync<Permissions.StorageWrite>().ResumeOnThreadPool();
 
-                if (storageReadPermissionRequest == PermissionStatus.Granted)
+                if (storagePermissionRequest == PermissionStatus.Granted)
                 {
-                   await _fileHandler.StoreFileInDownloads(downloadRequest).PreserveThreadContext();
-                   await _fileHandler.HandleFile(downloadRequest).PreserveThreadContext();
+                    await AttemptStoreAndHandleFile(downloadRequest).PreserveThreadContext();
                 }
+            }
+        }
+
+        private async Task AttemptStoreAndHandleFile(DownloadRequest downloadRequest)
+        {
+            var handleFileResult = await _fileHandler.DownloadFile(downloadRequest).PreserveThreadContext();
+            if (handleFileResult is DownloadFileResult.Failed)
+            {
+                var model = new FullNavigationTryAgainFileDownloadErrorModel(_navigationHandler, _view.SelectedNavigationFooterItem);
+                var page = _pageFactory.CreatePageFor(model);
+                await _view.AppNavigation.Push(page).PreserveThreadContext();
             }
         }
 

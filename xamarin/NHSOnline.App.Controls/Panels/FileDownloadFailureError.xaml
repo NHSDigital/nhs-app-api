@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<StackLayout xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
+             xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
+             x:Class="NHSOnline.App.Controls.Panels.FileDownloadFailureError"
+             x:Name="Root">
+    <elements:Heading1 Text="Sorry, something went wrong" x:Name="Heading" />
+    <panels:NhsErrorCallout LabelText="Error">
+        <StackLayout>
+            <elements:Paragraph Text="We could not download this file, please try again." />
+            <elements:Paragraph Text="If the problem continues and you need to download a document from your GP health record, contact your GP surgery." />
+            <elements:Paragraph Text="If you’re trying to download another type of document, you can try again now. If the problem continues you may need to find another way to download the document." />
+
+            <elements:LinkLabel Text="Try again"
+                                Margin="0,20,0,0"
+                                Command="{Binding TryAgainCommand, Source={x:Reference Name=Root}}"
+                                HorizontalOptions="Start" />
+        </StackLayout>
+    </panels:NhsErrorCallout>
+</StackLayout>

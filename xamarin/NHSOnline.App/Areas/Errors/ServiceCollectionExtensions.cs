@@ -14,7 +14,8 @@ namespace NHSOnline.App.Areas.Errors
                 .AddModelViewPresenter<CloseSlimBackToHomeNetworkErrorModel, CloseSlimBackToHomeNetworkErrorPage, CloseSlimBackToHomeNetworkErrorPresenter>()
                 .AddModelViewPresenter<CloseSlimTryAgainNetworkErrorModel, CloseSlimTryAgainNetworkErrorPage, CloseSlimTryAgainNetworkErrorPresenter>()
                 .AddModelViewPresenter<FullNavigationBackToHomeNetworkErrorModel, FullNavigationBackToHomeNetworkErrorPage, FullNavigationBackToHomeNetworkErrorPresenter>()
-                .AddModelViewPresenter<PreHomeTryAgainNetworkErrorModel, PreHomeTryAgainNetworkErrorPage, PreHomeTryAgainNetworkErrorPresenter>();
+                .AddModelViewPresenter<PreHomeTryAgainNetworkErrorModel, PreHomeTryAgainNetworkErrorPage, PreHomeTryAgainNetworkErrorPresenter>()
+                .AddModelViewPresenter<FullNavigationTryAgainFileDownloadErrorModel, FullNavigationTryAgainFileDownloadErrorPage, FullNavigationTryAgainFileDownloadErrorPresenter>();
         }
     }
 }

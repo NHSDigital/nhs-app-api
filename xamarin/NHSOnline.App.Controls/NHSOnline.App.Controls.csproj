@@ -190,6 +190,10 @@
       <DependentUpon>BackToHomeNetworkError.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Panels\FileDownloadFailureError.xaml.cs">
+      <DependentUpon>FileDownloadFailureError.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

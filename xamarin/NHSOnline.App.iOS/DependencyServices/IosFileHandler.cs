@@ -21,71 +21,77 @@ namespace NHSOnline.App.iOS.DependencyServices
     {
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(IosFileHandler));
 
-        public Task StoreFileInDownloads(DownloadRequest downloadRequest)
-        {
-            Logger.LogInformation("We currently do not store files directly to the download folder");
-            return Task.CompletedTask;
-        }
-
-        public async Task HandleFile(DownloadRequest downloadRequest)
+        public async Task<DownloadFileResult> DownloadFile(DownloadRequest downloadRequest)
         {
             if (string.Equals(downloadRequest.MimeType, "application/vnd.apple.pkpass", StringComparison.Ordinal))
             {
-                HandlePassKitPassFile(downloadRequest);
+                return HandlePassKitPassFile(downloadRequest);
             }
 
-            await HandleDefaultFileTypes(downloadRequest).PreserveThreadContext();
+            return await HandleDefaultFileTypes(downloadRequest).PreserveThreadContext();
         }
 
-        private static async Task HandleDefaultFileTypes(DownloadRequest downloadRequest)
+        private static async Task<DownloadFileResult> HandleDefaultFileTypes(DownloadRequest downloadRequest)
         {
+            var documents = Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments);
+            var tmp = Path.Combine (documents, "..", "tmp");
+
             try
             {
                 await File.WriteAllBytesAsync(
-                    downloadRequest.FileCachePath,
+                    Path.Combine(tmp,downloadRequest.FileName),
                     Convert.FromBase64String(downloadRequest.Base64Data)).PreserveThreadContext();
             }
             catch (Exception e)
             {
-                Logger.LogError("Failed to write data to cache directory", e);
-                return;
+                Logger.LogError(e, "Failed to write data to cache directory");
+                return new DownloadFileResult.Failed();
             }
 
-            ShareFile shareFile = new ShareFile(downloadRequest.FileCachePath);
+            ShareFile shareFile = new ShareFile(Path.Combine(tmp,downloadRequest.FileName));
 
             var requestShare = new ShareFileRequest(
                 Regex.Replace(downloadRequest.FileName, @"\s+", ""),
                 shareFile);
 
             await Share.RequestAsync(requestShare).PreserveThreadContext();
+
+            return new DownloadFileResult.Success();
         }
 
-        private static void HandlePassKitPassFile(DownloadRequest downloadRequest)
+        private static DownloadFileResult HandlePassKitPassFile(DownloadRequest downloadRequest)
         {
+
+            #pragma warning disable CA2000
+                var data = new NSData(downloadRequest.Base64Data, NSDataBase64DecodingOptions.IgnoreUnknownCharacters);
+                var passKitPass = new PKPass(data, out NSError error);
+            #pragma warning restore CA2000
+
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse - The generated PKPass is incorrect and the NSError can actually be null
+            if (error != null)
+            {
+                Logger.LogError(
+                    $"Failed to create a pass kit pass, localised description is {error.LocalizedDescription}");
+                return new DownloadFileResult.Failed();
+            }
+
             Device.BeginInvokeOnMainThread(() =>
             {
                 try
                 {
-                    using var data = new NSData(downloadRequest.Base64Data, NSDataBase64DecodingOptions.IgnoreUnknownCharacters);
-                    using var passKitPass = new PKPass(data, out NSError error);
-
-                    // ReSharper disable once ConditionIsAlwaysTrueOrFalse - The generated PKPass is incorrect and the NSError can actually be null
-                    if (error != null)
-                    {
-                        Logger.LogError(
-                            $"Failed to create a pass kit pass, localised description is {error.LocalizedDescription}");
-                        return;
-                    }
-
                     using var passKitPassesViewController = new PKAddPassesViewController(passKitPass);
-
                     UIApplication.SharedApplication.KeyWindow.RootViewController?.PresentModalViewController(passKitPassesViewController, true);
+                    data.Dispose();
+                    passKitPass.Dispose();
+                    passKitPassesViewController.Dispose();
                 }
                 catch (Exception e)
                 {
-                    Logger.LogError(e, "Failed to handle the pass kit file");
+                    Logger.LogError(e, "Failed to display the pass kit file");
                 }
             });
+
+            return new DownloadFileResult.Success();
         }
     }
 }

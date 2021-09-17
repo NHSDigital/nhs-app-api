@@ -17,8 +17,33 @@ namespace NHSOnline.IntegrationTests.WebIntegration
     [TestClass]
     public class FileDownloadWebIntegrationTests
     {
-        [NhsAppAndroidTest]
+        [NhsAppAndroidTest(AndroidDevice = AndroidDevice.Pixel3, OSVersion = AndroidOSVersion.Ten)]
         public void APatientWithProofLevelNineCanDownloadAFileFromAWebIntegrationDownloadFileScreenAndroid(
+            IAndroidDriverWrapper driver)
+        {
+            var patient = new PkbPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+
+            NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsAndroid(driver);
+
+            AndroidFileDownloadPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.DownloadImage();
+
+            AndroidFilePermissionsDialog
+                .AssertDisplayed(driver)
+                .Allow();
+
+            AndroidGooglePhotosApp
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppAndroidTest(AndroidDevice = AndroidDevice.Pixel3, OSVersion = AndroidOSVersion.Nine)]
+        public void APatientWithProofLevelNineCanDownloadAFileFromAWebIntegrationDownloadFileScreenNotUsingTheNewerOsAndroid(
             IAndroidDriverWrapper driver)
         {
             var patient = new PkbPatient()

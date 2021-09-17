@@ -164,6 +164,10 @@
       <DependentUpon>NhsAppTransparentHeaderPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Areas\Errors\Views\FullNavigationTryAgainFileDownloadErrorPage.xaml.cs">
+      <DependentUpon>FullNavigationTryAgainFileDownloadErrorPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
