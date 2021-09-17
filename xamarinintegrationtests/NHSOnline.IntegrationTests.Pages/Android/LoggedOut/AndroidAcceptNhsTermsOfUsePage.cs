@@ -3,11 +3,11 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 {
-    public class AndroidAcceptNhsTermsOfUsePageContent
+    public class AndroidAcceptNhsTermsOfUsePage
     {
         private readonly IAndroidDriverWrapper _driver;
 
-        private AndroidAcceptNhsTermsOfUsePageContent(IAndroidDriverWrapper driver) => _driver = driver;
+        private AndroidAcceptNhsTermsOfUsePage(IAndroidDriverWrapper driver) => _driver = driver;
 
         private AndroidLabel Title => AndroidLabel.WithText(
             _driver,
@@ -25,14 +25,14 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             _driver,
             "For urgent medical advice, visit 111.nhs.uk or call 111.");
 
-        public static AndroidAcceptNhsTermsOfUsePageContent AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidAcceptNhsTermsOfUsePage AssertOnPage(IAndroidDriverWrapper driver)
         {
-            var page = new AndroidAcceptNhsTermsOfUsePageContent(driver);
+            var page = new AndroidAcceptNhsTermsOfUsePage(driver);
             page.Title.AssertVisible();
             return page;
         }
 
-        public AndroidAcceptNhsTermsOfUsePageContent AssertPageContent()
+        public AndroidAcceptNhsTermsOfUsePage AssertPageContent()
         {
             Title.AssertVisible();
             YouCantUseTheNhsApp.AssertVisible();
@@ -40,5 +40,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             UrgentMedicalAdvice.AssertVisible();
             return this;
         }
+
+        public void BackToHome() => BackToHomeLink.Touch();
+
+        private AndroidLink BackToHomeLink => AndroidLink.WithContentDescription(_driver, "Back to home").ScrollIntoView();
     }
 }

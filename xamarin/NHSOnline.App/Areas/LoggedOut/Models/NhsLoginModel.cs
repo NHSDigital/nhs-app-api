@@ -5,6 +5,13 @@ namespace NHSOnline.App.Areas.LoggedOut.Models
 {
     internal class NhsLoginModel
     {
+        internal NhsLoginModel(ProofKeyCodeExchangeCodes pkceCodes)
+        {
+            PkceCodes = pkceCodes;
+            FidoAuthResponse = string.Empty;
+            DeeplinkUrl = null;
+        }
+
         internal NhsLoginModel(ProofKeyCodeExchangeCodes pkceCodes, string? fidoAuthResponse, Uri? deeplinkUrl)
         {
             PkceCodes = pkceCodes;
@@ -19,11 +26,15 @@ namespace NHSOnline.App.Areas.LoggedOut.Models
 
         internal ProofKeyCodeExchangeCodes PkceCodes { get; }
         internal string? FidoAuthResponse { get; }
-
         internal Uri? DeeplinkUrl { get; }
 
-        internal CreateSessionModel AuthReturn(Uri redirectUri, string authCode, Uri? deeplinkUrl) => new CreateSessionModel(this, redirectUri, authCode, deeplinkUrl);
+        internal CreateSessionModel AuthReturn(Uri redirectUri, string authCode, Uri? deeplinkUrl) =>
+            new CreateSessionModel(this, redirectUri, authCode, deeplinkUrl);
 
-        internal NhsLoginErrorModel NhsLoginFailed(string errorReferenceCode) => new NhsLoginErrorModel(this, errorReferenceCode);
+        internal NhsLoginErrorModel NhsLoginFailed() =>
+            new NhsLoginErrorModel(this, GenerateErrorReferenceCodeFromPrefix());
+
+        internal static string GenerateErrorReferenceCodeFromPrefix() =>
+            $"3w{RandomErrorReferenceGenerator.GenerateString(4, "acefghjkmnorstuwxyz3456789")}";
     }
 }

@@ -23,7 +23,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
             => new IOSLink(interactor, text);
 
         public void AssertVisible()
-            => ActOnElement(e => e.Displayed.Should().BeTrue($"a link with text '{_text}' should be displayed"));
+            => ActOnElement(e => e.Displayed.Should().BeTrue($"A link with text '{_text}' should be displayed"));
 
         public void Touch()
             => ActOnElementContext(context => context.Tap());

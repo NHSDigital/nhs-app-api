@@ -34,7 +34,7 @@ namespace NHSOnline.IntegrationTests.TermsAndConditions
                 .AssertOnPage(driver)
                 .PageContent.DeclineTermsAndConditions();
 
-            AndroidAcceptNhsTermsOfUsePageContent
+            AndroidAcceptNhsTermsOfUsePage
                 .AssertOnPage(driver)
                 .AssertPageContent();
         }

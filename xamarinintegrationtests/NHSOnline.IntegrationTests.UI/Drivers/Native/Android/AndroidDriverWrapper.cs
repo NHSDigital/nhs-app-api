@@ -195,9 +195,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             context.AddBrowserStackSessionDetailsToLogs(_driver, _browserStackConfig, testLogs);
         }
 
-        void INativeDriverWrapper.LoggedOutHomeScreenLoaded()
+        void INativeDriverWrapper.NhsAppWebViewClosed()
         {
-            Web.LoggedOutHomeScreenLoaded();
+            Web.NhsAppWebViewClosed();
         }
 
         public void Dispose() => _driver.Dispose();

@@ -1,14 +1,12 @@
-using System;
-
 namespace NHSOnline.App.Controls.WebViews.Payloads
 {
     public sealed class StartNhsLoginUpliftRequest
     {
-        public StartNhsLoginUpliftRequest(Uri url)
+        public StartNhsLoginUpliftRequest(string assertedLoginIdentity)
         {
-            Url = url;
+            AssertedLoginIdentity = assertedLoginIdentity;
         }
 
-        public Uri Url { get; set; }
+        public string AssertedLoginIdentity { get; }
     }
 }

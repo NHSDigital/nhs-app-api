@@ -1,4 +1,5 @@
 using System;
+using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
 
@@ -19,6 +20,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
 
         public static WebPanel WithTitle(IWebInteractor interactor, string text)
             => new (interactor, text);
+
+        public void AssertNotVisible() => _interactor.IsPresent(FindBy).Should().BeFalse("A panel with heading {0} should not be displayed", _text);
         private void ActOnElement(Action<IWebElement> action)
             => _interactor.ActOnElement(FindBy, action);
 

@@ -12,12 +12,12 @@ namespace NHSOnline.App.NhsLogin
 
     internal interface INhsLoginUriBuilderScopeSetter
     {
-        INhsLoginUriBuilderVectorsOfTrustSetter Scopes(string firstScope, params string[] otherScopes);
+        INhsLoginUriBuilderVectorsOfTrustSetter Scopes(NhsLoginScope scope);
     }
 
     internal interface INhsLoginUriBuilderVectorsOfTrustSetter
     {
-        INhsLoginUriBuilderRedirectUriSetter VectorsOfTrust(string firstVectorOfTrust, params string[] otherVectorsOfTrust);
+        INhsLoginUriBuilderRedirectUriSetter VectorsOfTrust(NhsLoginVectorsOfTrust vectorsOfTrust);
     }
 
     internal interface INhsLoginUriBuilderRedirectUriSetter : INhsLoginUriBuilder
@@ -41,6 +41,22 @@ namespace NHSOnline.App.NhsLogin
         INhsLoginUriBuilderVectorsOfTrustSetter,
         INhsLoginUriBuilderRedirectUriSetter
     {
+        private static readonly Dictionary<NhsLoginScope, string> ScopesRegister = new
+            Dictionary<NhsLoginScope, string>
+            {
+                { NhsLoginScope.P5NoGpSession, "openid profile profile_extended gp_registration_details" },
+                { NhsLoginScope.P9WithGpSession, "openid profile profile_extended nhs_app_credentials gp_registration_details" },
+                { NhsLoginScope.P5ToP9Uplift, "openid profile email profile_extended gp_registration_details" },
+            };
+
+        private static readonly Dictionary<NhsLoginVectorsOfTrust, string> VectorsOfTrustRegister = new
+            Dictionary<NhsLoginVectorsOfTrust, string>
+            {
+                { NhsLoginVectorsOfTrust.P5Basic, "\"P5.Cp.Cd\", \"P5.Cp.Ck\", \"P5.Cm\"" },
+                { NhsLoginVectorsOfTrust.P9Sensitive, "\"P9.Cp.Cd\", \"P9.Cp.Ck\", \"P9.Cm\"" },
+                { NhsLoginVectorsOfTrust.P5BasicAndP9Sensitive, "\"P5.Cp.Cd\", \"P5.Cp.Ck\", \"P5.Cm\", \"P9.Cp.Cd\", \"P9.Cp.Ck\", \"P9.Cm\"" },
+            };
+
         private readonly UriBuilder _uriBuilder;
         private readonly Dictionary<string, string> _queryString;
 
@@ -50,8 +66,8 @@ namespace NHSOnline.App.NhsLogin
 
             _queryString = new Dictionary<string, string>
             {
-                {"state", "A"},
-                {"response_type", "code"}
+                { "state", "A" },
+                { "response_type", "code" }
             };
         }
 
@@ -66,18 +82,15 @@ namespace NHSOnline.App.NhsLogin
             return this;
         }
 
-        public INhsLoginUriBuilderVectorsOfTrustSetter Scopes(string firstScope, params string[] otherScopes)
+        public INhsLoginUriBuilderVectorsOfTrustSetter Scopes(NhsLoginScope scope)
         {
-            _queryString.Add("scope", string.Join(" ", otherScopes.Prepend(firstScope)));
+            _queryString.Add("scope", ScopesRegister[scope]);
             return this;
         }
 
-        public INhsLoginUriBuilderRedirectUriSetter VectorsOfTrust(string requiredFirstVectorOfTrust,
-            params string[] otherVectorsOfTrust)
+        public INhsLoginUriBuilderRedirectUriSetter VectorsOfTrust(NhsLoginVectorsOfTrust vectorsOfTrust)
         {
-            var quotedValues = string.Join(", ", otherVectorsOfTrust.Prepend(requiredFirstVectorOfTrust)
-                .Select(x => $"\"{x}\""));
-            _queryString.Add("vtr", $"[{quotedValues}]");
+            _queryString.Add("vtr", $"[{VectorsOfTrustRegister[vectorsOfTrust]}]");
             return this;
         }
 
@@ -118,7 +131,8 @@ namespace NHSOnline.App.NhsLogin
 
         public Uri Build()
         {
-            var queryStringParts = _queryString.Select(kvp => $"{Uri.EscapeUriString(kvp.Key)}={Uri.EscapeUriString(kvp.Value)}");
+            var queryStringParts =
+                _queryString.Select(kvp => $"{Uri.EscapeUriString(kvp.Key)}={Uri.EscapeUriString(kvp.Value)}");
             var queryString = string.Join("&", queryStringParts);
 
             _uriBuilder.Query = $"?{queryString}";

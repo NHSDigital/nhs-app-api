@@ -1,4 +1,5 @@
-using System.Windows.Input;
+using System.Threading.Tasks;
+using NHSOnline.App.Controls;
 using NHSOnline.App.Threading;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -12,10 +13,15 @@ namespace NHSOnline.App.Navigation.Pages
         public static readonly BindableProperty PageContentProperty =
             BindableProperty.Create(nameof(PageContent), typeof(View), typeof(NhsAppFullHeaderPage));
 
+        public static readonly BindableProperty CloseCommandProperty =
+            BindableProperty.Create(nameof(CloseCommand), typeof(AsyncCommand), typeof(NhsAppFullHeaderPage));
+
         public NhsAppCloseAndLogoHeaderPage()
         {
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
+
+            CloseCommand = new AsyncCommand(() => DefaultCloseAction);
         }
 
         public View PageContent
@@ -24,6 +30,12 @@ namespace NHSOnline.App.Navigation.Pages
             set => SetValue(PageContentProperty, value);
         }
 
-        public ICommand CloseClicked => new Command(async () => await Navigation.PopAsync(false).PreserveThreadContext());
+        public AsyncCommand CloseCommand
+        {
+            get => (AsyncCommand) GetValue(CloseCommandProperty);
+            set => SetValue(CloseCommandProperty, value);
+        }
+
+        private async Task DefaultCloseAction() => await Navigation.PopAsync(false).PreserveThreadContext();
     }
 }

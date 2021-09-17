@@ -15,6 +15,7 @@ using NHSOnline.App.DependencyServices;
 using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.Dialogs;
 using NHSOnline.App.Navigation;
+using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
 using NHSOnline.App.Services.FIDO;
 using NHSOnline.App.Threading;
@@ -33,6 +34,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly ILogger _logger;
         private readonly IBrowserOverlay _browserOverlay;
         private readonly IPageFactory _pageFactory;
+        private readonly INhsLoginService _nhsLoginService;
         private readonly IBiometricAuthenticationService _biometricAuthenticationService;
         private readonly RedirectorUrlFactory _redirectorUrlFactory;
         private readonly INhsAppNavigationHandler _navigationHandler;
@@ -49,6 +51,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             ILogger<NhsAppWebPresenter> logger,
             IBrowserOverlay browserOverlay,
             IPageFactory pageFactory,
+            INhsLoginService nhsLoginService,
             INotifications notifications,
             IBiometricAuthenticationService biometricAuthenticationService,
             RedirectorUrlFactory redirectorUrlFactory,
@@ -63,6 +66,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _logger = logger;
             _browserOverlay = browserOverlay;
             _pageFactory = pageFactory;
+            _nhsLoginService = nhsLoginService;
             _notifications = notifications;
 
             _biometricAuthenticationService = biometricAuthenticationService;
@@ -270,9 +274,10 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         private async Task StartNhsLoginUpliftRequested(StartNhsLoginUpliftRequest request)
         {
-            _logger.LogInformation("Starting Uplift - {Url}", request.Url);
+            _logger.LogInformation("Starting Uplift");
 
-            var model = new NhsLoginUpliftModel(request.Url, GetNewPopToRootHandler());
+            var pkceCodes = _nhsLoginService.GeneratePkceCodes();
+            var model = new NhsLoginUpliftModel(pkceCodes, request.AssertedLoginIdentity, GetNewPopToRootHandler());
 
             var page = _pageFactory.CreatePageFor(model);
             await _view.AppNavigation

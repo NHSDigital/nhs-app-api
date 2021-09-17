@@ -26,11 +26,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
             AddEventHandlers();
         }
 
-        IAppNavigation<INhsLoginUpliftView.IEvents> INavigationView<INhsLoginUpliftView.IEvents>.AppNavigation => _appNavigation;
-
-        Func<Task>? INhsLoginUpliftView.IEvents.Appearing { get; set; }
-        private AsyncCommand AppearingCommand
-            => new AsyncCommand(() => ((INhsLoginUpliftView.IEvents)this).Appearing);
+        IAppNavigation<INhsLoginUpliftView.IEvents> INavigationView<INhsLoginUpliftView.IEvents>.AppNavigation =>
+            _appNavigation;
 
         public Action<WebNavigatingEventArgs>? Navigating { get; set; }
 
@@ -55,8 +52,6 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
 
             RemoveEventHandlers();
             AddEventHandlers();
-
-            AppearingCommand.Execute(null);
         }
 
         protected override void OnDisappearing()
@@ -106,10 +101,21 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
             }
         }
 
-        protected override bool OnBackButtonPressed()
+        public void LoadUrlAndNotifyOnRedirect(Uri uri, Func<Uri, bool> isRedirect, Action<Uri> redirected)
         {
-            BackRequestedCommand.Execute(null);
-            return true;
+            void OnWebViewOnNavigating(object sender, WebNavigatingEventArgs args)
+            {
+                var redirectedUri = new Uri(args.Url);
+                if (isRedirect(redirectedUri))
+                {
+                    args.Cancel = true;
+                    WebView.Navigating -= OnWebViewOnNavigating;
+                    redirected(redirectedUri);
+                }
+            }
+
+            WebView.Navigating += OnWebViewOnNavigating;
+            GoToUri(uri);
         }
 
         private void ShowWebView()
@@ -126,18 +132,24 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
 
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);
 
+        protected override bool OnBackButtonPressed()
+        {
+            BackRequestedCommand.Execute(null);
+            return true;
+        }
+
         public Task HandleDeeplink(Uri deeplinkUrl)
         {
             _logger.LogInformation("{className} is not required to handle deeplinks", nameof(NhsLoginUpliftPage));
             return Task.CompletedTask;
         }
 
-        private void WebViewNavigating (object sender, WebNavigatingEventArgs e)
+        private void WebViewNavigating(object sender, WebNavigatingEventArgs e)
         {
             ShowSpinner();
         }
 
-        private void WebOnEndNavigating (object sender, WebNavigatedEventArgs e)
+        private void WebOnEndNavigating(object sender, WebNavigatedEventArgs e)
         {
             ShowWebView();
         }

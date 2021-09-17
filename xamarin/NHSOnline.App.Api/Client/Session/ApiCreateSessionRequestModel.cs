@@ -6,8 +6,8 @@ namespace NHSOnline.App.Api.Client.Session
         {
             AuthCode = authCode;
             CodeVerifier = codeVerifier;
-            RedirectUrl = redirectUrl;
             Referrer = referrer;
+            RedirectUrl = redirectUrl;
         }
 
         public string AuthCode { get; }

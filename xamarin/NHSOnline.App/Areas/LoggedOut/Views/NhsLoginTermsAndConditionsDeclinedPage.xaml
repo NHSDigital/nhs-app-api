@@ -5,7 +5,8 @@
                                     xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
                                     xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
                                     x:Class="NHSOnline.App.Areas.LoggedOut.Views.NhsLoginTermsAndConditionsDeclinedPage"
-                                    x:Name="Page">
+                                    x:Name="Page"
+                                    CloseCommand="{Binding CloseRequestedCommand, Source={x:Reference Name=Page}}">
 
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <StackLayout>

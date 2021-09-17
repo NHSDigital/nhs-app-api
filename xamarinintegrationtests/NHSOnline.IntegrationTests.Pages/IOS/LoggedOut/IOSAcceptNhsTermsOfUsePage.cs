@@ -32,12 +32,18 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
             return page;
         }
 
-        public void AssertPageContent()
+        public IOSAcceptNhsTermsOfUsePage AssertPageContent()
         {
             Title.AssertVisible();
             YouCantUseTheNhsApp.AssertVisible();
             ContactGpSurgery.AssertVisible();
             UrgentMedicalAdvice.AssertVisible();
+
+            return this;
         }
+
+        public void BackToHome() => BackToHomeLink.Touch();
+
+        private IOSLink BackToHomeLink => IOSLink.WithText(_driver, "Back to home");
     }
 }

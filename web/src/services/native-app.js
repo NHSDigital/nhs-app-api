@@ -81,10 +81,10 @@ export default {
     return app && app.startNhsLoginUplift;
   },
 
-  startNhsLoginUplift(url) {
+  startNhsLoginUplift(token) {
     const app = window.nativeApp;
-    const request = JSON.stringify({ url });
-    app.startNhsLoginUplift(request);
+    const urlRequest = JSON.stringify({ assertedLoginIdentity: token });
+    app.startNhsLoginUplift(urlRequest);
   },
 
   /* This method is used to determine whether to hide the web header on the

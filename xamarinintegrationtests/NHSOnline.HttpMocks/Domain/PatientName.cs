@@ -12,5 +12,10 @@ namespace NHSOnline.HttpMocks.Domain
         public string Title { get; }
         public string GivenName { get; }
         public string FamilyName { get; }
+
+        public override string ToString()
+        {
+            return $"{Title} {GivenName} {FamilyName}";
+        }
     }
 }

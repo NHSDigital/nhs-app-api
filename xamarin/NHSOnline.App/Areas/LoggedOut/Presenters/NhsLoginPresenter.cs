@@ -120,17 +120,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         public async Task Visit(AuthReturnCheckResult.Failed failed)
         {
-            _logger.LogWarning("Auth Return Failed");
-            var errorReferenceCode =
-                $"3w{RandomErrorReferenceGenerator.GenerateString(4, "acefghjkmnorstuwxyz3456789")}";
-            _logger.LogError($"Auth Return failed, error reference {errorReferenceCode} generated");
+            var nhsLoginErrorModel = _model.NhsLoginFailed();
+            _logger.LogError($"Auth Return failed, error reference {nhsLoginErrorModel.ServiceDeskReference} generated");
 
-            await NavigateToLoginErrorPage(errorReferenceCode).PreserveThreadContext();
-        }
-
-        private async Task NavigateToLoginErrorPage(string errorReferenceCode)
-        {
-            var nhsLoginErrorModel = _model.NhsLoginFailed(errorReferenceCode);
             var nhsLoginErrorPage = _pageFactory.CreatePageFor(nhsLoginErrorModel);
 
             await _view.AppNavigation.ReplaceCurrentPage(nhsLoginErrorPage).PreserveThreadContext();

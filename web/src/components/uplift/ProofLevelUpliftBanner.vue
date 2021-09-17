@@ -43,12 +43,11 @@ export default {
           },
         })
         .then(({ token }) => {
-          const fullUpliftUrl = `${this.upliftUrl}&asserted_login_identity=${token}`;
           if (NativeApp.supportsNativeNhsLoginUplift()) {
-            NativeApp.startNhsLoginUplift(fullUpliftUrl);
+            NativeApp.startNhsLoginUplift(token);
           } else {
             this.$store.dispatch('http/isLoadingExternalSite');
-            window.location = fullUpliftUrl;
+            window.location = `${this.upliftUrl}&asserted_login_identity=${token}`;
           }
         });
     },

@@ -10,7 +10,6 @@ namespace NHSOnline.App.Areas.WebIntegration
     {
         internal interface IEvents
         {
-            Func<Task>? Appearing { get; set; }
             Action<WebNavigatingEventArgs>? Navigating { get; set; }
             Func<Task>? NavigationFailed { get; set; }
 
@@ -19,5 +18,7 @@ namespace NHSOnline.App.Areas.WebIntegration
         }
 
         void GoToUri(Uri uri);
+        void LoadUrlAndNotifyOnRedirect(Uri uri, Func<Uri, bool> isRedirect, Action<Uri> redirected);
+
     }
 }

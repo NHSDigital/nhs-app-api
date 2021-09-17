@@ -61,12 +61,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
             PrescriptionsMenuItem
         };
 
-        private WebPanel UpliftPanel => WebPanel.WithTitle(_interactor, "Prove your identity to get full access");
-
-        private WebButton Continue => UpliftPanel.ContainingButtonWithText("Continue");
-
-        internal void AssertOnPage() => TitleText.AssertVisible();
-
         public void AssertNameDisplayedFor(string patientName) => NameDefinitionTerm.AssertValue(patientName);
 
         public void AssertUserAgent(Platform platform) =>
@@ -90,6 +84,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
             DismissBiometricsBanner.AssertNotVisible();
         }
 
+        public void AssertUpliftPanelNotVisible() => UpliftPanel.AssertNotVisible();
+
         public void AssertNhsNumberNotVisible() => NhsNumberTerm.AssertNotVisible();
 
         public void ProveYourIdentityContinue() => Continue.Click();
@@ -97,5 +93,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
         public void DismissBiometricPanel() => DismissBiometricsBanner.Click();
 
         public void GetYourCovidPass() => GetYourCovidPassMenuItem.Click();
+
+        private WebPanel UpliftPanel => WebPanel.WithTitle(_interactor, "Prove your identity to get full access");
+
+        private WebButton Continue => UpliftPanel.ContainingButtonWithText("Continue");
+
+        internal void AssertOnPage() => TitleText.AssertVisible();
     }
 }

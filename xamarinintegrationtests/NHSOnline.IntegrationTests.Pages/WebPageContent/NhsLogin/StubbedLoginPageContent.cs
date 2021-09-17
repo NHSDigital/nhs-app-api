@@ -33,7 +33,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsLogin
 
         internal void AssertOnPage() => TitleText.AssertVisible();
 
-
         public StubbedLoginPageContent AssertVectorOfTrust()
         {
             VectorsOfTrustDefinitionTerm.AssertValue("[\"P5.Cp.Cd\", \"P5.Cp.Ck\", \"P5.Cm\", \"P9.Cp.Cd\", \"P9.Cp.Ck\", \"P9.Cm\"]");

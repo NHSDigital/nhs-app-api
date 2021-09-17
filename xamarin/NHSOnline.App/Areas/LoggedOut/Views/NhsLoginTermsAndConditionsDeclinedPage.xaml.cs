@@ -30,6 +30,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public Func<Task>? OneOneOneRequested { get; set; }
         public ICommand OneOneOneCommand => new AsyncCommand(() => OneOneOneRequested);
 
+        public Func<Task>? CloseRequested { get; set; }
+        public ICommand CloseRequestedCommand => new AsyncCommand(() => CloseRequested);
+
         protected override void OnAppearing()
         {
             _logger.LogInformation("{Method}", nameof(OnAppearing));

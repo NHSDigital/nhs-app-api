@@ -1,8 +1,10 @@
 import AuthorisationService from '@/services/authorisation-service';
 import ProofLevelUpliftBanner from '@/components/uplift/ProofLevelUpliftBanner';
+import NativeApp from '@/services/native-app';
 import { mount } from '../../helpers';
 
 jest.mock('@/services/authorisation-service');
+jest.mock('@/services/native-app');
 
 describe('Proof level uplift banner', () => {
   const hostname = 'www.example.com';
@@ -77,8 +79,22 @@ describe('Proof level uplift banner', () => {
       });
     });
 
+    describe('NativeApp methods are supported and correct uplift json is returned to native app', () => {
+      beforeEach(() => {
+        NativeApp.supportsNativeNhsLoginUplift.mockReturnValue(true);
+        NativeApp.startNhsLoginUplift = jest.fn();
+        upliftButton.trigger('click');
+        response.token = 'token';
+      });
+
+      it('will return correct uplift json', () => {
+        expect(NativeApp.startNhsLoginUplift).toBeCalledWith('token');
+      });
+    });
+
     afterEach(() => {
       window.location = location;
+      NativeApp.startNhsLoginUplift.mockClear();
     });
   });
 });

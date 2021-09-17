@@ -7,7 +7,7 @@ using NHSOnline.App.Config;
 
 namespace NHSOnline.App.NhsLogin
 {
-    internal sealed class NhsLoginService: INhsLoginService
+    internal sealed class NhsLoginService : INhsLoginService
     {
         private readonly ILogger _logger;
         private readonly INhsLoginConfiguration _loginConfig;
@@ -42,17 +42,12 @@ namespace NHSOnline.App.NhsLogin
 
         public LoginState BeginLogin(ProofKeyCodeExchangeCodes codes, string? fidoAuthResponse)
         {
-            var authReturnUri = new UriBuilder
-            {
-                Scheme = "https",
-                Host = _webConfig.Host,
-                Path = "/auth-return"
-            }.Uri;
+            var authReturnUri = BuildLoginAuthReturnUri();
 
             var authoriseUri = NhsLoginUriBuilder.Create(_loginConfig)
                 .ClientId("nhs-online")
-                .Scopes("openid", "profile", "profile_extended", "gp_registration_details")
-                .VectorsOfTrust("P5.Cp.Cd", "P5.Cp.Ck", "P5.Cm", "P9.Cp.Cd", "P9.Cp.Ck", "P9.Cm")
+                .Scopes(NhsLoginScope.P5NoGpSession)
+                .VectorsOfTrust(NhsLoginVectorsOfTrust.P5BasicAndP9Sensitive)
                 .RedirectUri(authReturnUri)
                 .Challenge(codes.Challenge, codes.Method)
                 .FidoAuthResponse(fidoAuthResponse)
@@ -72,14 +67,40 @@ namespace NHSOnline.App.NhsLogin
 
             var authoriseUri = NhsLoginUriBuilder.Create(_loginConfig)
                 .ClientId("nhs-online")
-                .Scopes("openid", "profile", "profile_extended", "nhs_app_credentials", "gp_registration_details")
-                .VectorsOfTrust("P5.Cp.Cd", "P5.Cp.Ck", "P5.Cm", "P9.Cp.Cd", "P9.Cp.Ck", "P9.Cm")
+                .Scopes(NhsLoginScope.P9WithGpSession)
+                .VectorsOfTrust(NhsLoginVectorsOfTrust.P5BasicAndP9Sensitive)
                 .RedirectUri(authReturnUri)
                 .State(redirectTo)
                 .AssertedLoginIdentity(assertedLoginIdentity)
                 .Build();
 
             return new CreateOnDemandGpSessionState(authoriseUri, authReturnUri);
+        }
+
+        public LoginState CreateNhsLoginUpliftSession(ProofKeyCodeExchangeCodes codes, string assertedLoginIdentity)
+        {
+            var authReturnUri = BuildLoginAuthReturnUri();
+
+            var authoriseUri = NhsLoginUriBuilder.Create(_loginConfig)
+                .ClientId("nhs-online")
+                .Scopes(NhsLoginScope.P5ToP9Uplift)
+                .VectorsOfTrust(NhsLoginVectorsOfTrust.P9Sensitive)
+                .RedirectUri(authReturnUri)
+                .Challenge(codes.Challenge, codes.Method)
+                .AssertedLoginIdentity(assertedLoginIdentity)
+                .Build();
+
+            return new LoginState(_logger, authoriseUri, authReturnUri);
+        }
+
+        private Uri BuildLoginAuthReturnUri()
+        {
+            return new UriBuilder
+            {
+                Scheme = _webConfig.Scheme,
+                Host = _webConfig.Host,
+                Path = "/auth-return"
+            }.Uri;
         }
     }
 }
