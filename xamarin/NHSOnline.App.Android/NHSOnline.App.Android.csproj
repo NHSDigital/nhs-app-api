@@ -3,6 +3,8 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Local - Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <NhsAppLabel>NHS App</NhsAppLabel>
+    <NhsAppPackageName>com.nhs.online.nhsonline</NhsAppPackageName>
     <ProjectGuid>{30B3186B-8809-4016-817A-894E629D1EDF}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TemplateGuid>{c9e5eea5-ca05-42a1-839b-61506e0a37df}</TemplateGuid>
@@ -32,7 +34,7 @@
     <NhsAppAuthRedirectPath>/auth-return</NhsAppAuthRedirectPath>
     <NhsAppBaseHost>www.nhsapp.service.nhs.uk</NhsAppBaseHost>
     <NhsAppBaseScheme>https</NhsAppBaseScheme>
-    <ErsUrl>pat.sa.refer.nhs.uk</ErsUrl>
+    <ErsUrl>refer.nhs.uk</ErsUrl>
     <ErsUrlPath>/nhslogin</ErsUrlPath>
     <ErsUrlScheme>https</ErsUrlScheme>
   </PropertyGroup>
@@ -88,6 +90,9 @@
     <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch19 - Release|AnyCPU' ">
+    <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Production - Release|AnyCPU' ">
     <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
   </PropertyGroup>
   <Import Project="Properties/BuildConfiguration.debugmode.$(DebugMode).props" />
@@ -162,6 +167,7 @@
     <Compile Include="SplashScreenActivity.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\BuildConfiguration.env.Production.props" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <None Include="Properties\AndroidManifest.template.xml" />
@@ -220,7 +226,6 @@
     <None Include="Properties\BuildConfiguration.debugmode.Debug.props" />
     <None Include="Properties\BuildConfiguration.debugmode.Release.props" />
     <None Include="Properties\BuildConfiguration.env.BrowserStack.props" />
-    <None Include="Properties\BuildConfiguration.env.Dev.props" />
     <None Include="Properties\BuildConfiguration.env.Local.props" />
     <None Include="Properties\BuildConfiguration.env.Staging.props" />
     <None Include="Properties\BuildConfiguration.env.Preview.props" />

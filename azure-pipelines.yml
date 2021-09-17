@@ -43,6 +43,7 @@ parameters:
       - Staging
       - OnboardingSandpit
       - OnboardingAos
+      - Production
 
   - name: intTestsRunXamarinNative
     displayName: Run Xamarin Native Integration Tests
@@ -310,6 +311,29 @@ stages:
           certSecureFile: iOSOnboardingCertificate.p12
           certPwd: '$(ios.onboarding.certificate.password)'
           provProfileSecureFile: iOSOnboardingDistributionAOS.mobileprovision
+          nativeVersion: '$(native.xamarin.version)'
+          buildNumber: '$(native.xamarin.ios.build.number)'
+
+  - ${{ if or(eq(variables['native.xamarin.target'], 'Production'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
+    - stage: xamarin_production
+      displayName: Build Xamarin Production Apps
+      dependsOn:
+      jobs:
+      - template: .azuredevops/templates/xamarin-android-client-build-job.yml
+        parameters:
+          configuration: 'Production - Release'
+          apkFilename: 'com.nhs.online.nhsonline.production.apk'
+          keyStoreFile: AndroidSigningKeyStore
+          apksignerKeystorePassword: '$(android.key.store.password)'
+          keystoreAlias: 'playconsoleuploadkey'
+          nativeVersion: '$(native.xamarin.version)'
+          buildNumber: '$(native.xamarin.android.build.number)'
+      - template: .azuredevops/templates/xamarin-ios-client-build-job.yml
+        parameters:
+          configuration: 'Production - Release'
+          certSecureFile: iOSProductionCertificate.p12
+          certPwd: '$(ios.production.certificate.password)'
+          provProfileSecureFile: iOSProduction.mobileprovision
           nativeVersion: '$(native.xamarin.version)'
           buildNumber: '$(native.xamarin.ios.build.number)'
 

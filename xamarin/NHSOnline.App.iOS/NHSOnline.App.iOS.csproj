@@ -6,6 +6,7 @@
     <NhsAppBundleShortVersion Condition=" '$(NhsAppBundleShortVersion)' == '' ">1.99.1</NhsAppBundleShortVersion>
     <NhsAppBundleVersion Condition=" '$(NhsAppBundleVersion)' == '' ">4</NhsAppBundleVersion>
     <NhsAppBundleDisplayName Condition=" '$(NhsAppBundleDisplayName)' == '' ">NHS App</NhsAppBundleDisplayName>
+    <NhsAppBundleIdentifier Condition=" '$(NhsAppBundleIdentifier)' == '' ">com.nhs.online</NhsAppBundleIdentifier>
     <NhsAppApnsEnvironmentEntitlement Condition=" '$(NhsAppApnsEnvironmentEntitlement)' == '' ">production</NhsAppApnsEnvironmentEntitlement>
     <NhsAppDomainEntitlement Condition=" '$(NhsAppDomainEntitlement)' == '' ">nhsapp.service.nhs.uk</NhsAppDomainEntitlement>
     <NhsAppErsDomainEntitlement Condition=" '$(NhsAppErsDomainEntitlement)' == '' ">refer.nhs.uk</NhsAppErsDomainEntitlement>
@@ -62,6 +63,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingAos - Debug|iPhoneSimulator' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingAos - Release|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingAos - Release|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Production - Release|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Production - Release|iPhoneSimulator' " />
   <Import Project="Properties/BuildConfiguration.env.$(Environment).props" />
   <Import Project="Properties/BuildConfiguration.debugmode.$(DebugMode).props" />
   <Import Project="Properties/BuildConfiguration.platform.$(Platform).props" />
@@ -170,11 +173,11 @@
     <None Include="Properties\BuildConfiguration.debugmode.Debug.props" />
     <None Include="Properties\BuildConfiguration.debugmode.Release.props" />
     <None Include="Properties\BuildConfiguration.env.BrowserStack.props" />
-    <None Include="Properties\BuildConfiguration.env.Dev.props" />
     <None Include="Properties\BuildConfiguration.env.Local.props" />
     <None Include="Properties\BuildConfiguration.env.OnboardingSandpit.props" />
     <None Include="Properties\BuildConfiguration.env.OnboardingAos.props" />
     <None Include="Properties\BuildConfiguration.env.Preview.props" />
+    <None Include="Properties\BuildConfiguration.env.Production.props" />
     <None Include="Properties\BuildConfiguration.env.Scratch18.props" />
     <None Include="Properties\BuildConfiguration.env.Scratch19.props" />
     <None Include="Properties\BuildConfiguration.env.Scratch6.props" />

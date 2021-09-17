@@ -1,8 +1,8 @@
 using System;
 
-namespace NHSOnline.App.Config.Values.Scratch19
+namespace NHSOnline.App.Config.Values.Production
 {
-    public class Scratch19NhsExternalServicesConfiguration: INhsExternalServicesConfiguration
+    public class ProductionNhsExternalServicesConfiguration: INhsExternalServicesConfiguration
     {
         public Uri NhsUkBaseHelpUrl { get; } = new Uri("https://www.nhs.uk/nhs-app/nhs-app-help-and-support/");
         public Uri NhsUkLoginHelpUrl { get; } = new Uri("https://www.nhs.uk/nhs-app/nhs-app-help-and-support/getting-started-with-the-nhs-app/");

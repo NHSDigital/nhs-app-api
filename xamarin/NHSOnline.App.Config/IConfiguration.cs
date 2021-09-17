@@ -18,6 +18,8 @@ namespace NHSOnline.App.Config
         static IConfiguration Configuration { get; } = new Values.Scratch18.Scratch18Configuration();
 #elif ENV_SCRATCH19
         static IConfiguration Configuration { get; } = new Values.Scratch19.Scratch19Configuration();
+#elif ENV_PRODUCTION
+        static IConfiguration Configuration { get; } = new Values.Production.ProductionConfiguration();
 #else
 #error No supported environment defined
 #endif
