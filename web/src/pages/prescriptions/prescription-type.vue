@@ -1,60 +1,33 @@
 <template>
   <div v-if="showTemplate && !hasApiError && !gpSessionApiError">
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full nhsuk-u-padding-top-3">
-        <div aria-atomic="true" role="alert">
-          <message-dialog
-            v-if="showErrors"
-            :focusable="true"
-            message-type="error"
-          >
-            <message-text id="errorHeading" data-purpose="error-heading">
-              {{ $t("prescriptions.prescriptionType.errors.thereIsAProblem") }}
-            </message-text>
-            <message-list class="nhsuk-u-margin-bottom-3">
-              <li>
-                {{
-                  $t(
-                    "prescriptions.prescriptionType.errors.chooseTypeOfPrescription"
-                  )
-                }}
-              </li>
-            </message-list>
-          </message-dialog>
-        </div>
+    <div class="nhsuk-grid-column-full">
 
-        <div v-if="hasLoaded" class="break">
-          <radio-group
-            id="radiogroup-repeatPrescription"
-            v-model="selectedValue"
-            :error-message="inlineErrorMessage"
-            :inline="true"
-            :radios="prescriptionTypeChoices"
-            :show-error="showErrors"
-            @select="selected"
-          >
-            <template v-slot:legendContent>
-              <h1 class="nhsuk-fieldset__heading nhsuk-u-margin-top-3">
-                {{ $t("navigation.pages.headers.prescriptionType") }}
-              </h1>
-            </template>
-          </radio-group>
-          <generic-button
-            id="continue-button"
-            :button-classes="['nhsuk-button']"
-            @click.prevent="continueClicked"
-          >
-            {{ $t("prescriptions.prescriptionType.continueButton") }}
-          </generic-button>
-          <desktopGenericBackLink
-            v-if="!$store.state.device.isNativeApp"
-            id="back-link"
-            :button-text="'generic.back'"
-            :path="getBackPath"
-            @clickAndPrevent="backButtonClicked"
-          />
-        </div>
+      <div v-if="hasLoaded" class="break">
+        <nhs-uk-radio-group
+          id="radiogroup-repeatPrescriptionType"
+          v-model="selectedValue"
+          :error="showErrors"
+          :error-text="inlineErrorMessage"
+          :heading="$t('navigation.pages.headers.prescriptionType')"
+          :items="prescriptionTypeChoices"
+          :required="true"
+          name="prescriptionType"
+          @validate="onAnswerValidate"/>
+        <generic-button
+          id="continue-button"
+          :button-classes="['nhsuk-button']"
+          @click.prevent="continueClicked"
+        >
+          {{ $t("prescriptions.prescriptionType.continueButton") }}
+        </generic-button>
       </div>
+      <desktopGenericBackLink
+        v-if="!$store.state.device.isNativeApp"
+        id="back-link"
+        :button-text="'generic.back'"
+        :path="getBackPath"
+        @clickAndPrevent="backButtonClicked"
+      />
     </div>
   </div>
   <div v-else-if="gpSessionApiError">
@@ -67,18 +40,11 @@
 <script>
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import GenericButton from '@/components/widgets/GenericButton';
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageText from '@/components/widgets/MessageText';
-import MessageList from '@/components/widgets/MessageList';
-import { GP_SESSION_ERROR_STATUS, redirectTo, gpSessionErrorHasRetried } from '@/lib/utils';
+import { GP_SESSION_ERROR_STATUS, gpSessionErrorHasRetried, redirectTo } from '@/lib/utils';
 import { getNavigationPathFromPrescriptionType } from '@/lib/prescriptions/navigation';
-import RadioGroup from '@/components/RadioGroup';
+import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import PrescriptionErrors from '@/components/errors/pages/prescriptions/PrescriptionsErrors';
-import {
-  PRESCRIPTION_TYPE_PATH,
-  PRESCRIPTIONS_CONTACT_SURGERY_PATH,
-  PRESCRIPTIONS_PATH,
-} from '@/router/paths';
+import { PRESCRIPTION_TYPE_PATH, PRESCRIPTIONS_CONTACT_SURGERY_PATH, PRESCRIPTIONS_PATH } from '@/router/paths';
 import showShutterPage from '@/lib/proxy/shutter';
 import { EventBus, FOCUS_ERROR_ELEMENT, UPDATE_HEADER, UPDATE_TITLE } from '@/services/event-bus';
 import vueScrollTo from 'vue-scrollto';
@@ -112,11 +78,8 @@ const loadData = async (store) => {
 export default {
   name: 'PrescriptionTypePage',
   components: {
-    RadioGroup,
+    NhsUkRadioGroup,
     GenericButton,
-    MessageDialog,
-    MessageText,
-    MessageList,
     DesktopGenericBackLink,
     PrescriptionErrors,
   },
@@ -134,7 +97,9 @@ export default {
         {
           label: this.$t('prescriptions.prescriptionType.repeatPrescription'),
           value: PRESCRIPTION_TYPE_REPEAT,
-          hint: this.$t('prescriptions.prescriptionType.repeatPrescriptionHint'),
+          hint: {
+            text: this.$t('prescriptions.prescriptionType.repeatPrescriptionHint'),
+          },
           id: 'radioButton-repeatPrescription',
         },
         {
@@ -142,9 +107,9 @@ export default {
             'prescriptions.prescriptionType.nonRepeatPrescription',
           ),
           value: PRESCRIPTION_TYPE_NON_REPEAT,
-          hint: this.$t(
-            'prescriptions.prescriptionType.nonRepeatPrescriptionHint',
-          ),
+          hint: {
+            text: this.$t('prescriptions.prescriptionType.nonRepeatPrescriptionHint'),
+          },
           id: 'radioButton-nonRepeatPrescription',
         },
       ],
@@ -198,6 +163,9 @@ export default {
     }
   },
   methods: {
+    onAnswerValidate(validation) {
+      this.isValid = validation.isValid;
+    },
     continueClicked() {
       this.hasTriedToContinue = false;
 
@@ -234,8 +202,9 @@ export default {
 };
 </script>
 
-<style module lang="scss" scoped>
+<style lang="scss" module scoped>
 @import "../../style/info";
 @import "../../style/buttons";
 @import "../../style/spacings";
 </style>
+

@@ -161,4 +161,53 @@ describe('nhsuk radio group', () => {
       });
     });
   });
+
+  describe('hints', () => {
+    it('will display a hint if one is provided', () => {
+      const items = [
+        { value: 'yes', label: 'Yes', hint: { text: 'This is hint 1' } },
+        { value: 'no', label: 'No', hint: { text: 'This is hint 2' } },
+      ];
+      mountComponent({
+        items,
+        name: 'urgency',
+      });
+
+      items.forEach((i) => {
+        const hint = wrapper.find(`#urgency-${i.value}-hint`);
+
+        expect(hint.text()).toEqual(i.hint.text);
+      });
+    });
+
+    it('will not render the hint if no hint is provided', () => {
+      const items = [{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }];
+      mountComponent({
+        items,
+        name: 'urgency',
+      });
+
+      items.forEach((i) => {
+        expect(wrapper.find(`#urgency-${i.value}-hint`).exists()).toBeFalsy();
+      });
+    });
+
+    it('will allow the selective rendering of hints', () => {
+      const items = [{ value: 'yes', label: 'Yes', hint: { text: 'This is hint 1' } }, { value: 'no', label: 'No' }];
+      mountComponent({
+        items,
+        name: 'urgency',
+      });
+
+      items.forEach((i) => {
+        if (i.hint) {
+          const hint = wrapper.find(`#urgency-${i.value}-hint`);
+
+          expect(hint.text()).toEqual(i.hint.text);
+        } else {
+          expect(wrapper.find(`#urgency-${i.value}-hint`).exists()).toBeFalsy();
+        }
+      });
+    });
+  });
 });

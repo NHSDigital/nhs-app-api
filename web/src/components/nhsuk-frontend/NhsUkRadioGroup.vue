@@ -30,10 +30,14 @@
              class="nhsuk-radios__item">
           <input :id="`${name}-${item.value}`" v-model="choice" class="nhsuk-radios__input"
                  :name="name" type="radio" :value="item.value" :required="required"
-                 :aria-describedby="error ? `${name}-error` : undefined">
+                 :aria-describedby="error ? `${name}-error` : undefined" aria-invalid="false">
           <label class="nhsuk-label nhsuk-radios__label" :for="`${name}-${item.value}`">
             {{ item.label || item.value }}
           </label>
+          <div v-if="item.hint" :id="`${name}-${item.value}-hint`"
+               class="nhsuk-hint nhsuk-radios__hint">
+            {{ item.hint.text }}
+          </div>
         </div>
       </div>
     </div>

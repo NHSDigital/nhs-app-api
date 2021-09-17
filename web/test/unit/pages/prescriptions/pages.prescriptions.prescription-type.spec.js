@@ -3,7 +3,7 @@ import {
   PRESCRIPTIONS_CONTACT_SURGERY_PATH,
   PRESCRIPTION_REPEAT_COURSES_PATH,
 } from '@/router/paths';
-import RadioGroup from '@/components/RadioGroup';
+import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import PrescriptionType from '@/pages/prescriptions/prescription-type';
 import * as dependency from '@/lib/utils';
 import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
@@ -76,7 +76,7 @@ describe('Prescription type page', () => {
 
   describe('Radio buttons', () => {
     it('will exist', () => {
-      expect(wrapper.find(RadioGroup).exists()).toBe(true);
+      expect(wrapper.find(NhsUkRadioGroup).exists()).toBe(true);
     });
   });
 
@@ -90,7 +90,7 @@ describe('Prescription type page', () => {
     });
 
     it('will redirect to the repeat prescription page when repeat radio selected', async () => {
-      const radioButton = wrapper.find('#radioButton-PRESCRIPTION_TYPE_REPEAT');
+      const radioButton = wrapper.find('#prescriptionType-PRESCRIPTION_TYPE_REPEAT');
       radioButton.trigger('click');
       continueButton.trigger('click');
       errorComponent = wrapper.find('#errorHeading');
@@ -102,7 +102,7 @@ describe('Prescription type page', () => {
     });
 
     it('will redirect to the contact surgery page when non repeat radio selected', async () => {
-      const radioButton = wrapper.find('#radioButton-PRESCRIPTION_TYPE_NON_REPEAT');
+      const radioButton = wrapper.find('#prescriptionType-PRESCRIPTION_TYPE_NON_REPEAT');
       radioButton.trigger('click');
       continueButton.trigger('click');
       await Vue.nextTick();
@@ -116,7 +116,7 @@ describe('Prescription type page', () => {
     it('will not redirect to another page when no prescription type has been selected', async () => {
       continueButton.trigger('click');
       await Vue.nextTick();
-      errorComponent = wrapper.find('#errorHeading');
+      errorComponent = wrapper.find('#message-dialog');
 
       expect(errorComponent.exists()).toBe(true);
       expect(dependency.redirectTo).not.toHaveBeenCalled();
@@ -124,7 +124,7 @@ describe('Prescription type page', () => {
     });
 
     it('will track prescriptions repeat courses path when repeat type is selected', async () => {
-      const radioButton = wrapper.find('#radioButton-PRESCRIPTION_TYPE_REPEAT');
+      const radioButton = wrapper.find('#prescriptionType-PRESCRIPTION_TYPE_REPEAT');
       radioButton.trigger('click');
       continueButton.trigger('click');
       await Vue.nextTick();
@@ -134,7 +134,7 @@ describe('Prescription type page', () => {
     });
 
     it('will track prescriptions contact surgery path when non repeat type is selected', async () => {
-      const radioButton = wrapper.find('#radioButton-PRESCRIPTION_TYPE_NON_REPEAT');
+      const radioButton = wrapper.find('#prescriptionType-PRESCRIPTION_TYPE_NON_REPEAT');
       radioButton.trigger('click');
       continueButton.trigger('click');
       await Vue.nextTick();

@@ -104,7 +104,6 @@ export const PRESCRIPTION_TYPE = {
   name: PRESCRIPTION_TYPE_NAME,
   component: PrescriptionTypePage,
   meta: {
-    headerKey: 'navigation.pages.headers.prescriptionType',
     titleKey: 'navigation.pages.titles.prescriptionType',
     crumb: breadcrumbs.PRESCRIPTION_TYPE_CRUMB,
     proofLevel: proofLevel.P9,
