@@ -6,5 +6,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
     {
         WebContextStrategies Web { get; }
         void LoggedOutHomeScreenLoaded();
+        string AppVersionNumber { get; }
     }
 }

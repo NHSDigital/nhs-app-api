@@ -21,6 +21,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 
         private TestLogs Logs { get; }
         public WebContextStrategies Web { get; }
+        public string AppVersionNumber { get; }
 
         internal AndroidDriverWrapper(
             string testName,
@@ -32,6 +33,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             Logs = logs;
 
             _browserStackConfig = Configuration.Get<BrowserStackConfig>("BrowserStack");
+            var nhsAppConfig = Configuration.Get<NhsAppConfig>("NhsApp");
             var androidConfig = Configuration.Get<AndroidConfig>("Android");
 
             logs.TestDevice(targetDevice.ToName(), osVersion.ToName());
@@ -51,6 +53,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
                 logs);
 
             Web = new WebContextStrategies(_nativeDriverContext, _driver, Logs);
+            AppVersionNumber = nhsAppConfig.AppVersionNumber;
 
             _interactor = new AndroidInteractor(
                 _nativeDriverContext,

@@ -4,7 +4,9 @@ parameters:
     default: false
   - name: runCanaryTests
     type: boolean
-    default: false  
+    default: false 
+  - name: nativeVersion
+    type: string
 
 jobs:
   - job:
@@ -73,6 +75,7 @@ jobs:
         continueOnError: ${{ or(eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['Build.SourceBranch'], 'refs/tags/')) }}
         env:
           BrowserStack__Key: $(browserstack.access.key)
+          NhsApp__AppVersionNumber: ${{ parameters['nativeVersion'] }}
           Android__PlayStorePassword: $(browserstack.playstore.password)
           BrowserStack__Build: $(Build.BuildNumber)
           TestExecution__RetryOnFlakyErrors: true

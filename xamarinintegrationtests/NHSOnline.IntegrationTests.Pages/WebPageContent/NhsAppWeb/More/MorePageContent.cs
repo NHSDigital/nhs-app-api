@@ -17,6 +17,9 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "More");
 
+        private WebText VersionText(string versionNumber) =>
+            WebText.WithTagAndText(_interactor, "span", $"({versionNumber})");
+
         private WebMenuItem LinkedProfilesMenuItem => WebMenuItem.WithTitle(_interactor, "Linked profiles");
 
         private WebMenuItem AccountAndSettingsMenuItem => WebMenuItem.WithTitle(_interactor, "Account and settings");
@@ -52,6 +55,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More
         {
             AssertOnPage();
             LogoutButton.AssertVisible();
+        }
+
+        public void AssertVersionText(string versionNumber)
+        {
+            VersionText(versionNumber).AssertVisible();
         }
 
         public void NavigateToAccountAndSettings()

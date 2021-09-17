@@ -17,6 +17,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         private IOSButton HelpIcon => IOSButton.WithText(_driver, "Help");
 
+        private IOSLabel VersionText(string versionNumber) => IOSLabel.WithText(_driver, $"Version {versionNumber}");
+
 
         public static IOSLoggedOutHomePage AssertOnPage(IIOSDriverWrapper driver)
         {
@@ -42,6 +44,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
         }
 
         public void AssertHelpIconPresent() => HelpIcon.AssertVisible();
+
+        public void AssertCorrectVersionText() => VersionText(_driver.AppVersionNumber).AssertVisible();
 
         public void GetHelp() => HelpIcon.Click();
 

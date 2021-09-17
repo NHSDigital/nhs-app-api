@@ -17,6 +17,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         private AndroidIcon HelpIcon => AndroidIcon.WithName(_driver, "NHS App help icon");
 
+        private AndroidLabel VersionText(string versionNumber) => AndroidLabel.WithText(_driver, $"Version {versionNumber}");
+
         public static AndroidLoggedOutHomePage AssertOnPage(IAndroidDriverWrapper driver)
         {
             var page = new AndroidLoggedOutHomePage(driver);
@@ -39,5 +41,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         public void ContinueWithNhsLogin() => ContinueButton.Click();
 
         public void AssertSessionExpired() => SessionExpiredText.AssertVisible();
+
+        public void AssertCorrectVersionText() => VersionText(_driver.AppVersionNumber).AssertVisible();
     }
 }

@@ -22,6 +22,7 @@ function validate_browserstack_environment () {
   DOCKER_ARGS+=(--env "Android__PlayStoreUser=${Android__PlayStoreUser:-'nhsappbrowserstack@gmail.com'}")
   DOCKER_ARGS+=(--env "Android__PlayStorePassword=${Android__PlayStorePassword}")
   DOCKER_ARGS+=(--env "TestExecution__RetryOnFlakyErrors=${TestExecution__RetryOnFlakyErrors}")
+  DOCKER_ARGS+=(--env "NhsApp__AppVersionNumber=${NhsApp__AppVersionNumber:-"1.0.0"}")
 }
 
 function generate_browserstack_local_identifier () {

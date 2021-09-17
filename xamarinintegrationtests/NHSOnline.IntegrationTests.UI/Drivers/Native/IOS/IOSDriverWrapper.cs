@@ -22,6 +22,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
         private TestLogs Logs { get; }
         public WebContextStrategies Web { get; }
 
+        public string AppVersionNumber { get; }
+
         internal IOSDriverWrapper(string testName,
             TestLogs logs,
             IOSBrowserStackCapability capabilities,
@@ -32,6 +34,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
 
             _browserStackConfig = Configuration.Get<BrowserStackConfig>("BrowserStack");
             var iosConfig = Configuration.Get<IOSConfig>("iOS");
+            var nhsAppConfig = Configuration.Get<NhsAppConfig>("NhsApp");
+
 
             logs.TestDevice(device.ToName(), osVersion.ToName());
 
@@ -47,6 +51,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             _interactor = CreateInteractor();
 
             Web = new WebContextStrategies(_nativeDriverContext, _driver, logs);
+            AppVersionNumber = nhsAppConfig.AppVersionNumber;
 
             AssertAppRunning();
         }
