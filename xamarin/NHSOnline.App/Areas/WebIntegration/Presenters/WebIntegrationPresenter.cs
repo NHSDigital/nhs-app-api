@@ -85,7 +85,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
         private async Task StartDownloadRequested(DownloadRequest downloadRequest)
         {
-            var storagePermissionCheck = await Permissions.CheckStatusAsync<Permissions.StorageWrite>().ResumeOnThreadPool();
+            var storagePermissionCheck = await Permissions.CheckStatusAsync<Permissions.StorageWrite>().PreserveThreadContext();
 
             if (storagePermissionCheck == PermissionStatus.Granted)
             {
@@ -93,7 +93,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             }
             else
             {
-                var storagePermissionRequest = await Permissions.RequestAsync<Permissions.StorageWrite>().ResumeOnThreadPool();
+                var storagePermissionRequest = await Permissions.RequestAsync<Permissions.StorageWrite>().PreserveThreadContext();
 
                 if (storagePermissionRequest == PermissionStatus.Granted)
                 {

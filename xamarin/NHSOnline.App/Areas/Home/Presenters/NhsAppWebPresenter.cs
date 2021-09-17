@@ -211,7 +211,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         private async Task StartDownloadRequested(DownloadRequest downloadRequest)
         {
-            var storagePermissionCheck = await Permissions.CheckStatusAsync<Permissions.StorageWrite>().ResumeOnThreadPool();
+            var storagePermissionCheck = await Permissions.CheckStatusAsync<Permissions.StorageWrite>().PreserveThreadContext();
 
             if (storagePermissionCheck == PermissionStatus.Granted)
             {
@@ -219,7 +219,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             }
             else
             {
-                var storagePermissionRequest = await Permissions.RequestAsync<Permissions.StorageWrite>().ResumeOnThreadPool();
+                var storagePermissionRequest = await Permissions.RequestAsync<Permissions.StorageWrite>().PreserveThreadContext();
 
                 if (storagePermissionRequest == PermissionStatus.Granted)
                 {
@@ -233,7 +233,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             var handleFileResult = await _fileHandler.DownloadFile(downloadRequest).PreserveThreadContext();
             if (handleFileResult is DownloadFileResult.Failed)
             {
-                var model = new FullNavigationTryAgainFileDownloadErrorModel(_navigationHandler, _view.SelectedNavigationFooterItem);
+                var model = new FullNavigationTryAgainFileDownloadErrorModel(GetNewPopToRootHandler(), _view.SelectedNavigationFooterItem);
                 var page = _pageFactory.CreatePageFor(model);
                 await _view.AppNavigation.Push(page).PreserveThreadContext();
             }

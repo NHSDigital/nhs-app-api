@@ -1,4 +1,4 @@
-﻿@model (string Title, Microsoft.AspNetCore.Http.HttpRequest Request, string ImageBase64String, string PkPassBase64String)
+﻿@model (string Title, Microsoft.AspNetCore.Http.HttpRequest Request, string ImageBase64String, string PkPassBase64String, string CorruptedBase64String)
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -44,7 +44,19 @@
           base64Data = base64;
             
           nhsapp.storage.downloadFromBytes(base64Data, filename, mimeType);
-        }              
+        } 
+        
+        function downloadTestCorruptedFile(base64) {
+          let mimeType;
+          let base64Data;
+          let filename;
+                  
+          filename= "MyWordDoc.docx";
+          mimeType = "application/msword";
+          base64Data = base64;
+            
+          nhsapp.storage.downloadFromBytes(base64Data, filename, mimeType);
+        } 
     </script>
 </head>
 <body>
@@ -62,6 +74,11 @@
         <li class="list-group-item">
             <button id="test-pass-download" onclick="downloadTestPassKitFile('@Model.PkPassBase64String');">
                 Download test pass kit file (ios only)
+            </button>
+        </li>
+        <li class="list-group-item">
+            <button id="test-corrupted-download" onclick="downloadTestCorruptedFile('@Model.CorruptedBase64String');">
+                Download test corrupted file
             </button>
         </li>
         <li class="list-group-item"><a href="javascript:history.back()">Back</a></li>

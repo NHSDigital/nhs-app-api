@@ -134,7 +134,181 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertDisplayed(driver);
         }
 
-        private static void NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsAndroid(IAndroidDriverWrapper driver)
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingAPassKitFileFromAWebIntegrationDownloadFileScreenAndCanTryAgainAndroid(
+            IAndroidDriverWrapper driver)
+        {
+            var patient = new PkbPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+
+            NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsAndroid(driver);
+
+            AndroidFileDownloadPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.DownloadPass();
+
+            AndroidFilePermissionsDialog
+                .AssertDisplayed(driver)
+                .Allow();
+
+            AndroidFileDownloadErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements()
+                .TryAgain();
+
+            AndroidFileDownloadPage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingACorruptedFileFromAWebIntegrationDownloadFileScreenAndCanGetHelpAndroid(
+            IAndroidDriverWrapper driver)
+        {
+            var patient = new PkbPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+
+            NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsAndroid(driver);
+
+            AndroidFileDownloadPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.DownloadCorrupted();
+
+            AndroidFilePermissionsDialog
+                .AssertDisplayed(driver)
+                .Allow();
+
+            AndroidFileDownloadErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements()
+                .Help();
+
+            AndroidAppTabBrowserChoice
+                .IfDisplayed(driver, choice => choice.ChooseChrome());
+
+            AndroidAppTab
+                .AssertOnHelpPageByTitle(driver, "Home")
+                .ReturnToApp();
+        }
+
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingACorruptedFileFromAWebIntegrationDownloadFileScreenAndCanNavigateToAppointmentsAndroid(
+            IAndroidDriverWrapper driver)
+        {
+            var patient = new PkbPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+
+            NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsAndroid(driver);
+
+            AndroidFileDownloadPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.DownloadCorrupted();
+
+            AndroidFilePermissionsDialog
+                .AssertDisplayed(driver)
+                .Allow();
+
+            AndroidFileDownloadErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements()
+                .Appointments();
+
+            AndroidAppointmentsPage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppIOSTest]
+        public void APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingACorruptedFileFromAWebIntegrationDownloadFileScreenAndCanTryAgainIOS(
+            IIOSDriverWrapper driver)
+        {
+            var patient = new PkbPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsIOS(driver);
+
+            IOSFileDownloadPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.DownloadCorrupted();
+
+            IOSFileDownloadErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements()
+                .TryAgain();
+
+            IOSFileDownloadPage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppIOSTest]
+        public void APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingACorruptedFileFromAWebIntegrationDownloadFileScreenAndCanGetHelpIOS(
+            IIOSDriverWrapper driver)
+        {
+            var patient = new PkbPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsIOS(driver);
+
+            IOSFileDownloadPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.DownloadCorrupted();
+
+            IOSFileDownloadErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements()
+                .Help();
+
+            IOSAppTab
+                .AssertOnHelpPageByTitle(driver, "Home")
+                .ReturnToApp();
+        }
+
+        [NhsAppIOSTest]
+        public void APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingACorruptedFileFromAWebIntegrationDownloadFileScreenAndCanNavigateToAppointmentsIOS(
+            IIOSDriverWrapper driver)
+        {
+            var patient = new PkbPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsIOS(driver);
+
+            IOSFileDownloadPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.DownloadCorrupted();
+
+            IOSFileDownloadErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements()
+                .Appointments();
+
+            IOSAppointmentsPage
+                .AssertOnPage(driver);
+        }
+
+        private static void NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsAndroid(
+            IAndroidDriverWrapper driver)
         {
 
             AndroidLoggedInHomePage
