@@ -77,6 +77,9 @@ export default {
       return gpSessionErrorHasRetried();
     },
   },
+  mounted() {
+    this.$store.dispatch('navigation/setRouteCrumb', 'onDemandAppointmentCrumb');
+  },
   methods: {
     tryAgain() {
       sessionStorage.setItem('hasRetried', true);

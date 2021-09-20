@@ -11,6 +11,8 @@ import {
   GP_SESSION_ON_DEMAND_RETURN_NAME,
 } from '@/router/names';
 
+import breadcrumbs from '@/breadcrumbs/gp-session-on-demand';
+
 import proofLevel from '@/lib/proofLevel';
 import { CLEAR_SELECTED_MENU_ITEM } from '@/middleware/nativeNavigation';
 import { APP_LOGIN_HELP_PATH } from '@/router/externalLinks';
@@ -35,7 +37,7 @@ export const GP_SESSION_ON_DEMAND_RETURN = {
   component: OnDemandReturnPage,
   meta: {
     isAnonymous: true,
-    crumb: {},
+    crumb: breadcrumbs.GP_SESSION_ON_DEMAND_CRUMB,
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
     helpPath: APP_LOGIN_HELP_PATH,
   },

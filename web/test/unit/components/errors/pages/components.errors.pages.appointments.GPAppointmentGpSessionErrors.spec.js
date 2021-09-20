@@ -52,5 +52,9 @@ describe('GpAppointmentGpSessionErrors', () => {
       expect(wrapper.find('#alternative_actions').exists()).toBe(true);
       expect(wrapper.find('#error-dialog-500').exists()).toBe(false);
     });
+
+    it('will dispatch to set the breadcrumb to the onDemandAppointmentCrumb', async () => {
+      expect($store.dispatch).toBeCalledWith('navigation/setRouteCrumb', 'onDemandAppointmentCrumb');
+    });
   });
 });

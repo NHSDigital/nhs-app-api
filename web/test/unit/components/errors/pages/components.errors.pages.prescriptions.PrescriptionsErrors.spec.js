@@ -95,5 +95,9 @@ describe('Prescriptions errors', () => {
 
       expect(page.find('#presciptionsGpSessionError').exists()).toBe(true);
     });
+
+    it('will dispatch to set the breadcrumb to the onDemandPrescriptionCrumb', async () => {
+      expect($store.dispatch).toBeCalledWith('navigation/setRouteCrumb', 'onDemandPrescriptionCrumb');
+    });
   });
 });

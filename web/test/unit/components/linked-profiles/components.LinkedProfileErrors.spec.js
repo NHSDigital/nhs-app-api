@@ -12,6 +12,7 @@ describe('linked profiles error component', () => {
   } = {}) =>
     mount(LinkedProfileErrors, {
       $store: createStore({
+        dispatch: jest.fn(() => Promise.resolve()),
         state: {
           device: {
             isNativeApp,
@@ -59,14 +60,19 @@ describe('linked profiles error component', () => {
         page = mountComponent({ hasRetried });
         expect(page.find('#linked-profiles-599-error').exists()).toBe(errorVisible);
       });
-  });
 
-  each([
-    [undefined, 'more'],
-    ['overridePath', 'overridePath'],
-  ])
-    .it('will set the appropriate backUrl', (backLinkOverride, expectedBackUrl) => {
-      page = mountComponent({ backLinkOverride });
-      expect(page.vm.backUrl).toBe(expectedBackUrl);
+    each([
+      [undefined, 'more'],
+      ['overridePath', 'overridePath'],
+    ])
+      .it('will set the appropriate backUrl', (backLinkOverride, expectedBackUrl) => {
+        page = mountComponent({ backLinkOverride });
+        expect(page.vm.backUrl).toBe(expectedBackUrl);
+      });
+
+    it('will dispatch to set the breadcrumb to the onDemandLinkedProfiles', async () => {
+      page = mountComponent();
+      expect(page.vm.$store.dispatch).toBeCalledWith('navigation/setRouteCrumb', 'onDemandLinkedProfiles');
     });
+  });
 });
