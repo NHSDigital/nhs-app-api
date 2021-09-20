@@ -10,7 +10,6 @@ target:
     - L84011
     - L84085
     - L84051
-    - L84022
 journeys:
   cdssAdvice:
     provider: eConsult

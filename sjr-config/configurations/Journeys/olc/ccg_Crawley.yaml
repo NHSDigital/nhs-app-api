@@ -8,7 +8,6 @@ target:
     - Y00351
     - H82026
     - H82064
-    - H82025
 journeys:
   cdssAdvice:
     provider: eConsult

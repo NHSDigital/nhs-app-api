@@ -16,7 +16,6 @@ target:
     - K84056
     - K84002
     - K84004
-    - K84059
     - K84078
     - K84006
     - K84071
@@ -27,7 +26,6 @@ target:
     - K84041
     - K84036
     - K84015
-    - K84019
     - K84624
     - K84065
     - K84013
@@ -44,7 +42,6 @@ target:
     - K84027
     - K84072
     - K84050
-    - K84024
 journeys:
   cdssAdvice:
     provider: eConsult

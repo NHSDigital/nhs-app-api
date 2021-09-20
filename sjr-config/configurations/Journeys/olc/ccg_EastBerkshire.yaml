@@ -15,7 +15,6 @@ target:
     - K81645
     - K81087
     - K81657
-    - K81075
     - K81094
     - K81043
     - K81010
@@ -31,7 +30,6 @@ target:
     - Y00437
     - K81066
     - K81082
-    - K81005
 journeys:
   cdssAdvice:
     provider: eConsult

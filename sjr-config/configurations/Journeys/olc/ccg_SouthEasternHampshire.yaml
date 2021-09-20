@@ -2,7 +2,6 @@ $schema: "Schemas/Journeys/configuration_schema.json"
 target:
   odsCodes:
     - J82147
-    - J82009
     - J82640
     - J82164
     - J82163
@@ -10,7 +9,6 @@ target:
     - J82633
     - J82005
     - J82041
-    - J82010
     - J82119
     - J82210
     - J82201
