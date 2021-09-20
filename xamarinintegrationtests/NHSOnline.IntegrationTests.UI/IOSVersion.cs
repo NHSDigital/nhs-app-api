@@ -4,6 +4,8 @@ namespace NHSOnline.IntegrationTests.UI
 {
     public enum IOSVersion
     {
+        Eleven,
+        Twelve,
         Thirteen,
     }
 
@@ -14,6 +16,8 @@ namespace NHSOnline.IntegrationTests.UI
             return osVersion switch
             {
                 IOSVersion.Thirteen => "13.0",
+                IOSVersion.Eleven => "11",
+                IOSVersion.Twelve => "12",
                 _ => throw new ArgumentOutOfRangeException(nameof(osVersion), osVersion, null)
             };
         }

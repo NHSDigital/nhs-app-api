@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Foundation;
@@ -35,6 +36,15 @@ namespace NHSOnline.App.iOS.DependencyServices
                 if (cookie.IsSessionOnly)
                 {
                     await cookieStore.DeleteCookieAsync(cookie).PreserveThreadContext();
+                }
+            }
+
+            var nsHttpCookieStore = NSHttpCookieStorage.SharedStorage.Cookies.ToList();
+            foreach (var cookie in nsHttpCookieStore)
+            {
+                if (cookie.IsSessionOnly)
+                {
+                    NSHttpCookieStorage.SharedStorage.DeleteCookie(cookie);
                 }
             }
         }

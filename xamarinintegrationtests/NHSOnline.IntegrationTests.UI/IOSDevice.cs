@@ -5,7 +5,9 @@ namespace NHSOnline.IntegrationTests.UI
     public enum IOSDevice
     {
         iPhone11Pro,
-        iPhone8
+        iPhone8,
+        iPhoneX,
+        iPhoneXR
     }
 
     public static class IOSDeviceExtensions
@@ -16,6 +18,8 @@ namespace NHSOnline.IntegrationTests.UI
             {
                 IOSDevice.iPhone11Pro => "iPhone 11 Pro",
                 IOSDevice.iPhone8 => "iPhone 8",
+                IOSDevice.iPhoneX => "iPhone X",
+                IOSDevice.iPhoneXR => "iPhone XR",
                 _ => throw new ArgumentOutOfRangeException(nameof(device), device, null)
             };
         }

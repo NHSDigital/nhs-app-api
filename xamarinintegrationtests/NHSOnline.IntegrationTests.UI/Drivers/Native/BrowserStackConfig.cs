@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
         public string? User { get; set; } = "ops20";
         public string? Key { get; set; }
         public string? LocalIdentifier { get; set; } = $"int_test_{Dns.GetHostName()}";
-        public string AppiumVersion { get; set; } = "1.20.2";
+        public string DefaultAppiumVersion { get; set; } = "1.20.2";
         public string Project { get; set; } = "NHSApp";
         public string Build { get; set; } = $"{Dns.GetHostName()}-local";
         public bool EnableNetworkLogs { get; set; }
@@ -20,7 +20,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
                 .AddBrowserStackUser(User)
                 .AddBrowserStackKey(GetKey())
                 .AddBrowserStackLocalIdentifier(LocalIdentifier)
-                .AddBrowserStackAppiumVersion(AppiumVersion)
                 .AddProject(Project)
                 .AddBuild(Build)
                 .EnableBrowserStackLocal()

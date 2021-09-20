@@ -70,6 +70,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             AndroidOSVersion osVersion)
         {
             return _browserStackConfig.GetDefaultBuilder()
+                .AddBrowserStackAppiumVersion(_browserStackConfig.DefaultAppiumVersion)
                 .AddAcceptInsecureCertificates()
                 .AddPageLoadStrategy(PageLoadStrategy.Normal)
                 .AddApp(androidConfig.App)

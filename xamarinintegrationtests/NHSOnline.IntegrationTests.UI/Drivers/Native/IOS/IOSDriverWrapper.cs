@@ -12,6 +12,8 @@ using OpenQA.Selenium.Appium.iOS;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
 {
+    // Valid combinations for device and OS for Browserstack App Automate can be found here
+    // https://www.browserstack.com/list-of-browsers-and-platforms/app_automate
     internal sealed class IOSDriverWrapper: IIOSDriverWrapper
     {
         private readonly IIOSBrowserStackDriver _driver;
@@ -86,6 +88,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             IOSBrowserStackCapability capabilities)
         {
             return _browserStackConfig.GetDefaultBuilder()
+                .AddBrowserStackAppiumVersion(GetAppiumVersion(osVersion))
                 .AddAcceptInsecureCertificates()
                 .AddPageLoadStrategy(PageLoadStrategy.Normal)
                 .AddApp(iosConfig.App)
@@ -95,6 +98,19 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
                 .AddTestName(testName)
                 .AddIOSBrowserStackCapability(capabilities)
                 .Build();
+        }
+
+        // To use older operating systems the tests must use specific Appium versions with those operating systems these can be found using the BrowserStack tool here
+        // https://www.browserstack.com/app-automate/capabilities
+        private string GetAppiumVersion(IOSVersion iosVersion)
+        {
+            return iosVersion switch
+            {
+                IOSVersion.Eleven => "1.16.0",
+                IOSVersion.Twelve => "1.18.0",
+                IOSVersion.Thirteen => _browserStackConfig.DefaultAppiumVersion,
+                _ => _browserStackConfig.DefaultAppiumVersion
+            };
         }
 
         void IInteractor<IIOSBrowserStackDriver, IOSElement>.ActOnDriver(

@@ -5,9 +5,12 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Foundation;
+using Microsoft.Extensions.Logging;
 using NHSOnline.App.Api;
 using NHSOnline.App.iOS.DependencyServices;
+using NHSOnline.App.Logging;
 using NHSOnline.App.Threading;
+using UIKit;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(IosHttpMessageHandlerFactory))]
@@ -17,7 +20,14 @@ namespace NHSOnline.App.iOS.DependencyServices
     {
         public HttpMessageHandler CreatePrimaryHttpMessageHandler()
         {
-            return new NsUrlSessionHandlerCookieFix();
+            return GetSessionHandler();
+        }
+
+        private static NSUrlSessionHandler GetSessionHandler()
+        {
+           return UIDevice.CurrentDevice.CheckSystemVersion(12, 0) ?
+                new NsUrlSessionHandlerSameSiteCookieFix() :
+                new NSUrlSessionHandler();
         }
 
         /// <summary>
@@ -28,14 +38,15 @@ namespace NHSOnline.App.iOS.DependencyServices
         ///
         /// This class works around this limitation and fixup the Set-Cookie headers to include the SameSite attribute.
         /// </summary>
-        private class NsUrlSessionHandlerCookieFix : NSUrlSessionHandler
+        private class NsUrlSessionHandlerSameSiteCookieFix : NSUrlSessionHandler
         {
             private readonly NSHttpCookieStorage _cookieStorage;
+            private static ILogger Logger => NhsAppLogging.CreateLogger<NsUrlSessionHandlerSameSiteCookieFix>();
 
-            public NsUrlSessionHandlerCookieFix() :this (NSHttpCookieStorage.SharedStorage)
+            public NsUrlSessionHandlerSameSiteCookieFix() :this (NSHttpCookieStorage.SharedStorage)
             { }
 
-            private NsUrlSessionHandlerCookieFix(NSHttpCookieStorage cookieStorage) : base(CreateConfig(cookieStorage))
+            private NsUrlSessionHandlerSameSiteCookieFix(NSHttpCookieStorage cookieStorage) : base(CreateConfig(cookieStorage))
             {
                 _cookieStorage = cookieStorage;
             }
@@ -91,12 +102,19 @@ namespace NHSOnline.App.iOS.DependencyServices
 
             private static void CopySameSiteAttribute(NSHttpCookie fromCookie, List<string> toCookieHeaders)
             {
-                if (fromCookie.SameSitePolicy != null)
+                try
                 {
-                    ReplaceFirstStringThatMatches(
-                        toCookieHeaders,
-                        x => x.StartsWith(fromCookie.Name, StringComparison.Ordinal),
-                        x => $"{x}; SameSite={fromCookie.SameSitePolicy}");
+                    if (fromCookie.SameSitePolicy != null)
+                    {
+                        ReplaceFirstStringThatMatches(
+                            toCookieHeaders,
+                            x => x.StartsWith(fromCookie.Name, StringComparison.Ordinal),
+                            x => $"{x}; SameSite={fromCookie.SameSitePolicy}");
+                    }
+                }
+                catch (MonoTouchException exception)
+                {
+                    Logger.LogError(exception, "Failed to copy SameSite attribute of cookie");
                 }
             }
 
