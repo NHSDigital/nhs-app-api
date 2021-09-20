@@ -53,11 +53,11 @@
 			</Response>
 			<Condition>(proxy.pathsuffix MatchesPath "/_status") and ((request.verb = "GET") or (request.verb = "HEAD"))</Condition>
 		</Flow>
-		<Flow name="TestEndpoint">
+		<Flow name="InternalEndpoint">
 			<Description/>
 			<Request>
 				<Step>
-					<Condition>(proxy.pathsuffix MatchesPath "**/test")</Condition>
+					<Condition>(proxy.pathsuffix MatchesPath "**/internal") or (proxy.pathsuffix MatchesPath "/runtime/**")</Condition>
 					<Name>RaiseFault.404NotFound</Name>
 				</Step>
 			</Request>
@@ -93,8 +93,8 @@
 	<RouteRule name="NoRouteStatus">
 		<Condition>(proxy.pathsuffix MatchesPath "/_status") and ((request.verb = "GET") or (request.verb = "HEAD"))</Condition>
 	</RouteRule>
-	<RouteRule name="NoRouteTest">
-		<Condition>(proxy.pathsuffix MatchesPath "**/test")</Condition>
+	<RouteRule name="NoRouteInternal">
+		<Condition>(proxy.pathsuffix MatchesPath "**/internal") or (proxy.pathsuffix MatchesPath "/runtime/**")</Condition>
 	</RouteRule>
 	<RouteRule name="nhs-app-target">
 		<TargetEndpoint>nhs-app-target</TargetEndpoint>
