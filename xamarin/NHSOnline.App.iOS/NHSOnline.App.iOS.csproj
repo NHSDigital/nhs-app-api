@@ -229,4 +229,7 @@
       <Visible>false</Visible>
     </ImageAsset>
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Swift" Version="1.0.8" />
+  </ItemGroup>
 </Project>
