@@ -8,7 +8,6 @@ using NHSOnline.App.Config;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
-using NHSOnline.App.Events.Models;
 using NHSOnline.App.Services;
 using NHSOnline.App.Services.Media;
 using NHSOnline.App.Threading;
@@ -49,7 +48,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             _view.AppNavigation
                 .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
                 .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
-                .RegisterHandler<NavigationFailedArgs>(ViewOnNavigationFailed, (view, handler) => view.NavigationFailed = handler)
+                .RegisterHandler(ViewOnNavigationFailed, (view, handler) => view.NavigationFailed = handler)
                 .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler)
                 .RegisterHandler<ISelectMediaRequest>(SelectMediaRequested, (view, handler) => view.SelectMediaRequested = handler);
         }
@@ -86,22 +85,11 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             }
         }
 
-        private Task ViewOnNavigationFailed(NavigationFailedArgs args)
+        private Task ViewOnNavigationFailed()
         {
-            if (args.OnInitialNavigation)
-            {
-                void RetryAction() => _view.GoToUri(args.FailedUrl);
-
-                var model = new CloseSlimTryAgainNetworkErrorModel(_view.AppNavigation.PopToRoot, RetryAction);
-                var page = _pageFactory.CreatePageFor(model);
-                return _view.AppNavigation.Push(page);
-            }
-            else
-            {
-                var model = new CloseSlimBackToHomeNetworkErrorModel();
-                var page = _pageFactory.CreatePageFor(model);
-                return _view.AppNavigation.Push(page);
-            }
+            var model = new CloseSlimBackToHomeNetworkErrorModel();
+            var page = _pageFactory.CreatePageFor(model);
+            return _view.AppNavigation.Push(page);
         }
 
         private async Task BackRequested()

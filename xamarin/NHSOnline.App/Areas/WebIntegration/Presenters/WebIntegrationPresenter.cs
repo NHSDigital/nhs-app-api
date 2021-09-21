@@ -8,7 +8,6 @@ using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices;
-using NHSOnline.App.Events.Models;
 using NHSOnline.App.Services;
 using NHSOnline.App.Threading;
 using Xamarin.Essentials;
@@ -56,8 +55,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                 .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
                 .RegisterHandler(HelpRequested, (view, handler) => view.HelpRequested = handler)
                 .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
-                .RegisterHandler<WebIntegrationNavigationFailedArgs>(ViewOnInitialNavigationFailed, (view, handler) => view.InitialNavigationFailed = handler)
-                .RegisterHandler<NavigationFailedArgs>(ViewOnNavigationFailed, (view, handler) => view.NavigationFailed = handler)
+                .RegisterHandler(ViewOnNavigationFailed, (view, handler) => view.NavigationFailed = handler)
                 .RegisterHandler(model.NavigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
                 .RegisterHandler(model.NavigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
                 .RegisterHandler(model.NavigationHandler.AdviceRequested, (view, handler) => view.AdviceRequested = handler)
@@ -138,18 +136,9 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             }
         }
 
-        private Task ViewOnNavigationFailed(NavigationFailedArgs args)
+        private Task ViewOnNavigationFailed()
         {
             var model = new FullNavigationBackToHomeNetworkErrorModel(_model.NavigationHandler, _model.FooterItem);
-            var page = _pageFactory.CreatePageFor(model);
-            return _view.AppNavigation.Push(page);
-        }
-
-        private Task ViewOnInitialNavigationFailed(WebIntegrationNavigationFailedArgs args)
-        {
-            void RetryAction() => _view.SetWebIntegrationRequest(args.FailedRequest);
-
-            var model = new FullNavigationTryAgainNetworkErrorModel(_model.NavigationHandler, _model.FooterItem, RetryAction);
             var page = _pageFactory.CreatePageFor(model);
             return _view.AppNavigation.Push(page);
         }

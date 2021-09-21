@@ -6,7 +6,6 @@ using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.Controls;
 using NHSOnline.App.DependencyInjection;
-using NHSOnline.App.Events.Models;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
 using NHSOnline.App.Threading;
@@ -47,7 +46,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
             _view.AppNavigation
                 .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
-                .RegisterHandler<NavigationFailedArgs>(ViewOnNavigationFailed, (view, handler) => view.NavigationFailed = handler)
+                .RegisterHandler(ViewOnNavigationFailed, (view, handler) => view.NavigationFailed = handler)
                 .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler)
                 .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeeplinkRequested = handler)
                 .RegisterHandler(model.NavigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
@@ -75,22 +74,11 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             }
         }
 
-        private Task ViewOnNavigationFailed(NavigationFailedArgs args)
+        private Task ViewOnNavigationFailed()
         {
-            if (args.OnInitialNavigation)
-            {
-                void RetryAction() => _view.GoToUri(args.FailedUrl);
-
-                var model = new FullNavigationTryAgainNetworkErrorModel(_model.NavigationHandler, _model.FooterItem, RetryAction);
-                var page = _pageFactory.CreatePageFor(model);
-                return _view.AppNavigation.Push(page);
-            }
-            else
-            {
-                var model = new FullNavigationBackToHomeNetworkErrorModel(_model.NavigationHandler, _model.FooterItem);
-                var page = _pageFactory.CreatePageFor(model);
-                return _view.AppNavigation.Push(page);
-            }
+            var model = new FullNavigationBackToHomeNetworkErrorModel(_model.NavigationHandler, _model.FooterItem);
+            var page = _pageFactory.CreatePageFor(model);
+            return _view.AppNavigation.Push(page);
         }
 
         private bool ShouldOpenInBrowserOverlay(Uri url)

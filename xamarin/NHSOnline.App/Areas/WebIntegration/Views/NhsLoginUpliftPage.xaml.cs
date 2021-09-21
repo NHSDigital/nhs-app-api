@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.Payloads;
-using NHSOnline.App.Events.Models;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
@@ -16,9 +15,6 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
     {
         private readonly ILogger _logger;
         private readonly AppNavigation<INhsLoginUpliftView.IEvents> _appNavigation;
-
-        private bool OnInitialNavigation { get; set; } = true;
-        private Uri? InitialUrl { get; set; }
 
         public NhsLoginUpliftPage(ILogger<NhsLoginUpliftPage> logger)
         {
@@ -38,9 +34,9 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
 
         public Action<WebNavigatingEventArgs>? Navigating { get; set; }
 
-        public Func<NavigationFailedArgs, Task>? NavigationFailed { get; set; }
-        private AsyncCommand<NavigationFailedArgs> NavigationFailedCommand
-            => new AsyncCommand<NavigationFailedArgs>(() => NavigationFailed);
+        public Func<Task>? NavigationFailed { get; set; }
+        private AsyncCommand NavigationFailedCommand
+            => new AsyncCommand(() => NavigationFailed);
 
         public Func<Task>? BackRequested { get; set; }
         private AsyncCommand BackRequestedCommand
@@ -99,25 +95,14 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         {
             _logger.LogInformation("Navigated ({Result}): {Uri}", args.Result, args.Url);
 
-            if (args.Result is WebNavigationResult.Success)
-            {
-                OnInitialNavigation = false;
-            }
-            else if (args.Result is WebNavigationResult.Cancel)
+            if (args.Result is WebNavigationResult.Cancel)
             {
                 _logger.LogInformation("Web navigation was cancelled");
             }
-            else if (InitialUrl is null)
-            {
-                _logger.LogError($"{nameof(InitialUrl)} is null but should never be null");
-
-                WebView.IsVisible = false;
-                NavigationFailedCommand.Execute(new NavigationFailedArgs(new Uri(args.Url), OnInitialNavigation));
-            }
-            else
+            else if(args.Result != WebNavigationResult.Success)
             {
                 WebView.IsVisible = false;
-                NavigationFailedCommand.Execute(new NavigationFailedArgs(InitialUrl, OnInitialNavigation));
+                NavigationFailedCommand.Execute(null);
             }
         }
 
@@ -139,13 +124,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
             WebView.IsVisible = true;
         }
 
-        public void GoToUri(Uri uri)
-        {
-            OnInitialNavigation = true;
-            InitialUrl = uri;
-
-            WebView.GoToUri(uri);
-        }
+        public void GoToUri(Uri uri) => WebView.GoToUri(uri);
 
         public Task HandleDeeplink(Uri deeplinkUrl)
         {

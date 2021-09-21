@@ -156,10 +156,6 @@
       <DependentUpon>FullNavigationBackToHomeNetworkErrorPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Areas\Errors\Views\FullNavigationTryAgainNetworkErrorPage.xaml.cs">
-      <DependentUpon>FullNavigationTryAgainNetworkErrorPage.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Areas\Errors\Views\PreHomeTryAgainNetworkErrorPage.xaml.cs">
       <DependentUpon>PreHomeTryAgainNetworkErrorPage.xaml</DependentUpon>
       <SubType>Code</SubType>
