@@ -20,6 +20,9 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
         private IOSLabel HealthInformationLabel => IOSLabel
             .WithText(_driver, "get health information and advice")
             .ScrollIntoView();
+        private IOSLabel HealthRecordLabel => IOSLabel
+            .WithText(_driver, "view your health record securely")
+            .ScrollIntoView();
         private IOSLabel OrganDonationLabel => IOSLabel
             .WithText(_driver, "manage your organ donation decision")
             .ScrollIntoView();
@@ -33,6 +36,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
             .WithText(_driver, "To get started you'll need to create your NHS login.")
             .ScrollIntoView();
 
+        private IOSLink WhatToDoThirteenToFifteenLink => IOSLink.WithText(_driver, "What to do if you're aged 13 to 15");
+
         private IOSButton ContinueButton => IOSButton
             .WithText(_driver, "Continue")
             .ScrollIntoView();
@@ -44,21 +49,24 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
             return page;
         }
 
-        public void AssertPageElements()
+        public IOSGettingStartedPage AssertPageElements()
         {
             PrescriptionsLabel.AssertVisible();
             AppointmentsLabel.AssertVisible();
             HealthInformationLabel.AssertVisible();
+            HealthRecordLabel.AssertVisible();
             OrganDonationLabel.AssertVisible();
             NhsNumberLabel.AssertVisible();
             LegalAgeLabel.AssertVisible();
             GetStartedLabel.AssertVisible();
+            WhatToDoThirteenToFifteenLink.AssertVisible();
             ContinueButton.AssertVisible();
+
+            return this;
         }
 
-        public void Continue()
-        {
-            ContinueButton.Click();
-        }
+        public void GoToWhatToDoThirteenToFifteenLink() => WhatToDoThirteenToFifteenLink.Touch();
+
+        public void Continue() => ContinueButton.Click();
     }
 }

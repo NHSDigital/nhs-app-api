@@ -28,6 +28,10 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public Func<Task>? LoginRequested { get; set; }
         public ICommand LoginCommand => new AsyncCommand(() => LoginRequested);
 
+        public Func<Task>? WhoCanAccessTheAppRequested { get; set; }
+        public ICommand WhoCanAccessTheAppCommand =>
+            new AsyncCommand(() => WhoCanAccessTheAppRequested);
+
         public Func<Task>? BackRequested { get; set; }
         private ICommand BackRequestedCommand => new AsyncCommand(() => BackRequested);
 

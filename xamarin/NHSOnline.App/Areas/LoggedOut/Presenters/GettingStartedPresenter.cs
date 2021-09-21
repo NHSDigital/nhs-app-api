@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
+using NHSOnline.App.Config;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
@@ -17,6 +18,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly IUserPreferencesService _userPreferencesService;
         private readonly INhsLoginService _nhsLoginService;
         private readonly GettingStartedModel _model;
+        private readonly IBrowserOverlay _browserOverlay;
+        private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
         private Uri? _deeplinkUrl;
 
         private Uri? ResolveDeeplinkUrl => _deeplinkUrl ?? _model.DeeplinkUrl;
@@ -27,7 +30,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             ILogger<GettingStartedPresenter> logger,
             IPageFactory pageFactory,
             IUserPreferencesService userPreferencesService,
-            INhsLoginService nhsLoginService)
+            INhsLoginService nhsLoginService,
+            IBrowserOverlay browserOverlay,
+            INhsExternalServicesConfiguration externalServicesConfiguration)
         {
             _model = model;
             _view = view;
@@ -35,9 +40,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _pageFactory = pageFactory;
             _userPreferencesService = userPreferencesService;
             _nhsLoginService = nhsLoginService;
+            _browserOverlay = browserOverlay;
+            _externalServicesConfiguration = externalServicesConfiguration;
 
             view.AppNavigation
                 .RegisterHandler(ViewOnLoginRequested, (view, handler) => view.LoginRequested = handler)
+                .RegisterHandler(WhoCanAccessTheAppRequested, (view, handler) => view.WhoCanAccessTheAppRequested = handler)
                 .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler)
                 .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeeplinkRequested = handler);
         }
@@ -53,6 +61,15 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
             var loginPage = _pageFactory.CreatePageFor(loginModel);
             await _view.AppNavigation.ReplaceCurrentPage(loginPage).PreserveThreadContext();
+        }
+
+        private async Task WhoCanAccessTheAppRequested()
+        {
+            _logger.LogInformation("Accessing who can access the app help url");
+
+            await _browserOverlay
+                .OpenBrowserOverlay(_externalServicesConfiguration.NhsUkLoginWhoCanUseTheAppHelpUrl)
+                .PreserveThreadContext();
         }
 
         private Task DeeplinkRequested(Uri deeplinkUrl)

@@ -19,8 +19,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             _locatorStrategy = locatorStrategy;
         }
 
-        public static AndroidLink WithText(IAndroidInteractor interactor, string text)
-            => new (interactor, new TextLocatorStrategy(text));
+        public static AndroidLink WithContentDescription(IAndroidInteractor interactor, string description)
+            => new (interactor, new ContentDescriptionLocatorStrategy(description));
 
         public void AssertVisible()
             => ActOnElement(e => e.Displayed.Should().BeTrue("a link with text {0} should be displayed", _locatorStrategy.Description));
@@ -40,17 +40,18 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             => new(_interactor, new AndroidScrollLocatorStrategy(_locatorStrategy));
 
         string IFocusable.ElementDescription
-            => new FocusableDescriptionBuilder {Tag = "android.widget.TextView", Text = _locatorStrategy.Description}.Description;
+            => new FocusableDescriptionBuilder {Tag = "android.view.ViewGroup", ContentDesc = _locatorStrategy.Description}.ViewGroupDescription;
 
-        private sealed class TextLocatorStrategy : IAndroidLocatorStrategy
+        private sealed class ContentDescriptionLocatorStrategy : IAndroidLocatorStrategy
         {
-            private readonly string _text;
+            private readonly string _description;
 
-            public TextLocatorStrategy(string text)
-                => _text = text;
+            public ContentDescriptionLocatorStrategy(string description)
+                => _description = description;
 
-            public string Selector => $"new UiSelector().className(\"android.widget.TextView\").text({_text.QuoteUiAutomatorLiteral()})";
-            public string Description => $"{_text}";
+            public string Selector => $"new UiSelector().className(\"android.view.ViewGroup\").descriptionContains({_description.QuoteUiAutomatorLiteral()})";
+
+            public string Description => $"{_description}";
         }
     }
 }

@@ -30,7 +30,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             .ScrollIntoView();
 
         private AndroidLink TryAgainButton => AndroidLink
-            .WithText(_driver, "Try again")
+            .WithContentDescription(_driver, "Try again")
             .ScrollIntoView();
 
         public static AndroidFileDownloadErrorPage AssertOnPage(IAndroidDriverWrapper driver)

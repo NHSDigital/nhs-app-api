@@ -13,7 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         private AndroidLabel GoBackToHomeAndTryAgainLabel => AndroidLabel.WithText(_driver, "Go back to the home page and try again.");
 
-        private AndroidLink BackToHomeLink => AndroidLink.WithText(_driver, "Back to home");
+        private AndroidLink BackToHomeLink => AndroidLink.WithContentDescription(_driver, "Back to home");
 
         public static AndroidForcedUpdateErrorPage AssertOnPage(IAndroidDriverWrapper driver)
         {

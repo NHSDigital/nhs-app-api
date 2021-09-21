@@ -24,7 +24,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Errors
 
         private AndroidLabel Title => AndroidLabel.WithText(_driver, "Connection error");
 
-        private AndroidLink BackToHomeLink => AndroidLink.WithText(_driver, "Back to home");
+        private AndroidLink BackToHomeLink => AndroidLink.WithContentDescription(_driver, "Back to home");
 
         public void BackToHome() => BackToHomeLink.ScrollIntoView().Touch();
     }

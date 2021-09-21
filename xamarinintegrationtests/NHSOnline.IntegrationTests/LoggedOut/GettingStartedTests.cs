@@ -1,5 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
+using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -12,11 +14,21 @@ namespace NHSOnline.IntegrationTests.LoggedOut
     [BusinessRule("BR-LOG-09.3", "Invoking native back on the getting started screen displays the logged out home screen")]
     public sealed class GettingStartedTests
     {
+        private const string WhatToDoThirteenToFifteenLinkPath = "who-can-use-the-nhs-app/";
+
         [NhsAppAndroidTest]
         public void APatientIsShownTheGettingStartedPageAndCanNavigateBackAndroid(IAndroidDriverWrapper driver)
         {
             NavigateToGettingStartedPage(driver)
-                .AssertPageElements();
+                .AssertPageElements()
+                .GoToWhatToDoThirteenToFifteenLink();
+
+            AndroidAppTabBrowserChoice
+                .IfDisplayed(driver, choice => choice.ChooseChrome());
+
+            AndroidAppTab
+                .AssertOnHelpPageByText(driver, WhatToDoThirteenToFifteenLinkPath)
+                .ReturnToApp();
 
             driver.PressBackButton();
 
@@ -29,7 +41,12 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         public void APatientIsShownTheGettingStartedPageAndCanNavigateBackIos(IIOSDriverWrapper driver)
         {
             NavigateToGettingStartedPage(driver)
-                .AssertPageElements();
+                .AssertPageElements()
+                .GoToWhatToDoThirteenToFifteenLink();
+
+            IOSAppTab
+                .AssertOnHelpPageByText(driver, WhatToDoThirteenToFifteenLinkPath)
+                .ReturnToApp();
 
             driver.SwipeBack();
 

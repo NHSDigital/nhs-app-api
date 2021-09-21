@@ -27,6 +27,10 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             .WithText(_driver, "get health information and advice")
             .ScrollIntoView();
 
+        private AndroidLabel HealthRecordLabel => AndroidLabel
+            .WithText(_driver, "view your health record securely")
+            .ScrollIntoView();
+
         private AndroidLabel OrganDonationLabel => AndroidLabel
             .WithText(_driver, "manage your organ donation decision")
             .ScrollIntoView();
@@ -43,6 +47,10 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             .WithText(_driver, "To get started you'll need to create your NHS login.")
             .ScrollIntoView();
 
+        private AndroidLink WhatToDoThirteenToFifteenLink => AndroidLink
+            .WithContentDescription(_driver, "What to do if you're aged 13 to 15")
+            .ScrollIntoView();
+
         private AndroidButton ContinueButton => AndroidButton
             .WithText(_driver, "Continue")
             .ScrollIntoView();
@@ -53,6 +61,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         private AndroidKeyboardNavigation KeyboardNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(
             _driver,
             CloseIcon,
+            WhatToDoThirteenToFifteenLink,
             ContinueButton);
 
         public static AndroidGettingStartedPage AssertOnPage(IAndroidDriverWrapper driver)
@@ -62,19 +71,25 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             return page;
         }
 
-        public void AssertPageElements()
+        public AndroidGettingStartedPage AssertPageElements()
         {
             UseTheNhsAppToLabel.AssertVisible();
             PrescriptionsLabel.AssertVisible();
             AppointmentsLabel.AssertVisible();
             HealthInformationLabel.AssertVisible();
+            HealthRecordLabel.AssertVisible();
             OrganDonationLabel.AssertVisible();
             NhsNumberLabel.AssertVisible();
+            WhatToDoThirteenToFifteenLink.AssertVisible();
             LegalAgeLabel.AssertVisible();
             GetStartedLabel.AssertVisible();
+
+            return this;
         }
 
         public void Continue() => ContinueButton.Click();
+
+        public void GoToWhatToDoThirteenToFifteenLink() => WhatToDoThirteenToFifteenLink.Touch();
 
         public void PressEnterKey() => KeyboardNavigation.PressEnterKey();
 

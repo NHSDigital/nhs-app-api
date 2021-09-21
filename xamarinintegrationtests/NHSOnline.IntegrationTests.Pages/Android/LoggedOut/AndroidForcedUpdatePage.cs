@@ -13,7 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         private AndroidLabel YouWillNotBeAbleToUseItLabel => AndroidLabel.WithText(_driver, "You will not be able to use it until you do.");
 
-        private AndroidLink UpdateLink => AndroidLink.WithText(_driver, "Update the NHS App now");
+        private AndroidLink UpdateLink => AndroidLink.WithContentDescription(_driver, "Update the NHS App now");
 
         public static AndroidForcedUpdatePage AssertOnPage(IAndroidDriverWrapper driver)
         {

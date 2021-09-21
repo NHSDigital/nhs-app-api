@@ -26,6 +26,8 @@
                             <elements:ListItem Text="book and manage appointments" />
 
                             <elements:ListItem Text="get health information and advice" />
+                            
+                            <elements:ListItem Text="view your health record securely" />
 
                             <elements:ListItem Text="manage your organ donation decision" />
 
@@ -34,6 +36,8 @@
                     </elements:UnorderedList>
 
                     <elements:Paragraph Text="You must be aged 13 and over to use the app, and registered at a GP surgery in England." />
+
+                    <elements:LinkLabel Text="What to do if you're aged 13 to 15" Command="{Binding WhoCanAccessTheAppCommand, Source={x:Reference Name=Page}}" />
 
                     <elements:Paragraph Text="To get started you'll need to create your NHS login." />
 
