@@ -49,8 +49,14 @@ namespace NHSOnline.App.Api.Session
         public CreateSessionResult Visit(ApiCreateSessionResult.BadRequest badRequest)
             => new CreateSessionResult.BadRequest(badRequest.PfsErrorResponse.ServiceDeskReference);
 
-        public CreateSessionResult Visit(ApiCreateSessionResult.OdsCodeNotSupportedOrNoNhsNumber odsCodeNotSupportedOrNoNhsNumber)
-            => new CreateSessionResult.OdsCodeNotSupportedOrNoNhsNumber(odsCodeNotSupportedOrNoNhsNumber.PfsErrorResponse.ServiceDeskReference);
+        public CreateSessionResult Visit(ApiCreateSessionResult.OdsCodeNotSupported odsCodeNotSupported)
+            => new CreateSessionResult.OdsCodeNotSupported(odsCodeNotSupported.PfsErrorResponse.ServiceDeskReference);
+
+        public CreateSessionResult Visit(ApiCreateSessionResult.OdsCodeNotFound odsCodeNotFound)
+            => new CreateSessionResult.OdsCodeNotFound(odsCodeNotFound.PfsErrorResponse.ServiceDeskReference);
+
+        public CreateSessionResult Visit(ApiCreateSessionResult.NoNhsNumber noNhsNumber)
+            => new CreateSessionResult.NoNhsNumber(noNhsNumber.PfsErrorResponse.ServiceDeskReference);
 
         public CreateSessionResult Visit(ApiCreateSessionResult.FailedAgeRequirement failedAgeRequirement)
             => new CreateSessionResult.FailedAgeRequirement(failedAgeRequirement.PfsErrorResponse.ServiceDeskReference);

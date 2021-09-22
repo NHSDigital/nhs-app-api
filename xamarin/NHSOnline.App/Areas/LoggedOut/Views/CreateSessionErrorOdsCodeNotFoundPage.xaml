@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<pages:NhsAppCloseSlimHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
+                                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                                 xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+                                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                                 xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
+                                 xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
+                                 xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
+                                 xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
+                                 xmlns:valueConverters="clr-namespace:NHSOnline.App.Controls.ValueConverters;assembly=NHSOnline.App.Controls"
+                                 mc:Ignorable="d"
+                                 x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorOdsCodeNotFoundPage"
+                                 x:Name="Page">
+    <pages:NhsAppCloseSlimHeaderPage.Resources> 
+            <valueConverters:AccessibleErrorCodeConverter x:Key="AccessibleErrorCodeConverter" />
+    </pages:NhsAppCloseSlimHeaderPage.Resources>
+    
+    <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
+        <panels:ResponsiveLayoutPanel>
+            <StackLayout>
+                <elements:Heading1 Text="Login failed" x:Name="Heading" />
+                <panels:NhsErrorCallout LabelText="Error">
+                    <StackLayout>
+                        <elements:Paragraph Text="We cannot connect to your GP surgery." />
+                        <elements:LinkLabel Text="Find out how to get an NHS COVID Pass using the online service" Command="{Binding CovidPassCommand, Source={x:Reference Name=Page}}" />
+                        <elements:Paragraph Text="Contact your surgery and ask them to check you're registered correctly with them, so you can log in to the NHS App." />
+                        <elements:Paragraph Text="Your surgery may need to resubmit your registration." />
+                        <elements:Paragraph Text="If you need to book an appointment or get a prescription now, contact your GP surgery directly." />
+                        <elements:Paragraph Text="For urgent medical advice, use NHS 111 online or call 111." />
+                        <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
+                        <elements:Paragraph Text="Contact us if you have checked with your GP surgery about this issue and are still unable to access the NHS App." />
+                        <elements:LinkLabelWithErrorCode Text="Contact us, quoting error code"
+                                                         ErrorCode="{Binding ServiceDeskReference, Source={x:Reference Name=Page}}"
+                                                         Command="{Binding ContactUsCommand, Source={x:Reference Name=Page}}" />
+                    </StackLayout>
+                </panels:NhsErrorCallout>
+            </StackLayout>
+        </panels:ResponsiveLayoutPanel>
+        
+        <ScrollView.Effects>
+            <effects:SafeAreaPaddingBottom />
+        </ScrollView.Effects>
+    </ScrollView>
+
+</pages:NhsAppCloseSlimHeaderPage>

@@ -87,8 +87,14 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         async Task ICreateSessionResultVisitor<Task>.Visit(CreateSessionResult.BadRequest badRequest)
             => await NavigateToBadRequestPage(badRequest.ServiceDeskReference).PreserveThreadContext();
 
-        async Task ICreateSessionResultVisitor<Task>.Visit(CreateSessionResult.OdsCodeNotSupportedOrNoNhsNumber odsCodeNotSupportedOrNoNhsNumber)
-            => await NavigateToOdsCodeNotSupportedOrNoNhsNumberPage(odsCodeNotSupportedOrNoNhsNumber.ServiceDeskReference).PreserveThreadContext();
+        async Task ICreateSessionResultVisitor<Task>.Visit(CreateSessionResult.OdsCodeNotSupported odsCodeNotSupported)
+            => await NavigateToOdsCodeNotSupportedPage(odsCodeNotSupported.ServiceDeskReference).PreserveThreadContext();
+
+        async Task ICreateSessionResultVisitor<Task>.Visit(CreateSessionResult.OdsCodeNotFound odsCodeNotFound)
+            => await NavigateToOdsCodeNotFoundPage(odsCodeNotFound.ServiceDeskReference).PreserveThreadContext();
+
+        async Task ICreateSessionResultVisitor<Task>.Visit(CreateSessionResult.NoNhsNumber noNhsNumber)
+            => await NavigateToNoNhsNumberPage(noNhsNumber.ServiceDeskReference).PreserveThreadContext();
 
         async Task ICreateSessionResultVisitor<Task>.Visit(CreateSessionResult.FailedAgeRequirement failedAgeRequirement)
             => await NavigateToFailedAgeRequirementPage().PreserveThreadContext();
@@ -127,9 +133,25 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             await _view.AppNavigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
         }
 
-        private async Task NavigateToOdsCodeNotSupportedOrNoNhsNumberPage(string serviceDeskReference)
+        private async Task NavigateToOdsCodeNotSupportedPage(string serviceDeskReference)
         {
-            var errorModel = _model.OdsCodeNotSupportedOrNoNhsNumberError(serviceDeskReference);
+            var errorModel = _model.OdsCodeNotSupportedError(serviceDeskReference);
+            var errorPage = _pageFactory.CreatePageFor(errorModel);
+
+            await _view.AppNavigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
+        }
+
+        private async Task NavigateToOdsCodeNotFoundPage(string serviceDeskReference)
+        {
+            var errorModel = _model.OdsCodeNotFoundError(serviceDeskReference);
+            var errorPage = _pageFactory.CreatePageFor(errorModel);
+
+            await _view.AppNavigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
+        }
+
+        private async Task NavigateToNoNhsNumberPage(string serviceDeskReference)
+        {
+            var errorModel = _model.NoNhsNumberError(serviceDeskReference);
             var errorPage = _pageFactory.CreatePageFor(errorModel);
 
             await _view.AppNavigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();

@@ -76,7 +76,7 @@ open class HybridPageObject : PageObject() {
         val charValToRemove = ("\u200B")
         return this.text.removeSuffix(charValToRemove)
     }
-    
+
     fun assertLinkExists(url: String, selector: String): HybridPageElement {
         val link = getElement(selector)
         link.actOnTheElement { l -> Assert.assertEquals("link", url, l.getAttribute("href")) }
@@ -87,6 +87,17 @@ open class HybridPageObject : PageObject() {
         val selector = "//a[contains(.,'$linkTitle')]"
         val expectedLink = if(internal) { Config.instance.url + url} else {url}
         return assertLinkExists(expectedLink, selector)
+    }
+
+    fun assertContactUsLinkExists(url: String? = null) : HybridPageElement {
+        var locator = "//a[contains(text(),'Contact us')]"
+        var message: String? = null
+
+        if (!url.isNullOrBlank()) {
+            locator += "[starts-with(@href, '$url')]"
+            message = "Expected the link called Contact us with target of $url to be available"
+        }
+        return getElement(locator).assertIsVisible(message)
     }
 
     fun attachJavascriptFunctionsToNativeAppWindow(scripts: ArrayList<String>){

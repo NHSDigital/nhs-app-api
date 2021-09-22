@@ -12,5 +12,8 @@ namespace NHSOnline.App.Config.Values.OnboardingAos
         public Uri OneOneOneWalesUrl { get; } = new Uri("https://111.wales.nhs.uk/");
         public Uri NhsUkContactUsUrl { get; } = new Uri("https://www.nhs.uk/contact-us/nhs-app-contact-us");
         public Uri MyHealthOnlineUrl { get; } = new Uri("https://111.wales.nhs.uk/contactus/myhealthonline/");
+        public Uri CovidPassUrl { get; } = new Uri("https://www.nhs.uk/conditions/coronavirus-covid-19/covid-pass/");
+        public Uri GpOutOfHoursService { get; } = new Uri("https://www.nidirect.gov.uk/articles/gp-out-hours-service");
+        public Uri CovidStatusService { get; } = new Uri("https://covid-status.service.nhsx.nhs.uk");
     }
 }

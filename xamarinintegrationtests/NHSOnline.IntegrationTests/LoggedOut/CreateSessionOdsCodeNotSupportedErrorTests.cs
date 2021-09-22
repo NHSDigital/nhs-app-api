@@ -77,7 +77,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 
-            AndroidCreateSessionOdsCodeNotSupportedErrorPage
+            AndroidCreateSessionOdsCodeNotFoundErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements();
         }
@@ -100,7 +100,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 
-            IOSCreateSessionOdsCodeNotSupportedErrorPage
+            IOSCreateSessionOdsCodeNotFoundErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements();
         }

@@ -190,10 +190,6 @@
       <DependentUpon>LinkLabelWithErrorCode.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Elements\Deprecated\LinkSpan.xaml.cs">
-      <DependentUpon>LinkSpan.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Elements\OrderedListItem.xaml.cs">
       <DependentUpon>OrderedListItem.xaml</DependentUpon>
       <SubType>Code</SubType>

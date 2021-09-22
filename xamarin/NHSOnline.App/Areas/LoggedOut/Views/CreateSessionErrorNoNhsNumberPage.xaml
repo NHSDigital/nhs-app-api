@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<pages:NhsAppCloseSlimHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
+                                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                                 xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+                                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                                 xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
+                                 xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
+                                 xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
+                                 xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
+                                 mc:Ignorable="d"
+                                 x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorNoNhsNumberPage"
+                                 x:Name="Page">
+    <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
+        <StackLayout>
+            <elements:Heading1 Text="Login failed" x:Name="Heading" />
+
+            <panels:NhsErrorCallout LabelText="Error">
+                <StackLayout>
+                    <elements:Paragraph Text="We cannot match your NHS number to a GP surgery." />
+                    <elements:Paragraph Text="If you need to book an appointment or get a prescription now, contact your GP surgery directly." />
+                    <elements:Paragraph Text="For urgent medical advice, use NHS 111 online or call 111." />
+                    <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
+                    <elements:LinkLabelWithErrorCode Text="Contact us, quoting error code"
+                                                     ErrorCode="{Binding ServiceDeskReference, Source={x:Reference Name=Page}}"
+                                                     Command="{Binding ContactUsCommand, Source={x:Reference Name=Page}}" />
+                </StackLayout>
+            </panels:NhsErrorCallout>
+
+        </StackLayout>
+
+        <ScrollView.Effects>
+            <effects:SafeAreaPaddingBottom />
+        </ScrollView.Effects>
+    </ScrollView>
+
+</pages:NhsAppCloseSlimHeaderPage>

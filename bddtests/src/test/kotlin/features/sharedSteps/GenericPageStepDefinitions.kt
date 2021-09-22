@@ -52,6 +52,12 @@ class GenericPageStepDefinitions {
         browser.browseTo(urlForPage)
     }
 
+    @When("^I see the Contact us link with a url of '(.*)'$")
+    fun iClickContactUsLinkWithAUrl(url: String) {
+        browser.storeCurrentTabCount()
+        genericPage.assertContactUsLinkExists(url)
+    }
+
     @When("^I click the link called '(.*)' with a url of '(.*)'$")
     fun iClickANamedLinkWithAUrl(linkTitle: String, url: String) {
         browser.storeCurrentTabCount()

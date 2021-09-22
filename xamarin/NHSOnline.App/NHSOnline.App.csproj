@@ -50,8 +50,14 @@
     <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorBadRequestPage.xaml.cs">
       <DependentUpon>CreateSessionErrorBadRequestPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberPage.xaml.cs">
-      <DependentUpon>CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberPage.xaml</DependentUpon>
+    <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorOdsCodeNotSupportedPage.xaml.cs">
+      <DependentUpon>CreateSessionErrorOdsCodeNotSupportedPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorOdsCodeNotFoundPage.xaml.cs">
+      <DependentUpon>CreateSessionErrorOdsCodeNotFoundPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorNotNhsNumberPage.xaml.cs">
+      <DependentUpon>CreateSessionErrorNotNhsNumberPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorInternalServerErrorPage.xaml.cs">
       <DependentUpon>CreateSessionErrorPage.xaml</DependentUpon>

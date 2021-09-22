@@ -13,7 +13,6 @@ describe('authReturn layout', () => {
   const NHS_WALES_111_URL = 'https://111.wales.nhs.uk';
   const NHS_111_URL = 'https://111.nhs.uk';
   const SYMPTOM_CHECKER_NORTHERN_IRELAND_URL = 'https://www-nidirect-gov-uk/articles/gp-out-hours-service';
-  const COVID_STATUS_URL = 'https://covid-status-service-nhsx-nhs-uk';
   const COVID_PASS_URL = 'https://www.nhs.uk/conditions/coronavirus-covid-19/covid-pass';
   const serviceDeskReference = 'fooReference';
   let goToUrl;
@@ -40,7 +39,6 @@ describe('authReturn layout', () => {
         SYMPTOM_CHECKER_WALES_URL: 'https://111.wales.nhs.uk',
         MY_HEALTH_ONLINE: 'https://111.wales.nhs.uk/contactus/myhealthonline/',
         SYMPTOM_CHECKER_NORTHERN_IRELAND_URL: 'https://www-nidirect-gov-uk/articles/gp-out-hours-service',
-        COVID_STATUS_URL: 'https://covid-status-service-nhsx-nhs-uk',
         COVID_PASS_URL: 'https://www.nhs.uk/conditions/coronavirus-covid-19/covid-pass',
       },
       state: {
@@ -144,27 +142,17 @@ describe('authReturn layout', () => {
       wrapper = mountAuthReturnLayout({ status: 464 });
     });
 
-    describe('error container', () => {
-      let container;
-
-      beforeEach(() => {
-        container = wrapper.find('[data-purpose=error-container]');
-      });
-
-      it('will exist', () => {
-        expect(container.exists()).toBe(true);
-      });
-
+    describe('container', () => {
       it('will have five sub headings', () => {
-        expect(container.findAll('h2').length).toBe(5);
+        expect(wrapper.findAll('h2').length).toBe(4);
       });
 
       it('will have twelve paragraphs', () => {
-        expect(container.findAll('p').length).toBe(12);
+        expect(wrapper.findAll('p').length).toBe(12);
       });
 
       it('will have five links', () => {
-        expect(container.findAll('a').length).toBe(5);
+        expect(wrapper.findAll('a').length).toBe(5);
       });
 
       describe('hyperlinks', () => {
@@ -258,24 +246,24 @@ describe('authReturn layout', () => {
       });
 
       describe('hyperlinks', () => {
+        let covidPassLink;
         let nhs111Link;
-        let covidServiceLink;
         let contactUsLink;
         beforeEach(() => {
-          nhs111Link = wrapper.findAll('a').at(0);
-          covidServiceLink = wrapper.findAll('a').at(1);
+          covidPassLink = wrapper.findAll('a').at(0);
+          nhs111Link = wrapper.findAll('a').at(1);
           contactUsLink = wrapper.findAll('a').at(2);
         });
 
         it('will exist', () => {
           expect(nhs111Link.exists()).toBe(true);
-          expect(covidServiceLink.exists()).toBe(true);
+          expect(covidPassLink.exists()).toBe(true);
           expect(contactUsLink.exists()).toBe(true);
         });
 
         it('url href is correct', () => {
+          expect(covidPassLink.attributes('href')).toBe(COVID_PASS_URL);
           expect(nhs111Link.attributes('href')).toBe(NHS_111_URL);
-          expect(covidServiceLink.attributes('href')).toBe(COVID_STATUS_URL);
           expect(contactUsLink.attributes('href'))
             .toBe(`${CONTACT_US_URL}?errorcode=${serviceDeskReference}&odscode=`);
         });

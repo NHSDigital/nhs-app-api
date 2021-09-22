@@ -6,16 +6,16 @@ using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.Areas.LoggedOut.Presenters
 {
-    internal sealed class CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberPresenter
+    internal sealed class CreateSessionErrorNoNhsNumberPresenter
     {
-        private readonly ICreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberView _view;
-        private readonly CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberModel _model;
+        private readonly ICreateSessionErrorNoNhsNumberView _view;
+        private readonly CreateSessionErrorNoNhsNumberModel _model;
         private readonly IBrowserOverlay _browserOverlay;
         private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
 
-        public CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberPresenter(
-            ICreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberView view,
-            CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberModel model,
+        public CreateSessionErrorNoNhsNumberPresenter(
+            ICreateSessionErrorNoNhsNumberView view,
+            CreateSessionErrorNoNhsNumberModel model,
             IBrowserOverlay browserOverlay,
             INhsExternalServicesConfiguration externalServicesConfiguration)
         {
@@ -27,8 +27,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _view.ServiceDeskReference = model.ServiceDeskReference;
 
             _view.AppNavigation
-                .RegisterHandler(ViewOnMyHealthOnlineRequested, (view, handler) => view.MyHealthOnlineRequested = handler)
-                .RegisterHandler(ViewOnOneOneOneWalesRequested, (view, handler) => view.OneOneOneWalesRequested = handler)
                 .RegisterHandler(ViewOnOneOneOneRequested, (view, handler) => view.OneOneOneRequested = handler)
                 .RegisterHandler(ViewOnContactUsRequested, (view, handler) => view.ContactUsRequested = handler);
         }

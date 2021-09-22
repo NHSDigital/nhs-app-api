@@ -47,7 +47,6 @@ export default {
       label: 'Go to one one one dot nhs dot uk',
     },
     goBackAndTryAgain: 'Go back to the home screen and try logging in again.',
-    ifYouNeed: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly.',
     ifYouNeedToBook: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly.',
     ifYouKeepSeeingThisQuoteCode: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
     ifYouKeepSeeingThisQuoteCodeToHelpUs: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
@@ -75,8 +74,18 @@ export default {
     contactUsQuotingErrorCode: ', quoting error code {errorCode}.',
     notShowingRegisteredSurgery: 'The Personal Demographics Service (PDS), which is the central NHS database, is not showing which GP surgery you are registered with.',
     isPdsLinkedToSurgery: 'Contact your GP surgery and ask them to check your PDS record is linked to the surgery.',
+    checkIfRegisteredWithSurgery: 'Contact your surgery and ask them to check you’re registered correctly with them, so you can log in to the NHS App.',
     stillUnableToAccessNhsApp: 'Contact us if you have checked with your GP surgery about this issue and are still unable to access the NHS App.',
     cannotMatchNhsNumberToSurgery: 'We cannot match your NHS number to a GP surgery.',
+    yourSurgeryMayNeedToResubmitRegistration: 'Your surgery may need to resubmit your registration.',
+    findOutHowToGetYourCovidPass: [
+      {
+        text: '',
+        label: '',
+        linkUrl: 'COVID_PASS_URL',
+        linkText: 'Find out how to get an NHS COVID Pass using the online service ',
+      },
+    ],
     howToGetYourCovidPass: [
       {
         text: '',

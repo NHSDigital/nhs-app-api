@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<pages:NhsAppCloseSlimHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
+                                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                                 xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+                                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                                 xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
+                                 xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
+                                 xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
+                                 xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
+                                 mc:Ignorable="d"
+                                 x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorOdsCodeNotSupportedPage"
+                                 x:Name="Page">
+    <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
+        <panels:ResponsiveLayoutPanel>
+            <StackLayout>
+                <elements:Heading1 Text="Login failed" x:Name="Heading" />
+
+                <StackLayout>
+                    <elements:Paragraph Text="If you’re not registered with a GP surgery in England, or you’re a member of the armed forces, you may still be able to get an NHS COVID Pass or proof of vaccination status." />
+                    <elements:LinkLabel Text="Find out how to get your NHS COVID Pass or proof of vaccination status" Command="{Binding CovidPassCommand, Source={x:Reference Name=Page}}" />
+                    <elements:Heading2 Text="If your GP surgery is in Wales" />
+                    <elements:Paragraph Text="The NHS App is not available in Wales because health services are managed separately from England." />
+                    <elements:Paragraph Text="If you need an appointment or prescription, use the My Health Online service or contact your GP surgery directly." />
+                    <elements:LinkLabel Text="Go to My Health Online" Command="{Binding MyHealthOnlineCommand, Source={x:Reference Name=Page}}" />
+                    <elements:Paragraph Text="For urgent medical advice use NHS 111 Wales online or call 111." />
+                    <elements:LinkLabel Text="Go to 111.wales.uk" Command="{Binding OneOneOneWalesCommand, Source={x:Reference Name=Page}}" />
+                    
+                    <elements:Heading2 Text="If you're registered with an armed forces GP surgery" />
+                    <elements:Paragraph Text="The NHS App is not available to members of the armed forces because these surgeries are managed separately." />
+                    
+                    <elements:Heading2 Text="If your GP surgery is in Scotland or Northern Ireland" />
+                    <elements:Paragraph Text="The NHS App is not available in Scotland or Northern Ireland because health services are managed separately from England." />
+                    <elements:Paragraph Text="If you need an appointment or prescription, contact your GP surgery directly." />
+                    <elements:Paragraph Text="If you’re in Scotland, for urgent medical advice call 111." />
+                    <elements:Paragraph Text="If you’re in Northern Ireland, for urgent medical advice contact your GP out of hours service." />
+                    <elements:LinkLabel Text="Go to the GP out of hours service for Northern Ireland" Command="{Binding GpOutOfHoursServiceCommand, Source={x:Reference Name=Page}}" />
+                    
+                    <elements:Heading2 Text="If you’re registered with a GP surgery in England that is not with the armed forces" />
+                    <elements:Paragraph Text="We cannot connect to your GP surgery." />
+                    <elements:LinkLabelWithErrorCode Text="Contact us, quoting error code"
+                                                     ErrorCode="{Binding ServiceDeskReference, Source={x:Reference Name=Page}}"
+                                                     Command="{Binding ContactUsCommand, Source={x:Reference Name=Page}}" />
+                </StackLayout>
+            </StackLayout>
+        </panels:ResponsiveLayoutPanel>
+            
+            <ScrollView.Effects>
+            <effects:SafeAreaPaddingBottom />
+        </ScrollView.Effects>
+    </ScrollView>
+
+</pages:NhsAppCloseSlimHeaderPage>

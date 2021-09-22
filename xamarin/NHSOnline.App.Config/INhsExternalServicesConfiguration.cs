@@ -12,5 +12,8 @@ namespace NHSOnline.App.Config
         Uri OneOneOneWalesUrl { get; }
         Uri NhsUkContactUsUrl { get; }
         Uri MyHealthOnlineUrl { get; }
+        Uri CovidPassUrl { get; }
+        Uri GpOutOfHoursService { get; }
+        Uri CovidStatusService { get; }
     }
 }

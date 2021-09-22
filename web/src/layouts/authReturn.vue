@@ -26,7 +26,7 @@
                     <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
                         nhsuk-u-margin-bottom-0">
                       {{ $t('login.authReturn.loginFailed') }} </h1>
-                    <error-container v-if="statusCode===464">
+                    <div v-if="statusCode===464">
                       <error-title title="login.authReturn.loginFailed"/>
                       <error-paragraph from="login.authReturn.ifYouAreNotRegisteredInEngland" />
                       <error-paragraph-with-links
@@ -60,17 +60,18 @@
                                   target="_blank"
                                   :query-param="contactUsParam"
                                   :params="{errorCode: serviceDeskReference}"/>
-                    </error-container>
+                    </div>
                     <error-container v-else-if="statusCode===468">
                       <error-title title="login.authReturn.loginFailed"/>
                       <error-paragraph from="login.authReturn.cannotConnectToGpSurgery" />
-                      <error-paragraph from="login.authReturn.notShowingRegisteredSurgery" />
-                      <error-paragraph from="login.authReturn.isPdsLinkedToSurgery" />
+                      <error-paragraph-with-links
+                        from="login.authReturn.findOutHowToGetYourCovidPass"/>
+                      <error-paragraph from="login.authReturn.checkIfRegisteredWithSurgery" />
+                      <error-paragraph
+                        from="login.authReturn.yourSurgeryMayNeedToResubmitRegistration" />
                       <error-paragraph from="login.authReturn.ifYouNeedToBook" />
                       <error-paragraph-with-links
                         from="login.authReturn.ifYouNeedUrgentMedicalAdvice"/>
-                      <error-paragraph-with-links
-                        from="login.authReturn.ifYouNeedCovidAdvice"/>
                       <error-paragraph from="login.authReturn.stillUnableToAccessNhsApp" />
                       <error-link from="generic.contactUsWithErrorCode"
                                   :action="contactUsUrl"
@@ -102,7 +103,7 @@
                     <error-container v-else-if="statusCode===400">
                       <error-title title="login.authReturn.loginFailed"/>
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
-                      <error-paragraph from="login.authReturn.ifYouNeed" />
+                      <error-paragraph from="login.authReturn.ifYouNeedToBook" />
                       <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
                       <error-link from="login.authReturn.goToNhs111"
                                   :action="nhs111Url"
@@ -115,7 +116,7 @@
                       <error-paragraph
                         from="login.authReturn.weCannotGetYourDetailsFromYourGpSurgery" />
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
-                      <error-paragraph from="login.authReturn.ifYouNeed" />
+                      <error-paragraph from="login.authReturn.ifYouNeedToBook" />
                       <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
                       <error-link from="login.authReturn.goToNhs111"
                                   :action="nhs111Url"
@@ -127,7 +128,7 @@
                       <error-title title="login.authReturn.loginFailed"/>
                       <error-paragraph from="login.authReturn.weCannotLoginYouIn" />
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
-                      <error-paragraph from="login.authReturn.ifYouNeed" />
+                      <error-paragraph from="login.authReturn.ifYouNeedToBook" />
                       <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
                       <error-link from="login.authReturn.goToNhs111"
                                   :action="nhs111Url"
@@ -141,7 +142,7 @@
                       <error-unordered-list
                         from="login.authReturn.weCannotGetYourLoginDetailsOrConnectToYourSurgery" />
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
-                      <error-paragraph from="login.authReturn.ifYouNeed" />
+                      <error-paragraph from="login.authReturn.ifYouNeedToBook" />
                       <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
                       <error-link from="login.authReturn.goToNhs111"
                                   :action="nhs111Url"
@@ -155,7 +156,7 @@
                       <error-unordered-list
                         from="login.authReturn.weCannotGetYourLoginDetailsOrConnectToYourSurgery" />
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
-                      <error-paragraph from="login.authReturn.ifYouNeed" />
+                      <error-paragraph from="login.authReturn.ifYouNeedToBook" />
                       <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
                       <error-link from="login.authReturn.goToNhs111"
                                   :action="nhs111Url"
@@ -167,7 +168,7 @@
                       <error-title title="login.authReturn.loginFailed"/>
                       <error-paragraph from="login.authReturn.weCannotLoginYouIn" />
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
-                      <error-paragraph from="login.authReturn.ifYouNeed" />
+                      <error-paragraph from="login.authReturn.ifYouNeedToBook" />
                       <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
                       <error-link from="login.authReturn.goToNhs111"
                                   :action="nhs111Url"

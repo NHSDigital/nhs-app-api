@@ -25,6 +25,9 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
         public static IOSLink WhichMatches(IIOSInteractor interactor, string pattern)
             => new IOSLink(interactor, new MatchesLocatorStrategy(interactor, pattern));
 
+        public IOSLink ScrollIntoView()
+            => new IOSLink(_interactor, new IOSScrollLocatorStrategy(_interactor, _locatorStrategy));
+
         public void AssertVisible() => _locatorStrategy.ActOnElementContext(
             context => context.Element.Displayed.Should().BeTrue($"a link with text  {_locatorStrategy.Description} should be displayed"));
 

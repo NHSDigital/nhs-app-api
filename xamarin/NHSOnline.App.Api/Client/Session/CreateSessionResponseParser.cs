@@ -39,9 +39,9 @@ namespace NHSOnline.App.Api.Client.Session
             {
                 HttpStatusCode.Created => HandleCreated(httpResponseMessage),
                 HttpStatusCode.BadRequest => HandleBadRequest(httpResponseMessage),
-                OdsCodeNotSupported => HandleOdsCodeNotSupportedOrNoNhsNumber(httpResponseMessage),
-                OdsCodeNotFound => HandleOdsCodeNotSupportedOrNoNhsNumber(httpResponseMessage),
-                NoNhsNumber => HandleOdsCodeNotSupportedOrNoNhsNumber(httpResponseMessage),
+                OdsCodeNotSupported => HandleOdsCodeNotSupported(httpResponseMessage),
+                OdsCodeNotFound => HandleOdsCodeNotFound(httpResponseMessage),
+                NoNhsNumber => HandleNoNhsNumber(httpResponseMessage),
                 FailedAgeRequirement => HandleFailedAgeRequirement(httpResponseMessage),
                 HttpStatusCode.InternalServerError => HandleInternalServerError(httpResponseMessage),
                 HttpStatusCode.BadGateway => HandleBadGateway(httpResponseMessage),
@@ -94,15 +94,39 @@ namespace NHSOnline.App.Api.Client.Session
                 () => new ApiCreateSessionResult.Failure());
         }
 
-        private async Task<ApiCreateSessionResult> HandleOdsCodeNotSupportedOrNoNhsNumber(HttpResponseMessage httpResponseMessage)
+        private async Task<ApiCreateSessionResult> HandleOdsCodeNotSupported(HttpResponseMessage httpResponseMessage)
         {
-            _logger.LogWarning("Create Session returned not supported or no NHS number");
+            _logger.LogWarning("Create Session returned Odscode not supported");
 
             var model = await _jsonResponseParser.Parse<PfsErrorResponseModel>(httpResponseMessage).ResumeOnThreadPool();
             var validationResult = _errorResponseModelValidator.Validate(model);
 
             return validationResult.Accept<ApiCreateSessionResult>(
-                response => new ApiCreateSessionResult.OdsCodeNotSupportedOrNoNhsNumber(response),
+                response => new ApiCreateSessionResult.OdsCodeNotSupported(response),
+                () => new ApiCreateSessionResult.Failure());
+        }
+
+        private async Task<ApiCreateSessionResult> HandleOdsCodeNotFound(HttpResponseMessage httpResponseMessage)
+        {
+            _logger.LogWarning("Create Session returned Odscode not found");
+
+            var model = await _jsonResponseParser.Parse<PfsErrorResponseModel>(httpResponseMessage).ResumeOnThreadPool();
+            var validationResult = _errorResponseModelValidator.Validate(model);
+
+            return validationResult.Accept<ApiCreateSessionResult>(
+                response => new ApiCreateSessionResult.OdsCodeNotFound(response),
+                () => new ApiCreateSessionResult.Failure());
+        }
+
+        private async Task<ApiCreateSessionResult> HandleNoNhsNumber(HttpResponseMessage httpResponseMessage)
+        {
+            _logger.LogWarning("Create Session returned Nhs number not found");
+
+            var model = await _jsonResponseParser.Parse<PfsErrorResponseModel>(httpResponseMessage).ResumeOnThreadPool();
+            var validationResult = _errorResponseModelValidator.Validate(model);
+
+            return validationResult.Accept<ApiCreateSessionResult>(
+                response => new ApiCreateSessionResult.NoNhsNumber(response),
                 () => new ApiCreateSessionResult.Failure());
         }
 

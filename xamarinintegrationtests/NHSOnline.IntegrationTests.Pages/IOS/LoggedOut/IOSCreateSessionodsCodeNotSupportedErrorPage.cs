@@ -11,65 +11,100 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         private IOSLabel Title => IOSLabel.WithText(_driver, "Login failed");
 
-        private IOSLabel WalesTitle => IOSLabel
+        private IOSLabel IfNotRegisteredOrArmedForceText => IOSLabel
+            .WithText(
+                _driver,
+                "If you’re not registered with a GP surgery in England, or you’re a member of the armed forces, you may still be able to get an NHS COVID Pass or proof of vaccination status.")
+            .ScrollIntoView();
+
+        private IOSLink FindOutHowToGetCovidPassLink => IOSLink
+            .WithText(
+                _driver,
+                "Find out how to get your NHS COVID Pass or proof of vaccination status");
+        private IOSLabel IfYourGpSurgeryIsInWalesText => IOSLabel
             .WithText(
                 _driver,
                 "If your GP surgery is in Wales")
             .ScrollIntoView();
-        private IOSLabel WalesNotAvailableText => IOSLabel
+
+        private IOSLabel NhsAppNotAvailableInWalesText => IOSLabel
             .WithText(
                 _driver,
                 "The NHS App is not available in Wales because health services are managed separately from England.")
             .ScrollIntoView();
-        private IOSLabel WalesIfYouNeedText => IOSLabel
+        private IOSLabel IfYouNeedText => IOSLabel
             .WithText(
                 _driver,
-                "If you need an appointment or prescription, go to My Health Online or contact your GP surgery directly. " +
-                "For urgent medical advice, go to 111.wales.nhs.uk or call 111.")
+                "If you need an appointment or prescription, use the My Health Online service or contact your GP surgery directly.")
             .ScrollIntoView();
 
-        private IOSLabel EnglandTitle => IOSLabel
+        private IOSLink GoToMyHealthOnlineLink => IOSLink
             .WithText(
                 _driver,
-                "If your GP surgery is in England")
-            .ScrollIntoView();
-        private IOSLabel EnglandNoSurgeryText => IOSLabel
+                "Go to My Health Online");
+        private IOSLabel ForUrgentMedicalAdviceText => IOSLabel
             .WithText(
                 _driver,
-                "Either we cannot connect to your GP surgery, or we cannot match your NHS number to a GP surgery.")
-            .ScrollIntoView();
-        private IOSLabel EnglandIfYouNeedText => IOSLabel
-            .WithText(
-                _driver,
-                "If you need an appointment or prescription, contact your GP surgery directly. " +
-                "For urgent medical advice, go to 111.nhs.uk or call 111.")
-            .ScrollIntoView();
-        private IOSLabel EnglandIfYouNeedAppHelpText => IOSLabel
-            .WithText(
-                _driver,
-                "If you still need help to access the app, contact us.")
+                "For urgent medical advice use NHS 111 Wales online or call 111.")
             .ScrollIntoView();
 
-        private IOSLabel NorthernIrelandOrScotlandTitle => IOSLabel
+        private IOSLink OneOneOneWalesLink => IOSLink
             .WithText(
                 _driver,
-                "If your GP surgery is in Northern Ireland or Scotland")
+                "Go to 111.wales.uk");
+        private IOSLabel IfRegisteredWithArmedForcesSurgeryText => IOSLabel
+            .WithText(
+                _driver,
+                "If you're registered with an armed forces GP surgery")
             .ScrollIntoView();
-        private IOSLabel NorthernIrelandOrScotlandNotAvailableText => IOSLabel
+        private IOSLabel NotAvailableToArmedForcesText => IOSLabel
             .WithText(
                 _driver,
-                "The NHS App is not available in Northern Ireland or Scotland because health services are managed separately from England.")
+                "The NHS App is not available to members of the armed forces because these surgeries are managed separately.")
             .ScrollIntoView();
-        private IOSLabel NorthernIrelandOrScotlandIfYouNeedText => IOSLabel
+        private IOSLabel IfSurgeryInScotlandOrNorthernIrelandText => IOSLabel
             .WithText(
                 _driver,
-                "If you need an appointment or prescription, contact your GP surgery directly." +
-                " For urgent medical advice, call 111.")
+                "If your GP surgery is in Scotland or Northern Ireland")
+            .ScrollIntoView();
+        private IOSLabel NotAvailableInNorthernIrelandOrScotlandText => IOSLabel
+            .WithText(
+                _driver,
+                "The NHS App is not available in Scotland or Northern Ireland because health services are managed separately from England.")
+            .ScrollIntoView();
+        private IOSLabel IfYouNeedAnAppointmentOrPrescriptionText => IOSLabel
+            .WithText(
+                _driver,
+                "If you need an appointment or prescription, contact your GP surgery directly.")
+            .ScrollIntoView();
+        private IOSLabel IfInScotlandText => IOSLabel
+            .WithText(
+                _driver,
+                "If you’re in Scotland, for urgent medical advice call 111.")
+            .ScrollIntoView();
+        private IOSLabel IfInNorthernIrelandText => IOSLabel
+            .WithText(
+                _driver,
+                "If you’re in Northern Ireland, for urgent medical advice contact your GP out of hours service.")
             .ScrollIntoView();
 
-        private IOSLabel ErrorCodeText => IOSLabel
-            .WhichMatches(_driver, "Reference: 3(f|r)[0-9a-z]{4}")
+        private IOSLink GoToGpOutOfHoursServiceLink => IOSLink
+            .WithText(
+                _driver,
+                "Go to the GP out of hours service for Northern Ireland");
+        private IOSLabel IfSurgeryInEnglandNotWithArmedForcesText => IOSLabel
+            .WithText(
+                _driver,
+                "If you’re registered with a GP surgery in England that is not with the armed forces")
             .ScrollIntoView();
+        private IOSLabel WeCannotContactYourGpSurgeryText => IOSLabel
+            .WithText(
+                _driver,
+                "We cannot connect to your GP surgery.")
+            .ScrollIntoView();
+
+        private IOSLink ErrorCodeLink => IOSLink
+            .WhichMatches(_driver, "Contact us, quoting error code 3 f ([0-9a-z] ){4}");
 
         public static IOSCreateSessionOdsCodeNotSupportedErrorPage AssertOnPage(IIOSDriverWrapper driver)
         {
@@ -80,20 +115,30 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         public IOSCreateSessionOdsCodeNotSupportedErrorPage AssertPageElements()
         {
-            WalesTitle.AssertVisible();
-            WalesNotAvailableText.AssertVisible();
-            WalesIfYouNeedText.AssertVisible();
+            IfNotRegisteredOrArmedForceText.AssertVisible();
+            FindOutHowToGetCovidPassLink.AssertVisible();
+            IfYourGpSurgeryIsInWalesText.AssertVisible();
 
-            EnglandTitle.AssertVisible();
-            EnglandNoSurgeryText.AssertVisible();
-            EnglandIfYouNeedText.AssertVisible();
-            EnglandIfYouNeedAppHelpText.AssertVisible();
+            NhsAppNotAvailableInWalesText.AssertVisible();
+            IfYouNeedText.AssertVisible();
+            GoToMyHealthOnlineLink.AssertVisible();
+            ForUrgentMedicalAdviceText.AssertVisible();
 
-            NorthernIrelandOrScotlandTitle.AssertVisible();
-            NorthernIrelandOrScotlandNotAvailableText.AssertVisible();
-            NorthernIrelandOrScotlandIfYouNeedText.AssertVisible();
+            OneOneOneWalesLink.AssertVisible();
+            IfRegisteredWithArmedForcesSurgeryText.AssertVisible();
+            NotAvailableToArmedForcesText.AssertVisible();
 
-            ErrorCodeText.AssertVisible();
+            IfSurgeryInScotlandOrNorthernIrelandText.AssertVisible();
+            NotAvailableInNorthernIrelandOrScotlandText.AssertVisible();
+            IfYouNeedAnAppointmentOrPrescriptionText.AssertVisible();
+            IfInScotlandText.AssertVisible();
+            IfInNorthernIrelandText.AssertVisible();
+            GoToGpOutOfHoursServiceLink.AssertVisible();
+
+            IfSurgeryInEnglandNotWithArmedForcesText.AssertVisible();
+            WeCannotContactYourGpSurgeryText.AssertVisible();
+
+            ErrorCodeLink.AssertVisible();
 
             return this;
         }
