@@ -11,7 +11,7 @@
     <h1 class="display-4">@Model.Title</h1>
     @if (Model.SubTitle != "")
     {
-        <h2 class="display-4">@Model.SubTitle</h2>
+        <h2 class="display-6">@Model.SubTitle</h2>
     }
 </div>
 @await Html.PartialAsync("~/views/HttpRequestData.cshtml", Model.Request)

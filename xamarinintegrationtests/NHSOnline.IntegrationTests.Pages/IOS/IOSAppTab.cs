@@ -48,8 +48,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
         public static IOSAppTab AssertInBrowserAppTab(IIOSDriverWrapper driver)
             => AssertOnPageByClose(driver);
 
-        public static IOSAppTab AssertOnOnlineConsultationPrivacyPolicyPage(IIOSDriverWrapper driver)
-            => AssertOnPageByTitle(driver, "NHS App privacy policy: online consultation services");
+        public static IOSAppTab AssertOnOnlineConsultationPrivacyPolicyPage(IIOSDriverWrapper driver) =>
+            AssertOnPageByTitle(driver, "Online Consultations");
 
         private static IOSAppTab AssertOnPageByTitle(IIOSDriverWrapper driver, string title)
         {

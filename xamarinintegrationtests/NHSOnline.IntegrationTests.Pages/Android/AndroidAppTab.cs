@@ -46,7 +46,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             => AssertOnPageByTextContaining(driver, "Contact Us", $"errorcode: {errorCode}");
 
         public static AndroidAppTab AssertOnOnlineConsultationPrivacyPolicyPage(IAndroidDriverWrapper driver) =>
-            AssertOnPageByTitle(driver, "NHS App privacy policy: online consultation services");
+            AssertOnPageByTitle(driver, "Online Consultations");
 
         public static AndroidAppTab AssertOnPrivacyPolicyPage(IAndroidDriverWrapper driver)
             => AssertOnPageByTitle(driver, "NHS App privacy policy");

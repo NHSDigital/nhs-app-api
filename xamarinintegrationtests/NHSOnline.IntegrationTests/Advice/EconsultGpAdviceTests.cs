@@ -18,7 +18,6 @@ namespace NHSOnline.IntegrationTests.Advice
     [BusinessRule("BR-GI-01.4", "Clicking the link for the NHS App privacy policy navigates the user to the Privacy Policy on NHS.uk in a browser overlay")]
     public class EconsultGpAdviceTests
     {
-        [Ignore("NHSO-16843: Raised to address issues with intergration dependencies causing test to fail")]
         [NhsAppAndroidTest]
         public void APatientCanAccessGpAdviceJourneyAndroid(IAndroidDriverWrapper driver)
         {
@@ -65,7 +64,6 @@ namespace NHSOnline.IntegrationTests.Advice
                 .Continue();
         }
 
-        [Ignore("NHSO-16843: Raised to address issues with intergration dependencies causing test to fail")]
         [NhsAppIOSTest]
         public void APatientCanAccessGpAdviceJourneyIos(IIOSDriverWrapper driver)
         {

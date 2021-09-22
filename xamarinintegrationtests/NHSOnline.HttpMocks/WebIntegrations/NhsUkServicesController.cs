@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace NHSOnline.HttpMocks.WebIntegrations
 {
     [Route("nhsuk")]
+    [Route("external/nhsuk")]
     public class NhsUkServicesController : Controller
     {
         [HttpGet("covid")]
@@ -72,9 +73,27 @@ namespace NHSOnline.HttpMocks.WebIntegrations
             return CreatePage("My Health Online");
         }
 
-        private IActionResult CreatePage(string title)
+        [HttpGet("online-consultations")]
+        public IActionResult OnlineConsultations()
         {
-            (string Title, string SubTitle, HttpRequest Request) model = (title, "", Request);
+            return CreatePage("Online Consultations");
+        }
+
+        [HttpGet("privacy")]
+        public IActionResult PrivacyPolicy()
+        {
+            return CreatePage("NHS App privacy policy");
+        }
+
+        [HttpGet("{*path}")]
+        public IActionResult UndefinedRoute(string? path = null)
+        {
+            return CreatePage($"Route not mocked", $"The path '{(path ?? "/")}' has not been mocked" );
+        }
+
+        private IActionResult CreatePage(string title, string subTitle = "")
+        {
+            (string Title, string SubTitle, HttpRequest Request) model = (title, subTitle, Request);
             return View("~/Views/WebIntegrations/InternalPage.cshtml", model);
         }
     }
