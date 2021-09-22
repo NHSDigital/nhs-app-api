@@ -78,7 +78,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             }
             else
             {
-                var model = new CloseSlimBackToHomeNetworkErrorModel();
+                var model = new CloseSlimBackToHomeNetworkErrorModel(_view.AppNavigation.PopToRoot);
                 var page = _pageFactory.CreatePageFor(model);
                 return _view.AppNavigation.Push(page);
             }

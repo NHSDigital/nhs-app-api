@@ -87,7 +87,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
         private Task ViewOnNavigationFailed()
         {
-            var model = new CloseSlimBackToHomeNetworkErrorModel();
+            var model = new CloseSlimBackToHomeNetworkErrorModel(_model.NavigationHandler.HomeRequested);
             var page = _pageFactory.CreatePageFor(model);
             return _view.AppNavigation.Push(page);
         }

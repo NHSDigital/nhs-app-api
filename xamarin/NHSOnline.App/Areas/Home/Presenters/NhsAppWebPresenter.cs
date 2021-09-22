@@ -139,8 +139,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         private Task CreateOnDemandGpSessionRequested(CreateOnDemandGpSessionRequest request)
         {
-            var popToRootNavigationHandler = new NhsAppPopToRootNavigationHandler(_navigationHandler, _view.AppNavigation);
-            var model = new NhsLoginOnDemandGpSessionModel(request.AssertedLoginIdentity, request.RedirectTo, _view.SelectedNavigationFooterItem, popToRootNavigationHandler);
+            var model = new NhsLoginOnDemandGpSessionModel(request.AssertedLoginIdentity, request.RedirectTo, _view.SelectedNavigationFooterItem, GetNewPopToRootHandler());
             var page = _pageFactory.CreatePageFor(model);
 
             return _view.AppNavigation.Push(page);
@@ -174,14 +173,14 @@ namespace NHSOnline.App.Areas.Home.Presenters
             }
         }
 
+        private NhsAppPopToRootNavigationHandler GetNewPopToRootHandler() => new NhsAppPopToRootNavigationHandler(_navigationHandler, _view.AppNavigation);
+
         private async Task OpenWebIntegrationRequested(OpenWebIntegrationRequest request)
         {
             _logger.LogInformation("Opening Web Integration - {Url}", request.Url);
 
-            var popToRootNavigationHandler = new NhsAppPopToRootNavigationHandler(_navigationHandler, _view.AppNavigation);
-
             var model = new WebIntegrationModel(
-                popToRootNavigationHandler,
+                GetNewPopToRootHandler(),
                 _view.SelectedNavigationFooterItem,
                 WebIntegrationRequest.Create(request),
                 request.AdditionalDomains,
@@ -197,10 +196,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
         {
             _logger.LogInformation("Opening Post Web Integration - {Url}", request.Url);
 
-            var popToRootNavigationHandler = new NhsAppPopToRootNavigationHandler(_navigationHandler, _view.AppNavigation);
-
             var model = new WebIntegrationModel(
-                popToRootNavigationHandler,
+                GetNewPopToRootHandler(),
                 _view.SelectedNavigationFooterItem,
                 WebIntegrationRequest.Create(request),
                 request.AdditionalDomains,
@@ -275,7 +272,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         {
             _logger.LogInformation("Starting Uplift - {Url}", request.Url);
 
-            var model = new NhsLoginUpliftModel(request.Url);
+            var model = new NhsLoginUpliftModel(request.Url, GetNewPopToRootHandler());
 
             var page = _pageFactory.CreatePageFor(model);
             await _view.AppNavigation
