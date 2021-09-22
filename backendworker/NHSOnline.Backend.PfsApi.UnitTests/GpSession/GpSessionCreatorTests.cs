@@ -193,27 +193,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSession
         }
 
         [TestMethod]
-        public async Task WhenRecreateGpSessionCalled_WithUnknownSupplier_ThenErrorResultIsReturned()
-        {
-            var result = await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Unknown);
-
-            Assert.AreEqual(
-                typeof(GpSessionRecreateResult.ErrorResult),
-                result.GetType());
-        }
-
-        [TestMethod]
-        public async Task WhenRecreateGpSessionCalled_WithUnknownSupplier_ThenErrorResultIsOdsCodeNotFound()
-        {
-            var result = await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Unknown);
-            var errorResult = result as GpSessionRecreateResult.ErrorResult;
-
-            Assert.AreEqual(
-                typeof(ErrorTypes.LoginOdsCodeNotFoundOrNotSupported),
-                errorResult.ErrorType.GetType());
-        }
-
-        [TestMethod]
         public async Task WhenRecreateSessionCalled_ThenRecreateResultIsReturned()
         {
             var result = await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis);

@@ -42,12 +42,11 @@ export default {
       if (content.linkUrl) {
         switch (content.linkUrl) {
           case 'SYMPTOM_CHECKER_URL':
-            url = this.$store.$env[content.linkUrl];
-            break;
           case 'MY_HEALTH_ONLINE':
-            url = this.$store.$env[content.linkUrl];
-            break;
           case 'SYMPTOM_CHECKER_WALES_URL':
+          case 'SYMPTOM_CHECKER_NORTHERN_IRELAND_URL':
+          case 'COVID_STATUS_URL':
+          case 'COVID_PASS_URL':
             url = this.$store.$env[content.linkUrl];
             break;
           default:

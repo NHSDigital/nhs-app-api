@@ -11,7 +11,9 @@ namespace NHSOnline.App.Api.Client.Session
 {
     internal sealed class CreateSessionResponseParser : IApiClientResponseParser<ApiCreateSessionResult>
     {
-        private const HttpStatusCode OdsCodeNotSupportedOrNoNhsNumber = (HttpStatusCode)464;
+        private const HttpStatusCode OdsCodeNotSupported = (HttpStatusCode)464;
+        private const HttpStatusCode OdsCodeNotFound = (HttpStatusCode)468;
+        private const HttpStatusCode NoNhsNumber = (HttpStatusCode)469;
         private const HttpStatusCode FailedAgeRequirement = (HttpStatusCode)465;
 
         private readonly ILogger _logger;
@@ -37,7 +39,9 @@ namespace NHSOnline.App.Api.Client.Session
             {
                 HttpStatusCode.Created => HandleCreated(httpResponseMessage),
                 HttpStatusCode.BadRequest => HandleBadRequest(httpResponseMessage),
-                OdsCodeNotSupportedOrNoNhsNumber => HandleOdsCodeNotSupportedOrNoNhsNumber(httpResponseMessage),
+                OdsCodeNotSupported => HandleOdsCodeNotSupportedOrNoNhsNumber(httpResponseMessage),
+                OdsCodeNotFound => HandleOdsCodeNotSupportedOrNoNhsNumber(httpResponseMessage),
+                NoNhsNumber => HandleOdsCodeNotSupportedOrNoNhsNumber(httpResponseMessage),
                 FailedAgeRequirement => HandleFailedAgeRequirement(httpResponseMessage),
                 HttpStatusCode.InternalServerError => HandleInternalServerError(httpResponseMessage),
                 HttpStatusCode.BadGateway => HandleBadGateway(httpResponseMessage),

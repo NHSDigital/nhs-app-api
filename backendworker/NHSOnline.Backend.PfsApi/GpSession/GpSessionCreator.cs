@@ -70,13 +70,6 @@ namespace NHSOnline.Backend.PfsApi.GpSession
         {
             _logger.LogInformation("Attempting to recreate GP user session for P9 user");
 
-            if (supplier == Supplier.Unknown)
-            {
-                return new GpSessionRecreateResult.ErrorResult(
-                    new ErrorTypes.LoginOdsCodeNotFoundOrNotSupported(),
-                    $"Failed to determine the GP system based on odsCode={userSession.OdsCode}");
-            }
-
             var gpSessionCreateArgs = new GpSessionRecreateArgs(
                 userSession.Im1ConnectionToken,
                 userSession.OdsCode,

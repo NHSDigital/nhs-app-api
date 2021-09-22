@@ -26,7 +26,7 @@ namespace NHSOnline.HttpMocks.Domain
                 EmisPatientOds.NotificationsPromptEnabled => "emis_with_notifications_prompt_enabled",
                 EmisPatientOds.PkbAndEconsult => "emis_with_pkb_and_econsult",
                 EmisPatientOds.AllSilversEnabled => "emis_with_all_silvers",
-                EmisPatientOds.NoOdsCode => "no-ods-code",
+                EmisPatientOds.NoOdsCode => string.Empty,
                 EmisPatientOds.UnknownOdsCode => "Unknown",
                 EmisPatientOds.Pkb => "emis_with_pkb",
                 EmisPatientOds.Cie => "emis_with_cie",

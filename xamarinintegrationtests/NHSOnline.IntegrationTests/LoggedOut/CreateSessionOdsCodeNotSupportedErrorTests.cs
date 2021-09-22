@@ -30,7 +30,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 
-            AndroidCreateSessionOdsCodeNotSupportedOrNoNhsNumberErrorPage
+            AndroidCreateSessionOdsCodeNotSupportedErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements();
         }
@@ -54,7 +54,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 
-            IOSCreateSessionOdsCodeNotSupportedOrNoNhsNumberErrorPage
+            IOSCreateSessionOdsCodeNotSupportedErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements();
         }
@@ -63,7 +63,6 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         public void AnErrorIsDisplayedWhenPatientHasUnknownSupplierAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient(EmisPatientOds.NoOdsCode);
-
             using var patients = Mocks.Patients.Add(patient);
 
             AndroidLoggedOutHomePage
@@ -78,7 +77,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 
-            AndroidCreateSessionOdsCodeNotSupportedOrNoNhsNumberErrorPage
+            AndroidCreateSessionOdsCodeNotSupportedErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements();
         }
@@ -101,7 +100,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 
-            IOSCreateSessionOdsCodeNotSupportedOrNoNhsNumberErrorPage
+            IOSCreateSessionOdsCodeNotSupportedErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements();
         }
@@ -126,7 +125,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 
-            AndroidCreateSessionOdsCodeNotSupportedOrNoNhsNumberErrorPage
+            AndroidCreateSessionNoNhsNumberErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements();
         }
@@ -151,7 +150,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 
-            IOSCreateSessionOdsCodeNotSupportedOrNoNhsNumberErrorPage
+            IOSCreateSessionNoNhsNumberErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements();
         }

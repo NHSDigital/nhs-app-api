@@ -208,6 +208,12 @@ spec:
           value: "https://111.nhs.uk/emergency-prescription/"
         - name: INFORMATICA_URL
           value: "https://the-andover-health-centre-medical-practice.appointments-online.co.uk/"  
+        - name: SYMPTOM_CHECKER_NORTHERN_IRELAND_URL
+          value: "https://www.nidirect.gov.uk/articles/gp-out-hours-service"
+        - name: COVID_STATUS_URL
+          value: "https://covid-status.service.nhsx.nhs.uk"
+        - name: COVID_PASS_URL
+          value: "https://www.nhs.uk/conditions/coronavirus-covid-19/covid-pass"
         - name: VUE_WINDOW_OBJECT_ENABLED
           value: "{{ $.Values.webVueGlobalObject }}"
         - name: GP_SESSION_ON_DEMAND_ENABLED

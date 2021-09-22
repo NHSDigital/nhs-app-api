@@ -46,6 +46,11 @@ export default {
       type: String,
       default: '',
     },
+    params: {
+      type: Object,
+      required: false,
+      default: () => {},
+    },
   },
   computed: {
     isVisible() {
@@ -62,7 +67,7 @@ export default {
       return url;
     },
     message() {
-      return this.$t(this.from);
+      return this.$t(this.from, this.params);
     },
     messageLabel() {
       if (isObject(this.message)) {
@@ -72,7 +77,7 @@ export default {
     },
     messageText() {
       const textPath = isObject(this.message) ? `${this.from}.text` : this.from;
-      return this.$t(textPath);
+      return this.$t(textPath, this.params);
     },
   },
   methods: {

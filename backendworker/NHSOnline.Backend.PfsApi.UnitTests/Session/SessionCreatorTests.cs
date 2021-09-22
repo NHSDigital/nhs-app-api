@@ -119,7 +119,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
         }
 
         [TestMethod]
-        public async Task CreateSession_UnknownOdsCode_ReturnsLoginOdsCodeNotSupportedError()
+        public async Task CreateSession_UnknownOdsCode_ReturnsLoginOdsCodeNotFoundError()
         {
             // Arrange
             var auditStub = ArrangeAudit();
@@ -133,18 +133,20 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
             Context.ArrangeAntiforgery();
             Context.ArrangeCitizenIdService();
             Context.ArrangeOdsCodeMassager();
+            Context.ArrangeServiceJourneyRulesService();
 
             Context.Mocks.ErrorReferenceGenerator
-                .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes.LoginOdsCodeNotFoundOrNotSupported>()))
+                .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes.LoginOdsCodeNotFound>()))
                 .Returns(SessionCreatorTestContext.ServiceDeskReference)
                 .Verifiable();
 
             Context.Mocks.ServiceJourneyRulesService
-                .Setup(x => x.GetServiceJourneyRulesForOdsCode(Context.Data.UserProfile.OdsCode))
+                .Setup(x => x.GetServiceJourneyRulesForOdsCode(null))
                 .Returns(Task.FromResult(serviceJourneyRulesConfigResult))
                 .Verifiable();
 
             // Act
+            Context.Data.CitizenIdUserSession.OdsCode = null;
             var result = await CreateSystemUnderTest().CreateSession(Context.Data.CreateSessionRequest);
 
             // Assert
@@ -153,16 +155,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                 var errorResult = result.Should().BeAssignableTo<CreateSessionResult.ErrorResult>().Subject;
 
                 errorResult.ErrorTypes.Category.Should().Be(ErrorCategory.Login);
-                errorResult.ErrorTypes.Prefix.Should().BeEquivalentTo("3f");
+                errorResult.ErrorTypes.Prefix.Should().BeEquivalentTo("3r");
                 errorResult.ErrorTypes.SourceApi.Should().Be(SourceApi.None);
-                errorResult.ErrorTypes.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber);
+                errorResult.ErrorTypes.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status468OdsCodeNotFound);
 
                 auditStub.AccessTokenString.Should().Be(Context.Data.CitizenIdUserSession.AccessToken);
                 auditStub.NhsNumber.Should().Be(Context.Data.UserProfile.NhsNumber);
                 auditStub.Supplier.Should().Be(Supplier.Unknown);
                 auditStub.Operation.Should().Be("GP_Session_Create");
                 auditStub.Details.Should().Be("Attempting to create Session");
-                auditStub.ResponseDetails.Should().Be("Failed to determine the GP system based on ODS code 'OdsCode'");
+                auditStub.ResponseDetails.Should().Be("Failed to determine the GP system. No ODS code");
             }
         }
 
@@ -366,7 +368,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
             };
 
             Context.Mocks.ErrorReferenceGenerator
-                .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes.LoginOdsCodeNotFoundOrNotSupported>()))
+                .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes.LoginOdsCodeNotSupported>()))
                 .Returns(SessionCreatorTestContext.ServiceDeskReference)
                 .Verifiable();
 
@@ -387,7 +389,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                 var errorResult = result.Should().BeAssignableTo<CreateSessionResult.ErrorResult>().Subject;
 
                 errorResult.ErrorTypes.Category.Should().Be(ErrorCategory.Login);
-                errorResult.ErrorTypes.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber);
+                errorResult.ErrorTypes.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupported);
                 errorResult.ErrorTypes.Prefix.Should().BeEquivalentTo("3f");
                 errorResult.ErrorTypes.SourceApi.Should().Be(SourceApi.None);
             }

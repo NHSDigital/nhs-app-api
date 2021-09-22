@@ -21,4 +21,10 @@ open class ExternalSitesMappingBuilder(method: String ="GET", relativePath:Strin
     fun organDonationRequest(path: String) = OrganDonationRequestBuilder("GET", path)
 
     fun nhsUkRequest(path: String) = NhsUkRequestBuilder("GET", path)
+
+    fun getCovidPassRequest() = GetCovidPassRequestBuilder()
+
+    fun getCovidPassOrProofRequest() = GetCovidPassOrProofRequestBuilder()
+
+    fun getNorthernIrelandRequest() = GetNorthernIrelandRequestBuilder()
 }

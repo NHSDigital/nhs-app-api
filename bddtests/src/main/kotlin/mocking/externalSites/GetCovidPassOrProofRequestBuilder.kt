@@ -3,16 +3,16 @@ package mocking.externalSites
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
-class InformaticaRequestBuilder
-    : ExternalSitesMappingBuilder("GET", "/andover-medical-practice-appointments-online-co-uk/") {
+class GetCovidPassOrProofRequestBuilder
+    : ExternalSitesMappingBuilder("GET", "/conditions/coronavirus-covid-19/covid-pass") {
 
     fun respondWithPage(): Mapping {
         return respondWith(HttpStatus.SC_OK) {
             andHtmlBody("""
                 <html>
-                    <title>Informatica</title>
+                    <title>NHS COVID Pass - NHS</title>
                     <body>
-                        <h1>Informatica</h1>
+                        <h1>Get your NHS COVID Pass</h1>
                     </body>
                 </html>
             """.trimIndent())

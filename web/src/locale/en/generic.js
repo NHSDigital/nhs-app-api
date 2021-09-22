@@ -3,6 +3,7 @@ export default {
   at: 'at',
   back: 'Back',
   contactUs: 'Contact us',
+  contactUsWithErrorCode: 'Contact us, quoting error code {errorCode}',
   continue: 'Continue',
   day: 'Day',
   error: 'Error',

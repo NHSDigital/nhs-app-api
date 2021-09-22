@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.PfsApi.Session
                 => result.Response;
 
             public ProcessResult<ServiceJourneyRulesResponse, CreateSessionResult> Visit(ServiceJourneyRulesConfigResult.NotFound result)
-                => ErrorResult(new ErrorTypes.LoginOdsCodeNotFoundOrNotSupported());
+                => ErrorResult(new ErrorTypes.LoginOdsCodeNotSupported());
 
             public ProcessResult<ServiceJourneyRulesResponse, CreateSessionResult> Visit(ServiceJourneyRulesConfigResult.InternalServerError result)
                 => ErrorResult(new ErrorTypes.LoginServiceJourneyRulesOtherError());

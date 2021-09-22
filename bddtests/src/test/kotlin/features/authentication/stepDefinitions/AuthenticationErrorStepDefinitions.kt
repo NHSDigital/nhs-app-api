@@ -91,6 +91,13 @@ class AuthenticationErrorStepDefinitions {
         setupAndLogIn(patient, supplier)
     }
 
+    @Given("I attempt to log in as a (.*) user without an ODS Code$")
+    fun iAttemptToLogInWithoutAnInvalidOdsCode(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier).copy(odsCode = "")
+        setupAndLogIn(patient, supplier)
+    }
+
     @Given("^I attempt to log in as an EMIS and the CID request timeout$")
     fun loginAsEmisTimeout() {
         val supplier = Supplier.EMIS

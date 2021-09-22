@@ -28,26 +28,67 @@
                       {{ $t('login.authReturn.loginFailed') }} </h1>
                     <error-container v-if="statusCode===464">
                       <error-title title="login.authReturn.loginFailed"/>
-                      <error-header from="login.authReturn.ifYourSurgeryIsInWales" />
-                      <error-paragraph from="login.authReturn.notAvailableInWales" />
+                      <error-paragraph from="login.authReturn.ifYouAreNotRegisteredInEngland" />
                       <error-paragraph-with-links
-                        from="login.authReturn.ifYouNeedInWales" />
-                      <error-header from="login.authReturn.ifYourSurgeryIsInEngland" />
+                        from="login.authReturn.howToGetYourCovidPass" />
+                      <error-header from="login.authReturn.ifYourSurgeryIsInWales" />
                       <error-paragraph
-                        from="login.authReturn.weCannotConnectToSurgeryOrMatchYourNhsNumber" />
-                      <error-paragraph-with-links from="login.authReturn.ifYouNeedInEngland"/>
-                      <error-paragraph-with-links from="login.authReturn.ifYouStillNeedHelp"
-                                                  :query-param="contactUsParam"/>
+                        from="login.authReturn.notAvailableInWales" />
+                      <error-paragraph-with-links
+                        from="login.authReturn.ifYouNeedAnAppointment" />
+                      <error-paragraph-with-links
+                        from="login.authReturn.ifYouNeedUrgentMedicalAdviceInWales"/>
                       <error-header
-                        from="login.authReturn.ifYourSurgeryIsInNorthernIrelandOrScotland" />
+                        from="login.authReturn.ifYouAreRegisteredWithTheArmedForces" />
                       <error-paragraph
-                        from="login.authReturn.notAvailableInNorthernIrelandOrScotland" />
+                        from="login.authReturn.armedForcesMessage" />
+                      <error-header
+                        from="login.authReturn.ifYourSurgeryIsInScotlandOrNorthernIreland" />
                       <error-paragraph
-                        from="login.authReturn.ifYouNeedInNorthernIrelandOrScotland" />
-                      <p id="errorCode" class="nhsuk-u-font-size-16">
-                        {{ $t('login.authReturn.reference') }}
-                        {{ serviceDeskReference }}
-                      </p>
+                        from="login.authReturn.notAvailableInScotlandOrNorthernIreland" />
+                      <error-paragraph
+                        from="login.authReturn.contactGPSurgeryDirectly" />
+                      <error-paragraph
+                        from="login.authReturn.ifYouAreInScotland" />
+                      <error-paragraph-with-links
+                        from="login.authReturn.ifYouNeedUrgentMedicalAdviceInNorthernIreland" />
+                      <error-header from="login.authReturn.ifYouAreRegisteredAndNotArmedForces" />
+                      <error-paragraph
+                        from="login.authReturn.cannotConnectToGpSurgery" />
+                      <error-link from="generic.contactUsWithErrorCode"
+                                  :action="contactUsUrl"
+                                  target="_blank"
+                                  :query-param="contactUsParam"
+                                  :params="{errorCode: serviceDeskReference}"/>
+                    </error-container>
+                    <error-container v-else-if="statusCode===468">
+                      <error-title title="login.authReturn.loginFailed"/>
+                      <error-paragraph from="login.authReturn.cannotConnectToGpSurgery" />
+                      <error-paragraph from="login.authReturn.notShowingRegisteredSurgery" />
+                      <error-paragraph from="login.authReturn.isPdsLinkedToSurgery" />
+                      <error-paragraph from="login.authReturn.ifYouNeedToBook" />
+                      <error-paragraph-with-links
+                        from="login.authReturn.ifYouNeedUrgentMedicalAdvice"/>
+                      <error-paragraph-with-links
+                        from="login.authReturn.ifYouNeedCovidAdvice"/>
+                      <error-paragraph from="login.authReturn.stillUnableToAccessNhsApp" />
+                      <error-link from="generic.contactUsWithErrorCode"
+                                  :action="contactUsUrl"
+                                  target="_blank"
+                                  :query-param="contactUsParam"
+                                  :params="{errorCode: serviceDeskReference}"/>
+                    </error-container>
+                    <error-container v-else-if="statusCode===469">
+                      <error-title title="login.authReturn.loginFailed"/>
+                      <error-paragraph from="login.authReturn.cannotMatchNhsNumberToSurgery" />
+                      <error-paragraph from="login.authReturn.ifYouNeedToBook" />
+                      <error-paragraph-with-links
+                        from="login.authReturn.ifYouNeedUrgentMedicalAdvice"/>
+                      <error-link from="generic.contactUsWithErrorCode"
+                                  :action="contactUsUrl"
+                                  target="_blank"
+                                  :query-param="contactUsParam"
+                                  :params="{errorCode: serviceDeskReference}"/>
                     </error-container>
                     <error-container v-else-if="statusCode===465">
                       <error-title title="login.authReturn.loginFailed"/>
@@ -232,6 +273,7 @@ export default {
     return {
       consentNotGivenDescription: CONSENT_NOT_GIVEN_DESCRIPTION,
       nhs111Url: this.$store.$env.SYMPTOM_CHECKER_URL,
+      contactUsUrl: this.$store.$env.CONTACT_US_URL,
     };
   },
   computed: {

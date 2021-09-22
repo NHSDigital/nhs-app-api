@@ -35,13 +35,31 @@ namespace NHSOnline.Backend.Support
             public override int StatusCode => StatusCodes.Status403Forbidden;
         }
 
-        public class LoginOdsCodeNotFoundOrNotSupported : ErrorTypes
+        public class LoginOdsCodeNotSupported : ErrorTypes
         {
             public override string Prefix => "3f";
 
             public override ErrorCategory Category => ErrorCategory.Login;
 
-            public override int StatusCode => Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber;
+            public override int StatusCode => Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupported;
+        }
+
+        public class LoginOdsCodeNotFound : ErrorTypes
+        {
+            public override string Prefix => "3r";
+
+            public override ErrorCategory Category => ErrorCategory.Login;
+
+            public override int StatusCode => Constants.CustomHttpStatusCodes.Status468OdsCodeNotFound;
+        }
+
+        public class LoginNhsNumberNotFound : ErrorTypes
+        {
+            public override string Prefix => "3u";
+
+            public override ErrorCategory Category => ErrorCategory.Login;
+
+            public override int StatusCode => Constants.CustomHttpStatusCodes.Status469NhsNumberNotFound;
         }
 
         public class GPSessionUnavailable: ErrorTypes

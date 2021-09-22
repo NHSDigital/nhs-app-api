@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
                     _logger.LogError("No NHS number was found");
                     return new CitizenIdSessionResult
                     {
-                        StatusCode = Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber
+                        StatusCode = Constants.CustomHttpStatusCodes.Status469NhsNumberNotFound
                     };
                 }
 

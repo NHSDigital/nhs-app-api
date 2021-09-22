@@ -31,41 +31,54 @@ Feature: Login error messages
     When I click the error 'Go to 111.nhs.uk' link with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
     Then a new tab has been opened by the link
 
-    #464
-  Scenario Outline: Cannot log in as a <GP System> user with no NHS Number
-    Given I attempt to log in as a <GP System> user without an NHS Number
-    And 'NHS UK' responds to requests for '/nhs-app-contact-us'
-    And '111' responds to requests for '/myhealthonline'
-    And '111' responds to requests for '/wales'
-    And '111' responds to requests for '/home'
-    Then The reference error and label and prefix is shown as "Reference: 3f"
-    When I click the error <Link text> link with a url of <Link url>
-    Then a new tab has been opened by the link
-    Examples:
-      | GP System | Link text           | Link url                                                                            |
-      | TPP       | 'contact us'        | 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3f' |
-      | TPP       | 'My Health Online'  | 'http://stubs.local.bitraft.io:8080/external/111/myhealthonline'                    |
-      | TPP       | '111.wales.nhs.uk'  | 'http://stubs.local.bitraft.io:8080/external/111/wales'                             |
-      | TPP       | '111.nhs.uk'        | 'http://stubs.local.bitraft.io:8080/external/111/home'                              |
-
   #464
   Scenario Outline: Cannot log in as a EMIS user with invalid ODS Code
     Given I attempt to log in as a EMIS user with invalid ODS Code
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'
-    And '111' responds to requests for '/myhealthonline'
+    And 'My Health Online' responds to requests for type '/myhealthonline'
     And '111' responds to requests for '/wales'
+    And 'COVID Pass or proof' responds to requests for type '/conditions/coronavirus-covid-19/covid-pass'
+    And 'Northern Ireland' responds to requests for type '/www-nidirect-gov-uk/articles/gp-out-hours-service'
+    And I see the error 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3f'
+    When I click the error <Link text> link with a url of <Link url>
+    Then a new tab has been opened by the link
+    Examples:
+      | Link text             | Link url                                                                                        |
+      | 'Contact us'          | 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3f'             |
+      | 'My Health Online'    | 'http://stubs.local.bitraft.io:8080/external/111/myhealthonline'                                |
+      | '111.wales.uk'        | 'http://stubs.local.bitraft.io:8080/external/111/wales'                                         |
+      | 'COVID Pass or proof' | 'http://stubs.local.bitraft.io:8080/external/conditions/coronavirus-covid-19/covid-pass'        |
+      | 'Northern Ireland'    | 'http://stubs.local.bitraft.io:8080/external/www-nidirect-gov-uk/articles/gp-out-hours-service' |
+
+  #468
+  Scenario Outline: Cannot log in as a EMIS user without ODS Code
+    Given I attempt to log in as a EMIS user without an ODS Code
+    And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     And '111' responds to requests for '/home'
-    Then The reference error and label and prefix is shown as "Reference: 3f"
+    And 'NHS COVID Pass' responds to requests for type '/covid-status-service-nhsx-nhs-uk'
+    And I see the error 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3r'
+    When I click the error <Link text> link with a url of <Link url>
+    Then a new tab has been opened by the link
+    Examples:
+      | Link text               | Link url                                                                            |
+      | 'Contact us'            | 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3r' |
+      | '111.nhs.uk'            | 'http://stubs.local.bitraft.io:8080/external/111/home'                              |
+      | 'NHS COVID Pass'        | 'http://stubs.local.bitraft.io:8080/external/covid-status-service-nhsx-nhs-uk'      |
+
+  #469
+  Scenario Outline: Cannot log in as a EMIS user with no NHS Number
+    Given I attempt to log in as a EMIS user without an NHS Number
+    And 'NHS UK' responds to requests for '/nhs-app-contact-us'
+    And '111' responds to requests for '/home'
+    And I see the error 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3u'
     When I click the error <Link text> link with a url of <Link url>
     Then a new tab has been opened by the link
     Examples:
       | Link text           | Link url                                                                            |
-      | 'contact us'        | 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3f' |
-      | 'My Health Online'  | 'http://stubs.local.bitraft.io:8080/external/111/myhealthonline'                    |
-      | '111.wales.nhs.uk'  | 'http://stubs.local.bitraft.io:8080/external/111/wales'                             |
-      | '111.nhs.uk'        | 'http://stubs.local.bitraft.io:8080/external/111/home'                                  |
+      | 'Contact us'        | 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3u' |
+      | '111.nhs.uk'        | 'http://stubs.local.bitraft.io:8080/external/111/home'                              |
 
-#504 timeout
+  #504 timeout
   Scenario: Cannot log in as a EMIS when the request timeout I see error code with "zn" prefix
     Given I attempt to log in as an EMIS and the CID request timeout
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'

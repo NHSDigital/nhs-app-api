@@ -1,84 +1,84 @@
-using NHSOnline.IntegrationTests.UI.Components.IOS;
+using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
-namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
+namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 {
-    public sealed class IOSCreateSessionOdsCodeNotSupportedOrNoNhsNumberErrorPage
+    public sealed class AndroidCreateSessionOdsCodeNotSupportedErrorPage
     {
-        private readonly IIOSDriverWrapper _driver;
+        private readonly IAndroidDriverWrapper _driver;
 
-        private IOSCreateSessionOdsCodeNotSupportedOrNoNhsNumberErrorPage(IIOSDriverWrapper driver) => _driver = driver;
+        private AndroidCreateSessionOdsCodeNotSupportedErrorPage(IAndroidDriverWrapper driver) => _driver = driver;
 
-        private IOSLabel Title => IOSLabel.WithText(_driver, "Login failed");
+        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Login failed");
 
-        private IOSLabel WalesTitle => IOSLabel
+        private AndroidLabel WalesTitle => AndroidLabel
             .WithText(
                 _driver,
                 "If your GP surgery is in Wales")
             .ScrollIntoView();
-        private IOSLabel WalesNotAvailableText => IOSLabel
+        private AndroidLabel WalesNotAvailableText => AndroidLabel
             .WithText(
                 _driver,
                 "The NHS App is not available in Wales because health services are managed separately from England.")
             .ScrollIntoView();
-        private IOSLabel WalesIfYouNeedText => IOSLabel
+        private AndroidLabel WalesIfYouNeedText => AndroidLabel
             .WithText(
                 _driver,
                 "If you need an appointment or prescription, go to My Health Online or contact your GP surgery directly. " +
                 "For urgent medical advice, go to 111.wales.nhs.uk or call 111.")
             .ScrollIntoView();
 
-        private IOSLabel EnglandTitle => IOSLabel
+        private AndroidLabel EnglandTitle => AndroidLabel
             .WithText(
                 _driver,
                 "If your GP surgery is in England")
             .ScrollIntoView();
-        private IOSLabel EnglandNoSurgeryText => IOSLabel
+        private AndroidLabel EnglandNoSurgeryText => AndroidLabel
             .WithText(
                 _driver,
                 "Either we cannot connect to your GP surgery, or we cannot match your NHS number to a GP surgery.")
             .ScrollIntoView();
-        private IOSLabel EnglandIfYouNeedText => IOSLabel
+        private AndroidLabel EnglandIfYouNeedText => AndroidLabel
             .WithText(
                 _driver,
                 "If you need an appointment or prescription, contact your GP surgery directly. " +
                 "For urgent medical advice, go to 111.nhs.uk or call 111.")
             .ScrollIntoView();
-        private IOSLabel EnglandIfYouNeedAppHelpText => IOSLabel
+        private AndroidLabel EnglandIfYouNeedAppHelpText => AndroidLabel
             .WithText(
                 _driver,
                 "If you still need help to access the app, contact us.")
             .ScrollIntoView();
 
-        private IOSLabel NorthernIrelandOrScotlandTitle => IOSLabel
+        private AndroidLabel NorthernIrelandOrScotlandTitle => AndroidLabel
             .WithText(
                 _driver,
                 "If your GP surgery is in Northern Ireland or Scotland")
             .ScrollIntoView();
-        private IOSLabel NorthernIrelandOrScotlandNotAvailableText => IOSLabel
+        private AndroidLabel NorthernIrelandOrScotlandNotAvailableText => AndroidLabel
             .WithText(
                 _driver,
                 "The NHS App is not available in Northern Ireland or Scotland because health services are managed separately from England.")
             .ScrollIntoView();
-        private IOSLabel NorthernIrelandOrScotlandIfYouNeedText => IOSLabel
+        private AndroidLabel NorthernIrelandOrScotlandIfYouNeedText => AndroidLabel
             .WithText(
                 _driver,
                 "If you need an appointment or prescription, contact your GP surgery directly." +
                 " For urgent medical advice, call 111.")
             .ScrollIntoView();
 
-        private IOSLabel ErrorCodeText => IOSLabel
-            .WhichMatches(_driver, "Reference: 3f[0-9a-z]{4}")
+        private AndroidLabel ErrorCodeText => AndroidLabel
+            .WhichMatches(_driver, "Reference: 3(f|r)[0-9a-z]{4}")
             .ScrollIntoView();
 
-        public static IOSCreateSessionOdsCodeNotSupportedOrNoNhsNumberErrorPage AssertOnPage(IIOSDriverWrapper driver)
+        public static AndroidCreateSessionOdsCodeNotSupportedErrorPage AssertOnPage(IAndroidDriverWrapper driver)
         {
-            var page = new IOSCreateSessionOdsCodeNotSupportedOrNoNhsNumberErrorPage(driver);
+            var page = new AndroidCreateSessionOdsCodeNotSupportedErrorPage(driver);
             page.Title.AssertVisible();
             return page;
         }
 
-        public IOSCreateSessionOdsCodeNotSupportedOrNoNhsNumberErrorPage AssertPageElements()
+        public AndroidCreateSessionOdsCodeNotSupportedErrorPage AssertPageElements()
         {
             WalesTitle.AssertVisible();
             WalesNotAvailableText.AssertVisible();

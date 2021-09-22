@@ -60,11 +60,13 @@ namespace NHSOnline.Backend.PfsApi.Session
             string odsCode,
             string csrfToken)
         {
-            if (supplier == Supplier.Unknown)
+            if (supplier == Supplier.Unknown && string.IsNullOrEmpty(odsCode))
             {
+                const string noOdsError = "Failed to determine the GP system. No ODS code";
+                _logger.LogInformation(noOdsError);
                 return new CreateUserSessionResult.Failure(
-                    new ErrorTypes.LoginOdsCodeNotFoundOrNotSupported(),
-                    $"Failed to determine the GP system based on ODS code '{odsCode}'");
+                    new ErrorTypes.LoginOdsCodeNotFound(),
+                    noOdsError);
             }
 
             P9UserSession userSession;

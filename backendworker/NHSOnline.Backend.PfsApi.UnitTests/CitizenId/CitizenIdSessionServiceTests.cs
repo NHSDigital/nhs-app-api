@@ -223,7 +223,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
         }
 
         [TestMethod]
-        public async Task Create_InvalidNhsNumber_ReturnsStatus464OdsCodeNotSupportedOrNoNhsNumber()
+        public async Task Create_InvalidNhsNumber_ReturnsStatus469NhsNumberNotFound()
         {
             // Arrange
             var userProfile = new UserProfile(new Auth.CitizenId.Models.UserInfo
@@ -256,7 +256,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             _mockCitizenIdService.VerifyAll();
             _mockProofLevelMapper.VerifyNoOtherCalls();
 
-            result.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber);
+            result.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status469NhsNumberNotFound);
         }
 
         [TestMethod]
