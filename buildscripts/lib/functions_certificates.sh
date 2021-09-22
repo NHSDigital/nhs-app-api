@@ -31,7 +31,7 @@ extendedKeyUsage = critical, 1.3.6.1.5.5.7.3.1
 [alt_names]
 DNS.1      = local.bitraft.io
 DNS.2      = securestubs.local.bitraft.io
-DNS.3      = silverintegrationtestprovider.securestubs.local.bitraft.io
+DNS.3      = pkb.securestubs.local.bitraft.io
 DNS.4      = securestubs.local.bitraft.io
 DNS.5      = android.local.bitraft.io
 
