@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Android.Content;
+using Android.Webkit;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Droid.Renderers.WebViews;
 using NHSOnline.App.Droid.Renderers.WebViews.Extensions;
@@ -23,10 +24,12 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
             };
         }
 
+        protected override WebViewClient GetWebViewClient() => new NhsAppFormsWebViewClient(this);
+
         protected override void OnElementChanged(ElementChangedEventArgs<WebView> e)
         {
             base.OnElementChanged(e);
-            
+
             foreach (var extension in _extensions)
             {
                 extension.OnElementChanged(e);

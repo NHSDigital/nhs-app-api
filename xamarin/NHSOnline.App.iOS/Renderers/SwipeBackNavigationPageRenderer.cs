@@ -31,7 +31,7 @@ namespace NHSOnline.App.iOS.Renderers
                 if (_renderer.Element is NavigationPage navigationPage &&
                     navigationPage.CurrentPage is ISwipeablePage page)
                 {
-                    if (!page.ShouldSwipeGoBack())
+                    if (page.OnSwipeBack())
                     {
                         return false;
                     }

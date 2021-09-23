@@ -7,6 +7,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         WaitForAction SwipeBack();
         void PushTestFile();
         Task DisableNetwork();
+        Task ResetNetwork();
         void CloseApp();
         void LaunchApp();
         void AssertRunningInForeground();

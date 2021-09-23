@@ -22,6 +22,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
             return page;
         }
 
+        public void NavigateToInternalPage() => PageContent.NavigateToInternalPage();
+
         public void AssertFileSelected() => PageContent.AssertFileSelected();
 
         public void UploadFile() => PageContent.UploadFile();

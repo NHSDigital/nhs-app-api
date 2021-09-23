@@ -27,6 +27,8 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
             };
         }
 
+        protected override WebViewClient GetWebViewClient() => new NhsAppFormsWebViewClient(this);
+
         protected override FormsWebChromeClient GetFormsWebChromeClient() => new NhsLoginUpliftChromeClient(ShowFileChooser);
 
         private void ShowFileChooser(IValueCallback valueCallback, WebChromeClient.FileChooserParams fileChooserParams)

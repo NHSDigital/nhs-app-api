@@ -43,6 +43,10 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
                 {
                     _logs.Info("{0}: Retrying", e.Message);
                 }
+                catch (NoSuchElementException e) when (DateTime.UtcNow < retryUntil)
+                {
+                    _logs.Info("{0}: Retrying", e.Message);
+                }
                 catch (WebDriverException e) when (DateTime.UtcNow < retryUntil)
                 {
                     _logs.Info("{0}: Retrying", e.Message);

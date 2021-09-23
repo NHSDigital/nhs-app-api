@@ -6,42 +6,22 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.More.AccountSettings
 {
     public sealed class IOSAccountSettingsPage
     {
-        private readonly IIOSDriverWrapper _driver;
         private readonly IIOSInteractor _interactor;
+
+        private AccountSettingsPageContent PageContent { get; }
 
         private IOSAccountSettingsPage(IIOSDriverWrapper driver)
         {
-            _driver = driver;
             _interactor = driver;
-            Navigation = new IOSFullNavigation(driver);
+
             PageContent = new AccountSettingsPageContent(driver.Web.NhsAppLoggedInWebView());
         }
-
-        IOSLink NotificationsSettingsMenuItem => IOSLink.WithText(_interactor, "Manage notifications");
-
-        IOSLink NhsLoginSettingsMenuItem => IOSLink.WithText(_interactor, "Manage NHS login account");
-
-        IOSLink FaceIdMenuItem => IOSLink.WithText(_interactor, "Face ID");
-
-        IOSLink TouchIdMenuItem => IOSLink.WithText(_interactor, "Touch ID");
-
-        public IOSFullNavigation Navigation { get; }
-
-        public AccountSettingsPageContent PageContent { get; }
 
         public static IOSAccountSettingsPage AssertOnPage(IIOSDriverWrapper driver)
         {
             var page = new IOSAccountSettingsPage(driver);
             page.PageContent.AssertOnPage();
             return page;
-        }
-
-        public IOSAccountSettingsPage AssertPageElements()
-        {
-            Navigation.AssertNavigationPresent();
-            PageContent.AssertPageElements();
-
-            return this;
         }
 
         public IOSAccountSettingsPage AssertTouchIdMenuItemElements()
@@ -56,9 +36,21 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.More.AccountSettings
             return this;
         }
 
-        public void NavigateToNotificationsSettings() => NotificationsSettingsMenuItem.Touch();
+        private IOSLink LegalAndCookiesMenuItem => IOSLink.WithText(_interactor, "Legal and cookies");
+
+        private IOSLink NhsLoginSettingsMenuItem => IOSLink.WithText(_interactor, "Manage NHS login account");
+
+        private IOSLink NotificationsSettingsMenuItem => IOSLink.WithText(_interactor, "Manage notifications");
+
+        private IOSLink FaceIdMenuItem => IOSLink.WithText(_interactor, "Face ID");
+
+        private IOSLink TouchIdMenuItem => IOSLink.WithText(_interactor, "Touch ID");
+
+        public void NavigateToLegalAndCookies() => LegalAndCookiesMenuItem.Touch();
 
         public void NavigateToNhsLoginSettings() => NhsLoginSettingsMenuItem.Touch();
+
+        public void NavigateToNotificationsSettings() => NotificationsSettingsMenuItem.Touch();
 
         public void NavigateToFaceIdBiometrics() => FaceIdMenuItem.Touch();
 

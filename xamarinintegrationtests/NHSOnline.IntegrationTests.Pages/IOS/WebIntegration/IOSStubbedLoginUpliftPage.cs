@@ -5,13 +5,10 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
 {
     public sealed class IOSStubbedLoginUpliftPage
     {
-        private readonly IIOSDriverWrapper _driver;
-
         private IOSStubbedLoginUpliftPage(IIOSDriverWrapper driver)
         {
             Navigation = new IOSSlimCloseNavigation(driver);
             PageContent = new StubbedLoginUpliftPageContent(driver.Web.WebIntegrationWebView());
-            _driver = driver;
         }
 
         public IOSSlimCloseNavigation Navigation { get; }
@@ -24,6 +21,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
             page.PageContent.AssertOnPage();
             return page;
         }
+
+        public void NavigateToInternalPage() => PageContent.NavigateToInternalPage();
 
         public void UploadFile() => PageContent.UploadFile();
 

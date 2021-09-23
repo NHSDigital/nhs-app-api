@@ -133,14 +133,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
             }
         }
 
-        protected override bool OnBackButtonPressed()
-        {
-            return true;
-        }
+        protected override bool OnBackButtonPressed() => true;
 
-        public bool ShouldSwipeGoBack()
-        {
-            return false;
-        }
+        public bool OnSwipeBack() => true;
     }
 }

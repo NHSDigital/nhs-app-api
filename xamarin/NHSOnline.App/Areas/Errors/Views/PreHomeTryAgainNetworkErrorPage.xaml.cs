@@ -10,7 +10,7 @@ using Xamarin.Forms.Xaml;
 namespace NHSOnline.App.Areas.Errors.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PreHomeTryAgainNetworkErrorPage : IPreHomeTryAgainNetworkErrorView, IPreHomeTryAgainNetworkErrorView.IEvents
+    public partial class PreHomeTryAgainNetworkErrorPage : IPreHomeTryAgainNetworkErrorView, IPreHomeTryAgainNetworkErrorView.IEvents, ISwipeablePage
     {
         private readonly ILogger<PreHomeTryAgainNetworkErrorPage> _logger;
         private readonly AppNavigation<IPreHomeTryAgainNetworkErrorView.IEvents> _appNavigation;
@@ -48,6 +48,12 @@ namespace NHSOnline.App.Areas.Errors.Views
         }
 
         protected override bool OnBackButtonPressed()
+        {
+            BackRequestedCommand.Execute(null);
+            return true;
+        }
+
+        public bool OnSwipeBack()
         {
             BackRequestedCommand.Execute(null);
             return true;

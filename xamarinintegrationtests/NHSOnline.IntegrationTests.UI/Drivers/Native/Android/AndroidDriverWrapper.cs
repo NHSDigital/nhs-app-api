@@ -133,6 +133,12 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             await browserStackApiClient.ApplyNetworkProfile(_driver.SessionId, NetworkProfile.AirplaneMode);
         }
 
+        async Task IAndroidDriverWrapper.ResetNetwork()
+        {
+            var browserStackApiClient = new BrowserStackApiClient(_browserStackConfig);
+            await browserStackApiClient.ApplyNetworkProfile(_driver.SessionId, NetworkProfile.Reset);
+        }
+
         public void CloseApp()
         {
             // To simulate how a user would close the app we first background it, wait a few moments and then close it.

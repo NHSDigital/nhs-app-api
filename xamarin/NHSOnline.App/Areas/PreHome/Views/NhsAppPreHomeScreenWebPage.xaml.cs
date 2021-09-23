@@ -182,15 +182,9 @@ namespace NHSOnline.App.Areas.PreHome.Views
             WebView.IsVisible = false;
         }
 
-        protected override bool OnBackButtonPressed()
-        {
-            return true;
-        }
+        protected override bool OnBackButtonPressed() => true;
 
-        public bool ShouldSwipeGoBack()
-        {
-            return false;
-        }
+        public bool OnSwipeBack() => true;
 
         public async Task HandleDeeplink(Uri deeplinkUrl)
         {

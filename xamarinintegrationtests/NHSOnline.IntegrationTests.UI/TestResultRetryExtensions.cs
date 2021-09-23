@@ -7,10 +7,9 @@ namespace NHSOnline.IntegrationTests.UI
     internal static class TestResultRetryExtensions
     {
         internal const string FailedToCreateDriverMessage = "Failed to create driver";
-
         internal const string DeviceTimeSkewMessage = "device time should be close to the current time";
-
         internal const string AppNotRunningMessage = "application should have been automatically started on test device";
+        internal const string FailedToUpdateNetworkStateMessage = "Failed to update network state";
 
         // 308536-Invalid Service com.apple.webinspector
         private static readonly Regex InvalidServiceWebInspectorMessage = new(
@@ -25,6 +24,11 @@ namespace NHSOnline.IntegrationTests.UI
         // Failed to create driver
         private static readonly Regex FailedToCreateDriver = new(
             Regex.Escape(FailedToCreateDriverMessage),
+            RegexOptions.Compiled);
+
+        /// Network state did not update in time on the test device
+        private static readonly Regex FailedToUpdateNetworkState = new(
+            Regex.Escape(FailedToUpdateNetworkStateMessage),
             RegexOptions.Compiled);
 
         // 390309-Device time in the future
@@ -103,6 +107,7 @@ namespace NHSOnline.IntegrationTests.UI
             (InvalidServiceWebInspectorMessage, RetryStatus.Retry(nameof(InvalidServiceWebInspectorMessage))),
             (AdbErrorListenerNotFound, RetryStatus.Retry(nameof(AdbErrorListenerNotFound))),
             (FailedToCreateDriver, RetryStatus.Retry(nameof(FailedToCreateDriver))),
+            (FailedToUpdateNetworkState, RetryStatus.Retry(nameof(FailedToUpdateNetworkState))),
             (DeviceTimeSkew, RetryStatus.Retry(nameof(DeviceTimeSkew))),
             (AppNotRunning, RetryStatus.Retry(nameof(AppNotRunning))),
             (IncorrectChromeVersion, RetryStatus.Retry(nameof(IncorrectChromeVersion))),

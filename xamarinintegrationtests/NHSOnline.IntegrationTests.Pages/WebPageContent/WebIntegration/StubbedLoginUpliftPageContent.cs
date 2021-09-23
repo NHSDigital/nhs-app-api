@@ -14,6 +14,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "NHS Login - Uplift");
 
+        private WebLink InternalPageLink => WebLink.WithText(_interactor, "Internal Page");
+
         private WebFormLabel FileUploadButton => WebFormLabel.WithText(_interactor, "Open photo library");
 
         private WebFormLabel OpenCameraButton => WebFormLabel.WithText(_interactor, "Open Camera");
@@ -27,6 +29,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
         private WebText PhotoNotCaptured => WebText.WithTagAndText(_interactor, "p", "No photo captured");
 
         internal void AssertOnPage() => TitleText.AssertVisible();
+
+        public void NavigateToInternalPage() => InternalPageLink.Click();
 
         public void UploadFile() => FileUploadButton.Click();
 

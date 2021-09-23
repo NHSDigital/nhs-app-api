@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Android.Content;
+using Android.Webkit;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Droid.Renderers.WebViews;
 using NHSOnline.App.Droid.Renderers.WebViews.Extensions;
@@ -27,6 +28,8 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
                 new EnableTargetBlankLinksRendererExtension(this)
             };
         }
+
+        protected override WebViewClient GetWebViewClient() => new NhsAppFormsWebViewClient(this);
 
         protected override void OnElementChanged(ElementChangedEventArgs<WebView> e)
         {

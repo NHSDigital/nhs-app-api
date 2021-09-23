@@ -9,7 +9,15 @@ namespace NHSOnline.HttpMocks.Domain
 
         internal void Add<TBehaviour>(TBehaviour behaviour) where TBehaviour : class
         {
-            _behaviour.Add(typeof(TBehaviour), behaviour);
+            var key = typeof(TBehaviour);
+
+            if (_behaviour.TryAdd(key, behaviour))
+            {
+                return;
+            }
+
+            _behaviour.Remove(key);
+            _behaviour.Add(key, behaviour);
         }
 
         internal TBehaviour Get<TBehaviour>(Func<TBehaviour> defaultFunc) where TBehaviour : class

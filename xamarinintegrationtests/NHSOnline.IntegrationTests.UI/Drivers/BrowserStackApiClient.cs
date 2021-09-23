@@ -63,6 +63,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
 
             var networkProfile = profileName switch
             {
+                NetworkProfile.Reset => "reset",
                 NetworkProfile.NoNetwork => "no-network",
                 NetworkProfile.AirplaneMode => "airplane-mode",
                 _ => throw new ArgumentOutOfRangeException(nameof(profileName), profileName, $"{nameof(ApplyNetworkProfile)} does not cover all {nameof(NetworkProfile)} types")

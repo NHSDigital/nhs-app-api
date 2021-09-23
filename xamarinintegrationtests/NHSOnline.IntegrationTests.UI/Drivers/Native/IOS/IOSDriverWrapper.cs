@@ -145,6 +145,12 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             await browserStackApiClient.ApplyNetworkProfile(_driver.SessionId, NetworkProfile.NoNetwork);
         }
 
+        async Task IIOSDriverWrapper.ResetNetwork()
+        {
+            var browserStackApiClient = new BrowserStackApiClient(_browserStackConfig);
+            await browserStackApiClient.ApplyNetworkProfile(_driver.SessionId, NetworkProfile.Reset);
+        }
+
         void IDriverWrapper.AttachDebugInfo(IDriverCleanupContext context)
         {
             context.TryAttachScreenshot(_driver);

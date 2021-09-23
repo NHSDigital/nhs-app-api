@@ -10,7 +10,7 @@ using Xamarin.Forms.Xaml;
 namespace NHSOnline.App.Areas.Errors.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class CloseSlimBackToHomeNetworkErrorPage : ICloseSlimBackToHomeNetworkErrorView, ICloseSlimBackToHomeNetworkErrorView.IEvents
+    public partial class CloseSlimBackToHomeNetworkErrorPage : ICloseSlimBackToHomeNetworkErrorView, ICloseSlimBackToHomeNetworkErrorView.IEvents, ISwipeablePage
     {
         private readonly ILogger<CloseSlimBackToHomeNetworkErrorPage> _logger;
         private readonly AppNavigation<ICloseSlimBackToHomeNetworkErrorView.IEvents> _appNavigation;
@@ -51,6 +51,12 @@ namespace NHSOnline.App.Areas.Errors.Views
         }
 
         protected override bool OnBackButtonPressed()
+        {
+            BackRequestedCommand.Execute(null);
+            return true;
+        }
+
+        public bool OnSwipeBack()
         {
             BackRequestedCommand.Execute(null);
             return true;
