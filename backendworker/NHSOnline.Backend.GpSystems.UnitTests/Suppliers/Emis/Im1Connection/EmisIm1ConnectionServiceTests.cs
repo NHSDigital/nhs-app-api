@@ -216,6 +216,63 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
         }
 
         [TestMethod]
+        public async Task Verify_ReturnsForbidden_WhenUserStatusIsRestricted()
+        {
+            // Arrange
+            const string restrictedErrorMessage = "Actual access level is 'Restricted'";
+
+            var userPatientLinkModels = new[] { CreateUserPatientLinkModel() };
+
+            var errorResponse = _fixture.Create<ExceptionErrorResponse>();
+            errorResponse.Exceptions.First().Message = restrictedErrorMessage;
+
+            var emisClientMock = new Mock<IEmisClient>();
+
+            var endUserSessionResponse = new SessionsEndUserSessionPostResponse
+            {
+                EndUserSessionId = DefaultEndUserSessionId
+            };
+
+            var sessionResponse = new SessionsPostResponse
+            {
+                SessionId = DefaultSessionId,
+                UserPatientLinks = userPatientLinkModels
+            };
+
+            emisClientMock
+                .Setup(x => x.SessionsEndUserSessionPost())
+                .ReturnsAsync(
+                    new EmisApiObjectResponse<SessionsEndUserSessionPostResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.SessionsEndUserSessionPost, _sampleSuccessStatusCodes)
+                    {
+                        Body = endUserSessionResponse
+                    });
+
+            emisClientMock
+                .Setup(x => x.SessionsPost(DefaultEndUserSessionId, It.IsAny<SessionsPostRequest>()))
+                .ReturnsAsync(
+                    new EmisApiObjectResponse<SessionsPostResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.SessionsPost, _sampleSuccessStatusCodes)
+                    {
+                        Body = sessionResponse
+                    });
+
+            emisClientMock
+                .Setup(x => x.DemographicsGet(It.IsAny<EmisRequestParameters>()))
+                .ReturnsAsync(
+                    new EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.Forbidden, RequestsForSuccessOutcome.SessionsPost, _sampleSuccessStatusCodes)
+                    {
+                        ExceptionErrorResponse = errorResponse
+                    });
+
+            var systemUnderTest = CreateSystemUnderTest(emisClientMock);
+
+            // Act
+            var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
+
+            // Assert
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.Forbidden>();
+        }
+
+        [TestMethod]
         public async Task Verify_ReturnsNotFound_WhenEmisReturnsEmptyUserLinkModels()
         {
             var emisClientMock = new Mock<IEmisClient>();

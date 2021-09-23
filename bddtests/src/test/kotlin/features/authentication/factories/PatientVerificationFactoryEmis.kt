@@ -16,6 +16,30 @@ import java.time.Duration
 private const val REQUEST_DELAY = 1000_000L
 
 class PatientVerificationFactoryEmis: PatientVerificationFactory(Supplier.EMIS) {
+    override fun restrictedUser() {
+        val patient = getDefaultPatient(listOf("NHS_number"))
+        val nhsNumbers = patient.nhsNumbers.map { number ->
+            PatientIdentifier(number,
+                    identifierType = IdentifierType.NhsNumber)
+        }.toTypedArray()
+
+        mockingClient.forEmis.mock {
+            authentication.endUserSessionRequest()
+                    .respondWithSuccess(patient.endUserSessionId)
+        }
+        mockingClient.forEmis.mock {
+            authentication.sessionRequest(patient)
+                    .respondWithSuccess(patient, AssociationType.Self)
+        }
+        mockingClient.forEmis.mock {
+            myRecord.demographicsRequest(patient)
+                    .respondWithEmisRestricted()
+        }
+
+        PatientVerificationSerenityHelpers.ConnectionToken.set(patient.connectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
+        PatientVerificationSerenityHelpers.NhsNumbers.set(nhsNumbers)
+    }
 
     override fun validPatientWithNoNhsNumber() {
         emisValidCredentialsWithNHSNumbers(arrayListOf())
@@ -28,7 +52,6 @@ class PatientVerificationFactoryEmis: PatientVerificationFactory(Supplier.EMIS) 
     override fun validPatientWithOneNhsNumber() {
         emisValidCredentialsWithNHSNumbers(listOf("NHS_number"))
     }
-
 
     override val odsCode: String = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS
 
@@ -86,17 +109,7 @@ class PatientVerificationFactoryEmis: PatientVerificationFactory(Supplier.EMIS) 
     }
 
     private fun emisValidCredentialsWithNHSNumbers(numbers: List<String>) {
-        val patient = Patient(
-                name = PatientName(title = "Miss",
-                        firstName = "Alexia",
-                        surname = "Scott"),
-                odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
-                connectionToken = "fe81f191-b016-466e-aeb2-64f08f2330a4",
-                sessionId = "xkWiivK1WBAkxIN9CDrGyy",
-                endUserSessionId = "9RFDWiqTO8zBWrp2p8s4K7",
-                userPatientLinkToken = "KxLiDl5nRS60DzIlrKoFSl",
-                nhsNumbers = numbers,
-                age = PatientAge(dateOfBirth = "1985-05-29"))
+        val patient = getDefaultPatient(numbers)
 
         val nhsNumbers = numbers.map { number ->
             PatientIdentifier(number,
@@ -120,6 +133,20 @@ class PatientVerificationFactoryEmis: PatientVerificationFactory(Supplier.EMIS) 
         PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
         PatientVerificationSerenityHelpers.NhsNumbers.set(nhsNumbers)
 
+    }
+
+    private fun getDefaultPatient(numbers: List<String>): Patient {
+        return Patient(
+                name = PatientName(title = "Miss",
+                        firstName = "Alexia",
+                        surname = "Scott"),
+                odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
+                connectionToken = "fe81f191-b016-466e-aeb2-64f08f2330a4",
+                sessionId = "xkWiivK1WBAkxIN9CDrGyy",
+                endUserSessionId = "9RFDWiqTO8zBWrp2p8s4K7",
+                userPatientLinkToken = "KxLiDl5nRS60DzIlrKoFSl",
+                nhsNumbers = numbers,
+                age = PatientAge(dateOfBirth = "1985-05-29"))
     }
 
     override fun setSessionExtendMockResponse(patient: Patient, expectedResponse: String) {

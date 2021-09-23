@@ -13,6 +13,9 @@ import models.Patient
 import utils.set
 
 class PatientVerificationFactoryVision: PatientVerificationFactory(Supplier.VISION){
+    override fun restrictedUser() {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
 
     override fun setSessionExtendMockResponse(patient: Patient, expectedResponse: String) {
         // Currently no session mocking required for vision

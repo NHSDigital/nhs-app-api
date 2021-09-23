@@ -129,7 +129,7 @@
   <data name="MeApplicationsPost_SurnameOrDateOfBirthAreIncorrect" xml:space="preserve">
     <value>No match found for given demographics</value>
   </data>
-    <data name="SessionPost_UserNotRegistered" xml:space="preserve">
+  <data name="SessionPost_UserNotRegistered" xml:space="preserve">
     <value>Actual account status is 'NotRegistered'</value>
   </data>
   <data name="AppointmentsPost_NotFound" xml:space="preserve">
@@ -161,5 +161,8 @@
   </data>
   <data name="EmisService_UnauthorisedRequest" xml:space="preserve">
     <value>Missing or invalid EndUserSessionId</value>
+  </data>
+  <data name="DemographicsGet_RestrictedUser" xml:space="preserve">
+    <value>Actual access level is 'Restricted'</value>
   </data>
 </root>

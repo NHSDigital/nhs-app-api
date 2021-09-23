@@ -89,10 +89,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                         EndUserSessionId = endUserSessionId
                     });
 
+                if (UserIsRestricted(demographicsResponse))
+                {
+                    LogExceptionError(nameof(_emisClient.DemographicsGet), demographicsResponse);
+                    _logger.LogEmisErrorResponse(demographicsResponse);
+
+                    return new Im1ConnectionVerifyResult.Forbidden();
+                }
                 if (!demographicsResponse.HasSuccessResponse)
                 {
                     LogExceptionError(nameof(_emisClient.DemographicsGet), demographicsResponse);
                     _logger.LogEmisErrorResponse(demographicsResponse);
+
                     return new Im1ConnectionVerifyResult.BadGateway();
                 }
 
@@ -364,6 +372,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
             return sessionsResponse.HasForbiddenResponse() &&
                    sessionsResponse
                        .HasExceptionWithMessageContaining(EmisApiErrorMessages.SessionPost_UserNotRegistered);
+        }
+
+        private static bool UserIsRestricted(EmisApiObjectResponse<DemographicsGetResponse> demographicsResponse)
+        {
+            return demographicsResponse.HasForbiddenResponse() &&
+                   demographicsResponse
+                       .HasExceptionWithMessageContaining(EmisApiErrorMessages.DemographicsGet_RestrictedUser);
         }
     }
 }

@@ -53,6 +53,15 @@ abstract class EmisMappingBuilder(configuration: EmisConfiguration?,
         }
     }
 
+    fun respondWithEmisRestricted(): Mapping {
+        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.SERVICE_ACCESS_VIOLATION.toString(),
+                "Actual access level is 'Restricted'")
+        val responseBody = JSonXmlConverter.toJson(exceptionResponse)
+        return respondWith(HttpStatus.SC_FORBIDDEN) {
+            andJsonBody(responseBody).build()
+        }
+    }
+
     fun respondWithEmisUnknownError(): Mapping {
         val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.UNKNOWN_EXCEPTION.toString(),
                 "Unknown Exception")

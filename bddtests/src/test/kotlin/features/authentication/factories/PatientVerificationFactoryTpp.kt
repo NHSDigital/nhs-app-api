@@ -24,6 +24,10 @@ import java.time.Duration
 private const val REQUEST_DELAY = 1000_000L
 
 class PatientVerificationFactoryTpp: PatientVerificationFactory(Supplier.TPP){
+    override fun restrictedUser() {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
+
     override fun validPatientWithNoNhsNumber() {
         Assert.fail("TPP user cannot have no NHS Number")
     }

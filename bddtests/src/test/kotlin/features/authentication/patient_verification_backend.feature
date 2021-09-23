@@ -136,3 +136,9 @@ Feature: Patient Verification Backend
     Given Vision responds with a registration incomplete error
     When I verify patient data using the v1 endpoint
     Then I receive a "Forbidden" error
+
+  Scenario: EMIS responds with a restricted user error
+    Given EMIS responds with a restricted user error
+    When I verify patient data using the v1 endpoint
+    Then I receive a "Forbidden" error
+

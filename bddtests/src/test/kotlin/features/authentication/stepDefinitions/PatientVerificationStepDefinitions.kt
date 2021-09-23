@@ -103,6 +103,11 @@ class PatientVerificationStepDefinitions {
         }
     }
 
+    @Given("^EMIS responds with a restricted user error$")
+    fun emisRespondsWithARestrictedUserError() {
+        PatientVerificationFactory.getForSupplier(Supplier.EMIS).restrictedUser()
+    }
+
     @Given("^I have an (.*) ODS Code not in expected format$")
     fun givenIHaveAnOdsCodeNotInExpectedFormat(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
