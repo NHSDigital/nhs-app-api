@@ -31,7 +31,7 @@ open class YourAppointmentsUISteps {
 
     @Step
     fun checkBackToAppointmentsLink() {
-        val actualMessage = yourAppointmentsPage.getBackLink()
+        val actualMessage = yourAppointmentsPage.getBackToAppointmentsLinkText()
         assertEquals(backLink, actualMessage)
     }
 

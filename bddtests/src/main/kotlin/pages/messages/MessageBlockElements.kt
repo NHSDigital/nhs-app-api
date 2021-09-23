@@ -7,43 +7,31 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.assertElementNotPresent
 import worker.models.messages.SingleMessageFacade
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class MessageBlockElements(private val page:HybridPageObject) {
 
-    private val unreadMessagesBar = "div/div/span[normalize-space(text())='Unread messages']"
-
-    private fun messagesXpathAboveUnreadLine(aboveUnreadLine: Boolean): String {
-        val followingOrPrecedingUnread = if (aboveUnreadLine) "following" else  "preceding"
-        return "//ul[$followingOrPrecedingUnread-sibling::$unreadMessagesBar]/li/div"
+    fun assertUnread(expectedMessages: ArrayList<SingleMessageFacade>) {
+        val actualMessages = getAll()
+        assert(expectedMessages, actualMessages.filter { message -> message.isUnread }, "unread")
     }
 
-    fun assertUnreadMessages(expectedMessages: ArrayList<SingleMessageFacade>) {
-        val actualUnreadMessages = getMessages(page, messagesXpathAboveUnreadLine(false))
-        assertMessages(expectedMessages, actualUnreadMessages, "unread")
+    fun assertRead(expectedMessages: ArrayList<SingleMessageFacade>) {
+        val actualMessages = getAll()
+        assert(expectedMessages, actualMessages.filter { message -> !message.isUnread }, "read")
     }
 
-    fun assertReadMessages(expectedMessages: ArrayList<SingleMessageFacade>) {
-        val actualReadMessages = getMessages(page, messagesXpathAboveUnreadLine(true))
-        assertMessages(expectedMessages, actualReadMessages, "read")
+    fun assertAllRead(expectedMessages: ArrayList<SingleMessageFacade>) {
+        val actualMessages = getAll()
+        Assert.assertFalse(actualMessages.any { message -> message.isUnread })
+        assert(expectedMessages, actualMessages, "read")
     }
 
-    fun assertAllReadMessages(expectedMessages: ArrayList<SingleMessageFacade>) {
-        HybridPageElement(
-                "//$unreadMessagesBar",
-                "//$unreadMessagesBar",
-                page = page,
-                helpfulName = "Unread Messages Bar").assertElementNotPresent()
-        val actualReadMessages = getMessages(page,"//ul/li/div")
-        assertMessages(expectedMessages, actualReadMessages, "read")
-    }
-
-    private fun assertMessages(expectedMessages: ArrayList<SingleMessageFacade>,
-                               actualMessages: List<MessageBlockElement>,
-                               messageType: String) {
+    private fun assert(expectedMessages: ArrayList<SingleMessageFacade>,
+                       actualMessages: List<MessageBlockElement>,
+                       messageType: String) {
         Assert.assertEquals("Expected $messageType messages", expectedMessages.count(), actualMessages.count())
         actualMessages.forEach { actualMessage ->
             assertDateFormat(actualMessage)
@@ -65,18 +53,27 @@ class MessageBlockElements(private val page:HybridPageObject) {
         Regex("Sent $time $date").matches(actualDate)
     }
 
-    private fun getMessages(page: HybridPageObject, locator: String): List<MessageBlockElement> {
+    private fun getAll(): List<MessageBlockElement> {
         val messageElements = HybridPageElement(
-                locator,
-                locator,
+                "//ul/li/a/div",
+                "//ul/li/a/div",
                 page = page,
                 helpfulName = "Messages",
                 timeToWaitForElement = 1).elements
-        return messageElements.map { element -> MessageBlockElement(element) }
+        return messageElements.mapIndexed { index, element -> MessageBlockElement(element, index) }
     }
 
-    private class MessageBlockElement(element: WebElementFacade) {
-        val messageBody: String = element.findElement<WebElement>(By.xpath("./div/p")).text
-        val sentTime: String = element.findElement<WebElement>(By.xpath("./time")).text
+    fun select(body: String) {
+        getAll().first { message -> message.messageBody.contains(body) }.click()
+    }
+
+    private class MessageBlockElement(private val element: WebElementFacade, index: Int) {
+        val messageBody: String = element.findElement<WebElement>(By.xpath("./p")).text
+        val sentTime: String = element.findElement<WebElement>(By.xpath("./div/time")).text
+        val isUnread: Boolean = element.containsElements(By.xpath("//*[@id='unreadIndicator${index}']"))
+
+        fun click() {
+            element.click()
+        }
     }
 }

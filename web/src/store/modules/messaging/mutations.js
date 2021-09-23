@@ -1,13 +1,24 @@
 import mapKeys from 'lodash/fp/mapKeys';
 import {
   initialState,
+  ADD_ERROR,
+  CLEAR,
   INIT,
   LOADED,
-  SET_SENDER,
+  LOADED_MESSAGE,
+  LOADED_SENDERS,
   SET_HAS_UNREAD,
+  SET_SENDER,
 } from './mutation-types';
 
 export default {
+  [ADD_ERROR](state, errorDetails) {
+    state.error = errorDetails;
+  },
+  [CLEAR](state) {
+    state.error = null;
+    state.message = null;
+  },
   [INIT](state) {
     const blank = initialState();
     return mapKeys((key) => {
@@ -16,6 +27,12 @@ export default {
   },
   [LOADED](state, data) {
     state.senderMessages = data || [];
+  },
+  [LOADED_MESSAGE](state, message) {
+    state.message = message;
+  },
+  [LOADED_SENDERS](state, senders) {
+    state.senders = senders || [];
   },
   [SET_SENDER](state, sender) {
     state.selectedSender = sender;

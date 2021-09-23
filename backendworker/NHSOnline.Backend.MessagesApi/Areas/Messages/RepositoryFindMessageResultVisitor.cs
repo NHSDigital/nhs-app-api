@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
 using NHSOnline.Backend.Support;
@@ -8,9 +7,9 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 {
     internal class RepositoryFindMessageResultVisitor : IRepositoryFindResultVisitor<UserMessage, MessagesResult>
     {
-        private readonly IMapper<List<UserMessage>, MessagesResponse> _mapper;
+        private readonly IMapper<UserMessage, MessagesResponse> _mapper;
 
-        public RepositoryFindMessageResultVisitor(IMapper<List<UserMessage>, MessagesResponse> mapper)
+        public RepositoryFindMessageResultVisitor(IMapper<UserMessage, MessagesResponse> mapper)
         {
             _mapper = mapper;
         }
@@ -27,11 +26,11 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 
         public MessagesResult Visit(RepositoryFindResult<UserMessage>.Found result)
         {
-            var response = _mapper.Map(result.Records.ToList());
+            var response = _mapper.Map(result.Records.Single());
 
-            if (response.Any())
+            if (response.SenderMessages.Any())
             {
-                return new MessagesResult.Some(response);
+                return new MessagesResult.Found(response);
             }
 
             return new MessagesResult.None();

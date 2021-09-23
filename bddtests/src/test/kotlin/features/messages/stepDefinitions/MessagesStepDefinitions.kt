@@ -14,14 +14,14 @@ import mocking.AccessTokenBuilder
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory
 import models.IdentityProofingLevel
 import net.thucydides.core.annotations.Steps
-import pages.assertElementNotPresent
-import pages.messages.MessagesErrorPage
-import pages.messages.MessagesInboxPage
+import pages.ErrorDialogPage
+import pages.messages.MessagePage
+import pages.messages.MessageSendersPage
 import pages.messages.MessagesPage
 import pages.navigation.NavBarNative
 import utils.SerenityHelpers
 import utils.getOrFail
-import worker.models.messages.MessagesSummaryFacade
+import worker.models.messages.SenderFacade
 import worker.models.messages.SingleMessageFacade
 import java.util.*
 import kotlin.collections.ArrayList
@@ -31,8 +31,9 @@ private const val ACCESS_TOKEN_ABOUT_TO_EXPIRE_MILLISECONDS = 50000
 class MessagesStepDefinitions {
 
     private lateinit var messagesPage: MessagesPage
-    private lateinit var messagesInboxPage: MessagesInboxPage
-    private lateinit var messagesErrorPage: MessagesErrorPage
+    private lateinit var messagePage: MessagePage
+    private lateinit var messageSendersPage: MessageSendersPage
+    private lateinit var errorDialogPage: ErrorDialogPage
 
     @Steps
     lateinit var nav: NavigationSteps
@@ -119,83 +120,57 @@ class MessagesStepDefinitions {
         setupMessagesEnabledPatient()
     }
 
-    @Given("^I am a user wishing to view my messages but retrieving the messages will cause an internal server error$")
-    fun iAmAUserWishingToViewTheirMessagesButIHaveAnInvalidMessage() {
-        val factory = setupMessagesEnabledPatient()
-        factory.setUpInvalidMessageInCache()
+    @When("^the messages can be retrieved successfully$")
+    fun theMessagesCanBeRetrievedSuccessfully(){
+        MessagesFactory().setUpValidMessageInCache()
     }
 
-    @When("^the messages in the repository can be retrieved successfully$")
-    fun theMessagesInTheRepositoryCanBeRetrievedSuccessfully(){
-        val factory = MessagesFactory()
-        factory.setUpMultipleMessagesInCache()
+    @When("^retrieving the messages will cause a server error$")
+    fun retrievingTheMessagesFromTheApiWillCauseAServerError(){
+        MessagesFactory().setUpInvalidMessageInCache()
     }
 
-    @When("^retrieving the messages from the repository will cause an internal server error$")
-    fun retrievingTheMessagesFromTheRepositoryWillCauseAnInternalServerError(){
-        val factory = MessagesFactory()
-        factory.setUpInvalidMessageInCache()
+    @When("^I click on (.*) sender$")
+    fun iClickOnSender(sender: String) {
+        messageSendersPage.senders.select(sender)
     }
 
-    @When("^I click on a sender in the Messages Inbox$")
-    fun iClickOnASenderInTheMessagesInbox() {
-        messagesInboxPage.messages.selectMessageSummary(MessagesSerenityHelpers.TARGET_SENDER.getOrFail())
+    @Then("^the (.*) sender is displayed as (unread|read)$")
+    fun theSenderIsDisplayedAsStatus(sender: String, status: String) {
+        when(status) {
+            "unread" -> messageSendersPage.senders.assertUnread(sender)
+            "read" -> messageSendersPage.senders.assertRead(sender)
+        }
     }
 
-    @Then("^the Messages Inbox page is displayed$")
+    @When("^I click on (a|the unread|.*) message on the Sender Messages page$")
+    fun iClickOnMessageOnTheSenderMessagesPage(message: String) {
+        val messageBody = when(message) {
+            "a" -> MessagesSerenityHelpers.TARGET_MESSAGE.getOrFail()
+            "the unread" -> MessagesSerenityHelpers.TARGET_UNREAD_MESSAGE.getOrFail()
+            else -> message
+        }
+        messagesPage.messages.select(messageBody)
+    }
+
+    @Then("^the Message Senders page is displayed$")
     fun theMessagesInboxPageIsDisplayed() {
-        messagesInboxPage.assertHeaderDisplayed()
-        messagesInboxPage.assertSubHeaderDisplayed()
+        messageSendersPage.assertHeaderDisplayed()
+        messageSendersPage.assertSubHeaderDisplayed()
     }
 
-    @Then("^the Back link on the Messages Inbox page is displayed$")
-    fun theBackLinkOnMessagesInboxPageIsDisplayed() {
-        messagesInboxPage.assertBackLinkDisplayed()
-    }
-
-    @Then("^the Back link on the App Messages page is displayed$")
-    fun theBackLinkOnAppMessagesPageIsDisplayed() {
-        messagesPage.assertBackLinkDisplayed()
-    }
-
-    @Then("^the Back link is not shown on the Messages Inbox page$")
-    fun theBackLinkOnMessagesInboxPageIsNotDisplayed() {
-        messagesInboxPage.backLink.assertElementNotPresent()
-    }
-
-    @Then("^the Back link is not shown on the Messages page$")
-    fun theBackLinkOnAppMessagesPageIsNotDisplayed() {
-        messagesPage.backLink.assertElementNotPresent()
-    }
-
-    @Then("^I click on the Back link on the Messages Inbox page$")
-    fun iClickOnTheBackLinkOnTheMessagesInboxPage() {
-        messagesInboxPage.backLink.click()
-    }
-
-    @Then("^I click on the Back link on the App Messages page$")
-    fun iClickOnTheBackLinkOnTheAppMessagesPage() {
-        messagesPage.backLink.click()
-    }
-
-    @Then("^the senders and latest messages are displayed on the Messages Inbox page$")
-    fun theSendersAndLatestMessagesAreDisplayedOnTheMessageInboxPage() {
-        messagesInboxPage.messages.assertMessages(MessagesSerenityHelpers.EXPECTED_SUMMARY_MESSAGES.getOrFail())
-    }
-
-    @Then("^the viewed messages are marked as read on the Messages Inbox page$")
-    fun theViewedMessagesAreMarkedAsReadOnTheMessageInboxPage() {
-        messagesInboxPage.messages.assertMessages(
-                MessagesSerenityHelpers.EXPECTED_SUMMARY_MESSAGES_AFTER_READING_SENDER.getOrFail())
+    @Then("^the senders are displayed on the Messages Inbox page$")
+    fun theSendersAreDisplayedOnTheMessageInboxPage() {
+        messageSendersPage.senders.assertAll(MessagesSerenityHelpers.EXPECTED_SENDERS.getOrFail())
     }
 
     @Then("^a message is displayed indicating that there are no messages in the Messages Inbox$")
     fun aMessageIsDisplayedIndicatingThatThereAreNoMessagesInTheMessagesInbox() {
-        messagesInboxPage.assertNoMessages()
+        messageSendersPage.assertNoSenders()
     }
 
-    @Then("^the Messages page is displayed$")
-    fun theMessagesPageIsDisplayed() {
+    @Then("^the Sender Messages page is displayed$")
+    fun theSenderMessagesPageIsDisplayed() {
         messagesPage.assertDisplayed(MessagesSerenityHelpers.TARGET_SENDER.getOrFail())
     }
 
@@ -205,29 +180,31 @@ class MessagesStepDefinitions {
                 .getOrFail<ArrayList<SingleMessageFacade>>()
         val expectedReadMessages = MessagesSerenityHelpers.EXPECTED_READ_MESSAGES
                 .getOrFail<ArrayList<SingleMessageFacade>>()
-        messagesPage.messages.assertReadMessages(expectedReadMessages)
-        messagesPage.messages.assertUnreadMessages(expectedUnreadMessages)
+        messagesPage.messages.assertRead(expectedReadMessages)
+        messagesPage.messages.assertUnread(expectedUnreadMessages)
     }
 
     @Then("^my messages from the sender are displayed as read$")
     fun myMessagesFromTheSenderAreDisplayedAsRead() {
         val expectedMessages = MessagesSerenityHelpers.EXPECTED_MESSAGES_FROM_SENDER
-                .getOrFail<MessagesSummaryFacade>().messages
+                .getOrFail<SenderFacade>().messages
         val expectedReadMessages = arrayListOf<SingleMessageFacade>()
         expectedReadMessages.addAll(expectedMessages)
-        messagesPage.messages.assertAllReadMessages(expectedReadMessages)
+        messagesPage.messages.assertAllRead(expectedReadMessages)
     }
 
-    @Then( "^an error with a retry button is displayed indicating that there was a problem getting messages$")
-    fun anErrorWithARetryButtonIsDisplayedIndicatingThatThereWasAProblemGettingMessages(){
-        messagesErrorPage.assertInboxErrorPage()
+    @Then( "^an error is displayed indicating that there was a problem getting messages$")
+    fun anErrorIsDisplayedIndicatingThatThereWasAProblemGettingMessages(){
+        errorDialogPage.assertPageTitle("Messages error")
+            .assertPageHeader("Messages error")
+            .assertParagraphText("There is a problem getting your messages.");
     }
 
-    @Then( "^an error with a retry button is displayed indicating that there was a problem getting " +
-            "messages from the sender$")
-    fun anErrorWithARetryButtonIsDisplayedIndicatingThatThereWasAProblemGettingMessagesFromTheSender(){
-        val sender = MessagesSerenityHelpers.TARGET_SENDER.getOrFail<String>()
-        messagesErrorPage.assertSenderErrorPage(sender)
+    @Then( "^an error is displayed indicating that there was a problem getting a message$")
+    fun anErrorIsDisplayedIndicatingThatThereWasAProblemGettingAMessage(){
+        errorDialogPage.assertPageTitle("Message error")
+            .assertPageHeader("Message error")
+            .assertParagraphText("There is a problem getting your message.");
     }
 
     @Then("^I click on the '(.*)' link in the message$")
@@ -245,6 +222,11 @@ class MessagesStepDefinitions {
     @Then("^I see messages button on the nav bar is highlighted$")
     fun messagesButtonOnNavBarIsHighlighted() {
         nav.assertSelectedTab(NavBarNative.NavBarType.MESSAGES)
+    }
+
+    @Then("^the Message page is displayed$")
+    fun theMessagePageIsDisplayed() {
+        messagePage.assertDisplayed(MessagesSerenityHelpers.TARGET_SENDER.getOrFail())
     }
 
     private fun setupMessagesEnabledPatient(): MessagesFactory {

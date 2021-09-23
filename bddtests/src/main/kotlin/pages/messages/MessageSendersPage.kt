@@ -5,14 +5,9 @@ import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertSingleElementPresent
 
-@DefaultUrl("http://web.local.bitraft.io:3000/messages/messaging")
-class MessagesInboxPage : HybridPageObject() {
-    val messages by lazy { InboxSummaryMessageBlockElements(this) }
-
-    val backLink = HybridPageElement(
-            "//a[@data-purpose='main-back-button']",
-            page = this
-    )
+@DefaultUrl("http://web.local.bitraft.io:3000/messages/app-messaging")
+class MessageSendersPage : HybridPageObject() {
+    val senders by lazy { SenderBlockElements(this) }
 
     fun assertHeaderDisplayed() {
         val path = "//h1[normalize-space(text())='Health information and updates']"
@@ -24,10 +19,6 @@ class MessagesInboxPage : HybridPageObject() {
                 this,
                 helpfulName = "header")
         header.waitForElement()
-    }
-
-    fun assertBackLinkDisplayed() {
-        backLink.assertSingleElementPresent()
     }
 
     fun assertSubHeaderDisplayed() {
@@ -42,7 +33,7 @@ class MessagesInboxPage : HybridPageObject() {
         header.waitForElement()
     }
 
-    fun assertNoMessages() {
+    fun assertNoSenders() {
         val noMessages = HybridPageElement(
                 "//span[@id='noMessages']",
                 page = this,

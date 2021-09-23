@@ -16,8 +16,9 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
     internal class MessageService : IMessageService
     {
         private readonly IMessageRepository _messageRepository;
-        private readonly ILogger<MessagesController> _logger;
+        private readonly ILogger<MessageService> _logger;
         private readonly IMapper<List<UserMessage>, MessagesResponse> _userMessagesToResponseMapper;
+        private readonly IMapper<UserMessage, MessagesResponse> _userMessageToResponseMapper;
         private readonly IMapper<List<SummaryMessage>, MessagesResponse> _summaryMessagesToResponseMapper;
         private readonly IMapper<AddMessageRequest, string, UserMessage> _addMessageToUserMessageMapper;
         private readonly IMessagesValidationService _validator;
@@ -25,8 +26,9 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
         public MessageService
         (
             IMessageRepository messageRepository,
-            ILogger<MessagesController> logger,
+            ILogger<MessageService> logger,
             IMapper<List<UserMessage>, MessagesResponse> userMessagesToResponseMapper,
+            IMapper<UserMessage, MessagesResponse> userMessageToResponseMapper,
             IMapper<List<SummaryMessage>, MessagesResponse> summaryMessagesToResponseMapper,
             IMapper<AddMessageRequest, string, UserMessage> addMessageToUserMessageMapper,
             IMessagesValidationService validator)
@@ -34,6 +36,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             _messageRepository = messageRepository;
             _logger = logger;
             _userMessagesToResponseMapper = userMessagesToResponseMapper;
+            _userMessageToResponseMapper = userMessageToResponseMapper;
             _summaryMessagesToResponseMapper = summaryMessagesToResponseMapper;
             _addMessageToUserMessageMapper = addMessageToUserMessageMapper;
             _validator = validator;
@@ -79,7 +82,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 
                 var result = await _messageRepository.FindMessage(accessToken.Subject, messageId);
 
-                return result.Accept(new RepositoryFindMessageResultVisitor(_userMessagesToResponseMapper));
+                return result.Accept(new RepositoryFindMessageResultVisitor(_userMessageToResponseMapper));
             }
             catch (Exception e)
             {
@@ -100,7 +103,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             {
                 var result = await _messageRepository.FindMessagesFromSender(accessToken.Subject, sender);
 
-                return result.Accept(new RepositoryFindMessageResultVisitor(_userMessagesToResponseMapper));
+                return result.Accept(new RepositoryFindMessagesResultVisitor(_userMessagesToResponseMapper));
             }
             catch (Exception e)
             {
@@ -122,7 +125,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                 var result = await _messageRepository.FindAllForUser(accessToken.Subject);
 
                 return result.Accept(
-                    new RepositoryFindMessagesResultToSummaryMessageVisitor(_summaryMessagesToResponseMapper));
+                    new RepositoryFindSummaryMessagesResultVisitor(_summaryMessagesToResponseMapper));
             }
             catch (Exception e)
             {
@@ -176,6 +179,27 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             {
                 _logger.LogError(e, "Message Patch has failed with exception");
                 return new MessagePatchResult.InternalServerError();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        public async Task<SendersResult> GetSenders(AccessToken accessToken)
+        {
+            _logger.LogEnter();
+
+            try
+            {
+                var result = await _messageRepository.FindAllForUser(accessToken.Subject);
+
+                return result.Accept(new RepositoryFindSendersResultVisitor());
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Get Senders has failed with exception");
+                return new SendersResult.InternalServerError();
             }
             finally
             {

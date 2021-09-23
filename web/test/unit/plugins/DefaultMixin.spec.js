@@ -37,7 +37,7 @@ describe('mixins', () => {
     getters = { 'session/isProxying': false };
 
     const $env = { BASE_NHS_APP_HELP_URL: 'http://stubs.local.bitraft.io' };
-    const $route = { path: '/foo', meta: { helpPath: '/help' } };
+    const $route = { path: '/foo', query: { param: 'value' }, meta: { helpPath: '/help' } };
     wrapper = mountPage({ $store: createStore({ state, getters, $env }), $route });
   });
 
@@ -147,7 +147,7 @@ describe('mixins', () => {
       });
 
       it('will redirect to current route', () => {
-        expect(utils.redirectTo).toBeCalledWith(wrapper.vm, '/foo');
+        expect(utils.redirectTo).toBeCalledWith(wrapper.vm, '/foo', { param: 'value' });
       });
     });
 

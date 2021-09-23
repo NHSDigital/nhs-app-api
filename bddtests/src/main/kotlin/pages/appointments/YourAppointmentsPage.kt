@@ -48,7 +48,7 @@ class YourAppointmentsPage : AppointmentSharedElementsPage() {
             page = this
     )
 
-    private val backLink = HybridPageElement(
+    private val backToAppointments = HybridPageElement(
             webDesktopLocator = "//a[contains(text(),\"Go to your appointments\")]",
             page = this
     )
@@ -102,5 +102,5 @@ class YourAppointmentsPage : AppointmentSharedElementsPage() {
         return getTelephoneSlot(upcomingAppointmentParentXpath)
     }
 
-    fun getBackLink(): String = backLink.text
+    fun getBackToAppointmentsLinkText(): String = backToAppointments.text
 }

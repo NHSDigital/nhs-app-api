@@ -29,16 +29,14 @@ Feature: Messages accessibility
     And I am logged in
     When I follow the unread messages link from the home page
     And I click the App Messages link on the messages hub page
-    Then the Messages Inbox page is displayed
-    And the Messages_HealthInformationAndUpdates page is saved to disk
-    When I click on a sender in the Messages Inbox
-    Then the Messages page is displayed
-    And the Messages_Details_ReadAndUnread page is saved to disk
-    When I click the 'Back' breadcrumb
-    Then the Messages Inbox page is displayed
-    When I click on a sender in the Messages Inbox
-    Then the Messages page is displayed
-    And the Messages_Details_Read page is saved to disk
+    Then the Message Senders page is displayed
+    And the Messages_Senders page is saved to disk
+    When I click on Sender One sender
+    Then the Sender Messages page is displayed
+    And the Messages_Sender_ReadAndUnread page is saved to disk
+    When I click on a message on the Sender Messages page
+    Then the Message page is displayed
+    And the Messages_Details page is saved to disk
 
   Scenario: The messages page is captured with no messages
     Given I am using the native app user agent
@@ -46,6 +44,6 @@ Feature: Messages accessibility
     And I am logged in
     When I follow the Messages link from the home page
     And I click the App Messages link on the messages hub page
-    Then the Messages Inbox page is displayed
+    Then the Message Senders page is displayed
     And a message is displayed indicating that there are no messages in the Messages Inbox
     And the Messages_NoMessages page is saved to disk

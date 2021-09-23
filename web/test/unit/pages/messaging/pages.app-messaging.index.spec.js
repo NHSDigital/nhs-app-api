@@ -1,5 +1,4 @@
 import each from 'jest-each';
-import i18n from '@/plugins/i18n';
 import Index from '@/pages/messages/app-messaging/index';
 import { initialState } from '@/store/modules/messaging/mutation-types';
 import { MESSAGES_PATH } from '@/router/paths';
@@ -11,7 +10,7 @@ dependency.redirectTo = jest.fn();
 describe('messaging index', () => {
   const messageItemClass = 'nhs-app-message__item';
   const messageItemUnreadClass = 'nhs-app-message__item--unread';
-  const messageSectionClass = 'nhs-app-message';
+  const senderSectionClass = 'nhs-app-message';
   const noMessagesSelector = '#noMessages';
   let $store;
   let wrapper;
@@ -21,20 +20,17 @@ describe('messaging index', () => {
     $style: {
       [messageItemClass]: messageItemClass,
       [messageItemUnreadClass]: messageItemUnreadClass,
-      [messageSectionClass]: messageSectionClass,
+      [senderSectionClass]: senderSectionClass,
     },
-    mountOpts: { i18n },
+    mocks: {
+      reload: jest.fn(),
+    },
   });
 
-  const createSummaryMessage = ({ body, sender, unreadCount = 0, sentTime = '2019-09-14T02:15:12.356Z' }) => {
-    $store.state.messaging.senderMessages.push({
-      sender,
+  const createSender = ({ name, unreadCount = 0 }) => {
+    $store.state.messaging.senders.push({
+      name,
       unreadCount,
-      messages: [{
-        sender,
-        body,
-        sentTime,
-      }],
     });
   };
 
@@ -49,24 +45,49 @@ describe('messaging index', () => {
     });
   });
 
-  describe('fetch', () => {
+  describe('created', () => {
     beforeEach(async () => {
       wrapper = mountIndex();
       await wrapper.vm.$nextTick();
     });
 
-    it('will dispatch `messaging/load`', () => {
-      expect($store.dispatch).toBeCalledWith('messaging/load');
+    it('will dispatch messaging/clear', () => {
+      expect($store.dispatch).toBeCalledWith('messaging/clear');
+    });
+
+    it('will dispatch `messaging/loadSenders`', () => {
+      expect($store.dispatch).toBeCalledWith('messaging/loadSenders');
     });
   });
 
-  describe('has no messages', () => {
-    beforeEach(() => {
+  describe('failed to load senders', () => {
+    beforeEach(async () => {
+      $store.state.messaging.error = true;
       wrapper = mountIndex();
+      await wrapper.vm.$nextTick();
     });
 
-    it('will not show messages section', () => {
-      expect(wrapper.find(`.${messageSectionClass}`).exists()).toBe(false);
+    it('will show the error container', () => {
+      expect(wrapper.find('[data-purpose="error-container"]').exists()).toBe(true);
+    });
+
+    it('will not show senders section', () => {
+      expect(wrapper.find(`.${senderSectionClass}`).exists()).toBe(false);
+    });
+
+    it('will not display the no messages text', () => {
+      expect(wrapper.find(noMessagesSelector).exists()).toBe(false);
+    });
+  });
+
+  describe('has no senders', () => {
+    beforeEach(async () => {
+      wrapper = mountIndex();
+      await wrapper.vm.$nextTick();
+    });
+
+    it('will not show senders section', () => {
+      expect(wrapper.find(`.${senderSectionClass}`).exists()).toBe(false);
     });
 
     it('will display the no messages text', () => {
@@ -76,48 +97,49 @@ describe('messaging index', () => {
     });
   });
 
-  describe('has messages', () => {
-    let messageSection;
+  describe('has senders', () => {
+    let senderSection;
 
     beforeEach(async () => {
-      createSummaryMessage({ body: 'summary message 1', sender: 'Test 1' });
-      createSummaryMessage({ body: 'unread summary message 2', sender: 'Test 2', unreadCount: 2 });
-      createSummaryMessage({ body: 'summary message 3', sender: 'Test 3' });
-      createSummaryMessage({ body: 'unread summary message 4', sender: 'Test 4', unreadCount: 4 });
+      createSender({ name: 'Test 1' });
+      createSender({ name: 'Test 2', unreadCount: 2 });
+      createSender({ name: 'Test 3' });
+      createSender({ name: 'Test 4', unreadCount: 4 });
       wrapper = mountIndex();
       await wrapper.vm.$nextTick();
-      messageSection = wrapper.find(`.${messageSectionClass}`);
+      senderSection = wrapper.find(`.${senderSectionClass}`);
     });
 
-    it('will show messages section', () => {
-      expect(messageSection.exists()).toBe(true);
+    it('will show senders section', () => {
+      expect(senderSection.exists()).toBe(true);
     });
 
-    it('will show all messages', () => {
-      const messages = messageSection.findAll(`.${messageItemClass}`);
+    it('will show all senders', () => {
+      const messages = senderSection.findAll(`.${messageItemClass}`);
       expect(messages.length).toBe(4);
-      expect(messages.at(0).text()).toContain('summary message 1');
-      expect(messages.at(1).text()).toContain('unread summary message 2');
-      expect(messages.at(2).text()).toContain('summary message 3');
-      expect(messages.at(3).text()).toContain('unread summary message 4');
+
+      expect(messages.at(0).text()).toContain('Test 1');
+      expect(messages.at(1).text()).toContain('Test 2');
+      expect(messages.at(2).text()).toContain('Test 3');
+      expect(messages.at(3).text()).toContain('Test 4');
     });
 
     it('will not display the no messages text', () => {
-      const noMessages = wrapper.find(noMessagesSelector);
-      expect(noMessages.exists()).toBe(false);
+      expect(wrapper.find(noMessagesSelector).exists()).toBe(false);
     });
 
-    describe('unread messages', () => {
-      let unreadMessages;
+    describe('senders with unread messages', () => {
+      let unreadSenders;
 
       beforeEach(() => {
-        unreadMessages = messageSection.findAll(`.${messageItemUnreadClass}`);
+        unreadSenders = senderSection.findAll(`.${messageItemUnreadClass}`);
       });
 
       it('will have the appropriate class', () => {
-        expect(unreadMessages.length).toBe(2);
-        expect(unreadMessages.at(0).text()).toContain('unread summary message 2');
-        expect(unreadMessages.at(1).text()).toContain('unread summary message 4');
+        expect(unreadSenders.length).toBe(2);
+
+        expect(unreadSenders.at(0).text()).toContain('Test 2');
+        expect(unreadSenders.at(1).text()).toContain('Test 4');
       });
     });
 
@@ -149,28 +171,28 @@ describe('messaging index', () => {
     });
   });
 
-  describe('message summary aria label', () => {
+  describe('sender aria label', () => {
     it('will indicate the sender and date of the last message received', async () => {
-      createSummaryMessage({ body: 'Read summary message', sender: 'Test sender' });
+      createSender({ name: 'Test sender' });
 
       wrapper = mountIndex();
       await wrapper.vm.$nextTick();
 
-      const ariaLabel = wrapper.find(`.${messageSectionClass}>.${messageItemClass}>a`).attributes('aria-label');
+      const ariaLabel = wrapper.find(`.${senderSectionClass}>.${messageItemClass}>a`).attributes('aria-label');
 
-      expect(ariaLabel).toEqual('Messages from: Test sender. The last message was sent on 14 September 2019. ');
+      expect(ariaLabel).toEqual('Messages from: Test sender. ');
     });
 
     each([[1, ''], [5, 's']])
       .it('will include an appropriately pluralised unread count when some messages are unread', async (count, pluralisation) => {
-        createSummaryMessage({ body: 'Read summary message', sender: 'Test sender', unreadCount: count });
+        createSender({ name: 'Test sender', unreadCount: count });
         const expected = 'Messages from: Test sender. ' +
-          `The last message was sent on 14 September 2019. You have ${count} unread message${pluralisation}. `;
+          `You have ${count} unread message${pluralisation}. `;
 
         wrapper = mountIndex();
         await wrapper.vm.$nextTick();
 
-        const ariaLabel = wrapper.find(`.${messageSectionClass}>.${messageItemClass}>a`).attributes('aria-label');
+        const ariaLabel = wrapper.find(`.${senderSectionClass}>.${messageItemClass}>a`).attributes('aria-label');
 
         expect(ariaLabel).toEqual(expected);
       });

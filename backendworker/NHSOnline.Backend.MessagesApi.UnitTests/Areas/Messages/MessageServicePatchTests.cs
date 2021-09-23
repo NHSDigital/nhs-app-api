@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
 
             _mockMessagesValidationService = new Mock<IMessagesValidationService>(MockBehavior.Strict);
 
-            var mockLogger = new Mock<ILogger<MessagesController>>();
+            var mockLogger = new Mock<ILogger<MessageService>>();
             var accessTokenString = JwtToken.Generate(new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, "NhsLoginId"),
@@ -51,9 +51,10 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             _systemUnderTest = new MessageService(
                 _mockMessageRepository.Object,
                 mockLogger.Object,
-                new Mock<IMapper<List<UserMessage>, MessagesResponse>>().Object,
-                new Mock<IMapper<List<SummaryMessage>, MessagesResponse>>().Object,
-                new Mock<IMapper<AddMessageRequest, string, UserMessage>>().Object,
+                new Mock<IMapper<List<UserMessage>, MessagesResponse>>(MockBehavior.Strict).Object,
+                new Mock<IMapper<UserMessage, MessagesResponse>>(MockBehavior.Strict).Object,
+                new Mock<IMapper<List<SummaryMessage>, MessagesResponse>>(MockBehavior.Strict).Object,
+                new Mock<IMapper<AddMessageRequest, string, UserMessage>>(MockBehavior.Strict).Object,
                 _mockMessagesValidationService.Object);
         }
 

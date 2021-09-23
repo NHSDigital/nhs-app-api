@@ -45,6 +45,11 @@ class GenericPageStepDefinitions {
         genericPage.clickOnBackLink()
     }
 
+    @When("^I can't see the Back link$")
+    fun iCantSeeTheBackLink() {
+        genericPage.getBackLink().assertElementNotPresent()
+    }
+
     @When("^I retrieve the '(.*)' page directly$")
     fun iretrieveThePageDirectly(pageName:String) {
         val urlForPage = PageUrl.getRelativePagePath(pageName)

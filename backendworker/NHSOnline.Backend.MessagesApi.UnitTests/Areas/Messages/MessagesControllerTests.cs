@@ -222,7 +222,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         }
 
         [TestMethod]
-        public async Task GetMessage_SuccessSome_ReturnsOK()
+        public async Task GetMessage_SuccessFound_ReturnsOK()
         {
             // Arrange
             var message = new Message
@@ -234,9 +234,12 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
 
             _mockMessageService
                 .Setup(x => x.GetMessage(_accessToken, MessageId))
-                .ReturnsAsync(new MessagesResult.Some(new MessagesResponse
+                .ReturnsAsync(new MessagesResult.Found(new MessagesResponse
                 {
-                    new SenderMessages { Messages = new List<Message> { message } }
+                    SenderMessages = new List<SenderMessages>
+                    {
+                        new SenderMessages { Messages = new List<Message> { message } }
+                    }
                 }));
 
             // Act
@@ -335,13 +338,19 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         }
 
         [TestMethod]
-        public async Task Get_WithSender_SuccessSome()
+        public async Task Get_WithSender_SuccessFound()
         {
             // Arrange
-            var response = new MessagesResponse();
+            var response = new MessagesResponse
+            {
+                SenderMessages = new List<SenderMessages>
+                {
+                    new SenderMessages { Sender = "Test Sender", UnreadCount = 1 }
+                }
+            };
 
             _mockMessageService.Setup(x => x.GetMessages(It.IsAny<AccessToken>(), It.IsAny<string>()))
-                .ReturnsAsync(new MessagesResult.Some(response));
+                .ReturnsAsync(new MessagesResult.Found(response));
 
             // Act
             var result = await _systemUnderTest.Get("sender");
@@ -350,8 +359,8 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             _mockMessageService.VerifyAll();
 
             result.Should().BeAssignableTo<OkObjectResult>()
-                .Subject.Value.Should().BeAssignableTo<IEnumerable<SenderMessages>>()
-                .Subject.Should().BeEquivalentTo(response);
+                .Subject.Value.Should().BeAssignableTo<List<SenderMessages>>()
+                .Subject.Should().BeEquivalentTo(response.SenderMessages);
         }
 
         [TestMethod]
@@ -422,12 +431,19 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         }
 
         [TestMethod]
-        public async Task Get_WithSummary_SuccessSome()
+        public async Task Get_WithSummary_SuccessFound()
         {
             // Arrange
-            var response = new MessagesResponse();
+            var response = new MessagesResponse
+            {
+                SenderMessages = new List<SenderMessages>
+                {
+                    new SenderMessages { Sender = "Test Sender", UnreadCount = 1 }
+                }
+            };
+
             _mockMessageService.Setup(x => x.GetSummaryMessages(It.IsAny<AccessToken>()))
-                .ReturnsAsync(new MessagesResult.Some(response));
+                .ReturnsAsync(new MessagesResult.Found(response));
 
             // Act
             var result = await _systemUnderTest.Get(summary: true);
@@ -436,8 +452,8 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             _mockMessageService.VerifyAll();
 
             result.Should().BeAssignableTo<OkObjectResult>()
-                .Subject.Value.Should().BeAssignableTo<IEnumerable<SenderMessages>>()
-                .Subject.Should().BeEquivalentTo(response);
+                .Subject.Value.Should().BeAssignableTo<List<SenderMessages>>()
+                .Subject.Should().BeEquivalentTo(response.SenderMessages);
         }
 
         [TestMethod]

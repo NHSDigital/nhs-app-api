@@ -4,6 +4,7 @@ using System.Linq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MongoDB.Bson;
 using Moq;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Mappers;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
@@ -18,7 +19,6 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
         [TestInitialize]
         public void TestInitialize()
         {
-
             _systemUnderTest = new MessagesResponseMapper(new Mock<ILogger<MessagesResponseMapper>>().Object);
         }
 
@@ -31,35 +31,45 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
             {
                 Sender = sender,
                 SentTime = DateTime.UtcNow,
-                ReadTime = DateTime.UtcNow
+                ReadTime = DateTime.UtcNow,
+                Body = "123"
             };
 
             var oldestMessage = new UserMessage
             {
                 Sender = sender,
                 SentTime = DateTime.UtcNow.AddSeconds(-10),
-                ReadTime = default(DateTime?)
+                ReadTime = default,
+                Body = "456"
             };
 
             var latestMessage = new UserMessage
             {
                 Sender = sender,
                 SentTime = DateTime.UtcNow.AddSeconds(10),
-                ReadTime = default(DateTime?)
+                ReadTime = default,
+                Body = "789"
             };
 
             // Act
             var result = _systemUnderTest.Map(new List<UserMessage> { currentMessage, oldestMessage, latestMessage });
 
             // Assert
-            result.Should().NotBeEmpty();
-            result.Should().HaveCount(1);
-            result.First().Should().BeEquivalentTo(new SenderMessages
-            {
-                Sender = sender,
-                UnreadCount = 2,
-                Messages = MapToMessages(latestMessage, currentMessage, oldestMessage)
-            });
+            result.SenderMessages.Should().NotBeEmpty();
+            result.SenderMessages.Should().HaveCount(1);
+            var resultSenderMessage = result.SenderMessages.First();
+            resultSenderMessage.Sender.Should().Be(sender);
+            resultSenderMessage.UnreadCount.Should().Be(2);
+
+            var resultMessages = resultSenderMessage.Messages;
+            resultMessages.Should().NotBeNull();
+            resultMessages.Should().HaveCount(3);
+
+            var expectedMessages = MapToMessages(latestMessage, currentMessage, oldestMessage);
+
+            resultMessages[0].Should().BeEquivalentTo(expectedMessages[0]);
+            resultMessages[1].Should().BeEquivalentTo(expectedMessages[1]);
+            resultMessages[2].Should().BeEquivalentTo(expectedMessages[2]);
         }
 
         [TestMethod]
@@ -69,7 +79,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
             var result = _systemUnderTest.Map(new List<UserMessage>());
 
             // Assert
-            result.Should().BeEmpty();
+            result.SenderMessages.Should().BeEmpty();
         }
 
         [TestMethod]
@@ -98,9 +108,9 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
                 { currentMessage, oldestMessage, latestMessage });
 
             // Assert
-            result.Should().NotBeEmpty();
-            result.Should().HaveCount(3);
-            result.Should().BeEquivalentTo(new List<SenderMessages>
+            result.SenderMessages.Should().NotBeEmpty();
+            result.SenderMessages.Should().HaveCount(3);
+            result.SenderMessages.Should().BeEquivalentTo(new List<SenderMessages>
             {
                 new SenderMessages
                 {
@@ -130,7 +140,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
             var result = _systemUnderTest.Map(new List<SummaryMessage>());
 
             // Assert
-            result.Should().BeEmpty();
+            result.SenderMessages.Should().BeEmpty();
         }
 
         [TestMethod]
@@ -144,10 +154,108 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
                 .And.ParamName.Should().Be("source");
         }
 
+        [TestMethod]
+        public void Map_WithUserMessages_WhenBodyExceeds240Chars_TruncateBody()
+        {
+            // Arrange
+            var message = new UserMessage
+            {
+                Sender = "test sender",
+                SentTime = DateTime.UtcNow.AddSeconds(-10),
+                ReadTime = default,
+                Body = $"Nam quis nulla. Integer malesuada. In in enim a arcu imperdiet malesuada. Sed vel lectus. " +
+                       $"Donec odio urna, tempus molestie, porttitor ut, iaculis quis, sem. Phasellus rhoncus. Aenean id " +
+                       $"metus id velit ullamcorper pulvinar. Vestibulum fermen#"
+            };
+
+            // Act
+            var result = _systemUnderTest.Map(new List<UserMessage> {message});
+
+            // Assert
+            result.Should().NotBeNull();
+            result.SenderMessages.Should().ContainSingle();
+            var resultMessage = result.SenderMessages.First().Messages.Should().ContainSingle().Subject;
+            resultMessage.Body.Should().Be($"Nam quis nulla. Integer malesuada. In in enim a arcu imperdiet malesuada. Sed vel lectus. " +
+                                           $"Donec odio urna, tempus molestie, porttitor ut, iaculis quis, sem. Phasellus rhoncus. Aenean id " +
+                                           $"metus id velit ullamcorper pulvinar. Vestibulum fermen");
+        }
+
+        [DataTestMethod]
+        [DataRow("Nam quis nulla. Integer malesuada. In in enim a arcu imperdiet malesuada. Sed vel lectus. " +
+                 "Donec odio urna, tempus molestie, porttitor ut, iaculis quis, sem. Phasellus rhoncus. Aenean id " +
+                 "metus id velit ullamcorper pulvinar. Vestibulum fermen")]
+        [DataRow("Nam quis nulla. Integer malesuada. In in enim a arcu imperdiet malesuada.")]
+        public void Map_WithUserMessages_WhenBodyLessThanOrEquals240Chars_DoesNotTruncateBody(string body)
+        {
+            // Arrange
+            var message = new UserMessage
+            {
+                Sender = "test sender",
+                SentTime = DateTime.UtcNow.AddSeconds(-10),
+                ReadTime = default,
+                Body = body
+            };
+
+            // Act
+            var result = _systemUnderTest.Map(new List<UserMessage> {message});
+
+            // Assert
+            result.Should().NotBeNull();
+            result.SenderMessages.Should().ContainSingle();
+            var resultMessage = result.SenderMessages.First().Messages.Should().ContainSingle().Subject;
+            resultMessage.Body.Should().Be(body);
+        }
+
+        [TestMethod]
+        public void Map_WithUserMessage_MapsToResponse()
+        {
+            // Arrange
+            var sentTime = DateTime.UtcNow;
+            var message = new UserMessage
+            {
+                Id = new ObjectId("ae0b4ffd40c44828b884961b"),
+                Sender = "test sender",
+                SentTime = sentTime,
+                ReadTime = default,
+                Body = $"Nam quis nulla. Integer malesuada. In in enim a arcu imperdiet malesuada. Sed vel lectus. " +
+                       $"Donec odio urna, tempus molestie, porttitor ut, iaculis quis, sem. Phasellus rhoncus. Aenean id " +
+                       $"metus id velit ullamcorper pulvinar. Vestibulum fermen#",
+                Version = 3
+            };
+
+            // Act
+            var result = _systemUnderTest.Map(message);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.SenderMessages.Should().ContainSingle();
+            var resultMessage = result.SenderMessages.First().Messages.Should().ContainSingle().Subject;
+
+            resultMessage.Id.Should().Be("ae0b4ffd40c44828b884961b");
+            resultMessage.Sender.Should().Be("test sender");
+            resultMessage.SentTime.Should().Be(sentTime);
+            resultMessage.Read.Should().Be(false);
+            resultMessage.Body.Should().Be(
+                $"Nam quis nulla. Integer malesuada. In in enim a arcu imperdiet malesuada. Sed vel lectus. Donec odio " +
+                $"urna, tempus molestie, porttitor ut, iaculis quis, sem. Phasellus rhoncus. Aenean id metus id velit " +
+                $"ullamcorper pulvinar. Vestibulum fermen#");
+            resultMessage.Version.Should().Be(3);
+        }
+
+        [TestMethod]
+        public void Map_WhenUserMessageIsNull_ThrowsException()
+        {
+            // Arrange, Act, Assert
+            FluentActions
+                .Invoking(() => _systemUnderTest.Map(default(UserMessage)))
+                .Should().Throw<ArgumentNullException>()
+                .And.ParamName.Should().Be("source");
+        }
+
         private List<Message> MapToMessages(params UserMessage[] userMessages)
             => userMessages.Select(m => new Message
             {
-                Id = m.Id,
+                Id = m.Id.ToString(),
                 Sender = m.Sender,
                 Version = m.Version,
                 Body = m.Body,

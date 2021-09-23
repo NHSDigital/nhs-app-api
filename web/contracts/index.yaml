@@ -5841,6 +5841,66 @@
           502: 
             description: "An unexpected error occurred processing the request."
     /v1/api/users/me/messages/{messageId}: 
+      get: 
+        security: 
+          - 
+            nhsLoginBearerAuth: []
+        tags: 
+          - "messages"
+        summary: "Retrieve message"
+        description: "Retrieves a message pertaining to the authorized user."
+        parameters: 
+          - 
+            in: "header"
+            name: "NHSO-Request-ID"
+            required: false
+            description: "A request identifier, should provide something unique on each separate request to allow NHS App to easily retrieve relevant log entries for debugging purposes."
+            schema: 
+              type: "string"
+          - 
+            in: "path"
+            name: "messageId"
+            required: true
+            description: "A unique identifier for a message."
+            schema: 
+              type: "string"
+        responses: 
+          200: 
+            description: "Successful operation. Message is retrieved."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  properties: 
+                    id: 
+                      type: "string"
+                    sender: 
+                      type: "string"
+                    version: 
+                      type: "integer"
+                    body: 
+                      type: "string"
+                    sendTime: 
+                      type: "string"
+                      format: "date-time"
+                      description: "Message sent time."
+                    read: 
+                      type: "boolean"
+                  example: 
+                    id: "9fbd0bea-5a63-4fd4-b4be-4bcd9c063227"
+                    sender: "b1f99cf0-278d-49ca-a325-0a1504799488"
+                    version: 0
+                    body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                    sendTime: "2019-09-17T02:15:12.350Z"
+                    read: true
+          400: 
+            description: "Bad request. Supplied request is invalid."
+          401: 
+            description: "Access token is missing or invalid."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "An unexpected error occurred processing the request."
       patch: 
         security: 
           - 
@@ -5907,6 +5967,50 @@
             description: "Access token is missing or invalid."
           404: 
             description: "Message to be updated cannot be found."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "An unexpected error occurred processing the request."
+    /v1/api/users/me/messages/senders: 
+      get: 
+        security: 
+          - 
+            nhsLoginBearerAuth: []
+        tags: 
+          - "messages"
+        summary: "Gets a list of senders who have sent messages to the authorized user"
+        description: "Gets a list of senders who have sent messages to the authorized user"
+        parameters: 
+          - 
+            in: "header"
+            name: "NHSO-Request-ID"
+            required: false
+            description: "A request identifier, should provide something unique on each separate request to allow NHS App to easily retrieve relevant log entries for debugging purposes."
+            schema: 
+              type: "string"
+        responses: 
+          200: 
+            description: "Successful operation. List of senders are retrieved."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  properties: 
+                    senders: 
+                      type: "array"
+                      items: 
+                        type: "objects"
+                        properties: 
+                          name: 
+                            type: "string"
+                            description: "The sender's name."
+                          unreadCount: 
+                            type: "integer"
+                            description: "The number of unread messages."
+          204: 
+            description: "Successful operation. Content is empty."
+          401: 
+            description: "Access token is missing or invalid."
           500: 
             description: "An unexpected error occurred processing the request."
           502: 

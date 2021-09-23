@@ -192,14 +192,12 @@ export default {
     },
   },
   async mounted() {
-    const params = { ignoreError: true };
-
     if (this.shouldLoadGpMessages && !this.ignoreGpSessionError()) {
-      await this.$store.dispatch('gpMessages/loadMessages', params);
+      await this.$store.dispatch('gpMessages/loadMessages', { ignoreError: true });
     }
 
     if (this.appMessagingSjrEnabled) {
-      await this.$store.dispatch('messaging/load', params);
+      await this.$store.dispatch('messaging/load');
     }
 
     this.hasUnreadGPMessages = this.$store.state.gpMessages.hasUnread;

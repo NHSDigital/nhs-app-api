@@ -14,8 +14,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
     {
         private readonly ILogger _logger;
 
-        public UpdateMessageMapperStep(
-            ILogger<MessagesController> logger)
+        public UpdateMessageMapperStep(ILogger<MessageService> logger)
         {
             _logger = logger;
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
@@ -9,8 +10,11 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Mappers
 {
     internal class MessagesResponseMapper :
         IMapper<List<UserMessage>, MessagesResponse>,
+        IMapper<UserMessage, MessagesResponse>,
         IMapper<List<SummaryMessage>, MessagesResponse>
     {
+        private const int MaxCharacterLimit = 240;
+
         private readonly ILogger<MessagesResponseMapper> _logger;
 
         public MessagesResponseMapper(ILogger<MessagesResponseMapper> logger)
@@ -31,20 +35,37 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Mappers
 
             return new MessagesResponse
             {
-                new SenderMessages
+                SenderMessages = new List<SenderMessages>
                 {
-                    Sender = source.First().Sender,
-                    UnreadCount = source.Count(m => !m.ReadTime.HasValue),
-                    Messages = source.OrderBy(m => m.SentTime)
-                        .Select(m => new Message
-                        {
-                            Id = m.Id,
-                            Sender = m.Sender,
-                            Version = m.Version,
-                            Body = m.Body,
-                            Read = m.ReadTime.HasValue,
-                            SentTime = m.SentTime,
-                        }).ToList()
+                    new SenderMessages
+                    {
+                        Sender = source.First().Sender,
+                        UnreadCount = source.Count(m => !m.ReadTime.HasValue),
+                        Messages = source.OrderByDescending(m => m.SentTime)
+                            .Select(m => MapMessage(m, true))
+                            .ToList()
+                    }
+                }
+            };
+        }
+
+        public MessagesResponse Map(UserMessage source)
+        {
+            new ValidateAndLog(_logger)
+                .IsNotNull(source, nameof(source), ThrowError)
+                .IsValid();
+
+            return new MessagesResponse
+            {
+                SenderMessages = new List<SenderMessages>
+                {
+                    new SenderMessages
+                    {
+                        Sender = source.Sender,
+                        Messages = new List<Message> {
+                            MapMessage(source)
+                        }
+                    }
                 }
             };
         }
@@ -55,26 +76,32 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Mappers
                 .IsNotNull(source, nameof(source), ThrowError)
                 .IsValid();
 
-            var senderMessages = source.OrderByDescending(s => s.SentTime)
-                .Select(s => new SenderMessages
-                {
-                    Sender = s.Sender,
-                    UnreadCount = s.UnreadCount,
-                    Messages = new List<Message>
+            return new MessagesResponse
+            {
+                SenderMessages = source.OrderByDescending(s => s.SentTime)
+                    .Select(s => new SenderMessages
                     {
-                        new Message
-                        {
-                            Id = s.Id,
-                            Sender = s.Sender,
-                            Version = s.Version,
-                            Body = s.Body,
-                            Read = s.ReadTime.HasValue,
-                            SentTime = s.SentTime,
-                        }
-                    }
-                });
+                        Sender = s.Sender,
+                        UnreadCount = s.UnreadCount,
+                        Messages = new List<Message> { MapMessage(s) }
+                    })
+                    .ToList()
+            };
+        }
 
-            return new MessagesResponse(senderMessages);
+        private Message MapMessage(UserMessage userMessage, bool truncateBody = false)
+        {
+            return new Message
+            {
+                Id = userMessage.Id.ToString(),
+                Sender = userMessage.Sender,
+                Version = userMessage.Version,
+                Body = truncateBody
+                    ? userMessage.Body.Substring(0, Math.Min(userMessage.Body.Length, MaxCharacterLimit))
+                    : userMessage.Body,
+                Read = userMessage.ReadTime.HasValue,
+                SentTime = userMessage.SentTime,
+            };
         }
     }
 }

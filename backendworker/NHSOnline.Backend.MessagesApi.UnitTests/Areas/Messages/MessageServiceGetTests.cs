@@ -29,13 +29,20 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
 
         private Mock<IMessageRepository> _mockMessageRepository;
         private Mock<IMapper<List<UserMessage>, MessagesResponse>> _mockUserMessagesToResponseMapper;
+        private Mock<IMapper<UserMessage, MessagesResponse>> _mockUserMessageToResponseMapper;
         private Mock<IMapper<List<SummaryMessage>, MessagesResponse>> _mockSummaryMessagesToResponseMapper;
         private Mock<IMessagesValidationService> _mockValidationService;
         private AccessToken _accessToken;
 
-        private readonly MessagesResponse _response = new MessagesResponse(new[] { new SenderMessages { Sender = Sender } });
-        private readonly SummaryMessage _summaryMessage = new SummaryMessage { Body = Body };
-        private readonly UserMessage _userMessage = new UserMessage { Body = Body };
+        private readonly MessagesResponse _response = new MessagesResponse
+        {
+            SenderMessages = new List<SenderMessages>
+            {
+                new SenderMessages { Sender = Sender }
+            }
+        };
+        private readonly SummaryMessage _summaryMessage = new SummaryMessage { Body = Body, Sender = Sender};
+        private readonly UserMessage _userMessage = new UserMessage { Body = Body, Sender = Sender };
 
         [TestInitialize]
         public void TestInitialize()
@@ -48,10 +55,11 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
 
             _mockMessageRepository = new Mock<IMessageRepository>(MockBehavior.Strict);
             _mockUserMessagesToResponseMapper = new Mock<IMapper<List<UserMessage>, MessagesResponse>>(MockBehavior.Strict);
+            _mockUserMessageToResponseMapper =  new Mock<IMapper<UserMessage, MessagesResponse>>(MockBehavior.Strict);
             _mockSummaryMessagesToResponseMapper = new Mock<IMapper<List<SummaryMessage>, MessagesResponse>>(MockBehavior.Strict);
             _mockValidationService = new Mock<IMessagesValidationService>(MockBehavior.Strict);
 
-            var mockLogger = new Mock<Microsoft.Extensions.Logging.ILogger<MessagesController>>();
+            var mockLogger = new Mock<Microsoft.Extensions.Logging.ILogger<MessageService>>();
 
             _accessToken = AccessToken.Parse(mockLogger.Object, accessTokenString);
 
@@ -59,10 +67,10 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 _mockMessageRepository.Object,
                 mockLogger.Object,
                 _mockUserMessagesToResponseMapper.Object,
+                _mockUserMessageToResponseMapper.Object,
                 _mockSummaryMessagesToResponseMapper.Object,
                 new Mock<IMapper<AddMessageRequest, string, UserMessage>>().Object,
-                _mockValidationService.Object
-            );
+                _mockValidationService.Object);
         }
 
         [TestMethod]
@@ -83,7 +91,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         }
 
         [TestMethod]
-        public async Task GetMessage_Some()
+        public async Task GetMessage_Found()
         {
             // Arrange
             _mockValidationService
@@ -97,8 +105,8 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                     _userMessage
                 }));
 
-            _mockUserMessagesToResponseMapper
-                .Setup(x => x.Map(It.IsAny<List<UserMessage>>()))
+            _mockUserMessageToResponseMapper
+                .Setup(x => x.Map(It.IsAny<UserMessage>()))
                 .Returns(_response);
 
             // Act
@@ -107,7 +115,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Assert
             VerifySetups();
 
-            result.Should().BeAssignableTo<MessagesResult.Some>()
+            result.Should().BeAssignableTo<MessagesResult.Found>()
                 .Subject.Response.Should().BeEquivalentTo(_response);
         }
 
@@ -147,8 +155,8 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                     _userMessage
                 }));
 
-            _mockUserMessagesToResponseMapper
-                .Setup(x => x.Map(It.IsAny<List<UserMessage>>()))
+            _mockUserMessageToResponseMapper
+                .Setup(x => x.Map(It.IsAny<UserMessage>()))
                 .Throws<ArgumentException>();
 
             // Act
@@ -203,7 +211,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         }
 
         [TestMethod]
-        public async Task GetMessages_Some()
+        public async Task GetMessages_Found()
         {
             // Arrange
             _mockMessageRepository
@@ -223,7 +231,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Assert
             VerifySetups();
 
-            result.Should().BeAssignableTo<MessagesResult.Some>()
+            result.Should().BeAssignableTo<MessagesResult.Found>()
                 .Subject.Response.Should().BeEquivalentTo(_response);
         }
 
@@ -303,7 +311,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         }
 
         [TestMethod]
-        public async Task GetSummaryMessages_Some()
+        public async Task GetSummaryMessages_Found()
         {
             // Arrange
             _mockMessageRepository
@@ -323,7 +331,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Assert
             VerifySetups();
 
-            result.Should().BeAssignableTo<MessagesResult.Some>()
+            result.Should().BeAssignableTo<MessagesResult.Found>()
                 .Subject.Response.Should().BeEquivalentTo(_response);
         }
 
@@ -402,11 +410,91 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             result.Should().BeAssignableTo<MessagesResult.BadGateway>();
         }
 
+        [TestMethod]
+        public async Task GetSenders_Found()
+        {
+            // Arrange
+            _mockMessageRepository
+                .Setup(x => x.FindAllForUser(NhsLoginId))
+                .ReturnsAsync(new RepositoryFindResult<UserMessage>.Found(new[]
+                {
+                    new UserMessage { Sender = "First", SentTime = DateTime.UtcNow.AddSeconds(-20), ReadTime = DateTime.UtcNow },
+                    new UserMessage { Sender = "Second", SentTime = DateTime.UtcNow.AddSeconds(-10), ReadTime = DateTime.UtcNow },
+                    new UserMessage { Sender = "Third", SentTime = DateTime.UtcNow },
+                    new UserMessage { Sender = "First", SentTime = DateTime.UtcNow.AddSeconds(10) },
+                    new UserMessage { Sender = "Third", SentTime = DateTime.UtcNow.AddSeconds(20) },
+                }));
+
+            // Act
+            var result = await _systemUnderTest.GetSenders(_accessToken);
+
+            // Assert
+            VerifySetups();
+
+            var response = result.Should().BeAssignableTo<SendersResult.Found>().Subject.Response;
+            response.Should().NotBeNull();
+            response.Senders.Should().HaveCount(3);
+            response.Senders[0].Should().BeEquivalentTo(new Sender {  Name = "Third", UnreadCount = 2 });
+            response.Senders[1].Should().BeEquivalentTo(new Sender {  Name = "First", UnreadCount = 1 });
+            response.Senders[2].Should().BeEquivalentTo(new Sender {  Name = "Second", UnreadCount = 0 });
+        }
+
+        [TestMethod]
+        public async Task GetSenders_None()
+        {
+            // Arrange
+            _mockMessageRepository
+                .Setup(x => x.FindAllForUser(NhsLoginId))
+                .ReturnsAsync(new RepositoryFindResult<UserMessage>.NotFound());
+
+            // Act
+            var result = await _systemUnderTest.GetSenders(_accessToken);
+
+            // Assert
+            VerifySetups();
+            result.Should().BeAssignableTo<SendersResult.None>();
+        }
+
+        [TestMethod]
+        public async Task GetSenders_InternalServerError()
+        {
+            // Arrange
+            _mockMessageRepository
+                .Setup(x => x.FindAllForUser(NhsLoginId))
+                .Throws<ArgumentException>();
+
+            // Act
+            var result = await _systemUnderTest.GetSenders(_accessToken);
+
+            // Assert
+            VerifySetups();
+
+            result.Should().BeAssignableTo<SendersResult.InternalServerError>();
+        }
+
+        [TestMethod]
+        public async Task GetSenders_BadGatewayError()
+        {
+            // Arrange
+            _mockMessageRepository
+                .Setup(x => x.FindAllForUser(NhsLoginId))
+                .ReturnsAsync(new RepositoryFindResult<UserMessage>.RepositoryError());
+
+            // Act
+            var result = await _systemUnderTest.GetSenders(_accessToken);
+
+            // Assert
+            VerifySetups();
+
+            result.Should().BeAssignableTo<SendersResult.BadGateway>();
+        }
+
         private void VerifySetups()
         {
             _mockMessageRepository.VerifyAll();
             _mockSummaryMessagesToResponseMapper.VerifyAll();
             _mockUserMessagesToResponseMapper.VerifyAll();
+            _mockUserMessageToResponseMapper.VerifyAll();
             _mockValidationService.VerifyAll();
         }
     }

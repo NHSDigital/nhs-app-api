@@ -1,87 +1,106 @@
 <template>
   <div v-if="showTemplate && loaded">
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
-        <page-title css-class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3">
-          <span class="nhsuk-caption-l nhsuk-u-margin-bottom-0">
-            {{ $t('messages.messagesFrom') }}
-          </span>
-          {{ sender }}
-        </page-title>
-      </div>
+    <div v-if="error">
+      <error-container>
+        <error-title title="messages.error.messageError" />
+        <error-paragraph from="messages.error.problemGettingMessage" />
+        <error-button from="generic.tryAgain" @click="reload" />
+      </error-container>
     </div>
+    <div v-else>
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+          <page-title css-class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3">
+            <span class="nhsuk-caption-l nhsuk-u-margin-bottom-0">
+              {{ $t('messages.messageFrom') }}
+            </span>
+            {{ sender }}
+          </page-title>
+        </div>
+      </div>
 
-    <ul v-if="hasReadMessages" id="readSection" :class="$style['message-panel__list']">
-      <message v-for="(message, index) in readMessages" :key="index" :message="message" />
-    </ul>
+      <div :class="$style['message-panel__item']">
+        <formatted-date-time :class="$style['message-panel__time']"
+                             :date-time="message.sentTime" />
+        <div :class="$style['message-panel__content']">
+          <markdown-content v-if="isMarkdown" class="panel-content" :content="message.body"
+                            :message-id="message.id" />
+          <linkify-content v-else class="panel-content" :content="message.body" tag="p" />
+        </div>
+      </div>
 
-    <scroll-to-anchor id="unreadMessages" />
-    <template v-if="hasUnreadMessages">
-      <page-divider :text="$t('messages.unreadMessages')" />
-
-      <ul id="unreadSection" :class="$style['message-panel__list']">
-        <message v-for="(message, index) in unreadMessages" :key="index" :message="message" />
-      </ul>
-    </template>
-
-    <desktopGenericBackLink v-if="!isNativeApp"
-                            data-purpose="back-link"
-                            :path="backLink"
-                            @clickAndPrevent="backClicked"/>
-
+      <desktopGenericBackLink v-if="!isNativeApp"
+                              data-purpose="back-link"
+                              :path="backLink"
+                              @clickAndPrevent="backClicked"/>
+    </div>
   </div>
 </template>
 
 <script>
-import Message from '@/components/messaging/Message';
-import PageDivider from '@/components/widgets/PageDivider';
-import PageTitle from '@/components/widgets/PageTitle';
-import ScrollToAnchor from '@/components/widgets/ScrollToAnchor';
-import { redirectTo } from '@/lib/utils';
-import { HEALTH_INFORMATION_UPDATES_PATH } from '@/router/paths';
-import get from 'lodash/fp/get';
-import first from 'lodash/fp/first';
-import takeWhile from 'lodash/fp/takeWhile';
-import dropWhile from 'lodash/fp/dropWhile';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import ErrorButton from '@/components/errors/ErrorButton';
+import ErrorContainer from '@/components/errors/ErrorContainer';
+import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
+import ErrorParagraph from '@/components/errors/ErrorParagraph';
+import ErrorTitle from '@/components/errors/ErrorTitle';
+import FormattedDateTime from '@/components/widgets/FormattedDateTime';
+import LinkifyContent from '@/components/widgets/LinkifyContent';
+import MarkdownContent from '@/components/widgets/MarkdownContent';
+import PageTitle from '@/components/widgets/PageTitle';
+import get from 'lodash/fp/get';
+import { HEALTH_INFORMATION_UPDATES_PATH, HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH } from '@/router/paths';
+import { messageVersion, redirectTo } from '@/lib/utils';
 
 export default {
   name: 'AppMessagingAppMessagePage',
   components: {
-    Message,
-    PageDivider,
-    PageTitle,
-    ScrollToAnchor,
     DesktopGenericBackLink,
+    ErrorButton,
+    ErrorContainer,
+    ErrorParagraph,
+    ErrorTitle,
+    FormattedDateTime,
+    LinkifyContent,
+    MarkdownContent,
+    PageTitle,
   },
+  mixins: [ErrorPageMixin],
   data() {
     return {
-      loaded: false,
-      sender: this.$store.state.messaging.selectedSender,
+      backLink: HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH,
       isNativeApp: this.$store.state.device.isNativeApp,
-      backLink: HEALTH_INFORMATION_UPDATES_PATH,
+      loaded: false,
     };
   },
   computed: {
-    messages() {
-      return get('messages')(first(this.$store.state.messaging.senderMessages)) || [];
+    error() {
+      return this.$store.state.messaging.error;
     },
-    hasReadMessages() {
-      return this.readMessages.length > 0;
+    isMarkdown() {
+      return get('version')(this.message) === messageVersion.Markdown;
     },
-    hasUnreadMessages() {
-      return this.unreadMessages.length > 0;
+    isUnread() {
+      return get('read')(this.message) === false;
     },
-    readMessages() {
-      return takeWhile(m => m.read)(this.messages);
+    message() {
+      return this.$store.state.messaging.message;
     },
-    unreadMessages() {
-      return dropWhile(m => m.read)(this.messages);
+    sender() {
+      return get('sender')(this.message);
     },
   },
   watch: {
     '$route.query.ts': async function watchTimestamp() {
       await this.loadMessage();
+    },
+    isUnread: async function watchRead(value) {
+      if (value) {
+        this.$store.dispatch('messaging/markAsRead', this.message.id);
+      }
+    },
+    sender: function watchSender(value) {
+      this.$store.dispatch('messaging/selectSender', value);
     },
   },
   async created() {
@@ -89,28 +108,57 @@ export default {
   },
   methods: {
     async loadMessage() {
-      const sender = this.$store.state.messaging.selectedSender;
+      this.loaded = false;
+      this.$store.dispatch('messaging/clear');
+      const messageId = get('messageId')(this.$route.query);
 
-      if (!sender) {
+      if (!messageId) {
         redirectTo(this, HEALTH_INFORMATION_UPDATES_PATH);
         return;
       }
 
-      await this.$store.dispatch('messaging/load', { sender });
+      await this.$store.dispatch('messaging/loadMessage', { messageId });
 
-      if (!this.messages.length) {
+      if (!this.error && !this.message) {
         redirectTo(this, HEALTH_INFORMATION_UPDATES_PATH);
+        return;
       }
 
       this.loaded = true;
     },
     backClicked() {
-      redirectTo(this, this.backLink);
+      redirectTo(this, this.backLink, { sender: this.sender });
     },
   },
 };
 </script>
 
+<style lang="scss">
+p.panel-content > a{
+  display: inline;
+  font-weight: normal;
+  vertical-align: unset;
+}
+
+div.panel-content{
+  ol{
+    padding-left:1.5em;
+  }
+
+  p > a{
+    display: inline;
+    font-weight: normal;
+    vertical-align: unset;
+  }
+
+  img{
+    display: block;
+    max-width: 100%;
+  }
+}
+</style>
+
 <style module lang='scss' scoped>
   @import "@/style/custom/app-message";
+  @import "@/style/custom/message";
 </style>

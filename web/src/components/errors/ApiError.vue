@@ -77,7 +77,6 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import GenericButton from '@/components/widgets/GenericButton';
 import HeaderSlim from '@/components/HeaderSlim';
 import MessageDialog from '@/components/widgets/MessageDialog';
-import MessagesSenderError from '@/components/errors/additional-info/MessagesSenderError';
 import MessageText from '@/components/widgets/MessageText';
 import ReportAProblem from '@/components/errors/ReportAProblem';
 import { getDynamicStyle } from '@/lib/desktop-experience';
@@ -103,7 +102,6 @@ export default {
     GenericButton,
     HeaderSlim,
     MessageDialog,
-    MessagesSenderError,
     MessageText,
     NativeApp,
     ReportAProblem,

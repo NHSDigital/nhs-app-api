@@ -97,7 +97,8 @@ export const ORGAN_DONATION_WITHDRAWN_PATH = 'organ-donation/withdrawn';
 export const ORGAN_DONATION_YOUR_CHOICE_PATH = 'organ-donation/your-choice';
 export const MESSAGES_PATH = 'messages';
 export const HEALTH_INFORMATION_UPDATES_PATH = 'messages/app-messaging';
-export const HEALTH_INFORMATION_UPDATES_MESSAGES_PATH = 'messages/app-messaging/app-message';
+export const HEALTH_INFORMATION_UPDATES_MESSAGE_PATH = 'messages/app-messaging/app-message';
+export const HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH = 'messages/app-messaging/sender-messages';
 export const GP_MESSAGES_PATH = 'messages/gp-messages';
 export const GP_MESSAGES_VIEW_ATTACHMENT_PATH = 'messages/gp-messages/view-attachment';
 export const GP_MESSAGES_DOWNLOAD_ATTACHMENT_PATH = 'messages/gp-messages/download-attachment';
@@ -232,7 +233,8 @@ export default {
   ORGAN_DONATION_YOUR_CHOICE_PATH,
   MESSAGES_PATH,
   HEALTH_INFORMATION_UPDATES_PATH,
-  HEALTH_INFORMATION_UPDATES_MESSAGES_PATH,
+  HEALTH_INFORMATION_UPDATES_MESSAGE_PATH,
+  HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH,
   GP_MESSAGES_PATH,
   GP_MESSAGES_VIEW_ATTACHMENT_PATH,
   GP_MESSAGES_DOWNLOAD_ATTACHMENT_PATH,

@@ -239,17 +239,19 @@ button {
   &:focus {
     @include nhsuk-hover-link-background-reset;
 
-    h2 {
+    h2, p.nhs-app-message__summary {
       @include nhsuk-focused-link-text;
     }
 
-    &:hover h2 {
-      @include nhsuk-focused-link-text;
+    &:hover {
+      h2, p.nhs-app-message__summary {
+        @include nhsuk-focused-link-text;
+      }
     }
   }
   
   &:hover {
-    h2 {
+    h2, p.nhs-app-message__summary {
       @include nhsuk-hover-link-background-reset;
       color: $nhsuk-hover-link-color !important;
       text-decoration: underline !important;

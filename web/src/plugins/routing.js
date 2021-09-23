@@ -22,7 +22,7 @@ const RoutingPlugin = {
         if (router.previousPaths.length >= 15) {
           router.previousPaths = router.previousPaths.splice(1);
         }
-        router.previousPaths.push(get('path')(from));
+        router.previousPaths.push(get('fullPath')(from));
       }
     });
   },

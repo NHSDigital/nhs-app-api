@@ -6,11 +6,11 @@ using NHSOnline.Backend.Repository;
 
 namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 {
-    internal class RepositoryFindMessagesResultToSummaryMessageVisitor : IRepositoryFindResultVisitor<UserMessage, MessagesResult>
+    internal class RepositoryFindSummaryMessagesResultVisitor : IRepositoryFindResultVisitor<UserMessage, MessagesResult>
     {
         private readonly IMapper<List<SummaryMessage>, MessagesResponse> _mapper;
 
-        public RepositoryFindMessagesResultToSummaryMessageVisitor(IMapper<List<SummaryMessage>, MessagesResponse> mapper)
+        public RepositoryFindSummaryMessagesResultVisitor(IMapper<List<SummaryMessage>, MessagesResponse> mapper)
         {
             _mapper = mapper;
         }
@@ -46,9 +46,9 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 
             var response = _mapper.Map(summaryMessages);
 
-            if (response.Any())
+            if (response.SenderMessages.Any())
             {
-                return new MessagesResult.Some(response);
+                return new MessagesResult.Found(response);
             }
 
             return new MessagesResult.None();

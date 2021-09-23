@@ -31,6 +31,7 @@ namespace NHSOnline.Backend.MessagesApi
             services.AddSingleton<IMessageService, MessageService>();
             services.AddSingleton<IMessageRepository, MessageRepository>();
             services.AddSingleton<IMapper<List<UserMessage>, MessagesResponse>, MessagesResponseMapper>();
+            services.AddSingleton<IMapper<UserMessage, MessagesResponse>, MessagesResponseMapper>();
             services.AddSingleton<IMapper<List<SummaryMessage>, MessagesResponse>, MessagesResponseMapper>();
             services.AddSingleton<IMapper<AddMessageRequest, string, UserMessage>, UserMessageMapper>();
             services.AddSingleton<IMapper<MessageLink, RepositoryFindResult<UserMessage>.Found, MessageLinkClickedData>, MessageLinkClickedDataMapper>();

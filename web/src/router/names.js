@@ -91,7 +91,8 @@ export const ORGAN_DONATION_WITHDRAWN_NAME = 'organ-donation-withdrawn';
 export const ORGAN_DONATION_YOUR_CHOICE_NAME = 'organ-donation-your-choice';
 export const MESSAGES_NAME = 'messages';
 export const HEALTH_INFORMATION_UPDATES_NAME = 'messages-app-messaging';
-export const HEALTH_INFORMATION_UPDATES_MESSAGES_NAME = 'messages-app-messaging-app-message';
+export const HEALTH_INFORMATION_UPDATES_MESSAGE_NAME = 'messages-app-messaging-app-message';
+export const HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_NAME = 'messages-app-messaging-sender-messages';
 export const GP_MESSAGES_NAME = 'messages-gp-messages';
 export const GP_MESSAGES_VIEW_ATTACHMENT_NAME = 'messages-gp-messages-view-attachment';
 export const GP_MESSAGES_DOWNLOAD_ATTACHMENT_NAME = 'messages-gp-messages-download-attachment';
@@ -223,7 +224,8 @@ const names = [
   ORGAN_DONATION_YOUR_CHOICE_NAME,
   MESSAGES_NAME,
   HEALTH_INFORMATION_UPDATES_NAME,
-  HEALTH_INFORMATION_UPDATES_MESSAGES_NAME,
+  HEALTH_INFORMATION_UPDATES_MESSAGE_NAME,
+  HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_NAME,
   GP_MESSAGES_NAME,
   GP_MESSAGES_VIEW_ATTACHMENT_NAME,
   GP_MESSAGES_DOWNLOAD_ATTACHMENT_NAME,

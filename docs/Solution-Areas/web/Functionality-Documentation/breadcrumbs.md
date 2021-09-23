@@ -20,7 +20,7 @@ _Note: If a route has no breadcrumb either on desktop or native, set its configu
 ### Examples
 
 ```js
-const HEALTH_INFORMATION_UPDATES_MESSAGES_CRUMB = {
+const HEALTH_INFORMATION_UPDATES_MESSAGE_CRUMB = {
   defaultCrumb: [INDEX_CRUMB, MESSAGES_CRUMB, HEALTH_INFORMATION_UPDATES_CRUMB],
   appMessagesOnlyCrumb: [INDEX_CRUMB, HEALTH_INFORMATION_UPDATES_CRUMB],
 };

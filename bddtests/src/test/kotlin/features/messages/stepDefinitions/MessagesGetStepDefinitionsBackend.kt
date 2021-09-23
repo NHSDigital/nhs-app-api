@@ -1,11 +1,11 @@
 package features.messages.stepDefinitions
 
-import io.cucumber.java.en.Given
-import io.cucumber.java.en.Then
-import io.cucumber.java.en.When
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import features.sharedSteps.InvalidAccessTokenTester
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import models.IdentityProofingLevel
 import org.junit.Assert
 import org.junit.Assert.assertNotNull
@@ -13,10 +13,12 @@ import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set
 import worker.models.messages.MessageCreateResponse
-import worker.models.messages.MessagesSummaryFacade
+import worker.models.messages.SenderFacade
 import worker.models.messages.SingleMessageFacade
 import worker.models.messages.MessagesResponse
 import worker.models.messages.MessagesResponseMessage
+import worker.models.messages.Sender
+import worker.models.messages.SendersResponse
 
 class MessagesGetStepDefinitionsBackend {
 
@@ -99,7 +101,7 @@ class MessagesGetStepDefinitionsBackend {
         val responseMessages =
                 MessagesSerenityHelpers.GET_MESSAGE_RESPONSE.getOrFail<Array<MessagesResponse>>()
         val expectedMessages =
-                MessagesSerenityHelpers.EXPECTED_SUMMARY_MESSAGES.getOrFail<ArrayList<MessagesSummaryFacade>>()
+                MessagesSerenityHelpers.EXPECTED_SENDERS.getOrFail<ArrayList<SenderFacade>>()
 
         assertReceivedMessages(expectedMessages, responseMessages)
     }
@@ -109,8 +111,9 @@ class MessagesGetStepDefinitionsBackend {
         val responseMessages =
                 MessagesSerenityHelpers.GET_MESSAGE_RESPONSE.getOrFail<Array<MessagesResponse>>()
         val expectedMessages =
-                MessagesSerenityHelpers.EXPECTED_MESSAGES_FROM_SENDER.getOrFail<MessagesSummaryFacade>()
-        assertReceivedMessages(arrayListOf(expectedMessages), responseMessages)
+                MessagesSerenityHelpers.EXPECTED_MESSAGES_FROM_SENDER.getOrFail<SenderFacade>()
+        val reversedExpectedMessages = expectedMessages.copy(messages = expectedMessages.messages.reversed())
+        assertReceivedMessages(arrayListOf(reversedExpectedMessages), responseMessages)
     }
 
     @Then("^I receive the message id$")
@@ -135,6 +138,12 @@ class MessagesGetStepDefinitionsBackend {
         MessagesApi.getMessage(authToken, messageId)
     }
 
+    @When("^I try to get the message senders without passing an access token$")
+    fun iTryToGetTheMessageSendersWithoutPassingAnAccessToken() {
+        val authToken = ""
+        MessagesApi.getSenders(authToken)
+    }
+
     @When("^I try to get the message using a blank string$")
     fun iTryToGetTheMessageUsingABlankString(){
         val authToken = SerenityHelpers.getPatient().accessToken
@@ -155,7 +164,35 @@ class MessagesGetStepDefinitionsBackend {
         assertNotNull("Message Id", response.id)
     }
 
-    private fun assertReceivedMessages(expectedMessages: ArrayList<MessagesSummaryFacade>,
+    @When("^I try to get a list of message senders$")
+    fun iTryToGetAListOfMessageSenders() {
+        val authToken = SerenityHelpers.getPatient().accessToken
+        MessagesApi.getSenders(authToken)
+    }
+
+    @Then("^I can see a list of message senders along with a count of unread messages per sender$")
+    fun iCanSeeAListOfMessageSendersAlongWithACountOfUnreadMessagesPerSender() {
+        val response = MessagesSerenityHelpers.GET_SENDERS.getOrFail<SendersResponse>()
+        val expectedMessages = MessagesSerenityHelpers.EXPECTED_SENDERS
+            .getOrFail<ArrayList<SenderFacade>>()
+        assertNotNull(response)
+        assertNotNull(response.senders)
+        val expectedSenders = expectedMessages.map { message ->
+            Sender(
+                message.name,
+                message.unreadCount
+            )
+        }
+
+        Assert.assertEquals("Number Of Senders", expectedSenders.count(), response.senders.count())
+
+        for (x in 0 until expectedSenders.count()){
+            Assert.assertEquals(expectedSenders[x].name, response.senders[x].name)
+            Assert.assertEquals(expectedSenders[x].unreadCount, response.senders[x].unreadCount)
+        }
+    }
+
+    private fun assertReceivedMessages(expectedMessages: ArrayList<SenderFacade>,
                                        responseMessages: Array<MessagesResponse>) {
 
         Assert.assertEquals("Number Of Messages", expectedMessages.count(), responseMessages.count())
@@ -164,7 +201,7 @@ class MessagesGetStepDefinitionsBackend {
         }
 
         val responseMessagesFacades = responseMessages.map { message ->
-            MessagesSummaryFacade(
+            SenderFacade(
                     message.sender,
                     message.unreadCount,
                     toFacade(message.messages))
@@ -174,8 +211,8 @@ class MessagesGetStepDefinitionsBackend {
         }
     }
 
-    fun assertEquals(expected: MessagesSummaryFacade, actual: MessagesSummaryFacade) {
-        Assert.assertEquals("sender", expected.sender, actual.sender)
+    fun assertEquals(expected: SenderFacade, actual: SenderFacade) {
+        Assert.assertEquals("sender", expected.name, actual.name)
         Assert.assertEquals("unreadCount", expected.unreadCount, actual.unreadCount)
         Assert.assertEquals("messages Count", expected.messages.count(), actual.messages.count())
         for (x in 0 until expected.messages.count()){

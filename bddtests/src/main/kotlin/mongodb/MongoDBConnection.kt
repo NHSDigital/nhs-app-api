@@ -7,6 +7,7 @@ import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters.regex
 import config.Config
 import org.bson.Document
+import org.bson.conversions.Bson
 import org.bson.json.JsonWriterSettings
 import org.junit.Assert
 import pages.ELEMENT_RETRY_TIME
@@ -70,6 +71,12 @@ class MongoDBConnection(private val collectionName: String, private val host: St
             assertNumberOfDocuments(0, collection)
             collection.insertMany(documentsToInsert)
             assertNumberOfDocuments(values.count(), collection)
+        }
+    }
+
+    fun updateOne(filter: Bson, update: Bson) {
+        onCollection { collection ->
+            collection.updateOne(filter, update)
         }
     }
 

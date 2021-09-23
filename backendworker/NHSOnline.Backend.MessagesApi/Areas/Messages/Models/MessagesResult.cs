@@ -4,11 +4,11 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
     {
         public abstract T Accept<T>(IMessagesResultVisitor<T> visitor);
 
-        public class Some : MessagesResult
+        public class Found : MessagesResult
         {
             public MessagesResponse Response { get; }
 
-            public Some(MessagesResponse response)
+            public Found(MessagesResponse response)
             {
                 Response = response;
             }
@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
                 return visitor.Visit(this);
             }
         }
-        
+
         public class BadRequest : MessagesResult
         {
             public override T Accept<T>(IMessagesResultVisitor<T> visitor)
@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
                 return visitor.Visit(this);
             }
         }
-        
+
         public class InternalServerError : MessagesResult
         {
             public override T Accept<T>(IMessagesResultVisitor<T> visitor)

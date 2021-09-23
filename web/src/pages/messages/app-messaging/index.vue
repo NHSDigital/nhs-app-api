@@ -1,51 +1,74 @@
 <template>
   <div v-if="showTemplate && loaded" id="mainDiv">
-    <h2>{{ $t('messages.yourMessages') }}</h2>
-    <ul v-if="hasSenderMessages" id="inboxMessages" :class="$style['nhs-app-message']">
-      <li v-for="(senderMessage, index) in senderMessages"
-          :key="index"
-          :class="{
-            [$style['nhs-app-message__item']]: true,
-            [$style['nhs-app-message__item--unread']]: !!senderMessage.unreadCount
-          }">
+    <div v-if="error">
+      <error-container>
+        <error-title title="messages.error.messagesError" />
+        <error-paragraph from="messages.error.problemGettingMessages" />
+        <error-button from="generic.tryAgain" @click="reload" />
+      </error-container>
+    </div>
+    <div v-else>
+      <h2>{{ $t('messages.yourMessages') }}</h2>
+      <ul v-if="hasSenders" id="inboxMessages" :class="$style['nhs-app-message']">
+        <li v-for="(sender, index) in senders"
+            :key="index"
+            :class="{
+              'nhsuk-u-margin-bottom-1': true,
+              [$style['nhs-app-message__item']]: true,
+              [$style['nhs-app-message__item--unread']]: !!sender.unreadCount
+            }">
+          <a :title="sender.name"
+             :href="messagePath(sender.name)"
+             :class="$style['nhs-app-message__link']"
+             :aria-label="messageLabel(sender)"
+             tabindex="0"
+             @click="goToMessages(sender.name)"
+             @click.stop.prevent="$emit('click')">
+            <div :class="$style['flex-baseline-container']" aria-hidden="true">
+              <h2 :class="['nhsuk-heading-xs', $style['nhs-app-message__title']]">
+                {{ sender.name }}
+              </h2>
+              <span v-if="sender.unreadCount" :class="$style['nhs-app-message__meta']">
+                <span :id="'unreadIndicator' + index"
+                      :class="$style['nhs-app-message__count']"
+                >{{ sender.unreadCount }}</span>
+              </span>
+            </div>
+          </a>
+        </li>
+      </ul>
 
-        <summary-message v-for="(message, messageIndex) in senderMessage.messages"
-                         :key="messageIndex"
-                         :title="senderMessage.sender"
-                         :sub-title="sanitizedContent(message.body)"
-                         :date-time="message.sentTime"
-                         :unread-count="senderMessage.unreadCount"
-                         :aria-label="messageLabel(senderMessage, message)"
-                         :href="messagePath()"
-                         :list-index="messageIndex"
-                         :has-unread-messages="isUnread(senderMessage)"
-                         @click="goToMessages(senderMessage)"/>
-      </li>
-    </ul>
+      <span v-else id="noMessages">{{ $t('messages.youHaveNoMessages') }}</span>
 
-    <span v-else id="noMessages">{{ $t('messages.youHaveNoMessages') }}</span>
-
-    <desktopGenericBackLink v-if="!isNativeApp"
-                            data-purpose="back-link"
-                            :path="backLink"
-                            @clickAndPrevent="backClicked"/>
-
+      <desktopGenericBackLink v-if="!isNativeApp"
+                              data-purpose="back-link"
+                              :path="backLink"
+                              @clickAndPrevent="backClicked"/>
+    </div>
   </div>
 </template>
 
 <script>
-import { redirectTo, formatInboxMessageTime, formatMessageDayWise } from '@/lib/utils';
-import { HEALTH_INFORMATION_UPDATES_MESSAGES_PATH, MESSAGES_PATH } from '@/router/paths';
-import { toPlainText } from '@/lib/markdown';
-import SummaryMessage from '@/components/messaging/SummaryMessage';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import ErrorButton from '@/components/errors/ErrorButton';
+import ErrorContainer from '@/components/errors/ErrorContainer';
+import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
+import ErrorParagraph from '@/components/errors/ErrorParagraph';
+import ErrorTitle from '@/components/errors/ErrorTitle';
+import { HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH, MESSAGES_PATH } from '@/router/paths';
+import { redirectTo } from '@/lib/utils';
+import { toPlainText } from '@/lib/markdown';
 
 export default {
   name: 'AppMessagingPage',
   components: {
-    SummaryMessage,
     DesktopGenericBackLink,
+    ErrorButton,
+    ErrorContainer,
+    ErrorParagraph,
+    ErrorTitle,
   },
+  mixins: [ErrorPageMixin],
   data() {
     return {
       loaded: false,
@@ -54,56 +77,48 @@ export default {
     };
   },
   computed: {
-    senderMessages() {
-      return this.$store.state.messaging.senderMessages;
+    error() {
+      return this.$store.state.messaging.error;
     },
-    hasSenderMessages() {
-      return this.senderMessages.length > 0;
+    hasSenders() {
+      return this.senders.length > 0;
+    },
+    senders() {
+      return this.$store.state.messaging.senders;
     },
   },
   watch: {
     '$route.query.ts': async function watchTimestamp() {
-      await this.loadMessages();
+      await this.loadSenders();
     },
   },
   async created() {
-    await this.loadMessages();
+    await this.loadSenders();
   },
   methods: {
-    async loadMessages() {
-      await this.$store.dispatch('messaging/load');
+    async loadSenders() {
+      this.loaded = false;
+      this.$store.dispatch('messaging/clear');
+      await this.$store.dispatch('messaging/loadSenders');
       this.loaded = true;
     },
     backClicked() {
       redirectTo(this, this.backLink);
     },
-    messagePath() {
-      return HEALTH_INFORMATION_UPDATES_MESSAGES_PATH;
+    messagePath(sender) {
+      return `${HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH}?sender=${sender}`;
     },
-    goToMessages(senderMessage) {
-      this.$store.dispatch('messaging/selectSender', senderMessage.sender);
-      redirectTo(this, this.messagePath());
+    goToMessages(sender) {
+      redirectTo(this, HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH, { sender });
     },
-    messageLabel(senderMessage, message) {
-      let timePrep = this.$t('generic.on');
-      const messageDate = formatInboxMessageTime(message.sentTime, this.$t.bind(this));
-      const messageDay = formatMessageDayWise(message.sentTime, this.$t.bind(this));
+    messageLabel(sender) {
+      let label = this.$t('messages.messagesFromSender')
+        .replace('{sender}', sender.name);
 
-      if (messageDay === 'Yesterday') {
-        timePrep = '';
-      } else if ((messageDate === 'Midday') || (messageDate === 'Midnight') || (messageDay === 'Today')) {
-        timePrep = this.$t('generic.at');
-      }
-
-      let label = this.$t('messages.messagesFromSenderLastSentDate')
-        .replace('{sender}', senderMessage.sender)
-        .replace('{timePrep}', timePrep)
-        .replace('{date}', messageDate);
-
-      if (senderMessage.unreadCount > 0) {
+      if (sender.unreadCount > 0) {
         label += this.$t('messages.youHaveCountUnreadMessagePlural')
-          .replace('{count}', senderMessage.unreadCount)
-          .replace('{plural}', senderMessage.unreadCount > 1 ? 's' : '');
+          .replace('{count}', sender.unreadCount)
+          .replace('{plural}', sender.unreadCount > 1 ? 's' : '');
       }
       return label;
     },
@@ -122,4 +137,5 @@ export default {
 @import '~nhsuk-frontend/packages/core/tools/spacing';
 @import '../../../style/arrow';
 @import '../../../style/messaging';
+@import "@/style/custom/summary-message";
 </style>

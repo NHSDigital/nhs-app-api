@@ -85,7 +85,7 @@ describe('on-demand-gp-return', () => {
     it('will dispatch to update title', () => {
       expect(EventBus.$emit)
         .toHaveBeenCalledWith(
-          UPDATE_TITLE, 'Page Loading',
+          UPDATE_TITLE, 'navigation.pages.titles.pageLoading',
         );
     });
   });

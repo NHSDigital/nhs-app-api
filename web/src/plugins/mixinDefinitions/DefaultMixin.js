@@ -84,7 +84,7 @@ export default {
       redirectTo(this, url);
     },
     reload() {
-      redirectTo(this, this.$route.path);
+      redirectTo(this, this.$route.path, this.$route.query);
     },
   },
 };

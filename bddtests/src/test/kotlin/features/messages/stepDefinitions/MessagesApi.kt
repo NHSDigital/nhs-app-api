@@ -8,6 +8,7 @@ import worker.models.messages.MessageCreateResponse
 import worker.models.messages.MessageRequest
 import worker.models.messages.MessagesResponse
 import worker.models.messages.MessagesResponseMessage
+import worker.models.messages.SendersResponse
 
 class MessagesApi {
     companion object {
@@ -33,6 +34,14 @@ class MessagesApi {
                 .messages
                 .getMessage(authToken, messageId)
             MessagesSerenityHelpers.GET_MESSAGE_RESPONSE.set(response)
+            return response
+        }
+
+        fun getSenders(authToken: String?): SendersResponse? {
+            val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .messages
+                .getSenders(authToken)
+            MessagesSerenityHelpers.GET_SENDERS.set(response)
             return response
         }
 

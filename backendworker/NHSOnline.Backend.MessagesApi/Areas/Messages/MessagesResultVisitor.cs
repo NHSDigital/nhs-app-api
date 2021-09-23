@@ -6,9 +6,9 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 {
     public class MessagesResultVisitor : IMessagesResultVisitor<IActionResult>
     {
-        public IActionResult Visit(MessagesResult.Some result)
+        public IActionResult Visit(MessagesResult.Found result)
         {
-            return new OkObjectResult(result.Response);
+            return new OkObjectResult(result.Response.SenderMessages);
         }
 
         public IActionResult Visit(MessagesResult.None result)

@@ -71,16 +71,14 @@ export default {
     },
   },
   async mounted() {
-    const params = { ignoreError: true };
-
     if (this.$store.$env.GP_SESSION_ON_DEMAND_ENABLED === false) {
       if (this.gpMessagesEnabled) {
-        await this.$store.dispatch('gpMessages/loadMessages', params);
+        await this.$store.dispatch('gpMessages/loadMessages', { ignoreError: true });
       }
     }
 
     if (this.appMessagingEnabled) {
-      await this.$store.dispatch('messaging/load', params);
+      await this.$store.dispatch('messaging/load');
     }
 
     this.hasUnreadMessages = this.$store.state.messaging.hasUnread;

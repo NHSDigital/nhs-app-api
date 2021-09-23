@@ -8,6 +8,7 @@ import worker.models.messages.MessageCreateResponse
 import worker.models.messages.MessageRequest
 import worker.models.messages.MessagesResponse
 import worker.models.messages.MessagesResponseMessage
+import worker.models.messages.SendersResponse
 
 class WorkerClientMessages(val config: Config, val sender: WorkerClientSender, val gson: Gson) {
 
@@ -48,6 +49,19 @@ class WorkerClientMessages(val config: Config, val sender: WorkerClientSender, v
 
         if (response != null) {
             return gson.fromJson(response, MessagesResponseMessage::class.java)
+        }
+
+        return null
+    }
+
+    fun getSenders(authToken: String?): SendersResponse? {
+        val uriBuilder = URIBuilder(uri("me") + "/senders")
+
+        val httpGet = RequestBuilder.get(uriBuilder.build().toString())
+            .addAuthorizationIfNotNull(authToken)
+        val response = httpGet.sendAndGetResult(sender)
+        if (response != null) {
+            return gson.fromJson(response, SendersResponse::class.java)
         }
 
         return null

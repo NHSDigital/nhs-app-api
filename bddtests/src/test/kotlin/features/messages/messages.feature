@@ -20,19 +20,22 @@ Feature: Messages
     And I am logged in
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
-    And the Messages Inbox page is displayed
-    And the senders and latest messages are displayed on the Messages Inbox page
-    And I click on a sender in the Messages Inbox
-    Then the Messages page is displayed
+    Then the Message Senders page is displayed
+    And the senders are displayed on the Messages Inbox page
+    And the Sender One sender is displayed as unread
+    When I click on Sender One sender
+    Then the Sender Messages page is displayed
     And my messages from the sender are displayed
     # We need to check the functionality to mark the messages as read with the back button,
     # to ensure that the state is updated
+    When I click on the unread message on the Sender Messages page
+    Then the Message page is displayed
     When I click the 'Back' breadcrumb
-    Then the Messages Inbox page is displayed
-    And the viewed messages are marked as read on the Messages Inbox page
-    When I click on a sender in the Messages Inbox
-    Then the Messages page is displayed
+    Then the Sender Messages page is displayed
     And my messages from the sender are displayed as read
+    When I click the 'Back' breadcrumb
+    Then the Message Senders page is displayed
+    And the Sender One sender is displayed as read
 
   Scenario: A user with proof level 5 can access their messages
     Given I am using the native app user agent
@@ -40,7 +43,7 @@ Feature: Messages
     And I am logged in
     When I follow the unread messages link from the home page
     And I click the App Messages link on the messages hub page
-    Then the Messages Inbox page is displayed
+    Then the Message Senders page is displayed
 
   Scenario: A user with proof level 5 can see they have unread messages on the home page
     Given I am using the native app user agent
@@ -70,22 +73,25 @@ Feature: Messages
     And I am logged in
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
-    And the Messages Inbox page is displayed
-    And the senders and latest messages are displayed on the Messages Inbox page
-    And I click on a sender in the Messages Inbox
-    Then the Messages page is displayed
+    And the Message Senders page is displayed
+    And the senders are displayed on the Messages Inbox page
+    And I click on Sender One sender
+    Then the Sender Messages page is displayed
+    When I click on message 1 message on the Sender Messages page
+    Then the Message page is displayed
     When I click on the '/more' link in the message
     Then the More page for mobile devices is displayed
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
-    And the Messages Inbox page is displayed
-    And the senders and latest messages are displayed on the Messages Inbox page
-    And I click on a sender in the Messages Inbox
-    Then the Messages page is displayed
+    And the Message Senders page is displayed
+    And I click on Sender One sender
+    Then the Sender Messages page is displayed
+    When I click on message 2 message on the Sender Messages page
+    Then the Message page is displayed
     When I click on the '/appointments/gp-appointments/booking' link in the message
     Then the Available Appointments page is displayed
     When I click the 'Back' breadcrumb
-    Then the Messages page is displayed
+    Then the Message page is displayed
 
   Scenario: A user can see their plain text messages and follow an external link
     Given I am using the native app user agent
@@ -96,12 +102,18 @@ Feature: Messages
     And I am logged in
     When I follow the Messages link from the home page
     And I click the App Messages link on the messages hub page
-    And the Messages Inbox page is displayed
-    And the senders and latest messages are displayed on the Messages Inbox page
-    And I click on a sender in the Messages Inbox
-    Then the Messages page is displayed
+    And the Message Senders page is displayed
+    And the senders are displayed on the Messages Inbox page
+    And I click on Sender One sender
+    Then the Sender Messages page is displayed
+    When I click on message 1 message on the Sender Messages page
+    Then the Message page is displayed
     When I click the link called 'http://stubs.local.bitraft.io:8080/external/111/home' with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
     Then a new tab has been opened by the link
+    When I click the 'Back' breadcrumb
+    Then the Sender Messages page is displayed
+    When I click on message 2 message on the Sender Messages page
+    Then the Message page is displayed
     When I click the link called 'stubs.local.bitraft.io:8080/external/111/home' with a url of 'https://stubs.local.bitraft.io:8080/external/111/home'
     Then a new tab has been opened by the link
 
@@ -112,10 +124,12 @@ Feature: Messages
     And I am logged in
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
-    And the Messages Inbox page is displayed
-    And the senders and latest messages are displayed on the Messages Inbox page
-    And I click on a sender in the Messages Inbox
-    Then the Messages page is displayed
+    And the Message Senders page is displayed
+    And the senders are displayed on the Messages Inbox page
+    And I click on Sender One sender
+    Then the Sender Messages page is displayed
+    When I click on message 1 message on the Sender Messages page
+    Then the Message page is displayed
     And the email address 'email@address.com' is identified as a link in the message
 
   Scenario: A user can see their markdown messages and follow some external links
@@ -127,12 +141,18 @@ Feature: Messages
     And I am logged in
     When I follow the Messages link from the home page
     And I click the App Messages link on the messages hub page
-    And the Messages Inbox page is displayed
-    And the senders and latest messages are displayed on the Messages Inbox page
-    And I click on a sender in the Messages Inbox
-    Then the Messages page is displayed
+    And the Message Senders page is displayed
+    And the senders are displayed on the Messages Inbox page
+    And I click on Sender One sender
+    Then the Sender Messages page is displayed
+    When I click on message 1 message on the Sender Messages page
+    Then the Message page is displayed
     When I click the link called 'http://stubs.local.bitraft.io:8080/external/111/home' with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
     Then a new tab has been opened by the link
+    When I click the 'Back' breadcrumb
+    Then the Sender Messages page is displayed
+    When I click on message 2 message on the Sender Messages page
+    Then the Message page is displayed
     When I click the link called 'stubs.local.bitraft.io:8080/external/111/home' with a url of 'https://stubs.local.bitraft.io:8080/external/111/home'
     Then a new tab has been opened by the link
 
@@ -143,10 +163,12 @@ Feature: Messages
     And I am logged in
     When I follow the Messages link from the home page
     And I click the App Messages link on the messages hub page
-    And the Messages Inbox page is displayed
-    And the senders and latest messages are displayed on the Messages Inbox page
-    And I click on a sender in the Messages Inbox
-    Then the Messages page is displayed
+    And the Message Senders page is displayed
+    And the senders are displayed on the Messages Inbox page
+    And I click on Sender One sender
+    Then the Sender Messages page is displayed
+    When I click on message 1 message on the Sender Messages page
+    Then the Message page is displayed
     When I click the internal link called 'pkb.stubs.local.bitraft.io' with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Fauth%252FgetInbox.action%253Ftab%253Dmessages'
     Then I am redirected to the redirector page with the header 'Messages and online consultations'
 
@@ -157,10 +179,12 @@ Feature: Messages
     And I am logged in
     When I follow the Messages link from the home page
     And I click the App Messages link on the messages hub page
-    And the Messages Inbox page is displayed
-    And the senders and latest messages are displayed on the Messages Inbox page
-    And I click on a sender in the Messages Inbox
-    Then the Messages page is displayed
+    And the Message Senders page is displayed
+    And the senders are displayed on the Messages Inbox page
+    And I click on Sender One sender
+    Then the Sender Messages page is displayed
+    When I click on message 1 message on the Sender Messages page
+    Then the Message page is displayed
     When I click the internal link called 'More' with a url of '/more'
     Then the More page for mobile devices is displayed
 
@@ -171,10 +195,12 @@ Feature: Messages
     And I am logged in
     When I follow the Messages link from the home page
     And I click the App Messages link on the messages hub page
-    And the Messages Inbox page is displayed
-    And the senders and latest messages are displayed on the Messages Inbox page
-    And I click on a sender in the Messages Inbox
-    Then the Messages page is displayed
+    And the Message Senders page is displayed
+    And the senders are displayed on the Messages Inbox page
+    And I click on Sender One sender
+    Then the Sender Messages page is displayed
+    When I click on message 1 message on the Sender Messages page
+    Then the Message page is displayed
     And the email address 'email1@address.com' is identified as a link in the message
 
   Scenario: A user can see their messages and follow an incorrect internal link
@@ -185,10 +211,12 @@ Feature: Messages
     And I am logged in
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
-    And the Messages Inbox page is displayed
-    And the senders and latest messages are displayed on the Messages Inbox page
-    And I click on a sender in the Messages Inbox
-    Then the Messages page is displayed
+    And the Message Senders page is displayed
+    And the senders are displayed on the Messages Inbox page
+    And I click on Sender One sender
+    Then the Sender Messages page is displayed
+    When I click on message 1 message on the Sender Messages page
+    Then the Message page is displayed
     When I click on the '/appointments/sausages' link in the message
     Then the Page not found error is displayed
     When I click the error '111.nhs.uk' link with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
@@ -200,7 +228,7 @@ Feature: Messages
     And I am logged in
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
-    And the Messages Inbox page is displayed
+    And the Message Senders page is displayed
     And a message is displayed indicating that there are no messages in the Messages Inbox
 
   Scenario: A user with messages disabled in service journey rules cannot see their messages
@@ -219,46 +247,65 @@ Feature: Messages
       | /messages/app-messaging/app-message?source=ios  |
       | /messages/app-messaging/app-message?source=android  |
 
-  Scenario: A user getting their summary messages when an internal server error occurs sees an error and can try again
+  Scenario: A user getting their message senders when a server error occurs sees an error and can try again
     Given I am using the native app user agent
-    And I am a user wishing to view my messages but retrieving the messages will cause an internal server error
+    And I am a user wishing to view my messages
     And I am logged in
     When I navigate to the Messages Hub page
+    And retrieving the messages will cause a server error
     And I click the App Messages link on the messages hub page
-    And an error with a retry button is displayed indicating that there was a problem getting messages
-    And the messages in the repository can be retrieved successfully
+    Then an error is displayed indicating that there was a problem getting messages
+    When the messages can be retrieved successfully
     And I click the 'Try again' button
-    Then the Messages Inbox page is displayed
+    Then the Message Senders page is displayed
 
-  Scenario: A user getting messages from a sender when an internal server error occurs sees an error and can try again
+  Scenario: A user getting messages from a sender when a server error occurs sees an error and can try again
     Given I am using the native app user agent
     And I am a user wishing to view my messages
     And I am logged in
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
-    And the senders and latest messages are displayed on the Messages Inbox page
-    And retrieving the messages from the repository will cause an internal server error
-    And I click on a sender in the Messages Inbox
-    Then an error with a retry button is displayed indicating that there was a problem getting messages from the sender
-    When the messages in the repository can be retrieved successfully
+    Then the senders are displayed on the Messages Inbox page
+    When retrieving the messages will cause a server error
+    And I click on Sender One sender
+    Then an error is displayed indicating that there was a problem getting messages
+    When the messages can be retrieved successfully
     And I click the 'Try again' button
-    Then the Messages page is displayed
+    Then the Sender Messages page is displayed
     And my messages from the sender are displayed
+
+  Scenario: A user getting a message when a server error occurs sees an error and can try again
+    Given I am using the native app user agent
+    And I am a user wishing to view my messages
+    And I am logged in
+    When I navigate to the Messages Hub page
+    And I click the App Messages link on the messages hub page
+    Then the senders are displayed on the Messages Inbox page
+    When I click on Sender One sender
+    Then the Sender Messages page is displayed
+    When retrieving the messages will cause a server error
+    And I click on a message on the Sender Messages page
+    Then an error is displayed indicating that there was a problem getting a message
+    When the messages can be retrieved successfully
+    And I click the 'Try again' button
+    Then the Message page is displayed
 
   Scenario: A desktop user can see back links on the app messages journey
     Given I am a user wishing to view my messages
     And I am logged in
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
-    And the Messages Inbox page is displayed
-    And the Back link on the Messages Inbox page is displayed
-    And I click on a sender in the Messages Inbox
-    Then the Messages page is displayed
-    And the Back link on the App Messages page is displayed
-    And I click on the Back link on the App Messages page
-    And the Messages Inbox page is displayed
-    And I click on the Back link on the Messages Inbox page
-    And the Messages Hub page is displayed
+    And the Message Senders page is displayed
+    And I click on Sender One sender
+    Then the Sender Messages page is displayed
+    When I click on a message on the Sender Messages page
+    Then the Message page is displayed
+    When I click the Back link
+    Then the Sender Messages page is displayed
+    When I click the Back link
+    Then the Message Senders page is displayed
+    When I click the Back link
+    Then the Messages Hub page is displayed
 
   Scenario: A native user cannot see back links on the app messages journey
     Given I am using the native app user agent
@@ -266,8 +313,11 @@ Feature: Messages
     And I am logged in
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
-    And the Messages Inbox page is displayed
-    And the Back link is not shown on the Messages Inbox page
-    And I click on a sender in the Messages Inbox
-    Then the Messages page is displayed
-    And the Back link is not shown on the Messages page
+    Then the Message Senders page is displayed
+    And I can't see the Back link
+    When I click on Sender One sender
+    Then the Sender Messages page is displayed
+    And I can't see the Back link
+    When I click on a message on the Sender Messages page
+    Then the Message page is displayed
+    And I can't see the Back link

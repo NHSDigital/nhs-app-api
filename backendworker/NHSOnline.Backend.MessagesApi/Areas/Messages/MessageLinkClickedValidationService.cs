@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
 using NHSOnline.Backend.Support;

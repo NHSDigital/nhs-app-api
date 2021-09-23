@@ -124,7 +124,11 @@ open class HybridPageObject : PageObject() {
     }
 
     fun clickOnBackLink() {
-        getElement("//a[@data-purpose='main-back-button']").click()
+        getBackLink().click()
+    }
+
+    fun getBackLink(): HybridPageElement {
+        return getElement("//a[@data-purpose='main-back-button']")
     }
 
     fun WebElementFacade.getTextWithoutUnicodeSuffix(): String{

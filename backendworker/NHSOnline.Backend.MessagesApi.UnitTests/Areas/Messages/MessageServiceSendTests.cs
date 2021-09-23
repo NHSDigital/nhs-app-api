@@ -36,9 +36,10 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
 
             _systemUnderTest = new MessageService(
                 _mockMessageRepository.Object,
-                new Mock<ILogger<MessagesController>>().Object,
-                new Mock<IMapper<List<UserMessage>, MessagesResponse>>().Object,
-                new Mock<IMapper<List<SummaryMessage>, MessagesResponse>>().Object,
+                new Mock<ILogger<MessageService>>().Object,
+                new Mock<IMapper<List<UserMessage>, MessagesResponse>>(MockBehavior.Strict).Object,
+                new Mock<IMapper<UserMessage, MessagesResponse>>(MockBehavior.Strict).Object,
+                new Mock<IMapper<List<SummaryMessage>, MessagesResponse>>(MockBehavior.Strict).Object,
                 _mockAddMessageToUserMessageMapper.Object,
                 _mockMessagesValidationService.Object);
         }

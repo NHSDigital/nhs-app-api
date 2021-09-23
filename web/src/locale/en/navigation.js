@@ -32,6 +32,7 @@ export default {
     gpMessages: 'GP surgery messages',
     gpMessagesViewDetails: 'Your conversation',
     healthAndInformationUpdates: 'Health information and updates',
+    senderList: 'Sender list',
     home: 'Home',
     legalAndCookies: 'Legal and cookies',
     messages: 'Messages',

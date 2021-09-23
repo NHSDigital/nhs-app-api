@@ -8,8 +8,6 @@ import {
   DOCUMENTS_PATH,
   GP_MEDICAL_RECORD_PATH,
   HEALTH_RECORDS_PATH,
-  HEALTH_INFORMATION_UPDATES_PATH,
-  HEALTH_INFORMATION_UPDATES_MESSAGES_PATH,
   MORE_ACCOUNTANDSETTINGS_PATH,
   MORE_ACCOUNTANDSETTINGS_MANAGENOTIFICATIONS_PATH,
   NOMINATED_PHARMACY_CONFIRM_PATH,
@@ -85,19 +83,6 @@ export default {
       redirectUrl: {
         default: HEALTH_RECORDS_PATH,
       },
-    },
-    {
-      route: HEALTH_INFORMATION_UPDATES_PATH,
-      redirectUrl: {
-        default: HEALTH_INFORMATION_UPDATES_PATH,
-      },
-    },
-    {
-      route: HEALTH_INFORMATION_UPDATES_MESSAGES_PATH,
-      redirectUrl: {
-        default: HEALTH_INFORMATION_UPDATES_MESSAGES_PATH,
-      },
-      additionalInfoComponent: 'MessagesSenderError',
     },
     {
       route: DOCUMENT_PATH,

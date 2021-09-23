@@ -13,6 +13,7 @@ import GpMessagesDeletePage from '@/pages/messages/gp-messages/delete';
 import GpMessagesDeleteSuccessPage from '@/pages/messages/gp-messages/delete-success';
 import AppMessagingPage from '@/pages/messages/app-messaging';
 import AppMessagingMessagePage from '@/pages/messages/app-messaging/app-message';
+import AppMessagingSenderMessagesPage from '@/pages/messages/app-messaging/sender-messages';
 
 import breadcrumbs from '@/breadcrumbs/messages';
 import {
@@ -28,7 +29,8 @@ import {
   GP_MESSAGES_DELETE_PATH,
   GP_MESSAGES_DELETE_SUCCESS_PATH,
   HEALTH_INFORMATION_UPDATES_PATH,
-  HEALTH_INFORMATION_UPDATES_MESSAGES_PATH,
+  HEALTH_INFORMATION_UPDATES_MESSAGE_PATH,
+  HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH,
 } from '@/router/paths';
 import {
   MESSAGES_NAME,
@@ -43,7 +45,8 @@ import {
   GP_MESSAGES_DELETE_NAME,
   GP_MESSAGES_DELETE_SUCCESS_NAME,
   HEALTH_INFORMATION_UPDATES_NAME,
-  HEALTH_INFORMATION_UPDATES_MESSAGES_NAME,
+  HEALTH_INFORMATION_UPDATES_MESSAGE_NAME,
+  HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_NAME,
 } from '@/router/names';
 import { LINKED_PROFILES_SHUTTER_MESSAGES } from '@/router/routes/linked-profiles';
 import { MESSAGES_MENU_ITEM } from '@/middleware/nativeNavigation';
@@ -305,13 +308,27 @@ export const HEALTH_INFORMATION_UPDATES = {
   },
 };
 
-export const HEALTH_INFORMATION_UPDATES_MESSAGES = {
-  path: HEALTH_INFORMATION_UPDATES_MESSAGES_PATH,
-  name: HEALTH_INFORMATION_UPDATES_MESSAGES_NAME,
+export const HEALTH_INFORMATION_UPDATES_MESSAGE = {
+  path: HEALTH_INFORMATION_UPDATES_MESSAGE_PATH,
+  name: HEALTH_INFORMATION_UPDATES_MESSAGE_NAME,
   component: AppMessagingMessagePage,
   meta: {
     titleKey: 'navigation.pages.titles.healthAndInformationUpdates',
-    crumb: breadcrumbs.HEALTH_INFORMATION_UPDATES_MESSAGES_CRUMB,
+    crumb: breadcrumbs.HEALTH_INFORMATION_UPDATES_MESSAGE_CRUMB,
+    helpPath: MESSAGING_HELP_PATH,
+    proofLevel: proofLevel.P5,
+    sjrRedirectRules: [sjrRedirectRules.messagingDisabledRedirect],
+    nativeNavigation: MESSAGES_MENU_ITEM,
+  },
+};
+
+export const HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES = {
+  path: HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH,
+  name: HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_NAME,
+  component: AppMessagingSenderMessagesPage,
+  meta: {
+    titleKey: 'navigation.pages.titles.healthAndInformationUpdates',
+    crumb: breadcrumbs.HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_CRUMB,
     helpPath: MESSAGING_HELP_PATH,
     proofLevel: proofLevel.P5,
     sjrRedirectRules: [sjrRedirectRules.messagingDisabledRedirect],
@@ -332,5 +349,6 @@ export default [
   GP_MESSAGES_DELETE,
   GP_MESSAGES_DELETE_SUCCESS,
   HEALTH_INFORMATION_UPDATES,
-  HEALTH_INFORMATION_UPDATES_MESSAGES,
+  HEALTH_INFORMATION_UPDATES_MESSAGE,
+  HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES,
 ];

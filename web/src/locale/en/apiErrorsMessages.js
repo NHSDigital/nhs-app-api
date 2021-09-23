@@ -36,36 +36,4 @@ export default {
       retryButtonText: 'Try again',
     },
   },
-  app_messaging: {
-    500: {
-      pageTitle: 'Messages error',
-      pageHeader: 'Messages error',
-      header: 'There is a problem getting your messages',
-      message: 'Try again now.',
-      retryButtonText: 'Try again',
-    },
-    502: {
-      pageTitle: 'Messages error',
-      pageHeader: 'Messages error',
-      header: 'There is a problem getting your messages',
-      message: 'Try again now.',
-      retryButtonText: 'Try again',
-    },
-    app_message: {
-      500: {
-        pageTitle: 'Messages error',
-        pageHeader: 'Messages error',
-        header: 'There is a problem getting your messages',
-        message: 'Try again now.',
-        retryButtonText: 'Try again',
-      },
-      502: {
-        pageTitle: 'Messages error',
-        pageHeader: 'Messages error',
-        header: 'There is a problem getting your messages',
-        message: 'Try again now.',
-        retryButtonText: 'Try again',
-      },
-    },
-  },
 };

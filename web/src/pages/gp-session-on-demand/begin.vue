@@ -48,7 +48,7 @@ export default {
       return;
     }
 
-    EventBus.$emit(UPDATE_TITLE, this.$t('navigation.pages.titles.pageLoading'));
+    EventBus.$emit(UPDATE_TITLE, 'navigation.pages.titles.pageLoading');
     const { gpSessionConnectUrl } = authorisationService.generateGpSessionUrl({
       redirectTo,
       cookies,

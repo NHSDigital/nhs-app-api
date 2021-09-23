@@ -101,7 +101,6 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
         }
 
         [HttpGet]
-        [UserProfile]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("api/me/messages/{messageId}")]
         public async Task<IActionResult> GetMessage([FromRoute] string messageId)
@@ -117,6 +116,30 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             catch (Exception e)
             {
                 _logger.LogError(e, "Failed to get message with exception");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Route("api/me/messages/senders")]
+        public async Task<IActionResult> GetSenders()
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                var result = await _messageService.GetSenders(_accessTokenProvider.AccessToken);
+
+                return result.Accept(new SendersResultVisitor());
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to get senders with exception");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
             finally
