@@ -20,15 +20,14 @@
     <AndroidManifest>Properties\AndroidManifest.generated.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
     <TargetFrameworkVersion>v11.0</TargetFrameworkVersion>
     <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <Environment>$(Configuration.Split('-')[0].Trim())</Environment>
-    <DebugMode>$(Configuration.Split('-')[1].Trim())</DebugMode>
+    <Environment Condition="  $(Configuration.Contains('-'))  ">$(Configuration.Split('-')[0].Trim())</Environment>
+    <DebugMode Condition="  $(Configuration.Contains('-'))  ">$(Configuration.Split('-')[1].Trim())</DebugMode>
     <GoogleServicesFile>Configuration/Production/google-services.json</GoogleServicesFile>
     <NhsAppScheme>nhsapp</NhsAppScheme>
     <NhsAppAuthRedirectPath>/auth-return</NhsAppAuthRedirectPath>
@@ -219,7 +218,7 @@
       <Name>NHSOnline.App.Threading</Name>
     </ProjectReference>
     <ProjectReference Include="..\NHSOnline.App\NHSOnline.App.csproj">
-      <Project>{E4B18CE6-D1B1-44F7-86F3-7DEAFDF47E31}</Project>
+      <Project>{61B85797-E631-4EC3-A3CC-6B8DB92A9B01}</Project>
       <Name>NHSOnline.App</Name>
     </ProjectReference>
   </ItemGroup>

@@ -24,8 +24,8 @@
     <MtouchEnableSGenConc>true</MtouchEnableSGenConc>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <ProvisioningType>automatic</ProvisioningType>
-    <Environment>$(Configuration.Split('-')[0].Trim())</Environment>
-    <DebugMode>$(Configuration.Split('-')[1].Trim())</DebugMode>
+    <Environment Condition="  $(Configuration.Contains('-'))  ">$(Configuration.Split('-')[0].Trim())</Environment>
+    <DebugMode Condition="  $(Configuration.Contains('-'))  ">$(Configuration.Split('-')[1].Trim())</DebugMode>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
