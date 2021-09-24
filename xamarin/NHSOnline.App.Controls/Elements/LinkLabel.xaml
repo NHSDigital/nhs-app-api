@@ -4,10 +4,13 @@
              xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
              xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
              xmlns:responsive="clr-namespace:NHSOnline.App.Controls.MarkupExtensions.Responsive;assembly=NHSOnline.App.Controls"
+             xmlns:valueConverters="clr-namespace:NHSOnline.App.Controls.ValueConverters;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Controls.Elements.LinkLabel"
              x:Name="Root">
 
     <ContentView.Resources>
+        <valueConverters:FallbackMultiBindingConverter x:Key="FallbackMultiBindingConverter" />
+        
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
@@ -22,14 +25,13 @@
                 <Setter Property="Margin" Value="0,0,0,24" />
             </Style>
 
-            <Style TargetType="Label" CanCascade="True">
+            <Style Class="LinkLabel" TargetType="Label" CanCascade="True">
                 <Setter Property="FontSize" Value="{responsive:NhsFontSize Medium}" />
                 <Setter Property="Padding" Value="0,2" />
                 <Setter Property="TextColor" Value="{Binding LabelTextColour, Source={x:Reference Name=Root}}" />
-                <Setter Property="TextDecorations"
-                        Value="{Binding LabelTextDecoration, Source={x:Reference Name=Root}}" />
+                <Setter Property="TextDecorations" Value="{Binding LabelTextDecoration, Source={x:Reference Name=Root}}" />
             </Style>
-
+ 
             <Style x:Key="LabelWide" TargetType="Label" CanCascade="True">
                 <Setter Property="FontSize" Value="{responsive:NhsFontSize Large}" />
             </Style>
@@ -38,7 +40,6 @@
                 <Setter Property="BackgroundColor" Value="Transparent" />
                 <Setter Property="HeightRequest" Value="5" />
             </Style>
-
         </ResourceDictionary>
     </ContentView.Resources>
 
@@ -56,27 +57,29 @@
     </VisualStateManager.VisualStateGroups>
 
     <controls:AccessibileStackLayout x:Name="StackLayout"
-                                     AutomationProperties.Name="{Binding Text, Source={x:Reference Name=Root}}"
                                      effects:AccessibilityEffect.ControlType="Link">
-
+        <AutomationProperties.Name>
+            <MultiBinding Converter="{StaticResource FallbackMultiBindingConverter}">
+                <Binding Path="AccessibleText" Source="{x:Reference Name=Root}" />
+                <Binding Path="Text" Source="{x:Reference Name=Root}" />
+            </MultiBinding>
+        </AutomationProperties.Name>
+        
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="KeyboardFocusStates">
                 <VisualState x:Name="KeyboardUnfocused" />
                 <VisualState x:Name="KeyboardFocused">
                     <VisualState.Setters>
-                        <Setter TargetName="BoxView" Property="StackLayout.BackgroundColor"
-                                Value="{StaticResource NhsUkPrimaryText}" />
-                        <Setter TargetName="Label" Property="Label.BackgroundColor"
-                                Value="{StaticResource NhsUkYellow}" />
-                        <Setter TargetName="Label" Property="Label.TextColor"
-                                Value="{StaticResource NhsUkPrimaryText}" />
+                        <Setter TargetName="BoxView" Property="StackLayout.BackgroundColor" Value="{StaticResource NhsUkPrimaryText}" />
+                        <Setter TargetName="Label" Property="Label.BackgroundColor" Value="{StaticResource NhsUkYellow}" />
+                        <Setter TargetName="Label" Property="Label.TextColor" Value="{StaticResource NhsUkPrimaryText}" />
                         <Setter TargetName="Label" Property="Label.TextDecorations" Value="None" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <Label x:Name="Label" Text="{Binding Text, Source={x:Reference Name=Root}}" />
+        <Label StyleClass="LinkLabel" x:Name="Label" Text="{Binding Text, Source={x:Reference Name=Root}}" />
         <BoxView x:Name="BoxView" StyleClass="FocusUnderLine" />
 
         <controls:AccessibileStackLayout.GestureRecognizers>

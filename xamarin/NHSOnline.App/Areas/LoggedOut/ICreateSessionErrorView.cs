@@ -7,7 +7,6 @@ namespace NHSOnline.App.Areas.LoggedOut
     internal interface ICreateSessionErrorView: INavigationView<ICreateSessionErrorView.IEvents>
     {
         string ServiceDeskReference { get; set; }
-        string AccessibleServiceDeskReference { get; set; }
 
         internal interface IEvents
         {

@@ -18,20 +18,12 @@
                 <StackLayout>
                     <elements:Paragraph Text="We cannot log you in to the NHS App." />
                     <elements:Paragraph Text="Go back to the home screen and try logging in again." />
-                    <elements:ErrorCodeParagraph
-                        LeadInText="If you keep seeing this message, contact us. Quote the error code "
-                        BoldText="{Binding ServiceDeskReference, Source={x:Reference Name=Page}}"
-                        AccessibleBoldTextLabel="{Binding AccessibleServiceDeskReference, Source={x:Reference Name=Page}}"
-                        LeadOutText=" to help us resolve the problem more quickly." />
-                    <elements:Paragraph>
-                        <FormattedString>
-                            <Span Text="If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to " />
-                            <elements:LinkSpan Text="111.nhs.uk"
-                                               Tapped="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
-                            <Span Text=" or call 111." />
-                        </FormattedString>
-                    </elements:Paragraph>
-                    <elements:LinkLabel Text="Contact us" Command="{Binding ContactUsCommand, Source={x:Reference Name=Page}}" />
+                    <elements:Paragraph Text="If you need to book an appointment or get a prescription now, contact your GP surgery directly." />
+                    <elements:Paragraph Text="For urgent medical advice, use NHS 111 online or call 111." />
+                    <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
+                    <elements:LinkLabelWithErrorCode Text="Contact us if you keep seeing this message, quoting error code"
+                                                     ErrorCode="{Binding ServiceDeskReference, Source={x:Reference Name=Page}}"
+                                                     Command="{Binding ContactUsCommand, Source={x:Reference Name=Page}}" />
                     <elements:LinkLabel Text="Back to home" Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />
                 </StackLayout>
             </panels:NhsErrorCallout>

@@ -34,7 +34,6 @@
             <Style x:Key="LabelWide" TargetType="Label" CanCascade="True">
                 <Setter Property="FontSize" Value="{responsive:NhsFontSize Large}" />
                 <Setter Property="Padding" Value="0,0,0,24" />
-
             </Style>
         </ResourceDictionary>
     </View.Resources>

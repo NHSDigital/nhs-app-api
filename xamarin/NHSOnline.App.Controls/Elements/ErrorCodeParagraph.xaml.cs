@@ -15,9 +15,6 @@ namespace NHSOnline.App.Controls.Elements
         public static readonly BindableProperty BoldTextProperty =
             BindableProperty.Create(nameof(BoldText), typeof(string), typeof(ErrorCodeParagraph));
 
-        public static readonly BindableProperty AccessibleBoldTextLabelProperty =
-            BindableProperty.Create(nameof(AccessibleBoldTextLabelProperty), typeof(string), typeof(ErrorCodeParagraph));
-
         public static readonly BindableProperty LeadOutTextProperty =
             BindableProperty.Create(nameof(LeadOutText), typeof(string), typeof(ErrorCodeParagraph));
 
@@ -42,12 +39,6 @@ namespace NHSOnline.App.Controls.Elements
         {
             get => (string) GetValue(BoldTextProperty);
             set => SetValue(BoldTextProperty, value);
-        }
-
-        public string AccessibleBoldTextLabel
-        {
-            get => (string) GetValue(AccessibleBoldTextLabelProperty);
-            set => SetValue(AccessibleBoldTextLabelProperty, value);
         }
 
         public string LeadOutText

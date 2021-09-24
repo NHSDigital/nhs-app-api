@@ -85,10 +85,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
                 .AssertOnPage(driver)
                 .UpliftTsAndCsDeclined();
 
-            AndroidAcceptNhsTermsOfUsePage
+            AndroidNeedToAcceptNhsTermsOfUsePage
                 .AssertOnPage(driver)
                 .AssertPageContent()
-                .BackToHome();
+                .BackToLogin();
 
             AndroidLoggedOutHomePage
                 .AssertOnPage(driver);
@@ -113,10 +113,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
                 .AssertOnPage(driver)
                 .UpliftTsAndCsDeclined();
 
-            IOSAcceptNhsTermsOfUsePage
+            IOSNeedToAcceptNhsTermsOfUsePage
                 .AssertOnPage(driver)
                 .AssertPageContent()
-                .BackToHome();
+                .BackToLogin();
 
             IOSLoggedOutHomePage
                 .AssertOnPage(driver);

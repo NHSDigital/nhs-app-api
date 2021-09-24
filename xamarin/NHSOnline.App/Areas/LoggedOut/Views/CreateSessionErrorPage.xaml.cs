@@ -15,9 +15,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public static readonly BindableProperty ServiceDeskReferenceProperty
             = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(CreateSessionErrorPage), "3h");
 
-        public static readonly BindableProperty AccessibleServiceDeskReferenceProperty
-            = BindableProperty.Create(nameof(AccessibleServiceDeskReference), typeof(string), typeof(CreateSessionErrorPage), "3 h");
-
         private readonly ILogger _logger;
         private readonly AppNavigation<ICreateSessionErrorView.IEvents> _appNavigation;
 
@@ -35,12 +32,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         {
             get => (string)GetValue(ServiceDeskReferenceProperty);
             set => SetValue(ServiceDeskReferenceProperty, value);
-        }
-
-        public string AccessibleServiceDeskReference
-        {
-            get => (string) GetValue(AccessibleServiceDeskReferenceProperty);
-            set => SetValue(AccessibleServiceDeskReferenceProperty, value);
         }
 
         public Func<Task>? OneOneOneRequested { get; set; }

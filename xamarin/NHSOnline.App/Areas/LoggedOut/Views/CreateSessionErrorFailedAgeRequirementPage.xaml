@@ -16,13 +16,9 @@
 
             <panels:NhsErrorCallout LabelText="Error">
                 <StackLayout>
-                    <elements:Paragraph>
-                        <FormattedString>
-                            <Span Text="Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services. For urgent medical advice, go to " />
-                            <elements:LinkSpan Text="111.nhs.uk" Tapped="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
-                            <Span Text=" or call 111." />
-                        </FormattedString>
-                    </elements:Paragraph>
+                    <elements:Paragraph Text="Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services." />
+                    <elements:Paragraph Text="For urgent medical advice, use NHS 111 online or call 111." />
+                    <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
                 </StackLayout>
             </panels:NhsErrorCallout>
 

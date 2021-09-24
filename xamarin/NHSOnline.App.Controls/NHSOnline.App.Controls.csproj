@@ -106,10 +106,6 @@
       <DependentUpon>Expander.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Elements\LinkSpan.xaml.cs">
-      <DependentUpon>LinkSpan.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Components\NhsWarningCallout.xaml.cs">
       <DependentUpon>NhsWarningCallout.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -194,6 +190,13 @@
       <DependentUpon>FileDownloadFailureError.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Elements\LinkLabelWithErrorCode.xaml.cs">
+      <DependentUpon>LinkLabelWithErrorCode.xaml</DependentUpon>     
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Elements\Deprecated\LinkSpan.xaml.cs">
+      <DependentUpon>LinkSpan.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
-
 </Project>

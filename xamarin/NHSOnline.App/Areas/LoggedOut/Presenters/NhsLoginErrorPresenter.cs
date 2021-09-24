@@ -33,7 +33,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _externalServicesConfiguration = externalServicesConfiguration;
 
             _view.ServiceDeskReference = model.ServiceDeskReference;
-            _view.AccessibleServiceDeskReference = model.AccessibleServiceDeskReference;
 
             _view.AppNavigation
                 .RegisterHandler(ViewOnBackHomeRequested, (view, handler) => view.BackHomeRequested = handler)

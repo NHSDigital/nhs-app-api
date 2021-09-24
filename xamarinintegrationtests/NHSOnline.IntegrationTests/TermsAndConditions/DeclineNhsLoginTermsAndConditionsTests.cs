@@ -34,9 +34,13 @@ namespace NHSOnline.IntegrationTests.TermsAndConditions
                 .AssertOnPage(driver)
                 .PageContent.DeclineTermsAndConditions();
 
-            AndroidAcceptNhsTermsOfUsePage
+            AndroidNeedToAcceptNhsTermsOfUsePage
                 .AssertOnPage(driver)
-                .AssertPageContent();
+                .AssertPageContent()
+                .BackToLogin();
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver);
         }
 
         [NhsAppIOSTest]
@@ -62,9 +66,13 @@ namespace NHSOnline.IntegrationTests.TermsAndConditions
                 .AssertOnPage(driver)
                 .PageContent.DeclineTermsAndConditions();
 
-            IOSAcceptNhsTermsOfUsePage
+            IOSNeedToAcceptNhsTermsOfUsePage
                 .AssertOnPage(driver)
-                .AssertPageContent();
+                .AssertPageContent()
+                .BackToLogin();
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver);
         }
     }
 }

@@ -11,30 +11,63 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
     public sealed class IOSLink
     {
         private readonly IIOSInteractor _interactor;
-        private readonly string _text;
+        private readonly IIOSLocatorStrategy _locatorStrategy;
 
-        private IOSLink(IIOSInteractor interactor, string text)
+        private IOSLink(IIOSInteractor interactor, IIOSLocatorStrategy locatorStrategy)
         {
             _interactor = interactor;
-            _text = text;
+            _locatorStrategy = locatorStrategy;
         }
 
         public static IOSLink WithText(IIOSInteractor interactor, string text)
-            => new IOSLink(interactor, text);
+            => new IOSLink(interactor, new TextLocatorStrategy(interactor, text));
 
-        public void AssertVisible()
-            => ActOnElement(e => e.Displayed.Should().BeTrue($"A link with text '{_text}' should be displayed"));
+        public static IOSLink WhichMatches(IIOSInteractor interactor, string pattern)
+            => new IOSLink(interactor, new MatchesLocatorStrategy(interactor, pattern));
 
-        public void Touch()
-            => ActOnElementContext(context => context.Tap());
+        public void AssertVisible() => _locatorStrategy.ActOnElementContext(
+            context => context.Element.Displayed.Should().BeTrue($"a link with text  {_locatorStrategy.Description} should be displayed"));
 
-        private void ActOnElementContext(Action<ElementContext<IIOSBrowserStackDriver, IOSElement>> action)
-            => _interactor.ActOnElementContext(FindBy, action);
+        public void Touch() => _interactor.ActOnElementContext(_locatorStrategy.FindBy, context=>context.Tap());
 
-        private void ActOnElement(Action<IOSElement> action)
-            => _interactor.ActOnElement(FindBy, action);
+        private sealed class TextLocatorStrategy : IIOSLocatorStrategy
+        {
+            private readonly IIOSInteractor _interactor;
+            private readonly string _text;
 
-        private By FindBy
-            => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeLink' AND label == {_text.QuotePredicateLiteral()}");
+            public TextLocatorStrategy(IIOSInteractor interactor, string text)
+            {
+                _interactor = interactor;
+                _text = text;
+            }
+
+            public string Description => $"with text '{_text}'";
+
+            public By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeLink' AND label == {_text.QuotePredicateLiteral()}");
+
+            public void ActOnElementContext(Action<ElementContext<IIOSBrowserStackDriver, IOSElement>> action) => _interactor.ActOnElementContext(FindBy, action);
+            public void AssertCannotBeFound(string because) => _interactor.AssertElementCannotBeFound(FindBy, because);
+        }
+
+        private sealed class MatchesLocatorStrategy : IIOSLocatorStrategy
+        {
+            private readonly IIOSInteractor _interactor;
+            private readonly string _pattern;
+
+            public MatchesLocatorStrategy(IIOSInteractor interactor, string pattern)
+            {
+                _interactor = interactor;
+                _pattern = pattern;
+            }
+
+            public string Description => $"which matches '{_pattern}'";
+
+            public By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeLink' AND label MATCHES {_pattern.QuotePredicateLiteral()}");
+
+            public void ActOnElementContext(Action<ElementContext<IIOSBrowserStackDriver, IOSElement>> action) => _interactor.ActOnElementContext(FindBy, action);
+            public void AssertCannotBeFound(string because) => _interactor.AssertElementCannotBeFound(FindBy, because);
+        }
+
+
     }
 }

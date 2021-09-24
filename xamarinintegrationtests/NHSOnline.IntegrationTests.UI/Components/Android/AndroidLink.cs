@@ -22,6 +22,9 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
         public static AndroidLink WithContentDescription(IAndroidInteractor interactor, string description)
             => new (interactor, new ContentDescriptionLocatorStrategy(description));
 
+        public static AndroidLink WhichMatches(IAndroidInteractor interactor, string pattern)
+            => new(interactor, new MatchesLocatorStrategy(pattern));
+
         public void AssertVisible()
             => ActOnElement(e => e.Displayed.Should().BeTrue("A link with text {0} should be displayed", _locatorStrategy.Description));
 
@@ -52,6 +55,17 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             public string Selector => $"new UiSelector().className(\"android.view.ViewGroup\").descriptionContains({_description.QuoteUiAutomatorLiteral()})";
 
             public string Description => $"{_description}";
+        }
+
+        private sealed class MatchesLocatorStrategy : IAndroidLocatorStrategy
+        {
+            private readonly string _pattern;
+
+            public MatchesLocatorStrategy(string pattern)
+                => _pattern = pattern;
+
+            public string Selector => $"new UiSelector().className(\"android.widget.TextView\").textMatches({_pattern.QuoteUiAutomatorLiteral()})";
+            public string Description => $"which matches '{_pattern}'";
         }
     }
 }

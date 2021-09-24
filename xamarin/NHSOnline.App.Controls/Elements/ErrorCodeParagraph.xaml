@@ -2,6 +2,7 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:responsive="clr-namespace:NHSOnline.App.Controls.MarkupExtensions.Responsive;assembly=NHSOnline.App.Controls"
+             xmlns:valueConverters="clr-namespace:NHSOnline.App.Controls.ValueConverters;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Controls.Elements.ErrorCodeParagraph"
              x:Name="Root">
 
@@ -20,6 +21,8 @@
 
     <View.Resources>
         <ResourceDictionary>
+            <valueConverters:AccessibleErrorCodeConverter x:Key="AccessibleErrorCodeConverter" />
+            
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -46,9 +49,14 @@
                     <FormattedString>
                         <Span Text="{Binding LeadInText, Source={x:Reference Name=Root}}" />
                         <Span Text="{Binding BoldText, Source={x:Reference Name=Root}}"
-                              AutomationProperties.LabeledBy="{Binding AccessibleBoldTextLabel, Source={x:Reference Name=Root}}"
                               FontFamily="Frutiger-Bold"
-                              FontSize="Medium" />
+                              FontSize="Medium" >
+                            <AutomationProperties.LabeledBy>
+                                <Binding Path="BoldText" 
+                                         Source="{x:Reference Name=Root}" 
+                                         Converter="{StaticResource AccessibleErrorCodeConverter}" />
+                            </AutomationProperties.LabeledBy>
+                        </Span>
                         <Span Text="{Binding LeadOutText, Source={x:Reference Name=Root}}" />
                     </FormattedString>
                 </Label.FormattedText>
@@ -59,9 +67,14 @@
                     <FormattedString>
                         <Span Text="{Binding LeadInText, Source={x:Reference Name=Root}}" />
                         <Span Text="{Binding BoldText, Source={x:Reference Name=Root}}"
-                              AutomationProperties.LabeledBy="{Binding AccessibleBoldTextLabel, Source={x:Reference Name=Root}}"
                               FontFamily="Frutiger-Bold"
-                              FontSize="Large" />
+                              FontSize="Large" >
+                            <AutomationProperties.LabeledBy>
+                                <Binding Path="BoldText" 
+                                         Source="{x:Reference Name=Root}" 
+                                         Converter="{StaticResource AccessibleErrorCodeConverter}" />
+                            </AutomationProperties.LabeledBy>
+                        </Span>
                         <Span Text="{Binding LeadOutText, Source={x:Reference Name=Root}}" />
                     </FormattedString>
                 </Label.FormattedText>

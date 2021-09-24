@@ -17,14 +17,9 @@
                 <StackLayout>
                     <elements:Paragraph Text="You cannot use the NHS App if you have not accepted NHS login terms of use." />
                     <elements:Paragraph Text="If you need to book an appointment or get a prescription now, contact your GP surgery directly." />
-                    <elements:Paragraph>
-                        <FormattedString>
-                            <Span Text="For urgent medical advice, visit " />
-                            <elements:LinkSpan Text="111.nhs.uk" Tapped="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
-                            <Span Text=" or call 111." />
-                        </FormattedString>
-                    </elements:Paragraph>
-                    <elements:LinkLabel Text="Back to home" Command="{Binding BackToHomeCommand, Source={x:Reference Name=Page}}" />
+                    <elements:Paragraph Text="For urgent medical advice, use NHS 111 online or call 111." />
+                    <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
+                    <elements:LinkLabel Text="Back to log in" Command="{Binding BackToHomeCommand, Source={x:Reference Name=Page}}" />
                 </StackLayout>
             </panels:ContentPanel>
         </StackLayout>

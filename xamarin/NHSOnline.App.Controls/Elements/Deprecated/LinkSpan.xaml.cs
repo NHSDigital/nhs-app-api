@@ -2,7 +2,7 @@ using System.Windows.Input;
 using NHSOnline.App.Controls.Styles;
 using Xamarin.Forms;
 
-namespace NHSOnline.App.Controls.Elements
+namespace NHSOnline.App.Controls.Elements.Deprecated
 {
     public partial class LinkSpan
     {

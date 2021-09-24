@@ -11,7 +11,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         private AndroidLabel Title => AndroidLabel.WithText(_driver, "Login failed");
 
-        private AndroidLabel DueToLegalRestrictionsText => AndroidLabel.WithText(_driver, "Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services. For urgent medical advice, go to 111.nhs.uk or call 111.");
+        private AndroidLabel DueToLegalRestrictionsText => AndroidLabel.WithText(_driver, "Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services.");
+        private AndroidLabel ForUrgentMedicalAdvice => AndroidLabel.WithText(_driver, "For urgent medical advice, use NHS 111 online or call 111.");
+        private AndroidLink GoTo111Link => AndroidLink.WithContentDescription(_driver, "Go to 111.nhs.uk");
 
         public static AndroidCreateSessionFailedAgeRequirementErrorPage AssertOnPage(IAndroidDriverWrapper driver)
         {
@@ -20,6 +22,11 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             return page;
         }
 
-        public void AssertPageElements() => DueToLegalRestrictionsText.AssertVisible();
+        public void AssertPageElements()
+        {
+            DueToLegalRestrictionsText.AssertVisible();
+            ForUrgentMedicalAdvice.AssertVisible();
+            GoTo111Link.AssertVisible();
+        }
     }
 }

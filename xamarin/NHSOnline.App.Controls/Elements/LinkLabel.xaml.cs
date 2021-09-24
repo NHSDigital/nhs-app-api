@@ -13,6 +13,9 @@ namespace NHSOnline.App.Controls.Elements
         public static readonly BindableProperty TextProperty =
             BindableProperty.Create(nameof(Text), typeof(string), typeof(LinkLabel));
 
+        public static readonly BindableProperty AccessibleTextProperty =
+            BindableProperty.Create(nameof(AccessibleText), typeof(string), typeof(LinkLabel));
+
         public static readonly BindableProperty LabelTextColourProperty =
             BindableProperty.Create(nameof(LabelTextColour), typeof(Color), typeof(LinkLabel), NhsUkColours.NhsUkPrimaryLinkBlue);
 
@@ -40,6 +43,12 @@ namespace NHSOnline.App.Controls.Elements
         {
             get => (string) GetValue(TextProperty);
             set => SetValue(TextProperty, value);
+        }
+
+        public string AccessibleText
+        {
+            get => (string) GetValue(AccessibleTextProperty);
+            set => SetValue(AccessibleTextProperty, value);
         }
 
         public Color LabelTextColour

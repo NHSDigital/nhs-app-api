@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
+             xmlns:valueConverters="clr-namespace:NHSOnline.App.Controls.ValueConverters;assembly=NHSOnline.App.Controls"
+             x:Class="NHSOnline.App.Controls.Elements.LinkLabelWithErrorCode"
+             x:Name="Root">
+    
+    <ContentView.Resources>
+        <valueConverters:AccessibleErrorCodeConverter x:Key="AccessibleErrorCodeConverter" />
+    </ContentView.Resources>
+    
+    <elements:LinkLabel Command="{Binding Command, Source={x:Reference Name=Root}}">
+        <elements:LinkLabel.Text>
+            <MultiBinding StringFormat="{}{0} {1}">
+                <Binding Path="Text" Source="{x:Reference Name=Root}" />
+                <Binding Path="ErrorCode" 
+                         Source="{x:Reference Name=Root}" />
+            </MultiBinding>
+        </elements:LinkLabel.Text>
+        
+        <elements:LinkLabel.AccessibleText>
+            <MultiBinding StringFormat="{}{0} {1}">
+                <Binding Path="Text" Source="{x:Reference Name=Root}" />
+                <Binding Path="ErrorCode" 
+                         Source="{x:Reference Name=Root}" 
+                         Converter="{StaticResource AccessibleErrorCodeConverter}" />
+            </MultiBinding>
+        </elements:LinkLabel.AccessibleText>
+    </elements:LinkLabel>
+</ContentView>
