@@ -180,6 +180,8 @@ spec:
         {{- end }}
         - name: SERVICE_JOURNEY_RULES_BASE_URL
           value: "https://nhsapp-sjr-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}"
+        - name: AUDIT_SINK_TYPE
+          value: "cosmosdb"
         - name: AUDIT_MONGO_DATABASE_NAME
           value: {{ $.Values.cosmosDBName }}-mongo
         - name: AUDIT_MONGO_DATABASE_COLLECTION

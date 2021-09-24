@@ -8,12 +8,12 @@ namespace NHSOnline.Backend.Auditing
 {
     public class StreamAuditSink : IAuditSink, IDisposable
     {
-        private readonly StreamWriter _streamWriter;
+        private readonly TextWriter _writer;
         private bool _disposed;
 
-        public StreamAuditSink(Stream stream)
+        public StreamAuditSink(TextWriter writer)
         {
-            _streamWriter = new StreamWriter(stream);
+            _writer = writer;
         }
 
         public Task WritePreOperationAudit(AuditRecord auditRecord)
@@ -57,8 +57,8 @@ namespace NHSOnline.Backend.Auditing
                 auditStringBuilder.Append($" Native Version: {auditRecord.NativeVersion} |");
             }
 
-            _streamWriter.WriteLine(auditStringBuilder.ToString());
-            _streamWriter.Flush();
+            _writer.WriteLine(auditStringBuilder.ToString());
+            _writer.Flush();
 
             return Task.CompletedTask;
         }
@@ -83,7 +83,7 @@ namespace NHSOnline.Backend.Auditing
 
             if (disposing)
             {
-                _streamWriter.Dispose();
+                _writer.Dispose();
             }
 
             _disposed = true;

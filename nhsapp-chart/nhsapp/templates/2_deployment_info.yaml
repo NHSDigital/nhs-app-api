@@ -108,6 +108,8 @@ spec:
               name: cosmosdb-mongodb-connection-string-ukw-{{ .Chart.AppVersion }}
               key: secret
         {{- end }}
+        - name: AUDIT_SINK_TYPE
+          value: "cosmosdb"
         - name: AUDIT_MONGO_DATABASE_NAME
           value: {{ $.Values.cosmosDBName }}-mongo
         - name: AUDIT_MONGO_DATABASE_COLLECTION

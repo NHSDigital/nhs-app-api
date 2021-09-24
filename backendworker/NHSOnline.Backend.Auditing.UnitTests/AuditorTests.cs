@@ -187,7 +187,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>(Constants.EnvironmentalVariables.VersionTag, "UNIT TEST") });
 
-            _fixture.Inject(new AuditorFactory(configBuilder.Build(), new StreamAuditSink(_stream))
+            _fixture.Inject(new AuditorFactory(configBuilder.Build(), new StreamAuditSink(new StreamWriter(_stream)))
                 .CreateAuditor(logger.Object));
 
             _mockUserSessionService = _fixture.Freeze<Mock<IUserSessionService>>();
