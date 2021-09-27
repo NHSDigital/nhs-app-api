@@ -31,9 +31,9 @@ namespace NHSOnline.IntegrationTests.DeviceAndOperatingSystemCompatibility
                 .AssertVectorOfTrust()
                 .Login(patient);
 
-            IOSTermsAndConditionsPage
+            IOS11TermsAndConditionsPage
                 .AssertOnPage(driver)
-                .PageContent.AcceptTermsAndConditions();
+                .AcceptTermsAndConditions();
 
             IOSUserResearchOptInPage
                 .AssertOnPage(driver)

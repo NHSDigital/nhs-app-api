@@ -76,7 +76,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.PreHome
             "label",
             "I accept the use of optional analytic cookies used to improve the performance of the NHS App.");
 
-        private WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
+        public WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
 
         internal void AssertOnPage() => TitleText.AssertVisible();
 
