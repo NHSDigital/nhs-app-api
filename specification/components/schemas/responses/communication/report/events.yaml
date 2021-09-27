@@ -26,11 +26,6 @@ items:
       description: If the original communication request included an optional Request Reference denoted by system `https://fhir.nhs.uk/NHSApp/request-id`, it will be returned in this field.
       maxLength: 50
       nullable: true
-    transmissionId:
-      type: string
-      description: A globally unique identifier used by the NHS App to identify an instance of sending a specific communication to a specific recipient via a specific channel.
-      maxLength: 36
-      nullable: false
     channel:
       type: string
       enum: [AppMessage, PushNotification]
