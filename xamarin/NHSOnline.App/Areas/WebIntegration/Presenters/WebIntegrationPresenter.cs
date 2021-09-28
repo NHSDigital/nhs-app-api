@@ -107,7 +107,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             var handleFileResult = await _fileHandler.DownloadFile(downloadRequest).PreserveThreadContext();
             if (handleFileResult is DownloadFileResult.Failed)
             {
-                var model = new FullNavigationTryAgainFileDownloadErrorModel(_model.NavigationHandler, _model.FooterItem);
+                var model = new FullNavigationTryAgainFileDownloadErrorModel(_model.NavigationHandler, _model.FooterItem, _model.HelpUrl);
                 var page = _pageFactory.CreatePageFor(model);
                 await _view.AppNavigation.Push(page).PreserveThreadContext();
             }

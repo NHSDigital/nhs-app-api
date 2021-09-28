@@ -17,6 +17,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration
     [TestClass]
     public class FileDownloadWebIntegrationTests
     {
+        private const string ThirdPartyHelpLinkPath = "health-records-in-the-nhs-app/third-party-services/";
+
         [NhsAppAndroidTest(AndroidDevice = AndroidDevice.Pixel3, OSVersion = AndroidOSVersion.Ten)]
         public void APatientWithProofLevelNineCanDownloadAFileFromAWebIntegrationDownloadFileScreenAndroid(
             IAndroidDriverWrapper driver)
@@ -194,7 +196,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
             AndroidAppTab
-                .AssertOnHelpPageByTitle(driver, "Home")
+                .AssertOnHelpPageByText(driver, ThirdPartyHelpLinkPath)
                 .ReturnToApp();
         }
 
@@ -277,7 +279,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .Help();
 
             IOSAppTab
-                .AssertOnHelpPageByTitle(driver, "Home")
+                .AssertOnHelpPageByText(driver, ThirdPartyHelpLinkPath)
                 .ReturnToApp();
         }
 

@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Controls;
-using NHSOnline.App.Events.Models;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 

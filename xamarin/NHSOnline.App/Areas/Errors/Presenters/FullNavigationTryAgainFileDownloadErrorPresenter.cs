@@ -45,7 +45,7 @@ namespace NHSOnline.App.Areas.Errors.Presenters
         private Task HelpRequested()
         {
             _logger.LogInformation("Help requested");
-            return _browserOverlay.OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkBaseHelpUrl);
+            return _browserOverlay.OpenBrowserOverlay( _model.HelpUrl ?? _nhsExternalServicesConfiguration.NhsUkHealthRecordDownloadHelpUrl);
         }
 
         private async Task TryAgainRequested()
