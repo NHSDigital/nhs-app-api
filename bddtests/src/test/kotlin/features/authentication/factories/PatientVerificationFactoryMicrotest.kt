@@ -48,6 +48,10 @@ class PatientVerificationFactoryMicrotest: PatientVerificationFactory(Supplier.M
         throw NotImplementedError("Not implemented for this GP system")
     }
 
+    override fun im1ConnectionTokenNoLongerValid() {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
+
     override fun oldOdsCodeAndConnectionTokenForPatientThatHasSinceMovedToADifferentPractice() {
         val patient = Patient.getDefault(gpSystem)
         SerenityHelpers.setPatient(patient)

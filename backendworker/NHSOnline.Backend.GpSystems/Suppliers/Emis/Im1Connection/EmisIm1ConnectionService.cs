@@ -10,6 +10,7 @@ using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
 {
@@ -113,6 +114,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
             {
                 _logger.LogError(e,
                     "Failed request to verify Emis Im1ConnectionToken, HttpRequestException has been thrown.");
+                return new Im1ConnectionVerifyResult.BadGateway();
+            }
+            catch (UnauthorisedGpSystemHttpRequestException e)
+            {
+                _logger.LogError(e,
+                    "Failed request to verify Emis Im1ConnectionToken, UnauthorisedGpSystemHttpRequestException has been thrown.");
                 return new Im1ConnectionVerifyResult.BadGateway();
             }
             finally

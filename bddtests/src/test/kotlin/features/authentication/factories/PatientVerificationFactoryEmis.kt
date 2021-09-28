@@ -55,6 +55,32 @@ class PatientVerificationFactoryEmis: PatientVerificationFactory(Supplier.EMIS) 
         PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
     }
 
+    override fun im1ConnectionTokenNoLongerValid() {
+        val patient = Patient(
+                name = PatientName(title = "Miss",
+                        firstName = "Alexia",
+                        surname = "Scott"),
+                odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
+                connectionToken = "fe81f191-b016-466e-aeb2-64f08f2330a4",
+                sessionId = "xkWiivK1WBAkxIN9CDrGyy",
+                endUserSessionId = "9RFDWiqTO8zBWrp2p8s4K7",
+                userPatientLinkToken = "KxLiDl5nRS60DzIlrKoFSl",
+                age = PatientAge(dateOfBirth = "1985-05-29"))
+
+        mockingClient.forEmis.mock {
+            authentication.sessionRequest(patient)
+                    .respondWithSuccess(patient, AssociationType.Self)
+        }
+        mockingClient.forEmis.mock { authentication.endUserSessionRequest()
+                .respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis.mock {
+            myRecord.demographicsRequest(patient).respondWithEmisNotAuthorised()
+        }
+
+        PatientVerificationSerenityHelpers.ConnectionToken.set(patient.connectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
+    }
+
     override fun connectionToExternalServiceFailed() {
         throw NotImplementedError("Not implemented for this GP system")
     }

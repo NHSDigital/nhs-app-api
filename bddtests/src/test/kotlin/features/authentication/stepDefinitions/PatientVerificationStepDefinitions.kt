@@ -32,6 +32,13 @@ class PatientVerificationStepDefinitions {
         PatientVerificationFactory.getForSupplier(supplier).im1ConnectionTokenDoesNotExist()
     }
 
+    @Given("^I have an (.*) IM1 Connection Token that is no longer valid$")
+    fun givenIHaveAnImConnectionTokenThatIsNoLongerValid(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        SerenityHelpers.setPatient(Patient.getDefault(supplier))
+        PatientVerificationFactory.getForSupplier(supplier).im1ConnectionTokenNoLongerValid()
+    }
+
     @Given("^Vision responds with a connection to external service failed$")
     fun givenVisionRespondsWithAConnectionToExternalServiceFailed() {
         PatientVerificationFactory.getForSupplier(Supplier.VISION).connectionToExternalServiceFailed()

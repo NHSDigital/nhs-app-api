@@ -152,6 +152,10 @@ class PatientVerificationFactoryTpp: PatientVerificationFactory(Supplier.TPP){
         throw NotImplementedError("Not implemented for this GP system")
     }
 
+    override fun im1ConnectionTokenNoLongerValid() {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
+
     override fun gpSystemNotAvailable() {
         val patient = SerenityHelpers.getPatient()
         mockingClient.forTpp.mock {

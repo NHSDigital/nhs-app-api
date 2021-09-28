@@ -77,7 +77,13 @@ Feature: Im1 Connection GET V2
       | TPP       | Bad Gateway |
       | VISION    | Bad Request |
 
-
+  Scenario Outline: A Non-existent IM1 Connection Token for the <GP System> tries verification using the v2 endpoint and receives a Bad Gateway error from demographics
+    Given I have an <GP System> IM1 Connection Token that is no longer valid
+    When I verify patient data using the v2 endpoint
+    Then I receive a "Bad Gateway" error
+    Examples:
+      | GP System |
+      | EMIS      |
 
   Scenario Outline: No ODS Code for a <GP System> user when trying verification using the v2 endpoint and receives a Bad Request error
     Given I have valid credentials for a <GP System> patient with one NHS Number

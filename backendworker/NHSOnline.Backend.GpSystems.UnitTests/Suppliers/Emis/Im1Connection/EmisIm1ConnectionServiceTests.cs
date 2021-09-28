@@ -19,6 +19,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Strategies.ResponseSuccessOutcome;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Http;
 using UnitTestHelper;
 using Im1ConnectionErrorCodes = NHSOnline.Backend.GpSystems.Im1Connection.Im1ConnectionErrorCodes;
 
@@ -292,6 +293,47 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             emisClientMock
                 .Setup(x => x.SessionsEndUserSessionPost())
                 .Throws<HttpRequestException>();
+
+            var systemUnderTest = CreateSystemUnderTest(emisClientMock);
+
+            var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
+
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.BadGateway>();
+        }
+
+        [TestMethod]
+        public async Task Verify_ReturnsBadGateway_WhenEmisClientThrowsUnauthorisedGpSystemHttpRequestException()
+        {
+            var emisClientMock = new Mock<IEmisClient>();
+            emisClientMock
+                .Setup(x => x.SessionsEndUserSessionPost())
+                .Throws<UnauthorisedGpSystemHttpRequestException>();
+
+            var systemUnderTest = CreateSystemUnderTest(emisClientMock);
+
+            var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
+
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.BadGateway>();
+        }
+
+        [TestMethod]
+        public async Task Verify_ReturnsBadGateway_WhenEmisClientDemographicsThrowsUnauthorisedGpSystemHttpRequestException()
+        {
+            const string expectedNhsNumber = "AB123";
+
+            var userPatientLinkModels = new[] { CreateUserPatientLinkModel() };
+            var patientIdentifiers = new[] { CreatePatientIdentifier(expectedNhsNumber) };
+            var emisClientMock = new Mock<IEmisClient>();
+
+            SetupEmisClientMockForVerify(
+                emisClientMock,
+                userPatientLinkModels: userPatientLinkModels,
+                patientIdentifiers: patientIdentifiers
+            );
+
+            emisClientMock
+                .Setup(x => x.DemographicsGet(It.IsAny<EmisRequestParameters>()))
+                .Throws<UnauthorisedGpSystemHttpRequestException>();
 
             var systemUnderTest = CreateSystemUnderTest(emisClientMock);
 
@@ -709,7 +751,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
                     {
                         Body = demographicsResponse
                     }));
-            
+
             demographicsResponse.PatientIdentifiers = patientIdentifiers;
 
             const string key = "Key";
@@ -724,7 +766,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
                 .Returns(Task.FromResult(true)).Verifiable();
 
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
-            
+
             return request;
         }
 

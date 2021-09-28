@@ -65,7 +65,7 @@ class PatientVerificationFactoryVision: PatientVerificationFactory(Supplier.VISI
         PatientVerificationSerenityHelpers.NhsNumber.set(patient.nhsNumbers[0])
     }
 
-     override fun connectionToExternalServiceFailed() {
+    override fun connectionToExternalServiceFailed() {
         val patient = VisionMockDefaults.patientVision
         val nonExistingConnectionToken = "{\"rosuAccountid\":\"999999999\",\"apiKey\":\"nonexistingapikey\"}"
 
@@ -108,6 +108,11 @@ class PatientVerificationFactoryVision: PatientVerificationFactory(Supplier.VISI
     override fun oldOdsCodeAndConnectionTokenForPatientThatHasSinceMovedToADifferentPractice() {
         throw NotImplementedError("Not implemented for this GP system")
     }
+
+    override fun im1ConnectionTokenNoLongerValid() {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
+
 
     override fun gpSystemNotAvailable() {
         val patient = VisionMockDefaults.patientVision
