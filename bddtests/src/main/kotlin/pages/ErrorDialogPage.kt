@@ -73,4 +73,20 @@ class ErrorDialogPage : HybridPageObject() {
         }
         return getElement(locator).assertIsVisible(message)
     }
+
+    fun assertLinkWithPrefix(linkText: String, url: String? = null, prefix: String) : HybridPageElement {
+        var locator = "$errorContainerLocator//a[contains(text(),'$linkText')]"
+        var message: String? = null
+
+        if (!url.isNullOrBlank()) {
+            locator += "[starts-with(@href, '$url')]"
+            message = "Expected the link called $linkText with target of $url to be available"
+        }
+
+        // Assert that the prefix is contained in the link text
+        val element = getElement(locator)
+        assertTrue(getElement(locator).textValue.contains("$linkText $prefix"))
+
+        return element.assertIsVisible(message)
+    }
 }

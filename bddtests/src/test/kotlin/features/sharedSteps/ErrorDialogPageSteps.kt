@@ -21,8 +21,14 @@ class ErrorDialogPageSteps {
         errorDialogPage.assertLink(linkText, url).click()
     }
 
-    @Then("^I see the error '(.*)' link with a url of '(.*)'$")
-    fun iSeeTheErrorLinkWithAUrlOf(linkText: String, url: String) {
-        errorDialogPage.assertLink(linkText, url)
+    @Then("^I see an error '(.*)' link with a url of '(.*)' and error prefix of '(.*)'$")
+    fun iSeeTheErrorLinkWithAUrlAndPrefix(linkText: String, url: String, prefix: String) {
+        errorDialogPage.assertLinkWithPrefix(linkText, url, prefix)
+    }
+
+    @Then("^I click an error '(.*)' link with a url of '(.*)' and error prefix of '(.*)'$")
+    fun iClickTheErrorLinkWithAUrlAndPrefix(linkText: String, url: String, prefix: String) {
+        browser.storeCurrentTabCount()
+        errorDialogPage.assertLinkWithPrefix(linkText, url, prefix).click()
     }
 }

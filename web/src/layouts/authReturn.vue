@@ -51,20 +51,22 @@
                     </error-container>
                     <error-container v-else-if="statusCode===465">
                       <error-title title="login.authReturn.loginFailed"/>
-                      <error-paragraph-with-links
+                      <error-paragraph
                         from="login.authReturn.dueToLegalRestrictionsUntilYouAreThirteen" />
+                      <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
+                      <error-link from="login.authReturn.goToNhs111"
+                                  :action="nhs111Url"
+                                  target="_blank" />
                     </error-container>
                     <error-container v-else-if="statusCode===400">
                       <error-title title="login.authReturn.loginFailed"/>
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
-                      <error-paragraph
-                        from="login.authReturn.ifYouKeepSeeingThisQuoteCodeToHelpUs"
-                        :variable="serviceDeskReference"/>
-                      <error-paragraph-with-links from="login.authReturn.ifYouNeed" />
-                      <error-link from="generic.contactUs"
-                                  :action="contactUsUrl"
-                                  target="_blank"
-                                  :query-param="contactUsParam"/>
+                      <error-paragraph from="login.authReturn.ifYouNeed" />
+                      <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
+                      <error-link from="login.authReturn.goToNhs111"
+                                  :action="nhs111Url"
+                                  target="_blank" />
+                      <service-desk-reference-link />
                       <error-link from="login.authReturn.backToHome" :action="loginUrl"/>
                     </error-container>
                     <error-container v-else-if="statusCode===403">
@@ -72,28 +74,24 @@
                       <error-paragraph
                         from="login.authReturn.weCannotGetYourDetailsFromYourGpSurgery" />
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
-                      <error-paragraph
-                        from="login.authReturn.ifYouKeepSeeingThisQuoteCodeToHelpUs"
-                        :variable="serviceDeskReference"/>
-                      <error-paragraph-with-links from="login.authReturn.ifYouNeed" />
-                      <error-link from="generic.contactUs"
-                                  :action="contactUsUrl"
-                                  target="_blank"
-                                  :query-param="contactUsParam"/>
+                      <error-paragraph from="login.authReturn.ifYouNeed" />
+                      <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
+                      <error-link from="login.authReturn.goToNhs111"
+                                  :action="nhs111Url"
+                                  target="_blank" />
+                      <service-desk-reference-link />
                       <error-link from="login.authReturn.backToHome" :action="loginUrl"/>
                     </error-container>
                     <error-container v-else-if="statusCode===500">
                       <error-title title="login.authReturn.loginFailed"/>
                       <error-paragraph from="login.authReturn.weCannotLoginYouIn" />
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
-                      <error-paragraph
-                        from="login.authReturn.ifYouKeepSeeingThisQuoteCodeToHelpUs"
-                        :variable="serviceDeskReference"/>
-                      <error-paragraph-with-links from="login.authReturn.ifYouNeed" />
-                      <error-link from="generic.contactUs"
-                                  :action="contactUsUrl"
-                                  target="_blank"
-                                  :query-param="contactUsParam"/>
+                      <error-paragraph from="login.authReturn.ifYouNeed" />
+                      <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
+                      <error-link from="login.authReturn.goToNhs111"
+                                  :action="nhs111Url"
+                                  target="_blank" />
+                      <service-desk-reference-link />
                       <error-link from="login.authReturn.backToHome" :action="loginUrl"/>
                     </error-container>
                     <error-container v-else-if="statusCode===502">
@@ -102,14 +100,12 @@
                       <error-unordered-list
                         from="login.authReturn.weCannotGetYourLoginDetailsOrConnectToYourSurgery" />
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
-                      <error-paragraph
-                        from="login.authReturn.ifYouKeepSeeingThisQuoteCodeToHelpUs"
-                        :variable="serviceDeskReference"/>
-                      <error-paragraph-with-links from="login.authReturn.ifYouNeed" />
-                      <error-link from="generic.contactUs"
-                                  :action="contactUsUrl"
-                                  target="_blank"
-                                  :query-param="contactUsParam"/>
+                      <error-paragraph from="login.authReturn.ifYouNeed" />
+                      <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
+                      <error-link from="login.authReturn.goToNhs111"
+                                  :action="nhs111Url"
+                                  target="_blank" />
+                      <service-desk-reference-link />
                       <error-link from="login.authReturn.backToHome" :action="loginUrl"/>
                     </error-container>
                     <error-container v-else-if="statusCode===504">
@@ -118,27 +114,24 @@
                       <error-unordered-list
                         from="login.authReturn.weCannotGetYourLoginDetailsOrConnectToYourSurgery" />
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
-                      <error-paragraph from="login.authReturn.ifYouKeepSeeingThisQuoteCode"
-                                       :variable="serviceDeskReference" />
-                      <error-paragraph-with-links from="login.authReturn.ifYouNeed" />
-                      <error-link from="generic.contactUs"
-                                  :action="contactUsUrl"
-                                  target="_blank"
-                                  :query-param="contactUsParam"/>
+                      <error-paragraph from="login.authReturn.ifYouNeed" />
+                      <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
+                      <error-link from="login.authReturn.goToNhs111"
+                                  :action="nhs111Url"
+                                  target="_blank" />
+                      <service-desk-reference-link />
                       <error-link from="login.authReturn.backToHome" :action="loginUrl"/>
                     </error-container>
                     <error-container v-else>
                       <error-title title="login.authReturn.loginFailed"/>
                       <error-paragraph from="login.authReturn.weCannotLoginYouIn" />
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
-                      <error-paragraph
-                        from="login.authReturn.ifYouKeepSeeingThisQuoteCodeToHelpUs"
-                        :variable="serviceDeskReference"/>
-                      <error-paragraph-with-links from="login.authReturn.ifYouNeed" />
-                      <error-link from="generic.contactUs"
-                                  :action="contactUsUrl"
-                                  target="_blank"
-                                  :query-param="contactUsParam"/>
+                      <error-paragraph from="login.authReturn.ifYouNeed" />
+                      <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
+                      <error-link from="login.authReturn.goToNhs111"
+                                  :action="nhs111Url"
+                                  target="_blank" />
+                      <service-desk-reference-link />
                       <error-link from="login.authReturn.backToHome" :action="loginUrl"/>
                     </error-container>
                   </div>
@@ -154,9 +147,10 @@
                   {{ $t('login.authReturn.youCannotUse') }}
                 </p>
                 <p>{{ $t('login.authReturn.ifYouNeedToBook') }}</p>
-                <contact-111
-                  :text="$t('appointments.confirmation.error.forUrgentMedicalAdvice.text')"
-                  :aria-label="$t('appointments.confirmation.error.forUrgentMedicalAdvice.label')"/>
+                <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
+                <error-link from="login.authReturn.goToNhs111"
+                            :action="nhs111Url"
+                            target="_blank" />
                 <error-link from="login.authReturn.backToLogin" :action="loginUrl"/>
               </div>
               <div v-else>
@@ -188,7 +182,6 @@
 import get from 'lodash/fp/get';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
-import Contact111 from '@/components/widgets/Contact111';
 import ErrorContainer from '@/components/errors/ErrorContainer';
 import ErrorHeader from '@/components/errors/ErrorHeader';
 import ErrorLink from '@/components/errors/ErrorLink';
@@ -200,6 +193,7 @@ import FlashMessage from '@/components/widgets/FlashMessage';
 import HeaderSlim from '@/components/HeaderSlim';
 import NativeVersionSetup from '@/services/nativeVersionSetup';
 import PageTitle from '@/components/widgets/PageTitle';
+import ServiceDeskReferenceLink from '@/components/errors/ServiceDeskReferenceLink';
 import Spinner from '@/components/widgets/Spinner';
 import WebHeader from '@/components/widgets/WebHeader';
 import WebFooter from '@/components/widgets/WebFooter';
@@ -211,7 +205,6 @@ export default {
   components: {
     ApiError,
     ConnectionError,
-    Contact111,
     ErrorContainer,
     ErrorHeader,
     ErrorLink,
@@ -222,6 +215,7 @@ export default {
     FlashMessage,
     HeaderSlim,
     PageTitle,
+    ServiceDeskReferenceLink,
     Spinner,
     WebHeader,
     WebFooter,
@@ -237,7 +231,7 @@ export default {
   data() {
     return {
       consentNotGivenDescription: CONSENT_NOT_GIVEN_DESCRIPTION,
-      contactUsUrl: this.$store.$env.CONTACT_US_URL,
+      nhs111Url: this.$store.$env.SYMPTOM_CHECKER_URL,
     };
   },
   computed: {

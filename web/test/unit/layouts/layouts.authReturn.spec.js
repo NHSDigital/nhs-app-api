@@ -111,7 +111,7 @@ describe('authReturn layout', () => {
 
         it('url will have error code', () => {
           expect(contactUsLink.attributes('href'))
-            .toBe(`${CONTACT_US_URL}?errorcode=${serviceDeskReference}&odscode=`);
+            .toBe(`${CONTACT_US_URL}?errorcode=${serviceDeskReference}`);
         });
       });
 

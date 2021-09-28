@@ -1,7 +1,5 @@
 package pages
 
-import org.junit.Assert
-
 class ServiceUnavailablePage : HybridPageObject() {
 
     private val header = HybridPageElement(
@@ -11,16 +9,15 @@ class ServiceUnavailablePage : HybridPageObject() {
             helpfulName = "content"
     )
 
-    private val content = HybridPageElement(
-            webDesktopLocator = "//p[@data-purpose='msg-text']",
-            androidLocator = null,
-            page = this,
-            helpfulName = "error message"
-    )
-
-    fun assertIsPresent(titleText: String, message: String) {
+    fun assertTitle(titleText: String): ServiceUnavailablePage {
         assert(titleText.equals(header.textValue))
         header.assertIsVisible()
-        Assert.assertEquals(message, content.text)
+        return this
+    }
+
+    fun assertParagraphText(paragraphText: String): ServiceUnavailablePage {
+        val message = getElement("//p[normalize-space()=\"$paragraphText\"]")
+        message.assertIsVisible()
+        return this
     }
 }

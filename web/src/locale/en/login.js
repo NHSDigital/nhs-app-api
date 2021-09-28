@@ -33,46 +33,24 @@ export default {
   authReturn: {
     backToHome: 'Back to home',
     backToLogin: 'Back to login',
+    contactUsIfYouKeepSeeing: {
+      text: 'Contact us if you keep seeing this message, quoting error code {errorCode}',
+      label: 'Contact us if you keep seeing this message, quoting error code ',
+    },
+    dueToLegalRestrictionsUntilYouAreThirteen: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services. ',
+    forUrgentMedicalAdvice: {
+      text: 'For urgent medical advice, use NHS 111 online or call 111.',
+      label: 'For urgent medical advice, use NHS one one one online or call one one one.',
+    },
+    goToNhs111: {
+      text: 'Go to 111.nhs.uk',
+      label: 'Go to one one one dot nhs dot uk',
+    },
     goBackAndTryAgain: 'Go back to the home screen and try logging in again.',
-    ifYouNeedToBook: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly.',
     ifYouKeepSeeingThisQuoteCode: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
     ifYouKeepSeeingThisQuoteCodeToHelpUs: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
-    ifYourSurgeryIsInEngland: 'If your GP surgery is in England ',
-    ifYourSurgeryIsInNorthernIrelandOrScotland: 'If your GP surgery is in Northern Ireland or Scotland ',
-    ifYourSurgeryIsInWales: 'If your GP surgery is in Wales',
-    loginFailed: 'Login failed',
-    notAvailableInNorthernIrelandOrScotland: 'The NHS App is not available in Northern Ireland or Scotland because health services are managed separately from England.',
-    notAvailableInWales: 'The NHS App is not available in Wales because health services are managed separately from England.',
-    reference: 'Reference: ',
-    termsNotAccepted: 'You need to accept NHS login terms of use to continue',
-    thisCanBeOneOfTwoProblems: 'This can be one of two problems:',
-    weCannotConnectToSurgeryOrMatchYourNhsNumber: 'Either we cannot connect to your GP surgery, or we cannot match your NHS number to a GP surgery.',
-    weCannotGetYourDetailsFromYourGpSurgery: 'We cannot get your details from your GP surgery.',
-    weCannotLoginYouIn: 'We cannot log you in to the NHS App.',
-    dueToLegalRestrictionsUntilYouAreThirteen: [
-      {
-        text: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services. For urgent medical advice, go to ',
-        label: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services. For urgent medical advice, go to one one one dot nhs dot uk',
-        linkUrl: 'SYMPTOM_CHECKER_URL',
-        linkText: '111.nhs.uk',
-      },
-      {
-        text: ' or call 111.',
-        label: ' or call one one one.',
-      },
-    ],
-    ifYouNeed: [
-      {
-        text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to',
-        label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to one one one dot nhs dot uk',
-        linkUrl: 'SYMPTOM_CHECKER_URL',
-        linkText: '111.nhs.uk',
-      },
-      {
-        text: ' or call 111.',
-        label: ' or call one one one.',
-      },
-    ],
+    ifYouNeed: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly.',
+    ifYouNeedToBook: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly.',
     ifYouNeedInEngland: [
       {
         text: 'If you need an appointment or prescription, contact your GP surgery directly. For urgent medical advice, go to ',
@@ -113,6 +91,18 @@ export default {
         linkText: 'contact us',
       },
     ],
+    ifYourSurgeryIsInEngland: 'If your GP surgery is in England ',
+    ifYourSurgeryIsInNorthernIrelandOrScotland: 'If your GP surgery is in Northern Ireland or Scotland ',
+    ifYourSurgeryIsInWales: 'If your GP surgery is in Wales',
+    loginFailed: 'Login failed',
+    notAvailableInNorthernIrelandOrScotland: 'The NHS App is not available in Northern Ireland or Scotland because health services are managed separately from England.',
+    notAvailableInWales: 'The NHS App is not available in Wales because health services are managed separately from England.',
+    reference: 'Reference: ',
+    termsNotAccepted: 'You need to accept NHS login terms of use to continue',
+    thisCanBeOneOfTwoProblems: 'This can be one of two problems:',
+    weCannotConnectToSurgeryOrMatchYourNhsNumber: 'Either we cannot connect to your GP surgery, or we cannot match your NHS number to a GP surgery.',
+    weCannotGetYourDetailsFromYourGpSurgery: 'We cannot get your details from your GP surgery.',
+    weCannotLoginYouIn: 'We cannot log you in to the NHS App.',
     weCannotGetYourLoginDetailsOrConnectToYourSurgery: {
       item1: {
         id: '1',

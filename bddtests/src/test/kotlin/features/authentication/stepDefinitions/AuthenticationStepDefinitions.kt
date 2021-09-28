@@ -243,10 +243,11 @@ class AuthenticationStepDefinitions {
 
     @Then("^I see an error message informing me I cannot log in as I am under the minimum age$")
     fun iSeeAnErrorMessageInformingMeICannotLogInAsIAmUnderSixteen() {
-        serviceUnavailablePage.assertIsPresent("Login failed",
-                "Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. " +
-                        "You can still contact your GP surgery to access your NHS services. " +
-                        "For urgent medical advice, go to 111.nhs.uk or call 111.")
+        serviceUnavailablePage.assertTitle("Login failed")
+                .assertParagraphText("Due to legal restrictions, you cannot use the " +
+                        "NHS App until you are at least 13 years old. " +
+                "You can still contact your GP surgery to access your NHS services." )
+                .assertParagraphText("For urgent medical advice, use NHS 111 online or call 111.")
     }
 
     @Then("^I see an error informing me to accept NHS login terms and conditions")
@@ -255,7 +256,7 @@ class AuthenticationStepDefinitions {
                 .assertParagraphText("You cannot use the NHS app if you have not accepted NHS login terms of use.")
                 .assertParagraphText("If you need to book an appointment or get a prescription now, " +
                         "contact your GP surgery directly.")
-                .assertParagraphText("For urgent medical advice, go to 111.nhs.uk or call 111.")
+                .assertParagraphText("For urgent medical advice, use NHS 111 online or call 111.")
                 .assertLinkExists("Back to login", "/login", true)
     }
 
