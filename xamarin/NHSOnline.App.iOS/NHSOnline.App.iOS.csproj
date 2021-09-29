@@ -110,8 +110,10 @@
     <Compile Include="Renderers\Heading1Renderer.cs" />
     <Compile Include="Renderers\StackLayoutRenderer.cs" />
     <Compile Include="Renderers\SwipeBackNavigationPageRenderer.cs" />
+    <Compile Include="Renderers\WebViews\BaseWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\Extensions\IWebViewRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\Extensions\NavigationDelegateRendererExtension.cs" />
+    <Compile Include="Renderers\WebViews\Extensions\UIDelegateRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\Extensions\WebIntegrationRequestRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\IProovExtensions.cs" />
     <Compile Include="Renderers\WebViews\NhsLoginOnDemandGpSessionWebViewRenderer.cs" />
@@ -124,6 +126,7 @@
     <Compile Include="Renderers\WebViews\ScriptMessageHandler.cs" />
     <Compile Include="Renderers\WebViews\WebIntegrationWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\WebViewConfigurationBuilder.cs" />
+    <Compile Include="Renderers\WebViews\WebViewUIDelegate.cs" />
     <Compile Include="SecureScreen.cs" />
     <None Include="Info.template.plist" />
     <None Include="Info.plist">

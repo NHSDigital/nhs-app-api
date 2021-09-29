@@ -7,7 +7,7 @@ using WebKit;
 
 namespace NHSOnline.App.iOS.Renderers.WebViews
 {
-    internal static class JavascriptBridge
+    internal class JavascriptBridge
     {
         public static JavascriptBridge<TWebView> ForWebView<TWebView>(Func<TWebView> webViewAccessor, string javascriptObjectName)
             => new JavascriptBridge<TWebView>(webViewAccessor, javascriptObjectName);

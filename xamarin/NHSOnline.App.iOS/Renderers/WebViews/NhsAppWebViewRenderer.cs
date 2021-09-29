@@ -2,18 +2,16 @@ using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.iOS.Renderers.WebViews;
 using WebKit;
 using Xamarin.Forms;
-using Xamarin.Forms.Platform.iOS;
 
 [assembly: ExportRenderer(typeof(NhsAppWebView), typeof(NhsAppWebViewRenderer))]
 namespace NHSOnline.App.iOS.Renderers.WebViews
 {
-    internal sealed class NhsAppWebViewRenderer : WkWebViewRenderer
+    internal sealed class NhsAppWebViewRenderer : BaseWebViewRenderer
     {
         private readonly JavascriptBridge<NhsAppWebView> _javascriptBridge;
 
         public NhsAppWebViewRenderer() : this(CustomConfiguration)
-        {
-        }
+        { }
 
         private NhsAppWebViewRenderer(WKWebViewConfiguration config) : base(config)
         {
@@ -39,18 +37,6 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                 .AddFunction("sessionExpired", webView => webView.SessionExpired)
                 .AddFunction("fetchNativeAppVersion", webView => webView.FetchNativeAppVersion)
                 .Apply(config.UserContentController);
-
-            AllowsLinkPreview = false;
-        }
-
-        protected override void OnElementChanged(VisualElementChangedEventArgs e)
-        {
-            if (e.OldElement == null)
-            {
-                NavigationDelegate = new WebViewNavigationDelegate(this);
-            }
-
-            base.OnElementChanged(e);
         }
 
         protected override void Dispose(bool disposing)
