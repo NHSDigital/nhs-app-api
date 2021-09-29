@@ -3,10 +3,5 @@ cluster: loadtestuks1
 zone: loadtest
 REGION: uksouth
 
-redcentricIP: 10.204.142.132
-
-spine_response:
-  internalIP: 10.50.10.10
-
 namespaces:
   - loadtest
