@@ -123,7 +123,6 @@ create table new_gpinfo as
     where   Supplier in (
                 "EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)",
                 "THE PHOENIX PARTNERSHIP",
-                "MICROTEST LTD",
                 "IN PRACTICE SYSTEMS LTD"
             )
     and     ClosedDate="" order by Supplier, CCG, Organisation;
