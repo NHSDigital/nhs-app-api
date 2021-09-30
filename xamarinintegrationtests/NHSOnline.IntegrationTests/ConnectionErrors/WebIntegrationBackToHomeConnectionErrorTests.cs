@@ -69,9 +69,8 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
                         .AssertOnPage(driver);
                 });
 
-            await driver.ResetNetwork();
-
-            await Task.Delay(TimeSpan.FromSeconds(5));
+            // For some reason this test consistently fails when there is no delay after resetting the network
+            await driver.ResetNetworkAndWait(TimeSpan.FromSeconds(5));
 
             AndroidBackToHomeConnectionErrorPage
                 .AssertOnPage(driver)
@@ -138,9 +137,8 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
                         .AssertOnPage(driver);
                 });
 
-            await driver.ResetNetwork();
-
-            await Task.Delay(TimeSpan.FromSeconds(5));
+            // For some reason this test consistently fails when there is no delay after resetting the network
+            await driver.ResetNetworkAndWait(TimeSpan.FromSeconds(5));
 
             IOSBackToHomeConnectionErrorPage
                 .AssertOnPage(driver)

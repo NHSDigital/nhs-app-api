@@ -7,13 +7,27 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
     {
         private readonly IIOSDriverWrapper _driver;
 
-        private IOSForcedUpdateErrorPage(IIOSDriverWrapper driver) => _driver = driver;
+        public IOSSlimCloseNavigation Navigation { get; }
 
-        private IOSLabel Title => IOSLabel.WithText(_driver, "Unable to verify app version");
+        private IOSForcedUpdateErrorPage(IIOSDriverWrapper driver)
+        {
+            _driver = driver;
+            Navigation = new IOSSlimCloseNavigation(driver);
+        }
 
-        private IOSLabel GoBackToHomeAndTryAgainLabel => IOSLabel.WithText(_driver, "Go back to the home page and try again.");
+        private IOSLabel Title=> IOSLabel.WithText(_driver, "Unable to confirm NHS App version");
 
-        private IOSLink BackToHomeLink => IOSLink.WithText(_driver, "Back to home");
+        private IOSLabel WeCannotConfirm => IOSLabel.WithText(_driver, "There is a problem connecting you. We cannot confirm which version of the NHS App you are using and if you may need to update it.");
+
+        private IOSLabel CheckYourConnection => IOSLabel.WithText(_driver, "Check your connection and try logging in again.");
+
+        private IOSLabel IfTheProblemContinues => IOSLabel.WithText(_driver, "If the problem continues and you need to book and appointment or get a prescription now, contact your GP surgery directly.");
+
+        private IOSLabel ForUrgentAdvice => IOSLabel.WithText(_driver, "For urgent medical advice, use NHS 111 online or call 111.");
+
+        private IOSLink GoTo111Link => IOSLink.WithText(_driver, "Go to 111.nhs.uk");
+
+        private IOSLink BackToLoginLink => IOSLink.WithText(_driver, "Back to login");
 
         public static IOSForcedUpdateErrorPage AssertOnPage(IIOSDriverWrapper driver)
         {
@@ -24,10 +38,17 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         public IOSForcedUpdateErrorPage AssertPageElements()
         {
-            GoBackToHomeAndTryAgainLabel.AssertVisible();
+            WeCannotConfirm.AssertVisible();
+            CheckYourConnection.AssertVisible();
+            IfTheProblemContinues.AssertVisible();
+            ForUrgentAdvice.AssertVisible();
+            GoTo111Link.AssertVisible();
+            BackToLoginLink.AssertVisible();
             return this;
         }
 
-        public void BackToHome() => BackToHomeLink.Touch();
+        public void GoTo111() => GoTo111Link.Touch();
+
+        public void BackToLogin() => BackToLoginLink.Touch();
     }
 }

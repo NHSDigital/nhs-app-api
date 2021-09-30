@@ -18,47 +18,46 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         private IOSButton DoneButton => IOSButton.WithText(_driver, "Done");
 
-        private WebText TitleText(IWebInteractor webInteractor) => WebText.WithTagAndText(webInteractor, "h1", _title);
+        private IOSLabel TitleText => IOSLabel.WithText(_driver, _title);
+
+        private IOSLabel NoInternetText => IOSLabel.WithText(_driver, "Safari cannot open the page because your iPhone is not connected to the internet.");
+
+        private IOSButton AcceptAnalyticsCookiesButton => IOSButton.WithText(_driver, "I'm OK with analytics cookies");
+
+        public void AssertNoInternet() => NoInternetText.AssertVisible();
 
         public void ReturnToApp() => DoneButton.Click();
 
-        public static IOSAppTab AssertOnConditionsPage(IIOSDriverWrapper driver) => AssertOnPageByTitle(driver, "Conditions");
+        public static IOSAppTab AssertOnCovidPage(IIOSDriverWrapper driver)
+            => AssertOnPageByTitle(driver, "Covid");
 
-        public static IOSAppTab AssertOnCovidPage(IIOSDriverWrapper driver) => AssertOnPageByTitle(driver, "Covid");
-
-        public static IOSAppTab AssertOn111Page(IIOSDriverWrapper driver) => AssertOnPageByTitle(driver, "111");
-
-        public static IOSAppTab AssertOnCovidConditionsPage(IIOSDriverWrapper driver) => AssertOnPageByTitle(driver, "Covid Conditions");
+        public static IOSAppTab AssertOn111Page(IIOSDriverWrapper driver)
+            => AssertOnPageByTitle(driver, "111");
 
         public static IOSAppTab AssertOnContactUsPage(IIOSDriverWrapper driver)
             => AssertOnPageByTitle(driver, "Contact Us");
 
-        public static IOSAppTab AssertOnHelpPageByTitle(IIOSDriverWrapper driver, string titleToMatch)
-            => AssertOnPageByTitle(driver, $"{titleToMatch} Help");
-
         public static IOSAppTab AssertOnHelpPageByText(IIOSDriverWrapper driver, string textToMatch)
             => AssertOnPageByTitle(driver, $"Help Page for {textToMatch}");
 
-        public static IOSAppTab AssertInBrowserAppTab(IIOSDriverWrapper driver) => AssertOnPageByClose(driver);
+        public static IOSAppTab AssertInBrowserAppTab(IIOSDriverWrapper driver)
+            => AssertOnPageByClose(driver);
 
-        public static IOSAppTab AssertOnOnlineConsultationPrivacyPolicyPage(IIOSDriverWrapper driver) =>
-            AssertOnPageByTitle(driver, "NHS App privacy policy: online consultation services");
-
-        public static IOSAppTab AssertOnPrivacyPolicyPage(IIOSDriverWrapper driver) => AssertOnPageByTitle(driver, "NHS App privacy policy");
-
-        private WebButton AcceptAnalyticsCookiesButton(IWebInteractor webInteractor) => WebButton.WithText(webInteractor, "I'm OK with analytics cookies");
+        public static IOSAppTab AssertOnOnlineConsultationPrivacyPolicyPage(IIOSDriverWrapper driver)
+            => AssertOnPageByTitle(driver, "NHS App privacy policy: online consultation services");
 
         private static IOSAppTab AssertOnPageByTitle(IIOSDriverWrapper driver, string title)
         {
             var page = new IOSAppTab(driver, title);
+
             try
             {
-                page.TitleText(driver.Web.BrowserOverlayWebView()).AssertVisible();
+                page.TitleText.AssertVisible();
             }
             catch (AssertFailedException)
             {
-                page.AcceptAnalyticsCookiesButton(driver.Web.BrowserOverlayWebView()).Click();
-                page.TitleText(driver.Web.BrowserOverlayWebView()).AssertVisible();
+                page.AcceptAnalyticsCookiesButton.Click();
+                page.TitleText.AssertVisible();
             }
 
             return page;
@@ -68,7 +67,6 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
         {
             var page = new IOSAppTab(driver);
             page.DoneButton.AssertVisible();
-
             return page;
         }
     }

@@ -133,7 +133,15 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             await browserStackApiClient.ApplyNetworkProfile(_driver.SessionId, NetworkProfile.AirplaneMode);
         }
 
-        async Task IAndroidDriverWrapper.ResetNetwork()
+        Task IAndroidDriverWrapper.ResetNetwork() => ResetNetwork();
+
+        async Task IAndroidDriverWrapper.ResetNetworkAndWait(TimeSpan timeSpan)
+        {
+            await ResetNetwork();
+            await Task.Delay(timeSpan);
+        }
+
+        private async Task ResetNetwork()
         {
             var browserStackApiClient = new BrowserStackApiClient(_browserStackConfig);
             await browserStackApiClient.ApplyNetworkProfile(_driver.SessionId, NetworkProfile.Reset);

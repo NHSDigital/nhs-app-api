@@ -8,7 +8,9 @@ namespace NHSOnline.App.Areas.LoggedOut
     {
         internal interface IEvents
         {
-            Func<Task>? BackToHomeRequested { get; set; }
+            Func<Task>? OneOneOneRequested { get; set; }
+            Func<Task>? BackToLoginRequested { get; set; }
+            Func<Task>? BackRequested { get; set; }
         }
     }
 }

@@ -15,15 +15,23 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             _text = text;
         }
 
-        private AndroidAppBrowserTabContents Contents => AndroidAppBrowserTabContents.WithText(_driver, _text);
+        private AndroidAppBrowserTabContents Title => AndroidAppBrowserTabContents.WithText(_driver, _text);
+
+        private AndroidAppBrowserTabContents NoInternetText => AndroidAppBrowserTabContents.WithText(_driver, "No internet");
 
         private AndroidImageButton AndroidAppTabClose => AndroidImageButton.WithDescription(_driver, "Close tab");
+
+        private AndroidButton AcceptNhsCookiesButton => AndroidButton.WithText(_driver, "I'm OK with analytics cookies");
+
+        public void AssertNoInternet() => NoInternetText.AssertVisible();
+
+        public void ReturnToApp() => AndroidAppTabClose.Click();
 
         public static AndroidAppTab AssertOnCovidPage(IAndroidDriverWrapper driver)
             => AssertOnPageByTitle(driver, "Covid");
 
-        public static AndroidAppTab AssertOnHelpPageByTitle(IAndroidDriverWrapper driver, string titleToMatch)
-            => AssertOnPageByTitle(driver, $"{titleToMatch} Help");
+        public static AndroidAppTab AssertOn111Page(IAndroidDriverWrapper driver)
+            => AssertOnPageByTitle(driver, "111");
 
         public static AndroidAppTab AssertOnHelpPageByText(IAndroidDriverWrapper driver, string textToMatch)
             => AssertOnPageByTitle(driver, $"Help Page for {textToMatch}");
@@ -37,11 +45,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         public static AndroidAppTab AssertOnPrivacyPolicyPage(IAndroidDriverWrapper driver)
             => AssertOnPageByTitle(driver, "NHS App privacy policy");
 
-        public static AndroidAppTab AssertInBrowserAppTab(IAndroidDriverWrapper driver) => AssertOnPageByClose(driver);
-
-        private AndroidButton AcceptNhsCookiesButton => AndroidButton.WithText(_driver, "I'm OK with analytics cookies");
-
-        public void ReturnToApp() => AndroidAppTabClose.Click();
+        public static AndroidAppTab AssertInBrowserAppTab(IAndroidDriverWrapper driver)
+            => AssertOnPageByClose(driver);
 
         private static AndroidAppTab AssertOnPageByTitle(IAndroidDriverWrapper driver, string title)
         {
@@ -49,15 +54,14 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
             try
             {
-                androidAppTab.Contents.AssertVisible();
+                androidAppTab.Title.AssertVisible();
             }
             catch (AssertFailedException)
             {
                 androidAppTab.AcceptNhsCookiesButton.Click();
-                androidAppTab.Contents.AssertVisible();
+                androidAppTab.Title.AssertVisible();
             }
 
-            androidAppTab.Contents.AssertVisible();
             return androidAppTab;
         }
 

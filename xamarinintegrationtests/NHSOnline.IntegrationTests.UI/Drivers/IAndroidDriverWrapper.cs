@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using NHSOnline.IntegrationTests.UI.Drivers.Native.Android;
 
@@ -11,6 +12,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         void PushTestFile();
         Task EnableAirplaneMode();
         Task ResetNetwork();
+        Task ResetNetworkAndWait(TimeSpan timeSpan);
         void DismissKeyboard();
         void SendKey(int key);
         void CloseApp();

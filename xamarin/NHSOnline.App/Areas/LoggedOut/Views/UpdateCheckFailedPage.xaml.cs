@@ -9,7 +9,7 @@ using NHSOnline.App.Navigation;
 namespace NHSOnline.App.Areas.LoggedOut.Views
 {
     [DesignTimeVisible(false)]
-    public partial class UpdateCheckFailedPage: IUpdateCheckFailedView, IUpdateCheckFailedView.IEvents
+    public partial class UpdateCheckFailedPage: IUpdateCheckFailedView, IUpdateCheckFailedView.IEvents, ISwipeablePage
     {
         private readonly ILogger _logger;
         private readonly AppNavigation<IUpdateCheckFailedView.IEvents> _appNavigation;
@@ -24,8 +24,14 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
 
         IAppNavigation<IUpdateCheckFailedView.IEvents> INavigationView<IUpdateCheckFailedView.IEvents>.AppNavigation => _appNavigation;
 
-        public Func<Task>? BackToHomeRequested { get; set; }
-        public ICommand BackToHomeCommand => new AsyncCommand(() => BackToHomeRequested);
+        public Func<Task>? OneOneOneRequested { get; set; }
+        public ICommand OneOneOneCommand => new AsyncCommand(() => OneOneOneRequested);
+
+        public Func<Task>? BackToLoginRequested { get; set; }
+        public ICommand BackToLoginCommand => new AsyncCommand(() => BackToLoginRequested);
+
+        public Func<Task>? BackRequested { get; set; }
+        private ICommand BackCommand => new AsyncCommand(() => BackRequested);
 
         protected override void OnAppearing()
         {
@@ -41,9 +47,21 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             _appNavigation.SuppressHandlers();
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            BackCommand.Execute(null);
+            return true;
+        }
+
+        public bool OnSwipeBack()
+        {
+            BackCommand.Execute(null);
+            return true;
+        }
+
         public Task HandleDeeplink(Uri deeplinkUrl)
         {
-            _logger.LogInformation("{className} is not required to handle deeplinks", nameof(UpdateCheckFailedPage));
+            _logger.LogInformation("{ClassName} is not required to handle deeplinks", nameof(UpdateCheckFailedPage));
             return Task.CompletedTask;
         }
     }

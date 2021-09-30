@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
@@ -60,7 +61,7 @@ namespace NHSOnline.IntegrationTests.ForcedUpdate
         }
 
         [NhsAppAndroidTest(AndroidBrowserStackCapability.NoNetwork)]
-        public void APatientSeesTheForcedUpgradeErrorPageWhenLoggingInWithNoNetworkInAndroid(IAndroidDriverWrapper driver)
+        public async Task APatientSeesTheForcedUpgradeErrorPageWhenLoggingInWithNoNetworkCanGoTo111AndCanNavigateBackToLogInAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
@@ -71,17 +72,70 @@ namespace NHSOnline.IntegrationTests.ForcedUpdate
                 .AssertOnPage(driver)
                 .ContinueWithNhsLogin();
 
+            KnownIssue.BrowserStackNetworkChangeFailed()
+                .ShouldExpect(() =>
+                {
+                    AndroidForcedUpdateErrorPage
+                        .AssertOnPage(driver)
+                        .AssertPageElements()
+                        .BackToLogin();
+                })
+                .OrIfKnownIssueOccuredExpect(() =>
+                {
+                    AndroidGettingStartedPage
+                        .AssertOnPage(driver);
+                });
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
             AndroidForcedUpdateErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements()
-                .BackToHome();
+                .Navigation.Close();
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            AndroidForcedUpdateErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements();
+
+            await driver.ResetNetwork();
+
+            AndroidForcedUpdateErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements()
+                .GoTo111();
+
+            AndroidAppTabBrowserChoice
+                .IfDisplayed(driver, choice => choice.ChooseChrome());
+
+            // Need to reuse the same page instance in the known issue fallback assertion
+            // as creating a new one will result in a new context being grabbed.
+            AndroidAppTab? appTab = null;
+
+            KnownIssue.BrowserStackNetworkChangeFailed()
+                .ShouldExpect(() =>
+                {
+                    appTab = AndroidAppTab.AssertOn111Page(driver);
+                    appTab.ReturnToApp();
+                })
+                .OrIfKnownIssueOccuredExpect(() =>
+                {
+                    appTab?.AssertNoInternet();
+                });
+
+            driver.PressBackButton();
 
             AndroidLoggedOutHomePage
                 .AssertOnPage(driver);
         }
 
         [NhsAppIOSTest(IOSBrowserStackCapability.NoNetwork)]
-        public void APatientSeesTheForcedUpgradeErrorPageWhenLoggingInWithNoNetworkInIOS(IIOSDriverWrapper driver)
+        public async Task APatientSeesTheForcedUpgradeErrorPageWhenLoggingInWithNoNetworkCanGoTo111AndCanNavigateBackToLogInIOS(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
@@ -92,10 +146,60 @@ namespace NHSOnline.IntegrationTests.ForcedUpdate
                 .AssertOnPage(driver)
                 .ContinueWithNhsLogin();
 
+            KnownIssue.BrowserStackNetworkChangeFailed()
+                .ShouldExpect(() =>
+                {
+                    IOSForcedUpdateErrorPage
+                        .AssertOnPage(driver)
+                        .AssertPageElements()
+                        .BackToLogin();
+                })
+                .OrIfKnownIssueOccuredExpect(() =>
+                {
+                    IOSGettingStartedPage
+                        .AssertOnPage(driver);
+                });
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
             IOSForcedUpdateErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements()
-                .BackToHome();
+                .Navigation.Close();
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            IOSForcedUpdateErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements();
+
+            await driver.ResetNetwork();
+
+            IOSForcedUpdateErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements()
+                .GoTo111();
+
+            // Need to reuse the same page instance in the known issue fallback assertion
+            // as creating a new one will result in a new context being grabbed.
+            IOSAppTab? appTab = null;
+
+            KnownIssue.BrowserStackNetworkChangeFailed()
+                .ShouldExpect(() =>
+                {
+                    appTab = IOSAppTab.AssertOn111Page(driver);
+                    appTab.ReturnToApp();
+                })
+                .OrIfKnownIssueOccuredExpect(() =>
+                {
+                    appTab?.AssertNoInternet();
+                });
+
+            driver.SwipeBack();
 
             IOSLoggedOutHomePage
                 .AssertOnPage(driver);
