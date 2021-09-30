@@ -36,6 +36,11 @@
   max-width: 100% !important;
 }
 
+@mixin nhsuk-focused-link-width-gpapt {
+  width: max-content;
+  max-width: 85% !important;
+}
+
 /// Focused input (form elements)
 ///
 /// Provides an additional outline and border to clearly indicate when
@@ -330,7 +335,7 @@ button {
 
     .nhsuk-details__summary-text {
       @include nhsuk-focused-link-text;
-      @include nhsuk-focused-link-width;
+      @include nhsuk-focused-link-width-gpapt;
       background: url("data:image/svg+xml,%3Csvg class='nhsuk-icon nhsuk-icon__plus' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='32' aria-hidden='true'%3E%3Ccircle cx='12' cy='12' r='10' fill='002f5c'%3E%3C/circle%3E%3Cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M12 8v8M8 12h8'%3E%3C/path%3E%3C/svg%3E%0A") left -2px center no-repeat; // sass-lint:disable-line quotes
     }
   }
