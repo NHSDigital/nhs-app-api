@@ -113,3 +113,16 @@ All the feeds can be configured by running the command `make configure-package-f
   ```
 
 - Fill in the placeholder with the actual token `TOKEN`
+
+## Troubleshooting issues
+- Error: nuget restore errors (401 Unauthorized)
+
+Solution: Look at the main Getting-Started.md - you need to run the `make configure-package-feed` 
+command. If this fails, see error below:
+
+- Error running `make configure-package-feed`: 'unlink xxx/Nuget is a directory' on Mac:
+
+Solution: check your `<home>\.config\Nuget` folder - this is supposed to be a Symlink to 
+`<home>\.nuget\Nuget`. If this has got messed up, e.g. the Symilnk is actually located inside 
+the Nuget folder, i.e. `<home>\.config\Nuget\Nuget`, just delete this folder in the .config 
+directory and re-run the make command.
