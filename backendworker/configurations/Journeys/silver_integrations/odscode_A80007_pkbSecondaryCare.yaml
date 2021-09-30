@@ -1,0 +1,22 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "A80007"
+journeys:
+  silverIntegrations:
+    carePlans:
+      - pkbSecondaryCare
+    consultations: []
+    healthTrackers:
+      - pkbSecondaryCare
+    libraries:
+      - pkbSecondaryCare
+    medicines:
+      - pkbSecondaryCare
+    messages:
+      - pkbSecondaryCare
+    recordSharing:
+      - pkbSecondaryCare
+    secondaryAppointments:
+      - pkbSecondaryCare
+    testResults:
+      - pkbSecondaryCare

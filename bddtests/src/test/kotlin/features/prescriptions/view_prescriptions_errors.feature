@@ -32,7 +32,6 @@ Feature: View prescriptions error cases
       | EMIS      | ze     |
       | TPP       | zt     |
       | VISION    | zs     |
-      | MICROTEST | zm     |
 
   @nativesmoketest
   Scenario Outline: A <GP System> user tries to navigate to the prescriptions page, but the request to retrieve the prescriptions throws a server error

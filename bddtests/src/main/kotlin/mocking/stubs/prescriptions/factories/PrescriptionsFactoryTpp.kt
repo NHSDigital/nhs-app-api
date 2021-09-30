@@ -6,7 +6,6 @@ import mocking.data.prescriptions.courses.TppCoursesLoader
 import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.tpp.models.RequestMedicationReply
-import mockingFacade.prescriptions.PartialSuccessFacade
 import models.Patient
 import models.prescriptions.PrescriptionLoaderConfiguration
 import org.apache.http.HttpStatus
@@ -116,14 +115,6 @@ class PrescriptionsFactoryTpp: PrescriptionsFactory() {
                     prescriptions.listRepeatMedication(patient)
                             .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
                 }
-    }
-
-    override fun orderPrescriptionReturnsConflictResponse() {
-        throw UnsupportedOperationException()
-    }
-
-    override fun prescriptionsOrderEndpointPartiallySuccessful(partialSuccess: PartialSuccessFacade) {
-        throw UnsupportedOperationException()
     }
 
     override fun disableForProxy(callingPatient: Patient, actingOnBehalfOf: Patient) {

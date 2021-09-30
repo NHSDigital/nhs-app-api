@@ -108,10 +108,6 @@ class ServiceJourneyRulesMapper {
                 EnumSet.of(SJRJourneyType.MEDICAL_RECORD_VERSION_1)
             )
             .add(
-                Supplier.MICROTEST, "A80004",
-                EnumSet.of(SJRJourneyType.MEDICAL_RECORD_VERSION_1)
-            )
-            .add(
                 Supplier.TPP, "A80002",
                 EnumSet.of(
                     SJRJourneyType.MEDICAL_RECORD_VERSION_1,
@@ -192,13 +188,15 @@ class ServiceJourneyRulesMapper {
                 Supplier.EMIS, "A80007",
                 EnumSet.of(
                     SJRJourneyType.ONE_ONE_ONE_DISABLED,
-                    SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB,
-                    SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_PKB,
-                    SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB,
-                    SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB,
-                    SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_PKB,
-                    SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_TESTSILVERTHIRDPARTYPROVIDER,
-                    SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB
+                    SJRJourneyType.MEDICAL_RECORD_IM1,
+                    SJRJourneyType.SILVER_INTEGRATION_APPOINTMENTS_PKB_SECONDARY_CARE,
+                    SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB_SECONDARY_CARE,
+                    SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB_SECONDARY_CARE,
+                    SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB_SECONDARY_CARE,
+                    SJRJourneyType.SILVER_INTEGRATION_MEDICINES_PKB_SECONDARY_CARE,
+                    SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_SECONDARY_CARE,
+                    SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_PKB_SECONDARY_CARE,
+                    SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_PKB_SECONDARY_CARE
                 )
             )
             .add(
@@ -214,20 +212,6 @@ class ServiceJourneyRulesMapper {
                     SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_CIE,
                     SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_CIE,
                     SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_CIE
-                )
-            )
-            .add(
-                Supplier.MICROTEST, "A21410",
-                EnumSet.of(
-                    SJRJourneyType.MEDICAL_RECORD_IM1,
-                    SJRJourneyType.SILVER_INTEGRATION_APPOINTMENTS_PKB_SECONDARY_CARE,
-                    SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB_SECONDARY_CARE,
-                    SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB_SECONDARY_CARE,
-                    SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB_SECONDARY_CARE,
-                    SJRJourneyType.SILVER_INTEGRATION_MEDICINES_PKB_SECONDARY_CARE,
-                    SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_SECONDARY_CARE,
-                    SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_PKB_SECONDARY_CARE,
-                    SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_PKB_SECONDARY_CARE
                 )
             )
             .add(

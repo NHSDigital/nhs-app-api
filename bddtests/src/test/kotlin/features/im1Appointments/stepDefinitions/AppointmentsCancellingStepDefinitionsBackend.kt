@@ -109,7 +109,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
 
     private fun getCancellationReason(gpSystem: Supplier) : String {
         return when (gpSystem) {
-            Supplier.EMIS, Supplier.MICROTEST ->  "No longer required"
+            Supplier.EMIS ->  "No longer required"
             else -> ""
         }
     }

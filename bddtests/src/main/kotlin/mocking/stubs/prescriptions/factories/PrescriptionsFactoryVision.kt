@@ -11,7 +11,6 @@ import mocking.vision.models.OrderNewPrescriptionRequest
 import mocking.vision.models.OrderNewPrescriptionResponse
 import mocking.vision.models.PrescriptionHistory
 import mocking.vision.models.VisionUserSession
-import mockingFacade.prescriptions.PartialSuccessFacade
 import models.Patient
 import models.prescriptions.PrescriptionLoaderConfiguration
 import org.apache.http.HttpStatus
@@ -126,13 +125,6 @@ class PrescriptionsFactoryVision: PrescriptionsFactory() {
                     prescriptions.getEligibleRepeatsRequest(VisionUserSession.fromPatient(patient))
                             .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
                 }
-    }
-    override fun orderPrescriptionReturnsConflictResponse() {
-        throw UnsupportedOperationException()
-    }
-
-    override fun prescriptionsOrderEndpointPartiallySuccessful(partialSuccess: PartialSuccessFacade) {
-        throw UnsupportedOperationException()
     }
 
     override fun disableForProxy(callingPatient: Patient, actingOnBehalfOf: Patient) {

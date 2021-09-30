@@ -34,7 +34,6 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
             Supplier.EMIS -> generateEmisMocks(patient)
             Supplier.TPP -> generateTppMocks(patient)
             Supplier.VISION -> generateVisionMocks(patient)
-            Supplier.MICROTEST -> { /* Microtest does not support registration with linkage keys */ }
         }
     }
 

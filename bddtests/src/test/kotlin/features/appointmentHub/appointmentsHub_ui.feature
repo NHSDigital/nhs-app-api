@@ -31,7 +31,6 @@ Feature: Appointments Hub Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: An <GP System> user can recover their session by clicking try again on navigate to GP Appointments
     Given I am an <GP System> user with no booked appointments
@@ -48,7 +47,6 @@ Feature: Appointments Hub Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: An <GP System> user without a GP session can recover their session on navigate to GP Appointments
     Given I am an <GP System> patient whose GP system is unavailable
@@ -69,7 +67,6 @@ Feature: Appointments Hub Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: An <GP System> user recovers their GP session before the error
     Given I am an <GP System> patient whose GP system is unavailable
@@ -85,7 +82,6 @@ Feature: Appointments Hub Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: An <GP System> user without a GP session is able to recover their session on try again
     Given I am an <GP System> patient whose GP system is unavailable
@@ -104,7 +100,6 @@ Feature: Appointments Hub Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user GP session eventually becomes available
     Given I am an <GP System> patient whose GP system is unavailable
@@ -130,4 +125,3 @@ Feature: Appointments Hub Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |

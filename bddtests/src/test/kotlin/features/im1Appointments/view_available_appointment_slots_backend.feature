@@ -17,7 +17,6 @@ Feature: View Available Appointment Slots Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: Requesting available <GP System> appointment slots returns an unknown exception, returns a Bad Gateway error
     Given an unknown exception will occur when wanting to view <GP System> appointment slots
@@ -29,7 +28,6 @@ Feature: View Available Appointment Slots Backend
       | EMIS      | 4e     |
       | TPP       | 4t     |
       | VISION    | 4s     |
-      | MICROTEST | 4m     |
 
     # GP System agnostic as GP System shouldn't be hit
   Scenario: Requesting available appointment slots by patient whose session expired returns "Unauthorized" error
@@ -54,7 +52,6 @@ Feature: View Available Appointment Slots Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: Requesting available appointment slots the <GP System> times out and returns "Gateway Timeout" error
     Given the system will time out when trying to retrieve <GP System> appointment slots
@@ -66,9 +63,8 @@ Feature: View Available Appointment Slots Backend
       | EMIS      | ze     |
       | TPP       | zt     |
       | VISION    | zs     |
-      | MICROTEST | zm     |
 
-    # Only specific to EMIS and MICROTEST as we only look to retrieve them for these systems at the moment
+    # Only specific to EMIS as we only look to retrieve them for this system at the moment
   Scenario Outline: A <GP System> user who has <User's Telephone Numbers> phone number(s) stored are retrieved with available slots
     Given I have <User's Telephone Numbers> telephone number(s) stored for <GP System>
     And there are available appointment slots with different criteria for <GP System>
@@ -81,8 +77,5 @@ Feature: View Available Appointment Slots Backend
       | EMIS      | only first                      | 1                 |
       | EMIS      | only second                     | 1                 |
       | EMIS      | both first and second           | 2                 |
-      | MICROTEST | no                              | 0                 |
-      | MICROTEST | only first                      | 1                 |
-      | MICROTEST | only second                     | 1                 |
-      | MICROTEST | both first and second           | 2                 |
+
 

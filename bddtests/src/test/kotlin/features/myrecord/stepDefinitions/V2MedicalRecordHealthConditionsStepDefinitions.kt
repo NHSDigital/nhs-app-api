@@ -24,10 +24,6 @@ open class V2MedicalRecordHealthConditionsStepDefinitions {
                 "10 October 2018\nPeanut allergy\nStatus: Past",
                 "10 October 2018\nBroken leg\nStatus: Current",
                 "10 October 2018\nAcne\nStatus: Random"
-            ), Supplier.MICROTEST to arrayOf(
-                "5 July 2019\nFinish Date: Ongoing\nRubric 3",
-                "4 July 2019\nFinish Date: Ongoing\nRubric 2",
-                "3 July 2019\nFinish Date: Ongoing\nRubric 1"
             ))
 
         @Then("^I see the expected health conditions - Medical Record v2$")

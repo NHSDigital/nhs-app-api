@@ -1,12 +1,11 @@
 package features.authentication.stepDefinitions
 
 import constants.Supplier
+import features.authentication.factories.PatientVerificationFactory
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
-import features.authentication.factories.PatientVerificationFactory
 import mocking.MockingClient
-import mocking.defaults.EmisMockDefaults
 import mocking.defaults.VisionMockDefaults
 import mocking.emis.demographics.PatientIdentifier
 import mocking.vision.models.VisionUserSession
@@ -49,12 +48,6 @@ class PatientVerificationStepDefinitions {
         val supplier = Supplier.valueOf(gpSystem)
         PatientVerificationSerenityHelpers.ConnectionToken.set("token")
         setDefaultNationalPracticeCodeSessionVariable(supplier)
-    }
-
-    @Given("^I have an EMIS IM1 Connection Token and I try to verify as a microtest user$")
-    fun givenIHaveAnIm1ConnectionTokenForEmisAndIAmMicrotest() {
-        PatientVerificationSerenityHelpers.ConnectionToken.set(EmisMockDefaults.DEFAULT_CONNECTION_TOKEN)
-        setDefaultNationalPracticeCodeSessionVariable(Supplier.MICROTEST)
     }
 
     private fun setDefaultNationalPracticeCodeSessionVariable(supplier: Supplier) {
@@ -142,14 +135,6 @@ class PatientVerificationStepDefinitions {
     fun givenIHaveValidCredentialsForAPatientWithNoNhsNumber(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         PatientVerificationFactory.getForSupplier(supplier).validPatientWithNoNhsNumber()
-    }
-
-    @Given("^I have an old ODS Code and IM1 Connection Token for a (\\w*) patient that has since moved to a"
-            + " different practice$")
-    fun givenIHaveAnOldOdsCodeAndIm1ConnectionTokenForAPatientThatHasSinceMovedToADifferentPractice(gpSystem: String) {
-        val supplier = Supplier.valueOf(gpSystem)
-        PatientVerificationFactory.getForSupplier(supplier)
-                                  .oldOdsCodeAndConnectionTokenForPatientThatHasSinceMovedToADifferentPractice()
     }
 
     @Given("I have valid a valid IM1 Connection Token for a (\\w+) patient but the GP System is not available$")

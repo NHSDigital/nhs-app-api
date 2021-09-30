@@ -24,7 +24,6 @@ import utils.getOrFail
 import utils.getOrNull
 import utils.set
 import worker.WorkerClient
-import worker.models.linkage.LinkageResponse
 import worker.models.patient.Im1ConnectionRequest
 import worker.models.patient.Im1ConnectionResponse
 import worker.models.patient.Im1ConnectionToken
@@ -218,23 +217,6 @@ class Im1ConnectionV1StepDefinitionsBackend {
 
     @When("^I register the user's IM1 credentials$")
     fun iRegisterAUsersIMCredentials() {
-        val im1ConnectionRequest = AuthenticationSerenityHelpers.IM1_CONNECTION_REQUEST
-                .getOrFail<Im1ConnectionRequest>()
-        Im1ConnectionV1Api.post(im1ConnectionRequest)
-    }
-
-    @When("^I register the Microtest user's IM1 credentials after linkage$")
-    fun iRegisterTheMicrotestUsersIMCredentialsAfterLinkage() {
-        val supplier = Supplier.MICROTEST
-        val linkageResponse = Serenity.sessionVariableCalled<LinkageResponse>(LinkageResponse::class)
-        val linkage = Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
-        Assert.assertNotNull(linkageResponse)
-        Assert.assertEquals(linkage.odsCode, linkageResponse.odsCode)
-        val patient = SerenityHelpers.getPatient()
-        DemographicsFactory.getForSupplier(supplier).enabled(Patient.getDefault(supplier))
-        SuccessfulRegistrationJourney(mockingClient).create(patient, supplier)
-        setIm1Request(patient)
-
         val im1ConnectionRequest = AuthenticationSerenityHelpers.IM1_CONNECTION_REQUEST
                 .getOrFail<Im1ConnectionRequest>()
         Im1ConnectionV1Api.post(im1ConnectionRequest)

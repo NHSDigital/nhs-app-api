@@ -18,8 +18,7 @@ abstract class PrescriptionsHistoryJourney  {
             hashMapOf(
                     Supplier.EMIS to { PrescriptionsHistoryJourneyEmis() },
                     Supplier.TPP to { throw NotImplementedError("Not implemented") },
-                    Supplier.VISION to { PrescriptionsHistoryJourneyVision() },
-                    Supplier.MICROTEST to { PrescriptionsHistoryJourneyMicrotest() }
+                    Supplier.VISION to { PrescriptionsHistoryJourneyVision() }
             )
         }
     }

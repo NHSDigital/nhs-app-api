@@ -187,8 +187,7 @@ abstract class AppointmentsSlotsFactory(gpSupplier: Supplier) : AppointmentsFact
             hashMapOf(
                     Supplier.EMIS to { AppointmentsSlotsFactoryEmis() },
                     Supplier.TPP to { AppointmentsSlotsFactoryTpp() },
-                    Supplier.VISION to { AppointmentsSlotsFactoryVision() },
-                    Supplier.MICROTEST to { AppointmentsSlotsFactoryMicrotest() }
+                    Supplier.VISION to { AppointmentsSlotsFactoryVision() }
             )
         }
     }

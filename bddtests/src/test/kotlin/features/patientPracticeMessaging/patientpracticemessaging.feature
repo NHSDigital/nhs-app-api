@@ -370,4 +370,3 @@ Feature: Patient to practice messaging
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |

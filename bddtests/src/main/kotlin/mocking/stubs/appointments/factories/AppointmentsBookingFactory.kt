@@ -143,8 +143,7 @@ abstract class AppointmentsBookingFactory(gpSupplier: Supplier) : AppointmentsFa
                     hashMapOf(
                             Supplier.EMIS to { AppointmentsBookingFactoryEmis() },
                             Supplier.TPP to { AppointmentsBookingFactoryTpp() },
-                            Supplier.VISION to { AppointmentsBookingFactoryVision() },
-                            Supplier.MICROTEST to { AppointmentsBookingFactoryMicrotest()})
+                            Supplier.VISION to { AppointmentsBookingFactoryVision() })
                 }
 
 

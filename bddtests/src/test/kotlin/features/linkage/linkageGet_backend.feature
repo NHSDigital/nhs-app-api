@@ -75,7 +75,6 @@ Feature: Linkage Get Key
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: Linkage request GET for <GP System> returns 400 Bad Request, empty NhsNumber
     Given I have valid <GP System> linkage details apart from an empty NhsNumber
@@ -86,7 +85,6 @@ Feature: Linkage Get Key
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: Linkage request GET for <GP System> returns 501 Not Implemented, not found ods code
     Given I have valid <GP System> linkage details apart from a not found OdsCode
@@ -97,7 +95,6 @@ Feature: Linkage Get Key
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario: Linkage request GET for EMIS returns 400 Bad Request, empty identity token
     Given I have valid EMIS linkage details apart from an empty identity token
@@ -173,34 +170,3 @@ Feature: Linkage Get Key
     Given VISION was unable to find the api key for my NHS number
     When I call the Linkage GET endpoint
     Then I receive a "Not Found" error
-
-  Scenario: Linkage request GET for Microtest returns a Linkage Not Supported error when demographics call fails with an Internal Server Error
-    Given I have valid MICROTEST linkage details
-    And the demographics endpoint responds with an "internal server error" error
-    When I call the Linkage GET endpoint
-    Then I receive a "Linkage Not Supported" error
-
-  Scenario: Linkage request GET for Microtest returns a Linkage Not Supported error when demographics call fails with a Forbidden error
-    Given I have valid MICROTEST linkage details
-    And the demographics endpoint responds with a "Forbidden" error
-    When I call the Linkage GET endpoint
-    Then I receive a "Linkage Not Supported" error
-
-  Scenario: Linkage request GET for Microtest returns a Linkage Not Supported error when demographics call fails with a Bad Gateway error
-    Given I have valid MICROTEST linkage details
-    And the demographics endpoint responds with a "Bad Gateway" error
-    When I call the Linkage GET endpoint
-    Then I receive a "Linkage Not Supported" error
-
-  Scenario Outline: Microtest patient can get linkage details, and successfully register with the returned details.
-    Given I have valid <GP System> linkage details
-    And the GP Practice has enabled demographics functionality
-    And no IM1 Connection Token is currently cached
-    When I call the Linkage GET endpoint
-    Then I receive a valid microtest linkage response
-    And the IM1 Connection Token is in the cache
-    When I register the Microtest user's IM1 credentials after linkage
-    Then I receive a "Created" success code
-    Examples:
-      | GP System |
-      | MICROTEST |

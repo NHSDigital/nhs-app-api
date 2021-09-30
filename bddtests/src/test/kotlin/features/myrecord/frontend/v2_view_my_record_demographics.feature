@@ -16,4 +16,3 @@ Feature: Demographics Frontend - Medical Record v2
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |

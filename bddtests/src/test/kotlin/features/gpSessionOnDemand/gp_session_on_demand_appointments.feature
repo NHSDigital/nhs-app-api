@@ -31,4 +31,3 @@ Feature: GP Session On Demand appointments
       | EMIS      | 3e     |
       | TPP       | 3t     |
       | VISION    | 3s     |
-      | MICROTEST | 3m     |

@@ -25,8 +25,7 @@ abstract class ProblemsFactory {
                 by lazy {
                     hashMapOf(
                             Supplier.EMIS to { ProblemsFactoryEmis() },
-                            Supplier.VISION to { ProblemsFactoryVision() },
-                            Supplier.MICROTEST to { ProblemsFactoryMicrotest() })
+                            Supplier.VISION to { ProblemsFactoryVision() })
                 }
 
     }

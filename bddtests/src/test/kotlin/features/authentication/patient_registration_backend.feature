@@ -27,11 +27,6 @@ Feature: Patient Registration Backend
     And the response has the expected connection token
     And the response has the expected NHS numbers
 
-  Scenario: Registering with linkage details for a Microtest practice, who don't support linkage keys, results in a Linkage Not Supported response
-    Given I have a new MICROTEST patient with Nhs Numbers of "5785445875"
-    When I register the user's IM1 credentials
-    Then I receive a "Linkage Not Supported" code
-
   Scenario Outline: <GP System> Account ID doesn't match a user
     Given I have data for a <GP System> patient that does not exist
     And no IM1 Connection Token is currently cached
@@ -180,7 +175,6 @@ Feature: Patient Registration Backend
       | EMIS      | Bad Request |
       | TPP       | Bad Request |
       | VISION    | Bad Request |
-      | MICROTEST | Bad Request |
 
   Scenario Outline: <GP System> - Missing Linkage Key
     Given I have a <GP System> user's IM1 credentials with missing Linkage Key
@@ -192,14 +186,12 @@ Feature: Patient Registration Backend
       | EMIS      | Bad Request |
       | TPP       | Bad Request |
       | VISION    | Bad Request |
-      | MICROTEST | Bad Request |
 
   Scenario: Targeting the IM1 endpoint does not expose the Patient Facing Services endpoint
     Given I target the IM1 endpoint
     And I have an IM1 request and a Patient Facing Request
     Then I receive a response from the IM1 request
     And I receive a Not Found response from the Patient Facing request
-
 
   Scenario: Targeting the Patient Facing Services endpoint does not expose the IM1 endpoint
     Given I target the Patient Facing Services endpoint

@@ -58,12 +58,6 @@ open class V2MedicalRecordStepDefinitions {
         medicalRecordV2Page.assertInfoAskingForDcrAccessVisible()
     }
 
-    @Then("^I see a message telling me to contact my GP for information on My Record - Medical Record v2$")
-    fun thenISeeAMessageTellingMeToContactMyGpV2() {
-        assertTextOnPage(
-                "Sorry, this information isn't available through the NHS App. To access it, contact your GP surgery.")
-    }
-
     @Then("^I see the (.*) section link on my record - Medical Record v2$")
     fun thenISeeTheSectionLinkOnMyRecordV2(linkText: String) {
         medicalRecordV2Page.assertMedicalRecordSectionLinkExists(linkText)
@@ -77,12 +71,6 @@ open class V2MedicalRecordStepDefinitions {
     @Then("^I see a message that I have no information recorded for a specific record - Medical Record v2$")
     fun thenISeeAMessageIndicatingThatIHaveNoInformationRecordedV2() {
         assertTextOnPage( "No information recorded")
-    }
-
-    @Then("^I see a message that this information isn't available through the NHS App - Medical Record v2$")
-    fun thenISeeAMessageIndicatingThatInformationIsntAvailable() {
-        assertTextOnPage("Sorry, this information isn't available through the NHS App. To access it, "+
-        "contact your GP surgery.")
     }
 
     @Then("^I see a message indicating that I have no access to view this section on My Record" +

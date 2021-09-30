@@ -40,8 +40,7 @@ abstract class AuthenticationFactory(protected val gpSystem: Supplier) {
             hashMapOf(
                     Supplier.EMIS to { AuthenticationFactoryEmis() },
                     Supplier.TPP to { AuthenticationFactoryTpp() },
-                    Supplier.VISION to { AuthenticationFactoryVision() },
-                    Supplier.MICROTEST to { AuthenticationFactoryMicrotest() }
+                    Supplier.VISION to { AuthenticationFactoryVision() }
             )
         }
     }

@@ -70,7 +70,6 @@ Feature: View prescriptions Frontend
     Examples:
       | GP System |
       | TPP       |
-      | MICROTEST |
 
   Scenario: The Ordered by label does exist if the prescription was ordered by proxy
     Given I am a patient using the EMIS GP System
@@ -196,7 +195,6 @@ Feature: View prescriptions Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user GP session eventually becomes available when viewing orders
     Given I am an <GP System> patient whose GP system is unavailable
@@ -223,7 +221,6 @@ Feature: View prescriptions Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario: The user can see the Contact your GP screen and follow an external link
     Given the scenario is submit prescription

@@ -32,7 +32,6 @@ Feature: Organ Donation Frontend
       | GP System |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
 # These tests navigate directly to the pages where the features are to be tested, to save time.
   Scenario Outline: A user can select '<Option>' for faith and belief sharing when opting to donate all their organs
@@ -86,7 +85,6 @@ Feature: Organ Donation Frontend
       | GP System |
       | EMIS      |
       | TPP       |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user can opt to donate some of their organs
     Given I am using the native app user agent
@@ -117,7 +115,6 @@ Feature: Organ Donation Frontend
       | TPP       |
       | EMIS      |
       | VISION    |
-      | MICROTEST |
 
   Scenario: A user can choose to record their ethnicity and religion when opting out of organ donation
     Given I am using the native app user agent

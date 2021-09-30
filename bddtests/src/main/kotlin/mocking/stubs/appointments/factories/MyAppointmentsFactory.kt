@@ -196,8 +196,7 @@ abstract class MyAppointmentsFactory(gpSupplier: Supplier) : AppointmentsFactory
             hashMapOf(
                     Supplier.EMIS to { MyAppointmentsFactoryEmis() },
                     Supplier.TPP to { MyAppointmentsFactoryTpp() },
-                    Supplier.VISION to { MyAppointmentsFactoryVision() },
-                    Supplier.MICROTEST to { MyAppointmentsFactoryMicrotest() }
+                    Supplier.VISION to { MyAppointmentsFactoryVision() }
             )
         }
     }

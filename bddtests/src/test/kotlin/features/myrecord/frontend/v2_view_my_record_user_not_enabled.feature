@@ -20,12 +20,3 @@ Feature: User Not Enabled Frontend - Medical Record v2
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
     Then I see the Consultations section link on my record - Medical Record v2
-
-  Scenario: A MICROTEST user who does not have medical record access will get a 403 returned - Medical Record v2
-    Given I am a MICROTEST user setup to use medical record version 2
-    And the my record wiremocks return a 403
-    And I am logged in
-    When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
-    Then I see Service not offered by GP or to specific user or access revoked warning message

@@ -28,7 +28,6 @@ Feature: Book Telephone Appointments Frontend
     Examples:
       | GP System |
       | EMIS      |
-      | MICROTEST |
 
   Scenario Outline: An <GP System> user receives an error if a phone number is not provided for telephone appointments
     Given I wish to book a <GP System> telephone appointment
@@ -46,7 +45,6 @@ Feature: Book Telephone Appointments Frontend
     Examples:
       | GP System |
       | EMIS      |
-      | MICROTEST |
 
   Scenario Outline: An <GP System> user receives errors if a phone number and booking reason are not provided for telephone appointments
     Given I wish to book a <GP System> telephone appointment
@@ -63,7 +61,6 @@ Feature: Book Telephone Appointments Frontend
     Examples:
       | GP System |
       | EMIS      |
-      | MICROTEST |
 
   Scenario Outline: An <GP System> user receives an error if a phone number is not provided for telephone appointments with optional booking reason
     Given I wish to book a <GP System> telephone appointment
@@ -79,8 +76,6 @@ Feature: Book Telephone Appointments Frontend
     Examples:
       | GP System |
       | EMIS      |
-      | MICROTEST |
-
 
   Scenario Outline: An <GP System> user receives an error if a phone number is not selected for telephone appointments, but symptoms have been entered
     Given I wish to book a <GP System> telephone appointment
@@ -98,7 +93,6 @@ Feature: Book Telephone Appointments Frontend
     Examples:
       | GP System |
       | EMIS      |
-      | MICROTEST |
 
   Scenario Outline: An <GP System> user receives an error if a phone number is not selected for telephone appointments with optional booking reason
     Given I wish to book a <GP System> telephone appointment
@@ -113,7 +107,6 @@ Feature: Book Telephone Appointments Frontend
     Examples:
       | GP System |
       | EMIS      |
-      | MICROTEST |
 
   Scenario Outline: An <GP System> user receives an error if an alternate phone number is selected for telephone appointments without a number entered, but symptoms have been entered
     Given I wish to book a <GP System> telephone appointment
@@ -132,7 +125,6 @@ Feature: Book Telephone Appointments Frontend
     Examples:
       | GP System |
       | EMIS      |
-      | MICROTEST |
 
   Scenario Outline: An <GP System> user receives an error if an alternate phone number is selected for telephone appointments with optional booking reason, but without a number entered
     Given I wish to book a <GP System> telephone appointment
@@ -149,7 +141,6 @@ Feature: Book Telephone Appointments Frontend
     Examples:
       | GP System |
       | EMIS      |
-      | MICROTEST |
 
   Scenario Outline: An <GP System> user receives an error if an empty string or whitespace provided for telephone appointments
     Given I wish to book a <GP System> telephone appointment
@@ -168,7 +159,6 @@ Feature: Book Telephone Appointments Frontend
     Examples:
       | GP System |
       | EMIS      |
-      | MICROTEST |
 
   Scenario Outline: An <GP System> user receives an error if an empty string or whitespace provided for telephone appointments, when alternate phone number is selected
     Given I wish to book a <GP System> telephone appointment
@@ -188,7 +178,6 @@ Feature: Book Telephone Appointments Frontend
     Examples:
       | GP System |
       | EMIS      |
-      | MICROTEST |
 
     # Regression Test scenarios to ensure booking reason is still validated for telephone appointments
 
@@ -206,7 +195,6 @@ Feature: Book Telephone Appointments Frontend
     Examples:
       | GP System |
       | EMIS      |
-      | MICROTEST |
 
   Scenario Outline: An appointment is booked for an <GP System> user if a phone number is provided for telephone appointments with optional booking reason
     Given I wish to book a <GP System> telephone appointment
@@ -243,7 +231,6 @@ Feature: Book Telephone Appointments Frontend
     Examples:
       | GP System |
       | EMIS      |
-      | MICROTEST |
 
   Scenario: An appointment can be booked for an EMIS with a stored phone number no reason when booking reasons are optional
     Given I wish to book a EMIS telephone appointment
@@ -278,7 +265,6 @@ Feature: Book Telephone Appointments Frontend
     Examples:
       | GP System |
       | EMIS      |
-      | MICROTEST |
 
   Scenario: An appointment is booked for an EMIS user if an phone number is manually entered for telephone appointments with optional booking reason
     Given I wish to book a EMIS telephone appointment

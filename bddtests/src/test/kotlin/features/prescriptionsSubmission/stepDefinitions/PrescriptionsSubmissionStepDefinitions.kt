@@ -4,9 +4,7 @@ import com.github.tomakehurst.wiremock.stubbing.Scenario
 import constants.Supplier
 import features.courses.stepDefinitions.CoursesStepDefinitions
 import features.nominatedPharmacy.NominatedPharmacySerenityHelpers
-import features.prescriptions.PrescriptionSerenityHelpers
 import features.prescriptions.mappers.EmisPrescriptionMapper
-import features.prescriptions.mappers.MicrotestPrescriptionMapper
 import features.prescriptions.mappers.TppPrescriptionMapper
 import features.prescriptions.mappers.VisionPrescriptionMapper
 import features.prescriptions.stepDefinitions.PrescriptionsSerenityHelpers
@@ -20,13 +18,11 @@ import mocking.defaults.VisionMockDefaults
 import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import mocking.emis.models.PrescriptionRequestsGetResponse
-import mocking.microtest.prescriptions.PrescriptionHistoryGetResponse
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationItem
 import mocking.stubs.pds.ViewSpinePdsStubs
 import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.vision.models.PrescriptionHistory
-import mockingFacade.prescriptions.PartialSuccessFacade
 import models.Patient
 import models.prescriptions.PrescriptionLoaderConfiguration
 import net.serenitybdd.core.Serenity
@@ -36,7 +32,6 @@ import pages.ContactYourGPPage
 import pages.ErrorPage
 import pages.TypeOfPrescriptionsPage
 import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
-import pages.prescription.PartiallySuccessfulRepeatPrescriptionsOrderPage
 import pages.prescription.ViewOrdersPrescriptionsPage
 import pages.text
 import utils.LinkedProfilesSerenityHelpers
@@ -75,7 +70,6 @@ open class PrescriptionsSubmissionStepDefinitions {
 
     private lateinit var viewOrdersPrescriptionsPage: ViewOrdersPrescriptionsPage
     private lateinit var confirmRepeatPrescriptionsOrderPage: ConfirmRepeatPrescriptionsOrderPage
-    private lateinit var partiallySuccessfulPrescriptionsOrderPage: PartiallySuccessfulRepeatPrescriptionsOrderPage
     private lateinit var errorPage: ErrorPage
 
     private var initialHistoricPrescriptionsCount = 0
@@ -109,24 +103,6 @@ open class PrescriptionsSubmissionStepDefinitions {
         }
 
         prescriptionSubmissionRequest!!.courseIds.addAll(uuids)
-    }
-
-    @Given("^the GP system responds with an error indicating the order was partially successful")
-    fun theGpSystemRespondsWithErrorIndicatingTheOrderWasPartiallySuccessful() {
-        val gpSystem = SerenityHelpers.getGpSupplier()
-
-        val successfulMedicationOrders = listOf("Amoxicillin", "Ibuprofen")
-        val unsuccessfulMedicationOrders = listOf("Tramadol", "Oxycodone", "Xanax")
-
-        val partialSuccessData = PartialSuccessFacade(
-                unsuccessfulMedications = unsuccessfulMedicationOrders,
-                successfulMedications = successfulMedicationOrders
-        )
-
-        PrescriptionsFactory.getForSupplier(gpSystem)
-                .prescriptionsOrderEndpointPartiallySuccessful(partialSuccessData)
-
-        PrescriptionSerenityHelpers.PARTIAL_SUCCESS_RESULT.set(partialSuccessData)
     }
 
     @Given("^EMIS responds with an error indicating an included course has already been ordered in the last 30 days " +
@@ -219,8 +195,6 @@ open class PrescriptionsSubmissionStepDefinitions {
         prescriptionLoader = PrescriptionsFactory.getForSupplier(supplier).getPrescriptionsLoader
         val emisPrescriptionMap = mutableMapOf<String, PrescriptionRequestsGetResponse>()
         Serenity.setSessionVariable("EmisPrescriptionsMap").to(emisPrescriptionMap)
-        val microtestPrescriptionMap = mutableMapOf<String, PrescriptionHistoryGetResponse>()
-        Serenity.setSessionVariable("MicrotestPrescriptionsMap").to(microtestPrescriptionMap)
     }
 
     @Given("^I have (\\d+) historic prescriptions in this scenario$")
@@ -263,21 +237,6 @@ open class PrescriptionsSubmissionStepDefinitions {
                             .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
                 }
             }
-            Supplier.MICROTEST -> {
-                val data = prescriptionLoader.data as PrescriptionHistoryGetResponse
-                mockingClient.forMicrotest.mock {
-                    prescriptions.getPrescriptionHistoryRequest(currentPatient)
-                            .respondWithSuccess(data)
-                            .inScenario(scenarioTitle)
-                            .whenScenarioStateIs(currentScenarioState)
-                }
-
-                val map =
-                        Serenity.sessionVariableCalled<MutableMap<String,
-                                PrescriptionHistoryGetResponse>>("MicrotestPrescriptionsMap")
-                map[Scenario.STARTED] = data
-            }
-
         }
     }
 
@@ -303,13 +262,6 @@ open class PrescriptionsSubmissionStepDefinitions {
             prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
                     .respondWithGenericInternalServerError()
         }
-    }
-
-    @Given("^GP system responds with a conflict error when a repeat prescription is submitted$")
-    fun gpSystemRespondsWithConflictErrorWhenARepeatPrescriptionIsSubmitted() {
-        PrescriptionsFactory
-                .getForSupplier(SerenityHelpers.getGpSupplier())
-                .orderPrescriptionReturnsConflictResponse()
     }
 
     @Then("^I see the Repeat prescription page with (\\d+) prescriptions$")
@@ -338,14 +290,6 @@ open class PrescriptionsSubmissionStepDefinitions {
                 viewOrdersPrescriptionsPage.assertPrescriptionsMatch(VisionPrescriptionMapper
                         .map(prescriptionLoader.data as PrescriptionHistory), amount)
             }
-            Supplier.MICROTEST -> {
-                val map =
-                        Serenity.sessionVariableCalled<MutableMap<String,
-                                PrescriptionHistoryGetResponse>>("MicrotestPrescriptionsMap")
-
-                viewOrdersPrescriptionsPage.assertPrescriptionsMatch(MicrotestPrescriptionMapper.map(
-                        map[currentScenarioState]!!), amount)
-            }
         }
     }
 
@@ -367,16 +311,6 @@ open class PrescriptionsSubmissionStepDefinitions {
                 expectedSubHeader, errorPage.subHeading.text)
         Assert.assertEquals("expected error text $expectedText but found ${errorPage.errorText1.text}",
                 expectedText, errorPage.errorText1.text)
-    }
-
-    @Then("^I can view which medications from my prescription order succeeded and failed$")
-    fun iSeeAMessageIndicatingThePrescriptionWasPartiallySuccessful() {
-        partiallySuccessfulPrescriptionsOrderPage.shouldBeDisplayed()
-
-        val partialSuccessExpected = PrescriptionSerenityHelpers
-                .PARTIAL_SUCCESS_RESULT
-                .getOrFail<PartialSuccessFacade>()
-        partiallySuccessfulPrescriptionsOrderPage.verifyMedications(partialSuccessExpected)
     }
 
     @When("^I see nominated pharmacy information is shown and correct$")

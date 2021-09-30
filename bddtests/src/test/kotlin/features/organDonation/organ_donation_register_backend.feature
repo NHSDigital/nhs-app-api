@@ -12,7 +12,6 @@ Feature: Organ Donation Register Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: When submitting an organ donation opt out decision, an unregistered <GP System> user receives a 201 response and a registration id
     Given I am a <GP System> api user who wants to opt-out of organ donation
@@ -25,7 +24,6 @@ Feature: Organ Donation Register Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: When submitting an organ donation opt in decision, an unregistered <GP System> user receives a 201 response and a registration id
     Given I am a <GP System> api user who wants to opt-in to organ donation
@@ -38,7 +36,6 @@ Feature: Organ Donation Register Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: When submitting an organ donation some organs decision, an unregistered <GP System> user receives a 201 response and a registration id
     Given I am a <GP System> api user who wants to donate some but not all organs
@@ -51,7 +48,6 @@ Feature: Organ Donation Register Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: When submitting an organ donation decision which will be conflicted, an unregistered <GP System> user receives a 201 response with state value of "conflicted" and a registration id
     Given I am a <GP System> api user who wants to opt-in to organ donation but will cause a conflict
@@ -64,7 +60,6 @@ Feature: Organ Donation Register Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: On submitting an organ donation decision, an OD response of <Error Code> will prompt a 500 response and no retry option
     Given I am a EMIS api user who wants to opt-out, but OD returns '<Error Code>' error

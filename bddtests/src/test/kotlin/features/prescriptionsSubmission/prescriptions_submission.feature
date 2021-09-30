@@ -38,7 +38,6 @@ Feature: Prescriptions submission Frontend
       | GP System |
       | EMIS      |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: The <GP System> user orders a non-repeat prescription
     Given the scenario is submit prescription
@@ -56,7 +55,6 @@ Feature: Prescriptions submission Frontend
       | GP System |
       | EMIS      |
       | VISION    |
-      | MICROTEST |
 
 # These tests navigate directly to the pages where the features are to be tested, to save time.
   Scenario Outline: The <GP System> user orders a repeat prescription with 5 entries
@@ -77,7 +75,6 @@ Feature: Prescriptions submission Frontend
       | GP System |
       | EMIS      |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: The <GP System> user orders a repeat prescription with 1 entries
     Given the scenario is submit prescription
@@ -95,7 +92,6 @@ Feature: Prescriptions submission Frontend
     | GP System |
     | EMIS      |
     | TPP       |
-    | MICROTEST |
   @nativesmoketest
     Examples:
     | GP System |
@@ -126,40 +122,9 @@ Feature: Prescriptions submission Frontend
     When I click Confirm and order repeat prescription
     Then I see a message indicating I've previously ordered one of the selected medications within the last 30 days
 
-  Scenario: The MICROTEST user should receive an error when all medications fail
-    Given the scenario is submit prescription
-    And I am using MICROTEST GP System to submit my prescription
-    And I have 1 historic prescriptions in this scenario
-    And I am logged in
-    When I retrieve the 'Your Prescriptions' page directly
-    And I select 1 repeatable prescriptions to order
-    And I click Continue on the Order a repeat prescription page
-    But GP system responds with a conflict error when a repeat prescription is submitted
-    When I click Confirm and order repeat prescription
-    Then I see a message indicating there was an error sending my order
-
-  Scenario: The Microtest user see a partial success page if some of their orders fail
-    Given the scenario is submit prescription
-    And I am using MICROTEST GP System to submit my prescription
-    And I have 1 historic prescriptions in this scenario
-    And I am logged in
-    Then I navigate to prescriptions
-    And I select 1 repeatable prescriptions to order
-    And I click Continue on the Order a repeat prescription page
-    But the GP system responds with an error indicating the order was partially successful
-    When I click Confirm and order repeat prescription
-    Then I can view which medications from my prescription order succeeded and failed
-
   Scenario: A user tries to navigate directly to the success page and is redirected back to the Prescriptions hub page
     Given the scenario is submit prescription
     And I am a EMIS patient
     When I am logged in
     And I retrieve the 'prescriptions success' page directly
-    Then I am redirected to the 'your prescriptions' page
-
-  Scenario: A user tries to navigate directly to the microtest partial success page and is redirected back to the Prescriptions hub page
-    Given the scenario is submit prescription
-    And I am an EMIS patient
-    When I am logged in
-    And I retrieve the 'partial success' page directly
     Then I am redirected to the 'your prescriptions' page

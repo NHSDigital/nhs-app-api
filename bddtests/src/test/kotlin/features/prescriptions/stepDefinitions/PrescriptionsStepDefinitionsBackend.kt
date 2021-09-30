@@ -67,8 +67,7 @@ class PrescriptionsStepDefinitionsBackend {
                 }
             }
             Supplier.TPP,
-            Supplier.VISION,
-            Supplier.MICROTEST -> {
+            Supplier.VISION -> {
                 Assert.assertEquals(count, prescriptionsListResponse.courses.count())
             }
             else -> {

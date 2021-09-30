@@ -28,8 +28,7 @@ abstract class SessionCreateJourneyFactory {
             hashMapOf(
                     Supplier.EMIS to { EmisSessionCreateJourneyFactory() },
                     Supplier.TPP to {  TppSessionCreateJourneyFactory() },
-                    Supplier.VISION to { VisionSessionCreateJourneyFactory() },
-                    Supplier.MICROTEST to { MicrotestSessionCreateJourneyFactory() }
+                    Supplier.VISION to { VisionSessionCreateJourneyFactory() }
             )
         }
     }

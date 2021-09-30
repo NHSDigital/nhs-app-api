@@ -9,7 +9,6 @@ import org.junit.Assert.assertTrue
 import utils.SerenityHelpers
 import worker.NhsoHttpExceptionErrorBody
 
-const val LINKAGE_NOT_SUPPORTED_RESPONSE_CODE = 550
 const val ODS_CODE_NOT_FOUND_RESPONSE_CODE = 464
 const val PATIENT_ID_NOT_FOUND_RESPONSE_CODE = 467
 const val GP_SUPPLIER_UNAVAILABLE_RESPONSE_CODE = 599
@@ -43,13 +42,6 @@ class ResponseStatusCodeSteps {
 
     @Then("^I receive (?:a|an) \"(.*)\" success code")
     fun thenIReceiveASuccessMessage(expectedStatusCode: String) {
-        val converted = httpStatusCodeTransform(expectedStatusCode)
-        val httpResponse = SerenityHelpers.getHttpResponse()!!
-        assertEquals(converted, httpResponse.statusLine.statusCode)
-    }
-
-    @Then("^I receive (?:a|an) \"(.*)\" code")
-    fun thenIReceiveAMessage(expectedStatusCode: String) {
         val converted = httpStatusCodeTransform(expectedStatusCode)
         val httpResponse = SerenityHelpers.getHttpResponse()!!
         assertEquals(converted, httpResponse.statusLine.statusCode)
@@ -122,7 +114,6 @@ class ResponseStatusCodeSteps {
             "service unavailable" to HttpStatus.SC_SERVICE_UNAVAILABLE,
             "unauthorized" to HttpStatus.SC_UNAUTHORIZED,
             "not implemented" to HttpStatus.SC_NOT_IMPLEMENTED,
-            "linkage not supported" to LINKAGE_NOT_SUPPORTED_RESPONSE_CODE,
             "no content" to HttpStatus.SC_NO_CONTENT,
             "ods code not found" to ODS_CODE_NOT_FOUND_RESPONSE_CODE,
             "patient id not found" to PATIENT_ID_NOT_FOUND_RESPONSE_CODE,

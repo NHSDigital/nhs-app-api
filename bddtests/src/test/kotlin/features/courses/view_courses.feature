@@ -24,7 +24,6 @@ Feature: View Courses Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: The <GP System> User has 0 repeatable prescriptions
     Given I am a <GP System> patient
@@ -44,7 +43,6 @@ Feature: View Courses Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: The <GP System> user has 1 repeatable prescription
     Given I am a <GP System> patient
@@ -81,7 +79,6 @@ Feature: View Courses Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: The <GP System> user has the max number of repeatable prescriptions
     Given I am a <GP System> patient
@@ -100,7 +97,6 @@ Feature: View Courses Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: The <GP System> user has over 5 repeat dispense prescriptions
     Given I am a <GP System> patient
@@ -134,7 +130,6 @@ Feature: View Courses Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: The <GP System> User has selected one repeat prescription to order
     Given I am a <GP System> patient
@@ -150,7 +145,6 @@ Feature: View Courses Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: The <GP System> User has selected no repeat prescriptions to order
     Given I am a <GP System> patient
@@ -170,7 +164,6 @@ Feature: View Courses Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and views previous selection
     Given I am a <GP System> patient
@@ -187,7 +180,6 @@ Feature: View Courses Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and the special request text and sees the updated confirmation
     Given I am a <GP System> patient
@@ -213,7 +205,6 @@ Feature: View Courses Frontend
       | GP System |
       | EMIS      |
       | VISION    |
-      | MICROTEST |
     @smoketest
     Examples:
       | GP System |
@@ -233,7 +224,6 @@ Feature: View Courses Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: The user can't see prescription special request when the gp system <GP System> has disabled it
     Given I am a <GP System> patient
@@ -412,7 +402,6 @@ Feature: View Courses Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: An <GP System> user without a GP session is able to recover their session on try again
     Given I am an <GP System> patient whose GP system is unavailable
@@ -435,7 +424,6 @@ Feature: View Courses Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user GP session eventually becomes available when ordering a prescription
     Given I am an <GP System> patient whose GP system is unavailable
@@ -465,5 +453,4 @@ Feature: View Courses Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 

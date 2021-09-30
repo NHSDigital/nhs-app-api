@@ -14,32 +14,10 @@ import worker.models.demographics.Demographics
 
 open class DemographicsStepDefinitions {
 
-    @Given("^the GP Practice has enabled demographics functionality$")
-    fun givenTheGPPracticeHasEnabledDemographicsFunctionality() {
-        val gpSystem = SerenityHelpers.getGpSupplier()
-        DemographicsFactory.getForSupplier(gpSystem).enabled(SerenityHelpers.getPatient())
-    }
-
     @Given("^the GP Practice has disabled demographics functionality$")
     fun givenTheGPPracticeHasDisabledDemographicsFunctionality() {
         val gpSystem = SerenityHelpers.getGpSupplier()
         DemographicsFactory.getForSupplier(gpSystem).disabled(SerenityHelpers.getPatient())
-    }
-
-    @Given("^the demographics endpoint responds with (?:a|an) \"(.*)\" error$")
-    fun theDemographicsEndpointRespondsWitSpecifiedError(expectedError: String) {
-        val gpSystem = SerenityHelpers.getGpSupplier()
-        val patient = SerenityHelpers.getPatient()
-
-        if (expectedError == "internal server") {
-            DemographicsFactory.getForSupplier(gpSystem).throwInternalError(patient)
-        }
-        if (expectedError == "forbidden") {
-            DemographicsFactory.getForSupplier(gpSystem).throwForbiddenError(patient)
-        }
-        if (expectedError == "bad gateway") {
-            DemographicsFactory.getForSupplier(gpSystem).throwForbiddenError(patient)
-        }
     }
 
     @When("^I get the users demographic data$")

@@ -32,8 +32,7 @@ abstract class DemographicsFactory {
                     hashMapOf(
                             Supplier.EMIS to { DemographicsFactoryEmis() },
                             Supplier.TPP to { DemographicsFactoryTpp() },
-                            Supplier.VISION to { DemographicsFactoryVision() },
-                            Supplier.MICROTEST to { DemographicsFactoryMicrotest() })
+                            Supplier.VISION to { DemographicsFactoryVision() })
                 }
     }
 }

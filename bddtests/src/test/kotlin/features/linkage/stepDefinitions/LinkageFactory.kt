@@ -54,8 +54,7 @@ abstract class LinkageFactory(protected val gpSystem: Supplier) {
             get() = hashMapOf(
                     Supplier.EMIS to { LinkageFactoryEmis() },
                     Supplier.TPP to { LinkageFactoryTpp() },
-                    Supplier.VISION to { LinkageFactoryVision() },
-                    Supplier.MICROTEST to { LinkageFactoryMicrotest() })
+                    Supplier.VISION to { LinkageFactoryVision() })
 
         fun validLinkage(gpSystem: Supplier): LinkageInformationFacade {
             SerenityHelpers.setPatient(Patient.getDefault(gpSystem))

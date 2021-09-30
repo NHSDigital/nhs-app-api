@@ -6,7 +6,6 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import features.prescriptions.mappers.EmisPrescriptionMapper
-import features.prescriptions.mappers.MicrotestPrescriptionMapper
 import features.prescriptions.mappers.TppPrescriptionMapper
 import features.prescriptions.mappers.VisionPrescriptionMapper
 import mocking.MockingClient
@@ -18,7 +17,6 @@ import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJo
 import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.emis.models.RequestedMedicationCourseStatus
-import mocking.microtest.prescriptions.PrescriptionHistoryGetResponse
 import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.vision.models.PrescriptionHistory
@@ -241,14 +239,6 @@ open class PrescriptionsStepDefinitions {
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
                         }
             }
-            Supplier.MICROTEST -> {
-
-                mockingClient
-                        .forMicrotest.mock {
-                            prescriptions.getPrescriptionHistoryRequest(currentPatient, expectedDefaultFromDate)
-                                    .respondWithSuccess(prescriptionLoader.data as PrescriptionHistoryGetResponse)
-                        }
-            }
         }
     }
 
@@ -334,8 +324,7 @@ open class PrescriptionsStepDefinitions {
     private fun providerHasAllPrescriptionFields(): Boolean {
         val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
         return currentProvider == Supplier.EMIS ||
-                currentProvider == Supplier.VISION ||
-                currentProvider == Supplier.MICROTEST
+                currentProvider == Supplier.VISION
     }
 
     @Then("^I select (\\d+) prescription to order$")
@@ -356,8 +345,6 @@ open class PrescriptionsStepDefinitions {
                 TppPrescriptionMapper.map(prescriptionLoader.data as ListRepeatMedicationReply)
             Supplier.VISION ->
                 VisionPrescriptionMapper.map(prescriptionLoader.data as PrescriptionHistory)
-            Supplier.MICROTEST ->
-                MicrotestPrescriptionMapper.map(prescriptionLoader.data as PrescriptionHistoryGetResponse)
             else -> throw NotImplementedError()
         }
     }

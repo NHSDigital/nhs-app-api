@@ -22,8 +22,7 @@ abstract class AllergiesFactory {
                     hashMapOf(
                             Supplier.EMIS to { AllergiesFactoryEmis() },
                             Supplier.TPP to { AllergiesFactoryTpp() },
-                            Supplier.VISION to { AllergiesFactoryVision() },
-                            Supplier.MICROTEST to { AllergiesFactoryMicrotest() })
+                            Supplier.VISION to { AllergiesFactoryVision() })
                 }
 
     }

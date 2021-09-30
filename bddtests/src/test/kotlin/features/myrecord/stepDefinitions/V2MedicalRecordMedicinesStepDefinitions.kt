@@ -29,8 +29,6 @@ open class V2MedicalRecordMedicinesStepDefinitions {
                     "1 TO 2 TABLETS UP TO FOUR TIMES DAILY AS REQUIRED\n45 tablet"
         ), Supplier.TPP to arrayOf(
                 "${formatDate(MedicationsData.tenMonthsAgo)}\nVentolin"
-        ), Supplier.MICROTEST to arrayOf(
-                "27 March 2019\nMedication 3\nONE tablet every day\n60 tabs\nReason: Reason: high blood pressure"
         )
     )
 
@@ -56,8 +54,6 @@ open class V2MedicalRecordMedicinesStepDefinitions {
                 "${formatDate(MedicationsData.tenMonthsAgo)}\nVentolin",
                 "${formatDate(MedicationsData.tenMonthsAgo)}\nSalbutamol",
                 "${formatDate(MedicationsData.tenMonthsAgo)}\nCalpol"
-        ), Supplier.MICROTEST to arrayOf(
-                "27 March 2019\nMedication 1\nONE tablet every day\n60 tabs\nReason: Reason: high blood pressure"
         )
     )
 
@@ -77,8 +73,6 @@ open class V2MedicalRecordMedicinesStepDefinitions {
                 "${formatDate(MedicationsData.twentyMonthsAgo)}\nVentolin",
                 "${formatDate(MedicationsData.twentyMonthsAgo)}\nSalbutamol",
                 "${formatDate(MedicationsData.twentyMonthsAgo)}\nCalpol"
-            ), Supplier.MICROTEST to arrayOf(
-                "27 March 2019\nMedication 2\nONE tablet every day\n60 tabs\nReason: Reason: high blood pressure"
             )
     )
 

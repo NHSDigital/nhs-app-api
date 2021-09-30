@@ -18,7 +18,6 @@ Feature: Book Appointments Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Request" response if no slot identifier is provided
     Given I have logged into <GP System> and have a valid session cookie
@@ -28,7 +27,6 @@ Feature: Book Appointments Backend
       | GP System |
       | EMIS      |
       | TPP       |
-      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Request" response if empty slot identifier is provided
     Given an appointment booking for <GP System> can be successful
@@ -39,7 +37,6 @@ Feature: Book Appointments Backend
       | GP System |
       | EMIS      |
       | TPP       |
-      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns a successful response if slot identifier is 1 character
     Given an appointment booking for <GP System> can be successful with slot identifier of 1 character
@@ -51,7 +48,6 @@ Feature: Book Appointments Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Request" response if no booking reason is provided
     Given an appointment booking for <GP System> requires a booking reason
@@ -62,7 +58,6 @@ Feature: Book Appointments Backend
       | GP System |
       | EMIS      |
       | TPP       |
-      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Request" response if an empty booking reason is provided
     Given an appointment booking for <GP System> requires a booking reason
@@ -75,7 +70,6 @@ Feature: Book Appointments Backend
     Examples:
       | GP System |
       | TPP       |
-      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns successful response if the booking reason is 1 character
     Given an appointment booking for <GP System> can be successful with booking reason of 1 character
@@ -87,7 +81,6 @@ Feature: Book Appointments Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns successful response if the booking reason is 150 characters
     Given an appointment booking for <GP System> can be successful with booking reason of 150 characters
@@ -99,7 +92,6 @@ Feature: Book Appointments Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Request" response if the booking reason exceeds 150 characters
     Given an appointment booking for <GP System> can be successful
@@ -110,7 +102,6 @@ Feature: Book Appointments Backend
       | GP System |
       | EMIS      |
       | TPP       |
-      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Unauthorized" response if the user session has expired
     Given an appointment booking for <GP System> can be successful, but session has expired
@@ -122,7 +113,6 @@ Feature: Book Appointments Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Unauthorized" response if no user session cookie was generated
     Given an appointment booking for <GP System> can be successful
@@ -133,7 +123,6 @@ Feature: Book Appointments Backend
       | GP System |
       | EMIS      |
       | TPP       |
-      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Forbidden" response if online appointment booking is not available for this patient
     Given online appointment booking is not available to the <GP System> patient, when wanting to book an appointment
@@ -145,7 +134,6 @@ Feature: Book Appointments Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Conflict" response if the chosen appointment slot is not available for booking
     Given an appointment booking for <GP System> cannot be successful because the slot is not available
@@ -157,7 +145,6 @@ Feature: Book Appointments Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
 #  Note: VISION ALLOWS To book appointments that are in past
   Scenario Outline: Booking an appointment with <GP System> returns "Conflict" response if the chosen appointment slot is in the past
@@ -169,7 +156,6 @@ Feature: Book Appointments Backend
       | GP System |
       | EMIS      |
       | TPP       |
-      | MICROTEST |
 
   Scenario: Booking an appointment with EMIS returns "Conflict" response if the chosen appointment slot is before the practice-defined date range.
     Given an appointment booking for EMIS cannot be successful because the slot is before practice defined days
@@ -193,7 +179,6 @@ Feature: Book Appointments Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Gateway" response if an unknown exception occurs
     Given an appointment booking for <GP System> generates an unknown exception
@@ -205,7 +190,6 @@ Feature: Book Appointments Backend
       | EMIS      | 4e     |
       | TPP       | 4t     |
       | VISION    | 4s     |
-      | MICROTEST | 4m     |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Gateway" response if the GP system is currently unavailable
     Given an appointment booking for <GP System> cannot be successful because the GP system is unavailable
@@ -217,7 +201,6 @@ Feature: Book Appointments Backend
       | EMIS      | 4e     |
       | TPP       | 4t     |
       | VISION    | 4s     |
-      | MICROTEST | 4m     |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Gateway Timeout" response if the GP system did not respond in a timely fashion
     Given an appointment booking for <GP System> cannot be successful because the GP system will time out
@@ -229,7 +212,6 @@ Feature: Book Appointments Backend
       | EMIS      | ze     |
       | TPP       | zt     |
       | VISION    | zs     |
-      | MICROTEST | zm     |
 
   Scenario Outline: A <GP System> api user getting corrupted data when booking an appointment receives an unknown internal server error
     Given <GP System> returns corrupted response for booking request
@@ -242,15 +224,11 @@ Feature: Book Appointments Backend
       | TPP       |
       | VISION    |
 
-  Scenario Outline: Booking a telephone appointment with <GP System> returns successful response if the phone number is provided
-    Given a telephone appointment booking for <GP System> can be successful
+  Scenario: Booking a telephone appointment with EMIS returns successful response if the phone number is provided
+    Given a telephone appointment booking for EMIS can be successful
     And I have logged in and have a valid session cookie
     When an appointment booking is submitted with phone number
     Then a successful response for appointment booking is returned
-    Examples:
-      | GP System |
-      | EMIS      |
-      | MICROTEST |
 
   Scenario: Booking a telephone appointment with EMIS returns an error response if the phone number is not provided
     Given a telephone appointment booking for EMIS cannot be successful without phone number

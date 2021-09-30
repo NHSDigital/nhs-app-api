@@ -7,7 +7,6 @@ import mocking.emis.EmisMappingRouter
 import mocking.externalSites.ExternalSitesMappingBuilder
 import mocking.favicon.FaviconMappingBuilder
 import mocking.help.HelpRequestBuilder
-import mocking.microtest.MicrotestMappingRouter
 import mocking.ndop.NdopMappingBuilder
 import mocking.onlineConsultations.OnlineConsultationsMappingBuilder
 import mocking.organDonation.OrganDonationMappingBuilder
@@ -43,7 +42,6 @@ class MockingClient(configuration: MockingConfiguration) {
     val forNdop = ExternalSupplierMockingClient(NdopMappingBuilder(), wiremockHelper)
     val forQualtrics = ExternalSupplierMockingClient(QualtricsMappingBuilder(), wiremockHelper)
 
-    val forMicrotest = ExternalSupplierMockingClient(MicrotestMappingRouter(), wiremockHelper)
     val forVision = ExternalSupplierMockingClient(VisionMappingRouter(), wiremockHelper)
     val forEmis = ExternalSupplierMockingClient(EmisMappingRouter(configuration.emisConfiguration), wiremockHelper)
     val forTpp = ExternalSupplierMockingClient(TppMappingRouter(), wiremockHelper)

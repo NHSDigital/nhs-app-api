@@ -28,7 +28,6 @@ Feature: Cancel Appointments Frontend
     Examples:
       | GP System |
       | VISION    |
-      | MICROTEST |
 
   Scenario: A Vision user is presented with the cancel appointment screen without reason selected, when there is just one (appointments before cutoff time)
     Given I have upcoming appointments before cutoff time for VISION with only one cancellation reason
@@ -59,7 +58,6 @@ Feature: Cancel Appointments Frontend
       | GP System |
       | EMIS      |
       | VISION    |
-      | MICROTEST |
 
   Scenario:  A VISION user is presented with a validation message if no reason is selected, even when there is just one
     Given I have upcoming appointments before cutoff time for VISION with only one cancellation reason
@@ -88,8 +86,6 @@ Feature: Cancel Appointments Frontend
       | Unable to attend   | EMIS      |
       | Reason 1           | VISION    |
       | Reason 2           | VISION    |
-      | No longer required | MICROTEST |
-      | Unable to attend   | MICROTEST |
 
   Scenario: A Vision user can cancel appointment when there is just one reason
     Given VISION is available to cancel a previously booked appointment before cutoff time, with only one available reason
@@ -123,7 +119,6 @@ Feature: Cancel Appointments Frontend
       | GP System |
       | TPP       |
       | VISION    |
-      | MICROTEST |
     @nativesmoketest
     Examples:
       | GP System |
@@ -213,7 +208,7 @@ Feature: Cancel Appointments Frontend
     Then a new tab has been opened by the link
     Examples:
       | Reason             | Prefix | GP System |
-      | No longer required | zm     | MICROTEST |
+      | No longer required | ze     | EMIS      |
 
     # covered in Manual Regression Test pack
   @tech-debt   @NHSO-4061

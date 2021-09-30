@@ -15,7 +15,6 @@ Feature: Im1 Connection GET V2
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user verifying their im1 Connection can get a <ExpectedCode> error from a <GPCode> error
     Given I am a <GP System> user and verifying my im1 connection returns '<GPHttpCode>' '<GPCode>' '<Message>'
@@ -31,19 +30,8 @@ Feature: Im1 Connection GET V2
       | VISION    | 400        | -30    | 400            | 106          | Invalid user credentials                                       |
       | VISION    | 400        | -8     | 403            | 102          | Registration incomplete                                        |
 
-  Scenario Outline: A MICROTEST user verifying their im1 Connection can get a <ExpectedCode> error when demographics fails with a <GPHttpCode> error
-    Given I am a MICROTEST user and verifying my im1 connection returns '<GPHttpCode>' '<GPCode>' '<Message>'
-    When I verify patient data using the v2 endpoint
-    Then I receive a '<ExpectedStatus>' IM1 error status code with code '<ExpectedCode>'
-    Examples:
-      | GPHttpCode | GPCode    | ExpectedStatus | ExpectedCode | Message |
-      | 502        |           | 502            | 100          | Unknown Error |
-      | 403        |           | 404            | 103          | Patient not found |
-      | 500        |           | 404            | 103          | Patient not found |
-
     # Returning NHS numbers from TPP covered with EMIS BDD
     # and TPP structure is covered with unit tests
-    # MICROTEST users must have an NHS number to verify
   Scenario Outline: A <GP System> patient has multiple NHS Numbers tries verification using the v2 endpoint and succesfully retrieve all their NHS numbers
     Given I have valid credentials for a <GP System> patient with multiple NHS Numbers
     When I verify patient data using the v2 endpoint
@@ -56,7 +44,6 @@ Feature: Im1 Connection GET V2
 
     # Returning NHS numbers from TPP covered with EMIS BDD
     # and TPP structure is covered with unit tests
-    # MICROTEST users must have an NHS number to verify
   Scenario Outline: A <GP System> patient has no NHS Number tries verification using the v2 endpoint and receives no NHS number
     Given I have valid credentials for a <GP System> patient with no NHS Number
     When I verify patient data using the v2 endpoint
@@ -94,7 +81,6 @@ Feature: Im1 Connection GET V2
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user with an IM1 Connection Token not in the expected format tries verification using the v2 endpoint and receives a Bad Request error
     Given I have an <GP System> IM1 Connection Token that is in an invalid format
@@ -105,4 +91,3 @@ Feature: Im1 Connection GET V2
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |

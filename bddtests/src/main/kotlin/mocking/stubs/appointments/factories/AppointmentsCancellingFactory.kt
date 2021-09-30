@@ -50,8 +50,7 @@ class AppointmentsCancellingFactory(gpSystem: Supplier) : AppointmentsFactory(gp
             hashMapOf(
                     Supplier.EMIS to { AppointmentsCancellingFactory(Supplier.EMIS) },
                     Supplier.TPP to { AppointmentsCancellingFactory(Supplier.TPP) },
-                    Supplier.VISION to { AppointmentsCancellingFactory(Supplier.VISION) },
-                    Supplier.MICROTEST to { AppointmentsCancellingFactory(Supplier.MICROTEST) })
+                    Supplier.VISION to { AppointmentsCancellingFactory(Supplier.VISION) })
         }
 
         val defaultApptCancellingReason = "Cancel an appointment."

@@ -40,7 +40,6 @@ Feature: View More Page
     Examples:
       | Gp System |
       | VISION    |
-      | MICROTEST |
 
     Scenario: A patient with proof level 5 navigates to More page
       Given I am a patient with proof level 5

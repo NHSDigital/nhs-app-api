@@ -28,8 +28,7 @@ abstract class MedicationsFactory {
                     hashMapOf(
                             Supplier.EMIS to { MedicationsFactoryEmis() },
                             Supplier.TPP to { MedicationsFactoryTpp() },
-                            Supplier.VISION to { MedicationsFactoryVision() },
-                            Supplier.MICROTEST to { MedicationsFactoryMicrotest() })
+                            Supplier.VISION to { MedicationsFactoryVision() })
                 }
 
     }

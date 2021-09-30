@@ -23,8 +23,7 @@ abstract class ImmunisationsFactory {
                 by lazy {
                     hashMapOf(
                             Supplier.EMIS to { ImmunisationsFactoryEmis() },
-                            Supplier.VISION to { ImmunisationsFactoryVision() },
-                            Supplier.MICROTEST to { ImmunisationsFactoryMicrotest() })
+                            Supplier.VISION to { ImmunisationsFactoryVision() })
                 }
 
     }

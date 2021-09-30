@@ -2,24 +2,15 @@ package features.linkage.stepDefinitions
 
 import constants.DateTimeFormats
 import constants.Supplier
-import io.cucumber.java.en.Given
-import io.cucumber.java.en.Then
-import io.cucumber.java.en.When
 import features.linkage.LinkageResult
-import features.myrecord.factories.DemographicsFactory
-import mocking.MockingClient
-import mocking.defaults.dataPopulation.journeys.im1Connection.SuccessfulRegistrationJourney
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.When
 import mockingFacade.linkage.LinkageInformationFacade
-import models.patients.MicrotestPatients
 import net.serenitybdd.core.Serenity
 import org.joda.time.DateTime
-import org.junit.Assert
 import utils.SerenityHelpers
-import worker.models.linkage.LinkageResponse
 
 open class LinkageGetStepDefinitions {
-
-    private val mockingClient = MockingClient.instance
 
     @Given("I have valid (.*) linkage details$")
     fun iHaveValidLinkageDetailsFor(gpSystem: String) {
@@ -96,7 +87,6 @@ open class LinkageGetStepDefinitions {
         LinkageFactory.setLinkageInformation(linkage, LinkageResult.NoApiKeyAssociatedWithNHSNumber)
     }
 
-
     @When("^I call the Linkage GET endpoint$")
     fun iCallTheLinkageGETEndpoint() {
         val gpSystem = SerenityHelpers.getGpSupplier()
@@ -108,18 +98,5 @@ open class LinkageGetStepDefinitions {
             LinkageFactory.getForSupplier(gpSystem).mockLinkageGetResult(linkage, linkageResult)
         }
         LinkageApi.get(linkage)
-    }
-
-    @Then("^I receive a valid microtest linkage response$")
-    fun iReceiveAValidMicrotestResponse() {
-        val linkageResponse = Serenity.sessionVariableCalled<LinkageResponse>(LinkageResponse::class)
-        val linkage = Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
-        Assert.assertNotNull(linkageResponse)
-        Assert.assertEquals(linkage.odsCode, linkageResponse.odsCode)
-        val patient = MicrotestPatients.postLinkageUserDetails(
-                linkageResponse.accountId, linkageResponse.linkageKey)
-        DemographicsFactory.getForSupplier(Supplier.MICROTEST).enabled(patient)
-        SerenityHelpers.resetPatient(patient)
-        SuccessfulRegistrationJourney(mockingClient).create(patient, Supplier.MICROTEST)
     }
 }

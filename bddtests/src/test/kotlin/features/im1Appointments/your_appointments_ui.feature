@@ -17,7 +17,6 @@ Feature: Your Appointments Frontend
       | GP System |
       | EMIS      |
       | TPP       |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user sees appropriate messages when they have no upcoming appointments
     Given I have no booked appointments for <GP System>
@@ -45,7 +44,6 @@ Feature: Your Appointments Frontend
       | GP System |
       | EMIS      |
       | TPP       |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user sees their historical appointments and a message if they have no upcoming
   appointments
@@ -60,7 +58,6 @@ Feature: Your Appointments Frontend
       | GP System |
       | EMIS      |
       | TPP       |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user sees both their upcoming and historical appointments
     Given I have historical and upcoming appointments for <GP System>
@@ -79,7 +76,6 @@ Feature: Your Appointments Frontend
     Examples:
       | GP System |
       | TPP       |
-      | MICROTEST |
 
   @smoketest
   Scenario: A VISION user can see their upcoming appointments
@@ -101,7 +97,6 @@ Feature: Your Appointments Frontend
     Examples:
       | GP System |
       | EMIS      |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user can see the telephone number they have been phoned on for a past telephone appointment
     Given I have historical telephone appointments for <GP System>
@@ -112,7 +107,6 @@ Feature: Your Appointments Frontend
     Examples:
       | GP System |
       | EMIS      |
-      | MICROTEST |
 
   #403
   Scenario Outline: <GP System> user sees appropriate error message when appointments are disabled
@@ -125,7 +119,6 @@ Feature: Your Appointments Frontend
       | TPP       |
       | EMIS      |
       | VISION    |
-      | MICROTEST |
 
   #500
   Scenario: TPP user sees appropriate error message when it returns corrupt data
@@ -167,17 +160,16 @@ Feature: Your Appointments Frontend
       | EMIS      | 3e     |
       | TPP       | 3t     |
       | VISION    | 3s     |
-      | MICROTEST | 3m     |
 
   #502
   @nativesmoketest
-  Scenario: MICROTEST user sees appropriate error message when it returns unknown exception viewing appointments
-    Given an unknown exception occurs when I want to view my MICROTEST appointments
+  Scenario: TPP user sees appropriate error message when it returns unknown exception viewing appointments
+    Given an unknown exception occurs when I want to view my TPP appointments
     And I am logged in
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed
     When I click the GP Appointments link
-    Then I see appropriate try again error message when there is an error with '4m'
+    Then I see appropriate try again error message when there is an error with '4t'
     When I click the error 'Back' link
     Then the Appointments Hub page is displayed
 

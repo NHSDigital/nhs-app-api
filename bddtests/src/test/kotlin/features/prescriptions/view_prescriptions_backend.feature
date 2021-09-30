@@ -13,7 +13,6 @@ Feature: View prescriptions backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: <GP System> patient with repeat prescriptions in the last 6 months and no fromDate
     Given I have logged into <GP System> and have a valid session cookie
@@ -26,7 +25,6 @@ Feature: View prescriptions backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: <GP System> patient requesting prescriptions with a fromDate in the future
     Given I have logged into <GP System> and have a valid session cookie
@@ -38,7 +36,6 @@ Feature: View prescriptions backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: <GP System> patient requesting prescriptions with a fromDate greater than 6 months ago
     Given I have logged into <GP System> and have a valid session cookie
@@ -50,7 +47,6 @@ Feature: View prescriptions backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: <GP System> patient requesting prescriptions with a fromDate not in the expected format
     Given I have logged into <GP System> and have a valid session cookie
@@ -62,7 +58,6 @@ Feature: View prescriptions backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario: Requesting prescriptions with a missing cookie
     # Without logging in
@@ -85,7 +80,6 @@ Feature: View prescriptions backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: <GP System> GP practice has disabled prescriptions functionality
     Given I have logged into <GP System> and have a valid session cookie
@@ -95,7 +89,6 @@ Feature: View prescriptions backend
     Examples:
       | GP System |
       | EMIS      |
-      | MICROTEST |
 
   Scenario Outline: <GP System> GP system fails to return in a timely fashion
     Given I have logged into <GP System> and have a valid session cookie
@@ -107,7 +100,6 @@ Feature: View prescriptions backend
       | EMIS      | ze     |
       | TPP       | zt     |
       | VISION    | zs     |
-      | MICROTEST | zm     |
 
   Scenario Outline: <GP System> patient who has prescriptions totalling more than one hundred courses
     Given I have logged into <GP System> and have a valid session cookie
@@ -120,7 +112,6 @@ Feature: View prescriptions backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: <GP System> patient who has multiple prescription each containing one course
     Given I have logged into <GP System> and have a valid session cookie
@@ -133,7 +124,6 @@ Feature: View prescriptions backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: <GP System> patient who has multiple prescription each containing the same repeat prescription
     Given I have logged into <GP System> and have a valid session cookie
@@ -146,7 +136,6 @@ Feature: View prescriptions backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: <GP System> patient who has only one prescription containing multiple courses
     Given I have logged into <GP System> and have a valid session cookie
@@ -196,7 +185,6 @@ Feature: View prescriptions backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: <GP System> patient but NHSO-Patient-Id header is not valid
     Given I have logged into <GP System> and have a valid session cookie

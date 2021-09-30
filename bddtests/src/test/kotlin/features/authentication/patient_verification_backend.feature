@@ -15,7 +15,6 @@ Feature: Patient Verification Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: <GP System> patient has multiple NHS Numbers
     Given I have valid credentials for a <GP System> patient with multiple NHS Numbers
@@ -63,12 +62,6 @@ Feature: Patient Verification Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
-
-  Scenario: Microtest patient tries to verify IM1 Connection details with Emis IM1 Connection Token.
-    Given I have an EMIS IM1 Connection Token and I try to verify as a microtest user
-    When I verify patient data using the v1 endpoint
-    Then I receive a "Bad Request" error
 
   Scenario Outline: No IM1 Connection Token for the <GP System>
     Given I have valid credentials for a <GP System> patient with one NHS Number
@@ -80,7 +73,6 @@ Feature: Patient Verification Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: Non-existent ODS Code for <GP System>
     Given I have an <GP System> ODS Code that does not exist
@@ -92,7 +84,6 @@ Feature: Patient Verification Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: ODS Code not in the expected format <GP System>
     Given I have an <GP System> ODS Code not in expected format
@@ -104,7 +95,6 @@ Feature: Patient Verification Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: No ODS Code for <GP System>
     Given I have valid credentials for a <GP System> patient with one NHS Number
@@ -116,7 +106,6 @@ Feature: Patient Verification Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: Verifying the credentials of a <GP System> patient when the GP System is not available returns a bad gateway response
     Given I have valid a valid IM1 Connection Token for a <GP System> patient but the GP System is not available
@@ -127,7 +116,6 @@ Feature: Patient Verification Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario: Vision responds with invalid request error
     Given Vision responds with an invalid request error
@@ -148,12 +136,3 @@ Feature: Patient Verification Backend
     Given Vision responds with a registration incomplete error
     When I verify patient data using the v1 endpoint
     Then I receive a "Forbidden" error
-
-  Scenario Outline: Verifying the old credentials of a <GP System> patient after they've moved practice returns a forbidden response
-    Given I have an old ODS Code and IM1 Connection Token for a <GP System> patient that has since moved to a different practice
-    When I verify patient data using the v1 endpoint
-    Then I receive a "Forbidden" error
-    Examples:
-      | GP System |
-      | MICROTEST |
-

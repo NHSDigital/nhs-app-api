@@ -25,21 +25,11 @@ Feature: View Available Appointment Slots Frontend
       | GP System |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
     @nativesmoketest
     Examples:
       | GP System |
       | EMIS      |
-
-  Scenario Outline: A user does not see any guidance provided by <GP System>
-    Given there are available appointment slots with different criteria for <GP System>
-    And I am logged in
-    When I retrieve the 'Appointment Booking' page directly
-    Then I cannot see any appointment slot guidance
-    Examples:
-      | GP System |
-      | MICROTEST |
 
   Scenario Outline: A user can expand, view and collapse guidance provided by <GP System>
     Given there are available appointment slots with different criteria for <GP System> when <Content> appointment slot guidance is provided
@@ -89,7 +79,6 @@ Feature: View Available Appointment Slots Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user can filter by selected clinician and only the appropriate slots will be displayed
     Given there are available appointment slots with different clinician for <GP System>
@@ -103,7 +92,6 @@ Feature: View Available Appointment Slots Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user enters the available appointments page, but only 1 appointment is available
     Given there is 1 available appointment slot for <GP System>
@@ -119,7 +107,6 @@ Feature: View Available Appointment Slots Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user enters the available appointments page, but appointments only available at 1 location
     Given there are available appointment slots for <GP System> for 1 location
@@ -131,7 +118,6 @@ Feature: View Available Appointment Slots Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user sees appropriate information message when no slots are available at all
     Given there are no available appointment slots for <GP System>
@@ -142,7 +128,6 @@ Feature: View Available Appointment Slots Frontend
       | GP System |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
     @nativesmoketest
     Examples:
@@ -159,7 +144,6 @@ Feature: View Available Appointment Slots Frontend
       | GP System |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
     @nativesmoketest
     Examples:
@@ -177,7 +161,6 @@ Feature: View Available Appointment Slots Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user sees appropriate message, if filtering by tomorrow but no appointments are available
     Given there are appointment slots on some days other than tomorrow, provided by <GP System>
@@ -191,7 +174,6 @@ Feature: View Available Appointment Slots Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   #403
   Scenario Outline: <GP System> user sees appropriate error message when not allowed to retrieve appointment slots
@@ -204,8 +186,6 @@ Feature: View Available Appointment Slots Frontend
     | TPP       |
     | EMIS      |
     | VISION    |
-    | MICROTEST |
-
 
   #500
   Scenario: TPP user sees appropriate error message when GP system returns corrupt data

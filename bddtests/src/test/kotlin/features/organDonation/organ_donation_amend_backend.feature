@@ -13,7 +13,6 @@ Feature: Organ Donation Amend Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: When amending an organ donation decision to some organs, a registered <GP System> user receives a 200 response and a registration id
     Given I am a <GP System> api user registered as opt-in who amends their decision to some organs
@@ -26,7 +25,6 @@ Feature: Organ Donation Amend Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: When amending an organ donation decision to opt out, a registered <GP System> user receives a 200 response and a registration id
     Given I am a <GP System> api user registered as some organs who amend their decision to opt-out
@@ -39,7 +37,6 @@ Feature: Organ Donation Amend Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: When amending an organ donation decision which will be conflicted, an unregistered <GP System> user receives a 200 response with state value of "conflicted" and a registration id
     Given I am a <GP System> api user who wants amend their decision, but will cause a conflict
@@ -52,7 +49,6 @@ Feature: Organ Donation Amend Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: When amending an organ donation decision, an OD response of <Error Code> will prompt a 500 response and no retry option
     Given I am a EMIS api user amending my decision, but OD returns '<Error Code>' error

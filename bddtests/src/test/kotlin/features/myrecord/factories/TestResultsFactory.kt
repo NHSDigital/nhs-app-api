@@ -26,8 +26,7 @@ abstract class TestResultsFactory {
                     hashMapOf(
                             Supplier.EMIS to { TestResultsFactoryEmis() },
                             Supplier.TPP to { TestResultsFactoryTpp() },
-                            Supplier.VISION to { TestResultsFactoryVision() },
-                            Supplier.MICROTEST to { TestResultsFactoryMicrotest() })
+                            Supplier.VISION to { TestResultsFactoryVision() })
                 }
 
     }

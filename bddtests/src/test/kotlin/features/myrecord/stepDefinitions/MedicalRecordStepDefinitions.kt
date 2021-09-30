@@ -1,17 +1,13 @@
 package features.myrecord.stepDefinitions
 
-import io.cucumber.java.en.Given
-import io.cucumber.java.en.Then
-import io.cucumber.java.en.When
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.myrecord.factories.MyRecordFactory
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
-import mocking.microtest.myRecord.MyRecordModuleCounts
-import mocking.microtest.myRecord.TestResultOptions
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
@@ -40,9 +36,6 @@ open class MedicalRecordStepDefinitions {
     private lateinit var errorDialogPage: ErrorDialogPage
     private lateinit var medicalRecordGpSessionError: MedicalRecordGpSessionError
 
-    var myRecordModuleCounts = MyRecordModuleCounts()
-    var testResultOptions = TestResultOptions()
-
     @Given("^the GP Practice has disabled summary care record functionality$")
     fun givenTheGPPracticeHasDisabledSummaryCareRecordFunctionality() {
         val gpSystem = SerenityHelpers.getGpSupplier()
@@ -53,67 +46,6 @@ open class MedicalRecordStepDefinitions {
     fun givenTheGPPracticeHasDisabledProxyAccessToSummaryCareRecordFunctionality() {
         val gpSystem = SerenityHelpers.getGpSupplier()
         MyRecordFactory.getForSupplier(gpSystem).disabled(ProxySerenityHelpers.getPatientOrProxy())
-    }
-
-    @Given("^I have (.*) Allergies$")
-    fun givenIHaveCountOfAllergies(count: Int) {
-        myRecordModuleCounts.allergyCount = count
-    }
-
-    @Given("^I have (.*) Medications$")
-    fun givenIHaveCountOfMedications(count: Int) {
-        myRecordModuleCounts.medicationCount = count
-    }
-
-    @Given("^I have (.*) Problems$")
-    fun givenIHaveCountOfProblems(count: Int) {
-        myRecordModuleCounts.problemCount = count
-    }
-
-    @Given("^I have (.*) Immunisations$")
-    fun givenIHaveCountOfImmunisations(count: Int) {
-        myRecordModuleCounts.vaccinationsCount = count
-    }
-
-    @Given("^I have (.*) Recalls$")
-    fun givenIHaveCountOfRecalls(count: Int) {
-        myRecordModuleCounts.recallCount = count
-    }
-
-    @Given("^I have (.*) Encounters$")
-    fun givenIHaveCountOfEncounters(count: Int) {
-        myRecordModuleCounts.encounterCount = count
-    }
-
-    @Given("^I have (.*) Referrals$")
-    fun givenIHaveCountOfReferrals(count: Int) {
-        myRecordModuleCounts.referralCount = count
-    }
-
-    @Given("^I have (.*) MedicalHistories$")
-    fun givenIHaveCountOfMedicalHistories(count: Int) {
-        myRecordModuleCounts.medicalHistoryCount = count
-    }
-
-    @Given("^the my record wiremocks return a 403$")
-    fun givenMyRecordWiremocksReturnA403() {
-        val patient = SerenityHelpers.getPatient()
-        val supplier = SerenityHelpers.getGpSupplier()
-
-        CitizenIdSessionCreateJourney().createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
-        MyRecordFactory.getForSupplier(supplier).respondWithForbidden(patient)
-    }
-
-    @Given("^the my record wiremocks are populated$")
-    fun givenMyRecordWiremocksArePopulated() {
-        val supplier = SerenityHelpers.getGpSupplier()
-
-        SerenityHelpers.setGpSupplier(supplier)
-        CitizenIdSessionCreateJourney().createFor(SerenityHelpers.getPatient())
-        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(SerenityHelpers.getPatient())
-        MyRecordFactory.getForSupplier(supplier).
-                enabledWithData(SerenityHelpers.getPatient(), myRecordModuleCounts, testResultOptions)
     }
 
     @Given("^the GP Practice has enabled all medical records for the patient$")

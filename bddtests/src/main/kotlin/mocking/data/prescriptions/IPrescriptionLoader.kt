@@ -76,9 +76,6 @@ interface IPrescriptionLoader<T> {
                 Supplier.VISION -> {
                     VisionPrescriptionLoader
                 }
-                Supplier.MICROTEST -> {
-                    MicrotestPrescriptionLoader
-                }
             }
         }
     }

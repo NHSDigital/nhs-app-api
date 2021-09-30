@@ -32,7 +32,6 @@ Feature: Organ Donation View Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user registered with organ donation can view their existing decision to donate all their organs
     Given I am using the native app user agent
@@ -46,7 +45,6 @@ Feature: Organ Donation View Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user registered with organ donation can view their existing decision to donate some of their organs
     Given I am using the native app user agent
@@ -60,7 +58,6 @@ Feature: Organ Donation View Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario: A user registered to donate some organs can see which organs they have not yet decided on
     Given I am using the native app user agent
@@ -89,7 +86,6 @@ Feature: Organ Donation View Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: A user registered with organ donation can view their existing faith decision of <Option>
     Given I am using the native app user agent

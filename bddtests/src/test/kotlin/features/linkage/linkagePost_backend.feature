@@ -63,11 +63,6 @@ Feature: Linkage Post Key
       | TPP       |
       | VISION    |
 
-  Scenario: Linkage request POST for Microtest returns not found
-    Given I have valid MICROTEST linkage details for posting
-    When I call the Linkage POST endpoint
-    Then I receive a "Not Found" error
-
   Scenario Outline: Linkage request POST for <GP System> returns 400 Bad Request, invalid OdsCode
     Given I have valid <GP System> linkage details apart from a not found OdsCode
     When I call the Linkage POST endpoint

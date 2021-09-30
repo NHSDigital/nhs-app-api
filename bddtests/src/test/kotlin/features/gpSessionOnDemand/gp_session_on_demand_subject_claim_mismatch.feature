@@ -15,7 +15,6 @@ Feature: GP Session On Demand subject claim mismatch
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user trying to view appointments after a decoupled login is shown an error when subject claim differs between Token and UserInfo responses
     Given NHS Login returns an invalid Subject upon establishing a <GP System> GP session
@@ -30,7 +29,6 @@ Feature: GP Session On Demand subject claim mismatch
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user trying to view linked profiles after a decoupled login is shown an error when subject claim differs between Token and UserInfo responses
     Given NHS Login returns an invalid Subject upon establishing a <GP System> GP session
@@ -56,4 +54,3 @@ Feature: GP Session On Demand subject claim mismatch
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |

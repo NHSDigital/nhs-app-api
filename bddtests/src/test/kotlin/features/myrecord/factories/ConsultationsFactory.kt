@@ -24,8 +24,7 @@ abstract class ConsultationsFactory {
                     hashMapOf(
                             Supplier.EMIS to { ConsultationsFactoryEmis() },
                             Supplier.TPP to { ConsultationsFactoryTpp() },
-                            Supplier.VISION to { ConsultationsFactoryVision() },
-                            Supplier.MICROTEST to { ConsultationsFactoryMicrotest() })
+                            Supplier.VISION to { ConsultationsFactoryVision() })
                 }
 
     }

@@ -60,7 +60,6 @@ Feature: Create Session Backend: The application verifies the user session
       | EMIS      | 3e     |
       | TPP       | 3t     |
       | VISION    | 3s     |
-      | MICROTEST | 3m     |
 
   Scenario Outline: <GP System> responds with a bad gateway
     Given I have valid OAuth details and <GP System> returns a Bad Gateway response
@@ -74,7 +73,6 @@ Feature: Create Session Backend: The application verifies the user session
       | EMIS      | 3e     |
       | TPP       | 3t     |
       | VISION    | 3s     |
-      | MICROTEST | 3m     |
 
   Scenario Outline: When creating a session with <GP System> an incomplete response resulting in a parsing error
     Given I have valid OAuth details and <GP System> returns with an incomplete response
@@ -89,7 +87,6 @@ Feature: Create Session Backend: The application verifies the user session
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: When user CID connection token fails to authenticate with <GP System> they can log in
     Given I have valid OAuth details and CID connection token fails to authenticate with <GP System>
@@ -121,7 +118,6 @@ Feature: Create Session Backend: The application verifies the user session
       | EMIS      | ze     |
       | TPP       | zt     |
       | VISION    | zs     |
-      | MICROTEST | zm     |
 
   # covered in Manual Regression Test pack
   @manual
@@ -137,4 +133,3 @@ Feature: Create Session Backend: The application verifies the user session
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |

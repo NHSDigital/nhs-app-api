@@ -27,7 +27,6 @@ abstract class PatientVerificationFactory(protected val gpSystem: Supplier)  {
             hashMapOf(
                     Supplier.EMIS to { PatientVerificationFactoryEmis() },
                     Supplier.TPP to { PatientVerificationFactoryTpp() },
-                    Supplier.VISION to { PatientVerificationFactoryVision() },
-                    Supplier.MICROTEST to { PatientVerificationFactoryMicrotest() } )}
+                    Supplier.VISION to { PatientVerificationFactoryVision() } )}
     }
 }

@@ -42,7 +42,6 @@ Feature: Book Appointments Frontend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   # Not applicable for VISION
   Scenario Outline: A <GP System> user cannot book an appointment without describing symptoms
@@ -57,7 +56,6 @@ Feature: Book Appointments Frontend
       | GP System |
       | EMIS      |
       | TPP       |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user can book an appointment describing symptoms
     Given there are <GP System> appointments available to book with a reason
@@ -79,7 +77,6 @@ Feature: Book Appointments Frontend
       | GP System |
       | EMIS      |
       | VISION    |
-      | MICROTEST |
     @smoketest
     Examples:
       | GP System |
@@ -233,7 +230,6 @@ Feature: Book Appointments Frontend
       | GP System |
       | TPP       |
       | VISION    |
-      | MICROTEST |
       | EMIS      |
 
 

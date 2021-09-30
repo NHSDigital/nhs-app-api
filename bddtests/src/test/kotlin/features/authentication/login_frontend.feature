@@ -87,16 +87,7 @@ Feature: Login frontend
     Then I see my Name on the home page
     And I do not see the yellow banner
 
-  #Once prescriptions are completed for microtest, this test can be merged with above
-  Scenario: A Microtest user sees the home page after logging in
-    Given I am a MICROTEST patient
-    And I am logged in
-    Then I see my Name on the home page
-    And I see my Date of birth on the home page
-    And I see my NHS number on the home page
-    And I see the home page header
-
-  Scenario Outline: A <GP System> user whos GP system supports proxy can still login when the GP System fails
+  Scenario Outline: A <GP System> user whose GP system supports proxy can still login when the GP System fails
     Given I am an <GP System> patient whose GP system is unavailable
     And I am logged in
     Then I see my Name on the home page
@@ -118,7 +109,6 @@ Feature: Login frontend
     Examples:
       | GP System |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: A <GP System> user can still log in when the Im1 Connection Token doesn't contain a key
     Given I am logged in as a <GP System> user created before Im1 Cache Keys existed

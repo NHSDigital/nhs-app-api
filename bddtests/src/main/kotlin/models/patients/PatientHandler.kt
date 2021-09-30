@@ -18,8 +18,7 @@ abstract class PatientHandler {
             hashMapOf(
                     Supplier.EMIS to { EmisPatients },
                     Supplier.TPP to { TppPatients },
-                    Supplier.VISION to { VisionPatients },
-                    Supplier.MICROTEST to { MicrotestPatients }
+                    Supplier.VISION to { VisionPatients }
             )
         }
     }

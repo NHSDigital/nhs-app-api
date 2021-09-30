@@ -76,27 +76,6 @@ Feature: Health Conditions Frontend - Medical Record V2
       | EMIS      |
       | VISION    |
 
-  Scenario: A MICROTEST user can view health conditions - Medical Record v2
-    Given I am a MICROTEST user setup to use medical record version 2
-    And the my record wiremocks are populated
-    And I am logged in
-    When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
-    And I click the Health conditions link on my record - Medical Record v2
-    Then I see the expected health conditions - Medical Record v2
-
-  Scenario: A MICROTEST user has no health conditions on their record - Medical Record v2
-    Given I am a MICROTEST user setup to use medical record version 2
-    And I have 0 Problems
-    And the my record wiremocks are populated
-    And I am logged in
-    When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
-    And I click the Health conditions link on my record - Medical Record v2
-    Then I see a message that this information isn't available through the NHS App - Medical Record v2
-
   Scenario: An EMIS user has a health condition result with an unknown date - Medical Record v2
     Given I am a EMIS user setup to use medical record version 2
     And the EMIS GP Practice has three problem results where the second record has no date

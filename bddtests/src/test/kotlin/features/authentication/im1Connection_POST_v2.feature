@@ -31,15 +31,6 @@ Feature: Im1 Connection V2 POST
       | EMIS      |
       | VISION    |
       | TPP       |
-    #MICROTEST users connection token is based on generated guids so we cant use the assert on the connection token
-
-  Scenario: A MICROTEST user can successfully register, getting retrieved linkage details
-    Given I am a MICROTEST user wishing to register with retrieved linkage details
-    And no IM1 Connection Token is currently cached
-    When I register the user's IM1 credentials using the v2 endpoint
-    Then I receive a "Created" success code
-    And the Im1 connection response has the expected NHS numbers
-    And the IM1 Connection Token is in the cache
 
   Scenario Outline: A <GP System> user can successfully register with created linkage details
     Given I am a <GP System> user wishing to register with created linkage details
@@ -92,8 +83,6 @@ Feature: Im1 Connection V2 POST
       | VISION   | 400        | 1       | 502            | 100 | Unmapped Error |
       | VISION   | 400        |	V4205   | 400            | 108 ||
       | VISION   | 404        |	V4205   | 400            | 108 ||
-      | MICROTEST| 400        |	        | 400            | 200 ||
-      | MICROTEST| 500        |	        | 400            | 200 ||
 
   Scenario Outline: A <GP System> user can successfully register with created linkage details after <GPCode> error
     Given I am a <GP System> user registering with created linkage after a get linkage returns '<GPHttpCode>' '<GPCode>' '<Message>'

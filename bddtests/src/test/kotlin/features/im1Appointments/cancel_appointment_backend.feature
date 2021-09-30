@@ -13,7 +13,6 @@ Feature: Cancel Appointments Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario: EMIS API will not cancel the appointment if an invalid reason is provided
     Given EMIS is available to cancel a previously booked appointment before cutoff time
@@ -31,7 +30,6 @@ Feature: Cancel Appointments Backend
       | EMIS      | ze     |
       | TPP       | zt     |
       | VISION    | zs     |
-      | MICROTEST | zm     |
 
   Scenario Outline: A <GP System> api user getting corrupted data when cancelling an appointment receives an unknown internal server error
     Given <GP System> returns corrupted response when trying to cancel a previously booked appointment

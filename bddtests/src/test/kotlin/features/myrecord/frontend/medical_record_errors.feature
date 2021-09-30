@@ -18,4 +18,3 @@ Feature: Medical Record Errors
       | EMIS      | ze     |
       | TPP       | zt     |
       | VISION    | zs     |
-      | MICROTEST | zm     |

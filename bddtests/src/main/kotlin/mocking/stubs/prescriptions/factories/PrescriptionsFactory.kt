@@ -5,7 +5,6 @@ import mocking.SupplierSpecificFactory
 import mocking.MockingClient
 import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
-import mockingFacade.prescriptions.PartialSuccessFacade
 import models.Patient
 import java.time.OffsetDateTime
 
@@ -47,8 +46,6 @@ abstract class PrescriptionsFactory {
     abstract fun coursesEndpointTimeout(patient : Patient)
     abstract fun coursesEndpointThrowingServerError(patient : Patient)
     abstract fun gpSessionHasExpired()
-    abstract fun orderPrescriptionReturnsConflictResponse()
-    abstract fun prescriptionsOrderEndpointPartiallySuccessful(partialSuccess: PartialSuccessFacade)
     abstract fun disableForProxy(callingPatient: Patient, actingOnBehalfOf: Patient)
 
     val mockingClient = MockingClient.instance
@@ -60,8 +57,7 @@ abstract class PrescriptionsFactory {
                     hashMapOf(
                             Supplier.EMIS to { PrescriptionsFactoryEmis() },
                             Supplier.TPP to { PrescriptionsFactoryTpp() },
-                            Supplier.VISION to { PrescriptionsFactoryVision() },
-                            Supplier.MICROTEST to { PrescriptionsFactoryMicrotest() })
+                            Supplier.VISION to { PrescriptionsFactoryVision() })
                 }
     }
 }

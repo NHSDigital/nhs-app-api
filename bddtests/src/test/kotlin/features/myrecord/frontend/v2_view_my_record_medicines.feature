@@ -28,7 +28,6 @@ Feature: Medicines Frontend - Medical Record v2
       | GP System |
       | EMIS      |
       | TPP       |
-      | MICROTEST |
     @smoketest
     Examples:
       | GP System |
@@ -83,24 +82,3 @@ Feature: Medicines Frontend - Medical Record v2
       | EMIS      |
       | VISION    |
       | TPP       |
-
-    Scenario: A MICROTEST user has no medicines on their record - Medical Record v2
-      Given I am a MICROTEST user setup to use medical record version 2
-      And I have 0 Medications
-      And the my record wiremocks are populated
-      And I am logged in
-    When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
-      And I click the Medicines link on my record - Medical Record v2
-      Then I see the medical record v2 medicines page
-      When I click the Acute medicines link - Medical Record v2
-      Then I see a message that I have no information recorded for a specific record - Medical Record v2
-      When I click the Back link
-      Then I see the medical record v2 medicines page
-      When I click the Current medicines link - Medical Record v2
-      Then I see a message that I have no information recorded for a specific record - Medical Record v2
-      When I click the Back link
-      Then I see the medical record v2 medicines page
-      When I click the Discontinued medicines link - Medical Record v2
-      Then I see a message that I have no information recorded for a specific record - Medical Record v2

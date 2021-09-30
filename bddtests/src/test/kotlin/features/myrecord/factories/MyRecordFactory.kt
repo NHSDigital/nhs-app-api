@@ -3,8 +3,6 @@ package features.myrecord.factories
 import constants.Supplier
 import mocking.SupplierSpecificFactory
 import mocking.MockingClient
-import mocking.microtest.myRecord.MyRecordModuleCounts
-import mocking.microtest.myRecord.TestResultOptions
 import models.Patient
 
 abstract class MyRecordFactory {
@@ -15,8 +13,7 @@ abstract class MyRecordFactory {
     abstract fun disabledForProxy(patient:Patient, actingOnBehalfOf: Patient)
     abstract fun enabledWithBlankRecord(patient: Patient)
     abstract fun enabledWithNoDcrAccess(patient: Patient)
-    abstract fun enabledWithData(
-            patient: Patient, myRecordModuleCounts: MyRecordModuleCounts, testResultOptions: TestResultOptions)
+    abstract fun enabledWithData(patient: Patient)
     abstract fun enabledWithAllRecords(patient: Patient)
     abstract fun respondWithForbidden(patient: Patient)
 
@@ -27,8 +24,7 @@ abstract class MyRecordFactory {
                     hashMapOf(
                             Supplier.EMIS to { MyRecordFactoryEmis() },
                             Supplier.TPP to { MyRecordFactoryTpp() },
-                            Supplier.VISION to { MyRecordFactoryVision() },
-                            Supplier.MICROTEST to { MyRecordFactoryMicrotest() })
+                            Supplier.VISION to { MyRecordFactoryVision() })
                 }
 
     }

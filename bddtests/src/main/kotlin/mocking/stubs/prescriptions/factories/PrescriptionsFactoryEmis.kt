@@ -8,7 +8,6 @@ import mocking.emis.models.CourseRequestsGetResponse
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import mocking.stubs.pds.ViewSpinePdsStubs
-import mockingFacade.prescriptions.PartialSuccessFacade
 import models.Patient
 import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.Serenity
@@ -142,13 +141,5 @@ class PrescriptionsFactoryEmis: PrescriptionsFactory() {
             prescriptions.coursesRequest(patient)
                     .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
         }
-    }
-
-    override fun orderPrescriptionReturnsConflictResponse() {
-        throw UnsupportedOperationException()
-    }
-
-    override fun prescriptionsOrderEndpointPartiallySuccessful(partialSuccess: PartialSuccessFacade) {
-        throw UnsupportedOperationException()
     }
 }

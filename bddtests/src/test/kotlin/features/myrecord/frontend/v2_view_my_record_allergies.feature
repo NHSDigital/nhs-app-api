@@ -22,17 +22,6 @@ Feature: Allergies Frontend - Medical Record v2
     And I click the Allergies and adverse reactions link on my record - Medical Record v2
     Then I see a message that I have no information recorded for a specific record - Medical Record v2
 
-  Scenario: A MICROTEST user can view allergies and adverse reactions section when no allergies are returned - Medical Record v2
-    Given I am a MICROTEST user setup to use medical record version 2
-    And I have 0 Allergies
-    And the my record wiremocks are populated
-    And I am logged in
-    When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
-    And I click the Allergies and adverse reactions link on my record - Medical Record v2
-    Then I see a message telling me to contact my GP for information on My Record - Medical Record v2
-
   Scenario: A VISION user is shown an appropriate error message when an unknown error occurs retrieving their allergies - Medical Record v2
     Given I am a VISION user setup to use medical record version 2
     And there is an unknown error getting allergies for VISION
@@ -42,16 +31,6 @@ Feature: Allergies Frontend - Medical Record v2
     When I click the 'Continue' button
     And I click the Allergies and adverse reactions link on my record - Medical Record v2
     Then I see an error occurred message on My Record - Medical Record v2
-
-  Scenario: A MICROTEST user can view allergies and adverse reactions section - Medical Record v2
-    Given I am a MICROTEST user setup to use medical record version 2
-    And the my record wiremocks are populated
-    And I am logged in
-    When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
-    And I click the Allergies and adverse reactions link on my record - Medical Record v2
-    Then I see the expected allergies displayed - Medical Record v2
 
   Scenario: An EMIS user has an allergies and adverse reactions result with an unknown date - Medical Record v2
     Given I am a EMIS user setup to use medical record version 2

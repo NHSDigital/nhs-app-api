@@ -13,7 +13,6 @@ Feature: Organ Donation Lookup Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: When looking for a registration, a <GP System> user who opted in receives a 200 and donation details
     Given I am a <GP System> api user registered with organ donation to donate all organs
@@ -26,7 +25,6 @@ Feature: Organ Donation Lookup Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: When looking for a registration, a <GP System> user who opted in with some organs receives a 200 and donation details
     Given I am a <GP System> api user registered with organ donation to donate some organs
@@ -40,7 +38,6 @@ Feature: Organ Donation Lookup Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: When looking for a registration, a <GP System> user who has an appointed representative receives a 200 and donation details
     Given I am a <GP System> api user registered with organ donation with an appointed representative
@@ -53,8 +50,6 @@ Feature: Organ Donation Lookup Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
-
 
   Scenario Outline: When looking for an organ donation registration, an unregistered <GP System> user receives a 200 and no donation details
     Given I am a <GP System> api user not registered with organ donation
@@ -68,7 +63,6 @@ Feature: Organ Donation Lookup Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: When looking for an organ donation registration but the system has a conflict, the <GP System> user receives a 200 response with state value of "conflicted"
     Given I am a <GP System> api user registered with organ donation, but organ donation will conflict
@@ -129,7 +123,6 @@ Feature: Organ Donation Lookup Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-      | MICROTEST |
 
   Scenario Outline: When looking for an organ donation registration but <GP System> times out when returning demographics, the user receives a 504 response
     #The OD data needs to be placed after log in, as the demographics timeout will affect creating a session
@@ -142,4 +135,3 @@ Feature: Organ Donation Lookup Backend
       | EMIS      | ze     |
       | TPP       | zt     |
       | VISION    | zs     |
-      | MICROTEST | zm     |

@@ -33,7 +33,6 @@ abstract class Im1ConnectionV2GetFactory(protected val gpSystem: Supplier) {
             get() = hashMapOf(
                     Supplier.EMIS to { Im1ConnectionV2GetFactoryEmis() },
                     Supplier.TPP to { Im1ConnectionV2GetFactoryTpp() },
-                    Supplier.VISION to { Im1ConnectionV2GetFactoryVision() },
-                    Supplier.MICROTEST to { Im1ConnectionV2GetFactoryMicrotest()} )
+                    Supplier.VISION to { Im1ConnectionV2GetFactoryVision() } )
     }
 }

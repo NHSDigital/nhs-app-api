@@ -17,10 +17,6 @@ open class V2MedicalRecordImmunisationsStepDefinitions {
             ), Supplier.VISION to arrayOf(
                 "10 October 2018\nLumpectomy NEC",
                 "10 October 2018\nLumpectomy NEC"
-            ), Supplier.MICROTEST to arrayOf(
-                "3 July 2019\nImmunisation 1\nNext Date: no next date\nStatus: Main 1",
-                "3 July 2019\nImmunisation 2\nNext Date: no next date\nStatus: Main 2",
-                "3 July 2019\nImmunisation 3\nNext Date: no next date\nStatus: Main 3"
             ))
 
     @Then("^I see the expected immunisations - Medical Record v2$")
