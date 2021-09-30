@@ -7,6 +7,7 @@ namespace NHSOnline.IntegrationTests.UI
         Eleven,
         Twelve,
         Thirteen,
+        Fourteen
     }
 
     public static class IOSVersionExtensions
@@ -15,9 +16,10 @@ namespace NHSOnline.IntegrationTests.UI
         {
             return osVersion switch
             {
-                IOSVersion.Thirteen => "13.0",
                 IOSVersion.Eleven => "11",
                 IOSVersion.Twelve => "12",
+                IOSVersion.Thirteen => "13",
+                IOSVersion.Fourteen => "14",
                 _ => throw new ArgumentOutOfRangeException(nameof(osVersion), osVersion, null)
             };
         }

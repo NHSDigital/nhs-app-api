@@ -219,7 +219,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
             if (storagePermissionCheck == PermissionStatus.Granted)
             {
-                await AttemptStoreAndHandleFile(downloadRequest).PreserveThreadContext();
+                await AttemptDownloadFile(downloadRequest).PreserveThreadContext();
             }
             else
             {
@@ -227,14 +227,14 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
                 if (storagePermissionRequest == PermissionStatus.Granted)
                 {
-                    await AttemptStoreAndHandleFile(downloadRequest).PreserveThreadContext();
+                    await AttemptDownloadFile(downloadRequest).PreserveThreadContext();
                 }
             }
         }
 
-        private async Task AttemptStoreAndHandleFile(DownloadRequest downloadRequest)
+        private async Task AttemptDownloadFile(DownloadRequest downloadRequest)
         {
-            var handleFileResult = await _fileHandler.DownloadFile(downloadRequest).PreserveThreadContext();
+            var handleFileResult = await _fileHandler.DownloadFile(downloadRequest, _view.GetWebViewElement()).PreserveThreadContext();
             if (handleFileResult is DownloadFileResult.Failed)
             {
                 var model = new FullNavigationTryAgainFileDownloadErrorModel(GetNewPopToRootHandler(), _view.SelectedNavigationFooterItem);

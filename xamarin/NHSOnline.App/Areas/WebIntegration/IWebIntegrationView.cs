@@ -35,5 +35,7 @@ namespace NHSOnline.App.Areas.WebIntegration
         void SetWebIntegrationRequest(WebIntegrationRequest webIntegrationRequest);
 
         void SetNavigationFooterItem(NavigationFooterItem footerItem);
+
+        View GetWebViewElement();
     }
 }

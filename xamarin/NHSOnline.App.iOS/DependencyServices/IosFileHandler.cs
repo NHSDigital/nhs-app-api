@@ -13,6 +13,7 @@ using PassKit;
 using UIKit;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using Rectangle = System.Drawing.Rectangle;
 
 [assembly: Dependency(typeof(IosFileHandler))]
 namespace NHSOnline.App.iOS.DependencyServices
@@ -20,18 +21,19 @@ namespace NHSOnline.App.iOS.DependencyServices
     public class IosFileHandler: IFileHandler
     {
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(IosFileHandler));
+        private const int InitialBoxSize = 20;
 
-        public async Task<DownloadFileResult> DownloadFile(DownloadRequest downloadRequest)
+        public async Task<DownloadFileResult> DownloadFile(DownloadRequest downloadRequest, View webViewElement)
         {
             if (string.Equals(downloadRequest.MimeType, "application/vnd.apple.pkpass", StringComparison.Ordinal))
             {
                 return HandlePassKitPassFile(downloadRequest);
             }
 
-            return await HandleDefaultFileTypes(downloadRequest).PreserveThreadContext();
+            return await HandleDefaultFileTypes(downloadRequest, webViewElement).PreserveThreadContext();
         }
 
-        private static async Task<DownloadFileResult> HandleDefaultFileTypes(DownloadRequest downloadRequest)
+        private static async Task<DownloadFileResult> HandleDefaultFileTypes(DownloadRequest downloadRequest, View webViewElement)
         {
             var documents = Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments);
             var tmp = Path.Combine (documents, "..", "tmp");
@@ -48,15 +50,30 @@ namespace NHSOnline.App.iOS.DependencyServices
                 return new DownloadFileResult.Failed();
             }
 
-            ShareFile shareFile = new ShareFile(Path.Combine(tmp,downloadRequest.FileName));
-
-            var requestShare = new ShareFileRequest(
-                Regex.Replace(downloadRequest.FileName, @"\s+", ""),
-                shareFile);
-
-            await Share.RequestAsync(requestShare).PreserveThreadContext();
+            await Share.RequestAsync(new ShareFileRequest
+            {
+                Title = Regex.Replace(downloadRequest.FileName, @"\s+", ""),
+                File = new ShareFile(Path.Combine(tmp,downloadRequest.FileName)),
+                PresentationSourceBounds = GetViewBounds(webViewElement)
+            }).PreserveThreadContext();
 
             return new DownloadFileResult.Success();
+        }
+
+        private static Rectangle GetViewBounds(View webViewElement)
+        {
+            var viewCenterX = webViewElement.Bounds.Center.X;
+            var viewCenterY = webViewElement.Bounds.Center.Y;
+
+            return DrawRectangle(viewCenterX, viewCenterY, InitialBoxSize, InitialBoxSize);
+        }
+
+        // Working out the boundaries is required for an iPad as it floats in the larger screen as opposed to iPhones where it is fixed to the bottom
+        private static Rectangle DrawRectangle(double viewCenterX, double viewCenterY, double width, double height)
+        {
+            return DeviceInfo.Idiom == DeviceIdiom.Tablet
+                ? new Rectangle((int)viewCenterX, (int)viewCenterY, (int)width, (int)height)
+                : Rectangle.Empty;
         }
 
         private static DownloadFileResult HandlePassKitPassFile(DownloadRequest downloadRequest)

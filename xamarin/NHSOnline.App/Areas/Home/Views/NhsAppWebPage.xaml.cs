@@ -289,6 +289,8 @@ namespace NHSOnline.App.Areas.Home.Views
         public async Task UpdateNativeVersion(string version)
             => await WebView.AppVersionUpdateNativeVersion(version).ResumeOnThreadPool();
 
+        public View GetWebViewElement() => WebView;
+
         public async Task SendNotificationsStatus(string status)
             => await WebView.SendNotificationsStatus(status).ResumeOnThreadPool();
 

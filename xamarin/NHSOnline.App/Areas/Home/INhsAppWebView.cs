@@ -77,5 +77,7 @@ namespace NHSOnline.App.Areas.Home
         Task Logout();
         Task GetContextualHelpLink();
         Task UpdateNativeVersion(string version);
+
+        View GetWebViewElement();
     }
 }

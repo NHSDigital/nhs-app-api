@@ -118,6 +118,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         public void SetWebIntegrationRequest(WebIntegrationRequest webIntegrationRequest) => WebView.WebIntegrationRequest = webIntegrationRequest;
 
         public void SetNavigationFooterItem(NavigationFooterItem footerItem) => SelectedNavigationFooterItem = footerItem;
+        public View GetWebViewElement() => WebView;
 
         private void WebOnEndNavigating(object sender, WebNavigatedEventArgs e)
         {

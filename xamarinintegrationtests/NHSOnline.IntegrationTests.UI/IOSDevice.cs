@@ -7,7 +7,8 @@ namespace NHSOnline.IntegrationTests.UI
         iPhone11Pro,
         iPhone8,
         iPhoneX,
-        iPhoneXR
+        iPhoneXR,
+        iPadAir4
     }
 
     public static class IOSDeviceExtensions
@@ -20,6 +21,7 @@ namespace NHSOnline.IntegrationTests.UI
                 IOSDevice.iPhone8 => "iPhone 8",
                 IOSDevice.iPhoneX => "iPhone X",
                 IOSDevice.iPhoneXR => "iPhone XR",
+                IOSDevice.iPadAir4 => "iPad Air 4",
                 _ => throw new ArgumentOutOfRangeException(nameof(device), device, null)
             };
         }

@@ -26,7 +26,7 @@ namespace NHSOnline.App.Droid.DependencyServices
 
         private static readonly string FilePath = Path.Combine(Environment.DirectoryDownloads + "/NhsApp");
 
-        public async Task<DownloadFileResult> DownloadFile(DownloadRequest downloadRequest)
+        public async Task<DownloadFileResult> DownloadFile(DownloadRequest downloadRequest, View webViewElement)
         {
             Uri? uri;
 

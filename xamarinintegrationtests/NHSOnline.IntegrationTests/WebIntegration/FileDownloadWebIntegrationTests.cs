@@ -69,6 +69,27 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver);
         }
 
+        [NhsAppIOSTest(IOSDevice = IOSDevice.iPadAir4, OSVersion = IOSVersion.Fourteen)]
+        public void APatientWithProofLevelNineCanDownloadAFileFromAWebIntegrationDownloadFileScreenIpadIOS(
+            IIOSDriverWrapper driver)
+        {
+            var patient = new PkbPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsIOS(driver);
+
+            IOSFileDownloadPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.DownloadImage();
+
+            IOSShareFilePanel
+                .AssertDisplayed(driver);
+        }
+
         [NhsAppIOSTest]
         public void APatientWithProofLevelNineCanDownloadAFileFromAWebIntegrationDownloadFileScreenIOS(
             IIOSDriverWrapper driver)
