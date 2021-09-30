@@ -23,7 +23,7 @@
                      :click-param="pharmacy"
                      :aria-label="ariaLabelCaption(pharmacy)">
             <slot>
-              <div class="nhsuk-u-padding-left-2" :class="$style['results-styling']">
+              <div class="nhsuk-u-padding-left-0" :class="$style['results-styling']">
                 <pharmacy-address-component :id="'resultAddressComponent-' + index"
                                             :pharmacy="pharmacy" :identifier="index"/>
               </div>
