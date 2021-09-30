@@ -15,6 +15,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments
         private WebText UnableToBookText => WebText.WithTagAndText(_interactor,
             "p", "You are not currently able to book and manage GP appointments online.");
 
+        private WebLink ReportAProblemLink => WebLink.WithText(_interactor, "Report a problem");
+
         private WebText WhatYouCanDoNext => WebText.WithTagAndText(_interactor,
             "h2", "What you can do next");
 
@@ -24,7 +26,10 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments
         {
             TitleText.AssertVisible();
             UnableToBookText.AssertVisible();
+            ReportAProblemLink.AssertVisible();
             WhatYouCanDoNext.AssertVisible();
         }
+
+        public void ReportAProblem() => ReportAProblemLink.Click();
     }
 }

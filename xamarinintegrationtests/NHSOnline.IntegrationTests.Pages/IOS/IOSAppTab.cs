@@ -20,6 +20,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         private IOSLabel TitleText => IOSLabel.WithText(_driver, _title);
 
+        private WebText ErrorCodeText(IWebInteractor webInteractor, string errorCode) => WebText.WithText(webInteractor, errorCode);
+
         private IOSLabel NoInternetText => IOSLabel.WithText(_driver, "Safari cannot open the page because your iPhone is not connected to the internet.");
 
         private IOSButton AcceptAnalyticsCookiesButton => IOSButton.WithText(_driver, "I'm OK with analytics cookies");
@@ -36,6 +38,9 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         public static IOSAppTab AssertOnContactUsPage(IIOSDriverWrapper driver)
             => AssertOnPageByTitle(driver, "Contact Us");
+
+        public static IOSAppTab AssertOnContactUsPageByErrorCode(IIOSDriverWrapper driver, string errorCode)
+            => AssertOnPageByTextContaining(driver, $"errorcode: {errorCode}");
 
         public static IOSAppTab AssertOnHelpPageByText(IIOSDriverWrapper driver, string textToMatch)
             => AssertOnPageByTitle(driver, $"Help Page for {textToMatch}");
@@ -61,6 +66,13 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             }
 
             return page;
+        }
+
+        private static IOSAppTab AssertOnPageByTextContaining(IIOSDriverWrapper driver, string subString)
+        {
+            var iosAppTab = new IOSAppTab(driver);
+            iosAppTab.ErrorCodeText(driver.Web.BrowserOverlayWebView(), subString).AssertContainsVisible();
+            return iosAppTab;
         }
 
         private static IOSAppTab AssertOnPageByClose(IIOSDriverWrapper driver)

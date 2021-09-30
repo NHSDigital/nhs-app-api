@@ -1,9 +1,11 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.CitizenId;
 using NHSOnline.HttpMocks.Domain;
+using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.Android.Appointments;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
+using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
@@ -16,7 +18,7 @@ namespace NHSOnline.IntegrationTests.Session.OnDemandGpSession
     public class CreateOnDemandGpSessionFailedTests
     {
         [NhsAppAndroidTest]
-        public void APatientSeesServiceSpecificGpSessionErrorScreensWhenThereIsAFailureCreatingAGpSessionOnDemandAndroid(IAndroidDriverWrapper driver)
+        public void APatientSeesServiceSpecificGpSessionErrorScreensWhenThereIsAFailureCreatingAGpSessionOnDemandAndCanReportTheProblemAndroid(IAndroidDriverWrapper driver)
         {
             var fo = new EmisPatient()
                 .WithName(b => b.GivenName("Fo").FamilyName("Catcha"))
@@ -47,11 +49,19 @@ namespace NHSOnline.IntegrationTests.Session.OnDemandGpSession
 
             AndroidAppointmentBookingUnavailablePage
                 .AssertOnPage(driver)
-                .AssertPageElements();
+                .AssertPageElements()
+                .PageContent.ReportAProblem();
+
+            AndroidAppTabBrowserChoice
+                .IfDisplayed(driver, choice => choice.ChooseChrome());
+
+            AndroidAppTab
+                .AssertOnContactUsPageByErrorCode(driver, "3c")
+                .ReturnToApp();
         }
 
         [NhsAppIOSTest]
-        public void APatientSeesServiceSpecificGpSessionErrorScreensWhenThereIsAFailureCreatingAGpSessionOnDemandIOS(IIOSDriverWrapper driver)
+        public void APatientSeesServiceSpecificGpSessionErrorScreensWhenThereIsAFailureCreatingAGpSessionOnDemandAndCanReportTheProblemIOS(IIOSDriverWrapper driver)
         {
             var anna = new EmisPatient()
                 .WithName(b => b.GivenName("Anna").FamilyName("Damma"))
@@ -82,7 +92,11 @@ namespace NHSOnline.IntegrationTests.Session.OnDemandGpSession
 
             IOSAppointmentBookingUnavailablePage
                 .AssertOnPage(driver)
-                .AssertPageElements();
+                .AssertPageElements()
+                .PageContent.ReportAProblem();
+
+            IOSAppTab
+                .AssertOnContactUsPageByErrorCode(driver, "3c");
         }
     }
 }

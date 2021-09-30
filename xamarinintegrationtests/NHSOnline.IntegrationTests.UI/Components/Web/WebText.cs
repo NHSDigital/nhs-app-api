@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
     public sealed class WebText : IActOnElementContext
     {
         private readonly IWebInteractor _interactor;
-        private readonly string _tag;
+        private readonly string? _tag;
         private readonly string _text;
 
         private WebText(IWebInteractor interactor, string tag, string text)
@@ -19,11 +19,23 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
             _text = text;
         }
 
+        private WebText(IWebInteractor interactor, string text)
+        {
+            _interactor = interactor;
+            _text = text;
+        }
+
         public static WebText WithTagAndText(IWebInteractor interactor, string tag, string text)
             => new WebText(interactor, tag, text);
 
+        public static WebText WithText(IWebInteractor interactor, string text)
+            => new WebText(interactor, text);
+
         public void AssertVisible()
             => ActOnElement(e => e.Displayed.Should().BeTrue("A {0} tag with text {1} should be displayed", _tag, _text));
+
+        public void AssertContainsVisible()
+            => ActOnContainsElement(e => e.Displayed.Should().BeTrue("A {0} tag with text {1} should be displayed", _tag, _text));
 
         public void AssertNotVisible() => _interactor.IsPresent(FindBy).Should().BeFalse("A {0} tag with text {1} should not be displayed", _tag, _text);
 
@@ -36,10 +48,18 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
         private void ActOnElement(Action<IWebElement> action)
             => _interactor.ActOnElement(FindBy, action);
 
+        private void ActOnContainsElement(Action<IWebElement> action)
+            => _interactor.ActOnElement(ContainsFindBy, action);
+
         private By FindBy
             => By.XPath(WholeElementSelector);
 
+        private By ContainsFindBy
+            => By.XPath(ElementContainsSelector);
+
         private string WholeElementSelector => $"//{ _tag}[normalize-space()={_text.QuoteXPathLiteral()}]";
+
+        private string ElementContainsSelector => $"//*[contains(normalize-space(), {_text.QuoteXPathLiteral()})]";
         void IActOnElementContext.ActOnElementContext(Action<ElementContext<IWebDriver, IWebElement>> action)
             => _interactor.ActOnElementContext(FindBy, action);
 

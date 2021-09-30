@@ -6,7 +6,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
     public sealed class AndroidAppointmentBookingUnavailablePage
     {
         private AndroidFullNavigation Navigation { get; }
-        private AppointmentBookingUnavailablePageContent PageContent { get; }
+        public AppointmentBookingUnavailablePageContent PageContent { get; }
 
         private AndroidAppointmentBookingUnavailablePage(IAndroidDriverWrapper driver)
         {
@@ -21,10 +21,11 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
             return page;
         }
 
-        public void AssertPageElements()
+        public AndroidAppointmentBookingUnavailablePage AssertPageElements()
         {
             Navigation.AssertNavigationPresent();
             PageContent.AssertPageElements();
+            return this;
         }
     }
 }

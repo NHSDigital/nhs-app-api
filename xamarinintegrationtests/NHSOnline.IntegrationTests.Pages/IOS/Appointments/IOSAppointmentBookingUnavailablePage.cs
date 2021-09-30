@@ -6,7 +6,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Appointments
     public sealed class IOSAppointmentBookingUnavailablePage
     {
         private IOSFullNavigation Navigation { get; }
-        private AppointmentBookingUnavailablePageContent PageContent { get; }
+        public AppointmentBookingUnavailablePageContent PageContent { get; }
 
         private IOSAppointmentBookingUnavailablePage(IIOSDriverWrapper driver)
         {
@@ -21,10 +21,12 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Appointments
             return page;
         }
 
-        public void AssertPageElements()
+        public IOSAppointmentBookingUnavailablePage AssertPageElements()
         {
             Navigation.AssertNavigationPresent();
             PageContent.AssertPageElements();
+
+            return this;
         }
     }
 }

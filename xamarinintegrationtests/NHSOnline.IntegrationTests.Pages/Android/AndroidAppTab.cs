@@ -17,6 +17,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidAppBrowserTabContents Title => AndroidAppBrowserTabContents.WithText(_driver, _text);
 
+        private AndroidAppBrowserTabContents ErrorCodeText(string errorCodeSubstring) =>
+            AndroidAppBrowserTabContents.WithText(_driver, errorCodeSubstring);
+
         private AndroidAppBrowserTabContents NoInternetText => AndroidAppBrowserTabContents.WithText(_driver, "No internet");
 
         private AndroidImageButton AndroidAppTabClose => AndroidImageButton.WithDescription(_driver, "Close tab");
@@ -38,6 +41,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         public static AndroidAppTab AssertOnContactUsPage(IAndroidDriverWrapper driver)
             => AssertOnPageByTitle(driver, "Contact Us");
+
+        public static AndroidAppTab AssertOnContactUsPageByErrorCode(IAndroidDriverWrapper driver, string errorCode)
+            => AssertOnPageByTextContaining(driver, "Contact Us", $"errorcode: {errorCode}");
 
         public static AndroidAppTab AssertOnOnlineConsultationPrivacyPolicyPage(IAndroidDriverWrapper driver) =>
             AssertOnPageByTitle(driver, "NHS App privacy policy: online consultation services");
@@ -62,6 +68,13 @@ namespace NHSOnline.IntegrationTests.Pages.Android
                 androidAppTab.Title.AssertVisible();
             }
 
+            return androidAppTab;
+        }
+
+        private static AndroidAppTab AssertOnPageByTextContaining(IAndroidDriverWrapper driver, string title, string subString)
+        {
+            var androidAppTab = new AndroidAppTab(driver, title);
+            androidAppTab.ErrorCodeText(subString).AssertSubStringVisible();
             return androidAppTab;
         }
 
