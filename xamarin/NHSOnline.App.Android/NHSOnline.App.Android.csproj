@@ -247,7 +247,7 @@
     </PackageReference>
     <PackageReference Include="Xamarin.Firebase.Messaging" Version="121.0.1" />
     <PackageReference Include="Xamarin.Google.Android.DataTransport.TransportRuntime" Version="2.2.6" />
-    <PackageReference Include="Xamarin.Google.Dagger" Version="2.27.0" />
+    <PackageReference Include="Xamarin.Google.Dagger" Version="2.37.0" />
     <PackageReference Include="Xamarin.AndroidX.Biometric" Version="1.1.0.1" />
   </ItemGroup>
   <ItemGroup>
