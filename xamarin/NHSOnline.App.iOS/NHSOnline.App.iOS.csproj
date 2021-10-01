@@ -98,6 +98,7 @@
     <Compile Include="DependencyServices\Notifications\RemoteNotificationRecievedHandler.cs" />
     <Compile Include="DependencyServices\Notifications\RemoteNotificationRegistrationHandler.cs" />
     <Compile Include="Effects\IosAccessibilityEffect.cs" />
+    <Compile Include="Effects\SafeAreaMarginEffectBottom.cs" />
     <Compile Include="Effects\SafeAreaPaddingEffectTop.cs" />
     <Compile Include="Effects\SafeAreaPaddingEffectBottom.cs" />
     <Compile Include="Effects\UIDeviceExtensions.cs" />

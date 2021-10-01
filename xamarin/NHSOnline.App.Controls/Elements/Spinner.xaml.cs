@@ -1,3 +1,4 @@
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -7,6 +8,8 @@ namespace NHSOnline.App.Controls.Elements
     public partial class Spinner
     {
         private const string AnimationName = "RotateSpinnerAnimation";
+
+        public event EventHandler<FocusRequestArgs>? AccessibilityFocusChangeRequested;
 
         public Spinner()
         {
@@ -47,6 +50,15 @@ namespace NHSOnline.App.Controls.Elements
                 null,
                 null,
                 () => true);
+        }
+
+        public void AccessibilityFocus()
+        {
+            if (AccessibilityFocusChangeRequested != null)
+            {
+                var arg = new FocusRequestArgs {Focus = true};
+                AccessibilityFocusChangeRequested(this, arg);
+            }
         }
     }
 }

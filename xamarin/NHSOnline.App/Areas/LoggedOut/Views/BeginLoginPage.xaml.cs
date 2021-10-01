@@ -40,6 +40,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             _appNavigation.EnableHandlers();
 
             AppearingCommand.Execute(null);
+            Spinner.AccessibilityFocus();
         }
 
         protected override void OnDisappearing()

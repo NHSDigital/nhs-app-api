@@ -140,6 +140,7 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Renderers\Heading1Renderer.cs" />
     <Compile Include="Renderers\KeyEventArgsExtensions.cs" />
+    <Compile Include="Renderers\SpinnerRenderer.cs" />
     <Compile Include="Renderers\WebViews\BaseChromeClient.cs" />
     <Compile Include="Renderers\WebViews\Extensions\AccessibilityWebViewRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\Extensions\EnableTargetBlankLinksRendererExtension.cs" />

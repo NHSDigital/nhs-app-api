@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
 <pages:NhsAppTransparentHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
                                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                                    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
@@ -10,16 +9,16 @@
                                    mc:Ignorable="d"
                                    x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionPage"
                                    x:Name="Page">
-
     <AbsoluteLayout>
         <elements:Spinner AbsoluteLayout.LayoutFlags="All"
                           AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                          Margin="0,0,0,50"
                           HorizontalOptions="Center"
                           VerticalOptions="Center"
-                          Margin="0,0,0,50"
+                          AutomationProperties.IsInAccessibleTree="True"
                           x:Name="Spinner">
             <elements:Spinner.Effects>
-                <effects:SafeAreaPaddingBottom />
+                <effects:SafeAreaMarginBottom />
             </elements:Spinner.Effects>
         </elements:Spinner>
     </AbsoluteLayout>
