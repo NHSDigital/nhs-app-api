@@ -7,7 +7,9 @@
 
 /** APP */
 html {
-  font: $apple-system-body;
+  @include tabletAndBelow{
+	  font: $apple-system-body;
+  }
 }
 
 body {

@@ -9,7 +9,9 @@ $logged_height: 12em; //16.5em
 @import './desktopWeb/accessibility';
 
 html {
-  font: $apple-system-body;
+    @include tabletAndBelow{
+        font: $apple-system-body;
+    }
 }
 
 /** APP */
