@@ -277,16 +277,15 @@ stages:
         parameters:
           configuration: 'OnboardingSandpit - Release'
           apkFilename: 'com.nhs.online.nhsonline.onboardingsandpit.apk'
-          keyStoreFile: AndroidSigningKeyStore
-          apksignerKeystorePassword: '$(android.key.store.password)'
-          keystoreAlias: 'playconsoleuploadkey'
+          keyStoreFile: AndroidDebugSigningKeyStore
+          apksignerKeystorePassword: '$(android.debug.key.store.password)'
           nativeVersion: '$(native.xamarin.version)'
           buildNumber: '$(native.xamarin.android.build.number)'
       - template: .azuredevops/templates/xamarin-ios-client-build-job.yml
         parameters:
           configuration: 'OnboardingSandpit - Release'
-          certSecureFile: iOSOnboardingCertificate.p12
-          certPwd: '$(ios.onboarding.certificate.password)'
+          certSecureFile: iOSProductionCertificate.p12
+          certPwd: '$(ios.production.certificate.password)'
           provProfileSecureFile: iOSOnboardingDistributionSandpit.mobileprovision
           nativeVersion: '$(native.xamarin.version)'
           buildNumber: '$(native.xamarin.ios.build.number)'
@@ -300,16 +299,15 @@ stages:
         parameters:
           configuration: 'OnboardingAos - Release'
           apkFilename: 'com.nhs.online.nhsonline.onboardingaos.apk'
-          keyStoreFile: AndroidSigningKeyStore
-          apksignerKeystorePassword: '$(android.key.store.password)'
-          keystoreAlias: 'playconsoleuploadkey'
+          keyStoreFile: AndroidDebugSigningKeyStore
+          apksignerKeystorePassword: '$(android.debug.key.store.password)'
           nativeVersion: '$(native.xamarin.version)'
           buildNumber: '$(native.xamarin.android.build.number)'
       - template: .azuredevops/templates/xamarin-ios-client-build-job.yml
         parameters:
           configuration: 'OnboardingAos - Release'
-          certSecureFile: iOSOnboardingCertificate.p12
-          certPwd: '$(ios.onboarding.certificate.password)'
+          certSecureFile: iOSProductionCertificate.p12
+          certPwd: '$(ios.production.certificate.password)'
           provProfileSecureFile: iOSOnboardingDistributionAOS.mobileprovision
           nativeVersion: '$(native.xamarin.version)'
           buildNumber: '$(native.xamarin.ios.build.number)'
