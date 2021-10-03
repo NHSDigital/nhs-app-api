@@ -26,7 +26,7 @@ namespace NHSOnline.App.Areas.LoggedOut
                 .AddModelViewPresenter<CreateSessionErrorBadResponseFromUpstreamSystemModel, CreateSessionErrorBadResponseFromUpstreamSystemPage, CreateSessionErrorBadResponseFromUpstreamSystemPresenter>()
                 .AddModelViewPresenter<CreateSessionErrorFailedAgeRequirementModel, CreateSessionErrorFailedAgeRequirementPage, CreateSessionErrorFailedAgeRequirementPresenter>()
                 .AddModelViewPresenter<CreateSessionErrorFallbackModel, CreateSessionErrorFallbackPage, CreateSessionErrorFallbackPresenter>()
-                .AddModelViewPresenter<CreateSessionErrorModel, CreateSessionErrorPage, CreateSessionErrorPresenter>()
+                .AddModelViewPresenter<CreateSessionErrorInternalServerErrorModel, CreateSessionErrorInternalServerErrorPage, CreateSessionErrorInternalServerErrorPresenter>()
                 .AddModelViewPresenter<CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberModel, CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberPage, CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberPresenter>()
                 .AddModelViewPresenter<CreateSessionErrorUpstreamSystemTimeoutModel, CreateSessionErrorUpstreamSystemTimeoutPage, CreateSessionErrorUpstreamSystemTimeoutPresenter>()
                 .AddModelViewPresenter<CreateSessionModel, CreateSessionPage, CreateSessionPresenter>()

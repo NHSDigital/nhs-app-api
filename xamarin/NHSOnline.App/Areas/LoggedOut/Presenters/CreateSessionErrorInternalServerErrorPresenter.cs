@@ -6,27 +6,27 @@ using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.Areas.LoggedOut.Presenters
 {
-    internal sealed class CreateSessionErrorPresenter
+    internal sealed class CreateSessionErrorInternalServerErrorPresenter
     {
-        private readonly ICreateSessionErrorView _view;
-        private readonly CreateSessionErrorModel _model;
+        private readonly ICreateSessionErrorInternalServerErrorView _internalServerErrorView;
+        private readonly CreateSessionErrorInternalServerErrorModel _internalServerErrorModel;
         private readonly IBrowserOverlay _browserOverlay;
         private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
 
-        public CreateSessionErrorPresenter(
-            ICreateSessionErrorView view,
-            CreateSessionErrorModel model,
+        public CreateSessionErrorInternalServerErrorPresenter(
+            ICreateSessionErrorInternalServerErrorView internalServerErrorView,
+            CreateSessionErrorInternalServerErrorModel internalServerErrorModel,
             IBrowserOverlay browserOverlay,
             INhsExternalServicesConfiguration externalServicesConfiguration)
         {
-            _view = view;
-            _model = model;
+            _internalServerErrorView = internalServerErrorView;
+            _internalServerErrorModel = internalServerErrorModel;
             _browserOverlay = browserOverlay;
             _externalServicesConfiguration = externalServicesConfiguration;
 
-            _view.ServiceDeskReference = model.ServiceDeskReference;
+            _internalServerErrorView.ServiceDeskReference = internalServerErrorModel.ServiceDeskReference;
 
-            _view.AppNavigation
+            _internalServerErrorView.AppNavigation
                 .RegisterHandler(ViewOnOneOneOneRequested, (view, handler) => view.OneOneOneRequested = handler)
                 .RegisterHandler(ViewOnContactUsRequested, (view, handler) => view.ContactUsRequested = handler)
                 .RegisterHandler(ViewOnBackHomeRequested, (view, handler) => view.BackHomeRequested = handler);
@@ -41,7 +41,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async Task ViewOnContactUsRequested()
         {
-            var contactUsUri = _externalServicesConfiguration.NhsUkContactUsUrlWithErrorCode(_model.ServiceDeskReference);
+            var contactUsUri = _externalServicesConfiguration.NhsUkContactUsUrlWithErrorCode(_internalServerErrorModel.ServiceDeskReference);
             await _browserOverlay
                 .OpenBrowserOverlay(contactUsUri)
                 .PreserveThreadContext();
@@ -49,7 +49,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async Task ViewOnBackHomeRequested()
         {
-            await _view.AppNavigation
+            await _internalServerErrorView.AppNavigation
                 .PopToRoot()
                 .PreserveThreadContext();
         }

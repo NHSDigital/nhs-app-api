@@ -39,7 +39,7 @@ namespace NHSOnline.App.Api.Client.Session
                 HttpStatusCode.BadRequest => HandleBadRequest(httpResponseMessage),
                 OdsCodeNotSupportedOrNoNhsNumber => HandleOdsCodeNotSupportedOrNoNhsNumber(httpResponseMessage),
                 FailedAgeRequirement => HandleFailedAgeRequirement(httpResponseMessage),
-                HttpStatusCode.InternalServerError => HandleInternalServerError(),
+                HttpStatusCode.InternalServerError => HandleInternalServerError(httpResponseMessage),
                 HttpStatusCode.BadGateway => HandleBadGateway(httpResponseMessage),
                 HttpStatusCode.GatewayTimeout => HandleGatewayTimeout(httpResponseMessage),
                 _ => HandleUnknownStatusCode(httpResponseMessage)
@@ -80,7 +80,7 @@ namespace NHSOnline.App.Api.Client.Session
 
         private async Task<ApiCreateSessionResult> HandleBadRequest(HttpResponseMessage httpResponseMessage)
         {
-            _logger.LogWarning("Create Session returned bad bequest");
+            _logger.LogWarning("Create Session returned bad request");
 
             var model = await _jsonResponseParser.Parse<PfsErrorResponseModel>(httpResponseMessage).ResumeOnThreadPool();
             var validationResult = _errorResponseModelValidator.Validate(model);
@@ -114,10 +114,16 @@ namespace NHSOnline.App.Api.Client.Session
                 () => new ApiCreateSessionResult.Failure());
         }
 
-        private Task<ApiCreateSessionResult> HandleInternalServerError()
+        private async Task<ApiCreateSessionResult> HandleInternalServerError(HttpResponseMessage httpResponseMessage)
         {
             _logger.LogWarning("Create Session returned internal server error");
-            return Task.FromResult<ApiCreateSessionResult>(new ApiCreateSessionResult.Failure());
+
+            var model = await _jsonResponseParser.Parse<PfsErrorResponseModel>(httpResponseMessage).ResumeOnThreadPool();
+            var validationResult = _errorResponseModelValidator.Validate(model);
+
+            return validationResult.Accept<ApiCreateSessionResult>(
+                response => new ApiCreateSessionResult.InternalServerError(response),
+                () => new ApiCreateSessionResult.Failure());
         }
 
         private async Task<ApiCreateSessionResult> HandleBadGateway(HttpResponseMessage httpResponseMessage)

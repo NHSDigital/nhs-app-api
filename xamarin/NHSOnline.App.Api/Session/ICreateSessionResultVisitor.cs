@@ -9,5 +9,6 @@ namespace NHSOnline.App.Api.Session
         T Visit(CreateSessionResult.FailedAgeRequirement failedAgeRequirement);
         T Visit(CreateSessionResult.BadResponseFromUpstreamSystem badResponseFromUpstreamSystem);
         T Visit(CreateSessionResult.UpstreamSystemTimeout odsCodeNotSupportedOrNoNhsNumber);
+        T Visit(CreateSessionResult.InternalServerError internalServerError);
     }
 }

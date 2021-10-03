@@ -10,23 +10,23 @@ using Xamarin.Forms;
 namespace NHSOnline.App.Areas.LoggedOut.Views
 {
     [DesignTimeVisible(false)]
-    public partial class CreateSessionErrorPage : ICreateSessionErrorView, ICreateSessionErrorView.IEvents
+    public partial class CreateSessionErrorInternalServerErrorPage : ICreateSessionErrorInternalServerErrorView, ICreateSessionErrorInternalServerErrorView.IEvents
     {
         public static readonly BindableProperty ServiceDeskReferenceProperty
-            = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(CreateSessionErrorPage), "3h");
+            = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(CreateSessionErrorInternalServerErrorPage), "3h");
 
         private readonly ILogger _logger;
-        private readonly AppNavigation<ICreateSessionErrorView.IEvents> _appNavigation;
+        private readonly AppNavigation<ICreateSessionErrorInternalServerErrorView.IEvents> _appNavigation;
 
-        public CreateSessionErrorPage(ILogger<CreateSessionErrorPage> logger)
+        public CreateSessionErrorInternalServerErrorPage(ILogger<CreateSessionErrorInternalServerErrorPage> logger)
         {
             _logger = logger;
-            _appNavigation = new AppNavigation<ICreateSessionErrorView.IEvents>(this, Navigation);
+            _appNavigation = new AppNavigation<ICreateSessionErrorInternalServerErrorView.IEvents>(this, Navigation);
 
             InitializeComponent();
         }
 
-        IAppNavigation<ICreateSessionErrorView.IEvents> INavigationView<ICreateSessionErrorView.IEvents>.AppNavigation => _appNavigation;
+        IAppNavigation<ICreateSessionErrorInternalServerErrorView.IEvents> INavigationView<ICreateSessionErrorInternalServerErrorView.IEvents>.AppNavigation => _appNavigation;
 
         public string ServiceDeskReference
         {
@@ -59,7 +59,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
 
         public Task HandleDeeplink(Uri deeplinkUrl)
         {
-            _logger.LogInformation("{className} is not required to handle deeplinks", nameof(CreateSessionErrorPage));
+            _logger.LogInformation("{className} is not required to handle deeplinks", nameof(CreateSessionErrorInternalServerErrorPage));
             return Task.CompletedTask;
         }
     }

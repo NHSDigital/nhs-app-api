@@ -19,8 +19,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Models
         public Uri RedirectUri { get; }
         public string AuthCode { get; }
 
-        internal CreateSessionErrorModel Error(string serviceDeskReference)
-            => new CreateSessionErrorModel(this, serviceDeskReference);
+        internal CreateSessionErrorInternalServerErrorModel InternalServerError(string serviceDeskReference)
+            => new CreateSessionErrorInternalServerErrorModel(this, serviceDeskReference);
 
         internal CreateSessionErrorFallbackModel FallbackError()
             => new CreateSessionErrorFallbackModel(this);

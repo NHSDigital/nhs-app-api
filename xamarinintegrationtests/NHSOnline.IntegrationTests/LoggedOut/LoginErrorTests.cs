@@ -10,18 +10,14 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.LoggedOut
 {
-    /// <summary>
-    /// BR-LOG-08.4 corresponds to a HTTP 500 Error code during Create Session.
-    /// </summary>
     [TestClass]
-    [BusinessRule("BR-LOG-08.4", "Log in when an unexpected error occurs displays an error message")]
-    public class CreateSessionErrorTests
+    public class LoginErrorTests
     {
         [NhsAppAndroidTest]
-        public void AnErrorIsDisplayedWhenCreateSessionReturnsAnInternalServerErrorAndroid(IAndroidDriverWrapper driver)
+        public void AnErrorIsDisplayedWhenNhsLoginReturnsAnErrorRedirectAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
-                .WithBehaviour(new NhsLoginGetUserProfileExplodingSuccessCodeBehaviour())
+                .WithBehaviour(new NhsLoginAuthoriseErrorCodeBehaviour())
                 .WithProofLevel5();
 
             using var patients = Mocks.Patients.Add(patient);
@@ -38,7 +34,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 
-            AndroidCreateSessionInternalServerErrorPage
+            AndroidNhsLoginErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements()
                 .ContactUs();
@@ -50,7 +46,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnContactUsPage(driver)
                 .ReturnToApp();
 
-            AndroidCreateSessionInternalServerErrorPage
+            AndroidNhsLoginErrorPage
                 .AssertOnPage(driver)
                 .BackToHome();
 
@@ -59,10 +55,10 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         }
 
         [NhsAppIOSTest]
-        public void AnErrorIsDisplayedWhenCreateSessionReturnsAnInternalServerErrorIos(IIOSDriverWrapper driver)
+        public void AnErrorIsDisplayedWhenNhsLoginReturnsAnErrorRedirectIos(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
-                .WithBehaviour(new NhsLoginGetUserProfileExplodingSuccessCodeBehaviour())
+                .WithBehaviour(new NhsLoginAuthoriseErrorCodeBehaviour())
                 .WithProofLevel5();
 
             using var patients = Mocks.Patients.Add(patient);
@@ -79,7 +75,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 
-            IOSCreateSessionInternalServerErrorPage
+            IOSNhsLoginErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements()
                 .ContactUs();
@@ -88,7 +84,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnContactUsPage(driver)
                 .ReturnToApp();
 
-            IOSCreateSessionInternalServerErrorPage
+            IOSNhsLoginErrorPage
                 .AssertOnPage(driver)
                 .BackToHome();
 
@@ -97,11 +93,11 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         }
 
         [NhsAppAndroidTest]
-        public void APatientCanNavigateToLoggedOutHomeWithTheKeyboardWhenCreateSessionReturnsInternalServerErrorAndroid(
+        public void APatientCanNavigateToLoggedOutHomeWithTheKeyboardWhenNhsLoginReturnsUnexpectedErrorAndroid(
             IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
-                .WithBehaviour(new NhsLoginGetUserProfileExplodingSuccessCodeBehaviour());
+                .WithBehaviour(new NhsLoginAuthoriseErrorCodeBehaviour());
             using var patients = Mocks.Patients.Add(patient);
 
             AndroidLoggedOutHomePage
@@ -116,7 +112,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 
-            AndroidCreateSessionInternalServerErrorPage
+            AndroidNhsLoginErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements()
                 .KeyboardNavigateToAndActivateContactUs();
@@ -128,7 +124,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnContactUsPage(driver)
                 .ReturnToApp();
 
-            AndroidCreateSessionInternalServerErrorPage
+            AndroidNhsLoginErrorPage
                 .AssertOnPage(driver)
                 .KeyboardNavigateToAndActivateBackToHome();
 

@@ -21,6 +21,7 @@ namespace NHSOnline.HttpMocks.Dev
                 yield return new EmisPatient().WithProofLevel5().WithLogin("P5Patient").WithName(b => b.FamilyName("P5"));
                 yield return new EmisPatient().WithProofLevel5().WithLogin("BadRequest").WithBehaviour(new NhsLoginAuthoriseBlankCodeBehaviour());
                 yield return new EmisPatient().WithProofLevel5().WithLogin("BadResponse").WithBehaviour(new NhsLoginTokenBadGatewayBehaviour());
+                yield return new EmisPatient().WithProofLevel5().WithLogin("CreateSessionInternalServerError").WithBehaviour(new NhsLoginGetUserProfileExplodingSuccessCodeBehaviour());
                 yield return new EmisPatient().WithProofLevel5().WithLogin("Timeout").WithBehaviour(GetUserProfileDelayBehaviour);
                 yield return new EmisPatient().WithProofLevel5().WithLogin("NoNhsNumber").WithNhsNumber(NhsNumber.None);
                 yield return new EmisPatient().WithProofLevel5().WithLogin("TooYoung").WithAge(12, 300);

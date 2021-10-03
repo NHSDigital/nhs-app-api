@@ -4,7 +4,7 @@ using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut
 {
-    internal interface ICreateSessionErrorView: INavigationView<ICreateSessionErrorView.IEvents>
+    internal interface ICreateSessionErrorInternalServerErrorView: INavigationView<ICreateSessionErrorInternalServerErrorView.IEvents>
     {
         string ServiceDeskReference { get; set; }
 

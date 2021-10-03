@@ -26,7 +26,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
             _view.AppNavigation
                 .RegisterHandler(ViewOnOneOneOneRequested, (view, handler) => view.OneOneOneRequested = handler)
-                .RegisterHandler(ViewOnContactUsRequested, (view, handler) => view.ContactUsRequested = handler)
                 .RegisterHandler(ViewOnBackHomeRequested, (view, handler) => view.BackHomeRequested = handler);
         }
 
@@ -34,13 +33,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         {
             await _browserOverlay
                 .OpenBrowserOverlay(_externalServicesConfiguration.OneOneOneUrl)
-                .PreserveThreadContext();
-        }
-
-        private async Task ViewOnContactUsRequested()
-        {
-            await _browserOverlay
-                .OpenBrowserOverlay(_externalServicesConfiguration.NhsUkContactUsUrl)
                 .PreserveThreadContext();
         }
 
