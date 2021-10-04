@@ -13,7 +13,7 @@ using NHSOnline.IntegrationTests.Pages.IOS.Prescriptions;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
-namespace NHSOnline.IntegrationTests.Session
+namespace NHSOnline.IntegrationTests.Session.SessionExpiry
 {
     [TestClass]
     [BusinessRule("BR-LOG-07.2","User is prompted to logout or extend their session when their session reaches predefined time until it expires")]
@@ -76,6 +76,8 @@ namespace NHSOnline.IntegrationTests.Session
                 .AssertDisplayed(driver)
                 .ExtendSession();
 
+            var secondSessionExpiryDelay = new DelayExecutionTimer(SessionExpiryDialogDuration);
+
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
                 .Navigation.NavigateToPrescriptions();
@@ -83,7 +85,7 @@ namespace NHSOnline.IntegrationTests.Session
             IOSPrescriptionsPage
                 .AssertOnPage(driver);
 
-            Thread.Sleep(SessionExpiryDialogDuration);
+            secondSessionExpiryDelay.Wait();
 
             IOSSessionExpiryPrompt
                 .AssertDisplayed(driver)

@@ -14,7 +14,7 @@ using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using NHSOnline.IntegrationTests.WebIntegration.Pkb;
 
-namespace NHSOnline.IntegrationTests.Session
+namespace NHSOnline.IntegrationTests.Session.SessionExpiry
 {
     [TestClass]
     [BusinessRule("BR-LOG-07.2","User is prompted to logout or extend their session when their session reaches predefined time until it expires")]

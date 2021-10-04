@@ -14,7 +14,7 @@ using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using NHSOnline.IntegrationTests.WebIntegration.Pkb;
 
-namespace NHSOnline.IntegrationTests.Session
+namespace NHSOnline.IntegrationTests.Session.SessionExpiry
 {
     [Ignore("The functionality is broken but being resolved under NHSO-15938")]
     [TestClass]
