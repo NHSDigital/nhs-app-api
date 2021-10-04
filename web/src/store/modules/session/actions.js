@@ -1,6 +1,7 @@
 import NativeApp from '@/services/native-app';
 import { setCookie } from '@/lib/cookie-manager';
 import SessionExpiryModal from '@/components/modal/content/SessionExpiryModal';
+import { isAnonymous } from '@/router';
 import {
   CLEAR,
   INIT,
@@ -146,8 +147,15 @@ export default {
         }
         return true;
       }
+
       this.dispatch('auth/logoutWhenExpired');
+      return false;
     }
+
+    if (NativeApp.supportsLogout() && !isAnonymous(this.app.$router.currentRoute)) {
+      this.dispatch('auth/logoutNativeWhenAlreadyExpired');
+    }
+
     return false;
   },
   extend({ dispatch }) {

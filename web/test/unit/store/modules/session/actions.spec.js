@@ -1,6 +1,8 @@
 import actions from '@/store/modules/session/actions';
 import NativeApp from '@/services/native-app';
 import SessionExpiryModal from '@/components/modal/content/SessionExpiryModal';
+import { isAnonymous } from '@/router';
+import { APPOINTMENTS_NAME } from '@/router/names';
 
 import {
   CLEAR,
@@ -14,8 +16,14 @@ import {
   HIDE_SESSION_EXPIRING,
 } from '@/store/modules/session/mutation-types';
 
+import { createRouter } from '../../../helpers';
+
+jest.mock('@/services/native-app');
+jest.mock('@/router');
+
 describe('actions', () => {
   let mutation;
+  let $router;
 
   beforeEach(() => {
     actions.$cookies = {
@@ -177,13 +185,19 @@ describe('actions', () => {
     let store;
 
     beforeEach(() => {
+      $router = createRouter(APPOINTMENTS_NAME);
+
       app = {
         dispatch: jest.fn(),
         validate: actions.validate,
         $env: {
           SESSION_EXPIRING_WARNING_SECONDS: 10,
         },
+        $router,
       };
+
+      actions.app = app;
+
       store = {
         getters: {
           isValid: () => true,
@@ -275,18 +289,42 @@ describe('actions', () => {
     });
 
     describe('is not logged in', () => {
-      beforeEach(() => {
-        store.getters.isLoggedIn = () => false;
+      describe('is not native', () => {
+        beforeEach(() => {
+          store.getters.isLoggedIn = () => false;
+        });
+
+        it('will not call global dispatch with the logout action', () => {
+          app.validate(store);
+          expect(app.dispatch).not.toHaveBeenCalledWith('auth/logoutWhenExpired');
+        });
+
+        it('will return false', () => {
+          const result = app.validate(store);
+          expect(result).toEqual(false);
+        });
       });
 
-      it('will not call global dispatch with the logout action', () => {
-        app.validate(store);
-        expect(app.dispatch).not.toHaveBeenCalledWith('auth/logoutWhenExpired');
-      });
+      describe('is native', () => {
+        beforeEach(() => {
+          store.getters.isLoggedIn = () => false;
+          isAnonymous.mockReturnValue(false);
 
-      it('will return false', () => {
-        const result = app.validate(store);
-        expect(result).toEqual(false);
+          NativeApp.supportsLogout.mockReturnValue(true);
+          actions.dispatch = jest.fn();
+
+          actions.app = app;
+        });
+
+        it('will call global dispatch with the logout action', () => {
+          actions.validate(store);
+          expect(actions.dispatch).toHaveBeenCalledWith('auth/logoutNativeWhenAlreadyExpired');
+        });
+
+        it('will return false', () => {
+          const result = actions.validate(store);
+          expect(result).toEqual(false);
+        });
       });
     });
   });

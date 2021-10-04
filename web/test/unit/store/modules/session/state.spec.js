@@ -1,5 +1,7 @@
 import session from '@/store/modules/session';
 
+jest.mock('@/router');
+
 const {
   state,
 } = session;

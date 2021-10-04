@@ -405,6 +405,16 @@ describe('actions', () => {
     });
   });
 
+  describe('logoutNativeWhenAlreadyExpired', () => {
+    beforeEach(() => {
+      actions.logoutNativeWhenAlreadyExpired();
+    });
+
+    it('will dispatch the `auth/logout` event', () => {
+      expect(actions.dispatch).toHaveBeenCalledWith('auth/logout', true);
+    });
+  });
+
   describe('updateConfig', () => {
     it('will call commit with the sent value', () => {
       const newConfigValue = { test: 'value' };

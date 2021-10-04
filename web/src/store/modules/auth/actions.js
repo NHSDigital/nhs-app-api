@@ -199,6 +199,9 @@ export default {
     this.dispatch('session/showExpiryMessage');
     this.dispatch('auth/logout', true);
   },
+  logoutNativeWhenAlreadyExpired() {
+    this.dispatch('auth/logout', true);
+  },
   logoutNoJs() {
     removeSessionCookies(this);
   },
