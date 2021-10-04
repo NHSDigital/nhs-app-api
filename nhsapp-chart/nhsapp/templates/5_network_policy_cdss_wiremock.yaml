@@ -6,6 +6,7 @@ metadata:
   name: allow-app-publishing-https-ingress-to-cdsswiremock-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.cdsswiremock.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -29,6 +30,7 @@ metadata:
   name: allow-cdsswiremock-ingress-from-api-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.cdsswiremock.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:

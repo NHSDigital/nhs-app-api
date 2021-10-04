@@ -6,6 +6,9 @@ apiVersion: networking.k8s.io/v1
 metadata:
   name: allow-https-ingress-to-messages-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
+  labels:
+    role: {{ $.Values.messages.role }}
+    version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
     matchLabels:
@@ -27,6 +30,9 @@ apiVersion: networking.k8s.io/v1
 metadata:
   name: allow-cosmosdb-egress-from-messages-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
+  labels:
+    role: {{ $.Values.messages.role }}
+    version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
     matchLabels:
@@ -51,6 +57,9 @@ apiVersion: networking.k8s.io/v1
 metadata:
   name: allow-eventhub-egress-from-messages-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
+  labels:
+    role: {{ $.Values.messages.role }}
+    version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
     matchLabels:
@@ -74,6 +83,7 @@ metadata:
   name: allow-messages-egress-to-iproxy-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.messages.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -98,6 +108,7 @@ metadata:
   name: allow-https-egress-from-{{ $.Values.messages.role }}-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.messages.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -120,6 +131,7 @@ metadata:
   name: allow-internal-dns-ingress-to-{{ $.Values.messages.role }}-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.messages.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -143,6 +155,7 @@ metadata:
   name: allow-messages-ingress-from-api-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.messages.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:

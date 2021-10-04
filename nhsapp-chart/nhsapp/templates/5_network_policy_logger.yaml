@@ -6,6 +6,7 @@ metadata:
   name: allow-https-ingress-to-logger-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.logger.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:

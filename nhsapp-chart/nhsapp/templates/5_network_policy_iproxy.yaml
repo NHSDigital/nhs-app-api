@@ -6,6 +6,7 @@ metadata:
   name: allow-https-ingress-to-iproxy-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.iproxy.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -50,6 +51,7 @@ metadata:
   name: allow-https-egress-from-{{ $.Values.iproxy.role }}-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.iproxy.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:

@@ -5,6 +5,9 @@ apiVersion: networking.k8s.io/v1
 metadata:
   name: allow-https-ingress-to-info-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
+  labels:
+    role: {{ $.Values.info.role }}
+    version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
     matchLabels:
@@ -26,6 +29,9 @@ apiVersion: networking.k8s.io/v1
 metadata:
   name: allow-cosmosdb-egress-from-info-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
+  labels:
+    role: {{ $.Values.info.role }}
+    version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
     matchLabels:
@@ -51,6 +57,7 @@ metadata:
   name: allow-userinfo-egress-to-cid-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.info.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -75,6 +82,7 @@ metadata:
   name: allow-userinfo-ingress-from-api-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.info.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -99,6 +107,7 @@ metadata:
   name: allow-userinfo-ingress-from-iproxy-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.info.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -123,6 +132,7 @@ metadata:
   name: allow-https-egress-from-{{ $.Values.info.role }}-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.info.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -145,6 +155,7 @@ metadata:
   name: allow-internal-dns-ingress-to-{{ $.Values.info.role }}-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.info.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:

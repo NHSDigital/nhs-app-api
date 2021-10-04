@@ -6,6 +6,7 @@ metadata:
   name: allow-https-ingress-to-wiremock-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.wiremock.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:

@@ -6,6 +6,7 @@ metadata:
   name: allow-https-ingress-to-api-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.api.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -29,6 +30,7 @@ metadata:
   name: allow-api-ingress-from-www-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.api.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -53,6 +55,7 @@ metadata:
   name: allow-api-egress-to-iproxy-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.api.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -77,6 +80,7 @@ metadata:
   name: allow-emis-egress-from-api-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.api.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -99,6 +103,7 @@ metadata:
   name: allow-organdonation-egress-from-api-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.api.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -121,6 +126,7 @@ metadata:
   name: allow-vision-egress-from-api-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.api.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -143,6 +149,7 @@ metadata:
   name: allow-tpp-egress-from-api-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.api.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -165,6 +172,7 @@ metadata:
   name: allow-cosmosdb-egress-from-api-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.api.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -192,6 +200,7 @@ metadata:
   name: allow-spine-ldap-egress-from-api-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.api.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -216,6 +225,7 @@ metadata:
   name: allow-spine-pds-egress-from-api-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.api.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -239,6 +249,7 @@ metadata:
   name: allow-api-egress-to-userinfo-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.api.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -263,6 +274,7 @@ metadata:
   name: allow-api-egress-to-messages-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.api.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -281,12 +293,13 @@ spec:
     - protocol: TCP
       port: {{ $.Values.sidecar_proxy.containerPort }}
 ---
-kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
 metadata:
-  name: allow-metaservice-egress-from-api-{{ .Chart.AppVersion }}
+  name: allow-api-egress-to-sjr-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.api.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -297,8 +310,13 @@ spec:
   - Egress
   egress:
   - to:
-    - ipBlock:
-        cidr: {{ $.Values.metaServiceCIDR }}
+    - podSelector:
+        matchLabels:
+          role: sjr
+          version: {{ .Chart.AppVersion | quote }}
+    ports:
+    - protocol: TCP
+      port: {{ $.Values.sidecar_proxy.containerPort }}
 {{- end }}
 ---
 kind: NetworkPolicy

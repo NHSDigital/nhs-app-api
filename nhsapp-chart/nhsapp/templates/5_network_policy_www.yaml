@@ -6,6 +6,7 @@ metadata:
   name: allow-app-publishing-https-ingress-to-www-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.web.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:

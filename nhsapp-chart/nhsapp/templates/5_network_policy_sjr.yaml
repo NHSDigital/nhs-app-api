@@ -6,6 +6,7 @@ metadata:
   name: allow-sjr-ingress-from-api-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.sjr.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
@@ -29,6 +30,7 @@ metadata:
   name: allow-sjr-ingress-from-cid-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.sjr.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:

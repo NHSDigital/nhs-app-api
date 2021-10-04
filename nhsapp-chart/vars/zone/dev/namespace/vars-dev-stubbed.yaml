@@ -1,0 +1,14 @@
+---
+environmentPerftest: true
+environmentStubbed:
+  cidStubbed: true
+  emisStubbed: true
+  tppStubbed: true
+  visionStubbed: false
+  tsandcsStubbed: false
+  deployWiremock: true
+  organDonationStubbed: true
+  microtestStubbed: true
+  cdssStubbed: true
+  spineStubbed: true
+
