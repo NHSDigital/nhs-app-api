@@ -19,7 +19,6 @@ target:
     - G83047
     - G83006
     - G83025
-    - G83002
     - G83057
 journeys:
   cdssAdvice:
