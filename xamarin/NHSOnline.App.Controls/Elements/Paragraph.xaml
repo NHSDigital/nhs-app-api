@@ -2,6 +2,7 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:responsive="clr-namespace:NHSOnline.App.Controls.MarkupExtensions.Responsive;assembly=NHSOnline.App.Controls"
+             xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Controls.Elements.Paragraph"
              x:Name="Root">
 
@@ -23,7 +24,7 @@
                 <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <Style TargetType="Label" CanCascade="True">
+            <Style TargetType="elements:Label" CanCascade="True">
                 <Setter Property="FontSize" Value="{responsive:NhsFontSize Medium}" />
                 <Setter Property="FontFamily" Value="Frutiger" />
                 <Setter Property="LineHeight" Value="1.2" />
@@ -31,7 +32,7 @@
                 <Setter Property="TextColor" Value="{StaticResource NhsUkPrimaryText}" />
             </Style>
 
-            <Style x:Key="LabelWide" TargetType="Label" CanCascade="True">
+            <Style x:Key="LabelWide" TargetType="elements:Label" CanCascade="True">
                 <Setter Property="FontSize" Value="{responsive:NhsFontSize Large}" />
                 <Setter Property="Padding" Value="0,0,0,24" />
             </Style>
@@ -40,9 +41,9 @@
 
     <ContentView.Content>
         <StackLayout>
-            <Label x:Name="Label"
-                   Text="{Binding Text, Source={x:Reference Name=Root}}"
-                   FormattedText="{Binding FormattedText, Source={x:Reference Name=Root}}" />
+            <elements:Label x:Name="Label"
+                            Text="{Binding Text, Source={x:Reference Name=Root}}"
+                            FormattedText="{Binding FormattedText, Source={x:Reference Name=Root}}" />
         </StackLayout>
     </ContentView.Content>
 </ContentView>

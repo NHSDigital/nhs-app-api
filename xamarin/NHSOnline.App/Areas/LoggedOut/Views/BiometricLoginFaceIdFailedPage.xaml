@@ -7,16 +7,15 @@
                                     x:Class="NHSOnline.App.Areas.LoggedOut.Views.BiometricLoginFaceIdFailedPage"
                                     x:Name="Page">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
-        <StackLayout>
-            <elements:Heading1 x:Name="Heading" Text="We cannot find your Face ID" />
-
-            <panels:ContentPanel>
-                <StackLayout>
-                    <elements:Paragraph Text="Check that you have added a face scan in your device's Face ID settings." />
-                    <elements:LinkLabel Text="Back to login"
-                                        Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />
-                </StackLayout>
-            </panels:ContentPanel>
-        </StackLayout>
+        <panels:ResponsiveLayoutPanel>
+            <StackLayout>
+                <elements:Heading1 Text="We cannot find your Face ID" x:Name="Heading" />
+                
+                <elements:Paragraph Text="Check that you have added a face scan in your device's Face ID settings." />
+                
+                <elements:LinkLabel Text="Back to login"
+                                    Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />
+            </StackLayout>
+        </panels:ResponsiveLayoutPanel>
     </ScrollView>
 </pages:NhsAppCloseAndLogoHeaderPage>

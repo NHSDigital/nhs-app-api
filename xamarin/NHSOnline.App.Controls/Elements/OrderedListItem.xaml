@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:responsive="clr-namespace:NHSOnline.App.Controls.MarkupExtensions.Responsive;assembly=NHSOnline.App.Controls"
+             xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
+             x:Class="NHSOnline.App.Controls.Elements.OrderedListItem"
+             x:Name="Root">
+
+    <View.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <Style x:Key="BaseLabelStyle" TargetType="Label" ApplyToDerivedTypes="True">
+                <Setter Property="TextColor" Value="{StaticResource NhsUkPrimaryText}" />
+                <Setter Property="FontSize" Value="{responsive:NhsFontSize Medium}" />
+                <Setter Property="FontFamily" Value="Frutiger" />
+                <Setter Property="LineHeight" Value="1.2" />
+                <Setter Property="VerticalTextAlignment" Value="Start" />    
+            </Style>
+            <Style x:Key="ListItemTextWide" TargetType="Label">
+                <Setter Property="FontSize" Value="{responsive:NhsFontSize Large}" />
+            </Style>
+            
+            <Style TargetType="Label" Class="Number" BasedOn="{StaticResource BaseLabelStyle}">
+                <Setter Property="MinimumWidthRequest" Value="16" />
+                <Setter Property="HorizontalTextAlignment" Value="End" />  
+                <Setter Property="HorizontalOptions" Value="Start" />
+                <Setter Property="LineBreakMode" Value="NoWrap" />
+            </Style>
+            <Style x:Key="NumberWide" TargetType="Label">
+                <Setter Property="MinimumWidthRequest" Value="20" />
+                <Setter Property="FontSize" Value="{responsive:NhsFontSize Large}" />
+            </Style>
+
+            <Style TargetType="elements:Label" Class="LabelText" BasedOn="{StaticResource BaseLabelStyle}">
+                <Setter Property="VerticalOptions" Value="StartAndExpand" />      
+                <Setter Property="HorizontalOptions" Value="StartAndExpand" />      
+            </Style>
+
+            <Style TargetType="Grid">
+                <Setter Property="ColumnSpacing" Value="0" />
+                <Setter Property="Margin" Value="0, 0, 0, 8" />
+            </Style>
+            <Style x:Key="GridWide" TargetType="Grid" >
+                <Setter Property="Margin" Value="0, 0, 0, 16" />
+            </Style>
+        </ResourceDictionary>
+    </View.Resources>
+
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="ResponsiveDisplayStates">
+            <VisualState x:Name="SmallDisplay" />
+            <VisualState x:Name="MediumDisplay" />
+            <VisualState x:Name="LargeDisplay">
+                <VisualState.Setters>
+                    <Setter TargetName="LabelText" Property="Span.FontSize" Value="{responsive:NhsFontSize Large}" />
+                    <Setter TargetName="Grid" Property="Style" Value="{ StaticResource GridWide}" />
+                    <Setter TargetName="LabelNumber" Property="Style" Value="{ StaticResource NumberWide}" />
+                    <Setter TargetName="LabelText" Property="Style" Value="{ StaticResource ListItemTextWide}" />
+                </VisualState.Setters>
+            </VisualState>
+        </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+
+    <ContentView.Content>
+        <Grid x:Name="Grid" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" x:Name="NumberColumn" />
+                <ColumnDefinition Width="6" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+      
+            <Label Grid.Column="0" x:Name="LabelNumber" StyleClass="Number"
+                   Text="{Binding Number, StringFormat='{0}.', Source={x:Reference Name=Root}}" />
+         
+            <elements:Label Grid.Column="2" x:Name="LabelText" StyleClass="LabelText"
+                   FontSize="{responsive:NhsFontSize Medium}"
+                   Text="{Binding Text, Source={x:Reference Name=Root}}"
+                   FormattedText="{Binding FormattedText, Source={x:Reference Name=Root}}" />
+        </Grid>
+    </ContentView.Content>
+</ContentView>

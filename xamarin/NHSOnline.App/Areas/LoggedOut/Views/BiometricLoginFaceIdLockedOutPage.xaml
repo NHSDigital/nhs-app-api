@@ -7,17 +7,37 @@
                                     x:Class="NHSOnline.App.Areas.LoggedOut.Views.BiometricLoginFaceIdLockedOutPage"
                                     x:Name="Page">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
-        <StackLayout>
-            <elements:Heading1 x:Name="Heading" Text="You need to turn on Face ID again" />
-
-            <panels:ContentPanel>
-                <StackLayout>
-                    <elements:Paragraph Text="We have turned it off as something has changed." />
-                    <elements:Paragraph Text="Log in using your email, password and security code, then turn Face ID on in the NHS App settings." />
-                    <elements:LinkLabel Text="Back to login"
-                                        Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />
-                </StackLayout>
-            </panels:ContentPanel>
-        </StackLayout>
+        <panels:ResponsiveLayoutPanel>
+            <StackLayout>
+                <elements:Heading1 Text="Turn on Face ID again" x:Name="Heading" />
+               
+                <elements:Paragraph Text="For your security, we turned it off after changes were made to the Face ID settings on your device." />
+                <elements:Paragraph Text="Log in using your email, password and security code." />
+                
+                <elements:Heading2 Text="Turning Face ID on"/>
+                
+                <elements:ListContainer>
+                    <StackLayout>
+                        <elements:OrderedListItem Number="1" Text="Log in to the NHS App." />
+                        <elements:OrderedListItem Number="2" >
+                            <elements:OrderedListItem.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Select " />
+                                    <Span Text="More" FontAttributes="Bold" />
+                                    <Span Text=", then " />
+                                    <Span Text="Account and settings" FontAttributes="Bold" />
+                                    <Span Text=", then " />
+                                    <Span Text="Face ID" FontAttributes="Bold" />
+                                    <Span Text="." /> 
+                                </FormattedString>
+                            </elements:OrderedListItem.FormattedText>
+                        </elements:OrderedListItem>
+                    </StackLayout>
+                </elements:ListContainer>
+                
+                <elements:LinkLabel Text="Back to login"
+                                    Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />
+            </StackLayout>
+        </panels:ResponsiveLayoutPanel>
     </ScrollView>
 </pages:NhsAppCloseAndLogoHeaderPage>

@@ -11,18 +11,21 @@
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorFailedAgeRequirementPage"
                                  x:Name="Page">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
-        <StackLayout>
-            <elements:Heading1 Text="Login failed" x:Name="Heading" />
+        <panels:ResponsiveLayoutPanel>
+            <StackLayout>
+                <elements:Heading1 Text="Login failed" x:Name="Heading" />
 
-            <panels:NhsErrorCallout LabelText="Error">
-                <StackLayout>
-                    <elements:Paragraph Text="Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services." />
-                    <elements:Paragraph Text="For urgent medical advice, use NHS 111 online or call 111." />
-                    <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
-                </StackLayout>
-            </panels:NhsErrorCallout>
+                <panels:NhsErrorCallout LabelText="Error">
+                    <StackLayout>
+                        <elements:Paragraph Text="Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services." />
+                        <elements:Paragraph Text="For urgent medical advice, use NHS 111 online or call 111." />
+                       
+                        <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
+                    </StackLayout>
+                </panels:NhsErrorCallout>
 
-        </StackLayout>
+            </StackLayout>
+        </panels:ResponsiveLayoutPanel>
 
         <ScrollView.Effects>
             <effects:SafeAreaPaddingBottom />

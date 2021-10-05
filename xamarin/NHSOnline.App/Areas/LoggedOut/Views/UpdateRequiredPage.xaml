@@ -8,17 +8,16 @@
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.UpdateRequiredPage"
                                  x:Name="Page">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
-        <StackLayout>
-            <elements:Heading1 x:Name="Heading" Text="You need to update the NHS App" />
-
-            <panels:ContentPanel>
-                <StackLayout>
-                    <elements:Paragraph Text="You will not be able to use it until you do." />
-                    <elements:LinkLabel Text="Update the NHS App now" Command="{Binding OpenAppStoreUrlCommand, Source={x:Reference Name=Page}}" />
-                </StackLayout>
-            </panels:ContentPanel>
-        </StackLayout>
-
+        <panels:ResponsiveLayoutPanel>
+            <StackLayout>
+                <elements:Heading1 Text="You need to update the NHS App" x:Name="Heading" />
+                
+                <elements:Paragraph Text="You will not be able to use it until you do." />
+               
+                <elements:LinkLabel Text="Update the NHS App now" Command="{Binding OpenAppStoreUrlCommand, Source={x:Reference Name=Page}}" />
+            </StackLayout>
+        </panels:ResponsiveLayoutPanel>
+        
         <ScrollView.Effects>
             <effects:SafeAreaPaddingBottom />
         </ScrollView.Effects>

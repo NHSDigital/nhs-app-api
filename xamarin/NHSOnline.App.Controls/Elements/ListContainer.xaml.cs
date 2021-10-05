@@ -3,9 +3,9 @@ using Xamarin.Forms.Xaml;
 namespace NHSOnline.App.Controls.Elements
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class UnorderedList
+    public partial class ListContainer
     {
-        public UnorderedList()
+        public ListContainer()
         {
             InitializeComponent();
         }

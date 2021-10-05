@@ -11,10 +11,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
-            <Style TargetType="panels:NhsPanelWithLabel">
-                <Setter Property="Margin" Value="16,0,16,0" />
-            </Style>
         </ResourceDictionary>
     </ContentView.Resources>
     

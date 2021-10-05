@@ -5,12 +5,12 @@ namespace NHSOnline.App.Controls.Elements
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     [ContentProperty(nameof(Text))]
-    public partial class ListItem
+    public partial class UnorderedListItem
     {
         public static readonly BindableProperty TextProperty =
-            BindableProperty.Create(nameof(Text), typeof(string), typeof(ListItem));
+            BindableProperty.Create(nameof(Text), typeof(string), typeof(UnorderedListItem));
 
-        public ListItem()
+        public UnorderedListItem()
         {
             InitializeComponent();
         }

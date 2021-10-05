@@ -11,20 +11,23 @@
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.UpdateCheckFailedPage"
                                  x:Name="Page">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
-        <StackLayout>
-            <elements:Heading1 x:Name="Heading" Text="Unable to confirm NHS App version" />
-
-            <panels:NhsErrorCallout LabelText="Error">
-                <StackLayout>
-                    <elements:Paragraph Text="There is a problem connecting you. We cannot confirm which version of the NHS App you are using and if you may need to update it." />
-                    <elements:Paragraph Text="Check your connection and try logging in again." />
-                    <elements:Paragraph Text="If the problem continues and you need to book and appointment or get a prescription now, contact your GP surgery directly." />
-                    <elements:Paragraph Text="For urgent medical advice, use NHS 111 online or call 111." />
-                    <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
-                    <elements:LinkLabel Text="Back to login" Command="{Binding BackToLoginCommand, Source={x:Reference Name=Page}}" />
-                </StackLayout>
-            </panels:NhsErrorCallout>
-        </StackLayout>
+        <panels:ResponsiveLayoutPanel>
+            <StackLayout>
+                <elements:Heading1 Text="Unable to confirm NHS App version" x:Name="Heading" />
+          
+                <panels:NhsErrorCallout LabelText="Error">
+                    <StackLayout>
+                        <elements:Paragraph Text="There is a problem connecting you. We cannot confirm which version of the NHS App you are using and if you may need to update it." />
+                        <elements:Paragraph Text="Check your connection and try logging in again." />
+                        <elements:Paragraph Text="If the problem continues and you need to book and appointment or get a prescription now, contact your GP surgery directly." />
+                        <elements:Paragraph Text="For urgent medical advice, use NHS 111 online or call 111." />
+                       
+                        <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
+                        <elements:LinkLabel Text="Back to login" Command="{Binding BackToLoginCommand, Source={x:Reference Name=Page}}" />
+                    </StackLayout>
+                </panels:NhsErrorCallout>
+            </StackLayout>
+        </panels:ResponsiveLayoutPanel>
 
         <ScrollView.Effects>
             <effects:SafeAreaPaddingBottom />

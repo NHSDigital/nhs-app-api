@@ -2,9 +2,7 @@
 
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
-                x:Class="NHSOnline.App.Controls.Panels.ContentPanel"
-                x:DataType="panels:NhsPanelWithLabel"
+                x:Class="NHSOnline.App.Controls.Panels.ResponsiveLayoutPanel"
                 x:Name="Root">
 
     <ContentView.Resources>
@@ -12,10 +10,6 @@
             <Style TargetType="StackLayout" Class="StackLayout">
                 <Setter Property="Spacing" Value="0" />
                 <Setter Property="Padding" Value="16,0,16,16" />
-            </Style>
-            
-            <Style x:Key="StackLayoutWide" TargetType="StackLayout" CanCascade="True">
-                <Setter Property="Padding" Value="24,0,24,24" />
             </Style>
         </ResourceDictionary>
     </ContentView.Resources>
@@ -27,7 +21,6 @@
             <VisualState x:Name="LargeDisplay">
                 <VisualState.Setters>
                     <Setter TargetName="PanelGrid" Property="Grid.ColumnSpan" Value="1" />
-                    <Setter TargetName="PanelGrid" Property="Style" Value="{StaticResource StackLayoutWide}" />
                 </VisualState.Setters>
             </VisualState>
         </VisualStateGroup>
@@ -43,8 +36,7 @@
             <StackLayout x:Name="PanelGrid" StyleClass="StackLayout"
                          Grid.Column="0"
                          Grid.ColumnSpan="2">
-                <ContentView 
-                    Content="{Binding PanelContent, Source={x:Reference Name=Root}}" />
+                <ContentView Content="{Binding PanelContent, Source={x:Reference Name=Root}}" />
             </StackLayout>
         </Grid>
     </ContentView.Content>

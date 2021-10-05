@@ -10,46 +10,38 @@
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.GettingStartedPage"
                                  x:Name="Page">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
-        <StackLayout>
-            <elements:Heading1 Text="Getting started" x:Name="Heading" />
+        <panels:ResponsiveLayoutPanel>
+            <StackLayout>
+                <elements:Heading1 Text="Getting started" x:Name="Heading" />
 
-            <panels:ContentPanel>
-                <StackLayout>
-                    <elements:Paragraph Text="Use the NHS App to:" />
+                <elements:Paragraph Text="Use the NHS App to:" />
 
-                    <elements:UnorderedList>
-                        <StackLayout>
-                            <elements:ListItem Text="get your NHS COVID pass" />
+                <elements:ListContainer>
+                    <StackLayout>
+                        <elements:UnorderedListItem Text="get your NHS COVID pass" />
+                        <elements:UnorderedListItem Text="order repeat prescriptions" />
+                        <elements:UnorderedListItem Text="book and manage appointments" />
+                        <elements:UnorderedListItem Text="get health information and advice" />
+                        <elements:UnorderedListItem Text="view your health record securely" />
+                        <elements:UnorderedListItem Text="manage your organ donation decision" />
+                        <elements:UnorderedListItem Text="view your NHS number" />
+                    </StackLayout>
+                </elements:ListContainer>
 
-                            <elements:ListItem Text="order repeat prescriptions" />
+                <elements:Paragraph Text="You must be aged 13 and over to use the app, and registered at a GP surgery in England." />
+                
+                <elements:LinkLabel Text="What to do if you're aged 13 to 15" Command="{Binding WhoCanAccessTheAppCommand, Source={x:Reference Name=Page}}" />
 
-                            <elements:ListItem Text="book and manage appointments" />
-
-                            <elements:ListItem Text="get health information and advice" />
-                            
-                            <elements:ListItem Text="view your health record securely" />
-
-                            <elements:ListItem Text="manage your organ donation decision" />
-
-                            <elements:ListItem Text="view your NHS number" />
-                        </StackLayout>
-                    </elements:UnorderedList>
-
-                    <elements:Paragraph Text="You must be aged 13 and over to use the app, and registered at a GP surgery in England." />
-
-                    <elements:LinkLabel Text="What to do if you're aged 13 to 15" Command="{Binding WhoCanAccessTheAppCommand, Source={x:Reference Name=Page}}" />
-
-                    <elements:Paragraph Text="To get started you'll need to create your NHS login." />
-
-                    <elements:Button Text="Continue"
-                                     ButtonColour="{StaticResource NhsUkGreen}"
-                                     ColourGradient="{StaticResource ButtonGreenLowerGradient}"
-                                     TextColour="{StaticResource NhsUkWhite}"
-                                     Margin="0,20,0,0"
-                                     Command="{Binding LoginCommand, Source={x:Reference Name=Page}}"
-                                     HorizontalOptions="Start" />
-                </StackLayout>
-            </panels:ContentPanel>
-        </StackLayout>
+                <elements:Paragraph Text="To get started you'll need to create your NHS login." />
+                
+                <elements:Button Text="Continue"
+                                    ButtonColour="{StaticResource NhsUkGreen}"
+                                    ColourGradient="{StaticResource ButtonGreenLowerGradient}"
+                                    TextColour="{StaticResource NhsUkWhite}"
+                                    Margin="0,20,0,0"
+                                    Command="{Binding LoginCommand, Source={x:Reference Name=Page}}"
+                                    HorizontalOptions="Start" />
+            </StackLayout>
+        </panels:ResponsiveLayoutPanel>
     </ScrollView>
 </pages:NhsAppCloseSlimHeaderPage>

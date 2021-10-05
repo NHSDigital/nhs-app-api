@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Label = NHSOnline.App.Controls.Elements.Label;
 
 namespace NHSOnline.App.Controls.MarkupExtensions.Responsive
 {

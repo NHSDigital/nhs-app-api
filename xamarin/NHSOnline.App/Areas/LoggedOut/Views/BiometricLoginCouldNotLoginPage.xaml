@@ -7,17 +7,16 @@
                                     x:Class="NHSOnline.App.Areas.LoggedOut.Views.BiometricLoginCouldNotLoginPage"
                                     x:Name="Page">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
-        <StackLayout>
-            <elements:Heading1 x:Name="Heading" Text="We could not log you in" />
-
-            <panels:ContentPanel>
-                <StackLayout>
-                    <elements:Paragraph Text="Go back to the homepage and try logging in again." />
-                    <elements:Paragraph Text="If you keep seeing this message, go back to the homepage and log in using your email, password and security code." />
-                    <elements:LinkLabel Text="Back to login"
-                                        Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />
-                </StackLayout>
-            </panels:ContentPanel>
-        </StackLayout>
+        <panels:ResponsiveLayoutPanel>
+            <StackLayout>
+                <elements:Heading1 Text="We could not log you in" x:Name="Heading" />
+                
+                <elements:Paragraph Text="Go back to the homepage and try logging in again." />
+                <elements:Paragraph Text="If you keep seeing this message, go back to the homepage and log in using your email, password and security code." />
+                
+                <elements:LinkLabel Text="Back to login"
+                                    Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />
+            </StackLayout>
+        </panels:ResponsiveLayoutPanel>
     </ScrollView>
 </pages:NhsAppCloseAndLogoHeaderPage>

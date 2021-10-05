@@ -2,7 +2,8 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:responsive="clr-namespace:NHSOnline.App.Controls.MarkupExtensions.Responsive;assembly=NHSOnline.App.Controls"
-             x:Class="NHSOnline.App.Controls.Elements.ListItem"
+             xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
+             x:Class="NHSOnline.App.Controls.Elements.UnorderedListItem"
              x:Name="Root">
 
     <View.Resources>
@@ -10,13 +11,13 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Style TargetType="Label">
+            <Style TargetType="elements:Label">
                 <Setter Property="TextColor" Value="{StaticResource NhsUkPrimaryText}" />
                 <Setter Property="FontSize" Value="{responsive:NhsFontSize Medium}" />
                 <Setter Property="FontFamily" Value="Frutiger" />
                 <Setter Property="LineHeight" Value="1.2" />
             </Style>
-            <Style x:Key="ListItemTextWide" TargetType="Label">
+            <Style x:Key="ListItemTextWide" TargetType="elements:Label">
                 <Setter Property="FontSize" Value="{responsive:NhsFontSize Large}" />
             </Style>
             <Style TargetType="StackLayout">
@@ -41,10 +42,10 @@
     <ContentView.Content>
         <StackLayout StyleClass="ListItem"
                      Orientation="Horizontal">
-            <Label x:Name="Bullet"
-                   Text="&#x2022; "
-                   TextColor="{StaticResource NhsUkPrimaryText}" />
-            <Label x:Name="LabelText" Text="{Binding Text, Source={x:Reference Name=Root}}" />
+            <elements:Label x:Name="Bullet"
+                            Text="&#x2022; "
+                            TextColor="{StaticResource NhsUkPrimaryText}" />
+            <elements:Label x:Name="LabelText" Text="{Binding Text, Source={x:Reference Name=Root}}" />
         </StackLayout>
     </ContentView.Content>
 </ContentView>

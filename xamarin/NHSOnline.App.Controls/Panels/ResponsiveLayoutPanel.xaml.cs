@@ -5,12 +5,12 @@ namespace NHSOnline.App.Controls.Panels
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     [ContentProperty(nameof(PanelContent))]
-    public partial class ContentPanel
+    public partial class ResponsiveLayoutPanel
     {
         public static readonly BindableProperty PanelContentProperty =
-            BindableProperty.Create(nameof(PanelContent), typeof(View), typeof(ContentPanel));
+            BindableProperty.Create(nameof(PanelContent), typeof(View), typeof(ResponsiveLayoutPanel));
 
-        public ContentPanel()
+        public ResponsiveLayoutPanel()
         {
             InitializeComponent();
         }

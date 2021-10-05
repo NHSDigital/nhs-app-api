@@ -162,20 +162,16 @@
       <DependentUpon>SlimLogoNavigationHeader.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Elements\ErrorCodeParagraph.xaml.cs">
-      <DependentUpon>ErrorCodeParagraph.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Elements\UnorderedList.xaml.cs">
-      <DependentUpon>UnorderedList.xaml</DependentUpon>
+    <Compile Update="Elements\ListContainer.xaml.cs">
+      <DependentUpon>ListContainer.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Elements\HelpButton.xaml.cs">
       <DependentUpon>HelpButton.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Panels\ContentPanel.xaml.cs">
-      <DependentUpon>NhsResponsiveContentPanel.xaml</DependentUpon>
+    <Compile Update="Panels\ResponsiveLayoutPanel.xaml.cs">
+      <DependentUpon>ContentPanel.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Panels\TryAgainNetworkError.xaml.cs">
@@ -196,6 +192,10 @@
     </Compile>
     <Compile Update="Elements\Deprecated\LinkSpan.xaml.cs">
       <DependentUpon>LinkSpan.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Elements\OrderedListItem.xaml.cs">
+      <DependentUpon>OrderedListItem.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
