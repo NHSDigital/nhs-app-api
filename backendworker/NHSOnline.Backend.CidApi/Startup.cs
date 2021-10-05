@@ -23,7 +23,6 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
-using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.CidApi.DependencyInjection;
 using NHSOnline.Backend.CidApi.Areas.Im1Connection;
@@ -167,7 +166,6 @@ namespace NHSOnline.Backend.CidApi
 
             services.AddSingleton(EmisConfigurationSettings.CreateAndValidate(Configuration, _logger));
             services.AddSingleton(TppConfigurationSettings.CreateAndValidate(Configuration, _logger));
-            services.AddSingleton(MicrotestConfigurationSettings.CreateAndValidate(Configuration, _logger));
             services.AddSingleton(VisionConfigurationSettings.CreateAndValidate(Configuration, _logger));
 
             services.RegisterFakeUserConfiguration(Configuration);

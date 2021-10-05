@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.Support
         {
             public override string Prefix => "4h";
             public override ErrorCategory Category => ErrorCategory.Appointments;
-            public override int StatusCode => Constants.CustomHttpStatusCodes.Status461TooLate; 
+            public override int StatusCode => Constants.CustomHttpStatusCodes.Status461TooLate;
         }
 
         public class AppointmentsUnexpectedError : ErrorTypes
@@ -52,14 +52,6 @@ namespace NHSOnline.Backend.Support
             public override ErrorCategory Category => ErrorCategory.Appointments;
             public override int StatusCode => StatusCodes.Status502BadGateway;
             public override SourceApi SourceApi => SourceApi.Emis;
-        }
-
-        public class AppointmentsBadGatewayMicrotest : ErrorTypes
-        {
-            public override string Prefix => "4m";
-            public override ErrorCategory Category => ErrorCategory.Appointments;
-            public override int StatusCode => StatusCodes.Status502BadGateway;
-            public override SourceApi SourceApi => SourceApi.Microtest;
         }
 
         public class AppointmentsBadGatewayTpp : ErrorTypes

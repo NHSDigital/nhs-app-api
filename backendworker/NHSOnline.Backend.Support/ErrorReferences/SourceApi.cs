@@ -9,7 +9,6 @@ namespace NHSOnline.Backend.Support
         Emis = 1,
         Tpp = 2,
         Vision = 3,
-        Microtest = 4,
         NhsLogin = 5,
         ServiceJourneyRules = 6,
         OrganDonation = 7,

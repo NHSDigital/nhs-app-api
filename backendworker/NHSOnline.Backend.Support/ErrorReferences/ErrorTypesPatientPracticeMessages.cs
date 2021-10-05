@@ -33,14 +33,6 @@ namespace NHSOnline.Backend.Support
             public override SourceApi SourceApi => SourceApi.Emis;
         }
 
-        public class PatientPracticeMessagesBadGatewayMicrotest : ErrorTypes
-        {
-            public override string Prefix => "9m";
-            public override ErrorCategory Category => ErrorCategory.PatientPracticeMessages;
-            public override int StatusCode => StatusCodes.Status502BadGateway;
-            public override SourceApi SourceApi => SourceApi.Microtest;
-        }
-
         public class PatientPracticeMessagesBadGatewayTpp : ErrorTypes
         {
             public override string Prefix => "9t";

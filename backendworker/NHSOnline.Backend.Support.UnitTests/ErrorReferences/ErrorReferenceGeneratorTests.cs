@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.Support.UnitTests
                 }
             }
         }
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -50,7 +50,6 @@ namespace NHSOnline.Backend.Support.UnitTests
         [DataRow(typeof(ErrorTypes.LoginUnexpectedError), "3h")]
         [DataRow(typeof(ErrorTypes.LoginBadGatewayEmis), "3e")]
         [DataRow(typeof(ErrorTypes.LoginBadGatewayTpp), "3t")]
-        [DataRow(typeof(ErrorTypes.LoginBadGatewayMicrotest), "3m")]
         [DataRow(typeof(ErrorTypes.LoginBadGatewayVision), "3s")]
         [DataRow(typeof(ErrorTypes.LoginBadGatewayNhsLogin), "3n")]
         [DataRow(typeof(ErrorTypes.LoginServiceJourneyRulesOtherError), "3k")]
@@ -61,11 +60,9 @@ namespace NHSOnline.Backend.Support.UnitTests
         [DataRow(typeof(ErrorTypes.AppointmentsTooLateToCancel), "4h")]
         [DataRow(typeof(ErrorTypes.AppointmentsUnexpectedError), "4k")]
         [DataRow(typeof(ErrorTypes.AppointmentsBadGatewayEmis), "4e")]
-        [DataRow(typeof(ErrorTypes.AppointmentsBadGatewayMicrotest), "4m")]
         [DataRow(typeof(ErrorTypes.AppointmentsBadGatewayTpp), "4t")]
         [DataRow(typeof(ErrorTypes.AppointmentsBadGatewayVision), "4s")]
         [DataRow(typeof(ErrorTypes.TimeoutEmis), "ze")]
-        [DataRow(typeof(ErrorTypes.TimeoutMicrotest), "zm")]
         [DataRow(typeof(ErrorTypes.TimeoutNhsLogin), "zn")]
         [DataRow(typeof(ErrorTypes.TimeoutOrganDonation), "zo")]
         [DataRow(typeof(ErrorTypes.TimeoutServiceJourneyRules), "zj")]
@@ -77,24 +74,22 @@ namespace NHSOnline.Backend.Support.UnitTests
         [DataRow(typeof(ErrorTypes.PrescriptionsMedicationAlreadyOrderedWithinLast30Days), "5g")]
         [DataRow(typeof(ErrorTypes.PrescriptionsUnexpectedError), "5k")]
         [DataRow(typeof(ErrorTypes.PrescriptionsBadGatewayEmis), "5e")]
-        [DataRow(typeof(ErrorTypes.PrescriptionsBadGatewayMicrotest), "5m")]
         [DataRow(typeof(ErrorTypes.PrescriptionsBadGatewayTpp), "5t")]
         [DataRow(typeof(ErrorTypes.PrescriptionsBadGatewayVision), "5s")]
         [DataRow(typeof(ErrorTypes.PatientPracticeMessagesBadRequest), "9a")]
         [DataRow(typeof(ErrorTypes.PatientPracticeMessagesForbidden), "9c")]
         [DataRow(typeof(ErrorTypes.PatientPracticeMessagesUnexpectedError), "9k")]
         [DataRow(typeof(ErrorTypes.PatientPracticeMessagesBadGatewayEmis), "9e")]
-        [DataRow(typeof(ErrorTypes.PatientPracticeMessagesBadGatewayMicrotest), "9m")]
         [DataRow(typeof(ErrorTypes.PatientPracticeMessagesBadGatewayTpp), "9t")]
         [DataRow(typeof(ErrorTypes.PatientPracticeMessagesBadGatewayVision), "9s")]
         public void GenerateAndLogErrorReference_UsingErrorType_ReturnsCorrectCode(Type type, string expectedPrefix)
         {
             var errorType = (ErrorTypes) Activator.CreateInstance(type);
             var errorCode = _errorReferenceGenerator.GenerateAndLogErrorReference(errorType);
-            
+
             errorCode.Should().StartWith(expectedPrefix);
         }
-        
+
         [DataTestMethod]
         [DataRow(ErrorCategory.Login, 400, "3a")]
         [DataRow(ErrorCategory.Login, 403, "3c")]
@@ -157,23 +152,18 @@ namespace NHSOnline.Backend.Support.UnitTests
 
         [DataTestMethod]
         [DataRow(ErrorCategory.Login, 502, Supplier.Emis, "3e")]
-        [DataRow(ErrorCategory.Login, 502, Supplier.Microtest, "3m")]
         [DataRow(ErrorCategory.Login, 502, Supplier.Tpp, "3t")]
         [DataRow(ErrorCategory.Login, 502, Supplier.Vision, "3s")]
         [DataRow(ErrorCategory.Appointments, 502, Supplier.Emis, "4e")]
-        [DataRow(ErrorCategory.Appointments, 502, Supplier.Microtest, "4m")]
         [DataRow(ErrorCategory.Appointments, 502, Supplier.Tpp, "4t")]
         [DataRow(ErrorCategory.Appointments, 502, Supplier.Vision, "4s")]
         [DataRow(ErrorCategory.Prescriptions, 502, Supplier.Emis, "5e")]
-        [DataRow(ErrorCategory.Prescriptions, 502, Supplier.Microtest, "5m")]
         [DataRow(ErrorCategory.Prescriptions, 502, Supplier.Tpp, "5t")]
         [DataRow(ErrorCategory.Prescriptions, 502, Supplier.Vision, "5s")]
         [DataRow(ErrorCategory.PatientPracticeMessages, 502, Supplier.Emis, "9e")]
-        [DataRow(ErrorCategory.PatientPracticeMessages, 502, Supplier.Microtest, "9m")]
         [DataRow(ErrorCategory.PatientPracticeMessages, 502, Supplier.Tpp, "9t")]
         [DataRow(ErrorCategory.PatientPracticeMessages, 502, Supplier.Vision, "9s")]
         [DataRow(ErrorCategory.Timeout, 504, Supplier.Emis, "ze")]
-        [DataRow(ErrorCategory.Timeout, 504, Supplier.Microtest, "zm")]
         [DataRow(ErrorCategory.Timeout, 504, Supplier.Tpp, "zt")]
         [DataRow(ErrorCategory.Timeout, 504, Supplier.Vision, "zs")]
         public void GenerateAndLogErrorReference_UsingErrorCategoryAndStatusCodeAndSupplier_ReturnsCorrectCode(ErrorCategory errorCategory, int statusCode, Supplier supplier, string expectedCode)
@@ -182,27 +172,22 @@ namespace NHSOnline.Backend.Support.UnitTests
 
             errorCode.Should().StartWith(expectedCode);
         }
-        
+
         [DataTestMethod]
         [DataRow(ErrorCategory.Login, 502, SourceApi.Emis, "3e")]
-        [DataRow(ErrorCategory.Login, 502, SourceApi.Microtest, "3m")]
         [DataRow(ErrorCategory.Login, 502, SourceApi.NhsLogin, "3n")]
         [DataRow(ErrorCategory.Login, 502, SourceApi.Tpp, "3t")]
         [DataRow(ErrorCategory.Login, 502, SourceApi.Vision, "3s")]
         [DataRow(ErrorCategory.Appointments, 502, SourceApi.Emis, "4e")]
-        [DataRow(ErrorCategory.Appointments, 502, SourceApi.Microtest, "4m")]
         [DataRow(ErrorCategory.Appointments, 502, SourceApi.Tpp, "4t")]
         [DataRow(ErrorCategory.Appointments, 502, SourceApi.Vision, "4s")]
         [DataRow(ErrorCategory.Prescriptions, 502, SourceApi.Emis, "5e")]
-        [DataRow(ErrorCategory.Prescriptions, 502, SourceApi.Microtest, "5m")]
         [DataRow(ErrorCategory.Prescriptions, 502, SourceApi.Tpp, "5t")]
         [DataRow(ErrorCategory.Prescriptions, 502, SourceApi.Vision, "5s")]
         [DataRow(ErrorCategory.PatientPracticeMessages, 502, SourceApi.Emis, "9e")]
-        [DataRow(ErrorCategory.PatientPracticeMessages, 502, SourceApi.Microtest, "9m")]
         [DataRow(ErrorCategory.PatientPracticeMessages, 502, SourceApi.Tpp, "9t")]
         [DataRow(ErrorCategory.PatientPracticeMessages, 502, SourceApi.Vision, "9s")]
         [DataRow(ErrorCategory.Timeout, 504, SourceApi.Emis, "ze")]
-        [DataRow(ErrorCategory.Timeout, 504, SourceApi.Microtest, "zm")]
         [DataRow(ErrorCategory.Timeout, 504, SourceApi.Tpp, "zt")]
         [DataRow(ErrorCategory.Timeout, 504, SourceApi.Vision, "zs")]
         [DataRow(ErrorCategory.Timeout, 504, SourceApi.NhsLogin, "zn")]
@@ -222,7 +207,7 @@ namespace NHSOnline.Backend.Support.UnitTests
 
             errorCode.Should().StartWith("xx");
         }
-        
+
         [TestMethod]
         public void GenerateAndLogErrorReference_UsingErrorCategoryAndStatusCodeThatReturnsMoreThanOneObject_ReturnsXxCode()
         {

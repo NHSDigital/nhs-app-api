@@ -12,7 +12,6 @@ using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
-using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.Sections;
@@ -109,23 +108,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             // Arrange
             var mockGpSystem = new Mock<IGpSystem>();
             var userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), gpUserSession: new TppUserSession(), "im1token");
-
-            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(userSession.GpUserSession.Supplier))
-                .Returns(mockGpSystem.Object);
-
-            // Act
-            var result = await _systemUnderTest.GetSection("TestResults", userSession);
-
-            // Assert
-            result.Should().BeAssignableTo<BadRequestObjectResult>();
-        }
-
-        [TestMethod]
-        public async Task GetSection_Microtest_BadRequest()
-        {
-            // Arrange
-            var mockGpSystem = new Mock<IGpSystem>();
-            var userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new MicrotestUserSession(), "im1token");
 
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(userSession.GpUserSession.Supplier))
                 .Returns(mockGpSystem.Object);

@@ -17,7 +17,6 @@ using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake;
-using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.NominatedPharmacy;
@@ -131,7 +130,6 @@ namespace NHSOnline.Backend.PfsApi
 
             services.AddSingleton(EmisConfigurationSettings.CreateAndValidate(Configuration, _logger));
             services.AddSingleton(TppConfigurationSettings.CreateAndValidate(Configuration, _logger));
-            services.AddSingleton(MicrotestConfigurationSettings.CreateAndValidate(Configuration, _logger));
             services.AddSingleton(VisionConfigurationSettings.CreateAndValidate(Configuration, _logger));
             services.AddSingleton(SessionConfigurationSettings.CreateAndValidate(Configuration, _logger));
             services.AddSingleton(OnlineConsultationsConfigurationSettings.CreateAndValidate(Configuration, _logger));

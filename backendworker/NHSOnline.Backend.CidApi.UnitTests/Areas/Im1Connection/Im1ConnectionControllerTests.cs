@@ -27,7 +27,6 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
     public class Im1ConnectionControllerTests
     {
         private const string DefaultOdsCode = "A12345";
-        private const string MicrotestOdsCode = "B81603";
         private const string DefaultPatientIdentifier = "XX00000A";
         private const string DefaultConnectionToken = "b2ed6831-cdd4-4ef7-a9b4-0880c2a35d78";
 
@@ -69,14 +68,14 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             {
                 ConnectionToken = DefaultConnectionToken,
                 NhsNumbers = _expectedNhsNumbers,
-                OdsCode = MicrotestOdsCode
+                OdsCode = DefaultOdsCode
             };
 
             _expectedSuccessfulVerifyV2Response = new PatientIm1ConnectionResponse
             {
                 ConnectionToken = DefaultConnectionToken,
                 NhsNumbers = _expectedNhsNumbers,
-                OdsCode = MicrotestOdsCode
+                OdsCode = DefaultOdsCode
             };
         }
 
@@ -349,66 +348,6 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 StatusCodes.Status501NotImplemented,
                 Im1ConnectionErrorCodes.ExternalCode.InvalidDetails,
                 "Invalid Details. Invalid parameters: odsCode");
-        }
-
-        [TestMethod]
-        public async Task GetV2_MicrotestDemographicsFailsWithInternalServerError_ReturnsForbidden()
-        {
-            // Arrange
-            const string odsCode = MicrotestOdsCode;
-            const string patientIdentifier = DefaultConnectionToken;
-
-            _odsCodeMassager.Setup(x => x.CheckOdsCode(odsCode)).Returns(odsCode);
-
-            var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
-                new Im1ConnectionVerifyResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.NoMatchFoundForGivenDemographics));
-
-            var gpSystemMock = MockGpSystem(im1ConnectionService);
-            _gpSystemResolver
-                .Setup(x => x.ResolveFromOdsCode(odsCode))
-                .ReturnsAsync(Option.Some(gpSystemMock.Object));
-
-            _systemUnderTest = CreateIm1ConnectionController();
-
-            // Act
-            var result = await _systemUnderTest.GetV2(DefaultConnectionToken, odsCode);
-
-            //Assert
-            AssertErrorWithStatusCode(
-                result,
-                StatusCodes.Status404NotFound,
-                Im1ConnectionErrorCodes.ExternalCode.PatientNotFound,
-                "Patient not found");
-        }
-
-        [TestMethod]
-        public async Task GetV2_MicrotestDemographicsFails_ReturnsBadGateway()
-        {
-            // Arrange
-            const string odsCode = MicrotestOdsCode;
-            const string patientIdentifier = DefaultConnectionToken;
-
-            _odsCodeMassager.Setup(x => x.CheckOdsCode(odsCode)).Returns(odsCode);
-
-            var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
-                new Im1ConnectionVerifyResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.ConnectionToServiceFailed));
-
-            var gpSystemMock = MockGpSystem(im1ConnectionService);
-            _gpSystemResolver
-                .Setup(x => x.ResolveFromOdsCode(odsCode))
-                .ReturnsAsync(Option.Some(gpSystemMock.Object));
-
-            _systemUnderTest = CreateIm1ConnectionController();
-
-            // Act
-            var result = await _systemUnderTest.GetV2(DefaultConnectionToken, odsCode);
-
-            //Assert
-            AssertErrorWithStatusCode(
-                result,
-                StatusCodes.Status502BadGateway,
-                Im1ConnectionErrorCodes.ExternalCode.UpstreamError,
-                "Upstream Error");
         }
 
         [TestMethod]

@@ -11,7 +11,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models
                 GpInfoSupplier.Emis => Supplier.Emis,
                 GpInfoSupplier.Tpp => Supplier.Tpp,
                 GpInfoSupplier.Vision => Supplier.Vision,
-                GpInfoSupplier.Microtest => Supplier.Microtest,
                 GpInfoSupplier.Fake => Supplier.Fake,
                 null => null,
                 _ => throw new InvalidOperationException(@$"Cannot convert GpInfoSupplier ""{gpInfoSupplier}"" to Supplier")

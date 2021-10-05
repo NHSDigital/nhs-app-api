@@ -221,7 +221,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         [DataRow("\"supplier\":\"emis\"")]
         [DataRow("\"supplier\":\"tpp\"")]
-        [DataRow("\"supplier\":\"microtest\"")]
         [DataRow("\"supplier\":\"vision\"")]
         [DataRow("\"ccgCode\":\"foo\"")]
         [DataRow("\"odsCode\":\"foo\"")]

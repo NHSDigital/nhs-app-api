@@ -31,13 +31,6 @@ namespace NHSOnline.Backend.Support
             public override SourceApi SourceApi => SourceApi.Fake;
         }
 
-        public class TimeoutMicrotest : ErrorTypesTimeout
-        {
-            public override string Prefix => "zm";
-
-            public override SourceApi SourceApi => SourceApi.Microtest;
-        }
-
         public class TimeoutNhsLogin : ErrorTypesTimeout
         {
             public override string Prefix => "zn";

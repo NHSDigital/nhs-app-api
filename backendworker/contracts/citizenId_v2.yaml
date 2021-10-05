@@ -1,7 +1,7 @@
 openapi: 3.0.0
 
 info:
-  version: 2.0.2
+  version: 2.0.3
   title: NHS App Middleware for NHS Login.
   description: NHS App Middleware endpoints to allow NHS Login to retrieve and validate linkage details and IM1 Connection Tokens.
 
@@ -391,7 +391,6 @@ components:
         - EMIS
         - TPP
         - Vision
-        - Microtest
         - NhsTestGpSupplier
       description: GP System Supplier for the GP Practice
 

@@ -10,7 +10,6 @@ using Moq;
 using Newtonsoft.Json.Linq;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
-using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Support;
@@ -244,81 +243,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             session.ValueOrFailure()
                 .Should().BeOfType<P9UserSession>().Subject
                 .GpUserSession.Should().BeOfType<EmisUserSession>($"{nameof(EmisUserSession)} should be deserialised");
-        }
-
-        [TestMethod]
-        public async Task GetUserSession_CreatedWithMicrotestGpSession_ReturnsMicrotestGpSession()
-        {
-            // Arrange
-            var userSession = new P9UserSession(string.Empty,
-                string.Empty,
-                new CitizenIdUserSession(),
-                new MicrotestUserSession(),
-                string.Empty);
-
-            ArrangeNoEncryption();
-            var json = await CreateSessionAndCaptureJson(userSession);
-            ArrangeSessionData(json);
-
-            // Act
-            var session = await CreateMongoSessionCacheService().GetUserSession("");
-
-            // Assert
-            _mockMongoCollection.Verify(x => x.InsertOneAsync(
-                It.IsAny<BsonDocument>(),
-                It.IsAny<InsertOneOptions>(),
-                It.IsAny<CancellationToken>()));
-
-            _mockMongoCollection.Verify(x => x.FindAsync(
-                It.IsAny<FilterDefinition<BsonDocument>>(),
-                It.IsAny<FindOptions<BsonDocument>>(),
-                It.IsAny<CancellationToken>()));
-
-            _mockMongoCollection.VerifyNoOtherCalls();
-
-            session.HasValue.Should().BeTrue("session should be returned");
-            session.ValueOrFailure()
-                .Should().BeOfType<P9UserSession>().Subject
-                .GpUserSession.Should()
-                .BeOfType<MicrotestUserSession>($"{nameof(MicrotestUserSession)} should be deserialised");
-        }
-
-        [TestMethod]
-        public async Task GetAndUpdateUserSession_CreatedWithMicrotestGpSession_ReturnsMicrotestGpSession()
-        {
-            // Arrange
-            var userSession = new P9UserSession(string.Empty,
-                string.Empty,
-                new CitizenIdUserSession(),
-                new MicrotestUserSession(),
-                string.Empty);
-
-            ArrangeNoEncryption();
-            var json = await CreateSessionAndCaptureJson(userSession);
-            ArrangeSessionData(json);
-
-            // Act
-            var session = await CreateMongoSessionCacheService().GetAndUpdateUserSession("");
-
-            // Assert
-            _mockMongoCollection.Verify(x => x.InsertOneAsync(
-                It.IsAny<BsonDocument>(),
-                It.IsAny<InsertOneOptions>(),
-                It.IsAny<CancellationToken>()));
-
-            _mockMongoCollection.Verify(x => x.FindOneAndUpdateAsync(
-                It.IsAny<FilterDefinition<BsonDocument>>(),
-                It.IsAny<UpdateDefinition<BsonDocument>>(),
-                It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
-                It.IsAny<CancellationToken>()));
-
-            _mockMongoCollection.VerifyNoOtherCalls();
-
-            session.HasValue.Should().BeTrue("session should be returned");
-            session.ValueOrFailure()
-                .Should().BeOfType<P9UserSession>().Subject
-                .GpUserSession.Should()
-                .BeOfType<MicrotestUserSession>($"{nameof(MicrotestUserSession)} should be deserialised");
         }
 
         [TestMethod]

@@ -15,9 +15,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models
         [Description("IN PRACTICE SYSTEMS LTD")]
         Vision,
 
-        [Description("MICROTEST LTD")]
-        Microtest,
-
         [Description("FAKE SUPPLIER")]
         Fake
     }

@@ -5,7 +5,6 @@ using NHSOnline.Backend.GpSystems.Im1Connection.Cache;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake;
-using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.Support.Sanitization;
@@ -25,8 +24,6 @@ namespace NHSOnline.Backend.GpSystems
 
             services.RegisterVisionPfsServices();
 
-            services.RegisterMicrotestPfsServices();
-
             if (enableGpSupplierConfiguration.EnableFake)
             {
                 services.RegisterFakePfsServices(isHealthCheckLoggingEnabled);
@@ -45,8 +42,6 @@ namespace NHSOnline.Backend.GpSystems
             services.RegisterTppCidServices();
 
             services.RegisterVisionCidServices();
-
-            services.RegisterMicrotestCidServices();
 
             if (enableGpSupplierConfiguration.EnableFake)
             {

@@ -9,7 +9,6 @@ using Moq;
 using NHSOnline.Backend.GpSystems.PatientRecord;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
-using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.PfsApi.Areas.MyRecord;
@@ -106,25 +105,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             // Arrange
             var userSession = _fixture.Build<P9UserSession>()
                 .With(x => x.GpUserSession, _fixture.Create<VisionUserSession>())
-                .Create();
-
-            var systemUnderTest = _fixture.Create<MyRecordMetadataLogger>();
-            var myRequestResponse = new MyRecordResponse();
-            var getMyRecordResponse = new GetMyRecordResult.Success(myRequestResponse);
-
-            // Act
-            systemUnderTest.LogMyRecordMetadata(userSession, getMyRecordResponse);
-
-            // Assert
-            _logger.VerifyLogger(LogLevel.Information, "medical_record_metadata=", Times.Never());
-        }
-
-        [TestMethod]
-        public void LogMyRecordMetadata_DoesNotLogForMicrotest()
-        {
-            // Arrange
-            var userSession = _fixture.Build<P9UserSession>()
-                .With(x => x.GpUserSession, _fixture.Create<MicrotestUserSession>())
                 .Create();
 
             var systemUnderTest = _fixture.Create<MyRecordMetadataLogger>();

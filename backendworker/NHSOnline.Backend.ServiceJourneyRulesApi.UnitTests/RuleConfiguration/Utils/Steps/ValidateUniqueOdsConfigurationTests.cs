@@ -204,16 +204,16 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var ccgConfiguration = CreateTargetConfiguration(ccgCode: ccgCode2);
             var odsCodeConfiguration = CreateTargetConfiguration(odsCode: "9");
             var odsCodesConfiguration = CreateTargetConfiguration(odsCodes: new List<string> { "8", "10" });
-            var supplierConfiguration = CreateTargetConfiguration(Supplier.Microtest);
+            var supplierConfiguration = CreateTargetConfiguration(Supplier.Tpp);
 
             var context = new ConfigurationContext
             {
                 GpInfos = new Dictionary<string, GpInfo>
                 {
-                    { "1", new GpInfo { Ods = "1", CcgCode = ccgCode, Supplier = GpInfoSupplier.Tpp } },
+                    { "1", new GpInfo { Ods = "1", CcgCode = ccgCode, Supplier = GpInfoSupplier.Emis } },
                     { "2", new GpInfo { Ods = "2", CcgCode = ccgCode2, Supplier = GpInfoSupplier.Emis } },
                     { "3", new GpInfo { Ods = "3", CcgCode = ccgCode2, Supplier = GpInfoSupplier.Vision } },
-                    { "4", new GpInfo { Ods = "4", CcgCode = ccgCode, Supplier = GpInfoSupplier.Microtest} }
+                    { "4", new GpInfo { Ods = "4", CcgCode = ccgCode, Supplier = GpInfoSupplier.Tpp} }
                 },
                 FolderConfigurations = new Dictionary<string, IEnumerable<TargetConfiguration>>
                 {
@@ -234,8 +234,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             firstFolderConfigurations.Should().NotBeNull().And.HaveCount(4);
 
             firstFolderConfigurations.Should().ContainKey("1").WhichValue.Should()
-                .NotBe(allConfiguration.Journeys.AddSupplier(Supplier.Tpp)).And
-                .BeEquivalentTo(allConfiguration.Journeys.AddSupplier(Supplier.Tpp));
+                .NotBe(allConfiguration.Journeys.AddSupplier(Supplier.Emis)).And
+                .BeEquivalentTo(allConfiguration.Journeys.AddSupplier(Supplier.Emis));
             firstFolderConfigurations.Should().ContainKey("2").WhichValue.Should()
                 .NotBe(allConfiguration.Journeys.AddSupplier(Supplier.Emis)).And
                 .BeEquivalentTo(allConfiguration.Journeys.AddSupplier(Supplier.Emis));
@@ -243,21 +243,21 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 .NotBe(allConfiguration.Journeys.AddSupplier(Supplier.Vision)).And
                 .BeEquivalentTo(allConfiguration.Journeys.AddSupplier(Supplier.Vision));
             firstFolderConfigurations.Should().ContainKey("4").WhichValue.Should()
-                .NotBe(odsCodeConfiguration.Journeys.AddSupplier(Supplier.Microtest)).And
-                .BeEquivalentTo(allConfiguration.Journeys.AddSupplier(Supplier.Microtest));
+                .NotBe(odsCodeConfiguration.Journeys.AddSupplier(Supplier.Tpp)).And
+                .BeEquivalentTo(allConfiguration.Journeys.AddSupplier(Supplier.Tpp));
 
             var secondFolderConfigurations = context.FolderOdsJourneys[folderName2];
             secondFolderConfigurations.Should().NotBeNull().And.HaveCount(3);
 
             secondFolderConfigurations.Should().ContainKey("2").WhichValue.Should()
                 .NotBe(ccgConfiguration.Journeys.AddSupplier(Supplier.Emis)).And
-                .BeEquivalentTo(ccgConfiguration.Journeys.AddSupplier(Supplier.Emis)    );
+                .BeEquivalentTo(ccgConfiguration.Journeys.AddSupplier(Supplier.Emis));
             secondFolderConfigurations.Should().ContainKey("3").WhichValue.Should()
                 .NotBe(ccgConfiguration.Journeys.AddSupplier(Supplier.Vision)).And
                 .BeEquivalentTo(ccgConfiguration.Journeys.AddSupplier(Supplier.Vision));
             secondFolderConfigurations.Should().ContainKey("4").WhichValue.Should()
-                .NotBe(odsCodesConfiguration.Journeys.AddSupplier(Supplier.Microtest)).And
-                .BeEquivalentTo(supplierConfiguration.Journeys.AddSupplier(Supplier.Microtest));
+                .NotBe(odsCodesConfiguration.Journeys.AddSupplier(Supplier.Tpp)).And
+                .BeEquivalentTo(supplierConfiguration.Journeys.AddSupplier(Supplier.Tpp));
         }
 
         private TargetConfiguration CreateTargetConfiguration(Supplier? supplier = null,

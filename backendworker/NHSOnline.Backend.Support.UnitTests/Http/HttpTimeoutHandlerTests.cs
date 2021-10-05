@@ -30,15 +30,15 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _fixture.Freeze<Mock<ILogger<HttpTimeoutHandler<IHttpRequestIdentifier>>>>();
-            
+
             _httpTimeoutConfigurationSettings = _fixture.Freeze<Mock<IHttpTimeoutConfigurationSettings>>();
             _httpTimeoutConfigurationSettings.Setup(x => x.DefaultHttpTimeoutSeconds)
                 .Returns(2);
-            
+
             var mockConfigurationSettings = _fixture.Freeze<Mock<IConfigurationSettings>>();
             mockConfigurationSettings.SetupGet(x => x.DefaultHttpTimeoutSeconds)
                 .Returns(2);
-            
+
             _httpRequestMessage = _fixture.Create<HttpRequestMessage>();
             _mockHttpHandler = _fixture.Create<MockHttpMessageHandler>();
         }
@@ -47,7 +47,6 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
         [DataRow("TPP", SourceApi.Tpp)]
         [DataRow("Emis", SourceApi.Emis)]
         [DataRow("Vision", SourceApi.Vision)]
-        [DataRow("Microtest", SourceApi.Microtest)]
         [DataRow("OrganDonation", SourceApi.OrganDonation)]
         [DataRow("ServiceJourneyRules", SourceApi.ServiceJourneyRules)]
         [DataRow("CitizenId", SourceApi.NhsLogin)]
@@ -73,7 +72,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
             systemUnderTest.InnerHandler = _mockHttpHandler;
 
             var invoker = new HttpMessageInvoker(systemUnderTest);
-            
+
             // Act
             Func<Task> act = async () => { await invoker.SendAsync(_httpRequestMessage, new CancellationToken()); };
 
@@ -88,7 +87,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
         {
             // Arrange
             var httpContent = _fixture.Create<HttpContent>();
-            
+
             _mockHttpHandler
                 .When(_httpRequestMessage.Method, _httpRequestMessage.RequestUri.ToString())
                 .Respond(httpContent);
@@ -103,7 +102,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
             systemUnderTest.InnerHandler = _mockHttpHandler;
 
             var invoker = new HttpMessageInvoker(systemUnderTest);
-            
+
             // Act
             var result = await invoker.SendAsync(_httpRequestMessage, new CancellationToken());
 
@@ -117,7 +116,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
         {
             // Arrange
             var httpContent = _fixture.Create<HttpContent>();
-            
+
             _mockHttpHandler
                 .When(_httpRequestMessage.Method, _httpRequestMessage.RequestUri.ToString())
                 .Respond(httpContent);
@@ -134,7 +133,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
             systemUnderTest.InnerHandler = _mockHttpHandler;
 
             var invoker = new HttpMessageInvoker(systemUnderTest);
-            
+
             // Act
             var result = await invoker.SendAsync(_httpRequestMessage, new CancellationToken());
 
@@ -165,7 +164,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
             systemUnderTest.InnerHandler = _mockHttpHandler;
 
             var invoker = new HttpMessageInvoker(systemUnderTest);
-            
+
             // Act
             var result = await invoker.SendAsync(_httpRequestMessage, new CancellationToken());
 

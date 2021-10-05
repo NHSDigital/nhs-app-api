@@ -235,7 +235,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .SupportsLinkedProfiles(true)
                             .Im1MessagingEnabled(true, false,
                                 false, false, false)
-                            .WithSupplier(Supplier.Microtest)
+                            .WithSupplier(Supplier.Vision)
                             .Build()
                     },
                     {

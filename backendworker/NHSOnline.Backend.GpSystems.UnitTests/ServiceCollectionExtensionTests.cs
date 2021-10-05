@@ -80,7 +80,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             serviceCollection.Should().NotBeNull();
 
             Suppliers.Emis.ServiceCollectionExtensionsTests.CheckAllEmisPfsRegisteredServices(serviceCollection);
-            Suppliers.Microtest.ServiceCollectionExtensionTests.CheckAllMicrotestPfsRegisteredServices(serviceCollection);
             Suppliers.Tpp.ServiceCollectionExtensionTests.CheckAllTppPfsRegisteredServices(serviceCollection);
             Suppliers.Vision.ServiceCollectionExtensionsTests.CheckAllVisionPfsRegisteredServices(serviceCollection);
         }
@@ -90,7 +89,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             serviceCollection.Should().NotBeNull();
 
             Suppliers.Emis.ServiceCollectionExtensionsTests.CheckAllEmisCidRegisteredServices(serviceCollection);
-            Suppliers.Microtest.ServiceCollectionExtensionTests.CheckAllMicrotestCidRegisteredServices(serviceCollection);
             Suppliers.Tpp.ServiceCollectionExtensionTests.CheckAllTppCidRegisteredServices(serviceCollection);
             Suppliers.Vision.ServiceCollectionExtensionsTests.CheckAllVisionCidRegisteredServices(serviceCollection);
         }

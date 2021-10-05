@@ -57,9 +57,6 @@ namespace NHSOnline.Backend.CidApi.Areas.Registration
                     case Supplier.Emis:
                         gpSystem =  GpSystemSupplier.EMIS;
                         break;
-                    case Supplier.Microtest:
-                        gpSystem = GpSystemSupplier.Microtest;
-                        break;
                     case Supplier.Tpp:
                         gpSystem =  GpSystemSupplier.TPP;
                         break;

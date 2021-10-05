@@ -141,13 +141,6 @@ namespace NHSOnline.Backend.Support
             public override SourceApi SourceApi => SourceApi.Tpp;
         }
 
-        public class LoginBadGatewayMicrotest : ErrorTypeBadGateway
-        {
-            public override string Prefix => "3m";
-
-            public override SourceApi SourceApi => SourceApi.Microtest;
-        }
-
         public class LoginBadGatewayVision : ErrorTypeBadGateway
         {
             public override string Prefix => "3s";

@@ -5,7 +5,6 @@ namespace NHSOnline.Backend.CidApi.Areas.Registration.Models
         NhsTestGpSupplier,
         EMIS,
         TPP,
-        Vision,
-        Microtest
+        Vision
     }
 }

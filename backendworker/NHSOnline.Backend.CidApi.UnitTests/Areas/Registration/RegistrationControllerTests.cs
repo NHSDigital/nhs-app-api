@@ -45,7 +45,6 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Registration
         [DataTestMethod]
         [DataRow("A29928", Supplier.Emis, "EMIS")]
         [DataRow("A55555", Supplier.Tpp, "TPP")]
-        [DataRow("A77777", Supplier.Microtest, "Microtest")]
         [DataRow("A66666", Supplier.Vision, "Vision")]
         [DataRow("F00001", Supplier.Fake, "NhsTestGpSupplier")]
         public async Task RegistrationControllerGet_ReturnsCorrectGpSystem_IfSuccessful(string odsCode,

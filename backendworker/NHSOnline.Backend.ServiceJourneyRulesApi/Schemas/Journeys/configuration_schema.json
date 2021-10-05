@@ -329,7 +329,7 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "supplier": { "enum": [ "emis", "tpp", "vision", "microtest" ] }
+            "supplier": { "enum": [ "emis", "tpp", "vision" ] }
           }
         }
       ]
@@ -354,7 +354,7 @@
         "oneOneOne": { "enum": [ "true", "false" ] },
         "prescriptions": { "$ref": "#/definitions/prescriptionsJourney" },
         "silverIntegrations": { "$ref": "#/definitions/silverIntegrations" },
-        "supplier": { "enum": [ "Emis", "Fake", "Tpp", "Vision", "Microtest" ] },
+        "supplier": { "enum": [ "Emis", "Fake", "Tpp", "Vision" ] },
         "supportsLinkedProfiles": { "enum": [ "true", "false" ] },
         "userInfo": { "enum": [ "true", "false" ] }
       },

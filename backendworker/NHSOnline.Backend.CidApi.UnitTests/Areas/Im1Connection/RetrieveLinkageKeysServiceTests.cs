@@ -99,7 +99,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         }
 
         [TestMethod]
-        public async Task GetLinkageKey_Microtest_LinkageNotSupported()
+        public async Task GetLinkageKey_LinkageServiceReportsLinkageNotSupported_LinkageNotSupported()
         {
             // Arrange
             const Im1ConnectionErrorCodes.InternalCode expectedErrorCode = Im1ConnectionErrorCodes.InternalCode
