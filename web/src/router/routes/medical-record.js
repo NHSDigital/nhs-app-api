@@ -9,16 +9,12 @@ import DiscontinuedMedicinesPage from '@/pages/health-records/gp-medical-record/
 import DocumentDetailPage from '@/pages/health-records/gp-medical-record/documents/detail/_id';
 import DocumentPage from '@/pages/health-records/gp-medical-record/documents/_id';
 import DocumentsPage from '@/pages/health-records/gp-medical-record/documents';
-import EncountersPage from '@/pages/health-records/gp-medical-record/encounters';
 import EventsPage from '@/pages/health-records/gp-medical-record/events';
 import ExaminationsPage from '@/pages/health-records/gp-medical-record/examinations';
 import HealthConditionsPage from '@/pages/health-records/gp-medical-record/health-conditions';
 import ImmunisationsPage from '@/pages/health-records/gp-medical-record/immunisations';
-import MedicalHistoryPage from '@/pages/health-records/gp-medical-record/medical-history';
 import MedicinesPage from '@/pages/health-records/gp-medical-record/medicines';
 import ProceduresPage from '@/pages/health-records/gp-medical-record/procedures';
-import RecallsPage from '@/pages/health-records/gp-medical-record/recalls';
-import ReferralsPage from '@/pages/health-records/gp-medical-record/referrals';
 import TestResultIdPage from '@/pages/health-records/gp-medical-record/testresultdetail/_testResultId';
 import TestResultsDetailPage from '@/pages/health-records/gp-medical-record/test-results-detail';
 import TestResultsPage from '@/pages/health-records/gp-medical-record/test-results';
@@ -37,7 +33,6 @@ import {
   DOCUMENT_DETAIL_PATH,
   DOCUMENT_PATH,
   DOCUMENTS_PATH,
-  ENCOUNTERS_PATH,
   EVENTS_PATH,
   EXAMINATIONS_V2_PATH,
   GP_MEDICAL_RECORD_GP_AT_HAND_PATH,
@@ -45,11 +40,8 @@ import {
   HEALTH_CONDITIONS_PATH,
   HEALTH_RECORDS_PATH,
   IMMUNISATIONS_PATH,
-  MEDICAL_HISTORY_PATH,
   MEDICINES_PATH,
   PROCEDURES_V2_PATH,
-  RECALLS_PATH,
-  REFERRALS_PATH,
   TESTRESULTID_PATH,
   TESTRESULTS_PATH,
   TESTRESULTSDETAIL_PATH,
@@ -65,7 +57,6 @@ import {
   DOCUMENT_DETAIL_NAME,
   DOCUMENT_NAME,
   DOCUMENTS_NAME,
-  ENCOUNTERS_NAME,
   EVENTS_NAME,
   EXAMINATIONS_V2_NAME,
   GP_MEDICAL_RECORD_GP_AT_HAND_NAME,
@@ -73,11 +64,8 @@ import {
   HEALTH_CONDITIONS_NAME,
   HEALTH_RECORDS_NAME,
   IMMUNISATIONS_NAME,
-  MEDICAL_HISTORY_NAME,
   MEDICINES_NAME,
   PROCEDURES_V2_NAME,
-  RECALLS_NAME,
-  REFERRALS_NAME,
   TESTRESULTID_NAME,
   TESTRESULTS_NAME,
   TESTRESULTSDETAIL_NAME,
@@ -494,82 +482,6 @@ export const PROCEDURES_V2 = {
   },
 };
 
-export const MEDICAL_HISTORY = {
-  path: MEDICAL_HISTORY_PATH,
-  name: MEDICAL_HISTORY_NAME,
-  component: MedicalHistoryPage,
-  meta: {
-    headerKey: 'navigation.pages.headers.medicalHistory',
-    titleKey: 'navigation.pages.titles.medicalHistory',
-    proofLevel: proofLevel.P9,
-    upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
-    crumb: breadcrumbs.MEDICAL_HISTORY_CRUMB,
-    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
-    nativeNavigation: YOUR_RECORD_MENU_ITEM,
-    middleware: [gpMedicalRecordAcceptance],
-    gpSessionOnDemand: {
-      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
-    },
-  },
-};
-
-export const ENCOUNTERS = {
-  path: ENCOUNTERS_PATH,
-  name: ENCOUNTERS_NAME,
-  component: EncountersPage,
-  meta: {
-    headerKey: 'navigation.pages.headers.encounters',
-    titleKey: 'navigation.pages.titles.encounters',
-    proofLevel: proofLevel.P9,
-    upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
-    crumb: breadcrumbs.ENCOUNTERS_CRUMB,
-    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
-    nativeNavigation: YOUR_RECORD_MENU_ITEM,
-    middleware: [gpMedicalRecordAcceptance],
-    gpSessionOnDemand: {
-      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
-    },
-  },
-};
-
-export const RECALLS = {
-  path: RECALLS_PATH,
-  name: RECALLS_NAME,
-  component: RecallsPage,
-  meta: {
-    headerKey: 'navigation.pages.headers.recalls',
-    titleKey: 'navigation.pages.titles.recalls',
-    proofLevel: proofLevel.P9,
-    upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
-    crumb: breadcrumbs.RECALLS_CRUMB,
-    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
-    nativeNavigation: YOUR_RECORD_MENU_ITEM,
-    middleware: [gpMedicalRecordAcceptance],
-    gpSessionOnDemand: {
-      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
-    },
-  },
-};
-
-export const REFERRALS = {
-  path: REFERRALS_PATH,
-  name: REFERRALS_NAME,
-  component: ReferralsPage,
-  meta: {
-    headerKey: 'navigation.pages.headers.referrals',
-    titleKey: 'navigation.pages.titles.referrals',
-    proofLevel: proofLevel.P9,
-    upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
-    crumb: breadcrumbs.REFERRALS_CRUMB,
-    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
-    nativeNavigation: YOUR_RECORD_MENU_ITEM,
-    middleware: [gpMedicalRecordAcceptance],
-    gpSessionOnDemand: {
-      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
-    },
-  },
-};
-
 export const GP_MEDICAL_RECORD_GP_AT_HAND = {
   path: GP_MEDICAL_RECORD_GP_AT_HAND_PATH,
   name: GP_MEDICAL_RECORD_GP_AT_HAND_NAME,
@@ -610,10 +522,6 @@ export default [
   DIAGNOSIS_V2,
   EXAMINATIONS_V2,
   PROCEDURES_V2,
-  ENCOUNTERS,
-  MEDICAL_HISTORY,
-  RECALLS,
-  REFERRALS,
   UPLIFT_GP_MEDICAL_RECORD,
   GP_MEDICAL_RECORD_GP_AT_HAND,
 ];

@@ -68,8 +68,6 @@
             <scr-tpp-gp-record v-if="supplier === 'TPP'"/>
 
             <scr-vision-gp-record v-if="supplier === 'VISION'"/>
-
-            <scr-microtest-gp-record v-if="supplier === 'MICROTEST'"/>
           </template>
 
           <template v-if="hasDetailedRecordAccess">
@@ -78,8 +76,6 @@
             <dcr-tpp-gp-record v-if="supplier === 'TPP'"/>
 
             <dcr-vision-gp-record v-if="supplier === 'VISION'"/>
-
-            <dcr-microtest-gp-record v-if="supplier === 'MICROTEST'"/>
           </template>
         </menu-item-list>
 
@@ -94,9 +90,7 @@
           </div>
           <div v-else id="errorMsg" :class="[$style['record-content'], 'nhsuk-u-margin-bottom-6']">
             <p><strong style="margin-top: 0.5em;">
-              {{ $t( supplier === 'MICROTEST' ?
-                'myRecord.thisInfoIsNotAvailabeInTheApp' :
-                'myRecord.youDoNotHaveAccessToYourRecord') }}
+              {{ $t('myRecord.youDoNotHaveAccessToYourRecord') }}
             </strong></p>
             <p>{{ $t('myRecord.contactSurgeryForMoreInformation') }} </p>
           </div>
@@ -115,11 +109,9 @@ import InsetText from '@/components/InsetText';
 import DcrEmisGpRecord from '@/components/gp-medical-record/DetailedCodedRecord/DcrEMISGpRecord';
 import DcrTppGpRecord from '@/components/gp-medical-record/DetailedCodedRecord/DcrTPPGpRecord';
 import DcrVisionGpRecord from '@/components/gp-medical-record/DetailedCodedRecord/DcrVISIONGpRecord';
-import DcrMicrotestGpRecord from '@/components/gp-medical-record/DetailedCodedRecord/DcrMICROTESTGpRecord';
 import ScrEmisGpRecord from '@/components/gp-medical-record/SummaryCareRecord/ScrEMISGpRecord';
 import ScrTppGpRecord from '@/components/gp-medical-record/SummaryCareRecord/ScrTPPGpRecord';
 import ScrVisionGpRecord from '@/components/gp-medical-record/SummaryCareRecord/ScrVISIONGpRecord';
-import ScrMicrotestGpRecord from '@/components/gp-medical-record/SummaryCareRecord/ScrMICROTESTGpRecord';
 import MenuItemList from '@/components/MenuItemList';
 import Glossary from '@/components/Glossary';
 import Warning from '@/components/my-record/Warning';
@@ -139,11 +131,9 @@ export default {
     DcrEmisGpRecord,
     DcrTppGpRecord,
     DcrVisionGpRecord,
-    DcrMicrotestGpRecord,
     ScrEmisGpRecord,
     ScrTppGpRecord,
     ScrVisionGpRecord,
-    ScrMicrotestGpRecord,
     MenuItemList,
     Warning,
     Shutter,

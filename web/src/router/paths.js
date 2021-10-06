@@ -55,7 +55,6 @@ export const CURRENT_MEDICINES_PATH = 'health-records/gp-medical-record/medicine
 export const CONSULTATIONS_PATH = 'health-records/gp-medical-record/consultations';
 export const CONSULTATIONS_AND_EVENTS_PATH = 'health-records/gp-medical-record/consultations';
 export const EVENTS_PATH = 'health-records/gp-medical-record/events';
-export const ENCOUNTERS_PATH = 'health-records/gp-medical-record/encounters';
 export const TESTRESULTS_PATH = 'health-records/gp-medical-record/test-results';
 export const TESTRESULTSDETAIL_PATH = 'health-records/gp-medical-record/test-results-detail';
 export const TESTRESULTID_PATH = 'health-records/gp-medical-record/testresultdetail/:testResultId';
@@ -64,12 +63,9 @@ export const DIAGNOSIS_V2_PATH = 'health-records/gp-medical-record/diagnosis';
 export const EXAMINATIONS_V2_PATH = 'health-records/gp-medical-record/examinations';
 export const PROCEDURES_V2_PATH = 'health-records/gp-medical-record/procedures';
 export const MEDICINES_PATH = 'health-records/gp-medical-record/medicines';
-export const MEDICAL_HISTORY_PATH = 'health-records/gp-medical-record/medical-history';
 export const DOCUMENTS_PATH = 'health-records/gp-medical-record/documents';
 export const DOCUMENT_PATH = 'health-records/gp-medical-record/documents/:id';
 export const DOCUMENT_DETAIL_PATH = 'health-records/gp-medical-record/documents/detail/:id';
-export const RECALLS_PATH = 'health-records/gp-medical-record/recalls';
-export const REFERRALS_PATH = 'health-records/gp-medical-record/referrals';
 export const HEALTH_CONDITIONS_PATH = 'health-records/gp-medical-record/health-conditions';
 export const NOMINATED_PHARMACY_PATH = 'nominated-pharmacy';
 export const NOMINATED_PHARMACY_SEARCH_PATH = 'nominated-pharmacy/search';
@@ -191,7 +187,6 @@ export default {
   CONSULTATIONS_PATH,
   CONSULTATIONS_AND_EVENTS_PATH,
   EVENTS_PATH,
-  ENCOUNTERS_PATH,
   TESTRESULTS_PATH,
   TESTRESULTSDETAIL_PATH,
   TESTRESULTID_PATH,
@@ -200,12 +195,9 @@ export default {
   EXAMINATIONS_V2_PATH,
   PROCEDURES_V2_PATH,
   MEDICINES_PATH,
-  MEDICAL_HISTORY_PATH,
   DOCUMENTS_PATH,
   DOCUMENT_PATH,
   DOCUMENT_DETAIL_PATH,
-  RECALLS_PATH,
-  REFERRALS_PATH,
   HEALTH_CONDITIONS_PATH,
   IOS_COMPATIBILITY_PATH,
   NOMINATED_PHARMACY_PATH,

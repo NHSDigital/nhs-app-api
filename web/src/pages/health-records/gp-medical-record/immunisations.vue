@@ -87,7 +87,7 @@ export default {
     },
   },
   async mounted() {
-    if (!['EMIS', 'VISION', 'MICROTEST'].includes(this.$store.state.myRecord.record.supplier)) {
+    if (!['EMIS', 'VISION'].includes(this.$store.state.myRecord.record.supplier)) {
       redirectTo(this, GP_MEDICAL_RECORD_PATH);
       return;
     }

@@ -49,7 +49,6 @@ export const CURRENT_MEDICINES_NAME = 'health-records-gp-medical-record-medicine
 export const CONSULTATIONS_NAME = 'health-records-gp-medical-record-consultations';
 export const CONSULTATIONS_AND_EVENTS_NAME = 'health-records-gp-medical-record-consultations';
 export const EVENTS_NAME = 'health-records-gp-medical-record-events';
-export const ENCOUNTERS_NAME = 'health-records-gp-medical-record-encounters';
 export const TESTRESULTS_NAME = 'health-records-gp-medical-record-test-results';
 export const TESTRESULTSDETAIL_NAME = 'health-records-gp-medical-record-test-results-detail';
 export const TESTRESULTID_NAME = 'health-records-gp-medical-record-testresultdetail-testResultId';
@@ -58,12 +57,9 @@ export const DIAGNOSIS_V2_NAME = 'health-records-gp-medical-record-diagnosis';
 export const EXAMINATIONS_V2_NAME = 'health-records-gp-medical-record-examinations';
 export const PROCEDURES_V2_NAME = 'health-records-gp-medical-record-procedures';
 export const MEDICINES_NAME = 'health-records-gp-medical-record-medicines';
-export const MEDICAL_HISTORY_NAME = 'health-records-gp-medical-record-medical-history';
 export const DOCUMENTS_NAME = 'health-records-gp-medical-record-documents';
 export const DOCUMENT_NAME = 'health-records-gp-medical-record-documents-id';
 export const DOCUMENT_DETAIL_NAME = 'health-records-gp-medical-record-documents-detail-id';
-export const RECALLS_NAME = 'health-records-gp-medical-record-recalls';
-export const REFERRALS_NAME = 'health-records-gp-medical-record-referrals';
 export const HEALTH_CONDITIONS_NAME = 'health-records-gp-medical-record-health-conditions';
 export const NOMINATED_PHARMACY_NAME = 'nominated-pharmacy';
 export const NOMINATED_PHARMACY_SEARCH_NAME = 'nominated-pharmacy-search';
@@ -183,7 +179,6 @@ const names = [
   CONSULTATIONS_NAME,
   EVENTS_NAME,
   CONSULTATIONS_AND_EVENTS_NAME,
-  ENCOUNTERS_NAME,
   TESTRESULTS_NAME,
   TESTRESULTSDETAIL_NAME,
   TESTRESULTID_NAME,
@@ -192,12 +187,9 @@ const names = [
   EXAMINATIONS_V2_NAME,
   PROCEDURES_V2_NAME,
   MEDICINES_NAME,
-  MEDICAL_HISTORY_NAME,
   DOCUMENTS_NAME,
   DOCUMENT_NAME,
   DOCUMENT_DETAIL_NAME,
-  RECALLS_NAME,
-  REFERRALS_NAME,
   HEALTH_CONDITIONS_NAME,
   NOMINATED_PHARMACY_NAME,
   NOMINATED_PHARMACY_SEARCH_NAME,

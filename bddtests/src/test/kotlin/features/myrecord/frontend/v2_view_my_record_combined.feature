@@ -152,10 +152,6 @@ Feature: Combined Frontend - Medical Record v2
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
     Then retrieving the Medical Record pages directly displays the Medical Record main page
-      |/health-records/gp-medical-record/medical-history                         |
-      |/health-records/gp-medical-record/recalls                                 |
-      |/health-records/gp-medical-record/encounters                              |
-      |/health-records/gp-medical-record/referrals                               |
       |/health-records/gp-medical-record/diagnosis                               |
       |/health-records/gp-medical-record/examinations                            |
       |/health-records/gp-medical-record/procedures                              |
@@ -172,10 +168,6 @@ Feature: Combined Frontend - Medical Record v2
       |/health-records/gp-medical-record/immunisations                           |
       |/health-records/gp-medical-record/health-conditions                       |
       |/health-records/gp-medical-record/consultations                           |
-      |/health-records/gp-medical-record/medical-history                         |
-      |/health-records/gp-medical-record/recalls                                 |
-      |/health-records/gp-medical-record/encounters                              |
-      |/health-records/gp-medical-record/referrals                               |
       |/health-records/gp-medical-record/diagnosis                               |
       |/health-records/gp-medical-record/examinations                            |
       |/health-records/gp-medical-record/procedures                              |
@@ -189,10 +181,6 @@ Feature: Combined Frontend - Medical Record v2
     When I click the 'Continue' button
     Then retrieving the Medical Record pages directly displays the Medical Record main page
       |/health-records/gp-medical-record/consultations                           |
-      |/health-records/gp-medical-record/medical-history                         |
-      |/health-records/gp-medical-record/recalls                                 |
-      |/health-records/gp-medical-record/encounters                              |
-      |/health-records/gp-medical-record/referrals                               |
       |/health-records/gp-medical-record/events                                  |
       |/health-records/gp-medical-record/documents                               |
 
