@@ -33,13 +33,34 @@ namespace NHSOnline.App.Controls.MarkupExtensions.Responsive
             // On Android 'Device.GetNamedSize' always returns a fixed value as accessibility text scaling is done by the device, not in code.
             // On iOS this returns a varying value based on the device accessibility text scaling setting.
             var responsiveCaptionSize = Device.GetNamedSize(NamedSize.Caption, typeof(Label));
-
-            return FontSizeFactorLookup[FontSizeOption] * responsiveCaptionSize;
+            var maxBoundForFontSizeFactor = MaxBoundForFontSizeFactor(Application.Current?.MainPage?.Width);
+            return Math.Min(maxBoundForFontSizeFactor, FontSizeFactorLookup[FontSizeOption] * responsiveCaptionSize);
         }
 
         object IMarkupExtension.ProvideValue(IServiceProvider serviceProvider)
         {
             return (this as IMarkupExtension<double>).ProvideValue(serviceProvider);
+        }
+
+        /// <summary>
+        /// At certain screen widths under high accessibility zoom factors, iOS devices truncate the text
+        /// (e.g. Heading1 = 'Getting Started'). This sets a max size we will allow the font size to scale to.
+        /// </summary>
+        /// <param name="currentPageWidth"></param>
+        /// <returns></returns>
+        private static int MaxBoundForFontSizeFactor(double? currentPageWidth)
+        {
+            if (currentPageWidth <= 370)
+            {
+                return 80;
+            }
+
+            if (currentPageWidth <= 380)
+            {
+                return 90;
+            }
+
+            return 105;
         }
     }
 }
