@@ -19,6 +19,9 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.ConnectionErrors
 {
     [TestClass]
+    [BusinessRule("BR-IC-01.1", "While within any journey that engages either native view or web view, if Internet connectivity is lost on a device, error screen with try again link/button is displayed which enables retrying to call the view for the User")]
+    [BusinessRule("BR-IC-01.3", "When try again link/button is chosen by the User on Internet connectivity error screen, try again action is triggered to retrieve last screen before Internet connectivity was lost.	")]
+    [BusinessRule("BR-IC-02.1", "When native back button is chosen while Internet connectivity error screen with try again link/button is displayed, try again action is triggered to retrieve last screen before Internet connectivity was lost")]
     public class TryAgainConnectionErrorTests
     {
         [NhsAppAndroidTest]

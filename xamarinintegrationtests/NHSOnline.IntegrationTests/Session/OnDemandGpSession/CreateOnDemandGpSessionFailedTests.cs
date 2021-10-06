@@ -15,6 +15,8 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.Session.OnDemandGpSession
 {
     [TestClass]
+    [BusinessRule("BR-GEN-04.6", "Failure to obtain a GP session on the first attempt in the user session displays a service specific 'try again' error to the user")]
+    [BusinessRule("BR-GEN-04.8", "Failure to obtain a GP session when the user has initiated another attempt to get a GP session via a try again displays a specific service unavailable shutter page to the user")]
     public class CreateOnDemandGpSessionFailedTests
     {
         [NhsAppAndroidTest]

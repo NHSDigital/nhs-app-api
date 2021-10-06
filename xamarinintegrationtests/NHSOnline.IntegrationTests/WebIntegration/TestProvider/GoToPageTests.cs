@@ -22,6 +22,7 @@ using NHSOnline.IntegrationTests.WebIntegration.Pkb;
 namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 {
     [TestClass]
+    [BusinessRule("BR-WI-01.14", "Following a link from within the web integration to a valid NHS App location navigates the user to the specified location")]
     public class GoToPageTests
     {
         [NhsAppAndroidTest]

@@ -15,6 +15,8 @@ using NHSOnline.IntegrationTests.WebIntegration.Pkb;
 namespace NHSOnline.IntegrationTests.WebIntegration
 {
     [TestClass]
+    [BusinessRule("BR-WI-01.6", "Adding an appointment to calendar with valid start and end dates invokes native calendar functionality with relevant fields supplied")]
+    [BusinessRule("BR-WI-01.7", "Adding an appointment to calendar when invalid params have been sent prompts the user to add an event manually to the calendar")]
     public class AddToCalendarWebIntegrationTests
     {
         private const int ValidStartTime = 1893589200; // Wednesday, 2 January 2030 13:00:00

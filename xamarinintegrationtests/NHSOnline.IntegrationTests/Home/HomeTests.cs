@@ -8,6 +8,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.Home
 {
     [TestClass]
+    [BusinessRule("BR-NAV-01.1", "Clicking the home icon in the in the native header navigates a P9 user to the logged in homepage")]
     public class HomeTests
     {
         [NhsAppAndroidTest]

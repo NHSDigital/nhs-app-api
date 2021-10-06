@@ -13,8 +13,8 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.WebIntegration
 {
-
     [TestClass]
+    [BusinessRule("BR-SET-01.11", "Navigating to NHS login displays the Manage your NHS login screen")]
     public class NhsLoginSettingsWebIntegrationTests
     {
         [NhsAppAndroidTest]

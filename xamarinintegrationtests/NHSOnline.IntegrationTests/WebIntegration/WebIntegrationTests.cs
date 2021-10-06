@@ -21,6 +21,8 @@ using NHSOnline.IntegrationTests.WebIntegration.Pkb;
 namespace NHSOnline.IntegrationTests.WebIntegration
 {
     [TestClass]
+    [BusinessRule("BR-WI-01.13", "Following a link from the header or footer while in a web integration navigates the user out of the web integration and to their chosen destination")]
+    [BusinessRule("BR-WI-01.14", "Following a link from within the web integration to a valid NHS App location navigates the user to the specified location")]
     public class WebIntegrationTests
     {
         [NhsAppAndroidTest]

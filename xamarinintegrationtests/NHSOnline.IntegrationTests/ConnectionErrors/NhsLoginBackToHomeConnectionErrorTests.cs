@@ -13,6 +13,8 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.ConnectionErrors
 {
     [TestClass]
+    [BusinessRule("BR-IC-01.4", "While within any journey that engages Web Integration, if Internet connectivity is lost on a device, error screen with back to home link is displayed which enables going back to Home view for the User")]
+    [BusinessRule("BR-IC-02.2", "When native back button is chosen while Internet connectivity error screen without try again button is displayed, back to NHS App view action is triggered to redirect the User to logged in Home view")]
     public class NhsLoginBackToHomeConnectionErrorTests
     {
         [NhsAppAndroidTest]

@@ -14,6 +14,13 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.Ndop
 {
     [TestClass]
+    [BusinessRule("BR-NS-05.2", "Navigating to the NDOP journey from the jump off in the NHS App (mobile App) initiates the NDOP journey within the NHS App.")]
+    [BusinessRule("BR-NS-05.3", "When entering NDOP journey several jump offs (information screens) are available to the User as links")]
+    [BusinessRule("BR-NS-05.4", "User can navigate between available  information screens either by choosing dedicated named links or by choosing navigation elements (Next and Previous)")]
+    [BusinessRule("BR-NS-05.5", "NDOP journey screen presenting detailed information about making choice for data sharing enables Start now button")]
+    [BusinessRule("BR-NS-05.6", "Start now button launches NDOP Service in NHS App, when clicked")]
+    [BusinessRule("BR-NS-05.7", "While launching NDOP Service from NHS App Single Sign On (SSO) applies for the User so there is no need to additionally login to NDOP Service")]
+    [BusinessRule("BR-NS-05.8", "After entering NDOP Service NDOP journey takes place for the User")]
     public class NdopIntegrationTests
     {
         [NhsAppAndroidTest]

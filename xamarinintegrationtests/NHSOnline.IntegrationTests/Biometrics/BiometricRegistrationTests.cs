@@ -13,6 +13,9 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.Biometrics
 {
     [TestClass]
+    [BusinessRule("BR-SET-02.1", "Navigating to biometrics settings screen when a user has registered Touch ID on the device shows the users current biometrics settings")]
+    [BusinessRule("BR-SET-02.3", "Navigating to biometrics settings screen when a user has not registered Face ID on the device show the users current biometrics settings")]
+    [BusinessRule("BR-SET-02.5", "Navigating to biometrics settings screen when a user has not registered Fingerprint ID on the device show the users current biometrics settings")]
     public class BiometricRegistrationTests
     {
         [NhsAppAndroidTest(AndroidDevice = AndroidDevice.Pixel3, OSVersion = AndroidOSVersion.Ten)]

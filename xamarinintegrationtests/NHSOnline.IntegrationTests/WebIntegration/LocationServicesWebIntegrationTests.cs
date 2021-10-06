@@ -15,6 +15,10 @@ using NHSOnline.IntegrationTests.WebIntegration.Pkb;
 namespace NHSOnline.IntegrationTests.WebIntegration
 {
     [TestClass]
+    [BusinessRule("BR-GEN-01.1", "An action that requires location services in a webview when location services have not been enabled for the native device displays a permissions prompt")]
+    [BusinessRule("BR-GEN-01.2", "Granting permissions when prompted to enable location services from an action in a webview enables location services services for that device")]
+    [BusinessRule("BR-GEN-01.3", "Rejecting permissions when prompted to enabled location services from an action in a webview results in the page in a webview not having access to location services")]
+    [BusinessRule("BR-GEN-01.4", "An action that requires location services in a webview when location services have already been enabled on the device for the app gives access to location services in a webview")]
     public class LocationServicesWebIntegrationTests
     {
         [NhsAppAndroidTest]

@@ -15,6 +15,7 @@ using NHSOnline.IntegrationTests.WebIntegration.Pkb;
 namespace NHSOnline.IntegrationTests.WebIntegration
 {
     [TestClass]
+    [BusinessRule("BR-WI-01.5", "Choosing to upload a file in a web integration opens the system file picker for the user to upload a file")]
     public class FileUploadWebIntegrationTests
     {
         [NhsAppAndroidTest]

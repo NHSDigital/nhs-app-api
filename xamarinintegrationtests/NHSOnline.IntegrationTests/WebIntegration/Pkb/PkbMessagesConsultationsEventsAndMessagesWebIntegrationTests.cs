@@ -11,7 +11,6 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
 {
-
     [TestClass]
     public class PkbMessagesConsultationsEventsAndMessagesWebIntegrationTests
     {

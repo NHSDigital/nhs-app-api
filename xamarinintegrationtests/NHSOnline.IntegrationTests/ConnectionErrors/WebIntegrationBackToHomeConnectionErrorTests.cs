@@ -18,6 +18,7 @@ using NHSOnline.IntegrationTests.WebIntegration.Pkb;
 
 namespace NHSOnline.IntegrationTests.ConnectionErrors
 {
+    [BusinessRule("BR-IC-01.2", "While within any journey that engages Web Integration, if Internet connectivity is lost on a device, error screen with back to home link is displayed which enables going back to Home view for the User")]
     [TestClass]
     public class WebIntegrationBackToHomeConnectionErrorTests
     {

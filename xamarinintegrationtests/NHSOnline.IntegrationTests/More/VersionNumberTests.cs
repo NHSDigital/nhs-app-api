@@ -10,6 +10,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.More
 {
     [TestClass]
+    [BusinessRule("BR-SET-01.19", "Navigating to More displays the relevant NHS App version numbers")]
     public class VersionNumberTests
     {
         [NhsAppAndroidTest]

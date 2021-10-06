@@ -15,6 +15,11 @@ using NHSOnline.IntegrationTests.WebIntegration.Pkb;
 namespace NHSOnline.IntegrationTests.WebIntegration
 {
     [TestClass]
+    [BusinessRule("BR-WI-01.9", "Downloading a document when permissions have not been granted on the device prompts the user to grant permissions")]
+    [BusinessRule("BR-WI-01.10", "Granting permissions on a device when downloading a document allows the document to be downloaded to the users chosen location on the device")]
+    [BusinessRule("BR-WI-01.11", "Rejecting permissions on a device when downloading a document cancels the download action")]
+    [BusinessRule("BR-WI-01.12", "Downloading a document when permissions have been granted on device downloads the document to the users chosen location on the device")]
+    [BusinessRule("BR-WI-01.16", "Adding an pass to Apple wallet downloads the pass and add it to the users Apple Wallet")]
     public class FileDownloadWebIntegrationTests
     {
         private const string ThirdPartyHelpLinkPath = "health-records-in-the-nhs-app/third-party-services/";

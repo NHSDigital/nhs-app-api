@@ -10,9 +10,9 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.LoggedOut
 {
     [TestClass]
+    [BusinessRule("BR-LOG-01.1", "Launching the app displays the logged out home screen")]
     public class VersionNumberTests
     {
-
         [NhsAppAndroidTest]
         public void APatientCanSeeTheCorrectVersionNumberWhenLoggedOutAndroid(IAndroidDriverWrapper driver)
         {
