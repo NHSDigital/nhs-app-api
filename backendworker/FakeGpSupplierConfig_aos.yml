@@ -967,3 +967,31 @@ defaultUsers:
       familyName: DAINE
       dateOfBirth: "1996-11-16T00:00:00"
       sex: Male
+
+  econsult:
+    9692113663:
+      userId: 44053297-f9f4-4b78-9b63-e7ef36a540dc
+      emailAddress: nhsapp.aos+econsult.user1@gmail.com
+      odsCode: N61021
+      givenName: Gary
+      familyName: Gibson
+      dateOfBirth: "1999-05-03T00:00:00"
+      sex: Male
+
+    9692113736:
+      userId: 358ea77b-4b8f-4eb8-afec-3b4962d456bf
+      emailAddress: nhsapp.aos+econsult.user2@gmail.com
+      odsCode: N51021
+      givenName: Kevin
+      familyName: Barry
+      dateOfBirth: "1964-02-11T00:00:00"
+      sex: Male
+
+    9692113914:
+      userId: b6f72403-3615-4c58-bb45-b5071bdd06eb
+      emailAddress: nhsapp.aos+econsult.user3@gmail.com
+      odsCode: N51021
+      givenName: Abe
+      familyName: Donor
+      dateOfBirth: "1964-02-15T00:00:00"
+      sex: Male
