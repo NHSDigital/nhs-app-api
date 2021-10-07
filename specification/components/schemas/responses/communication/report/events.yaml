@@ -51,12 +51,12 @@ items:
 
         - Cancelled: A request to send a push notification has been abandoned, because an in-app message to which it related Failed.
         - Completed: Processing of the communication has successfully completed for this recipient and channel. For in-app messages this indicates that the message has been delivered to the patient's NHS App messaging inbox. For push notifications it indicates that the messages has been relayed for sending to the Apple or Google Push Notification Service (PNS), or scheduled for sending at 6am if processing occured during the hours of 10pm to 6am.
-        - Failed: Processing of the communication failed abnormally for this recipient and channel. Further information can be found in the `statusDetail` field.
+        - Failed: Processing of the communication failed abnormally for this recipient and channel. Further information can be found in the `eventDetail` field.
         - Read: An in-app message has been read for the first time by the recipient.
-        - Rejected: A request to send a communication to this recipient has been rejected. This usually occurs when no NHS App user is known with the specified NHS number, or when attempting to send a push notification to an NHS App user who has not enabled push notifications. Further information can be found in the `statusDetail` field.
+        - Rejected: A request to send a communication to this recipient has been rejected. This usually occurs when no NHS App user is known with the specified NHS number, or when attempting to send a push notification to an NHS App user who has not enabled push notifications. Further information can be found in the `eventDetail` field.
       example: "Completed"
       nullable: false
-    statusDetail:
+    eventDetail:
       type: string
       description: Gives additional information about the event, particularly where the event was Rejected or Failed.
       nullable: true

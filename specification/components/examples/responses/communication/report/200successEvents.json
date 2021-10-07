@@ -8,7 +8,7 @@
         "nhsNumber": "9692113612",
         "communicationCreatedDateTime": "2021-08-05T13:28:52:175",
         "event": "Completed",
-        "statusDetail": null
+        "eventDetail": null
     },
     {
         "eventDateTime": "2021-08-05T13:30:01:724",
@@ -19,7 +19,7 @@
         "nhsNumber": "9692113612",
         "communicationCreatedDateTime": "2021-08-05T13:28:52:175",
         "event": "Completed",
-        "statusDetail": null
+        "eventDetail": null
     },
     {
         "eventDateTime": "2021-08-05T13:28:00:384",
@@ -30,7 +30,7 @@
         "nhsNumber": "9074732933",
         "communicationCreatedDateTime": "2021-08-05T13:28:52:175",
         "event": "Rejected",
-        "statusDetail": "NHS number not found"
+        "eventDetail": "NHS number not found"
     },
     {
         "eventDateTime": "2021-08-05T13:28:01:816",
@@ -41,7 +41,7 @@
         "nhsNumber": "9074732933",
         "communicationCreatedDateTime": "2021-08-05T13:28:52:175",
         "event": "Rejected",
-        "statusDetail": "NHS number not found"
+        "eventDetail": "NHS number not found"
     },
     {
         "eventDateTime": "2021-08-05T13:28:58:981",
@@ -52,7 +52,7 @@
         "nhsNumber": "9482026470",
         "communicationCreatedDateTime": "2021-08-05T13:28:52:175",
         "event": "Completed",
-        "statusDetail": null
+        "eventDetail": null
     },
     {
         "eventDateTime": "2021-08-05T13:30:02:128",
@@ -63,7 +63,7 @@
         "nhsNumber": "9482026470",
         "communicationCreatedDateTime": "2021-08-05T13:28:52:175",
         "event": "Rejected",
-        "statusDetail": "Notification registration not found"
+        "eventDetail": "Notification registration not found"
     },
     {
         "eventDateTime": "2021-08-05T14:59:24:426",
@@ -74,7 +74,7 @@
         "nhsNumber": "9133760004",
         "communicationCreatedDateTime": "2021-08-05T14:59:16:034",
         "event": "Failed",
-        "statusDetail": "Failure details"
+        "eventDetail": "Failure details"
     },
     {
         "eventDateTime": "2021-08-05T14:59:26:561",
@@ -85,7 +85,7 @@
         "nhsNumber": "9133760004",
         "communicationCreatedDateTime": "2021-08-05T14:59:16:034",
         "event": "Cancelled",
-        "statusDetail": "Associated App Message failed"
+        "eventDetail": "Associated App Message failed"
     },
     {
         "eventDateTime": "2021-08-05T22:01:59:005",
@@ -96,7 +96,7 @@
         "nhsNumber": "9692113612",
         "communicationCreatedDateTime": "2021-08-05T13:28:52:175",
         "event": "Read",
-        "statusDetail": null
+        "eventDetail": null
     },
     {
         "eventDateTime": "2021-08-05T23:07:19:005",
@@ -107,6 +107,6 @@
         "nhsNumber": "9482026470",
         "communicationCreatedDateTime": "2021-08-05T13:28:52:175",
         "event": "Read",
-        "statusDetail": null
+        "eventDetail": null
     }
 ]
