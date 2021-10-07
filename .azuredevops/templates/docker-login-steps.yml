@@ -4,10 +4,6 @@ steps:
     parameters:
       mode: add
       acr: nhsapp
-  - template: acr_firewall.yml
-    parameters:
-      mode: add
-      acr: nhsapprelease
 
   - task: Docker@2
     displayName: Login to docker registry

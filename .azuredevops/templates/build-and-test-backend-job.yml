@@ -150,7 +150,3 @@ jobs:
         parameters:
           mode: remove
           acr: nhsapp
-      - template: acr_firewall.yml
-        parameters:
-          mode: remove
-          acr: nhsapprelease
