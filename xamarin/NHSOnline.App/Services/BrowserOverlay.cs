@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using NHSOnline.App.Controls.Styles;
 using NHSOnline.App.Threading;
 using Xamarin.Essentials;
 
@@ -13,9 +12,7 @@ namespace NHSOnline.App.Services
             await Browser.OpenAsync(uri, new BrowserLaunchOptions
             {
                 LaunchMode = BrowserLaunchMode.SystemPreferred,
-                TitleMode = BrowserTitleMode.Show,
-                PreferredToolbarColor = NhsUkColours.NhsUkBlue,
-                PreferredControlColor = NhsUkColours.NhsUkWhite
+                TitleMode = BrowserTitleMode.Show
             }).ResumeOnThreadPool();
         }
     }
