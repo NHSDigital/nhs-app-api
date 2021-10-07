@@ -17,12 +17,12 @@
                 <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <Style TargetType="controls:AccessibileStackLayout" CanCascade="True">
+            <Style TargetType="controls:AccessibleStackLayout" CanCascade="True">
                 <Setter Property="Margin" Value="0,0,0,12" />
                 <Setter Property="Spacing" Value="0" />
                 <Setter Property="HorizontalOptions" Value="Start" />
             </Style>
-            <Style x:Key="StackLayoutWide" TargetType="controls:AccessibileStackLayout">
+            <Style x:Key="StackLayoutWide" TargetType="controls:AccessibleStackLayout">
                 <Setter Property="Margin" Value="0,0,0,24" />
             </Style>
 
@@ -57,7 +57,7 @@
         </VisualStateGroup>
     </VisualStateManager.VisualStateGroups>
 
-    <controls:AccessibileStackLayout x:Name="StackLayout"
+    <controls:AccessibleStackLayout x:Name="StackLayout"
                                      effects:AccessibilityEffect.ControlType="Link">
         <AutomationProperties.Name>
             <MultiBinding Converter="{StaticResource FallbackMultiBindingConverter}">
@@ -83,8 +83,8 @@
         <elements:Label StyleClass="LinkLabel" x:Name="Label" Text="{Binding Text, Source={x:Reference Name=Root}}" />
         <BoxView x:Name="BoxView" StyleClass="FocusUnderLine" />
 
-        <controls:AccessibileStackLayout.GestureRecognizers>
+        <controls:AccessibleStackLayout.GestureRecognizers>
             <TapGestureRecognizer Command="{Binding Command, Source={x:Reference Name=Root}}" />
-        </controls:AccessibileStackLayout.GestureRecognizers>
-    </controls:AccessibileStackLayout>
+        </controls:AccessibleStackLayout.GestureRecognizers>
+    </controls:AccessibleStackLayout>
 </ContentView>

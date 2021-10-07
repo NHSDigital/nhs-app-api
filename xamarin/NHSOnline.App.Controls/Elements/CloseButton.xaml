@@ -14,7 +14,7 @@
                 <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
-            <Style TargetType="controls:AccessibileStackLayout" Class="Button">
+            <Style TargetType="controls:AccessibleStackLayout" Class="Button">
                 <Setter Property="HorizontalOptions" Value="Start" />
                 <Setter Property="VerticalOptions" Value="Center" />
                 <Setter Property="HeightRequest" Value="35" />
@@ -59,7 +59,7 @@
         </ResourceDictionary>
     </ContentView.Resources>
     
-    <controls:AccessibileStackLayout StyleClass="Button" 
+    <controls:AccessibleStackLayout StyleClass="Button" 
                                   x:Name="ButtonStackLayout"
                                   effects:AccessibilityEffect.ControlType="Button"
                                   AutomationProperties.IsInAccessibleTree="True" 
@@ -99,5 +99,5 @@
                 </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
             
-        </controls:AccessibileStackLayout>
+        </controls:AccessibleStackLayout>
 </ContentView>

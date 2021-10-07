@@ -14,7 +14,7 @@
                 <ResourceDictionary Source="/Styles/NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
-            <Style TargetType="controls:AccessibileStackLayout" Class="ButtonLayout">
+            <Style TargetType="controls:AccessibleStackLayout" Class="ButtonLayout">
                 <Setter Property="Spacing" Value="0" />
             </Style>
             
@@ -63,7 +63,7 @@
         </VisualStateGroup>
     </VisualStateManager.VisualStateGroups>
         
-    <controls:AccessibileStackLayout x:Name="ButtonContainer"
+    <controls:AccessibleStackLayout x:Name="ButtonContainer"
                                      StyleClass="ButtonLayout"
                                      effects:AccessibilityEffect.ControlType="Button"
                                      AutomationProperties.Name="Help">
@@ -91,5 +91,5 @@
             <TapGestureRecognizer 
                 Command="{Binding Command, Source={x:Reference Name=Root}}" />
         </StackLayout.GestureRecognizers>
-    </controls:AccessibileStackLayout>
+    </controls:AccessibleStackLayout>
 </ContentView>
