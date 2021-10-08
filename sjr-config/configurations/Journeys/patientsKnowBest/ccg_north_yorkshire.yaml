@@ -1,0 +1,71 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes: 
+    - "B82004"
+    - "B82008"
+    - "B82010"
+    - "B82011"
+    - "B82012"
+    - "B82013"
+    - "B82014"
+    - "B82016"
+    - "B82017"
+    - "B82019"
+    - "B82022"
+    - "B82023"
+    - "B82025"
+    - "B82027"
+    - "B82029"
+    - "B82030"
+    - "B82032"
+    - "B82034"
+    - "B82035"
+    - "B82036"
+    - "B82037"
+    - "B82038"
+    - "B82042"
+    - "B82044"
+    - "B82045"
+    - "B82046"
+    - "B82049"
+    - "B82050"
+    - "B82054"
+    - "B82057"
+    - "B82059"
+    - "B82060"
+    - "B82062"
+    - "B82063"
+    - "B82066"
+    - "B82067"
+    - "B82069"
+    - "B82072"
+    - "B82075"
+    - "B82078"
+    - "B82084"
+    - "B82086"
+    - "B82088"
+    - "B82091"
+    - "B82101"
+    - "B82104"
+    - "B82106"
+    - "B82609"
+    - "B82622"
+    - "B82628"
+    - "Y02669"
+
+journeys:
+  silverIntegrations:
+    carePlans:
+      - pkb
+    healthTrackers:
+      - pkb
+    libraries:
+      - pkb
+    medicines:
+      - pkb
+    messages:
+      - pkb
+    secondaryAppointments:
+      - pkb
+    testResults:
+      - pkb

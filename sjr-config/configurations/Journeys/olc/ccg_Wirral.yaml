@@ -34,7 +34,6 @@ target:
     - N85013
     - N85038
     - N85008
-    - N85019
 journeys:
   cdssAdvice:
     provider: eConsult
