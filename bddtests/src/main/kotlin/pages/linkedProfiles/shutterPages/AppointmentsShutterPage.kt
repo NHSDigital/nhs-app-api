@@ -2,7 +2,7 @@ package pages.linkedProfiles.shutterPages
 
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageObject
-import pages.navigation.HeaderNative
+import pages.navigation.WebHeader
 import pages.sharedElements.expectedPage.ExpectedPageStructure
 import pages.sharedElements.expectedPage.ExpectedPageStructureAssertor
 import pages.sharedElements.expectedPage.ParsedPage
@@ -10,10 +10,10 @@ import pages.sharedElements.expectedPage.ParsedPage
 @DefaultUrl("http://web.local.bitraft.io:3000/linked-profiles/shutter/appointments")
 class AppointmentsShutterPage : HybridPageObject() {
 
-    private lateinit var headerNative: HeaderNative
+    private lateinit var webHeader: WebHeader
 
     fun isLoaded(patientName: String) {
-        headerNative.waitForPageHeaderText(
+        webHeader.waitForPageHeaderText(
                 "You do not have access to $patientName's GP appointments")
     }
 

@@ -17,12 +17,9 @@ open class OrganDonationBasePage: HybridPageObject() {
 
     protected val title by lazy {
         HybridPageElement(
-                "//h2",
-                "//h2",
-                null,
-                null,
-                this,
-                helpfulName = "header").withText(titleText)
+            "//h2",
+            this,
+            helpfulName = "header").withText(titleText)
     }
 
     fun clickContinue() {

@@ -14,28 +14,25 @@ open class LinksElement(private val page : HybridPageObject, val content : ILink
 
     private val container by lazy {
         HybridPageElement(
-                webDesktopLocator = content.containerXPath,
-                androidLocator = null,
-                page = page,
-                helpfulName = content.linkBlockTitle
+            webDesktopLocator = content.containerXPath,
+            page = page,
+            helpfulName = content.linkBlockTitle
         )
     }
 
     private fun listOfLinks(): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = sections,
-                androidLocator = null,
-                page = page,
-                helpfulName = "ListOfLinks"
+            webDesktopLocator = sections,
+            page = page,
+            helpfulName = "ListOfLinks"
         )
     }
 
     private fun listOfUlLinks(): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = sectionsWithList,
-                androidLocator = null,
-                page = page,
-                helpfulName = "ListOfLinks"
+            webDesktopLocator = sectionsWithList,
+            page = page,
+            helpfulName = "ListOfLinks"
         )
     }
 
@@ -67,10 +64,9 @@ open class LinksElement(private val page : HybridPageObject, val content : ILink
 
     private fun linkDescriptionBody(linkTitle: String): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "${content.specificLinkXPath(linkTitle)}//p",
-                androidLocator = null,
-                page = page,
-                helpfulName = "$linkTitle Link")
+            webDesktopLocator = "${content.specificLinkXPath(linkTitle)}//p",
+            page = page,
+            helpfulName = "$linkTitle Link")
     }
 
     private fun assertDescription(title: String, description: String?) {

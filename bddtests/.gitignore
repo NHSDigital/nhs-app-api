@@ -32,7 +32,6 @@ gradle_abj
 resources/*
 *.swp
 target/*
-browserstack.err
 *.override.yml
 .classpath
 .project

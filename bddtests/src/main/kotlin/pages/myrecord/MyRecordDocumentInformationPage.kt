@@ -13,32 +13,28 @@ class MyRecordDocumentInformationPage : HybridPageObject() {
 
     private fun link(id: String): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "$listMenuPath[@id='$id']",
-                androidLocator = null,
-                page = this,
-                helpfulName = "$id Link")
+            webDesktopLocator = "$listMenuPath[@id='$id']",
+            page = this,
+            helpfulName = "$id Link")
     }
 
     private fun documentInfo(infoText: String): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "$documentInfoPath${String.format(containsTextXpathSubstring, infoText)}",
-                androidLocator = null,
-                page = this,
-                helpfulName = "Document Info Text")
+            webDesktopLocator = "$documentInfoPath${String.format(containsTextXpathSubstring, infoText)}",
+            page = this,
+            helpfulName = "Document Info Text")
     }
 
     private fun documentComment(commentText: String): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "$documentCommentsPath${String.format(containsTextXpathSubstring, commentText)}",
-                androidLocator = null,
-                page = this,
-                helpfulName = "Document Comment Text")
+            webDesktopLocator = "$documentCommentsPath${String.format(containsTextXpathSubstring, commentText)}",
+            page = this,
+            helpfulName = "Document Comment Text")
     }
 
     private fun header(headerText: String): HybridPageElement {
         return HybridPageElement(
             webDesktopLocator = "//h1${String.format(containsTextXpathSubstring, headerText)}",
-            androidLocator = null,
             page = this,
             helpfulName = "Header")
     }

@@ -22,60 +22,46 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
     private val alternateNumberRadioButtonXpath = "$inputTypeRadioXpathPrefix and @id='otherPhoneNumberRadioInput']"
 
     val reasonFormField = HybridPageElement(
-            webDesktopLocator = "//textarea[@id='reasonText']",
-            webMobileLocator = "//*[@id='reasonText']",
-            androidLocator = null,
-            page = this
+        webDesktopLocator = "//textarea[@id='reasonText']",
+        page = this
     )
 
     val radioButtons = HybridPageElement(
-            webDesktopLocator = "$inputTypeRadioXpathPrefix]",
-            webMobileLocator = "$inputTypeRadioXpathPrefix]",
-            androidLocator = null,
-            page = this
+        webDesktopLocator = "$inputTypeRadioXpathPrefix]",
+        page = this
     )
 
     private fun telephoneNumberRadioButton(telephoneNumber: String): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = String.format(telephoneNumberRadioButtonByValueXpath, telephoneNumber),
-                webMobileLocator = String.format(telephoneNumberRadioButtonByValueXpath, telephoneNumber),
-                androidLocator = null,
-                page = this
+            webDesktopLocator = String.format(telephoneNumberRadioButtonByValueXpath, telephoneNumber),
+            page = this
         )
     }
 
     private val alternateTelephoneNumberRadioButton = HybridPageElement(
-            webDesktopLocator = alternateNumberRadioButtonXpath,
-            webMobileLocator = alternateNumberRadioButtonXpath,
-            androidLocator = null,
-            page = this
+        webDesktopLocator = alternateNumberRadioButtonXpath,
+        page = this
     )
 
     val telephoneNumberDiv = HybridPageElement(
-            webDesktopLocator = "//*[@id='telephoneNumberText']",
-            webMobileLocator = "//*[@id='telephoneNumberText']",
-            androidLocator = null,
-            page = this
+        webDesktopLocator = "//*[@id='telephoneNumberText']",
+        page = this
     )
 
     val telephoneError = HybridPageElement(
-            webDesktopLocator = "//*[@data-purpose='telephone-error']",
-            webMobileLocator = "//*[@data-purpose='telephone-error']",
-            androidLocator = null,
-            page = this,
-            helpfulName = "Telephone Error"
+        webDesktopLocator = "//*[@data-purpose='telephone-error']",
+        page = this,
+        helpfulName = "Telephone Error"
     )
 
     override val titleText: String = "Confirm your appointment"
 
     fun describeSymptoms(symptoms: String) {
         reasonFormField.typeTextIntoTextArea(symptoms)
-        hideKeyboardIfOnMobile()
     }
 
     fun describeTelephoneNumber(telephoneNumber: String) {
         telephoneNumberDiv.actOnTheElement { it.type<WebElementFacade>(telephoneNumber) }
-        hideKeyboardIfOnMobile()
     }
 
     fun getNumberOfSelectedPhoneNumberRadioButtons(): Int {

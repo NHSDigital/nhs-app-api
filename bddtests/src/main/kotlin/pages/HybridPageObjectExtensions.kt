@@ -1,6 +1,5 @@
 package pages
 
-
 fun HybridPageObject.clickOnActionContainingText(actionText: String) {
     getActionPageElement(actionText)
             .assertIsVisible()
@@ -9,19 +8,8 @@ fun HybridPageObject.clickOnActionContainingText(actionText: String) {
 
 private fun HybridPageObject.getActionPageElement(actionText: String): HybridPageElement {
     val webLocator = "//a[contains(text(),'$actionText')]"
-    val nativeLocator = "//button[contains(text(),'$actionText')]"
     return HybridPageElement(
-            webDesktopLocator = webLocator,
-            iOSLocator = nativeLocator,
-            androidLocator = nativeLocator,
-            page = this
+        webDesktopLocator = webLocator,
+        page = this
     )
-}
-
-fun HybridPageObject.isActionVisible(actionText: String): Boolean {
-    var isVisible = false
-
-    getActionPageElement(actionText).actOnTheElement { isVisible = it.isCurrentlyVisible }
-
-    return isVisible
 }

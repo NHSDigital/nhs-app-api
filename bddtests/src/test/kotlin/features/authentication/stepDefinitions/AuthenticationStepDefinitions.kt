@@ -10,7 +10,6 @@ import features.myrecord.factories.DemographicsFactory
 import features.navigation.steps.NavHeaderSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.CookieSteps
-import features.sharedSteps.NavigationSteps
 import io.cucumber.datatable.DataTable
 import mocking.MockingClient
 import mocking.defaults.EmisMockDefaults
@@ -27,8 +26,6 @@ import pages.more.MorePage
 import pages.assertElementNotPresent
 import pages.assertSingleElementPresent
 import pages.loggedOut.CIDAccountCreationPage
-import pages.navigation.BreadcrumbHeader
-import pages.navigation.NavBarNative
 import pages.navigation.WebHeader
 import utils.SerenityHelpers
 
@@ -45,12 +42,9 @@ class AuthenticationStepDefinitions {
     @Steps
     lateinit var login: LoginSteps
     @Steps
-    lateinit var nav: NavigationSteps
-    @Steps
     lateinit var navHeader: NavHeaderSteps
     @Steps
     lateinit var webHeader: WebHeader
-    lateinit var breadcrumbs: BreadcrumbHeader
     lateinit var more: MorePage
     lateinit var serviceUnavailablePage: ServiceUnavailablePage
     lateinit var accountCreationpage: CIDAccountCreationPage
@@ -124,7 +118,8 @@ class AuthenticationStepDefinitions {
 
     @When("^I browse to the page at (.*)$")
     fun iBrowseToPageAt(url: String) {
-        this.currentUrl = nav.browseToPage(url)
+        browser.browseTo(url)
+        this.currentUrl = url
     }
 
     @When("^I browse to the pages at the following urls I see the (.*) page$")
@@ -189,56 +184,17 @@ class AuthenticationStepDefinitions {
     @Then("^I can cycle through the header links$")
     fun iLCycleTheHeaderLinks() {
         val linksToFollow = arrayListOf(
-                { NativeHeaderHelper.followAdviceHeaderLink(webHeader) },
-                { NativeHeaderHelper.followAppointmentHeaderLink(webHeader) },
-                { NativeHeaderHelper.followPrescriptionsHeaderLink(webHeader) },
-                { NativeHeaderHelper.followYourHealthHeaderLink(webHeader) },
-                { NativeHeaderHelper.followMoreHeaderLink(webHeader) }
+                { webHeader.followAdviceHeaderLink() },
+                { webHeader.followAppointmentHeaderLink() },
+                { webHeader.followPrescriptionsHeaderLink() },
+                { webHeader.followYourHealthHeaderLink() },
+                { webHeader.followMoreHeaderLink() }
         )
 
         linksToFollow.forEachIndexed { index, link ->
             if (index != linksToFollow.size)
                 link.invoke()
         }
-    }
-
-    @Then("^I can cycle through the native header links$")
-    fun iLCycleTheNativeHeaderLinks(){
-        val linksToFollow = arrayListOf(
-                {followAppointmentNativeNavBarLink()},
-                {followPrescriptionsNativeNavBarLink()},
-                {followMyRecordNativeNavBarLink()},
-                {followAdviceNativeNavBarLink()}
-        )
-
-        linksToFollow.forEachIndexed { index, link ->
-            if (index != linksToFollow.size)
-                link.invoke()
-        }
-    }
-
-    private fun followAppointmentNativeNavBarLink() {
-        nav.select(NavBarNative.NavBarType.APPOINTMENTS)
-        webHeader.isPageTitleCorrect("Appointments")
-        breadcrumbs.assertVisible()
-    }
-
-    private fun followPrescriptionsNativeNavBarLink() {
-        nav.select(NavBarNative.NavBarType.PRESCRIPTIONS)
-        webHeader.isPageTitleCorrect("Prescriptions")
-        breadcrumbs.assertVisible()
-    }
-
-    private fun followMyRecordNativeNavBarLink() {
-        nav.select(NavBarNative.NavBarType.YOUR_HEALTH)
-        webHeader.isPageTitleCorrect("Your medical record")
-        breadcrumbs.assertVisible()
-    }
-
-    private fun followAdviceNativeNavBarLink() {
-        nav.select(NavBarNative.NavBarType.ADVICE)
-        webHeader.isPageTitleCorrect("Advice")
-        breadcrumbs.assertVisible()
     }
 
     @Then("^I see an error message informing me I cannot log in as I am under the minimum age$")
@@ -263,11 +219,6 @@ class AuthenticationStepDefinitions {
     @Then("^I see the login page$")
     fun iSeeTheLoginPage() {
         login.loginPage.shouldBeDisplayed()
-    }
-
-    @Then("^I see the navigation menu$")
-    fun iSeeNavbar() {
-        nav.assertVisible()
     }
 
     @Then("^I see the yellow banner$")

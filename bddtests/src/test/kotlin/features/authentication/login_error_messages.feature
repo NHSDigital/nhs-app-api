@@ -3,8 +3,7 @@
 Feature: Login error messages
 
   The user is shown appropriate error messages if something goes wrong during login
-#400
-  @nativesmoketest
+  #400
   Scenario: CitizenID provides invalid data after successful login
     Given I am logged into Citizen ID but am receiving invalid data
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'
@@ -21,12 +20,8 @@ Feature: Login error messages
     Then a new tab has been opened by the link
     Examples:
       | GP System |
+      | EMIS      |
       | TPP       |
-
-    @nativesmoketest
-    Examples:
-      | GP System  |
-      | EMIS       |
 
     #465
   Scenario: Cannot log in as a TPP user with an age under 13
@@ -53,17 +48,7 @@ Feature: Login error messages
       | TPP       | '111.wales.nhs.uk'  | 'http://stubs.local.bitraft.io:8080/external/111/wales'                             |
       | TPP       | '111.nhs.uk'        | 'http://stubs.local.bitraft.io:8080/external/111/home'                              |
 
-    @nativesmoketest
-    Examples:
-      | GP System  | Link text           | Link url                                                                           |
-      | EMIS       | 'contact us'        | 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3f'|
-      | EMIS       | 'My Health Online'  | 'http://stubs.local.bitraft.io:8080/external/111/myhealthonline'                   |
-      | EMIS       | '111.wales.nhs.uk'  | 'http://stubs.local.bitraft.io:8080/external/111/wales'                            |
-      | EMIS       | '111.nhs.uk'        | 'http://stubs.local.bitraft.io:8080/external/111/home'                                  |
-
-
   #464
-  @nativesmoketest
   Scenario Outline: Cannot log in as a EMIS user with invalid ODS Code
     Given I attempt to log in as a EMIS user with invalid ODS Code
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'

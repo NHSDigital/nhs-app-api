@@ -35,16 +35,15 @@ open class NoOnlineAppointments: HybridPageObject() {
 
     fun clickBackLink() {
         HybridPageElement(
-                webDesktopLocator = "//a[@data-purpose='error']",
-                page = this
+            webDesktopLocator = "//a[@data-purpose='error']",
+            page = this
         ).click()
     }
 
     private fun setupElement(headerText: String): HybridPageElement{
         return HybridPageElement(
-                webDesktopLocator = "//h2[contains(text(),'$headerText')]",
-                androidLocator = null,
-                page = this
+            webDesktopLocator = "//h2[contains(text(),'$headerText')]",
+            page = this
         )
     }
 }

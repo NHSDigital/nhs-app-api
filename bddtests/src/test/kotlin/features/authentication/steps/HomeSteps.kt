@@ -4,11 +4,9 @@ import mockingFacade.linkedProfiles.LinkedProfileFacade
 import models.Patient
 import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
-import org.junit.Assert
 import pages.HomePage
 import pages.HybridPageElement
 import pages.assertIsVisible
-import pages.navigation.HeaderNative
 import pages.navigation.WebHeader
 
 enum class PatientDetail(val label: String) {
@@ -32,8 +30,6 @@ enum class NavigationLinkText (val linkText: String) {
 open class HomeSteps {
 
     lateinit var homePage: HomePage
-
-    lateinit var headerNative: HeaderNative
 
     @Steps
     lateinit var webHeader: WebHeader
@@ -69,11 +65,6 @@ open class HomeSteps {
     fun waitForLoginToCompleteSuccessfully(waitForLoginPage: Boolean) {
         if (waitForLoginPage) {
             assertHeaderVisible()
-        }
-        homePage.locatorMethods.assertNativeElementsLoaded(homePage.welcomeInfo)
-        if (homePage.onMobile()) {
-            Assert.assertEquals("Dismiss button text", "Dismiss", homePage.dismissButton.textValue.trim())
-            homePage.dismissButton.click()
         }
     }
 

@@ -7,15 +7,13 @@
 
 ## Solution Areas
 
-* [Android](Solution-Areas/android.md) - the native Android code base
+* [Xamarin](Solution-Areas/xamarin.md) - The Xamarin app and integration tests
 * [Backend Worker](Solution-Areas/backend.md) - the backend .NET codebase
 * [Contracts](Solution-Areas/backend-contracts.md) - editing and bundling the OpenAPI (Swagger) contracts.
 * [Helm Chart](Solution-Areas/nhsapp-chart.md) - for packaging and versioning the Kubernetes resources
-* [iOS](Solution-Areas/ios.md) - the native Apple codebase
 * [Integration Tests](Solution-Areas/integration-tests.md) - BDD tests, written in Kotlin
 * [Silver Integration API Test Site](Solution-Areas/silver-integrationapi-test-site) - a simulated third-party provider site, for testing the Silver Integration JS API
 * [Web](Solution-Areas/web.md) - The Vue web project
-* [Xamarin](Solution-Areas/xamarin.md) - The Xamarin app and integration tests
 
 ## Tools and Utilities
 

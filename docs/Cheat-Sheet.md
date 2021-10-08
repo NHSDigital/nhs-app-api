@@ -80,7 +80,7 @@ make run-perf-stubs
 emulator @emulator_name -dns-server 127.0.0.1
 ```
 
-See [Android - Running in Emulator](Solution-Areas/android.md#running-in-emulator) for more details.
+See [Android - Running in Emulator](Solution-Areas/xamarin/android.md#running-in-emulator) for more details.
 
 ### Run physical iOS device pointing at local services
 

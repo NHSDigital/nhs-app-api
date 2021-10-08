@@ -68,7 +68,6 @@ Feature: Your Appointments Frontend
     And each appointment can be cancelled
     And I am given the list of historical appointments
     And I can book an appointment
-    @nativesmoketest
     @smoketest
     Examples:
       | GP System |
@@ -162,7 +161,6 @@ Feature: Your Appointments Frontend
       | VISION    | 3s     |
 
   #502
-  @nativesmoketest
   Scenario: TPP user sees appropriate error message when it returns unknown exception viewing appointments
     Given an unknown exception occurs when I want to view my TPP appointments
     And I am logged in

@@ -92,9 +92,6 @@ Feature: Prescriptions submission Frontend
     | GP System |
     | EMIS      |
     | TPP       |
-  @nativesmoketest
-    Examples:
-    | GP System |
     | VISION    |
 
   Scenario: The EMIS user tries to submit potentially dangerous text for special request
@@ -109,8 +106,7 @@ Feature: Prescriptions submission Frontend
     And I click Confirm and order repeat prescription
     Then I see a message indicating there was an error sending my order
 
-  @nativesmoketest
-  Scenario: The EMIS user should receive an error when they try to order a drug which they're ordered within the last 30 days
+  Scenario: The EMIS user should receive an error when they try to order a drug which they've ordered within the last 30 days
     Given the scenario is submit prescription
     And I am using EMIS GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario

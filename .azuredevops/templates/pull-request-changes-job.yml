@@ -54,11 +54,5 @@ jobs:
             XAMARIN_RE='xamarin'
             set_variable_if_changes_match 'xamarin' "${XAMARIN_RE}"
 
-            IOS_RE="${START_OF_LINE_RE}"'ios/'
-            set_variable_if_changes_match 'ios' "${IOS_RE}"
-
-            ANDROID_RE="${START_OF_LINE_RE}"'android/'
-            set_variable_if_changes_match 'android' "${ANDROID_RE}"
-
         env:
           AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)

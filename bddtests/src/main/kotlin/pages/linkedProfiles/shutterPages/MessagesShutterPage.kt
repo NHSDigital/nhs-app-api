@@ -2,16 +2,16 @@ package pages.linkedProfiles.shutterPages
 
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageObject
-import pages.navigation.HeaderNative
+import pages.navigation.WebHeader
 import pages.sharedElements.expectedPage.ExpectedPageStructure
 
 @DefaultUrl("http://web.local.bitraft.io:3000/linked-profiles/shutter/messages")
 class MessagesShutterPage :  HybridPageObject() {
 
-    private lateinit var headerNative: HeaderNative
+    private lateinit var webHeader: WebHeader
 
     fun isLoaded() {
-        headerNative.waitForPageHeaderText("Messages")
+        webHeader.waitForPageHeaderText("Messages")
     }
 
     fun assertText(patientName: String) {

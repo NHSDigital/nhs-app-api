@@ -11,7 +11,6 @@ import pages.HybridPageObject
 import pages.assertElementNotPresent
 import pages.assertIsVisible
 import pages.clickOnActionContainingText
-import pages.navigation.NavBarNative
 import pages.navigation.WebHeader
 import pages.withNormalisedText
 
@@ -25,9 +24,6 @@ class GenericPageStepDefinitions {
 
     @Steps
     lateinit var home: HomeSteps
-
-    @Steps
-    lateinit var navSteps: NavigationSteps
 
     @When("^I click the '(.*)' button$")
     fun iClickTheButton(buttonText: String) {
@@ -123,18 +119,6 @@ class GenericPageStepDefinitions {
 
         genericPage.getElement("//input[@type='radio'][following-sibling::${label.webDesktopLocator}]")
             .click()
-    }
-
-    @Then("^the (.*) menu button is highlighted")
-    fun iSeeAHighlightedMenuButton(type: String) {
-        Assert.assertTrue(navSteps.hasSelectedTab(NavBarNative.NavBarType.valueOf(type.toUpperCase())))
-    }
-
-    @Then("^none of the menu buttons are highlighted")
-    fun iDoNotSeeAHighlightedMenuButton() {
-        if (home.headerNative.onMobile()) {
-            Assert.assertFalse("Nav bar has highlighted item, expected none", navSteps.hasAnyTabSelected())
-        }
     }
 
     @Then("^the page title is '(.*)'$")

@@ -1,7 +1,6 @@
 package pages
 
 import org.junit.Assert.assertEquals
-import pages.navigation.HeaderNative
 import pages.navigation.WebHeader
 
 open class ErrorPage : HybridPageObject() {
@@ -11,10 +10,8 @@ open class ErrorPage : HybridPageObject() {
     private val subHeaderLocator = String.format(errorTextFinderFormat, "msg-subheader")
     private val messageTextLocator = String.format(errorTextFinderFormat, "msg-text")
     private val extraMessageTextLocator = String.format(errorTextFinderFormat, "msg-extratext")
-    private val backButtonLocator = "//*[@data-purpose='retry-or-back-button']"
     private val desktopBackLinkLocator = "//*[@data-purpose='retry-or-back-button']"
 
-    lateinit var headerNative: HeaderNative
     lateinit var webHeader: WebHeader
 
     val heading = findElementByLocator(headerLocator)
@@ -25,19 +22,12 @@ open class ErrorPage : HybridPageObject() {
 
     private val errorText2 = findElementByLocator(extraMessageTextLocator)
 
-    val button = findElementByLocator(
-            locator = desktopBackLinkLocator,
-            iOSLocator = backButtonLocator,
-            androidLocator = backButtonLocator
-    )
+    val button = findElementByLocator(desktopBackLinkLocator)
 
-    protected fun findElementByLocator(locator: String, iOSLocator: String? = null,
-                                       androidLocator: String? = null): HybridPageElement {
+    protected fun findElementByLocator(locator: String): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = locator,
-                iOSLocator = iOSLocator,
-                androidLocator = androidLocator,
-                page = this
+            webDesktopLocator = locator,
+            page = this
         )
     }
 

@@ -7,10 +7,9 @@ import pages.HybridPageObject
 
 class FrontendErrorVerificationStepDefinitions : HybridPageObject() {
     private val errorCode = HybridPageElement(
-            webDesktopLocator = "//*[@id=\"errorCode\"]",
-            androidLocator = null,
-            page = this,
-            helpfulName = "error message"
+        webDesktopLocator = "//*[@id=\"errorCode\"]",
+        page = this,
+        helpfulName = "error message"
     )
 
     @Then("^The reference error and label and prefix is shown as \"([^\"]*)\"$")

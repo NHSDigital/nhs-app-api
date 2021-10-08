@@ -4,17 +4,14 @@ import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.myrecord.factories.MyRecordFactory
 import features.sharedSteps.BrowserSteps
-import features.sharedSteps.NavigationSteps
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
-import org.junit.Assert
 import pages.ErrorDialogPage
 import pages.MedicalRecordGpSessionError
-import pages.navigation.HeaderNative
-import pages.navigation.NavBarNative
+import pages.navigation.WebHeader
 import utils.LinkedProfilesSerenityHelpers
 import utils.ProxySerenityHelpers
 import utils.SerenityHelpers
@@ -30,9 +27,7 @@ open class MedicalRecordStepDefinitions {
     lateinit var login: LoginSteps
     @Steps
     lateinit var home: HomeSteps
-    @Steps
-    lateinit var nav: NavigationSteps
-    private lateinit var headerNative: HeaderNative
+    private lateinit var webHeader: WebHeader
     private lateinit var errorDialogPage: ErrorDialogPage
     private lateinit var medicalRecordGpSessionError: MedicalRecordGpSessionError
 
@@ -74,28 +69,12 @@ open class MedicalRecordStepDefinitions {
 
     @When("^I navigate away from the medical record page$")
     fun iNavigateAwayFromTheMedicalRecordPage() {
-        nav.select(NavBarNative.NavBarType.ADVICE)
+        webHeader.clickAdvicePageLink()
     }
 
     @Then("^I see header text is Your GP health record$")
     fun thenISeeHeaderTextIsYourGPHealthRecord() {
-        headerNative.waitForPageHeaderText("Your GP health record")
-    }
-
-    @Then("^I see my record button on the nav bar is highlighted$")
-    fun thenISeeMyRecordButtonOnTheNavBarIsHighlighted() {
-        Assert.assertTrue(nav.hasSelectedTab(NavBarNative.NavBarType.YOUR_HEALTH))
-    }
-
-    @Then("^No navigation menu bar item will be selected$")
-    fun thenNoNavigationMenuBarItemWillBeSelected() {
-        if(headerNative.onMobile()) {
-            Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.ADVICE))
-            Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.APPOINTMENTS))
-            Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.PRESCRIPTIONS))
-            Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.YOUR_HEALTH))
-            Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.MESSAGES))
-        }
+        webHeader.waitForPageHeaderText("Your GP health record")
     }
 
     @Then("^I see appropriate try again error message for gp medical record when there is no GP session$")

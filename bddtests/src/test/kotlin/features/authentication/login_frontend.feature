@@ -10,8 +10,6 @@ Feature: Login frontend
     Then I see my Name on the home page
     And I see my Date of birth on the home page
     And I see my NHS number on the home page
-    And I see the home page header
-    And I see the navigation menu
     And I can see and follow the View your GP health record link
     When I click the home icon
     Then I see the home page
@@ -35,7 +33,6 @@ Feature: Login frontend
     And I am logged in
     Then I see my Name on the home page
 
-  @android
   Scenario: A EMIS user can see the home page after logging in
     Given I am a EMIS patient
     And I am logged in
@@ -43,7 +40,6 @@ Feature: Login frontend
     And I see my Date of birth on the home page
     And I see my NHS number on the home page
     And I see the home page header
-    And I see the navigation menu
     And I can see and follow the View your GP health record link
     When I click the home icon
     Then I see the home page
@@ -128,13 +124,6 @@ Feature: Login frontend
       | TPP       |
       | VISION    |
 
-  @pending
-  @nativesmoketest
-  Scenario: Any user sees the current app version on the login page
-    Given I am at the login page
-    And I see the login page
-    Then I see the current app version
-
   Scenario Outline: A <GP System> user can log in, log out, and log in again
     Given I am logged in as a <GP System> user
     Then I see the home page
@@ -164,14 +153,6 @@ Feature: Login frontend
     When I see the home page
     Then I can cycle through the header links
 
-  @nativesmoketest
-  Scenario: A EMIS user on a native device can cycle the header links
-    Given I am logged in as a EMIS user
-    And I have no booked appointments for EMIS
-    And I have no repeat prescriptions
-    When I see the home page
-    Then I can cycle through the native header links
-
   @manual
   # to enable survey link change HOTJAR_SURVEY_VISIBLE env variable value
   Scenario Outline: A <GP System> user sees a survey link on the home page if enabled
@@ -195,14 +176,6 @@ Feature: Login frontend
       | TPP    |
       | VISION |
 
-  @native
-  @pending
-  Scenario: Any user can click the help icon on the login page
-    Given I am at the login page
-    And I see the help icon on the login page
-    When I click the help icon on the login page
-    Then a new tab has been opened by the link
-
   Scenario Outline: A <GP System> user that is 13 years old can log in
     Given I attempt to log in as a <GP System> user that is 13
     Then I see the home page
@@ -217,8 +190,7 @@ Feature: Login frontend
     When I attempt biometric login and fail
     Then I see the login biometric error page is displayed
 
-#502
-  @nativesmoketest
+  #502
   Scenario: CitizenID login is successful but EMIS session cannot be established
     Given I am logged into Citizen ID but EMIS session cannot be established
     Then the Terms and Conditions page is displayed
@@ -248,7 +220,6 @@ Feature: Login frontend
     Given I am a user who cannot view care plans from Patients Know Best and has an IM1 Medical Record journey
     And I am logged in
     And I see the home page header
-    And I see the navigation menu
     And I can see and follow the View your GP health record link
     Then the Medical Record Warning Page is displayed
 

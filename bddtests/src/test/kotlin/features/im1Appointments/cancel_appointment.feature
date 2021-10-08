@@ -4,7 +4,6 @@ Feature: Cancel Appointments Frontend
 
   #This test covers navigation via buttons/links
 
-  @nativesmoketest
   Scenario: An EMIS user is presented with the cancel appointment screen with a drop-down
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
@@ -16,7 +15,6 @@ Feature: Cancel Appointments Frontend
 
 # These tests navigate directly to the pages where the features are to be tested, to save time.
 
-  @nativesmoketest
   Scenario Outline: <GP System> user is presented with the cancel appointment screen with a drop-down
     Given I have upcoming appointments before cutoff time for <GP System>
     And I am logged in
@@ -117,12 +115,9 @@ Feature: Cancel Appointments Frontend
     Then the Your Appointments page is displayed
     Examples:
       | GP System |
+      | EMIS      |
       | TPP       |
       | VISION    |
-    @nativesmoketest
-    Examples:
-      | GP System |
-      | EMIS      |
 
   #403
   Scenario Outline: A <GP System> user sees appropriate error message when it is not allowed to cancel

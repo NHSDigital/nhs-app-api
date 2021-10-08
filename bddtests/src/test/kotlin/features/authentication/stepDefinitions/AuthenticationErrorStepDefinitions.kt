@@ -7,7 +7,6 @@ import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.myrecord.factories.DemographicsFactory
 import features.sharedSteps.BrowserSteps
-import features.sharedSteps.NavigationSteps
 import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journeys.termsAndConditions.TermsAndConditionsJourneyFactory
@@ -27,8 +26,6 @@ class AuthenticationErrorStepDefinitions {
     lateinit var home: HomeSteps
     @Steps
     lateinit var login: LoginSteps
-    @Steps
-    lateinit var nav: NavigationSteps
     @Steps
     lateinit var webHeader: WebHeader
 

@@ -2,7 +2,6 @@ package features.im1Appointments.steps
 
 import constants.Supplier
 import features.authentication.steps.LoginSteps
-import features.sharedSteps.NavigationSteps
 import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
 import mocking.models.Mapping
 import mocking.stubs.appointments.factories.AppointmentsCancellingFactory
@@ -31,8 +30,6 @@ open class CancelAppointmentSteps {
 
     @Steps
     lateinit var login: LoginSteps
-    @Steps
-    lateinit var navigation: NavigationSteps
     lateinit var webHeader: WebHeader
     lateinit var cancelAppointmentPage: CancelAppointmentPage
 

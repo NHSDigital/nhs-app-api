@@ -41,7 +41,6 @@ function validate_secret {
 }
 
 validate_secret android-debug-store-file
-validate_secret android-development.gradle
 validate_secret android_keystore.password
 validate_secret auth_signing_private_key.pem
 validate_secret auth_signing_rsapass.password

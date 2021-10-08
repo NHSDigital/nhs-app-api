@@ -1,15 +1,15 @@
 package pages.appointments
 
 import pages.HybridPageObject
-import pages.navigation.HeaderNative
+import pages.navigation.WebHeader
 import pages.sharedElements.expectedPage.ExpectedPageStructure
 
 class InformaticaAppointmentsPage : HybridPageObject() {
 
-    private lateinit var headerNative: HeaderNative
+    private lateinit var webHeader: WebHeader
 
     fun isLoaded() {
-        headerNative.waitForPageHeaderText("Service unavailable")
+        webHeader.waitForPageHeaderText("Service unavailable")
     }
 
     fun assertInformaticaAppointmentsPageVisible() {

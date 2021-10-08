@@ -7,7 +7,6 @@ open class ContactYourGPPage : HybridPageObject() {
 
     private val pageTitle = HybridPageElement(
         webDesktopLocator = "//h1[contains(text(),\"Contact your GP surgery for non-repeat prescription requests\")]",
-        androidLocator = null,
         page = this,
         helpfulName = "Contact your GP Title"
     )

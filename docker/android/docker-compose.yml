@@ -1,11 +1,6 @@
 version: "3.4"
 
 services:
-
-  web.local.bitraft.io:
-    env_file:
-      - ./docker/android/env/web.env
-
   dns:
     image: andyshinn/dnsmasq:2.78
     ports:

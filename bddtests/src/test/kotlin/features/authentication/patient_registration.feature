@@ -13,7 +13,6 @@ Feature: Patient Registration Frontend
       | TPP       |
       | VISION    |
 
-  @ios
   Scenario Outline: <GP System> User launches and completes account creation from web
     Given I have completed <GP System> account creation
     Then the Terms and Conditions page is displayed
@@ -24,14 +23,9 @@ Feature: Patient Registration Frontend
     And I click the 'Continue' button
     Then I see the signed in home page
     And I see my Name on the home page
-    And I see the navigation menu
     And I see the home page header
-
-    Examples:
-      | GP System |
-      | TPP       |
-      | VISION    |
-  @nativesmoketest
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
+      | VISION    |

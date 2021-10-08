@@ -21,9 +21,8 @@ open class ForbiddenError: HybridPageObject() {
 
    fun setupElement(headerText: String): HybridPageElement{
         return HybridPageElement(
-                webDesktopLocator = "//h2[contains(text(),'$headerText')]",
-                androidLocator = null,
-                page = this
+            webDesktopLocator = "//h2[contains(text(),'$headerText')]",
+            page = this
         )
     }
 }

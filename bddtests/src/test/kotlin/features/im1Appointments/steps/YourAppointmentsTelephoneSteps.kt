@@ -6,14 +6,12 @@ import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.appointments.YourAppointmentsPage
 import pages.assertIsDisplayed
-import pages.navigation.HeaderNative
 
 open class YourAppointmentsTelephoneSteps {
 
     lateinit var yourAppointmentsPage: YourAppointmentsPage
     @Steps
     lateinit var yourAppointmentsUiSteps: YourAppointmentsUISteps
-    lateinit var headerNative: HeaderNative
 
     private val upcomingPhoneMessage = "We will call you on"
     private val pastPhoneMessage = "The number you gave us was"

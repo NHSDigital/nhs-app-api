@@ -9,8 +9,6 @@ Feature: Demographics Frontend - Medical Record v2
     When I click the 'Continue' button
     And I see header text is Your GP health record
     Then I see the expected demographics information - Medical Record v2
-    And I see my record button on the nav bar is highlighted
-
     Examples:
       | GP System |
       | EMIS      |

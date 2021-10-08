@@ -12,8 +12,6 @@ import pages.loggedOut.LoginPage
 import utils.GlobalSerenityHelpers
 import utils.getOrNull
 import utils.set
-import webdrivers.isAndroid
-import webdrivers.isIOS
 import webdrivers.options.ChromeOptionManager
 import webdrivers.options.OptionManager
 import webdrivers.options.nojs.NoJsOption
@@ -59,7 +57,7 @@ open class BrowserSteps {
     }
 
     private fun openPage(page: HybridPageObject) {
-        if (!page.onMobile() && OptionManager.instance().isEnabled(NoJsOption::class)) {
+        if (OptionManager.instance().isEnabled(NoJsOption::class)) {
             page.open()
             val optionManager = OptionManager.instance()
             optionManager.getOptions().forEach {
@@ -185,8 +183,6 @@ open class BrowserSteps {
     }
 
     private fun getWindowHandleCount(currentDriver: WebDriver): Int {
-        return if (!currentDriver.isIOS() && !currentDriver.isAndroid()) {
-            currentDriver.windowHandles.count()
-        } else 0
+        return currentDriver.windowHandles.count()
     }
 }

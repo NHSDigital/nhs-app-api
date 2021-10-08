@@ -11,7 +11,6 @@ steps:
     timeoutInMinutes: 180
     env:
       AZURE_NOTIFICATION_HUBS__0__AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY: $(azure.notification.hub.shared.access.key)
-      BROWSERSTACK_ACCESS_KEY: $(browserstack.access.key)
     inputs:
       scriptPath: bddtests/buildscripts/$(tests.script)
 

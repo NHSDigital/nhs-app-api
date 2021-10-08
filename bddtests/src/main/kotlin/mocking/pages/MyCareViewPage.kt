@@ -7,9 +7,8 @@ import pages.assertIsVisible
 class MyCareViewPage: HybridPageObject() {
 
     private val pageTitle = HybridPageElement(
-            webDesktopLocator = "//h1",
-            androidLocator = null,
-            page = this
+        webDesktopLocator = "//h1",
+        page = this
     ).withText("My Care View")
 
     fun assertTitleVisible() {

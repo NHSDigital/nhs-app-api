@@ -31,9 +31,8 @@ class PatientPracticeDownloadAttachmentPage: HybridPageObject() {
 
     private fun pageElement(xPath: String): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = xPath,
-                androidLocator = null,
-                page = this)
+            webDesktopLocator = xPath,
+            page = this)
     }
 
     private fun getParagraph(paragraphId: String) : HybridPageElement {

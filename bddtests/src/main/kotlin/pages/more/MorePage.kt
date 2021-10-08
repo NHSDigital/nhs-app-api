@@ -12,25 +12,20 @@ class MorePage : HybridPageObject() {
     private val listMenuPath = "//ul[@data-purpose='more-menu']//li//a/div/h2"
 
     val signOutButton = HybridPageElement(
-            webDesktopLocator = "//a[@id='account-logout']",
-            iOSLocator = "//button[@id='signout-button']",
-            androidLocator = "//button[@id='signout-button']",
-            page = this
+        webDesktopLocator = "//a[@id='account-logout']",
+        page = this
     )
 
     val signOutButtonMobile = HybridPageElement(
-            webDesktopLocator = "//button[@id='signout-button']",
-            iOSLocator = "//button[@id='signout-button']",
-            androidLocator = "//button[@id='signout-button']",
-            page = this
+        webDesktopLocator = "//button[@id='signout-button']",
+        page = this
     )
 
     private fun link(linkText: String): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "$listMenuPath${String.format(containsTextXpathSubstring, linkText)}",
-                androidLocator = null,
-                page = this,
-                helpfulName = "$linkText Link")
+            webDesktopLocator = "$listMenuPath${String.format(containsTextXpathSubstring, linkText)}",
+            page = this,
+            helpfulName = "$linkText Link")
     }
 
     val linkedProfilesLink = link("Linked profiles")
@@ -99,11 +94,9 @@ class MorePage : HybridPageObject() {
     fun getHeaderElement(title: String): HybridPageElement {
         val locator = "//h2[contains(text(),\"$title\")]"
         return HybridPageElement(
-                webDesktopLocator = locator,
-                androidLocator = locator,
-                iOSLocator = locator,
-                page = this,
-                helpfulName = title
+            webDesktopLocator = locator,
+            page = this,
+            helpfulName = title
         )
     }
 }

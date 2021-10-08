@@ -21,13 +21,10 @@ class OrganDonationChoicePage : OrganDonationBasePage() {
 
     private fun button(option: String, description: String): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "//button[descendant::*[contains(text(),\"$option\")]]" +
-                        "//p[contains(text(),'$description')]",
-                webMobileLocator = "//button[descendant::*[contains(text(),\"$option\")]]" +
-                        "//p[contains(text(),'$description')]",
-                androidLocator = null,
-                page = this,
-                helpfulName = "$option option"
+            webDesktopLocator = "//button[descendant::*[contains(text(),\"$option\")]]" +
+                    "//p[contains(text(),'$description')]",
+            page = this,
+            helpfulName = "$option option"
         )
     }
 

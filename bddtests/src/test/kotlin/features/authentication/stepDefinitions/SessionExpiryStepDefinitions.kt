@@ -20,9 +20,7 @@ import utils.getOrFail
 import utils.set
 import worker.WorkerClient
 import worker.models.session.UserSessionRequest
-import java.time.LocalDateTime
 
-private const val DELAY_SECONDS_FOR_WAITING = 2000L
 private const val DELAY_BEFORE_RESUME = 10_000L
 
 class SessionExpiryStepDefinitions  {
@@ -74,18 +72,8 @@ class SessionExpiryStepDefinitions  {
 
     @When("^I am idle long enough for the session to expire$")
     fun iAmIdleLongEnoughForTheSessionToExpire() {
-        when(sessionExpiry.onMobile()){
-            false -> {
-                sessionExpiry.waitForSessionExpiryAfterModalDisplay()
-            }
-            true -> {
-                sessionExpiry.waitForSessionExpiry()
-            }
-        }
+        sessionExpiry.waitForSessionExpiryAfterModalDisplay()
     }
-
-    @When("^I am idle long enough for the session to expire after the dialog$")
-    fun iAmIdleLongEnoughForTheSessionToExpireAfterTheDialog() = sessionExpiry.waitForSessionExpiryAfterModalDisplay()
 
     @Given("^I allow my session to expire$")
     fun givenIAllowMySessionToExpire() {
@@ -107,24 +95,6 @@ class SessionExpiryStepDefinitions  {
     @When("^I am idle long enough for the session expiry dialog box to appear$")
     fun iAmIdleLongEnoughForSessionExpiryDialog() = sessionExpiry.waitForSessionExpiryModal()
 
-    @When("^I take note of the current time as when the session was last refreshed")
-    fun iTakeNoteOfTheCurrentTimeAsWhenTheSessionWasLastRefreshed()
-            = GlobalSerenityHelpers.NOTED_SESSION_LAST_REFRESHED_TIME.set(LocalDateTime.now())
-
-    @When("^I am idle long enough " +
-            "after the time I noted the session was refreshed " +
-            "for the session expiry dialog box to appear$")
-    fun iAmIdleLongEnoughAfterTheTimeINotedTheSessionWasRefreshedForSessionExpiryDialog() {
-        val from = GlobalSerenityHelpers.NOTED_SESSION_LAST_REFRESHED_TIME.getOrFail<LocalDateTime>()
-        sessionExpiry.waitForSessionExpiryModal(from)
-    }
-
-    @When("^I am idle long enough on a secure page for the session expiry dialog box to appear$")
-    fun iAmIdleLongEnoughOnASecurePageForSessionExpiryDialog() {
-        sessionExpiry.waitForSessionExpiryModal()
-        sessionExpiry.assertIsDisplayed()
-    }
-
     @Then("^I see the login page with the session expiry notification$")
     fun iSeeTheLoginPageWithTheSessionExpiryNotification() {
         login.loginPage.shouldBeDisplayed()
@@ -141,25 +111,8 @@ class SessionExpiryStepDefinitions  {
         sessionExpiry.assertIsNotDisplayed()
     }
 
-    @Then("^I background the app long enough for the session warning dialog to appear and bring it back to foreground$")
-    fun iBackgroundTheAppForDialog() = sessionExpiry.backgroundAppUntilSessionExpiryModalShouldBeDisplayed()
-
-    @Then("^I background the app long enough for the session expiry and bring it back to foreground$")
-    fun iBackgroundTheAppForSessionExpiry() = sessionExpiry.backgroundAppUntilSessionExpiry()
-
-    @Then("^I lock the device$")
-    fun iLockTheDevice() = sessionExpiry.lockDevice()
-
-    @Then("^I unlock the device$")
-    fun iUnlockTheDevice() {
-        Thread.sleep(DELAY_SECONDS_FOR_WAITING)
-        sessionExpiry.unlockDevice()
-        Thread.sleep(DELAY_SECONDS_FOR_WAITING)
-    }
-
     @Then("^I am idle for a short time$")
     fun iamIdleBeforeResume() {
         Thread.sleep(DELAY_BEFORE_RESUME)
-        sessionExpiry.tryUnlockDevice()
     }
 }

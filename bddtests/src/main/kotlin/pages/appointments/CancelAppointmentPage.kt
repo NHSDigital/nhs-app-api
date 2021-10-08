@@ -18,22 +18,19 @@ class CancelAppointmentPage : AppointmentSharedElementsPage() {
             "as possible to let them know you need to cancel."
 
     private val checkDetailsText = HybridPageElement(
-            webDesktopLocator = "//div[@data-purpose='info']/p",
-            androidLocator = null,
-            page = this
+        webDesktopLocator = "//div[@data-purpose='info']/p",
+        page = this
     )
 
     private val dropDownMenuLabel = HybridPageElement(
-            webDesktopLocator = "//label[@for='txt_reason']",
-            androidLocator = null,
-            page = this
+        webDesktopLocator = "//label[@for='txt_reason']",
+        page = this
     )
 
     val dropDownMenu = HybridPageElement(
-            webDesktopLocator = "//select[@id='txt_reason']",
-            androidLocator = null,
-            page = this,
-            helpfulName = "dropdown menu"
+        webDesktopLocator = "//select[@id='txt_reason']",
+        page = this,
+        helpfulName = "dropdown menu"
     )
 
     override val titleText: String = "Cancel GP appointment"

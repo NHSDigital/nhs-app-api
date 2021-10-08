@@ -12,20 +12,18 @@ import pages.withoutRetrying
 class YourAppointmentsPage : AppointmentSharedElementsPage() {
 
     val upcomingAppointmentsHeading = HybridPageElement(
-            webDesktopLocator = "//h2[normalize-space(text())='Upcoming appointments']",
-            page = this
+        webDesktopLocator = "//h2[normalize-space(text())='Upcoming appointments']",
+        page = this
     )
 
     val pastAppointmentsHeading = HybridPageElement(
-            webDesktopLocator = "//h2[normalize-space(text())='Past appointments']",
-            page = this
+        webDesktopLocator = "//h2[normalize-space(text())='Past appointments']",
+        page = this
     )
 
     val bookButton = HybridPageElement(
-            webDesktopLocator = "//*[@id='book-appointments-button']",
-            androidLocator = "//*[@id='book-appointments-button']",
-            iOSLocator = "//*[@id='book-appointments-button']",
-            page = this
+        webDesktopLocator = "//*[@id='book-appointments-button']",
+        page = this
     )
 
     private val actualNoUpcomingText = HybridPageElement(

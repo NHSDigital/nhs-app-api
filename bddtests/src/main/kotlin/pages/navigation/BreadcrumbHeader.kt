@@ -14,17 +14,15 @@ open class BreadcrumbHeader : HybridPageObject() {
 
     fun assertVisible() {
         HybridPageElement(
-                webDesktopLocator = breadcrumbContainerXPath,
-                webMobileLocator = breadcrumbContainerXPath,
-                page = this
+            webDesktopLocator = breadcrumbContainerXPath,
+            page = this
         ).assertIsVisible()
     }
 
     fun assertNotPresent() {
         HybridPageElement(
-                webDesktopLocator = breadcrumbContainerXPath,
-                webMobileLocator = breadcrumbContainerXPath,
-                page = this
+            webDesktopLocator = breadcrumbContainerXPath,
+            page = this
         ).assertElementNotPresent()
     }
 
@@ -47,9 +45,8 @@ open class BreadcrumbHeader : HybridPageObject() {
 
     private fun getAllBreadcrumbLinks(): List<WebElementFacade> {
         return HybridPageElement(
-                webDesktopLocator = breadcrumbLinksXPath,
-                webMobileLocator = breadcrumbLinksXPath,
-                page = this
+            webDesktopLocator = breadcrumbLinksXPath,
+            page = this
         ).elements
     }
 }

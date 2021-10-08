@@ -25,10 +25,9 @@ open class AppointmentHubPage : HybridPageObject() {
             .addLink(olcAdminHelpTitle, olcAdminHelpDescription)
 
     private val pageTitle = HybridPageElement(
-            webDesktopLocator = "//h1[contains(text(),\"Appointments\")]",
-            androidLocator = null,
-            page = this,
-            helpfulName = "Appointments Hub Title"
+        webDesktopLocator = "//h1[contains(text(),\"Appointments\")]",
+        page = this,
+        helpfulName = "Appointments Hub Title"
     )
 
     val links by lazy { LinksElement(this, content) }

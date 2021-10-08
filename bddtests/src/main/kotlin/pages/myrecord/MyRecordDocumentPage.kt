@@ -5,9 +5,7 @@ import pages.HybridPageElement
 
 class MyRecordDocumentPage : HybridPageObject() {
 
-    val document =
-            HybridPageElement(
-                    webDesktopLocator = "//div[@id='document']",
-                    androidLocator = null,
-                    page = this)
+    val document = HybridPageElement(
+        webDesktopLocator = "//div[@id='document']",
+        page = this)
 }

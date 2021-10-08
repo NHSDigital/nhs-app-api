@@ -2,24 +2,8 @@
 Feature: View prescriptions Frontend
   A user can view information about their prescriptions after logging in
 
-  #This test covers navigation via buttons/links
-
-  @nativesmoketest
-  Scenario Outline: <GP System> patient selects the prescriptions menu button
-    Given I am a patient using the <GP System> GP System
-    And I have 1 past repeat prescriptions
-    And each repeat prescription contains 1 courses of which 1 are repeats
-    And I am logged in
-    And I navigate to prescriptions
-    Then the Prescriptions Hub page is displayed
-    And the prescriptions menu button is highlighted
-    Examples:
-      | GP System |
-      | EMIS      |
-
   # These tests navigate directly to the pages where the features are to be tested, to save time.
 
-  @nativesmoketest
   Scenario Outline: <GP System> patient with no past repeat prescriptions
     Given I am a patient using the <GP System> GP System
     And I have 0 past repeat prescriptions
@@ -46,7 +30,6 @@ Feature: View prescriptions Frontend
       | EMIS      |
 
   @smoketest
-  @nativesmoketest
   Scenario Outline: <GP System> patient who has multiple prescription each containing one course
     Given I am a patient using the <GP System> GP System
     And I have 3 past repeat prescriptions
@@ -113,17 +96,13 @@ Feature: View prescriptions Frontend
     And I click the View Orders link
     Then I see 2 prescriptions
 
-  @nativesmoketest
-  Scenario Outline: The <GP System> User clicks on the Prescriptions button and the service is disabled at a GP Practice level
-    Given I am a patient using the <GP System> GP System
+  Scenario: The TPP User clicks on the Prescriptions button and the service is disabled at a GP Practice level
+    Given I am a patient using the TPP GP System
     And prescriptions is disabled at a GP Practice level
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
     And I click 'Order a prescription'
     Then I see a message informing me that I don't currently have access to this service
-    Examples:
-      | GP System |
-      | TPP       |
 
   Scenario Outline: A <GP System> user with historic prescriptions with missing quantity info
     Given I am a patient using the <GP System> GP System

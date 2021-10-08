@@ -17,10 +17,9 @@ class BannerObject private constructor(private val page : HybridPageObject,
     private val containerXPath = "//div[$innerXPath]"
 
     private val container = HybridPageElement(
-            containerXPath,
-            webMobileLocator = containerXPath,
-            page = page,
-            helpfulName = "$title Banner Container")
+        containerXPath,
+        page = page,
+        helpfulName = "$title Banner Container")
 
     fun assertVisible(expectedText: String) {
         assertVisible(arrayListOf(expectedText))

@@ -14,9 +14,6 @@ open class MessagesBasePage : HybridPageObject() {
         val path = "//h1[contains(normalize-space(), '$sender')]//span[contains(normalize-space(), '$titleText:')]"
         val header = HybridPageElement(
             path,
-            path,
-            null,
-            null,
             this,
             helpfulName = "header")
         header.waitForElement()

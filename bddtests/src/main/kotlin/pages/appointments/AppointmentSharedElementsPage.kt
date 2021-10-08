@@ -8,7 +8,7 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.navigation.HeaderNative
+import pages.navigation.WebHeader
 import pages.withoutRetrying
 import worker.models.ErrorCodeParagraph
 import java.text.SimpleDateFormat
@@ -49,13 +49,12 @@ abstract class AppointmentSharedElementsPage : HybridPageObject() {
     private val appointmentTelephoneXPath = String.format(dataLabelXpath, "phone number")
 
     private val selectedAppointmentParentXpath = "//div[@data-purpose='appointment-info']"
-    lateinit var headerNative: HeaderNative
+    lateinit var webHeader: WebHeader
 
     val reasonError = HybridPageElement(
-            webDesktopLocator = "//*[@data-purpose='reason-error']",
-            androidLocator = null,
-            page = this,
-            helpfulName = "Reason Error"
+        webDesktopLocator = "//*[@data-purpose='reason-error']",
+        page = this,
+        helpfulName = "Reason Error"
     )
 
     val phoneConfirmation = HybridPageElement(
@@ -85,7 +84,7 @@ abstract class AppointmentSharedElementsPage : HybridPageObject() {
     }
 
     fun assertPageFullyLoaded() {
-        headerNative.getPageTitle(titleText!!)
+        webHeader.waitForPageHeaderText(titleText!!)
     }
 
     fun getDateTimestampsOfSlots(appointmentListParentXpath: String): List<Long> {

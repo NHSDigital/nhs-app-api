@@ -1,6 +1,5 @@
 package features.dataSharing.stepDefinitions
 
-import config.Config
 import constants.Supplier
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
@@ -16,7 +15,6 @@ import pages.ndop.MakeChoiceDataSharingPage
 import pages.ndop.NdopPage
 import pages.ndop.OverviewDataSharingPage
 import utils.SerenityHelpers
-import java.net.URL
 
 class DataSharingStepDefinitions {
     private lateinit var overviewPage: OverviewDataSharingPage
@@ -70,9 +68,6 @@ class DataSharingStepDefinitions {
 
     @Then("^the NDOP website is displayed$")
     fun iAmOnTheNDOPWebsite() {
-        if(ndopPage.onMobile()){
-            URL(Config.instance.dataPreferencesUrl)
-        }
         ndopPage.assertTokenIsDisplayed()
     }
 

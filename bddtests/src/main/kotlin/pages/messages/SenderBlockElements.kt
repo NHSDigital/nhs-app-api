@@ -36,7 +36,6 @@ class SenderBlockElements(private val page: HybridPageObject) {
         val locator = "//ul[@id='inboxMessages']/li/a"
         val messagesLocator = HybridPageElement(
             locator,
-            locator,
             page = page,
             helpfulName = "Messages",
             timeToWaitForElement = 100

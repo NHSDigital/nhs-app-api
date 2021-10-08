@@ -23,7 +23,7 @@ Feature: Session Expiry and Extend for Desktop
     Then the Appointment Slot page is displayed
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button
-    Then the Appointment Booking success message is displayed
+    Then the Appointment Booking success page is displayed
 
   Scenario: Before session expiry, on a secure screen, is prompted with the session extension dialog box, opts to logout
     Given there are EMIS appointments available to book

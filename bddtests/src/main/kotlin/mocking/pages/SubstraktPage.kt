@@ -7,9 +7,8 @@ import pages.assertIsVisible
 class SubstraktPage: HybridPageObject() {
 
     private val pageTitle = HybridPageElement(
-            webDesktopLocator = "//h1",
-            androidLocator = null,
-            page = this
+        webDesktopLocator = "//h1",
+        page = this
     ).withText("Substrakt")
 
     fun assertTitleVisible() {

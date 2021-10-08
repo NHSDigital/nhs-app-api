@@ -22,10 +22,9 @@ class LoginSettingsErrorPage : HybridPageObject() {
     fun assertCannotFindContentDisplayed(biometricType: String) {
         val text by lazy {
             HybridPageElement(
-                    cannotFindTextLocator,
-                    cannotFindTextLocator,
-                    page = this,
-                    helpfulName = "information")
+                cannotFindTextLocator,
+                page = this,
+                helpfulName = "information")
         }
         when (biometricType) {
             "Touch ID" -> {
@@ -63,18 +62,16 @@ class LoginSettingsErrorPage : HybridPageObject() {
 
         val firstParagraph by lazy {
             HybridPageElement(
-                    firstParagraphLocator,
-                    firstParagraphLocator,
-                    page = this,
-                    helpfulName = "informationParaOne")
+                firstParagraphLocator,
+                page = this,
+                helpfulName = "informationParaOne")
         }
 
         val secondParagraph by lazy {
             HybridPageElement(
-                    secondParagraphLocator,
-                    secondParagraphLocator,
-                    page = this,
-                    helpfulName = "informationParaTwo")
+                secondParagraphLocator,
+                page = this,
+                helpfulName = "informationParaTwo")
         }
 
         firstParagraph.assertIsVisible()
@@ -103,10 +100,9 @@ class LoginSettingsErrorPage : HybridPageObject() {
     private fun getTitle(titleLocator: String): HybridPageElement {
         val title by lazy {
             HybridPageElement(
-                    titleLocator,
-                    titleLocator,
-                    page = this,
-                    helpfulName = "header")
+                titleLocator,
+                page = this,
+                helpfulName = "header")
         }
         return title
     }

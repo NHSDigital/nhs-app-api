@@ -53,10 +53,9 @@ class LoginSettingsPage : HybridPageObject() {
     private fun getTitle(titleLocator: String): HybridPageElement {
         val title by lazy {
             HybridPageElement(
-                    titleLocator,
-                    titleLocator,
-                    page = this,
-                    helpfulName = "header")
+                titleLocator,
+                page = this,
+                helpfulName = "header")
         }
         return title
     }

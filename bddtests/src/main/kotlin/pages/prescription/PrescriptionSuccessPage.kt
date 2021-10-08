@@ -9,11 +9,11 @@ import pages.HybridPageObject
 import pages.asciiText
 import pages.assertElementNotPresent
 import pages.text
-import pages.navigation.HeaderNative
+import pages.navigation.WebHeader
 
 class PrescriptionSuccessPage : HybridPageObject() {
 
-    private lateinit var headerNative: HeaderNative
+    private lateinit var webHeader: WebHeader
 
     private val whatHappensNextHeading = HybridPageElement(
         webDesktopLocator = "//h2[contains(text(),'What happens next')]",
@@ -66,11 +66,11 @@ class PrescriptionSuccessPage : HybridPageObject() {
     )
 
     fun checkSuccessHeading() {
-        headerNative.waitForPageHeaderText("Your prescription has been ordered")
+        webHeader.waitForPageHeaderText("Your prescription has been ordered")
     }
 
     fun checkSuccessHeadingForProxy(name: String) {
-        headerNative.waitForPageHeaderText("$name\'s prescription has been ordered")
+        webHeader.waitForPageHeaderText("$name\'s prescription has been ordered")
     }
 
     fun clickGoToViewOrdersLink() {

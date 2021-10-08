@@ -12,13 +12,12 @@ open class TypeOfPrescriptionsPage : HybridPageObject() {
 
     private val pageTitle = HybridPageElement(
         webDesktopLocator = "//h1[contains(text(),\"What type of prescription do you want to order?\")]",
-        androidLocator = null,
         page = this,
         helpfulName = "Type of Prescriptions Title"
     )
 
     private val continueButton = HybridPageElement(
-        "//button[@id='continue-button']",
+        webDesktopLocator = "//button[@id='continue-button']",
         page = this,
         helpfulName = "Continue button"
     )

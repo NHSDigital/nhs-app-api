@@ -12,9 +12,8 @@ class PatientPracticeMessagingDeleteSuccessPage: HybridPageObject() {
 
     private fun pageElement(xPath: String): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = xPath,
-                androidLocator = null,
-                page = this
+            webDesktopLocator = xPath,
+            page = this
         )
     }
 

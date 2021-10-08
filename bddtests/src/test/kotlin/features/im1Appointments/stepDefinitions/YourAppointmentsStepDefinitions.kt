@@ -18,7 +18,6 @@ import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.ErrorDialogPage
-import pages.appointments.AddToCalendarInterruptPage
 import pages.AppointmentHubPage
 import pages.AppointmentsForbiddenError
 import pages.AppointmentsGpSessionError
@@ -43,8 +42,6 @@ class YourAppointmentsStepDefinitions {
     lateinit var yourAppointmentsUISteps: YourAppointmentsUISteps
     @Steps
     lateinit var bookingSuccessPage: BookingSuccessPage
-    @Steps
-    lateinit var addToCalendarInterruptPage: AddToCalendarInterruptPage
     @Steps
     lateinit var cancelSuccessPage: CancellingSuccessPage
     @Steps
@@ -101,7 +98,6 @@ class YourAppointmentsStepDefinitions {
 
     @When("^I select \"([^\"]*)\" button$")
     fun whenISelectButton(buttonText: String) {
-        yourAppointmentsUISteps.yourAppointmentsPage.locatorMethods.waitForNativeStepToComplete()
         yourAppointmentsUISteps.yourAppointmentsPage.clickOnButtonContainingText(buttonText)
     }
 
@@ -121,34 +117,11 @@ class YourAppointmentsStepDefinitions {
         appointmentsConfirmationSteps.checkAppointmentDetails()
     }
 
-    @Then("^the Appointment Booking success message is displayed$")
-    fun appointmentBookingSuccessMessage() {
-        yourAppointmentsUISteps.yourAppointmentsPage.
-                locatorMethods.assertNativeElementsLoaded(yourAppointmentsUISteps.yourAppointmentsPage.bookButton)
-        bookingSuccessPage.checkBookingSuccessMessage()
-        bookingSuccessPage.checkAppointmentDetails()
-    }
-
     @Then("^the Appointment Booking success page is displayed$")
     fun appointmentBookingSuccessPage() {
         bookingSuccessPage.checkBookingSuccessMessage()
         yourAppointmentsUISteps.checkBackToAppointmentsLink()
         bookingSuccessPage.checkAppointmentDetails()
-    }
-
-    @Then("^I click on the Add to calendar link$")
-    fun iClickOnTheAddToCalendarLink() {
-        bookingSuccessPage.clickAddToCalendarLink()
-    }
-
-    @Then("^the Add to calendar interrupt page is displayed$")
-    fun addToCalendarInterruptPageIsShown() {
-        addToCalendarInterruptPage.checkAddToCalendarMessage()
-    }
-
-    @Then("^I click on the Add to calendar button$")
-    fun iClickOnTheAddToCalendarButton() {
-        addToCalendarInterruptPage.clickAddToCalendarButton()
     }
 
     @Then("^the Appointment Cancel success page is displayed$")
@@ -193,8 +166,7 @@ class YourAppointmentsStepDefinitions {
 
     @Then("^the Your Appointments page is displayed$")
     fun iWillBeOnTheMyAppointmentsScreen() {
-        yourAppointmentsUISteps.yourAppointmentsPage.
-                locatorMethods.assertNativeElementsLoaded(yourAppointmentsUISteps.yourAppointmentsPage.bookButton)
+        yourAppointmentsUISteps.yourAppointmentsPage.bookButton.assertIsVisible()
         iCanBookAnAppointment()
         thePageTitleIsYourAppointments()
     }

@@ -11,7 +11,6 @@ import features.myrecord.factories.MyRecordFactory
 import features.navigation.steps.NavHeaderSteps
 import features.prescriptions.stepDefinitions.PrescriptionsDataSetup
 import features.sharedSteps.BrowserSteps
-import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
 import mocking.data.nhsAzureSearchData.NhsAzureSearchData
 import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
@@ -45,8 +44,6 @@ class LinkedProfilesStepDefinitions {
     lateinit var browser: BrowserSteps
     @Steps
     lateinit var login: LoginSteps
-    @Steps
-    lateinit var nav: NavigationSteps
     @Steps
     lateinit var navHeader: NavHeaderSteps
 

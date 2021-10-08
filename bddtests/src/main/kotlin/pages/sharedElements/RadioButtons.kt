@@ -69,10 +69,9 @@ class RadioButtons private constructor(private val page: HybridPageObject, priva
         private fun getButtons(page: HybridPageObject, locator: String)
                 : List<RadioButton> {
             return HybridPageElement(
-                    locator,
-                    locator,
-                    page = page,
-                    helpfulName = "Radio Buttons").elements.map { element -> RadioButton(element) }
+                locator,
+                page = page,
+                helpfulName = "Radio Buttons").elements.map { element -> RadioButton(element) }
         }
 
         private const val defaultRadioButtonXPath = "//div[input[@type=\"radio\"]]"

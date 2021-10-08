@@ -20,7 +20,6 @@ export DOCKER_REGISTRY=${DOCKER_REGISTRY:-nhsapp.azurecr.io}
 # Should replace with an image that has just the required software
 export DOCKER_IMAGE_GRADLE=${DOCKER_IMAGE_GRADLE:-$DOCKER_REGISTRY/nhsonline-int-tests-base:jdk8-node12-1.0}
 export DOCKER_IMAGE_CHROME=${DOCKER_IMAGE_CHROME:-$DOCKER_REGISTRY/nhsonline-int-tests-chrome:jdk8-node12-chrome_latest-1.0}
-export DOCKER_IMAGE_BROWSERSTACK_LOCAL=${DOCKER_IMAGE_BROWSERSTACK_LOCAL:-$DOCKER_REGISTRY/nhsonline-browserstack-local:latest}
 
 export DOCKER_IMAGE=${DOCKER_IMAGE_CHROME}
 
@@ -49,8 +48,6 @@ DOCKER_ARGS+=('--shm-size=256m')
 
 export DOCKER_ARGS
 export DOCKER_USER
-
-export NATIVE_APP_PATH_ANDROID=${NATIVE_APP_PATH_ANDROID:-../android/app/build/outputs/apk/browserstack/app-browserstack-unsigned.apk}
 
 export WORKING_DIR
 

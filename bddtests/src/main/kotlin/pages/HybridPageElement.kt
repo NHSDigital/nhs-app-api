@@ -6,7 +6,6 @@ import org.openqa.selenium.Keys
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
 import org.openqa.selenium.WebElement
-import webdrivers.getLocatorStrategy
 
 const val HEADER_HEIGHT_PX = 100
 const val FLOATING_BUTTON_HEIGHT_PX = 78.5
@@ -19,13 +18,10 @@ const val ELEMENT_RETRY_TIME = 1.0
 const val MILLISECONDS_IN_A_SECOND = 1000L
 
 open class HybridPageElement(
-        var webDesktopLocator: String,
-        var webMobileLocator: String = webDesktopLocator,
-        var androidLocator: String? = null,
-        var iOSLocator: String? = null,
-        open val page: HybridPageObject,
-        val helpfulName: String? = null,
-        var timeToWaitForElement: Int = TIME_TO_WAIT_FOR_ELEMENT
+    var webDesktopLocator: String,
+    open val page: HybridPageObject,
+    val helpfulName: String? = null,
+    var timeToWaitForElement: Int = TIME_TO_WAIT_FOR_ELEMENT
 ) {
     var helpfulNameToUse = helpfulName ?: webDesktopLocator
 
@@ -40,11 +36,6 @@ open class HybridPageElement(
         get() {
             return getElements { element -> element }
         }
-
-    fun scrollToElement(): HybridPageElement {
-        actOnTheElement { scrollTo(it) }
-        return this
-    }
 
     open fun click() {
         waitForElementToBecomeVisible().actOnTheElement {
@@ -122,41 +113,26 @@ open class HybridPageElement(
 
     fun withText(text: String, exact: Boolean = true, normalised: Boolean = false): HybridPageElement {
         val textFunc = if (normalised) "normalize-space(text())" else "text()"
-        val textAttribute = if (normalised) "normalize-space(@text)" else "@text"
         return when (exact) {
             true -> {
                 HybridPageElement(
-                        webDesktopLocator = this.webDesktopLocator.plus("[$textFunc=\"$text\"]"),
-                        webMobileLocator = this.webMobileLocator.plus("[$textFunc=\"$text\"]"),
-                        androidLocator = this.androidLocator?.plus("[$textAttribute=\"$text\"]"),
-                        iOSLocator = this.iOSLocator?.plus("[$textAttribute=\"$text\"]"),
-                        helpfulName = this.helpfulNameToUse,
-                        page = this.page,
-                        timeToWaitForElement = this.timeToWaitForElement)
+                    webDesktopLocator = this.webDesktopLocator.plus("[$textFunc=\"$text\"]"),
+                    helpfulName = this.helpfulNameToUse,
+                    page = this.page,
+                    timeToWaitForElement = this.timeToWaitForElement)
             }
             false -> {
                 HybridPageElement(
-                        webDesktopLocator = this.webDesktopLocator.plus("[contains($textFunc,\"$text\")]"),
-                        webMobileLocator = this.webMobileLocator.plus("[$textFunc=\"$text\"]"),
-                        androidLocator = this.androidLocator?.plus("[contains($textAttribute,\"$text\")]"),
-                        iOSLocator = this.iOSLocator?.plus("[contains($textAttribute,\"$text\")]"),
-                        helpfulName = this.helpfulNameToUse,
-                        page = this.page,
-                        timeToWaitForElement = this.timeToWaitForElement)
+                    webDesktopLocator = this.webDesktopLocator.plus("[contains($textFunc,\"$text\")]"),
+                    helpfulName = this.helpfulNameToUse,
+                    page = this.page,
+                    timeToWaitForElement = this.timeToWaitForElement)
             }
         }
     }
 
     fun sendEnterKey() {
         this.waitForElementToBecomeVisible().sendKeys(Keys.ENTER)
-    }
-
-    protected fun setHelpfulNameToUseFromLocator(locator: String) {
-        if (helpfulName != null) {
-            helpfulNameToUse = "$helpfulName ($locator)"
-        } else {
-            helpfulNameToUse = locator
-        }
     }
 
     protected fun scrollTo(elem: Any) {
@@ -172,12 +148,7 @@ open class HybridPageElement(
 
     override fun toString(): String {
         return StringBuilder(HybridPageElement::class.simpleName)
-                .append(" { ")
-                .append("webDesktopLocator: $webDesktopLocator, ")
-                .append("webMobileLocator: $webMobileLocator, ")
-                .append("androidLocator: $androidLocator, ")
-                .append("iOSLocator: $iOSLocator ")
-                .append("}")
+                .append("{ webDesktopLocator: $webDesktopLocator }")
                 .toString()
     }
 
@@ -226,36 +197,14 @@ open class HybridPageElement(
             if (timeToWaitForElement == 0) 1 else (timeToWaitForElement / ELEMENT_RETRY_TIME).toInt()
 
     private fun selectElement(): WebElementFacade {
-        return when (page.driver.getLocatorStrategy(this)) {
-            LocatorStrategy.IOS -> page.findByXpath(iOSLocator!!).also {
-                it.getWrappedElementWithRetry()
+        return page.findByXpath(webDesktopLocator).also {
+            if ((it.isUnderneathFixedElements()).or(!it.isCurrentlyVisible)) {
+                scrollTo(it)
             }
-            LocatorStrategy.ANDROID -> page.findByXpath(androidLocator!!).also {
-                it.getWrappedElementWithRetry()
-            }
-            LocatorStrategy.WEBVIEW,
-            LocatorStrategy.BROWSER_DESKTOP -> page.findByXpath(webDesktopLocator).also {
-                if ((it.isUnderneathFixedElements()).or(!it.isCurrentlyVisible)) {
-                    scrollTo(it)
-                }
-            }
-            LocatorStrategy.BROWSER_MOBILE -> page.findByXpath(webMobileLocator).also {
-                if ((it.isUnderneathFixedElements()).or(!it.isCurrentlyVisible)) {
-                    scrollTo(it)
-                }
-            }
-            else -> throw IllegalArgumentException("Unknown element locator strategy.")
         }
     }
 
     private fun getElementsWithLocatorMethod(): List<WebElementFacade> {
-        return when (page.driver.getLocatorStrategy(this)) {
-            LocatorStrategy.IOS -> page.findAllByXpath(iOSLocator!!)
-            LocatorStrategy.ANDROID -> page.findAllByXpath(androidLocator!!)
-            LocatorStrategy.WEBVIEW,
-            LocatorStrategy.BROWSER_DESKTOP -> page.findAllByXpath(webDesktopLocator)
-            LocatorStrategy.BROWSER_MOBILE -> page.findAllByXpath(webMobileLocator)
-            else -> throw IllegalArgumentException("Unknown element locator strategy.")
-        }
+        return page.findAllByXpath(webDesktopLocator)
     }
 }

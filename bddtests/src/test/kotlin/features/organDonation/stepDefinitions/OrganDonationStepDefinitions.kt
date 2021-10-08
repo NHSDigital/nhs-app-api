@@ -13,7 +13,6 @@ import net.thucydides.core.annotations.Steps
 import org.apache.http.HttpStatus
 import pages.HomePage
 import pages.ErrorDialogPage
-import pages.navigation.HeaderNative
 import pages.organDonation.OrganDonationBasePage
 import pages.organDonation.OrganDonationChoicePage
 import pages.organDonation.OrganDonationFaithModule
@@ -25,7 +24,6 @@ open class OrganDonationStepDefinitions {
     @Steps
     lateinit var browser: BrowserSteps
 
-    lateinit var header: HeaderNative
     lateinit var organDonationChoicePage: OrganDonationChoicePage
 
     lateinit var page: OrganDonationBasePage

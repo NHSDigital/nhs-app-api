@@ -1,3 +1,0 @@
-enum DataDownloadAlertType {
-    case OSNotSupported
-}

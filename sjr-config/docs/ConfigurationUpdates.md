@@ -72,7 +72,7 @@
 3. Run the nhsapp CI pipeline [https://dev.azure.com/nhsapp/NHS%20App/_build?definitionId=4](https://dev.azure.com/nhsapp/NHS%20App/_build?definitionId=4) with the following options:
 
 	*Branch/tag* set to your new tag of `nhsapp`.
-	*Stages to run* with Android Client, iOS Client and Generate Code Coverage *unset*
+	*Stages to run* with any xamarin-related and Generate Code Coverage stages *unset*
 
 4. Run the acr image sync job [https://dev.azure.com/nhsapp/NHS%20App/_build?definitionId=75](https://dev.azure.com/nhsapp/NHS%20App/_build?definitionId=75) with *Image to sync* set to `all`. The *Branch/tag* dropdown can be left on `develop`.
 

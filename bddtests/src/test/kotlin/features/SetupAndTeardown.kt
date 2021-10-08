@@ -12,15 +12,10 @@ import net.serenitybdd.core.Serenity.setSessionVariable
 import net.serenitybdd.screenplay.actors.OnStage
 import net.serenitybdd.screenplay.actors.OnlineCast
 import org.junit.Assert
-import org.openqa.selenium.WebDriver
-import pages.WEB_CONTEXT
 import utils.GlobalSerenityHelpers
 import utils.contains
 import utils.getOrNull
 import utils.set
-import webdrivers.getMobileDriver
-import webdrivers.isAndroid
-import webdrivers.isIOS
 import worker.WorkerClient
 import java.util.logging.Level
 
@@ -73,11 +68,7 @@ class SetupAndTeardown {
     }
 
     private fun assertNoConsoleLogs(scenario: Scenario) {
-        var driver = getWebdriverManager().currentDriver
-
-        if (driver != null && (driver.isAndroid() || driver.isIOS())) {
-            driver = switchWebview(driver)
-        }
+        val driver = getWebdriverManager().currentDriver
 
         Thread.sleep(DELAY_TIME)
 
@@ -101,23 +92,5 @@ class SetupAndTeardown {
     private fun executeTearDownActions() {
         val tearDownActions = GlobalSerenityHelpers.TEAR_DOWN_ACTIONS.getOrNull<List<() -> Unit>>()
         tearDownActions?.forEach { tearDownAction -> tearDownAction.invoke() }
-    }
-
-    private fun switchWebview(currentDriver: WebDriver): WebDriver? {
-        var driver = currentDriver
-        driver = driver.getMobileDriver()
-        if (driver.context.contains(WEB_CONTEXT, ignoreCase = true)) {
-            println("Already in $WEB_CONTEXT context: ${driver.context}")
-        } else {
-            for (context in driver.contextHandles) {
-                if (context.contains(WEB_CONTEXT, true)) {
-                    println("Switching context to $context... Currently on: ${driver.context}")
-                    driver.context(context)
-                    println("Switched context! Now on: ${driver.context}")
-                    break
-                }
-            }
-        }
-        return driver
     }
 }

@@ -13,24 +13,21 @@ class ExpandElement(pageObject: HybridPageObject) {
     private val summaryXpath = "$parentXpath/summary"
 
     private val expander = HybridPageElement(
-            webDesktopLocator = parentXpath,
-            androidLocator = null,
-            page = pageObject,
-            helpfulName = "Details Expand Element"
+        webDesktopLocator = parentXpath,
+        page = pageObject,
+        helpfulName = "Details Expand Element"
     )
 
     private val summary = HybridPageElement(
-            webDesktopLocator = summaryXpath,
-            androidLocator = null,
-            page = pageObject,
-            helpfulName = "Details Expand Summary"
+        webDesktopLocator = summaryXpath,
+        page = pageObject,
+        helpfulName = "Details Expand Summary"
     )
 
     private val content = HybridPageElement(
-            webDesktopLocator = "$parentXpath/div",
-            androidLocator = null,
-            page = pageObject,
-            helpfulName = "Details Expand Content"
+        webDesktopLocator = "$parentXpath/div",
+        page = pageObject,
+        helpfulName = "Details Expand Content"
     )
 
     fun collapse() {

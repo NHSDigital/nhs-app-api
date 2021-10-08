@@ -1,6 +1,6 @@
 # Configure Azure DevOps Feeds
 
-NPM, NuGet and some Gradle packages (Android/BDD Tests) are pulled from DevOps feeds. These proxy internet sources, prevent tampering of packages and avoid build failures during downtime of services such as NPM.
+NPM, NuGet and some Gradle packages (BDD Tests) are pulled from DevOps feeds. These proxy internet sources, prevent tampering of packages and avoid build failures during downtime of services such as NPM.
 
 [[_TOC_]]
 
@@ -89,7 +89,7 @@ All the feeds can be configured by running the command `make configure-package-f
 
 ## Maven/Gradle Config
 
-*Used in:* android, bddtests
+*Used in:* bddtests
 
 - Create a new file:
 

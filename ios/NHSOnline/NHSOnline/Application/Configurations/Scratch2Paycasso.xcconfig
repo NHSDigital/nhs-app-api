@@ -1,5 +1,0 @@
-#include "Defaults.xcconfig"
-#include "Pods/Target Support Files/Pods-NHSOnlinePaycasso/Pods-NHSOnlinePaycasso.scratch2.xcconfig"
-
-HOME_URL = www-scratch2.dev.nonlive.nhsapp.service.nhs.uk/
-BASE_API_URL = api-scratch2.dev.nonlive.nhsapp.service.nhs.uk/

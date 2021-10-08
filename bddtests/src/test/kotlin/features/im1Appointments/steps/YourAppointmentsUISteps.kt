@@ -10,14 +10,13 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import pages.appointments.YourAppointmentsPage
 import pages.assertIsDisplayed
-import pages.navigation.HeaderNative
+import pages.assertIsVisible
 import pages.navigation.WebHeader
 import java.util.*
 
 open class YourAppointmentsUISteps {
 
     lateinit var yourAppointmentsPage: YourAppointmentsPage
-    lateinit var headerNative: HeaderNative
     lateinit var webHeader: WebHeader
 
     private val pageHeader = "Your GP appointments"
@@ -37,9 +36,7 @@ open class YourAppointmentsUISteps {
 
     @Step
     fun clickOnBookAppointmentButton() {
-        yourAppointmentsPage.locatorMethods.assertNativeElementsLoaded(yourAppointmentsPage.bookButton)
-        yourAppointmentsPage.
-                bookButton.click()
+        yourAppointmentsPage.bookButton.assertIsVisible().click()
     }
 
     @Step

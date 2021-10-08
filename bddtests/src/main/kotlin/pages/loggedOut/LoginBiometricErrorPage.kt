@@ -20,26 +20,23 @@ class LoginBiometricErrorPage : HybridPageObject() {
     fun assertDisplayed() {
         val title by lazy {
             HybridPageElement(
-                    titleLocator,
-                    titleLocator,
-                    page = this,
-                    helpfulName = "header")
+                titleLocator,
+                page = this,
+                helpfulName = "header")
         }
 
         val paragraphOne by lazy {
             HybridPageElement(
-                    firstParagraphLocator,
-                    firstParagraphLocator,
-                    page = this,
-                    helpfulName = "firstParagraph")
+                firstParagraphLocator,
+                page = this,
+                helpfulName = "firstParagraph")
         }
 
         val paragraphTwo by lazy {
             HybridPageElement(
-                    secondParagraphLocator,
-                    secondParagraphLocator,
-                    page = this,
-                    helpfulName = "secondParagraph")
+                secondParagraphLocator,
+                page = this,
+                helpfulName = "secondParagraph")
         }
 
         title.assertIsVisible()

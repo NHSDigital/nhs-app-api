@@ -3,12 +3,12 @@ package pages.linkedProfiles
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.navigation.HeaderNative
+import pages.navigation.WebHeader
 
 @DefaultUrl("http://web.local.bitraft.io:3000/linked-profiles/summary")
 class LinkedProfileSummaryPage : HybridPageObject() {
 
-    private lateinit var headerNative: HeaderNative
+    private lateinit var webHeader: WebHeader
 
     val switchProfileButton = HybridPageElement(
             webDesktopLocator = "//*[@id='btn-switch-profile']",
@@ -16,6 +16,6 @@ class LinkedProfileSummaryPage : HybridPageObject() {
     )
 
     fun isLoaded(patientName: String) {
-        headerNative.waitForPageHeaderText("Switch to " + patientName + "\'s profile to act on their behalf")
+        webHeader.waitForPageHeaderText("Switch to " + patientName + "\'s profile to act on their behalf")
     }
 }

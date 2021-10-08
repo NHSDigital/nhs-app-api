@@ -25,7 +25,6 @@ class AccountSettingsPage : HybridPageObject() {
     private fun pageTitle(patient: Patient): HybridPageElement {
         return HybridPageElement(
                 webDesktopLocator = "//h2",
-                androidLocator = null,
                 page = this
         ).withText("Account settings for ${patient.name.firstName} ${patient.name.surname}")
     }

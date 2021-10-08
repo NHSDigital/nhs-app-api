@@ -10,7 +10,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import pages.appointments.AvailableAppointmentsPage
-import pages.navigation.BreadcrumbHeader
 import pages.navigation.WebHeader
 import utils.LinkedProfilesSerenityHelpers
 import utils.getOrNull
@@ -21,11 +20,10 @@ import javax.servlet.http.Cookie
 
 open class AvailableAppointmentsSteps {
 
-    private val pageHeader = "Book an appointment"
+    private val pageHeader = "Book a GP appointment"
 
     lateinit var availableAppointmentsPage: AvailableAppointmentsPage
     lateinit var webHeader: WebHeader
-    private lateinit var breadcrumbs: BreadcrumbHeader
 
     @Step
     fun checkIfPageHeaderIsCorrect() {
@@ -70,11 +68,7 @@ open class AvailableAppointmentsSteps {
 
     @Step
     fun clickOnBackLink() {
-        if (availableAppointmentsPage.onMobile()) {
-            breadcrumbs.selectBreadcrumbLink("Your appointments")
-        }
-        else
-            availableAppointmentsPage.clickDesktopBackButton()
+        availableAppointmentsPage.clickDesktopBackButton()
     }
 
     @Step

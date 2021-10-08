@@ -11,8 +11,6 @@ class LegalAndCookiesManageCookiesPage : HybridPageObject() {
 
     val pageBody = HybridPageElement(
         webDesktopLocator = "/html/body",
-        iOSLocator = "/html/body",
-        androidLocator = "/html/body",
         page = this
     )
 

@@ -3,10 +3,9 @@ package pages
 class ServiceUnavailablePage : HybridPageObject() {
 
     private val header = HybridPageElement(
-            webDesktopLocator = "//h1[contains(text(), 'Login failed')]",
-            androidLocator = null,
-            page = this,
-            helpfulName = "content"
+        webDesktopLocator = "//h1[contains(text(), 'Login failed')]",
+        page = this,
+        helpfulName = "content"
     )
 
     fun assertTitle(titleText: String): ServiceUnavailablePage {

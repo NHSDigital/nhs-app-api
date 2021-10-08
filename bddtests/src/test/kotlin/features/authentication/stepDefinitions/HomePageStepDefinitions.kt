@@ -1,10 +1,8 @@
 package features.authentication.stepDefinitions
 
-import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import features.authentication.steps.HomeSteps
-import features.authentication.steps.LoginSteps
 import features.authentication.steps.NavigationLinkText
 import features.authentication.steps.PatientDetail
 import features.serviceJourneyRules.stepDefinitions.ServiceJourneyRulesSerenityHelpers
@@ -13,9 +11,10 @@ import mockingFacade.linkedProfiles.LinkedProfileFacade
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.HybridPageElement
+import pages.MessagesHubPage
 import pages.PrescriptionsHubPage
 import pages.assertSingleElementPresent
-import pages.navigation.NavBarNative
+import pages.gpMedicalRecord.MedicalRecordHubPage
 import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
@@ -29,29 +28,10 @@ class HomePageStepDefinitions {
     private lateinit var browser: BrowserSteps
     @Steps
     private lateinit var homeSteps: HomeSteps
-    @Steps
-    private lateinit var loginSteps: LoginSteps
-    @Steps
-    private lateinit var navBar: NavBarNative
 
     private lateinit var prescriptionsHubPage: PrescriptionsHubPage
-
-    @Given("^I am at the login page")
-    fun givenIAmAtTheLoginPage() {
-        browser.goToApp()
-        loginSteps.loginPage.shouldBeDisplayed()
-    }
-
-    @Given("^I see the help icon on the login page")
-    fun givenISeeTheHelpIconOnTheLoginPage() {
-        loginSteps.loginPage.helpIconIsVisible()
-    }
-
-    @When("^I click the help icon on the login page")
-    fun iClickTheHelpIconOnTheLoginPage() {
-        browser.storeCurrentTabCount()
-        loginSteps.loginPage.clickHelpIcon()
-    }
+    private lateinit var messagesHubPage: MessagesHubPage
+    private lateinit var yourHealthHubPage: MedicalRecordHubPage
 
     @When("I follow the unread messages link from the home page$")
     fun iFollowTheUnreadMessagesLinkFromTheHomePage() {
@@ -86,11 +66,6 @@ class HomePageStepDefinitions {
     @Then("^I see the home page header$")
     fun iSeeTheHomePageHeader() {
         homeSteps.assertHeaderVisible()
-    }
-
-    @Then("^I see the current app version")
-    fun iSeeTheCurrentAppVersion() {
-        homeSteps.homePage.assertVersionNumberVisible()
     }
 
     @Then("^I see a collapsible link to a survey, which I can follow$")
@@ -157,12 +132,12 @@ class HomePageStepDefinitions {
 
     private fun followGPHealthRecordLink(linkElement: HybridPageElement) {
         linkElement.click()
-        navBar.isHighlighted(NavBarNative.NavBarType.YOUR_HEALTH)
+        yourHealthHubPage.pageTitleGpMedicalRecord().assertSingleElementPresent()
     }
 
     private fun followMessagesLink(linkElement: HybridPageElement) {
         linkElement.click()
-        navBar.isHighlighted(NavBarNative.NavBarType.MESSAGES)
+        messagesHubPage.assertMessagesHubPageDisplayed()
     }
 
     private fun followLinkedProfilesLink(linkElement: HybridPageElement) {

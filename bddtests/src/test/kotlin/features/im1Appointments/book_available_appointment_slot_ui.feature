@@ -118,7 +118,6 @@ Feature: Book Appointments Frontend
       | EMIS      |
 
   #409
-  @nativesmoketest
   Scenario Outline: A <GP System> user sees appropriate information error message when appointment has already been booked
     Given there are <GP System> appointments available to book, but the appointment slot has already been booked by somebody else
     And I am logged in
@@ -135,7 +134,6 @@ Feature: Book Appointments Frontend
       | EMIS      |
 
   #460
-  @nativesmoketest
   Scenario Outline: A <GP System> user reached maximum appointment booking limit
     Given there are <GP System> appointments available to book, but user reached maximum appointment booking limit
     And I am logged in
@@ -179,7 +177,6 @@ Feature: Book Appointments Frontend
       | xx     | TPP       |
 
   #502
-  @nativesmoketest
   Scenario Outline: A <GP System> user sees appropriate information message when GP system is unavailable
     Given there are <GP System> appointments available to book, but the GP system is unavailable
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'
@@ -288,29 +285,5 @@ Feature: Book Appointments Frontend
     And I don't see option to type in booking reason
     Examples:
       | GP System |
-      | VISION    |
-    @nativesmoketest
-    Examples:
-      | GP System |
       | EMIS      |
-
-
-  @pending
-  @native
-  Scenario: An EMIS user can book an appointment and add it to the native calendar
-    Given there are EMIS appointments available to book where booking reason is set optional
-    And a booked appointment can be cancelled
-    And I am logged in
-    When I retrieve the 'Appointment Booking' page directly
-    And I have selected an appointment slot to book
-    Then the Appointment Slot page is displayed
-    When I click the 'Confirm and book appointment' button
-    Then the Appointment Booking success page is displayed
-    And I click on the Add to calendar link
-    And the Add to calendar interrupt page is displayed
-    When I click on the Add to calendar button
-    # TODO - figure out how to get browerstack and the native calendar working together ??
-    #Then the native calendar is shown
-    #And I save the appointment to the calendar
-    #And the Appointment Hub page is displayed
-
+      | VISION    |

@@ -7,10 +7,9 @@ import pages.assertIsVisible
 class GNCRPage: HybridPageObject() {
 
     private val pageTitle = HybridPageElement(
-            webDesktopLocator = "//h1",
-            androidLocator = null,
-            page = this
-        ).withText("GNCR")
+        webDesktopLocator = "//h1",
+        page = this
+    ).withText("GNCR")
 
     fun assertTitleVisible() {
         pageTitle.assertIsVisible()

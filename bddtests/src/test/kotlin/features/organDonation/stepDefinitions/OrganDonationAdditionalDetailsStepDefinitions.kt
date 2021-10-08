@@ -4,13 +4,11 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.organDonation.models.OrganDonationDemographics
-import pages.navigation.HeaderNative
 import pages.organDonation.OrganDonationAdditionalDetailsPage
 import utils.getOrFail
 
 open class OrganDonationAdditionalDetailsStepDefinitions {
 
-    lateinit var header: HeaderNative
     lateinit var organDonationAdditionalDetailsPage: OrganDonationAdditionalDetailsPage
 
     @When("^I select an ethnicity to record for organ donation$")

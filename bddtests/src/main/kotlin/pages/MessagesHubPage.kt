@@ -35,9 +35,8 @@ class MessagesHubPage: HybridPageObject() {
 
     private fun getElementByLocator(locator: String, helpfulName: String = ""): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = locator,
-                androidLocator = null,
-                page = this,
-                helpfulName = helpfulName)
+            webDesktopLocator = locator,
+            page = this,
+            helpfulName = helpfulName)
     }
 }

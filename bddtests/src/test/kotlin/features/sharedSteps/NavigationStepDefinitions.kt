@@ -4,16 +4,15 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import net.thucydides.core.annotations.Steps
-import pages.navigation.NavBarNative
+import pages.navigation.WebHeader
 import utils.GlobalSerenityHelpers
 import utils.set
+import java.lang.IllegalArgumentException
 
 class NavigationStepDefinitions {
     @Steps
     private lateinit var browser: BrowserSteps
-
-    @Steps
-    lateinit var navSteps: NavigationSteps
+    private lateinit var webHeader: WebHeader
 
     @Given("^I am using the native app user agent$")
     fun iAmUsingTheNativeAppUserAgent() {
@@ -35,7 +34,14 @@ class NavigationStepDefinitions {
 
     @When("^I navigate to (\\w+)$")
     fun iNavigateTo(tab: String) {
-        navSteps.select(NavBarNative.NavBarType.valueOf(tab.toUpperCase()))
+        when(tab.toUpperCase()){
+            "ADVICE" -> webHeader.clickAdvicePageLink()
+            "APPOINTMENTS" -> webHeader.clickAppointmentsPageLink()
+            "PRESCRIPTIONS" -> webHeader.clickPrescriptionsPageLink()
+            "YOUR_HEALTH" -> webHeader.clickYourHealthPageLink()
+            "MESSAGES" -> webHeader.clickMessagesPageLink()
+            else -> throw IllegalArgumentException("$tab not implemented")
+        }
     }
 
     @Then("^I am redirected to '(.*)'$")

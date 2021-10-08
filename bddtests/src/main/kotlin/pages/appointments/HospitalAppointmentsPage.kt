@@ -11,10 +11,9 @@ import pages.sharedElements.LinksElement
 open class HospitalAppointmentsPage : HybridPageObject() {
 
     private val pageTitle = HybridPageElement(
-            webDesktopLocator = "//h1",
-            androidLocator = null,
-            page = this,
-            helpfulName = "Hospital Appointments Title"
+        webDesktopLocator = "//h1",
+        page = this,
+        helpfulName = "Hospital Appointments Title"
     ).withText("Hospital and other appointments", normalised = true)
 
     private val hospitalAppointmentsTitle = "Book or cancel your referral appointment"

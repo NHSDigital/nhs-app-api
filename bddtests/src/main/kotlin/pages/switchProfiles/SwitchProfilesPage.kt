@@ -4,12 +4,12 @@ import models.switchProfiles.SwitchProfileData
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageObject
 import pages.HybridPageElement
-import pages.navigation.HeaderNative
+import pages.navigation.WebHeader
 
 @DefaultUrl("http://web.local.bitraft.io:3000/switch-profile")
 open class SwitchProfilesPage : HybridPageObject() {
 
-    private lateinit var headerNative: HeaderNative
+    private lateinit var webHeader: WebHeader
 
     val switchToMyProfileButton = HybridPageElement(
             webDesktopLocator = "//button",
@@ -17,7 +17,7 @@ open class SwitchProfilesPage : HybridPageObject() {
     ).withText("Switch to my profile", false)
 
     fun isLoaded(name: String) {
-        headerNative.waitForPageHeaderText("You are acting on behalf of $name")
+        webHeader.waitForPageHeaderText("You are acting on behalf of $name")
     }
 
     fun getDisplayedProxyDetails(): SwitchProfileData {

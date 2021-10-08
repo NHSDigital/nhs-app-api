@@ -35,9 +35,6 @@ class LegalAndCookiesPage : HybridPageObject() {
     private val title by lazy {
         HybridPageElement(
             "//h1[normalize-space(text())='Legal and cookies']",
-            "//h1[normalize-space(text())='Legal and cookies']",
-            null,
-            null,
             this,
             helpfulName = "header")
     }

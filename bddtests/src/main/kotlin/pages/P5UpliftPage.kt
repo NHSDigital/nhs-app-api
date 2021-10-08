@@ -21,17 +21,15 @@ open class P5UpliftPage : HybridPageObject() {
 
     private val headerElement by lazy {
         HybridPageElement(
-                webDesktopLocator = "//h2",
-                androidLocator = null,
-                page = this
+            webDesktopLocator = "//h2",
+            page = this
         ).withText(heading)
     }
 
     private val descriptionElement by lazy {
         HybridPageElement(
-                webDesktopLocator = "//p",
-                androidLocator = null,
-                page = this
+            webDesktopLocator = "//p",
+            page = this
         )
     }
 

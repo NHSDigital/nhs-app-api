@@ -1,5 +1,0 @@
-#include "Defaults.xcconfig"
-#include "Pods/Target Support Files/Pods-NHSOnline/Pods-NHSOnline.preview.xcconfig"
-
-HOME_URL = www-preview.dev.nonlive.nhsapp.service.nhs.uk/
-BASE_API_URL = api-preview.dev.nonlive.nhsapp.service.nhs.uk/

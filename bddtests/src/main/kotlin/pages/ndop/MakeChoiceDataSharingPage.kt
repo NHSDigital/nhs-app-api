@@ -37,8 +37,7 @@ class MakeChoiceDataSharingPage: DataSharingPage() {
                     .pagination { previous(previousPageTitle) }
 
     val btnStartNow = HybridPageElement(
-            webDesktopLocator = "//button[normalize-space(text())='Start now']",
-            androidLocator = null,
-            page = this
+        webDesktopLocator = "//button[normalize-space(text())='Start now']",
+        page = this
     )
 }

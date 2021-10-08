@@ -55,11 +55,10 @@ class MessageBlockElements(private val page:HybridPageObject) {
 
     private fun getAll(): List<MessageBlockElement> {
         val messageElements = HybridPageElement(
-                "//ul/li/a/div",
-                "//ul/li/a/div",
-                page = page,
-                helpfulName = "Messages",
-                timeToWaitForElement = 1).elements
+            "//ul/li/a/div",
+            page = page,
+            helpfulName = "Messages",
+            timeToWaitForElement = 1).elements
         return messageElements.mapIndexed { index, element -> MessageBlockElement(element, index) }
     }
 

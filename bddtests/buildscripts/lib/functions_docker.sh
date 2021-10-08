@@ -88,10 +88,6 @@ function rebuild_image_with_user() {
 }
 
 function configure_npmrc_and_m2_volumes () {
-  if [ -z "${TF_BUILD}" ] && [[ "${BROWSER}" =~ ^browserstack_* ]]; then
-    DOCKER_USER="browserstack"
-  fi
-
   DOCKER_ARGS+=(-v "${MVN_CFG_PATH}:${DOCKER_ROOT}home/${DOCKER_USER}/.m2/settings.xml")
   DOCKER_ARGS+=(-v "${NPMRC_PATH}:${DOCKER_ROOT}home/${DOCKER_USER}/.npmrc")
 }

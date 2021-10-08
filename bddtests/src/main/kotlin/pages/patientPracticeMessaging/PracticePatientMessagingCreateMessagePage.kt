@@ -43,17 +43,15 @@ class PracticePatientMessagingCreateMessagePage: HybridPageObject() {
 
     private fun header(): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "//h1",
-                androidLocator = null,
-                page = this,
-                helpfulName = "Header")
+            webDesktopLocator = "//h1",
+            page = this,
+            helpfulName = "Header")
     }
 
     private fun pageElement(xPath: String): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = xPath,
-                androidLocator = null,
-                page = this
+            webDesktopLocator = xPath,
+            page = this
         )
     }
 

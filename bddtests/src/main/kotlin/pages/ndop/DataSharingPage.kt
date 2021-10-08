@@ -31,19 +31,17 @@ abstract class DataSharingPage : HybridPageObject() {
 
     fun assertDisplayed() {
         val title = HybridPageElement(
-                webDesktopLocator = "//h1[normalize-space(text())='$pageTitle']",
-                androidLocator = null,
-                page = this
+            webDesktopLocator = "//h1[normalize-space(text())='$pageTitle']",
+            page = this
         )
         title.assertSingleElementPresent()
     }
 
     fun contentsLink(linkText: String): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "//ol/li/a[normalize-space(text())='$linkText']",
-                androidLocator = null,
-                page = this,
-                helpfulName = "'$linkText' Link in Contents Element"
+            webDesktopLocator = "//ol/li/a[normalize-space(text())='$linkText']",
+            page = this,
+            helpfulName = "'$linkText' Link in Contents Element"
         )
     }
 }

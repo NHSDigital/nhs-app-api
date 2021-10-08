@@ -54,7 +54,7 @@ dependencies {
     compile "org.slf4j:slf4j-simple:1.7.7"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     compile "org.jetbrains.kotlin:kotlin-reflect"
-    compile group: 'com.browserstack', name: 'browserstack-local-java', version: '1.0.2'
+    compile "org.json:json:20160212"
     compile 'io.github.bonigarcia:webdrivermanager:3.6.2'
     compile "com.github.tomakehurst:wiremock-standalone:2.17.0"
     compile "ch.qos.logback:logback-classic:1.2.3"

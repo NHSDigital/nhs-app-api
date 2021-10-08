@@ -71,6 +71,7 @@ Feature: Organ Donation View Frontend
     Given I am using the native app user agent
     And I am a EMIS user registered with organ donation but existing registration is in conflicted state
     And I am logged in
+    When I navigate to the health record hub page
     And I navigate to the internal Organ Donation Page
     Then the organ donation decision has been found and is to be processed
 

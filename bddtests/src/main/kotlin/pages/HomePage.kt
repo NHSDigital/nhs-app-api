@@ -14,86 +14,75 @@ class HomePage : HybridPageObject() {
     val headerText: String = "Home"
 
     val welcomeInfo = HybridPageElement(
-            webDesktopLocator = "//div[@data-sid='welcome-info']",
-            androidLocator = null,
-            page = this,
-            helpfulName = "Welcome info"
+        webDesktopLocator = "//div[@data-sid='welcome-info']",
+        page = this,
+        helpfulName = "Welcome info"
     )
 
     val welcomeInfoProxy = HybridPageElement(
-            webDesktopLocator = "//div[@data-sid='welcome-info-proxy']",
-            androidLocator = null,
-            page = this,
-            helpfulName = "Welcome info"
+        webDesktopLocator = "//div[@data-sid='welcome-info-proxy']",
+        page = this,
+        helpfulName = "Welcome info"
     )
 
     val dismissButton = HybridPageElement(
-            webDesktopLocator = "//a[@id='btn_biometricBannerDismiss']",
-            androidLocator = null,
-            page = this,
-            helpfulName = "Dismiss Button"
+        webDesktopLocator = "//a[@id='btn_biometricBannerDismiss']",
+        page = this,
+        helpfulName = "Dismiss Button"
     ).withText("Dismiss", false)
 
     private val unreadIndicator = HybridPageElement(
-            webDesktopLocator = "//*[@id='btn_messages_discIndicator']",
-            androidLocator = null,
-            page = this,
-            helpfulName = "Unread Indicator")
+        webDesktopLocator = "//*[@id='btn_messages_discIndicator']",
+        page = this,
+        helpfulName = "Unread Indicator")
 
     private val surveyPath = "//div[@data-purpose='survey']"
 
     private val surveyLinkTab = HybridPageElement(
-            webDesktopLocator = "$surveyPath/div[@data-purpose = 'tabForToggle']/div[@data-purpose = 'toggleContent']",
-            androidLocator = null,
-            page = this,
-            helpfulName = "Survey Tab"
+        webDesktopLocator = "$surveyPath/div[@data-purpose = 'tabForToggle']/div[@data-purpose = 'toggleContent']",
+        page = this,
+        helpfulName = "Survey Tab"
     )
 
     private val surveyContentPath = "$surveyPath/div[@data-purpose = 'content']"
 
     private val surveyContent = HybridPageElement(
-            webDesktopLocator = surveyContentPath,
-            androidLocator = null,
-            page = this,
-            helpfulName = "Survey Content"
+        webDesktopLocator = surveyContentPath,
+        page = this,
+        helpfulName = "Survey Content"
     )
 
     val surveyContentLink = HybridPageElement(
-            webDesktopLocator = "$surveyContentPath/p[@data-purpose = 'info']/a[@data-purpose = 'link']",
-            androidLocator = null,
-            page = this,
-            helpfulName = "Survey Link"
+        webDesktopLocator = "$surveyContentPath/p[@data-purpose = 'info']/a[@data-purpose = 'link']",
+        page = this,
+        helpfulName = "Survey Link"
     )
 
     private val listMenuPath = "//ul[@data-sid= 'navigation-list-menu']//a/div/h2"
 
     val banner = HybridPageElement(
-            webDesktopLocator = "//*[@id='warning-banner']",
-            webMobileLocator = "//*[@id='warning-banner']",
-            page = this
+        webDesktopLocator = "//*[@id='warning-banner']",
+        page = this
     )
 
     val actingAsOtherUserWarning = HybridPageElement(
-            webDesktopLocator = "//*[@id='acting-as-other-user-warning']",
-            webMobileLocator = "//*[@id='acting-as-other-user-warning']",
-            page = this
+        webDesktopLocator = "//*[@id='acting-as-other-user-warning']",
+        page = this
     )
 
     private fun listOfLinks(): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = listMenuPath,
-                androidLocator = null,
-                page = this,
-                helpfulName = "ListOfLinks"
+            webDesktopLocator = listMenuPath,
+            page = this,
+            helpfulName = "ListOfLinks"
         )
     }
 
     private fun link(linkText: String): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "$listMenuPath${String.format(containsTextXpathSubstring, linkText)}",
-                androidLocator = null,
-                page = this,
-                helpfulName = "$linkText Link")
+            webDesktopLocator = "$listMenuPath${String.format(containsTextXpathSubstring, linkText)}",
+            page = this,
+            helpfulName = "$linkText Link")
     }
 
     fun assertUnreadIndicatorPresent() {
@@ -115,10 +104,9 @@ class HomePage : HybridPageObject() {
 
     private fun getPatientDetailElement(detail:String) : HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator =
-                  "${welcomeInfo.webDesktopLocator}//dt[normalize-space(text())='$detail:']/following-sibling::dd[1]",
-                androidLocator = null,
-                page = this
+            webDesktopLocator =
+              "${welcomeInfo.webDesktopLocator}//dt[normalize-space(text())='$detail:']/following-sibling::dd[1]",
+            page = this
         )
     }
 
@@ -163,10 +151,9 @@ class HomePage : HybridPageObject() {
         val pXpath = "//p[contains(text(),'Version dev_bdd_docker')]"
 
         val versionNumberElement = HybridPageElement(
-                webDesktopLocator = "$divXpath | $pXpath",
-                androidLocator = null,
-                page = this,
-                helpfulName = "Version Number"
+            webDesktopLocator = "$divXpath | $pXpath",
+            page = this,
+            helpfulName = "Version Number"
         )
         versionNumberElement.assertSingleElementPresent()
     }

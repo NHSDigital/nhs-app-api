@@ -6,6 +6,7 @@ Feature: Organ donation accessibility
     Given I am using the native app user agent
     And I am a EMIS user not registered with organ donation, who wishes to register and donate some organs
     And I am logged in
+    When I navigate to the health record hub page
     And I navigate to the internal Organ Donation Choice Page
     Then the OrganDonation_RegisterNewOrganDonationDecision page is saved to disk
     And I choose to donate my organs
@@ -35,6 +36,7 @@ Feature: Organ donation accessibility
     Given I am using the native app user agent
     And I am a EMIS user registered as opt-out who wishes to reaffirm their decision
     And I am logged in
+    When I navigate to the health record hub page
     And I navigate to the internal Organ Donation Page
     Then the Organ Donation View Registration page is displayed
     When I choose to reaffirm my organ donation decision
@@ -45,6 +47,7 @@ Feature: Organ donation accessibility
     Given I am using the native app user agent
     And I am a EMIS user registered with organ donation with a decision to opt-in who wishes to withdraw
     And I am logged in
+    When I navigate to the health record hub page
     And I navigate to the internal Organ Donation Page
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
     And the OrganDonation_ViewRegisteredDecision page is saved to disk

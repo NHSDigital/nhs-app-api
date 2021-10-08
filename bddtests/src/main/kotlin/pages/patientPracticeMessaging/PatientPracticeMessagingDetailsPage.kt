@@ -15,9 +15,6 @@ class PatientPracticeMessagingDetailsPage: HybridPageObject() {
         val path = "//h1[normalize-space(text())='Messages']"
         val header = HybridPageElement(
                 path,
-                path,
-                null,
-                null,
                 this,
                 helpfulName = "header")
         header.waitForElement()
@@ -97,9 +94,8 @@ class PatientPracticeMessagingDetailsPage: HybridPageObject() {
 
     private fun getElementById(locator: String): HybridPageElement{
         return HybridPageElement(
-                webDesktopLocator = locator,
-                androidLocator = null,
-                page = this)
+            webDesktopLocator = locator,
+            page = this)
     }
 
     fun clickDeleteConversation() {

@@ -3,11 +3,10 @@ package features.organDonation.stepDefinitions
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import features.sharedSteps.BrowserSteps
-import features.sharedSteps.PageUrl
 import net.thucydides.core.annotations.Steps
 import pages.assertIsVisible
 import pages.gpMedicalRecord.MedicalRecordHubPage
-import pages.navigation.NavBarNative
+import pages.navigation.WebHeader
 import pages.organDonation.OrganDonationChoicePage
 
 open class OrganDonationChoiceStepDefinitions {
@@ -16,16 +15,10 @@ open class OrganDonationChoiceStepDefinitions {
     lateinit var browser: BrowserSteps
     lateinit var yourHealthPage: MedicalRecordHubPage
     lateinit var organDonationChoicePage: OrganDonationChoicePage
-    lateinit var navbarNative: NavBarNative
+    lateinit var webHeader: WebHeader
 
     @When("^I navigate to the internal Organ Donation Page")
     fun iNavigateToTheInternalOrganDonationPage() {
-        if (!yourHealthPage.onMobile()) {
-            val url = PageUrl.getRelativePagePath("health record hub")
-            browser.browseTo(url)
-        } else {
-            navbarNative.select(NavBarNative.NavBarType.YOUR_HEALTH)
-        }
         yourHealthPage.getHeaderElement("Manage your organ donation decision").click()
     }
 

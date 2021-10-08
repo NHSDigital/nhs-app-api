@@ -30,7 +30,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
             page = this
     )
 
-    override val titleText: String = "Book an appointment"
+    override val titleText: String = "Book a GP appointment"
 
     val guidance = ExpandElement(this)
 
@@ -92,41 +92,37 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
             String.format("//*$appointmentSessionNameXpath$containsTextXpathSubstring/ancestor::a", sessionName)
         }
         return HybridPageElement(
-                webDesktopLocator = String.format(
-                        timeSlotByDateAndTimeXpath,
-                        date,
-                        time
-                ).plus(xPathSuffixWithAppointmentSessionName),
-                androidLocator = null,
-                page = this,
-                helpfulName = "Time slot by date, time and session name. "
+            webDesktopLocator = String.format(
+                timeSlotByDateAndTimeXpath,
+                date,
+                time
+            ).plus(xPathSuffixWithAppointmentSessionName),
+            page = this,
+            helpfulName = "Time slot by date, time and session name. "
         )
     }
 
     private val timeSlots = HybridPageElement(
-            webDesktopLocator = timeSlotsXpath,
-            androidLocator = null,
-            page = this,
-            helpfulName = "Any time slot. "
+        webDesktopLocator = timeSlotsXpath,
+        page = this,
+        helpfulName = "Any time slot. "
     )
 
     private val dateHeading = HybridPageElement(
-            webDesktopLocator = dateHeadingXpath,
-            androidLocator = null,
-            page = this,
-            helpfulName = "Any date heading. "
+        webDesktopLocator = dateHeadingXpath,
+        page = this,
+        helpfulName = "Any date heading. "
     )
 
     private fun dateHeadingByText(date: String) = HybridPageElement(
-            webDesktopLocator = String.format(dateHeadingByTextXpathFormat, date),
-            androidLocator = null,
-            page = this,
-            helpfulName = "Date heading by text. "
+        webDesktopLocator = String.format(dateHeadingByTextXpathFormat, date),
+        page = this,
+        helpfulName = "Date heading by text. "
     )
 
     private val desktopBackLink = HybridPageElement(
-            webDesktopLocator = "//a[@data-purpose='main-back-button']",
-            page = this
+        webDesktopLocator = "//a[@data-purpose='main-back-button']",
+        page = this
     )
 
     fun clickDesktopBackButton() {

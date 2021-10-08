@@ -3,14 +3,6 @@
 Feature: View Available Appointment Slots Frontend
   Users can view available appointments from the available appointments Page.
 
-  #GP System agnostic scenario, so only need to test with EMIS
-  @nativesmoketest
-  Scenario: A user who is signed in sees the appointments navigation button highlighted
-    Given there are available appointment slots with different criteria for EMIS
-    And I am logged in
-    And I am on the Available Appointments page
-    Then the appointments menu button is highlighted
-
 # These tests navigate directly to the pages where the features are to be tested, to save time.
   Scenario Outline: A <GP System> user enters the available appointments page
     Given there are available appointment slots with different criteria for <GP System>
@@ -23,13 +15,9 @@ Feature: View Available Appointment Slots Frontend
     And no available slots are displayed
     Examples:
       | GP System |
+      | EMIS      |
       | TPP       |
       | VISION    |
-
-    @nativesmoketest
-    Examples:
-      | GP System |
-      | EMIS      |
 
   Scenario Outline: A user can expand, view and collapse guidance provided by <GP System>
     Given there are available appointment slots with different criteria for <GP System> when <Content> appointment slot guidance is provided
@@ -126,13 +114,9 @@ Feature: View Available Appointment Slots Frontend
     Then I see a message informing me that the GP has no online appointments available and what to do next
     Examples:
       | GP System |
+      | EMIS      |
       | TPP       |
       | VISION    |
-
-    @nativesmoketest
-    Examples:
-      | GP System |
-      | EMIS      |
 
   Scenario Outline: A <GP System> user goes back when no slots are available at all
     Given there are no available appointment slots for <GP System>
@@ -142,13 +126,9 @@ Feature: View Available Appointment Slots Frontend
     Then the Your Appointments page is displayed
     Examples:
       | GP System |
+      | EMIS      |
       | TPP       |
       | VISION    |
-
-    @nativesmoketest
-    Examples:
-      | GP System |
-      | EMIS      |
 
   Scenario Outline: A <GP System> user sees appropriate message, if filtering by today but no appointments are available
     Given there are available appointment slots with different criteria for <GP System>
@@ -198,7 +178,6 @@ Feature: View Available Appointment Slots Frontend
     Then a new tab has been opened by the link
 
   #502
-  @nativesmoketest
   Scenario: EMIS user sees appropriate error message when GP system is unavailable
     Given EMIS is unavailable for available appointment slots
     And I am logged in
@@ -285,7 +264,6 @@ Feature: View Available Appointment Slots Frontend
     And I decide I don't want to select an appointment and go back
     Then the Your Appointments page is displayed
 
-  @nativesmoketest
   Scenario: A user has problems with prescriptions and selects appointments and prescriptions in quick succession
     #    GP System agnostic scenario, so only need to test with EMIS
     Given there are available EMIS appointment slots with different criteria but there is a slight delay in retrieving them

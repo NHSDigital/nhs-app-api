@@ -1,22 +1,6 @@
 @more
 Feature: View More Page
 
-  @nativesmoketest
-  Scenario: A patient can navigate to More page
-    Given I am a EMIS patient
-    And I am logged in
-    When I click the more icon
-    Then the More page is displayed
-    And none of the menu buttons are highlighted
-
-  @nativesmoketest
-  Scenario: The app version is on the More Page
-    Given I am a EMIS patient
-    And I am logged in
-    When I click the more icon
-    Then the More page is displayed
-    And I see the current app version
-
   Scenario Outline: A patient can see the linked accounts, account & settings and Help & support links
     Given I am a <Gp System> patient
     And I am logged in

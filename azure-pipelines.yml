@@ -1,38 +1,6 @@
 name: $[format('{0}-{1}', variables['Build.SourceBranchName'], counter(variables['Build.SourceBranchName']))]
 
 parameters:
-  - name: androidTarget
-    displayName: Android native app target
-    type: string
-    default: browserstack
-    values:
-      - browserstack
-      - onboardingsandpit
-      - onboardingaos
-      - logindev
-      - previewRelease
-      - scratch1
-      - scratch2
-      - scratch3
-      - scratch4
-      - scratch5
-      - scratch6
-      - scratch7
-      - scratch8
-      - scratch9
-      - scratch10
-      - scratch11
-      - scratch12
-      - scratch13
-      - scratch14
-      - scratch15
-      - scratch16
-      - scratch17
-      - scratch18
-      - scratch19
-      - scratch20
-      - scratch21
-
   - name: xamarinTarget
     displayName: Xamarin native app target
     type: string
@@ -47,21 +15,6 @@ parameters:
 
   - name: intTestsRunXamarinNative
     displayName: Run Xamarin Native Integration Tests
-    type: boolean
-    default: false
-
-  - name: intTestsRunAndroidNative
-    displayName: Run Android Native Integration Tests
-    type: boolean
-    default: false
-
-  - name: intTestsRunAndroidNativeLongRunning
-    displayName: Run Android Native Long Running Integration Tests
-    type: boolean
-    default: false
-
-  - name: uploadToGooglePlayConsole
-    displayName: Upload Android Client to Google Play Console
     type: boolean
     default: false
 
@@ -94,34 +47,28 @@ variables:
   docker.tag: $[variables['Build.SourceVersion']]
   source.develop: ${{ eq(variables['Build.SourceBranchName'], 'develop') }}
   source.tag: ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}
-  native.android.target: ${{ parameters.androidTarget }}
   native.xamarin.target: ${{ parameters.xamarinTarget }}
   native.xamarin.version: '1.99.2'
   native.xamarin.ios.build.number:  $[counter(variables['native.version.number'], 1)]
   native.xamarin.android.build.number: $[counter('android', 100)]
   sjr.config.image.name: 'nhsonline-service-journey-prod-config'
   sjr.image.tag: $[variables['Build.SourceVersion']]
-  native.android.upload: ${{ parameters.uploadToGooglePlayConsole }}
+  # native.android.upload: ${{ parameters.uploadToGooglePlayConsole }}
 
   # Build.Reason is blank when specifying parameters but Manual when running the pipeline
   ${{ if or(eq(variables['Build.Reason'], ''), eq(variables['Build.Reason'], 'Manual')) }}:
     int.tests.run.native.xamarin: ${{ parameters.intTestsRunXamarinNative }}
-    int.tests.run.native.android: ${{ parameters.intTestsRunAndroidNative }}
+    # int.tests.run.native.android: ${{ parameters.intTestsRunAndroidNative }}
     security.scan.enabled: ${{ parameters.securityScanEnabled }}
   ${{ if and(ne(variables['Build.Reason'], ''), ne(variables['Build.Reason'], 'Manual')) }}:
     ${{ if or(eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['Build.SourceBranch'], 'refs/tags/')) }}:
       int.tests.run.native.xamarin: true
-      int.tests.run.native.android: true
+      # int.tests.run.native.android: true
       security.scan.enabled: false
     ${{ if and(ne(variables['Build.SourceBranchName'], 'develop'), ne(variables['Build.SourceBranch'], 'refs/tags/')) }}:
       int.tests.run.native.xamarin: false
-      int.tests.run.native.android: false
+      # int.tests.run.native.android: false
       security.scan.enabled: false
-
-  ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
-    int.tests.run.native.android.long-running: true
-  ${{ if ne(variables['Build.Reason'], 'Schedule') }}:
-    int.tests.run.native.android.long-running: ${{ parameters.intTestsRunAndroidNativeLongRunning }}
 
 stages:
   - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
@@ -154,18 +101,6 @@ stages:
     dependsOn:
     jobs:
       - template: .azuredevops/templates/build-and-test-web-job.yml
-
-  - stage: android
-    displayName: Android Client
-    dependsOn:
-      - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-        - pr_changes
-    ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-      condition: and(succeeded(), or(eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.android'], 'True'), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.pipeline'], 'True')))
-    jobs:
-      - template: .azuredevops/templates/build-and-test-android-client-job.yml
-        parameters:
-          uploadToGooglePlayConsole: ${{ parameters.uploadToGooglePlayConsole }}
 
   - stage: generate_code_coverage
     displayName: Generate Code Coverage
@@ -205,24 +140,6 @@ stages:
           - template: .azuredevops/templates/integration-tests-variables.yml
         steps:
           - template: .azuredevops/templates/integration-tests-steps.yml
-
-  - ${{ if or(eq(variables['int.tests.run.native.android'], 'true'), eq(variables['int.tests.run.native.android.long-running'], 'true')) }}:
-    - stage: android_integration_tests
-      displayName: Android Integration Tests
-      dependsOn:
-        - web
-        - backend
-        - android
-      condition: and(succeeded(), eq(variables['native.android.target'], 'browserstack'))
-      jobs:
-        - ${{ if eq(variables['int.tests.run.native.android'], 'true') }}:
-          - template: .azuredevops/templates/integration-tests-android-job.yml
-
-        - ${{ if eq(variables['int.tests.run.native.android.long-running'], 'true') }}:
-          - template: .azuredevops/templates/integration-tests-android-job.yml
-            parameters:
-              job.name: Long Running
-              tranche.tag: long-running
 
   - ${{ if eq(variables['native.xamarin.target'], 'Preview') }}:
     - stage: xamarin_preview

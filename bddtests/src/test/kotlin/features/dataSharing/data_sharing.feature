@@ -1,5 +1,4 @@
 @data-sharing
-@nativesmoketest
 Feature: Data Sharing Frontend
   A user can access Data Sharing
 

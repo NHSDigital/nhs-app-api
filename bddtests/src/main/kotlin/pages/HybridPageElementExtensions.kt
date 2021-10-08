@@ -39,19 +39,6 @@ fun HybridPageElement.waitForElementToBecomeVisible() : HybridPageElement {
     return this
 }
 
-fun NativePageElement.waitForNativeElementToBecomeVisible() : NativePageElement {
-    actOnTheNativeElement {
-        while (true) {
-            val wrappedElement = it
-            if (wrappedElement.size != null || it.isDisplayed)
-                break
-            Thread.sleep(WAIT_FOR_NON_STALE_ELEMENT)
-        }
-    }
-
-    return this
-}
-
 fun HybridPageElement.waitUntilPresent() {
     actOnTheElement { it.waitUntilPresent<WebElementFacade>() }
 }

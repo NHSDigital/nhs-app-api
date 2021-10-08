@@ -6,27 +6,9 @@ Feature: Use the navigation header bar
     Given I am a EMIS patient
     And I am logged in
     And I see the header
-    When I click the help icon
+    When I click the help and support link
     Then a new tab has been opened by the link
 
-  @nativesmoketest
-  Scenario: A patient can access the more page by clicking the my more icon
-    Given I am a EMIS patient
-    And I am logged in
-    And I see the header
-    When I click the more icon
-    Then the More page is displayed
-
-  @nativesmoketest
-  Scenario: A patient can access the home page by clicking the home icon
-    Given I am a EMIS patient
-    And I am logged in
-    And I see the header
-    And I navigate away from the home page
-    When I click the home icon
-    Then I see the home page
-
-  @nativesmoketest
   Scenario: Dynamic back link leads to the correct pages
     Given I am using the native app user agent
     And I am a EMIS patient
@@ -54,6 +36,7 @@ Feature: Use the navigation header bar
     And I am a EMIS patient
     And I am logged in
     And I am a EMIS user not registered with organ donation, who wishes to register and opt in
+    When I navigate to the health record hub page
     And I navigate to the internal Organ Donation Choice Page
     And I choose to donate my organs
     Then the Organ Donation Your Choice page is displayed

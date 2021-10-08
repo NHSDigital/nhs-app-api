@@ -3,12 +3,10 @@ package features.navigation.steps
 import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
 import pages.HomePage
-import pages.navigation.HeaderNative
 import pages.navigation.WebHeader
 
 open class NavHeaderSteps {
 
-    lateinit var header: HeaderNative
     lateinit var homePage: HomePage
 
     @Steps
@@ -16,17 +14,17 @@ open class NavHeaderSteps {
 
     @Step
     fun clickMore() {
-        header.clickMore()
+        webHeader.clickMore()
     }
 
     @Step
-    fun clickHelp() {
-        header.clickHelp()
+    fun clickHelpAndSupport() {
+        webHeader.clickHelpAndSupportLink()
     }
 
     @Step
     fun clickHome() {
-        header.clickHome()
+        webHeader.clickHomeIcon()
     }
 
     @Step

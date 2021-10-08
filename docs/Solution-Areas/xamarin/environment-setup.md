@@ -29,3 +29,7 @@ Xcode is also required to be installed. Kainos users - Xcode has to be installed
   - check the `Xcode Path` is set in Rider: `Preferences -> Build,Execution,Deployment -> iOS -> Xcode path` to e.g. `/Applications/Xcode.app`
   - Open the Xcode app, create a default Xamarin forms project targetting iOS. Debug this and wait for the Simulator app to spin up. Restart Rider and try again.
 - Android: if you get complaints about the wrong version of the SDK (eg its looking for v29), open `Visual Studio for Mac -> Preferences -> Projects/Sdk Locations/Android`. Find the correct SDK e.g. under `Android 10.0 - Q` then install it too.
+
+## Android
+
+For more Android-specific setup steps, see the [xamarin android docs](android.md)

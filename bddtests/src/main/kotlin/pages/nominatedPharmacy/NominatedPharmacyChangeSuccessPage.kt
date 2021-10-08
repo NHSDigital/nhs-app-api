@@ -2,12 +2,12 @@ package pages.nominatedPharmacy
 
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
-import pages.navigation.HeaderNative
+import pages.navigation.WebHeader
 
 @DefaultUrl("http://web.local.bitraft.io:3000/nominated-pharmacy/change-success")
 open class NominatedPharmacyChangeSuccessPage : PharmacyDetailComponent() {
 
-    private lateinit var headerNative: HeaderNative
+    private lateinit var webHeader: WebHeader
 
     val prescriptionsLink = HybridPageElement(
             webDesktopLocator = "//a[contains(text(), 'Go to your prescriptions')]",
@@ -15,6 +15,6 @@ open class NominatedPharmacyChangeSuccessPage : PharmacyDetailComponent() {
     )
 
     fun isLoaded() {
-        headerNative.waitForPageHeaderText("You have nominated a pharmacy")
+        webHeader.waitForPageHeaderText("You have nominated a pharmacy")
     }
 }

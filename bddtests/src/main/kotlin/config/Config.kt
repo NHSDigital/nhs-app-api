@@ -27,18 +27,7 @@ class Config private constructor() {
     val dataPreferencesPath: String
     val dataPreferencesUrl: String
 
-    val browserstackUrl: String
-    val browserstackLocalIdentifier: String?
-    val browserstackBrowserResolution: String
-    val browserstackTimezone: String
-    val browserstackAppVersion: String?
-    val browserstackNetworkProfile: String?
-    val browserstackDeviceName: String?
-    val browserstackDeviceOSVersion: String?
-    val browserstackBuild: String
     val autoLogin: String
-    val appPath: String
-    val appiumServer: String
     val sessionExpiryMinutes: Long
     val showPageSourceForXPathQuery: Boolean
     val gpLookupApiKey: String
@@ -74,22 +63,7 @@ class Config private constructor() {
         logBackendUrl = envOrDefault("logBackendUrl", "http://log.local.bitraft.io:8090")
         isDockerised = envOrDefault("DOCKER",false)
 
-        val browserstackUsername = envOrDefault("BROWSERSTACK_USERNAME", "NOT_PROVIDED")
-        val browserstackAccessKey = envOrDefault("BROWSERSTACK_ACCESS_KEY", "NOT_PROVIDED")
-        browserstackUrl = "http://$browserstackUsername:$browserstackAccessKey@hub-cloud.browserstack.com/wd/hub"
-        browserstackLocalIdentifier = envOrNull("BROWSERSTACK_LOCAL_IDENTIFIER")
-        browserstackBrowserResolution = envOrDefault("BROWSERSTACK_BROWSER_RESOLUTION","")
-        browserstackAppVersion = envOrNull("BROWSERSTACK_APP_VERSION")
-        browserstackNetworkProfile = envOrNull("BROWSERSTACK_NETWORK_PROFILE")
-        browserstackTimezone = envOrDefault("BROWSERSTACK_TIMEZONE", "UTC")
-        browserstackBuild = envOrDefault(
-                "BROWSERSTACK_BUILD",
-                (System.getenv("HOSTNAME") ?: System.getenv("COMPUTERNAME") ?: "unknown") + "-manual")
         showPageSourceForXPathQuery = envOrDefault("XPATH_PAGE_SOURCE", false)
-        appPath = envOrDefault("APP_PATH", "NOT_PROVIDED")
-        appiumServer = envOrDefault("APPIUM_SERVER", "http://127.0.0.1:4723/wd/hub")
-        browserstackDeviceName = envOrNull("BROWSERSTACK_DEVICE_NAME")
-        browserstackDeviceOSVersion = envOrNull("BROWSERSTACK_OS_VERSION")
 
         cidSettingsUrl = envOrDefault(
                 "CID_SETTINGS_URL",
@@ -143,16 +117,6 @@ class Config private constructor() {
     private fun envOrDefault(key: String, defaultValue: String): String {
         return (System.getenv(key) ?: defaultValue)
                 .also { println("$key set as $it") }
-    }
-
-    private fun envOrNull(key: String): String? {
-        return (System.getenv(key))
-                .also {
-                    when (it) {
-                        null -> println("$key not set")
-                        else -> println("$key set as $it")
-                    }
-                }
     }
 
     private fun envOrDefault(key: String, defaultValue: Long): Long {

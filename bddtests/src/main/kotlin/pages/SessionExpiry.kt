@@ -1,11 +1,6 @@
 package pages
 
 import config.Config
-import io.appium.java_client.AppiumDriver
-import io.appium.java_client.MobileElement
-import utils.GlobalSerenityHelpers
-import utils.getOrFail
-import webdrivers.getSpecificDriver
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
@@ -13,55 +8,36 @@ import java.time.temporal.ChronoUnit
 const val SCREEN_LOCK_PREVENTION_INTERVAL = 30_000L
 const val SESSION_EXPIRY_MODAL_DISPLAY_DURATION = 60_000L
 const val ADDITIONAL_TIME_FOR_SESSION_TO_EXPIRE = 60_000L
-const val SESSION_EXPIRY_DIALOG_MESSAGE = "For security reasons, we'll log you out of the NHS App in 1 minute."
 
-open class SessionExpiry : NativePageObject() {
+open class SessionExpiry : HybridPageObject() {
 
     private val sessionExpiryModalDisplayDuration = Duration.ofMillis(SESSION_EXPIRY_MODAL_DISPLAY_DURATION)
     private val additionalTimeForSessionToExpire = Duration.ofMillis(ADDITIONAL_TIME_FOR_SESSION_TO_EXPIRE)
 
     private val timeUntilSessionExpiryAfterModalDisplay =
-            sessionExpiryModalDisplayDuration.plus(additionalTimeForSessionToExpire)
-
-
-    private val headerNative = NativePageElement(
-            androidLocator = "//android.widget.TextView[@text=\"$SESSION_EXPIRY_DIALOG_MESSAGE\"]",
-            iOSLocator = "//XCUIElementTypeStaticText[@value=\"$SESSION_EXPIRY_DIALOG_MESSAGE\" and @visible='true']",
-            webDesktopLocator = "//p[@data-sid='warningDurationInformation']",
-            page = this
-    )
+        sessionExpiryModalDisplayDuration.plus(additionalTimeForSessionToExpire)
 
     private val headerWeb = HybridPageElement(
-            webDesktopLocator = "//p",
-            page = this
+        webDesktopLocator = "//p",
+        page = this
     ).withNormalisedText("For security reasons, you'll be logged out in 1 minute.")
 
-    private val extendSessionButton = NativePageElement(
-            androidLocator = "//android.widget.Button[@text='STAY LOGGED IN']",
-            iOSLocator = "//XCUIElementTypeButton[@label='Stay logged in']",
-            webDesktopLocator = "//button[contains(text(),'Stay logged in')]",
-            page = this
+    private val extendSessionButton = HybridPageElement(
+        webDesktopLocator = "//button[contains(text(),'Stay logged in')]",
+        page = this
     )
 
-    private val logoutButton = NativePageElement(
-            androidLocator = "//android.widget.Button[@text='LOG OUT']",
-            iOSLocator = "//XCUIElementTypeButton[@label='Log out']",
-            webDesktopLocator = "//a[contains(text(),'Log out')]",
-            page = this
+    private val logoutButton = HybridPageElement(
+        webDesktopLocator = "//a[contains(text(),'Log out')]",
+        page = this
     )
 
     fun assertIsDisplayed() {
-        when (onMobile()) {
-            true -> headerNative.assertIsDisplayed()
-            false -> headerWeb.assertIsVisible()
-        }
+        headerWeb.assertIsVisible()
     }
 
     fun assertIsNotDisplayed() {
-        when (onMobile()) {
-            true -> headerNative.assertElementNotPresent()
-            false -> headerWeb.assertElementNotPresent()
-        }
+        headerWeb.assertElementNotPresent()
     }
 
     fun clickExtendSession() {
@@ -86,26 +62,6 @@ open class SessionExpiry : NativePageObject() {
         waitFor(timeUntilSessionExpiryAfterModalDisplay)
     }
 
-    fun backgroundAppUntilSessionExpiryModalShouldBeDisplayed() {
-        val modalDelay = timeUntilSessionExpiryModalShouldBeDisplayed()
-        backgroundAppFor(modalDelay)
-    }
-
-    fun backgroundAppUntilSessionExpiry() {
-        val expiryDelay = timeUntilSessionExpiry()
-        backgroundAppFor(expiryDelay)
-    }
-
-    private fun backgroundAppFor(delay: Duration) {
-        val driver = driver.getSpecificDriver<AppiumDriver<MobileElement>>()
-        driver.runAppInBackground(Duration.ofSeconds(-1))
-        waitFor(delay)
-        driver.activateApp(GlobalSerenityHelpers.APP_BUNDLE_ID.getOrFail())
-    }
-
-    private fun timeUntilSessionExpiry(): Duration =
-            timeUntilSessionExpiryModalShouldBeDisplayed() + timeUntilSessionExpiryAfterModalDisplay
-
     private fun timeUntilSessionExpiryModalShouldBeDisplayed(): Duration {
         val timeoutDuration = Duration.ofMinutes(Config.instance.sessionExpiryMinutes)
         return timeoutDuration.minus(sessionExpiryModalDisplayDuration)
@@ -126,8 +82,6 @@ open class SessionExpiry : NativePageObject() {
 
             println("$now: Sleeping ${delay}ms until $delayUntil")
             Thread.sleep(delay)
-
-            tryUnlockDevice()
         }
     }
 }

@@ -75,10 +75,6 @@ $(call expand_run_options_docker_image,run-android-http-mocks,STUBS)
 run-android-http-mocks:	## Run in docker with HTTP mocks for android
 	LOGINENV=stubbed ./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/stubbed/docker-compose.yml docker/stubbed/docker-compose.http-mocks.yml docker/android/docker-compose.yml
 
-$(eval $(call expand_run_options_docker_images,run-android-https))
-run-android-https: $(SSL_CERT)	## Run in docker with https for android
-	./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/https/docker-compose.yml docker/android/docker-compose.yml docker/android/docker-compose.https.yml
-
 run-localbdd:	## Run in docker with stubs so BDD tests can be run locally
 	$(MAKE) -C bddtests run-local
 
@@ -106,6 +102,6 @@ $(SSL_CERT):
 $(SECURE_STUBS_SSL_CERT):
 	./buildscripts/create-secure-stub-certificate.sh
 
-.PHONY: run run-dev-stubs run-https run-android run-android-https run-localbdd run-bdd run-deps validate_local_secrets validate_local_images configure-package-feed
+.PHONY: run run-dev-stubs run-https run-android run-localbdd run-bdd run-deps validate_local_secrets validate_local_images configure-package-feed
 
 -include buildscripts/util.make

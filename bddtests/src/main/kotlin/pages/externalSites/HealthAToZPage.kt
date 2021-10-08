@@ -10,9 +10,8 @@ class HealthAToZPage: HybridPageObject() {
     val url: URL = URL("http://stubs.local.bitraft.io/external/healthAtoZ")
 
     private val pageTitle = HybridPageElement(
-            webDesktopLocator = "//h1",
-            androidLocator = null,
-            page = this
+        webDesktopLocator = "//h1",
+        page = this
     ).withText("Health A to Z")
 
     fun assertTitleVisible() {

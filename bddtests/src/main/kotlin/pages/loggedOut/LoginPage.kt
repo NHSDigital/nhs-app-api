@@ -12,61 +12,46 @@ import pages.assertIsVisible
 class LoginPage : HybridPageObject() {
 
     private val pageHeading = HybridPageElement(
-            webDesktopLocator = "//h1[contains(text(), 'Access your NHS services')]",
-            webMobileLocator = "//h2[contains(text(), 'How are you feeling today?')]",
-            androidLocator = "//h2[contains(text(), 'How are you feeling today?')]",
-            iOSLocator = "//h2[contains(text(), 'How are you feeling today?')]",
-            page = this
+        webDesktopLocator = "//h1[contains(text(), 'Access your NHS services')]",
+        page = this
     )
 
     val downloadAppPanel = HybridPageElement(
-            webDesktopLocator = "//div[@data-id='app-panel']",
-            webMobileLocator = "//div[@data-id='app-panel']",
-            androidLocator = null,
-            page = this
+        webDesktopLocator = "//div[@data-id='app-panel']",
+        page = this
     )
 
     val desktopSpecificInformation = HybridPageElement(
-            webDesktopLocator = "//*[@id='desktopSpecificInformation']",
-            webMobileLocator = "//*[@id='desktopSpecificInformation']",
-            androidLocator = null,
-            page = this
+        webDesktopLocator = "//*[@id='desktopSpecificInformation']",
+        page = this
     )
 
     val beforeYouStartDiv = HybridPageElement(
-            webDesktopLocator = "//div[@id='before-you-start']",
-            webMobileLocator = "//div@id='before-you-start']",
-            androidLocator = null,
-            page = this
+        webDesktopLocator = "//div[@id='before-you-start']",
+        page = this
     )
 
     val otherServicesDiv = HybridPageElement(
-            webDesktopLocator = "//div[@id='other-services']",
-            webMobileLocator = "//div@id='other-services']",
-            androidLocator = null,
-            page = this
+        webDesktopLocator = "//div[@id='other-services']",
+        page = this
     )
 
     val loginOrCreateAccountButton = HybridPageElement(
-            webDesktopLocator = "//button[contains(text(), 'Continue with NHS login')]",
-            webMobileLocator = "//button[contains(text(), 'Continue with NHS login')]",
-            androidLocator = null,
-            page = this
+        webDesktopLocator = "//button[contains(text(), 'Continue with NHS login')]",
+        page = this
     )
 
     private val helpIcon = HybridPageElement(
-            webDesktopLocator = "//a[@id='help_icon']/*[name()='svg']",
-            androidLocator = null,
-            page = this
+        webDesktopLocator = "//a[@id='help_icon']/*[name()='svg']",
+        page = this
     )
 
     private lateinit var accountCreationPage: CIDAccountCreationPage
 
     private val timeoutBanner = HybridPageElement(
-            webDesktopLocator = "//*[@data-purpose='session-timeout'][contains(text(), " +
-                    "'For your security, you need to log in again')]",
-            androidLocator = null,
-            page = this
+        webDesktopLocator = "//*[@data-purpose='session-timeout'][contains(text(), " +
+                "'For your security, you need to log in again')]",
+        page = this
     )
 
     fun signIn() {

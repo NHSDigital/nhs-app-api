@@ -17,7 +17,6 @@ open class ServerError : ErrorPage() {
 
   private val serverErrorPageHeader = HybridPageElement(
     webDesktopLocator = "//h1[contains(text(),\"Server error\")]",
-    androidLocator = null,
     page = this,
     helpfulName = "Server error header"
   )

@@ -6,20 +6,20 @@ import org.openqa.selenium.By
 import org.openqa.selenium.NotFoundException
 import org.openqa.selenium.WebElement
 import pages.HybridPageObject
-import pages.navigation.HeaderNative
+import pages.navigation.WebHeader
 import java.util.ArrayList
 
 @DefaultUrl("http://web.local.bitraft.io:3000/linked-profiles")
 open class LinkedProfilesPage : HybridPageObject() {
 
-    private lateinit var headerNative: HeaderNative
+    private lateinit var webHeader: WebHeader
 
     private var linkedAccountsXpath = "//li[@data-sid='linked-account']"
     private var nameInsideLinkedProfileXpath: String = ".//h2"
     private var ageInsideLinkedProfileXpath = ".//p[@data-sid='age-months']"
 
     fun isLoaded() {
-        headerNative.waitForPageHeaderText("Linked profiles")
+        webHeader.waitForPageHeaderText("Linked profiles")
     }
 
     fun getDisplayedLinkedProfiles(): ArrayList<LinkedProfileOption> {

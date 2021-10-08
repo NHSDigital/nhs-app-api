@@ -13,7 +13,6 @@ class AccountAndSettingsPage : HybridPageObject() {
     private fun link(linkText: String): HybridPageElement {
         return HybridPageElement(
             webDesktopLocator = "$listMenuPath${String.format(containsTextXpathSubstring, linkText)}",
-            androidLocator = null,
             page = this,
             helpfulName = "$linkText Link")
     }
@@ -74,9 +73,6 @@ class AccountAndSettingsPage : HybridPageObject() {
     private val title by lazy {
         HybridPageElement(
             "//h1[normalize-space(text())='Account and settings']",
-            "//h1[normalize-space(text())='Account and settings']",
-            null,
-            null,
             this,
             helpfulName = "header")
     }

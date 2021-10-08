@@ -1,18 +1,18 @@
 package pages.gpAtHand
 
 import pages.HybridPageObject
-import pages.navigation.HeaderNative
+import pages.navigation.WebHeader
 import pages.sharedElements.expectedPage.ExpectedPageStructure
 
 abstract class GpAtHandBasePage: HybridPageObject() {
 
-    private lateinit var headerNative: HeaderNative
+    private lateinit var webHeader: WebHeader
     abstract val headerContext: String
     abstract val paragraphContext: String
 
 
     fun isLoaded() {
-        headerNative.waitForPageHeaderText("Service unavailable")
+        webHeader.waitForPageHeaderText("Service unavailable")
     }
 
     fun assertGpAtHandPageVisible() {

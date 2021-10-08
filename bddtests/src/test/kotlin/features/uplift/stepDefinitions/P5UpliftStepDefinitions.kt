@@ -1,7 +1,6 @@
 package features.uplift.stepDefinitions
 
 import constants.Supplier
-import features.sharedSteps.BrowserSteps
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import mocking.MockingClient
@@ -16,11 +15,7 @@ import pages.P5UpliftPage
 import pages.navigation.WebHeader
 import pages.withNormalisedText
 import utils.SerenityHelpers
-import pages.navigation.NavBarNative
-import features.sharedSteps.NavigationSteps
 import pages.assertIsVisible
-import utils.GlobalSerenityHelpers
-import utils.set
 
 class P5UpliftStepDefinitions : HybridPageObject() {
 
@@ -28,22 +23,11 @@ class P5UpliftStepDefinitions : HybridPageObject() {
 
   @Steps
   private lateinit var p5ShutterPage: P5UpliftPage
-  @Steps
-  lateinit var nav: NavigationSteps
-  @Steps
-  private lateinit var browser: BrowserSteps
 
   lateinit var webHeader: WebHeader
 
   @Given("^I am a patient with proof level 5$")
   fun iAmAPatientWithProofLevel5() {
-    setupPatient()
-  }
-
-  @Given("^I am a patient logging in natively with proof level 5$")
-  fun iAmAPatientLoggingInNativelyWithProofLevel5() {
-    browser.setUserAgentSource("ios")
-    GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.set(true)
     setupPatient()
   }
 
@@ -86,42 +70,5 @@ class P5UpliftStepDefinitions : HybridPageObject() {
   @Then("^the uplift journey starts$")
   fun theUpliftJourneyStarts() {
     webHeader.getPageTitle().withNormalisedText(UpliftLoginRequestBuilder.title).assertIsVisible()
-  }
-
-
-  @Then("^the navbar is working$")
-  fun checkTheNavbarIsWorking(){
-    val linksToFollow = arrayListOf(
-            {followAppointmentNativeNavBarLink()},
-            {followPrescriptionsNativeNavBarLink()},
-            {followYourHealthNativeNavBarLink()},
-            {followAdviceNativeNavBarLink()},
-            {followMessagesNativeNavBarLink()}
-    )
-
-    linksToFollow.forEachIndexed { index, link ->
-      if (index != linksToFollow.size)
-        link.invoke()
-    }
-  }
-
-  private fun followAppointmentNativeNavBarLink() {
-    nav.select(NavBarNative.NavBarType.APPOINTMENTS)
-  }
-
-  private fun followPrescriptionsNativeNavBarLink() {
-    nav.select(NavBarNative.NavBarType.PRESCRIPTIONS)
-  }
-
-  private fun followYourHealthNativeNavBarLink() {
-    nav.select(NavBarNative.NavBarType.YOUR_HEALTH)
-  }
-
-  private fun followAdviceNativeNavBarLink() {
-    nav.select(NavBarNative.NavBarType.ADVICE)
-  }
-
-  private fun followMessagesNativeNavBarLink() {
-    nav.select(NavBarNative.NavBarType.MESSAGES)
   }
 }

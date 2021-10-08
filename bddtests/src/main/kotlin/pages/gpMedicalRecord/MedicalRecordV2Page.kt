@@ -21,40 +21,36 @@ class MedicalRecordV2Page : HybridPageObject() {
             findOutMoreAboutAccessLinkText
 
     val pageTitle = HybridPageElement(
-            webDesktopLocator = "//h1[contains(text(),\"Your GP health record\")]",
-            androidLocator = null,
-            page = this,
-            helpfulName = "GP Health Record Title")
+        webDesktopLocator = "//h1[contains(text(),\"Your GP health record\")]",
+        page = this,
+        helpfulName = "GP Health Record Title")
 
     val askForDcrAccessInsetText = HybridPageElement(
-            webDesktopLocator = askForDcrAccessSelector,
-            page = this,
-            helpfulName = "Ask for DCR access info"
+        webDesktopLocator = askForDcrAccessSelector,
+        page = this,
+        helpfulName = "Ask for DCR access info"
     )
 
     val askForDcrAccessInsetTextLink = HybridPageElement(
-            webDesktopLocator = "$askForDcrAccessSelector/a",
-            page = this,
-            helpfulName = "Ask for DCR access info - Link"
+        webDesktopLocator = "$askForDcrAccessSelector/a",
+        page = this,
+        helpfulName = "Ask for DCR access info - Link"
     )
 
     val clinicalAbbreviationsLink =
-            HybridPageElement(
-                    webDesktopLocator = "//a/span[contains(text(),'Help with abbreviations')]",
-                    androidLocator = null,
-                    page = this)
+        HybridPageElement(
+            webDesktopLocator = "//a/span[contains(text(),'Help with abbreviations')]",
+            page = this)
 
     private val noSummaryCareAccessMessage =
-            HybridPageElement(
-                    webDesktopLocator = "//div[@id='errorMsg']",
-                    androidLocator = null,
-                    page = this)
+        HybridPageElement(
+            webDesktopLocator = "//div[@id='errorMsg']",
+            page = this)
 
     fun getBody(message: String): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "//p[contains(text(), \"$message\")]",
-                androidLocator = null,
-                page = this)
+            webDesktopLocator = "//p[contains(text(), \"$message\")]",
+            page = this)
     }
 
     fun assertMedicalRecordSectionLinkExists(linkText: String) {

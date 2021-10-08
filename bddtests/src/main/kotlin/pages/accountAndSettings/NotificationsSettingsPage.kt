@@ -39,11 +39,8 @@ class NotificationsSettingsPage : HybridPageObject() {
 
     private val title by lazy {
         HybridPageElement(
-                "//h1[normalize-space(text())='Manage notifications']",
-                "//h1[normalize-space(text())='Manage notifications']",
-                null,
-                null,
-                this,
-                helpfulName = "header")
+            "//h1[normalize-space(text())='Manage notifications']",
+            this,
+            helpfulName = "header")
     }
 }

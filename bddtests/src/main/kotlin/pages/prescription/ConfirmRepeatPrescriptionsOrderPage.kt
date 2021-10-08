@@ -14,12 +14,9 @@ const val HEADER_RETRIES = 20
 open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject() {
     val title by lazy {
         HybridPageElement(
-                "//h1[normalize-space(text())='Check your prescription details before you order']",
-                "//h1[normalize-space(text())='Check your prescription details before you order']",
-                null,
-                null,
-                this,
-                helpfulName = "header")
+            "//h1[normalize-space(text())='Check your prescription details before you order']",
+            page = this,
+            helpfulName = "header")
     }
     val specialRequestTextXPath = "//*[@id='specialRequestText']"
 
@@ -28,19 +25,18 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject() {
     val pharmacyDetailComponent = PharmacyDetailComponent()
 
     val confirmAndOrderRepeatPrescriptionButton = HybridPageElement(
-            webDesktopLocator = "//*[@id='btn_confirm_and_order_prescription']",
-            androidLocator = null,
-            page = this
+        webDesktopLocator = "//*[@id='btn_confirm_and_order_prescription']",
+        page = this
     )
 
     val changeThisPrescriptionButton = HybridPageElement(
-            webDesktopLocator = "//a[@id='changeRepeatPrescription']",
-            page = this
+        webDesktopLocator = "//a[@id='changeRepeatPrescription']",
+        page = this
     )
 
     val changeThisSpecialRequest = HybridPageElement(
-            webDesktopLocator = "//a[@id='changeSpecialRequest']",
-            page = this
+        webDesktopLocator = "//a[@id='changeSpecialRequest']",
+        page = this
     )
 
     val serverErrorPageHeader = "Error sending order"

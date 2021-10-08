@@ -11,8 +11,6 @@ Feature: Cookie Banner
     When I click the link called 'cookies policy' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/cookies'
     Then a new tab has been opened by the link
 
-  @native
-  @nativesmoketest
   Scenario: Cookie banner doesn't appear on the "non logged in" login page, on the native app
     Given I am using the native app user agent
     When I am on the login logged-out page

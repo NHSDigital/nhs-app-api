@@ -16,23 +16,20 @@ class MyRecordDocumentsPage : HybridPageObject() {
 
     private fun getIndividualDocumentItem(): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = baseDocumentItemPath,
-                androidLocator = null,
-                page = this)
+            webDesktopLocator = baseDocumentItemPath,
+            page = this)
     }
 
     private fun getDocumentDateAndType(): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "$baseDocumentItemPath//p",
-                androidLocator = null,
-                page = this)
+            webDesktopLocator = "$baseDocumentItemPath//p",
+            page = this)
     }
 
     private fun getDocumentTerm(): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "$baseDocumentItemPath//h2",
-                androidLocator = null,
-                page = this)
+            webDesktopLocator = "$baseDocumentItemPath//h2",
+            page = this)
     }
 
     fun assertDocumentItemsVisible(expectedDocuments: List<ExpectedDocument>) {

@@ -4,11 +4,13 @@ import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.navigation.HeaderNative
+import pages.navigation.WebHeader
 import pages.text
 
 @DefaultUrl("http://web.local.bitraft.io:3000/silver-integration/feature-not-available")
 open class FeatureNotAvailablePage : HybridPageObject() {
+
+    private lateinit var webHeader: WebHeader
 
     val heading = HybridPageElement(
             webDesktopLocator = "//p[@data-purpose='error-heading']",
@@ -28,10 +30,8 @@ open class FeatureNotAvailablePage : HybridPageObject() {
             page = this
     )
 
-    private lateinit var headerNative: HeaderNative
-
     fun isLoaded(header: String) {
-        headerNative.waitForPageHeaderText(header)
+        webHeader.waitForPageHeaderText(header)
         Assert.assertEquals(
                 "This service is not available",
                 heading.text)

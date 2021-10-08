@@ -38,8 +38,8 @@ open class GpSessionError: HybridPageObject() {
 
     fun clickBackLink() {
         HybridPageElement(
-                webDesktopLocator = "//a[@data-purpose='error']",
-                page = this
+            webDesktopLocator = "//a[@data-purpose='error']",
+            page = this
         ).click()
     }
 
@@ -51,24 +51,21 @@ open class GpSessionError: HybridPageObject() {
 
     fun setupSubHeader(headerText: String): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "//h2[contains(text(),'$headerText')]",
-                androidLocator = null,
-                page = this
+            webDesktopLocator = "//h2[contains(text(),'$headerText')]",
+            page = this
         )
     }
 
     fun setupHeader(headerText: String): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "//h1[contains(text(),'$headerText')]",
-                androidLocator = null,
-                page = this
+            webDesktopLocator = "//h1[contains(text(),'$headerText')]",
+            page = this
         )
     }
 
     fun assertHeaderTag(headerText: String, tag: String): GpSessionError {
         val element = HybridPageElement(
             webDesktopLocator = "//$tag[contains(text(),'$headerText')]",
-            androidLocator = null,
             page = this
         )
         element.assertIsVisible()

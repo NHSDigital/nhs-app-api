@@ -4,24 +4,22 @@ import io.cucumber.datatable.DataTable
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import features.sharedSteps.BrowserSteps
-import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps
 import pages.myrecord.MyRecordWarningPage
-import pages.navigation.NavBarNative
+import pages.navigation.WebHeader
 import utils.toSingleElementList
 
 open class MedicalRecordWarningStepDefinitions {
 
     @Steps
-    lateinit var nav: NavigationSteps
-    @Steps
     lateinit var browser: BrowserSteps
 
+    private lateinit var webHeader: WebHeader
     private lateinit var myRecordWarningPage: MyRecordWarningPage
 
     @Given("^I navigate to the Medical Record Page$")
     fun iNavigateToTheMedicalRecordPage() {
-        nav.select(NavBarNative.NavBarType.YOUR_HEALTH)
+        webHeader.clickYourHealthPageLink()
     }
 
     @Then("^the Medical Record Warning Page is displayed$")

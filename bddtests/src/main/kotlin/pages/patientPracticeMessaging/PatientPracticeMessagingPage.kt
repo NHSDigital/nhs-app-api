@@ -30,10 +30,7 @@ class PatientPracticeMessagingPage: HybridPageObject() {
         val path = "//h1[normalize-space(text())='GP surgery messages']"
         val header = HybridPageElement(
                 path,
-                path,
-                null,
-                null,
-                this,
+                page = this,
                 helpfulName = "header")
         header.waitForElement()
     }
@@ -72,10 +69,9 @@ class PatientPracticeMessagingPage: HybridPageObject() {
 
     fun clickFirstMessage() {
         HybridPageElement(
-                webDesktopLocator = "//a[@id='${PatientPracticeMessagingSerenityHelpers.INITIAL_MESSAGE_ID
-                        .getOrNull<String>()}']",
-                androidLocator = null,
-                page= this
+            webDesktopLocator = "//a[@id='${PatientPracticeMessagingSerenityHelpers.INITIAL_MESSAGE_ID
+                    .getOrNull<String>()}']",
+            page= this
         ).click()
         Thread.sleep(DEFAULT_WAIT_TIME)
     }
@@ -86,39 +82,34 @@ class PatientPracticeMessagingPage: HybridPageObject() {
 
     private fun noMessagesText(): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "//p[contains(text(),'You have no messages')]",
-                androidLocator = null,
-                page = this
+            webDesktopLocator = "//p[contains(text(),'You have no messages')]",
+            page = this
         )
     }
 
     private fun getMessageDate(): HybridPageElement{
         return HybridPageElement(
-                webDesktopLocator = "$baseMessagePath//time",
-                androidLocator = null,
-                page = this
+            webDesktopLocator = "$baseMessagePath//time",
+            page = this
         )
     }
 
     private fun getMessageSubject(): HybridPageElement{
         return HybridPageElement(
-                webDesktopLocator = "$baseMessagePath//p",
-                androidLocator = null,
-                page = this)
+            webDesktopLocator = "$baseMessagePath//p",
+            page = this)
     }
 
     private fun getUnreadIndicator(): HybridPageElement{
         return HybridPageElement(
-                webDesktopLocator = "//*[@id='unreadIndicator0']",
-                androidLocator = null,
-                page = this)
+            webDesktopLocator = "//*[@id='unreadIndicator0']",
+            page = this)
     }
 
     private fun getMessageTitle(): HybridPageElement{
         return HybridPageElement(
-                webDesktopLocator = "$baseMessagePath//h2",
-                androidLocator = null,
-                page = this)
+            webDesktopLocator = "$baseMessagePath//h2",
+            page = this)
     }
 
 }

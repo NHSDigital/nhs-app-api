@@ -9,7 +9,6 @@ import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.asciiText
 import pages.assertIsVisible
-import pages.navigation.HeaderNative
 import pages.typeTextIntoTextArea
 
 const val DELAY_FOR_ELEMENT_SELECTION: Long = 50
@@ -29,7 +28,6 @@ fun resolveDetailsField(dosage: String?, quantity: String?): ArrayList<String> {
 @DefaultUrl("http://web.local.bitraft.io:3000/prescriptions/repeat-courses")
 open class RepeatPrescriptionsPage : HybridPageObject() {
     var headerText: String = "Order a repeat prescription"
-    lateinit var headerBar: HeaderNative
 
     private val prescriptionNameLocator = By.cssSelector("[data-label='prescription-name']")
     private val prescriptionInstructionsLocator = By.cssSelector("[data-label='prescription-description']")
@@ -37,24 +35,23 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
     private val medicalAbbreviationExtLink = "http://stubs.local.bitraft.io:8080/external/nhsuk/abbreviations"
 
     val orderRepeatPrescriptionButton = HybridPageElement(
-            webDesktopLocator = "//button[@id='btn_order_prescription']",
-            androidLocator = null,
-            page = this
+        webDesktopLocator = "//button[@id='btn_order_prescription']",
+        page = this
     )
 
     val specialRequestTextArea = HybridPageElement(
-            webDesktopLocator = specialRequestTextAreaXpath,
-            page = this
+        webDesktopLocator = specialRequestTextAreaXpath,
+        page = this
     )
 
     val medicalAbbreviationLabel = HybridPageElement(
-            webDesktopLocator = "//summary/span[contains(text(),'Help with medical abbreviations')]",
-            page = this
+        webDesktopLocator = "//summary/span[contains(text(),'Help with medical abbreviations')]",
+        page = this
     )
 
     val medicalAbbreviationLink = HybridPageElement(
-            webDesktopLocator = "//a[contains(text(),'abbreviations commonly found in medical records')]",
-            page = this
+        webDesktopLocator = "//a[contains(text(),'abbreviations commonly found in medical records')]",
+        page = this
     )
 
     override fun shouldBeDisplayed() {
@@ -109,11 +106,7 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
     }
 
     fun selectXPrescriptionsToOrder(numberOfSubscriptionsToSelect: Int) {
-        var repeatPrescriptionContainers = findAllByXpath("//div[@data-purpose='repeat-prescription']")
-        if(repeatPrescriptionContainers.isEmpty() && onMobile()){
-            locatorMethods.waitForNativeStepToComplete()
-            repeatPrescriptionContainers = findAllByXpath("//div[@data-purpose='repeat-prescription']")
-        }
+        val repeatPrescriptionContainers = findAllByXpath("//div[@data-purpose='repeat-prescription']")
         for (i in 0..(numberOfSubscriptionsToSelect - 1)) {
             val label = repeatPrescriptionContainers[i].findElement<WebElement>(By.tagName("label"))
             label.click()
@@ -140,13 +133,12 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
         val instructions = courseToSelect.getInstructions()
         return HybridPageElement(
                 webDesktopLocator = "//label[contains(.," +
-                        "'${instructions[0]}') " +
-                        when(instructions.size) {
-                            2 -> " and contains(.,'${instructions[1]}')"
-                            else -> ""
-                        } +
-                        " and contains(.,'${courseToSelect.name}')]",
-                androidLocator = null,
+                    "'${instructions[0]}') " +
+                    when(instructions.size) {
+                        2 -> " and contains(.,'${instructions[1]}')"
+                        else -> ""
+                    } +
+                    " and contains(.,'${courseToSelect.name}')]",
                 page = this
         )
     }

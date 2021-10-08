@@ -6,6 +6,7 @@ Feature: Organ Donation Frontend
     Given I am using the native app user agent
     And I am a <GP System> user not registered with organ donation, who wishes to register and opt in
     And I am logged in
+    When I navigate to the health record hub page
     And I navigate to the internal Organ Donation Choice Page
     And I choose to donate my organs
     Then the Organ Donation Your Choice page is displayed
@@ -24,7 +25,6 @@ Feature: Organ Donation Frontend
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation has been successfully created
   @smoketest
-  @nativesmoketest
     Examples:
       | GP System |
       | EMIS      |
@@ -77,14 +77,11 @@ Feature: Organ Donation Frontend
     And I click the 'Submit my decision' button on an Organ Donation page
     Then the Organ Donation View Registration page is displayed
     And the decision to opt out of organ donation has been successfully created
-  @nativesmoketest
-    Examples:
-      | GP System |
-      | VISION    |
     Examples:
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user can opt to donate some of their organs
     Given I am using the native app user agent

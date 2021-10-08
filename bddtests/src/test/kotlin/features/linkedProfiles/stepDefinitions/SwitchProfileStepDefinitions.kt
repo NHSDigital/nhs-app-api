@@ -4,7 +4,6 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
-import features.sharedSteps.NavigationSteps
 import mockingFacade.linkedProfiles.LinkedProfileFacade
 import models.switchProfiles.SwitchProfileData
 import net.thucydides.core.annotations.Steps
@@ -19,8 +18,6 @@ class SwitchProfileStepDefinitions {
     lateinit var browser: BrowserSteps
     @Steps
     lateinit var login: LoginSteps
-    @Steps
-    lateinit var nav: NavigationSteps
 
     lateinit var home: HomePage
 

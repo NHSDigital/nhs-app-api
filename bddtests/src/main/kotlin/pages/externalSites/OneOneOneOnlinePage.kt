@@ -10,9 +10,8 @@ class OneOneOneOnlinePage: HybridPageObject() {
     val url: URL = URL("http://stubs.local.bitraft.io/external/111")
 
     private val pageTitle = HybridPageElement(
-            webDesktopLocator = "//h1",
-            androidLocator = null,
-            page = this
+        webDesktopLocator = "//h1",
+        page = this
     ).withText("/home")
 
     fun assertTitleVisible() {

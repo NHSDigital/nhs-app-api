@@ -2,7 +2,7 @@ package pages.nominatedPharmacy
 
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
-import pages.navigation.HeaderNative
+import pages.navigation.WebHeader
 
 @DefaultUrl("http://web.local.bitraft.io:3000/nominated-pharmacy/confirm")
 open class ConfirmNominatedPharmacyPage : PharmacyDetailComponent() {
@@ -12,9 +12,9 @@ open class ConfirmNominatedPharmacyPage : PharmacyDetailComponent() {
             page = this
     )
 
-    private lateinit var headerNative: HeaderNative
+    private lateinit var webHeader: WebHeader
 
     fun isLoaded() {
-        headerNative.waitForPageHeaderText("Check your nominated pharmacy details")
+        webHeader.waitForPageHeaderText("Check your nominated pharmacy details")
     }
 }

@@ -10,9 +10,8 @@ abstract class NhsAppHelpPage protected constructor(title: String): HybridPageOb
     val url = URL("http://stubs.local.bitraft.io/help/${title}")
 
     private val pageTitle = HybridPageElement(
-            webDesktopLocator = "//h1",
-            androidLocator = null,
-            page = this
+        webDesktopLocator = "//h1",
+        page = this
     ).withText(title, false)
 
 
