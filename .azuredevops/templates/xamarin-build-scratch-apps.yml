@@ -1,0 +1,29 @@
+parameters:
+  - name: configuration
+    type: string
+  - name: apksignerKeystorePassword
+    type: string
+    default: '$(android.debug.key.store.password)'
+  - name: nativeVersion
+    type: string
+  - name: androidBuildNumber
+    type: string
+  - name: iosBuildNumber
+    type: string
+
+jobs:
+  - template: xamarin-android-client-build-job.yml
+    parameters:
+      configuration: ${{ parameters.configuration }} - Release
+      apkFileName: 'com.nhs.online.nhsonline.${{ lower(parameters.configuration) }}.apk'
+      keyStoreFile: AndroidSigningKeyStore
+      apksignerKeystorePassword: '${{ parameters.apksignerKeystorePassword }}'
+      keystoreAlias: 'playconsoleuploadkey'
+      nativeVersion: '${{ parameters.nativeVersion }}'
+      buildNumber: '${{ parameters.androidBuildNumber }}'
+  - template: xamarin-ios-client-build-job.yml
+    parameters:
+      configuration: ${{ parameters.configuration }} - Release
+      provProfileSecureFile: iOSDevelopment${{ lower(parameters.configuration) }}.mobileprovision
+      nativeVersion: '${{ parameters.nativeVersion }}'
+      buildNumber: '${{ parameters.iosBuildNumber }}'

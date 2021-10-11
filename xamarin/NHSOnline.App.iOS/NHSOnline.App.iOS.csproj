@@ -49,12 +49,48 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Debug|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Release|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Release|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch1 - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch1 - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch2 - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch2 - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch3 - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch3 - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch4 - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch4 - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch5 - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch5 - Debug|iPhoneSimulator' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch6 - Debug|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch6 - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch7 - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch7 - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch8 - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch8 - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch9 - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch9 - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch10 - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch10 - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch11 - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch11 - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch12 - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch12 - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch13 - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch13 - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch14 - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch14 - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch15 - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch15 - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch16 - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch16 - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch17 - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch17 - Debug|iPhoneSimulator' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch18 - Debug|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch18 - Debug|iPhoneSimulator' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch19 - Debug|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch19 - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch20 - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch20 - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch21 - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Scratch21 - Debug|iPhoneSimulator' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingSandpit - Debug|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingSandpit - Debug|iPhoneSimulator' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OnboardingSandpit - Release|iPhone' " />
@@ -182,9 +218,27 @@
     <None Include="Properties\BuildConfiguration.env.OnboardingAos.props" />
     <None Include="Properties\BuildConfiguration.env.Preview.props" />
     <None Include="Properties\BuildConfiguration.env.Production.props" />
+    <None Include="Properties\BuildConfiguration.env.Scratch1.props" />
+    <None Include="Properties\BuildConfiguration.env.Scratch10.props" />
+    <None Include="Properties\BuildConfiguration.env.Scratch11.props" />
+    <None Include="Properties\BuildConfiguration.env.Scratch12.props" />
+    <None Include="Properties\BuildConfiguration.env.Scratch13.props" />
+    <None Include="Properties\BuildConfiguration.env.Scratch14.props" />
+    <None Include="Properties\BuildConfiguration.env.Scratch15.props" />
+    <None Include="Properties\BuildConfiguration.env.Scratch16.props" />
+    <None Include="Properties\BuildConfiguration.env.Scratch17.props" />
     <None Include="Properties\BuildConfiguration.env.Scratch18.props" />
     <None Include="Properties\BuildConfiguration.env.Scratch19.props" />
+    <None Include="Properties\BuildConfiguration.env.Scratch2.props" />
+    <None Include="Properties\BuildConfiguration.env.Scratch20.props" />
+    <None Include="Properties\BuildConfiguration.env.Scratch21.props" />
+    <None Include="Properties\BuildConfiguration.env.Scratch3.props" />
+    <None Include="Properties\BuildConfiguration.env.Scratch4.props" />
+    <None Include="Properties\BuildConfiguration.env.Scratch5.props" />
     <None Include="Properties\BuildConfiguration.env.Scratch6.props" />
+    <None Include="Properties\BuildConfiguration.env.Scratch7.props" />
+    <None Include="Properties\BuildConfiguration.env.Scratch8.props" />
+    <None Include="Properties\BuildConfiguration.env.Scratch9.props" />
     <None Include="Properties\BuildConfiguration.env.Staging.props" />
     <None Include="Properties\BuildConfiguration.platform.iPhone.props" />
     <None Include="Properties\BuildConfiguration.platform.iPhoneSimulator.props" />

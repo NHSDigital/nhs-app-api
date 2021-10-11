@@ -12,7 +12,27 @@ parameters:
       - OnboardingSandpit
       - OnboardingAos
       - Production
-
+      - Scratch1
+      - Scratch2
+      - Scratch3
+      - Scratch4
+      - Scratch5
+      - Scratch6
+      - Scratch7
+      - Scratch8
+      - Scratch9
+      - Scratch10
+      - Scratch11
+      - Scratch12
+      - Scratch13
+      - Scratch14
+      - Scratch15
+      - Scratch16
+      - Scratch17
+      - Scratch18
+      - Scratch19
+      - Scratch20
+      - Scratch21
   - name: intTestsRunXamarinNative
     displayName: Run Xamarin Native Integration Tests
     type: boolean
@@ -170,6 +190,19 @@ stages:
             provProfileSecureFile: iOSDevelopmentPreview.mobileprovision
             nativeVersion: '$(native.xamarin.version)'
             buildNumber: '$(native.xamarin.ios.build.number)'
+
+  - ${{ if startsWith(variables['native.xamarin.target'], 'Scratch') }}:
+    - stage: xamarin_scratch
+      displayName: Build Xamarin Scratch Apps
+      dependsOn:
+      jobs:
+        - template: .azuredevops/templates/xamarin-build-scratch-apps.yml
+          parameters:
+            configuration: $(native.xamarin.target)
+            apksignerKeystorePassword: '$(android.key.store.password)'
+            nativeVersion: '$(native.xamarin.version)'
+            androidBuildNumber: '$(native.xamarin.android.build.number)'
+            iosBuildNumber: '$(native.xamarin.ios.build.number)'
 
   - ${{ if or(eq(variables['native.xamarin.target'], 'Staging'), eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
     - stage: xamarin_staging
