@@ -1,5 +1,5 @@
 ---
-apiVersion: policy/v1
+apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
   name: {{ template "nhsapp.name" . }}-{{ $.Values.api.role }}-pdb-{{ .Chart.AppVersion }}

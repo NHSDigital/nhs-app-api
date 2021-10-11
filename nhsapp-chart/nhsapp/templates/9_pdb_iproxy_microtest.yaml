@@ -1,6 +1,6 @@
 {{- if $.Values.iproxy_microtest.deployMicrotest }}
 ---
-apiVersion: policy/v1
+apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
   name: {{ template "nhsapp.name" . }}-{{ $.Values.iproxy_microtest.role }}-pdb-{{ .Chart.AppVersion }}
