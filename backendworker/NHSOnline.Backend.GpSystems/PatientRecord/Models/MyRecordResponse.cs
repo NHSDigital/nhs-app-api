@@ -14,13 +14,9 @@
             Diagnosis = new Diagnosis();
             Examinations = new Examinations();
             Procedures = new Procedures();
-            MedicalHistories = new MedicalHistories();
             Documents = new PatientDocuments();
-            Recalls = new Recalls();
-            Encounters = new Encounters();
-            Referrals = new Referrals();
         }
-        
+
         public bool HasSummaryRecordAccess { get; set; }
         public bool HasDetailedRecordAccess { get; set; }
         public string Supplier {get; set;}
@@ -33,11 +29,7 @@
         public Consultations Consultations { get; set; }
         public Diagnosis Diagnosis { get; set; }
         public Examinations Examinations { get; set; }
-        public Procedures Procedures { get; set; }        
-        public MedicalHistories MedicalHistories { get; set; }
+        public Procedures Procedures { get; set; }
         public PatientDocuments Documents { get; set; }
-        public Recalls Recalls { get; set; }
-        public Encounters Encounters { get; set; }
-        public Referrals Referrals { get; set; }
     }
 }
