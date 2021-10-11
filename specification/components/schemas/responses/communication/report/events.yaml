@@ -7,8 +7,8 @@ items:
     eventDateTime:
       type: string
       format: date-time
-      description: The datetime at which the event occurred. Note that this may be several days after the datetime at which the communication request was originally made (particularly for in-app message Read events).
-      example: "2021-08-21T13:28:58:579"
+      description: The UTC datetime at which the event occurred. Note that this may be several days after the datetime at which the communication request was originally made (particularly for in-app message Read events).
+      example: "2021-08-21T13:28:58Z"
       nullable: false
     communicationId:
       type: string
@@ -40,8 +40,8 @@ items:
     communicationCreatedDateTime:
       type: string
       format: date-time
-      description: The datetime at which the original communication request was received.
-      example: "2021-08-05T13:28:52:175"
+      description: The UTC datetime at which the original communication request was received.
+      example: "2021-08-05T13:28:52Z"
       nullable: false
     event:
       type: string
@@ -50,7 +50,7 @@ items:
         Indicates the nature of the event being reported, as follows:
 
         - Cancelled: A request to send a push notification has been abandoned, because an in-app message to which it related Failed.
-        - Completed: Processing of the communication has successfully completed for this recipient and channel. For in-app messages this indicates that the message has been delivered to the patient's NHS App messaging inbox. For push notifications it indicates that the messages has been relayed for sending to the Apple or Google Push Notification Service (PNS), or scheduled for sending at 6am if processing occured during the hours of 10pm to 6am.
+        - Completed: Processing of the communication has successfully completed for this recipient and channel. For in-app messages this indicates that the message has been delivered to the patient's NHS App messaging inbox. For push notifications it indicates that the messages has been relayed for sending to the Apple or Google Push Notification Service (PNS), or scheduled for sending at 6am if processing occured during the hours of 10pm to 6am (UK time).
         - Failed: Processing of the communication failed abnormally for this recipient and channel. Further information can be found in the `eventDetail` field.
         - Read: An in-app message has been read for the first time by the recipient.
         - Rejected: A request to send a communication to this recipient has been rejected. This usually occurs when no NHS App user is known with the specified NHS number, or when attempting to send a push notification to an NHS App user who has not enabled push notifications. Further information can be found in the `eventDetail` field.
