@@ -5,10 +5,6 @@ secrets:
     file: "./docker/stubbed/certs/TestCert.pfx"
   tpp_cert_passphrase:
     file: "./docker/stubbed/certs/TestCert.password"
-  microtest_cert:
-    file: "./docker/stubbed/certs/TestCert.pfx"
-  microtest_cert_passphrase:
-    file: "./docker/stubbed/certs/TestCert.password"
   auth_signing_private_key:
     file: "./docker/stubbed/certs/private_key.pem"
   auth_signing_rsapass:
@@ -29,7 +25,6 @@ services:
       - ./docker/stubbed/env/emis_connectivity.env
       - ./docker/stubbed/env/ers_connectivity.env
       - ./docker/stubbed/env/gplookup_connectivity.env
-      - ./docker/stubbed/env/microtest_connectivity.env
       - ./docker/stubbed/env/onlineconsultationsproviders_connectivity.env
       - ./docker/stubbed/env/organdonation_connectivity.env
       - ./docker/stubbed/env/spine_connectivity.env
@@ -40,7 +35,6 @@ services:
   cid.local.bitraft.io:
     env_file:
       - ./docker/stubbed/env/emis_connectivity.env
-      - ./docker/stubbed/env/microtest_connectivity.env
       - ./docker/stubbed/env/tpp_connectivity.env
       - ./docker/stubbed/env/vision_connectivity.env
 
