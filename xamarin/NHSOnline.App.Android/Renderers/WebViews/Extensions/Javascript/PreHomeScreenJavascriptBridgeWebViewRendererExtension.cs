@@ -6,7 +6,7 @@ using Xamarin.Forms.Platform.Android;
 namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions.Javascript
 {
     [SuppressMessage("Microsoft.Design", "CA1001", Justification = "If we manually dispose the bridge we get occasional crashes as Android still has a reference to it, see https://github.com/xamarin/xamarin-android/issues/1408#issuecomment-373236773")]
-    internal sealed class PreHomeScreenJavascriptBridgeWebViewRendererExtension : IWebViewRendererExtension
+    internal sealed class PreHomeScreenJavascriptBridgeWebViewRendererExtension : WebViewRendererExtension
     {
         private readonly WebViewRenderer _renderer;
         private NhsAppPreHomeJavascriptBridge? _nhsAppPreHomeJavascriptBridge;
@@ -16,7 +16,7 @@ namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions.Javascript
             _renderer = renderer;
         }
 
-        public void OnElementChanged(ElementChangedEventArgs<WebView> e)
+        internal override void OnElementChanged(ElementChangedEventArgs<WebView> e)
         {
             if (e.OldElement is NhsAppPreHomeScreenWebview)
             {

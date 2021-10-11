@@ -5,6 +5,7 @@ using NHSOnline.App.Areas.Errors.Models;
 using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.Controls;
+using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices;
@@ -24,12 +25,13 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
         private readonly IBrowserOverlay _browserOverlay;
         private readonly ILogger _logger;
         private readonly WebIntegrationUriDestination _uriDestination;
+        private readonly SingleSignOnMonitor _singleSignOnMonitor;
         private readonly ICalendar _calendar;
         private readonly IFileHandler _fileHandler;
         private readonly IPageFactory _pageFactory;
 
         public WebIntegrationPresenter(
-            IWebIntegrationView view,
+            IWebIntegrationView webIntegrationView,
             WebIntegrationModel model,
             INhsLoginConfiguration nhsLoginConfiguration,
             IBrowserOverlay browserOverlay,
@@ -38,7 +40,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             IFileHandler fileHandler,
             IPageFactory pageFactory)
         {
-            _view = view;
+            _view = webIntegrationView;
             _model = model;
             _browserOverlay = browserOverlay;
             _logger = logger;
@@ -47,6 +49,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             _pageFactory = pageFactory;
 
             _uriDestination = new WebIntegrationUriDestination(nhsLoginConfiguration, model.WebIntegrationRequest.Url, model.AdditionalDomains);
+            _singleSignOnMonitor = new SingleSignOnMonitor(nhsLoginConfiguration, logger);
 
             _view.SetNavigationFooterItem(model.FooterItem);
             _view.SetWebIntegrationRequest(model.WebIntegrationRequest);
@@ -56,6 +59,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                 .RegisterHandler(HelpRequested, (view, handler) => view.HelpRequested = handler)
                 .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
                 .RegisterHandler(ViewOnNavigationFailed, (view, handler) => view.NavigationFailed = handler)
+                .RegisterHandler<WebViewPageLoadEventArgs>(ViewOnPageLoadComplete, (view, handler) => view.PageLoadComplete = handler)
                 .RegisterHandler(model.NavigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
                 .RegisterHandler(model.NavigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
                 .RegisterHandler(model.NavigationHandler.AdviceRequested, (view, handler) => view.AdviceRequested = handler)
@@ -150,6 +154,11 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             var model = new FullNavigationBackToHomeNetworkErrorModel(_model.NavigationHandler, _model.FooterItem);
             var page = _pageFactory.CreatePageFor(model);
             return _view.AppNavigation.Push(page);
+        }
+
+        private void ViewOnPageLoadComplete(WebViewPageLoadEventArgs pageLoadEventArgs)
+        {
+            _singleSignOnMonitor.PageLoadComplete(pageLoadEventArgs);
         }
 
         private async Task AddEventToCalendarRequested(AddEventToCalendarRequest request)

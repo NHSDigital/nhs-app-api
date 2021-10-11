@@ -9,7 +9,7 @@ using Xamarin.Forms.Platform.iOS;
 namespace NHSOnline.App.iOS.Renderers.WebViews.Extensions
 {
     [SuppressMessage("Reliability", "CA2000", Justification = "Disposing is hard and causes crashes if we do it wrong")]
-    internal class WebIntegrationRequestRendererExtension : IWebViewRendererExtension
+    internal sealed class WebIntegrationRequestRendererExtension : IWebViewRendererExtension
     {
         private readonly WkWebViewRenderer _renderer;
 

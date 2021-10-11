@@ -9,21 +9,20 @@ using WebView = Xamarin.Forms.WebView;
 
 namespace NHSOnline.App.Droid.Renderers.WebViews
 {
-    public abstract class BaseWebViewRenderer: WebViewRenderer
+    public class BaseWebViewRenderer : WebViewRenderer
     {
-        private readonly List<IWebViewRendererExtension> _extensions;
+        private readonly List<WebViewRendererExtension> _extensions = new();
 
-        protected BaseWebViewRenderer(Context context) : base(context)
+        public BaseWebViewRenderer(Context context) : base(context)
         {
-            _extensions = new List<IWebViewRendererExtension>();
+            AddExtension(new UserAgentWebViewRendererExtension(this));
+            AddExtension(new EnableTargetBlankLinksRendererExtension(this));
         }
 
-        protected void AddExtension(IWebViewRendererExtension extension)
+        private protected void AddExtension(WebViewRendererExtension extension)
         {
             _extensions.Add(extension);
         }
-
-        protected override WebViewClient GetWebViewClient() => new NhsAppFormsWebViewClient(this);
 
         protected override void OnElementChanged(ElementChangedEventArgs<WebView> e)
         {
@@ -34,6 +33,10 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
                 extension.OnElementChanged(e);
             }
         }
+
+        protected override WebViewClient GetWebViewClient() => new NhsAppFormsWebViewClient(this, _extensions.AsReadOnly());
+
+        protected override FormsWebChromeClient GetFormsWebChromeClient() => new BaseWebChromeClient(_extensions.AsReadOnly());
 
         protected override void Dispose(bool disposing)
         {
@@ -46,6 +49,7 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
 
                 Control.Destroy();
             }
+
             base.Dispose(disposing);
         }
     }

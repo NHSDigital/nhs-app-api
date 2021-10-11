@@ -8,18 +8,25 @@ namespace NHSOnline.IntegrationTests.Logs
 {
     public abstract class DockerLogs
     {
-        private readonly IEnumerable<string> _logs;
-        private readonly Regex _searchRegex;
+        private readonly IList<string> _logs;
         private readonly TimeSpan _logEndTimeExtension = new(0,0,1);
 
         protected DockerLogs(DateTime startTime, DateTime endTime, string containerName, string regex)
+            : this(startTime, endTime, containerName, new Regex(regex))
         {
-            _logs = UI.DockerLogs.GetDockerLogs(containerName, startTime, endTime.Add(_logEndTimeExtension));
-            _searchRegex = new Regex(regex);
         }
 
-        private bool HasMatches() => _logs.Any(x => _searchRegex.IsMatch(x));
+        protected DockerLogs(DateTime startTime, DateTime endTime, string containerName, Regex regex)
+        {
+            _logs = UI.DockerLogs.GetDockerLogs(containerName, startTime, endTime.Add(_logEndTimeExtension))
+                .Where(x => regex.IsMatch(x))
+                .ToList();
+        }
+
+        private bool HasMatches() => _logs.Any();
 
         public void AssertFound() => Assert.IsTrue(HasMatches());
+
+        protected IEnumerable<string> Logs => _logs;
     }
 }

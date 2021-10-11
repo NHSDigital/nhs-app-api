@@ -1,8 +1,10 @@
 using System;
+using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using Foundation;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
+using NHSOnline.App.iOS.Renderers.WebViews.Extensions;
 using NHSOnline.App.Logging;
 using WebKit;
 using Xamarin.Forms;
@@ -14,10 +16,13 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
     {
         private const int FrameLoadInterruptedErrorCode = 102;
         private readonly WkWebViewRenderer _renderer;
+        private readonly ReadOnlyCollection<IWebViewRendererExtension> _extensions;
 
-        public WebViewNavigationDelegate(WkWebViewRenderer renderer)
+        public WebViewNavigationDelegate(WkWebViewRenderer renderer,
+            ReadOnlyCollection<IWebViewRendererExtension> extensions)
         {
             _renderer = renderer;
+            _extensions = extensions;
         }
 
         private WebView WebView => (WebView)_renderer.Element;
@@ -50,6 +55,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                         true => WKNavigationActionPolicy.Cancel,
                         false => WKNavigationActionPolicy.Allow
                     };
+
                     decisionHandler(decision);
                 }
                 else
@@ -74,11 +80,21 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 
         public override void DidStartProvisionalNavigation(WKWebView webView, WKNavigation navigation)
         {
-            NhsAppResilience.ExecuteOnMainThread(action: () => Log(navigation));
+            foreach (var extension in _extensions)
+            {
+                NhsAppResilience.ExecuteImmediately(() => extension.DidStartProvisionalNavigation(navigation));
+            }
+
+            NhsAppResilience.ExecuteOnMainThread(() => Log(navigation));
         }
 
         public override void DidReceiveServerRedirectForProvisionalNavigation(WKWebView webView, WKNavigation navigation)
         {
+            foreach (var extension in _extensions)
+            {
+                NhsAppResilience.ExecuteImmediately(() => extension.DidReceiveServerRedirectForProvisionalNavigation(navigation));
+            }
+
             NhsAppResilience.ExecuteOnMainThread(() => Log(navigation));
         }
 
@@ -113,6 +129,11 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 
         public override void DidFinishNavigation(WKWebView webView, WKNavigation navigation)
         {
+            foreach (var extension in _extensions)
+            {
+                NhsAppResilience.ExecuteImmediately(() => extension.DidFinishNavigation(navigation));
+            }
+
             NhsAppResilience.ExecuteOnMainThread(() =>
             {
                 Log(navigation);

@@ -7,25 +7,26 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 {
     internal class BaseWebViewRenderer: WkWebViewRenderer
     {
-        private List<IWebViewRendererExtension> Extensions { get; }
+        private readonly List<IWebViewRendererExtension> _extensions = new List<IWebViewRendererExtension>();
 
         public BaseWebViewRenderer() : this(CustomConfiguration)
         { }
 
         internal BaseWebViewRenderer(WKWebViewConfiguration config) : base(config)
         {
-            Extensions = new List<IWebViewRendererExtension>
-            {
-                new NavigationDelegateRendererExtension(this),
-                new UIDelegateRendererExtension(this)
-            };
         }
 
         public override bool AllowsLinkPreview => false;
 
         protected override void OnElementChanged(VisualElementChangedEventArgs e)
         {
-            foreach (var extension in Extensions)
+            if (e.OldElement != null)
+            {
+                NavigationDelegate = new WebViewNavigationDelegate(this, _extensions.AsReadOnly());
+                UIDelegate = new WebViewUIDelegate();
+            }
+
+            foreach (var extension in _extensions)
             {
                 extension.OnElementChanged(e);
             }
@@ -35,7 +36,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 
         internal void AddExtension(IWebViewRendererExtension extension)
         {
-            Extensions.Add(extension);
+            _extensions.Add(extension);
         }
 
         private static WKWebViewConfiguration CustomConfiguration

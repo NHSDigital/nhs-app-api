@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
+using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Navigation;
@@ -55,6 +56,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
 
         public Func<Uri, Task>? DeepLinkRequested { get; set; }
 
+        public Action<WebViewPageLoadEventArgs>? PageLoadComplete { get; set; }
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -82,12 +85,14 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         {
             WebView.Navigating += WebViewOnNavigating;
             WebView.Navigated += WebViewOnNavigated;
+            WebView.PageLoadComplete += OnPageLoadComplete;
         }
 
         private void RemoveEventHandlers()
         {
             WebView.Navigating -= WebViewOnNavigating;
             WebView.Navigated -= WebViewOnNavigated;
+            WebView.PageLoadComplete -= OnPageLoadComplete;
         }
 
         private void WebViewOnNavigating(object sender, WebNavigatingEventArgs args)
@@ -121,6 +126,14 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         {
             Spinner.IsVisible = false;
             WebView.IsVisible = true;
+        }
+
+        private void OnPageLoadComplete(object sender, WebViewPageLoadEventArgs pageLoadEventArgs)
+        {
+            if (PageLoadComplete != null)
+            {
+                NhsAppResilience.ExecuteOnMainThread(() => PageLoadComplete.Invoke(pageLoadEventArgs));
+            }
         }
 
         public async Task HandleDeeplink(Uri deeplinkUrl)

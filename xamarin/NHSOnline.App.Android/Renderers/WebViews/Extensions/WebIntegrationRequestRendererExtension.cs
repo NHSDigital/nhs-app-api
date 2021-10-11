@@ -8,32 +8,35 @@ using Xamarin.Forms.Platform.Android;
 
 namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions
 {
-    internal sealed class WebIntegrationRequestRendererExtension: IWebViewRendererExtension
+    internal sealed class WebIntegrationRequestRendererExtension: WebViewRendererExtension
     {
         private readonly WebViewRenderer _renderer;
+        private IPostRequestCapableWebView? _postRequestCapableWebView;
 
         public WebIntegrationRequestRendererExtension(WebViewRenderer renderer)
         {
             _renderer = renderer;
         }
 
-        public void OnElementChanged(ElementChangedEventArgs<WebView> e)
+        internal override void OnElementChanged(ElementChangedEventArgs<WebView> e)
         {
-            if (e.OldElement == null)
+            if (e.NewElement is IPostRequestCapableWebView postRequestCapableWebView)
             {
-
-                if (e.NewElement is WebIntegrationWebView webView)
-                {
-                    webView.PropertyChanged += NewWebIntegrationWebViewOnPropertyChanged;
-                }
+                _postRequestCapableWebView = postRequestCapableWebView;
+                e.NewElement.PropertyChanged += WebViewOnPropertyChanged;
+            }
+            else if (e.NewElement != null)
+            {
+                throw new NotSupportedException(
+                    $"The {nameof(WebIntegrationRequestRendererExtension)} extension can only be added to WebViews that implement {nameof(IPostRequestCapableWebView)}");
             }
 
             LoadWebRequest();
         }
 
-        private void NewWebIntegrationWebViewOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void WebViewOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(WebIntegrationWebView.WebIntegrationRequest))
+            if (e.PropertyName == nameof(IPostRequestCapableWebView.WebIntegrationRequest))
             {
                 LoadWebRequest();
             }
@@ -41,19 +44,16 @@ namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions
 
         private void LoadWebRequest()
         {
-            if (_renderer.Element is WebIntegrationWebView webView)
+            var webRequest = _postRequestCapableWebView?.WebIntegrationRequest;
+            if (webRequest != null)
             {
-                var webRequest = webView.WebIntegrationRequest;
-                if (webRequest != null)
+                if (webRequest.Verb == HttpMethod.Post)
                 {
-                    if (webRequest.Verb == HttpMethod.Post)
-                    {
-                        PostRequest(webRequest);
-                    }
-                    else
-                    {
-                        GetRequest(webRequest);
-                    }
+                    PostRequest(webRequest);
+                }
+                else
+                {
+                    GetRequest(webRequest);
                 }
             }
         }

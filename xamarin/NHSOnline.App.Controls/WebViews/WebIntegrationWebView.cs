@@ -9,7 +9,7 @@ using Xamarin.Forms;
 
 namespace NHSOnline.App.Controls.WebViews
 {
-    public sealed class WebIntegrationWebView : WebView
+    public sealed class WebIntegrationWebView : WebView, IRedirectFlowAwareWebView, IPostRequestCapableWebView
     {
         public const string JavascriptObjectName = "nhsappNative";
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(WebIntegrationWebView));
@@ -20,6 +20,8 @@ namespace NHSOnline.App.Controls.WebViews
                 nameof(GoToNhsAppPageCommand),
                 typeof(AsyncCommand<string>),
                 typeof(WebIntegrationWebView));
+
+        public event EventHandler<WebViewPageLoadEventArgs>? PageLoadComplete;
 
         public void GoToNhsAppPage(string argument) => GoToNhsAppPageCommand.Execute(argument);
 
@@ -87,6 +89,11 @@ namespace NHSOnline.App.Controls.WebViews
             };
             settings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
             return settings;
+        }
+
+        void IRedirectFlowAwareWebView.OnPageLoadComplete(WebViewPageLoadEventArgs pageLoadEventArgs)
+        {
+            PageLoadComplete?.Invoke(this, pageLoadEventArgs);
         }
     }
 }

@@ -45,25 +45,13 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsLogin
             LoginButton.Click();
         }
 
-        public void Back()
-        {
-            BackLink.Click();
-        }
+        public void Back() => BackLink.Click();
 
-        public void InternalPage()
-        {
-            InternalPageLink.Click();
-        }
+        public void InternalPage() => InternalPageLink.Click();
 
-        public void InternalPageNewWindow()
-        {
-            InternalPageNewWindowLink.Click();
-        }
+        public void InternalPageNewWindow() => InternalPageNewWindowLink.Click();
 
-        public void Covid()
-        {
-            CovidLink.Click();
-        }
+        public void Covid() => CovidLink.Click();
 
         public void LoginWithLoginTermsAndConditions(Patient patient)
         {

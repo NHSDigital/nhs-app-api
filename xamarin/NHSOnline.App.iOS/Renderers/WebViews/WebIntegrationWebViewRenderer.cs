@@ -26,6 +26,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                 .Apply(config.UserContentController);
 
             AddExtension(new WebIntegrationRequestRendererExtension(this));
+            AddExtension(new PageLoadRedirectAggregatorExtension(this));
         }
 
         protected override void Dispose(bool disposing)

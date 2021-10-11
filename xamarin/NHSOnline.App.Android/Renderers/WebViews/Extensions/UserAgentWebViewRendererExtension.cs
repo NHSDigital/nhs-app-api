@@ -4,7 +4,7 @@ using Xamarin.Forms.Platform.Android;
 
 namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions
 {
-    internal sealed class UserAgentWebViewRendererExtension: IWebViewRendererExtension
+    internal sealed class UserAgentWebViewRendererExtension: WebViewRendererExtension
     {
         private readonly WebViewRenderer _renderer;
 
@@ -13,7 +13,7 @@ namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions
             _renderer = renderer;
         }
 
-        public void OnElementChanged(ElementChangedEventArgs<WebView> e)
+        internal override void OnElementChanged(ElementChangedEventArgs<WebView> e)
         {
             if (e.OldElement == null && _renderer.Control.Settings != null)
             {

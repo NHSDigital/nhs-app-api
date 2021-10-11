@@ -5,14 +5,14 @@ using Xamarin.Forms.Platform.Android;
 
 namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions
 {
-    internal sealed class AccessibilityWebViewRendererExtension: IWebViewRendererExtension
+    internal sealed class AccessibilityWebViewRendererExtension: WebViewRendererExtension
     {
         private readonly WebViewRenderer _renderer;
 
         public AccessibilityWebViewRendererExtension(WebViewRenderer renderer)
             => _renderer = renderer;
 
-        public void OnElementChanged(ElementChangedEventArgs<WebView> e)
+        internal override void OnElementChanged(ElementChangedEventArgs<WebView> e)
         {
             if (e.OldElement == null &&
                 _renderer.Control.Settings != null &&
@@ -24,6 +24,5 @@ namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions
                 };
             }
         }
-
     }
 }

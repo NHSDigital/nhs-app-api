@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Controls;
+using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
@@ -15,6 +16,7 @@ namespace NHSOnline.App.Areas.WebIntegration
 
             Action<WebNavigatingEventArgs>? Navigating { get; set; }
             Func<Task>? NavigationFailed { get; set; }
+            Action<WebViewPageLoadEventArgs>? PageLoadComplete { get; set; }
 
             Func<Task>? HelpRequested { get; set; }
             Func<Task>? HomeRequested { get; set; }

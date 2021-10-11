@@ -12,10 +12,8 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
     {
         public NhsAppWebViewRenderer(Context context) : base(context)
         {
-            AddExtension(new UserAgentWebViewRendererExtension(this));
             AddExtension(new AccessibilityWebViewRendererExtension(this));
             AddExtension(new NhsAppJavascriptBridgeWebViewRendererExtension(this));
-            AddExtension(new EnableTargetBlankLinksRendererExtension(this));
         }
     }
 }

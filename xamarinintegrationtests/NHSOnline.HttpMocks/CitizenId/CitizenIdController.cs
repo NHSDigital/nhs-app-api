@@ -329,5 +329,25 @@ namespace NHSOnline.HttpMocks.CitizenId
                 }
             );
         }
+
+        [Host(AuthHostName)]
+        [Route("redirect-chain-1")]
+        public IActionResult RedirectChainStep1() => Redirect($"{CidBase}redirect-chain-2?some=query&string=parameters");
+
+        [Host(AuthHostName)]
+        [Route("redirect-chain-2")]
+        public IActionResult RedirectChainStep2() => Redirect($"{CidBase}redirect-chain-3");
+
+        [Host(AuthHostName)]
+        [Route("redirect-chain-3")]
+        public IActionResult RedirectChainStep3() => Redirect($"{CidBase}redirect-chain-4?more=parameters&in=here");
+
+        [Host(AuthHostName)]
+        [Route("redirect-chain-4")]
+        public IActionResult RedirectChainStep4() => Redirect($"http://{AuthHostName}:8080/enter-email");
+
+        [Host(AuthHostName)]
+        [Route("/enter-email")]
+        public IActionResult EnterEmail() => View();
     }
 }

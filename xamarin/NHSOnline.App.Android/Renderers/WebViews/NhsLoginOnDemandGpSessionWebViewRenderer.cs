@@ -1,7 +1,6 @@
 using Android.Content;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Droid.Renderers.WebViews;
-using NHSOnline.App.Droid.Renderers.WebViews.Extensions;
 using Xamarin.Forms;
 
 [assembly: ExportRenderer(typeof(NhsLoginOnDemandGpSessionWebView), typeof(NhsLoginOnDemandGpSessionWebViewRenderer))]
@@ -11,8 +10,6 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
     {
         public NhsLoginOnDemandGpSessionWebViewRenderer(Context context) : base(context)
         {
-            AddExtension(new UserAgentWebViewRendererExtension(this));
-            AddExtension(new EnableTargetBlankLinksRendererExtension(this));
         }
     }
 }

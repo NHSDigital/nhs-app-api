@@ -3,22 +3,33 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Android.Runtime;
 using Android.Webkit;
+using NHSOnline.App.Controls;
+using NHSOnline.App.Droid.Renderers.WebViews.Extensions;
 using Xamarin.Forms.Platform.Android;
 using Uri = Android.Net.Uri;
 
 namespace NHSOnline.App.Droid.Renderers.WebViews
 {
-    public class NhsAppFormsWebViewClient : FormsWebViewClient
+    internal class NhsAppFormsWebViewClient : FormsWebViewClient
     {
         private readonly WebViewRenderer? _renderer;
+        private readonly IReadOnlyCollection<WebViewRendererExtension> _extensions;
 
-        public NhsAppFormsWebViewClient(WebViewRenderer renderer) : base(renderer)
-            => _renderer = renderer;
+        public NhsAppFormsWebViewClient(WebViewRenderer renderer, IReadOnlyCollection<WebViewRendererExtension> extensions)
+            : base(renderer)
+        {
+            _renderer = renderer;
+            _extensions = extensions;
+        }
 
         // Unused constructor is used by java interop and should not be removed
-        public NhsAppFormsWebViewClient(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
+        public NhsAppFormsWebViewClient(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
         {
+            _renderer = null;
+            _extensions = Array.Empty<WebViewRendererExtension>();
         }
+
 
         [SuppressMessage("Reliability", "CA2000", Justification = "ProxyErrorWebResourceRequest is passed through to the framework where it will be disposed")]
         public override void OnReceivedError(WebView view, IWebResourceRequest request, WebResourceError error)
@@ -53,6 +64,37 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
             public IDictionary<string, string>? RequestHeaders => _request.RequestHeaders;
 
             public Uri? Url => Uri.Parse(_renderer?.Control.Url);
+        }
+
+        public override bool ShouldOverrideUrlLoading(WebView view, IWebResourceRequest request)
+        {
+            foreach (var extension in _extensions)
+            {
+                NhsAppResilience.ExecuteImmediately(() => extension.ShouldOverrideUrlLoading(request));
+            }
+
+            return base.ShouldOverrideUrlLoading(view, request);
+        }
+
+        [Obsolete("This obsolete but will still be called on devices running < API 24 versions, thus we handle it in addition to the new one")]
+        public override bool ShouldOverrideUrlLoading(WebView view, string url)
+        {
+            foreach (var extension in _extensions)
+            {
+                NhsAppResilience.ExecuteImmediately(() => extension.ShouldOverrideUrlLoading(url));
+            }
+
+            return base.ShouldOverrideUrlLoading(view, url);
+        }
+
+        public override void OnPageFinished(WebView view, string url)
+        {
+            foreach (var extension in _extensions)
+            {
+                NhsAppResilience.ExecuteImmediately(() => extension.OnPageFinished(url));
+            }
+
+            base.OnPageFinished(view, url);
         }
     }
 }

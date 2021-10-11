@@ -3,7 +3,7 @@ using Xamarin.Forms;
 
 namespace NHSOnline.App.Controls.WebViews
 {
-    public sealed class NhsLoginUpliftWebView : WebView
+    public sealed class NhsLoginUpliftWebView : WebView, IFileUploadAwareWebView
     {
         public static readonly BindableProperty SelectMediaCommandProperty =
             BindableProperty.Create(

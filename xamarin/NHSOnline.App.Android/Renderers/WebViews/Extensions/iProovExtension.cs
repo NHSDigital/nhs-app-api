@@ -7,13 +7,13 @@ using iProov.Android;
 namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions
 {
     [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "iProov is the name of the product")]
-    internal sealed class IProovExtension: IWebViewRendererExtension, IDisposable
+    internal sealed class IProovExtension: WebViewRendererExtension, IDisposable
     {
         private readonly WebViewRenderer _renderer;
 
         public IProovExtension(WebViewRenderer renderer) => _renderer = renderer;
 
-        public void OnElementChanged(ElementChangedEventArgs<WebView> e)
+        internal override void OnElementChanged(ElementChangedEventArgs<WebView> e)
         {
             if (e.OldElement == null)
             {
