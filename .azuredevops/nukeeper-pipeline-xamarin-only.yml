@@ -2,8 +2,8 @@
 trigger: none
 
 schedules:
-  - cron: 0 3 * * Mon,Tue,Wed,Thu,Fri
-    displayName: Nightly Update
+  - cron: 0 0 * * 0
+    displayName: Once a week at 00:00 on Sunday - Xamarin only packages
     branches:
       include:
         - develop
@@ -17,9 +17,15 @@ jobs:
     displayName: NuKeeper
 
     variables:
-      dotnet.cli.telemetry.optout: true
-      dotnet.nologo: true
-      XAMARIN_ONLY_RUN: false
+      - group: nukeeper-variable-group
+      - name: dotnet.cli.telemetry.optout
+        value: true
+      - name: dotnet.nologo
+        value: true
+      - name: XAMARIN_ONLY_RUN
+        value: true
+      - name: XAMARIN_SLACK_URI
+        value: $[variables.xamarin_slack_webhook_uri]
 
     pool:
       vmImage: 'windows-latest'
@@ -50,6 +56,7 @@ jobs:
             git config --global user.email nhsapp.ops@nhs.net
 
       - task: Bash@3
+        name: NuKeeperMinor
         displayName: NuKeeper Minor
         inputs:
           targetType: filePath
