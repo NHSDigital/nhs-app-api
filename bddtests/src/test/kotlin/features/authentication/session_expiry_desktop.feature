@@ -25,6 +25,19 @@ Feature: Session Expiry and Extend for Desktop
     And  I click the 'Confirm and book appointment' button
     Then the Appointment Booking success page is displayed
 
+  Scenario: Before session expiry, is prompted with the session extension dialog box, extends their session and user is not signed out
+    Given there are EMIS appointments available to book with a reason
+    And a booked appointment can be cancelled
+    And I am logged in
+    When I retrieve the 'Appointment Booking' page directly
+    And I am idle long enough for the session expiry dialog box to appear
+    And I see a dialog box prompting to extend the session
+    And I click to extend the session that returns bad gateway
+    Then the dialog box is not visible on the screen
+    And I do not see the error page
+    When I retrieve the 'Appointment Booking' page directly
+    Then the page title is 'Book a GP appointment'
+
   Scenario: Before session expiry, on a secure screen, is prompted with the session extension dialog box, opts to logout
     Given there are EMIS appointments available to book
     And I am logged in

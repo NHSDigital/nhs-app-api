@@ -31,6 +31,11 @@ open class ErrorPage : HybridPageObject() {
         )
     }
 
+    private val headerWeb = HybridPageElement(
+        webDesktopLocator = "//p",
+        page = this
+    ).withNormalisedText("Service currently unavailable")
+
     fun assertNoButton(text: String) {
         button.withText(text).assertElementNotPresent()
     }
@@ -82,5 +87,9 @@ open class ErrorPage : HybridPageObject() {
     fun assertErrorDetailText(errorDetailText: String): ErrorPage {
         assertEquals("Content message incorrect. ", errorDetailText, errorText2.text)
         return this
+    }
+
+    fun assertIsNotDisplayed() {
+        headerWeb.assertElementNotPresent()
     }
 }

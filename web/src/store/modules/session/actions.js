@@ -158,8 +158,7 @@ export default {
 
     return false;
   },
-  extend({ dispatch }) {
-    return this.app.$http.postV1SessionExtend()
-      .catch(() => dispatch('auth/logoutWhenExpired'));
+  extend() {
+    return this.app.$http.postV1SessionExtend({ ignoreError: true });
   },
 };

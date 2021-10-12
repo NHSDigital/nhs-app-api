@@ -12,6 +12,7 @@ import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFact
 import models.Patient
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
+import pages.ErrorPage
 import pages.SessionExpiry
 import utils.GlobalSerenityHelpers
 import utils.LinkedProfilesSerenityHelpers
@@ -29,6 +30,8 @@ class SessionExpiryStepDefinitions  {
     lateinit var login: LoginSteps
 
     lateinit var sessionExpiry: SessionExpiry
+
+    private lateinit var errorPage: ErrorPage
 
     @Given("^I am logged in as a (.*) user expecting a \"(.*)\"\\ response when extending their session$")
     fun iClickToExtendSessionExpectingResponse(gpSystem: String, expectedResponse: String) {
@@ -106,6 +109,14 @@ class SessionExpiryStepDefinitions  {
         sessionExpiry.assertIsDisplayed()
     }
 
+    @When("^I click to extend the session that returns bad gateway$")
+    fun iClickToExtendSessionThatReturnsBadGateway() {
+        val patient = Patient.getDefault(Supplier.EMIS)
+        PatientVerificationFactory.getForSupplier(Supplier.EMIS)
+            .setSessionExtendMockResponse(patient, "bad gateway")
+        sessionExpiry.clickExtendSession()
+    }
+
     @Then("^the dialog box is not visible on the screen$")
     fun theDialogBoxIsNotVisible() {
         sessionExpiry.assertIsNotDisplayed()
@@ -114,5 +125,10 @@ class SessionExpiryStepDefinitions  {
     @Then("^I am idle for a short time$")
     fun iamIdleBeforeResume() {
         Thread.sleep(DELAY_BEFORE_RESUME)
+    }
+
+    @Then("^I do not see the error page$")
+    fun iDoNotSeeTheErrorPage() {
+        errorPage.assertIsNotDisplayed()
     }
 }
