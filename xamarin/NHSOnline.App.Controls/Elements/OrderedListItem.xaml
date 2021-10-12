@@ -38,6 +38,10 @@
                 <Setter Property="VerticalOptions" Value="StartAndExpand" />      
                 <Setter Property="HorizontalOptions" Value="StartAndExpand" />      
             </Style>
+            
+            <Style TargetType="Span" ApplyToDerivedTypes="True">
+                <Setter Property="FontFamily" Value="Frutiger" />
+            </Style>
 
             <Style TargetType="Grid">
                 <Setter Property="ColumnSpacing" Value="0" />

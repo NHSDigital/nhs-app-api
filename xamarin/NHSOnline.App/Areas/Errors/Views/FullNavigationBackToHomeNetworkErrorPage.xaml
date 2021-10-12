@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <pages:NhsAppFullHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
                             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
@@ -11,8 +12,10 @@
                             SelectedNavigationFooterItem="{Binding SelectedNavigationFooterItem, Source={x:Reference Name=Page}}">
 
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
-        <panels:BackToHomeNetworkError
-            x:Name="ErrorPanel"
-            BackToHomeCommand="{Binding BackToHomeCommand, Source={x:Reference Name=Page}}" />
+        <panels:ResponsiveLayoutPanel>
+            <panels:BackToHomeNetworkError
+                x:Name="ErrorPanel"
+                BackToHomeCommand="{Binding BackToHomeCommand, Source={x:Reference Name=Page}}" />
+        </panels:ResponsiveLayoutPanel>
     </ScrollView>
 </pages:NhsAppFullHeaderPage>

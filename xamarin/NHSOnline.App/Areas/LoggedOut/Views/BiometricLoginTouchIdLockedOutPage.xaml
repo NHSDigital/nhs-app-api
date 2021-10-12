@@ -21,11 +21,11 @@
                             <elements:OrderedListItem.FormattedText>
                                 <FormattedString>
                                     <Span Text="Select " />
-                                    <Span Text="More" FontAttributes="Bold" />
+                                    <Span Text="More" FontFamily="Frutiger-Bold" />
                                     <Span Text=", then " />
-                                    <Span Text="Account and settings" FontAttributes="Bold" />
+                                    <Span Text="Account and settings" FontFamily="Frutiger-Bold" />
                                     <Span Text=", then " />
-                                    <Span Text="Touch ID" FontAttributes="Bold" />
+                                    <Span Text="Touch ID" FontFamily="Frutiger-Bold" />
                                     <Span Text="." /> 
                                 </FormattedString>
                             </elements:OrderedListItem.FormattedText>
