@@ -28,7 +28,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
 
         public AndroidCalendarPage AssertNativeHeader()
         {
-            Navigation.AssertNavigationPresent();
+            Navigation.AssertNavigationIconsArePresent();
             return this;
         }
 

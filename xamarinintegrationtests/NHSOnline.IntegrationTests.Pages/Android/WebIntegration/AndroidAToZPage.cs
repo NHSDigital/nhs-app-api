@@ -35,8 +35,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
         {
             var headerFocusableList = Navigation.KeyboardHeaderNavigation.GetFocusableElements();
             var footerFocusableList = Navigation.KeyboardFooterNavigation.GetFocusableElements();
+            var pageFocusableList = PageContent.FocusableElements;
 
-            return footerFocusableList.Concat(headerFocusableList);
+            return headerFocusableList.Concat(pageFocusableList).Concat(footerFocusableList);
         }
 
         public void KeyboardNavigateToMessages() => Navigation.KeyboardNavigateToMessages(KeyboardPageContentNavigation);

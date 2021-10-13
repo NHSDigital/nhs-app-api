@@ -31,7 +31,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
 
         public AndroidPkbPage AssertNativeHeader()
         {
-            Navigation.AssertNavigationPresent();
+            Navigation.AssertNavigationIconsArePresent();
             return this;
         }
 
@@ -44,7 +44,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
             var footerFocusableList = Navigation.KeyboardFooterNavigation.GetFocusableElements();
             var pageFocusableList = PageContent.FocusableElements;
 
-            return pageFocusableList.Concat(footerFocusableList).Concat(headerFocusableList);
+            return headerFocusableList.Concat(pageFocusableList).Concat(footerFocusableList);
         }
 
         public void NavigateToCalendar() => PageContent.NavigateToCalendar();
@@ -57,13 +57,6 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
 
         public void NavigateToLocationServices() => PageContent.NavigateToLocationServices();
 
-        public void KeyboardNavigateToPrescriptions() => Navigation.KeyboardNavigateToPrescriptionsFromElement(KeyboardPageContentNavigation, PageContent.FocusableElements.First());
-
-        // Focus needs to be set on webview on page load, NHSO-14668 and tabbing functionality needs to be updated before this can be removed.
-        public AndroidPkbPage TabIntoFocus()
-        {
-            _driver.SendKey(AndroidKeyCode.Keycode_TAB);
-            return this;
-        }
+        public void KeyboardNavigateToPrescriptions() => Navigation.KeyboardNavigateToPrescriptions(KeyboardPageContentNavigation);
     }
 }

@@ -31,7 +31,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
 
         public void AssertPageElements()
         {
-            Navigation.AssertNavigationPresent();
+            Navigation.AssertNavigationIconsArePresent();
             PageContent.AssertPageElements();
         }
 

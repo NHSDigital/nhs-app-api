@@ -34,7 +34,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
 
         public IOSPkbPage AssertNativeHeader()
         {
-            Navigation.AssertNavigationPresent();
+            Navigation.AssertNavigationIconsArePresent();
             return this;
         }
     }

@@ -42,7 +42,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         public AndroidFileDownloadErrorPage AssertPageElements()
         {
-            Navigation.AssertNavigationPresent();
+            Navigation.AssertNavigationIconsArePresent();
             WeCouldNotDownloadLabel.AssertVisible();
             IfYourProblemContinuesLabel.AssertVisible();
             TryAgainNowLabel.AssertVisible();

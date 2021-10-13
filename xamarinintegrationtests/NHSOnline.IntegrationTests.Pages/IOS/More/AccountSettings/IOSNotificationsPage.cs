@@ -29,7 +29,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.More.AccountSettings
 
         public void AssertPageElements()
         {
-            Navigation.AssertNavigationPresent();
+            Navigation.AssertNavigationIconsArePresent();
             PageContent.AssertPageElements();
         }
     }

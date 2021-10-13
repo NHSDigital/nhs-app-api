@@ -12,30 +12,32 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             _driver = driver;
         }
 
-        private IOSNavigationBar FullNavigationHeader => IOSNavigationBar.WithName(_driver, "NHS App Full Navigation Header");
+        private IOSAppIcon HomeAppIcon => IOSAppIcon.WithName(_driver, "Home");
 
-        private IOSNavigationBar FullNavigationFooter => IOSNavigationBar.WithName(_driver, "NHS App Full Navigation Footer");
+        private IOSAppIcon HelpAppIcon => IOSAppIcon.WithName(_driver, "Help");
 
-        private IOSAppIcon HomeAppIcon => FullNavigationHeader.ContainingButtonWithName("Home");
+        private IOSAppIcon MoreAppIcon => IOSAppIcon.WithName(_driver, "More");
 
-        private IOSAppIcon HelpAppIcon => FullNavigationHeader.ContainingButtonWithName("Help");
+        private IOSAppIcon AdviceAppIcon => IOSAppIcon.WithName(_driver, "Advice");
 
-        private IOSAppIcon MoreAppIcon => FullNavigationHeader.ContainingButtonWithName("More");
+        private IOSAppIcon AppointmentsAppIcon => IOSAppIcon.WithName(_driver, "Appointments");
 
-        private IOSAppIcon AdviceAppIcon => FullNavigationFooter.ContainingButtonWithName("Advice");
+        private IOSAppIcon PrescriptionsAppIcon => IOSAppIcon.WithName(_driver, "Prescriptions");
 
-        private IOSAppIcon AppointmentsAppIcon => FullNavigationFooter.ContainingButtonWithName("Appointments");
+        private IOSAppIcon YourHealthAppIcon => IOSAppIcon.WithName(_driver, "Your health");
 
-        private IOSAppIcon PrescriptionsAppIcon => FullNavigationFooter.ContainingButtonWithName("Prescriptions");
+        private IOSAppIcon MessagesAppIcon => IOSAppIcon.WithName(_driver, "Messages");
 
-        private IOSAppIcon YourHealthAppIcon => FullNavigationFooter.ContainingButtonWithName("Your health");
-
-        private IOSAppIcon MessagesAppIcon => FullNavigationFooter.ContainingButtonWithName("Messages");
-
-        internal void AssertNavigationPresent()
+        internal void AssertNavigationIconsArePresent()
         {
-            FullNavigationHeader.AssertVisible();
-            FullNavigationFooter.AssertVisible();
+            HomeAppIcon.AssertVisible();
+            HelpAppIcon.AssertVisible();
+            MoreAppIcon.AssertVisible();
+            AdviceAppIcon.AssertVisible();
+            AppointmentsAppIcon.AssertVisible();
+            PrescriptionsAppIcon.AssertVisible();
+            YourHealthAppIcon.AssertVisible();
+            MessagesAppIcon.AssertVisible();
         }
 
         public void AssertNoIconsSelected()

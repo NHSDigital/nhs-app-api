@@ -14,6 +14,7 @@ namespace NHSOnline.App.Navigation.Pages
 
         public static readonly BindableProperty PageContentProperty =
             BindableProperty.Create(nameof(PageContent), typeof(View), typeof(NhsAppFullHeaderPage));
+
         public static readonly BindableProperty SelectedNavigationFooterItemProperty =
             BindableProperty.Create(nameof(SelectedNavigationFooterItem), typeof(NavigationFooterItem), typeof(NhsAppFullHeaderPage));
 

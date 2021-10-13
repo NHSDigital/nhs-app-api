@@ -133,7 +133,6 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidPkbPage
                 .AssertOnPage(driver, PhrPath.ViewAppointments)
-                .TabIntoFocus()
                 .KeyboardNavigateToPrescriptions();
 
             AndroidPrescriptionsPage

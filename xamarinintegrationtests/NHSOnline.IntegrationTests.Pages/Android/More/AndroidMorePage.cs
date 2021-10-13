@@ -43,7 +43,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.More
 
         public AndroidMorePage AssertPageElements()
         {
-            Navigation.AssertNavigationPresent();
+            Navigation.AssertNavigationIconsArePresent();
             PageContent.AssertPageElements();
 
             return this;

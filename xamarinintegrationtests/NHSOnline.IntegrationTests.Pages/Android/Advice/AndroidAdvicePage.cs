@@ -30,7 +30,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Advice
 
         public void AssertPageElements()
         {
-            Navigation.AssertNavigationPresent();
+            Navigation.AssertNavigationIconsArePresent();
             PageContent.AssertPageElements();
         }
 

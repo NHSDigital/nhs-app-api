@@ -25,7 +25,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
 
         public IOSCalendarPage AssertNativeHeader()
         {
-            Navigation.AssertNavigationPresent();
+            Navigation.AssertNavigationIconsArePresent();
             return this;
         }
 

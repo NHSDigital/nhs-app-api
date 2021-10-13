@@ -41,7 +41,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         public IOSFileDownloadErrorPage AssertPageElements()
         {
-            Navigation.AssertNavigationPresent();
+            Navigation.AssertNavigationIconsArePresent();
             WeCouldNotDownloadLabel.AssertVisible();
             IfYourProblemContinuesLabel.AssertVisible();
             TryAgainNowLabel.AssertVisible();

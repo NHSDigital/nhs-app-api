@@ -24,7 +24,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
 
         public IOSNhsLoginSettingsPage AssertNativeHeader()
         {
-            Navigation.AssertNavigationPresent();
+            Navigation.AssertNavigationIconsArePresent();
             return this;
         }
     }

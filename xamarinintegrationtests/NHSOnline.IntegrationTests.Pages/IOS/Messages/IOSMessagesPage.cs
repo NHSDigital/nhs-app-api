@@ -24,7 +24,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Messages
 
         public void AssertPageElements()
         {
-            Navigation.AssertNavigationPresent();
+            Navigation.AssertNavigationIconsArePresent();
             PageContent.AssertPageElements();
         }
     }

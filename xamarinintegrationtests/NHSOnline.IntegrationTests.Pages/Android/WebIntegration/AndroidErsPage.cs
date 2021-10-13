@@ -24,7 +24,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
 
         public void AssertPageElements()
         {
-            Navigation.AssertNavigationPresent();
+            Navigation.AssertNavigationIconsArePresent();
         }
     }
 }

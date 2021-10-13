@@ -9,7 +9,8 @@
                             mc:Ignorable="d"
                             x:Class="NHSOnline.App.Areas.WebIntegration.Views.WebIntegrationPage"
                             x:Name="Page"
-                            SelectedNavigationFooterItem="{Binding SelectedNavigationFooterItem, Source={x:Reference Name=Page}}">
+                            SelectedNavigationFooterItem="{Binding SelectedNavigationFooterItem, Source={x:Reference Name=Page}}"
+                            AutomationProperties.IsInAccessibleTree="False">
     
     <AbsoluteLayout BackgroundColor="{ StaticResource NhsUkPageBackgroundGrey }">
         <elements:Spinner AbsoluteLayout.LayoutFlags="All"

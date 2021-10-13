@@ -24,7 +24,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Prescriptions
 
         public void AssertPageElements()
         {
-            Navigation.AssertNavigationPresent();
+            Navigation.AssertNavigationIconsArePresent();
             PageContent.AssertPageElements();
         }
     }

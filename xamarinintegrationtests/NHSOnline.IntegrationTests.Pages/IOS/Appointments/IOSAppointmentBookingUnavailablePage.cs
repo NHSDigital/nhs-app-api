@@ -23,7 +23,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Appointments
 
         public IOSAppointmentBookingUnavailablePage AssertPageElements()
         {
-            Navigation.AssertNavigationPresent();
+            Navigation.AssertNavigationIconsArePresent();
             PageContent.AssertPageElements();
 
             return this;

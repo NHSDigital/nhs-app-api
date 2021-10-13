@@ -13,25 +13,21 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             _driver = driver;
         }
 
-        private AndroidNavigationBar FullNavigationHeader => AndroidNavigationBar.WithName(_driver, "NHS App Full Navigation Header");
+        private AndroidIcon HomeIcon => AndroidIcon.WithName(_driver,"Home");
 
-        private AndroidNavigationBar FullNavigationFooter => AndroidNavigationBar.WithName(_driver, "NHS App Full Navigation Footer");
+        private AndroidIcon HelpIcon => AndroidIcon.WithName(_driver,"Help");
 
-        private AndroidIcon HomeIcon => FullNavigationHeader.ContainingIconWithName("Home");
+        private AndroidIcon MoreIcon => AndroidIcon.WithName(_driver,"More");
 
-        private AndroidIcon HelpIcon => FullNavigationHeader.ContainingIconWithName("Help");
+        private AndroidIcon AdviceIcon => AndroidIcon.WithName(_driver,"Advice");
 
-        private AndroidIcon MoreIcon => FullNavigationHeader.ContainingIconWithName("More");
+        private AndroidIcon AppointmentsIcon => AndroidIcon.WithName(_driver,"Appointments");
 
-        private AndroidIcon AdviceIcon => FullNavigationFooter.ContainingIconWithName("Advice");
+        private AndroidIcon PrescriptionsIcon => AndroidIcon.WithName(_driver,"Prescriptions");
 
-        private AndroidIcon AppointmentsIcon => FullNavigationFooter.ContainingIconWithName("Appointments");
+        private AndroidIcon YourHealthIcon => AndroidIcon.WithName(_driver,"Your health");
 
-        private AndroidIcon PrescriptionsIcon => FullNavigationFooter.ContainingIconWithName("Prescriptions");
-
-        private AndroidIcon YourHealthIcon => FullNavigationFooter.ContainingIconWithName("Your health");
-
-        private AndroidIcon MessagesIcon => FullNavigationFooter.ContainingIconWithName("Messages");
+        private AndroidIcon MessagesIcon => AndroidIcon.WithName(_driver,"Messages");
 
         internal AndroidKeyboardNavigation KeyboardHeaderNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(
             _driver,
@@ -48,10 +44,16 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             MessagesIcon);
 
 
-        public void AssertNavigationPresent()
+        public void AssertNavigationIconsArePresent()
         {
-            FullNavigationHeader.AssertVisible();
-            FullNavigationFooter.AssertVisible();
+            HomeIcon.AssertVisible();
+            HelpIcon.AssertVisible();
+            MoreIcon.AssertVisible();
+            AdviceIcon.AssertVisible();
+            AppointmentsIcon.AssertVisible();
+            PrescriptionsIcon.AssertVisible();
+            YourHealthIcon.AssertVisible();
+            MessagesIcon.AssertVisible();
         }
 
         public void AssertNoIconsSelected()

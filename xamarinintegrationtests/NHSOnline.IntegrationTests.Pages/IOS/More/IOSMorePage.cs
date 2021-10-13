@@ -29,7 +29,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.More
 
         public IOSMorePage AssertPageElements()
         {
-            Navigation.AssertNavigationPresent();
+            Navigation.AssertNavigationIconsArePresent();
             PageContent.AssertPageElements();
 
             return this;

@@ -51,7 +51,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.More.AccountSettings
 
         public void AssertPageElements()
         {
-            Navigation.AssertNavigationPresent();
+            Navigation.AssertNavigationIconsArePresent();
             PageContent.AssertPageElements();
         }
 

@@ -12,6 +12,11 @@
     <div class="jumbotron">
         <h1 class="display-4">NHS Login Settings</h1>
     </div>
+    <div class="nhsuk-back-link">
+        <a class="nhsuk-back-link__link" href="javascript: window.history.back();">
+            Back
+        </a>
+    </div>
     @await Html.PartialAsync("~/views/HttpRequestData.cshtml", Model.Request)
 </body>
 </html>

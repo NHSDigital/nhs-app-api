@@ -82,8 +82,7 @@
         <StackLayout Spacing="0">
             <BoxView />
             
-            <Grid AutomationId="NHS App Full Navigation Footer"
-                  x:Name="FooterGrid">
+            <Grid x:Name="FooterGrid">
                 
                 <Grid.Effects>
                     <effects:SafeAreaPaddingBottom />

@@ -45,7 +45,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
 
         public AndroidLoggedInHomePage AssertPageDisplayedFor(string name)
         {
-            Navigation.AssertNavigationPresent();
+            Navigation.AssertNavigationIconsArePresent();
             PageContent.AssertNameDisplayedFor(name);
             return this;
         }

@@ -14,6 +14,11 @@
         <h2 class="display-6">@Model.SubTitle</h2>
     }
 </div>
+<div class="nhsuk-back-link">
+    <a class="nhsuk-back-link__link" href="javascript: window.history.back();">
+        Back
+    </a>
+</div>
 @await Html.PartialAsync("~/views/HttpRequestData.cshtml", Model.Request)
 </body>
 </html>

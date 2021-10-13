@@ -24,7 +24,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
 
         public IOSLoggedInHomePage AssertPageDisplayedFor(string name)
         {
-            Navigation.AssertNavigationPresent();
+            Navigation.AssertNavigationIconsArePresent();
             PageContent.AssertNameDisplayedFor(name);
             return this;
         }

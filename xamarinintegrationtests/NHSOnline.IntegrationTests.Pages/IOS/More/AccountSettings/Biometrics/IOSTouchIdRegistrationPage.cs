@@ -26,7 +26,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.More.AccountSettings.Biometrics
 
         public void AssertPageElements()
         {
-            Navigation.AssertNavigationPresent();
+            Navigation.AssertNavigationIconsArePresent();
             PageContent.AssertPageElements();
         }
     }
