@@ -1421,3 +1421,12 @@ defaultUsers:
       familyName: Donor
       dateOfBirth: "1964-02-15T00:00:00"
       sex: Male
+
+    9667727647:
+      userId: 23a974e9-3694-4506-808c-da21305ae53f
+      emailAddress: onboarding.nhsapp+econsult.user4@gmail.com
+      odsCode: N61021
+      givenName: Lily
+      familyName: Dawson
+      dateOfBirth: "1980-05-22T00:00:00"
+      sex: Female
