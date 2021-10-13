@@ -52,8 +52,6 @@ tppIPTrust: "62.253.26.135/32"
 tppProviderID: 9b369fd64a6a6d23
 tppSupportsLinkedAccounts: true
 
-microtestHostname: nhsapp.microtest.co.uk
-
 econsultEnabled: true
 eConsult:
   hostname: nhsapp.econsult.health
@@ -175,11 +173,6 @@ iproxy:
   imagePullPolicy: IfNotPresent
   minAvailable: 4
   minReplicas: 8
-  maxReplicas: 100
-
-iproxy_microtest:
-  minAvailable: 0
-  minReplicas: 2
   maxReplicas: 100
 
 info:

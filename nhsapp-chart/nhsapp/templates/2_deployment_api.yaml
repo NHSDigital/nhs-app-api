@@ -278,16 +278,6 @@ spec:
             secretKeyRef:
               name: {{ $.Values.authSigningKeyName }}-password-{{ .Chart.AppVersion }}
               key: password
-        - name: MICROTEST_BASE_URL
-        {{- if $.Values.environmentStubbed.microtestStubbed }}
-          value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/microtest/"
-        {{- else if $.Values.environmentStubbed.useExternalStubs }}
-          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/microtest/"
-        {{- else }}
-          value: "https://iproxy-microtest-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.iproxy_microtest.containerPort }}/v1/"
-        {{- end }}
-        - name: MICROTEST_CERTIFICATE_ENABLED
-          value: "{{ $.Values.microtestCertificateEnabled }}"
         - name: ConfigurationSettings__CookieDomain
           {{- if $.Values.akamaiEnv }}
           value: .{{ $.Values.akamaiEnv }}

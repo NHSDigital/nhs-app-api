@@ -114,30 +114,4 @@ spec:
     - protocol: TCP
       port: {{ . }}
 {{- end }}
----
-{{- if $.Values.iproxy_microtest.deployMicrotest -}}
-kind: NetworkPolicy
-apiVersion: networking.k8s.io/v1
-metadata:
-  name: allow-iproxy-microtest-egress-from-cid-{{ .Chart.AppVersion }}
-  namespace: {{ $.Values.global.environment }}
-  labels:
-    version: {{ .Chart.AppVersion | quote }}
-spec:
-  podSelector:
-    matchLabels:
-      role: {{ $.Values.cid.role }}
-      version: {{ .Chart.AppVersion | quote }}
-  policyTypes:
-  - Egress
-  egress:
-  - to:
-    - podSelector:
-        matchLabels:
-          role: iproxy-microtest
-          version: {{ .Chart.AppVersion | quote }}
-    ports:
-    - protocol: TCP
-      port: {{ $.Values.sidecar_proxy.containerPort }}
-{{- end }}
 {{- end }}

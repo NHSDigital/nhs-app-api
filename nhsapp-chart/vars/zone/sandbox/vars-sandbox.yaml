@@ -71,8 +71,6 @@ api:
     servicesV3__silver_third_party_api_test__domains__1: https://httpstat.us
     servicesV3__nhsd__url: https://vaccine-status-dev-uks.azurewebsites.net
     servicesV3__netCompany__url: https://stdevpistatic01.z33.web.core.windows.net
-iproxy_microtest:
-  deployMicrotest: false
 
 users:
   notificationHubs:

@@ -32,9 +32,6 @@ spinePdsCIDR: "10.239.14.29/32"
 spinePdsHost: "msg.dev.spine2.ncrs.nhs.uk"
 spinePdsPath: "sync-service"
 
-iproxy_microtest:
-  deployMicrotest: true
-
 iproxy:
   n3enabled: true
 
@@ -169,15 +166,6 @@ iproxy:
   cpuRequest: "100m"
   cpuLimit: "250m"
   targetCPUUtilizationPercentage: 45
-
-iproxy_microtest:
-  minAvailable: 0
-  minReplicas: 1
-  maxReplicas: 1
-  memoryRequest: "125Mi"
-  memoryLimit: "250Mi"
-  cpuRequest: "125m"
-  cpuLimit: "250m"
 
 wiremock:
   minAvailable: 0

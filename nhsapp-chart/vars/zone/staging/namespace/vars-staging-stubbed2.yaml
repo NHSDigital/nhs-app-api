@@ -27,7 +27,6 @@ environmentStubbed:
   tsandcsStubbed: false
   deployWiremock: true
   organDonationStubbed: true
-  microtestStubbed: true
   cdssStubbed: true
   spineStubbed: true
   nhsSearchStubbed: true

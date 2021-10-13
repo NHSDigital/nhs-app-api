@@ -192,10 +192,6 @@ eventHubPorts:
   - 5671
   - 5672
 
-microtestHostname: nhsapp-test.microtest.co.uk
-microtestProtocol: https
-microtestCertificateEnabled: false
-
 odsRemapEnabled: false
 odsRemapMap: ""
 
@@ -439,23 +435,6 @@ iproxy:
   targetCPUUtilizationPercentage: 45
   environmentVariables:
   n3enabled: false
-
-iproxy_microtest:
-  deployMicrotest: true
-  containerPort: 8443
-  role: iproxy-microtest
-  image: nhsonline-nginx-microtest
-  image_tag: "v1.16.1"
-  imagePullPolicy: IfNotPresent
-  minAvailable: 0
-  minReplicas: 1
-  maxReplicas: 1
-  memoryRequest: "125Mi"
-  memoryLimit: "250Mi"
-  cpuRequest: "125m"
-  cpuLimit: "250m"
-  targetCPUUtilizationPercentage: 45
-  environmentVariables:
 
 wiremock:
   containerPort: 8080
