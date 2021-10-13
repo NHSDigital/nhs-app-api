@@ -6,7 +6,8 @@
                                     xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
                                     x:Class="NHSOnline.App.Areas.LoggedOut.Views.NhsLoginTermsAndConditionsDeclinedPage"
                                     x:Name="Page"
-                                    CloseCommand="{Binding CloseRequestedCommand, Source={x:Reference Name=Page}}">
+                                    CloseCommand="{Binding CloseRequestedCommand, Source={x:Reference Name=Page}}"
+                                    PageDescription="You need to accept NHS login terms of use to continue">
 
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <panels:ResponsiveLayoutPanel>

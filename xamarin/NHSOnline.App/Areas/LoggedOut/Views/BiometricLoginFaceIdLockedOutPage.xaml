@@ -5,7 +5,8 @@
                                     xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
                                     xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
                                     x:Class="NHSOnline.App.Areas.LoggedOut.Views.BiometricLoginFaceIdLockedOutPage"
-                                    x:Name="Page">
+                                    x:Name="Page"
+                                    PageDescription="You need to turn on Face ID again">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <panels:ResponsiveLayoutPanel>
             <StackLayout>

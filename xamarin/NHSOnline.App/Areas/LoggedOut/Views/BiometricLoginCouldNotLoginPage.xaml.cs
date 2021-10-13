@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
+using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut.Views
@@ -14,7 +15,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         private readonly ILogger _logger;
         private readonly AppNavigation<IBiometricLoginCouldNotLoginView.IEvents> _appNavigation;
 
-        public BiometricLoginCouldNotLoginPage(ILogger<BiometricLoginCouldNotLoginPage> logger)
+        public BiometricLoginCouldNotLoginPage(ILogger<BiometricLoginCouldNotLoginPage> logger, IAccessibilityService accessibilityService): base(accessibilityService)
         {
             _logger = logger;
             _appNavigation = new AppNavigation<IBiometricLoginCouldNotLoginView.IEvents>(this, Navigation);

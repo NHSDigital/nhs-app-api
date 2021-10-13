@@ -5,7 +5,8 @@
                                     xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
                                     xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
                                     x:Class="NHSOnline.App.Areas.LoggedOut.Views.BiometricLoginFingerprintLockedOutPage"
-                                    x:Name="Page">
+                                    x:Name="Page"
+                                    PageDescription="Turn on fingerprint, face or iris again">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <panels:ResponsiveLayoutPanel>
             <StackLayout>
