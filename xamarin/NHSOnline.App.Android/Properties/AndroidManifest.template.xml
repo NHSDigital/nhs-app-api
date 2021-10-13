@@ -5,7 +5,10 @@
 		  package="placeholder"
 		  android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30" />
-	<application android:label="placeholder" android:networkSecurityConfig="@xml/network_security_config">
+	<application
+			android:label="placeholder"
+			android:networkSecurityConfig="@xml/network_security_config"
+			android:allowBackup="false">
 		<!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
              See README(https://goo.gl/l4GJaQ) for more. -->
 		<meta-data
