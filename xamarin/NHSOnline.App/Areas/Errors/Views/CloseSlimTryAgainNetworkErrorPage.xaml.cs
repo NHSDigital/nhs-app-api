@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
+using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -15,7 +16,7 @@ namespace NHSOnline.App.Areas.Errors.Views
         private readonly ILogger<CloseSlimTryAgainNetworkErrorPage> _logger;
         private readonly AppNavigation<ICloseSlimTryAgainNetworkErrorView.IEvents> _appNavigation;
 
-        public CloseSlimTryAgainNetworkErrorPage(ILogger<CloseSlimTryAgainNetworkErrorPage> logger)
+        public CloseSlimTryAgainNetworkErrorPage(ILogger<CloseSlimTryAgainNetworkErrorPage> logger , IAccessibilityService accessibilityService): base(accessibilityService)
         {
             _logger = logger;
             _appNavigation = new AppNavigation<ICloseSlimTryAgainNetworkErrorView.IEvents>(this, Navigation);
@@ -41,7 +42,7 @@ namespace NHSOnline.App.Areas.Errors.Views
             _logger.LogInformation("{Method}", nameof(OnAppearing));
             _appNavigation.EnableHandlers();
 
-            ErrorPanel.AccessibilityFocusHeading();
+            base.OnAppearing();
         }
 
         protected override void OnDisappearing()

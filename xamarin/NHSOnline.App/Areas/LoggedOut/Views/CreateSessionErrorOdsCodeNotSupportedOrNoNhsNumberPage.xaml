@@ -11,7 +11,8 @@
                                  xmlns:valueConverters="clr-namespace:NHSOnline.App.Controls.ValueConverters;assembly=NHSOnline.App.Controls"
                                  mc:Ignorable="d"
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberPage"
-                                 x:Name="Page">
+                                 x:Name="Page"
+                                 PageDescription="Login failed">
     <pages:NhsAppCloseSlimHeaderPage.Resources> 
             <valueConverters:AccessibleErrorCodeConverter x:Key="AccessibleErrorCodeConverter" />
     </pages:NhsAppCloseSlimHeaderPage.Resources>

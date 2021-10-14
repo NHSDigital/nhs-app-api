@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
+using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut.Views
@@ -14,7 +15,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         private readonly ILogger _logger;
         private readonly AppNavigation<ICreateSessionErrorFallbackView.IEvents> _appNavigation;
 
-        public CreateSessionErrorFallbackPage(ILogger<CreateSessionErrorFallbackPage> logger)
+        public CreateSessionErrorFallbackPage(ILogger<CreateSessionErrorFallbackPage> logger, IAccessibilityService accessibilityService): base(accessibilityService)
         {
             _logger = logger;
             _appNavigation = new AppNavigation<ICreateSessionErrorFallbackView.IEvents>(this, Navigation);
@@ -35,7 +36,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             _logger.LogInformation("{Method}", nameof(OnAppearing));
             _appNavigation.EnableHandlers();
 
-            Heading.AccessibilityFocus();
+            base.OnAppearing();
         }
 
         protected override void OnDisappearing()

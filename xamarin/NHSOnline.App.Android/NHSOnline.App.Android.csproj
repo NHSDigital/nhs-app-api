@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="AndroidServices\AndroidNotificationMessagingService.cs" />
     <Compile Include="DependencyServices\AlertDialog\AndroidDialogPresenter.cs" />
+    <Compile Include="DependencyServices\AndroidAccessibilityService.cs" />
     <Compile Include="DependencyServices\AndroidFileHandler.cs" />
     <Compile Include="DependencyServices\AndroidLifecycle.cs" />
     <Compile Include="DependencyServices\AndroidNativeLog.cs" />

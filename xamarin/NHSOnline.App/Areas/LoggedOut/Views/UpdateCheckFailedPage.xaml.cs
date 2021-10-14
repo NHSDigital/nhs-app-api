@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
+using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut.Views
@@ -14,7 +15,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         private readonly ILogger _logger;
         private readonly AppNavigation<IUpdateCheckFailedView.IEvents> _appNavigation;
 
-        public UpdateCheckFailedPage(ILogger<UpdateCheckFailedPage> logger)
+        public UpdateCheckFailedPage(ILogger<UpdateCheckFailedPage> logger, IAccessibilityService accessibilityService): base(accessibilityService)
         {
             _logger = logger;
             _appNavigation = new AppNavigation<IUpdateCheckFailedView.IEvents>(this, Navigation);
@@ -38,7 +39,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             _logger.LogInformation("{Method}", nameof(OnAppearing));
             _appNavigation.EnableHandlers();
 
-            Heading.AccessibilityFocus();
+            base.OnAppearing();
         }
 
         protected override void OnDisappearing()

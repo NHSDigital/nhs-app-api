@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
+using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
@@ -18,7 +19,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         private readonly ILogger _logger;
         private readonly AppNavigation<ICreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberView.IEvents> _appNavigation;
 
-        public CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberPage(ILogger<CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberPage> logger)
+        public CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberPage(ILogger<CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberPage> logger, IAccessibilityService accessibilityService): base(accessibilityService)
         {
             _logger = logger;
             _appNavigation = new AppNavigation<ICreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberView.IEvents>(this, Navigation);
@@ -51,7 +52,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             _logger.LogInformation("{Method}", nameof(OnAppearing));
             _appNavigation.EnableHandlers();
 
-            Heading.AccessibilityFocus();
+            base.OnAppearing();
         }
 
         protected override void OnDisappearing()

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <pages:NhsAppCloseSlimHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
                                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                                  xmlns:d="http://xamarin.com/schemas/2014/forms/design"
@@ -9,7 +9,8 @@
                                  xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
                                  mc:Ignorable="d"
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorInternalServerErrorPage"
-                                 x:Name="Page">
+                                 x:Name="Page"
+                                 PageDescription="Login failed">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <panels:ResponsiveLayoutPanel>
             <StackLayout>

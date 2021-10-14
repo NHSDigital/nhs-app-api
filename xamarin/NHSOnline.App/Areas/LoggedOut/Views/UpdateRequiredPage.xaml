@@ -6,7 +6,8 @@
                                  xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
                                  xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.UpdateRequiredPage"
-                                 x:Name="Page">
+                                 x:Name="Page"
+                                 PageDescription="You need to update the NHS App">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <panels:ResponsiveLayoutPanel>
             <StackLayout>

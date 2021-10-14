@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
+using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -15,7 +16,7 @@ namespace NHSOnline.App.Areas.Errors.Views
         private readonly ILogger<CloseSlimBackToHomeNetworkErrorPage> _logger;
         private readonly AppNavigation<ICloseSlimBackToHomeNetworkErrorView.IEvents> _appNavigation;
 
-        public CloseSlimBackToHomeNetworkErrorPage(ILogger<CloseSlimBackToHomeNetworkErrorPage> logger)
+        public CloseSlimBackToHomeNetworkErrorPage(ILogger<CloseSlimBackToHomeNetworkErrorPage> logger, IAccessibilityService accessibilityService): base(accessibilityService)
         {
             _logger = logger;
             _appNavigation = new AppNavigation<ICloseSlimBackToHomeNetworkErrorView.IEvents>(this, Navigation);
@@ -41,7 +42,7 @@ namespace NHSOnline.App.Areas.Errors.Views
             _logger.LogInformation("{Method}", nameof(OnAppearing));
             _appNavigation.EnableHandlers();
 
-            ErrorPanel.AccessibilityFocusHeading();
+            base.OnAppearing();
         }
 
         protected override void OnDisappearing()

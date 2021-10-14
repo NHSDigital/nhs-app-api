@@ -5,7 +5,8 @@
              xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
              xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Controls.Navigation.SlimCloseNavigationHeader"
-             x:Name="Root">
+             x:Name="Root"
+             AutomationProperties.IsInAccessibleTree="False">
      <ContentView.Effects>
         <effects:SafeAreaPaddingTop/>
     </ContentView.Effects>
@@ -25,7 +26,7 @@
         </ResourceDictionary>
     </View.Resources>
 
-    <StackLayout AutomationId="NHS App Slim Close Navigation Header">
+    <StackLayout>
         <elements:CloseButton Command="{Binding CloseCommand, Source={x:Reference Name=Root}}" />
     </StackLayout>
 </ContentView>

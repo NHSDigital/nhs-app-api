@@ -10,7 +10,8 @@
                                  mc:Ignorable="d"
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.NhsLoginErrorPage"
                                  x:Name="Page"
-                                 CloseCommand="{Binding CloseRequestedCommand, Source={x:Reference Name=Page}}">
+                                 CloseCommand="{Binding CloseRequestedCommand, Source={x:Reference Name=Page}}"
+                                 PageDescription="Login failed">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <panels:ResponsiveLayoutPanel>
             <StackLayout>

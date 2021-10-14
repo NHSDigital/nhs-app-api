@@ -9,9 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         internal AndroidSlimCloseNavigation(IAndroidDriverWrapper driver) => _driver = driver;
 
-        private AndroidNavigationBar Header => AndroidNavigationBar.WithName(_driver, "NHS App Slim Close Navigation Header");
-
-        private AndroidIcon CloseIcon => Header.ContainingIconWithName("NHS App close icon");
+        private AndroidIcon CloseIcon => AndroidIcon.WithName(_driver, "NHS App close icon");
 
         public void Close() => CloseIcon.Click();
 

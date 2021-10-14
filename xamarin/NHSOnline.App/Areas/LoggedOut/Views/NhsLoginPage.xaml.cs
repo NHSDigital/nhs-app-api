@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
+using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Events.Models;
 using NHSOnline.App.Navigation;
 using NHSOnline.App.Threading;
@@ -20,7 +21,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         private bool OnInitialNavigation { get; set; } = true;
         private Uri? InitialUrl { get; set; }
 
-        public NhsLoginPage(ILogger<NhsLoginPage> logger)
+        public NhsLoginPage(ILogger<NhsLoginPage> logger, IAccessibilityService accessibilityService): base(accessibilityService)
         {
             _logger = logger;
             _appNavigation = new AppNavigation<INhsLoginView.IEvents>(this, Navigation);
@@ -51,6 +52,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
 
             RemoveEventHandlers();
             AddEventHandlers();
+
+            base.OnAppearing();
         }
 
         protected override void OnDisappearing()

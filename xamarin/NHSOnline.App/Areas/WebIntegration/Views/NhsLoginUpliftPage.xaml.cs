@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.Payloads;
+using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
@@ -16,7 +17,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         private readonly ILogger _logger;
         private readonly AppNavigation<INhsLoginUpliftView.IEvents> _appNavigation;
 
-        public NhsLoginUpliftPage(ILogger<NhsLoginUpliftPage> logger)
+        public NhsLoginUpliftPage(ILogger<NhsLoginUpliftPage> logger, IAccessibilityService accessibilityService): base(accessibilityService)
         {
             _logger = logger;
             _appNavigation = new AppNavigation<INhsLoginUpliftView.IEvents>(this, Navigation);
@@ -45,13 +46,13 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
 
         protected override void OnAppearing()
         {
-            base.OnAppearing();
-
             _logger.LogInformation("{Method}", nameof(OnAppearing));
             _appNavigation.EnableHandlers();
 
             RemoveEventHandlers();
             AddEventHandlers();
+
+            base.OnAppearing();
         }
 
         protected override void OnDisappearing()

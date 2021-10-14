@@ -9,7 +9,8 @@
                                  xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
                                  mc:Ignorable="d"
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.UpdateCheckFailedPage"
-                                 x:Name="Page">
+                                 x:Name="Page"
+                                 PageDescription="Unable to confirm NHS App version">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <panels:ResponsiveLayoutPanel>
             <StackLayout>

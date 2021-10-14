@@ -9,7 +9,8 @@
                                  xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
                                  mc:Ignorable="d"
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorBadResponseFromUpstreamSystemPage"
-                                 x:Name="Page">
+                                 x:Name="Page"
+                                 PageDescription="Login failed">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <panels:ResponsiveLayoutPanel>
             <StackLayout>

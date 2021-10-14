@@ -50,6 +50,7 @@ namespace NHSOnline.App.Droid
             AndroidDialogPresenter.MainActivity = this;
             AndroidFileHandler.MainActivity = this;
             AndroidInstallReferrerService.MainActivity = this;
+            AndroidAccessibilityService.MainActivity = this;
 
             NhsApp = new NhsApp();
 

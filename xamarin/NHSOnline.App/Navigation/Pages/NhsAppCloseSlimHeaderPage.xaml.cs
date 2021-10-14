@@ -1,5 +1,9 @@
+using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
+using NHSOnline.App.DependencyServices;
+using NHSOnline.App.Logging;
 using NHSOnline.App.Threading;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -10,14 +14,22 @@ namespace NHSOnline.App.Navigation.Pages
     [ContentProperty(nameof(PageContent))]
     public partial class NhsAppCloseSlimHeaderPage
     {
+        private readonly IAccessibilityService? _accessibilityService;
+
+        private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(NhsAppCloseSlimHeaderPage));
+
         public static readonly BindableProperty PageContentProperty =
-            BindableProperty.Create(nameof(PageContent), typeof(View), typeof(NhsAppFullHeaderPage));
+            BindableProperty.Create(nameof(PageContent), typeof(View), typeof(NhsAppCloseSlimHeaderPage));
 
         public static readonly BindableProperty CloseCommandProperty =
-            BindableProperty.Create(nameof(CloseCommand), typeof(AsyncCommand), typeof(NhsAppFullHeaderPage));
+            BindableProperty.Create(nameof(CloseCommand), typeof(AsyncCommand), typeof(NhsAppCloseSlimHeaderPage));
 
-        public NhsAppCloseSlimHeaderPage()
+        public static readonly BindableProperty PageDescriptionProperty =
+            BindableProperty.Create(nameof(PageDescription), typeof(string), typeof(NhsAppCloseSlimHeaderPage));
+
+        public NhsAppCloseSlimHeaderPage(IAccessibilityService accessibilityService)
         {
+            _accessibilityService = accessibilityService;
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
 
@@ -36,6 +48,26 @@ namespace NHSOnline.App.Navigation.Pages
             set => SetValue(CloseCommandProperty, value);
         }
 
+        public string PageDescription
+        {
+            get => (string) GetValue(PageDescriptionProperty);
+            set => SetValue(PageDescriptionProperty, value);
+        }
+
         private async Task DefaultCloseAction() => await Navigation.PopAsync(false).PreserveThreadContext();
+
+        protected override void OnAppearing()
+        {
+            try
+            {
+                _accessibilityService!.AnnounceText($"{PageDescription}.");
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, "Failed to announce text to voice over");
+            }
+
+            base.OnAppearing();
+        }
     }
 }
