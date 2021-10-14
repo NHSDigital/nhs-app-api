@@ -6,19 +6,19 @@ using OpenQA.Selenium.Appium.Android;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Android
 {
-    public class AndroidAppBrowserTabContents
+    public class AndroidBrowserOverlayContents
     {
         private readonly IAndroidInteractor _interactor;
         private readonly string _text;
 
-        private AndroidAppBrowserTabContents(IAndroidInteractor interactor, string text)
+        private AndroidBrowserOverlayContents(IAndroidInteractor interactor, string text)
         {
             _interactor = interactor;
             _text = text;
         }
 
-        public static AndroidAppBrowserTabContents WithText(IAndroidInteractor interactor, string text)
-            => new AndroidAppBrowserTabContents(interactor, text);
+        public static AndroidBrowserOverlayContents WithText(IAndroidInteractor interactor, string text)
+            => new AndroidBrowserOverlayContents(interactor, text);
 
         public void AssertVisible()
             => ActOnElement(e => e.Displayed.Should().BeTrue("a view with text {0} should be displayed", _text));

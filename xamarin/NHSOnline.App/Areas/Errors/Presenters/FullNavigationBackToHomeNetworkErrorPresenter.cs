@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.Errors.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.Services;
+using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.Areas.Errors.Presenters
 {
@@ -26,6 +27,7 @@ namespace NHSOnline.App.Areas.Errors.Presenters
             view.SetNavigationFooterItem(model.SelectedFooterItem);
 
             view.AppNavigation
+                .RegisterHandler(OneOneOneRequested, (view, handler) => view.OneOneOneRequested = handler)
                 .RegisterHandler(model.NavigationHandler.HomeRequested, (view, handler) => view.BackToHomeRequested = handler)
                 .RegisterHandler(model.NavigationHandler.HomeRequested, (view, handler) => view.BackRequested = handler)
                 .RegisterHandler(model.NavigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
@@ -42,6 +44,14 @@ namespace NHSOnline.App.Areas.Errors.Presenters
         {
             _logger.LogInformation("Help requested");
             return _browserOverlay.OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkBaseHelpUrl);
+        }
+        private async Task OneOneOneRequested()
+        {
+            _logger.LogInformation("OneOneOne requested");
+
+            await _browserOverlay
+                .OpenBrowserOverlay(_nhsExternalServicesConfiguration.OneOneOneUrl)
+                .PreserveThreadContext();
         }
     }
 }

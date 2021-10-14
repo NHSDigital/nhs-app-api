@@ -25,6 +25,9 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
         public void Click()
             => ActOnElement(e => e.Click());
 
+        public bool IsVisible()
+            => _interactor.IsPresent(FindBy);
+
         public void AssertVisible() => _locatorStrategy.ActOnElementContext(
             context => context.Element.Displayed.Should().BeTrue($"a button with text {_locatorStrategy.Description} should be displayed"));
 

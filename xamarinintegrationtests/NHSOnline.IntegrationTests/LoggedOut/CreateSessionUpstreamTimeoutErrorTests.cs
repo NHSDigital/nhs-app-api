@@ -2,8 +2,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.CitizenId;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
+using NHSOnline.IntegrationTests.Pages.Android.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.IOS;
+using NHSOnline.IntegrationTests.Pages.IOS.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -43,11 +45,11 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                     .ContactUs();
             }
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertOnContactUsPage(driver)
+            AndroidBrowserOverlayContactUsPage
+                .AssertOnPage(driver)
                 .ReturnToApp();
 
             AndroidCreateSessionUpstreamSystemTimeoutErrorPage
@@ -87,11 +89,11 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                     .KeyboardNavigateToAndActivateContactUs();
             }
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertOnContactUsPage(driver)
+            AndroidBrowserOverlayContactUsPage
+                .AssertOnPage(driver)
                 .ReturnToApp();
 
             AndroidCreateSessionUpstreamSystemTimeoutErrorPage
@@ -131,8 +133,8 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                     .ContactUs();
             }
 
-            IOSAppTab
-                .AssertOnContactUsPage(driver)
+            IOSBrowserOverlayContactUsPage
+                .AssertOnPage(driver)
                 .ReturnToApp();
 
             IOSCreateSessionUpstreamSystemTimeoutErrorPage

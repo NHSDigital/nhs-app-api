@@ -29,6 +29,9 @@ namespace NHSOnline.App.Areas.Errors.Views
 
         public void SetNavigationFooterItem(NavigationFooterItem footerItem) => SelectedNavigationFooterItem = footerItem;
 
+        public Func<Task>? OneOneOneRequested { get; set; }
+        public ICommand OneOneOneCommand => new AsyncCommand(() => OneOneOneRequested);
+
         public Func<Task>? BackToHomeRequested { get; set; }
         public ICommand BackToHomeCommand => new AsyncCommand(() => BackToHomeRequested);
 

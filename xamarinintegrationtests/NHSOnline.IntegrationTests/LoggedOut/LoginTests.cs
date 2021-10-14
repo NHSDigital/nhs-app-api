@@ -1,8 +1,10 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
+using NHSOnline.IntegrationTests.Pages.Android.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.IOS;
+using NHSOnline.IntegrationTests.Pages.IOS.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -48,11 +50,11 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .PageContent.Covid();
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertOnCovidPage(driver)
+            AndroidBrowserOverlayCovidPage
+                .AssertOnPage(driver)
                 .ReturnToApp();
 
             AndroidStubbedLoginPage
@@ -87,8 +89,8 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .PageContent.Covid();
 
-            IOSAppTab
-                .AssertOnCovidPage(driver)
+            IOSBrowserOverlayCovidPage
+                .AssertOnPage(driver)
                 .ReturnToApp();
 
             IOSStubbedLoginPage

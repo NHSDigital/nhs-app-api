@@ -16,6 +16,7 @@
         <panels:ResponsiveLayoutPanel>
             <panels:BackToHomeNetworkError
                 x:Name="ErrorPanel"
+                OneOneOneCommand="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}"
                 BackToHomeCommand="{Binding BackToHomeCommand, Source={x:Reference Name=Page}}" />
         </panels:ResponsiveLayoutPanel>
     </ScrollView>

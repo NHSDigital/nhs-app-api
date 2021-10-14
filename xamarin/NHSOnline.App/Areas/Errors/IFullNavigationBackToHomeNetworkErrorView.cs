@@ -17,6 +17,7 @@ namespace NHSOnline.App.Areas.Errors
             Func<Task>? PrescriptionsRequested { get; set; }
             Func<Task>? YourHealthRequested { get; set; }
             Func<Task>? MessagesRequested { get; set; }
+            Func<Task>? OneOneOneRequested { get; set; }
             Func<Task>? BackToHomeRequested { get; set; }
             Func<Task>? BackRequested { get; set; }
         }

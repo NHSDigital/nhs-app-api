@@ -7,12 +7,21 @@ namespace NHSOnline.App.Controls.Panels
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TryAgainNetworkError
     {
+        public static readonly BindableProperty OneOneOneCommandProperty =
+            BindableProperty.Create(nameof(OneOneOneCommand), typeof(ICommand), typeof(TryAgainNetworkError));
+
         public static readonly BindableProperty TryAgainCommandProperty =
             BindableProperty.Create(nameof(TryAgainCommand), typeof(ICommand), typeof(TryAgainNetworkError));
 
         public TryAgainNetworkError()
         {
             InitializeComponent();
+        }
+
+        public ICommand OneOneOneCommand
+        {
+            get => (ICommand) GetValue(OneOneOneCommandProperty);
+            set => SetValue(OneOneOneCommandProperty, value);
         }
 
         public ICommand TryAgainCommand

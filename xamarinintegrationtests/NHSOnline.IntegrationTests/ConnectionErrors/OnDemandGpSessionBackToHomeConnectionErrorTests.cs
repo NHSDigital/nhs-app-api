@@ -4,10 +4,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.CitizenId;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
+using NHSOnline.IntegrationTests.Pages.Android.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.Android.Errors;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.Messages;
 using NHSOnline.IntegrationTests.Pages.IOS;
+using NHSOnline.IntegrationTests.Pages.IOS.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.IOS.Errors;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.Messages;
@@ -56,19 +58,34 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
 
             AndroidBackToHomeConnectionErrorPage
                 .AssertOnPage(driver)
-                .BackToHome();
+                .GoTo111();
+
+            AndroidBrowserOverlayBrowserChoice
+                .IfDisplayed(driver, choice => choice.ChooseChrome());
+
+            // Need to reuse the same page instance in the known issue fallback assertion
+            // as creating a new one will result in a new context being grabbed.
+            AndroidBrowserOverlay111Page? browserOverlay = null;
 
             KnownIssue.BrowserStackNetworkChangeFailed()
                 .ShouldExpect(() =>
                 {
-                    AndroidLoggedInHomePage
-                        .AssertOnPage(driver);
+                    browserOverlay = AndroidBrowserOverlay111Page.AssertInBrowserOverlay(driver);
+                    browserOverlay
+                        .AssertOnPage()
+                        .ReturnToApp();
                 })
                 .OrIfKnownIssueOccuredExpect(() =>
                 {
-                    AndroidInternetConnectionErrorPage
-                        .AssertOnPage(driver);
+                    browserOverlay?.AssertNoInternet();
                 });
+
+            AndroidBackToHomeConnectionErrorPage
+                .AssertOnPage(driver)
+                .BackToHome();
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver);
         }
 
         [NhsAppIOSTest]
@@ -107,19 +124,31 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
 
             IOSBackToHomeConnectionErrorPage
                 .AssertOnPage(driver)
-                .BackToHome();
+                .GoTo111();
+
+            // Need to reuse the same page instance in the known issue fallback assertion
+            // as creating a new one will result in a new context being grabbed.
+            IOSBrowserOverlay111Page? browserOverlay = null;
 
             KnownIssue.BrowserStackNetworkChangeFailed()
                 .ShouldExpect(() =>
                 {
-                    IOSLoggedInHomePage
-                        .AssertOnPage(driver);
+                    browserOverlay = IOSBrowserOverlay111Page.AssertInBrowserOverlay(driver);
+                    browserOverlay
+                        .AssertOnPage()
+                        .ReturnToApp();
                 })
                 .OrIfKnownIssueOccuredExpect(() =>
                 {
-                    IOSInternetConnectionErrorPage
-                        .AssertOnPage(driver);
+                    browserOverlay?.AssertNoInternet();
                 });
+
+            IOSBackToHomeConnectionErrorPage
+                .AssertOnPage(driver)
+                .BackToHome();
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver);
         }
     }
 }

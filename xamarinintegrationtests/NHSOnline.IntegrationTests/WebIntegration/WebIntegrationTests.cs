@@ -3,6 +3,7 @@ using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.Android.Advice;
 using NHSOnline.IntegrationTests.Pages.Android.Appointments;
+using NHSOnline.IntegrationTests.Pages.Android.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.Messages;
 using NHSOnline.IntegrationTests.Pages.Android.More;
@@ -12,6 +13,7 @@ using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
 using NHSOnline.IntegrationTests.Pages.Android.YourHealth;
 using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
+using NHSOnline.IntegrationTests.Pages.IOS.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.WebIntegration;
 using NHSOnline.IntegrationTests.UI;
@@ -71,11 +73,11 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .PageContent.NavigateToCovid();
 
             // Other pages should load in App Browser Tab
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertOnCovidPage(driver)
+            AndroidBrowserOverlayCovidPage
+                .AssertOnPage(driver)
                 .ReturnToApp();
 
             AndroidErsPage
@@ -236,8 +238,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .PageContent.NavigateToCovid();
 
             // Other pages should load in App Browser Tab
-            IOSAppTab
-                .AssertOnCovidPage(driver)
+            IOSBrowserOverlayCovidPage
+                .AssertOnPage(driver)
                 .ReturnToApp();
 
             IOSErsPage

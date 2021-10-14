@@ -28,6 +28,9 @@ namespace NHSOnline.App.Areas.Errors.Views
 
         IAppNavigation<ICloseSlimBackToHomeNetworkErrorView.IEvents> INavigationView<ICloseSlimBackToHomeNetworkErrorView.IEvents>.AppNavigation => _appNavigation;
 
+        public Func<Task>? OneOneOneRequested { get; set; }
+        public ICommand OneOneOneCommand => new AsyncCommand(() => OneOneOneRequested);
+
         public Func<Task>? BackToHomeRequested { get; set; }
         public ICommand BackToHomeCommand => new AsyncCommand(() => BackToHomeRequested);
 

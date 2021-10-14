@@ -1,10 +1,12 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
+using NHSOnline.IntegrationTests.Pages.Android.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
 using NHSOnline.IntegrationTests.Pages.Android.YourHealth;
 using NHSOnline.IntegrationTests.Pages.IOS;
+using NHSOnline.IntegrationTests.Pages.IOS.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.WebIntegration;
 using NHSOnline.IntegrationTests.Pages.IOS.YourHealth;
@@ -43,11 +45,11 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertNativeHeader()
                 .PageContent.NavigateToExternalDomain();
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertInBrowserAppTab(driver)
+            AndroidBrowserOverlay
+                .AssertInBrowserOverlay(driver)
                 .ReturnToApp();
         }
 
@@ -77,8 +79,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertNativeHeader()
                 .PageContent.NavigateToExternalDomain();
 
-            IOSAppTab
-                .AssertInBrowserAppTab(driver)
+            IOSBrowserOverlay
+                .AssertInBrowserOverlay(driver)
                 .ReturnToApp();
         }
     }

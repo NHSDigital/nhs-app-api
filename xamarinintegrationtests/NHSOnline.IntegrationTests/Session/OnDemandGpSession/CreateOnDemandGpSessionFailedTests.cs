@@ -3,10 +3,12 @@ using NHSOnline.HttpMocks.CitizenId;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.Android.Appointments;
+using NHSOnline.IntegrationTests.Pages.Android.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
+using NHSOnline.IntegrationTests.Pages.IOS.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.UI;
@@ -54,11 +56,12 @@ namespace NHSOnline.IntegrationTests.Session.OnDemandGpSession
                 .AssertPageElements()
                 .PageContent.ReportAProblem();
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertOnContactUsPageByErrorCode(driver, "3c")
+            AndroidBrowserOverlayContactUsPage
+                .AssertOnPage(driver)
+                .AssertErrorCode("3c")
                 .ReturnToApp();
         }
 
@@ -97,8 +100,10 @@ namespace NHSOnline.IntegrationTests.Session.OnDemandGpSession
                 .AssertPageElements()
                 .PageContent.ReportAProblem();
 
-            IOSAppTab
-                .AssertOnContactUsPageByErrorCode(driver, "3c");
+            IOSBrowserOverlayContactUsPage
+                .AssertOnPage(driver)
+                .AssertErrorCode("3c")
+                .ReturnToApp();
         }
     }
 }

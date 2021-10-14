@@ -3,9 +3,11 @@ using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
+using NHSOnline.IntegrationTests.Pages.Android.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.IOS;
+using NHSOnline.IntegrationTests.Pages.IOS.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.UI;
@@ -73,16 +75,16 @@ namespace NHSOnline.IntegrationTests.Session.SessionExpiry
                 .AssertOnPage(driver)
                 .KeyboardNavigateToHelp(patient);
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertOnHelpPageByText(driver, HomeHelpLinkPath);
+            AndroidBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, HomeHelpLinkPath);
 
             sessionExpiryDelay.Wait();
 
-            AndroidAppTab
-                .AssertOnHelpPageByText(driver, HomeHelpLinkPath)
+            AndroidBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, HomeHelpLinkPath)
                 .ReturnToApp();
 
             AndroidLoggedOutHomePage
@@ -105,13 +107,13 @@ namespace NHSOnline.IntegrationTests.Session.SessionExpiry
                 .AssertOnPage(driver)
                 .Navigation.NavigateToHelp();
 
-            IOSAppTab
-                .AssertOnHelpPageByText(driver, HomeHelpLinkPath);
+            IOSBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, HomeHelpLinkPath);
 
             sessionExpiryDelay.Wait();
 
-            IOSAppTab
-                .AssertOnHelpPageByText(driver, HomeHelpLinkPath)
+            IOSBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, HomeHelpLinkPath)
                 .ReturnToApp();
 
             IOSLoggedOutHomePage

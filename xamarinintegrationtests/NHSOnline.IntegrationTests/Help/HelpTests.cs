@@ -4,6 +4,7 @@ using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.Advice;
 using NHSOnline.IntegrationTests.Pages.Android.Appointments;
+using NHSOnline.IntegrationTests.Pages.Android.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.Android.Messages;
 using NHSOnline.IntegrationTests.Pages.Android.More;
@@ -14,6 +15,7 @@ using NHSOnline.IntegrationTests.Pages.Android.YourHealth;
 using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.Advice;
 using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
+using NHSOnline.IntegrationTests.Pages.IOS.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.IOS.Messages;
@@ -50,11 +52,11 @@ namespace NHSOnline.IntegrationTests.Help
                 .AssertOnPage(driver)
                 .GetHelp();
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertOnHelpPageByText(driver, LoggedOutHelpLinkPath)
+            AndroidBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, LoggedOutHelpLinkPath)
                 .ReturnToApp();
         }
 
@@ -65,8 +67,8 @@ namespace NHSOnline.IntegrationTests.Help
                 .AssertOnPage(driver)
                 .GetHelp();
 
-            IOSAppTab
-                .AssertOnHelpPageByText(driver, LoggedOutHelpLinkPath)
+            IOSBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, LoggedOutHelpLinkPath)
                 .ReturnToApp();
         }
 
@@ -81,11 +83,11 @@ namespace NHSOnline.IntegrationTests.Help
                 .AssertOnPage(driver)
                 .Navigation.NavigateToHelp();
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertOnHelpPageByText(driver, HomeHelpLinkPath)
+            AndroidBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, HomeHelpLinkPath)
                 .ReturnToApp();
 
             AndroidLoggedInHomePage
@@ -107,11 +109,11 @@ namespace NHSOnline.IntegrationTests.Help
                 .AssertOnPage(driver)
                 .KeyboardNavigateToHelp(patient);
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertOnHelpPageByText(driver, HomeHelpLinkPath);
+            AndroidBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, HomeHelpLinkPath);
         }
 
         [NhsAppIOSTest]
@@ -125,8 +127,8 @@ namespace NHSOnline.IntegrationTests.Help
                 .AssertOnPage(driver)
                 .Navigation.NavigateToHelp();
 
-            IOSAppTab
-                .AssertOnHelpPageByText(driver, HomeHelpLinkPath)
+            IOSBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, HomeHelpLinkPath)
                 .ReturnToApp();
 
             IOSLoggedInHomePage
@@ -149,11 +151,11 @@ namespace NHSOnline.IntegrationTests.Help
                 .AssertOnPage(driver)
                 .Navigation.NavigateToHelp();
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertOnHelpPageByText(driver, AdviceHelpLinkPath)
+            AndroidBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, AdviceHelpLinkPath)
                 .ReturnToApp();
 
             AndroidAdvicePage
@@ -176,8 +178,8 @@ namespace NHSOnline.IntegrationTests.Help
                 .AssertOnPage(driver)
                 .Navigation.NavigateToHelp();
 
-            IOSAppTab
-                .AssertOnHelpPageByText(driver, AdviceHelpLinkPath)
+            IOSBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, AdviceHelpLinkPath)
                 .ReturnToApp();
 
             IOSAdvicePage
@@ -200,11 +202,11 @@ namespace NHSOnline.IntegrationTests.Help
                 .AssertOnPage(driver)
                 .Navigation.NavigateToHelp();
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertOnHelpPageByText(driver, AppointmentsHelpLinkPath)
+            AndroidBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, AppointmentsHelpLinkPath)
                 .ReturnToApp();
 
             AndroidAppointmentsPage
@@ -227,8 +229,8 @@ namespace NHSOnline.IntegrationTests.Help
                 .AssertOnPage(driver)
                 .Navigation.NavigateToHelp();
 
-            IOSAppTab
-                .AssertOnHelpPageByText(driver, AppointmentsHelpLinkPath)
+            IOSBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, AppointmentsHelpLinkPath)
                 .ReturnToApp();
 
             IOSAppointmentsPage
@@ -251,11 +253,11 @@ namespace NHSOnline.IntegrationTests.Help
                 .AssertOnPage(driver)
                 .Navigation.NavigateToHelp();
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertOnHelpPageByText(driver, PrescriptionsHelpLinkPath)
+            AndroidBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, PrescriptionsHelpLinkPath)
                 .ReturnToApp();
 
             AndroidPrescriptionsPage
@@ -278,8 +280,8 @@ namespace NHSOnline.IntegrationTests.Help
                 .AssertOnPage(driver)
                 .Navigation.NavigateToHelp();
 
-            IOSAppTab
-                .AssertOnHelpPageByText(driver, PrescriptionsHelpLinkPath)
+            IOSBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, PrescriptionsHelpLinkPath)
                 .ReturnToApp();
 
             IOSPrescriptionsPage
@@ -302,11 +304,11 @@ namespace NHSOnline.IntegrationTests.Help
                 .AssertOnPage(driver)
                 .Navigation.NavigateToHelp();
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertOnHelpPageByText(driver, YourHealthHelpLinkPath)
+            AndroidBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, YourHealthHelpLinkPath)
                 .ReturnToApp();
 
             AndroidGpMedicalRecordPage
@@ -329,8 +331,8 @@ namespace NHSOnline.IntegrationTests.Help
                 .AssertOnPage(driver)
                 .Navigation.NavigateToHelp();
 
-            IOSAppTab
-                .AssertOnHelpPageByText(driver, YourHealthHelpLinkPath)
+            IOSBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, YourHealthHelpLinkPath)
                 .ReturnToApp();
 
             IOSGpMedicalRecordPage
@@ -353,11 +355,11 @@ namespace NHSOnline.IntegrationTests.Help
                 .AssertOnPage(driver)
                 .Navigation.NavigateToHelp();
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertOnHelpPageByText(driver, MessagesHelpLinkPath)
+            AndroidBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, MessagesHelpLinkPath)
                 .ReturnToApp();
 
             AndroidMessagesPage
@@ -380,8 +382,8 @@ namespace NHSOnline.IntegrationTests.Help
                 .AssertOnPage(driver)
                 .Navigation.NavigateToHelp();
 
-            IOSAppTab
-                .AssertOnHelpPageByText(driver, MessagesHelpLinkPath)
+            IOSBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, MessagesHelpLinkPath)
                 .ReturnToApp();
 
             IOSMessagesPage
@@ -413,11 +415,11 @@ namespace NHSOnline.IntegrationTests.Help
                 .AssertNativeHeader()
                 .Navigation.NavigateToHelp();
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertOnHelpPageByText(driver, NhsLoginSettingsHelpLinkPath)
+            AndroidBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, NhsLoginSettingsHelpLinkPath)
                 .ReturnToApp();
 
             AndroidNhsLoginSettingsPage
@@ -449,8 +451,8 @@ namespace NHSOnline.IntegrationTests.Help
                 .AssertNativeHeader()
                 .Navigation.NavigateToHelp();
 
-            IOSAppTab
-                .AssertOnHelpPageByText(driver, NhsLoginSettingsHelpLinkPath)
+            IOSBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, NhsLoginSettingsHelpLinkPath)
                 .ReturnToApp();
 
             IOSNhsLoginSettingsPage

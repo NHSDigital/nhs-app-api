@@ -27,6 +27,9 @@ namespace NHSOnline.App.Areas.Errors.Views
 
         IAppNavigation<IPreHomeTryAgainNetworkErrorView.IEvents> INavigationView<IPreHomeTryAgainNetworkErrorView.IEvents>.AppNavigation => _appNavigation;
 
+        public Func<Task>? OneOneOneRequested { get; set; }
+        public ICommand OneOneOneCommand => new AsyncCommand(() => OneOneOneRequested);
+
         public Func<Task>? TryAgainRequested { get; set; }
         public ICommand TryAgainCommand => new AsyncCommand(() => TryAgainRequested);
 

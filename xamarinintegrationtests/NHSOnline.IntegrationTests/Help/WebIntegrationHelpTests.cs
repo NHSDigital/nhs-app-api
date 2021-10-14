@@ -1,10 +1,12 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
+using NHSOnline.IntegrationTests.Pages.Android.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.Prescriptions;
 using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
 using NHSOnline.IntegrationTests.Pages.IOS;
+using NHSOnline.IntegrationTests.Pages.IOS.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.Prescriptions;
 using NHSOnline.IntegrationTests.Pages.IOS.WebIntegration;
@@ -43,11 +45,11 @@ namespace NHSOnline.IntegrationTests.Help
                 .AssertOnPage(driver, PhrPath.HospitalAndOtherPrescriptions)
                 .Navigation.NavigateToHelp();
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertOnHelpPageByText(driver, ThirdPartyHelpLinkPath)
+            AndroidBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, ThirdPartyHelpLinkPath)
                 .ReturnToApp();
 
             AndroidPkbPage
@@ -77,8 +79,8 @@ namespace NHSOnline.IntegrationTests.Help
                 .AssertOnPage(driver, PhrPath.HospitalAndOtherPrescriptions)
                 .Navigation.NavigateToHelp();
 
-            IOSAppTab
-                .AssertOnHelpPageByText(driver, ThirdPartyHelpLinkPath)
+            IOSBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, ThirdPartyHelpLinkPath)
                 .ReturnToApp();
 
             IOSPkbPage

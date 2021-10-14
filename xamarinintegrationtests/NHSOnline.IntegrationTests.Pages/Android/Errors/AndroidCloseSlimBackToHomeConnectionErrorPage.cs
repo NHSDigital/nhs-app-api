@@ -24,7 +24,11 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Errors
 
         private AndroidLabel Title => AndroidLabel.WithText(_driver, "Connection error");
 
+        private AndroidLink GoTo111Link => AndroidLink.WithContentDescription(_driver, "Go to 111.nhs.uk");
+
         private AndroidLink BackToHomeLink => AndroidLink.WithContentDescription(_driver, "Back to home");
+
+        public void GoTo111() => GoTo111Link.ScrollIntoView().Touch();
 
         public void BackToHome() => BackToHomeLink.ScrollIntoView().Touch();
     }

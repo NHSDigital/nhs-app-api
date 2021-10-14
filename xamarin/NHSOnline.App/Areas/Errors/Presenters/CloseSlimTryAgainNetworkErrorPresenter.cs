@@ -1,6 +1,8 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.Errors.Models;
+using NHSOnline.App.Config;
+using NHSOnline.App.Services;
 using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.Areas.Errors.Presenters
@@ -9,19 +11,26 @@ namespace NHSOnline.App.Areas.Errors.Presenters
     {
         private readonly ICloseSlimTryAgainNetworkErrorView _view;
         private readonly CloseSlimTryAgainNetworkErrorModel _model;
+        private readonly IBrowserOverlay _browserOverlay;
+        private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
         private readonly ILogger<CloseSlimTryAgainNetworkErrorPresenter> _logger;
 
         public CloseSlimTryAgainNetworkErrorPresenter(
             ICloseSlimTryAgainNetworkErrorView view,
             CloseSlimTryAgainNetworkErrorModel model,
+            IBrowserOverlay browserOverlay,
+            INhsExternalServicesConfiguration externalServicesConfiguration,
             ILogger<CloseSlimTryAgainNetworkErrorPresenter> logger)
         {
             _view = view;
             _model = model;
+            _browserOverlay = browserOverlay;
+            _externalServicesConfiguration = externalServicesConfiguration;
             _logger = logger;
 
             view.AppNavigation
                 .RegisterHandler(CloseRequested, (view, handler) => view.CloseRequested = handler)
+                .RegisterHandler(OneOneOneRequested, (view, handler) => view.OneOneOneRequested = handler)
                 .RegisterHandler(TryAgainRequested, (view, handler) => view.TryAgainRequested = handler)
                 .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler);
         }
@@ -32,6 +41,15 @@ namespace NHSOnline.App.Areas.Errors.Presenters
 
             await _view.AppNavigation.Pop().PreserveThreadContext();
             await _model.CloseAction.Invoke().PreserveThreadContext();
+        }
+
+        private async Task OneOneOneRequested()
+        {
+            _logger.LogInformation("OneOneOne requested");
+
+            await _browserOverlay
+                .OpenBrowserOverlay(_externalServicesConfiguration.OneOneOneUrl)
+                .PreserveThreadContext();
         }
 
         private Task TryAgainRequested()

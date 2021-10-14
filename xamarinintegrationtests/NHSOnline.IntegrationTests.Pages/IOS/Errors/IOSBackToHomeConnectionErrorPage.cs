@@ -21,7 +21,11 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Errors
 
         private IOSLabel Title => IOSLabel.WithText(_driver, "Connection error");
 
+        private IOSLink GoTo111Link => IOSLink.WithText(_driver, "Go to 111.nhs.uk");
+
         private IOSLink BackToHomeLink => IOSLink.WithText(_driver, "Back to home");
+
+        public void GoTo111() => GoTo111Link.Touch();
 
         public void BackToHome() => BackToHomeLink.Touch();
     }

@@ -1,9 +1,14 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
+using NHSOnline.IntegrationTests.Pages.Android;
+using NHSOnline.IntegrationTests.Pages.Android.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.Android.Errors;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
+using NHSOnline.IntegrationTests.Pages.IOS;
+using NHSOnline.IntegrationTests.Pages.IOS.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.IOS.Errors;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
@@ -46,14 +51,43 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
                 .ShouldExpect(() =>
                 {
                     AndroidCloseSlimBackToHomeConnectionErrorPage
-                        .AssertOnPage(driver)
-                        .BackToHome();
+                        .AssertOnPage(driver);
                 })
                 .OrIfKnownIssueOccuredExpect(() =>
                 {
                     AndroidTermsAndConditionsPage
                         .AssertOnPage(driver);
                 });
+
+            await driver.ResetNetworkAndWait(TimeSpan.FromSeconds(5));
+
+            AndroidCloseSlimBackToHomeConnectionErrorPage
+                .AssertOnPage(driver)
+                .GoTo111();
+
+            AndroidBrowserOverlayBrowserChoice
+                .IfDisplayed(driver, choice => choice.ChooseChrome());
+
+            // Need to reuse the same page instance in the known issue fallback assertion
+            // as creating a new one will result in a new context being grabbed.
+            AndroidBrowserOverlay111Page? browserOverlay = null;
+
+            KnownIssue.BrowserStackNetworkChangeFailed()
+                .ShouldExpect(() =>
+                {
+                    browserOverlay = AndroidBrowserOverlay111Page.AssertInBrowserOverlay(driver);
+                    browserOverlay
+                        .AssertOnPage()
+                        .ReturnToApp();
+                })
+                .OrIfKnownIssueOccuredExpect(() =>
+                {
+                    browserOverlay?.AssertNoInternet();
+                });
+
+            AndroidCloseSlimBackToHomeConnectionErrorPage
+                .AssertOnPage(driver)
+                .BackToHome();
 
             AndroidLoggedOutHomePage
                 .AssertOnPage(driver);
@@ -88,14 +122,40 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
                 .ShouldExpect(() =>
                 {
                     IOSCloseSlimBackToHomeConnectionErrorPage
-                        .AssertOnPage(driver)
-                        .BackToHome();
+                        .AssertOnPage(driver);
                 })
                 .OrIfKnownIssueOccuredExpect(() =>
                 {
                     IOSTermsAndConditionsPage
                         .AssertOnPage(driver);
                 });
+
+            await driver.ResetNetworkAndWait(TimeSpan.FromSeconds(5));
+
+            IOSCloseSlimBackToHomeConnectionErrorPage
+                .AssertOnPage(driver)
+                .GoTo111();
+
+            // Need to reuse the same page instance in the known issue fallback assertion
+            // as creating a new one will result in a new context being grabbed.
+            IOSBrowserOverlay111Page? browserOverlay = null;
+
+            KnownIssue.BrowserStackNetworkChangeFailed()
+                .ShouldExpect(() =>
+                {
+                    browserOverlay = IOSBrowserOverlay111Page.AssertInBrowserOverlay(driver);
+                    browserOverlay
+                        .AssertOnPage()
+                        .ReturnToApp();
+                })
+                .OrIfKnownIssueOccuredExpect(() =>
+                {
+                    browserOverlay?.AssertNoInternet();
+                });
+
+            IOSCloseSlimBackToHomeConnectionErrorPage
+                .AssertOnPage(driver)
+                .BackToHome();
 
             IOSLoggedOutHomePage
                 .AssertOnPage(driver);

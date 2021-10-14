@@ -2,8 +2,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.CitizenId;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
+using NHSOnline.IntegrationTests.Pages.Android.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.IOS;
+using NHSOnline.IntegrationTests.Pages.IOS.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -39,11 +41,11 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertPageElements()
                 .ContactUs();
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertOnContactUsPage(driver)
+            AndroidBrowserOverlayContactUsPage
+                .AssertOnPage(driver)
                 .ReturnToApp();
 
             AndroidNhsLoginErrorPage
@@ -80,8 +82,8 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertPageElements()
                 .ContactUs();
 
-            IOSAppTab
-                .AssertOnContactUsPage(driver)
+            IOSBrowserOverlayContactUsPage
+                .AssertOnPage(driver)
                 .ReturnToApp();
 
             IOSNhsLoginErrorPage
@@ -117,11 +119,11 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertPageElements()
                 .KeyboardNavigateToAndActivateContactUs();
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertOnContactUsPage(driver)
+            AndroidBrowserOverlayContactUsPage
+                .AssertOnPage(driver)
                 .ReturnToApp();
 
             AndroidNhsLoginErrorPage

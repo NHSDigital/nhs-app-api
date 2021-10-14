@@ -2,9 +2,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.Android.Advice;
+using NHSOnline.IntegrationTests.Pages.Android.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.Advice;
+using NHSOnline.IntegrationTests.Pages.IOS.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -39,22 +41,22 @@ namespace NHSOnline.IntegrationTests.Advice
                 .AssertOnPage(driver)
                 .PageContent.SelectFindOutMore();
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertOnOnlineConsultationPrivacyPolicyPage(driver)
+            AndroidBrowserOverlayOnlineConsultationPrivacyPolicyPage
+                .AssertOnPage(driver)
                 .ReturnToApp();
 
             AndroidAskYourGpForAdviceStartPage
                 .AssertOnPage(driver)
                 .PageContent.SelectPrivacyPolicy();
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertOnPrivacyPolicyPage(driver)
+            AndroidBrowserOverlayNhsAppPrivacyPolicyPage
+                .AssertOnPage(driver)
                 .ReturnToApp();
 
             AndroidAskYourGpForAdviceStartPage
@@ -83,17 +85,15 @@ namespace NHSOnline.IntegrationTests.Advice
 
             IOSAskYourGpForAdviceStartPage
                 .AssertOnPage(driver)
-                .PageContent
-                .SelectFindOutMore();
+                .PageContent.SelectFindOutMore();
 
-            IOSAppTab
-                .AssertOnOnlineConsultationPrivacyPolicyPage(driver)
+            IOSBrowserOverlayOnlineConsultationPrivacyPolicyPage
+                .AssertOnPage(driver)
                 .ReturnToApp();
 
             IOSAskYourGpForAdviceStartPage
                 .AssertOnPage(driver)
-                .PageContent
-                .AssertPageContent();
+                .PageContent.AssertPageContent();
         }
 
         [NhsAppManualTest("NHSO-15774", "OLC Journey is not fully stubbed yet")]

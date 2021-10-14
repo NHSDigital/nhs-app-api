@@ -1,12 +1,17 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
+using NHSOnline.IntegrationTests.Pages.Android;
+using NHSOnline.IntegrationTests.Pages.Android.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.Android.Errors;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.More;
 using NHSOnline.IntegrationTests.Pages.Android.More.AccountSettings;
 using NHSOnline.IntegrationTests.Pages.Android.More.AccountSettings.LegalAndCookies;
 using NHSOnline.IntegrationTests.Pages.Android.More.AccountSettings.LegalAndCookies.ManageCookies;
+using NHSOnline.IntegrationTests.Pages.IOS;
+using NHSOnline.IntegrationTests.Pages.IOS.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.IOS.Errors;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.More;
@@ -73,23 +78,39 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
                         .AssertOnPage(driver);
                 });
 
-            await driver.ResetNetwork();
+            // For some reason this test consistently fails when there is no delay after resetting the network
+            await driver.ResetNetworkAndWait(TimeSpan.FromSeconds(5));
+
+            AndroidCloseSlimTryAgainConnectionErrorPage
+                .AssertOnPage(driver)
+                .GoTo111();
+
+            AndroidBrowserOverlayBrowserChoice
+                .IfDisplayed(driver, choice => choice.ChooseChrome());
+
+            // Need to reuse the same page instance in the known issue fallback assertion
+            // as creating a new one will result in a new context being grabbed.
+            AndroidBrowserOverlay111Page? browserOverlay = null;
+
+            KnownIssue.BrowserStackNetworkChangeFailed()
+                .ShouldExpect(() =>
+                {
+                    browserOverlay = AndroidBrowserOverlay111Page.AssertInBrowserOverlay(driver);
+                    browserOverlay
+                        .AssertOnPage()
+                        .ReturnToApp();
+                })
+                .OrIfKnownIssueOccuredExpect(() =>
+                {
+                    browserOverlay?.AssertNoInternet();
+                });
 
             AndroidCloseSlimTryAgainConnectionErrorPage
                 .AssertOnPage(driver)
                 .TryAgain();
 
-            KnownIssue.BrowserStackNetworkChangeFailed()
-                .ShouldExpect(() =>
-                {
-                    AndroidManageCookiesPage
-                        .AssertOnPage(driver);
-                })
-                .OrIfKnownIssueOccuredExpect(() =>
-                {
-                    AndroidCloseSlimTryAgainConnectionErrorPage
-                        .AssertOnPage(driver);
-                });
+            AndroidManageCookiesPage
+                .AssertOnPage(driver);
         }
 
         [NhsAppIOSTest]
@@ -144,19 +165,31 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
 
             IOSCloseSlimTryAgainConnectionErrorPage
                 .AssertOnPage(driver)
-                .TryAgain();
+                .GoTo111();
+
+            // Need to reuse the same page instance in the known issue fallback assertion
+            // as creating a new one will result in a new context being grabbed.
+            IOSBrowserOverlay111Page? browserOverlay = null;
 
             KnownIssue.BrowserStackNetworkChangeFailed()
                 .ShouldExpect(() =>
                 {
-                    IOSManageCookiesPage
-                        .AssertOnPage(driver);
+                    browserOverlay = IOSBrowserOverlay111Page.AssertInBrowserOverlay(driver);
+                    browserOverlay
+                        .AssertOnPage()
+                        .ReturnToApp();
                 })
                 .OrIfKnownIssueOccuredExpect(() =>
                 {
-                    IOSCloseSlimTryAgainConnectionErrorPage
-                        .AssertOnPage(driver);
+                    browserOverlay?.AssertNoInternet();
                 });
+
+            IOSCloseSlimTryAgainConnectionErrorPage
+                .AssertOnPage(driver)
+                .TryAgain();
+
+            IOSManageCookiesPage
+                .AssertOnPage(driver);
         }
 
         [NhsAppAndroidTest]

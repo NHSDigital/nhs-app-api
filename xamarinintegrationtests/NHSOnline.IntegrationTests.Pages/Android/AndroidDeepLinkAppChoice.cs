@@ -4,23 +4,23 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 {
     public sealed class AndroidDeepLinkAppChoice
     {
-        private AndroidAppChoice AndroidAppChoice { get; }
+        private AndroidBrowserChoice AndroidBrowserChoice { get; }
 
         private AndroidDeepLinkAppChoice(IAndroidDriverWrapper driver)
         {
-            AndroidAppChoice = new AndroidAppChoice(driver, "NHS App - BrowserStack", "web.local.bitraft.io");
+            AndroidBrowserChoice = new AndroidBrowserChoice(driver, "NHS App - BrowserStack", "web.local.bitraft.io");
         }
         
         public static AndroidDeepLinkAppChoice AssertDisplayed(IAndroidDriverWrapper driver)
         {
             var appChoice = new AndroidDeepLinkAppChoice(driver);
-            appChoice.AndroidAppChoice.AssertDisplayed();
+            appChoice.AndroidBrowserChoice.AssertDisplayed();
             return appChoice;
         }
 
         public void ChooseNhsApp()
         {
-            AndroidAppChoice.ChooseTargetApp();
+            AndroidBrowserChoice.ChooseTargetApp();
         }
     }
 }

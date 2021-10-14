@@ -5,19 +5,19 @@ using OpenQA.Selenium.Appium;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Android
 {
-    public sealed class AndroidAppTabBrowserChoiceOption
+    public sealed class AndroidBrowserOverlayBrowserChoiceOption
     {
         private readonly IAndroidInteractor _interactor;
         private readonly string _text;
 
-        private AndroidAppTabBrowserChoiceOption(IAndroidInteractor interactor, string text)
+        private AndroidBrowserOverlayBrowserChoiceOption(IAndroidInteractor interactor, string text)
         {
             _interactor = interactor;
             _text = text;
         }
 
-        public static AndroidAppTabBrowserChoiceOption WithText(IAndroidInteractor interactor, string text)
-            => new AndroidAppTabBrowserChoiceOption(interactor, text);
+        public static AndroidBrowserOverlayBrowserChoiceOption WithText(IAndroidInteractor interactor, string text)
+            => new AndroidBrowserOverlayBrowserChoiceOption(interactor, text);
 
         public void Click()
             => _interactor.ActOnElement(FindBy, e => e.Click());

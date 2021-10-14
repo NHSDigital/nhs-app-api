@@ -1,7 +1,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.IntegrationTests.Pages.Android;
+using NHSOnline.IntegrationTests.Pages.Android.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.IOS;
+using NHSOnline.IntegrationTests.Pages.IOS.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -23,11 +25,11 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertPageElements()
                 .GoToWhatToDoThirteenToFifteenLink();
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidAppTab
-                .AssertOnHelpPageByText(driver, WhatToDoThirteenToFifteenLinkPath)
+            AndroidBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, WhatToDoThirteenToFifteenLinkPath)
                 .ReturnToApp();
 
             driver.PressBackButton();
@@ -44,8 +46,8 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertPageElements()
                 .GoToWhatToDoThirteenToFifteenLink();
 
-            IOSAppTab
-                .AssertOnHelpPageByText(driver, WhatToDoThirteenToFifteenLinkPath)
+            IOSBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, WhatToDoThirteenToFifteenLinkPath)
                 .ReturnToApp();
 
             driver.SwipeBack();

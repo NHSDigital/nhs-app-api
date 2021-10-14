@@ -14,6 +14,7 @@
         <panels:ResponsiveLayoutPanel>
             <panels:TryAgainNetworkError
                 x:Name="ErrorPanel"
+                OneOneOneCommand="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}"
                 TryAgainCommand="{Binding TryAgainCommand, Source={x:Reference Name=Page}}" />
         </panels:ResponsiveLayoutPanel>
     </ScrollView>

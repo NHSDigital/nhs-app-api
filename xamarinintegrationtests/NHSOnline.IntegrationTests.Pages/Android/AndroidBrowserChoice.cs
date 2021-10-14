@@ -4,7 +4,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.Android
 {
-    public sealed class AndroidAppChoice
+    public sealed class AndroidBrowserChoice
     {
         private readonly IAndroidDriverWrapper _driver;
         private readonly string _targetApp;
@@ -23,7 +23,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         private AndroidSystemButton JustOnceButton =>
             AndroidSystemButton.WhichMatches(_driver, "(JUST ONCE|Just once)");
 
-        public AndroidAppChoice(IAndroidDriverWrapper driver, string targetApp, string? link = null)
+        public AndroidBrowserChoice(IAndroidDriverWrapper driver, string targetApp, string? link = null)
         {
             _driver = driver;
             _targetApp = targetApp;

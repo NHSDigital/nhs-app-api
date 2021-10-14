@@ -2,8 +2,10 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
+using NHSOnline.IntegrationTests.Pages.Android.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.IOS;
+using NHSOnline.IntegrationTests.Pages.IOS.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -110,22 +112,24 @@ namespace NHSOnline.IntegrationTests.ForcedUpdate
                 .AssertPageElements()
                 .GoTo111();
 
-            AndroidAppTabBrowserChoice
+            AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
             // Need to reuse the same page instance in the known issue fallback assertion
             // as creating a new one will result in a new context being grabbed.
-            AndroidAppTab? appTab = null;
+            AndroidBrowserOverlay111Page? browserOverlay = null;
 
             KnownIssue.BrowserStackNetworkChangeFailed()
                 .ShouldExpect(() =>
                 {
-                    appTab = AndroidAppTab.AssertOn111Page(driver);
-                    appTab.ReturnToApp();
+                    browserOverlay = AndroidBrowserOverlay111Page.AssertInBrowserOverlay(driver);
+                    browserOverlay
+                        .AssertOnPage()
+                        .ReturnToApp();
                 })
                 .OrIfKnownIssueOccuredExpect(() =>
                 {
-                    appTab?.AssertNoInternet();
+                    browserOverlay?.AssertNoInternet();
                 });
 
             driver.PressBackButton();
@@ -186,17 +190,19 @@ namespace NHSOnline.IntegrationTests.ForcedUpdate
 
             // Need to reuse the same page instance in the known issue fallback assertion
             // as creating a new one will result in a new context being grabbed.
-            IOSAppTab? appTab = null;
+            IOSBrowserOverlay111Page? browserOverlay = null;
 
             KnownIssue.BrowserStackNetworkChangeFailed()
                 .ShouldExpect(() =>
                 {
-                    appTab = IOSAppTab.AssertOn111Page(driver);
-                    appTab.ReturnToApp();
+                    browserOverlay = IOSBrowserOverlay111Page.AssertInBrowserOverlay(driver);
+                    browserOverlay
+                        .AssertOnPage()
+                        .ReturnToApp();
                 })
                 .OrIfKnownIssueOccuredExpect(() =>
                 {
-                    appTab?.AssertNoInternet();
+                    browserOverlay?.AssertNoInternet();
                 });
 
             driver.SwipeBack();
