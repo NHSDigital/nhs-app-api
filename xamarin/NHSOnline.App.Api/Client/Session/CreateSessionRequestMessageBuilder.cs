@@ -18,6 +18,7 @@ namespace NHSOnline.App.Api.Client.Session
         {
             httpRequestMessage.Method = HttpMethod.Post;
             httpRequestMessage.RequestUri = new Uri("/v1/session");
+            httpRequestMessage.Headers.Add("NHSO-Request-ID", Guid.NewGuid().ToString());
             await _serializer.SetContent(httpRequestMessage, request.CreateModel()).ResumeOnThreadPool();
         }
     }
