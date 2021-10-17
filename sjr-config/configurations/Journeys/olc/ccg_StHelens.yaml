@@ -2,7 +2,6 @@ $schema: "Schemas/Journeys/configuration_schema.json"
 target:
   odsCodes:
     - N83054
-    - N83019
     - N83027
     - N83604
     - N83635

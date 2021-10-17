@@ -8,7 +8,6 @@ target:
     - G82087
     - G82658
     - G82050
-    - G82142
 journeys:
   cdssAdvice:
     provider: eConsult
