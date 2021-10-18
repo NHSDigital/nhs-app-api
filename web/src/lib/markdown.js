@@ -8,6 +8,16 @@ import { INTERSTITIAL_REDIRECTOR_PATH } from '@/router/paths';
 let markdownInternal;
 let $store;
 
+const getTarget = (token, hrefIndex) => {
+  const href = token.attrs[hrefIndex][1];
+
+  if (href.startsWith('/') && !href.startsWith('//')) {
+    return '_self';
+  }
+
+  return isSameHostNameAndProtocol(href) ? '_self' : '_blank';
+};
+
 const getHref = (token, hrefIndex) => {
   const href = token.attrs[hrefIndex][1];
 
@@ -21,17 +31,6 @@ const getHref = (token, hrefIndex) => {
   return href;
 };
 
-const assignTarget = (token, href) => {
-  let targetValue = '_blank';
-  if (href.startsWith('/') && !href.startsWith('//')) {
-    targetValue = '_self';
-  } else {
-    targetValue = isSameHostNameAndProtocol(href) ? '_self' : '_blank';
-  }
-
-  token.attrPush(['target', targetValue]);
-};
-
 const overrideLinkRenderer = (md) => {
   const defaultRender = md.renderer.rules.link_open ||
     ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options));
@@ -40,10 +39,10 @@ const overrideLinkRenderer = (md) => {
     const token = tokens[idx];
     const hrefIndex = token.attrIndex('href');
     const href = getHref(token, hrefIndex);
-
-    assignTarget(token, href);
+    const target = getTarget(token, hrefIndex);
 
     token.attrs[hrefIndex][1] = href;
+    token.attrPush(['target', target]);
 
     return defaultRender(tokens, idx, options, env, self);
   };

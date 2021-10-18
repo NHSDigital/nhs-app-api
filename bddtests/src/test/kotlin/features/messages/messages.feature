@@ -159,7 +159,7 @@ Feature: Messages
     When I click on message 1 message on the Sender Messages page
     Then the Message page is displayed
     When I click the internal link called 'pkb.stubs.local.bitraft.io' with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Fauth%252FgetInbox.action%253Ftab%253Dmessages'
-    Then I am redirected to the redirector page with the header 'Messages and online consultations'
+    Then a new tab has been opened by the link
 
   Scenario: A user can see their markdown messages and follow an internal link
     Given I am using the native app user agent

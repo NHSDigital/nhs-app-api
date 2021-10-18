@@ -250,8 +250,8 @@ describe('MarkdownContent', () => {
             expect(linkElement.attributes().href).toEqual('/redirector?redirect_to=https%3A%2F%2Fssotest.com');
           });
 
-          it('will set target attribute to _self', () => {
-            expect(linkElement.attributes().target).toEqual('_self');
+          it('will set target attribute to _blank', () => {
+            expect(linkElement.attributes().target).toEqual('_blank');
           });
 
           it('will set link text', () => {
