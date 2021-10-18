@@ -435,6 +435,28 @@ describe('MarkdownContent', () => {
           });
         });
       });
+
+      describe('with a redirector external link', () => {
+        const href = '/redirector?redirect_to=https://link-to-external-site.com';
+        const target = '_blank';
+
+        beforeEach(() => {
+          event = createEvent({ keyName: key.Enter, href, target });
+          wrapper.vm.navigateTo(event);
+        });
+
+        it('will not push to the router', () => {
+          expect($router.push).not.toBeCalled();
+        });
+
+        it('will not call event preventDefault', () => {
+          expect(event.preventDefault).not.toBeCalled();
+        });
+
+        it('will not dispatch', () => {
+          expect($store.dispatch).not.toBeCalled();
+        });
+      });
     });
 
     describe('onKeyDown', () => {

@@ -5,6 +5,7 @@
 
 <script>
 import markdownContent from '@/lib/markdown';
+import { INTERSTITIAL_REDIRECTOR_PATH } from '@/router/paths';
 import { key, redirectTo } from '@/lib/utils';
 
 export default {
@@ -47,7 +48,7 @@ export default {
       const href = event.target.getAttribute('href');
       const target = event.target.getAttribute('target');
 
-      if (target === '_blank') {
+      if (target === '_blank' && !href.startsWith(`/${INTERSTITIAL_REDIRECTOR_PATH}`)) {
         this.$store.dispatch('messaging/linkClicked', {
           messageId: this.messageId,
           link: href,
