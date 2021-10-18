@@ -59,7 +59,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
             var footerFocusableList = Navigation.KeyboardFooterNavigation.GetFocusableElements();
             var pageFocusableList = PageContent.FocusableElements;
 
-            return pageFocusableList.Concat(footerFocusableList).Concat(headerFocusableList);
+            return headerFocusableList.Concat(pageFocusableList).Concat(footerFocusableList);
         }
 
         public void ProveYourIdentityContinue() => PageContent.ProveYourIdentityContinue();

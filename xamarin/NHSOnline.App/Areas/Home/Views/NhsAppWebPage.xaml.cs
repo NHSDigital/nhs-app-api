@@ -184,19 +184,14 @@ namespace NHSOnline.App.Areas.Home.Views
         {
             _logger.LogInformation("Navigated ({Result}): {Uri}", args.Result, args.Url);
 
-            if (args.Result is WebNavigationResult.Success)
+            if (args.Result != WebNavigationResult.Success && args.Result != WebNavigationResult.Cancel)
             {
-                WebView.Focus();
-                WebView.AccessibilityFocus();
+                WebView.IsVisible = false;
+                NavigationFailedCommand.Execute(new Uri(args.Url));
             }
             else if (args.Result is WebNavigationResult.Cancel)
             {
                 _logger.LogInformation("Web navigation was cancelled");
-            }
-            else
-            {
-                WebView.IsVisible = false;
-                NavigationFailedCommand.Execute(new Uri(args.Url));
             }
 
         }
