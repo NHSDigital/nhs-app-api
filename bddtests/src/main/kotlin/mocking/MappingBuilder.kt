@@ -5,6 +5,7 @@ import org.apache.http.HttpStatus
 
 private const val SC_FOUND = HttpStatus.SC_MOVED_TEMPORARILY
 const val CONTENT_TYPE_APPLICATION_JSON = "application/json; charset=UTF-8"
+
 abstract class MappingBuilder(method: String, url: String, isUrlPattern: Boolean = false) {
 
     open var delayMillisecs = 0
@@ -20,7 +21,6 @@ abstract class MappingBuilder(method: String, url: String, isUrlPattern: Boolean
         if (isPattern) {
             urlPattern = url
         }
-
     }
 
     fun respondWithBody(body: String, statusCode: Int = HttpStatus.SC_OK): Mapping {

@@ -54,7 +54,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                         IsViewable = false,
                         IsDownloadable = false
                     };
-
                 }
 
                 if (task.HasErrorWithCode(Constants.TppErrorCodes.FileStillUploading))

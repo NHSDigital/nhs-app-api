@@ -182,14 +182,24 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
         }
 
         [TestMethod]
-        public async Task CreateLinkageKey_ReturnsInternalServerError_WhenNoBodyOnNhsResponse()
+        public async Task CreateLinkageKey_ReturnsInternalServerError_WhenConnectionTokenSavingThrowsException()
         {
             var request = ValidCreateLinkageRequest();
-            var userResponse = new TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK);
+            var userResponse = new TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
+                { Body = _fixture.Create<LinkAccountReply>() };
 
             _linkAccountCreate
-                .Setup(x => x.Post(It.IsAny<LinkAccountCreate>()))
+                .Setup(x => x.Post(It.Is<LinkAccountCreate>(
+                    x =>
+                        x.NhsNumber == request.NhsNumber
+                        && x.LastName == request.Surname
+                        && x.DateofBirth == request.DateOfBirth
+                        && x.OrganisationCode == request.OdsCode)))
                 .ReturnsAsync(userResponse);
+
+            _mockIm1CacheService
+                .Setup(x => x.SaveIm1ConnectionToken(It.IsAny<string>(), It.IsAny<TppConnectionToken>()))
+                .Throws<Exception>();
 
             var result = await _systemUnderTest.CreateLinkageKey(request);
 

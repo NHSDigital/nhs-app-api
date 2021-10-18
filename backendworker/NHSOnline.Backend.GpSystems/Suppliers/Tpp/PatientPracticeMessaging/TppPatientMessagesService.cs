@@ -71,12 +71,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
 
                 var mappedResponse = _messagesViewMapper.Map(response);
 
-                if (mappedResponse is null)
-                {
-                    _logger.LogInformation("Mapping TPP patient messages returned null");
-                    return new GetPatientMessagesResult.BadGateway();
-                }
-
                 _logger.LogInformation(
                     $"Number of TPP patient messages retrieved: {mappedResponse.MessageSummaries.Count}");
 
@@ -179,23 +173,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
                 var parameters = (tppUserSession, message.RecipientIdentifier, message.MessageBody);
                 var response = await _messagesCreateMessagePost.Post(parameters);
 
-                if (response.Body is null)
+                if (!response.HasSuccessResponse)
                 {
                     _logger.LogTppErrorResponse(response);
                     return new PostPatientMessageResult.BadGateway();
                 }
 
                 return new PostPatientMessageResult.Success();
-
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request post message patient practice messaging");
-                return new PostPatientMessageResult.BadGateway();
-            }
-            catch (NullReferenceException e)
-            {
-                _logger.LogError(e, "Patient practice messaging message create reply returned a null body");
                 return new PostPatientMessageResult.BadGateway();
             }
             finally

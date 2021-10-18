@@ -24,7 +24,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 
             return _requestExecutor.Post<MessagesViewReply>(
                 requestBuilder => requestBuilder.Model(request).Suid(tppUserSession.Suid));
-
         }
     }
 }

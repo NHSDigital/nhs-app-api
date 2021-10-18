@@ -87,10 +87,6 @@ class AuthenticationFactoryVision : AuthenticationFactory(Supplier.VISION) {
         }
     }
 
-    override fun patientWithNullResponseBody(patient: Patient) {
-        throw NotImplementedError("Not implemented for Vision")
-    }
-
     companion object {
         val mockingClient = SerenityHelpers.getMockingClient()
 

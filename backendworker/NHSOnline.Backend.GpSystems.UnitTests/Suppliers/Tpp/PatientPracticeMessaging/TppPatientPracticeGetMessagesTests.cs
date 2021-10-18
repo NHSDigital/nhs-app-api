@@ -152,6 +152,30 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
         }
 
         [TestMethod]
+        public async Task GetMessages_WhenThrottled_ReturnsBadGateway()
+        {
+            var tppUserSession = new TppUserSession
+            {
+                PatientId = "1234",
+                OnlineUserId = "12345",
+                OdsCode = "1234"
+            };
+            // Arrange
+            _messagesViewPost
+                .Setup(c => c.Post(tppUserSession))
+                .Throws<TppThrottlingHttpRequestException>()
+                .Verifiable();
+
+            // Act
+            var getMessagesResult = await _systemUnderTest.GetMessages(tppUserSession);
+
+            // Assert
+            _messagesViewPost.Verify();
+
+            getMessagesResult.Should().BeAssignableTo<GetPatientMessagesResult.BadGateway>();
+        }
+
+        [TestMethod]
         public async Task GetMessages_WhenExceptionIsThrown_ReturnsInternalServerError()
         {
 
@@ -174,47 +198,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
             _messagesViewPost.Verify();
 
             getMessagesResult.Should().BeAssignableTo<GetPatientMessagesResult.InternalServerError>();
-        }
-
-        [TestMethod]
-        public async Task GetMessages_WhenMapperReturnsNull_ReturnsBadGateway()
-        {
-            // Arrange
-            var messagesViewReply = new MessagesViewReply
-            {
-                Messages = null
-            };
-
-            var tppUserSession = new TppUserSession
-            {
-                PatientId = "1234",
-                OnlineUserId = "12345",
-                OdsCode = "1234"
-            };
-            _messagesViewPost
-                .Setup(c => c.Post(tppUserSession))
-                .Returns(Task.FromResult(
-                    new TppApiObjectResponse<MessagesViewReply>(HttpStatusCode.OK)
-                    {
-                        Body = messagesViewReply,
-                        ErrorResponse = null,
-                    }))
-                .Verifiable();
-
-            _mockMessagesMapper
-                .Setup(e => e.Map(
-                    It.Is<MessagesViewReply>(m => m.Equals(messagesViewReply))))
-                .Returns((GetPatientMessagesResponse) null)
-                .Verifiable();
-
-            // Act
-            var messagesResult = await _systemUnderTest.GetMessages(tppUserSession);
-
-            // Assert
-            _messagesViewPost.Verify();
-            _mockMessagesMapper.Verify();
-
-            messagesResult.Should().BeAssignableTo<GetPatientMessagesResult.BadGateway>();
         }
     }
 }
