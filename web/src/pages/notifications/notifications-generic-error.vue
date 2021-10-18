@@ -1,11 +1,11 @@
 <template>
   <no-return-flow-layout>
     <div v-if="showTemplate">
-      <p>{{ $t('notifications.manageNotifications.error.select')
-      }}<strong>{{ $t('notifications.manageNotifications.error.continue')
-      }}</strong>{{ $t('notifications.manageNotifications.error.goTo')
-      }}<strong>{{ $t('notifications.manageNotifications.error.settings')
-      }}</strong>{{ $t('notifications.manageNotifications.error.tryAgain') }}.
+      <p>{{ $t('notifications.error.select')
+      }}<strong>{{ $t('notifications.error.continue')
+      }}</strong>{{ $t('notifications.error.goTo')
+      }}<strong>{{ $t('notifications.error.settings')
+      }}</strong>{{ $t('notifications.error.tryAgain') }}.
       </p>
       <primary-button id="btn_continue" @click="onContinue">
         {{ $t('generic.continue') }}

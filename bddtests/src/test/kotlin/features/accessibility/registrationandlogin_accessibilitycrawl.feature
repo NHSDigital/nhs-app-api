@@ -45,13 +45,9 @@ Feature: Registration and login accessibility
     Then I see the cookie banner
     And the DesktopCookieBanner page is saved to disk
 
-  Scenario: The 'Manage Notifications Prompt' page is captured
+  Scenario: The 'Notifications Prompt' page is captured
     Given I am using the native app user agent
     And I am a user wishing to enable push notifications for the first time, with my initial state undetermined
-    And I am logged in
-    When I navigate to the More page
-    And I click the Account and settings link on the More page
-    Then the Account and settings page settings links are available
-    When I click the Manage notifications link on the account and settings page
-    Then the Notifications Settings page is displayed
-    And the ManageNotificationsPrompt page is saved to disk
+    And I log in to the app expecting to see the notifications prompt
+    Then I see the notifications prompt
+    And the NotificationsPrompt page is saved to disk

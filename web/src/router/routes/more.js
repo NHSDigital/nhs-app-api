@@ -130,8 +130,8 @@ export const MORE_ACCOUNT_AND_SETTINGS_MANAGE_NOTIFICATIONS = {
   name: MORE_ACCOUNTANDSETTINGS_MANAGENOTIFICATIONS_NAME,
   component: MoreAccountAndSettingsManageNotificationsPage,
   meta: {
-    headerKey: 'navigation.pages.headers.notifications',
-    titleKey: 'navigation.pages.titles.notifications',
+    headerKey: 'navigation.pages.headers.manageNotifications',
+    titleKey: 'navigation.pages.titles.manageNotifications',
     proofLevel: proofLevel.P5,
     crumb: breadcrumbs.MORE_ACCOUNT_AND_SETTINGS_LEGAL_AND_COOKIES_INDEX_CRUMB,
     helpPath: MANAGING_YOUR_NHS_APP_ACCOUNT_HELP_PATH,

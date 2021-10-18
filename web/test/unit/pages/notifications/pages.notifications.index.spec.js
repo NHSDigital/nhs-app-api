@@ -21,33 +21,6 @@ describe('notifications prompt page', () => {
     });
   };
 
-  describe('content', () => {
-    beforeEach(() => {
-      wrapper = mountPage({
-        state: {
-          device: {
-            isNativeApp: true,
-          },
-          notifications: {
-            notificationCookieExists: false,
-          },
-        },
-      });
-    });
-
-    it('will show the expected paragraphs', () => {
-      const paragraphs = wrapper.findAll('p');
-      expect(paragraphs.at(0).text()).toEqual('These may include new features and public health updates.');
-      expect(paragraphs.at(1).text()).toContain('If you share this device with other people, they may see your notifications. The settings will apply to everyone who logs in to the NHS App on this device.');
-      expect(paragraphs.at(2).text()).toContain('More information is available in the NHS App privacy policy.');
-    });
-
-    it('will have the correct text for radio labels', () => {
-      wrapper.findAll('label');
-      expect(wrapper.findAll('label').at(0).text()).toEqual('Allow notifications  I accept the NHS App sending notifications on this device');
-    });
-  });
-
   describe('new user is prompted for notifications', () => {
     beforeEach(() => {
       wrapper = mountPage({
