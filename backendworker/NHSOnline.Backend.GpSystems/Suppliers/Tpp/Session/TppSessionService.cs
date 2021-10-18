@@ -114,13 +114,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                 return CheckFailureTypeForGpSessionCreateResult(authenticateReply);
             }
 
-            if (authenticateReply.Body == null)
-            {
-                const string message = "TPP Authenticate Reply returned empty body";
-                _logger.LogError(message);
-                return new GpSessionCreateResult.BadGateway(message);
-            }
-
             return authenticateReply;
         }
 
@@ -217,7 +210,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 
                 return new SessionLogoffResult.Success(gpUserSession);
             }
-
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Failed request to logoff TPP user session, HttpRequestException has been thrown.");

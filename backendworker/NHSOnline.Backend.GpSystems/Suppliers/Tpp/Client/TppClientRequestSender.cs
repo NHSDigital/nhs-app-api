@@ -25,19 +25,23 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
         public async Task<TppApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
             HttpRequestMessage request)
         {
-            using (var responseMessage = await _httpClient.Client.SendAsync(request))
+            using var responseMessage = await _httpClient.Client.SendAsync(request);
+            var response = new TppApiObjectResponse<TResponse>(responseMessage.StatusCode);
+            await response.Parse(responseMessage, _responseParser, _logger);
+
+            if (response.HasSuccessResponse && response.Body == null)
             {
-                var response = new TppApiObjectResponse<TResponse>(responseMessage.StatusCode);
-                await response.Parse(responseMessage, _responseParser, _logger);
-
-                if (!response.IsUnauthorisedResponse)
-                {
-                    return response;
-                }
-
-                _logger.LogInformation("Unauthorised TPP response");
-                throw new UnauthorisedGpSystemHttpRequestException();
+                _logger.LogInformation("Throttling TPP response");
+                throw new TppThrottlingHttpRequestException();
             }
+
+            if (!response.IsUnauthorisedResponse)
+            {
+                return response;
+            }
+
+            _logger.LogInformation("Unauthorised TPP response");
+            throw new UnauthorisedGpSystemHttpRequestException();
         }
     }
 }

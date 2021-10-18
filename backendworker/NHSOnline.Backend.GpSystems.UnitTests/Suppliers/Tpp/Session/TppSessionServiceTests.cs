@@ -103,14 +103,29 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         }
 
         [TestMethod]
-        public async Task
-            Create_TppClientThrowsHttpRequestExceptionFromSessionCreate_ReturnsSupplierSystemUnavailable()
+        public async Task Create_TppClientThrowsHttpRequestExceptionFromSessionCreate_ReturnsBadGateway()
         {
             // Arrange
-            // Tpp client throws HttpRequestException
             _mockAuthenticate
                 .Setup(x => x.Post(It.IsAny<Authenticate>()))
                 .Throws<HttpRequestException>()
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "bar", _nhsNumber);
+
+            // Assert
+            _mockAuthenticate.Verify();
+            result.Should().BeAssignableTo<GpSessionCreateResult.BadGateway>();
+        }
+
+        [TestMethod]
+        public async Task Create_TppClientIsThrottledOnSessionCreate_ReturnsBadGateway()
+        {
+            // Arrange
+            _mockAuthenticate
+                .Setup(x => x.Post(It.IsAny<Authenticate>()))
+                .Throws<TppThrottlingHttpRequestException>()
                 .Verifiable();
 
             // Act
@@ -145,26 +160,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             _mockLinkedAccountsService.Verify();
             _actual.AccountId.Should().Be(accountId);
             _actual.Passphrase.Should().Be(passphrase);
-        }
-
-        [TestMethod]
-        public async Task Create_WhenAuthenticateReplyHasEmptyBody_ReturnsBadGateway()
-        {
-            // Arrange
-            var reply = CreateReply();
-            reply.StatusCode = HttpStatusCode.Accepted;
-
-            reply.Body = null;
-
-            _mockAuthenticate.Setup(x => x
-                    .Post(It.IsAny<Authenticate>()))
-                .ReturnsAsync(() => reply);
-
-            // Act
-            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "1234", _nhsNumber);
-
-            // Assert
-            result.Should().BeAssignableTo<GpSessionCreateResult.BadGateway>();
         }
 
         [TestMethod]

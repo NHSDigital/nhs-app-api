@@ -70,8 +70,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
         private PatientIm1ConnectionResponse CreatePatientIm1ConnectionResponse(
             TppApiObjectResponse<AuthenticateReply> authenticateReply, string connectionToken, string odsCode)
         {
-            var nhsNumbers = authenticateReply.Body?.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
-
+            var nhsNumbers = authenticateReply.Body.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
 
             var response = new PatientIm1ConnectionResponse
             {
@@ -149,7 +148,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
                 return new Im1ConnectionRegisterResult.BadGateway();
             }
 
-            var nhsNumbers = authenticateReply.Body?.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
+            var nhsNumbers = authenticateReply.Body.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
 
             var response = new CreateIm1ConnectionResponse
             {

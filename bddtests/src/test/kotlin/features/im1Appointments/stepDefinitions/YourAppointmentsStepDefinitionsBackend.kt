@@ -171,6 +171,14 @@ class YourAppointmentsStepDefinitionsBackend {
         }
     }
 
+    @Given("^TPP is throttling when I want to view my appointments$")
+    fun tppIsThrottlingWhenIWantToViewMyAppointments() {
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(Supplier.TPP)
+        viewAppointmentFactory.createMyAppointments {
+            respondWithThrottling()
+        }
+    }
+
     @Given("^TPP is unavailable for (.*) appointments$")
     fun tppIsUnavailableForAppointments(appointmentType: String) {
         val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(Supplier.TPP)

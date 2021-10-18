@@ -46,12 +46,6 @@ class TppSessionBuilder(authenticate: Authenticate) : TppMappingBuilder("POST", 
         }
     }
 
-    fun respondWithSuccessAndEmptyBody(): Mapping {
-        return respondWith(HttpStatus.SC_OK) {
-            andXmlBody("").build()
-        }
-    }
-
     fun respondWithError(errorBody: Error): Mapping {
         val responseBody = Error(
                 errorBody.errorCode,

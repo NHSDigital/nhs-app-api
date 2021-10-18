@@ -23,16 +23,6 @@ Feature: Login frontend
       | TPP       |
       | VISION    |
 
-  Scenario: A TPP user can see the home page after logging in with a null response body
-    Given I am a TPP patient with a null response body
-    And I am logged in
-    Then I see my Name on the home page
-
-  Scenario: A TPP user can see the home page after logging in with a null response body and OnDemand enabled
-    Given I am a TPP patient with a null response body
-    And I am logged in
-    Then I see my Name on the home page
-
   Scenario: A EMIS user can see the home page after logging in
     Given I am a EMIS patient
     And I am logged in

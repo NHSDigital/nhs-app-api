@@ -50,16 +50,24 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
 
         public async Task<LinkageResult> GetLinkageKey(GetLinkageRequest getLinkageRequest)
         {
-            var linkAccountRequest = CreateGetRequest(getLinkageRequest);
-            var linkAccountReply = await _linkAccountRetrieveRequest.Post(linkAccountRequest);
-
-            if (linkAccountReply.HasSuccessResponse)
+            try
             {
-                _logger.LogInformation("Linkage Key call successful");
-                return HandleRetrieveSuccess(linkAccountRequest, linkAccountReply);
-            }
+                var linkAccountRequest = CreateGetRequest(getLinkageRequest);
+                var linkAccountReply = await _linkAccountRetrieveRequest.Post(linkAccountRequest);
 
-            return HandleRetrieveError(linkAccountReply, linkAccountRequest);
+                if (linkAccountReply.HasSuccessResponse)
+                {
+                    _logger.LogInformation("Linkage Key call successful");
+                    return HandleRetrieveSuccess(linkAccountRequest, linkAccountReply);
+                }
+
+                return HandleRetrieveError(linkAccountReply, linkAccountRequest);
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e, "Unsuccessful request get linkage key");
+                return new LinkageResult.SupplierSystemUnavailable();
+            }
         }
 
         public async Task<LinkageResult> CreateLinkageKey(CreateLinkageRequest createLinkageRequest)
