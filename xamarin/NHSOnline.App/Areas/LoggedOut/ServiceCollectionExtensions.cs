@@ -17,6 +17,7 @@ namespace NHSOnline.App.Areas.LoggedOut
                 .AddModelViewPresenter<BiometricLoginFaceIdLockedOutModel, BiometricLoginFaceIdLockedOutPage, BiometricLoginFaceIdLockedOutPresenter>()
                 .AddModelViewPresenter<BiometricLoginFingerprintFailedModel, BiometricLoginFingerprintFailedPage, BiometricLoginFingerprintFailedPresenter>()
                 .AddModelViewPresenter<BiometricLoginFingerprintLockedOutModel, BiometricLoginFingerprintLockedOutPage, BiometricLoginFingerprintLockedOutPresenter>()
+                .AddModelViewPresenter<BiometricLoginLegacySensorNotValidModel, BiometricLoginLegacySensorNotValidPage, BiometricLoginLegacySensorNotValidPresenter>()
                 .AddModelViewPresenter<BiometricLoginTouchIdFailedModel, BiometricLoginTouchIdFailedPage, BiometricLoginTouchIdFailedPresenter>()
                 .AddModelViewPresenter<BiometricLoginTouchIdLockedOutModel, BiometricLoginTouchIdLockedOutPage, BiometricLoginTouchIdLockedOutPresenter>()
                 .AddModelViewPresenter<GettingStartedModel, GettingStartedPage, GettingStartedPresenter>()

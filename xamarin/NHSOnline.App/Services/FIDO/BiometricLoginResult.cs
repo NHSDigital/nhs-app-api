@@ -54,5 +54,10 @@ namespace NHSOnline.App.Services.FIDO
         {
             public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
         }
+
+        internal sealed class LegacySensorNotValid : BiometricLoginResult
+        {
+            public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
+        }
     }
 }

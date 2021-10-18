@@ -6,5 +6,6 @@ namespace NHSOnline.App.DependencyServices.Biometrics
         T Visit(BiometricStatus.FingerPrintFaceOrIris fingerPrintFaceOrIris);
         T Visit(BiometricStatus.TouchId touchId);
         T Visit(BiometricStatus.FaceId faceId);
+        T Visit(BiometricStatus.LegacySensorNotValid legacySensorNotValid);
     }
 }

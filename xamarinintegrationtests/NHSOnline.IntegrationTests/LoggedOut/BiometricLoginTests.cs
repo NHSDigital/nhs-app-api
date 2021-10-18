@@ -28,6 +28,8 @@ namespace NHSOnline.IntegrationTests.LoggedOut
     [BusinessRule("BR-LOG-04.25","Backgrounding the app when the biometric prompt is displayed on login displays an error when the user returns to the app")]
     [BusinessRule("BR-LOG-04.26","Consecutive unsuccessful attempts to authenticate with Fingerprint ID displays a message")]
     [BusinessRule("BR-LOG-04.27","Returning to the logged out home screen after receiving unsuccessful biometric error message authentication displays the biometric prompt again")]
+    [BusinessRule("BR-LOG-04.30","If biometric authentication was turned on in (legacy) NHS App, but the device fingerprint  sensor does not meet new security requirements, after upgrade (migration) on first NHS APP launch a shutter page is displayed (concerns Android)")]
+    [BusinessRule("BR-LOG-04.31","If biometric authentication was turned on in (legacy) NHS App, but the device fingerprint  sensor does not meet new security requirements, after upgrade (migration) User needs to login using credentials and try using another biometric method (concerns Android)")]
     public class BiometricLoginTests
     {
         [NhsAppManualTest("NHSO-14305", "Unable to automate biometric tests at the moment")]
@@ -116,5 +118,8 @@ namespace NHSOnline.IntegrationTests.LoggedOut
 
         [NhsAppManualTest("NHSO-14305", "Unable to automate biometric tests at the moment")]
         public void APatientReturningToTheLoggedOutHomeScreenAfterMultipleUnsuccessfulAttemptsIsShownTheBiometricPromptAndroidFingerprint() { }
+
+        [NhsAppManualTest("NHSO-17076", "Unable to automate biometric tests at the moment")]
+        public void APatientWhoHasLoggedInToLegacyAppWithFingerprintReceivesShutterScreenOnlyOnceOnXamarinWhenTheirPhoneSensorIsDeemedInvalidAndroid() { }
     }
 }

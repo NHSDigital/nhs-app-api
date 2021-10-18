@@ -53,6 +53,13 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             await result.Accept(new BiometricLoginPermanentLockoutStatusResultVisitor(this)).PreserveThreadContext();
         }
 
+        public async Task ShowBiometricLoginLegacySensorNotValid()
+        {
+            var model = new BiometricLoginLegacySensorNotValidModel();
+            var view = _pageFactory.CreatePageFor(model);
+            await _view.AppNavigation.Push(view).PreserveThreadContext();
+        }
+
         private async Task ShowBiometricLoginFingerprintFailed()
         {
             var model = new BiometricLoginFingerprintFailedModel();
@@ -110,6 +117,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
                 return Task.CompletedTask;
             }
 
+            public Task Visit(BiometricStatusResult.LegacySensorNotValid legacySensorNotValid)
+            {
+                Logger.LogError("Biometric login failed result when legacy sensor not valid");
+                return Task.CompletedTask;
+            }
+
             public async Task Visit(BiometricStatusResult.FingerPrintFaceOrIris fingerPrintFaceOrIris)
                 => await _dispatcher.ShowBiometricLoginFingerprintFailed().PreserveThreadContext();
 
@@ -132,6 +145,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             public Task Visit(BiometricStatusResult.HardwareNotPresent hardwareNotPresent)
             {
                 Logger.LogError("Biometric login permanently locked out result when hardware not present");
+                return Task.CompletedTask;
+            }
+
+            public Task Visit(BiometricStatusResult.LegacySensorNotValid legacySensorNotValid)
+            {
+                Logger.LogError("Biometric login permanently locked out result when legacy sensor not valid");
                 return Task.CompletedTask;
             }
 

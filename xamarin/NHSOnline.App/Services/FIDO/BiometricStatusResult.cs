@@ -32,22 +32,35 @@ namespace NHSOnline.App.Services.FIDO
 
         internal sealed class FingerPrintFaceOrIris : HardwarePresent
         {
-            internal FingerPrintFaceOrIris(bool usable, bool registered) : base(usable, registered) { }
+            internal FingerPrintFaceOrIris(bool usable, bool registered) : base(usable, registered)
+            {
+            }
+
             public override T Accept<T>(IBiometricStatusResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
         internal sealed class TouchId : HardwarePresent
         {
-            internal TouchId(bool usable, bool registered) : base(usable, registered) { }
+            internal TouchId(bool usable, bool registered) : base(usable, registered)
+            {
+            }
+
             public override T Accept<T>(IBiometricStatusResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
         internal sealed class FaceId : HardwarePresent
         {
-            internal FaceId(bool usable, bool registered) : base(usable, registered) { }
+            internal FaceId(bool usable, bool registered) : base(usable, registered)
+            {
+            }
+
             public override T Accept<T>(IBiometricStatusResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
+        internal sealed class LegacySensorNotValid : BiometricStatusResult
+        {
+            public override T Accept<T>(IBiometricStatusResultVisitor<T> visitor) => visitor.Visit(this);
+        }
 
         private sealed class BiometricStatusVisitor : IBiometricStatusVisitor<BiometricStatusResult>
         {
@@ -82,6 +95,11 @@ namespace NHSOnline.App.Services.FIDO
                 var usable = faceId.State == BiometricHardwareState.Usable;
                 var registered = IsRegistered(faceId.RegistrationStatus);
                 return new FaceId(usable, registered);
+            }
+
+            public BiometricStatusResult Visit(BiometricStatus.LegacySensorNotValid legacySensorNotValid)
+            {
+                return new LegacySensorNotValid();
             }
 
             private bool IsRegistered(BiometricRegistrationStatus registrationStatus)

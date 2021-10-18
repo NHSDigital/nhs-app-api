@@ -9,6 +9,11 @@ namespace NHSOnline.App.DependencyServices.Biometrics
             public override T Accept<T>(IBiometricStatusVisitor<T> visitor) => visitor.Visit(this);
         }
 
+        public sealed class LegacySensorNotValid : BiometricStatus
+        {
+            public override T Accept<T>(IBiometricStatusVisitor<T> visitor) => visitor.Visit(this);
+        }
+
         public abstract class HardwarePresent: BiometricStatus
         {
             internal HardwarePresent(BiometricHardwareState state, BiometricRegistrationStatus registrationStatus)

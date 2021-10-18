@@ -117,6 +117,11 @@ namespace NHSOnline.App.Services.FIDO
                 return new BiometricLoginResult.NotRegistered();
             }
 
+            public ProcessResult<string, BiometricLoginResult> Visit(BiometricStatus.LegacySensorNotValid legacySensorNotValid)
+            {
+                return new BiometricLoginResult.LegacySensorNotValid();
+            }
+
             public ProcessResult<string, BiometricLoginResult> Visit(BiometricStatus.FingerPrintFaceOrIris fingerPrintFaceOrIris)
             {
                 return GetCanLoginResult(fingerPrintFaceOrIris.RegistrationStatus);

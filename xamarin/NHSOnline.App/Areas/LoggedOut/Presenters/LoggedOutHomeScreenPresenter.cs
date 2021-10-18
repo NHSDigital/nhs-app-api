@@ -172,6 +172,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task ShowBiometricLoginPermanentlyLockedOut()
             => await _biometricLoginErrorPageDispatcher.ShowBiometricLoginPermanentlyLockedOut().PreserveThreadContext();
 
+        private async Task ShowBiometricLoginLegacySensorNotValid()
+        {
+            Logger.LogInformation("Showing legacy sensor not valid shutter screen");
+            await _biometricLoginErrorPageDispatcher.ShowBiometricLoginLegacySensorNotValid().PreserveThreadContext();
+        }
+
         private async Task LoadLoginHelpUrl()
         {
             Logger.LogInformation("Accessing login help url");
@@ -242,6 +248,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             {
                 Logger.LogInformation("Biometric login temporarily locked out");
                 await _presenter.ShowBiometricLoginAfterDelay(BiometricDelayOnTemporaryLockout).PreserveThreadContext();
+            }
+
+            public async Task Visit(BiometricLoginResult.LegacySensorNotValid legacySensorNotValid)
+            {
+                Logger.LogInformation("Biometric login legacy sensor not valid");
+                await _presenter.ShowBiometricLoginLegacySensorNotValid().PreserveThreadContext();
             }
         }
 

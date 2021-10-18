@@ -6,5 +6,6 @@ namespace NHSOnline.App.Services.FIDO
         T Visit(BiometricStatusResult.FingerPrintFaceOrIris fingerPrintFaceOrIris);
         T Visit(BiometricStatusResult.TouchId touchId);
         T Visit(BiometricStatusResult.FaceId faceId);
+        T Visit(BiometricStatusResult.LegacySensorNotValid legacySensorNotValid);
     }
 }

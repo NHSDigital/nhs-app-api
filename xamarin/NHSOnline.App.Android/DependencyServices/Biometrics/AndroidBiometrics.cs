@@ -29,9 +29,9 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
             {
                 BiometricManager.BiometricErrorHwUnavailable => Unusable(),
                 BiometricManager.BiometricErrorNoneEnrolled => Unusable(),
-                BiometricManager.BiometricErrorNoHardware => HardwareNotPresent(),
+                BiometricManager.BiometricErrorNoHardware => LegacySensorNotValid(),
                 BiometricManager.BiometricErrorSecurityUpdateRequired => Unusable(),
-                BiometricManager.BiometricErrorUnsupported => HardwareNotPresent(),
+                BiometricManager.BiometricErrorUnsupported => LegacySensorNotValid(),
                 BiometricManager.BiometricStatusUnknown => Unusable(),
                 BiometricManager.BiometricSuccess => Usable(),
                 _ => HardwareNotPresent()
@@ -39,11 +39,17 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
 
             return Task.FromResult(status);
 
-            BiometricStatus.FingerPrintFaceOrIris Unusable() => new BiometricStatus.FingerPrintFaceOrIris(BiometricHardwareState.Unusable, DeriveBiometricRegistrationStatus(fidoUsername));
+            BiometricStatus.FingerPrintFaceOrIris Unusable() =>
+                new BiometricStatus.FingerPrintFaceOrIris(BiometricHardwareState.Unusable,
+                    DeriveBiometricRegistrationStatus(fidoUsername));
 
-            BiometricStatus.FingerPrintFaceOrIris Usable() => new BiometricStatus.FingerPrintFaceOrIris(BiometricHardwareState.Usable, DeriveBiometricRegistrationStatus(fidoUsername));
+            BiometricStatus.FingerPrintFaceOrIris Usable() =>
+                new BiometricStatus.FingerPrintFaceOrIris(BiometricHardwareState.Usable,
+                    DeriveBiometricRegistrationStatus(fidoUsername));
 
             BiometricStatus.HardwareNotPresent HardwareNotPresent() => new BiometricStatus.HardwareNotPresent();
+
+            BiometricStatus.LegacySensorNotValid LegacySensorNotValid() => new BiometricStatus.LegacySensorNotValid();
         }
 
         private BiometricRegistrationStatus DeriveBiometricRegistrationStatus(string fidoUsername)
@@ -71,7 +77,8 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
 
             keyPairGenerator.Initialize(keyGenParameterSpec);
 
-            _ = keyPairGenerator.GenerateKeyPair() ?? throw new InvalidOperationException("GenerateKeyPair returns null");
+            _ = keyPairGenerator.GenerateKeyPair() ??
+                throw new InvalidOperationException("GenerateKeyPair returns null");
             if (TryGetKey(fidoUsername, out var biometricAuthKey))
             {
                 BiometricRegistrationState.FidoRegistered = true;

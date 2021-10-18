@@ -164,6 +164,10 @@
       <DependentUpon>FullNavigationTryAgainFileDownloadErrorPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Areas\LoggedOut\Views\BiometricLoginLegacySensorNotValidPage.xaml.cs">
+      <DependentUpon>BiometricLoginLegacySensorNotValidPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

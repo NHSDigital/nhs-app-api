@@ -498,6 +498,9 @@ namespace NHSOnline.App.Areas.Home.Presenters
             public BiometricStatus Visit(BiometricStatusResult.HardwareNotPresent hardwareNotPresent)
                 => BiometricStatus.None();
 
+            public BiometricStatus Visit(BiometricStatusResult.LegacySensorNotValid legacySensorNotValid)
+                => BiometricStatus.None();
+
             public BiometricStatus Visit(BiometricStatusResult.FingerPrintFaceOrIris fingerPrintFaceOrIris)
                 => BiometricStatus.FingerPrintFaceOrIris(fingerPrintFaceOrIris.Registered);
 

@@ -10,5 +10,6 @@ namespace NHSOnline.App.Services.FIDO
         T Visit(BiometricLoginResult.Failed failed);
         T Visit(BiometricLoginResult.PermanentLockout permanentLockout);
         T Visit(BiometricLoginResult.TemporaryLockout temporaryLockout);
+        T Visit(BiometricLoginResult.LegacySensorNotValid legacySensorNotValid);
     }
 }

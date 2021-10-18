@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<pages:NhsAppCloseAndLogoHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
+                                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                                    xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
+                                    xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
+                                    xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
+                                    x:Class="NHSOnline.App.Areas.LoggedOut.Views.BiometricLoginLegacySensorNotValidPage"
+                                    x:Name="Page"
+                                    PageDescription="We cannot find your fingerprint">
+    <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
+        <panels:ResponsiveLayoutPanel>
+            <StackLayout>
+                <elements:Heading1 Text="We cannot find your fingerprint" />
+
+                <elements:Paragraph
+                    Text="We're no longer able to support fingerprint recognition on Android devices that do not meet Google's increased security settings." />
+                <elements:Paragraph
+                    Text="You may still be able to log in using face or iris recognition if your device has these sensors, as they may be more secure." />
+                <elements:Paragraph
+                    Text="Otherwise, you'll need to log in using your email, password and security code." />
+
+                <elements:Heading2 Text="Turning face or iris on" />
+
+                <elements:ListContainer>
+                    <StackLayout>
+                        <elements:OrderedListItem Number="1" Text="Log in to the NHS App." />
+                        <elements:OrderedListItem Number="2">
+                            <elements:OrderedListItem.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Select " />
+                                    <Span Text="More" FontFamily="Frutiger-Bold" />
+                                    <Span Text=", then " />
+                                    <Span Text="Account and settings" FontFamily="Frutiger-Bold" />
+                                    <Span Text=", then " />
+                                    <Span Text="Fingerprint, face or iris" FontFamily="Frutiger-Bold" />
+                                    <Span Text="." />
+                                </FormattedString>
+                            </elements:OrderedListItem.FormattedText>
+                        </elements:OrderedListItem>
+                    </StackLayout>
+                </elements:ListContainer>
+
+                <elements:LinkLabel Text="Back to login"
+                                    Command="{Binding BackToLoginCommand, Source={x:Reference Name=Page}}" />
+            </StackLayout>
+        </panels:ResponsiveLayoutPanel>
+    </ScrollView>
+</pages:NhsAppCloseAndLogoHeaderPage>
