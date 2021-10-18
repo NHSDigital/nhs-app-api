@@ -63,6 +63,7 @@
                 </Grid.ColumnDefinitions>
                 
                 <navigation:FullNavigationHeaderItem Text="Home"
+                                                     AccessibilityText="NHS App Home"
                                                      IconCommand="{Binding HomeCommand, Source={x:Reference Name=Root}}">
                     <navigation:FullNavigationHeaderItem.DefaultIcon>
                         <icons:IconHomeWhite />
@@ -88,6 +89,7 @@
             
                 <navigation:FullNavigationHeaderItem Grid.Column="0" 
                                                      Text="Help"
+                                                     AccessibilityText="Help"
                                                      IconCommand="{Binding HelpCommand, Source={x:Reference Name=Root}}">
                     <navigation:FullNavigationHeaderItem.DefaultIcon>
                         <icons:IconHelpWhite />
@@ -99,6 +101,7 @@
                 
                 <navigation:FullNavigationHeaderItem Grid.Column="1" 
                                                      Text="More"
+                                                     AccessibilityText="More"
                                                      IconCommand="{Binding MoreCommand, Source={x:Reference Name=Root}}">
                     <navigation:FullNavigationHeaderItem.DefaultIcon>
                         <icons:IconMoreWhite />

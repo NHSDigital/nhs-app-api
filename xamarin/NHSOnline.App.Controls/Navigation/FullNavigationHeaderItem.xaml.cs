@@ -10,6 +10,9 @@ namespace NHSOnline.App.Controls.Navigation
         public static readonly BindableProperty TextProperty =
             BindableProperty.Create(nameof(Text), typeof(string), typeof(FullNavigationHeaderItem));
 
+        public static readonly BindableProperty AccessibilityTextProperty =
+            BindableProperty.Create(nameof(AccessibilityText), typeof(string), typeof(FullNavigationHeaderItem));
+
         public static readonly BindableProperty DefaultIconProperty =
             BindableProperty.Create(nameof(DefaultIcon), typeof(SvgImage), typeof(FullNavigationHeaderItem));
 
@@ -22,6 +25,12 @@ namespace NHSOnline.App.Controls.Navigation
         public FullNavigationHeaderItem()
         {
             InitializeComponent();
+        }
+
+        public string AccessibilityText
+        {
+            get => (string) GetValue(AccessibilityTextProperty);
+            set => SetValue(AccessibilityTextProperty, value);
         }
 
         public string Text

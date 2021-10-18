@@ -48,7 +48,7 @@
     <ContentView.Content>
         <controls:AccessibleStackLayout x:Name="ButtonStackLayout"
                                       StyleClass="IconAndLabel"  
-                                      AutomationProperties.Name="{Binding Text, Source={x:Reference Name=Root}}"
+                                      AutomationProperties.Name="{Binding AccessibilityText, Source={x:Reference Name=Root}}"
                                       effects:AccessibilityEffect.ControlType="Button"> 
             
             <ContentView x:Name="IconDefault" StyleClass="IconDefault" Content="{Binding DefaultIcon, Source={x:Reference Name=Root}}" />

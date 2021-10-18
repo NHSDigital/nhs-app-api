@@ -13,7 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             _driver = driver;
         }
 
-        private AndroidIcon HomeIcon => AndroidIcon.WithName(_driver,"Home");
+        private AndroidIcon HomeIcon => AndroidIcon.WithName(_driver,"NHS App Home");
 
         private AndroidIcon HelpIcon => AndroidIcon.WithName(_driver,"Help");
 

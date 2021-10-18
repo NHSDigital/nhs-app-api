@@ -12,7 +12,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             _driver = driver;
         }
 
-        private IOSAppIcon HomeAppIcon => IOSAppIcon.WithName(_driver, "Home");
+        private IOSAppIcon HomeAppIcon => IOSAppIcon.WithName(_driver, "NHS App Home");
 
         private IOSAppIcon HelpAppIcon => IOSAppIcon.WithName(_driver, "Help");
 
