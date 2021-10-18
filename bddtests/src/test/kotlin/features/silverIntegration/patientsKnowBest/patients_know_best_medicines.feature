@@ -38,7 +38,7 @@ Feature: Patients Know Best Medicines
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Fauth%2FmanageMedications.action%3Ftab%3Dtreatments'
     Then I am redirected to the redirector page with the header 'Hospital and other prescriptions'
-    When I click the link called 'Find out more about personal health record services' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/health-records'
+    When I click the link called 'Find out more about personal health record services' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/personal-health-records'
     Then a new tab has been opened by the link
 
   Scenario: A user who cannot see PKB medications but tries to access it is redirected

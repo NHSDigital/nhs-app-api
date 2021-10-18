@@ -27,7 +27,7 @@ Feature: Great North Care Record Correspondence
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fgncr.stubs.local.bitraft.io%3A8080%2Fcorrespondence'
     Then I am redirected to the redirector page with the header 'Hospital and other healthcare letters'
-    When I click the link called 'Find out more about personal health record services' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/health-records'
+    When I click the link called 'Find out more about personal health record services' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/personal-health-records'
     Then a new tab has been opened by the link
 
   Scenario: A user navigates directly to an external partner site and will see a warning page

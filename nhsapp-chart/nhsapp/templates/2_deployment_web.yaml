@@ -186,6 +186,8 @@ spec:
           value: "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/"
         - name: HEALTH_RECORDS_HELP_AND_SUPPORT_URL
           value: "https://www.nhs.uk/nhs-services/online-services/nhs-app/nhs-app-help-and-support/health-records/"
+        - name: PERSONAL_HEALTH_RECORDS_PRIVACY_URL
+          value: "https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-privacy-policy/personal-health-records/"
         - name: YOUR_NHS_DATA_MATTERS_URL
           value: "https://www.nhs.uk/your-nhs-data-matters/"
         - name: OTHER_WAYS_TO_MAKE_A_CHOICE_URL
