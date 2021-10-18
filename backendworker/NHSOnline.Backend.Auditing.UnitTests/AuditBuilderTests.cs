@@ -519,11 +519,13 @@ namespace NHSOnline.Backend.Auditing.UnitTests
 
         private static IAuditor CreateAuditor(Mock<IAuditSink> mockAuditSink)
         {
+            var mockLogger = new Mock<ILoggerFactory>();
+
             var services = new ServiceCollection();
             var configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string> { { "AUDIT_SINK_TYPE", "FILE" } })
                 .Build();
-            new ServiceConfigurationModule().ConfigureServices(services, configuration);
+            new ServiceConfigurationModule(mockLogger.Object).ConfigureServices(services, configuration);
 
             services.AddMockLoggers();
             services.AddSingleton<IConfiguration>(configuration);

@@ -35,6 +35,8 @@ secrets:
     file: "~/.nhsonline/secrets/comms_hub_event_hub_pid_connection_string"
   comms_hub_event_hub_connection_string:
     file: "~/.nhsonline/secrets/comms_hub_event_hub_connection_string"
+  audit_event_hub_connection_string:
+    file: "~/.nhsonline/secrets/audit_event_hub_connection_string"
 
 
 services:
@@ -109,6 +111,9 @@ services:
           if [ -f "$$COMMS_HUB_EVENT_HUB_CONNECTION_STRING" ]; then
             export COMMS_HUB_EVENT_HUB_CONNECTION_STRING=$$(<$$COMMS_HUB_EVENT_HUB_CONNECTION_STRING)
           fi
+          if [ -f "$$AUDIT_EVENT_HUB_CONNECTION_STRING" ]; then
+            export AUDIT_EVENT_HUB_CONNECTION_STRING=$$(<$$AUDIT_EVENT_HUB_CONNECTION_STRING)
+          fi
           exec $$*
       - "--"
     command: dotnet NHSOnline.Backend.PfsApi.dll
@@ -150,6 +155,7 @@ services:
       - vision_cert_passphrase
       - comms_hub_event_hub_pid_connection_string
       - comms_hub_event_hub_connection_string
+      - audit_event_hub_connection_string
 
   cid.local.bitraft.io:
     image: ${CIDAPI_DOCKER_REGISTRY:-local}/nhsonline-backendcidapi:${CIDAPI_DOCKER_TAG:-latest}

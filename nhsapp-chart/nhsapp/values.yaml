@@ -350,6 +350,7 @@ api:
   targetCPUUtilizationPercentage: 40
   emisExtendedTimeout: 10
   mongoDatabaseAuditCollection: audit_info
+  auditEventHub: eventhub_ns_auditing
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
       value: "Production"
@@ -379,6 +380,7 @@ cid:
   cpuLimit: "1400m"
   targetCPUUtilizationPercentage: 35
   mongoDatabaseAuditCollection: audit
+  auditEventHub: eventhub_ns_auditing
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
       value: "Production"
@@ -517,6 +519,7 @@ info:
   targetCPUUtilizationPercentage: 45
   mongoDatabaseInfoCollection: info
   mongoDatabaseInfoAuditCollection: audit_info
+  auditEventHub: eventhub_ns_auditing
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
       value: "Production"

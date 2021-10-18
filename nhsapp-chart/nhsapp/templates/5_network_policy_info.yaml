@@ -181,3 +181,25 @@ spec:
     - ipBlock:
         cidr: {{ $.Values.metaServiceCIDR }}
 {{- end }}
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-eventhub-egress-from-info-{{ .Chart.AppVersion }}
+  namespace: {{ $.Values.global.environment }}
+spec:
+  podSelector:
+    matchLabels:
+      role: {{ $.Values.info.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    ports:
+{{- range $.Values.eventHubPorts }}
+      - protocol: TCP
+        port: {{ . }}
+{{- end }}

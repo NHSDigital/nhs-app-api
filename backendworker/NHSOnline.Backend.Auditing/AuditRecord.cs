@@ -19,6 +19,7 @@ namespace NHSOnline.Backend.Auditing
             VersionTag version)
         {
             Timestamp = timestamp;
+            AuditId = Guid.NewGuid().ToString();
             NhsLoginSubject = nhsLoginSubject;
             NhsNumber = nhsNumber;
             IsActingOnBehalfOfAnother = isActingOnBehalfOfAnother;
@@ -35,6 +36,9 @@ namespace NHSOnline.Backend.Auditing
             WebVersion = version.Web;
             NativeVersion = version.Native;
         }
+
+        [BsonElement]
+        public string AuditId { get; private set; }
 
         [BsonElement]
         public string NhsLoginSubject { get; private set; }

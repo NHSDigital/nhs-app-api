@@ -36,6 +36,7 @@ namespace NHSOnline.Backend.Auditing
             var auditStringBuilder = new StringBuilder(" | ")
                 .AppendJoin(" | ",
                     auditRecord.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture),
+                    auditRecord.AuditId,
                     auditRecord.NhsLoginSubject,
                     auditRecord.NhsNumber,
                     auditRecord.IsActingOnBehalfOfAnother,
