@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews.Payloads;
+using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Navigation;
 using NHSOnline.App.Threading;
 using Xamarin.Forms;
@@ -16,7 +17,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         private readonly ILogger _logger;
         private readonly AppNavigation<IWebIntegrationView.IEvents> _appNavigation;
 
-        public WebIntegrationPage(ILogger<WebIntegrationPage> logger)
+        public WebIntegrationPage(ILogger<WebIntegrationPage> logger, IAccessibilityService accessibilityService): base(accessibilityService)
         {
             _logger = logger;
             _appNavigation = new AppNavigation<IWebIntegrationView.IEvents>(this, Navigation);

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
+using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Navigation;
 using NHSOnline.App.Threading;
 using Xamarin.Forms;
@@ -16,7 +17,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         private readonly ILogger<NhsLoginOnDemandGpSessionPage> _logger;
         private readonly AppNavigation<INhsLoginOnDemandGpSessionView.IEvents> _appNavigation;
 
-        public NhsLoginOnDemandGpSessionPage(ILogger<NhsLoginOnDemandGpSessionPage> logger)
+        public NhsLoginOnDemandGpSessionPage(ILogger<NhsLoginOnDemandGpSessionPage> logger, IAccessibilityService accessibilityService): base(accessibilityService) 
         {
             _logger = logger;
             _appNavigation = new AppNavigation<INhsLoginOnDemandGpSessionView.IEvents>(this, Navigation);

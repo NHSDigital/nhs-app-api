@@ -9,6 +9,7 @@
                             mc:Ignorable="d"
                             x:Class="NHSOnline.App.Areas.Errors.Views.FullNavigationTryAgainFileDownloadErrorPage"
                             x:Name="Page"
+                            PageDescription="Sorry, something went wrong"
                             SelectedNavigationFooterItem="{Binding SelectedNavigationFooterItem, Source={x:Reference Name=Page}}">
 
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">

@@ -9,12 +9,12 @@
                             mc:Ignorable="d"
                             x:Class="NHSOnline.App.Areas.Errors.Views.FullNavigationBackToHomeNetworkErrorPage"
                             x:Name="Page"
+                            PageDescription="Connection error"
                             SelectedNavigationFooterItem="{Binding SelectedNavigationFooterItem, Source={x:Reference Name=Page}}">
 
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <panels:ResponsiveLayoutPanel>
             <panels:BackToHomeNetworkError
-                x:Name="ErrorPanel"
                 OneOneOneCommand="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}"
                 BackToHomeCommand="{Binding BackToHomeCommand, Source={x:Reference Name=Page}}" />
         </panels:ResponsiveLayoutPanel>

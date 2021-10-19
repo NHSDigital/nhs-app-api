@@ -1,7 +1,10 @@
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
+using NHSOnline.App.DependencyServices;
+using NHSOnline.App.Logging;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,6 +14,8 @@ namespace NHSOnline.App.Navigation.Pages
     [ContentProperty(nameof(PageContent))]
     public partial class NhsAppFullHeaderPage
     {
+        private readonly IAccessibilityService _accessibilityService;
+        private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(NhsAppFullHeaderPage));
 
         public static readonly BindableProperty PageContentProperty =
             BindableProperty.Create(nameof(PageContent), typeof(View), typeof(NhsAppFullHeaderPage));
@@ -18,8 +23,12 @@ namespace NHSOnline.App.Navigation.Pages
         public static readonly BindableProperty SelectedNavigationFooterItemProperty =
             BindableProperty.Create(nameof(SelectedNavigationFooterItem), typeof(NavigationFooterItem), typeof(NhsAppFullHeaderPage));
 
-        public NhsAppFullHeaderPage()
+        public static readonly BindableProperty PageDescriptionProperty =
+            BindableProperty.Create(nameof(PageDescription), typeof(string), typeof(NhsAppCloseSlimHeaderPage), "");
+        
+        public NhsAppFullHeaderPage(IAccessibilityService accessibilityService)
         {
+            _accessibilityService = accessibilityService;
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
         }
@@ -28,6 +37,12 @@ namespace NHSOnline.App.Navigation.Pages
         {
             get => (View) GetValue(PageContentProperty);
             set => SetValue(PageContentProperty, value);
+        }
+        
+        public string PageDescription
+        {
+            get => (string) GetValue(PageDescriptionProperty);
+            set => SetValue(PageDescriptionProperty, value);
         }
 
         public NavigationFooterItem SelectedNavigationFooterItem
@@ -59,5 +74,22 @@ namespace NHSOnline.App.Navigation.Pages
 
         public Func<Task>? MessagesRequested { get; set; }
         public ICommand MessagesClicked => new AsyncCommand(() => MessagesRequested);
+        
+        protected override void OnAppearing()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(PageDescription))
+                {
+                    _accessibilityService.AnnounceText($"{PageDescription}.");
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, "Failed to announce text to voice over");
+            }
+
+            base.OnAppearing();
+        }
     }
 }
