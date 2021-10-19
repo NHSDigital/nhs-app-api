@@ -14,7 +14,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
     public partial class CreateSessionErrorUpstreamSystemTimeoutPage : ICreateSessionErrorUpstreamSystemTimeoutView, ICreateSessionErrorUpstreamSystemTimeoutView.IEvents
     {
         public static readonly BindableProperty ServiceDeskReferenceProperty
-            = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(CreateSessionErrorUpstreamSystemTimeoutPage), string.Empty);
+            = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(CreateSessionErrorUpstreamSystemTimeoutPage), "xxxxxx");
 
         private readonly ILogger _logger;
         private readonly AppNavigation<ICreateSessionErrorUpstreamSystemTimeoutView.IEvents> _appNavigation;

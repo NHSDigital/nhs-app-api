@@ -14,7 +14,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
     public partial class CreateSessionErrorBadResponseFromUpstreamSystemPage : ICreateSessionErrorBadResponseFromUpstreamSystemView, ICreateSessionErrorBadResponseFromUpstreamSystemView.IEvents
     {
         public static readonly BindableProperty ServiceDeskReferenceProperty
-            = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(CreateSessionErrorBadResponseFromUpstreamSystemPage), string.Empty);
+            = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(CreateSessionErrorBadResponseFromUpstreamSystemPage), "xxxxxx");
 
         private readonly ILogger _logger;
         private readonly AppNavigation<ICreateSessionErrorBadResponseFromUpstreamSystemView.IEvents> _appNavigation;

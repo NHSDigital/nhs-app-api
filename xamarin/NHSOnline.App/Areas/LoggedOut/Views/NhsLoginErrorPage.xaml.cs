@@ -14,7 +14,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
     public partial class NhsLoginErrorPage : INhsLoginErrorView, INhsLoginErrorView.IEvents
     {
         public static readonly BindableProperty ServiceDeskReferenceProperty
-            = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(NhsLoginErrorPage), "3w");
+            = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(NhsLoginErrorPage), "xxxxxx");
 
         private readonly ILogger _logger;
         private readonly AppNavigation<INhsLoginErrorView.IEvents> _appNavigation;

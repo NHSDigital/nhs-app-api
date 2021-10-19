@@ -14,7 +14,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
     public partial class CreateSessionErrorInternalServerErrorPage : ICreateSessionErrorInternalServerErrorView, ICreateSessionErrorInternalServerErrorView.IEvents
     {
         public static readonly BindableProperty ServiceDeskReferenceProperty
-            = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(CreateSessionErrorInternalServerErrorPage), "3h");
+            = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(CreateSessionErrorInternalServerErrorPage), "xxxxxx");
 
         private readonly ILogger _logger;
         private readonly AppNavigation<ICreateSessionErrorInternalServerErrorView.IEvents> _appNavigation;

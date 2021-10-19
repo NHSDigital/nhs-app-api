@@ -14,7 +14,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
     public partial class CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberPage : ICreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberView, ICreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberView.IEvents
     {
         public static readonly BindableProperty ServiceDeskReferenceProperty
-            = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberPage), "3f");
+            = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberPage), "xxxxxx");
 
         private readonly ILogger _logger;
         private readonly AppNavigation<ICreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberView.IEvents> _appNavigation;

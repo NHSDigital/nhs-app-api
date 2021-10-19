@@ -36,7 +36,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public ICommand BackHomeCommand => new AsyncCommand(() => BackHomeRequested);
 
         public static readonly BindableProperty ServiceDeskReferenceProperty
-            = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(CreateSessionErrorBadRequestPage), "3c");
+            = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(CreateSessionErrorBadRequestPage), "xxxxxx");
 
         public string ServiceDeskReference
         {
