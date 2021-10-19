@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="app">
-      <div v-if="showError"
+      <div v-if="hasConnectionProblem"
            :class="!isNativeApp && $style.desktopWeb">
         <div v-if="!isNativeApp" :class="$style['header-container-desktop']">
           <web-header :show-menu="false" :show-links="false"/>
@@ -14,7 +14,7 @@
         <div class="nhsuk-grid-row">
           <div ref="mainContent" tabindex="-1" class="nhsuk-grid-column-two-thirds">
             <div id="maincontent">
-              <div v-if="showError && !termsNotAccepted"
+              <div v-if="hasConnectionProblem && !termsNotAccepted"
                    id="authReturnError"
                    :class="!isNativeApp && $style.desktopWeb">
                 <div tabindex="-1"
@@ -212,7 +212,7 @@
         </div>
       </div>
     </div>
-    <div v-if="showError && !$store.state.device.isNativeApp"
+    <div v-if="hasConnectionProblem && !$store.state.device.isNativeApp"
          :class="$style['footer-container-desktop']">
       <web-footer />
     </div>
@@ -281,7 +281,9 @@ export default {
       const title = (this.termsNotAccepted) ?
         this.$t('login.authReturn.termsNotAccepted') :
         this.$t('login.authReturn.loginFailed');
-      return this.showError && `${title} - ${this.$t('appTitle')}`;
+      return this.hasConnectionProblem
+        ? `${title} - ${this.$t('appTitle')}`
+        : undefined;
     },
     contactUsParam() {
       return {
@@ -314,9 +316,6 @@ export default {
     },
     statusCode() {
       return get('$store.state.errors.apiErrors[0].status')(this);
-    },
-    showError() {
-      return this.$store.getters['errors/showApiError'] || this.$store.state.errors.hasConnectionProblem;
     },
     termsNotAccepted() {
       return this.$route.query.error_description === this.consentNotGivenDescription;

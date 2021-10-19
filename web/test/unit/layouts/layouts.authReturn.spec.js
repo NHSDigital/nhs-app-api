@@ -22,13 +22,16 @@ describe('authReturn layout', () => {
   const mountAuthReturnLayout = ({
     status,
     shallow = false,
-    showApiError = true,
+    hasConnectionProblem = true,
     query = {},
   }) => mount(AuthReturnLayout, {
     shallow,
     mocks: {
       correctUrl: jest.fn(),
       goToUrl,
+    },
+    data: function data() {
+      return { hasConnectionProblem };
     },
     $store: createStore({
       $env: {
@@ -39,9 +42,6 @@ describe('authReturn layout', () => {
         SYMPTOM_CHECKER_NORTHERN_IRELAND_URL: 'https://www-nidirect-gov-uk/articles/gp-out-hours-service',
         COVID_STATUS_URL: 'https://covid-status-service-nhsx-nhs-uk',
         COVID_PASS_URL: 'https://www.nhs.uk/conditions/coronavirus-covid-19/covid-pass',
-      },
-      getters: {
-        'errors/showApiError': showApiError,
       },
       state: {
         appVersion: {
@@ -346,8 +346,8 @@ describe('authReturn layout', () => {
     });
 
     describe('title', () => {
-      it('will set title to undefined if showError is false', () => {
-        wrapper = mountAuthReturnLayout({ shallow: true, showApiError: false });
+      it('will set title to undefined if hasConnectionProblem is false', () => {
+        wrapper = mountAuthReturnLayout({ shallow: true, hasConnectionProblem: false });
         const head = wrapper.vm.$options.metaInfo.call(wrapper.vm);
         expect(head.title).toBeUndefined();
       });

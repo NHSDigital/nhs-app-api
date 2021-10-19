@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasConnection">
+  <div v-if="showTemplate">
     <error-container v-if="error.status === genericStatusCodes.BAD_REQUEST" :id="errorId">
       <error-title title="appointments.error.thereIsAProblemAppointments"
                    header="appointments.error.thereIsAProblem" />
@@ -125,11 +125,6 @@ export default {
       appointmentStatusCodes: appointmentStatus,
       errorId: `error-dialog-${this.error.status}`,
     };
-  },
-  computed: {
-    hasConnection() {
-      return !this.hasConnectionProblem();
-    },
   },
 };
 </script>

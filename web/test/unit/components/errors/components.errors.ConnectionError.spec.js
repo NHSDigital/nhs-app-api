@@ -1,7 +1,13 @@
 import ConnectionError from '@/components/errors/ConnectionError';
 import * as dependency from '@/lib/utils';
 import { INDEX_PATH } from '@/router/paths';
+import { EventBus, UPDATE_HEADER, UPDATE_TITLE } from '@/services/event-bus';
 import { createRouter, createStore, mount } from '../../helpers';
+
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $on: jest.fn(), $off: jest.fn(), $emit: jest.fn() },
+}));
 
 describe('ConnectionError.vue', () => {
   let wrapper;
@@ -43,6 +49,14 @@ describe('ConnectionError.vue', () => {
       expect(messageElement.text()).toContain('111.nhs.uk');
       expect(messageElement.text()).toContain('or call 111.');
       expect(messageElement.attributes()['aria-label']).toBe('Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.');
+    });
+
+    it('will not update the header and title when there no longer is a connection error', () => {
+      EventBus.$emit.mockClear();
+      $store.state.errors.hasConnectionProblem = false;
+
+      expect(EventBus.$emit).not.toHaveBeenCalledWith(UPDATE_HEADER, 'generic.errors.internetConnectionError');
+      expect(EventBus.$emit).not.toHaveBeenCalledWith(UPDATE_TITLE, 'generic.errors.internetConnectionError');
     });
 
     describe('try again button', () => {
@@ -95,6 +109,19 @@ describe('ConnectionError.vue', () => {
 
     it('will not show error dialog', () => {
       expect(wrapper.find('#message-dialog').exists()).toBe(false);
+    });
+
+    it('will not update the header and title', () => {
+      expect(EventBus.$emit).not.toHaveBeenCalledWith(UPDATE_HEADER, 'generic.errors.internetConnectionError');
+      expect(EventBus.$emit).not.toHaveBeenCalledWith(UPDATE_TITLE, 'generic.errors.internetConnectionError');
+    });
+
+    it('will update the header and title when a connection error arises', () => {
+      EventBus.$emit.mockClear();
+      $store.state.errors.hasConnectionProblem = true;
+
+      expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'generic.errors.internetConnectionError');
+      expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, 'generic.errors.internetConnectionError');
     });
   });
 });

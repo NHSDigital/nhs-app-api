@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasConnection">
+  <div v-if="showTemplate">
     <error-page v-if="error && error.status === genericStatusCodes.FORBIDDEN"
                 header-locale-ref="forbiddenErrors.appointments.gpAppointmentBookingUnavailable"
                 :back-url="appointmentsPath">
@@ -135,9 +135,6 @@ export default {
   computed: {
     errorId() {
       return this.error ? `error-dialog-${this.error.status}` : 'unknown-error';
-    },
-    hasConnection() {
-      return !this.hasConnectionProblem();
     },
   },
 };

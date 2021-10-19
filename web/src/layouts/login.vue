@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="isErrorVisible" :class="$style['error-container']">
+    <div v-if="hasConnectionProblem" :class="$style['error-container']">
       <connection-error/>
       <api-error/>
     </div>
@@ -117,9 +117,6 @@ export default {
   computed: {
     showSessionExpiredBanner() {
       return this.$store.state.session.showExpiryMessage || this.$route.query.showExpiryMessage;
-    },
-    isErrorVisible() {
-      return this.$store.getters['errors/showApiError'] || this.$store.state.errors.hasConnectionProblem;
     },
   },
   mounted() {

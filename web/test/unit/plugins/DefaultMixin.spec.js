@@ -19,9 +19,11 @@ describe('mixins', () => {
   let state;
   let getters;
   let wrapper;
+  let store;
 
   const mountPage = ({ $store, $route }) => {
     const testPage = { template: '<div></div>' };
+    store = $store;
 
     return mount(testPage, {
       localVue,
@@ -42,6 +44,36 @@ describe('mixins', () => {
   });
 
   describe('computed', () => {
+    describe('showTemplate', () => {
+      it('will return true when there is network access and no api error', () => {
+        getters['errors/showApiError'] = false;
+        store.state.errors.hasConnectionProblem = false;
+
+        expect(wrapper.vm.showTemplate).toEqual(true);
+      });
+
+      it('will return false when there is network access and api error', () => {
+        getters['errors/showApiError'] = true;
+        store.state.errors.hasConnectionProblem = false;
+
+        expect(wrapper.vm.showTemplate).toEqual(false);
+      });
+
+      it('will return false when there is no network access and no api error', () => {
+        getters['errors/showApiError'] = false;
+        store.state.errors.hasConnectionProblem = true;
+
+        expect(wrapper.vm.showTemplate).toEqual(false);
+      });
+
+      it('will return false when there is no network access and api error', () => {
+        getters['errors/showApiError'] = true;
+        store.state.errors.hasConnectionProblem = true;
+
+        expect(wrapper.vm.showTemplate).toEqual(false);
+      });
+    });
+
     describe('currentHelpUrl', () => {
       it('should call the generate help link function with the correct parameters', () => {
         const result = wrapper.vm.currentHelpUrl; // eslint-disable-line no-unused-vars
@@ -151,31 +183,19 @@ describe('mixins', () => {
       });
     });
 
-    describe('hasConnectionProblem', () => {
-      let hasConnectionErrorBool;
+    describe('watch - $router.query.ts', () => {
+      it('will dispatch `errors/setConnectionProblem` with the value false when navigator online', () => {
+        jest.spyOn(navigator, 'onLine', 'get').mockReturnValue(true);
+        wrapper.setData({ $route: { query: { ts: 'foo' } } });
 
-      describe('when online and no Api error', () => {
-        beforeEach(() => {
-          getters['errors/showApiError'] = false;
-          jest.spyOn(navigator, 'onLine', 'get').mockReturnValueOnce(true);
-          hasConnectionErrorBool = wrapper.vm.hasConnectionProblem();
-        });
-
-        it('will return a value of false', () => {
-          expect(hasConnectionErrorBool).toEqual(false);
-        });
+        expect(store.dispatch).toBeCalledWith('errors/setConnectionProblem', false);
       });
 
-      describe('when offline and no Api error', () => {
-        beforeEach(() => {
-          getters['errors/showApiError'] = false;
-          jest.spyOn(navigator, 'onLine', 'get').mockReturnValueOnce(false);
-          hasConnectionErrorBool = wrapper.vm.hasConnectionProblem();
-        });
+      it('will dispatch `errors/setConnectionProblem` with the value true when navigator not online', () => {
+        jest.spyOn(navigator, 'onLine', 'get').mockReturnValue(false);
+        wrapper.setData({ $route: { query: { ts: 'foo' } } });
 
-        it('will return a value of true', () => {
-          expect(hasConnectionErrorBool).toEqual(true);
-        });
+        expect(store.dispatch).toBeCalledWith('errors/setConnectionProblem', true);
       });
     });
   });

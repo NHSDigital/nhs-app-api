@@ -25,6 +25,7 @@
 import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import { redirectTo } from '@/lib/utils';
 import { INDEX_PATH } from '@/router/paths';
 
@@ -43,6 +44,14 @@ export default {
   computed: {
     showError() {
       return this.$store.state.errors.hasConnectionProblem;
+    },
+  },
+  watch: {
+    showError(value) {
+      if (value) {
+        EventBus.$emit(UPDATE_HEADER, 'generic.errors.internetConnectionError');
+        EventBus.$emit(UPDATE_TITLE, 'generic.errors.internetConnectionError');
+      }
     },
   },
   methods: {

@@ -15,10 +15,26 @@ export default {
   name: 'defaultMixin',
   computed: {
     showTemplate() {
-      return !this.hasConnectionProblem();
+      this.checkHasNetworkAccess();
+
+      return !this.hasConnectionProblem;
     },
     currentHelpUrl() {
       return generateContextualHelpLink(this.$store, this.$route);
+    },
+    hasApiError() {
+      return this.$store.getters['errors/showApiError'];
+    },
+    hasNetworkProblem() {
+      return this.$store.state.errors.hasConnectionProblem;
+    },
+    hasConnectionProblem() {
+      return this.hasNetworkProblem || this.hasApiError;
+    },
+  },
+  watch: {
+    '$route.query.ts': function watchTimestamp() {
+      this.checkHasNetworkAccess();
     },
   },
   methods: {
@@ -50,11 +66,9 @@ export default {
         ? LOGOUT_PATH
         : url;
     },
-    hasConnectionProblem() {
-      const hasInternetConnectionError = !navigator.onLine;
-      this.$store.dispatch('errors/setConnectionProblem', hasInternetConnectionError);
-
-      return hasInternetConnectionError || this.$store.getters['errors/showApiError'];
+    checkHasNetworkAccess() {
+      const hasNetworkAccess = navigator.onLine;
+      this.$store.dispatch('errors/setConnectionProblem', !hasNetworkAccess);
     },
     getMedicationCourseStatus(medicationStatusId) {
       // eslint-disable-next-line no-restricted-syntax
