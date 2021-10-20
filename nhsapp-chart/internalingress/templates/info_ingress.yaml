@@ -11,7 +11,7 @@ metadata:
   namespace: {{ .Values.global.environment }}
   labels:
     role: cold-info
-    releaseVersion: {{ default "develop" .Values.messages.version }}
+    releaseVersion: {{ default "develop" .Values.info.version }}
 spec:
   rules:
     - host: api-cold.{{ .Values.zone }}.{{ .Values.domain }}

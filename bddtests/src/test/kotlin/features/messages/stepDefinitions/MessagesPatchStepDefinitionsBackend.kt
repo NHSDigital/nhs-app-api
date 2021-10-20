@@ -30,10 +30,10 @@ class MessagesPatchStepDefinitionsBackend {
         MessagesApi.patch(authToken = null, messageId =  messageId, patch = MessagesFactory.patchToUpdateAsRead)
     }
 
-    @Then("^an attempt to mark a message as read with an invalid access token will return an Unauthorised error$")
-    fun aAttemptToGetMessagesFromASenderWithAnInvalidAccessTokenWillReturnAnUnauthorisedError() {
+    @Then("^an attempt to mark a message as read with an invalid access token will return an Internal Server error$")
+    fun aAttemptToGetMessagesFromASenderWithAnInvalidAccessTokenWillReturnAnInternalServerError() {
         val messageId = MessagesSerenityHelpers.MESSAGE_ID.getOrFail<String>()
-        InvalidAccessTokenTester.assertInvalidTokensThrowUnauthorised { token ->
+        InvalidAccessTokenTester.assertInvalidTokensThrowInternalServer { token ->
             MessagesApi.patch(authToken = token, messageId =  messageId, patch = MessagesFactory.patchToUpdateAsRead)
         }
     }

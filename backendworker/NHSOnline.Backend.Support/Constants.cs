@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace NHSOnline.Backend.Support
 {
@@ -273,6 +275,13 @@ namespace NHSOnline.Backend.Support
         public static class HealthCheckConstants
         {
             public const string HealthCheckLoggingEnabledConfigKeyName = "Global:IsHealthCheckLoggingEnabled";
+        }
+
+        public static class AuthenticationSchemeGroupings
+        {
+            public const string JwtAndCookieAuthenticationScheme = JwtBearerDefaults.AuthenticationScheme + ","
+                + CookieAuthenticationDefaults.AuthenticationScheme;
+
         }
     }
 }

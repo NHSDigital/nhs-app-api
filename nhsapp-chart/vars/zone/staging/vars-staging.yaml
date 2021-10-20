@@ -112,8 +112,6 @@ api:
     servicesV3__silver_third_party_api_test__url: https://silverintegrationtestsa.z33.web.core.windows.net
     servicesV3__silver_third_party_api_test__domains__1: https://httpstat.us
 
-messagesEnabled: true
-
 users:
   notificationHubs:
     - notificationHubPath: nhsapp-staging

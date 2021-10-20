@@ -50,8 +50,6 @@ services:
     volumes:
       - ./docker/nginx/api:/etc/nginx/conf.d
     depends_on:
-      - log.local.bitraft.io
-      - messages.local.bitraft.io
       - pfs.local.bitraft.io
       - userinfo.local.bitraft.io
       - users.local.bitraft.io
@@ -285,46 +283,6 @@ services:
       - qualtrics_api_key
       - comms_hub_event_hub_pid_connection_string
       - comms_hub_event_hub_connection_string
-
-  messages.local.bitraft.io:
-    image: ${MESSAGESAPI_DOCKER_REGISTRY:-local}/nhsonline-backendmessagesapi:${MESSAGESAPI_DOCKER_TAG:-latest}
-    entrypoint:
-      - /bin/bash # The service currently expects secrets as env vars but docker-compose only supports files
-      - -c        # Therefore we run a script before starting the service to read the file into an env var
-      - |
-          if [ -f "$$AUTH_SIGNING_PASSWORD" ]; then
-            export AUTH_SIGNING_PASSWORD=$$(<$$AUTH_SIGNING_PASSWORD)
-          fi
-          if [ -f "$$NHSAPP_API_KEY" ]; then
-            export NHSAPP_API_KEY=$$(<$$NHSAPP_API_KEY)
-          fi
-          if [ -f "$$COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING" ]; then
-            export COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING=$$(<$$COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING)
-          fi
-          if [ -f "$$COMMS_HUB_EVENT_HUB_CONNECTION_STRING" ]; then
-            export COMMS_HUB_EVENT_HUB_CONNECTION_STRING=$$(<$$COMMS_HUB_EVENT_HUB_CONNECTION_STRING)
-          fi
-          exec $$*
-      - "--"
-    command: dotnet NHSOnline.Backend.MessagesApi.dll
-    env_file:
-      - ./docker/messages.env
-      - ./docker/eventhub_connectivity.env
-      - ./docker/health_checks_enabled.env
-    secrets:
-      - auth_signing_private_key
-      - auth_signing_rsapass
-      - nhsapp_api_key
-      - comms_hub_event_hub_pid_connection_string
-      - comms_hub_event_hub_connection_string
-
-  log.local.bitraft.io:
-    image: ${LOGAPI_DOCKER_REGISTRY:-local}/nhsonline-clientloggerapi:${LOGAPI_DOCKER_TAG:-latest}
-    env_file:
-      - ./docker/logger.env
-      - ./docker/health_checks_enabled.env
-    secrets:
-      - nhsapp_api_key
 
   mongo_seed:
     image: mongo:latest

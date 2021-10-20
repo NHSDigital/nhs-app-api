@@ -94,6 +94,26 @@ data:
                 proxy_set_header Connection "";
             }
 
+            location ~* ^/v[1,2]/api/users/me/messages {
+                rewrite ^/v(.*)/api/users/me/messages(.*) /v$1/api/me/messages$2 break;
+                proxy_pass http://application;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_set_header Connection "";
+            }
+
+             location ~* "^/v[1,2]/api/users/(.*)/messages" {
+                rewrite ^/v(.*)/api/users/(.*)/messages$ /v$1/api/$2/messages break;
+                proxy_pass http://application;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_set_header Connection "";
+            }
+
             location /healthz {
                 return 204;
             }

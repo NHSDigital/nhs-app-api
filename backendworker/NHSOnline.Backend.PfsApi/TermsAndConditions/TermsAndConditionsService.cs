@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
         private readonly IConsentRequestToTermsAndConditionsMapper _consentRequestToTermsAndConditionsMapper;
         private readonly IMapper<ConsentRequest, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> _consentRequestToUpdateMapper;
         private readonly IMapper<AnalyticsCookieAcceptance, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> _analyticsCookieAcceptanceToUpdateMapper;
-        private readonly IMessagesService _messagesService;
+        private readonly IIntroMessagesService _introMessagesService;
         private readonly IMetricLogger _metricLogger;
 
         public TermsAndConditionsService
@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             IConsentRequestToTermsAndConditionsMapper consentRequestToTermsAndConditionsMapper,
             IMapper<ConsentRequest, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> consentRequestToUpdateMapper,
             IMapper<AnalyticsCookieAcceptance, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> analyticsCookieAcceptanceToUpdateMapper,
-            IMessagesService messagesService,
+            IIntroMessagesService introMessagesService,
             IMetricLogger metricLogger
         )
         {
@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             _consentRequestToTermsAndConditionsMapper = consentRequestToTermsAndConditionsMapper;
             _consentRequestToUpdateMapper = consentRequestToUpdateMapper;
             _analyticsCookieAcceptanceToUpdateMapper = analyticsCookieAcceptanceToUpdateMapper;
-            _messagesService = messagesService;
+            _introMessagesService = introMessagesService;
             _metricLogger = metricLogger;
         }
 
@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
 
             if (result is TermsAndConditionsRecordConsentResult.InitialConsentRecorded)
             {
-                await _messagesService.SendIntroductoryMessage(nhsLoginId);
+                await _introMessagesService.SendIntroductoryMessage(nhsLoginId);
             }
 
             return result;

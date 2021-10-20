@@ -22,11 +22,6 @@ www:
 info:
   targetAppVersion: ""
 
-messages:
-  targetAppVersion: ""
-
 users:
   targetAppVersion: ""
 
-logger:
-  targetAppVersion: ""

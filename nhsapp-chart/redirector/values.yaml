@@ -20,14 +20,8 @@ cid:
 www:
   role: www
   version: ""
-logger:
-  role: logger
-  version: ""
 users:
   role: users
-  version: ""
-messages:
-  role: messages
   version: ""
 info:
   role: info

@@ -18,7 +18,40 @@ class InvalidAccessTokenTester {
             }
         }
 
+        fun assertInvalidTokensThrowInternalServer(apiCall: (String) -> Unit) {
+            val invalidTokens = AccessTokenBuilder().getInvalidTokens(SerenityHelpers.getPatient())
+            invalidTokens.forEach { invalidToken ->
+                assertInvalidTokenThrowsInternalServer(
+                        accessToken = invalidToken.first.serialize(),
+                        tokenParameterKey = invalidToken.second,
+                        apiCall = apiCall)
+            }
+        }
+
         private fun assertInvalidTokenThrowsUnauthorised(
+                accessToken: String,
+                tokenParameterKey: String,
+                apiCall: (String) -> Unit) {
+            doCallAndThrow(
+                    HttpStatus.SC_UNAUTHORIZED,
+                    accessToken,
+                    tokenParameterKey,
+                    apiCall)
+        }
+
+        private fun assertInvalidTokenThrowsInternalServer(
+                accessToken: String,
+                tokenParameterKey: String,
+                apiCall: (String) -> Unit) {
+            doCallAndThrow(
+                    HttpStatus.SC_INTERNAL_SERVER_ERROR,
+                    accessToken,
+                    tokenParameterKey,
+                    apiCall)
+        }
+
+        private fun doCallAndThrow(
+                error: Int,
                 accessToken: String,
                 tokenParameterKey: String,
                 apiCall: (String) -> Unit) {
@@ -32,7 +65,7 @@ class InvalidAccessTokenTester {
             )
             Assert.assertEquals("Incorrect status code returned. " +
                     "Access Token invalid value: '$tokenParameterKey",
-                    HttpStatus.SC_UNAUTHORIZED,
+                    error,
                     errorResponse!!.statusCode)
         }
     }

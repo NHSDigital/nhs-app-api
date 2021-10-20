@@ -93,13 +93,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GpSupplierSpecific", "GpSup
 		contracts\gpSupplierSpecific\tpp-linkage.yaml = contracts\gpSupplierSpecific\tpp-linkage.yaml
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.MessagesApi.UnitTests", "NHSOnline.Backend.MessagesApi.UnitTests\NHSOnline.Backend.MessagesApi.UnitTests.csproj", "{DC1B54DB-8F80-4B09-BC2D-E7DE1DA72520}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Messages.UnitTests", "NHSOnline.Backend.Messages.UnitTests\NHSOnline.Backend.Messages.UnitTests.csproj", "{DC1B54DB-8F80-4B09-BC2D-E7DE1DA72520}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.MessagesApi", "NHSOnline.Backend.MessagesApi\NHSOnline.Backend.MessagesApi.csproj", "{2AEDCC47-819E-4229-B46A-A52D6C6FD612}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Messages", "NHSOnline.Backend.Messages\NHSOnline.Backend.Messages.csproj", "{2AEDCC47-819E-4229-B46A-A52D6C6FD612}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.LoggerApi", "NHSOnline.Backend.LoggerApi\NHSOnline.Backend.LoggerApi.csproj", "{37A118C6-606C-4803-B785-235E6A54DC0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Logger", "NHSOnline.Backend.Logger\NHSOnline.Backend.Logger.csproj", "{37A118C6-606C-4803-B785-235E6A54DC0C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.LoggerApi.UnitTests", "NHSOnline.Backend.LoggerApi.UnitTests\NHSOnline.Backend.LoggerApi.UnitTests.csproj", "{7DF21FD7-92D4-4581-B7CD-BBC14228ED75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Logger.UnitTests", "NHSOnline.Backend.Logger.UnitTests\NHSOnline.Backend.Logger.UnitTests.csproj", "{7DF21FD7-92D4-4581-B7CD-BBC14228ED75}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.UserInfoApi", "NHSOnline.Backend.UserInfoApi\NHSOnline.Backend.UserInfoApi.csproj", "{98E8AA2E-450C-4973-815E-FA2CFFA8D81D}"
 EndProject

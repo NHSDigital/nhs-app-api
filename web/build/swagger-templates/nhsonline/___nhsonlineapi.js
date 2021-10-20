@@ -128,16 +128,16 @@ class NHSOnlineApi {
         if (useAccessToken) {
           const accessToken = await this.store.dispatch('auth/ensureAccessToken');
           headers['Authorization'] = `Bearer ${accessToken}`;
-        } else {
-          const csrfToken = get('csrfToken')(parameters) || get('store.state.session.csrfToken')(this);
-          if (csrfToken) {
-            headers['X-CSRF-TOKEN'] = csrfToken;
-          }
+        } 
+        
+        const csrfToken = get('csrfToken')(parameters) || get('store.state.session.csrfToken')(this);
+        if (csrfToken) {
+          headers['X-CSRF-TOKEN'] = csrfToken;
+        }
 
-          const cookie = get('cookie')(parameters) || this.cookie;
-          if (cookie) {
-            headers['Cookie'] = cookie;
-          }
+        const cookie = get('cookie')(parameters) || this.cookie;
+        if (cookie) {
+          headers['Cookie'] = cookie;
         }
 
         let nhsoRequestId = uuid();

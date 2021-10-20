@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OdsCode
             {
                 return new BadRequestObjectResult(ModelState);
             }
-            
+
             if (string.IsNullOrEmpty(odsCode))
             {
                 return BadRequest();
@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OdsCode
                 var isOdsCodeEnrolled = await _odsCodeLookup.LookupSupplier(odsCode);
 
                 var response = new GetOdsCodeLookupResponse { IsGpSystemSupported = isOdsCodeEnrolled.HasValue };
-                
+
                 return new OkObjectResult(response);
             }
             catch (Exception e)

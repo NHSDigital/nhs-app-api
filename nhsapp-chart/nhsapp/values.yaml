@@ -343,6 +343,9 @@ api:
     - name: USERINFO_API_BASE_URL
       value: http://api.local.bitraft.io:8091/v1/api/me/info
 
+messages:
+  mongoDatabaseMessagesCollection: messages
+
 cid:
   containerPort: 8080
   clientAuth: true
@@ -368,25 +371,6 @@ cid:
       value: "2.1.0.0"
     - name: FAKE_GP_USERS_DATABASE_COLLECTION
       value: fake_gp_users
-
-logger:
-  containerPort: 8080
-  publicURL: null
-  role: logger
-  image: nhsonline-clientloggerapi
-  image_tag: latest
-  imagePullPolicy: Always
-  minAvailable: 1
-  minReplicas: 2
-  maxReplicas: 100
-  memoryRequest: "128Mi"
-  memoryLimit: "128Mi"
-  cpuRequest: "300m"
-  cpuLimit: "1000m"
-  targetCPUUtilizationPercentage: 45
-  environmentVariables:
-    - name: ASPNETCORE_ENVIRONMENT
-      value: "Production"
 
 cdsswiremock:
   containerPort: 8080
@@ -458,26 +442,6 @@ users:
   cpuLimit: "350m"
   targetCPUUtilizationPercentage: 45
   mongoDatabaseUserDeviceCollection: devices
-  environmentVariables:
-    - name: ASPNETCORE_ENVIRONMENT
-      value: "Production"
-
-messages:
-  containerPort: 8080
-  publicURL: null
-  role: messages
-  image: nhsonline-backendmessagesapi
-  image_tag: develop
-  imagePullPolicy: Always
-  minAvailable: 1
-  minReplicas: 2
-  maxReplicas: 100
-  memoryRequest: "256Mi"
-  memoryLimit: "256Mi"
-  cpuRequest: "300m"
-  cpuLimit: "300m"
-  targetCPUUtilizationPercentage: 45
-  mongoDatabaseMessagesCollection: messages
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
       value: "Production"

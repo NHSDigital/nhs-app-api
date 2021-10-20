@@ -10,21 +10,8 @@ namespace NHSOnline.Backend.PfsApi.Messages
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IMessagesApiConfig, MessagesApiConfig>();
-            services.AddSingleton<IMessagesClient, MessagesClient>();
-            services.AddSingleton<IMessagesService, MessagesService>();
-            services.AddSingleton<IMessagesServiceConfig, MessagesServiceConfig>();
-
-            services.AddTransient<MessagesHttpRequestIdentifier>();
-
-            services
-                .AddHttpClient<MessagesHttpClient>()
-                .AddHttpMessageHandler<HttpTimeoutHandler<MessagesHttpRequestIdentifier>>()
-                .AddHttpMessageHandler<HttpRequestIdentificationHandler<MessagesHttpRequestIdentifier>>()
-                .AddCorrelationIdForwarding();
-
-            services.AddNhsAppClientHealthCheck<MessagesHttpClient>("Messages", NhsAppHealthCheckTags.Readiness, configuration);
-
+            services.AddSingleton<IIntroMessagesService, IntroMessagesService>();
+            services.AddSingleton<IIntroMessagesServiceConfig, IntroMessagesServiceConfig>();
             base.ConfigureServices(services, configuration);
         }
     }

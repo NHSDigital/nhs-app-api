@@ -1,4 +1,6 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Logging;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.AspNet.CorrelationId;
 using NHSOnline.Backend.AspNet.HealthChecks;
@@ -61,6 +64,7 @@ namespace NHSOnline.Backend.PfsApi
             _supplierStartup = new SupplierStartup(configuration, loggerFactory, new GpSystemRegistrationService());
 
             _logger = loggerFactory.CreateLogger<Startup>();
+
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -69,14 +73,16 @@ namespace NHSOnline.Backend.PfsApi
         {
             SetupConfigurationSettings(services);
 
-            services
-                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(ConfigureServiceCookies);
-            services.AddScoped<CustomCookieAuthenticationEvents>();
+            services.ConfigureAuthentication(Configuration, _logger, _env.IsDevelopment(), _configurationSettings);
 
+            services.AddScoped<CustomCookieAuthenticationEvents>();
             services.AddNhsAppCorrelationId();
 
             services.AddCors();
+
+            // From MessagesApi.Startup.cs
+            services.SetupApiKeys(Configuration, _logger);
+            services.SetupHttpHandlers();
 
             services.AddMemoryCache();
 
@@ -104,23 +110,6 @@ namespace NHSOnline.Backend.PfsApi
 
             _supplierStartup.ConfigureServices(services);
             _modularStartup.ConfigureServices(services);
-        }
-
-        private void ConfigureServiceCookies(CookieAuthenticationOptions options)
-        {
-            options.Cookie.Name = Constants.CookieNames.SessionId;
-            options.Cookie.HttpOnly = true;
-            options.EventsType = typeof(CustomCookieAuthenticationEvents);
-            options.TicketDataFormat = new UnencryptedCookieDataFormat();
-            options.Cookie.SameSite = SameSiteMode.Lax;
-            options.Cookie.SecurePolicy = _env.IsDevelopment()
-                ? CookieSecurePolicy.SameAsRequest
-                : CookieSecurePolicy.Always;
-
-            if (!string.IsNullOrEmpty(_configurationSettings.CookieDomain))
-            {
-                options.Cookie.Domain = _configurationSettings.CookieDomain;
-            }
         }
 
         private void SetupConfigurationSettings(IServiceCollection services)
@@ -172,12 +161,13 @@ namespace NHSOnline.Backend.PfsApi
             app.UseRouting();
             app.UseCors(Configuration);
             app.UseAuthentication();
-
+            app.UseAuthorization(); // order is important here
             app.UseMiddleware<ProxyAuditingMiddleware>();
 
             app.UseNhsAppCorrelationId();
 
-            app.UseEndpoints(b => {
+            app.UseEndpoints(b =>
+            {
                 b.MapHealthCheckEndpoints();
                 b.MapControllers();
             });

@@ -1,4 +1,6 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
@@ -13,6 +15,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Ndop
 {
     [ApiVersionRoute("patient/ndop")]
     [ProxyingNotAllowed]
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class NdopController : Controller
     {
         private readonly INdopService _ndopService;

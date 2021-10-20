@@ -106,7 +106,6 @@ api:
     servicesV3__pkb__url: https://nhsapp.devstacks.pkb.io
     servicesV3__pkb__doamins__url: https://nhsapp.devstacks.pkb.io:443
 
-messagesEnabled: true
 sjrExternalIngressEnabled: true
 
 users:

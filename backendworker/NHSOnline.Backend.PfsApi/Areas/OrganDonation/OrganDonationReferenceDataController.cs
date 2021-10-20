@@ -1,4 +1,6 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
@@ -9,6 +11,7 @@ using NHSOnline.Backend.Support.Logging;
 namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 {
     [ApiVersionRoute("patient/organdonation/referencedata")]
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class OrganDonationReferenceDataController : Controller
     {
 

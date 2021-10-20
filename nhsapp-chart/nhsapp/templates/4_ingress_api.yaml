@@ -45,14 +45,14 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ template "nhsapp.name" . }}-messages-{{ .Chart.AppVersion | replace "." "-"}}
+                name: {{ template "nhsapp.name" . }}-api-{{ .Chart.AppVersion | replace "." "-"}}
                 port:
                   number: {{ $.Values.sidecar_proxy.containerPort }}
           - path:  /v[1,2]/api/users/([A-Za-z0-9-:]{36,37})/messages
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ template "nhsapp.name" . }}-messages-{{ .Chart.AppVersion | replace "." "-"}}
+                name: {{ template "nhsapp.name" . }}-api-{{ .Chart.AppVersion | replace "." "-"}}
                 port:
                   number: {{ $.Values.sidecar_proxy.containerPort }}
           {{- end }}
@@ -72,13 +72,6 @@ spec:
                 port:
                   number: {{ $.Values.sidecar_proxy.containerPort }}
           {{- end }}
-          - path: /v1/api/log
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: {{ template "nhsapp.name" . }}-logger-{{ .Chart.AppVersion  | replace "." "-" }}
-                port:
-                  number: {{ $.Values.sidecar_proxy.containerPort }}
           - path: /v[1,2]/api/users
             pathType: ImplementationSpecific
             backend:
@@ -116,14 +109,14 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ template "nhsapp.name" . }}-messages-{{ .Chart.AppVersion | replace "." "-"}}
+                name: {{ template "nhsapp.name" . }}-api-{{ .Chart.AppVersion | replace "." "-"}}
                 port:
                   number: {{ $.Values.sidecar_proxy.containerPort }}
           - path: /v[1,2]/api/users/([A-Za-z0-9-:]{36,37})/messages
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ template "nhsapp.name" . }}-messages-{{ .Chart.AppVersion | replace "." "-"}}
+                name: {{ template "nhsapp.name" . }}-api-{{ .Chart.AppVersion | replace "." "-"}}
                 port:
                   number: {{ $.Values.sidecar_proxy.containerPort }}
           {{- end }}
@@ -143,13 +136,6 @@ spec:
                 port:
                   number: {{ $.Values.sidecar_proxy.containerPort }}
           {{- end }}
-          - path: /v1/api/log
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: {{ template "nhsapp.name" . }}-logger-{{ .Chart.AppVersion  | replace "." "-" }}
-                port:
-                  number: {{ $.Values.sidecar_proxy.containerPort }}
           - path: /v[1,2]/api/users
             pathType: ImplementationSpecific
             backend:

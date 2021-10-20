@@ -23,8 +23,6 @@ for IMAGE in "${IMAGE_SETTING_NAMES[@]}"; do
             IMAGE="service-journey-dev-config"
         elif [ "$IMAGE" == "SJRAPI" ]; then
             IMAGE="backendservicejourneyrulesapi"
-        elif [ "$IMAGE" == "LOGAPI" ]; then
-            IMAGE="clientloggerapi"
         elif [ "$IMAGE" == "WEB" ]; then
             IMAGE="web"
         else

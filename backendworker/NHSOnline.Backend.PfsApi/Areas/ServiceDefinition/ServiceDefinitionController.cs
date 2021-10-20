@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Hl7.Fhir.Model;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition;
@@ -15,6 +17,7 @@ using ClinicalDecisionSupportConstants = NHSOnline.Backend.PfsApi.ClinicalDecisi
 
 namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
 {
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class ServiceDefinitionController : Controller
     {
         private readonly IServiceDefinitionService _service;

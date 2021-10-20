@@ -15,8 +15,6 @@ tppSupportsLinkedAccounts: true
 organDonationHostname: nhsbt-apim-staging.azure-api.net
 organDonationPath: odr/v1/
 
-messagesEnabled: true
-
 patientPracticeMessagingEnabled: true
 environmentPerftest: true
 environmentStubbed:

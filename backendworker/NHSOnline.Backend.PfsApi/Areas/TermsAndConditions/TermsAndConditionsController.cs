@@ -1,5 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
@@ -15,6 +17,7 @@ using NHSOnline.Backend.Support.Session;
 namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
 {
     [ProxyingNotAllowed]
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class TermsAndConditionsController : Controller
     {
         private readonly ITermsAndConditionsService _termsAndConditionsService;

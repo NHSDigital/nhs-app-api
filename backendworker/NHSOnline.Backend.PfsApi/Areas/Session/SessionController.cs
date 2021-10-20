@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -47,6 +48,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public IActionResult Get([UserSession] P5UserSession userSession)
         {
             try
@@ -121,6 +123,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         }
 
         [HttpDelete]
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Delete([UserSession] UserSession userSession)
         {
             try
@@ -139,6 +142,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
 
         [HttpPut]
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         [Route("gp-session-on-demand")]
         public async Task<IActionResult> GpSessionOnDemand([FromBody] UserSessionRequest model, [UserSession] P9UserSession p9UserSession)
         {

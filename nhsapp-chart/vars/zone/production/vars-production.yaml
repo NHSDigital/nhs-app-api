@@ -180,13 +180,6 @@ info:
   minReplicas: 8
   maxReplicas: 100
 
-messages:
-  minAvailable: 4
-  minReplicas: 8
-  maxReplicas: 100
-
-messagesEnabled: true
-
 users:
   minAvailable: 7
   minReplicas: 13

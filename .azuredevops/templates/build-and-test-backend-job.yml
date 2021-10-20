@@ -127,21 +127,11 @@ jobs:
           scriptPath: backendworker/buildscripts/11_package_non_live_sjr_config.sh
 
       - task: ShellScript@2
-        displayName: Package Logger API
-        inputs:
-          scriptPath: backendworker/buildscripts/12_package_logger_api.sh
-
-      - task: ShellScript@2
         displayName: Package Users API
         inputs:
-          scriptPath: backendworker/buildscripts/13_package_users_api.sh
+          scriptPath: backendworker/buildscripts/12_package_users_api.sh
 
       - task: ShellScript@2
         displayName: Package User Info API
         inputs:
-          scriptPath: backendworker/buildscripts/14_package_userinfo_api.sh
-
-      - task: ShellScript@2
-        displayName: Package Messages API
-        inputs:
-          scriptPath: backendworker/buildscripts/15_package_messages_api.sh
+          scriptPath: backendworker/buildscripts/13_package_userinfo_api.sh

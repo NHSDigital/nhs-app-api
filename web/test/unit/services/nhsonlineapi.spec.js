@@ -116,6 +116,16 @@ describe('services/nhsonlineapi', () => {
       describe('set to true', () => {
         beforeEach(() => {
           store.dispatch.mockImplementation('auth/ensureAccessToken').mockReturnValue(accessToken);
+          store.state = {
+            session: {
+              csrfToken: 'boo',
+            },
+            linkedAccounts: {
+              config: {
+                patientId: '1234-abcd-5678',
+              },
+            },
+          };
           const api = createRequestApi();
           api.cookie = 'double chocolate fudge';
           request({ headers, useAccessToken: true });
@@ -129,6 +139,10 @@ describe('services/nhsonlineapi', () => {
           expect(headers.Authorization).toBe(`Bearer ${accessToken}`);
         });
 
+        it('will set the "X-CSRF-TOKEN" header in the request from the store', () => {
+          expect(headers['X-CSRF-TOKEN']).toEqual(store.state.session.csrfToken);
+        });
+
         describe('cookie exists', () => {
           beforeEach(() => {
             const api = createRequestApi();
@@ -136,8 +150,8 @@ describe('services/nhsonlineapi', () => {
             request({ api, headers, useAccessToken: true });
           });
 
-          it('will not set the Cookie header', () => {
-            expect(headers.Cookie).toBeUndefined();
+          it('will set the Cookie header', () => {
+            expect(headers.Cookie).toBeDefined();
           });
         });
       });

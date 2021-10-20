@@ -18,7 +18,6 @@ fakeGpSystemEnabled: true
 fakeGpSupplierConfigPath: "/app/FakeGpSupplierConfig_ext.yml"
 nominatedpharmacyEnabled: true
 econsultEnabled: true
-messagesEnabled: true
 tppSupportsLinkedAccounts: true
 sixteenWeeksSlotsEnabled: true
 webVueGlobalObject: true
@@ -179,15 +178,6 @@ users:
   notificationHubs:
     - notificationHubPath: nhsapp-nonlive-preview
       notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
-
-messages:
-  minAvailable: 0
-  minReplicas: 1
-  maxReplicas: 1
-  memoryRequest: "64Mi"
-  memoryLimit: "128Mi"
-  cpuRequest: "100m"
-  cpuLimit: "200m"
 
 info:
   minAvailable: 0

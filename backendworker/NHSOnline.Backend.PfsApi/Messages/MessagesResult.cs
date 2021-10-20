@@ -16,9 +16,6 @@ namespace NHSOnline.Backend.PfsApi.Messages
             }
         }
 
-        public class BadGateway : MessagesResult
-        {
-        }
 
         public class InternalServerError : MessagesResult
         {

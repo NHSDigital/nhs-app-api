@@ -1,6 +1,8 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
@@ -24,6 +26,7 @@ using NHSOnline.Backend.Support.Session;
 namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 {
     [JourneyFeatureFilter(JourneyFeature.NominatedPharmacy)]
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class NominatedPharmacyController : Controller
     {
         private readonly ILogger<NominatedPharmacyController> _logger;

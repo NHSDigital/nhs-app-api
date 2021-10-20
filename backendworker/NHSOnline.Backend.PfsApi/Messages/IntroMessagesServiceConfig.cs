@@ -1,0 +1,22 @@
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.PfsApi.Resources;
+using NHSOnline.Backend.Support;
+
+namespace NHSOnline.Backend.PfsApi.Messages
+{
+    public class IntroMessagesServiceConfig : IIntroMessagesServiceConfig
+    {
+        public bool SendIntroductoryMessage { get; }
+
+        public string Body { get; }
+        public string CampaignId { get; }
+
+        public IntroMessagesServiceConfig(IConfiguration configuration, ILogger<IntroMessagesServiceConfig> logger)
+        {
+            SendIntroductoryMessage = configuration.GetBoolOrThrow("SEND_INTRODUCTORY_MESSAGE", logger);
+            CampaignId = configuration.GetOrWarn("INTRODUCTORY_MESSAGE_CAMPAIGN_ID", logger);
+            Body = EmbeddedResources.GetEmbeddedResource(EmbeddedResources.IntroductoryMessage);
+        }
+    }
+}

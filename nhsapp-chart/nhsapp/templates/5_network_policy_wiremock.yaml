@@ -34,10 +34,6 @@ spec:
           version: {{ .Chart.AppVersion | quote }}
     - podSelector:
         matchLabels:
-          role: {{ $.Values.messages.role }}
-          version: {{ .Chart.AppVersion | quote }}
-    - podSelector:
-        matchLabels:
           role: {{ $.Values.info.role }}
           version: {{ .Chart.AppVersion | quote }}
     ports:

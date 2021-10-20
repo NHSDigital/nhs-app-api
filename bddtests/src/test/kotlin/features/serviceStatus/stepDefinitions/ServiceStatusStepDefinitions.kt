@@ -26,14 +26,6 @@ class ServiceStatusStepDefinitions {
     fun theUserInfoServiceReadinessIsRequested() =
             theServiceReadinessIsRequested { workerClient -> workerClient.userInfoHealth }
 
-    @When("^the messages service readiness is requested$")
-    fun theMessagesServiceReadinessIsRequested() =
-            theServiceReadinessIsRequested { workerClient -> workerClient.messagesHealth }
-
-    @When("^the logs service readiness is requested$")
-    fun theLogsServiceReadinessIsRequested() =
-            theServiceReadinessIsRequested { workerClient -> workerClient.logHealth }
-
     @Then("^the response from the service readiness endpoint has status code 204$")
     fun theResponseFromTheServiceReadinessEndpointHasStatusCode204() {
         val response = ServiceStatusSerenityHelpers.READINESS_ENDPOINT_RESPONSE.getOrFail<HttpResponse>()

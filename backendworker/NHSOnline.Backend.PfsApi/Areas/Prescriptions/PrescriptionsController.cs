@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
@@ -22,6 +24,7 @@ using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
 {
     [ApiVersionRoute("patient/prescriptions")]
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class PrescriptionsController : Controller
     {
         private readonly ConfigurationSettings _settings;

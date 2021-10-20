@@ -24,7 +24,3 @@ services:
   userinfo.local.bitraft.io:
     env_file:
       - ./docker/nhslogin_connectivity_dev.env
-
-  messages.local.bitraft.io:
-    env_file:
-      - ./docker/nhslogin_connectivity_dev.env

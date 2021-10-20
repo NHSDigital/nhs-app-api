@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.RequestFormatters;
 using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.Support.AspNet.Filters;
@@ -32,6 +33,7 @@ namespace NHSOnline.Backend.PfsApi
             filters.Add<UnauthorisedGpSystemHttpRequestExceptionFilterAttribute>();
             filters.Add<InvalidPatientIdExceptionFilterAttribute>();
             filters.Add<UserSessionFilter>();
+            filters.Add<UserProfileFilter>();
             // the GP session filter requires auditing, so it must invoked after the audit filter
             filters.Add<GpSessionFilter>(2);
 
