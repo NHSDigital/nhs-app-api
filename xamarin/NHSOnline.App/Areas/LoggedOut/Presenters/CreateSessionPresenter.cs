@@ -212,10 +212,10 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
                 _userSession = userSession;
             }
 
-            public string? Name => _userSession.Name;
+            public string? User => _userSession.Name;
             public int DurationSeconds => _userSession.SessionTimeout;
             public string? GpOdsCode => _userSession.OdsCode;
-            public string? Token => _userSession.Token;
+            public string? CsrfToken => _userSession.Token;
             public string LastCalledAt => _userSession.LastCalledAt;
             public string? NhsNumber => _userSession.NhsNumber;
             public string? DateOfBirth => _userSession.DateOfBirth;
