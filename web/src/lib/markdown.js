@@ -50,7 +50,7 @@ const overrideLinkRenderer = (md) => {
 
 const initMarkdown = (store) => {
   if (!markdownInternal) {
-    markdownInternal = new MarkdownIt('zero').enable(['emphasis', 'image', 'link', 'list', 'newline']);
+    markdownInternal = new MarkdownIt('zero').enable(['emphasis', 'image', 'link', 'list', 'newline', 'heading']);
     overrideLinkRenderer(markdownInternal);
   }
 

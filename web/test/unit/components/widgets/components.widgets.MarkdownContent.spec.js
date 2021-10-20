@@ -329,158 +329,176 @@ describe('MarkdownContent', () => {
             expect(linkElement.text()).toEqual('Call 111');
           });
         });
-      });
 
-      describe('with not allowed markdown', () => {
-        each([
-          ['heading 1', '# Lorem ipsum dolor sit amet', '<h1>'],
-          ['heading 2', '## Lorem ipsum dolor sit amet', '<h2>'],
-          ['heading 3', '### Lorem ipsum dolor sit amet', '<h3>'],
-          ['heading 4', '#### Lorem ipsum dolor sit amet', '<h4>'],
-          ['heading 5', '##### Lorem ipsum dolor sit amet', '<h5>'],
-          ['heading 6', '###### Lorem ipsum dolor sit amet', '<h6>'],
-          ['horizontal rule (_)', '___', '<hr>'],
-          ['horizontal rule (*)', '***', '<hr>'],
-          ['horizontal rule (*)', '***', '<hr>'],
-          ['blockquotes', '> Blockquotes can also be nested', '<blockquote>'],
-          ['strikethrough', '~~Strikethrough~~', '<s>'],
-          ['Inline code', 'Inline `code`', '<code>'],
-          ['Inline code', 'Inline `code`', '<code>'],
-          ['indented codeblock', '\tintented code\n\tsecondline', '<pre>'],
-          ['backtick codeblock', '```\nintented code\nsecondline\n```', '<pre>'],
-          ['table', '| Option | Description |\n| ------ | ----------- |\n| data | Lorem ipsum. |', '<table>'],
-          ['inserted text', '++Inserted text++', '<ins>'],
-          ['marked text', '==Marked text==', '<mark>'],
-          ['angle bracket links', '<http://www.test.com>', '<a>'],
-        ]).describe('%s markdown tag', (_, content, tag) => {
+        describe.each([
+          ['1', '#', 'h1'],
+          ['2', '##', 'h2'],
+          ['3', '###', 'h3'],
+          ['4', '####', 'h4'],
+          ['5', '#####', 'h5'],
+          ['6', '######', 'h6'],
+        ])('heading %s', (_, markup, elementType) => {
+          let heading;
+
           beforeEach(() => {
-            wrapper = mountMarkdownContent({ content });
+            wrapper = mountMarkdownContent({ content: `${markup} Lorem ipsum dolor sit amet` });
+            heading = wrapper.find(elementType);
           });
 
-          it(`will not render ${tag}`, () => {
-            expect(wrapper.find('p').html()).toEqual(expect.not.stringContaining(tag));
+          it('will render', () => {
+            expect(heading.exists()).toBe(true);
+          });
+
+          it('will set text', () => {
+            expect(heading.text()).toEqual('Lorem ipsum dolor sit amet');
+          });
+        });
+
+        describe('with not allowed markdown', () => {
+          each([
+            ['horizontal rule (_)', '___', '<hr>'],
+            ['horizontal rule (*)', '***', '<hr>'],
+            ['horizontal rule (*)', '***', '<hr>'],
+            ['blockquotes', '> Blockquotes can also be nested', '<blockquote>'],
+            ['strikethrough', '~~Strikethrough~~', '<s>'],
+            ['Inline code', 'Inline `code`', '<code>'],
+            ['Inline code', 'Inline `code`', '<code>'],
+            ['indented codeblock', '\tintented code\n\tsecondline', '<pre>'],
+            ['backtick codeblock', '```\nintented code\nsecondline\n```', '<pre>'],
+            ['table', '| Option | Description |\n| ------ | ----------- |\n| data | Lorem ipsum. |', '<table>'],
+            ['inserted text', '++Inserted text++', '<ins>'],
+            ['marked text', '==Marked text==', '<mark>'],
+            ['angle bracket links', '<http://www.test.com>', '<a>'],
+          ]).describe('%s markdown tag', (_, content, tag) => {
+            beforeEach(() => {
+              wrapper = mountMarkdownContent({ content });
+            });
+
+            it(`will not render ${tag}`, () => {
+              expect(wrapper.find('p').html()).toEqual(expect.not.stringContaining(tag));
+            });
           });
         });
       });
     });
-  });
 
-  describe('methods', () => {
-    describe('navigateTo', () => {
-      let event;
+    describe('methods', () => {
+      describe('navigateTo', () => {
+        let event;
 
-      describe('with a `/` href', () => {
+        describe('with a `/` href', () => {
+          const href = '/link-to-page';
+
+          beforeEach(() => {
+            event = createEvent({ keyName: key.Enter, href });
+            wrapper.vm.navigateTo(event);
+          });
+
+          it('will push href to the router', () => {
+            expect($router.push).toBeCalledWith({ path: href });
+          });
+
+          it('will call event preventDefault', () => {
+            expect(event.preventDefault).toBeCalled();
+          });
+
+          it('will not dispatch', () => {
+            expect($store.dispatch).not.toBeCalled();
+          });
+        });
+
+        describe('with a `//` href', () => {
+          const href = '//link-to-page';
+
+          beforeEach(() => {
+            event = createEvent({ keyName: key.Enter, href });
+            wrapper.vm.navigateTo(event);
+          });
+
+          it('will not push to the router', () => {
+            expect($router.push).not.toBeCalled();
+          });
+
+          it('will not call event preventDefault', () => {
+            expect(event.preventDefault).not.toBeCalled();
+          });
+
+          it('will not dispatch', () => {
+            expect($store.dispatch).not.toBeCalled();
+          });
+        });
+
+        describe('with an external link', () => {
+          const href = 'https://link-to-external-site.com';
+          const target = '_blank';
+
+          beforeEach(() => {
+            event = createEvent({ keyName: key.Enter, href, target });
+            wrapper.vm.navigateTo(event);
+          });
+
+          it('will not push to the router', () => {
+            expect($router.push).not.toBeCalled();
+          });
+
+          it('will not call event preventDefault', () => {
+            expect(event.preventDefault).not.toBeCalled();
+          });
+
+          it('will dispatch `messaging/linkClicked` with correct arguments ', () => {
+            expect($store.dispatch).toBeCalledWith('messaging/linkClicked', {
+              link: href,
+              messageId: expectedMessageId,
+            });
+          });
+        });
+
+        describe('with a redirector external link', () => {
+          const href = '/redirector?redirect_to=https://link-to-external-site.com';
+          const target = '_blank';
+
+          beforeEach(() => {
+            event = createEvent({ keyName: key.Enter, href, target });
+            wrapper.vm.navigateTo(event);
+          });
+
+          it('will not push to the router', () => {
+            expect($router.push).not.toBeCalled();
+          });
+
+          it('will not call event preventDefault', () => {
+            expect(event.preventDefault).not.toBeCalled();
+          });
+
+          it('will not dispatch', () => {
+            expect($store.dispatch).not.toBeCalled();
+          });
+        });
+      });
+
+      describe('onKeyDown', () => {
         const href = '/link-to-page';
 
-        beforeEach(() => {
-          event = createEvent({ keyName: key.Enter, href });
-          wrapper.vm.navigateTo(event);
-        });
+        describe('on Enter', () => {
+          beforeEach(() => {
+            const event = createEvent({ keyName: key.Enter, href });
+            wrapper.vm.onKeyDown(event);
+          });
 
-        it('will push href to the router', () => {
-          expect($router.push).toBeCalledWith({ path: href });
-        });
-
-        it('will call event preventDefault', () => {
-          expect(event.preventDefault).toBeCalled();
-        });
-
-        it('will not dispatch', () => {
-          expect($store.dispatch).not.toBeCalled();
-        });
-      });
-
-      describe('with a `//` href', () => {
-        const href = '//link-to-page';
-
-        beforeEach(() => {
-          event = createEvent({ keyName: key.Enter, href });
-          wrapper.vm.navigateTo(event);
-        });
-
-        it('will not push to the router', () => {
-          expect($router.push).not.toBeCalled();
-        });
-
-        it('will not call event preventDefault', () => {
-          expect(event.preventDefault).not.toBeCalled();
-        });
-
-        it('will not dispatch', () => {
-          expect($store.dispatch).not.toBeCalled();
-        });
-      });
-
-      describe('with an external link', () => {
-        const href = 'https://link-to-external-site.com';
-        const target = '_blank';
-
-        beforeEach(() => {
-          event = createEvent({ keyName: key.Enter, href, target });
-          wrapper.vm.navigateTo(event);
-        });
-
-        it('will not push to the router', () => {
-          expect($router.push).not.toBeCalled();
-        });
-
-        it('will not call event preventDefault', () => {
-          expect(event.preventDefault).not.toBeCalled();
-        });
-
-        it('will dispatch `messaging/linkClicked` with correct arguments ', () => {
-          expect($store.dispatch).toBeCalledWith('messaging/linkClicked', {
-            link: href,
-            messageId: expectedMessageId,
+          it('will push href to the router', () => {
+            expect($router.push).toBeCalledWith({ path: href });
           });
         });
-      });
 
-      describe('with a redirector external link', () => {
-        const href = '/redirector?redirect_to=https://link-to-external-site.com';
-        const target = '_blank';
+        describe('on any other key', () => {
+          beforeEach(() => {
+            const event = createEvent({ keyName: key.ArrowLeft, href });
+            wrapper.vm.onKeyDown(event);
+          });
 
-        beforeEach(() => {
-          event = createEvent({ keyName: key.Enter, href, target });
-          wrapper.vm.navigateTo(event);
-        });
-
-        it('will not push to the router', () => {
-          expect($router.push).not.toBeCalled();
-        });
-
-        it('will not call event preventDefault', () => {
-          expect(event.preventDefault).not.toBeCalled();
-        });
-
-        it('will not dispatch', () => {
-          expect($store.dispatch).not.toBeCalled();
-        });
-      });
-    });
-
-    describe('onKeyDown', () => {
-      const href = '/link-to-page';
-
-      describe('on Enter', () => {
-        beforeEach(() => {
-          const event = createEvent({ keyName: key.Enter, href });
-          wrapper.vm.onKeyDown(event);
-        });
-
-        it('will push href to the router', () => {
-          expect($router.push).toBeCalledWith({ path: href });
-        });
-      });
-
-      describe('on any other key', () => {
-        beforeEach(() => {
-          const event = createEvent({ keyName: key.ArrowLeft, href });
-          wrapper.vm.onKeyDown(event);
-        });
-
-        it('will not push to the router', () => {
-          expect($router.push).not.toBeCalled();
+          it('will not push to the router', () => {
+            expect($router.push).not.toBeCalled();
+          });
         });
       });
     });
