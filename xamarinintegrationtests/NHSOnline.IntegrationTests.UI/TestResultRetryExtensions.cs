@@ -71,6 +71,11 @@ namespace NHSOnline.IntegrationTests.UI
             @"Unable to locate element.*Manage notifications|No IWebElement found matching.*Allow notificationsI accept the NHS App sending notifications on this device",
             RegexOptions.Compiled);
 
+        // Appium could not translate web coordinates issues
+        private static readonly Regex AppiumUnableToTranslateWebCoordinates = new(
+            @"Appium error: An unknown server-side error occurred while processing the command\. Original error: No webviews found\. Unable to translate web coordinates for native web tap.*",
+            RegexOptions.Compiled);
+
         // Appium could not proxy issue
         private static readonly Regex AppiumProxyIssue = new(
             @"Appium error: An unknown server-side error occurred while processing the command\. Original error: Could not proxy.*",
@@ -117,6 +122,7 @@ namespace NHSOnline.IntegrationTests.UI
             (NginxBadGateway, RetryStatus.Retry(nameof(NginxBadGateway))),
             (FirebaseAuthorisationFailureWontRetry, RetryStatus.Retry(nameof(FirebaseAuthorisationFailureWontRetry))),
             (AppiumProxyIssue, RetryStatus.Retry(nameof(AppiumProxyIssue))),
+            (AppiumUnableToTranslateWebCoordinates, RetryStatus.Retry(nameof(AppiumUnableToTranslateWebCoordinates))),
             (AboutBlank, RetryStatus.Retry(nameof(AboutBlank))),
             (WindowHandleNotFound, RetryStatus.Retry(nameof(WindowHandleNotFound))),
             (UnableToFindFileIos, RetryStatus.Retry(nameof(UnableToFindFileIos))),
