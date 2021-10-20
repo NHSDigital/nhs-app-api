@@ -14,8 +14,7 @@
 
             <elements:LinkLabel Text="Try again"
                                 Margin="0,20,0,0"
-                                Command="{Binding TryAgainCommand, Source={x:Reference Name=Root}}"
-                                HorizontalOptions="Start" />
+                                Command="{Binding TryAgainCommand, Source={x:Reference Name=Root}}" />
         </StackLayout>
     </panels:NhsErrorCallout>
 </StackLayout>
