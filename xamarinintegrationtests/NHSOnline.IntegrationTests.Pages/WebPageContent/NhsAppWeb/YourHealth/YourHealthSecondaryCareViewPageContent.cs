@@ -12,9 +12,9 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
 
         internal YourHealthSecondaryCareViewPageContent(IWebInteractor interactor) : base(interactor) => _interactor = interactor;
 
-        private WebMenuItem SecondaryCareViewTestResultsMenuItem => WebMenuItem.WithTitle(_interactor, "Test results", "btn_pkb_secondary_care_test_results");
+        private WebMenuItem SecondaryCareViewTestResultsAndImagingMenuItem => WebMenuItem.WithTitle(_interactor, "Test results and imaging", "btn_pkb_secondary_care_test_results");
 
-        private WebText SecondaryCareViewTestResultsText => WebText.WithTagAndText(_interactor, "p", "View test results from your hospital and other healthcare providers");
+        private WebText SecondaryCareViewTestResultsAndImagingText => WebText.WithTagAndText(_interactor, "p", "View test results and imaging from your hospital and other healthcare providers, or add your own");
 
         private WebMenuItem SecondaryCareViewCarePlansMenuItem => WebMenuItem.WithTitle(_interactor, "Care plans", "btn_pkb_secondary_care_care_plans");
 
@@ -34,8 +34,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
 
         public void AssertElements()
         {
-            SecondaryCareViewTestResultsMenuItem.AssertVisible();
-            SecondaryCareViewTestResultsText.AssertVisible();
+            SecondaryCareViewTestResultsAndImagingMenuItem.AssertVisible();
+            SecondaryCareViewTestResultsAndImagingText.AssertVisible();
             SecondaryCareViewCarePlansMenuItem.AssertVisible();
             SecondaryCareViewCarePlansText.AssertVisible();
             SecondaryCareViewTrackYourHealthMenuItem.AssertVisible();
@@ -51,7 +51,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
             CovidPassMenuItem,
             VaccineRecordMenuItem,
             GpHeathRecordMenuItem,
-            SecondaryCareViewTestResultsMenuItem,
+            SecondaryCareViewTestResultsAndImagingMenuItem,
             SecondaryCareViewCarePlansMenuItem,
             SecondaryCareViewTrackYourHealthMenuItem,
             SecondaryCareViewSharedHealthMenuItem,
@@ -60,7 +60,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
             NdopMenuItem
         };
 
-        public void KeyboardNavigateToTestResults(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(SecondaryCareViewTestResultsMenuItem, navigation);
+        public void KeyboardNavigateToTestResults(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(SecondaryCareViewTestResultsAndImagingMenuItem, navigation);
 
         public void KeyboardNavigateToCarePlans(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(SecondaryCareViewCarePlansMenuItem, navigation);
 

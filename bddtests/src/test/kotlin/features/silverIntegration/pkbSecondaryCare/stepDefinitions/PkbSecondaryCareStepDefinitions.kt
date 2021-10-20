@@ -87,13 +87,13 @@ class PkbSecondaryCareStepDefinitions : HybridPageObject() {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_NONE)
     }
 
-    @Given("^I am a user who can view test results from PKB Secondary Care$")
-    fun iAmAUserWhoCanViewTestResultsFromPkbSecondaryCare(){
+    @Given("^I am a user who can view test results and imaging from PKB Secondary Care$")
+    fun iAmAUserWhoCanViewTestResultsAndImagingFromPkbSecondaryCare(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_PKB_SECONDARY_CARE)
     }
 
-    @Given("^I am a user who cannot view test results from PKB Secondary Care$")
-    fun iAmAUserWhoCannotViewTestResultsFromPkbSecondaryCare(){
+    @Given("^I am a user who cannot view test results and imaging from PKB Secondary Care$")
+    fun iAmAUserWhoCannotViewTestResultsAndImagingFromPkbSecondaryCare(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_NONE)
     }
 
@@ -128,10 +128,10 @@ class PkbSecondaryCareStepDefinitions : HybridPageObject() {
         }
     }
 
-    @Given("^Secondary Care responds to requests for test results$")
-    fun secondaryCareRespondsToRequestsForTestResults() {
+    @Given("^Secondary Care responds to requests for test results and imaging$")
+    fun secondaryCareRespondsToRequestsForTestResultsAndImaging() {
         MockingClient.instance.forSecondaryCare.mock {
-            SecondaryCareRequestBuilder().testResultsRequest().respondWithPage()
+            SecondaryCareRequestBuilder().testResultsAndImagingRequest().respondWithPage()
         }
     }
 
@@ -176,9 +176,9 @@ class PkbSecondaryCareStepDefinitions : HybridPageObject() {
         medicalRecordHubPage.getHeaderElement("Shared health links").assertElementNotPresent()
     }
 
-    @Then("^the link to PKB Secondary Care test results is not available on the Health Records Hub$")
-    fun thePKBSecondaryCareTestResultsLinkIsNotAvailableOnTheHealthRecordsHub() {
-        medicalRecordHubPage.getHeaderElement("Test results").assertElementNotPresent()
+    @Then("^the link to PKB Secondary Care test results and imaging is not available on the Health Records Hub$")
+    fun thePKBSecondaryCareTestResultsAndImagingLinkIsNotAvailableOnTheHealthRecordsHub() {
+        medicalRecordHubPage.getHeaderElement("Test results and imaging").assertElementNotPresent()
     }
 
     @Then("^the link to PKB Secondary Care Care plans is not available on the Health Records Hub$")
@@ -264,10 +264,10 @@ class PkbSecondaryCareStepDefinitions : HybridPageObject() {
                 "Find out more about personal health record services")
     }
 
-    @Then("the test results warning on the page explains the service is from PKB Secondary Care$")
-    fun assertTestResultsWarningMessageContent() {
+    @Then("the test results and imaging warning on the page explains the service is from PKB Secondary Care$")
+    fun assertTestResultsAndImagingWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-                "Test results\nThis service is provided by Patients Know Best",
+                "Test results and imaging\nThis service is provided by Patients Know Best",
                 "Your GP surgery or hospital has chosen this personal health record service provider.",
                 "Find out more about personal health record services")
     }

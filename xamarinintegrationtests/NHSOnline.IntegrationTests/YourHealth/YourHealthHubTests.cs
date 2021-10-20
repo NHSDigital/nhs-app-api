@@ -17,7 +17,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
     [BusinessRule("BR-HRE-01.1", "Show Health Records hub page")]
     public class YourHealthHubTests
     {
-        private const string TestResultsPageTitle = "Test results";
+        private const string TestResultsAndImagingPageTitle = "Test results and imaging";
         private const string CarePlansPageTitle = "Care plans";
         private const string TrackYourHealthPageTitle = "Track your health";
         private const string SharedHealthPageTitle = "Shared health links";
@@ -221,7 +221,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
                 .KeyboardNavigateToTestResults();
 
             AndroidWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, TestResultsPageTitle)
+                .AssertOnPage(driver, TestResultsAndImagingPageTitle)
                 .KeyboardNavigateBack();
 
             AndroidYourHealthPkbPage
@@ -284,7 +284,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
                 .KeyboardNavigateToTestResults();
 
             AndroidWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, TestResultsPageTitle)
+                .AssertOnPage(driver, TestResultsAndImagingPageTitle)
                 .KeyboardNavigateBack();
 
             AndroidYourHealthCiePage
@@ -346,7 +346,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
                 .KeyboardNavigateToTestResults();
 
             AndroidWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, TestResultsPageTitle)
+                .AssertOnPage(driver, TestResultsAndImagingPageTitle)
                 .KeyboardNavigateBack();
 
             AndroidYourHealthSecondaryCareViewPage
@@ -409,7 +409,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
                 .KeyboardNavigateToTestResults();
 
             AndroidWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, TestResultsPageTitle)
+                .AssertOnPage(driver, TestResultsAndImagingPageTitle)
                 .KeyboardNavigateBack();
 
             AndroidYourHealthMyCareViewPage

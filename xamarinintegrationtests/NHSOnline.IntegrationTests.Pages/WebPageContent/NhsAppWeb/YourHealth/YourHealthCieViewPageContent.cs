@@ -12,9 +12,9 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
 
         internal YourHealthCieViewPageContent(IWebInteractor interactor) : base(interactor) => _interactor = interactor;
 
-        private WebMenuItem CieTestResultsMenuItem => WebMenuItem.WithTitle(_interactor, "Test results", "btn_pkb_cie_test_results");
+        private WebMenuItem CieTestResultsAndImagingMenuItem => WebMenuItem.WithTitle(_interactor, "Test results and imaging", "btn_pkb_cie_test_results");
 
-        private WebText CieTestResultsText => WebText.WithTagAndText(_interactor, "p", "View test results from your hospital and other healthcare providers");
+        private WebText CieTestResultsAndImagingText => WebText.WithTagAndText(_interactor, "p", "View test results and imaging from your hospital and other healthcare providers, or add your own");
 
         private WebMenuItem CieCarePlansMenuItem => WebMenuItem.WithTitle(_interactor, "Care plans", "btn_pkb_cie_care_plans");
 
@@ -37,7 +37,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
             CovidPassMenuItem,
             VaccineRecordMenuItem,
             GpHeathRecordMenuItem,
-            CieTestResultsMenuItem,
+            CieTestResultsAndImagingMenuItem,
             CieCarePlansMenuItem,
             CieTrackYourHealthMenuItem,
             CieSharedHealthMenuItem,
@@ -48,8 +48,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
 
         public void AssertElements()
         {
-            CieTestResultsMenuItem.AssertVisible();
-            CieTestResultsText.AssertVisible();
+            CieTestResultsAndImagingMenuItem.AssertVisible();
+            CieTestResultsAndImagingText.AssertVisible();
             CieCarePlansMenuItem.AssertVisible();
             CieCarePlansText.AssertVisible();
             CieTrackYourHealthMenuItem.AssertVisible();
@@ -60,7 +60,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
             CieRecordSharingText.AssertVisible();
         }
 
-        public void KeyboardNavigateToTestResults(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(CieTestResultsMenuItem, navigation);
+        public void KeyboardNavigateToTestResults(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(CieTestResultsAndImagingMenuItem, navigation);
 
         public void KeyboardNavigateToCarePlans(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(CieCarePlansMenuItem, navigation);
 

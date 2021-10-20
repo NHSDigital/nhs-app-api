@@ -87,13 +87,13 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_MESSAGES_NONE)
     }
 
-    @Given("^I am a user who can view test results from PKB My Care View$")
-    fun iAmAUserWhoCanViewTestResultsFromPkbMyCareView(){
+    @Given("^I am a user who can view test results and imaging from PKB My Care View$")
+    fun iAmAUserWhoCanViewTestResultsAndImagingFromPkbMyCareView(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_PKB_MY_CARE_VIEW)
     }
 
-    @Given("^I am a user who cannot view test results from PKB My Care View$")
-    fun iAmAUserWhoCannotViewTestResultsFromPkbMyCareView() {
+    @Given("^I am a user who cannot view test results and imaging from PKB My Care View$")
+    fun iAmAUserWhoCannotViewTestResultsAndImagingFromPkbMyCareView() {
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_NONE)
     }
 
@@ -109,17 +109,20 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
 
     @Given("^My Care View responds to requests for appointments$")
     fun myCareViewRespondsToRequestsForAppointments() {
-        MockingClient.instance.forMyCareView.mock { MyCareViewRequestBuilder().appointmentRequest().respondWithPage() }
+        MockingClient.instance.forMyCareView.mock {
+            MyCareViewRequestBuilder().appointmentRequest().respondWithPage() }
     }
 
     @Given("^My Care View responds to requests for messages$")
     fun myCareViewRespondsToRequestsForMessages() {
-        MockingClient.instance.forMyCareView.mock { MyCareViewRequestBuilder().messagesRequest().respondWithPage() }
+        MockingClient.instance.forMyCareView.mock {
+            MyCareViewRequestBuilder().messagesRequest().respondWithPage() }
     }
 
     @Given("^My Care View responds to requests for medicines$")
     fun myCareViewRespondsToRequestsForMedicines() {
-        MockingClient.instance.forMyCareView.mock { MyCareViewRequestBuilder().medicinesRequest().respondWithPage() }
+        MockingClient.instance.forMyCareView.mock {
+            MyCareViewRequestBuilder().medicinesRequest().respondWithPage() }
     }
 
     @Given("^My Care View responds to requests for record sharing$")
@@ -131,17 +134,20 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
 
     @Given("^My Care View responds to requests for shared links$")
     fun myCareViewRespondsToRequestsForSharedLinks() {
-        MockingClient.instance.forMyCareView.mock { MyCareViewRequestBuilder().sharedLinksRequest().respondWithPage() }
+        MockingClient.instance.forMyCareView.mock {
+            MyCareViewRequestBuilder().sharedLinksRequest().respondWithPage() }
     }
 
-    @Given("^My Care View responds to requests for test results$")
-    fun myCareViewRespondsToRequestsForTestResults() {
-        MockingClient.instance.forMyCareView.mock { MyCareViewRequestBuilder().testResultsRequest().respondWithPage() }
+    @Given("^My Care View responds to requests for test results and imaging$")
+    fun myCareViewRespondsToRequestsForTestResultsAndImaging() {
+        MockingClient.instance.forMyCareView.mock {
+            MyCareViewRequestBuilder().testResultsAndImagingRequest().respondWithPage() }
     }
 
     @Given("^My Care View responds to requests for care plans$")
     fun myCareViewRespondsToRequestsForCarePlans() {
-        MockingClient.instance.forMyCareView.mock { MyCareViewRequestBuilder().carePlanRequest().respondWithPage() }
+        MockingClient.instance.forMyCareView.mock {
+            MyCareViewRequestBuilder().carePlanRequest().respondWithPage() }
     }
 
     @Given("^My Care View responds to requests for health tracker$")
@@ -166,9 +172,9 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
         medicalRecordHubPage.getHeaderElement("Shared health links").assertElementNotPresent()
     }
 
-    @Then("^the link to PKB My Care View test results is not available on the Health Records Hub$")
-    fun thePKBMyCareViewTestResultsLinkIsNotAvailableOnTheHealthRecordsHub() {
-        medicalRecordHubPage.getHeaderElement("Test results").assertElementNotPresent()
+    @Then("^the link to PKB My Care View test results and imaging is not available on the Health Records Hub$")
+    fun thePKBMyCareViewTestResultsAndImagingLinkIsNotAvailableOnTheHealthRecordsHub() {
+        medicalRecordHubPage.getHeaderElement("Test results and imaging").assertElementNotPresent()
     }
 
     @Then("^the link to PKB My Care View Care plans is not available on the Health Records Hub$")
@@ -249,10 +255,10 @@ class PkbMyCareViewStepDefinitions : HybridPageObject() {
                 "Find out more about personal health record services")
     }
 
-    @Then("the test results warning on the page explains the service is from PKB My Care View$")
-    fun assertTestResultsWarningMessageContent() {
+    @Then("the test results and imaging warning on the page explains the service is from PKB My Care View$")
+    fun assertTestResultsAndImagingWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-                "Test results\nThis service is provided by MyCareView powered by Patients Know Best",
+                "Test results and imaging\nThis service is provided by MyCareView powered by Patients Know Best",
                 "Your GP surgery or hospital has chosen this personal health record service provider.",
                 "Find out more about personal health record services")
     }

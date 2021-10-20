@@ -42,8 +42,8 @@ class PKBRequestBuilder(queryStringEntries: HashMap<String, String> = hashMapOf(
             hashMapOf("phrPath" to "/library/manageLibrary.action")
     )
 
-    fun testResultsRequest() = PKBRequestBuilder(
-            hashMapOf("phrPath" to "/test/myTests.action")
+    fun testResultsAndImagingRequest() = PKBRequestBuilder(
+            hashMapOf("phrPath" to "/pkbNhsResultsMenu.action")
     )
 
     fun respondWithPage(): Mapping {

@@ -49,8 +49,8 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_MEDICINES_NONE)
     }
 
-    @Given("^I am a user who can view test results from Patients Know Best$")
-    fun iAmAUserWhoCanViewTestResultsFromPatientsKnowBest() {
+    @Given("^I am a user who can view test results and imaging from Patients Know Best$")
+    fun iAmAUserWhoCanViewTestResultsAndImagingFromPatientsKnowBest() {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_PKB)
     }
 
@@ -59,8 +59,8 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB)
     }
 
-    @Given("^I am a user who cannot view test results from Patients Know Best$")
-    fun iAmAUserWhoCannotViewTestResultsFromPatientsKnowBest() {
+    @Given("^I am a user who cannot view test results and imaging from Patients Know Best$")
+    fun iAmAUserWhoCannotViewTestResultsAndImagingFromPatientsKnowBest() {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_NONE)
     }
 
@@ -154,9 +154,9 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
         MockingClient.instance.forPKB.mock { PKBRequestBuilder().sharedLinksRequest().respondWithPage() }
     }
 
-    @Given("^PKB responds to requests for test results$")
-    fun pkbRespondsToRequestsForTestResults() {
-        MockingClient.instance.forPKB.mock { PKBRequestBuilder().testResultsRequest().respondWithPage() }
+    @Given("^PKB responds to requests for test results and imaging$")
+    fun pkbRespondsToRequestsForTestResultsAndImaging() {
+        MockingClient.instance.forPKB.mock { PKBRequestBuilder().testResultsAndImagingRequest().respondWithPage() }
     }
 
     @Then("^the link to PKB Track your health is not available on the health record hub page$")
@@ -174,9 +174,9 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
         medicalRecordHubPage.getHeaderElement("Shared health links").assertElementNotPresent()
     }
 
-    @Then("^the link to PKB test results is not available on the health record hub page$")
-    fun theLinkToPkbTestResultsIsNotAvailableOnTheHealthRecordHubPage() {
-        medicalRecordHubPage.getHeaderElement("Test results").assertElementNotPresent()
+    @Then("^the link to PKB test results and imaging is not available on the health record hub page$")
+    fun theLinkToPkbTestResultsAndImagingIsNotAvailableOnTheHealthRecordHubPage() {
+        medicalRecordHubPage.getHeaderElement("Test results and imaging").assertElementNotPresent()
     }
 
     @Then("^the link to PKB Care plans is not available on the health record hub page$")
@@ -221,10 +221,10 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
             "Find out more about personal health record services")
     }
 
-    @Then("the test results warning on the page explains the service is from Patients Know Best$")
-    fun assertTestResultsMessageContent() {
+    @Then("the test results and imaging warning on the page explains the service is from Patients Know Best$")
+    fun assertTestResultsAndImagingMessageContent() {
         redirector.interruptionCard.assertContent(
-            "Test results\nThis service is provided by Patients Know Best",
+            "Test results and imaging\nThis service is provided by Patients Know Best",
             "Your GP surgery or hospital has chosen this personal health record service provider.",
             "Find out more about personal health record services")
     }

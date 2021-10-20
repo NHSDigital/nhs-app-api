@@ -12,9 +12,9 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
 
         internal YourHealthMyCareViewPageContent(IWebInteractor interactor) : base(interactor) => _interactor = interactor;
 
-        private WebMenuItem MyCareViewTestResultsMenuItem => WebMenuItem.WithTitle(_interactor, "Test results", "btn_pkb_my_care_view_test_results");
+        private WebMenuItem MyCareViewTestResultsAndImagingMenuItem => WebMenuItem.WithTitle(_interactor, "Test results and imaging", "btn_pkb_my_care_view_test_results");
 
-        private WebText MyCareViewTestResultsText => WebText.WithTagAndText(_interactor, "p", "View test results from your hospital and other healthcare providers");
+        private WebText MyCareViewTestResultsAndImagingText => WebText.WithTagAndText(_interactor, "p", "View test results and imaging from your hospital and other healthcare providers, or add your own");
 
         private WebMenuItem MyCareViewCarePlansMenuItem => WebMenuItem.WithTitle(_interactor, "Care plans", "btn_pkb_my_care_view_care_plans");
 
@@ -34,8 +34,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
 
         public void AssertElements()
         {
-            MyCareViewTestResultsMenuItem.AssertVisible();
-            MyCareViewTestResultsText.AssertVisible();
+            MyCareViewTestResultsAndImagingMenuItem.AssertVisible();
+            MyCareViewTestResultsAndImagingText.AssertVisible();
             MyCareViewCarePlansMenuItem.AssertVisible();
             MyCareViewCarePlansText.AssertVisible();
             MyCareViewTrackYourHealthMenuItem.AssertVisible();
@@ -51,7 +51,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
             CovidPassMenuItem,
             VaccineRecordMenuItem,
             GpHeathRecordMenuItem,
-            MyCareViewTestResultsMenuItem,
+            MyCareViewTestResultsAndImagingMenuItem,
             MyCareViewCarePlansMenuItem,
             MyCareViewTrackYourHealthMenuItem,
             MyCareViewSharedHealthMenuItem,
@@ -60,7 +60,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
             NdopMenuItem
         };
 
-        public void KeyboardNavigateToTestResults(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(MyCareViewTestResultsMenuItem, navigation);
+        public void KeyboardNavigateToTestResults(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(MyCareViewTestResultsAndImagingMenuItem, navigation);
 
         public void KeyboardNavigateToCarePlans(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(MyCareViewCarePlansMenuItem, navigation);
 

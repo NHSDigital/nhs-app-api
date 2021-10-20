@@ -49,8 +49,8 @@ class CIERequestBuilder(queryStringEntries: HashMap<String, String> = hashMapOf(
                     "brand" to "cie")
     )
 
-    fun testResultsRequest() = CIERequestBuilder(
-            hashMapOf("phrPath" to "/test/myTests.action",
+    fun testResultsAndImagingRequest() = CIERequestBuilder(
+            hashMapOf("phrPath" to "/pkbNhsResultsMenu.action",
                     "brand" to "cie")
     )
 

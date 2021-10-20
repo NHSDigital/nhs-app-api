@@ -33,11 +33,11 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .PageContent.NavigateToTestResults();
 
             AndroidWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, "Test results")
+                .AssertOnPage(driver, "Test results and imaging")
                 .PageContent.NavigateToNextPage();
 
             AndroidPkbPage
-                .AssertOnPage(driver, PhrPath.TestResults)
+                .AssertOnPage(driver, PhrPath.TestResultsAndImaging)
                 .AssertNativeHeader();
         }
 
@@ -59,7 +59,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .PageContent.NavigateToTestResults();
 
             IOSWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, "Test results");
+                .AssertOnPage(driver, "Test results and imaging");
 
             driver.SwipeBack();
 
@@ -68,11 +68,11 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .PageContent.NavigateToTestResults();
 
             IOSWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, "Test results")
+                .AssertOnPage(driver, "Test results and imaging")
                 .PageContent.NavigateToNextPage();
 
             IOSPkbPage
-                .AssertOnPage(driver, PhrPath.TestResults)
+                .AssertOnPage(driver, PhrPath.TestResultsAndImaging)
                 .AssertNativeHeader();
         }
     }

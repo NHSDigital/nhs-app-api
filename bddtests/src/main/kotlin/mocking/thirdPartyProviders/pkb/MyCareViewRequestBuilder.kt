@@ -49,8 +49,8 @@ class MyCareViewRequestBuilder(queryStringEntries: HashMap<String, String> = has
                     "brand" to "pkbMyCareView")
     )
 
-    fun testResultsRequest() = MyCareViewRequestBuilder(
-            hashMapOf("phrPath" to "/test/myTests.action",
+    fun testResultsAndImagingRequest() = MyCareViewRequestBuilder(
+            hashMapOf("phrPath" to "/pkbNhsResultsMenu.action",
                     "brand" to "pkbMyCareView")
     )
 

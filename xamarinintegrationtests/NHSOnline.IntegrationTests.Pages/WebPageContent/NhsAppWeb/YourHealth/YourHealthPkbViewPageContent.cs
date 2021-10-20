@@ -12,9 +12,9 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
 
         internal YourHealthPkbViewPageContent(IWebInteractor interactor) : base(interactor) => _interactor = interactor;
 
-        private WebMenuItem PkbTestResultsMenuItem => WebMenuItem.WithTitle(_interactor, "Test results", "btn_pkb_test_results");
+        private WebMenuItem PkbTestResultsAndImagingMenuItem => WebMenuItem.WithTitle(_interactor, "Test results and imaging", "btn_pkb_test_results");
 
-        private WebText PkbTestResultsText => WebText.WithTagAndText(_interactor, "p", "View test results from your hospital and other healthcare providers");
+        private WebText PkbTestResultsAndImagingText => WebText.WithTagAndText(_interactor, "p", "View test results and imaging from your hospital and other healthcare providers, or add your own");
 
         private WebMenuItem PkbCarePlansMenuItem => WebMenuItem.WithTitle(_interactor, "Care plans", "btn_pkb_care_plans");
 
@@ -41,7 +41,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
             CovidPassMenuItem,
             VaccineRecordMenuItem,
             GpHeathRecordMenuItem,
-            PkbTestResultsMenuItem,
+            PkbTestResultsAndImagingMenuItem,
             PkbCarePlansMenuItem,
             PkbTrackYourHealthMenuItem,
             PkbSharedHealthMenuItem,
@@ -52,8 +52,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
 
         public void AssertElements()
         {
-            PkbTestResultsMenuItem.AssertVisible();
-            PkbTestResultsText.AssertVisible();
+            PkbTestResultsAndImagingMenuItem.AssertVisible();
+            PkbTestResultsAndImagingText.AssertVisible();
             PkbCarePlansMenuItem.AssertVisible();
             PkbCarePlansText.AssertVisible();
             PkbTrackYourHealthMenuItem.AssertVisible();
@@ -64,7 +64,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
             PkbRecordSharingText.AssertVisible();
         }
 
-        public void NavigateToTestResults() => PkbTestResultsMenuItem.Click();
+        public void NavigateToTestResults() => PkbTestResultsAndImagingMenuItem.Click();
 
         public void NavigateToCarePlans() => PkbCarePlansMenuItem.Click();
 
@@ -90,7 +90,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
 
         public void KeyboardNavigateToGpHealthRecord(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(GpHeathRecordMenuItem, navigation);
 
-        public void KeyboardNavigateToTestResults(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(PkbTestResultsMenuItem, navigation);
+        public void KeyboardNavigateToTestResults(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(PkbTestResultsAndImagingMenuItem, navigation);
 
         public void KeyboardNavigateToCarePlans(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(PkbCarePlansMenuItem, navigation);
 

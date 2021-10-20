@@ -273,11 +273,11 @@ export default {
       {
         id: 'testResults',
         jumpOffContent: {
-          headerText: 'Test results',
-          descriptionText: 'View test results from your hospital and other healthcare providers',
+          headerText: 'Test results and imaging',
+          descriptionText: 'View test results and imaging from your hospital and other healthcare providers, or add your own',
         },
         thirdPartyWarning: {
-          featureName: 'Test results',
+          featureName: 'Test results and imaging',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
@@ -392,12 +392,12 @@ export default {
       {
         id: 'testResultsCie',
         jumpOffContent: {
-          headerText: 'Test results',
-          descriptionText: 'View test results from your hospital and other healthcare providers',
+          headerText: 'Test results and imaging',
+          descriptionText: 'View test results and imaging from your hospital and other healthcare providers, or add your own',
         },
         thirdPartyWarning: {
           brandName: 'Care Information Exchange powered by Patients Know Best',
-          featureName: 'Test results',
+          featureName: 'Test results and imaging',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
@@ -505,11 +505,11 @@ export default {
       {
         id: 'testResultsPkbSecondaryCare',
         jumpOffContent: {
-          headerText: 'Test results',
-          descriptionText: 'View test results from your hospital and other healthcare providers',
+          headerText: 'Test results and imaging',
+          descriptionText: 'View test results and imaging from your hospital and other healthcare providers, or add your own',
         },
         thirdPartyWarning: {
-          featureName: 'Test results',
+          featureName: 'Test results and imaging',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
@@ -624,12 +624,12 @@ export default {
       {
         id: 'testResultsPkbMyCareView',
         jumpOffContent: {
-          headerText: 'Test results',
-          descriptionText: 'View test results from your hospital and other healthcare providers',
+          headerText: 'Test results and imaging',
+          descriptionText: 'View test results and imaging from your hospital and other healthcare providers, or add your own',
         },
         thirdPartyWarning: {
           brandName: 'MyCareView powered by Patients Know Best',
-          featureName: 'Test results',
+          featureName: 'Test results and imaging',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',

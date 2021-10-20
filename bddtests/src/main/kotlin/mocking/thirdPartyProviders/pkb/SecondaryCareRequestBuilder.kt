@@ -49,8 +49,8 @@ class SecondaryCareRequestBuilder(queryStringEntries: HashMap<String, String> = 
                     "brand" to "pkbSecondaryCare")
     )
 
-    fun testResultsRequest() = SecondaryCareRequestBuilder(
-            hashMapOf("phrPath" to "/test/myTests.action",
+    fun testResultsAndImagingRequest() = SecondaryCareRequestBuilder(
+            hashMapOf("phrPath" to "/pkbNhsResultsMenu.action",
                     "brand" to "pkbSecondaryCare")
     )
 

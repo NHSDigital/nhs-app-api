@@ -47,13 +47,13 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_MEDICINES_NONE)
     }
 
-    @Given("^I am a user who can view test results from Care Information Exchange$")
-    fun iAmAUserWhoCanViewTestResultsFromCareInformationExchange() {
+    @Given("^I am a user who can view test results and imaging from Care Information Exchange$")
+    fun iAmAUserWhoCanViewTestResultsAndImagingFromCareInformationExchange() {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_CIE)
     }
 
-    @Given("^I am a user who cannot view test results from Care Information Exchange$")
-    fun iAmAUserWhoCannotViewTestResultsFromCareInformationExchange() {
+    @Given("^I am a user who cannot view test results and imaging from Care Information Exchange$")
+    fun iAmAUserWhoCannotViewTestResultsAndImagingFromCareInformationExchange() {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_NONE)
     }
 
@@ -148,9 +148,9 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
         MockingClient.instance.forCIE.mock { CIERequestBuilder().sharedLinksRequest().respondWithPage() }
     }
 
-    @Given("^CIE responds to requests for test results$")
-    fun cieRespondsToRequestsForTestResults() {
-        MockingClient.instance.forCIE.mock { CIERequestBuilder().testResultsRequest().respondWithPage() }
+    @Given("^CIE responds to requests for test results and imaging$")
+    fun cieRespondsToRequestsForTestResultsAndImaging() {
+        MockingClient.instance.forCIE.mock { CIERequestBuilder().testResultsAndImagingRequest().respondWithPage() }
     }
 
     @Then("^the link to CIE Track your health is not available on the health record hub page$")
@@ -168,9 +168,9 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
         medicalRecordHubPage.getHeaderElement("Shared health links").assertElementNotPresent()
     }
 
-    @Then("^the link to CIE test results is not available on the health record hub page$")
-    fun theLinkToCieTestResultsIsNotAvailableOnTheHealthRecordHubPage() {
-        medicalRecordHubPage.getHeaderElement("Test results").assertElementNotPresent()
+    @Then("^the link to CIE test results and imaging is not available on the health record hub page$")
+    fun theLinkToCieTestResultsAndImagingIsNotAvailableOnTheHealthRecordHubPage() {
+        medicalRecordHubPage.getHeaderElement("Test results and imaging").assertElementNotPresent()
     }
 
     @Then("^the link to CIE Care plans is not available on the health record hub page$")
@@ -208,10 +208,11 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
             "Find out more about personal health record services")
     }
 
-    @Then("the test results warning on the page explains the service is from Care Information Exchange$")
-    fun assertTestResultsWarningMessageContent() {
+    @Then("the test results and imaging warning on the page explains the service is from Care Information Exchange$")
+    fun assertTestResultsAndImagingWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-            "Test results\nThis service is provided by Care Information Exchange powered by Patients Know Best",
+            "Test results and imaging\nThis service is provided by Care Information Exchange powered by " +
+                    "Patients Know Best",
             "Your GP surgery or hospital has chosen this personal health record service provider.",
             "Find out more about personal health record services")
     }
