@@ -18,6 +18,7 @@ namespace NHSOnline.IntegrationTests.ForcedUpdate
     [BusinessRule("BR-LOG-13.6", "Continuing with NHS login when request for min app version has failed displays an error")]
     public class ForcedUpdateTests
     {
+        [Ignore("Browserstack are showing consistent problems logging into google so we are temporarily ignoring this")]
         [NhsAppAndroidTest(AndroidBrowserStackCapability.SignInToGoogle)]
         public void APatientWithAnOutDatedAppSeesTheForcedUpgradePageWhenLoggingInAndroid(IAndroidDriverWrapper driver)
         {

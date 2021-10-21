@@ -23,6 +23,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         private const int ValidEndTime = 1893589800; // Wednesday, 2 January 2030 13:10:00
         private const int InvalidEndTime = 1893589100; // Wednesday, 2 January 2030 12:58:20
 
+        [Ignore("Browserstack are showing consistent problems logging into google so we are temporarily ignoring this")]
         [NhsAppAndroidTest(AndroidBrowserStackCapability.SignInToGoogle)]
         public void APatientWithProofLevelNineCanAddAnEventToTheCalendarOnAWebIntegrationCalendarScreenAndroid(
             IAndroidDriverWrapper driver)
@@ -75,6 +76,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertDetailsArePassed();
         }
 
+        [Ignore("Browserstack are showing consistent problems logging into google so we are temporarily ignoring this")]
         [NhsAppAndroidTest(AndroidBrowserStackCapability.SignInToGoogle)]
         public void APatientWithProofLevelNineTryingToCallAnInvalidDateRangeOnAWebIntegrationCalendarScreenIsShownAndErrorDialogCanBeDismissedAndroid(
             IAndroidDriverWrapper driver)
@@ -127,6 +129,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver);
         }
 
+        [Ignore("Browserstack are showing consistent problems logging into google so we are temporarily ignoring this")]
         [NhsAppAndroidTest(AndroidBrowserStackCapability.SignInToGoogle)]
         public void APatientWithProofLevelNineTryingToCallAnInvalidDateRangeOnAWebIntegrationCalendarScreenIsShownAnErrorDialogAndCanAddedManuallyAndroid(
             IAndroidDriverWrapper driver)
