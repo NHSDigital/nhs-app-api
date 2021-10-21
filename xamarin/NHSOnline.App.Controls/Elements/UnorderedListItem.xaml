@@ -18,7 +18,7 @@
                 <Setter Property="LineHeight" Value="1.2" />
             </Style>
             <Style x:Key="ListItemTextWide" TargetType="elements:Label">
-                <Setter Property="FontSize" Value="{responsive:NhsFontSize Large}" />
+                <Setter Property="FontSize" Value="{responsive:NhsFontSize MediumWide}" />
             </Style>
             <Style TargetType="StackLayout">
                 <Setter Property="Margin" Value="0, 0, 0, 8" />

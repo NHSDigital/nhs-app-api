@@ -13,7 +13,7 @@
     </Style>
 
     <Style TargetType="Label" ApplyToDerivedTypes="True" Class="Heading2">
-        <Setter Property="FontSize" Value="{responsive:NhsFontSize Large}" />
+        <Setter Property="FontSize" Value="{responsive:NhsFontSize Heading2}" />
         <Setter Property="FontFamily" Value="Frutiger-Bold" />
         <Setter Property="TextColor" Value="#212B32" />
         <Setter Property="Padding" Value="0, 12" />

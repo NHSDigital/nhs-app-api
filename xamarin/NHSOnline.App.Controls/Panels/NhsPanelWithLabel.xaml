@@ -54,13 +54,13 @@
             
             <Style TargetType="Label" Class="HeadingText" CanCascade="True">
                 <Setter Property="VerticalTextAlignment" Value="Center" />
-                <Setter Property="FontSize" Value="{responsive:NhsFontSize Medium}" />
+                <Setter Property="FontSize" Value="{responsive:NhsFontSize Heading2}" />
                 <Setter Property="FontFamily" Value="Frutiger-Bold" />
                 <Setter Property="BackgroundColor" Value="{Binding LabelBackgroundColour, Source={x:Reference Name=Root}}" />
                 <Setter Property="TextColor" Value="{Binding LabelTextColour, Source={x:Reference Name=Root}}" />
             </Style>
             <Style x:Key="HeadingTextWide" TargetType="Label" CanCascade="True">
-                <Setter Property="FontSize" Value="{responsive:NhsFontSize Large}" />
+                <Setter Property="FontSize" Value="{responsive:NhsFontSize Heading2Wide}" />
             </Style>
             
             <Style TargetType="ContentView" Class="PanelContentView" CanCascade="True">

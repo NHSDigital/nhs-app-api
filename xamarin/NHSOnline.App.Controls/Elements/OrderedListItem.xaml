@@ -20,7 +20,7 @@
                 <Setter Property="VerticalTextAlignment" Value="Start" />    
             </Style>
             <Style x:Key="ListItemTextWide" TargetType="Label">
-                <Setter Property="FontSize" Value="{responsive:NhsFontSize Large}" />
+                <Setter Property="FontSize" Value="{responsive:NhsFontSize MediumWide}" />
             </Style>
             
             <Style TargetType="Label" Class="Number" BasedOn="{StaticResource BaseLabelStyle}">
@@ -31,7 +31,7 @@
             </Style>
             <Style x:Key="NumberWide" TargetType="Label">
                 <Setter Property="MinimumWidthRequest" Value="20" />
-                <Setter Property="FontSize" Value="{responsive:NhsFontSize Large}" />
+                <Setter Property="FontSize" Value="{responsive:NhsFontSize MediumWide}" />
             </Style>
 
             <Style TargetType="elements:Label" Class="LabelText" BasedOn="{StaticResource BaseLabelStyle}">
@@ -59,7 +59,7 @@
             <VisualState x:Name="MediumDisplay" />
             <VisualState x:Name="LargeDisplay">
                 <VisualState.Setters>
-                    <Setter TargetName="LabelText" Property="Span.FontSize" Value="{responsive:NhsFontSize Large}" />
+                    <Setter TargetName="LabelText" Property="Span.FontSize" Value="{responsive:NhsFontSize MediumWide}" />
                     <Setter TargetName="Grid" Property="Style" Value="{ StaticResource GridWide}" />
                     <Setter TargetName="LabelNumber" Property="Style" Value="{ StaticResource NumberWide}" />
                     <Setter TargetName="LabelText" Property="Style" Value="{ StaticResource ListItemTextWide}" />

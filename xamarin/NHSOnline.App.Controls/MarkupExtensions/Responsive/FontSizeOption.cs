@@ -4,10 +4,10 @@ namespace NHSOnline.App.Controls.MarkupExtensions.Responsive
     {
         Small,
         Medium,
+        MediumWide,
         Large,
         Heading2,
         Heading2Wide,
-        Title,
         Heading1,
         Heading1Wide,
     }

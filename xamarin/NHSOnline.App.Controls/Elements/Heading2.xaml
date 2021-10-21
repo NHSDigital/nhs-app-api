@@ -7,18 +7,6 @@
              x:Class="NHSOnline.App.Controls.Elements.Heading2"
              x:Name="Root">
 
-    <VisualStateManager.VisualStateGroups>
-        <VisualStateGroup x:Name="ResponsiveDisplayStates">
-            <VisualState x:Name="SmallDisplay" />
-            <VisualState x:Name="MediumDisplay" />
-            <VisualState x:Name="LargeDisplay">
-                <VisualState.Setters>
-                    <Setter TargetName="Heading2Label" Property="Style" Value="{ StaticResource Heading2Wide}" />
-                </VisualState.Setters>
-            </VisualState>
-        </VisualStateGroup>
-    </VisualStateManager.VisualStateGroups>
-
     <View.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -38,6 +26,18 @@
             </Style>
         </ResourceDictionary>
     </View.Resources>
+    
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="ResponsiveDisplayStates">
+            <VisualState x:Name="SmallDisplay" />
+            <VisualState x:Name="MediumDisplay" />
+            <VisualState x:Name="LargeDisplay">
+                <VisualState.Setters>
+                    <Setter TargetName="Heading2Label" Property="Style" Value="{ StaticResource Heading2Wide}" />
+                </VisualState.Setters>
+            </VisualState>
+        </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
 
     <elements:Label x:Name="Heading2Label" Text="{Binding Text, Source={x:Reference Name=Root}}"
                     effects:AccessibilityEffect.ControlType="Heading2" />

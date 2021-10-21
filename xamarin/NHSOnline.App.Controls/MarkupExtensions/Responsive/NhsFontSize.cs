@@ -17,11 +17,11 @@ namespace NHSOnline.App.Controls.MarkupExtensions.Responsive
             new Dictionary<FontSizeOption, double>
             {
                 { FontSizeOption.Small, 1.167 },        // 14
-                { FontSizeOption.Medium, 1.417 },       // 17
+                { FontSizeOption.Medium, 1.333 },       // 16
+                { FontSizeOption.MediumWide, 1.583 },   // 19
                 { FontSizeOption.Large, 1.83 },         // 22
                 { FontSizeOption.Heading2, 1.667 },     // 20
                 { FontSizeOption.Heading2Wide, 2 },     // 24
-                { FontSizeOption.Title, 2.333 },        // 28
                 { FontSizeOption.Heading1, 2.667 },     // 32
                 { FontSizeOption.Heading1Wide, 4 },     // 48
             };
