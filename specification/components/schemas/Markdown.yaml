@@ -5,7 +5,11 @@ description: |
   Currently supported Markdown syntax:
   * Emphasis
     * Bold text \*\*Bold\*\*
-    * Italic text \_Italic\_
+
+  * Headings
+    * Heading 2 \#\# Heading 2
+
+    * Heading 3 \#\#\# Heading 3
 
   * Lists
     * Bullet list:
