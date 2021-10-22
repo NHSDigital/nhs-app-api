@@ -4,8 +4,8 @@ target:
 journeys:
   cdssAdvice:
     provider: eConsult
-    serviceDefinition: GEC_GEN
+    serviceDefinition: GEC_GEN__F
     conditionsServiceDefinition: CONDITION_LIST
   cdssAdmin:
     provider: eConsult
-    serviceDefinition: CONDITION_LIST_ADMIN
+    serviceDefinition: GEC_ADM__F
