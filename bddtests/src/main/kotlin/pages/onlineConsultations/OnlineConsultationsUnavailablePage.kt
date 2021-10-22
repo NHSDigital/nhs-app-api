@@ -35,10 +35,16 @@ class OnlineConsultationsUnavailablePage: HybridPageObject() {
             "[contains(text(), 'Stay at home and avoid close contact with other people.')]",
         page = this)
 
+    private val urgentMedicalAdvice = HybridPageElement(
+            webDesktopLocator = "//div[@data-purpose='olc-unavailable']" +
+                    "//p[@aria-label='For urgent medical advice, go to 111.nhs.uk or call one one one.']" +
+                    "[contains(text(), 'For urgent medical advice, go to')]",
+            page = this)
+
     private val coronavirusLink = HybridPageElement(
         webDesktopLocator = "//div[@data-purpose='olc-unavailable']" +
-            "//a[@data-purpose='coronavirus-link'][@href='https://111.nhs.uk/service/COVID-19/']" +
-            "[contains(text(), 'Use the 111 coronavirus service to see if you need medical help')]",
+            "//a[@data-purpose='coronavirus-link'][@href='http://stubs.local.bitraft.io:8080/external/nhsuk/covid']" +
+            "[contains(text(), 'Find out what to do if you think you might have coronavirus')]",
         page = this)
 
     fun assertIsVisible(gpAdvice: Boolean) {
@@ -50,6 +56,7 @@ class OnlineConsultationsUnavailablePage: HybridPageObject() {
         info.assertIsVisible()
         coronavirusHeading.assertIsVisible()
         coronavirusInfo.assertIsVisible()
+        urgentMedicalAdvice.assertIsVisible()
         coronavirusLink.assertIsVisible()
     }
 }

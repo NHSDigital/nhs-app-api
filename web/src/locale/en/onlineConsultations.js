@@ -22,7 +22,11 @@ export default {
     thisServiceIsNormallyAvailable: 'This service is normally available during your GP surgery\'s opening hours.',
     coronavirusIfYouThinkYouMightHave: 'If you think you might have coronavirus',
     coronavirusStayAtHome: 'Stay at home and avoid close contact with other people.',
-    coronavirusUseOneOneOneLink: 'Use the 111 coronavirus service to see if you need medical help',
+    forUrgentMedicalAdvice: {
+      text: 'For urgent medical advice, go to',
+      label: 'For urgent medical advice, go to 111.nhs.uk or call one one one.',
+    },
+    findOutWhatToDo: 'Find out what to do if you think you might have coronavirus',
   },
   validationErrors: {
     thereIsAProblem: 'There\'s a problem',

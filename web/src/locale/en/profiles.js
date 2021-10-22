@@ -28,17 +28,15 @@ export default {
     },
     appointments: {
       header: 'You do not have access to {name}\'s GP appointments',
-      summary: 'Contact {name}\'s GP surgery for more information. For urgent medical advice, go to',
-      postSummaryLinks: {
-        nhs111Link: '111.nhs.uk',
-        call111: 'or call 111.',
+      summary: 'Contact {name}\'s GP surgery for more information.',
+      forUrgentMedicalAdvice: {
+        text: 'For urgent medical advice, go to ',
+        label: 'For urgent medical advice, go to 111.nhs.uk or call one one one.',
       },
-      summaryLabel: 'Contact {name}\'s GP surgery for more information. For urgent medical advice, go to one one one.nhs.uk or call one one one.',
       coronaVirus: {
         header: 'If you think {name} might have coronavirus',
         body: 'They must stay at home and avoid close contact with other people.',
-        link: 'Use the 111 coronavirus service to find out what to do',
-        linkLabel: 'Use the one one one coronavirus service to find out what to do',
+        link: 'Find out what to do if you think they might have coronavirus',
       },
       switch: 'Switch to your profile to book appointments for yourself.',
     },

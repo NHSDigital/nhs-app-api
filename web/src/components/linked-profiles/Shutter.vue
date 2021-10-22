@@ -5,21 +5,20 @@
       <strong>{{ subHeader }}</strong>
     </p>
     <p v-if="summaryText" id="shutter-summary-text"
-       :aria-label="summaryLabelText">
+       :aria-label="summaryText">
       {{ summaryText }}
-      <template v-if="postSummaryLinks">
-        <a href="https://111.nhs.uk" target="_blank" rel="noopener noreferrer"
-           style="display:inline">{{ oneOneOneLinkText }}</a>
-        {{ orCallText }}
-      </template>
     </p>
+    <template v-if="showMedicalAdvice">
+      <contact-111 id="shutter-medical-advice-text"
+                   :text="medicalAdviceText" :aria-label="medicalAdviceLabel"/>
+    </template>
     <h2 v-if="coronaVirusHeaderText">{{ coronaVirusHeaderText }}</h2>
     <p v-if="coronaVirusBodyText">{{ coronaVirusBodyText }}</p>
     <p v-if="coronaVirusLinkText">
       <analytics-tracked-tag
-        :href="coronaServiceUrl"
+        :href="coronaConditionsUrl"
         :text="coronaVirusLinkText"
-        :aria-label="coronaVirusLinkLabelText"
+        :aria-label="coronaVirusLinkText"
         tag="a" target="_blank">
         {{ coronaVirusLinkText }}
       </analytics-tracked-tag>
@@ -45,6 +44,7 @@
 import { INDEX_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import Contact111 from '@/components/widgets/Contact111';
 import GenericButton from '@/components/widgets/GenericButton';
 import get from 'lodash/fp/get';
 
@@ -52,6 +52,7 @@ export default {
   name: 'Shutter',
   components: {
     AnalyticsTrackedTag,
+    Contact111,
     GenericButton,
   },
   props: {
@@ -63,19 +64,17 @@ export default {
   },
   data() {
     return {
-      coronaServiceUrl: this.$store.$env.CORONA_SERVICE_URL,
+      coronaConditionsUrl: this.$store.$env.CORONA_CONDITIONS_URL,
       coronaVirusBodyText: '',
       coronaVirusHeaderText: '',
-      coronaVirusLinkLabelText: undefined,
       coronaVirusLinkText: '',
       givenName: get('$store.state.linkedAccounts.actingAsUser.givenName')(this),
       subHeader: '',
       summaryText: '',
-      summaryLabelText: undefined,
       switchText: '',
-      oneOneOneLinkText: '',
-      orCallText: '',
-      postSummaryLinks: false,
+      showMedicalAdvice: false,
+      medicalAdviceText: '',
+      medicalAdviceLabel: '',
     };
   },
   mounted() {
@@ -88,11 +87,6 @@ export default {
 
     if (this.$te(`profiles.shutter.${featureName}.summary`)) {
       this.summaryText = this.$t(`profiles.shutter.${featureName}.summary`)
-        .replace('{name}', this.givenName);
-    }
-
-    if (this.$te(`profiles.shutter.${featureName}.summaryLabel`)) {
-      this.summaryLabelText = this.$t(`profiles.shutter.${featureName}.summaryLabel`)
         .replace('{name}', this.givenName);
     }
 
@@ -113,14 +107,10 @@ export default {
       this.coronaVirusLinkText = this.$t(`profiles.shutter.${featureName}.coronaVirus.link`);
     }
 
-    if (this.$te(`profiles.shutter.${featureName}.coronaVirus.linkLabel`)) {
-      this.coronaVirusLinkLabelText = this.$t(`profiles.shutter.${featureName}.coronaVirus.linkLabel`);
-    }
-
-    if (this.$te(`profiles.shutter.${featureName}.postSummaryLinks`)) {
-      this.postSummaryLinks = true;
-      this.oneOneOneLinkText = this.$t(`profiles.shutter.${featureName}.postSummaryLinks.nhs111Link`);
-      this.orCallText = this.$t(`profiles.shutter.${featureName}.postSummaryLinks.call111`);
+    if (this.$te(`profiles.shutter.${featureName}.forUrgentMedicalAdvice`)) {
+      this.showMedicalAdvice = true;
+      this.medicalAdviceText = this.$t(`profiles.shutter.${featureName}.forUrgentMedicalAdvice.text`);
+      this.medicalAdviceLabel = this.$t(`profiles.shutter.${featureName}.forUrgentMedicalAdvice.label`);
     }
   },
   methods: {

@@ -112,6 +112,7 @@ Feature: Login with proxy access
 
   Scenario: An EMIS user sees shutter pages when proxying
     Given I am logged in as a EMIS user with linked profiles and appointments provider IM1
+    And 'NHS UK' responds to requests for '/covid'
     Then I see the home page
     When I can see and follow the Linked profiles link
     Then the linked profiles page is displayed
@@ -137,7 +138,7 @@ Feature: Login with proxy access
     Then the Appointments Hub page is displayed
     And I click the GP Appointments link
     And the appointments shutter page is displayed
-    When I click the link called 'Use the 111 coronavirus service to find out what to do' with a url of 'http://stubs.local.bitraft.io:8080/external/covid'
+    When I click the link called 'Find out what to do if you think they might have coronavirus' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/covid'
     Then a new tab has been opened by the link
 
   Scenario Outline: A <GP System> user proxying on behalf of another will see the confirmation page after booking a repeat prescription
@@ -271,8 +272,9 @@ Feature: Login with proxy access
       | EMIS      |
       | TPP       |
 
-  Scenario: An TPP user sees shutter pages when proxying and trying to access services without permissions
+  Scenario: A TPP user sees shutter pages when proxying and trying to access services without permissions
     Given I am logged in as a TPP user with linked profiles but no access to core services and appointments provider IM1
+    And 'NHS UK' responds to requests for '/covid'
     And the scenario is submit prescription
     Then I see the home page
     When I have switched to a linked profile
@@ -299,7 +301,7 @@ Feature: Login with proxy access
     Then the Appointments Hub page is displayed
     And I click the GP Appointments link
     And the appointments shutter page is displayed
-    When I click the link called 'Use the 111 coronavirus service to find out what to do' with a url of 'http://stubs.local.bitraft.io:8080/external/covid'
+     When I click the link called 'Find out what to do if you think they might have coronavirus' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/covid'
     Then a new tab has been opened by the link
 
   Scenario Outline: An <GP System> user can recover their session when in linked profiles on try again

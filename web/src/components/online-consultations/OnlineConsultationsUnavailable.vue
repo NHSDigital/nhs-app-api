@@ -9,12 +9,15 @@
     <p data-purpose="coronavirus-info">
       {{ $t('onlineConsultations.unavailable.coronavirusStayAtHome') }}
     </p>
+    <contact-111
+      :text="$t('onlineConsultations.unavailable.forUrgentMedicalAdvice.text')"
+      :aria-label="$t('onlineConsultations.unavailable.forUrgentMedicalAdvice.label')"/>
     <p>
-      <a href="https://111.nhs.uk/service/COVID-19/"
+      <a :href="coronaConditionsUrl"
          data-purpose="coronavirus-link"
          target="_blank"
          rel="noopener noreferrer">
-        {{ $t('onlineConsultations.unavailable.coronavirusUseOneOneOneLink') }}
+        {{ $t('onlineConsultations.unavailable.findOutWhatToDo') }}
       </a>
     </p>
     <desktopGenericBackLink v-if="!isNativeApp"
@@ -28,12 +31,19 @@
 <script>
 import last from 'lodash/fp/last';
 import { redirectTo } from '@/lib/utils';
+import Contact111 from '@/components/widgets/Contact111';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 
 export default {
   name: 'OnlineConsultationsUnavailable',
   components: {
+    Contact111,
     DesktopGenericBackLink,
+  },
+  data() {
+    return {
+      coronaConditionsUrl: this.$store.$env.CORONA_CONDITIONS_URL,
+    };
   },
   computed: {
     isNativeApp() {

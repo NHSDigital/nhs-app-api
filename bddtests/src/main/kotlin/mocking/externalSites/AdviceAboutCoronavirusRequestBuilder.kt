@@ -4,7 +4,7 @@ import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
 class AdviceAboutCoronavirusRequestBuilder
-    : ExternalSitesMappingBuilder("GET", "/covid") {
+    : ExternalSitesMappingBuilder("GET", "/nhsuk/covid") {
 
     fun respondWithPage(): Mapping {
         return respondWith(HttpStatus.SC_OK) {

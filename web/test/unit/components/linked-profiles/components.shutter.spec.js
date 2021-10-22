@@ -28,6 +28,7 @@ describe('shutter component', () => {
 
   describe('component behaviour', () => {
     let shutterSummaryText;
+    let shutterMedicalAdviceText;
     let shutterSwitchText;
     let switchBackButton;
 
@@ -39,18 +40,21 @@ describe('shutter component', () => {
 
     beforeEach(() => {
       shutterSummaryText = wrapper.find('#shutter-summary-text');
+      shutterMedicalAdviceText = wrapper.find('#shutter-medical-advice-text');
       shutterSwitchText = wrapper.find('#shutter-switch-text');
       switchBackButton = wrapper.find('#btn-switch-profile');
     });
 
     it('will correctly display the localised message for a feature e.g. appointments', () => {
       expect(shutterSummaryText.exists()).toBe(true);
+      expect(shutterMedicalAdviceText.exists()).toBe(true);
       expect(shutterSwitchText.exists()).toBe(true);
       expect(switchBackButton.exists()).toBe(true);
 
-      expect(shutterSummaryText.text()).toContain(`Contact ${mainPatientGivenName}'s GP surgery for more information. For urgent medical advice, go to`);
-      expect(shutterSummaryText.text()).toContain('111.nhs.uk');
-      expect(shutterSummaryText.text()).toContain('or call 111.');
+      expect(shutterSummaryText.text()).toBe(`Contact ${mainPatientGivenName}'s GP surgery for more information.`);
+      expect(shutterMedicalAdviceText.text()).toContain('For urgent medical advice, go to ');
+      expect(shutterMedicalAdviceText.text()).toContain('111.nhs.uk');
+      expect(shutterMedicalAdviceText.text()).toContain('or call 111.');
       expect(shutterSwitchText.text()).toBe('Switch to your profile to book appointments for yourself.');
     });
 

@@ -26,10 +26,10 @@
         <h2>{{ $t('appointments.book.ifYouThinkYouMightHaveCoronavirus') }}</h2>
         <p>{{ $t('appointments.book.stayAtHome') }}</p>
         <p>
-          <a href="https://111.nhs.uk/COVID-19"
+          <a :href="coronaConditionsUrl"
              rel="noopener noreferrer"
-             :aria-label="$t('appointments.book.useThe111CoronavirusService.label')">
-            {{ $t('appointments.book.useThe111CoronavirusService.text') }}</a>
+             :aria-label="$t('appointments.book.findOutWhatToDo')">
+            {{ $t('appointments.book.findOutWhatToDo') }}</a>
         </p>
         <alternative-appointment-actions :show-coronavirus-item="false"/>
       </template>
@@ -125,6 +125,7 @@ export default {
   },
   data() {
     return {
+      coronaConditionsUrl: this.$store.$env.CORONA_CONDITIONS_URL,
       backUrl: APPOINTMENTS_PATH,
       appointmentsPath: GP_APPOINTMENTS_PATH,
       contactUsUrl: this.$store.$env.CONTACT_US_URL,
