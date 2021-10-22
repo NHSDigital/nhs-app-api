@@ -21,6 +21,9 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
 
         internal void AssertOnPage()
         {
+            // Extending timeout to allow page to reload as it has been shown to at times take over the default time
+            using var extendedTimeout = ExtendedTimeout.FromSeconds(5);
+            
             TitleText.ScrollTo();
             TitleText.AssertVisible();
         }
