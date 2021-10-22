@@ -3,7 +3,7 @@ using Xamarin.Forms.Platform.Android;
 
 namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions
 {
-    internal interface IWebViewRendererExtension
+    public interface IWebViewRendererExtension
     {
         void OnElementChanged(ElementChangedEventArgs<WebView> e);
     }
