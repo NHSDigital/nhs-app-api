@@ -1,3 +1,4 @@
+using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Components.IOS;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -32,6 +33,10 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.BrowserOverlay
         public static IOSBrowserOverlay AssertInBrowserOverlay(IIOSDriverWrapper driver, string title = "")
         {
             var browserOverlay = new IOSBrowserOverlay(driver, title);
+
+            // Extending timeout to allow app tab to finish opening
+            using var extendedTimeout = ExtendedTimeout.FromSeconds(5);
+
             browserOverlay.DoneButton.AssertVisible();
             return browserOverlay;
         }
