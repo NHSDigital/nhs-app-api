@@ -270,6 +270,20 @@ Feature: nominated pharmacy journey
       | GP System |
       | EMIS      |
 
+  Scenario Outline: Patient sees nominated pharmacy when gp practice is enabled and DOB from Spine is in YYYYMMDDHHMM format
+    Given I am a patient using the <GP System> GP System
+    And I have 1 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    And my GP Practice is EPS enabled
+    And I have a P1 typed nominated pharmacy with SW11XR OdsCode and Spine DOB with Hours and Minutes
+    And I am logged in
+    When I navigate to prescriptions
+    Then the Prescriptions Hub page is displayed
+    And I see my nominated pharmacy on the prescriptions hub page
+    Examples:
+      | GP System |
+      | EMIS      |
+
   Scenario: Patient does not see nominated pharmacy when SJR has disabled it for their gp practice
     Given I am a EMIS user where the journey configurations are:
       | Journey            | Value    |

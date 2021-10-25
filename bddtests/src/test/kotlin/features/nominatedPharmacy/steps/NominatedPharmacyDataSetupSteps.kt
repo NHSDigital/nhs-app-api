@@ -82,23 +82,16 @@ open class NominatedPharmacyDataSetupSteps {
         setupNominatedPharmacy(responseStringForUpdatedPharmacy, odsCode)
     }
 
-    fun setupNominatedPharmacy(pharmacyType: String, odsCode: String) {
-        val nhsNumber = SerenityHelpers.getPatient().nhsNumbers[0]
-        val surname = SerenityHelpers.getPatient().name.surname
-        val dateOfBirth = SerenityHelpers.getPatient().age.dateOfBirthDigitsOnly()
-
-        val personalDetails = PersonalCheckDetails(nhsNumber = nhsNumber, surname = surname, dateOfBirth = dateOfBirth)
-
-        val responseStringForUpdatedPharmacy = GetNominatedPharmacyRequestBuilder.getResponse(
-                personalDetails, odsCode, arrayOf(pharmacyType))
-
-        setupNominatedPharmacyWithResponseString(responseStringForUpdatedPharmacy, odsCode)
-    }
-
-    fun setupNominatedPharmacy(pharmacyType: String, odsCode: String, code: String? = null) {
+    fun setupNominatedPharmacy(pharmacyType: String,
+                               odsCode: String,
+                               code: String? = null,
+                               dobWithHrsAndMins : Boolean = false) {
         val  nhsNumber = SerenityHelpers.getPatient().nhsNumbers[0]
         val surname = SerenityHelpers.getPatient().name.surname
-        val dateOfBirth = SerenityHelpers.getPatient().age.dateOfBirthDigitsOnly()
+        var dateOfBirth = SerenityHelpers.getPatient().age.dateOfBirthDigitsOnly()
+        if (dobWithHrsAndMins) {
+            dateOfBirth += "1530";  //appending hours (15) and minutes (30) to the DOB
+        }
 
         val personalDetails = PersonalCheckDetails(nhsNumber = nhsNumber, surname = surname, dateOfBirth = dateOfBirth)
 

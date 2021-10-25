@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Models;
 using NHSOnline.Backend.NominatedPharmacy.Models;
@@ -23,7 +24,13 @@ namespace NHSOnline.Backend.NominatedPharmacy
         private const string NominatedPharmacyCode = "P1";
         private const string MedicalApplianceCode = "P2";
         private const string DispensingDoctorCode = "P3";
-        private const string DateOfBirthFormat = "yyyyMMdd";
+
+        private readonly string[] _dateOfBirthFormats = { "yyyyMMdd", "yyyyMMddHHmm" };
+        private readonly Dictionary<int, string> _spineNonStandardDobLengthLoggingFormats = new Dictionary<int, string>{
+            {4, "YYYY" },
+            {6, "YYYYMM" },
+            {12, "YYYYMMDDHHMM" }
+        };
 
         private readonly ILogger<NominatedPharmacyService> _logger;
         private readonly INominatedPharmacyClient _prescriptionTrackingClient;
@@ -316,10 +323,18 @@ namespace NHSOnline.Backend.NominatedPharmacy
             }
 
             var dateOfBirthReturned = result.GetDateOfBirth();
-            if (DateTime.TryParseExact(dateOfBirthReturned, DateOfBirthFormat,
+            if (dateOfBirthReturned != null)
+            {
+                if (_spineNonStandardDobLengthLoggingFormats.TryGetValue(dateOfBirthReturned.Length, out var dateFormatReceived))
+                {
+                    _logger.LogInformation($"dateOfBirthReturned format was {dateFormatReceived} " + GetNhsLoginId(cidUserSession));
+                }
+            }
+
+            if (DateTime.TryParseExact(dateOfBirthReturned, _dateOfBirthFormats,
                 CultureInfo.InvariantCulture, DateTimeStyles.None, out var returnedDobParsed))
             {
-                if (!returnedDobParsed.Equals(cidUserSession.DateOfBirth))
+                if (!returnedDobParsed.Date.Equals(cidUserSession.DateOfBirth.Date))
                 {
                     _logger.LogInformation($"Returned date of birth {returnedDobParsed} " +
                                   $"did not match expected date of birth {cidUserSession.DateOfBirth}");
@@ -345,11 +360,14 @@ namespace NHSOnline.Backend.NominatedPharmacy
             var patientCareSections = new Dictionary<string, PatientCareProvisionEvent>();
 
             patientCareSections.AddIfValueNotNull(NominatedPharmacyCode,
-                patientCareProvisionEvents.FirstOrDefault(x => string.Equals(x.Code?.Code, NominatedPharmacyCode, StringComparison.Ordinal)));
+                patientCareProvisionEvents.FirstOrDefault(x =>
+                    string.Equals(x.Code?.Code, NominatedPharmacyCode, StringComparison.Ordinal)));
             patientCareSections.AddIfValueNotNull(MedicalApplianceCode,
-                patientCareProvisionEvents.FirstOrDefault(x => string.Equals(x.Code?.Code, MedicalApplianceCode, StringComparison.Ordinal)));
+                patientCareProvisionEvents.FirstOrDefault(x =>
+                    string.Equals(x.Code?.Code, MedicalApplianceCode, StringComparison.Ordinal)));
             patientCareSections.AddIfValueNotNull(DispensingDoctorCode,
-                patientCareProvisionEvents.FirstOrDefault(x => string.Equals(x.Code?.Code, DispensingDoctorCode, StringComparison.Ordinal)));
+                patientCareProvisionEvents.FirstOrDefault(x =>
+                    string.Equals(x.Code?.Code, DispensingDoctorCode, StringComparison.Ordinal)));
 
             if (!patientCareSections.Any())
             {
@@ -397,5 +415,8 @@ namespace NHSOnline.Backend.NominatedPharmacy
                     };
             }
         }
+
+        private string GetNhsLoginId(CitizenIdUserSession cidUserSession)
+            => AccessToken.Parse(_logger, cidUserSession.AccessToken).Subject;
     }
 }

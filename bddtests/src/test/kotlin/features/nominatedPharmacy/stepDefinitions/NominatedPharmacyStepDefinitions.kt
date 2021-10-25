@@ -88,6 +88,11 @@ class NominatedPharmacyStepDefinitions {
         nominatedPharmacyDataSetupSteps.setupNominatedPharmacyWithInternetPharmacy(odsCode)
     }
 
+    @Given("^I have a P1 typed nominated pharmacy with (.*) OdsCode and Spine DOB with Hours and Minutes$")
+    fun iHaveAP1TypedNominatedPharmacyAndSpineDOBWithHoursAndMinutes(odsCode: String) {
+        nominatedPharmacyDataSetupSteps.setupNominatedPharmacy("P1", odsCode, dobWithHrsAndMins = true)
+    }
+
     @Given("^I have a (.*) typed nominated pharmacy with (.*) OdsCode and nhsNumber (.*) is returned$")
     fun iHaveANomPharmButDifferentNhsNumberIsReturned(pharmacyType: String, odsCode: String, nhsNumber: String) {
         nominatedPharmacyDataSetupSteps.setupNominatedPharmacyWithDifferentNhsNumber(pharmacyType, odsCode, nhsNumber)
