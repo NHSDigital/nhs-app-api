@@ -431,12 +431,3 @@ export const normaliseWhiteSpace = text => (
 
 export const generateContextualHelpLink = (store, currentRoute) =>
   `${store.$env.BASE_NHS_APP_HELP_URL}${currentRoute.meta.helpPath || ''}`;
-
-export const getUserAgentNativeVersionNumber = () => {
-  const versionNumberRegex = /(?:nhsapp-ios|nhsapp-android)\/(\d+\.\d+\.\d+)/g;
-  const matches = versionNumberRegex.exec(window.navigator.userAgent);
-  if (matches && matches.length > 1) {
-    return matches[1];
-  }
-  return undefined;
-};

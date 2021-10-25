@@ -1,7 +1,7 @@
 import NativeApp from '@/services/native-app';
 import jwt from 'jwt-decode';
 import { LOGIN_PATH } from '@/router/paths';
-import { removeCookies } from '@/lib/cookie-manager';
+import { removeCookies, setCookie } from '@/lib/cookie-manager';
 import get from 'lodash/fp/get';
 import { GP_SESSION_ERROR_STATUS, createLocalError } from '@/lib/utils';
 import generic from '@/locale/en/generic';
@@ -23,7 +23,7 @@ const final = ({ self, commit, expired }) => {
   self.dispatch('navigation/init');
   self.dispatch('repeatPrescriptionCourses/init');
   self.dispatch('errors/clearAllApiErrors');
-  self.dispatch('session/init');
+  self.dispatch('session/setInfo');
   self.dispatch('flashMessage/init');
   self.dispatch('termsAndConditions/init');
   self.dispatch('appVersion/init');
@@ -89,7 +89,7 @@ const cleanupSession = ({ self }) => {
   });
 };
 
-const updateSessionStore = (self, data) => {
+const updateSessionStore = (self, data, updateType) => {
   const {
     name,
     odsCode,
@@ -103,12 +103,11 @@ const updateSessionStore = (self, data) => {
   } = data;
   self.dispatch('session/hideExpiryMessage');
   self.dispatch('practiceSettings/setIm1MessagingEnabled', im1MessagingEnabled);
-  self.dispatch('session/setInfo', {
-    user: name,
+  self.dispatch(updateType, {
+    name,
     durationSeconds: sessionTimeout,
     gpOdsCode: odsCode,
-    lastCalledAt: new Date(),
-    csrfToken: token,
+    token,
     nhsNumber,
     dateOfBirth,
     accessToken,
@@ -138,7 +137,12 @@ export default {
           const { token } = await this.app.$http.postV1PatientAuthorizationAccessTokenRefresh();
           cookieValue.accessToken = token;
 
-          this.dispatch('session/setInfo', { accessToken: token });
+          setCookie({
+            key: 'nhso.session',
+            value: cookieValue,
+            cookies: this.$cookies,
+            secure: this.$env.SECURE_COOKIES,
+          });
 
           resolveRefreshing(token);
         } catch (e) {
@@ -162,7 +166,7 @@ export default {
       const request = createSessionRequest(state, rootState, nhsLoginResponse);
       const response = await this.app.$http.postV1Session(request);
 
-      updateSessionStore(this, response.data);
+      updateSessionStore(this, response.data, 'session/setInfo');
 
       commit(AUTH_RESPONSE, response.data);
     } catch (error) {
@@ -177,7 +181,7 @@ export default {
       const request = createSessionRequest(state, rootState, nhsLoginResponse);
       const response = await this.app.$http.putV1SessionGpSessionOnDemand(request);
 
-      updateSessionStore(this, response.data);
+      updateSessionStore(this, response.data, 'session/updateInfo');
 
       commit(AUTH_RESPONSE, response.data);
     } catch (error) {

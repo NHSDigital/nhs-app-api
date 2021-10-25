@@ -51,7 +51,7 @@ describe('actions', () => {
       'organDonation/init',
       'repeatPrescriptionCourses/init',
       'serviceJourneyRules/init',
-      'session/init',
+      'session/setInfo',
       'termsAndConditions/init',
       'gpMessages/init',
       'practiceSettings/init',
@@ -169,17 +169,22 @@ describe('actions', () => {
   });
 
   describe('handle auth response', () => {
-    const mockNowDate = new Date(1634116386906);
-
     beforeEach(async () => {
       const rootState = {
         device: {
           referrer: 'test',
         },
       };
-
-      mockdate.set(mockNowDate);
       await actions.handleAuthResponse({ commit, state, rootState }, { code: '123' });
+    });
+
+    it('will set the session info from the received session timeout and the response', () => {
+      expect(actions.dispatch).toHaveBeenCalledWith('session/setInfo', {
+        name,
+        durationSeconds: sessionTimeout,
+        token,
+        gpOdsCode: odsCode,
+      });
     });
 
     it('will hide start validation checking', () => {
@@ -188,16 +193,6 @@ describe('actions', () => {
 
     it('will update im1MessagingEnabled', () => {
       expect(actions.dispatch).toHaveBeenCalledWith('practiceSettings/setIm1MessagingEnabled', im1MessagingEnabled);
-    });
-
-    it('will set the session info from the received session timeout and the response', () => {
-      expect(actions.dispatch).toHaveBeenCalledWith('session/setInfo', {
-        user: name,
-        durationSeconds: sessionTimeout,
-        csrfToken: token,
-        lastCalledAt: mockNowDate,
-        gpOdsCode: odsCode,
-      });
     });
 
     it('will hide the expiry message', () => {
@@ -221,16 +216,22 @@ describe('actions', () => {
       error_description: 'error desc',
       error_uri: 'error url',
     };
-    const mockNowDate = new Date(1634116386906);
-
     beforeEach(async () => {
       const rootState = {
         device: {
           referrer: 'test',
         },
       };
-      mockdate.set(mockNowDate);
       await actions.handleGpOnDemandResponse({ commit, state, rootState }, nhsLoginResponse);
+    });
+
+    it('will set the session info from the received session timeout and the response', () => {
+      expect(actions.dispatch).toHaveBeenCalledWith('session/updateInfo', {
+        name,
+        durationSeconds: sessionTimeout,
+        token,
+        gpOdsCode: odsCode,
+      });
     });
 
     it('will hide start validation checking', () => {
@@ -239,16 +240,6 @@ describe('actions', () => {
 
     it('will update im1MessagingEnabled', () => {
       expect(actions.dispatch).toHaveBeenCalledWith('practiceSettings/setIm1MessagingEnabled', im1MessagingEnabled);
-    });
-
-    it('will set the session info from the received session timeout and the response', () => {
-      expect(actions.dispatch).toHaveBeenCalledWith('session/setInfo', {
-        user: name,
-        durationSeconds: sessionTimeout,
-        lastCalledAt: mockNowDate,
-        csrfToken: token,
-        gpOdsCode: odsCode,
-      });
     });
 
     it('will hide the expiry message', () => {
@@ -337,10 +328,15 @@ describe('actions', () => {
         expect(actions.app.$http.postV1PatientAuthorizationAccessTokenRefresh).toBeCalled();
       });
 
-      it('will call dispatch to session/setInfo with the new access token', () => {
-        expect(actions.dispatch).toBeCalledWith(
-          'session/setInfo',
+      it('will set `nhso.session` with refreshed token', () => {
+        expect(actions.$cookies.set).toBeCalledWith(
+          'nhso.session',
           { accessToken: refreshedToken },
+          null,
+          '/',
+          null,
+          actions.$env.SECURE_COOKIES,
+          'Lax',
         );
       });
 

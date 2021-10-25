@@ -4,6 +4,7 @@ import {
   END_VALIDATION_CHECKING,
   HIDE_EXPIRY_MESSAGE,
   HIDE_SESSION_EXPIRING,
+  SET_LAST_CALLED_AT,
   SHOW_EXPIRY_MESSAGE,
   SHOW_SESSION_EXPIRING,
   START_VALIDATION_CHECKING,
@@ -27,6 +28,16 @@ describe('mutations', () => {
       const stateToMutate = { lastCalledAt: new Date() };
       mutations[CLEAR](stateToMutate);
       expect(stateToMutate.durationSeconds).toBeUndefined();
+    });
+  });
+
+  describe('SET_LAST_CALLED_AT', () => {
+    it('will set the lastCalledAt on the state', () => {
+      const stateToMutation = {};
+      const expected = new Date(2018, 4, 4);
+
+      mutations[SET_LAST_CALLED_AT](stateToMutation, expected);
+      expect(stateToMutation.lastCalledAt).toBe(expected);
     });
   });
 

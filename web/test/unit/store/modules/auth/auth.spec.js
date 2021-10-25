@@ -76,10 +76,10 @@ describe('actions', () => {
         expect(call.length).toEqual(2);
 
         const {
-          user: actualName,
+          name: actualName,
           durationSeconds: actualTimeout,
           gpOdsCode: actualOdsCode,
-          csrfToken: actualToken,
+          token: actualToken,
         } = call[1];
 
         expect(actualName).toEqual(name);
@@ -100,16 +100,16 @@ describe('actions', () => {
         },
       )
       .then(() => {
-        const setInfoCall = find(x => x[0] === 'session/setInfo')(actions.dispatch.mock.calls);
-        expect(setInfoCall).not.toBeUndefined();
-        expect(setInfoCall.length).toEqual(2);
+        const updateInfoCall = find(x => x[0] === 'session/updateInfo')(actions.dispatch.mock.calls);
+        expect(updateInfoCall).not.toBeUndefined();
+        expect(updateInfoCall.length).toEqual(2);
 
-        const updateInfoParameter = setInfoCall[1];
+        const updateInfoParameter = updateInfoCall[1];
         const {
-          user: actualName,
+          name: actualName,
           durationSeconds: actualTimeout,
           gpOdsCode: actualOdsCode,
-          csrfToken: actualToken,
+          token: actualToken,
         } = updateInfoParameter;
 
         expect(actualName).toEqual(name);

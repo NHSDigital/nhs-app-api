@@ -7,6 +7,7 @@ import {
   HIDE_EXPIRY_MESSAGE,
   HIDE_SESSION_EXPIRING,
   SET_INFO,
+  SET_LAST_CALLED_AT,
   SHOW_EXPIRY_MESSAGE,
   START_VALIDATION_CHECKING,
   SHOW_SESSION_EXPIRING,
@@ -40,27 +41,30 @@ export default {
     delete (state.showExpiryMessage);
   },
   [SET_INFO](state, {
-    user,
+    name,
     durationSeconds,
     gpOdsCode,
     sessionTimeout,
-    csrfToken,
-    lastCalledAt,
+    token,
+    lastCalledAt = new Date(),
     nhsNumber,
     dateOfBirth,
     accessToken,
     proofLevel,
   } = {}) {
-    state.user = user;
+    state.user = name;
     state.durationSeconds = durationSeconds;
     state.gpOdsCode = gpOdsCode;
     state.sessionTimeout = sessionTimeout;
-    state.csrfToken = csrfToken;
+    state.csrfToken = token;
     state.lastCalledAt = lastCalledAt;
     state.nhsNumber = nhsNumber;
     state.dateOfBirth = dateOfBirth;
     state.accessToken = accessToken;
     state.proofLevel = proofLevel;
+  },
+  [SET_LAST_CALLED_AT](state, date) {
+    state.lastCalledAt = date;
   },
   [SET_USER_SESSION_REFERENCE](state, userSessionCreateReferenceCode) {
     state.userSessionCreateReferenceCode = userSessionCreateReferenceCode;
