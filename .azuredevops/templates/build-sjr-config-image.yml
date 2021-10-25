@@ -49,8 +49,3 @@ jobs:
           repository: $(sjr.config.image.name)
           tags: |
             $(Build.SourceBranchName)
-
-      - template: acr_firewall.yml
-        parameters:
-          mode: remove
-          acr: nhsapp

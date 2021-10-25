@@ -139,8 +139,3 @@ jobs:
           testResultsFiles: xamarinintegrationtests/TestResults/*.trx
           failTaskOnFailedTests: false
           mergeTestResults: true
-
-      - template: acr_firewall.yml
-        parameters:
-          mode: remove
-          acr: nhsapp

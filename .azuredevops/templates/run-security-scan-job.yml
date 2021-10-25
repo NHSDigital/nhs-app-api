@@ -11,8 +11,4 @@ jobs:
           TWISTLOCK_CLI_PASSWORD: $(twistlock.cli.password)
         inputs:
           scriptPath: buildscripts/run_twistlock_security_scan.sh
-      
-      - template: acr_firewall.yml
-        parameters:
-          mode: remove
-          acr: nhsapp
+

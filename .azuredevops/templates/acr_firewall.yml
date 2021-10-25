@@ -12,18 +12,18 @@ parameters:
       - nhsapp
       - nhsapprelease
 
-steps:
-  - task: AzureCLI@2
-    condition: always()
-    displayName: ${{ parameters.acr }} ACR Firewall Host Agent IP ${{ parameters.mode }}
-    inputs:
-      ${{ if eq(parameters.acr, 'nhsapprelease') }}:
-        azureSubscription: nhsapp-live-terraform-sp
-      ${{ if eq(parameters.acr, 'nhsapp') }}:
-        azureSubscription: nhsapp-nonlive-terraform-sp
-      ${{ if eq(parameters.acr, 'nhsapptest') }}:
-        azureSubscription: nhsapp-nonlive-terraform-sp
-      scriptType: 'bash'
-      scriptLocation: 'scriptPath'
-      scriptPath: buildscripts/acr_firewall.sh
-      arguments: ${{ parameters.acr }} ${{ parameters.mode }}
+#steps:
+#  - task: AzureCLI@2
+#    condition: always()
+#    displayName: ${{ parameters.acr }} ACR Firewall Host Agent IP ${{ parameters.mode }}
+#    inputs:
+#      ${{ if eq(parameters.acr, 'nhsapprelease') }}:
+#        azureSubscription: nhsapp-live-terraform-sp
+#      ${{ if eq(parameters.acr, 'nhsapp') }}:
+#        azureSubscription: nhsapp-nonlive-terraform-sp
+#      ${{ if eq(parameters.acr, 'nhsapptest') }}:
+#       azureSubscription: nhsapp-nonlive-terraform-sp
+#      scriptType: 'bash'
+#      scriptLocation: 'scriptPath'
+#      scriptPath: buildscripts/acr_firewall.sh
+#      arguments: ${{ parameters.acr }} ${{ parameters.mode }}

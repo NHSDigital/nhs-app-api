@@ -62,9 +62,3 @@ jobs:
         inputs:
           pathToPublish: '$(Build.ArtifactStagingDirectory)/CodeAnalysis'
           artifactName: Integration Tests Code Analysis
-
-      # ACR Firewall - Remove host agent IP
-      - template: acr_firewall.yml
-        parameters:
-          mode: remove
-          acr: nhsapp
