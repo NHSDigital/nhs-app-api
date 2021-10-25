@@ -132,6 +132,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                 _logger.LogError(e, "Unsuccessful request retrieving patient document");
                 return new GetPatientDocumentResult.BadGateway();
             }
+            catch (ArgumentNullException e)
+            {
+                _logger.LogError(e, "Request for patient document returned null body");
+                return new GetPatientDocumentResult.BadGateway();
+            }
             catch(Exception e)
             {
                 _logger.LogError(e, "Exception thrown when retrieving patient document");
@@ -165,6 +170,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving patient document for download");
+                return new GetPatientDocumentDownloadResult.BadGateway();
+            }
+            catch (ArgumentNullException e)
+            {
+                _logger.LogError(e, "Request for patient document for download returned null body");
                 return new GetPatientDocumentDownloadResult.BadGateway();
             }
             catch(Exception e)
@@ -203,6 +213,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving test result");
+                return new GetDetailedTestResult.BadGateway();
+            }
+            catch (NullReferenceException e)
+            {
+                _logger.LogError(e, "Test Result retrieval return null body");
                 return new GetDetailedTestResult.BadGateway();
             }
             finally
@@ -312,6 +327,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             }
             catch (Exception e)
             {
+
                 _logger.LogError(e, "Retrieving testResults failed. Returning hasErrored as true");
                 return new TestResults
                 {

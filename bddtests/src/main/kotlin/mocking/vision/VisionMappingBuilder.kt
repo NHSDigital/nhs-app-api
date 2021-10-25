@@ -34,8 +34,4 @@ abstract class VisionMappingBuilder(method: String = "POST") : MappingBuilder(me
                     ErrorResponseCodeVision.NON_VISION_ERROR_CODE)).build()
         }
     }
-
-    fun respondWithThrottling(): Mapping {
-        throw NotImplementedError("Not implemented for this GP system")
-    }
 }

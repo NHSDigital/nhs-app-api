@@ -149,28 +149,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
             Task<HttpResponseMessage> ProcessRequestTwo() => Task.FromResult(new HttpResponseMessage(HttpStatusCode.NotFound));
         }
 
-        [TestMethod]
-        public void Post_ThrowsThrottlingException_WhenSuccessResponseWithNoBody()
-        {
-            // Arrange
-            var request = new HttpRequestMessage(HttpMethod.Post, "http://tppapitest:60015/Test");
-            MockHttpHandler
-                .When(request.Method, request.RequestUri.ToString())
-                .Respond(() => Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new StringContent(string.Empty)
-                }));
-
-            using var scopeOne = Context.ServiceProvider.CreateScope();
-            var systemUnderTestOne = scopeOne.ServiceProvider.GetRequiredService<ITppClientRequestSender>();
-
-            // Act & Assert
-            FluentActions
-                .Invoking(() => systemUnderTestOne.SendRequestAndParseResponse<LogoffReply>(request))
-                .Should()
-                .Throw<TppThrottlingHttpRequestException>();
-        }
-
         [TestCleanup]
         public void Dispose() => MockHttpHandler.Dispose();
     }

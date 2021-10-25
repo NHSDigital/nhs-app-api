@@ -24,6 +24,14 @@ class AuthenticationFactoryTpp : AuthenticationFactory(Supplier.TPP) {
         }
     }
 
+    override fun patientWithNullResponseBody(patient: Patient) {
+        mockingClient.forTpp.mock {
+            authentication.authenticateRequest(
+                    TppMockDefaults.tppAuthenticateRequest(patient))
+                    .respondWithSuccessAndEmptyBody()
+        }
+    }
+
     override fun patientDoesNotExist(patient: Patient) {
         createInvalidLinkageTest(patient)
     }

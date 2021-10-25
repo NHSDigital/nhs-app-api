@@ -25,6 +25,7 @@ abstract class TppMappingBuilder(method: String = "POST", relativePath: String =
         requestBuilder.andHeader(HEADER_CONTENT_TYPE, "text/xml; charset=UTF-8")
     }
 
+
     fun responseErrorWhenGPDisabledAppointmentsService(): Mapping {
         val errorMsg = "You don't have access to this online service"
         val disabledTppError = Error(errorCode = ErrorResponseCodeTpp.NO_ACCESS,
@@ -52,13 +53,8 @@ abstract class TppMappingBuilder(method: String = "POST", relativePath: String =
         return respondWith(error)
     }
 
-    fun respondWithThrottling(): Mapping {
-        return respondWith(HttpStatus.SC_OK) {
-            andXmlBody("").build()
-        }
-    }
-
     protected inline fun <reified T : Any> respondWith(response: T): Mapping {
+
         val xmlBody = JSonXmlConverter.toXML(response)
 
         return respondWith(HttpStatus.SC_OK) {

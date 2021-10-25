@@ -371,18 +371,30 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
         }
 
         [TestMethod]
-        public async Task GetDetailedTestResult_WhenPostIsThrottled_ReturnsBadGateway()
+        public async Task GetDetailedTestResult_WhenPostCheckThrowsNullException_ReturnsBadGateway()
         {
             var testResultId = _fixture.Create<string>();
+            var testResultViewReplyResponse = new TppApiObjectResponse<TestResultsViewReply>(HttpStatusCode.OK)
+            {
+                Body = _fixture.Create<TestResultsViewReply>()
+            };
 
             _testResultsViewDetailed
                 .Setup(x => x.Post(TestResultsViewDetailedMatchParameters(testResultId)))
-                .Throws<TppThrottlingHttpRequestException>();
+                .ReturnsAsync(testResultViewReplyResponse);
+
+            _patientDetailedTestResultsChecker
+                .Setup(x => x.Check(testResultViewReplyResponse))
+                .Throws<NullReferenceException>();
 
             var result = await _systemUnderTest.GetDetailedTestResult(_gpLinkedAccountModel, testResultId);
 
             result.Should().BeAssignableTo<GetDetailedTestResult.BadGateway>();
         }
+
+
+
+
 
         private List<ViewPatientOverViewItem> CreateListPatientOverviewItem(int count)
         {

@@ -38,6 +38,7 @@ class Mapping() {
         return this
     }
 
+
     override fun toString(): String {
         val requestString = "Request: ${Gson().toJson(request)}"
         val responseString = "Response: ${Gson().toJson(response)}"

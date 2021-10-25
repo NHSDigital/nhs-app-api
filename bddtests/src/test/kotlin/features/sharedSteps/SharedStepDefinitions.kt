@@ -63,6 +63,17 @@ open class SharedStepDefinitions {
         TermsAndConditionsJourneyFactory.consent(patient)
     }
 
+    @Given("^I am an? (.*) patient with a null response body$")
+    fun initialisePatientAndGpSystemWithNullResponseBody(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier)
+        setupPatient(patient, supplier)
+
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
+        AuthenticationFactory.getForSupplier(supplier).patientWithNullResponseBody(patient)
+        TermsAndConditionsJourneyFactory.consent(patient)
+    }
+
     @Given("^I am an? (.*) patient whose GP system is unavailable$")
     fun initialisePatientAndUnavailableGpSystem(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)

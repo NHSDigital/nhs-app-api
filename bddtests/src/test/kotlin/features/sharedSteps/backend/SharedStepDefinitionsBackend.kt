@@ -66,7 +66,7 @@ open class SharedStepDefinitionsBackend{
 
     @Given("^I am a user with proof level 5 and have a valid session cookie$")
     fun iAmAUserWithProofLevel5AndHaveAValidSessionCookie() {
-        val gpSystem = Supplier.EMIS
+        val gpSystem = Supplier.valueOf("EMIS")
         val patient = Patient.getDefault(gpSystem).copy(identityProofingLevel = IdentityProofingLevel.P5)
         SerenityHelpers.setPatient(patient)
         SerenityHelpers.setGpSupplier(gpSystem)

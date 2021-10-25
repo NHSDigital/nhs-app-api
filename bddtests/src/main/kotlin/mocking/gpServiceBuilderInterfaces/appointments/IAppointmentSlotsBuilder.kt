@@ -1,9 +1,11 @@
 package mocking.gpServiceBuilderInterfaces.appointments
 
+
 import mocking.gpServiceBuilderInterfaces.IBuilderCommonResponses
 import mocking.models.Mapping
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import java.time.Duration
+
 
 interface IAppointmentSlotsBuilder : IBuilderCommonResponses {
 

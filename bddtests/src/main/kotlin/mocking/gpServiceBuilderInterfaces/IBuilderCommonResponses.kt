@@ -11,6 +11,4 @@ interface IBuilderCommonResponses {
     fun respondWithUnknownException(): Mapping
 
     fun respondWithGPErrorWhenNotEnabled(): Mapping
-
-    fun respondWithThrottling(): Mapping
 }

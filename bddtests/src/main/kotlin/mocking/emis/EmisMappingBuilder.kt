@@ -62,10 +62,6 @@ abstract class EmisMappingBuilder(configuration: EmisConfiguration?,
         }
     }
 
-    fun respondWithThrottling(): Mapping {
-        throw NotImplementedError("Not implemented for this GP system")
-    }
-
     override fun respondWithServiceUnavailable(): Mapping {
         return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
             andJsonBody("")

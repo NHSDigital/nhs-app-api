@@ -108,6 +108,7 @@ class MyAppointmentsBuilderTpp(
     }
 
     override fun respondWithCorrupted(): Mapping {
+
         val response = JSonXmlConverter.toXML(viewAppointmentsReplyBase())
         return respondWithCorruptedContent(response)
     }

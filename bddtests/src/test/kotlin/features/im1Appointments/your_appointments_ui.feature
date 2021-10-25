@@ -171,16 +171,6 @@ Feature: Your Appointments Frontend
     When I click the error 'Back' link
     Then the Appointments Hub page is displayed
 
-  Scenario: A TPP user sees appropriate error message when GP system is throttling
-    Given TPP is throttling when I want to view my appointments
-    And I am logged in
-    When I retrieve the 'appointment hub' page directly
-    Then the Appointments Hub page is displayed
-    When I click the GP Appointments link
-    Then I see appropriate try again error message when there is an error with '4t'
-    When I click the error 'Back' link
-    Then the Appointments Hub page is displayed
-
   #504
   Scenario: VISION user opens up contact us after a timeout
     Given VISION will time out when trying to retrieve my appointments

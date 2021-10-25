@@ -31,6 +31,8 @@ abstract class AuthenticationFactory(protected val gpSystem: Supplier) {
     abstract fun patientWithLinkageKeyInWrongFormat(patient: Patient)
     abstract fun patientWithDOBInWrongFormat(patient: Patient)
     abstract fun patientWithIncompleteResponse(patient: Patient)
+    abstract fun patientWithNullResponseBody(patient: Patient)
+
 
     companion object : SupplierSpecificFactory<AuthenticationFactory>() {
 

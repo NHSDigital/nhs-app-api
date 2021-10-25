@@ -84,6 +84,30 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
         }
 
         [TestMethod]
+        public async Task Verify_ReturnsAEmptyNhsNumbers_WhenTppRespondsWithEmptyNhsNumber()
+        {
+            // Arrange
+            _mockAuthenticate.Setup(x => x.Post(It.IsAny<Authenticate>())).Returns(
+                Task.FromResult(
+                    new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
+                    {
+                        Body = null
+                    }));
+
+            var systemUnderTest = CreateSystemUnderTest();
+
+            // Act
+            var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
+
+            // Assert
+            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.Success>()
+                .Subject;
+
+            successResult.Response.ConnectionToken.Should().Be(DefaultConnectionToken);
+            successResult.Response.NhsNumbers.Should().BeEmpty();
+        }
+
+        [TestMethod]
         public async Task Verify_ReturnsUnmappedErrorWithStatusCode_WhenTppClientReturnsErrorResponse()
         {
             // Arrange
@@ -409,31 +433,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
             _mockLinkAccount
                 .Setup(x => x.Post(It.IsAny<LinkAccountAuthenticate>()))
                 .Throws<HttpRequestException>();
-            var systemUnderTest = CreateSystemUnderTest();
-            var request = _fixture.Create<PatientIm1ConnectionRequest>();
-
-            // Act
-            var result = await systemUnderTest.Register(request);
-
-            // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.BadGateway>();
-        }
-
-        [TestMethod]
-        public async Task Verify_ReturnsBadGateway_WhenTppClientAuthenticateIsThrottled()
-        {
-            // Arrange
-            var linkAccountReply = _fixture.Create<LinkAccountReply>();
-            _mockLinkAccount.Setup(x => x.Post(It.IsAny<LinkAccountAuthenticate>())).Returns(
-                Task.FromResult(
-                    new TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
-                    {
-                        Body = linkAccountReply,
-                    }));
-
-            _mockAuthenticate
-                .Setup(x => x.Post(It.IsAny<Authenticate>()))
-                .Throws<TppThrottlingHttpRequestException>();
             var systemUnderTest = CreateSystemUnderTest();
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 

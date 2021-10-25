@@ -112,7 +112,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
         }
 
         [TestMethod]
-        public async Task MessageCreate_WhenThrottled_ReturnsBadGateway()
+        public async Task MessageCreate_WhenNullReferenceException_ReturnsBadGateway()
         {
             var tppUserSession = new TppUserSession
             {
@@ -131,7 +131,44 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
             // Arrange
             _messageCreatePost
                 .Setup(c => c.Post(parameters))
-                .Throws<TppThrottlingHttpRequestException>()
+                .Throws<NullReferenceException>()
+                .Verifiable();
+
+            // Act
+            var createMessageResult = await _systemUnderTest.SendMessage(tppUserSession, message);
+
+            // Assert
+            _messageCreatePost.Verify();
+
+            createMessageResult.Should().BeAssignableTo<PostPatientMessageResult.BadGateway>();
+        }
+
+        [TestMethod]
+        public async Task MessageCreate_WhenNullIsReturned_ReturnsBadGateway()
+        {
+            var tppUserSession = new TppUserSession
+            {
+                PatientId = "1234",
+                OnlineUserId = "12345",
+                OdsCode = "1234"
+            };
+
+            var message = new CreatePatientMessage
+            {
+                MessageBody = "Test message",
+                RecipientIdentifier = "1:Recipient",
+            };
+            var parameters = (tppUserSession, message.RecipientIdentifier, message.MessageBody);
+
+            // Arrange
+            _messageCreatePost
+                .Setup(c => c.Post(parameters))
+                .Returns(Task.FromResult(
+                    new TppApiObjectResponse<MessageCreateReply>(HttpStatusCode.OK)
+                    {
+                        Body = null,
+                        ErrorResponse = null,
+                    }))
                 .Verifiable();
 
             // Act
