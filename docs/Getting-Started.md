@@ -122,7 +122,9 @@ You will be prompted for parameters when needed. Alternatively you can follow th
 
 ## Secrets
 
-Secrets required for running the app locally are stored in Keybase (`team/nhsonline/development_secrets`). These are automatically copied to your home directory (`~/.nhsonline/secrets`) when the app is run using make if the keybase filesystem integration is working. If it is not an error will be reported and the files should be manually copied across.
+The team use [Keybase](https://keybase.io) to share and synchronise secrets.
+Sign up for an account if you don't already have one, and ask a friendly tech lead to add you to the team.
+The secrets required for running the app locally are stored in the folder (`team/nhsonline/development_secrets`). If the keybase filesystem integration is installed and running these will be automatically copied to your home directory (`~/.nhsonline/secrets`) when the NHS App is run using make. Otherwise an error will be reported and the necessary files should be manually copied across.
 
 ## Docker
 
