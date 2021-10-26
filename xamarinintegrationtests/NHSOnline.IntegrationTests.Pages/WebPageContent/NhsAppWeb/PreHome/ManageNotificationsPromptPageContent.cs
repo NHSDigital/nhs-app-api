@@ -10,36 +10,35 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.PreHome
 
         internal ManageNotificationsPromptPageContent(IWebInteractor webInteractor) => _interactor = webInteractor;
 
-        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Manage notifications");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Turn on notifications");
 
-        private WebText ThisMayIncludeText => WebText.WithTagAndText(
+        private WebText WeUseNotificationsText => WebText.WithTagAndText(
             _interactor,
             "p",
-            "These may include new features and public health updates.");
+            "We use notifications to tell you when you get a new message.");
 
-        private WebText IfYouShareThisDeviceText => WebText.WithTagAndText(
+        private WebText NhsMaySendYouMessagesText => WebText.WithTagAndText(
             _interactor,
             "p",
-            "If you share this device with other people, they may see your notifications. " +
-            "The settings will apply to everyone who logs in to the NHS App on this device.");
+            "The NHS and connected healthcare providers, like your GP surgery, may send you messages using the NHS App.");
 
         private WebText MoreInformationIsAvailableText => WebText.WithTagAndText(
             _interactor,
             "p",
-            "More information is available in the NHS App privacy policy.");
+            "More information is available in the NHS App privacy policy");
 
         private WebLink PrivacyPolicyLink => WebLink.WithText(_interactor, "NHS App privacy policy");
 
         private WebText AcceptNotificationsText => WebText.WithTagAndText(
             _interactor,
             "span",
-            "I accept the NHS App sending notifications on this device");
+            "Tell me about new messages");
 
         private WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
 
         private WebToggle NotificationsToggle => WebToggle.WithLabel(
             _interactor,
-            "Allow notificationsI accept the NHS App sending notifications on this device");
+            "Turn on notifications on this deviceTell me about new messages");
 
         internal void AssertOnPage()
         {
@@ -49,8 +48,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.PreHome
 
         public ManageNotificationsPromptPageContent AssertPageContent()
         {
-            ThisMayIncludeText.AssertVisible();
-            IfYouShareThisDeviceText.AssertVisible();
+            WeUseNotificationsText.AssertVisible();
+            NhsMaySendYouMessagesText.AssertVisible();
             MoreInformationIsAvailableText.AssertVisible();
             PrivacyPolicyLink.AssertVisible();
             AcceptNotificationsText.AssertVisible();
