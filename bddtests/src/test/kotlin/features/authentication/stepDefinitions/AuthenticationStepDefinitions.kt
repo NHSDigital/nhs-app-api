@@ -139,7 +139,7 @@ class AuthenticationStepDefinitions {
 
     private fun iBrowseToPageXAndSeePageX(page: String, path: String, destination: String = "") {
         val lowerPage = page.toLowerCase()
-        browser.browseTo(path)
+        browser.browseViaHttpGet(path)
         this.currentUrl = path
 
         when (lowerPage) {

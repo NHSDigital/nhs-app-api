@@ -3,13 +3,14 @@ import NativeApp from '@/services/native-app';
 import SessionExpiryModal from '@/components/modal/content/SessionExpiryModal';
 import { isAnonymous } from '@/router';
 import { APPOINTMENTS_NAME } from '@/router/names';
+import { setCookie } from '@/lib/cookie-manager';
 
 import {
   CLEAR,
   END_VALIDATION_CHECKING,
+  LOGOUT,
   HIDE_EXPIRY_MESSAGE,
   SET_INFO,
-  SET_LAST_CALLED_AT,
   SHOW_EXPIRY_MESSAGE,
   START_VALIDATION_CHECKING,
   SHOW_SESSION_EXPIRING,
@@ -19,21 +20,29 @@ import {
 import { createRouter } from '../../../helpers';
 
 jest.mock('@/services/native-app');
+jest.mock('@/lib/cookie-manager');
+jest.mock('@/services/native-app');
 jest.mock('@/router');
 
 describe('actions', () => {
   let mutation;
   let $router;
+  const $cookies = {
+    get: jest.fn(),
+    set: jest.fn(),
+    remove: jest.fn(),
+  };
+  const $env = {
+    SECURE_COOKIES: true,
+    XAMARIN_INITIAL_RELEASE_VERSION: '1.99.0',
+  };
 
   beforeEach(() => {
-    actions.$cookies = {
-      get: jest.fn(),
-      set: jest.fn(),
-      remove: jest.fn(),
-    };
-    actions.$env = jest.fn();
+    actions.$cookies = $cookies;
+    actions.$env = $env;
     mutation = {
       commit: jest.fn(),
+      dispatch: jest.fn(),
       state: { },
     };
   });
@@ -54,26 +63,125 @@ describe('actions', () => {
   });
 
   describe('set info', () => {
-    it('will have a setInfo function', () => expect(actions.setInfo).toBeInstanceOf(Function));
-
-    it('will call commit for the SET_INFO mutation passing the info object', () => {
-      const input = {};
-
-      actions.setInfo(mutation, input);
-
-      expect(mutation.commit).toHaveBeenCalledWith(SET_INFO, input);
+    let userAgentGetter;
+    beforeEach(() => {
+      delete window.location;
+      window.location = new URL('https://www.example.com');
+      userAgentGetter = jest.spyOn(window.navigator, 'userAgent', 'get');
     });
-  });
 
-  describe('update info', () => {
-    it('will have a updateInfo function', () => expect(actions.updateInfo).toBeInstanceOf(Function));
+    describe('Native app version in the userAgent is less than xamarin release version', () => {
+      beforeEach(() => {
+        userAgentGetter.mockReturnValue('Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KTML, like Gecko) nhsapp-ios/1.89.0 nhsapp-manufacturer/Apple nhsapp-model/x86_64 nhsapp-os/14.3 nhsapp-architecture/x64');
+      });
 
-    it('will call commit for the SET_INFO mutation passing the info object', () => {
-      const input = {};
+      it('will have a setInfo function', () => expect(actions.setInfo).toBeInstanceOf(Function));
 
-      actions.updateInfo(mutation, input);
+      it('will call commit for the SET_INFO mutation passing the info object', () => {
+        const input = {};
 
-      expect(mutation.commit).toHaveBeenCalledWith(SET_INFO, input);
+        actions.setInfo(mutation, input);
+        expect(mutation.commit).toHaveBeenCalledWith(SET_INFO, input);
+      });
+
+      it('will set the cookie with the new values and no explicit domain', () => {
+        const input = {};
+        actions.setInfo(mutation, input);
+
+        expect(setCookie).toHaveBeenCalledWith({
+          key: 'nhso.session',
+          value: input,
+          cookies: $cookies,
+          secure: $env.SECURE_COOKIES,
+        });
+      });
+    });
+
+    describe('Native app version in the userAgent is greater than xamarin release version', () => {
+      beforeEach(() => {
+        userAgentGetter.mockReturnValue('Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KTML, like Gecko) nhsapp-ios/1.99.1 nhsapp-manufacturer/Apple nhsapp-model/x86_64 nhsapp-os/14.3 nhsapp-architecture/x64');
+      });
+
+      it('will have a setInfo function', () => expect(actions.setInfo).toBeInstanceOf(Function));
+
+      it('will call commit for the SET_INFO mutation passing the info object', () => {
+        const input = {};
+
+        actions.setInfo(mutation, input);
+        expect(mutation.commit).toHaveBeenCalledWith(SET_INFO, input);
+      });
+
+      it('will set the cookie with the new values and no explicit domain', () => {
+        const input = {};
+        actions.setInfo(mutation, input);
+
+        expect(setCookie).toHaveBeenCalledWith({
+          key: 'nhso.session',
+          value: input,
+          cookies: $cookies,
+          secure: $env.SECURE_COOKIES,
+          domain: '.www.example.com',
+        });
+      });
+    });
+
+    describe('Native app version in the userAgent is equal to xamarin release version', () => {
+      beforeEach(() => {
+        userAgentGetter.mockReturnValue('Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KTML, like Gecko) nhsapp-ios/1.99.0 nhsapp-manufacturer/Apple nhsapp-model/x86_64 nhsapp-os/14.3 nhsapp-architecture/x64');
+      });
+
+      it('will have a setInfo function', () => expect(actions.setInfo).toBeInstanceOf(Function));
+
+      it('will call commit for the SET_INFO mutation passing the info object', () => {
+        const input = {};
+
+        actions.setInfo(mutation, input);
+        expect(mutation.commit).toHaveBeenCalledWith(SET_INFO, input);
+      });
+
+      it('will set the cookie with the new values and no explicit domain', () => {
+        const input = {};
+        actions.setInfo(mutation, input);
+
+        expect(setCookie).toHaveBeenCalledWith({
+          key: 'nhso.session',
+          value: input,
+          cookies: $cookies,
+          secure: $env.SECURE_COOKIES,
+          domain: '.www.example.com',
+        });
+      });
+
+      describe('No native app version in the userAgent', () => {
+        beforeEach(() => {
+          userAgentGetter.mockReturnValue('Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KTML, like Gecko) nhsapp-manufacturer/Apple nhsapp-model/x86_64 nhsapp-os/14.3 nhsapp-architecture/x64');
+        });
+
+        it('will have a setInfo function', () => expect(actions.setInfo).toBeInstanceOf(Function));
+
+        it('will call commit for the SET_INFO mutation passing the info object', () => {
+          const input = {};
+
+          actions.setInfo(mutation, input);
+          expect(mutation.commit).toHaveBeenCalledWith(SET_INFO, input);
+        });
+
+        it('will set the cookie with the new values and no explicit domain', () => {
+          const input = {};
+          actions.setInfo(mutation, input);
+
+          expect(setCookie).toHaveBeenCalledWith({
+            key: 'nhso.session',
+            value: input,
+            cookies: $cookies,
+            secure: $env.SECURE_COOKIES,
+          });
+        });
+      });
+
+      afterEach(() => {
+        userAgentGetter.mockClear();
+      });
     });
   });
 
@@ -145,6 +253,20 @@ describe('actions', () => {
     });
   });
 
+  describe('logout', () => {
+    it('will have a logout function', () => {
+      expect(actions.logout).toBeInstanceOf(Function);
+    });
+
+    it(
+      'will call commit for the LOGOUT mutation passing the current date and time',
+      () => {
+        actions.logout(mutation);
+        expect(mutation.commit).toHaveBeenCalledWith(LOGOUT);
+      },
+    );
+  });
+
   describe('update last called at', () => {
     it('will have a updateLastCalledAt function', () => {
       expect(actions.updateLastCalledAt).toBeInstanceOf(Function);
@@ -155,8 +277,7 @@ describe('actions', () => {
       () => {
         const now = new Date();
         actions.updateLastCalledAt(mutation, now);
-        expect(mutation.commit.mock.calls[0][0]).toEqual(SET_LAST_CALLED_AT);
-        expect(mutation.commit.mock.calls[0][1] - now).toBeCloseTo(0);
+        expect(mutation.dispatch).toHaveBeenCalledWith('setInfo', { lastCalledAt: now });
       },
     );
 
@@ -164,7 +285,7 @@ describe('actions', () => {
       'will call commit for the HIDE_SESSION_EXPIRING mutation',
       () => {
         actions.updateLastCalledAt(mutation, new Date());
-        expect(mutation.commit.mock.calls[1][0]).toEqual(HIDE_SESSION_EXPIRING);
+        expect(mutation.commit.mock.calls[0][0]).toEqual(HIDE_SESSION_EXPIRING);
       },
     );
   });

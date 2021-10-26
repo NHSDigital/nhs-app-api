@@ -75,15 +75,15 @@ Feature: Authorisation occurs during each URL visit
       | /more                                          | /more                                          |
       | /appointments                                  | /appointments                                  |
       | /appointments/gp-appointments/booking          | /appointments/gp-appointments/booking          |
-      | /                                              |                                                |
+      | /                                              | /                                              |
       | /health-records                                | /health-records                                |
       | /health-records/gp-medical-record              | /health-records/gp-medical-record              |
       | /prescriptions                                 | /prescriptions                                 |
       | /prescriptions/repeat-courses                  | /prescriptions/repeat-courses                  |
       | /prescriptions/confirm-prescription-details    | /prescriptions                                 |
       | /advice                                        | /advice                                        |
-      | /terms-and-conditions                          |                                                |
-      | /logout                                        | /login                                         |
+      | /terms-and-conditions                          | /patient                                       |
+      | /logout                                        | /login?redirect_to=index                       |
 
   @bug @NHSO-8672
   #To be merged into the above test once the bug is fixed
@@ -111,7 +111,7 @@ Feature: Authorisation occurs during each URL visit
       | /prescriptions/confirm-prescription-details | /prescriptions                    |
       | /advice                                     | /advice                           |
       | /terms-and-conditions                       |                                   |
-      | /logout                                     | /login                            |
+      | /logout                                     | /login?redirect_to=index          |
       | /redirector                                 |                                   |
       | /redirector?redirect_to=appointments        | /appointments                     |
       | /nonexistent                                |                                   |
@@ -133,7 +133,7 @@ Feature: Authorisation occurs during each URL visit
       | /prescriptions/confirm-prescription-details | /prescriptions                    |
       | /advice                                     | /advice                           |
       | /terms-and-conditions                       |                                   |
-      | /logout                                     | /login                            |
+      | /logout                                     | /login?redirect_to=index          |
       | /redirector                                 |                                   |
       | /redirector?redirect_to=appointments        | /appointments                     |
       | /nonexistent                                |                                   |
@@ -159,7 +159,7 @@ Feature: Authorisation occurs during each URL visit
       | /prescriptions/confirm-prescription-details | /prescriptions                    |
       | /advice                                     | /advice                           |
       | /terms-and-conditions                       |                                   |
-      | /logout                                     | /login                            |
+      | /logout                                     | /login?redirect_to=index          |
       | /redirector                                 |                                   |
       | /redirector?redirect_to=appointments        | /appointments                     |
       | /nonexistent                                |                                   |

@@ -104,7 +104,8 @@ open class BrowserSteps {
                 .withMessage("Expected url to end with '$url', but was '${loginPage.driver.currentUrl}'"
                         + originalPathMessage)
                 .until {
-                    it.currentUrl.endsWith(url)
+                    val escapedUrl = url.replace("?", "\\?")
+                    it.currentUrl.matches(Regex(".*$escapedUrl\$"))
                 }
     }
 

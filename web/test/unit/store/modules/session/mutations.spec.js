@@ -1,10 +1,10 @@
 import mutations from '@/store/modules/session/mutations';
 import {
   CLEAR,
+  LOGOUT,
   END_VALIDATION_CHECKING,
   HIDE_EXPIRY_MESSAGE,
   HIDE_SESSION_EXPIRING,
-  SET_LAST_CALLED_AT,
   SHOW_EXPIRY_MESSAGE,
   SHOW_SESSION_EXPIRING,
   START_VALIDATION_CHECKING,
@@ -31,13 +31,25 @@ describe('mutations', () => {
     });
   });
 
-  describe('SET_LAST_CALLED_AT', () => {
-    it('will set the lastCalledAt on the state', () => {
-      const stateToMutation = {};
-      const expected = new Date(2018, 4, 4);
-
-      mutations[SET_LAST_CALLED_AT](stateToMutation, expected);
-      expect(stateToMutation.lastCalledAt).toBe(expected);
+  describe('LOGOUT', () => {
+    const stateToMutate = {};
+    describe('showExpiryMessage is true remains true', () => {
+      beforeEach(() => {
+        stateToMutate.showExpiryMessage = true;
+      });
+      it('will not set the showExpiryMessage on the state', () => {
+        mutations[LOGOUT](stateToMutate);
+        expect(stateToMutate.showExpiryMessage).toBe(true);
+      });
+    });
+    describe('showExpiryMessage is false remains false', () => {
+      beforeEach(() => {
+        stateToMutate.showExpiryMessage = false;
+      });
+      it('will not set the showExpiryMessage on the state', () => {
+        mutations[LOGOUT](stateToMutate);
+        expect(stateToMutate.showExpiryMessage).toBe(false);
+      });
     });
   });
 

@@ -6,8 +6,8 @@ import {
   END_VALIDATION_CHECKING,
   HIDE_EXPIRY_MESSAGE,
   HIDE_SESSION_EXPIRING,
+  LOGOUT,
   SET_INFO,
-  SET_LAST_CALLED_AT,
   SHOW_EXPIRY_MESSAGE,
   START_VALIDATION_CHECKING,
   SHOW_SESSION_EXPIRING,
@@ -37,34 +37,49 @@ export default {
   [END_VALIDATION_CHECKING](state) {
     state.validationInterval = undefined;
   },
+  [LOGOUT](state) {
+    state.accessToken = undefined;
+    state.csrfToken = undefined;
+    state.dateOfBirth = undefined;
+    state.durationSeconds = undefined;
+    state.gpOdsCode = undefined;
+    state.hasLoaded = false;
+    state.lastCalledAt = undefined;
+    state.nhsNumber = undefined;
+    state.proofLevel = undefined;
+    state.sessionTimeout = undefined;
+    state.showSessionExpiring = false;
+    state.user = undefined;
+    state.validationInterval = undefined;
+    state.userSessionCreateReferenceCode = undefined;
+    state.hasRetried = undefined;
+    state.hasGpSession = undefined;
+  },
   [HIDE_EXPIRY_MESSAGE](state) {
     delete (state.showExpiryMessage);
   },
   [SET_INFO](state, {
-    name,
+    user,
     durationSeconds,
     gpOdsCode,
     sessionTimeout,
-    token,
-    lastCalledAt = new Date(),
+    csrfToken,
+    lastCalledAt,
     nhsNumber,
     dateOfBirth,
     accessToken,
     proofLevel,
   } = {}) {
-    state.user = name;
+    state.user = user;
     state.durationSeconds = durationSeconds;
     state.gpOdsCode = gpOdsCode;
     state.sessionTimeout = sessionTimeout;
-    state.csrfToken = token;
+    state.csrfToken = csrfToken;
     state.lastCalledAt = lastCalledAt;
     state.nhsNumber = nhsNumber;
     state.dateOfBirth = dateOfBirth;
     state.accessToken = accessToken;
     state.proofLevel = proofLevel;
-  },
-  [SET_LAST_CALLED_AT](state, date) {
-    state.lastCalledAt = date;
   },
   [SET_USER_SESSION_REFERENCE](state, userSessionCreateReferenceCode) {
     state.userSessionCreateReferenceCode = userSessionCreateReferenceCode;

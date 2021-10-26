@@ -1,15 +1,17 @@
 import NativeApp from '@/services/native-app';
+import semver from 'semver';
 import { setCookie } from '@/lib/cookie-manager';
 import SessionExpiryModal from '@/components/modal/content/SessionExpiryModal';
 import { isAnonymous } from '@/router';
+import { getUserAgentNativeVersionNumber } from '@/lib/utils';
 import {
   CLEAR,
   INIT,
   LOADED,
   END_VALIDATION_CHECKING,
+  LOGOUT,
   HIDE_EXPIRY_MESSAGE,
   SET_INFO,
-  SET_LAST_CALLED_AT,
   SHOW_EXPIRY_MESSAGE,
   START_VALIDATION_CHECKING,
   SHOW_SESSION_EXPIRING,
@@ -23,11 +25,13 @@ export default {
     ({ commit }) => commit(INIT),
   clear:
     ({ commit }) => commit(CLEAR),
+  logout:
+    ({ commit }) => commit(LOGOUT),
   hideExpiryMessage:
     ({ commit }) => commit(HIDE_EXPIRY_MESSAGE),
   showExpiryMessage:
     ({ commit }) => commit(SHOW_EXPIRY_MESSAGE),
-  async getSession({ commit }) {
+  async getSession({ commit, dispatch }) {
     const response = await this.app.$http.getV1Session({
       ignoreError: true,
       returnResponse: true,
@@ -47,11 +51,12 @@ export default {
         proofLevel,
       } = response.data;
 
-      commit(SET_INFO, {
-        name,
+      dispatch('setInfo', {
+        user: name,
         durationSeconds: sessionTimeout,
+        lastCalledAt: new Date(),
         gpOdsCode: odsCode,
-        token,
+        csrfToken: token,
         nhsNumber,
         dateOfBirth,
         accessToken,
@@ -66,48 +71,35 @@ export default {
     commit(LOADED);
     return Promise.resolve();
   },
-  updateLastCalledAt({ commit }, lastCalledAt = new Date()) {
-    const session = this.$cookies.get('nhso.session');
-
-    if (session) {
-      session.lastCalledAt = lastCalledAt;
-      setCookie({
-        key: 'nhso.session',
-        value: session,
-        cookies: this.$cookies,
-        secure: this.$env.SECURE_COOKIES,
-      });
-    }
-
-    commit(SET_LAST_CALLED_AT, lastCalledAt);
+  updateLastCalledAt({ commit, dispatch }, lastCalledAt = new Date()) {
+    dispatch('setInfo', { lastCalledAt });
     commit(HIDE_SESSION_EXPIRING);
   },
   setInfo({ commit, state }, info) {
     const value = !info
       ? undefined
-      : ({
-        name: info.name || state.user,
-        durationSeconds: info.durationSeconds,
-        gpOdsCode: info.gpOdsCode,
-        token: info.token,
-        lastCalledAt: info.lastCalledAt || new Date(),
-        nhsNumber: info.nhsNumber,
-        dateOfBirth: info.dateOfBirth,
-        accessToken: info.accessToken,
-        proofLevel: info.proofLevel,
-      });
+      : { ...state, ...info };
 
-    setCookie({
+    const cookie = {
       key: 'nhso.session',
       value,
       cookies: this.$cookies,
       secure: this.$env.SECURE_COOKIES,
-    });
+    };
 
-    commit(SET_INFO, info);
-  },
-  updateInfo({ commit }, info) {
-    commit(SET_INFO, info);
+    // Version check to be removed on ticket NHSO-17380 when Xamarin app is the minimum
+    // supported version in production. The cookie created by native code prepends a .
+    // to the domain (RCF2109) the web does not resulting in duplicate cookies.
+    // This is part of the cause of bug NHSO-16677 which this code helps to resolve
+    // by making the domains match.
+    const nativeVersion = getUserAgentNativeVersionNumber();
+    if (nativeVersion && semver.gte(nativeVersion, this.$env.XAMARIN_INITIAL_RELEASE_VERSION)) {
+      cookie.domain = `.${window.location.hostname}`;
+    }
+
+    setCookie(cookie);
+
+    commit(SET_INFO, value);
   },
   setGpSession({ commit }, info) {
     commit(HAS_GP_SESSION, info);
