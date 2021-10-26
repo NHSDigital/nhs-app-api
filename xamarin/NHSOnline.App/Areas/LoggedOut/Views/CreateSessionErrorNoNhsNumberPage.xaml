@@ -11,23 +11,22 @@
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorNoNhsNumberPage"
                                  x:Name="Page">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
-        <StackLayout>
-            <elements:Heading1 Text="Login failed" x:Name="Heading" />
-
-            <panels:NhsErrorCallout LabelText="Error">
-                <StackLayout>
-                    <elements:Paragraph Text="We cannot match your NHS number to a GP surgery." />
-                    <elements:Paragraph Text="If you need to book an appointment or get a prescription now, contact your GP surgery directly." />
-                    <elements:Paragraph Text="For urgent medical advice, use NHS 111 online or call 111." />
-                    <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
-                    <elements:LinkLabelWithErrorCode Text="Contact us, quoting error code"
-                                                     ErrorCode="{Binding ServiceDeskReference, Source={x:Reference Name=Page}}"
-                                                     Command="{Binding ContactUsCommand, Source={x:Reference Name=Page}}" />
-                </StackLayout>
-            </panels:NhsErrorCallout>
-
-        </StackLayout>
-
+        <panels:ResponsiveLayoutPanel>
+            <StackLayout>
+                <elements:Heading1 Text="Login failed" x:Name="Heading" />
+                <panels:NhsErrorCallout LabelText="Error">
+                    <StackLayout>
+                        <elements:Paragraph Text="We cannot match your NHS number to a GP surgery." />
+                        <elements:Paragraph Text="If you need to book an appointment or get a prescription now, contact your GP surgery directly." />
+                        <elements:Paragraph Text="For urgent medical advice, use NHS 111 online or call 111." />
+                        <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
+                        <elements:LinkLabelWithErrorCode Text="Contact us, quoting error code"
+                                                         ErrorCode="{Binding ServiceDeskReference, Source={x:Reference Name=Page}}"
+                                                         Command="{Binding ContactUsCommand, Source={x:Reference Name=Page}}" />
+                    </StackLayout>
+                </panels:NhsErrorCallout>
+            </StackLayout>
+        </panels:ResponsiveLayoutPanel>
         <ScrollView.Effects>
             <effects:SafeAreaPaddingBottom />
         </ScrollView.Effects>
