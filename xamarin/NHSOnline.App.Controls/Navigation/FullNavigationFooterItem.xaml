@@ -46,6 +46,10 @@
                             <Setter TargetName="ButtonContent" 
                                     Property="StackLayout.WidthRequest" 
                                     Value="62" />
+                            
+                            <Setter TargetName="ItemLabel"
+                                    Property="Label.FontSize"
+                                    Value="9" />
                         </VisualState.Setters>
                     </VisualState>
                     

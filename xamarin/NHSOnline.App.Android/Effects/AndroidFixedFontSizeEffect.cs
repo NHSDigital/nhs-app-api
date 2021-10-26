@@ -32,7 +32,8 @@ namespace NHSOnline.App.Droid.Effects
             base.OnElementPropertyChanged(args);
 
             // If change screen orientation, ensure font size does not change by re-applying effect.
-            if (args.PropertyName.ToUpperInvariant() == "WIDTH")
+            if (args.PropertyName.ToUpperInvariant() == "HEIGHT" ||
+                args.PropertyName.ToUpperInvariant() == "WIDTH")
             {
                 try
                 {
