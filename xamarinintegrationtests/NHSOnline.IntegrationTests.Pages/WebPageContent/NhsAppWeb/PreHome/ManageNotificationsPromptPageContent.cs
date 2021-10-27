@@ -25,7 +25,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.PreHome
         private WebText MoreInformationIsAvailableText => WebText.WithTagAndText(
             _interactor,
             "p",
-            "More information is available in the NHS App privacy policy");
+            "More information is available in the NHS App privacy policy.");
 
         private WebLink PrivacyPolicyLink => WebLink.WithText(_interactor, "NHS App privacy policy");
 

@@ -20,7 +20,7 @@
             tag="a"
             target="_blank">{{
               $t('notifications.notificationsLink')
-            }}</analytics-tracked-tag>
+            }}</analytics-tracked-tag>.
         </p>
       </div>
       <primary-button id="btn_continue" @click="onContinue">
