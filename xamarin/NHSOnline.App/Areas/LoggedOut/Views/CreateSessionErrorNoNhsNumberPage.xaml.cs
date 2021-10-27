@@ -45,7 +45,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             _logger.LogInformation("{Method}", nameof(OnAppearing));
             _appNavigation.EnableHandlers();
 
-            Heading.AccessibilityFocus();
+            base.OnAppearing();
         }
 
         protected override void OnDisappearing()

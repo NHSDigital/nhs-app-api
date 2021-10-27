@@ -7,18 +7,15 @@
                                  xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
                                  xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
                                  xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
-                                 xmlns:valueConverters="clr-namespace:NHSOnline.App.Controls.ValueConverters;assembly=NHSOnline.App.Controls"
                                  mc:Ignorable="d"
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorOdsCodeNotFoundPage"
+                                 PageDescription="Login failed"
                                  x:Name="Page">
-    <pages:NhsAppCloseSlimHeaderPage.Resources> 
-            <valueConverters:AccessibleErrorCodeConverter x:Key="AccessibleErrorCodeConverter" />
-    </pages:NhsAppCloseSlimHeaderPage.Resources>
     
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <panels:ResponsiveLayoutPanel>
             <StackLayout>
-                <elements:Heading1 Text="Login failed" x:Name="Heading" />
+                <elements:Heading1 Text="Login failed" />
                 <panels:NhsErrorCallout LabelText="Error">
                     <StackLayout>
                         <elements:Paragraph Text="We cannot connect to your GP surgery." />
@@ -41,5 +38,4 @@
             <effects:SafeAreaPaddingBottom />
         </ScrollView.Effects>
     </ScrollView>
-
 </pages:NhsAppCloseSlimHeaderPage>

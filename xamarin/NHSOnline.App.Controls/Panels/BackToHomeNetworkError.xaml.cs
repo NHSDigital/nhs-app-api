@@ -29,10 +29,5 @@ namespace NHSOnline.App.Controls.Panels
             get => (ICommand) GetValue(BackToHomeCommandProperty);
             set => SetValue(BackToHomeCommandProperty, value);
         }
-
-        public void AccessibilityFocusHeading()
-        {
-            Heading.AccessibilityFocus();
-        }
     }
 }

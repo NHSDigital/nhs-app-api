@@ -1,5 +1,4 @@
 using System;
-using System.Windows.Input;
 using NHSOnline.App.Controls.Styles;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -9,8 +8,6 @@ namespace NHSOnline.App.Controls.Elements
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Heading1
     {
-        public static readonly BindableProperty CommandProperty = TapGestureRecognizer.CommandProperty;
-
         public static readonly BindableProperty TextProperty =
             BindableProperty.Create(nameof(Text), typeof(string), typeof(Heading1));
 
@@ -28,12 +25,6 @@ namespace NHSOnline.App.Controls.Elements
         {
             base.OnSizeAllocated(width, height);
             ResponsiveStates.SetVisualStateBreakpoints(this);
-        }
-
-        public ICommand Command
-        {
-            get => (ICommand) GetValue(CommandProperty);
-            set => SetValue(CommandProperty, value);
         }
 
         public string Text
