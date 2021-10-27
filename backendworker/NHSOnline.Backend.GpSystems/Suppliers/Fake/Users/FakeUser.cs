@@ -36,6 +36,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Users
         public string FamilyName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Sex { get; set; }
+        public bool Im1MessagingEnabled { get; set; }
         public AreaBehaviours Behaviours { get; set; }
 
         public IList<string> LinkedAccountsNhsNumbers { get; set; }

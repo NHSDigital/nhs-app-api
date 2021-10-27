@@ -10,16 +10,7 @@ class MessageSendersPage : HybridPageObject() {
     val senders by lazy { SenderBlockElements(this) }
 
     fun assertHeaderDisplayed() {
-        val path = "//h1[normalize-space(text())='Health information and updates']"
-        val header = HybridPageElement(
-            path,
-            this,
-            helpfulName = "header")
-        header.waitForElement()
-    }
-
-    fun assertSubHeaderDisplayed() {
-        val path = "//h2[normalize-space(text())='Your messages']"
+        val path = "//h1[normalize-space(text())='Your health service messages']"
         val header = HybridPageElement(
             path,
             this,
@@ -29,7 +20,7 @@ class MessageSendersPage : HybridPageObject() {
 
     fun assertNoSenders() {
         val noMessages = HybridPageElement(
-            "//span[@id='noMessages']",
+            "//p[@id='noMessages']",
             page = this,
             helpfulName = "no messages tag"
         )

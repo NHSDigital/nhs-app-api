@@ -8,7 +8,7 @@
                    header-tag="h2"
                    :href="im1MessagingPath"
                    :show-indicator="hasUnreadGPMessages"
-                   :text="$t('messages.hub.gpSurgeryMessages')"
+                   :text="$t('messages.hub.gpSurgeryMessaging')"
                    :description="$t('messages.hub.sendOrViewMessagesFromYourSurgery')"
                    :aria-label="ariaLabelGpMessages()"
                    :click-func="navigateToGpMessages"/>
@@ -50,7 +50,7 @@
                    data-purpose="text_link"
                    :href="appMessagingPath"
                    :show-indicator="hasUnreadAppMessages"
-                   :text="$t('messages.hub.healthInformationAndUpdates')"
+                   :text="$t('messages.hub.yourHealthServiceMessages')"
                    :description="$t('messages.hub.viewMessagesFromHealthServicesAndTheApp')"
                    :click-func="navigateToAppMessages"
                    :aria-label="ariaLabelAppMessages()"/>
@@ -217,19 +217,19 @@ export default {
     ariaLabelGpMessages() {
       const { hasUnreadGPMessages } = this;
       return (hasUnreadGPMessages) ?
-        `${this.$t('messages.hub.gpSurgeryMessages')}
+        `${this.$t('messages.hub.gpSurgeryMessaging')}
           ${this.$t('messages.hub.sendOrViewMessagesFromYourSurgery')}.
           ${this.$t('messages.youHaveUnreadMessages')}`
-        : `${this.$t('messages.hub.gpSurgeryMessages')}
+        : `${this.$t('messages.hub.gpSurgeryMessaging')}
           ${this.$t('messages.hub.sendOrViewMessagesFromYourSurgery')}.`;
     },
     ariaLabelAppMessages() {
       const { hasUnreadAppMessages } = this;
       return (hasUnreadAppMessages) ?
-        `${this.$t('messages.hub.healthInformationAndUpdates')}
+        `${this.$t('messages.hub.yourHealthServiceMessages')}
           ${this.$t('messages.hub.viewMessagesFromHealthServicesAndTheApp')}.
           ${this.$t('messages.youHaveUnreadMessages')}`
-        : `${this.$t('messages.hub.healthInformationAndUpdates')}
+        : `${this.$t('messages.hub.yourHealthServiceMessages')}
           ${this.$t('messages.hub.viewMessagesFromHealthServicesAndTheApp')}.`;
     },
   },

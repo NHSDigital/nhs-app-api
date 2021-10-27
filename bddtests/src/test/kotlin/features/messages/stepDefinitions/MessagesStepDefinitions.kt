@@ -150,7 +150,6 @@ class MessagesStepDefinitions {
     @Then("^the Message Senders page is displayed$")
     fun theMessagesInboxPageIsDisplayed() {
         messageSendersPage.assertHeaderDisplayed()
-        messageSendersPage.assertSubHeaderDisplayed()
     }
 
     @Then("^the senders are displayed on the Messages Inbox page$")

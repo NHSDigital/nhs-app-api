@@ -25,6 +25,13 @@ export default {
         message: 'Try again now. If the problem continues and you need this information now, contact the person directly.',
         retryButtonText: 'Try again',
       },
+      403: {
+        pageTitle: 'Message error',
+        pageHeader: 'Message error',
+        header: 'There is a problem getting your message',
+        message: 'Try again now. If the problem continues and you need this information now, contact the person directly.',
+        retryButtonText: 'Try again',
+      },
     },
   },
   delete: {

@@ -8,7 +8,6 @@
       </error-container>
     </div>
     <div v-else>
-      <h2>{{ $t('messages.yourMessages') }}</h2>
       <ul v-if="hasSenders" id="inboxMessages" :class="$style['nhs-app-message']">
         <li v-for="(sender, index) in senders"
             :key="index"
@@ -38,8 +37,7 @@
         </li>
       </ul>
 
-      <span v-else id="noMessages">{{ $t('messages.youHaveNoMessages') }}</span>
-
+      <p v-else id="noMessages">{{ $t('messages.youHaveNoMessages') }}</p>
       <desktopGenericBackLink v-if="!isNativeApp"
                               data-purpose="back-link"
                               :path="backLink"

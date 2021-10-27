@@ -27,7 +27,7 @@ class PatientPracticeMessagingPage: HybridPageObject() {
     }
 
     fun assertDisplayed() {
-        val path = "//h1[normalize-space(text())='GP surgery messages']"
+        val path = "//h1[normalize-space(text())='GP surgery messaging']"
         val header = HybridPageElement(
                 path,
                 page = this,

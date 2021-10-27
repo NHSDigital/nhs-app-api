@@ -151,8 +151,6 @@ describe('messages page', () => {
         expect(im1MessagingLink.exists()).toBe(true);
         expect(im1MessagingLinkSubHeader.exists()).toBe(true);
         expect(im1MessagingLinkBody.exists()).toBe(true);
-        expect(im1MessagingLinkSubHeader.text()).toEqual('GP surgery messages');
-        expect(im1MessagingLinkBody.text()).toEqual('Send or view messages from your GP surgery');
       });
     });
   });

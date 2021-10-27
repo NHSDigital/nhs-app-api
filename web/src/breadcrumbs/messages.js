@@ -16,7 +16,7 @@ const MESSAGES_CRUMB = {
 
 const GP_MESSAGES_CRUMB = {
   defaultCrumb: [INDEX_CRUMB, MESSAGES_CRUMB],
-  i18nKey: 'gpMessages',
+  i18nKey: 'gpMessaging',
   name: GP_MESSAGES_NAME,
 };
 
@@ -81,7 +81,7 @@ const GP_MESSAGES_DELETE_SUCCESS_CRUMB = {
 
 const HEALTH_INFORMATION_UPDATES_CRUMB = {
   defaultCrumb: [INDEX_CRUMB, MESSAGES_CRUMB],
-  i18nKey: 'healthAndInformationUpdates',
+  i18nKey: 'yourHealthServiceMessages',
   name: HEALTH_INFORMATION_UPDATES_NAME,
 };
 

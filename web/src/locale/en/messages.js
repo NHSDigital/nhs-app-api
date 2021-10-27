@@ -80,9 +80,9 @@ export default {
     tryAgainNowOrContactSender: 'Try again now. If the problem continues and you need this information now, contact {sender} directly.',
   },
   hub: {
-    gpSurgeryMessages: 'GP surgery messages',
-    sendOrViewMessagesFromYourSurgery: 'Send or view messages from your GP surgery',
-    healthInformationAndUpdates: 'Health information and updates',
-    viewMessagesFromHealthServicesAndTheApp: 'View messages from health services and the NHS App',
+    gpSurgeryMessaging: 'GP surgery messaging',
+    sendOrViewMessagesFromYourSurgery: 'Send and view messages from staff at your GP surgery',
+    yourHealthServiceMessages: 'Your health service messages',
+    viewMessagesFromHealthServicesAndTheApp: 'View messages from the NHS App and connected healthcare providers, like your GP surgery',
   },
 };

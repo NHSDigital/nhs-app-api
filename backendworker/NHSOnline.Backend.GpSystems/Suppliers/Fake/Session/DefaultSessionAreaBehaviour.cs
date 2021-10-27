@@ -29,7 +29,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Session
                 NhsNumber = user.NhsNumber,
                 OdsCode = user.OdsCode,
                 Name = user.Name,
-                ProxyPatients = new List<FakeProxyUserSession>()
+                ProxyPatients = new List<FakeProxyUserSession>(),
+                Im1MessagingEnabled = user.Im1MessagingEnabled
             };
 
             foreach (var proxyNhsNumber in user.LinkedAccountsNhsNumbers)

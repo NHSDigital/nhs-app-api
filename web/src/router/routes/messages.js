@@ -83,8 +83,8 @@ export const GP_MESSAGES = {
   name: GP_MESSAGES_NAME,
   component: GpMessagesPage,
   meta: {
-    headerKey: 'navigation.pages.headers.gpMessages',
-    titleKey: 'navigation.pages.titles.gpMessages',
+    headerKey: 'navigation.pages.headers.gpMessaging',
+    titleKey: 'navigation.pages.titles.gpMessaging',
     proofLevel: proofLevel.P9,
     upliftRoute: INDEX,
     crumb: breadcrumbs.GP_MESSAGES_CRUMB,
@@ -298,8 +298,8 @@ export const HEALTH_INFORMATION_UPDATES = {
   name: HEALTH_INFORMATION_UPDATES_NAME,
   component: AppMessagingPage,
   meta: {
-    headerKey: 'navigation.pages.headers.healthAndInformationUpdates',
-    titleKey: 'navigation.pages.titles.healthAndInformationUpdates',
+    headerKey: 'navigation.pages.headers.yourHealthServiceMessages',
+    titleKey: 'navigation.pages.titles.yourHealthServiceMessages',
     crumb: breadcrumbs.HEALTH_INFORMATION_UPDATES_CRUMB,
     helpPath: MESSAGING_HELP_PATH,
     proofLevel: proofLevel.P5,
@@ -313,7 +313,7 @@ export const HEALTH_INFORMATION_UPDATES_MESSAGE = {
   name: HEALTH_INFORMATION_UPDATES_MESSAGE_NAME,
   component: AppMessagingMessagePage,
   meta: {
-    titleKey: 'navigation.pages.titles.healthAndInformationUpdates',
+    titleKey: 'navigation.pages.titles.yourHealthServiceMessages',
     crumb: breadcrumbs.HEALTH_INFORMATION_UPDATES_MESSAGE_CRUMB,
     helpPath: MESSAGING_HELP_PATH,
     proofLevel: proofLevel.P5,
@@ -327,7 +327,7 @@ export const HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES = {
   name: HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_NAME,
   component: AppMessagingSenderMessagesPage,
   meta: {
-    titleKey: 'navigation.pages.titles.healthAndInformationUpdates',
+    titleKey: 'navigation.pages.titles.yourHealthServiceMessages',
     crumb: breadcrumbs.HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_CRUMB,
     helpPath: MESSAGING_HELP_PATH,
     proofLevel: proofLevel.P5,
