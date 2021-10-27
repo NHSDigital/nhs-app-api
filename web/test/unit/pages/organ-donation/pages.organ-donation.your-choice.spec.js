@@ -1,5 +1,5 @@
 import i18n from '@/plugins/i18n';
-import RadioGroup from '@/components/RadioGroup';
+import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import YourChoice from '@/pages/organ-donation/your-choice';
 import { ORGAN_DONATION_FAITH_PATH } from '@/router/paths';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
@@ -45,7 +45,7 @@ describe('organ donation your choice page', () => {
   });
 
   it('will have radio buttons', () => {
-    expect(wrapper.find(RadioGroup).exists()).toBe(true);
+    expect(wrapper.find(NhsUkRadioGroup).exists()).toBe(true);
   });
 
   describe('continue', () => {

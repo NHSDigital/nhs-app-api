@@ -1,26 +1,24 @@
 <template>
-  <radio-group :key="organName"
-               v-model="selectedValue"
-               :name="organName"
-               :radios="choices"
-               :inline="true"
-               :current-value="currentChoice"
-               :show-error="showError"
-               :error-message="inlineErrorMessage"
-               @select="selected">
-    <template v-slot:legendContent>
-      {{ $t(title) }}
-    </template>
-  </radio-group>
+  <nhs-uk-radio-group
+    v-model="selectedValue"
+    :name="organName"
+    :items="choices"
+    :error="showError"
+    :error-text="inlineErrorMessage"
+    :current-value="currentChoice"
+    :heading="$t(title)"
+    :legend-size="'xs'"
+    @onselect="selected"
+  />
 </template>
 <script>
-import RadioGroup from '@/components/RadioGroup';
+import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import { NO, NOT_STATED, YES } from '@/store/modules/organDonation/mutation-types';
 
 export default {
   name: 'OrganChoice',
   components: {
-    RadioGroup,
+    NhsUkRadioGroup,
   },
   props: {
     title: {

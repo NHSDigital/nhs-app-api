@@ -50,6 +50,7 @@ export default {
   youHaveNoMessages: 'You have no messages.',
   youHaveUnreadMessages: 'You have unread messages.',
   youNeedToSelectYesOrNo: 'You need to select yes or no',
+  thereIsAProblem: 'There is a problem',
   yourConversationWillStillBeSaved: 'Your conversation will still be saved in your GP health record.',
   yourMessages: 'Your messages',
   call999NowIfYouHaveSymptoms: [{

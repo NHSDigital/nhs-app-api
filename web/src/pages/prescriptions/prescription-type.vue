@@ -1,6 +1,11 @@
 <template>
   <div v-if="showTemplate && !hasApiError && !gpSessionApiError">
     <div class="nhsuk-grid-column-full">
+      <error-dialog v-if="showErrors"
+                    :header-locale-ref="'prescriptions.prescriptionType.errors.thereIsAProblem'"
+                    :errors="$t(
+                      'prescriptions.prescriptionType.errors.chooseTypeOfPrescription'
+                    )"/>
 
       <div v-if="hasLoaded" class="break">
         <nhs-uk-radio-group
@@ -8,7 +13,8 @@
           v-model="selectedValue"
           :error="showErrors"
           :error-text="inlineErrorMessage"
-          :heading="$t('navigation.pages.headers.prescriptionType')"
+          :heading="'<h1>' + $t('navigation.pages.headers.prescriptionType') + '</h1>'"
+          :heading-as-html="true"
           :items="prescriptionTypeChoices"
           :required="true"
           name="prescriptionType"
@@ -42,6 +48,7 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import GenericButton from '@/components/widgets/GenericButton';
 import { GP_SESSION_ERROR_STATUS, gpSessionErrorHasRetried, redirectTo } from '@/lib/utils';
 import { getNavigationPathFromPrescriptionType } from '@/lib/prescriptions/navigation';
+import ErrorDialog from '@/components/ErrorDialog';
 import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import PrescriptionErrors from '@/components/errors/pages/prescriptions/PrescriptionsErrors';
 import { PRESCRIPTION_TYPE_PATH, PRESCRIPTIONS_CONTACT_SURGERY_PATH, PRESCRIPTIONS_PATH } from '@/router/paths';
@@ -78,6 +85,7 @@ const loadData = async (store) => {
 export default {
   name: 'PrescriptionTypePage',
   components: {
+    ErrorDialog,
     NhsUkRadioGroup,
     GenericButton,
     DesktopGenericBackLink,

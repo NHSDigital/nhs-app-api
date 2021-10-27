@@ -2,6 +2,7 @@ import BackButton from '@/components/BackButton';
 import Faith from '@/pages/organ-donation/faith';
 import i18n from '@/plugins/i18n';
 import MessageDialog from '@/components/widgets/MessageDialog';
+import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import { initialState, YES, NO, NOT_STATED } from '@/store/modules/organDonation/mutation-types';
 import { redirectTo } from '@/lib/utils';
 import { ORGAN_DONATION_ADDITIONAL_DETAILS_PATH } from '@/router/paths';
@@ -135,9 +136,21 @@ describe('organ donation faith page', () => {
   describe('radio button', () => {
     let radioButton;
 
+    describe('NhsUkRadioGroup ', () => {
+      let nhsUkRadioButton;
+
+      beforeEach(() => {
+        nhsUkRadioButton = wrapper.find(NhsUkRadioGroup);
+      });
+
+      it('should exist', () => {
+        expect(nhsUkRadioButton.exists()).toBe(true);
+      });
+    });
+
     describe('yes', () => {
       beforeEach(() => {
-        radioButton = wrapper.find(`#radioButton-${YES}`);
+        radioButton = wrapper.find(`#faith-${YES}`);
       });
 
       it('will exist', () => {
@@ -157,7 +170,7 @@ describe('organ donation faith page', () => {
 
     describe('no', () => {
       beforeEach(() => {
-        radioButton = wrapper.find(`#radioButton-${NO}`);
+        radioButton = wrapper.find(`#faith-${NO}`);
       });
 
       it('will exist', () => {
@@ -177,7 +190,7 @@ describe('organ donation faith page', () => {
 
     describe('prefer not to say', () => {
       beforeEach(() => {
-        radioButton = wrapper.find(`#radioButton-${NOT_STATED}`);
+        radioButton = wrapper.find(`#faith-${NOT_STATED}`);
       });
 
       it('will exist', () => {

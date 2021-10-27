@@ -1,8 +1,8 @@
-const ExtraLarge = 'nhsuk-fieldset__legend--xl';
-const Large = 'nhsuk-fieldset__legend--l';
-const Medium = 'nhsuk-fieldset__legend--m';
-const Small = 'nhsuk-fieldset__legend--s';
-const ExtraSmall = 'nhsuk-fieldset__legend--xs';
+const ExtraLarge = 'xl';
+const Large = 'l';
+const Medium = 'm';
+const Small = 's';
+const ExtraSmall = 'xs';
 
 export default {
   ExtraLarge,

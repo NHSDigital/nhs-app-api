@@ -93,7 +93,7 @@ describe('Prescription type page', () => {
       const radioButton = wrapper.find('#prescriptionType-PRESCRIPTION_TYPE_REPEAT');
       radioButton.trigger('click');
       continueButton.trigger('click');
-      errorComponent = wrapper.find('#errorHeading');
+      errorComponent = wrapper.find('#message-dialog');
       await Vue.nextTick();
 
       expect(errorComponent.exists()).toBe(false);
@@ -106,7 +106,7 @@ describe('Prescription type page', () => {
       radioButton.trigger('click');
       continueButton.trigger('click');
       await Vue.nextTick();
-      errorComponent = wrapper.find('#errorHeading');
+      errorComponent = wrapper.find('#message-dialog');
 
       expect(errorComponent.exists()).toBe(false);
       expect(dependency.redirectTo)

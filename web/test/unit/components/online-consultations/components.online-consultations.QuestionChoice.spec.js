@@ -1,10 +1,8 @@
 import QuestionChoice from '@/components/online-consultations/QuestionChoice';
-import RadioGroup from '@/components/RadioGroup';
-import GenericRadioButton from '@/components/widgets/GenericRadioButton';
-import each from 'jest-each';
+// import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import { mount } from '../../helpers';
 
-describe('questionChoice compoonent', () => {
+describe('questionChoice component', () => {
   let wrapper;
 
   const mountQuestion = ({ renderAsHtml = false, legend = undefined } = {}) =>
@@ -21,23 +19,10 @@ describe('questionChoice compoonent', () => {
       },
     });
 
-  describe('renderAsHtml', () => {
-    each([
-      true,
-      false,
-    ]).it('will set renderAsHtml on radio group', (renderAsHtml) => {
-      wrapper = mountQuestion({ renderAsHtml });
-
-      const radioGroup = wrapper.find(RadioGroup);
-
-      expect(radioGroup.vm.renderAsHtml).toEqual(renderAsHtml);
-    });
-  });
-
   describe('legend', () => {
     it('will include legend element if legend provided', () => {
       wrapper = mountQuestion({ legend: 'Question choice legend' });
-      const legend = wrapper.find("[name='legend']");
+      const legend = wrapper.find('#name-legend');
       expect(legend.text()).toEqual('Question choice legend');
     });
   });
@@ -48,18 +33,18 @@ describe('questionChoice compoonent', () => {
     });
 
     it('will have radio button for the question with value of first', () => {
-      const firstRadioButton = wrapper.findAll(GenericRadioButton).at(0);
-      expect(firstRadioButton.vm.value).toEqual('first');
+      const firstRadioButton = wrapper.find('#name-first');
+      expect(firstRadioButton.exists()).toBe(true);
     });
 
     it('will have radio button for the question with value of second', () => {
-      const secondRadioButton = wrapper.findAll(GenericRadioButton).at(1);
-      expect(secondRadioButton.vm.value).toEqual('second');
+      const secondRadioButton = wrapper.find('#name-second');
+      expect(secondRadioButton.exists()).toBe(true);
     });
 
     it('will have radio button for the question with value of third', () => {
-      const thirdRadioButton = wrapper.findAll(GenericRadioButton).at(2);
-      expect(thirdRadioButton.vm.value).toEqual('third');
+      const thirdRadioButton = wrapper.find('#name-third');
+      expect(thirdRadioButton.exists()).toBe(true);
     });
 
     it('will have first radio button with correct label', () => {

@@ -1,6 +1,10 @@
 <template>
   <terms-and-conditions-layout>
     <div v-if="showTemplate">
+      <error-dialog v-if="showError"
+                    :header-locale-ref="'userResearch.thereIsAProblem'"
+                    :errors="$t('userResearch.selectYesOrNo')"/>
+
       <p>{{ $t('userResearch.weWouldLikeToContactYouAboutUserResearch') }}</p>
       <collapsible-details>
         <template slot="header">
@@ -27,7 +31,7 @@
       <nhs-uk-radio-group
         v-model="selectedValue"
         name="userResearch"
-        legend-size="nhsuk-fieldset__legend--m"
+        :legend-size="'m'"
         :heading="$t('userResearch.canWeContactYouToTakePart')"
         :error="showError"
         :error-heading-reference="'userResearch.thereIsAProblem'"
@@ -44,6 +48,7 @@
 <script>
 import CollapsibleDetails from '@/components/widgets/collapsible/CollapsibleDetails';
 import PrimaryButton from '@/components/PrimaryButton';
+import ErrorDialog from '@/components/ErrorDialog';
 import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import TermsAndConditionsLayout from '@/layouts/termsAndConditions';
 import isUndefined from 'lodash/fp/isUndefined';
@@ -56,6 +61,7 @@ export default {
     PrimaryButton,
     TermsAndConditionsLayout,
     NhsUkRadioGroup,
+    ErrorDialog,
   },
   data() {
     return {

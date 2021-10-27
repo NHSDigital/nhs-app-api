@@ -1,29 +1,24 @@
 <template>
   <div id="mainDiv" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <div role="alert" aria-atomic="true">
-        <message-dialog v-if="showErrors" message-type="error" :focusable="true">
-          <message-text data-purpose="error-heading">
-            {{ $t('organDonation.thereIsAProblem') }}
-          </message-text>
-          <message-list data-purpose="reason-error">
-            <li>{{ $t('organDonation.yourChoice.chooseToDonate') }}</li>
-          </message-list>
-        </message-dialog>
-      </div>
+      <error-dialog v-if="showErrors"
+                    :header-locale-ref="'organDonation.thereIsAProblem'"
+                    :errors="$t('organDonation.yourChoice.chooseToDonate')"/>
+
       <div>
         <h2>{{ $t('organDonation.yourChoice.yourChoice') }}</h2>
       </div>
-      <radio-group v-model="selectedValue"
-                   :current-value="currentChoice"
-                   :radios="radioButtons"
-                   :show-error="showErrors"
-                   :error-message="$t('organDonation.yourChoice.chooseToDonate')"
-                   @select="selected">
-        <template v-slot:legendContent>
-          {{ $t('organDonation.yourChoice.youCanDonateSomeOrAll') }}
-        </template>
-      </radio-group>
+      <nhs-uk-radio-group v-model="selectedValue"
+                          name="choice"
+                          :items="radioButtons"
+                          :current-value="currentChoice"
+                          :legend-size="'xs'"
+                          :heading="$t('organDonation.yourChoice.youCanDonateSomeOrAll')"
+                          :required="true"
+                          :error="showErrors"
+                          :error-text="$t('organDonation.yourChoice.chooseToDonate')"
+                          @onselect="selected"
+      />
       <generic-button id="continue-button"
                       :class="['nhsuk-button']"
                       @click.prevent="continueClicked">
@@ -39,10 +34,8 @@ import { isDefault } from '@/lib/organ-donation/registration-comparison';
 import isNil from 'lodash/fp/isNil';
 import BackButton from '@/components/BackButton';
 import GenericButton from '@/components/widgets/GenericButton';
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageText from '@/components/widgets/MessageText';
-import MessageList from '@/components/widgets/MessageList';
-import RadioGroup from '@/components/RadioGroup';
+import ErrorDialog from '@/components/ErrorDialog';
+import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import { EnsureOptInDecision } from '@/components/organ-donation/EnsureDecisionMixin';
 import {
   ORGAN_DONATION_FAITH_PATH,
@@ -55,10 +48,8 @@ export default {
   components: {
     BackButton,
     GenericButton,
-    MessageDialog,
-    MessageList,
-    MessageText,
-    RadioGroup,
+    ErrorDialog,
+    NhsUkRadioGroup,
   },
   mixins: [EnsureOptInDecision],
   data() {
@@ -66,14 +57,18 @@ export default {
       hasTriedToContinue: false,
       radioButtons: [
         {
-          hint: this.$t('organDonation.yourChoice.helpUpToNinePeople'),
           label: this.$t('organDonation.yourChoice.allMyOrgansAndTissue'),
           value: true,
+          hint: {
+            text: this.$t('organDonation.yourChoice.helpUpToNinePeople'),
+          },
         },
         {
-          hint: this.$t('organDonation.yourChoice.chooseWhichOrgansAndTissue'),
           label: this.$t('organDonation.yourChoice.someOrgansAndTissue'),
           value: false,
+          hint: {
+            text: this.$t('organDonation.yourChoice.chooseWhichOrgansAndTissue'),
+          },
         },
       ],
       setAllOrgansAction: 'organDonation/setAllOrgans',

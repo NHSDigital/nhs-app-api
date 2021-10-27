@@ -40,15 +40,15 @@ describe('gp messages urgency page', () => {
       },
     });
   };
+  beforeEach(() => {
+    EventBus.$emit.mockClear();
+    EventBus.$on.mockClear();
+    EventBus.$off.mockClear();
+    isEmptyArray.mockClear();
+    redirectTo.mockClear();
+  });
 
   describe('created', () => {
-    beforeEach(() => {
-      EventBus.$emit.mockClear();
-      EventBus.$on.mockClear();
-      EventBus.$off.mockClear();
-      isEmptyArray.mockClear();
-    });
-
     describe('no available recipients', () => {
       beforeEach(async () => {
         isEmptyArray.mockImplementation(() => true);
@@ -99,38 +99,45 @@ describe('gp messages urgency page', () => {
   describe('continue clicked', () => {
     const messageRecipients = [{ recipientIdentifier: '1', name: 'Dr. Test' }];
 
-    it('will show a validation error when making no choice', async () => {
+    beforeEach(async () => {
       mountPage({ messageRecipients });
       await wrapper.vm.$nextTick();
-
-      wrapper.find('#continueButton').trigger('click');
-      await wrapper.vm.$nextTick();
-
-      const errorContent = wrapper.find('[data-purpose="error-container"] [data-purpose="error"]');
-      const validationError = errorContent.find('ul li');
-      expect(errorContent.exists()).toBe(true);
-      expect(errorContent.text()).toContain('There\'s a problem');
-      expect(validationError.text()).toEqual('You need to select yes or no');
     });
 
-    it('will redirect to /gp-messages/contact-your-gp when the answer is yes', async () => {
-      mountPage({ urgencyChoice: 'yes', messageRecipients });
-      await wrapper.vm.$nextTick();
+    (describe('no choice', () => {
+      it('will show an error summary', async () => {
+        await wrapper.find('#continueButton').trigger('click');
+        expect(wrapper.vm.isError).toBe(true);
 
-      wrapper.find('#continueButton').trigger('click');
-      await wrapper.vm.$nextTick();
+        const summaryError = wrapper.find('#message-dialog');
+        expect(summaryError.exists()).toBe(true);
+      });
+    }));
 
-      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages/urgency/contact-your-gp');
-    });
+    (describe('choice made', () => {
+      it('will set correct validity when answer is yes', async () => {
+        const radioButton = wrapper.find('#messagingUrgency-yes');
+        expect(radioButton.exists()).toBe(true);
+        await radioButton.setChecked();
+        expect(wrapper.vm.isValid).toBe(true);
 
-    it('will redirect to /gp-messages/recipients when the answer is no', async () => {
-      mountPage({ urgencyChoice: 'no', messageRecipients });
-      await wrapper.vm.$nextTick();
+        const continueButton = wrapper.find('#continueButton');
+        expect(continueButton.exists()).toBe(true);
+        await continueButton.trigger('click');
+        expect(wrapper.vm.isError).toBe(false);
+      });
 
-      wrapper.find('#continueButton').trigger('click');
-      await wrapper.vm.$nextTick();
+      it('will set correct validity when when the answer is no', async () => {
+        const radioButton = wrapper.find('#messagingUrgency-no');
+        expect(radioButton.exists()).toBe(true);
+        await radioButton.setChecked();
+        expect(wrapper.vm.isValid).toBe(true);
 
-      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages/recipients');
-    });
+        const continueButton = wrapper.find('#continueButton');
+        expect(continueButton.exists()).toBe(true);
+        await continueButton.trigger('click');
+        expect(wrapper.vm.isError).toBe(false);
+      });
+    }));
   });
 });

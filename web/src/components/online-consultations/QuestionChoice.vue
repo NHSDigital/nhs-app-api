@@ -7,27 +7,29 @@
         {{ singleError }}
       </span>
     </div>
-    <span v-if="legend" name="legend" class="nhsuk-u-visually-hidden">{{ legend }}</span>
-    <radio-group :key="name"
-                 v-model="selectedValue"
-                 :name="name"
-                 :radios="options"
-                 :current-value="selectedValue"
-                 :required="required"
-                 :render-as-html="renderAsHtml"
-                 :a-described-by="ariaDescribed"
-                 @select="selected"/>
+    <nhs-uk-radio-group
+      v-model="selectedValue"
+      :heading="legend? ('<h1>' + legend + '</h1>') : undefined"
+      :heading-as-html="true"
+      :no-heading-required="legend == false"
+      :name="name"
+      :legend-size="'l'"
+      :required="required"
+      :items="options"
+      :render-as-html="renderAsHmtl"
+      :disable-fieldset="true"
+    />
   </span>
 </template>
 
 <script>
-import RadioGroup from '@/components/RadioGroup';
+import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import { questionChoiceAnswerValid } from '@/lib/online-consultations/answer-validators';
 
 export default {
   name: 'QuestionChoice',
   components: {
-    RadioGroup,
+    NhsUkRadioGroup,
   },
   props: {
     name: {

@@ -1,3 +1,10 @@
+<!--
+NOTE this page is not currently accessible with-in the application
+See link bellow for when feature was disabled.
+https://nhsd-jira.digital.nhs.uk/browse/NHSO-8947
+Ensure this is updated to use NhsUkRadioButton if re-enabled in line with
+https://nhsd-jira.digital.nhs.uk/browse/NHSO-16781
+-->
 <template>
   <div>
     <div class="nhsuk-grid-row">

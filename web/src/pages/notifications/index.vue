@@ -6,7 +6,10 @@
       <p>{{ $t('notifications.theNhsAndConnected') }}</p>
       <nhs-uk-radio-group v-model="selectedValue"
                           name="notifications"
-                          :heading="$t('notifications.doYouWantToGetNotifications')"
+                          :heading="'<h1>'
+                            + $t('notifications.doYouWantToGetNotifications')
+                            + '</h1>'"
+                          :heading-as-html="true"
                           :legend-size="mediumLegendSize"
                           :enable-error-dialog="false"
                           :error="showError"
@@ -110,7 +113,6 @@ export default {
   methods: {
     async onContinue() {
       this.hasTriedToContinue = true;
-
       if (this.showError) {
         EventBus.$emit(FOCUS_ERROR_ELEMENT);
         return;

@@ -2,13 +2,20 @@
   <div v-if="showTemplate && !loading" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <div v-if="messageRecipients && messageRecipients.length > 0">
+        <error-dialog v-if="isError"
+                      :header-locale-ref="'messages.thereIsAProblem'"
+                      :errors="$t('messages.youNeedToSelectYesOrNo')"/>
+
         <nhs-uk-radio-group id="messagingUrgency"
                             v-model="answer"
                             :error="isError"
                             :error-text="$t('messages.youNeedToSelectYesOrNo')"
                             :items="questionOptions"
                             :required="true"
-                            :heading="$t('navigation.pages.titles.gpMessagesUrgency')"
+                            :heading="'<h1>'
+                              + $t('navigation.pages.titles.gpMessagesUrgency')
+                              + '</h1>'"
+                            :heading-as-html="true"
                             name="messagingUrgency"
                             @validate="onAnswerValidate"/>
         <generic-button id="continueButton"
@@ -41,6 +48,7 @@
 <script>
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import GenericButton from '@/components/widgets/GenericButton';
+import ErrorDialog from '@/components/ErrorDialog';
 import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import { redirectTo, isEmptyArray } from '@/lib/utils';
 import {
@@ -58,11 +66,13 @@ export default {
   components: {
     DesktopGenericBackLink,
     GenericButton,
+    ErrorDialog,
     NhsUkRadioGroup,
   },
   data() {
     return {
       isError: false,
+      isValid: false,
       loading: true,
       questionOptions: [{
         value: YES,

@@ -3,11 +3,21 @@
 
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
+        <error-dialog v-if="showErrors"
+                      :header-locale-ref="'nominatedPharmacy.chooseType.errorHeading'"
+                      :errors="$t('nominatedPharmacy.chooseType.errorMessage')"/>
+      </div>
+    </div>
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
         <nhs-uk-radio-group
           v-model="selectedValue"
           name="chooseType"
-          legend-size="nhsuk-fieldset__legend--xl"
-          :heading="$t('nominatedPharmacy.chooseType.nominatedPharmacyChooseType')"
+          :legend-size="'xl'"
+          :heading="'<h1>'
+            + $t('nominatedPharmacy.chooseType.nominatedPharmacyChooseType')
+            + '</h1>'"
+          :heading-as-html="true"
           :error="showErrors"
           :error-text="$t('nominatedPharmacy.chooseType.errorMessage')"
           :items="radioButtons"
@@ -45,6 +55,7 @@ import get from 'lodash/fp/get';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import GenericButton from '@/components/widgets/GenericButton';
+import ErrorDialog from '@/components/ErrorDialog';
 import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
 import {
@@ -62,6 +73,7 @@ export default {
     AnalyticsTrackedTag,
     DesktopGenericBackLink,
     GenericButton,
+    ErrorDialog,
     NhsUkRadioGroup,
   },
   data() {

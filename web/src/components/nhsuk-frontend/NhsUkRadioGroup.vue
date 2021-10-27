@@ -1,14 +1,25 @@
+<!-- v-html is used to render html in radio button lables as e-consult results can contain html -->
+<!-- eslint-disable vue/no-v-html -->
 <template>
-  <fieldset class="nhsuk-fieldset" :aria-describedby="error ? `${name}-error` : undefined">
-    <legend :class="['nhsuk-fieldset__legend', legendSize, 'nhsuk-u-margin-bottom-3']">
-      <h1 ref="nhsukRadiosHeader"
-          class="nhsuk-fieldset__heading nhsuk-u-margin-top-3"
-          tabindex="-1">{{ heading }}</h1>
+  <component :is="componentType" class="nhsuk-fieldset"
+             :aria-describedby="error ? `${name}-error` : undefined">
+
+    <legend
+      v-if="!noHeadingRequired && heading"
+      :id="`${name}-legend`"
+      :class="['nhsuk-fieldset__legend',
+               `nhsuk-fieldset__legend--${legendSize}`,
+               'nhsuk-u-margin-bottom-3']"
+    >
+      <template v-if="headingAsHtml">
+        <span v-html="heading"/>
+      </template>
+      <template v-else>{{ heading }}</template>
     </legend>
+
     <error-dialog v-if="enableErrorDialog && error"
                   :header-locale-ref="errorHeadingReference"
                   :errors="errorText"/>
-
 
     <div :class="['nhsuk-form-group', error ? 'nhsuk-form-group--error' : undefined]">
       <span v-if="error" :id="`${name}-error`" class="nhsuk-error-message">
@@ -17,22 +28,23 @@
       </span>
 
       <div class="nhsuk-radios">
-        <div v-for="item in items" :key="`${name}-${item.value}`"
+        <div v-for="item in items" :key="`${name}-${getValue(item)}`"
              class="nhsuk-radios__item">
-          <input :id="`${name}-${item.value}`" v-model="choice" class="nhsuk-radios__input"
-                 :name="name" type="radio" :value="item.value" :required="required"
+          <input :id="`${name}-${getValue(item)}`" v-model="choice" class="nhsuk-radios__input"
+                 :name="name" type="radio" :value="getValue(item)" :required="required"
                  :aria-describedby="error ? `${name}-error` : undefined" aria-invalid="false">
-          <label class="nhsuk-label nhsuk-radios__label" :for="`${name}-${item.value}`">
-            {{ item.label || item.value }}
+          <label class="nhsuk-label nhsuk-radios__label" :for="`${name}-${getValue(item)}`">
+            <template v-if="renderAsHtml"><span v-html="getLabel(item) || item.value"/></template>
+            <template v-else>{{ getLabel(item) || item.value }}</template>
           </label>
-          <div v-if="item.hint" :id="`${name}-${item.value}-hint`"
+          <div v-if="item.hint" :id="`${name}-${getValue(item)}-hint`"
                class="nhsuk-hint nhsuk-radios__hint">
             {{ item.hint.text }}
           </div>
         </div>
       </div>
     </div>
-  </fieldset>
+  </component>
 </template>
 
 <script>
@@ -49,19 +61,29 @@ export default {
       type: String,
       required: true,
     },
+    noHeadingRequired: {
+      type: Boolean,
+      default: false,
+    },
+    headingAsHtml: {
+      type: Boolean,
+      default: false,
+    },
     heading: {
       type: String,
-      required: true,
+      default: undefined,
+
+      // This makes headings required, unless noHeadingRequired is true.
+      validator: (value, noHeadingRequired) => noHeadingRequired || (value !== undefined && value !== ''),
     },
     legendSize: {
       type: String,
-      default: LegendSize.ExtraLarge,
+      default: LegendSize.xs,
       validator: value => Object.values(LegendSize).includes(value),
     },
-    // TODO: to be reverted to false by default
     enableErrorDialog: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     error: {
       type: Boolean,
@@ -83,36 +105,74 @@ export default {
       type: Boolean,
       default: true,
     },
-    value: {
-      type: String,
+    // only used if radio group already in fieldset
+    disableFieldset: {
+      type: Boolean,
+      default: false,
+    },
+    // eslint-disable-next-line vue/require-prop-types
+    currentValue: {
       default: undefined,
+    },
+    renderAsHtml: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
     return {
       itemValues: this.items.map(v => v.value),
-      choice: this.value,
+      choice: this.currentValue,
+      selectedValue: this.currentValue,
+      componentType: this.disableFieldset ? 'div' : 'fieldset',
     };
   },
   watch: {
     choice(to) {
       this.checkAndEmitIsValueValid(to);
+      this.onSelected(to);
       this.$emit('input', to);
     },
   },
   created() {
     this.checkAndEmitIsValueValid(this.choice);
+    if (this.choice !== undefined) {
+      this.onSelected(this.choice);
+    }
   },
   mounted() {
     if (document.activeElement !== null) {
       document.activeElement.blur();
     }
-    this.$refs.nhsukRadiosHeader.focus();
   },
   methods: {
     checkAndEmitIsValueValid(value) {
       const isValid = (!this.required && value === undefined) || this.itemValues.includes(value);
       this.$emit('validate', { isValid });
+    },
+    onSelected(value) {
+      this.choice = value;
+      this.$emit('onselect', this.choice);
+    },
+    getValue(item) {
+      if (item.value !== undefined && item.value !== '') {
+        return item.value;
+      } if (item.code !== undefined && item.code !== '') {
+        return item.code;
+      }
+      return '';
+    },
+    getLabel(item) {
+      if (item === undefined || item === null) {
+        /* eslint-disable consistent-return */
+        return;
+      }
+      if (item.label !== undefined && item.label !== '') {
+        return item.label;
+      } if (item.description !== undefined && item.description !== '') {
+        return item.description;
+      }
+      return '';
     },
   },
 };

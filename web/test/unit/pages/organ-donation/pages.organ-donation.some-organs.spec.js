@@ -3,7 +3,12 @@ import OrganChoice from '@/components/organ-donation/OrganChoice';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import SomeOrgans from '@/pages/organ-donation/some-organs';
 import i18n from '@/plugins/i18n';
-import { initialState, NO, NOT_STATED, YES } from '@/store/modules/organDonation/mutation-types';
+import {
+  initialState,
+  NO,
+  NOT_STATED,
+  YES,
+} from '@/store/modules/organDonation/mutation-types';
 import {
   ORGAN_DONATION_FAITH_PATH,
   ORGAN_DONATION_MORE_ABOUT_ORGANS_PATH,

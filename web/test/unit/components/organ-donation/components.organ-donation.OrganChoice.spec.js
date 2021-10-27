@@ -1,9 +1,9 @@
 /* eslint-disable object-curly-newline */
-import GenericRadioButton from '@/components/widgets/GenericRadioButton';
 import i18n from '@/plugins/i18n';
 import OrganChoice from '@/components/organ-donation/OrganChoice';
+import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import {
-  initialState,
+  initialState, NO, YES,
 } from '@/store/modules/organDonation/mutation-types';
 import { createStore, mount } from '../../helpers';
 
@@ -12,8 +12,6 @@ const organName = 'heart';
 describe('organ choice component', () => {
   let $store;
   let wrapper;
-  let yesRadioButton;
-  let noRadioButton;
 
   const mountOrganChoice = () => mount(OrganChoice, {
     $store,
@@ -34,61 +32,86 @@ describe('organ choice component', () => {
     wrapper = mountOrganChoice();
   });
 
-  describe('yes selected', () => {
-    beforeEach(() => {
-      yesRadioButton = wrapper.findAll(GenericRadioButton).at(0);
-    });
+  describe('radio button', () => {
+    let radioButton;
+    let label;
 
-    it('will dispatch `setSomeOrgans` when a radio button is selected', () => {
-      wrapper.vm.selected('Yes');
-      expect($store.dispatch).toHaveBeenCalledWith('organDonation/setSomeOrgans', { choice: 'heart', value: 'Yes' });
-    });
+    describe('NhsUkRadioGroup ', () => {
+      let nhsUkRadioButton;
 
-    it('will have a yes radio button with value set to Yes', () => {
-      expect(yesRadioButton.vm.value).toEqual('Yes');
-    });
-
-    describe('text translations', () => {
-      it('will display the organ title', () => {
-        expect(wrapper.text()).toContain('Heart');
+      beforeEach(() => {
+        nhsUkRadioButton = wrapper.find(NhsUkRadioGroup);
       });
-    });
 
-    describe('computed properties', () => {
-      describe('currentChoice', () => {
-        it('will be the state value for that organ', () => {
-          expect(wrapper.vm.currentChoice)
-            .toEqual($store.state.organDonation.registration.decisionDetails.choices[organName]);
+      it('should exist', () => {
+        expect(nhsUkRadioButton.exists()).toBe(true);
+      });
+
+      describe('text translations', () => {
+        it('will display the organ title', () => {
+          expect(wrapper.text()).toContain('Heart');
         });
       });
-    });
-  });
 
-  describe('no selected', () => {
-    beforeEach(() => {
-      noRadioButton = wrapper.findAll(GenericRadioButton).at(1);
-    });
+      describe('yes', () => {
+        beforeEach(() => {
+          radioButton = wrapper.find(`#heart-${YES}`);
+        });
 
-    it('will dispatch `setSomeOrgans` when a radio button is selected', () => {
-      wrapper.vm.selected('No');
-      expect($store.dispatch).toHaveBeenCalledWith('organDonation/setSomeOrgans', { choice: 'heart', value: 'No' });
-    });
+        it('will have lable Yes', () => {
+          label = wrapper.find(`[for="heart-${YES}"]`);
+          expect(label.text()).toContain('Yes');
+        });
 
-    it('will have a no radio button with value set to No', () => {
-      expect(noRadioButton.vm.value).toEqual('No');
-    });
+        describe('when clicked', () => {
+          beforeEach(() => {
+            radioButton.trigger('click');
+          });
 
-    describe('text translations', () => {
-      it('will display the organ title', () => {
-        expect(wrapper.text()).toContain('Heart');
+          it('will dispatch `setSomeOrgans` when a radio button is selected', () => {
+            expect($store.dispatch).toHaveBeenCalledWith('organDonation/setSomeOrgans', { choice: 'heart', value: 'Yes' });
+          });
+
+          describe('computed properties', () => {
+            describe('currentChoice', () => {
+              it('will be the state value for that organ', () => {
+                expect(wrapper.vm.currentChoice)
+                  .toEqual($store.state.organDonation.registration
+                    .decisionDetails.choices[organName]);
+              });
+            });
+          });
+        });
       });
-    });
 
-    describe('computed properties', () => {
-      describe('currentChoice', () => {
-        it('will be the state value for that organ', () => {
-          expect(wrapper.vm.currentChoice)
-            .toEqual($store.state.organDonation.registration.decisionDetails.choices[organName]);
+      describe('no', () => {
+        beforeEach(() => {
+          radioButton = wrapper.find(`#heart-${NO}`);
+        });
+
+        it('will have lable No', () => {
+          label = wrapper.find(`[for="heart-${NO}"]`);
+          expect(label.text()).toContain('No');
+        });
+
+        describe('when clicked', () => {
+          beforeEach(() => {
+            radioButton.trigger('click');
+          });
+
+          it('will dispatch `setSomeOrgans` when a radio button is selected', () => {
+            expect($store.dispatch).toHaveBeenCalledWith('organDonation/setSomeOrgans', { choice: 'heart', value: 'No' });
+          });
+        });
+
+        describe('computed properties', () => {
+          describe('currentChoice', () => {
+            it('will be the state value for that organ', () => {
+              expect(wrapper.vm.currentChoice)
+                .toEqual($store.state.organDonation.registration
+                  .decisionDetails.choices[organName]);
+            });
+          });
         });
       });
     });
