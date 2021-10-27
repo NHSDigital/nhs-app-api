@@ -11,12 +11,12 @@ open class NominatedPharmacyChooseTypePage : HybridPageObject() {
     private lateinit var webHeader: WebHeader
 
     val highStreetPharmacyRadioButton = HybridPageElement(
-        webDesktopLocator = "//input[@id='radioButton-highStreet']",
+        webDesktopLocator = "//input[@id='chooseType-highStreet']",
         page = this
     )
 
     val onlinePharmacyRadioButton = HybridPageElement(
-        webDesktopLocator = "//input[@id='radioButton-online']",
+        webDesktopLocator = "//input[@id='chooseType-online']",
         page = this
     )
 

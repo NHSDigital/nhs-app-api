@@ -1,20 +1,6 @@
 <template>
   <terms-and-conditions-layout>
     <div v-if="showTemplate">
-      <message-dialog v-if="showError"
-                      :focusable="true"
-                      message-type="error"
-                      role="alert"
-                      tabindex="-1">
-        <message-text data-purpose="error-heading">
-          {{ $t('userResearch.thereIsAProblem') }}
-        </message-text>
-        <message-list data-purpose="reason-error">
-          <li>
-            {{ $t('userResearch.selectYesOrNo') }}
-          </li>
-        </message-list>
-      </message-dialog>
       <p>{{ $t('userResearch.weWouldLikeToContactYouAboutUserResearch') }}</p>
       <collapsible-details>
         <template slot="header">
@@ -38,16 +24,15 @@
                $t('userResearch.readOurPrivacyPolicy') }}</a>{{
           $t('userResearch.toFindOutHowWeUseAndProtectYourData') }}
       </p>
-      <radio-group header-size="m"
-                   class="nhsuk-u-margin-bottom-4"
-                   :show-error="showError"
-                   :error-message="$t('userResearch.selectYesOrNo')"
-                   :radios="choices"
-                   @select="onSelection">
-        <template v-slot:legendContent>
-          {{ $t('userResearch.canWeContactYouToTakePart') }}
-        </template>
-      </radio-group>
+      <nhs-uk-radio-group
+        v-model="selectedValue"
+        name="userResearch"
+        :legend-size="'nhsuk-fieldset__legend--m'"
+        :heading="$t('userResearch.canWeContactYouToTakePart')"
+        :error="showError"
+        :error-text="$t('userResearch.selectYesOrNo')"
+        :items="choices"
+      />
       <primary-button @click.stop.prevent="onContinue">
         {{ $t('generic.continue') }}
       </primary-button>
@@ -57,11 +42,8 @@
 
 <script>
 import CollapsibleDetails from '@/components/widgets/collapsible/CollapsibleDetails';
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageList from '@/components/widgets/MessageList';
-import MessageText from '@/components/widgets/MessageText';
 import PrimaryButton from '@/components/PrimaryButton';
-import RadioGroup from '@/components/RadioGroup';
+import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import TermsAndConditionsLayout from '@/layouts/termsAndConditions';
 import isUndefined from 'lodash/fp/isUndefined';
 import { NOTIFICATIONS_PATH } from '@/router/paths';
@@ -70,12 +52,9 @@ export default {
   name: 'UserResearchPage',
   components: {
     CollapsibleDetails,
-    MessageDialog,
-    MessageList,
-    MessageText,
     PrimaryButton,
-    RadioGroup,
     TermsAndConditionsLayout,
+    NhsUkRadioGroup,
   },
   data() {
     return {

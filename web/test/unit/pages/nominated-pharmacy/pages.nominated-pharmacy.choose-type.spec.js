@@ -1,6 +1,6 @@
 import i18n from '@/plugins/i18n';
 import NominatedPharmacyChooseType from '@/pages/nominated-pharmacy/choose-type';
-import RadioGroup from '@/components/RadioGroup';
+import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
 import {
   NOMINATED_PHARMACY_DSP_INTERRUPT_PATH,
@@ -55,7 +55,7 @@ describe('nominated pharmacy choose type page', () => {
   });
 
   it('will have radio buttons', () => {
-    expect(wrapper.find(RadioGroup).exists()).toBe(true);
+    expect(wrapper.find(NhsUkRadioGroup).exists()).toBe(true);
   });
 
   describe('continue-button', () => {
@@ -70,7 +70,7 @@ describe('nominated pharmacy choose type page', () => {
     it('will redirect to the nominated pharmacy search page', async () => {
       wrapper.vm.selected(PharmacyTypeChoice.HIGH_STREET_PHARMACY);
       continueButton.trigger('click');
-      errorComponent = wrapper.find('#errorHeading');
+      errorComponent = wrapper.find('#chooseType-error');
 
       expect(errorComponent.exists()).toBe(false);
       expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/setChosenType', PharmacyTypeChoice.HIGH_STREET_PHARMACY);
@@ -81,7 +81,7 @@ describe('nominated pharmacy choose type page', () => {
     it('will redirect to the dsp interrupt page', async () => {
       wrapper.vm.selected(PharmacyTypeChoice.ONLINE_PHARMACY);
       continueButton.trigger('click');
-      errorComponent = wrapper.find('#errorHeading');
+      errorComponent = wrapper.find('#chooseType-error');
 
       expect(errorComponent.exists()).toBe(false);
       expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/setChosenType', PharmacyTypeChoice.ONLINE_PHARMACY);
@@ -93,7 +93,7 @@ describe('nominated pharmacy choose type page', () => {
       wrapper.vm.selected(null);
       continueButton.trigger('click');
       await wrapper.vm.$nextTick();
-      errorComponent = wrapper.find('#errorHeading');
+      errorComponent = wrapper.find('#chooseType-error');
 
       expect(errorComponent.exists()).toBe(true);
       expect($store.dispatch).not.toHaveBeenCalled();

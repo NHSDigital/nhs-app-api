@@ -3,37 +3,16 @@
 
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <div role="alert" aria-atomic="true">
-          <message-dialog v-if="showErrors"
-                          message-type="error"
-                          :focusable="true">
-            <message-text id="errorHeading" data-purpose="error-heading">
-              {{ $t('nominatedPharmacy.chooseType.errorHeading') }}
-            </message-text>
-            <message-list data-purpose="reason-error">
-              <li>{{ $t('nominatedPharmacy.chooseType.errorMessage') }}</li>
-            </message-list>
-          </message-dialog>
-        </div>
-      </div>
-    </div>
-
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
-        <radio-group v-model="selectedValue"
-                     :class="$style.radioGroup"
-                     :radios="radioButtons"
-                     :show-error="showErrors"
-                     :current-value="currentChoice"
-                     :error-message="$t('nominatedPharmacy.chooseType.errorMessage')"
-                     :header-size="xl"
-                     @select="selected">
-          <template v-slot:legendContent>
-            <h1 class="nhsuk-fieldset__heading nhsuk-u-margin-top-3">
-              {{ $t('nominatedPharmacy.chooseType.nominatedPharmacyChooseType') }}
-            </h1>
-          </template>
-        </radio-group>
+        <nhs-uk-radio-group
+          v-model="selectedValue"
+          name="chooseType"
+          :legend-size="'nhsuk-fieldset__legend--xl'"
+          :heading="$t('nominatedPharmacy.chooseType.nominatedPharmacyChooseType')"
+          :error="showErrors"
+          :error-text="$t('nominatedPharmacy.chooseType.errorMessage')"
+          :items="radioButtons"
+          @selected="selected"
+        />
       </div>
     </div>
 
@@ -66,10 +45,7 @@ import get from 'lodash/fp/get';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import GenericButton from '@/components/widgets/GenericButton';
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageText from '@/components/widgets/MessageText';
-import MessageList from '@/components/widgets/MessageList';
-import RadioGroup from '@/components/RadioGroup';
+import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
 import {
   NOMINATED_PHARMACY_SEARCH_PATH,
@@ -86,10 +62,7 @@ export default {
     AnalyticsTrackedTag,
     DesktopGenericBackLink,
     GenericButton,
-    MessageDialog,
-    MessageList,
-    MessageText,
-    RadioGroup,
+    NhsUkRadioGroup,
   },
   data() {
     return {
@@ -99,12 +72,12 @@ export default {
       hasContinuedWithoutSelection: false,
       radioButtons: [
         {
-          hint: this.$t('nominatedPharmacy.chooseType.highStreetHint'),
+          hint: { text: this.$t('nominatedPharmacy.chooseType.highStreetHint') },
           label: this.$t('nominatedPharmacy.chooseType.highStreet'),
           value: PharmacyTypeChoice.HIGH_STREET_PHARMACY,
         },
         {
-          hint: this.$t('nominatedPharmacy.chooseType.onlineHint'),
+          hint: { text: this.$t('nominatedPharmacy.chooseType.onlineHint') },
           label: this.$t('nominatedPharmacy.chooseType.online'),
           value: PharmacyTypeChoice.ONLINE_PHARMACY,
         },

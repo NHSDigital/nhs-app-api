@@ -31,6 +31,6 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
             => ActOnLabelElement(e => e.Displayed.Should().BeTrue("A {0} tag with text {1} should be displayed", _legend, _option));
 
         private By LabelFindBy
-            => By.XPath($"//fieldset[legend[normalize-space(text()) = {_legend.QuoteXPathLiteral()}]]//label[normalize-space(text()) = {_option.QuoteXPathLiteral()}]");
+            => By.XPath($"//fieldset[legend[h1[normalize-space(text()) =  {_legend.QuoteXPathLiteral()}]]]//label[normalize-space(text()) = {_option.QuoteXPathLiteral()}]");
     }
 }

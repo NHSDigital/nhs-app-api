@@ -72,7 +72,7 @@ describe('user research', () => {
         });
 
         it('will show error dialog', () => {
-          expect(wrapper.find('.error').exists()).toBe(true);
+          expect(wrapper.find('#message-dialog').exists()).toBe(true);
         });
 
         it('will not call conditional redirect', () => {
@@ -80,7 +80,7 @@ describe('user research', () => {
         });
 
         it('will show inline errors', () => {
-          expect(wrapper.find('.error-message').exists()).toBe(true);
+          expect(wrapper.find('#userResearch-error').exists()).toBe(true);
         });
       });
 
@@ -89,17 +89,17 @@ describe('user research', () => {
         ['No', 'optOut'],
       ])('`%s` radio button is selected', (_, value) => {
         beforeEach(() => {
-          const radioButton = wrapper.find(`#radioButton-${value}`);
+          const radioButton = wrapper.find(`#userResearch-${value}`);
           radioButton.trigger('click');
           clickButton();
         });
 
         it('will not show error dialog', () => {
-          expect(wrapper.find('.error').exists()).toBe(false);
+          expect(wrapper.find('#message-dialog').exists()).toBe(false);
         });
 
         it('will not show inline errors', () => {
-          expect(wrapper.find('.error-message').exists()).toBe(false);
+          expect(wrapper.find('#userResearch-error').exists()).toBe(false);
         });
 
         it('will post user research preference', () => {
@@ -119,7 +119,7 @@ describe('user research', () => {
           const error = { response: { status: 500 } };
           $http.postV1ApiUsersMeInfoUserresearch.mockImplementation(() => Promise.reject(error));
 
-          const radioButton = wrapper.find('#radioButton-optIn');
+          const radioButton = wrapper.find('#userResearch-optIn');
           radioButton.trigger('click');
           clickButton();
         });
