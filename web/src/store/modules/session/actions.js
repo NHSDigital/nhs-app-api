@@ -80,6 +80,10 @@ export default {
       ? undefined
       : { ...state, ...info };
 
+    value.csrfToken = value.csrfToken || value.token;
+
+    value.user = value.user || value.name;
+
     const cookie = {
       key: 'nhso.session',
       value,
