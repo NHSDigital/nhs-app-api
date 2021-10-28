@@ -221,7 +221,7 @@ spec:
         - name: BASE_NHS_APP_HELP_URL
           value: "{{ $.Values.web.baseNhsAppHelpUrl }}"
         - name: XAMARIN_INITIAL_RELEASE_VERSION
-          value: "1.99.0"
+          value: "2.0.0"
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"
