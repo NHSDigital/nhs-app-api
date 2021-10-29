@@ -39,13 +39,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                 County = pharmacy.County,
                 City = pharmacy.City,
                 Postcode = pharmacy.Postcode,
-                OdsCode = pharmacy.NACSCode,
-                TelephoneNumber = pharmacy.GetContactsArray().FirstOrDefault(x => x.OrganisationContactMethodType == OrganisationContactMethodType.Telephone)?.OrganisationContactValue,
-                OpeningTimes = pharmacy.GetOpeningTimesArray()
-                    .Where(x => x.IsOpen && x.WeekDay.HasValue)
+                OdsCode = pharmacy.ODSCode,
+                TelephoneNumber = pharmacy.Contacts?.FirstOrDefault(x => x.ContactMethodType == OrganisationContactMethodType.Telephone)?.ContactValue,
+                OpeningTimes = (pharmacy.OpeningTimes ?? new List<GpSearch.Models.OpeningTime>())
+                    .Where(x => x.IsOpen && x.Weekday.HasValue)
                     .Select(x => new OpeningTime
                     {
-                        Day = x.WeekDay?.ToString(),
+                        Day = x.Weekday?.ToString(),
                         Time = x.Times,
                     })
             };

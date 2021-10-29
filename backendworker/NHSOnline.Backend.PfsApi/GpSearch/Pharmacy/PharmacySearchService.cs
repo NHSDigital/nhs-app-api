@@ -300,10 +300,10 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
         private static IEnumerable<Organisation> PickContactableOnlinePharmacies(IEnumerable<Organisation> pharmacies)
         {
             return pharmacies.Where(x => !string.IsNullOrEmpty(x.URL)
-                                         || x.GetContactsArray().Any(c =>
-                                             c.OrganisationContactMethodType ==
+                                         || x.Contacts?.Any(c =>
+                                             c.ContactMethodType ==
                                              ResponseEnums.OrganisationContactMethodType.Telephone &&
-                                             !string.IsNullOrEmpty(c.OrganisationContactValue))).ToList();
+                                             !string.IsNullOrEmpty(c.ContactValue)) == true).ToList();
         }
 
         private async Task<PharmacySearchResponse> ExecuteOrganisationPostcodeSearch(OrganisationPostcodeSearchData organisationSearchData, string postcode)
@@ -333,13 +333,10 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
             return new OrganisationPostcodeSearchData
             {
                 Top = _gpLookupConfig.PharmacySearchApiLimit,
-                Select = "OrganisationID,OrganisationName,Address1,Address2,Address3,City,Postcode,NACSCode,Geocode,Contacts,OpeningTimes",
-                Filter = $"OrganisationSubType eq '{ Constants.OrganisationSubTypeForCommunityPharmacy }' ",
+                Select = "OrganisationName,Address1,Address2,Address3,City,Postcode,ODSCode,Geocode,Contacts,OpeningTimes",
+                Filter = $"OrganisationTypeId eq '{Constants.OrganisationTypePharmacy}' and OrganisationSubType eq '{ Constants.OrganisationSubTypeForCommunityPharmacy }' and Metrics / any (x: x/MetricName eq '{Constants.EpsMetricName}' and x/Value eq '{Constants.EpsEnabledMetricValue}')",
                 OrderBy = $"geo.distance(Geocode, geography'POINT({postcodeData.Longitude} {postcodeData.Latitude})')",
-                Search = $"Metrics:({ Constants.MetricIdForEPSEnabled })",
                 Count = true,
-                QueryType = "full",
-                SearchMode = "all"
             };
         }
 
@@ -347,8 +344,8 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
         {
             var searchData = new OrganisationSearchData
             {
-                Select = "OrganisationName,URL,Contacts,NACSCode",
-                Filter = $"(OrganisationTypeID eq '{Constants.OrganisationTypePharmacy}') and (OrganisationSubType eq '{Constants.OrganisationSubTypeForInternetPharmacy}')",
+                Select = "OrganisationName,URL,Contacts,ODSCode",
+                Filter = $"(OrganisationTypeId eq '{Constants.OrganisationTypePharmacy}') and (OrganisationSubType eq '{Constants.OrganisationSubTypeForInternetPharmacy}')",
                 Count = true,
             };
 

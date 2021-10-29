@@ -77,6 +77,6 @@ components:
         postcode:
           type: string
           description: Postcode
-        nacsCode:
+        odsCode:
           type: string
           description: ODSCode

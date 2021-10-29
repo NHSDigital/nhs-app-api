@@ -2,10 +2,11 @@
 {
     public static class Constants
     {
-        internal const int MetricIdForEPSEnabled = 10051;
+        internal const string EpsMetricName = "Electronic prescription service";
+        internal const string EpsEnabledMetricValue = "Yes";
 
-        internal const string OrganisationSubTypeForCommunityPharmacy = "Community Pharmacy";
-        internal const string OrganisationSubTypeForInternetPharmacy = "Internet Pharmacy";
+        internal const string OrganisationSubTypeForCommunityPharmacy = "Community";
+        internal const string OrganisationSubTypeForInternetPharmacy = "DistanceSelling";
 
         internal const string OrganisationTypeGpPractice = "GPB";
         internal const string OrganisationTypePharmacy = "PHA";

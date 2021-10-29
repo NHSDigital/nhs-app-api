@@ -39,7 +39,7 @@ describe('pharmacy summary', () => {
     let pharmacyAddressComponent;
 
     beforeEach(() => {
-      props.pharmacy.pharmacySubType = 'Community Pharmacy';
+      props.pharmacy.pharmacySubType = 'Community';
       wrapper = mount(PharmacySummary, {
         $store,
         propsData: props,
@@ -56,7 +56,7 @@ describe('pharmacy summary', () => {
     let pharmacyAddressComponent;
 
     beforeEach(() => {
-      props.pharmacy.pharmacySubType = 'Internet Pharmacy';
+      props.pharmacy.pharmacySubType = 'DistanceSelling';
       wrapper = mount(PharmacySummary, {
         $store,
         propsData: props,

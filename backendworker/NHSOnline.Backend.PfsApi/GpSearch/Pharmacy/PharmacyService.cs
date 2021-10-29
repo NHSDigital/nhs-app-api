@@ -93,7 +93,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
             {
                 Top = 1,
                 Search = "*",
-                Filter = $"NACSCode eq '{odsCode}'",
+                Filter = $"ODSCode eq '{odsCode}'",
                 Count = true,
             };
         }

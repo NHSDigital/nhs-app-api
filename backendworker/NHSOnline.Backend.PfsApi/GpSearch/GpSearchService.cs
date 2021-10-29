@@ -72,9 +72,11 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
                 return new IsGpPracticeEpsEnabledResponse(HttpStatusCode.NotFound);
             }
 
-            var metrics = searchResponse.Body.Organisations.First().GetMetricsArray();
+            var metrics = searchResponse.Body.Organisations.First().Metrics;
+            var hasEpsMetric = metrics.Any(
+                x => x.MetricName == Constants.EpsMetricName && x.Value == Constants.EpsEnabledMetricValue);
 
-            if (!metrics.Any(x => x.MetricID == Constants.MetricIdForEPSEnabled))
+            if (!hasEpsMetric)
             {
                 _logger.LogInformation(
                     $"Search for Nhs GP Practice by ods code {odsCode}, not enabled for eps ");
@@ -127,8 +129,8 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
             return new OrganisationSearchData
             {
                 Top = 1,
-                Filter = $"OrganisationTypeID eq '{Constants.OrganisationTypeGpPractice}' and NACSCode eq '{odsCode}'",
-                Select = "OrganisationID,OrganisationName,NACSCode,Metrics",
+                Filter = $"OrganisationTypeId eq '{Constants.OrganisationTypeGpPractice}' and ODSCode eq '{odsCode}'",
+                Select = "OrganisationName,ODSCode,Metrics",
             };
         }
     }

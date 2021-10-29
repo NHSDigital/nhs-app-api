@@ -77,8 +77,6 @@ users:
     - notificationHubPath: nhsapp-nonlive
       notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
 
-nhsSearchHostname: nhsuk-apim-int-uks.azure-api.net
-
 secrets:
   notificationHubs:
     - name: "notificationHubSharedAccessKey"

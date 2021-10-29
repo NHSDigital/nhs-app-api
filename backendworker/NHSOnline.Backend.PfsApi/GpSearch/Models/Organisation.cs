@@ -21,44 +21,20 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models
 
         public string Postcode { get; set; }
 
-        public string NACSCode { get; set; }
+        public string ODSCode { get; set; }
 
         public Geocode Geocode { get; set; }
 
-        public string OpeningTimes { get; set; }
+        public List<OpeningTime> OpeningTimes { get; set; } = new List<OpeningTime>();
 
-        public string Contacts { get; set; }
+        public List<ContactInformation> Contacts { get; set; } = new List<ContactInformation>();
+
+        public List<MetricInformation> Metrics { get; set; } = new List<MetricInformation>();
 
         public string OrganisationSubType { get; set; }
 
         [SuppressMessage("Microsoft.Naming", "CA1056",
             Justification = "We want to display the exact URL/string returned from NHSSearch to avoid any parsing error.")]
         public string URL { get; set; }
-
-        public string Metrics { get; set; }
-
-        public IEnumerable<OpeningTime> GetOpeningTimesArray()
-        {
-            var listOfOpeningTimes = !string.IsNullOrEmpty(OpeningTimes) ?
-                JsonConvert.DeserializeObject<IEnumerable<OpeningTime>>(OpeningTimes) : Enumerable.Empty<OpeningTime>();
-
-            return listOfOpeningTimes ?? Enumerable.Empty<OpeningTime>();
-        }
-
-        public IEnumerable<ContactInformation> GetContactsArray()
-        {
-            var listOfContacts = !string.IsNullOrEmpty(Contacts)?
-                JsonConvert.DeserializeObject<IEnumerable<ContactInformation>>(Contacts) : Enumerable.Empty<ContactInformation>();
-
-            return listOfContacts ?? Enumerable.Empty<ContactInformation>();
-        }
-
-        public IEnumerable<MetricInformation> GetMetricsArray()
-        {
-            var listOfContacts = !string.IsNullOrEmpty(Metrics)?
-                JsonConvert.DeserializeObject<IEnumerable<MetricInformation>>(Metrics) : Enumerable.Empty<MetricInformation>();
-
-            return listOfContacts ?? Enumerable.Empty<MetricInformation>();
-        }
     }
 }

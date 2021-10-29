@@ -2,6 +2,8 @@
 {
     public class MetricInformation
     {
-        public int MetricID { get; set; }
+        public string MetricName { get; set; }
+
+        public string Value { get; set; }
     }
 }

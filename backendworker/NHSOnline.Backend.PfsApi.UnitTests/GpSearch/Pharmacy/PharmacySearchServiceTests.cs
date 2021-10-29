@@ -34,8 +34,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
 
         private IFixture _fixture;
 
-        private const int EPSEnabledMetricID = 10051;
-
         [TestInitialize]
         public void TestInitialize()
         {
@@ -117,10 +115,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
 
            _gpLookupClient
                 .Setup(x => x.GpPostcodeSearch(It.Is<OrganisationPostcodeSearchData>(p =>
-                    p.Search.Equals("Metrics:("+EPSEnabledMetricID+")", StringComparison.Ordinal) &&
-                    p.QueryType.Equals("full", StringComparison.Ordinal) &&
-                    p.SearchMode.Equals("all", StringComparison.Ordinal) &&
-                    p.Filter.Contains("OrganisationSubType eq 'Community Pharmacy'", StringComparison.Ordinal) &&
+                    p.Filter.Contains($"OrganisationTypeId eq '{Constants.OrganisationTypePharmacy}' " +
+                                      $"and OrganisationSubType eq '{Constants.OrganisationSubTypeForCommunityPharmacy}' " +
+                                      $"and Metrics / any (x: x/MetricName eq '{Constants.EpsMetricName}' " +
+                                      $"and x/Value eq '{Constants.EpsEnabledMetricValue}')", StringComparison.Ordinal) &&
                     p.OrderBy.Equals($"geo.distance(Geocode, geography'POINT({longitude} {latitude})')", StringComparison.Ordinal) &&
                     p.Top == _gpLookupConfig.Object.PharmacySearchApiLimit)))
                 .Returns(Task.FromResult(pharmacyResponse));
@@ -266,11 +264,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             var pharmacies = Enumerable.Repeat(new Organisation
             {
                 URL = url,
-                Contacts = JsonConvert.SerializeObject(
-                    new[]
-                    {
-                        new ContactInformation { OrganisationContactMethodType = ResponseEnums.OrganisationContactMethodType.Telephone, OrganisationContactValue = telephone },
-                    })
+                Contacts = new List<ContactInformation>
+                {
+                    new ContactInformation{ ContactValue = telephone, ContactMethodType = ResponseEnums.OrganisationContactMethodType.Telephone}
+                },
             }, 1).ToList();
 
             var pharmacyResponse = new
@@ -367,33 +364,28 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
                 pharmacies.Add(new Organisation
                 {
                     URL = $"www.test{i}.com",
-                    Contacts = JsonConvert.SerializeObject(new[]
-                        {
-                            new ContactInformation
-                            {
-                                OrganisationContactMethodType = ResponseEnums.OrganisationContactMethodType.Telephone,
-                                OrganisationContactValue = "0100234987"
-                            }
-                        }
-                    )
+                    Contacts = new List<ContactInformation>
+                    {
+                        new ContactInformation{ ContactValue = "0100234987", ContactMethodType = ResponseEnums.OrganisationContactMethodType.Telephone}
+                    }
                 });
             }
 
             // some pharmacies only have one piece of information (and will not be filtered)
             pharmacies[4].URL = "";
             pharmacies[5].URL = null;
-            pharmacies[6].Contacts = "";
+            pharmacies[6].Contacts = new List<ContactInformation>();
             pharmacies[7].Contacts = null;
 
             // these 4 pharmacies will have no information (and will be filtered)
             pharmacies[8].URL = "";
-            pharmacies[8].Contacts = "";
+            pharmacies[8].Contacts = new List<ContactInformation>();
             pharmacies[9].URL = null;
             pharmacies[9].Contacts = null;
             pharmacies[10].URL = "";
             pharmacies[10].Contacts = null;
             pharmacies[11].URL = null;
-            pharmacies[11].Contacts = "";
+            pharmacies[11].Contacts = new List<ContactInformation>();
 
             var pharmacyResponse = new
                 GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>(HttpStatusCode.OK)
@@ -443,10 +435,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
                     p.QueryType == null &&
                     p.SearchMode == null &&
                     p.Filter.Equals(
-                        $"(OrganisationTypeID eq '{Constants.OrganisationTypePharmacy}') " +
+                        $"(OrganisationTypeId eq '{Constants.OrganisationTypePharmacy}') " +
                         $"and (OrganisationSubType eq '{Constants.OrganisationSubTypeForInternetPharmacy}')", StringComparison.Ordinal) &&
                     p.Top == 1000 &&
-                    p.Select.Equals("OrganisationName,URL,Contacts,NACSCode", StringComparison.Ordinal))))
+                    p.Select.Equals("OrganisationName,URL,Contacts,ODSCode", StringComparison.Ordinal))))
                 .Returns(Task.FromResult(response));
         }
 
@@ -459,10 +451,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
                     p.QueryType == null &&
                     p.SearchMode == null &&
                     p.Filter.Equals(
-                        $"(OrganisationTypeID eq '{Constants.OrganisationTypePharmacy}') " +
+                        $"(OrganisationTypeId eq '{Constants.OrganisationTypePharmacy}') " +
                         $"and (OrganisationSubType eq '{Constants.OrganisationSubTypeForInternetPharmacy}')", StringComparison.Ordinal) &&
                     p.Top == _gpLookupConfig.Object.OnlinePharmacySearchResultLimit &&
-                    p.Select.Equals("OrganisationName,URL,Contacts,NACSCode", StringComparison.Ordinal))))
+                    p.Select.Equals("OrganisationName,URL,Contacts,ODSCode", StringComparison.Ordinal))))
                 .Returns(Task.FromResult(response));
         }
     }

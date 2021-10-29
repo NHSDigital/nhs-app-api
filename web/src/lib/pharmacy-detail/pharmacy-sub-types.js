@@ -1,5 +1,5 @@
-export const CommunityPharmacy = 'Community Pharmacy';
-export const InternetPharmacy = 'Internet Pharmacy';
+export const CommunityPharmacy = 'Community';
+export const InternetPharmacy = 'DistanceSelling';
 
 export default {
   CommunityPharmacy,

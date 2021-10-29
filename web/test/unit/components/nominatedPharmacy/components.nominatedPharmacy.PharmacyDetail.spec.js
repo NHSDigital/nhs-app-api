@@ -13,7 +13,7 @@ const createPharmacyDetailComponentForP1CommunityPharmacy = ({ $store }) => moun
     pharmacy: {
       pharmacyName: 'Best pharmacy',
       pharmacyType: 'P1',
-      pharmacySubType: 'Community Pharmacy',
+      pharmacySubType: 'Community',
       telephoneNumber: '666668',
       addressLine1: 'address1',
       addressLine2: 'address2',
@@ -41,7 +41,7 @@ const createPharmacyDetailComponentWhereDisplayChangeMyNominatedPharmacyButtonIs
       pharmacy: {
         pharmacyName: 'Best pharmacy',
         pharmacyType: 'P1',
-        pharmacySubType: 'Community Pharmacy',
+        pharmacySubType: 'Community',
         telephoneNumber: '666668',
         addressLine1: 'address1',
         addressLine2: 'address2',
@@ -68,7 +68,7 @@ const createPharmacyDetailComponentForP1InternetPharmacy = ({ $store }) => mount
     pharmacy: {
       pharmacyName: 'Best pharmacy',
       pharmacyType: 'P1',
-      pharmacySubType: 'Internet Pharmacy',
+      pharmacySubType: 'DistanceSelling',
       telephoneNumber: '666668',
       addressLine1: 'address1',
       addressLine2: 'address2',
@@ -108,7 +108,7 @@ const createPharmacyDetailComponentForP3 = ({ $store }) => mount(PharmacyDetail,
 });
 
 describe('pharmacy detail', () => {
-  describe('pharmacy detail with Pharmacy type as P1 and Pharmacy Subtype as Community Pharmacy', () => {
+  describe('pharmacy detail with Pharmacy type as P1 and Pharmacy Subtype as Community', () => {
     let wrapper;
     let $store;
 
@@ -176,7 +176,7 @@ describe('pharmacy detail', () => {
     });
   });
 
-  describe('pharmacy detail with Pharmacy type as P1 and Pharmacy Subtype as Internet Pharmacy', () => {
+  describe('pharmacy detail with Pharmacy type as P1 and Pharmacy Subtype as DistanceSelling', () => {
     let wrapper;
     let $store;
 

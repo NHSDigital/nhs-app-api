@@ -63,8 +63,8 @@ open class NominatedPharmacyDataSetupSteps {
 
         val data = NhsAzureSearchData.generatePharmacyData(1)
         val generatedPharmacy = data.value[0]
-        generatedPharmacy.NACSCode = odsCode
-        generatedPharmacy.OrganisationSubType = "Internet Pharmacy"
+        generatedPharmacy.ODSCode = odsCode
+        generatedPharmacy.OrganisationSubType = "DistanceSelling"
         setupWiremockToReturnPharmacyWhenSearchedFor(generatedPharmacy)
 
         NominatedPharmacySerenityHelpers.MY_NOMINATED_PHARMACY.set(generatedPharmacy)
@@ -111,7 +111,7 @@ open class NominatedPharmacyDataSetupSteps {
 
         val data = NhsAzureSearchData.generatePharmacyData(1)
         val generatedPharmacy = data.value[0]
-        generatedPharmacy.NACSCode = odsCode
+        generatedPharmacy.ODSCode = odsCode
         setupWiremockToReturnPharmacyWhenSearchedFor(generatedPharmacy)
 
         NominatedPharmacySerenityHelpers.MY_NOMINATED_PHARMACY.set(generatedPharmacy)
@@ -131,8 +131,8 @@ open class NominatedPharmacyDataSetupSteps {
         mockingClient.forAzure.forSearchOrganisation {
             nhsAzureSearch.nhsAzureSearchOrganisationRequest(NhsAzureSearchOrganisationRequestBody(
                     top = 1,
-                    filter = "OrganisationTypeID eq 'GPB' and NACSCode eq '$odsCode'",
-                    select = "OrganisationID,OrganisationName,NACSCode,Metrics",
+                    filter = "OrganisationTypeId eq 'GPB' and ODSCode eq '$odsCode'",
+                    select = "OrganisationName,ODSCode,Metrics",
                     search = null,
                     count = false,
                     searchFields = null,
@@ -154,7 +154,7 @@ open class NominatedPharmacyDataSetupSteps {
         val responseStringForUpdatedPharmacy =
                 GetNominatedPharmacyRequestBuilder.getResponse(
                         personalDetails,
-                        organisation.NACSCode,
+                        organisation.ODSCode,
                         arrayOf(pharmacyType))
 
         mockingClient.forSpine.mock {
@@ -186,7 +186,7 @@ open class NominatedPharmacyDataSetupSteps {
                     search = "*",
                     select = null,
                     searchFields = null,
-                    filter = "NACSCode eq '${organisation.NACSCode}'",
+                    filter = "ODSCode eq '${organisation.ODSCode}'",
                     queryType = null,
                     count = true
             )).respondWithSuccess(
@@ -202,8 +202,8 @@ open class NominatedPharmacyDataSetupSteps {
         mockingClient.forAzure.forSearchOrganisation {
             nhsAzureSearch.nhsAzureSearchOrganisationRequest(NhsAzureSearchOrganisationRequestBody(
                     top = 1,
-                    filter = "OrganisationTypeID eq 'GPB' and NACSCode eq '$odsCode'",
-                    select = "OrganisationID,OrganisationName,NACSCode,Metrics",
+                    filter = "OrganisationTypeId eq 'GPB' and ODSCode eq '$odsCode'",
+                    select = "OrganisationName,ODSCode,Metrics",
                     search = null,
                     count = false,
                     searchFields = null,
@@ -216,13 +216,13 @@ open class NominatedPharmacyDataSetupSteps {
     fun disableGpPracticeForEPSForPatient() {
         val odsCode = SerenityHelpers.getPatient().odsCode
         val data = NhsAzureSearchData.generatePharmacyData(1)
-        data.value.get(0).Metrics = ""
+        data.value.get(0).Metrics = arrayListOf()
 
         mockingClient.forAzure.forSearchOrganisation {
             nhsAzureSearch.nhsAzureSearchOrganisationRequest(NhsAzureSearchOrganisationRequestBody(
                     top = 1,
-                    filter = "OrganisationTypeID eq 'GPB' and NACSCode eq '${odsCode}'",
-                    select = "OrganisationID,OrganisationName,NACSCode,Metrics",
+                    filter = "OrganisationTypeId eq 'GPB' and ODSCode eq '${odsCode}'",
+                    select = "OrganisationName,ODSCode,Metrics",
                     search = null,
                     count = false,
                     searchFields = null,
@@ -236,15 +236,16 @@ open class NominatedPharmacyDataSetupSteps {
         mockingClient.forAzure.forSearchOrganisation {
             nhsAzureSearch.nhsAzureSearchPostcodeOrganisationRequest(NhsAzureSearchOrganisationWithPostcodeRequestBody(
                     top = 10,
-                    select = "OrganisationID,OrganisationName,Address1,Address2,Address3," +
-                            "City,Postcode,NACSCode,Geocode,Contacts,OpeningTimes",
-                    filter = "OrganisationSubType eq 'Community Pharmacy' ",
-                    search = "Metrics:(10051)",
+                    select = "OrganisationName,Address1,Address2,Address3," +
+                            "City,Postcode,ODSCode,Geocode,Contacts,OpeningTimes",
+                    filter = "OrganisationTypeId eq 'PHA' and OrganisationSubType eq 'Community' and " +
+                            "Metrics / any (x: x/MetricName eq 'Electronic prescription service' and x/Value eq 'Yes')",
+                    search = null,
                     searchFields = null,
                     count = true,
                     orderby = "geo.distance(Geocode, geography'POINT(${postcode.longitude} ${postcode.latitude})')",
-                    queryType = "full",
-                    searchMode = "all"
+                    queryType = null,
+                    searchMode = null
             )).respondWithSuccess(data)
         }
     }

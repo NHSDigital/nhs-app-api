@@ -34,8 +34,6 @@ cidHostname: auth.login.nhs.uk
 cidFidoHostname: uaf.login.nhs.uk
 cidSettingsHostName: settings.login.nhs.uk
 
-nhsSearchHostname: api.nhs.uk
-
 visionHostname: vs002.inps.co.uk
 visionIPTrust: "185.45.163.86/32"
 visionUsername: "pfs:kain01"

@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
         private readonly IGpLookupConfig _config;
 
         private const string SubscriptionKey = "subscription-key";
-        private const string OrganisationSearchPath = "service-search/search?api-version=1";
+        private const string OrganisationSearchPath = "service-search/search?api-version=2";
         private const string PostcodeSearchPath = "service-search/postcodesandplaces/search?api-version=1";
 
         public GpLookupClient(

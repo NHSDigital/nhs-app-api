@@ -2,7 +2,7 @@
 {
     public class OpeningTime
     {
-        public ResponseEnums.WeekDay? WeekDay { get; set; }
+        public ResponseEnums.WeekDay? Weekday { get; set; }
 
         public string Times { get; set; }
 

@@ -38,7 +38,6 @@ iproxy:
 ndopClaimIssuer: https://www-preview.dev.nonlive.nhsapp.service.nhs.uk
 ndopClaimAudience: https://ndopapp-int1.thunderbird.service.nhs.uk
 contactUsUrl: https://www.nhs.uk/contact-us/nhs-app-contact-us
-nhsSearchHostname: nhsuk-apim-int-uks.azure-api.net
 
 # well known
 wellKnownAndroidPackageName: com.nhs.online.nhsonline.preview

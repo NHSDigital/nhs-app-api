@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
             var expectedResponse = _fixture.Create<NhsOrganisationSearchResponse>();
 
             _mockHttpHandler
-                .When(HttpMethod.Post, new Uri(_gLookupClientApiBaseUrl, "service-search/search?api-version=1").ToString())
+                .When(HttpMethod.Post, new Uri(_gLookupClientApiBaseUrl, "service-search/search?api-version=2").ToString())
                 .WithHeaders("subscription-key", $"{_gpLookupApiKey}")
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
 
             _mockHttpHandler.VerifyNoOutstandingExpectation();
         }
-        
+
         public void Dispose()
         {
             _mockHttpHandler.Dispose();

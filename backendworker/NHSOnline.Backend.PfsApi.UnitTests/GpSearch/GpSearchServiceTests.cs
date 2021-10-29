@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.PfsApi.GpSearch;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
+using Constants = NHSOnline.Backend.Support.Constants;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
 {
@@ -123,11 +124,21 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
         {
             // Arrange
             const string odsCode = "AB234";
-            const int metricIdOtherThanToEpsEnabled = 999;
+            const string otherEpsMetricValue = "No";
 
             var organisationReturnResults = new List<Organisation>
             {
-                new Organisation { OrganisationName = "Test GP Practice", Metrics = $"[{{\"MetricID\": {metricIdOtherThanToEpsEnabled} }}]" }
+                new Organisation {
+                    OrganisationName = "Test GP Practice",
+                    Metrics = new List<MetricInformation>
+                    {
+                        new MetricInformation
+                        {
+                            MetricName = PfsApi.GpSearch.Constants.EpsMetricName,
+                            Value = otherEpsMetricValue
+                        }
+                    }
+                }
             };
 
             var organisationReturnResult =
@@ -164,7 +175,18 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
 
             var organisationReturnResults = new List<Organisation>
             {
-                new Organisation { OrganisationName = "Test GP Practice", Metrics = $"[{{\"MetricID\": {Constants.MetricIdForEPSEnabled} }}]" }
+                new Organisation
+                {
+                    OrganisationName = "Test GP Practice",
+                    Metrics = new List<MetricInformation>
+                    {
+                        new MetricInformation
+                        {
+                            MetricName = PfsApi.GpSearch.Constants.EpsMetricName,
+                            Value = PfsApi.GpSearch.Constants.EpsEnabledMetricValue
+                        }
+                    }
+                }
             };
 
             var organisationReturnResult =
@@ -179,8 +201,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
 
             _gpLookupClient.Setup(x => x.OrganisationSearch(It.Is<OrganisationSearchData>(
                 o => o.Top == 1 &&
-                string.Equals(o.Select, "OrganisationID,OrganisationName,NACSCode,Metrics", System.StringComparison.OrdinalIgnoreCase) &&
-                string.Equals(o.Filter, $"OrganisationTypeID eq 'GPB' and NACSCode eq '{odsCode}'", System.StringComparison.OrdinalIgnoreCase))
+                string.Equals(o.Select, "OrganisationName,ODSCode,Metrics", System.StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(o.Filter, $"OrganisationTypeId eq 'GPB' and ODSCode eq '{odsCode}'", System.StringComparison.OrdinalIgnoreCase))
                 ))
                 .Returns(Task.FromResult(organisationReturnResult))
                 .Verifiable();
@@ -221,8 +243,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
 
             _gpLookupClient.Setup(x => x.OrganisationSearch(It.Is<OrganisationSearchData>(
                     o => o.Top == 1 &&
-                         string.Equals(o.Select, "OrganisationID,OrganisationName,NACSCode,Metrics", System.StringComparison.OrdinalIgnoreCase) &&
-                         string.Equals(o.Filter, $"OrganisationTypeID eq 'GPB' and NACSCode eq '{odsCode}'", System.StringComparison.OrdinalIgnoreCase))
+                         string.Equals(o.Select, "OrganisationName,ODSCode,Metrics", System.StringComparison.OrdinalIgnoreCase) &&
+                         string.Equals(o.Filter, $"OrganisationTypeId eq 'GPB' and ODSCode eq '{odsCode}'", System.StringComparison.OrdinalIgnoreCase))
                 ))
                 .Returns(Task.FromResult(organisationReturnResult))
                 .Verifiable();

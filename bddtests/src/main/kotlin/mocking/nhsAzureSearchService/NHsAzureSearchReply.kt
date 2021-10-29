@@ -1,6 +1,5 @@
 package mocking.nhsAzureSearchService
 
-import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 
 data class NhsAzureSearchOrganisationReply(
@@ -13,7 +12,6 @@ data class Geocode(
 )
 
 data class NhsAzureSearchOrganisationItem(
-        var OrganisationID: String,
         var OrganisationName: String,
         var OrganisationType: String,
         var OrganisationSubType: String,
@@ -23,30 +21,33 @@ data class NhsAzureSearchOrganisationItem(
         var City: String,
         var County: String,
         var Postcode: String,
-        var NACSCode: String,
+        var ODSCode: String,
         var Geocode: Geocode,
-        var Metrics: String? = null,
-        var Contacts: String? = null,
+        var Metrics: ArrayList<Metric> = arrayListOf(),
+        var Contacts: ArrayList<Contact> = arrayListOf(),
         var URL: String? = null) {
     fun primaryPhone(): String? {
-        if (Contacts != null) {
-            val contacts = Gson().fromJson(Contacts, Array<Contact>::class.java)
-
-            val telephoneNumbers = contacts.filter { it.OrganisationContactMethodType == "Telephone" }
+        if (!Contacts.isEmpty()) {
+            val telephoneNumbers = Contacts.filter { it.ContactMethodType == "Telephone" }
             val primaryPhone = telephoneNumbers.firstOrNull()
 
-            return primaryPhone?.OrganisationContactValue
+            return primaryPhone?.ContactValue
         }
         return null
     }
 }
 
 data class Contact(
-        var OrganisationContactType: String,
-        var OrganisationContactAvailabilityType: String,
-        var OrganisationContactMethodType: String,
-        var OrganisationContactValue: String
-        )
+        var ContactType: String,
+        var ContactAvailabilityType: String,
+        var ContactMethodType: String,
+        var ContactValue: String
+)
+
+data class Metric(
+        var MetricName: String,
+        var Value: String
+)
 
 data class NHSAzureSearchPostcodesAndPlacesReply(
         var value: MutableList<NhsAzureSearchPostcodesAndPlacesItem> = arrayListOf(),

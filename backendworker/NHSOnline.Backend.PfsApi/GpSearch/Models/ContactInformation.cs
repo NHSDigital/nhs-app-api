@@ -2,8 +2,8 @@
 {
     public class ContactInformation
     {
-        public ResponseEnums.OrganisationContactMethodType OrganisationContactMethodType { get; set; }
+        public ResponseEnums.OrganisationContactMethodType ContactMethodType { get; set; }
 
-        public string OrganisationContactValue { get; set; }
+        public string ContactValue { get; set; }
     }
 }

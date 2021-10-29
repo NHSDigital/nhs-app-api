@@ -36,8 +36,6 @@ cidHostname: auth.ext.signin.nhs.uk
 cidFidoHostname: uaf.ext.signin.nhs.uk
 cidSettingsHostName: settings.ext.signin.nhs.uk
 
-nhsSearchHostname: api.nhs.uk
-
 emisIPTrust: "13.73.180.243/32"
 emisHostname: "nhs70apptest.emishealth.com"
 emisPort: 443

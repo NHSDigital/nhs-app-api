@@ -4,7 +4,9 @@ import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationReply
 import mocking.nhsAzureSearchService.NHSAzureSearchPostcodesAndPlacesReply
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationItem
 import mocking.nhsAzureSearchService.NhsAzureSearchPostcodesAndPlacesItem
+import mocking.nhsAzureSearchService.Contact
 import mocking.nhsAzureSearchService.Geocode
+import mocking.nhsAzureSearchService.Metric
 
 object NhsAzureSearchData {
 
@@ -15,10 +17,8 @@ object NhsAzureSearchData {
     // 1 less than F81090 in redis cache
     const val ORGANISATION_NAME = "Clay Cross Medical Centre"
     private const val PHARMACY_NAME = "My Pharmacy"
-    private const val RANDOMIZED_INTERNET_PHARMACY_LIMIT = 1000
 
-    private const val BASE_NACSCODE = 81089
-    private const val BASE_ORGANISATION_ID = 4648
+    private const val BASE_ODSCODE = 81089
     private const val POSTCODE_SEARCH_INDEX = 9
 
     fun generateOrganisationData(numberOfItems: Int): NhsAzureSearchOrganisationReply {
@@ -41,15 +41,6 @@ object NhsAzureSearchData {
         return NhsAzureSearchOrganisationReply(searchItems, numberOfItems)
     }
 
-    fun generateOnlinePharmacyData(): NhsAzureSearchOrganisationReply {
-        val searchItems = mutableListOf<NhsAzureSearchOrganisationItem>()
-
-        for(i in 1..RANDOMIZED_INTERNET_PHARMACY_LIMIT) {
-            searchItems.add(createOnlinePharmacyResultFromIndex(i))
-        }
-        return NhsAzureSearchOrganisationReply(searchItems, RANDOMIZED_INTERNET_PHARMACY_LIMIT)
-    }
-
     fun getSuccessfulPostcodeMatch(): NHSAzureSearchPostcodesAndPlacesReply {
         val searchItems = mutableListOf<NhsAzureSearchPostcodesAndPlacesItem>()
 
@@ -68,8 +59,7 @@ object NhsAzureSearchData {
 
     private fun createOrganisationResultFromIndex(
             i: Int, isPharmacySearch: Boolean = false): NhsAzureSearchOrganisationItem {
-        val numericNACSCode = BASE_NACSCODE + i
-        val organisationId = BASE_ORGANISATION_ID + i
+        val numericODSCode = BASE_ODSCODE + i
 
         val organisationName = if (isPharmacySearch) "$PHARMACY_NAME $i" else "$ORGANISATION_NAME $i"
 
@@ -79,80 +69,45 @@ object NhsAzureSearchData {
                 ))
 
         return NhsAzureSearchOrganisationItem(
-                "$organisationId",
                 organisationName,
                 "P1",
-                "Community Pharmacy",
+                "Community",
                 "$i Bridge Street",
                 "Clay Cross",
                 "Address Line 3",
                 "Chesterfield",
                 "County",
                 "SW$i ${i % POSTCODE_SEARCH_INDEX + POSTCODES_AND_PLACES_LIMIT}NG",
-                "F$numericNACSCode",
+                "F$numericODSCode",
                 geocode)
     }
 
     private fun createPharmacyResultFromIndex(i: Int): NhsAzureSearchOrganisationItem {
-        val numericNACSCode = BASE_NACSCODE + i
-        val organisationId = BASE_ORGANISATION_ID + i
-
+        val numericODSCode = BASE_ODSCODE + i
         val organisationName = "$PHARMACY_NAME $i"
-
         val geocode = Geocode(
                 Coordinates = mutableListOf(
                 DEFAULT_LATITUDE.toDouble() + i, DEFAULT_LONGITUDE.toDouble() + i
         ))
 
         return NhsAzureSearchOrganisationItem(
-                "$organisationId",
                 organisationName,
                 "P1",
-                "Community Pharmacy",
+                "Community",
                 "$i Bridge Street",
                 "Clay Cross",
                 "Address Line 3",
                 "Chesterfield",
                 "County",
                 "SW$i ${i % POSTCODE_SEARCH_INDEX + POSTCODES_AND_PLACES_LIMIT}NG",
-                "F$numericNACSCode",
+                "F$numericODSCode",
                 geocode,
-                "[{\"MetricID\":10051,\"MetricName\":\"EPS enabled pharmacy\"," +
-                        "\"DisplayName\":\"EPS Enabled\",\"Description\":\"EPS Service is enabled\"," +
-                        "\"Value\":\"yes\",\"Text\":\"Has EPS enabled\"," +
-                        "\"MetricDisplayTypeID\":4,\"MetricDisplayTypeName\":\"BooleanImage\"," +
-                        "\"IsMetaMetric\":true}]",
-                "[{\"OrganisationContactType\":\"Primary\"," +
-                        "\"OrganisationContactAvailabilityType\":\"Office hours\"," +
-                        "\"OrganisationContactMethodType\":\"Telephone\"," +
-                        "\"OrganisationContactValue\":\"01132433551 (ext. $i)\"}]",
+                arrayListOf(Metric("Electronic prescription service", "Yes")),
+                arrayListOf(Contact(
+                        "Primary",
+                        "Office hours",
+                        "Telephone",
+                        "01132433551 (ext. $i)")),
                 "www.$organisationName.com")
     }
-
-
-    private fun createOnlinePharmacyResultFromIndex(i: Int): NhsAzureSearchOrganisationItem {
-        val organisationName = "$ORGANISATION_NAME $i"
-        val numericNACSCode = BASE_NACSCODE + i
-
-        return NhsAzureSearchOrganisationItem(
-                "",
-                organisationName,
-                "P1",
-                "Internet Pharmacy",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "$numericNACSCode",
-                Geocode(),
-                "",
-                "[{\"OrganisationContactType\":\"Primary\"," +
-                        "\"OrganisationContactAvailabilityType\":\"Office hours\"," +
-                        "\"OrganisationContactMethodType\":\"Telephone\"," +
-                        "\"OrganisationContactValue\":\"01132433551 (ext. $i)\"}]",
-                "www.$organisationName.com")
-    }
-
 }
