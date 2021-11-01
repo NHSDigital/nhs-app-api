@@ -16,20 +16,33 @@
                 <elements:Paragraph Text="Log in using your email, password and security code." />
                
                 <elements:Heading2 Text="Turning fingerprint, face or iris on"/>
-               
                 <elements:ListContainer>
                     <StackLayout>
                         <elements:OrderedListItem Number="1" Text="Log in to the NHS App." />
-                        <elements:OrderedListItem Number="2" >
+                        <elements:OrderedListItem Number="2">
+                            <elements:OrderedListItem.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Go to " />
+                                    <Span Text="More" FontFamily="Frutiger-Bold" />
+                                    <Span Text="." />
+                                </FormattedString>
+                            </elements:OrderedListItem.FormattedText>
+                        </elements:OrderedListItem>
+                        <elements:OrderedListItem Number="3">
                             <elements:OrderedListItem.FormattedText>
                                 <FormattedString>
                                     <Span Text="Select " />
-                                    <Span Text="More" FontFamily="Frutiger-Bold" />
-                                    <Span Text=", then " />
                                     <Span Text="Account and settings" FontFamily="Frutiger-Bold" />
-                                    <Span Text=", then " />
+                                    <Span Text="." />
+                                </FormattedString>
+                            </elements:OrderedListItem.FormattedText>
+                        </elements:OrderedListItem>
+                        <elements:OrderedListItem Number="4">
+                            <elements:OrderedListItem.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Then select " />
                                     <Span Text="Fingerprint, face or iris" FontFamily="Frutiger-Bold" />
-                                    <Span Text="." /> 
+                                    <Span Text="." />
                                 </FormattedString>
                             </elements:OrderedListItem.FormattedText>
                         </elements:OrderedListItem>
