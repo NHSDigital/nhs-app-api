@@ -30,9 +30,9 @@ export default {
       return now < expiryTime && now >= expiringTime;
     };
   },
-  isLoggedIn(input) {
-    const state = input.session || input;
-    return () => !!state.csrfToken;
+  isLoggedIn: state => () => {
+    const sessionState = state.session || state;
+    return !!sessionState.csrfToken;
   },
   isProofLevel9(state) {
     return state.proofLevel === proofLevel.P9;

@@ -24,7 +24,7 @@ Feature: Sign out of mobile web
 
     # covered in Manual Regression Test pack
   @manual
-  Scenario: The nsho cookie should be clear of session and user information if server side sign out fails
+  Scenario: The nhso.session cookie should be clear of session and user information if server side sign out fails
     # Cannot induce session sign-out failure.
     Given I am logged in
     When I sign out
@@ -42,7 +42,7 @@ Feature: Sign out of mobile web
       | TPP         |
       | VISION      |
 
-  Scenario Outline: The nsho cookie should be clear of session and user information if the <GP Supplier> user is not signed in
+  Scenario Outline: The nhso.session cookie should be clear of session and user information if the <GP Supplier> user is not signed in
     Given I am logged in as a <GP Supplier> user
     When I sign out
     Then I see the login page
@@ -53,7 +53,7 @@ Feature: Sign out of mobile web
       | TPP         |
       | VISION      |
 
-  Scenario: The nsho cookie should be clear of TPP session and user information if server side sign out fails
+  Scenario: The nhso.session cookie should be clear of TPP session and user information if server side sign out fails
     # Only TPP has a sign out endpoint which can fail. Other suppliers tested manually
     Given I am logged in as a TPP user where the session will fail to clear on signout
     When I sign out

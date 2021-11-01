@@ -1,6 +1,6 @@
 import NativeApp from '@/services/native-app';
 import semver from 'semver';
-import { setCookie } from '@/lib/cookie-manager';
+import { setCookie, removeCookies } from '@/lib/cookie-manager';
 import SessionExpiryModal from '@/components/modal/content/SessionExpiryModal';
 import { isAnonymous } from '@/router';
 import { getUserAgentNativeVersionNumber } from '@/lib/utils';
@@ -25,8 +25,10 @@ export default {
     ({ commit }) => commit(INIT),
   clear:
     ({ commit }) => commit(CLEAR),
-  logout:
-    ({ commit }) => commit(LOGOUT),
+  logout({ commit }) {
+    commit(LOGOUT);
+    removeCookies({ cookies: this.$cookies, key: ['nhso.session'] });
+  },
   hideExpiryMessage:
     ({ commit }) => commit(HIDE_EXPIRY_MESSAGE),
   showExpiryMessage:

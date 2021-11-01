@@ -6,7 +6,7 @@ Feature: Authorisation occurs during each URL visit
     Given I am a EMIS patient
     And I am not logged in
     When I browse to the pages at the following urls I see the login page
-      | /more                                    |
+      | /more                                       |
       | /appointments                               |
       | /appointments/cancelling                    |
       | /appointments/booking                       |
@@ -83,7 +83,7 @@ Feature: Authorisation occurs during each URL visit
       | /prescriptions/confirm-prescription-details    | /prescriptions                                 |
       | /advice                                        | /advice                                        |
       | /terms-and-conditions                          | /patient                                       |
-      | /logout                                        | /login?redirect_to=index                       |
+      | /logout                                        | /login                                         |
 
   @bug @NHSO-8672
   #To be merged into the above test once the bug is fixed
@@ -111,7 +111,7 @@ Feature: Authorisation occurs during each URL visit
       | /prescriptions/confirm-prescription-details | /prescriptions                    |
       | /advice                                     | /advice                           |
       | /terms-and-conditions                       | /patient                          |
-      | /logout                                     | /login?redirect_to=index          |
+      | /logout                                     | /login                            |
       | /redirector                                 | /patient                          |
       | /redirector?redirect_to=appointments        | /appointments                     |
       | /nonexistent                                | /patient                          |
@@ -133,7 +133,7 @@ Feature: Authorisation occurs during each URL visit
       | /prescriptions/confirm-prescription-details | /prescriptions                    |
       | /advice                                     | /advice                           |
       | /terms-and-conditions                       | /patient                          |
-      | /logout                                     | /login?redirect_to=index          |
+      | /logout                                     | /login                            |
       | /redirector                                 | /patient                          |
       | /redirector?redirect_to=appointments        | /appointments                     |
       | /nonexistent                                | /patient                          |
@@ -159,7 +159,7 @@ Feature: Authorisation occurs during each URL visit
       | /prescriptions/confirm-prescription-details | /prescriptions                    |
       | /advice                                     | /advice                           |
       | /terms-and-conditions                       | /patient                          |
-      | /logout                                     | /login?redirect_to=index          |
+      | /logout                                     | /login                            |
       | /redirector                                 | /patient                          |
       | /redirector?redirect_to=appointments        | /appointments                     |
       | /nonexistent                                | /patient                          |

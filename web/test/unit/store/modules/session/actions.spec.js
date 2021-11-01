@@ -3,7 +3,7 @@ import NativeApp from '@/services/native-app';
 import SessionExpiryModal from '@/components/modal/content/SessionExpiryModal';
 import { isAnonymous } from '@/router';
 import { APPOINTMENTS_NAME } from '@/router/names';
-import { setCookie } from '@/lib/cookie-manager';
+import { setCookie, removeCookies } from '@/lib/cookie-manager';
 
 import {
   CLEAR,
@@ -263,6 +263,7 @@ describe('actions', () => {
       () => {
         actions.logout(mutation);
         expect(mutation.commit).toHaveBeenCalledWith(LOGOUT);
+        expect(removeCookies).toHaveBeenCalledWith({ cookies: $cookies, key: ['nhso.session'] });
       },
     );
   });
