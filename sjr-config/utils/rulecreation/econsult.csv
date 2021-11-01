@@ -255,7 +255,6 @@ cwsussex,Coastal West Sussex,CCG,Coastal West Sussex,Sussex and East Surrey,broa
 cwsussex,Coastal West Sussex,CCG,Coastal West Sussex,Sussex and East Surrey,flanshampark,Flansham Park Health Centre,H82038,13333
 cwsussex,Coastal West Sussex,CCG,Coastal West Sussex,Sussex and East Surrey,grovehouse-surgery,Grove House Surgery,H82043,11658
 cwsussex,Coastal West Sussex,CCG,Coastal West Sussex,Sussex and East Surrey,harbourviewhealthcare,Harbour View Healthcare,H82023,14661
-cwsussex,Coastal West Sussex,CCG,Coastal West Sussex,Sussex and East Surrey,henfieldmedicalcentre,Henfield Medical Centre,H82060,10003
 cwsussex,Coastal West Sussex,CCG,Coastal West Sussex,Sussex and East Surrey,langleyhousesurgery,Langley House Surgery,H82013,11900
 cwsussex,Coastal West Sussex,CCG,Coastal West Sussex,Sussex and East Surrey,lavantsurgery,Lavant Road Surgery,H82051,12143
 cwsussex,Coastal West Sussex,CCG,Coastal West Sussex,Sussex and East Surrey,limetreesurgeryfindon,Lime Tree Surgery - Findon,H82034,21347
@@ -372,7 +371,6 @@ devon,Devon,CCG,Devon,Devon,modburyhealthcentre,Modbury Health Centre,L83086,443
 devon,Devon,CCG,Devon,Devon,moretonhampsteadhealthcentre,Moretonhampstead Health Centre,L83049,3200
 devon,Devon,CCG,Devon,Devon,mountpleasanthealthcentre,Mount Pleasant Health Centre,L83066,16047
 devon,Devon,CCG,Devon,Devon,newvalleypractice,New Valley Practice,L83127,8900
-devon,Devon,CCG,Devon,Devon,northroadwest,North Road West Medical Centre,L83030,8222
 devon,Devon,CCG,Devon,Devon,northmasurgery,Northam Surgery,L83050,12470
 devon,Devon,CCG,Devon,Devon,nortonbrookmedical,Norton Brook Medical Centre,L83059,10200
 devon,Devon,CCG,Devon,Devon,oakside,Oakside Surgery,L83015,7360
@@ -1044,7 +1042,6 @@ kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,middlewaysurgery,Middl
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,morrabsurgery,Morrab Surgery,Y01051,10773
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,mullionhealthcentre,Mullion And Constantine Group Practice,L82056,8100
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,narrowcliffsurgery,Narrowcliff Surgery,L82029,14500
-kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,newquayhealthcentre,Newquay Health Centre,Y02517,16388
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,theoaktreesurgery,Oak Tree Surgery And Pensilva Health Centre,L82016,11007
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,oldbridgesurgery,Old Bridge Surgery,L82022,9500
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,perranporthsurgery,Perranporth Surgery,L82013,7642
@@ -2639,7 +2636,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,New River Health,E82102,
 ,,,Other,,,Doctors Surgery Colney Hatch Lane,E83034,
 ,,,Other,,,Pentelow Practice,E85115,
-,,,Other,,,Morris House Group Practice,F85019,
 ,,,Other,,,Apex Medical Practice,G82679,
 ,,,Other,,,Valentine Health Partnership,G83067,
 ,,,Other,,,Cathedral Medical Group,H82042,
@@ -2690,3 +2686,11 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Billinge Medical Practice,N83019,
 ,,,Other,,,Ford Medical Practice,N84029,
 ,,,Other,,,St Hilary Group Practice,N85025,
+,,,Other,,,Nidderdale Group Practice,B82004,
+,,,Other,,,Burvill House Surgery,E82023,
+,,,Other,,,The Portmill Surgery,E82044,
+,,,Other,,,Hove Medical Centre,G81001,
+,,,Other,,,Woodlands & Clerklands Partnership,H82025,
+,,,Other,,,Southway Surgery,L83039,
+,,,Other,,,Knowle House Surgery,L83089,
+,,,Other,,,Hadwen Health,L84009,
