@@ -13,6 +13,7 @@
                 <elements:Heading1 Text="We cannot find your Face ID" x:Name="Heading" />
                 
                 <elements:Paragraph Text="Check that you have added a face scan in your device's Face ID settings." />
+                <elements:Paragraph Text="If you need to access the NHS App now, you can use your password and security code to log in." />
                 
                 <elements:LinkLabel Text="Back to login"
                                     Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />

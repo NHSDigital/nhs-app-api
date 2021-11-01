@@ -13,6 +13,7 @@
                 <elements:Heading1 Text="We cannot find your fingerprint, face or iris" x:Name="Heading" />
                 
                 <elements:Paragraph Text="Check that you have added a fingerprint, face or iris in your device's security settings." />
+                <elements:Paragraph Text="If you need to access the NHS App now, you can use your password and security code to log in." />
                
                 <elements:LinkLabel Text="Back to login"
                                     Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />
