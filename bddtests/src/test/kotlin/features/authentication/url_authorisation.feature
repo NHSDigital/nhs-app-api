@@ -75,7 +75,7 @@ Feature: Authorisation occurs during each URL visit
       | /more                                          | /more                                          |
       | /appointments                                  | /appointments                                  |
       | /appointments/gp-appointments/booking          | /appointments/gp-appointments/booking          |
-      | /                                              | /                                              |
+      | /                                              | /patient                                       |
       | /health-records                                | /health-records                                |
       | /health-records/gp-medical-record              | /health-records/gp-medical-record              |
       | /prescriptions                                 | /prescriptions                                 |
@@ -105,16 +105,16 @@ Feature: Authorisation occurs during each URL visit
     Examples:
       | Url                                         | Page                              |
       | /appointments                               | /appointments                     |
-      | /                                           |                                   |
+      | /                                           | /patient                          |
       | /health-records/gp-medical-record           | /health-records/gp-medical-record |
       | /prescriptions                              | /prescriptions                    |
       | /prescriptions/confirm-prescription-details | /prescriptions                    |
       | /advice                                     | /advice                           |
-      | /terms-and-conditions                       |                                   |
+      | /terms-and-conditions                       | /patient                          |
       | /logout                                     | /login?redirect_to=index          |
-      | /redirector                                 |                                   |
+      | /redirector                                 | /patient                          |
       | /redirector?redirect_to=appointments        | /appointments                     |
-      | /nonexistent                                |                                   |
+      | /nonexistent                                | /patient                          |
 
   Scenario Outline: A User who has not accepted updated T&C and not logged in and attempts to navigate to a restricted <Url> is taken to the <Page> after accepting terms
     Given I am a EMIS patient who has accepted terms and conditions but updated terms and conditions exist
@@ -127,16 +127,16 @@ Feature: Authorisation occurs during each URL visit
     Examples:
       | Url                                         | Page                              |
       | /appointments                               | /appointments                     |
-      | /                                           |                                   |
+      | /                                           | /patient                          |
       | /health-records/gp-medical-record           | /health-records/gp-medical-record |
       | /prescriptions                              | /prescriptions                    |
       | /prescriptions/confirm-prescription-details | /prescriptions                    |
       | /advice                                     | /advice                           |
-      | /terms-and-conditions                       |                                   |
+      | /terms-and-conditions                       | /patient                          |
       | /logout                                     | /login?redirect_to=index          |
-      | /redirector                                 |                                   |
+      | /redirector                                 | /patient                          |
       | /redirector?redirect_to=appointments        | /appointments                     |
-      | /nonexistent                                |                                   |
+      | /nonexistent                                | /patient                          |
 
   Scenario Outline: User has never logged in and attempts to navigate to a restricted <Url> is taken to the <Page> after login
     Given I am a EMIS patient who has not already accepted terms and conditions
@@ -153,13 +153,13 @@ Feature: Authorisation occurs during each URL visit
     Examples:
       | Url                                         | Page                              |
       | /appointments                               | /appointments                     |
-      | /                                           |                                   |
+      | /                                           | /patient                          |
       | /health-records/gp-medical-record           | /health-records/gp-medical-record |
       | /prescriptions                              | /prescriptions                    |
       | /prescriptions/confirm-prescription-details | /prescriptions                    |
       | /advice                                     | /advice                           |
-      | /terms-and-conditions                       |                                   |
+      | /terms-and-conditions                       | /patient                          |
       | /logout                                     | /login?redirect_to=index          |
-      | /redirector                                 |                                   |
+      | /redirector                                 | /patient                          |
       | /redirector?redirect_to=appointments        | /appointments                     |
-      | /nonexistent                                |                                   |
+      | /nonexistent                                | /patient                          |
