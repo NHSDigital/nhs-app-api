@@ -298,6 +298,9 @@ defaultUsers:
       familyName: Smithson
       dateOfBirth: "1954-09-19T00:00:00"
       sex: Male
+      im1MessagingEnabled: true
+      behaviours:
+        patientPracticeMessaging: BadRequest
 
     9990546770:
       userId: a7ae6d5c-3920-4681-8e11-cd17b0aeb455
@@ -319,6 +322,9 @@ defaultUsers:
       familyName: Day
       dateOfBirth: "1939-06-09T00:00:00"
       sex: Male
+      im1MessagingEnabled: true
+      behaviours:
+        patientPracticeMessaging: BadGateway
 
     9990551359:
       userId: fbac45f2-b377-496c-8395-6c9625fe5df8
@@ -328,6 +334,9 @@ defaultUsers:
       familyName: Upton
       dateOfBirth: "1925-11-02T00:00:00"
       sex: Male
+      im1MessagingEnabled: true
+      behaviours:
+        patientPracticeMessaging: Forbidden
 
     9692236552:
       userId: f82672af-afbc-4d3c-b6a2-0d7f3c076d7f

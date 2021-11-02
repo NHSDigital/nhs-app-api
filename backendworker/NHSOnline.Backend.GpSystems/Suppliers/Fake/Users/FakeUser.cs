@@ -8,6 +8,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Fake.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.LinkedAccounts;
+using NHSOnline.Backend.GpSystems.Suppliers.Fake.PatientPracticeMessaging;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Session;
@@ -36,7 +37,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Users
         public DateTime DateOfBirth { get; set; }
         public string Sex { get; set; }
         public AreaBehaviours Behaviours { get; set; }
-        
+
         public IList<string> LinkedAccountsNhsNumbers { get; set; }
 
         [YamlIgnore]
@@ -160,6 +161,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Users
         public ISessionExtendAreaBehaviour SessionExtendAreaBehaviour =>
             ServiceProvider?.ResolveAreaBehaviour<ISessionExtendAreaBehaviour>(
                 Behaviours?.SessionExtend ?? Behaviour.Default
+            );
+
+        [YamlIgnore]
+        [BsonIgnore]
+        public IPatientPracticeMessagingAreaBehaviour PatientPracticeMessagingAreaBehaviour =>
+            ServiceProvider?.ResolveAreaBehaviour<IPatientPracticeMessagingAreaBehaviour>(
+                Behaviours?.PatientPracticeMessaging ?? Behaviour.Default
             );
     }
 }

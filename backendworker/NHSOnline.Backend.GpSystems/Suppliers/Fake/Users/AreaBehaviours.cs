@@ -23,5 +23,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Users
         public Behaviour? Session { get; set; }
 
         public Behaviour? SessionExtend { get; set; }
+
+        public Behaviour? PatientPracticeMessaging { get; set; }
     }
 }

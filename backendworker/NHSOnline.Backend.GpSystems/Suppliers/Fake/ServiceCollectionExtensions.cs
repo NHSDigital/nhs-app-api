@@ -9,6 +9,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Fake.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.LinkedAccounts;
+using NHSOnline.Backend.GpSystems.Suppliers.Fake.PatientPracticeMessaging;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Session;
@@ -31,6 +32,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
             services.RegisterFakePatientRecordServices();
             services.RegisterFakePrescriptionServices();
             services.RegisterFakePfsSessionServices();
+            services.RegisterFakePatientPracticeMessagingServices();
 
             services.RegisterBehaviourMappings();
 
