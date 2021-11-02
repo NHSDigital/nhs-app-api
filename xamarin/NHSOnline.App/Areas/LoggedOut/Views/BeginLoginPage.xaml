@@ -18,6 +18,7 @@
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
                             AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.HelpText="Loading"
                             x:Name="Spinner">
             <elements:Spinner.Effects>
                 <effects:SafeAreaMarginBottom />
