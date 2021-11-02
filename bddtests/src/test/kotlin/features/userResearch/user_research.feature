@@ -8,7 +8,7 @@ Feature: User Research
     And I click the 'Continue' button
     Then the User Research page is displayed
     And I click the 'Continue' button
-    And I see 'There is a problem' error summary message
+    And I see 'There's a problem' error summary message
     And I see 'Select yes or no' error summary message item
     And I see 'Select yes or no' inline error
     When I click the 'Yes' radio button

@@ -21,7 +21,7 @@ class ValidationSteps {
 
     @Then("^I see '(.*)' inline error$")
     fun iSeeAnInlineError(error: String) {
-        genericPage.getElement("//span[@data-purpose='error']")
+        genericPage.getElement("//span")
                 .withNormalisedText(error)
                 .assertIsVisible()
     }
