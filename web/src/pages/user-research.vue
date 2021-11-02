@@ -30,6 +30,7 @@
         :legend-size="'nhsuk-fieldset__legend--m'"
         :heading="$t('userResearch.canWeContactYouToTakePart')"
         :error="showError"
+        :error-heading-reference="'userResearch.thereIsAProblem'"
         :error-text="$t('userResearch.selectYesOrNo')"
         :items="choices"
       />

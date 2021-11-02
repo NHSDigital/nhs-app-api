@@ -9,7 +9,7 @@
     <div role="alert" aria-atomic="true">
       <message-dialog v-if="error" message-type="error" :focusable="true">
         <message-text>
-          {{ $t('messages.thereIsAProblem') }}
+          {{ $t(`${errorHeadingReference}`) }}
         </message-text>
         <message-list>
           <li>
@@ -74,6 +74,10 @@ export default {
     error: {
       type: Boolean,
       default: false,
+    },
+    errorHeadingReference: {
+      type: String,
+      default: 'messages.thereIsAProblem',
     },
     errorText: {
       type: String,
