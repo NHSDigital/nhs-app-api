@@ -1,3 +1,5 @@
+using System;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
@@ -84,15 +86,17 @@ namespace NHSOnline.IntegrationTests.YourHealth
                 .AssertOnPage(driver)
                 .PageContent.ClickBackBreadcrumb();
 
-            // Step removed to prevent flaky test failures see https://nhsd-jira.digital.nhs.uk/browse/NHSO-16514 for details
-            // AndroidYourHealthPkbPage
-            //     .AssertOnPage(driver)
-            //     .TabIntoFocus()
-            //     .KeyboardNavigateToOrganDonation();
+            AndroidYourHealthPkbPage
+                .AssertOnPage(driver)
+                .TabIntoFocus()
+                .KeyboardNavigateToOrganDonation();
 
-            // AndroidOrganDonationPage
-            //     .AssertOnPage(driver)
-            //     .PageContent.ClickBackBreadcrumb();
+            // Due to GP On-demand, it can take a few seconds for the page to load with properly
+            Thread.Sleep(TimeSpan.FromSeconds(5));
+
+            AndroidOrganDonationPage
+                .AssertOnPage(driver)
+                .PageContent.ClickBackBreadcrumb();
 
             AndroidYourHealthPkbPage
                 .AssertOnPage(driver)
