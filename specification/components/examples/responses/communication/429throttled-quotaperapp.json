@@ -1,0 +1,10 @@
+{
+    "resourceType": "OperationOutcome",
+    "issue": [
+        {
+            "severity": "error",
+            "code": "throttled",
+            "diagnostics": "Your application, my-app, has exceeded its quota of 100 requests every 1 minute(s) and is being rate limited."
+        }
+    ]
+}
