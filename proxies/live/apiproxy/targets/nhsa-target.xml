@@ -16,12 +16,6 @@
 			</Step>
 			<Condition>oauthV2.OauthV2.VerifyAccessToken.failed</Condition>
 		</FaultRule>
-		<FaultRule name="quota_limits_breached">
-			<Step>
-				<Name>AssignMessage.QuotaLimitsBreachedErrorResponse</Name>
-				<Condition>(error.status.code Equals "429")</Condition>
-			</Step>
-		</FaultRule>
 	</FaultRules>
 	<PreFlow>
 		<Request>
@@ -29,10 +23,7 @@
 				<Name>OauthV2.VerifyAccessToken</Name>
 			</Step>
 			<Step>
-				<Name>Quota</Name>
-			</Step>
-			<Step>
-				<Name>SpikeArrest</Name>
+				<Name>FlowCallout.ApplyRateLimiting</Name>
 			</Step>
 			<Step>
 				<Name>KeyValueMap.GetUpstreamApiKey</Name>

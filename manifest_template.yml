@@ -43,8 +43,20 @@ apigee:
         attributes:
           - name: access
             value: public
-          - name: ratelimit
-            value: 2400pm
+          - name: ratelimiting
+            value:
+              {{ NAME }}: # Assuming the proxy name is the same as NAME?
+                quota:
+                  enabled: true
+                  interval: 1
+                  limit: 2400
+                  timeunit: minute
+              app:
+                quota:
+                  enabled: true
+                  interval: 1
+                  limit: 1200
+                  timeunit: minute
         description: {{ DESCRIPTION }}
         displayName: {{ TITLE }}
         environments: [ {{ ENV.name }} ]
@@ -57,7 +69,10 @@ apigee:
         scopes:
           - 'urn:nhsd:apim:app:level3:nhs-app'
           - 'urn:nhsd:apim:user-nhs-id:aal3:nhs-app'
-        quota: '2400'
+        # An API Product requires a quota value but it is not used
+        # (We use the value defined in the ratelimiting attribute)
+        # Hence this is set to a nonsense value to avoid confusion
+        quota: '99999'
         quotaInterval: '1'
         quotaTimeUnit: minute
     specs:
