@@ -29,7 +29,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
             return this;
         }
 
-        public IOSCalendarPage AddCalendarDetails(int startTime, int endTime)
+        public IOSCalendarPage AddCalendarDetails(decimal startTime, decimal endTime)
         {
             PageContent.AddToCalendar(startTime, endTime);
             return this;

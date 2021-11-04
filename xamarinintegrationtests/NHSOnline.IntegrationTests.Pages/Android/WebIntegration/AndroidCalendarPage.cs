@@ -32,7 +32,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
             return this;
         }
 
-        public AndroidCalendarPage AddCalendarDetails(int startTime, int endTime)
+        public AndroidCalendarPage AddCalendarDetails(decimal startTime, decimal endTime)
         {
             PageContent.AddToCalendar(startTime, endTime);
             return this;

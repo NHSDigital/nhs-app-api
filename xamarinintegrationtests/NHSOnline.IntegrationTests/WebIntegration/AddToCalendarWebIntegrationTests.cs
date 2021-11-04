@@ -14,14 +14,15 @@ using NHSOnline.IntegrationTests.WebIntegration.Pkb;
 
 namespace NHSOnline.IntegrationTests.WebIntegration
 {
+    [TestCategory("CiaranTestAddToCalendarDecimalTimestamps")]
     [TestClass]
     [BusinessRule("BR-WI-01.6", "Adding an appointment to calendar with valid start and end dates invokes native calendar functionality with relevant fields supplied")]
     [BusinessRule("BR-WI-01.7", "Adding an appointment to calendar when invalid params have been sent prompts the user to add an event manually to the calendar")]
     public class AddToCalendarWebIntegrationTests
     {
-        private const int ValidStartTime = 1893589200; // Wednesday, 2 January 2030 13:00:00
-        private const int ValidEndTime = 1893589800; // Wednesday, 2 January 2030 13:10:00
-        private const int InvalidEndTime = 1893589100; // Wednesday, 2 January 2030 12:58:20
+        private const decimal ValidStartTime = 1893589200.123m; // Wednesday, 2 January 2030 13:00:00.123
+        private const decimal ValidEndTime = 1893589800.456m; // Wednesday, 2 January 2030 13:10:00.456
+        private const decimal InvalidEndTime = 1893589100.789m; // Wednesday, 2 January 2030 12:58:20.789
 
         [NhsAppAndroidTest(AndroidBrowserStackCapability.SignInToGoogle)]
         public void APatientWithProofLevelNineCanAddAnEventToTheCalendarOnAWebIntegrationCalendarScreenAndroid(

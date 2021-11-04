@@ -29,7 +29,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         internal void AssertOnPage() => TitleText.AssertVisible();
 
-        public void AddToCalendar(int startTime, int endTime)
+        public void AddToCalendar(decimal startTime, decimal endTime)
         {
             SubjectInputText.EnterText("Test Subject");
             BodyInputText.EnterText("Test Body");
