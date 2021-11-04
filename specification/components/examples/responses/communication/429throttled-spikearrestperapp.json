@@ -1,0 +1,10 @@
+{
+    "resourceType": "OperationOutcome",
+    "issue": [
+        {
+            "severity": "error",
+            "code": "throttled",
+            "diagnostics": "Your application, my-app, has created a spike in traffic and is being rate limited. Please reduce the frequency of your requests."
+        }
+    ]
+}

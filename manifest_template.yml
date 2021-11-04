@@ -45,17 +45,17 @@ apigee:
             value: public
           - name: ratelimiting
             value:
-              {{ NAME }}: # Assuming the proxy name is the same as NAME?
+              {{ NAME }}:
                 quota:
                   enabled: true
                   interval: 1
-                  limit: 2400
+                  limit: 7
                   timeunit: minute
               app:
                 quota:
                   enabled: true
                   interval: 1
-                  limit: 1200
+                  limit: 5
                   timeunit: minute
         description: {{ DESCRIPTION }}
         displayName: {{ TITLE }}

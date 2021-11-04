@@ -211,7 +211,7 @@ paths:
               example:
                 $ref: components/examples/responses/communication/403permissionsMissingForAppMessage.json
         "429":
-          description: You have exceeded your application's [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits).
+          description: You have exceeded your application's [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) or the API is currently receiving a high volume of requests.
           headers:
             X-Correlation-ID:
               $ref: components/schemas/XCorrelationId.yaml
@@ -219,8 +219,20 @@ paths:
             application/fhir+json:
               schema:
                 $ref: components/schemas/OperationOutcome.yaml
-              example:
-                $ref: components/examples/responses/communication/429throttled.json
+              examples:
+                exceeded-quota-per-app:
+                  summary: Your application has exceeded its quota
+                  value:
+                    $ref: components/examples/responses/communication/429throttled-quoteperapp.json
+                exceeded-spike-arrest:
+                  summary: Your application has created a spike in traffic
+                  value:
+                    $ref: components/examples/responses/communication/429throttled-spikearrestperapp.json
+                exceeded-quota-per-proxy:
+                  summary: API is receiving a high volume of requests
+                  value:
+                    $ref: components/examples/responses/communication/429throttled-quotaperproxy.json
+                
   /communication/notification/FHIR/R4/CommunicationRequest:
     parameters:
       - $ref: '#/components/parameters/BearerAuthorization'
@@ -339,7 +351,7 @@ paths:
               example:
                 $ref: components/examples/responses/communication/403permissionsMissingForPushNotification.json
         "429":
-          description: You have exceeded your application's [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits).
+          description: You have exceeded your application's [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) or the API is currently receiving a high volume of requests.
           headers:
             X-Correlation-ID:
               $ref: components/schemas/XCorrelationId.yaml
@@ -347,8 +359,19 @@ paths:
             application/fhir+json:
               schema:
                 $ref: components/schemas/OperationOutcome.yaml
-              example:
-                $ref: components/examples/responses/communication/429throttled.json
+              examples:
+                exceeded-quota-per-app:
+                  summary: Your application has exceeded its quota
+                  value:
+                    $ref: components/examples/responses/communication/429throttled-quoteperapp.json
+                exceeded-spike-arrest:
+                  summary: Your application has created a spike in traffic
+                  value:
+                    $ref: components/examples/responses/communication/429throttled-spikearrestperapp.json
+                exceeded-quota-per-proxy:
+                  summary: API is receiving a high volume of requests
+                  value:
+                    $ref: components/examples/responses/communication/429throttled-quotaperproxy.json
   /communication/in-app-with-notification/FHIR/R4/CommunicationRequest:
     parameters:
       - $ref: '#/components/parameters/BearerAuthorization'
@@ -473,7 +496,7 @@ paths:
                   value:
                     $ref: components/examples/responses/communication/403permissionsMissingForPushNotification.json
         "429":
-          description: You have exceeded your application's [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits).
+          description: You have exceeded your application's [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) or the API is currently receiving a high volume of requests.
           headers:
             X-Correlation-ID:
               $ref: components/schemas/XCorrelationId.yaml
@@ -481,8 +504,19 @@ paths:
             application/fhir+json:
               schema:
                 $ref: components/schemas/OperationOutcome.yaml
-              example:
-                $ref: components/examples/responses/communication/429throttled.json
+              examples:
+                exceeded-quota-per-app:
+                  summary: Your application has exceeded its quota
+                  value:
+                    $ref: components/examples/responses/communication/429throttled-quoteperapp.json
+                exceeded-spike-arrest:
+                  summary: Your application has created a spike in traffic
+                  value:
+                    $ref: components/examples/responses/communication/429throttled-spikearrestperapp.json
+                exceeded-quota-per-proxy:
+                  summary: API is receiving a high volume of requests
+                  value:
+                    $ref: components/examples/responses/communication/429throttled-quotaperproxy.json
   /communication/report/events:
     parameters:
       - $ref: '#/components/parameters/BearerAuthorization'
@@ -585,7 +619,7 @@ paths:
               example:
                 $ref: components/examples/responses/communication/403permissionsMissingForEventReport.json
         "429":
-          description: You have exceeded your application's [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits).
+          description: You have exceeded your application's [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) or the API is currently receiving a high volume of requests.
           headers:
             X-Correlation-ID:
               $ref: components/schemas/XCorrelationId.yaml
@@ -593,8 +627,19 @@ paths:
             application/fhir+json:
               schema:
                 $ref: components/schemas/OperationOutcome.yaml          
-              example:
-                $ref: components/examples/responses/communication/429throttled.json           
+              examples:
+                exceeded-quota-per-app:
+                  summary: Your application has exceeded its quota
+                  value:
+                    $ref: components/examples/responses/communication/429throttled-quoteperapp.json
+                exceeded-spike-arrest:
+                  summary: Your application has created a spike in traffic
+                  value:
+                    $ref: components/examples/responses/communication/429throttled-spikearrestperapp.json
+                exceeded-quota-per-proxy:
+                  summary: API is receiving a high volume of requests
+                  value:
+                    $ref: components/examples/responses/communication/429throttled-quotaperproxy.json
   /communication/report/patients:
     parameters:
       - $ref: '#/components/parameters/BearerAuthorization'
@@ -699,7 +744,7 @@ paths:
               example:
                 $ref: components/examples/responses/communication/403permissionsMissingForPatientReport.json
         "429":
-          description: You have exceeded your application's [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits).
+          description: You have exceeded your application's [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) or the API is currently receiving a high volume of requests.
           headers:
             X-Correlation-ID:
               $ref: components/schemas/XCorrelationId.yaml
@@ -707,8 +752,19 @@ paths:
             application/fhir+json:
               schema:
                 $ref: components/schemas/OperationOutcome.yaml        
-              example:
-                $ref: components/examples/responses/communication/429throttled.json                      
+              examples:
+                exceeded-quota-per-app:
+                  summary: Your application has exceeded its quota
+                  value:
+                    $ref: components/examples/responses/communication/429throttled-quoteperapp.json
+                exceeded-spike-arrest:
+                  summary: Your application has created a spike in traffic
+                  value:
+                    $ref: components/examples/responses/communication/429throttled-spikearrestperapp.json
+                exceeded-quota-per-proxy:
+                  summary: API is receiving a high volume of requests
+                  value:
+                    $ref: components/examples/responses/communication/429throttled-quotaperproxy.json
 components:
   parameters:
     CorrelationId:

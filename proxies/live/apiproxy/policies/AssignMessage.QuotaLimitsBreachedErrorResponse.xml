@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AssignMessage.QuotaLimitsBreachedErrorResponse">
+	<Set>
+		<StatusCode>429</StatusCode>
+		<Payload contentType="application/json">
+			{
+				"resourceType": "OperationOutcome",
+				"issue": [
+					{
+						"severity": "error",
+						"code": "throttled",
+						"diagnostics": "{rateLimitingErrorMessage}"
+					}
+				]
+			}
+		</Payload>
+	</Set>
+	<IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+	<AssignTo createNew="false" transport="http" type="response"/>
+</AssignMessage>
