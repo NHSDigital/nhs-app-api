@@ -155,9 +155,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 var request = new CreateGpSessionOnDemandRequest(p9UserSession, model, csrfToken, HttpContext);
 
                 var result = await _sessionCreator.CreateGpSessionOnDemand(request);
-                if (result is CreateSessionResult.ErrorResult)
+                if (result is CreateSessionResult.ErrorResult errorCause)
                 {
-                    return _errorResultBuilder.BuildResult(new ErrorTypes.GPSessionUnavailable());
+                    return _errorResultBuilder.BuildResult(
+                        new ErrorTypes.GPSessionUnavailable(errorCause.ErrorTypes));
                 }
 
                 var referrer = "";

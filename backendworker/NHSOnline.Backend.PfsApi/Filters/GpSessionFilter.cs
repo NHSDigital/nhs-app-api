@@ -203,14 +203,6 @@ namespace NHSOnline.Backend.PfsApi.Filters
                 return Task.FromResult(false);
             }
 
-            public Task<bool> Visit(GpSessionRecreateResult.SessionNotRequiredResult sessionNotRequiredResult)
-            {
-                _gpSessionFilter._logger.LogInformation(
-                    $"GP session still not required for user from odsCode={_p9UserSession.OdsCode}");
-
-                return Task.FromResult(true);
-            }
-
             public Task<bool> Visit(GpSessionRecreateResult.Im1ConnectionTokenEmptyResult im1ConnectionTokenEmptyResult)
             {
                  _gpSessionFilter._logger.LogInformation("GP Session created on demand");

@@ -19,6 +19,7 @@ using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 using UnitTestHelper;
+using GpSessionRecreateResult = NHSOnline.Backend.PfsApi.GpSession.GpSessionRecreateResult;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Session
 {
@@ -653,10 +654,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
         }
 
         [TestMethod]
-        public async Task CreateGpSessionOnDemand_Returns599_WhenCreateGpSession_ReturnsErrorResult()
+        [DynamicData(nameof(RecreateTestDataServiceReference))]
+        public async Task CreateGpSessionOnDemand_Returns599_WhenCreateGpSession_ReturnsErrorResult(
+            GpSessionCreateResult gpSessionCreateResult,
+            string expectedServiceDeskReference)
         {
             // Arrange
-            var auditStub = ArrangeAudit();
+            ArrangeAudit();
 
             Context.ArrangeAntiforgery();
             Context.ArrangeCitizenIdService();
@@ -671,7 +675,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                 new EmisProxyUserSession()
             };
 
-            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Forbidden("blah"));
+            ArrangeGpSessionManagerCreateSession(gpSessionCreateResult);
 
             ArrangeMatchingNhsLoginIds();
 
@@ -687,7 +691,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                 var errorResult = result.Should().BeAssignableTo<CreateSessionResult.ErrorResult>().Subject;
 
                 errorResult.ErrorTypes.Category.Should().Be(ErrorCategory.Login);
-                errorResult.ErrorTypes.Prefix.Should().BeEquivalentTo("3u");
+                errorResult.ErrorTypes.Prefix.Should().BeEquivalentTo(expectedServiceDeskReference);
                 errorResult.ErrorTypes.SourceApi.Should().Be(SourceApi.None);
                 errorResult.ErrorTypes.StatusCode.Should().Be(599);
             }
@@ -746,11 +750,22 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
             get
             {
                 yield return new object[] { new GpSessionCreateResult.Timeout("Timeout"), "ze" };
-                yield return new object[] { new GpSessionCreateResult.Unparseable("Unparseable"), "3u" };
+                yield return new object[] { new GpSessionCreateResult.Unparseable("Unparseable"), "3p" };
                 yield return new object[] { new GpSessionCreateResult.BadGateway("BadGateway"), "3e" };
                 yield return new object[] { new GpSessionCreateResult.BadGateway("BadGateway"), "3t" };
                 yield return new object[] { new GpSessionCreateResult.BadGateway("BadGateway"), "3m" };
                 yield return new object[] { new GpSessionCreateResult.BadGateway("BadGateway"), "3s" };
+                yield return new object[] { new GpSessionCreateResult.BadRequest("BadRequest"), "3a" };
+                yield return new object[] { new GpSessionCreateResult.InternalServerError("InternalServerError"), "3h" };
+            }
+        }
+
+        private static IEnumerable<object[]> RecreateTestDataServiceReference
+        {
+            get
+            {
+                yield return new object[] { new GpSessionCreateResult.Unparseable("Unparseable"), "3p" };
+                yield return new object[] { new GpSessionCreateResult.BadGateway("BadGateway"), "3e" };
                 yield return new object[] { new GpSessionCreateResult.BadRequest("BadRequest"), "3a" };
                 yield return new object[] { new GpSessionCreateResult.InternalServerError("InternalServerError"), "3h" };
             }
@@ -821,7 +836,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
         }
 
         [TestMethod]
-        public async Task CreateSession_ReturnsGpSessionExistsResult_WhenUserHasGpSession()
+        public async Task CreateGpSessionOnDemand_ReturnsGpSessionExistsResult_WhenUserHasGpSession()
         {
             // Arrange
             Context.ArrangeAntiforgery();

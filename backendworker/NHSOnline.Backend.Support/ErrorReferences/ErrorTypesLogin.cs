@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.Support
                 _cause = cause;
             }
 
-            public override string Prefix => _cause?.Prefix ?? "3u";
+            public override string Prefix => _cause?.Prefix ?? "3y";
 
             public override ErrorCategory Category => _cause?.Category ?? ErrorCategory.Login;
 

@@ -71,12 +71,16 @@ namespace NHSOnline.Backend.PfsApi.Session
 
             var createGpSessionResult = await _gpSessionCreator.RecreateGpSession(request.UserSession, supplier);
 
-            if (createGpSessionResult is GpSessionRecreateResult.RecreatedResult)
+            switch (createGpSessionResult)
             {
-                return new CreateSessionResult.Success(request.UserSession);
+                case GpSessionRecreateResult.RecreatedResult _:
+                case GpSessionRecreateResult.SessionStillValidResult _:
+                    return new CreateSessionResult.Success(request.UserSession);
+                case GpSessionRecreateResult.ErrorResult errorResult:
+                    return new CreateSessionResult.ErrorResult(new ErrorTypes.GPSessionUnavailable(errorResult.ErrorType));
+                default:
+                    return new CreateSessionResult.ErrorResult(new ErrorTypes.GPSessionUnavailable());
             }
-
-            return new CreateSessionResult.ErrorResult(new ErrorTypes.GPSessionUnavailable());
         }
 
         private static string GetIm1ConnectionToken(CitizenIdSessionResult citizenIdSessionResult)
