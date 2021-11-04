@@ -172,8 +172,6 @@ spec:
           value: "https://www.organdonation.nhs.uk/app/app-share/"
         - name: ORGAN_DONATION_TELL_FAMILY_URL
           value: "https://www.organdonation.nhs.uk/app/app-tell/"
-        - name: BLOOD_DONATION_URL
-          value: "https://www.blood.co.uk/"  
         - name: CONTACT_US_URL
           value: "https://www.nhs.uk/contact-us/nhs-app-contact-us"
         - name: COOKIES_BANNER_URL
