@@ -173,7 +173,7 @@ spec:
         - name: ORGAN_DONATION_TELL_FAMILY_URL
           value: "https://www.organdonation.nhs.uk/app/app-tell/"
         - name: CONTACT_US_URL
-          value: "https://www.nhs.uk/contact-us/nhs-app-contact-us"
+          value: "{{ $.Values.contactUsUrl }}"
         - name: COOKIES_BANNER_URL
           value: "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy#manage"
         - name: PRIVACY_POLICY_URL
