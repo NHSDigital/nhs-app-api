@@ -49,13 +49,13 @@ apigee:
                 quota:
                   enabled: true
                   interval: 1
-                  limit: 2400
+                  limit: 5
                   timeunit: minute
               app:
                 quota:
                   enabled: true
                   interval: 1
-                  limit: 1200
+                  limit: 7
                   timeunit: minute
         description: {{ DESCRIPTION }}
         displayName: {{ TITLE }}
