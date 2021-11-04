@@ -36,7 +36,7 @@ export default {
   marketingPurposes: 'marketing purposes',
   medicalRoyalColleges: 'medical royal colleges',
   moreOptions: 'More options',
-  nhsDigitalAndPublicHealthEngland: 'NHS Digital and Public Health England',
+  nhsDigitalAndPublicHealthEngland: 'NHS Digital',
   nhsWebsite: 'NHS website',
   notUseDataForMarketingOrInsurance: 'not use data for marketing or insurance purposes (unless you request this)',
   overview: 'Overview',

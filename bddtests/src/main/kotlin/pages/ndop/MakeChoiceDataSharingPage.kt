@@ -23,7 +23,7 @@ class MakeChoiceDataSharingPage: DataSharingPage() {
                             "change or check your current choice")
                     .paragraph("If you want to make a choice for someone else, find out how to on the NHS website.")
                     .paragraph("Your choice will be applied by:")
-                    .listItems("NHS Digital and Public Health England",
+                    .listItems("NHS Digital",
                             "all other health and care organisations by 31 March 2022 " +
                             "(delayed from March 2020 to allow organisations to focus on the COVID-19 outbreak). " +
                             "Read more about the extension to the compliance deadline for national data opt-out.")
