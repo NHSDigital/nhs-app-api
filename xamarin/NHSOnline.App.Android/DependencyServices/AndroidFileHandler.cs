@@ -44,7 +44,7 @@ namespace NHSOnline.App.Droid.DependencyServices
             try
             {
                 using var viewFileIntent = new Intent(Intent.ActionView, uri);
-                viewFileIntent.AddFlags(ActivityFlags.GrantPersistableUriPermission | ActivityFlags.NewTask);
+                viewFileIntent.AddFlags(ActivityFlags.GrantReadUriPermission | ActivityFlags.NewTask);
                 MainActivity?.StartActivity(viewFileIntent);
             }
             catch (Exception e)
@@ -103,7 +103,6 @@ namespace NHSOnline.App.Droid.DependencyServices
             using var contentValues = new ContentValues();
             contentValues.Put(MediaStore.IMediaColumns.DisplayName, downloadRequest.FileName);
             contentValues.Put(MediaStore.IMediaColumns.MimeType, downloadRequest.MimeType);
-            contentValues.Put(MediaStore.IMediaColumns.RelativePath, FilePath);
 
             fileUri = resolver.Insert(MediaStore.Downloads.ExternalContentUri, contentValues)!;
             return resolver;
