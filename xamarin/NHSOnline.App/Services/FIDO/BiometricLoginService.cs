@@ -35,7 +35,7 @@ namespace NHSOnline.App.Services.FIDO
                 return new BiometricLoginResult.PermanentLockout();
             }
 
-            var authSigner = await VerifyUser(biometricAuthKey).ResumeOnThreadPool();
+            var authSigner = await VerifyUser(biometricAuthKey).PreserveThreadContext();
             if (authSigner.Failed(out var authSignerFailure))
             {
                 return authSignerFailure;
@@ -59,7 +59,7 @@ namespace NHSOnline.App.Services.FIDO
 
         private static async Task<ProcessResult<IBiometricAuthSigner, BiometricLoginResult>> VerifyUser(IBiometricAuthKey key)
         {
-            var verifyResult = await key.VerifyUser(VerificationReason.Login).ResumeOnThreadPool();
+            var verifyResult = await key.VerifyUser(VerificationReason.Login).PreserveThreadContext();
 
             return verifyResult.Accept(new LoginVerifyUserResultVisitor());
         }

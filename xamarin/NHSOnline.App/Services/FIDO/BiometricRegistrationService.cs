@@ -30,10 +30,10 @@ namespace NHSOnline.App.Services.FIDO
 
         public async Task<BiometricRegisterResult> Register(AccessToken accessToken)
         {
-            await DeleteRegistration(accessToken).ResumeOnThreadPool();
-            using var key = await _biometrics.CreateBiometricKey(accessToken.Subject).ResumeOnThreadPool();
+            await DeleteRegistration(accessToken).PreserveThreadContext();
+            using var key = await _biometrics.CreateBiometricKey(accessToken.Subject).PreserveThreadContext();
 
-            var authSigner = await VerifyUser(key).ResumeOnThreadPool();
+            var authSigner = await VerifyUser(key).PreserveThreadContext();
             if (authSigner.Failed(out var authSignerFailure))
             {
                 return authSignerFailure;
@@ -91,7 +91,7 @@ namespace NHSOnline.App.Services.FIDO
 
         private static async Task<ProcessResult<IBiometricAuthSigner, BiometricRegisterResult>> VerifyUser(IBiometricAuthKey key)
         {
-            var verifyResult = await key.VerifyUser(VerificationReason.Registration).ResumeOnThreadPool();
+            var verifyResult = await key.VerifyUser(VerificationReason.Registration).PreserveThreadContext();
 
             var verifyUserResultVisitor = new RegisterVerifyUserResultVisitor();
             return verifyResult.Accept(verifyUserResultVisitor);

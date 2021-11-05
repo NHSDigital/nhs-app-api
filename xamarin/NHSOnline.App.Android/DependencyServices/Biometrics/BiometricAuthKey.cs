@@ -107,7 +107,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
 
             biometricPrompt.Authenticate(promptInfo, cryptoObject);
 
-            return await completionSource.Task.ResumeOnThreadPool();
+            return await completionSource.Task.PreserveThreadContext();
         }
 
         public Task Delete(string fidoUsername)

@@ -30,7 +30,7 @@ namespace NHSOnline.App.Services.FIDO
 
         public async Task<BiometricRegisterResult> Register(AccessToken accessToken)
         {
-            return await _biometricRegistrationService.Register(accessToken).ResumeOnThreadPool();
+            return await _biometricRegistrationService.Register(accessToken).PreserveThreadContext();
         }
 
         public async Task DeleteRegistration(AccessToken accessToken)
@@ -40,7 +40,7 @@ namespace NHSOnline.App.Services.FIDO
 
         public async Task<BiometricLoginResult> Authenticate(string fidoUsername)
         {
-            return await _biometricLoginService.Authenticate(fidoUsername).ResumeOnThreadPool();
+            return await _biometricLoginService.Authenticate(fidoUsername).PreserveThreadContext();
         }
 
         public async Task<BiometricStatusResult> FetchBiometricStatus(string fidoUsername)
