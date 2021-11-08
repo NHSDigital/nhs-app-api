@@ -20,7 +20,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 
         protected override void OnElementChanged(VisualElementChangedEventArgs e)
         {
-            if (e.OldElement != null)
+            if (e.OldElement == null)
             {
                 NavigationDelegate = new WebViewNavigationDelegate(this, _extensions.AsReadOnly());
                 UIDelegate = new WebViewUIDelegate();
