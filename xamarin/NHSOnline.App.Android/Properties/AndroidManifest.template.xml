@@ -59,6 +59,19 @@
 					android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"/>
 		</provider>
 	</application>
+
+	<queries>
+		<intent>
+			<action android:name="android.media.action.VIDEO_CAPTURE" />
+		</intent>
+		<intent>
+			<action android:name="android.media.action.IMAGE_CAPTURE" />
+		</intent>
+		<intent>
+			<action android:name="android.media.action.IMAGE_CAPTURE_SECURE" />
+		</intent>
+	</queries>
+	
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.WRITE_CALENDAR" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
