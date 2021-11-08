@@ -38,6 +38,7 @@ export default {
   success: 'Success',
   today: 'Today',
   tryAgain: 'Try again',
+  thereIsAProblem: 'There\'s a problem',
   unit: 'Unit',
   urgentAdvice: 'Urgent advice:',
   version: 'Version',

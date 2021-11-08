@@ -1,28 +1,36 @@
 <template>
   <no-return-flow-layout>
     <div v-if="showTemplate">
-      <div>
-        <p>{{ $t('notifications.weUseNotifications') }}</p>
-        <p>{{ $t('notifications.theNhsAndConnected') }}</p>
-        <labelled-toggle v-model="registered"
-                         checkbox-id="allow_notifications"
-                         :is-waiting="isWaiting"
-                         :label="$t('notifications.turnOnNotifications')"
-                         :hint-text="$t('notifications.tellMeAbout')"/>
-        <p>{{ $t('notifications.turnOnNotificationsForEachDevice') }}</p>
+      <error-dialog v-if="showError" :errors="errorText"/>
+      <p>{{ $t('notifications.weUseNotifications') }}</p>
+      <p>{{ $t('notifications.theNhsAndConnected') }}</p>
+      <nhs-uk-radio-group v-model="selectedValue"
+                          name="notifications"
+                          :heading="$t('notifications.doYouWantToGetNotifications')"
+                          :legend-size="mediumLegendSize"
+                          :enable-error-dialog="false"
+                          :error="showError"
+                          :error-text="errorText"
+                          :required="true"
+                          :items="choices"/>
+      <collapsible-details id="age-info">
+        <template slot="header">
+          {{ $t('notifications.aboutNotifications') }}
+        </template>
+        <p>{{ $t('notifications.ifYouWantToGetNotifications') }}</p>
         <p>{{ $t('notifications.ifYouShareThisDevice') }}</p>
-        <p>
-          {{ $t('notifications.moreInformation')
-          }}<analytics-tracked-tag
-            :href="privacyUrl"
-            :text="$t('notifications.notificationsLink')"
-            class="inline"
-            tag="a"
-            target="_blank">{{
-              $t('notifications.notificationsLink')
-            }}</analytics-tracked-tag>.
-        </p>
-      </div>
+      </collapsible-details>
+      <p>
+        {{ $t('notifications.moreInformation')
+        }}<analytics-tracked-tag
+          :href="privacyUrl"
+          :text="$t('notifications.notificationsLink')"
+          class="inline"
+          tag="a"
+          target="_blank">{{
+            $t('notifications.notificationsLink')
+          }}</analytics-tracked-tag>.
+      </p>
       <primary-button id="btn_continue" @click="onContinue">
         {{ $t('generic.continue') }}
       </primary-button>
@@ -31,39 +39,53 @@
 </template>
 
 <script>
+import isUndefined from 'lodash/fp/isUndefined';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import LabelledToggle from '@/components/widgets/LabelledToggle';
+import CollapsibleDetails from '@/components/widgets/collapsible/CollapsibleDetails';
+import ErrorDialog from '@/components/ErrorDialog';
+import LegendSize from '@/lib/legend-size';
 import NativeApp from '@/services/native-app';
+import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import NoReturnFlowLayout from '@/layouts/no-return-flow-layout';
 import PrimaryButton from '@/components/PrimaryButton';
 import RedirectMixin from '@/components/RedirectMixin';
+import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
 
 export default {
   name: 'Index',
   components: {
     AnalyticsTrackedTag,
-    LabelledToggle,
+    CollapsibleDetails,
+    ErrorDialog,
+    NhsUkRadioGroup,
     NoReturnFlowLayout,
     PrimaryButton,
   },
   mixins: [RedirectMixin],
   data() {
     return {
+      choices: [
+        {
+          label: this.$t('notifications.turnOnNotifications'),
+          hint: { text: this.$t('notifications.tellMeAbout') },
+          value: 'yes',
+        },
+        {
+          label: this.$t('notifications.doNotSendNotifications'),
+          hint: { text: this.$t('notifications.iUnderstandIWillNotBeTold') },
+          value: 'no',
+        },
+      ],
+      errorText: this.$t('notifications.chooseIfYouWantToGetNotifications'),
+      hasTriedToContinue: false,
+      mediumLegendSize: LegendSize.Medium,
       privacyUrl: this.$store.$env.PRIVACY_POLICY_URL,
+      selectedValue: undefined,
     };
   },
   computed: {
-    isWaiting() {
-      return this.$store.state.notifications.isWaiting;
-    },
-    registered: {
-      get() {
-        return this.$store.state.notifications.registered;
-      },
-      set() {
-        this.$store.dispatch('spinner/prevent', true);
-        this.$store.dispatch('notifications/toggle');
-      },
+    showError() {
+      return this.hasTriedToContinue && isUndefined(this.selectedValue);
     },
   },
   created() {
@@ -86,11 +108,19 @@ export default {
     NativeApp.hideWhiteScreen();
   },
   methods: {
-    onContinue() {
+    async onContinue() {
+      this.hasTriedToContinue = true;
+
+      if (this.showError) {
+        EventBus.$emit(FOCUS_ERROR_ELEMENT);
+        return;
+      }
+
       this.$store.dispatch('notifications/addNotificationCookie');
 
-      const { toggleUpdated } = this.$store.state.notifications;
-      if (!toggleUpdated) {
+      if (this.selectedValue === 'yes') {
+        await this.$store.dispatch('notifications/toggle');
+      } else {
         this.$store.dispatch('notifications/logMetrics', {
           screenShown: true,
           notificationsRegistered: false,

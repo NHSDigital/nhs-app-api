@@ -6,7 +6,7 @@
         <nhs-uk-radio-group
           v-model="selectedValue"
           name="chooseType"
-          :legend-size="'nhsuk-fieldset__legend--xl'"
+          legend-size="nhsuk-fieldset__legend--xl"
           :heading="$t('nominatedPharmacy.chooseType.nominatedPharmacyChooseType')"
           :error="showErrors"
           :error-text="$t('nominatedPharmacy.chooseType.errorMessage')"

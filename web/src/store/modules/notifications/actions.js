@@ -34,10 +34,10 @@ const addApiError = ({ dispatch }, errorCode, message) => dispatch('errors/addAp
   },
 });
 
-let resolveLoading;
+let resolveTask = () => { };
 
 export default {
-  authorised({ state, commit }, deviceResponse) {
+  authorised({ commit, dispatch, state }, deviceResponse) {
     let deviceResponseParam = deviceResponse;
 
     if (typeof deviceResponseParam !== 'object') {
@@ -52,25 +52,25 @@ export default {
         ? this.app.$http.postV1ApiUsersMeDevices({ addDeviceRequest: { devicePns, deviceType } })
         : this.app.$http.deleteV1ApiUsersMeDevices({ devicePns });
 
-      return promise.then(() => {
-        commit(SET_REGISTRATION, registering);
+      return promise
+        .then(() => {
+          commit(SET_REGISTRATION, registering);
 
-        if (this.app.$router.currentRoute.name === NOTIFICATIONS_NAME) {
-          this.dispatch('notifications/logMetrics',
-            { screenShown: true,
+          if (this.app.$router.currentRoute.name === NOTIFICATIONS_NAME) {
+            dispatch('logMetrics', {
+              screenShown: true,
               notificationsRegistered: registering,
               didErrorAttemptingToUpdateStatus: false,
             });
-        }
-      })
-        // NHSO-7584
+          }
+        })
         .catch((error) => {
           if (this.app.$router.currentRoute.name === NOTIFICATIONS_NAME) {
-            this.dispatch('notifications/logMetrics',
-              { screenShown: true,
-                notificationsRegistered: state.registered,
-                didErrorAttemptingToUpdateStatus: true,
-              });
+            dispatch('logMetrics', {
+              screenShown: true,
+              notificationsRegistered: state.registered,
+              didErrorAttemptingToUpdateStatus: true,
+            });
             this.app.$router.push({ path: NOTIFICATIONS_GENERIC_FAILURE_PATH });
           } else {
             if (get('response.status')(error) === 404) {
@@ -79,42 +79,43 @@ export default {
             throw new Error(error.message);
           }
         })
-        .finally(() => commit(SET_WAITING, false));
+        .finally(() => {
+          commit(SET_WAITING, false);
+          resolveTask(authorisationStatus.authorised);
+        });
     }
 
     return this.app.$http.getV1ApiUsersMeDevices({ devicePns })
       .then(() => commit(SET_REGISTRATION, true))
       .catch(() => commit(SET_REGISTRATION, false))
       .finally(() => {
-        resolveLoading(authorisationStatus.authorised);
+        resolveTask(authorisationStatus.authorised);
       });
   },
   load() {
     const loading = new Promise((resolve) => {
-      resolveLoading = resolve;
+      resolveTask = resolve;
     });
 
     NativeApp.getNotificationsStatus();
     return loading;
   },
-  logMetrics({ rootState }, params) {
-    const { screenShown,
-      notificationsRegistered,
-      didErrorAttemptingToUpdateStatus,
-    } = params;
+  async logMetrics({ rootState }, params) {
+    const { screenShown, notificationsRegistered, didErrorAttemptingToUpdateStatus } = params;
     const platform = rootState.device.source;
 
-    this.app.$http.postV1ApiUsersMeDevicesPromptMetrics({
-      notificationsPromptData:
-        {
+    try {
+      await this.app.$http.postV1ApiUsersMeDevicesPromptMetrics({
+        notificationsPromptData: {
           screenShown,
           notificationsRegistered,
           platform,
           didErrorAttemptingToUpdateStatus,
         },
-    }).catch(() => {
+      });
+    } catch {
       // do nothing as this is just logging
-    });
+    }
   },
   settingsStatus({ commit }, status) {
     switch (status) {
@@ -124,51 +125,59 @@ export default {
       case authorisationStatus.denied:
         commit(SET_REGISTRATION, false);
 
-        if (this.app.$router.history.pending !== null &&
-          this.app.$router.history.pending.name === NOTIFICATIONS_NAME) {
+        if (get('name')(this.app.$router.history.pending) === NOTIFICATIONS_NAME) {
           this.app.$router.push({ path: NOTIFICATIONS_GENERIC_FAILURE_PATH });
         } else {
           addApiError(this, 10001);
         }
 
-        resolveLoading(status);
+        resolveTask(status);
         break;
       default:
         commit(SET_REGISTRATION, false);
-        resolveLoading(status);
+        resolveTask(status);
     }
   },
   retryToggle({ dispatch }) {
-    // NHSO-7584
     this.dispatch('errors/clearAllApiErrors');
     EventBus.$emit(UPDATE_HEADER, 'navigation.pages.headers.notifications');
     EventBus.$emit(UPDATE_TITLE, 'navigation.pages.headers.notifications');
-    dispatch('toggle');
+    return dispatch('toggle');
   },
   toggle({ commit }) {
     commit(SET_WAITING, true);
     commit(TOGGLE_UPDATED, true);
 
+    const toggling = new Promise((resolve) => {
+      resolveTask = resolve;
+    });
+
     NativeApp.requestPnsToken(toggle);
+    return toggling;
   },
-  unauthorised({ commit }) {
+  unauthorised({ commit, dispatch }) {
     commit(SET_WAITING, false);
-    if (this.app.$router.currentRoute.name === NOTIFICATIONS_NAME ||
-      this.app.$router.currentRoute.name === USER_RESEARCH_NAME ||
-      this.app.$router.currentRoute.name === TERMSANDCONDITIONS_NAME) {
-      this.dispatch('notifications/logMetrics',
-        { screenShown: true,
+    switch (this.app.$router.currentRoute.name) {
+      case NOTIFICATIONS_NAME:
+      case USER_RESEARCH_NAME:
+      case TERMSANDCONDITIONS_NAME:
+        dispatch('logMetrics', {
+          screenShown: true,
           notificationsRegistered: false,
           didErrorAttemptingToUpdateStatus: true,
         });
-      this.app.$router.push({ path: NOTIFICATIONS_GENERIC_FAILURE_PATH });
-    } else if (this.app.$router.currentRoute.name === AUTH_RETURN_NAME) {
-      // if there is a fatal error when load is called during
-      // the middleware we need to ensure the promise is
-      // resolved and doesn't leave the user stuck
-      resolveLoading('');
-    } else {
-      addApiError(this, 10002);
+
+        this.app.$router.push({ path: NOTIFICATIONS_GENERIC_FAILURE_PATH });
+        break;
+      case AUTH_RETURN_NAME:
+        // if there is a fatal error when load is called during
+        // the middleware we need to ensure the promise is
+        // resolved and doesn't leave the user stuck
+        resolveTask('');
+        break;
+      default:
+        addApiError(this, 10002);
+        break;
     }
   },
   addNotificationCookie() {

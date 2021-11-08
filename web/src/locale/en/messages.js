@@ -34,7 +34,6 @@ export default {
   subject: 'Subject',
   textMustBeShorterThan450Characters: 'Text must be shorter than 450 characters (about 75 words).',
   textMustBeShorterThan64Characters: 'Text must be shorter than 64 characters (about 10 words).',
-  thereIsAProblem: 'There\'s a problem',
   thisIsWhoYourSurgeryLetsYouMessage: 'This is who your GP surgery lets you message. Your message may be read by any member of staff.',
   toAccessContactSurgery: 'To access it, contact your GP surgery directly.',
   toDiscussFurther: 'To discuss this message further, send a new message or phone your GP surgery.',
