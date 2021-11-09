@@ -108,6 +108,40 @@ Before running the app locally, some entries need to be added to your machine's 
 127.0.0.1 silverintegrationtestprovider.securestubs.local.bitraft.io
 ```
 
+If you have difficulty accessing web.local.bitraft.io:3000 and web is running in Docker. Try editing the `hosts` file to use the IPv6 addresses instead:
+
+```bash
+::1 api.local.bitraft.io
+::1 auth.nhslogin.stubs.local.bitraft.io
+::1 cid.local.bitraft.io
+::1 ers.stubs.local.bitraft.io
+::1 deeplinklauncher.stubs.local.bitraft.io
+::1 log.local.bitraft.io
+::1 messages.local.bitraft.io
+::1 minimock.local.bitraft.io
+::1 mongodb.bitraft.io
+::1 paycasso.stubs.local.bitraft.io
+::1 pfs.local.bitraft.io
+::1 servicejourneyrulesapi.local.bitraft.io
+::1 settings.nhslogin.stubs.local.bitraft.io
+::1 silver.local.bitraft.io
+::1 stubs.local.bitraft.io
+::1 uaf.nhslogin.stubs.local.bitraft.io
+::1 userinfo.local.bitraft.io
+::1 users.local.bitraft.io
+::1 web.local.bitraft.io
+::1 pkb.stubs.local.bitraft.io
+::1 pkb.securestubs.local.bitraft.io
+::1 engage.stubs.local.bitraft.io
+::1 gncr.stubs.local.bitraft.io
+::1 substrakt.stubs.local.bitraft.io
+::1 nhsd.stubs.local.bitraft.io
+::1 netcompany.stubs.local.bitraft.io
+::1 silverintegrationtestprovider.stubs.local.bitraft.io
+::1 silverintegrationtestprovider.securestubs.local.bitraft.io
+```
+
+
 ## Azure DevOps Feeds
 
 [Create a Personal Access Token](How-Tos/configure-azure-dev-ops-feeds.md#create-personal-access-token) for Azure DevOps.
