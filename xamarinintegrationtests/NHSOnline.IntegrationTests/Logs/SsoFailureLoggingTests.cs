@@ -1,4 +1,6 @@
+using System;
 using System.Text.Encodings.Web;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.HttpMocks.Emis;
@@ -40,6 +42,9 @@ namespace NHSOnline.IntegrationTests.Logs
 
                 AndroidNhsLoginSingleSignOnEnterEmailPage
                     .AssertOnPage(driver);
+
+                // Wait for the asynchronous log call to be made
+                Thread.Sleep(TimeSpan.FromSeconds(5));
             });
 
             var clientLogs = new ClientLoggerLogs(timing.StartTime, timing.StopTime);
@@ -74,6 +79,9 @@ http://auth.nhslogin.stubs.local.bitraft.io:8080/enter-email");
 
                 IOSNhsLoginSingleSignOnEnterEmailPage
                     .AssertOnPage(driver);
+
+                // Wait for the asynchronous log call to be made
+                Thread.Sleep(TimeSpan.FromSeconds(5));
             });
 
             var clientLogs = new ClientLoggerLogs(timing.StartTime, timing.StopTime);
