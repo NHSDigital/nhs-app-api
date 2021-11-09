@@ -1,3 +1,4 @@
+using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -66,6 +67,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         public static AndroidGettingStartedPage AssertOnPage(IAndroidDriverWrapper driver)
         {
+            // Extending timeout as its been shown this page causes failures by not taking enough time to wait for it to load
+            using var extendedTimeout = ExtendedTimeout.FromSeconds(10);
+
             var page = new AndroidGettingStartedPage(driver);
             page.Title.AssertVisible();
             return page;
