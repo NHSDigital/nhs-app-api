@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Messages;
+using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -38,6 +39,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Messages
 
         public static AndroidMessagesPage AssertOnPage(IAndroidDriverWrapper driver)
         {
+            // Extending timeout to allow page to finish reloading
+            using var extendedTimeout = ExtendedTimeout.FromSeconds(5);
+
             var page = new AndroidMessagesPage(driver);
             page.PageContent.AssertOnPage();
             return page;
