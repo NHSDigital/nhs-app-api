@@ -307,7 +307,10 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
                         .AssertOnPage(driver);
                 });
 
-            await driver.ResetNetwork();
+            // The web uses the navigator.online property to determine
+            // internet connection issues, which is not immediately updated
+            // when the network comes back online in Safari.
+            await driver.ResetNetworkAndWait(TimeSpan.FromSeconds(5));
 
             IOSCloseSlimTryAgainConnectionErrorPage
                 .AssertOnPage(driver)
@@ -439,7 +442,10 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
                         .AssertOnPage(driver);
                 });
 
-            await driver.ResetNetwork();
+            // The web uses the navigator.online property to determine
+            // internet connection issues, which is not immediately updated
+            // when the network comes back online in Safari.
+            await driver.ResetNetworkAndWait(TimeSpan.FromSeconds(5));
 
             driver.SwipeBack();
 
