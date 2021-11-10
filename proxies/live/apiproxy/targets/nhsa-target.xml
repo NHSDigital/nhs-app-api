@@ -18,9 +18,12 @@
 		</FaultRule>
 		<FaultRule name="quota_limits_breached">
 			<Step>
-				<Name>AssignMessage.QuotaLimitsBreachedErrorResponse</Name>
-				<Condition>(error.status.code Equals "429")</Condition>
+				<Name>ExtractVariables.RateLimitingError</Name>
 			</Step>
+			<Step>
+				<Name>AssignMessage.QuotaLimitsBreachedErrorResponse</Name>
+			</Step>
+			<Condition>(error.status.code Equals "429")</Condition>
 		</FaultRule>
 	</FaultRules>
 	<PreFlow>
@@ -29,11 +32,8 @@
 				<Name>OauthV2.VerifyAccessToken</Name>
 			</Step>
 			<Step>
-				<Name>Quota</Name>
-			</Step>
-			<Step>
-				<Name>SpikeArrest</Name>
-			</Step>
+                <Name>FlowCallout.ApplyRateLimiting</Name>
+            </Step>
 			<Step>
 				<Name>KeyValueMap.GetUpstreamApiKey</Name>
 			</Step>

@@ -1,0 +1,10 @@
+{
+    "resourceType": "OperationOutcome",
+    "issue": [
+        {
+            "severity": "error",
+            "code": "throttled",
+            "diagnostics": "This API is currently receiving a high volume of requests and is being rate limited."
+        }
+    ]
+}
