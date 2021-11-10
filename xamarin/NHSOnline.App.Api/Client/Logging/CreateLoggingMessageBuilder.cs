@@ -18,6 +18,7 @@ namespace NHSOnline.App.Api.Logging
         public async Task Build(ApiCreateLogRequest request, HttpRequestMessage httpRequestMessage)
         {
             httpRequestMessage.Method = HttpMethod.Post;
+            httpRequestMessage.Headers.Add("NHSO-Request-ID", Guid.NewGuid().ToString());
             httpRequestMessage.RequestUri = new Uri("/v1/api/log");
             await _serializer.SetContent(httpRequestMessage, request.CreateModel()).ResumeOnThreadPool();
         }

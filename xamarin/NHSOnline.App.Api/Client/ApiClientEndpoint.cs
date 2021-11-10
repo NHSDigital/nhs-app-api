@@ -24,6 +24,7 @@ namespace NHSOnline.App.Api.Client
         public async Task<TResult> Call(TRequest request, CancellationToken token)
         {
             using var requestMessage = new HttpRequestMessage();
+
             await _requestMessageBuilder.Build(request, requestMessage).ResumeOnThreadPool();
 
             using var responseMessage = await _apiHttpClient.Send(requestMessage, token).ResumeOnThreadPool();
