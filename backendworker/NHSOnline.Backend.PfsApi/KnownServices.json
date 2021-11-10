@@ -543,6 +543,17 @@
           "validateSession": false
         }
       ]
-    } 
+    },
+    "gncr": {
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    }
   }
 }

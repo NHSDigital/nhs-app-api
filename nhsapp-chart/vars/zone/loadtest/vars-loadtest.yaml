@@ -86,14 +86,6 @@ api:
     services__substraktPatientPack_admin__url: https://admin-request.test.substrakthealth.com
     services__substraktPatientPack_auth__url: https://auth.test.substrakthealth.com
     services__gncr__url: https://pepfront.enigmahost.net
-    services__gncr__javaScriptInteractionMode: SilverThirdParty
-    services__gncr__menuTab: None
-    services__gncr__viewMode: WebView
-    services__gncr__integrationLevel: SilverWithWebNavigation
-    services__gncr__showSpinner: true
-    services__gncr__showThirdPartyWarning: true
-    services__gncr__requiresAssertedLoginIdentity: true
-    services__gncr__validateSession: true
     services__engage__url: https://nhs1-nhsapp.engage.gp
     services__ers__url: https://pat.sa.refer.nhs.uk
     services__pkb__url: https://nhsapp.devstacks.pkb.io
@@ -109,8 +101,6 @@ api:
     servicesV3__substraktPatientPack__domains__1: https://admin-request.test.substrakthealth.com
     servicesV3__substraktPatientPack__domains__2: https://auth.test.substrakthealth.com
     servicesV3__gncr__url: https://pepfront.enigmahost.net
-    servicesV3__gncr__requiresAssertedLoginIdentity: true
-    servicesV3__gncr__validateSession: true
     servicesV3__engage__url: https://nhs1-nhsapp.engage.gp
     servicesV3__ers__url: https://pat.sa.refer.nhs.uk
     servicesV3__pkb__url: https://nhsapp.devstacks.pkb.io

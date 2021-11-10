@@ -15,6 +15,9 @@ describe('hospital appointments hub', () => {
   }, {
     id: 'pkb',
     url: 'www.url.com',
+  }, {
+    id: 'gncr',
+    url: 'www.url.com',
   }];
 
   const mountAs = ({
@@ -60,6 +63,9 @@ describe('hospital appointments hub', () => {
       ['pkbMyCareView', 'Appointments', true, false, true],
       ['pkbMyCareView', 'Appointments', true, true, false],
       ['pkbMyCareView', 'Appointments', false, false, false],
+      ['gncr', 'Appointments', true, false, true],
+      ['gncr', 'Appointments', true, true, false],
+      ['gncr', 'Appointments', false, false, false],
     ]).describe('%s %s enabled is %s, proxy is %s', (
       provider, linkType, context, isProxy, expectedResult,
     ) => {
@@ -79,6 +85,9 @@ describe('hospital appointments hub', () => {
             break;
           case 'pkbMyCareView':
             linkElement = '#btn_pkb_my_care_view_appointments';
+            break;
+          case 'gncrAppointments':
+            linkElement = '#btn_gncr_appointments';
             break;
           default:
             break;

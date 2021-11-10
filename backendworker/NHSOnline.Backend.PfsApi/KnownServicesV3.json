@@ -76,6 +76,10 @@
       "url": "https://stdevpistatic01.z33.web.core.windows.net",
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": true
+    },
+    "gncr": {
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true
     } 
   }
 }
