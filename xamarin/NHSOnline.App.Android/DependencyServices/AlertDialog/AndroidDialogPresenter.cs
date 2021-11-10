@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Android.App;
 using Microsoft.Extensions.Logging;
@@ -20,47 +18,35 @@ namespace NHSOnline.App.Droid.DependencyServices.AlertDialog
         internal static MainActivity? MainActivity { get; set; }
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(AndroidDialogPresenter));
 
-        private static ConcurrentDictionary<string, DismissibleDialog> KnownDialogs { get; } = new ConcurrentDictionary<string, DismissibleDialog>();
+        private static DismissibleDialog? ActiveDialog { get; set; }
 
         public async Task DisplayAlertDialog(NhsAppAlertDialog nhsAppAlert)
         {
-            await CreateAndShowAlertDialog(nhsAppAlert).ResumeOnThreadPool();
+            await CreateAndShowAlertDialog(nhsAppAlert).PreserveThreadContext();
         }
 
         public async Task DismissAll()
         {
-            await DismissAllActiveDialogs().ResumeOnThreadPool();
+            await DismissActiveDialog().ResumeOnThreadPool();
         }
 
-        internal static Task CreateAndShowAlertDialog(NhsAppAlertDialog nhsAppAlertDialog)
+        internal static async Task CreateAndShowAlertDialog(NhsAppAlertDialog nhsAppAlertDialog)
         {
-            DismissAllActiveDialogs();
-
-            if (KnownDialogs.ContainsKey(nhsAppAlertDialog.Message))
-            {
-                var existingDialog = KnownDialogs.GetValueOrDefault(nhsAppAlertDialog.Message);
-                existingDialog.Dialog.Show();
-                return Task.CompletedTask;
-            }
+            await DismissActiveDialog().PreserveThreadContext();
 
             var dialog = CreateDialog(nhsAppAlertDialog);
 
             if (dialog == null)
             {
                 Logger.LogWarning($"Failed to create {nhsAppAlertDialog.Message} dialog");
-                return Task.CompletedTask;
+                return;
             }
 
             var newDismissibleDialog = new DismissibleDialog(nhsAppAlertDialog.DismissAction, dialog);
 
-            if (!KnownDialogs.TryAdd(nhsAppAlertDialog.Message, newDismissibleDialog))
-            {
-                Logger.LogWarning($"Failed to add {nhsAppAlertDialog.Message} dialog to {nameof(KnownDialogs)} collection");
-                return Task.CompletedTask;
-            }
-
             dialog.Show();
-            return Task.CompletedTask;
+
+            ActiveDialog = newDismissibleDialog;
         }
 
         private static Android.App.AlertDialog? CreateDialog(NhsAppAlertDialog nhsAppAlertDialog)
@@ -76,23 +62,29 @@ namespace NHSOnline.App.Droid.DependencyServices.AlertDialog
             alert.SetCancelable(false);
 
             alert.SetNegativeButton(nhsAppAlertDialog.CancelText,
-                (_, __) => { NhsAppResilience.ExecuteOnMainThread(nhsAppAlertDialog.CancelAction); });
+                (_, __) =>
+                {
+                    NhsAppResilience.ExecuteOnMainThread(nhsAppAlertDialog.CancelAction);
+                    ActiveDialog = null;
+                });
 
             alert.SetPositiveButton(nhsAppAlertDialog.AcceptText,
-                (_, __) => { NhsAppResilience.ExecuteOnMainThread(nhsAppAlertDialog.AcceptAction); });
+                (_, __) =>
+                {
+                    NhsAppResilience.ExecuteOnMainThread(nhsAppAlertDialog.AcceptAction);
+                    ActiveDialog = null;
+                });
 
             return alert.Create();
         }
 
-        private static Task DismissAllActiveDialogs()
+        private static Task DismissActiveDialog()
         {
-            foreach (var (_, dialog) in KnownDialogs)
+            if (ActiveDialog != null)
             {
-                if (dialog.Dialog is {IsShowing: true})
-                {
-                    NhsAppResilience.ExecuteOnMainThread(dialog.DismissAction);
-                    dialog.Dialog.Dismiss();
-                }
+                NhsAppResilience.ExecuteOnMainThread(ActiveDialog.DismissAction);
+                ActiveDialog.Dialog.Dismiss();
+                ActiveDialog = null;
             }
 
             return Task.CompletedTask;
