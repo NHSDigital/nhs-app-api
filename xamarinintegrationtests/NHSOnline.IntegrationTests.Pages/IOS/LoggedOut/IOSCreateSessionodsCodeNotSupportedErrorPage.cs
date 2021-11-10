@@ -104,7 +104,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
             .ScrollIntoView();
 
         private IOSLink ErrorCodeLink => IOSLink
-            .WhichMatches(_driver, "Contact us, quoting error code 3 f ([0-9a-z] ){4}");
+            .WhichMatches(_driver, "Contact us, quoting error code 3 f ([0-9a-z] ){4}")
+            .ScrollIntoView();
 
         public static IOSCreateSessionOdsCodeNotSupportedErrorPage AssertOnPage(IIOSDriverWrapper driver)
         {
