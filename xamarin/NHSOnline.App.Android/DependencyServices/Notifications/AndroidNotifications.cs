@@ -68,17 +68,17 @@ namespace NHSOnline.App.Droid.DependencyServices.Notifications
         }
 
         private static bool NotificationsSupported
-            => GoogleApiAvailability.Instance
+            => GoogleApiAvailabilityLight.Instance
                 .IsGooglePlayServicesAvailable(Application.Context) == ConnectionResult.Success;
 
         private static string GetPlayServicesError()
         {
-            var resultCode = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(Application.Context);
+            var resultCode = GoogleApiAvailabilityLight.Instance.IsGooglePlayServicesAvailable(Application.Context);
 
             if (resultCode != ConnectionResult.Success)
             {
-                return GoogleApiAvailability.Instance.IsUserResolvableError(resultCode) ?
-                    GoogleApiAvailability.Instance.GetErrorString(resultCode) :
+                return GoogleApiAvailabilityLight.Instance.IsUserResolvableError(resultCode) ?
+                    GoogleApiAvailabilityLight.Instance.GetErrorString(resultCode) :
                     "This device is not supported";
             }
 
