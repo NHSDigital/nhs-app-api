@@ -2,6 +2,7 @@ import MorePage from '@/pages/more/index';
 import i18n from '@/plugins/i18n';
 import WebFooter from '@/components/widgets/WebFooter';
 import each from 'jest-each';
+import find from 'lodash/fp/find';
 import { TERMS_AND_CONDITIONS_URL, PRIVACY_POLICY_URL, ACCESSIBILITY_STATEMENT_URL } from '@/router/externalLinks';
 import { createStore, initFilters, mount } from '../../helpers';
 
@@ -12,6 +13,11 @@ describe('More Page', () => {
   initFilters();
 
   let $state;
+
+  const knownServices = [{
+    id: 'gncr',
+    url: 'www.url.com',
+  }];
 
   beforeEach(() => {
     $state = {
@@ -37,10 +43,13 @@ describe('More Page', () => {
 
   const buildStoreGetters = ({
     isProofLevel9 = true,
+    context = false,
   } = {}) => ({
     'appVersion/isNativeVersionAfter': jest.fn().mockReturnValue(true),
     'session/isProofLevel9': isProofLevel9,
-    'serviceJourneyRules/silverIntegrationEnabled': jest.fn().mockReturnValue(false),
+    'knownServices/matchOneById': id => find(service => service.id === id)(knownServices),
+    'serviceJourneyRules/silverIntegrationEnabled': jest.fn().mockReturnValue(context),
+    'session/isProxying': false,
   });
 
   const createStyle = () => ({
@@ -60,11 +69,13 @@ describe('More Page', () => {
     isNativeApp = false,
     supportsLinkedProfiles = false,
     isProofLevel9 = true,
+    context = false,
   }) => {
     const $store = createStore({ state: $state });
 
     $store.getters = buildStoreGetters({
       isProofLevel9,
+      context,
     });
 
     $store.app.$http = {
@@ -111,6 +122,15 @@ describe('More Page', () => {
 
     it('will have an account and settings link', () => {
       expect(wrapper.findAll('li').at(1).text()).toContain('Account and settings');
+    });
+
+    it('will have a Great North Care Record preferences link', () => {
+      wrapper = mountPage({
+        isNativeApp: true,
+        supportsLinkedProfiles: true,
+        context: true,
+      });
+      expect(wrapper.findAll('li').at(2).text()).toContain('Great North Care Record preferences');
     });
 
     it('will have a help and support link', () => {

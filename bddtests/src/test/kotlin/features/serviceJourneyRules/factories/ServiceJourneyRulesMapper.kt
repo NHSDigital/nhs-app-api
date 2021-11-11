@@ -130,7 +130,8 @@ class ServiceJourneyRulesMapper {
                     SJRJourneyType.IM1_MESSAGING_ENABLED,
                     SJRJourneyType.IM1_MESSAGING_REQUIRESDETAILSREQUEST_DISABLED,
                     SJRJourneyType.SILVER_INTEGRATION_MESSAGES_GNCR,
-                    SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_GNCR
+                    SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_GNCR,
+                    SJRJourneyType.SILVER_INTEGRATION_ACCOUNT_ADMIN_GNCR
                 )
             )
             .add(

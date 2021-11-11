@@ -30,7 +30,7 @@ Feature: Patients Know Best Messages
 
   Scenario: A user can follow the link to Find out more about personal health records
     Given I am a user who can view Messages and Online Consultations from Patients Know Best
-    And 'NHS UK' responds to requests for '/health-records'
+    And 'NHS UK' responds to requests for '/personal-health-records'
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Fauth%2FgetInbox.action%3Ftab%3Dmessages'
     Then I am redirected to the redirector page with the header 'Messages and online consultations'

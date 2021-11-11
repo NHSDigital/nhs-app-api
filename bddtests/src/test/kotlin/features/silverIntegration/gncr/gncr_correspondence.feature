@@ -23,7 +23,7 @@ Feature: Great North Care Record Correspondence
 
   Scenario: A user can follow the link to Find out more about hospital and other healthcare documents
     Given I am a user who can view Correspondence from GNCR
-    And 'NHS UK' responds to requests for '/health-records'
+    And 'NHS UK' responds to requests for '/personal-health-records'
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fgncr.stubs.local.bitraft.io%3A8080%2Fcorrespondence'
     Then I am redirected to the redirector page with the header 'Hospital and other healthcare documents'

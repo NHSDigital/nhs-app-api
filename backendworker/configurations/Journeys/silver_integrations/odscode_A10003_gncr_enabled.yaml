@@ -3,6 +3,8 @@ target:
   odsCode: "A10003"
 journeys:
   silverIntegrations:
+    accountAdmin: 
+      - gncr
     messages:
       - gncr
     secondaryAppointments:

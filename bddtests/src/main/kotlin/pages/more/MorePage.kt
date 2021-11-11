@@ -30,6 +30,7 @@ class MorePage : HybridPageObject() {
 
     val linkedProfilesLink = link("Linked profiles")
     val accountAndSettingsLink = link("Account and settings")
+    val gncrAdminLink = link("Great North Care Record preferences")
     val helpAndSupportLink = link("Help and support")
     val cookieLink = link("Cookies")
     val loginAndPasswordOptionsLink = link("Login options")
@@ -57,6 +58,14 @@ class MorePage : HybridPageObject() {
 
     fun assertAccountAndSettingsLinkIsPresent() {
         accountAndSettingsLink.assertIsVisible()
+    }
+
+    fun assertGNCRAdminLinkIsPresent() {
+        gncrAdminLink.assertIsVisible()
+    }
+
+    fun assertGNCRAdminLinkIsNotPresent() {
+        gncrAdminLink.assertElementNotPresent()
     }
 
     fun assertHelpAndSupportLinkIsPresent() {

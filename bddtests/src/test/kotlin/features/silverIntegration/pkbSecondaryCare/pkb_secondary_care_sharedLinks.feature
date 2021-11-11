@@ -24,7 +24,7 @@ Feature: Patients Know Best Secondary Care Shared Links
 
   Scenario: A user can follow the link to Find out more about personal health records
     Given I am a user who can view Shared Links from PKB Secondary Care
-    And 'NHS UK' responds to requests for '/health-records'
+    And 'NHS UK' responds to requests for '/personal-health-records'
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Flibrary%2FmanageLibrary.action%26brand=pkbSecondaryCare'
     Then I am redirected to the redirector page with the header 'Shared health links'

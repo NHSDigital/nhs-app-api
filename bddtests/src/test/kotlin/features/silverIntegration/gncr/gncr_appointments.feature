@@ -23,7 +23,7 @@ Feature: Great North Care Record Appointments
 
   Scenario: A user can follow the link to Find out more about personal health records
     Given I am a user who can view Appointments from GNCR
-    And 'NHS UK' responds to requests for '/health-records'
+    And 'NHS UK' responds to requests for '/personal-health-records'
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fgncr.stubs.local.bitraft.io%3A8080%2Fappointment'
     Then I am redirected to the redirector page with the header 'Hospital and other appointments'

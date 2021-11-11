@@ -109,13 +109,13 @@ export default {
       {
         id: 'admin',
         jumpOffContent: {
-          headerText: 'Great North Care Record service preferences',
+          headerText: 'Great North Care Record preferences',
           descriptionText: '',
         },
         thirdPartyWarning: {
-          featureName: 'Service preferences [TBC - GNCR testing]',
-          servicePurchaser: 'service purchaser',
-          serviceType: 'personal health record service',
+          featureName: 'GNCR preferences',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service ',
           serviceTypePlural: 'personal health record services',
           linkHref: 'PERSONAL_HEALTH_RECORDS_PRIVACY_URL',
         },

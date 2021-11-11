@@ -7,4 +7,6 @@ open class GNCRRequestBuilder(method: String ="GET", relativePath:String="")
     fun gncrAppointmentsRequest() = GNCRAppointmentsRequestBuilder()
 
     fun gncrCorrespondenceRequest() = GNCRCorrespondenceRequestBuilder()
+
+    fun gncrAdminRequest() = GNCRAdminRequestBuilder()
 }

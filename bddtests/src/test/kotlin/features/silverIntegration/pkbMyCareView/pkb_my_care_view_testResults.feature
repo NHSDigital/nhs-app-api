@@ -23,7 +23,7 @@ Feature: Patients Know Best My Care View  Test Results
 
   Scenario: A user can follow the link to Find out more about personal health records
     Given I am a user who can view test results from PKB My Care View
-    And 'NHS UK' responds to requests for '/health-records'
+    And 'NHS UK' responds to requests for '/personal-health-records'
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Ftest%2FmyTests.action%26brand=pkbMyCareView'
     Then I am redirected to the redirector page with the header 'Test results'
