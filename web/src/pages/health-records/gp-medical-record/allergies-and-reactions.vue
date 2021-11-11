@@ -5,8 +5,10 @@
       :has-errored="allergies.hasErrored"
       :has-undetermined-access="allergies.hasUndeterminedAccess"
     />
-    <div v-else data-purpose="allergies-and-reactions">
-      <div role="list" class="nhsuk-grid-row nhsuk-u-margin-bottom-4">
+    <div v-else
+         data-purpose="allergies-and-reactions"
+         class="nhsuk-u-margin-bottom-4">
+      <div role="list" class="nhsuk-grid-row">
         <MedicalRecordCardGroupItem
           v-for="(allergy, index) in orderedAllergies"
           :key="`allergy.name-${index}`"
@@ -29,6 +31,7 @@
           </Card>
         </MedicalRecordCardGroupItem>
       </div>
+      <no-further-information-available />
     </div>
     <glossary v-if="!showError"/>
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
@@ -44,6 +47,7 @@ import Card from '@/components/widgets/card/Card';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
+import NoFurtherInformationAvailable from '@/components/gp-medical-record/SharedComponents/NoFurtherInformationAvailable';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import ScrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/SCRErrorNoAccessGpRecord';
 import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
@@ -53,8 +57,9 @@ export default {
   components: {
     Card,
     DesktopGenericBackLink,
-    MedicalRecordCardGroupItem,
     Glossary,
+    MedicalRecordCardGroupItem,
+    NoFurtherInformationAvailable,
     ScrErrorNoAccessGpRecord,
   },
   mixins: [ReloadRecordMixin],

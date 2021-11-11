@@ -7,36 +7,39 @@
       :has-undetermined-access="immunisations.hasUndeterminedAccess"/>
     <div
       v-else
-      role="list"
-      class="nhsuk-grid-row nhsuk-u-margin-bottom-4">
-      <MedicalRecordCardGroupItem
-        v-for="(item, index) in orderedImmunisations"
-        :key="`immunisation-${index}`"
-        data-purpose="record-item"
-        class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2">
-        <Card data-label="immunisations">
-          <div data-purpose="immunisations-card">
-            <p v-if="item.effectiveDate && item.effectiveDate.value"
-               class="nhsuk-u-margin-bottom-0 nhsuk-u-font-weight-bold">
-              {{ item.effectiveDate.value | datePart(item.effectiveDate.datePart) }}
-            </p>
-            <p v-else class="nhsuk-u-margin-bottom-0 nhsuk-u-font-weight-bold">
-              {{ $t('myRecord.unknownDate') }}
-            </p>
-            <p class="nhsuk-body nhsuk-u-margin-bottom-2">
-              {{ item.term }}
-            </p>
-            <p v-if="item.nextDate != null"
-               class="nhsuk-body nhsuk-u-margin-bottom-2">
-              {{ $t('myRecord.gpMedicalRecord.nextDate') }}{{ getNextDateFormatted(item.nextDate) }}
-            </p>
-            <p v-if="item.status != null"
-               class="nhsuk-body nhsuk-u-margin-bottom-2">
-              {{ $t('myRecord.gpMedicalRecord.status') }}{{ item.status }}
-            </p>
-          </div>
-        </Card>
-      </MedicalRecordCardGroupItem>
+      class="nhsuk-u-margin-bottom-4">
+      <div role="list" class="nhsuk-grid-row">
+        <MedicalRecordCardGroupItem
+          v-for="(item, index) in orderedImmunisations"
+          :key="`immunisation-${index}`"
+          data-purpose="record-item"
+          class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2">
+          <Card data-label="immunisations">
+            <div data-purpose="immunisations-card">
+              <p v-if="item.effectiveDate && item.effectiveDate.value"
+                 class="nhsuk-u-margin-bottom-0 nhsuk-u-font-weight-bold">
+                {{ item.effectiveDate.value | datePart(item.effectiveDate.datePart) }}
+              </p>
+              <p v-else class="nhsuk-u-margin-bottom-0 nhsuk-u-font-weight-bold">
+                {{ $t('myRecord.unknownDate') }}
+              </p>
+              <p class="nhsuk-body nhsuk-u-margin-bottom-2">
+                {{ item.term }}
+              </p>
+              <p v-if="item.nextDate != null"
+                 class="nhsuk-body nhsuk-u-margin-bottom-2">
+                {{ $t('myRecord.gpMedicalRecord.nextDate') }}
+                {{ getNextDateFormatted(item.nextDate) }}
+              </p>
+              <p v-if="item.status != null"
+                 class="nhsuk-body nhsuk-u-margin-bottom-2">
+                {{ $t('myRecord.gpMedicalRecord.status') }}{{ item.status }}
+              </p>
+            </div>
+          </Card>
+        </MedicalRecordCardGroupItem>
+      </div>
+      <no-further-information-available />
     </div>
     <glossary v-if="!showError"/>
     <desktopGenericBackLink
@@ -54,6 +57,7 @@ import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedCompo
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
+import NoFurtherInformationAvailable from '@/components/gp-medical-record/SharedComponents/NoFurtherInformationAvailable';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
@@ -64,6 +68,7 @@ export default {
     DcrErrorNoAccessGpRecord,
     DesktopGenericBackLink,
     MedicalRecordCardGroupItem,
+    NoFurtherInformationAvailable,
     Glossary,
   },
   mixins: [ReloadRecordMixin],
@@ -71,7 +76,6 @@ export default {
     return {
       backPath: GP_MEDICAL_RECORD_PATH,
       immunisations: null,
-
     };
   },
   computed: {

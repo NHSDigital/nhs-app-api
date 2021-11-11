@@ -6,8 +6,8 @@
       :has-errored="consultations.hasErrored"
       :has-access="consultations.hasAccess"
       :has-undetermined-access="consultations.hasUndeterminedAccess"/>
-    <div v-else data-purpose="consultations">
-      <div role="list" class="nhsuk-grid-row nhsuk-u-margin-bottom-4">
+    <div v-else data-purpose="consultations" class="nhsuk-u-margin-bottom-4">
+      <div role="list" class="nhsuk-grid-row">
         <MedicalRecordCardGroupItem
           v-for="(consultation, index) in orderedConsultations"
           :key="`consultation-${index}`"
@@ -61,6 +61,7 @@
           </Card>
         </MedicalRecordCardGroupItem>
       </div>
+      <no-further-information-available />
     </div>
     <glossary v-if="!showError"/>
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
@@ -77,6 +78,7 @@ import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedCompo
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
+import NoFurtherInformationAvailable from '@/components/gp-medical-record/SharedComponents/NoFurtherInformationAvailable';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
@@ -84,10 +86,11 @@ import { redirectTo } from '@/lib/utils';
 export default {
   components: {
     Card,
-    DesktopGenericBackLink,
-    MedicalRecordCardGroupItem,
-    Glossary,
     DcrErrorNoAccessGpRecord,
+    DesktopGenericBackLink,
+    Glossary,
+    MedicalRecordCardGroupItem,
+    NoFurtherInformationAvailable,
   },
   mixins: [ReloadRecordMixin],
   data() {
@@ -101,7 +104,6 @@ export default {
     orderedConsultations() {
       return orderBy([consultation => this.getEffectiveDate(consultation.effectiveDate, '')],
         ['desc'])((this.consultations || {}).data);
-    // (this.consultations.data);
     },
     showError() {
       return this.consultations &&

@@ -10,7 +10,7 @@ Feature: Documents Frontend - Medical Record v2
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
     And I click the Documents link on my record - Medical Record v2
-    Then I see a message that I have no information recorded for a specific record - Medical Record v2
+    Then I see a message that I have no information available for a specific record - Medical Record v2
     Examples:
       | GP System |
       | EMIS      |
@@ -35,6 +35,7 @@ Feature: Documents Frontend - Medical Record v2
     When I click the 'Continue' button
     And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
+    And I see a message that no further information is available for this section in GP Medical Record
     Examples:
       | GP System |
       | EMIS      |

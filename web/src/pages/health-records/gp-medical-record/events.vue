@@ -5,8 +5,8 @@
       :has-errored="events.hasErrored"
       :has-access="events.hasAccess"
       :has-undetermined-access="events.hasUndeterminedAccess"/>
-    <div v-else data-purpose="events">
-      <div role="list" class="nhsuk-grid-row nhsuk-u-margin-bottom-4">
+    <div v-else data-purpose="events" class="nhsuk-u-margin-bottom-4">
+      <div role="list" class="nhsuk-grid-row">
         <MedicalRecordCardGroupItem
           v-for="(event, index) in orderedEvents"
           :key="`event-${index}`"
@@ -36,6 +36,7 @@
           </Card>
         </MedicalRecordCardGroupItem>
       </div>
+      <no-further-information-available />
     </div>
     <glossary v-if="!showError"/>
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
@@ -52,6 +53,7 @@ import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedCompo
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
+import NoFurtherInformationAvailable from '@/components/gp-medical-record/SharedComponents/NoFurtherInformationAvailable';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
@@ -59,10 +61,11 @@ import { redirectTo } from '@/lib/utils';
 export default {
   components: {
     Card,
-    DesktopGenericBackLink,
-    MedicalRecordCardGroupItem,
-    Glossary,
     DcrErrorNoAccessGpRecord,
+    DesktopGenericBackLink,
+    Glossary,
+    MedicalRecordCardGroupItem,
+    NoFurtherInformationAvailable,
   },
   mixins: [ReloadRecordMixin],
   data() {

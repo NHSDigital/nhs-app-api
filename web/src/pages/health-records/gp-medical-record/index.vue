@@ -88,12 +88,12 @@
           <div v-if="isProxying" :class="[$style['info'], 'nhsuk-u-margin-top-3']">
             <shutter :feature="'medicalRecord'" />
           </div>
-          <div v-else id="errorMsg" :class="[$style['record-content'], 'nhsuk-u-margin-bottom-6']">
-            <p><strong style="margin-top: 0.5em;">
-              {{ $t('myRecord.youDoNotHaveAccessToYourRecord') }}
-            </strong></p>
+          <card v-else id="errorMsg" class="nhsuk-u-margin-bottom-6">
+            <p>
+              <strong>{{ $t('myRecord.youDoNotHaveAccessToYourRecord') }}</strong>
+            </p>
             <p>{{ $t('myRecord.contactSurgeryForMoreInformation') }} </p>
-          </div>
+          </card>
         </div>
       </div>
     </div>
@@ -106,6 +106,7 @@
 <script>
 import get from 'lodash/fp/get';
 import InsetText from '@/components/InsetText';
+import Card from '@/components/widgets/card/Card';
 import DcrEmisGpRecord from '@/components/gp-medical-record/DetailedCodedRecord/DcrEMISGpRecord';
 import DcrTppGpRecord from '@/components/gp-medical-record/DetailedCodedRecord/DcrTPPGpRecord';
 import DcrVisionGpRecord from '@/components/gp-medical-record/DetailedCodedRecord/DcrVISIONGpRecord';
@@ -126,6 +127,7 @@ const PATIENTDETAILS = 'patientdetails';
 
 export default {
   components: {
+    Card,
     Glossary,
     InsetText,
     DcrEmisGpRecord,

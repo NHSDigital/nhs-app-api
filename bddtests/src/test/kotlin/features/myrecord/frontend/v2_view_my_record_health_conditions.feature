@@ -10,6 +10,7 @@ Feature: Health Conditions Frontend - Medical Record V2
     When I click the 'Continue' button
     And I click the Health conditions link on my record - Medical Record v2
     Then I see the expected health conditions - Medical Record v2
+    And I see a message that no further information is available for this section in GP Medical Record
 
     Examples:
       | GP System |
@@ -24,7 +25,7 @@ Feature: Health Conditions Frontend - Medical Record V2
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
     And I click the Health conditions link on my record - Medical Record v2
-    Then I see a message that I have no information recorded for a specific record - Medical Record v2
+    Then I see a message that I have no information available for a specific record - Medical Record v2
 
     Examples:
       | GP System |

@@ -68,9 +68,14 @@ open class V2MedicalRecordStepDefinitions {
         assertTextOnPage("An error has occurred trying to retrieve this data.")
     }
 
-    @Then("^I see a message that I have no information recorded for a specific record - Medical Record v2$")
-    fun thenISeeAMessageIndicatingThatIHaveNoInformationRecordedV2() {
-        assertTextOnPage( "No information recorded")
+    @Then("^I see a message that I have no information available for a specific record - Medical Record v2$")
+    fun thenISeeAMessageIndicatingThatIHaveNoInformationAvailableV2() {
+        assertTextOnPage("No information available")
+    }
+
+    @Then("^I see a message that no further information is available for this section in GP Medical Record$")
+    fun thenISeeAMessageIndicatingThatNoFurtherInformationIsAvailableV2() {
+        assertTextOnPage("No further information available")
     }
 
     @Then("^I see a message indicating that I have no access to view this section on My Record" +

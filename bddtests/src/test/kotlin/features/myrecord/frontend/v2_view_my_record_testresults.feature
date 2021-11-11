@@ -20,7 +20,7 @@ Feature: Test Results Frontend - Medical Record v2
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
     And I click the Test results link on my record - Medical Record v2
-    Then I see a message that I have no information recorded for a specific record - Medical Record v2
+    Then I see a message that I have no information available for a specific record - Medical Record v2
 
   Scenario: An EMIS user has one test result with one value - Medical Record v2
     Given I am a EMIS user setup to use medical record version 2
@@ -71,6 +71,7 @@ Feature: Test Results Frontend - Medical Record v2
     When I click the 'Continue' button
     And I click the Test results link on my record - Medical Record v2
     Then I see test results with multiple child values some of which have ranges - Medical Record v2
+    And I see a message that no further information is available for this section in GP Medical Record
 
   Scenario: An EMIS user has a test result with an unknown date - Medical Record v2
     Given I am a EMIS user setup to use medical record version 2
@@ -92,6 +93,7 @@ Feature: Test Results Frontend - Medical Record v2
     When I click the 'Continue' button
     And I click the Test results link on my record - Medical Record v2
     Then I see 6 test results - Medical Record v2
+    And I see a message that no further information is available for this section in GP Medical Record
 
   Scenario: A TPP user will see a error screen when viewing an invalid individual test result - Medical Record v2
     Given I am a TPP user setup to use medical record version 2

@@ -20,7 +20,7 @@ Feature: Allergies Frontend - Medical Record v2
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
     And I click the Allergies and adverse reactions link on my record - Medical Record v2
-    Then I see a message that I have no information recorded for a specific record - Medical Record v2
+    Then I see a message that I have no information available for a specific record - Medical Record v2
 
   Scenario: A VISION user is shown an appropriate error message when an unknown error occurs retrieving their allergies - Medical Record v2
     Given I am a VISION user setup to use medical record version 2
@@ -41,6 +41,7 @@ Feature: Allergies Frontend - Medical Record v2
     When I click the 'Continue' button
     And I click the Allergies and adverse reactions link on my record - Medical Record v2
     Then I see the expected allergies displayed with unknown date for the second result - Medical Record v2
+    And I see a message that no further information is available for this section in GP Medical Record
 
   Scenario: An EMIS user receiving a bad allergies response sees an error - Medical Record v2
     Given I am a EMIS user setup to use medical record version 2

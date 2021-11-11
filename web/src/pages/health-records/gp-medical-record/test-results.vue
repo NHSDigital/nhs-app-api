@@ -10,68 +10,71 @@
         :has-undetermined-access="results.hasUndeterminedAccess"
       />
       <div v-else-if="supplier === 'TPP' || supplier === 'EMIS'"
-           role="list" class="nhsuk-grid-row nhsuk-u-margin-bottom-4">
-        <MedicalRecordCardGroupItem
-          v-for="(testResult, testIndex) in orderedTestResults"
-          :key="`testResult-${testIndex}`"
-          data-purpose="record-item"
-          class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2">
-          <Card data-label="allergies-and-reactions">
-            <div data-purpose="test-results-card">
-              <p v-if="testResult.date && testResult.date.value"
-                 class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0"
-                 data-purpose="record-item-header">
-                {{ testResult.date.value | datePart(testResult.date.datePart) }}
-              </p>
-              <p v-else class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0"
-                 data-purpose="record-item-header">
-                {{ $t('myRecord.unknownDate') }}
-              </p>
-              <p v-if="supplier === 'TPP'"
-                 class="nhsuk-u-margin-bottom-0">
-                <a :href="getTestResultPath(testResult.id)"
-                   :class="$style.viewTestResult"
-                   data-purpose="record-item-detail"
-                   tabindex="0"
-                   @click.prevent="activateTestResult(testResult.id)"
-                   @keypress.enter.prevent="activateTestResult(testResult.id)">
-                  {{ testResult.description }}
-                </a>
-              </p>
-              <p v-if="supplier === 'EMIS'"
-                 class="nhsuk-body nhsuk-u-margin-bottom-2"
-                 data-purpose="record-item-detail">
-                {{ testResult.description }}</p>
-              <div v-if="testResult.associatedTexts.length > 0"
-                   class="nhsuk-body nhsuk-u-margin-bottom-2">
-                <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">
-                  {{ $t('myRecord.gpMedicalRecord.comment') }}
+           class="nhsuk-u-margin-bottom-4">
+        <div role="list" class="nhsuk-grid-row">
+          <MedicalRecordCardGroupItem
+            v-for="(testResult, testIndex) in orderedTestResults"
+            :key="`testResult-${testIndex}`"
+            data-purpose="record-item"
+            class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2">
+            <Card data-label="allergies-and-reactions">
+              <div data-purpose="test-results-card">
+                <p v-if="testResult.date && testResult.date.value"
+                   class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0"
+                   data-purpose="record-item-header">
+                  {{ testResult.date.value | datePart(testResult.date.datePart) }}
                 </p>
-                <p v-for="(associatedText, associatedTextItemIndex) in testResult.associatedTexts"
-                   :key="`associatedText-${associatedTextItemIndex}`"
+                <p v-else class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0"
+                   data-purpose="record-item-header">
+                  {{ $t('myRecord.unknownDate') }}
+                </p>
+                <p v-if="supplier === 'TPP'"
                    class="nhsuk-u-margin-bottom-0">
-                  {{ associatedText }}</p>
+                  <a :href="getTestResultPath(testResult.id)"
+                     :class="$style.viewTestResult"
+                     data-purpose="record-item-detail"
+                     tabindex="0"
+                     @click.prevent="activateTestResult(testResult.id)"
+                     @keypress.enter.prevent="activateTestResult(testResult.id)">
+                    {{ testResult.description }}
+                  </a>
+                </p>
+                <p v-if="supplier === 'EMIS'"
+                   class="nhsuk-body nhsuk-u-margin-bottom-2"
+                   data-purpose="record-item-detail">
+                  {{ testResult.description }}</p>
+                <div v-if="testResult.associatedTexts.length > 0"
+                     class="nhsuk-body nhsuk-u-margin-bottom-2">
+                  <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">
+                    {{ $t('myRecord.gpMedicalRecord.comment') }}
+                  </p>
+                  <p v-for="(associatedText, associatedTextItemIndex) in testResult.associatedTexts"
+                     :key="`associatedText-${associatedTextItemIndex}`"
+                     class="nhsuk-u-margin-bottom-0">
+                    {{ associatedText }}</p>
+                </div>
+                <ul v-if="testResult.testResultChildLineItems.length > 0"
+                    class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-bottom-0">
+                  <li v-for="(lineItem, lineItemIndex)
+                        in testResult.testResultChildLineItems"
+                      :key="`line-${lineItemIndex}`"
+                      data-purpose="record-item-child-detail">
+                    {{ lineItem.description }}
+                    <ul v-if="lineItem.associatedTexts.length > 0"
+                        class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-bottom-0">
+                      <li v-for="(lineItemAssociatedText, lineItemAssociatedTextIndex)
+                            in lineItem.associatedTexts"
+                          :key="`lineAssociatedText-${lineItemAssociatedTextIndex}`">
+                        {{ lineItemAssociatedText }}
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
               </div>
-              <ul v-if="testResult.testResultChildLineItems.length > 0"
-                  class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-bottom-0">
-                <li v-for="(lineItem, lineItemIndex)
-                      in testResult.testResultChildLineItems"
-                    :key="`line-${lineItemIndex}`"
-                    data-purpose="record-item-child-detail">
-                  {{ lineItem.description }}
-                  <ul v-if="lineItem.associatedTexts.length > 0"
-                      class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-bottom-0">
-                    <li v-for="(lineItemAssociatedText, lineItemAssociatedTextIndex)
-                          in lineItem.associatedTexts"
-                        :key="`lineAssociatedText-${lineItemAssociatedTextIndex}`">
-                      {{ lineItemAssociatedText }}
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
-          </Card>
-        </MedicalRecordCardGroupItem>
+            </Card>
+          </MedicalRecordCardGroupItem>
+        </div>
+        <no-further-information-available />
       </div>
       <glossary v-if="!showError"/>
       <desktopGenericBackLink
@@ -90,6 +93,7 @@ import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedCompo
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
+import NoFurtherInformationAvailable from '@/components/gp-medical-record/SharedComponents/NoFurtherInformationAvailable';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import { redirectTo } from '@/lib/utils';
 import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
@@ -100,6 +104,7 @@ export default {
     DcrErrorNoAccessGpRecord,
     DesktopGenericBackLink,
     MedicalRecordCardGroupItem,
+    NoFurtherInformationAvailable,
     Glossary,
   },
   mixins: [ReloadRecordMixin],

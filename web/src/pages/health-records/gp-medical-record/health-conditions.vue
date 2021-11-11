@@ -6,8 +6,8 @@
       :has-access="problems.hasAccess"
       :has-undetermined-access="problems.hasUndeterminedAccess"
     />
-    <div v-else data-purpose="health-conditions">
-      <div role="list" class="nhsuk-grid-row nhsuk-u-margin-bottom-4">
+    <div v-else data-purpose="health-conditions" class="nhsuk-u-margin-bottom-4">
+      <div role="list" class="nhsuk-grid-row">
         <MedicalRecordCardGroupItem
           v-for="(problem, index) in orderedProblems"
           :key="`problem-${index}`"
@@ -40,6 +40,7 @@
           </Card>
         </MedicalRecordCardGroupItem>
       </div>
+      <no-further-information-available />
     </div>
     <glossary v-if="!showError"/>
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
@@ -53,6 +54,7 @@
 import orderBy from 'lodash/fp/orderBy';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
+import NoFurtherInformationAvailable from '@/components/gp-medical-record/SharedComponents/NoFurtherInformationAvailable';
 import Card from '@/components/widgets/card/Card';
 import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
 import Glossary from '@/components/Glossary';
@@ -67,6 +69,7 @@ export default {
     MedicalRecordCardGroupItem,
     Glossary,
     DcrErrorNoAccessGpRecord,
+    NoFurtherInformationAvailable,
   },
   mixins: [ReloadRecordMixin],
   data() {

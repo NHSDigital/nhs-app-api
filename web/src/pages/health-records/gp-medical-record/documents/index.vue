@@ -1,29 +1,31 @@
 <template>
-  <div>
+  <div v-if="showTemplate">
     <dcr-error-no-access-gp-record
       v-if="showError"
       :has-errored="documents.hasErrored"
       :has-access="documents.hasAccess"/>
 
-    <div v-if="showTemplate" class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
-        <menu-item-list>
-          <menu-item v-for="(document, index) in orderedDocuments"
-                     :id="document.documentIdentifier"
-                     :key="index"
-                     header-tag="h2"
-                     :target="'_blank'"
-                     :text="documentTitle(document.term, document.effectiveDate, document.type)"
-                     :click-func="documentClicked"
-                     :click-param="document"
-                     :description="documentDescription(document.extension, document.size)"
-                     :aria-label="`${documentTitle(document.term,
-                                                   document.effectiveDate,
-                                                   document.type)}.
-                                ${documentDescription(document.extension,
-                     document.size)}`"/>
-        </menu-item-list>
+    <div v-else class="nhsuk-u-margin-bottom-4">
+      <div class="nhsuk-grid-row nhsuk-u-margin-bottom-2">
+        <div class="nhsuk-grid-column-full">
+          <menu-item-list>
+            <menu-item v-for="(document, index) in orderedDocuments"
+                       :id="document.documentIdentifier"
+                       :key="index"
+                       header-tag="h2"
+                       :target="'_blank'"
+                       :text="documentTitle(document.term, document.effectiveDate, document.type)"
+                       :click-func="documentClicked"
+                       :click-param="document"
+                       :description="documentDescription(document.extension, document.size)"
+                       :aria-label="`${documentTitle(document.term,
+                                                     document.effectiveDate,
+                                                     document.type)}.
+                                  ${documentDescription(document.extension, document.size)}`"/>
+          </menu-item-list>
+        </div>
       </div>
+      <no-further-information-available />
     </div>
 
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
@@ -40,6 +42,7 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import MenuItem from '@/components/MenuItem';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import MenuItemList from '@/components/MenuItemList';
+import NoFurtherInformationAvailable from '@/components/gp-medical-record/SharedComponents/NoFurtherInformationAvailable';
 import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
 import { DOCUMENT_NAME } from '@/router/names';
 import { isBlankString, isNumber, redirectTo, readableBytes, datePart } from '@/lib/utils';
@@ -82,6 +85,7 @@ export default {
     DcrErrorNoAccessGpRecord,
     MenuItem,
     MenuItemList,
+    NoFurtherInformationAvailable,
   },
   mixins: [ReloadRecordMixin],
   data() {
