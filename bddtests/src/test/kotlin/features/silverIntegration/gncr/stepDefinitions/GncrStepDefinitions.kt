@@ -57,10 +57,10 @@ class GncrStepDefinitions : HybridPageObject() {
                 "Find out more about personal health record services")
     }
 
-    @Then("the healthcare letters warning message on the Redirector page explains the service is from GNCR$")
-    fun assertHospitalAndOtherHealthCareLettersWarningMessageContent() {
+    @Then("the healthcare documents warning message on the Redirector page explains the service is from GNCR$")
+    fun assertHospitalAndOtherHealthCareDocumentsWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-            "Hospital and other healthcare letters\nThis service is provided by Great North Care Record",
+            "Hospital and other healthcare documents\nThis service is provided by Great North Care Record",
             "Your GP surgery or hospital has chosen this personal health record service provider.",
             "Find out more about personal health record services")
     }
@@ -85,9 +85,10 @@ class GncrStepDefinitions : HybridPageObject() {
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_MESSAGES_NONE)
     }
 
-    @Then("^the link to GNCR 'Hospital and other healthcare letters' is not available on the Health Records Hub page$")
+    @Then("^the link to GNCR 'Hospital and other healthcare documents' " +
+            "is not available on the Health Records Hub page$")
     fun theLinkToGNCRCorrespondenceIsNotAvailableOnTheAppointmentsPage() {
-        medicalRecordHubPage.getHeaderElement("Hospital and other healthcare letters").assertElementNotPresent()
+        medicalRecordHubPage.getHeaderElement("Hospital and other healthcare documents").assertElementNotPresent()
     }
 
     @Then("^I am navigated to a third party site for GNCR$")

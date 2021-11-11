@@ -10,23 +10,23 @@ Feature: Great North Care Record Correspondence
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page
-    And I click the menu item 'Hospital and other healthcare letters'
-    And I am redirected to the redirector page with the header 'Hospital and other healthcare letters'
-    And the healthcare letters warning message on the Redirector page explains the service is from GNCR
+    And I click the menu item 'Hospital and other healthcare documents'
+    And I am redirected to the redirector page with the header 'Hospital and other healthcare documents'
+    And the healthcare documents warning message on the Redirector page explains the service is from GNCR
 
-  Scenario: A user without access to GNCR cannot see the menu item 'Hospital and other healthcare letters' on the Health Record Hub page
+  Scenario: A user without access to GNCR cannot see the menu item 'Hospital and other healthcare documents' on the Health Record Hub page
     Given I am a user who cannot view Correspondence from GNCR
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page
-    And the link to GNCR 'Hospital and other healthcare letters' is not available on the Health Records Hub page
+    And the link to GNCR 'Hospital and other healthcare documents' is not available on the Health Records Hub page
 
-  Scenario: A user can follow the link to Find out more about hospital and other healthcare letters
+  Scenario: A user can follow the link to Find out more about hospital and other healthcare documents
     Given I am a user who can view Correspondence from GNCR
     And 'NHS UK' responds to requests for '/health-records'
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fgncr.stubs.local.bitraft.io%3A8080%2Fcorrespondence'
-    Then I am redirected to the redirector page with the header 'Hospital and other healthcare letters'
+    Then I am redirected to the redirector page with the header 'Hospital and other healthcare documents'
     When I click the link called 'Find out more about personal health record services' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/personal-health-records'
     Then a new tab has been opened by the link
 
@@ -35,6 +35,6 @@ Feature: Great North Care Record Correspondence
     And GNCR responds to requests for correspondence
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fgncr.stubs.local.bitraft.io%3A8080%2Fcorrespondence'
-    Then I am redirected to the redirector page with the header 'Hospital and other healthcare letters'
+    Then I am redirected to the redirector page with the header 'Hospital and other healthcare documents'
     When I click the 'Continue' button on the redirector page with a url starting with 'http://gncr.stubs.local.bitraft.io:8080/correspondence'
     Then I am navigated to a third party site for GNCR

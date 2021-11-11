@@ -95,11 +95,11 @@ export default {
       {
         id: 'correspondence',
         jumpOffContent: {
-          headerText: 'Hospital and other healthcare letters',
-          descriptionText: 'This includes your hospital, mental health and social care letters and documents',
+          headerText: 'Hospital and other healthcare documents',
+          descriptionText: 'View letters and documents from your hospital, mental health or social care teams',
         },
         thirdPartyWarning: {
-          featureName: 'Hospital and other healthcare letters',
+          featureName: 'Hospital and other healthcare documents',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
