@@ -82,7 +82,7 @@ export default {
   hub: {
     gpSurgeryMessaging: 'GP surgery messaging',
     sendOrViewMessagesFromYourSurgery: 'Send and view messages from staff at your GP surgery',
-    yourHealthServiceMessages: 'Your health service messages',
     viewMessagesFromHealthServicesAndTheApp: 'View messages from the NHS App and connected healthcare providers, like your GP surgery',
+    yourHealthServiceMessages: 'Your health service messages',
   },
 };
