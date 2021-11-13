@@ -45,7 +45,7 @@ namespace NHSOnline.IntegrationTests.Notifications
                 .AssertOnPage(driver)
                 .PageContent
                 .AssertPageContent()
-                .ToggleOnNotifications()
+                .YesTurnOnNotifications()
                 .Continue();
 
             AndroidLoggedInHomePage

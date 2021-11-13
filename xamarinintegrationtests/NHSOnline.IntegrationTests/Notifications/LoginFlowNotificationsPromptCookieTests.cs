@@ -44,6 +44,7 @@ namespace NHSOnline.IntegrationTests.Notifications
                 .AssertOnPage(driver)
                 .PageContent
                 .AssertPageContent()
+                .NoDontSendNotifications()
                 .Continue();
 
             AndroidLoggedInHomePage
@@ -95,6 +96,7 @@ namespace NHSOnline.IntegrationTests.Notifications
                 .AssertOnPage(driver)
                 .PageContent
                 .AssertPageContent()
+                .NoDontSendNotifications()
                 .Continue();
 
             IOSLoggedInHomePage
