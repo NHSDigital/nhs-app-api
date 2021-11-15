@@ -11,6 +11,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         private IOSSearchBar SearchBar => IOSSearchBar.WithText(_driver, "Search");
 
+        private IOSButton CancelButton => IOSButton.WithText(_driver, "Cancel");
+
         private IOSStoragePage(IIOSDriverWrapper driver)
         {
             _driver = driver;
@@ -24,6 +26,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
         }
 
         public void SelectFile() => FileLabel.Click();
+
+        public void CloseFileSelectorScreen() => CancelButton.Click();
 
         public IOSStoragePage SearchForText()
         {

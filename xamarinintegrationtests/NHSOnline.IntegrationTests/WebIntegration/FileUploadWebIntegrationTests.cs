@@ -1,3 +1,4 @@
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
@@ -15,7 +16,8 @@ using NHSOnline.IntegrationTests.WebIntegration.Pkb;
 namespace NHSOnline.IntegrationTests.WebIntegration
 {
     [TestClass]
-    [BusinessRule("BR-WI-01.5", "Choosing to upload a file in a web integration opens the system file picker for the user to upload a file")]
+    [BusinessRule("BR-WI-01.5",
+        "Choosing to upload a file in a web integration opens the system file picker for the user to upload a file")]
     public class FileUploadWebIntegrationTests
     {
         [NhsAppAndroidTest]
@@ -98,20 +100,30 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertNativeHeader()
                 .NavigateToFileUpload();
 
-            IOSFileUploadPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .UploadTestFile()
-                .PageContent.UploadFile();
+            IOSStoragePage? storagePage = null;
 
-            IOSFileSourceDialog
-                .GetPanel(driver)
-                .SelectBrowse();
+            TransitoryErrorRetryHandler.RetryOnSpecificFailure()
+                .Handle(() =>
+                    {
+                        IOSFileUploadPage
+                            .AssertOnPage(driver)
+                            .AssertNativeHeader()
+                            .UploadTestFile()
+                            .PageContent.UploadFile();
 
-            IOSStoragePage
-                .AssertOnPage(driver)
-                .SearchForText()
-                .SelectFile();
+                        IOSFileSourceDialog
+                            .GetPanel(driver)
+                            .SelectBrowse();
+
+                        storagePage = IOSStoragePage
+                            .AssertOnPage(driver);
+
+                        storagePage
+                            .SearchForText()
+                            .SelectFile();
+                    },
+                    "No IOSElement found matching ByIosNSPredicate(type == 'XCUIElementTypeCell' AND name == 'test, txt')",
+                    () => { storagePage?.CloseFileSelectorScreen(); });
 
             IOSFileUploadPage
                 .AssertOnPage(driver)
