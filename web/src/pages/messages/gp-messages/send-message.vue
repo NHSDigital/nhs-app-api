@@ -6,7 +6,7 @@
           <div class="nhsuk-grid-column-full">
             <message-dialog message-type="error" :focusable="true">
               <message-text data-purpose="error-heading">
-                {{ $t('generic.thereIsAProblem') }}
+                {{ $t('messages.thereIsAProblem') }}
               </message-text>
               <message-list>
                 <li v-if="subjectError && subjectEnabled" data-purpose="subject-error">

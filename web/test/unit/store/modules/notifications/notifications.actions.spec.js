@@ -133,11 +133,6 @@ describe('notifications actions', () => {
   describe('authorised', () => {
     const state = { registered: false };
     const deviceResponse = { deviceType: 'android', devicePns: 5, trigger: 'toggle' };
-    let dispatch;
-
-    beforeEach(() => {
-      dispatch = jest.fn();
-    });
 
     describe('on load', () => {
       let loading;
@@ -152,7 +147,7 @@ describe('notifications actions', () => {
           beforeEach(async () => {
             actions.app.$router.currentRoute.name = ACCOUNT_NOTIFICATIONS_NAME;
             getSuccess = true;
-            await actions.authorised({ commit, dispatch, state }, deviceResponse);
+            await actions.authorised({ commit, state }, deviceResponse);
           });
 
           it('will call the `getV1ApiUsersMeDevices` endpoint', () => {
@@ -174,7 +169,7 @@ describe('notifications actions', () => {
           beforeEach(async () => {
             actions.app.$router.currentRoute.name = ACCOUNT_NOTIFICATIONS_NAME;
             getSuccess = false;
-            await actions.authorised({ commit, dispatch, state }, deviceResponse);
+            await actions.authorised({ commit, state }, deviceResponse);
           });
 
           it('will call the `getV1ApiUsersMeDevices` endpoint', () => {
@@ -193,10 +188,7 @@ describe('notifications actions', () => {
     });
 
     describe('on toggle', () => {
-      let toggling;
-
       beforeEach(() => {
-        toggling = actions.toggle({ commit });
         deviceResponse.trigger = 'toggle';
       });
 
@@ -205,7 +197,7 @@ describe('notifications actions', () => {
           beforeEach(async () => {
             state.registered = false;
             actions.app.$router.currentRoute.name = ACCOUNT_NOTIFICATIONS_NAME;
-            await actions.authorised({ commit, dispatch, state }, deviceResponse);
+            await actions.authorised({ commit, state }, deviceResponse);
           });
 
           it('will call the `postV1ApiUsersMeDevices` endpoint', () => {
@@ -225,8 +217,6 @@ describe('notifications actions', () => {
             expect(commit).toBeCalledWith(SET_REGISTRATION, true);
           });
 
-          it('will resolve toggle promise with `authorised`', () => expect(toggling).resolves.toBe('authorised'));
-
           describe('on error', () => {
             beforeEach(() => {
               actions.app.$router.currentRoute.name = ACCOUNT_NOTIFICATIONS_NAME;
@@ -236,16 +226,15 @@ describe('notifications actions', () => {
             toggleOnError({ deviceResponse, state });
           });
         });
-
         describe('notifications prompt', () => {
           beforeEach(async () => {
             state.registered = false;
             actions.app.$router.currentRoute.name = NOTIFICATIONS_NAME;
-            await actions.authorised({ commit, dispatch, state }, deviceResponse);
+            await actions.authorised({ commit, state }, deviceResponse);
           });
 
           it('will dispatch to log metrics', () => {
-            expect(dispatch).toBeCalledWith('logMetrics', {
+            expect(actions.dispatch).toBeCalledWith('notifications/logMetrics', {
               screenShown: true,
               notificationsRegistered: true,
               didErrorAttemptingToUpdateStatus: false,
@@ -253,16 +242,19 @@ describe('notifications actions', () => {
           });
         });
 
-        describe('notifications prompt on error', () => {
-          beforeEach(async () => {
+        describe('on error', () => {
+          const execute = async () => {
+            await actions.authorised({ commit, state }, deviceResponse);
+          };
+          beforeEach(() => {
             state.registered = false;
             actions.app.$router.currentRoute.name = NOTIFICATIONS_NAME;
             postSuccess = false;
-            await actions.authorised({ commit, dispatch, state }, deviceResponse);
+            execute();
           });
 
-          it('will dispatch to log metrics with error', () => {
-            expect(dispatch).toBeCalledWith('logMetrics', {
+          it('will dispatch to log metrics', () => {
+            expect(actions.dispatch).toBeCalledWith('notifications/logMetrics', {
               screenShown: true,
               notificationsRegistered: false,
               didErrorAttemptingToUpdateStatus: true,
@@ -276,7 +268,7 @@ describe('notifications actions', () => {
           beforeEach(async () => {
             actions.app.$router.currentRoute.name = ACCOUNT_NOTIFICATIONS_NAME;
             state.registered = true;
-            await actions.authorised({ commit, dispatch, state }, deviceResponse);
+            await actions.authorised({ commit, state }, deviceResponse);
           });
 
           describe('on error', () => {
@@ -287,7 +279,6 @@ describe('notifications actions', () => {
             toggleOnError({ deviceResponse, state });
           });
         });
-
         describe('notifications prompt', () => {
           beforeEach(async () => {
             actions.app.$router.currentRoute.name = NOTIFICATIONS_NAME;
@@ -295,13 +286,16 @@ describe('notifications actions', () => {
           });
 
           describe('on error', () => {
-            beforeEach(async () => {
+            const execute = async () => {
+              await actions.authorised({ commit, state }, deviceResponse);
+            };
+            beforeEach(() => {
               deleteSuccess = false;
-              await actions.authorised({ commit, dispatch, state }, deviceResponse);
+              execute();
             });
 
             it('will dispatch to log metrics', () => {
-              expect(dispatch).toBeCalledWith('logMetrics', {
+              expect(actions.dispatch).toBeCalledWith('notifications/logMetrics', {
                 screenShown: true,
                 notificationsRegistered: true,
                 didErrorAttemptingToUpdateStatus: true,
@@ -437,11 +431,9 @@ describe('notifications actions', () => {
   });
 
   describe('toggle', () => {
-    let result;
-
     beforeEach(() => {
       actions.app.$router.currentRoute.name = ACCOUNT_NOTIFICATIONS_NAME;
-      result = actions.toggle({ commit });
+      actions.toggle({ commit });
     });
 
     it('will commit a value of `true` to `SET_WAITING`', () => {
@@ -451,23 +443,13 @@ describe('notifications actions', () => {
     it('will call native app `requestPnsToken`', () => {
       expect(global.nativeApp.requestPnsToken).toBeCalledWith('toggle');
     });
-
-    it('will return a promise', () => {
-      expect(result).toBeInstanceOf(Promise);
-    });
   });
 
   describe('unauthorised', () => {
-    let dispatch;
-
-    beforeEach(() => {
-      dispatch = jest.fn();
-    });
-
     describe('account notifications', () => {
       beforeEach(() => {
         actions.app.$router.currentRoute.name = ACCOUNT_NOTIFICATIONS_NAME;
-        actions.unauthorised({ commit, dispatch });
+        actions.unauthorised({ commit });
       });
 
       it('will commit a value of `false` to `SET_WAITING`', () => {
@@ -488,7 +470,7 @@ describe('notifications actions', () => {
     describe('notifications prompt', () => {
       beforeEach(() => {
         actions.app.$router.currentRoute.name = NOTIFICATIONS_NAME;
-        actions.unauthorised({ commit, dispatch });
+        actions.unauthorised({ commit });
       });
 
       it('will commit a value of `false` to `SET_WAITING`', () => {
@@ -496,7 +478,7 @@ describe('notifications actions', () => {
       });
 
       it('will dispatch to log metrics', () => {
-        expect(dispatch).toBeCalledWith('logMetrics', {
+        expect(actions.dispatch).toBeCalledWith('notifications/logMetrics', {
           screenShown: true,
           notificationsRegistered: false,
           didErrorAttemptingToUpdateStatus: true,

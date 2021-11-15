@@ -27,7 +27,7 @@
       <nhs-uk-radio-group
         v-model="selectedValue"
         name="userResearch"
-        legend-size="nhsuk-fieldset__legend--m"
+        :legend-size="'nhsuk-fieldset__legend--m'"
         :heading="$t('userResearch.canWeContactYouToTakePart')"
         :error="showError"
         :error-heading-reference="'userResearch.thereIsAProblem'"

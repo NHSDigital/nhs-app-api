@@ -15,9 +15,9 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Messages
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Messages");
 
-        private WebMenuItem GpSurgeryMessagingMenuItem => WebMenuItem.WithTitle(_interactor, "GP surgery messaging");
+        private WebMenuItem GpSurgeryMessagesMenuItem => WebMenuItem.WithTitle(_interactor, "GP surgery messages");
 
-        private WebText GpSurgeryMessagesText => WebText.WithTagAndText(_interactor, "p", "Send and view messages from staff at your GP surgery");
+        private WebText GpSurgeryMessagesText => WebText.WithTagAndText(_interactor, "p", "Send or view messages from your GP surgery");
 
         private WebMenuItem AskYourGpSurgeryAQuestionMenuItem => WebMenuItem.WithTitle(_interactor, "Ask your GP surgery a question");
 
@@ -45,13 +45,13 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Messages
 
         private WebMenuItem TestProviderMenuItem => WebMenuItem.WithTitle(_interactor, "Test Provider");
 
-        private WebMenuItem YourHealthServiceMessagesMenuItem => WebMenuItem.WithTitle(_interactor, "Your health service messages");
+        private WebMenuItem HealthInfoAndUpdatesMenuItem => WebMenuItem.WithTitle(_interactor, "Health information and updates");
 
-        private WebText YourHealthServiceMessagesText => WebText.WithTagAndText(_interactor, "p", "View messages from the NHS App and connected healthcare providers, like your GP surgery");
+        private WebText HealthInfoAndUpdatesText => WebText.WithTagAndText(_interactor, "p", "View messages from health services and the NHS App");
 
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
-            GpSurgeryMessagingMenuItem,
+            GpSurgeryMessagesMenuItem,
             AskYourGpSurgeryAQuestionMenuItem,
             OnlineConsultationsMenuItem,
             ConsultationsEventsAndMessagesPkbMenuItem,
@@ -59,7 +59,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Messages
             ConsultationsEventsAndMessagesMyCareViewMenuItem,
             ConsultationsEventsAndMessagesSecondaryCareViewMenuItem,
             TestProviderMenuItem,
-            YourHealthServiceMessagesMenuItem
+            HealthInfoAndUpdatesMenuItem
         };
 
         internal void AssertOnPage()
@@ -114,10 +114,10 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Messages
 
         public MessagesPageContent AssertPageElements()
         {
-            GpSurgeryMessagingMenuItem.AssertVisible();
+            GpSurgeryMessagesMenuItem.AssertVisible();
             GpSurgeryMessagesText.AssertVisible();
-            YourHealthServiceMessagesMenuItem.AssertVisible();
-            YourHealthServiceMessagesText.AssertVisible();
+            HealthInfoAndUpdatesMenuItem.AssertVisible();
+            HealthInfoAndUpdatesText.AssertVisible();
             return this;
         }
 
@@ -125,7 +125,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Messages
 
         public void NavigateToConsultationsEventsAndMessagesPkb() => ConsultationsEventsAndMessagesPkbMenuItem.Click();
 
-        public void KeyboardNavigateToGpSurgeryMessages(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(GpSurgeryMessagingMenuItem, navigation);
+        public void KeyboardNavigateToGpSurgeryMessages(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(GpSurgeryMessagesMenuItem, navigation);
 
         public void KeyboardNavigateToSubstrakt(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(AskYourGpSurgeryAQuestionMenuItem, navigation);
 
@@ -139,11 +139,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Messages
 
         public void KeyboardNavigateToSecondaryCareView(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(ConsultationsEventsAndMessagesSecondaryCareViewMenuItem, navigation);
 
-        public void KeyboardNavigateToYourHealthServiceMessages(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(YourHealthServiceMessagesMenuItem, navigation);
+        public void KeyboardNavigateToHealthInfoAndUpdates(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(HealthInfoAndUpdatesMenuItem, navigation);
 
         private void KeyboardNavigateToAndActivateMenuItem(IFocusable menuItem, AndroidKeyboardNavigation keyboardPageContentNavigation)
         {
-            keyboardPageContentNavigation.TabBetween(GpSurgeryMessagingMenuItem, menuItem);
+            keyboardPageContentNavigation.TabBetween(GpSurgeryMessagesMenuItem, menuItem);
             keyboardPageContentNavigation.PressEnterKey();
         }
     }

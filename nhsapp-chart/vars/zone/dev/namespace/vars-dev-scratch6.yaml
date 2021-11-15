@@ -4,8 +4,6 @@ users:
     - notificationHubPath: nhsapp-nonlive-scratch6
       notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
 
-userResearchEnabled: true
-
 # well known
 wellKnownAndroidPackageName: com.nhs.online.nhsonline.scratch6
 wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.scratch6

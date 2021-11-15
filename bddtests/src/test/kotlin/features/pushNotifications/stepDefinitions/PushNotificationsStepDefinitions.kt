@@ -95,19 +95,24 @@ class PushNotificationsStepDefinitions {
         resetScripts(SettingStatus.Authorised, true)
     }
 
-    @When("^I allow notifications$")
-    fun iAllowNotifications() {
-        notificationPromptSteps.allowNotifications()
+    @When("^I accept notifications and continue$")
+    fun iAcceptNotificationsAndContinue() {
+        notificationPromptSteps.acceptNotifications()
     }
 
-    @When("^I deny notifications$")
-    fun iDenyNotifications() {
-        notificationPromptSteps.denyNotifications()
+    @When("^I accept notifications but I am denied$")
+    fun iAcceptNotifications() {
+        notificationPromptSteps.acceptNotificationsButUnauthorisedReturned()
     }
 
     @When("^I continue from the notification failure$")
     fun iContinueFromTheNotificationFailure() {
         notificationFailureSteps.continueToHome()
+    }
+
+    @When("^I do not accept notifications and continue$")
+    fun iDontAcceptNotificationsAndContinue() {
+        notificationPromptSteps.dontAcceptNotifications()
     }
 
     @Then("^the Notifications Settings page is displayed$")

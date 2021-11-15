@@ -1,11 +1,5 @@
 import Notifications from '@/pages/notifications/index';
-import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
 import { createStore, mount } from '../../helpers';
-
-jest.mock('@/services/event-bus', () => ({
-  ...jest.requireActual('@/services/event-bus'),
-  EventBus: { $on: jest.fn(), $off: jest.fn(), $emit: jest.fn() },
-}));
 
 describe('notifications prompt page', () => {
   let $store;
@@ -27,10 +21,6 @@ describe('notifications prompt page', () => {
     });
   };
 
-  beforeEach(() => {
-    EventBus.$emit.mockClear();
-  });
-
   describe('new user is prompted for notifications', () => {
     beforeEach(() => {
       wrapper = mountPage({
@@ -47,62 +37,10 @@ describe('notifications prompt page', () => {
       });
     });
 
-    describe('the user does not make a choice', () => {
-      beforeEach(() => {
-        wrapper.find('#btn_continue').trigger('click');
-      });
-
-      it('will show inline error', () => {
-        expect(wrapper.find('.nhsuk-form-group--error').exists()).toBe(true);
-      });
-
-      it('will show error dialog', () => {
-        expect(wrapper.find('#message-dialog').exists()).toBe(true);
-      });
-
-      it('will not dispatch', () => {
-        expect($store.dispatch).not.toBeCalled();
-      });
-
-      it('will not call conditional redirect', () => {
-        expect(conditionalRedirect).not.toBeCalled();
-      });
-
-      it('will set focus on the error component', () => {
-        expect(EventBus.$emit).toBeCalledWith(FOCUS_ERROR_ELEMENT);
-      });
-
-      describe('choice made', () => {
-        beforeEach(() => {
-          wrapper.find('#notifications-yes').trigger('click');
-        });
-
-        it('will not show inline error', () => {
-          expect(wrapper.find('.nhsuk-form-group--error').exists()).toBe(false);
-        });
-
-        it('will not show error dialog', () => {
-          expect(wrapper.find('#message-dialog').exists()).toBe(false);
-        });
-      });
-    });
-
     describe('the user agreed to notifications', () => {
       beforeEach(() => {
-        wrapper.find('#notifications-yes').trigger('click');
+        wrapper.find('#allow_notifications').trigger('click');
         wrapper.find('#btn_continue').trigger('click');
-      });
-
-      it('will not show inline error', () => {
-        expect(wrapper.find('.nhsuk-form-group--error').exists()).toBe(false);
-      });
-
-      it('will not show error dialog', () => {
-        expect(wrapper.find('#message-dialog').exists()).toBe(false);
-      });
-
-      it('will not set focus on the error component', () => {
-        expect(EventBus.$emit).not.toBeCalled();
       });
 
       it('will call to native to toggle permission', () => {
@@ -113,10 +51,6 @@ describe('notifications prompt page', () => {
         expect($store.dispatch).toBeCalledWith('notifications/addNotificationCookie');
       });
 
-      it('will not log metrics', () => {
-        expect($store.dispatch).not.toBeCalledWith('notifications/logMetrics', expect.anything);
-      });
-
       it('will call conditional redirect', () => {
         expect(conditionalRedirect).toBeCalled();
       });
@@ -124,20 +58,7 @@ describe('notifications prompt page', () => {
 
     describe('the user does not agree to notifications', () => {
       beforeEach(() => {
-        wrapper.find('#notifications-no').trigger('click');
         wrapper.find('#btn_continue').trigger('click');
-      });
-
-      it('will not show inline error', () => {
-        expect(wrapper.find('.nhsuk-form-group--error').exists()).toBe(false);
-      });
-
-      it('will not show error dialog', () => {
-        expect(wrapper.find('#message-dialog').exists()).toBe(false);
-      });
-
-      it('will not set focus on the error component', () => {
-        expect(EventBus.$emit).not.toBeCalled();
       });
 
       it('will not call to native to toggle permission', () => {

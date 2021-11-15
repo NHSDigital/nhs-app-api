@@ -11,8 +11,7 @@ Install Xamarin "Mobile Development .Net" using Visual Studio Install
 
 [Follow Getting started with Xamarin on Rider](https://www.jetbrains.com/help/rider/Xamarin.html#). This will require Visual Studio for Mac to be installed but not used.
 
-### Xcode
-Xcode is required to be installed. Kainos users - Xcode can be installed via the Company Portal, but you will be automatically updated upon new releases. If you want to be in control of your XCode Version, you can [download specific versions here](https://developer.apple.com/download/all/) (Note: you may need to raise a ticket with Kainos IT to granted admin rights to install).
+Xcode is also required to be installed. Kainos users - Xcode has to be installed via the Company Portal.
 
 ### Getting the iOS project to build
 - The iOS project has a provisioning profile of the 'NHS Digital' Apple developer account. This means you need to get your @nhs.net account to create an AppleID/account in Apple Developer, then get someone on the team to add you to the Apple Developer 'NHS Digital' team.
@@ -26,10 +25,6 @@ Xcode is required to be installed. Kainos users - Xcode can be installed via the
 
 ![RiderMonoVersion](Images/RiderMonoVersion.png)
 - iOS: when building the App, if you get the error: 'Could not find any available provisioning profiles for NHSOnline.App.iOS', then you haven't clicked 'Download manual profiles' in Xcode.
-- iOS: If you have clicked 'Download manual profiles' in Xcode, and its still not building...
-  - In Rider, right-click on the iOS project and select `open in XCode`
-  - In XCode, select the project and click on the `Signing & Capabilities` tab.
-  - In the `Signing` section, open the `Team` dropdown and select `NHS Digital`. That should magically fix the provisioning profiles. ![RiderAndXcode](Images/RiderAndXcode.png)
 - iOS: if the App builds, but you cannot debug as there is no iOS device simulator available for selection in Rider (or the dropdown is totally missing):
   - check the `Xcode Path` is set in Rider: `Preferences -> Build,Execution,Deployment -> iOS -> Xcode path` to e.g. `/Applications/Xcode.app`
   - Open the Xcode app, create a default Xamarin forms project targetting iOS. Debug this and wait for the Simulator app to spin up. Restart Rider and try again.

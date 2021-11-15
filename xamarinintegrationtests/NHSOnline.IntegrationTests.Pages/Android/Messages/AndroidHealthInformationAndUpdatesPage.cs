@@ -7,15 +7,15 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.Android.Messages
 {
-    public class AndroidYourHealthServiceMessagesPage
+    public class AndroidHealthInformationAndUpdatesPage
     {
         private readonly IAndroidDriverWrapper _driver;
 
-        private AndroidYourHealthServiceMessagesPage(IAndroidDriverWrapper driver)
+        private AndroidHealthInformationAndUpdatesPage(IAndroidDriverWrapper driver)
         {
             _driver = driver;
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new YourHealthServiceMessagesPageContent(driver.Web.NhsAppLoggedInWebView());
+            PageContent = new HealthInformationAndUpdatesPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         private AndroidKeyboardNavigation KeyboardPageContentNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(
@@ -33,11 +33,11 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Messages
 
         private AndroidFullNavigation Navigation { get; }
 
-        private YourHealthServiceMessagesPageContent PageContent { get; }
+        private HealthInformationAndUpdatesPageContent PageContent { get; }
 
-        public static AndroidYourHealthServiceMessagesPage AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidHealthInformationAndUpdatesPage AssertOnPage(IAndroidDriverWrapper driver)
         {
-            var page = new AndroidYourHealthServiceMessagesPage(driver);
+            var page = new AndroidHealthInformationAndUpdatesPage(driver);
             page.PageContent.AssertOnPage();
             return page;
         }

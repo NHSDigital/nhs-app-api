@@ -9,19 +9,33 @@ open class NotificationSteps {
     lateinit var notificationsPromptPage: NotificationsPromptPage
 
     @Step
-    fun allowNotifications() {
+    fun acceptNotifications() {
+        notificationsPromptPage.notificationsToggle.assertIsVisible()
+        notificationsPromptPage.notificationsToggle.click()
+
        val executor = notificationsPromptPage.driver as JavascriptExecutor
             executor.executeScript("""
             window.nativeAppCallbacks.notificationsAuthorised(
                 '{"trigger":"toggle", "devicePns":"test", "deviceType":"android"}')
         """.trimIndent())
+
+        notificationsPromptPage.continueButton.click()
     }
 
     @Step
-    fun denyNotifications() {
+    fun acceptNotificationsButUnauthorisedReturned() {
+        notificationsPromptPage.notificationsToggle.assertIsVisible()
+        notificationsPromptPage.notificationsToggle.click()
+
         val executor = notificationsPromptPage.driver as JavascriptExecutor
         executor.executeScript("""
             window.nativeAppCallbacks.notificationsUnauthorised()
         """.trimIndent())
+    }
+
+    @Step
+    fun dontAcceptNotifications() {
+        notificationsPromptPage.notificationsToggle.assertIsVisible()
+        notificationsPromptPage.continueButton.click()
     }
 }
