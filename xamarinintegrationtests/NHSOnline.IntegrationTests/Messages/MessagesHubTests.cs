@@ -11,8 +11,8 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.Messages
 {
     [TestClass]
-    [BusinessRule("BR-MES-01.1", "Show 'Health information and updates' panel on messages hub page")]
-    [BusinessRule("BR-MES-01.2", "Show 'GP surgery messages' panel on messages hub page")]
+    [BusinessRule("BR-MES-01.1", "Show 'Your health service messages' panel on messages hub page")]
+    [BusinessRule("BR-MES-01.2", "Show 'GP surgery messaging' panel on messages hub page")]
     [BusinessRule("BR-MES-01.3", "Show 'Ask your GP surgery a question' panel on messages hub page")]
     [BusinessRule("BR-MES-01.4", "Show 'Messages and consultations with a doctor or health professional' panel on messages hub page")]
     [BusinessRule("BR-MES-01.5", "Show 'Consultations, events and messages' panel on messages hub page")]
@@ -149,9 +149,9 @@ namespace NHSOnline.IntegrationTests.Messages
             AndroidMessagesPage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateToHealthInfoAndUpdates();
+                .KeyboardNavigateToYourHealthServiceMessages();
 
-            AndroidHealthInformationAndUpdatesPage
+            AndroidYourHealthServiceMessagesPage
                 .AssertOnPage(driver)
                 .KeyboardNavigateBack();
 

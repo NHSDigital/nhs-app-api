@@ -5,19 +5,10 @@
           class="nhsuk-fieldset__heading nhsuk-u-margin-top-3"
           tabindex="-1">{{ heading }}</h1>
     </legend>
+    <error-dialog v-if="enableErrorDialog && error"
+                  :header-locale-ref="errorHeadingReference"
+                  :errors="errorText"/>
 
-    <div role="alert" aria-atomic="true">
-      <message-dialog v-if="error" message-type="error" :focusable="true">
-        <message-text>
-          {{ $t(`${errorHeadingReference}`) }}
-        </message-text>
-        <message-list>
-          <li>
-            {{ errorText }}
-          </li>
-        </message-list>
-      </message-dialog>
-    </div>
 
     <div :class="['nhsuk-form-group', error ? 'nhsuk-form-group--error' : undefined]">
       <span v-if="error" :id="`${name}-error`" class="nhsuk-error-message">
@@ -45,17 +36,13 @@
 </template>
 
 <script>
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageList from '@/components/widgets/MessageList';
-import MessageText from '@/components/widgets/MessageText';
+import ErrorDialog from '@/components/ErrorDialog';
 import LegendSize from '@/lib/legend-size';
 
 export default {
   name: 'NhsUkRadioGroup',
   components: {
-    MessageDialog,
-    MessageList,
-    MessageText,
+    ErrorDialog,
   },
   props: {
     name: {
@@ -71,13 +58,18 @@ export default {
       default: LegendSize.ExtraLarge,
       validator: value => Object.values(LegendSize).includes(value),
     },
+    // TODO: to be reverted to false by default
+    enableErrorDialog: {
+      type: Boolean,
+      default: true,
+    },
     error: {
       type: Boolean,
       default: false,
     },
     errorHeadingReference: {
       type: String,
-      default: 'messages.thereIsAProblem',
+      default: 'generic.thereIsAProblem',
     },
     errorText: {
       type: String,

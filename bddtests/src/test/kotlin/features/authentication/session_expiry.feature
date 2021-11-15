@@ -6,7 +6,8 @@ Feature: GP Session Expiry
     And I am using the native app user agent
     And I log in to the app expecting to see the notifications prompt
     Then I see the notifications prompt
-    When I do not accept notifications and continue
+    When I click the 'No, do not send notifications on this device' radio button
+    And I click the 'Continue' button
     Then I see the home page
     And the GP System session has expired when viewing prescriptions
     When I retrieve the 'Your Prescriptions' page directly
@@ -25,7 +26,8 @@ Feature: GP Session Expiry
     And I am using the native app user agent
     And I log in to the app expecting to see the notifications prompt
     Then I see the notifications prompt
-    When I do not accept notifications and continue
+    When I click the 'No, do not send notifications on this device' radio button
+    And I click the 'Continue' button
     Then I see the home page
     And the GP System session has expired when viewing prescriptions
     When I retrieve the 'prescription repeat courses' page directly

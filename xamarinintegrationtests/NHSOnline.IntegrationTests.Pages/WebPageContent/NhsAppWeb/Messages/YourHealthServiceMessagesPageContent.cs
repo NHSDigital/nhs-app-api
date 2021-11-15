@@ -7,13 +7,13 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Messages
 {
-    public class HealthInformationAndUpdatesPageContent
+    public class YourHealthServiceMessagesPageContent
     {
         private readonly IWebInteractor _interactor;
 
-        internal HealthInformationAndUpdatesPageContent(IWebInteractor interactor) => _interactor = interactor;
+        internal YourHealthServiceMessagesPageContent(IWebInteractor interactor) => _interactor = interactor;
 
-        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Health information and updates");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Your health service messages");
 
         private WebLink BackBreadcrumb => WebLink.WithText(_interactor, "Back");
 

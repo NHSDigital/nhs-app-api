@@ -27,7 +27,13 @@ Feature: Push Notifications
     And I am a user wishing to enable push notifications for the first time, with my initial state undetermined
     And I log in to the app expecting to see the notifications prompt
     Then I see the notifications prompt
-    When I accept notifications and continue
+    When I click the 'Continue' button
+    Then I see 'There's a problem' error summary message
+    And I see 'Choose if you want to get notifications' error summary message item
+    And I see 'Choose if you want to get notifications' inline error
+    When I click the 'Yes, turn on notifications on this device' radio button
+    And I click the 'Continue' button
+    And I allow notifications
     Then I see the home page
 
   Scenario: A user who already has the notifications cookie will not see the prompt during login
@@ -41,7 +47,8 @@ Feature: Push Notifications
     And I am a user wishing to enable push notifications for the first time, with my initial state undetermined
     And I log in to the app expecting to see the notifications prompt
     Then I see the notifications prompt
-    When I do not accept notifications and continue
+    When I click the 'No, do not send notifications on this device' radio button
+    And I click the 'Continue' button
     Then I see the home page
 
   Scenario: A user viewing notifications prompt when notifications is denied sees an error
@@ -49,7 +56,9 @@ Feature: Push Notifications
     And I am a user wishing to enable push notifications for the first time, with my initial state undetermined
     And I log in to the app expecting to see the notifications prompt
     Then I see the notifications prompt
-    When I accept notifications but I am denied
+    When I click the 'Yes, turn on notifications on this device' radio button
+    And I click the 'Continue' button
+    And I deny notifications
     Then I see the notification failure
     When I continue from the notification failure
     Then I see the home page
