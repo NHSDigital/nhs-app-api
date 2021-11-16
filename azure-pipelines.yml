@@ -48,7 +48,7 @@ variables:
   source.develop: ${{ eq(variables['Build.SourceBranchName'], 'develop') }}
   source.tag: ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}
   native.xamarin.target: ${{ parameters.xamarinTarget }}
-  native.xamarin.version: '2.0.0'
+  native.xamarin.version: '2.0.11'
   native.xamarin.ios.build.number:  $[counter(variables['native.version.number'], 1)]
   native.xamarin.android.build.number: $[counter('android', 100)]
   sjr.config.image.name: 'nhsonline-service-journey-prod-config'
