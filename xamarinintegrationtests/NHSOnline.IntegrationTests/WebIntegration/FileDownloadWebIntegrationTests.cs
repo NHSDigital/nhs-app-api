@@ -1,3 +1,5 @@
+using System;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
@@ -305,6 +307,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver)
                 .AssertPageElements()
                 .Help();
+
+            Thread.Sleep(TimeSpan.FromSeconds(5));
 
             IOSBrowserOverlayNhsAppHelpPage
                 .AssertOnPage(driver, ThirdPartyHelpLinkPath)
