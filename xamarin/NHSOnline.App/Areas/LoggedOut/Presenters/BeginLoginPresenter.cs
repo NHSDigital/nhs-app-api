@@ -77,7 +77,11 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         {
             if (_userPreferencesService.ShowGettingStarted)
             {
-                _userPreferencesService.ShowGettingStarted = !await _nhsAppCookieService.HasGettingStartedPageCookie().ResumeOnThreadPool();
+                var hasGettingStartedCookie = await _nhsAppCookieService.HasGettingStartedPageCookie().ResumeOnThreadPool();
+                var hasBiometricsEnabled = _userPreferencesService.BiometricsKeyId != null;
+                var hasSeenGettingStartedScreen = hasGettingStartedCookie || hasBiometricsEnabled;
+
+                _userPreferencesService.ShowGettingStarted = !hasSeenGettingStartedScreen;
             }
         }
 
