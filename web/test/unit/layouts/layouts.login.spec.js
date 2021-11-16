@@ -9,13 +9,15 @@ describe('login layout', () => {
   describe('metaInfo', () => {
     let head;
 
-    beforeEach(() => {
+    const createLoginPage = ({
+      nativeApp = true,
+    } = {}) => {
       const wrapper = shallowMount(
         LoginLayout,
         {
           $store: createStore({
             state: {
-              device: { isNativeApp: true, source: 'web' },
+              device: { isNativeApp: nativeApp, source: 'web' },
               appVersion: { nativeVersion: '3.2.1', webVersion: '1.2.3' },
               errors: { hasConnectionProblem: false },
               session: { showExpiryMessage: false },
@@ -37,17 +39,25 @@ describe('login layout', () => {
         },
       );
       head = wrapper.vm.$meta().refresh().metaInfo;
-    });
+    };
 
     it('will set language from locale', () => {
+      createLoginPage();
       expect(head.htmlAttrs.lang).toBe('en-GB');
     });
 
-    it('will set title to be the pageTitle', () => {
-      expect(head.title).toBe('Login screen');
+    it('will set title to be the native pageTitle when native', () => {
+      createLoginPage({ nativeApp: true });
+      expect(head.title).toBe('Log in - NHS App');
+    });
+
+    it('will set title to be the online pageTitle when not native', () => {
+      createLoginPage({ nativeApp: false });
+      expect(head.title).toBe('Log in - NHS App Online');
     });
 
     it('will have no scripts defined', () => {
+      createLoginPage();
       expect(head.script.length).toBe(0);
     });
   });

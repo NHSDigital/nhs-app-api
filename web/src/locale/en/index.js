@@ -33,6 +33,7 @@ import userResearch from './userResearch';
 export default {
   language: 'en-GB',
   appTitle: 'NHS App',
+  appTitleOnline: 'NHS App Online',
   more,
   accountAndSettings,
   apiErrors,

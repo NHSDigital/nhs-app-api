@@ -205,7 +205,7 @@ export default {
       linkedProfiles: 'Linked profiles',
       linkedProfilesSummary: 'Switch to {fullName}\'s profile to act on their behalf',
       legalAndCookies: 'Legal and cookies',
-      login: 'Login screen',
+      login: 'Log in',
       loginBiometricError: 'We could not log you in',
       loginSettings: '{biometricType}',
       loginSettingsErrorCannotChange: 'We could not change your {biometricType} settings',

@@ -101,6 +101,10 @@ export default {
   },
   metaInfo() {
     return {
+      titleTemplate: (titleChunk) => {
+        const titleSuffix = this.isNativeApp ? this.$t('appTitle') : this.$t('appTitleOnline');
+        return `${titleChunk} - ${titleSuffix}`;
+      },
       title: this.$t('navigation.pages.titles.login'),
       htmlAttrs: {
         lang: this.$t('language'),
