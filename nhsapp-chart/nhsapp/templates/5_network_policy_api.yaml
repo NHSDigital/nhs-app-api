@@ -293,10 +293,10 @@ spec:
     - protocol: TCP
       port: {{ $.Values.sidecar_proxy.containerPort }}
 ---
-apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
 metadata:
-  name: allow-api-egress-to-sjr-{{ .Chart.AppVersion }}
+  name: allow-metaservice-egress-from-api-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
     role: {{ $.Values.api.role }}
@@ -310,13 +310,8 @@ spec:
   - Egress
   egress:
   - to:
-    - podSelector:
-        matchLabels:
-          role: sjr
-          version: {{ .Chart.AppVersion | quote }}
-    ports:
-    - protocol: TCP
-      port: {{ $.Values.sidecar_proxy.containerPort }}
+    - ipBlock:
+        cidr: {{ $.Values.metaServiceCIDR }}
 {{- end }}
 ---
 kind: NetworkPolicy
@@ -324,6 +319,9 @@ apiVersion: networking.k8s.io/v1
 metadata:
   name: allow-eventhub-egress-from-api-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
+  labels:
+    role: {{ $.Values.api.role }}
+    version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
     matchLabels:
