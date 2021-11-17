@@ -16,11 +16,14 @@
   &::after {
     /*  Custom dropdown arrow */
     /*content: "\25BC";*/
-    content: url(~@/assets/icon_arrow_down.svg);
+    background: url(~@/assets/icon_arrow_down.svg);
+    background-repeat: no-repeat;
+    content: "\00a0";
     height: 1em;
     right: 1.4em;
     top: 50%;
-    margin-top: -.5em;
+    margin-top: -.25em;
+    width: 19px;
   }
   &::before {
     /*  Custom dropdown arrow cover */
