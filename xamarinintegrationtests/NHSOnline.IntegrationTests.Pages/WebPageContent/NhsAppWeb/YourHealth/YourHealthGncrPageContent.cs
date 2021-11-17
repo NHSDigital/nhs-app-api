@@ -12,14 +12,14 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
 
         internal YourHealthGncrPageContent(IWebInteractor interactor) : base(interactor) => _interactor = interactor;
 
-        private WebMenuItem GncrHospitalAndHealthcareLettersMenuItem => WebMenuItem.WithTitle(_interactor, "Hospital and other healthcare letters");
+        private WebMenuItem GncrHospitalAndHealthcareDocumentsMenuItem => WebMenuItem.WithTitle(_interactor, "Hospital and other healthcare documents");
 
-        private WebText GncrHospitalAndHealthcareLettersText => WebText.WithTagAndText(_interactor, "p", "This includes your hospital, mental health and social care letters and documents");
+        private WebText GncrHospitalAndHealthcareLettersAndDocumentsText => WebText.WithTagAndText(_interactor, "p", "View letters and documents from your hospital, mental health or social care teams");
 
         public void AssertElements()
         {
-            GncrHospitalAndHealthcareLettersMenuItem.AssertVisible();
-            GncrHospitalAndHealthcareLettersText.AssertVisible();
+            GncrHospitalAndHealthcareDocumentsMenuItem.AssertVisible();
+            GncrHospitalAndHealthcareLettersAndDocumentsText.AssertVisible();
         }
 
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
@@ -27,12 +27,12 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
             CovidPassMenuItem,
             VaccineRecordMenuItem,
             GpHeathRecordMenuItem,
-            GncrHospitalAndHealthcareLettersMenuItem,
+            GncrHospitalAndHealthcareDocumentsMenuItem,
             OrganDonationMenuItem,
             NdopMenuItem
         };
 
         public void KeyboardNavigateToGncr(AndroidKeyboardNavigation navigation) =>
-            KeyboardNavigateToAndActivateMenuItem(GncrHospitalAndHealthcareLettersMenuItem, navigation);
+            KeyboardNavigateToAndActivateMenuItem(GncrHospitalAndHealthcareDocumentsMenuItem, navigation);
     }
 }

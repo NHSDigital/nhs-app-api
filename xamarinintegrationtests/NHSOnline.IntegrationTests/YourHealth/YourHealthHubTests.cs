@@ -190,7 +190,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
                 .KeyboardNavigateToGncr();
 
             AndroidWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, "Hospital and other healthcare letters")
+                .AssertOnPage(driver, "Hospital and other healthcare documents")
                 .KeyboardNavigateBack();
 
             AndroidYourHealthGncrPage
