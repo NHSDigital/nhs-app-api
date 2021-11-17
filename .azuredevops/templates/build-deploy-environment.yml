@@ -23,14 +23,41 @@ parameters:
     displayName: "Optional image version override (develop or tag)"
     type: string
     default: "None"
-  - name: stubEnvironment
-    displayName: "Should the suppliers be stubbed in this environment"
-    type: boolean
-    default: true
   - name: environmentRefOverride
-    displayName: "Pipeline will automatically extract the jira reference from the branch, you can override by providing a value other than IGNORE to this parameter"
+    displayName: "Pipeline will automatically extract the jira reference from the branch, you can override by providing a value other than jiraref to this parameter"
     type: string
-    default: "IGNORE"
+    default: "jiraref"
+    values:
+      - jiraref
+      - scratch1
+      - scratch2
+      - scratch3
+      - scratch4
+      - scratch5
+      - scratch6
+      - scratch7
+      - scratch8
+      - scratch9
+      - scratch10
+      - scratch11
+      - scratch12
+      - scratch13
+      - scratch14
+      - scratch15
+      - scratch16
+      - scratch17
+      - scratch18
+      - scratch19
+      - scratch20
+      - scratch21
+      - onboardingsandpit
+      - onboardingaos
+      - logindevelopment
+      - preview
+      - demo
+      - ops1
+      - ops2
+      - ops3
 resources:
   repositories:
     - repository: nhsapp-ops-terraform
@@ -243,65 +270,63 @@ stages:
                 echo "No releases to uninstall."
               fi
         - task: Bash@3
-          condition: eq(${{parameters.stubEnvironment}}, True)
-          displayName: 'Install Stubbed Environment with Helm'
+          displayName: 'Install Environment with Helm'
           inputs:
             targetType: 'inline'
             script: |
-              helm upgrade $(lowercaseReleaseName) $(System.DefaultWorkingDirectory)/nhsapp/nhsapp-chart/nhsapp/ \
-              --namespace $(ENVIRONMENT_REF) \
-              --install \
-              --set global.environment="$(ENVIRONMENT_REF)" \
-              -f $(System.DefaultWorkingDirectory)/nhsapp/nhsapp-chart/vars/zone/$(environment)/vars-$(environment).yaml \
-              -f $(System.DefaultWorkingDirectory)/nhsapp/nhsapp-chart/vars/zone/$(environment)/environment_overrides/vars-nhslogin-${{ parameters.loginEnv }}.yaml \
-              -f $(System.DefaultWorkingDirectory)/nhsapp/nhsapp-chart/vars/zone/$(environment)/namespace/vars-dev-stubbed.yaml \
-              --set appImageTag=$(version) \
-              --set cid.image_tag=$(version) \
-              --set api.image_tag=$(version) \
-              --set web.image_tag=$(version) \
-              --set cdsswiremock.image_tag=$(version) \
-              --set logger.image_tag=$(version) \
-              --set sjr.image_tag=$(version) \
-              --set sjrconfig.image_tag=$(version) \
-              --set stub_loader.image_tag=$(version) \
-              --set wiremock.image_tag=latest \
-              --set users.image_tag=$(version) \
-              --set messages.image_tag=$(version) \
-              --set info.image_tag=$(version) \
-              --reset-values \
-              --set cosmosDBName=$(cosmosDBName) \
-              --set region=$(region) \
-              --set zone=$(environment) \
-              --set clusterIP=$(clusterIP) \
-              --set networkPolicyEnabled=false 
-        - task: Bash@3
-          condition: eq(${{parameters.stubEnvironment}}, False)
-          displayName: 'Install Non Stubbed Environment with Helm'
-          inputs:
-            targetType: 'inline'
-            script: |
-              helm upgrade $(lowercaseReleaseName) $(System.DefaultWorkingDirectory)/nhsapp/nhsapp-chart/nhsapp/ \
-              --namespace $(ENVIRONMENT_REF) \
-              --install \
-              --set global.environment="$(ENVIRONMENT_REF)" \
-              -f $(System.DefaultWorkingDirectory)/nhsapp/nhsapp-chart/vars/zone/$(environment)/vars-$(environment).yaml \
-              -f $(System.DefaultWorkingDirectory)/nhsapp/nhsapp-chart/vars/zone/$(environment)/environment_overrides/vars-nhslogin-${{ parameters.loginEnv }}.yaml \
-              --set appImageTag=$(version) \
-              --set cid.image_tag=$(version) \
-              --set api.image_tag=$(version) \
-              --set web.image_tag=$(version) \
-              --set cdsswiremock.image_tag=$(version) \
-              --set logger.image_tag=$(version) \
-              --set sjr.image_tag=$(version) \
-              --set sjrconfig.image_tag=$(version) \
-              --set stub_loader.image_tag=$(version) \
-              --set wiremock.image_tag=latest \
-              --set users.image_tag=$(version) \
-              --set messages.image_tag=$(version) \
-              --set info.image_tag=$(version) \
-              --reset-values \
-              --set cosmosDBName=$(cosmosDBName) \
-              --set region=$(region) \
-              --set zone=$(environment) \
-              --set clusterIP=$(clusterIP) \
-              --set networkPolicyEnabled=false 
+              if [ -f "$(System.DefaultWorkingDirectory)/nhsapp/nhsapp-chart/vars/zone/$(environment)/namespace/vars-$(environment)-${{ parameters.environmentRefOverride }}.yaml" ]; then
+                echo "Installing with namespace override file"
+                helm upgrade $(lowercaseReleaseName) $(System.DefaultWorkingDirectory)/nhsapp/nhsapp-chart/nhsapp/ \
+                  --namespace $(ENVIRONMENT_REF) \
+                  --install \
+                  --set global.environment="$(ENVIRONMENT_REF)" \
+                  -f $(System.DefaultWorkingDirectory)/nhsapp/nhsapp-chart/vars/zone/$(environment)/vars-$(environment).yaml \
+                  -f $(System.DefaultWorkingDirectory)/nhsapp/nhsapp-chart/vars/zone/$(environment)/namespace/vars-$(environment)-${{ parameters.environmentRefOverride }}.yaml \
+                  -f $(System.DefaultWorkingDirectory)/nhsapp/nhsapp-chart/vars/zone/$(environment)/environment_overrides/vars-nhslogin-${{ parameters.loginEnv }}.yaml \
+                  --set appImageTag=$(version) \
+                  --set cid.image_tag=$(version) \
+                  --set api.image_tag=$(version) \
+                  --set web.image_tag=$(version) \
+                  --set cdsswiremock.image_tag=$(version) \
+                  --set logger.image_tag=$(version) \
+                  --set sjr.image_tag=$(version) \
+                  --set sjrconfig.image_tag=$(version) \
+                  --set stub_loader.image_tag=$(version) \
+                  --set wiremock.image_tag=latest \
+                  --set users.image_tag=$(version) \
+                  --set messages.image_tag=$(version) \
+                  --set info.image_tag=$(version) \
+                  --reset-values \
+                  --set cosmosDBName=$(cosmosDBName) \
+                  --set region=$(region) \
+                  --set zone=$(environment) \
+                  --set clusterIP=$(clusterIP) \
+                  --set networkPolicyEnabled=false 
+              else
+                echo "Installing without namespace override file"
+                helm upgrade $(lowercaseReleaseName) $(System.DefaultWorkingDirectory)/nhsapp/nhsapp-chart/nhsapp/ \
+                  --namespace $(ENVIRONMENT_REF) \
+                  --install \
+                  --set global.environment="$(ENVIRONMENT_REF)" \
+                  -f $(System.DefaultWorkingDirectory)/nhsapp/nhsapp-chart/vars/zone/$(environment)/vars-$(environment).yaml \
+                  -f $(System.DefaultWorkingDirectory)/nhsapp/nhsapp-chart/vars/zone/$(environment)/environment_overrides/vars-nhslogin-${{ parameters.loginEnv }}.yaml \
+                  --set appImageTag=$(version) \
+                  --set cid.image_tag=$(version) \
+                  --set api.image_tag=$(version) \
+                  --set web.image_tag=$(version) \
+                  --set cdsswiremock.image_tag=$(version) \
+                  --set logger.image_tag=$(version) \
+                  --set sjr.image_tag=$(version) \
+                  --set sjrconfig.image_tag=$(version) \
+                  --set stub_loader.image_tag=$(version) \
+                  --set wiremock.image_tag=latest \
+                  --set users.image_tag=$(version) \
+                  --set messages.image_tag=$(version) \
+                  --set info.image_tag=$(version) \
+                  --reset-values \
+                  --set cosmosDBName=$(cosmosDBName) \
+                  --set region=$(region) \
+                  --set zone=$(environment) \
+                  --set clusterIP=$(clusterIP) \
+                  --set networkPolicyEnabled=false 
+              fi

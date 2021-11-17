@@ -191,7 +191,6 @@ spec:
   - to:
     - ipBlock:
         cidr: {{ $.Values.metaServiceCIDR }}
-{{- end }}
 ---
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
@@ -213,4 +212,5 @@ spec:
 {{- range $.Values.eventHubPorts }}
       - protocol: TCP
         port: {{ . }}
+{{- end }}
 {{- end }}
