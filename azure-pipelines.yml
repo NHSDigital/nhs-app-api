@@ -54,6 +54,10 @@ variables:
   sjr.config.image.name: 'nhsonline-service-journey-prod-config'
   sjr.image.tag: $[variables['Build.SourceVersion']]
   # native.android.upload: ${{ parameters.uploadToGooglePlayConsole }}
+  ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/') }}:
+    branchName: $[ replace(variables['Build.SourceBranch'], 'refs/heads/', '') ]
+  ${{ if startsWith(variables['Build.SourceBranch'], 'refs/pull/') }}:
+    branchName: $[ replace(variables['System.PullRequest.SourceBranch'], 'refs/heads/', '') ]
 
   # Build.Reason is blank when specifying parameters but Manual when running the pipeline
   ${{ if or(eq(variables['Build.Reason'], ''), eq(variables['Build.Reason'], 'Manual')) }}:
@@ -88,7 +92,12 @@ stages:
     displayName: Scan git history for secrets
     dependsOn:
     jobs:
-      - template: .azuredevops/templates/secret-scanning.yml
+      - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+        - template: .azuredevops/templates/secret-scanning-pull-request.yml
+          parameters:
+            branchName: $(branchName)       
+      - ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
+        - template: .azuredevops/templates/secret-scanning.yml
 
   - stage: backend
     displayName: Backend
