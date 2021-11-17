@@ -41,5 +41,8 @@ namespace NHSOnline.IntegrationTests.UI
 
         public static KnownIssue BrowserStackNetworkChangeFailed()
             => new KnownIssue(TestResultRetryExtensions.FailedToUpdateNetworkStateMessage);
+
+        public static KnownIssue BrowserStackUnableToVerifyAppVersionFailure()
+            => new KnownIssue(TestResultRetryExtensions.UnableToVerifyAppVersion);
     }
 }

@@ -1,3 +1,5 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Components.IOS;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -10,6 +12,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
         private IOSGettingStartedPage(IIOSDriverWrapper driver) => _driver = driver;
 
         private IOSLabel Title => IOSLabel.WithText(_driver, "Getting started");
+        private IOSLabel UnableToConfirmAppVersionTitle => IOSLabel.WithText(_driver, "Unable to confirm NHS App version");
 
         private IOSLabel PrescriptionsLabel => IOSLabel
             .WithText(_driver, "order repeat prescriptions")
@@ -45,7 +48,17 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
         public static IOSGettingStartedPage AssertOnPage(IIOSDriverWrapper driver)
         {
             var page = new IOSGettingStartedPage(driver);
-            page.Title.AssertVisible();
+
+            KnownIssue.BrowserStackUnableToVerifyAppVersionFailure()
+                .ShouldExpect(() =>
+                {
+                    page.Title.AssertVisible();
+                })
+                .OrIfKnownIssueOccuredExpect(() =>
+                {
+                    page.UnableToConfirmAppVersionTitle.AssertVisible();
+                });
+
             return page;
         }
 

@@ -10,6 +10,7 @@ namespace NHSOnline.IntegrationTests.UI
         internal const string DeviceTimeSkewMessage = "device time should be close to the current time";
         internal const string AppNotRunningMessage = "application should have been automatically started on test device";
         internal const string FailedToUpdateNetworkStateMessage = "Failed to update network state";
+        internal const string UnableToVerifyAppVersion = "Failed to verify app version due to device connection";
 
         // 308536-Invalid Service com.apple.webinspector
         private static readonly Regex InvalidServiceWebInspectorMessage = new(
@@ -107,6 +108,11 @@ namespace NHSOnline.IntegrationTests.UI
             "kAXErrorServerNotFound",
             RegexOptions.Compiled);
 
+        // Connection failures are causing this screen to show and fail the test
+        private static readonly Regex DeviceFailedVersionCheck = new(
+            Regex.Escape(UnableToVerifyAppVersion),
+            RegexOptions.Compiled);
+
         private static readonly List<(Regex pattern, RetryStatus result)> RetryExceptionMessageRegexes = new()
         {
             (InvalidServiceWebInspectorMessage, RetryStatus.Retry(nameof(InvalidServiceWebInspectorMessage))),
@@ -127,7 +133,8 @@ namespace NHSOnline.IntegrationTests.UI
             (WindowHandleNotFound, RetryStatus.Retry(nameof(WindowHandleNotFound))),
             (UnableToFindFileIos, RetryStatus.Retry(nameof(UnableToFindFileIos))),
             (FileUploadSelectorDeviceVariance, RetryStatus.Retry(nameof(FileUploadSelectorDeviceVariance))),
-            (KAXErrorServerNotFound, RetryStatus.Retry(nameof(KAXErrorServerNotFound)))
+            (KAXErrorServerNotFound, RetryStatus.Retry(nameof(KAXErrorServerNotFound))),
+            (DeviceFailedVersionCheck, RetryStatus.Retry(nameof(DeviceFailedVersionCheck)))
         };
 
         internal static RetryStatus ShouldRetry(this TestResult result, TestLogs logs)

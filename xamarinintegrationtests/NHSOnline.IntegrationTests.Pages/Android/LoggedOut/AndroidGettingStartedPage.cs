@@ -1,3 +1,4 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -11,6 +12,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         private AndroidGettingStartedPage(IAndroidDriverWrapper driver) => _driver = driver;
 
         private AndroidLabel Title => AndroidLabel.WithText(_driver, "Getting started");
+        private AndroidLabel UnableToConfirmAppVersionTitle => AndroidLabel.WithText(_driver, "Unable to confirm NHS App version");
 
         private AndroidLabel UseTheNhsAppToLabel => AndroidLabel
             .WithText(_driver, "Use the NHS App to:")
@@ -71,7 +73,17 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             using var extendedTimeout = ExtendedTimeout.FromSeconds(10);
 
             var page = new AndroidGettingStartedPage(driver);
-            page.Title.AssertVisible();
+
+            KnownIssue.BrowserStackUnableToVerifyAppVersionFailure()
+                .ShouldExpect(() =>
+                {
+                    page.Title.AssertVisible();
+                })
+                .OrIfKnownIssueOccuredExpect(() =>
+                {
+                    page.UnableToConfirmAppVersionTitle.AssertVisible();
+                });
+
             return page;
         }
 
