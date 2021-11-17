@@ -38,7 +38,7 @@ namespace NHSOnline.IntegrationTests.Help
                 .PageContent.NavigateToHospitalAndOtherPrescriptions();
 
             AndroidWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, "Hospital and other prescriptions")
+                .AssertOnPage(driver, "Hospital and other medicines")
                 .PageContent.NavigateToNextPage();
 
             AndroidPkbPage
@@ -72,7 +72,7 @@ namespace NHSOnline.IntegrationTests.Help
                 .PageContent.NavigateToHospitalAndOtherPrescriptions();
 
             IOSWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, "Hospital and other prescriptions")
+                .AssertOnPage(driver, "Hospital and other medicines")
                 .PageContent.NavigateToNextPage();
 
             IOSPkbPage

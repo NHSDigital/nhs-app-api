@@ -106,7 +106,7 @@ namespace NHSOnline.IntegrationTests.NativeFooter
                 .PageContent.NavigateToHospitalAndOtherPrescriptions();
 
             IOSWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, "Hospital and other prescriptions")
+                .AssertOnPage(driver, "Hospital and other medicines")
                 .PageContent.NavigateToNextPage();
 
             IOSPkbPage

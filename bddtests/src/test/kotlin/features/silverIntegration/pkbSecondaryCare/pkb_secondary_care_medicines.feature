@@ -15,7 +15,7 @@ Feature: Patients Know Best Secondary Care Medicines
     Then I am redirected to the redirector page with the header 'Hospital and other medicines'
     And the hospital and medicines warning on the page explains the service is from PKB Secondary Care
 
-  Scenario: The menu item 'Hospital and other prescriptions' is visible on desktop
+  Scenario: The menu item 'Hospital and other medicines' is visible on desktop
     Given I am a user who can view Medicines from PKB Secondary Care
     And I am logged in
     Then I see the home page

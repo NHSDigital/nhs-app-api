@@ -237,11 +237,11 @@ export default {
       {
         id: 'medicines',
         jumpOffContent: {
-          headerText: 'Hospital and other prescriptions',
-          descriptionText: 'See your current and past prescriptions',
+          headerText: 'Hospital and other medicines',
+          descriptionText: 'View your current and past medicines or add a record of your own',
         },
         thirdPartyWarning: {
-          featureName: 'Hospital and other prescriptions',
+          featureName: 'Hospital and other medicines',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',

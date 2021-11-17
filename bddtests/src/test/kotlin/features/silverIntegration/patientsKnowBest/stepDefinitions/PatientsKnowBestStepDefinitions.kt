@@ -197,10 +197,10 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
                 "Find out more about personal health record services")
     }
 
-    @Then("the hospital and prescriptions warning on the page explains the service is from Patients Know Best$")
-    fun assertHospitalAndPrescriptionsWarningMessageContent() {
+    @Then("the hospital and medicines warning on the page explains the service is from Patients Know Best$")
+    fun assertHospitalAndMedicinesWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-            "Hospital and other prescriptions\nThis service is provided by Patients Know Best",
+            "Hospital and other medicines\nThis service is provided by Patients Know Best",
             "Your GP surgery or hospital has chosen this personal health record service provider.",
             "Find out more about personal health record services")
     }

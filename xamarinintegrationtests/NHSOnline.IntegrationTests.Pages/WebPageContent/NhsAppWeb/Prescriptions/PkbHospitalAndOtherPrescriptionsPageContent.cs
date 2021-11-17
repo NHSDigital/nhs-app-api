@@ -17,7 +17,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
         private WebText TitleText => WebText.WithTagAndText(
             _interactor,
             "h1",
-            "Hospital and other prescriptions This service is provided by Patients Know Best");
+            "Hospital and other medicines This service is provided by Patients Know Best");
 
         private WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
 

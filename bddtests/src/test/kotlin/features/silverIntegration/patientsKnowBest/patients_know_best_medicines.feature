@@ -12,10 +12,10 @@ Feature: Patients Know Best Medicines
     Then the Prescriptions Hub page is displayed
     And the PKB View Medicines link is available on the Prescriptions Hub
     When I click the PKB View Medicines link on the Prescriptions hub
-    Then I am redirected to the redirector page with the header 'Hospital and other prescriptions'
-    And the hospital and prescriptions warning on the page explains the service is from Patients Know Best
+    Then I am redirected to the redirector page with the header 'Hospital and other medicines'
+    And the hospital and medicines warning on the page explains the service is from Patients Know Best
 
-  Scenario: The menu item 'Hospital and other prescriptions' is visible on desktop
+  Scenario: The menu item 'Hospital and other medicines' is visible on desktop
     Given I am a user who can view Medicines from Patients Know Best
     And I am logged in
     Then I see the home page
@@ -28,7 +28,7 @@ Feature: Patients Know Best Medicines
     And PKB responds to requests for medicines
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Fauth%2FmanageMedications.action%3Ftab%3Dtreatments'
-    Then I am redirected to the redirector page with the header 'Hospital and other prescriptions'
+    Then I am redirected to the redirector page with the header 'Hospital and other medicines'
     When I click the 'Continue' button on the redirector page with a url starting with 'http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=/auth/manageMedications.action?tab=treatments'
     Then I am navigated to a third party site for PKB
 
@@ -37,7 +37,7 @@ Feature: Patients Know Best Medicines
     And 'NHS UK' responds to requests for '/personal-health-records'
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Fauth%2FmanageMedications.action%3Ftab%3Dtreatments'
-    Then I am redirected to the redirector page with the header 'Hospital and other prescriptions'
+    Then I am redirected to the redirector page with the header 'Hospital and other medicines'
     When I click the link called 'Find out more about personal health record services' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/personal-health-records'
     Then a new tab has been opened by the link
 
@@ -45,6 +45,6 @@ Feature: Patients Know Best Medicines
     Given I am a user who cannot view Medicines from Patients Know Best
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Fauth%2FmanageMedications.action%3Ftab%3Dtreatments'
-    Then I see silver integration error page loaded with title Hospital and other prescriptions
+    Then I see silver integration error page loaded with title Hospital and other medicines
     When I select the Go to NHS App homepage link from the feature not available page
     Then I see the home page header

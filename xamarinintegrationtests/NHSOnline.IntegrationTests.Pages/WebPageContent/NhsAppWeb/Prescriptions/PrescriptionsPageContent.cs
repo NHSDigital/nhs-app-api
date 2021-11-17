@@ -32,13 +32,13 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
 
         private WebMenuItem PkbHospitalAndOtherPrescriptionsMenuItem => WebMenuItem.WithTitle(
             _interactor,
-            "Hospital and other prescriptions",
+            "Hospital and other medicines",
             "btn_pkb_medicines");
 
         private WebText PkbHospitalAndOtherPrescriptionsText => WebText.WithTagAndText(
             _interactor,
             "p",
-            "See your current and past prescriptions");
+            "View your current and past medicines or add a record of your own");
 
         private WebMenuItem PkbCieHospitalAndOtherMedicinesMenuItem => WebMenuItem.WithTitle(
             _interactor,
