@@ -38,12 +38,12 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
                 .AssertOnPage(driver)
                 .Continue();
 
-            AndroidStubbedLoginPage
+            AndroidStubbedLoginPageSlimHeader
                 .AssertOnPage(driver);
 
             await driver.EnableAirplaneMode();
 
-            AndroidStubbedLoginPage
+            AndroidStubbedLoginPageSlimHeader
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 
@@ -177,12 +177,12 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
                 .AssertOnPage(driver)
                 .Continue();
 
-            AndroidStubbedLoginPage
+            AndroidStubbedLoginPageSlimHeader
                 .AssertOnPage(driver);
 
             await driver.EnableAirplaneMode();
 
-            AndroidStubbedLoginPage
+            AndroidStubbedLoginPageSlimHeader
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 
@@ -263,12 +263,12 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
                 .AssertOnPage(driver)
                 .Continue();
 
-            AndroidStubbedLoginPage
+            AndroidStubbedLoginPageSlimHeader
                 .AssertOnPage(driver);
 
             await driver.EnableAirplaneMode();
 
-            AndroidStubbedLoginPage
+            AndroidStubbedLoginPageSlimHeader
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 

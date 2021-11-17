@@ -30,7 +30,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .Continue();
 
-            AndroidStubbedLoginPage
+            AndroidStubbedLoginPageSlimHeader
                 .AssertOnPage(driver)
                 .PageContent.InternalPage();
 
@@ -38,7 +38,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .PageContent.NavigateBack();
 
-            AndroidStubbedLoginPage
+            AndroidStubbedLoginPageSlimHeader
                 .AssertOnPage(driver)
                 .PageContent.InternalPageNewWindow();
 
@@ -46,7 +46,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .PageContent.NavigateBack();
 
-            AndroidStubbedLoginPage
+            AndroidStubbedLoginPageSlimHeader
                 .AssertOnPage(driver)
                 .PageContent.Covid();
 
@@ -57,7 +57,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .ReturnToApp();
 
-            AndroidStubbedLoginPage
+            AndroidStubbedLoginPageSlimHeader
                 .AssertOnPage(driver);
         }
 

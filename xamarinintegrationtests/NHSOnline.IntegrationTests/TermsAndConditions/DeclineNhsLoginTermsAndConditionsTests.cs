@@ -26,7 +26,7 @@ namespace NHSOnline.IntegrationTests.TermsAndConditions
                 .AssertOnPage(driver)
                 .Continue();
 
-            AndroidStubbedLoginPage
+            AndroidStubbedLoginPageSlimHeader
                 .AssertOnPage(driver)
                 .PageContent.LoginWithLoginTermsAndConditions(patient);
 

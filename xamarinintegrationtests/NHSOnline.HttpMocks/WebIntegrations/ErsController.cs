@@ -14,7 +14,7 @@ namespace NHSOnline.HttpMocks.WebIntegrations
             return View("~/Views/WebIntegrations/ErsNhsLogin.cshtml", model);
         }
 
-        [HttpGet("Internal/Page.html")]
+        [HttpGet("internal/page.html")]
         public IActionResult InternalPage()
         {
             (string Title, HttpRequest Request) model = ("eRS Internal Page", Request);

@@ -3,9 +3,9 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 {
-    public sealed class AndroidStubbedLoginPage
+    public sealed class AndroidStubbedLoginPageSlimHeader
     {
-        private AndroidStubbedLoginPage(IAndroidDriverWrapper driver)
+        private AndroidStubbedLoginPageSlimHeader(IAndroidDriverWrapper driver)
         {
             Navigation = new AndroidSlimCloseNavigation(driver);
             PageContent = new StubbedLoginPageContent(driver.Web.WebIntegrationWebView());
@@ -15,9 +15,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         public AndroidSlimCloseNavigation Navigation { get; }
 
-        public static AndroidStubbedLoginPage AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidStubbedLoginPageSlimHeader AssertOnPage(IAndroidDriverWrapper driver)
         {
-            var page = new AndroidStubbedLoginPage(driver);
+            var page = new AndroidStubbedLoginPageSlimHeader(driver);
             page.PageContent.AssertOnPage();
             return page;
         }

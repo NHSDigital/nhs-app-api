@@ -30,7 +30,7 @@ namespace NHSOnline.IntegrationTests.Logs
 
             var testTiming = TimedTestExecutor.Execute(() =>
             {
-                AndroidStubbedLoginPage
+                AndroidStubbedLoginPageSlimHeader
                     .AssertOnPage(driver)
                     .PageContent
                     .Login(patient);

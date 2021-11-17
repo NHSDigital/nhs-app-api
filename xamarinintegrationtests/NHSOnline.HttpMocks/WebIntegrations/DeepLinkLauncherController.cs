@@ -8,10 +8,16 @@ namespace NHSOnline.HttpMocks.WebIntegrations
     public class DeepLinkLauncherController : Controller
     {
         [HttpGet("deeplinks")]
-        public IActionResult NhsLogin()
+        public IActionResult DeepLink()
         {
             (string Title, HttpRequest Request) model = ("Deep Link Integration", Request);
             return View("~/Views/WebIntegrations/DeepLinkLauncher.cshtml", model);
+        }
+
+        [HttpGet("deeplinkswebintegration")]
+        public IActionResult DeepLinkWebIntegration()
+        {
+            return View("~/Views/WebIntegrations/DeepLinkWebIntegrationLauncher.cshtml");
         }
     }
 }

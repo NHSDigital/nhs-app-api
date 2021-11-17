@@ -65,11 +65,12 @@ export default {
     },
   },
   watch: {
-    '$route.query.redirect_to': function watchRedirectParam() {
+    '$route.query': function watchQueryString() {
       this.startRedirect();
     },
   },
   mounted() {
+    this.$store.dispatch('device/pageLoadComplete');
     this.startRedirect();
   },
   methods: {

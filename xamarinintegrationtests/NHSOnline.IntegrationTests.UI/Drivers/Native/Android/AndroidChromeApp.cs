@@ -27,11 +27,16 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         public void NavigateToDeepLinkLauncher()
             => NavigateTo("http://deeplinklauncher.stubs.local.bitraft.io:8080/deeplinks");
 
+        public void NavigateToDeepLinkWebIntegrationLauncher()
+            => NavigateTo("http://deeplinklauncher.stubs.local.bitraft.io:8080/deeplinkswebintegration");
+
+        public void ClickLink() => _interactor.PressEnterKey();
+
         private void NavigateTo(string destination)
         {
             var element = (AndroidElement)_driver.FindElement(MobileBy.Id($"{AppPackage}:id/search_box_text"));
             element.ReplaceValue(destination);
-            _interactor.PressEnterKey();
+            ClickLink();
         }
     }
 }

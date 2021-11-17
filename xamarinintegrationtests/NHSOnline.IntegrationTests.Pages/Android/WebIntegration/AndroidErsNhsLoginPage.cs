@@ -1,4 +1,5 @@
 using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsLogin;
+using NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
@@ -8,12 +9,12 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
         private AndroidErsNhsLoginPage(IAndroidDriverWrapper driver)
         {
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new StubbedLoginPageContent(driver.Web.WebIntegrationWebView());
+            PageContent = new ErsPageContent(driver.Web.WebIntegrationWebView());
         }
 
         private AndroidFullNavigation Navigation { get; }
 
-        public StubbedLoginPageContent PageContent { get; }
+        public ErsPageContent PageContent { get; }
 
         public static AndroidErsNhsLoginPage AssertOnPage(IAndroidDriverWrapper driver)
         {

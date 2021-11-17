@@ -39,7 +39,7 @@ namespace NHSOnline.IntegrationTests.Home
                 .AssertOnPage(driver)
                 .ContinueWithNhsLogin();
 
-            AndroidStubbedLoginPage
+            AndroidStubbedLoginPageSlimHeader
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 

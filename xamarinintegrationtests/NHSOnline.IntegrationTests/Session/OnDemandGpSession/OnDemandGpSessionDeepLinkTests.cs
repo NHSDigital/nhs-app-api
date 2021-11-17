@@ -33,7 +33,7 @@ namespace NHSOnline.IntegrationTests.Session.OnDemandGpSession
                 .AssertOnPage(driver)
                 .PageContent.NavigateToOrderARepeatPrescription();
 
-            AndroidStubbedLoginPage
+            AndroidStubbedLoginPageSlimHeader
                 .AssertOnPage(driver);
 
             driver.BackgroundApp();
@@ -49,7 +49,7 @@ namespace NHSOnline.IntegrationTests.Session.OnDemandGpSession
                 .AssertDisplayed(driver)
                 .ChooseNhsApp();
 
-            AndroidStubbedLoginPage
+            AndroidStubbedLoginPageSlimHeader
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 

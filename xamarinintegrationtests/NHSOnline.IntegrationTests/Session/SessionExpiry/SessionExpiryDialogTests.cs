@@ -110,7 +110,7 @@ namespace NHSOnline.IntegrationTests.Session.SessionExpiry
                 .AssertOnPage(driver)
                 .Continue();
 
-            AndroidStubbedLoginPage
+            AndroidStubbedLoginPageSlimHeader
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 

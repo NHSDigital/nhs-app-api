@@ -28,7 +28,7 @@ namespace NHSOnline.IntegrationTests.Notifications
                 .AssertOnPage(driver)
                 .Continue();
 
-            AndroidStubbedLoginPage
+            AndroidStubbedLoginPageSlimHeader
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 
@@ -57,7 +57,7 @@ namespace NHSOnline.IntegrationTests.Notifications
                 .AssertOnPage(driver)
                 .ContinueWithNhsLogin();
 
-            AndroidStubbedLoginPage
+            AndroidStubbedLoginPageSlimHeader
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 

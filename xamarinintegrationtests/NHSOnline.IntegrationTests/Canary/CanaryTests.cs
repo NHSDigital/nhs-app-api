@@ -50,7 +50,7 @@ namespace NHSOnline.IntegrationTests.Canary
                 .AssertOnPage(driver)
                 .Continue();
 
-            AndroidStubbedLoginPage
+            AndroidStubbedLoginPageSlimHeader
                 .AssertOnPage(driver)
                 .PageContent
                 .AssertVectorOfTrust()

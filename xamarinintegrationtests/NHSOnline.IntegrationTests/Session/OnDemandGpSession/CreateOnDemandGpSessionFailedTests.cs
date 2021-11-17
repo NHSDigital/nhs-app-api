@@ -42,7 +42,7 @@ namespace NHSOnline.IntegrationTests.Session.OnDemandGpSession
                 .AssertOnPage(driver)
                 .PageContent.NavigateToGpSurgeryAppointments();
 
-            AndroidStubbedLoginPage
+            AndroidStubbedLoginPageSlimHeader
                 .AssertOnPage(driver)
                 .PageContent.Login(brie);
 

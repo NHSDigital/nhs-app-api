@@ -28,7 +28,7 @@ namespace NHSOnline.IntegrationTests.Home
                 .AssertOnPage(driver)
                 .Continue();
 
-            AndroidStubbedLoginPage
+            AndroidStubbedLoginPageSlimHeader
                 .AssertOnPage(driver)
                 .PageContent
                     .AssertVectorOfTrust()

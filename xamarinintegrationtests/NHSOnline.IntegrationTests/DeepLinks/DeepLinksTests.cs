@@ -3,6 +3,7 @@ using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.Android.Appointments;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
+using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -61,6 +62,50 @@ namespace NHSOnline.IntegrationTests.DeepLinks
 
             LoginProcess.LogAndroidPatientIn(driver, patient);
             AndroidAppointmentsPage.AssertOnPage(driver);
+        }
+
+        [NhsAppAndroidTest]
+        public void DeepLinkToSamePage(IAndroidDriverWrapper driver)
+        {
+            var patient = new TppPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage.AssertOnPage(driver);
+
+            driver.BackgroundApp();
+
+            driver.OpenChromeApp()
+                .NavigateToDeepLinkWebIntegrationLauncher();
+
+            AndroidDeepLinkWebIntegrationLauncherPage
+                .AssertOnPage(driver)
+                .ClickLink();
+
+            AndroidDeepLinkAppChoice
+                .AssertDisplayed(driver)
+                .ChooseNhsApp();
+
+            AndroidRedirectorPage.AssertOnPage(driver);
+
+            AndroidErsPage.AssertOnPage(driver);
+
+            driver.BackgroundApp();
+
+            // We just need to click the link again as the DeepLinkLauncher page is already
+            // open in the Chrome App
+            driver.OpenChromeApp()
+                .ClickLink();
+
+            AndroidDeepLinkAppChoice
+                .AssertDisplayed(driver)
+                .ChooseNhsApp();
+
+            AndroidRedirectorPage.AssertOnPage(driver);
+
+            AndroidErsPage.AssertOnPage(driver);
         }
     }
 }
