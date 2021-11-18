@@ -113,7 +113,7 @@ export default {
           descriptionText: '',
         },
         thirdPartyWarning: {
-          featureName: 'GNCR preferences',
+          featureName: 'Great North Care Record preferences',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service ',
           serviceTypePlural: 'personal health record services',

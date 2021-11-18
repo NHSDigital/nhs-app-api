@@ -72,10 +72,10 @@ class GncrStepDefinitions : HybridPageObject() {
             "Find out more about personal health record services")
     }
 
-    @Then("the GNCR Preferences warning message on the Redirector page explains the service is from GNCR$")
+    @Then("the GNCR preferences warning message on the Redirector page explains the service is from GNCR$")
     fun assertGNCRPreferencesWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-                "GNCR preferences\nThis service is provided by Great North Care Record",
+                "Great North Care Record preferences\nThis service is provided by Great North Care Record",
                 "Your GP surgery or hospital has chosen this personal health record service provider.",
                 "Find out more about personal health record services")
     }
