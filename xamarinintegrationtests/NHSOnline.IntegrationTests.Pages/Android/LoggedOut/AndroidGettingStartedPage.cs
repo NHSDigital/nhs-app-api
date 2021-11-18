@@ -70,7 +70,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         public static AndroidGettingStartedPage AssertOnPage(IAndroidDriverWrapper driver)
         {
             // Extending timeout as its been shown this page causes failures by not taking enough time to wait for it to load
-            using var extendedTimeout = ExtendedTimeout.FromSeconds(10);
+            using var extendedTimeout = ExtendedTimeout.FromSeconds(20);
 
             var page = new AndroidGettingStartedPage(driver);
 
