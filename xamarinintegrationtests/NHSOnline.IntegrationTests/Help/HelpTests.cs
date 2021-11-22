@@ -12,7 +12,6 @@ using NHSOnline.IntegrationTests.Pages.Android.More.AccountSettings;
 using NHSOnline.IntegrationTests.Pages.Android.Prescriptions;
 using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
 using NHSOnline.IntegrationTests.Pages.Android.YourHealth;
-using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.Advice;
 using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
 using NHSOnline.IntegrationTests.Pages.IOS.BrowserOverlay;
