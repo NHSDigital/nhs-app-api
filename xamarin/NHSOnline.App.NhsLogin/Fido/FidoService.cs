@@ -52,11 +52,20 @@ namespace NHSOnline.App.NhsLogin.Fido
             {
                 return await _authorisationService.Authorise(fidoKey).ResumeOnThreadPool();
             }
+            catch (Exception e) when (IsKeyUserNotAuthenticated(e))
+            {
+                return new FidoAuthorisationResult.PermanentLockout();
+            }
             catch (Exception e)
             {
                 _logger.LogError(e, "FIDO authorise unsuccessful");
                 return new FidoAuthorisationResult.Unauthorised();
             }
         }
+
+        private static bool IsKeyUserNotAuthenticated(Exception e) =>
+            e.ToString().Contains(
+                "android.security.KeyStoreException: Key user not authenticated",
+                StringComparison.Ordinal);
     }
 }

@@ -21,5 +21,10 @@ namespace NHSOnline.App.NhsLogin.Fido
         {
             public override T Accept<T>(IFidoAuthorisationResultVisitor<T> visitor) => visitor.Visit(this);
         }
+
+        public sealed class PermanentLockout : FidoAuthorisationResult
+        {
+            public override T Accept<T>(IFidoAuthorisationResultVisitor<T> visitor) => visitor.Visit(this);
+        }
     }
 }

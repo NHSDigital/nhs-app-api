@@ -160,6 +160,11 @@ namespace NHSOnline.App.Services.FIDO
             {
                 return new BiometricLoginResult.Unauthorised();
             }
+
+            public BiometricLoginResult Visit(FidoAuthorisationResult.PermanentLockout permanentLockout)
+            {
+                return new BiometricLoginResult.PermanentLockout();
+            }
         }
     }
 }
