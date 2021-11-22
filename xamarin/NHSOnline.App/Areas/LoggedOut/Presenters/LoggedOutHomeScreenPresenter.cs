@@ -24,7 +24,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
         private readonly ILifecycle _lifecycle;
         private readonly IBrowserOverlay _browserOverlay;
-        private readonly IBackgroundExecutionService _backgroundExecutionService;
         private readonly IForcedUpdateCheckService _forcedUpdateCheckService;
         private readonly IDialogPresenter _dialogPresenterService;
         private readonly BiometricLoginErrorPageDispatcher _biometricLoginErrorPageDispatcher;
@@ -47,7 +46,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             INhsExternalServicesConfiguration nhsExternalServicesConfiguration,
             ILifecycle lifecycle,
             IBrowserOverlay browserOverlay,
-            IBackgroundExecutionService backgroundExecutionService,
             IForcedUpdateCheckService forcedUpdateCheckService,
             IDialogPresenter dialogPresenterService,
             LoggedOutHomeScreenModel model,
@@ -60,7 +58,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
             _lifecycle = lifecycle;
             _browserOverlay = browserOverlay;
-            _backgroundExecutionService = backgroundExecutionService;
             _forcedUpdateCheckService = forcedUpdateCheckService;
             _dialogPresenterService = dialogPresenterService;
             _model = model;
@@ -92,19 +89,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
             _forcedUpdateCheckService.Initiate();
 
-            // NHSO-14252 will address this workaround
-            await _backgroundExecutionService.Run(async () =>
-            {
-                await Task.Delay(BiometricDelayOnAppearing).ResumeOnThreadPool();
-
-                MainThread.BeginInvokeOnMainThread(async () =>
-                {
-                    if (!_cancelBiometricLogin.IsCancellationRequested)
-                    {
-                        await ActivateBiometricLogin().PreserveThreadContext();
-                    }
-                });
-            }).ResumeOnThreadPool();
+            await ShowBiometricLoginAfterDelay(BiometricDelayOnAppearing).PreserveThreadContext();
         }
 
         private Task ViewOnDisappearing()

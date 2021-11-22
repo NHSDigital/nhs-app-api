@@ -97,14 +97,17 @@ namespace NHSOnline.App.iOS.DependencyServices
                 try
                 {
                     using var passKitPassesViewController = new PKAddPassesViewController(passKitPass);
-                    UIApplication.SharedApplication.KeyWindow.RootViewController?.PresentModalViewController(passKitPassesViewController, true);
-                    data.Dispose();
-                    passKitPass.Dispose();
-                    passKitPassesViewController.Dispose();
+                    UIApplication.SharedApplication.KeyWindow.RootViewController?.PresentModalViewController(
+                        passKitPassesViewController, true);
                 }
                 catch (Exception e)
                 {
                     Logger.LogError(e, "Failed to display the pass kit file");
+                }
+                finally
+                {
+                    data.Dispose();
+                    passKitPass.Dispose();
                 }
             });
 
