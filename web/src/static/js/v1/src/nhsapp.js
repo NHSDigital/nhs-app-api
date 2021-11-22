@@ -13,6 +13,9 @@ window.nhsapp = {
     goToPage(appPage) {
       window.nhsappNative.goToPage(appPage);
     },
+    openBrowserOverlay(url) {
+      window.nhsappNative.openBrowserOverlay(url);
+    },
   },
   tools: {
     getAppPlatform() {

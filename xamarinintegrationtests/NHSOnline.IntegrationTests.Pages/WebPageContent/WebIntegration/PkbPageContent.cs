@@ -24,6 +24,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         private WebLink GoToPageLink => WebLink.WithText(_interactor, "Go to page");
 
+        private WebLink OpenBrowserOverlayLink => WebLink.WithText(_interactor, "Open Browser Overlay");
+
         private WebLink FileUploadLink => WebLink.WithText(_interactor, "File upload");
 
         private WebLink DocumentDownloadLink => WebLink.WithText(_interactor, "Download document");
@@ -48,6 +50,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
         public void NavigateToCalendar() => CalendarLink.Click();
 
         public void NavigateToGoToPage() => GoToPageLink.Click();
+
+        public void NavigateToOpenBrowserOverlay() => OpenBrowserOverlayLink.Click();
 
         public void NavigateToFileUpload() => FileUploadLink.Click();
 

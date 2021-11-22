@@ -25,6 +25,7 @@
                                         VerticalOptions="FillAndExpand"
                                         StartDownloadCommand="{Binding StartDownloadCommand, Source={x:Reference Name=Page}}"
                                         GoToNhsAppPageCommand="{Binding GoToNhsAppPageCommand, Source={x:Reference Name=Page}}"
+                                        OpenBrowserOverlayCommand="{Binding OpenBrowserOverlayCommand, Source={x:Reference Name=Page}}"
                                         AddEventToCalendarCommand="{Binding AddEventToCalendarCommand, Source={x:Reference Name=Page}}"
                                         Navigated="WebOnEndNavigating" />
 

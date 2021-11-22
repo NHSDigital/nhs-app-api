@@ -68,6 +68,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                 .RegisterHandler(model.NavigationHandler.YourHealthRequested, (view, handler) => view.YourHealthRequested = handler)
                 .RegisterHandler(model.NavigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler)
                 .RegisterHandler<string>(GoToNhsAppPageRequested, (view, handler) => view.GoToNhsAppPageRequested = handler)
+                .RegisterHandler<Uri>(OpenBrowserOverlayRequested, (view, handler) => view.OpenBrowserOverlayRequested = handler)
                 .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeepLinkRequested = handler)
                 .RegisterHandler<AddEventToCalendarRequest>(AddEventToCalendarRequested, (view, handler) => view.AddEventToCalendarRequested = handler)
                 .RegisterHandler<DownloadRequest>(StartDownloadRequested, (view, handler) => view.StartDownloadRequested = handler);
@@ -78,6 +79,13 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             _logger.LogInformation("Going to NHS App Page - {page}", page);
 
             await _model.NavigationHandler.GoToNhsAppPageRequested(page).PreserveThreadContext();
+        }
+
+        private async Task OpenBrowserOverlayRequested(Uri overlayUri)
+        {
+            await _browserOverlay
+                .OpenBrowserOverlay(overlayUri)
+                .PreserveThreadContext();
         }
 
         private async Task HelpRequested()

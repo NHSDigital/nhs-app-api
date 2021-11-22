@@ -65,6 +65,14 @@ namespace NHSOnline.HttpMocks.WebIntegrations
         }
 
         [Host(PkbHostName)]
+        [HttpGet("OpenBrowserOverlay.html")]
+        public IActionResult OpenBrowserOverlayPage()
+        {
+            (string Title, HttpRequest Request) model = ("Web Integration Functionality - Open Browser Overlay", Request);
+            return View("~/Views/WebIntegrations/WebIntegrationFunctionalityPages/OpenBrowserOverlayPage.cshtml", model);
+        }
+
+        [Host(PkbHostName)]
         [HttpGet("FileUpload.html")]
         public IActionResult FileUploadPage()
         {

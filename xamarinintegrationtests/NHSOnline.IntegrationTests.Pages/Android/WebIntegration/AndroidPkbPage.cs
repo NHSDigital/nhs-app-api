@@ -4,7 +4,6 @@ using NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration;
 using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
-using OpenQA.Selenium.Appium.Android;
 
 namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
 {
@@ -50,6 +49,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
         public void NavigateToCalendar() => PageContent.NavigateToCalendar();
 
         public void NavigateToGoToPage() => PageContent.NavigateToGoToPage();
+
+        public void NavigateToOpenBrowserOverlay() => PageContent.NavigateToOpenBrowserOverlay();
 
         public void NavigateToFileUpload() => PageContent.NavigateToFileUpload();
 

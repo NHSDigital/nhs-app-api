@@ -21,6 +21,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
             _javascriptBridge = JavascriptBridge
                 .ForWebView(() => (WebIntegrationWebView)Element, WebIntegrationWebView.JavascriptObjectName)
                 .AddFunction("goToPage", webView => webView.GoToNhsAppPage)
+                .AddFunction("openBrowserOverlay", webView => webView.OpenBrowserOverlay)
                 .AddFunction("addEventToCalendar", webView => webView.AddEventToCalendar)
                 .AddFunction("startDownloadFromJson", webview => webview.StartDownload)
                 .Apply(config.UserContentController);

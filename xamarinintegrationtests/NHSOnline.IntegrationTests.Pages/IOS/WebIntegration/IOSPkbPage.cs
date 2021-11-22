@@ -26,6 +26,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
 
         public void NavigateToGoToPage() => PageContent.NavigateToGoToPage();
 
+        public void NavigateToOpenBrowserOverlay() => PageContent.NavigateToOpenBrowserOverlay();
+
         public void NavigateToFileUpload() => PageContent.NavigateToFileUpload();
 
         public void NavigateToDocumentDownload() => PageContent.NavigateToDocumentDownload();

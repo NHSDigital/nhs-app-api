@@ -21,9 +21,27 @@ namespace NHSOnline.App.Controls.WebViews
                 typeof(AsyncCommand<string>),
                 typeof(WebIntegrationWebView));
 
+        public static readonly BindableProperty OpenBrowserOverlayCommandProperty =
+            BindableProperty.Create(
+                nameof(OpenBrowserOverlayCommand),
+                typeof(AsyncCommand<Uri>),
+                typeof(WebIntegrationWebView));
+
         public event EventHandler<WebViewPageLoadEventArgs>? PageLoadComplete;
 
         public void GoToNhsAppPage(string argument) => GoToNhsAppPageCommand.Execute(argument);
+
+        public void OpenBrowserOverlay(string argument)
+        {
+            try
+            {
+                OpenBrowserOverlayCommand.Execute(new Uri(argument));
+            }
+            catch (UriFormatException e)
+            {
+                Logger.LogError(e, $"Argument supplied is not a valid Uri: {argument}");
+            }
+        }
 
         public static readonly BindableProperty AddEventToCalendarCommandProperty =
             BindableProperty.Create(nameof(AddEventToCalendarCommand), typeof(AsyncCommand<AddEventToCalendarRequest>), typeof(WebIntegrationWebView));
@@ -38,6 +56,12 @@ namespace NHSOnline.App.Controls.WebViews
         {
             get => (AsyncCommand<string>) GetValue(GoToNhsAppPageCommandProperty);
             set => SetValue(GoToNhsAppPageCommandProperty, value);
+        }
+
+        public AsyncCommand<Uri> OpenBrowserOverlayCommand
+        {
+            get => (AsyncCommand<Uri>) GetValue(OpenBrowserOverlayCommandProperty);
+            set => SetValue(OpenBrowserOverlayCommandProperty, value);
         }
 
         public AsyncCommand<DownloadRequest> StartDownloadCommand

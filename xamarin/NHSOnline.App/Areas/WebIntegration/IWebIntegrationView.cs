@@ -28,6 +28,7 @@ namespace NHSOnline.App.Areas.WebIntegration
             Func<Task>? MessagesRequested { get; set; }
 
             Func<string, Task>? GoToNhsAppPageRequested { get; set; }
+            Func<Uri, Task>? OpenBrowserOverlayRequested { get; set; }
             Func<Uri, Task>? DeepLinkRequested { get; set; }
 
             Func<AddEventToCalendarRequest, Task>? AddEventToCalendarRequested { get; set; }
