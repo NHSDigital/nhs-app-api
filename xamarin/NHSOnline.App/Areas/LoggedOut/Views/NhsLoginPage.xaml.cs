@@ -16,9 +16,11 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
     [DesignTimeVisible(false)]
     public partial class NhsLoginPage: INhsLoginView, INhsLoginView.IEvents
     {
+        public event EventHandler<FocusRequestArgs>? AccessibilityFocusChangeRequested;
+
         private readonly ILogger _logger;
         private readonly AppNavigation<INhsLoginView.IEvents> _appNavigation;
-        private readonly INavigationService _navigationService;
+        private const string PageName = "NHS Login";
 
         private bool OnInitialNavigation { get; set; } = true;
         private Uri? InitialUrl { get; set; }
@@ -26,8 +28,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public NhsLoginPage(ILogger<NhsLoginPage> logger, IAccessibilityService accessibilityService, INavigationService navigationService): base(accessibilityService)
         {
             _logger = logger;
-            _navigationService = navigationService;
-            _appNavigation = new AppNavigation<INhsLoginView.IEvents>(this, _navigationService);
+            _appNavigation = new AppNavigation<INhsLoginView.IEvents>(this, navigationService);
 
             InitializeComponent();
 
@@ -136,11 +137,13 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         {
             Spinner.IsVisible = false;
             WebView.IsVisible = true;
+            AccessibilityFocus();
         }
 
         private void ShowSpinner()
         {
             Spinner.IsVisible = true;
+            Spinner.AccessibilityFocus();
             WebView.IsVisible = false;
         }
 
@@ -166,6 +169,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         private void WebOnEndNavigating (object sender, WebNavigatedEventArgs e)
         {
             ShowWebView();
+            PageDescription = PageName;
+            AnnouncePage();
         }
 
         public async Task HandleDeeplink(Uri deeplinkUrl)
@@ -173,6 +178,15 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             if (DeeplinkRequested != null)
             {
                 await DeeplinkRequested(deeplinkUrl).PreserveThreadContext();
+            }
+        }
+
+        private void AccessibilityFocus()
+        {
+            if (AccessibilityFocusChangeRequested != null)
+            {
+                var arg = new FocusRequestArgs {Focus = true};
+                AccessibilityFocusChangeRequested(this, arg);
             }
         }
     }

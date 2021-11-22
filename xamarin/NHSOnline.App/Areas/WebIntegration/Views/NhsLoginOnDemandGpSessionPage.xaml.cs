@@ -15,15 +15,18 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class NhsLoginOnDemandGpSessionPage : INhsLoginOnDemandGpSessionView, INhsLoginOnDemandGpSessionView.IEvents
     {
+        public event EventHandler<FocusRequestArgs>? AccessibilityFocusChangeRequested;
+
         private readonly ILogger<NhsLoginOnDemandGpSessionPage> _logger;
         private readonly AppNavigation<INhsLoginOnDemandGpSessionView.IEvents> _appNavigation;
-        private readonly INavigationService _navigationService;
 
-        public NhsLoginOnDemandGpSessionPage(ILogger<NhsLoginOnDemandGpSessionPage> logger, IAccessibilityService accessibilityService, INavigationService navigationService): base(accessibilityService)
+        public NhsLoginOnDemandGpSessionPage(
+            ILogger<NhsLoginOnDemandGpSessionPage> logger,
+            IAccessibilityService accessibilityService,
+            INavigationService navigationService): base(accessibilityService)
         {
             _logger = logger;
-            _navigationService = navigationService;
-            _appNavigation = new AppNavigation<INhsLoginOnDemandGpSessionView.IEvents>(this, _navigationService);
+            _appNavigation = new AppNavigation<INhsLoginOnDemandGpSessionView.IEvents>(this, navigationService);
 
             InitializeComponent();
 
@@ -121,11 +124,13 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         {
             Spinner.IsVisible = false;
             WebView.IsVisible = true;
+            AccessibilityFocus();
         }
 
         private void ShowSpinner()
         {
             Spinner.IsVisible = true;
+            Spinner.AccessibilityFocus();
             WebView.IsVisible = false;
         }
 
@@ -151,6 +156,15 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
             if (DeeplinkRequested != null)
             {
                 await DeeplinkRequested(deeplinkUrl).PreserveThreadContext();
+            }
+        }
+
+        private void AccessibilityFocus()
+        {
+            if (AccessibilityFocusChangeRequested != null)
+            {
+                var arg = new FocusRequestArgs {Focus = true};
+                AccessibilityFocusChangeRequested(this, arg);
             }
         }
     }

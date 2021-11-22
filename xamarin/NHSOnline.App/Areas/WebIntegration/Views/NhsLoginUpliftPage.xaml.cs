@@ -15,15 +15,19 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
     [DesignTimeVisible(false)]
     public partial class NhsLoginUpliftPage : INhsLoginUpliftView, INhsLoginUpliftView.IEvents
     {
+        public event EventHandler<FocusRequestArgs>? AccessibilityFocusChangeRequested;
+        private const string PageName = "NHS Login";
+
         private readonly ILogger _logger;
         private readonly AppNavigation<INhsLoginUpliftView.IEvents> _appNavigation;
-        private readonly INavigationService _navigationService;
 
-        public NhsLoginUpliftPage(ILogger<NhsLoginUpliftPage> logger, IAccessibilityService accessibilityService, INavigationService navigationService): base(accessibilityService)
+        public NhsLoginUpliftPage(
+            ILogger<NhsLoginUpliftPage> logger,
+            IAccessibilityService accessibilityService,
+            INavigationService navigationService): base(accessibilityService)
         {
             _logger = logger;
-            _navigationService = navigationService;
-            _appNavigation = new AppNavigation<INhsLoginUpliftView.IEvents>(this, _navigationService);
+            _appNavigation = new AppNavigation<INhsLoginUpliftView.IEvents>(this, navigationService);
 
             InitializeComponent();
 
@@ -126,11 +130,13 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         {
             Spinner.IsVisible = false;
             WebView.IsVisible = true;
+            AccessibilityFocus();
         }
 
         private void ShowSpinner()
         {
             Spinner.IsVisible = false;
+            Spinner.AccessibilityFocus();
             WebView.IsVisible = true;
         }
 
@@ -156,6 +162,17 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         private void WebOnEndNavigating(object sender, WebNavigatedEventArgs e)
         {
             ShowWebView();
+            PageDescription = PageName;
+            AnnouncePage();
+        }
+
+        private void AccessibilityFocus()
+        {
+            if (AccessibilityFocusChangeRequested != null)
+            {
+                var arg = new FocusRequestArgs {Focus = true};
+                AccessibilityFocusChangeRequested(this, arg);
+            }
         }
     }
 }

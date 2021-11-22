@@ -30,6 +30,26 @@ namespace NHSOnline.App.iOS.Effects
                 visualElement.Unfocused -= VisualElementOnFocusStateChanged;
                 visualElement.Unfocused += VisualElementOnFocusStateChanged;
             }
+
+            if (Element is IVisibleControl visibleControl)
+            {
+                visibleControl.VisibilityChangeRequested -= AccessibleControlOnVisibilityChangeRequested;
+                visibleControl.VisibilityChangeRequested += AccessibleControlOnVisibilityChangeRequested;
+            }
+        }
+
+        private void AccessibleControlOnVisibilityChangeRequested(object sender, IVisibleControl.VisibilityChangeEventArgs e)
+        {
+            if (Element is not View view ||
+                view.GetRenderer()?.NativeView == null)
+            {
+                return;
+            }
+
+            if ((Control ?? Container) is { } target)
+            {
+                target.IsAccessibilityElement = e.IsVisible;
+            }
         }
 
         private void VisualElementOnFocusStateChanged(object sender, FocusEventArgs e)
@@ -64,6 +84,7 @@ namespace NHSOnline.App.iOS.Effects
                 AccessibilityEffect.ControlType.Link => UIAccessibilityTrait.Link,
                 AccessibilityEffect.ControlType.Heading1 => UIAccessibilityTrait.None,
                 AccessibilityEffect.ControlType.Heading2 => UIAccessibilityTrait.None,
+                AccessibilityEffect.ControlType.Spinner => UIAccessibilityTrait.None,
                 _ => throw new ArgumentOutOfRangeException(nameof(controlType), controlType,
                     $"{nameof(AccessibilityTraitsFor)} doesn't cover all types")
             };
@@ -84,6 +105,7 @@ namespace NHSOnline.App.iOS.Effects
                 AccessibilityEffect.ControlType.Link => null,
                 AccessibilityEffect.ControlType.Heading1 => "Heading level 1",
                 AccessibilityEffect.ControlType.Heading2 => "Heading level 2",
+                AccessibilityEffect.ControlType.Spinner => "Loading",
                 _ => throw new ArgumentOutOfRangeException(nameof(controlType), controlType,
                     $"{nameof(AccessibilityHintFor)} doesn't cover all types")
             };
@@ -95,6 +117,11 @@ namespace NHSOnline.App.iOS.Effects
             {
                 visualElement.Focused -= VisualElementOnFocusStateChanged;
                 visualElement.Unfocused -= VisualElementOnFocusStateChanged;
+            }
+
+            if (Element is IVisibleControl visibleControl)
+            {
+                visibleControl.VisibilityChangeRequested -= AccessibleControlOnVisibilityChangeRequested;
             }
         }
     }

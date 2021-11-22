@@ -242,14 +242,15 @@
     <Compile Include="DependencyServices\Notifications\AndroidGetPnsTokenResponse.cs" />
     <Compile Include="DependencyServices\Notifications\AndroidNotifications.cs" />
     <Compile Include="Effects\AndroidAccessibilityEffect.cs" />
+    <Compile Include="Effects\AndroidAccessibilityFocusEffect.cs" />
     <Compile Include="Effects\AndroidFixedFontSizeEffect.cs" />
     <Compile Include="Extensions\IntentExtensions.cs" />
     <Compile Include="Extensions\WindowExtensions.cs" />
     <Compile Include="Handlers\OnReceivedGeolocationPermissionsResultHandler.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="Renderers\ContentPageRenderer.cs" />
     <Compile Include="Renderers\Heading1Renderer.cs" />
     <Compile Include="Renderers\KeyEventArgsExtensions.cs" />
-    <Compile Include="Renderers\SpinnerRenderer.cs" />
     <Compile Include="Renderers\WebViews\BaseWebChromeClient.cs" />
     <Compile Include="Renderers\WebViews\BaseWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\Extensions\AccessibilityWebViewRendererExtension.cs" />

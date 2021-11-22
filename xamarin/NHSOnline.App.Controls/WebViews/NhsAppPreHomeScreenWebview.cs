@@ -9,7 +9,7 @@ using Xamarin.Forms;
 
 namespace NHSOnline.App.Controls.WebViews
 {
-    public sealed class NhsAppPreHomeScreenWebview: WebView, IAccessibleWebView
+    public sealed class NhsAppPreHomeScreenWebview: WebView, IAccessibleControl
     {
         public event EventHandler<FocusRequestArgs> AccessibilityFocusChangeRequested = null!;
 

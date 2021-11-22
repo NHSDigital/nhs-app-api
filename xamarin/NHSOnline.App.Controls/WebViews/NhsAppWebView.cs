@@ -12,7 +12,7 @@ using Xamarin.Forms;
 
 namespace NHSOnline.App.Controls.WebViews
 {
-    public sealed class NhsAppWebView: WebView, IAccessibleWebView
+    public sealed class NhsAppWebView: WebView, IAccessibleControl
     {
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(NhsAppWebView));
 

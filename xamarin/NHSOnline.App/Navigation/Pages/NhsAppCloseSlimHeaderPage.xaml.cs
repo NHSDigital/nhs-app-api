@@ -58,16 +58,23 @@ namespace NHSOnline.App.Navigation.Pages
 
         protected override void OnAppearing()
         {
+            AnnouncePage();
+            base.OnAppearing();
+        }
+
+        protected void AnnouncePage()
+        {
             try
             {
-                _accessibilityService!.AnnounceText($"{PageDescription}.");
+                if (!string.IsNullOrWhiteSpace(PageDescription))
+                {
+                    _accessibilityService!.AnnounceText($"{PageDescription}.");
+                }
             }
             catch (Exception e)
             {
                 Logger.LogError(e, "Failed to announce text to voice over");
             }
-
-            base.OnAppearing();
         }
     }
 }

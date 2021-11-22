@@ -9,8 +9,7 @@
                                  xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
                                  mc:Ignorable="d"
                                  x:Class="NHSOnline.App.Areas.WebIntegration.Views.NhsLoginUpliftPage"
-                                 x:Name="Page"
-                                 PageDescription="Nhs Login">
+                                 x:Name="Page">
 
     <AbsoluteLayout BackgroundColor="{ StaticResource NhsUkPageBackgroundGrey }">
         <elements:Spinner AbsoluteLayout.LayoutFlags="All"

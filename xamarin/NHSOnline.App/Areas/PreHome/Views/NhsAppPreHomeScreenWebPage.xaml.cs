@@ -15,15 +15,15 @@ namespace NHSOnline.App.Areas.PreHome.Views
     [DesignTimeVisible(false)]
     public partial class NhsAppPreHomeScreenWebPage : INhsAppPreHomeScreenWebView, INhsAppPreHomeScreenWebView.IEvents, IRootPage, ISwipeablePage
     {
+        public event EventHandler<FocusRequestArgs>? AccessibilityFocusChangeRequested;
+
         private readonly ILogger _logger;
         private readonly AppNavigation<INhsAppPreHomeScreenWebView.IEvents> _appNavigation;
-        private readonly INavigationService _navigationService;
 
         public NhsAppPreHomeScreenWebPage(ILogger<NhsAppPreHomeScreenWebPage> logger, INavigationService navigationService)
         {
             _logger = logger;
-            _navigationService = navigationService;
-            _appNavigation = new AppNavigation<INhsAppPreHomeScreenWebView.IEvents>(this, _navigationService);
+            _appNavigation = new AppNavigation<INhsAppPreHomeScreenWebView.IEvents>(this, navigationService);
 
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
@@ -186,11 +186,13 @@ namespace NHSOnline.App.Areas.PreHome.Views
         {
             Spinner.IsVisible = false;
             WebView.IsVisible = true;
+            AccessibilityFocus();
         }
 
         private void ShowSpinner()
         {
             Spinner.IsVisible = true;
+            Spinner.AccessibilityFocus();
             WebView.IsVisible = false;
         }
 
@@ -203,6 +205,15 @@ namespace NHSOnline.App.Areas.PreHome.Views
             if (DeeplinkRequested != null)
             {
                 await DeeplinkRequested(deeplinkUrl).PreserveThreadContext();
+            }
+        }
+
+        private void AccessibilityFocus()
+        {
+            if (AccessibilityFocusChangeRequested != null)
+            {
+                var arg = new FocusRequestArgs {Focus = true};
+                AccessibilityFocusChangeRequested(this, arg);
             }
         }
     }

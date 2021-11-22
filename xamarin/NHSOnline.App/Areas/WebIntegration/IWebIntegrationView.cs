@@ -8,7 +8,7 @@ using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.WebIntegration
 {
-    internal interface IWebIntegrationView: INavigationView<IWebIntegrationView.IEvents>
+    internal interface IWebIntegrationView: INavigationView<IWebIntegrationView.IEvents>, IAccessibleControl
     {
         internal interface IEvents
         {

@@ -68,7 +68,8 @@ namespace NHSOnline.App.Controls.Effects
             Link,
             Button,
             Heading1,
-            Heading2
+            Heading2,
+            Spinner,
         }
 
         private class AccessibilityRoutingEffect : RoutingEffect

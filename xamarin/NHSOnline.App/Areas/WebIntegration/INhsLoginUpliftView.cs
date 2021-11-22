@@ -1,12 +1,13 @@
 using System;
 using System.Threading.Tasks;
+using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.WebIntegration
 {
-    internal interface INhsLoginUpliftView: INavigationView<INhsLoginUpliftView.IEvents>
+    internal interface INhsLoginUpliftView: INavigationView<INhsLoginUpliftView.IEvents>, IAccessibleControl
     {
         internal interface IEvents
         {

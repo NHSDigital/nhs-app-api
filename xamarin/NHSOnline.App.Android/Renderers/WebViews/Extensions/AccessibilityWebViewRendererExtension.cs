@@ -1,5 +1,5 @@
 using Android.Views.Accessibility;
-using NHSOnline.App.Controls.WebViews;
+using NHSOnline.App.Controls;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
@@ -16,7 +16,7 @@ namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions
         {
             if (e.OldElement == null &&
                 _renderer.Control.Settings != null &&
-                _renderer.Element is IAccessibleWebView view)
+                _renderer.Element is IAccessibleControl view)
             {
                 view.AccessibilityFocusChangeRequested += (sender, args) =>
                 {

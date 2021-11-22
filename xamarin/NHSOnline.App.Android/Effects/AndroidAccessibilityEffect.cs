@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Android.OS;
+using Android.Views;
 using Android.Views.Accessibility;
 using AndroidX.Core.View.Accessibility;
 using NHSOnline.App.Controls;
@@ -25,7 +26,6 @@ namespace NHSOnline.App.Droid.Effects
         {
             if ((Control ?? Container) is { } target &&
                 AccessibilityEffect.GetControlType(Element) is { } controlType)
-
             {
                 target.SetAccessibilityDelegate(new AccessibilityDelegate(Element, controlType));
                 switch (controlType)
@@ -38,11 +38,29 @@ namespace NHSOnline.App.Droid.Effects
                         target.FocusChange -= ControlFocusChange;
                         target.FocusChange += ControlFocusChange;
                         break;
+                    case AccessibilityEffect.ControlType.Spinner:
+                        AutomationProperties.SetIsInAccessibleTree(Element, true);
+                        break;
                     case AccessibilityEffect.ControlType.Heading1:
                     case AccessibilityEffect.ControlType.Heading2:
                     default:
                         break;
                 }
+
+                if (Element is IVisibleControl visibleControl)
+                {
+                    visibleControl.VisibilityChangeRequested -= AccessibleControlOnVisibilityChangeRequested;
+                    visibleControl.VisibilityChangeRequested += AccessibleControlOnVisibilityChangeRequested;
+                }
+            }
+        }
+
+        private void AccessibleControlOnVisibilityChangeRequested(object sender, IVisibleControl.VisibilityChangeEventArgs e)
+        {
+            if ((Control ?? Container) is { } target)
+            {
+                target.ImportantForAccessibility = e.IsVisible ? ImportantForAccessibility.Yes : ImportantForAccessibility.No;
+                target.Focusable = e.IsVisible;
             }
         }
 
@@ -53,6 +71,11 @@ namespace NHSOnline.App.Droid.Effects
             {
                 target.KeyPress -= ControlOnKeyPress;
                 target.FocusChange -= ControlFocusChange;
+            }
+
+            if (Element is IVisibleControl visibleControl)
+            {
+                visibleControl.VisibilityChangeRequested -= AccessibleControlOnVisibilityChangeRequested;
             }
         }
 
@@ -155,6 +178,9 @@ namespace NHSOnline.App.Droid.Effects
                         break;
                     case AccessibilityEffect.ControlType.Heading2:
                         info.RoleDescription = "Heading 2";
+                        break;
+                    case AccessibilityEffect.ControlType.Spinner:
+                        info.RoleDescription = "Loading";
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(

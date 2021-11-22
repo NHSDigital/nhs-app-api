@@ -16,15 +16,15 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
     [DesignTimeVisible(false)]
     public partial class WebIntegrationPage : IWebIntegrationView, IWebIntegrationView.IEvents, ISwipeablePage
     {
+        public event EventHandler<FocusRequestArgs>? AccessibilityFocusChangeRequested;
+
         private readonly ILogger _logger;
         private readonly AppNavigation<IWebIntegrationView.IEvents> _appNavigation;
-        private readonly INavigationService _navigationService;
 
         public WebIntegrationPage(ILogger<WebIntegrationPage> logger, IAccessibilityService accessibilityService, INavigationService navigationService): base(accessibilityService)
         {
             _logger = logger;
-            _navigationService = navigationService;
-            _appNavigation = new AppNavigation<IWebIntegrationView.IEvents>(this, _navigationService);
+            _appNavigation = new AppNavigation<IWebIntegrationView.IEvents>(this, navigationService);
 
             InitializeComponent();
 
@@ -131,8 +131,12 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
 
         private void WebOnEndNavigating(object sender, WebNavigatedEventArgs e)
         {
-            Spinner.IsVisible = false;
-            WebView.IsVisible = true;
+            if (Spinner.IsVisible)
+            {
+                Spinner.IsVisible = false;
+                WebView.IsVisible = true;
+                AccessibilityFocus();
+            }
         }
 
         private void OnPageLoadComplete(object sender, WebViewPageLoadEventArgs pageLoadEventArgs)
@@ -154,5 +158,14 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         protected override bool OnBackButtonPressed() => true;
 
         public bool OnSwipeBack() => true;
+
+        private void AccessibilityFocus()
+        {
+            if (AccessibilityFocusChangeRequested != null)
+            {
+                var arg = new FocusRequestArgs {Focus = true};
+                AccessibilityFocusChangeRequested(this, arg);
+            }
+        }
     }
 }

@@ -5,11 +5,12 @@ using Xamarin.Forms.Xaml;
 namespace NHSOnline.App.Controls.Elements
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class Spinner
+    public partial class Spinner : IAccessibleControl, IVisibleControl
     {
         private const string AnimationName = "RotateSpinnerAnimation";
 
         public event EventHandler<FocusRequestArgs>? AccessibilityFocusChangeRequested;
+        public event EventHandler<IVisibleControl.VisibilityChangeEventArgs>? VisibilityChangeRequested;
 
         public Spinner()
         {
@@ -23,6 +24,8 @@ namespace NHSOnline.App.Controls.Elements
 
             if (propertyName == "IsVisible")
             {
+                VisibilityChanged(IsVisible);
+
                 if (!IsVisible)
                 {
                     NhsSpinner.CancelAnimations();
@@ -58,6 +61,15 @@ namespace NHSOnline.App.Controls.Elements
             {
                 var arg = new FocusRequestArgs {Focus = true};
                 AccessibilityFocusChangeRequested(this, arg);
+            }
+        }
+
+        private void VisibilityChanged(bool isVisible)
+        {
+            if (VisibilityChangeRequested != null)
+            {
+                var arg = new IVisibleControl.VisibilityChangeEventArgs {IsVisible = isVisible};
+                VisibilityChangeRequested(this, arg);
             }
         }
     }

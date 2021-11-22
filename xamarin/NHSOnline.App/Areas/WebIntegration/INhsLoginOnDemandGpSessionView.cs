@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.WebIntegration
 {
-    internal interface INhsLoginOnDemandGpSessionView: INavigationView<INhsLoginOnDemandGpSessionView.IEvents>
+    internal interface INhsLoginOnDemandGpSessionView: INavigationView<INhsLoginOnDemandGpSessionView.IEvents>, IAccessibleControl
     {
         internal interface IEvents
         {
