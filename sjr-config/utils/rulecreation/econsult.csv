@@ -350,7 +350,6 @@ devon,Devon,CCG,Devon,Devon,elmsurgery,Elm Surgery,L83019,7007
 devon,Devon,CCG,Devon,Devon,fremington,Fremington Medical Centre,L83057,6814
 devon,Devon,CCG,Devon,Devon,friaryhousesurgery,Friary House Surgery,L83072,10786
 devon,Devon,CCG,Devon,Devon,haldon-house,Haldon House,L83136,6065
-devon,Devon,CCG,Devon,Devon,hartlandsurgery,Hartland Surgery,L83129,2700
 devon,Devon,CCG,Devon,Devon,hillbartonsurgery,Hill Barton Surgery,L83143,3904
 devon,Devon,CCG,Devon,Devon,honitonsurgery,Honiton Surgery,L83002,16500
 devon,Devon,CCG,Devon,Devon,idelanesurgery,Ide Lane Surgery,L83079,7624
@@ -376,7 +375,6 @@ devon,Devon,CCG,Devon,Devon,okehamptonmedicalcentre,Okehampton Medical Centre,L8
 devon,Devon,CCG,Devon,Devon,oldfarmsurgery,Old Farm Surgery,L83607,4750
 devon,Devon,CCG,Devon,Devon,pathfields,Pathfields Practice,L83008,33000
 devon,Devon,CCG,Devon,Devon,pembrokehousesurgery,Pembroke House Surgery,L83131,26000
-devon,Devon,CCG,Devon,Devon,peverellparksurgery,Peverell Park Surgery,L83648,18277
 devon,Devon,CCG,Devon,Devon,pinhoesurgery,Pinhoe And Broadclyst Medical Practice,L83040,11500
 devon,Devon,CCG,Devon,Devon,queensmc,Queen's Medical centre,L83003,10741
 devon,Devon,CCG,Devon,Devon,raleighsurgery,Raleigh Surgery,L83627,3986
@@ -1718,7 +1716,6 @@ southwark,Southwark,CCG,Southwark,South East London,draruandpartners,Dr Aru And 
 southwark,Southwark,CCG,Southwark,South East London,dmccrystalpalaceroad,Dulwich Medical Centre,G85651,9518
 southwark,Southwark,CCG,Southwark,South East London,elmlodgesurgery,Elm Lodge Surgery,G85051,7600
 southwark,Southwark,CCG,Southwark,South East London,fhrgp,Forest Hill Road Group Practice,G85001,12459
-southwark,Southwark,CCG,Southwark,South East London,mgmp,Melbourne Grove and Hambleden Medical Practice,G85132,7200
 southwark,Southwark,CCG,Southwark,South East London,nunheadsurgery,Nunhead Surgery,G85685,9478
 southwark,Southwark,CCG,Southwark,South East London,oldkentroadsurgery,Old Kent Road Surgery,G85052,9905
 southwark,Southwark,CCG,Southwark,South East London,parkmedicalcentresouthwark,Park Medical Centre,G85125,6002
@@ -2269,7 +2266,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Churchdown Surgery,L84047,
 ,,,Other,,,St Catherine's Surgery,N85020,
 ,,,Other,,,Paxton Medical Group,N85044,
-,,,Other,,,Hoylake Road Medical Centre,N85046,
 ,,,Other,,,Herrington Medical Group,A89009,
 ,,,Other,,,The Garden Surgery,B86054,
 ,,,Other,,,Pinfold Medical Practice,C82011,
@@ -2597,7 +2593,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,South Hermitage Surgery,M82060,
 ,,,Other,,,Henley-in-Arden Medical Centre,M84024,
 ,,,Other,,,Watton Place Clinic,E82121,
-,,,Other,,,Goodmans Fields Health Centre,F84039,
 ,,,Other,,,Orchard Family Practice,G82162,
 ,,,Other,,,Emsworth Surgery,J82009,
 ,,,Other,,,Camrose Gillies and Hackwood Partnership,J82069,
@@ -2651,7 +2646,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,St Andrews Medical Practice,E83024,
 ,,,Other,,,Bush Doctors,E85055,
 ,,,Other,,,The Globe Town Surgery,F84123,
-,,,Other,,,Island Health,F84710,
 ,,,Other,,,Bounds Green Group Practice,F85066,
 ,,,Other,,,Wye Surgery,G82142,
 ,,,Other,,,Green Street Green Medical Centre,G84627,
@@ -2687,3 +2681,7 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Valley Medical Centre,N82092,
 ,,,Other,,,Newquay Health Centre,Y02517,
 ,,,Other,,,Montpelier Surgery,G81044,
+,,,Other,,,Hollyns Health and Wellbeing,B83045,
+,,,Other,,,Cauldwell Medical Centre,E81030,
+,,,Other,,,Maritime Health Partnership,G82744,
+,,,Other,,,Stretton Medical Centre,N81623,
