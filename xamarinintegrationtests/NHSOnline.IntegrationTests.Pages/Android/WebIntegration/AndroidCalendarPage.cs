@@ -46,5 +46,10 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
 
             _driver.SendKey(AndroidKeyCode.Keycode_ENTER);
         }
+
+        public void AddCalendarEventClick()
+        {
+            PageContent.AddCalendarEvent();
+        }
     }
 }

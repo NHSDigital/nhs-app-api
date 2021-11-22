@@ -1,3 +1,5 @@
+using System;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
@@ -11,10 +13,10 @@ using NHSOnline.IntegrationTests.Pages.IOS.WebIntegration;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using NHSOnline.IntegrationTests.WebIntegration.Pkb;
+using OpenQA.Selenium.Appium.Android;
 
 namespace NHSOnline.IntegrationTests.WebIntegration
 {
-    [TestCategory("CiaranTestAddToCalendarDecimalTimestamps")]
     [TestClass]
     [BusinessRule("BR-WI-01.6", "Adding an appointment to calendar with valid start and end dates invokes native calendar functionality with relevant fields supplied")]
     [BusinessRule("BR-WI-01.7", "Adding an appointment to calendar when invalid params have been sent prompts the user to add an event manually to the calendar")]
@@ -36,17 +38,41 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             NavigateToAddToCalendarViaPkbHospitalAppointmentsAndroid(driver);
 
-            AndroidCalendarPage
-                .AssertOnPage(driver)
+            var androidCalendarPage = AndroidCalendarPage
+                .AssertOnPage(driver);
+
+            androidCalendarPage
                 .AssertNativeHeader()
                 .AddCalendarDetails(ValidStartTime, ValidEndTime)
                 .AddCalendarEvent();
 
-            AndroidGoogleCalendarsApp
+            var androidGoogleCalendarsApp = AndroidGoogleCalendarsApp
                 .AssertOnPage(driver)
                 .NavigateThroughOverview()
-                .ConfirmGotIt()
-                .AssertDetailsArePassed();
+                .ConfirmGotIt();
+
+            TransitoryErrorHandler.HandleSpecificFailure()
+                .Alternate(() =>
+                    {
+                        androidGoogleCalendarsApp.AssertDetailsArePassed();
+                    },
+                    "No AndroidElement found matching By.XPath: .//android.widget.EditText[normalize-space(@text)='Test Subject']",
+                    () =>
+                    {
+                        Console.WriteLine("Add An Event To The Calendar RetryHandler revert action. Attempt to refresh calendar sync and try again.");
+
+                        // Manually sync Calendar by pressing 'Refresh' button
+                        driver.SendKey(AndroidKeyCode.Keycode_MENU);
+                        androidGoogleCalendarsApp.ClickRefreshText();
+
+                        Thread.Sleep(TimeSpan.FromSeconds(10));
+
+                        // Try re-add App event
+                        driver.PressBackButton();
+
+                        androidCalendarPage
+                            .AddCalendarEventClick();
+                    });
         }
 
         [NhsAppIOSTest]

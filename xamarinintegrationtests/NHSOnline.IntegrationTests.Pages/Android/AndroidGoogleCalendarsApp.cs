@@ -12,6 +12,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidLabel WelcomeText => AndroidLabel.WithText(_driver, "Google Calendar");
 
+        private AndroidLabel RefreshText => AndroidLabel.WithText(_driver, "Refresh");
+
         private AndroidImageView NextStandardImageView =>
             AndroidImageView.WithImageViewDescription(_driver, "next page");
 
@@ -22,6 +24,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             AndroidImageButton.WithDescription(_driver, "next page");
 
         private AndroidButton GotItButton => AndroidButton.WithText(_driver, "GOT IT");
+
+        private AndroidButton SaveButton => AndroidButton.WithText(_driver, "Save");
 
         private AndroidEditText SubjectText => AndroidEditText.WithText(_driver, "Test Subject");
 
@@ -69,6 +73,17 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         {
             GotItButton.Click();
             return this;
+        }
+
+        public AndroidGoogleCalendarsApp ClickRefreshText()
+        {
+            RefreshText.Click();
+            return this;
+        }
+
+        public void ClickSave()
+        {
+            SaveButton.Click();
         }
 
         public void AssertDetailsArePassed()
