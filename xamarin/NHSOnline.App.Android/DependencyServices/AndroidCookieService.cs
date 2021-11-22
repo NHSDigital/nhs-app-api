@@ -3,9 +3,11 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using Android.Webkit;
+using Microsoft.Extensions.Logging;
 using NHSOnline.App.Api.Client.Cookies;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Droid.DependencyServices;
+using NHSOnline.App.Logging;
 using NHSOnline.App.Threading;
 using Xamarin.Forms;
 
@@ -18,6 +20,8 @@ namespace NHSOnline.App.Droid.DependencyServices
         private static CookieManager CookieManager => CookieManager.Instance ??
                                                       throw new NotSupportedException(
                                                           "Could not get instance of Android CookieManager");
+
+        private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(AndroidCookieService));
 
         public async Task SetCookie(ApiCookie apiCookie)
         {
@@ -32,9 +36,16 @@ namespace NHSOnline.App.Droid.DependencyServices
         {
             var callBack = new CallBackResult();
 
-            CookieManager.RemoveSessionCookies(callBack);
+            try
+            {
+                CookieManager.RemoveSessionCookies(callBack);
 
-            await callBack.GetAwaitable().ResumeOnThreadPool();
+                await callBack.GetAwaitable().ResumeOnThreadPool();
+            }
+            catch (Exception exception)
+            {
+                Logger.LogError(exception, "Error clearing session cookies");
+            }
         }
 
         public Task<Cookie?> GetCookie(Uri uri, string cookieName)
