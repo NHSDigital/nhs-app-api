@@ -1,4 +1,5 @@
 ---
+name: ${{ parameters.environmentRefOverride }}-$(Build.SourceBranchName)-$(Date:yyyyMMdd)_$(Rev:r)
 trigger: none
 parameters:
   - name: reapply_config
