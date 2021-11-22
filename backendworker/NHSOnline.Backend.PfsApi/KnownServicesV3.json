@@ -75,7 +75,10 @@
     "netCompany": {
       "url": "https://stdevpistatic01.z33.web.core.windows.net",
       "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": true
+      "requiresAssertedLoginIdentity": true,
+      "domains": [
+        "https://nhscovidpass.queue-it.net"
+      ]
     },
     "gncr": {
       "showThirdPartyWarning": true,

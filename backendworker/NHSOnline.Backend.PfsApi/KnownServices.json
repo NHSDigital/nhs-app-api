@@ -544,6 +544,18 @@
         }
       ]
     },
+    "netCompany_queueIt": {
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": false,
+      "url": "https://nhscovidpass.queue-it.net"
+    },
     "gncr": {
       "subServices": null,
       "javaScriptInteractionMode": "SilverThirdParty",
