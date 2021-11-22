@@ -8,6 +8,7 @@ using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Threading;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.DependencyServices;
+using NHSOnline.App.DependencyServices.Navigation;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
@@ -18,11 +19,13 @@ namespace NHSOnline.App.Areas.Home.Views
     {
         private readonly ILogger _logger;
         private readonly AppNavigation<INhsAppWebView.IEvents> _appNavigation;
+        private readonly INavigationService _navigationService;
 
-        public NhsAppWebPage(ILogger<NhsAppWebPage> logger, IAccessibilityService accessibilityService): base(accessibilityService)
+        public NhsAppWebPage(ILogger<NhsAppWebPage> logger, IAccessibilityService accessibilityService, INavigationService navigationService): base(accessibilityService)
         {
             _logger = logger;
-            _appNavigation = new AppNavigation<INhsAppWebView.IEvents>(this, Navigation);
+            _navigationService = navigationService;
+            _appNavigation = new AppNavigation<INhsAppWebView.IEvents>(this, _navigationService);
 
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);

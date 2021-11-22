@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.App.DependencyServices.Navigation;
 using NHSOnline.App.Services.FIDO;
 using NHSOnline.App.Services.ForcedUpdate;
 using NHSOnline.App.Services.Media;
@@ -11,6 +12,7 @@ namespace NHSOnline.App.Services
         {
             return services
                 .AddSingleton<IForcedUpdateCheckService, ForcedUpdateCheckService>()
+                .AddSingleton<INavigationService, NhsAppNavigationService>()
                 .AddTransient<NhsAppCookieService>()
                 .AddTransient<IBiometricAuthenticationService, BiometricAuthenticationService>()
                 .AddTransient<BiometricRegistrationService>()

@@ -4,6 +4,7 @@ using System.Windows.Input;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.DependencyServices;
+using NHSOnline.App.DependencyServices.Navigation;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -15,11 +16,13 @@ namespace NHSOnline.App.Areas.Errors.Views
     {
         private readonly ILogger<CloseSlimBackToHomeNetworkErrorPage> _logger;
         private readonly AppNavigation<ICloseSlimBackToHomeNetworkErrorView.IEvents> _appNavigation;
+        private readonly INavigationService _navigationService;
 
-        public CloseSlimBackToHomeNetworkErrorPage(ILogger<CloseSlimBackToHomeNetworkErrorPage> logger, IAccessibilityService accessibilityService): base(accessibilityService)
+        public CloseSlimBackToHomeNetworkErrorPage(ILogger<CloseSlimBackToHomeNetworkErrorPage> logger, IAccessibilityService accessibilityService, INavigationService navigationService): base(accessibilityService)
         {
             _logger = logger;
-            _appNavigation = new AppNavigation<ICloseSlimBackToHomeNetworkErrorView.IEvents>(this, Navigation);
+            _navigationService = navigationService;
+            _appNavigation = new AppNavigation<ICloseSlimBackToHomeNetworkErrorView.IEvents>(this, _navigationService);
 
             InitializeComponent();
 

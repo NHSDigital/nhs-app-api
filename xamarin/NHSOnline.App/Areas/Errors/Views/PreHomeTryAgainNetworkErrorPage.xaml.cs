@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
+using NHSOnline.App.DependencyServices.Navigation;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -14,11 +15,13 @@ namespace NHSOnline.App.Areas.Errors.Views
     {
         private readonly ILogger<PreHomeTryAgainNetworkErrorPage> _logger;
         private readonly AppNavigation<IPreHomeTryAgainNetworkErrorView.IEvents> _appNavigation;
+        private readonly INavigationService _navigationService;
 
-        public PreHomeTryAgainNetworkErrorPage(ILogger<PreHomeTryAgainNetworkErrorPage> logger)
+        public PreHomeTryAgainNetworkErrorPage(ILogger<PreHomeTryAgainNetworkErrorPage> logger, INavigationService navigationService)
         {
             _logger = logger;
-            _appNavigation = new AppNavigation<IPreHomeTryAgainNetworkErrorView.IEvents>(this, Navigation);
+            _navigationService = navigationService;
+            _appNavigation = new AppNavigation<IPreHomeTryAgainNetworkErrorView.IEvents>(this, _navigationService);
 
             InitializeComponent();
 

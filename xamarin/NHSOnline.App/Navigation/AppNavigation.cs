@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.DependencyServices.Navigation;
 using NHSOnline.App.Logging;
 using NHSOnline.App.Threading;
 using Xamarin.Forms;
@@ -16,12 +17,12 @@ namespace NHSOnline.App.Navigation
         private readonly List<Action> _suppressHandlers = new List<Action>();
 
         private readonly TEvents _viewEvents;
-        private readonly INavigation _navigation;
+        private readonly INavigationService _navigationService;
 
-        public AppNavigation(TEvents viewEvents, INavigation navigation)
+        public AppNavigation(TEvents viewEvents, INavigationService navigationService)
         {
             _viewEvents = viewEvents;
-            _navigation = navigation;
+            _navigationService = navigationService;
         }
 
         public IAppNavigation<TEvents> RegisterHandler(
@@ -73,59 +74,41 @@ namespace NHSOnline.App.Navigation
             return Task.CompletedTask;
         }
 
-        private static void SuppressedEventSync<TArgs>(TArgs arg)
-        {
+        private static void SuppressedEventSync<TArgs>(TArgs arg) =>
             Logger.LogInformation("Suppressing event ({TArgs})", typeof(TArgs).Name);
-        }
 
-        public void EnableHandlers()
-        {
-            _enableHandlers.ForEach(enable => enable());
-        }
+        public void EnableHandlers() => _enableHandlers.ForEach(enable => enable());
 
-        public void SuppressHandlers()
-        {
-            _suppressHandlers.ForEach(suppress => suppress());
-        }
+        public void SuppressHandlers() => _suppressHandlers.ForEach(suppress => suppress());
 
         public async Task Push(Page page)
         {
             SuppressHandlers();
-
-            await _navigation.PushAsync(page, false).PreserveThreadContext();
+            await _navigationService.Push(page).PreserveThreadContext();
         }
 
         public async Task Pop()
         {
             SuppressHandlers();
-
-            await _navigation.PopAsync(false).PreserveThreadContext();
+            await _navigationService.Pop().PreserveThreadContext();
         }
 
         public async Task PopToRoot()
         {
             SuppressHandlers();
-
-            await _navigation.PopToRootAsync(false).PreserveThreadContext();
+            await _navigationService.PopToRoot().PreserveThreadContext();
         }
 
         public async Task PopToNewRoot(Page newRootPage)
         {
             SuppressHandlers();
-
-            _navigation.InsertPageBefore(newRootPage, _navigation.NavigationStack[0]);
-            await _navigation.PopToRootAsync(false).PreserveThreadContext();
+            await _navigationService.PopToNewRoot(newRootPage).PreserveThreadContext();
         }
 
         public async Task ReplaceCurrentPage(Page page)
         {
             SuppressHandlers();
-
-            var currentPage = _navigation.NavigationStack[^1];
-
-            await _navigation.PushAsync(page, false).PreserveThreadContext();
-
-            _navigation.RemovePage(currentPage);
+            await _navigationService.ReplaceCurrentPage(page).PreserveThreadContext();
         }
     }
 }

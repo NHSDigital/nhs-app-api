@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.DependencyServices;
+using NHSOnline.App.DependencyServices.Navigation;
 using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut.Views
@@ -14,11 +15,13 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
     {
         private readonly ILogger _logger;
         private readonly AppNavigation<IBiometricLoginFingerprintFaceIrisFailedView.IEvents> _appNavigation;
+        private readonly INavigationService _navigationService;
 
-        public BiometricLoginFingerprintFailedPage(ILogger<BiometricLoginFingerprintFailedPage> logger, IAccessibilityService accessibilityService): base(accessibilityService)
+        public BiometricLoginFingerprintFailedPage(ILogger<BiometricLoginFingerprintFailedPage> logger, IAccessibilityService accessibilityService, INavigationService navigationService): base(accessibilityService)
         {
             _logger = logger;
-            _appNavigation = new AppNavigation<IBiometricLoginFingerprintFaceIrisFailedView.IEvents>(this, Navigation);
+            _navigationService = navigationService;
+            _appNavigation = new AppNavigation<IBiometricLoginFingerprintFaceIrisFailedView.IEvents>(this, _navigationService);
 
             InitializeComponent();
         }
@@ -32,7 +35,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         {
             _logger.LogInformation("{Method}", nameof(OnAppearing));
             _appNavigation.EnableHandlers();
-            
+
             base.OnAppearing();
         }
 

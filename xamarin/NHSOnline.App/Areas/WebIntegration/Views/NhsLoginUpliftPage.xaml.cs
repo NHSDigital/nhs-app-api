@@ -6,6 +6,7 @@ using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyServices;
+using NHSOnline.App.DependencyServices.Navigation;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
@@ -16,11 +17,13 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
     {
         private readonly ILogger _logger;
         private readonly AppNavigation<INhsLoginUpliftView.IEvents> _appNavigation;
+        private readonly INavigationService _navigationService;
 
-        public NhsLoginUpliftPage(ILogger<NhsLoginUpliftPage> logger, IAccessibilityService accessibilityService): base(accessibilityService)
+        public NhsLoginUpliftPage(ILogger<NhsLoginUpliftPage> logger, IAccessibilityService accessibilityService, INavigationService navigationService): base(accessibilityService)
         {
             _logger = logger;
-            _appNavigation = new AppNavigation<INhsLoginUpliftView.IEvents>(this, Navigation);
+            _navigationService = navigationService;
+            _appNavigation = new AppNavigation<INhsLoginUpliftView.IEvents>(this, _navigationService);
 
             InitializeComponent();
 

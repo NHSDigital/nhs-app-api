@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.DependencyServices;
+using NHSOnline.App.DependencyServices.Navigation;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
@@ -15,11 +16,13 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
     {
         private readonly ILogger _logger;
         private readonly AppNavigation<ICreateSessionErrorBadRequestView.IEvents> _appNavigation;
+        private readonly INavigationService _navigationService;
 
-        public CreateSessionErrorBadRequestPage(ILogger<CreateSessionErrorBadRequestPage> logger, IAccessibilityService accessibilityService): base(accessibilityService)
+        public CreateSessionErrorBadRequestPage(ILogger<CreateSessionErrorBadRequestPage> logger, IAccessibilityService accessibilityService, INavigationService navigationService): base(accessibilityService)
         {
             _logger = logger;
-            _appNavigation = new AppNavigation<ICreateSessionErrorBadRequestView.IEvents>(this, Navigation);
+            _navigationService = navigationService;
+            _appNavigation = new AppNavigation<ICreateSessionErrorBadRequestView.IEvents>(this, _navigationService);
 
             InitializeComponent();
         }

@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.DependencyServices;
+using NHSOnline.App.DependencyServices.Navigation;
 using NHSOnline.App.Navigation;
 using NHSOnline.App.Threading;
 
@@ -15,14 +16,16 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
     {
         private readonly ILogger _logger;
         private readonly AppNavigation<IGettingStartedView.IEvents> _appNavigation;
+        private readonly INavigationService _navigationService;
 
         public GettingStartedPage(
             ILogger<GettingStartedPage> logger,
-            IAccessibilityService accessibilityService)
+            IAccessibilityService accessibilityService, INavigationService navigationService)
             : base(accessibilityService)
         {
             _logger = logger;
-            _appNavigation = new AppNavigation<IGettingStartedView.IEvents>(this, Navigation);
+            _navigationService = navigationService;
+            _appNavigation = new AppNavigation<IGettingStartedView.IEvents>(this, _navigationService);
 
             InitializeComponent();
         }

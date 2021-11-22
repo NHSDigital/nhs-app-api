@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Config;
+using NHSOnline.App.DependencyServices.Navigation;
 using NHSOnline.App.Services;
 using NHSOnline.App.Threading;
 
@@ -12,17 +13,19 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly IBrowserOverlay _browserOverlay;
         private readonly INhsExternalServicesConfiguration _nhsExternalServices;
         private readonly ILogger<UpdateCheckFailedPresenter> _logger;
+        readonly INavigationService _navigationService;
 
         public UpdateCheckFailedPresenter(
             IUpdateCheckFailedView view,
             IBrowserOverlay browserOverlay,
             INhsExternalServicesConfiguration nhsExternalServices,
-            ILogger<UpdateCheckFailedPresenter> logger)
+            ILogger<UpdateCheckFailedPresenter> logger, INavigationService navigationService)
         {
             _view = view;
             _browserOverlay = browserOverlay;
             _nhsExternalServices = nhsExternalServices;
             _logger = logger;
+            _navigationService = navigationService;
 
             view.AppNavigation
                 .RegisterHandler(OneOneOneRequested, (view, handler) => view.OneOneOneRequested = handler)
@@ -41,13 +44,13 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task BackToLoginRequested()
         {
             _logger.LogInformation("Back to login requested");
-            await _view.AppNavigation.Pop().PreserveThreadContext();
+            await _navigationService.Pop().PreserveThreadContext();
         }
 
         private async Task BackRequested()
         {
             _logger.LogInformation("Back requested");
-            await _view.AppNavigation.Pop().PreserveThreadContext();
+            await _navigationService.Pop().PreserveThreadContext();
         }
     }
 }

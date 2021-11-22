@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.DependencyServices;
+using NHSOnline.App.DependencyServices.Navigation;
 using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.LoggedOut.Views
@@ -14,11 +15,13 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
     {
         private readonly ILogger _logger;
         private readonly AppNavigation<ICreateSessionErrorFailedAgeRequirementView.IEvents> _appNavigation;
+        private readonly INavigationService _navigationService;
 
-        public CreateSessionErrorFailedAgeRequirementPage(ILogger<CreateSessionErrorFailedAgeRequirementPage> logger, IAccessibilityService accessibilityService): base(accessibilityService)
+        public CreateSessionErrorFailedAgeRequirementPage(ILogger<CreateSessionErrorFailedAgeRequirementPage> logger, IAccessibilityService accessibilityService, INavigationService navigationService): base(accessibilityService)
         {
             _logger = logger;
-            _appNavigation = new AppNavigation<ICreateSessionErrorFailedAgeRequirementView.IEvents>(this, Navigation);
+            _navigationService = navigationService;
+            _appNavigation = new AppNavigation<ICreateSessionErrorFailedAgeRequirementView.IEvents>(this, _navigationService);
 
             InitializeComponent();
         }

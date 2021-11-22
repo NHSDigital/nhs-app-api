@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.DependencyInjection;
+using NHSOnline.App.DependencyServices.Navigation;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
 using NHSOnline.App.Services.ForcedUpdate;
@@ -20,6 +21,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly IForcedUpdateCheckService _forcedUpdateCheckService;
         private readonly IUserPreferencesService _userPreferencesService;
         private readonly NhsAppCookieService _nhsAppCookieService;
+        private readonly INavigationService _navigationService;
 
         private Uri? _deeplinkUrl;
         private Uri? ResolveDeeplinkUrl => _deeplinkUrl ?? _model.DeeplinkUrl;
@@ -32,7 +34,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             INhsLoginService nhsLoginService,
             IForcedUpdateCheckService forcedUpdateCheckService,
             IUserPreferencesService userPreferencesService,
-            NhsAppCookieService nhsAppCookieService)
+            NhsAppCookieService nhsAppCookieService, INavigationService navigationService)
         {
             _view = view;
             _model = model;
@@ -42,6 +44,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _forcedUpdateCheckService = forcedUpdateCheckService;
             _userPreferencesService = userPreferencesService;
             _nhsAppCookieService = nhsAppCookieService;
+            _navigationService = navigationService;
 
             view.AppNavigation
                 .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)

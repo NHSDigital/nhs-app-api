@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.Payloads;
+using NHSOnline.App.DependencyServices.Navigation;
 using NHSOnline.App.Navigation;
 using NHSOnline.App.Threading;
 using Xamarin.Forms;
@@ -16,11 +17,13 @@ namespace NHSOnline.App.Areas.PreHome.Views
     {
         private readonly ILogger _logger;
         private readonly AppNavigation<INhsAppPreHomeScreenWebView.IEvents> _appNavigation;
+        private readonly INavigationService _navigationService;
 
-        public NhsAppPreHomeScreenWebPage(ILogger<NhsAppPreHomeScreenWebPage> logger)
+        public NhsAppPreHomeScreenWebPage(ILogger<NhsAppPreHomeScreenWebPage> logger, INavigationService navigationService)
         {
             _logger = logger;
-            _appNavigation = new AppNavigation<INhsAppPreHomeScreenWebView.IEvents>(this, Navigation);
+            _navigationService = navigationService;
+            _appNavigation = new AppNavigation<INhsAppPreHomeScreenWebView.IEvents>(this, _navigationService);
 
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
