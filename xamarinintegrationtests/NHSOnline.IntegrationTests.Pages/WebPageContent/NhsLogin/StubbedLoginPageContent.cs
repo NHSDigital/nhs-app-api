@@ -42,7 +42,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsLogin
         public void Login(Patient patient)
         {
             PatientIdWebInputText.EnterText(patient.Id);
-            LoginButton.Click();
+            LoginButtonClick();
         }
 
         public void Back() => BackLink.Click();
@@ -52,6 +52,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsLogin
         public void InternalPageNewWindow() => InternalPageNewWindowLink.Click();
 
         public void Covid() => CovidLink.Click();
+
+        public void LoginButtonClick() => LoginButton.Click();
 
         public void LoginWithLoginTermsAndConditions(Patient patient)
         {

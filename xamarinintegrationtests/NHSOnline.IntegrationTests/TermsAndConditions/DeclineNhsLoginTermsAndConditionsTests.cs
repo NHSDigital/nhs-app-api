@@ -26,21 +26,30 @@ namespace NHSOnline.IntegrationTests.TermsAndConditions
                 .AssertOnPage(driver)
                 .Continue();
 
-            AndroidStubbedLoginPageSlimHeader
-                .AssertOnPage(driver)
+            var androidStubbedLoginPageSlimHeader = AndroidStubbedLoginPageSlimHeader
+                .AssertOnPage(driver);
+
+            androidStubbedLoginPageSlimHeader
                 .PageContent.LoginWithLoginTermsAndConditions(patient);
 
-            AndroidStubbedLoginTermsAndConditionsPage
-                .AssertOnPage(driver)
-                .PageContent.DeclineTermsAndConditions();
+            TransitoryErrorRetryHandler.RetryOnSpecificFailure()
+                .Handle(() =>
+                    {
+                        AndroidStubbedLoginTermsAndConditionsPage
+                            .AssertOnPage(driver)
+                            .PageContent.DeclineTermsAndConditions();
 
-            AndroidNeedToAcceptNhsTermsOfUsePage
-                .AssertOnPage(driver)
-                .AssertPageContent()
-                .BackToLogin();
+                        AndroidNeedToAcceptNhsTermsOfUsePage
+                            .AssertOnPage(driver)
+                            .AssertPageContent()
+                            .BackToLogin();
 
-            AndroidLoggedOutHomePage
-                .AssertOnPage(driver);
+                        AndroidLoggedOutHomePage
+                            .AssertOnPage(driver);
+                    },
+                    "No IWebElement found matching By.XPath: //h1[normalize-space()='NHS Login - Terms and Conditions']",
+                    // Intermittent issue where the on-screen keyboard appears. Clicking 'Login' again will continue test.
+                    () => { androidStubbedLoginPageSlimHeader.PageContent.LoginButtonClick(); });
         }
 
         [NhsAppIOSTest]
