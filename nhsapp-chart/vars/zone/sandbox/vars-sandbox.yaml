@@ -21,6 +21,8 @@ fakeGpSystemEnabled: true
 econsultEnabled: true
 sixteenWeeksSlotsEnabled: true
 
+organDonationDesktopEnabled: true
+
 api:
   knownServicesOverrides:
     services__ndop__url: https://ndopapp-int1.thunderbird.service.nhs.uk

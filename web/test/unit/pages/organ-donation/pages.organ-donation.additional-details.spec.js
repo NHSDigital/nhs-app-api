@@ -1,5 +1,4 @@
 import AdditionalDetails from '@/pages/organ-donation/additional-details';
-import BackButton from '@/components/BackButton';
 import find from 'lodash/fp/find';
 import i18n from '@/plugins/i18n';
 import {
@@ -8,7 +7,7 @@ import {
 } from '@/router/paths';
 import { DECISION_OPT_IN, initialState } from '@/store/modules/organDonation/mutation-types';
 import { redirectTo } from '@/lib/utils';
-import { createStore, mount } from '../../helpers';
+import { createStore, mount, createRouter } from '../../helpers';
 
 jest.mock('@/lib/utils', () => ({
   ...jest.requireActual('@/lib/utils'),
@@ -31,7 +30,7 @@ describe('additional-details', () => {
 
   beforeEach(() => {
     redirectTo.mockClear();
-    $router = [];
+    $router = createRouter();
     state = {
       organDonation: initialState(),
       device: {
@@ -136,14 +135,14 @@ describe('additional-details', () => {
 
     describe('back', () => {
       describe('button', () => {
-        let backButton;
+        let backLink;
 
         beforeEach(() => {
-          backButton = wrapper.find(BackButton);
+          backLink = wrapper.find('[data-purpose=main-back-button]');
         });
 
         it('will exist', () => {
-          expect(backButton.exists()).toBe(true);
+          expect(backLink.exists()).toBe(true);
         });
       });
     });

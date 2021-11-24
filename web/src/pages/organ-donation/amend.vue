@@ -5,19 +5,18 @@
         <find-out-more-link/>
       </menu-item-list>
       <make-decision/>
-      <generic-button v-if="!$store.state.device.isNativeApp"
-                      id="back-button"
-                      :class="['nhsuk-button', 'nhsuk-button--secondary']"
-                      @click="goBack" >
-        {{ $t('generic.back') }}
-      </generic-button>
+      <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
+                              id="back-link"
+                              :path="organDonationPath"
+                              :button-text="'generic.back'"
+                              @clickAndPrevent="backButtonClicked"/>
     </div>
   </div>
 </template>
 
 <script>
 import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
-import GenericButton from '@/components/widgets/GenericButton';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
 import MenuItemList from '@/components/MenuItemList';
 import { INDEX_PATH, ORGAN_DONATION_PATH } from '@/router/paths';
@@ -27,19 +26,25 @@ import { redirectTo } from '@/lib/utils';
 export default {
   components: {
     FindOutMoreLink,
-    GenericButton,
+    DesktopGenericBackLink,
     MakeDecision,
     MenuItemList,
   },
+  data() {
+    return {
+      organDonationPath: ORGAN_DONATION_PATH,
+    };
+  },
   mounted() {
-    if (!isNativeApp({ route: this.$route, store: this.$store })) {
+    if (!isNativeApp({ store: this.$store })
+    && !this.$store.$env.ORGAN_DONATION_DESKTOP_ENABLED) {
       redirectTo(this, INDEX_PATH);
     } else if (!this.$store.state.organDonation.isAmending) {
       redirectTo(this, ORGAN_DONATION_PATH);
     }
   },
   methods: {
-    goBack() {
+    backButtonClicked() {
       this.$store.dispatch('organDonation/amendCancel');
       redirectTo(this, ORGAN_DONATION_PATH);
     },

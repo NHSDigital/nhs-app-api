@@ -32,16 +32,20 @@
                       @click.prevent="continueClicked">
         {{ $t('generic.continue') }}
       </generic-button>
-      <back-button v-if="!$store.state.device.isNativeApp"/>
+      <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
+                              :path="backLink"
+                              :button-text="'generic.back'"
+                              @clickAndPrevent="backClicked"/>
     </div>
   </div>
 </template>
 <script>
 /* eslint-disable no-restricted-syntax */
 import includes from 'lodash/fp/includes';
-import BackButton from '@/components/BackButton';
 import EnsureDecisionMixin from '@/components/organ-donation/EnsureDecisionMixin';
 import GenericButton from '@/components/widgets/GenericButton';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import DynamicBackLinkMixin from '@/components/organ-donation/DynamicBackLinkMixin';
 import ErrorDialog from '@/components/ErrorDialog';
 import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
 import OrganChoice from '@/components/organ-donation/OrganChoice';
@@ -54,13 +58,13 @@ import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
 export default {
   scrollToTop: true,
   components: {
-    BackButton,
     GenericButton,
+    DesktopGenericBackLink,
     ErrorDialog,
     NhsArrowBanner,
     OrganChoice,
   },
-  mixins: [EnsureDecisionMixin],
+  mixins: [EnsureDecisionMixin, DynamicBackLinkMixin],
   data() {
     return {
       activeErrorMessage: '',

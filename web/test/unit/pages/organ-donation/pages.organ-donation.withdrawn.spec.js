@@ -10,7 +10,7 @@ describe('withdrawn', () => {
     $store = createStore({
       state: {
         device: {
-          isNativeApp: true,
+          isNativeApp: false,
         },
       },
     });

@@ -7,7 +7,7 @@ import { isNativeApp } from '@/components/NativeOnlyMixin';
 const getDecision = get('state.organDonation.registration.decision');
 const canAmendDecision = decision => ![DECISION_APPOINTED_REP, DECISION_UNKNOWN].includes(decision);
 const redirectIfFalse = ({ redirect, store, value }) => {
-  if (!isNativeApp({ store })) {
+  if (!isNativeApp({ store }) && !store.$env.ORGAN_DONATION_DESKTOP_ENABLED) {
     redirect(INDEX_PATH);
   } else if (!value) {
     redirect(ORGAN_DONATION_PATH);

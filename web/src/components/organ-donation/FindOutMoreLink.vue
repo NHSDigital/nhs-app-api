@@ -1,6 +1,6 @@
 <template>
   <menu-item id="btn_findOutMore"
-             header-tag="h3"
+             header-tag="h2"
              :href="findOutMoreUrl"
              target="_blank"
              :text="$t('organDonation.findOutMoreAbout')"

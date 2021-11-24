@@ -69,56 +69,61 @@ describe('organ donation amend page', () => {
       });
     });
 
+    describe('check amending', () => {
+      describe('is not amending', () => {
+        beforeEach(() => {
+          wrapper = mountWrapper({ isAmending: false, isNativeApp: true });
+        });
+
+        it('will redirect back to the organ donation page', () => {
+          expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, ORGAN_DONATION_PATH);
+        });
+      });
+
+      describe('is amending', () => {
+        beforeEach(() => {
+          mountWrapper({ isAmending: true, isNativeApp: true });
+        });
+
+        it('will not redirect', () => {
+          expect(redirectTo).not.toHaveBeenCalled();
+        });
+      });
+    });
+
     describe('is amending', () => {
+      let backLink;
       beforeEach(() => {
-        mountWrapper({ isAmending: true, isNativeApp: true });
+        wrapper = mountWrapper({ isAmending: true });
+        backLink = wrapper.find('#back-link').find('a');
       });
 
-      it('will not redirect', () => {
-        expect(redirectTo).not.toHaveBeenCalled();
-      });
-    });
-  });
-
-  describe('is amending', () => {
-    beforeEach(() => {
-      wrapper = mountWrapper({ isAmending: true });
-    });
-
-    it('will show the "MakeDecision" component', () => {
-      expect(wrapper.find(MakeDecision).exists()).toEqual(true);
-    });
-
-    it('will show the find out more link', () => {
-      expect(wrapper.find(FindOutMoreLink).exists()).toEqual(true);
-    });
-
-    describe('back button', () => {
-      let backButton;
-
-      beforeEach(() => {
-        backButton = wrapper.find('#back-button');
+      it('will show the "MakeDecision" component', () => {
+        expect(wrapper.find(MakeDecision).exists()).toEqual(true);
       });
 
-      it('will exist', () => {
-        expect(backButton.exists()).toEqual(true);
+      it('will show the find out more link', () => {
+        expect(wrapper.find(FindOutMoreLink).exists()).toEqual(true);
       });
 
-      it('will be a button with a grey nhsuk-button style', () => {
-        const classes = backButton.classes();
-        expect(classes).toContain('nhsuk-button');
-        expect(classes).toContain('nhsuk-button--secondary');
-      });
+      describe('button', () => {
+        it('will exist', () => {
+          expect(backLink.exists()).toBe(true);
+        });
 
-      it('will translate the generic back button text', () => {
-        expect(backButton.text()).toEqual('Back');
+        it('will exist', () => {
+          expect(backLink.exists()).toBe(true);
+        });
+
+        it('will display the correct text', () => {
+          expect(backLink.text()).toEqual('Back');
+        });
       });
 
       describe('click', () => {
         beforeEach(() => {
-          backButton.trigger('click');
+          backLink.trigger('click');
         });
-
         it('will dispatch the "amendCancel" event', () => {
           expect($store.dispatch).toHaveBeenCalledWith('organDonation/amendCancel');
         });

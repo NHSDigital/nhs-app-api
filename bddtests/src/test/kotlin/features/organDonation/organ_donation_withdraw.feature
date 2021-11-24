@@ -4,8 +4,7 @@ Feature: Organ Donation Withdraw Frontend
 # These tests navigate directly to the pages where the features are to be tested, to save time.
   #All combinations of GP System users and Decisions have been covered in backend tests
   Scenario Outline: As a <GP System> user, I can withdraw previously registered <Decision> organ donation decision
-    Given I am using the native app user agent
-    And I am a <GP System> user registered with organ donation with a decision to <Decision> who wishes to withdraw
+    Given I am a <GP System> user registered with organ donation with a decision to <Decision> who wishes to withdraw
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to <Decision>
@@ -26,8 +25,7 @@ Feature: Organ Donation Withdraw Frontend
       | appoint-a-representative | EMIS      |
 
   Scenario: A user sees an error message without retry option when trying to withdraw a previously registered organ donation decision and access is denied
-    Given I am using the native app user agent
-    And I am a TPP user registered with organ donation with a decision to opt-out who wishes to withdraw but OD returns non-recoverable 502 error
+    Given I am a TPP user registered with organ donation with a decision to opt-out who wishes to withdraw but OD returns non-recoverable 502 error
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-out
@@ -43,8 +41,7 @@ Feature: Organ Donation Withdraw Frontend
     Then I see an appropriate Organ Donation error message without a retry option
 
   Scenario: A user sees an error message with a retry option when trying to withdraw a previously registered organ donation decision and timeout occurs
-    Given I am using the native app user agent
-    And I am a VISION user registered with organ donation with a decision to opt-out who wishes to withdraw but OD returns recoverable 503 error
+    Given I am a VISION user registered with organ donation with a decision to opt-out who wishes to withdraw but OD returns recoverable 503 error
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-out
@@ -61,8 +58,7 @@ Feature: Organ Donation Withdraw Frontend
     Then the Organ Donation View Registration page is displayed with my decision to withdraw
 
   Scenario: A user is shown a validation error if an organ donation withdrawal reason is not selected
-    Given I am using the native app user agent
-    And I am a EMIS user registered with organ donation with a decision to opt-in who wishes to withdraw
+    Given I am a EMIS user registered with organ donation with a decision to opt-in who wishes to withdraw
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
@@ -76,14 +72,13 @@ Feature: Organ Donation Withdraw Frontend
     And my decision to withdraw is recorded on the Organ Donation Check Details page
 
   Scenario: A user can navigate back through the withdraw journey
-    Given I am using the native app user agent
-    And I am a EMIS user registered with organ donation with a decision to opt-in who wishes to withdraw
+    Given I am a EMIS user registered with organ donation with a decision to opt-in who wishes to withdraw
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
     When I choose to withdraw my organ donation decision
     Then the Organ Donation Withdraw Decision page is displayed
-    When I click the 'Back' breadcrumb
+    When I click the Back link on an Organ Donation page
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
     When I choose to withdraw my organ donation decision
     Then the Organ Donation Withdraw Decision page is displayed
@@ -93,8 +88,7 @@ Feature: Organ Donation Withdraw Frontend
     And my decision to withdraw is recorded on the Organ Donation Check Details page
 
   Scenario: A user, when attempting to withdraw a previously registered organ donation decision, but OD takes too long to respond, is shown decision pending page
-    Given I am using the native app user agent
-    And I am a EMIS user registered with organ donation with a decision to opt-in who wishes to opt-out but OD takes too long to respond
+    Given I am a EMIS user registered with organ donation with a decision to opt-in who wishes to opt-out but OD takes too long to respond
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
@@ -110,8 +104,7 @@ Feature: Organ Donation Withdraw Frontend
     Then I see an appropriate Organ Donation decision processing message without a retry option
 
   Scenario: A user can find out more about changes to the organ donation laws when withdrawing
-    Given I am using the native app user agent
-    And 'Organ Donation' responds to requests for '/app-law'
+    Given 'Organ Donation' responds to requests for '/app-law'
     And I am a VISION user registered with organ donation with a decision to opt-out who wishes to withdraw but OD returns recoverable 503 error
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
@@ -122,8 +115,7 @@ Feature: Organ Donation Withdraw Frontend
     Then a new tab has been opened by the link
 
   Scenario: A user can decide to amend their decision when withdrawing
-    Given I am using the native app user agent
-    And I am a VISION user registered with organ donation with a decision to opt-out who wishes to withdraw but OD returns recoverable 503 error
+    Given I am a VISION user registered with organ donation with a decision to opt-out who wishes to withdraw but OD returns recoverable 503 error
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-out
@@ -133,8 +125,7 @@ Feature: Organ Donation Withdraw Frontend
     Then the amend Organ Donation Choice Page is displayed
 
   Scenario: A user can find out more about changes to the organ donation laws after withdrawing
-    Given I am using the native app user agent
-    And 'Organ Donation' responds to requests for '/app-law'
+    Given 'Organ Donation' responds to requests for '/app-law'
     And I am a EMIS user registered with organ donation with a decision to opt-in who wishes to withdraw
     And I am logged in
     When I retrieve the 'Organ Donation' page directly

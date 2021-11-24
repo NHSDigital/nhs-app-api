@@ -12,7 +12,7 @@ import {
   STATE_OK,
 } from '@/store/modules/organDonation/mutation-types';
 import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
-import { createStore, initFilters, mount } from '../../helpers';
+import { createRouter, createStore, initFilters, mount } from '../../helpers';
 
 jest.mock('@/services/event-bus', () => ({
   ...jest.requireActual('@/services/event-bus'),
@@ -48,18 +48,20 @@ const createState = ({
   return {
     organDonation,
     device: {
-      isNativeApp: true,
+      isNativeApp: false,
     },
   };
 };
 
 describe('review your decision', () => {
+  let $router;
   let $store;
   let wrapper;
 
   const mountPage = ({ state, getters }) => {
+    $router = createRouter();
     $store = createStore({ state, getters });
-    return mount(ReviewYourDecision, { $store, mountOpts: { i18n } });
+    return mount(ReviewYourDecision, { $router, $store, mountOpts: { i18n } });
   };
 
   beforeEach(() => {

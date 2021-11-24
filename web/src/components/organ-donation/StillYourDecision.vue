@@ -2,11 +2,9 @@
   <div>
     <h3>{{ $t('organDonation.stillYourDecision.isThisStillYourDecision') }}</h3>
     <p>{{ $t('organDonation.stillYourDecision.keepingUpToDateWillHelp') }}</p>
-    <ul class="nhsuk-list">
-      <reaffirm-decision-link v-if="showReaffirm"
-                              :is-some-organs="isSomeOrgans"/>
-      <amend-decision-link v-if="showAmend"/>
-    </ul>
+    <reaffirm-decision-link v-if="showReaffirm"
+                            :is-some-organs="isSomeOrgans"/>
+    <amend-decision-link v-if="showAmend"/>
   </div>
 </template>
 

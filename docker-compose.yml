@@ -74,6 +74,7 @@ services:
       - ./docker/well-known.env
       - ./docker/gp_session_connectivity.env
       - ./docker/health_checks_enabled.env
+      - ./docker/organ_donation_desktop_enabled.env
 
   pfs.local.bitraft.io:
     image: ${PFSAPI_DOCKER_REGISTRY:-local}/nhsonline-backendpfsapi:${PFSAPI_DOCKER_TAG:-latest}

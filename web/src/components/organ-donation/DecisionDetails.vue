@@ -11,7 +11,7 @@
         <h4 class="nhsuk-heading-xs nhsuk-u-margin-0">
           {{ $t('organDonation.decisionDetails.youHaveChosenToDonate') }}
         </h4>
-        <ul class="nhsuk-list nhsuk-u-margin-left-3">
+        <ul class="nhsuk-list nhsuk-u-margin-left-0">
           <li v-for="choice in chosen" :key="choice">
             {{ $t(`organDonation.organs.${choice}`) }}
           </li>
@@ -21,7 +21,7 @@
         <h4 class="nhsuk-heading-xs nhsuk-u-margin-0">
           {{ $t('organDonation.decisionDetails.youHaveChosenNotToDonate') }}
         </h4>
-        <ul class="nhsuk-list nhsuk-u-margin-left-3">
+        <ul class="nhsuk-list nhsuk-u-margin-left-0">
           <li v-for="choice in notChosen" :key="choice">
             {{ $t(`organDonation.organs.${choice}`) }}
           </li>
@@ -31,7 +31,7 @@
         <h4 class="nhsuk-heading-xs nhsuk-u-margin-0">
           {{ $t('organDonation.decisionDetails.weDoNotHaveADecisionFor') }}
         </h4>
-        <ul class="nhsuk-list nhsuk-u-margin-left-3">
+        <ul class="nhsuk-list nhsuk-u-margin-left-0">
           <li v-for="choice in notStated" :key="choice">
             {{ $t(`organDonation.organs.${choice}`) }}
           </li>

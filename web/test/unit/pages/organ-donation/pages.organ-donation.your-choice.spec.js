@@ -15,7 +15,7 @@ const createState = (choice = '') => {
   const state = {
     organDonation: initialState(),
     device: {
-      isNativeApp: true,
+      isNativeApp: false,
     },
   };
 

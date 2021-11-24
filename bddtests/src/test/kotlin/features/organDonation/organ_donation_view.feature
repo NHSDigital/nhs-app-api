@@ -2,27 +2,17 @@
 Feature: Organ Donation View Frontend
 
 # These tests covers navigation via buttons/links
-  Scenario: A user can navigate to the native version of 'Manage organ donation preferences' when toggle is set as so
-    Given I am using the native app user agent
-    And I am a EMIS user not registered with organ donation, who wishes to register
+  Scenario: A user can navigate to 'Manage organ donation preferences'
+    Given I am a EMIS user not registered with organ donation, who wishes to register
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page
     When I choose to set my organ donation preferences
     Then the internal Organ Donation page is displayed
 
-  Scenario: A logged in user using desktop can navigate to the external organ donation site
-    Given I am a EMIS patient
-    And I am logged in
-    When I navigate to the health record hub page
-    Then I see the health records hub page
-    When I choose to set my organ donation preferences
-    Then the external Organ Donation page is displayed
-
 # These tests navigate directly to the pages where the features are to be tested, to save time.
   Scenario Outline: A <GP System> user registered with organ donation can view their existing decision to not donate their organs
-    Given I am using the native app user agent
-    And I am a <GP System> user registered with organ donation to not donate my organs
+    Given I am a <GP System> user registered with organ donation to not donate my organs
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed
@@ -34,8 +24,7 @@ Feature: Organ Donation View Frontend
       | VISION    |
 
   Scenario Outline: A <GP System> user registered with organ donation can view their existing decision to donate all their organs
-    Given I am using the native app user agent
-    And I am a <GP System> user registered with organ donation to donate all organs
+    Given I am a <GP System> user registered with organ donation to donate all organs
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed
@@ -47,8 +36,7 @@ Feature: Organ Donation View Frontend
       | VISION    |
 
   Scenario Outline: A <GP System> user registered with organ donation can view their existing decision to donate some of their organs
-    Given I am using the native app user agent
-    And I am a <GP System> user registered with organ donation to donate some organs
+    Given I am a <GP System> user registered with organ donation to donate some organs
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed
@@ -60,24 +48,21 @@ Feature: Organ Donation View Frontend
       | VISION    |
 
   Scenario: A user registered to donate some organs can see which organs they have not yet decided on
-    Given I am using the native app user agent
-    And I am a EMIS user registered with organ donation to donate some organs, but not all are decided on
+    Given I am a EMIS user registered with organ donation to donate some organs, but not all are decided on
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed
     And the existing decision to opt in to organ donation with some organs is displayed
 
   Scenario: A user is informed when existing registration is in conflicted state
-    Given I am using the native app user agent
-    And I am a EMIS user registered with organ donation but existing registration is in conflicted state
+    Given I am a EMIS user registered with organ donation but existing registration is in conflicted state
     And I am logged in
     When I navigate to the health record hub page
     And I navigate to the internal Organ Donation Page
     Then the organ donation decision has been found and is to be processed
 
   Scenario Outline: A <GP System> user registered with organ donation can view their decision of appointed representative
-    Given I am using the native app user agent
-    And I am a <GP System> user registered with organ donation with an appointed representative
+    Given I am a <GP System> user registered with organ donation with an appointed representative
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed
@@ -89,8 +74,7 @@ Feature: Organ Donation View Frontend
       | VISION    |
 
   Scenario Outline: A user registered with organ donation can view their existing faith decision of <Option>
-    Given I am using the native app user agent
-    And I am a EMIS user registered with organ donation to donate all organs with a faith decision of '<Option>'
+    Given I am a EMIS user registered with organ donation to donate all organs with a faith decision of '<Option>'
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed
@@ -103,8 +87,7 @@ Feature: Organ Donation View Frontend
       | Prefer not to say                 |
 
   Scenario: A user can navigate to the external 'Share my decision' page when viewing their registration
-    Given I am using the native app user agent
-    And 'Organ Donation' responds to requests for '/app-share'
+    Given 'Organ Donation' responds to requests for '/app-share'
     And I am a EMIS user registered with organ donation to donate all organs
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
@@ -113,8 +96,7 @@ Feature: Organ Donation View Frontend
     Then a new tab has been opened by the link
 
   Scenario: A user can navigate to the external 'Tell your family and friends' page when viewing their registration
-    Given I am using the native app user agent
-    And 'Organ Donation' responds to requests for '/app-tell'
+    Given 'Organ Donation' responds to requests for '/app-tell'
     And I am a EMIS user registered with organ donation to donate all organs
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
@@ -123,8 +105,7 @@ Feature: Organ Donation View Frontend
     Then a new tab has been opened by the link
 
   Scenario Outline: A user when navigating to Organ Donation, but OD returns a <Error Code> recoverable error when retrieving their registration, is shown an error message and can retry
-    Given I am using the native app user agent
-    And I am a EMIS user registered as opt-in, but on lookup OD returns recoverable <Error Code> error
+    Given I am a EMIS user registered as opt-in, but on lookup OD returns recoverable <Error Code> error
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I see an appropriate Organ Donation error message with a retry option
@@ -135,8 +116,7 @@ Feature: Organ Donation View Frontend
       | 504        |
 
   Scenario Outline: A user when navigating to Organ Donation, but OD returns a <Error Code> non-recoverable error when retrieving their registration, is shown an error message and can't retry
-    Given I am using the native app user agent
-    And I am a EMIS user registered with OD, but on lookup OD returns non-recoverable <Error Code> error
+    Given I am a EMIS user registered with OD, but on lookup OD returns non-recoverable <Error Code> error
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I see an appropriate Organ Donation error message without a retry option
@@ -145,8 +125,7 @@ Feature: Organ Donation View Frontend
       | 403        |
 
   Scenario Outline: A user when navigating to Organ Donation, but OD returns a <Error Code> recoverable error when retrieving reference data, is shown an error message and can retry
-    Given I am using the native app user agent
-    And I am a EMIS user registered with OD, but the ReferenceData call returns recoverable <Error Code> error
+    Given I am a EMIS user registered with OD, but the ReferenceData call returns recoverable <Error Code> error
     And I have a valid GP Session
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
@@ -158,8 +137,7 @@ Feature: Organ Donation View Frontend
       | 429        |
 
   Scenario Outline: A user when navigating to Organ Donation, but OD returns a <Error Code> non-recoverable error when retrieving reference data, is shown an error message and can't retry
-    Given I am using the native app user agent
-    And I am a EMIS user registered with OD, but the ReferenceData call returns non-recoverable <Error Code> error
+    Given I am a EMIS user registered with OD, but the ReferenceData call returns non-recoverable <Error Code> error
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I see an appropriate Organ Donation error message without a retry option

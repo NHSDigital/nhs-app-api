@@ -43,6 +43,7 @@ open class OrganDonationWithdrawDecisionPage : OrganDonationBasePage()  {
                 .paragraph("Whatever you decide, please make sure your family know your decision.")
                 .dropdown("Reason for withdrawing", expectedDropDownContent)
                 .button("Continue")
+                .paragraph("Back")
         expected.assert(this)
     }
 

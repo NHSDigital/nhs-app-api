@@ -1,10 +1,10 @@
 <template>
-  <li>
+  <p>
     <a id="reaffirmDecisionLink" href="#"
        @click.stop.prevent="setReaffirmDecision">
       {{ $t('organDonation.thisIsStillMyDecision') }}
     </a>
-  </li>
+  </p>
 </template>
 
 <script>

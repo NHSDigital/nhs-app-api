@@ -1,4 +1,3 @@
-import BackButton from '@/components/BackButton';
 import OrganChoice from '@/components/organ-donation/OrganChoice';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import SomeOrgans from '@/pages/organ-donation/some-organs';
@@ -162,16 +161,14 @@ describe('organ donation some organs page', () => {
   });
 
   describe('back', () => {
-    describe('button', () => {
-      let backButton;
+    let backLink;
 
-      beforeEach(() => {
-        backButton = wrapper.find(BackButton);
-      });
+    beforeEach(() => {
+      backLink = wrapper.find('[data-purpose=main-back-button]');
+    });
 
-      it('will exist', () => {
-        expect(backButton.exists()).toBe(true);
-      });
+    it('will exist', () => {
+      expect(backLink.exists()).toBe(true);
     });
   });
 

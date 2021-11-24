@@ -23,7 +23,7 @@ describe('view decision', () => {
   const createState = () => ({
     organDonation: initialState(),
     device: {
-      isNativeApp: true,
+      isNativeApp: false,
     },
   });
 

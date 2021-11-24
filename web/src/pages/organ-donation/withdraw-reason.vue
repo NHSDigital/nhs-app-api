@@ -64,12 +64,10 @@
                           @click.stop.prevent="continueClicked">
             {{ $t('generic.continue') }}
           </generic-button>
-          <generic-button v-if="!$store.state.device.isNativeApp"
-                          id="back-button"
-                          :class="['nhsuk-button', 'nhsuk-button--secondary']"
-                          @click.stop.prevent="goBack" >
-            {{ $t('generic.back') }}
-          </generic-button>
+          <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
+                                  :path="organDonationPath"
+                                  :button-text="'generic.back'"
+                                  @clickAndPrevent="backButtonClicked"/>
         </div>
       </div>
     </div>
@@ -82,6 +80,7 @@ import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import ErrorGroup from '@/components/ErrorGroup';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GenericButton from '@/components/widgets/GenericButton';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
@@ -102,6 +101,7 @@ export default {
     ErrorGroup,
     ErrorMessage,
     GenericButton,
+    DesktopGenericBackLink,
     MessageDialog,
     MessageList,
     MessageText,
@@ -112,6 +112,7 @@ export default {
       hasTriedToContinue: false,
       lawChangeUrl: this.$store.$env.ORGAN_DONATION_LAW_CHANGE_URL,
       reasonId: get('organDonation.withdrawReasonId')(this.$store.state),
+      organDonationPath: ORGAN_DONATION_PATH,
     };
   },
   computed: {
@@ -126,7 +127,8 @@ export default {
     },
   },
   mounted() {
-    if (!isNativeApp({ route: this.$route, store: this.$store })) {
+    if (!isNativeApp({ store: this.$store })
+    && !this.$store.$env.ORGAN_DONATION_DESKTOP_ENABLED) {
       redirectTo(this, INDEX_PATH);
     } else if (!this.$store.getters['organDonation/canWithdraw']) {
       redirectTo(this, ORGAN_DONATION_PATH);
@@ -155,7 +157,7 @@ export default {
         redirectTo(this, ORGAN_DONATION_REVIEW_YOUR_DECISION_PATH);
       });
     },
-    goBack() {
+    backButtonClicked() {
       redirectTo(this, ORGAN_DONATION_PATH);
     },
   },

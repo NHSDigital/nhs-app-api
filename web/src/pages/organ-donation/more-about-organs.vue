@@ -7,19 +7,23 @@
         <h3>{{ content.subheader }}</h3>
         <p>{{ content.body }}</p>
       </div>
-      <back-button v-if="!$store.state.device.isNativeApp"/>
+      <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
+                              :path="backLink"
+                              :button-text="'generic.back'"
+                              @clickAndPrevent="backClicked"/>
     </div>
   </div>
 </template>
 
 <script>
-import BackButton from '@/components/BackButton';
 import NativeOnlyMixin from '@/components/NativeOnlyMixin';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import DynamicBackLinkMixin from '@/components/organ-donation/DynamicBackLinkMixin';
 
 export default {
   components: {
-    BackButton,
+    DesktopGenericBackLink,
   },
-  mixins: [NativeOnlyMixin],
+  mixins: [NativeOnlyMixin, DynamicBackLinkMixin],
 };
 </script>

@@ -220,6 +220,8 @@ spec:
           value: "{{ $.Values.web.baseNhsAppHelpUrl }}"
         - name: XAMARIN_INITIAL_RELEASE_VERSION
           value: "2.0.0"
+        - name: ORGAN_DONATION_DESKTOP_ENABLED
+          value: "{{ $.Values.organDonationDesktopEnabled }}"
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"

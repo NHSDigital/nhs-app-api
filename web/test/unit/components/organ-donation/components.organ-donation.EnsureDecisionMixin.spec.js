@@ -8,7 +8,12 @@ import {
   DECISION_UNKNOWN,
 } from '@/store/modules/organDonation/mutation-types';
 
-const createStore = ({ decision, isWithdrawing = false, isNativeApp } = {}) => ({
+const createStore = ({
+  decision,
+  isWithdrawing = false,
+  isNativeApp,
+  organDonationDesktop,
+} = {}) => ({
   state: {
     device: {
       isNativeApp,
@@ -23,18 +28,21 @@ const createStore = ({ decision, isWithdrawing = false, isNativeApp } = {}) => (
       },
     },
   },
+  $env: {
+    ORGAN_DONATION_DESKTOP_ENABLED: organDonationDesktop,
+  },
 });
 
 describe('ensure decision mixin', () => {
   describe('fetch', () => {
     let redirect;
 
-    const fetch = ({ decision, isNativeApp }) => {
+    const fetch = ({ decision, isNativeApp, organDonationDesktop = false }) => {
       redirect = jest.fn();
 
       EnsureDecisionMixin.fetch({
         redirect,
-        store: createStore({ decision, isNativeApp }),
+        store: createStore({ decision, isNativeApp, organDonationDesktop }),
       });
     };
 
@@ -52,6 +60,48 @@ describe('ensure decision mixin', () => {
       describe('decision not made', () => {
         beforeEach(() => {
           fetch({ decision: DECISION_UNKNOWN, isNativeApp: true });
+        });
+
+        it('will call redirect with the ORGAN_DONATION path', () => {
+          expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION_PATH);
+        });
+      });
+
+      describe('the user has appointed a representative', () => {
+        beforeEach(() => {
+          fetch({ decision: DECISION_APPOINTED_REP, isNativeApp: true });
+        });
+
+        it('will call redirect with the ORGAN_DONATION path', () => {
+          expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION_PATH);
+        });
+      });
+
+      describe('decision is opt-out', () => {
+        beforeEach(() => {
+          fetch({ decision: DECISION_OPT_OUT, isNativeApp: true });
+        });
+
+        it('will not call redirect', () => {
+          expect(redirect).not.toHaveBeenCalled();
+        });
+      });
+
+      describe('decision is opt-in', () => {
+        beforeEach(() => {
+          fetch({ decision: DECISION_OPT_IN, isNativeApp: true });
+        });
+
+        it('will not call redirect', () => {
+          expect(redirect).not.toHaveBeenCalled();
+        });
+      });
+    });
+
+    describe('desktop', () => {
+      describe('decision not made', () => {
+        beforeEach(() => {
+          fetch({ decision: DECISION_UNKNOWN, isNativeApp: false, organDonationDesktop: true });
         });
 
         it('will call redirect with the ORGAN_DONATION path', () => {

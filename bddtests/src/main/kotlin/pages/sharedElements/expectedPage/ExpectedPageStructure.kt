@@ -43,10 +43,10 @@ class ExpectedPageStructure : ExpectedPageStructureBase<ExpectedPageStructure>()
         return this
     }
 
-    fun menuLinks(links:List<String>) : ExpectedPageStructure {
+    fun menuLinks(links:List<String>, linkStyle:String = "h2") : ExpectedPageStructure {
         links.forEach { element ->
             expectedElements.add(element, "li")
-            expectedElements.add(element, "h3") }
+            expectedElements.add(element, linkStyle) }
         return this
     }
 

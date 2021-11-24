@@ -44,7 +44,10 @@
                       @click="clickSubmit">
         {{ $t('organDonation.reviewYourDecision.submitMyDecision') }}
       </generic-button>
-      <back-button v-if="!$store.state.device.isNativeApp"/>
+      <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
+                              :path="backLink"
+                              :button-text="'generic.back'"
+                              @clickAndPrevent="backClicked"/>
     </div>
   </div>
 </template>
@@ -53,12 +56,13 @@
 import isEmpty from 'lodash/fp/isEmpty';
 import get from 'lodash/fp/get';
 import AdditionalInformation from '@/components/organ-donation/AdditionalInformation';
-import BackButton from '@/components/BackButton';
 import ContactDetails from '@/components/organ-donation/ContactDetails';
 import DecisionInfo from '@/components/organ-donation/DecisionInfo';
+import DynamicBackLinkMixin from '@/components/organ-donation/DynamicBackLinkMixin';
 import Confirmation from '@/components/organ-donation/Confirmation';
 import FaithDetails from '@/components/organ-donation/FaithDetails';
 import GenericButton from '@/components/widgets/GenericButton';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
@@ -70,18 +74,18 @@ import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
 export default {
   components: {
     AdditionalInformation,
-    BackButton,
     Confirmation,
     ContactDetails,
     DecisionInfo,
     FaithDetails,
     GenericButton,
+    DesktopGenericBackLink,
     MessageDialog,
     MessageList,
     MessageText,
     PersonalDetails,
   },
-  mixins: [EnsureCanSubmit],
+  mixins: [EnsureCanSubmit, DynamicBackLinkMixin],
   data() {
     return {
       isDisabled: false,

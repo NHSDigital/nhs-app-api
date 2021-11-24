@@ -24,7 +24,10 @@
                       @click.prevent="continueClicked">
         {{ $t('generic.continue') }}
       </generic-button>
-      <back-button v-if="!$store.state.device.isNativeApp" :before="beforeBack" />
+      <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
+                              :path="backLink"
+                              :button-text="'generic.back'"
+                              @clickAndPrevent="backClicked"/>
     </div>
   </div>
 </template>
@@ -32,8 +35,9 @@
 import get from 'lodash/fp/get';
 import { isDefault } from '@/lib/organ-donation/registration-comparison';
 import isNil from 'lodash/fp/isNil';
-import BackButton from '@/components/BackButton';
 import GenericButton from '@/components/widgets/GenericButton';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import DynamicBackLinkMixin from '@/components/organ-donation/DynamicBackLinkMixin';
 import ErrorDialog from '@/components/ErrorDialog';
 import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import { EnsureOptInDecision } from '@/components/organ-donation/EnsureDecisionMixin';
@@ -46,12 +50,12 @@ import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
 
 export default {
   components: {
-    BackButton,
     GenericButton,
+    DesktopGenericBackLink,
     ErrorDialog,
     NhsUkRadioGroup,
   },
-  mixins: [EnsureOptInDecision],
+  mixins: [DynamicBackLinkMixin, EnsureOptInDecision],
   data() {
     return {
       hasTriedToContinue: false,
@@ -103,9 +107,6 @@ export default {
     }
   },
   methods: {
-    beforeBack() {
-      this.hasTriedToContinue = false;
-    },
     continueClicked() {
       this.hasTriedToContinue = false;
 
@@ -126,6 +127,10 @@ export default {
     },
     selected(value) {
       this.$store.dispatch(this.setAllOrgansAction, value);
+    },
+    backButtonClicked() {
+      this.hasTriedToContinue = false;
+      this.backClicked();
     },
   },
 };

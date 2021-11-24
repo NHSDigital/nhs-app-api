@@ -3,8 +3,7 @@
 Feature: Organ donation accessibility
 
   Scenario: The organ donation journey pages are captured
-    Given I am using the native app user agent
-    And I am a EMIS user not registered with organ donation, who wishes to register and donate some organs
+    Given I am a EMIS user not registered with organ donation, who wishes to register and donate some organs
     And I am logged in
     When I navigate to the health record hub page
     And I navigate to the internal Organ Donation Choice Page
@@ -33,8 +32,7 @@ Feature: Organ donation accessibility
     And the OrganDonation_AllOrgansConfirmation page is saved to disk
 
   Scenario: The organ donation check details page captured for reaffirm journey
-    Given I am using the native app user agent
-    And I am a EMIS user registered as opt-out who wishes to reaffirm their decision
+    Given I am a EMIS user registered as opt-out who wishes to reaffirm their decision
     And I am logged in
     When I navigate to the health record hub page
     And I navigate to the internal Organ Donation Page
@@ -44,8 +42,7 @@ Feature: Organ donation accessibility
     And the OrganDonation_CheckDetails_ReaffirmNoAdditionalDetails page is saved to disk
 
   Scenario: The organ donation withdraw journey pages captured
-    Given I am using the native app user agent
-    And I am a EMIS user registered with organ donation with a decision to opt-in who wishes to withdraw
+    Given I am a EMIS user registered with organ donation with a decision to opt-in who wishes to withdraw
     And I am logged in
     When I navigate to the health record hub page
     And I navigate to the internal Organ Donation Page
@@ -64,8 +61,7 @@ Feature: Organ donation accessibility
     And the OrganDonation_WithdrawDecisionConfirmation page is saved to disk
 
   Scenario: The 'Organ Donation Register API timeout' page is captured
-    Given I am using the native app user agent
-    And I am a EMIS user who wishes to register as opt out, but OD takes too long to respond
+    Given I am a EMIS user who wishes to register as opt out, but OD takes too long to respond
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I follow the opt-out journey to the 'Check Details' page
@@ -76,8 +72,7 @@ Feature: Organ donation accessibility
     And the OrganDonation_RegisterAPITimeout page is saved to disk
 
   Scenario: The 'Organ donation - generic error' page is captured
-    Given I am using the native app user agent
-    And I am a EMIS user who wishes to register as opt out, but OD returns non-recoverable 400 error
+    Given I am a EMIS user who wishes to register as opt out, but OD returns non-recoverable 400 error
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I follow the opt-out journey to the 'Check Details' page
@@ -87,8 +82,7 @@ Feature: Organ donation accessibility
     And the OrganDonation_GenericError page is saved to disk
 
   Scenario: The 'Organ decision received (but not yet processed)' page is captured
-    Given I am using the native app user agent
-    And I am a EMIS user registered as opt-in with organ donation, who wishes to opt-out but will cause a conflict
+    Given I am a EMIS user registered as opt-in with organ donation, who wishes to opt-out but will cause a conflict
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
@@ -99,8 +93,7 @@ Feature: Organ donation accessibility
     And the OrganDonation_OrganDecisionReceived page is saved to disk
 
   Scenario: The 'About organs and tissue' page is captured
-    Given I am using the native app user agent
-    And I am a EMIS user not registered with organ donation, who wishes to register and donate some organs
+    Given I am a EMIS user not registered with organ donation, who wishes to register and donate some organs
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I choose to donate my organs

@@ -1,6 +1,7 @@
 /* eslint-disable object-curly-newline */
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
 import { ORGAN_DONATION_PATH } from '@/router/paths';
+import { ORGAN_DONATION_URL } from '@/router/externalLinks';
 import { redirectTo } from '@/lib/utils';
 import { createStore, mount } from '../../helpers';
 
@@ -20,22 +21,23 @@ describe('organ donation link', () => {
   let propsData;
   let wrapper;
 
-  const mountAs = (params = { native: true }) => {
+  const mountAs = ({
+    organDonationDesktopEnabled = true,
+  } = {}) => {
     $store = createStore({
       state: {
-        device: {
-          isNativeApp: params.native,
-        },
         navigation: {
           backLinkOverride: undefined,
         },
+      },
+      $env: {
+        ORGAN_DONATION_DESKTOP_ENABLED: organDonationDesktopEnabled,
       },
     });
     propsData = {
       id: ID_TEST_LINK,
       backLinkOverride: BACK_LINK_OVERRIDE,
     };
-
     return mount(OrganDonationLink, { $store, $router, propsData });
   };
 
@@ -44,32 +46,14 @@ describe('organ donation link', () => {
     $router = [];
   });
 
-  describe('`useIntegratedOrganDonation` computed property', () => {
-    it('will be false when the app is not native', () => {
-      wrapper = mountAs({ native: false });
-
-      expect(wrapper.vm.useIntegratedOrganDonation).toBe(false);
-    });
-
-    it('will be true when the app is native', () => {
-      wrapper = mountAs({ native: true });
-
-      expect(wrapper.vm.useIntegratedOrganDonation).toBe(true);
-    });
-  });
-
   describe('link', () => {
     beforeEach(() => {
       wrapper = mountAs();
       link = wrapper.find(`#${ID_TEST_LINK}`);
     });
 
-    it('will have the external URL for the href', () => {
+    it('will have the internal URL for the href', () => {
       expect(link.attributes().href).toEqual(URL_INTERNAL);
-    });
-
-    it('will have the target set to "_self"', () => {
-      expect(link.attributes().target).toEqual('_self');
     });
   });
 
@@ -92,6 +76,30 @@ describe('organ donation link', () => {
         wrapper.vm.onClickOrganDonation();
         expect($store.dispatch).toHaveBeenCalledWith('navigation/setBackLinkOverride', BACK_LINK_OVERRIDE);
       });
+    });
+  });
+
+  describe('not internal link', () => {
+    beforeEach(() => {
+      wrapper = mountAs({ organDonationDesktopEnabled: false });
+      link = wrapper.find(`#${ID_TEST_LINK}`);
+    });
+
+    it('will have the external URL for the href', () => {
+      expect(link.attributes().href).toEqual(ORGAN_DONATION_URL);
+    });
+  });
+
+  describe('onClickOrganDonation handler for external', () => {
+    beforeEach(() => {
+      wrapper = mountAs({ organDonationDesktopEnabled: false });
+      link = wrapper.find(`#${ID_TEST_LINK}`);
+    });
+
+    it('will not redirect to the organ donation path ', () => {
+      wrapper = mountAs({ organDonationDesktopEnabled: false });
+      wrapper.vm.onClickOrganDonation();
+      expect(redirectTo).not.toHaveBeenCalledWith(wrapper.vm, ORGAN_DONATION_PATH);
     });
   });
 });

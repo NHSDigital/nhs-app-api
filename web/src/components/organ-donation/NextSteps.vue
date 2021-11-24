@@ -3,7 +3,7 @@
     <h2>{{ $t('organDonation.nextSteps.nextSteps') }}</h2>
     <menu-item-list>
       <menu-item id="btn_tellFamily"
-                 header-tag="h3"
+                 header-tag="h2"
                  target="_blank"
                  :href="tellFamilyUrl"
                  :description="$t('organDonation.nextSteps.doYourFamiltyAndFriendsKnow')"
@@ -13,7 +13,7 @@
 
       <menu-item v-if="isOptInDecision"
                  id="btn_shareDecision"
-                 header-tag="h3"
+                 header-tag="h2"
                  target="_blank"
                  :href="shareDecisionUrl"
                  :description="$t('organDonation.nextSteps.helpPromoteOnSocialMedia')"

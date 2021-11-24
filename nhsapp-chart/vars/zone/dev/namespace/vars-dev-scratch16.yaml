@@ -17,3 +17,5 @@ secrets:
     - name: "notificationHubSharedAccessKey-nonlive-scratch16"
       versionuks: "8b384f7ad0054cda80bc1b0b1964b16e"
       versionukw: "1bd3a7a8f692424d9f46249ce09ec0ae"
+
+organDonationDesktopEnabled: false

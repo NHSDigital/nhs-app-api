@@ -25,7 +25,6 @@ import {
 } from '@/router/externalLinks';
 
 const getIsNativeApp = get('$store.state.device.isNativeApp');
-
 export default {
   name: 'OrganDonationLink',
   components: {
@@ -67,8 +66,7 @@ export default {
       return this.useIntegratedOrganDonation ? ORGAN_DONATION_PATH : ORGAN_DONATION_URL;
     },
     useIntegratedOrganDonation() {
-      // Integrated organ donation is used if the request is from the native app.
-      return getIsNativeApp(this);
+      return this.$store.$env.ORGAN_DONATION_DESKTOP_ENABLED || getIsNativeApp(this);
     },
   },
   methods: {

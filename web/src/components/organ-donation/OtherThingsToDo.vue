@@ -4,7 +4,7 @@
     <menu-item-list>
       <menu-item v-if="canWithdraw"
                  id="btn_withdraw"
-                 header-tag="h3"
+                 header-tag="h2"
                  href="#"
                  :description="$t('organDonation.otherThings.youCanWithdrawAtAnyTime')"
                  :text="$t('organDonation.otherThings.withdrawYourDecision')"
@@ -12,7 +12,7 @@
                  :aria-label="`${$t('organDonation.otherThings.withdrawYourDecision')}.
                                ${$t('organDonation.otherThings.youCanWithdrawAtAnyTime')}`"/>
       <menu-item id="btn_blood"
-                 header-tag="h3"
+                 header-tag="h2"
                  :href="bloodDonationUrl"
                  target="_blank"
                  :description="$t('organDonation.otherThings.youCouldSaveLivesByGivingBlood')"

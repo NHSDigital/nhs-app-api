@@ -23,7 +23,7 @@ open class OrganDonationNextStepsModule(page :HybridPageObject) : LinksElement(p
 
         private var nextStepsContent = LinksWithDescriptionsContent(
                 linkBlockTitle = "Next steps",
-                linkStyling = "h3")
+                linkStyling = "h2")
                 .addLink(tellFamilyLinkTitle, tellFamilyLinkDescription)
                 .addLink(shareLinkTitle, shareLinkDescription)
     }

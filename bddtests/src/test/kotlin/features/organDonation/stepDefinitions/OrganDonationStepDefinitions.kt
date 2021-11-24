@@ -1,6 +1,5 @@
 package features.organDonation.stepDefinitions
 
-import config.Config
 import constants.Supplier
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
@@ -16,7 +15,6 @@ import pages.ErrorDialogPage
 import pages.organDonation.OrganDonationBasePage
 import pages.organDonation.OrganDonationChoicePage
 import pages.organDonation.OrganDonationFaithModule
-import java.net.URL
 import pages.GpSessionError
 
 open class OrganDonationStepDefinitions {
@@ -144,19 +142,14 @@ open class OrganDonationStepDefinitions {
         }
     }
 
+    @When("^I click the Back link on an Organ Donation page$")
+    fun iClickTheBackLinkOnThePage() {
+        page.clickBackLinkButton()
+    }
+
     @When("^I click the '(.*)' button on an Organ Donation page$")
     fun iClickTheButtonOnThePage(buttonText: String) {
         page.clickButton(buttonText)
-    }
-
-    @Then("^the external Organ Donation page is displayed$")
-    fun iAmOnTheExternalOrganDonationPage() {
-        aNewTabOpens(Config.instance.organDonation)
-    }
-
-    private fun aNewTabOpens(url: String) {
-        browser.changeTab(URL(url), true)
-        browser.shouldHaveUrl(url)
     }
 
     @Then("^the internal Organ Donation page is displayed$")

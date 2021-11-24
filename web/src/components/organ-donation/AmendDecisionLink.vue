@@ -1,11 +1,11 @@
 <template>
-  <li>
+  <p>
     <a id="amendDecisionLink"
        href="#"
        @click.stop.prevent="amendDecision">
       {{ $t('organDonation.iWantToChangeMyDecision') }}
     </a>
-  </li>
+  </p>
 </template>
 
 <script>

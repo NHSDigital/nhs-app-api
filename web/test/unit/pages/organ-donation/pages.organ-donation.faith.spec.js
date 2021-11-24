@@ -1,4 +1,3 @@
-import BackButton from '@/components/BackButton';
 import Faith from '@/pages/organ-donation/faith';
 import i18n from '@/plugins/i18n';
 import MessageDialog from '@/components/widgets/MessageDialog';
@@ -7,7 +6,7 @@ import { initialState, YES, NO, NOT_STATED } from '@/store/modules/organDonation
 import { redirectTo } from '@/lib/utils';
 import { ORGAN_DONATION_ADDITIONAL_DETAILS_PATH } from '@/router/paths';
 import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
-import { createRouter, createStore, mount } from '../../helpers';
+import { createStore, mount, createRouter } from '../../helpers';
 
 jest.mock('@/lib/utils', () => ({
   ...jest.requireActual('@/lib/utils'),
@@ -52,14 +51,14 @@ describe('organ donation faith page', () => {
 
   describe('back', () => {
     describe('button', () => {
-      let backButton;
+      let backLink;
 
       beforeEach(() => {
-        backButton = wrapper.find(BackButton);
+        backLink = wrapper.find('[data-purpose=main-back-button]');
       });
 
       it('will exist', () => {
-        expect(backButton.exists()).toBe(true);
+        expect(backLink.exists()).toBe(true);
       });
     });
   });

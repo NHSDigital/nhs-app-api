@@ -41,15 +41,19 @@
           {{ $t('generic.continue') }}
         </generic-button>
       </fieldset>
-      <back-button v-if="!$store.state.device.isNativeApp"/>
+      <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
+                              :path="backLink"
+                              :button-text="'generic.back'"
+                              @clickAndPrevent="backClicked"/>
     </div>
   </div>
 </template>
 
 <script>
-import BackButton from '@/components/BackButton';
 import CollapsibleDialog from '@/components/widgets/collapsible/CollapsibleDialog';
 import GenericButton from '@/components/widgets/GenericButton';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import DynamicBackLinkMixin from '@/components/organ-donation/DynamicBackLinkMixin';
 import ErrorDialog from '@/components/ErrorDialog';
 import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import { isDefault } from '@/lib/organ-donation/registration-comparison';
@@ -61,13 +65,13 @@ import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
 
 export default {
   components: {
-    BackButton,
     CollapsibleDialog,
     GenericButton,
+    DesktopGenericBackLink,
     ErrorDialog,
     NhsUkRadioGroup,
   },
-  mixins: [EnsureOptInDecision],
+  mixins: [EnsureOptInDecision, DynamicBackLinkMixin],
   data() {
     return {
       choices: [

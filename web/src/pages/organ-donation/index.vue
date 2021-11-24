@@ -162,7 +162,8 @@ export default {
   },
 
   async created() {
-    if (!isNativeApp({ route: this.$route, store: this.$store })) {
+    if (!isNativeApp({ store: this.$store })
+    && !this.$store.$env.ORGAN_DONATION_DESKTOP_ENABLED) {
       redirectTo(this, INDEX_PATH);
       return;
     }

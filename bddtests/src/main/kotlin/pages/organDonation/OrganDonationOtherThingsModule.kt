@@ -28,7 +28,7 @@ open class OrganDonationOtherThingsModule(page :HybridPageObject) : LinksElement
 
         private var otherThingsContent = LinksWithDescriptionsContent(
                 linkBlockTitle = "Other things you can do",
-                linkStyling = "h3")
+                linkStyling = "h2")
                 .addLink(withdrawYourDecisionLinkTitle, withdrawYourDecisionLinkDescription)
                 .addLink(registerBloodDonorLinkTitle, registerBloodDonorLinkDescription)
     }

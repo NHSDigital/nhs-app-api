@@ -32,6 +32,12 @@ open class OrganDonationBasePage: HybridPageObject() {
         clickOnButtonContainingText(buttonText)
     }
 
+    fun clickBackLinkButton() {
+        //This wait has been added to ensure race condition does not occur on organ donation pages
+        Thread.sleep(RACE_CONDITION_WAIT)
+        clickOnBackLink()
+    }
+
     fun assertButtonHasAttribute(buttonText: String, attributeName: String) {
         HybridPageElement(
             webDesktopLocator = "//button",

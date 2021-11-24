@@ -57,17 +57,22 @@ class OrganDonationChoicePage : OrganDonationBasePage() {
         val expected = ExpectedPageStructure()
                 .menuLinks(listOf("Find out more about organ donation"))
                 .h2(title)
-        addButtonsToExpectedPage(expected)
+        addButtonsToExpectedPage(expected, includingBackLink = true)
         return expected
     }
 
-    private fun addButtonsToExpectedPage(expected: ExpectedPageStructure): ExpectedPageStructure {
+    private fun addButtonsToExpectedPage(
+            expected: ExpectedPageStructure,
+            includingBackLink: Boolean = false): ExpectedPageStructure {
         expected.button("NO\nI do not want to donate my organs")
                 .h2("NO")
                 .paragraph("I do not want to donate my organs")
                 .button("YES\nI want to donate all or some of my organs")
                 .h2("YES")
                 .paragraph("I want to donate all or some of my organs")
+        if (includingBackLink) {
+            expected.paragraph("Back")
+        }
         return expected
     }
 

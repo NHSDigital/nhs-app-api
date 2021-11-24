@@ -38,16 +38,21 @@
                       @click.prevent="continueClicked">
         {{ $t('generic.continue') }}
       </generic-button>
-      <back-button v-if="!$store.state.device.isNativeApp" />
+      <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
+                              id="genericBackLink"
+                              :path="backLink"
+                              :button-text="'generic.back'"
+                              @clickAndPrevent="backClicked"/>
     </div>
   </div>
 </template>
 
 <script>
 import get from 'lodash/fp/get';
-import BackButton from '@/components/BackButton';
 import EnsureDecisionMixin from '@/components/organ-donation/EnsureDecisionMixin';
+import DynamicBackLinkMixin from '@/components/organ-donation/DynamicBackLinkMixin';
 import GenericButton from '@/components/widgets/GenericButton';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import SelectDropdown from '@/components/widgets/SelectDropdown';
 import { ORGAN_DONATION_REVIEW_YOUR_DECISION_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
@@ -59,11 +64,11 @@ const mapAdditionalDetails = self => ({
 
 export default {
   components: {
-    BackButton,
     GenericButton,
+    DesktopGenericBackLink,
     SelectDropdown,
   },
-  mixins: [EnsureDecisionMixin],
+  mixins: [EnsureDecisionMixin, DynamicBackLinkMixin],
   data() {
     return {
       ethnicityId: get('$store.state.organDonation.additionalDetails.ethnicityId')(this),

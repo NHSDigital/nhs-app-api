@@ -63,6 +63,7 @@ open class OrganDonationFindOutMoreAboutOrgansAndTissuePage: OrganDonationBasePa
                         "If your small intestine fails, you wouldn’t be able to digest food. You would need " +
                         "to get nutrition from an alternative method, such as through a drip into your vein."
                 )
+                .paragraph("Back")
                 .assert(this)
     }
 }
