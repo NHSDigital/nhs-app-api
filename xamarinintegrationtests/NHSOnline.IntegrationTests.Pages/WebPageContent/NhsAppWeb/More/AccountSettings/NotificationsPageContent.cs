@@ -18,8 +18,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Manage notifications");
 
-        private WebText TheseMayIncludeText => WebText.WithTagAndText(_interactor, "p",
-            "These may include new features and public health updates.");
+        private WebText WeUseNotifications => WebText.WithTagAndText(_interactor, "p",
+            "We use notifications to tell you when you get a new message.");
+
+        private WebText TheNhsAndConnected => WebText.WithTagAndText(_interactor, "p",
+        "The NHS and connected healthcare providers, like your GP surgery, may send you messages using the NHS App.");
 
         private WebText IfYouShareThisDeviceText => WebText.WithTagAndText(_interactor, "p",
             "If you share this device with other people, they may see your notifications. The settings will apply to everyone who logs in to the NHS App on this device.");
@@ -30,10 +33,10 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
             "More information is available in the NHS App privacy policy.");
 
         private WebToggle NotificationsToggle => WebToggle.WithLabel(_interactor,
-            "Allow notificationsI accept the NHS App sending notifications on this device");
+            "Turn on notifications on this deviceWhen off, you may not be told about new messages unless you log in");
 
         private WebLink NotificationSettingsLink => WebLink.WithText(_interactor,
-            "Manage how notifications are shown on this device (opens your device settings)");
+            "Choose how notifications are shown on this device (opens your device settings)");
 
         private WebText ErrorTitleText => WebText.WithTagAndText(_interactor, "h1", "Notifications error");
 
@@ -63,7 +66,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
         public void AssertPageElements()
         {
             TitleText.AssertVisible();
-            TheseMayIncludeText.AssertVisible();
+            WeUseNotifications.AssertVisible();
+            TheNhsAndConnected.AssertVisible();
             IfYouShareThisDeviceText.AssertVisible();
             MoreInfoText.AssertVisible();
             NotificationSettingsLink.AssertVisible();

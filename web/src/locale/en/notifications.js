@@ -8,7 +8,7 @@ export default {
   ifYouShareThisDevice: 'If you share this device with other people, they may see your notifications.',
   ifYouWantToGetNotifications: 'If you want to get notifications, you need to turn them on for each device you use to access the NHS App.',
   iUnderstandIWillNotBeTold: 'I understand I may not be told about new messages unless I log in',
-  manageHowNotificationsAreShown: 'Manage how notifications are shown on this device (opens your device settings)',
+  chooseHowNotificationsAreShown: 'Choose how notifications are shown on this device (opens your device settings)',
   moreInformation: 'More information is available in the ',
   notificationsLink: 'NHS App privacy policy',
   notificationsMayInclude: 'These may include new features and public health updates.',
@@ -16,6 +16,9 @@ export default {
   theNhsAndConnected: 'The NHS and connected healthcare providers, like your GP surgery, may send you messages using the NHS App.',
   turnOnNotifications: 'Yes, turn on notifications on this device',
   weUseNotifications: 'We use notifications to tell you when you get a new message.',
+  enableNotificationsOnThisDevice: 'Enable notifications on this device',
+  whenOffYouMayNotBeTold: 'When off, you may not be told about new messages unless you log in',
+  turnOnNotificationsOnThisDevice: 'Turn on notifications on this device',
   error: {
     select: 'Select ',
     continue: 'Continue',

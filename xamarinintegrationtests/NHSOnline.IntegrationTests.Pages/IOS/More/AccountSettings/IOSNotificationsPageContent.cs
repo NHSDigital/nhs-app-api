@@ -12,7 +12,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.More.AccountSettings
             _interactor = interactor;
         }
 
-        private IOSLabel NotificationsToggleLabel => IOSLabel.WithText(_interactor, "Allow notifications");
+        private IOSLabel NotificationsToggleLabel =>
+            IOSLabel.WithText(_interactor, "Turn on notifications on this device");
 
         public void ToggleOnNotifications()
         {

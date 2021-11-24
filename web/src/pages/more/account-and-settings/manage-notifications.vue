@@ -3,28 +3,35 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <div>
-          <p>{{ $t('notifications.notificationsMayInclude') }}</p>
-          <p>{{ $t('notifications.ifYouShareThisDevice') }}</p>
-          <p>
-            {{ $t('notifications.moreInformation')
-            }}<analytics-tracked-tag
-              :href="privacyUrl"
-              :text="$t('notifications.notificationsLink')"
-              class="inline"
-              tag="a"
-              target="_blank">{{
-                $t('notifications.notificationsLink')
-              }}</analytics-tracked-tag>.
-          </p>
+          <p>{{ $t('notifications.weUseNotifications') }}</p>
+          <p>{{ $t('notifications.theNhsAndConnected') }}</p>
           <labelled-toggle v-model="registered"
                            checkbox-id="allow_notifications"
                            :is-waiting="isWaiting"
-                           :label="$t('notifications.allowNotifications')"
-                           :hint-text="$t('notifications.iAcceptNotifications')"/>
+                           :label="$t('notifications.turnOnNotificationsOnThisDevice')"
+                           :hint-text="$t('notifications.whenOffYouMayNotBeTold')"/>
         </div>
+        <collapsible-details>
+          <template slot="header">
+            {{ $t('notifications.aboutNotifications') }}
+          </template>
+          <p>{{ $t('notifications.ifYouWantToGetNotifications') }}</p>
+          <p>{{ $t('notifications.ifYouShareThisDevice') }}</p>
+        </collapsible-details>
+        <p>
+          {{ $t('notifications.moreInformation')
+          }}<analytics-tracked-tag
+            :href="privacyUrl"
+            :text="$t('notifications.notificationsLink')"
+            class="inline"
+            tag="a"
+            target="_blank">{{
+              $t('notifications.notificationsLink')
+            }}</analytics-tracked-tag>.
+        </p>
         <p>
           <a id="app-more" href="#" @click.prevent.stop="openAppSettings">
-            {{ $t('notifications.manageHowNotificationsAreShown') }}
+            {{ $t('notifications.chooseHowNotificationsAreShown') }}
           </a>
         </p>
       </div>
@@ -34,6 +41,7 @@
 
 <script>
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import CollapsibleDetails from '@/components/widgets/collapsible/CollapsibleDetails';
 import LabelledToggle from '@/components/widgets/LabelledToggle';
 import NativeApp from '@/services/native-app';
 
@@ -41,6 +49,7 @@ export default {
   name: 'MoreAccountAndSettingsManageNotificationsPage',
   components: {
     AnalyticsTrackedTag,
+    CollapsibleDetails,
     LabelledToggle,
   },
   data() {
