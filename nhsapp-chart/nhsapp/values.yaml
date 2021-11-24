@@ -187,6 +187,7 @@ cosmosDBIPTrust:
   - "51.141.53.76/32"            # CosmosDB UKWest 11.11.2020
   - "51.141.55.229/32"           # CosmosDB UKWest 11.11.2020
   - "2603:1020:605:402::c0/122"  # CosmosDB UKWest 11.11.2020
+  - "10.0.0.0/8"                 # CosmosDB PrivateLink Route
 
 mongoDBConnectionCheckIntervalInSeconds: 30
 metaServiceCIDR: "169.254.169.254/32"
