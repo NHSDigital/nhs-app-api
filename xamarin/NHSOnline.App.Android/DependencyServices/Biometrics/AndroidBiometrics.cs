@@ -106,6 +106,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
             if (Build.VERSION.SdkInt >= BuildVersionCodes.N)
             {
                 builder.SetAttestationChallenge(Array.Empty<byte>());
+                builder.SetInvalidatedByBiometricEnrollment(true);
             }
 
             return builder.Build();
