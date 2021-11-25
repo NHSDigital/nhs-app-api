@@ -4,4 +4,4 @@ target:
 journeys:
   appointments:
     provider: informatica
-    informaticaUrl: https://the-andover-health-centre-medical-practice.appointments-online.co.uk/
+    informaticaUrl: http://stubs.local.bitraft.io:8080/external/andover-medical-practice-appointments-online-co-uk/

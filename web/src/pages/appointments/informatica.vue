@@ -30,7 +30,7 @@ export default {
   },
   data() {
     return {
-      informaticaUrl: this.$store.$env.INFORMATICA_URL,
+      informaticaUrl: this.$store.state.serviceJourneyRules.rules.appointments.informaticaUrl,
     };
   },
 };
