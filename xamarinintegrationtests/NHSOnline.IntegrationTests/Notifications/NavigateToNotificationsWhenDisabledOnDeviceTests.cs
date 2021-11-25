@@ -10,7 +10,8 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.Notifications
 {
     [TestClass]
-    [BusinessRule("BR-NOT-04.9", "Navigating to notification settings when notifications have been disabled for the device in the device settings displays an error message")]
+    [BusinessRule("BR-NOT-04.9",
+        "Navigating to notification settings when notifications have been disabled for the device in the device settings displays an error message")]
     public class NavigateToNotificationsWhenDisabledOnDeviceTests
     {
         [NhsAppAndroidTest]
@@ -46,9 +47,18 @@ namespace NHSOnline.IntegrationTests.Notifications
                 .AssertOnPage(driver)
                 .TurnOffNotifications();
 
-            AndroidSettingsNotifications
-                .AssertOnPage(driver)
-                .ClickBack();
+            var androidSettingsNotifications = AndroidSettingsNotifications
+                .AssertOnPage(driver);
+
+            TransitoryErrorHandler.HandleSpecificFailure()
+                .Alternate(() =>
+                    {
+                        // Intermittently there is no 'Back' arrow on this system notifications screen. In this case, just use native Back action.
+                        androidSettingsNotifications
+                            .ClickBack();
+                    },
+                    "No AndroidElement found matching By.XPath: //android.widget.ImageButton[normalize-space(@content-desc)='Navigate up']",
+                    () => { driver.PressBackButton(); });
 
             AndroidNotificationsPage
                 .AssertOnPage(driver)
@@ -67,7 +77,10 @@ namespace NHSOnline.IntegrationTests.Notifications
                 .PageContent.AssertNotificationsTurnedOffErrorPageElements();
         }
 
-        [NhsAppManualTest("NHSO-14101", "BrowserStack requires Enterprise Certificate signing to enable notifications on iOS")]
-        public void APatientNavigatesToNotificationsWhenDisabledOnDeviceIOS() { }
+        [NhsAppManualTest("NHSO-14101",
+            "BrowserStack requires Enterprise Certificate signing to enable notifications on iOS")]
+        public void APatientNavigatesToNotificationsWhenDisabledOnDeviceIOS()
+        {
+        }
     }
 }

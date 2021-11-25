@@ -32,8 +32,8 @@ namespace NHSOnline.IntegrationTests.TermsAndConditions
             androidStubbedLoginPageSlimHeader
                 .PageContent.LoginWithLoginTermsAndConditions(patient);
 
-            TransitoryErrorRetryHandler.RetryOnSpecificFailure()
-                .Handle(() =>
+            TransitoryErrorHandler.HandleSpecificFailure()
+                .Retry(() =>
                     {
                         AndroidStubbedLoginTermsAndConditionsPage
                             .AssertOnPage(driver)

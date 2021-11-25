@@ -102,8 +102,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSStoragePage? storagePage = null;
 
-            TransitoryErrorRetryHandler.RetryOnSpecificFailure()
-                .Handle(() =>
+            TransitoryErrorHandler.HandleSpecificFailure()
+                .Retry(() =>
                     {
                         IOSFileUploadPage
                             .AssertOnPage(driver)
