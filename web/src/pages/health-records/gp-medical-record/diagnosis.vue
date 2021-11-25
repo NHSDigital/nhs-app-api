@@ -5,16 +5,16 @@
       v-if="showError"
       :has-errored="diagnosis.hasErrored"
       :has-access="diagnosis.hasAccess"/>
-    <div v-if="showTemplate"
-         :class="['pull-content']"
-         class="nhsuk-grid-row nhsuk-u-margin-bottom-4">
-      <div class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2">
-        <div v-if="markup">
+    <div v-else-if="markup"
+         class="nhsuk-u-margin-bottom-4">
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2">
           <card>
             <span v-html="markup"/>
           </card>
         </div>
       </div>
+      <no-further-information-available />
     </div>
     <glossary v-if="!showError"/>
     <desktopGenericBackLink
@@ -30,6 +30,7 @@ import Card from '@/components/widgets/card/Card';
 import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
+import NoFurtherInformationAvailable from '@/components/gp-medical-record/SharedComponents/NoFurtherInformationAvailable';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
@@ -40,6 +41,7 @@ export default {
     DcrErrorNoAccessGpRecord,
     Card,
     Glossary,
+    NoFurtherInformationAvailable,
   },
   mixins: [ReloadRecordMixin],
   data() {

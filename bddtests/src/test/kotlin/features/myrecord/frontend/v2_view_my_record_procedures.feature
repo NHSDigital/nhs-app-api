@@ -31,3 +31,4 @@ Feature: Procedures Frontend - Medical Record v2
     When I click the 'Continue' button
     And I click the Procedures link on my record - Medical Record v2
     Then I see the expected procedures - Medical Record v2
+    And I see a message that no further information is available for this section in GP Medical Record

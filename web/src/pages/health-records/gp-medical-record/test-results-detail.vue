@@ -1,16 +1,21 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <div v-if="showTemplate"
-       :class="[$style.content,
-                'pull-content',
-                !$store.state.device.isNativeApp && $style.desktopWeb]">
+  <div v-if="showTemplate">
     <dcr-error-no-access-gp-record
       v-if="showError"
       :has-errored="testResults.hasErrored"
       :has-access="testResults.hasAccess"/>
-    <Card v-else :class="$style['vision-test-results', 'test-result-content']">
-      <span v-html="markup"/>
-    </Card>
+    <div v-else-if="markup"
+         class="nhsuk-u-margin-bottom-4">
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2">
+          <card>
+            <span v-html="markup"/>
+          </card>
+        </div>
+      </div>
+      <no-further-information-available />
+    </div>
     <glossary v-if="markup"/>
     <desktopGenericBackLink
       v-if="!$store.state.device.isNativeApp"
@@ -27,6 +32,7 @@ import Card from '@/components/widgets/card/Card';
 import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
+import NoFurtherInformationAvailable from '@/components/gp-medical-record/SharedComponents/NoFurtherInformationAvailable';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
@@ -37,6 +43,7 @@ export default {
     DcrErrorNoAccessGpRecord,
     DesktopGenericBackLink,
     Glossary,
+    NoFurtherInformationAvailable,
   },
   mixins: [ReloadRecordMixin],
   data() {
@@ -64,7 +71,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-  @import "@/style/custom/test-results-detail";
-</style>
