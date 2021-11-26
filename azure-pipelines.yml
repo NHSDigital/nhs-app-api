@@ -362,9 +362,3 @@ stages:
         - backend
       jobs:
         - template: .azuredevops/templates/build-sjr-config-image.yml
-
-    - stage: secret_scanning
-      displayName: Production Scan git history for secrets
-      dependsOn:
-      jobs:
-        - template: .azuredevops/templates/secret-scanning.yml
