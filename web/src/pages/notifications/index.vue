@@ -6,9 +6,9 @@
       <p>{{ $t('notifications.theNhsAndConnected') }}</p>
       <nhs-uk-radio-group v-model="selectedValue"
                           name="notifications"
-                          :heading="'<h1>'
+                          :heading="'<h2>'
                             + $t('notifications.doYouWantToGetNotifications')
-                            + '</h1>'"
+                            + '</h2>'"
                           :heading-as-html="true"
                           :legend-size="mediumLegendSize"
                           :enable-error-dialog="false"

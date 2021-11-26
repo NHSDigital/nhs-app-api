@@ -16,7 +16,7 @@ class NotificationsPromptPage : HybridPageObject() {
     var turnOnNotificationsForEachDevice = getElement("//p[contains(text(), " +
             "'If you want to get notifications, you need to turn them on for each device you use to access the " +
             "NHS App.')]")
-    var doYouWant = getElement("//h1[contains(text(), 'Do you want to get NHS App notifications?')]")
+    var doYouWant = getElement("//h2[contains(text(), 'Do you want to get NHS App notifications?')]")
     var ifYouShare = getElement("//p[contains(text(), " +
             "'If you share this device with other people, they may see your notifications')]")
     var moreInfoParagraph = getElement("//p[contains(text(), 'More information is available in the')]")
