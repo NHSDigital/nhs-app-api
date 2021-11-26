@@ -8,8 +8,10 @@ using AndroidX.Biometric;
 using AndroidX.Fragment.App;
 using Java.Security;
 using Java.Security.Spec;
+using Microsoft.Extensions.Logging;
 using NHSOnline.App.DependencyServices.Biometrics;
 using NHSOnline.App.Droid.DependencyServices.Biometrics;
+using NHSOnline.App.Logging;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(AndroidBiometrics))]
@@ -18,6 +20,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
     public sealed class AndroidBiometrics : IBiometrics
     {
         internal static Activity MainActivity { get; set; } = null!;
+        private static ILogger Logger => NhsAppLogging.CreateLogger<AndroidBiometrics>();
 
         public Task<BiometricStatus> FetchBiometricStatus(string fidoUsername)
         {
@@ -114,13 +117,20 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
 
         public bool TryGetKey(string fidoUsername, [NotNullWhen(true)] out IBiometricAuthKey? key)
         {
-            var secretKey = BiometricKeyStore.GetKey(fidoUsername);
-            var certificate = BiometricKeyStore.GetCertificate(fidoUsername);
-
-            if (secretKey != null && certificate != null)
+            try
             {
-                key = new BiometricAuthKey((FragmentActivity)MainActivity, secretKey, certificate);
-                return true;
+                var secretKey = BiometricKeyStore.GetKey(fidoUsername);
+                var certificate = BiometricKeyStore.GetCertificate(fidoUsername);
+
+                if (secretKey != null && certificate != null)
+                {
+                    key = new BiometricAuthKey((FragmentActivity) MainActivity, secretKey, certificate);
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, "Failed to get Biometric Auth Key");
             }
 
             key = default;
