@@ -946,7 +946,6 @@ hounslow,Hounslow,CCG,Hounslow,North West London,willowpractice,Willow Practice,
 ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,barracklane,Barrack Lane Medical Centre,D83059,19400
 ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,bildestonhealthcentre,Bildeston Health Centre,D83006,6800
 ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,constablecountrymedicalpractice,Constable Country Medical Practice,D83001,10200
-ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,debenroadsurgery,Deben Road Surgery,D83050,7358
 ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,debenhamgrouppractice,Debenham Group Practice,D83041,8850
 ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,drsolwayandwhale,Dr Solway and Dr Mallick Practice,D83073,6278
 ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,eyehealthcentre,Eye Health Centre,D83043,6029
@@ -966,7 +965,6 @@ ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North 
 ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,mendleshamhealthcentre,Mendlesham Medical Group,D83019,7628
 ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,orchardmedicalpractice,Orchard Medical Practice,D83074,14475
 ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,saxquax,Saxmundham Health,D83053,9286
-ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,thebircheskesgrave,The Birches Medical Centre,D83084,7492
 ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,leistonsurgery,The Leiston Surgery,D83028,7296
 ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,thepeninsulapractice,The Peninsula Practice,D83054,4000
 ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,wickhammarketmc,Wickham Market Medical Centre And Rendlesham Surgery,D83061,10000
@@ -1946,7 +1944,6 @@ whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,alm
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,andoverhealthcentre,Andover Health Centre Medical Practice,J82017,13916
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,archerspractice,Archers Practice,J82020,6600
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,bartonsurgery,Barton WebbPeploe Partnership,J82166,10750
-whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,bishopswalthamsurgery,Bishops Waltham Surgery,J82064,12853
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,blackthornhealthcentre,Blackthorn Health Centre,J82051,12387
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,boyattwoodsurgery,Boyatt Wood Surgery,J82169,7500
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,charltonhillsurgery,Charlton Hill Surgery,J82025,12500
@@ -2361,7 +2358,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Lanark Medical Centre,E87756,
 ,,,Other,,,Dr T Abela & Partners - Chafford Hundred MC,F81113,
 ,,,Other,,,Balfour Medical Centre,F81155,
-,,,Other,,,Stifford Clays Medical Practice,F81192,
 ,,,Other,,,Yadava Practice,F81211,
 ,,,Other,,,The Grays Surgery,F81218,
 ,,,Other,,,Dell Medical Centre and Stanford le Hope Branch Surgery,F81219,
@@ -2455,7 +2451,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Clanricarde Medical Centre,G82025,
 ,,,Other,,,The Cedars Surgery,G82028,
 ,,,Other,,,The Town Medical Centre,G82110,
-,,,Other,,,Swanscombe & Bean Partnership,G82122,
 ,,,Other,,,Thames Avenue Surgery,G82154,
 ,,,Other,,,Maidstone Road Surgery - Rainham,G82180,
 ,,,Other,,,Twydall Medical Centre,G82184,
@@ -2659,7 +2654,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Portishead Medical Group,L81004,
 ,,,Other,,,Hanham Health,L81079,
 ,,,Other,,,Pembroke Road Surgery,L81081,
-,,,Other,,,Church View Surgery,L83064,
 ,,,Other,,,Tower House Practice,N81057,
 ,,,Other,,,Manchester Road Surgery,N81107,
 ,,,Other,,,Brownlow Health - Princes Park Health Centre,N82076,
@@ -2685,3 +2679,9 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Cauldwell Medical Centre,E81030,
 ,,,Other,,,Maritime Health Partnership,G82744,
 ,,,Other,,,Stretton Medical Centre,N81623,
+,,,Other,,,Warden Lodge Medical Practice,E82123,
+,,,Other,,,Island Health,F84710,
+,,,Other,,,Green Meadows Surgery,K81076,
+,,,Other,,,Peverell Park Surgery,L83648,
+,,,Other,,,Marysville Medical Practice,M82040,
+,,,Other,,,Hoylake Road Medical Centre,N85046,

@@ -1,7 +1,6 @@
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
   odsCodes:
-    - "M85007"
     - "M85041"
 journeys:
   silverIntegrations:
