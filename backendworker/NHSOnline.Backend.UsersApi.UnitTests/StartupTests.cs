@@ -294,6 +294,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
                 .Setup(x => x["MONGO_CONNECTION_STRING"])
                 .Returns(mongoConnectionString);
 
+            _mockConfiguration
+                .Setup(x => x["MOCK_NOTIFICATION_HUB_CLIENT"])
+                .Returns("false");
+
             SetupNotificationHubConfigurationFields();
         }
 

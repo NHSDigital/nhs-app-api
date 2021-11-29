@@ -113,6 +113,7 @@ api:
     servicesV3__silver_third_party_api_test__domains__1: https://httpstat.us
 
 users:
+  mockNotificationHubClient: false
   notificationHubs:
     - notificationHubPath: nhsapp-staging
       notificationHubConnectionString: Endpoint=sb://nhsapp-staging.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=

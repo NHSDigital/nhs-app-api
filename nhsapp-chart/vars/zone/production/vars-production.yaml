@@ -181,6 +181,7 @@ info:
   maxReplicas: 100
 
 users:
+  mockNotificationHubClient: false
   minAvailable: 7
   minReplicas: 13
   maxReplicas: 100

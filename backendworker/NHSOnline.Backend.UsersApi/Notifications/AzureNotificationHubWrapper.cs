@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Azure.NotificationHubs;
@@ -11,7 +10,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
     {
         private const int InstallationRecordMaxResults = 100;
 
-        private readonly NotificationHubClient _hubClient;
+        private readonly INotificationHubClient _hubClient;
 
         private readonly IInstallationFactory _installationFactory;
         private readonly INhsLoginIdService _readService;
@@ -22,9 +21,11 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         public int Generation { get; }
         public string Path { get; }
 
-        public AzureNotificationHubWrapper(AzureNotificationHubConfiguration configuration)
+        public AzureNotificationHubWrapper(
+            AzureNotificationHubConfiguration configuration,
+            INotificationHubClientFactory notificationHubClientFactory)
         {
-            _hubClient = NotificationHubClient.CreateClientFromConnectionString(
+            _hubClient = notificationHubClientFactory.CreateClientFromConnectionString(
                 $"{configuration.ConnectionString}{configuration.SharedAccessKey}",
                 configuration.NotificationHubPath
             );

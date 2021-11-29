@@ -53,7 +53,8 @@ namespace NHSOnline.Backend.UsersApi
 
             services
                 .AddControllers(ConfigureMvcOptions)
-                .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
+                .AddNewtonsoftJson(o =>
+                    o.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
 
             services.AddNhsAppHealthCheckService(Configuration);
             services.AddPerformanceCounterService(Configuration);
@@ -83,11 +84,24 @@ namespace NHSOnline.Backend.UsersApi
 
         private void SetupConfigurationSettings(IServiceCollection services)
         {
-            var clientWrappers = CreateAzureNotificationHubConfigurations()
-                .Select(x => new AzureNotificationHubWrapper(x))
-                .Cast<IAzureNotificationHubWrapper>();
+            var mockNotificationHub = Configuration.GetBoolOrFallback("MOCK_NOTIFICATION_HUB_CLIENT", false);
+            INotificationHubClientFactory clientFactory;
 
-            services.AddSingleton(clientWrappers);
+            if (mockNotificationHub)
+            {
+                _logger.LogWarning("Using mock notification hub client");
+                clientFactory = new MockNotificationHubClientFactory();
+            }
+            else
+            {
+                clientFactory = new NotificationHubClientFactory();
+            }
+
+            services.AddSingleton(
+                CreateAzureNotificationHubConfigurations()
+                    .Select(x => new AzureNotificationHubWrapper(x, clientFactory))
+                    .Cast<IAzureNotificationHubWrapper>()
+            );
 
             var httpTimeoutConfig = CreateHttpTimeoutConfiguration();
             services.AddSingleton<IHttpTimeoutConfigurationSettings>(httpTimeoutConfig);

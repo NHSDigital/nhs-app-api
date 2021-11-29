@@ -111,8 +111,10 @@ api:
 sjrExternalIngressEnabled: true
 
 users:
-  notificationHubPath: nhsapp-loadtest
-  notificationHubConnectionString: Endpoint=sb://nhsapp-loadtest.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+  mockNotificationHubClient: true
+  notificationHubs:
+    - notificationHubPath: nhsapp-loadtest
+      notificationHubConnectionString: Endpoint=sb://nhsapp-loadtest.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
 
 metrics:
   memoryRequest: "120Mi"

@@ -65,6 +65,7 @@ api:
     servicesV3__netCompany__url: https://stdevpistatic01.z33.web.core.windows.net
 
 users:
+  mockNotificationHubClient: false
   notificationHubs:
     - notificationHubPath: nhsapp-nonlive
       notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
