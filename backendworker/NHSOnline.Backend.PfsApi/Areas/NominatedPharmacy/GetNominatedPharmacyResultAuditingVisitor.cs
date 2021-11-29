@@ -23,6 +23,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
+                _logger.LogInformation("Successfully retrieved nominated pharmacy");
                 await _auditor.PostOperationAudit(AuditType, "Successfully retrieved nominated pharmacy");
             }
             catch (Exception e)
@@ -35,6 +36,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
+                _logger.LogInformation("Personal Details checks failed on the retrieved Nominated Pharmacy");
                 await _auditor.PostOperationAudit(AuditType, "Personal Details checks failed on the retrieved Nominated Pharmacy");
             }
             catch (Exception e)
@@ -47,6 +49,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
+                _logger.LogInformation("Pharmacy checks failed on the retrieved Nominated Pharmacy");
                 await _auditor.PostOperationAudit(AuditType, "Pharmacy checks failed on the retrieved Nominated Pharmacy");
             }
             catch (Exception e)
@@ -88,6 +91,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
+                _logger.LogInformation("Account is marked as confidential");
                 await _auditor.PostOperationAudit(AuditType, "Account is marked as confidential");
             }
             catch (Exception e)
@@ -124,8 +128,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
+                _logger.LogInformation($"GP practice with ods code { result.OdsCode } " +
+                                       "not enabled for electronic prescription service");
                 await _auditor.PostOperationAudit(AuditType, $"GP practice with ods code { result.OdsCode } " +
-                                                      "not enabled for electronic prescription service");
+                                                             "not enabled for electronic prescription service");
             }
             catch (Exception e)
             {
@@ -137,6 +143,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
+                _logger.LogInformation($"Error retrieving GP practice with ods code {result.OdsCode}");
                 await _auditor.PostOperationAudit(AuditType, $"Error retrieving GP practice with ods code {result.OdsCode}");
             }
             catch (Exception e)
@@ -149,6 +156,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
+                _logger.LogInformation("No nominated pharmacy. Returning Success.");
                 await _auditor.PostOperationAudit(AuditType, "No nominated pharmacy. Returning Success.");
             }
             catch (Exception e)
@@ -161,8 +169,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
+                _logger.LogInformation("Error retrieving pharmacy using pharmacy OdsCde " +
+                                       $"{result.OdsCode} with status code {result.StatusCode}");
                 await _auditor.PostOperationAudit(AuditType, "Error retrieving pharmacy using pharmacy OdsCde " +
-                                                      $"{result.OdsCode} with status code {result.StatusCode}");
+                                                             $"{result.OdsCode} with status code {result.StatusCode}");
             }
             catch (Exception e)
             {
@@ -174,6 +184,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
+                _logger.LogInformation("Nominated pharmacy is disabled as user has invalid pharmacy subtype");
                 await _auditor.PostOperationAudit(AuditType, "Nominated pharmacy is disabled as user has invalid pharmacy subtype");
             }
             catch (Exception e)
