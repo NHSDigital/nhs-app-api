@@ -192,6 +192,7 @@ users:
   notificationHubs:
     - notificationHubPath: nhsapp-production
       notificationHubConnectionString: Endpoint=sb://nhsapp-production.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
+      notificationHubReadCharacters: "0123"
       notificationHubWriteCharacters: "0123"
     - notificationHubPath: nhsapp-production-0
       notificationHubConnectionString: Endpoint=sb://nhsapp-production-0.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=

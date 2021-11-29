@@ -11,6 +11,11 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
            return new AcceptedResult();
         }
 
+        public IActionResult Visit(NotificationSendResult.Conflict result)
+        {
+            return new ConflictResult();
+        }
+
         public IActionResult Visit(NotificationSendResult.InternalServerError result)
         {
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);

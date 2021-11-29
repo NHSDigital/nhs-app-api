@@ -39,8 +39,13 @@ namespace NHSOnline.Backend.UsersApi.Notifications
                     ScheduledTime = notificationSendRequest.ScheduledTime
                 };
 
-                await _notificationClient.SendNotification(request);
-                return new NotificationSendResult.Success();
+                var notificationResponse = await _notificationClient.SendNotification(request);
+                return new NotificationSendResult.Success(notificationResponse);
+            }
+            catch (InstallationNotFoundException ex)
+            {
+                _logger.LogError(ex, "Failed to send notification, installation not found on any hub");
+                return new NotificationSendResult.Conflict();
             }
             catch (MessagingException ex)
             {

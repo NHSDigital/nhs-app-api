@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         Task<bool> InstallationExists(string installationId);
         Task<string[]> GetInstallationIdsByDevicePns(string devicePns);
         Task<string[]> GetInstallationIdsByNhsLoginId(string nhsLoginId);
-        Task SendNotification(NotificationRequest request);
-        Task SendScheduledNotification(NotificationRequest request);
+        Task<NotificationResponse> SendNotification(NotificationRequest request);
+        Task<NotificationResponse> SendScheduledNotification(NotificationRequest request);
     }
 }

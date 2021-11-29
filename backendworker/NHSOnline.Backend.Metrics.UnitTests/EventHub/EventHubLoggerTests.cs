@@ -175,6 +175,36 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
             AssertContains(loggedPidData, "NhsNumber=NHS+Number");
         }
 
+        [TestMethod]
+        public async Task NotificationEnqueued_LogsNotificationEnqueuedEventLogDataToNonPidEventHubs()
+        {
+            // Arrange
+            var notificationEnqueuedData = new NotificationEnqueuedEventLogData(
+                "Nhs Login ID", "Notification ID", "Tracking ID", true);
+
+            var loggedNonPidData = string.Empty;
+
+            _mockNonPidEventHubClient.Setup(x => x.WriteToEventHub(It.IsAny<string>()))
+                .Callback<string>(x => loggedNonPidData = x)
+                .Returns(Task.CompletedTask);
+            _mockNonPidEventHubClient.SetupGet(x => x.PidAllowed).Returns(false);
+
+            // Act
+            await _systemUnderTest.NotificationEnqueued(notificationEnqueuedData);
+
+            // Assert
+            VerifyMocks();
+
+            loggedNonPidData.Split(' ').Should().HaveCount(7);
+            AssertTimeStamp(loggedNonPidData);
+            AssertContains(loggedNonPidData, "Action=NotificationEnqueued");
+            AssertContains(loggedNonPidData, "EnvironmentName=TestEnv");
+            AssertContains(loggedNonPidData, "NhsLoginId=Nhs+Login+ID");
+            AssertContains(loggedNonPidData, "NotificationId=Notification+ID");
+            AssertContains(loggedNonPidData, "TrackingId=Tracking+ID");
+            AssertContains(loggedNonPidData, "Scheduled=True");
+        }
+
         private static void AssertContains(string logData, string expected)
         {
             logData.Split(' ').Should().Contain(expected);

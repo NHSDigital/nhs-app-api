@@ -14,6 +14,6 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         Task<bool> InstallationExists(string installationId, string nhsLoginId);
         Task<ICollection<string>> FindInstallationIdsByNhsLoginId(string nhsLoginId);
         Task<(HttpStatusCode, string)> Migrate(MigrationRequest request);
-        Task SendNotification(NotificationRequest request);
+        Task<NotificationResponse> SendNotification(NotificationRequest request);
     }
 }

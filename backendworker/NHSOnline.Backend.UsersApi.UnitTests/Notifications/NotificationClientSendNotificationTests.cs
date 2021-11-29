@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -31,6 +32,30 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             NhsLoginId = NhsLoginId
         };
 
+        private readonly NotificationRequest _scheduledNotificationRequest = new NotificationRequest
+        {
+            Title = "title",
+            Subtitle = "subtitle",
+            Body = "body",
+            Url = new Uri("http://www.example.com"),
+            NhsLoginId = NhsLoginId,
+            ScheduledTime = DateTimeOffset.UtcNow.AddHours(1)
+        };
+
+        private readonly NotificationResponse _scheduledNotificationResponse = new NotificationResponse
+        {
+            Scheduled = true,
+            NotificationId = "Scheduled Notification ID",
+            TrackingId = "Scheduled Tracking ID"
+        };
+
+        private readonly NotificationResponse _notificationResponse = new NotificationResponse
+        {
+            Scheduled = false,
+            NotificationId = "Notification ID",
+            TrackingId = "Tracking ID"
+        };
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -46,48 +71,79 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         }
 
         [TestMethod]
-        public async Task SendNotification_NoMatchingWrappers_NoActionTaken()
+        public void SendNotification_NoMatchingWrappers_Throws()
         {
+            // Arrange
             _mockWrapperService
                 .Setup(x => x.AllFor(NhsLoginId))
                 .Returns(Enumerable.Empty<IAzureNotificationHubWrapper>());
 
-            await _systemUnderTest.SendNotification(_notificationRequest);
+            // Act
+            FluentActions.Invoking(async () => await _systemUnderTest.SendNotification(_notificationRequest))
+                .Should().ThrowExactly<InstallationNotFoundException>();
 
-            VerifySetups();
+            // Assert
+            VerifyMocks();
         }
 
         [TestMethod]
-        public async Task SendNotification_OneMatchingWrapper_InstallationNotFound_NoActionTaken()
+        public void SendNotification_NoMatchingWrappers_Scheduled_Throws()
         {
-            SetupMockWrapper(_mockWrapper, false);
+            // Arrange
+            _mockWrapperService
+                .Setup(x => x.AllFor(NhsLoginId))
+                .Returns(Enumerable.Empty<IAzureNotificationHubWrapper>());
+
+            // Act
+            FluentActions.Invoking(async () => await _systemUnderTest.SendNotification(_scheduledNotificationRequest))
+                .Should().ThrowExactly<InstallationNotFoundException>();
+
+            // Assert
+            VerifyMocks();
+        }
+
+        [TestMethod]
+        public async Task SendNotification_OneMatchingWrapper_NotificationSent()
+        {
+            // Arrange
+            SetupMockWrapper(_mockWrapper);
 
             _mockWrapperService
                 .Setup(x => x.AllFor(NhsLoginId))
                 .Returns(new[] { _mockWrapper.Object });
 
-            await _systemUnderTest.SendNotification(_notificationRequest);
+            // Act
+            var response = await _systemUnderTest.SendNotification(_notificationRequest);
 
-            VerifySetups();
+            // Assert
+            response.Should().BeEquivalentTo(_notificationResponse);
+
+            VerifyMocks();
         }
 
         [TestMethod]
-        public async Task SendNotification_OneMatchingWrapper_InstallationFound_SendsNotification()
+        public async Task SendNotification_OneMatchingWrapper_Scheduled_NotificationSent()
         {
-            SetupMockWrapper(_mockWrapper, true);
+            // Arrange
+            SetupMockWrapper(_mockWrapper, scheduled: true);
 
             _mockWrapperService
                 .Setup(x => x.AllFor(NhsLoginId))
                 .Returns(new[] { _mockWrapper.Object });
 
-            await _systemUnderTest.SendNotification(_notificationRequest);
+            // Act
+            var response = await _systemUnderTest.SendNotification(_scheduledNotificationRequest);
 
-            VerifySetups();
+            // Assert
+            response.Should().BeEquivalentTo(_scheduledNotificationResponse);
+
+            VerifyMocks();
         }
 
         [TestMethod]
-        public async Task SendNotification_MultipleMatchingWrappers_InstallationNotFoundInAny_NoActionTaken()
+        public void SendNotification_MultipleMatchingWrappers_InstallationNotFoundInAny_Throws()
         {
+            // Arrange
             SetupMockWrapper(_mockWrapper, false, true);
             SetupMockWrapper(_mockWrapper2, false, true);
 
@@ -95,14 +151,37 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 .Setup(x => x.AllFor(NhsLoginId))
                 .Returns(new[] { _mockWrapper.Object, _mockWrapper2.Object });
 
-            await _systemUnderTest.SendNotification(_notificationRequest);
+            // Act
+            FluentActions.Invoking(async () => await _systemUnderTest.SendNotification(_notificationRequest))
+                .Should().ThrowExactly<InstallationNotFoundException>();
 
-            VerifySetups();
+            // Assert
+            VerifyMocks();
+        }
+
+        [TestMethod]
+        public void SendNotification_MultipleMatchingWrappers_InstallationNotFoundInAny_Scheduled_Throws()
+        {
+            // Arrange
+            SetupMockWrapper(_mockWrapper, false, true);
+            SetupMockWrapper(_mockWrapper2, false, true);
+
+            _mockWrapperService
+                .Setup(x => x.AllFor(NhsLoginId))
+                .Returns(new[] { _mockWrapper.Object, _mockWrapper2.Object });
+
+            // Act
+            FluentActions.Invoking(async () => await _systemUnderTest.SendNotification(_scheduledNotificationRequest))
+                .Should().ThrowExactly<InstallationNotFoundException>();
+
+            // Assert
+            VerifyMocks();
         }
 
         [TestMethod]
         public async Task SendNotification_MultipleMatchingWrappers_InstallationFoundInFirstOne_SendsNotification()
         {
+            // Arrange
             SetupMockWrapper(_mockWrapper, true, true);
             SetupMockWrapper(_mockWrapper2, false, true);
 
@@ -110,8 +189,32 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 .Setup(x => x.AllFor(NhsLoginId))
                 .Returns(new[] { _mockWrapper.Object, _mockWrapper2.Object });
 
-            await _systemUnderTest.SendNotification(_notificationRequest);
+            // Act
+            var response = await _systemUnderTest.SendNotification(_notificationRequest);
 
+            // Assert
+            response.Should().BeEquivalentTo(_notificationResponse);
+            _mockWrapperService.VerifyAll();
+            _mockWrapper.VerifyAll();
+            _mockWrapper2.VerifyNoOtherCalls();
+        }
+
+        [TestMethod]
+        public async Task SendNotification_MultipleMatchingWrappers_InstallationFoundInFirstOne_Scheduled_SendsNotification()
+        {
+            // Arrange
+            SetupMockWrapper(_mockWrapper, true, true, true);
+            SetupMockWrapper(_mockWrapper2, false, true, true);
+
+            _mockWrapperService
+                .Setup(x => x.AllFor(NhsLoginId))
+                .Returns(new[] { _mockWrapper.Object, _mockWrapper2.Object });
+
+            // Act
+            var response = await _systemUnderTest.SendNotification(_scheduledNotificationRequest);
+
+            // Assert
+            response.Should().BeEquivalentTo(_scheduledNotificationResponse);
             _mockWrapperService.VerifyAll();
             _mockWrapper.VerifyAll();
             _mockWrapper2.VerifyNoOtherCalls();
@@ -120,6 +223,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         [TestMethod]
         public async Task SendNotification_MultipleMatchingWrappers_InstallationFoundInSecondOne_SendsNotification()
         {
+            // Arrange
             SetupMockWrapper(_mockWrapper, false, true);
             SetupMockWrapper(_mockWrapper2, true, true);
 
@@ -127,14 +231,37 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 .Setup(x => x.AllFor(NhsLoginId))
                 .Returns(new[] { _mockWrapper.Object, _mockWrapper2.Object });
 
-            await _systemUnderTest.SendNotification(_notificationRequest);
+            // Act
+            var response = await _systemUnderTest.SendNotification(_notificationRequest);
 
-            VerifySetups();
+            // Assert
+            response.Should().BeEquivalentTo(_notificationResponse);
+            VerifyMocks();
+        }
+
+        [TestMethod]
+        public async Task SendNotification_MultipleMatchingWrappers_InstallationFoundInSecondOne_Scheduled_SendsNotification()
+        {
+            // Arrange
+            SetupMockWrapper(_mockWrapper, false, true, true);
+            SetupMockWrapper(_mockWrapper2, true, true, true);
+
+            _mockWrapperService
+                .Setup(x => x.AllFor(NhsLoginId))
+                .Returns(new[] { _mockWrapper.Object, _mockWrapper2.Object });
+
+            // Act
+            var response = await _systemUnderTest.SendNotification(_scheduledNotificationRequest);
+
+            // Assert
+            response.Should().BeEquivalentTo(_scheduledNotificationResponse);
+            VerifyMocks();
         }
 
         [TestMethod]
         public async Task SendNotification_MultipleMatchingWrappers_InstallationFoundInAll_SendsNotification()
         {
+            // Arrange
             SetupMockWrapper(_mockWrapper, true, true);
             SetupMockWrapper(_mockWrapper2, true, true);
 
@@ -142,58 +269,43 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 .Setup(x => x.AllFor(NhsLoginId))
                 .Returns(new[] { _mockWrapper.Object, _mockWrapper2.Object });
 
-            await _systemUnderTest.SendNotification(_notificationRequest);
+            // Act
+            var response = await _systemUnderTest.SendNotification(_notificationRequest);
 
+            // Assert
+            response.Should().BeEquivalentTo(_notificationResponse);
             _mockWrapperService.VerifyAll();
             _mockWrapper.VerifyAll();
             _mockWrapper2.VerifyNoOtherCalls();
         }
 
         [TestMethod]
-        public async Task SendNotification_NullScheduled_SendsNotification()
-        {
-            //Arrange
-            SetupMockWrapper(_mockWrapper, true);
-            _notificationRequest.ScheduledTime = null;
-
-            _mockWrapperService
-                .Setup(x => x.AllFor(NhsLoginId))
-                .Returns(new[] { _mockWrapper.Object });
-
-            //Act
-            await _systemUnderTest.SendNotification(_notificationRequest);
-
-            //Assert
-            VerifySetups();
-        }
-
-        [TestMethod]
-        public async Task SendNotification_ScheduledTimeSpecified_SchedulesNotification()
+        public async Task SendNotification_MultipleMatchingWrappers_InstallationFoundInAll_Scheduled_SendsNotification()
         {
             // Arrange
-            _notificationRequest.ScheduledTime = DateTimeOffset.Now.AddHours(1);
-
-            SetupMockWrapper(_mockWrapper, true);
+            SetupMockWrapper(_mockWrapper, true, true, true);
+            SetupMockWrapper(_mockWrapper2, true, true, true);
 
             _mockWrapperService
                 .Setup(x => x.AllFor(NhsLoginId))
-                .Returns(new[] { _mockWrapper.Object });
+                .Returns(new[] { _mockWrapper.Object, _mockWrapper2.Object });
 
             // Act
-            await _systemUnderTest.SendNotification(_notificationRequest);
+            var response = await _systemUnderTest.SendNotification(_scheduledNotificationRequest);
 
             // Assert
-            VerifySetups();
+            response.Should().BeEquivalentTo(_scheduledNotificationResponse);
+            _mockWrapperService.VerifyAll();
+            _mockWrapper.VerifyAll();
+            _mockWrapper2.VerifyNoOtherCalls();
         }
 
         private void SetupMockWrapper(
             Mock<IAzureNotificationHubWrapper> wrapper,
-            bool hasInstallations,
-            bool hasMultipleWrappers = false
-        )
+            bool hasInstallations = false,
+            bool hasMultipleWrappers = false,
+            bool scheduled = false)
         {
-            bool isScheduled = _notificationRequest.ScheduledTime != null;
-
             if (hasMultipleWrappers)
             {
                 var installationIds = hasInstallations
@@ -206,38 +318,38 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 
                 if (hasInstallations)
                 {
-                    if (isScheduled)
+                    if (scheduled)
                     {
                         wrapper
-                            .Setup(x => x.SendScheduledNotification(_notificationRequest))
-                            .Returns(Task.CompletedTask);
+                            .Setup(x => x.SendScheduledNotification(_scheduledNotificationRequest))
+                            .ReturnsAsync(_scheduledNotificationResponse);
                     }
                     else
                     {
                         wrapper
                             .Setup(x => x.SendNotification(_notificationRequest))
-                            .Returns(Task.CompletedTask);
+                            .ReturnsAsync(_notificationResponse);
                     }
                 }
             }
             else
             {
-                if (isScheduled)
+                if (scheduled)
                 {
                     wrapper
-                        .Setup(x => x.SendScheduledNotification(_notificationRequest))
-                        .Returns(Task.CompletedTask);
+                        .Setup(x => x.SendScheduledNotification(_scheduledNotificationRequest))
+                        .ReturnsAsync(_scheduledNotificationResponse);
                 }
                 else
                 {
                     wrapper
                         .Setup(x => x.SendNotification(_notificationRequest))
-                        .Returns(Task.CompletedTask);
+                        .ReturnsAsync(_notificationResponse);
                 }
             }
         }
 
-        private void VerifySetups()
+        private void VerifyMocks()
         {
             _mockWrapperService.VerifyAll();
             _mockWrapper.VerifyAll();

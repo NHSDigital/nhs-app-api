@@ -20,6 +20,8 @@ namespace NHSOnline.Backend.Metrics.EventHub
 
         public Task MessageCreated(MessageCreatedEventLogData data) => WriteEventLog(data, EventHubs.CommsHubBoth);
         public Task MessageRead(MessageReadEventLogData data) => WriteEventLog(data, EventHubs.CommsHubBoth);
+        public Task NotificationEnqueued(NotificationEnqueuedEventLogData data) =>
+            WriteEventLog(data, EventHubs.CommsHubNonPid);
 
         private Task WriteEventLog(
             IEventLogData data,

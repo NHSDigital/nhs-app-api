@@ -130,6 +130,8 @@ paths:
             description: Successfully sent
           "400":
             $ref: '#/components/responses/BadRequest'
+          "409":
+            $ref: '#/components/responses/Conflict'
           "500":
             $ref: '#/components/responses/UnexpectedError'
           "502":
@@ -194,6 +196,8 @@ components:
       description: An unexpected error occurred processing the request.
     BadRequest:
       description: Bad request. Supplied request is invalid.
+    Conflict:
+      description: Conflict. Request could not be completed due to a conflict with the current state of the target resource.
   schemas:
     DeviceType:
       type: string

@@ -70,15 +70,22 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             return (await _hubClient.GetRegistrationsByTagAsync(tag, InstallationRecordMaxResults)).InstallationIds();
         }
 
-        public async Task SendNotification(NotificationRequest request)
+        public async Task<NotificationResponse> SendNotification(NotificationRequest request)
         {
             var properties = request.ToDictionary();
             var tag = NhsLoginTagGenerator.Generate(request.NhsLoginId);
 
-            await _hubClient.SendTemplateNotificationAsync(properties, tag);
+            var notificationOutcome = await _hubClient.SendTemplateNotificationAsync(properties, tag);
+
+            return new NotificationResponse
+            {
+                NotificationId = notificationOutcome.NotificationId,
+                Scheduled = false,
+                TrackingId = notificationOutcome.TrackingId
+            };
         }
 
-        public async Task SendScheduledNotification(NotificationRequest request)
+        public async Task<NotificationResponse> SendScheduledNotification(NotificationRequest request)
         {
             var properties = request.ToDictionary();
             var tag = NhsLoginTagGenerator.Generate(request.NhsLoginId);
@@ -86,7 +93,14 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             var notification = new TemplateNotification(properties);
 
             Debug.Assert(request.ScheduledTime != null, "request.ScheduledTime != null");
-            await _hubClient.ScheduleNotificationAsync(notification, request.ScheduledTime.Value, tag);
+            var notificationOutcome = await _hubClient.ScheduleNotificationAsync(notification, request.ScheduledTime.Value, tag);
+
+            return new NotificationResponse
+            {
+                NotificationId = notificationOutcome.ScheduledNotificationId,
+                Scheduled = true,
+                TrackingId = notificationOutcome.TrackingId
+            };
         }
 
         public override string ToString() => _description;

@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 using NHSOnline.Backend.UsersApi.Notifications;
+using NHSOnline.Backend.UsersApi.Notifications.Models;
 using NotificationRequest = NHSOnline.Backend.UsersApi.Notifications.Models.NotificationRequest;
 
 namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
@@ -45,6 +46,13 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 Url = url,
             };
 
+            var notificationResponse = new NotificationResponse
+            {
+                Scheduled = false,
+                NotificationId = "Notification ID",
+                TrackingId = "Tracking ID"
+            };
+
             _mockNotificationClient
                 .Setup(x => x.SendNotification(
                     It.Is<NotificationRequest>(y =>
@@ -53,7 +61,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                         y.Body == body &&
                         y.Url == new Uri(url) &&
                         y.NhsLoginId == NhsLoginId)))
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(notificationResponse);
 
             // Act
             var result = await _systemUnderTest.Send(NhsLoginId, request);
@@ -61,7 +69,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             // Assert
             _mockNotificationClient.VerifyAll();
 
-            result.Should().BeOfType<NotificationSendResult.Success>();
+            var successResult = result.Should().BeOfType<NotificationSendResult.Success>().Subject;
+            successResult.NotificationResponse.Should().BeEquivalentTo(notificationResponse);
         }
 
         [TestMethod]
@@ -80,6 +89,13 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 Url = url
             };
 
+            var notificationResponse = new NotificationResponse
+            {
+                Scheduled = false,
+                NotificationId = "Notification ID",
+                TrackingId = "Tracking ID"
+            };
+
             _mockNotificationClient
                 .Setup(x => x.SendNotification(
                     It.Is<NotificationRequest>(y =>
@@ -88,7 +104,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                         y.Body == body &&
                         y.Url == new Uri(url) &&
                         y.NhsLoginId == NhsLoginId)))
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(notificationResponse);
 
             // Act
             var result = await _systemUnderTest.Send(NhsLoginId, request);
@@ -96,7 +112,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             // Assert
             _mockNotificationClient.VerifyAll();
 
-            result.Should().BeOfType<NotificationSendResult.Success>();
+            var successResult = result.Should().BeOfType<NotificationSendResult.Success>().Subject;
+            successResult.NotificationResponse.Should().BeEquivalentTo(notificationResponse);
         }
 
         [TestMethod]
@@ -115,6 +132,13 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 Url = url
             };
 
+            var notificationResponse = new NotificationResponse
+            {
+                Scheduled = false,
+                NotificationId = "Notification ID",
+                TrackingId = "Tracking ID"
+            };
+
             _mockNotificationClient
                 .Setup(x => x.SendNotification(
                     It.Is<NotificationRequest>(y =>
@@ -123,7 +147,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                         y.Body == body &&
                         y.Url == new Uri(url) &&
                         y.NhsLoginId == NhsLoginId)))
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(notificationResponse);
 
             // Act
             var result = await _systemUnderTest.Send(NhsLoginId, request);
@@ -132,6 +156,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             _mockNotificationClient.VerifyAll();
 
             result.Should().BeOfType<NotificationSendResult.Success>();
+
+            var successResult = result.Should().BeOfType<NotificationSendResult.Success>().Subject;
+            successResult.NotificationResponse.Should().BeEquivalentTo(notificationResponse);
         }
 
         [TestMethod]
@@ -153,6 +180,13 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 Url = url
             };
 
+            var notificationResponse = new NotificationResponse
+            {
+                Scheduled = false,
+                NotificationId = "Notification ID",
+                TrackingId = "Tracking ID"
+            };
+
             _mockNotificationClient
                 .Setup(x => x.SendNotification(
                     It.Is<NotificationRequest>(y =>
@@ -161,13 +195,16 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                         y.Body == body &&
                         y.Url == null &&
                         y.NhsLoginId == NhsLoginId)))
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(notificationResponse);
 
             // Act
-            await _systemUnderTest.Send(NhsLoginId, request);
+            var result = await _systemUnderTest.Send(NhsLoginId, request);
 
             // Assert
             _mockNotificationClient.VerifyAll();
+
+            var successResult = result.Should().BeOfType<NotificationSendResult.Success>().Subject;
+            successResult.NotificationResponse.Should().BeEquivalentTo(notificationResponse);
         }
 
         [TestMethod]
@@ -182,6 +219,13 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 Url = "   http://www.example.com  "
             };
 
+            var notificationResponse = new NotificationResponse
+            {
+                Scheduled = false,
+                NotificationId = "Notification ID",
+                TrackingId = "Tracking ID"
+            };
+
             _mockNotificationClient
                 .Setup(x => x.SendNotification(
                     It.Is<NotificationRequest>(y =>
@@ -190,13 +234,52 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                         y.Body == "body" &&
                         y.Url == new Uri("http://www.example.com") &&
                         y.NhsLoginId == NhsLoginId)))
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(notificationResponse);
 
             // Act
-            await _systemUnderTest.Send(NhsLoginId, request);
+            var result = await _systemUnderTest.Send(NhsLoginId, request);
 
             // Assert
             _mockNotificationClient.VerifyAll();
+
+            var successResult = result.Should().BeOfType<NotificationSendResult.Success>().Subject;
+            successResult.NotificationResponse.Should().BeEquivalentTo(notificationResponse);
+        }
+
+        [TestMethod]
+        public async Task Send_NotificationServiceThrowsInstallationNotFoundException_ReturnsConflictResult()
+        {
+            // Arrange
+            const string title = "title";
+            const string subtitle = "subtitle";
+            const string body = "body";
+            const string url = "http://www.example.com";
+
+            var request = new NotificationSendRequest
+            {
+                Title = title,
+                Subtitle = subtitle,
+                Body = body,
+                Url = url
+            };
+
+            _mockNotificationClient
+                .Setup(x => x.SendNotification(
+                    It.Is<NotificationRequest>(y =>
+                        y.Title == title &&
+                        y.Subtitle == subtitle &&
+                        y.Body == body &&
+                        y.Url == new Uri(url) &&
+                        y.NhsLoginId == NhsLoginId)))
+                .ThrowsAsync(new InstallationNotFoundException());
+
+            // Act
+            var result = await _systemUnderTest.Send(NhsLoginId, request);
+
+            // Assert
+            _mockNotificationClient.VerifyAll();
+
+            result.Should().BeOfType<NotificationSendResult.Conflict>();
         }
 
         [TestMethod]
@@ -326,6 +409,13 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 ScheduledTime = scheduledTime
             };
 
+            var notificationResponse = new NotificationResponse
+            {
+                Scheduled = true,
+                NotificationId = "Notification ID",
+                TrackingId = "Tracking ID"
+            };
+
             _mockNotificationClient
                 .Setup(x => x.SendNotification(
                     It.Is<NotificationRequest>(y =>
@@ -335,7 +425,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                         y.Url == new Uri(url) &&
                         y.NhsLoginId == NhsLoginId &&
                         y.ScheduledTime == scheduledTime)))
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(notificationResponse);
 
             // Act
             var result = await _systemUnderTest.Send(NhsLoginId, request);
@@ -344,6 +434,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             _mockNotificationClient.VerifyAll();
 
             result.Should().BeOfType<NotificationSendResult.Success>();
+
+            var successResult = result.Should().BeOfType<NotificationSendResult.Success>().Subject;
+            successResult.NotificationResponse.Should().BeEquivalentTo(notificationResponse);
         }
     }
 }

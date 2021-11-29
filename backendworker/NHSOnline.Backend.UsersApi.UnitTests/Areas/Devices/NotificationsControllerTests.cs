@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Metrics.EventHub;
 using NHSOnline.Backend.UsersApi.Areas.Devices;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 using NHSOnline.Backend.UsersApi.Notifications;
+using NHSOnline.Backend.UsersApi.Notifications.Models;
 
 namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 {
@@ -17,15 +19,19 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
     {
         private NotificationsController _systemUnderTest;
         private Mock<INotificationService> _mockNotificationService;
+        private Mock<IEventHubLogger> _mockEventHubLogger;
         private const string NhsLoginId = "NhsLoginId";
 
         [TestInitialize]
         public void TestInitialize()
         {
             _mockNotificationService = new Mock<INotificationService>(MockBehavior.Strict);
+            _mockEventHubLogger = new Mock<IEventHubLogger>(MockBehavior.Strict);
 
-            _systemUnderTest = new NotificationsController(_mockNotificationService.Object,
-                new Mock<ILogger<NotificationsController>>().Object);
+            _systemUnderTest = new NotificationsController(
+                _mockNotificationService.Object,
+                new Mock<ILogger<NotificationsController>>().Object,
+                _mockEventHubLogger.Object);
         }
 
         [TestMethod]
@@ -40,15 +46,26 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
                 Url = "http://www.example.com"
             };
 
+            var notificationResponse = new NotificationResponse
+            {
+                Scheduled = false,
+                NotificationId = "Notification ID",
+                TrackingId = "Tracking ID"
+            };
+
             _mockNotificationService
                 .Setup(x => x.Send(NhsLoginId, sendRequest))
-                .ReturnsAsync(new NotificationSendResult.Success());
+                .ReturnsAsync(new NotificationSendResult.Success(notificationResponse));
+
+            _mockEventHubLogger
+                .Setup(x => x.NotificationEnqueued(It.IsNotNull<NotificationEnqueuedEventLogData>()))
+                .Returns(Task.CompletedTask);
 
             // Act
             var result = await _systemUnderTest.Post(NhsLoginId, sendRequest);
 
             // Assert
-            _mockNotificationService.VerifyAll();
+            VerifyMocks();
 
             result.Should().BeOfType<AcceptedResult>();
         }
@@ -68,15 +85,26 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
                 Url = "http://www.example.com"
             };
 
+            var notificationResponse = new NotificationResponse
+            {
+                Scheduled = true,
+                NotificationId = "Notification ID",
+                TrackingId = "Tracking ID"
+            };
+
             _mockNotificationService
                 .Setup(x => x.Send(NhsLoginId, sendRequest))
-                .ReturnsAsync(new NotificationSendResult.Success());
+                .ReturnsAsync(new NotificationSendResult.Success(notificationResponse));
+
+            _mockEventHubLogger
+                .Setup(x => x.NotificationEnqueued(It.IsNotNull<NotificationEnqueuedEventLogData>()))
+                .Returns(Task.CompletedTask);
 
             // Act
             var result = await _systemUnderTest.Post(NhsLoginId, sendRequest);
 
             // Assert
-            _mockNotificationService.VerifyAll();
+            VerifyMocks();
 
             result.Should().BeOfType<AcceptedResult>();
         }
@@ -96,15 +124,26 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
                 Url = "http://www.example.com"
             };
 
+            var notificationResponse = new NotificationResponse
+            {
+                Scheduled = false,
+                NotificationId = "Notification ID",
+                TrackingId = "Tracking ID"
+            };
+
             _mockNotificationService
                 .Setup(x => x.Send(NhsLoginId, sendRequest))
-                .ReturnsAsync(new NotificationSendResult.Success());
+                .ReturnsAsync(new NotificationSendResult.Success(notificationResponse));
+
+            _mockEventHubLogger
+                .Setup(x => x.NotificationEnqueued(It.IsNotNull<NotificationEnqueuedEventLogData>()))
+                .Returns(Task.CompletedTask);
 
             // Act
             var result = await _systemUnderTest.Post(NhsLoginId, sendRequest);
 
             // Assert
-            _mockNotificationService.VerifyAll();
+            VerifyMocks();
 
             result.Should().BeOfType<AcceptedResult>();
         }
@@ -124,15 +163,26 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
                 Url = url
             };
 
+            var notificationResponse = new NotificationResponse
+            {
+                Scheduled = false,
+                NotificationId = "Notification ID",
+                TrackingId = "Tracking ID"
+            };
+
             _mockNotificationService
                 .Setup(x => x.Send(NhsLoginId, sendRequest))
-                .ReturnsAsync(new NotificationSendResult.Success());
+                .ReturnsAsync(new NotificationSendResult.Success(notificationResponse));
+
+            _mockEventHubLogger
+                .Setup(x => x.NotificationEnqueued(It.IsNotNull<NotificationEnqueuedEventLogData>()))
+                .Returns(Task.CompletedTask);
 
             // Act
             var result = await _systemUnderTest.Post(NhsLoginId, sendRequest);
 
             // Assert
-            _mockNotificationService.VerifyAll();
+            VerifyMocks();
 
             result.Should().BeOfType<AcceptedResult>();
         }
@@ -156,7 +206,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             var result = await _systemUnderTest.Post(NhsLoginId, sendRequest);
 
             // Assert
-            _mockNotificationService.VerifyAll();
+            VerifyMocks();
 
             result.Should().BeOfType<BadRequestResult>();
         }
@@ -177,9 +227,33 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             var result = await _systemUnderTest.Post(NhsLoginId, sendRequest);
 
             // Assert
-            _mockNotificationService.VerifyAll();
+            VerifyMocks();
 
             result.Should().BeOfType<BadRequestResult>();
+        }
+
+        [TestMethod]
+        public async Task Post_NotificationServiceReturnConflict_Returns409Conflict()
+        {
+            // Arrange
+            var sendRequest = new NotificationSendRequest
+            {
+                Title = "title",
+                Subtitle = "subtitle",
+                Body = "body",
+                Url = ""
+            };
+            _mockNotificationService
+                .Setup(x => x.Send(NhsLoginId, sendRequest))
+                .ReturnsAsync(new NotificationSendResult.Conflict());
+
+            // Act
+            var result = await _systemUnderTest.Post(NhsLoginId, sendRequest);
+
+            // Assert
+            VerifyMocks();
+
+            result.Should().BeOfType<ConflictResult>();
         }
 
         [TestMethod]
@@ -201,7 +275,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             var result = await _systemUnderTest.Post(NhsLoginId, sendRequest);
 
             // Assert
-            _mockNotificationService.VerifyAll();
+            VerifyMocks();
 
             var subject = result.Should().BeOfType<StatusCodeResult>().Subject;
             subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
@@ -226,7 +300,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             var result = await _systemUnderTest.Post(NhsLoginId, sendRequest);
 
             // Assert
-            _mockNotificationService.VerifyAll();
+            VerifyMocks();
 
             var subject = result.Should().BeOfType<StatusCodeResult>().Subject;
             subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
@@ -235,6 +309,13 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         public void Dispose()
         {
             _systemUnderTest?.Dispose();
+        }
+
+        private void VerifyMocks()
+        {
+            _mockNotificationService.VerifyAll();
+            _mockEventHubLogger.VerifyAll();
+            _mockEventHubLogger.VerifyNoOtherCalls();
         }
     }
 }

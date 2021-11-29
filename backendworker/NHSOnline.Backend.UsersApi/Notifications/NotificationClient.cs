@@ -161,7 +161,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             }
         }
 
-        public async Task SendNotification(NotificationRequest request)
+        public async Task<NotificationResponse> SendNotification(NotificationRequest request)
         {
             _logger.LogEnter();
 
@@ -171,10 +171,10 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
                 if (wrappers.Count == 1)
                 {
-                    await SendNotification(wrappers[0], request);
+                    var notificationResponse = await SendNotification(wrappers[0], request);
 
                     _logger.LogInformation($"Notification {request} sent to nhs login id {request.NhsLoginId} on hub {wrappers[0]}");
-                    return;
+                    return notificationResponse;
                 }
 
                 foreach (var wrapper in wrappers)
@@ -186,11 +186,13 @@ namespace NHSOnline.Backend.UsersApi.Notifications
                         continue;
                     }
 
-                    await SendNotification(wrapper, request);
+                    var notificationResponse = await SendNotification(wrapper, request);
 
                     _logger.LogInformation($"Notification {request} sent to nhs login id {request.NhsLoginId} on hub {wrapper}");
-                    return;
+                    return notificationResponse;
                 }
+
+                throw new InstallationNotFoundException();
             }
             finally
             {
@@ -198,16 +200,14 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             }
         }
 
-        private static async Task SendNotification(IAzureNotificationHubWrapper wrapper, NotificationRequest request)
+        private static async Task<NotificationResponse> SendNotification(IAzureNotificationHubWrapper wrapper, NotificationRequest request)
         {
             if (request.ScheduledTime != null)
             {
-                await wrapper.SendScheduledNotification(request);
+                return await wrapper.SendScheduledNotification(request);
             }
-            else
-            {
-                await wrapper.SendNotification(request);
-            }
+
+            return await wrapper.SendNotification(request);
         }
     }
 }

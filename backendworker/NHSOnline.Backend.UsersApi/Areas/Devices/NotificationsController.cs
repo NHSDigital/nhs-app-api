@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.AspNet.ApiKey;
+using NHSOnline.Backend.Metrics.EventHub;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
@@ -15,13 +16,16 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
     {
         private readonly ILogger<NotificationsController> _logger;
         private readonly INotificationService _notificationService;
+        private readonly IEventHubLogger _eventHubLogger;
 
         public NotificationsController(
             INotificationService notificationService,
-            ILogger<NotificationsController> logger)
+            ILogger<NotificationsController> logger,
+            IEventHubLogger eventHubLogger)
         {
             _notificationService = notificationService;
             _logger = logger;
+            _eventHubLogger = eventHubLogger;
         }
 
         [HttpPost]
@@ -38,6 +42,7 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
                 }
 
                 var sendResult = await _notificationService.Send(nhsLoginId, notificationSendRequest);
+                await sendResult.Accept(new NotificationLogSendResultVisitor(_eventHubLogger, _logger, nhsLoginId));
                 return sendResult.Accept(new NotificationSendResultVisitor());
             }
             finally
