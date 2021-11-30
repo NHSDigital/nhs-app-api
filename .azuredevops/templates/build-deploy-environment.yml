@@ -2,13 +2,6 @@
 name: ${{ parameters.environmentRefOverride }}-$(Build.SourceBranchName)-$(Date:yyyyMMdd)_$(Rev:r)
 trigger: none
 parameters:
-  - name: reapply_config
-    displayName: Reapply bootstrap
-    type: string
-    default: false
-    values:
-      - false
-      - true
   - name: loginEnv
     displayName: Login environment
     type: string
@@ -25,7 +18,7 @@ parameters:
     type: string
     default: "None"
   - name: environmentRefOverride
-    displayName: "Pipeline will automatically extract the jira reference from the branch, you can override by providing a value other than jiraref to this parameter"
+    displayName: "What environment do you want to deploy to? e.g. scratch1 etc"
     type: string
     default: "jiraref"
     values:
@@ -51,11 +44,6 @@ parameters:
       - scratch19
       - scratch20
       - scratch21
-      - onboardingsandpit
-      - onboardingaos
-      - logindevelopment
-      - preview
-      - demo
       - ops1
       - ops2
       - ops3
@@ -78,7 +66,7 @@ variables:
   - name: terraformVersion
     value: 0.14.8
   - name: REAPPLY_CONFIG
-    value: ${{ parameters.reapply_config }}
+    value: true
   - name: PROJECT_PATH
     value: nhsapp-ops-infra
   - name: SCRIPTS_PATH
