@@ -21,6 +21,3 @@ journeys:
   silverIntegrations:
     secondaryAppointments:
       - removeErs
-    vaccineRecord:
-      - removeNetCompany
-      - removeNetCompanyP5
