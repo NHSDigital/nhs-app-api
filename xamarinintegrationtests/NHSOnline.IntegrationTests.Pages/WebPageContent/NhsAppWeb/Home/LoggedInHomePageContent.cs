@@ -40,7 +40,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
 
         private WebLink DismissBiometricsBanner => WebLink.WithText(_interactor, "Dismiss");
 
-        private WebMenuItem GetYourCovidPassMenuItem => WebMenuItem.WithTitle(_interactor, "Get your NHS COVID Pass");
+        private WebMenuItem GetYourCovidPassMenuItem => WebMenuItem.WithTitle(_interactor, "NHS COVID Pass");
 
         private WebMenuItem MessagesMenuItem => WebMenuItem.WithTitle(_interactor, "View your messages");
 

@@ -115,7 +115,7 @@ export default {
         text: '',
         label: '',
         linkUrl: 'COVID_STATUS_URL',
-        linkText: 'Get your NHS COVID Pass',
+        linkText: 'NHS COVID Pass',
       },
     ],
     ifYouNeedUrgentMedicalAdviceInWales: [

@@ -9,9 +9,9 @@ If you have full access to the NHS App, you can do things like:
   
 If you're unable to access these features, you may need to prove who you are. [Read more about how to prove who you are](https://nhs.uk/nhs-app/nhs-app-help-and-support/getting-started-with-the-nhs-app/proving-who-you-are-to-get-full-access/?wt.mc_id=intro_v1_0621).  
 
-### Get your NHS COVID Pass
+### NHS COVID Pass
 
-You can view and share your NHS COVID Pass for places in England that have chosen to use this service and for travel abroad. [Read more about your NHS COVID Pass](https://nhs.uk/nhs-app/nhs-app-help-and-support/health-records-in-the-nhs-app/about-the-nhs-covid-pass-service/?wt.mc_id=intro_v1_0621).
+View and download your COVID Pass for places in England and Wales using this service, or for travel abroad. [Read more about your NHS COVID Pass](https://nhs.uk/nhs-app/nhs-app-help-and-support/health-records-in-the-nhs-app/about-the-nhs-covid-pass-service/?wt.mc_id=intro_v1_0621).
 
 ### GP health record
   

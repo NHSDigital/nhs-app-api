@@ -13,9 +13,9 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Your health");
 
-        internal WebMenuItem CovidPassMenuItem => WebMenuItem.WithTitle(_interactor, "Get your NHS COVID Pass");
+        internal WebMenuItem CovidPassMenuItem => WebMenuItem.WithTitle(_interactor, "NHS COVID Pass");
 
-        private WebText CovidPassText => WebText.WithTagAndText(_interactor, "p", "View and share your COVID Pass for places in England that have chosen to use this service and for travel abroad");
+        private WebText CovidPassText => WebText.WithTagAndText(_interactor, "p", "View and download your COVID Pass for places in England and Wales using this service, or for travel abroad");
 
         internal WebMenuItem VaccineRecordMenuItem => WebMenuItem.WithTitle(_interactor, "Check your COVID-19 vaccine record");
 

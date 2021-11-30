@@ -12,7 +12,7 @@ class GetCovidPassOrProofRequestBuilder
                 <html>
                     <title>NHS COVID Pass - NHS</title>
                     <body>
-                        <h1>Get your NHS COVID Pass</h1>
+                        <h1>NHS COVID Pass</h1>
                     </body>
                 </html>
             """.trimIndent())
