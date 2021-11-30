@@ -31,13 +31,13 @@ namespace NHSOnline.App.iOS.DependencyServices.Notifications
 
                 if (aps.Count == 0)
                 {
-                    Logger.LogInformation(nameof(RemoteNotificationReceivedHandler), $"aps dictionary is empty");
+                    Logger.LogInformation("aps dictionary is empty");
                     return;
                 }
 
                 if (aps["url"] is null)
                 {
-                    Logger.LogInformation(nameof(RemoteNotificationReceivedHandler), $"aps dictionary does not contain a url");
+                    Logger.LogInformation("aps dictionary does not contain a url");
                     return;
                 }
 
@@ -45,16 +45,16 @@ namespace NHSOnline.App.iOS.DependencyServices.Notifications
 
                 if (string.IsNullOrWhiteSpace(url))
                 {
-                    Logger.LogInformation(nameof(RemoteNotificationReceivedHandler), $"Url is empty");
+                    Logger.LogInformation("Url is empty");
                     return;
                 }
 
-                Logger.LogInformation(nameof(RemoteNotificationReceivedHandler), $"Notification contains url {url}");
+                Logger.LogInformation("Notification contains url {url}", url);
                 _nhsApp.HandleDeeplink(url);
             }
             catch (Exception e)
             {
-                Logger.LogError(nameof(RemoteNotificationReceivedHandler), $"Exception occured: {e}");
+                Logger.LogError(e, "Failed to ReceiveRemoteNotification");
             }
         }
     }

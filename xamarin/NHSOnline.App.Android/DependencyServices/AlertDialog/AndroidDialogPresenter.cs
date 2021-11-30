@@ -38,7 +38,7 @@ namespace NHSOnline.App.Droid.DependencyServices.AlertDialog
 
             if (dialog == null)
             {
-                Logger.LogWarning($"Failed to create {nhsAppAlertDialog.Message} dialog");
+                Logger.LogWarning("Failed to create {Message} dialog", nhsAppAlertDialog.Message);
                 return;
             }
 

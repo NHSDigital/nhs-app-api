@@ -70,9 +70,9 @@ namespace NHSOnline.App.Services.ForcedUpdate
 
                 return updateRequired;
             }
-            catch (TaskCanceledException taskCancelledException)
+            catch (TaskCanceledException e)
             {
-                _logger.LogError(taskCancelledException, "Failed, task cancelled");
+                _logger.LogError(e, "Failed, task cancelled");
                 return UpdateRequired.Failed;
             }
             catch (Exception e)

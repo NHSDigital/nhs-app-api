@@ -327,7 +327,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         private Task SetMenuBarItemRequested(string menuItemIndex)
         {
-            _logger.LogInformation($"Menu bar item change requested for {menuItemIndex}");
+            _logger.LogInformation("Menu bar item change requested for {menuItemIndex}", menuItemIndex);
 
             var footerItem = GetFooterItemFromIndex(menuItemIndex);
 
@@ -337,7 +337,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             }
             else
             {
-                _logger.LogError($"Menu bar item change requested for invalid index '{menuItemIndex}'");
+                _logger.LogError("Menu bar item change requested for invalid index '{menuItemIndex}'", menuItemIndex);
             }
 
             return Task.CompletedTask;

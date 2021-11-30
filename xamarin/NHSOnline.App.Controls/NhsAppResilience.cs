@@ -81,7 +81,7 @@ namespace NHSOnline.App.Controls
         {
             try
             {
-                Logger.LogError(e, $"Unable to attempt recovery as not {nameof(NhsAppResilience)} is not initialised");
+                Logger.LogError(e, "Unable to attempt recovery as {className} is not initialised", nameof(NhsAppResilience));
             }
             catch
             {

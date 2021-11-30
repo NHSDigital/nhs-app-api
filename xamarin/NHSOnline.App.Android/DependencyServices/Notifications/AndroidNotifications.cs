@@ -35,7 +35,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Notifications
         {
             if (!NotificationsSupported)
             {
-                Logger.LogError(GetPlayServicesError());
+                Logger.LogError("Notifications not supported: {PlayServicesError}", GetPlayServicesError());
                 return new GetPnsTokenResult.Unauthorised();
             }
 
@@ -53,7 +53,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Notifications
 
                 if (token == null)
                 {
-                    Logger.LogError(GetPlayServicesError());
+                    Logger.LogError("Token was not retrieved: {PlayServicesError}",GetPlayServicesError());
                     return new GetPnsTokenResult.Unauthorised();
                 }
 

@@ -27,7 +27,8 @@ namespace NHSOnline.App.iOS.DependencyServices.Notifications
 
         internal void FailedToRegisterForRemoteNotifications(NSError error)
         {
-            Logger.LogError($"Failed to register for remote notifications. | Reason: {error.LocalizedFailureReason} | Description: {error.LocalizedDescription}");
+            Logger.LogError("Failed to register for remote notifications. | Reason: {Reason} | Description: {Description}",
+                error.LocalizedFailureReason, error.LocalizedDescription );
 
             _completionSource.SetResult(new GetPnsTokenResult.Unauthorised());
         }

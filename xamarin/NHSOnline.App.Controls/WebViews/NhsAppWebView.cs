@@ -284,7 +284,7 @@ namespace NHSOnline.App.Controls.WebViews
             }
             catch (UriFormatException e)
             {
-                Logger.LogError(e, $"Argument supplied is not a valid Uri: {argument}");
+                Logger.LogError(e, "Argument supplied is not a valid Uri: {argument}", argument);
             }
         }
 

@@ -115,7 +115,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
         public async Task Visit(AuthReturnCheckResult.Failed failed)
         {
             var nhsLoginErrorModel = _model.NhsLoginFailed();
-            _logger.LogError($"NHS Login Uplift failed, error reference {nhsLoginErrorModel.ServiceDeskReference} generated");
+            _logger.LogError("NHS Login Uplift failed, error reference {ServiceDeskReference} generated",
+                nhsLoginErrorModel.ServiceDeskReference);
 
             var nhsLoginErrorPage = _pageFactory.CreatePageFor(nhsLoginErrorModel);
 

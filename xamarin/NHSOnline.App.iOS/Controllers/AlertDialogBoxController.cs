@@ -44,7 +44,7 @@ namespace NHSOnline.App.iOS.Controllers
                 {
                     if (!AlertDismissActions.TryAdd(nhsAppAlert.Message, nhsAppAlert.DismissAction))
                     {
-                        Logger.LogWarning($"Unable to add dismiss action for {nhsAppAlert.Message} dialog");
+                        Logger.LogWarning("Unable to add dismiss action for {Message} dialog", nhsAppAlert.Message);
                     }
                 }
 
@@ -100,7 +100,7 @@ namespace NHSOnline.App.iOS.Controllers
 
                 if (AlertDismissActions.TryRemove(modal.Message, out _))
                 {
-                    Logger.LogWarning($"Unable to remove dismiss action for {modal.Message} dialog");
+                    Logger.LogWarning("Unable to remove dismiss action for {Message} dialog", modal.Message);
                 }
             }
 

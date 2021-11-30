@@ -38,7 +38,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async Task ViewOnBackHomeRequested()
         {
-            _logger.LogInformation(nameof(ViewOnBackHomeRequested));
+            _logger.LogInformation("{Method}", nameof(ViewOnBackHomeRequested));
             await _view.AppNavigation
                 .PopToRoot()
                 .PreserveThreadContext();

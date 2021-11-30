@@ -42,9 +42,9 @@ namespace NHSOnline.App.Droid.DependencyServices
 
                 await callBack.GetAwaitable().ResumeOnThreadPool();
             }
-            catch (Exception exception)
+            catch (Exception e)
             {
-                Logger.LogError(exception, "Error clearing session cookies");
+                Logger.LogError(e, "Error clearing session cookies");
             }
         }
 

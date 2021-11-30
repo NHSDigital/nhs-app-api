@@ -39,7 +39,7 @@ namespace NHSOnline.App.Api.Client.Logging
         private Task<ApiCreateLogResult> HandleUnknownStatusCode(HttpResponseMessage httpResponseMessage)
         {
             _logger.LogWarning(
-                "Log message returned unexpected HTTP status {UnexpectedHttpStatue}",
+                "Log message returned unexpected HTTP status {UnexpectedHttpStatus}",
                 httpResponseMessage.StatusCode);
             return Task.FromResult<ApiCreateLogResult>(new ApiCreateLogResult.Failure());
         }

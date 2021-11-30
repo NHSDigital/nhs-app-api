@@ -70,9 +70,9 @@ namespace NHSOnline.App.Api.Client.Session
                             {
                                 cookies.Add(new ApiCookie(httpResponseMessage.RequestMessage.RequestUri, cookieHeader));
                             }
-                            catch (Exception exception)
+                            catch (Exception e)
                             {
-                                _logger.LogError(exception,"Failed to add cookie from session response to CookieJar");
+                                _logger.LogError(e,"Failed to add cookie from session response to CookieJar");
                             }
                         }
                     }

@@ -51,19 +51,19 @@ namespace NHSOnline.App.Services.Media
             {
                 return await MediaPicker.CapturePhotoAsync().PreserveThreadContext();
             }
-            catch (FeatureNotSupportedException featureNotSupportedException)
+            catch (FeatureNotSupportedException e)
             {
-                _logger.LogInformation(featureNotSupportedException, "Capture photo feature not supported");
+                _logger.LogInformation(e, "Capture photo feature not supported");
                 return null;
             }
-            catch (PermissionException permissionException)
+            catch (PermissionException e)
             {
-                _logger.LogInformation(permissionException, "User refused permissions");
+                _logger.LogInformation(e, "User refused permissions");
                 return null;
             }
-            catch (Exception exception)
+            catch (Exception e)
             {
-                _logger.LogError(exception, $"Unexpected exception from {nameof(MediaPicker.CapturePhotoAsync)}");
+                _logger.LogError(e, "Unexpected exception from {Method}", nameof(MediaPicker.CapturePhotoAsync));
                 return null;
             }
         }
@@ -74,19 +74,19 @@ namespace NHSOnline.App.Services.Media
             {
                return await MediaPicker.PickPhotoAsync().PreserveThreadContext();
             }
-            catch (FeatureNotSupportedException featureNotSupportedException)
+            catch (FeatureNotSupportedException e)
             {
-                _logger.LogInformation(featureNotSupportedException, "Pick photo feature not supported");
+                _logger.LogInformation(e, "Pick photo feature not supported");
                 return null;
             }
-            catch (PermissionException permissionException)
+            catch (PermissionException e)
             {
-                _logger.LogInformation(permissionException, "User refused permissions");
+                _logger.LogInformation(e, "User refused permissions");
                 return null;
             }
-            catch (Exception exception)
+            catch (Exception e)
             {
-                _logger.LogError(exception, $"Unexpected exception from {nameof(MediaPicker.PickPhotoAsync)}");
+                _logger.LogError(e, "Unexpected exception from {Method}", nameof(MediaPicker.PickPhotoAsync));
                 return null;
             }
         }
@@ -97,19 +97,19 @@ namespace NHSOnline.App.Services.Media
             {
                 return await MediaPicker.CaptureVideoAsync().PreserveThreadContext();
             }
-            catch (FeatureNotSupportedException featureNotSupportedException)
+            catch (FeatureNotSupportedException e)
             {
-                _logger.LogInformation(featureNotSupportedException, "Capture video feature not supported");
+                _logger.LogInformation(e, "Capture video feature not supported");
                 return null;
             }
-            catch (PermissionException permissionException)
+            catch (PermissionException e)
             {
-                _logger.LogInformation(permissionException, "User refused permissions");
+                _logger.LogInformation(e, "User refused permissions");
                 return null;
             }
-            catch (Exception exception)
+            catch (Exception e)
             {
-                _logger.LogError(exception, $"Unexpected exception from {nameof(MediaPicker.CaptureVideoAsync)}");
+                _logger.LogError(e, "Unexpected exception from {Method}",nameof(MediaPicker.CaptureVideoAsync));
                 return null;
             }
         }
@@ -120,19 +120,19 @@ namespace NHSOnline.App.Services.Media
             {
                 return await MediaPicker.PickVideoAsync().PreserveThreadContext();
             }
-            catch (FeatureNotSupportedException featureNotSupportedException)
+            catch (FeatureNotSupportedException e)
             {
-                _logger.LogInformation(featureNotSupportedException, "Pick video feature not supported");
+                _logger.LogInformation(e, "Pick video feature not supported");
                 return null;
             }
-            catch (PermissionException permissionException)
+            catch (PermissionException e)
             {
-                _logger.LogInformation(permissionException, "User refused permissions");
+                _logger.LogInformation(e, "User refused permissions");
                 return null;
             }
-            catch (Exception exception)
+            catch (Exception e)
             {
-                _logger.LogError(exception, $"Unexpected exception from {nameof(MediaPicker.PickVideoAsync)}");
+                _logger.LogError(e, "Unexpected exception from {Method}",  nameof(MediaPicker.PickVideoAsync));
                 return null;
             }
         }

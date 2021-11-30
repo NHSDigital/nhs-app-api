@@ -38,7 +38,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async Task ViewOnBackToLoginRequested()
         {
-            _logger.LogInformation(nameof(ViewOnBackToLoginRequested));
+            _logger.LogInformation("{Method}", nameof(ViewOnBackToLoginRequested));
             await _view.AppNavigation
                 .PopToRoot()
                 .PreserveThreadContext();

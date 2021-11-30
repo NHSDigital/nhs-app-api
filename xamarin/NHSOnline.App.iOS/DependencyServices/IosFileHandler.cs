@@ -87,8 +87,8 @@ namespace NHSOnline.App.iOS.DependencyServices
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse - The generated PKPass is incorrect and the NSError can actually be null
             if (error != null)
             {
-                Logger.LogError(
-                    $"Failed to create a pass kit pass, localised description is {error.LocalizedDescription}");
+                Logger.LogError("Failed to create a pass kit pass, localised description is {error}",
+                    error.LocalizedDescription);
                 return new DownloadFileResult.Failed();
             }
 

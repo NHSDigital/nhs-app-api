@@ -72,7 +72,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
 
         public Task HandleDeeplink(Uri deeplinkUrl)
         {
-            _logger.LogInformation("{className} is not required to handle deeplinks", nameof(CreateSessionErrorOdsCodeNotSupportedPage));
+            _logger.LogInformation("{ClassName} is not required to handle deeplinks", nameof(CreateSessionErrorOdsCodeNotSupportedPage));
             return Task.CompletedTask;
         }
     }

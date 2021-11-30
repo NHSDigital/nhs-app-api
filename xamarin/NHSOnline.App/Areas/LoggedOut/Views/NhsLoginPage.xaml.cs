@@ -103,7 +103,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             }
             else if (InitialUrl is null)
             {
-                _logger.LogError($"{nameof(InitialUrl)} is null but should never be null");
+                _logger.LogError("{Property} is null but should never be null", nameof(InitialUrl));
 
                 WebView.IsVisible = false;
                 NavigationFailedCommand.Execute(new NavigationFailedArgs(new Uri(args.Url), OnInitialNavigation));

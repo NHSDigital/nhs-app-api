@@ -112,9 +112,9 @@ namespace NHSOnline.App.iOS.DependencyServices
                             x => $"{x}; SameSite={fromCookie.SameSitePolicy}");
                     }
                 }
-                catch (MonoTouchException exception)
+                catch (MonoTouchException e)
                 {
-                    Logger.LogError(exception, "Failed to copy SameSite attribute of cookie");
+                    Logger.LogError(e, "Failed to copy SameSite attribute of cookie");
                 }
             }
 

@@ -61,7 +61,7 @@ namespace NHSOnline.App.Api.Client.Configuration
 
         private Task<ApiGetConfigurationResult> HandleUnknownStatusCode(HttpResponseMessage httpResponseMessage)
         {
-            _logger.LogWarning("Get Configuration returned HTTP status {UnexpectedHttpStatue}", httpResponseMessage.StatusCode);
+            _logger.LogWarning("Get Configuration returned HTTP status {UnexpectedHttpStatus}", httpResponseMessage.StatusCode);
             return Task.FromResult<ApiGetConfigurationResult>(new ApiGetConfigurationResult.Failure());
         }
     }
