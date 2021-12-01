@@ -16,7 +16,7 @@
       :legend-size="'l'"
       :required="required"
       :items="options"
-      :render-as-html="renderAsHmtl"
+      :render-as-html="renderAsHtml"
       :disable-fieldset="true"
     />
   </span>
