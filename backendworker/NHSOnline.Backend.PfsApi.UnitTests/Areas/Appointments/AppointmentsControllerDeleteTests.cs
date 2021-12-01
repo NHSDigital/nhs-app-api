@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
 
             _gpSession = new EmisUserSession();
 
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), _gpSession, "im1token");
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", _gpSession);
 
             _mockAppointmentsService = new Mock<IAppointmentsService>();
 

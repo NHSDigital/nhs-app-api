@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace NHSOnline.Backend.Support.Session
 {
@@ -11,11 +12,20 @@ namespace NHSOnline.Backend.Support.Session
             string csrfToken,
             string nhsNumber,
             CitizenIdUserSession citizenIdUserSession,
-            GpUserSession gpUserSession,
+            string im1ConnectionToken,
+            GpUserSession gpUserSession)
+            : this(csrfToken, nhsNumber, citizenIdUserSession, im1ConnectionToken)
+        {
+            GpUserSession = gpUserSession;
+        }
+
+        public P9UserSession(
+            string csrfToken,
+            string nhsNumber,
+            CitizenIdUserSession citizenIdUserSession,
             string im1ConnectionToken)
             : base(csrfToken, citizenIdUserSession)
         {
-            GpUserSession = gpUserSession;
             NhsNumber = nhsNumber;
             Im1ConnectionToken = im1ConnectionToken;
             OrganDonationSessionId = Guid.NewGuid();
@@ -28,6 +38,10 @@ namespace NHSOnline.Backend.Support.Session
         public string Im1ConnectionToken { get; set; }
 
         public string NhsNumber { get; set; }
+
+        public Dictionary<Guid, string> PatientLookup { get; set; } = new Dictionary<Guid, string>();
+
+        public Guid PatientSessionId { get; set; }
 
         public override TResult Accept<TResult>(IUserSessionVisitor<TResult> visitor)
             => visitor.Visit(this);

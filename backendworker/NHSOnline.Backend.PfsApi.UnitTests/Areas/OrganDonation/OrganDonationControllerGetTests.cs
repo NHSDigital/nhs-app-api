@@ -42,8 +42,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         public void TestInitialize()
         {
             _gpUserSession = new EmisUserSession();
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(),
-                _gpUserSession, "im1token");
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", _gpUserSession);
             _mockOrganDonationService = new Mock<IOrganDonationService>();
             _mockAuditor = new Mock<IAuditor>();
 

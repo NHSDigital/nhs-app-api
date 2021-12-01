@@ -87,7 +87,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 };
                 var serviceJourneyRulesResponse = new ServiceJourneyRulesResponse { Journeys = new Journeys { Supplier = Supplier.Emis } };
                 var userSession = new P9UserSession("CsrfRequestToken", nhsNumber,
-                    citizenIdUserSession, emisUserSession, "im1ConnectionToken")
+                    citizenIdUserSession, "im1ConnectionToken", emisUserSession)
                 {
                     Key = "ApiSessionId"
                 };

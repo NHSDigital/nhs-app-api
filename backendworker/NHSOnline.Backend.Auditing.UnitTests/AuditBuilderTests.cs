@@ -561,8 +561,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 {
                     AccessToken = accessToken ?? CreateAccessTokenString("Test"),
                 },
-                gpUserSession.Object,
-                "im1ConnectionToken");
+                "im1ConnectionToken", gpUserSession.Object);
 
             var userSessionService = new Mock<IUserSessionService>();
             userSessionService.Setup(x => x.GetUserSession<UserSession>()).Returns(Option.Some<UserSession>(userSession));

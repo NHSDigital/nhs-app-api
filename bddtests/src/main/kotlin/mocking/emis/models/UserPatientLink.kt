@@ -5,4 +5,5 @@ class UserPatientLink(val title: String,
                       val surname: String,
                       val userPatientLinkToken: String,
                       val nationalPracticeCode: String,
-                      val associationType: AssociationType)
+                      val associationType: AssociationType,
+                      val patientActivityContextGuid: String)

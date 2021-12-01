@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         {
             _patientId = Guid.NewGuid();
 
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", new EmisUserSession());
             _mockPrescriptionsService = new Mock<IPrescriptionService>();
             _mockPrescriptionValidationService = new Mock<IPrescriptionValidationService>();
 

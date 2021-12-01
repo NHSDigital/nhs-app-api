@@ -10,10 +10,16 @@ class CreateSessionResponseModel(val sessionId: String,
                                  val surname: String,
                                  userPatientLinkToken: String,
                                  odsCode: String,
-                                 associationType: AssociationType) {
+                                 associationType: AssociationType,
+                                 patientActivityContextGuid: String) {
     val lastAccessTime = DateTime.now()
-    var userPatientLinks = mutableListOf(UserPatientLink(title,
-                                                   firstName, surname,
-                                                   userPatientLinkToken,
-                                                   odsCode, associationType))
+    var userPatientLinks = mutableListOf(
+            UserPatientLink(
+                    title,
+                    firstName,
+                    surname,
+                    userPatientLinkToken,
+                    odsCode,
+                    associationType,
+                    patientActivityContextGuid))
 }

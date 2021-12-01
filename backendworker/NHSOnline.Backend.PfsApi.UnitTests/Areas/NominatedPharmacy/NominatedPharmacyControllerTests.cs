@@ -50,8 +50,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         {
             _userSession = new P9UserSession("csrfToken", "nhsNumber",
                 new CitizenIdUserSession{ OdsCode = OdsCode},
-                new EmisUserSession(),
-                "im1token");
+                "im1token", new EmisUserSession());
 
             _mockNominatedPharmacyService = new Mock<INominatedPharmacyService>();
             _mockPharmacyService = new Mock<IPharmacyService>();

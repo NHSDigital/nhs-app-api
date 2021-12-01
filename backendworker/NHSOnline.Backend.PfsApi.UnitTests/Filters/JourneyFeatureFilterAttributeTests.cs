@@ -40,8 +40,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
                 string.Empty,
                 string.Empty,
                 new CitizenIdUserSession { OdsCode = "X10000" },
-                new EmisUserSession(),
-                string.Empty);
+                string.Empty, new EmisUserSession());
 
             _sjrResponse = new ServiceJourneyRulesResponse()
             {

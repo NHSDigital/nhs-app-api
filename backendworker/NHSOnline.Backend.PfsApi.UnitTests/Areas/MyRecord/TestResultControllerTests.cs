@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         {
             _mockAuditor = new Mock<IAuditor>();
 
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", new EmisUserSession());
 
             _mockPatientRecordService = new Mock<IPatientRecordService>();
 

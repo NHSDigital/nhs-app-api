@@ -48,8 +48,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
                 {
                     OdsCode = "A12345"
                 },
-                _gpSession,
-                "con_token");
+                "con_token", _gpSession);
 
             Mock.Get(_gpSession)
                 .Setup(gp => gp.Supplier)

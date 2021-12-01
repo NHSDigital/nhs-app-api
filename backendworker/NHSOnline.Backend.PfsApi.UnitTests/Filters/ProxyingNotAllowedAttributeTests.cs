@@ -117,12 +117,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
                 string.Empty,
                 string.Empty,
                 new CitizenIdUserSession(),
-                new EmisUserSession
+                string.Empty, new EmisUserSession
                 {
                     OdsCode = "X10000",
                     Id = Guid.NewGuid(),
-                },
-                string.Empty);
+                });
 
             _mockUserSessionService
                 .Setup(x => x.GetUserSession<P9UserSession>())

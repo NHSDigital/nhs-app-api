@@ -12,6 +12,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         public string SessionId { get; set; }
         public string EndUserSessionId { get; set; }
         public string UserPatientLinkToken { get; set; }
+        public string PatientActivityContextGuid { get; set; }
         public Necessity AppointmentBookingReasonNecessity { get; set; }
         public Necessity PrescriptionSpecialRequestNecessity { get; set; }
         public ICollection<EmisProxyUserSession> ProxyPatients { get; set; }

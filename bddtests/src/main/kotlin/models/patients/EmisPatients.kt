@@ -51,6 +51,7 @@ class EmisPatients {
                         surname = "Smith"),
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 userPatientLinkToken = "3v4DARxCmznF6eiGMQRR2u",
+                patientActivityContextGuid = "2a3c3d6d-3234-4e78-8953-96395f354671",
                 age = PatientAge(dateOfBirth = "1972-04-12"),
                 sessionId = "AJYF0ufQI6tTpdfwaXAt",
                 connectionToken = EmisMockDefaults.DEFAULT_CONNECTION_TOKEN,
@@ -65,6 +66,7 @@ class EmisPatients {
                 age = PatientAge(dateOfBirth = "1972-04-12"),
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 userPatientLinkToken = "id83hdydGyo6kKl0gaRdRb",
+                patientActivityContextGuid = "1a05dd89-07b1-46e1-a842-44eb96f1b8fd",
                 sessionId = "fbWgorZ8Fggk9c5PgKd7",
                 connectionToken = "7e14cfb4-eb7a-44c3-8603-28ee36c7a9bf",
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
@@ -92,6 +94,7 @@ class EmisPatients {
                 accountId = "4140044939",
                 linkageKey = "vVGO8bgV6fvPb",
                 userPatientLinkToken = "gpSWtREiH9499bPzix8v5b",
+                patientActivityContextGuid = "71c88d41-ec6c-46de-9a65-81aa0fbee3a4",
                 im1ConnectionToken = montelFryeIm1ConnectionToken,
                 linkedAccounts = setOf(alanCook.copy(), paulSmith.copy())
         )
@@ -109,7 +112,8 @@ class EmisPatients {
                 nhsNumbers = listOf("6421509687"),
                 accountId = "4493941400",
                 linkageKey = "V6fvPbvVGO8bg",
-                userPatientLinkToken = "8v5bgpSW9bPzixtREiH949"
+                userPatientLinkToken = "8v5bgpSW9bPzixtREiH949",
+                patientActivityContextGuid = "0bc41dcb-84cb-4591-8cdf-3baa7f6862d5"
         )
 
         val johnSmith = Patient(
@@ -125,6 +129,7 @@ class EmisPatients {
                 accountId = "1195029928",
                 linkageKey = "KjwzyFSEUAGj4",
                 userPatientLinkToken = "3v4DARxCmznF6eiGMQRR2u",
+                patientActivityContextGuid = "0ab3bad4-b145-44d1-9f1f-7025b9928f69",
                 nhsNumbers = listOf("7174450393")
         )
 
@@ -135,6 +140,7 @@ class EmisPatients {
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 userPatientLinkToken = "3v4DARxCmznF6eiGMQRR2u",
                 age = PatientAge(dateOfBirth = "2004-04-12"),
+                patientActivityContextGuid = "6697842f-8ce8-4164-a73d-69477e394aea",
                 sessionId = "AJYF0ufQI6tTpdfwaXAt",
                 connectionToken = EmisMockDefaults.DEFAULT_CONNECTION_TOKEN,
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
@@ -150,6 +156,7 @@ class EmisPatients {
                         dateOfBirth = "1972-04-12"),
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 userPatientLinkToken = "id83hdydGyo6kKl0gaRdRb",
+                patientActivityContextGuid = "f2f1c137-7f89-4ce8-b0c4-d886fb4352cf",
                 sessionId = "fbWgorZ8Fggk9c5PgKd7",
                 connectionToken = "7e14cfb4-eb7a-44c3-8603-28ee36c7a9bf",
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
@@ -171,6 +178,7 @@ class EmisPatients {
                 accountId = "4140044939",
                 linkageKey = "vVGO8bgV6fvPb",
                 userPatientLinkToken = "gpSWtREiH9499bPzix8v5b",
+                patientActivityContextGuid = "249197ed-c6c8-4b52-b3aa-927b34072c33",
                 linkedAccounts = setOf(karadanvers.copy(), lenaluthor.copy())
         )
     }

@@ -101,7 +101,7 @@
                  new Claim(JwtRegisteredClaimNames.Sub, NhsLoginId),
                  new Claim("nhs_number", "NHS Number")
              })};
-             _userSession = new P9UserSession("csrfToken", "nhsNumber", _cidUserSession, new EmisUserSession(), "im1ConnectionToken");
+             _userSession = new P9UserSession("csrfToken", "nhsNumber", _cidUserSession, "im1ConnectionToken", new EmisUserSession());
              _mockGuidCreator.Setup(c => c.CreateGuid()).Returns(_requestId);
 
              _mockDemographicsService = new Mock<IDemographicsService>();

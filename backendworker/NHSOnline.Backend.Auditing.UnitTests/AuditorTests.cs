@@ -219,8 +219,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 string.Empty,
                 nhsNumber,
                 new CitizenIdUserSession { AccessToken = accessToken, },
-                new EmisUserSession { NhsNumber = nhsNumber },
-                string.Empty);
+                string.Empty, new EmisUserSession { NhsNumber = nhsNumber });
         }
 
         private static UserSession CreateUserSessionNoGpSystem(string nhsNumber, string accessToken)
@@ -229,8 +228,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 string.Empty,
                 nhsNumber,
                 new CitizenIdUserSession { AccessToken = accessToken },
-                new NullGpSession(Supplier.Tpp, "1 plus 2 is three"),
-                string.Empty);
+                string.Empty, new NullGpSession(Supplier.Tpp, "1 plus 2 is three"));
         }
 
         private static LinkedAccountAuditInfo CreateLinkedAccountAuditInfo(bool isProxying, string proxyNhsNumber)

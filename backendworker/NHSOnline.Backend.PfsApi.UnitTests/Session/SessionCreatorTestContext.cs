@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Antiforgery;
@@ -173,7 +174,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                 {
                     OdsCode = UserProfile.OdsCode,
                     NhsNumber = UserProfile.NhsNumber,
-                    Name = $"{UserProfile.GivenName} {UserProfile.FamilyName}"
+                    Name = $"{UserProfile.GivenName} {UserProfile.FamilyName}",
+                    ProxyPatients = new List<EmisProxyUserSession>(),
                 };
 
                 OnDemandGpSession = new OnDemandGpSession(Supplier.Emis);
@@ -204,7 +206,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
 
                 SessionConfigSettings = new SessionConfigurationSettings(false);
 
-                UserSession = new P9UserSession(CsrfRequestToken, UserProfile.NhsNumber, CitizenIdUserSession, EmisUserSession, UserInfo.Im1ConnectionToken);
+                UserSession = new P9UserSession(CsrfRequestToken, UserProfile.NhsNumber, CitizenIdUserSession, UserInfo.Im1ConnectionToken, EmisUserSession);
 
                 CreateSessionRequest = new CreateSessionRequest(UserSessionRequest, CsrfRequestToken, mocks.HttpContext.Object);
 

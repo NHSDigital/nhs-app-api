@@ -557,9 +557,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
                 Guid.NewGuid().ToString(),
                 "1234567890",
                 new CitizenIdUserSession(),
-                _gpUserSession,
-                Guid.NewGuid().ToString()
-            );
+                Guid.NewGuid().ToString(), _gpUserSession);
 
             _userSession = _p9UserSession;
         }

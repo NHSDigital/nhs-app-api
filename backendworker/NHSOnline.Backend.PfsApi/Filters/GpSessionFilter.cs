@@ -40,7 +40,6 @@ namespace NHSOnline.Backend.PfsApi.Filters
             _gpSessionCreator = gpSessionCreator;
             _gpSystemFactory = gpSystemFactory;
             _errorResultBuilder = errorResultBuilder;
-            _userSessionService = userSessionService;
             _httpContextAccessor = httpContextAccessor;
         }
 

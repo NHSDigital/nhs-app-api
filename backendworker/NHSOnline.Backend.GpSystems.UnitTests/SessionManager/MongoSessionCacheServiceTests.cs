@@ -43,8 +43,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                 string.Empty,
                 string.Empty,
                 new CitizenIdUserSession(),
-                new TppUserSession(),
-                string.Empty);
+                string.Empty, new TppUserSession());
 
             ArrangeNoEncryption();
 
@@ -90,8 +89,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                 string.Empty,
                 string.Empty,
                 new CitizenIdUserSession(),
-                new TppUserSession(),
-                string.Empty);
+                string.Empty, new TppUserSession());
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);
@@ -125,8 +123,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                 string.Empty,
                 string.Empty,
                 new CitizenIdUserSession(),
-                new TppUserSession(),
-                string.Empty);
+                string.Empty, new TppUserSession());
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);
@@ -161,8 +158,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                 string.Empty,
                 string.Empty,
                 new CitizenIdUserSession(),
-                new EmisUserSession(),
-                string.Empty);
+                string.Empty, new EmisUserSession());
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);
@@ -196,8 +192,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                 string.Empty,
                 string.Empty,
                 new CitizenIdUserSession(),
-                new EmisUserSession(),
-                string.Empty);
+                string.Empty, new EmisUserSession());
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);
@@ -232,8 +227,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                 string.Empty,
                 string.Empty,
                 new CitizenIdUserSession(),
-                new VisionUserSession(),
-                string.Empty);
+                string.Empty, new VisionUserSession());
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);
@@ -268,8 +262,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                 string.Empty,
                 string.Empty,
                 new CitizenIdUserSession(),
-                new VisionUserSession(),
-                string.Empty);
+                string.Empty, new VisionUserSession());
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);
@@ -366,8 +359,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                 string.Empty,
                 string.Empty,
                 new CitizenIdUserSession { ProofLevel = ProofLevel.P9 },
-                new EmisUserSession(),
-                string.Empty);
+                string.Empty, new EmisUserSession());
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);
@@ -401,8 +393,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                 string.Empty,
                 string.Empty,
                 new CitizenIdUserSession { ProofLevel = ProofLevel.P9 },
-                new EmisUserSession(),
-                string.Empty);
+                string.Empty, new EmisUserSession());
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);

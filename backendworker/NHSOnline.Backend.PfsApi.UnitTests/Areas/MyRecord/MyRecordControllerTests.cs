@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             _gpSession = new EmisUserSession();
 
             _mockGpSystemFactory = new Mock<IGpSystemFactory>();
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), _gpSession, "im1token");
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", _gpSession);
 
             _systemUnderTest = new MyRecordController(
                 new Mock<ILogger<MyRecordController>>().Object,

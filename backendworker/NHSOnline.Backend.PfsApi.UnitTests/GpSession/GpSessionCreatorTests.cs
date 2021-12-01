@@ -58,9 +58,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSession
                 {
                     OdsCode = "X4545"
                 },
-                null,
-                Guid.NewGuid().ToString()
-            );
+                Guid.NewGuid().ToString(), null);
 
             _p9UserSession.GpUserSession = new NullGpSession(Supplier.Emis, "_ref");
 

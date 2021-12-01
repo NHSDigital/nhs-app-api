@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
 
             _gpSession = new EmisUserSession { PrescriptionSpecialRequestNecessity = Necessity.Optional };
 
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), _gpSession, "im1token");
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", _gpSession);
 
             _mockPrescriptionsService = new Mock<IPrescriptionService>();
             _mockPrescriptionValidationService = new Mock<IPrescriptionValidationService>();

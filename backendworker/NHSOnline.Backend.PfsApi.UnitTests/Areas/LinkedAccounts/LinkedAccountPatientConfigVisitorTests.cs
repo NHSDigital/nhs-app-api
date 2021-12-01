@@ -70,8 +70,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             var userSession = new P9UserSession("csrfToken",
                 "nhsNumber",
                 It.IsAny<CitizenIdUserSession>(),
-                nullGpSession,
-                "im1ConnectionToken");
+                "im1ConnectionToken", nullGpSession);
 
             _systemUnderTest = new LinkedAccountPatientConfigVisitor(
                 _mockLogger.Object,
@@ -98,8 +97,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             var userSession = new P9UserSession("csrfToken",
                 "nhsNumber",
                 It.IsAny<CitizenIdUserSession>(),
-                _gpUserSession.Object,
-                "im1ConnectionToken");
+                "im1ConnectionToken", _gpUserSession.Object);
 
             LinkedAccountsResult linkedAccountResult = new LinkedAccountsResult.Success(
                 new List<LinkedAccount>

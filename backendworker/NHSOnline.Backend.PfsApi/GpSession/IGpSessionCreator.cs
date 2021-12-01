@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.PfsApi.GpSession
 {
     public interface IGpSessionCreator
     {
-        Task<GpUserSession> CreateGpSession(CitizenIdSessionResult citizenIdUserSession, Supplier supplier);
+        Task CreateGpSession(CitizenIdSessionResult citizenIdUserSession, Supplier supplier, P9UserSession p9UserSession);
 
         Task<GpSessionRecreateResult> RecreateGpSession(P9UserSession userSession, Supplier supplier);
     }

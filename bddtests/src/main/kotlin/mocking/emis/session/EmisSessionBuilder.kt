@@ -31,7 +31,9 @@ class EmisSessionBuilder(configuration: EmisConfiguration,
                 sessionId = patient.sessionId,
                 userPatientLinkToken = patient.userPatientLinkToken,
                 odsCode = patient.odsCode,
-                associationType = associationType)
+                associationType = associationType,
+                patientActivityContextGuid = patient.patientActivityContextGuid
+        )
 
         patient.linkedAccounts.forEach {
             val proxyPatientLink = UserPatientLink(
@@ -40,7 +42,8 @@ class EmisSessionBuilder(configuration: EmisConfiguration,
                     surname = it.name.surname,
                     userPatientLinkToken = it.userPatientLinkToken,
                     nationalPracticeCode = it.odsCode,
-                    associationType =  AssociationType.Proxy
+                    associationType =  AssociationType.Proxy,
+                    patientActivityContextGuid = it.patientActivityContextGuid
             )
 
             responseBody.userPatientLinks.add(proxyPatientLink)

@@ -69,37 +69,38 @@ namespace NHSOnline.Backend.PfsApi.Session
                     noOdsError);
             }
 
-            P9UserSession userSession;
+            var userSession = CreateP9UserSession(citizenIdSessionResult, csrfToken);
             if (string.IsNullOrEmpty(citizenIdSessionResult.Im1ConnectionToken))
             {
                 _logger.LogInformation("Im1ConnectionToken null/empty. Creating OnDemandGpSession object");
                 var gpUserSession = new OnDemandGpSession(supplier);
-                userSession = await CreateP9UserSession(citizenIdSessionResult, gpUserSession, csrfToken);
+                userSession.GpUserSession = gpUserSession;
+                await CreateUserSession(userSession);
             }
             else
             {
                 _logger.LogInformation($"Im1ConnectionToken populated. Creating GpUserSession for {supplier}");
-                var gpUserSession = await _gpSessionCreator.CreateGpSession(citizenIdSessionResult, supplier);
-                userSession = await CreateP9UserSession(citizenIdSessionResult, gpUserSession, csrfToken);
+                await _gpSessionCreator.CreateGpSession(citizenIdSessionResult, supplier, userSession);
+                await CreateUserSession(userSession);
                 await DeleteConnectionTokenFromCache(citizenIdSessionResult.Im1ConnectionToken);
             }
 
             return CreateUserSessionResult.Succeeded(userSession);
         }
 
-        private async Task<P9UserSession> CreateP9UserSession(CitizenIdSessionResult citizenIdSessionResult,
-            GpUserSession gpUserSession, string csrfToken)
+        private P9UserSession CreateP9UserSession(CitizenIdSessionResult citizenIdSessionResult, string csrfToken)
         {
             var userSession = new P9UserSession(
                 csrfToken,
                 citizenIdSessionResult.NhsNumber,
                 citizenIdSessionResult.Session,
-                gpUserSession,
                 citizenIdSessionResult.Im1ConnectionToken);
-
+            return userSession;
+        }
+        private async Task CreateUserSession(UserSession userSession)
+        {
             var sessionId = await _sessionCacheService.CreateUserSession(userSession);
             _logger.LogDebug($"Created Session Id: '{sessionId}'");
-            return userSession;
         }
 
         private async Task DeleteConnectionTokenFromCache(string im1ConnectionToken)

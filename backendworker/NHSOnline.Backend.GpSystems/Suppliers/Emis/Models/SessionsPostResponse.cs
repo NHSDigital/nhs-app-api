@@ -17,7 +17,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Models
                 ?.FirstOrDefault(x => x.AssociationType == AssociationType.Self)
                 ?.UserPatientLinkToken;
         }
-        
+
+        public string ExtractPatientActivityContextGuid()
+        {
+            return UserPatientLinks
+                ?.FirstOrDefault(x => x.AssociationType == AssociationType.Self)
+                ?.PatientActivityContextGuid;
+        }
+
         public IEnumerable<UserPatientLink> ExtractLinkedPatients()
         {
             return UserPatientLinks

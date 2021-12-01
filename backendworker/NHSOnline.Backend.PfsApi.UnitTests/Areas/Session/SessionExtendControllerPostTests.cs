@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         [TestInitialize]
         public void TestInitialize()
         {
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", new EmisUserSession());
 
             _patientGuid = Guid.NewGuid();
 

@@ -134,7 +134,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
         {
             var session = new EmisUserSession
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid(), // To be removed - jira 13005
                 EndUserSessionId = endUserSessionResponse.EndUserSessionId,
                 NhsNumber = nhsNumber,
                 OdsCode = odsCode,
@@ -188,12 +188,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
 
                 session.SessionId = sessionResponse.Body.SessionId;
                 session.UserPatientLinkToken = sessionResponse.Body.ExtractUserPatientLinkToken();
+                session.PatientActivityContextGuid = sessionResponse.Body.ExtractPatientActivityContextGuid();
                 session.ProxyPatients = sessionResponse.Body.ExtractLinkedPatients()
                     .Select(x => new EmisProxyUserSession
                     {
                         Id = Guid.NewGuid(),
                         OdsCode = x.NationalPracticeCode,
                         UserPatientLinkToken = x.UserPatientLinkToken,
+                        PatientActivityContextGuid = x.PatientActivityContextGuid,
                     })
                     .ToList();
 
