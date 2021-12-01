@@ -314,17 +314,10 @@ spec:
         - name: AUDIT_SINK_TYPE
           value: "cosmosdb"
         - name: AUDIT_EVENT_HUB_CONNECTION_STRING
-        {{- if eq .Values.region "uksouth" }}
           valueFrom:
             secretKeyRef:
               name: audit-event-hub-connection-string-uks-{{ .Chart.AppVersion }}
               key: secret
-        {{- else }}
-          valueFrom:
-            secretKeyRef:
-              name: audit-event-hub-connection-string-ukw-{{ .Chart.AppVersion }}
-              key: secret
-        {{- end }}
         - name: AUDIT_EVENT_HUB_NAME
           value: {{ $.Values.api.auditEventHub }}
         - name: AUDIT_MONGO_DATABASE_COLLECTION
