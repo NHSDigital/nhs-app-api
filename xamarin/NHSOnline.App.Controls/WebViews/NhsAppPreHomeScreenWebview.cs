@@ -9,7 +9,7 @@ using Xamarin.Forms;
 
 namespace NHSOnline.App.Controls.WebViews
 {
-    public sealed class NhsAppPreHomeScreenWebview: WebView, IAccessibleControl
+    public sealed class NhsAppPreHomeScreenWebview: WebView, IAccessibleControl, INavigationFlowAwareWebView
     {
         public event EventHandler<FocusRequestArgs> AccessibilityFocusChangeRequested = null!;
 
@@ -21,6 +21,8 @@ namespace NHSOnline.App.Controls.WebViews
                 AccessibilityFocusChangeRequested(this, arg);
             }
         }
+
+        public event EventHandler<WebViewPageNavigationEventArgs>? PageLoadComplete;
 
         public static readonly BindableProperty GetNotificationsStatusCommandProperty =
             BindableProperty.Create(nameof(GetNotificationsStatusCommand), typeof(AsyncCommand), typeof(NhsAppPreHomeScreenWebview));
@@ -81,6 +83,9 @@ namespace NHSOnline.App.Controls.WebViews
         public async Task SendSessionExtend()
             => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.sessionExtend()").ResumeOnThreadPool();
 
+        public async Task<string> GetCurrentWebViewUrl()
+            => await EvaluateJavaScriptAsync("window.document.URL").ResumeOnThreadPool();
+
         public void GoToLoggedInHomeScreen() => GoToLoggedInHomeScreenCommand.Execute(null);
 
         public AsyncCommand GoToLoggedInHomeScreenCommand
@@ -124,6 +129,11 @@ namespace NHSOnline.App.Controls.WebViews
             };
             settings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
             return settings;
+        }
+
+        void INavigationFlowAwareWebView.OnPageLoadComplete(WebViewPageNavigationEventArgs pageNavigationEventArgs)
+        {
+            PageLoadComplete?.Invoke(this, pageNavigationEventArgs);
         }
     }
 }

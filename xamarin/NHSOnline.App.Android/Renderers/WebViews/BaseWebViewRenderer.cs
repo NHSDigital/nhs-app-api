@@ -4,6 +4,7 @@ using System.Linq;
 using Android.Content;
 using Android.Webkit;
 using NHSOnline.App.Droid.Renderers.WebViews.Extensions;
+using NHSOnline.App.Services;
 using Xamarin.Forms.Platform.Android;
 using WebView = Xamarin.Forms.WebView;
 
@@ -12,6 +13,8 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
     public class BaseWebViewRenderer : WebViewRenderer
     {
         private readonly List<WebViewRendererExtension> _extensions = new();
+
+        public static string UserAgent { get; set; } = UserAgentService.Instance.NhsAppUserAgent;
 
         public BaseWebViewRenderer(Context context) : base(context)
         {

@@ -1,5 +1,6 @@
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.iOS.Renderers.WebViews;
+using NHSOnline.App.iOS.Renderers.WebViews.Extensions;
 using WebKit;
 using Xamarin.Forms;
 
@@ -24,6 +25,8 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                 .AddFunction("sessionExpired", webView => webView.SessionExpired)
                 .AddFunction("logout", webView => webView.Logout)
                 .Apply(config.UserContentController);
+
+            AddExtension(new PageNavigationAggregatorExtension(this));
         }
 
         protected override void Dispose(bool disposing)

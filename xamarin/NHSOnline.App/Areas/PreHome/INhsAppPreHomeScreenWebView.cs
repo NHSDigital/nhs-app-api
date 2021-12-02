@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using NHSOnline.App.Controls;
+using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
@@ -14,6 +15,7 @@ namespace NHSOnline.App.Areas.PreHome
             Func<Task>? Appearing { get; set; }
             Action<WebNavigatingEventArgs>? Navigating { get; set; }
             Func<Uri, Task>? NavigationFailed { get; set; }
+            Action<WebViewPageNavigationEventArgs>? PageLoadComplete { get; set; }
 
             Func<Task>? GetNotificationsStatusRequested { get; set; }
             Func<Task>? GoToLoggedInHomeRequested { get; set; }
@@ -25,6 +27,7 @@ namespace NHSOnline.App.Areas.PreHome
             Func<Task>? OnSessionExpiringRequested { get; set; }
         }
 
+        Task<Uri?> GetCurrentWebViewUrl();
         void GoToUri(Uri uri);
         Task SendNotificationsStatus(string status);
         Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse);

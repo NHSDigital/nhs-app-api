@@ -6,39 +6,37 @@ using Xamarin.Forms.Platform.iOS;
 
 namespace NHSOnline.App.iOS.Renderers.WebViews.Extensions
 {
-    internal sealed class PageLoadRedirectAggregatorExtension : IWebViewRendererExtension
+    internal sealed class PageNavigationAggregatorExtension : IWebViewRendererExtension
     {
         private readonly WKWebView _webView;
 
-        private readonly List<(Uri, DateTimeOffset)> _redirectFlow = new();
-        private IRedirectFlowAwareWebView? _redirectFlowAwareWebView;
+        private readonly List<(Uri, DateTimeOffset)> _navigationFlow = new();
+        private INavigationFlowAwareWebView? _navigationFlowAwareWebView;
 
-        public PageLoadRedirectAggregatorExtension(WKWebView webView)
+        public PageNavigationAggregatorExtension(WKWebView webView)
         {
             _webView = webView;
         }
 
         public void OnElementChanged(VisualElementChangedEventArgs e)
         {
-            if (e.NewElement is IRedirectFlowAwareWebView redirectFlowAwareWebView)
+            if (e.NewElement is INavigationFlowAwareWebView navigationFlowAwareWebView)
             {
-                _redirectFlowAwareWebView = redirectFlowAwareWebView;
+                _navigationFlowAwareWebView = navigationFlowAwareWebView;
             }
             else if (e.NewElement != null)
             {
                 throw new NotSupportedException(
-                    $"The {nameof(PageLoadRedirectAggregatorExtension)} extension can only be added to WebViews that implement {nameof(IRedirectFlowAwareWebView)}");
+                    $"The {nameof(PageNavigationAggregatorExtension)} extension can only be added to WebViews that implement {nameof(INavigationFlowAwareWebView)}");
             }
         }
 
         public void DidStartProvisionalNavigation(WKNavigation navigation)
         {
-            _redirectFlow.Clear();
-
             var url = _webView.Url?.ToString();
             if (url != null)
             {
-                _redirectFlow.Add((new Uri(url), DateTimeOffset.UtcNow));
+                _navigationFlow.Add((new Uri(url), DateTimeOffset.UtcNow));
             }
         }
 
@@ -47,14 +45,13 @@ namespace NHSOnline.App.iOS.Renderers.WebViews.Extensions
             var url = _webView.Url?.ToString();
             if (url != null)
             {
-                _redirectFlow.Add((new Uri(url), DateTimeOffset.UtcNow));
+                _navigationFlow.Add((new Uri(url), DateTimeOffset.UtcNow));
             }
         }
 
         public void DidFinishNavigation(WKNavigation navigation)
         {
-            _redirectFlowAwareWebView?.OnPageLoadComplete(new WebViewPageLoadEventArgs(_redirectFlow));
-            _redirectFlow.Clear();
+            _navigationFlowAwareWebView?.OnPageLoadComplete(new WebViewPageNavigationEventArgs(_navigationFlow));
         }
     }
 }

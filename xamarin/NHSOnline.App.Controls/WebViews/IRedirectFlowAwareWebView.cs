@@ -11,11 +11,11 @@ namespace NHSOnline.App.Controls.WebViews
 
     public class WebViewPageLoadEventArgs : EventArgs
     {
-        private readonly IReadOnlyCollection<Uri> _pageLoadUrlLog;
+        private readonly IReadOnlyCollection<(Uri, DateTimeOffset)> _pageLoadUrlLog;
 
-        public IEnumerable<Uri> Urls => _pageLoadUrlLog;
+        public IEnumerable<(Uri, DateTimeOffset)> Urls => _pageLoadUrlLog;
 
-        public WebViewPageLoadEventArgs(IEnumerable<Uri> pageLoadUrlLog)
+        public WebViewPageLoadEventArgs(IEnumerable<(Uri, DateTimeOffset)> pageLoadUrlLog)
         {
             _pageLoadUrlLog = pageLoadUrlLog.ToList().AsReadOnly();
         }

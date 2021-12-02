@@ -21,11 +21,12 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
         public void PageLoadComplete(WebViewPageLoadEventArgs pageLoadEventArgs)
         {
-            var finalUri = pageLoadEventArgs.Urls.LastOrDefault();
+            var (finalUri, _) = pageLoadEventArgs.Urls.LastOrDefault();
 
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse - finalUri can be null
             if (finalUri != null && IsNhsLoginEnterEmailScreen(finalUri))
             {
-                var urls = string.Join("\n", pageLoadEventArgs.Urls.Select(x => x.GetLeftPart(UriPartial.Path)));
+                var urls = string.Join("\n", pageLoadEventArgs.Urls.Select(x => x.Item1.GetLeftPart(UriPartial.Path)));
                 _logger.LogError(
                     $"Web integration page load ended up on NHS login enter-email screen. Redirect flow was:\n{urls}");
             }

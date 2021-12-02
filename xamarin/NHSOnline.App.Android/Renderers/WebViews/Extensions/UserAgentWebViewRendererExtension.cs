@@ -18,6 +18,7 @@ namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions
             if (e.OldElement == null && _renderer.Control.Settings != null)
             {
                 _renderer.Control.Settings.UserAgentString += $" {UserAgentService.Instance.NhsAppUserAgent}";
+                BaseWebViewRenderer.UserAgent = _renderer.Control.Settings.UserAgentString;
             }
         }
     }

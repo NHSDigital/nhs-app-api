@@ -8,6 +8,7 @@ using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Areas.PreHome.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.Controls;
+using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices;
@@ -33,6 +34,7 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
         private readonly INotifications _notifications;
         private readonly ICookieService _cookieService;
         private readonly IDialogPresenter _dialogPresenter;
+        private readonly IPreHomeLogoutMonitor _preHomeLogoutMonitor;
 
         private Uri? ResolveDeeplinkUrl => _deeplinkUrl ?? _model.DeeplinkUrl;
 
@@ -44,6 +46,7 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             IBrowserOverlay browserOverlay,
             IPageFactory pageFactory,
             INotifications notifications,
+            IPreHomeLogoutMonitor preHomeLogoutMonitor,
             ICookieService cookieService,
             IDialogPresenter dialogPresenter)
         {
@@ -54,13 +57,17 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             _browserOverlay = browserOverlay;
             _pageFactory = pageFactory;
             _notifications = notifications;
+            _preHomeLogoutMonitor = preHomeLogoutMonitor;
             _cookieService = cookieService;
             _dialogPresenter = dialogPresenter;
+
+            _preHomeLogoutMonitor.Begin();
 
             _view.AppNavigation
                 .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
                 .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
                 .RegisterHandler<Uri>(ViewOnNavigationFailed, (view, handler) => view.NavigationFailed = handler)
+                .RegisterHandler<WebViewPageNavigationEventArgs>(ViewOnPageLoadComplete, (view, handler) => view.PageLoadComplete = handler)
                 .RegisterHandler(GetNotificationsStatusRequested, (view, handler) => view.GetNotificationsStatusRequested = handler)
                 .RegisterHandler(GoToLoggedInHomeRequested, (view, handler) => view.GoToLoggedInHomeRequested = handler)
                 .RegisterHandler(LogoutRequested, (view, handler) => view.LogoutRequested = handler)
@@ -102,6 +109,8 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
         private async Task LogoutRequested()
         {
             _logger.LogInformation("{Method}", nameof(LogoutRequested));
+
+            _preHomeLogoutMonitor.Finish(await _view.GetCurrentWebViewUrl().PreserveThreadContext());
 
             var model = new LoggedOutHomeScreenModel();
             var page = _pageFactory.CreatePageFor(model);
@@ -153,6 +162,11 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             var model = new PreHomeTryAgainNetworkErrorModel(RetryAction);
             var page = _pageFactory.CreatePageFor(model);
             return _view.AppNavigation.Push(page);
+        }
+
+        private void ViewOnPageLoadComplete(WebViewPageNavigationEventArgs pageNavigationEventArgs)
+        {
+            _preHomeLogoutMonitor.PageLoadComplete(pageNavigationEventArgs);
         }
 
         private async Task GetNotificationsStatusRequested()

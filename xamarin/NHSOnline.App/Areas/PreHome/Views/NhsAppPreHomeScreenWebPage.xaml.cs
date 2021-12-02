@@ -80,6 +80,8 @@ namespace NHSOnline.App.Areas.PreHome.Views
 
         public Func<Uri, Task>? DeeplinkRequested { get; set; }
 
+        public Action<WebViewPageNavigationEventArgs>? PageLoadComplete { get; set; }
+
         private INhsAppPreHomeScreenWebView.IEvents Events => this;
 
         protected override void OnAppearing()
@@ -105,12 +107,14 @@ namespace NHSOnline.App.Areas.PreHome.Views
         {
             WebView.Navigating += WebViewOnNavigating;
             WebView.Navigated += WebViewOnNavigated;
+            WebView.PageLoadComplete += OnPageLoadComplete;
         }
 
         private void RemoveEventHandlers()
         {
             WebView.Navigating -= WebViewOnNavigating;
             WebView.Navigated -= WebViewOnNavigated;
+            WebView.PageLoadComplete -= OnPageLoadComplete;
         }
 
         private void WebViewOnNavigating(object sender, WebNavigatingEventArgs args)
@@ -152,6 +156,12 @@ namespace NHSOnline.App.Areas.PreHome.Views
             }
         }
 
+        public async Task<Uri?> GetCurrentWebViewUrl()
+        {
+            var currentUrl = await WebView.GetCurrentWebViewUrl().ResumeOnThreadPool();
+            return Uri.TryCreate(currentUrl, UriKind.Absolute, out Uri uri) ? uri : null;
+        }
+
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);
 
         public async Task SendNotificationsStatus(string status)
@@ -180,6 +190,14 @@ namespace NHSOnline.App.Areas.PreHome.Views
         private void WebOnEndNavigating (object sender, WebNavigatedEventArgs e)
         {
             ShowWebView();
+        }
+
+        private void OnPageLoadComplete(object sender, WebViewPageNavigationEventArgs pageNavigationEventArgs)
+        {
+            if (PageLoadComplete != null)
+            {
+                NhsAppResilience.ExecuteOnMainThread(() => PageLoadComplete.Invoke(pageNavigationEventArgs));
+            }
         }
 
         private void ShowWebView()

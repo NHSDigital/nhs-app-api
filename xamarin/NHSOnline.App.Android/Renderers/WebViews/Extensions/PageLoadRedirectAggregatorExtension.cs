@@ -10,7 +10,7 @@ namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions
     internal sealed class PageLoadRedirectAggregatorExtension : WebViewRendererExtension
     {
         private IRedirectFlowAwareWebView? _redirectFlowAwareWebView;
-        private readonly List<Uri> _singleSignOnFlow = new();
+        private readonly List<(Uri, DateTimeOffset)> _redirectFlow = new();
 
         internal override void OnElementChanged(ElementChangedEventArgs<WebView> e)
         {
@@ -32,20 +32,20 @@ namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions
                 var url = request.Url.ToString();
                 if (url != null)
                 {
-                    _singleSignOnFlow.Add(new Uri(url));
+                    _redirectFlow.Add((new Uri(url), DateTimeOffset.UtcNow));
                 }
             }
         }
 
         internal override void ShouldOverrideUrlLoading(string url)
         {
-            _singleSignOnFlow.Add(new Uri(url));
+            _redirectFlow.Add((new Uri(url), DateTimeOffset.UtcNow));
         }
 
         internal override void OnPageFinished(string url)
         {
-            _redirectFlowAwareWebView?.OnPageLoadComplete(new WebViewPageLoadEventArgs(_singleSignOnFlow));
-            _singleSignOnFlow.Clear();
+            _redirectFlowAwareWebView?.OnPageLoadComplete(new WebViewPageLoadEventArgs(_redirectFlow));
+            _redirectFlow.Clear();
         }
     }
 }
