@@ -7,7 +7,7 @@ namespace NHSOnline.App.Config.Values.Scratch.Scratch21
     internal sealed class Scratch21Configuration : IConfiguration
     {
         public ILoggingConfiguration Logging { get; } = new ScratchLoggingConfiguration();
-        public INhsLoginConfiguration NhsLogin { get; } = new ExtNhsLoginConfiguration();
+        public INhsLoginConfiguration NhsLogin => NhsLoginConfigurations.NhsLoginConfiguration;
         public INhsAppWebConfiguration NhsAppWeb { get; } = new ScratchNhsAppWebConfiguration("scratch21");
         public INhsAppApiConfiguration NhsAppApi { get; } = new ScratchNhsAppApiConfiguration("scratch21");
         public INhsExternalServicesConfiguration NhsExternalServices { get; } = new ScratchNhsExternalServicesConfiguration();

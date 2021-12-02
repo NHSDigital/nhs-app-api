@@ -1,6 +1,9 @@
 parameters:
   - name: configuration
     type: string
+  - name: nhsLoginEnvironment
+    type: string
+    default: ' '
   - name: apksignerKeystorePassword
     type: string
     default: '$(android.debug.key.store.password)'
@@ -21,9 +24,11 @@ jobs:
       keystoreAlias: 'playconsoleuploadkey'
       nativeVersion: '${{ parameters.nativeVersion }}'
       buildNumber: '${{ parameters.androidBuildNumber }}'
+      nhsLoginConfiguration: '${{ parameters.nhsLoginEnvironment }}'
   - template: xamarin-ios-client-build-job.yml
     parameters:
       configuration: ${{ parameters.configuration }} - Release
       provProfileSecureFile: iOSDevelopment${{ lower(parameters.configuration) }}.mobileprovision
       nativeVersion: '${{ parameters.nativeVersion }}'
       buildNumber: '${{ parameters.iosBuildNumber }}'
+      nhsLoginConfiguration: '${{ parameters.nhsLoginEnvironment }}'

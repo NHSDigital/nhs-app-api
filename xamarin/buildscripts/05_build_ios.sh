@@ -20,6 +20,10 @@ MSBUILD_ARGS+=("-p:IpaPackageDir=${IPA_PACKAGE_DIR}")
 MSBUILD_ARGS+=("-p:NhsAppBundleShortVersion=${NATIVE_VERSION_NUMBER}")
 MSBUILD_ARGS+=("-p:NhsAppBundleVersion=${NATIVE_IOS_BUILD_NUMBER}")
 
+if [ -n "${NHS_LOGIN_CONFIGURATION}" ]; then
+  MSBUILD_ARGS+=("-p:NhsLoginConfiguration=${NHS_LOGIN_CONFIGURATION}")
+fi
+
 if [ -n "${APPLE_CERTIFICATE_SIGNING_IDENTITY}" ]; then
   MSBUILD_ARGS+=("-p:Codesignkey=${APPLE_CERTIFICATE_SIGNING_IDENTITY}")
 fi

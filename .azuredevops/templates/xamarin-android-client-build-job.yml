@@ -18,6 +18,9 @@ parameters:
     type: string
   - name: buildNumber
     type: string
+  - name: nhsLoginConfiguration
+    type: string
+    default: ' '
 
 
 jobs:
@@ -71,6 +74,7 @@ jobs:
           CONFIGURATION: '${{ parameters.configuration }}'
           NATIVE_VERSION_NUMBER: '${{ parameters.nativeVersion }}'
           NATIVE_ANDROID_BUILD_NUMBER: '${{ parameters.buildNumber }}'
+          NHS_LOGIN_CONFIGURATION: '${{ parameters.nhsLoginConfiguration }}'
         inputs:
           scriptPath: xamarin/buildscripts/04_build_android_apk.sh
 

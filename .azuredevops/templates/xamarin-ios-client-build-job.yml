@@ -15,6 +15,9 @@ parameters:
     type: string
   - name: buildNumber
     type: string
+  - name: nhsLoginConfiguration
+    type: string
+    default: ' '
 
 jobs:
   - job:
@@ -49,6 +52,7 @@ jobs:
           IPA_PACKAGE_DIR: '$(output.directory)'
           NATIVE_VERSION_NUMBER: '${{ parameters.nativeVersion }}'
           NATIVE_IOS_BUILD_NUMBER: '${{ parameters.buildNumber }}'
+          NHS_LOGIN_CONFIGURATION: '${{ parameters.nhsLoginConfiguration }}'
         inputs:
           scriptPath: xamarin/buildscripts/05_build_ios.sh
 

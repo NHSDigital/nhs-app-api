@@ -18,5 +18,6 @@
 
   <Import Project="Properties/BuildConfiguration.debugmode.$(DebugMode).props" />
   <Import Project="Properties/BuildConfiguration.env.$(Environment).props" />
+  <Import Project="Properties/BuildConfiguration.env.nhslogin.$(NhsLoginConfiguration).props" />
 
 </Project>

@@ -39,6 +39,18 @@ parameters:
     type: boolean
     default: true
 
+  - name: xamarinScratchNhsLoginTarget
+    displayName: Xamarin native app Nhs Login environment
+    type: string
+    default: ' '
+    values:
+      - ' '
+      - ext
+      - aos
+      - sandpit
+      - production
+      - stubbed
+
   - name: intTestsRunXamarinNative
     displayName: Run Xamarin Native Integration Tests
     type: boolean
@@ -219,6 +231,7 @@ stages:
             nativeVersion: '$(native.xamarin.version)'
             androidBuildNumber: '$(native.xamarin.android.build.number)'
             iosBuildNumber: '$(native.xamarin.ios.build.number)'
+            nhsLoginEnvironment: '${{ parameters.xamarinScratchNhsLoginTarget }}'
 
   - ${{ if and(or(eq(variables['native.xamarin.target'], 'Staging'), eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
     - stage: xamarin_staging
