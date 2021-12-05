@@ -292,7 +292,6 @@ darlington,Darlington,CCG,Darlington,Durham Darligton Teeside Hambleton Richmond
 darlington,Darlington,CCG,Darlington,Durham Darligton Teeside Hambleton Richmondshire and Whitby,stgeorgesmp,St Georges Medical Practice,A83070,5600
 darlington,Darlington,CCG,Darlington,Durham Darligton Teeside Hambleton Richmondshire and Whitby,whinfieldsurgery,Whinfield Medical Practice,A83005,11887
 sderbyshire,Derby and Derbyshire,CCG,Derby and Derbyshire,Derbyshire,ashbournemedical,Ashbourne Medical Practice,C81037,8600
-sderbyshire,Derby and Derbyshire,CCG,Derby and Derbyshire,Derbyshire,barlboroughmedical,Barlborough Medical Practice,C81662,7484
 sderbyshire,Derby and Derbyshire,CCG,Derby and Derbyshire,Derbyshire,blackwellmedicalcentre,Blackwell Medical Centre,C81661,2576
 sderbyshire,Derby and Derbyshire,CCG,Derby and Derbyshire,Derbyshire,claycrosssurgery,Clay Cross Medical Centre,C81056,6118
 sderbyshire,Derby and Derbyshire,CCG,Derby and Derbyshire,Derbyshire,hartingtonsurgery,Hartington Surgery,C81082,3026
@@ -404,7 +403,6 @@ devon,Devon,CCG,Devon,Devon,westhoesurgery,West Hoe Surgery,L83112,5083
 devon,Devon,CCG,Devon,Devon,westbankpractice,Westbank Practice,L83041,8841
 devon,Devon,CCG,Devon,Devon,wonfordgreen-surgery,Wonford Green Surgery,L83655,5400
 devon,Devon,CCG,Devon,Devon,woodburysurgery,Woodbury Surgery,L83116,4200
-devon,Devon,CCG,Devon,Devon,wycliffesurgery,Wycliffe Surgery,L83076,6300
 devon,Devon,CCG,Devon,Devon,wyndhamhousesurgery,Wyndham House Surgery,L83134,3972
 devon,Devon,CCG,Devon,Devon,yealmmedical,Yealm Medical Centre,L83081,7000
 dorset,Dorset,CCG,Dorset,Dorset,adampractice,Adam Practice,J81006,34063
@@ -1112,7 +1110,6 @@ lambeth,Lambeth,CCG,Lambeth,South East London,vauxhallsurgery,Vauxhall Surgery,G
 leeds,Leeds,CCG,Leeds,West Yorkshire and Harrogate,arthingtonmedicalcentreleeds,Arthington Medical Centre,B86096,6000
 leeds,Leeds,CCG,Leeds,West Yorkshire and Harrogate,ashtonviewmedical,Ashton View Medical Centre,B86623,4615
 leeds,Leeds,CCG,Leeds,West Yorkshire and Harrogate,beechtreemcleeds,Beechtree Medical Centre,B86655,1818
-leeds,Leeds,CCG,Leeds,West Yorkshire and Harrogate,oultonmedicalcentre,Dr Freeman And Partners,B86006,15581
 leeds,Leeds,CCG,Leeds,West Yorkshire and Harrogate,windmillhealthcentre,Dr Roberts And Partners,B86007,8375
 leeds,Leeds,CCG,Leeds,West Yorkshire and Harrogate,leedsgps,Dr S Laybourn and Partners,B86062,9000
 leeds,Leeds,CCG,Leeds,West Yorkshire and Harrogate,coltonmill-thegrange,Dr T Fox and Partners,B86075,13050
@@ -2587,7 +2584,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Stokenchurch Medical Centre,K82048,
 ,,,Other,,,South Hermitage Surgery,M82060,
 ,,,Other,,,Henley-in-Arden Medical Centre,M84024,
-,,,Other,,,Watton Place Clinic,E82121,
 ,,,Other,,,Orchard Family Practice,G82162,
 ,,,Other,,,Emsworth Surgery,J82009,
 ,,,Other,,,Camrose Gillies and Hackwood Partnership,J82069,
@@ -2663,7 +2659,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Billinge Medical Practice,N83019,
 ,,,Other,,,Ford Medical Practice,N84029,
 ,,,Other,,,St Hilary Group Practice,N85025,
-,,,Other,,,Nidderdale Group Practice,B82004,
 ,,,Other,,,Burvill House Surgery,E82023,
 ,,,Other,,,The Portmill Surgery,E82044,
 ,,,Other,,,Southway Surgery,L83039,
@@ -2680,8 +2675,10 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Maritime Health Partnership,G82744,
 ,,,Other,,,Stretton Medical Centre,N81623,
 ,,,Other,,,Warden Lodge Medical Practice,E82123,
-,,,Other,,,Island Health,F84710,
 ,,,Other,,,Green Meadows Surgery,K81076,
 ,,,Other,,,Peverell Park Surgery,L83648,
 ,,,Other,,,Marysville Medical Practice,M82040,
 ,,,Other,,,Hoylake Road Medical Centre,N85046,
+,,,Other,,,Aylesford Medical Centre,G82058,
+,,,Other,,,Bishops Waltham Surgery,J82064,
+,,,Other,,,St Thomas Medical Group,L83016,
