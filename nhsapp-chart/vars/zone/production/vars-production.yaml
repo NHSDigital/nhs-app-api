@@ -89,7 +89,7 @@ splunk:
 
 qualtricsBaseUrl: "https://nhsdigital.eu.qualtrics.com/API/v3/"
 qualtricsDirectoryId: "POOL_3f8iG2TIImtgHLn"
-qualtricsMailingListId: "CG_3nxFnDUpfzZsDpI"
+qualtricsMailingListId: "CG_w5F6mH6oqyWsP6N"
 
 web:
   minAvailable: 4
