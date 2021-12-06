@@ -122,6 +122,7 @@ api:
     services__ers__url: https://refer.nhs.uk
     services__pkb__url: https://my.patientsknowbest.com
     services__pkb_alt__url: http://my.patientsknowbest.com:443
+    services__gncr__url: https://my.gncr.org.uk
     services__substraktPatientPack__url: https://jump-point.production.substrakthealth.com
     services__substraktPatientPack_admin__url: https://admin-request.production.substrakthealth.com
     services__substraktPatientPack_auth__url: https://auth.production.substrakthealth.com
@@ -138,6 +139,7 @@ api:
     servicesV3__ers__url: https://refer.nhs.uk
     servicesV3__pkb__url: https://my.patientsknowbest.com
     servicesV3__pkb__domains__1: http://my.patientsknowbest.com:443
+    servicesV3__gncr__url: https://my.gncr.org.uk
     servicesV3__substraktPatientPack__url: https://jump-point.production.substrakthealth.com
     servicesV3__substraktPatientPack__domains__1: https://admin-request.production.substrakthealth.com
     servicesV3__substraktPatientPack__domains__2: https://auth.production.substrakthealth.com
