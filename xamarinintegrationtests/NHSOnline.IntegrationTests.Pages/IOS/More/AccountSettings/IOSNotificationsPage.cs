@@ -27,10 +27,11 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.More.AccountSettings
             return page;
         }
 
-        public void AssertPageElements()
+        public IOSNotificationsPage AssertPageElements()
         {
             Navigation.AssertNavigationIconsArePresent();
             PageContent.AssertPageElements();
+            return this;
         }
     }
 }

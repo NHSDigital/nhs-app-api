@@ -49,10 +49,11 @@ namespace NHSOnline.IntegrationTests.Pages.Android.More.AccountSettings
             return page;
         }
 
-        public void AssertPageElements()
+        public AndroidNotificationsPage AssertPageElements()
         {
             Navigation.AssertNavigationIconsArePresent();
             PageContent.AssertPageElements();
+            return this;
         }
 
         public void KeyboardNavigateToDeviceSettings() =>

@@ -38,6 +38,7 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             IOSNotificationsPage
                 .AssertOnPage(driver)
+                .AssertPageElements()
                 .IOSPageContent.ToggleOnNotifications();
 
             IOSNotificationsPermissionDialog

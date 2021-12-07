@@ -36,6 +36,7 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             AndroidNotificationsPage
                 .AssertOnPage(driver)
+                .AssertPageElements()
                 .PageContent.OpenNotificationSettings();
 
             AndroidSettingsAppInfo

@@ -14,6 +14,18 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
         internal NotificationsPageContent(IWebInteractor interactor)
         {
             _interactor = interactor;
+
+            AboutNotificationsExpander = WebLinkExpander.WithText(_interactor, "About notifications on your devices");
+
+            IfYouWantToGetNotificationsText = AboutNotificationsExpander.Contains(interactor => WebText.WithTagAndText(
+                interactor,
+                "p",
+                "If you want to get notifications, you need to turn them on for each device you use to access the NHS App."));
+
+            IfYouShareThisDeviceText = AboutNotificationsExpander.Contains(_interactor => WebText.WithTagAndText(
+                _interactor,
+                "p",
+                "If you share this device with other people, they may see your notifications."));
         }
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Manage notifications");
@@ -24,8 +36,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
         private WebText TheNhsAndConnected => WebText.WithTagAndText(_interactor, "p",
         "The NHS and connected healthcare providers, like your GP surgery, may send you messages using the NHS App.");
 
-        private WebText IfYouShareThisDeviceText => WebText.WithTagAndText(_interactor, "p",
-            "If you share this device with other people, they may see your notifications. The settings will apply to everyone who logs in to the NHS App on this device.");
+        private WebLinkExpander AboutNotificationsExpander { get; }
+
+        private WebText IfYouShareThisDeviceText { get; }
+
+        private WebText IfYouWantToGetNotificationsText { get; }
 
         private WebLink PrivacyLink => WebLink.WithText(_interactor, "NHS App privacy policy");
 
@@ -56,6 +71,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
         {
             PrivacyLink,
             NotificationsToggle,
+            AboutNotificationsExpander,
             NotificationSettingsLink
         };
 
@@ -68,7 +84,14 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
             TitleText.AssertVisible();
             WeUseNotifications.AssertVisible();
             TheNhsAndConnected.AssertVisible();
+
+            AboutNotificationsExpander.AssertVisible();
+            AboutNotificationsExpander.AssertCollapsed();
+            AboutNotificationsExpander.Toggle();
+            AboutNotificationsExpander.AssertExpanded();
+            IfYouWantToGetNotificationsText.AssertVisible();
             IfYouShareThisDeviceText.AssertVisible();
+
             MoreInfoText.AssertVisible();
             NotificationSettingsLink.AssertVisible();
         }
