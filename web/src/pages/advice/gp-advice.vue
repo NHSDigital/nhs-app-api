@@ -41,7 +41,7 @@ import { LOGIN_PATH } from '@/router/paths';
 
 const getServiceDefinitionId = store => (
   store.state.onlineConsultations.gpAdviceServiceDefinitionId ||
-  store.state.serviceJourneyRules.rules.cdssAdvice.conditionsServiceDefinition
+  store.state.serviceJourneyRules.rules.cdssAdvice.serviceDefinition
 );
 
 export default {

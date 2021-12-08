@@ -89,16 +89,17 @@ const showError = (store) => {
 };
 
 const getServiceDefinitionType = (journeyRules, serviceDefinitionId) => {
-  switch (serviceDefinitionId) {
-    case journeyRules.cdssAdmin.serviceDefinition:
-      return ServiceDefinitionTypes.AdminHelp;
-    case journeyRules.cdssAdvice.serviceDefinition:
-      return ServiceDefinitionTypes.GeneralAdvice;
-    case journeyRules.cdssAdvice.conditionsServiceDefinition:
-      return ServiceDefinitionTypes.ConditionList;
-    default:
-      return ServiceDefinitionTypes.ConditionAdvice;
+  if (serviceDefinitionId === journeyRules.cdssAdmin.serviceDefinition ||
+    journeyRules.cdssAdmin.knownGeneralServiceDefinitions.includes(serviceDefinitionId)) {
+    return ServiceDefinitionTypes.AdminHelp;
   }
+  if (serviceDefinitionId === journeyRules.cdssAdvice.serviceDefinition) {
+    return ServiceDefinitionTypes.ConditionList;
+  }
+  if (journeyRules.cdssAdvice.knownGeneralServiceDefinitions.includes(serviceDefinitionId)) {
+    return ServiceDefinitionTypes.GeneralAdvice;
+  }
+  return ServiceDefinitionTypes.ConditionAdvice;
 };
 
 export default {
@@ -258,7 +259,7 @@ export default {
         const defaultCondition = getQuestionnaire(response, 'DEFAULT_CONDITION');
 
         const isConditionsQuestion = questionnaire.id ===
-          rootState.serviceJourneyRules.rules.cdssAdvice.conditionsServiceDefinition;
+          rootState.serviceJourneyRules.rules.cdssAdvice.serviceDefinition;
         const issues = getAllIssues(response);
         const previousQuestion = getQuestion(getPreviousQuestion(response));
         const previousAnswers = getQuestionnaireResponseAnswers(response);

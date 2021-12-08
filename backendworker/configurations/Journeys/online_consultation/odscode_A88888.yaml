@@ -4,8 +4,9 @@ target:
 journeys:  
   cdssAdvice:
     provider: stubs
-    serviceDefinition: NHS_ADVICE
-    conditionsServiceDefinition: NHS_CONDITION_LIST
+    serviceDefinition: NHS_CONDITION_LIST
+    knownGeneralServiceDefinitions: []
   cdssAdmin:
     provider: stubs
     serviceDefinition: NHS_ADMIN
+    knownGeneralServiceDefinitions: []

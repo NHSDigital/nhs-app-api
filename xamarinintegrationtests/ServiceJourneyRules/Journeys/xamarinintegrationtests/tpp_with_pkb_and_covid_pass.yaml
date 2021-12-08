@@ -7,10 +7,15 @@ journeys:
   cdssAdmin:
     serviceDefinition: CONDITION_LIST_ADMIN
     provider: eConsult
+    knownGeneralServiceDefinitions:
+      - GEC_ADM__F
+      - GEC_ADM__T
   cdssAdvice:
-    serviceDefinition: GEC_GEN
-    conditionsServiceDefinition: CONDITION_LIST
+    serviceDefinition: CONDITION_LIST
     provider: eConsult
+    knownGeneralServiceDefinitions:
+      - GEC_GEN__F
+      - PCI_UWC__T
   coronavirusInformation: true
   documents: true
   im1Messaging:

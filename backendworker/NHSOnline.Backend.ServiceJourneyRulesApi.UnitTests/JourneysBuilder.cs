@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support;
 
@@ -27,14 +28,16 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
         }
 
         public JourneysBuilder CdssAdminProvider(CdssProvider? cdssAdminProvider,
-            string cdssAdminServiceDefinition = null)
+            string cdssAdminServiceDefinition = null,
+            IList<string> cdssAdminKnownGeneralServiceDefinitions = null)
         {
             if (cdssAdminProvider != null)
             {
                 _journeys.CdssAdmin = new Cdss
                 {
                     Provider = cdssAdminProvider.Value,
-                    ServiceDefinition = cdssAdminServiceDefinition
+                    ServiceDefinition = cdssAdminServiceDefinition,
+                    KnownGeneralServiceDefinitions = cdssAdminKnownGeneralServiceDefinitions
                 };
             }
             else
@@ -47,7 +50,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
 
         public JourneysBuilder CdssAdviceProvider(CdssProvider? cdssAdviceProvider,
             string cdssAdviceServiceDefinition = null,
-            string cdssAdviceConditionsServiceDefinition = null)
+            IList<string> cdssAdviceKnownGeneralServiceDefinitions = null)
         {
             if (cdssAdviceProvider != null)
             {
@@ -55,7 +58,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
                 {
                     Provider = cdssAdviceProvider.Value,
                     ServiceDefinition = cdssAdviceServiceDefinition,
-                    ConditionsServiceDefinition = cdssAdviceConditionsServiceDefinition
+                    KnownGeneralServiceDefinitions = cdssAdviceKnownGeneralServiceDefinitions
                 };
             }
             else

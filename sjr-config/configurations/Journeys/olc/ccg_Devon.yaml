@@ -102,8 +102,13 @@ target:
 journeys:
   cdssAdvice:
     provider: eConsult
-    serviceDefinition: GEC_GEN
-    conditionsServiceDefinition: CONDITION_LIST
+    serviceDefinition: CONDITION_LIST
+    knownGeneralServiceDefinitions:
+      - GEC_GEN__F
+      - PCI_UWC__T
   cdssAdmin:
     provider: eConsult
     serviceDefinition: CONDITION_LIST_ADMIN
+    knownGeneralServiceDefinitions:
+      - GEC_ADM__F
+      - GEC_ADM__T

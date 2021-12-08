@@ -91,11 +91,12 @@ const rootState = {
       cdssAdmin: {
         serviceDefinition: 'NHS_ADMIN',
         provider: 'stubs',
+        knownGeneralServiceDefinitions: ['NHS_ADMIN_PARENT'],
       },
       cdssAdvice: {
-        serviceDefinition: 'NHS_ADVICE',
-        conditionsServiceDefinition: 'NHS_CONDITION_LIST',
+        serviceDefinition: 'NHS_CONDITION_LIST',
         provider: 'stubs',
+        knownGeneralServiceDefinitions: ['NHS_ADVICE'],
       },
     },
   },
@@ -144,6 +145,7 @@ describe('online consultations store actions', () => {
       ['NHS_ADVICE', 'GeneralAdvice'],
       ['NHS_CONDITION_LIST', 'ConditionList'],
       ['ANOTHER_SERVICE_DEFINITION', 'ConditionAdvice'],
+      ['NHS_ADMIN_PARENT', 'AdminHelp'],
     ]).it('will map service definition id %s to %s type for api request', (
       id, type,
     ) => {
@@ -541,7 +543,7 @@ describe('online consultations store actions', () => {
               });
             });
 
-            describe('guidance response contains questionnaire matching conditionsServiceDefinition in SJR', () => {
+            describe('guidance response contains questionnaire matching ServiceDefinition in SJR', () => {
               it('will store list of service definitions in conditionList', () => {
                 // Arrange
                 const expectedConditionsList = [{
