@@ -46,4 +46,4 @@ journeys:
       - netCompanyP5
       - nhsd
   supportsLinkedProfiles: true
-  notificationPrompt: true
+  notificationPrompt: false
