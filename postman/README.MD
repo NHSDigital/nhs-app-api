@@ -1,6 +1,6 @@
 # How to use the postman collection
 ## Generate a key pair
-In order to use the postman collection with signed jwt authentication you will require a private key pair. These can be gnerated using the following command (Do not set a passphrase when prompted)
+In order to use the postman collection with signed jwt authentication you will require a private key pair. These can be generated using the following command (Do not set a passphrase when prompted)
 
 ```
 ssh-keygen -t rsa -b 4096 -m PEM -f jwtRS512.key
