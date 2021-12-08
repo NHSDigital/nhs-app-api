@@ -526,8 +526,6 @@ paths:
       operationId: get-event-report
       description: |
         ## Overview
-        **Development of this endpoint is in progress. It is not yet available in the production environment and this specification is subject to change. This documentation is provided to give onboarding partners early visibility of planned features.**
-
         Use this endpoint to get a daily report of events relating to in-app messages and push notifications that you have previously sent to NHS App users.
 
         An event will be included in this report detailing the outcome of attempting to send each communication to each individual recipient, for each channel (push notification or in-app message).
@@ -649,8 +647,6 @@ paths:
       operationId: get-patient-report
       description: |
         ## Overview
-        **Development of this endpoint is in progress. It is not yet available in the production environment and this specification is subject to change. This documentation is provided to give onboarding partners early visibility of planned features.**
-
         Use this endpoint to get details of patients registered with the NHS App for a given GP surgery, and an indication of whether they have enabled push notifications on one or more devices. The response will only include patients who have had their identity verified to 'high' (P9) level.
 
         Client applications must only invoke this endpoint as agreed with the NHS App team, typically to retrieve details of patients at GP practices where their service is available.
