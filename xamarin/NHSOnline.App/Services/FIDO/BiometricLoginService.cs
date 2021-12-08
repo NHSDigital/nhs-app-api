@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using NHSOnline.App.DependencyServices.Biometrics;
+using NHSOnline.App.Logging;
 using NHSOnline.App.NhsLogin.Fido;
 using NHSOnline.App.Threading;
 
@@ -11,15 +13,18 @@ namespace NHSOnline.App.Services.FIDO
         private readonly IBiometrics _biometrics;
         private readonly IFidoService _fidoService;
         private readonly IUserPreferencesService _preferencesService;
+        private readonly ILogger _logger;
 
         public BiometricLoginService(
             IBiometrics biometrics,
             IFidoService fidoService,
-            IUserPreferencesService preferencesService)
+            IUserPreferencesService preferencesService,
+            ILogger<BiometricLoginService> logger)
         {
             _biometrics = biometrics;
             _fidoService = fidoService;
             _preferencesService = preferencesService;
+            _logger = logger;
         }
 
         public async Task<BiometricLoginResult> Authenticate(string fidoUsername)
@@ -30,18 +35,26 @@ namespace NHSOnline.App.Services.FIDO
                 return keyIdFailure;
             }
 
-            if (!_biometrics.TryGetKey(fidoUsername, out var biometricAuthKey))
+            try
             {
+                if (!_biometrics.TryGetKey(fidoUsername, out var biometricAuthKey))
+                {
+                    return new BiometricLoginResult.PermanentLockout();
+                }
+
+                var authSigner = await VerifyUser(biometricAuthKey).PreserveThreadContext();
+                if (authSigner.Failed(out var authSignerFailure))
+                {
+                    return authSignerFailure;
+                }
+
+                return await DoFidoLogin(keyId, biometricAuthKey, authSigner.Result).ResumeOnThreadPool();
+            }
+            catch (CrossPlatformException e) when (e.ErrorType is CrossPlatformErrorType.UnrecoverableKey)
+            {
+                _logger.LogError(e, "Unrecoverable key exception");
                 return new BiometricLoginResult.PermanentLockout();
             }
-
-            var authSigner = await VerifyUser(biometricAuthKey).PreserveThreadContext();
-            if (authSigner.Failed(out var authSignerFailure))
-            {
-                return authSignerFailure;
-            }
-
-            return await DoFidoLogin(keyId, biometricAuthKey, authSigner.Result).ResumeOnThreadPool();
         }
 
         private async Task<ProcessResult<string, BiometricLoginResult>> ValidateRegistration(string fidoUsername)

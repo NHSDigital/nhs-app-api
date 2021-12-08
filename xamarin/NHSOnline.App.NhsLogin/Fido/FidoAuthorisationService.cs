@@ -32,6 +32,7 @@ namespace NHSOnline.App.NhsLogin.Fido
             header.AppId = AppId;
 
             var finalChallengeParams = GenerateFinalChallengeParams(authRequest.Challenge);
+
             var assertion = await GenerateAuthenticationAssertion(fidoKey, finalChallengeParams).ResumeOnThreadPool();
 
             var authResponse = new UafAuthenticationResponse
@@ -93,9 +94,8 @@ namespace NHSOnline.App.NhsLogin.Fido
                 .FinalChallengeParams(fcParams)
                 .KeyId(key.KeyId());
 
-            builder = await builder.Sign(key.SignBytes).ResumeOnThreadPool();
-
-            return await builder.Build().ResumeOnThreadPool();
+                builder = await builder.Sign(key.SignBytes).ResumeOnThreadPool();
+                return await builder.Build().ResumeOnThreadPool();
         }
     }
 }

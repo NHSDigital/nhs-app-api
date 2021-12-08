@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Api.Session;
 using NHSOnline.App.DependencyServices.Biometrics;
+using NHSOnline.App.Logging;
 using NHSOnline.App.NhsLogin.Fido;
 using NHSOnline.App.Threading;
 
@@ -31,22 +32,30 @@ namespace NHSOnline.App.Services.FIDO
         public async Task<BiometricRegisterResult> Register(AccessToken accessToken)
         {
             await DeleteRegistration(accessToken).PreserveThreadContext();
-            using var key = await _biometrics.CreateBiometricKey(accessToken.Subject).PreserveThreadContext();
 
-            var authSigner = await VerifyUser(key).PreserveThreadContext();
-            if (authSigner.Failed(out var authSignerFailure))
+            try
             {
-                return authSignerFailure;
-            }
+                using var key = await _biometrics.CreateBiometricKey(accessToken.Subject).PreserveThreadContext();
 
-            var keyId = await DoFidoRegistration(key, authSigner.Result, accessToken).ResumeOnThreadPool();
-            if (keyId.Failed(out var keyIdFailure))
+                var authSigner = await VerifyUser(key).PreserveThreadContext();
+                if (authSigner.Failed(out var authSignerFailure))
+                {
+                    return authSignerFailure;
+                }
+
+                var keyId = await DoFidoRegistration(key, authSigner.Result, accessToken).ResumeOnThreadPool();
+                if (keyId.Failed(out var keyIdFailure))
+                {
+                    return keyIdFailure;
+                }
+
+                _userPreferencesService.BiometricsKeyId = keyId;
+                return BiometricRegisterResult.Success();
+            }
+            catch (CrossPlatformException)
             {
-                return keyIdFailure;
+                return BiometricRegisterResult.Failed(BiometricErrorCode.CannotChangeBiometrics);
             }
-
-            _userPreferencesService.BiometricsKeyId = keyId;
-            return BiometricRegisterResult.Success();
         }
 
         public async Task DeleteRegistration(AccessToken accessToken)

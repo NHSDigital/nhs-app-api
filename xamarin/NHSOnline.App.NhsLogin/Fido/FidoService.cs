@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Logging;
 using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.NhsLogin.Fido
@@ -12,14 +11,6 @@ namespace NHSOnline.App.NhsLogin.Fido
         private readonly ILogger _logger;
         private readonly FidoRegistrationService _registrationService;
         private readonly FidoAuthorisationService _authorisationService;
-
-        private static readonly List<string> UnrecoverableAndroidKeyStoreExceptions = new List<string>
-        {
-            // This exception wrapper covers a multitude of android.security.KeyStoreExceptions which are raised by 'KeyStore2.java' class.
-            "java.security.UnrecoverableKeyException",
-            // The following KeyStoreExceptions do not get wrapped in the Java one above, but we will handle in the same way.
-            "android.security.KeyStoreException: Key user not authenticated"
-        };
 
         public FidoService(
             ILogger<FidoService> logger,
@@ -62,9 +53,9 @@ namespace NHSOnline.App.NhsLogin.Fido
             {
                 return await _authorisationService.Authorise(fidoKey).ResumeOnThreadPool();
             }
-            catch (Exception e) when (IsUnrecoverableAndroidKeyStoreException(e))
+            catch (CrossPlatformException e) when (e.ErrorType is CrossPlatformErrorType.UnrecoverableKey)
             {
-                _logger.LogError(e, "Unrecoverable Android KeyStore Exception detected");
+                _logger.LogError(e, "Unrecoverable Exception detected");
                 return new FidoAuthorisationResult.PermanentLockout();
             }
             catch (Exception e)
@@ -73,9 +64,5 @@ namespace NHSOnline.App.NhsLogin.Fido
                 return new FidoAuthorisationResult.Unauthorised();
             }
         }
-
-        private static bool IsUnrecoverableAndroidKeyStoreException(Exception exception) =>
-            UnrecoverableAndroidKeyStoreExceptions.Any(knownKeyStoreExceptionStringToMatch =>
-                exception.ToString().Contains(knownKeyStoreExceptionStringToMatch, StringComparison.Ordinal));
     }
 }

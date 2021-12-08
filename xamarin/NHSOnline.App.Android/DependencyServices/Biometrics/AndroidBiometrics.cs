@@ -43,8 +43,8 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
             return Task.FromResult(status);
 
             BiometricStatus.FingerPrintFaceOrIris Unusable() =>
-                new BiometricStatus.FingerPrintFaceOrIris(BiometricHardwareState.Unusable,
-                    DeriveBiometricRegistrationStatus(fidoUsername));
+            new BiometricStatus.FingerPrintFaceOrIris(BiometricHardwareState.Unusable,
+                DeriveBiometricRegistrationStatus(fidoUsername));
 
             BiometricStatus.FingerPrintFaceOrIris Usable() =>
                 new BiometricStatus.FingerPrintFaceOrIris(BiometricHardwareState.Usable,
@@ -63,9 +63,16 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
                 return BiometricRegistrationStatus.NotRegistered;
             }
 
-            if (TryGetKey(fidoUsername, out _))
+            try
             {
-                return BiometricRegistrationStatus.Registered;
+                if (TryGetKey(fidoUsername, out _))
+                {
+                    return BiometricRegistrationStatus.Registered;
+                }
+            }
+            catch (CrossPlatformException e) when (e.ErrorType is CrossPlatformErrorType.UnrecoverableKey)
+            {
+                Logger.LogError(e, "Unable to get key - Registration invalid");
             }
 
             return BiometricRegistrationStatus.Invalidated;
@@ -82,10 +89,18 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
 
             _ = keyPairGenerator.GenerateKeyPair() ??
                 throw new InvalidOperationException("GenerateKeyPair returns null");
-            if (TryGetKey(fidoUsername, out var biometricAuthKey))
+            try
             {
-                BiometricRegistrationState.FidoRegistered = true;
-                return Task.FromResult(biometricAuthKey);
+                if (TryGetKey(fidoUsername, out var biometricAuthKey))
+                {
+                    BiometricRegistrationState.FidoRegistered = true;
+                    return Task.FromResult(biometricAuthKey);
+                }
+            }
+            catch (CrossPlatformException e) when (e.ErrorType is CrossPlatformErrorType.UnrecoverableKey)
+            {
+                Logger.LogError(e, "Unable to create key - Unrecoverable key exception");
+                throw;
             }
 
             throw new InvalidOperationException("GenerateKeyPair failed");
@@ -127,6 +142,11 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
                     key = new BiometricAuthKey((FragmentActivity) MainActivity, secretKey, certificate);
                     return true;
                 }
+            }
+            catch (UnrecoverableKeyException e)
+            {
+                Logger.LogError(e, "Failed to get Biometric Auth Key");
+                throw new CrossPlatformException("UnrecoverableKeyException", CrossPlatformErrorType.UnrecoverableKey);
             }
             catch (Exception e)
             {

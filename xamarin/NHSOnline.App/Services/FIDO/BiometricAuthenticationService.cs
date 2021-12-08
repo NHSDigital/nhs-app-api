@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using NHSOnline.App.Api.Session;
 using NHSOnline.App.DependencyServices.Biometrics;
 using NHSOnline.App.Threading;
@@ -8,20 +7,17 @@ namespace NHSOnline.App.Services.FIDO
 {
     internal sealed class BiometricAuthenticationService : IBiometricAuthenticationService
     {
-        private readonly ILogger _logger;
         private readonly IBiometrics _biometrics;
         private readonly IUserPreferencesService _preferencesService;
         private readonly BiometricRegistrationService _biometricRegistrationService;
         private readonly BiometricLoginService _biometricLoginService;
 
         public BiometricAuthenticationService(
-            ILogger<BiometricAuthenticationService> logger,
             IBiometrics biometrics,
             IUserPreferencesService preferencesService,
             BiometricRegistrationService biometricRegistrationService,
             BiometricLoginService biometricLoginService)
         {
-            _logger = logger;
             _biometrics = biometrics;
             _preferencesService = preferencesService;
             _biometricRegistrationService = biometricRegistrationService;
