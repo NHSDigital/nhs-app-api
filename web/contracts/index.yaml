@@ -5929,7 +5929,7 @@
                         type: "string"
                       transmissionId: 
                         type: "string"
-                      communcationCreatedDateTime: 
+                      communicationCreatedDateTime: 
                         type: "string"
                         format: "date-time"
                       requestReference: 
@@ -5952,7 +5952,7 @@
                     supplierId: "7e874122-d6c0-47c1-96eb-0a2532b51675"
                     communicationId: "1c92e18e-6221-4bfd-8d30-d535e16dacd1"
                     transmissionId: "2c92e18e-6221-4bfd-8d30-d535e16dacd2"
-                    communcationCreatedDateTime: "2020-10-26T15:06:37.350Z"
+                    communicationCreatedDateTime: "2020-10-26T15:06:37.350Z"
                     requestReference: "RequestReference"
                     campaignId: "c40b8210-2217-43d8-9016-333f04388e40"
                     odsCode: "OdsCode"
