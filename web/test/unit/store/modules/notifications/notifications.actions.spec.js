@@ -132,7 +132,7 @@ describe('notifications actions', () => {
 
   describe('authorised', () => {
     const state = { registered: false };
-    const deviceResponse = { deviceType: 'android', devicePns: 5, trigger: 'toggle' };
+    const deviceResponse = { deviceType: 'android', devicePns: 5, trigger: 'toggle', ignoreError: true };
     let dispatch;
 
     beforeEach(() => {
@@ -145,6 +145,7 @@ describe('notifications actions', () => {
       beforeEach(() => {
         loading = actions.load();
         deviceResponse.trigger = 'load';
+        deviceResponse.ignoreError = false;
       });
 
       describe('Accounts notifications', () => {
@@ -157,7 +158,7 @@ describe('notifications actions', () => {
 
           it('will call the `getV1ApiUsersMeDevices` endpoint', () => {
             expect($http.getV1ApiUsersMeDevices).toBeCalledWith(
-              { devicePns: deviceResponse.devicePns },
+              { devicePns: deviceResponse.devicePns, ignoreError: deviceResponse.ignoreError },
             );
           });
 
@@ -179,7 +180,7 @@ describe('notifications actions', () => {
 
           it('will call the `getV1ApiUsersMeDevices` endpoint', () => {
             expect($http.getV1ApiUsersMeDevices).toBeCalledWith(
-              { devicePns: deviceResponse.devicePns },
+              { devicePns: deviceResponse.devicePns, ignoreError: deviceResponse.ignoreError },
             );
           });
 
@@ -214,6 +215,7 @@ describe('notifications actions', () => {
                 devicePns: deviceResponse.devicePns,
                 deviceType: deviceResponse.deviceType,
               },
+              ignoreError: deviceResponse.ignoreError,
             });
           });
 
@@ -240,6 +242,7 @@ describe('notifications actions', () => {
         describe('notifications prompt', () => {
           beforeEach(async () => {
             state.registered = false;
+            deviceResponse.ignoreError = true;
             actions.app.$router.currentRoute.name = NOTIFICATIONS_NAME;
             await actions.authorised({ commit, dispatch, state }, deviceResponse);
           });
@@ -249,6 +252,7 @@ describe('notifications actions', () => {
               screenShown: true,
               notificationsRegistered: true,
               didErrorAttemptingToUpdateStatus: false,
+              ignoreError: deviceResponse.ignoreError,
             });
           });
         });
@@ -266,6 +270,7 @@ describe('notifications actions', () => {
               screenShown: true,
               notificationsRegistered: false,
               didErrorAttemptingToUpdateStatus: true,
+              ignoreError: deviceResponse.ignoreError,
             });
           });
         });
@@ -305,6 +310,7 @@ describe('notifications actions', () => {
                 screenShown: true,
                 notificationsRegistered: true,
                 didErrorAttemptingToUpdateStatus: true,
+                ignoreError: deviceResponse.ignoreError,
               });
             });
           });
@@ -500,6 +506,7 @@ describe('notifications actions', () => {
           screenShown: true,
           notificationsRegistered: false,
           didErrorAttemptingToUpdateStatus: true,
+          ignoreError: true,
         });
       });
     });

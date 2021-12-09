@@ -42,6 +42,7 @@ describe('notifications prompt page', () => {
             notificationCookieExists: false,
             registered: false,
             toggleUpdated: false,
+            notificationCommunicationError: false,
           },
         },
       });
@@ -153,6 +154,7 @@ describe('notifications prompt page', () => {
           screenShown: true,
           notificationsRegistered: false,
           didErrorAttemptingToUpdateStatus: false,
+          ignoreError: true,
         });
       });
 
@@ -187,6 +189,43 @@ describe('notifications prompt page', () => {
           screenShown: false,
           notificationsRegistered: true,
           didErrorAttemptingToUpdateStatus: false,
+          ignoreError: true,
+        });
+      });
+
+      it('will call conditional redirect', () => {
+        expect(conditionalRedirect).toBeCalled();
+      });
+    });
+  });
+
+  describe('an error has occurred in notifications/load in middleware', () => {
+    beforeEach(() => {
+      wrapper = mountPage({
+        state: {
+          device: {
+            isNativeApp: true,
+          },
+          notifications: {
+            notificationCookieExists: false,
+            registered: false,
+            notificationCommunicationError: true,
+          },
+        },
+      });
+    });
+
+    describe('the user gets to a point where the screen would load', () => {
+      it('will not add the cookie', () => {
+        expect($store.dispatch).not.toBeCalledWith('notifications/addNotificationCookie');
+      });
+
+      it('will log metrics', () => {
+        expect($store.dispatch).toBeCalledWith('notifications/logMetrics', {
+          screenShown: false,
+          notificationsRegistered: false,
+          didErrorAttemptingToUpdateStatus: false,
+          ignoreError: true,
         });
       });
 

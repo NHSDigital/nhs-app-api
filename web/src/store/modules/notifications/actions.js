@@ -14,8 +14,14 @@ import {
   SET_NOTIFICATION_COOKIE_EXISTS,
   SET_REGISTRATION, SET_WAITING,
   TOGGLE_UPDATED,
+  NOTIFICATION_COMMUNICATION_ERROR,
 } from './mutation-types';
 
+const initialRoutes = [
+  NOTIFICATIONS_NAME,
+  USER_RESEARCH_NAME,
+  TERMSANDCONDITIONS_NAME,
+];
 const load = 'load';
 const toggle = 'toggle';
 const authorisationStatus = {
@@ -39,6 +45,7 @@ let resolveTask = () => { };
 export default {
   authorised({ commit, dispatch, state }, deviceResponse) {
     let deviceResponseParam = deviceResponse;
+    const ignoreError = initialRoutes.includes(this.app.$router.currentRoute.name);
 
     if (typeof deviceResponseParam !== 'object') {
       deviceResponseParam = JSON.parse(deviceResponse);
@@ -48,30 +55,24 @@ export default {
 
     if (trigger === toggle) {
       const registering = !state.registered;
+      let notificationsRegistered = registering;
+      let didErrorAttemptingToUpdateStatus = false;
       const promise = registering
-        ? this.app.$http.postV1ApiUsersMeDevices({ addDeviceRequest: { devicePns, deviceType } })
-        : this.app.$http.deleteV1ApiUsersMeDevices({ devicePns });
+        ? this.app.$http.postV1ApiUsersMeDevices({
+          addDeviceRequest: { devicePns, deviceType }, ignoreError,
+        })
+        : this.app.$http.deleteV1ApiUsersMeDevices({ devicePns, ignoreError });
 
       return promise
         .then(() => {
           commit(SET_REGISTRATION, registering);
-
-          if (this.app.$router.currentRoute.name === NOTIFICATIONS_NAME) {
-            dispatch('logMetrics', {
-              screenShown: true,
-              notificationsRegistered: registering,
-              didErrorAttemptingToUpdateStatus: false,
-            });
-          }
         })
         .catch((error) => {
-          if (this.app.$router.currentRoute.name === NOTIFICATIONS_NAME) {
-            dispatch('logMetrics', {
-              screenShown: true,
-              notificationsRegistered: state.registered,
-              didErrorAttemptingToUpdateStatus: true,
-            });
+          notificationsRegistered = state.registered;
+          didErrorAttemptingToUpdateStatus = true;
+          if (ignoreError) {
             this.app.$router.push({ path: NOTIFICATIONS_GENERIC_FAILURE_PATH });
+            commit(NOTIFICATION_COMMUNICATION_ERROR, true);
           } else {
             if (get('response.status')(error) === 404) {
               addApiError(this, 10003, error.message);
@@ -80,14 +81,27 @@ export default {
           }
         })
         .finally(() => {
+          if (ignoreError) {
+            dispatch('logMetrics', {
+              screenShown: true,
+              notificationsRegistered,
+              didErrorAttemptingToUpdateStatus,
+              ignoreError,
+            });
+          }
           commit(SET_WAITING, false);
           resolveTask(authorisationStatus.authorised);
         });
     }
 
-    return this.app.$http.getV1ApiUsersMeDevices({ devicePns })
+    return this.app.$http.getV1ApiUsersMeDevices({ devicePns, ignoreError })
       .then(() => commit(SET_REGISTRATION, true))
-      .catch(() => commit(SET_REGISTRATION, false))
+      .catch((error) => {
+        commit(SET_REGISTRATION, false);
+        if (get('response.status')(error) !== 404) {
+          commit(NOTIFICATION_COMMUNICATION_ERROR, true);
+        }
+      })
       .finally(() => {
         resolveTask(authorisationStatus.authorised);
       });
@@ -101,7 +115,9 @@ export default {
     return loading;
   },
   async logMetrics({ rootState }, params) {
-    const { screenShown, notificationsRegistered, didErrorAttemptingToUpdateStatus } = params;
+    const {
+      screenShown, notificationsRegistered, didErrorAttemptingToUpdateStatus, ignoreError,
+    } = params;
     const platform = rootState.device.source;
 
     try {
@@ -112,6 +128,7 @@ export default {
           platform,
           didErrorAttemptingToUpdateStatus,
         },
+        ignoreError,
       });
     } catch {
       // do nothing as this is just logging
@@ -165,6 +182,7 @@ export default {
           screenShown: true,
           notificationsRegistered: false,
           didErrorAttemptingToUpdateStatus: true,
+          ignoreError: true,
         });
 
         this.app.$router.push({ path: NOTIFICATIONS_GENERIC_FAILURE_PATH });

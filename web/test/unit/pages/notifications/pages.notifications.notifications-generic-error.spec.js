@@ -27,9 +27,15 @@ describe('notifications prompt page', () => {
       });
     });
 
+    const normalizeString = str => str.replace(/\s+/g, ' ');
+
     it('will show the expected paragraph', () => {
-      const paragraphs = wrapper.findAll('p');
-      expect(paragraphs.at(0).text()).toEqual('Select Continue, go to Settings and try again.');
+      const listItems = wrapper.findAll('li');
+      expect(normalizeString(listItems.at(0).text())).toEqual('Select Continue.');
+      expect(normalizeString(listItems.at(1).text())).toEqual('Go to More.');
+      expect(normalizeString(listItems.at(2).text())).toEqual('Select Account and settings.');
+      expect(normalizeString(listItems.at(3).text())).toEqual('Then select Manage notifications.');
+      expect(normalizeString(listItems.at(4).text())).toEqual('Turn on the notifications toggle.');
     });
   });
 });

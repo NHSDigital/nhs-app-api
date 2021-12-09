@@ -3,6 +3,7 @@ import {
   SET_REGISTRATION,
   SET_WAITING,
   TOGGLE_UPDATED,
+  NOTIFICATION_COMMUNICATION_ERROR,
 } from './mutation-types';
 
 export default {
@@ -17,5 +18,8 @@ export default {
   },
   [TOGGLE_UPDATED](state, logged) {
     state.toggleUpdated = logged;
+  },
+  [NOTIFICATION_COMMUNICATION_ERROR](state, error) {
+    state.notificationCommunicationError = error;
   },
 };

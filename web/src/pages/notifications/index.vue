@@ -92,16 +92,19 @@ export default {
     },
   },
   created() {
-    const { notificationCookieExists, registered } = this.$store.state.notifications;
+    const { notificationCookieExists, registered, notificationCommunicationError }
+      = this.$store.state.notifications;
+
     if (!notificationCookieExists && registered) {
       this.$store.dispatch('notifications/addNotificationCookie');
     }
 
-    if (notificationCookieExists || registered) {
+    if (notificationCookieExists || registered || notificationCommunicationError) {
       this.$store.dispatch('notifications/logMetrics', {
         screenShown: false,
-        notificationsRegistered: true,
+        notificationsRegistered: notificationCookieExists || registered,
         didErrorAttemptingToUpdateStatus: false,
+        ignoreError: true,
       });
       this.conditionalRedirect();
     }
@@ -127,10 +130,13 @@ export default {
           screenShown: true,
           notificationsRegistered: false,
           didErrorAttemptingToUpdateStatus: false,
+          ignoreError: true,
         });
       }
 
-      this.conditionalRedirect();
+      if (!this.$store.state.notifications.notificationCommunicationError) {
+        this.conditionalRedirect();
+      }
     },
   },
 };
