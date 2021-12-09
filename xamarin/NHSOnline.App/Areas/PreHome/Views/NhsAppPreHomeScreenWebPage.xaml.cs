@@ -127,19 +127,28 @@ namespace NHSOnline.App.Areas.PreHome.Views
         {
             _logger.LogInformation("Navigated ({Result}): {Uri}", args.Result, args.Url);
 
-            if (args.Result is WebNavigationResult.Success)
+            if (args.Url is null)
             {
-                WebView.Focus();
-                WebView.AccessibilityFocus();
+                _logger.LogWarning("Web navigation cancelled - url is null - logging out");
+                LogoutCommand.Execute(null);
+                return;
             }
-            else if (args.Result is WebNavigationResult.Cancel)
+
+            switch(args.Result)
             {
-                _logger.LogInformation("Web navigation was cancelled");
-            }
-            else
-            {
-                WebView.IsVisible = false;
-                NavigationFailedCommand.Execute(new Uri(args.Url));
+                case WebNavigationResult.Success:
+                    WebView.Focus();
+                    WebView.AccessibilityFocus();
+                    break;
+                case WebNavigationResult.Cancel:
+                    _logger.LogInformation("Web navigation was cancelled");
+                    break;
+                case WebNavigationResult.Failure:
+                case WebNavigationResult.Timeout:
+                default:
+                    WebView.IsVisible = false;
+                    NavigationFailedCommand.Execute(new Uri(args.Url));
+                    break;
             }
         }
 
