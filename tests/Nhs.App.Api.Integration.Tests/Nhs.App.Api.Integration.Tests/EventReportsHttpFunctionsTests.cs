@@ -9,7 +9,6 @@ using Hl7.Fhir.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Nhs.App.Api.Integration.Tests.Extensions;
-using Nhs.App.Api.Integration.Tests.Models;
 using Task = System.Threading.Tasks.Task;
 
 namespace Nhs.App.Api.Integration.Tests
@@ -24,26 +23,6 @@ namespace Nhs.App.Api.Integration.Tests
         {
             _testConfiguration = new TestConfiguration(context);
             TestClassSetup(_testConfiguration);
-        }
-
-        [TestMethod]
-        public async Task EventReportInternal_Post_Returns404NotFound()
-        {
-            // Arrange
-            using var httpClient = CreateHttpClient();
-
-            // Act
-            var response = await httpClient.PostAsync(
-                "communication/report/events/internal",
-                new StringContent(JsonConvert.SerializeObject(new EventReportCreateRequest
-                {
-                    SupplierId = "SupplierId",
-                    ReportDate = DateTime.Today
-                }))
-            );
-
-            // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [TestMethod]
