@@ -42,7 +42,7 @@ spec:
                 name: {{ template "nhsapp.name" . }}-{{ $.Values.web.role }}-{{ .Chart.AppVersion | replace "." "-" }}
                 port:
                   number: {{ $.Values.sidecar_proxy.containerPort }}
-    {{- if eq (default $.Values.zone "dev") .Values.global.environment }} 
+    {{- if eq .Values.zone .Values.global.environment }} 
     - host: www.{{ $.Values.zone }}.{{ $.Values.domain }}
       http:
         paths:
