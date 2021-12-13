@@ -25,17 +25,29 @@ emisApplicationID: "C849DB19-4EB0-4BDF-ABF3-7C5233739AF0"
 createDefaultIngress: false
 
 web:
+  minAvailable: 4
+  minReplicas: 8
+  maxReplicas: 100
   image_tag: latest
   publicURL: www-stubbed.stubbed.nhsapp.service.nhs.uk
 
 api:
+  minAvailable: 16
+  minReplicas: 32
+  maxReplicas: 300
   image_tag: latest
   publicURL: api-stubbed.stubbed.nhsapp.service.nhs.uk
 
 cid:
+  minAvailable: 8
+  minReplicas: 16
+  maxReplicas: 100
   image_tag: latest
 
 users:
+  minAvailable: 7
+  minReplicas: 13
+  maxReplicas: 100
   notificationHubs:
     - notificationHubPath: nhsapp-stubbed
       notificationHubConnectionString: Endpoint=sb://nhsapp-staging.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
@@ -45,3 +57,29 @@ secrets:
     - name: "notificationHubSharedAccessKey-stubbed"
       versionuks: "2b4a1b6853d54f2a97f21f2a30c7b7ea"
       versionukw: "b17c83a5ee934d06be07f93f0cc079bd"
+
+logger:
+  minAvailable: 8
+  minReplicas: 16
+  maxReplicas: 100
+
+sjr:
+  minAvailable: 4
+  minReplicas: 8
+  maxReplicas: 100
+
+iproxy:
+  minAvailable: 4
+  minReplicas: 8
+  maxReplicas: 100
+
+info:
+  minAvailable: 4
+  minReplicas: 8
+  maxReplicas: 100
+
+messages:
+  minAvailable: 4
+  minReplicas: 8
+  maxReplicas: 100
+
