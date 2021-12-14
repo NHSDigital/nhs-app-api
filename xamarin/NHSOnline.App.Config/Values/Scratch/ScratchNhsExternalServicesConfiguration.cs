@@ -15,5 +15,6 @@ namespace NHSOnline.App.Config.Values.Scratch
         public Uri CovidPassUrl { get; } = new Uri("https://www.nhs.uk/conditions/coronavirus-covid-19/covid-pass/");
         public Uri GpOutOfHoursService { get; } = new Uri("https://www.nidirect.gov.uk/articles/gp-out-hours-service");
         public Uri CovidStatusService { get; } = new Uri("https://covid-status.service.nhsx.nhs.uk");
+        public Uri NhsAppOnlineLogin { get; } = new Uri("https://www.nhsapp.service.nhs.uk/login");
     }
 }

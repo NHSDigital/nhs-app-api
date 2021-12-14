@@ -222,6 +222,7 @@
     <Compile Include="DependencyServices\AndroidLifecycle.cs" />
     <Compile Include="DependencyServices\AndroidNativeLog.cs" />
     <Compile Include="DependencyServices\AndroidPreHomeLogoutMonitor.cs" />
+    <Compile Include="DependencyServices\AndroidPlatformVersion.cs" />
     <Compile Include="DependencyServices\AndroidSettingsService.cs" />
     <Compile Include="DependencyServices\AndroidUpdateService.cs" />
     <Compile Include="DependencyServices\AndroidNativeAppVersionCheckService.cs" />

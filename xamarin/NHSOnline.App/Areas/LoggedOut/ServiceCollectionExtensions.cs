@@ -22,6 +22,7 @@ namespace NHSOnline.App.Areas.LoggedOut
                 .AddModelViewPresenter<BiometricLoginTouchIdLockedOutModel, BiometricLoginTouchIdLockedOutPage, BiometricLoginTouchIdLockedOutPresenter>()
                 .AddModelViewPresenter<GettingStartedModel, GettingStartedPage, GettingStartedPresenter>()
                 .AddModelViewPresenter<UpdateRequiredModel, UpdateRequiredPage, UpdateRequiredPresenter>()
+                .AddModelViewPresenter<UnsupportedPlatformVersionModel, UnsupportedPlatformVersionPage, UnsupportedPlatformVersionPresenter>()
                 .AddModelViewPresenter<UpdateCheckFailedModel, UpdateCheckFailedPage, UpdateCheckFailedPresenter>()
                 .AddModelViewPresenter<CreateSessionErrorBadRequestModel, CreateSessionErrorBadRequestPage, CreateSessionErrorBadRequestPresenter>()
                 .AddModelViewPresenter<CreateSessionErrorBadResponseFromUpstreamSystemModel, CreateSessionErrorBadResponseFromUpstreamSystemPage, CreateSessionErrorBadResponseFromUpstreamSystemPresenter>()

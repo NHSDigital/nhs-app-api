@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<pages:NhsAppCloseSlimHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
+                                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                                 xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+                                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                                 xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
+                                 xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
+                                 xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
+                                 xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
+                                 mc:Ignorable="d"
+                                 x:Class="NHSOnline.App.Areas.LoggedOut.Views.UnsupportedPlatformVersionPage"
+                                 x:Name="Page"
+                                 PageDescription="Your operating system is not supported - NHS App">
+    <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
+        <panels:ResponsiveLayoutPanel>
+            <StackLayout>
+                <elements:Heading1 Text="Your operating system is not supported" x:Name="Heading" />
+                <elements:Paragraph Text="{Binding MinimumPlatformVersion, StringFormat='You can only use the NHS App if your device is on {0} or above.', Source={x:Reference Name=Page}}" />
+                <elements:Paragraph Text="Try updating your operating system." />
+                <elements:Paragraph Text="If you need to get an NHS COVID Pass, you can access the service online." />
+                <elements:LinkLabel Text="Get your NHS COVID Pass" Command="{Binding CovidPassCommand, Source={x:Reference Name=Page}}" />
+                <elements:Paragraph Text="If you still cannot access the NHS App, you can use NHS App online through your web browser." />
+                <elements:LinkLabel Text="Go to NHS App online" Command="{Binding NhsAppOnlineLoginCommand, Source={x:Reference Name=Page}}" />
+                <elements:Paragraph Text="For urgent medical advice, use NHS 111 online or call 111." />
+                <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
+            </StackLayout>
+        </panels:ResponsiveLayoutPanel>
+        <ScrollView.Effects>
+            <effects:SafeAreaPaddingBottom />
+        </ScrollView.Effects>
+    </ScrollView>
+</pages:NhsAppCloseSlimHeaderPage>

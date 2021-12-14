@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.DependencyInjection;
+using NHSOnline.App.DependencyServices;
 using NHSOnline.App.DependencyServices.Navigation;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
@@ -22,6 +23,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly IUserPreferencesService _userPreferencesService;
         private readonly NhsAppCookieService _nhsAppCookieService;
         private readonly INavigationService _navigationService;
+        private readonly IPlatformVersion _platformVersion;
 
         private Uri? _deeplinkUrl;
         private Uri? ResolveDeeplinkUrl => _deeplinkUrl ?? _model.DeeplinkUrl;
@@ -34,7 +36,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             INhsLoginService nhsLoginService,
             IForcedUpdateCheckService forcedUpdateCheckService,
             IUserPreferencesService userPreferencesService,
-            NhsAppCookieService nhsAppCookieService, INavigationService navigationService)
+            NhsAppCookieService nhsAppCookieService, INavigationService navigationService,
+            IPlatformVersion platformVersion)
         {
             _view = view;
             _model = model;
@@ -45,6 +48,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _userPreferencesService = userPreferencesService;
             _nhsAppCookieService = nhsAppCookieService;
             _navigationService = navigationService;
+            _platformVersion = platformVersion;
 
             view.AppNavigation
                 .RegisterHandler(ViewOnAppearing, (view, handler) => view.Appearing = handler)
@@ -59,20 +63,27 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async Task ViewOnAppearing()
         {
-            var updateCheck = await UpdateRequiredCheck().PreserveThreadContext();
-            await ValidateAndUpdateShowGettingStarted().PreserveThreadContext();
-
-            if (updateCheck != UpdateRequired.No)
+            if (!_platformVersion.MeetsMinimumPlatformVersion())
             {
-                await ShowUpdateCheckStatusPage(updateCheck).PreserveThreadContext();
-            }
-            else if (_userPreferencesService.ShowGettingStarted)
-            {
-                await ShowGettingStartedPage().PreserveThreadContext();
+                await ShowUnsupportedPlatformPage().PreserveThreadContext();
             }
             else
             {
-                await ShowNhsLoginPage(_model.FidoAuthResponse).PreserveThreadContext();
+                var updateCheck = await UpdateRequiredCheck().PreserveThreadContext();
+                await ValidateAndUpdateShowGettingStarted().PreserveThreadContext();
+
+                if (updateCheck != UpdateRequired.No)
+                {
+                    await ShowUpdateCheckStatusPage(updateCheck).PreserveThreadContext();
+                }
+                else if (_userPreferencesService.ShowGettingStarted)
+                {
+                    await ShowGettingStartedPage().PreserveThreadContext();
+                }
+                else
+                {
+                    await ShowNhsLoginPage(_model.FidoAuthResponse).PreserveThreadContext();
+                }
             }
         }
 
@@ -138,6 +149,14 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var updateCheckFailedModel = new UpdateCheckFailedModel();
             var updateCheckFailedPage = _pageFactory.CreatePageFor(updateCheckFailedModel);
             await _view.AppNavigation.ReplaceCurrentPage(updateCheckFailedPage).PreserveThreadContext();
+        }
+
+        private async Task ShowUnsupportedPlatformPage()
+        {
+            var unsupportedPlatformVersionModel = new UnsupportedPlatformVersionModel(
+                _platformVersion.MinimumPlatformVersionDescription());
+            var unsupportedPlatformVersionPage = _pageFactory.CreatePageFor(unsupportedPlatformVersionModel);
+            await _view.AppNavigation.ReplaceCurrentPage(unsupportedPlatformVersionPage).PreserveThreadContext();
         }
     }
 }
