@@ -105,6 +105,7 @@
   <Import Project="Properties/BuildConfiguration.debugmode.$(DebugMode).props" />
   <Import Project="Properties/BuildConfiguration.platform.$(Platform).props" />
   <ItemGroup>
+    <Compile Include="Compatibility.cs" />
     <Compile Include="Controllers\AlertDialogBoxController.cs" />
     <Compile Include="Controllers\IosViewController.cs" />
     <Compile Include="Controllers\CalendarEventController.cs" />

@@ -41,7 +41,11 @@ namespace NHSOnline.App.iOS
             Xamarin.Forms.Forms.Init();
 
             NhsApp = new NhsApp();
-            UNUserNotificationCenter.Current.Delegate = new UserNotificationCenterHandler();
+
+            if (Compatibility.MinimumRequiredVersion(10, 0))
+            {
+                UNUserNotificationCenter.Current.Delegate = new UserNotificationCenterHandler();
+            }
 
             _remoteNotificationRecievedHandler = new RemoteNotificationReceivedHandler(NhsApp);
 

@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using LocalAuthentication;
 using NHSOnline.App.DependencyServices.Biometrics;
 using NHSOnline.App.iOS.DependencyServices.Biometrics;
-using UIKit;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(IosBiometrics))]
@@ -27,13 +26,13 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
         {
             BiometricStatus status = new BiometricStatus.HardwareNotPresent();
 
-            if (UIDevice.CurrentDevice.CheckSystemVersion(10, 0))
+            if (Compatibility.MinimumRequiredVersion(10, 0))
             {
                 using var context = new LAContext();
                 if (BiometricsHardware.HasBiometricHardware(context, out var state))
                 {
                     var registrationStatus = DeriveRegistrationStatus(context);
-                    if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+                    if (Compatibility.MinimumRequiredVersion(11, 0))
                     {
                         status = context.BiometryType switch
                         {

@@ -10,7 +10,6 @@ using NHSOnline.App.Api;
 using NHSOnline.App.iOS.DependencyServices;
 using NHSOnline.App.Logging;
 using NHSOnline.App.Threading;
-using UIKit;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(IosHttpMessageHandlerFactory))]
@@ -25,7 +24,7 @@ namespace NHSOnline.App.iOS.DependencyServices
 
         private static NSUrlSessionHandler GetSessionHandler()
         {
-           return UIDevice.CurrentDevice.CheckSystemVersion(12, 0) ?
+           return Compatibility.MinimumRequiredVersion(12, 0) ?
                 new NsUrlSessionHandlerSameSiteCookieFix() :
                 new NSUrlSessionHandler();
         }

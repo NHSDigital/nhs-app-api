@@ -5,7 +5,6 @@ using Foundation;
 using LocalAuthentication;
 using NHSOnline.App.DependencyServices.Biometrics;
 using Security;
-using UIKit;
 
 namespace NHSOnline.App.iOS.DependencyServices.Biometrics
 {
@@ -59,7 +58,7 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
 
         private static SecKeyGenerationParameters CreateGenerationParameters()
         {
-            var flags = UIDevice.CurrentDevice.CheckSystemVersion(11, 3)
+            var flags = Compatibility.MinimumRequiredVersion(11, 3)
                 ? SecAccessControlCreateFlags.BiometryCurrentSet
                 : SecAccessControlCreateFlags.TouchIDCurrentSet;
 
