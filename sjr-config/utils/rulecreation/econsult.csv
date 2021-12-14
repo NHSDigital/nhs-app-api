@@ -1141,7 +1141,6 @@ lewisham,Lewisham,CCG,Lewisham,South East London,amershamvale,Amersham Vale Prac
 lewisham,Lewisham,CCG,Lewisham,South East London,newcrosshealthcentre,New Cross Health Centre,G85076,5812
 lewisham,Lewisham,CCG,Lewisham,South East London,trianglegrouppractice,Triangle Group Practice,G85120,7327
 lincolnshire,Lincolnshire,CCG,Lincolnshire,,trentvalleysurgery,Trent Valley Surgery,C83641,4347
-lincolnshirew,Lincolnshire West,CCG,Lincolnshire West,Lincolnshire,richmondmedicalcentre-lincoln,Richmond Medical Centre,c83025,11400
 liverpool,Liverpool,CCG,Liverpool,Cheshire and Merseyside,abercrombyfp,Abercromby Family Practice,N82054,6800
 liverpool,Liverpool,CCG,Liverpool,Cheshire and Merseyside,abingdonmc,Abingdon FHCC,N82086,3543
 liverpool,Liverpool,CCG,Liverpool,Cheshire and Merseyside,albionsurgeryeverton,Albion Surgery,N82095,4900
@@ -2277,7 +2276,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Sunnybank Medical Centre,B83009,
 ,,,Other,,,The Willows Medical Practice Bradford District,B83020,
 ,,,Other,,,Thornton & Denholme Medical Practice,B83030,
-,,,Other,,,Cowgill Surgery,B83049,
 ,,,Other,,,Haigh Hall Medical Practice,B83054,
 ,,,Other,,,Shipley Medical Practice,B83063,
 ,,,Other,,,North Street Surgery,B83602,
@@ -2676,9 +2674,15 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Stretton Medical Centre,N81623,
 ,,,Other,,,Warden Lodge Medical Practice,E82123,
 ,,,Other,,,Green Meadows Surgery,K81076,
-,,,Other,,,Peverell Park Surgery,L83648,
 ,,,Other,,,Marysville Medical Practice,M82040,
 ,,,Other,,,Hoylake Road Medical Centre,N85046,
 ,,,Other,,,Aylesford Medical Centre,G82058,
 ,,,Other,,,Bishops Waltham Surgery,J82064,
 ,,,Other,,,St Thomas Medical Group,L83016,
+,,,Other,,,Dr Freeman & Partners,B86006,
+,,,Other,,,The Elms Medical Practice,E82071,
+,,,Other,,,Stifford Clays Medical Practice,F81192,
+,,,Other,,,Island Health,F84710,
+,,,Other,,,Dashwood Medical Centre,G82064,
+,,,Other,,,Woodlands Medical Centre,K84043,
+,,,Other,,,Church View Surgery,L83064,
