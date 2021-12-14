@@ -36,6 +36,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
         {
             CalendarLink,
             GoToPageLink,
+            OpenBrowserOverlayLink,
             FileUploadLink,
             DocumentDownloadLink,
             LocationServicesLink
