@@ -1,11 +1,19 @@
-﻿## Welcome to the NHS App
+﻿## Download your NHS COVID Pass
+
+Download your NHS COVID Pass for travel abroad using one of the following options:
+
+- add to Apple Wallet or save to phone with Google Pay
+- download PDF copy
+- receive an offline copy by email
+
+## Welcome to the NHS App
   
 If you have full access to the NHS App, you can do things like:  
-  
+
+- get your NHS COVID Pass
 - order repeat prescriptions  
 - manage appointments  
 - view your GP health record  
-- get your NHS COVID Pass for travel abroad
   
 If you're unable to access these features, you may need to prove who you are. [Read more about how to prove who you are](https://nhs.uk/nhs-app/nhs-app-help-and-support/getting-started-with-the-nhs-app/proving-who-you-are-to-get-full-access/?wt.mc_id=intro_v1_0621).  
 
@@ -43,7 +51,3 @@ To link a profile:
 Select the help icon from wherever you are in the app, to see a help page about that screen. For example, selecting the help icon from the prescriptions area will take you to a help page about prescriptions.
 
 [See our help and support](https://nhs.uk/nhs-app/nhs-app-help-and-support/?wt.mc_id=intro_v1_0621)
-  
-### Help the NHS improve this message
-  
-[Tell us your thoughts](https://feedback.digital.nhs.uk/jfe/form/SV_79QHUy4hqKpdGVE)
