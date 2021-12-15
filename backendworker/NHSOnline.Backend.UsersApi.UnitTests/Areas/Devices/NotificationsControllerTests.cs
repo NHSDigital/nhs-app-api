@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Metrics.EventHub;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.UsersApi.Areas.Devices;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 using NHSOnline.Backend.UsersApi.Notifications;
@@ -31,7 +32,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             _systemUnderTest = new NotificationsController(
                 _mockNotificationService.Object,
                 new Mock<ILogger<NotificationsController>>().Object,
-                _mockEventHubLogger.Object);
+                _mockEventHubLogger.Object,
+                new Mock<IMapper<AddNotificationSenderContext, SenderContextEventLogData>>().Object
+                );
         }
 
         [TestMethod]
@@ -67,7 +70,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             // Assert
             VerifyMocks();
 
-            result.Should().BeOfType<AcceptedResult>();
+            var acceptedResult = result.Should().BeOfType<AcceptedResult>();
+            acceptedResult.Subject.Value.Should().BeEquivalentTo(notificationResponse);
         }
 
         [TestMethod]
@@ -106,7 +110,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             // Assert
             VerifyMocks();
 
-            result.Should().BeOfType<AcceptedResult>();
+            var acceptedResult = result.Should().BeOfType<AcceptedResult>();
+            acceptedResult.Subject.Value.Should().BeEquivalentTo(notificationResponse);
         }
 
         [TestMethod]
@@ -145,7 +150,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             // Assert
             VerifyMocks();
 
-            result.Should().BeOfType<AcceptedResult>();
+            var acceptedResult = result.Should().BeOfType<AcceptedResult>();
+            acceptedResult.Subject.Value.Should().BeEquivalentTo(notificationResponse);
         }
 
         [TestMethod]
@@ -184,7 +190,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             // Assert
             VerifyMocks();
 
-            result.Should().BeOfType<AcceptedResult>();
+            var acceptedResult = result.Should().BeOfType<AcceptedResult>();
+            acceptedResult.Subject.Value.Should().BeEquivalentTo(notificationResponse);
         }
 
         [TestMethod]

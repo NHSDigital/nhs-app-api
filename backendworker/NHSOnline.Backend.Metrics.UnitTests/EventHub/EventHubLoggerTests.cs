@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
             // Arrange
             var messageCreatedData = new MessageCreatedEventLogData(
                 "Message ID",
-                new MessageSenderContextEventLogData(
+                new SenderContextEventLogData(
                     "Supplier ID",
                     "Communication ID",
                     "Transmission ID",
@@ -112,7 +112,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
             // Arrange
             var messageReadData = new MessageReadEventLogData(
                 "Message ID",
-                new MessageSenderContextEventLogData(
+                new SenderContextEventLogData(
                     "Supplier ID",
                     "Communication ID",
                     "Transmission ID",
@@ -176,18 +176,36 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
         }
 
         [TestMethod]
-        public async Task NotificationEnqueued_LogsNotificationEnqueuedEventLogDataToNonPidEventHubs()
+        public async Task NotificationEnqueued_LogsNotificationEnqueuedEventLogDataToPidAndNonPidEventHubs()
         {
             // Arrange
+            var senderContext = new SenderContextEventLogData(
+                "Supplier ID",
+                "Communication ID",
+                "Transmission ID",
+                new DateTime(2021, 04, 22, 01, 05, 25),
+                "Request Reference",
+                "Campaign ID",
+                "Ods Code",
+                "NHS Number",
+                "NHS Login ID"
+            );
+
             var notificationEnqueuedData = new NotificationEnqueuedEventLogData(
-                "Nhs Login ID", "Notification ID", "Tracking ID", true);
+                "Nhs Login ID", "Notification ID", "Tracking ID", true, senderContext);
 
             var loggedNonPidData = string.Empty;
+            var loggedPidData = string.Empty;
 
             _mockNonPidEventHubClient.Setup(x => x.WriteToEventHub(It.IsAny<string>()))
                 .Callback<string>(x => loggedNonPidData = x)
                 .Returns(Task.CompletedTask);
             _mockNonPidEventHubClient.SetupGet(x => x.PidAllowed).Returns(false);
+
+            _mockPidEventHubClient.Setup(x => x.WriteToEventHub(It.IsAny<string>()))
+                .Callback<string>(x => loggedPidData = x)
+                .Returns(Task.CompletedTask);
+            _mockPidEventHubClient.SetupGet(x => x.PidAllowed).Returns(true);
 
             // Act
             await _systemUnderTest.NotificationEnqueued(notificationEnqueuedData);
@@ -195,7 +213,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
             // Assert
             VerifyMocks();
 
-            loggedNonPidData.Split(' ').Should().HaveCount(7);
+            loggedNonPidData.Split(' ').Should().HaveCount(14);
             AssertTimeStamp(loggedNonPidData);
             AssertContains(loggedNonPidData, "Action=NotificationEnqueued");
             AssertContains(loggedNonPidData, "EnvironmentName=TestEnv");
@@ -203,6 +221,29 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
             AssertContains(loggedNonPidData, "NotificationId=Notification+ID");
             AssertContains(loggedNonPidData, "TrackingId=Tracking+ID");
             AssertContains(loggedNonPidData, "Scheduled=True");
+            AssertContains(loggedNonPidData, "CommunicationId=Communication+ID");
+            AssertContains(loggedNonPidData, "TransmissionId=Transmission+ID");
+            AssertContains(loggedNonPidData, "CommunicationCreatedDateTime=2021-04-22T01%3a05%3a25%3a000");
+            AssertContains(loggedNonPidData, "RequestReference=Request+Reference");
+            AssertContains(loggedNonPidData, "CampaignId=Campaign+ID");
+            AssertContains(loggedNonPidData, "OdsCode=Ods+Code");
+            AssertDoesNotContain(loggedNonPidData, "NhsNumber=NHS+Number");
+
+            loggedPidData.Split(' ').Should().HaveCount(15);
+            AssertTimeStamp(loggedPidData);
+            AssertContains(loggedPidData, "Action=NotificationEnqueued");
+            AssertContains(loggedPidData, "EnvironmentName=TestEnv");
+            AssertContains(loggedPidData, "NhsLoginId=Nhs+Login+ID");
+            AssertContains(loggedPidData, "NotificationId=Notification+ID");
+            AssertContains(loggedPidData, "TrackingId=Tracking+ID");
+            AssertContains(loggedPidData, "Scheduled=True");
+            AssertContains(loggedPidData, "CommunicationId=Communication+ID");
+            AssertContains(loggedPidData, "TransmissionId=Transmission+ID");
+            AssertContains(loggedPidData, "CommunicationCreatedDateTime=2021-04-22T01%3a05%3a25%3a000");
+            AssertContains(loggedPidData, "RequestReference=Request+Reference");
+            AssertContains(loggedPidData, "CampaignId=Campaign+ID");
+            AssertContains(loggedPidData, "OdsCode=Ods+Code");
+            AssertContains(loggedPidData, "NhsNumber=NHS+Number");
         }
 
         private static void AssertContains(string logData, string expected)

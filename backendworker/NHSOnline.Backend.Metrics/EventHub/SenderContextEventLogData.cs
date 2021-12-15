@@ -4,7 +4,7 @@ using NHSOnline.Backend.Metrics.Extensions;
 
 namespace NHSOnline.Backend.Metrics.EventHub
 {
-    public class MessageSenderContextEventLogData : IEventLogData
+    public class SenderContextEventLogData : IEventLogData
     {
         private readonly string _supplierId;
         private readonly string _communicationId;
@@ -16,7 +16,9 @@ namespace NHSOnline.Backend.Metrics.EventHub
         private readonly string _nhsNumber;
         private readonly string _nhsLoginId;
 
-        public MessageSenderContextEventLogData(string supplierId, string communicationId,
+        public SenderContextEventLogData(){}
+
+        public SenderContextEventLogData(string supplierId, string communicationId,
             string transmissionId, DateTime? communicationCreatedDateTime, string requestReference, string campaignId,
             string odsCode, string nhsNumber, string nhsLoginId)
         {

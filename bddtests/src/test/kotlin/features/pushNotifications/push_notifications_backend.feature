@@ -122,6 +122,12 @@ Feature: Push Notifications Backend
     And I send the notification
     Then I receive an "Accepted" success code
 
+  Scenario: An api user can send a notification with sender context
+    Given I am an api user wishing to send a notification to a given Nhs Login Id
+    And I send the notification with sender context
+    Then I receive an "Accepted" success code
+    And I receive a response body with sender information
+
   Scenario: An api user sending a malformed notification will receive a 400
     Given I am an api user wishing to send a notification to a given Nhs Login Id
     And I send a malformed notification

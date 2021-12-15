@@ -51,13 +51,13 @@ class WorkerClientUserDevices(val config: Config, val sender: WorkerClientSender
         return httpGet.sendAndGetResult(sender, gson, Array<String>::class.java)
     }
 
-    fun postNotification(nhsLoginId: String, notification: NotificationSendRequest, includeApiKey:Boolean)
-            : HttpResponse? {
+    fun postNotification(nhsLoginId: String, notification: NotificationSendRequest, includeApiKey:Boolean): String?
+    {
         val uriBuilder = URIBuilder(uri(nhsLoginId) + "/notifications")
         val httpPost = RequestBuilder.post(uriBuilder.build().toString())
                 .addBody(notification, gson)
                 .addExternalSystemApiKey(includeApiKey)
-        return httpPost.send(sender)
+        return httpPost.sendAndGetResult(sender)
     }
 
     private fun uri(userIdentifier: String): String {

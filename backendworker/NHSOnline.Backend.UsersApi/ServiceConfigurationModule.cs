@@ -10,8 +10,12 @@ using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.CitizenId;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Metrics;
+using NHSOnline.Backend.Metrics.EventHub;
 using NHSOnline.Backend.Repository;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
+using NHSOnline.Backend.UsersApi.Areas.Devices;
+using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 using NHSOnline.Backend.UsersApi.Repository;
 
 namespace NHSOnline.Backend.UsersApi
@@ -23,6 +27,7 @@ namespace NHSOnline.Backend.UsersApi
             services.RegisterRepository<UserDevice, UsersRepositoryConfiguration>(configuration);
             services.AddSingleton<IUserDeviceRepository, UserDeviceRepository>();
             services.AddSingleton<IDeviceRepositoryService, DeviceRepositoryService>();
+            services.AddSingleton<IMapper<AddNotificationSenderContext, SenderContextEventLogData>, NotificationSenderContextEventLogDataMapper>();
 
             ConfigureUserProfileServices(services);
             ConfigureCitizenIdServices(services);

@@ -18,19 +18,28 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
         private readonly INotificationService _notificationService;
         private readonly IEventHubLogger _eventHubLogger;
 
+        private readonly IMapper<AddNotificationSenderContext, SenderContextEventLogData>
+            _notificationSenderContextEventLogDataMapper;
+
         public NotificationsController(
             INotificationService notificationService,
             ILogger<NotificationsController> logger,
-            IEventHubLogger eventHubLogger)
+            IEventHubLogger eventHubLogger,
+            IMapper<AddNotificationSenderContext, SenderContextEventLogData> notificationSenderContextEventLogDataMapper)
         {
             _notificationService = notificationService;
             _logger = logger;
             _eventHubLogger = eventHubLogger;
+            _notificationSenderContextEventLogDataMapper = notificationSenderContextEventLogDataMapper;
         }
 
         [HttpPost]
         [Route("api/users/{nhsLoginId}/devices/notifications")]
-        public async Task<IActionResult> Post(string nhsLoginId, [FromBody] NotificationSendRequest notificationSendRequest)
+        public async Task<IActionResult> Post
+        (
+            [FromRoute(Name = "nhsLoginId")] string nhsLoginId,
+            [FromBody] NotificationSendRequest notificationSendRequest
+        )
         {
             try
             {
@@ -42,7 +51,14 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
                 }
 
                 var sendResult = await _notificationService.Send(nhsLoginId, notificationSendRequest);
-                await sendResult.Accept(new NotificationLogSendResultVisitor(_eventHubLogger, _logger, nhsLoginId));
+                await sendResult.Accept(new NotificationLogSendResultVisitor(
+                    _eventHubLogger,
+                    _logger,
+                    _notificationSenderContextEventLogDataMapper,
+                    nhsLoginId,
+                    notificationSendRequest)
+                );
+
                 return sendResult.Accept(new NotificationSendResultVisitor());
             }
             finally

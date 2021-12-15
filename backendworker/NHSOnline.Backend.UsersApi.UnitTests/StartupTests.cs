@@ -207,8 +207,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             jwtBearerOptions.RequireHttpsMetadata.Should().BeFalse();
         }
 
-
-
         [TestMethod]
         public void ConfigureServices_WhenMongoConnectionStringIsPresent_ShouldRegisterLocalMongoDatabaseClient()
         {

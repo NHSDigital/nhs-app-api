@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
         private readonly IMetricLogger _metricLogger;
         private readonly IEventHubLogger _eventHubLogger;
 
-        private readonly IMapper<SenderContext, MessageSenderContextEventLogData>
+        private readonly IMapper<SenderContext, SenderContextEventLogData>
             _messageSenderContextEventLogDataMapper;
 
         public MessagesController
@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             ILogger<MessagesController> logger,
             IMetricLogger metricLogger,
             IEventHubLogger eventHubLogger,
-            IMapper<SenderContext, MessageSenderContextEventLogData> messageSenderContextEventLogDataMapper,
+            IMapper<SenderContext, SenderContextEventLogData> messageSenderContextEventLogDataMapper,
             IAccessTokenProvider accessTokenProvider)
         {
             _messageService = messageService;

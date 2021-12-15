@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.UsersApi.Notifications;
+using NHSOnline.Backend.UsersApi.Notifications.Models;
 
 namespace NHSOnline.Backend.UsersApi.Areas.Devices
 {
@@ -8,7 +9,7 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
     {
         public IActionResult Visit(NotificationSendResult.Success result)
         {
-           return new AcceptedResult();
+            return new AcceptedResult(string.Empty, result.NotificationResponse);
         }
 
         public IActionResult Visit(NotificationSendResult.Conflict result)

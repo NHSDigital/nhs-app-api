@@ -11,5 +11,6 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices.Models
         [SuppressMessage("Microsoft.Design", "CA1056", Justification = "Uris are not serializable")]
         public string Url { get; set; }
         public DateTimeOffset? ScheduledTime { get; set; }
+        public AddNotificationSenderContext SenderContext { get; set; }
     }
 }

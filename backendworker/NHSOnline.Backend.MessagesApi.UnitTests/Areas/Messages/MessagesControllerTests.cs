@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 new Mock<ILogger<MessagesController>>().Object,
                 _mockMetricLogger.Object,
                 _mockEventHubLogger.Object,
-                new Mock<IMapper<SenderContext, MessageSenderContextEventLogData>>().Object,
+                new Mock<IMapper<SenderContext, SenderContextEventLogData>>().Object,
                 mockAccessTokenProvider.Object
             );
         }

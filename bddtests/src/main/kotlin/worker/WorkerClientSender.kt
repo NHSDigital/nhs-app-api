@@ -67,7 +67,15 @@ class WorkerClientSender {
     }
 
     private fun isSuccessful(response: HttpResponse):Boolean {
-        val successfulStatusCodes = arrayListOf(HttpStatus.SC_OK, HttpStatus.SC_CREATED, HttpStatus.SC_NO_CONTENT)
+        val successfulStatusCodes = arrayListOf(
+                HttpStatus.SC_OK,
+                HttpStatus.SC_CREATED,
+                HttpStatus.SC_ACCEPTED,
+                HttpStatus.SC_NON_AUTHORITATIVE_INFORMATION,
+                HttpStatus.SC_NO_CONTENT,
+                HttpStatus.SC_RESET_CONTENT,
+                HttpStatus.SC_PARTIAL_CONTENT,
+                HttpStatus.SC_MULTI_STATUS)
         return successfulStatusCodes.contains(response.statusLine.statusCode)
     }
 

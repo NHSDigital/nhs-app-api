@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.MessagesApi
             services.AddSingleton<IMapper<MessageLink, UserMessage, MessageLinkClickedData>, MessageLinkClickedDataMapper>();
             services.AddScoped<IMessageLinkClickedService, MessageLinkClickedService>();
             services.AddSingleton<IMessageLinkClickedValidationService, MessageLinkClickedValidationService>();
-            services.AddSingleton<IMapper<SenderContext, MessageSenderContextEventLogData>, MessageSenderContextEventLogDataMapper>();
+            services.AddSingleton<IMapper<SenderContext, SenderContextEventLogData>, MessageSenderContextEventLogDataMapper>();
 
             ConfigureUserProfileServices(services);
             ConfigureCitizenIdServices(services);

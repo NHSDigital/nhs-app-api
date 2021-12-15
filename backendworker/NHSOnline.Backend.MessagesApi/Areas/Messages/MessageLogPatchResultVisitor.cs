@@ -15,13 +15,13 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
         private readonly IEventHubLogger _eventHubLogger;
         private readonly ILogger _logger;
 
-        private readonly IMapper<SenderContext, MessageSenderContextEventLogData>
+        private readonly IMapper<SenderContext, SenderContextEventLogData>
             _messageSenderContextEventLogDataMapper;
 
         public MessageLogPatchResultVisitor(
             IMetricLogger metricLogger,
             IEventHubLogger eventHubLogger,
-            IMapper<SenderContext, MessageSenderContextEventLogData> messageSenderContextEventLogDataMapper,
+            IMapper<SenderContext, SenderContextEventLogData> messageSenderContextEventLogDataMapper,
             ILogger logger)
         {
             _metricLogger = metricLogger;

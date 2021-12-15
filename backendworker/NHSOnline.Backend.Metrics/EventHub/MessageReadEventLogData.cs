@@ -5,9 +5,9 @@ namespace NHSOnline.Backend.Metrics.EventHub
     public class MessageReadEventLogData : IEventLogData
     {
         private readonly string _messageId;
-        private readonly MessageSenderContextEventLogData _senderContextEventLogData;
+        private readonly SenderContextEventLogData _senderContextEventLogData;
 
-        public MessageReadEventLogData(string messageId, MessageSenderContextEventLogData senderContextEventLogData)
+        public MessageReadEventLogData(string messageId, SenderContextEventLogData senderContextEventLogData)
         {
             _messageId = messageId;
             _senderContextEventLogData = senderContextEventLogData;

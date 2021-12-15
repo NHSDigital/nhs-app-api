@@ -10,12 +10,12 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
     public class AddMessageLogResultVisitor : IAddMessageResultVisitor<Task>
     {
         private readonly IEventHubLogger _eventHubLogger;
-        private readonly IMapper<SenderContext, MessageSenderContextEventLogData> _mapper;
+        private readonly IMapper<SenderContext, SenderContextEventLogData> _mapper;
         private readonly ILogger _logger;
 
         public AddMessageLogResultVisitor(
             IEventHubLogger eventHubLogger,
-            IMapper<SenderContext, MessageSenderContextEventLogData> mapper,
+            IMapper<SenderContext, SenderContextEventLogData> mapper,
             ILogger logger
         )
         {
@@ -33,11 +33,11 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                     return;
                 }
 
-                var logData = _mapper.Map(result.UserMessage.SenderContext);
+                var senderContextLogData = _mapper.Map(result.UserMessage.SenderContext);
 
                 await _eventHubLogger.MessageCreated(new MessageCreatedEventLogData(
                     result.UserMessage.Id.ToString(),
-                    logData
+                    senderContextLogData
                 ));
             }
             catch (Exception e)

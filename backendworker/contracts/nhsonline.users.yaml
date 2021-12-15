@@ -125,17 +125,21 @@ paths:
               $ref: "#/components/schemas/NotificationSendRequest"
         description: Details of the notification to be sent
         required: true
-        responses:
-          "202":
-            description: Successfully sent
-          "400":
-            $ref: '#/components/responses/BadRequest'
-          "409":
-            $ref: '#/components/responses/Conflict'
-          "500":
-            $ref: '#/components/responses/UnexpectedError'
-          "502":
-            $ref: '#/components/responses/UnexpectedError'
+      responses:
+        "202":
+          description: Successfully sent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotificationSendResponse"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "500":
+          $ref: '#/components/responses/UnexpectedError'
+        "502":
+          $ref: '#/components/responses/UnexpectedError'
   /users/me/devices/prompt/metrics:
     post:
       security:
@@ -152,11 +156,11 @@ paths:
               $ref: "#/components/schemas/NotificationsPromptData"
         description: Metrics to be logged for the notification prompt
         required: true
-        responses:
-          "200":
-            description: Successfully logged
-          "400":
-            $ref: '#/components/responses/BadRequest'
+      responses:
+        "200":
+          description: Successfully logged
+        "400":
+          $ref: '#/components/responses/BadRequest'
   /users/{nhsLoginId}/devices/registrations:
     get:
       tags:
@@ -245,6 +249,17 @@ components:
           type: string
         scheduledTime:
           type: string
+        senderContext:
+          $ref: "#/components/schemas/PushNotificationSenderContext"
+    NotificationSendResponse:
+      type: object
+      properties:
+        notificationId:
+          type: string
+        trackingId:
+          type: string
+        scheduled:
+          type: boolean
     NotificationsPromptData:
       type: object
       required:
@@ -261,3 +276,25 @@ components:
           type: string
         didErrorAttemptingToUpdateStatus:
           type: boolean
+    PushNotificationSenderContext:
+      type: object
+      properties:
+        supplierId:
+          type: string
+        communicationId:
+          type: string
+        transmissionId:
+          type: string
+        communicationCreatedDateTime:
+          type: string
+          format: date-time
+        requestReference:
+          type: string
+        campaignId:
+          type: string
+        odsCode:
+          type: string
+        nhsNumber:
+          type: string
+        nhsLoginId:
+          type: string

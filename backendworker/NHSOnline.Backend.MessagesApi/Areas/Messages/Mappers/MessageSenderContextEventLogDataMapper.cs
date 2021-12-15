@@ -6,7 +6,7 @@ using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 
 namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Mappers
 {
-    public class MessageSenderContextEventLogDataMapper : IMapper<SenderContext, MessageSenderContextEventLogData>
+    public class MessageSenderContextEventLogDataMapper : IMapper<SenderContext, SenderContextEventLogData>
     {
         private readonly ILogger<MessageSenderContextEventLogDataMapper> _logger;
 
@@ -15,13 +15,13 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Mappers
             _logger = logger;
         }
 
-        public MessageSenderContextEventLogData Map(SenderContext source)
+        public SenderContextEventLogData Map(SenderContext source)
         {
             new ValidateAndLog(_logger)
                 .IsNotNull(source, "source", ThrowError)
                 .IsValid();
 
-            return new MessageSenderContextEventLogData(
+            return new SenderContextEventLogData(
                 source.SupplierId,
                 source.CommunicationId,
                 source.TransmissionId,

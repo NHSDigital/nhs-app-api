@@ -9,7 +9,6 @@ import worker.models.userDevices.NotificationSendRequest
 import worker.models.userDevices.RegisterUserDevicesRequest
 
 class NotificationsApi {
-
     companion object {
         fun setupRegistration(authToken: String?) = postRegistration(authToken)
 
@@ -61,10 +60,12 @@ class NotificationsApi {
             PushNotificationsSerenityHelpers.GET_REGISTRATIONS_RESPONSE.set(response)
         }
 
-        fun postNotification(nhsloginId: String, notification: NotificationSendRequest) {
-            Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+        fun postNotification(nhsloginId: String, notification: NotificationSendRequest): String? {
+            val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .userDevices
                     .postNotification(nhsloginId, notification, true)
+            PushNotificationsSerenityHelpers.CREATE_PUSH_NOTIFICATION_RESPONSE.set(response)
+            return response
         }
     }
 }

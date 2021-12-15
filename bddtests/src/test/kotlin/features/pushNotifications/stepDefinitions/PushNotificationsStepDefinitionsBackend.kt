@@ -11,7 +11,6 @@ import org.junit.Assert
 import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set
-import worker.models.userDevices.NotificationSendRequest
 import worker.models.userDevices.RegisterUserDevicesResponse
 
 private const val WAIT_FOR_HUB_UPDATE = 1000L
@@ -250,24 +249,18 @@ class PushNotificationsStepDefinitionsBackend {
         }
     }
 
-    @Then("^I send the notification$")
-    fun iSendTheNotification() {
-        val nhsLoginId = SerenityHelpers.getPatient().subject
-        val notification = NotificationSendRequest("title", "subtitle", "body", "http://www.example.com")
-        NotificationsApi.postNotification(nhsLoginId, notification)
-    }
-
-    @Then("^I send a malformed notification$")
-    fun iSendAMalformedNotification() {
-        val nhsLoginId = SerenityHelpers.getPatient().subject
-        val notification = NotificationSendRequest("title", "subtitle", null, "http://www.example.com")
-        NotificationsApi.postNotification(nhsLoginId, notification)
-    }
-
     @Then("^I receive a list of NhsLoginIds from devices registrations endpoint$")
     fun iReceiveAListOfNhsLoginIdsFromUserInfoEndpoint() {
         val response = PushNotificationsSerenityHelpers.GET_REGISTRATIONS_RESPONSE.getOrFail<Array<String>?>()
         Assert.assertEquals("Registrations found", 1, response?.size)
+    }
+
+    @Then("^I receive a response body with sender information$")
+    fun iReceiveAResponseBodyWithSenderInformation() {
+        val response = PushNotificationsSerenityHelpers.CREATE_PUSH_NOTIFICATION_RESPONSE.getOrFail<String>()
+        Assert.assertTrue(response.contains("trackingId"))
+        Assert.assertTrue(response.contains("notificationId"))
+        Assert.assertTrue(response.contains("scheduled"))
     }
 
     private fun assertSingleRecordInDeviceRepository() {

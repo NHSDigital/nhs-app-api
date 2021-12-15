@@ -3,6 +3,7 @@ package features.pushNotifications.stepDefinitions
 import utils.ISerenityHelperEnums
 
 enum class PushNotificationsSerenityHelpers : ISerenityHelperEnums {
+    CREATE_PUSH_NOTIFICATION_RESPONSE,
     DELETE_RESPONSE,
     EXPECTED_DEVICE_TYPE,
     EXPECTED_MULTIPLE_PNS,

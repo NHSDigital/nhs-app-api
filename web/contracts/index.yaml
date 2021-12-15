@@ -5608,11 +5608,11 @@
                     type: "boolean"
           description: "Metrics to be logged for the notification prompt"
           required: true
-          responses: 
-            200: 
-              description: "Successfully logged"
-            400: 
-              description: "Bad request. Supplied request is invalid."
+        responses: 
+          200: 
+            description: "Successfully logged"
+          400: 
+            description: "Bad request. Supplied request is invalid."
     /v1/api/users/{nhsLoginId}/devices/registrations: 
       get: 
         tags: 
@@ -5677,19 +5677,52 @@
                     type: "string"
                   scheduledTime: 
                     type: "string"
+                  senderContext: 
+                    type: "object"
+                    properties: 
+                      supplierId: 
+                        type: "string"
+                      communicationId: 
+                        type: "string"
+                      transmissionId: 
+                        type: "string"
+                      communicationCreatedDateTime: 
+                        type: "string"
+                        format: "date-time"
+                      requestReference: 
+                        type: "string"
+                      campaignId: 
+                        type: "string"
+                      odsCode: 
+                        type: "string"
+                      nhsNumber: 
+                        type: "string"
+                      nhsLoginId: 
+                        type: "string"
           description: "Details of the notification to be sent"
           required: true
-          responses: 
-            202: 
-              description: "Successfully sent"
-            400: 
-              description: "Bad request. Supplied request is invalid."
-            409: 
-              description: "Conflict. Request could not be completed due to a conflict with the current state of the target resource."
-            500: 
-              description: "An unexpected error occurred processing the request."
-            502: 
-              description: "An unexpected error occurred processing the request."
+        responses: 
+          202: 
+            description: "Successfully sent"
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  properties: 
+                    notificationId: 
+                      type: "string"
+                    trackingId: 
+                      type: "string"
+                    scheduled: 
+                      type: "boolean"
+          400: 
+            description: "Bad request. Supplied request is invalid."
+          409: 
+            description: "Conflict. Request could not be completed due to a conflict with the current state of the target resource."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "An unexpected error occurred processing the request."
     /v1/api/users/me/messages: 
       get: 
         security: 
