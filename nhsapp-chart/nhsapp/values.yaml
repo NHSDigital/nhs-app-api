@@ -264,7 +264,7 @@ addAppointmentToCalendarEnabled: true
 
 # Introductory messages
 sendIntroductoryMessage: true
-introductoryMessageCampaignId: "Intro_v1_0621"
+introductoryMessageCampaignId: "Intro_v2_1221"
 messagesApiResourceUrl: "/v1/api/users/{0}/messages"
 
 # Sjr Api externally visible
