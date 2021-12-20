@@ -317,6 +317,11 @@ button {
   }
 }
 
+// Needed for iOS voiceover on native device to ensure 'expanded' gets announced
+.nhsuk-details .nhsuk-details__summary {
+  display: block;
+}
+
 // Focus for expander when expanded
 .nhsuk-expander[open] .nhsuk-details__summary {
   &:focus {
