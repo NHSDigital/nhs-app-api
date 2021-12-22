@@ -35,17 +35,13 @@ namespace NHSOnline.App.Services.ForcedUpdate
             _task = Task.Run(() => IsUpdateRequiredCheck(CreateTimeoutCancellationToken()));
         }
 
-        private CancellationToken CreateTimeoutCancellationToken()
-        {
-            _taskCancellationToken?.Cancel();
-            _taskCancellationToken?.Dispose();
-
-            _taskCancellationToken = new CancellationTokenSource();
-            return _taskCancellationToken.Token;
-        }
-
         public async Task<UpdateRequired> RequiresForcedUpdate()
         {
+            if (_task == null)
+            {
+                _task = IsUpdateRequiredCheck(CreateTimeoutCancellationToken());
+            }
+
             if (_task != null && _taskCancellationToken != null)
             {
                 _taskCancellationToken.CancelAfter(ForcedUpdateRequestTimeout);
@@ -66,13 +62,13 @@ namespace NHSOnline.App.Services.ForcedUpdate
                 var updateRequired =
                     configurationResult.Accept(new AssessUpdateRequiredVisitor(_nativeAppVersionCheckService));
 
-                _logger.LogInformation(message: $"Update Required Check finished. UpdateRequired:'{updateRequired}'");
+                _logger.LogInformation("Update Required Check finished. updateRequired: '{UpdateRequired}'", updateRequired);
 
                 return updateRequired;
             }
             catch (TaskCanceledException e)
             {
-                _logger.LogError(e, "Failed, task cancelled");
+                _logger.LogError(e, "Failed, task cancelled likely due to running longer than configured timeout");
                 return UpdateRequired.Failed;
             }
             catch (Exception e)
@@ -80,6 +76,15 @@ namespace NHSOnline.App.Services.ForcedUpdate
                 _logger.LogError(e, "Failed Update Required check");
                 return UpdateRequired.Failed;
             }
+        }
+
+        private CancellationToken CreateTimeoutCancellationToken()
+        {
+            _taskCancellationToken?.Cancel();
+            _taskCancellationToken?.Dispose();
+
+            _taskCancellationToken = new CancellationTokenSource();
+            return _taskCancellationToken.Token;
         }
 
         public void Dispose()

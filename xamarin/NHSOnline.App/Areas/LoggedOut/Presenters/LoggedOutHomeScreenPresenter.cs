@@ -82,12 +82,13 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async Task ViewOnAppearing()
         {
+            // Kick this Task off at this point so the update check can get underway for when needed.
+            _forcedUpdateCheckService.Initiate();
+
             await _dialogPresenterService.DismissAll().PreserveThreadContext();
             _cancelBiometricLogin.Dispose();
             _cancelBiometricLogin = new CancellationTokenSource();
             await _cookieService.ClearSessionCookies().PreserveThreadContext();
-
-            _forcedUpdateCheckService.Initiate();
 
             await ShowBiometricLoginAfterDelay(BiometricDelayOnAppearing).PreserveThreadContext();
         }
