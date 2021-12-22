@@ -30,12 +30,15 @@ namespace NHSOnline.App.iOS.DependencyServices
 
         public async Task ClearSessionCookies()
         {
-            var cookieStore = WKWebsiteDataStore.DefaultDataStore.HttpCookieStore;
-            foreach (var cookie in await cookieStore.GetAllCookiesAsync().PreserveThreadContext())
+            if (Compatibility.MinimumRequiredVersion(11, 0))
             {
-                if (cookie.IsSessionOnly)
+                var cookieStore = WKWebsiteDataStore.DefaultDataStore.HttpCookieStore;
+                foreach (var cookie in await cookieStore.GetAllCookiesAsync().PreserveThreadContext())
                 {
-                    await cookieStore.DeleteCookieAsync(cookie).PreserveThreadContext();
+                    if (cookie.IsSessionOnly)
+                    {
+                        await cookieStore.DeleteCookieAsync(cookie).PreserveThreadContext();
+                    }
                 }
             }
 
@@ -51,12 +54,19 @@ namespace NHSOnline.App.iOS.DependencyServices
 
         public async Task<Cookie?> GetCookie(Uri uri, string cookieName)
         {
+            if (!Compatibility.MinimumRequiredVersion(11, 0))
+            {
+                return null;
+            }
+
             var cookieStore = WKWebsiteDataStore.DefaultDataStore.HttpCookieStore;
-            var cookies = await cookieStore.GetAllCookiesAsync().ResumeOnThreadPool() ?? Array.Empty<NSHttpCookie>();
+            var cookies = await cookieStore.GetAllCookiesAsync().ResumeOnThreadPool() ??
+                          Array.Empty<NSHttpCookie>();
 
             foreach (NSHttpCookie cookie in cookies)
             {
-                if (cookie.Name == cookieName && uri.Host.Contains(cookie.Domain, StringComparison.InvariantCultureIgnoreCase))
+                if (cookie.Name == cookieName &&
+                    uri.Host.Contains(cookie.Domain, StringComparison.InvariantCultureIgnoreCase))
                 {
                     return new Cookie(cookie.Name, cookie.Value, cookie.Path, cookie.Domain);
                 }
