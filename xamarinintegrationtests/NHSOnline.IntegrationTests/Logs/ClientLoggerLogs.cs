@@ -28,6 +28,20 @@ namespace NHSOnline.IntegrationTests.Logs
                 $"Expected at least one client log to be:\n{expectedClientLog}\n\nLogs were:\n\n{string.Join("\n\n", Logs)}");
         }
 
+        internal void AssertClientLogStartsWith(string expectedClientLog)
+        {
+            foreach (var clientLog in ClientLogs())
+            {
+                if (clientLog.StartsWith(expectedClientLog, StringComparison.Ordinal))
+                {
+                    return;
+                }
+            }
+
+            Assert.Fail(
+                $"Expected at least one client log to be:\n{expectedClientLog}\n\nLogs were:\n\n{string.Join("\n\n", Logs)}");
+        }
+
         private IEnumerable<string> ClientLogs()
         {
             foreach (var log in Logs)

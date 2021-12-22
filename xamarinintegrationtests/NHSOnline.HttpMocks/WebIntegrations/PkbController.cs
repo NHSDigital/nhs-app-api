@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Http;
+using NHSOnline.HttpMocks.Domain;
 
 namespace NHSOnline.HttpMocks.WebIntegrations
 {
@@ -86,12 +87,17 @@ namespace NHSOnline.HttpMocks.WebIntegrations
         {
             var basePath =
                 $"{Directory.GetParent(Directory.GetCurrentDirectory())?.Parent?.Parent?.Parent}/NHSOnline.HttpMocks/Resources";
-            var passKitBase64 = System.IO.File.ReadAllText($"{basePath}/PKPass.txt");
-            var imageBase64 = System.IO.File.ReadAllText($"{basePath}/HandAndFootXrayImage.txt");
-            var corruptedFileBase64 = System.IO.File.ReadAllText($"{basePath}/CorruptedFile.txt");
 
-            (string Title, HttpRequest Request, string ImageBase64String, string PkPassBase64String, string CorruptedBase64String) model =
-                ("Web Integration Functionality - Document Download", Request, imageBase64, passKitBase64, corruptedFileBase64);
+            var model = new DocumentDownload
+            {
+                Title = "Web Integration Functionality - Document Download",
+                Request = Request,
+                CorruptedBase64String = System.IO.File.ReadAllText($"{basePath}/CorruptedFile.txt"),
+                CorruptedPassKitBase64 = System.IO.File.ReadAllText($"{basePath}/CorruptedPKPass.txt"),
+                ImageBase64String = System.IO.File.ReadAllText($"{basePath}/HandAndFootXrayImage.txt"),
+                PkPassBase64String = System.IO.File.ReadAllText($"{basePath}/PKPass.txt")
+            };
+
             return View("~/Views/WebIntegrations/WebIntegrationFunctionalityPages/DocumentDownloadPage.cshtml", model);
         }
 

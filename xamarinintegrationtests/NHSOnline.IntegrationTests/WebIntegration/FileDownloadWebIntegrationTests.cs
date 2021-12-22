@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
+using NHSOnline.IntegrationTests.Logs;
 using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.Android.Appointments;
 using NHSOnline.IntegrationTests.Pages.Android.BrowserOverlay;
@@ -19,11 +20,16 @@ using NHSOnline.IntegrationTests.WebIntegration.Pkb;
 namespace NHSOnline.IntegrationTests.WebIntegration
 {
     [TestClass]
-    [BusinessRule("BR-WI-01.9", "Downloading a document when permissions have not been granted on the device prompts the user to grant permissions")]
-    [BusinessRule("BR-WI-01.10", "Granting permissions on a device when downloading a document allows the document to be downloaded to the users chosen location on the device")]
-    [BusinessRule("BR-WI-01.11", "Rejecting permissions on a device when downloading a document cancels the download action")]
-    [BusinessRule("BR-WI-01.12", "Downloading a document when permissions have been granted on device downloads the document to the users chosen location on the device")]
-    [BusinessRule("BR-WI-01.16", "Adding an pass to Apple wallet downloads the pass and add it to the users Apple Wallet")]
+    [BusinessRule("BR-WI-01.9",
+        "Downloading a document when permissions have not been granted on the device prompts the user to grant permissions")]
+    [BusinessRule("BR-WI-01.10",
+        "Granting permissions on a device when downloading a document allows the document to be downloaded to the users chosen location on the device")]
+    [BusinessRule("BR-WI-01.11",
+        "Rejecting permissions on a device when downloading a document cancels the download action")]
+    [BusinessRule("BR-WI-01.12",
+        "Downloading a document when permissions have been granted on device downloads the document to the users chosen location on the device")]
+    [BusinessRule("BR-WI-01.16",
+        "Adding an pass to Apple wallet downloads the pass and add it to the users Apple Wallet")]
     public class FileDownloadWebIntegrationTests
     {
         private const string ThirdPartyHelpLinkPath = "health-records-in-the-nhs-app/third-party-services/";
@@ -54,8 +60,9 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppAndroidTest(AndroidDevice = AndroidDevice.Pixel3, OSVersion = AndroidOSVersion.Nine)]
-        public void APatientWithProofLevelNineCanDownloadAFileFromAWebIntegrationDownloadFileScreenNotUsingTheNewerOsAndroid(
-            IAndroidDriverWrapper driver)
+        public void
+            APatientWithProofLevelNineCanDownloadAFileFromAWebIntegrationDownloadFileScreenNotUsingTheNewerOsAndroid(
+                IAndroidDriverWrapper driver)
         {
             var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
@@ -121,8 +128,9 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppAndroidTest]
-        public void APatientWithProofLevelNineCanDenyPermissionsToDownloadAFileFromAWebIntegrationDownloadFileScreenAndroid(
-            IAndroidDriverWrapper driver)
+        public void
+            APatientWithProofLevelNineCanDenyPermissionsToDownloadAFileFromAWebIntegrationDownloadFileScreenAndroid(
+                IAndroidDriverWrapper driver)
         {
             var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
@@ -166,16 +174,52 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertDisplayed(driver);
         }
 
-        [NhsAppAndroidTest]
-        public void APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingAPassKitFileFromAWebIntegrationDownloadFileScreenAndCanTryAgainAndroid(
-            IAndroidDriverWrapper driver)
+        [NhsAppIOSTest]
+        public void
+            APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingACorruptedPassKitFileFromAWebIntegrationDownloadFileScreenAndCanTryAgainIOS(
+                IIOSDriverWrapper driver)
         {
             var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
-            LoginProcess.LogAndroidPatientIn(driver, patient);
+            LoginProcess.LogIOSPatientIn(driver, patient);
 
+            NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsIOS(driver);
+
+            var timing = TimedTestExecutor.Execute(() =>
+            {
+                IOSFileDownloadPage
+                    .AssertOnPage(driver)
+                    .AssertNativeHeader()
+                    .PageContent.DownloadCorruptedPass();
+
+                IOSFileDownloadErrorPage
+                    .AssertOnPage(driver)
+                    .AssertPageElements()
+                    .TryAgain();
+
+                IOSFileDownloadPage
+                    .AssertOnPage(driver);
+
+                // Wait for the asynchronous log call to be made
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+            });
+
+            var clientLogs = new ClientLoggerLogs(timing.StartTime, timing.StopTime);
+            clientLogs.AssertClientLogStartsWith("Failed to construct a PKPass object as the data received is not in the expected format. DownloadRequest file length:");
+        }
+
+        [NhsAppAndroidTest]
+        public void
+            APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingAPassKitFileFromAWebIntegrationDownloadFileScreenAndCanTryAgainAndroid
+            (
+                IAndroidDriverWrapper driver)
+        {
+            var patient = new PkbPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+            LoginProcess.LogAndroidPatientIn(driver, patient);
             NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsAndroid(driver);
 
             AndroidFileDownloadPage
@@ -197,15 +241,15 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppAndroidTest]
-        public void APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingACorruptedFileFromAWebIntegrationDownloadFileScreenAndCanGetHelpAndroid(
-            IAndroidDriverWrapper driver)
+        public void
+            APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingACorruptedFileFromAWebIntegrationDownloadFileScreenAndCanGetHelpAndroid
+            (
+                IAndroidDriverWrapper driver)
         {
             var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
-
             LoginProcess.LogAndroidPatientIn(driver, patient);
-
             NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsAndroid(driver);
 
             AndroidFileDownloadPage
@@ -231,15 +275,15 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppAndroidTest]
-        public void APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingACorruptedFileFromAWebIntegrationDownloadFileScreenAndCanNavigateToAppointmentsAndroid(
-            IAndroidDriverWrapper driver)
+        public void
+            APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingACorruptedFileFromAWebIntegrationDownloadFileScreenAndCanNavigateToAppointmentsAndroid
+            (
+                IAndroidDriverWrapper driver)
         {
             var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
-
             LoginProcess.LogAndroidPatientIn(driver, patient);
-
             NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsAndroid(driver);
 
             AndroidFileDownloadPage
@@ -261,15 +305,15 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppIOSTest]
-        public void APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingACorruptedFileFromAWebIntegrationDownloadFileScreenAndCanTryAgainIOS(
-            IIOSDriverWrapper driver)
+        public void
+            APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingACorruptedFileFromAWebIntegrationDownloadFileScreenAndCanTryAgainIOS
+            (
+                IIOSDriverWrapper driver)
         {
             var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
-
             LoginProcess.LogIOSPatientIn(driver, patient);
-
             NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsIOS(driver);
 
             IOSFileDownloadPage
@@ -287,15 +331,15 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppIOSTest]
-        public void APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingACorruptedFileFromAWebIntegrationDownloadFileScreenAndCanGetHelpIOS(
-            IIOSDriverWrapper driver)
+        public void
+            APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingACorruptedFileFromAWebIntegrationDownloadFileScreenAndCanGetHelpIOS
+            (
+                IIOSDriverWrapper driver)
         {
             var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
-
             LoginProcess.LogIOSPatientIn(driver, patient);
-
             NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsIOS(driver);
 
             IOSFileDownloadPage
@@ -316,15 +360,15 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppIOSTest]
-        public void APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingACorruptedFileFromAWebIntegrationDownloadFileScreenAndCanNavigateToAppointmentsIOS(
-            IIOSDriverWrapper driver)
+        public void
+            APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingACorruptedFileFromAWebIntegrationDownloadFileScreenAndCanNavigateToAppointmentsIOS
+            (
+                IIOSDriverWrapper driver)
         {
             var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
-
             LoginProcess.LogIOSPatientIn(driver, patient);
-
             NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsIOS(driver);
 
             IOSFileDownloadPage
@@ -344,7 +388,6 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         private static void NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsAndroid(
             IAndroidDriverWrapper driver)
         {
-
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
                 .Navigation.NavigateToAppointments();

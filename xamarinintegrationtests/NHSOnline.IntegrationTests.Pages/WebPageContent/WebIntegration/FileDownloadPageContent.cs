@@ -18,6 +18,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         private WebButton DownloadPassButton => WebButton.WithText(_interactor, "Download test pass kit file (ios only)");
 
+        private WebButton DownloadCorruptedPassButton => WebButton.WithText(_interactor, "Download corrupted test pass kit file (ios only)");
+
         private WebButton DownloadCorruptedButton => WebButton.WithText(_interactor, "Download test corrupted file");
 
         internal void AssertOnPage() => TitleText.AssertVisible();
@@ -25,6 +27,12 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
         public void DownloadImage() => DownloadImageButton.Click();
 
         public void DownloadPass() => DownloadPassButton.Click();
+
+        public void DownloadCorruptedPass()
+        {
+            DownloadCorruptedPassButton.ScrollTo();
+            DownloadCorruptedPassButton.Click();
+        }
 
         public void DownloadCorrupted()
         {

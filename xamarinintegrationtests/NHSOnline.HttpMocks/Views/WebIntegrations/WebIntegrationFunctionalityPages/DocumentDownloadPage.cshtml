@@ -1,4 +1,4 @@
-﻿@model (string Title, Microsoft.AspNetCore.Http.HttpRequest Request, string ImageBase64String, string PkPassBase64String, string CorruptedBase64String)
+﻿@model NHSOnline.HttpMocks.Domain.DocumentDownload
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -77,11 +77,18 @@
             </button>
         </li>
         <li class="list-group-item">
+            <button id="test-pass-download-empty" onclick="downloadTestPassKitFile('@Model.CorruptedPassKitBase64');">
+                Download corrupted test pass kit file (ios only)
+            </button>
+        </li>
+        <li class="list-group-item">
             <button id="test-corrupted-download" onclick="downloadTestCorruptedFile('@Model.CorruptedBase64String');">
                 Download test corrupted file
             </button>
         </li>
-        <li class="list-group-item"><a href="javascript:history.back()">Back</a></li>
+        <li class="list-group-item">
+            <a href="javascript:history.back()">Back</a>
+        </li>
     </ul>
     <hr>
 </div>

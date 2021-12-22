@@ -18,7 +18,7 @@ using Rectangle = System.Drawing.Rectangle;
 [assembly: Dependency(typeof(IosFileHandler))]
 namespace NHSOnline.App.iOS.DependencyServices
 {
-    public class IosFileHandler: IFileHandler
+    public class IosFileHandler : IFileHandler
     {
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(IosFileHandler));
         private const int InitialBoxSize = 20;
@@ -33,15 +33,16 @@ namespace NHSOnline.App.iOS.DependencyServices
             return await HandleDefaultFileTypes(downloadRequest, webViewElement).PreserveThreadContext();
         }
 
-        private static async Task<DownloadFileResult> HandleDefaultFileTypes(DownloadRequest downloadRequest, View webViewElement)
+        private static async Task<DownloadFileResult> HandleDefaultFileTypes(DownloadRequest downloadRequest,
+            View webViewElement)
         {
-            var documents = Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments);
-            var tmp = Path.Combine (documents, "..", "tmp");
+            var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var tmp = Path.Combine(documents, "..", "tmp");
 
             try
             {
                 await File.WriteAllBytesAsync(
-                    Path.Combine(tmp,downloadRequest.FileName),
+                    Path.Combine(tmp, downloadRequest.FileName),
                     Convert.FromBase64String(downloadRequest.Base64Data)).PreserveThreadContext();
             }
             catch (Exception e)
@@ -53,7 +54,7 @@ namespace NHSOnline.App.iOS.DependencyServices
             await Share.RequestAsync(new ShareFileRequest
             {
                 Title = Regex.Replace(downloadRequest.FileName, @"\s+", ""),
-                File = new ShareFile(Path.Combine(tmp,downloadRequest.FileName)),
+                File = new ShareFile(Path.Combine(tmp, downloadRequest.FileName)),
                 PresentationSourceBounds = GetViewBounds(webViewElement)
             }).PreserveThreadContext();
 
@@ -78,16 +79,29 @@ namespace NHSOnline.App.iOS.DependencyServices
 
         private static DownloadFileResult HandlePassKitPassFile(DownloadRequest downloadRequest)
         {
+            NSData data;
+            PKPass passKitPass;
+            NSError? error;
 
-            #pragma warning disable CA2000
-                var data = new NSData(downloadRequest.Base64Data, NSDataBase64DecodingOptions.IgnoreUnknownCharacters);
-                var passKitPass = new PKPass(data, out NSError error);
-            #pragma warning restore CA2000
+            try
+            {
+#pragma warning disable CA2000
+                data = new NSData(downloadRequest.Base64Data, NSDataBase64DecodingOptions.IgnoreUnknownCharacters);
+                passKitPass = new PKPass(data, out error);
+#pragma warning restore CA2000
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e,
+                    "Failed to construct a PKPass object as the data received is not in the expected format. DownloadRequest file length: {DownloadRequestFileLength}",
+                    downloadRequest.Base64Data?.Length);
+                return new DownloadFileResult.Failed();
+            }
 
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse - The generated PKPass is incorrect and the NSError can actually be null
             if (error != null)
             {
-                Logger.LogError("Failed to create a pass kit pass, localised description is {error}",
+                Logger.LogError("Failed to create a pass kit pass, localised description is {Error}",
                     error.LocalizedDescription);
                 return new DownloadFileResult.Failed();
             }
