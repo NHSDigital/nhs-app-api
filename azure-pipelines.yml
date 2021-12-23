@@ -33,6 +33,12 @@ parameters:
       - Scratch19
       - Scratch20
       - Scratch21
+
+  - name: runXamarinBuilds
+    displayName: Run Xamarin Builds (uncheck for Web/API only)
+    type: boolean
+    default: true
+
   - name: intTestsRunXamarinNative
     displayName: Run Xamarin Native Integration Tests
     type: boolean
@@ -69,6 +75,7 @@ variables:
   source.develop: ${{ eq(variables['Build.SourceBranchName'], 'develop') }}
   source.tag: ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}
   native.xamarin.target: ${{ parameters.xamarinTarget }}
+  native.xamarin.runXamarinBuilds: ${{ parameters.runXamarinBuilds }}
   native.xamarin.version: '2.2.0'
   native.xamarin.ios.build.number:  $[counter(variables['native.version.number'], 1)]
   native.xamarin.android.build.number: $[counter('android', 100)]
@@ -171,7 +178,7 @@ stages:
         steps:
           - template: .azuredevops/templates/integration-tests-steps.yml
 
-  - ${{ if eq(variables['native.xamarin.target'], 'Preview') }}:
+  - ${{ if and(eq(variables['native.xamarin.target'], 'Preview'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
     - stage: xamarin_preview
       displayName: Build Xamarin Preview Apps
       dependsOn:
@@ -192,7 +199,7 @@ stages:
             nativeVersion: '$(native.xamarin.version)'
             buildNumber: '$(native.xamarin.ios.build.number)'
 
-  - ${{ if startsWith(variables['native.xamarin.target'], 'Scratch') }}:
+  - ${{ if and(startsWith(variables['native.xamarin.target'], 'Scratch'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
     - stage: xamarin_scratch
       displayName: Build Xamarin Scratch Apps
       dependsOn:
@@ -205,7 +212,7 @@ stages:
             androidBuildNumber: '$(native.xamarin.android.build.number)'
             iosBuildNumber: '$(native.xamarin.ios.build.number)'
 
-  - ${{ if or(eq(variables['native.xamarin.target'], 'Staging'), eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
+  - ${{ if and(or(eq(variables['native.xamarin.target'], 'Staging'), eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
     - stage: xamarin_staging
       displayName: Build Xamarin Staging Apps
       dependsOn:
@@ -228,7 +235,7 @@ stages:
           nativeVersion: '$(native.xamarin.version)'
           buildNumber: '$(native.xamarin.ios.build.number)'
 
-  - ${{ if or(eq(variables['native.xamarin.target'], 'OnboardingSandpit'), eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
+  - ${{ if and(or(eq(variables['native.xamarin.target'], 'OnboardingSandpit'), eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
     - stage: xamarin_onboarding_sandpit
       displayName: Build Xamarin Onboarding Sandpit Apps
       dependsOn:
@@ -250,7 +257,7 @@ stages:
           nativeVersion: '$(native.xamarin.version)'
           buildNumber: '$(native.xamarin.ios.build.number)'
 
-  - ${{ if or(eq(variables['native.xamarin.target'], 'OnboardingAos'), eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
+  - ${{ if and(or(eq(variables['native.xamarin.target'], 'OnboardingAos'), eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
     - stage: xamarin_onboarding_aos
       displayName: Build Xamarin Onboarding Aos Apps
       dependsOn:
@@ -272,7 +279,7 @@ stages:
           nativeVersion: '$(native.xamarin.version)'
           buildNumber: '$(native.xamarin.ios.build.number)'
 
-  - ${{ if or(eq(variables['native.xamarin.target'], 'Production'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
+  - ${{ if and(or(eq(variables['native.xamarin.target'], 'Production'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
     - stage: xamarin_production
       displayName: Build Xamarin Production Apps
       dependsOn:
@@ -295,7 +302,7 @@ stages:
           nativeVersion: '$(native.xamarin.version)'
           buildNumber: '$(native.xamarin.ios.build.number)'
 
-  - ${{ if or(eq(variables['int.tests.run.native.xamarin'], 'true'), eq(variables['Build.Reason'], 'PullRequest')) }}:
+  - ${{ if and(or(eq(variables['int.tests.run.native.xamarin'], 'true'), eq(variables['Build.Reason'], 'PullRequest')), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
     - stage: xamarin_browserstack
       displayName: Build Xamarin Browserstack Apps
       dependsOn:
@@ -313,7 +320,7 @@ stages:
 
     - stage: xamarin_integration_tests
       displayName: Xamarin Integration Tests
-      ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+      ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
         condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
       dependsOn:
         - web
@@ -328,7 +335,7 @@ stages:
 
     - stage: xamarin_integration_upgrade_tests
       displayName: Xamarin Integration Upgrade Tests
-      ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+      ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
         condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
       dependsOn:
         - web
@@ -344,7 +351,7 @@ stages:
 
     - stage: xamarin_integration_canary_tests
       displayName: Xamarin Integration Canary Tests
-      ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+      ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
         condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'False'))
       dependsOn:
         - web
@@ -358,7 +365,7 @@ stages:
             runCanaryTests: true
             nativeVersion: '$(native.xamarin.version)'
 
-    - ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
+    - ${{ if and(ne(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
       - stage: xamarin_integration_report_generation
         displayName: Xamarin Integration Generate Reports
         condition: succeededOrFailed()
@@ -369,7 +376,7 @@ stages:
         jobs:
           - template: .azuredevops/templates/integration-tests-xamarin-generate-reports.yml
 
-    - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+    - ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
       - stage: xamarin_pr_integration_report_generation
         displayName: Xamarin Integration Generate Reports
         condition: and(succeededOrFailed(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
