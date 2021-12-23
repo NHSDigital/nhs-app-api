@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Foundation;
 using LocalAuthentication;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.DependencyServices.Biometrics;
@@ -24,7 +25,8 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
 
         public byte[] PublicKeyEccX962Raw()
         {
-            using var data = _secKey.GetPublicKey().GetExternalRepresentation(out var error);
+            NSError? error = new NSError();
+            using var data = _secKey.GetPublicKey()?.GetExternalRepresentation(out error);
             try
             {
                 if (data == null)
