@@ -205,7 +205,7 @@
   <Import Project="Properties/BuildConfiguration.debugmode.$(DebugMode).props" />
   <Import Project="Properties/BuildConfiguration.env.$(Environment).props" />
   <ItemGroup>
-    <PackageReference Include="iProov.Android" Version="7.0.3" />
+    <PackageReference Include="iProov.Android" Version="7.1.0" />
     <Reference Include="Mono.Android" />
     <Reference Include="Mono.Android.Export" />
     <Reference Include="System" />
@@ -378,9 +378,9 @@
   <ItemGroup>
     <PackageReference Include="Xamarin.Android.InstallReferrer" Version="1.0.1" />
     <PackageReference Include="Xamarin.AndroidX.Preference" Version="1.1.1.11" />
-    <PackageReference Include="Xamarin.Firebase.Messaging" Version="122.0.0.0" />
-    <PackageReference Include="Xamarin.Google.Android.DataTransport.TransportRuntime" Version="3.0.1" />
-    <PackageReference Include="Xamarin.Google.Dagger" Version="2.37.0" />
+    <PackageReference Include="Xamarin.Firebase.Messaging" Version="122.0.0.3" />
+    <PackageReference Include="Xamarin.Google.Android.DataTransport.TransportRuntime" Version="3.0.1.1" />
+    <PackageReference Include="Xamarin.Google.Dagger" Version="2.39.1" />
     <PackageReference Include="Xamarin.AndroidX.Biometric" Version="1.1.0.6" />
   </ItemGroup>
   <ItemGroup>
