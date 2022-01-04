@@ -190,10 +190,24 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 
         private static void Log(WKNavigation navigation, [CallerMemberName] string method = "")
         {
-            Logger.LogDebug(
-                "Navigation {Id:X} {Method}",
-                navigation.ClassHandle.ToInt64(),
-                method);
+            try
+            {
+                Logger.LogDebug(
+                    "Navigation {Id:X} {Method}",
+                    navigation.ClassHandle.ToInt64(),
+                    method);
+            }
+            catch (NullReferenceException e)
+            {
+                Logger.LogDebug(e, "Null reference when trying log the navigation action");
+
+                if (!string.IsNullOrEmpty(method))
+                {
+                    Logger.LogDebug(
+                        "Navigation {Method}",
+                        method);
+                }
+            }
         }
 
         private static void LogError(WKNavigation navigation, NSError error, [CallerMemberName] string method = "")
