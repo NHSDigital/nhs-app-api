@@ -47,6 +47,9 @@ parameters:
       - ops1
       - ops2
       - ops3
+      - onboardingsandpit
+      - onboardingaos
+      - authdevelopment
 resources:
   repositories:
     - repository: nhsapp-ops-terraform
@@ -91,6 +94,8 @@ variables:
     value: scratch
   - name: helmVersion
     value: 3.2.3
+  - name: permanentEnvironments
+    value: onboardingsandpit,onboardingaos,authdevelopment,scratch12
 pool:
   vmImage: 'ubuntu-latest'
 stages:
@@ -126,6 +131,7 @@ stages:
                     deployReason: $(Build.Reason)
                     queuedBy: $(Build.QueuedBy)
                     environmentRef: $(ENVIRONMENT_REF)
+                    preventDelete: ${{ contains(variables['permanentEnvironments'], parameters.environmentRefOverride ) }}
   - stage: stage_bootstrap_cluster
     displayName: Bootstrap Cluster
     jobs:
