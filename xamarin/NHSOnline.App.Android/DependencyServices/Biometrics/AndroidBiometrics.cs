@@ -87,8 +87,17 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
 
             keyPairGenerator.Initialize(keyGenParameterSpec);
 
-            _ = keyPairGenerator.GenerateKeyPair() ??
-                throw new InvalidOperationException("GenerateKeyPair returns null");
+            try
+            {
+                _ = keyPairGenerator.GenerateKeyPair() ??
+                    throw new InvalidOperationException("GenerateKeyPair returns null");
+            }
+            catch (ProviderException e)
+            {
+                Logger.LogError(e, "ProviderException when trying to generate keypair");
+                throw new InvalidOperationException("GenerateKeyPair failed");
+            }
+
             try
             {
                 if (TryGetKey(fidoUsername, out var biometricAuthKey))
