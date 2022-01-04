@@ -35,8 +35,6 @@ export default {
 
   stayOnPage({ commit }) {
     if (window.nativeApp) {
-      this.dispatch('navigation/setPreviousMenuItem');
-
       NativeApp.dismissPageLeaveWarningDialogue();
     } else {
       this.dispatch('modal/hide');
@@ -57,7 +55,6 @@ export default {
   sessionExpiryCheckAndCloseLeavePageWarningModal({ commit, state }) {
     if (state.showLeavingWarning) {
       if (window.nativeApp) {
-        this.dispatch('navigation/setPreviousMenuItem');
         this.dispatch('device/unlockNavBar');
       }
       commit(RESET);

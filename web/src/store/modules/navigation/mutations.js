@@ -11,20 +11,11 @@ function clearPreviousSelectedMenuItem(state) {
   state.menuItemStatusAt = Array(5).fill(false);
 }
 
-function storePreviousSelectedMenuItem(state) {
-  state.menuItemStatusAt.forEach((menuItem, index) => {
-    if (menuItem === true) {
-      state.previousMenuItemIndex = index;
-    }
-  });
-}
-
 export default {
   [CLEAR_SELECTED_MENUITEM](state) {
     if (window.nativeApp) {
       NativeApp.clearMenuBarItem();
     } else {
-      storePreviousSelectedMenuItem(state);
       clearPreviousSelectedMenuItem(state);
     }
   },
@@ -32,7 +23,6 @@ export default {
     if (window.nativeApp !== 'undefined') {
       NativeApp.setMenuBarItem(menuItemIndex);
     }
-    storePreviousSelectedMenuItem(state);
     clearPreviousSelectedMenuItem(state);
     state.menuItemStatusAt[menuItemIndex] = true;
   },

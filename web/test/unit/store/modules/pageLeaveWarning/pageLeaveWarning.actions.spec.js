@@ -135,10 +135,6 @@ describe('actions', () => {
         expect(mutation.commit).toHaveBeenCalledWith(RESET);
       });
 
-      it('will dispatch to set the menu item as previous', () => {
-        expect(app.dispatch).toBeCalledWith('navigation/setPreviousMenuItem');
-      });
-
       it('will call native app to dismiss the dialogue', () => {
         expect(dismissPageLeaveWarningDialogueSpy).toHaveBeenCalled();
       });

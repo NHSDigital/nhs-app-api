@@ -62,7 +62,4 @@ export default {
   setNewMenuItem({ commit }, menuItem) {
     commit(SET_NEWMENUITEM, menuItem);
   },
-  setPreviousMenuItem({ commit, state }) {
-    commit(SET_NEWMENUITEM, state.previousMenuItemIndex);
-  },
 };
