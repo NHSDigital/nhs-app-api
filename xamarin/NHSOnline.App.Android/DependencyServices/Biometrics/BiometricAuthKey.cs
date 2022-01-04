@@ -89,6 +89,11 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
                 Logger.LogError(e, "Failed to init signature. KeyStore value invalidated");
                 return new BiometricAuthVerifyUserResult.PermanentLockout();
             }
+            catch (InvalidKeyException e)
+            {
+                Logger.LogError(e, "Failed to init signature. KeyStore value invalid");
+                return new BiometricAuthVerifyUserResult.PermanentLockout();
+            }
 
             using var promptInfoBuilder = new BiometricPrompt.PromptInfo.Builder();
             var promptInfo = promptInfoBuilder
