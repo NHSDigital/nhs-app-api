@@ -53,7 +53,7 @@ describe('GpAtHandContent.vue', () => {
 
   describe('header content', () => {
     it('will contain replacement for headerTag', () => {
-      expect(wrapper.find('#guidance_sub_header').text()).toContain('Sorry, you cannot book GP appointments through the NHS App');
+      expect(wrapper.find('#guidance_sub_header').text()).toContain('You cannot book GP appointments through the NHS App');
     });
   });
 

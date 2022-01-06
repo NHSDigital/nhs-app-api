@@ -7,10 +7,10 @@
       <p v-for="(content, index) in $t('gpAtHand.content.paragraphs')"
          :key="index">
         {{ replaceContentTag(content.prefix) }}
-        <analytics-tracked-tag
-          :href="`${linkHref(content.linkUrl)}`"
-          :text="content.linkText"
-          tag="a" target="_blank">
+        <analytics-tracked-tag v-if="content.linkText"
+                               :href="`${linkHref(content.linkUrl)}`"
+                               :text="content.linkText"
+                               tag="a" target="_blank">
           {{
             content.linkText
           }}</analytics-tracked-tag>{{

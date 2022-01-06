@@ -17,10 +17,9 @@ abstract class GpAtHandBasePage: HybridPageObject() {
 
     fun assertGpAtHandPageVisible() {
         val expected = ExpectedPageStructure()
-                .h2("Sorry, you cannot $headerContext through the NHS App")
-                .paragraph("To $paragraphContext with Babylon GP at Hand, please use the Babylon app.")
-                .paragraph("Please contact Babylon GP at Hand on 0330 808 2217 or gpathand@nhs.net " +
-                        "if you have any problems.")
+                .h2("You cannot $headerContext through the NHS App")
+                .paragraph("To $paragraphContext with Babylon GP at Hand, use the Babylon app.")
+                .paragraph("Call Babylon GP at Hand on 0330 808 2217 if you have any problems.")
         expected.assert(this)
     }
 }

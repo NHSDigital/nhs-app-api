@@ -12,19 +12,16 @@ export default {
     contentTag: 'order prescriptions',
   },
   content: {
-    header: 'Sorry, you cannot {headerTag} through the NHS App',
+    header: 'You cannot {headerTag} through the NHS App',
     paragraphs: [
       {
-        prefix: 'To {contentTag} with Babylon GP at Hand, please ',
+        prefix: 'To {contentTag} with Babylon GP at Hand, ',
         linkText: 'use the Babylon app',
         linkUrl: 'GPATHAND_APP_DOWNLOAD_URL',
         suffix: '.',
       },
       {
-        prefix: 'Please contact Babylon GP at Hand on 0330 808 2217 or ',
-        linkText: 'gpathand@nhs.net',
-        linkUrl: 'mailto:gpathand@nhs.net',
-        suffix: ' if you have any problems.',
+        prefix: 'Call Babylon GP at Hand on 0330 808 2217 if you have any problems.',
       },
     ],
   },

@@ -5571,7 +5571,7 @@
               description: "Successfully sent"
             400: 
               description: "Bad request. Supplied request is invalid."
-            409:
+            409: 
               description: "Conflict. Request could not be completed due to a conflict with the current state of the target resource."
             500: 
               description: "An unexpected error occurred processing the request."
