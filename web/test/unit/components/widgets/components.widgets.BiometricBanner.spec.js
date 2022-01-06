@@ -74,6 +74,29 @@ describe('BiometricBanner', () => {
       });
     });
 
+    describe('banner text', () => {
+      describe('android', () => {
+        beforeEach(() => {
+          wrapper = mountBiometricBanner({ source: 'android', dismissed: false });
+        });
+
+        it('will have correct text', () => {
+          const label = wrapper.find('#bannerText');
+          expect(label.element.textContent.trim()).toEqual('If your mobile device supports fingerprint, face or iris recognition and meets Google\'s increased security settings, you can use it to log in to the NHS App instead of a password and security code.');
+        });
+      });
+      describe('ios', () => {
+        beforeEach(() => {
+          wrapper = mountBiometricBanner({ source: 'ios', dismissed: false });
+        });
+
+        it('will have correct text', () => {
+          const label = wrapper.find('#bannerText');
+          expect(label.element.textContent.trim()).toEqual('If your mobile device supports Touch ID or Face ID, you can use it to log in to the NHS App instead of a password and security code.');
+        });
+      });
+    });
+
     describe('dismiss button', () => {
       let dismissButton;
 

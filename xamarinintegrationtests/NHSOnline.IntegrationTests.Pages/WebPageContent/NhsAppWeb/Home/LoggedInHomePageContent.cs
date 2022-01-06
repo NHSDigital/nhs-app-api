@@ -13,13 +13,21 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
         public const string BioFingerprint = "Set up fingerprint, face or iris";
         public const string BoiFaceId = "Set up Face ID";
 
+        public const string AndroidInfoText =
+            "If your mobile device supports fingerprint, face or iris recognition and meets Google's increased security settings, you can use it to log in to the NHS App instead of a password and security code.";
+
+        public const string IOSInfoText =
+            "If your mobile device supports Touch ID or Face ID, you can use it to log in to the NHS App instead of a password and security code.";
+
         private readonly string _biometricsButtonText;
+        private readonly string _biometricsInfoText;
         private readonly IWebInteractor _interactor;
 
-        internal LoggedInHomePageContent(IWebInteractor interactor, string biometricsButtonText)
+        internal LoggedInHomePageContent(IWebInteractor interactor, string biometricsButtonText, string biometricsInfoText)
         {
             _interactor = interactor;
             _biometricsButtonText = biometricsButtonText;
+            _biometricsInfoText = biometricsInfoText;
         }
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Home");
@@ -33,8 +41,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
         private WebText BiometricsPanelText => WebText.WithTagAndText(
             _interactor,
             "p",
-            "If your mobile device supports fingerprint, face or iris recognition, " +
-            "you can use it to log in to the NHS App instead of a password and security code.");
+            _biometricsInfoText);
 
         private WebButton OpenSettingsButton => WebButton.WithText(_interactor, _biometricsButtonText);
 

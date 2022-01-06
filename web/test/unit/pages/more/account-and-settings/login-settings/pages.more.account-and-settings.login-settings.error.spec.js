@@ -16,6 +16,7 @@ describe('login settings page', () => {
     biometricType = 'face',
     isNativeApp = true,
     errorCode = undefined,
+    source = 'ios',
   } = {}) => {
     $router = createRouter();
     store = createStore({
@@ -26,6 +27,7 @@ describe('login settings page', () => {
         },
         device: {
           isNativeApp,
+          source,
         },
       },
       getters: {
@@ -44,17 +46,27 @@ describe('login settings page', () => {
   describe('biometric error screen', () => {
     describe('cannot find biometrics', () => {
       each([
-        ['have information showing Face ID could not be found', 'face', 'Check that you have added a face scan in your device\'s Face ID settings.'],
-        ['have information showing Touch ID could not be found', 'touch', 'Check that you have added a fingerprint in your device\'s Touch ID settings.'],
-        ['have information showing Fingerprint could not be found', 'fingerPrint', 'Check that you have added a fingerprint in your device\'s security settings.'],
-      ]).it('will %s', (_, biometricType, text) => {
+        ['have information showing Face ID could not be found', 'ios', 'face', 'Check that you have added a face scan in your device\'s Face ID settings.'],
+        ['have information showing Touch ID could not be found', 'ios', 'touch', 'Check that you have added a fingerprint in your device\'s Touch ID settings.'],
+        ['have information showing Fingerprint could not be found', 'android', 'fingerPrintFaceOrIris', 'Check that you have added a fingerprint, face or iris in your device\'s security settings.'],
+      ]).it('will %s', (_, source, biometricType, text) => {
         mountPage(
           {
             errorCode: biometricErrorCodes.CannotFindBiometrics,
             biometricType,
+            source,
           },
         );
         expect(wrapper.findAll('p').at(0).text()).toContain(text);
+
+        if (biometricType === 'fingerPrintFaceOrIris') {
+          expect(wrapper.findAll('p').at(1).text()).toContain('We cannot support fingerprint, face or iris recognition (biometrics) on Android devices with sensors that do not meet Google\'s increased security settings.');
+          expect(wrapper.findAll('p').at(2).text()).toContain('Get help with logging in using biometrics');
+          expect(wrapper.findAll('p').at(3).text()).toContain('If you cannot use biometrics, you\'ll need to log in using your email, password and security code.');
+        } else {
+          expect(wrapper.findAll('p').at(1).text()).toContain('Get help with logging in using biometrics');
+          expect(wrapper.findAll('p').at(2).text()).toContain('If you cannot use biometrics, you\'ll need to log in using your email, password and security code.');
+        }
       });
     });
 

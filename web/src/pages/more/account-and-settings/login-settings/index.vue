@@ -10,7 +10,7 @@
         </p>
       </div>
       <div v-else>
-        <p class="nhsuk-u-padding-bottom-3">
+        <p id="biometricInformation" class="nhsuk-u-padding-bottom-3">
           {{ biometricInformation }}
         </p>
         <message-dialog message-type="warning" :icon-text="$t('generic.important')">

@@ -1,8 +1,7 @@
 export default {
   biometrics: {
     biometricInformation: {
-      fingerPrint: 'You can log in with your fingerprint instead of a password and security code.',
-      fingerPrintFaceOrIris: 'You can log in with your fingerprint, face or iris instead of a password and security code.',
+      fingerPrintFaceOrIris: 'You can log in with your fingerprint, face or iris instead of a password and security code if your device meets Google\'s increased security settings.',
       face: 'Face ID lets you log in with your face scan instead of a password and security code.',
       touch: 'Touch ID lets you log in with your fingerprint instead of a password and security code.',
     },
@@ -42,9 +41,11 @@ export default {
         errorText: {
           face: 'Check that you have added a face scan in your device\'s Face ID settings.',
           touch: 'Check that you have added a fingerprint in your device\'s Touch ID settings.',
-          fingerPrint: 'Check that you have added a fingerprint in your device\'s security settings.',
           fingerPrintFaceOrIris: 'Check that you have added a fingerprint, face or iris in your device\'s security settings.',
         },
+        weCannotSupport: 'We cannot support fingerprint, face or iris recognition (biometrics) on Android devices with sensors that do not meet Google\'s increased security settings.',
+        getHelp: 'Get help with logging in using biometrics',
+        ifYouCantUseBiometrics: 'If you cannot use biometrics, you\'ll need to log in using your email, password and security code.',
       },
       cannotChangeBiometricSettings: {
         paragraph1: 'Go back and try again.',

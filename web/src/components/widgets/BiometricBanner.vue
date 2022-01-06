@@ -4,8 +4,8 @@
                     message-id="success-dialog"
                     message-type="message"
                     :icon-text="$t('home.loginOptions')">
-      <message-text>
-        {{ $t('home.ifYourDeviceSupports') }}
+      <message-text id="bannerText">
+        {{ $t(bannerText) }}
       </message-text>
       <message-text>
         <analytics-tracked-tag :text="$t('home.openSettings')" tabindex="">
@@ -61,6 +61,12 @@ export default {
           dismissed: true,
         },
       };
+    },
+    bannerText() {
+      if (this.$store.state.device.source === 'android') {
+        return 'home.ifYourAndroidDeviceSupports';
+      }
+      return 'home.ifYourIOSDeviceSupports';
     },
     showBiometricBanner() {
       return this.$store.state.device.isNativeApp && !this.$store.state.biometricBanner.dismissed;

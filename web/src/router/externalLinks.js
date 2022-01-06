@@ -18,6 +18,8 @@ export const NHS_APP_PRIVACY_POLICY_URL = `${NHS_APP_LEGAL_AND_COOKIES_URL}nhs-a
 export const PRIVACY_POLICY_URL = `${NHS_APP_PRIVACY_POLICY_URL}privacy-policy/`;
 export const ONLINE_CONSULTATIONS_PRIVACY_URL = `${NHS_APP_PRIVACY_POLICY_URL}online-consultation-services/`;
 
+export const NHS_APP_LOGGING_IN_HELP = 'https://www.nhs.uk/nhs-app/nhs-app-help-and-support/getting-started-with-the-nhs-app/logging-in-to-the-nhs-app/';
+
 // Linked profiles help paths
 export const APP_LOGIN_HELP_PATH = 'getting-started-with-the-nhs-app/logging-in-to-the-nhs-app/';
 export const PROXY_HELP_PATH = 'linked-profiles-in-the-nhs-app/';

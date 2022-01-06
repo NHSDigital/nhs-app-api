@@ -15,7 +15,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Fingerprint, face or iris");
 
         private WebText YouCanLoginWithText => WebText.WithTagAndText(_interactor, "p",
-            "You can log in with your fingerprint, face or iris instead of a password and security code.");
+            "You can log in with your fingerprint, face or iris instead of a password and security code if your device meets Google's increased security settings.");
 
         private WebText ImportantInformationPanel => WebText.WithTagAndText(_interactor, "p",
             "All fingerprints, faces or irises registered on this device will be able to access connected health websites and apps that use your NHS login information.");

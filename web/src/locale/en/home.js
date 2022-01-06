@@ -1,6 +1,7 @@
 export default {
   loginOptions: 'Login options',
-  ifYourDeviceSupports: 'If your mobile device supports fingerprint, face or iris recognition, you can use it to log in to the NHS App instead of a password and security code.',
+  ifYourIOSDeviceSupports: 'If your mobile device supports Touch ID or Face ID, you can use it to log in to the NHS App instead of a password and security code.',
+  ifYourAndroidDeviceSupports: 'If your mobile device supports fingerprint, face or iris recognition and meets Google\'s increased security settings, you can use it to log in to the NHS App instead of a password and security code.',
   openSettings: 'Open settings',
   openLoginSettings: 'Open login settings',
   setupTouchId: 'Set up Touch ID',

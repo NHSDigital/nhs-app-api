@@ -103,6 +103,41 @@ describe('login settings page', () => {
           });
       });
     });
+    describe('page information text', () => {
+      describe('device biometric type is face', () => {
+        beforeEach(() => {
+          mountPage({ biometricType: 'face' });
+        });
+
+        it('will show the correct information text',
+          () => {
+            const label = wrapper.find('#biometricInformation');
+            expect(label.element.textContent.trim()).toEqual('Face ID lets you log in with your face scan instead of a password and security code.');
+          });
+      });
+      describe('device biometric type is fingerPrint or iris', () => {
+        beforeEach(() => {
+          mountPage({ biometricType: 'fingerPrintFaceOrIris' });
+        });
+
+        it('will show the correct information text',
+          () => {
+            const label = wrapper.find('#biometricInformation');
+            expect(label.element.textContent.trim()).toEqual('You can log in with your fingerprint, face or iris instead of a password and security code if your device meets Google\'s increased security settings.');
+          });
+      });
+      describe('device biometric type is touch', () => {
+        beforeEach(() => {
+          mountPage({ biometricType: 'touch' });
+        });
+
+        it('will show the correct information text',
+          () => {
+            const label = wrapper.find('#biometricInformation');
+            expect(label.element.textContent.trim()).toEqual('Touch ID lets you log in with your fingerprint instead of a password and security code.');
+          });
+      });
+    });
     describe('toggle label', () => {
       describe('biometric type is face', () => {
         beforeEach(() => {
@@ -115,17 +150,6 @@ describe('login settings page', () => {
             expect(label.element.textContent).toEqual('Log in with Face ID');
           });
       });
-      describe('biometric type is fingerPrint', () => {
-        beforeEach(() => {
-          mountPage({ biometricType: 'fingerPrint' });
-        });
-
-        it('will show the correct biometric type',
-          () => {
-            const label = wrapper.find('strong');
-            expect(label.element.textContent).toEqual('Log in with fingerprint');
-          });
-      });
       describe('biometric type is touch', () => {
         beforeEach(() => {
           mountPage({ biometricType: 'touch' });
@@ -135,6 +159,17 @@ describe('login settings page', () => {
           () => {
             const label = wrapper.find('strong');
             expect(label.element.textContent).toEqual('Log in with Touch ID');
+          });
+      });
+      describe('biometric type is fingerprint, face or iris', () => {
+        beforeEach(() => {
+          mountPage({ biometricType: 'fingerPrintFaceOrIris' });
+        });
+
+        it('will show the correct biometric type',
+          () => {
+            const label = wrapper.find('strong');
+            expect(label.element.textContent).toEqual('Log in with fingerprint, face or iris');
           });
       });
     });
