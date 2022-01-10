@@ -1,14 +1,18 @@
 jobs:
   - job: securityscan
-    displayName: Twistlock Vulnerabilities and Compliance Scan
+    displayName: Trivy Vulnerabilities and Compliance Scan
     steps:
       - template: set-branch-tag-steps.yml
       - template: docker-login-steps.yml
 
-      - task: ShellScript@2
-        displayName: Run
-        env:
-          TWISTLOCK_CLI_PASSWORD: $(twistlock.cli.password)
-        inputs:
-          scriptPath: buildscripts/run_twistlock_security_scan.sh
+      - script: |
+          sudo apt-get install rpm
+          wget https://github.com/aquasecurity/trivy/releases/download/v$(trivyVersion)/trivy_$(trivyVersion)_Linux-64bit.deb
+          sudo dpkg -i trivy_$(trivyVersion)_Linux-64bit.deb
+          trivy -v
+        displayName: 'Download and install Trivy'
 
+      - task: ShellScript@2
+        displayName: Run Trivy
+        inputs:
+          scriptPath: buildscripts/run_trivy_security_scan.sh

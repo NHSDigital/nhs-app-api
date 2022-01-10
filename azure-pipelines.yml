@@ -63,6 +63,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
+  trivyVersion: 0.22.0
   docker.registry: nhsapp.azurecr.io
   docker.tag: $[variables['Build.SourceVersion']]
   source.develop: ${{ eq(variables['Build.SourceBranchName'], 'develop') }}
