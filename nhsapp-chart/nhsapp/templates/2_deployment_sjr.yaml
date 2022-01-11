@@ -97,7 +97,7 @@ spec:
         - name: sjr-config
           mountPath: {{ $.Values.sjrconfig.mountPath }}
           {{- end }}
-{{- with $.Values.probes.dotnet }}
+{{- with $.Values.probes.sjr }}
 {{ toYaml . | trim | indent 8 }}
 {{- end }}
 
