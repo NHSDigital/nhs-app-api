@@ -50,6 +50,7 @@ export const CONSULTATIONS_NAME = 'health-records-gp-medical-record-consultation
 export const CONSULTATIONS_AND_EVENTS_NAME = 'health-records-gp-medical-record-consultations';
 export const EVENTS_NAME = 'health-records-gp-medical-record-events';
 export const TESTRESULTS_NAME = 'health-records-gp-medical-record-test-results';
+export const TESTRESULTS_V2_NAME = 'health-records-gp-medical-record-test-results-v2';
 export const TESTRESULTSDETAIL_NAME = 'health-records-gp-medical-record-test-results-detail';
 export const TESTRESULTID_NAME = 'health-records-gp-medical-record-testresultdetail-testResultId';
 export const IMMUNISATIONS_NAME = 'health-records-gp-medical-record-immunisations';
@@ -180,6 +181,7 @@ const names = [
   EVENTS_NAME,
   CONSULTATIONS_AND_EVENTS_NAME,
   TESTRESULTS_NAME,
+  TESTRESULTS_V2_NAME,
   TESTRESULTSDETAIL_NAME,
   TESTRESULTID_NAME,
   IMMUNISATIONS_NAME,

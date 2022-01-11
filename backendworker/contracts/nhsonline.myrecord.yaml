@@ -106,6 +106,39 @@ paths:
             application/json:
               schema:
                 $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+  /historic-test-results/{year}:
+    get:
+      tags:
+        - test result
+      parameters:
+        - in: path
+          name: year
+          required: true
+          description: The year to return test results to the client
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns test results for selected year
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TestResults"
+        "400":
+          description: Bad request. A querystring parameter is not in the expected format.
+        "401":
+          description: User session has expired.
+        "500":
+          description: An unexpected error occurred processing the request.
+        "502":
+          description: Bad response received from upstream system.
+        "504":
+          description: Timeout when calling upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+
   /documents:
     get:
       tags:

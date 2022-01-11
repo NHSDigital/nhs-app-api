@@ -37,6 +37,8 @@ paths:
     $ref: ./nhsonline.termsandconditions.yaml#/paths/~1toggle-analytics-cookie-acceptance
   /v1/patient/test-result:
     $ref: ./nhsonline.myrecord.yaml#/paths/~1test-result
+  /v1/patient/historic-test-results/{year}:
+    $ref: ./nhsonline.myrecord.yaml#/paths/~1historic-test-results~1{year}
   /v1/patient/messages:
     $ref: ./nhsonline.patientmessages.yaml#/paths/~1messages
   /v1/patient/messages/{id}:

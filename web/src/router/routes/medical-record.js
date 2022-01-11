@@ -18,6 +18,7 @@ import ProceduresPage from '@/pages/health-records/gp-medical-record/procedures'
 import TestResultIdPage from '@/pages/health-records/gp-medical-record/testresultdetail/_testResultId';
 import TestResultsDetailPage from '@/pages/health-records/gp-medical-record/test-results-detail';
 import TestResultsPage from '@/pages/health-records/gp-medical-record/test-results';
+import TestResultsV2Page from '@/pages/health-records/gp-medical-record/test-results-v2';
 import GpAtHandPage from '@/pages/health-records/gp-at-hand';
 import UpliftGpMedicalRecordPage from '@/pages/uplift/gp-medical-record';
 
@@ -44,6 +45,7 @@ import {
   PROCEDURES_V2_PATH,
   TESTRESULTID_PATH,
   TESTRESULTS_PATH,
+  TESTRESULTS_V2_PATH,
   TESTRESULTSDETAIL_PATH,
   UPLIFT_GP_MEDICAL_RECORD_PATH,
 } from '@/router/paths';
@@ -68,6 +70,7 @@ import {
   PROCEDURES_V2_NAME,
   TESTRESULTID_NAME,
   TESTRESULTS_NAME,
+  TESTRESULTS_V2_NAME,
   TESTRESULTSDETAIL_NAME,
   UPLIFT_GP_MEDICAL_RECORD_NAME,
   GP_HEALTH_RECORD_JOURNEY_NAME,
@@ -236,6 +239,25 @@ export const TESTRESULTS = {
   path: TESTRESULTS_PATH,
   name: TESTRESULTS_NAME,
   component: TestResultsPage,
+  meta: {
+    headerKey: 'navigation.pages.headers.testResults',
+    titleKey: 'navigation.pages.titles.testResults',
+    proofLevel: proofLevel.P9,
+    upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
+    crumb: breadcrumbs.TEST_RESULTS_CRUMB,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
+    nativeNavigation: YOUR_RECORD_MENU_ITEM,
+    middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
+  },
+};
+
+export const TESTRESULTSV2 = {
+  path: TESTRESULTS_V2_PATH,
+  name: TESTRESULTS_V2_NAME,
+  component: TestResultsV2Page,
   meta: {
     headerKey: 'navigation.pages.headers.testResults',
     titleKey: 'navigation.pages.titles.testResults',
@@ -510,6 +532,7 @@ export default [
   CURRENT_MEDICINES,
   DISCONTINUED_MEDICINES,
   TESTRESULTS,
+  TESTRESULTSV2,
   TESTRESULTSDETAIL,
   TESTRESULTID,
   CONSULTATIONS,

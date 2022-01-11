@@ -195,9 +195,9 @@ spec:
         - name: COOKIES_POLICY_URL
           value: "https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-cookies-policy/"
         - name: ACCESSIBILITY_STATEMENT_URL
-          value: "https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-accessibility-statement/"  
-        - name: OPEN_SOURCE_LICENCES_URL
-          value: "https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-open-source-licences/"    
+          value: "https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-accessibility-statement/"
+          name: OPEN_SOURCE_LICENCES_URL
+          value: "https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-open-source-licences/"
         - name: NOMINATED_PHARMACY_DSP_URL
           value: "https://www.nhs.uk/Service-Search/other-services/pharmacies/internetpharmacies"
         - name: GPATHAND_APP_DOWNLOAD_URL
@@ -205,7 +205,7 @@ spec:
         - name: EMERGENCY_PRESCRIPTIONS_URL
           value: "https://111.nhs.uk/emergency-prescription/"
         - name: INFORMATICA_URL
-          value: "https://the-andover-health-centre-medical-practice.appointments-online.co.uk/"  
+          value: "https://the-andover-health-centre-medical-practice.appointments-online.co.uk/"
         - name: SYMPTOM_CHECKER_NORTHERN_IRELAND_URL
           value: "https://www.nidirect.gov.uk/articles/gp-out-hours-service"
         - name: COVID_STATUS_URL
@@ -223,7 +223,9 @@ spec:
         - name: ORGAN_DONATION_DESKTOP_ENABLED
           value: "{{ $.Values.organDonationDesktopEnabled }}"
         - name: SKIP_LOGGED_OUT_ENABLED
-          value: "{{ $.Values.skipLoggedOutEnabled }}"          
+          value: "{{ $.Values.skipLoggedOutEnabled }}"
+        - name: TPP_SUPPORTS_TEST_RESULTS_V2
+          value: "{{ $.Values.tppSupportsTestResultV2 }}"
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"

@@ -179,6 +179,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             }
         }
 
+        public Task<GetHistoricTestResultsResult> GetHistoricTestResults(GpLinkedAccountModel gpLinkedAccountModel, int year)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<GetDetailedTestResult> GetDetailedTestResult(GpLinkedAccountModel gpLinkedAccountModel, string testResultId)
         {
             throw new NotImplementedException();

@@ -56,6 +56,7 @@ export const CONSULTATIONS_PATH = 'health-records/gp-medical-record/consultation
 export const CONSULTATIONS_AND_EVENTS_PATH = 'health-records/gp-medical-record/consultations';
 export const EVENTS_PATH = 'health-records/gp-medical-record/events';
 export const TESTRESULTS_PATH = 'health-records/gp-medical-record/test-results';
+export const TESTRESULTS_V2_PATH = 'health-records/gp-medical-record/test-results-v2';
 export const TESTRESULTSDETAIL_PATH = 'health-records/gp-medical-record/test-results-detail';
 export const TESTRESULTID_PATH = 'health-records/gp-medical-record/testresultdetail/:testResultId';
 export const IMMUNISATIONS_PATH = 'health-records/gp-medical-record/immunisations';
@@ -188,6 +189,7 @@ export default {
   CONSULTATIONS_AND_EVENTS_PATH,
   EVENTS_PATH,
   TESTRESULTS_PATH,
+  TESTRESULTS_V2_PATH,
   TESTRESULTSDETAIL_PATH,
   TESTRESULTID_PATH,
   IMMUNISATIONS_PATH,

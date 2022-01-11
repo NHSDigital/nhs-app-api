@@ -31,6 +31,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
         private readonly ITppClientRequest<(TppRequestParameters tppRequestParameters, string startDate, string endDate), TestResultsViewReply> _testResultsView;
         private readonly ITppClientRequest<(TppRequestParameters tppRequestParameters, string documentIdentifier), RequestBinaryDataReply> _requestBinaryData;
         private readonly ITppClientRequest<(TppRequestParameters tppRequestParameters, string testResultId), TestResultsViewReply> _testResultsViewDetailed;
+        private readonly TppConfigurationSettings _settings;
 
         public TppPatientRecordService(IGetPatientDcrEventsTaskChecker patientDcrEventsChecker,
             IGetPatientOverviewTaskChecker patientOverviewTaskChecker,
@@ -43,7 +44,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             ITppClientRequest<(TppRequestParameters tppRequestParameters, string documentIdentifier), RequestBinaryDataReply> requestBinaryData,
             ITppClientRequest<(TppRequestParameters tppRequestParameters, string testResultId), TestResultsViewReply> testResultsViewDetailed,
             IGetPatientDocumentsFromDcrEventsTaskChecker patientDocumentsFromDcrEventsTaskChecker,
-            ILogger<TppPatientRecordService> logger, ITppMyRecordMapper tppMyRecordMapper)
+            ILogger<TppPatientRecordService> logger, ITppMyRecordMapper tppMyRecordMapper,
+            TppConfigurationSettings settings)
         {
             _patientDcrEventsChecker = patientDcrEventsChecker;
             _patientOverviewTaskChecker = patientOverviewTaskChecker;
@@ -58,6 +60,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             _requestBinaryData = requestBinaryData;
             _testResultsViewDetailed = testResultsViewDetailed;
             _logger = logger;
+            _settings = settings;
         }
 
         public async Task<GetMyRecordResult> GetMyRecord(GpLinkedAccountModel gpLinkedAccountModel)
@@ -178,6 +181,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             }
         }
 
+        public async Task<GetHistoricTestResultsResult> GetHistoricTestResults(GpLinkedAccountModel gpLinkedAccountModel, int year)
+        {
+            var tppTestResultDates = GetCalendarYearOfTestResults(year);
+            var tppRequestParameters = gpLinkedAccountModel.BuildTppRequestParameters(_logger);
+
+            var testResults = await CombineTestResults(tppTestResultDates, tppRequestParameters);
+
+            return new GetHistoricTestResultsResult.Success(testResults);
+        }
+
         public async Task<GetDetailedTestResult> GetDetailedTestResult(GpLinkedAccountModel gpLinkedAccountModel, string testResultId)
         {
             _logger.LogEnter();
@@ -211,11 +224,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             }
         }
 
-        private async Task<TestResults> GetLast180DaysTestResults(TppRequestParameters tppRequestParameters)
+        private async Task<TestResults> GetTestResults(TppRequestParameters tppRequestParameters)
         {
             _logger.LogEnter();
 
-            var tppTestResultDates = GetTestResultDateParams();
+            var tppTestResultDates =
+                _settings.SupportsTestResultsV2 ? GetTestResultsForCurrentYear() : GetLast180DaysTestResults();
+
+            return await CombineTestResults(tppTestResultDates, tppRequestParameters);
+        }
+
+        private async Task<TestResults> CombineTestResults(List<TppTestResultDates> tppTestResultDates, TppRequestParameters tppRequestParameters)
+        {
             var combinedTestResults = new List<TestResultItem>();
 
             _logger.LogDebug("Grouping test results by date");
@@ -243,7 +263,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             return new TestResults { Data = combinedTestResults };
         }
 
-        private static List<TppTestResultDates> GetTestResultDateParams()
+        private static List<TppTestResultDates> GetLast180DaysTestResults()
         {
             var today = DateTime.Now.Date;
 
@@ -265,6 +285,44 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                     EndDate = today.AddHours(23).AddMinutes(59).AddSeconds(59),
                 }
             };
+        }
+
+        private static List<TppTestResultDates> GetTestResultsForCurrentYear()
+        {
+            return GetTestResultsYear(DateTime.Now.Date);
+        }
+
+        private static List<TppTestResultDates> GetCalendarYearOfTestResults(int year)
+        {
+            return GetTestResultsYear(new DateTime(year, 12, 31, 23, 59, 59));
+        }
+
+        private static List<TppTestResultDates> GetTestResultsYear(DateTime endDate)
+        {
+            var startDate = new DateTime(endDate.Year, 1, 1, 0, 0, 0);
+            var daysLeft = (endDate - startDate).Days;
+
+            var listOfDates = new List<TppTestResultDates>();
+            while (daysLeft >= 60)
+            {
+                listOfDates.Add(new TppTestResultDates
+                {
+                    StartDate = startDate,
+                    EndDate = startDate.AddDays(59).AddHours(23).AddMinutes(59).AddSeconds(59)
+                });
+
+                startDate = startDate.AddDays(60);
+                daysLeft  = (endDate - startDate).Days;
+            }
+
+            // leftover days
+            listOfDates.Add(new TppTestResultDates
+            {
+                StartDate = startDate,
+                EndDate = endDate
+            });
+
+            return listOfDates;
         }
 
         private async Task<TppDcrItems> RetrievePatientRecordDcrItems(TppRequestParameters tppRequestParameters)
@@ -307,8 +365,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             try
             {
                 _logger.LogInformation("Retrieving Test Results.");
-
-                return await GetLast180DaysTestResults(tppRequestParameters);
+                return await GetTestResults(tppRequestParameters);
             }
             catch (Exception e)
             {

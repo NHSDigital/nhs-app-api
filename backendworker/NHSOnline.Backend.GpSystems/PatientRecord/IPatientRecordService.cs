@@ -12,5 +12,6 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord
             string documentIdentifier, string documentType, string documentName);
         Task<GetPatientDocumentDownloadResult> GetPatientDocumentForDownload(GpLinkedAccountModel gpLinkedAccountModel,
             string documentIdentifier, string documentType, string documentName);
+        Task<GetHistoricTestResultsResult> GetHistoricTestResults(GpLinkedAccountModel gpLinkedAccountModel, int year);
     }
 }

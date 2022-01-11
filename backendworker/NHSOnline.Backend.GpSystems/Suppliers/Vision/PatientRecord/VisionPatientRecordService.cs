@@ -130,5 +130,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
         {
             throw new NotImplementedException();
         }
+
+        public Task<GetHistoricTestResultsResult> GetHistoricTestResults(GpLinkedAccountModel gpLinkedAccountModel, int year)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

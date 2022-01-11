@@ -1,6 +1,6 @@
 <template>
   <div>
-    <menu-item id="test-results"
+    <menu-item v-if="!tppSupportsTestResultsV2" id="test-results"
                data-purpose="test-results"
                header-tag="h2"
                :href="testResultsPath"
@@ -11,6 +11,15 @@
                :click-func="goToUrl"
                :click-param="testResultsPath"
                :count="record.testResults.data.length"/>
+    <menu-item v-else id="test-results"
+               data-purpose="test-results"
+               header-tag="h2"
+               :href="testResultsV2Path"
+               :text="$t('myRecord.detailedCodedRecord.testResults')"
+               :aria-label="
+                 getAriaLabel($t('myRecord.detailedCodedRecord.testResults'))"
+               :click-func="goToUrl"
+               :click-param="testResultsV2Path"/>
 
     <menu-item id="events"
                data-purpose="events"
@@ -45,6 +54,7 @@ import MenuItem from '@/components/MenuItem';
 import SjrIf from '@/components/SjrIf';
 import {
   TESTRESULTS_PATH,
+  TESTRESULTS_V2_PATH,
   EVENTS_PATH,
   DOCUMENTS_PATH,
 } from '@/router/paths';
@@ -59,8 +69,10 @@ export default {
     return {
       record: this.$store.state.myRecord.record,
       testResultsPath: TESTRESULTS_PATH,
+      testResultsV2Path: TESTRESULTS_V2_PATH,
       eventsPath: EVENTS_PATH,
       documentsPath: DOCUMENTS_PATH,
+      tppSupportsTestResultsV2: this.$store.$env.TPP_SUPPORTS_TEST_RESULTS_V2,
     };
   },
   methods: {

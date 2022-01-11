@@ -47,6 +47,8 @@ namespace NHSOnline.Backend.Auditing
         public const string GetOrganDonationReferenceDataAuditTypeResponse = "OrganDonation_ReferenceData_Response";
         public const string GetTestResultAuditTypeRequest = "TestResult_Get_Request";
         public const string GetTestResultAuditTypeResponse = "TestResult_Get_Response";
+        public const string GetHistoricTestResultsAuditTypeRequest = "Historic_TestResult_Get_Request";
+        public const string GetHistoricTestResultsAuditTypeResponse = "Historic_TestResult_Get_Response";
         public const string ViewDocumentAuditTypeRequest = "Document_View_Request";
         public const string ViewDocumentAuditTypeResponse = "Document_View_Response";
         public const string DownloadDocumentAuditTypeRequest = "Document_Download_Request";

@@ -75,6 +75,7 @@ services:
       - ./docker/gp_session_connectivity.env
       - ./docker/health_checks_enabled.env
       - ./docker/organ_donation_desktop_enabled.env
+      - ./docker/tpp_test_results.env
 
   pfs.local.bitraft.io:
     image: ${PFSAPI_DOCKER_REGISTRY:-local}/nhsonline-backendpfsapi:${PFSAPI_DOCKER_TAG:-latest}
@@ -138,6 +139,7 @@ services:
       - ./docker/knownservices.env
       - ./docker/knownservicesV3.env
       - ./docker/health_checks_enabled.env
+      - ./docker/tpp_test_results.env
     depends_on:
       - servicejourneyrulesapi.local.bitraft.io
     secrets:

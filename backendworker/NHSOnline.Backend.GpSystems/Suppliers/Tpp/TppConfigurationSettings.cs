@@ -20,6 +20,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         public int? PrescriptionsMaxCoursesSoftLimit { get; set; }
         public int? CoursesMaxCoursesLimit { get; set; }
         public bool SupportsLinkedAccounts { get; set; }
+        public bool SupportsTestResultsV2 { get; }
 
         public TppConfigurationSettings() {}
 
@@ -34,7 +35,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             string certificatePassphrase,
             int? prescriptionsMaxCoursesSoftLimit,
             int? coursesMaxCoursesLimit,
-            string supportsLinkedAccounts)
+            string supportsLinkedAccounts,
+            string supportsTestResultsV2)
         {
             ApiUrl = baseUrl;
             ApiVersion = apiVersion;
@@ -48,6 +50,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             CoursesMaxCoursesLimit = coursesMaxCoursesLimit;
 
             SupportsLinkedAccounts = string.Equals("true", supportsLinkedAccounts, StringComparison.Ordinal);
+            SupportsTestResultsV2 = string.Equals("true", supportsTestResultsV2, StringComparison.Ordinal);
         }
 
         public void Validate()
@@ -105,6 +108,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             var certificatePath = configuration.GetOrWarn("TPP_CERT_PATH", logger);
             var certificatePassphrase = configuration.GetOrWarn("TPP_CERT_PASSPHRASE", logger);
             var supportsLinkedAccounts = configuration.GetOrWarn("TPP_SUPPORTS_LINKED_ACCOUNTS", logger);
+            var supportsTestResultsV2 = configuration.GetOrWarn("TPP_SUPPORTS_TEST_RESULTS_V2", logger);
 
             var prescriptionsMaxCoursesSoftLimit = configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", logger);
             var coursesMaxCoursesLimit = configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", logger);
@@ -120,7 +124,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
                 certificatePassphrase,
                 prescriptionsMaxCoursesSoftLimit,
                 coursesMaxCoursesLimit,
-                supportsLinkedAccounts);
+                supportsLinkedAccounts,
+                supportsTestResultsV2);
 
             config.Validate();
 

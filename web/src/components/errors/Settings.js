@@ -20,6 +20,7 @@ import {
   PRESCRIPTION_REPEAT_COURSES_PATH,
   TESTRESULTID_PATH,
   TESTRESULTS_PATH,
+  TESTRESULTS_V2_PATH,
   TESTRESULTSDETAIL_PATH,
   APPOINTMENT_ADMIN_HELP_PATH,
   GP_ADVICE_PATH,
@@ -239,6 +240,12 @@ export default {
       route: TESTRESULTS_PATH,
       redirectUrl: {
         default: TESTRESULTS_PATH,
+      },
+    },
+    {
+      route: TESTRESULTS_V2_PATH,
+      redirectUrl: {
+        default: TESTRESULTS_V2_PATH,
       },
     },
     {

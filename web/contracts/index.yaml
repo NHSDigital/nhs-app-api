@@ -2800,6 +2800,110 @@
                     serviceDeskReference: 
                       type: "string"
                       description: "Six character service desk reference code."
+    /v1/patient/historic-test-results/{year}: 
+      get: 
+        tags: 
+          - "test result"
+        parameters: 
+          - 
+            in: "path"
+            name: "year"
+            required: true
+            description: "The year to return test results to the client"
+            schema: 
+              type: "string"
+        responses: 
+          200: 
+            description: "Returns test results for selected year"
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  properties: 
+                    hasAccess: 
+                      type: "boolean"
+                      description: "Does the patient have access to this data."
+                    hasErrored: 
+                      type: "boolean"
+                      description: "Some error occurred when attempting to retrieve test result data."
+                    rawHtml: 
+                      type: "string"
+                      description: "When working with Vision, raw HTML is returned instead of XML data"
+                    data: 
+                      type: "object"
+                      properties: 
+                        testResults: 
+                          type: "array"
+                          description: "Array of test results"
+                          items: 
+                            type: "object"
+                            properties: 
+                              id: 
+                                type: "string"
+                                description: "Id of the test result"
+                              date: 
+                                type: "object"
+                                properties: 
+                                  value: 
+                                    type: "string"
+                                    format: "date-time"
+                                    description: "date/time value."
+                                  datePart: 
+                                    type: "string"
+                                    description: "date part to display."
+                                    enum: 
+                                      - "Unknown"
+                                      - "Year"
+                                      - "YearMonth"
+                                      - "YearMonthDay"
+                                      - "YearMonthDayTime"
+                              description: 
+                                type: "string"
+                                description: "The name of the test result."
+                              associatedTexts: 
+                                type: "array"
+                                description: "Array of associated texts."
+                                items: 
+                                  type: "string"
+                              testResultChildItems: 
+                                type: "array"
+                                description: "Array of test result child line items."
+                                items: 
+                                  type: "object"
+                                  properties: 
+                                    description: 
+                                      type: "string"
+                                      description: "The name of the test result."
+                                    associatedTexts: 
+                                      type: "array"
+                                      description: "Array of associated texts."
+                                      items: 
+                                        type: "string"
+          400: 
+            description: "Bad request. A querystring parameter is not in the expected format."
+          401: 
+            description: "User session has expired."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "Bad response received from upstream system."
+          504: 
+            description: "Timeout when calling upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
     /v1/patient/messages: 
       get: 
         tags: 

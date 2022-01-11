@@ -26,6 +26,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         internal const string CertificatePath = "CertificatePath";
         internal const string CertificatePassphrase = "CerticiatePassphrase";
         internal const string SupportsLinkedAccounts = "true";
+        internal const string SupportsTestResultsV2 = "true";
 
         internal const string ResponseSuidHeader = "suid";
         internal const string RequestTypeHeader = "type";
@@ -64,7 +65,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             services.AddSingleton(MockLogger.Object);
 
             var tppConfig = new TppConfigurationSettings(ApiUrl, ApiVersion, ApplicationName, ApplicationVersion, ApplicationProviderId, ApplicationDeviceType,
-                CertificatePassphrase, CertificatePath, PrescriptionsMaxCoursesSoftLimit, CoursesMaxCoursesLimit, SupportsLinkedAccounts);
+                CertificatePassphrase, CertificatePath, PrescriptionsMaxCoursesSoftLimit, CoursesMaxCoursesLimit, SupportsLinkedAccounts, SupportsTestResultsV2);
             services.AddSingleton(tppConfig);
 
             services.AddSingleton(MockHttpHandler);
