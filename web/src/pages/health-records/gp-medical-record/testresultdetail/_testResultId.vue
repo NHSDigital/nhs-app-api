@@ -27,7 +27,6 @@ import Card from '@/components/widgets/card/Card';
 import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
-import { TESTRESULTS_PATH, TESTRESULTS_V2_PATH } from '@/router/paths';
 
 import { redirectTo } from '@/lib/utils';
 
@@ -46,10 +45,7 @@ export default {
   },
   computed: {
     getBackPath() {
-      if (this.tppSupportsTestResultsV2) {
-        return TESTRESULTS_V2_PATH;
-      }
-      return TESTRESULTS_PATH;
+      return this.$router.previousPaths.at(-1);
     },
   },
   async mounted() {

@@ -204,6 +204,8 @@ components:
           $ref: "#/components/schemas/Immunisations"
         testResults:
           $ref: "#/components/schemas/TestResults"
+        historicTestResults:
+          $ref: "#/components/schemas/TestResults"
         diagnosis:
           $ref: "#/components/schemas/Diagnosis"
         problems:

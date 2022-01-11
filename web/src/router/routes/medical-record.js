@@ -19,6 +19,8 @@ import TestResultIdPage from '@/pages/health-records/gp-medical-record/testresul
 import TestResultsDetailPage from '@/pages/health-records/gp-medical-record/test-results-detail';
 import TestResultsPage from '@/pages/health-records/gp-medical-record/test-results';
 import TestResultsV2Page from '@/pages/health-records/gp-medical-record/test-results-v2';
+import TestResultsForYearPage from '@/pages/health-records/gp-medical-record/test-results-for-year';
+import ChooseTestResultYearPage from '@/pages/health-records/gp-medical-record/choose-test-result-year';
 import GpAtHandPage from '@/pages/health-records/gp-at-hand';
 import UpliftGpMedicalRecordPage from '@/pages/uplift/gp-medical-record';
 
@@ -46,6 +48,8 @@ import {
   TESTRESULTID_PATH,
   TESTRESULTS_PATH,
   TESTRESULTS_V2_PATH,
+  CHOOSE_TEST_RESULT_YEAR_PATH,
+  TEST_RESULTS_FOR_YEAR_PATH,
   TESTRESULTSDETAIL_PATH,
   UPLIFT_GP_MEDICAL_RECORD_PATH,
 } from '@/router/paths';
@@ -71,6 +75,8 @@ import {
   TESTRESULTID_NAME,
   TESTRESULTS_NAME,
   TESTRESULTS_V2_NAME,
+  CHOOSE_TEST_RESULT_YEAR_NAME,
+  TEST_RESULTS_FOR_YEAR_NAME,
   TESTRESULTSDETAIL_NAME,
   UPLIFT_GP_MEDICAL_RECORD_NAME,
   GP_HEALTH_RECORD_JOURNEY_NAME,
@@ -260,6 +266,42 @@ export const TESTRESULTSV2 = {
   component: TestResultsV2Page,
   meta: {
     headerKey: 'navigation.pages.headers.testResults',
+    titleKey: 'navigation.pages.titles.testResults',
+    proofLevel: proofLevel.P9,
+    upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
+    crumb: breadcrumbs.TEST_RESULTS_CRUMB,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
+    nativeNavigation: YOUR_RECORD_MENU_ITEM,
+    middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
+  },
+};
+
+export const CHOOSE_TEST_RESULT_YEAR = {
+  path: CHOOSE_TEST_RESULT_YEAR_PATH,
+  name: CHOOSE_TEST_RESULT_YEAR_NAME,
+  component: ChooseTestResultYearPage,
+  meta: {
+    titleKey: 'navigation.pages.titles.testResults',
+    proofLevel: proofLevel.P9,
+    upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
+    crumb: breadcrumbs.TEST_RESULTS_CRUMB,
+    helpPath: GP_MEDICAL_RECORD_HELP_PATH,
+    nativeNavigation: YOUR_RECORD_MENU_ITEM,
+    middleware: [gpMedicalRecordAcceptance],
+    gpSessionOnDemand: {
+      journey: GP_HEALTH_RECORD_JOURNEY_NAME,
+    },
+  },
+};
+
+export const TEST_RESULTS_FOR_YEAR = {
+  path: TEST_RESULTS_FOR_YEAR_PATH,
+  name: TEST_RESULTS_FOR_YEAR_NAME,
+  component: TestResultsForYearPage,
+  meta: {
     titleKey: 'navigation.pages.titles.testResults',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
@@ -533,6 +575,8 @@ export default [
   DISCONTINUED_MEDICINES,
   TESTRESULTS,
   TESTRESULTSV2,
+  CHOOSE_TEST_RESULT_YEAR,
+  TEST_RESULTS_FOR_YEAR,
   TESTRESULTSDETAIL,
   TESTRESULTID,
   CONSULTATIONS,

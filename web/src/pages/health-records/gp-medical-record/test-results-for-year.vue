@@ -4,41 +4,36 @@
                                       'pull-content',
                                       !$store.state.device.isNativeApp && $style.desktopWeb]">
       <test-results :results="results" />
-
-      <desktopGenericBackLink
-        v-if="!$store.state.device.isNativeApp"
-        id="desktopBackLink"
-        :path="backPath"
-        :button-text="'generic.back'"
-        @clickAndPrevent="backButtonClicked"/>
     </div>
   </div>
 </template>
 
 <script>
-import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import TestResults from '@/components/gp-medical-record/SharedComponents/TestResults';
 import { redirectTo } from '@/lib/utils';
 import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
+import { UPDATE_HEADER, EventBus } from '@/services/event-bus';
 
 export default {
   components: {
-    DesktopGenericBackLink,
     TestResults,
   },
-  mixins: [ReloadRecordMixin],
   data() {
     return {
       backPath: GP_MEDICAL_RECORD_PATH,
       results: null,
+      year: this.$router.currentRoute.query.year,
     };
   },
   async mounted() {
-    if (!this.$store.state.myRecord.record.testResults) {
-      await this.$store.dispatch('myRecord/load');
+    if (!this.$store.state.myRecord.record.historicTestResults || this.$store.state.myRecord.record.historicTestResults[`_${this.year}`] === undefined) {
+      await this.$store.dispatch('myRecord/loadHistoricTestResult', this.year);
     }
-    this.results = this.$store.state.myRecord.record.testResults;
+    this.results = this.$store.state.myRecord.record.historicTestResults[`_${this.year}`];
+
+    const headerText = this.$t('navigation.pages.headers.testResultsForYear', { year: this.year });
+
+    EventBus.$emit(UPDATE_HEADER, headerText, true);
   },
   methods: {
     backButtonClicked() {

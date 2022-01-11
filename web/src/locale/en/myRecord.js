@@ -6,8 +6,8 @@ export default {
   dateOfBirth: 'Date of birth',
   name: 'Name',
   nhsNumber: 'NHS number',
-  noInformationAvailable: 'No information available',
-  noFurtherInformationAvailable: 'No further information available',
+  noInformationAvailable: 'No information available.',
+  noFurtherInformationAvailable: 'No further information available.',
   records: 'records',
   thereIsNoDetailToDisplayForTestResult: 'There is no detail to display for this test result.',
   thisInfoIsNotAvailabeInTheApp: 'Sorry, this information isn\'t available through the NHS App. To access it, contact your GP surgery.',
@@ -27,6 +27,7 @@ export default {
     procedures: 'Procedures',
     testResults: 'Test results',
     testResultsPastSixMonths: 'Test results (past 6 months)',
+    viewAllTestResults: 'View all test results',
   },
   gpMedicalRecord: {
     acuteMedicines: 'Acute (short-term) medicines',

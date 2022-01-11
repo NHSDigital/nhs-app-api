@@ -8,9 +8,6 @@ users:
 wellKnownAndroidPackageName: com.nhs.online.nhsonline.scratch4
 wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.scratch4
 
-# tpp test results version 2
-tppSupportsTestResultV2: true
-
 secrets:
   notificationHubs:
     - name: "notificationHubSharedAccessKey-nonlive-scratch4"

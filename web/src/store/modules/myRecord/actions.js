@@ -4,6 +4,7 @@ import {
   CLEAR,
   LOADED,
   LOADED_TEST_RESULTS,
+  LOADED_HISTORIC_TEST_RESULTS,
   LOADED_DIAGNOSIS,
   LOADED_EXAMINATIONS,
   LOADED_PROCEDURES,
@@ -90,6 +91,11 @@ export default {
     const { response: data }
       = await this.app.$http.getV1PatientTestResult({ testResultId }) || {};
     commit(LOADED_DETAILED_TEST_RESULT, { data });
+  },
+  async loadHistoricTestResult({ commit }, year) {
+    const { response: record }
+      = await this.app.$http.getV1PatientHistoricTestResultsByYear({ year }) || {};
+    commit(LOADED_HISTORIC_TEST_RESULTS, { record, year });
   },
   reload({ commit }, value) {
     commit(SET_RELOAD, value);

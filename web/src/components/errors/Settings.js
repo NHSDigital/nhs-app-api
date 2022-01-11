@@ -21,6 +21,8 @@ import {
   TESTRESULTID_PATH,
   TESTRESULTS_PATH,
   TESTRESULTS_V2_PATH,
+  CHOOSE_TEST_RESULT_YEAR_PATH,
+  TEST_RESULTS_FOR_YEAR_PATH,
   TESTRESULTSDETAIL_PATH,
   APPOINTMENT_ADMIN_HELP_PATH,
   GP_ADVICE_PATH,
@@ -246,6 +248,18 @@ export default {
       route: TESTRESULTS_V2_PATH,
       redirectUrl: {
         default: TESTRESULTS_V2_PATH,
+      },
+    },
+    {
+      route: CHOOSE_TEST_RESULT_YEAR_PATH,
+      redirectUrl: {
+        default: CHOOSE_TEST_RESULT_YEAR_PATH,
+      },
+    },
+    {
+      route: TEST_RESULTS_FOR_YEAR_PATH,
+      redirectUrl: {
+        default: TEST_RESULTS_FOR_YEAR_PATH,
       },
     },
     {

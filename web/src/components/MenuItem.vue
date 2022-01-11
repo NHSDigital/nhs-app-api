@@ -122,7 +122,6 @@ export default {
       }
       return this.showCount ? `${`${this.text} (${this.count} `}${this.$t('myRecord.records')})` : this.text;
     },
-
   },
 };
 </script>

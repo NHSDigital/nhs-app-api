@@ -9,6 +9,7 @@
             Immunisations = new Immunisations();
             Problems = new Problems();
             TestResults = new TestResults();
+            HistoricTestResults = new TestResults();
             TppDcrEvents = new TppDcrEvents();
             Consultations = new Consultations();
             Diagnosis = new Diagnosis();
@@ -24,6 +25,7 @@
         public Medications Medications { get; set; }
         public Immunisations Immunisations { get; set; }
         public TestResults TestResults { get; set; }
+        public TestResults HistoricTestResults { get; set; }
         public Problems Problems { get; set; }
         public TppDcrEvents TppDcrEvents { get; set; }
         public Consultations Consultations { get; set; }

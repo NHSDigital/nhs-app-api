@@ -7,6 +7,7 @@ import {
   CLEAR,
   LOADED,
   LOADED_TEST_RESULTS,
+  LOADED_HISTORIC_TEST_RESULTS,
   LOADED_DIAGNOSIS,
   LOADED_EXAMINATIONS,
   LOADED_PROCEDURES,
@@ -23,7 +24,9 @@ const clearState = (state) => {
   state.hasLoaded = false;
   state.reload = true;
   state.isPatientDetailsCollapsed = true;
-  state.record = {};
+  state.record = {
+    historicTestResults: {},
+  };
   state.patientDetails = {};
   state.detailedTestResult = {
     data: '',
@@ -128,6 +131,13 @@ export default {
   },
   [LOADED_TEST_RESULTS](state, { record }) {
     state.testResults = record;
+  },
+  [LOADED_HISTORIC_TEST_RESULTS](state, { record, year }) {
+    if (state.record.historicTestResults === undefined) {
+      state.record.historicTestResults = {};
+    }
+    const newSection = `_${year}`;
+    state.record.historicTestResults[newSection] = record;
   },
   [LOADED_DIAGNOSIS](state, { record }) {
     state.diagnosis = record;
