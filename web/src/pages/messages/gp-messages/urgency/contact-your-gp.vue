@@ -12,7 +12,7 @@
       </div>
       <care-card id="phoneYourGpCareCard"
                  class="nhsuk-u-margin-top-7 nhsuk-u-margin-bottom-7"
-                 urgency="urgent"
+                 urgency="immediate"
                  :heading="$t('messages.call999NowIfYouHave')">
         <ul>
           <li v-for="(symptom, index) in $t('messages.call999NowIfYouHaveSymptoms')"
