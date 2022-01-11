@@ -40,6 +40,7 @@ export default {
     prescriptions: 'Prescriptions',
     prescriptionType: 'Prescription type',
     yourHealth: 'Your health',
+    testResults: 'Test results',
     yourHealthServiceMessages: 'Your health service messages',
   },
   header: {

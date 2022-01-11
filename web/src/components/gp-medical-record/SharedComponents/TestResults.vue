@@ -102,6 +102,10 @@ export default {
       type: Object,
       default: null,
     },
+    from: {
+      type: String,
+      default: null,
+    },
     showGlossary: {
       type: Boolean,
       default: true,
@@ -136,7 +140,7 @@ export default {
   },
   methods: {
     activateTestResult(testResultId) {
-      redirectTo(this, this.getTestResultPath(testResultId));
+      redirectTo(this, `${this.getTestResultPath(testResultId)}${(this.from ? `?from=${this.from}` : '')}`);
     },
     getEffectiveDate(effectiveDate, defaultValue) {
       return effectiveDate && effectiveDate.value
