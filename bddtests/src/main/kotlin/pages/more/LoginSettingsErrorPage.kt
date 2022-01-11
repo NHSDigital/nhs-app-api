@@ -37,10 +37,10 @@ class LoginSettingsErrorPage : HybridPageObject() {
                         String.format(cannotFindTitleLocator, "Face ID"),
                         "Check that you have added a face scan in your device's Face ID settings.")
             }
-            "Fingerprint" -> {
+            "fingerPrintFaceOrIris" -> {
                 assertDisplayWithInfoText(text,
-                        String.format(cannotFindTitleLocator, "fingerprint"),
-                        "Check that you have added a fingerprint in your device's security settings.")
+                        String.format(cannotFindTitleLocator, "fingerprint, face or iris"),
+                        "Check that you have added a fingerprint, face or iris in your device's security settings.")
             }
         }
     }
@@ -49,7 +49,8 @@ class LoginSettingsErrorPage : HybridPageObject() {
         when (biometricType) {
             "Touch ID" -> assertDisplayWithNoInfoText(String.format(cannotChangeTitleLocator, "Touch ID"))
             "Face ID" -> assertDisplayWithNoInfoText(String.format(cannotChangeTitleLocator, "Face ID"))
-            "Fingerprint" -> assertDisplayWithNoInfoText(String.format(cannotChangeTitleLocator, "fingerprint"))
+            "Fingerprint, face or iris" -> assertDisplayWithNoInfoText(String.format(cannotChangeTitleLocator, 
+            "fingerprint, face or iris"))
         }
 
         val firstParagraphLocator =
