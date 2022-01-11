@@ -294,6 +294,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 
         private static List<TppTestResultDates> GetCalendarYearOfTestResults(int year)
         {
+            if (year == DateTime.Today.Year)
+            {
+                return GetTestResultsForCurrentYear();
+            }
             return GetTestResultsYear(new DateTime(year, 12, 31, 23, 59, 59));
         }
 

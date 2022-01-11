@@ -426,3 +426,15 @@ export const getUserAgentNativeVersionNumber = () => {
   }
   return undefined;
 };
+
+export const getYearOfBirth = (store) => {
+  const isProxying = store.getters['session/isProxying'];
+  if (isProxying) {
+    const age = store.state.linkedAccounts.actingAsUser.ageYears;
+    const currentYear = new Date().getFullYear();
+    const yearOfBirth = currentYear - age;
+    return yearOfBirth;
+  }
+  const yearOfBirth = store.state.session.dateOfBirth;
+  return yearOfBirth.substring(0, 4);
+};

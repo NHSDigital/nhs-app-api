@@ -13,6 +13,17 @@
                      href="#"
                      data-sid="view-older-results"/>
         </menu-item-list>
+        <pagination v-if="!showPastYearRange"
+                    :previous-link="futureYearRangePath"
+                    :previous-title="futureYearRange"/>
+        <pagination v-else-if="!showFutureYearRange"
+                    :next-link="pastYearRangePath"
+                    :next-title="pastYearRange" />
+        <pagination v-else
+                    :previous-link="futureYearRangePath"
+                    :previous-title="futureYearRange"
+                    :next-link="pastYearRangePath"
+                    :next-title="pastYearRange" />
       </div>
     </div>
   </div>
@@ -22,57 +33,114 @@
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
-import { GP_MEDICAL_RECORD_PATH, TEST_RESULTS_FOR_YEAR_PATH } from '@/router/paths';
+import Pagination from '@/components/Pagination';
+import { GP_MEDICAL_RECORD_PATH, TEST_RESULTS_FOR_YEAR_PATH, CHOOSE_TEST_RESULT_YEAR_PATH } from '@/router/paths';
 import { UPDATE_HEADER, EventBus } from '@/services/event-bus';
-import { redirectTo } from '@/lib/utils';
+import { redirectTo, getYearOfBirth } from '@/lib/utils';
 
 export default {
   components: {
     MenuItem,
     MenuItemList,
+    Pagination,
   },
   mixins: [ReloadRecordMixin],
   data() {
     return {
       backPath: GP_MEDICAL_RECORD_PATH,
-      results: null,
-      startYear: this.getStartYear(),
       pageYearCount: 5,
+      yearOfBirth: getYearOfBirth(this.$store),
+      previousYear: new Date().getFullYear() - 1,
     };
   },
   computed: {
-    showError() {
-      return this.results && (
-        this.results.hasErrored ||
-        this.results.data.length === 0 ||
-        !this.results.hasAccess);
+    page() {
+      const pageNumber = this.$route.query.page || '1';
+      return Number(pageNumber);
+    },
+    pastYearRangePath() {
+      return `${CHOOSE_TEST_RESULT_YEAR_PATH}?page=${this.pastPageNumber}`;
+    },
+    futureYearRangePath() {
+      return `${CHOOSE_TEST_RESULT_YEAR_PATH}?page=${this.futurePageNumber}`;
+    },
+    pastPageNumber() {
+      const pageNumber = this.page;
+      return `${pageNumber + 1}`;
+    },
+    futurePageNumber() {
+      const pageNumber = this.page;
+      return `${pageNumber - 1}`;
+    },
+    startYear() {
+      return this.previousYear - ((this.page - 1) * this.pageYearCount);
+    },
+    endYear() {
+      let endYear = this.startYear - (this.pageYearCount - 1);
+      if (endYear <= this.yearOfBirth) {
+        endYear = this.yearOfBirth;
+      }
+      return endYear;
     },
     historicYears() {
-      const previousYears = [];
-      for (let i = 0; i < this.pageYearCount; i += 1) {
-        previousYears[i] = this.startYear - i;
+      const years = [];
+      const yearsToShow = this.startYear - this.endYear;
+      for (let i = 0; i <= yearsToShow; i += 1) {
+        const year = this.startYear - i;
+        years.push(year);
       }
-      return previousYears;
+
+      return years;
+    },
+    pastYearRange() {
+      const yearArray = this.historicYears;
+      const nextStart = yearArray[yearArray.length - 1] - 1;
+      let nextEnd = nextStart - this.pageYearCount + 1;
+      if (nextEnd <= this.yearOfBirth) {
+        nextEnd = this.yearOfBirth;
+      }
+      return `${nextStart} to ${nextEnd}`;
+    },
+    futureYearRange() {
+      const yearArray = this.historicYears;
+      const nextEnd = yearArray[0] + 1;
+      const nextStart = nextEnd + this.pageYearCount - 1;
+      return `${nextStart} to ${nextEnd}`;
+    },
+    showPastYearRange() {
+      return !this.historicYears.includes(Number(this.yearOfBirth));
+    },
+    showFutureYearRange() {
+      return !this.historicYears.includes(this.previousYear);
+    },
+  },
+  watch: {
+    page() {
+      this.updateHeader();
     },
   },
   async mounted() {
-    const endYear = this.startYear - this.pageYearCount + 1;
-    if (!this.$store.state.myRecord.record.testResults) {
-      await this.$store.dispatch('myRecord/load');
+    if (this.isInvalidPage()) {
+      redirectTo(this, `${CHOOSE_TEST_RESULT_YEAR_PATH}?page=1`);
     }
-    this.results = this.$store.state.myRecord.record.testResults;
 
-    const headerText = this.$t('navigation.pages.headers.testResultsChooseYear',
-      { startYear: this.startYear, endYear });
-
-    EventBus.$emit(UPDATE_HEADER, headerText, true);
+    this.updateHeader();
   },
   methods: {
-    getStartYear() {
-      return new Date().getFullYear() - 1;
+    updateHeader() {
+      const headerText = this.$t('navigation.pages.headers.testResultsChooseYear',
+        { startYear: this.startYear, endYear: this.endYear });
+
+      EventBus.$emit(UPDATE_HEADER, headerText, true);
     },
     getTestResultsForYear(year) {
       redirectTo(this, `${TEST_RESULTS_FOR_YEAR_PATH}?year=${year}`);
+    },
+    isInvalidPage() {
+      const pageNumber = this.page;
+      const age = new Date().getFullYear() - this.yearOfBirth;
+      const maxPage = Math.trunc(age / this.pageYearCount) + 1;
+      return ((pageNumber < 1) || pageNumber > maxPage);
     },
   },
 };
