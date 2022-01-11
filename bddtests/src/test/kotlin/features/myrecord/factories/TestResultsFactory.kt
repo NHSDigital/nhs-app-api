@@ -10,7 +10,7 @@ abstract class TestResultsFactory {
 
     abstract fun disabled(patient: Patient)
     abstract fun enabledWithBlankRecord(patient: Patient)
-    abstract fun enabledWithRecords(patient: Patient)
+    abstract fun enabledWithRecords(patient: Patient, year: Int?, numberOfResults: Int?)
     abstract fun errorRetrieving(patient: Patient)
     abstract fun noAccess(patient: Patient)
     abstract fun getExpectedTestResults() : List<TestResultItem>

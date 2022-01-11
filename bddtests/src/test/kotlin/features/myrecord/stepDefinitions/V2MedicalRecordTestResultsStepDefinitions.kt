@@ -2,20 +2,37 @@ package features.myrecord.stepDefinitions
 
 import constants.Supplier
 import features.myrecord.factories.TestResultsFactory
+import features.sharedSteps.BrowserSteps
+import features.sharedSteps.PageUrl
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
+import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import pages.ErrorPage
+import pages.assertIsVisible
 import pages.gpMedicalRecord.TestResultsPage
+import pages.myrecord.MyRecordChooseTestResultYearPage
 import pages.myrecord.MyRecordTestResultDetailPage
+import pages.navigation.WebHeader
+import pages.withNormalisedText
 import utils.SerenityHelpers
+import java.time.OffsetDateTime
+import kotlin.math.truncate
+import constants.TppConstants
 
 open class V2MedicalRecordTestResultsStepDefinitions {
 
     private lateinit var testResultsPage: TestResultsPage
     private lateinit var myRecordDetailedTestResultPage: MyRecordTestResultDetailPage
     private lateinit var errorPage: ErrorPage
+    private lateinit var chooseTestResultPage: MyRecordChooseTestResultYearPage
+    private lateinit var webHeader: WebHeader
+
+    private val pageCount = TppConstants.PageCount
+
+    @Steps
+    lateinit var browser: BrowserSteps
 
     @When("I click a test result - Medical Record v2$")
     fun whenIClickATestResultV2() {
@@ -128,6 +145,110 @@ open class V2MedicalRecordTestResultsStepDefinitions {
                 .assertMessageText(message)
                 .assertPageHeader(pageHeader)
                 .assertNoRetryButton()
+    }
+
+    @Then("I see the previous 5 years")
+    fun thenISeeThePreviousFiveYears() {
+        chooseTestResultPage.assertInitialTitleVisible()
+        chooseTestResultPage.assertFirstMenuElement()
+        chooseTestResultPage.assertLastMenuElement()
+    }
+
+    @Then("I see further previous test results")
+    fun thenISeeFurtherPreviousFiveYears() {
+        chooseTestResultPage.assertNextTitleVisible()
+        chooseTestResultPage.assertNextFirstMenuElement()
+        chooseTestResultPage.assertNextLastMenuElement()
+    }
+
+    @When("^I retrieve the last choose test results page$")
+    fun iRetrieveTheLastChooseTestResultsPage() {
+        val currentYear = OffsetDateTime.now().year
+        val patientYearOfBirth = SerenityHelpers.getPatient().age.getYearOfBirth()
+
+        val age = currentYear - patientYearOfBirth.toDouble()
+        val lastPage = truncate(age / pageCount) + 1
+
+        val urlForPage = PageUrl.getRelativePagePath("choose test results") + "?page=$lastPage"
+        browser.browseTo(urlForPage)
+    }
+
+    @When("^I retrieve the last choose test results page for a linked account user$")
+    fun iRetrieveTheLastChooseTestResultsPageForALinkedAccountUser() {
+        val currentYear = OffsetDateTime.now().year
+        val patientLinkedAccountYearOfBirth =
+                SerenityHelpers.getPatient().linkedAccounts.toList()[0].age.getYearOfBirth()
+
+        val age = currentYear - patientLinkedAccountYearOfBirth.toDouble()
+        val lastPage = truncate(age / pageCount) + 1
+
+        val urlForPage = PageUrl.getRelativePagePath("choose test results") + "?page=$lastPage"
+        browser.browseTo(urlForPage)
+    }
+
+    @Then("^I see the specific test results page for '(.*)'$")
+    fun iSeeTheSpecificTestResultsPage(year: String) {
+        val title = "$year test results"
+        webHeader.getPageTitle().withNormalisedText(title).assertIsVisible()
+    }
+
+    @When("^I retrieve the last specific test results page$")
+    fun iRetrieveTheLastSpecificTestResultsPage() {
+        val patientYearOfBirth = SerenityHelpers.getPatient().age.getYearOfBirth()
+
+        val urlForPage = PageUrl.getRelativePagePath("test results for year") + "?year=$patientYearOfBirth"
+        browser.browseTo(urlForPage)
+    }
+
+    @When("^I retrieve the last specific test results page for a linked account user$")
+    fun iRetrieveTheLastSpecificTestResultsPageForALinkedAccountUser() {
+        val patientLinkedAccountYearOfBirth =
+                SerenityHelpers.getPatient().linkedAccounts.toList()[0].age.getYearOfBirth()
+
+
+        val urlForPage = PageUrl.getRelativePagePath("test results for year") + "?year=$patientLinkedAccountYearOfBirth"
+        browser.browseTo(urlForPage)
+    }
+
+    @When("^I click the first test result$")
+    fun iClickTheFirstTestResults() {
+        testResultsPage.clickTestResult()
+    }
+
+    @Then("^I click the previous years test results$")
+    fun iClickThePreviousYearsTestResults() {
+        val previousYear = OffsetDateTime.now().year - 1
+        chooseTestResultPage.getHeaderElement(previousYear).click()
+    }
+
+    @Then("^I cannot see the next pagination link$")
+    fun iCannotSeeTheNextPaginationLink() {
+        chooseTestResultPage.assertNextPaginationNotVisible()
+    }
+
+    @Then("^I can see the next pagination link$")
+    fun iCanSeeTheNextPaginationLink() {
+        chooseTestResultPage.assertNextPaginationVisible()
+    }
+
+    @When("^I click the next pagination link$")
+    fun iClickTheNextPaginationLink() {
+        chooseTestResultPage.clickNextPaginationLink()
+    }
+
+    @Then("^I cannot see the previous pagination link$")
+    fun iCannotSeeThePreviousPaginationLink() {
+        chooseTestResultPage.assertPreviousPaginationNotVisible()
+    }
+
+    @Then("^I can see the previous pagination link$")
+    fun iCanSeeThePreviousPaginationLink() {
+        chooseTestResultPage.assertPreviousPaginationVisible()
+    }
+
+    @When("^I click the previous pagination link$")
+    fun iClickThePreviousPaginationLink() {
+        chooseTestResultPage.clickPreviousPaginationLink()
     }
 
     companion object {

@@ -28,7 +28,7 @@ class TestResultsFactoryVision : TestResultsFactory() {
         }
     }
 
-    override fun enabledWithRecords(patient: Patient) {
+    override fun enabledWithRecords(patient: Patient, year: Int?, numberOfResults: Int?) {
         mocker.generatePatientDataResponse(
                 patient,
                 testResultsView,

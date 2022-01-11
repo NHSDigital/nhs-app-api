@@ -20,7 +20,7 @@ class TestResultsFactoryEmis : TestResultsFactory(){
         }
     }
 
-    override fun enabledWithRecords(patient: Patient) {
+    override fun enabledWithRecords(patient: Patient, year: Int?, numberOfResults: Int?) {
         mockingClient.forEmis.mock {
             myRecord.testResultsRequest(patient)
                     .respondWithSuccess(TestResultsData.getTestResultsForEmis(NUMBER_OF_TEST_RESULTS_EQUALS_SIX))

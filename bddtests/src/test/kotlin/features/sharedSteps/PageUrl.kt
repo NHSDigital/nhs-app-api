@@ -46,7 +46,9 @@ open class PageUrl {
                 "terms and conditions" to "/terms-and-conditions",
                 "wayfinder" to "/appointments/wayfinder-appointments",
                 "your gp appointments" to "/appointments/gp-appointments",
-                "your prescriptions" to "/prescriptions"
+                "your prescriptions" to "/prescriptions",
+                "choose test results" to "/health-records/gp-medical-record/choose-test-result-year",
+                "test results for year" to "/health-records/gp-medical-record/test-results-for-year"
             )
 
         fun getRelativePagePath(pageName: String): String {

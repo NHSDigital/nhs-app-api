@@ -133,6 +133,5 @@ export default {
   [GP_MEDICAL_RECORD_NAME]: {
     ignoreStore: false,
     defaultPath: INDEX_PATH,
-    healthRecordPath: HEALTH_RECORDS_PATH,
   },
 };

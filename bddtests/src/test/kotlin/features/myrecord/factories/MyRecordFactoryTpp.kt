@@ -82,7 +82,7 @@ class MyRecordFactoryTpp: MyRecordFactory() {
                     .respondWithSuccess(TppDcrData.getMultipleDcrEventsForTpp())
         }
 
-        testResultsFactory.enabledWithRecords(patient)
+        testResultsFactory.enabledWithRecords(patient, null, null)
     }
 
     override fun respondWithForbidden(patient: Patient) {

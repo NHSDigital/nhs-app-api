@@ -49,7 +49,7 @@ Feature: Combined Frontend - Medical Record v2
   Scenario Outline: A <GP System> user can view their med record with bad medicines and consultations data and OK test results data - Medical Record v2
     Given I am a <GP System> user setup to use medical record version 2
     And The GP practice responds with bad medications data
-    And the GP Practice has six test results
+    And the GP Practice has 6 test results
     And the GP practice returns bad consultations data
     And I am logged in
     And I retrieve the 'gp medical record' page directly

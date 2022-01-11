@@ -1,21 +1,23 @@
 package features.myrecord.factories
 
 import constants.ErrorResponseCodeTpp
+import constants.TppConstants
 import mocking.data.myrecord.TestResultsData
 import mocking.tpp.models.Error
 import models.Patient
 import worker.models.myrecord.TestResultItem
+import java.time.Duration
 import java.time.OffsetDateTime
+import java.time.ZoneOffset
+import kotlin.math.ceil
 
-
-private const val NUMBER_OF_TEST_RESULTS_EQUALS_ONE = 1
-private const val NUMBER_OF_TEST_RESULTS_EQUALS_TWO = 2
-private const val NUMBER_OF_TEST_RESULTS_EQUALS_THREE = 3
 private const val START_DATE_FOR_RANGE_ONE = 179L
 private const val END_DATE_FOR_RANGE_ONE = 120L
-private const val START_DATE_FOR_RANGE_TWO = 119L
-private const val END_DATE_FOR_RANGE_TWO = 60L
-private const val START_DATE_FOR_RANGE_THREE = 59L
+private const val MAX_MINUTE_SECONDS =  59
+private const val MAX_HOUR =  23
+private const val MAX_MONTH =  12
+private const val MAX_DAY_INT =  31
+private const val MAX_DAYS_IN_REQUEST =  60
 
 class TestResultsFactoryTpp : TestResultsFactory(){
     override fun respondWithACorruptedResponse(patient: Patient) {
@@ -31,9 +33,12 @@ class TestResultsFactoryTpp : TestResultsFactory(){
 
     override fun disabled(patient: Patient) {
         val today = OffsetDateTime.now()
-
-        val startDate = today.minusDays(START_DATE_FOR_RANGE_ONE)
-        val endDate = today.minusDays(END_DATE_FOR_RANGE_ONE)
+        val startDate = OffsetDateTime.of(today.year, 1, 1,0, 0, 0, 0, ZoneOffset.UTC)
+        val endDate  = startDate
+                .plusDays(MAX_DAYS_IN_REQUEST.toLong() - 1)
+                .plusHours(MAX_HOUR.toLong())
+                .plusMinutes(MAX_MINUTE_SECONDS.toLong())
+                .plusSeconds(MAX_MINUTE_SECONDS.toLong())
 
         mockingClient.forTpp.mock {
             myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
@@ -44,60 +49,62 @@ class TestResultsFactoryTpp : TestResultsFactory(){
     }
 
     override fun enabledWithBlankRecord(patient: Patient) {
-        val today = OffsetDateTime.now()
-
-        var startDate = today.minusDays(START_DATE_FOR_RANGE_ONE)
-        var endDate = today.minusDays(END_DATE_FOR_RANGE_ONE)
-
-        mockingClient.forTpp.mock {
-            myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
-                    .respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
-        }
-
-        startDate = today.minusDays(START_DATE_FOR_RANGE_TWO)
-        endDate = today.minusDays(END_DATE_FOR_RANGE_TWO)
-
-        mockingClient.forTpp.mock {
-            myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
-                    .respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
-        }
-
-        startDate = today.minusDays(START_DATE_FOR_RANGE_THREE)
-        endDate = today
-
-        mockingClient.forTpp.mock {
-            myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
-                    .respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
-        }
+        throw UnsupportedOperationException("Not yet implemented")
     }
 
-    override fun enabledWithRecords(patient: Patient) {
+    override fun enabledWithRecords(patient: Patient, year: Int?, numberOfResults: Int?) {
+        val daysLeft: Long
+        var resultsReturned = 0
+        var startDate: OffsetDateTime
+        val finalEndDate: OffsetDateTime
         val today = OffsetDateTime.now()
-        var startDate = today.minusDays(START_DATE_FOR_RANGE_ONE)
-        var endDate = today.minusDays(END_DATE_FOR_RANGE_ONE)
+        var resultsShown = TppConstants.DefaultTestResultsReturned
 
-        mockingClient.forTpp.mock {
-            myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
-                    .respondWithSuccess(TestResultsData
-                            .getMultipleTestResultsForTpp(NUMBER_OF_TEST_RESULTS_EQUALS_ONE))
+        if (numberOfResults != null) {
+            resultsShown = numberOfResults
         }
 
-        startDate = today.minusDays(START_DATE_FOR_RANGE_TWO)
-        endDate = today.minusDays(END_DATE_FOR_RANGE_TWO)
-
-        mockingClient.forTpp.mock {
-            myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
-                    .respondWithSuccess(TestResultsData
-                            .getMultipleTestResultsForTpp(NUMBER_OF_TEST_RESULTS_EQUALS_TWO))
+        if (year != null) {
+            startDate = OffsetDateTime.of(year, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC)
+            finalEndDate  = OffsetDateTime.of(year,
+                MAX_MONTH,
+                MAX_DAY_INT,
+                MAX_HOUR,
+                MAX_DAYS_IN_REQUEST - 1,
+                MAX_MINUTE_SECONDS,
+                MAX_MINUTE_SECONDS,
+                ZoneOffset.UTC)
+        } else {
+            startDate = OffsetDateTime.of(today.year, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC)
+            finalEndDate = today
         }
 
-        startDate = today.minusDays(START_DATE_FOR_RANGE_THREE)
-        endDate = today
+        daysLeft = Duration.between(startDate, finalEndDate).toDays()
 
-        mockingClient.forTpp.mock {
-            myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
-                    .respondWithSuccess(TestResultsData
-                            .getMultipleTestResultsForTpp(NUMBER_OF_TEST_RESULTS_EQUALS_THREE))
+        var requestEndDate  = startDate
+                .plusDays(MAX_DAYS_IN_REQUEST.toLong() - 1)
+                .plusHours(MAX_HOUR.toLong())
+                .plusMinutes(MAX_MINUTE_SECONDS.toLong())
+                .plusSeconds(MAX_MINUTE_SECONDS.toLong())
+
+        val testResultsCallsRequired = ceil(daysLeft.toDouble() / MAX_DAYS_IN_REQUEST).toInt()
+
+        for(callsMade in 1..testResultsCallsRequired) {
+
+            if (callsMade == testResultsCallsRequired){
+                requestEndDate = finalEndDate
+                resultsReturned = resultsShown
+            }
+
+            mockingClient.forTpp.mock {
+                myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, requestEndDate)
+                        .respondWithSuccess(TestResultsData
+                                .getMultipleTestResultsForTpp(resultsReturned))
+            }
+
+            startDate = startDate.plusDays(MAX_DAYS_IN_REQUEST.toLong())
+            requestEndDate = requestEndDate.plusDays(MAX_DAYS_IN_REQUEST.toLong())
+
         }
     }
 
@@ -128,7 +135,6 @@ class TestResultsFactoryTpp : TestResultsFactory(){
                             "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
         }
     }
-
 
     override fun getExpectedTestResults(): List<TestResultItem> {
         throw UnsupportedOperationException("Not yet implemented")

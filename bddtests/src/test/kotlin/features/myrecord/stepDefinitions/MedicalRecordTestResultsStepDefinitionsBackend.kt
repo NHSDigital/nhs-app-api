@@ -11,10 +11,12 @@ import mocking.emis.testResults.TestResultValue
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
 import utils.LinkedProfilesSerenityHelpers
+import utils.ProxySerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
+import java.time.OffsetDateTime
 
 private const val NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_ZERO = 0
 private const val NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_ONE = 1
@@ -51,10 +53,46 @@ open class MedicalRecordTestResultsStepDefinitionsBackend {
         }
     }
 
-    @Given("^the GP Practice has six test results$")
-    fun givenTheGpPracticeHasSixTestResults() {
+    @Given("^the GP Practice has (.*) test results$")
+    fun givenTheGpPracticeHasSixTestResults(numberOfResults: Int?) {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        TestResultsFactory.getForSupplier(gpSystem).enabledWithRecords(SerenityHelpers.getPatient())
+        TestResultsFactory.getForSupplier(gpSystem).enabledWithRecords(
+                ProxySerenityHelpers.getPatientOrProxy(),
+                null,
+                numberOfResults)
+    }
+
+    @Given("^the GP practice has (.*) historic test results for patients birth year$")
+    fun givenTheGpPracticeHasHistoricTestResultsForPatientsBirthYear(numberOfResults: Int?) {
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        val year = SerenityHelpers.getPatient().age.getYearOfBirth().toInt()
+        TestResultsFactory
+                .getForSupplier(gpSystem)
+                .enabledWithRecords(ProxySerenityHelpers.getPatientOrProxy(), year, numberOfResults)
+    }
+
+    @Given("^the GP practice has (.*) historic test results for linked account birth year$")
+    fun givenTheGpPracticeHasHistoricTestResultsForLinkedAccountBirthYear(numberOfResults: Int?) {
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        val year = SerenityHelpers.getPatient().linkedAccounts.toList()[0].age.getYearOfBirth().toInt()
+        TestResultsFactory
+                .getForSupplier(gpSystem)
+                .enabledWithRecords(ProxySerenityHelpers.getPatientOrProxy(), year, numberOfResults)
+    }
+
+    @Given("^the GP practice has (.*) historic test results for the previous (.*) years$")
+    fun givenTheGpPracticeHasSixHistoricTestResultsForPreviousYears(numberOfResults: Int?, numberOfPreviousYears: Int) {
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        val currentYear = OffsetDateTime.now().year
+        var yearsToMock = numberOfPreviousYears
+
+        while (yearsToMock > 0) {
+            val year = currentYear - yearsToMock
+            TestResultsFactory
+                    .getForSupplier(gpSystem)
+                    .enabledWithRecords(ProxySerenityHelpers.getPatientOrProxy(), year, numberOfResults)
+            yearsToMock--
+        }
     }
 
     @Given("^the GP Practice has a single test result with multiple child values with no ranges for EMIS$")

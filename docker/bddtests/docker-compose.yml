@@ -35,6 +35,7 @@ services:
   web.local.bitraft.io:
     env_file:
      - ./docker/bddtests/env/web.env
+     - ./docker/bddtests/env/tpp_test_results.env
 
   pfs.local.bitraft.io:
     env_file:
@@ -42,6 +43,7 @@ services:
       - ./docker/bddtests/env/ndop_connectivity.env
       - ./docker/bddtests/env/proxy_access.env
       - ./docker/bddtests/env/pfs.env
+      - ./docker/bddtests/env/tpp_test_results.env
     secrets:
       - ndop_signing_key
       - ndop_signing_key_passphrase

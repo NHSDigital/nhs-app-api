@@ -10,7 +10,7 @@ Feature: Errors part2 accessibility
 
   Scenario: The 'H-GP08a Test results (TPP)' page is captured
     Given I am a TPP user setup to use medical record version 2
-    And the GP Practice has six test results
+    And the GP Practice has 6 test results
     And I am logged in
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed

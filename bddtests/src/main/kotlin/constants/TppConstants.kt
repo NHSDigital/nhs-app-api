@@ -7,6 +7,7 @@ class TppConstants {
         const val Im1MessagingListServiceAccessCode = "512"
         const val ListServiceAccessesAvailableStatus = "A"
         const val ListServiceAccessesAvailableStatusDescription = "A"
-
+        const val PageCount = 5
+        const val DefaultTestResultsReturned = 6
     }
 }

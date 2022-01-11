@@ -7,7 +7,7 @@ Feature: Get Test Results Data Backend
   Scenario Outline: Requesting multiple test results returns multiple test results data for <GP System>
     Given I am a <GP System> user setup to use medical record version 2
     And I have logged in and have a valid session cookie
-    And the GP Practice has six test results
+    And the GP Practice has 6 test results
     When I get the users test results
     Then I receive 6 test results as part of the my record object
     And the field indicating supplier is set

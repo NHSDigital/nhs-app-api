@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 private const val MONTHS_IN_YEAR = 12
+private const val YEAR_CHAR_LENGTH = 4
 data class PatientAge(val dateOfBirth: String) {
 
     fun formattedAge(): String {
@@ -40,6 +41,10 @@ data class PatientAge(val dateOfBirth: String) {
 
     fun dateOfBirthDigitsOnly(): String {
         return dateOfBirth.replace("-", "")
+    }
+
+    fun getYearOfBirth(): String{
+        return dateOfBirth.substring(0, YEAR_CHAR_LENGTH)
     }
 
     private fun getAgePart(dob: String, unit: ChronoUnit): Int {
