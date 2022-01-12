@@ -764,3 +764,11 @@ Y02755,"ROCK HEALTHCARE LIMITED","IN PRACTICE SYSTEMS LTD","EGTON MEDICAL INFORM
 ==================================================================
 Job Run - Wed 5 Jan 2022 15:12:06 GMT
 ==================================================================
+==================================================================
+Job Run - Wed 12 Jan 2022 11:29:00 GMT
+ODS,Organisation,PreviousSupplier,NewSupplier
+C81027,"SOMERCOTES MEDICAL CENTRE","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)","THE PHOENIX PARTNERSHIP"
+C81027,"SOMERCOTES MEDICAL CENTRE","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)","THE PHOENIX PARTNERSHIP"
+P83007,"RADCLIFFE MEDICAL PRACTICE","IN PRACTICE SYSTEMS LTD","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)"
+P83007,"RADCLIFFE MEDICAL PRACTICE","IN PRACTICE SYSTEMS LTD","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)"
+==================================================================
