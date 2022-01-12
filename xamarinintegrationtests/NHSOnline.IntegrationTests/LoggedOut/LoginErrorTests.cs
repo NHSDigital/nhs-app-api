@@ -1,10 +1,10 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.CitizenId;
 using NHSOnline.HttpMocks.Domain;
+using NHSOnline.IntegrationTests.Logs;
 using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.Android.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
-using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.UI;
@@ -32,14 +32,20 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .Continue();
 
-            AndroidStubbedLoginPageSlimHeader
-                .AssertOnPage(driver)
-                .PageContent.Login(patient);
+            var timing = TimedTestExecutor.Execute(() =>
+            {
+                AndroidStubbedLoginPageSlimHeader
+                    .AssertOnPage(driver)
+                    .PageContent.Login(patient);
 
-            AndroidNhsLoginErrorPage
-                .AssertOnPage(driver)
-                .AssertPageElements()
-                .ContactUs();
+                AndroidNhsLoginErrorPage
+                    .AssertOnPage(driver)
+                    .AssertPageElements()
+                    .ContactUs();
+            });
+
+            var clientLogs = new ClientLoggerLogs(timing.StartTime, timing.StopTime);
+            clientLogs.AssertClientLogContainsRegex(@"Error reference 3w?(\S{4}) generated. NHS login redirect error");
 
             AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());

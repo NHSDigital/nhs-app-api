@@ -29,6 +29,13 @@ namespace NHSOnline.App.NhsLogin
 
         public sealed class Failed : AuthReturnCheckResult
         {
+            public Failed(string errorLogMessage)
+            {
+                ErrorLogMessage = errorLogMessage;
+            }
+
+            public string ErrorLogMessage { get; }
+
             public override T Accept<T>(IAuthReturnCheckResultVisitor<T> visitor) => visitor.Visit(this);
         }
     }

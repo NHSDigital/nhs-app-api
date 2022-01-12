@@ -121,7 +121,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         public async Task Visit(AuthReturnCheckResult.Failed failed)
         {
             var nhsLoginErrorModel = _model.NhsLoginFailed();
-            _logger.LogError("Auth Return failed, error reference {ServiceDeskReference} generated", nhsLoginErrorModel.ServiceDeskReference);
+            _logger.LogError("Error reference {ServiceDeskReference} generated. {ErrorMessage}", nhsLoginErrorModel.ServiceDeskReference,
+                failed.ErrorLogMessage);
 
             var nhsLoginErrorPage = _pageFactory.CreatePageFor(nhsLoginErrorModel);
 

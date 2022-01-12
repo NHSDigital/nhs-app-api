@@ -43,17 +43,18 @@ namespace NHSOnline.App.NhsLogin
                 return new AuthReturnCheckResult.TermsAndConditionsDeclined();
             }
 
+            string errorLogMessage;
             if (queryString["error"] != null)
             {
                 var error = queryString["error"];
-                _logger.LogError("NHS Login redirect error: {Error}; Uri: {Uri}", error, uri);
+                errorLogMessage = $"NHS login redirect error: {error}; Uri: {uri}";
             }
             else
             {
-                _logger.LogError("NHS Login redirect without code or error; Uri: {Uri}", uri);
+                errorLogMessage = $"NHS login redirect without code or error; Uri: {uri}";
             }
 
-            return new AuthReturnCheckResult.Failed();
+            return new AuthReturnCheckResult.Failed(errorLogMessage);
         }
     }
 }

@@ -28,6 +28,22 @@ namespace NHSOnline.IntegrationTests.Logs
                 $"Expected at least one client log to be:\n{expectedClientLog}\n\nLogs were:\n\n{string.Join("\n\n", Logs)}");
         }
 
+        internal void AssertClientLogContainsRegex(string expectedClientLogRegex)
+        {
+            var regex = new Regex(expectedClientLogRegex);
+            foreach (var clientLog in ClientLogs())
+            {
+                var matches = regex.Matches(clientLog);
+                if (matches.Count > 0)
+                {
+                    return;
+                }
+            }
+
+            Assert.Fail(
+                $"Expected at least one client log to contain regex:\n{expectedClientLogRegex}\n\nLogs were:\n\n{string.Join("\n\n", Logs)}");
+        }
+
         internal void AssertClientLogStartsWith(string expectedClientLog)
         {
             foreach (var clientLog in ClientLogs())
