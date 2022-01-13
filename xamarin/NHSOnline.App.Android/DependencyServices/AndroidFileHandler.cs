@@ -24,8 +24,6 @@ namespace NHSOnline.App.Droid.DependencyServices
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(AndroidFileHandler));
         internal static MainActivity? MainActivity { set; get; }
 
-        private static readonly string FilePath = Path.Combine(Environment.DirectoryDownloads + "/NhsApp");
-
         public async Task<DownloadFileResult> DownloadFile(DownloadRequest downloadRequest, View webViewElement)
         {
             Uri? uri;
@@ -70,17 +68,22 @@ namespace NHSOnline.App.Droid.DependencyServices
         private static async Task<Uri?> CreateFileUsingDeprecated(byte[] convertedData, string fileName)
         {
             #pragma warning disable 618
-                var directory = Path.Combine(Environment.ExternalStorageDirectory?.AbsolutePath!, FilePath);
+            var directory = Environment.ExternalStorageDirectory?.AbsolutePath;
             #pragma warning restore 618
 
-            if (!Directory.Exists(directory))
+            if (directory == null || !Directory.Exists(directory))
             {
-                Directory.CreateDirectory(directory);
+                throw new DirectoryNotFoundException(
+                    "Users device does not have a downloads directory so we cannot save the file");
             }
 
             using var file = new Java.IO.File(Path.Combine(directory, fileName));
-            using var outputStream = new FileOutputStream(file);
-            await outputStream.WriteAsync(convertedData).PreserveThreadContext();
+
+            if (!file.Exists())
+            {
+                using var outputStream = new FileOutputStream(file);
+                await outputStream.WriteAsync(convertedData).PreserveThreadContext();
+            }
 
             return FileProvider.GetUriForFile(
                 MainActivity,
