@@ -9,7 +9,7 @@
     <ContentPage.Content>
         <ContentView>
             <ContentView.Effects>
-                <effects:SafeAreaPaddingTop/>
+                <effects:SafeAreaPaddingTopOrientationAware/>
             </ContentView.Effects>
             <StackLayout BackgroundColor="{StaticResource NhsUkBlue}" Spacing="0">
                 <View.Resources>

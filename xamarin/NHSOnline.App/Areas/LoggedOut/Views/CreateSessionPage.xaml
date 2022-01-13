@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<pages:NhsAppTransparentHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
-                                   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                                   xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-                                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                                   xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
-                                   xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
-                                   xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
-                                   mc:Ignorable="d"
-                                   x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionPage"
-                                   x:Name="Page">
-    <AbsoluteLayout>
+<pages:NhsAppPreHomeHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
+                               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                               xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+                               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                               xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
+                               xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
+                               xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
+                               mc:Ignorable="d"
+                               x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionPage"
+                               x:Name="Page">
+    <AbsoluteLayout BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <elements:Spinner AbsoluteLayout.LayoutFlags="All"
                           AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                           Margin="0,0,0,50"
@@ -21,4 +21,4 @@
             </elements:Spinner.Effects>
         </elements:Spinner>
     </AbsoluteLayout>
-</pages:NhsAppTransparentHeaderPage>
+</pages:NhsAppPreHomeHeaderPage>

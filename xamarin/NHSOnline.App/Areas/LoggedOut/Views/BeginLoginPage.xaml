@@ -10,7 +10,7 @@
                                    x:Class="NHSOnline.App.Areas.LoggedOut.Views.BeginLoginPage"
                                    BackgroundColor="{StaticResource NhsUkBlue}"
                                    x:Name="Page">
-    <AbsoluteLayout>
+    <AbsoluteLayout BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <elements:Spinner AbsoluteLayout.LayoutFlags="All"
                             AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                             Margin="0,0,0,50"

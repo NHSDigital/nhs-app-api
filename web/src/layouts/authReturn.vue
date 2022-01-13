@@ -199,7 +199,7 @@
                 <main>
                   <div :class="useDefaultPageStyling
                     ? $style['default-grey; footer-container-desktop']
-                    : $style['blue-body']">
+                    : $style['grey-body']">
                     <spinner />
                     <connection-error />
                     <api-error />

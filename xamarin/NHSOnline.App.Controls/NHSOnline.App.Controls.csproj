@@ -194,5 +194,9 @@
       <DependentUpon>OrderedListItem.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Effects\SafeAreaPaddingTopOrientationAware.xaml.cs">
+      <DependentUpon>SafeAreaPaddingTopOrientationAware.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

@@ -29,7 +29,14 @@
         </ResourceDictionary>
     </View.Resources>
         
-    <StackLayout>
-        <icons:NhsLogoWhite />
-    </StackLayout>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <StackLayout Grid.Column="1">
+            <icons:NhsLogoWhite />
+        </StackLayout>
+    </Grid>
 </ContentView>
