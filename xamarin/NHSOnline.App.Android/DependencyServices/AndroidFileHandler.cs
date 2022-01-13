@@ -106,6 +106,7 @@ namespace NHSOnline.App.Droid.DependencyServices
             using var contentValues = new ContentValues();
             contentValues.Put(MediaStore.IMediaColumns.DisplayName, downloadRequest.FileName);
             contentValues.Put(MediaStore.IMediaColumns.MimeType, downloadRequest.MimeType);
+            contentValues.Put(MediaStore.IMediaColumns.DocumentId, Guid.NewGuid().ToString());
 
             fileUri = resolver.Insert(MediaStore.Downloads.ExternalContentUri, contentValues)!;
             return resolver;
