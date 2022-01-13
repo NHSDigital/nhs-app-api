@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -58,14 +59,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
 
         private void LogJti(P5UserSession userSession)
         {
-            var jti = userSession.CitizenIdUserSession.IdTokenJti;
+            var jti = userSession.CitizenIdUserSession.IdTokenJti.ToLoggableJti();
             if (string.IsNullOrWhiteSpace(jti))
             {
-                _logger.LogInformation("Null or empty jti provided for id assertion");
+                _logger.LogInformation("Null or empty JTI provided for id assertion");
             }
             else
             {
-                _logger.LogInformation($"Asserted login with jti ending: {jti.Substring(jti.Length - 5)}");
+                _logger.LogInformation($"Asserted login with JTI ending: {jti}");
             }
         }
     }

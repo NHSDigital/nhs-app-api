@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
@@ -103,6 +104,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 if (model?.Referrer != null)
                 {
                     referrer = model.Referrer;
+                }
+
+                if (result is CreateSessionResult.Success success)
+                {
+                    var jti = success.UserSession.Key.ToLoggableJti();
+                    _logger.LogInformation($"User Session Key JTI ending: {jti}");
                 }
 
                 return await result.Accept(_sessionResultVisitor, HttpContext, sessionExpiryCookieToken, referrer);

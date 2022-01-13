@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
@@ -16,6 +17,7 @@ using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.Areas.Session;
 using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.PfsApi.UserInfo;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Certificate;
@@ -44,10 +46,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .AddTransient<SessionController>()
                 .AddSingleton(Data.ConfigurationSettings);
 
-            Mocks.ConfigureServices(serviceCollection);
-
             new PfsApi.Session.ServiceConfigurationModule().ConfigureServices(serviceCollection, null);
             new PfsApi.GpSession.ServiceConfigurationModule().ConfigureServices(serviceCollection, null);
+
+            Mocks.ConfigureServices(serviceCollection);
 
             ServiceProvider = serviceCollection.BuildServiceProvider();
             Mocks.HttpContext.Setup(x => x.RequestServices).Returns(() => ServiceProvider);
@@ -92,21 +94,36 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             internal Mock<HttpContext> HttpContext { get; } = new Mock<HttpContext>();
             internal Mock<ISessionCacheService> SessionCacheService { get; } = new Mock<ISessionCacheService>();
 
+            internal Mock<ISessionCreator> SessionCreator { get; } = new Mock<ISessionCreator>();
+
+            internal Mock<ISessionExpiryCookieCreator> SessionExpiryCookieCreator { get; } =
+                new Mock<ISessionExpiryCookieCreator>();
+
+            internal Mock<IAntiforgery> AntiForgery { get; } = new Mock<IAntiforgery>();
+
+            internal Mock<ILogger<SessionController>> Logger { get; } = new Mock<ILogger<SessionController>>();
+
+            internal Mock<ISessionResultVisitor<Task<IActionResult>>> SessionResultVisitor { get; } =
+                new Mock<ISessionResultVisitor<Task<IActionResult>>>();
+
             public void ConfigureServices(IServiceCollection serviceCollection)
             {
                 serviceCollection
                     .AddSingleton(Auditor.Object)
                     .AddSingleton(GpSessionManager.Object)
                     .AddSingleton(SessionCacheService.Object)
+                    .AddSingleton(SessionExpiryCookieCreator.Object)
+                    .AddSingleton(AntiForgery.Object)
+                    .AddSingleton(SessionCreator.Object)
+                    .AddSingleton(Logger.Object)
+                    .AddSingleton(SessionResultVisitor.Object)
                     .AddSingleton(new Mock<ICitizenIdSessionService>().Object)
                     .AddSingleton(new Mock<IGpSystemFactory>().Object)
-                    .AddSingleton(new Mock<ILogger<SessionController>>().Object)
                     .AddSingleton(new Mock<IIm1CacheService>().Object)
                     .AddSingleton(new Mock<IOdsCodeMassager>().Object)
                     .AddSingleton(new Mock<IServiceJourneyRulesService>().Object)
                     .AddSingleton(new Mock<IErrorReferenceGenerator>().Object)
                     .AddSingleton(new Mock<IUserInfoService>().Object)
-                    .AddSingleton(new Mock<IAntiforgery>().Object)
                     .AddSingleton(new Mock<IAuthenticationService>().Object)
                     .AddSingleton(new Mock<IMetricLogger>().Object)
                     .AddSingleton(new Mock<ISigning>().Object)
