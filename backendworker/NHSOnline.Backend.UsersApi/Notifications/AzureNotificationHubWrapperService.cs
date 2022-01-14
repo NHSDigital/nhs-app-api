@@ -13,8 +13,6 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             _wrappers = wrappers.ToDictionary(x => x.Path, x => x);
         }
 
-        public IEnumerable<IAzureNotificationHubWrapper> All() => _wrappers.Values;
-
         public IEnumerable<IAzureNotificationHubWrapper> AllFor(string nhsLoginId)
         {
             var output = _wrappers.Values
