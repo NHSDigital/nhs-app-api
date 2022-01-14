@@ -1,5 +1,7 @@
 <template>
   <div v-if="showTemplate && !hasApiError && !gpSessionApiError">
+    <!-- NB Following div ensures legend focus within radio group announced - NHSO-17263 -->
+    <div class="nhsuk-u-visually-hidden" role="status" tabindex="-1"/>
     <div class="nhsuk-grid-column-full">
       <error-dialog v-if="showErrors"
                     :header-locale-ref="'prescriptions.prescriptionType.errors.thereIsAProblem'"
@@ -54,7 +56,6 @@ import PrescriptionErrors from '@/components/errors/pages/prescriptions/Prescrip
 import { PRESCRIPTION_TYPE_PATH, PRESCRIPTIONS_CONTACT_SURGERY_PATH, PRESCRIPTIONS_PATH } from '@/router/paths';
 import showShutterPage from '@/lib/proxy/shutter';
 import { EventBus, FOCUS_ERROR_ELEMENT, UPDATE_HEADER, UPDATE_TITLE } from '@/services/event-bus';
-import vueScrollTo from 'vue-scrollto';
 import sjrIf from '@/lib/sjrIf';
 import InterruptBackTo from '@/lib/pharmacy-detail/interrupt-back-to';
 
@@ -160,15 +161,6 @@ export default {
   async created() {
     await loadData(this.$store, this.$t);
     this.$store.dispatch('flashMessage/show');
-  },
-  mounted() {
-    if (this.$route.hash) {
-      const ref = this.$refs[this.$route.hash.substring(1)];
-      if (ref) {
-        const element = ref.$el || ref;
-        vueScrollTo.scrollTo(element, 250, { easing: vueScrollTo['ease-in'] });
-      }
-    }
   },
   methods: {
     onAnswerValidate(validation) {

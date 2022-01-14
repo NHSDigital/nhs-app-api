@@ -8,6 +8,7 @@ import pages.sharedElements.RadioButtons
 import pages.text
 
 class PatientPracticeMessagingUrgencyPage: HybridPageObject() {
+    private val expectedHeaderText = "Do you need urgent advice?"
     private val urgentRadioButtonLabel = "Yes, I need advice now"
     private val nonUrgentRadioButtonLabel = "No, my message is not urgent"
 
@@ -19,6 +20,13 @@ class PatientPracticeMessagingUrgencyPage: HybridPageObject() {
             "//button[@id='continueButton']",
             page = this,
             helpfulName = "Continue button")
+
+    fun assertIsDisplayed() {
+        Assert.assertEquals(
+                "Header should contain text $expectedHeaderText",
+                expectedHeaderText,
+                header.getPageTitle().text)
+    }
 
     fun chooseUrgentAndContinue() {
         val urgentRadio = radioButtons.button(urgentRadioButtonLabel)

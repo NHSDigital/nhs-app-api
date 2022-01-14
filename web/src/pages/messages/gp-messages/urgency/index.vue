@@ -2,6 +2,8 @@
   <div v-if="showTemplate && !loading" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <div v-if="messageRecipients && messageRecipients.length > 0">
+        <!-- NB Following div ensures legend focus within radio group announced - NHSO-17263 -->
+        <div class="nhsuk-u-visually-hidden" role="status" tabindex="-1"/>
         <error-dialog v-if="isError"
                       :header-locale-ref="'messages.thereIsAProblem'"
                       :errors="$t('messages.youNeedToSelectYesOrNo')"/>

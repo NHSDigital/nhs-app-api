@@ -344,7 +344,9 @@ Feature: Patient to practice messaging
     When I follow the Messages link from the home page
     Then the Messages Hub page is displayed
     And I click on the patient practice Messages link on the Messages Hub page
-    When I click the Send a message button and I choose that I need urgent advice via patient practice messaging
+    When I click the Send a message button on the patient practice messaging inbox
+    Then I see the patient practice messaging urgency page
+    When I choose that I need urgent advice
     Then I see the patient practice messaging urgency contact your gp page
     And I see a message explaining patient practice messaging is not for urgent advice
 
@@ -355,7 +357,9 @@ Feature: Patient to practice messaging
     When I follow the Messages link from the home page
     Then the Messages Hub page is displayed
     And I click on the patient practice Messages link on the Messages Hub page
-    When I click the Send a message button and I choose that I do not need urgent advice via patient practice messaging
+    When I click the Send a message button on the patient practice messaging inbox
+    Then I see the patient practice messaging urgency page
+    When I choose that I do not need urgent advice
     Then I see the patient practice messaging recipients page
     And I see a list of patient practice messaging recipients
 

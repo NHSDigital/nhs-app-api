@@ -3,10 +3,11 @@
 <template>
   <component :is="componentType" class="nhsuk-fieldset"
              :aria-describedby="error ? `${name}-error` : undefined">
-
     <legend
       v-if="!noHeadingRequired && heading"
       :id="`${name}-legend`"
+      ref="legendRef"
+      tabindex="-1"
       :class="['nhsuk-fieldset__legend',
                `nhsuk-fieldset__legend--${legendSize}`,
                'nhsuk-u-margin-bottom-3']"
@@ -141,8 +142,11 @@ export default {
     }
   },
   mounted() {
-    if (document.activeElement !== null) {
-      document.activeElement.blur();
+    if (!this.noHeadingRequired && this.heading) {
+      if (document.activeElement !== null) {
+        document.activeElement.blur();
+      }
+      this.$refs.legendRef.focus();
     }
   },
   methods: {

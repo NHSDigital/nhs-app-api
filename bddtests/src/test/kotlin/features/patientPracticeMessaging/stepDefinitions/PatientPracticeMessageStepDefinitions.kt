@@ -179,6 +179,16 @@ class PatientPracticeMessageStepDefinitions {
         patientPracticeMessagingUrgencyPage.chooseNonUrgentAndContinue()
     }
 
+    @When("^I choose that I need urgent advice$")
+    fun iChooseThatINeedUrgentAdvice() {
+        patientPracticeMessagingUrgencyPage.chooseUrgentAndContinue()
+    }
+
+    @When("^I choose that I do not need urgent advice$")
+    fun iChooseThatIDoNotNeedUrgentAdvice() {
+        patientPracticeMessagingUrgencyPage.chooseNonUrgentAndContinue()
+    }
+
     @When("^I select delete conversation on the view conversation page$")
     fun iClickOnDeleteConversationFromViewDetailsScreen() {
         patientPracticeMessagingDetailsPage.clickDeleteConversation()
@@ -187,6 +197,11 @@ class PatientPracticeMessageStepDefinitions {
     @Then("^I see the patient practice messaging urgency contact your gp page$")
     fun iSeeThePatientPracticeMessagingUrgencyContactYourGpPage() {
         patientPracticeMessagingContactYourGpPage.assertIsDisplayed()
+    }
+
+    @Then("^I see the patient practice messaging urgency page$")
+    fun iSeeThePatientPracticeMessagingUrgencyPage() {
+        patientPracticeMessagingUrgencyPage.assertIsDisplayed()
     }
 
     @Then("^I click the send message link on the message details page and I do not need urgent advice")

@@ -1,6 +1,7 @@
 <template>
   <div v-if="showTemplate">
-
+    <!-- NB Following div ensures legend focus within radio group announced - NHSO-17263 -->
+    <div class="nhsuk-u-visually-hidden" role="status" tabindex="-1"/>
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <error-dialog v-if="showErrors"
