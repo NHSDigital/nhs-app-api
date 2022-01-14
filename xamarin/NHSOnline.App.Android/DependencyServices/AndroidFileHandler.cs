@@ -68,10 +68,11 @@ namespace NHSOnline.App.Droid.DependencyServices
         private static async Task<Uri?> CreateFileUsingDeprecated(byte[] convertedData, string fileName)
         {
             #pragma warning disable 618
-            var directory = Environment.ExternalStorageDirectory?.AbsolutePath;
+            var directory = Path.Combine(Environment.ExternalStorageDirectory?.AbsolutePath ?? string.Empty,
+                Environment.DirectoryDownloads ?? string.Empty);
             #pragma warning restore 618
 
-            if (directory == null || !Directory.Exists(directory))
+            if (!Directory.Exists(directory))
             {
                 throw new DirectoryNotFoundException(
                     "Users device does not have a downloads directory so we cannot save the file");
