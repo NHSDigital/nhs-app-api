@@ -1,10 +1,12 @@
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Azure.NotificationHubs.Messaging;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.UsersApi.Notifications.Models;
+using NHSOnline.Backend.UsersApi.Repository;
 
 namespace NHSOnline.Backend.UsersApi.Notifications
 {
@@ -27,6 +29,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             {
                 _logger.LogEnter();
 
+                await _notificationClient.DeleteInstallationsByDevicePns(request.DevicePns);
                 var installationId = await _notificationClient.CreateInstallation(request);
 
                 _logger.LogInformation("New registration created");
@@ -34,6 +37,16 @@ namespace NHSOnline.Backend.UsersApi.Notifications
                 {
                     Id = installationId
                 });
+            }
+            catch (AggregateException ex) when (ex.InnerExceptions.Any(x => x is HttpRequestException || x is MessagingException))
+            {
+                _logger.LogError(ex, "Failed to register installation with Azure, an unexpected exception has been thrown");
+                return new RegistrationResult.BadGateway();
+            }
+            catch (AggregateException ex)
+            {
+                _logger.LogError(ex, "Failed to register installation with Azure, an unexpected exception has been thrown");
+                return new RegistrationResult.InternalServerError();
             }
             catch (MessagingException ex)
             {
@@ -49,6 +62,39 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             {
                 _logger.LogError(ex, "Failed to register installation with Azure, an unexpected exception has been thrown");
                 return new RegistrationResult.InternalServerError();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        public async Task<RegistrationExistsResult> Exists(UserDevice userDevice)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                if(await _notificationClient.InstallationExists(userDevice.RegistrationId, userDevice.NhsLoginId))
+                {
+                    return new RegistrationExistsResult.Found();
+                }
+                return new RegistrationExistsResult.NotFound();
+            }
+            catch (MessagingException ex)
+            {
+                _logger.LogError(ex, "Failed to check if installation exists on Azure notification hubs, an unexpected exception has been thrown");
+                return new RegistrationExistsResult.BadGateway();
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "Failed to check if installation exists on Azure notification hubs, an unexpected exception has been thrown");
+                return new RegistrationExistsResult.BadGateway();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to check if installation exists on Azure notification hubs, an unexpected exception has been thrown");
+                return new RegistrationExistsResult.InternalServerError();
             }
             finally
             {

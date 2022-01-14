@@ -58,6 +58,11 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public Task<bool> InstallationExists(string installationId) => _hubClient.InstallationExistsAsync(installationId);
 
+        public async Task<string[]> GetInstallationIdsByDevicePns(string devicePns)
+        {
+            return (await _hubClient.GetRegistrationsByChannelAsync(devicePns, InstallationRecordMaxResults)).InstallationIds();
+        }
+
         public async Task<string[]> GetInstallationIdsByNhsLoginId(string nhsLoginId)
         {
             var tag = NhsLoginTagGenerator.Generate(nhsLoginId);

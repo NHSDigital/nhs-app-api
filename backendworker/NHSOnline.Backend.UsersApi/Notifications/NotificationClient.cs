@@ -63,6 +63,46 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             _logger.LogExit();
         }
 
+        public async Task DeleteInstallationsByDevicePns(string devicePns)
+        {
+            _logger.LogEnter();
+
+            try
+            {
+                var tasks = _wrapperService.All().Select(wrapper => Task.Run(async () =>
+                {
+                    var installationIds = await wrapper.GetInstallationIdsByDevicePns(devicePns);
+
+                    if (!installationIds.Any())
+                    {
+                        return;
+                    }
+
+                    await Task.WhenAll(installationIds.Select(async x => await wrapper.DeleteInstallation(x)));
+                    _logger.LogInformation($"Installation ids {string.Join(", ", installationIds)} for device {devicePns} deleted from hub {wrapper}");
+                }));
+
+                await Task.WhenAll(tasks);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        public async Task<bool> InstallationExists(string installationId, string nhsLoginId)
+        {
+            foreach (var wrapper in _wrapperService.AllFor(nhsLoginId))
+            {
+                if (await wrapper.InstallationExists(installationId))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public async Task<ICollection<string>> FindInstallationIdsByNhsLoginId(string nhsLoginId)
         {
             var output = new List<string>();

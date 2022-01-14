@@ -22,6 +22,49 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         }
 
         [TestMethod]
+        public void All_Empty_ReturnsEmpty()
+        {
+            _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
+
+            var result = _systemUnderTest.All();
+
+            result.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void All_Single_ReturnsSingle()
+        {
+            _wrappers.Add(GetMockWrapperForReading(1, true).Object);
+
+            _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
+
+            var result = _systemUnderTest.All().ToList();
+
+            result.Should().HaveCount(1);
+            Assert.AreEqual(1, result[0].Generation);
+        }
+
+        [TestMethod]
+        public void All_Multiple_ReturnsMultiple()
+        {
+            _wrappers.AddRange(new[]
+            {
+                GetMockWrapperForReading(1, true).Object,
+                GetMockWrapperForReading(2, true).Object,
+                GetMockWrapperForReading(3, true).Object
+            });
+
+            _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
+
+            var result = _systemUnderTest.All().ToList();
+
+            result.Should().HaveCount(3);
+            Assert.IsNotNull(result.FirstOrDefault(x => x.Generation == 1));
+            Assert.IsNotNull(result.FirstOrDefault(x => x.Generation == 2));
+            Assert.IsNotNull(result.FirstOrDefault(x => x.Generation == 3));
+        }
+
+        [TestMethod]
         public void AllFor_Empty_ThrowsExceptions()
         {
             _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);

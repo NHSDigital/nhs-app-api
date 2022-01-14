@@ -1,8 +1,7 @@
 package worker.models.userDevices
 
-data class UserDevice(
+data class InvalidUserDevice(
         val _id: String,
         val NhsLoginId: String,
-        val RegistrationId: String,
-        val PnsToken: String
+        val invalidField: String
 )

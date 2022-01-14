@@ -3,7 +3,8 @@ using NHSOnline.Backend.UsersApi.Repository;
 
 namespace NHSOnline.Backend.UsersApi.Registrations
 {
-    public class GetRegistrationServiceResultVisitor : ISearchDeviceResultVisitor<RegistrationExistsResult>
+    public class GetRegistrationServiceResultVisitor : ISearchDeviceResultVisitor<RegistrationExistsResult>,
+        IDeleteDeviceResultVisitor<RegistrationExistsResult>
     {
         public RegistrationExistsResult Visit(SearchDeviceResult.Found result)
         {
@@ -21,6 +22,21 @@ namespace NHSOnline.Backend.UsersApi.Registrations
         }
 
         public RegistrationExistsResult Visit(SearchDeviceResult.InternalServerError result)
+        {
+            return new RegistrationExistsResult.InternalServerError();
+        }
+
+        public RegistrationExistsResult Visit(DeleteDeviceResult.Success result)
+        {
+            return new RegistrationExistsResult.Found();
+        }
+
+        public RegistrationExistsResult Visit(DeleteDeviceResult.BadGateway result)
+        {
+            return new RegistrationExistsResult.BadGateway();
+        }
+
+        public RegistrationExistsResult Visit(DeleteDeviceResult.InternalServerError result)
         {
             return new RegistrationExistsResult.InternalServerError();
         }

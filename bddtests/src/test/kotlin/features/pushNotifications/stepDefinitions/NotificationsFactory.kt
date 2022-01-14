@@ -1,6 +1,5 @@
 package features.pushNotifications.stepDefinitions
 
-import com.mongodb.client.model.Filters.eq
 import constants.Supplier
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
@@ -8,16 +7,12 @@ import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJo
 import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import models.Patient
 import mongodb.MongoDBConnection
-import org.bson.Document
 import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
 import utils.addToList
 import utils.set
 import utils.getOrFail
-import worker.models.userDevices.UserDevice
-
-private const val REGISTRATION_ID: String = "ee4e986a-7abc-452c-be11-db5c1f780021"
-private const val INVALID_REGISTRATION_ID: Int = 1234
+import worker.models.userDevices.InvalidUserDevice
 
 class NotificationsFactory {
     fun setUpUser(notificationPromptEnabled: Boolean = true): Patient {
@@ -109,12 +104,8 @@ class NotificationsFactory {
     fun setUpInvalidMongoDeviceRegistration() {
         MongoDBConnection.UserDevicesCollection.clearCache()
         val patient = SerenityHelpers.getPatient()
-        val device = createDevice(patient)
-        MongoDBConnection.UserDevicesCollection.clearAndInsertValue(device)
-        MongoDBConnection.UserDevicesCollection.updateOne(
-                eq("RegistrationId", REGISTRATION_ID),
-                Document("\$set", Document("RegistrationId", INVALID_REGISTRATION_ID))
-        )
+        val device = createInvalidDevice(patient)
+        createUserDeviceInRepository(device)
     }
 
     private fun mockNotificationsStatus(status: SettingStatus): String {
@@ -139,14 +130,16 @@ class NotificationsFactory {
                 "function(trigger){window.nativeAppCallbacks.notificationsUnauthorised()}"
     }
 
-    private fun createDevice(patient: Patient): UserDevice {
+    private fun createInvalidDevice(patient: Patient): InvalidUserDevice {
         val devicePns = PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail<String>()
-
-        return UserDevice(
+        return InvalidUserDevice(
             patient.subject + "-" + devicePns,
             patient.subject,
-            REGISTRATION_ID,
-            devicePns
+            "this is an invalid field"
         )
+    }
+
+    private fun createUserDeviceInRepository(userDevice: InvalidUserDevice) {
+        MongoDBConnection.UserDevicesCollection.clearAndInsertValue(userDevice)
     }
 }

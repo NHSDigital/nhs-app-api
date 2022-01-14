@@ -63,7 +63,25 @@ namespace NHSOnline.Backend.UsersApi.Registrations
                 _logger.LogEnter();
 
                 var searchDeviceResult = await _deviceRepositoryService.Find(devicePns, accessToken);
-                return searchDeviceResult.Accept(new GetRegistrationServiceResultVisitor());
+                if (!(searchDeviceResult is SearchDeviceResult.Found foundDeviceResult))
+                {
+                    return searchDeviceResult.Accept(new GetRegistrationServiceResultVisitor());
+                }
+
+                var registrationResult = await _notificationService.Exists(foundDeviceResult.UserDevice);
+                if (registrationResult is RegistrationExistsResult.NotFound)
+                {
+                    var deleteDeviceResult =
+                        await _deviceRepositoryService.Delete(foundDeviceResult.UserDevice.DeviceId,
+                            accessToken.Subject);
+
+                    if (!(deleteDeviceResult is DeleteDeviceResult.Success))
+                    {
+                        return deleteDeviceResult.Accept(new GetRegistrationServiceResultVisitor());
+                    }
+                }
+
+                return registrationResult;
             }
             finally
             {
