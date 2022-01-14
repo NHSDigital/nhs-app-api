@@ -40,17 +40,13 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         }
 
         [TestMethod]
-        public async Task Register_WhenNoExistingRegistrations_ReturnsSuccess()
+        public async Task Register_CreatedSuccessfully_ReturnsSuccess()
         {
             // Arrange
             var expectedResponse = new RegistrationResult.Success(new NotificationRegistrationResult
             {
                 Id = InstallationId
             });
-
-            _mockNotificationClient
-                .Setup(x => x.DeleteInstallationsByDevicePns(DevicePns))
-                .Returns(Task.CompletedTask);
 
             _mockNotificationClient
                 .Setup(x => x.CreateInstallation(_installation, null))
@@ -63,89 +59,12 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             _mockNotificationClient.VerifyAll();
 
             result.Should().BeEquivalentTo(expectedResponse);
-        }
-
-        [TestMethod]
-        public async Task Register_WhenHasExistingRegistrations_ReturnsSuccess()
-        {
-            // Arrange
-            var expectedResponse = new RegistrationResult.Success(new NotificationRegistrationResult
-            {
-                Id = InstallationId
-            });
-
-            _mockNotificationClient
-                .Setup(x => x.DeleteInstallationsByDevicePns(DevicePns))
-                .Returns(Task.CompletedTask);
-
-            _mockNotificationClient
-                .Setup(x => x.CreateInstallation(_installation, null))
-                .ReturnsAsync(InstallationId);
-
-            // Act
-            var result = await _systemUnderTest.Register(_installation);
-
-            // Assert
-            _mockNotificationClient.VerifyAll();
-
-            result.Should().BeEquivalentTo(expectedResponse);
-        }
-
-        [TestMethod]
-        public async Task Register_WhenInstallationFactoryThrowsException_ReturnsInternalServerErrorResult()
-        {
-            // Arrange
-            // Act
-            var result = await _systemUnderTest.Register(_installation);
-
-            // Assert
-            _mockNotificationClient.VerifyAll();
-
-            result.Should().BeOfType<RegistrationResult.InternalServerError>();
-        }
-
-        [TestMethod]
-        public async Task Register_WhenDeletingAnyRegistrationThrowsAnHttpException_ReturnsBadGatewayResult()
-        {
-            // Arrange
-            _mockNotificationClient
-                .Setup(x => x.DeleteInstallationsByDevicePns(DevicePns))
-                .ThrowsAsync(new HttpRequestException());
-
-            // Act
-            var result = await _systemUnderTest.Register(_installation);
-
-            // Assert
-            _mockNotificationClient.VerifyAll();
-
-            result.Should().BeOfType<RegistrationResult.BadGateway>();
-        }
-
-        [TestMethod]
-        public async Task Register_WhenDeletingAnyRegistrationThrowsAnException_ReturnsInternalServerErrorResult()
-        {
-            // Arrange
-            _mockNotificationClient
-                .Setup(x => x.DeleteInstallationsByDevicePns(DevicePns))
-                .ThrowsAsync(new DivideByZeroException());
-
-            // Act
-            var result = await _systemUnderTest.Register(_installation);
-
-            // Assert
-            _mockNotificationClient.VerifyAll();
-
-            result.Should().BeOfType<RegistrationResult.InternalServerError>();
         }
 
         [TestMethod]
         public async Task Register_WhenCreateOrUpdateRegistrationThrowsAHttpException_ReturnsBadGatewayResult()
         {
             // Arrange
-            _mockNotificationClient
-                .Setup(x => x.DeleteInstallationsByDevicePns(DevicePns))
-                .Returns(Task.CompletedTask);
-
             _mockNotificationClient
                 .Setup(x => x.CreateInstallation(_installation, null))
                 .Throws<HttpRequestException>();
@@ -164,10 +83,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         {
             // Arrange
             _mockNotificationClient
-                .Setup(x => x.DeleteInstallationsByDevicePns(DevicePns))
-                .Returns(Task.CompletedTask);
-
-            _mockNotificationClient
                 .Setup(x => x.CreateInstallation(_installation, null))
                 .Throws<Exception>();
 
@@ -184,10 +99,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         public async Task Register_WhenCreateOrUpdateRegistrationThrowsAMessageException_ReturnsBadGatewayResult()
         {
             // Arrange
-            _mockNotificationClient
-                .Setup(x => x.DeleteInstallationsByDevicePns(DevicePns))
-                .Returns(Task.CompletedTask);
-
             _mockNotificationClient
                 .Setup(x => x.CreateInstallation(_installation, null))
                 .Throws(MessagingExceptionFactory.Create());
