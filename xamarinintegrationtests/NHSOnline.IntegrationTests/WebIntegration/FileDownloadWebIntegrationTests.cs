@@ -57,6 +57,17 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidGooglePhotosApp
                 .AssertOnPage(driver);
+
+            // additional steps to verify re-download does not fail
+            driver.PressBackButton();
+
+            AndroidFileDownloadPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.DownloadImage();
+
+            AndroidGooglePhotosApp
+                .AssertOnPage(driver);
         }
 
         [NhsAppAndroidTest(AndroidDevice = AndroidDevice.Pixel3, OSVersion = AndroidOSVersion.Nine)]
@@ -80,6 +91,17 @@ namespace NHSOnline.IntegrationTests.WebIntegration
             AndroidFilePermissionsDialog
                 .AssertDisplayed(driver)
                 .Allow();
+
+            AndroidGooglePhotosApp
+                .AssertOnPage(driver);
+
+            // additional steps to verify re-download does not fail
+            driver.PressBackButton();
+
+            AndroidFileDownloadPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.DownloadImage();
 
             AndroidGooglePhotosApp
                 .AssertOnPage(driver);
