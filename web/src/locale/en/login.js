@@ -31,7 +31,6 @@ export default {
   youMustBe13AndOver: 'You must be aged 13 and over to use the app, and registered at a GP surgery in England.',
   youWillNeedToContactSurgeryToRequestAccess: 'You\'ll need to contact your GP surgery first and request access to GP online services.',
   authReturn: {
-    backToHome: 'Back to home',
     backToLogin: 'Back to login',
     contactUsIfYouKeepSeeing: {
       text: 'Contact us if you keep seeing this message, quoting error code {errorCode}',
@@ -46,7 +45,7 @@ export default {
       text: 'Go to 111.nhs.uk',
       label: 'Go to one one one dot nhs dot uk',
     },
-    goBackAndTryAgain: 'Go back to the home screen and try logging in again.',
+    goBackAndTryAgain: 'Go back and try logging in again.',
     ifYouNeedToBook: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly.',
     ifYouKeepSeeingThisQuoteCode: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
     ifYouKeepSeeingThisQuoteCodeToHelpUs: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',

@@ -12,8 +12,8 @@
             <StackLayout>
                 <elements:Heading1 Text="We could not log you in" x:Name="Heading" />
                 
-                <elements:Paragraph Text="Go back to the homepage and try logging in again." />
-                <elements:Paragraph Text="If you keep seeing this message, go back to the homepage and log in using your email, password and security code." />
+                <elements:Paragraph Text="Go back and try logging in again." />
+                <elements:Paragraph Text="If you keep seeing this message, you'll need to log in using your email, password and security code." />
                 
                 <elements:LinkLabel Text="Back to login"
                                     Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />

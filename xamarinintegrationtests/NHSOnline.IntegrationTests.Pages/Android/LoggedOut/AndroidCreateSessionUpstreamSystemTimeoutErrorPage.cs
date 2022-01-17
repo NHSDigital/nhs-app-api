@@ -21,17 +21,17 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         private AndroidLabel ThisCouldBeText => AndroidLabel.WithText(_driver, "This can be one of two problems:");
         private AndroidLabel CannotGetLoginDetailsText => AndroidLabel.WithText(_driver, "we cannot get your NHS login details");
         private AndroidLabel CannotConnectToGpSurgeryText => AndroidLabel.WithText(_driver, "we cannot connect to your GP surgery");
-        private AndroidLabel GoBackText => AndroidLabel.WithText(_driver, "Go back to the home screen and try logging in again.");
+        private AndroidLabel GoBackText => AndroidLabel.WithText(_driver, "Go back and try logging in again.");
         private AndroidLabel IfYouNeedText => AndroidLabel.WithText(_driver, "If you need to book an appointment or get a prescription now, contact your GP surgery directly.");
         private AndroidLabel ForUrgentMedicalAdvice => AndroidLabel.WithText(_driver, "For urgent medical advice, use NHS 111 online or call 111.");
         private AndroidLink GoTo111Link => AndroidLink.WithContentDescription(_driver, "Go to 111.nhs.uk");
         private AndroidLink ContactUsLink => AndroidLink.WhichMatches(_driver, "Contact us if you keep seeing this message, quoting error code z([0-9a-z]){5}").ScrollIntoView();
-        private AndroidLink BackToHomeLink => AndroidLink.WithContentDescription(_driver, "Back to home").ScrollIntoView();
+        private AndroidLink BackToLoginLink => AndroidLink.WithContentDescription(_driver, "Back to login").ScrollIntoView();
 
         private IEnumerable<IFocusable> GetAllKeyboardNavigationFocusableElements()
         {
             var headerList = Navigation.KeyboardNavigation.GetFocusableElements();
-            var pageFocusableList = new[] {GoTo111Link, ContactUsLink, BackToHomeLink};
+            var pageFocusableList = new[] {GoTo111Link, ContactUsLink, BackToLoginLink};
 
             return headerList.Concat(pageFocusableList);
         }
@@ -55,15 +55,15 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             ForUrgentMedicalAdvice.AssertVisible();
             GoTo111Link.AssertVisible();
             ContactUsLink.AssertVisible();
-            BackToHomeLink.AssertVisible();
+            BackToLoginLink.AssertVisible();
             return this;
         }
 
         public void ContactUs() => ContactUsLink.Touch();
-        public void BackToHome() => BackToHomeLink.Touch();
+        public void BackToLogin() => BackToLoginLink.Touch();
 
         public void KeyboardNavigateToAndActivateContactUs() => KeyboardNavigateToAndActivateFocusable(ContactUsLink);
-        public void KeyboardNavigateToAndActivateBackToHome() => KeyboardNavigateToAndActivateFocusable(BackToHomeLink);
+        public void KeyboardNavigateToAndActivateBackToLogin() => KeyboardNavigateToAndActivateFocusable(BackToLoginLink);
 
         private void KeyboardNavigateToAndActivateFocusable(IFocusable focusable)
         {

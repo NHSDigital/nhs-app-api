@@ -109,7 +109,7 @@
                                   :action="nhs111Url"
                                   target="_blank" />
                       <service-desk-reference-link />
-                      <error-link from="login.authReturn.backToHome" :action="loginUrl"/>
+                      <error-link from="login.authReturn.backToLogin" :action="loginUrl"/>
                     </error-container>
                     <error-container v-else-if="statusCode===403">
                       <error-title title="login.authReturn.loginFailed"/>
@@ -122,7 +122,7 @@
                                   :action="nhs111Url"
                                   target="_blank" />
                       <service-desk-reference-link />
-                      <error-link from="login.authReturn.backToHome" :action="loginUrl"/>
+                      <error-link from="login.authReturn.backToLogin" :action="loginUrl"/>
                     </error-container>
                     <error-container v-else-if="statusCode===500">
                       <error-title title="login.authReturn.loginFailed"/>
@@ -134,7 +134,7 @@
                                   :action="nhs111Url"
                                   target="_blank" />
                       <service-desk-reference-link />
-                      <error-link from="login.authReturn.backToHome" :action="loginUrl"/>
+                      <error-link from="login.authReturn.backToLogin" :action="loginUrl"/>
                     </error-container>
                     <error-container v-else-if="statusCode===502">
                       <error-title title="login.authReturn.loginFailed"/>
@@ -148,7 +148,7 @@
                                   :action="nhs111Url"
                                   target="_blank" />
                       <service-desk-reference-link />
-                      <error-link from="login.authReturn.backToHome" :action="loginUrl"/>
+                      <error-link from="login.authReturn.backToLogin" :action="loginUrl"/>
                     </error-container>
                     <error-container v-else-if="statusCode===504">
                       <error-title title="login.authReturn.loginFailed"/>
@@ -162,7 +162,7 @@
                                   :action="nhs111Url"
                                   target="_blank" />
                       <service-desk-reference-link />
-                      <error-link from="login.authReturn.backToHome" :action="loginUrl"/>
+                      <error-link from="login.authReturn.backToLogin" :action="loginUrl"/>
                     </error-container>
                     <error-container v-else>
                       <error-title title="login.authReturn.loginFailed"/>
@@ -174,7 +174,7 @@
                                   :action="nhs111Url"
                                   target="_blank" />
                       <service-desk-reference-link />
-                      <error-link from="login.authReturn.backToHome" :action="loginUrl"/>
+                      <error-link from="login.authReturn.backToLogin" :action="loginUrl"/>
                     </error-container>
                   </div>
                 </div>

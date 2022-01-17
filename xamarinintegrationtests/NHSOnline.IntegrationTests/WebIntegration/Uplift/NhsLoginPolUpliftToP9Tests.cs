@@ -143,7 +143,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
 
             AndroidNhsLoginErrorPage
                 .AssertOnPage(driver)
-                .BackToHome();
+                .BackToLogin();
 
             AndroidLoggedOutHomePage
                 .AssertOnPage(driver);
@@ -170,7 +170,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
 
             IOSNhsLoginErrorPage
                 .AssertOnPage(driver)
-                .BackToHome();
+                .BackToLogin();
 
             IOSLoggedOutHomePage
                 .AssertOnPage(driver);

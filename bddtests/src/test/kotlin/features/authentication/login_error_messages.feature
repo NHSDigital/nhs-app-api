@@ -8,7 +8,7 @@ Feature: Login error messages
     Given I am logged into Citizen ID but am receiving invalid data
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     Then I see an error 'Contact us if you keep seeing this message, quoting error code' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3a' and error prefix of '3a'
-    When I click the error 'Back to home' link
+    When I click the error 'Back to login' link
     Then I see the login page
 
   #465

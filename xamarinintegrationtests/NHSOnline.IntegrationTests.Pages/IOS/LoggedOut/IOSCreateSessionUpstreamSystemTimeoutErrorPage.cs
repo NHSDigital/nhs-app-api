@@ -12,12 +12,12 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
         private IOSLabel ThisCouldBeText => IOSLabel.WithText(_driver, "This can be one of two problems:");
         private IOSLabel CannotGetLoginDetailsText => IOSLabel.WithText(_driver, "we cannot get your NHS login details");
         private IOSLabel CannotConnectToGpSurgeryText => IOSLabel.WithText(_driver, "we cannot connect to your GP surgery");
-        private IOSLabel GoBackText => IOSLabel.WithText(_driver, "Go back to the home screen and try logging in again.");
+        private IOSLabel GoBackText => IOSLabel.WithText(_driver, "Go back and try logging in again.");
         private IOSLabel IfYouNeedText => IOSLabel.WithText(_driver, "If you need to book an appointment or get a prescription now, contact your GP surgery directly.");
         private IOSLabel ForUrgentMedicalAdvice => IOSLabel.WithText(_driver, "For urgent medical advice, use NHS 111 online or call 111.");
         private IOSLink GoTo111Link => IOSLink.WithText(_driver, "Go to 111.nhs.uk");
         private IOSLink ContactUsLink => IOSLink.WhichMatches(_driver, "Contact us if you keep seeing this message, quoting error code z ([0-9a-z] ){5}");
-        private IOSLink BackToHomeLink => IOSLink.WithText(_driver, "Back to home");
+        private IOSLink BackToLoginLink => IOSLink.WithText(_driver, "Back to login");
 
         public static IOSCreateSessionUpstreamSystemTimeoutErrorPage AssertOnPage(IIOSDriverWrapper driver)
         {
@@ -36,11 +36,11 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
             ForUrgentMedicalAdvice.AssertVisible();
             GoTo111Link.AssertVisible();
             ContactUsLink.AssertVisible();
-            BackToHomeLink.AssertVisible();
+            BackToLoginLink.AssertVisible();
             return this;
         }
 
         public void ContactUs() => ContactUsLink.Touch();
-        public void BackToHome() => BackToHomeLink.Touch();
+        public void BackToLogin() => BackToLoginLink.Touch();
     }
 }

@@ -54,7 +54,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
 
             AndroidCreateSessionUpstreamSystemTimeoutErrorPage
                 .AssertOnPage(driver)
-                .BackToHome();
+                .BackToLogin();
 
             AndroidLoggedOutHomePage
                 .AssertOnPage(driver);
@@ -98,7 +98,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
 
             AndroidCreateSessionUpstreamSystemTimeoutErrorPage
                 .AssertOnPage(driver)
-                .KeyboardNavigateToAndActivateBackToHome();
+                .KeyboardNavigateToAndActivateBackToLogin();
 
             AndroidLoggedOutHomePage
                 .AssertOnPage(driver);
@@ -139,7 +139,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
 
             IOSCreateSessionUpstreamSystemTimeoutErrorPage
                 .AssertOnPage(driver)
-                .BackToHome();
+                .BackToLogin();
 
             IOSLoggedOutHomePage
                 .AssertOnPage(driver);

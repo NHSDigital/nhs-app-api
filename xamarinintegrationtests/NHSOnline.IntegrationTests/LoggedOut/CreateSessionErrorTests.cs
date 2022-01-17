@@ -54,7 +54,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
 
             AndroidCreateSessionInternalServerErrorPage
                 .AssertOnPage(driver)
-                .BackToHome();
+                .BackToLogin();
 
             AndroidLoggedOutHomePage
                 .AssertOnPage(driver);
@@ -92,7 +92,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
 
             IOSCreateSessionInternalServerErrorPage
                 .AssertOnPage(driver)
-                .BackToHome();
+                .BackToLogin();
 
             IOSLoggedOutHomePage
                 .AssertOnPage(driver);
@@ -132,7 +132,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
 
             AndroidCreateSessionInternalServerErrorPage
                 .AssertOnPage(driver)
-                .KeyboardNavigateToAndActivateBackToHome();
+                .KeyboardNavigateToAndActivateBackToLogin();
 
             AndroidLoggedOutHomePage
                 .AssertOnPage(driver);
