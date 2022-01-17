@@ -4,8 +4,8 @@ export default {
     contentTag: 'book appointments',
   },
   myRecord: {
-    headerTag: 'access your GP medical record',
-    contentTag: 'view your GP medical record',
+    headerTag: 'access your medical record',
+    contentTag: 'view your medical record',
   },
   prescriptions: {
     headerTag: 'order prescriptions',
