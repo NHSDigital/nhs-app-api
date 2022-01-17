@@ -12,15 +12,11 @@
     <key>CFBundleVersion</key>
     <string>4</string>
     <key>MinimumOSVersion</key>
-    <string>9.0</string>
+    <string>11.0</string>
     <key>UIDeviceFamily</key>
     <array>
       <integer>1</integer>
       <integer>2</integer>
-    </array>
-    <key>UIRequiredDeviceCapabilities</key>
-    <array>
-      <string>armv7</string>
     </array>
     <key>UILaunchStoryboardName</key>
     <string>LaunchScreen</string>
