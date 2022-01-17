@@ -40,5 +40,10 @@ namespace NHSOnline.App.DependencyServices.Biometrics
         {
             public override T Accept<T>(IBiometricAuthVerifyUserResultVisitor<T> visitor) => visitor.Visit(this);
         }
+
+        public sealed class VendorError : BiometricAuthVerifyUserResult
+        {
+            public override T Accept<T>(IBiometricAuthVerifyUserResultVisitor<T> visitor) => visitor.Visit(this);
+        }
     }
 }

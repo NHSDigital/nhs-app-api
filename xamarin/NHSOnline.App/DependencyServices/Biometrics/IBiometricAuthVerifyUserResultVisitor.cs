@@ -8,5 +8,6 @@ namespace NHSOnline.App.DependencyServices.Biometrics
         T Visit(BiometricAuthVerifyUserResult.Unauthorised unauthorised);
         T Visit(BiometricAuthVerifyUserResult.PermanentLockout permanentLockout);
         T Visit(BiometricAuthVerifyUserResult.TemporaryLockout temporaryLockout);
+        T Visit(BiometricAuthVerifyUserResult.VendorError vendorError);
     }
 }

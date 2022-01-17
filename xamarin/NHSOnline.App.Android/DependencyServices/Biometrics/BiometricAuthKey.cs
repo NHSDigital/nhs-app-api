@@ -171,6 +171,11 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
                         _completionSource.SetResult(new BiometricAuthVerifyUserResult.PermanentLockout());
                         break;
 
+                    case BiometricPrompt.ErrorVendor:
+                        Logger.LogInformation("Vendor error '{ErrString}' has occured. cancelling this biometric request", errString);
+                        _completionSource.SetResult(new BiometricAuthVerifyUserResult.VendorError());
+                        break;
+
                     default:
                         Logger.LogWarning("Authentication error: {ErrorCode} {ErrString}", errorCode, errString);
                         _completionSource.SetResult(new BiometricAuthVerifyUserResult.Unauthorised());

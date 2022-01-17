@@ -189,34 +189,22 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
                 _presenter = presenter;
             }
 
-            public Task Visit(BiometricLoginResult.NotRegistered notRegistered)
-            {
-                Logger.LogInformation("Biometrics not registered");
-                return Task.CompletedTask;
-            }
-
             public async Task Visit(BiometricLoginResult.Authorised authorised)
             {
                 Logger.LogInformation("Biometric authorisation successful");
                 await _presenter.BeginLoginJourney(authorised.FidoAuthResponse).PreserveThreadContext();
             }
 
-            public async Task Visit(BiometricLoginResult.Unauthorised unauthorised)
+            public async Task Visit(BiometricLoginResult.CouldNotLogin couldNotLogin)
             {
-                Logger.LogInformation("Biometric authorisation unsuccessful");
+                Logger.LogInformation("Biometrics could not log in due to: {Reason}", couldNotLogin.Reason);
                 await _presenter.ShowCouldNotLoginWithBiometrics().PreserveThreadContext();
             }
 
-            public Task Visit(BiometricLoginResult.UserCancelled userCancelled)
+            public Task Visit(BiometricLoginResult.NoAction noAction)
             {
-                Logger.LogInformation("Biometric login cancelled by the user");
+                Logger.LogInformation("No Biometric action due to: {Reason}", noAction.Reason);
                 return Task.CompletedTask;
-            }
-
-            public async Task Visit(BiometricLoginResult.SystemCancelled systemCancelled)
-            {
-                Logger.LogInformation("Biometric login cancelled by the system");
-                await _presenter.ShowCouldNotLoginWithBiometrics().PreserveThreadContext();
             }
 
             public async Task Visit(BiometricLoginResult.Failed failed)
@@ -225,16 +213,19 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
                 await _presenter.ShowBiometricLoginFailed().PreserveThreadContext();
             }
 
-            public async Task Visit(BiometricLoginResult.PermanentLockout permanentLockout)
+            public async Task Visit(BiometricLoginResult.Lockout lockout)
             {
-                Logger.LogInformation("Biometric login permanently locked out");
-                await _presenter.ShowBiometricLoginPermanentlyLockedOut().PreserveThreadContext();
-            }
+                if (lockout.Type == LockoutType.Permanent)
+                {
+                    Logger.LogInformation("Biometric login permanently locked out");
+                    await _presenter.ShowBiometricLoginPermanentlyLockedOut().PreserveThreadContext();
+                }
+                else
+                {
+                    Logger.LogInformation("Biometric login temporarily locked out");
+                    await _presenter.ShowBiometricLoginAfterDelay(BiometricDelayOnTemporaryLockout).PreserveThreadContext();
+                }
 
-            public async Task Visit(BiometricLoginResult.TemporaryLockout temporaryLockout)
-            {
-                Logger.LogInformation("Biometric login temporarily locked out");
-                await _presenter.ShowBiometricLoginAfterDelay(BiometricDelayOnTemporaryLockout).PreserveThreadContext();
             }
 
             public async Task Visit(BiometricLoginResult.LegacySensorNotValid legacySensorNotValid)

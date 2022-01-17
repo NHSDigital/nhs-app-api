@@ -39,7 +39,7 @@ namespace NHSOnline.App.Services.FIDO
             {
                 if (!_biometrics.TryGetKey(fidoUsername, out var biometricAuthKey))
                 {
-                    return new BiometricLoginResult.PermanentLockout();
+                    return new BiometricLoginResult.Lockout(LockoutType.Permanent);
                 }
 
                 var authSigner = await VerifyUser(biometricAuthKey).PreserveThreadContext();
@@ -53,7 +53,7 @@ namespace NHSOnline.App.Services.FIDO
             catch (CrossPlatformException e) when (e.ErrorType is CrossPlatformErrorType.UnrecoverableKey)
             {
                 _logger.LogError(e, "Unrecoverable key exception");
-                return new BiometricLoginResult.PermanentLockout();
+                return new BiometricLoginResult.Lockout(LockoutType.Permanent);
             }
         }
 
@@ -62,7 +62,7 @@ namespace NHSOnline.App.Services.FIDO
             var keyId = _preferencesService.BiometricsKeyId;
             if (keyId is null)
             {
-                return new BiometricLoginResult.NotRegistered();
+                return new BiometricLoginResult.NoAction(NoActionReason.NotRegistered);
             }
 
             var status = await _biometrics.FetchBiometricStatus(fidoUsername).ResumeOnThreadPool();
@@ -92,12 +92,12 @@ namespace NHSOnline.App.Services.FIDO
 
             public ProcessResult<IBiometricAuthSigner, BiometricLoginResult> Visit(BiometricAuthVerifyUserResult.UserCancelled userCancelled)
             {
-                return new BiometricLoginResult.UserCancelled();
+                return new BiometricLoginResult.NoAction(NoActionReason.UserCancelled);
             }
 
             public ProcessResult<IBiometricAuthSigner, BiometricLoginResult> Visit(BiometricAuthVerifyUserResult.SystemCancelled systemCancelled)
             {
-                return new BiometricLoginResult.SystemCancelled();
+                return new BiometricLoginResult.CouldNotLogin(CouldNotLoginReason.SystemCancelled);
             }
 
             public ProcessResult<IBiometricAuthSigner, BiometricLoginResult> Visit(BiometricAuthVerifyUserResult.Unauthorised unauthorised)
@@ -107,12 +107,17 @@ namespace NHSOnline.App.Services.FIDO
 
             public ProcessResult<IBiometricAuthSigner, BiometricLoginResult> Visit(BiometricAuthVerifyUserResult.PermanentLockout permanentLockout)
             {
-                return new BiometricLoginResult.PermanentLockout();
+                return new BiometricLoginResult.Lockout(LockoutType.Permanent);
             }
 
             public ProcessResult<IBiometricAuthSigner, BiometricLoginResult> Visit(BiometricAuthVerifyUserResult.TemporaryLockout temporaryLockout)
             {
-                return new BiometricLoginResult.TemporaryLockout();
+                return new BiometricLoginResult.Lockout(LockoutType.Temporary);
+            }
+
+            public ProcessResult<IBiometricAuthSigner, BiometricLoginResult> Visit(BiometricAuthVerifyUserResult.VendorError vendorError)
+            {
+                return new BiometricLoginResult.NoAction(NoActionReason.VendorError);
             }
         }
 
@@ -127,7 +132,7 @@ namespace NHSOnline.App.Services.FIDO
 
             public ProcessResult<string, BiometricLoginResult> Visit(BiometricStatus.HardwareNotPresent hardwareNotPresent)
             {
-                return new BiometricLoginResult.NotRegistered();
+                return new BiometricLoginResult.NoAction(NoActionReason.NotRegistered);
             }
 
             public ProcessResult<string, BiometricLoginResult> Visit(BiometricStatus.LegacySensorNotValid legacySensorNotValid)
@@ -154,9 +159,9 @@ namespace NHSOnline.App.Services.FIDO
             {
                 return status switch
                 {
-                    BiometricRegistrationStatus.NotRegistered => new BiometricLoginResult.NotRegistered(),
+                    BiometricRegistrationStatus.NotRegistered => new BiometricLoginResult.NoAction(NoActionReason.NotRegistered),
                     BiometricRegistrationStatus.Registered => _keyId,
-                    BiometricRegistrationStatus.Invalidated => new BiometricLoginResult.PermanentLockout(),
+                    BiometricRegistrationStatus.Invalidated => new BiometricLoginResult.Lockout(LockoutType.Permanent),
                     _ => throw new InvalidOperationException($"Unknown registration status: {status}")
                 };
             }
@@ -171,12 +176,12 @@ namespace NHSOnline.App.Services.FIDO
 
             public BiometricLoginResult Visit(FidoAuthorisationResult.Unauthorised unauthorised)
             {
-                return new BiometricLoginResult.Unauthorised();
+                return new BiometricLoginResult.CouldNotLogin(CouldNotLoginReason.Unauthorised);
             }
 
             public BiometricLoginResult Visit(FidoAuthorisationResult.PermanentLockout permanentLockout)
             {
-                return new BiometricLoginResult.PermanentLockout();
+                return new BiometricLoginResult.Lockout(LockoutType.Permanent);
             }
         }
     }

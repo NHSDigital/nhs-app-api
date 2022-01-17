@@ -8,11 +8,6 @@ namespace NHSOnline.App.Services.FIDO
 
         public abstract T Accept<T>(IBiometricLoginResultVisitor<T> visitor);
 
-        internal sealed class NotRegistered : BiometricLoginResult
-        {
-            public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
-        }
-
         internal sealed class Authorised : BiometricLoginResult
         {
             public string FidoAuthResponse { get; }
@@ -25,18 +20,27 @@ namespace NHSOnline.App.Services.FIDO
             public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
-        internal sealed class Unauthorised : BiometricLoginResult
+        internal sealed class CouldNotLogin : BiometricLoginResult
         {
+            public CouldNotLoginReason Reason { get; }
+
+            public CouldNotLogin(CouldNotLoginReason reason)
+            {
+                Reason = reason;
+            }
+
             public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
-        internal sealed class UserCancelled : BiometricLoginResult
+        internal sealed class NoAction : BiometricLoginResult
         {
-            public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
-        }
+            public NoActionReason Reason { get; }
 
-        internal sealed class SystemCancelled : BiometricLoginResult
-        {
+            public NoAction(NoActionReason reason)
+            {
+                Reason = reason;
+            }
+
             public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
@@ -45,13 +49,14 @@ namespace NHSOnline.App.Services.FIDO
             public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
-        internal sealed class PermanentLockout : BiometricLoginResult
+        internal sealed class Lockout : BiometricLoginResult
         {
-            public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
-        }
+            public LockoutType Type { get; }
 
-        internal sealed class TemporaryLockout : BiometricLoginResult
-        {
+            public Lockout(LockoutType type)
+            {
+                Type = type;
+            }
             public override T Accept<T>(IBiometricLoginResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
