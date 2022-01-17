@@ -16,7 +16,7 @@ class PatientPracticeMessagingContactYourGpPage: HybridPageObject() {
     private val expectedMessagingPurposeText = "Messaging is for non-urgent advice."
     private val expectedWhatToDoNextText = "For advice now, contact your GP surgery directly, " +
             "go to 111.nhs.uk or call 111."
-    private val expectedCareCardHeaderText = "Urgent advice:\nCall 999 now if you have:"
+    private val expectedCareCardHeaderText = "Immediate advice:\nCall 999 now if you have:"
 
     private val careCardLocator = "//div[@id='phoneYourGpCareCard']"
 
