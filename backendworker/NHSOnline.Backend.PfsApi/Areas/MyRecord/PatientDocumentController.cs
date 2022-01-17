@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
                     documentInfo.Name);
 
                 await result.Accept(new PatientDocumentAuditingVisitor(_auditor, _logger));
-                return result.Accept(new PatientDocumentResultVisitor());
+                return result.Accept(new PatientDocumentResultVisitor(_logger));
             }
             finally
             {
