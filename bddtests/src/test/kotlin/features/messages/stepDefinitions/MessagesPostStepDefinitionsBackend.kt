@@ -18,11 +18,6 @@ class MessagesPostStepDefinitionsBackend {
 
     @Given("^I am an api user wishing to post a message$")
     fun iAmAApiUserWishingToPostAMessage() {
-        iAmAnApiUserWishingToPostAMessage("Communication One", "Transmission One")
-    }
-
-    @Given("^I am an api user wishing to post a message without a communication ID or Transmission ID$")
-    fun iAmAApiUserWishingToPostAMessageWithoutACommunicationIdOrTransmissionId() {
         iAmAnApiUserWishingToPostAMessage()
     }
 
@@ -44,16 +39,12 @@ class MessagesPostStepDefinitionsBackend {
     }
 
     private fun iAmAnApiUserWishingToPostAMessage(
-        communicationId: String? = null,
-        transmissionId: String? = null,
         senderContext: SenderContext? = null
     ) {
         MongoDBConnection.MessagesCollection.clearCache()
         val message = MessageRequest(
             sender = "Sender One",
             body = "Message One",
-            communicationId = communicationId,
-            transmissionId = transmissionId,
             version = MessageVersion.PLAIN_TEXT.value,
             senderContext = senderContext
         )

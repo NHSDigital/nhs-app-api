@@ -19,8 +19,6 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
         private const string MessageId = "MessageId";
         private const string Link = "https://testing.com/valid/url/";
         private const string CampaignId = "CampaignId";
-        private const string CommunicationId = "CommunicationId";
-        private const string TransmissionId = "TransmissionId";
         private const string SenderContextCommunicationId = "SenderContextCommunicationId";
         private const string SenderContextTransmissionId = "SenderContextTransmissionId";
 
@@ -121,8 +119,6 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
             {
                 new UserMessage
                 {
-                    CommunicationId = CommunicationId,
-                    TransmissionId = TransmissionId,
                     SenderContext = null
                 }
             });
@@ -132,8 +128,8 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
             Assert.AreEqual(MessageId, output.MessageId);
             Assert.AreEqual(_link, output.Link);
             Assert.AreEqual(null, output.CampaignId);
-            Assert.AreEqual(CommunicationId, output.CommunicationId);
-            Assert.AreEqual(TransmissionId, output.TransmissionId);
+            Assert.AreEqual(null, output.CommunicationId);
+            Assert.AreEqual(null, output.TransmissionId);
         }
 
         [TestMethod]
@@ -143,8 +139,6 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
             {
                 new UserMessage
                 {
-                    CommunicationId = CommunicationId,
-                    TransmissionId = TransmissionId,
                     SenderContext = new SenderContext
                     {
                         CampaignId = CampaignId,

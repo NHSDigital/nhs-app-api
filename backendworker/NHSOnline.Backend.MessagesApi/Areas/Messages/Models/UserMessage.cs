@@ -6,6 +6,7 @@ using NHSOnline.Backend.Repository;
 
 namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
 {
+    [BsonIgnoreExtraElements]
     public class UserMessage : RepositoryRecord
     {
         [BsonId(IdGenerator = typeof(ObjectIdGenerator))]
@@ -28,12 +29,6 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
 
         [BsonElement]
         public DateTime SentTime { get; set; }
-
-        [BsonElement]
-        public string CommunicationId { get; set; }
-
-        [BsonElement]
-        public string TransmissionId { get; set; }
 
         [BsonElement]
         public SenderContext SenderContext { get; set; }

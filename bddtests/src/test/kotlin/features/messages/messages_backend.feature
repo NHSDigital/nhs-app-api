@@ -69,15 +69,8 @@ Feature: Messages Backend
     And I receive the message id
     And the message is available in the database
 
-  Scenario: An api user can post messages with Communication ID and Transmission ID specified
+  Scenario: An api user can post messages without sender context specified
     Given I am an api user wishing to post a message
-    When I post a message to the api
-    Then I receive a "Created" success code
-    And I receive the message id
-    And the message is available in the database
-
-  Scenario: An api user can post messages without Communication ID specified
-    Given I am an api user wishing to post a message without a communication ID or Transmission ID
     When I post a message to the api
     Then I receive a "Created" success code
     And I receive the message id

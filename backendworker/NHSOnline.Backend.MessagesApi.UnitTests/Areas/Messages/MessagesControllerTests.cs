@@ -538,13 +538,13 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 .ReturnsAsync(new MessagePatchResult.Updated(new UserMessage
                 {
                     Id = new ObjectId(MessageId),
-                    CommunicationId = communicationId,
-                    TransmissionId = transmissionId,
                     ReadTime = DateTime.UtcNow,
                     SenderContext = new SenderContext
                     {
                         CampaignId = campaignId,
-                        SupplierId = supplierId
+                        CommunicationId = communicationId,
+                        SupplierId = supplierId,
+                        TransmissionId = transmissionId
                     }
                 }));
 
@@ -578,24 +578,19 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         public async Task Patch_WithNoSenderContext_DoesNotSendEventLog()
         {
             // Arrange
-            const string communicationId = "communicationId_2345";
-            const string transmissionId = "transmissionId_3456";
-
             _mockMessageService.Setup(x =>
                     x.UpdateMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<AccessToken>(),
                         It.IsAny<string>()))
                 .ReturnsAsync(new MessagePatchResult.Updated(new UserMessage
                 {
                     Id = new ObjectId(MessageId),
-                    CommunicationId = communicationId,
-                    TransmissionId = transmissionId,
                     ReadTime = new DateTime(2021, 04, 22, 01, 05, 25),
                     SenderContext = null
                 }));
 
             _mockMetricLogger.Setup(x => x.MessageRead(It.Is<MessageReadData>(mrd =>
-                    mrd.CommunicationId == communicationId &&
-                    mrd.TransmissionId == transmissionId &&
+                    mrd.CommunicationId == null &&
+                    mrd.TransmissionId == null &&
                     mrd.MessageId == MessageId)))
                 .Returns(Task.CompletedTask);
 

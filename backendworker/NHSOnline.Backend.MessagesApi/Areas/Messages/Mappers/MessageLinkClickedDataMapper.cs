@@ -27,8 +27,8 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Mappers
                 firstSource.MessageId,
                 firstSource.Link,
                 userMessage?.SenderContext?.CampaignId,
-                userMessage?.SenderContext?.CommunicationId ?? userMessage?.CommunicationId,
-                userMessage?.SenderContext?.TransmissionId ?? userMessage?.TransmissionId
+                userMessage?.SenderContext?.CommunicationId,
+                userMessage?.SenderContext?.TransmissionId
             );
         }
 

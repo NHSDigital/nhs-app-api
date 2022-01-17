@@ -28,28 +28,8 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Mappers
                 Version = firstSource.Version,
                 Body = firstSource.Body,
                 SentTime = DateTime.UtcNow,
-                CommunicationId = MapCommunicationId(firstSource),
-                TransmissionId = MapTransmissionId(firstSource),
                 SenderContext = MapSenderContext(firstSource.SenderContext)
             };
-        }
-
-        private static string MapCommunicationId(AddMessageRequest request)
-        {
-            var communicationId = request.SenderContext?.CommunicationId ?? request.CommunicationId;
-
-            return string.IsNullOrWhiteSpace(communicationId)
-                ? null
-                : communicationId;
-        }
-
-        private static string MapTransmissionId(AddMessageRequest request)
-        {
-            var transmissionId = request.SenderContext?.TransmissionId ?? request.TransmissionId;
-
-            return string.IsNullOrWhiteSpace(transmissionId)
-                ? null
-                : transmissionId;
         }
 
         private static SenderContext MapSenderContext(AddMessageSenderContext senderContext)

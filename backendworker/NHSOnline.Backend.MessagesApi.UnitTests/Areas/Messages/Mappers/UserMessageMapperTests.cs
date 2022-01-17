@@ -65,142 +65,6 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
                     ((ArgumentNullException) x).ParamName.Equals("secondSource", StringComparison.Ordinal));
         }
 
-        [DataTestMethod]
-        [DataRow(null)]
-        [DataRow("")]
-        [DataRow(" ")]
-        [DataRow("   ")]
-        public void Map_RequestAndContextCommunicationIdAreNullOrWhiteSpace_MappedCommunicationIdIsNull(
-            string communicationId)
-        {
-            // Arrange
-            var request = new AddMessageRequest
-            {
-                CommunicationId = communicationId,
-                SenderContext = new AddMessageSenderContext
-                {
-                    CommunicationId = communicationId
-                }
-            };
-
-            // Act
-            var result = _systemUnderTest.Map(request, NhsLoginId);
-
-            // Assert
-            result.Should().NotBeNull();
-            result.CommunicationId.Should().BeNull();
-        }
-
-        [DataTestMethod]
-        public void Map_RequestSenderContextCommunicationIdHasValue_MapsCommunicationIdFromSenderContext()
-        {
-            // Arrange
-            var request = new AddMessageRequest
-            {
-                CommunicationId = "RequestCommunicationId",
-                SenderContext = new AddMessageSenderContext
-                {
-                    CommunicationId = "ContextCommunicationSenderId"
-                }
-            };
-
-            // Act
-            var result = _systemUnderTest.Map(request, NhsLoginId);
-
-            // Assert
-            result.Should().NotBeNull();
-            result.CommunicationId.Should().Be("ContextCommunicationSenderId");
-        }
-
-        [DataTestMethod]
-        public void Map_RequestCommunicationIdHasValueSenderContextIsNull_MapsCommunicationIdFromRequest()
-        {
-            // Arrange
-            var request = new AddMessageRequest
-            {
-                CommunicationId = "RequestCommunicationId",
-                SenderContext = new AddMessageSenderContext
-                {
-                    CommunicationId = null
-                }
-            };
-
-            // Act
-            var result = _systemUnderTest.Map(request, NhsLoginId);
-
-            // Assert
-            result.Should().NotBeNull();
-            result.CommunicationId.Should().Be("RequestCommunicationId");
-        }
-
-        [DataTestMethod]
-        [DataRow(null)]
-        [DataRow("")]
-        [DataRow(" ")]
-        [DataRow("   ")]
-        public void Map_RequestAndSenderContextTransmissionIdIsNullOrWhiteSpace_MappedTransmissionIdIsNull(
-            string transmissionId)
-        {
-            // Arrange
-            var request = new AddMessageRequest
-            {
-                TransmissionId = transmissionId,
-                SenderContext = new AddMessageSenderContext
-                {
-                    TransmissionId = transmissionId
-                }
-            };
-
-            // Act
-            var result = _systemUnderTest.Map(request, NhsLoginId);
-
-            // Assert
-            result.Should().NotBeNull();
-            result.TransmissionId.Should().BeNull();
-        }
-
-        [DataTestMethod]
-        public void Map_RequestSenderContextTransmissionIdHasValue_MapsTransmissionIdFromSenderContext()
-        {
-            // Arrange
-            var request = new AddMessageRequest
-            {
-                TransmissionId = "RequestTransmissionId",
-                SenderContext = new AddMessageSenderContext
-                {
-                    TransmissionId = "ContextTransmissionSenderId"
-                }
-            };
-
-            // Act
-            var result = _systemUnderTest.Map(request, NhsLoginId);
-
-            // Assert
-            result.Should().NotBeNull();
-            result.TransmissionId.Should().Be("ContextTransmissionSenderId");
-        }
-
-        [DataTestMethod]
-        public void Map_RequestTransmissionIdHasValueSenderContextIsNull_MapsTransmissionIdFromRequest()
-        {
-            // Arrange
-            var request = new AddMessageRequest
-            {
-                TransmissionId = "RequestTransmissionId",
-                SenderContext = new AddMessageSenderContext
-                {
-                    TransmissionId = null
-                }
-            };
-
-            // Act
-            var result = _systemUnderTest.Map(request, NhsLoginId);
-
-            // Assert
-            result.Should().NotBeNull();
-            result.TransmissionId.Should().Be("RequestTransmissionId");
-        }
-
         [TestMethod]
         public void Map_RequestSenderContextIsNull_MappedSenderContextIsNull()
         {
@@ -226,9 +90,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
             var request = new AddMessageRequest
             {
                 Body = "Body",
-                CommunicationId = "CommunicationId",
                 Sender = "Sender",
-                TransmissionId = "TransmissionId",
                 Version = 1,
                 SenderContext = new AddMessageSenderContext
                 {
@@ -250,10 +112,8 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
             // Assert
             result.Should().NotBeNull();
             result.Body.Should().Be("Body");
-            result.CommunicationId.Should().Be("CommunicationId");
             result.Sender.Should().Be("Sender");
             result.SentTime.Should().BeCloseTo(nowTime, TimeSpan.FromSeconds(1));
-            result.TransmissionId.Should().Be("TransmissionId");
             result.Version.Should().Be(1);
             result.SenderContext.Should().BeEquivalentTo(new SenderContext
             {

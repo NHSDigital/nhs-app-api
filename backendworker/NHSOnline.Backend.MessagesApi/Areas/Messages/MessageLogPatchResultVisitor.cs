@@ -53,8 +53,8 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                 tasks.Add(_metricLogger.MessageRead(
                     new MessageReadData(
                         result.UserMessage.Id.ToString(),
-                        result.UserMessage.CommunicationId,
-                        result.UserMessage.TransmissionId,
+                        result.UserMessage.SenderContext?.CommunicationId,
+                        result.UserMessage.SenderContext?.TransmissionId,
                         result.UserMessage.SenderContext?.CampaignId,
                         result.UserMessage.SenderContext?.SupplierId)
                 ));

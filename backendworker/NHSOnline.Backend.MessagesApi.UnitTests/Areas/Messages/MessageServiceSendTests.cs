@@ -52,9 +52,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             {
                 Version = 1,
                 Body = "Body",
-                Sender = "Sender",
-                CommunicationId = "CommunicationId",
-                TransmissionId = "TransmissionId"
+                Sender = "Sender"
             };
 
             var mappedUserMessage = new UserMessage();

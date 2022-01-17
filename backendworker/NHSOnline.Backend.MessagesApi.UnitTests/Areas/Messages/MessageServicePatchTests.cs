@@ -70,9 +70,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             userMessageJsonPatch.Operations.Add(new Operation<UserMessage>(operation, userMessagePath, null, nowTime));
             var userMessage = new UserMessage
             {
-                Id = new ObjectId("ae0b4ffd40c44828b884961b5228128e"),
-                CommunicationId = "CommunicationId",
-                TransmissionId = "TransmissionId"
+                Id = new ObjectId("ae0b4ffd40c44828b884961b5228128e")
             };
 
             _mockMessagesValidationService.Setup(x =>
