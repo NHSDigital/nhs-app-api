@@ -2,7 +2,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.App.Api.Client.Session;
 using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.Api.Client.Configuration
@@ -14,7 +13,7 @@ namespace NHSOnline.App.Api.Client.Configuration
         private readonly IResponseModelValidator<GetConfigurationResponseModel, GetConfigurationResponse> _responseModelValidator;
 
         public GetConfigurationResponseParser(
-            ILogger<CreateSessionResponseParser> logger,
+            ILogger<GetConfigurationResponseParser> logger,
             JsonResponseParser jsonResponseParser,
             IResponseModelValidator<GetConfigurationResponseModel, GetConfigurationResponse> responseModelValidator)
         {

@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Api.Client;
 using NHSOnline.App.Api.Client.Configuration;
+using NHSOnline.App.Logging;
 using NHSOnline.App.Threading;
+using Polly;
 
 namespace NHSOnline.App.Api.Configuration
 {
@@ -22,14 +24,26 @@ namespace NHSOnline.App.Api.Configuration
             _endpoint = endpoint;
         }
 
-        public async Task<GetConfigurationResult> GetConfiguration(CancellationToken token)
+        public async Task<GetConfigurationResult> GetConfiguration(int maxAttempts, CancellationToken token)
         {
             try
             {
                 var request = new ApiConfigurationRequest();
-                var result = await _endpoint.Call(request, token).ResumeOnThreadPool();
+                var retry = Policy.Handle<Exception>()
+                    .WaitAndRetryAsync(maxAttempts - 1, i => TimeSpan.FromSeconds(2));
 
-                return result.Accept(this);
+                return await retry.ExecuteAsync(async cancellationToken =>
+                {
+                    var result = await _endpoint.Call(request, token).ResumeOnThreadPool();
+
+                    if (result is ApiGetConfigurationResult.Success)
+                    {
+                        return result.Accept(this);
+                    }
+                    
+                    throw new GetConfigurationException("Get Configuration Failed");
+
+                }, token).ResumeOnThreadPool();
             }
             catch (Exception e)
             {

@@ -5,6 +5,6 @@ namespace NHSOnline.App.Api.Configuration
 {
     public interface IConfigurationService
     {
-        public Task<GetConfigurationResult> GetConfiguration(CancellationToken token);
+        public Task<GetConfigurationResult> GetConfiguration(int maxAttempts, CancellationToken token);
     }
 }

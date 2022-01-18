@@ -65,6 +65,8 @@ namespace NHSOnline.IntegrationTests.ForcedUpdate
         [NhsAppAndroidTest(AndroidBrowserStackCapability.NoNetwork)]
         public async Task APatientSeesTheForcedUpgradeErrorPageWhenLoggingInWithNoNetworkCanGoTo111AndCanNavigateBackToLogInAndroid(IAndroidDriverWrapper driver)
         {
+            using var extendedTimeout = ExtendedTimeout.FromSeconds(30);
+
             var patient = new EmisPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
                 .WithProofLevel5();
@@ -141,6 +143,8 @@ namespace NHSOnline.IntegrationTests.ForcedUpdate
         [NhsAppIOSTest(IOSBrowserStackCapability.NoNetwork)]
         public async Task APatientSeesTheForcedUpgradeErrorPageWhenLoggingInWithNoNetworkCanGoTo111AndCanNavigateBackToLogInIOS(IIOSDriverWrapper driver)
         {
+            using var extendedTimeout = ExtendedTimeout.FromSeconds(30);
+
             var patient = new EmisPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
                 .WithProofLevel5();

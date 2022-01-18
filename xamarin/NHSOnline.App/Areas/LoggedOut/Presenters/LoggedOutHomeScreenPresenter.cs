@@ -130,6 +130,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         {
             var model = new BeginLoginModel(_deeplinkUrl, fidoAuthResponse);
             var page = _pageFactory.CreatePageFor(model);
+
             await _view.AppNavigation.Push(page).PreserveThreadContext();
         }
 

@@ -32,14 +32,19 @@ namespace NHSOnline.App.Services.ForcedUpdate
 
         public void Initiate()
         {
-            _task = Task.Run(() => IsUpdateRequiredCheck(CreateTimeoutCancellationToken()));
+            _task = Task.Run(() => IsUpdateRequiredCheck(10, CreateTimeoutCancellationToken()));
         }
 
         public async Task<UpdateRequired> RequiresForcedUpdate()
         {
             if (_task == null)
             {
-                _task = IsUpdateRequiredCheck(CreateTimeoutCancellationToken());
+                _task = IsUpdateRequiredCheck(1, CreateTimeoutCancellationToken());
+            }
+
+            if (_task.Status == TaskStatus.RanToCompletion && _task.Result == UpdateRequired.Failed)
+            {
+                return await IsUpdateRequiredCheck(1, CreateTimeoutCancellationToken()).ResumeOnThreadPool();
             }
 
             if (_task != null && _taskCancellationToken != null)
@@ -53,11 +58,11 @@ namespace NHSOnline.App.Services.ForcedUpdate
 
         public async Task OpenAppStoreUrl() => await _updateService.OpenAppStoreUrl().ResumeOnThreadPool();
 
-        private async Task<UpdateRequired> IsUpdateRequiredCheck(CancellationToken token)
+        private async Task<UpdateRequired> IsUpdateRequiredCheck(int maxAttempts, CancellationToken token)
         {
             try
             {
-                var configurationResult = await _configurationService.GetConfiguration(token).ResumeOnThreadPool();
+                var configurationResult = await _configurationService.GetConfiguration(maxAttempts, token).ResumeOnThreadPool();
 
                 var updateRequired =
                     configurationResult.Accept(new AssessUpdateRequiredVisitor(_nativeAppVersionCheckService));
