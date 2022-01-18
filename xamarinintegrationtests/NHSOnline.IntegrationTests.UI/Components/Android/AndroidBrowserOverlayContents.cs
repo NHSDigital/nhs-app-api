@@ -27,7 +27,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             => _interactor.ActOnElement(FindBy, action);
 
         private By FindBy
-            => By.XPath($"//android.view.View[normalize-space(@text)={_text.QuoteXPathLiteral()}]");
+            => By.XPath($"//android.view.View[normalize-space(@text)={_text.QuoteXPathLiteral()}]|//android.widget.TextView[normalize-space(@text)={_text.QuoteXPathLiteral()}]");
 
         public void AssertSubStringVisible()
             => ActOnSubStringElement(e => e.Displayed.Should().BeTrue("a view with text containing {0} should be displayed", _text));
