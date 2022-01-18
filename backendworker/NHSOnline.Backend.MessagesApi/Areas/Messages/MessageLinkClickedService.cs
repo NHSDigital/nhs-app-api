@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
@@ -13,14 +14,14 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
     public class MessageLinkClickedService : IMessageLinkClickedService
     {
         private readonly ILogger<MessageLinkClickedService> _logger;
-        private readonly IMapper<MessageLink, RepositoryFindResult<UserMessage>.Found, MessageLinkClickedData> _mapper;
+        private readonly IMapper<MessageLink, UserMessage, MessageLinkClickedData> _mapper;
         private readonly IMessageLinkClickedValidationService _validationService;
         private readonly IMessageRepository _messageRepository;
         private readonly IMetricLogger _metricLogger;
 
         public MessageLinkClickedService(
             ILogger<MessageLinkClickedService> logger,
-            IMapper<MessageLink, RepositoryFindResult<UserMessage>.Found, MessageLinkClickedData> mapper,
+            IMapper<MessageLink, UserMessage, MessageLinkClickedData> mapper,
             IMessageLinkClickedValidationService validationService,
             IMessageRepository messageRepository,
             IMetricLogger metricLogger
@@ -51,7 +52,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                     return result.Accept(new RepositoryFindMessageLinkClickedResultVisitor());
                 }
 
-                var data = _mapper.Map(messageLink, found);
+                var data = _mapper.Map(messageLink, found.Records.First());
 
                 await _metricLogger.MessageLinkClicked(data);
 

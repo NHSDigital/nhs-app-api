@@ -14,18 +14,19 @@ using NHSOnline.Backend.Support;
 namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
 {
     [TestClass]
-    public class MessageLinkClickedServiceTests 
+    public class MessageLinkClickedServiceTests
     {
         private MessageLinkClickedService _systemUnderTest;
 
-        private Mock<IMapper<MessageLink, RepositoryFindResult<UserMessage>.Found, MessageLinkClickedData>> _mockMapper;
+        private Mock<IMapper<MessageLink, UserMessage, MessageLinkClickedData>> _mockMapper;
         private Mock<IMessageLinkClickedValidationService> _mockValidationService;
         private Mock<IMessageRepository> _mockMessageRepository;
         private Mock<IMetricLogger> _mockMetricLogger;
 
         private const string NhsLoginId = "NhsLoginId";
         private const string MessageId = "MessageId";
-        private readonly Uri _link = new Uri("https://www.testing.com/valid/url/");
+        private const string Link = "https://www.testing.com/valid/url/";
+        private readonly Uri _link = new Uri(Link);
 
         private MessageLink _messageLink;
         private MessageLinkClickedData _data;
@@ -39,9 +40,9 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 Link = _link
             };
 
-            _data = new MessageLinkClickedData(MessageId, _link, null, null, null);
+            _data = new MessageLinkClickedData(MessageId, Link, null, null, null);
 
-            _mockMapper = new Mock<IMapper<MessageLink, RepositoryFindResult<UserMessage>.Found, MessageLinkClickedData>>(MockBehavior.Strict);
+            _mockMapper = new Mock<IMapper<MessageLink, UserMessage, MessageLinkClickedData>>(MockBehavior.Strict);
             _mockValidationService = new Mock<IMessageLinkClickedValidationService>(MockBehavior.Strict);
             _mockMessageRepository = new Mock<IMessageRepository>(MockBehavior.Strict);
             _mockMetricLogger = new Mock<IMetricLogger>(MockBehavior.Strict);
@@ -160,14 +161,15 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 .Setup(x => x.IsServiceRequestValid(NhsLoginId, _messageLink))
                 .Returns(true);
 
-            var found = new RepositoryFindResult<UserMessage>.Found(null);
+            var userMessage = new UserMessage();
+            var found = new RepositoryFindResult<UserMessage>.Found(new[]{userMessage});
 
             _mockMessageRepository
                 .Setup(x => x.FindMessage(NhsLoginId, MessageId))
                 .ReturnsAsync(found);
 
             _mockMapper
-                .Setup(x => x.Map(_messageLink, found))
+                .Setup(x => x.Map(_messageLink, userMessage))
                 .Throws<Exception>();
 
             // Act
@@ -187,14 +189,15 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 .Setup(x => x.IsServiceRequestValid(NhsLoginId, _messageLink))
                 .Returns(true);
 
-            var found = new RepositoryFindResult<UserMessage>.Found(null);
+            var userMessage = new UserMessage();
+            var found = new RepositoryFindResult<UserMessage>.Found(new[] { userMessage });
 
             _mockMessageRepository
                 .Setup(x => x.FindMessage(NhsLoginId, MessageId))
                 .ReturnsAsync(found);
 
             _mockMapper
-                .Setup(x => x.Map(_messageLink, found))
+                .Setup(x => x.Map(_messageLink, userMessage))
                 .Returns(_data);
 
             _mockMetricLogger
@@ -218,14 +221,15 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 .Setup(x => x.IsServiceRequestValid(NhsLoginId, _messageLink))
                 .Returns(true);
 
-            var found = new RepositoryFindResult<UserMessage>.Found(null);
+            var userMessage = new UserMessage();
+            var found = new RepositoryFindResult<UserMessage>.Found(new[]{userMessage});
 
             _mockMessageRepository
                 .Setup(x => x.FindMessage(NhsLoginId, MessageId))
                 .ReturnsAsync(found);
 
             _mockMapper
-                .Setup(x => x.Map(_messageLink, found))
+                .Setup(x => x.Map(_messageLink, userMessage))
                 .Returns(_data);
 
             _mockMetricLogger

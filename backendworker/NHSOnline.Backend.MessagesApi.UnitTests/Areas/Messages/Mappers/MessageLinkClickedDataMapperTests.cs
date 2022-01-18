@@ -1,11 +1,10 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Mappers;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
-using NHSOnline.Backend.Repository;
+using NHSOnline.Backend.Support.Hasher;
 
 namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
 {
@@ -15,39 +14,49 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
         private MessageLinkClickedDataMapper _systemUnderTest;
 
         private Mock<ILogger<MessageLinkClickedDataMapper>> _mockLogger;
+        private Mock<IHashingService> _mockHashingService;
 
         private const string MessageId = "MessageId";
         private const string Link = "https://testing.com/valid/url/";
         private const string CampaignId = "CampaignId";
-        private const string SenderContextCommunicationId = "SenderContextCommunicationId";
-        private const string SenderContextTransmissionId = "SenderContextTransmissionId";
+        private const string CommunicationId = "CommunicationId";
+        private const string TransmissionId = "TransmissionId";
 
         private MessageLink _messageLink;
-        private RepositoryFindResult<UserMessage>.Found _found;
-        private Uri _link;
+        private UserMessage _userMessage;
+        private readonly Uri _link = new Uri(Link);
 
         [TestInitialize]
         public void Setup()
         {
-            _link = new Uri(Link);
-
             _messageLink = new MessageLink
             {
                 MessageId = MessageId,
                 Link = _link
             };
 
-            _found = new RepositoryFindResult<UserMessage>.Found(new [] { new UserMessage() });
+            _userMessage = new UserMessage
+            {
+                SenderContext = new SenderContext
+                {
+                    CampaignId = CampaignId,
+                    CommunicationId = CommunicationId,
+                    TransmissionId = TransmissionId
+                }
+            };
 
             _mockLogger = new Mock<ILogger<MessageLinkClickedDataMapper>>();
+            _mockHashingService = new Mock<IHashingService>(MockBehavior.Strict);
 
-            _systemUnderTest = new MessageLinkClickedDataMapper(_mockLogger.Object);
+            _systemUnderTest = new MessageLinkClickedDataMapper(_mockLogger.Object, _mockHashingService.Object);
         }
 
         [TestMethod]
         public void Map_MessageLinkIsNull_ThrowsError()
         {
-            Assert.ThrowsException<NullReferenceException>(() => _systemUnderTest.Map(null, _found));
+            Assert.ThrowsException<NullReferenceException>(() => _systemUnderTest.Map(null, _userMessage));
+
+            VerifyMocks();
         }
 
         [TestMethod]
@@ -56,10 +65,12 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
             _messageLink = new MessageLink
             {
                 MessageId = null,
-                Link = new Uri(Link)
+                Link = _link
             };
 
-            Assert.ThrowsException<AggregateException>(() => _systemUnderTest.Map(_messageLink, _found));
+            Assert.ThrowsException<AggregateException>(() => _systemUnderTest.Map(_messageLink, _userMessage));
+
+            VerifyMocks();
         }
 
         [TestMethod]
@@ -68,10 +79,12 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
             _messageLink = new MessageLink
             {
                 MessageId = string.Empty,
-                Link = new Uri(Link)
+                Link = _link
             };
 
-            Assert.ThrowsException<AggregateException>(() => _systemUnderTest.Map(_messageLink, _found));
+            Assert.ThrowsException<AggregateException>(() => _systemUnderTest.Map(_messageLink, _userMessage));
+
+            VerifyMocks();
         }
 
         [TestMethod]
@@ -83,78 +96,73 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
                 Link = null
             };
 
-            Assert.ThrowsException<AggregateException>(() => _systemUnderTest.Map(_messageLink, _found));
+            Assert.ThrowsException<AggregateException>(() => _systemUnderTest.Map(_messageLink, _userMessage));
+
+            VerifyMocks();
         }
 
         [TestMethod]
-        public void Map_FoundIsNull_ValidData()
+        public void Map_UserMessageIsNull_ThrowsError()
         {
-            var output = _systemUnderTest.Map(_messageLink, null);
+            Assert.ThrowsException<AggregateException>(() => _systemUnderTest.Map(_messageLink, null));
+
+            VerifyMocks();
+        }
+
+        [TestMethod]
+        public void Map_UserMessageSenderContextIsNull_ValidDataWithUnhashedLink()
+        {
+            _userMessage.SenderContext = null;
+
+            var output = _systemUnderTest.Map(_messageLink, _userMessage);
 
             Assert.AreEqual(MessageId, output.MessageId);
-            Assert.AreEqual(_link, output.Link);
+            Assert.AreEqual(Link, output.Link);
             Assert.AreEqual(null, output.CampaignId);
             Assert.AreEqual(null, output.CommunicationId);
             Assert.AreEqual(null, output.TransmissionId);
+
+            VerifyMocks();
         }
 
-        [TestMethod]
-        public void Map_UserMessageIsNull_ValidData()
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        public void Map_UserMessageSenderContextIsPopulatedWithNullOrEmptyCommunicationId_ValidDataWithUnhashedLink(string communicationId)
         {
-            var found = new RepositoryFindResult<UserMessage>.Found(new List<UserMessage> { null });
+            _userMessage.SenderContext.CommunicationId = communicationId;
 
-            var output = _systemUnderTest.Map(_messageLink, found);
+            var output = _systemUnderTest.Map(_messageLink, _userMessage);
 
             Assert.AreEqual(MessageId, output.MessageId);
-            Assert.AreEqual(_link, output.Link);
-            Assert.AreEqual(null, output.CampaignId);
-            Assert.AreEqual(null, output.CommunicationId);
-            Assert.AreEqual(null, output.TransmissionId);
-        }
-
-        [TestMethod]
-        public void Map_UserMessageSenderContextIsNull_ValidData()
-        {
-            var found = new RepositoryFindResult<UserMessage>.Found(new[]
-            {
-                new UserMessage
-                {
-                    SenderContext = null
-                }
-            });
-
-            var output = _systemUnderTest.Map(_messageLink, found);
-
-            Assert.AreEqual(MessageId, output.MessageId);
-            Assert.AreEqual(_link, output.Link);
-            Assert.AreEqual(null, output.CampaignId);
-            Assert.AreEqual(null, output.CommunicationId);
-            Assert.AreEqual(null, output.TransmissionId);
-        }
-
-        [TestMethod]
-        public void Map_UserMessageSenderContextIsPopulated_ValidData()
-        {
-            var found = new RepositoryFindResult<UserMessage>.Found(new []
-            {
-                new UserMessage
-                {
-                    SenderContext = new SenderContext
-                    {
-                        CampaignId = CampaignId,
-                        CommunicationId = SenderContextCommunicationId,
-                        TransmissionId = SenderContextTransmissionId
-                    }
-                }
-            });
-
-            var output = _systemUnderTest.Map(_messageLink, found);
-
-            Assert.AreEqual(MessageId, output.MessageId);
-            Assert.AreEqual(_link, output.Link);
+            Assert.AreEqual(Link, output.Link);
             Assert.AreEqual(CampaignId, output.CampaignId);
-            Assert.AreEqual(SenderContextCommunicationId, output.CommunicationId);
-            Assert.AreEqual(SenderContextTransmissionId, output.TransmissionId);
+            Assert.AreEqual(communicationId, output.CommunicationId);
+            Assert.AreEqual(TransmissionId, output.TransmissionId);
+
+            VerifyMocks();
+        }
+
+        [TestMethod]
+        public void Map_UserMessageSenderContextIsPopulatedWithCommunicationId_ValidDataWithHashedLink()
+        {
+            const string hashedLink = "hashedLink";
+            _mockHashingService.Setup(x => x.Hash(Link)).Returns(hashedLink);
+
+            var output = _systemUnderTest.Map(_messageLink, _userMessage);
+
+            Assert.AreEqual(MessageId, output.MessageId);
+            Assert.AreEqual(hashedLink, output.Link);
+            Assert.AreEqual(CampaignId, output.CampaignId);
+            Assert.AreEqual(CommunicationId, output.CommunicationId);
+            Assert.AreEqual(TransmissionId, output.TransmissionId);
+
+            VerifyMocks();
+        }
+
+        private void VerifyMocks()
+        {
+            _mockHashingService.VerifyAll();
         }
     }
 }

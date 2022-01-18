@@ -357,7 +357,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests
 
         private static MessageLinkClickedData GetTestMessageLinkClickedData() => new MessageLinkClickedData(
             "MessageId",
-            new Uri("https://testing.com/valid/url/"),
+            "https://testing.com/valid/url/",
             "CampaignId",
             "CommunicationId",
             "TransmissionId"
