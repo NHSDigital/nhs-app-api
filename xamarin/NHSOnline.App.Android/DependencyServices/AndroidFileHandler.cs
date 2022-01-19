@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using Android.Content;
@@ -84,12 +85,27 @@ namespace NHSOnline.App.Droid.DependencyServices
             {
                 using var outputStream = new FileOutputStream(file);
                 await outputStream.WriteAsync(convertedData).PreserveThreadContext();
-            }
 
-            return FileProvider.GetUriForFile(
-                MainActivity,
-                Android.App.Application.Context.PackageName + ".fileprovider",
-                file);
+                return FileProvider.GetUriForFile(
+                    MainActivity,
+                    Android.App.Application.Context.PackageName + ".fileprovider",
+                    file);
+            }
+            else
+            {
+                var dateTimeFormatted = DateTime.Now.ToString("yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+
+                using var duplicateFile = new Java.IO.File(
+                    Path.Combine(directory, $"{Path.GetFileNameWithoutExtension(fileName)} {dateTimeFormatted}{Path.GetExtension(file.Name)}"));
+
+                using var outputStream = new FileOutputStream(duplicateFile);
+                await outputStream.WriteAsync(convertedData).PreserveThreadContext();
+
+                return FileProvider.GetUriForFile(
+                    MainActivity,
+                    Android.App.Application.Context.PackageName + ".fileprovider",
+                    duplicateFile);
+            }
         }
 
         private static async Task<Uri?> CreateFileFromResolver(byte[] convertedData, DownloadRequest downloadRequest)
