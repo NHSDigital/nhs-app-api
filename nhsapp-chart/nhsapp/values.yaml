@@ -31,6 +31,7 @@ clusterDNSNameservers:
   - 172.28.160.10
 
 userResearchEnabled: false
+skipLoggedOutEnabled: true
 
 # PFS Providers
 tppHostname: systmonline2.tpp-uk.com

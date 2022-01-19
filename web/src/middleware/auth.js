@@ -11,13 +11,48 @@ import { EMPTY_PATH, INTERSTITIAL_REDIRECTOR_PATH } from '@/router/paths';
 import { isAnonymous } from '@/router';
 import { createRouteByNameObject, createRoutePathObject, pathWithPatientPrefixOrUndefined } from '@/lib/utils';
 
-export default ({ router, store, to, next }) => {
+const trustedReferrers = ['NHS_UK'].map(name => name.toUpperCase());
+
+const logTrustedReferrer = async (store, sanitizedPath, to) => {
+  if (sanitizedPath) {
+    const destination = sanitizedPath === '/patient/' ? EMPTY_PATH : sanitizedPath;
+    await store.dispatch(
+      'log/onInfo',
+      `Skipping logged out home page - referrer is ${to.query.referrer}, destination is ${destination}`,
+    );
+  } else {
+    await store.dispatch(
+      'log/onInfo',
+      `Skipping logged out home page - referrer is ${to.query.referrer}, destination is invalid ${to.path}`,
+    );
+  }
+};
+
+const continueLogin = (store, path) => {
+  const authorisationService = new AuthorisationService(store.$env);
+  const { loginUrl } = authorisationService.generateLoginUrl({
+    redirectTo: path,
+    cookies: store.$cookies,
+  });
+  window.location.href = loginUrl;
+};
+
+export default async ({ router, store, to, next }) => {
   const isLoggedIn = store.getters['session/isLoggedIn']();
   const santizedPath = pathWithPatientPrefixOrUndefined({ path: to.path, store, router });
 
   if (!isAnonymous(to) && !isLoggedIn) {
+    if (store.$env.SKIP_LOGGED_OUT_ENABLED) {
+      if (to.query.referrer && trustedReferrers.includes(to.query.referrer.toUpperCase())) {
+        await logTrustedReferrer(store, santizedPath, to);
+        continueLogin(store, santizedPath || EMPTY_PATH);
+        return;
+      }
+    }
+
     if (to.path === EMPTY_PATH || !santizedPath) {
-      return next({ name: LOGIN_NAME });
+      next({ name: LOGIN_NAME });
+      return;
     }
 
     let queryParam = to.name;
@@ -33,41 +68,40 @@ export default ({ router, store, to, next }) => {
       if (redirectParam) {
         query[REDIRECT_PARAMETER] = redirectParam;
       } else {
-        return next({ name: LOGIN_NAME });
+        next({ name: LOGIN_NAME });
+        return;
       }
     }
-    return next({ name: LOGIN_NAME, query });
+    next({ name: LOGIN_NAME, query });
+    return;
   }
 
   if (isLoggedIn) {
     if (to.name === LOGIN_NAME || (to.name !== INDEX_NAME && to.path === EMPTY_PATH)) {
-      return next(createRouteByNameObject({
+      next(createRouteByNameObject({
         name: INDEX_NAME,
         query: to.query,
         params: to.params,
         store,
       }));
+      return;
     }
 
     if (to.matched.length === 0 && santizedPath) {
-      return next(createRoutePathObject({
+      next(createRoutePathObject({
         path: to.path,
         query: to.query,
         params: to.params,
         store,
       }));
+      return;
     }
   }
 
   if (to.name === BEGINLOGIN_NAME) {
-    const authorisationService = new AuthorisationService(store.$env);
-    const { loginUrl } = authorisationService.generateLoginUrl({
-      redirectTo: to.query[REDIRECT_PARAMETER],
-      cookies: store.$cookies,
-    });
-
-    window.location.href = loginUrl;
-    return next(false);
+    continueLogin(store, to.query[REDIRECT_PARAMETER]);
+    next(false);
+    return;
   }
-  return next();
+  next();
 };

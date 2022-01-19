@@ -31,8 +31,14 @@ describe('middleware/auth', () => {
     CID_AUTH_ENDPOINT_URL: 'mock cid auth endpoint',
   };
 
-  const callAuth = (route) => {
-    auth({ store, to: route, next, router: $router });
+  const callAuth = async (route) => {
+    const to = route;
+    if (to.query === undefined) {
+      to.query = {
+        referrer: 'UNTRUSTED_REFERRER',
+      };
+    }
+    await auth({ store, to, next, router: $router });
   };
 
   beforeEach(() => {
@@ -53,6 +59,10 @@ describe('middleware/auth', () => {
       app: {
         $router,
       },
+      $env: {
+        SKIP_LOGGED_OUT_ENABLED: false,
+      },
+      dispatch: jest.fn(),
     };
     dependancy.createRouteByNameObject = jest.fn();
     dependancy.createRoutePathObject = jest.fn();
@@ -62,7 +72,7 @@ describe('middleware/auth', () => {
   describe('isloggedIn is true', () => {
     const query = 'query';
     const params = 'param';
-    beforeEach(() => {
+    beforeEach(async () => {
       getters['session/isLoggedIn'] = () => true;
       const to = {
         ...BOOKING,
@@ -70,7 +80,7 @@ describe('middleware/auth', () => {
           { ...BOOKING },
         ],
       };
-      callAuth(to);
+      await callAuth(to);
     });
 
     it('will not be redirected', () => {
@@ -79,14 +89,14 @@ describe('middleware/auth', () => {
     });
 
     describe('when path is LOGIN', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         const to = {
           ...LOGIN,
           query,
           params,
           store,
         };
-        callAuth(to);
+        await callAuth(to);
       });
 
       it('will be redirected to the index page', () => {
@@ -107,16 +117,16 @@ describe('middleware/auth', () => {
         params,
         store,
       };
-      it('will not redirect if path is invalid', () => {
+      it('will not redirect if path is invalid', async () => {
         dependancy.pathWithPatientPrefixOrUndefined.mockImplementation(undefined);
-        callAuth(to);
+        await callAuth(to);
         expect(dependancy.createRoutePathObject).not.toBeCalledWith(expect.anything);
         expect(next).not.toBeCalledWith(expect.anything);
         expect(next).toBeCalled();
       });
 
-      it('will redirect if path is valid', () => {
-        callAuth(to);
+      it('will redirect if path is valid', async () => {
+        await callAuth(to);
         expect(dependancy.createRoutePathObject).toBeCalledWith({
           path: to.path,
           query,
@@ -132,9 +142,68 @@ describe('middleware/auth', () => {
       getters['session/isLoggedIn'] = () => false;
     });
 
-    describe('when is a known route', () => {
+    describe('skip logged in page is true', () => {
+      const to = {
+        meta: {},
+        query: {
+          referrer: 'nhs_uk',
+        },
+      };
+
       beforeEach(() => {
-        callAuth(BOOKING);
+        next.mockClear();
+        store.$env.SKIP_LOGGED_OUT_ENABLED = true;
+
+        delete window.location;
+        window.location = {};
+      });
+
+      describe('referrer is valid and path is valid', () => {
+        it('will skip the login page and write log message with deep link destination', async () => {
+          to.path = BOOKING.path;
+          await callAuth(to);
+
+          expect(store.dispatch).toBeCalledWith(
+            'log/onInfo',
+            `Skipping logged out home page - referrer is ${to.query.referrer}, destination is /patient/${to.path}`,
+          );
+          expect(window.location.href).toBe(generatedLoginUrl);
+          expect(next).not.toBeCalled();
+        });
+
+        it('will skip the login page and write log message with destination homepage', async () => {
+          to.path = EMPTY_PATH;
+          dependancy.pathWithPatientPrefixOrUndefined.mockImplementation(x => `${x.path}`);
+          await callAuth(to);
+
+          expect(store.dispatch).toBeCalledWith(
+            'log/onInfo',
+            `Skipping logged out home page - referrer is ${to.query.referrer}, destination is ${to.path}`,
+          );
+          expect(window.location.href).toBe(generatedLoginUrl);
+          expect(next).not.toBeCalled();
+        });
+      });
+
+      describe('referrer is valid but path is invalid', () => {
+        it('will skip login page and write log message with invalid destination', async () => {
+          to.path = 'invalid-path';
+          dependancy.pathWithPatientPrefixOrUndefined.mockImplementation(undefined);
+          await callAuth(to);
+
+          expect(store.dispatch).toBeCalledWith(
+            'log/onInfo',
+            `Skipping logged out home page - referrer is ${to.query.referrer}, destination is invalid ${to.path}`,
+          );
+          expect(window.location.href).toBe(generatedLoginUrl);
+          expect(next).not.toBeCalled();
+        });
+      });
+    });
+
+    describe('when is a known route', () => {
+      beforeEach(async () => {
+        await callAuth(BOOKING);
       });
 
       it('will be redirected to the login page with redirecturl query param', () => {
@@ -144,8 +213,8 @@ describe('middleware/auth', () => {
     });
 
     describe('when route is an empty path', () => {
-      beforeEach(() => {
-        callAuth({ path: EMPTY_PATH });
+      beforeEach(async () => {
+        await callAuth({ path: EMPTY_PATH });
       });
 
       it('will be redirected to the login page without a redirecturl query param', () => {
@@ -154,8 +223,8 @@ describe('middleware/auth', () => {
     });
 
     describe('when route has no name', () => {
-      beforeEach(() => {
-        callAuth({ path: 'some_path' });
+      beforeEach(async () => {
+        await callAuth({ path: 'some_path' });
       });
 
       it('will be redirected to the login page without a redirecturl query param', () => {
@@ -164,8 +233,8 @@ describe('middleware/auth', () => {
     });
 
     describe('when route is the redirector page', () => {
-      beforeEach(() => {
-        callAuth(REDIRECTOR);
+      beforeEach(async () => {
+        await callAuth(REDIRECTOR);
       });
 
       it('will be redirected to the login page without a redirecturl query param', () => {
@@ -176,8 +245,8 @@ describe('middleware/auth', () => {
     describe('when route is the redirector page with a redirect parameter', () => {
       const query = {};
       query[REDIRECT_PARAMETER] = APPOINTMENTS_NAME;
-      beforeEach(() => {
-        callAuth({
+      beforeEach(async () => {
+        await callAuth({
           ...{ path: 'redirector' },
           query,
         });
@@ -192,7 +261,7 @@ describe('middleware/auth', () => {
       const { location } = window;
       const hostname = 'www.example.com';
 
-      beforeEach(() => {
+      beforeEach(async () => {
         store.$env = environment;
         getters['session/isLoggedIn'] = () => false;
 
@@ -201,7 +270,7 @@ describe('middleware/auth', () => {
           hostname,
         };
 
-        callAuth({ ...BEGIN_LOGIN,
+        await callAuth({ ...BEGIN_LOGIN,
           query: { source: 'ios' } });
       });
 

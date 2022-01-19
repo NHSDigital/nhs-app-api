@@ -222,6 +222,8 @@ spec:
           value: "2.0.0"
         - name: ORGAN_DONATION_DESKTOP_ENABLED
           value: "{{ $.Values.organDonationDesktopEnabled }}"
+        - name: SKIP_LOGGED_OUT_ENABLED
+          value: "{{ $.Values.skipLoggedOutEnabled }}"          
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"

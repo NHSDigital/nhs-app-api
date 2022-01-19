@@ -1,6 +1,6 @@
-const sendRequest = (store, level, message) => {
+const sendRequest = async (store, level, message) => {
   store.dispatch('spinner/prevent', true);
-  store.app.$http.postV1ApiLog({
+  return store.app.$http.postV1ApiLog({
     createLogRequest: { TimeStamp: new Date(), Level: level, Message: message },
     ignoreError: true,
   }).finally(() => {
@@ -9,10 +9,10 @@ const sendRequest = (store, level, message) => {
 };
 
 export default {
-  onError(_, errorMessage) {
-    sendRequest(this, 'Error', errorMessage);
+  async onError(_, errorMessage) {
+    await sendRequest(this, 'Error', errorMessage);
   },
-  onInfo(_, message) {
-    sendRequest(this, 'Information', message);
+  async onInfo(_, message) {
+    await sendRequest(this, 'Information', message);
   },
 };
