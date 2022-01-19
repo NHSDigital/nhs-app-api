@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices;
-using NHSOnline.App.DependencyServices.Navigation;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
 using NHSOnline.App.Services.ForcedUpdate;
@@ -22,7 +21,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly IForcedUpdateCheckService _forcedUpdateCheckService;
         private readonly IUserPreferencesService _userPreferencesService;
         private readonly NhsAppCookieService _nhsAppCookieService;
-        private readonly INavigationService _navigationService;
         private readonly IPlatformVersion _platformVersion;
 
         private Uri? _deeplinkUrl;
@@ -36,7 +34,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             INhsLoginService nhsLoginService,
             IForcedUpdateCheckService forcedUpdateCheckService,
             IUserPreferencesService userPreferencesService,
-            NhsAppCookieService nhsAppCookieService, INavigationService navigationService,
+            NhsAppCookieService nhsAppCookieService,
             IPlatformVersion platformVersion)
         {
             _view = view;
@@ -47,7 +45,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _forcedUpdateCheckService = forcedUpdateCheckService;
             _userPreferencesService = userPreferencesService;
             _nhsAppCookieService = nhsAppCookieService;
-            _navigationService = navigationService;
             _platformVersion = platformVersion;
 
             view.AppNavigation
@@ -153,9 +150,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async Task ShowUnsupportedPlatformPage()
         {
-            var unsupportedPlatformVersionModel = new UnsupportedPlatformVersionModel(
-                _platformVersion.MinimumPlatformVersionDescription());
-            var unsupportedPlatformVersionPage = _pageFactory.CreatePageFor(unsupportedPlatformVersionModel);
+            var unsupportedPlatformVersionPage = _pageFactory.CreatePageFor(new UnsupportedPlatformVersionModel());
             await _view.AppNavigation.ReplaceCurrentPage(unsupportedPlatformVersionPage).PreserveThreadContext();
         }
     }

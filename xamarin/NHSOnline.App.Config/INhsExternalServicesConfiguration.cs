@@ -16,5 +16,6 @@ namespace NHSOnline.App.Config
         Uri GpOutOfHoursService { get; }
         Uri CovidStatusService { get; }
         Uri NhsAppOnlineLogin { get; }
+        Uri NhsAppTechnicalIssuesSupportUrl { get; }
     }
 }

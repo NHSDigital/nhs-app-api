@@ -16,5 +16,6 @@ namespace NHSOnline.App.Config.Values.Local
         public Uri GpOutOfHoursService { get; } = new Uri("http://stubs.local.bitraft.io:8080/nhsuk/gp-out-hours-service");
         public Uri CovidStatusService { get; } = new Uri("http://stubs.local.bitraft.io:8080/nhsuk/covid-status-service-nhsx-nhs-uk");
         public Uri NhsAppOnlineLogin { get; } = new Uri("http://stubs.local.bitraft.io:8080/nhsuk/login");
+        public Uri NhsAppTechnicalIssuesSupportUrl { get; } = new Uri("http://stubs.local.bitraft.io:8080/nhsuk/help/home");
     }
 }

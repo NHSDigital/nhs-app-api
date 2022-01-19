@@ -9,11 +9,8 @@ namespace NHSOnline.App.Areas.LoggedOut
         internal interface IEvents
         {
             Func<Task>? OneOneOneRequested { get; set; }
-            Func<Task>? CovidPassRequested { get; set; }
             Func<Task>? NhsAppOnlineLoginRequested { get; set; }
-
+            Func<Task>? NhsAppTechnicalIssuesSupportRequested { get; set; }
         }
-
-        string MinimumPlatformVersion { get; set; }
     }
 }

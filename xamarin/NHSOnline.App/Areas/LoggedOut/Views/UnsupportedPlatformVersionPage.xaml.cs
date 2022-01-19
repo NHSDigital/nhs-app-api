@@ -7,7 +7,6 @@ using NHSOnline.App.Controls;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.DependencyServices.Navigation;
 using NHSOnline.App.Navigation;
-using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.LoggedOut.Views
 {
@@ -32,14 +31,11 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public Func<Task>? OneOneOneRequested { get; set; }
         public ICommand OneOneOneCommand => new AsyncCommand(() => OneOneOneRequested);
 
-        public Func<Task>? CovidPassRequested { get; set; }
-        public ICommand CovidPassCommand => new AsyncCommand(() => CovidPassRequested);
-
         public Func<Task>? NhsAppOnlineLoginRequested { get; set; }
         public ICommand NhsAppOnlineLoginCommand => new AsyncCommand(() => NhsAppOnlineLoginRequested);
 
-        public static readonly BindableProperty MinimumPlatformVersionProperty
-            = BindableProperty.Create(nameof(MinimumPlatformVersion), typeof(string), typeof(UnsupportedPlatformVersionPage));
+        public Func<Task>? NhsAppTechnicalIssuesSupportRequested { get; set; }
+        public ICommand NhsAppTechnicalIssuesSupportCommand => new AsyncCommand(() => NhsAppTechnicalIssuesSupportRequested);
 
         protected override void OnAppearing()
         {
@@ -59,12 +55,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         {
             _logger.LogInformation("{ClassName} is not required to handle deeplinks", nameof(UnsupportedPlatformVersionPage));
             return Task.CompletedTask;
-        }
-
-        public string MinimumPlatformVersion
-        {
-            get => (string) GetValue(MinimumPlatformVersionProperty);
-            set => SetValue(MinimumPlatformVersionProperty, value);
         }
     }
 }

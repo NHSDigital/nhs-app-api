@@ -14,13 +14,11 @@
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <panels:ResponsiveLayoutPanel>
             <StackLayout>
-                <elements:Heading1 Text="Your operating system is not supported" x:Name="Heading" />
-                <elements:Paragraph Text="{Binding MinimumPlatformVersion, StringFormat='You can only use the NHS App if your device is on {0} or above.', Source={x:Reference Name=Page}}" />
-                <elements:Paragraph Text="Try updating your operating system." />
-                <elements:Paragraph Text="If you need to get an NHS COVID Pass, you can access the service online." />
-                <elements:LinkLabel Text="Get your NHS COVID Pass" Command="{Binding CovidPassCommand, Source={x:Reference Name=Page}}" />
+                <elements:Heading1 Text="Operating system not supported" x:Name="Heading" />
+                <elements:Paragraph Text="To use the NHS App, you’ll need to update your device's operating system." />
+                <elements:LinkLabel Text="Get help updating your operating system" Command="{Binding NhsAppTechnicalIssuesSupportCommand, Source={x:Reference Name=Page}}" />
                 <elements:Paragraph Text="If you still cannot access the NHS App, you can use NHS App online through your web browser." />
-                <elements:LinkLabel Text="Go to NHS App online" Command="{Binding NhsAppOnlineLoginCommand, Source={x:Reference Name=Page}}" />
+                <elements:LinkLabel Text="Access NHS services online" Command="{Binding NhsAppOnlineLoginCommand, Source={x:Reference Name=Page}}" />
                 <elements:Paragraph Text="For urgent medical advice, use NHS 111 online or call 111." />
                 <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
             </StackLayout>
