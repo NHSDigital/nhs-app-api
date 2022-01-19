@@ -116,6 +116,19 @@ Feature: Authorisation occurs during each URL visit
       | /redirector?redirect_to=appointments        | /appointments                     |
       | /nonexistent                                | /patient                          |
 
+  Scenario Outline: User who has not logged in and attempts to navigate to a restricted URL <Url> with referrer=nhs_uk
+                    and valid assertedLoginIdentity is taken to NHS Login where they will not have to login before
+                    being redirected to their target NHS App page <Page>.
+    Given I am a EMIS patient
+    And I am about to directly access every page
+    And I am not logged in
+    When I browse to the <Url> and see the relevant page
+    Then I am on the relevant <Page> page
+    Examples: # includes a target page which requires a GP session and one which does not
+      | Url                                                                                                       | Page                                  |
+      | /advice?referrer=nhs_uk&assertedLoginIdentity=valid-asserted-login-identity                               | /advice                               |
+      | /patient/appointments/gp-appointments?referrer=nhs_uk&assertedLoginIdentity=valid-asserted-login-identity | /patient/appointments/gp-appointments |
+
   Scenario Outline: A User who has not accepted updated T&C and not logged in and attempts to navigate to a restricted <Url> is taken to the <Page> after accepting terms
     Given I am a EMIS patient who has accepted terms and conditions but updated terms and conditions exist
     And I am not logged in

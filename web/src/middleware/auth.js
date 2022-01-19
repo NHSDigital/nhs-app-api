@@ -28,15 +28,6 @@ const logTrustedReferrer = async (store, sanitizedPath, to) => {
   }
 };
 
-const continueLogin = (store, path) => {
-  const authorisationService = new AuthorisationService(store.$env);
-  const { loginUrl } = authorisationService.generateLoginUrl({
-    redirectTo: path,
-    cookies: store.$cookies,
-  });
-  window.location.href = loginUrl;
-};
-
 export default async ({ router, store, to, next }) => {
   const isLoggedIn = store.getters['session/isLoggedIn']();
   const santizedPath = pathWithPatientPrefixOrUndefined({ path: to.path, store, router });
@@ -45,7 +36,16 @@ export default async ({ router, store, to, next }) => {
     if (store.$env.SKIP_LOGGED_OUT_ENABLED) {
       if (to.query.referrer && trustedReferrers.includes(to.query.referrer.toUpperCase())) {
         await logTrustedReferrer(store, santizedPath, to);
-        continueLogin(store, santizedPath || EMPTY_PATH);
+        const authorisationService = new AuthorisationService(store.$env);
+        const { loginUrl } = authorisationService.generateLoginUrl({
+          redirectTo: santizedPath || EMPTY_PATH,
+          cookies: store.$cookies,
+          singleSignOnDetails: {
+            assertedLoginIdentity: to.query.assertedLoginIdentity,
+            prompt: 'none',
+          },
+        });
+        window.location.href = loginUrl;
         return;
       }
     }
@@ -99,7 +99,12 @@ export default async ({ router, store, to, next }) => {
   }
 
   if (to.name === BEGINLOGIN_NAME) {
-    continueLogin(store, to.query[REDIRECT_PARAMETER]);
+    const authorisationService = new AuthorisationService(store.$env);
+    const { loginUrl } = authorisationService.generateLoginUrl({
+      redirectTo: to.query[REDIRECT_PARAMETER],
+      cookies: store.$cookies,
+    });
+    window.location.href = loginUrl;
     next(false);
     return;
   }

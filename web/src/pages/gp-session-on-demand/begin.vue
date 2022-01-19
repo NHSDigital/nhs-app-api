@@ -52,10 +52,13 @@ export default {
     const { gpSessionConnectUrl } = authorisationService.generateGpSessionUrl({
       redirectTo,
       cookies,
+      singleSignOnDetails: {
+        assertedLoginIdentity: token,
+        prompt: 'none',
+      },
     });
 
-    const fullGpSessionConnectUrl = `${gpSessionConnectUrl}&asserted_login_identity=${token}`;
-    window.location = fullGpSessionConnectUrl;
+    window.location = gpSessionConnectUrl;
   },
 };
 </script>

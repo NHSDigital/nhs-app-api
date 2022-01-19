@@ -5,6 +5,7 @@ import mocking.MappingBuilder
 import mocking.citizenId.login.AccountRegistrationRequestBuilder
 import mocking.citizenId.login.CompleteLoginRequestBuilder
 import mocking.citizenId.login.InitialLoginRequestBuilder
+import mocking.citizenId.login.LoginWithAssertedLoginIdentityRequestBuilder
 import mocking.citizenId.login.SSOLoginRequestBuilder
 import mocking.citizenId.login.SigningKeysRequestBuilder
 import mocking.citizenId.login.TokenRefreshRequestBuilder
@@ -24,6 +25,12 @@ open class CitizenIdMappingBuilder(method: String ="GET", relativePath:String=""
                             clientId: String,
                             customMatcher: String? = null) = InitialLoginRequestBuilder(
             patient, redirectUri, clientId, customMatcher)
+
+    fun loginWithAssertedLoginIdentityRequestBuilder(patient: Patient,
+                            redirectUri: String,
+                            clientId: String,
+                            customMatcher: String? = null) = LoginWithAssertedLoginIdentityRequestBuilder(
+        patient, redirectUri, clientId, customMatcher)
 
     fun ssoLoginRequest(patient: Patient,
                             redirectUri: String,

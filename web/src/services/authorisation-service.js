@@ -21,10 +21,12 @@ const camelToUnderscore = key => key.replace(/([A-Z])/g, '_$1').toLowerCase();
 const generateFidoUrl = (redirectData) => {
   const originalData = redirectData;
   const newData = {};
+  const excludedKeys = ['authoriseUrl', 'assertedLoginIdentity', 'prompt'];
   Object.keys(originalData).forEach((key) => {
-    if (key !== 'authoriseUrl') {
-      newData[camelToUnderscore(key)] = originalData[key];
+    if (excludedKeys.includes(key)) {
+      return;
     }
+    newData[camelToUnderscore(key)] = originalData[key];
   });
   return `${originalData.authoriseUrl}?${querystring.stringify(newData)}`;
 };
@@ -40,6 +42,14 @@ const generateCIDUrl = (redirectData) => {
     [camelToUnderscore('responseType')]: redirectData.responseType,
     [camelToUnderscore('vtr')]: redirectData.vtr,
   };
+
+  if (redirectData.assertedLoginIdentity) {
+    newData[[camelToUnderscore('assertedLoginIdentity')]] = redirectData.assertedLoginIdentity;
+  }
+
+  if (redirectData.prompt) {
+    newData[[camelToUnderscore('prompt')]] = redirectData.prompt;
+  }
 
   return `${redirectData.authoriseUrl}?${querystring.stringify(newData)}`;
 };
@@ -63,13 +73,14 @@ class AuthorisationService {
     }
   }
 
-  generateLoginUrl({ redirectTo, cookies, fidoAuthResponse }) {
+  generateLoginUrl({ redirectTo, cookies, fidoAuthResponse, singleSignOnDetails }) {
     return this.generateAuthUrl({
       redirectTo,
       cookies,
       fidoAuthResponse,
       p5VectorOfTrust: this.cidP5VectorOfTrustEnabled,
       scope: this.defaultScope,
+      singleSignOnDetails,
     });
   }
 
@@ -83,7 +94,7 @@ class AuthorisationService {
     return { upliftUrl: loginUrl };
   }
 
-  generateGpSessionUrl({ redirectTo, cookies, fidoAuthResponse }) {
+  generateGpSessionUrl({ redirectTo, cookies, fidoAuthResponse, singleSignOnDetails }) {
     const { loginUrl } = this.generateAuthUrl({
       redirectTo,
       cookies,
@@ -91,6 +102,7 @@ class AuthorisationService {
       p5VectorOfTrust: this.cidP5VectorOfTrustEnabled,
       scope: 'openid profile email nhs_app_credentials gp_registration_details profile_extended',
       redirectUri: this.webCidOnDemandGpReturnRedirectUri,
+      singleSignOnDetails,
     });
 
     return { gpSessionConnectUrl: loginUrl };
@@ -103,6 +115,7 @@ class AuthorisationService {
     p5VectorOfTrust,
     scope,
     redirectUri = this.webCidRedirectUri,
+    singleSignOnDetails = {},
   }) {
     const verifier = createVerifier();
     const challenge = createChallenge(verifier);
@@ -119,6 +132,8 @@ class AuthorisationService {
       authoriseUrl: this.cidAuthEndpoint,
       fidoAuthResponse,
       vtr: p5VectorOfTrust ? '["P5.Cp.Cd", "P5.Cp.Ck", "P5.Cm", "P9.Cp.Cd", "P9.Cp.Ck", "P9.Cm"]' : '["P9.Cp.Cd", "P9.Cp.Ck", "P9.Cm"]',
+      assertedLoginIdentity: singleSignOnDetails.assertedLoginIdentity,
+      prompt: singleSignOnDetails.prompt,
     };
 
     setCookie({

@@ -16,8 +16,8 @@ let router;
 let wrapper;
 
 const hostname = 'localhost';
-const generatedGpSessionUrl = 'http://cid/on-demand-gp-session-return/';
 const loginIdentityToken = 'jwtToken';
+const generatedGpSessionUrl = `http://cid/on-demand-gp-session-return&asserted_login_identity=${loginIdentityToken}`;
 
 const mountPage = () => {
   store = createStore({
@@ -79,7 +79,7 @@ describe('on-demand-gp-return', () => {
           IntendedRelyingPartyUrl: 'localhost',
         },
       });
-      expect(window.location).toBe(`${generatedGpSessionUrl}&asserted_login_identity=${loginIdentityToken}`);
+      expect(window.location).toBe(generatedGpSessionUrl);
     });
 
     it('will dispatch to update title', () => {

@@ -107,6 +107,11 @@ class CitizenIdSessionCreateJourney {
         }
 
         mockingClient.forCitizenId.mock {
+            loginWithAssertedLoginIdentityRequestBuilder(patient, loginRedirectUri, Config.instance.cidClientId)
+                .respondWithRedirectBackToNhsAppPage()
+        }
+
+        mockingClient.forCitizenId.mock {
             ssoLoginRequest(patient, gpSessionRedirectUri, Config.instance.cidClientId)
                     .respondWithRedirectURI()
         }
