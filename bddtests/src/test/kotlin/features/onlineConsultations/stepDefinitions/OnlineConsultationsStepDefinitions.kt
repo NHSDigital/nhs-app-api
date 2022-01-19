@@ -87,8 +87,13 @@ open class OnlineConsultationsStepDefinitions {
 
     @When("^I click on a condition$")
     fun iClickACondition() {
-        answerQuestionAndContinue("button", OnlineConsultationConstants
-                .BREATHING_PROBLEMS_CONDITION_ID)
+        onlineConsultationsPage.clickFormElement("button",
+                OnlineConsultationConstants.BREATHING_PROBLEMS_CONDITION_ID)
+    }
+
+    @When("^I click continue without selecting an option")
+    fun iContinueWithoutSelectingAnOption(){
+        continueClicked()
     }
 
     @When("^I am submitting the questionnaire for myself$")
