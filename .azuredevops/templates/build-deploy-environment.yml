@@ -302,7 +302,8 @@ stages:
                   --set region=$(region) \
                   --set zone=$(environment) \
                   --set clusterIP=$(clusterIP) \
-                  --set networkPolicyEnabled=false 
+                  --set networkPolicyEnabled=false \
+                  --set createDefaultPrivateIngress=true
               else
                 echo "Installing without namespace override file"
                 helm upgrade $(lowercaseReleaseName) $(System.DefaultWorkingDirectory)/nhsapp/nhsapp-chart/nhsapp/ \
@@ -329,5 +330,6 @@ stages:
                   --set region=$(region) \
                   --set zone=$(environment) \
                   --set clusterIP=$(clusterIP) \
-                  --set networkPolicyEnabled=false 
+                  --set networkPolicyEnabled=false \
+                  --set createDefaultPrivateIngress=true
               fi
