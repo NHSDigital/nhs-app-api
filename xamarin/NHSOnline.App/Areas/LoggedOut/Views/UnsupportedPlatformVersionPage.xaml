@@ -17,7 +17,7 @@
                 <elements:Heading1 Text="Operating system not supported" x:Name="Heading" />
                 <elements:Paragraph Text="To use the NHS App, you’ll need to update your device's operating system." />
                 <elements:LinkLabel Text="Get help updating your operating system" Command="{Binding NhsAppTechnicalIssuesSupportCommand, Source={x:Reference Name=Page}}" />
-                <elements:Paragraph Text="If you still cannot access the NHS App, you can use NHS App online through your web browser." />
+                <elements:Paragraph Text="If you still cannot use the NHS App, you can access NHS services online through your web browser." />
                 <elements:LinkLabel Text="Access NHS services online" Command="{Binding NhsAppOnlineLoginCommand, Source={x:Reference Name=Page}}" />
                 <elements:Paragraph Text="For urgent medical advice, use NHS 111 online or call 111." />
                 <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
