@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NHSOnline.App.NhsLogin.Fido.Assertion;
 using NHSOnline.App.NhsLogin.Fido.Models;
 using NHSOnline.App.Threading;
@@ -115,18 +116,75 @@ namespace NHSOnline.App.NhsLogin.Fido
             var result = await _uafClient.PostRegistrationResponse(registrationResponse, accessToken).ResumeOnThreadPool();
             var resultString = await result.Content.ReadAsStringAsync().ResumeOnThreadPool();
 
-            _logger.LogInformation("UAF Registration Response Response: {UAFRegistrationResponseResponse}", resultString);
-
-            var uafPostRegistrationResponse = JsonConvert.DeserializeObject<List<UafPostRegistrationResponse>>(resultString);
-            var username = uafPostRegistrationResponse?.FirstOrDefault()?.Username ?? string.Empty;
-
-            if (result.IsSuccessStatusCode)
+            try
             {
-                return new FidoRegisterResult.Registered(username);
+                var uafPostRegistrationResponse =
+                    JsonConvert.DeserializeObject<List<UafPostRegistrationResponse>>(resultString);
+                var username = uafPostRegistrationResponse?.FirstOrDefault()?.Username ?? string.Empty;
+
+                if (result.IsSuccessStatusCode)
+                {
+                    return new FidoRegisterResult.Registered(username);
+                }
+
+                _logger.LogError("Fido post registration response returned {HttpStatusCode}", result.StatusCode);
+            }
+            catch (JsonException)
+            {
+                if (TryParseJObject(resultString, out var jObject) && jObject != null)
+                {
+                    RedactValuesOnJToken(jObject);
+                    _logger.LogError("Unexpected UAF registration response (status code: {statusCode}): {response}", result.StatusCode, jObject);
+                }
+                else
+                {
+                    _logger.LogError("Unexpected non-JSON UAF registration response (status code: {statusCode})", result.StatusCode);
+                }
             }
 
-            _logger.LogError("Fido post registration response returned {HttpStatusCode}", result.StatusCode);
             return new FidoRegisterResult.Failed();
+        }
+
+        private static bool TryParseJObject(string json, out JObject? obj)
+        {
+            try
+            {
+                obj = JObject.Parse(json);
+                return true;
+            }
+            catch (JsonReaderException)
+            {
+                obj = null;
+                return false;
+            }
+        }
+
+        private static void RedactValuesOnJToken(JToken jToken)
+        {
+            foreach (var token in jToken.Children())
+            {
+                if (token.Type != JTokenType.Property)
+                {
+                    continue;
+                }
+
+                var firstChild = token.First;
+                if (firstChild is {Type: JTokenType.Object})
+                {
+                    RedactValuesOnJToken(firstChild);
+                }
+                else if (firstChild is JArray jArray)
+                {
+                    foreach (var item in jArray.Children())
+                    {
+                        RedactValuesOnJToken(item);
+                    }
+                }
+                else if (token is JProperty property && firstChild is JValue {Value: { }})
+                {
+                    jToken[property.Name] = "<redacted>";
+                }
+            }
         }
 
         private class UafPostRegistrationResponse
