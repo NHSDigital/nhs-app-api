@@ -35,5 +35,5 @@ do
   echo "Scanning $DOCKER_REGISTRY/$IMAGE:$DOCKER_TAG"
   echo
 
-  trivy image "$DOCKER_REGISTRY/$IMAGE:$DOCKER_TAG" || die "Trivy security scan failed for $DOCKER_REGISTRY/$IMAGE:$DOCKER_TAG"
+  trivy image --ignore-unfixed "$DOCKER_REGISTRY/$IMAGE:$DOCKER_TAG" || die "Trivy security scan failed for $DOCKER_REGISTRY/$IMAGE:$DOCKER_TAG"
 done

@@ -101,6 +101,7 @@ COPY --chown=www-data:www-data nginx/nginx.conf.template /etc/nginx/nginx.conf.t
 USER root
 
 RUN apt-get update && \
+    apt-get -y upgrade && \
     apt-get install --no-install-recommends -y sudo ca-certificates jq && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
