@@ -9,10 +9,17 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         private IOSCreateSessionFailedAgeRequirementErrorPage(IIOSDriverWrapper driver) => _driver = driver;
 
-        private IOSLabel Title => IOSLabel.WithText(_driver, "Login failed");
+        private IOSLabel Title => IOSLabel.WithText(_driver, "Cannot log in due to age restriction");
 
-        private IOSLabel DueToLegalRestrictionsText => IOSLabel.WithText(_driver, "Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services.");
-        private IOSLabel ForUrgentMedicalAdvice => IOSLabel.WithText(_driver, "For urgent medical advice, use NHS 111 online or call 111.");
+        private IOSLabel MustBeOver13Text => IOSLabel.WithText(_driver, "You must be aged 13 or over to use the NHS App due to legal restrictions.");
+        private IOSLabel IfAged12Text => IOSLabel.WithText(_driver, "If you're aged 12, you can still get an NHS COVID Pass for travel.");
+
+        private IOSLink DigitalCovidPassLink => IOSLink.WithText(_driver, "Get your digital NHS COVID Pass");
+        private IOSLink PaperCovidPassLink => IOSLink.WithText(_driver, "Get your NHS COVID Pass letter sent to you by post");
+
+        private IOSLabel ContactGpText => IOSLabel.WithText(_driver, "Contact your GP surgery to find out if you can access any GP services online.");
+        private IOSLabel ForUrgentMedicalAdvice => IOSLabel.WithText(_driver, "For urgent medical advice, go to NHS 111 online or call 111.");
+
         private IOSLink GoTo111Link => IOSLink.WithText(_driver, "Go to 111.nhs.uk");
 
         public static IOSCreateSessionFailedAgeRequirementErrorPage AssertOnPage(IIOSDriverWrapper driver)
@@ -24,7 +31,11 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         public void AssertPageElements()
         {
-            DueToLegalRestrictionsText.AssertVisible();
+            MustBeOver13Text.AssertVisible();
+            IfAged12Text.AssertVisible();
+            DigitalCovidPassLink.AssertVisible();
+            PaperCovidPassLink.AssertVisible();
+            ContactGpText.AssertVisible();
             ForUrgentMedicalAdvice.AssertVisible();
             GoTo111Link.AssertVisible();
         }

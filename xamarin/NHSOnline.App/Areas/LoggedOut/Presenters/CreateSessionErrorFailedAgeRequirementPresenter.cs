@@ -21,7 +21,23 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _externalServicesConfiguration = externalServicesConfiguration;
 
             _view.AppNavigation
+                .RegisterHandler(ViewDigitalCovidPassRequested, (view, handler) => view.DigitalCovidPassRequested = handler)
+                .RegisterHandler(ViewPaperCovidPassRequested, (view, handler) => view.PaperCovidPassRequested = handler)
                 .RegisterHandler(ViewOnOneOneOneRequested, (view, handler) => view.OneOneOneRequested = handler);
+        }
+
+        private async Task ViewDigitalCovidPassRequested()
+        {
+            await _browserOverlay
+                .OpenBrowserOverlay(_externalServicesConfiguration.DigitalCovidPassUrl)
+                .PreserveThreadContext();
+        }
+
+        private async Task ViewPaperCovidPassRequested()
+        {
+            await _browserOverlay
+                .OpenBrowserOverlay(_externalServicesConfiguration.PaperCovidPassUrl)
+                .PreserveThreadContext();
         }
 
         private async Task ViewOnOneOneOneRequested()

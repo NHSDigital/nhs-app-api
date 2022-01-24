@@ -24,7 +24,7 @@ open class ExternalSitesMappingBuilder(method: String ="GET", relativePath:Strin
 
     fun getCovidPassRequest() = GetCovidPassRequestBuilder()
 
-    fun getCovidPassOrProofRequest() = GetCovidPassOrProofRequestBuilder()
+    fun getCovidPassOrProofRequest(path: String) = GetCovidPassOrProofRequestBuilder("GET", path)
 
     fun getNorthernIrelandRequest() = GetNorthernIrelandRequestBuilder()
 }

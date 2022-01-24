@@ -9,6 +9,8 @@ namespace NHSOnline.App.Areas.LoggedOut
         internal interface IEvents
         {
             Func<Task>? OneOneOneRequested { get; set; }
+            Func<Task>? DigitalCovidPassRequested { get; set; }
+            Func<Task>? PaperCovidPassRequested { get; set; }
         }
     }
 }

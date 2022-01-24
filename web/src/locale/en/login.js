@@ -31,6 +31,18 @@ export default {
   youMustBe13AndOver: 'You must be aged 13 and over to use the app, and registered at a GP surgery in England.',
   youWillNeedToContactSurgeryToRequestAccess: 'You\'ll need to contact your GP surgery first and request access to GP online services.',
   authReturn: {
+    under13: {
+      title: 'Cannot log in due to age restriction',
+      mustBeOver13: 'You must be aged 13 or over to use the NHS App due to legal restrictions.',
+      ifAged12: 'If you\'re aged 12, you can still get an NHS COVID Pass for travel.',
+      getDigitalCovidPass: 'Get your digital NHS COVID Pass',
+      getCovidPassLetter: 'Get your NHS COVID Pass letter sent to you by post',
+      contactGpToFindOut: 'Contact your GP surgery to find out if you can access any GP services online.',
+      urgentMedicalAdvice: {
+        text: 'For urgent medical advice, go to NHS 111 online or call 111.',
+        label: 'For urgent medical advice, go to NHS 111 online or call one one one.',
+      },
+    },
     backToLogin: 'Back to login',
     contactUsIfYouKeepSeeing: {
       text: 'Contact us if you keep seeing this message, quoting error code {errorCode}',

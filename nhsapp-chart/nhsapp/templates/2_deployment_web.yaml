@@ -210,6 +210,8 @@ spec:
           value: "https://www.nidirect.gov.uk/articles/gp-out-hours-service"
         - name: COVID_STATUS_URL
           value: "https://covid-status.service.nhsx.nhs.uk"
+        - name: COVID_PASS_LETTER_URL
+          value: "https://www.nhs.uk/conditions/coronavirus-covid-19/covid-pass/get-your-covid-pass-letter"
         - name: COVID_PASS_URL
           value: "https://www.nhs.uk/conditions/coronavirus-covid-19/covid-pass"
         - name: VUE_WINDOW_OBJECT_ENABLED

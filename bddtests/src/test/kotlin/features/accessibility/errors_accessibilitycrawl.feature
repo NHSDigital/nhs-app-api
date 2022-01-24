@@ -52,6 +52,8 @@ Feature: errors accessibility
 
   Scenario: Service unavailable too young is captured
     Given I attempt to log in as a TPP user with an age under 13
+    And 'NHS COVID Pass' responds to requests for type '/'
+    And 'COVID Pass or proof' responds to requests for type '/get-your-covid-pass-letter'
     And '111' responds to requests for '/home'
-    Then I see an error message informing me I cannot log in as I am under the minimum age
+    Then I see a message informing me I cannot log in as I am under the minimum age
     And the Errors_SC05g_ServiceUnavailable_TooYoung page is saved to disk

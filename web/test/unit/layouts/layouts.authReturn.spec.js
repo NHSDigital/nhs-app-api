@@ -14,6 +14,8 @@ describe('authReturn layout', () => {
   const NHS_111_URL = 'https://111.nhs.uk';
   const SYMPTOM_CHECKER_NORTHERN_IRELAND_URL = 'https://www-nidirect-gov-uk/articles/gp-out-hours-service';
   const COVID_PASS_URL = 'https://www.nhs.uk/conditions/coronavirus-covid-19/covid-pass';
+  const COVID_PASS_LETTER_URL = 'http://test/covid-letter';
+  const COVID_STATUS_URL = 'http://test/covid-online';
   const serviceDeskReference = 'fooReference';
   let goToUrl;
   let wrapper;
@@ -40,6 +42,8 @@ describe('authReturn layout', () => {
         MY_HEALTH_ONLINE: 'https://111.wales.nhs.uk/contactus/myhealthonline/',
         SYMPTOM_CHECKER_NORTHERN_IRELAND_URL: 'https://www-nidirect-gov-uk/articles/gp-out-hours-service',
         COVID_PASS_URL: 'https://www.nhs.uk/conditions/coronavirus-covid-19/covid-pass',
+        COVID_PASS_LETTER_URL: 'http://test/covid-letter',
+        COVID_STATUS_URL: 'http://test/covid-online',
       },
       state: {
         appVersion: {
@@ -206,12 +210,30 @@ describe('authReturn layout', () => {
         expect(container.exists()).toBe(true);
       });
 
-      it('will have one link', () => {
-        expect(container.findAll('a').length).toBe(1);
+      it('will have a title', () => {
+        expect(container.findAll('h1').length).toBe(1);
+      });
+
+      it('will have seven paragraphs', () => {
+        expect(container.findAll('p').length).toBe(7);
+      });
+
+      it('will have three links', () => {
+        expect(container.findAll('a').length).toBe(3);
+      });
+
+      it('will have a digital covid link', () => {
+        const link = wrapper.findAll('a').at(0);
+        expect(link.attributes('href')).toBe(COVID_STATUS_URL);
+      });
+
+      it('will have a letter covid link', () => {
+        const link = wrapper.findAll('a').at(1);
+        expect(link.attributes('href')).toBe(COVID_PASS_LETTER_URL);
       });
 
       it('will link to the 111 website', () => {
-        const nhs111Link = wrapper.findAll('a').at(0);
+        const nhs111Link = wrapper.findAll('a').at(2);
         expect(nhs111Link.attributes('href')).toBe(NHS_111_URL);
       });
     });
@@ -338,6 +360,12 @@ describe('authReturn layout', () => {
         wrapper = mountAuthReturnLayout({ shallow: true, hasConnectionProblem: false });
         const head = wrapper.vm.$options.metaInfo.call(wrapper.vm);
         expect(head.title).toBeUndefined();
+      });
+
+      it('will set title to Cannot login... if under 13', () => {
+        wrapper = mountAuthReturnLayout({ status: 465, shallow: true });
+        const head = wrapper.vm.$options.metaInfo.call(wrapper.vm);
+        expect(head.title).toBe('Cannot log in due to age restriction - NHS App');
       });
 
 

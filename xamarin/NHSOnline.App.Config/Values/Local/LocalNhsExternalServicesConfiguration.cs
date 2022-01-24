@@ -9,6 +9,8 @@ namespace NHSOnline.App.Config.Values.Local
         public Uri NhsUkLoginWhoCanUseTheAppHelpUrl { get;  } = new Uri("http://stubs.local.bitraft.io:8080/nhsuk/help-and-support/who-can-use-the-nhs-app/");
         public Uri NhsUkHealthRecordDownloadHelpUrl { get; } = new Uri("http://stubs.local.bitraft.io:8080/nhsuk/help/home");
         public Uri OneOneOneUrl { get; } = new Uri("http://stubs.local.bitraft.io:8080/nhsuk/111");
+        public Uri DigitalCovidPassUrl { get; } = new Uri("http://stubs.local.bitraft.io:8080/nhsuk/digitalCovidPass");
+        public Uri PaperCovidPassUrl { get; } = new Uri("http://stubs.local.bitraft.io:8080/nhsuk/paperCovidPass");
         public Uri OneOneOneWalesUrl { get; } = new Uri("http://stubs.local.bitraft.io:8080/nhsuk/111wales");
         public Uri NhsUkContactUsUrl { get; } = new Uri("http://stubs.local.bitraft.io:8080/nhsuk/contactus");
         public Uri MyHealthOnlineUrl { get; } = new Uri("http://stubs.local.bitraft.io:8080/nhsuk/myhealthonline");

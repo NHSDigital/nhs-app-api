@@ -9,6 +9,8 @@ namespace NHSOnline.App.Config
         Uri NhsUkLoginWhoCanUseTheAppHelpUrl { get; }
         Uri NhsUkHealthRecordDownloadHelpUrl { get; }
         Uri OneOneOneUrl { get; }
+        Uri DigitalCovidPassUrl { get; }
+        Uri PaperCovidPassUrl { get; }
         Uri OneOneOneWalesUrl { get; }
         Uri NhsUkContactUsUrl { get; }
         Uri MyHealthOnlineUrl { get; }

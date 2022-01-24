@@ -197,13 +197,13 @@ class AuthenticationStepDefinitions {
         }
     }
 
-    @Then("^I see an error message informing me I cannot log in as I am under the minimum age$")
-    fun iSeeAnErrorMessageInformingMeICannotLogInAsIAmUnderSixteen() {
-        serviceUnavailablePage.assertTitle("Login failed")
-                .assertParagraphText("Due to legal restrictions, you cannot use the " +
-                        "NHS App until you are at least 13 years old. " +
-                "You can still contact your GP surgery to access your NHS services." )
-                .assertParagraphText("For urgent medical advice, use NHS 111 online or call 111.")
+    @Then("^I see a message informing me I cannot log in as I am under the minimum age$")
+    fun iSeeAMessageInformingMeICannotLogInAsIAmUnderThirteen() {
+        serviceUnavailablePage.assertAgeUnder13Title("Cannot log in due to age restriction")
+                .assertParagraphText("You must be aged 13 or over to use the NHS App due to legal restrictions.")
+                .assertParagraphText("If you're aged 12, you can still get an NHS COVID Pass for travel.")
+                .assertParagraphText("Contact your GP surgery to find out if you can access any GP services online.")
+                .assertParagraphText("For urgent medical advice, go to NHS 111 online or call 111.")
     }
 
     @Then("^I see an error informing me to accept NHS login terms and conditions")

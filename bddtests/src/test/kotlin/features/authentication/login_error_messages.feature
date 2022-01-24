@@ -14,22 +14,35 @@ Feature: Login error messages
   #465
   Scenario Outline: Cannot log in as a <GP System> user with no Date of Birth
     Given I attempt to log in as a <GP System> user without a date of birth
+    And 'NHS COVID Pass' responds to requests for type '/'
+    And 'COVID Pass or proof' responds to requests for type '/get-your-covid-pass-letter'
     And '111' responds to requests for '/home'
-    Then I see an error message informing me I cannot log in as I am under the minimum age
-    When I click the error 'Go to 111.nhs.uk' link with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
+    Then I see a message informing me I cannot log in as I am under the minimum age
+    When I click the link called <Link text> with a url of <Link url>
     Then a new tab has been opened by the link
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
+      | GP System | Link text                                            | Link url                                                                                                            |
+      | EMIS      | 'Get your digital NHS COVID Pass'                    | 'http://stubs.local.bitraft.io:8080/external/covid-status-service-nhsx-nhs-uk'                                      |
+      | TPP       | 'Get your digital NHS COVID Pass'                    | 'http://stubs.local.bitraft.io:8080/external/covid-status-service-nhsx-nhs-uk'                                      |
+      | EMIS      | 'Get your NHS COVID Pass letter sent to you by post' | 'http://stubs.local.bitraft.io:8080/external/conditions/coronavirus-covid-19/covid-pass/get-your-covid-pass-letter' |
+      | TPP       | 'Get your NHS COVID Pass letter sent to you by post' | 'http://stubs.local.bitraft.io:8080/external/conditions/coronavirus-covid-19/covid-pass/get-your-covid-pass-letter' |
+      | EMIS      | 'Go to 111.nhs.uk'                                   | 'http://stubs.local.bitraft.io:8080/external/111/home'                                                              |
+      | TPP       | 'Go to 111.nhs.uk'                                   | 'http://stubs.local.bitraft.io:8080/external/111/home'                                                              |
 
     #465
-  Scenario: Cannot log in as a TPP user with an age under 13
+  Scenario Outline: Cannot log in as a TPP user with an age under 13
     Given I attempt to log in as a TPP user with an age under 13
+    And 'NHS COVID Pass' responds to requests for type '/'
+    And 'COVID Pass or proof' responds to requests for type '/get-your-covid-pass-letter'
     And '111' responds to requests for '/home'
-    Then I see an error message informing me I cannot log in as I am under the minimum age
-    When I click the error 'Go to 111.nhs.uk' link with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
+    Then I see a message informing me I cannot log in as I am under the minimum age
+    When I click the link called <Link text> with a url of <Link url>
     Then a new tab has been opened by the link
+    Examples:
+      | Link text                                            | Link url                                                                                                            |
+      | 'Get your digital NHS COVID Pass'                    | 'http://stubs.local.bitraft.io:8080/external/covid-status-service-nhsx-nhs-uk'                                      |
+      | 'Get your NHS COVID Pass letter sent to you by post' | 'http://stubs.local.bitraft.io:8080/external/conditions/coronavirus-covid-19/covid-pass/get-your-covid-pass-letter' |
+      | 'Go to 111.nhs.uk'                                   | 'http://stubs.local.bitraft.io:8080/external/111/home'                                                              |
 
   #464
   Scenario Outline: Cannot log in as a EMIS user with invalid ODS Code
@@ -37,7 +50,7 @@ Feature: Login error messages
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     And 'My Health Online' responds to requests for type '/myhealthonline'
     And '111' responds to requests for '/wales'
-    And 'COVID Pass or proof' responds to requests for type '/conditions/coronavirus-covid-19/covid-pass'
+    And 'COVID Pass or proof' responds to requests for type ''
     And 'Northern Ireland' responds to requests for type '/www-nidirect-gov-uk/articles/gp-out-hours-service'
     And I see the Contact us link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3f'
     When I click the link called <Link text> with a url of <Link url>
@@ -54,15 +67,15 @@ Feature: Login error messages
     Given I attempt to log in as a EMIS user without an ODS Code
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     And '111' responds to requests for '/home'
-    And 'COVID Pass or proof' responds to requests for type '/conditions/coronavirus-covid-19/covid-passk'
+    And 'COVID Pass or proof' responds to requests for type ''
     And I see the error 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3r'
     When I click the error <Link text> link with a url of <Link url>
     Then a new tab has been opened by the link
     Examples:
-      | Link text               | Link url                                                                            |
-      | 'Contact us'            | 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3r' |
-      | '111.nhs.uk'            | 'http://stubs.local.bitraft.io:8080/external/111/home'                              |
-      | 'NHS COVID Pass'        | 'http://stubs.local.bitraft.io:8080/external/conditions/coronavirus-covid-19/covid-pass'      |
+      | Link text         | Link url                                                                                 |
+      | 'Contact us'      | 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3r'      |
+      | '111.nhs.uk'      | 'http://stubs.local.bitraft.io:8080/external/111/home'                                   |
+      | 'NHS COVID Pass'  | 'http://stubs.local.bitraft.io:8080/external/conditions/coronavirus-covid-19/covid-pass' |
 
   #469
   Scenario Outline: Cannot log in as a EMIS user with no NHS Number

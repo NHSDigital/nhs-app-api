@@ -10,21 +10,22 @@
                                  mc:Ignorable="d"
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorFailedAgeRequirementPage"
                                  x:Name="Page"
-                                 PageDescription="Login failed">
+                                 PageDescription="Cannot log in due to age restriction">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <panels:ResponsiveLayoutPanel>
             <StackLayout>
-                <elements:Heading1 Text="Login failed" x:Name="Heading" />
+                <elements:Heading1 Text="Cannot log in due to age restriction" x:Name="Heading" />
 
-                <panels:NhsErrorCallout LabelText="Error">
-                    <StackLayout>
-                        <elements:Paragraph Text="Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services." />
-                        <elements:Paragraph Text="For urgent medical advice, use NHS 111 online or call 111." />
-                       
-                        <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
-                    </StackLayout>
-                </panels:NhsErrorCallout>
+                <elements:Paragraph Text="You must be aged 13 or over to use the NHS App due to legal restrictions." />
+                <elements:Paragraph Text="If you're aged 12, you can still get an NHS COVID Pass for travel." />
 
+                <elements:LinkLabel Text="Get your digital NHS COVID Pass" Command="{Binding DigitalCovidPassCommand, Source={x:Reference Name=Page}}" />
+                <elements:LinkLabel Text="Get your NHS COVID Pass letter sent to you by post" Command="{Binding PaperCovidPassCommand, Source={x:Reference Name=Page}}" />
+
+                <elements:Paragraph Text="Contact your GP surgery to find out if you can access any GP services online." />
+                <elements:Paragraph Text="For urgent medical advice, go to NHS 111 online or call 111." />
+
+                <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
             </StackLayout>
         </panels:ResponsiveLayoutPanel>
 

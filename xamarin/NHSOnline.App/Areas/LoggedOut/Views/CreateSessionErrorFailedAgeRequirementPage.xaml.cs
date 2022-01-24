@@ -39,6 +39,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public Func<Task>? OneOneOneRequested { get; set; }
         public ICommand OneOneOneCommand => new AsyncCommand(() => OneOneOneRequested);
 
+        public Func<Task>? DigitalCovidPassRequested { get; set; }
+        public ICommand DigitalCovidPassCommand => new AsyncCommand(() => DigitalCovidPassRequested);
+
+        public Func<Task>? PaperCovidPassRequested { get; set; }
+        public ICommand PaperCovidPassCommand => new AsyncCommand(() => PaperCovidPassRequested);
+
         public Task HandleDeeplink(Uri deeplinkUrl)
         {
             _logger.LogInformation("{className} is not required to handle deeplinks", nameof(CreateSessionErrorFailedAgeRequirementPage));

@@ -40,7 +40,7 @@ open class ExternalSiteMockingStepDefinitions {
                 }
             "COVID Pass or proof" ->
                 MockingClient.instance.forExternalSites.mock {
-                    getCovidPassOrProofRequest().respondWithPage()
+                    getCovidPassOrProofRequest(serviceName).respondWithPage(serviceName)
                 }
             "Northern Ireland" ->
                 MockingClient.instance.forExternalSites.mock {

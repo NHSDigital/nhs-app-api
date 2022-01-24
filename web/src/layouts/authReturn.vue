@@ -23,11 +23,10 @@
                        :class="isNativeApp
                          ? 'pull-content nhsuk-u-padding-top-7'
                          : ''">
-                    <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
-                        nhsuk-u-margin-bottom-0">
-                      {{ $t('login.authReturn.loginFailed') }} </h1>
                     <div v-if="statusCode===464">
-                      <error-title title="login.authReturn.loginFailed"/>
+                      <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
+                           nhsuk-u-margin-bottom-0">
+                        {{ $t('login.authReturn.loginFailed') }} </h1>
                       <error-paragraph from="login.authReturn.ifYouAreNotRegisteredInEngland" />
                       <error-paragraph-with-links
                         from="login.authReturn.howToGetYourCovidPass" />
@@ -62,7 +61,9 @@
                                   :params="{errorCode: serviceDeskReference}"/>
                     </div>
                     <error-container v-else-if="statusCode===468">
-                      <error-title title="login.authReturn.loginFailed"/>
+                      <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
+                          nhsuk-u-margin-bottom-0">
+                        {{ $t('login.authReturn.loginFailed') }} </h1>
                       <error-paragraph from="login.authReturn.cannotConnectToGpSurgery" />
                       <error-paragraph-with-links
                         from="login.authReturn.findOutHowToGetYourCovidPass"/>
@@ -80,7 +81,9 @@
                                   :params="{errorCode: serviceDeskReference}"/>
                     </error-container>
                     <error-container v-else-if="statusCode===469">
-                      <error-title title="login.authReturn.loginFailed"/>
+                      <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
+                          nhsuk-u-margin-bottom-0">
+                        {{ $t('login.authReturn.loginFailed') }} </h1>
                       <error-paragraph from="login.authReturn.cannotMatchNhsNumberToSurgery" />
                       <error-paragraph from="login.authReturn.ifYouNeedToBook" />
                       <error-paragraph-with-links
@@ -91,17 +94,30 @@
                                   :query-param="contactUsParam"
                                   :params="{errorCode: serviceDeskReference}"/>
                     </error-container>
-                    <error-container v-else-if="statusCode===465">
-                      <error-title title="login.authReturn.loginFailed"/>
-                      <error-paragraph
-                        from="login.authReturn.dueToLegalRestrictionsUntilYouAreThirteen" />
-                      <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
+                    <error-container v-else-if="statusCode===465" override-style="plain">
+                      <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
+                          nhsuk-u-margin-bottom-0">
+                        {{ $t('login.authReturn.under13.title') }} </h1>
+                      <p>{{ $t('login.authReturn.under13.mustBeOver13') }}</p>
+                      <p>{{ $t('login.authReturn.under13.ifAged12') }}</p>
+                      <error-link from="login.authReturn.under13.getDigitalCovidPass"
+                                  :action="digitalCovidPassUrl"
+                                  target="_blank" />
+                      <error-link from="login.authReturn.under13.getCovidPassLetter"
+                                  :action="letterCovidPassUrl"
+                                  target="_blank" />
+                      <p>{{ $t('login.authReturn.under13.contactGpToFindOut') }}</p>
+                      <p aria-label="$t('login.authReturn.under13.u13UrgentMedicalAdvice.label')">
+                        {{ $t('login.authReturn.under13.urgentMedicalAdvice.text') }}
+                      </p>
                       <error-link from="login.authReturn.goToNhs111"
                                   :action="nhs111Url"
                                   target="_blank" />
                     </error-container>
                     <error-container v-else-if="statusCode===400">
-                      <error-title title="login.authReturn.loginFailed"/>
+                      <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
+                          nhsuk-u-margin-bottom-0">
+                        {{ $t('login.authReturn.loginFailed') }} </h1>
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
                       <error-paragraph from="login.authReturn.ifYouNeedToBook" />
                       <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
@@ -112,7 +128,9 @@
                       <error-link from="login.authReturn.backToLogin" :action="loginUrl"/>
                     </error-container>
                     <error-container v-else-if="statusCode===403">
-                      <error-title title="login.authReturn.loginFailed"/>
+                      <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
+                          nhsuk-u-margin-bottom-0">
+                        {{ $t('login.authReturn.loginFailed') }} </h1>
                       <error-paragraph
                         from="login.authReturn.weCannotGetYourDetailsFromYourGpSurgery" />
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
@@ -125,7 +143,9 @@
                       <error-link from="login.authReturn.backToLogin" :action="loginUrl"/>
                     </error-container>
                     <error-container v-else-if="statusCode===500">
-                      <error-title title="login.authReturn.loginFailed"/>
+                      <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
+                          nhsuk-u-margin-bottom-0">
+                        {{ $t('login.authReturn.loginFailed') }} </h1>
                       <error-paragraph from="login.authReturn.weCannotLoginYouIn" />
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
                       <error-paragraph from="login.authReturn.ifYouNeedToBook" />
@@ -137,7 +157,9 @@
                       <error-link from="login.authReturn.backToLogin" :action="loginUrl"/>
                     </error-container>
                     <error-container v-else-if="statusCode===502">
-                      <error-title title="login.authReturn.loginFailed"/>
+                      <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
+                          nhsuk-u-margin-bottom-0">
+                        {{ $t('login.authReturn.loginFailed') }} </h1>
                       <error-paragraph from="login.authReturn.thisCanBeOneOfTwoProblems" />
                       <error-unordered-list
                         from="login.authReturn.weCannotGetYourLoginDetailsOrConnectToYourSurgery" />
@@ -151,7 +173,9 @@
                       <error-link from="login.authReturn.backToLogin" :action="loginUrl"/>
                     </error-container>
                     <error-container v-else-if="statusCode===504">
-                      <error-title title="login.authReturn.loginFailed"/>
+                      <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
+                          nhsuk-u-margin-bottom-0">
+                        {{ $t('login.authReturn.loginFailed') }} </h1>
                       <error-paragraph from="login.authReturn.thisCanBeOneOfTwoProblems" />
                       <error-unordered-list
                         from="login.authReturn.weCannotGetYourLoginDetailsOrConnectToYourSurgery" />
@@ -165,7 +189,9 @@
                       <error-link from="login.authReturn.backToLogin" :action="loginUrl"/>
                     </error-container>
                     <error-container v-else>
-                      <error-title title="login.authReturn.loginFailed"/>
+                      <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
+                          nhsuk-u-margin-bottom-0">
+                        {{ $t('login.authReturn.loginFailed') }} </h1>
                       <error-paragraph from="login.authReturn.weCannotLoginYouIn" />
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
                       <error-paragraph from="login.authReturn.ifYouNeedToBook" />
@@ -229,7 +255,6 @@ import ErrorHeader from '@/components/errors/ErrorHeader';
 import ErrorLink from '@/components/errors/ErrorLink';
 import ErrorParagraph from '@/components/errors/ErrorParagraph';
 import ErrorParagraphWithLinks from '@/components/errors/ErrorParagraphWithLinks';
-import ErrorTitle from '@/components/errors/ErrorTitle';
 import ErrorUnorderedList from '@/components/errors/ErrorUnorderedList';
 import FlashMessage from '@/components/widgets/FlashMessage';
 import HeaderSlim from '@/components/HeaderSlim';
@@ -252,7 +277,6 @@ export default {
     ErrorLink,
     ErrorParagraph,
     ErrorParagraphWithLinks,
-    ErrorTitle,
     ErrorUnorderedList,
     FlashMessage,
     HeaderSlim,
@@ -275,13 +299,21 @@ export default {
       consentNotGivenDescription: CONSENT_NOT_GIVEN_DESCRIPTION,
       nhs111Url: this.$store.$env.SYMPTOM_CHECKER_URL,
       contactUsUrl: this.$store.$env.CONTACT_US_URL,
+      letterCovidPassUrl: this.$store.$env.COVID_PASS_LETTER_URL,
+      digitalCovidPassUrl: this.$store.$env.COVID_STATUS_URL,
     };
   },
   computed: {
     title() {
-      const title = (this.termsNotAccepted) ?
-        this.$t('login.authReturn.termsNotAccepted') :
-        this.$t('login.authReturn.loginFailed');
+      let title;
+      if (this.termsNotAccepted) {
+        title = this.$t('login.authReturn.termsNotAccepted');
+      } else if (this.statusCode === 465) {
+        title = this.$t('login.authReturn.under13.title');
+      } else {
+        title = this.$t('login.authReturn.loginFailed');
+      }
+
       return this.hasConnectionProblem
         ? `${title} - ${this.$t('appTitle')}`
         : undefined;
