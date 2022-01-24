@@ -24,7 +24,6 @@ target:
     - E85750
     - E85056
     - E85001
-    - E85040
     - E85600
 journeys:
   cdssAdvice:

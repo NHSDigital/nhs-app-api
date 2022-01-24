@@ -39,7 +39,6 @@ target:
     - K84001
     - K84082
     - K84031
-    - K84027
     - K84050
 journeys:
   cdssAdvice:

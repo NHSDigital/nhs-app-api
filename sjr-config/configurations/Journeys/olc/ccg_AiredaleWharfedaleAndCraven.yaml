@@ -6,7 +6,6 @@ target:
     - B83019
     - B83624
     - B83002
-    - B83008
     - B82007
 journeys:
   cdssAdvice:
