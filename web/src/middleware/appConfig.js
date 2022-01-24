@@ -22,7 +22,7 @@ const getLinkedAccounts = async (store, to) => {
     await store.dispatch('linkedAccounts/initialiseConfig');
     if (store.state.linkedAccounts.config.hasLinkedAccounts) {
       const patientIdInUrl = to.params.patientId;
-      const mainUserPatientId = store.getters['linkedAccounts/mainPatientId'];
+      const mainUserPatientId = store.getters['session/patientSessionId'];
       if (!patientIdInUrl || patientIdInUrl === mainUserPatientId) {
         await store.dispatch('linkedAccounts/switchToMainUserProfile');
       } else {

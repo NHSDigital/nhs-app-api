@@ -2,8 +2,6 @@ export const LOADED = 'LOADED';
 export const ADD_ERROR = 'ADD_ERROR';
 export const CLEAR = 'CLEAR';
 export const INIT = 'INIT';
-export const LOSS_PROXY = 'LOSS_PROXY';
-export const LOSS_PROXY_RESET = 'LOSS_PROXY_RESET';
 export const CLEAR_SELECTED_LINKED_ACCOUNT = 'CLEAR_SELECTED_LINKED_ACCOUNT';
 export const SELECT = 'SELECT';
 export const CLEAR_LINKED_ACCOUNTS = 'CLEAR_LINKED_ACCOUNTS';
@@ -17,10 +15,8 @@ export const initialState = () => ({
   actingAsUser: null,
   hasErrored: false,
   error: null,
-  recoverFromProxyLoss: false,
   config: {
     hasLoaded: false,
-    patientId: '',
     hasLinkedAccounts: false,
   },
 });

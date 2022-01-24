@@ -15,7 +15,7 @@ describe('middleware/appConfig', () => {
      store = {
        getters: {
          'session/isLoggedIn': () => isLoggedIn,
-         'linkedAccounts/mainPatientId': mainPatientId,
+         'session/patientSessionId': mainPatientId,
        },
        dispatch: jest.fn(),
        state: {
@@ -24,6 +24,7 @@ describe('middleware/appConfig', () => {
          session: {
            hasGpSession,
            hasLoaded,
+           patientSessionId: mainPatientId,
          },
        },
      };

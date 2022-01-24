@@ -10,8 +10,6 @@ import {
   CLEAR,
   LOADED,
   INIT,
-  LOSS_PROXY,
-  LOSS_PROXY_RESET,
   SELECT,
   CLEAR_SELECTED_LINKED_ACCOUNT,
   CLEAR_LINKED_ACCOUNTS,
@@ -94,22 +92,15 @@ export default {
         this.dispatch('serviceJourneyRules/init');
       });
   },
-  switchToMainUserProfile({ commit, getters }) {
-    const { mainPatientId } = getters;
+  switchToMainUserProfile({ commit, rootState }) {
+    const { patientSessionId } = rootState.session;
     const params = {
-      id: mainPatientId,
+      id: patientSessionId,
     };
     return this.app.$http
       .postV1PatientLinkedAccountsSwitchById(params)
       .then(() => {
         commit(SWITCH_TO_MAIN_USER_ACCOUNT);
       });
-  },
-  redirectAfterInvalidPatientIdDetected({ commit }) {
-    commit(LOSS_PROXY);
-    redirectByName({ $router: this.app.$router, $store: this }, INDEX_NAME);
-  },
-  proxyRecoveryComplete({ commit }) {
-    commit(LOSS_PROXY_RESET);
   },
 };

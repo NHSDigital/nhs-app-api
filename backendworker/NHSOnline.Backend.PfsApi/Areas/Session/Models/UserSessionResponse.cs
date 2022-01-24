@@ -25,6 +25,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session.Models
 
         public bool HasGpSession { get; set; }
 
+        public Guid PatientSessionId { get; set; }
+
         public string UserSessionCreateReferenceCode { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter), false)]

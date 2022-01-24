@@ -54,9 +54,10 @@ describe('services/nhsonlineapi', () => {
         dispatch: jest.fn(),
         state: {
           linkedAccounts: {
-            config: {
-              patientId: '1234-abcd-5678',
-            },
+            config: {},
+          },
+          session: {
+            patientSessionId: '1234-abcd-5678',
           },
         },
       };
@@ -65,7 +66,7 @@ describe('services/nhsonlineapi', () => {
       };
     });
 
-    describe('will send a header NHSO-Patient-Id for a http rquest', () => {
+    describe('will send a header NHSO-Patient-Id for a http request', () => {
       let headers;
       beforeEach(() => {
         headers = {};
@@ -80,7 +81,7 @@ describe('services/nhsonlineapi', () => {
         const headersSentInRequest = axios.mock.calls[0][0].headers;
         expect(headersSentInRequest).not.toBeNull();
         const patientIdHeader = headersSentInRequest['NHSO-Patient-Id'];
-        expect(patientIdHeader).toBe(store.state.linkedAccounts.config.patientId);
+        expect(patientIdHeader).toBe(store.state.session.patientSessionId);
       });
     });
 
@@ -208,9 +209,7 @@ describe('services/nhsonlineapi', () => {
               csrfToken: 'boo',
             },
             linkedAccounts: {
-              config: {
-                patientId: '1234-abcd-5678',
-              },
+              config: {},
             },
           };
         });

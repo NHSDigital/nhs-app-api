@@ -7,18 +7,12 @@ const findPatientId = (state) => {
   if (actingAsUser) {
     return actingAsUser.id;
   }
-  return get('config.patientId')(state);
+  return '';
 };
 
 export default {
   hasLinkedAccounts(state) {
     return get('config.hasLinkedAccounts')(state);
-  },
-  mainPatientId(state) {
-    return get('config.patientId')(state);
-  },
-  isRecoveringFromProxyLoss(state) {
-    return get('recoverFromProxyLoss')(state);
   },
   getSelectedLinkedAccount(state) {
     return get('selectedLinkedAccount')(state);
@@ -26,7 +20,7 @@ export default {
   getPatientId(state) {
     return findPatientId(state);
   },
-  isPatientIdNotEmpty(state) {
+  isActingOnBehalfOfPatient(state) {
     const patientId = findPatientId(state);
     return patientId !== '' && patientId !== EMPTY_GUID;
   },

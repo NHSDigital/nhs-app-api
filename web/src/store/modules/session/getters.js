@@ -53,4 +53,7 @@ export default {
     return requiredProofLevel => requiredProofLevel === proofLevel.P9
       && state.proofLevel !== proofLevel.P9;
   },
+  patientSessionId(state) {
+    return state.patientSessionId;
+  },
 };

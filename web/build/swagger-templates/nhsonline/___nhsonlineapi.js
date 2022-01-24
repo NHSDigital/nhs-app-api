@@ -22,7 +22,7 @@ const getPatientId = (that) => {
   if (that.store.state.linkedAccounts && that.store.state.linkedAccounts.actingAsUser) {
     patientId = that.store.state.linkedAccounts.actingAsUser.id;
   } else {
-    patientId = get('store.state.linkedAccounts.config.patientId')(that);
+    patientId = get('store.state.session.patientSessionId')(that);
   }
 
   return patientId;
@@ -230,15 +230,6 @@ class NHSOnlineApi {
             this.store.dispatch('http/loadingCompleted', url);
           }
           if (!axios.isCancel(error)) {
-            if (error.response && error.response.status === 467) {
-              this.store.dispatch('linkedAccounts/redirectAfterInvalidPatientIdDetected');
-              reject({
-                deferred,
-                error,
-                store: this.store,
-              });
-            }
-
             if (error.response !== undefined && 401 === error.response.status) {
               this.store.dispatch('auth/unauthorised');
               resolve({

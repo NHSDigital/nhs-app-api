@@ -119,9 +119,8 @@ describe('switchToMainUserProfile', () => {
       id: mainPatientId,
     };
 
-    const getters = {
-      mainPatientId,
-    };
+    const getters = {};
+    const rootState = { session: { patientSessionId: mainPatientId } };
 
     const that = {
       app: {
@@ -136,7 +135,7 @@ describe('switchToMainUserProfile', () => {
     const commit = jest.fn();
 
     return switchToMainUserProfile
-      .call(that, { commit, getters })
+      .call(that, { commit, getters, rootState })
       .then(() => {
         expect(that.app.$http.postV1PatientLinkedAccountsSwitchById)
           .toHaveBeenCalledWith(expectedRequest);

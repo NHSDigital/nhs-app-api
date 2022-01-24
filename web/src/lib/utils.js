@@ -178,7 +178,8 @@ export const readableBytes = (bytes) => {
 
 export const createRouteByNameObject = ({ name, query, params, store }) => {
   const newParams = { ...params };
-  if (store.getters['session/isLoggedIn']() && store.getters['linkedAccounts/isPatientIdNotEmpty']) {
+  if (store.getters['session/isLoggedIn']()
+      && store.getters['linkedAccounts/isActingOnBehalfOfPatient']) {
     newParams.patientId = store.getters['linkedAccounts/getPatientId'];
   } else {
     delete newParams.patientId;
@@ -255,7 +256,7 @@ const definePatientIdPathParams = (store) => {
     paramString: `${INDEX_PATH_PARAM}${EMPTY_PATH}`,
   };
 
-  if (store.getters['linkedAccounts/isPatientIdNotEmpty']) {
+  if (store.getters['linkedAccounts/isActingOnBehalfOfPatient']) {
     retObj.patientId = store.getters['linkedAccounts/getPatientId'];
     retObj.paramString = INDEX_PATH_PARAM;
   }

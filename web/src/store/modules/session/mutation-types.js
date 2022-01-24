@@ -21,6 +21,7 @@ export const initialState = () => ({
   hasLoaded: false,
   lastCalledAt: undefined,
   nhsNumber: undefined,
+  patientSessionId: undefined,
   proofLevel: undefined,
   sessionTimeout: undefined,
   showExpiryMessage: false,

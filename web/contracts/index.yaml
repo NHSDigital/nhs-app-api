@@ -3605,6 +3605,9 @@
                     userSessionCreateReferenceCode: 
                       type: "string"
                       description: "Service desk reference error if GP session is unavailable"
+                    patientSessionId: 
+                      type: "string"
+                      description: "Id for identifying the main patient making a request for the duration of the current session"
                     proofLevel: 
                       type: "string"
                       description: "User's proof level"
@@ -3695,6 +3698,9 @@
                         userSessionCreateReferenceCode: 
                           type: "string"
                           description: "Service desk reference error if GP session is unavailable"
+                        patientSessionId: 
+                          type: "string"
+                          description: "Id for identifying the main patient making a request for the duration of the current session"
                         proofLevel: 
                           type: "string"
                           description: "User's proof level"
@@ -4124,6 +4130,9 @@
                         userSessionCreateReferenceCode: 
                           type: "string"
                           description: "Service desk reference error if GP session is unavailable"
+                        patientSessionId: 
+                          type: "string"
+                          description: "Id for identifying the main patient making a request for the duration of the current session"
                         proofLevel: 
                           type: "string"
                           description: "User's proof level"

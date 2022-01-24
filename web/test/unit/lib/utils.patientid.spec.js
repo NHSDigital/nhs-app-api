@@ -16,7 +16,7 @@ describe('util library patientId', () => {
       $store = {
         getters: {
           'linkedAccounts/getPatientId': PATIENT_ID,
-          'linkedAccounts/isPatientIdNotEmpty': true,
+          'linkedAccounts/isActingOnBehalfOfPatient': true,
         },
       };
     });
@@ -38,7 +38,7 @@ describe('util library patientId', () => {
 
     it('will add patient id prefix when url does not begin with patient', () => {
       const patientId = '330b2795-e20f-427e-9699-7943dd31d4db';
-      $store.getters['linkedAccounts/isPatientIdNotEmpty'] = true;
+      $store.getters['linkedAccounts/isActingOnBehalfOfPatient'] = true;
       $store.getters['linkedAccounts/getPatientId'] = patientId;
       const param = { trimmedPath: 'pathName', store: $store };
       // act
@@ -78,7 +78,7 @@ describe('util library patientId', () => {
       $store = {
         getters: {
           'linkedAccounts/getPatientId': patientId,
-          'linkedAccounts/isPatientIdNotEmpty': true,
+          'linkedAccounts/isActingOnBehalfOfPatient': true,
         },
       };
     });

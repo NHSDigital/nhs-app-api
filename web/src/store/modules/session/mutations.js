@@ -47,6 +47,7 @@ export default {
     state.lastCalledAt = undefined;
     state.nhsNumber = undefined;
     state.proofLevel = undefined;
+    state.patientSessionId = undefined;
     state.sessionTimeout = undefined;
     state.showSessionExpiring = false;
     state.user = undefined;
@@ -68,6 +69,7 @@ export default {
     nhsNumber,
     dateOfBirth,
     accessToken,
+    patientSessionId,
     proofLevel,
   } = {}) {
     state.user = user;
@@ -79,6 +81,7 @@ export default {
     state.nhsNumber = nhsNumber;
     state.dateOfBirth = dateOfBirth;
     state.accessToken = accessToken;
+    state.patientSessionId = patientSessionId;
     state.proofLevel = proofLevel;
   },
   [SET_USER_SESSION_REFERENCE](state, userSessionCreateReferenceCode) {

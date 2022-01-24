@@ -24,7 +24,7 @@ describe('util library', () => {
       store = {
         getters: {
           'linkedAccounts/getPatientId': patientId,
-          'linkedAccounts/isPatientIdNotEmpty': false,
+          'linkedAccounts/isActingOnBehalfOfPatient': false,
           'session/isLoggedIn': () => isLoggedIn,
         },
       };
@@ -44,7 +44,7 @@ describe('util library', () => {
 
       describe('patient id is not empty', () => {
         beforeEach(() => {
-          store.getters['linkedAccounts/isPatientIdNotEmpty'] = true;
+          store.getters['linkedAccounts/isActingOnBehalfOfPatient'] = true;
           route = createRouteByNameObject({ name, query, params, store });
         });
 

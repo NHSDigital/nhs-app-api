@@ -4,8 +4,6 @@ import {
   CLEAR,
   LOADED,
   INIT,
-  LOSS_PROXY,
-  LOSS_PROXY_RESET,
   SELECT,
   CLEAR_SELECTED_LINKED_ACCOUNT,
   CLEAR_LINKED_ACCOUNTS,
@@ -59,7 +57,6 @@ export default {
   },
   [SET_LINKED_ACCOUNTS_CONFIG](state, config) {
     state.config.hasLoaded = true;
-    state.config.patientId = config.id;
     state.config.hasLinkedAccounts = config.hasLinkedAccounts;
     state.items = config.linkedAccounts;
   },
@@ -68,12 +65,5 @@ export default {
   },
   [SWITCH_TO_MAIN_USER_ACCOUNT](state) {
     state.actingAsUser = null;
-  },
-  [LOSS_PROXY](state) {
-    init(state);
-    state.recoverFromProxyLoss = true;
-  },
-  [LOSS_PROXY_RESET](state) {
-    state.recoverFromProxyLoss = false;
   },
 };

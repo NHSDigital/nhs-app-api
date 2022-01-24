@@ -51,6 +51,7 @@ export default {
         userSessionCreateReferenceCode,
         hasGpSession,
         proofLevel,
+        patientSessionId,
       } = response.data;
 
       dispatch('setInfo', {
@@ -63,6 +64,7 @@ export default {
         dateOfBirth,
         accessToken,
         proofLevel,
+        patientSessionId,
       });
 
       commit(SET_USER_SESSION_REFERENCE, userSessionCreateReferenceCode);

@@ -38,7 +38,7 @@ describe('util library redirect', () => {
         getters: {
           'session/isLoggedIn': () => loggedIn,
           'linkedAccounts/getPatientId': PATIENT_ID,
-          'linkedAccounts/isPatientIdNotEmpty': true,
+          'linkedAccounts/isActingOnBehalfOfPatient': true,
         },
       },
       $router: {
@@ -340,7 +340,7 @@ describe('util library redirect', () => {
       describe('no patient Id', () => {
         beforeEach(() => {
           loggedIn = true;
-          self.$store.getters['linkedAccounts/isPatientIdNotEmpty'] = false;
+          self.$store.getters['linkedAccounts/isActingOnBehalfOfPatient'] = false;
         });
         it('will call push with no patientId param', () => {
           const query = { source: 'ios' };
