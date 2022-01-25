@@ -15,7 +15,6 @@ using NHSOnline.Backend.GpSystems.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
 {
@@ -26,7 +25,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
 
         private Mock<IPatientRecordService> _mockPatientRecordService;
         private Mock<IAuditor> _mockAuditor;
-        private Mock<ILogger<PatientDocumentController>> _mockLogger;
 
         private P9UserSession _userSession;
         private Guid _patientId;
@@ -73,9 +71,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             httpContextMock.SetupGet(x => x.Response).Returns(httpContextResponse.Object);
 
             _mockAuditor = new Mock<IAuditor>();
-            _mockLogger = new Mock<ILogger<PatientDocumentController>>();
+
             _systemUnderTest = new PatientDocumentController(
-                _mockLogger.Object,
+                new Mock<ILogger<PatientDocumentController>>().Object,
                 mockGpSystemFactory.Object,
                 _mockAuditor.Object);
 
@@ -95,12 +93,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         public async Task GetPatientDocument_WhenServiceReturnsSuccessResult_ReturnsOkPatientDocumentResult()
         {
             // Arrange
-            var successResponse = new PatientDocument
-            {
-                IsDownloadable = true,
-                IsViewable = false,
-                Type=DocumentType
-            };
+            var successResponse = new PatientDocument();
 
             var successResult = new GetPatientDocumentResult.Success(successResponse);
 
@@ -129,11 +122,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             // Assert
             _mockPatientRecordService.Verify();
             VerifyMockAuditor();
-            var expectedLogMessage =
-                $"Accessing document type {successResponse.Type} " +
-                $"which is set to viewable as {successResponse.IsViewable} " +
-                $"and downloadable as {successResponse.IsDownloadable}";
-            _mockLogger.VerifyLogger(LogLevel.Information,expectedLogMessage,Times.Once());
 
             result
                 .Should().BeAssignableTo<OkObjectResult>()

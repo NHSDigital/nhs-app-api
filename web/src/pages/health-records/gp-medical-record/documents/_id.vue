@@ -155,6 +155,11 @@ export default {
     this.isViewable = isViewable;
     this.isDownloadable = isDownloadable;
     this.loading = false;
+
+    this.$store.dispatch(
+      'log/onInfo',
+      `Accessing document type ${this.type} set to valid as ${this.isValidFile}, viewable as ${this.isValidFile && this.isViewable} and downloadable as ${this.isValidFile && this.isDownloadable}`,
+    );
   },
   methods: {
     navigateToView() {
