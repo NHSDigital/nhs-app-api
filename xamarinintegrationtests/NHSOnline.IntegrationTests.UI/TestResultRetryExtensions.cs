@@ -113,6 +113,16 @@ namespace NHSOnline.IntegrationTests.UI
             Regex.Escape(UnableToVerifyAppVersion),
             RegexOptions.Compiled);
 
+        // Web context not ready
+        private static readonly Regex WebContextNotReady = new(
+            @"Web context not ready after \d[0-9]:\d[0-9]:\d[0-9]: Unable to communicate to node*",
+            RegexOptions.Compiled);
+
+        // Unused web context not found webview
+        private static readonly Regex UnusedWebContext = new(
+            @"Unused web context not found after \d[0-9]:\d[0-9]:\d[0-9]; Contexts: *",
+            RegexOptions.Compiled);
+
         private static readonly List<(Regex pattern, RetryStatus result)> RetryExceptionMessageRegexes = new()
         {
             (InvalidServiceWebInspectorMessage, RetryStatus.Retry(nameof(InvalidServiceWebInspectorMessage))),
@@ -134,7 +144,9 @@ namespace NHSOnline.IntegrationTests.UI
             (UnableToFindFileIos, RetryStatus.Retry(nameof(UnableToFindFileIos))),
             (FileUploadSelectorDeviceVariance, RetryStatus.Retry(nameof(FileUploadSelectorDeviceVariance))),
             (KAXErrorServerNotFound, RetryStatus.Retry(nameof(KAXErrorServerNotFound))),
-            (DeviceFailedVersionCheck, RetryStatus.Retry(nameof(DeviceFailedVersionCheck)))
+            (DeviceFailedVersionCheck, RetryStatus.Retry(nameof(DeviceFailedVersionCheck))),
+            (UnusedWebContext, RetryStatus.Retry(nameof(UnusedWebContext))),
+            (WebContextNotReady, RetryStatus.Retry(nameof(WebContextNotReady)))
         };
 
         internal static RetryStatus ShouldRetry(this TestResult result, TestLogs logs)
