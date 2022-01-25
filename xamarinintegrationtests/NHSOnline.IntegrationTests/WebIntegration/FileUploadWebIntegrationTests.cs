@@ -69,7 +69,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .PageContent.AssertFileSelected();
         }
 
-        [NhsAppIOSTest]
+        // Running on lower version as we had issues with the structure in the updated default
+        [NhsAppIOSTest(IOSDevice = IOSDevice.iPhone11Pro, OSVersion = IOSVersion.Thirteen)]
         public void APatientWithProofLevelNineCanUploadTheirFileToAWebIntegrationFileUploadScreenIOS(
             IIOSDriverWrapper driver)
         {
@@ -103,7 +104,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
             IOSStoragePage? storagePage = null;
 
             TransitoryErrorHandler.HandleSpecificFailure()
-                .Retry(() =>
+                .ResetAndRetry(() =>
                     {
                         IOSFileUploadPage
                             .AssertOnPage(driver)
@@ -119,16 +120,24 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                             .AssertOnPage(driver);
 
                         storagePage
-                            .SearchForText()
-                            .SelectFile();
+                            .SearchForText();
                     },
                     "No IOSElement found matching ByIosNSPredicate(type == 'XCUIElementTypeCell' AND name == 'test, txt')",
                     () => { storagePage?.CloseFileSelectorScreen(); });
 
-            IOSFileUploadPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
-                .PageContent.AssertFileSelected();
+            TransitoryErrorHandler.HandleSpecificFailure()
+                .Retry(() =>
+                    {
+                        storagePage?
+                            .SelectFile();
+
+                        IOSFileUploadPage
+                            .AssertOnPage(driver)
+                            .AssertNativeHeader()
+                            .PageContent.AssertFileSelected();
+                    },
+                    "Expected e.Displayed to be true because an icon with name NHS App Home should be displayed, but found False.");
+
         }
     }
 }

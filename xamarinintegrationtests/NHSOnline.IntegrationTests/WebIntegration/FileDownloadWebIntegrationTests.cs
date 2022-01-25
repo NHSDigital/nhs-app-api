@@ -48,7 +48,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidFileDownloadPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
+                .AssertNativeHeaderAllIcons()
                 .PageContent.DownloadImage();
 
             AndroidFilePermissionsDialog
@@ -58,12 +58,21 @@ namespace NHSOnline.IntegrationTests.WebIntegration
             AndroidGooglePhotosApp
                 .AssertOnPage(driver);
 
-            // additional steps to verify re-download does not fail
-            driver.PressBackButton();
+            AndroidFileDownloadPage? downloadPage = null;
 
-            AndroidFileDownloadPage
-                .AssertOnPage(driver)
-                .AssertNativeHeader()
+            // additional steps to verify re-download does not fail
+            TransitoryErrorHandler.HandleSpecificFailure()
+                .Retry(() =>
+                    {
+                        driver.PressBackButton();
+
+                        downloadPage = AndroidFileDownloadPage
+                            .AssertOnPage(driver)
+                            .AssertNativeHeaderAllIcons();
+                    },
+                    "No AndroidElement found matching By.XPath: .//android.view.ViewGroup[normalize-space(@content-desc)='NHS App Home']");
+
+            downloadPage?
                 .PageContent.DownloadImage();
 
             AndroidGooglePhotosApp
@@ -85,7 +94,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidFileDownloadPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
+                .AssertNativeHeaderAllIcons()
                 .PageContent.DownloadImage();
 
             AndroidFilePermissionsDialog
@@ -100,7 +109,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidFileDownloadPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
+                .AssertNativeHeaderAllIcons()
                 .PageContent.DownloadImage();
 
             AndroidGooglePhotosApp
@@ -164,7 +173,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidFileDownloadPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
+                .AssertNativeHeaderAllIcons()
                 .PageContent.DownloadImage();
 
             AndroidFilePermissionsDialog
@@ -246,7 +255,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidFileDownloadPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
+                .AssertNativeHeaderAllIcons()
                 .PageContent.DownloadPass();
 
             AndroidFilePermissionsDialog
@@ -276,7 +285,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidFileDownloadPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
+                .AssertNativeHeaderAllIcons()
                 .PageContent.DownloadCorrupted();
 
             AndroidFilePermissionsDialog
@@ -310,7 +319,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidFileDownloadPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
+                .AssertNativeHeaderAllIcons()
                 .PageContent.DownloadCorrupted();
 
             AndroidFilePermissionsDialog

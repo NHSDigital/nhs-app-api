@@ -10,9 +10,9 @@ namespace NHSOnline.IntegrationTests.UI
     public sealed class NhsAppIOSTestAttribute : TestMethodAttribute
     {
         internal IOSBrowserStackCapability Capabilities { get; }
-        public IOSDevice IOSDevice { get; set; } = IOSDevice.iPhone11Pro;
+        public IOSDevice IOSDevice { get; set; } = IOSDevice.iPhone12;
 
-        public IOSVersion OSVersion { get; set; } = IOSVersion.Thirteen;
+        public IOSVersion OSVersion { get; set; } = IOSVersion.Fourteen;
 
         public NhsAppIOSTestAttribute(params IOSBrowserStackCapability[] capabilities)
         {

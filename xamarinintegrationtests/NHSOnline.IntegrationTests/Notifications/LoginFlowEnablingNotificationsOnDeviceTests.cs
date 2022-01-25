@@ -48,6 +48,8 @@ namespace NHSOnline.IntegrationTests.Notifications
                 .YesTurnOnNotifications()
                 .Continue();
 
+            AndroidSessionExpiryPrompt.ExtendIfDisplayed(driver);
+
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
                 .Navigation.NavigateToMore();

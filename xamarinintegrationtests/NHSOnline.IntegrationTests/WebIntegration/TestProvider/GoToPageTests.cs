@@ -43,7 +43,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             AndroidGoToPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
+                .AssertFullNativeHeader()
                 .TabIntoFocus()
                 .KeyboardNavigateToGoToAdvice();
 
@@ -55,7 +55,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             AndroidGoToPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
+                .AssertNativeHeaderHome()
                 .TabIntoFocus()
                 .KeyboardNavigateToGoToAppointments();
 
@@ -63,7 +63,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             AndroidGoToPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
+                .AssertNativeHeaderHome()
                 .TabIntoFocus()
                 .KeyboardNavigateToGoToHealthRecords();
 
@@ -75,7 +75,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             AndroidGoToPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
+                .AssertNativeHeaderHome()
                 .TabIntoFocus()
                 .KeyboardNavigateToGoToMore();
 
@@ -87,7 +87,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             AndroidGoToPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
+                .AssertNativeHeaderHome()
                 .TabIntoFocus()
                 .KeyboardNavigateToGoToSettings();
 
@@ -99,13 +99,12 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             AndroidGoToPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
+                .AssertNativeHeaderHome()
                 .TabIntoFocus()
                 .KeyboardNavigateToGoToUplift();
 
             AndroidUpliftShutterPage
-                .AssertOnPage(driver)
-                .NavigateToAppointments();
+                .AssertOnPage(driver);
         }
 
         [NhsAppIOSTest]
@@ -137,7 +136,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             IOSGoToPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
+                .AssertNativeHeaderHome()
                 .PageContent.GoToAdvice();
 
             IOSAdvicePage
@@ -148,14 +147,14 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             IOSGoToPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
+                .AssertNativeHeaderHome()
                 .PageContent.GoToAppointments();
 
             NavigateToHospitalAppointmentsGoToPageIOS(driver);
 
             IOSGoToPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
+                .AssertNativeHeaderHome()
                 .PageContent.GoToPrescriptions();
 
             IOSPrescriptionsPage
@@ -166,7 +165,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             IOSGoToPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
+                .AssertNativeHeaderHome()
                 .PageContent.GoToHealthRecords();
 
             IOSYourHealthPage
@@ -177,7 +176,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             IOSGoToPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
+                .AssertNativeHeaderHome()
                 .PageContent.GoToMore();
 
             IOSMorePage
@@ -188,7 +187,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             IOSGoToPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
+                .AssertNativeHeaderHome()
                 .PageContent.GoToSettings();
 
             IOSMorePage
@@ -199,7 +198,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             IOSGoToPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
+                .AssertNativeHeaderHome()
                 .PageContent.GoToInvalidPage();
 
             IOSLoggedInHomePage
@@ -210,7 +209,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             IOSGoToPage
                 .AssertOnPage(driver)
-                .AssertNativeHeader()
+                .AssertNativeHeaderHome()
                 .PageContent.GoToUplift();
 
             IOSUpliftShutterPage
@@ -238,7 +237,6 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             AndroidPkbPage
                 .AssertOnPage(driver, PhrPath.ViewAppointments)
-                .AssertNativeHeader()
                 .NavigateToGoToPage();
         }
 
@@ -263,7 +261,6 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             IOSPkbPage
                 .AssertOnPage(driver, PhrPath.ViewAppointments)
-                .AssertNativeHeader()
                 .NavigateToGoToPage();
         }
     }

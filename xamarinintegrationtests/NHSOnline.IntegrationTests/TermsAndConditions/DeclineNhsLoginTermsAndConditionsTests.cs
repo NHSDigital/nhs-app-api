@@ -33,7 +33,7 @@ namespace NHSOnline.IntegrationTests.TermsAndConditions
                 .PageContent.LoginWithLoginTermsAndConditions(patient);
 
             TransitoryErrorHandler.HandleSpecificFailure()
-                .Retry(() =>
+                .ResetAndRetry(() =>
                     {
                         AndroidStubbedLoginTermsAndConditionsPage
                             .AssertOnPage(driver)

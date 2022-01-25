@@ -14,6 +14,8 @@ namespace NHSOnline.HttpMocks.Domain
         public string UserPatientLinkToken => $"linktoken_{Id}";
         public string SessionId => $"session{Id}";
 
+        public string PatientActivityContextGuid { get; } = Guid.NewGuid().ToString();
+
         public EmisPatient(EmisPatientOds emisPatientOds = EmisPatientOds.PkbAndEconsult)
         {
             OdsCode = emisPatientOds.ToOdsCodeString();

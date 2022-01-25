@@ -43,40 +43,5 @@ namespace NHSOnline.IntegrationTests.DeviceAndOperatingSystemCompatibility
                 .AssertOnPage(driver)
                 .AssertPageDisplayedFor("Wendy House");
         }
-
-
-        [NhsAppIOSTest(IOSDevice = IOSDevice.iPhoneXR, OSVersion = IOSVersion.Twelve)]
-        public void APatientWithProofLevelNineCanSuccessfullyLogInOnIOS12(IIOSDriverWrapper driver)
-        {
-            var patient = new EmisPatient()
-                .WithName(b => b.GivenName("Wendy").FamilyName("House"));
-            using var patients = Mocks.Patients.Add(patient);
-
-            IOSLoggedOutHomePage
-                .AssertOnPage(driver)
-                .ContinueWithNhsLogin();
-
-            IOS11GettingStartedPage
-                .AssertOnPage(driver)
-                .Continue();
-
-            IOSStubbedLoginPage
-                .AssertOnPage(driver)
-                .PageContent
-                .AssertVectorOfTrust()
-                .Login(patient);
-
-            IOSTermsAndConditionsPage
-                .AssertOnPage(driver)
-                .PageContent.AcceptTermsAndConditions();
-
-            IOSUserResearchOptInPage
-                .AssertOnPage(driver)
-                .PageContent.OptInToUserResearch();
-
-            IOSLoggedInHomePage
-                .AssertOnPage(driver)
-                .AssertPageDisplayedFor("Wendy House");
-        }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.IntegrationTests.UI.Components.IOS;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -14,37 +15,29 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             _driver = driver;
         }
 
-        private IOSSystemLinkLabel AllPhotos => IOSSystemLinkLabel.WithText(_driver, "All Photos");
+        private IOSButton FileChooserNavigationButton => IOSButton.WithText(_driver, "Photos");
 
-        private IOSLabel FileChooserTitleText => IOSLabel.WithText(_driver, "Photos");
+        private IOSButton ChooseButton => IOSButton.WithText(_driver, "Choose");
 
-        private IOSButton Done => IOSButton.WithText(_driver, "Done");
+        private IOSButton CancelButton => IOSButton.WithText(_driver, "Cancel");
 
-        private IOSSystemLinkLabel Photo => IOSSystemLinkLabel.WhichMatches(_driver, "Photo,.*");
+        private IOSSystemImage Photo => IOSSystemImage.WhichMatches(_driver, "Photo,.*");
 
         public static IOSFileChooser AssertDisplayed(IIOSDriverWrapper driver)
         {
             var page = new IOSFileChooser(driver);
-            page.FileChooserTitleText.AssertVisible();
+            page.FileChooserNavigationButton.AssertVisible();
             return page;
         }
 
-        public IOSFileChooser SelectFolder()
-        {
-            AllPhotos.Click();
-            return this;
-        }
-
-        public IOSFileChooser ChoosePhoto()
+        public void ChoosePhoto()
         {
             Task.Delay(TimeSpan.FromMilliseconds(100)).Wait();
             Photo.Click();
-            return this;
         }
 
-        public void ConfirmSelection()
-        {
-            Done.Click();
-        }
+        public void ConfirmSelection() => ChooseButton.Click();
+
+        public void CancelSelection() => CancelButton.Click();
     }
 }

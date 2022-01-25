@@ -72,7 +72,9 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.PreHome
 
         internal void AssertOnPage()
         {
-            using var timeout = ExtendedTimeout.FromSeconds(10);
+            // seeing this call can take a min if google services are running slow and extending this means we
+            // either login or get the sorry screen
+            using var timeout = ExtendedTimeout.FromSeconds(65);
             TitleText.AssertVisible();
         }
 

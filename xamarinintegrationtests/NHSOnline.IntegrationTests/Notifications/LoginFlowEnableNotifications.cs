@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
+using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.Android.More;
@@ -48,6 +49,8 @@ namespace NHSOnline.IntegrationTests.Notifications
                 .AssertPageContent()
                 .YesTurnOnNotifications()
                 .Continue();
+
+            AndroidSessionExpiryPrompt.ExtendIfDisplayed(driver);
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)

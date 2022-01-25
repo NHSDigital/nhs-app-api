@@ -8,7 +8,7 @@ namespace NHSOnline.IntegrationTests.UI
         {
         }
 
-        public void Retry(Action actionToRetry, string errorMessageToTriggerRetry,
+        public void ResetAndRetry(Action actionToRetry, string errorMessageToTriggerRetry,
             Action actionToRevertTestState)
         {
             try
@@ -21,6 +21,22 @@ namespace NHSOnline.IntegrationTests.UI
                     StringComparison.InvariantCulture))
             {
                 actionToRevertTestState.Invoke();
+
+                actionToRetry.Invoke();
+            }
+        }
+
+        public void Retry(Action actionToRetry, string errorMessageToTriggerRetry)
+        {
+            try
+            {
+                actionToRetry.Invoke();
+            }
+            catch (Exception e)
+                when (e.Message.Contains(
+                          errorMessageToTriggerRetry,
+                          StringComparison.InvariantCulture))
+            {
 
                 actionToRetry.Invoke();
             }

@@ -19,7 +19,8 @@ namespace NHSOnline.HttpMocks.Emis
                     patient.UserPatientLinkToken,
                     patient.OdsCode,
                     NationalPracticeCode = patient.OdsCode,
-                    AssociationType = "Self"
+                    AssociationType = "Self",
+                    patient.PatientActivityContextGuid
                 }
             };
 

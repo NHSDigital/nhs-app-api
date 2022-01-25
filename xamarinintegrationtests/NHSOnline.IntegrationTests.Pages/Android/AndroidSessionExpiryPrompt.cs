@@ -1,3 +1,5 @@
+using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.Android
@@ -19,6 +21,19 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         {
             var prompt = AndroidPrompt.AssertDisplayed(driver, PromptLabelText, AcceptButtonText, CancelButtonText);
             return new AndroidSessionExpiryPrompt(prompt);
+        }
+
+        public static void ExtendIfDisplayed(IAndroidDriverWrapper driver)
+        {
+            try
+            {
+                var prompt = AndroidPrompt.AssertDisplayed(driver, PromptLabelText, AcceptButtonText, CancelButtonText);
+                prompt.Accept();
+            }
+            catch (AssertFailedException)
+            {
+                Console.WriteLine("Dialog is not shown");
+            }
         }
 
         public void ExtendSession() => _androidPrompt.Accept();

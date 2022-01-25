@@ -9,6 +9,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Home
 {
+    [BusinessRule("BR-HOM-01.1", "Biometrics call out is displayed when no biometrics preference has been set on a compatible device")]
     [BusinessRule("BR-HOM-01.2", "Biometrics call out is not displayed when it has been previously dismissed")]
     [BusinessRule("BR-LOG-03.1", "Continuing with NHS login displays NHS login when the before you start screen has previously been acknowledged")]
     [TestClass]
@@ -25,11 +26,12 @@ namespace NHSOnline.IntegrationTests.Home
 
             LoginProcess.LogAndroidPatientIn(driver, patient);
 
-            var homePage = AndroidLoggedInHomePage
-                .AssertOnPage(driver);
-            homePage.PageContent.AssertBiometricPanelVisible();
-            homePage.PageContent.DismissBiometricPanel();
-            homePage.PageContent.AssertBiometricPanelNotVisible();
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .PageContent
+                .AssertBiometricPanelVisible()
+                .DismissBiometricPanel()
+                .AssertBiometricPanelNotVisible();
 
             driver.CloseApp();
 
@@ -58,11 +60,12 @@ namespace NHSOnline.IntegrationTests.Home
 
             LoginProcess.LogIOSPatientIn(driver, patient);
 
-            var homePage = IOSLoggedInHomePage
-                .AssertOnPage(driver);
-            homePage.PageContent.AssertBiometricPanelVisible();
-            homePage.PageContent.DismissBiometricPanel();
-            homePage.PageContent.AssertBiometricPanelNotVisible();
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .PageContent
+                .AssertBiometricPanelVisible()
+                .DismissBiometricPanel()
+                .AssertBiometricPanelNotVisible();
 
             driver.CloseApp();
 

@@ -35,7 +35,10 @@ namespace NHSOnline.IntegrationTests.Appointments
 
             AndroidAppointmentsPage
                 .AssertOnPage(driver)
-                .PageContent.NavigateToAdditionalGpServices();
+                .PageContent
+                .AssertPageElements()
+                .AssertAdditionalGpServicesElements()
+                .NavigateToAdditionalGpServices();
 
             AndroidAdditionalGpServicesStartPage
                 .AssertOnPage(driver)
@@ -82,7 +85,9 @@ namespace NHSOnline.IntegrationTests.Appointments
 
             IOSAppointmentsPage
                 .AssertOnPage(driver)
-                .PageContent.NavigateToAdditionalGpServices();
+                .PageContent.AssertPageElements()
+                .AssertAdditionalGpServicesElements()
+                .NavigateToAdditionalGpServices();
 
             IOSAdditionalGpServicesStartPage
                 .AssertOnPage(driver)

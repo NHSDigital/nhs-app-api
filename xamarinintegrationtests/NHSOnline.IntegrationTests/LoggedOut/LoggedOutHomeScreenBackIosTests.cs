@@ -11,19 +11,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
     {
 
         [NhsAppIOSTest]
-        public void APatientCanNotSwipeToCloseTheAppOnTheLoggedOutHomeScreenIos(IIOSDriverWrapper driver)
-        {
-            IOSLoggedOutHomePage
-                .AssertOnPage(driver);
-
-            driver.SwipeBack();
-
-            IOSLoggedOutHomePage
-                .AssertOnPage(driver);
-        }
-
-        [NhsAppIOSTest]
-        public void APatientCanContinueToLoginAfterSwipingBackOnTheLoggedOutHomeScreenIos(IIOSDriverWrapper driver)
+        public void APatientCanNotSwipeToCloseTheAppAndCanContinueToLoginAfterSwipingBackOnTheLoggedOutHomeScreenIos(IIOSDriverWrapper driver)
         {
             IOSLoggedOutHomePage
                 .AssertOnPage(driver)

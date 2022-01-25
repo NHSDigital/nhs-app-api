@@ -30,6 +30,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
 
         private WebText PkbSharedHealthMenuItemTitle => WebText.WithTagAndText(_interactor, "h2", "Shared health links");
 
+        private WebText PkbRecordSharingMenuItemTitle => WebText.WithTagAndText(_interactor, "h2", "Record sharing");
+
         private WebMenuItem PkbRecordSharingMenuItem => WebMenuItem.WithTitle(_interactor, "Record sharing", "btn_pkb_record_sharing");
 
         private WebText PkbRecordSharingText => WebText.WithTagAndText(_interactor, "p", "Choose and manage information you share with your health teams");
@@ -68,7 +70,12 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
 
         public void NavigateToTrackYourHealth() => PkbTrackYourHealthMenuItem.Click();
 
-        public void NavigateToRecordSharing() => PkbRecordSharingMenuItem.Click();
+        public void NavigateToRecordSharing()
+        {
+            PkbRecordSharingMenuItemTitle.ScrollTo();
+            PkbRecordSharingMenuItemTitle.AssertVisible();
+            PkbRecordSharingMenuItem.Click();
+        }
 
         public void NavigateToSharedHealth()
         {

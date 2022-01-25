@@ -40,6 +40,11 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             MessagesAppIcon.AssertVisible();
         }
 
+        internal void AssertHomeIconIsPresent()
+        {
+            HomeAppIcon.AssertVisible();
+        }
+
         public void AssertNoIconsSelected()
         {
             AdviceAppIcon.AssertNotSelected();

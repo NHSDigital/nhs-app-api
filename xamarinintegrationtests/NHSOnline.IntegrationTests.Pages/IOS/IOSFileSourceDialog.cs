@@ -1,4 +1,5 @@
 using System;
+using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Components.IOS;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -13,7 +14,9 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             _driver = driver;
         }
 
-        private IOSSystemLabel PhotoLibraryLabel => IOSSystemLabel.WithText(_driver, "Photo Library");
+        private IOSButton PhotoLibraryButton => IOSButton.WithText(_driver, "Photo Library");
+
+        private IOSButton BrowseButton => IOSButton.WithText(_driver, "Browse");
 
         private IOSSystemLabel BrowseLabel => IOSSystemLabel.WithText(_driver, "Browse");
 
@@ -28,13 +31,13 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
         public static void IfDisplayed(IIOSDriverWrapper driver, Action<IOSFileSourceDialog> action)
         {
             var page = new IOSFileSourceDialog(driver);
-            if (page.BrowseLabel.IsPresent())
+            if (page.BrowseButton.IsVisible())
             {
                 action(page);
             }
         }
 
-        public void SelectPhotoLibrary() => PhotoLibraryLabel.Click();
+        public void SelectPhotoLibrary() => PhotoLibraryButton.Click();
 
         public void SelectBrowse() => BrowseLabel.Click();
 

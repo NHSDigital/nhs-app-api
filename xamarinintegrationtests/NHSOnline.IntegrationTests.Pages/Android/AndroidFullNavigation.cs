@@ -56,6 +56,11 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             MessagesIcon.AssertVisible();
         }
 
+        public void AssertHomeIconIsPresent()
+        {
+            HomeIcon.AssertVisible();
+        }
+
         public void AssertNoIconsSelected()
         {
             AdviceIcon.AssertNotSelected();

@@ -97,7 +97,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
 
         public void ProveYourIdentityContinue() => Continue.Click();
 
-        public void DismissBiometricPanel() => DismissBiometricsBanner.Click();
+        public LoggedInHomePageContent DismissBiometricPanel()
+        {
+            DismissBiometricsBanner.Click();
+            return this;
+        }
 
         public void GetYourCovidPass() => GetYourCovidPassMenuItem.Click();
 
