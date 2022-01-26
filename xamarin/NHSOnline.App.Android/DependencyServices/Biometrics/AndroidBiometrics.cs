@@ -85,7 +85,21 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
                 .ThrowIfNull("KeyPairGenerator is null");
             var keyGenParameterSpec = BuildKeyGenParameterSpec(fidoUsername);
 
-            keyPairGenerator.Initialize(keyGenParameterSpec);
+            try
+            {
+                keyPairGenerator.Initialize(keyGenParameterSpec);
+            }
+            catch (GeneralSecurityException e) when (e.Message != null && e.Message.Contains("must be enrolled to create keys requiring user authentication for every", StringComparison.Ordinal))
+            {
+                using var keyguardManager = (KeyguardManager?)Android.App.Application.Context.GetSystemService("keyguard");
+
+                Logger.LogError(
+                    keyguardManager?.IsDeviceSecure != true
+                        ? "KeyguardManager reported device is not secure. Original error message: {message}"
+                        : "KeyguardManager reported device is secure. Original error message: {message}", e.Message);
+
+                throw;
+            }
 
             try
             {
