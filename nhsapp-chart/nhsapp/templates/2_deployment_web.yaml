@@ -196,7 +196,7 @@ spec:
           value: "https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-cookies-policy/"
         - name: ACCESSIBILITY_STATEMENT_URL
           value: "https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-accessibility-statement/"
-          name: OPEN_SOURCE_LICENCES_URL
+        - name: OPEN_SOURCE_LICENCES_URL
           value: "https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-open-source-licences/"
         - name: NOMINATED_PHARMACY_DSP_URL
           value: "https://www.nhs.uk/Service-Search/other-services/pharmacies/internetpharmacies"
