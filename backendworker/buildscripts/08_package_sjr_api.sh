@@ -26,4 +26,9 @@ then
   docker tag "${DOCKER_REGISTRY}/nhsonline-backendservicejourneyrulesapi:${DOCKER_TAG}" "${DOCKER_REGISTRY}/nhsonline-backendservicejourneyrulesapi:${BRANCH_TAG}" || die "Failed to tag ${DOCKER_REGISTRY}/nhsonline-backendservicejourneyrulesapi:${BRANCH_TAG}"
   push_docker_image "${DOCKER_REGISTRY}/nhsonline-backendservicejourneyrulesapi:${DOCKER_TAG}"
   push_docker_image "${DOCKER_REGISTRY}/nhsonline-backendservicejourneyrulesapi:${BRANCH_TAG}"
+  if [ -n "${DOCKER_REGISTRY_RELEASE}" ]
+  then
+    docker tag "${DOCKER_REGISTRY}/nhsonline-backendservicejourneyrulesapi:${DOCKER_TAG}" "${DOCKER_REGISTRY_RELEASE}/nhsonline-backendservicejourneyrulesapi:${BRANCH_TAG}"
+    push_docker_image "${DOCKER_REGISTRY_RELEASE}/nhsonline-backendservicejourneyrulesapi:${BRANCH_TAG}"
+  fi
 fi

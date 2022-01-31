@@ -28,4 +28,9 @@ then
   docker tag "${DOCKER_REGISTRY}/nhsonline-web:${DOCKER_TAG}" "${DOCKER_REGISTRY}/nhsonline-web:$BRANCH_TAG" || die "Failed to tag web docker image"
   push_docker_image "${DOCKER_REGISTRY}/nhsonline-web:${DOCKER_TAG}"
   push_docker_image "${DOCKER_REGISTRY}/nhsonline-web:${BRANCH_TAG}"
+  if [ -n "${DOCKER_REGISTRY_RELEASE}" ]
+  then
+    docker tag "${DOCKER_REGISTRY}/nhsonline-web:${DOCKER_TAG}" "${DOCKER_REGISTRY_RELEASE}/nhsonline-web:${BRANCH_TAG}"
+    push_docker_image "${DOCKER_REGISTRY_RELEASE}/nhsonline-web:${BRANCH_TAG}"
+  fi
 fi
