@@ -55,5 +55,28 @@ namespace NHSOnline.IntegrationTests
                 .AssertOnPage(driver)
                 .PageContent.OptInToUserResearch();
         }
+
+        public static void LogIOSPatientInPreIos13(IIOSDriverWrapper driver, Patient patient)
+        {
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            IOSPreIOS13GettingStartedPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            IOSStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
+
+            IOSTermsAndConditionsPage
+                .AssertOnPage(driver)
+                .PageContent.AcceptTermsAndConditions();
+
+            IOSUserResearchOptInPage
+                .AssertOnPage(driver)
+                .PageContent.OptInToUserResearch();
+        }
     }
 }

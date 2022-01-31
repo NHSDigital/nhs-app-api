@@ -17,31 +17,62 @@ namespace NHSOnline.IntegrationTests.DeviceAndOperatingSystemCompatibility
                 .WithName(b => b.GivenName("Wendy").FamilyName("House"));
             using var patients = Mocks.Patients.Add(patient);
 
-            IOSLoggedOutHomePage
-                .AssertOnPage(driver)
-                .ContinueWithNhsLogin();
-
-            IOS11GettingStartedPage
-                .AssertOnPage(driver)
-                .Continue();
-
-            IOSStubbedLoginPage
-                .AssertOnPage(driver)
-                .PageContent
-                .AssertVectorOfTrust()
-                .Login(patient);
-
-            IOS11TermsAndConditionsPage
-                .AssertOnPage(driver)
-                .AcceptTermsAndConditions();
-
-            IOSUserResearchOptInPage
-                .AssertOnPage(driver)
-                .PageContent.OptInToUserResearch();
+            LoginProcess.LogIOSPatientInPreIos13(driver, patient);
 
             IOSLoggedInHomePage
-                .AssertOnPage(driver)
-                .AssertPageDisplayedFor("Wendy House");
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppIOSTest(IOSDevice = IOSDevice.iPhoneXR, OSVersion = IOSVersion.Twelve)]
+        public void APatientWithProofLevelNineCanSuccessfullyLogInOnIOS12(IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Wendy").FamilyName("House"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientInPreIos13(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppIOSTest(IOSDevice = IOSDevice.iPhone11Pro, OSVersion = IOSVersion.Thirteen)]
+        public void APatientWithProofLevelNineCanSuccessfullyLogInOnIOS13(IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Wendy").FamilyName("House"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppIOSTest(IOSDevice = IOSDevice.iPhone12, OSVersion = IOSVersion.Fourteen)]
+        public void APatientWithProofLevelNineCanSuccessfullyLogInOnIOS14(IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Wendy").FamilyName("House"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppIOSTest(IOSDevice = IOSDevice.iPhone13, OSVersion = IOSVersion.Fifteen)]
+        public void APatientWithProofLevelNineCanSuccessfullyLogInOnIOS15(IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Wendy").FamilyName("House"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver);
         }
     }
 }
