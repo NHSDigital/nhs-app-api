@@ -12,13 +12,16 @@
 
 1. Acquire the latest weekly GP info csv file. This is emailed to the NHS App mailbox every Sunday - a member of the T2 or T3 support team will be able to access the latest.
 
-2. Update `sjr-config/utils/gpinfocreation/data/full_gpinfo.csv` and/or `sjr-config/utils/gpinfocreation/data/excluded-practices.csv`.
+2. Replace `sjr-config/utils/gpinfocreation/data/full_gpinfo.csv` with the file emailed gpinfo.csv. 
+NB: full_gpinfo.csv file is used to create an updated gpinfo.csv after step 3 below.
 
 3. From the root directory of nhsapp repo run
 	```bash
 	sjr-config/utils/gpinfocreation/src/process_gpinfo.sh
 	```
-	to update `gpinfo.csv`
+	to update `sjr-config/configurations/gpinfo.csv`
+
+4. Check that `sjr-config/configurations/gpinfo.csv` has changed (datestamp)
 
 ### eConsult update
 

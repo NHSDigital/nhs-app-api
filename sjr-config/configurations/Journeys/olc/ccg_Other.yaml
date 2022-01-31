@@ -490,7 +490,6 @@ target:
     - F81197
     - F81632
     - F81669
-    - F83027
     - G82605
     - H85029
     - H85090
@@ -633,6 +632,11 @@ target:
     - P81013
     - U80502
     - Y00522
+    - E82023
+    - E82082
+    - G82060
+    - L81036
+    - N83605
 journeys:
   cdssAdvice:
     provider: eConsult

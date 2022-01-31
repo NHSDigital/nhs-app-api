@@ -1,0 +1,52 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - "K83047"
+    - "K83048"
+    - "K83049"
+    - "K83050"
+    - "K83051"
+    - "K83052"
+    - "K83053"
+    - "K83055"
+    - "K83056"
+    - "K83059"
+    - "K83064"
+    - "K83065"
+    - "K83066"
+    - "K83068"
+    - "K83069"
+    - "K83070"
+    - "K83076"
+    - "K83077"
+    - "K83079"
+    - "K83080"
+    - "K83081"
+    - "K83601"
+    - "K83607"
+    - "K83610"
+    - "K83614"
+    - "K83616"
+    - "K83618"
+    - "K83620"
+    - "K83621"
+    - "K83622"
+    - "K83625"
+    - "Y00399"
+    - "Y01139"
+journeys:
+  silverIntegrations:
+    carePlans:
+      - pkb
+    libraries:
+      - pkb
+    medicines:
+      - pkb
+    messages:
+      - pkb
+    secondaryAppointments:
+      - pkb
+    healthTrackers:
+      - pkb
+    testResults:
+      - pkb
