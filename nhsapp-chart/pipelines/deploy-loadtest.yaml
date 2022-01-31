@@ -102,6 +102,16 @@ stages:
             PUBLIC_IP_ADDRESS=`az network public-ip show --name nhsapp-${{ AKS_SHORTNAME }}_PIP --resource-group nhsapp-${{ AKS_SHORTNAME }}_PIP | jq '.ipAddress' | tr -d '"'`/32
             echo $PUBLIC_IP_ADDRESS
             echo "##vso[task.setvariable variable=clusterIP;]$PUBLIC_IP_ADDRESS"
+      - task: AzureCLI@2
+        displayName: Get managed identity
+        inputs:
+          azureSubscription: nhsapp-nonlive-terraform-sp
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            ManagedIdentity=$(az aks show -n nhsapp-${{ AKS_SHORTNAME }} -g nhsapp-${{ AKS_SHORTNAME }} --query identityProfile.kubeletidentity.clientId -o tsv)
+            echo $ManagedIdentity
+            echo "##vso[task.setvariable variable=managedIdentity;]$ManagedIdentity"
       - task: HelmInstaller@1
         displayName: 'Install Helm'
         inputs:
@@ -155,6 +165,7 @@ stages:
                     --set region=uksouth
                     --set zone=$(environment)
                     --set clusterIP=$(clusterIP)
+                    --set clusterManagedId=$(managedIdentity)
           install: true
           waitForExecution: false
       - task: HelmDeploy@0
