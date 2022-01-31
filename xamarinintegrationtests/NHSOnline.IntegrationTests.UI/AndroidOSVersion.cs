@@ -4,8 +4,11 @@ namespace NHSOnline.IntegrationTests.UI
 {
     public enum AndroidOSVersion
     {
+        Eight,
         Nine,
-        Ten
+        Ten,
+        Eleven,
+        Twelve
     }
 
     public static class AndroidOsVersionExtensions
@@ -14,8 +17,12 @@ namespace NHSOnline.IntegrationTests.UI
         {
             return osVersion switch
             {
+                AndroidOSVersion.Eight => "8.0",
                 AndroidOSVersion.Nine => "9.0",
                 AndroidOSVersion.Ten => "10.0",
+                AndroidOSVersion.Eleven => "11.0",
+                AndroidOSVersion.Twelve => "12.0",
+
                 _ => throw new ArgumentOutOfRangeException(nameof(osVersion), osVersion, null)
             };
         }
