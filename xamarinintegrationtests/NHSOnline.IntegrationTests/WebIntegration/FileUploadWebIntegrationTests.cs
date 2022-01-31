@@ -125,19 +125,13 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                     "No IOSElement found matching ByIosNSPredicate(type == 'XCUIElementTypeCell' AND name == 'test, txt')",
                     () => { storagePage?.CloseFileSelectorScreen(); });
 
-            TransitoryErrorHandler.HandleSpecificFailure()
-                .Retry(() =>
-                    {
-                        storagePage?
-                            .SelectFile();
+            storagePage?
+                .SelectFile();
 
-                        IOSFileUploadPage
-                            .AssertOnPage(driver)
-                            .AssertNativeHeader()
-                            .PageContent.AssertFileSelected();
-                    },
-                    "Expected e.Displayed to be true because an icon with name NHS App Home should be displayed, but found False.");
-
+            IOSFileUploadPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.AssertFileSelected();
         }
     }
 }

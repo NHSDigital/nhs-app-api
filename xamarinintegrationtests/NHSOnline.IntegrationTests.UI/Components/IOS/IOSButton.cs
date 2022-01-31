@@ -25,6 +25,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
         public void Click()
             => ActOnElement(e => e.Click());
 
+        public void Touch() => _interactor.ActOnElementContext(_locatorStrategy.FindBy, context=>context.Tap());
+
         public bool IsVisible()
             => _interactor.IsPresent(FindBy);
 

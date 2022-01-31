@@ -27,12 +27,11 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         public void SelectFile() => FileLabel.Click();
 
-        public void CloseFileSelectorScreen() => CancelButton.Click();
+        public void CloseFileSelectorScreen() => CancelButton.Touch();
 
-        public IOSStoragePage SearchForText()
+        public void SearchForText()
         {
             SearchBar.EnterText("test");
-            return this;
         }
     }
 }

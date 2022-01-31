@@ -67,30 +67,22 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
                 .AssertOnPage(driver)
                 .AssertNoFileSelected();
 
+             IOSStubbedLoginUpliftPage
+                 .AssertOnPage(driver)
+                 .UploadFile();
+
+             IOSFileSourceDialog
+                 .GetPanel(driver)
+                 .SelectPhotoLibrary();
+
+            IOSFileChooser
+                .AssertDisplayed(driver)
+                .ChoosePhoto()
+                .ConfirmSelection();
+
             IOSStubbedLoginUpliftPage
                 .AssertOnPage(driver)
-                .UploadFile();
-
-            IOSFileSourceDialog
-                .GetPanel(driver)
-                .SelectPhotoLibrary();
-
-            IOSFileChooser fileChooser = IOSFileChooser
-                .AssertDisplayed(driver);
-
-            fileChooser.ChoosePhoto();
-
-            TransitoryErrorHandler.HandleSpecificFailure()
-                .ResetAndRetry(() =>
-                    {
-                        fileChooser.ConfirmSelection();
-
-                        IOSStubbedLoginUpliftPage
-                            .AssertOnPage(driver)
-                            .AssertFileSelected();
-                    },
-                    "No IWebElement found matching By.XPath: //p[normalize-space()='File selected']\nAn element could not be located on the page using the given search parameters.",
-                    () => { IOSFileChooser.AssertDisplayed(driver).CancelSelection(); });
+                .AssertFileSelected();
         }
     }
 }

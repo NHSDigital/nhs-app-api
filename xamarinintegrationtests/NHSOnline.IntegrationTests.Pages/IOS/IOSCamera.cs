@@ -29,6 +29,6 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             return this;
         }
 
-        public void UsePhoto() => UsePhotoButton.Click();
+        public void UsePhoto() => UsePhotoButton.Touch();
     }
 }

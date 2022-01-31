@@ -21,7 +21,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
         public static IOSSystemImage WhichMatches(IIOSInteractor interactor, string pattern)
             => new IOSSystemImage(interactor, new MatchesLocatorStrategy(interactor, pattern));
 
-        public void Click() => _interactor.ActOnElementContext(_locatorStrategy.FindBy, context=>context.Element.Click());
+        public void Touch() => _interactor.ActOnElementContext(_locatorStrategy.FindBy, context=>context.Tap());
 
         private sealed class MatchesLocatorStrategy : IIOSLocatorStrategy
         {

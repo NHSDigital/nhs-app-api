@@ -26,6 +26,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
 
         public void Click() => ActOnElement(element => element.Click());
 
+        public void Touch() => _interactor.ActOnElementContext(FindBy, context => context.Tap());
+
         public bool IsPresent()
         {
             var isPresent = false;

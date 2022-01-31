@@ -123,6 +123,24 @@ namespace NHSOnline.IntegrationTests.UI
             @"Unused web context not found after \d[0-9]:\d[0-9]:\d[0-9]; Contexts: *",
             RegexOptions.Compiled);
 
+        // File upload problems that can be re-ran
+        private static readonly Regex CannotFindFileSelectedInUploadScreen = new(
+            @"(?=.*No IWebElement found matching\b)(?=.*File selected\b).*",
+            RegexOptions.Compiled);
+
+        private static readonly Regex CannotFindPhotosLabelInPhotoScreen = new(
+            @"No IOSElement found matching ByIosNSPredicate\(type == 'XCUIElementTypeStaticText' AND label == 'Photos'\)*",
+            RegexOptions.Compiled);
+
+        private static readonly Regex CannotFindPhotosButtonInPhotoScreen = new(
+            @"No IOSElement found matching ByIosNSPredicate\(type == 'XCUIElementTypeButton' AND label == 'Photos'\)*",
+            RegexOptions.Compiled);
+
+        // Issue where it is trying to download photos from cloud
+        private static readonly Regex CannotChooseButtonInPhotoScreen = new(
+            @"No IOSElement found matching ByIosNSPredicate\(type == 'XCUIElementTypeButton' AND label == 'Choose'\)*",
+            RegexOptions.Compiled);
+
         private static readonly List<(Regex pattern, RetryStatus result)> RetryExceptionMessageRegexes = new()
         {
             (InvalidServiceWebInspectorMessage, RetryStatus.Retry(nameof(InvalidServiceWebInspectorMessage))),
@@ -146,7 +164,11 @@ namespace NHSOnline.IntegrationTests.UI
             (KAXErrorServerNotFound, RetryStatus.Retry(nameof(KAXErrorServerNotFound))),
             (DeviceFailedVersionCheck, RetryStatus.Retry(nameof(DeviceFailedVersionCheck))),
             (UnusedWebContext, RetryStatus.Retry(nameof(UnusedWebContext))),
-            (WebContextNotReady, RetryStatus.Retry(nameof(WebContextNotReady)))
+            (WebContextNotReady, RetryStatus.Retry(nameof(WebContextNotReady))),
+            (CannotFindFileSelectedInUploadScreen, RetryStatus.Retry(nameof(CannotFindFileSelectedInUploadScreen))),
+            (CannotFindPhotosLabelInPhotoScreen, RetryStatus.Retry(nameof(CannotFindPhotosLabelInPhotoScreen))),
+            (CannotFindPhotosButtonInPhotoScreen, RetryStatus.Retry(nameof(CannotFindPhotosButtonInPhotoScreen))),
+            (CannotChooseButtonInPhotoScreen, RetryStatus.Retry(nameof(CannotChooseButtonInPhotoScreen)))
         };
 
         internal static RetryStatus ShouldRetry(this TestResult result, TestLogs logs)
