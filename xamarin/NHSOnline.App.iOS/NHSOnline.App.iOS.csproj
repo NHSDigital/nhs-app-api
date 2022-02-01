@@ -8,7 +8,7 @@
     <NhsAppBundleDisplayName Condition=" '$(NhsAppBundleDisplayName)' == '' ">NHS App</NhsAppBundleDisplayName>
     <NhsAppBundleIdentifier Condition=" '$(NhsAppBundleIdentifier)' == '' ">com.nhs.online</NhsAppBundleIdentifier>
     <NhsAppApnsEnvironmentEntitlement Condition=" '$(NhsAppApnsEnvironmentEntitlement)' == '' ">production</NhsAppApnsEnvironmentEntitlement>
-    <NhsAppDomainEntitlement Condition=" '$(NhsAppDomainEntitlement)' == '' ">nhsapp.service.nhs.uk</NhsAppDomainEntitlement>
+    <NhsAppDomainEntitlement Condition=" '$(NhsAppDomainEntitlement)' == '' ">www.nhsapp.service.nhs.uk</NhsAppDomainEntitlement>
     <NhsAppErsDomainEntitlement Condition=" '$(NhsAppErsDomainEntitlement)' == '' ">refer.nhs.uk</NhsAppErsDomainEntitlement>
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
