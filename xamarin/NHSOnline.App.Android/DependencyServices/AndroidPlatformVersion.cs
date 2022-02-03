@@ -11,10 +11,5 @@ namespace NHSOnline.App.Droid.DependencyServices
         {
             return true;
         }
-
-        public string MinimumPlatformVersionDescription()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

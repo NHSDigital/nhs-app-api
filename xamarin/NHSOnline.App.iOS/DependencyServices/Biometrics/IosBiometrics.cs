@@ -26,25 +26,15 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
         {
             BiometricStatus status = new BiometricStatus.HardwareNotPresent();
 
-            if (Compatibility.MinimumRequiredVersion(10, 0))
+            using var context = new LAContext();
+            if (BiometricsHardware.HasBiometricHardware(context, out var state))
             {
-                using var context = new LAContext();
-                if (BiometricsHardware.HasBiometricHardware(context, out var state))
+                var registrationStatus = DeriveRegistrationStatus(context);
+                status = context.BiometryType switch
                 {
-                    var registrationStatus = DeriveRegistrationStatus(context);
-                    if (Compatibility.MinimumRequiredVersion(11, 0))
-                    {
-                        status = context.BiometryType switch
-                        {
-                            LABiometryType.FaceId => new BiometricStatus.FaceId(state, registrationStatus),
-                            _ => new BiometricStatus.TouchId(state, registrationStatus)
-                        };
-                    }
-                    else
-                    {
-                        status = new BiometricStatus.TouchId(state, registrationStatus);
-                    }
-                }
+                    LABiometryType.FaceId => new BiometricStatus.FaceId(state, registrationStatus),
+                    _ => new BiometricStatus.TouchId(state, registrationStatus)
+                };
             }
 
             return Task.FromResult(status);

@@ -28,8 +28,7 @@ namespace NHSOnline.App.iOS.Effects
 
         private void SetMargin()
         {
-            if (UIDevice.CurrentDevice.SupportsSafeAreaInsets() &&
-                Element is Layout element)
+            if (Element is Layout element)
             {
                 _originalMargin = element.Margin;
 

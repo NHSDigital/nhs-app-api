@@ -42,10 +42,7 @@ namespace NHSOnline.App.iOS
 
             NhsApp = new NhsApp();
 
-            if (Compatibility.MinimumRequiredVersion(10, 0))
-            {
-                UNUserNotificationCenter.Current.Delegate = new UserNotificationCenterHandler();
-            }
+            UNUserNotificationCenter.Current.Delegate = new UserNotificationCenterHandler();
 
             _remoteNotificationRecievedHandler = new RemoteNotificationReceivedHandler(NhsApp);
 

@@ -28,8 +28,7 @@ namespace NHSOnline.App.iOS.Effects
 
         private void SetPadding()
         {
-            if (UIDevice.CurrentDevice.SupportsSafeAreaInsets() &&
-                Element is Layout element)
+            if (Element is Layout element)
             {
                 _originalPadding = element.Padding;
 

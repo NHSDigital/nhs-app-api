@@ -2,7 +2,6 @@ import more from './more';
 import accountAndSettings from './accountAndSettings';
 import apiErrors from './apiErrors';
 import appointments from './appointments';
-import compatibility from './compatibility';
 import components from './components';
 import dataSharing from './dataSharing';
 import forbiddenErrors from './forbiddenErrors';
@@ -38,7 +37,6 @@ export default {
   accountAndSettings,
   apiErrors,
   appointments,
-  compatibility,
   components,
   dataSharing,
   forbiddenErrors,

@@ -4,14 +4,12 @@ import PreRegistrationInformationPage from '@/pages/pre-registration-information
 import AuthReturnPage from '@/pages/auth-return/index';
 import TermsAndConditionsPage from '@/pages/terms-and-conditions';
 import UserResearchPage from '@/pages/user-research';
-import IOSCompatibility from '@/pages/ios-compatibility';
 import Notifications from '@/pages/notifications/index';
 import NotificationsGenericError from '@/pages/notifications/notifications-generic-error';
 
 import {
   AUTH_RETURN_PATH,
   BEGINLOGIN_PATH,
-  IOS_COMPATIBILITY_PATH,
   LOGIN_BIOMETRIC_ERROR_PATH,
   LOGIN_PATH,
   NOTIFICATIONS_GENERIC_FAILURE_PATH,
@@ -23,7 +21,6 @@ import {
 import {
   AUTH_RETURN_NAME,
   BEGINLOGIN_NAME,
-  IOS_COMPATIBILITY_NAME,
   LOGIN_BIOMETRIC_ERROR_NAME,
   LOGIN_NAME,
   NOTIFICATIONS_GENERIC_FAILURE_NAME,
@@ -44,12 +41,6 @@ const getTermsConditionTitle = (store, i18n) => (
   i18n.t(store.state.termsAndConditions.updatedConsentRequired
     ? 'termsAndConditions.updated.title'
     : 'navigation.pages.headers.termsAndConditions')
-);
-
-const getCompatibilityTitle = (store, i18n) => (
-  i18n.t(store.state.compatibility.isIncompatible
-    ? 'compatibility.incompatible.notCompatibleHeader'
-    : 'compatibility.compatible.compatibleHeader')
 );
 
 export const LOGIN = {
@@ -149,18 +140,6 @@ export const USER_RESEARCH = {
   },
 };
 
-export const IOS_COMPATIBILITY = {
-  path: IOS_COMPATIBILITY_PATH,
-  name: IOS_COMPATIBILITY_NAME,
-  component: IOSCompatibility,
-  meta: {
-    isAnonymous: true,
-    headerKey: getCompatibilityTitle,
-    titleKey: getCompatibilityTitle,
-    crumb: {},
-  },
-};
-
 export const NOTIFICATIONS = {
   path: NOTIFICATIONS_PATH,
   name: NOTIFICATIONS_NAME,
@@ -192,7 +171,6 @@ export default [
   PRE_REGISTRATION,
   BEGIN_LOGIN,
   AUTH_RETURN,
-  IOS_COMPATIBILITY,
   TERMS_AND_CONDITIONS,
   USER_RESEARCH,
   NOTIFICATIONS,

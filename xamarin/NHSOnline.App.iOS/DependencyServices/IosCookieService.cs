@@ -30,15 +30,12 @@ namespace NHSOnline.App.iOS.DependencyServices
 
         public async Task ClearSessionCookies()
         {
-            if (Compatibility.MinimumRequiredVersion(11, 0))
+            var cookieStore = WKWebsiteDataStore.DefaultDataStore.HttpCookieStore;
+            foreach (var cookie in await cookieStore.GetAllCookiesAsync().PreserveThreadContext())
             {
-                var cookieStore = WKWebsiteDataStore.DefaultDataStore.HttpCookieStore;
-                foreach (var cookie in await cookieStore.GetAllCookiesAsync().PreserveThreadContext())
+                if (cookie.IsSessionOnly)
                 {
-                    if (cookie.IsSessionOnly)
-                    {
-                        await cookieStore.DeleteCookieAsync(cookie).PreserveThreadContext();
-                    }
+                    await cookieStore.DeleteCookieAsync(cookie).PreserveThreadContext();
                 }
             }
 
@@ -54,11 +51,6 @@ namespace NHSOnline.App.iOS.DependencyServices
 
         public async Task<Cookie?> GetCookie(Uri uri, string cookieName)
         {
-            if (!Compatibility.MinimumRequiredVersion(11, 0))
-            {
-                return null;
-            }
-
             var cookieStore = WKWebsiteDataStore.DefaultDataStore.HttpCookieStore;
             var cookies = await cookieStore.GetAllCookiesAsync().ResumeOnThreadPool() ??
                           Array.Empty<NSHttpCookie>();
