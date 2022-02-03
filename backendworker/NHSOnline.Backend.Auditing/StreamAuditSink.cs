@@ -42,7 +42,8 @@ namespace NHSOnline.Backend.Auditing
                     auditRecord.IsActingOnBehalfOfAnother,
                     auditRecord.Supplier,
                     auditRecord.Operation,
-                    auditRecord.Details)
+                    auditRecord.Details,
+                    auditRecord.Referrer)
                 .Append(" |");
 
             if (!string.IsNullOrEmpty(auditRecord.ApiVersion))
@@ -60,6 +61,10 @@ namespace NHSOnline.Backend.Auditing
             if (!string.IsNullOrEmpty(auditRecord.IntegrationReferrer))
             {
                 auditStringBuilder.Append($" IntegrationReferrer: {auditRecord.IntegrationReferrer} |");
+            }
+            if (!string.IsNullOrEmpty(auditRecord.Referrer))
+            {
+                auditStringBuilder.Append($" Referrer: {auditRecord.Referrer} |");
             }
 
             await _writer.WriteLineAsync(auditStringBuilder.ToString());

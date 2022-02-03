@@ -101,12 +101,25 @@ open class BrowserSteps {
         val originalPathMessage= if (originalPath != null) {" Original Path : '$originalPath'"} else {""}
         WebDriverWait(loginPage.driver, LOAD_URL_WAIT_TIME)
                 .pollingEvery(Duration.ofMillis(POLLING_DURATION))
-                .withMessage("Expected url to end with '$url', but was '${loginPage.driver.currentUrl}'"
+                .withMessage("Expected url to be '$url', but was '${loginPage.driver.currentUrl}'"
                         + originalPathMessage)
                 .until {
                     val escapedUrl = url.replace("?", "\\?")
                     it.currentUrl.matches(Regex(".*$escapedUrl\$"))
                 }
+    }
+
+    @Step
+    open fun shouldContainWithinUrl(url: String, originalPath: String? = null) {
+        val originalPathMessage= if (originalPath != null) {" Original Path : '$originalPath'"} else {""}
+        WebDriverWait(loginPage.driver, LOAD_URL_WAIT_TIME)
+            .pollingEvery(Duration.ofMillis(POLLING_DURATION))
+            .withMessage("Expected url should contain '$url', but contained '${loginPage.driver.currentUrl}'"
+                    + originalPathMessage)
+            .until {
+                val escapedUrl = url.replace("?", "\\?")
+                it.currentUrl.contains(Regex(".*$escapedUrl\$"))
+            }
     }
 
     @Step

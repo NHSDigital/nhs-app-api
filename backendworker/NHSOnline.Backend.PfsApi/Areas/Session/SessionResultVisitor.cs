@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.Session;
@@ -23,6 +24,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         private readonly IMetricLogger _metricLogger;
         private readonly ISessionErrorResultBuilder _errorResultBuilder;
         private readonly ISessionExpiryCookieCreator _sessionExpiryCookieCreator;
+        private readonly IAuditor _auditor;
 
         public SessionResultVisitor(
             UserSessionService userSessionService,
@@ -30,7 +32,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             ConfigurationSettings settings,
             IMetricLogger metricLogger,
             ISessionErrorResultBuilder errorResultBuilder,
-            ISessionExpiryCookieCreator sessionExpiryCookieCreator)
+            ISessionExpiryCookieCreator sessionExpiryCookieCreator,
+            IAuditor auditor)
         {
             _userSessionService = userSessionService;
             _logger = logger;
@@ -38,6 +41,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             _metricLogger = metricLogger;
             _errorResultBuilder = errorResultBuilder;
             _sessionExpiryCookieCreator = sessionExpiryCookieCreator;
+            _auditor = auditor;
         }
 
         public async Task<IActionResult> Visit(CreateSessionResult.Success success, HttpContext httpContext, string sessionCookieExpiryToken, string referrer)
@@ -59,6 +63,16 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             responseBody = userSession.Accept(new CreateResponseFromUserSessionVisitor<PostUserSessionResponse>(_settings, responseBody));
 
             await LoginLogMetrics(httpContext, userSession, referrer);
+
+            await _auditor.PostOperationAuditSessionEvent(responseBody.AccessToken,
+                                                            string.IsNullOrEmpty(responseBody.NhsNumber) ? " " : responseBody.NhsNumber,
+                                                            Supplier.Unknown,
+                                                            AuditingOperations.LoginSuccess,
+                                                            $"Successful Login with SessionId: {userSession.Key}, " +
+                                                            $"Referrer: {referrer}",
+                                                            referrer);
+
+            _logger.LogInformation($"Audited  SessionId: {userSession.Key}, Referrer {referrer} - after successful login");
 
             return new CreatedResult(string.Empty, responseBody);
         }

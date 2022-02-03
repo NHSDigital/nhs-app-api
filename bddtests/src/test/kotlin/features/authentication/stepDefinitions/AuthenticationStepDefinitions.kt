@@ -152,6 +152,9 @@ class AuthenticationStepDefinitions {
             "relevant" -> {
                 browser.shouldHaveUrl(destination, path)
             }
+            "urlcontains" -> {
+                browser.shouldContainWithinUrl(destination, path)
+            }
         }
     }
 

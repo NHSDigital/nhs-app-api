@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoFixture;
+using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +23,24 @@ namespace NHSOnline.Backend.Auditing.UnitTests
     [TestClass]
     public sealed class AuditBuilderTests
     {
+        private IServiceProvider _requestServices;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            var fixture = new Fixture()
+                .Customize(new AutoMoqCustomization());
+
+            var mockUserSessionService = fixture.Freeze<Mock<IUserSessionService>>();
+
+            var mockServiceProvider = fixture.Freeze<Mock<IServiceProvider>>();
+            mockServiceProvider
+                .Setup(x => x.GetService(typeof(IUserSessionService)))
+                .Returns(mockUserSessionService.Object);
+
+            _requestServices = mockServiceProvider.Object;
+        }
+
         [TestMethod]
         public async Task Execute_CallsWriteAuditTwice()
         {
@@ -28,7 +48,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
 
             var auditor = CreateAuditor(mockAuditSink);
 
-            using (auditor.BeginScope(new DefaultHttpContext()))
+            using (auditor.BeginScope(new DefaultHttpContext { RequestServices = _requestServices }))
             {
                 await auditor
                     .Audit()
@@ -54,7 +74,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
 
             var auditor = CreateAuditor(mockAuditSink);
 
-            using (auditor.BeginScope(new DefaultHttpContext()))
+            using (auditor.BeginScope(new DefaultHttpContext { RequestServices = _requestServices }))
             {
                 await auditor
                     .Audit()
@@ -85,7 +105,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
 
             var auditor = CreateAuditor(mockAuditSink);
 
-            using (auditor.BeginScope(new DefaultHttpContext()))
+            using (auditor.BeginScope(new DefaultHttpContext { RequestServices = _requestServices }))
             {
                 await auditor
                     .Audit()
@@ -164,7 +184,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             var mockAuditSink = new Mock<IAuditSink>();
             var auditor = CreateAuditor(mockAuditSink);
 
-            using (auditor.BeginScope(new DefaultHttpContext()))
+            using (auditor.BeginScope(new DefaultHttpContext { RequestServices = _requestServices }))
             {
                 await auditor
                     .Audit()
@@ -272,7 +292,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             var mockAuditSink = new Mock<IAuditSink>();
             var auditor = CreateAuditor(mockAuditSink);
 
-            using (auditor.BeginScope(new DefaultHttpContext()))
+            using (auditor.BeginScope(new DefaultHttpContext { RequestServices = _requestServices }))
             {
                 await auditor
                     .Audit()
@@ -379,7 +399,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             var mockAuditSink = new Mock<IAuditSink>();
             var auditor = CreateAuditor(mockAuditSink);
 
-            using (auditor.BeginScope(new DefaultHttpContext()))
+            using (auditor.BeginScope(new DefaultHttpContext { RequestServices = _requestServices }))
             {
                 await auditor
                     .Audit()
@@ -403,7 +423,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             var mockAuditSink = new Mock<IAuditSink>();
             var auditor = CreateAuditor(mockAuditSink);
 
-            using (auditor.BeginScope(new DefaultHttpContext()))
+            using (auditor.BeginScope(new DefaultHttpContext { RequestServices = _requestServices }))
             {
                 await auditor
                     .Audit()
@@ -426,8 +446,9 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         {
             var mockAuditSink = new Mock<IAuditSink>();
             var auditor = CreateAuditor(mockAuditSink);
+            var expectedDetails = $"{details}";
 
-            using (auditor.BeginScope(new DefaultHttpContext()))
+            using (auditor.BeginScope(new DefaultHttpContext { RequestServices = _requestServices }))
             {
                 await auditor
                     .Audit()
@@ -439,7 +460,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             }
 
             mockAuditSink.Verify(
-                x => x.WritePreOperationAudit(It.Is<AuditRecord>(ar => ar.Operation == "Operation_Request" && ar.Details == details)),
+                x => x.WritePreOperationAudit(It.Is<AuditRecord>(ar => ar.Operation == "Operation_Request" && ar.Details == expectedDetails)),
                 Times.Once);
         }
 
@@ -450,8 +471,9 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         {
             var mockAuditSink = new Mock<IAuditSink>();
             var auditor = CreateAuditor(mockAuditSink);
+            var expectedDetails = $"{details}";
 
-            using (auditor.BeginScope(new DefaultHttpContext()))
+            using (auditor.BeginScope(new DefaultHttpContext { RequestServices = _requestServices }))
             {
                 await auditor
                     .Audit()
@@ -463,7 +485,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             }
 
             mockAuditSink.Verify(
-                x => x.WritePostOperationAudit(It.Is<AuditRecord>(ar => ar.Operation == "Operation_Response" && ar.Details == details)),
+                x => x.WritePostOperationAudit(It.Is<AuditRecord>(ar => ar.Operation == "Operation_Response" && ar.Details == expectedDetails)),
                 Times.Once);
         }
 
@@ -474,11 +496,13 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             var auditor = CreateAuditor(mockAuditSink);
             var accessToken = CreateAccessTokenString("subject");
             const string integrationReferrer = "nhs_uk";
+            const string referrer = "testReferrer";
 
-            using (auditor.BeginScope(new DefaultHttpContext()))
+            using (auditor.BeginScope(new DefaultHttpContext() { RequestServices = _requestServices }))
             {
                 await auditor
                     .Audit()
+                    .Referrer(referrer)
                     .IntegrationReferrer(integrationReferrer)
                     .AccessToken(accessToken)
                     .NhsNumber("NhsNumber")
@@ -505,7 +529,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             var mockAuditSink = new Mock<IAuditSink>();
             var auditor = CreateAuditor(mockAuditSink);
 
-            using (auditor.BeginScope(new DefaultHttpContext()))
+            using (auditor.BeginScope(new DefaultHttpContext { RequestServices = _requestServices }))
             {
                 var exception = new InvalidOperationException(exceptionMessage);
 
@@ -528,8 +552,9 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         {
             var mockAuditSink = new Mock<IAuditSink>();
             var auditor = CreateAuditor(mockAuditSink);
+            var expectedDetails = $"{exceptionMessage}";
 
-            using (auditor.BeginScope(new DefaultHttpContext()))
+            using (auditor.BeginScope(new DefaultHttpContext { RequestServices = _requestServices }))
             {
                 Func<Task<AuditedResultStub>> act = async () => await auditor
                     .Audit()
@@ -543,7 +568,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             }
 
             mockAuditSink.Verify(
-                x => x.WritePostOperationAudit(It.Is<AuditRecord>(ar => ar.Operation == "Operation_Response" && ar.Details == exceptionMessage)),
+                x => x.WritePostOperationAudit(It.Is<AuditRecord>(ar => ar.Operation == "Operation_Response" && ar.Details == expectedDetails)),
                 Times.Once);
         }
 

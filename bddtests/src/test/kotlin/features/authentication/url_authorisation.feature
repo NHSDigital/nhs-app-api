@@ -122,7 +122,7 @@ Feature: Authorisation occurs during each URL visit
     Given I am a EMIS patient
     And I am about to directly access every page
     And I am not logged in
-    When I browse to the <Url> and see the relevant page
+    When I browse to the <Url> and see the urlcontains page
     Then I am on the relevant <Page> page
     Examples: # includes a target page which requires a GP session and one which does not
       | Url                                                                                                       | Page                                                              |
