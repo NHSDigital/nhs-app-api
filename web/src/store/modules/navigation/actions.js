@@ -23,6 +23,12 @@ export default {
   init({ commit }) {
     commit(INIT_NAVIGATION);
   },
+  goToRouteByName(_, name) {
+    const path = this.app.$router.resolve({
+      name,
+    });
+    this.app.$router.push(path.resolved.fullPath);
+  },
   goTo(_, path) {
     redirectTo({ $router: this.app.$router, $store: this }, path);
   },

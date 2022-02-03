@@ -44,6 +44,17 @@ const NativeAppCallbacksPlugin = {
       notificationsAuthorised(notificationsAuthorisedDetails) {
         store.dispatch('notifications/authorised', notificationsAuthorisedDetails);
       },
+      navigationGoToByRouteName(name) {
+        store.dispatch('navigation/goToRouteByName', name);
+      },
+      retrieveLastCrumbName() {
+        const crumbExists = window.vue.$route.meta.crumb.defaultCrumb;
+        if (crumbExists !== undefined) {
+          return window.vue.$route.meta.crumb.defaultCrumb[crumbExists.length - 1].name;
+        }
+
+        return '';
+      },
       navigationGoTo(path) {
         store.dispatch('navigation/goTo', path);
       },
