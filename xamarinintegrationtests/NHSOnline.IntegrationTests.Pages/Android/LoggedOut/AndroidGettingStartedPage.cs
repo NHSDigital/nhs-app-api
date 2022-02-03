@@ -12,7 +12,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         private AndroidGettingStartedPage(IAndroidDriverWrapper driver) => _driver = driver;
 
         private AndroidLabel Title => AndroidLabel.WithText(_driver, "Getting started");
-        private AndroidLabel UnableToConfirmAppVersionTitle => AndroidLabel.WithText(_driver, "Unable to confirm NHS App version");
+        private AndroidLabel CannotLogInTitle => AndroidLabel.WithText(_driver, "Cannot log in");
 
         private AndroidLabel UseTheNhsAppToLabel => AndroidLabel
             .WithText(_driver, "Use the NHS App to:")
@@ -81,7 +81,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
                 })
                 .OrIfKnownIssueOccuredExpect(() =>
                 {
-                    page.UnableToConfirmAppVersionTitle.AssertVisible();
+                    page.CannotLogInTitle.AssertVisible();
                 });
 
             return page;

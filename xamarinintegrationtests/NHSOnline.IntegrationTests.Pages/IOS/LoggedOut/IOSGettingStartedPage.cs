@@ -12,7 +12,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
         private IOSGettingStartedPage(IIOSDriverWrapper driver) => _driver = driver;
 
         private IOSLabel Title => IOSLabel.WithText(_driver, "Getting started");
-        private IOSLabel UnableToConfirmAppVersionTitle => IOSLabel.WithText(_driver, "Unable to confirm NHS App version");
+        private IOSLabel CannotLogInTitle => IOSLabel.WithText(_driver, "Cannot log in");
 
         private IOSLabel PrescriptionsLabel => IOSLabel
             .WithText(_driver, "order repeat prescriptions")
@@ -56,7 +56,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
                 })
                 .OrIfKnownIssueOccuredExpect(() =>
                 {
-                    page.UnableToConfirmAppVersionTitle.AssertVisible();
+                    page.CannotLogInTitle.AssertVisible();
                 });
 
             return page;

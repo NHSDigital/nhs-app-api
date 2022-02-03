@@ -15,13 +15,13 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             Navigation = new AndroidSlimCloseNavigation(driver);
         }
 
-        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Unable to confirm NHS App version");
+        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Cannot log in");
 
         private AndroidLabel WeCannotConfirm => AndroidLabel.WithText(_driver, "There is a problem connecting you. We cannot confirm which version of the NHS App you are using and if you may need to update it.");
 
         private AndroidLabel CheckYourConnection => AndroidLabel.WithText(_driver, "Check your connection and try logging in again.");
 
-        private AndroidLabel IfTheProblemContinues => AndroidLabel.WithText(_driver, "If the problem continues and you need to book and appointment or get a prescription now, contact your GP surgery directly.");
+        private AndroidLabel IfTheProblemContinues => AndroidLabel.WithText(_driver, "If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly.");
 
         private AndroidLabel ForUrgentAdvice => AndroidLabel.WithText(_driver, "For urgent medical advice, use NHS 111 online or call 111.");
 

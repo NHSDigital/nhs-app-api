@@ -15,13 +15,13 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
             Navigation = new IOSSlimCloseNavigation(driver);
         }
 
-        private IOSLabel Title=> IOSLabel.WithText(_driver, "Unable to confirm NHS App version");
+        private IOSLabel Title=> IOSLabel.WithText(_driver, "Cannot log in");
 
         private IOSLabel WeCannotConfirm => IOSLabel.WithText(_driver, "There is a problem connecting you. We cannot confirm which version of the NHS App you are using and if you may need to update it.");
 
         private IOSLabel CheckYourConnection => IOSLabel.WithText(_driver, "Check your connection and try logging in again.");
 
-        private IOSLabel IfTheProblemContinues => IOSLabel.WithText(_driver, "If the problem continues and you need to book and appointment or get a prescription now, contact your GP surgery directly.");
+        private IOSLabel IfTheProblemContinues => IOSLabel.WithText(_driver, "If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly.");
 
         private IOSLabel ForUrgentAdvice => IOSLabel.WithText(_driver, "For urgent medical advice, use NHS 111 online or call 111.");
 
