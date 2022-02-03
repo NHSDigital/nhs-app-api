@@ -46,5 +46,5 @@ sidecar_proxy:
   cpuRequest: "125m"
   cpuLimit: "250m"
   image: nhsonline-nginx
-  image_tag: "v1.16.2"
+  image_tag: "v1.20.2"
   imagePullPolicy: IfNotPresent
