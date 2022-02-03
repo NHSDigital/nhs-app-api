@@ -7,7 +7,7 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Auditing.UnitTestsSupport
 {
-    public sealed class AuditBuilderStub: IAuditBuilder, IAuditBuilderSupplier, IAuditBuilderDetails, IAuditBuilderExecute, IAuditIntegrationReferrer
+    public sealed class AuditBuilderStub: IAuditBuilder, IAuditBuilderSupplier, IAuditBuilderDetails, IAuditBuilderExecute, IAuditIntegrationReferrer, IAuditBuilderReferrer
     {
         public string AccessTokenString { get; set; }
         public AccessToken AccessToken { get; set; }
@@ -18,7 +18,13 @@ namespace NHSOnline.Backend.Auditing.UnitTestsSupport
         public string Details { get; set; }
         public List<object> Parameters { get; set; }
         public string ResponseDetails { get; set; }
+        public string Referrer { get; set; }
 
+        IAuditIntegrationReferrer IAuditBuilderReferrer.Referrer(string referrer)
+        {
+            Referrer = referrer;
+            return this;
+        }
 
         IAuditBuilderAccessToken IAuditIntegrationReferrer.IntegrationReferrer(string integrationReferrer)
         {

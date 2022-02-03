@@ -9,13 +9,19 @@ namespace NHSOnline.Backend.Auditing
             string nhsNumber,
             Supplier supplier,
             bool isProxying,
-            string linkedAccountNhsNumber)
+            string linkedAccountNhsNumber,
+            string sessionId,
+            ProofLevel proofLevel,
+            string odsCode)
         {
             AccessToken = accessToken;
             NhsNumber = nhsNumber;
             Supplier = supplier;
             IsProxying = isProxying;
             LinkedAccountNhsNumber = linkedAccountNhsNumber;
+            SessionId = sessionId;
+            ProofLevel = proofLevel;
+            OdsCode = odsCode;
         }
 
         public string AccessToken { get; }
@@ -23,5 +29,8 @@ namespace NHSOnline.Backend.Auditing
         public Supplier Supplier { get; }
         public bool IsProxying { get; }
         public string LinkedAccountNhsNumber { get; }
+        public string SessionId { get; }
+        public ProofLevel ProofLevel { get; }
+        public string OdsCode { get; }
     }
 }

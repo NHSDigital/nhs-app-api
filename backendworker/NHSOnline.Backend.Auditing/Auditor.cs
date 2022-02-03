@@ -57,10 +57,10 @@ namespace NHSOnline.Backend.Auditing
         }
 
         public async Task PostOperationAuditSessionEvent(string accessToken, string nhsNumber, Supplier supplier, string operation, string details,
-            params object[] parameters)
+            string referrer, params object[] parameters)
         {
             await AuditSessionEvent(AuditType.PostOperationAudit, accessToken, nhsNumber, supplier, operation, details,
-                parameters);
+                referrer, parameters);
         }
 
 
@@ -81,7 +81,7 @@ namespace NHSOnline.Backend.Auditing
                 nhsNumber = auditUserContext.LinkedAccountNhsNumber;
             }
 
-            await AuditInternal(auditType, nhsLoginSubject, nhsNumber, isProxying, supplier, operation, details, parameters);
+            await AuditInternal(auditType, nhsLoginSubject, nhsNumber, isProxying, supplier, operation, details, null, parameters);
         }
 
         private async Task AuditRegistrationEvent(
@@ -93,7 +93,7 @@ namespace NHSOnline.Backend.Auditing
             params object[] parameters)
         {
             const string nhsLoginSubject = "";
-            await AuditInternal(auditType, nhsLoginSubject, nhsNumber, false, supplier, operation, details, parameters);
+            await AuditInternal(auditType, nhsLoginSubject, nhsNumber, false, supplier, operation, details, null, parameters);
         }
 
         private async Task AuditSessionEvent(
@@ -103,10 +103,11 @@ namespace NHSOnline.Backend.Auditing
             Supplier supplier,
             string operation,
             string details,
+            string referrer,
             params object[] parameters)
         {
             var nhsLoginSubject = DeriveNhsLoginSubject(accessToken);
-            await AuditInternal(auditType, nhsLoginSubject, nhsNumber, false, supplier, operation, details, parameters);
+            await AuditInternal(auditType, nhsLoginSubject, nhsNumber, false, supplier, operation, details, referrer, parameters);
         }
 
         public IDisposable BeginScope(HttpContext httpContext)
@@ -136,6 +137,7 @@ namespace NHSOnline.Backend.Auditing
             Supplier supplier,
             string operation,
             string details,
+            string referrer,
             params object[] parameters)
         {
             if (string.IsNullOrEmpty(nhsNumber))
@@ -143,7 +145,9 @@ namespace NHSOnline.Backend.Auditing
                 throw new NoAuditKeyException(ExceptionMessages.NoNhsNumberAvailable);
             }
 
-            var auditRecord = BuildAuditRecord(nhsLoginSubject, nhsNumber, isProxying, supplier, operation, details, parameters);
+            var auditRecord = BuildAuditRecord(nhsLoginSubject, nhsNumber, isProxying, supplier, operation, details, referrer, parameters);
+
+            _logger.LogInformation($"auditRecord contains Session: {auditRecord.SessionId}, Referrer: {auditRecord.Referrer}, IntegrationReferrer: {auditRecord.IntegrationReferrer} ");
 
             switch (auditType)
             {
@@ -189,14 +193,17 @@ namespace NHSOnline.Backend.Auditing
             Supplier supplier,
             string operation,
             string details,
+            string referrer,
             params object[] parameters)
         {
+            var versionTag = _scopeProvider.Value?.VersionTag();
+            var auditUserContext = _scopeProvider.Value?.UserContext()
+                                   ?? throw new NoAuditKeyException("Cannot audit outside of HttpContextAuditorScope");
+
             if (parameters.Length > 0)
             {
                 details = string.Format(CultureInfo.GetCultureInfo("en-GB"), details, parameters);
             }
-
-            var versionTag = _scopeProvider.Value?.VersionTag();
 
             var auditRecord = new AuditRecord(
                 DateTime.UtcNow,
@@ -208,7 +215,11 @@ namespace NHSOnline.Backend.Auditing
                 details,
                 versionTag,
                 _environment,
-                null);
+                null,
+                auditUserContext.SessionId,
+                auditUserContext.ProofLevel.ToString(),
+                auditUserContext.OdsCode,
+                referrer);
 
             return auditRecord;
         }
@@ -250,9 +261,11 @@ namespace NHSOnline.Backend.Auditing
             public string Operation { get; set; }
             public string IntegrationReferrer { get; set; }
             public string RequestDetails { get; set; }
+            public string Referrer { get; set; }
 
             internal AuditRecord BuildAuditRecord(string operationSuffix, string details)
-                => new AuditRecord(
+            {
+                return new AuditRecord(
                     DateTime.UtcNow,
                     NhsLoginSubject,
                     NhsNumber,
@@ -262,13 +275,19 @@ namespace NHSOnline.Backend.Auditing
                     details,
                     _versionTag,
                     _environment,
-                    IntegrationReferrer);
+                    IntegrationReferrer,
+                    _auditUserContext().SessionId,
+                    _auditUserContext().ProofLevel.ToString(),
+                    _auditUserContext().OdsCode,
+                    Referrer);
+            }
 
             internal void SetContextFromScope()
             {
                 var auditUserContext = _auditUserContext();
                 NhsNumber = auditUserContext.NhsNumber;
                 Supplier = auditUserContext.Supplier;
+
                 DeriveNhsLoginSubject(auditUserContext.AccessToken);
 
                 IsProxying = auditUserContext.IsProxying;
@@ -321,6 +340,12 @@ namespace NHSOnline.Backend.Auditing
             {
                 State.SetContextFromScope();
                 return new AuditBuilderOperation(State).Operation(operation);
+            }
+            
+            public IAuditIntegrationReferrer Referrer(string referrer)
+            {
+                State.Referrer = referrer;
+                return new AuditBuilder(State);
             }
 
             public IAuditBuilderAccessToken IntegrationReferrer(string integrationReferrer)

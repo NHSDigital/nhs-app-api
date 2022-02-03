@@ -35,6 +35,10 @@ namespace NHSOnline.AuditLogFunctionApp.Model
 
         public string IntegrationReferrer { get; set; }
 
+        public string SessionId { get; set; }
+
+        public string ProofLevel { get; set; }
+
         public AuditRecord(
             DateTime timestamp,
             string nhsLoginSubject,
@@ -46,7 +50,9 @@ namespace NHSOnline.AuditLogFunctionApp.Model
             VersionTag version,
             string auditId,
             string environment,
-            string integrationReferrer
+            string integrationReferrer,
+            string sessionId,
+            string proofLevel
         )
         {
             Timestamp = timestamp;
@@ -58,6 +64,9 @@ namespace NHSOnline.AuditLogFunctionApp.Model
             Operation = operation;
             Details = details;
             IntegrationReferrer = integrationReferrer;
+            Environment = environment;
+            SessionId = sessionId;
+            ProofLevel = proofLevel;
 
             if (version != null)
             {
@@ -65,8 +74,6 @@ namespace NHSOnline.AuditLogFunctionApp.Model
                 WebVersion = version.Web;
                 NativeVersion = version.Native;
             }
-
-            Environment = environment;
         }
     }
 }
