@@ -386,6 +386,35 @@ defaultUsers:
       dateOfBirth: "1981-07-23T00:00:00"
       sex: Male
 
+  nhsbt:
+    9661183252:
+      userId: fc29eb99-7ea8-4ca2-a442-dd4c41821bd7
+      emailAddress: onboarding.nhsapp+nhsbt.user1@gmail.com
+      odsCode: F00001
+      givenName: Arnold
+      familyName: haigh-cid
+      dateOfBirth: "1974-05-27T00:00:00"
+      sex: Male
+
+    9661183260:
+      userId: d843a51a-4b52-4d09-a346-815c4dab1cbb
+      emailAddress: onboarding.nhsapp+nhsbt.user2@gmail.com
+      odsCode: F00001
+      givenName: xiaowen
+      familyName: yue-cid
+      dateOfBirth: "1976-04-13T00:00:00"
+      sex: Male
+
+    9661183279:
+      userId: add4ec4a-edfb-4fc5-bb83-a30a7bf2f5ad
+      emailAddress: onboarding.nhsapp+nhsbt.user3@gmail.com
+      odsCode: F00001
+      givenName: Edwin
+      familyName: maw-cid
+      dateOfBirth: "1958-11-23T00:00:00"
+      sex: Male
+
+
   substrakt:
     9990555095:
       userId: e43cd1fe-7d42-4d5e-a092-224a9ae5a9fc

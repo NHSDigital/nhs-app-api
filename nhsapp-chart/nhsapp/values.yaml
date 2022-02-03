@@ -75,7 +75,7 @@ organDonationIPTrust: "13.73.176.25/32"
 organDonationProtocol: https
 organDonationHostname: nhsbt-apim-dev01.azure-api.net
 organDonationPort: 443
-organDonationPath: uat3/odr/v1/
+organDonationPath: sit6/odr/v1/
 organDonationClientId: ODR-26-NHSAP
 organDonationDataExpirySeconds: 86400
 
