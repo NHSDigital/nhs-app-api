@@ -101,7 +101,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterHandler(OnSessionExpiringRequested, (view, handler) => view.OnSessionExpiringRequested = handler)
                 .RegisterHandler(LogoutRequested, (view, handler) => view.LogoutRequested = handler)
                 .RegisterHandler(SessionExpiredRequested, (view, handler) => view.SessionExpiredRequested = handler)
-                .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler)
+                .RegisterHandler<bool>(BackRequested, (view, handler) => view.BackRequested = handler)
                 .RegisterHandler<CreateOnDemandGpSessionRequest>(CreateOnDemandGpSessionRequested, (view, handler) => view.CreateOnDemandGpSessionRequested = handler)
                 .RegisterHandler(_navigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
                 .RegisterHandler(_navigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
@@ -397,12 +397,23 @@ namespace NHSOnline.App.Areas.Home.Presenters
             await _view.SendBiometricCompletion(completion).PreserveThreadContext();
         }
 
-        private async Task BackRequested()
+        private async Task BackRequested(bool shouldLogout)
         {
             _logger.LogInformation("Display back requested");
 
-            await _dialogPresenter.DisplayAlertDialog(
-                new ConfirmLogout(_view.Logout)).PreserveThreadContext();
+            var name = await _view.GetLastCrumbIfExists().PreserveThreadContext();
+
+            if (string.IsNullOrEmpty(name) && shouldLogout)
+            {
+                _logger.LogInformation("No crumb, showing logout dialog");
+                await _dialogPresenter.DisplayAlertDialog(
+                    new ConfirmLogout(_view.Logout)).PreserveThreadContext();
+            }
+            else
+            {
+                _logger.LogInformation("Page has a crumb route, navigating back");
+                await _view.NavigateToRouteByName(name).PreserveThreadContext();
+            }
         }
 
         private async Task FetchNativeAppVersionRequested()

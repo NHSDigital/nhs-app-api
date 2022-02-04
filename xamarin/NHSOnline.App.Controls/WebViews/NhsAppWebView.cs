@@ -378,6 +378,15 @@ namespace NHSOnline.App.Controls.WebViews
             await EvaluateJavaScriptAsync($"{callbackName}('{jsonArgument}')").ResumeOnThreadPool();
         }
 
+        public async Task<string> GetLastCrumbIfExists()
+            => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.retrieveLastCrumbName()").ResumeOnThreadPool();
+
+        public async Task NavigationGoToByRouteName(string name)
+        {
+            await EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigationGoToByRouteName('{name}')")
+                    .ResumeOnThreadPool();
+        }
+
         public async Task GetContextualHelpLink()
             => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.getContextualHelpLink()").ResumeOnThreadPool();
 

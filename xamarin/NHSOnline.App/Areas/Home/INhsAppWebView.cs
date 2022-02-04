@@ -46,7 +46,7 @@ namespace NHSOnline.App.Areas.Home
             Func<Task>? OpenSettingsRequested { get; set; }
             Func<Task>? LogoutRequested { get; set; }
             Func<Task>? SessionExpiredRequested { get; set; }
-            Func<Task>? BackRequested { get; set; }
+            Func<bool, Task>? BackRequested { get; set; }
             Func<CreateOnDemandGpSessionRequest, Task>? CreateOnDemandGpSessionRequested { get; set; }
             Func<Uri, Task>? DeeplinkRequested { get; set; }
             Func<Task>? DisplayPageLeaveWarningRequested { get; set; }
@@ -55,6 +55,7 @@ namespace NHSOnline.App.Areas.Home
 
         NavigationFooterItem SelectedNavigationFooterItem { get; set; }
 
+        Task<string> GetLastCrumbIfExists();
         void GoToUri(Uri uri);
         Task NavigateToAppPage(string page);
         Task NavigateToAdvice();
@@ -65,6 +66,7 @@ namespace NHSOnline.App.Areas.Home
         Task NavigateToMore();
         Task NavigateToHome();
         Task NavigateToRedirector(Uri targetUrl);
+        Task NavigateToRouteByName(string name);
         Task NavigateToOnDemandGpReturn(Dictionary<string, string> queryParameters);
         Task SendNotificationsStatus(string status);
         Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse);

@@ -15,7 +15,7 @@ using Xamarin.Forms;
 namespace NHSOnline.App.Areas.Home.Views
 {
     [DesignTimeVisible(false)]
-    public partial class NhsAppWebPage : INhsAppWebView, INhsAppWebView.IEvents, IRootPage
+    public partial class NhsAppWebPage : INhsAppWebView, INhsAppWebView.IEvents, IRootPage, ISwipeablePage
     {
         private readonly ILogger _logger;
         private readonly AppNavigation<INhsAppWebView.IEvents> _appNavigation;
@@ -109,9 +109,9 @@ namespace NHSOnline.App.Areas.Home.Views
         public AsyncCommand SessionExpiredCommand
             => new AsyncCommand(() => SessionExpiredRequested);
 
-        public Func<Task>? BackRequested { get; set; }
-        public AsyncCommand BackRequestedCommand
-            => new AsyncCommand(() => BackRequested);
+        public Func<bool, Task>? BackRequested { get; set; }
+        public AsyncCommand<bool> BackRequestedCommand
+            => new AsyncCommand<bool>(() => BackRequested);
 
         public Func<CreateOnDemandGpSessionRequest, Task>? CreateOnDemandGpSessionRequested { get; set; }
         public AsyncCommand<CreateOnDemandGpSessionRequest> CreateOnDemandGpSessionRequestedCommand
@@ -202,7 +202,7 @@ namespace NHSOnline.App.Areas.Home.Views
 
         protected override bool OnBackButtonPressed()
         {
-            BackRequestedCommand.Execute(null);
+            BackRequestedCommand.Execute(true);
             return true;
         }
 
@@ -211,6 +211,12 @@ namespace NHSOnline.App.Areas.Home.Views
             await WebView.AuthLogout().PreserveThreadContext();
             LogoutCommand.Execute(null);
         }
+
+        public async Task<string> GetLastCrumbIfExists()
+            => await WebView.GetLastCrumbIfExists().PreserveThreadContext();
+
+        public async Task NavigateToRouteByName(string name)
+            => await WebView.NavigationGoToByRouteName(name).PreserveThreadContext();
 
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);
 
@@ -324,6 +330,12 @@ namespace NHSOnline.App.Areas.Home.Views
         {
             Spinner.IsVisible = false;
             WebView.IsVisible = true;
+        }
+
+        public bool OnSwipeBack()
+        {
+            BackRequestedCommand.Execute(false);
+            return true;
         }
     }
 }
