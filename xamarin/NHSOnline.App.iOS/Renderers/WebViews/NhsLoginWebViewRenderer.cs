@@ -8,8 +8,29 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 {
     internal sealed class NhsLoginWebViewRenderer : BaseWebViewRenderer
     {
-        public NhsLoginWebViewRenderer() : base(CustomConfiguration)
+        private readonly JavascriptBridge<NhsLoginWebView> _javascriptBridge;
+
+        public NhsLoginWebViewRenderer() : this(CustomConfiguration)
         { }
+
+        private NhsLoginWebViewRenderer(WKWebViewConfiguration config) : base(config)
+        {
+            this.InstallIProov();
+
+            _javascriptBridge = JavascriptBridge
+                .ForWebView(() => (NhsLoginWebView)Element, "nativeNhsLogin")
+                .Apply(config.UserContentController);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _javascriptBridge.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
 
         private static WKWebViewConfiguration CustomConfiguration
             => new WebViewConfigurationBuilder().Build();
