@@ -21,7 +21,6 @@ target:
     - "E85054"
     - "E85057"
     - "E85061"
-    - "E85061"
     - "E85064"
     - "E85066"
     - "E85069"
@@ -53,7 +52,6 @@ target:
     - "E85628"
     - "E85630"
     - "E85633"
-    - "E85633"
     - "E85635"
     - "E85640"
     - "E85643"
@@ -80,16 +78,16 @@ target:
 journeys:
   silverIntegrations:
     carePlans:
-      - pkbCie
+      - pkb
     libraries:
-      - pkbCie
+      - pkb
     medicines:
-      - pkbCie
+      - pkb
     messages:
-      - pkbCie
+      - pkb
     secondaryAppointments:
-      - pkbCie
+      - pkb
     healthTrackers:
-      - pkbCie
+      - pkb
     testResults:
-      - pkbCie
+      - pkb

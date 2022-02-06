@@ -9,7 +9,6 @@ target:
     - "E84013"
     - "E84015"
     - "E84017"
-    - "E84017"
     - "E84020"
     - "E84021"
     - "E84025"
@@ -35,7 +34,6 @@ target:
     - "E84086"
     - "E84620"
     - "E84626"
-    - "E84626"
     - "E84635"
     - "E84637"
     - "E84638"
@@ -59,16 +57,16 @@ target:
 journeys:
   silverIntegrations:
     carePlans:
-      - pkbCie
+      - pkb
     libraries:
-      - pkbCie
+      - pkb
     medicines:
-      - pkbCie
+      - pkb
     messages:
-      - pkbCie
+      - pkb
     secondaryAppointments:
-      - pkbCie
+      - pkb
     healthTrackers:
-      - pkbCie
+      - pkb
     testResults:
-      - pkbCie
+      - pkb
