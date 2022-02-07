@@ -57,6 +57,10 @@ namespace NHSOnline.Backend.Auditing
             {
                 auditStringBuilder.Append($" Native Version: {auditRecord.NativeVersion} |");
             }
+            if (!string.IsNullOrEmpty(auditRecord.IntegrationReferrer))
+            {
+                auditStringBuilder.Append($" IntegrationReferrer: {auditRecord.IntegrationReferrer} |");
+            }
 
             await _writer.WriteLineAsync(auditStringBuilder.ToString());
             await _writer.FlushAsync();

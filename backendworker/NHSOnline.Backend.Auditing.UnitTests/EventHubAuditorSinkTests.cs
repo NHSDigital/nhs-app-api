@@ -94,7 +94,8 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 operation,
                 "details",
                 new VersionTag("api", "web", "native"),
-                "test");
+                "test",
+                null);
         }
 
         private void SetupEventDataBatch()

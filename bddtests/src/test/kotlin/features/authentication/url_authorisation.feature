@@ -125,9 +125,9 @@ Feature: Authorisation occurs during each URL visit
     When I browse to the <Url> and see the relevant page
     Then I am on the relevant <Page> page
     Examples: # includes a target page which requires a GP session and one which does not
-      | Url                                                                                                       | Page                                  |
-      | /advice?referrer=nhs_uk&assertedLoginIdentity=valid-asserted-login-identity                               | /advice                               |
-      | /patient/appointments/gp-appointments?referrer=nhs_uk&assertedLoginIdentity=valid-asserted-login-identity | /patient/appointments/gp-appointments |
+      | Url                                                                                                       | Page                                                              |
+      | /advice?referrer=nhs_uk&assertedLoginIdentity=valid-asserted-login-identity                               | /advice?integration_referrer=nhs_uk                               |
+      | /patient/appointments/gp-appointments?referrer=nhs_uk&assertedLoginIdentity=valid-asserted-login-identity | /patient/appointments/gp-appointments?integration_referrer=nhs_uk |
 
   Scenario Outline: A User who has not accepted updated T&C and not logged in and attempts to navigate to a restricted <Url> is taken to the <Page> after accepting terms
     Given I am a EMIS patient who has accepted terms and conditions but updated terms and conditions exist

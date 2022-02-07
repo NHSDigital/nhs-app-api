@@ -20,6 +20,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         public string CodeVerifier => _model.CodeVerifier;
         public Uri RedirectUrl => new Uri(_model.RedirectUrl);
         public string CsrfToken { get; }
+        public string IntegrationReferrer => _model.IntegrationReferrer;
         public HttpContext HttpContext { get; }
     }
 }

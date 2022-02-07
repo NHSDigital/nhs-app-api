@@ -92,7 +92,8 @@ namespace NHSOnline.AuditLogFunctionApp.EventGenerator
                 "Online consultations submitted",
                 new VersionTag(null, null, null),
                 Guid.NewGuid().ToString(),
-                "test"
+                "test",
+                "testReferrer"
             );
 
         private static string GenerateNHSNumber() =>

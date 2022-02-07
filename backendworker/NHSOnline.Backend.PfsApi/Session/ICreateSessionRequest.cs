@@ -9,6 +9,7 @@ namespace NHSOnline.Backend.PfsApi.Session
         string CodeVerifier { get; }
         Uri RedirectUrl { get; }
         string CsrfToken { get; }
+        string IntegrationReferrer { get; }
         HttpContext HttpContext { get; }
     }
 }

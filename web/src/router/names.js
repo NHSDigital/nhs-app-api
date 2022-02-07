@@ -130,6 +130,7 @@ export const UPLIFT_SILVER_INTEGRATION_NAME = 'uplift-siler-integration';
 export const USER_RESEARCH_NAME = 'user-research';
 export const REDIRECT_PARAMETER = 'redirect_to';
 export const REDIRECT_PAGE_PARAMETER = 'redirect_to_page';
+export const INTEGRATION_REFERRER_PARAMETER = 'integration_referrer';
 
 const names = [
   INDEX_NAME,
@@ -261,6 +262,7 @@ const names = [
   USER_RESEARCH_NAME,
   REDIRECT_PARAMETER,
   REDIRECT_PAGE_PARAMETER,
+  INTEGRATION_REFERRER_PARAMETER,
 ];
 
 export const GP_PRESCRIPTION_JOURNEY_NAME = 'GP_PRESCRIPTION_JOURNEY';

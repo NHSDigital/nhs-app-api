@@ -38,16 +38,17 @@ namespace NHSOnline.Backend.PfsApi.Session
 
             MassageOdsCode(citizenIdSessionResult);
 
-            await Audit(citizenIdSessionResult);
+            await Audit(citizenIdSessionResult, request.IntegrationReferrer);
 
             _logger.LogInformation($"NhsNumber={citizenIdSessionResult.NhsNumber.RemoveWhiteSpace()}");
 
             return citizenIdSessionResult;
         }
 
-        private async Task Audit(CitizenIdSessionResult citizenIdSessionResult)
+        private async Task Audit(CitizenIdSessionResult citizenIdSessionResult, string integrationReferrer)
         {
             await _auditor.Audit()
+                .IntegrationReferrer(integrationReferrer)
                 .AccessToken(citizenIdSessionResult.Session.AccessToken)
                 .NhsNumber(citizenIdSessionResult.NhsNumber)
                 .Supplier(Supplier.Unknown)

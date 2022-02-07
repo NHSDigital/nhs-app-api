@@ -5,6 +5,7 @@ import {
   LOGIN_NAME,
   APPOINTMENTS_NAME,
   REDIRECT_PARAMETER,
+  INTEGRATION_REFERRER_PARAMETER,
 } from '@/router/names';
 import { EMPTY_PATH } from '@/router/paths';
 import { BEGIN_LOGIN, LOGIN } from '@/router/routes/login';
@@ -18,6 +19,7 @@ jest.mock('@/lib/utils');
 describe('middleware/auth', () => {
   let getters;
   let store;
+  let generateLoginUrlMock;
   const generatedLoginUrl = 'test_foo';
   const $router = {
     push: jest.fn(),
@@ -42,8 +44,9 @@ describe('middleware/auth', () => {
   };
 
   beforeEach(() => {
+    generateLoginUrlMock = jest.fn(() => ({ loginUrl: generatedLoginUrl }));
     AuthorisationService.mockImplementation(() => ({
-      generateLoginUrl: jest.fn(() => ({ loginUrl: generatedLoginUrl })),
+      generateLoginUrl: generateLoginUrlMock,
     }));
     getters = [];
     store = {
@@ -142,6 +145,84 @@ describe('middleware/auth', () => {
       getters['session/isLoggedIn'] = () => false;
     });
 
+    describe('Audit referrer when value is valid', () => {
+      const to = {
+        meta: {},
+        query: {
+          referrer: 'NHS_UK',
+        },
+      };
+
+      beforeEach(() => {
+        next.mockClear();
+        store.$env.SKIP_LOGGED_OUT_ENABLED = true;
+        delete window.location;
+        window.location = {};
+      });
+
+      describe('referrer is valid and is appended to path', () => {
+        it('will skip login page and referrer value is retained', async () => {
+          to.path = BOOKING.path;
+          await callAuth(to);
+          expect(generateLoginUrlMock).toBeCalledWith({
+            cookies: store.$cookies,
+            redirectTo: `/patient/${to.path}?integration_referrer=NHS_UK`,
+            singleSignOnDetails: {
+              assertedLoginIdentity: undefined,
+              prompt: 'none',
+            },
+          });
+          expect(window.location.href).toBe(generatedLoginUrl);
+          expect(next).not.toBeCalled();
+        });
+      });
+    });
+
+    describe('Audit referrer when value is invalid', () => {
+      const to = {
+        meta: {},
+        query: {
+          referrer: 'unknown',
+        },
+      };
+
+      beforeEach(() => {
+        next.mockClear();
+        store.$env.SKIP_LOGGED_OUT_ENABLED = true;
+        delete window.location;
+        window.location = {};
+      });
+
+      describe('referrer is invalid and path is valid', () => {
+        it('will be redirected to logged out home page and referrer value is retained', async () => {
+          to.path = BOOKING.path;
+          await callAuth(to);
+          const query = { [REDIRECT_PARAMETER]: `/patient/${BOOKING.path}?${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}` };
+          expect(next).toBeCalledWith({ name: LOGIN_NAME, query });
+        });
+      });
+
+      describe('referrer is invalid and path is invalid', () => {
+        it('will be redirected to logged out home page and referrer value is retained', async () => {
+          to.path = 'invalid-path';
+          dependancy.pathWithPatientPrefixOrUndefined.mockImplementation(undefined);
+          await callAuth(to);
+          const query = { [REDIRECT_PARAMETER]: `/?${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}` };
+          expect(next).toBeCalledWith({ name: LOGIN_NAME, query });
+        });
+      });
+
+      describe('referrer is invalid and path is empty', () => {
+        it('will be redirected to logged out home page and referrer value is retained', async () => {
+          to.path = EMPTY_PATH;
+          dependancy.pathWithPatientPrefixOrUndefined.mockImplementation(undefined);
+          await callAuth(to);
+          const query = { [REDIRECT_PARAMETER]: `/?${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}` };
+          expect(next).toBeCalledWith({ name: LOGIN_NAME, query });
+        });
+      });
+    });
+
     describe('skip logged in page is true', () => {
       const to = {
         meta: {},
@@ -159,42 +240,22 @@ describe('middleware/auth', () => {
       });
 
       describe('referrer is valid and path is valid', () => {
-        it('will skip the login page and write log message with deep link destination', async () => {
-          to.path = BOOKING.path;
-          await callAuth(to);
-
-          expect(store.dispatch).toBeCalledWith(
-            'log/onInfo',
-            `Skipping logged out home page - referrer is ${to.query.referrer}, destination is /patient/${to.path}`,
-          );
-          expect(window.location.href).toBe(generatedLoginUrl);
-          expect(next).not.toBeCalled();
-        });
-
-        it('will skip the login page and write log message with destination homepage', async () => {
+        it('will skip the login page when the path is empty', async () => {
           to.path = EMPTY_PATH;
           dependancy.pathWithPatientPrefixOrUndefined.mockImplementation(x => `${x.path}`);
           await callAuth(to);
 
-          expect(store.dispatch).toBeCalledWith(
-            'log/onInfo',
-            `Skipping logged out home page - referrer is ${to.query.referrer}, destination is ${to.path}`,
-          );
           expect(window.location.href).toBe(generatedLoginUrl);
           expect(next).not.toBeCalled();
         });
       });
 
       describe('referrer is valid but path is invalid', () => {
-        it('will skip login page and write log message with invalid destination', async () => {
+        it('will skip login page when the path is invalid', async () => {
           to.path = 'invalid-path';
           dependancy.pathWithPatientPrefixOrUndefined.mockImplementation(undefined);
           await callAuth(to);
 
-          expect(store.dispatch).toBeCalledWith(
-            'log/onInfo',
-            `Skipping logged out home page - referrer is ${to.query.referrer}, destination is invalid ${to.path}`,
-          );
           expect(window.location.href).toBe(generatedLoginUrl);
           expect(next).not.toBeCalled();
         });

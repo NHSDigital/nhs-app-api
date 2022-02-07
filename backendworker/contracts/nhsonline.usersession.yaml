@@ -216,6 +216,9 @@ components:
         referrer:
           type: string
           description: Where the app was referred to the user
+        integrationReferrer:
+          type: string
+          description: The source which attempted to initiate a single-sign-on to the NHS App via query parameter e.g. referrer=nhs_uk
         nhsLoginError:
           type: string
           description: An error code.

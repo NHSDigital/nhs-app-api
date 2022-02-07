@@ -72,7 +72,8 @@ namespace NHSOnline.AuditLogFunctionApp.UnitTests.Functions
                     "details",
                     new VersionTag("api", "web", "native"),
                     Guid.NewGuid().ToString(),
-                    "test"));
+                    "test",
+                    "testReferrer"));
 
             _auditRecords = auditRecords.ToArray();
         }

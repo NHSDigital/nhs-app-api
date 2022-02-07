@@ -5,6 +5,7 @@ import { removeCookies } from '@/lib/cookie-manager';
 import get from 'lodash/fp/get';
 import { GP_SESSION_ERROR_STATUS, createLocalError } from '@/lib/utils';
 import generic from '@/locale/en/generic';
+import { INTEGRATION_REFERRER_PARAMETER } from '@/router/names';
 import { AUTH_RESPONSE, INIT_AUTH, LOGOUT, UPDATE_CONFIG, ADD_GP_SESSION_ERROR } from './mutation-types';
 
 const thirtySeconds = 30000;
@@ -60,6 +61,18 @@ const logoutCleanUp = ({ self }) => {
   removeSessionCookies(self);
 };
 
+const getIntegrationReferrer = (nhsLoginResponse) => {
+  if (nhsLoginResponse.state) {
+    const paramsIndex = nhsLoginResponse.state.indexOf('?');
+    if (paramsIndex >= 0) {
+      const urlSearchParams = new URLSearchParams(nhsLoginResponse.state.substring(paramsIndex));
+      const integrationReferrer = urlSearchParams.get(INTEGRATION_REFERRER_PARAMETER);
+      return integrationReferrer;
+    }
+  }
+  return null;
+};
+
 const createSessionRequest = (state, rootState, nhsLoginResponse) => {
   const { codeVerifier, redirectUri: redirectUrl } = state.config || {};
   const request = {
@@ -70,10 +83,12 @@ const createSessionRequest = (state, rootState, nhsLoginResponse) => {
       nhsLoginErrorUri: get('error_uri', nhsLoginResponse),
       codeVerifier,
       redirectUrl,
+      integrationReferrer: getIntegrationReferrer(nhsLoginResponse),
     },
     ignoreError: true,
     returnResponse: true,
   };
+
   if (rootState.device.referrer !== undefined) {
     request.userSession.referrer = rootState.device.referrer;
   }

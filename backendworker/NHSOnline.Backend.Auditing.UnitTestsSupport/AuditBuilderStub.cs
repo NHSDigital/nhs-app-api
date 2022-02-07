@@ -7,16 +7,24 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Auditing.UnitTestsSupport
 {
-    public sealed class AuditBuilderStub: IAuditBuilder, IAuditBuilderSupplier, IAuditBuilderDetails, IAuditBuilderExecute
+    public sealed class AuditBuilderStub: IAuditBuilder, IAuditBuilderSupplier, IAuditBuilderDetails, IAuditBuilderExecute, IAuditIntegrationReferrer
     {
         public string AccessTokenString { get; set; }
         public AccessToken AccessToken { get; set; }
         public string NhsNumber { get; set; }
         public Supplier Supplier { get; set; }
         public string Operation { get; set; }
+        public string IntegrationReferrer { get; set; }
         public string Details { get; set; }
         public List<object> Parameters { get; set; }
         public string ResponseDetails { get; set; }
+
+
+        IAuditBuilderAccessToken IAuditIntegrationReferrer.IntegrationReferrer(string integrationReferrer)
+        {
+            IntegrationReferrer = integrationReferrer;
+            return this;
+        }
 
         IAuditBuilderNhsNumber IAuditBuilderAccessToken.AccessToken(string accessToken)
         {

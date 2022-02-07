@@ -17,7 +17,8 @@ namespace NHSOnline.Backend.Auditing
             string operation,
             string details,
             VersionTag version,
-            string environment)
+            string environment,
+            string integrationReferrer)
         {
             Timestamp = timestamp;
             AuditId = Guid.NewGuid().ToString();
@@ -27,6 +28,7 @@ namespace NHSOnline.Backend.Auditing
             Supplier = supplier.ToString();
             Operation = operation;
             Details = details;
+            IntegrationReferrer = integrationReferrer;
 
             if (version == null)
             {
@@ -71,5 +73,8 @@ namespace NHSOnline.Backend.Auditing
 
         [BsonElement]
         public string Environment { get; private set; }
+
+        [BsonElement]
+        public string IntegrationReferrer { get; private set; }
     }
 }

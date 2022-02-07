@@ -207,7 +207,8 @@ namespace NHSOnline.Backend.Auditing
                 operation,
                 details,
                 versionTag,
-                _environment);
+                _environment,
+                null);
 
             return auditRecord;
         }
@@ -247,6 +248,7 @@ namespace NHSOnline.Backend.Auditing
             public bool IsProxying { get; set; }
             public Supplier Supplier { get; set; }
             public string Operation { get; set; }
+            public string IntegrationReferrer { get; set; }
             public string RequestDetails { get; set; }
 
             internal AuditRecord BuildAuditRecord(string operationSuffix, string details)
@@ -259,7 +261,8 @@ namespace NHSOnline.Backend.Auditing
                     $"{Operation}_{operationSuffix}",
                     details,
                     _versionTag,
-                    _environment);
+                    _environment,
+                    IntegrationReferrer);
 
             internal void SetContextFromScope()
             {
@@ -318,6 +321,12 @@ namespace NHSOnline.Backend.Auditing
             {
                 State.SetContextFromScope();
                 return new AuditBuilderOperation(State).Operation(operation);
+            }
+
+            public IAuditBuilderAccessToken IntegrationReferrer(string integrationReferrer)
+            {
+                State.IntegrationReferrer = integrationReferrer;
+                return new AuditBuilder(State);
             }
         }
 

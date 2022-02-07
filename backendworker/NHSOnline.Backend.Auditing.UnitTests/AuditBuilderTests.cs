@@ -468,6 +468,36 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         }
 
         [TestMethod]
+        public async Task Execute_IntegrationReferrer_AuditsCorrectly()
+        {
+            var mockAuditSink = new Mock<IAuditSink>();
+            var auditor = CreateAuditor(mockAuditSink);
+            var accessToken = CreateAccessTokenString("subject");
+            const string integrationReferrer = "nhs_uk";
+
+            using (auditor.BeginScope(new DefaultHttpContext()))
+            {
+                await auditor
+                    .Audit()
+                    .IntegrationReferrer(integrationReferrer)
+                    .AccessToken(accessToken)
+                    .NhsNumber("NhsNumber")
+                    .Supplier(Supplier.Unknown)
+                    .Operation("operation")
+                    .Details("RequestDetails")
+                    .Execute(() => Task.FromResult(new AuditedResultStub { Details = "ResultDetails" }));
+            }
+
+            mockAuditSink.Verify(
+                x => x.WritePreOperationAudit(It.Is<AuditRecord>(ar => ar.IntegrationReferrer == integrationReferrer)),
+                Times.Once);
+
+            mockAuditSink.Verify(
+                x => x.WritePostOperationAudit(It.Is<AuditRecord>(ar => ar.IntegrationReferrer == integrationReferrer)),
+                Times.Once);
+        }
+
+        [TestMethod]
         [DataRow("Boom")]
         [DataRow("Exception")]
         public async Task Execute_ExceptionFromAction_PropagatesException(string exceptionMessage)

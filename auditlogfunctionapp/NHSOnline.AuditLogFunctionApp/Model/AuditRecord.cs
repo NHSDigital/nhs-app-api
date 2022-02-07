@@ -33,6 +33,8 @@ namespace NHSOnline.AuditLogFunctionApp.Model
 
         public string Environment { get; set; }
 
+        public string IntegrationReferrer { get; set; }
+
         public AuditRecord(
             DateTime timestamp,
             string nhsLoginSubject,
@@ -43,7 +45,8 @@ namespace NHSOnline.AuditLogFunctionApp.Model
             string details,
             VersionTag version,
             string auditId,
-            string environment
+            string environment,
+            string integrationReferrer
         )
         {
             Timestamp = timestamp;
@@ -54,6 +57,7 @@ namespace NHSOnline.AuditLogFunctionApp.Model
             Supplier = supplier;
             Operation = operation;
             Details = details;
+            IntegrationReferrer = integrationReferrer;
 
             if (version != null)
             {

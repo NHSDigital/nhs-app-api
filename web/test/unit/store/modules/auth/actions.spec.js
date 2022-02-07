@@ -213,6 +213,36 @@ describe('actions', () => {
     });
   });
 
+  describe('will call postV1Session with correct params', () => {
+    it.each([
+      ['', null],
+      ['/prescriptions', null],
+      ['/prescriptions?integration_referrer=test', 'test'],
+      ['/prescriptions?integration_referrer=', ''],
+    ])('handle auth response - integrationReferrer is sent correctly', async (nhsLoginState, expectedIntegrationReferrer) => {
+      const rootState = {
+        device: {
+          referrer: 'test',
+        },
+      };
+      await actions.handleAuthResponse({ commit, state, rootState }, { code: '123', state: nhsLoginState });
+      expect(actions.app.$http.postV1Session)
+        .toHaveBeenCalledWith(
+          expect.objectContaining({
+            userSession: {
+              integrationReferrer: expectedIntegrationReferrer,
+              authCode: '123',
+              codeVerifier: undefined,
+              nhsLoginError: undefined,
+              nhsLoginErrorDescription: undefined,
+              nhsLoginErrorUri: undefined,
+              redirectUrl: undefined,
+              referrer: 'test',
+            },
+          }),
+        );
+    });
+  });
 
   describe('handle gp session on demand response', () => {
     const nhsLoginResponse = {
