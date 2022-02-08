@@ -26,7 +26,7 @@ Feature: Patients Know Best My Care View Shared Links
     Given I am a user who can view Shared Links from PKB My Care View
     And 'NHS UK' responds to requests for '/personal-health-records'
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Flibrary%2FmanageLibrary.action%26brand=pkbMyCareView'
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Flibrary%252FmanageLibrary.action%26brand%3DpkbMyCareView'
     Then I am redirected to the redirector page with the header 'Shared health links'
     When I click the link called 'Find out more about personal health record services' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/personal-health-records'
     Then a new tab has been opened by the link
@@ -35,7 +35,7 @@ Feature: Patients Know Best My Care View Shared Links
     Given I am a user who can view Shared Links from PKB My Care View
     And My Care View responds to requests for shared links
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Flibrary%2FmanageLibrary.action%26brand=pkbMyCareView'
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Flibrary%252FmanageLibrary.action%26brand%3DpkbMyCareView'
     Then I am redirected to the redirector page with the header 'Shared health links'
-    When I click the 'Continue' button on the redirector page with a url starting with 'http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=/library/manageLibrary.action&brand=pkbMyCareView'
+    When I click the 'Continue' button on the redirector page with a url starting with 'http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Flibrary%2FmanageLibrary.action&brand=pkbMyCareView'
     Then I am navigated to a third party site for My Care View

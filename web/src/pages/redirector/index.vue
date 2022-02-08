@@ -76,7 +76,11 @@ export default {
   methods: {
     getDecodedRedirectParam() {
       const redirectParam = get(REDIRECT_PARAMETER)(this.$route.query);
-      return redirectParam ? decodeURIComponent(redirectParam) : undefined;
+      if (redirectParam) {
+        // If the redirect parameter does not contain a colon (i.e. "https://"), it must be encoded (deep link scenario), so needs decoding.
+        return redirectParam.includes(':') ? redirectParam : decodeURIComponent(redirectParam);
+      }
+      return undefined;
     },
     startRedirect() {
       this.redirectParameter = this.getDecodedRedirectParam();

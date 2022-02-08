@@ -25,7 +25,7 @@ Feature: Patients Know Best Test Results
     Given I am a user who can view test results from Patients Know Best
     And 'NHS UK' responds to requests for '/personal-health-records'
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Ftest%2FmyTests.action'
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Ftest%252FmyTests.action'
     Then I am redirected to the redirector page with the header 'Test results'
     When I click the link called 'Find out more about personal health record services' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/personal-health-records'
     Then a new tab has been opened by the link
@@ -34,7 +34,7 @@ Feature: Patients Know Best Test Results
     Given I am a user who can view test results from Patients Know Best
     And PKB responds to requests for test results
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Ftest%2FmyTests.action'
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Ftest%252FmyTests.action'
     Then I am redirected to the redirector page with the header 'Test results'
-    When I click the 'Continue' button on the redirector page with a url starting with 'http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=/test/myTests.action'
+    When I click the 'Continue' button on the redirector page with a url starting with 'http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Ftest%2FmyTests.action'
     Then I am navigated to a third party site for PKB

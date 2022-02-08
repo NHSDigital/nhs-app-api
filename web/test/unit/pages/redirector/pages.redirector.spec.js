@@ -238,7 +238,7 @@ describe('redirector page', () => {
       hasAgreedToThirdPartyWarning.mockReturnValue(false);
       $route = {
         name: names.INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [names.REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
+        query: { [names.REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages' },
         meta: {},
       };
 
@@ -270,7 +270,7 @@ describe('redirector page', () => {
       it('will call `postV1PatientAssertedLoginIdentity`', () => {
         expect($http.postV1PatientAssertedLoginIdentity).toHaveBeenCalledWith({
           assertedLoginIdentityRequest: {
-            IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
+            IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages',
             JumpOffId: 'messages',
             ProviderId: 'pkb',
             ProviderName: 'Patients Know Best',
@@ -281,7 +281,7 @@ describe('redirector page', () => {
       });
 
       it('will redirect to the external url', () => {
-        expect(window.setWindowLocation).toHaveBeenCalledWith('http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages&assertedLoginIdentity=jwtToken');
+        expect(window.setWindowLocation).toHaveBeenCalledWith('http://www.url.com/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages&assertedLoginIdentity=jwtToken');
       });
     });
 
@@ -347,7 +347,7 @@ describe('redirector page', () => {
       hasAgreedToThirdPartyWarning.mockReturnValue(false);
       $route = {
         name: names.INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [names.REDIRECT_PARAMETER]: 'http%3A%2F%2Fwww.url.com%2Fnhs-login%2Flogin?phrPath=%2Fauth%2FgetInbox.action?tab=messages' },
+        query: { [names.REDIRECT_PARAMETER]: 'http%3A%2F%2Fwww.url.com%2Fnhs-login%2Flogin%3FphrPath%3D%252Fauth%252FgetInbox.action%253Ftab%253Dmessages' },
         meta: {},
       };
 
@@ -377,7 +377,7 @@ describe('redirector page', () => {
       it('will call `postV1PatientAssertedLoginIdentity`', () => {
         expect($http.postV1PatientAssertedLoginIdentity).toHaveBeenCalledWith({
           assertedLoginIdentityRequest: {
-            IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
+            IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages',
             JumpOffId: 'messages',
             ProviderId: 'pkb',
             ProviderName: 'Patients Know Best',
@@ -389,7 +389,7 @@ describe('redirector page', () => {
 
       it('will call NativeApp.openWebIntegration with the decoded asserted login url', () => {
         expect(NativeApp.openWebIntegration).toHaveBeenCalledWith(
-          'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages&assertedLoginIdentity=jwtToken',
+          'http://www.url.com/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages&assertedLoginIdentity=jwtToken',
           ['http://additional.domain.com'],
           'http://stubs.local.bitraft.io/help-and-support/',
         );
@@ -449,7 +449,7 @@ describe('redirector page', () => {
     beforeEach(() => {
       $route = {
         name: names.INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [names.REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
+        query: { [names.REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages' },
         meta: {},
       };
 
@@ -472,7 +472,7 @@ describe('redirector page', () => {
     beforeEach(() => {
       $route = {
         name: names.INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [names.REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
+        query: { [names.REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages' },
         meta: {},
       };
 
@@ -495,7 +495,7 @@ describe('redirector page', () => {
     beforeEach(() => {
       $route = {
         name: names.INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [names.REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
+        query: { [names.REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages' },
         meta: {},
       };
 
@@ -523,7 +523,7 @@ describe('redirector page', () => {
       hasAgreedToThirdPartyWarning.mockReturnValue(true);
       $route = {
         name: names.INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [names.REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
+        query: { [names.REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages' },
         meta: {},
       };
 
@@ -551,7 +551,7 @@ describe('redirector page', () => {
     it('will generate an asserted login identity for the matching service', () => {
       expect($http.postV1PatientAssertedLoginIdentity).toHaveBeenCalledWith({
         assertedLoginIdentityRequest: {
-          IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
+          IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages',
           JumpOffId: 'messages',
           ProviderId: 'pkb',
           ProviderName: 'Patients Know Best',

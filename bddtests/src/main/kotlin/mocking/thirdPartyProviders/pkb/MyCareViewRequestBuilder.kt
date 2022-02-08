@@ -9,7 +9,7 @@ class MyCareViewRequestBuilder(queryStringEntries: HashMap<String, String> = has
     init {
         if (queryStringEntries.isNotEmpty()) {
             queryStringEntries.entries.forEach {
-                requestBuilder.andQueryParameter(it.key, it.value)
+                requestBuilder.andQueryParameter(it.key, it.value, "contains")
             }
         }
     }
@@ -24,6 +24,11 @@ class MyCareViewRequestBuilder(queryStringEntries: HashMap<String, String> = has
                     "brand" to "pkbMyCareView")
     )
 
+    fun healthTrackerRequest() = MyCareViewRequestBuilder(
+            hashMapOf("phrPath" to "/pkbNhsMenu.action",
+                    "brand" to "pkbMyCareView")
+    )
+
     fun messagesRequest() = MyCareViewRequestBuilder(
             hashMapOf("phrPath" to "/auth/getInbox.action?tab=messages",
                     "brand" to "pkbMyCareView")
@@ -35,8 +40,7 @@ class MyCareViewRequestBuilder(queryStringEntries: HashMap<String, String> = has
     )
 
     fun recordSharingRequest() = MyCareViewRequestBuilder(
-            hashMapOf("phrPath" to "/patient/myConsentTeam.action?tab=invitations",
-                    "subTab" to "myClinicians",
+            hashMapOf("phrPath" to "/patient/myConsentTeam.action?tab=invitations&subTab=myClinicians",
                     "brand" to "pkbMyCareView")
     )
 
@@ -47,11 +51,6 @@ class MyCareViewRequestBuilder(queryStringEntries: HashMap<String, String> = has
 
     fun testResultsRequest() = MyCareViewRequestBuilder(
             hashMapOf("phrPath" to "/test/myTests.action",
-                    "brand" to "pkbMyCareView")
-    )
-
-    fun healthTrackerRequest() = MyCareViewRequestBuilder(
-            hashMapOf("phrPath" to "/pkbNhsMenu.action",
                     "brand" to "pkbMyCareView")
     )
 

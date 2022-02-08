@@ -9,7 +9,7 @@ class CIERequestBuilder(queryStringEntries: HashMap<String, String> = hashMapOf(
     init {
         if (queryStringEntries.isNotEmpty()) {
             queryStringEntries.entries.forEach {
-                requestBuilder.andQueryParameter(it.key, it.value)
+                requestBuilder.andQueryParameter(it.key, it.value, "contains")
             }
         }
     }
@@ -40,8 +40,7 @@ class CIERequestBuilder(queryStringEntries: HashMap<String, String> = hashMapOf(
     )
 
     fun recordSharingRequest() = CIERequestBuilder(
-            hashMapOf("phrPath" to "/patient/myConsentTeam.action?tab=invitations",
-                    "subTab" to "myClinicians",
+            hashMapOf("phrPath" to "/patient/myConsentTeam.action?tab=invitations&subTab=myClinicians",
                     "brand" to "cie")
     )
 

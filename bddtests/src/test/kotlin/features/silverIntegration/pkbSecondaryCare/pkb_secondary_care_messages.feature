@@ -32,7 +32,7 @@ Feature: Patients Know Best Secondary Care Messages
     Given I am a user who can view Messages and Online Consultations from PKB Secondary Care
     And 'NHS UK' responds to requests for '/personal-health-records'
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Fauth%2FgetInbox.action%3Ftab%3Dmessages%26brand=pkbSecondaryCare'
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Fauth%252FgetInbox.action%253Ftab%253Dmessages%26brand%3DpkbSecondaryCare'
     Then I am redirected to the redirector page with the header 'Consultations, events and messages'
     When I click the link called 'Find out more about personal health record services' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/personal-health-records'
     Then a new tab has been opened by the link
@@ -41,7 +41,7 @@ Feature: Patients Know Best Secondary Care Messages
     Given I am a user who can view Messages and Online Consultations from PKB Secondary Care
     And Secondary Care responds to requests for messages
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Fauth%2FgetInbox.action%3Ftab%3Dmessages%26brand=pkbSecondaryCare'
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Fauth%252FgetInbox.action%253Ftab%253Dmessages%26brand%3DpkbSecondaryCare'
     Then I am redirected to the redirector page with the header 'Consultations, events and messages'
-    When I click the 'Continue' button on the redirector page with a url starting with 'http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages&brand=pkbSecondaryCare'
+    When I click the 'Continue' button on the redirector page with a url starting with 'http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages&brand=pkbSecondaryCare'
     Then I am navigated to a third party site for Secondary Care

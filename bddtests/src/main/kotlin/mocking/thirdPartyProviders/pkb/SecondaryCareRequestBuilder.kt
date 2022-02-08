@@ -9,7 +9,7 @@ class SecondaryCareRequestBuilder(queryStringEntries: HashMap<String, String> = 
     init {
         if (queryStringEntries.isNotEmpty()) {
             queryStringEntries.entries.forEach {
-                requestBuilder.andQueryParameter(it.key, it.value)
+                requestBuilder.andQueryParameter(it.key, it.value, "contains")
             }
         }
     }
@@ -24,6 +24,11 @@ class SecondaryCareRequestBuilder(queryStringEntries: HashMap<String, String> = 
                     "brand" to "pkbSecondaryCare")
     )
 
+    fun healthTrackerRequest() = SecondaryCareRequestBuilder(
+            hashMapOf("phrPath" to "/pkbNhsMenu.action",
+                    "brand" to "pkbSecondaryCare")
+    )
+
     fun messagesRequest() = SecondaryCareRequestBuilder(
             hashMapOf("phrPath" to "/auth/getInbox.action?tab=messages",
                     "brand" to "pkbSecondaryCare")
@@ -35,8 +40,7 @@ class SecondaryCareRequestBuilder(queryStringEntries: HashMap<String, String> = 
     )
 
     fun recordSharingRequest() = SecondaryCareRequestBuilder(
-            hashMapOf("phrPath" to "/patient/myConsentTeam.action?tab=invitations",
-                    "subTab" to "myClinicians",
+            hashMapOf("phrPath" to "/patient/myConsentTeam.action?tab=invitations&subTab=myClinicians",
                     "brand" to "pkbSecondaryCare")
     )
 
@@ -47,11 +51,6 @@ class SecondaryCareRequestBuilder(queryStringEntries: HashMap<String, String> = 
 
     fun testResultsRequest() = SecondaryCareRequestBuilder(
             hashMapOf("phrPath" to "/test/myTests.action",
-                    "brand" to "pkbSecondaryCare")
-    )
-
-    fun healthTrackerRequest() = SecondaryCareRequestBuilder(
-            hashMapOf("phrPath" to "/pkbNhsMenu.action",
                     "brand" to "pkbSecondaryCare")
     )
 

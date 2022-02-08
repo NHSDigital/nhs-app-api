@@ -27,7 +27,7 @@ Feature: Patients Know Best Appointments
     Given I am a EMIS patient
     And 'NHS UK' responds to requests for '/personal-health-records'
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Fdiary%2FlistAppointments.action'
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Fdiary%252FlistAppointments.action'
     Then I am redirected to the redirector page with the header 'View appointments'
     When I click the link called 'Find out more about personal health record services' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/personal-health-records'
     Then a new tab has been opened by the link
@@ -36,7 +36,7 @@ Feature: Patients Know Best Appointments
     Given I am a user who can view Appointments from Patients Know Best
     And PKB responds to requests for appointments
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%2Fdiary%2FlistAppointments.action'
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Fdiary%252FlistAppointments.action'
     Then I am redirected to the redirector page with the header 'View appointments'
-    When I click the 'Continue' button on the redirector page with a url starting with 'http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=/diary/listAppointments.action'
+    When I click the 'Continue' button on the redirector page with a url starting with 'http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fdiary%2FlistAppointments.action'
     Then I am navigated to a third party site for PKB

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +19,8 @@ namespace NHSOnline.HttpMocks.WebIntegrations
         public IActionResult LoginPage(
             [RequiredFromQuery(Name = "phrPath")] string phrPath)
         {
-            (Uri Url, HttpRequest Request) model = (new Uri($"http://{AuthHostName}:8080/authorize?phrPath={phrPath}"), Request );
+            var encodedPhrPath = HttpUtility.UrlEncode(phrPath);
+            (Uri Url, HttpRequest Request) model = (new Uri($"http://{AuthHostName}:8080/authorize?phrPath={encodedPhrPath}"), Request );
             return View("~/Views/WebIntegrations/RedirectPage.cshtml", model);
         }
 
@@ -27,7 +29,8 @@ namespace NHSOnline.HttpMocks.WebIntegrations
         public IActionResult NhsLoginAuthorize(
             [RequiredFromQuery(Name = "phrPath")] string phrPath)
         {
-            (Uri Url, HttpRequest Request) model = (new Uri($"https://{SecurePkbHostName}/authorized?phrPath={phrPath}"), Request );
+            var encodedPhrPath = HttpUtility.UrlEncode(phrPath);
+            (Uri Url, HttpRequest Request) model = (new Uri($"https://{SecurePkbHostName}/authorized?phrPath={encodedPhrPath}"), Request );
             return View("~/Views/WebIntegrations/RedirectPage.cshtml", model);
         }
 

@@ -43,7 +43,7 @@ Feature: Redirector
     And I click the 'Back' breadcrumb
     Then the Messages Hub page is displayed
     When I retrieve the 'home' page directly
-    And I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages'
+    And I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Fauth%252FgetInbox.action%253Ftab%253Dmessages'
     Then I am redirected to the redirector page with the header 'Messages and online consultations'
     When I click the 'Back' breadcrumb
     Then I see the home page
@@ -59,7 +59,7 @@ Feature: Redirector
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Fauth%252FgetInbox.action%253Ftab%253Dmessages'
     Then I am redirected to the redirector page with the header 'Messages and online consultations'
-    When I click the 'Continue' button on the redirector page with a url starting with 'http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages'
+    When I click the 'Continue' button on the redirector page with a url starting with 'http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages'
     Then I am navigated to a third party site
     When I browse directly to '/health-records' in the NHS App
     And I see the health records hub page
