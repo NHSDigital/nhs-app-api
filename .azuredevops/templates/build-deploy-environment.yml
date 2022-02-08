@@ -96,7 +96,7 @@ variables:
   - name: helmVersion
     value: 3.2.3
   - name: permanentEnvironments
-    value: onboardingsandpit,onboardingaos,authdevelopment,scratch12
+    value: onboardingsandpit,onboardingaos,authdevelopment,scratch11
 pool:
   vmImage: 'ubuntu-latest'
 stages:
