@@ -34,6 +34,11 @@ namespace NHSOnline.IntegrationTests.LoggedOut
             AndroidCreateSessionFailedAgeRequirementErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements();
+
+            driver.PressBackButton();
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver);
         }
 
         [NhsAppIOSTest]
@@ -59,6 +64,11 @@ namespace NHSOnline.IntegrationTests.LoggedOut
             IOSCreateSessionFailedAgeRequirementErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements();
+
+            driver.SwipeBack();
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver);
         }
     }
 }

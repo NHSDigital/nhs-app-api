@@ -31,6 +31,15 @@ namespace NHSOnline.IntegrationTests.ForcedUpdate
                 .ContinueWithNhsLogin();
 
             AndroidForcedUpdatePage
+                .AssertOnPage(driver);
+
+            driver.PressBackButton();
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            AndroidForcedUpdatePage
                 .AssertOnPage(driver)
                 .AssertPageElements()
                 .Upgrade();
@@ -48,6 +57,15 @@ namespace NHSOnline.IntegrationTests.ForcedUpdate
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
                 .WithProofLevel5();
             using var patients = Mocks.Patients.Add(patient);
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            IOSForcedUpdatePage
+                .AssertOnPage(driver);
+
+            driver.SwipeBack();
 
             IOSLoggedOutHomePage
                 .AssertOnPage(driver)

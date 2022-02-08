@@ -54,6 +54,19 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .BackToLogin();
 
             AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            AndroidStubbedLoginPageSlimHeader
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
+
+            AndroidCreateSessionBadRequestErrorPage
+                .AssertOnPage(driver);
+
+            driver.PressBackButton();
+
+            AndroidLoggedOutHomePage
                 .AssertOnPage(driver);
         }
 
@@ -130,6 +143,19 @@ namespace NHSOnline.IntegrationTests.LoggedOut
             IOSCreateSessionBadRequestErrorPage
                 .AssertOnPage(driver)
                 .BackToLogin();
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            IOSStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
+
+            IOSCreateSessionBadRequestErrorPage
+                .AssertOnPage(driver);
+
+            driver.SwipeBack();
 
             IOSLoggedOutHomePage
                 .AssertOnPage(driver);

@@ -33,6 +33,11 @@ namespace NHSOnline.IntegrationTests.LoggedOut
             AndroidCreateSessionOdsCodeNotSupportedErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements();
+
+            driver.PressBackButton();
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver);
         }
 
         [NhsAppIOSTest]
@@ -57,6 +62,11 @@ namespace NHSOnline.IntegrationTests.LoggedOut
             IOSCreateSessionOdsCodeNotSupportedErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements();
+
+            driver.SwipeBack();
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver);
         }
 
         [NhsAppAndroidTest]
