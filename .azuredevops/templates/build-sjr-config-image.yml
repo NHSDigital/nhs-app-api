@@ -49,3 +49,13 @@ jobs:
           repository: $(sjr.config.image.name)
           tags: |
             $(Build.SourceBranchName)
+      - ${{ if or(eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
+        - task: Docker@2
+          displayName: Push to release ACR
+          inputs:
+            command: push
+            containerRegistry: nhsappcontainersrelease
+            repository: $(sjr.config.image.name)
+            tags: |
+              $(Build.SourceBranchName)
+
