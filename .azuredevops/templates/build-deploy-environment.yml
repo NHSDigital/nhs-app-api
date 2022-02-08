@@ -50,6 +50,7 @@ parameters:
       - onboardingsandpit
       - onboardingaos
       - authdevelopment
+      - preview
 resources:
   repositories:
     - repository: nhsapp-ops-terraform
