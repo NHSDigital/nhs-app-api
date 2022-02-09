@@ -52,7 +52,7 @@
 import last from 'lodash/fp/last';
 import isEmpty from 'lodash/fp/isEmpty';
 import { navigateBack, createRouteByNameObject } from '@/lib/utils';
-import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
+import { EventBus, NATIVE_BACK, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 import backLinkOverrides from '@/router/backLinkOverRides';
 import { SWITCH_PROFILE_NAME } from '@/router/names';
 
@@ -80,6 +80,12 @@ export default {
     hasCrumbs() {
       return !isEmpty(this.crumbs);
     },
+  },
+  beforeMount() {
+    EventBus.$on(NATIVE_BACK, this.backClicked);
+  },
+  beforeDestroy() {
+    EventBus.$off(NATIVE_BACK, this.backClicked);
   },
   methods: {
     createRouteLink(name) {

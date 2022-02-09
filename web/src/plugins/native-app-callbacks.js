@@ -1,6 +1,6 @@
 import store from '@/store';
 import router from '@/router';
-import { REDIRECT_PAGE_PARAMETER, REDIRECT_PARAMETER } from '@/router/names';
+import { REDIRECT_PAGE_PARAMETER, REDIRECT_PARAMETER, INDEX_NAME } from '@/router/names';
 import { INTERSTITIAL_REDIRECTOR_PATH, GP_SESSION_ON_DEMAND_RETURN_PATH } from '@/router/paths';
 import { generateContextualHelpLink, isBlankString, redirectTo } from '@/lib/utils';
 import NativeApp from '@/services/native-app';
@@ -44,8 +44,16 @@ const NativeAppCallbacksPlugin = {
       notificationsAuthorised(notificationsAuthorisedDetails) {
         store.dispatch('notifications/authorised', notificationsAuthorisedDetails);
       },
-      navigationGoToByRouteName(name) {
-        store.dispatch('navigation/goToRouteByName', name);
+      navigationBack() {
+        const crumb = window.vue.$route.meta.crumb.defaultCrumb;
+
+        if (crumb !== undefined) {
+          if (crumb.length === 1 && crumb[0].name === INDEX_NAME) {
+            store.dispatch('navigation/goToHomePage');
+          } else {
+            store.dispatch('navigation/goBack');
+          }
+        }
       },
       retrieveLastCrumbName() {
         const crumbExists = window.vue.$route.meta.crumb.defaultCrumb;

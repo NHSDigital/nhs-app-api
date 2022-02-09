@@ -215,8 +215,12 @@ namespace NHSOnline.App.Areas.Home.Views
         public async Task<string> GetLastCrumbIfExists()
             => await WebView.GetLastCrumbIfExists().PreserveThreadContext();
 
-        public async Task NavigateToRouteByName(string name)
-            => await WebView.NavigationGoToByRouteName(name).PreserveThreadContext();
+        public async Task NavigateBack()
+        {
+            WebView.Focus();
+            WebView.AccessibilityFocus();
+            await WebView.NavigateBack().PreserveThreadContext();
+        }
 
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);
 

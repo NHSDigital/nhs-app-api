@@ -381,9 +381,9 @@ namespace NHSOnline.App.Controls.WebViews
         public async Task<string> GetLastCrumbIfExists()
             => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.retrieveLastCrumbName()").ResumeOnThreadPool();
 
-        public async Task NavigationGoToByRouteName(string name)
+        public async Task NavigateBack()
         {
-            await EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigationGoToByRouteName('{name}')")
+            await EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigationBack()")
                     .ResumeOnThreadPool();
         }
 

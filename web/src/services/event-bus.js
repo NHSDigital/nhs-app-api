@@ -6,5 +6,6 @@ export const UPDATE_LOCALISED_CAPTION = 'update-localised-caption';
 export const UPDATE_HEADER = 'update-header';
 export const UPDATE_TITLE = 'update-title';
 export const FOCUS_ERROR_ELEMENT = 'focus-error-element';
+export const NATIVE_BACK = 'native-back';
 
 export const EventBus = new Vue();

@@ -412,7 +412,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             else
             {
                 _logger.LogInformation("Page has a crumb route, navigating back");
-                await _view.NavigateToRouteByName(name).PreserveThreadContext();
+                await _view.NavigateBack().PreserveThreadContext();
             }
         }
 

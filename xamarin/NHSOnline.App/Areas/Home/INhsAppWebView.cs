@@ -66,7 +66,7 @@ namespace NHSOnline.App.Areas.Home
         Task NavigateToMore();
         Task NavigateToHome();
         Task NavigateToRedirector(Uri targetUrl);
-        Task NavigateToRouteByName(string name);
+        Task NavigateBack();
         Task NavigateToOnDemandGpReturn(Dictionary<string, string> queryParameters);
         Task SendNotificationsStatus(string status);
         Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse);

@@ -1,5 +1,6 @@
 import { redirectTo } from '@/lib/utils';
-import { ADVICE_PATH,
+import {
+  ADVICE_PATH,
   APPOINTMENTS_PATH,
   PRESCRIPTIONS_PATH,
   HEALTH_RECORDS_PATH,
@@ -8,6 +9,7 @@ import { ADVICE_PATH,
   MORE_PATH,
   GP_SESSION_ON_DEMAND_BEGIN_PATH,
 } from '@/router/paths';
+import { EventBus, NATIVE_BACK } from '@/services/event-bus';
 import {
   CLEAR_SELECTED_MENUITEM,
   INIT_NAVIGATION,
@@ -23,11 +25,8 @@ export default {
   init({ commit }) {
     commit(INIT_NAVIGATION);
   },
-  goToRouteByName(_, name) {
-    const path = this.app.$router.resolve({
-      name,
-    });
-    this.app.$router.push(path.resolved.fullPath);
+  goBack() {
+    EventBus.$emit(NATIVE_BACK);
   },
   goTo(_, path) {
     redirectTo({ $router: this.app.$router, $store: this }, path);
