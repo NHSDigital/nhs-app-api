@@ -27,7 +27,7 @@ spec:
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: allow-https-egress-from-api-{{ .Chart.AppVersion }}
+  name: allow-mongodb-egress-from-api-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
     role: {{ $.Values.api.role }}
@@ -42,10 +42,10 @@ spec:
   egress:
   - to:
     - ipBlock:
-        cidr: 0.0.0.0/0
+        cidr: 10.0.0.0/8
     ports:
     - protocol: TCP
-      port: 443
+      port: 10255
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
