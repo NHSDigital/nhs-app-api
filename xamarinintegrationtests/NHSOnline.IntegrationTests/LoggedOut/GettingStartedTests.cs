@@ -2,7 +2,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.Android.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
-using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.UI;
@@ -27,6 +26,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
 
             AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
+
+            //Allow browser overlay to load
+            using var extendedTimeout = ExtendedTimeout.FromSeconds(5);
 
             AndroidBrowserOverlayNhsAppHelpPage
                 .AssertOnPage(driver, WhatToDoThirteenToFifteenLinkPath)
