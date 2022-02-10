@@ -50,5 +50,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
                 await DeeplinkRequested(deeplinkUrl).PreserveThreadContext();
             }
         }
+
+        protected override bool OnBackButtonPressed() => true;
     }
 }

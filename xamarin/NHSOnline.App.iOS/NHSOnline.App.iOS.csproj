@@ -150,6 +150,7 @@
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Renderers\ButtonElementRenderer.cs" />
     <Compile Include="Renderers\ContentPageRenderer.cs" />
+    <Compile Include="Renderers\CreateSessionSwipeBackNavigationPageRenderer.cs" />
     <Compile Include="Renderers\Heading1Renderer.cs" />
     <Compile Include="Renderers\StackLayoutRenderer.cs" />
     <Compile Include="Renderers\SwipeBackNavigationPageRenderer.cs" />
