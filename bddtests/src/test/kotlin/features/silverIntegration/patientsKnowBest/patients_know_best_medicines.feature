@@ -23,14 +23,19 @@ Feature: Patients Know Best Medicines
     Then the Prescriptions Hub page is displayed
     And the PKB View Medicines link is available on the Prescriptions Hub
 
-  Scenario: A user navigates to an external partner site and will see a warning page
+  @smoketest
+  Scenario Outline: A user navigates to an external partner site and will see a warning page
     Given I am a EMIS patient
     And PKB responds to requests for medicines
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Fauth%252FmanageMedications.action%253Ftab%253Dtreatments'
+    When I navigate to the redirector page with a url of '<Redirect Path>'
     Then I am redirected to the redirector page with the header 'Hospital and other medicines'
-    When I click the 'Continue' button on the redirector page with a url starting with 'http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fauth%2FmanageMedications.action%3Ftab%3Dtreatments'
+    When I click the 'Continue' button on the redirector page with a url starting with '<Landing Page>'
     Then I am navigated to a third party site for PKB
+    Examples:
+      | Redirect Path                                                                                                                                                                                   | Landing Page                                                                                                                                |
+      | /redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Fauth%252FmanageMedications.action%253Ftab%253Dtreatments                            | http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fauth%2FmanageMedications.action%3Ftab%3Dtreatments                        |
+      | /redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Fauth%252FmanageMedications.action%253Ftab%253Dtreatments%2526contextUserId%253D4277 | http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fauth%2FmanageMedications.action%3Ftab%3Dtreatments%26contextUserId%3D4277 |
 
   Scenario: A user can follow the link to Find out more about personal health records
     Given I am a user who can view Medicines from Patients Know Best

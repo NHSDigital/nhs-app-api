@@ -98,51 +98,39 @@ describe('util library', () => {
   });
 
   describe('getThirdPartyJumpOff', () => {
-    const pkbJumpOffWithQueryString = { redirectPath: '/pkb.com/sso?jump=appointments' };
-    const ersJumpOffNoQueryString = { redirectPath: '/ers.com/login' };
-    const pkbCieEncodedPartsInQuery = {
-      redirectPath: '/nhs-login/login?phrPath=%2Ftest%2FmyTests.action&brand=cie',
-    };
+    const fullUri = { acceptablePathsRegex: '^\\/full-uri\\?param=\\/another\\/path\\?tab=appointments$' };
+    const fullUriWithOptionalValuesAfter = { acceptablePathsRegex: '^\\/full-uri\\?param=\\/another\\/path\\?tab=messages.*$' };
+    const uriPathNoQueryString = { acceptablePathsRegex: '^\\/foo/path$' };
+    const uriPathWithOptionalQueryString = { acceptablePathsRegex: '^\\/foo(\\/?\\?.*)?$' };
+
     const thirdPartyConfig = {
-      jumpOffs: [pkbJumpOffWithQueryString, ersJumpOffNoQueryString, pkbCieEncodedPartsInQuery],
+      jumpOffs: [
+        fullUri,
+        fullUriWithOptionalValuesAfter,
+        uriPathNoQueryString,
+        uriPathWithOptionalQueryString,
+      ],
     };
 
-    each([{
-      redirectPath: '/pkb.com/sso?jump=appointment', // query string value too short (missing s)
-      expectedResultMatch: '',
-    }, {
-      redirectPath: '/pkb.com/sso?jump=appointments&q=1', // unexpected extra query param
-      expectedResultMatch: '',
-    }, {
-      redirectPath: '/pkb.com/sso?q=1', // doesn't have required query param
-      expectedResultMatch: '',
-    }, {
-      redirectPath: '/pkb.com/sso', // no match as jump off defines that the url must have the query parms
-      expectedResultMatch: '',
-    }, {
-      redirectPath: '/pkb.com/sso?jump=appointments',
-      expectedResultMatch: pkbJumpOffWithQueryString,
-    }, {
-      redirectPath: '/ers.com/login',
-      expectedResultMatch: ersJumpOffNoQueryString,
-    }, {
-      redirectPath: '/ers.com/loginx', // path has extra letter
-      expectedResultMatch: '',
-    }, {
-      redirectPath: '/ers.com/logi', // path too short
-      expectedResultMatch: '',
-    }, {
-      redirectPath: '/ers.com/login?source=login',
-      expectedResultMatch: ersJumpOffNoQueryString,
-    }, {
-      redirectPath: '/nhs-login/login?phrPath=%2Ftest%2FmyTests.action&brand=cie', // encoded parts
-      expectedResultMatch: pkbCieEncodedPartsInQuery,
-    }]).it('will correctly match third party jump off points', (data) => {
+    each([
+      ['/full-uri?param=/another/path?tab=appointment', ''], // query string value too short (missing s)
+      ['/full-uri?param=/another/path?tab=appointment&q=1', ''], // unexpected extra query param
+      ['/full-uri?param=/another/path?tab=prescriptions', ''], // unknown query param
+      ['/full-uri', ''], // no match as jump off defines that the url must have the query parms
+      ['/full-uri?param=/another/path?tab=appointments', fullUri], // exact match
+      ['/full-uri?param=/another/path?tab=messages&q=1', fullUriWithOptionalValuesAfter], // extra query parameters are allowed
+      ['/full-uri?param=%2Fanother%2Fpath%3Ftab%3Dmessages%26q%3D1', fullUriWithOptionalValuesAfter], // extra query parameters are allowed (encoded)
+      ['/foo/path', uriPathNoQueryString], // exact match
+      ['/foo/path/more', ''], // path not recognised
+      ['/foo', uriPathWithOptionalQueryString], // without optional query paramaters
+      ['/foo/?param=value', uriPathWithOptionalQueryString], // extra query parameters after forward slash
+      ['/foo?param=value', uriPathWithOptionalQueryString], // extra query parameters
+    ]).it('will correctly match redirect path %s with third party jump off point', (redirectPath, expectedResultMatch) => {
       // act
-      const result = getThirdPartyJumpOff(thirdPartyConfig, data.redirectPath);
+      const result = getThirdPartyJumpOff(thirdPartyConfig, redirectPath);
 
       // assert
-      expect(result).toBe(data.expectedResultMatch);
+      expect(result).toBe(expectedResultMatch);
     });
   });
 

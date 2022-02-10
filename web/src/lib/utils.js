@@ -371,21 +371,12 @@ export const getPathAndQuery = (url) => {
   }
 };
 
-const getThirdPartyJumpOffMatchingFullUri = (thirdPartyConfig, redirectPath) => {
+const getThirdPartyJumpOffMatchingUri = (thirdPartyConfig, redirectPath) => {
   const decodedRedirectPath = decodeURIComponent(redirectPath);
   for (let i = 0; i < thirdPartyConfig.jumpOffs.length; i += 1) {
-    if (decodeURIComponent(thirdPartyConfig.jumpOffs[i].redirectPath) === decodedRedirectPath) {
-      return thirdPartyConfig.jumpOffs[i];
-    }
-  }
-  return null;
-};
+    const redirectPathRegex = new RegExp(thirdPartyConfig.jumpOffs[i].acceptablePathsRegex);
 
-const getThirdPartyJumpOffMatchingUriPath = (thirdPartyConfig, redirectPath) => {
-  const decodedRedirectPath = decodeURIComponent(redirectPath);
-  const path = decodedRedirectPath.split('?')[0];
-  for (let i = 0; i < thirdPartyConfig.jumpOffs.length; i += 1) {
-    if (decodeURIComponent(thirdPartyConfig.jumpOffs[i].redirectPath) === path) {
+    if (decodedRedirectPath.match(redirectPathRegex)) {
       return thirdPartyConfig.jumpOffs[i];
     }
   }
@@ -394,15 +385,9 @@ const getThirdPartyJumpOffMatchingUriPath = (thirdPartyConfig, redirectPath) => 
 
 export const getThirdPartyJumpOff = (thirdPartyConfig, redirectPath) => {
   if (thirdPartyConfig.jumpOffs !== undefined) {
-    const jumpOffMatchingFullUri =
-      getThirdPartyJumpOffMatchingFullUri(thirdPartyConfig, redirectPath);
+    const jumpOffMatchingFullUri = getThirdPartyJumpOffMatchingUri(thirdPartyConfig, redirectPath);
     if (jumpOffMatchingFullUri !== null) {
       return jumpOffMatchingFullUri;
-    }
-    const jumpOffMatchingUriPath =
-      getThirdPartyJumpOffMatchingUriPath(thirdPartyConfig, redirectPath);
-    if (jumpOffMatchingUriPath !== null) {
-      return jumpOffMatchingUriPath;
     }
   }
   return '';

@@ -22,14 +22,19 @@ Feature: Patients Know Best Record Sharing
     Then I see the health records hub page
     And the link to PKB record sharing is not available on the health record hub page
 
-  Scenario: A user navigates to an external partner site and will see a warning page
+  @smoketest
+  Scenario Outline: A user navigates to an external partner site and will see a warning page
     Given I am a EMIS patient
     And PKB responds to requests for record sharing
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Fpatient%252FmyConsentTeam.action%253Ftab%253Dinvitations%2526subTab%253DmyClinicians'
+    When I navigate to the redirector page with a url of '<Redirect Path>'
     Then I am redirected to the redirector page with the header 'Record Sharing'
-    When I click the 'Continue' button on the redirector page with a url starting with 'http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fpatient%2FmyConsentTeam.action%3Ftab%3Dinvitations%26subTab%3DmyClinicians'
+    When I click the 'Continue' button on the redirector page with a url starting with '<Landing Page>'
     Then I am navigated to a third party site for PKB
+    Examples:
+      | Redirect Path                                                                                                                                                                                                               | Landing Page                                                                                                                                                        |
+      | /redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Fpatient%252FmyConsentTeam.action%253Ftab%253Dinvitations%2526subTab%253DmyClinicians                            | http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fpatient%2FmyConsentTeam.action%3Ftab%3Dinvitations%26subTab%3DmyClinicians                        |
+      | /redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Fpatient%252FmyConsentTeam.action%253Ftab%253Dinvitations%2526subTab%253DmyClinicians%2526contextUserId%253D4277 | http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fpatient%2FmyConsentTeam.action%3Ftab%3Dinvitations%26subTab%3DmyClinicians%26contextUserId%3D4277 |
 
   Scenario: A user can follow the link to Find out more about personal health records
     Given I am a user who can view Record Sharing from Patients Know Best

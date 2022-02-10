@@ -37,11 +37,16 @@ Feature: Patients Know Best Messages
     When I click the link called 'Find out more about personal health record services' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/personal-health-records'
     Then a new tab has been opened by the link
 
-  Scenario: A user navigates to an external partner site and will see a warning page
+  @smoketest
+  Scenario Outline: A user navigates to an external partner site and will see a warning page
     Given I am a user who can view Messages and Online Consultations from Patients Know Best
     And PKB responds to requests for messages
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Fauth%252FgetInbox.action%253Ftab%253Dmessages'
+    When I navigate to the redirector page with a url of '<Redirect Path>'
     Then I am redirected to the redirector page with the header 'Messages and online consultations'
-    When I click the 'Continue' button on the redirector page with a url starting with 'http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages'
+    When I click the 'Continue' button on the redirector page with a url starting with '<Landing Page>'
     Then I am navigated to a third party site for PKB
+    Examples:
+      | Redirect Path                                                                                                                                                                        | Landing Page                                                                                                                     |
+      | /redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Fauth%252FgetInbox.action%253Ftab%253Dmessages                            | http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages                        |
+      | /redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Fauth%252FgetInbox.action%253Ftab%253Dmessages%2526contextUserId%253D4277 | http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages%26contextUserId%3D4277 |
