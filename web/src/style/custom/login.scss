@@ -5,3 +5,31 @@
 .appVersion {
   text-align: center;
 }
+
+.continueWithNhsLogin {
+  margin: 0;
+  padding: 0;
+
+  li {
+    list-style: none;
+    display: inline-block;
+    width: fit-content;
+
+    a {
+      display: inline-block;
+      vertical-align: top;
+      border: 4px solid transparent;
+
+      &:focus,
+      &:hover {
+        background-color: #ffeb3b !important;
+        border: 4px solid #ffeb3b !important;
+        box-shadow: 0 -2px #ffeb3b, 0 4px #212b32 !important;
+      }
+
+      img{
+        display: block;
+      }
+    }
+  }
+}

@@ -15,7 +15,7 @@ Feature: Registration and login accessibility
   Scenario: The 'Getting started' page is captured
     Given I am a patient using the native app
     When I am on the login logged-out page for the first time
-    And I click the 'Continue with NHS login' button
+    And I click the link with 'viewInstructionsButton' id
     Then the page title is 'Getting started'
     And the Login_BeforeYouStart page is saved to disk
 

@@ -1,6 +1,6 @@
 export default {
   accessYourNhsServices: 'Access your NHS services',
-  aged13AndOver: 'aged 13 and over',
+  aged13OrOver: 'aged 13 or over',
   beforeYouStart: 'Before you start',
   getYourCovidPass: 'get your NHS COVID Pass',
   bookAndManageAppointments: 'book and manage appointments',
@@ -27,9 +27,8 @@ export default {
   useThisServiceTo: 'Use this service to:',
   viewYourHealthRecord: 'view your health record securely',
   viewYourNhsNumber: 'view your NHS number',
-  whatToDoIfYouAre13To15: 'What to do if you\'re aged 13 to 15',
-  youMustBe13AndOver: 'You must be aged 13 and over to use the app, and registered at a GP surgery in England.',
-  youWillNeedToContactSurgeryToRequestAccess: 'You\'ll need to contact your GP surgery first and request access to GP online services.',
+  youMustBe13OrOver: 'You must be aged 13 or over to use the app, and registered at a GP surgery in England.',
+  findOutMoreAboutWhoCanUseTheNHSApp: 'Find out more about who can use the NHS App',
   authReturn: {
     ssoAttemptedLoginFailure: 'Failed SSO authentication attempt from referrer {referrer}',
     under13: {

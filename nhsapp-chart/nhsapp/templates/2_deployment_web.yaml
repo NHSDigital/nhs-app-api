@@ -232,6 +232,8 @@ spec:
           value: "{{ $.Values.tppSupportsTestResultV2 }}"
         - name: WELLNESS_AND_PREVENTION_PRIVACY_URL
           value: "https://hub-dev.wpalpha.clouddev.works/privacy"
+        - name: WHO_CAN_USE_APP_URL
+          value: "https://www.nhs.uk/nhs-app/nhs-app-help-and-support/getting-started-with-the-nhs-app/who-can-use-the-nhs-app/"  
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"

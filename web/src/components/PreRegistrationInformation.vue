@@ -12,36 +12,38 @@
               {{ $t('login.registeredWithSurgeryInEngland') }}
             </li>
             <li class="nhsuk-u-margin-bottom-3">
-              {{ $t('login.aged13AndOver') }}
+              {{ $t('login.aged13OrOver') }}
             </li>
           </ul>
+          <p>
+            <a :href="whoCanUseAppUrl" target="_blank" rel="noopener noreferrer">
+              {{ $t('login.findOutMoreAboutWhoCanUseTheNHSApp') }}
+            </a>
+          </p>
         </div>
         <div v-else>
-          <p>{{ $t('login.youMustBe13AndOver') }}</p>
+          <p>{{ $t('login.youMustBe13OrOver') }}</p>
         </div>
-        <collapsible-details id="age-info">
-          <template slot="header">
-            {{ $t('login.whatToDoIfYouAre13To15') }}
-          </template>
-          <p>{{ $t('login.youWillNeedToContactSurgeryToRequestAccess') }}</p>
-        </collapsible-details>
       </div>
     </div>
   </div>
 </template>
 <script>
-import CollapsibleDetails from '@/components/widgets/collapsible/CollapsibleDetails';
 
 export default {
   name: 'PreRegistrationInformation',
   components: {
-    CollapsibleDetails,
   },
   props: {
     shouldShowFullContent: {
       type: Boolean,
       default: true,
     },
+  },
+  data() {
+    return {
+      whoCanUseAppUrl: this.$store.$env.WHO_CAN_USE_APP_URL,
+    };
   },
 };
 </script>

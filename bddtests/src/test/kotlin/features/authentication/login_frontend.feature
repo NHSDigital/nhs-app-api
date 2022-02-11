@@ -41,7 +41,7 @@ Feature: Login frontend
   Scenario: A user can see the native instructions
     Given I am a patient using the native app
     When I am on the login logged-out page for the first time
-    And I click the 'Continue with NHS login' button
+    And I click the link with 'viewInstructionsButton' id
     Then the page title is 'Getting started'
     And I click the 'Continue' button
     And the page contains the header 'Integration Test Patient'
@@ -49,7 +49,7 @@ Feature: Login frontend
   Scenario: A user does not see the native instructions
     Given I am a patient using the native app
     When I am on the login logged-out page
-    And I click the 'Continue with NHS login' button
+    And I click the link with 'viewInstructionsButton' id
     Then the page contains the header 'Integration Test Patient'
 
   Scenario: A patient with proof level 5 sees no NHS number when logging in

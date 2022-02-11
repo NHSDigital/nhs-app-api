@@ -6,11 +6,20 @@
             class="nhsuk-u-margin-bottom-2 nhsuk-u-padding-left-0 nhsuk-u-padding-right-0">
           {{ $t('login.toAccessYourNhsServices') }}
         </h2>
-        <generic-button id="viewInstructionsButton"
-                        :button-classes="getButtonClasses"
-                        @click.stop.prevent="onContinueClicked">
-          {{ $t('login.continueWithNhsLogin') }}
-        </generic-button>
+        <ul :class="$style['continueWithNhsLogin']"
+            :style="[isUsingNativeApp ? {'text-align': 'center'} : {'text-align' : 'left'} ]">
+          <li>
+            <a id="viewInstructionsButton"
+               tabindex="0"
+               :aria-label="$t('login.continueWithNhsLogin')"
+               href="#"
+               @click.stop.prevent="onContinueClicked">
+              <img :alt="$t('login.continueWithNhsLogin')"
+                   src="../assets/continue-with-nhs-login.png">
+            </a>
+          </li>
+        </ul>
+        <br>
       </div>
       <div v-if="isUsingNativeApp"
            :class="[$style['nhsuk-body-s'], $style['appVersion']]">
@@ -31,13 +40,11 @@ import NativeApp from '@/services/native-app';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 import { BEGINLOGIN_PATH, PRE_REGISTRATION_INFORMATION_PATH } from '@/router/paths';
 import { REDIRECT_PARAMETER } from '@/router/names';
-import GenericButton from '@/components/widgets/GenericButton';
 import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'LoginPage',
   components: {
-    GenericButton,
     LoginLayout,
   },
   data() {
