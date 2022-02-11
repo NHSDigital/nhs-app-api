@@ -160,6 +160,7 @@
     <Compile Include="Renderers\WebViews\Extensions\PageNavigationAggregatorExtension.cs" />
     <Compile Include="Renderers\WebViews\Extensions\WebIntegrationRequestRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\IProovExtensions.cs" />
+    <Compile Include="Renderers\WebViews\NhsAppPreHomeSwipeBackNavigationPageRenderer.cs" />
     <Compile Include="Renderers\WebViews\NhsLoginOnDemandGpSessionWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\NhsLoginUpliftWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\NhsAppPreHomeScreenWebViewRenderer.cs" />
