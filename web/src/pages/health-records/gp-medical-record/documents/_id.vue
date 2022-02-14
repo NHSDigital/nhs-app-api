@@ -156,10 +156,12 @@ export default {
     this.isDownloadable = isDownloadable;
     this.loading = false;
 
-    this.$store.dispatch(
-      'log/onInfo',
-      `Accessing document type ${this.type} set to valid as ${this.isValidFile}, viewable as ${this.isValidFile && this.isViewable} and downloadable as ${this.isValidFile && this.isDownloadable}`,
-    );
+    if (store.$env.GP_MEDICAL_RECORD_DOCUMENT_INFO_LOGGING_ENABLED) {
+      this.$store.dispatch(
+        'log/onInfo',
+        `Accessing document type ${this.type} set to valid as ${this.isValidFile}, viewable as ${this.isValidFile && this.isViewable} and downloadable as ${this.isValidFile && this.isDownloadable}`,
+      );
+    }
   },
   methods: {
     navigateToView() {

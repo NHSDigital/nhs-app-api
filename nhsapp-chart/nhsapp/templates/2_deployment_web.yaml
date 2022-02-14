@@ -76,6 +76,8 @@ spec:
           value: "{{ $.Values.web.containerPort }}"
         - name: THIRD_PARTY_JUMP_OFF_LOGGING_ENABLED
           value: "{{ $.Values.web.thirdPartyJumpOffLoggingEnabled }}"
+        - name: GP_MEDICAL_RECORD_DOCUMENT_INFO_LOGGING_ENABLED
+          value: "{{ $.Values.web.gpMedicalRecordDocumentInfoLoggedEnabled }}"
         - name: ANALYTICS_ENVIRONMENT
           value: "{{ $.Values.web.analyticsEnvironment }}"
         - name: ANALYTICS_SCRIPT_URL

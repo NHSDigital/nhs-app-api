@@ -19,6 +19,7 @@ const $route = {
 const newStore = ({
   document,
   documentConsultationsWithComments = [],
+  gpMedicalRecordDocumentInfoLoggedEnabled = false,
 } = {}) => (
   createStore({
     state: {
@@ -35,6 +36,7 @@ const newStore = ({
     },
     $env: {
       CLINICAL_ABBREVIATIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/',
+      GP_MEDICAL_RECORD_DOCUMENT_INFO_LOGGING_ENABLED: gpMedicalRecordDocumentInfoLoggedEnabled,
     },
   }));
 
@@ -299,6 +301,50 @@ describe('document view', () => {
       page.vm.loading = true;
 
       expect(page.find('[data-purpose=page-content]').exists()).toBe(false);
+    });
+  });
+
+  describe('logging', () => {
+    it('will log document detail when enabled', async () => {
+      // Arrange
+      const document = {
+        term: 'Document1',
+        comments: [],
+        size: 1000000,
+        type: 'jpg',
+        date: {},
+        isValidFile: true,
+        isViewable: true,
+        isDownloadable: true,
+      };
+
+      // Act
+      const store = newStore({ document, gpMedicalRecordDocumentInfoLoggedEnabled: true });
+      await mountPage({ $store: store });
+
+      // Assert
+      expect(store.dispatch).toHaveBeenCalledWith('log/onInfo', `Accessing document type ${document.type} set to valid as ${document.isValidFile}, viewable as ${true} and downloadable as ${true}`);
+    });
+
+    it('will not log document detail when disabled', async () => {
+      // Arrange
+      const document = {
+        term: 'Document1',
+        comments: [],
+        size: 1000000,
+        type: 'jpg',
+        date: {},
+        isValidFile: true,
+        isViewable: true,
+        isDownloadable: true,
+      };
+
+      // Act
+      const store = newStore({ document, gpMedicalRecordDocumentInfoLoggedEnabled: false });
+      await mountPage({ $store: store });
+
+      // Assert
+      expect(store.dispatch).not.toHaveBeenCalledWith('log/onInfo', expect.any(String));
     });
   });
 
