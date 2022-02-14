@@ -109,14 +109,14 @@ spec:
         - name: MONGO_DB_CONNECTION_CHECK_INTERVAL_IN_SECONDS
           value: "{{ $.Values.mongoDBConnectionCheckIntervalInSeconds }}"
         - name: AUDIT_SINK_TYPE
-          value: "cosmosdb"
+          value: "{{ $.Values.auditSinkType }}"
         - name: AUDIT_EVENT_HUB_CONNECTION_STRING
           valueFrom:
             secretKeyRef:
-              name: audit-event-hub-connection-string-uks-{{ .Chart.AppVersion }}
+              name: audit-event-hub-connection-string-{{ .Chart.AppVersion }}
               key: secret
         - name: AUDIT_EVENT_HUB_NAME
-          value: {{ $.Values.info.auditEventHub }}
+          value: nhsapp-{{ $.Values.cluster }}-auditing
         - name: AUDIT_MONGO_DATABASE_COLLECTION
           value: {{ $.Values.info.mongoDatabaseInfoAuditCollection }}
         - name: USERINFO_MONGO_DATABASE_COLLECTION

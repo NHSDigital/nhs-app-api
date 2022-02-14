@@ -1,0 +1,14 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "AuditEventHubName": "{{INSERT CLUSTER NAME HERE}}-auditing",
+    "AuditEventHubConnectionDataReceiver__fullyQualifiedNamespace": "{{INSERT EVENT HUB NAMESPACE HERE}}.servicebus.windows.net",
+    "AuditEventHubConnectionDataReceiver__credential": "managedidentity",
+    "AuditEventHubConnectionDataReceiver__clientId": "{{INSERT CLIENT ID HERE}}",
+    "AuditCosmosSQLDbName": "{{INSERT DB NAME HERE}}",
+    "AuditCosmosSQLDbContainer": "audit",
+    "AuditCosmosSQLDbConnectionString": "{{INSERT CONNECTION STRING HERE}}"
+  }
+}

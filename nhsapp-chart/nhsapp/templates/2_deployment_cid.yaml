@@ -171,14 +171,14 @@ spec:
         - name: SERVICE_JOURNEY_RULES_BASE_URL
           value: "https://nhsapp-sjr-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}"
         - name: AUDIT_SINK_TYPE
-          value: "cosmosdb"
+          value: "{{ $.Values.auditSinkType }}"
         - name: AUDIT_EVENT_HUB_CONNECTION_STRING
           valueFrom:
             secretKeyRef:
-              name: audit-event-hub-connection-string-uks-{{ .Chart.AppVersion }}
+              name: audit-event-hub-connection-string-{{ .Chart.AppVersion }}
               key: secret
         - name: AUDIT_EVENT_HUB_NAME
-          value: {{ $.Values.cid.auditEventHub }}
+          value: nhsapp-{{ $.Values.cluster }}-auditing
         - name: AUDIT_MONGO_DATABASE_COLLECTION
           value: {{ $.Values.cid.mongoDatabaseAuditCollection }}
         - name: FAKE_GP_SUPPLIER_CONFIG_PATH

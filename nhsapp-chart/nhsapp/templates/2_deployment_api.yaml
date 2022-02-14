@@ -314,14 +314,14 @@ spec:
           value: "Microsoft.ApplicationInsights.Profiler.AspNetCore"
         {{- end }}
         - name: AUDIT_SINK_TYPE
-          value: "cosmosdb"
+          value: "{{ $.Values.auditSinkType }}"
         - name: AUDIT_EVENT_HUB_CONNECTION_STRING
           valueFrom:
             secretKeyRef:
-              name: audit-event-hub-connection-string-uks-{{ .Chart.AppVersion }}
+              name: audit-event-hub-connection-string-{{ .Chart.AppVersion }}
               key: secret
         - name: AUDIT_EVENT_HUB_NAME
-          value: {{ $.Values.api.auditEventHub }}
+          value: nhsapp-{{ $.Values.cluster }}-auditing
         - name: AUDIT_MONGO_DATABASE_COLLECTION
           value: {{ $.Values.api.mongoDatabaseAuditCollection }}
         - name: VERSION_TAG

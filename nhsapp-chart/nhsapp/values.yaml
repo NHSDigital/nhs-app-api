@@ -17,7 +17,7 @@ environmentStubbed: {}
 appInsightsEnabled: false
 appImageTag: v1.0.0
 environmentPerftest: {}
-cluster: {}
+cluster: ""
 clusterIP: ""
 zone: dev
 domain: ""
@@ -260,6 +260,9 @@ organdonationSubscription: cGxhY2Vob2xkZXI=
 sessionKey: cGxhY2Vob2xkZXI=
 spinePartyId: cGxhY2Vob2xkZXI=
 
+# Audit sink type (console, cosmosdb, eventhub)
+auditSinkType: cosmosdb
+
 # Splunk
 splunk:
     pidIndex: apppid_nhsapp_dev
@@ -330,7 +333,6 @@ api:
   targetCPUUtilizationPercentage: 40
   emisExtendedTimeout: 10
   mongoDatabaseAuditCollection: audit_info
-  auditEventHub: eventhub_ns_auditing
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
       value: "Production"
@@ -363,7 +365,6 @@ cid:
   cpuLimit: "1400m"
   targetCPUUtilizationPercentage: 35
   mongoDatabaseAuditCollection: audit
-  auditEventHub: eventhub_ns_auditing
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
       value: "Production"
@@ -463,7 +464,6 @@ info:
   targetCPUUtilizationPercentage: 45
   mongoDatabaseInfoCollection: info
   mongoDatabaseInfoAuditCollection: audit_info
-  auditEventHub: eventhub_ns_auditing
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
       value: "Production"
