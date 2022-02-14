@@ -899,7 +899,6 @@ horsham,Horsham and Mid Sussex,CCG,Horsham and Mid Sussex,Sussex and East Surrey
 horsham,Horsham and Mid Sussex,CCG,Horsham and Mid Sussex,Sussex and East Surrey,newtonspractice,Newtons Health Centre,H82056,12702
 horsham,Horsham and Mid Sussex,CCG,Horsham and Mid Sussex,Sussex and East Surrey,northlandswoodpractice,Northlands Wood Surgery,H82100,7989
 horsham,Horsham and Mid Sussex,CCG,Horsham and Mid Sussex,Sussex and East Surrey,orchardsurgery,Orchard Surgery,H82036,7740
-horsham,Horsham and Mid Sussex,CCG,Horsham and Mid Sussex,Sussex and East Surrey,parksurgeryhorsham,Park Surgery,H82017,23969
 horsham,Horsham and Mid Sussex,CCG,Horsham and Mid Sussex,Sussex and East Surrey,silverdalepractice,Silverdale Surgery,H82072,12968
 horsham,Horsham and Mid Sussex,CCG,Horsham and Mid Sussex,Sussex and East Surrey,meadowssurgeryburgesshill,The Meadows Surgery,H82003,9413
 hounslow,Hounslow,CCG,Hounslow,North West London,albanypractice,Albany Practice,E85004,6993
@@ -2240,7 +2239,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Thornton & Denholme Medical Practice,B83030,
 ,,,Other,,,Haigh Hall Medical Practice,B83054,
 ,,,Other,,,Shipley Medical Practice,B83063,
-,,,Other,,,North Street Surgery,B83602,
 ,,,Other,,,Sharnbrook Surgery,E81024,
 ,,,Other,,,King Street Surgery,E81038,
 ,,,Other,,,Cornwall House Surgery,E83013,
@@ -2631,8 +2629,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Dr Freeman & Partners,B86006,
 ,,,Other,,,The Elms Medical Practice,E82071,
 ,,,Other,,,Stifford Clays Medical Practice,F81192,
-,,,Other,,,Island Health,F84710,
-,,,Other,,,Dashwood Medical Centre,G82064,
 ,,,Other,,,Woodlands Medical Centre,K84043,
 ,,,Other,,,Church View Surgery,L83064,
 ,,,Other,,,Bankhouse Surgery,A81007,
@@ -2662,4 +2658,7 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Coleridge Medical Centre,L83095,
 ,,,Other,,,Knockin Medical Centre,M82020,
 ,,,Other,,,Drs Berni and Vitty,N84001,
-
+,,,Other,,,Stephenson Park Health Group,A87007,
+,,,Other,,,Hove Medical Centre,G81001,
+,,,Other,,,The Malthouse Surgery,K84027,
+,,,Other,,,Alcester Health Centre,M84049,

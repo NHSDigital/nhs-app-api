@@ -119,6 +119,8 @@ target:
     - "L85034"
     - "L85061"
     - "B84003"
+    - "B82619"
+    - "G81099"
 journeys:
   silverIntegrations:
     consultations:
