@@ -36,7 +36,7 @@ emisCertEnabled: true
 fakeGpSystemEnabled: false
 
 organDonationHostname: nhsbt-apim-dev01.azure-api.net
-organDonationPath: uat3/odr/v1/
+organDonationPath: sit6/odr/v1/
 
 patientPracticeMessagingEnabled: false
 
