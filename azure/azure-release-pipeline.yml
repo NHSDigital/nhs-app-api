@@ -44,7 +44,7 @@ extends:
           - internal_qa
       - environment: ref
         depends_on:
-          - internal-qa
+          - internal_qa
         enable_status_monitoring: false
       - environment: prod
         depends_on:
