@@ -42,6 +42,10 @@ extends:
       - environment: int
         depends_on:
           - internal_qa
+      - environment: ref
+        depends_on:
+          - internal-qa
+        enable_status_monitoring: false
       - environment: prod
         depends_on:
           - internal_qa

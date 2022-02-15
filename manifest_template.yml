@@ -6,22 +6,27 @@
 #
 #
 APIGEE_ENVIRONMENTS:
-- display_name: Internal Development
+- name: internal-dev
+  display_name: Internal Development
   make_spec_visible: true
-  name: internal-dev
-- display_name: Internal QA
+- name: internal-qa
+  display_name: Internal QA
   make_spec_visible: true
-  name: internal-qa
-- display_name: External Development
+- name: dev
+  display_name: External Development
   make_spec_visible: true
-  name: dev
-- display_name: Integration Testing
+- name: int
+  display_name: Integration Testing
   make_spec_visible: true
-  name: int
-- approval_type: manual
+- name: ref
+  display_name: Reference / Load Testing
+  make_spec_visible: true
+  quota: 120000
+  appQuota: 120000
+- name: prod
   display_name: Production
-  make_spec_visible: true
-  name: prod
+  approval_type: manual
+  make_spec_visible: true 
 ---
 meta:
   api:
@@ -49,13 +54,13 @@ apigee:
                 quota:
                   enabled: true
                   interval: 1
-                  limit: 2400
+                  limit: {{ ENV.quota | default(2400) }}
                   timeunit: minute
               app:
                 quota:
                   enabled: true
                   interval: 1
-                  limit: 1200
+                  limit: {{ ENV.appQuota | default(1200) }}
                   timeunit: minute
         description: {{ DESCRIPTION }}
         displayName: {{ TITLE }}
