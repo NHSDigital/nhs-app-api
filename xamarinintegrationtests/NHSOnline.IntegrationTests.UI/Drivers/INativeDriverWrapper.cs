@@ -7,5 +7,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         WebContextStrategies Web { get; }
         void NhsAppWebViewClosed();
         string AppVersionNumber { get; }
+        void Screenshot(string screenshotName);
     }
 }

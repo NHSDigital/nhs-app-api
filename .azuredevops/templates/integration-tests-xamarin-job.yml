@@ -5,6 +5,9 @@ parameters:
   - name: runCanaryTests
     type: boolean
     default: false 
+  - name: runFlipbookTests
+    type: boolean
+    default: false 
   - name: nativeVersion
     type: string
 
@@ -83,6 +86,7 @@ jobs:
           NATIVE_APP_PATH_IOS: "$(System.ArtifactsDirectory)/Xamarin iOS Clients/NHSOnline.App.BrowserStack.ipa"
           USE_APP_UPGRADE_CONFIG: ${{ parameters['runUpgradeTests'] }}
           CANARY_RUN: ${{ parameters['runCanaryTests'] }}
+          FLIPBOOK_RUN: ${{ parameters['runFlipbookTests'] }}
         inputs:
           scriptPath: xamarinintegrationtests/buildscripts/06_run_integration_tests.sh
 
@@ -114,7 +118,7 @@ jobs:
           scriptPath: xamarinintegrationtests/buildscripts/07_generate_integration_test_result_json.sh
 
       - task: PublishPipelineArtifact@1
-        displayName: Publish Xamarin Integration Test Artifacts
+        displayName: Publish Xamarin Integration Test Results
         condition: and(succeededOrFailed(), eq(variables['integration.tests.results.exists'], 'True'))
         inputs:
           targetPath: 'xamarinintegrationtests/TestResults'
@@ -122,8 +126,17 @@ jobs:
             artifactName: 'Xamarin Integration Canary Test Files Attempt-$(System.JobAttempt)'
           ${{ if eq(parameters['runUpgradeTests'], true) }}:
             artifactName: 'Xamarin Integration Upgrade Test Files Attempt-$(System.JobAttempt)'
-          ${{ if and(eq(parameters['runUpgradeTests'], false), eq(parameters['runCanaryTests'], false))  }}:
+          ${{ if eq(parameters['runFlipbookTests'], true) }}:
+            artifactName: 'Xamarin Integration Flipbook Test Files Attempt-$(System.JobAttempt)'
+          ${{ if and(eq(parameters['runUpgradeTests'], false), eq(parameters['runCanaryTests'], false), eq(parameters['runFlipbookTests'], false))  }}:
             artifactName: 'Xamarin Integration Test Files Attempt-$(System.JobAttempt)'
+
+      - task: PublishPipelineArtifact@1
+        displayName: Publish Xamarin Integration Test Flipbook
+        condition: and(succeededOrFailed(), eq(variables['integration.tests.results.exists'], 'True'),  eq('${{ parameters['runFlipbookTests'] }}', 'True'))
+        inputs:
+          targetPath: 'xamarinintegrationtests/flipbookgeneration/flipbook'
+          artifactName: GeneratedFlipbookScreenshots
 
       - task: PublishTestResults@2
         displayName: Publish Test Results

@@ -35,7 +35,7 @@ namespace NHSOnline.IntegrationTests.UI
 
         internal FileInfo GetTempFile(string filename) => _testTempDirectory.GetTempFile(filename);
 
-        internal void Cleanup(TestResult testResult)
+        internal void Cleanup(TestResult testResult, bool isFlipbookTest)
         {
             var testResultContext = new TestResultContext(this, testResult);
 
@@ -49,6 +49,11 @@ namespace NHSOnline.IntegrationTests.UI
             else
             {
                 _driver.UpdateBrowserStackStatusToPassed(testResultContext);
+            }
+
+            if (isFlipbookTest)
+            {
+                _driver.WriteTestDetails();
             }
 
             _driver.AddBrowserStackSessionDetailsToLogs(testResultContext, Logs);

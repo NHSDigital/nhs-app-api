@@ -44,6 +44,11 @@ parameters:
     type: boolean
     default: false
 
+  - name: runFlipbookTests
+    displayName: Run Flipbook tests and generate flipbook
+    type: boolean
+    default: false
+
   - name: securityScanEnabled
     displayName: Run Security Scans
     type: boolean
@@ -76,6 +81,7 @@ variables:
   source.tag: ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}
   native.xamarin.target: ${{ parameters.xamarinTarget }}
   native.xamarin.runXamarinBuilds: ${{ parameters.runXamarinBuilds }}
+  native.xamarin.runFlipbookTests: ${{ parameters.runFlipbookTests }}
   native.xamarin.version: '2.4.0'
   native.xamarin.ios.build.number:  $[counter(variables['native.version.number'], 1)]
   native.xamarin.android.build.number: $[counter('android', 100)]
@@ -366,6 +372,28 @@ stages:
           parameters:
             runCanaryTests: true
             nativeVersion: '$(native.xamarin.version)'
+
+    - ${{ if or(eq(variables['source.tag'], 'True'), eq(variables['native.xamarin.runFlipbookTests'], 'true')) }}:
+      - stage: xamarin_integration_flipbook_tests
+        displayName: Xamarin Integration Flipbook Tests
+        condition: succeeded()
+        dependsOn:
+          - web
+          - backend
+          - xamarin_browserstack
+        jobs:
+          - template: .azuredevops/templates/integration-tests-xamarin-job.yml
+            parameters:
+              runFlipbookTests: true
+              nativeVersion: '$(native.xamarin.version)'
+
+    - ${{ if or(eq(variables['source.tag'], 'True'), eq(variables['native.xamarin.runFlipbookTests'], 'true')) }}:
+      - stage: xamarin_integration_flipbook
+        displayName: Generate Xamarin Integration Flipbook
+        dependsOn:
+          - xamarin_integration_flipbook_tests
+        jobs:
+          - template: .azuredevops/templates/integration-tests-xamarin-job-generate-flipbook.yml
 
     - ${{ if and(ne(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
       - stage: xamarin_integration_report_generation

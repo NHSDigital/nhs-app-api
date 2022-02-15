@@ -6,6 +6,10 @@ SECURE_STUBS_SSL_CERT := ~/.nhsonline/secure-stubs-certificate/secure-stubs.crt
 
 build: $(BUILD_SCRIPTS)	## Build all integration test components
 
+generate-flipbook: ## Runs flipbook tests, build and generates the flipbook (Flipbook journeys must be ran before this)
+	FLIPBOOK_RUN='True' ./buildscripts/06_run_integration_tests.sh && \
+	./buildscripts/09_build_flipbook.sh && ./buildscripts/10_flipbook_generate.sh
+
 .PHONY: $(ALL_SCRIPTS) run run-local run-deps
 $(ALL_SCRIPTS):
 	$@
@@ -13,7 +17,7 @@ $(ALL_SCRIPTS):
 -include ../buildscripts/expand_run_options_docker_images.make
 
 $(eval $(call expand_run_options_docker_images,run))
-run: run-deps $(SECURE_STUBS_SSL_CERT)
+run: run-deps $(SECURE_STUBS_SSL_CERT) ## Run the xamarin integration tests
 	./buildscripts/06_run_integration_tests.sh
 
 $(eval $(call expand_run_options_docker_images,run-local))

@@ -18,10 +18,16 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         private readonly IAndroidInteractor _interactor;
         private readonly NativeDriverContext _nativeDriverContext;
         private readonly BrowserStackConfig _browserStackConfig;
+        private readonly FlipbookGeneration _flipbookGeneration;
 
         private TestLogs Logs { get; }
         public WebContextStrategies Web { get; }
         public string AppVersionNumber { get; }
+
+        private AndroidDevice TargetDevice { get; }
+        private AndroidOSVersion OsVersion { get; }
+
+        private int ScreenshotCounter { get; set; }
 
         internal AndroidDriverWrapper(
             string testName,
@@ -31,8 +37,13 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             AndroidOSVersion osVersion)
         {
             Logs = logs;
+            TargetDevice = targetDevice;
+            OsVersion = osVersion;
 
             _browserStackConfig = Configuration.Get<BrowserStackConfig>("BrowserStack");
+
+            _flipbookGeneration = new FlipbookGeneration(testName);
+
             var nhsAppConfig = Configuration.Get<NhsAppConfig>("NhsApp");
             var androidConfig = Configuration.Get<AndroidConfig>("Android");
 
@@ -197,6 +208,13 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             context.UpdateBrowserStackStatusToPassed(_driver, _browserStackConfig);
         }
 
+        //Write test details to file for flip book generation
+        void IDriverWrapper.WriteTestDetails()
+        {
+            _flipbookGeneration.WriteTestDetails(AppVersionNumber, TargetDevice.ToName(),
+                "Android", OsVersion.ToName());
+        }
+
         void IDriverWrapper.AddBrowserStackSessionDetailsToLogs(
             IDriverCleanupContext context, TestLogs testLogs)
         {
@@ -206,6 +224,12 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         void INativeDriverWrapper.NhsAppWebViewClosed()
         {
             Web.NhsAppWebViewClosed();
+        }
+
+        public void Screenshot(string screenshotName)
+        {
+            _flipbookGeneration.Screenshot(_driver,
+                $"{ScreenshotCounter++}{screenshotName}");
         }
 
         public void Dispose() => _driver.Dispose();

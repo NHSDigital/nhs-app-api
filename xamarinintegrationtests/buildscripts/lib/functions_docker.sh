@@ -73,7 +73,7 @@ function stop_services_under_test () {
 function destroy_services_under_test () {
   if [ -z "$TF_BUILD" ]; then
     docker rm "${DOCKER_PROJECT_NAME}_test_runner"
-    docker-compose -p "$DOCKER_PROJECT_NAME" "${DOCKER_COMPOSE_FILES_ARGS[@]}" down --volume
+    docker-compose -p "$DOCKER_PROJECT_NAME" "${DOCKER_COMPOSE_FILES_ARGS[@]}" down --volumes
   fi
 }
 

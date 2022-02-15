@@ -336,3 +336,5 @@ coverage.json
 *.trx
 TestResults
 launchSettings.json
+
+flipbookgeneration/flipbook

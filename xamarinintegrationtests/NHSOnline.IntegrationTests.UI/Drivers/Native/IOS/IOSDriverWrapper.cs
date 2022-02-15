@@ -20,11 +20,17 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
         private readonly IIOSInteractor _interactor;
         private readonly NativeDriverContext _nativeDriverContext;
         private readonly BrowserStackConfig _browserStackConfig;
+        private readonly FlipbookGeneration _flipbookGeneration;
 
         private TestLogs Logs { get; }
         public WebContextStrategies Web { get; }
 
         public string AppVersionNumber { get; }
+
+        private IOSDevice Device { get; }
+        private IOSVersion OsVersion { get; }
+
+        private int ScreenshotCounter { get; set; }
 
         internal IOSDriverWrapper(string testName,
             TestLogs logs,
@@ -33,8 +39,12 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             IOSVersion osVersion)
         {
             Logs = logs;
+            Device = device;
+            OsVersion = osVersion;
 
+            _flipbookGeneration = new FlipbookGeneration(testName);
             _browserStackConfig = Configuration.Get<BrowserStackConfig>("BrowserStack");
+
             var iosConfig = Configuration.Get<IOSConfig>("iOS");
             var nhsAppConfig = Configuration.Get<NhsAppConfig>("NhsApp");
 
@@ -206,6 +216,18 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
         void INativeDriverWrapper.NhsAppWebViewClosed()
         {
             Web.NhsAppWebViewClosed();
+        }
+
+        //Write test details to file for flip book generation
+        void IDriverWrapper.WriteTestDetails()
+        {
+            _flipbookGeneration.WriteTestDetails(AppVersionNumber, Device.ToName(),
+                "Android", OsVersion.ToName());
+        }
+
+        public void Screenshot(string screenshotName)
+        {
+            _flipbookGeneration.Screenshot(_driver, $"{ScreenshotCounter++}{screenshotName}");
         }
 
         public void Dispose() => _driver.Dispose();

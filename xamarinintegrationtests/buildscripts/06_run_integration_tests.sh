@@ -36,8 +36,12 @@ then
 elif [ "$CANARY_RUN" == 'True' ]
 then
   TEST_FILTER="TestCategory=NhsAppCanaryTest"
+elif [ "$FLIPBOOK_RUN" == 'True' ]
+then
+  rm -rf flipbookgeneration/flipbook/
+  TEST_FILTER="TestCategory=NhsAppFlipbookTest"
 else
-  TEST_FILTER='"TestCategory!=NhsAppUpgradeTest&TestCategory!=NhsAppCanaryTest"'
+  TEST_FILTER='"TestCategory!=NhsAppUpgradeTest&TestCategory!=NhsAppCanaryTest&TestCategory!=NhsAppFlipbookTest"'
 fi
 info "Using test filter ${TEST_FILTER}"
 
@@ -54,6 +58,10 @@ TESTS_EXIT_CODE=$?
 set -e
 
 docker cp int_test_test_runner:/src/TestResults/. TestResults
+
+if [ "$FLIPBOOK_RUN" == 'True' ]
+  then  docker cp int_test_test_runner:/src/flipbook/. flipbookgeneration/flipbook
+fi
 
 stop_services_under_test
 

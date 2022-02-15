@@ -1,0 +1,28 @@
+jobs:
+  - job:
+    displayName: Generate Xamarin integration test flipbook
+    steps:
+      - template: docker-login-steps.yml
+
+      - task: DownloadPipelineArtifact@2
+        inputs:
+          artifact: 'GeneratedFlipbookScreenshots'
+          path: xamarinintegrationtests/flipbookgeneration/flipbook
+
+      - task: ShellScript@2
+        displayName: Build
+        inputs:
+          scriptPath: xamarinintegrationtests/buildscripts/09_build_flipbook.sh
+
+      - task: ShellScript@2
+        displayName: Generate Xamarin integration test flipbook
+        inputs:
+          scriptPath: xamarinintegrationtests/buildscripts/10_flipbook_generate.sh
+
+      - task: PublishPipelineArtifact@1
+        displayName: Publish Xamarin tests flipbook
+        inputs:
+          artifactName: Flipbook
+          targetPath: 'xamarinintegrationtests/flipbookgeneration/flipbook'
+
+

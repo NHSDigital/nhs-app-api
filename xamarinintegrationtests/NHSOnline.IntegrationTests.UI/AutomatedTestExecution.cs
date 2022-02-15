@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
@@ -13,8 +14,11 @@ namespace NHSOnline.IntegrationTests.UI
         {
             _createDriverWrapper = driverWrapper;
         }
+
         public TestResult Execute(TestLogs logs, ITestMethod testMethod)
         {
+
+            var isFlipbookTest = testMethod.MethodInfo.GetCustomAttributes(typeof(NhsAppFlipbookTestAttribute),false).Length > 0;
 
             if (testMethod.HasInvalidParameters<TDriverWrapper>(out var errorResult))
             {
@@ -29,7 +33,7 @@ namespace NHSOnline.IntegrationTests.UI
 
                 var testResult = testMethod.Invoke(new object[] { driver });
 
-                context.Cleanup(testResult);
+                context.Cleanup(testResult, isFlipbookTest);
 
                 return testResult;
             }
