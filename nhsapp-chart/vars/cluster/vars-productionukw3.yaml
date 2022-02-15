@@ -1,0 +1,4 @@
+---
+cluster: productionukw3
+zone: production
+REGION: ukwest

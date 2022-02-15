@@ -1,0 +1,4 @@
+---
+cluster: staginguks2
+zone: staging
+REGION: uksouth

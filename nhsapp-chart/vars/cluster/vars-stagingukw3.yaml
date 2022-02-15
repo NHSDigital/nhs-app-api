@@ -1,0 +1,4 @@
+---
+cluster: stagingukw3
+zone: staging
+REGION: ukwest
