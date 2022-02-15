@@ -395,7 +395,7 @@ paths:
 
         If a recipient is an active NHS App user but has not registered a device to receive native push notifications, they will still receive the in-app message.
 
-        This endpoint allows you to specify the content that will appear in the in-app message. It does not allow you to specify the content that will appear in the associated push notification. By default the content of the associated push notification will read "You have a new message. This may contain important information.". To discuss changing this standard push notification content for your application, [contact the NHS App team](mailto:app.onboarding@nhs.net).
+        This endpoint allows you to specify the content that will appear in the in-app message. It does not allow you to specify the content that will appear in the associated push notification. By default the content of the associated push notification will read "NHS App. You have a new message.". To discuss changing this standard push notification content for your application, [contact the NHS App team](mailto:app.onboarding@nhs.net).
         
         We are considering making an enhancement to allow the sender name of the in-app message content to be dynamically included in the content of the associated push notification. This may be of benefit if your application sends communications on behalf of several NHS organisations. You can track, comment, and vote for this feature on our [interactive product backlog](https://nhs-digital-api-management.featureupvote.com/suggestions/204132/nhs-app-api-allow-push-notification-content-to-include-the-message-sender-name).
         
