@@ -96,7 +96,8 @@ namespace NHSOnline.AuditLogFunctionApp.UnitTests.Functions
                     "OnlineConsultations_Submitted",
                     "details",
                     new VersionTag("api", "web", "native"),
-                    Guid.NewGuid().ToString()));
+                    Guid.NewGuid().ToString(),
+                    "test"));
 
             _auditRecords = auditRecords.ToArray();
         }

@@ -16,7 +16,8 @@ namespace NHSOnline.Backend.Auditing
             Supplier supplier,
             string operation,
             string details,
-            VersionTag version)
+            VersionTag version,
+            string environment)
         {
             Timestamp = timestamp;
             AuditId = Guid.NewGuid().ToString();
@@ -35,6 +36,7 @@ namespace NHSOnline.Backend.Auditing
             ApiVersion = version.Api;
             WebVersion = version.Web;
             NativeVersion = version.Native;
+            Environment = environment;
         }
 
         [BsonElement]
@@ -66,5 +68,8 @@ namespace NHSOnline.Backend.Auditing
 
         [BsonElement]
         public string NativeVersion { get; private set; }
+
+        [BsonElement]
+        public string Environment { get; private set; }
     }
 }

@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         private EventHubAuditorSink _eventHubAuditorSink;
         private AuditRecord _auditRecord;
         private EventDataBatch _eventDataBatch;
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         {
             SetupAuditRecord(AuditingOperations.GetLinkedAccountsRequest);
             SetupEventDataBatch();
-            
+
             _mockEventHubProducerClient.Setup(x => x.CreateBatchAsync(It.IsAny<CreateBatchOptions>(), It.IsAny<CancellationToken>()))
                 .Throws<Exception>();
 
@@ -93,7 +93,8 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 Support.Supplier.Emis,
                 operation,
                 "details",
-                new VersionTag("api", "web", "native"));
+                new VersionTag("api", "web", "native"),
+                "test");
         }
 
         private void SetupEventDataBatch()

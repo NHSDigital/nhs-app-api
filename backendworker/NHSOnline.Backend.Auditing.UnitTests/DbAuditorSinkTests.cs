@@ -98,7 +98,8 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 Support.Supplier.Emis,
                 operation,
                 "details",
-                new VersionTag("api","web","native"));
+                new VersionTag("api","web","native"),
+                "test");
         }
     }
 }

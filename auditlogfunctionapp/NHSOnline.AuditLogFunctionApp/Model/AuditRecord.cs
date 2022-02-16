@@ -11,25 +11,27 @@ namespace NHSOnline.AuditLogFunctionApp.Model
 
         public DateTime Timestamp { get; set; }
 
-        public string AuditId { get; private set; }
+        public string AuditId { get; set; }
 
-        public string NhsLoginSubject { get; private set; }
+        public string NhsLoginSubject { get; set; }
 
-        public string NhsNumber { get; private set; }
+        public string NhsNumber { get; set; }
 
-        public bool IsActingOnBehalfOfAnother { get; private set; }
+        public bool IsActingOnBehalfOfAnother { get; set; }
 
-        public string Supplier { get; private set; }
+        public string Supplier { get; set; }
 
-        public string Operation { get; private set; }
+        public string Operation { get; set; }
 
-        public string Details { get; private set; }
+        public string Details { get; set; }
 
-        public string ApiVersion { get; private set; }
+        public string ApiVersion { get; set; }
 
-        public string WebVersion { get; private set; }
+        public string WebVersion { get; set; }
 
-        public string NativeVersion { get; private set; }
+        public string NativeVersion { get; set; }
+
+        public string Environment { get; set; }
 
         public AuditRecord(
             DateTime timestamp,
@@ -40,7 +42,8 @@ namespace NHSOnline.AuditLogFunctionApp.Model
             string operation,
             string details,
             VersionTag version,
-            string auditId
+            string auditId,
+            string environment
         )
         {
             Timestamp = timestamp;
@@ -52,14 +55,14 @@ namespace NHSOnline.AuditLogFunctionApp.Model
             Operation = operation;
             Details = details;
 
-            if (version == null)
+            if (version != null)
             {
-                return;
+                ApiVersion = version.Api;
+                WebVersion = version.Web;
+                NativeVersion = version.Native;
             }
 
-            ApiVersion = version.Api;
-            WebVersion = version.Web;
-            NativeVersion = version.Native;
+            Environment = environment;
         }
     }
 }

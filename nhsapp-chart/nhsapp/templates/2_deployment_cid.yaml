@@ -185,6 +185,8 @@ spec:
           value: "{{ $.Values.fakeGpSupplierConfigPath }}"
         - name: IM1CACHE_MONGO_DATABASE_COLLECTION
           value: im1cache
+        - name: ENVIRONMENT_NAME
+          value: {{ $.Values.global.environment }}
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"

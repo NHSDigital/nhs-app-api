@@ -523,7 +523,11 @@ namespace NHSOnline.Backend.Auditing.UnitTests
 
             var services = new ServiceCollection();
             var configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(new Dictionary<string, string> { { "AUDIT_SINK_TYPE", "FILE" } })
+                .AddInMemoryCollection(new Dictionary<string, string>
+                {
+                    { "AUDIT_SINK_TYPE", "FILE" },
+                    { "ENVIRONMENT_NAME", "TEST" }
+                })
                 .Build();
             new ServiceConfigurationModule(mockLogger.Object).ConfigureServices(services, configuration);
 

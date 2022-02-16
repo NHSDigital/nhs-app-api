@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.Auditing
             return WriteAudit(auditRecord);
         }
 
-        private Task WriteAudit(AuditRecord auditRecord)
+        private async Task WriteAudit(AuditRecord auditRecord)
         {
             if (_disposed)
             {
@@ -58,10 +58,8 @@ namespace NHSOnline.Backend.Auditing
                 auditStringBuilder.Append($" Native Version: {auditRecord.NativeVersion} |");
             }
 
-            _writer.WriteLine(auditStringBuilder.ToString());
-            _writer.Flush();
-
-            return Task.CompletedTask;
+            await _writer.WriteLineAsync(auditStringBuilder.ToString());
+            await _writer.FlushAsync();
         }
 
         public void Dispose()

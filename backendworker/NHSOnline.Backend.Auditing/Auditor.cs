@@ -22,6 +22,7 @@ namespace NHSOnline.Backend.Auditing
         private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
         private readonly IAuditSink _auditSink;
+        private readonly string _environment;
 
         public Auditor(AsyncLocal<HttpContextAuditorScope> scopeProvider, ILogger logger, IConfiguration configuration,
             IAuditSink auditSink)
@@ -30,6 +31,7 @@ namespace NHSOnline.Backend.Auditing
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _auditSink = auditSink ?? throw new ArgumentNullException(nameof(auditSink));
+            _environment = _configuration.GetOrThrow("ENVIRONMENT_NAME", _logger);
         }
 
         public async Task PreOperationAudit(string operation, string details, params object[] parameters)
@@ -121,6 +123,7 @@ namespace NHSOnline.Backend.Auditing
                 _logger,
                 () => scope.UserContext(),
                 scope.VersionTag(),
+                _environment,
                 _auditSink);
             return new AuditBuilder(state);
         }
@@ -203,7 +206,8 @@ namespace NHSOnline.Backend.Auditing
                 supplier,
                 operation,
                 details,
-                versionTag);
+                versionTag,
+                _environment);
 
             return auditRecord;
         }
@@ -225,13 +229,15 @@ namespace NHSOnline.Backend.Auditing
         {
             private readonly Func<AuditUserContext> _auditUserContext;
             private readonly VersionTag _versionTag;
+            private readonly string _environment;
 
-            public AuditBuilderState(ILogger logger, Func<AuditUserContext> auditUserContext, VersionTag versionTag, IAuditSink auditSink)
+            public AuditBuilderState(ILogger logger, Func<AuditUserContext> auditUserContext, VersionTag versionTag, string environment, IAuditSink auditSink)
             {
                 Logger = logger;
                 AuditSink = auditSink;
                 _auditUserContext = auditUserContext;
                 _versionTag = versionTag;
+                _environment = environment;
             }
 
             public ILogger Logger { get; }
@@ -252,7 +258,8 @@ namespace NHSOnline.Backend.Auditing
                     Supplier,
                     $"{Operation}_{operationSuffix}",
                     details,
-                    _versionTag);
+                    _versionTag,
+                    _environment);
 
             internal void SetContextFromScope()
             {
