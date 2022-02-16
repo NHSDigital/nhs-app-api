@@ -16,6 +16,9 @@ Xcode is required to be installed. Kainos users - Xcode can be installed via the
 
 ### Getting the iOS project to build
 - The iOS project has a provisioning profile of the 'NHS Digital' Apple developer account. This means you need to get your @nhs.net account to create an AppleID/account in Apple Developer, then get someone on the team to add you to the Apple Developer 'NHS Digital' team.
+- You can confirm you've been added by going to https://appstoreconnect.apple.com/access/users, finding and selecting your user and ensuring you have the following permissions: (you may need someone with a greater level of access to grant these):
+  - Access to Certificates, Identifiers & Profiles
+  - Access to Cloud Managed Distribution Certificate
 - Then you need this profile on your machine for Rider to pick it up. Open `XCode -> Preferences -> Accounts` and sign in with your AppleId. It will pull in your personal role and also the NHS Digital team you are now in. **NB: you must also click the box to 'Download manual profiles'.** 
 
   ![Xcode - sign in and Download Manual Profiles](Images/XcodeDownloadProfiles.png)
