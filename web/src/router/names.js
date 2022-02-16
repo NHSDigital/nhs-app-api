@@ -131,6 +131,8 @@ export const USER_RESEARCH_NAME = 'user-research';
 export const REDIRECT_PARAMETER = 'redirect_to';
 export const REDIRECT_PAGE_PARAMETER = 'redirect_to_page';
 export const INTEGRATION_REFERRER_PARAMETER = 'integration_referrer';
+export const REFERRER_PARAMETER = 'referrer';
+export const SSO_PARAMETER = 'sso';
 
 const names = [
   INDEX_NAME,
@@ -263,6 +265,8 @@ const names = [
   REDIRECT_PARAMETER,
   REDIRECT_PAGE_PARAMETER,
   INTEGRATION_REFERRER_PARAMETER,
+  REFERRER_PARAMETER,
+  SSO_PARAMETER,
 ];
 
 export const GP_PRESCRIPTION_JOURNEY_NAME = 'GP_PRESCRIPTION_JOURNEY';

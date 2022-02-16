@@ -7,6 +7,7 @@ import {
   INTERSTITIAL_REDIRECTOR_NAME,
   LOGIN_NAME,
   INTEGRATION_REFERRER_PARAMETER,
+  SSO_PARAMETER,
 } from '@/router/names';
 import { EMPTY_PATH, INTERSTITIAL_REDIRECTOR_PATH } from '@/router/paths';
 import { isAnonymous } from '@/router';
@@ -21,8 +22,9 @@ export default async ({ router, store, to, next }) => {
   if (!isAnonymous(to) && !isLoggedIn) {
     if (store.$env.SKIP_LOGGED_OUT_ENABLED) {
       if (to.query.referrer) {
-        const integrationReferrer = `?${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}`;
-        const redirectPathWithReferrer = `${santizedPath || EMPTY_PATH}${integrationReferrer}`;
+        const integrationReferrer = `${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}`;
+        const ssoParameter = `${SSO_PARAMETER}=${to.query.assertedLoginIdentity !== undefined}`;
+        const redirectPathWithReferrer = `${santizedPath || EMPTY_PATH}?${integrationReferrer}&${ssoParameter}`;
 
         if (trustedReferrers.includes(to.query.referrer.toUpperCase())) {
           const authorisationService = new AuthorisationService(store.$env);

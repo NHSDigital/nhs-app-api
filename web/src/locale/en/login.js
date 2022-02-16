@@ -31,6 +31,7 @@ export default {
   youMustBe13AndOver: 'You must be aged 13 and over to use the app, and registered at a GP surgery in England.',
   youWillNeedToContactSurgeryToRequestAccess: 'You\'ll need to contact your GP surgery first and request access to GP online services.',
   authReturn: {
+    ssoAttemptedLoginFailure: 'Failed SSO authentication attempt from referrer {referrer}',
     under13: {
       title: 'Cannot log in due to age restriction',
       mustBeOver13: 'You must be aged 13 or over to use the NHS App due to legal restrictions.',

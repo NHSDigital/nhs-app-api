@@ -166,9 +166,27 @@ describe('middleware/auth', () => {
           await callAuth(to);
           expect(generateLoginUrlMock).toBeCalledWith({
             cookies: store.$cookies,
-            redirectTo: `/patient/${to.path}?integration_referrer=NHS_UK`,
+            redirectTo: `/patient/${to.path}?integration_referrer=NHS_UK&sso=false`,
             singleSignOnDetails: {
               assertedLoginIdentity: undefined,
+              prompt: 'none',
+            },
+          });
+          expect(window.location.href).toBe(generatedLoginUrl);
+          expect(next).not.toBeCalled();
+        });
+      });
+
+      describe('referrer is valid and is appended to path and assertedLoginIdentity is present', () => {
+        it('will skip the login page, retain the referrer param and attach the sso query param', async () => {
+          to.path = BOOKING.path;
+          to.query.assertedLoginIdentity = 'myToken';
+          await callAuth(to);
+          expect(generateLoginUrlMock).toBeCalledWith({
+            cookies: store.$cookies,
+            redirectTo: `/patient/${to.path}?integration_referrer=NHS_UK&sso=true`,
+            singleSignOnDetails: {
+              assertedLoginIdentity: to.query.assertedLoginIdentity,
               prompt: 'none',
             },
           });
@@ -191,13 +209,24 @@ describe('middleware/auth', () => {
         store.$env.SKIP_LOGGED_OUT_ENABLED = true;
         delete window.location;
         window.location = {};
+        to.query.assertedLoginIdentity = undefined;
       });
 
       describe('referrer is invalid and path is valid', () => {
-        it('will be redirected to logged out home page and referrer value is retained', async () => {
+        it('will be redirected to logged out home page, referrer value is retained and sso is added', async () => {
           to.path = BOOKING.path;
           await callAuth(to);
-          const query = { [REDIRECT_PARAMETER]: `/patient/${BOOKING.path}?${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}` };
+          const query = { [REDIRECT_PARAMETER]: `/patient/${BOOKING.path}?${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}&sso=false` };
+          expect(next).toBeCalledWith({ name: LOGIN_NAME, query });
+        });
+      });
+
+      describe('referrer is invalid, path is valid and assertedLoginIdentity is present', () => {
+        it('will be redirected to logged out home page, referrer value is retained and sso will be true', async () => {
+          to.path = BOOKING.path;
+          to.query.assertedLoginIdentity = 'myToken';
+          await callAuth(to);
+          const query = { [REDIRECT_PARAMETER]: `/patient/${BOOKING.path}?${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}&sso=true` };
           expect(next).toBeCalledWith({ name: LOGIN_NAME, query });
         });
       });
@@ -207,7 +236,7 @@ describe('middleware/auth', () => {
           to.path = 'invalid-path';
           dependancy.pathWithPatientPrefixOrUndefined.mockImplementation(undefined);
           await callAuth(to);
-          const query = { [REDIRECT_PARAMETER]: `/?${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}` };
+          const query = { [REDIRECT_PARAMETER]: `/?${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}&sso=false` };
           expect(next).toBeCalledWith({ name: LOGIN_NAME, query });
         });
       });
@@ -217,7 +246,7 @@ describe('middleware/auth', () => {
           to.path = EMPTY_PATH;
           dependancy.pathWithPatientPrefixOrUndefined.mockImplementation(undefined);
           await callAuth(to);
-          const query = { [REDIRECT_PARAMETER]: `/?${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}` };
+          const query = { [REDIRECT_PARAMETER]: `/?${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}&sso=false` };
           expect(next).toBeCalledWith({ name: LOGIN_NAME, query });
         });
       });

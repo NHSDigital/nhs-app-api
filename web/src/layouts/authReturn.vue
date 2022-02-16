@@ -265,7 +265,12 @@ import Spinner from '@/components/widgets/Spinner';
 import WebHeader from '@/components/widgets/WebHeader';
 import WebFooter from '@/components/widgets/WebFooter';
 import { LOGIN_PATH } from '@/router/paths';
-import { GP_SESSION_ON_DEMAND_RETURN_NAME } from '@/router/names';
+import {
+  GP_SESSION_ON_DEMAND_RETURN_NAME,
+  REDIRECT_PARAMETER,
+  INTEGRATION_REFERRER_PARAMETER,
+  REFERRER_PARAMETER,
+} from '@/router/names';
 import { CONSENT_NOT_GIVEN_DESCRIPTION } from '@/lib/utils';
 
 export default {
@@ -330,6 +335,19 @@ export default {
       return this.$store.state.device.isNativeApp;
     },
     loginUrl() {
+      if (this.$store.$env.SKIP_LOGGED_OUT_ENABLED) {
+        const stateInfo = this.$route.query.state;
+        if (typeof stateInfo === 'string') {
+          const paramsIndex = stateInfo.indexOf('?');
+          if (paramsIndex >= 0) {
+            const redirectTo = stateInfo.substring(0, paramsIndex);
+            const urlSearchParams = new URLSearchParams(stateInfo.substring(paramsIndex));
+            const referrer = urlSearchParams.get(INTEGRATION_REFERRER_PARAMETER);
+
+            return `${LOGIN_PATH}?${REDIRECT_PARAMETER}=${redirectTo}&${REFERRER_PARAMETER}=${referrer}`;
+          }
+        }
+      }
       return LOGIN_PATH;
     },
     mainClass() {

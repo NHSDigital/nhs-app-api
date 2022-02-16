@@ -25,6 +25,7 @@ describe('authReturn layout', () => {
     shallow = false,
     hasConnectionProblem = true,
     query = {},
+    skippedLoggedOutPage = false,
   }) => mount(AuthReturnLayout, {
     shallow,
     mocks: {
@@ -44,6 +45,7 @@ describe('authReturn layout', () => {
         COVID_PASS_URL: 'https://www.nhs.uk/conditions/coronavirus-covid-19/covid-pass',
         COVID_PASS_LETTER_URL: 'http://test/covid-letter',
         COVID_STATUS_URL: 'http://test/covid-online',
+        SKIP_LOGGED_OUT_ENABLED: skippedLoggedOutPage,
       },
       state: {
         appVersion: {
@@ -103,6 +105,21 @@ describe('authReturn layout', () => {
         it('will go to /login when clicked', () => {
           link.trigger('click');
           expect(goToUrl).toBeCalledWith('/login');
+        });
+
+        it('will retain referrer and redirect_to parameters', () => {
+          wrapper = mountAuthReturnLayout({
+            status,
+            skippedLoggedOutPage: true,
+            query: {
+              state: 'deep_link?integration_referrer=nhs_uk',
+            },
+          });
+          container = wrapper.find('[data-purpose=error-container]');
+          link = container.findAll('a').at(2);
+
+          link.trigger('click');
+          expect(goToUrl).toBeCalledWith('/login?redirect_to=deep_link&referrer=nhs_uk');
         });
       });
 

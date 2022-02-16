@@ -5,7 +5,7 @@ import { removeCookies } from '@/lib/cookie-manager';
 import get from 'lodash/fp/get';
 import { GP_SESSION_ERROR_STATUS, createLocalError } from '@/lib/utils';
 import generic from '@/locale/en/generic';
-import { INTEGRATION_REFERRER_PARAMETER } from '@/router/names';
+import { INTEGRATION_REFERRER_PARAMETER, SSO_PARAMETER } from '@/router/names';
 import { AUTH_RESPONSE, INIT_AUTH, LOGOUT, UPDATE_CONFIG, ADD_GP_SESSION_ERROR } from './mutation-types';
 
 const thirtySeconds = 30000;
@@ -61,17 +61,25 @@ const logoutCleanUp = ({ self }) => {
   removeSessionCookies(self);
 };
 
-const getIntegrationReferrer = (nhsLoginResponse) => {
+const getParamValue = (nhsLoginResponse, paramName) => {
   if (nhsLoginResponse.state) {
     const paramsIndex = nhsLoginResponse.state.indexOf('?');
     if (paramsIndex >= 0) {
       const urlSearchParams = new URLSearchParams(nhsLoginResponse.state.substring(paramsIndex));
-      const integrationReferrer = urlSearchParams.get(INTEGRATION_REFERRER_PARAMETER);
-      return integrationReferrer;
+      return urlSearchParams.get(paramName);
     }
   }
   return null;
 };
+
+const getIntegrationReferrer = nhsLoginResponse =>
+  getParamValue(nhsLoginResponse, INTEGRATION_REFERRER_PARAMETER);
+
+const attemptedLoginWithSSO = nhsLoginResponse =>
+  (getParamValue(nhsLoginResponse, SSO_PARAMETER) === 'true');
+
+const failedSSOLoginMessage = ({ self, nhsLoginResponse }) =>
+  self.app.$t('login.authReturn.ssoAttemptedLoginFailure', { referrer: getIntegrationReferrer(nhsLoginResponse) });
 
 const createSessionRequest = (state, rootState, nhsLoginResponse) => {
   const { codeVerifier, redirectUri: redirectUrl } = state.config || {};
@@ -181,6 +189,9 @@ export default {
 
       commit(AUTH_RESPONSE, response.data);
     } catch (error) {
+      if (attemptedLoginWithSSO(nhsLoginResponse)) {
+        await this.dispatch('log/onInfo', failedSSOLoginMessage({ self: this, nhsLoginResponse }));
+      }
       this.dispatch('errors/addApiError', error);
     } finally {
       cleanupSession({ self: this });

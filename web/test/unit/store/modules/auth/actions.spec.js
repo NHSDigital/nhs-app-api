@@ -294,6 +294,46 @@ describe('actions', () => {
     });
   });
 
+  describe('handle postV1Session failure', () => {
+    const mockNowDate = new Date(1634116386906);
+    const rootState = {};
+    const error = { response: { status: 502 } };
+    const nhsLoginResponse = {};
+
+    beforeEach(async () => {
+      const $t = jest.fn().mockImplementation((key, { referrer }) => {
+        switch (key) {
+          case 'login.authReturn.ssoAttemptedLoginFailure':
+            return `Failed SSO authentication attempt from referrer ${referrer}`;
+          default:
+            return undefined;
+        }
+      });
+
+      actions.app = {
+        $http: {
+          postV1Session: jest.fn(() => Promise.reject(error)),
+        },
+        $t,
+      };
+
+      mockdate.set(mockNowDate);
+    });
+
+    it('will log a message when sso is true', async () => {
+      nhsLoginResponse.state = 'path?integration_referrer=nhs_uk&sso=true';
+      await actions.handleAuthResponse({ commit, state, rootState }, nhsLoginResponse);
+
+      expect(actions.dispatch).toHaveBeenCalledWith('log/onInfo', 'Failed SSO authentication attempt from referrer nhs_uk');
+    });
+
+    it('will not log a message when sso is false', async () => {
+      nhsLoginResponse.state = 'path?integration_referrer=nhs_uk&sso=false';
+      await actions.handleAuthResponse({ commit, state, rootState }, nhsLoginResponse);
+
+      expect(actions.dispatch).not.toHaveBeenCalledWith('log/onInfo', 'Failed SSO authentication attempt from referrer nhs_uk');
+    });
+  });
 
   describe('ensureAccessToken', () => {
     let expiryDate;
