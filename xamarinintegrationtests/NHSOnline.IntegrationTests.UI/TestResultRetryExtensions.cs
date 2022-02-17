@@ -128,6 +128,11 @@ namespace NHSOnline.IntegrationTests.UI
             @"(?=.*No IWebElement found matching\b)(?=.*File selected\b).*",
             RegexOptions.Compiled);
 
+        // Photo capture problems that can be re-ran
+        private static readonly Regex CannotFindPhotoCaptured = new(
+            @"(?=.*No IWebElement found matching\b)(?=.*Photo captured\b).*",
+            RegexOptions.Compiled);
+
         private static readonly Regex CannotFindPhotosLabelInPhotoScreen = new(
             @"No IOSElement found matching ByIosNSPredicate\(type == 'XCUIElementTypeStaticText' AND label == 'Photos'\)*",
             RegexOptions.Compiled);
@@ -168,7 +173,8 @@ namespace NHSOnline.IntegrationTests.UI
             (CannotFindFileSelectedInUploadScreen, RetryStatus.Retry(nameof(CannotFindFileSelectedInUploadScreen))),
             (CannotFindPhotosLabelInPhotoScreen, RetryStatus.Retry(nameof(CannotFindPhotosLabelInPhotoScreen))),
             (CannotFindPhotosButtonInPhotoScreen, RetryStatus.Retry(nameof(CannotFindPhotosButtonInPhotoScreen))),
-            (CannotChooseButtonInPhotoScreen, RetryStatus.Retry(nameof(CannotChooseButtonInPhotoScreen)))
+            (CannotChooseButtonInPhotoScreen, RetryStatus.Retry(nameof(CannotChooseButtonInPhotoScreen))),
+            (CannotFindPhotoCaptured, RetryStatus.Retry(nameof(CannotFindPhotoCaptured)))
         };
 
         internal static RetryStatus ShouldRetry(this TestResult result, TestLogs logs)
