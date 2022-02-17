@@ -21,9 +21,9 @@ Feature: Account and Settings Hub
     And I am logged in
     When I navigate to the Account and settings page
     Then the Account and settings Hub page is displayed
-    And the Manage NHS login account link is displayed
-    When I click the Manage NHS login account link on the account and settings page
-    Then the nhs login account settings page has opened in a new tab
+    And the Manage NHS account link is displayed
+    When I click the Manage NHS account link on the account and settings page
+    Then the nhs account settings page has opened in a new tab
 
   Scenario: A patient can navigate to the manage notifications page on their native device
     Given I am a EMIS patient using the native app
@@ -56,7 +56,7 @@ Feature: Account and Settings Hub
     Then the More page is displayed
     And I click the Account and settings link on the More page
     And the Legal and cookies link is displayed
-    And the Manage NHS login account link is displayed
+    And the Manage NHS account link is displayed
     Examples:
       | Gp System |
       | EMIS      |

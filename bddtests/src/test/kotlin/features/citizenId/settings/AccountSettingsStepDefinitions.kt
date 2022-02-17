@@ -12,8 +12,8 @@ class AccountSettingsStepDefinitions {
 
     lateinit var accountSettings: AccountSettingsPage
 
-    @Then("^the nhs login account settings page has opened in a new tab$")
-    fun theNhsLoginAccountSettingsPageHasOpened() {
+    @Then("^the nhs account settings page has opened in a new tab$")
+    fun theNhsAccountSettingsPageHasOpened() {
         browser.changeTab(accountSettings.url, true)
         accountSettings.assertTitleVisible()
     }

@@ -23,9 +23,9 @@ class AccountAndSettingsHubStepDefinitions {
         accountAndSettingsPage.assertDisplayed()
     }
 
-    @Then("^the Manage NHS login account link is displayed$")
-    fun theManageNHSLoginAccountLinkIsDisplayed() {
-        accountAndSettingsPage.assertManageNHSLoginAccountIsPresent()
+    @Then("^the Manage NHS account link is displayed$")
+    fun theManageNHSAccountLinkIsDisplayed() {
+        accountAndSettingsPage.assertManageNHSAccountIsPresent()
     }
 
     @Then("^the Manage notifications link is displayed$")
@@ -70,7 +70,7 @@ class AccountAndSettingsHubStepDefinitions {
             "Touch ID" -> accountAndSettingsPage.touchIDLink.click()
             "Fingerprint" -> accountAndSettingsPage.fingerprintLink.click()
             "Fingerprint, face or iris" -> accountAndSettingsPage.fingerprintFaceOrIrisLink.click()
-            "Manage NHS login account" -> accountAndSettingsPage.manageNhsLoginAccountLink.click()
+            "Manage NHS account" -> accountAndSettingsPage.manageNhsAccountLink.click()
             "Manage notifications" -> accountAndSettingsPage.manageNotificationsLink.click()
             "Legal and cookies" -> accountAndSettingsPage.legalAndCookiesLink.click()
         }

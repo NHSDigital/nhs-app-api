@@ -86,8 +86,8 @@ describe('Account and Settings Page', () => {
           expect(wrapper.findAll('li').at(0).text()).toContain('Login options');
         });
       }
-      it('will have a manage nhs login account link', () => {
-        expect(wrapper.findAll('li').at(1).text()).toContain('Manage NHS login account');
+      it('will have a manage nhs account link', () => {
+        expect(wrapper.findAll('li').at(1).text()).toContain('Manage NHS account');
       });
       it('will have a manage notifications link', () => {
         expect(wrapper.findAll('li').at(2).text()).toContain('Manage notifications');
@@ -96,8 +96,8 @@ describe('Account and Settings Page', () => {
         expect(wrapper.findAll('li').at(3).text()).toContain('Legal and cookies');
       });
     } else {
-      it('will have a manage nhs login account link', () => {
-        expect(wrapper.findAll('li').at(0).text()).toContain('Manage NHS login account');
+      it('will have a manage nhs account link', () => {
+        expect(wrapper.findAll('li').at(0).text()).toContain('Manage NHS account');
       });
       it('will have a legal and cookies link', () => {
         expect(wrapper.findAll('li').at(1).text()).toContain('Legal and cookies');

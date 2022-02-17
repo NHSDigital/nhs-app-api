@@ -84,7 +84,7 @@ describe('AccountAndSettings', () => {
     });
 
     it('NHS login has the correct text', () => {
-      expect(nhsLoginLink.text()).toBe('Manage NHS login account');
+      expect(nhsLoginLink.text()).toBe('Manage NHS account');
     });
 
     it('can see Notifications', () => {

@@ -1,5 +1,5 @@
 export default {
   legalAndCookies: 'Legal and cookies',
-  manageNhsLoginAccount: 'Manage NHS login account',
+  manageNhsAccount: 'Manage NHS account',
   manageNotifications: 'Manage notifications',
 };

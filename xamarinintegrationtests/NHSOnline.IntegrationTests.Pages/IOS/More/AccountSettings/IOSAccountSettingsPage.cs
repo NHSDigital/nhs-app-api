@@ -38,7 +38,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.More.AccountSettings
 
         private IOSLink LegalAndCookiesMenuItem => IOSLink.WithText(_interactor, "Legal and cookies");
 
-        private IOSLink NhsLoginSettingsMenuItem => IOSLink.WithText(_interactor, "Manage NHS login account");
+        private IOSLink NhsLoginSettingsMenuItem => IOSLink.WithText(_interactor, "Manage NHS account");
 
         private IOSLink NotificationsSettingsMenuItem => IOSLink.WithText(_interactor, "Manage notifications");
 

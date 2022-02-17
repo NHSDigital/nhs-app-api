@@ -19,7 +19,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
 
         private WebMenuItem BiometricMenuItem => WebMenuItem.WithTitle(_interactor, "Fingerprint, face or iris");
 
-        private WebMenuItem ManageNhsLoginMenuItem => WebMenuItem.WithTitle(_interactor, "Manage NHS login account");
+        private WebMenuItem ManageNhsLoginMenuItem => WebMenuItem.WithTitle(_interactor, "Manage NHS account");
 
         private WebMenuItem ManageNotificationsMenuItem => WebMenuItem.WithTitle(_interactor, "Manage notifications");
 

@@ -9,8 +9,8 @@
     <menu-item id="btn_nhsLogin"
                :header-tag="headerTag"
                :target="(isNativeApp ? '_parent' : '_blank')"
-               :text="$t('accountAndSettings.manageNhsLoginAccount')"
-               :aria-label="$t('accountAndSettings.manageNhsLoginAccount')"
+               :text="$t('accountAndSettings.manageNhsAccount')"
+               :aria-label="$t('accountAndSettings.manageNhsAccount')"
                :click-func="goToNHSSettings"/>
     <menu-item v-if="showNotifications"
                id="btn_notificationOptions"

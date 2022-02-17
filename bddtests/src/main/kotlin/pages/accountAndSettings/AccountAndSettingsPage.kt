@@ -19,7 +19,7 @@ class AccountAndSettingsPage : HybridPageObject() {
 
     val settings = AccountSettingsModule(this)
 
-    val manageNhsLoginAccountLink = link("Manage NHS login account")
+    val manageNhsAccountLink = link("Manage NHS account")
     val legalAndCookiesLink = link("Legal and cookies")
     val loginAndPasswordOptionsLink = link("Login options")
     val faceIDLink = link("Face ID")
@@ -30,7 +30,7 @@ class AccountAndSettingsPage : HybridPageObject() {
 
     fun assertDisplayed() {
         title.waitForElement()
-        manageNhsLoginAccountLink.assertIsVisible()
+        manageNhsAccountLink.assertIsVisible()
         legalAndCookiesLink.assertIsVisible()
     }
 
@@ -54,8 +54,8 @@ class AccountAndSettingsPage : HybridPageObject() {
         fingerprintFaceOrIrisLink.assertIsVisible()
     }
 
-    fun assertManageNHSLoginAccountIsPresent() {
-        manageNhsLoginAccountLink.assertIsVisible()
+    fun assertManageNHSAccountIsPresent() {
+        manageNhsAccountLink.assertIsVisible()
     }
 
     fun assertManageNotificationsIsPresent() {
