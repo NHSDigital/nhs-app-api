@@ -18,6 +18,8 @@
       :items="options"
       :render-as-html="renderAsHtml"
       :disable-fieldset="true"
+      :current-value="currentChoice"
+      @onselect="selected"
     />
   </span>
 </template>
@@ -77,6 +79,9 @@ export default {
   computed: {
     validValues() {
       return this.options.map(o => o.code);
+    },
+    currentChoice() {
+      return this.selectedValue;
     },
     ariaDescribed() {
       const ariaDescribedContent = [

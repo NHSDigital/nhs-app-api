@@ -22,6 +22,7 @@
           :error="showErrors"
           :error-text="$t('nominatedPharmacy.chooseType.errorMessage')"
           :items="radioButtons"
+          :current-value="currentChoice"
           @selected="selected"
         />
       </div>
