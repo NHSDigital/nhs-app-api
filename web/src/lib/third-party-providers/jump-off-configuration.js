@@ -219,7 +219,7 @@ const thirdPartyProvider = {
     medicines: {
       acceptablePathsRegex: '^\\/nhs-login\\/login\\?phrPath=\\/auth\\/manageMedications\\.action.*$',
       jumpOffId: 'medicines',
-      redirectPath: '/nhs-login/login?phrPath=%2Fauth%2FmanageMedications.action%3Ftab%3Ftreatments',
+      redirectPath: '/nhs-login/login?phrPath=%2Fauth%2FmanageMedications.action%3Ftab%3Dtreatments',
       provider: 'pkb',
       serviceType: 'medicines',
     },
