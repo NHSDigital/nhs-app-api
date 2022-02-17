@@ -103,9 +103,9 @@ api:
     servicesV3__netCompany__url: https://stdevpistatic01.z33.web.core.windows.net
 
 sidecar_proxy:
-  memoryRequest: "128Mi"
+  memoryRequest: "32Mi"
   memoryLimit: "256Mi"
-  cpuRequest: "125m"
+  cpuRequest: "10m"
   cpuLimit: "250m"
 
 web:
@@ -114,7 +114,7 @@ web:
   maxReplicas: 1
   memoryRequest: "20Mi"
   memoryLimit: "40Mi"
-  cpuRequest: "100m"
+  cpuRequest: "10m"
   cpuLimit: "200m"
   targetCPUUtilizationPercentage: 45
 
@@ -122,9 +122,9 @@ cid:
   minAvailable: 0
   minReplicas: 1
   maxReplicas: 1
-  memoryRequest: "256Mi"
+  memoryRequest: "32Mi"
   memoryLimit: "400Mi"
-  cpuRequest: "100m"
+  cpuRequest: "10m"
   cpuLimit: "200m"
   targetCPUUtilizationPercentage: 35
 
@@ -132,9 +132,9 @@ logger:
   minAvailable: 0
   minReplicas: 1
   maxReplicas: 1
-  memoryRequest: "64Mi"
+  memoryRequest: "32Mi"
   memoryLimit: "128Mi"
-  cpuRequest: "100m"
+  cpuRequest: "10m"
   cpuLimit: "200m"
   targetCPUUtilizationPercentage: 45
 
@@ -142,9 +142,9 @@ cdsswiremock:
   minAvailable: 0
   minReplicas: 1
   maxReplicas: 1
-  memoryRequest: "256Mi"
+  memoryRequest: "32Mi"
   memoryLimit: "512Mi"
-  cpuRequest: "125m"
+  cpuRequest: "10m"
   cpuLimit: "250m"
   targetCPUUtilizationPercentage: 45
 
@@ -154,7 +154,7 @@ iproxy:
   maxReplicas: 1
   memoryRequest: "20Mi"
   memoryLimit: "40Mi"
-  cpuRequest: "100m"
+  cpuRequest: "10m"
   cpuLimit: "250m"
   targetCPUUtilizationPercentage: 45
 
@@ -162,9 +162,9 @@ wiremock:
   minAvailable: 0
   minReplicas: 1
   maxReplicas: 4
-  memoryRequest: "1024Mi"
+  memoryRequest: "32Mi"
   memoryLimit: "4096Mi"
-  cpuRequest: "500m"
+  cpuRequest: "10m"
   cpuLimit: "2"
   targetCPUUtilizationPercentage: 35
 
@@ -172,9 +172,9 @@ users:
   minAvailable: 0
   minReplicas: 1
   maxReplicas: 1
-  memoryRequest: "64Mi"
+  memoryRequest: "32Mi"
   memoryLimit: "128Mi"
-  cpuRequest: "100m"
+  cpuRequest: "10m"
   cpuLimit: "200m"
   notificationHubs:
     - notificationHubPath: nhsapp-nonlive-preview
@@ -184,9 +184,9 @@ info:
   minAvailable: 0
   minReplicas: 1
   maxReplicas: 1
-  memoryRequest: "64Mi"
+  memoryRequest: "32Mi"
   memoryLimit: "128Mi"
-  cpuRequest: "100m"
+  cpuRequest: "10m"
   cpuLimit: "200m"
   targetCPUUtilizationPercentage: 45
 
@@ -194,9 +194,9 @@ sjr:
   minAvailable: 0
   minReplicas: 1
   maxReplicas: 1
-  memoryRequest: "150Mi"
+  memoryRequest: "32Mi"
   memoryLimit: "256Mi"
-  cpuRequest: "100m"
+  cpuRequest: "10m"
   cpuLimit: "200m"
   targetCPUUtilizationPercentage: 45
   targetMemoryUtilizationPercentage: 80
@@ -205,9 +205,9 @@ sjrconfig:
   minAvailable: 0
   minReplicas: 1
   maxReplicas: 1
-  memoryRequest: "256Mi"
+  memoryRequest: "32Mi"
   memoryLimit: "512Mi"
-  cpuRequest: "125m"
+  cpuRequest: "10m"
   cpuLimit: "250m"
   targetCPUUtilizationPercentage: 45
   targetMemoryUtilizationPercentage: 80
