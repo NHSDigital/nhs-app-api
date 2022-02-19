@@ -52,16 +52,16 @@ target:
 journeys:
   silverIntegrations:
     carePlans:
-      - pkbCie
+      - pkb
     libraries:
-      - pkbCie
+      - pkb
     medicines:
-      - pkbCie
+      - pkb
     messages:
-      - pkbCie
+      - pkb
     secondaryAppointments:
-      - pkbCie
+      - pkb
     healthTrackers:
-      - pkbCie
+      - pkb
     testResults:
-      - pkbCie
+      - pkb
