@@ -12,7 +12,7 @@ description: |
     * Heading 3 \#\#\# Heading 3
 
   * Lists
-    * Bullet list:
+    * Bulleted list:
 
       \* Item1
 
@@ -20,13 +20,13 @@ description: |
 
       \* Item3
 
-  * Ordered lists
+    * Ordered lists
 
-    1\. Item1
+      1\. Item1
 
-    2\. Item2
+      2\. Item2
 
-    3\. Item3
+      3\. Item3
 
   * Links with text \[Link text](https://en.wikipedia.org/wiki/Markdown)
   * Links with title \[Link text](https://en.wikipedia.org/wiki/Markdown\, "Title text")
