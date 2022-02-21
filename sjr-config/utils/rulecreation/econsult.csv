@@ -1034,7 +1034,6 @@ kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,theramegrouppractice,T
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,roselandsurgeries,The Roseland Surgeries,L82048,3637
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,thestennacksurgery,The Stennack Surgery,Y01922,12250
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,threespiresmedicalp,The Three Spires Medical Practice,L82028,16058
-kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,veorsurgery,Veor Surgery,L82044,7500
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,wadebridgedoctors,Wadebridge and Camel Estuary Practice,L82004,7150
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,westoversurgery,Westover Surgery,L82622,7689
 kilburnnetwork,Kilburn Network,ORGANISATION,Brent,North West London,chicheleroadsurgery,Chichele Road Surgery,E84674,5800
@@ -1802,7 +1801,6 @@ towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North Ea
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,thegroveroadsurgery,The Grove Road Surgery,F84055,3799
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,thespitalfieldspractice,The Spitalfields Practice,F84081,13378
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,wappinggrouppractice,The Wapping Group Practice,F84079,9981
-trafford,Trafford,CCG,Trafford,Greater Manchester,delameremedicalpractice,The Delamere Medical Practice,P91018,13625
 valeroyal,Vale Royal,CCG,Vale Royal,Cheshire and Merseyside,highstreetmedicalpractice,High Street Medical Practice,N81040,6000
 valeroyal,Vale Royal,CCG,Vale Royal,Cheshire and Merseyside,middlewichroadsurgery,Middlewich Road Surgery,N81113,7000
 valeroyal,Vale Royal,CCG,Vale Royal,Cheshire and Merseyside,oakwoodmedicalcentrebarnton,Oakwood Medical Centre,N81067,9000
@@ -2041,7 +2039,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,LINCOLN HOUSE SURGERY,N84037,
 ,,,Other,,,Dr A Patel Surgery,F82686,
 ,,,Other,,,Brompton Medical Centre,E87746,
-,,,Other,,,Scarsdale Medical Centre,E87715,
 ,,,Other,,,The Upstairs Surgery,F82019,
 ,,,Other,,,Acrefield Surgery,E86615,
 ,,,Other,,,Kennedy Way Surgery,L81042,
@@ -2254,7 +2251,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Chevin Medical Practice,B86032,
 ,,,Other,,,Priory Medical Practice,E81049,
 ,,,Other,,,Rothesay Surgery,E81611,
-,,,Other,,,Cuffley and Goffs Oak Medical Practice,E82081,
 ,,,Other,,,Mandeville Medical Centre,E85108,
 ,,,Other,,,Connaught Square Practice,E87037,
 ,,,Other,,,Millbank Medical Centre,E87739,
@@ -2662,3 +2658,9 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Hove Medical Centre,G81001,
 ,,,Other,,,The Malthouse Surgery,K84027,
 ,,,Other,,,Alcester Health Centre,M84049,
+,,,Other,,,Ling House Medical Centre,B83008,
+,,,Other,,,London Road Surgery,F81041,
+,,,Other,,,Park Surgery,H82017,
+,,,Other,,,Loxwood Medical Practice,H82031,
+,,,Other,,,St Peter's Surgery,J82208,
+,,,Other,,,Pinfold Medical,M91650,
