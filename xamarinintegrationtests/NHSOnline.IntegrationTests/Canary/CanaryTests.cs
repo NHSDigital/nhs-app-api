@@ -6,6 +6,7 @@ using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.Android.More;
 using NHSOnline.IntegrationTests.Pages.Android.WebIntegration;
+using NHSOnline.IntegrationTests.Pages.Android.YourHealth;
 using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
@@ -78,6 +79,15 @@ namespace NHSOnline.IntegrationTests.Canary
 
             AndroidPkbPage
                 .AssertOnPage(driver, PhrPath.ViewAppointments)
+                .AssertNativeHeader()
+                .Navigation.NavigateToYourHealth();
+
+            AndroidYourHealthPkbPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToRecordSharing();
+
+            AndroidPkbPage
+                .AssertOnPage(driver, PhrPath.RecordSharing)
                 .AssertNativeHeader()
                 .Navigation.NavigateToMore();
 

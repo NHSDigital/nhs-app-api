@@ -21,6 +21,10 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
 
         private WebText VaccineRecordText => WebText.WithTagAndText(_interactor, "p", "View your vaccination details, like the name and batch number, and report any side effects you have experienced");
 
+        internal WebMenuItem RecordSharingMenuItem => WebMenuItem.WithTitle(_interactor, "Record sharing");
+
+        private WebText RecordSharingText => WebText.WithText(_interactor, "Choose and manage information you share with your health teams");
+
         internal WebMenuItem GpHeathRecordMenuItem => WebMenuItem.WithTitle(_interactor, "GP health record");
 
         private WebText GpHealthRecordText => WebText.WithTagAndText(_interactor, "p", "View allergies, medicines, test results and more in your GP health record");
