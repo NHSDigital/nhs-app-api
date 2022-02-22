@@ -141,4 +141,26 @@ spec:
   - to:
     - ipBlock:
         cidr: {{ $.Values.metaServiceCIDR }}
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-cosmosdb-egress-from-users-{{ .Chart.AppVersion }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  podSelector:
+    matchLabels:
+      role: {{ $.Values.cid.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 10.0.0.0/8
+    ports:
+      - protocol: TCP
+        port: 10255
 {{- end }}
