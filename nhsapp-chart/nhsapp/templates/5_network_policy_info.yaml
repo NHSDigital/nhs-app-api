@@ -145,7 +145,7 @@ spec:
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: allow-cosmosdb-egress-from-users-{{ .Chart.AppVersion }}
+  name: allow-cosmosdb-egress-from-info-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
     version: {{ .Chart.AppVersion | quote }}
