@@ -148,11 +148,12 @@ metadata:
   name: allow-cosmosdb-egress-from-info-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.info.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
     matchLabels:
-      role: {{ $.Values.cid.role }}
+      role: {{ $.Values.info.role }}
       version: {{ .Chart.AppVersion | quote }}
   policyTypes:
   - Egress
@@ -163,4 +164,29 @@ spec:
     ports:
       - protocol: TCP
         port: 10255
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-info-egress-to-iproxy-{{ .Chart.AppVersion }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    role: {{ $.Values.info.role }}
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  podSelector:
+    matchLabels:
+      role: {{ $.Values.info.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          role: iproxy
+          version: {{ .Chart.AppVersion | quote }}
+    ports:
+    - protocol: TCP
+      port: {{ $.Values.sidecar_proxy.containerPort }}
 {{- end }}

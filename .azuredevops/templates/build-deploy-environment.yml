@@ -303,7 +303,7 @@ stages:
                   --set region=$(region) \
                   --set zone=$(environment) \
                   --set clusterIP=$(clusterIP) \
-                  --set networkPolicyEnabled=false \
+                  --set networkPolicyEnabled=true \
                   --set createDefaultPrivateIngress=true \
                   --set cluster=devuks2
               else
@@ -332,7 +332,7 @@ stages:
                   --set region=$(region) \
                   --set zone=$(environment) \
                   --set clusterIP=$(clusterIP) \
-                  --set networkPolicyEnabled=false \
+                  --set networkPolicyEnabled=true \
                   --set createDefaultPrivateIngress=true \
                   --set cluster=devuks2
               fi

@@ -146,11 +146,12 @@ metadata:
   name: allow-cosmosdb-egress-from-users-{{ .Chart.AppVersion }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    role: {{ $.Values.users.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   podSelector:
     matchLabels:
-      role: {{ $.Values.cid.role }}
+      role: {{ $.Values.users.role }}
       version: {{ .Chart.AppVersion | quote }}
   policyTypes:
   - Egress

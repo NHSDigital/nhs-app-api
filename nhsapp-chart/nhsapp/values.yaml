@@ -200,7 +200,7 @@ eConsult:
   protocol: https
   hostname: nhsapp.econsulttest.health
 
-messagesEnabled: true
+messagesEnabled: false
 
 # N3 Endpoint
 n3Protocol: https
