@@ -247,6 +247,7 @@
     <Compile Include="Effects\AndroidAccessibilityFocusEffect.cs" />
     <Compile Include="Effects\AndroidFixedFontSizeEffect.cs" />
     <Compile Include="Extensions\IntentExtensions.cs" />
+    <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="Extensions\WindowExtensions.cs" />
     <Compile Include="Handlers\OnReceivedGeolocationPermissionsResultHandler.cs" />
     <Compile Include="MainActivity.cs" />

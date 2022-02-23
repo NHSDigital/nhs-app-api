@@ -8,6 +8,7 @@ using Firebase.Messaging;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.Droid.DependencyServices.Notifications;
+using NHSOnline.App.Droid.Extensions;
 using NHSOnline.App.Logging;
 using NHSOnline.App.Threading;
 
@@ -39,7 +40,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Notifications
                 return new GetPnsTokenResult.Unauthorised();
             }
 
-            var notificationsStatus = await GetDeviceNotificationsStatus().ResumeOnThreadPool();
+            var notificationsStatus = await GetDeviceNotificationsStatus().PreserveThreadContext();
 
             if (notificationsStatus == NotificationStatus.denied)
             {
@@ -49,7 +50,7 @@ namespace NHSOnline.App.Droid.DependencyServices.Notifications
 
             try
             {
-                var token = await FirebaseMessaging.Instance.GetToken();
+                var token = await FirebaseMessaging.Instance.GetToken().ToAwaitableTask(Logger).PreserveThreadContext();
 
                 if (token == null)
                 {
