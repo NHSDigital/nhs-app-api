@@ -81,6 +81,7 @@ export const MORE = {
       value: true,
       route: LINKED_PROFILES_SHUTTER_MORE,
     }],
+    isHub: true,
   },
 };
 

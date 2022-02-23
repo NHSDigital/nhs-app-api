@@ -76,6 +76,7 @@ export const PRESCRIPTIONS = {
     gpSessionOnDemand: {
       journey: GP_PRESCRIPTION_JOURNEY_NAME,
     },
+    isHub: true,
   },
 };
 

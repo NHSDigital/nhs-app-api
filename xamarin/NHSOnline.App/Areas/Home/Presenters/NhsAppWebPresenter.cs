@@ -26,6 +26,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
 {
     internal sealed class NhsAppWebPresenter
     {
+        private const string HomePageRouteName = "index";
+
         private bool _hasAlreadyAppeared;
 
         private readonly NhsAppWebModel _model;
@@ -401,17 +403,24 @@ namespace NHSOnline.App.Areas.Home.Presenters
         {
             _logger.LogInformation("Display back requested");
 
-            var name = await _view.GetLastCrumbIfExists().PreserveThreadContext();
+            var name = await _view.GetCurrentRouteName().PreserveThreadContext();
 
-            if (string.IsNullOrEmpty(name) && shouldLogout)
+            if (string.Equals(name, HomePageRouteName, StringComparison.Ordinal))
             {
-                _logger.LogInformation("No crumb, showing logout dialog");
-                await _dialogPresenter.DisplayAlertDialog(
-                    new ConfirmLogout(_view.Logout)).PreserveThreadContext();
+                if (shouldLogout)
+                {
+                    _logger.LogInformation("On home page and showing logout dialog");
+                    await _dialogPresenter.DisplayAlertDialog(
+                        new ConfirmLogout(_view.Logout)).PreserveThreadContext();
+                }
+                else
+                {
+                    _logger.LogInformation("On home page and not showing logout dialog");
+                }
             }
             else
             {
-                _logger.LogInformation("Page has a crumb route, navigating back");
+                _logger.LogInformation("Page is not home, navigating back");
                 await _view.NavigateBack().PreserveThreadContext();
             }
         }

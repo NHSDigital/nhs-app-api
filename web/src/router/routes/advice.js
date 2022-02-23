@@ -30,6 +30,7 @@ export const ADVICE = {
       value: true,
       route: LINKED_PROFILES_SHUTTER_ADVICE,
     }],
+    isHub: true,
   },
 };
 

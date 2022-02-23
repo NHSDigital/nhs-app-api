@@ -121,6 +121,7 @@ export const HEALTH_RECORDS = {
     gpSessionOnDemand: {
       journey: GP_HEALTH_RECORD_JOURNEY_NAME,
     },
+    isHub: true,
   },
 };
 

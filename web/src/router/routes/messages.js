@@ -75,6 +75,7 @@ export const MESSAGES = {
     gpSessionOnDemand: {
       ignoreError: true,
     },
+    isHub: true,
   },
 };
 

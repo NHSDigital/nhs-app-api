@@ -55,7 +55,7 @@ namespace NHSOnline.App.Areas.Home
 
         NavigationFooterItem SelectedNavigationFooterItem { get; set; }
 
-        Task<string> GetLastCrumbIfExists();
+        Task<string> GetCurrentRouteName();
         void GoToUri(Uri uri);
         Task NavigateToAppPage(string page);
         Task NavigateToAdvice();

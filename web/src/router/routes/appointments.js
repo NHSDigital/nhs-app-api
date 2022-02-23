@@ -86,6 +86,7 @@ export const APPOINTMENTS = {
     crumb: breadcrumbs.APPOINTMENTS_CRUMB,
     helpPath: APPOINTMENTS_AND_ONLINE_CONSULTATIONS_IN_THE_NHS_APP_PATH,
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
+    isHub: true,
   },
 };
 

@@ -212,8 +212,8 @@ namespace NHSOnline.App.Areas.Home.Views
             LogoutCommand.Execute(null);
         }
 
-        public async Task<string> GetLastCrumbIfExists()
-            => await WebView.GetLastCrumbIfExists().PreserveThreadContext();
+        public async Task<string> GetCurrentRouteName()
+            => await WebView.GetCurrentRouteName().PreserveThreadContext();
 
         public async Task NavigateBack()
         {
