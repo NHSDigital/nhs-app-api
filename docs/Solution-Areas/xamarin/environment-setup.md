@@ -23,6 +23,20 @@ Xcode is required to be installed. Kainos users - Xcode can be installed via the
 
   ![Xcode - sign in and Download Manual Profiles](Images/XcodeDownloadProfiles.png)
 
+### Running in an iOS simulator (Kainos staff)
+
+For Zscaler to permit traffic from your iOS simulator, you must add the KAINOS-ROOT-CA certificate to it. If you don't, you may receive the error "An SSL error has occurred and a secure connection to the server cannot be made" in Rider. The symptom of this error is that you cannot get past the initial welcome screen and you receive an error "We cannot confirm which version of the NHS App you are using".
+
+Download the certificate to the device.
+
+To do this, you could:
+- export your KAINOS-ROOT-CA certificate from keychain to your documents.
+- download the certificate to your simulator (you could upload it somewhere secure like your Kainos OneDrive, sign into OneDrive on your simulator and download it from there).
+- upon download, you will receive a message asking you to go to settings to install the certificate.
+- go to `Settings > General > Device Management`, find the certificate and tap "Install" (you may receive another warning and you may have to tap "Install" again).
+- Now you must trust the certificate. Go to `General > About > Certificate Trust settings` and toggle the certificate on.
+
+
 ### Troubleshooting
 
 - You may have to direct Rider to point at the specific Mono version that Xamarin forms requires.
