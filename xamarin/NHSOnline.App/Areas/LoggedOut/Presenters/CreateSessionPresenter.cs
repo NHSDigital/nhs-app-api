@@ -74,7 +74,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task<CreateSessionResult> TryCreateSession()
         {
             return await _sessionService
-                .CreateSession(_model.AuthCode, _model.PkceCodes.Verifier, _installReferrer.Referrer, _model.RedirectUri)
+                .CreateSession(_model.AuthCode, _model.PkceCodes.Verifier, _installReferrer.Referrer, _model.RedirectUri, _model.IntegrationReferrer)
                 .ResumeOnThreadPool();
         }
 

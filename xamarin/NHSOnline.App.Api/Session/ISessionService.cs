@@ -5,6 +5,6 @@ namespace NHSOnline.App.Api.Session
 {
     public interface ISessionService
     {
-        Task<CreateSessionResult> CreateSession(string authCode, string codeVerifier, string referrer, Uri redirectUrl);
+        Task<CreateSessionResult> CreateSession(string authCode, string codeVerifier, string referrer, Uri redirectUrl, string integrationReferrer);
     }
 }

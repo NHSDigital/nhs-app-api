@@ -1,4 +1,5 @@
 using System;
+using System.Web;
 
 namespace NHSOnline.App.Areas.LoggedOut.Models
 {
@@ -9,6 +10,16 @@ namespace NHSOnline.App.Areas.LoggedOut.Models
         {
             RedirectUri = redirectUri;
             AuthCode = authCode;
+            var integrationReferrer =string.Empty;
+            if (deeplinkUrl != null)
+            {
+                var queryString = HttpUtility.ParseQueryString(deeplinkUrl?.Query);
+                if (queryString != null)
+                {
+                    integrationReferrer = queryString["referrer"];
+                }
+            }
+            IntegrationReferrer = integrationReferrer;
         }
 
         protected CreateSessionModel(CreateSessionModel createSessionModel)
@@ -18,6 +29,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Models
 
         public Uri RedirectUri { get; }
         public string AuthCode { get; }
+        public string IntegrationReferrer { get; }
 
         internal CreateSessionErrorInternalServerErrorModel InternalServerError(string serviceDeskReference)
             => new CreateSessionErrorInternalServerErrorModel(this, serviceDeskReference);

@@ -21,11 +21,11 @@ namespace NHSOnline.App.Api.Session
             _createSessionEndpoint = createSessionEndpoint;
         }
 
-        public async Task<CreateSessionResult> CreateSession(string authCode, string codeVerifier, string referrer, Uri redirectUrl)
+        public async Task<CreateSessionResult> CreateSession(string authCode, string codeVerifier, string referrer, Uri redirectUrl, string integrationReferrer)
         {
             try
             {
-                var request = new ApiCreateSessionRequest(authCode, codeVerifier, referrer, redirectUrl);
+                var request = new ApiCreateSessionRequest(authCode, codeVerifier, referrer, redirectUrl, integrationReferrer);
                 var result = await _createSessionEndpoint.Call(request, CancellationToken.None).ResumeOnThreadPool();
 
                 return result.Accept(this);
