@@ -82,6 +82,11 @@ namespace NHSOnline.IntegrationTests.UI
             @"Appium error: An unknown server-side error occurred while processing the command\. Original error: Could not proxy.*",
             RegexOptions.Compiled);
 
+        // Appium could not proxy issue POST element
+        private static readonly Regex AppiumProxyIssuePostElement = new(
+            @"Appium error: An unknown server-side error occurred while processing the command. Original error: 'POST /element'.*",
+            RegexOptions.Compiled);
+
         // 419002-Intermittent network access issue on iOS device
         private static readonly Regex AboutBlank = new(
             Regex.Escape("Expected driver.Url not to be \"about:blank\"."),
@@ -174,7 +179,8 @@ namespace NHSOnline.IntegrationTests.UI
             (CannotFindPhotosLabelInPhotoScreen, RetryStatus.Retry(nameof(CannotFindPhotosLabelInPhotoScreen))),
             (CannotFindPhotosButtonInPhotoScreen, RetryStatus.Retry(nameof(CannotFindPhotosButtonInPhotoScreen))),
             (CannotChooseButtonInPhotoScreen, RetryStatus.Retry(nameof(CannotChooseButtonInPhotoScreen))),
-            (CannotFindPhotoCaptured, RetryStatus.Retry(nameof(CannotFindPhotoCaptured)))
+            (CannotFindPhotoCaptured, RetryStatus.Retry(nameof(CannotFindPhotoCaptured))),
+            (AppiumProxyIssuePostElement, RetryStatus.Retry(nameof(AppiumProxyIssuePostElement)))
         };
 
         internal static RetryStatus ShouldRetry(this TestResult result, TestLogs logs)
