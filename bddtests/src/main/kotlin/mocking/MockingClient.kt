@@ -21,6 +21,7 @@ import mocking.thirdPartyProviders.gncr.GNCRRequestBuilder
 import mocking.thirdPartyProviders.netCompany.NetCompanyRequestBuilder
 import mocking.thirdPartyProviders.nhsd.NhsdRequestBuilder
 import mocking.thirdPartyProviders.substrakt.SubstraktRequestBuilder
+import mocking.thirdPartyProviders.wellnessAndPrevention.WellnessAndPreventionRequestBuilder
 import mocking.tpp.TppMappingRouter
 import mocking.vision.VisionMappingRouter
 import org.apache.http.HttpStatus
@@ -57,6 +58,7 @@ class MockingClient(configuration: MockingConfiguration) {
     val forSubstrakt = ExternalSupplierMockingClient(SubstraktRequestBuilder(), wiremockHelper)
     val forNetCompany = ExternalSupplierMockingClient(NetCompanyRequestBuilder(), wiremockHelper)
     val forNhsd = ExternalSupplierMockingClient(NhsdRequestBuilder(), wiremockHelper)
+    val forWellness = ExternalSupplierMockingClient(WellnessAndPreventionRequestBuilder(), wiremockHelper)
 
     val forHelp = ExternalSupplierMockingClient(HelpRequestBuilder(), wiremockHelper)
 

@@ -28,6 +28,11 @@
                        'myRecord.hub.viewAllergiesMedicinesAndMore')" />
 
           <div v-if="!isProxying">
+            <third-party-jump-off-button v-if="showWellnessAndPrevention"
+                                         id="btn_wellness_and_prevention"
+                                         provider-id="wellnessAndPrevention"
+                                         :provider-configuration="thirdPartyProvider
+                                           .wellnessAndPrevention.healthTrackers" />
             <third-party-jump-off-button v-if="showPkbTestResults"
                                          id="btn_pkb_test_results"
                                          provider-id="pkb"
@@ -193,6 +198,14 @@ export default {
       dataSharingPath: this.$store.state.device.isNativeApp
         ? DATA_SHARING_OVERVIEW_PATH
         : this.$store.$env.YOUR_NHS_DATA_MATTERS_URL,
+      showWellnessAndPrevention: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'wellnessAndPrevention',
+          serviceType: 'healthTrackers',
+        },
+      }),
       showPkbTestResults: sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',

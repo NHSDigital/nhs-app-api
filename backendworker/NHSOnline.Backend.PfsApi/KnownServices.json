@@ -566,6 +566,14 @@
       "showThirdPartyWarning": true,
       "requiresAssertedLoginIdentity": true,
       "validateSession": true
+    },
+    "wellnessAndPrevention": {
+      "url": "https://hub-dev.wpalpha.clouddev.works",
+      "requiresAssertedLoginIdentity": true,
+      "showThirdPartyWarning": true,
+      "validateSession": true,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "viewMode": "WebView"
     }
   }
 }

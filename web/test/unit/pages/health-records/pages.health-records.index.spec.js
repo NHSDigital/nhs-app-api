@@ -222,6 +222,9 @@ describe('healthRecords', () => {
       ['netCompany', 'Vaccine Record', true, false, true],
       ['netCompany', 'Vaccine Record', true, true, false],
       ['netCompany', 'Vaccine Record', false, false, false],
+      ['wellnessAndPrevention', 'Wellness and Prevention', true, false, true],
+      ['wellnessAndPrevention', 'Wellness and Prevention', true, true, false],
+      ['wellnessAndPrevention', 'Wellness and Prevention', false, false, false],
     ]).describe('%s %s enabled is %s, proxy is %s', (
       provider, linkType, integrationEnabled, isProxying, expectedResult,
     ) => {
@@ -293,6 +296,9 @@ describe('healthRecords', () => {
           case 'myCareViewTestResults':
             linkElement = '#btn_pkb_my_care_view_test_results';
             break;
+          case 'wellnessAndPreventionWellnessandPrevention':
+            linkElement = '#btn_wellness_and_prevention';
+            break;
           default:
             break;
         }
@@ -301,6 +307,7 @@ describe('healthRecords', () => {
       });
 
       it(`${expectedResult ? 'will' : 'will not'} show the link`, () => {
+        expect(linkElement).toBeDefined();
         expect(wrapper.find(linkElement).exists()).toBe(expectedResult);
       });
     });

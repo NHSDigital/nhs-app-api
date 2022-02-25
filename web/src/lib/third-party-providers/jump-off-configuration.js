@@ -343,6 +343,14 @@ const thirdPartyProvider = {
       proofLevel: proofLevel.P5,
     },
   },
+  wellnessAndPrevention: {
+    healthTrackers: {
+      jumpOffId: 'wellnessAndPrevention',
+      redirectPath: '/sso',
+      provider: 'wellnessAndPrevention',
+      serviceType: 'healthTrackers',
+    },
+  },
 };
 
 export const getJumpOffConfiguration = id => get(id)(thirdPartyProvider);

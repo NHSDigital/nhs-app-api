@@ -106,6 +106,7 @@ Before running the app locally, some entries need to be added to your machine's 
 127.0.0.1 netcompany.stubs.local.bitraft.io
 127.0.0.1 silverintegrationtestprovider.stubs.local.bitraft.io
 127.0.0.1 silverintegrationtestprovider.securestubs.local.bitraft.io
+127.0.0.1 wellnessandprevention.stubs.local.bitraft.io
 ```
 
 If you have difficulty accessing web.local.bitraft.io:3000 and web is running in Docker. Try editing the `hosts` file to use the IPv6 addresses instead:
@@ -139,6 +140,7 @@ If you have difficulty accessing web.local.bitraft.io:3000 and web is running in
 ::1 netcompany.stubs.local.bitraft.io
 ::1 silverintegrationtestprovider.stubs.local.bitraft.io
 ::1 silverintegrationtestprovider.securestubs.local.bitraft.io
+::1 wellnessandprevention.stubs.local.bitraft.io
 ```
 
 

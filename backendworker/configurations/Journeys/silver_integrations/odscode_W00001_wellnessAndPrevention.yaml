@@ -1,0 +1,13 @@
+#
+#
+#   Sandpit users in ODS code W00001 are used by the wellness and prevention third party.
+#   DO NOT enable any external third-party silver integrations for this ODS code.
+#
+#
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "W00001"
+journeys:
+  silverIntegrations:
+    healthTrackers:
+      - wellnessAndPrevention

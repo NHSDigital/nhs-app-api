@@ -691,4 +691,24 @@ export default {
       },
     ],
   },
+  wellnessAndPrevention: {
+    serviceId: 'wellnessAndPrevention',
+    providerName: 'Wellness and Prevention',
+    jumpOffs: [
+      {
+        id: 'wellnessAndPrevention',
+        jumpOffContent: {
+          headerText: 'Wellness and Prevention',
+          descriptionText: 'Sample jump off for Wellness and Prevention',
+        },
+        thirdPartyWarning: {
+          featureName: 'Third Party Feature Name',
+          servicePurchaser: 'Service Purchaser',
+          serviceType: 'Service Type',
+          serviceTypePlural: 'Service Type Plural',
+          linkHref: 'WELLNESS_AND_PREVENTION_PRIVACY_URL',
+        },
+      },
+    ],
+  },
 };

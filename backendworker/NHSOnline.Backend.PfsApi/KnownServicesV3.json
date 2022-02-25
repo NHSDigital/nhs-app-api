@@ -83,6 +83,11 @@
     "gncr": {
       "showThirdPartyWarning": true,
       "requiresAssertedLoginIdentity": true
+    },
+    "wellnessAndPrevention": {
+      "url": "https://hub-dev.wpalpha.clouddev.works",
+      "requiresAssertedLoginIdentity": true,
+      "showThirdPartyWarning": true
     }
   }
 }

@@ -56,3 +56,4 @@ services:
           - substrakt.stubs.local.bitraft.io
           - nhsd.stubs.local.bitraft.io
           - netcompany.stubs.local.bitraft.io
+          - wellnessAndPrevention.stubs.local.bitraft.io

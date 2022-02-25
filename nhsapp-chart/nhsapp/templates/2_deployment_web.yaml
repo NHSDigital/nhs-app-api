@@ -230,6 +230,8 @@ spec:
           value: "{{ $.Values.skipLoggedOutEnabled }}"
         - name: TPP_SUPPORTS_TEST_RESULTS_V2
           value: "{{ $.Values.tppSupportsTestResultV2 }}"
+        - name: WELLNESS_AND_PREVENTION_PRIVACY_URL
+          value: "https://hub-dev.wpalpha.clouddev.works/privacy"
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"
