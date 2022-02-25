@@ -1,7 +1,4 @@
 ---
-environmentStubbed:
-  deployWiremock: true
-
 users:
   notificationHubs:
     - notificationHubPath: nhsapp-nonlive-scratch18
