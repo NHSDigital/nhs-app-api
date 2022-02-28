@@ -59,6 +59,15 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .PageContent.NavigateToTrackYourHealth();
 
             IOSWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "Track your health");
+
+            driver.SwipeBack();
+
+            IOSYourHealthPkbPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToTrackYourHealth();
+
+            IOSWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, "Track your health")
                 .PageContent.NavigateToNextPage();
 

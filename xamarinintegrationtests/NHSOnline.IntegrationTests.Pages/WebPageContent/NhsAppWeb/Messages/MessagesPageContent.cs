@@ -123,6 +123,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Messages
 
         public void NavigateToTestProvider() => TestProviderMenuItem.Click();
 
+        public void NavigateToGPSurgeryMessages() => GpSurgeryMessagingMenuItem.Click();
+
         public void NavigateToConsultationsEventsAndMessagesPkb() => ConsultationsEventsAndMessagesPkbMenuItem.Click();
 
         public void KeyboardNavigateToGpSurgeryMessages(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(GpSurgeryMessagingMenuItem, navigation);

@@ -3,6 +3,7 @@ using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Web
 {
@@ -29,7 +30,14 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
             => ActOnElement(e => e.Displayed.Should().BeTrue("A menu item with title {0} should be displayed", _title));
 
         public void Click()
-            => ActOnElement(e => e.Click());
+            => ActOnElement(e =>
+            {
+                ScrollTo();
+                e.Click();
+            });
+
+        private void ScrollTo() => _interactor.ActOnElementContext(
+            FindBy, c => new Actions(c.Driver).MoveToElement(c.Element).Perform());
 
         private void ActOnElement(Action<IWebElement> action)
             => _interactor.ActOnElement(FindBy, action);

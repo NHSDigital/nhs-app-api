@@ -53,6 +53,34 @@ namespace NHSOnline.IntegrationTests.Appointments
                 .AssertAdditionalGpServicesElements();
         }
 
+        [NhsAppIOSTest]
+        public void APatientIsShownAnErrorWhenTryingToAccessTheSurgeryGpAppointmentsPageIos(IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("App").FamilyName("Ointments"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToAppointments();
+
+            IOSAppointmentsPage
+                .AssertOnPage(driver)
+                .PageContent
+                .AssertPageElements()
+                .NavigateToGpSurgeryAppointments();
+
+            IOSGpSurgeryAppointmentsPage
+                .AssertOnPage(driver);
+
+            driver.SwipeBack();
+
+            IOSAppointmentsPage
+                .AssertOnPage(driver);
+        }
+
         [NhsAppAndroidTest]
         public void APatientIsShownAppointmentsHubAndCanNavigateBackFromLinksViaKeyboardNavigationAndroid(IAndroidDriverWrapper driver)
         {
@@ -82,6 +110,16 @@ namespace NHSOnline.IntegrationTests.Appointments
             AndroidAdditionalGpServicesPage
                 .AssertOnPage(driver)
                 .PageContent.ClickBackBreadcrumb();
+
+            AndroidAppointmentsPage
+                .AssertOnPage(driver)
+                .TabIntoFocus()
+                .KeyboardNavigateToGpSurgeryAppointments();
+
+            AndroidGpSurgeryAppointmentsPage
+                .AssertOnPage(driver);
+
+            driver.PressBackButton();
 
             AndroidAppointmentsPage
                 .AssertOnPage(driver)

@@ -57,15 +57,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More
             LogoutButton.AssertVisible();
         }
 
-        public void AssertVersionText(string versionNumber)
-        {
-            VersionText(versionNumber).AssertVisible();
-        }
+        public void AssertVersionText(string versionNumber) => VersionText(versionNumber).AssertVisible();
 
-        public void NavigateToAccountAndSettings()
-        {
-            AccountAndSettingsMenuItem.Click();
-        }
+        public void NavigateToAccountAndSettings() => AccountAndSettingsMenuItem.Click();
+
+        public void NavigateToLinkedProfiles() => LinkedProfilesMenuItem.Click();
 
         public void Logout() => LogoutButton.Click();
 

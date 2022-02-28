@@ -32,6 +32,15 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .PageContent.NavigateToCarePlans();
 
             AndroidWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "Care plans");
+
+            driver.PressBackButton();
+
+            AndroidYourHealthPkbPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToCarePlans();
+
+            AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, "Care plans")
                 .PageContent.NavigateToNextPage();
 
@@ -52,6 +61,15 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
                 .Navigation.NavigateToYourHealth();
+
+            IOSYourHealthPkbPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToCarePlans();
+
+            IOSWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "Care plans");
+
+            driver.SwipeBack();
 
             IOSYourHealthPkbPage
                 .AssertOnPage(driver)

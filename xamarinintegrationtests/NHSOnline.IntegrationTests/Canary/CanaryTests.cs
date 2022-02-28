@@ -74,8 +74,18 @@ namespace NHSOnline.IntegrationTests.Canary
                 .PageContent.NavigateToViewAppointments();
 
             AndroidWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "View appointments");
+
+            driver.PressBackButton();
+
+            AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, "View appointments")
                 .PageContent.NavigateToNextPage();
+
+            AndroidPkbPage
+                .AssertOnPage(driver, PhrPath.ViewAppointments)
+                .AssertNativeHeader()
+                .Navigation.NavigateToYourHealth();
 
             AndroidPkbPage
                 .AssertOnPage(driver, PhrPath.ViewAppointments)
@@ -136,6 +146,15 @@ namespace NHSOnline.IntegrationTests.Canary
             IOSAppointmentsPage
                 .AssertOnPage(driver)
                 .PageContent.NavigateToHospitalAndOtherAppointments();
+
+            IOSHospitalAndOtherAppointmentsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToViewAppointments();
+
+            IOSWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "View appointments");
+
+            driver.SwipeBack();
 
             IOSHospitalAndOtherAppointmentsPage
                 .AssertOnPage(driver)

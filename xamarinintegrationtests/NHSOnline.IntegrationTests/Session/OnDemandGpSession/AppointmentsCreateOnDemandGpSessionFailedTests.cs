@@ -6,6 +6,7 @@ using NHSOnline.IntegrationTests.Pages.Android.Appointments;
 using NHSOnline.IntegrationTests.Pages.Android.BrowserOverlay;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
+using NHSOnline.IntegrationTests.Pages.Android.Prescriptions;
 using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
 using NHSOnline.IntegrationTests.Pages.IOS.BrowserOverlay;
@@ -19,10 +20,10 @@ namespace NHSOnline.IntegrationTests.Session.OnDemandGpSession
     [TestClass]
     [BusinessRule("BR-GEN-04.6", "Failure to obtain a GP session on the first attempt in the user session displays a service specific 'try again' error to the user")]
     [BusinessRule("BR-GEN-04.8", "Failure to obtain a GP session when the user has initiated another attempt to get a GP session via a try again displays a specific service unavailable shutter page to the user")]
-    public class CreateOnDemandGpSessionFailedTests
+    public class AppointmentsCreateOnDemandGpSessionFailedTests
     {
         [NhsAppAndroidTest]
-        public void APatientSeesServiceSpecificGpSessionErrorScreensWhenThereIsAFailureCreatingAGpSessionOnDemandAndCanReportTheProblemAndroid(IAndroidDriverWrapper driver)
+        public void APatientSeesServiceSpecificGpSessionErrorScreensWhenTryingToViewAppointmentsAndThereIsAFailureCreatingAGpSessionOnDemandAndCanReportTheProblemAndroid(IAndroidDriverWrapper driver)
         {
             var fo = new EmisPatient()
                 .WithName(b => b.GivenName("Fo").FamilyName("Catcha"))
@@ -63,6 +64,11 @@ namespace NHSOnline.IntegrationTests.Session.OnDemandGpSession
                 .AssertOnPage(driver)
                 .AssertErrorCode("3c")
                 .ReturnToApp();
+
+            driver.PressBackButton();
+
+            AndroidAppointmentsPage
+                .AssertOnPage(driver);
         }
 
         [NhsAppIOSTest]
@@ -104,6 +110,12 @@ namespace NHSOnline.IntegrationTests.Session.OnDemandGpSession
                 .AssertOnPage(driver)
                 .AssertErrorCode("3c")
                 .ReturnToApp();
+
+            driver.SwipeBack();
+
+            IOSAppointmentsPage
+                .AssertOnPage(driver)
+                .GoToGpSurgeryAppointments();
         }
     }
 }

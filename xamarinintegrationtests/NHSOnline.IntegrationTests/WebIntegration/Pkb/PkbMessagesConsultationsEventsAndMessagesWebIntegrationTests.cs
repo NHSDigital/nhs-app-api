@@ -58,6 +58,15 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .PageContent.NavigateToConsultationsEventsAndMessagesPkb();
 
             IOSWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "Messages and online consultations");
+
+            driver.SwipeBack();
+
+            IOSMessagesPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToConsultationsEventsAndMessagesPkb();
+
+            IOSWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, "Messages and online consultations")
                 .PageContent.NavigateToNextPage();
 

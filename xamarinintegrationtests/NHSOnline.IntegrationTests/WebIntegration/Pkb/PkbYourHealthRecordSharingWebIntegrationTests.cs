@@ -59,6 +59,15 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .PageContent.NavigateToRecordSharing();
 
             IOSWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "Record Sharing");
+
+            driver.SwipeBack();
+
+            IOSYourHealthPkbPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToRecordSharing();
+
+            IOSWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, "Record Sharing")
                 .PageContent.NavigateToNextPage();
 

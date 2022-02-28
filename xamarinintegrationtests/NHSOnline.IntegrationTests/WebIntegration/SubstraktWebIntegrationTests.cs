@@ -37,6 +37,15 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .PageContent.NavigateToUpdateYourPersonalDetails();
 
             AndroidWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "Update your personal details");
+
+            driver.PressBackButton();
+
+            AndroidYourHealthSubstraktPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToUpdateYourPersonalDetails();
+
+            AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, "Update your personal details")
                 .PageContent.NavigateToNextPage();
 
@@ -65,6 +74,15 @@ namespace NHSOnline.IntegrationTests.WebIntegration
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
                 .Navigation.NavigateToYourHealth();
+
+            IOSYourHealthSubstraktPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToUpdateYourPersonalDetails();
+
+            IOSWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "Update your personal details");
+
+            driver.SwipeBack();
 
             IOSYourHealthSubstraktPage
                 .AssertOnPage(driver)

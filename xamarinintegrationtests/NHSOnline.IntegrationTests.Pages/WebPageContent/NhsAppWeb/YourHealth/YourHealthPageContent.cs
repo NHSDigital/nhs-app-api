@@ -68,6 +68,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
 
         public void NavigateToNdop() => NdopMenuItem.Click();
 
+        public void NavigateToGPHealthRecord() => GpHeathRecordMenuItem.Click();
+
         internal void KeyboardNavigateToAndActivateMenuItem(IFocusable menuItem, AndroidKeyboardNavigation keyboardPageContentNavigation)
         {
             keyboardPageContentNavigation.TabBetween(CovidPassMenuItem, menuItem);

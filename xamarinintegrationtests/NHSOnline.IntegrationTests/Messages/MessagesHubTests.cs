@@ -166,5 +166,102 @@ namespace NHSOnline.IntegrationTests.Messages
                 .AssertMyCareViewElements()
                 .AssertSecondaryCareViewElements();
         }
+
+        [NhsAppAndroidTest]
+        public void APatientCanKeyboardNavigateToTheMessagesHubPageAndUseBackButtonAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
+                .WithName(b => b.GivenName("Garry").FamilyName("Messi"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .KeyboardNavigateToMessages(patient);
+
+            AndroidMessagesPage
+                .AssertOnPage(driver)
+                .TabIntoFocus()
+                .KeyboardNavigateToGpSurgeryMessages();
+
+            AndroidGpSurgeryMessagesPage
+                .AssertOnPage(driver);
+
+            driver.PressBackButton();
+
+            AndroidMessagesPage
+                .AssertOnPage(driver)
+                .TabIntoFocus()
+                .KeyboardNavigateToGncr();
+
+            AndroidWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "Online consultations");
+
+            driver.PressBackButton();
+
+            AndroidMessagesPage
+                .AssertOnPage(driver)
+                .TabIntoFocus()
+                .KeyboardNavigateToSubstrakt();
+
+            AndroidWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "Ask your GP surgery a question");
+
+            driver.PressBackButton();
+
+            AndroidMessagesPage
+                .AssertOnPage(driver)
+                .TabIntoFocus()
+                .KeyboardNavigateToPkb();
+
+            AndroidWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "Messages and online consultations");
+
+            driver.PressBackButton();
+
+            AndroidMessagesPage
+                .AssertOnPage(driver)
+                .TabIntoFocus()
+                .KeyboardNavigateToCie();
+
+            AndroidWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "Consultations, events and messages");
+
+            driver.PressBackButton();
+
+            AndroidMessagesPage
+                .AssertOnPage(driver)
+                .TabIntoFocus()
+                .KeyboardNavigateToMyCareView();
+
+            AndroidWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "Consultations, events and messages");
+
+            driver.PressBackButton();
+
+            AndroidMessagesPage
+                .AssertOnPage(driver)
+                .TabIntoFocus()
+                .KeyboardNavigateToSecondaryCareView();
+
+            AndroidWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "Consultations, events and messages");
+
+            driver.PressBackButton();
+
+            AndroidMessagesPage
+                .AssertOnPage(driver)
+                .TabIntoFocus()
+                .KeyboardNavigateToYourHealthServiceMessages();
+
+            AndroidYourHealthServiceMessagesPage
+                .AssertOnPage(driver);
+
+            driver.PressBackButton();
+
+            AndroidMessagesPage
+                .AssertOnPage(driver);
+        }
     }
 }

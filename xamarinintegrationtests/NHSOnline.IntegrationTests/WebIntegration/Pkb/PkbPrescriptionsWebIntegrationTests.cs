@@ -59,6 +59,15 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .PageContent.NavigateToHospitalAndOtherPrescriptions();
 
             IOSWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "Hospital and other medicines");
+
+            driver.SwipeBack();
+
+            IOSPrescriptionsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToHospitalAndOtherPrescriptions();
+
+            IOSWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, "Hospital and other medicines")
                 .PageContent.NavigateToNextPage();
 

@@ -38,6 +38,15 @@ namespace NHSOnline.IntegrationTests.Help
                 .PageContent.NavigateToHospitalAndOtherPrescriptions();
 
             AndroidWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "Hospital and other medicines");
+
+            driver.PressBackButton();
+
+            AndroidPrescriptionsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToHospitalAndOtherPrescriptions();
+
+            AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, "Hospital and other medicines")
                 .PageContent.NavigateToNextPage();
 
@@ -66,6 +75,15 @@ namespace NHSOnline.IntegrationTests.Help
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
                 .Navigation.NavigateToPrescriptions();
+
+            IOSPrescriptionsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToHospitalAndOtherPrescriptions();
+
+            IOSWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "Hospital and other medicines");
+
+            driver.SwipeBack();
 
             IOSPrescriptionsPage
                 .AssertOnPage(driver)

@@ -58,6 +58,15 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .PageContent.NavigateToSharedHealth();
 
             IOSWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "Shared health links");
+
+            driver.SwipeBack();
+
+            IOSYourHealthPkbPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToSharedHealth();
+
+            IOSWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, "Shared health links")
                 .PageContent.NavigateToNextPage();
 

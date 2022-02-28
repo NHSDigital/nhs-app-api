@@ -15,6 +15,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Your GP health record");
 
+        private WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
+
         public WebLink BackBreadcrumb => WebLink.WithText(_interactor, "Back");
 
         internal void AssertOnPage()
@@ -26,5 +28,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
         }
 
         public void ClickBackBreadcrumb() => BackBreadcrumb.Click();
+
+        public void Continue()
+        {
+            ContinueButton.ScrollTo();
+            ContinueButton.Click();
+        }
     }
 }
