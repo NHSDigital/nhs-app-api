@@ -1,23 +1,20 @@
 using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Azure.Documents;
-using Microsoft.Azure.Documents.Client;
 using NHSOnline.AuditLogFunctionApp.Model;
 
 using Microsoft.Azure.WebJobs;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.AuditLogFunctionApp.Functions
 {
     public class AuditEventConsumerFunction
     {
-        private readonly IConfiguration _configuration;
         private readonly ILogger<AuditEventConsumerFunction> _logger;
 
-        public AuditEventConsumerFunction(IConfiguration configuration, ILogger<AuditEventConsumerFunction> logger)
+        public AuditEventConsumerFunction(ILogger<AuditEventConsumerFunction> logger)
         {
-            _configuration = configuration;
             _logger = logger;
         }
 
@@ -30,44 +27,51 @@ namespace NHSOnline.AuditLogFunctionApp.Functions
             )]
             AuditRecord[] auditRecords,
             [CosmosDB(
+                "%AuditCosmosSQLDbName%",
+                "%AuditCosmosSQLDbContainer%",
                 ConnectionStringSetting = "AuditCosmosSQLDbConnectionString"
             )]
-            IDocumentClient documentClient
+            IAsyncCollector<AuditRecord> auditCollection
         )
         {
+            var stopwatch = Stopwatch.StartNew();
+
             _logger.LogInformation(
                 "{} function started. recordCount={}",
                 nameof(AuditEventConsumerTrigger),
                 auditRecords.Length
             );
 
-            var databaseId = _configuration["AuditCosmosSQLDbName"];
-            var containerId = _configuration["AuditCosmosSQLDbContainer"];
-
-            foreach (var record in auditRecords)
+            try
             {
-                record.Id = record.AuditId;
-
-                try
-                {
-                    await documentClient.UpsertDocumentAsync(
-                        UriFactory.CreateDocumentCollectionUri(databaseId, containerId),
-                        record
-                    );
-
-                    _logger.LogInformation("Wrote audit item to database. auditId={}", record.Id);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(
-                        ex,
-                        "Failed to write audit item to database due to exception. auditId={}",
-                        record.Id
-                    );
-
-                    throw;
-                }
+                await Task.WhenAll(
+                    auditRecords.AsParallel().Select(r =>
+                    {
+                        r.Id = r.AuditId;
+                        return auditCollection.AddAsync(r);
+                    }).ToArray()
+                );
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(
+                    ex,
+                    "Failed to write audit item to database due to exception"
+                );
+
+                throw;
+            }
+
+            await auditCollection.FlushAsync();
+
+            stopwatch.Stop();
+
+            _logger.LogInformation(
+                "{} function finished. durationInMs={} recordCount={}",
+                nameof(AuditEventConsumerTrigger),
+                stopwatch.ElapsedMilliseconds,
+                auditRecords.Length
+            );
         }
     }
 }

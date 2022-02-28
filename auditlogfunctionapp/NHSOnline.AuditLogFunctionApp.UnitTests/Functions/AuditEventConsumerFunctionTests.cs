@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Azure.Documents;
-using Microsoft.Azure.Documents.Client;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.AuditLogFunctionApp.Functions;
@@ -17,43 +14,27 @@ namespace NHSOnline.AuditLogFunctionApp.UnitTests.Functions
     public class AuditEventConsumerFunctionTests
     {
         private AuditRecord[] _auditRecords;
-        private Mock<IDocumentClient> _mockCosmosClient;
+        private Mock<IAsyncCollector<AuditRecord>> _mockCosmosClient;
         private AuditEventConsumerFunction _systemUnderTest;
-        private Mock<IConfigurationSection> _mockConfSection;
 
          [TestInitialize]
         public void TestInitialize()
         {
-            _mockConfSection = new Mock<IConfigurationSection>();
-            _mockConfSection.SetupGet(m =>
-                m[It.Is<string>(s => s == "AuditCosmosSQLDbName")]
-            ).Returns("db");
-            _mockConfSection.SetupGet(m =>
-                m[It.Is<string>(s => s == "AuditCosmosSQLDbContainer")]
-            ).Returns("container");
-
             _systemUnderTest = new AuditEventConsumerFunction(
-                _mockConfSection.Object,
                 Mock.Of<ILogger<AuditEventConsumerFunction>>()
             );
-            _mockCosmosClient = new Mock<IDocumentClient>();
+            _mockCosmosClient = new Mock<IAsyncCollector<AuditRecord>>();
         }
 
         [TestMethod]
         public async Task AuditEventConsumerFunction_NoAuditRecords_DbUpsertNotInvoked()
         {
             // Act
-            await _systemUnderTest.AuditEventConsumerTrigger(new AuditRecord[0], _mockCosmosClient.Object);
+            await _systemUnderTest.AuditEventConsumerTrigger(Array.Empty<AuditRecord>(), _mockCosmosClient.Object);
 
             // Assert
             _mockCosmosClient.Verify(
-                m => m.UpsertDocumentAsync(
-                    It.IsAny<Uri>(),
-                    It.IsAny<AuditRecord>(),
-                    It.IsAny<RequestOptions>(),
-                    false,
-                    default
-                ),
+                m => m.AddAsync(It.IsAny<AuditRecord>(), default),
                 Times.Never
             );
         }
@@ -72,13 +53,7 @@ namespace NHSOnline.AuditLogFunctionApp.UnitTests.Functions
 
             // Assert
             _mockCosmosClient.Verify(
-                m => m.UpsertDocumentAsync(
-                    It.IsAny<Uri>(),
-                    It.IsAny<AuditRecord>(),
-                    It.IsAny<RequestOptions>(),
-                    false,
-                    default
-                ),
+                m => m.AddAsync(It.IsAny<AuditRecord>(), default),
                 Times.Exactly(auditRecordCount));
         }
 
