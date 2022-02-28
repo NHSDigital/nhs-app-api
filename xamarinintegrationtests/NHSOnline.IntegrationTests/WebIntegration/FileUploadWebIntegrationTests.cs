@@ -71,6 +71,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
         // Running on lower version as we had issues with the structure in the updated default
         [NhsAppIOSTest(IOSDevice = IOSDevice.iPhone11Pro, OSVersion = IOSVersion.Thirteen)]
+        [NhsAppFlakyTest]
         public void APatientWithProofLevelNineCanUploadTheirFileToAWebIntegrationFileUploadScreenIOS(
             IIOSDriverWrapper driver)
         {

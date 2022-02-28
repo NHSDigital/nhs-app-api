@@ -40,8 +40,11 @@ elif [ "$FLIPBOOK_RUN" == 'True' ]
 then
   rm -rf flipbookgeneration/flipbook/
   TEST_FILTER="TestCategory=NhsAppFlipbookTest"
+elif [ "$FLAKY_RUN" == 'True' ]
+then
+  TEST_FILTER="TestCategory=NhsAppFlakyTest"
 else
-  TEST_FILTER='"TestCategory!=NhsAppUpgradeTest&TestCategory!=NhsAppCanaryTest&TestCategory!=NhsAppFlipbookTest"'
+  TEST_FILTER='"TestCategory!=NhsAppUpgradeTest&TestCategory!=NhsAppCanaryTest&TestCategory!=NhsAppFlipbookTest&TestCategory!=NhsAppFlakyTest"'
 fi
 info "Using test filter ${TEST_FILTER}"
 

@@ -80,6 +80,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppAndroidTest(AndroidDevice = AndroidDevice.Pixel3, OSVersion = AndroidOSVersion.Nine)]
+        [NhsAppFlakyTest]
         public void
             APatientWithProofLevelNineCanDownloadAFileFromAWebIntegrationDownloadFileScreenNotUsingTheNewerOsAndroid(
                 IAndroidDriverWrapper driver)

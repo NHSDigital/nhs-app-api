@@ -8,6 +8,9 @@ parameters:
   - name: runFlipbookTests
     type: boolean
     default: false 
+  - name: runFlakyTests
+    type: boolean
+    default: false 
   - name: nativeVersion
     type: string
 
@@ -87,6 +90,7 @@ jobs:
           USE_APP_UPGRADE_CONFIG: ${{ parameters['runUpgradeTests'] }}
           CANARY_RUN: ${{ parameters['runCanaryTests'] }}
           FLIPBOOK_RUN: ${{ parameters['runFlipbookTests'] }}
+          FLAKY_RUN: ${{ parameters['runFlakyTests'] }}
         inputs:
           scriptPath: xamarinintegrationtests/buildscripts/06_run_integration_tests.sh
 
@@ -128,7 +132,9 @@ jobs:
             artifactName: 'Xamarin Integration Upgrade Test Files Attempt-$(System.JobAttempt)'
           ${{ if eq(parameters['runFlipbookTests'], true) }}:
             artifactName: 'Xamarin Integration Flipbook Test Files Attempt-$(System.JobAttempt)'
-          ${{ if and(eq(parameters['runUpgradeTests'], false), eq(parameters['runCanaryTests'], false), eq(parameters['runFlipbookTests'], false))  }}:
+          ${{ if eq(parameters['runFlakyTests'], true) }}:
+            artifactName: 'Xamarin Integration Flaky Test Files Attempt-$(System.JobAttempt)'
+          ${{ if and(eq(parameters['runUpgradeTests'], false), eq(parameters['runCanaryTests'], false), eq(parameters['runFlipbookTests'], false), eq(parameters['runFlakyTests'], false))  }}:
             artifactName: 'Xamarin Integration Test Files Attempt-$(System.JobAttempt)'
 
       - task: PublishPipelineArtifact@1
@@ -146,7 +152,9 @@ jobs:
             testRunTitle: 'Xamarin Integration Canary Tests'
           ${{ if eq(parameters['runUpgradeTests'], true) }}:
             testRunTitle: 'Xamarin Integration Upgrade Tests'
-          ${{ if and(eq(parameters['runUpgradeTests'], false), eq(parameters['runCanaryTests'], false))  }}:
+          ${{ if eq(parameters['runFlakyTests'], true) }}:
+            testRunTitle: 'Xamarin Integration Flaky Tests'
+          ${{ if and(eq(parameters['runUpgradeTests'], false), eq(parameters['runCanaryTests'], false), eq(parameters['runFlakyTests'], false))  }}:
             testRunTitle: 'Xamarin Integration Tests'
           testResultsFormat: VSTest
           testResultsFiles: xamarinintegrationtests/TestResults/*.trx

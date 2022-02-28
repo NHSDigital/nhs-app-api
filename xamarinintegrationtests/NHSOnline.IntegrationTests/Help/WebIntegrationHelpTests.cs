@@ -23,6 +23,7 @@ namespace NHSOnline.IntegrationTests.Help
         private const string ThirdPartyHelpLinkPath = "health-records-in-the-nhs-app/third-party-services/";
 
         [NhsAppAndroidTest]
+        [NhsAppFlakyTest]
         public void APkbPatientCanAccessContextualHelpFromWebIntegrationScreenAndroid(IAndroidDriverWrapper driver)
         {
             var patient = LoadPkbPatient();
@@ -66,6 +67,7 @@ namespace NHSOnline.IntegrationTests.Help
         }
 
         [NhsAppIOSTest]
+        [NhsAppFlakyTest]
         public void APkbPatientCanAccessContextualHelpFromWebIntegrationScreenIOS(IIOSDriverWrapper driver)
         {
             var patient = LoadPkbPatient();
