@@ -810,3 +810,8 @@ ODS,Organisation,PreviousSupplier,NewSupplier
 P83608,"THE ELMS MEDICAL CENTRE","IN PRACTICE SYSTEMS LTD","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)"
 P83608,"THE ELMS MEDICAL CENTRE","IN PRACTICE SYSTEMS LTD","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)"
 ==================================================================
+==================================================================
+Job Run - Mon 28 Feb 2022 10:26:36 GMT
+ODS,Organisation,PreviousSupplier,NewSupplier
+L84011,"LYDNEY PRACTICE","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)","THE PHOENIX PARTNERSHIP"
+==================================================================

@@ -273,7 +273,6 @@ crawley,Crawley,CCG,Crawley,Sussex and East Surrey,bridgemedicalcentre,Bridge Me
 crawley,Crawley,CCG,Crawley,Sussex and East Surrey,coachmansmedicalpractice,Coachmans Medical Practice,H82098,11007
 crawley,Crawley,CCG,Crawley,Sussex and East Surrey,langleycornersurgery,Langley Corner Surgery,Y00351,11235
 crawley,Crawley,CCG,Crawley,Sussex and East Surrey,saxonbrook,Saxonbrook Medical Centre,H82026,17490
-crawley,Crawley,CCG,Crawley,Sussex and East Surrey,southgatemedicalgroup,Southgate Medical Group,H82064,10097
 darlington,Darlington,CCG,Darlington,Durham Darligton Teeside Hambleton Richmondshire and Whitby,blackettsmedical,Blacketts Medical Practice,A83034,10164
 darlington,Darlington,CCG,Darlington,Durham Darligton Teeside Hambleton Richmondshire and Whitby,carmelmedicalcentre,Carmel Medical Practice,A83031,10409
 darlington,Darlington,CCG,Darlington,Durham Darligton Teeside Hambleton Richmondshire and Whitby,cliftoncourtmedicalpractice,Clifton Court Medical Practice,A83040,12099
@@ -413,7 +412,6 @@ dorset,Dorset,CCG,Dorset,Dorset,evergreenoaksurgery,Evergreen Oak Surgery,J81086
 dorset,Dorset,CCG,Dorset,Dorset,fordingtonsurgery,Fordington Surgery,J81626,4600
 dorset,Dorset,CCG,Dorset,Dorset,gillinghamsurgery,Gillingham Medical Practice,J81081,12634
 dorset,Dorset,CCG,Dorset,Dorset,highcliffemedicalcentre,Highcliffe Medical Centre,J81028,11305
-dorset,Dorset,CCG,Dorset,Dorset,leybournesurgery,Leybourne Surgery,J81071,3911
 dorset,Dorset,CCG,Dorset,Dorset,lifeboatquaymedicalcentre,Lifeboat Quay Medical Centre,J81052,6100
 dorset,Dorset,CCG,Dorset,Dorset,littledownsurgery,Littledown Surgery,J81067,5233
 dorset,Dorset,CCG,Dorset,Dorset,marineandoakridge,Marine and Oakridge Partnership,J81049,9086
@@ -1349,7 +1347,6 @@ northumberland,Northumberland,CCG,Northumberland,Northhumberland Tyne and Wear a
 northumberland,Northumberland,CCG,Northumberland,Northhumberland Tyne and Wear and North Durham,netherfieldhousesurgery,Netherfield House Surgery,A84037,5900
 northumberland,Northumberland,CCG,Northumberland,Northhumberland Tyne and Wear and North Durham,ponteland,Ponteland Medical Group,A84007,8714
 northumberland,Northumberland,CCG,Northumberland,Northhumberland Tyne and Wear and North Durham,prudhoemedicalgroup,Prudhoe Medical Group,A84016,0
-northumberland,Northumberland,CCG,Northumberland,Northhumberland Tyne and Wear and North Durham,railwaymedicalgroup,Railway Medical Group,A84009,26750
 northumberland,Northumberland,CCG,Northumberland,Northhumberland Tyne and Wear and North Durham,riversdalesurgery,Riversdale Surgery,A84035,6097
 northumberland,Northumberland,CCG,Northumberland,Northhumberland Tyne and Wear and North Durham,scotsgapmedicalgroup,Scots Gap Medical Group,A84042,2100
 northumberland,Northumberland,CCG,Northumberland,Northhumberland Tyne and Wear and North Durham,seatonparkmedicalgroup,Seaton Park Medical Group,A84028,18034
@@ -1922,7 +1919,6 @@ whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,rin
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,shepherdspring,Shepherds Spring Medical Centre,J82082,12707
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,standrewssurgery,St Andrews Surgery,J82071,10700
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,stclementspractice,St Clements Surgery,J82035,17435
-whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,stpaulssurgery-winchester,St Pauls Surgery,J82050,18400
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,stockbridgesurgery,Stockbridge Surgery,J82016,9100
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,stokewood,Stokewood Surgery,J82018,16995
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,testvalesurgery,Testvale Surgery,J82132,13607
@@ -2116,7 +2112,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Chapeltown Family Surgery,B86108,
 ,,,Other,,,Forum Health Centre,M86014,
 ,,,Other,,,Kirton Medical centre,C83057,
-,,,Other,,,Mitcheldean Surgery,L84045,
 ,,,Other,,,19 Beaumont Street Surgery,K84016,
 ,,,Other,,,Broadmead Medical Centre,Y02578,
 ,,,Other,,,Sixways Clinic,L84015,
@@ -2607,7 +2602,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Knowle House Surgery,L83089,
 ,,,Other,,,Morris House Group Practice,F85019,
 ,,,Other,,,The Blandford Group Practice,J81019,
-,,,Other,,,North Road West Medical Centre,L83030,
 ,,,Other,,,Valley Medical Centre,N82092,
 ,,,Other,,,Newquay Health Centre,Y02517,
 ,,,Other,,,Montpelier Surgery,G81044,
@@ -2659,8 +2653,10 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,The Malthouse Surgery,K84027,
 ,,,Other,,,Alcester Health Centre,M84049,
 ,,,Other,,,Ling House Medical Centre,B83008,
-,,,Other,,,London Road Surgery,F81041,
 ,,,Other,,,Park Surgery,H82017,
+,,,Other,,,London Road Surgery,F81041,
+,,,Other,,,Island Health,F84710,
 ,,,Other,,,Loxwood Medical Practice,H82031,
+,,,Other,,,Lindfield Medical Centre,H82035,
 ,,,Other,,,St Peter's Surgery,J82208,
 ,,,Other,,,Pinfold Medical,M91650,
