@@ -1,7 +1,9 @@
 using System;
 using System.IO;
+using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.IntegrationTests.UI.Drivers;
+using NHSOnline.IntegrationTests.UI.Drivers.Native;
 using OpenQA.Selenium;
 
 namespace NHSOnline.IntegrationTests.UI
@@ -17,12 +19,18 @@ namespace NHSOnline.IntegrationTests.UI
 
         public TestResult Execute(TestLogs logs, ITestMethod testMethod)
         {
-
-            var isFlipbookTest = testMethod.MethodInfo.GetCustomAttributes(typeof(NhsAppFlipbookTestAttribute),false).Length > 0;
+            var flipBookTestAttribute = testMethod.MethodInfo.GetCustomAttribute<NhsAppFlipbookTestAttribute>();
+            var isFlipBookTest = flipBookTestAttribute is not null;
 
             if (testMethod.HasInvalidParameters<TDriverWrapper>(out var errorResult))
             {
                 return errorResult;
+            }
+
+            if (isFlipBookTest)
+            {
+                var flipBookConfig = Configuration.Get<FlipBookConfig>("FlipBookConfig");
+                Directory.CreateDirectory($"{flipBookConfig.FlipBookPath}{testMethod.TestMethodName}/screenshots");
             }
 
             try
@@ -32,8 +40,9 @@ namespace NHSOnline.IntegrationTests.UI
                 using var context = new TestContext(testMethod, logs, tempDirectory, driver);
 
                 var testResult = testMethod.Invoke(new object[] { driver });
-
-                context.Cleanup(testResult, isFlipbookTest);
+                context.Cleanup(testResult, isFlipBookTest,
+                    flipBookTestAttribute?.ParentJourney ?? "",
+                    flipBookTestAttribute?.FlipbookTestName ?? testMethod.TestMethodName);
 
                 return testResult;
             }

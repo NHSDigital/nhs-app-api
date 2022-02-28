@@ -26,11 +26,10 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
         public WebContextStrategies Web { get; }
 
         public string AppVersionNumber { get; }
+        private string TestName { get; }
 
         private IOSDevice Device { get; }
         private IOSVersion OsVersion { get; }
-
-        private int ScreenshotCounter { get; set; }
 
         internal IOSDriverWrapper(string testName,
             TestLogs logs,
@@ -41,13 +40,18 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             Logs = logs;
             Device = device;
             OsVersion = osVersion;
+            TestName = testName;
+            Device = device;
+            OsVersion = osVersion;
 
-            _flipbookGeneration = new FlipbookGeneration(testName);
+
             _browserStackConfig = Configuration.Get<BrowserStackConfig>("BrowserStack");
 
             var iosConfig = Configuration.Get<IOSConfig>("iOS");
             var nhsAppConfig = Configuration.Get<NhsAppConfig>("NhsApp");
+            var flipBookConfig = Configuration.Get<FlipBookConfig>("FlipBookConfig");
 
+            _flipbookGeneration = new FlipbookGeneration(flipBookConfig.FlipBookPath, TestName);
 
             logs.TestDevice(device.ToName(), osVersion.ToName());
 
@@ -219,15 +223,24 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
         }
 
         //Write test details to file for flip book generation
-        void IDriverWrapper.WriteTestDetails()
+        void IDriverWrapper.WriteTestDetails(string parentJourney, string testName)
         {
-            _flipbookGeneration.WriteTestDetails(AppVersionNumber, Device.ToName(),
-                "Android", OsVersion.ToName());
+            var flipBookTestDetails = new FlipbookTestDetails
+            {
+                AppVersion = AppVersionNumber,
+                Device = $"iOS - {Device.ToName()}",
+                OSVersion = OsVersion.ToName(),
+                ParentJourney = parentJourney,
+                TestName = $"{testName} - iOS",
+                Folder = TestName
+            };
+
+            _flipbookGeneration.WriteTestDetails(flipBookTestDetails);
         }
 
         public void Screenshot(string screenshotName)
         {
-            _flipbookGeneration.Screenshot(_driver, $"{ScreenshotCounter++}{screenshotName}");
+            _flipbookGeneration.Screenshot(_driver, screenshotName);
         }
 
         public void Dispose() => _driver.Dispose();

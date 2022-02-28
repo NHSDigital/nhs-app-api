@@ -7,6 +7,11 @@ cd "$(dirname "${BASH_SOURCE[0]}")/../flipbookgeneration" || exit 1
 DOCKER_ARGS=()
 DOCKER_ARGS+=(--name "int_flipbook")
 
+# Remove previous docker container
+if [ "$(docker ps -a | grep int_flipbook)" ] 
+ then docker rm "$(docker ps -a | grep int_flipbook | awk '{print $1}')"
+fi
+
 echo "Generating flipbook..."
 
 docker run \
@@ -15,4 +20,5 @@ docker run \
    ./generate.sh"
 
 docker cp int_flipbook:/src/flipbook/. flipbook
+
 echo "Done."

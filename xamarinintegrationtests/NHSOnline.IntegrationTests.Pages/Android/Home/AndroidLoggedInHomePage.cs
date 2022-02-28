@@ -36,10 +36,17 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
                 LoggedInHomePageContent.BioFingerprint, LoggedInHomePageContent.AndroidInfoText);
         }
 
-        public static AndroidLoggedInHomePage AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidLoggedInHomePage AssertOnPage(IAndroidDriverWrapper driver,
+            bool screenshot = false)
         {
             var page = new AndroidLoggedInHomePage(driver);
             page.PageContent.AssertOnPage();
+
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(AndroidLoggedInHomePage));
+            }
+
             return page;
         }
 

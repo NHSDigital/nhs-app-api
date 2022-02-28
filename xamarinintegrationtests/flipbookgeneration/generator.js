@@ -1,16 +1,46 @@
 const fs = require('fs');
 const path = require('path');
 const flipbookPath = 'flipbook';
+const testDetails = JSON.parse(fs.readFileSync(`${flipbookPath}/testDetails.json`));
 
-var testData;
-var flipbookDirectory = fs.readdirSync(flipbookPath);
-var outputHtml = "<html><body>";
+formatName = (name) => name.toLowerCase().split(' ').join('-');
 
-for (var idx = 0; idx < flipbookDirectory.length; idx++) {
-    testData = fs.readFileSync(`${flipbookPath}/${flipbookDirectory[idx]}/testDetails.txt`, 'utf-8').split("\n");
-    outputHtml += `<h1>${flipbookDirectory[idx]}</h1><h2>AppVersion=v${testData[0]} | Model=${testData[1]} | OS Version=${testData[2]} ${testData[3]}</h2>`;
+// We want the tests with no parent journey to appear at the top
+testDetails.sort((a,b) => a.ParentJourney.localeCompare(b.ParentJourney));
 
-    var screenshotDir = path.resolve(`${flipbookPath}/${flipbookDirectory[idx]}/screenshots`);
+var outputHtml = `<html>
+    <head>
+        <style>
+            .break:not(:last-of-type){ break-after: page;}
+            body {
+                font-family: Arial;
+            }
+        </style>
+    </head>
+<body>`;
+
+for (var idx = 0; idx < testDetails.length; idx++) {
+    const { AppVersion, Device, OSVersion, ParentJourney, TestName, Folder } = testDetails[idx];
+    let ParentJourneyTestId;
+
+    if (!ParentJourney) {
+        let TestNameId = formatName(TestName);
+        outputHtml += `<div class="break"><h1 id="${TestNameId}">${TestName}</h1>`;
+    } else {
+        ParentJourneyTestId = formatName(ParentJourney);
+        outputHtml += `<div class="break"><h1>${TestName}</h1>` 
+    }
+
+    outputHtml += `<h2>AppVersion=v${AppVersion} | Device=${Device} | OS Version=${OSVersion}</h2>`;
+
+    // If not the login journey we need to print the link to it
+    if (ParentJourney) {
+        outputHtml += `<p style="margin:0;padding:20px;background:blue;color:white;display:inline-block;">
+        <a href="#${ParentJourneyTestId}" style="color:white;">${ParentJourney}</a></p>
+        <p style="margin:0;margin-top:10px;margin-bottom:10px;font-weight:bold;font-size:30px;">&darr;</p>`;
+    }
+
+    var screenshotDir = path.resolve(`${flipbookPath}/${Folder}/screenshots`);
     var files = fs.readdirSync(screenshotDir);
 
     for (var screenshot in files) {
@@ -18,16 +48,19 @@ for (var idx = 0; idx < flipbookDirectory.length; idx++) {
             return;
         }
 
-        if (screenshot % 4 == 0) {
-            outputHtml += "<p style='margin-top:1em;'></p>";
-        }
+        outputHtml += `<div class="break" style="display:inline-block;margin-left:1em;">`;
 
-        outputHtml += `<div style="display:inline-block;margin-left:1em;">
-            <span style="padding:10px;font-weight:bold;font-size:16px;">${parseInt(screenshot) + 1}</span><img src="${screenshotDir}/${files[screenshot]}" height="400px" width="200px" style="display:inline;vertical-align:top;"/>
-        </div>`; 
+        // Don't render arrows before first screenshot
+        if (screenshot > 0) {
+            outputHtml += `<span style="padding:10px;font-weight:bold;font-size:30px;">&rarr;</span>`;
+        }
+            
+        outputHtml +=`<img src="${screenshotDir}/${files[screenshot]}" height="500px" width="250px" style="display:inline;vertical-align:middle;margin-bottom:1em;"/></div>`; 
     }
 
-    outputHtml += "</body></html>";
+    outputHtml += '</div>'
 }
+
+outputHtml += "</body></html>";
 
 fs.writeFileSync('output.html', outputHtml);

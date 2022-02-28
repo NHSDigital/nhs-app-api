@@ -20,10 +20,16 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
         private IOSLabel VersionText(string versionNumber) => IOSLabel.WithText(_driver, $"Version {versionNumber}");
 
 
-        public static IOSLoggedOutHomePage AssertOnPage(IIOSDriverWrapper driver)
+        public static IOSLoggedOutHomePage AssertOnPage(IIOSDriverWrapper driver,
+            bool screenshot = false)
         {
             var page = new IOSLoggedOutHomePage(driver);
             page.AccessServicesText.AssertVisible();
+
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(IOSLoggedOutHomePage));
+            }
 
             driver.NhsAppWebViewClosed();
 

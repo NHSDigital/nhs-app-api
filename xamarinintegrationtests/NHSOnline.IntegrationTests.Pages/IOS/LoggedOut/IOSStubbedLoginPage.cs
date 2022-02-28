@@ -15,10 +15,16 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         public IOSSlimCloseNavigation Navigation { get; }
 
-        public static IOSStubbedLoginPage AssertOnPage(IIOSDriverWrapper driver)
+        public static IOSStubbedLoginPage AssertOnPage(IIOSDriverWrapper driver, bool screenshot = false)
         {
             var page = new IOSStubbedLoginPage(driver);
             page.PageContent.AssertOnPage();
+
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(IOSStubbedLoginPage));
+            }
+
             return page;
         }
     }

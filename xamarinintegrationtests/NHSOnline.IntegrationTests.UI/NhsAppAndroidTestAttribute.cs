@@ -15,8 +15,6 @@ namespace NHSOnline.IntegrationTests.UI
 
         public AndroidOSVersion OSVersion { get; set; } = AndroidOSVersion.Nine;
 
-        public bool IsFlipbookTest { get; set; }
-
         public NhsAppAndroidTestAttribute(params AndroidBrowserStackCapability[] capabilities)
         {
             Capabilities = capabilities.Aggregate(

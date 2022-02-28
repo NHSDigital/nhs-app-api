@@ -21,5 +21,15 @@ namespace NHSOnline.IntegrationTests.UI
                 Outcome = UnitTestOutcome.Inconclusive,
             };
         }
+
+        public TestResult Execute(TestLogs logs, ITestMethod testMethod, string parentJourney)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public TestResult Execute(TestLogs logs, ITestMethod testMethod, bool isFlipbookTest, string parentJourney)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

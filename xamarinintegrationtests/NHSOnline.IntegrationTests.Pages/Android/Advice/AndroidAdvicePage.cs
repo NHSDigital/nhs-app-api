@@ -21,10 +21,17 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Advice
             PageContent = new AdvicePageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
-        public static AndroidAdvicePage AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidAdvicePage AssertOnPage(IAndroidDriverWrapper driver,
+            bool screenshot = false)
         {
             var page = new AndroidAdvicePage(driver);
             page.PageContent.AssertOnPage();
+
+            if (screenshot)
+            {
+                driver.Screenshot("Advice");
+            }
+
             return page;
         }
 

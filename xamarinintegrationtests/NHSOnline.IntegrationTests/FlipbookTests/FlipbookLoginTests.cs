@@ -13,7 +13,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
     public class FlipbookLoginTests
     {
         [NhsAppAndroidTest]
-        [NhsAppFlipbookTest]
+        [NhsAppFlipbookTest(FlipbookTestName = "A user logs into the app")]
         public void APatientWithProofLevelNineCanSuccessfullyLogInAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
@@ -21,44 +21,34 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
             using var patients = Mocks.Patients.Add(patient);
 
             AndroidLoggedOutHomePage
-                .AssertOnPage(driver)
+                .AssertOnPage(driver, screenshot: true)
                 .ContinueWithNhsLogin();
 
-            driver.Screenshot("LoggedOutHomePage");
-
             AndroidGettingStartedPage
-                .AssertOnPage(driver)
+                .AssertOnPage(driver,  screenshot: true)
                 .Continue();
 
-            driver.Screenshot("GettingStartedPage");
-
             AndroidStubbedLoginPageSlimHeader
-                .AssertOnPage(driver)
+                .AssertOnPage(driver, screenshot: true)
                 .PageContent
                 .AssertVectorOfTrust()
                 .Login(patient);
 
             AndroidTermsAndConditionsPage
-                .AssertOnPage(driver)
+                .AssertOnPage(driver, screenshot: true)
                 .PageContent.AcceptTermsAndConditions();
 
-            driver.Screenshot("TermsAndConditions");
-
             AndroidUserResearchOptInPage
-                .AssertOnPage(driver)
+                .AssertOnPage(driver, screenshot: true)
                 .PageContent.OptInToUserResearch();
 
-            driver.Screenshot("UserResearch");
-
             AndroidLoggedInHomePage
-                .AssertOnPage(driver)
+                .AssertOnPage(driver, screenshot: true)
                 .AssertPageDisplayedFor("Wendy House");
-
-            driver.Screenshot("LoggedInHome");
         }
 
         [NhsAppIOSTest]
-        [NhsAppFlipbookTest]
+        [NhsAppFlipbookTest(FlipbookTestName = "A user logs into the app")]
         public void APatientWithProofLevelNineCanSuccessfullyLogInIOS(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
@@ -66,40 +56,30 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
             using var patients = Mocks.Patients.Add(patient);
 
             IOSLoggedOutHomePage
-                .AssertOnPage(driver)
+                .AssertOnPage(driver, screenshot: true)
                 .ContinueWithNhsLogin();
 
-            driver.Screenshot("LoggedOutHome");
-
             IOSGettingStartedPage
-                .AssertOnPage(driver)
+                .AssertOnPage(driver, screenshot: true)
                 .Continue();
 
-            driver.Screenshot("GettingStarted");
-
             IOSStubbedLoginPage
-                .AssertOnPage(driver)
+                .AssertOnPage(driver, screenshot: true)
                 .PageContent
                 .AssertVectorOfTrust()
                 .Login(patient);
 
             IOSTermsAndConditionsPage
-                .AssertOnPage(driver)
+                .AssertOnPage(driver, screenshot: true)
                 .PageContent.AcceptTermsAndConditions();
 
-            driver.Screenshot("TermsAndConditions");
-
             IOSUserResearchOptInPage
-                .AssertOnPage(driver)
+                .AssertOnPage(driver, screenshot: true)
                 .PageContent.OptInToUserResearch();
 
-            driver.Screenshot("UserResearch");
-
             IOSLoggedInHomePage
-                .AssertOnPage(driver)
+                .AssertOnPage(driver, screenshot: true)
                 .AssertPageDisplayedFor("Wendy House");
-
-            driver.Screenshot("LoggedInHome");
         }
     }
 }

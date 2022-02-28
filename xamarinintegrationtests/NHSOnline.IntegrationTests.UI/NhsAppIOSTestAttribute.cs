@@ -27,7 +27,8 @@ namespace NHSOnline.IntegrationTests.UI
             var requestedCapabilities = GetRequestedCapabilities(testMethod);
 
             var testExecution = new AutomatedTestExecution<IIOSDriverWrapper>(
-                logs => new IOSDriverWrapper(testName, logs, requestedCapabilities, IOSDevice, OSVersion));
+                logs => new IOSDriverWrapper(testName, logs, requestedCapabilities, IOSDevice,
+                    OSVersion));
 
             var testExecutor = new TestExecutor(testName, testMethod, testExecution);
 

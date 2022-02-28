@@ -23,11 +23,10 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         private TestLogs Logs { get; }
         public WebContextStrategies Web { get; }
         public string AppVersionNumber { get; }
+        private string TestName { get; }
 
         private AndroidDevice TargetDevice { get; }
         private AndroidOSVersion OsVersion { get; }
-
-        private int ScreenshotCounter { get; set; }
 
         internal AndroidDriverWrapper(
             string testName,
@@ -37,15 +36,18 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             AndroidOSVersion osVersion)
         {
             Logs = logs;
+
             TargetDevice = targetDevice;
             OsVersion = osVersion;
+            TestName = testName;
 
             _browserStackConfig = Configuration.Get<BrowserStackConfig>("BrowserStack");
 
-            _flipbookGeneration = new FlipbookGeneration(testName);
-
             var nhsAppConfig = Configuration.Get<NhsAppConfig>("NhsApp");
             var androidConfig = Configuration.Get<AndroidConfig>("Android");
+            var flipbookConfig = Configuration.Get<FlipBookConfig>("FlipbookConfig");
+
+            _flipbookGeneration = new FlipbookGeneration(flipbookConfig.FlipBookPath, TestName);
 
             logs.TestDevice(targetDevice.ToName(), osVersion.ToName());
 
@@ -209,10 +211,19 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         }
 
         //Write test details to file for flip book generation
-        void IDriverWrapper.WriteTestDetails()
+        void IDriverWrapper.WriteTestDetails(string parentJourney, string testName)
         {
-            _flipbookGeneration.WriteTestDetails(AppVersionNumber, TargetDevice.ToName(),
-                "Android", OsVersion.ToName());
+            var flipBookDetails = new FlipbookTestDetails
+            {
+                AppVersion = AppVersionNumber,
+                Device = $"Android - {TargetDevice.ToName()}",
+                OSVersion = OsVersion.ToName(),
+                ParentJourney = parentJourney,
+                TestName = $"{testName} - Android",
+                Folder = TestName
+            };
+
+            _flipbookGeneration.WriteTestDetails(flipBookDetails);
         }
 
         void IDriverWrapper.AddBrowserStackSessionDetailsToLogs(
@@ -228,8 +239,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 
         public void Screenshot(string screenshotName)
         {
-            _flipbookGeneration.Screenshot(_driver,
-                $"{ScreenshotCounter++}{screenshotName}");
+            _flipbookGeneration.Screenshot(_driver, screenshotName);
         }
 
         public void Dispose() => _driver.Dispose();

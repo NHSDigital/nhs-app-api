@@ -45,7 +45,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
             .WithText(_driver, "Continue")
             .ScrollIntoView();
 
-        public static IOSGettingStartedPage AssertOnPage(IIOSDriverWrapper driver)
+        public static IOSGettingStartedPage AssertOnPage(IIOSDriverWrapper driver, bool screenshot = false)
         {
             var page = new IOSGettingStartedPage(driver);
 
@@ -53,6 +53,11 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
                 .ShouldExpect(() =>
                 {
                     page.Title.AssertVisible();
+
+                    if (screenshot)
+                    {
+                        driver.Screenshot(nameof(IOSGettingStartedPage));
+                    }
                 })
                 .OrIfKnownIssueOccuredExpect(() =>
                 {

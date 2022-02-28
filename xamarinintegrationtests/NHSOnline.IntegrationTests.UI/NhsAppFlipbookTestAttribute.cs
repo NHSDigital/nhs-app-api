@@ -6,5 +6,9 @@ namespace NHSOnline.IntegrationTests.UI
     public sealed class NhsAppFlipbookTestAttribute: TestCategoryBaseAttribute
     {
         public override IList<string> TestCategories  => new List<string> { "NhsAppFlipbookTest" };
+
+        public string? FlipbookTestName { get; set; }
+
+        public string? ParentJourney { get; set; }
     }
 }

@@ -12,10 +12,17 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
             PageContent = new UserResearchOptInPageContent(driver.Web.NhsAppPreHomeWebView());
         }
 
-        public static AndroidUserResearchOptInPage AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidUserResearchOptInPage AssertOnPage(IAndroidDriverWrapper driver,
+            bool screenshot = false)
         {
             var page = new AndroidUserResearchOptInPage(driver);
             page.PageContent.AssertOnPage();
+
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(AndroidUserResearchOptInPage));
+            }
+
             return page;
         }
     }

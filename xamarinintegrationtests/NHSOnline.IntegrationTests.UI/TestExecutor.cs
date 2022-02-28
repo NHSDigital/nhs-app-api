@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.IntegrationTests.UI.Drivers.Native;
 using NHSOnline.IntegrationTests.UI.Reporting;
 
 namespace NHSOnline.IntegrationTests.UI

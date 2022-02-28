@@ -67,7 +67,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             WhatToDoThirteenToFifteenLink,
             ContinueButton);
 
-        public static AndroidGettingStartedPage AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidGettingStartedPage AssertOnPage(IAndroidDriverWrapper driver,
+            bool screenshot = false)
         {
             // Extending timeout as its been shown this page causes failures by not taking enough time to wait for it to load
             using var extendedTimeout = ExtendedTimeout.FromSeconds(20);
@@ -78,6 +79,11 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
                 .ShouldExpect(() =>
                 {
                     page.Title.AssertVisible();
+
+                    if (screenshot)
+                    {
+                        driver.Screenshot(nameof(AndroidGettingStartedPage));
+                    }
                 })
                 .OrIfKnownIssueOccuredExpect(() =>
                 {

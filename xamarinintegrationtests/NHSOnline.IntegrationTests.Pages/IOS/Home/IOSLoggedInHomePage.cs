@@ -17,10 +17,17 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
                     LoggedInHomePageContent.IOSInfoText);
         }
 
-        public static IOSLoggedInHomePage AssertOnPage(IIOSDriverWrapper driver)
+        public static IOSLoggedInHomePage AssertOnPage(IIOSDriverWrapper driver,
+            bool screenshot = false)
         {
             var page = new IOSLoggedInHomePage(driver);
             page.PageContent.AssertOnPage();
+
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(IOSLoggedInHomePage));
+            }
+
             return page;
         }
 

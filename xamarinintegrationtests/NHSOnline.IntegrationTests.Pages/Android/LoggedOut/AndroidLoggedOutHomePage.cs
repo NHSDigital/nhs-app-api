@@ -1,3 +1,4 @@
+using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -19,10 +20,15 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         private AndroidLabel VersionText(string versionNumber) => AndroidLabel.WithText(_driver, $"Version {versionNumber}");
 
-        public static AndroidLoggedOutHomePage AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidLoggedOutHomePage AssertOnPage(IAndroidDriverWrapper driver, bool screenshot = false)
         {
             var page = new AndroidLoggedOutHomePage(driver);
             page.AccessServicesText.AssertVisible();
+
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(AndroidLoggedInHomePage));
+            }
 
             driver.NhsAppWebViewClosed();
 

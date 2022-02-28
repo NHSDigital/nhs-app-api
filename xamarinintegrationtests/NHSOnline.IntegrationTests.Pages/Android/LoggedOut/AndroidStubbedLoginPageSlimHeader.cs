@@ -15,10 +15,17 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         public AndroidSlimCloseNavigation Navigation { get; }
 
-        public static AndroidStubbedLoginPageSlimHeader AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidStubbedLoginPageSlimHeader AssertOnPage(IAndroidDriverWrapper driver,
+            bool screenshot = false)
         {
             var page = new AndroidStubbedLoginPageSlimHeader(driver);
             page.PageContent.AssertOnPage();
+
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(AndroidStubbedLoginPageSlimHeader));
+            }
+
             return page;
         }
     }

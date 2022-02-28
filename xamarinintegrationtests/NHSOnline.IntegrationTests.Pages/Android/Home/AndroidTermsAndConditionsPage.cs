@@ -12,10 +12,17 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
             PageContent = new TermsAndConditionsPageContent(driver.Web.NhsAppPreHomeWebView());
         }
 
-        public static AndroidTermsAndConditionsPage AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidTermsAndConditionsPage AssertOnPage(IAndroidDriverWrapper driver,
+            bool screenshot = false)
         {
             var page = new AndroidTermsAndConditionsPage(driver);
             page.PageContent.AssertOnPage();
+
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(AndroidTermsAndConditionsPage));
+            }
+
             return page;
         }
 
