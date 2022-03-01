@@ -238,6 +238,29 @@ spec:
       - protocol: TCP
         port: {{ $.Values.spineLdapPort }}
 ---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-internet-egress-from-api-{{ .Chart.AppVersion }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    role: {{ $.Values.api.role }}
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  podSelector:
+    matchLabels:
+      role: {{ $.Values.api.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+      ports:
+        - protocol: TCP
+          port: 443
+---
 {{- end }}
 {{- if $.Values.spinePdsEnabled -}}
 kind: NetworkPolicy
