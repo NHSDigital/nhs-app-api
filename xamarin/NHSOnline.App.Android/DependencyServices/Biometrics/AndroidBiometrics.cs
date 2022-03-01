@@ -6,6 +6,7 @@ using Android.OS;
 using Android.Security.Keystore;
 using AndroidX.Biometric;
 using AndroidX.Fragment.App;
+using Java.Lang;
 using Java.Security;
 using Java.Security.Spec;
 using Microsoft.Extensions.Logging;
@@ -13,6 +14,7 @@ using NHSOnline.App.DependencyServices.Biometrics;
 using NHSOnline.App.Droid.DependencyServices.Biometrics;
 using NHSOnline.App.Logging;
 using Xamarin.Forms;
+using Exception = System.Exception;
 
 [assembly: Dependency(typeof(AndroidBiometrics))]
 namespace NHSOnline.App.Droid.DependencyServices.Biometrics
@@ -26,25 +28,9 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
         {
             using var manager = BiometricManager.From(MainActivity);
 
-            var canAuthenticate = manager.CanAuthenticate(BiometricManager.Authenticators.BiometricStrong);
-
-            BiometricStatus status = canAuthenticate switch
-            {
-                BiometricManager.BiometricErrorHwUnavailable => Unusable(),
-                BiometricManager.BiometricErrorNoneEnrolled => Unusable(),
-                BiometricManager.BiometricErrorNoHardware => LegacySensorNotValid(),
-                BiometricManager.BiometricErrorSecurityUpdateRequired => Unusable(),
-                BiometricManager.BiometricErrorUnsupported => LegacySensorNotValid(),
-                BiometricManager.BiometricStatusUnknown => Unusable(),
-                BiometricManager.BiometricSuccess => Usable(),
-                _ => HardwareNotPresent()
-            };
-
-            return Task.FromResult(status);
-
             BiometricStatus.FingerPrintFaceOrIris Unusable() =>
-            new BiometricStatus.FingerPrintFaceOrIris(BiometricHardwareState.Unusable,
-                DeriveBiometricRegistrationStatus(fidoUsername));
+                new BiometricStatus.FingerPrintFaceOrIris(BiometricHardwareState.Unusable,
+                    DeriveBiometricRegistrationStatus(fidoUsername));
 
             BiometricStatus.FingerPrintFaceOrIris Usable() =>
                 new BiometricStatus.FingerPrintFaceOrIris(BiometricHardwareState.Usable,
@@ -53,6 +39,33 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
             BiometricStatus.HardwareNotPresent HardwareNotPresent() => new BiometricStatus.HardwareNotPresent();
 
             BiometricStatus.LegacySensorNotValid LegacySensorNotValid() => new BiometricStatus.LegacySensorNotValid();
+
+            try
+            {
+                var canAuthenticate = manager.CanAuthenticate(BiometricManager.Authenticators.BiometricStrong);
+
+                BiometricStatus status = canAuthenticate switch
+                {
+                    BiometricManager.BiometricErrorHwUnavailable => Unusable(),
+                    BiometricManager.BiometricErrorNoneEnrolled => Unusable(),
+                    BiometricManager.BiometricErrorNoHardware => LegacySensorNotValid(),
+                    BiometricManager.BiometricErrorSecurityUpdateRequired => Unusable(),
+                    BiometricManager.BiometricErrorUnsupported => LegacySensorNotValid(),
+                    BiometricManager.BiometricStatusUnknown => Unusable(),
+                    BiometricManager.BiometricSuccess => Usable(),
+                    _ => HardwareNotPresent()
+                };
+
+                return Task.FromResult(status);
+            }
+            catch (IllegalStateException e) when (e.Message != null && e.Message.Contains("Unknown security", StringComparison.Ordinal))
+            {
+                Logger.LogError(e, "Illegal state exception fetching biometric status - Unknown security level");
+
+                // Return unusable if we cannot determine the devices security level
+                return Task.FromResult((BiometricStatus) Unusable());
+            }
+
         }
 
         private BiometricRegistrationStatus DeriveBiometricRegistrationStatus(string fidoUsername)
