@@ -5,12 +5,15 @@
              xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Controls.Panels.FileDownloadFailureError"
              x:Name="Root">
-    <elements:Heading1 Text="Sorry, something went wrong" x:Name="Heading" />
+    <elements:Heading1 Text="Cannot download file" x:Name="Heading" />
     <panels:NhsErrorCallout LabelText="Error">
         <StackLayout>
-            <elements:Paragraph Text="We could not download this file, please try again." />
-            <elements:Paragraph Text="If the problem continues and you need to download a document from your GP health record, contact your GP surgery." />
-            <elements:Paragraph Text="If you’re trying to download another type of document, you can try again now. If the problem continues you may need to find another way to download the document." />
+            <elements:Paragraph Text="Try again. If you still cannot download this file and it’s a document from your GP health record, contact your GP surgery." />
+            <elements:Paragraph Text="For all other types of documents, you’ll need to find another way to view them." />
+            
+            <elements:LinkLabel Text="Get help with downloading documents from your health record"
+                                Margin="0,20,0,0"
+                                Command="{Binding GetHelpWithDocumentDownloadingCommand, Source={x:Reference Name=Root}}" />
 
             <elements:LinkLabel Text="Try again"
                                 Margin="0,20,0,0"

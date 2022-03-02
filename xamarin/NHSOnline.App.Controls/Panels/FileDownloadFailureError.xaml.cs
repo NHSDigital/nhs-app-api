@@ -10,9 +10,18 @@ namespace NHSOnline.App.Controls.Panels
         public static readonly BindableProperty TryAgainCommandProperty =
             BindableProperty.Create(nameof(TryAgainCommand), typeof(ICommand), typeof(FileDownloadFailureError));
 
+        public static readonly BindableProperty GetHelpWithDocumentDownloadingCommandProperty =
+            BindableProperty.Create(nameof(GetHelpWithDocumentDownloadingCommand), typeof(ICommand), typeof(FileDownloadFailureError));
+
         public FileDownloadFailureError()
         {
             InitializeComponent();
+        }
+
+        public ICommand GetHelpWithDocumentDownloadingCommand
+        {
+            get => (ICommand) GetValue(GetHelpWithDocumentDownloadingCommandProperty);
+            set => SetValue(GetHelpWithDocumentDownloadingCommandProperty, value);
         }
 
         public ICommand TryAgainCommand

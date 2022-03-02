@@ -32,6 +32,7 @@ namespace NHSOnline.App.Areas.Errors.Presenters
 
             view.AppNavigation
                 .RegisterHandler(TryAgainRequested, (view, handler) => view.TryAgainRequested = handler)
+                .RegisterHandler(GetHelpWithDocumentDownloadingRequested, (view, handler) => view.GetHelpWithDocumentDownloadingRequested = handler)
                 .RegisterHandler(model.NavigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
                 .RegisterHandler(HelpRequested, (view, handler) => view.HelpRequested = handler)
                 .RegisterHandler(model.NavigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
@@ -63,6 +64,15 @@ namespace NHSOnline.App.Areas.Errors.Presenters
             _logger.LogInformation("Back requested");
 
             await _view.AppNavigation.Pop().PreserveThreadContext();
+        }
+
+        private async Task GetHelpWithDocumentDownloadingRequested()
+        {
+            _logger.LogInformation("Get Help With Document Downloading requested");
+
+            await _browserOverlay
+                .OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsAppGetDocumentDownloadHelpUrl)
+                .PreserveThreadContext();
         }
     }
 }

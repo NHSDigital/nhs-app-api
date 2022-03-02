@@ -40,6 +40,9 @@ namespace NHSOnline.App.Areas.Errors.Views
         public AsyncCommand BackRequestedCommand
             => new AsyncCommand(() => BackRequested);
 
+        public Func<Task>? GetHelpWithDocumentDownloadingRequested { get; set; }
+        public ICommand GetHelpWithDocumentDownloadingCommand => new AsyncCommand(() => GetHelpWithDocumentDownloadingRequested);
+
         protected override void OnAppearing()
         {
             _logger.LogInformation("{Method}", nameof(OnAppearing));

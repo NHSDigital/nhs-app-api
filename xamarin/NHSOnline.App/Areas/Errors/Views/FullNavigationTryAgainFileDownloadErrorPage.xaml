@@ -9,14 +9,16 @@
                             mc:Ignorable="d"
                             x:Class="NHSOnline.App.Areas.Errors.Views.FullNavigationTryAgainFileDownloadErrorPage"
                             x:Name="Page"
-                            PageDescription="Sorry, something went wrong"
+                            PageDescription="Cannot download file"
                             SelectedNavigationFooterItem="{Binding SelectedNavigationFooterItem, Source={x:Reference Name=Page}}">
 
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <panels:ResponsiveLayoutPanel>
             <panels:FileDownloadFailureError
                 x:Name="ErrorPanel"
-                TryAgainCommand="{Binding TryAgainCommand, Source={x:Reference Name=Page}}" />
+                TryAgainCommand="{Binding TryAgainCommand, Source={x:Reference Name=Page}}"
+                GetHelpWithDocumentDownloadingCommand="{Binding GetHelpWithDocumentDownloadingCommand, Source={x:Reference Name=Page}}" />
         </panels:ResponsiveLayoutPanel>
     </ScrollView>
+    
 </pages:NhsAppFullHeaderPage>

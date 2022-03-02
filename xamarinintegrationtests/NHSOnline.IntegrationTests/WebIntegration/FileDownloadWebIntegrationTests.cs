@@ -34,6 +34,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration
     {
         private const string ThirdPartyHelpLinkPath = "health-records-in-the-nhs-app/third-party-services/";
 
+        private const string DocumentDownloadHelpLinkPath = "health-records-in-the-nhs-app/gp-health-record/";
+
         [NhsAppAndroidTest(AndroidDevice = AndroidDevice.Pixel3, OSVersion = AndroidOSVersion.Ten)]
         public void APatientWithProofLevelNineCanDownloadAFileFromAWebIntegrationDownloadFileScreenAndroid(
             IAndroidDriverWrapper driver)
@@ -242,6 +244,42 @@ namespace NHSOnline.IntegrationTests.WebIntegration
             clientLogs.AssertClientLogStartsWith("Failed to construct a PKPass object as the data received is not in the expected format. DownloadRequest file length:");
         }
 
+        [NhsAppIOSTest]
+        public void
+            APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingACorruptedPassKitFileFromAWebIntegrationDownloadFileScreenAndGetDocumentDownloadHelpIOS(
+                IIOSDriverWrapper driver)
+        {
+            var patient = new PkbPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsIOS(driver);
+
+            var timing = TimedTestExecutor.Execute(() =>
+            {
+                IOSFileDownloadPage
+                    .AssertOnPage(driver)
+                    .AssertNativeHeader()
+                    .PageContent.DownloadCorruptedPass();
+
+                IOSFileDownloadErrorPage
+                    .AssertOnPage(driver)
+                    .AssertPageElements()
+                    .GetDocumentDownloadHelp();
+
+                IOSFileDownloadPage
+                    .AssertOnPage(driver);
+
+                // Wait for the asynchronous log call to be made
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+            });
+
+            var clientLogs = new ClientLoggerLogs(timing.StartTime, timing.StopTime);
+            clientLogs.AssertClientLogStartsWith("Failed to construct a PKPass object as the data received is not in the expected format. DownloadRequest file length:");
+        }
+
         [NhsAppAndroidTest]
         public void
             APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingAPassKitFileFromAWebIntegrationDownloadFileScreenAndCanTryAgainAndroid
@@ -267,6 +305,36 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver)
                 .AssertPageElements()
                 .TryAgain();
+
+            AndroidFileDownloadPage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppAndroidTest]
+        public void
+            APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingAPassKitFileFromAWebIntegrationDownloadFileScreenAndCanGetDocumentDownloadHelpAndroid
+            (
+                IAndroidDriverWrapper driver)
+        {
+            var patient = new PkbPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+            NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsAndroid(driver);
+
+            AndroidFileDownloadPage
+                .AssertOnPage(driver)
+                .AssertNativeHeaderAllIcons()
+                .PageContent.DownloadPass();
+
+            AndroidFilePermissionsDialog
+                .AssertDisplayed(driver)
+                .Allow();
+
+            AndroidFileDownloadErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements()
+                .GetDocumentDownloadHelp();
 
             AndroidFileDownloadPage
                 .AssertOnPage(driver);
@@ -303,6 +371,40 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidBrowserOverlayNhsAppHelpPage
                 .AssertOnPage(driver, ThirdPartyHelpLinkPath)
+                .ReturnToApp();
+        }
+
+        [NhsAppAndroidTest]
+        public void
+            APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingACorruptedFileFromAWebIntegrationDownloadFileScreenAndCanGetDocumentDownloadHelpAndroid
+            (
+                IAndroidDriverWrapper driver)
+        {
+            var patient = new PkbPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+            NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsAndroid(driver);
+
+            AndroidFileDownloadPage
+                .AssertOnPage(driver)
+                .AssertNativeHeaderAllIcons()
+                .PageContent.DownloadCorrupted();
+
+            AndroidFilePermissionsDialog
+                .AssertDisplayed(driver)
+                .Allow();
+
+            AndroidFileDownloadErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements()
+                .GetDocumentDownloadHelp();
+
+            AndroidBrowserOverlayBrowserChoice
+                .IfDisplayed(driver, choice => choice.ChooseChrome());
+
+            AndroidBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, DocumentDownloadHelpLinkPath)
                 .ReturnToApp();
         }
 
@@ -399,6 +501,35 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSBrowserOverlayNhsAppHelpPage
                 .AssertOnPage(driver, ThirdPartyHelpLinkPath)
+                .ReturnToApp();
+        }
+
+        [NhsAppIOSTest]
+        public void
+            APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingACorruptedFileFromAWebIntegrationDownloadFileScreenAndCanGetDocumentDownloadHelpIOS
+            (
+                IIOSDriverWrapper driver)
+        {
+            var patient = new PkbPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+            LoginProcess.LogIOSPatientIn(driver, patient);
+            NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsIOS(driver);
+
+            IOSFileDownloadPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.DownloadCorrupted();
+
+            IOSFileDownloadErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements()
+                .GetDocumentDownloadHelp();
+
+            Thread.Sleep(TimeSpan.FromSeconds(5));
+
+            IOSBrowserOverlayNhsAppHelpPage
+                .AssertOnPage(driver, DocumentDownloadHelpLinkPath)
                 .ReturnToApp();
         }
 

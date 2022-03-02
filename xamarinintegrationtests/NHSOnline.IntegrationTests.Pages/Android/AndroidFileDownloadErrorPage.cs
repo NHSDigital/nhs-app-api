@@ -15,18 +15,18 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidFullNavigation Navigation { get; }
 
-        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Sorry, something went wrong");
-
-        private AndroidLabel WeCouldNotDownloadLabel => AndroidLabel
-            .WithText(_driver, "We could not download this file, please try again.")
-            .ScrollIntoView();
-
-        private AndroidLabel IfYourProblemContinuesLabel => AndroidLabel
-            .WithText(_driver, "If the problem continues and you need to download a document from your GP health record, contact your GP surgery.")
-            .ScrollIntoView();
+        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Cannot download file");
 
         private AndroidLabel TryAgainNowLabel => AndroidLabel
-            .WithText(_driver, "If you’re trying to download another type of document, you can try again now. If the problem continues you may need to find another way to download the document.")
+            .WithText(_driver, "Try again. If you still cannot download this file and it’s a document from your GP health record, contact your GP surgery.")
+            .ScrollIntoView();
+
+        private AndroidLabel OtherTypesOfDocumentLabel => AndroidLabel
+            .WithText(_driver, "For all other types of documents, you’ll need to find another way to view them.")
+            .ScrollIntoView();
+
+        private AndroidLink GetDocumentDownloadHelpLink => AndroidLink
+            .WithContentDescription(_driver, "Get help with downloading documents from your health record")
             .ScrollIntoView();
 
         private AndroidLink TryAgainButton => AndroidLink
@@ -42,16 +42,18 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         public AndroidFileDownloadErrorPage AssertPageElements()
         {
-            Navigation.AssertNavigationIconsArePresent();
-            WeCouldNotDownloadLabel.AssertVisible();
-            IfYourProblemContinuesLabel.AssertVisible();
+            Navigation.AssertNavigationIconsArePresent(); ;
             TryAgainNowLabel.AssertVisible();
+            OtherTypesOfDocumentLabel.AssertVisible();
+            GetDocumentDownloadHelpLink.AssertVisible();
             TryAgainButton.AssertVisible();
 
             return this;
         }
 
         public void TryAgain() => TryAgainButton.Touch();
+
+        public void GetDocumentDownloadHelp() => GetDocumentDownloadHelpLink.Touch();
 
         public void Help() => Navigation.NavigateToHelp();
 
