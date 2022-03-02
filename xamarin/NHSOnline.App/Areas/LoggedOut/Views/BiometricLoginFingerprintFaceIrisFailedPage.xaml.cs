@@ -28,13 +28,20 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
 
         IAppNavigation<IBiometricLoginFingerprintFaceIrisFailedView.IEvents> INavigationView<IBiometricLoginFingerprintFaceIrisFailedView.IEvents>.AppNavigation => _appNavigation;
 
+        Func<Task>? IBiometricLoginFingerprintFaceIrisFailedView.IEvents.Appearing { get; set; }
+        private ICommand AppearingCommand => new AsyncCommand(() => Events.Appearing);
+
         public Func<Task>? BackHomeRequested { get; set; }
         public ICommand BackHomeCommand => new AsyncCommand(() => BackHomeRequested);
+
+        private IBiometricLoginFingerprintFaceIrisFailedView.IEvents Events => this;
 
         protected override void OnAppearing()
         {
             _logger.LogInformation("{Method}", nameof(OnAppearing));
             _appNavigation.EnableHandlers();
+
+            AppearingCommand.Execute(null);
 
             base.OnAppearing();
         }
