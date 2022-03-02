@@ -78,14 +78,13 @@ namespace NHSOnline.IntegrationTests.Canary
 
             driver.PressBackButton();
 
+            AndroidHospitalAndOtherAppointmentsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToViewAppointments();
+
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, "View appointments")
                 .PageContent.NavigateToNextPage();
-
-            AndroidPkbPage
-                .AssertOnPage(driver, PhrPath.ViewAppointments)
-                .AssertNativeHeader()
-                .Navigation.NavigateToYourHealth();
 
             AndroidPkbPage
                 .AssertOnPage(driver, PhrPath.ViewAppointments)
