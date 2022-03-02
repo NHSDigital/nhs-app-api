@@ -10,17 +10,9 @@
       :aria-label="$t('navigation.header.nhsAppOnlineHomepage')"
       @click.stop.prevent="onClick">
       <nhs-header-svg/>
-      <span v-if="!$store.state.device.isNativeApp"
-            id="logo-text"
-            class="nhsuk-header__service-name">
-        {{ $t('navigation.header.nhsAppOnline') }}</span>
     </router-link>
     <div v-else>
       <nhs-header-svg/>
-      <span v-if="!$store.state.device.isNativeApp"
-            id="logo-text"
-            class="nhsuk-header__service-name">
-        {{ $t('navigation.header.nhsAppOnline') }}</span>
     </div>
   </div>
 </template>

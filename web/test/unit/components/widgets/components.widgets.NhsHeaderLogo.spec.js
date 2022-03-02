@@ -29,21 +29,8 @@ describe('NhsHeaderLogo.vue', () => {
   };
 
   describe('on desktop', () => {
-    let span;
-
     beforeEach(() => {
       wrapper = mountAs({ native: false });
-      span = wrapper.find('#logo-text');
-    });
-
-    it('will show desktop service header', () => {
-      expect(span
-        .exists())
-        .toBe(true);
-    });
-
-    it('will display NHS App online text', () => {
-      expect(span.text()).toEqual('NHS App online');
     });
 
     it('will have the service header design for the logo', () => {
