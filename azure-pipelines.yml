@@ -94,7 +94,7 @@ variables:
   native.xamarin.target: ${{ parameters.xamarinTarget }}
   native.xamarin.runXamarinBuilds: ${{ parameters.runXamarinBuilds }}
   native.xamarin.runFlipbookTests: ${{ parameters.runFlipbookTests }}
-  native.xamarin.version: '2.5.0'
+  native.xamarin.version: '2.6.0'
   native.xamarin.ios.build.number:  $[counter(variables['native.version.number'], 1)]
   native.xamarin.android.build.number: $[counter('android', 100)]
   sjr.config.image.name: 'nhsonline-service-journey-prod-config'

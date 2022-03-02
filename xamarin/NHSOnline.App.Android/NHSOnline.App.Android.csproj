@@ -11,7 +11,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>NHSOnline.App.Droid</RootNamespace>
     <AssemblyName>NHSOnline.App.Android</AssemblyName>
-    <NhsAppVersionName>2.4.0</NhsAppVersionName>
+    <NhsAppVersionName>2.6.0</NhsAppVersionName>
     <NhsAppAndroidBuildNumber>99</NhsAppAndroidBuildNumber>
     <Deterministic>True</Deterministic>
     <AndroidApplication>True</AndroidApplication>
