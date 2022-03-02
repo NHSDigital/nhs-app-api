@@ -12,7 +12,7 @@ class TermsAndConditionsPage : HybridPageObject() {
     val mainBodyText = HybridPageElement(
         webDesktopLocator = "//p",
         page = this
-    ).withText("To use the NHS App you must agree to our", exact = false)
+    ).withText("To use your NHS account you must agree to our", exact = false)
 
     val mainErrorMessage = HybridPageElement(
         webDesktopLocator = "//li",
@@ -31,7 +31,7 @@ class TermsAndConditionsPage : HybridPageObject() {
 
     val acceptCookiesCheckBox = CheckBoxElement(
             page = this,
-            text = "I accept the use of optional analytic cookies used to improve the performance of the NHS App."
+            text = "I accept the use of optional analytic cookies used to improve performance."
     )
 
     val continueButton = HybridPageElement(

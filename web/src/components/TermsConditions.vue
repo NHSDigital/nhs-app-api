@@ -15,6 +15,7 @@
       </div>
     </div>
     <div id="text_body" :class="$style.info">
+      <p>{{ $t('termsAndConditions.initial.loginToAccount') }}</p>
       <p>{{ $t('termsAndConditions.initial.youMustAgreeTo') }}
         <span>
           <!-- inline links achieved through span to ensure font boosting is possible -->
@@ -48,14 +49,7 @@
       </error-message>
       <fieldset class="nhsuk-fieldset">
         <legend>
-          <p>
-            {{ $t('termsAndConditions.initial.manageCookies.prefix') }}
-            <span>
-              <a :href="cookiesPolicyURL" target="_blank" rel="noopener noreferrer">
-                {{ $t('termsAndConditions.initial.manageCookies.link') }}</a>
-            </span>
-            {{ $t('termsAndConditions.initial.manageCookies.suffix') }}
-          </p>
+          <p>{{ $t('termsAndConditions.initial.manageCookies.text') }}</p>
         </legend>
         <generic-checkbox :value="termsAcceptedValue"
                           :a-described-by="hasTriedToContinue && !areTermsAccepted ?
