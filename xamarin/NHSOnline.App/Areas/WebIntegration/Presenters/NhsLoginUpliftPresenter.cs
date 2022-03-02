@@ -10,6 +10,7 @@ using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
+using NHSOnline.App.Services.FIDO;
 using NHSOnline.App.Services.Media;
 using NHSOnline.App.Threading;
 using Xamarin.Forms;
@@ -26,6 +27,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
         private readonly INhsLoginConfiguration _nhsLoginConfiguration;
         private readonly IBrowserOverlay _browserOverlay;
         private readonly ISelectMediaService _selectMediaService;
+        private readonly IBiometricAuthenticationService _biometricAuthenticationService;
 
         private readonly LoginState _loginState;
 
@@ -37,7 +39,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             INhsLoginService nhsLoginService,
             INhsLoginConfiguration nhsLoginConfiguration,
             IBrowserOverlay browserOverlay,
-            ISelectMediaService selectMediaService)
+            ISelectMediaService selectMediaService,
+            IBiometricAuthenticationService biometricAuthenticationService)
         {
             _logger = logger;
             _view = view;
@@ -47,6 +50,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             _nhsLoginConfiguration = nhsLoginConfiguration;
             _browserOverlay = browserOverlay;
             _selectMediaService = selectMediaService;
+            _biometricAuthenticationService = biometricAuthenticationService;
 
             _view.AppNavigation
                 .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
@@ -110,6 +114,23 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             var termsAndConditionsDeclinedPage = _pageFactory.CreatePageFor(termsAndConditionsDeclinedModel);
 
             await _view.AppNavigation.ReplaceCurrentPage(termsAndConditionsDeclinedPage).PreserveThreadContext();
+        }
+
+        public async Task Visit(AuthReturnCheckResult.SignatureInvalid signatureInvalid)
+        {
+            _logger.LogInformation("NHS Login No FIDO record");
+
+            var biometricStatus = await _biometricAuthenticationService.FetchBiometricStatus(string.Empty)
+                .PreserveThreadContext();
+
+            Page page = biometricStatus switch
+            {
+                BiometricStatusResult.FaceId => _pageFactory.CreatePageFor(new BiometricLoginFaceIdLockedOutModel()),
+                BiometricStatusResult.TouchId => _pageFactory.CreatePageFor(new BiometricLoginTouchIdLockedOutModel()),
+                _ => _pageFactory.CreatePageFor(new BiometricLoginFingerprintLockedOutModel())
+            };
+
+            await _view.AppNavigation.ReplaceCurrentPage(page).PreserveThreadContext();
         }
 
         public async Task Visit(AuthReturnCheckResult.Failed failed)

@@ -38,5 +38,10 @@ namespace NHSOnline.App.NhsLogin
 
             public override T Accept<T>(IAuthReturnCheckResultVisitor<T> visitor) => visitor.Visit(this);
         }
+
+        public sealed class SignatureInvalid : AuthReturnCheckResult
+        {
+            public override T Accept<T>(IAuthReturnCheckResultVisitor<T> visitor) => visitor.Visit(this);
+        }
     }
 }

@@ -9,6 +9,7 @@ using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.Events.Models;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
+using NHSOnline.App.Services.FIDO;
 using NHSOnline.App.Threading;
 using Xamarin.Forms;
 
@@ -23,6 +24,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly INhsLoginConfiguration _nhsLoginConfiguration;
         private readonly IBrowserOverlay _browserOverlay;
         private readonly LoginState _loginState;
+        private readonly IBiometricAuthenticationService _biometricAuthenticationService;
         private Uri? _deeplinkUrl;
 
         private Uri? ResolveDeeplinkUrl => _deeplinkUrl ?? _model.DeeplinkUrl;
@@ -34,7 +36,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             IPageFactory pageFactory,
             INhsLoginConfiguration nhsLoginConfiguration,
             IBrowserOverlay browserOverlay,
-            INhsLoginService nhsLoginService)
+            INhsLoginService nhsLoginService,
+            IBiometricAuthenticationService biometricAuthenticationService)
         {
             _model = model;
             _view = view;
@@ -42,6 +45,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _pageFactory = pageFactory;
             _nhsLoginConfiguration = nhsLoginConfiguration;
             _browserOverlay = browserOverlay;
+            _biometricAuthenticationService = biometricAuthenticationService;
 
             _view.AppNavigation
                 .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
@@ -116,6 +120,24 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var termsAndConditionsDeclinedPage = _pageFactory.CreatePageFor(termsAndConditionsDeclinedModel);
 
             await _view.AppNavigation.ReplaceCurrentPage(termsAndConditionsDeclinedPage).PreserveThreadContext();
+        }
+
+        public async Task Visit(AuthReturnCheckResult.SignatureInvalid signatureInvalid)
+        {
+            _logger.LogError("NHS Login No FIDO record");
+
+            // iOS doesn't use a fidoUsername and for Android we only care for the type of biometric
+            var biometricStatus = await _biometricAuthenticationService.FetchBiometricStatus(string.Empty)
+                .PreserveThreadContext();
+
+            Page page = biometricStatus switch
+            {
+                BiometricStatusResult.FaceId => _pageFactory.CreatePageFor(new BiometricLoginFaceIdLockedOutModel()),
+                BiometricStatusResult.TouchId => _pageFactory.CreatePageFor(new BiometricLoginTouchIdLockedOutModel()),
+                _ => _pageFactory.CreatePageFor(new BiometricLoginFingerprintLockedOutModel())
+            };
+
+            await _view.AppNavigation.ReplaceCurrentPage(page).PreserveThreadContext();
         }
 
         public async Task Visit(AuthReturnCheckResult.Failed failed)

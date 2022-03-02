@@ -6,6 +6,8 @@ namespace NHSOnline.App.NhsLogin
 {
     public sealed class LoginState
     {
+        private const string NhsLoginErrorSignatureInvalid = "signature_invalid";
+        private const string NhsLoginErrorConsentNotGiven = "ConsentNotGiven";
         private readonly ILogger _logger;
         private readonly Uri _authReturnUri;
 
@@ -31,6 +33,7 @@ namespace NHSOnline.App.NhsLogin
             }
 
             var queryString = HttpUtility.ParseQueryString(uri.Query);
+
             if (queryString["code"] != null)
             {
                 var code = queryString["code"];
@@ -38,20 +41,19 @@ namespace NHSOnline.App.NhsLogin
             }
 
             var errorDescription = queryString["error_description"];
-            if (errorDescription != null && "ConsentNotGiven".Equals(errorDescription, StringComparison.Ordinal))
+            if (errorDescription is NhsLoginErrorConsentNotGiven)
             {
                 return new AuthReturnCheckResult.TermsAndConditionsDeclined();
             }
 
-            string errorLogMessage;
-            if (queryString["error"] != null)
+            var error = queryString["error"];
+            string errorLogMessage = queryString["error"] == null ?
+                $"NHS login redirect without code or error; Uri: {uri}"
+                : $"NHS login redirect error: {error}; Uri: {uri}";
+
+            if (error is NhsLoginErrorSignatureInvalid)
             {
-                var error = queryString["error"];
-                errorLogMessage = $"NHS login redirect error: {error}; Uri: {uri}";
-            }
-            else
-            {
-                errorLogMessage = $"NHS login redirect without code or error; Uri: {uri}";
+                return new AuthReturnCheckResult.SignatureInvalid();
             }
 
             return new AuthReturnCheckResult.Failed(errorLogMessage);
