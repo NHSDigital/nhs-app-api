@@ -6,19 +6,16 @@
             class="nhsuk-u-margin-bottom-2 nhsuk-u-padding-left-0 nhsuk-u-padding-right-0">
           {{ $t('login.toAccessYourNhsServices') }}
         </h2>
-        <ul :class="$style['continueWithNhsLogin']"
-            :style="[isUsingNativeApp ? {'text-align': 'center'} : {'text-align' : 'left'} ]">
-          <li>
-            <a id="viewInstructionsButton"
-               tabindex="0"
-               :aria-label="$t('login.continueWithNhsLogin')"
-               href="#"
-               @click.stop.prevent="onContinueClicked">
-              <img :alt="$t('login.continueWithNhsLogin')"
-                   src="../assets/continue-with-nhs-login.png">
-            </a>
-          </li>
-        </ul>
+        <br>
+        <button id="viewInstructionsButton"
+                :class="$style['continueWithNhsLogin']"
+                :button-classes="getButtonClasses"
+                :style="[isUsingNativeApp ? {'margin': 'auto'} : {'margin': '0'} ]"
+                tabindex="0"
+                :aria-label="$t('login.continueWithNhsLogin')"
+                @click.stop.prevent="onContinueClicked">
+          {{ $t('login.continueWithNhsLogin') }}
+        </button>
         <br>
       </div>
       <div v-if="isUsingNativeApp"

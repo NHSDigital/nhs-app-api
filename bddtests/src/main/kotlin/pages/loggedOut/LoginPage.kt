@@ -37,7 +37,7 @@ class LoginPage : HybridPageObject() {
     )
 
     val loginOrCreateAccountButton = HybridPageElement(
-        webDesktopLocator = "//a[@id='viewInstructionsButton']",
+        webDesktopLocator = "//button[contains(text(), 'Continue with NHS login')]",
         page = this
     )
 

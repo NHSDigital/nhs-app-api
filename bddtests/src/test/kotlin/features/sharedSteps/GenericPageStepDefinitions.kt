@@ -11,7 +11,6 @@ import pages.HybridPageObject
 import pages.assertElementNotPresent
 import pages.assertIsVisible
 import pages.clickOnActionContainingText
-import pages.clickOnActionWithId
 import pages.navigation.WebHeader
 import pages.withNormalisedText
 
@@ -35,12 +34,6 @@ class GenericPageStepDefinitions {
     fun iClickTheLink(linkText: String) {
         browser.storeCurrentTabCount()
         genericPage.clickOnActionContainingText(linkText)
-    }
-
-    @When("^I click the link with '(.*)' id$")
-    fun iClickTheLinkWithId(linkId: String) {
-        browser.storeCurrentTabCount()
-        genericPage.clickOnActionWithId(linkId)
     }
 
     @When("^I click the Back link$")

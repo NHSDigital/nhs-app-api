@@ -7,29 +7,25 @@
 }
 
 .continueWithNhsLogin {
-  margin: 0;
-  padding: 0;
+  height: 60px;
+  width: 345px;
+  background-image: url('../../src/assets/icon-continue-with-nhs-login-normal.svg'),
+  url('../../src/assets/icon-continue-with-nhs-login-hovered.svg'),
+  url('../../src/assets/icon-continue-with-nhs-login-focused.svg');
+  background-repeat: no-repeat;
+  background-size: 345px 60px;
+  display: block;
+  font-size: 0;
+  background-color: unset !important;
+  border: unset !important;
+  box-shadow: unset !important;
 
-  li {
-    list-style: none;
-    display: inline-block;
-    width: fit-content;
-
-    a {
-      display: inline-block;
-      vertical-align: top;
-      border: 4px solid transparent;
-
-      &:focus,
-      &:hover {
-        background-color: #ffeb3b !important;
-        border: 4px solid #ffeb3b !important;
-        box-shadow: 0 -2px #ffeb3b, 0 4px #212b32 !important;
-      }
-
-      img{
-        display: block;
-      }
-    }
+  &:hover {
+    cursor: pointer;
+    background-image: url('../../src/assets/icon-continue-with-nhs-login-hovered.svg');
+  }
+  &:focus {
+    cursor: pointer;
+    background-image: url('../../src/assets/icon-continue-with-nhs-login-focused.svg');
   }
 }
