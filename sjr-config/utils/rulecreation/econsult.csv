@@ -85,7 +85,6 @@ basildon,Basildon and Brentwood,CCG,Basildon and Brentwood,Mid and South Essex,t
 basildon,Basildon and Brentwood,CCG,Basildon and Brentwood,Mid and South Essex,westernroadsurgery,The Western Road Surgery,F81013,10176
 bexley,Bexley,CCG,Bexley,South East London,barnardmedicalgroup,Barnard Medical Group Barnard Practice,G83004,15300
 bexley,Bexley,CCG,Bexley,South East London,bellegrovesurgery,Bellegrove Surgery,G83009,11430
-bexley,Bexley,CCG,Bexley,South East London,belvederemedicalcentre,Belvedere Medical Centre,G83052,10171
 bexley,Bexley,CCG,Bexley,South East London,bexleygrouppractice,Bexley Group Practice,G83028,11818
 bexley,Bexley,CCG,Bexley,South East London,bexleymedicalgroup,Bexley Medical Group,G83053,17106
 bexley,Bexley,CCG,Bexley,South East London,burstedwoodsurgery,Bursted Wood Surgery,G83046,5012
@@ -934,7 +933,6 @@ ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North 
 ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,framlinghamsurgery,Framlingham Medical Practice,D83026,9738
 ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,fressingfieldmedicalcentre,Fressingfield Medical Centre,D83069,5800
 ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,hadleighhealth,Hadleigh Boxford Group Practice,D83037,15321
-ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,havenhealth,Haven Health,D83081,7800
 ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,hawthorndrivesurgery,Hawthorn Drive Surgery,D83056,8991
 ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,holbrookandshotleysurgery,Holbrook and Shotley Practice,D83020,7881
 ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,howardhousesurgery,Howard House,D83015,8000
@@ -1294,7 +1292,6 @@ nehampshireandfarnham,North East Hampshire and Farnham,CCG,North East Hampshire 
 nehampshireandfarnham,North East Hampshire and Farnham,CCG,North East Hampshire and Farnham,Frimley Health,wellingtonpractice,The Wellington Practice,J82198,3340
 nehampshireandfarnham,North East Hampshire and Farnham,CCG,North East Hampshire and Farnham,Frimley Health,voyagerfamilyhealth,Voyager Family Health,J82067,18487
 north hampshire,North Hampshire,CCG,North Hampshire,Hampshire and the Isle of Wight,beggarwoodsurgery,Beggarwood Surgery,J82220,6816
-north hampshire,North Hampshire,CCG,North Hampshire,Hampshire and the Isle of Wight,bentleysurgery,Bentley Surgery,J82197,3637
 north hampshire,North Hampshire,CCG,North Hampshire,Hampshire and the Isle of Wight,boundaries-surgery,Boundaries Surgery,J82625,3931
 north hampshire,North Hampshire,CCG,North Hampshire,Hampshire and the Isle of Wight,bramblysgrange,Bramblys Grange Medical Practice,J82058,11974
 north hampshire,North Hampshire,CCG,North Hampshire,Hampshire and the Isle of Wight,chawtonparksurgery,Chawton Park Surgery,J82136,9778
@@ -2146,7 +2143,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Churchill Medical Centre,F86627,
 ,,,Other,,,Nexus Health Group,G85034,
 ,,,Other,,,Courtyard Surgery,H82028,
-,,,Other,,,Watership Down Health,J82639,
 ,,,Other,,,Lakeside Healthcare Corby,K83002,
 ,,,Other,,,The Fishponds Family Practice,L81013,
 ,,,Other,,,The Downend Health Group,L81026,
@@ -2245,7 +2241,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Darlaston Family Practice,M91026,
 ,,,Other,,,Chevin Medical Practice,B86032,
 ,,,Other,,,Priory Medical Practice,E81049,
-,,,Other,,,Rothesay Surgery,E81611,
 ,,,Other,,,Mandeville Medical Centre,E85108,
 ,,,Other,,,Connaught Square Practice,E87037,
 ,,,Other,,,Millbank Medical Centre,E87739,
@@ -2653,10 +2648,15 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,The Malthouse Surgery,K84027,
 ,,,Other,,,Alcester Health Centre,M84049,
 ,,,Other,,,Ling House Medical Centre,B83008,
-,,,Other,,,Park Surgery,H82017,
 ,,,Other,,,London Road Surgery,F81041,
 ,,,Other,,,Island Health,F84710,
 ,,,Other,,,Loxwood Medical Practice,H82031,
 ,,,Other,,,Lindfield Medical Centre,H82035,
 ,,,Other,,,St Peter's Surgery,J82208,
 ,,,Other,,,Pinfold Medical,M91650,
+,,,Other,,,Orchard Court Surgery,A83006,
+,,,Other,,,Scarsdale Medical Centre,E87715,
+,,,Other,,,Henfield Medical Centre,H82060,
+,,,Other,,,Southgate Medical Group,H82064,
+,,,Other,,,St Pauls Surgery,J82050,
+,,,Other,,,North Road West Medical Centre,L83030,

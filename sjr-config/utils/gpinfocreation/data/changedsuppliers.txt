@@ -815,3 +815,10 @@ Job Run - Mon 28 Feb 2022 10:26:36 GMT
 ODS,Organisation,PreviousSupplier,NewSupplier
 L84011,"LYDNEY PRACTICE","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)","THE PHOENIX PARTNERSHIP"
 ==================================================================
+==================================================================
+Job Run - Sun 6 Mar 2022 21:40:36 GMT
+ODS,Organisation,PreviousSupplier,NewSupplier
+B82002,"MILLFIELD SURGERY","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)","THE PHOENIX PARTNERSHIP"
+P83603,"RED BANK GROUP PRACTICE","IN PRACTICE SYSTEMS LTD","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)"
+P83603,"RED BANK GROUP PRACTICE","IN PRACTICE SYSTEMS LTD","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)"
+==================================================================
