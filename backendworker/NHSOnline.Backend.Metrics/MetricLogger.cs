@@ -16,45 +16,45 @@ namespace NHSOnline.Backend.Metrics
 
         public Task AppointmentCancel(AppointmentData data) => WriteMetricLog(data);
 
+        public Task GpSessionCreated(LoginData data) => WriteMetricLog(data);
+
         public Task Login(LoginData data) => WriteMetricLog(data);
 
-        public Task GpSessionCreated(LoginData data) => WriteMetricLog(data);
+        public Task MedicalRecordView(MedicalRecordData data) => WriteMetricLog(data);
+
+        public Task MessageLinkClicked(MessageLinkClickedData data) => WriteMetricLog(data);
+
+        public Task MessageRead(MessageReadData data) => WriteMetricLog(data);
+
+        public Task NominatedPharmacyCreate(NominatedPharmacyData data) => WriteMetricLog(data);
+
+        public Task NominatedPharmacyUpdate(NominatedPharmacyData data) => WriteMetricLog(data);
+
+        public Task NotificationsDisabled() => WriteMetricLog();
+
+        public Task NotificationsEnabled() => WriteMetricLog();
+
+        public Task NotificationsPrompt(NotificationsPromptData data) => WriteMetricLog(data);
+
+        public Task OrganDonationCreateRegistration(OrganDonationData data) => WriteMetricLog(data);
+
+        public Task OrganDonationGetRegistration(OrganDonationData data) => WriteMetricLog(data);
+
+        public Task OrganDonationUpdateRegistration(OrganDonationData data) => WriteMetricLog(data);
+
+        public Task OrganDonationWithdrawRegistration(OrganDonationData data) => WriteMetricLog(data);
+
+        public Task RepeatPrescriptionOrder(RepeatPrescriptionData data) => WriteMetricLog(data);
+
+        public Task SilverIntegrationJumpOff(SilverIntegrationData data) => WriteMetricLog(data);
+
+        public Task TermsAndConditionsInitialConsent() => WriteMetricLog();
 
         public Task UpliftStarted(UpliftStartedData data) => WriteMetricLog(data);
 
         public Task UserResearchOptIn() => WriteMetricLog();
 
         public Task UserResearchOptOut() => WriteMetricLog();
-
-        public Task TermsAndConditionsInitialConsent() => WriteMetricLog();
-
-        public Task MessageRead(MessageReadData data) => WriteMetricLog(data);
-
-        public Task NotificationsEnabled() => WriteMetricLog();
-
-        public Task NotificationsDisabled() => WriteMetricLog();
-
-        public Task NotificationsPrompt(NotificationsPromptData data) => WriteMetricLog(data);
-
-        public Task OrganDonationWithdrawRegistration(OrganDonationData data) => WriteMetricLog(data);
-
-        public Task OrganDonationGetRegistration(OrganDonationData data) => WriteMetricLog(data);
-
-        public Task OrganDonationCreateRegistration(OrganDonationData data) => WriteMetricLog(data);
-
-        public Task OrganDonationUpdateRegistration(OrganDonationData data) => WriteMetricLog(data);
-
-        public Task SilverIntegrationJumpOff(SilverIntegrationData data) => WriteMetricLog(data);
-
-        public Task MedicalRecordView(MedicalRecordData data) => WriteMetricLog(data);
-
-        public Task NominatedPharmacyCreate(NominatedPharmacyData data) => WriteMetricLog(data);
-
-        public Task NominatedPharmacyUpdate(NominatedPharmacyData data) => WriteMetricLog(data);
-
-        public Task RepeatPrescriptionOrder(RepeatPrescriptionData data) => WriteMetricLog(data);
-
-        public Task MessageLinkClicked(MessageLinkClickedData data) => WriteMetricLog(data);
 
         private Task WriteMetricLog(IMetricData data, [CallerMemberName] string action = "")
         {

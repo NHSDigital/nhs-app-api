@@ -8,44 +8,44 @@ namespace NHSOnline.Backend.Metrics
 
         Task AppointmentCancel(AppointmentData data);
 
-        Task Login(LoginData data);
-
         Task GpSessionCreated(LoginData data);
 
-        Task UpliftStarted(UpliftStartedData data);
-
-        Task UserResearchOptOut();
-
-        Task UserResearchOptIn();
-
-        Task TermsAndConditionsInitialConsent();
-
-        Task MessageRead(MessageReadData data);
-
-        Task NotificationsEnabled();
-
-        Task NotificationsDisabled();
-
-        Task OrganDonationWithdrawRegistration(OrganDonationData data);
-
-        Task OrganDonationGetRegistration(OrganDonationData data);
-
-        Task OrganDonationCreateRegistration(OrganDonationData data);
-
-        Task OrganDonationUpdateRegistration(OrganDonationData data);
-
-        Task NotificationsPrompt(NotificationsPromptData data);
-
-        Task SilverIntegrationJumpOff(SilverIntegrationData data);
+        Task Login(LoginData data);
 
         Task MedicalRecordView(MedicalRecordData data);
+
+        Task MessageLinkClicked(MessageLinkClickedData data);
+
+        Task MessageRead(MessageReadData data);
 
         Task NominatedPharmacyCreate(NominatedPharmacyData data);
 
         Task NominatedPharmacyUpdate(NominatedPharmacyData data);
 
+        Task NotificationsDisabled();
+
+        Task NotificationsEnabled();
+
+        Task NotificationsPrompt(NotificationsPromptData data);
+
+        Task OrganDonationCreateRegistration(OrganDonationData data);
+
+        Task OrganDonationGetRegistration(OrganDonationData data);
+
+        Task OrganDonationUpdateRegistration(OrganDonationData data);
+
+        Task OrganDonationWithdrawRegistration(OrganDonationData data);
+
         Task RepeatPrescriptionOrder(RepeatPrescriptionData data);
 
-        Task MessageLinkClicked(MessageLinkClickedData data);
+        Task SilverIntegrationJumpOff(SilverIntegrationData data);
+
+        Task TermsAndConditionsInitialConsent();
+
+        Task UpliftStarted(UpliftStartedData data);
+
+        Task UserResearchOptIn();
+
+        Task UserResearchOptOut();
     }
 }
