@@ -8,7 +8,7 @@ services:
 
   silver.local.bitraft.io:
     ports:
-      - "5000:5000"
+      - "5001:5001"
 
   api.local.bitraft.io:
     ports:
