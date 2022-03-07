@@ -60,11 +60,16 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Advice
 
         public AskYourGpForAdviceStartPageContent  ClickDemographicsCheckbox()
         {
+            AllowDemographicDataCheckbox.ScrollTo();
             AllowDemographicDataCheckbox.Click();
             return this;
         }
 
-        public void Continue() => ContinueButton.Click();
+        public void Continue()
+        {
+            ContinueButton.ScrollTo();
+            ContinueButton.Click();
+        }
 
         public void SelectFindOutMore() => FindOutMoreText.Click();
 

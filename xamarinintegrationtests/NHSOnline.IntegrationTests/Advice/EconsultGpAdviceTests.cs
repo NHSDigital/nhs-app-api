@@ -64,6 +64,14 @@ namespace NHSOnline.IntegrationTests.Advice
                 .PageContent.AssertPageContent()
                 .ClickDemographicsCheckbox()
                 .Continue();
+
+            AndroidAskYourGpForAdviceTermsPage
+                .AssertOnPage(driver);
+
+            driver.PressBackButton();
+
+            AndroidAskYourGpForAdviceTermsPage
+                .AssertOnPage(driver);
         }
 
         [NhsAppIOSTest]
@@ -93,7 +101,17 @@ namespace NHSOnline.IntegrationTests.Advice
 
             IOSAskYourGpForAdviceStartPage
                 .AssertOnPage(driver)
-                .PageContent.AssertPageContent();
+                .PageContent.AssertPageContent()
+                .ClickDemographicsCheckbox()
+                .Continue();
+
+            IOSAskYourGpForAdviceTermsPage
+                .AssertOnPage(driver);
+
+            driver.SwipeBack();
+
+            IOSAskYourGpForAdviceTermsPage
+                .AssertOnPage(driver);
         }
 
         [NhsAppManualTest("NHSO-15774", "OLC Journey is not fully stubbed yet")]

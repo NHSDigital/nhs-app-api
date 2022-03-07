@@ -1,6 +1,7 @@
 using System;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Web
 {
@@ -23,6 +24,9 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
 
         public void Click()
             => ActOnCheckboxElement(e => e.Click());
+
+        public void ScrollTo() => _interactor.ActOnElementContext(
+            CheckboxFindBy, c => new Actions(c.Driver).MoveToElement(c.Element).Perform());
 
         private void ActOnCheckboxElement(Action<IWebElement> action)
             => _interactor.ActOnElement(CheckboxFindBy, action);
