@@ -3,10 +3,9 @@ Feature: Logged out home page content
 
   Scenario: The correct information about using the service is displayed when on logged-out home page
     Given I am on the login logged-out page
-    And 'NHS UK' responds to requests for '/healthAtoZ'
     And I see a list of other services I can use without logging in
-    Then I click the link called 'Search conditions and treatments' with a url of 'http://stubs.local.bitraft.io:8080/external/healthAtoZ'
-    And a new tab has been opened by the link
+    Then I see the link called 'Go to the NHS website' with a url of 'https://www.nhs.uk/'
+    And I see the link called 'Find out more about who can have an NHS account' with a url of 'https://www.nhs.uk/nhs-app/nhs-app-help-and-support/getting-started-with-the-nhs-app/who-can-use-the-nhs-app/'
 
   Scenario: The correct content appears when on logged-out home page
     Given I am on the login logged-out page

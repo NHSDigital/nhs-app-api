@@ -3,6 +3,7 @@
     <p><strong data-id="panel-title">
       {{ $t('login.getTheNhsAppOnYourDevice') }}</strong>
     </p>
+    <p>{{ $t('login.youCanAlsoLoginUsingNhsApp') }}</p>
     <ul>
       <li>
         <a data-id="apple-store-icon"

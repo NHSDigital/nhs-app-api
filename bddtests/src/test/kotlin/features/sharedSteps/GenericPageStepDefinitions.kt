@@ -64,6 +64,12 @@ class GenericPageStepDefinitions {
         genericPage.assertLinkExists(linkTitle, url, internal = false).click()
     }
 
+    @When("^I see the link called '(.*)' with a url of '(.*)'$")
+    fun iSeeANamedLinkWithAUrl(linkTitle: String, url: String) {
+        browser.storeCurrentTabCount()
+        genericPage.assertLinkExists(linkTitle, url, internal = false)
+    }
+
     @When("^I click the internal link called '(.*)' with a url of '(.*)'$")
     fun iClickANamedInternalLinkWithAUrl(linkTitle: String, url: String) {
         browser.storeCurrentTabCount()

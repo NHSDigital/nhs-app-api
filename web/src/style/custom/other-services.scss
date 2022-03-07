@@ -8,6 +8,10 @@
 @include fromDesktop() {
 }
 
-a {
-    display: inline-block;
+a.nhsuk-action-link__link {
+  &:focus {
+    svg{
+      fill: black;
+    }
+  }
 }

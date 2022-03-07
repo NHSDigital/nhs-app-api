@@ -25,7 +25,7 @@ describe('Pre registration information', () => {
       });
 
       it('header will have the expected text to translate', () => {
-        expect(wrapper.find('h2').text()).toEqual('Before you start');
+        expect(wrapper.find('h2').text()).toEqual('Who can have an NHS account');
       });
 
       it('list will be visible on page', () => {

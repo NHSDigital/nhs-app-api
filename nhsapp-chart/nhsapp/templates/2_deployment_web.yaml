@@ -233,7 +233,9 @@ spec:
         - name: WELLNESS_AND_PREVENTION_PRIVACY_URL
           value: "https://hub-dev.wpalpha.clouddev.works/privacy"
         - name: WHO_CAN_USE_APP_URL
-          value: "https://www.nhs.uk/nhs-app/nhs-app-help-and-support/getting-started-with-the-nhs-app/who-can-use-the-nhs-app/"  
+          value: "https://www.nhs.uk/nhs-app/nhs-app-help-and-support/getting-started-with-the-nhs-app/who-can-use-the-nhs-app/"
+        - name: GO_TO_NHS_WEBSITE
+          value: "https://www.nhs.uk/"    
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"

@@ -4,9 +4,9 @@
       <div id="before-you-start" class="nhsuk-u-margin-top-1">
         <div v-if="shouldShowFullContent">
           <h2 class="nhsuk-u-margin-bottom-3">
-            {{ $t('login.beforeYouStart') }}
+            {{ $t('login.whoCanHaveNhsAccount') }}
           </h2>
-          <p>{{ $t('login.toUseThisServiceYouMustBe') }}</p>
+          <p>{{ $t('login.youCanHaveAccountIfYouAre') }}</p>
           <ul>
             <li class="nhsuk-u-margin-bottom-3">
               {{ $t('login.registeredWithSurgeryInEngland') }}
@@ -16,8 +16,8 @@
             </li>
           </ul>
           <p>
-            <a :href="whoCanUseAppUrl" target="_blank" rel="noopener noreferrer">
-              {{ $t('login.findOutMoreAboutWhoCanUseTheNHSApp') }}
+            <a :href="whoCanUseAppUrl">
+              {{ $t('login.findOutMoreAboutWhoCanHaveNhsAccount') }}
             </a>
           </p>
         </div>

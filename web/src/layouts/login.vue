@@ -27,8 +27,8 @@
           <div class="nhsuk-grid-row">
             <div class="nhsuk-grid-column-two-thirds nhsuk-u-margin-bottom-0">
               <p v-if="!isNativeApp" id="desktopSpecificInformation">
-                {{ $t('login.useNhsAppOnlineToAccessServices') }}</p>
-              <p class="nhsuk-u-margin-bottom-4">{{ $t('login.useThisServiceTo') }}</p>
+                {{ $t('login.loginToYourNhsAccountToAccessServices') }}</p>
+              <p class="nhsuk-u-margin-bottom-4">{{ $t('login.loginToYourAccountTo') }}</p>
               <ul>
                 <li class="nhsuk-u-margin-bottom-3">{{ $t('login.getYourCovidPass') }}</li>
                 <li class="nhsuk-u-margin-bottom-3">{{ $t('login.orderRepeatPrescriptions') }}</li>
