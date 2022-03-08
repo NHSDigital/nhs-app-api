@@ -1,11 +1,14 @@
+using System;
 using System.Threading.Tasks;
 using EventKit;
 using Foundation;
+using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Dialogs;
 using NHSOnline.App.iOS.Controllers;
 using NHSOnline.App.iOS.DependencyServices.Calendar;
+using NHSOnline.App.Logging;
 using NHSOnline.App.Threading;
 using UIKit;
 using Xamarin.Forms;
@@ -15,6 +18,8 @@ namespace NHSOnline.App.iOS.DependencyServices.Calendar
 {
     public sealed class IosCalendar : ICalendar
     {
+        private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(IosCalendar));
+
         public async Task<bool> RequestPermission()
         {
             var completionSource = new TaskCompletionSource<bool>();
@@ -27,7 +32,14 @@ namespace NHSOnline.App.iOS.DependencyServices.Calendar
 
         public async Task AddToCalendar(AddEventToCalendarRequest request)
         {
-            await CalendarEventController.ShowEventController(request).ResumeOnThreadPool();
+            try
+            {
+                await CalendarEventController.ShowEventController(request).ResumeOnThreadPool();
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, "Add to iOS calendar failed");
+            }
         }
 
         public async Task ShowCalendarPermissionDeniedAlert()
