@@ -16,8 +16,9 @@ build:	## Build web and backend worker
 	$(MAKE) -C web build
 
 build-all: build	## Build everything (run make from a subdirectory for more granularity)
-	$(MAKE) -C android build
+	$(MAKE) -C xamarin build
 	$(MAKE) -C bddtests build
+	$(MAKE) -C xamarinintegrationtests build
 
 test:	## Unit test web and backend worker
 	$(MAKE) -C backendworker test
@@ -28,6 +29,9 @@ test-all: test	## Unit test everything
 
 clean:	## Delete all docker containers and volumes
 	./buildscripts/clean.sh
+
+start-android-emulator: ## Start the android emulator using DNS (Specify EMULATOR=<NAME> to target a particular device)
+	./buildscripts/start_android_emulator.sh
 
 localbdd: build	run-localbdd	## Build everything and start containers ready to BDD tests locally
 
