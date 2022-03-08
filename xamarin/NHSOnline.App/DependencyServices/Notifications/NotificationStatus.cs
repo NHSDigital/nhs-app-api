@@ -4,6 +4,7 @@ namespace NHSOnline.App.DependencyServices.Notifications
     {
         authorised,
         denied,
-        notDetermined
+        notDetermined,
+        serviceError
     }
 }

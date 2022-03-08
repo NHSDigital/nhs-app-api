@@ -177,6 +177,14 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
 
         private async Task RequestPnsToken(string trigger)
         {
+            if (!_notifications.NotificationServiceAvailable())
+            {
+                await _view.SendNotificationsStatus(NotificationStatus.serviceError.ToString())
+                    .PreserveThreadContext();
+
+                return;
+            }
+
             var pnsTokenResult = await _notifications.GetPnsToken().PreserveThreadContext();
 
             if (pnsTokenResult is GetPnsTokenResult.Authorised authorisedResult)

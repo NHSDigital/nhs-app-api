@@ -28,6 +28,7 @@ const authorisationStatus = {
   authorised: 'authorised',
   denied: 'denied',
   notDetermined: 'notDetermined',
+  serviceError: 'serviceError',
 };
 
 const addApiError = ({ dispatch }, errorCode, message) => dispatch('errors/addApiError', {
@@ -144,6 +145,15 @@ export default {
 
         if (get('name')(this.app.$router.history.pending) === NOTIFICATIONS_NAME) {
           this.app.$router.push({ path: NOTIFICATIONS_GENERIC_FAILURE_PATH });
+        } else {
+          addApiError(this, 10001);
+        }
+
+        resolveTask(status);
+        break;
+      case authorisationStatus.serviceError:
+        if (get('name')(this.app.$router.history.pending) === NOTIFICATIONS_NAME) {
+          NativeApp.goToLoggedInHomeScreen();
         } else {
           addApiError(this, 10001);
         }

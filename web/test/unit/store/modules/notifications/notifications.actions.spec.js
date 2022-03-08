@@ -118,6 +118,7 @@ describe('notifications actions', () => {
     global.nativeApp = {
       getNotificationsStatus: jest.fn(),
       requestPnsToken: jest.fn(),
+      goToLoggedInHomeScreen: jest.fn(),
     };
 
     actions.$cookies = $cookies;
@@ -353,6 +354,26 @@ describe('notifications actions', () => {
 
         it('will resolve loading promise with `notDetermined`', () => expect(loading).resolves.toBe('notDetermined'));
       });
+
+      describe('serviceError', () => {
+        beforeEach(() => {
+          actions.settingsStatus({ commit }, 'serviceError');
+        });
+
+        it('will not call native app `requestPnsToken`', () => {
+          expect(global.nativeApp.requestPnsToken).not.toBeCalled();
+        });
+
+        it('will not commit a value to `SET_REGISTRATION`', () => {
+          expect(commit).not.toBeCalledWith(SET_REGISTRATION, false);
+        });
+
+        it('will navigate to the logged in home page`', () => {
+          expect(global.nativeApp.goToLoggedInHomeScreen).not.toBeCalled();
+        });
+
+        it('will resolve loading promise with `serviceError`', () => expect(loading).resolves.toBe('serviceError'));
+      });
     });
     describe('notifications prompt', () => {
       let loading;
@@ -396,6 +417,26 @@ describe('notifications actions', () => {
         });
 
         it('will resolve loading promise with `notDetermined`', () => expect(loading).resolves.toBe('notDetermined'));
+      });
+
+      describe('serviceError', () => {
+        beforeEach(() => {
+          actions.settingsStatus({ commit }, 'serviceError');
+        });
+
+        it('will not call native app `requestPnsToken`', () => {
+          expect(global.nativeApp.requestPnsToken).not.toBeCalled();
+        });
+
+        it('will not commit a value to `SET_REGISTRATION`', () => {
+          expect(commit).not.toBeCalledWith(SET_REGISTRATION, false);
+        });
+
+        it('will navigate to the logged in home page`', () => {
+          expect(global.nativeApp.goToLoggedInHomeScreen).toBeCalled();
+        });
+
+        it('will resolve loading promise with `serviceError`', () => expect(loading).resolves.toBe('serviceError'));
       });
     });
   });

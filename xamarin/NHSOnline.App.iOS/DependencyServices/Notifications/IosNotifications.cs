@@ -42,6 +42,8 @@ namespace NHSOnline.App.iOS.DependencyServices.Notifications
             return await completionSource.Task.ResumeOnThreadPool();
         }
 
+        public bool NotificationServiceAvailable() => true;
+
         private static NotificationStatus MapNotificationAuthorizationStatus(UNAuthorizationStatus status)
         {
             var notificationStatus = NotificationStatus.denied;

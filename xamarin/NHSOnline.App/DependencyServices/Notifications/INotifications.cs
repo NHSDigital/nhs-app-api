@@ -6,5 +6,6 @@ namespace NHSOnline.App.DependencyServices.Notifications
     {
         Task<NotificationStatus> GetDeviceNotificationsStatus();
         Task<GetPnsTokenResult> GetPnsToken();
+        bool NotificationServiceAvailable();
     }
 }

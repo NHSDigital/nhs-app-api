@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Gms.Common;
-using Android.Gms.Extensions;
 using AndroidX.Core.App;
 using Firebase.Messaging;
 using Microsoft.Extensions.Logging;
@@ -19,6 +18,24 @@ namespace NHSOnline.App.Droid.DependencyServices.Notifications
     {
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(AndroidNotifications));
 
+        public bool NotificationServiceAvailable()
+        {
+            var googlePlayServices = GoogleApiAvailabilityLight.Instance;
+            var googlePlayServicesAvailability = googlePlayServices.IsGooglePlayServicesAvailable(Application.Context);
+
+            if (googlePlayServicesAvailability != ConnectionResult.Success)
+            {
+                Logger.LogError("{isResolvable} issue occured from google services: {PlayServicesError}",
+                        googlePlayServices.IsUserResolvableError(googlePlayServicesAvailability)
+                            ?  "Resolvable" : "Unresolvable",
+                        googlePlayServices.GetErrorString(googlePlayServicesAvailability));
+
+                return false;
+            }
+
+            return true;
+        }
+
         public Task<NotificationStatus> GetDeviceNotificationsStatus()
         {
             var notificationManager = NotificationManagerCompat.From(Application.Context);
@@ -34,27 +51,30 @@ namespace NHSOnline.App.Droid.DependencyServices.Notifications
 
         public async Task<GetPnsTokenResult> GetPnsToken()
         {
-            if (!NotificationsSupported)
-            {
-                Logger.LogError("Notifications not supported: {PlayServicesError}", GetPlayServicesError());
-                return new GetPnsTokenResult.Unauthorised();
-            }
-
-            var notificationsStatus = await GetDeviceNotificationsStatus().PreserveThreadContext();
-
-            if (notificationsStatus == NotificationStatus.denied)
-            {
-                Logger.LogError("Notification status is denied, returning unauthorised");
-                return new GetPnsTokenResult.Unauthorised();
-            }
-
             try
             {
-                var token = await FirebaseMessaging.Instance.GetToken().ToAwaitableTask(Logger).PreserveThreadContext();
+                var notificationsStatus = await GetDeviceNotificationsStatus().PreserveThreadContext();
+
+                if (notificationsStatus == NotificationStatus.denied)
+                {
+                    Logger.LogError("Notification status is denied, returning unauthorised");
+                    return new GetPnsTokenResult.Unauthorised();
+                }
+
+                var googlePlayServices = GoogleApiAvailabilityLight.Instance;
+                var googlePlayServicesAvailability = googlePlayServices.IsGooglePlayServicesAvailable(Application.Context);
+
+                using var token = await FirebaseMessaging.Instance
+                    .GetToken()
+                    .ToAwaitableTask(Logger)
+                    .PreserveThreadContext();
 
                 if (token == null)
                 {
-                    Logger.LogError("Token was not retrieved: {PlayServicesError}",GetPlayServicesError());
+                    Logger.LogError("{isResolvable} issue occured from retrieving the token: {PlayServicesError}",
+                        googlePlayServices.IsUserResolvableError(googlePlayServicesAvailability)
+                            ?  "Resolvable" : "Unresolvable",
+                        googlePlayServices.GetErrorString(googlePlayServicesAvailability));
                     return new GetPnsTokenResult.Unauthorised();
                 }
 
@@ -66,24 +86,6 @@ namespace NHSOnline.App.Droid.DependencyServices.Notifications
                 Logger.LogError(e, "Exception thrown while trying to retrieve token");
                 return new GetPnsTokenResult.Unauthorised();
             }
-        }
-
-        private static bool NotificationsSupported
-            => GoogleApiAvailabilityLight.Instance
-                .IsGooglePlayServicesAvailable(Application.Context) == ConnectionResult.Success;
-
-        private static string GetPlayServicesError()
-        {
-            var resultCode = GoogleApiAvailabilityLight.Instance.IsGooglePlayServicesAvailable(Application.Context);
-
-            if (resultCode != ConnectionResult.Success)
-            {
-                return GoogleApiAvailabilityLight.Instance.IsUserResolvableError(resultCode) ?
-                    GoogleApiAvailabilityLight.Instance.GetErrorString(resultCode) :
-                    "This device is not supported";
-            }
-
-            return "An error occurred preventing the use of push notifications";
         }
     }
 }
