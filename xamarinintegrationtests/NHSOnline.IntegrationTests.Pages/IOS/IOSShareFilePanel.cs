@@ -12,12 +12,20 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             _driver = driver;
         }
 
-        private IOSFilesAppHeader FileDetailsHeader => IOSFilesAppHeader.WithText(_driver, "MyHandAndFootXrayPicture, Image · 8 KB");
+        private IOSFilesAppHeader ImageFileDetailsHeader => IOSFilesAppHeader.WithText(_driver, "MyHandAndFootXrayPicture, Image · 8 KB");
+        private IOSFilesAppHeader ZipFileDetailsHeader => IOSFilesAppHeader.WithText(_driver, "TestZipFile, ZIP Archive · 82 KB");
 
-        public static IOSShareFilePanel AssertDisplayed(IIOSDriverWrapper driver)
+        public static IOSShareFilePanel AssertDisplayedImageFile(IIOSDriverWrapper driver)
         {
             var page = new IOSShareFilePanel(driver);
-            page.FileDetailsHeader.AssertVisible();
+            page.ImageFileDetailsHeader.AssertVisible();
+            return page;
+        }
+
+        public static IOSShareFilePanel AssertDisplayedZipFile(IIOSDriverWrapper driver)
+        {
+            var page = new IOSShareFilePanel(driver);
+            page.ZipFileDetailsHeader.AssertVisible();
             return page;
         }
     }

@@ -45,6 +45,18 @@
             
           nhsapp.storage.downloadFromBytes(base64Data, filename, mimeType);
         } 
+
+        function downloadTestZipFile(base64) {
+          let mimeType;
+          let base64Data;
+          let filename;
+                  
+          filename= "TestZipFile.zip";
+          mimeType = "application/zip";
+          base64Data = base64;
+            
+          nhsapp.storage.downloadFromBytes(base64Data, filename, mimeType);
+        } 
         
         function downloadTestCorruptedFile(base64) {
           let mimeType;
@@ -79,6 +91,11 @@
         <li class="list-group-item">
             <button id="test-pass-download-empty" onclick="downloadTestPassKitFile('@Model.CorruptedPassKitBase64');">
                 Download corrupted test pass kit file (ios only)
+            </button>
+        </li>
+        <li class="list-group-item">
+            <button id="test-zip-download" onclick="downloadTestZipFile('@Model.ZipFileBase64String');">
+                Download zip file
             </button>
         </li>
         <li class="list-group-item">

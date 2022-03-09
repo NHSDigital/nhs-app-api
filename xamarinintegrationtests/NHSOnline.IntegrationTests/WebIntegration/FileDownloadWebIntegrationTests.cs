@@ -137,7 +137,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .PageContent.DownloadImage();
 
             IOSShareFilePanel
-                .AssertDisplayed(driver);
+                .AssertDisplayedImageFile(driver);
         }
 
         [NhsAppIOSTest]
@@ -158,7 +158,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .PageContent.DownloadImage();
 
             IOSShareFilePanel
-                .AssertDisplayed(driver);
+                .AssertDisplayedImageFile(driver);
         }
 
         [NhsAppAndroidTest]
@@ -206,6 +206,27 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSPassKitController
                 .AssertDisplayed(driver);
+        }
+
+        [NhsAppIOSTest]
+        public void APatientWithProofLevelNineCanDownloadAZipFileFromAWebIntegrationDownloadFileScreenIOS(
+            IIOSDriverWrapper driver)
+        {
+            var patient = new PkbPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsIOS(driver);
+
+            IOSFileDownloadPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.DownloadZip();
+
+            IOSShareFilePanel
+                .AssertDisplayedZipFile(driver);
         }
 
         [NhsAppIOSTest]

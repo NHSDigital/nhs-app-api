@@ -22,11 +22,15 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         private WebButton DownloadCorruptedButton => WebButton.WithText(_interactor, "Download test corrupted file");
 
+        private WebButton DownloadZipFileButton => WebButton.WithText(_interactor, "Download zip file");
+
         internal void AssertOnPage() => TitleText.AssertVisible();
 
         public void DownloadImage() => DownloadImageButton.Click();
 
         public void DownloadPass() => DownloadPassButton.Click();
+
+        public void DownloadZip() => DownloadZipFileButton.Click();
 
         public void DownloadCorruptedPass()
         {
