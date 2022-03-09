@@ -39,6 +39,7 @@ describe('redirector page', () => {
     $http = {
       postV1PatientAssertedLoginIdentity: jest.fn()
         .mockImplementation(() => Promise.resolve({ token: 'jwtToken' })),
+      postV1ApiUsersMeSilverIntegrationBlockedMetrics: jest.fn().mockImplementation(),
     };
 
     const $store = createStore({
@@ -334,6 +335,10 @@ describe('redirector page', () => {
       it('will redirect to the external url', () => {
         expect(window.setWindowLocation).toHaveBeenCalledWith('http://www.url.com/covid-status-sso?proofLevel=p5&assertedLoginIdentity=jwtToken');
       });
+
+      it('will not call the metric logger to log that silverintegration jump off was blocked as the journey config has P5 access', () => {
+        expect($http.postV1ApiUsersMeSilverIntegrationBlockedMetrics).not.toHaveBeenCalled();
+      });
     });
 
     afterEach(() => {
@@ -393,6 +398,10 @@ describe('redirector page', () => {
           ['http://additional.domain.com'],
           'http://stubs.local.bitraft.io/help-and-support/',
         );
+      });
+
+      it('will not call the metric logger to log that silverintegration jump off was blocked', () => {
+        expect($http.postV1ApiUsersMeSilverIntegrationBlockedMetrics).not.toHaveBeenCalled();
       });
     });
 
@@ -489,6 +498,18 @@ describe('redirector page', () => {
       expect(dependency.redirectTo)
         .toHaveBeenCalledWith(wrapper.vm, UPLIFT_SILVER_INTEGRATION_PATH, expect.any(Object));
     });
+
+    it('will call the metric logger to log that silverintegration jump off was blocked with Reason: Proof', () => {
+      expect($http.postV1ApiUsersMeSilverIntegrationBlockedMetrics).toHaveBeenCalledWith({
+        silverIntegrationJumpOffBlockedData: {
+          JumpOffId: 'messages',
+          ProviderId: 'pkb',
+          ProviderName: 'Patients Know Best',
+          Reason: 'Proof',
+        },
+        ignoreError: true,
+      });
+    });
   });
 
   describe('has a redirect parameter to an external site in the knownServices list but doesn\'t have the silver integration feature enabled via SJR', () => {
@@ -515,6 +536,19 @@ describe('redirector page', () => {
           SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_PATH,
           expect.any(Object),
         );
+    });
+
+
+    it('will call the metric logger to log that silverintegration jump off was blocked with Reason: SJR', () => {
+      expect($http.postV1ApiUsersMeSilverIntegrationBlockedMetrics).toHaveBeenCalledWith({
+        silverIntegrationJumpOffBlockedData: {
+          JumpOffId: 'messages',
+          ProviderId: 'pkb',
+          ProviderName: 'Patients Know Best',
+          Reason: 'SJR',
+        },
+        ignoreError: true,
+      });
     });
   });
 

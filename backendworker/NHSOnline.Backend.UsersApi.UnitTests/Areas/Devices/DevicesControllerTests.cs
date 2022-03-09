@@ -400,41 +400,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             result.Should().BeAssignableTo<BadRequestResult>();
         }
 
-        [TestMethod]
-        public void Post_Metric_Success_ReturnsStatus200Ok()
-        {
-            // Arrange
-           var notificationPromptData = new NotificationsPromptData(
-               true,
-               true,
-               "iOS",
-               false);
-
-            // Act
-            var result = _systemUnderTest.PostNotificationsPromptMetrics(notificationPromptData);
-
-            // Assert
-            result.Should().BeOfType<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(StatusCodes.Status200OK);
-        }
-
-        [TestMethod]
-        public void Post_Metric_BadRequest_ReturnsStatus400BadRequest()
-        {
-            // Arrange
-            var notificationPromptData = new NotificationsPromptData(
-                true,
-                true,
-                "",
-                false);
-
-            // Act
-            var result = _systemUnderTest.PostNotificationsPromptMetrics(notificationPromptData);
-
-            // Assert
-            result.Should().BeAssignableTo<BadRequestResult>();
-        }
-
         private RegisterDeviceRequest CreateValidRegisterDeviceRequest()
             => new RegisterDeviceRequest
             {

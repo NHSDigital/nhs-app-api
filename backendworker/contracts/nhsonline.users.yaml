@@ -187,6 +187,27 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
         "502":
           $ref: '#/components/responses/UnexpectedError'
+  /users/me/silver-integration-blocked/metrics:
+    post:
+      security:
+        - nhsLoginBearerAuth: []
+      tags:
+        - silver integration jumpoff blocked metric logging
+      summary: logs metrics for the blocked silver integration jumpoff
+      description: logs metrics for the blocked silver integration jumpoff
+      requestBody:
+        x-name: SilverIntegrationJumpOffBlockedData
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SilverIntegrationJumpOffBlockedData"
+        description: Metrics to be logged for the blocked silver integration jumpoff
+        required: true
+      responses:
+        "200":
+          description: Successfully logged
+        "400":
+          $ref: '#/components/responses/BadRequest'
 components:
   securitySchemes:
     nhsLoginBearerAuth:
@@ -297,4 +318,20 @@ components:
         nhsNumber:
           type: string
         nhsLoginId:
+          type: string
+    SilverIntegrationJumpOffBlockedData:
+      type: object
+      required:
+        - providerId
+        - providerName
+        - jumpOffId
+        - reason
+      properties:
+        providerId:
+          type: string
+        providerName:
+          type: string
+        jumpOffId:
+          type: string
+        reason:
           type: string

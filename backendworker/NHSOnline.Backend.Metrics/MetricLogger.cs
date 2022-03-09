@@ -48,6 +48,8 @@ namespace NHSOnline.Backend.Metrics
 
         public Task SilverIntegrationJumpOff(SilverIntegrationData data) => WriteMetricLog(data);
 
+        public Task SilverIntegrationJumpOffBlocked(SilverIntegrationJumpOffBlockedData data) => WriteMetricLog(data);
+
         public Task TermsAndConditionsInitialConsent() => WriteMetricLog();
 
         public Task UpliftStarted(UpliftStartedData data) => WriteMetricLog(data);

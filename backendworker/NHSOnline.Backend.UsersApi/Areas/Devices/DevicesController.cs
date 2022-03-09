@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -128,44 +127,6 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
             {
                 _logger.LogExit();
             }
-        }
-
-        [Route("api/users/me/devices/prompt/metrics")]
-        [HttpPost]
-        [UserProfile]
-        public IActionResult PostNotificationsPromptMetrics([FromBody] NotificationsPromptData notificationsPromptData)
-        {
-            try
-            {
-                _logger.LogEnter();
-
-                if (!IsNotificationPromptDataValid(notificationsPromptData))
-                {
-                    return BadRequest();
-                }
-
-                _metricLogger.NotificationsPrompt(notificationsPromptData);
-                return new StatusCodeResult(StatusCodes.Status200OK);
-            }
-            finally
-            {
-                _logger.LogExit();
-            }
-        }
-
-        private bool IsNotificationPromptDataValid(NotificationsPromptData data)
-        {
-            return new ValidateAndLog(_logger)
-                .IsNotNull(data, nameof(data))
-                .IsNotNullOrWhitespace(data?.Platform, nameof(data.Platform))
-                .IsNotNullOrWhitespace(
-                    data?.NotificationsRegistered.ToString(
-                        CultureInfo.InvariantCulture),
-                    nameof(data.NotificationsRegistered))
-                .IsUriOrNull(data?.ScreenShown.ToString(
-                        CultureInfo.InvariantCulture),
-                    nameof(data.ScreenShown))
-                .IsValid();
         }
 
         private bool IsDevicePnsValid(string devicePns)

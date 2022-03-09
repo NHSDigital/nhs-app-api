@@ -144,6 +144,17 @@ export default {
         setWindowLocation(url);
       }
     },
+    logSilverIntegrationJumpOffBlockedMetrics(reason) {
+      this.$store.app.$http.postV1ApiUsersMeSilverIntegrationBlockedMetrics({
+        silverIntegrationJumpOffBlockedData: {
+          ProviderId: this.thirdPartyServiceContent.serviceId,
+          ProviderName: this.thirdPartyServiceContent.providerName,
+          JumpOffId: this.jumpOffId,
+          Reason: reason,
+        },
+        ignoreError: true,
+      });
+    },
     canAccessSilverIntegration(store, { provider, serviceType }) {
       return sjrIf({
         $store: store,
@@ -154,6 +165,7 @@ export default {
         },
       });
     },
+
     navigateToThirdParty({ url }) {
       this.sessionStorageName = `agreedThirdPartyWarning_${this.matchedService.id}`;
 
@@ -173,7 +185,7 @@ export default {
         next();
         return;
       }
-
+      this.logSilverIntegrationJumpOffBlockedMetrics('Proof');
       redirectTo(
         this,
         UPLIFT_SILVER_INTEGRATION_PATH,
@@ -185,7 +197,7 @@ export default {
         next();
         return;
       }
-
+      this.logSilverIntegrationJumpOffBlockedMetrics('SJR');
       redirectTo(
         this,
         SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_PATH,

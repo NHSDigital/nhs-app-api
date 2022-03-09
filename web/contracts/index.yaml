@@ -1274,6 +1274,68 @@
                                           description: "Array of associated texts."
                                           items: 
                                             type: "string"
+                    historicTestResults: 
+                      type: "object"
+                      properties: 
+                        hasAccess: 
+                          type: "boolean"
+                          description: "Does the patient have access to this data."
+                        hasErrored: 
+                          type: "boolean"
+                          description: "Some error occurred when attempting to retrieve test result data."
+                        rawHtml: 
+                          type: "string"
+                          description: "When working with Vision, raw HTML is returned instead of XML data"
+                        data: 
+                          type: "object"
+                          properties: 
+                            testResults: 
+                              type: "array"
+                              description: "Array of test results"
+                              items: 
+                                type: "object"
+                                properties: 
+                                  id: 
+                                    type: "string"
+                                    description: "Id of the test result"
+                                  date: 
+                                    type: "object"
+                                    properties: 
+                                      value: 
+                                        type: "string"
+                                        format: "date-time"
+                                        description: "date/time value."
+                                      datePart: 
+                                        type: "string"
+                                        description: "date part to display."
+                                        enum: 
+                                          - "Unknown"
+                                          - "Year"
+                                          - "YearMonth"
+                                          - "YearMonthDay"
+                                          - "YearMonthDayTime"
+                                  description: 
+                                    type: "string"
+                                    description: "The name of the test result."
+                                  associatedTexts: 
+                                    type: "array"
+                                    description: "Array of associated texts."
+                                    items: 
+                                      type: "string"
+                                  testResultChildItems: 
+                                    type: "array"
+                                    description: "Array of test result child line items."
+                                    items: 
+                                      type: "object"
+                                      properties: 
+                                        description: 
+                                          type: "string"
+                                          description: "The name of the test result."
+                                        associatedTexts: 
+                                          type: "array"
+                                          description: "Array of associated texts."
+                                          items: 
+                                            type: "string"
                     diagnosis: 
                       type: "object"
                       properties: 
@@ -5613,6 +5675,42 @@
                   didErrorAttemptingToUpdateStatus: 
                     type: "boolean"
           description: "Metrics to be logged for the notification prompt"
+          required: true
+        responses: 
+          200: 
+            description: "Successfully logged"
+          400: 
+            description: "Bad request. Supplied request is invalid."
+    /v1/api/users/me/silver-integration-blocked/metrics: 
+      post: 
+        security: 
+          - 
+            nhsLoginBearerAuth: []
+        tags: 
+          - "silver integration jumpoff blocked metric logging"
+        summary: "logs metrics for the blocked silver integration jumpoff"
+        description: "logs metrics for the blocked silver integration jumpoff"
+        requestBody: 
+          x-name: "SilverIntegrationJumpOffBlockedData"
+          content: 
+            application/json: 
+              schema: 
+                type: "object"
+                required: 
+                  - "providerId"
+                  - "providerName"
+                  - "jumpOffId"
+                  - "reason"
+                properties: 
+                  providerId: 
+                    type: "string"
+                  providerName: 
+                    type: "string"
+                  jumpOffId: 
+                    type: "string"
+                  reason: 
+                    type: "string"
+          description: "Metrics to be logged for the blocked silver integration jumpoff"
           required: true
         responses: 
           200: 
