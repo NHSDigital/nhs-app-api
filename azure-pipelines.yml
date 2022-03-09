@@ -104,7 +104,7 @@ variables:
     branchName: $[ replace(variables['Build.SourceBranch'], 'refs/heads/', '') ]
   ${{ if startsWith(variables['Build.SourceBranch'], 'refs/pull/') }}:
     branchName: $[ replace(variables['System.PullRequest.SourceBranch'], 'refs/heads/', '') ]
-  ${{ if or(eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
+  ${{ if or(eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['source.tag'], 'True')) }}:
     docker.registry_release: nhsapprelease.azurecr.io
 
   # Build.Reason is blank when specifying parameters but Manual when running the pipeline
@@ -233,7 +233,7 @@ stages:
             iosBuildNumber: '$(native.xamarin.ios.build.number)'
             nhsLoginEnvironment: '${{ parameters.xamarinScratchNhsLoginTarget }}'
 
-  - ${{ if and(or(eq(variables['native.xamarin.target'], 'Staging'), eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
+  - ${{ if and(or(eq(variables['native.xamarin.target'], 'Staging'), eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['source.tag'], 'True')), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
     - stage: xamarin_staging
       displayName: Build Xamarin Staging Apps
       dependsOn:
@@ -256,7 +256,7 @@ stages:
           nativeVersion: '$(native.xamarin.version)'
           buildNumber: '$(native.xamarin.ios.build.number)'
 
-  - ${{ if and(or(eq(variables['native.xamarin.target'], 'OnboardingSandpit'), eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
+  - ${{ if and(or(eq(variables['native.xamarin.target'], 'OnboardingSandpit'), eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['source.tag'], 'True')), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
     - stage: xamarin_onboarding_sandpit
       displayName: Build Xamarin Onboarding Sandpit Apps
       dependsOn:
@@ -278,7 +278,7 @@ stages:
           nativeVersion: '$(native.xamarin.version)'
           buildNumber: '$(native.xamarin.ios.build.number)'
 
-  - ${{ if and(or(eq(variables['native.xamarin.target'], 'OnboardingAos'), eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
+  - ${{ if and(or(eq(variables['native.xamarin.target'], 'OnboardingAos'), eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['source.tag'], 'True')), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
     - stage: xamarin_onboarding_aos
       displayName: Build Xamarin Onboarding Aos Apps
       dependsOn:
@@ -300,7 +300,7 @@ stages:
           nativeVersion: '$(native.xamarin.version)'
           buildNumber: '$(native.xamarin.ios.build.number)'
 
-  - ${{ if and(or(eq(variables['native.xamarin.target'], 'Production'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
+  - ${{ if and(or(eq(variables['native.xamarin.target'], 'Production'), eq(variables['source.tag'], 'True')), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
     - stage: xamarin_production
       displayName: Build Xamarin Production Apps
       dependsOn:
@@ -323,7 +323,7 @@ stages:
           nativeVersion: '$(native.xamarin.version)'
           buildNumber: '$(native.xamarin.ios.build.number)'
 
-  - ${{ if and(or(eq(variables['int.tests.run.native.xamarin'], 'true'), eq(variables['native.xamarin.runFlipbookTests'], 'true'), eq(variables['Build.Reason'], 'PullRequest'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
+  - ${{ if and(or(eq(variables['int.tests.run.native.xamarin'], 'true'), eq(variables['native.xamarin.runFlipbookTests'], 'true'), eq(variables['Build.Reason'], 'PullRequest'), eq(variables['source.tag'], 'True')), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
     - stage: xamarin_browserstack
       displayName: Build Xamarin Browserstack Apps
       dependsOn:
@@ -339,68 +339,69 @@ stages:
             nativeVersion: '$(native.xamarin.version)'
             buildNumber: '$(native.xamarin.ios.build.number)'
 
-    - stage: xamarin_integration_tests
-      displayName: XIT - Main
-      ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
-        condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
-      dependsOn:
-        - web
-        - backend
-        - xamarin_browserstack
-        - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-          - pr_changes
-      jobs:
-        - template: .azuredevops/templates/integration-tests-xamarin-job.yml
-          parameters:
-            nativeVersion: '$(native.xamarin.version)'
+    - ${{ if eq(variables['source.tag'], 'False') }}:
+      - stage: xamarin_integration_tests
+        displayName: XIT - Main
+        ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
+          condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
+        dependsOn:
+          - web
+          - backend
+          - xamarin_browserstack
+          - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+            - pr_changes
+        jobs:
+          - template: .azuredevops/templates/integration-tests-xamarin-job.yml
+            parameters:
+              nativeVersion: '$(native.xamarin.version)'
 
-    - stage: xamarin_integration_upgrade_tests
-      displayName: XIT - Upgrade
-      ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
-        condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
-      dependsOn:
-        - web
-        - backend
-        - xamarin_browserstack
-        - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-          - pr_changes
-      jobs:
-        - template: .azuredevops/templates/integration-tests-xamarin-job.yml
-          parameters:
-            runUpgradeTests: true
-            nativeVersion: '$(native.xamarin.version)'
+      - stage: xamarin_integration_upgrade_tests
+        displayName: XIT - Upgrade
+        ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
+          condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
+        dependsOn:
+          - web
+          - backend
+          - xamarin_browserstack
+          - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+            - pr_changes
+        jobs:
+          - template: .azuredevops/templates/integration-tests-xamarin-job.yml
+            parameters:
+              runUpgradeTests: true
+              nativeVersion: '$(native.xamarin.version)'
 
-    - stage: xamarin_integration_canary_tests
-      displayName: XIT - Canary
-      ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
-        condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'False'))
-      dependsOn:
-        - web
-        - backend
-        - xamarin_browserstack
-        - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-          - pr_changes
-      jobs:
-        - template: .azuredevops/templates/integration-tests-xamarin-job.yml
-          parameters:
-            runCanaryTests: true
-            nativeVersion: '$(native.xamarin.version)'
+      - stage: xamarin_integration_canary_tests
+        displayName: XIT - Canary
+        ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
+          condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'False'))
+        dependsOn:
+          - web
+          - backend
+          - xamarin_browserstack
+          - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+            - pr_changes
+        jobs:
+          - template: .azuredevops/templates/integration-tests-xamarin-job.yml
+            parameters:
+              runCanaryTests: true
+              nativeVersion: '$(native.xamarin.version)'
 
-    - stage: xamarin_integration_flaky_tests
-      displayName: XIT - Flaky
-      ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
-        condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
-      dependsOn:
-        - web
-        - backend
-        - xamarin_browserstack
-        - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-          - pr_changes
-      jobs:
-        - template: .azuredevops/templates/integration-tests-xamarin-job.yml
-          parameters:
-            runFlakyTests: true
-            nativeVersion: '$(native.xamarin.version)'
+      - stage: xamarin_integration_flaky_tests
+        displayName: XIT - Flaky
+        ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
+          condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
+        dependsOn:
+          - web
+          - backend
+          - xamarin_browserstack
+          - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+            - pr_changes
+        jobs:
+          - template: .azuredevops/templates/integration-tests-xamarin-job.yml
+            parameters:
+              runFlakyTests: true
+              nativeVersion: '$(native.xamarin.version)'
 
     - ${{ if or(eq(variables['source.tag'], 'True'), eq(variables['native.xamarin.runFlipbookTests'], 'true')) }}:
       - stage: xamarin_integration_flipbook_tests
@@ -424,7 +425,7 @@ stages:
         jobs:
           - template: .azuredevops/templates/integration-tests-xamarin-job-generate-flipbook.yml
 
-    - ${{ if and(ne(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
+    - ${{ if and(ne(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true'), eq(variables['source.tag'], 'False')) }}:
       - stage: xamarin_integration_report_generation
         displayName: XIT - Generate Reports
         condition: succeededOrFailed()
@@ -435,7 +436,7 @@ stages:
         jobs:
           - template: .azuredevops/templates/integration-tests-xamarin-generate-reports.yml
 
-    - ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
+    - ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true'), eq(variables['source.tag'], 'False')) }}:
       - stage: xamarin_pr_integration_report_generation
         displayName: XIT - Generate Upgrade Reports
         condition: and(succeededOrFailed(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
