@@ -8,7 +8,7 @@ cosmosDBName: loadtest
 AZURE_SUBSCRIPTION_NAME: nonlive
 networkPolicyEnabled: false
 
-environmentPublicHostSuffix: "-loadtest.loadtest.nonlive.nhsapp.service.nhs.uk"
+environmentPublicHostSuffix: ".loadtest.nonlive.nhsapp.service.nhs.uk"
 environmentPrivateHostSuffix: "-loadtest.private.loadtest.nonlive.nhsapp.service.nhs.uk"
 tlsSecretName: "loadtest-nonlive-nhsapp-service-nhs-uk"
 
@@ -108,6 +108,9 @@ api:
 
 sjrExternalIngressEnabled: true
 
+cid:
+  clientAuth: false
+  
 users:
   mockNotificationHubClient: true
 

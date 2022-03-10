@@ -6,10 +6,12 @@ metadata:
     kubernetes.io/ingress.class: nginx
     kubernetes.io/tls-acme: 'false'
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    {{- if $.Values.cid.clientAuth }}
     nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
     nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
     nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "false"
     nginx.ingress.kubernetes.io/auth-tls-secret: "kube-system/external-ca"
+    {{- end }}
   name: default-cid
   labels:
     role: default-cid
