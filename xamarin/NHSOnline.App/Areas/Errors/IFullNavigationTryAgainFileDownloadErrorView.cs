@@ -18,6 +18,7 @@ namespace NHSOnline.App.Areas.Errors
             Func<Task>? YourHealthRequested { get; set; }
             Func<Task>? MessagesRequested { get; set; }
             Func<Task>? TryAgainRequested { get; set; }
+            Func<Task>? BackRequested { get; set; }
         }
 
         void SetNavigationFooterItem(NavigationFooterItem footerItem);

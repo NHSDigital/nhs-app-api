@@ -39,7 +39,8 @@ namespace NHSOnline.App.Areas.Errors.Presenters
                 .RegisterHandler(model.NavigationHandler.AppointmentsRequested, (view, handler) => view.AppointmentsRequested = handler)
                 .RegisterHandler(model.NavigationHandler.PrescriptionsRequested, (view, handler) => view.PrescriptionsRequested = handler)
                 .RegisterHandler(model.NavigationHandler.YourHealthRequested, (view, handler) => view.YourHealthRequested = handler)
-                .RegisterHandler(model.NavigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler);
+                .RegisterHandler(model.NavigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler)
+                .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler);
         }
 
         private Task HelpRequested()
@@ -51,6 +52,13 @@ namespace NHSOnline.App.Areas.Errors.Presenters
         private async Task TryAgainRequested()
         {
             _logger.LogInformation("Try Again requested");
+            await _view.AppNavigation.Pop().PreserveThreadContext();
+        }
+
+        private async Task BackRequested()
+        {
+            _logger.LogInformation("Back requested");
+
             await _view.AppNavigation.Pop().PreserveThreadContext();
         }
     }

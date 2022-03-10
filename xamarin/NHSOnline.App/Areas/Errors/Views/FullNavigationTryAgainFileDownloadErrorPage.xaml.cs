@@ -12,7 +12,7 @@ using Xamarin.Forms.Xaml;
 namespace NHSOnline.App.Areas.Errors.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class FullNavigationTryAgainFileDownloadErrorPage : IFullNavigationTryAgainFileDownloadErrorView, IFullNavigationTryAgainFileDownloadErrorView.IEvents
+    public partial class FullNavigationTryAgainFileDownloadErrorPage : IFullNavigationTryAgainFileDownloadErrorView, IFullNavigationTryAgainFileDownloadErrorView.IEvents, ISwipeablePage
     {
         private readonly ILogger<FullNavigationTryAgainFileDownloadErrorPage> _logger;
         private readonly AppNavigation<IFullNavigationTryAgainFileDownloadErrorView.IEvents> _appNavigation;
@@ -36,6 +36,10 @@ namespace NHSOnline.App.Areas.Errors.Views
         public Func<Task>? TryAgainRequested { get; set; }
         public ICommand TryAgainCommand => new AsyncCommand(() => TryAgainRequested);
 
+        public Func<Task>? BackRequested { get; set; }
+        public AsyncCommand BackRequestedCommand
+            => new AsyncCommand(() => BackRequested);
+
         protected override void OnAppearing()
         {
             _logger.LogInformation("{Method}", nameof(OnAppearing));
@@ -54,6 +58,18 @@ namespace NHSOnline.App.Areas.Errors.Views
         {
             _logger.LogInformation("{ClassName} is not required to handle deeplinks", nameof(IFullNavigationTryAgainFileDownloadErrorView));
             return Task.CompletedTask;
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            BackRequestedCommand.Execute(null);
+            return true;
+        }
+
+        public bool OnSwipeBack()
+        {
+            BackRequestedCommand.Execute(null);
+            return true;
         }
     }
 }

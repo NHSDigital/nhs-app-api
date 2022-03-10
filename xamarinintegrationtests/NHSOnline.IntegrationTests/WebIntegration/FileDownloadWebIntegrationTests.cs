@@ -329,11 +329,13 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             AndroidFileDownloadErrorPage
                 .AssertOnPage(driver)
-                .AssertPageElements()
-                .Appointments();
+                .AssertPageElements();
 
-            AndroidAppointmentsPage
+            driver.PressBackButton();
+
+            AndroidFileDownloadPage
                 .AssertOnPage(driver);
+
         }
 
         [NhsAppIOSTest]
@@ -357,6 +359,15 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver)
                 .AssertPageElements()
                 .TryAgain();
+
+            IOSFileDownloadPage
+                .AssertOnPage(driver)
+                .PageContent.DownloadCorrupted();
+
+            IOSFileDownloadErrorPage
+                .AssertOnPage(driver);
+
+            driver.SwipeBack();
 
             IOSFileDownloadPage
                 .AssertOnPage(driver);
