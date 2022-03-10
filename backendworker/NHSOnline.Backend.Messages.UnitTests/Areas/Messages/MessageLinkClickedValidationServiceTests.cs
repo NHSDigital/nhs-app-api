@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -15,7 +14,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         private const string Blank = "";
         private const string NhsLoginId = "NhsLoginId";
         private const string MessageId = "MessageId";
-        private const string Url = "https://www.testing.com/valid/url/";
+        private const string Link = "https://www.testing.com/valid/url/";
 
         [TestInitialize]
         public void TestInitialise()
@@ -26,19 +25,15 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         }
 
         [DataTestMethod]
-        [DataRow(null, MessageId, Url, false)]
-        [DataRow(Blank, MessageId, Url, false)]
-        [DataRow(NhsLoginId, null, Url, false)]
-        [DataRow(NhsLoginId, Blank, Url, false)]
+        [DataRow(null, MessageId, Link, false)]
+        [DataRow(Blank, MessageId, Link, false)]
+        [DataRow(NhsLoginId, null, Link, false)]
+        [DataRow(NhsLoginId, Blank, Link, false)]
         [DataRow(NhsLoginId, MessageId, null, false)]
-        [DataRow(NhsLoginId, MessageId, Url, true)]
-        public void IsServiceRequestValid(string nhsLoginId, string messageId, string url, bool expected)
+        [DataRow(NhsLoginId, MessageId, Link, true)]
+        public void IsServiceRequestValid(string nhsLoginId, string messageId, string link, bool expected)
         {
             // Arrange
-            var link = url == null
-                ? null
-                : new Uri(url);
-
             var messageLink = new MessageLink
             {
                 MessageId = messageId,

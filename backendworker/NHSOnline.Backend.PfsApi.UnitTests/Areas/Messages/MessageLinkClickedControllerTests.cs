@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
 
         private const string MessageId = "MessageId";
         private const string NhsLoginId = "NhsLoginId";
-        private readonly Uri _link = new Uri("https://testing.com/valid/url/");
+        private const string Link = "https://testing.com/valid/url/";
 
         private MessageLinkClickedRequest _request;
 
@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
         {
             _request = new MessageLinkClickedRequest
             {
-                Link = _link
+                Link = Link
             };
 
             _mockAccessTokenProvider = new Mock<IAccessTokenProvider>(MockBehavior.Strict);

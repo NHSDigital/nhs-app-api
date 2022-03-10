@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Metrics.EventHub;
@@ -38,7 +37,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
         }
 
         [TestMethod]
-        public async Task MessageCreated_LogsMessageEventLogDataToPidAndNonPidEventHubs()
+        public async Task MessageCreated_LogsMessageCreatedEventLogDataToPidAndNonPidEventHubs()
         {
             // Arrange
             var messageCreatedData = new MessageCreatedEventLogData(
@@ -107,7 +106,79 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
         }
 
         [TestMethod]
-        public async Task MessageRead_LogsMessageEventLogDataToPidAndNonPidEventHubs()
+        public async Task MessageLinkClicked_LogsMessageLinkClickedEventLogDataToPidAndNonPidEventHubs()
+        {
+            // Arrange
+            var messageLinkClickedEventLogData = new MessageLinkClickedEventLogData(
+                "Message ID",
+                link: "https://www.nhs.uk",
+                new SenderContextEventLogData(
+                    "Supplier ID",
+                    "Communication ID",
+                    "Transmission ID",
+                    new DateTime(2021, 04, 22, 01, 05, 25),
+                    "Request Reference",
+                    "Campaign ID",
+                    "Ods Code",
+                    "NHS Number",
+                    "NHS Login ID"
+                )
+            );
+
+            var loggedPidData = string.Empty;
+            var loggedNonPidData = string.Empty;
+
+            _mockNonPidEventHubClient.Setup(x => x.WriteToEventHub(It.IsAny<string>()))
+                .Callback<string>(x => loggedNonPidData = x)
+                .Returns(Task.CompletedTask);
+            _mockNonPidEventHubClient.SetupGet(x => x.PidAllowed).Returns(false);
+
+            _mockPidEventHubClient.Setup(x => x.WriteToEventHub(It.IsAny<string>()))
+                .Callback<string>(x => loggedPidData = x)
+                .Returns(Task.CompletedTask);
+            _mockPidEventHubClient.SetupGet(x => x.PidAllowed).Returns(true);
+
+            // Act
+            await _systemUnderTest.MessageLinkClicked(messageLinkClickedEventLogData);
+
+            // Assert
+            VerifyMocks();
+
+            loggedNonPidData.Split(' ').Should().HaveCount(13);
+            AssertTimeStamp(loggedNonPidData);
+            AssertContains(loggedNonPidData, "Action=MessageLinkClicked");
+            AssertContains(loggedNonPidData, "EnvironmentName=TestEnv");
+            AssertContains(loggedNonPidData, "MessageId=Message+ID");
+            AssertContains(loggedNonPidData, "Link=https%3a%2f%2fwww.nhs.uk");
+            AssertContains(loggedNonPidData, "SupplierId=Supplier+ID");
+            AssertContains(loggedNonPidData, "CommunicationId=Communication+ID");
+            AssertContains(loggedNonPidData, "TransmissionId=Transmission+ID");
+            AssertContains(loggedNonPidData, "CommunicationCreatedDateTime=2021-04-22T01%3a05%3a25%3a000");
+            AssertContains(loggedNonPidData, "RequestReference=Request+Reference");
+            AssertContains(loggedNonPidData, "CampaignId=Campaign+ID");
+            AssertContains(loggedNonPidData, "OdsCode=Ods+Code");
+            AssertContains(loggedNonPidData, "NhsLoginId=NHS+Login+ID");
+            AssertDoesNotContain(loggedNonPidData, "NhsNumber=NHS+Number");
+
+            loggedPidData.Split(' ').Should().HaveCount(14);
+            AssertTimeStamp(loggedPidData);
+            AssertContains(loggedPidData, "Action=MessageLinkClicked");
+            AssertContains(loggedPidData, "EnvironmentName=TestEnv");
+            AssertContains(loggedPidData, "MessageId=Message+ID");
+            AssertContains(loggedPidData, "Link=https%3a%2f%2fwww.nhs.uk");
+            AssertContains(loggedPidData, "SupplierId=Supplier+ID");
+            AssertContains(loggedPidData, "CommunicationId=Communication+ID");
+            AssertContains(loggedPidData, "TransmissionId=Transmission+ID");
+            AssertContains(loggedPidData, "CommunicationCreatedDateTime=2021-04-22T01%3a05%3a25%3a000");
+            AssertContains(loggedPidData, "RequestReference=Request+Reference");
+            AssertContains(loggedPidData, "CampaignId=Campaign+ID");
+            AssertContains(loggedPidData, "OdsCode=Ods+Code");
+            AssertContains(loggedPidData, "NhsLoginId=NHS+Login+ID");
+            AssertContains(loggedPidData, "NhsNumber=NHS+Number");
+        }
+
+        [TestMethod]
+        public async Task MessageRead_LogsMessageReadEventLogDataToPidAndNonPidEventHubs()
         {
             // Arrange
             var messageReadData = new MessageReadEventLogData(

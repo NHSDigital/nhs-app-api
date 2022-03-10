@@ -66,7 +66,6 @@ namespace NHSOnline.Backend.PfsApi
             services.AddSingleton<IMapper<UserMessage, MessagesResponse>, MessagesResponseMapper>();
             services.AddSingleton<IMapper<List<SummaryMessage>, MessagesResponse>, MessagesResponseMapper>();
             services.AddSingleton<IMapper<AddMessageRequest, string, UserMessage>, UserMessageMapper>();
-            services.AddSingleton<IMapper<MessageLink, UserMessage, MessageLinkClickedData>, MessageLinkClickedDataMapper>();
             services.AddScoped<IMessageLinkClickedService, MessageLinkClickedService>();
             services.AddSingleton<IMessageLinkClickedValidationService, MessageLinkClickedValidationService>();
             services.AddSingleton<IMapper<SenderContext, SenderContextEventLogData>, MessageSenderContextEventLogDataMapper>();
