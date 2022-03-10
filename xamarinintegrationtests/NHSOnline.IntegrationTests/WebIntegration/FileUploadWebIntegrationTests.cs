@@ -1,4 +1,3 @@
-using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
@@ -102,37 +101,25 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertNativeHeader()
                 .NavigateToFileUpload();
 
-            IOSStoragePage? storagePage = null;
+            IOSFileUploadPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .UploadTestFile()
+                .PageContent.UploadFile();
 
-            TransitoryErrorHandler.HandleSpecificFailure()
-                .ResetAndRetry(() =>
-                    {
-                        IOSFileUploadPage
-                            .AssertOnPage(driver)
-                            .AssertNativeHeader()
-                            .UploadTestFile()
-                            .PageContent.UploadFile();
+            IOSFileSourceDialog
+                .GetPanel(driver)
+                .SelectBrowse();
 
-                        IOSFileSourceDialog
-                            .GetPanel(driver)
-                            .SelectBrowse();
-
-                        storagePage = IOSStoragePage
-                            .AssertOnPage(driver);
-
-                        storagePage
-                            .SearchForText();
-                    },
-                    "No IOSElement found matching ByIosNSPredicate(type == 'XCUIElementTypeCell' AND name == 'test, txt')",
-                    () => { storagePage?.CloseFileSelectorScreen(); });
-
-            storagePage?
+            IOSStoragePage
+                .AssertOnPage(driver)
                 .SelectFile();
 
             IOSFileUploadPage
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
                 .PageContent.AssertFileSelected();
+
         }
     }
 }
