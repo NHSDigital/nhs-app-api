@@ -27,7 +27,7 @@ MSBUILD_ARGS_ANDROID+=("-p:NhsAppAndroidBuildNumber=${NATIVE_ANDROID_BUILD_NUMBE
 MSBUILD_ARGS_ANDROID+=("-p:Configuration=${CONFIGURATION}")
 
 if [ -n "${NHS_LOGIN_CONFIGURATION}" ]; then
-  MSBUILD_ARGS+=("-p:NhsLoginConfiguration=${NHS_LOGIN_CONFIGURATION}")
+  MSBUILD_ARGS_ANDROID+=("-p:NhsLoginConfiguration=${NHS_LOGIN_CONFIGURATION}")
 fi
 
 MSBUILD_ARGS_ANDROID+=("-p:Platform=Any CPU")
