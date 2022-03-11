@@ -6,7 +6,7 @@ jobs:
 
       - task: DownloadPipelineArtifact@2
         inputs:
-          artifact: 'GeneratedFlipbookScreenshots'
+          artifact: $(native.xamarin.flipbookInterimFolderName)
           path: xamarinintegrationtests/flipbookgeneration/flipbook
 
       - task: ShellScript@2
@@ -24,5 +24,3 @@ jobs:
         inputs:
           artifactName: Flipbook
           targetPath: 'xamarinintegrationtests/flipbookgeneration/flipbook'
-
-

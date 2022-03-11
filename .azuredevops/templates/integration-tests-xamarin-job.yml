@@ -4,13 +4,13 @@ parameters:
     default: false
   - name: runCanaryTests
     type: boolean
-    default: false 
+    default: false
   - name: runFlipbookTests
     type: boolean
-    default: false 
+    default: false
   - name: runFlakyTests
     type: boolean
-    default: false 
+    default: false
   - name: nativeVersion
     type: string
 
@@ -137,12 +137,22 @@ jobs:
           ${{ if and(eq(parameters['runUpgradeTests'], false), eq(parameters['runCanaryTests'], false), eq(parameters['runFlipbookTests'], false), eq(parameters['runFlakyTests'], false))  }}:
             artifactName: 'Xamarin Integration Test Files Attempt-$(System.JobAttempt)'
 
+      - task: Bash@3
+        displayName: Set Generated Flipbook Artefact Name Variable
+        condition: succeededOrFailed()
+        inputs:
+          targetType: 'inline'
+          script: |
+            if [[ "$(System.JobAttempt)" != "1" ]]; then
+              echo "##vso[task.setvariable variable=native.xamarin.flipbookInterimFolderName]GeneratedFlipbookScreenshots$(System.JobAttempt)"
+            fi
+
       - task: PublishPipelineArtifact@1
         displayName: Publish Xamarin Integration Test Flipbook
         condition: and(succeededOrFailed(), eq(variables['integration.tests.results.exists'], 'True'),  eq('${{ parameters['runFlipbookTests'] }}', 'True'))
         inputs:
           targetPath: 'xamarinintegrationtests/flipbookgeneration/flipbook'
-          artifactName: GeneratedFlipbookScreenshots
+          artifactName: $(native.xamarin.flipbookInterimFolderName)
 
       - task: PublishTestResults@2
         displayName: Publish Test Results
