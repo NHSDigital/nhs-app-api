@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.AccountSettings;
+using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -38,7 +39,17 @@ namespace NHSOnline.IntegrationTests.Pages.Android.More.AccountSettings
         public static AndroidNotificationsPage AssertOnPage(IAndroidDriverWrapper driver)
         {
             var page = new AndroidNotificationsPage(driver);
-            page.PageContent.AssertOnPage();
+
+            KnownIssue.BrowserStackGoogleServicesFailure()
+                .ShouldExpect(() =>
+                {
+                    page.PageContent.AssertOnPage();
+                })
+                .OrIfKnownIssueOccuredExpect(() =>
+                {
+                    page.PageContent.AssertErrorOnPage();
+                });
+
             return page;
         }
 

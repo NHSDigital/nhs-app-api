@@ -11,6 +11,7 @@ namespace NHSOnline.IntegrationTests.UI
         internal const string AppNotRunningMessage = "application should have been automatically started on test device";
         internal const string FailedToUpdateNetworkStateMessage = "Failed to update network state";
         internal const string UnableToVerifyAppVersion = "Failed to verify app version due to device connection";
+        internal const string BrowserStackGoogleServicesFailure = "Failed to establish google services connection";
 
         // 308536-Invalid Service com.apple.webinspector
         private static readonly Regex InvalidServiceWebInspectorMessage = new(
@@ -118,6 +119,11 @@ namespace NHSOnline.IntegrationTests.UI
             Regex.Escape(UnableToVerifyAppVersion),
             RegexOptions.Compiled);
 
+        // Connection failures are causing this screen to show and fail the test
+        private static readonly Regex GoogleServicesFailure = new(
+            Regex.Escape(BrowserStackGoogleServicesFailure),
+            RegexOptions.Compiled);
+
         // Web context not ready
         private static readonly Regex WebContextNotReady = new(
             @"Web context not ready after \d[0-9]:\d[0-9]:\d[0-9]: Unable to communicate to node*",
@@ -180,7 +186,8 @@ namespace NHSOnline.IntegrationTests.UI
             (CannotFindPhotosButtonInPhotoScreen, RetryStatus.Retry(nameof(CannotFindPhotosButtonInPhotoScreen))),
             (CannotChooseButtonInPhotoScreen, RetryStatus.Retry(nameof(CannotChooseButtonInPhotoScreen))),
             (CannotFindPhotoCaptured, RetryStatus.Retry(nameof(CannotFindPhotoCaptured))),
-            (AppiumProxyIssuePostElement, RetryStatus.Retry(nameof(AppiumProxyIssuePostElement)))
+            (AppiumProxyIssuePostElement, RetryStatus.Retry(nameof(AppiumProxyIssuePostElement))),
+            (GoogleServicesFailure, RetryStatus.Retry(nameof(GoogleServicesFailure)))
         };
 
         internal static RetryStatus ShouldRetry(this TestResult result, TestLogs logs)

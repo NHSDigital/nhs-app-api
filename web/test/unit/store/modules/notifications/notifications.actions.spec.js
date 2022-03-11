@@ -2,6 +2,7 @@ import actions from '@/store/modules/notifications/actions';
 import { SET_REGISTRATION, SET_WAITING } from '@/store/modules/notifications/mutation-types';
 import { ACCOUNT_NOTIFICATIONS_NAME, NOTIFICATIONS_NAME } from '@/router/names';
 import { setCookie } from '@/lib/cookie-manager';
+import { NOTIFICATIONS_GENERIC_FAILURE_PATH } from '@/router/paths';
 import { createRouter } from '../../../helpers';
 
 jest.mock('@/lib/cookie-manager');
@@ -434,6 +435,39 @@ describe('notifications actions', () => {
 
         it('will navigate to the logged in home page`', () => {
           expect(global.nativeApp.goToLoggedInHomeScreen).toBeCalled();
+        });
+
+        it('will resolve loading promise with `serviceError`', () => expect(loading).resolves.toBe('serviceError'));
+      });
+    });
+    describe('On notifications prompt', () => {
+      let loading;
+
+      beforeEach(() => {
+        actions.app.$router.currentRoute.name = NOTIFICATIONS_NAME;
+        loading = actions.load();
+      });
+
+      describe('serviceError when registering', () => {
+        beforeEach(() => {
+          actions.settingsStatus({ commit }, 'serviceError');
+        });
+
+        it('will not call native app `requestPnsToken`', () => {
+          expect(global.nativeApp.requestPnsToken).not.toBeCalled();
+        });
+
+        it('will not commit a value to `SET_REGISTRATION`', () => {
+          expect(commit).not.toBeCalledWith(SET_REGISTRATION, false);
+        });
+
+        it('will not navigate to the logged in home page`', () => {
+          expect(global.nativeApp.goToLoggedInHomeScreen).not.toBeCalled();
+        });
+
+        it('will navigate to the generic notifications prompt failure`', () => {
+          expect(actions.app.$router.push)
+            .toBeCalledWith({ path: NOTIFICATIONS_GENERIC_FAILURE_PATH });
         });
 
         it('will resolve loading promise with `serviceError`', () => expect(loading).resolves.toBe('serviceError'));

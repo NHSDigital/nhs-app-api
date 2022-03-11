@@ -154,6 +154,8 @@ export default {
       case authorisationStatus.serviceError:
         if (get('name')(this.app.$router.history.pending) === NOTIFICATIONS_NAME) {
           NativeApp.goToLoggedInHomeScreen();
+        } else if (get('name')(this.app.$router.currentRoute) === NOTIFICATIONS_NAME) {
+          this.app.$router.push({ path: NOTIFICATIONS_GENERIC_FAILURE_PATH });
         } else {
           addApiError(this, 10001);
         }

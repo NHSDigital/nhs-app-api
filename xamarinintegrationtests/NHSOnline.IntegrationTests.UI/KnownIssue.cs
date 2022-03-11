@@ -44,5 +44,8 @@ namespace NHSOnline.IntegrationTests.UI
 
         public static KnownIssue BrowserStackUnableToVerifyAppVersionFailure()
             => new KnownIssue(TestResultRetryExtensions.UnableToVerifyAppVersion);
+
+        public static KnownIssue BrowserStackGoogleServicesFailure()
+            => new KnownIssue(TestResultRetryExtensions.BrowserStackGoogleServicesFailure);
     }
 }
