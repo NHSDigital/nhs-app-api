@@ -10,9 +10,9 @@
 
 ### GP Info update
 
-1. Acquire the latest weekly GP info csv file. This is emailed to the NHS App mailbox every Sunday - a member of the T2 or T3 support team will be able to access the latest.
+1. Acquire the latest weekly GP info csv file. This is emailed to the NHS App mailbox every Sunday - a member of the T2 or T3 support team will be able to access the latest. Rename the attachment from `gpinfo.csv` to `full_gpinfo.csv`.
 
-2. Replace `sjr-config/utils/gpinfocreation/data/full_gpinfo.csv` with the file emailed gpinfo.csv. 
+2. Replace `sjr-config/utils/gpinfocreation/data/full_gpinfo.csv` with the renamed emailed attachment. 
 NB: full_gpinfo.csv file is used to create an updated gpinfo.csv after step 3 below.
 
 3. From the root directory of nhsapp repo run
@@ -21,7 +21,7 @@ NB: full_gpinfo.csv file is used to create an updated gpinfo.csv after step 3 be
 	```
 	to update `sjr-config/configurations/gpinfo.csv`
 
-4. Check that `sjr-config/configurations/gpinfo.csv` has changed (datestamp)
+4. Check that `sjr-config/configurations/gpinfo.csv` has been updated.
 
 ### eConsult update
 
@@ -72,18 +72,17 @@ NB: full_gpinfo.csv file is used to create an updated gpinfo.csv after step 3 be
 	```
 	or much easier is to use the Azure DevOps UI for the repo.
 
-3. Run the nhsapp CI pipeline [https://dev.azure.com/nhsapp/NHS%20App/_build?definitionId=4](https://dev.azure.com/nhsapp/NHS%20App/_build?definitionId=4) with the following options:
+3. The CI pipeline should run automatically when you create the new tag. If for some reason this does not complete successfully you can run the nhsapp CI pipeline [https://dev.azure.com/nhsapp/NHS%20App/_build?definitionId=4](https://dev.azure.com/nhsapp/NHS%20App/_build?definitionId=4) with the following options for a minimal build:
 
 	*Branch/tag* set to your new tag of `nhsapp`.
-	*Stages to run* with any xamarin-related and Generate Code Coverage stages *unset*
+	
+	*Stages to run* with Integration Tests and Generate Code Coverage stages *unset*
 
-4. Run the acr image sync job [https://dev.azure.com/nhsapp/NHS%20App/_build?definitionId=75](https://dev.azure.com/nhsapp/NHS%20App/_build?definitionId=75) with *Image to sync* set to `all`. The *Branch/tag* dropdown can be left on `develop`.
+4. Create a new Release from your Tag using the NHSApp Release Pipeline in ADO [https://dev.azure.com/nhsapp/NHS%20App/_release?_a=releases&view=mine&definitionId=4](https://dev.azure.com/nhsapp/NHS%20App/_release?_a=releases&view=mine&definitionId=4) 
 
-5. Create a new Release from your Tag using the NHSApp Release Pipeline in ADO [https://dev.azure.com/nhsapp/NHS%20App/_release?_a=releases&view=mine&definitionId=4](https://dev.azure.com/nhsapp/NHS%20App/_release?_a=releases&view=mine&definitionId=4) 
+5. Progress the release through to staging, and give it a quick test there to ensure it looks ok. You may need to seek approval to deploy to staging. When you are happy, notify the relevant release channel that you are deploying to cold and get approval for that step (Production Deploy). Test in cold with a live account [https://www-cold.production.nhsapp.service.nhs.uk/](https://www-cold.production.nhsapp.service.nhs.uk/). When you are happy get approval for the Production Release step. If you deploy to cold and for some reason don't progress to switching live, let Ops know so they can clear the release down to save space.
 
-6. Progress the release through to staging, and give it a quick test there to ensure it looks ok. You may need to seek approval to deploy to staging. When you are happy, notify Ops that you are deploying to cold and get approval for that step. Test in cold with a live account [https://www-cold.production.nhsapp.service.nhs.uk/](https://www-cold.production.nhsapp.service.nhs.uk/). When you are happy notify Ops so that the release may be switched live. If you deploy to cold and don't progress to switching live, also let Ops know so they can clear the release down to save space.
-
-7. Create the new file of eConsult live surgeries:
+6. Create the new file of eConsult live surgeries:
 
 	```bash
 	  awk -F, '{print $8","$7}' sjr-config/utils/rulecreation/econsult.csv > sjr-config/utils/rulecreation/200729-practices-live.csv
@@ -93,6 +92,6 @@ NB: full_gpinfo.csv file is used to create an updated gpinfo.csv after step 3 be
 	
 	Email the file to liz.jones@webgp.com with subject 'NHS App config'.
 
-8. Add the latest sjr-config/utils/rulecreation/engage.csv to the [Engage SharePoint folder](https://hscic365.sharepoint.com/sites/EngageHealthSystemsLtd/Shared%20Documents/Forms/AllItems.aspx?csf=1&web=1&e=097t7s&cid=1e0bd1d8%2D3964%2D4bba%2D80e2%2Ddc7b3b6abca1&RootFolder=%2Fsites%2FEngageHealthSystemsLtd%2FShared%20Documents%2FEngage%20Practice%20Management&FolderCTID=0x0120009F236CF489C42E4E8C5F68FA5FC260FE) and rename the csv file to the format `YYMMDD-practices-live.csv`. Do this even if there were no changes to Engage for the release.
+7. Add the latest sjr-config/utils/rulecreation/engage.csv to the [Engage SharePoint folder](https://hscic365.sharepoint.com/sites/EngageHealthSystemsLtd/Shared%20Documents/Forms/AllItems.aspx?csf=1&web=1&e=097t7s&cid=1e0bd1d8%2D3964%2D4bba%2D80e2%2Ddc7b3b6abca1&RootFolder=%2Fsites%2FEngageHealthSystemsLtd%2FShared%20Documents%2FEngage%20Practice%20Management&FolderCTID=0x0120009F236CF489C42E4E8C5F68FA5FC260FE) and rename the csv file to the format `YYMMDD-practices-live.csv`. Do this even if there were no changes to Engage for the release.
 
-9. If you updated a release branch then cherry pick the update back into `develop`. This will ensure the next release cut is up-to-date with SJR.
+8. If you updated a release branch then cherry pick the update back into `develop`. This will ensure the next release cut is up-to-date with SJR.

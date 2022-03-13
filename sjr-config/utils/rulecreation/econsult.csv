@@ -335,7 +335,6 @@ devon,Devon,CCG,Devon,Devon,crofthallmedicalpractice,Croft Hall Medical Practice
 devon,Devon,CCG,Devon,Devon,dartmedical,Dartmouth Medical Practice,L83094,7850
 devon,Devon,CCG,Devon,Devon,deanxsurgery,Dean Cross Surgery,L83021,10436
 devon,Devon,CCG,Devon,Devon,devonsquare,Devon Square Surgery,L83046,8715
-devon,Devon,CCG,Devon,Devon,devonporthealthcentre,Devonport Health Centre,L83624,7526
 devon,Devon,CCG,Devon,Devon,elmsurgery,Elm Surgery,L83019,7007
 devon,Devon,CCG,Devon,Devon,fremington,Fremington Medical Centre,L83057,6814
 devon,Devon,CCG,Devon,Devon,friaryhousesurgery,Friary House Surgery,L83072,10786
@@ -1059,7 +1058,6 @@ knowsley,Knowsley,CCG,Knowsley,Cheshire and Merseyside,tarbockmedicalcentre,Tarb
 knowsley,Knowsley,CCG,Knowsley,Cheshire and Merseyside,thcsurgery,The Health Centre Surgery,N83013,5056
 knowsley,Knowsley,CCG,Knowsley,Cheshire and Merseyside,trenthammedicalcentre,Trentham Medical Centre,N83055,5547
 knowsley,Knowsley,CCG,Knowsley,Cheshire and Merseyside,wingatemedicalcentre,Wingate Medical Centre,N83009,12113
-herewardgp,Lakeside Healthcare Hereward,PRACTICE,South Lincolnshire,Lincolnshire,herewardgp,Lakeside Healthcare Hereward,C83035,12635
 lambeth,Lambeth,CCG,Lambeth,South East London,becketthouse,Beckett House Practice,G85100,7350
 lambeth,Lambeth,CCG,Lambeth,South East London,binfieldroadsurgery,Binfield Road Surgery,G85123,7850
 lambeth,Lambeth,CCG,Lambeth,South East London,brixtonhillgrouppractice,Brixton Hill Group Practice,G85025,11343
@@ -1686,7 +1684,6 @@ southwark,Southwark,CCG,Southwark,South East London,villastreetmedicalcentre,Vil
 springmeadsurgery,Springmead Surgery,PRACTICE,Somerset,Somerset,springmeadsurgery,Springmead Surgery,L85028,5788
 sthelens,St Helens,CCG,St Helens,Cheshire and Merseyside,bethanymedicalcentre,Bethany Medical Centre,N83054,4106
 sthelens,St Helens,CCG,St Helens,Cheshire and Merseyside,centralsurgerysthelens,Central Surgery,N83027,6500
-sthelens,St Helens,CCG,St Helens,Cheshire and Merseyside,cornerstonesurgery,Cornerstone Surgery,N83604,2595
 sthelens,St Helens,CCG,St Helens,Cheshire and Merseyside,thecrossroadssurgery,Crossroads Surgery,N83635,1400
 sthelens,St Helens,CCG,St Helens,Cheshire and Merseyside,oldwhintsurgery,Dr Rahil - Old Whint Surgery,N83624,2936
 sthelens,St Helens,CCG,St Helens,Cheshire and Merseyside,ecclestonmedicalcentre,Eccleston Medical Centre,N83614,3750
@@ -2396,7 +2393,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Pump Lane Surgery,G82635,
 ,,,Other,,,Malling Health Four,G82681,
 ,,,Other,,,Church View Practice,G82704,
-,,,Other,,,Wish Valley Surgery,G82732,
 ,,,Other,,,Medway Medical Group,G82775,
 ,,,Other,,,Pinehill Sugery,J82184,
 ,,,Other,,,The Family Practice,L81090,
@@ -2461,7 +2457,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Lonsdale Medical Centre,G82768,
 ,,,Other,,,James Fisher Medical Centre,J81047,
 ,,,Other,,,Hughenden Valley and Chequers Surgeries,K82049,
-,,,Other,,,Leeds Student Medical Practice,B86110,
 ,,,Other,,,London Road Surgery,E81019,
 ,,,Other,,,Putnoe Medical Centre,E81029,
 ,,,Other,,,Linden Road Surgery,E81060,
@@ -2617,7 +2612,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Woodlands Medical Centre,K84043,
 ,,,Other,,,Church View Surgery,L83064,
 ,,,Other,,,Bankhouse Surgery,A81007,
-,,,Other,,,Watton Place Clinic,E82121,
 ,,,Other,,,Sturry Surgery & Canterbury Health Centre,G82082,
 ,,,Other,,,Swanscombe & Bean Partnership,G82122,
 ,,,Other,,,Bank House Surgery,G84609,
@@ -2660,3 +2654,4 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Southgate Medical Group,H82064,
 ,,,Other,,,St Pauls Surgery,J82050,
 ,,,Other,,,North Road West Medical Centre,L83030,
+,,,Other,,,Dashwood Medical Centre,G82064,

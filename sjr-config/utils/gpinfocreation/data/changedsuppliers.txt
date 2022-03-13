@@ -822,3 +822,8 @@ B82002,"MILLFIELD SURGERY","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)","THE P
 P83603,"RED BANK GROUP PRACTICE","IN PRACTICE SYSTEMS LTD","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)"
 P83603,"RED BANK GROUP PRACTICE","IN PRACTICE SYSTEMS LTD","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)"
 ==================================================================
+==================================================================
+Job Run - Sun Mar 13 09:14:18 GMTST 2022
+ODS,Organisation,PreviousSupplier,NewSupplier
+A86028,"REGENT MEDICAL CENTRE","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)","THE PHOENIX PARTNERSHIP"
+==================================================================
