@@ -93,9 +93,7 @@ namespace NHSOnline.AuditLogFunctionApp.EventGenerator
                 new VersionTag(null, null, null),
                 Guid.NewGuid().ToString(),
                 "test",
-                "testIntegrationReferrer",
-                "sessionId",
-                "P9"
+                "testReferrer"
             );
 
         private static string GenerateNHSNumber() =>

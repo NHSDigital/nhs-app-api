@@ -11,6 +11,5 @@ namespace NHSOnline.Backend.PfsApi.Session
         string CsrfToken { get; }
         string IntegrationReferrer { get; }
         HttpContext HttpContext { get; }
-        string Referrer { get; }
     }
 }

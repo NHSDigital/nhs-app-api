@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.Auditing
             params object[] parameters);
 
          Task PostOperationAuditSessionEvent(string accessToken, string nhsNumber, Supplier supplier, string operation, string details,
-             string referrer, params object[] parameters);
+             params object[] parameters);
 
         IDisposable BeginScope(HttpContext httpContext);
 

@@ -16,7 +16,6 @@ using NHSOnline.Backend.Support.Session;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support.Temporal;
 using UnitTestHelper;
-using NHSOnline.Backend.Auditing;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 {
@@ -118,7 +117,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     .AddSingleton(new Mock<ISessionErrorResultBuilder>().Object)
                     .AddSingleton(new Mock<IAuthenticationService>().Object)
                     .AddSingleton(new AuthSigningConfig(new Mock<IConfiguration>().Object, new Mock<ILogger<AuthSigningConfig>>().Object))
-                    .AddSingleton(new Mock<IAuditor>().Object)
                     .AddMockLoggers();
             }
         }

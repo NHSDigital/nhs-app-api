@@ -95,11 +95,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 "details",
                 new VersionTag("api", "web", "native"),
                 "test",
-                null,
-                "SessionId",
-                "P9",
-                "odsCode",
-                "referrer");
+                null);
         }
 
         private void SetupEventDataBatch()

@@ -28,8 +28,6 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         private static string _nhsNumber2;
         private const Supplier SupplierEmis = Supplier.Emis;
         private static readonly string AccessToken = AuditorTestResources.AccessTokenValid;
-        private static string _odsCode;
-        private static string _referrer = "";
 
         private IFixture _fixture;
         private Stream _stream;
@@ -104,7 +102,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 var mockUserSessionService = new Mock<IUserSessionService>();
                 mockUserSessionService
                     .Setup(x => x.GetUserSession<UserSession>())
-                    .Returns(Option.Some(CreateUserSession(_nhsNumber2, AuditorTestResources.AccessTokenValid, _odsCode)));
+                    .Returns(Option.Some(CreateUserSession(_nhsNumber2, AuditorTestResources.AccessTokenValid)));
                 var requestServices = new ServiceCollection()
                     .AddSingleton(mockUserSessionService.Object)
                     .BuildServiceProvider();
@@ -161,7 +159,6 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 Supplier supplier,
                 string operation,
                 string details,
-                string referrer,
                 params object[] parameters
                 )
             {
@@ -169,7 +166,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
 
                 using (_auditor.BeginScope(dummyContext))
                 {
-                    await _auditor.PostOperationAuditSessionEvent(accessToken, nhsNumber, supplier, operation, details, referrer, parameters);
+                    await _auditor.PostOperationAuditSessionEvent(accessToken, nhsNumber, supplier, operation, details, parameters);
                 }
             }
         }
@@ -182,8 +179,6 @@ namespace NHSOnline.Backend.Auditing.UnitTests
 
             _nhsNumber1 = "123 123 1234";
             _nhsNumber2 = "123 123 1235";
-
-            _odsCode = "OdsCode";
 
             // Set the stream for audits
             _stream = new MemoryStream();
@@ -202,7 +197,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             _mockUserSessionService = _fixture.Freeze<Mock<IUserSessionService>>();
             _mockUserSessionService
                 .Setup(x => x.GetUserSession<UserSession>())
-                .Returns(Option.Some(CreateUserSession(_nhsNumber1, AuditorTestResources.AccessTokenValid, _odsCode)));
+                .Returns(Option.Some(CreateUserSession(_nhsNumber1, AuditorTestResources.AccessTokenValid)));
 
             var mockServiceProvider = _fixture.Freeze<Mock<IServiceProvider>>();
             mockServiceProvider
@@ -222,33 +217,21 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             _systemUnderTest = _fixture.Create<DummyClassThatAudits>();
         }
 
-        private static UserSession CreateUserSession(string nhsNumber, string accessToken,
-            string odsCode)
+        private static UserSession CreateUserSession(string nhsNumber, string accessToken)
         {
             return new P9UserSession(
                 string.Empty,
                 nhsNumber,
-                new CitizenIdUserSession
-                {
-                    AccessToken = accessToken,
-                    ProofLevel = ProofLevel.P9,
-                    OdsCode = odsCode
-                },
+                new CitizenIdUserSession { AccessToken = accessToken, },
                 string.Empty, new EmisUserSession { NhsNumber = nhsNumber });
         }
 
-        private static UserSession CreateUserSessionNoGpSystem(string nhsNumber, string accessToken,
-            string odsCode)
+        private static UserSession CreateUserSessionNoGpSystem(string nhsNumber, string accessToken)
         {
             return new P9UserSession(
                 string.Empty,
                 nhsNumber,
-                new CitizenIdUserSession
-                {
-                    AccessToken = accessToken,
-                    ProofLevel = ProofLevel.P9,
-                    OdsCode = odsCode
-                },
+                new CitizenIdUserSession { AccessToken = accessToken },
                 string.Empty, new NullGpSession(Supplier.Tpp, "1 plus 2 is three"));
         }
 
@@ -316,28 +299,28 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         public async Task Audit_HappyPath()
         {
             await _systemUnderTest.Audit(
-                CreateUserSession(_nhsNumber1, AuditorTestResources.AccessTokenValid, _odsCode),
+                CreateUserSession(_nhsNumber1, AuditorTestResources.AccessTokenValid),
                 "Test Audit", "SomeDetails '{0} {1}'", "with", "parameters");
 
             _stream.Position = 0;
             var streamReader = new StreamReader(_stream);
 
             var testString = streamReader.ReadLine();
-            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | False | Emis | Test Audit | SomeDetails 'with parameters' | " + _referrer + " |");
+            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | False | Emis | Test Audit | SomeDetails 'with parameters' |");
         }
 
         [TestMethod]
         public async Task Audit_HappyPath_NoGpSession()
         {
             await _systemUnderTest.Audit(
-                CreateUserSessionNoGpSystem(_nhsNumber1, AuditorTestResources.AccessTokenValid, _odsCode),
+                CreateUserSessionNoGpSystem(_nhsNumber1, AuditorTestResources.AccessTokenValid),
                 "Test Audit", "SomeDetails '{0} {1}'", "with", "parameters");
 
             _stream.Position = 0;
             var streamReader = new StreamReader(_stream);
 
             var testString = streamReader.ReadLine();
-            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | False | Disconnected | Test Audit | SomeDetails 'with parameters' | " + _referrer + " |");
+            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | False | Disconnected | Test Audit | SomeDetails 'with parameters' |");
         }
 
         [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
@@ -345,7 +328,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         [DataRow("")]
         public async Task Audit_NhsNumberNullOrEmpty_Throws(string nhsNumber)
         {
-            var userSession = CreateUserSession(nhsNumber, AuditorTestResources.AccessTokenValid, _odsCode);
+            var userSession = CreateUserSession(nhsNumber, AuditorTestResources.AccessTokenValid);
             await _systemUnderTest.Audit(
                 userSession,
                 "Test Audit",
@@ -358,7 +341,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         [DataRow("")]
         public async Task Audit_AccessTokenNullOrEmpty_Throws(string accessToken)
         {
-            var userSession = CreateUserSession(_nhsNumber1, accessToken, _odsCode);
+            var userSession = CreateUserSession(_nhsNumber1, accessToken);
 
             await _systemUnderTest.Audit(
                 userSession,
@@ -372,7 +355,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         [DataRow("")]
         public async Task Audit_AccessTokenNullOrEmpty_NoGpSession_Throws(string accessToken)
         {
-            var userSession = CreateUserSessionNoGpSystem(_nhsNumber1, accessToken, _odsCode);
+            var userSession = CreateUserSessionNoGpSystem(_nhsNumber1, accessToken);
 
             await _systemUnderTest.Audit(
                 userSession,
@@ -384,7 +367,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
         public async Task Audit_AccessTokenInvalid_Throws()
         {
-            var userSession = CreateUserSession(_nhsNumber1, AuditorTestResources.AccessTokenInvalid, _odsCode);
+            var userSession = CreateUserSession(_nhsNumber1, AuditorTestResources.AccessTokenInvalid);
 
             await _systemUnderTest.Audit(
                 userSession,
@@ -396,7 +379,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
         public async Task Audit_AccessTokenInvalid_NoGpSystem_Throws()
         {
-            var userSession = CreateUserSessionNoGpSystem(_nhsNumber1, AuditorTestResources.AccessTokenInvalid, _odsCode);
+            var userSession = CreateUserSessionNoGpSystem(_nhsNumber1, AuditorTestResources.AccessTokenInvalid);
 
             await _systemUnderTest.Audit(
                 userSession,
@@ -411,15 +394,15 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             await _systemUnderTest.AuditSessionEvent(
                 AccessToken,
                 _nhsNumber1,
-                Supplier.Tpp, "Test Audit", "SomeDetails 'with parameters'",
-                _referrer);
+                Supplier.Tpp, "Test Audit", "SomeDetails '{0} {1}'", "with", "parameters");
 
             _stream.Position = 0;
             var streamReader = new StreamReader(_stream);
 
             var testString = streamReader.ReadLine();
-            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | False | Tpp | Test Audit | SomeDetails 'with parameters' | " + _referrer + " |");
+            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | False | Tpp | Test Audit | SomeDetails 'with parameters' |");
         }
+
 
         [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
         [DataRow(null)]
@@ -432,8 +415,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 Supplier.Vision,
                 "Test Audit",
                 "SomeDetails '{0} {1}'",
-                "with", "parameters",
-                _referrer);
+                "with", "parameters");
         }
 
         [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
@@ -447,8 +429,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 SupplierEmis,
                 "Test Audit",
                 "SomeDetails '{0} {1}'",
-                "with", "parameters",
-                _referrer);
+                "with", "parameters");
         }
 
         [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
@@ -459,8 +440,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 _nhsNumber1, SupplierEmis,
                 "Test Audit",
                 "SomeDetails '{0} {1}'",
-                "with", "parameters",
-                _referrer);
+                "with", "parameters");
         }
 
         [TestMethod]
@@ -474,7 +454,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             var streamReader = new StreamReader(_stream);
 
             var testString = streamReader.ReadLine();
-            testString.Should().EndWith("|  | " +  _nhsNumber1 + " | False | Tpp | Test Audit | SomeDetails 'with parameters' | " + _referrer + " |");
+            testString.Should().EndWith("|  | " +  _nhsNumber1 + " | False | Tpp | Test Audit | SomeDetails 'with parameters' |");
         }
 
         [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
@@ -500,16 +480,17 @@ namespace NHSOnline.Backend.Auditing.UnitTests
 
             var auditLine1 = streamReader.ReadLine();
             auditLine1.Should().NotBeEmpty();
-            auditLine1.Should().EndWith(_nhsNumber2 + " | False | Emis | Testing | Message with rubbish scope 1 | " + _referrer + " |");
+            auditLine1.Should().EndWith(_nhsNumber2 + " | False | Emis | Testing | Message with rubbish scope 1 |");
 
             var auditLine2 = streamReader.ReadLine();
             auditLine2.Should().NotBeEmpty();
-            auditLine2.Should().EndWith(_nhsNumber1 + " | False | Emis | Testing | TaskedMethod | " + _referrer + " |");
+            auditLine2.Should().EndWith(_nhsNumber1 + " | False | Emis | Testing | TaskedMethod |");
 
             var auditLine3  = streamReader.ReadLine();
             auditLine3.Should().NotBeEmpty();
-            auditLine3.Should().EndWith(_nhsNumber2 + " | False | Emis | Testing | Message with rubbish scope 2 | " + _referrer + " |");
+            auditLine3.Should().EndWith(_nhsNumber2 + " | False | Emis | Testing | Message with rubbish scope 2 |");
         }
+
 
         [TestMethod]
         public void TestCrossThreadAuditsWhileProxying()
@@ -529,16 +510,17 @@ namespace NHSOnline.Backend.Auditing.UnitTests
 
             var auditLine1 = streamReader.ReadLine();
             auditLine1.Should().NotBeEmpty();
-            auditLine1.Should().EndWith(_nhsNumber2 + " | False | Emis | Testing | Message with rubbish scope 1 | " + _referrer + " |");
+            auditLine1.Should().EndWith(_nhsNumber2 + " | False | Emis | Testing | Message with rubbish scope 1 |");
 
             var auditLine2 = streamReader.ReadLine();
             auditLine2.Should().NotBeEmpty();
-            auditLine2.Should().EndWith(proxyNhsNumber + " | True | Emis | Testing | TaskedMethod | " + _referrer + " |");
+            auditLine2.Should().EndWith(proxyNhsNumber + " | True | Emis | Testing | TaskedMethod |");
 
             var auditLine3  = streamReader.ReadLine();
             auditLine3.Should().NotBeEmpty();
-            auditLine3.Should().EndWith(_nhsNumber2 + " | False | Emis | Testing | Message with rubbish scope 2 | " + _referrer + " |");
+            auditLine3.Should().EndWith(_nhsNumber2 + " | False | Emis | Testing | Message with rubbish scope 2 |");
         }
+
 
         public void Dispose()
         {

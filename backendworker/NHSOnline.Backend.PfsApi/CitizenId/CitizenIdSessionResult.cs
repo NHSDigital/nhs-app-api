@@ -11,7 +11,6 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
         public string NhsNumber { get; set; }
         public DateTime DateOfBirth { get; set; }
         public CitizenIdUserSession Session { get; set; }
-        public string Referrer { get; set; }
 
         string IAuditedResult.Details => $"Created Citizen Id Session {StatusCode}";
     }

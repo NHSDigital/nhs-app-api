@@ -57,24 +57,6 @@ namespace NHSOnline.AuditLogFunctionApp.UnitTests.Functions
                 Times.Exactly(auditRecordCount));
         }
 
-        [TestMethod]
-        [DataRow(1)]
-        [DataRow(3)]
-        [DataRow(10)]
-        public async Task AuditEventConsumerFunction_ValidAnd1ExcludedAuditRecords_DbUpsertCompletedMinus1(int auditRecordCount)
-        {
-            // Arrange
-            SetupAuditRecordsIncluding1LoginSuccessOperation(auditRecordCount);
-
-            // Act
-            await _systemUnderTest.AuditEventConsumerTrigger(_auditRecords, _mockCosmosClient.Object);
-
-            // Assert
-            _mockCosmosClient.Verify(
-                m => m.AddAsync(It.IsAny<AuditRecord>(), default),
-                Times.Exactly(auditRecordCount-1));
-        }
-
         private void SetupAuditRecords(int auditRecordCount)
         {
             var auditRecords = new List<AuditRecord>();
@@ -91,34 +73,7 @@ namespace NHSOnline.AuditLogFunctionApp.UnitTests.Functions
                     new VersionTag("api", "web", "native"),
                     Guid.NewGuid().ToString(),
                     "test",
-                    "testIntegrationReferrer",
-                    "sessionId",
-                    "P9"));
-
-            _auditRecords = auditRecords.ToArray();
-        }
-
-        private void SetupAuditRecordsIncluding1LoginSuccessOperation(int auditRecordCount)
-        {
-            var auditRecords = new List<AuditRecord>();
-            var testOperation = "OnlineConsultations_Submitted";
-            var excludedOperation = "Login_Success";
-
-            for (var i = 0; i < auditRecordCount; i++)
-                auditRecords.Add(new AuditRecord(
-                    DateTime.Now.AddHours(i),
-                    "nhsLoginSubject",
-                    "nhsNumber",
-                    false,
-                    "Emis",
-                    (i == 0 ? excludedOperation : testOperation),
-                    "details",
-                    new VersionTag("api", "web", "native"),
-                    Guid.NewGuid().ToString(),
-                    "test",
-                    "testIntegrationReferrer",
-                    "sessionId",
-                    "P9"));
+                    "testReferrer"));
 
             _auditRecords = auditRecords.ToArray();
         }

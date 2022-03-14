@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.Auditing
                 ?.GetUserSession<UserSession>() ?? Option.None<UserSession>();
             if (userSession.IsEmpty)
             {
-                return new AuditUserContext(null,null, Supplier.Unknown, false, null, null, ProofLevel.P5, null);
+                return new AuditUserContext(null,null, Supplier.Unknown, false, null);
             }
             var isProxying = false;
             string linkedAccountNhsNumber = null;
@@ -72,10 +72,7 @@ namespace NHSOnline.Backend.Auditing
                     string.Empty,
                     Supplier.Unknown,
                     _isProxying,
-                    _linkedAccountNhsNumber,
-                    userSession.Key,
-                    userSession.CitizenIdUserSession.ProofLevel,
-                    userSession.CitizenIdUserSession.OdsCode);
+                    _linkedAccountNhsNumber);
 
             public AuditUserContext Visit(P9UserSession userSession)
             {
@@ -84,11 +81,9 @@ namespace NHSOnline.Backend.Auditing
                     userSession.NhsNumber,
                     userSession.GpUserSession.Supplier,
                     _isProxying,
-                    _linkedAccountNhsNumber,
-                    userSession.Key,
-                    userSession.CitizenIdUserSession.ProofLevel,
-                    userSession.CitizenIdUserSession.OdsCode);
+                    _linkedAccountNhsNumber);
             }
+
         }
     }
 }

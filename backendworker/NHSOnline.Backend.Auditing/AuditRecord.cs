@@ -18,11 +18,7 @@ namespace NHSOnline.Backend.Auditing
             string details,
             VersionTag version,
             string environment,
-            string integrationReferrer,
-            string sessionId,
-            string proofLevel,
-            string ods,
-            string referrer)
+            string integrationReferrer)
         {
             Timestamp = timestamp;
             AuditId = Guid.NewGuid().ToString();
@@ -33,10 +29,6 @@ namespace NHSOnline.Backend.Auditing
             Operation = operation;
             Details = details;
             IntegrationReferrer = integrationReferrer;
-            SessionId = sessionId;
-            ProofLevel = proofLevel;
-            ODS = ods;
-            Referrer = referrer;
 
             if (version == null)
             {
@@ -84,17 +76,5 @@ namespace NHSOnline.Backend.Auditing
 
         [BsonElement]
         public string IntegrationReferrer { get; private set; }
-
-        [BsonElement]
-        public string SessionId { get; private set; }
-
-        [BsonElement]
-        public string ProofLevel { get; private set; }
-
-        [BsonElement]
-        public string ODS { get; private set; }
-
-        [BsonElement]
-        public string Referrer { get; private set; }
-   }
+    }
 }

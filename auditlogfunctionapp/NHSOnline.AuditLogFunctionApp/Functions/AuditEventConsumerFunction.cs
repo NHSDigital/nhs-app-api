@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,8 +36,6 @@ namespace NHSOnline.AuditLogFunctionApp.Functions
         {
             var stopwatch = Stopwatch.StartNew();
 
-            auditRecords = RemoveExcludedOperations();
-
             _logger.LogInformation(
                 "{} function started. recordCount={}",
                 nameof(AuditEventConsumerTrigger),
@@ -75,16 +72,6 @@ namespace NHSOnline.AuditLogFunctionApp.Functions
                 stopwatch.ElapsedMilliseconds,
                 auditRecords.Length
             );
-
-            AuditRecord[] RemoveExcludedOperations()
-            {
-                var auditRecordList = auditRecords.ToList();
-                var removedOperationsCount = auditRecordList.RemoveAll(a => AuditingOperations.ExcludedList.Contains(a.Operation));
-
-                _logger.LogInformation($"{removedOperationsCount} excluded logs removed from original audit records");
-
-                return auditRecordList.ToArray();
-            }
         }
     }
 }
