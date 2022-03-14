@@ -54,7 +54,7 @@ namespace NHSOnline.IntegrationTests.Appointments
         }
 
         [NhsAppIOSTest]
-        public void APatientIsShownAnErrorWhenTryingToAccessTheSurgeryGpAppointmentsPageIos(IIOSDriverWrapper driver)
+        public void APatientIsShownTheirGpAppointmentsAndCanNavigateBackWhenAccessingTheGpAppointmentsPageIos(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
                 .WithName(b => b.GivenName("App").FamilyName("Ointments"));
