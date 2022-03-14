@@ -9,9 +9,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     public enum HealthTrackersProvider
     {
         pkb,
-        pkbCie,
-        pkbSecondaryCare,
-        pkbMyCareView,
         wellnessAndPrevention
     }
 }

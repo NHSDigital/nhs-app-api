@@ -40,36 +40,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
             "p",
             "View your current and past medicines or add a record of your own");
 
-        private WebMenuItem PkbCieHospitalAndOtherMedicinesMenuItem => WebMenuItem.WithTitle(
-            _interactor,
-            "Hospital and other medicines",
-            "btn_pkb_cie_medicines");
-
-        private WebText PkbCieHospitalAndOtherMedicinesText => WebText.WithTagAndText(
-            _interactor,
-            "p",
-            "View your current and past medicines or add a record of your own");
-
-        private WebMenuItem PkbSecondaryCareHospitalAndOtherMedicinesMenuItem => WebMenuItem.WithTitle(
-            _interactor,
-            "Hospital and other medicines",
-            "btn_pkb_secondary_care_medicines");
-
-        private WebText PkbSecondaryCareHospitalAndOtherMedicinesText => WebText.WithTagAndText(
-            _interactor,
-            "p",
-            "View your current and past medicines or add a record of your own");
-
-        private WebMenuItem PkbMyCareViewHospitalAndOtherMedicinesMenuItem => WebMenuItem.WithTitle(
-            _interactor,
-            "Hospital and other medicines",
-            "btn_pkb_my_care_view_medicines");
-
-        private WebText PkbMyCareViewHospitalAndOtherMedicinesText => WebText.WithTagAndText(
-            _interactor,
-            "p",
-            "View your current and past medicines or add a record of your own");
-
         internal void AssertOnPage() => TitleText.AssertVisible();
 
         public PrescriptionsPageContent AssertPageElements()
@@ -88,35 +58,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
             return this;
         }
 
-        public PrescriptionsPageContent AssertPkbCieElements()
-        {
-            PkbCieHospitalAndOtherMedicinesMenuItem.AssertVisible();
-            PkbCieHospitalAndOtherMedicinesText.AssertVisible();
-            return this;
-        }
-
-        public PrescriptionsPageContent AssertPkbSecondaryCareElements()
-        {
-            PkbSecondaryCareHospitalAndOtherMedicinesMenuItem.AssertVisible();
-            PkbSecondaryCareHospitalAndOtherMedicinesText.AssertVisible();
-            return this;
-        }
-
-        public PrescriptionsPageContent AssertPkbMyCareViewElements()
-        {
-            PkbMyCareViewHospitalAndOtherMedicinesMenuItem.AssertVisible();
-            PkbMyCareViewHospitalAndOtherMedicinesText.AssertVisible();
-            return this;
-        }
-
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
             OrderARepeatPrescriptionButton,
             ViewYourOrdersMenuItem,
-            PkbHospitalAndOtherPrescriptionsMenuItem,
-            PkbCieHospitalAndOtherMedicinesMenuItem,
-            PkbSecondaryCareHospitalAndOtherMedicinesMenuItem,
-            PkbMyCareViewHospitalAndOtherMedicinesMenuItem
+            PkbHospitalAndOtherPrescriptionsMenuItem
         };
 
         public void NavigateToOrderARepeatPrescription() => OrderARepeatPrescriptionButton.Click();
@@ -131,15 +77,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
 
         public void KeyboardNavigateToPkbHospitalAndOtherPrescriptions(AndroidKeyboardNavigation navigation)
             => KeyboardNavigateToAndActivateMenuItem(PkbHospitalAndOtherPrescriptionsMenuItem, navigation);
-
-        public void KeyboardNavigateToPkbCieHospitalAndOtherMedicines(AndroidKeyboardNavigation navigation)
-            => KeyboardNavigateToAndActivateMenuItem(PkbCieHospitalAndOtherMedicinesMenuItem, navigation);
-
-        public void KeyboardNavigateToPkbSecondaryCareHospitalAndOtherMedicines(AndroidKeyboardNavigation navigation)
-            => KeyboardNavigateToAndActivateMenuItem(PkbSecondaryCareHospitalAndOtherMedicinesMenuItem, navigation);
-
-        public void KeyboardNavigateToPkbMyCareViewHospitalAndOtherMedicines(AndroidKeyboardNavigation navigation)
-            => KeyboardNavigateToAndActivateMenuItem(PkbMyCareViewHospitalAndOtherMedicinesMenuItem, navigation);
 
         private void KeyboardNavigateToAndActivateMenuItem(IFocusable menuItem, AndroidKeyboardNavigation keyboardPageContentNavigation)
         {

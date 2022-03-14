@@ -82,9 +82,6 @@ export default {
     },
     providerName() {
       if (this.knownService) {
-        if (this.getWarningMessage('brandName') !== undefined) {
-          return this.getWarningMessage('brandName');
-        }
         return this.getText(`thirdPartyProviders.${this.knownService.id}.providerName`);
       }
       return '';

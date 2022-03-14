@@ -39,10 +39,7 @@ namespace NHSOnline.IntegrationTests.Messages
                 .AssertPageElements()
                 .AssertEngageElements()
                 .AssertSubstraktElements()
-                .AssertPkbElements()
-                .AssertCieElements()
-                .AssertMyCareViewElements()
-                .AssertSecondaryCareViewElements();
+                .AssertPkbElements();
         }
 
         [NhsAppIOSTest]
@@ -64,10 +61,7 @@ namespace NHSOnline.IntegrationTests.Messages
                 .AssertPageElements()
                 .AssertEngageElements()
                 .AssertSubstraktElements()
-                .AssertPkbElements()
-                .AssertCieElements()
-                .AssertMyCareViewElements()
-                .AssertSecondaryCareViewElements();
+                .AssertPkbElements();
         }
 
         [NhsAppAndroidTest]
@@ -122,33 +116,6 @@ namespace NHSOnline.IntegrationTests.Messages
             AndroidMessagesPage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateToCie();
-
-            AndroidWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, "Consultations, events and messages")
-                .KeyboardNavigateBack();
-
-            AndroidMessagesPage
-                .AssertOnPage(driver)
-                .TabIntoFocus()
-                .KeyboardNavigateToMyCareView();
-
-            AndroidWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, "Consultations, events and messages")
-                .KeyboardNavigateBack();
-
-            AndroidMessagesPage
-                .AssertOnPage(driver)
-                .TabIntoFocus()
-                .KeyboardNavigateToSecondaryCareView();
-
-            AndroidWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, "Consultations, events and messages")
-                .KeyboardNavigateBack();
-
-            AndroidMessagesPage
-                .AssertOnPage(driver)
-                .TabIntoFocus()
                 .KeyboardNavigateToYourHealthServiceMessages();
 
             AndroidYourHealthServiceMessagesPage
@@ -161,10 +128,7 @@ namespace NHSOnline.IntegrationTests.Messages
                 .AssertPageElements()
                 .AssertEngageElements()
                 .AssertSubstraktElements()
-                .AssertPkbElements()
-                .AssertCieElements()
-                .AssertMyCareViewElements()
-                .AssertSecondaryCareViewElements();
+                .AssertPkbElements();
         }
 
         [NhsAppAndroidTest]
@@ -217,36 +181,6 @@ namespace NHSOnline.IntegrationTests.Messages
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, "Messages and online consultations");
-
-            driver.PressBackButton();
-
-            AndroidMessagesPage
-                .AssertOnPage(driver)
-                .TabIntoFocus()
-                .KeyboardNavigateToCie();
-
-            AndroidWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, "Consultations, events and messages");
-
-            driver.PressBackButton();
-
-            AndroidMessagesPage
-                .AssertOnPage(driver)
-                .TabIntoFocus()
-                .KeyboardNavigateToMyCareView();
-
-            AndroidWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, "Consultations, events and messages");
-
-            driver.PressBackButton();
-
-            AndroidMessagesPage
-                .AssertOnPage(driver)
-                .TabIntoFocus()
-                .KeyboardNavigateToSecondaryCareView();
-
-            AndroidWebIntegrationWarningPanelPage
-                .AssertOnPage(driver, "Consultations, events and messages");
 
             driver.PressBackButton();
 

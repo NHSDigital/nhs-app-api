@@ -37,8 +37,8 @@ Feature: GP Session On Demand medical record
       | EMIS      | 3e     |
       | TPP       | 3t     |
 
-  Scenario Outline: The shutter page is shown with care plans menu item for <Pkb Brand>
-    Given I am a patient with <Pkb Brand> care plans and the GP System is unavailable
+  Scenario: The shutter page is shown with care plans menu item for pkb
+    Given I am a patient with pkb care plans and the GP System is unavailable
     And I am logged in
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
@@ -46,15 +46,9 @@ Feature: GP Session On Demand medical record
     And I see appropriate try again error message for gp medical record when there is no GP session
     And I click the 'Try again' button
     And I see the Third Party menu item 'Care plans'
-    Examples:
-      | Pkb Brand        |
-      | pkb              |
-      | pkbCie           |
-      | pkbSecondaryCare |
-      | pkbMyCareView    |
 
-  Scenario Outline: The shutter page is shown with health tracker menu item for <Pkb Brand>
-    Given I am a patient with <Pkb Brand> health tracker and the GP System is unavailable
+  Scenario: The shutter page is shown with health tracker menu item for pkb
+    Given I am a patient with pkb health tracker and the GP System is unavailable
     And I am logged in
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
@@ -62,12 +56,6 @@ Feature: GP Session On Demand medical record
     And I see appropriate try again error message for gp medical record when there is no GP session
     And I click the 'Try again' button
     And I see the Third Party menu item 'Track your health'
-    Examples:
-      | Pkb Brand        |
-      | pkb              |
-      | pkbCie           |
-      | pkbSecondaryCare |
-      | pkbMyCareView    |
 
   Scenario Outline: The shutter page is shown with no <Menu item text> option when there is no GP session
     Given I am a patient who does not have <Silver integration> and the GP System is unavailable

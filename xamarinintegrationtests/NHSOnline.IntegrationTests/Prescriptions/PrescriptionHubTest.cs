@@ -94,39 +94,9 @@ namespace NHSOnline.IntegrationTests.Prescriptions
 
             AndroidPrescriptionsPage
                 .AssertOnPage(driver)
-                .TabIntoFocus()
-                .KeyboardNavigateToPkbCieHospitalAndOtherMedicines();
-
-            AndroidPkbCieHospitalAndOtherMedicinesPage
-                .AssertOnPage(driver)
-                .KeyboardNavigateBack();
-
-            AndroidPrescriptionsPage
-                .AssertOnPage(driver)
-                .TabIntoFocus()
-                .KeyboardNavigateToPkbSecondaryCareHospitalAndOtherMedicines();
-
-            AndroidPkbSecondaryCareHospitalAndOtherMedicinesPage
-                .AssertOnPage(driver)
-                .KeyboardNavigateBack();
-
-            AndroidPrescriptionsPage
-                .AssertOnPage(driver)
-                .TabIntoFocus()
-                .KeyboardNavigateToPkbMyCareViewHospitalAndOtherMedicines();
-
-            AndroidPkbMyCareViewHospitalAndOtherMedicinesPage
-                .AssertOnPage(driver)
-                .KeyboardNavigateBack();
-
-            AndroidPrescriptionsPage
-                .AssertOnPage(driver)
                 .PageContent
                 .AssertPageElements()
-                .AssertPkbElements()
-                .AssertPkbCieElements()
-                .AssertPkbSecondaryCareElements()
-                .AssertPkbMyCareViewElements();
+                .AssertPkbElements();
         }
     }
 }

@@ -187,31 +187,13 @@ describe('prescriptions hub index page', () => {
       ['pkb', true, false, true],
       ['pkb', true, true, false],
       ['pkb', false, false, false],
-      ['cie', true, false, true],
-      ['cie', true, true, false],
-      ['cie', false, false, false],
-      ['pkbSecondaryCare', true, false, true],
-      ['pkbSecondaryCare', true, true, false],
-      ['pkbSecondaryCare', false, false, false],
-      ['myCareView', true, false, true],
-      ['myCareView', true, true, false],
-      ['myCareView', false, false, false],
     ]).describe('%s medicines enabled is %s, proxy is %s', (
       provider, context, isProxying, expectedResult,
     ) => {
       beforeEach(() => {
         switch (provider) {
-          case 'cie':
-            linkElement = '#btn_pkb_cie_medicines';
-            break;
           case 'pkb':
             linkElement = '#btn_pkb_medicines';
-            break;
-          case 'pkbSecondaryCare':
-            linkElement = '#btn_pkb_secondary_care_medicines';
-            break;
-          case 'myCareView':
-            linkElement = '#btn_pkb_my_care_view_medicines';
             break;
           default:
             break;

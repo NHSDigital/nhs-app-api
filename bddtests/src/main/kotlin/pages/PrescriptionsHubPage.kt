@@ -32,24 +32,6 @@ open class PrescriptionsHubPage : HybridPageObject() {
         page = this
     )
 
-    val cieMedicinesJumpOffButton = HybridPageElement(
-        webDesktopLocator = "//*[@id='btn_pkb_cie_medicines']",
-        helpfulName = "cie jump off point",
-        page = this
-    )
-
-    val pkbSecondaryCareMedicinesJumpOffButton = HybridPageElement(
-        webDesktopLocator = "//*[@id='btn_pkb_secondary_care_medicines']",
-        helpfulName = "pkb secondary care jump off point",
-        page = this
-    )
-
-    val pkbMyCareViewMedicinesJumpOffButton = HybridPageElement(
-        webDesktopLocator = "//*[@id='btn_pkb_my_care_view_medicines']",
-        helpfulName = "pkb my care view jump off point",
-        page = this
-    )
-
     fun assertPrescriptionsHubIsDisplayed() {
         pageTitle.assertIsVisible()
     }

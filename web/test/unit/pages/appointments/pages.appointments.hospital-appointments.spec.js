@@ -54,15 +54,6 @@ describe('hospital appointments hub', () => {
       ['pkb', 'Appointments', true, false, true],
       ['pkb', 'Appointments', true, true, false],
       ['pkb', 'Appointments', false, false, false],
-      ['cie', 'Appointments', true, false, true],
-      ['cie', 'Appointments', true, true, false],
-      ['cie', 'Appointments', false, false, false],
-      ['pkbSecondaryCare', 'Appointments', true, false, true],
-      ['pkbSecondaryCare', 'Appointments', true, true, false],
-      ['pkbSecondaryCare', 'Appointments', false, false, false],
-      ['pkbMyCareView', 'Appointments', true, false, true],
-      ['pkbMyCareView', 'Appointments', true, true, false],
-      ['pkbMyCareView', 'Appointments', false, false, false],
       ['gncr', 'Appointments', true, false, true],
       ['gncr', 'Appointments', true, true, false],
       ['gncr', 'Appointments', false, false, false],
@@ -74,17 +65,8 @@ describe('hospital appointments hub', () => {
           case 'ersManageYourReferral':
             linkElement = '#btn_manage_your_referral';
             break;
-          case 'cieAppointments':
-            linkElement = '#btn_pkb_cie_appointments';
-            break;
           case 'pkbAppointments':
             linkElement = '#btn_pkb_appointments';
-            break;
-          case 'pkbSecondaryCare':
-            linkElement = '#btn_pkb_secondary_care_appointments';
-            break;
-          case 'pkbMyCareView':
-            linkElement = '#btn_pkb_my_care_view_appointments';
             break;
           case 'gncrAppointments':
             linkElement = '#btn_gncr_appointments';

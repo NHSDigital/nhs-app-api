@@ -31,18 +31,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Messages
 
         private WebText ConsultationsEventsAndMessagesPkbText => WebText.WithTagAndText(_interactor, "p", "See details of your visits and treatments, view clinical documents, message your health team, or fill in a consultation form");
 
-        private WebMenuItem ConsultationsEventsAndMessagesCieMenuItem => WebMenuItem.WithTitle(_interactor, "Consultations, events and messages", "btn_pkb_cie_messages_and_consultations");
-
-        private WebText ConsultationsEventsAndMessagesCieText => WebText.WithTagAndText(_interactor, "p", "See details of your visits and treatments, view clinical documents, message your health team, or fill in a consultation form");
-
-        private WebMenuItem ConsultationsEventsAndMessagesMyCareViewMenuItem => WebMenuItem.WithTitle(_interactor, "Consultations, events and messages", "btn_pkb_my_care_view_messages_and_consultations");
-
-        private WebText ConsultationsEventsAndMessagesMyCareViewText => WebText.WithTagAndText(_interactor, "p", "See details of your visits and treatments, view clinical documents, message your health team, or fill in a consultation form");
-
-        private WebMenuItem ConsultationsEventsAndMessagesSecondaryCareViewMenuItem => WebMenuItem.WithTitle(_interactor, "Consultations, events and messages", "btn_pkb_secondary_care_messages_and_consultations");
-
-        private WebText ConsultationsEventsAndMessagesSecondaryCareViewText => WebText.WithTagAndText(_interactor, "p", "See details of your visits and treatments, view clinical documents, message your health team, or fill in a consultation form");
-
         private WebMenuItem TestProviderMenuItem => WebMenuItem.WithTitle(_interactor, "Test Provider");
 
         private WebMenuItem YourHealthServiceMessagesMenuItem => WebMenuItem.WithTitle(_interactor, "Your health service messages");
@@ -55,9 +43,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Messages
             AskYourGpSurgeryAQuestionMenuItem,
             OnlineConsultationsMenuItem,
             ConsultationsEventsAndMessagesPkbMenuItem,
-            ConsultationsEventsAndMessagesCieMenuItem,
-            ConsultationsEventsAndMessagesMyCareViewMenuItem,
-            ConsultationsEventsAndMessagesSecondaryCareViewMenuItem,
             TestProviderMenuItem,
             YourHealthServiceMessagesMenuItem
         };
@@ -91,27 +76,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Messages
             return this;
         }
 
-        public MessagesPageContent AssertCieElements()
-        {
-            ConsultationsEventsAndMessagesCieMenuItem.AssertVisible();
-            ConsultationsEventsAndMessagesCieText.AssertVisible();
-            return this;
-        }
-
-        public MessagesPageContent AssertMyCareViewElements()
-        {
-            ConsultationsEventsAndMessagesMyCareViewMenuItem.AssertVisible();
-            ConsultationsEventsAndMessagesMyCareViewText.AssertVisible();
-            return this;
-        }
-
-        public MessagesPageContent AssertSecondaryCareViewElements()
-        {
-            ConsultationsEventsAndMessagesSecondaryCareViewMenuItem.AssertVisible();
-            ConsultationsEventsAndMessagesSecondaryCareViewText.AssertVisible();
-            return this;
-        }
-
         public MessagesPageContent AssertPageElements()
         {
             GpSurgeryMessagingMenuItem.AssertVisible();
@@ -134,12 +98,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Messages
         public void KeyboardNavigateToGncr(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(OnlineConsultationsMenuItem, navigation);
 
         public void KeyboardNavigateToPkb(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(ConsultationsEventsAndMessagesPkbMenuItem, navigation);
-
-        public void KeyboardNavigateToCie(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(ConsultationsEventsAndMessagesCieMenuItem, navigation);
-
-        public void KeyboardNavigateToMyCareView(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(ConsultationsEventsAndMessagesMyCareViewMenuItem, navigation);
-
-        public void KeyboardNavigateToSecondaryCareView(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(ConsultationsEventsAndMessagesSecondaryCareViewMenuItem, navigation);
 
         public void KeyboardNavigateToYourHealthServiceMessages(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(YourHealthServiceMessagesMenuItem, navigation);
 

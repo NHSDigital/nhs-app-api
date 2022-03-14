@@ -46,28 +46,6 @@
             provider-id="pkb"
             :provider-configuration="thirdPartyProvider.pkb.medicines"
           />
-          <third-party-jump-off-button
-            v-if="showPkbCieMedicines"
-            id="btn_pkb_cie_medicines"
-            provider-id="pkb"
-            :provider-configuration="thirdPartyProvider.pkb.medicinesCie"
-          />
-          <third-party-jump-off-button
-            v-if="showPkbSecondaryCareMedicines"
-            id="btn_pkb_secondary_care_medicines"
-            provider-id="pkb"
-            :provider-configuration="
-              thirdPartyProvider.pkb.medicinesPkbSecondaryCare
-            "
-          />
-          <third-party-jump-off-button
-            v-if="showPkbMyCareView"
-            id="btn_pkb_my_care_view_medicines"
-            provider-id="pkb"
-            :provider-configuration="
-              thirdPartyProvider.pkb.medicinesPkbMyCareView
-            "
-          />
         </menu-item-list>
       </div>
     </div>
@@ -146,47 +124,8 @@ export default {
         },
       });
     },
-    hasPkbCieMedicines() {
-      return sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbCie',
-          serviceType: 'medicines',
-        },
-      });
-    },
-    hasPkbSecondaryCareMedicines() {
-      return sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbSecondaryCare',
-          serviceType: 'medicines',
-        },
-      });
-    },
-    hasPkbMyCareView() {
-      return sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbMyCareView',
-          serviceType: 'medicines',
-        },
-      });
-    },
     showPkbMedicines() {
       return !this.isProxying && this.hasPkbMedicines;
-    },
-    showPkbCieMedicines() {
-      return !this.isProxying && this.hasPkbCieMedicines;
-    },
-    showPkbSecondaryCareMedicines() {
-      return !this.isProxying && this.hasPkbSecondaryCareMedicines;
-    },
-    showPkbMyCareView() {
-      return !this.isProxying && this.hasPkbMyCareView;
     },
     viewOrdersPath() {
       return PRESCRIPTIONS_VIEW_ORDERS_PATH;

@@ -38,81 +38,21 @@
                                          provider-id="pkb"
                                          :provider-configuration="thirdPartyProvider
                                            .pkb.testResults" />
-            <third-party-jump-off-button v-if="showPkbCieTestResults"
-                                         id="btn_pkb_cie_test_results"
-                                         provider-id="pkb"
-                                         :provider-configuration="thirdPartyProvider
-                                           .pkb.testResultsCie" />
-            <third-party-jump-off-button v-if="showPkbSecondaryCareTestResults"
-                                         id="btn_pkb_secondary_care_test_results"
-                                         provider-id="pkb"
-                                         :provider-configuration="thirdPartyProvider
-                                           .pkb.testResultsPkbSecondaryCare" />
-            <third-party-jump-off-button v-if="showPkbMyCareViewTestResults"
-                                         id="btn_pkb_my_care_view_test_results"
-                                         provider-id="pkb"
-                                         :provider-configuration="thirdPartyProvider
-                                           .pkb.testResultsPkbMyCareView" />
             <third-party-jump-off-button v-if="showPkbCarePlans"
                                          id="btn_pkb_care_plans"
                                          provider-id="pkb"
                                          :provider-configuration="thirdPartyProvider
                                            .pkb.carePlans" />
-            <third-party-jump-off-button v-if="showPkbCieCarePlans"
-                                         id="btn_pkb_cie_care_plans"
-                                         provider-id="pkb"
-                                         :provider-configuration="thirdPartyProvider
-                                           .pkb.carePlansCie" />
-            <third-party-jump-off-button v-if="showPkbSecondaryCareCarePlans"
-                                         id="btn_pkb_secondary_care_care_plans"
-                                         provider-id="pkb"
-                                         :provider-configuration="thirdPartyProvider
-                                           .pkb.carePlansPkbSecondaryCare" />
-            <third-party-jump-off-button v-if="showPkbMyCareViewCarePlans"
-                                         id="btn_pkb_my_care_view_care_plans"
-                                         provider-id="pkb"
-                                         :provider-configuration="thirdPartyProvider
-                                           .pkb.carePlansPkbMyCareView" />
             <third-party-jump-off-button v-if="showPkbHealthTracker"
                                          id="btn_pkb_health_trackers"
                                          provider-id="pkb"
                                          :provider-configuration="thirdPartyProvider
                                            .pkb.healthTrackers" />
-            <third-party-jump-off-button v-if="showPkbCieHealthTracker"
-                                         id="btn_pkb_cie_health_trackers"
-                                         provider-id="pkb"
-                                         :provider-configuration="thirdPartyProvider
-                                           .pkb.healthTrackersCie" />
-            <third-party-jump-off-button v-if="showPkbSecondaryCareHealthTracker"
-                                         id="btn_pkb_secondary_care_health_trackers"
-                                         provider-id="pkb"
-                                         :provider-configuration="thirdPartyProvider
-                                           .pkb.healthTrackersPkbSecondaryCare" />
-            <third-party-jump-off-button v-if="showPkbMyCareViewHealthTracker"
-                                         id="btn_pkb_my_care_view_health_trackers"
-                                         provider-id="pkb"
-                                         :provider-configuration="thirdPartyProvider
-                                           .pkb.healthTrackersPkbMyCareView" />
             <third-party-jump-off-button v-if="showPkbSharedLinks"
                                          id="btn_pkb_shared_links"
                                          provider-id="pkb"
                                          :provider-configuration="thirdPartyProvider
                                            .pkb.sharedLinks"/>
-            <third-party-jump-off-button v-if="showPkbCieSharedLinks"
-                                         id="btn_pkb_cie_shared_links"
-                                         provider-id="pkb"
-                                         :provider-configuration="thirdPartyProvider
-                                           .pkb.sharedLinksCie" />
-            <third-party-jump-off-button v-if="showPkbSecondaryCareSharedLinks"
-                                         id="btn_pkb_secondary_care_shared_links"
-                                         provider-id="pkb"
-                                         :provider-configuration="thirdPartyProvider
-                                           .pkb.sharedLinksPkbSecondaryCare"/>
-            <third-party-jump-off-button v-if="showPkbMyCareViewSharedLinks"
-                                         id="btn_pkb_my_care_view_shared_links"
-                                         provider-id="pkb"
-                                         :provider-configuration="thirdPartyProvider
-                                           .pkb.sharedLinksPkbMyCareView" />
             <third-party-jump-off-button v-if="showPatientPackAccountAdmin"
                                          id="btn_substrakt_update_details"
                                          provider-id="substraktPatientPack"
@@ -123,22 +63,6 @@
                                          provider-id="pkb"
                                          :provider-configuration="thirdPartyProvider
                                            .pkb.recordSharing" />
-            <third-party-jump-off-button v-if="showPkbCieRecordSharing"
-                                         id="btn_pkb_cie_record_sharing"
-                                         provider-id="pkb"
-                                         :provider-configuration="thirdPartyProvider
-                                           .pkb.recordSharingCie" />
-            <third-party-jump-off-button v-if="showPkbSecondaryCareRecordSharing"
-                                         id="btn_pkb_secondary_care_record_sharing"
-                                         provider-id="pkb"
-                                         :provider-configuration="thirdPartyProvider
-                                           .pkb.recordSharingPkbSecondaryCare" />
-            <third-party-jump-off-button v-if="showPkbMyCareViewRecordSharing"
-                                         id="btn_pkb_my_care_view_record_sharing"
-                                         provider-id="pkb"
-                                         :provider-configuration="thirdPartyProvider
-                                           .pkb.recordSharingPkbMyCareView" />
-
             <third-party-jump-off-button
               v-if="showGncrMessages"
               id="btn_gncr_messages_and_consultations"
@@ -214,59 +138,11 @@ export default {
           serviceType: 'testResults',
         },
       }),
-      showPkbCieTestResults: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbCie',
-          serviceType: 'testResults',
-        },
-      }),
-      showPkbSecondaryCareTestResults: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbSecondaryCare',
-          serviceType: 'testResults',
-        },
-      }),
-      showPkbMyCareViewTestResults: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbMyCareView',
-          serviceType: 'testResults',
-        },
-      }),
       showPkbCarePlans: sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',
         context: {
           provider: 'pkb',
-          serviceType: 'carePlans',
-        },
-      }),
-      showPkbCieCarePlans: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbCie',
-          serviceType: 'carePlans',
-        },
-      }),
-      showPkbSecondaryCareCarePlans: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbSecondaryCare',
-          serviceType: 'carePlans',
-        },
-      }),
-      showPkbMyCareViewCarePlans: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbMyCareView',
           serviceType: 'carePlans',
         },
       }),
@@ -278,59 +154,11 @@ export default {
           serviceType: 'healthTrackers',
         },
       }),
-      showPkbCieHealthTracker: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbCie',
-          serviceType: 'healthTrackers',
-        },
-      }),
-      showPkbSecondaryCareHealthTracker: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbSecondaryCare',
-          serviceType: 'healthTrackers',
-        },
-      }),
-      showPkbMyCareViewHealthTracker: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbMyCareView',
-          serviceType: 'healthTrackers',
-        },
-      }),
       showPkbSharedLinks: sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',
         context: {
           provider: 'pkb',
-          serviceType: 'libraries',
-        },
-      }),
-      showPkbCieSharedLinks: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbCie',
-          serviceType: 'libraries',
-        },
-      }),
-      showPkbSecondaryCareSharedLinks: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbSecondaryCare',
-          serviceType: 'libraries',
-        },
-      }),
-      showPkbMyCareViewSharedLinks: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbMyCareView',
           serviceType: 'libraries',
         },
       }),
@@ -371,30 +199,6 @@ export default {
         journey: 'silverIntegration',
         context: {
           provider: 'pkb',
-          serviceType: 'recordSharing',
-        },
-      }),
-      showPkbCieRecordSharing: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbCie',
-          serviceType: 'recordSharing',
-        },
-      }),
-      showPkbSecondaryCareRecordSharing: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbSecondaryCare',
-          serviceType: 'recordSharing',
-        },
-      }),
-      showPkbMyCareViewRecordSharing: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbMyCareView',
           serviceType: 'recordSharing',
         },
       }),

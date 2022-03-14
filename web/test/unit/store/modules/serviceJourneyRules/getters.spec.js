@@ -322,7 +322,7 @@ describe('getters', () => {
     const { silverIntegrationAppointmentsEnabled } = getters;
 
     it('will be true if silverIntegrations.secondaryAppointments is populated', () => {
-      currentState.rules.silverIntegrations.secondaryAppointments = ['pkb', 'pkbCie'];
+      currentState.rules.silverIntegrations.secondaryAppointments = ['pkb'];
       expect(silverIntegrationAppointmentsEnabled(currentState))
         .toBe(true);
     });
@@ -344,7 +344,7 @@ describe('getters', () => {
     const { silverIntegrationMessagesEnabled } = getters;
 
     it('will be true if silverIntegrations.messages is populated', () => {
-      currentState.rules.silverIntegrations.messages = ['pkb', 'pkbCie'];
+      currentState.rules.silverIntegrations.messages = ['pkb'];
       expect(silverIntegrationMessagesEnabled(currentState))
         .toBe(true);
     });

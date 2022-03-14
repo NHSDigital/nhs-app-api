@@ -69,14 +69,5 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Prescriptions
 
         public void KeyboardNavigateToPkbHospitalAndOtherPrescriptions() =>
             PageContent.KeyboardNavigateToPkbHospitalAndOtherPrescriptions(KeyboardPageContentNavigation);
-
-        public void KeyboardNavigateToPkbCieHospitalAndOtherMedicines() =>
-            PageContent.KeyboardNavigateToPkbCieHospitalAndOtherMedicines(KeyboardPageContentNavigation);
-
-        public void KeyboardNavigateToPkbSecondaryCareHospitalAndOtherMedicines() =>
-            PageContent.KeyboardNavigateToPkbSecondaryCareHospitalAndOtherMedicines(KeyboardPageContentNavigation);
-
-        public void KeyboardNavigateToPkbMyCareViewHospitalAndOtherMedicines() =>
-            PageContent.KeyboardNavigateToPkbMyCareViewHospitalAndOtherMedicines(KeyboardPageContentNavigation);
     }
 }

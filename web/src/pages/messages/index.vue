@@ -25,20 +25,6 @@
                                      id="btn_pkb_messages_and_consultations"
                                      provider-id="pkb"
                                      :provider-configuration="thirdPartyProvider.pkb.messages" />
-        <third-party-jump-off-button v-if="pkbCieEnabled"
-                                     id="btn_pkb_cie_messages_and_consultations"
-                                     provider-id="pkb"
-                                     :provider-configuration="thirdPartyProvider.pkb.messagesCie" />
-        <third-party-jump-off-button v-if="pkbMyCareViewEnabled"
-                                     id="btn_pkb_my_care_view_messages_and_consultations"
-                                     provider-id="pkb"
-                                     :provider-configuration="thirdPartyProvider.pkb.
-                                       messagesPkbMyCareView" />
-        <third-party-jump-off-button v-if="pkbSecondaryCareEnabled"
-                                     id="btn_pkb_secondary_care_messages_and_consultations"
-                                     provider-id="pkb"
-                                     :provider-configuration="thirdPartyProvider.pkb.
-                                       messagesPkbSecondaryCare" />
         <third-party-jump-off-button
           v-if="testProviderEnabled"
           id="btn_test_silver_messages"
@@ -106,30 +92,6 @@ export default {
           serviceType: 'messages',
         },
       }),
-      hasPkbCieMessages: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbCie',
-          serviceType: 'messages',
-        },
-      }),
-      hasPkbMyCareViewMessages: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbMyCareView',
-          serviceType: 'messages',
-        },
-      }),
-      hasPkbSecondaryCareMessages: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbSecondaryCare',
-          serviceType: 'messages',
-        },
-      }),
       hasTestProviderMessages: sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',
@@ -157,7 +119,6 @@ export default {
         this.appMessagingSjrEnabled ||
         this.engageEnabled ||
         this.pkbEnabled ||
-        this.pkbCieEnabled ||
         this.substraktEnabled ||
         this.testProviderEnabled;
     },
@@ -174,15 +135,6 @@ export default {
     },
     pkbEnabled() {
       return this.hasPkbMessages && !this.isProxying && this.isProofLevel9;
-    },
-    pkbCieEnabled() {
-      return this.hasPkbCieMessages && !this.isProxying && this.isProofLevel9;
-    },
-    pkbMyCareViewEnabled() {
-      return this.hasPkbMyCareViewMessages && !this.isProxying && this.isProofLevel9;
-    },
-    pkbSecondaryCareEnabled() {
-      return this.hasPkbSecondaryCareMessages && !this.isProxying && this.isProofLevel9;
     },
     testProviderEnabled() {
       return this.hasTestProviderMessages && this.isProofLevel9;

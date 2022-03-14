@@ -62,12 +62,6 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Messages
 
         public void KeyboardNavigateToPkb() => PageContent.KeyboardNavigateToPkb(KeyboardPageContentNavigation);
 
-        public void KeyboardNavigateToCie() => PageContent.KeyboardNavigateToCie(KeyboardPageContentNavigation);
-
-        public void KeyboardNavigateToMyCareView() => PageContent.KeyboardNavigateToMyCareView(KeyboardPageContentNavigation);
-
-        public void KeyboardNavigateToSecondaryCareView() => PageContent.KeyboardNavigateToSecondaryCareView(KeyboardPageContentNavigation);
-
         public void KeyboardNavigateToYourHealthServiceMessages() => PageContent.KeyboardNavigateToYourHealthServiceMessages(KeyboardPageContentNavigation);
     }
 }

@@ -1,22 +1,22 @@
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
-  odsCode: "A80007"
+  odsCode: "A10001"
 journeys:
   silverIntegrations:
     carePlans:
-      - pkbSecondaryCare
+      - pkb
     consultations: []
     healthTrackers:
-      - pkbSecondaryCare
+      - pkb
     libraries:
-      - pkbSecondaryCare
+      - pkb
     medicines:
-      - pkbSecondaryCare
+      - pkb
     messages:
-      - pkbSecondaryCare
+      - pkb
     recordSharing:
-      - pkbSecondaryCare
+      - pkb
     secondaryAppointments:
-      - pkbSecondaryCare
+      - pkb
     testResults:
-      - pkbSecondaryCare
+      - pkb

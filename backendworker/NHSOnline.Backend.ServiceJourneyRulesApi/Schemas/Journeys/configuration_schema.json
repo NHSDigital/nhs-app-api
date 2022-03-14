@@ -213,14 +213,14 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": ["pkb", "pkbCie", "pkbSecondaryCare", "pkbMyCareView"]
+            "enum": ["pkb"]
           }
         },
         "consultations": {
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [ "pkb", "pkbCie", "engage", "accurx" ]
+            "enum": [ "pkb", "engage", "accurx" ]
           }
         },
         "consultationsAdmin": {
@@ -234,28 +234,28 @@
           "type":"array",
           "items": {
             "type": "string",
-            "enum": ["pkb", "pkbCie", "pkbSecondaryCare", "pkbMyCareView", "wellnessAndPrevention"]
+            "enum": ["pkb", "wellnessAndPrevention"]
           }
         },
         "libraries": {
           "type": "array",
           "items": {
             "type": "string",
-            "enum": ["pkb", "pkbCie", "pkbSecondaryCare", "pkbMyCareView"]
+            "enum": ["pkb"]
           }
         },
         "medicines": {
           "type": "array",
           "items": {
             "type": "string",
-            "enum": ["pkb", "pkbCie", "pkbSecondaryCare", "pkbMyCareView"]
+            "enum": ["pkb"]
           }
         },
         "messages": {
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [ "pkb", "pkbCie", "pkbMyCareView" , "pkbSecondaryCare" , "testSilverThirdPartyProvider", "engage" , "gncr", "substraktPatientPack"]
+            "enum": [ "pkb", "testSilverThirdPartyProvider", "engage" , "gncr", "substraktPatientPack"]
           }
         },
         "participation":  {
@@ -269,21 +269,21 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [ "pkb", "pkbCie", "pkbMyCareView" , "pkbSecondaryCare"]
+            "enum": [ "pkb" ]
           }
         },
         "secondaryAppointments": {
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [ "ers", "pkb", "pkbCie", "pkbMyCareView" , "pkbSecondaryCare" , "gncr", "removeErs"]
+            "enum": [ "ers", "pkb", "gncr", "removeErs"]
           }
         },
         "testResults": {
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [ "pkb", "pkbCie", "pkbSecondaryCare", "pkbMyCareView"]
+            "enum": [ "pkb" ]
           }
         },
         "vaccineRecord": {

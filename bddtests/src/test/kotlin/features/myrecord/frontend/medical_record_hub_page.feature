@@ -20,24 +20,9 @@ Feature: Medical record hub page
     Then I see the health records hub page
     And I see the Third Party menu item 'Care plans'
 
-  Scenario: A user can access the health record hub page if CIE Care Plans is available
-    Given I am an EMIS patient and I have access to Care Information Exchange Care Plans
-    And I am logged in
-    When I navigate to the health record hub page
-    Then I see the health records hub page
-    And I see the Third Party menu item 'Care plans'
-
   Scenario: A user can access the medical record hub page if PKB Health Tracker is available
     Given I am using the native app user agent
     And I am an EMIS patient and I have access to Patients Know Best Health Tracker
-    And I am logged in
-    When I navigate to the health record hub page
-    Then I see the health records hub page
-    And I see the Third Party menu item 'Track your health'
-
-  Scenario: A user can access the medical record hub page if CIE Health Tracker is available
-    Given I am using the native app user agent
-    And I am an EMIS patient and I have access to Care Information Exchange Health Tracker
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page

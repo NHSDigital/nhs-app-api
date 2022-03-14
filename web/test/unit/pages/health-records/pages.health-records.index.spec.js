@@ -156,63 +156,18 @@ describe('healthRecords', () => {
       ['pkb', 'Test Results', true, false, true],
       ['pkb', 'Test Results', true, true, false],
       ['pkb', 'Test Results', false, false, false],
-      ['cie', 'Test Results', true, false, true],
-      ['cie', 'Test Results', true, true, false],
-      ['cie', 'Test Results', false, false, false],
-      ['pkbSecondaryCare', 'Test Results', true, false, true],
-      ['pkbSecondaryCare', 'Test Results', true, true, false],
-      ['pkbSecondaryCare', 'Test Results', false, false, false],
-      ['myCareView', 'Test Results', true, false, true],
-      ['myCareView', 'Test Results', true, true, false],
-      ['myCareView', 'Test Results', false, false, false],
       ['pkb', 'Care Plans', true, false, true],
       ['pkb', 'Care Plans', true, true, false],
       ['pkb', 'Care Plans', false, false, false],
-      ['cie', 'Care Plans', true, false, true],
-      ['cie', 'Care Plans', true, true, false],
-      ['cie', 'Care Plans', false, false, false],
-      ['pkbSecondaryCare', 'Care Plans', true, false, true],
-      ['pkbSecondaryCare', 'Care Plans', true, true, false],
-      ['pkbSecondaryCare', 'Care Plans', false, false, false],
-      ['myCareView', 'Care Plans', true, false, true],
-      ['myCareView', 'Care Plans', true, true, false],
-      ['myCareView', 'Care Plans', false, false, false],
       ['pkb', 'Health Trackers', true, false, true],
       ['pkb', 'Health Trackers', true, true, false],
       ['pkb', 'Health Trackers', false, false, false],
-      ['cie', 'Health Trackers', true, false, true],
-      ['cie', 'Health Trackers', true, true, false],
-      ['cie', 'Health Trackers', false, false, false],
-      ['pkbSecondaryCare', 'Health Trackers', true, false, true],
-      ['pkbSecondaryCare', 'Health Trackers', true, true, false],
-      ['pkbSecondaryCare', 'Health Trackers', false, false, false],
-      ['myCareView', 'Health Trackers', true, false, true],
-      ['myCareView', 'Health Trackers', true, true, false],
-      ['myCareView', 'Health Trackers', false, false, false],
       ['pkb', 'secondary shared links', true, false, true],
       ['pkb', 'secondary shared links', true, true, false],
       ['pkb', 'secondary shared links', false, false, false],
-      ['cie', 'secondary shared links', true, false, true],
-      ['cie', 'secondary shared links', true, true, false],
-      ['cie', 'secondary shared links', false, false, false],
-      ['pkbSecondaryCare', 'secondary shared links', true, false, true],
-      ['pkbSecondaryCare', 'secondary shared links', true, true, false],
-      ['pkbSecondaryCare', 'secondary shared links', false, false, false],
-      ['myCareView', 'secondary shared links', true, false, true],
-      ['myCareView', 'secondary shared links', true, true, false],
-      ['myCareView', 'secondary shared links', false, false, false],
       ['pkb', 'Record Sharing', true, false, true],
       ['pkb', 'Record Sharing', true, true, false],
       ['pkb', 'Record Sharing', false, false, false],
-      ['pkbCie', 'Record Sharing', true, false, true],
-      ['pkbCie', 'Record Sharing', true, true, false],
-      ['pkbCie', 'Record Sharing', false, false, false],
-      ['pkbSecondaryCare', 'Record Sharing', true, false, true],
-      ['pkbSecondaryCare', 'Record Sharing', true, true, false],
-      ['pkbSecondaryCare', 'Record Sharing', false, false, false],
-      ['myCareView', 'Record Sharing', true, false, true],
-      ['myCareView', 'Record Sharing', true, true, false],
-      ['myCareView', 'Record Sharing', false, false, false],
       ['gncr', 'correspondence', true, false, true],
       ['gncr', 'correspondence', true, true, false],
       ['gncr', 'correspondence', false, false, false],
@@ -236,38 +191,11 @@ describe('healthRecords', () => {
           case 'pkbCarePlans':
             linkElement = '#btn_pkb_care_plans';
             break;
-          case 'cieCarePlans':
-            linkElement = '#btn_pkb_cie_care_plans';
-            break;
-          case 'pkbSecondaryCareCarePlans':
-            linkElement = '#btn_pkb_secondary_care_care_plans';
-            break;
-          case 'myCareViewCarePlans':
-            linkElement = '#btn_pkb_my_care_view_care_plans';
-            break;
           case 'pkbHealthTrackers':
             linkElement = '#btn_pkb_health_trackers';
             break;
-          case 'cieHealthTrackers':
-            linkElement = '#btn_pkb_cie_health_trackers';
-            break;
-          case 'pkbSecondaryCareHealthTrackers':
-            linkElement = '#btn_pkb_secondary_care_health_trackers';
-            break;
-          case 'myCareViewHealthTrackers':
-            linkElement = '#btn_pkb_my_care_view_health_trackers';
-            break;
           case 'pkbSharedLinks':
             linkElement = '#btn_pkb_shared_links';
-            break;
-          case 'cieSharedLinks':
-            linkElement = '#btn_pkb_cie_shared_links';
-            break;
-          case 'pkbSecondaryCareSharedLinks':
-            linkElement = '#btn_pkb_secondary_care_shared_links';
-            break;
-          case 'myCareViewSharedLinks':
-            linkElement = '#btn_pkb_my_care_view_shared_links';
             break;
           case 'gncrMessages':
             linkElement = '#btn_gncr_messages_and_consultations';
@@ -280,21 +208,6 @@ describe('healthRecords', () => {
             break;
           case 'pkbRecordSharing':
             linkElement = '#btn_pkb_record_sharing';
-            break;
-          case 'pkbCieRecordSharing':
-            linkElement = '#btn_pkb_cie_record_sharing';
-            break;
-          case 'pkbSecondaryCareRecordSharing':
-            linkElement = '#btn_pkb_secondary_care_record_sharing';
-            break;
-          case 'myCareViewRecordSharing':
-            linkElement = '#btn_pkb_my_care_view_record_sharing';
-            break;
-          case 'pkbSecondaryCareTestResults':
-            linkElement = '#btn_pkb_secondary_care_test_results';
-            break;
-          case 'myCareViewTestResults':
-            linkElement = '#btn_pkb_my_care_view_test_results';
             break;
           case 'wellnessAndPreventionWellnessandPrevention':
             linkElement = '#btn_wellness_and_prevention';

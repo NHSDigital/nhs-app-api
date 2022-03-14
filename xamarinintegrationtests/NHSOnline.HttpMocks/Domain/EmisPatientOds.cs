@@ -10,9 +10,6 @@ namespace NHSOnline.HttpMocks.Domain
         NoOdsCode,
         UnknownOdsCode,
         Pkb,
-        Cie,
-        SecondaryCareView,
-        MyCareView,
         Substrakt,
         Gncr
     }
@@ -29,9 +26,6 @@ namespace NHSOnline.HttpMocks.Domain
                 EmisPatientOds.NoOdsCode => string.Empty,
                 EmisPatientOds.UnknownOdsCode => "Unknown",
                 EmisPatientOds.Pkb => "emis_with_pkb",
-                EmisPatientOds.Cie => "emis_with_cie",
-                EmisPatientOds.SecondaryCareView => "emis_with_secondary_care_view",
-                EmisPatientOds.MyCareView => "emis_with_my_care_view",
                 EmisPatientOds.Substrakt => "emis_with_substrakt",
                 EmisPatientOds.Gncr => "emis_with_gncr",
                 _ => throw new ArgumentOutOfRangeException(nameof(odsCode), odsCode, null)

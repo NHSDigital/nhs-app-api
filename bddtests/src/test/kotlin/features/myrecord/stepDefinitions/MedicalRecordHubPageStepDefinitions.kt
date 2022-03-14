@@ -50,16 +50,6 @@ open class MedicalRecordHubPageStepDefinitions {
         setupPatient(supplier, SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB)
     }
 
-    @Given("^I am an (.*) patient and I have access to Care Information Exchange Care Plans$")
-    fun setupCIECarePlansPatient(supplier: String) {
-        setupPatient(supplier, SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_CIE)
-    }
-
-    @Given("^I am an (.*) patient and I have access to Care Information Exchange Health Tracker$")
-    fun setupCIEHealthTrackerPatient(supplier: String) {
-        setupPatient(supplier, SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_CIE)
-    }
-
     @When("I click the menu item '(.*)'$")
     fun clickMenuItem(title: String) {
         medicalRecordHubPage.getHeaderElement(title).click()

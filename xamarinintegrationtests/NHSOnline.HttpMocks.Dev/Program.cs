@@ -34,9 +34,6 @@ namespace NHSOnline.HttpMocks.Dev
                 yield return new VisionPatient().WithLogin("VisionPatient").WithName(b => b.FamilyName("Vision"));
                 yield return new EmisPatient(EmisPatientOds.AllSilversEnabled).WithLogin("EmisWithAllSilvers").WithName(b => b.FamilyName("AllSilvers"));
                 yield return new EmisPatient(EmisPatientOds.Pkb).WithLogin("PKB").WithName(b => b.FamilyName("pkb"));
-                yield return new EmisPatient(EmisPatientOds.Cie).WithLogin("CIE").WithName(b => b.FamilyName("cie"));
-                yield return new EmisPatient(EmisPatientOds.SecondaryCareView).WithLogin("MCV").WithName(b => b.FamilyName("scv"));
-                yield return new EmisPatient(EmisPatientOds.MyCareView).WithLogin("SCV").WithName(b => b.FamilyName("mcv"));
                 yield return new EmisPatient().WithLogin("NdopAbortConnection").WithBehaviour(new NdopCreateSessionAbortConnectionBehaviour());
             }
         }

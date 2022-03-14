@@ -13,28 +13,6 @@ Feature: Supplier onboarding accessibility
     And the care plans warning message on the Redirector page explains the service is from Patients Know Best
     And the Supplier_Onboarding_Patients_Know_Best page is saved to disk
 
-  Scenario: 'Care Information Exchange onboarding' page is captured
-    Given I am using the native app user agent
-    And I am a user who can view care plans from Care Information Exchange
-    And I am logged in
-    When I navigate to the health record hub page
-    Then I see the health records hub page
-    And I click the menu item 'Care plans'
-    And I am redirected to the redirector page with the header 'Care plans'
-    And the care plan warning on the page explains the service is from Care Information Exchange
-    And the Supplier_Onboarding_Care_Information_Exchange page is saved to disk
-
-  Scenario: 'MyCareView onboarding' page is captured
-    Given I am using the native app user agent
-    And I am a user who can view care plans from PKB My Care View
-    And I am logged in
-    When I navigate to the health record hub page
-    Then I see the health records hub page
-    And I click the menu item 'Care plans'
-    And I am redirected to the redirector page with the header 'Care plans'
-    And the care plan warning on the page explains the service is from PKB My Care View
-    And the Supplier_Onboarding_MyCareView page is saved to disk
-
   Scenario: 'Substrakt onboarding' page is captured
     Given I am using the native app user agent
     And I am a user who can view Ask Your Gp Surgery a Question from Substrakt

@@ -42,7 +42,7 @@ NB: full_gpinfo.csv file is used to create an updated gpinfo.csv after step 3 be
 
 ### PKB update
 1. The PKB updates are posted in the #sjr-third-party-updates Slack channel, usually by Matt Deaves.
-2. Update `sjr-config/configurations/Journeys/patientsKnowBest/*.yaml` with the practice changes - the files are usually at CCG level. Note that the there are different brands of PKB, and what is enabled is not necessarily consistent at a brand level, but at a CCG level.
+2. Update `sjr-config/configurations/Journeys/patientsKnowBest/*.yaml` with the practice changes - the files are usually at CCG level.
 
 ### Engage update
 

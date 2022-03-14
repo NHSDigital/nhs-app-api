@@ -58,46 +58,10 @@ class GpSessionOnDemandStepDefinitions {
             SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB)
     }
 
-    @Given("^I am a patient with pkbCie care plans and the GP System is unavailable$")
-    fun patientWithPkbCieCarePlansUnavailableGpSystem() {
-        initialisePatientWithPkbBrandUnavailableGpSystem(
-            SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_CIE)
-    }
-
-    @Given("^I am a patient with pkbSecondaryCare care plans and the GP System is unavailable$")
-    fun patientWithPkbSecondaryCareCarePlansUnavailableGpSystem() {
-        initialisePatientWithPkbBrandUnavailableGpSystem(
-            SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB_SECONDARY_CARE)
-    }
-
-    @Given("^I am a patient with pkbMyCareView care plans and the GP System is unavailable$")
-    fun patientWithPkbMyCareViewCarePlansUnavailableGpSystem() {
-        initialisePatientWithPkbBrandUnavailableGpSystem(
-            SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB_MY_CARE_VIEW)
-    }
-
     @Given("^I am a patient with pkb health tracker and the GP System is unavailable$")
     fun patientWithPkbHealthTrackerUnavailableGpSystem() {
         initialisePatientWithPkbBrandUnavailableGpSystem(
             SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB)
-    }
-
-    @Given("^I am a patient with pkbCie health tracker and the GP System is unavailable$")
-    fun patientWithPkbCieHealthTrackerUnavailableGpSystem() {
-        initialisePatientWithPkbBrandUnavailableGpSystem(
-            SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_CIE)
-    }
-
-    @Given("^I am a patient with pkbSecondaryCare health tracker and the GP System is unavailable$")
-    fun patientWithPkbSecondaryCareHealthTrackerUnavailableGpSystem() {
-        initialisePatientWithPkbBrandUnavailableGpSystem(
-            SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB_SECONDARY_CARE)
-    }
-
-    @Given("^I am a patient with pkbMyCareView health tracker and the GP System is unavailable$")
-    fun patientWithPkbMyCareViewHealthTrackerUnavailableGpSystem() {
-        initialisePatientWithPkbBrandUnavailableGpSystem(
-            SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB_MY_CARE_VIEW)
     }
 
     private fun initialisePatientWithPkbBrandUnavailableGpSystem(journey: SJRJourneyType) {

@@ -16,10 +16,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
             {
                 EmisPatientOds.Pkb.ToOdsCodeString(),
                 EmisPatientOds.AllSilversEnabled.ToOdsCodeString(),
-                EmisPatientOds.MyCareView.ToOdsCodeString(),
-                EmisPatientOds.SecondaryCareView.ToOdsCodeString(),
                 EmisPatientOds.Substrakt.ToOdsCodeString(),
-                EmisPatientOds.Cie.ToOdsCodeString(),
                 EmisPatientOds.Gncr.ToOdsCodeString()
             };
         private string InvalidPatientAssertionMessage = "Emis PKB patient is required to use keyboard navigation";

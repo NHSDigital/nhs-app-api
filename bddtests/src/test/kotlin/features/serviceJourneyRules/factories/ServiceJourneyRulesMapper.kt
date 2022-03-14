@@ -189,30 +189,13 @@ class ServiceJourneyRulesMapper {
                 Supplier.EMIS, "A80007",
                 EnumSet.of(
                     SJRJourneyType.ONE_ONE_ONE_DISABLED,
-                    SJRJourneyType.MEDICAL_RECORD_IM1,
-                    SJRJourneyType.SILVER_INTEGRATION_APPOINTMENTS_PKB_SECONDARY_CARE,
-                    SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB_SECONDARY_CARE,
-                    SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB_SECONDARY_CARE,
-                    SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB_SECONDARY_CARE,
-                    SJRJourneyType.SILVER_INTEGRATION_MEDICINES_PKB_SECONDARY_CARE,
-                    SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_SECONDARY_CARE,
-                    SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_PKB_SECONDARY_CARE,
-                    SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_PKB_SECONDARY_CARE
+                    SJRJourneyType.MEDICAL_RECORD_IM1
                 )
             )
             .add(
                 Supplier.EMIS, "B86013",
                 EnumSet.of(
-                    SJRJourneyType.MEDICAL_RECORD_IM1,
-                    SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_CIE,
-                    SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_CIE,
-                    SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_CIE,
-                    SJRJourneyType.SILVER_INTEGRATION_LIBRARY_CIE,
-                    SJRJourneyType.SILVER_INTEGRATION_MEDICINES_CIE,
-                    SJRJourneyType.SILVER_INTEGRATION_MESSAGES_CIE,
-                    SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_CIE,
-                    SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_CIE,
-                    SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_CIE
+                    SJRJourneyType.MEDICAL_RECORD_IM1
                 )
             )
             .add(
@@ -226,15 +209,7 @@ class ServiceJourneyRulesMapper {
             .add(
                 Supplier.EMIS, "A10001",
                 EnumSet.of(
-                    SJRJourneyType.MEDICAL_RECORD_IM1,
-                    SJRJourneyType.SILVER_INTEGRATION_APPOINTMENTS_PKB_MY_CARE_VIEW,
-                    SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB_MY_CARE_VIEW,
-                    SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB_MY_CARE_VIEW,
-                    SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB_MY_CARE_VIEW,
-                    SJRJourneyType.SILVER_INTEGRATION_MEDICINES_PKB_MY_CARE_VIEW,
-                    SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_MY_CARE_VIEW,
-                    SJRJourneyType.SILVER_INTEGRATION_RECORD_SHARING_PKB_MY_CARE_VIEW,
-                    SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_PKB_MY_CARE_VIEW
+                    SJRJourneyType.MEDICAL_RECORD_IM1
                 )
             )
             .add(

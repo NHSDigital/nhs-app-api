@@ -8,35 +8,19 @@ journeys:
       - gncr
     carePlans:
       - pkb
-      - pkbCie
-      - pkbMyCareView
-      - pkbSecondaryCare
     consultations:
       - pkb
-      - pkbCie
       - engage
     consultationsAdmin: 
       - engage
     healthTrackers:
       - pkb
-      - pkbCie
-      - pkbMyCareView
-      - pkbSecondaryCare
     libraries:
       - pkb
-      - pkbCie
-      - pkbMyCareView
-      - pkbSecondaryCare
     medicines:
       - pkb
-      - pkbCie
-      - pkbMyCareView
-      - pkbSecondaryCare
     messages:
       - pkb
-      - pkbCie
-      - pkbMyCareView
-      - pkbSecondaryCare
       - testSilverThirdPartyProvider
       - gncr
       - engage
@@ -45,21 +29,12 @@ journeys:
       - substraktPatientPack
     recordSharing:
       - pkb
-      - pkbCie
-      - pkbMyCareView
-      - pkbSecondaryCare
     secondaryAppointments:
       - ers
       - pkb
-      - pkbCie
-      - pkbMyCareView
-      - pkbSecondaryCare
       - gncr
     testResults: 
       - pkb
-      - pkbCie
-      - pkbMyCareView
-      - pkbSecondaryCare
     vaccineRecord:
       - netCompany
       - nhsd

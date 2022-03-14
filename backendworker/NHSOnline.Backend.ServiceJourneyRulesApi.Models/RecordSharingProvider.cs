@@ -7,9 +7,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     /// </summary>
     public enum RecordSharingProvider
     {
-        pkb,
-        pkbCie,
-        pkbMyCareView,
-        pkbSecondaryCare
+        pkb
     }
 }

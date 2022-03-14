@@ -181,18 +181,6 @@ describe('messages page', () => {
       ['pkb', true, false, false, false],
       ['pkb', true, true, true, false],
       ['pkb', false, false, true, false],
-      ['cie', true, false, true, true],
-      ['cie', true, false, false, false],
-      ['cie', true, true, true, false],
-      ['cie', false, false, true, false],
-      ['myCareView', true, false, true, true],
-      ['myCareView', true, false, false, false],
-      ['myCareView', true, true, true, false],
-      ['myCareView', false, false, true, false],
-      ['SecondaryCare', true, false, true, true],
-      ['SecondaryCare', true, false, false, false],
-      ['SecondaryCare', true, true, true, false],
-      ['SecondaryCare', false, false, true, false],
       ['engage', true, false, true, true],
       ['engage', true, false, false, false],
       ['engage', true, true, true, false],
@@ -206,17 +194,8 @@ describe('messages page', () => {
     ) => {
       beforeEach(() => {
         switch (provider) {
-          case 'cie':
-            linkElement = '#btn_pkb_cie_messages_and_consultations';
-            break;
           case 'pkb':
             linkElement = '#btn_pkb_messages_and_consultations';
-            break;
-          case 'myCareView':
-            linkElement = '#btn_pkb_my_care_view_messages_and_consultations';
-            break;
-          case 'SecondaryCare':
-            linkElement = '#btn_pkb_secondary_care_messages_and_consultations';
             break;
           case 'engage':
             linkElement = '#btn_engage_messages';

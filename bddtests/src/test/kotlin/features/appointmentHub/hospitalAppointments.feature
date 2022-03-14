@@ -22,15 +22,6 @@ Feature: Hospital Appointments
     And I browse to the pages at the following urls I see the relevant page
     | /appointments/hospital-appointments  | /appointments |
 
-  Scenario: A user with cie access only can navigate to the hospital appointments page
-    Given I am a user who can manage their cie hospital appointments only
-    And I am logged in
-    When I retrieve the 'appointment hub' page directly
-    Then the Appointments Hub page is displayed
-    When I click the 'Hospital and other services' link on the Appointments Hub
-    Then the Hospital Appointments page is displayed
-    And the Hospital Appointments links are displayed
-
   Scenario: A user with pkb access only can navigate to the hospital appointments page
     Given I am a user who can manage their pkb hospital appointments only
     And I am logged in
@@ -74,19 +65,3 @@ Feature: Hospital Appointments
     When I click the 'Hospital and other services' link on the Appointments Hub
     Then the Hospital Appointments page is displayed
     And the Hospital Appointments links are displayed
-
-  Scenario: A user with no access to PKB Secondary Care cannot see the Appointments link on the Prescriptions Hub
-    Given I am a user who cannot view Medicines from PKB Secondary Care
-    And I am logged in
-    Then I see the home page
-    Given I navigate to the your prescriptions page
-    Then the Prescriptions Hub page is displayed
-    And the link to PKB Secondary Care View Appointments is not available on the Appointments page
-
-  Scenario: A user with no access to PKB My Care View cannot see the Medicines link on the Prescriptions Hub
-    Given I am a user who cannot view Medicines from PKB My Care View
-    And I am logged in
-    Then I see the home page
-    Given I navigate to the your prescriptions page
-    Then the Prescriptions Hub page is displayed
-    And the link to PKB My Care View Appointments is not available on the Appointments page
