@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Drivers.BrowserStack;
@@ -16,6 +17,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
     // https://www.browserstack.com/list-of-browsers-and-platforms/app_automate
     internal sealed class IOSDriverWrapper: IIOSDriverWrapper
     {
+        private const string DeviceFilePath = "@com.nhs.online.dev.browserstack:documents/test.txt";
+        private const string FileLocation = "../../../../NHSOnline.IntegrationTests.UI/Resources/test.txt";
+
         private readonly IIOSBrowserStackDriver _driver;
         private readonly IIOSInteractor _interactor;
         private readonly NativeDriverContext _nativeDriverContext;
@@ -150,8 +154,28 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             return new WaitForAction();
         }
 
-        void IIOSDriverWrapper.PushTestFile() => _driver.PushFile("@com.google.chrome.ios:documents/test.txt",
-            new FileInfo("../../../../NHSOnline.IntegrationTests.UI/Resources/test.txt"));
+        public bool VerifyFilePushed()
+        {
+            var bytes = _driver.PullFile(DeviceFilePath);
+
+            if (bytes.Length < 1)
+            {
+                // file isn't there trying to push again
+                PushTestFile();
+
+                bytes = _driver.PullFile(DeviceFilePath);
+            }
+
+            return bytes.Length > 0;
+        }
+
+        public void PushTestFile()
+        {
+            _driver.PushFile(DeviceFilePath,
+                new FileInfo(FileLocation));
+
+            Thread.Sleep(TimeSpan.FromSeconds(4));
+        }
 
         async Task IIOSDriverWrapper.DisableNetwork()
         {

@@ -30,11 +30,5 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
             Navigation.AssertNavigationIconsArePresent();
             return this;
         }
-
-        public IOSFileUploadPage UploadTestFile()
-        {
-            _driver.PushTestFile();
-            return this;
-        }
     }
 }

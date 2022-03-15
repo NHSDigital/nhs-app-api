@@ -157,6 +157,11 @@ namespace NHSOnline.IntegrationTests.UI
             @"No IOSElement found matching ByIosNSPredicate\(type == 'XCUIElementTypeButton' AND label == 'Choose'\)*",
             RegexOptions.Compiled);
 
+        // Issue where file is not uploaded and we fail the test
+        private static readonly Regex BrowserstackDidNotUploadFile = new(
+            @"Test could not find test file for upload*",
+            RegexOptions.Compiled);
+
         private static readonly List<(Regex pattern, RetryStatus result)> RetryExceptionMessageRegexes = new()
         {
             (InvalidServiceWebInspectorMessage, RetryStatus.Retry(nameof(InvalidServiceWebInspectorMessage))),
@@ -187,7 +192,8 @@ namespace NHSOnline.IntegrationTests.UI
             (CannotChooseButtonInPhotoScreen, RetryStatus.Retry(nameof(CannotChooseButtonInPhotoScreen))),
             (CannotFindPhotoCaptured, RetryStatus.Retry(nameof(CannotFindPhotoCaptured))),
             (AppiumProxyIssuePostElement, RetryStatus.Retry(nameof(AppiumProxyIssuePostElement))),
-            (GoogleServicesFailure, RetryStatus.Retry(nameof(GoogleServicesFailure)))
+            (GoogleServicesFailure, RetryStatus.Retry(nameof(GoogleServicesFailure))),
+            (BrowserstackDidNotUploadFile, RetryStatus.Retry(nameof(BrowserstackDidNotUploadFile)))
         };
 
         internal static RetryStatus ShouldRetry(this TestResult result, TestLogs logs)

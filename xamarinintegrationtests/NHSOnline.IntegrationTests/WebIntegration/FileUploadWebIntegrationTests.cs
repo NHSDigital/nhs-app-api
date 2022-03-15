@@ -1,3 +1,5 @@
+using System;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
@@ -23,6 +25,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         public void APatientWithProofLevelNineCanUploadTheirFileToAWebIntegrationFileUploadScreenAndroid(
             IAndroidDriverWrapper driver)
         {
+            UploadAndVerifyFile(driver);
+
             var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
@@ -53,7 +57,6 @@ namespace NHSOnline.IntegrationTests.WebIntegration
             AndroidFileUploadPage
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
-                .UploadTestFile()
                 .PageContent
                 .AssertFileNotSelected()
                 .UploadFile();
@@ -74,6 +77,13 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         public void APatientWithProofLevelNineCanUploadTheirFileToAWebIntegrationFileUploadScreenIOS(
             IIOSDriverWrapper driver)
         {
+            UploadAndVerifyFile(driver);
+
+            if (!driver.VerifyFilePushed())
+            {
+                Assert.Fail("Test could not find test file for upload");
+            }
+
             var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
@@ -104,7 +114,6 @@ namespace NHSOnline.IntegrationTests.WebIntegration
             IOSFileUploadPage
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
-                .UploadTestFile()
                 .PageContent.UploadFile();
 
             IOSFileSourceDialog
@@ -113,6 +122,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSStoragePage
                 .AssertOnPage(driver)
+                .SearchForText()
                 .SelectFile();
 
             IOSFileUploadPage
@@ -120,6 +130,16 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertNativeHeader()
                 .PageContent.AssertFileSelected();
 
+        }
+
+        private static void UploadAndVerifyFile(INativeDriverWrapper driver)
+        {
+            driver.PushTestFile();
+
+            if (!driver.VerifyFilePushed())
+            {
+                Assert.Fail("Test could not find test file for upload");
+            }
         }
     }
 }

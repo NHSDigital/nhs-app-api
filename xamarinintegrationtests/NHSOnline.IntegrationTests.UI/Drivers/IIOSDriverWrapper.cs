@@ -6,7 +6,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
     public interface IIOSDriverWrapper : INativeDriverWrapper, IIOSInteractor
     {
         WaitForAction SwipeBack();
-        void PushTestFile();
         Task DisableNetwork();
         Task ResetNetwork();
         Task ResetNetworkAndWait(TimeSpan timeSpan);

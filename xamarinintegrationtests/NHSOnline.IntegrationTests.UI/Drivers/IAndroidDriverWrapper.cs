@@ -9,7 +9,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         WaitForAction PressBackButton();
         void AssertNotRunningInForeground();
         void AssertRunningInForeground();
-        void PushTestFile();
         Task EnableAirplaneMode();
         Task ResetNetwork();
         Task ResetNetworkAndWait(TimeSpan timeSpan);

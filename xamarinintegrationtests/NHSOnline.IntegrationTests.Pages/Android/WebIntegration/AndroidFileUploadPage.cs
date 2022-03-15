@@ -30,11 +30,5 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
             Navigation.AssertNavigationIconsArePresent();
             return this;
         }
-
-        public AndroidFileUploadPage UploadTestFile()
-        {
-            _driver.PushTestFile();
-            return this;
-        }
     }
 }

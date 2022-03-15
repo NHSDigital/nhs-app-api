@@ -14,6 +14,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 {
     internal sealed class AndroidDriverWrapper : IAndroidDriverWrapper
     {
+        private const string DeviceFilePath = "/sdcard/Download/NhsAppLogo.png";
+        private const string FileLocation = "../../../../NHSOnline.IntegrationTests.UI/Resources/NhsAppLogo.png";
+
         private readonly IAndroidBrowserStackDriver _driver;
         private readonly IAndroidInteractor _interactor;
         private readonly NativeDriverContext _nativeDriverContext;
@@ -134,10 +137,27 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             _driver.PressKeyCode(key);
         }
 
-        void IAndroidDriverWrapper.PushTestFile()
+        public bool VerifyFilePushed()
         {
-            _driver.PushFile("/sdcard/Download/NhsAppLogo.png",
-                new FileInfo("../../../../NHSOnline.IntegrationTests.UI/Resources/NhsAppLogo.png"));
+            var bytes = _driver.PullFile(DeviceFilePath);
+
+            if (bytes.Length < 1)
+            {
+                // file isn't there trying to push again
+                PushTestFile();
+
+                bytes = _driver.PullFile(DeviceFilePath);
+            }
+
+            return bytes.Length > 0;
+        }
+
+        public void PushTestFile()
+        {
+            _driver.PushFile(DeviceFilePath,
+                new FileInfo(FileLocation));
+
+            Thread.Sleep(TimeSpan.FromSeconds(4));
         }
 
         async Task IAndroidDriverWrapper.EnableAirplaneMode()
