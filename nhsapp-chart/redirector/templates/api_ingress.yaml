@@ -23,9 +23,7 @@ spec:
               name: default-api
               port:
                 number: {{ .Values.defaultServicePort }}
-    - host: api{{ .Values.environmentPublicHostSuffix }}
-      http:
-        paths:
+        {{- if $.Values.messagesEnabled }}
         - path: /v[1,2]/api/users/me/messages
           pathType: ImplementationSpecific 
           backend:
@@ -33,16 +31,14 @@ spec:
               name: default-api
               port:
                 number: {{ .Values.defaultServicePort }}
-    - host: api{{ .Values.environmentPublicHostSuffix }}
-      http:
-        paths:
         - path: /v[1,2]/api/users/([A-Za-z0-9-:]{36,37})/messages
           pathType: ImplementationSpecific 
           backend:
             service:
               name: default-api
               port:
-                number: {{ .Values.defaultServicePort }}                
+                number: {{ .Values.defaultServicePort }}
+        {{- end }}
   tls:
     - hosts:
         - api{{ .Values.environmentPublicHostSuffix }}
