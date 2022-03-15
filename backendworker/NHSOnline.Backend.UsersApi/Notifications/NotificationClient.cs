@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -61,18 +60,6 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             await Task.WhenAll(tasks);
 
             _logger.LogExit();
-        }
-
-        public async Task<ICollection<string>> FindInstallationIdsByNhsLoginId(string nhsLoginId)
-        {
-            var output = new List<string>();
-
-            foreach (var wrapper in _wrapperService.AllFor(nhsLoginId))
-            {
-                output.AddRange(await wrapper.GetInstallationIdsByNhsLoginId(nhsLoginId));
-            }
-
-            return output;
         }
 
         public async Task<(HttpStatusCode, string)> Migrate(MigrationRequest request)

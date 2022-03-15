@@ -75,6 +75,26 @@ namespace NHSOnline.Backend.UsersApi.Repository
             }
         }
 
+        public async Task<FindRegistrationsResult> Find(string nhsLoginId)
+        {
+            _logger.LogEnter();
+
+            try
+            {
+                var repositoryResult = await _deviceRepository.Find(nhsLoginId);
+                return repositoryResult.Accept(new RepositoryFindResultVisitor());
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "User Device find failed with exception");
+                return new FindRegistrationsResult.InternalServerError();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
         public async Task<DeleteDeviceResult> Delete(string deviceId, string nhsLoginId)
         {
             _logger.LogEnter();

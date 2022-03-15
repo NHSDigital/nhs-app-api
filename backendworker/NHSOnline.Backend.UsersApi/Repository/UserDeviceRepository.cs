@@ -64,6 +64,25 @@ namespace NHSOnline.Backend.UsersApi.Repository
             }
         }
 
+        public async Task<RepositoryFindResult<UserDevice>> Find(string nhsLoginId)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                new ValidateAndLog(_logger)
+                    .IsNotNull(nhsLoginId, nameof(nhsLoginId), ThrowError)
+                    .IsNotEmpty(nhsLoginId,nameof(nhsLoginId),ThrowError)
+                    .IsValid();
+
+                return await _repository.Find(d => d.NhsLoginId == nhsLoginId, RecordName);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
         [SuppressMessage("Microsoft.Globalization", "CA1309", Justification =
             "Method ‘CompareOrdinal’ is not supported in repository")]
         public async Task<RepositoryDeleteResult<UserDevice>> Delete(string nhsLoginId, string deviceId)

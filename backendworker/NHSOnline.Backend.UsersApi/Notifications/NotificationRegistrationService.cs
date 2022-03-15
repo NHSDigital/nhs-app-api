@@ -55,42 +55,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
                 _logger.LogExit();
             }
         }
-
-        public async Task<FindRegistrationsResult> Find(string nhsLoginId)
-        {
-            try
-            {
-                _logger.LogEnter();
-
-                var registrations = await _notificationClient.FindInstallationIdsByNhsLoginId(nhsLoginId);
-
-                if(registrations?.Count > 0)
-                {
-                    return new FindRegistrationsResult.Found(registrations);
-                }
-                return new FindRegistrationsResult.NotFound();
-            }
-            catch (MessagingException ex)
-            {
-                _logger.LogError(ex, "Failed to find registrations on Azure notification hubs, an unexpected exception has been thrown");
-                return new FindRegistrationsResult.BadGateway();
-            }
-            catch (HttpRequestException ex)
-            {
-                _logger.LogError(ex, "Failed to find registrations on Azure notification hubs, an unexpected exception has been thrown");
-                return new FindRegistrationsResult.BadGateway();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to find registrations on Azure notification hubs, an unexpected exception has been thrown");
-                return new FindRegistrationsResult.InternalServerError();
-            }
-            finally
-            {
-                _logger.LogExit();
-            }
-        }
-
+        
         public async Task<DeleteRegistrationResult> Delete(string id, string nhsLoginId)
         {
             try

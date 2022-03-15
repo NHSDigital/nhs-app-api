@@ -125,5 +125,50 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
             // Assert
             act.Should().Throw<AggregateException>();
         }
+
+        [TestMethod]
+        [DataRow(null,DisplayName ="Null Nhs Login Id")]
+        [DataRow("",DisplayName = "Blank Nhs Login Id")]
+
+        public void Find_By_NhsLoginId_WithInvalidArguments_ThrowsException(string nhsLoginId)
+        {
+            // Act
+            Func<Task> act = async () => await _systemUnderTest.Find(nhsLoginId);
+
+            // Assert
+            act.Should().Throw<AggregateException>();
+        }
+
+        [TestMethod]
+        public async Task Find_By_NhsLoginId_WhenDeviceIdRecordExists_ShouldReturnRecords()
+        {
+            // Arrange
+            var userDevice = new UserDevice();
+            _mockRepository.Setup(x =>
+                    x.Find(It.IsAny<Expression<Func<UserDevice, bool>>>(), It.IsAny<string>(), null))
+                .ReturnsAsync(new RepositoryFindResult<UserDevice>.Found(new []{ userDevice }));
+
+            // Act
+            var result = await _systemUnderTest.Find("nhsLoginId");
+
+            // Assert
+            result.Should().BeOfType<RepositoryFindResult<UserDevice>.Found>()
+                .Subject.Records.Should().BeEquivalentTo(userDevice);
+        }
+
+        [TestMethod]
+        public async Task Find_By_NhsLoginId_WhenDeviceIdRecordsDoesNotExist_ShouldNotReturnRecords()
+        {
+            // Arrange
+            _mockRepository.Setup(x =>
+                    x.Find(It.IsAny<Expression<Func<UserDevice, bool>>>(), It.IsAny<string>(),null))
+                .ReturnsAsync(new RepositoryFindResult<UserDevice>.NotFound());
+
+            // Act
+            var result = await _systemUnderTest.Find("nhsLoginId");
+
+            // Assert
+            result.Should().BeAssignableTo<RepositoryFindResult<UserDevice>.NotFound>();
+        }
     }
 }

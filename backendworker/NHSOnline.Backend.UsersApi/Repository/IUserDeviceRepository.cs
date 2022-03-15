@@ -7,6 +7,7 @@ namespace NHSOnline.Backend.UsersApi.Repository
     {
         Task<RepositoryCreateResult<UserDevice>> Create(UserDevice userDevice);
         Task<RepositoryFindResult<UserDevice>> Find(string nhsLoginId, string deviceId);
+        Task<RepositoryFindResult<UserDevice>> Find(string nhsLoginId);
         Task<RepositoryDeleteResult<UserDevice>> Delete(string nhsLoginId, string deviceId);
     }
 }

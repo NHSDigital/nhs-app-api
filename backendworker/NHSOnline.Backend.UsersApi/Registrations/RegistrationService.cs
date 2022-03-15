@@ -77,7 +77,7 @@ namespace NHSOnline.Backend.UsersApi.Registrations
             {
                 _logger.LogEnter();
 
-                return await _notificationService.Find(nhsLoginId);
+                return await _deviceRepositoryService.Find(nhsLoginId);
             }
             finally
             {
