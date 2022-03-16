@@ -24,7 +24,6 @@ spec:
                name: cold-api
                port:
                   number: {{ $.Values.defaultServicePort }}
-          {{- if $.Values.messagesEnabled }}
           - path: /v[1,2]/api/users/me/messages
             pathType: ImplementationSpecific 
             backend:
@@ -39,7 +38,6 @@ spec:
                 name: cold-api
                 port:
                   number: {{ .Values.defaultServicePort }}
-          {{- end }}
   tls:
     - hosts:
         - api-cold.{{ $.Values.zone }}.{{ $.Values.domain }}
