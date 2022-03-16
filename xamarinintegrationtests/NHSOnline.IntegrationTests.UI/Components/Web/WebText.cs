@@ -31,6 +31,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
         public static WebText WithText(IWebInteractor interactor, string text)
             => new WebText(interactor, text);
 
+        public void Click() => ActOnElement(e => e.Click());
+
         public void AssertVisible()
             => ActOnElement(e => e.Displayed.Should().BeTrue("A {0} tag with text {1} should be displayed", _tag, _text));
 

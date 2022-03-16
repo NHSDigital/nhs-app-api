@@ -12,10 +12,16 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Appointments
             PageContent = new GpSurgeryAppointmentsPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
-        public static IOSGpSurgeryAppointmentsPage AssertOnPage(IIOSDriverWrapper driver)
+        public static IOSGpSurgeryAppointmentsPage AssertOnPage(IIOSDriverWrapper driver, bool screenshot = false)
         {
             var page = new IOSGpSurgeryAppointmentsPage(driver);
             page.PageContent.AssertOnPage();
+
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(IOSGpSurgeryAppointmentsPage));
+            }
+
             return page;
         }
     }

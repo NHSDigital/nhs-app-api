@@ -3,6 +3,7 @@ using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Web
 {
@@ -35,6 +36,13 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
 
         private void ActOnElement(Action<IWebElement> action)
             => _interactor.ActOnElement(FindBy, action);
+
+        public WebLink ScrollTo()
+        {
+            _interactor.ActOnElementContext(
+                FindBy, c => new Actions(c.Driver).MoveToElement(c.Element).Perform());
+            return this;
+        }
 
         private By FindBy
             => By.XPath($"{_searchPrefix}//a[normalize-space(string())={_text.QuoteXPathLiteral()}]");

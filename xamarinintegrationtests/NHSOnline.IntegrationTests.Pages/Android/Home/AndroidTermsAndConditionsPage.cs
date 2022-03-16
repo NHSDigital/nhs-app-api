@@ -7,9 +7,12 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
     {
         public TermsAndConditionsPageContent PageContent { get; }
 
+        private IAndroidDriverWrapper _driver { get; }
+
         private AndroidTermsAndConditionsPage(IAndroidDriverWrapper driver)
         {
             PageContent = new TermsAndConditionsPageContent(driver.Web.NhsAppPreHomeWebView());
+            _driver = driver;
         }
 
         public static AndroidTermsAndConditionsPage AssertOnPage(IAndroidDriverWrapper driver,
@@ -31,5 +34,10 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
             PageContent.AssertPageContent();
         }
 
+        public void ScrollAndScreenshot()
+        {
+            PageContent.ContinueButton.ScrollTo();
+            _driver.Screenshot($"{nameof(AndroidTermsAndConditionsPage)}_scrolled");
+        }
     }
 }

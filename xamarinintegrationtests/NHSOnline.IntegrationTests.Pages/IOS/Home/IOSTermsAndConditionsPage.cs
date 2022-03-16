@@ -7,9 +7,12 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
     {
         public TermsAndConditionsPageContent PageContent { get; }
 
+        private IIOSDriverWrapper _driver { get; }
+
         private IOSTermsAndConditionsPage(IIOSDriverWrapper driver)
         {
             PageContent = new TermsAndConditionsPageContent(driver.Web.NhsAppPreHomeWebView());
+            _driver = driver;
         }
 
         public static IOSTermsAndConditionsPage AssertOnPage(IIOSDriverWrapper driver,
@@ -29,6 +32,12 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
         public void AssertPageContent()
         {
             PageContent.AssertPageContent();
+        }
+
+        public void ScrollAndScreenshot()
+        {
+            PageContent.ContinueButton.ScrollTo();
+            _driver.Screenshot($"{nameof(IOSTermsAndConditionsPage)}_scrolled");
         }
     }
 }

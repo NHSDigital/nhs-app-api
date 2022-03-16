@@ -34,16 +34,18 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
                 .AssertVectorOfTrust()
                 .Login(patient);
 
-            AndroidTermsAndConditionsPage
-                .AssertOnPage(driver, screenshot: true)
-                .PageContent.AcceptTermsAndConditions();
+            var termsAndConditions = AndroidTermsAndConditionsPage
+                .AssertOnPage(driver, screenshot: true);
+
+            termsAndConditions.ScrollAndScreenshot();
+            termsAndConditions.PageContent.AcceptTermsAndConditions();
 
             AndroidUserResearchOptInPage
                 .AssertOnPage(driver, screenshot: true)
                 .PageContent.OptInToUserResearch();
 
             AndroidLoggedInHomePage
-                .AssertOnPage(driver, screenshot: true)
+                .AssertOnPage(driver)
                 .AssertPageDisplayedFor("Wendy House");
         }
 
@@ -69,9 +71,11 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
                 .AssertVectorOfTrust()
                 .Login(patient);
 
-            IOSTermsAndConditionsPage
-                .AssertOnPage(driver, screenshot: true)
-                .PageContent.AcceptTermsAndConditions();
+            var termsAndConditions = IOSTermsAndConditionsPage
+                .AssertOnPage(driver, screenshot: true);
+
+            termsAndConditions.ScrollAndScreenshot();
+            termsAndConditions.PageContent.AcceptTermsAndConditions();
 
             IOSUserResearchOptInPage
                 .AssertOnPage(driver, screenshot: true)

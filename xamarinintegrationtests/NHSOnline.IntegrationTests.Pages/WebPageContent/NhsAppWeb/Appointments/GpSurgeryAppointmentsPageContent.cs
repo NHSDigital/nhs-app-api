@@ -14,17 +14,18 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments
         }
 
         private WebLink BackBreadcrumb => WebLink.WithText(_interactor, "Back");
-
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Your GP appointments");
-
+        private WebButton BookAppointment => WebButton.WithText(_interactor, "Book an appointment");
         internal void AssertOnPage()
         {
             // Extending timeout to allow SSO to complete
-            using var extendedTimeout = ExtendedTimeout.FromSeconds(15);
-            
+            using var extendedTimeout = ExtendedTimeout.FromSeconds(20);
+
             TitleText.AssertVisible();
         }
 
         public void ClickBackBreadcrumb() => BackBreadcrumb.Click();
+
+        public void ClickBookAppointment() => BookAppointment.Click();
     }
 }

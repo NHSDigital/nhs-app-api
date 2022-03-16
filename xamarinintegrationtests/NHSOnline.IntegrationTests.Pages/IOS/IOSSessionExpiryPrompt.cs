@@ -1,3 +1,5 @@
+using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS
@@ -23,6 +25,19 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
         }
 
         public void ExtendSession() => _iosPrompt.Accept();
+
+        public static void ExtendIfDisplayed(IIOSDriverWrapper driver)
+        {
+            try
+            {
+                var prompt = AssertDisplayed(driver);
+                prompt.ExtendSession();
+            }
+            catch (AssertFailedException)
+            {
+                Console.WriteLine("Dialog is not shown");
+            }
+        }
 
         public void Logout() => _iosPrompt.Cancel();
     }

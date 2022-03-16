@@ -12,10 +12,17 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
             PageContent = new GpSurgeryAppointmentsPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
-        public static AndroidGpSurgeryAppointmentsPage AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidGpSurgeryAppointmentsPage AssertOnPage(IAndroidDriverWrapper driver,
+            bool screenshot = false)
         {
             var page = new AndroidGpSurgeryAppointmentsPage(driver);
             page.PageContent.AssertOnPage();
+
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(AndroidGpSurgeryAppointmentsPage));
+            }
+
             return page;
         }
     }

@@ -21,10 +21,16 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Appointments
 
         private IOSLink GpSurgeryAppointmentsLink => IOSLink.WithText(_driver,  "GP surgery appointments");
 
-        public static IOSAppointmentsPage AssertOnPage(IIOSDriverWrapper driver)
+        public static IOSAppointmentsPage AssertOnPage(IIOSDriverWrapper driver, bool screenshot = false)
         {
             var page = new IOSAppointmentsPage(driver);
             page.PageContent.AssertOnPage();
+
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(IOSAppointmentsPage));
+            }
+
             return page;
         }
 

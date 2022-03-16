@@ -25,8 +25,8 @@ namespace NHSOnline.HttpMocks.Emis
                             new()
                             {
                                 SlotId = "123",
-                                StartTime = DateTime.Now.ToString(CultureInfo.InvariantCulture),
-                                EndTime = DateTime.Now.AddDays(1).ToString(CultureInfo.InvariantCulture),
+                                StartTime = "03/10/2100 08:00:00",
+                                EndTime = "03/11/2100 08:00:00",
                                 SlotTypeName = "Practice",
                                 SlotTypeStatus = SlotTypeStatus.Practice,
                                 TelephoneNumber = "1234567890",
