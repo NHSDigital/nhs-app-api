@@ -42,6 +42,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 
         public bool? UserInfo { get; set; }
 
+        public Wayfinder Wayfinder { get; set; }
+
         public Journeys Clone() => new Journeys()
         {
             Appointments = Appointments?.Clone(),
@@ -61,7 +63,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
             Prescriptions = Prescriptions?.Clone(),
             SilverIntegrations = SilverIntegrations?.Clone(),
             SupportsLinkedProfiles = SupportsLinkedProfiles,
-            UserInfo = UserInfo
+            UserInfo = UserInfo,
+            Wayfinder = Wayfinder
         };
 
         public Journeys AddSupplier(Supplier? supplier)
@@ -162,6 +165,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
             if (other.UserInfo.HasValue)
             {
                 UserInfo = other.UserInfo;
+            }
+
+            if (other.Wayfinder != null)
+            {
+                Wayfinder = other.Wayfinder;
             }
         }
     }

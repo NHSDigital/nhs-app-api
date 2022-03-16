@@ -16,6 +16,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
         pkbSecondaryCare,
         gncr,
         [RemovesSecondaryAppointmentsProvider(ers)]
-        removeErs
+        removeErs,
+        wayfinder
     }
 }

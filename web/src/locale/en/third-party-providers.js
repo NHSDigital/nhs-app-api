@@ -72,6 +72,14 @@ export default {
             + 'you can book or cancel your first appointment here',
         },
       },
+      {
+        id: 'manageYourReferralWayfinder',
+        jumpOffContent: {
+          headerText: 'View and manage other referrals and appointments',
+          descriptionText: 'If you have a referral, you can manage your ' +
+            'first appointment in the NHS e-Referral Service',
+        },
+      },
     ],
   },
   gncr: {

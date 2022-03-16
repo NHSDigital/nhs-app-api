@@ -43,3 +43,5 @@ journeys:
     vaccineRecord: []
   supportsLinkedProfiles: true
   userInfo: true
+  wayfinder:
+    isEnabled: false

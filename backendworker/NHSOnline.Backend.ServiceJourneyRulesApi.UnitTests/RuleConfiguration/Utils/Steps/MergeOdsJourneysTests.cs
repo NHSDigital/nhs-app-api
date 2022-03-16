@@ -81,6 +81,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         .VaccineRecord(VaccineRecordProvider.nhsd)
                     )
                     .UserInfoEnabled(false)
+                    .WayfinderEnabled(false)
                     .Build(),
                 new JourneysBuilder()
                     .CdssAdminProvider(CdssProvider.none)
@@ -89,6 +90,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .SilverIntegrations(x => x
                         .SecondaryAppointments(SecondaryAppointmentsProvider.ers)
                         .TestResults(TestResultsProvider.pkb))
+                    .WayfinderEnabled(true)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.informatica, "www.example.com")
@@ -121,6 +123,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .Prescriptions(PrescriptionsProvider.gpAtHand)
                     .SilverIntegrations(x => x
                         .TestResults(TestResultsProvider.pkb))
+                    .WayfinderEnabled(true)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.gpAtHand)
@@ -150,6 +153,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         .VaccineRecord(VaccineRecordProvider.nhsd)
                     )
                     .UserInfoEnabled(true)
+                    .WayfinderEnabled(false)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.im1)
@@ -169,6 +173,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         .SecondaryAppointments(SecondaryAppointmentsProvider.removeErs)
                         .VaccineRecord(VaccineRecordProvider.removeNhsd)
                     )
+                    .WayfinderEnabled(false)
                     .UserInfoEnabled(true)
                     .Build(),
                 new JourneysBuilder().Build()
@@ -200,6 +205,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         .VaccineRecord(VaccineRecordProvider.nhsd)
                     )
                     .UserInfoEnabled(false)
+                    .WayfinderEnabled(true)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.gpAtHand)
@@ -232,6 +238,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         .VaccineRecord(VaccineRecordProvider.nhsd)
                     )
                     .UserInfoEnabled(true)
+                    .WayfinderEnabled(false)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.im1)
@@ -254,6 +261,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         .VaccineRecord()
                     )
                     .UserInfoEnabled(true)
+                    .WayfinderEnabled(false)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(null)
@@ -269,6 +277,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .OneOneOneEnabled(null)
                     .Prescriptions(null)
                     .UserInfoEnabled(null)
+                    .WayfinderEnabled(null)
                     .Build()
             );
 

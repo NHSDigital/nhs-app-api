@@ -29,6 +29,18 @@
                    :aria-label="ariaLabelCaption(
                      'appointments.hub.hospitalAndOtherAppointments',
                      'appointments.hub.viewAndManageAppointmentsLikeReferrals')"/>
+
+        <menu-item v-if="showWayfinder"
+                   id="btn_wayfinderAppointments"
+                   header-tag="h2"
+                   data-purpose="text_link"
+                   :href="wayfinderAppointmentsPath"
+                   :click-func="redirectToWayfinderAppointments"
+                   :text="$t('appointments.hub.wayfinderAppointments')"
+                   :description="$t('appointments.hub.viewAndManageReferralsAndAppointments')"
+                   :aria-label="ariaLabelCaption(
+                     'appointments.hub.wayfinderAppointments',
+                     'appointments.hub.viewAndManageReferralsAndAppointments')"/>
       </menu-item-list>
     </div>
   </div>
@@ -41,6 +53,7 @@ import MenuItemList from '@/components/MenuItemList';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 import {
+  APPOINTMENT_WAYFINDER_PATH,
   GP_APPOINTMENTS_PATH,
   HOSPITAL_APPOINTMENTS_PATH,
 } from '@/router/paths';
@@ -68,6 +81,7 @@ export default {
           serviceType: 'consultationsAdmin',
         },
       }),
+      hasWayfinder: sjrIf({ $store: this.$store, journey: 'wayfinder' }),
     };
   },
   computed: {
@@ -77,9 +91,16 @@ export default {
     hospitalAppointmentsPath() {
       return HOSPITAL_APPOINTMENTS_PATH;
     },
+    wayfinderAppointmentsPath() {
+      return APPOINTMENT_WAYFINDER_PATH;
+    },
     showHospitalAppointments() {
       return !this.isProxying &&
-        sjrIf({ $store: this.$store, journey: 'silverIntegrationAppointments' });
+        sjrIf({ $store: this.$store, journey: 'silverIntegrationAppointments' })
+        && this.hasWayfinder === false;
+    },
+    showWayfinder() {
+      return !this.isProxying && this.hasWayfinder;
     },
   },
   mounted() {
@@ -94,6 +115,9 @@ export default {
     },
     redirectToHospitalAppointments() {
       this.$router.push(this.hospitalAppointmentsPath);
+    },
+    redirectToWayfinderAppointments() {
+      this.$router.push(this.wayfinderAppointmentsPath);
     },
   },
 };

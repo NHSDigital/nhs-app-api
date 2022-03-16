@@ -62,3 +62,5 @@ journeys:
   supplier: Tpp
   supportsLinkedProfiles: true
   userInfo: true
+  wayfinder:
+    isEnabled: false

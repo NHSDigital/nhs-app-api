@@ -31,6 +31,7 @@ export const APPOINTMENTS_PATH = 'appointments';
 export const GP_APPOINTMENTS_PATH = 'appointments/gp-appointments';
 export const HOSPITAL_APPOINTMENTS_PATH = 'appointments/hospital-appointments';
 export const APPOINTMENT_ADMIN_HELP_PATH = 'appointments/gp-appointments/admin-help';
+export const APPOINTMENT_WAYFINDER_PATH = 'appointments/wayfinder-appointments';
 export const GP_ADVICE_PATH = 'advice/gp-advice';
 export const APPOINTMENT_BOOKING_PATH = 'appointments/gp-appointments/booking';
 export const APPOINTMENT_CANCELLING_PATH = 'appointments/gp-appointments/cancelling';

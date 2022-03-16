@@ -47,3 +47,5 @@ journeys:
       - nhsd
   supportsLinkedProfiles: true
   notificationPrompt: true
+  wayfinder:
+    isEnabled: false

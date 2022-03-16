@@ -295,6 +295,15 @@
         }
       },
       "additionalProperties": false
+    },
+    "wayfinder": {
+      "additionalProperties": false,
+      "type": "object",
+      "properties": {
+        "isEnabled": {
+          "enum": ["true", "false"]
+        }
+      }
     }
   },
   "properties": {
@@ -367,7 +376,8 @@
         "silverIntegrations": { "$ref": "#/definitions/silverIntegrations" },
         "supplier": { "enum": [ "Emis", "Fake", "Tpp", "Vision" ] },
         "supportsLinkedProfiles": { "enum": [ "true", "false" ] },
-        "userInfo": { "enum": [ "true", "false" ] }
+        "userInfo": { "enum": [ "true", "false" ] },
+        "wayfinder": { "$ref": "#/definitions/wayfinder" }
       },
       "anyOf": [
         {
@@ -426,6 +436,9 @@
         },
         {
           "required": [ "userInfo" ]
+        },
+        {
+          "required": [ "wayfinder" ]
         }
       ]
     }

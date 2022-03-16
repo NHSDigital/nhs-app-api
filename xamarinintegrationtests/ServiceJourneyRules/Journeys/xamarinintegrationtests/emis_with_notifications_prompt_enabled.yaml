@@ -44,3 +44,5 @@ journeys:
   supplier: Emis
   supportsLinkedProfiles: true
   userInfo: true
+  wayfinder:
+    isEnabled: false

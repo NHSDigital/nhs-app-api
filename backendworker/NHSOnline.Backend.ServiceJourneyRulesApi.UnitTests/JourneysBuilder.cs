@@ -213,6 +213,23 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             return this;
         }
 
+        public JourneysBuilder WayfinderEnabled(bool? enabled)
+        {
+            if (enabled != null)
+            {
+                _journeys.Wayfinder = new Wayfinder
+                {
+                    IsEnabled = enabled
+                };
+            }
+            else
+            {
+                _journeys.Wayfinder = null;
+            }
+
+            return this;
+        }
+
         public JourneysBuilder WithSupplier(Supplier supplier)
         {
             _journeys.Supplier = supplier;

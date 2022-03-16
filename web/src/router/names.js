@@ -24,6 +24,7 @@ export const APPOINTMENTS_NAME = 'appointments';
 export const GP_APPOINTMENTS_NAME = 'appointments-gp-appointments';
 export const HEALTH_INFORMATION_UPDATES_NAMES = 'messages-app-messaging';
 export const HOSPITAL_APPOINTMENTS_NAME = 'appointments-hospital-appointments';
+export const APPOINTMENT_WAYFINDER_NAME = 'appointments-wayfinder-appointments';
 export const APPOINTMENT_ADMIN_HELP_NAME = 'appointments-gp-appointments-admin-help';
 export const GP_ADVICE_NAME = 'advice-gp-advice';
 export const APPOINTMENT_BOOKING_NAME = 'appointments-gp-appointments-booking';

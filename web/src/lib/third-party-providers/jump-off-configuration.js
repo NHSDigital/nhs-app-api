@@ -10,6 +10,13 @@ const thirdPartyProvider = {
       provider: 'ers',
       serviceType: 'secondaryAppointments',
     },
+    manageYourReferralWayfinder: {
+      acceptablePathsRegex: '^\\/nhslogin(\\/?\\?.*)?$',
+      jumpOffId: 'manageYourReferralWayfinder',
+      redirectPath: '/nhslogin',
+      provider: 'ers',
+      serviceType: 'secondaryAppointments',
+    },
   },
   pkb: {
     appointmentsCie: {

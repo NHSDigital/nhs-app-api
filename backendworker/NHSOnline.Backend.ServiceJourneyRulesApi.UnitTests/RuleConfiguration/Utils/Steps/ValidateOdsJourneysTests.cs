@@ -111,6 +111,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .SupportsLinkedProfiles(true)
                             .Im1MessagingEnabled(true, true, true,
                                 true, true)
+                            .WayfinderEnabled(true)
                             .WithSupplier(Supplier.Emis)
                             .Build()
                     },
@@ -145,6 +146,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .SupportsLinkedProfiles(false)
                             .Im1MessagingEnabled(false, false, false,
                                 false, false)
+                            .WayfinderEnabled(false)
                             .WithSupplier(Supplier.Tpp)
                             .Build()
                     },
@@ -183,6 +185,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 false,
                                 false,
                                 false)
+                            .WayfinderEnabled(true)
                             .WithSupplier(Supplier.Vision)
                             .Build()
                     }
@@ -235,6 +238,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .SupportsLinkedProfiles(true)
                             .Im1MessagingEnabled(true, false,
                                 false, false, false)
+                            .WayfinderEnabled(true)
                             .WithSupplier(Supplier.Vision)
                             .Build()
                     },
@@ -269,6 +273,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .SupportsLinkedProfiles(false)
                             .Im1MessagingEnabled(false, false, false,
                                 false, false)
+                            .WayfinderEnabled(false)
                             .WithSupplier(Supplier.Emis)
                             .Build()
                     },
@@ -304,6 +309,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .SupportsLinkedProfiles(true)
                             .Im1MessagingEnabled(true, true, true,
                                 true, true)
+                            .WayfinderEnabled(true)
                             .WithSupplier(Supplier.Tpp)
                             .Build()
                     }
@@ -504,9 +510,15 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 {
                     "A25",
                     ValidJourneys()
+                        .WayfinderEnabled(null)
+                        .Build()
+                },
+                {
+                    "A26",
+                    ValidJourneys()
                         .WithSupplier(Supplier.Unknown)
                         .Build()
-                }
+                },
             };
 
             // Act
@@ -537,7 +549,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             AssertError("A22", "journeys.SilverIntegrations.SecondaryAppointments");
             AssertError("A23", "journeys.SilverIntegrations.TestResults");
             AssertError("A24", "journeys.SilverIntegrations.VaccineRecord");
-            AssertError("A25", "journeys.Supplier");
+            AssertError("A25", "journeys.Wayfinder.IsEnabled");
+            AssertError("A26", "journeys.Supplier");
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error validating merged journeys.", Times.Once());
 
             result.Should().BeFalse();
@@ -584,6 +597,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     true,
                     true,
                     true)
+                .WayfinderEnabled(true)
                 .WithSupplier(Supplier.Emis);
         }
 

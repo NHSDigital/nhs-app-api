@@ -51,3 +51,5 @@ journeys:
   supplier: Vision
   supportsLinkedProfiles: false
   userInfo: true
+  wayfinder:
+    isEnabled: false

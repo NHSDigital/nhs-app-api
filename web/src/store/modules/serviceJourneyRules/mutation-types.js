@@ -50,5 +50,8 @@ export const initialState = () => ({
       secondaryAppointments: [],
       vaccineRecord: [],
     },
+    wayfinder: {
+      isEnabled: false,
+    },
   },
 });

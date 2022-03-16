@@ -53,3 +53,5 @@ journeys:
   supplier: Fake
   supportsLinkedProfiles: true
   userInfo: true
+  wayfinder:
+    isEnabled: false

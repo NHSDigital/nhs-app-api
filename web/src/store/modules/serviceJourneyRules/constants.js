@@ -25,6 +25,7 @@ export const mutationNames = {
   SILVER_INTEGRATION_APPOINTMENTS: 'silverIntegrationAppointments',
   SILVER_INTEGRATION_MESSAGES: 'silverIntegrationMessages',
   UPDATE_STATUS_GP_MESSAGES: 'updateStatusGpMessages',
+  WAYFINDER: 'wayfinder',
 };
 
 const {
@@ -52,6 +53,7 @@ const {
   SILVER_INTEGRATION_APPOINTMENTS,
   SILVER_INTEGRATION_MESSAGES,
   UPDATE_STATUS_GP_MESSAGES,
+  WAYFINDER,
 } = mutationNames;
 
 // this is used by eslint to validate SJR if attribute parameters
@@ -87,4 +89,5 @@ export const getterNames = {
   SILVER_INTEGRATION_ENABLED: `${SILVER_INTEGRATION}Enabled`,
   SILVER_INTEGRATION_MESSAGES_ENABLED: `${SILVER_INTEGRATION_MESSAGES}Enabled`,
   UPDATE_STATUS_GP_MESSAGES_ENABLED: `${UPDATE_STATUS_GP_MESSAGES}Enabled`,
+  WAYFINDER_ENABLED: `${WAYFINDER}Enabled`,
 };

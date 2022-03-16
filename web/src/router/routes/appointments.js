@@ -11,6 +11,7 @@ import GpAtHandPage from '@/pages/appointments/gp-at-hand';
 import HospitalAppointmentsPage from '@/pages/appointments/hospital-appointments';
 import InformaticaPage from '@/pages/appointments/informatica';
 import UpliftAppointmentsPage from '@/pages/uplift/appointments';
+import WayfinderAppointmentsPage from '@/pages/appointments/wayfinder-appointments';
 import CaptionSize from '@/lib/caption-size';
 
 import breadcrumbs from '@/breadcrumbs/appointments';
@@ -28,6 +29,7 @@ import {
   APPOINTMENT_CANCELLING_PATH,
   APPOINTMENT_CANCELLING_SUCCESS_PATH,
   APPOINTMENT_ADMIN_HELP_PATH,
+  APPOINTMENT_WAYFINDER_PATH,
 } from '@/router/paths';
 import {
   UPLIFT_APPOINTMENTS_NAME,
@@ -44,6 +46,7 @@ import {
   APPOINTMENT_CANCELLING_SUCCESS_NAME,
   APPOINTMENT_ADMIN_HELP_NAME,
   GP_APPOINTMENT_JOURNEY_NAME,
+  APPOINTMENT_WAYFINDER_NAME,
 } from '@/router/names';
 
 import { APPOINTMENTS_MENU_ITEM } from '@/middleware/nativeNavigation';
@@ -126,6 +129,22 @@ export const HOSPITAL_APPOINTMENTS = {
     crumb: breadcrumbs.HOSPITAL_APPOINTMENTS_CRUMB,
     helpPath: HOSPITAL_AND_OTHER_APPOINTMENTS_HELP_PATH,
     sjrRedirectRules: [sjrRedirectRules.silverIntegrationsSecondaryAppointmentsDisabledRedirect],
+    nativeNavigation: APPOINTMENTS_MENU_ITEM,
+  },
+};
+
+export const WAYFINDER_APPOINTMENTS = {
+  path: APPOINTMENT_WAYFINDER_PATH,
+  name: APPOINTMENT_WAYFINDER_NAME,
+  component: WayfinderAppointmentsPage,
+  meta: {
+    headerKey: 'navigation.pages.headers.wayfinderAppointments',
+    titleKey: 'navigation.pages.titles.wayfinderAppointments',
+    proofLevel: proofLevel.P9,
+    upliftRoute: UPLIFT_APPOINTMENTS,
+    crumb: breadcrumbs.APPOINTMENTS_WAYFINDER_CRUMB,
+    helpPath: HOSPITAL_AND_OTHER_APPOINTMENTS_HELP_PATH,
+    sjrRedirectRules: [sjrRedirectRules.wayfinderAppointmentsDisabledRedirect],
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
   },
 };
@@ -328,6 +347,7 @@ export default [
   APPOINTMENTS,
   GP_APPOINTMENTS,
   HOSPITAL_APPOINTMENTS,
+  WAYFINDER_APPOINTMENTS,
   GP_AT_HAND,
   INFORMATICA,
   BOOKING,

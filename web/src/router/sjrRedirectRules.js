@@ -116,4 +116,9 @@ export default {
     url: HEALTH_RECORDS_PATH,
     name: HEALTH_RECORDS_NAME,
   },
+  wayfinderAppointmentsDisabledRedirect: {
+    journey_disabled: 'wayfinder',
+    url: APPOINTMENTS_PATH,
+    name: APPOINTMENTS_NAME,
+  },
 };

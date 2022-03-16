@@ -91,4 +91,6 @@ journeys:
     - netCompanyP5
   supplier: Emis
   supportsLinkedProfiles: true
-  userInfo: true
+  userInfo: true  
+  wayfinder:
+    isEnabled: false

@@ -85,6 +85,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
             AddSilverIntegrationValidations(journeysValidator);
             AddIm1MessagingValidations(journeysValidator);
             AddHomeScreenValidations(journeysValidator);
+            AddWayfinderValidations(journeysValidator);
 
             return journeysValidator;
 
@@ -159,6 +160,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
 
                     return homeScreen.PublicHealthNotifications?.Any() ?? false;
                 }, "journeys.HomeScreen.PublicHealthNotifications");
+        }
+
+        private static void AddWayfinderValidations(JourneysValidator journeysValidator)
+        {
+            journeysValidator
+                .Add(journeys => journeys.Wayfinder?.IsEnabled != null, "journeys.Wayfinder.IsEnabled");
         }
     }
 }

@@ -33,6 +33,7 @@ const {
   SILVER_INTEGRATION_APPOINTMENTS_ENABLED,
   SILVER_INTEGRATION_MESSAGES_ENABLED,
   UPDATE_STATUS_GP_MESSAGES_ENABLED,
+  WAYFINDER_ENABLED,
 } = getterNames;
 
 const {
@@ -137,5 +138,8 @@ export default {
   },
   [UPDATE_STATUS_GP_MESSAGES_ENABLED](state) {
     return get('rules.im1Messaging.canUpdateReadStatus')(state);
+  },
+  [WAYFINDER_ENABLED](state) {
+    return get('rules.wayfinder.isEnabled')(state);
   },
 };
