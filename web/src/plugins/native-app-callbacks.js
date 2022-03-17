@@ -54,6 +54,15 @@ const NativeAppCallbacksPlugin = {
       getCurrentRouteName() {
         return router.currentRoute.name;
       },
+      // to be removed when we put 2.6.0 as forced upgrade
+      retrieveLastCrumbName() {
+        const crumbExists = router.currentRoute.meta.crumb.defaultCrumb;
+        if (crumbExists !== undefined) {
+          return crumbExists[crumbExists.length - 1].name;
+        }
+
+        return '';
+      },
       navigationGoTo(path) {
         store.dispatch('navigation/goTo', path);
       },
