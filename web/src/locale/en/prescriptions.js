@@ -24,7 +24,6 @@ export default {
     emergencyContact2: ' or call 111 to request an emergency supply of the prescription item.',
     emergencyContactLabel: 'If you cannot contact them, go to 111.nhs.uk/emergency-prescription or call 111 to request an emergency supply of the prescription item.',
     emergencyPrescriptionLinkText: '111.nhs.uk/emergency-prescription',
-    emergencyPrescriptionLink: 'https://111.nhs.uk/emergency-prescription',
     backButtonText: 'Back',
   },
   historic: {

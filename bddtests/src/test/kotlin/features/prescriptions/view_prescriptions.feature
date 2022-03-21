@@ -203,6 +203,7 @@ Feature: View prescriptions Frontend
 
   Scenario: The user can see the Contact your GP screen and follow an external link
     Given the scenario is submit prescription
+    And '111' responds to requests for '/emergency-prescription'
     And I am using TPP GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And I am logged in
@@ -214,5 +215,5 @@ Feature: View prescriptions Frontend
     And the Type_Of_Prescriptions page is saved to disk
     When I select the option to order a non repeat prescription
     Then the Contact Your GP page is displayed
-    When I click the link called '111.nhs.uk/emergency-prescription' with a url of 'https://111.nhs.uk/emergency-prescription'
+    When I click the link called '111.nhs.uk/emergency-prescription' with a url of 'http://stubs.local.bitraft.io:8080/external/111/emergency-prescription'
     Then a new tab has been opened by the link

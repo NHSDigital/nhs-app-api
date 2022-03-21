@@ -1,8 +1,17 @@
 import EmergencyPrescriptionsLink from '@/components/widgets/EmergencyPrescriptionsLink';
-import { mount } from '../../helpers';
+import { createStore, mount } from '../../helpers';
 
 describe('EmergencyPrescriptionsLink', () => {
-  const mountEmergencyPrescriptionsLink = () => mount(EmergencyPrescriptionsLink);
+  const mountEmergencyPrescriptionsLink = () => mount(
+    EmergencyPrescriptionsLink,
+    {
+      $store: createStore({
+        $env: {
+          EMERGENCY_PRESCRIPTIONS_URL: 'https://111.nhs.uk/emergency-prescription',
+        },
+      }),
+    },
+  );
   let wrapper;
   let link;
 

@@ -45,7 +45,13 @@ describe('Prescription contact surgery page', () => {
   beforeEach(() => {
     state = createState(false);
     getters = {};
-    $store = createStore({ state, getters });
+    $store = createStore({
+      state,
+      getters,
+      $env: {
+        EMERGENCY_PRESCRIPTIONS_URL: 'https://111.nhs.uk/emergency-prescription',
+      },
+    });
     $store.app = { $analytics: { trackButtonClick: jest.fn() } };
 
     wrapper = mount(
