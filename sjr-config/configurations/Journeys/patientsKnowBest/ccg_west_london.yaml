@@ -1,6 +1,7 @@
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
   odsCodes:
+    - "E84012"
     - "E87003"
     - "E87004"
     - "E87007"
