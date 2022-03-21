@@ -13,11 +13,11 @@
         <p id="biometricInformation" class="nhsuk-u-padding-bottom-3">
           {{ biometricInformation }}
         </p>
-        <message-dialog message-type="warning" :icon-text="$t('generic.important')">
+        <message-dialog-generic message-type="warning" :icon-text="$t('generic.important')">
           <message-text>
             {{ biometricWarningText }}
           </message-text>
-        </message-dialog>
+        </message-dialog-generic>
         <div class="nhsuk-u-margin-top-5">
           <labelled-toggle v-model="registered"
                            checkbox-id="updateBiometricReg"
@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 import MessageText from '@/components/widgets/MessageText';
 import LabelledToggle from '@/components/widgets/LabelledToggle';
 import { MORE_PATH } from '@/router/paths';
@@ -38,7 +38,7 @@ import { redirectTo } from '@/lib/utils';
 export default {
   name: 'LoginSettingsPage',
   components: {
-    MessageDialog,
+    MessageDialogGeneric,
     MessageText,
     LabelledToggle,
   },

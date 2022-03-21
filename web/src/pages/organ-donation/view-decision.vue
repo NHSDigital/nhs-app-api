@@ -1,20 +1,20 @@
 <template>
   <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
     <div v-if="isConflicted">
-      <message-dialog :icon-text="$t('organDonation.viewDecision.decisionSubmitted')"
-                      message-id="success-dialog" message-type="success">
+      <message-dialog-generic :icon-text="$t('organDonation.viewDecision.decisionSubmitted')"
+                              message-id="success-dialog" message-type="success">
         <message-text>
           {{ $t('organDonation.viewDecision.weHaveReceivedYourDecision') }}</message-text>
-      </message-dialog>
+      </message-dialog-generic>
       <h2>{{ $t('organDonation.viewDecision.whatHappensNext') }}</h2>
       <p :class="$style.messageText">
         {{ $t('organDonation.viewDecision.weWillProcessYourRegistration') }}</p>
     </div>
     <div v-else>
-      <message-dialog message-id="success-dialog" message-type="success">
+      <message-dialog-generic message-id="success-dialog" message-type="success">
         <message-text>
           {{ $t('organDonation.viewDecision.yourDecisionHasBeenRecorded') }}</message-text>
-      </message-dialog>
+      </message-dialog-generic>
 
       <decision-info :decision-details="$store.state.organDonation.registration.decisionDetails"
                      :decision="$store.state.organDonation.registration.decision"/>
@@ -34,7 +34,7 @@ import get from 'lodash/fp/get';
 import DecisionInfo from '@/components/organ-donation/DecisionInfo';
 import EnsureDecisionMixin from '@/components/organ-donation/EnsureDecisionMixin';
 import FaithDetailsRegistered from '@/components/organ-donation/FaithDetailsRegistered';
-import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 import MessageText from '@/components/widgets/MessageText';
 import NextSteps from '@/components/organ-donation/NextSteps';
 import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
@@ -46,7 +46,7 @@ export default {
     DecisionInfo,
     FaithDetailsRegistered,
     MessageText,
-    MessageDialog,
+    MessageDialogGeneric,
     NextSteps,
     OtherThingsToDo,
     StillYourDecision,

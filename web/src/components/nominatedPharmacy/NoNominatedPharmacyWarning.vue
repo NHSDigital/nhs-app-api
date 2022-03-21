@@ -1,10 +1,10 @@
 <template>
   <div :class="$style.info" data-purpose="info">
-    <message-dialog message-type="warning" :icon-text="$t('generic.important')">
+    <message-dialog-generic message-type="warning" :icon-text="$t('generic.important')">
       <message-text id="warning-text">
         {{ $t('nominatedPharmacy.notFound.warningText') }}
       </message-text>
-    </message-dialog>
+    </message-dialog-generic>
     <p id="instruction">
       {{ $t('nominatedPharmacy.notFound.line') }}
     </p>
@@ -20,7 +20,7 @@
 
 <script>
 /* eslint-disable global-require */
-import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 import MessageText from '@/components/widgets/MessageText';
 import { NOMINATED_PHARMACY_INTERRUPT_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
@@ -28,7 +28,7 @@ import { redirectTo } from '@/lib/utils';
 export default {
   name: 'NoNominatedPharmacyWarning',
   components: {
-    MessageDialog,
+    MessageDialogGeneric,
     MessageText,
   },
   data() {

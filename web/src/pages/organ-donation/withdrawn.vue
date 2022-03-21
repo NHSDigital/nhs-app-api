@@ -1,8 +1,8 @@
 <template>
   <div id="mainDiv" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <message-dialog :icon-text="$t('organDonation.withdrawn.decisionWithdrawn')"
-                      message-id="success-dialog" message-type="success">
+      <message-dialog-generic :icon-text="$t('organDonation.withdrawn.decisionWithdrawn')"
+                              message-id="success-dialog" message-type="success">
         <message-text
           v-for="(item, index) in $t('organDonation.withdrawn.youNoLongerHaveADecisionRecorded')"
           :key="index">
@@ -21,7 +21,7 @@
         <message-text>
           {{ $t('organDonation.withdrawn.youCanRecordADecisionAtAnyTime') }}
         </message-text>
-      </message-dialog>
+      </message-dialog-generic>
       <div>
         <h2>{{ $t('organDonation.withdrawn.whatToDoNext') }}</h2>
         <p>{{ $t('organDonation.withdrawn.letYourFamilyKnow') }}</p>
@@ -33,7 +33,7 @@
 
 <script>
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 import MessageText from '@/components/widgets/MessageText';
 import NativeOnlyMixin from '@/components/NativeOnlyMixin';
 import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
@@ -41,7 +41,7 @@ import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
 export default {
   components: {
     AnalyticsTrackedTag,
-    MessageDialog,
+    MessageDialogGeneric,
     MessageText,
     OtherThingsToDo,
   },

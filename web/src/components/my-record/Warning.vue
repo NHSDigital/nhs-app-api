@@ -2,14 +2,14 @@
   <div v-if="showTemplate"
        id="mainDiv"
        :class="[!$store.state.device.isNativeApp && $style.desktopWeb]">
-    <message-dialog message-type="warning" :icon-text="$t('generic.important')">
+    <message-dialog-generic message-type="warning" :icon-text="$t('generic.important')">
       <message-text :class="$style.warningText">
         {{ $t('myRecord.warning.yourRecordMayContainSensitiveInformation') }}
       </message-text>
       <message-text :class="$style.warningText">
         {{ $t('myRecord.warning.youHaveALegalRightToAccess') }}
       </message-text>
-    </message-dialog>
+    </message-dialog-generic>
     <div :class="$style.info" data-purpose="info">
       <p>{{ $t('myRecord.warning.yourRecordShowsPersonalData') }}</p>
       <p>{{ $t('myRecord.warning.youMayAlsoSee') }}</p>
@@ -33,7 +33,7 @@
 
 <script>
 import GenericButton from '@/components/widgets/GenericButton';
-import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 import MessageText from '@/components/widgets/MessageText';
 import { redirectTo } from '@/lib/utils';
 import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
@@ -44,7 +44,7 @@ export default {
   name: 'Warning',
   components: {
     GenericButton,
-    MessageDialog,
+    MessageDialogGeneric,
     MessageText,
     DesktopGenericBackLink,
   },

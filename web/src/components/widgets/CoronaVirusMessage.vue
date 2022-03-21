@@ -1,5 +1,5 @@
 <template>
-  <message-dialog
+  <message-dialog-generic
     message-id="corona-virus-warning"
     message-type="warning"
     :icon-text="$t('appointments.coronavirus.coronavirus')">
@@ -23,12 +23,12 @@
         {{ $t('appointments.coronavirus.findOutWhatToDo') }}
       </analytics-tracked-tag>
     </message-text>
-  </message-dialog>
+  </message-dialog-generic>
 </template>
 
 <script>
 import Contact111 from '@/components/widgets/Contact111';
-import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 import MessageText from '@/components/widgets/MessageText';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
@@ -36,7 +36,7 @@ export default {
   name: 'CoronaVirusMessage',
   components: {
     Contact111,
-    MessageDialog,
+    MessageDialogGeneric,
     MessageText,
     AnalyticsTrackedTag,
   },

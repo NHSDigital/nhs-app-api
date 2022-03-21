@@ -1,24 +1,24 @@
 <template>
   <div v-if="showTemplate" id="mainDiv" class="pull-content">
-    <message-dialog message-type="warning">
+    <message-dialog-generic message-type="warning">
       <message-text :is-header="true">
         {{ $t('myRecord.youDoNotHaveAccessToYourRecord') }}
       </message-text>
       <message-text>
         {{ $t('myRecord.contactSurgeryForMoreInformation') }}
       </message-text>
-    </message-dialog>
+    </message-dialog-generic>
   </div>
 </template>
 
 <script>
 /* eslint-disable import/extensions */
-import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 import MessageText from '@/components/widgets/MessageText';
 
 export default {
   components: {
-    MessageDialog,
+    MessageDialogGeneric,
     MessageText,
   },
 };

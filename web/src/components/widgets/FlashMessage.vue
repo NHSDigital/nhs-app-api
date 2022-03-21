@@ -1,31 +1,32 @@
 <template>
   <div v-if="showFlashMessage">
-    <message-dialog v-if="isWarning()" :extra-classes="[$style['flash-message']]"
-                    message-type="warning" >
+    <message-dialog-generic v-if="isWarning()" :extra-classes="[$style['flash-message']]"
+                            message-type="warning" >
       <message-text>{{ message }}</message-text>
-    </message-dialog>
+    </message-dialog-generic>
     <message-dialog v-else-if="isError()" :extra-classes="[$style['flash-message']]"
                     message-type="error" >
       <message-text>{{ message }}</message-text>
     </message-dialog>
-    <message-dialog v-else :extra-classes="[$style['flash-message']]"
-                    message-id="success-dialog"
-                    message-type="success">
-      <message-text>{{ message }}
-      </message-text>
-    </message-dialog>
+    <message-dialog-generic v-else :extra-classes="[$style['flash-message']]"
+                            message-id="success-dialog"
+                            message-type="success" >
+      <message-text>{{ message }}</message-text>
+    </message-dialog-generic>
   </div>
 </template>
 
 <script>
 /* eslint-disable import/extensions */
 import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 import MessageText from '@/components/widgets/MessageText';
 
 export default {
   name: 'FlashMessage',
   components: {
     MessageDialog,
+    MessageDialogGeneric,
     MessageText,
   },
   computed: {

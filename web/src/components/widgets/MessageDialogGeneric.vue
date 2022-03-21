@@ -1,5 +1,5 @@
 <template>
-  <div id="message-dialog" ref="messageDialogContainer" data-purpose="error-container"
+  <div id="message-dialog-generic" ref="messageDialogContainer" data-purpose="error-container"
        :class="[mType,
                 ...extraClasses,
                 'nhsuk-width-container--full',
@@ -21,7 +21,7 @@
 import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 
 export default {
-  name: 'MessageDialog',
+  name: 'MessageDialogGeneric',
   props: {
     focusable: {
       type: Boolean,
@@ -33,8 +33,8 @@ export default {
     },
     messageType: {
       type: String,
-      default: 'error',
-      validator: value => ['error'].indexOf(value) !== -1,
+      default: 'warning',
+      validator: value => ['success', 'warning', 'message'].indexOf(value) !== -1,
     },
     messageId: {
       type: String,
@@ -92,5 +92,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import "@/style/custom/message-dialog";
+@import "@/style/custom/message-dialog";
 </style>

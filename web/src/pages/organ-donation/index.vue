@@ -7,11 +7,11 @@
       <div class="nhsuk-grid-column-full">
         <div v-if="isConflicted || hasExistingDecision">
           <div v-if="isConflicted">
-            <message-dialog :icon-text="$t('organDonation.index.decisionFound')"
-                            message-id="success-dialog" message-type="success">
+            <message-dialog-generic :icon-text="$t('organDonation.index.decisionFound')"
+                                    message-id="success-dialog" message-type="success">
               <message-text>
                 {{ $t('organDonation.index.yourRegistrationIsBeingProcessed') }}</message-text>
-            </message-dialog>
+            </message-dialog-generic>
             <h2>{{ $t('organDonation.index.weAreProcessingYourRegistration') }}</h2>
             <p>
               {{ $t('organDonation.index.pleaseCheckBackInTwoDays') }}</p>
@@ -69,7 +69,7 @@ import FaithDetailsRegistered from '@/components/organ-donation/FaithDetailsRegi
 import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
 import MenuItemList from '@/components/MenuItemList';
-import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 import MessageText from '@/components/widgets/MessageText';
 import NextSteps from '@/components/organ-donation/NextSteps';
 import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
@@ -102,7 +102,7 @@ export default {
     MakeDecision,
     MenuItemList,
     MessageText,
-    MessageDialog,
+    MessageDialogGeneric,
     NextSteps,
     OtherThingsToDo,
     StillYourDecision,

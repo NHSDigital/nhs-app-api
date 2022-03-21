@@ -1,9 +1,9 @@
 <template>
   <div v-if="showBiometricBanner" :class="$style.container">
-    <message-dialog :extra-classes="[$style['flash-message']]"
-                    message-id="success-dialog"
-                    message-type="message"
-                    :icon-text="$t('home.loginOptions')">
+    <message-dialog-generic :extra-classes="[$style['flash-message']]"
+                            message-id="success-dialog"
+                            message-type="message"
+                            :icon-text="$t('home.loginOptions')">
       <message-text id="bannerText">
         {{ $t(bannerText) }}
       </message-text>
@@ -28,14 +28,14 @@
           </analytics-tracked-tag>
         </p>
       </message-text>
-    </message-dialog>
+    </message-dialog-generic>
   </div>
 </template>
 
 <script>
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GenericButton from '@/components/widgets/GenericButton';
-import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 import MessageText from '@/components/widgets/MessageText';
 import {
   MORE_ACCOUNTANDSETTINGS_FINGERPRINT_PATH,
@@ -51,7 +51,7 @@ export default {
   components: {
     AnalyticsTrackedTag,
     GenericButton,
-    MessageDialog,
+    MessageDialogGeneric,
     MessageText,
   },
   computed: {

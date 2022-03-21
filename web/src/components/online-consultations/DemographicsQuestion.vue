@@ -1,8 +1,8 @@
 <template>
   <div>
-    <message-dialog id="demographicsWarning"
-                    message-type="warning"
-                    :icon-text="$t('generic.important')">
+    <message-dialog-generic id="demographicsWarning"
+                            message-type="warning"
+                            :icon-text="$t('generic.important')">
       <message-text>
         {{ $t('onlineConsultations.warning.text',
               { providerName: providerName }) }}
@@ -12,7 +12,7 @@
           {{ $t('onlineConsultations.warning.link') }}</a>
         </span>
       </message-text>
-    </message-dialog>
+    </message-dialog-generic>
     <generic-question-wrapper>
       <fieldset class="nhsuk-fieldset nhsuk-form-group--error">
         <legend class="nhsuk-fieldset__legend">
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 import MessageText from '@/components/widgets/MessageText';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
@@ -72,7 +72,7 @@ import last from 'lodash/fp/last';
 export default {
   name: 'DemographicsQuestion',
   components: {
-    MessageDialog,
+    MessageDialogGeneric,
     MessageText,
     GenericCheckbox,
     GenericButton,

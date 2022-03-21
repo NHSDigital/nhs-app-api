@@ -12,17 +12,17 @@
     </div>
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <message-dialog v-if="!isP1Pharmacy"
-                        id="warning-dialog-dispensing-practice"
-                        message-type="warning"
-                        :icon-text="$t('generic.important')">
+        <message-dialog-generic v-if="!isP1Pharmacy"
+                                id="warning-dialog-dispensing-practice"
+                                message-type="warning"
+                                :icon-text="$t('generic.important')">
           <message-text id="warning-text-1" :class="$style.warningText">
             {{ $t('nominatedPharmacy.warning.changeDispensingPractice.line1') }}
           </message-text>
           <message-text id="warning-text-2" :class="$style.warningText">
             {{ $t('nominatedPharmacy.warning.changeDispensingPractice.line2') }}
           </message-text>
-        </message-dialog>
+        </message-dialog-generic>
       </div>
     </div>
     <div class="nhsuk-grid-row">
@@ -42,7 +42,7 @@
 /* eslint-disable global-require */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
-import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 import MessageText from '@/components/widgets/MessageText';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
 import { PRESCRIPTIONS_PATH, NOMINATED_PHARMACY_PATH } from '@/router/paths';
@@ -53,7 +53,7 @@ export default {
   components: {
     AnalyticsTrackedTag,
     PharmacyDetail,
-    MessageDialog,
+    MessageDialogGeneric,
     MessageText,
   },
   data() {
