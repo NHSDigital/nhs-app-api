@@ -243,6 +243,12 @@ class ServiceJourneyRulesMapper {
                     SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_WELLNESS_AND_PREVENTION
                 )
             )
+            .add(
+                    Supplier.EMIS, "WF0001",
+                    EnumSet.of(
+                            SJRJourneyType.WAYFINDER_ENABLED
+                    )
+            )
 
         fun findPatientForConfiguration(
             gpSystem: Supplier?,
