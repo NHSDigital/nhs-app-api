@@ -16,6 +16,14 @@ namespace NHSOnline.Backend.UsersApi.Notifications
     {
         private readonly int _sleepTimeInMilliSeconds;
 
+        private void SimulateDelay()
+        {
+            if (_sleepTimeInMilliSeconds > 0)
+            {
+                Thread.Sleep(_sleepTimeInMilliSeconds);
+            }
+        }
+
         public MockNotificationHubClient(int sleepTimeInMilliSeconds)
         {
             _sleepTimeInMilliSeconds = sleepTimeInMilliSeconds;
@@ -23,33 +31,33 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public Task CancelNotificationAsync(string scheduledNotificationId)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.CompletedTask;
         }
 
         public Task CancelNotificationAsync(string scheduledNotificationId, CancellationToken cancellationToken)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.CompletedTask;
         }
 
         public Task<AdmRegistrationDescription> CreateAdmNativeRegistrationAsync(string admRegistrationId)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new AdmRegistrationDescription(Guid.NewGuid().ToString()));
         }
 
         public Task<AdmRegistrationDescription> CreateAdmNativeRegistrationAsync(string admRegistrationId,
             CancellationToken cancellationToken)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new AdmRegistrationDescription(Guid.NewGuid().ToString()));
         }
 
         public Task<AdmRegistrationDescription> CreateAdmNativeRegistrationAsync(string admRegistrationId,
             IEnumerable<string> tags)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new AdmRegistrationDescription(Guid.NewGuid().ToString(), tags));
         }
 
@@ -62,21 +70,21 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         public Task<AdmTemplateRegistrationDescription> CreateAdmTemplateRegistrationAsync(string admRegistrationId,
             string jsonPayload)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new AdmTemplateRegistrationDescription(admRegistrationId));
         }
 
         public Task<AdmTemplateRegistrationDescription> CreateAdmTemplateRegistrationAsync(string admRegistrationId,
             string jsonPayload, CancellationToken cancellationToken)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new AdmTemplateRegistrationDescription(admRegistrationId, jsonPayload));
         }
 
         public Task<AdmTemplateRegistrationDescription> CreateAdmTemplateRegistrationAsync(string admRegistrationId,
             string jsonPayload, IEnumerable<string> tags)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new AdmTemplateRegistrationDescription(admRegistrationId, jsonPayload, tags));
         }
 
@@ -88,21 +96,21 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public Task<AppleRegistrationDescription> CreateAppleNativeRegistrationAsync(string deviceToken)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new AppleRegistrationDescription(deviceToken));
         }
 
         public Task<AppleRegistrationDescription> CreateAppleNativeRegistrationAsync(string deviceToken,
             CancellationToken cancellationToken)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new AppleRegistrationDescription(deviceToken));
         }
 
         public Task<AppleRegistrationDescription> CreateAppleNativeRegistrationAsync(string deviceToken,
             IEnumerable<string> tags)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new AppleRegistrationDescription(deviceToken, tags));
         }
 
@@ -115,7 +123,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         public Task<AppleTemplateRegistrationDescription> CreateAppleTemplateRegistrationAsync(string deviceToken,
             string jsonPayload)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new AppleTemplateRegistrationDescription(deviceToken, jsonPayload));
         }
 
@@ -128,20 +136,20 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         public Task<AppleTemplateRegistrationDescription> CreateAppleTemplateRegistrationAsync(string deviceToken,
             string jsonPayload, IEnumerable<string> tags)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new AppleTemplateRegistrationDescription(deviceToken, jsonPayload, tags));
         }
 
         public Task<AppleTemplateRegistrationDescription> CreateAppleTemplateRegistrationAsync(string deviceToken,
             string jsonPayload, IEnumerable<string> tags, CancellationToken cancellationToken)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new AppleTemplateRegistrationDescription(deviceToken, jsonPayload, tags));
         }
 
         public Task<BaiduRegistrationDescription> CreateBaiduNativeRegistrationAsync(string userId, string channelId)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return CreateBaiduNativeRegistrationAsync(userId, channelId, Enumerable.Empty<string>());
         }
 
@@ -154,20 +162,20 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         public Task<BaiduTemplateRegistrationDescription> CreateBaiduTemplateRegistrationAsync(string userId,
             string channelId, string jsonPayload)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new BaiduTemplateRegistrationDescription(userId, channelId, jsonPayload));
         }
 
         public Task<BaiduTemplateRegistrationDescription> CreateBaiduTemplateRegistrationAsync(string userId,
             string channelId, string jsonPayload, IEnumerable<string> tags)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new BaiduTemplateRegistrationDescription(userId, channelId, jsonPayload, tags));
         }
 
         public Task<FcmRegistrationDescription> CreateFcmNativeRegistrationAsync(string fcmRegistrationId)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new FcmRegistrationDescription(fcmRegistrationId));
         }
 
@@ -180,7 +188,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         public Task<FcmRegistrationDescription> CreateFcmNativeRegistrationAsync(string fcmRegistrationId,
             IEnumerable<string> tags)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new FcmRegistrationDescription(fcmRegistrationId, tags));
         }
 
@@ -193,7 +201,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         public Task<FcmTemplateRegistrationDescription> CreateFcmTemplateRegistrationAsync(string fcmRegistrationId,
             string jsonPayload)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new FcmTemplateRegistrationDescription(fcmRegistrationId, jsonPayload));
         }
 
@@ -206,7 +214,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         public Task<FcmTemplateRegistrationDescription> CreateFcmTemplateRegistrationAsync(string fcmRegistrationId,
             string jsonPayload, IEnumerable<string> tags)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new FcmTemplateRegistrationDescription(fcmRegistrationId, jsonPayload, tags));
         }
 
@@ -218,89 +226,89 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public Task<MpnsRegistrationDescription> CreateMpnsNativeRegistrationAsync(string channelUri)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new MpnsRegistrationDescription(channelUri));
         }
 
         public Task<MpnsRegistrationDescription> CreateMpnsNativeRegistrationAsync(string channelUri,
             IEnumerable<string> tags)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new MpnsRegistrationDescription(channelUri, tags));
         }
 
         public Task<MpnsTemplateRegistrationDescription> CreateMpnsTemplateRegistrationAsync(string channelUri,
             string xmlTemplate)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new MpnsTemplateRegistrationDescription(channelUri, xmlTemplate));
         }
 
         public Task<MpnsTemplateRegistrationDescription> CreateMpnsTemplateRegistrationAsync(string channelUri,
             string xmlTemplate, IEnumerable<string> tags)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new MpnsTemplateRegistrationDescription(channelUri, xmlTemplate, tags));
         }
 
         public void CreateOrUpdateInstallation(Installation installation)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
         }
 
         public Task CreateOrUpdateInstallationAsync(Installation installation)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.CompletedTask;
         }
 
         public Task CreateOrUpdateInstallationAsync(Installation installation, CancellationToken cancellationToken)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.CompletedTask;
         }
 
         public Task<T> CreateOrUpdateRegistrationAsync<T>(T registration) where T : RegistrationDescription
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(registration);
         }
 
         public Task<T> CreateOrUpdateRegistrationAsync<T>(T registration, CancellationToken cancellationToken)
             where T : RegistrationDescription
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(registration);
         }
 
         public Task<T> CreateRegistrationAsync<T>(T registration) where T : RegistrationDescription
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(registration);
         }
 
         public Task<T> CreateRegistrationAsync<T>(T registration, CancellationToken cancellationToken)
             where T : RegistrationDescription
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(registration);
         }
 
         public Task<string> CreateRegistrationIdAsync()
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(Guid.NewGuid().ToString());
         }
 
         public Task<string> CreateRegistrationIdAsync(CancellationToken cancellationToken)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(Guid.NewGuid().ToString());
         }
 
         public Task<WindowsRegistrationDescription> CreateWindowsNativeRegistrationAsync(string channelUri)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new WindowsRegistrationDescription(channelUri));
         }
 
@@ -313,7 +321,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         public Task<WindowsRegistrationDescription> CreateWindowsNativeRegistrationAsync(string channelUri,
             IEnumerable<string> tags)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new WindowsRegistrationDescription(channelUri, tags));
         }
 
@@ -326,7 +334,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         public Task<WindowsTemplateRegistrationDescription> CreateWindowsTemplateRegistrationAsync(string channelUri,
             string xmlTemplate)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new WindowsTemplateRegistrationDescription(channelUri, xmlTemplate));
         }
 
@@ -339,7 +347,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         public Task<WindowsTemplateRegistrationDescription> CreateWindowsTemplateRegistrationAsync(string channelUri,
             string xmlTemplate, IEnumerable<string> tags)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new WindowsTemplateRegistrationDescription(channelUri, xmlTemplate, tags));
         }
 
@@ -351,72 +359,72 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public void DeleteInstallation(string installationId)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
         }
 
         public Task DeleteInstallationAsync(string installationId)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.CompletedTask;
         }
 
         public Task DeleteInstallationAsync(string installationId, CancellationToken cancellationToken)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.CompletedTask;
         }
 
         public Task DeleteRegistrationAsync(RegistrationDescription registration)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.CompletedTask;
         }
 
         public Task DeleteRegistrationAsync(RegistrationDescription registration, CancellationToken cancellationToken)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.CompletedTask;
         }
 
         public Task DeleteRegistrationAsync(string registrationId)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.CompletedTask;
         }
 
         public Task DeleteRegistrationAsync(string registrationId, CancellationToken cancellationToken)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.CompletedTask;
         }
 
         public Task DeleteRegistrationAsync(string registrationId, string etag)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.CompletedTask;
         }
 
         public Task DeleteRegistrationAsync(string registrationId, string etag, CancellationToken cancellationToken)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.CompletedTask;
         }
 
         public Task DeleteRegistrationsByChannelAsync(string pnsHandle)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.CompletedTask;
         }
 
         public Task DeleteRegistrationsByChannelAsync(string pnsHandle, CancellationToken cancellationToken)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.CompletedTask;
         }
 
         public Task<CollectionQueryResult<RegistrationDescription>> GetAllRegistrationsAsync(int top)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(GetRegistrationDescriptionEnumerable(new List<RegistrationDescription>()));
         }
 
@@ -440,13 +448,13 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public Uri GetBaseUri()
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return new Uri("sb://mock.notification.hub:9999");
         }
 
         public Task<Uri> GetFeedbackContainerUriAsync()
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new Uri("sb://mock.notification.hub:9999/feedback"));
         }
 
@@ -457,13 +465,13 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public Installation GetInstallation(string installationId)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return new Installation { InstallationId = installationId };
         }
 
         public Task<Installation> GetInstallationAsync(string installationId)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new Installation { InstallationId = installationId });
         }
 
@@ -474,7 +482,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public Task<NotificationHubJob> GetNotificationHubJobAsync(string jobId)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new NotificationHubJob());
         }
 
@@ -485,7 +493,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public async Task<IEnumerable<NotificationHubJob>> GetNotificationHubJobsAsync()
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return new List<NotificationHubJob>
             {
                 await GetNotificationHubJobAsync(Guid.NewGuid().ToString()),
@@ -500,7 +508,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public Task<NotificationDetails> GetNotificationOutcomeDetailsAsync(string notificationId)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new NotificationDetails { NotificationId = notificationId });
         }
 
@@ -513,7 +521,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         public Task<TRegistrationDescription> GetRegistrationAsync<TRegistrationDescription>(string registrationId)
             where TRegistrationDescription : RegistrationDescription
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new FcmRegistrationDescription(registrationId) as TRegistrationDescription);
         }
 
@@ -526,7 +534,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         public Task<CollectionQueryResult<RegistrationDescription>> GetRegistrationsByChannelAsync(string pnsHandle,
             int top)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(GetRegistrationDescriptionEnumerable(new List<RegistrationDescription>()));
         }
 
@@ -561,7 +569,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
                 RegistrationId = Guid.NewGuid().ToString()
             };
 
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(GetRegistrationDescriptionEnumerable(new List<RegistrationDescription>
                 { registration }));
         }
@@ -586,43 +594,43 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public bool InstallationExists(string installationId)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return true;
         }
 
         public Task<bool> InstallationExistsAsync(string installationId)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(true);
         }
 
         public Task<bool> InstallationExistsAsync(string installationId, CancellationToken cancellationToken)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return InstallationExistsAsync(installationId);
         }
 
         public void PatchInstallation(string installationId, IList<PartialUpdateOperation> operations)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
         }
 
         public Task PatchInstallationAsync(string installationId, IList<PartialUpdateOperation> operations)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.CompletedTask;
         }
 
         public Task PatchInstallationAsync(string installationId, IList<PartialUpdateOperation> operations,
             CancellationToken cancellationToken)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.CompletedTask;
         }
 
         public Task<bool> RegistrationExistsAsync(string registrationId)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(true);
         }
 
@@ -634,7 +642,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         public Task<ScheduledNotification> ScheduleNotificationAsync(Notification notification,
             DateTimeOffset scheduledTime)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(new ScheduledNotification());
         }
 
@@ -670,7 +678,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public Task<NotificationOutcome> SendAdmNativeNotificationAsync(string jsonPayload)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(GetDefaultNotificationOutCome());
         }
 
@@ -704,7 +712,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public Task<NotificationOutcome> SendAppleNativeNotificationAsync(string jsonPayload)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(GetDefaultNotificationOutCome());
         }
 
@@ -738,7 +746,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public Task<NotificationOutcome> SendBaiduNativeNotificationAsync(string message)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(GetDefaultNotificationOutCome());
         }
 
@@ -773,7 +781,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         public Task<NotificationOutcome> SendDirectNotificationAsync(Notification notification,
             IList<string> deviceHandles)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(GetDefaultNotificationOutCome());
         }
 
@@ -796,7 +804,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public Task<NotificationOutcome> SendFcmNativeNotificationAsync(string jsonPayload)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(GetDefaultNotificationOutCome());
         }
 
@@ -830,7 +838,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public Task<NotificationOutcome> SendMpnsNativeNotificationAsync(string nativePayload)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(GetDefaultNotificationOutCome());
         }
 
@@ -864,7 +872,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public Task<NotificationOutcome> SendNotificationAsync(Notification notification)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(GetDefaultNotificationOutCome());
         }
 
@@ -898,7 +906,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public Task<NotificationOutcome> SendTemplateNotificationAsync(IDictionary<string, string> properties)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(GetDefaultNotificationOutCome());
         }
 
@@ -911,7 +919,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         public Task<NotificationOutcome> SendTemplateNotificationAsync(IDictionary<string, string> properties,
             IEnumerable<string> tags)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(GetDefaultNotificationOutCome());
         }
 
@@ -924,7 +932,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         public Task<NotificationOutcome> SendTemplateNotificationAsync(IDictionary<string, string> properties,
             string tagExpression)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(GetDefaultNotificationOutCome());
         }
 
@@ -936,7 +944,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public Task<NotificationOutcome> SendWindowsNativeNotificationAsync(string windowsNativePayload)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(GetDefaultNotificationOutCome());
         }
 
@@ -949,7 +957,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         public Task<NotificationOutcome> SendWindowsNativeNotificationAsync(string windowsNativePayload,
             IEnumerable<string> tags)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(GetDefaultNotificationOutCome());
         }
 
@@ -962,7 +970,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         public Task<NotificationOutcome> SendWindowsNativeNotificationAsync(string windowsNativePayload,
             string tagExpression)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(GetDefaultNotificationOutCome());
         }
 
@@ -974,27 +982,27 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public Task<NotificationHubJob> SubmitNotificationHubJobAsync(NotificationHubJob job)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(job);
         }
 
         public Task<NotificationHubJob> SubmitNotificationHubJobAsync(NotificationHubJob job,
             CancellationToken cancellationToken)
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return SubmitNotificationHubJobAsync(job);
         }
 
         public Task<T> UpdateRegistrationAsync<T>(T registration) where T : RegistrationDescription
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return Task.FromResult(registration);
         }
 
         public Task<T> UpdateRegistrationAsync<T>(T registration, CancellationToken cancellationToken)
             where T : RegistrationDescription
         {
-            Thread.Sleep(_sleepTimeInMilliSeconds);
+            SimulateDelay();
             return UpdateRegistrationAsync(registration);
         }
 
