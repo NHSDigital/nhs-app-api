@@ -77,6 +77,8 @@ paths:
     $ref: ./nhsonline.assertedloginidentity.yaml#/paths/~1asserted-login-identity
   /v1/patient/authorization/access-token/refresh:
     $ref: ./nhsonline.authorization.yaml#/paths/~1access-token~1refresh
+  /v1/patient/secondary-care/summary:
+    $ref: ./nhsonline.secondarycare.yaml#/paths/~1secondary-care~1summary
   /v1/api/users/me/devices:
     $ref: ./nhsonline.users.yaml#/paths/~1users~1me~1devices
   /v1/api/users/me/devices/prompt/metrics:

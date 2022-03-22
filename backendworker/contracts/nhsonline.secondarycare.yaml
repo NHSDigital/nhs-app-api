@@ -1,0 +1,129 @@
+openapi: 3.0.2
+info:
+  version: 0.0.1
+  title: NHS App Sub-API - Secondary Care
+  description: NHS App Sub-API - endpoints pertaining to Secondary-Care integration.
+paths:
+  /secondary-care/summary:
+    get:
+      tags:
+        - secondary-care
+      summary: Gets a summary of secondary care appointments and referrals for the user.
+      description: Gets a summary of secondary care appointments and referrals for the user. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained from session endpoint).
+      responses:
+        "200":
+          description: Successfully retrieved secondary care summary.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SecondaryCareSummaryResponse"
+        "400":
+          description: Bad request. Supplied request is incomplete or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "401":
+          description: User session has expired.
+        "500":
+          description: An unexpected error occurred during the processing of the request.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "502":
+          description: Bad response received from upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+
+components:
+  schemas:
+    SecondaryCareSummaryResponse:
+      type: object
+      required:
+        - referrals
+        - upcomingAppointments
+      properties:
+        referrals:
+          type: array
+          description: An array of referrals for the authorized user.
+          items:
+            $ref: "#/components/schemas/Referral"
+        upcomingAppointments:
+          type: array
+          description: An array of upcoming appointments for the authorized user.
+          items:
+            $ref: "#/components/schemas/UpcomingAppointment"
+    Referral:
+      type: object
+      required:
+        - referralId
+        - referredDatetime
+        - serviceSpeciality
+        - referrerOrganisation
+        - status
+        - provider
+      properties:
+        referralId:
+          type: string
+          description: Supplier specific reference - booking reference.
+        referredDatetime:
+          type: string
+          format: date-time
+          description: The date-time the referral was initiated.
+        serviceSpeciality:
+          type: string
+          description: The speciality of the department the patient is being referred to.
+        referrerOrganisation:
+          type: string
+          description: Patient friendly name of the referrer organisation.
+        status:
+          type: string
+          description: Possible referral states.
+          enum:
+            - Bookable
+            - BookableWasCancelled
+            - InReview
+        reviewDueDate:
+          type: string
+          format: date-time
+          description: Optional - Date when referral is due if applicable. Only will be returned if status is InReview.
+        provider:
+          type: string
+          description: The linked referral or portal system.
+          enum:
+            - pkb
+            - ers
+            - drdoctor
+    UpcomingAppointment:
+      type: object
+      required:
+        - locationDescription
+        - deepLinkUrl
+        - provider
+      properties:
+        appointmentId:
+          type: string
+          description: Optional - Supplier specific reference - booking reference.
+        appointmentDatetime:
+          type: string
+          format: date-time
+          description: Optional - The date-time of the upcoming appointment.
+        locationDescription:
+          type: string
+          description: A patient friendly term for where the appointment will be.
+        serviceSpeciality:
+          type: string
+          description: Optional - The speciality of the department of the appointment.
+        deepLinkUrl:
+          type: string
+          description: Deep link url for the user to get more details on the provider.
+        provider:
+          type: string
+          description: The linked referral or portal system.
+          enum:
+            - pkb
+            - ers
+            - drdoctor

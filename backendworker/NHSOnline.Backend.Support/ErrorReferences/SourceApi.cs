@@ -16,6 +16,6 @@ namespace NHSOnline.Backend.Support
         OnlineConsultations = 9,
         Qualtrics = 10,
         Fake = 11,
-        Messages = 12
+        Messages = 12,
     }
 }
