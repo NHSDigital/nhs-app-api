@@ -2,8 +2,7 @@
   <div v-if="showTemplate">
     <test-results
       v-if="results"
-      :results="results"
-      :year="year" />
+      :results="results" />
     <pagination v-if="!showPastYearNavigation"
                 :previous-link="futureYearPath"
                 :previous-title="futureYear"/>
@@ -40,15 +39,7 @@ export default {
   },
   computed: {
     year() {
-      if (this.$route.query.year) {
-        return this.$route.query.year;
-      }
-
-      if (this.$store.state.myRecord.lastViewedTestResultYear) {
-        return this.$store.state.myRecord.lastViewedTestResultYear;
-      }
-
-      return this.getCurrentYear();
+      return this.$route.query.year;
     },
     pastYear() {
       return `${Number(this.year) - 1}`;
@@ -83,9 +74,6 @@ export default {
   methods: {
     async loadTestResults() {
       this.results = null;
-
-      this.$store.dispatch('myRecord/setLastViewedTestResultYear', this.year);
-
       if (!this.$store.state.myRecord.hasLoaded) {
         await this.$store.dispatch('myRecord/load');
       }

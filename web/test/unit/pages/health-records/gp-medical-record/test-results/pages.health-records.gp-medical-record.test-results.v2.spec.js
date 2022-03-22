@@ -1,24 +1,9 @@
 import testResultsV2Page from '@/pages/health-records/gp-medical-record/test-results-v2';
 import i18n from '@/plugins/i18n';
-import { createStore, mount } from '../../../../helpers';
+import { createStore, shallowMount } from '../../../../helpers';
 
 let page;
 let $store;
-
-const createTestResults = ({
-  associatedTexts,
-  date,
-  description,
-  id,
-  testResultChildLineItems,
-} = {}) =>
-  ({
-    associatedTexts,
-    date,
-    description,
-    id,
-    testResultChildLineItems,
-  });
 
 const mountPage = ({ testResults = undefined } = {}) => {
   $store = createStore({
@@ -27,17 +12,13 @@ const mountPage = ({ testResults = undefined } = {}) => {
       myRecord: {
         record: {
           testResults,
-          supplier: 'TPP',
         },
       },
-    },
-    $env: {
-      CLINICAL_ABBREVIATIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/',
     },
     dispatch: jest.fn(),
   });
 
-  page = mount(testResultsV2Page, {
+  page = shallowMount(testResultsV2Page, {
     $store,
     mountOpts: { i18n },
   });
@@ -65,7 +46,7 @@ describe('gp-medical-record test results', () => {
         hasAccess: true,
       },
     });
-    expect($store.dispatch).not.toHaveBeenCalledWith('myRecord/load');
+    expect($store.dispatch).not.toHaveBeenCalled();
   });
 
   it('will direct user to the choose test result year page', async () => {
@@ -75,33 +56,5 @@ describe('gp-medical-record test results', () => {
     const olderTestResultsLink = page.find('[id="view-older-results"]');
     expect(olderTestResultsLink.attributes().href)
       .toEqual('health-records/gp-medical-record/choose-test-result-year');
-  });
-
-  it('will direct user to the test result detail page', async () => {
-    mountPage({
-      testResults: {
-        data: [
-          createTestResults({
-            associatedTexts: ['associated texts'],
-            date: { value: '2022-01-10T12:03:44+00:00' },
-            description: 'first description text',
-            id: '1',
-            testResultChildLineItems: [
-              {
-                associatedTexts: ['child associated texts'],
-                description: 'child description text',
-              },
-            ],
-          }),
-        ],
-        hasErrored: false,
-        hasAccess: true,
-      },
-    });
-    await page.vm.$nextTick();
-
-    const testResultsLink = page.find('[id="view-test-results-0"]');
-    expect(testResultsLink.attributes().href)
-      .toEqual('health-records/gp-medical-record/testresultdetail/1');
   });
 });

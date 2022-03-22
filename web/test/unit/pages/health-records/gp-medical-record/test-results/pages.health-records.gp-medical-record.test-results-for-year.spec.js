@@ -79,7 +79,7 @@ describe('gp-medical-record test results for year', () => {
     });
 
     it('will not call dispatch for loadHistoricTestResult when data for specific year is empty', async () => {
-      const year = '2021';
+      const year = 2021;
       await mountPage({
         linkedAccountData: [],
         historicTestResultData: [

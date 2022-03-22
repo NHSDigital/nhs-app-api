@@ -2,7 +2,7 @@ import { INDEX_CRUMB } from '@/breadcrumbs/general';
 import sjrIf from '@/lib/sjrIf';
 import sjrRedirectRules from '@/router/sjrRedirectRules';
 
-import { HEALTH_RECORDS_NAME, TESTRESULTS_V2_NAME, GP_MEDICAL_RECORD_NAME, CHOOSE_TEST_RESULT_YEAR_NAME, TEST_RESULTS_FOR_YEAR_NAME } from '@/router/names';
+import { HEALTH_RECORDS_NAME } from '@/router/names';
 
 const UPLIFT_GP_MEDICAL_RECORD_CRUMB = {
   defaultCrumb: [INDEX_CRUMB],
@@ -14,34 +14,6 @@ export const HEALTH_RECORDS_CRUMB = {
   nativeDisabled: true,
   i18nKey: 'yourHealth',
   name: HEALTH_RECORDS_NAME,
-};
-
-export const CHOOSE_TEST_RESULT_PAGE_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB],
-  nativeDisabled: true,
-  i18nKey: 'testResults',
-  name: CHOOSE_TEST_RESULT_YEAR_NAME,
-};
-
-export const TEST_RESULTS_FOR_SPECIFIC_YEAR_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB],
-  nativeDisabled: true,
-  i18nKey: 'testResults',
-  name: TEST_RESULTS_FOR_YEAR_NAME,
-};
-
-export const GP_MEDICAL_RECORD_V2_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB],
-  nativeDisabled: true,
-  i18nKey: 'myRecord',
-  name: GP_MEDICAL_RECORD_NAME,
-};
-
-export const TEST_RESULT_V2_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB],
-  nativeDisabled: true,
-  i18nKey: 'testResults',
-  name: TESTRESULTS_V2_NAME,
 };
 
 const GP_MEDICAL_RECORD_CRUMB = {
@@ -86,26 +58,12 @@ const TEST_RESULTS_CRUMB = {
   defaultCrumb: [INDEX_CRUMB, HEALTH_RECORDS_CRUMB],
 };
 
-const TEST_RESULTS_V2_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_V2_CRUMB],
-};
-
-const CHOOSE_TEST_RESULTS_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB, TEST_RESULT_V2_CRUMB],
-};
-
-const TEST_RESULTS_FOR_YEAR_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB, CHOOSE_TEST_RESULT_PAGE_CRUMB],
-};
-
 const TEST_RESULTS_DETAIL_CRUMB = {
   defaultCrumb: [INDEX_CRUMB, HEALTH_RECORDS_CRUMB],
 };
 
 const TEST_RESULTS_ID_CRUMB = {
   defaultCrumb: [INDEX_CRUMB, HEALTH_RECORDS_CRUMB],
-  v2ForYearCrumb: [INDEX_CRUMB, TEST_RESULTS_FOR_SPECIFIC_YEAR_CRUMB],
-  v2TestResultCrumb: [INDEX_CRUMB, TEST_RESULT_V2_CRUMB],
 };
 
 const IMMUNISATIONS_CRUMB = {
@@ -154,9 +112,6 @@ export default {
   DISCONTINUED_MEDICINES_CRUMB,
   CONSULTATIONS_AND_EVENTS_CRUMB,
   TEST_RESULTS_CRUMB,
-  TEST_RESULTS_V2_CRUMB,
-  CHOOSE_TEST_RESULTS_CRUMB,
-  TEST_RESULTS_FOR_YEAR_CRUMB,
   TEST_RESULTS_DETAIL_CRUMB,
   TEST_RESULTS_ID_CRUMB,
   IMMUNISATIONS_CRUMB,

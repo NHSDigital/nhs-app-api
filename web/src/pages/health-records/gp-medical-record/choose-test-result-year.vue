@@ -55,16 +55,8 @@ export default {
   },
   computed: {
     page() {
-      if (this.$route.query.page) {
-        return Number(this.$route.query.page);
-      }
-      if (this.$store.state.myRecord.lastViewedTestResultYear) {
-        const year = this.$store.state.myRecord.lastViewedTestResultYear;
-        const yearDiff = this.previousYear - year;
-        const page = Math.trunc(yearDiff / this.pageYearCount) + 1;
-        return Number(page);
-      }
-      return 1;
+      const pageNumber = this.$route.query.page || '1';
+      return Number(pageNumber);
     },
     pastYearRangePath() {
       return `${CHOOSE_TEST_RESULT_YEAR_PATH}?page=${this.pastPageNumber}`;

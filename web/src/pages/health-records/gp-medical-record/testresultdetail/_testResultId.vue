@@ -12,8 +12,7 @@
       <div class="nhsuk-u-margin-top-3">
         <glossary v-if="result" />
         <desktopGenericBackLink
-          v-if="!$store.state.device.isNativeApp
-            && !tppSupportsTestResultsV2"
+          v-if="!$store.state.device.isNativeApp"
           class="nhsuk-u-margin-top-3"
           :path="getBackPath"
           :button-text="'generic.back'"
@@ -50,13 +49,6 @@ export default {
     },
   },
   async mounted() {
-    if (this.tppSupportsTestResultsV2) {
-      if (this.$route.query.from) {
-        this.$store.dispatch('navigation/setRouteCrumb', 'v2TestResultCrumb');
-      } else {
-        this.$store.dispatch('navigation/setRouteCrumb', 'v2ForYearCrumb');
-      }
-    }
     await this.$store.dispatch(
       'myRecord/loadDetailedTestResult',
       this.$route.params.testResultId,

@@ -12,8 +12,6 @@ export const SET_MEDICAL_RECORD_TYPE = 'SET_MEDICAL_RECORD_TYPE';
 export const SET_RELOAD = 'SET_RELOAD';
 export const TOGGLE_PATIENT_DETAIL = 'TOGGLE_PATIENT_DETAIL';
 export const ADD_ERROR = 'ADD_ERROR';
-export const SET_LAST_VIEWED_TEST_RESULT_YEAR = 'SET_LAST_VIEWED_TEST_RESULT_YEAR';
-export const CLEAR_LAST_VIEWED_TEST_RESULT_YEAR = 'CLEAR_LAST_VIEWED_TEST_RESULT_YEAR';
 export const initialState = () => ({
   hasAcceptedTerms: false,
   hasLoaded: false,
@@ -30,5 +28,4 @@ export const initialState = () => ({
   procedures: '',
   medicalRecordType: undefined,
   error: null,
-  lastViewedTestResultYear: null,
 });

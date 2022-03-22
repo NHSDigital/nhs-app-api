@@ -9,9 +9,6 @@ import {
   MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_PATH,
   MORE_ACCOUNTANDSETTINGS_PATH,
   PRESCRIPTION_TYPE_PATH,
-  CHOOSE_TEST_RESULT_YEAR_PATH,
-  GP_MEDICAL_RECORD_PATH,
-  TESTRESULTS_V2_PATH,
 } from '@/router/paths';
 import {
   GP_APPOINTMENTS_NAME,
@@ -33,10 +30,6 @@ import {
   MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_NAME,
   MORE_ACCOUNTANDSETTINGS_NAME,
   NOMINATED_PHARMACY_CHECK_NAME,
-  CHOOSE_TEST_RESULT_YEAR_NAME,
-  TEST_RESULTS_FOR_YEAR_NAME,
-  TESTRESULTS_V2_NAME,
-  GP_MEDICAL_RECORD_NAME,
 } from '@/router/names';
 
 /**
@@ -117,21 +110,5 @@ export default {
   [SWITCH_PROFILE_NAME]: {
     ignoreStore: true,
     defaultPath: INDEX_PATH,
-  },
-  [CHOOSE_TEST_RESULT_YEAR_NAME]: {
-    ignoreStore: true,
-    defaultPath: TESTRESULTS_V2_PATH,
-  },
-  [TEST_RESULTS_FOR_YEAR_NAME]: {
-    ignoreStore: true,
-    defaultPath: CHOOSE_TEST_RESULT_YEAR_PATH,
-  },
-  [TESTRESULTS_V2_NAME]: {
-    ignoreStore: true,
-    defaultPath: GP_MEDICAL_RECORD_PATH,
-  },
-  [GP_MEDICAL_RECORD_NAME]: {
-    ignoreStore: true,
-    defaultPath: HEALTH_RECORDS_PATH,
   },
 };
