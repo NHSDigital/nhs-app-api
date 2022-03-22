@@ -23,7 +23,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
         internal void AssertOnPage()
         {
             // Extending timeout to allow SSO to complete
-            using var extendedTimeout = ExtendedTimeout.FromSeconds(15);
+            using var extendedTimeout = ExtendedTimeout.FromSeconds(20);
 
             // There are no prescriptions mocks yet and so there will always be an error
             ErrorTitleText.AssertVisible();

@@ -13,28 +13,24 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
 
         internal OrderARepeatPrescriptionPageContent(IWebInteractor interactor) => _interactor = interactor;
 
-        private WebText ErrorTitleText => WebText.WithTagAndText(
+        private WebText TitleText => WebText.WithTagAndText(
             _interactor,
             "h1",
-            "Prescription data error");
+            "What type of prescription do you want to order?");
 
         private WebLink BackBreadcrumb => WebLink.WithText(_interactor, "Back");
-
-        private WebButton TryAgainButton => WebButton.WithText(_interactor, "Try Again");
 
         internal void AssertOnPage()
         {
             // Extending timeout to allow SSO to complete
             using var extendedTimeout = ExtendedTimeout.FromSeconds(15);
 
-            // There are no prescriptions mocks yet and so there will always be an error
-            ErrorTitleText.AssertVisible();
+            TitleText.AssertVisible();
         }
 
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
-            BackBreadcrumb,
-            TryAgainButton
+            BackBreadcrumb
         };
 
         public void KeyboardNavigateBack(AndroidKeyboardNavigation navigation)

@@ -76,6 +76,7 @@ namespace NHSOnline.IntegrationTests.Prescriptions
 
             AndroidPrescriptionsPage
                 .AssertOnPage(driver)
+                .TabIntoFocus()
                 .KeyboardNavigateToViewYourOrders();
 
             AndroidViewYourOrdersPage
