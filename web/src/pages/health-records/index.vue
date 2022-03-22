@@ -410,6 +410,7 @@ export default {
     window.scrollTo(0, 0);
   },
   mounted() {
+    this.$store.dispatch('navigation/setBackLinkOverride', HEALTH_RECORDS_PATH);
     this.$store.dispatch('device/unlockNavBar');
   },
   methods: {

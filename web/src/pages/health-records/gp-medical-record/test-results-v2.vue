@@ -4,7 +4,10 @@
                                       'pull-content',
                                       !$store.state.device.isNativeApp && $style.desktopWeb]">
       <h2>{{ getYear() }}</h2>
-      <test-results :results="results" :show-glossary="false" />
+      <test-results
+        :results="results"
+        :show-glossary="false"
+        :from="from"/>
       <menu-item-list class="nhsuk-u-margin-top-5">
         <menu-item id="view-older-results"
                    data-purpose="view-older-results"
@@ -41,6 +44,7 @@ export default {
     return {
       results: null,
       chooseTestResultYearPath: CHOOSE_TEST_RESULT_YEAR_PATH,
+      from: 'v2',
     };
   },
   computed: {
@@ -52,6 +56,7 @@ export default {
     },
   },
   async mounted() {
+    this.$store.dispatch('myRecord/clearLastViewedTestResultYear');
     if (!this.$store.state.myRecord.record.testResults) {
       await this.$store.dispatch('myRecord/load');
     }

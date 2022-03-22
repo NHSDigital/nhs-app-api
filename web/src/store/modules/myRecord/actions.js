@@ -12,6 +12,8 @@ import {
   TOGGLE_PATIENT_DETAIL,
   SET_MEDICAL_RECORD_TYPE,
   SET_RELOAD,
+  SET_LAST_VIEWED_TEST_RESULT_YEAR,
+  CLEAR_LAST_VIEWED_TEST_RESULT_YEAR,
   ADD_ERROR,
 } from '@/store/modules/myRecord/mutation-types';
 import AnalyticsValues from '@/lib/analytics-values';
@@ -96,6 +98,12 @@ export default {
     const { response: record }
       = await this.app.$http.getV1PatientHistoricTestResultsByYear({ year }) || {};
     commit(LOADED_HISTORIC_TEST_RESULTS, { record, year });
+  },
+  setLastViewedTestResultYear({ commit }, year) {
+    commit(SET_LAST_VIEWED_TEST_RESULT_YEAR, { year });
+  },
+  clearLastViewedTestResultYear({ commit }) {
+    commit(CLEAR_LAST_VIEWED_TEST_RESULT_YEAR);
   },
   reload({ commit }, value) {
     commit(SET_RELOAD, value);

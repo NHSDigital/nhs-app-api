@@ -16,6 +16,8 @@ import {
   SET_MEDICAL_RECORD_TYPE,
   SET_RELOAD,
   ADD_ERROR,
+  SET_LAST_VIEWED_TEST_RESULT_YEAR,
+  CLEAR_LAST_VIEWED_TEST_RESULT_YEAR,
   initialState,
 } from './mutation-types';
 
@@ -38,6 +40,7 @@ const clearState = (state) => {
   state.medicalRecordType = undefined;
   state.documentConsultationsWithComments = [];
   state.error = null;
+  state.lastViewedTestResultYear = null;
 };
 
 function parseCommentsFromDocConsultations(doc) {
@@ -159,5 +162,11 @@ export default {
   },
   [SET_MEDICAL_RECORD_TYPE](state, { medicalRecordType }) {
     state.medicalRecordType = medicalRecordType;
+  },
+  [SET_LAST_VIEWED_TEST_RESULT_YEAR](state, { year }) {
+    state.lastViewedTestResultYear = year;
+  },
+  [CLEAR_LAST_VIEWED_TEST_RESULT_YEAR](state) {
+    state.lastViewedTestResultYear = null;
   },
 };
