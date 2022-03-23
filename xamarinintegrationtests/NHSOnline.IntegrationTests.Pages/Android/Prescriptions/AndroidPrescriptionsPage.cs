@@ -23,10 +23,16 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Prescriptions
             _driver = driver;
         }
 
-        public static AndroidPrescriptionsPage AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidPrescriptionsPage AssertOnPage(IAndroidDriverWrapper driver, bool screenshot = false)
         {
             var page = new AndroidPrescriptionsPage(driver);
             page.PageContent.AssertOnPage();
+
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(AndroidPrescriptionsPage));
+            }
+
             return page;
         }
 

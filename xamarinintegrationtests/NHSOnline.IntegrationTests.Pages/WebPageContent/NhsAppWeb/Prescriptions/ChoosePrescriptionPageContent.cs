@@ -7,31 +7,43 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescriptions
 {
-    public class OrderARepeatPrescriptionPageContent
+    public class ChoosePrescriptionPageContent
     {
         private readonly IWebInteractor _interactor;
 
-        internal OrderARepeatPrescriptionPageContent(IWebInteractor interactor) => _interactor = interactor;
-
-        private WebLink BackBreadcrumb => WebLink.WithText(_interactor, "Back");
-
-        private WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
+        internal ChoosePrescriptionPageContent(IWebInteractor interactor) => _interactor = interactor;
 
         private WebText TitleText => WebText.WithTagAndText(
             _interactor,
             "h1",
-            "What type of prescription do you want to order?");
+            "Order a repeat prescription");
 
-        private WebRadioOption PrescriptionType => WebRadioOption.InFieldsetLegendWithLabel(_interactor,
-            "What type of prescription do you want to order?", "A repeat prescription");
+        private WebLink BackBreadcrumb => WebLink.WithText(_interactor, "Back");
 
-        public OrderARepeatPrescriptionPageContent ChooseRepeat()
+        private WebCheckbox PrescriptionCheckbox => WebCheckbox.WithLabel(_interactor, "Tablet");
+
+        private WebTextarea SpecialRequestText => WebTextarea.WithId(_interactor, "specialRequest");
+        private WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
+
+        public ChoosePrescriptionPageContent ChooseRepeat()
         {
-            PrescriptionType.Click();
+            PrescriptionCheckbox.Click();
+            return this;
+        }
+
+        public ChoosePrescriptionPageContent ClickPrescription()
+        {
+            PrescriptionCheckbox.Click();
             return this;
         }
 
         public void Continue() => ContinueButton.Click();
+
+        public ChoosePrescriptionPageContent InsertSpecialRequest()
+        {
+            SpecialRequestText.InsertText("I need this medication");
+            return this;
+        }
 
         internal void AssertOnPage()
         {

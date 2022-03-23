@@ -15,10 +15,16 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Prescriptions
 
         public PrescriptionsPageContent PageContent { get; }
 
-        public static IOSPrescriptionsPage AssertOnPage(IIOSDriverWrapper driver)
+        public static IOSPrescriptionsPage AssertOnPage(IIOSDriverWrapper driver, bool screenshot = false)
         {
             var page = new IOSPrescriptionsPage(driver);
             page.PageContent.AssertOnPage();
+
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(IOSPrescriptionsPage));
+            }
+
             return page;
         }
 

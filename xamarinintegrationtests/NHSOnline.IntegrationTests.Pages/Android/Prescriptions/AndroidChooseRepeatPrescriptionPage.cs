@@ -7,30 +7,30 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.Android.Prescriptions
 {
-    public class AndroidOrderARepeatPrescriptionPage
+    public class AndroidChooseRepeatPrescriptionPage
     {
         private readonly IAndroidDriverWrapper _driver;
 
         private AndroidFullNavigation Navigation { get; }
 
-        public OrderARepeatPrescriptionPageContent PageContent { get; }
-        
-        private AndroidOrderARepeatPrescriptionPage(IAndroidDriverWrapper driver)
+        public ChoosePrescriptionPageContent PageContent { get; }
+
+
+        private AndroidChooseRepeatPrescriptionPage(IAndroidDriverWrapper driver)
         {
             _driver = driver;
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new OrderARepeatPrescriptionPageContent(driver.Web.NhsAppLoggedInWebView());
+            PageContent = new ChoosePrescriptionPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
-        public static AndroidOrderARepeatPrescriptionPage AssertOnPage(IAndroidDriverWrapper driver,
-            bool screenshot = false)
+        public static AndroidChooseRepeatPrescriptionPage AssertOnPage(IAndroidDriverWrapper driver, bool screenshot = false)
         {
-            var page = new AndroidOrderARepeatPrescriptionPage(driver);
+            var page = new AndroidChooseRepeatPrescriptionPage(driver);
             page.PageContent.AssertOnPage();
 
             if (screenshot)
             {
-                driver.Screenshot(nameof(AndroidOrderARepeatPrescriptionPage));
+                driver.Screenshot(nameof(AndroidChooseRepeatPrescriptionPage));
             }
 
             return page;

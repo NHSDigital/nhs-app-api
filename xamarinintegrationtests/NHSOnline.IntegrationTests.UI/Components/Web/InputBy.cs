@@ -17,6 +17,6 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
 
         internal By Input => By.XPath($"//input[@type={_type.QuoteXPathLiteral()} and ../{LabelXPath}/@for=@id]");
 
-        private string LabelXPath => $"label[normalize-space()={_label.QuoteXPathLiteral()}]";
+        private string LabelXPath => $"label[contains(normalize-space(string()), {_label.QuoteXPathLiteral()})]";
     }
 }
