@@ -20,7 +20,8 @@ namespace NHSOnline.App.Services
                 .AddTransient<IBrowserOverlay, BrowserOverlay>()
                 .AddTransient<ISelectMediaService, SelectMediaService>()
                 .AddTransient<IUserPreferencesService, UserPreferencesService>()
-                .AddTransient<RedirectorUrlFactory>();
+                .AddTransient<RedirectorUrlFactory>()
+                .AddTransient<FileDownloadService>();
         }
     }
 }

@@ -53,6 +53,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertNativeHeaderAllIcons()
                 .PageContent.DownloadImage();
 
+            AndroidStorageProminentDialog
+                .AssertDisplayed(driver)
+                .Ok();
+
             AndroidFilePermissionsDialog
                 .AssertDisplayed(driver)
                 .Allow();
@@ -99,6 +103,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver)
                 .AssertNativeHeaderAllIcons()
                 .PageContent.DownloadImage();
+
+            AndroidStorageProminentDialog
+                .AssertDisplayed(driver)
+                .Ok();
 
             AndroidFilePermissionsDialog
                 .AssertDisplayed(driver)
@@ -178,6 +186,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver)
                 .AssertNativeHeaderAllIcons()
                 .PageContent.DownloadImage();
+
+            AndroidStorageProminentDialog
+                .AssertDisplayed(driver)
+                .Ok();
 
             AndroidFilePermissionsDialog
                 .AssertDisplayed(driver)
@@ -318,6 +330,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertNativeHeaderAllIcons()
                 .PageContent.DownloadPass();
 
+            AndroidStorageProminentDialog
+                .AssertDisplayed(driver)
+                .Ok();
+
             AndroidFilePermissionsDialog
                 .AssertDisplayed(driver)
                 .Allow();
@@ -348,6 +364,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertNativeHeaderAllIcons()
                 .PageContent.DownloadPass();
 
+            AndroidStorageProminentDialog
+                .AssertDisplayed(driver)
+                .Ok();
+
             AndroidFilePermissionsDialog
                 .AssertDisplayed(driver)
                 .Allow();
@@ -377,6 +397,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver)
                 .AssertNativeHeaderAllIcons()
                 .PageContent.DownloadCorrupted();
+
+            AndroidStorageProminentDialog
+                .AssertDisplayed(driver)
+                .Ok();
 
             AndroidFilePermissionsDialog
                 .AssertDisplayed(driver)
@@ -412,6 +436,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertNativeHeaderAllIcons()
                 .PageContent.DownloadCorrupted();
 
+            AndroidStorageProminentDialog
+                .AssertDisplayed(driver)
+                .Ok();
+
             AndroidFilePermissionsDialog
                 .AssertDisplayed(driver)
                 .Allow();
@@ -445,6 +473,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver)
                 .AssertNativeHeaderAllIcons()
                 .PageContent.DownloadCorrupted();
+
+            AndroidStorageProminentDialog
+                .AssertDisplayed(driver)
+                .Ok();
 
             AndroidFilePermissionsDialog
                 .AssertDisplayed(driver)

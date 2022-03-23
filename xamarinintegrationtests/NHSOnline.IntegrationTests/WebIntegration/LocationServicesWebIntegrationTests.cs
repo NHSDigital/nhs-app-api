@@ -38,6 +38,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertNativeHeader()
                 .ShowLocation();
 
+            AndroidLocationProminentDialog
+                .AssertDisplayed(driver)
+                .Ok();
+
             AndroidLocationServicesPermissionsDialog
                 .AssertDisplayed(driver)
                 .Deny();
@@ -119,6 +123,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
                 .ShowLocation();
+
+            AndroidLocationProminentDialog
+                .AssertDisplayed(driver)
+                .Ok();
 
             AndroidLocationServicesPermissionsDialog
                 .AssertDisplayed(driver)

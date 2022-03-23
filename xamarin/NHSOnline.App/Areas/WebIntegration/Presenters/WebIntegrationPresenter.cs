@@ -11,7 +11,6 @@ using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Services;
 using NHSOnline.App.Threading;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.WebIntegration.Presenters
@@ -29,6 +28,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
         private readonly ICalendar _calendar;
         private readonly IFileHandler _fileHandler;
         private readonly IPageFactory _pageFactory;
+        private readonly IDialogPresenter _dialogPresenter;
+        private readonly FileDownloadService _fileDownloadService;
 
         public WebIntegrationPresenter(
             IWebIntegrationView webIntegrationView,
@@ -38,7 +39,9 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             ILogger<WebIntegrationPresenter> logger,
             ICalendar calendar,
             IFileHandler fileHandler,
-            IPageFactory pageFactory)
+            IPageFactory pageFactory,
+            IDialogPresenter dialogPresenter,
+            FileDownloadService fileDownloadService)
         {
             _view = webIntegrationView;
             _model = model;
@@ -47,6 +50,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             _calendar = calendar;
             _fileHandler = fileHandler;
             _pageFactory = pageFactory;
+            _dialogPresenter = dialogPresenter;
+            _fileDownloadService = fileDownloadService;
 
             _uriDestination = new WebIntegrationUriDestination(nhsLoginConfiguration, model.WebIntegrationRequest.Url, model.AdditionalDomains);
             _singleSignOnMonitor = new SingleSignOnMonitor(nhsLoginConfiguration, logger);
@@ -97,32 +102,15 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
         private async Task StartDownloadRequested(DownloadRequest downloadRequest)
         {
-            var storagePermissionCheck = await Permissions.CheckStatusAsync<Permissions.StorageWrite>().PreserveThreadContext();
-
-            if (storagePermissionCheck == PermissionStatus.Granted)
-            {
-                await AttemptDownloadFile(downloadRequest).PreserveThreadContext();
-            }
-            else
-            {
-                var storagePermissionRequest = await Permissions.RequestAsync<Permissions.StorageWrite>().PreserveThreadContext();
-
-                if (storagePermissionRequest == PermissionStatus.Granted)
+            await _fileDownloadService.StartDownloadRequested(_dialogPresenter, downloadRequest, _fileHandler,
+                _view.GetWebViewElement(),
+                async () =>
                 {
-                    await AttemptDownloadFile(downloadRequest).PreserveThreadContext();
-                }
-            }
-        }
-
-        private async Task AttemptDownloadFile(DownloadRequest downloadRequest)
-        {
-            var handleFileResult = await _fileHandler.DownloadFile(downloadRequest, _view.GetWebViewElement()).PreserveThreadContext();
-            if (handleFileResult is DownloadFileResult.Failed)
-            {
-                var model = new FullNavigationTryAgainFileDownloadErrorModel(_model.NavigationHandler, _model.FooterItem, _model.HelpUrl);
-                var page = _pageFactory.CreatePageFor(model);
-                await _view.AppNavigation.Push(page).PreserveThreadContext();
-            }
+                    var model = new FullNavigationTryAgainFileDownloadErrorModel(_model.NavigationHandler,
+                        _model.FooterItem, _model.HelpUrl);
+                    var page = _pageFactory.CreatePageFor(model);
+                    await _view.AppNavigation.Push(page).PreserveThreadContext();
+                }).PreserveThreadContext();
         }
 
         private async Task DeeplinkRequested(Uri deepLinkUrl)

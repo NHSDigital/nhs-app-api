@@ -2,6 +2,8 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls.WebViews.Payloads;
+using NHSOnline.App.DependencyServices;
+using NHSOnline.App.Dialogs;
 using NHSOnline.App.Threading;
 using Xamarin.Essentials;
 
@@ -10,14 +12,126 @@ namespace NHSOnline.App.Services.Media
     public class SelectMediaService : ISelectMediaService
     {
         private readonly ILogger<SelectMediaService> _logger;
-        public SelectMediaService(ILogger<SelectMediaService> logger)
+        private readonly IDialogPresenter _dialogPresenter;
+
+        private const string AcceptedCameraDialogLogText =
+            "User has accepted the info dialog for the camera permission";
+
+        private const string CancelledCameraDialogLogText =
+            "User has cancelled the info dialog for the camera permission";
+
+        private const string AcceptedStorageDialogLogText =
+            "User has accepted the info dialog for the file storage permission";
+
+        private const string CancelledStorageDialogLogText =
+            "User has cancelled the info dialog for the file storage permission";
+
+        private const string FirstCameraSharedPrefKey = "FirstCameraRationaleShown";
+
+        private const string FirstStorageReadSharedPrefKey = "FirstStorageReadRationaleShown";
+
+        public SelectMediaService(ILogger<SelectMediaService> logger, IDialogPresenter dialogPresenter)
         {
             _logger = logger;
+            _dialogPresenter = dialogPresenter;
         }
 
         public async Task SelectMedia(ISelectMediaRequest selectMediaRequest)
         {
-            var file = selectMediaRequest switch
+            var prefKey =
+                selectMediaRequest.Mode == SelectMediaMode.Take
+                    ? FirstCameraSharedPrefKey
+                    : FirstStorageReadSharedPrefKey;
+
+            var permissionRationale =
+                selectMediaRequest.Mode == SelectMediaMode.Take
+                    ? Permissions.ShouldShowRationale<Permissions.Camera>()
+                    : Permissions.ShouldShowRationale<Permissions.StorageRead>();
+
+            if (_dialogPresenter.ShouldShowProminentDialog(prefKey, permissionRationale))
+            {
+                if (selectMediaRequest.Mode == SelectMediaMode.Take)
+                {
+                    await _dialogPresenter.DisplayAlertDialog(
+                        new CameraPermissionRationale(async () =>
+                        {
+                            _logger.LogError(AcceptedCameraDialogLogText);
+
+                            if (!Preferences.ContainsKey(prefKey))
+                            {
+                                Preferences.Set(prefKey, "true");
+                            }
+
+                            var file = await RetrieveFile(selectMediaRequest).PreserveThreadContext();
+
+                            if (file is null)
+                            {
+                                selectMediaRequest.NoMediaSelected();
+                            }
+                            else
+                            {
+                                selectMediaRequest.MediaSelected(file.FullPath);
+                            }
+                        }, () =>
+                        {
+                            _logger.LogError(CancelledCameraDialogLogText);
+
+                            selectMediaRequest.NoMediaSelected();
+
+                            return Task.CompletedTask;
+                        })).PreserveThreadContext();
+                }
+                else
+                {
+                    await _dialogPresenter.DisplayAlertDialog(
+                        new FileStoragePermissionRationale(async () =>
+                        {
+                            _logger.LogError(AcceptedStorageDialogLogText);
+
+                            if (!Preferences.ContainsKey(prefKey))
+                            {
+                                Preferences.Set(prefKey, "true");
+                            }
+
+                            var file = await RetrieveFile(selectMediaRequest).PreserveThreadContext();
+
+                            if (file is null)
+                            {
+                                selectMediaRequest.NoMediaSelected();
+                            }
+                            else
+                            {
+                                selectMediaRequest.MediaSelected(file.FullPath);
+                            }
+                        }, () =>
+                        {
+                            _logger.LogError(CancelledStorageDialogLogText);
+
+                            selectMediaRequest.NoMediaSelected();
+
+                            return Task.CompletedTask;
+                        })).PreserveThreadContext();
+                }
+
+            }
+            else
+            {
+                var file = await RetrieveFile(selectMediaRequest).PreserveThreadContext();
+
+                if (file is null)
+                {
+                    selectMediaRequest.NoMediaSelected();
+                }
+                else
+                {
+                    selectMediaRequest.MediaSelected(file.FullPath);
+                }
+            }
+        }
+
+        private async Task<FileResult?> RetrieveFile(ISelectMediaRequest selectMediaRequest)
+        {
+            return selectMediaRequest switch
             {
                 {Type: SelectMediaType.Image, Mode: SelectMediaMode.Pick}
                     => await PickPhoto().PreserveThreadContext(),
@@ -34,15 +148,6 @@ namespace NHSOnline.App.Services.Media
                 _ => throw new NotSupportedException(
                     $"Type: {selectMediaRequest.Type}; Mode: {selectMediaRequest.Mode}: Not Supported")
             };
-
-            if (file is null)
-            {
-                selectMediaRequest.NoMediaSelected();
-            }
-            else
-            {
-                selectMediaRequest.MediaSelected(file.FullPath);
-            }
         }
 
         private async Task<FileResult?> TakePhoto()

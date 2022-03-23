@@ -11,6 +11,8 @@ namespace NHSOnline.App.iOS.DependencyServices.AlertDialog
 {
     public class IosDialogPresenter : IDialogPresenter
     {
+        public bool ShouldShowProminentDialog(string preferenceKey, bool shouldShowRationale) => false;
+
         public async Task DisplayAlertDialog(Dialogs.NhsAppAlertDialog nhsAppAlert)
         {
             await AlertDialogBoxController.ShowAlertPopup(nhsAppAlert).ResumeOnThreadPool();

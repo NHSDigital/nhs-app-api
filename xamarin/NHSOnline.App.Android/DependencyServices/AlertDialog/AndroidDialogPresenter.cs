@@ -8,6 +8,7 @@ using NHSOnline.App.Dialogs;
 using NHSOnline.App.Droid.DependencyServices.AlertDialog;
 using NHSOnline.App.Logging;
 using NHSOnline.App.Threading;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(AndroidDialogPresenter))]
@@ -19,6 +20,9 @@ namespace NHSOnline.App.Droid.DependencyServices.AlertDialog
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(AndroidDialogPresenter));
 
         private static DismissibleDialog? ActiveDialog { get; set; }
+
+        public bool ShouldShowProminentDialog(string preferenceKey, bool shouldShowRationale) =>
+            shouldShowRationale || !Preferences.ContainsKey(preferenceKey);
 
         public async Task DisplayAlertDialog(NhsAppAlertDialog nhsAppAlert)
         {

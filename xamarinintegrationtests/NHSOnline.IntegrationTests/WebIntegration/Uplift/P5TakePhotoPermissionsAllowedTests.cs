@@ -34,6 +34,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
                 .AssertOnPage(driver)
                 .OpenCamera();
 
+            AndroidCameraProminentDialog
+                .AssertDisplayed(driver)
+                .Ok();
+
             AndroidCameraPermissionsDialog
                 .AssertDisplayed(driver)
                 .Allow();

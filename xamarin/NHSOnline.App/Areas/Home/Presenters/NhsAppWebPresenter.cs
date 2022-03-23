@@ -45,6 +45,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly ISettingsService _settingsService;
         private readonly IFileHandler _fileHandler;
         private readonly IDialogPresenter _dialogPresenter;
+        private readonly FileDownloadService _fileDownloadService;
 
         public NhsAppWebPresenter(
             NhsAppWebModel model,
@@ -60,7 +61,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
             ISettingsService settingsService,
             ICalendar calendar,
             IFileHandler fileHandler,
-            IDialogPresenter dialogPresenter)
+            IDialogPresenter dialogPresenter,
+            FileDownloadService fileDownloadService)
         {
             _model = model;
             _view = view;
@@ -77,6 +79,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _calendar = calendar;
             _fileHandler = fileHandler;
             _dialogPresenter = dialogPresenter;
+            _fileDownloadService = fileDownloadService;
             _navigationHandler = new NhsAppNavigationHandler(view);
 
             _view.AppNavigation
@@ -217,32 +220,14 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         private async Task StartDownloadRequested(DownloadRequest downloadRequest)
         {
-            var storagePermissionCheck = await Permissions.CheckStatusAsync<Permissions.StorageWrite>().PreserveThreadContext();
-
-            if (storagePermissionCheck == PermissionStatus.Granted)
-            {
-                await AttemptDownloadFile(downloadRequest).PreserveThreadContext();
-            }
-            else
-            {
-                var storagePermissionRequest = await Permissions.RequestAsync<Permissions.StorageWrite>().PreserveThreadContext();
-
-                if (storagePermissionRequest == PermissionStatus.Granted)
+            await _fileDownloadService.StartDownloadRequested(_dialogPresenter, downloadRequest, _fileHandler,
+                _view.GetWebViewElement(),
+                async () =>
                 {
-                    await AttemptDownloadFile(downloadRequest).PreserveThreadContext();
-                }
-            }
-        }
-
-        private async Task AttemptDownloadFile(DownloadRequest downloadRequest)
-        {
-            var handleFileResult = await _fileHandler.DownloadFile(downloadRequest, _view.GetWebViewElement()).PreserveThreadContext();
-            if (handleFileResult is DownloadFileResult.Failed)
-            {
-                var model = new FullNavigationTryAgainFileDownloadErrorModel(GetNewPopToRootHandler(), _view.SelectedNavigationFooterItem);
-                var page = _pageFactory.CreatePageFor(model);
-                await _view.AppNavigation.Push(page).PreserveThreadContext();
-            }
+                    var model = new FullNavigationTryAgainFileDownloadErrorModel(GetNewPopToRootHandler(), _view.SelectedNavigationFooterItem);
+                    var page = _pageFactory.CreatePageFor(model);
+                    await _view.AppNavigation.Push(page).PreserveThreadContext();
+                }).PreserveThreadContext();
         }
 
         private async Task AddEventToCalendarRequested(AddEventToCalendarRequest request)

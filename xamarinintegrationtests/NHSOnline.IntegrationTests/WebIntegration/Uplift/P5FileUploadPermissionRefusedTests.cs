@@ -29,6 +29,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
                 .AssertOnPage(driver)
                 .UploadFile();
 
+            AndroidStorageProminentDialog
+                .AssertDisplayed(driver)
+                .Ok();
+
             AndroidFilePermissionsDialog
                 .AssertDisplayed(driver)
                 .Deny();
