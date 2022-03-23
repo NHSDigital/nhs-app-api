@@ -44,7 +44,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             _auditor = auditor;
         }
 
-        public async Task<IActionResult> Visit(CreateSessionResult.Success success, HttpContext httpContext, string sessionCookieExpiryToken, string referrer)
+        public async Task<IActionResult> Visit(CreateSessionResult.Success success,
+                                                HttpContext httpContext,
+                                                string sessionCookieExpiryToken,
+                                                string referrer,
+                                                string integrationReferrer)
         {
             var userSession = success.UserSession;
             var serviceJourneyRules = success.ServiceJourneyRules;
@@ -68,11 +72,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                                                             string.IsNullOrEmpty(responseBody.NhsNumber) ? " " : responseBody.NhsNumber,
                                                             Supplier.Unknown,
                                                             AuditingOperations.LoginSuccess,
-                                                            $"Successful Login with SessionId: {userSession.Key}, " +
-                                                            $"Referrer: {referrer}",
-                                                            referrer);
-
-            _logger.LogInformation($"Audited  SessionId: {userSession.Key}, Referrer {referrer} - after successful login");
+                                                            $"Successful Login with SessionId: {userSession.Key}",
+                                                            referrer,
+                                                            integrationReferrer);
 
             return new CreatedResult(string.Empty, responseBody);
         }

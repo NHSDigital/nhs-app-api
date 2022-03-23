@@ -102,10 +102,16 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 var result = await _sessionCreator.CreateSession(request);
 
                 var referrer = "";
+                var integrationReferrer = "";
 
                 if (model?.Referrer != null)
                 {
                     referrer = model.Referrer;
+                }
+
+                if (model?.IntegrationReferrer != null)
+                {
+                    integrationReferrer = model.IntegrationReferrer;
                 }
 
                 if (result is CreateSessionResult.Success success)
@@ -114,7 +120,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                     _logger.LogInformation($"User Session Key JTI ending: {jti}");
                 }
 
-                return await result.Accept(_sessionResultVisitor, HttpContext, sessionExpiryCookieToken, referrer);
+                return await result.Accept(_sessionResultVisitor, HttpContext, sessionExpiryCookieToken, referrer, integrationReferrer);
             }
             finally
             {

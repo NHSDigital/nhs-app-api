@@ -30,6 +30,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         private static readonly string AccessToken = AuditorTestResources.AccessTokenValid;
         private static string _odsCode;
         private static string _referrer = "";
+        private static string integrationReferrer = "";
 
         private IFixture _fixture;
         private Stream _stream;
@@ -169,7 +170,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
 
                 using (_auditor.BeginScope(dummyContext))
                 {
-                    await _auditor.PostOperationAuditSessionEvent(accessToken, nhsNumber, supplier, operation, details, referrer, parameters);
+                    await _auditor.PostOperationAuditSessionEvent(accessToken, nhsNumber, supplier, operation, details, referrer, integrationReferrer, parameters);
                 }
             }
         }

@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             };
 
             // Act
-            await Context.CreateSystemUnderTest().Visit(Context.Data.SuccessResult, Context.Mocks.HttpContext.Object, expectedJwtToken, "");
+            await Context.CreateSystemUnderTest().Visit(Context.Data.SuccessResult, Context.Mocks.HttpContext.Object, expectedJwtToken, "referrer", "integrationReferrer");
 
             // Assert
             Context.Mocks.ResponseCookies
