@@ -74,7 +74,7 @@ namespace NHSOnline.App
             Justification = "Parsing at the app level rather than in the individual apps")]
         public void HandleDeeplink(string deeplinkUrl)
         {
-            if (Uri.TryCreate(deeplinkUrl, UriKind.RelativeOrAbsolute, out var targetUri))
+            if (Uri.TryCreate(deeplinkUrl, UriKind.Absolute, out var targetUri))
             {
                 if (NavigationPage?.CurrentPage is INavigationView currentPage)
                 {
