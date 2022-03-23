@@ -22,6 +22,6 @@ namespace NHSOnline.App.Services.FIDO
 
         byte[] IFidoKey.PublicKeyEccX962Raw() => _key.PublicKeyEccX962Raw();
 
-        async Task<byte[]> IFidoKey.SignBytes(byte[] toSign) => await _signer.SignBytes(toSign).ResumeOnThreadPool();
+        async Task<byte[]> IFidoKey.SignBytes(byte[] toSign) => await _signer.SignBytes(toSign).PreserveThreadContext();
     }
 }

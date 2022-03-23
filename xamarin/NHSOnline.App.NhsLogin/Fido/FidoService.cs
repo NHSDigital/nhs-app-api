@@ -51,7 +51,7 @@ namespace NHSOnline.App.NhsLogin.Fido
         {
             try
             {
-                return await _authorisationService.Authorise(fidoKey).ResumeOnThreadPool();
+                return await _authorisationService.Authorise(fidoKey).PreserveThreadContext();
             }
             catch (CrossPlatformException e) when (e.ErrorType is CrossPlatformErrorType.UnrecoverableKey)
             {

@@ -47,7 +47,7 @@ namespace NHSOnline.App.NhsLogin.Fido.Assertion
 
             bytesToSignWriter(bytesToSign);
 
-            var signatureBytes = await signer(bytesToSign.ToArray()).ResumeOnThreadPool();
+            var signatureBytes = await signer(bytesToSign.ToArray()).PreserveThreadContext();
             signature.SigBytes(signatureBytes);
 
             return _builder;

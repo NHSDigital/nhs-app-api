@@ -29,11 +29,11 @@ namespace NHSOnline.App.NhsLogin.Fido
 
         internal async Task<FidoRegisterResult> Register(IFidoKey key, string accessToken)
         {
-            var registrationRequest = await GetRegistrationRequest(accessToken).ResumeOnThreadPool();
+            var registrationRequest = await GetRegistrationRequest(accessToken).PreserveThreadContext();
 
-            var registrationResponse = await CreateAndSignRegistrationResponse(registrationRequest, key).ResumeOnThreadPool();
+            var registrationResponse = await CreateAndSignRegistrationResponse(registrationRequest, key).PreserveThreadContext();
 
-            return await PostRegistrationResponse(registrationResponse, accessToken).ResumeOnThreadPool();
+            return await PostRegistrationResponse(registrationResponse, accessToken).PreserveThreadContext();
         }
 
         internal async Task Deregister(string accessToken, string keyId)
@@ -70,7 +70,7 @@ namespace NHSOnline.App.NhsLogin.Fido
             header.AppId = AppId;
 
             var finalChallengeParams = GenerateFinalChallengeParams(registrationRequest.Challenge);
-            var assertion = await GenerateRegistrationAssertion(key, finalChallengeParams).ResumeOnThreadPool();
+            var assertion = await GenerateRegistrationAssertion(key, finalChallengeParams).PreserveThreadContext();
 
             var registrationResponse = new UafRegistrationResponse
             {
@@ -106,9 +106,9 @@ namespace NHSOnline.App.NhsLogin.Fido
                 .KeyId(key.KeyId())
                 .PublicKeyEccX962Raw(key.PublicKeyEccX962Raw());
 
-            builder = await builder.Sign(key.SignBytes).ResumeOnThreadPool();
+            builder = await builder.Sign(key.SignBytes).PreserveThreadContext();
 
-            return await builder.Build().ResumeOnThreadPool();
+            return await builder.Build().PreserveThreadContext();
         }
 
         private async Task<FidoRegisterResult> PostRegistrationResponse(UafRegistrationResponse registrationResponse, string accessToken)

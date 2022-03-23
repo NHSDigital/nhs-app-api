@@ -79,7 +79,7 @@ namespace NHSOnline.App.Services.FIDO
 
         private async Task<BiometricLoginResult> DoFidoLogin(string keyId, IBiometricAuthKey key, IBiometricAuthSigner signer)
         {
-            var result = await _fidoService.Authorise(new FidoKey(keyId, key, signer)).ResumeOnThreadPool();
+            var result = await _fidoService.Authorise(new FidoKey(keyId, key, signer)).PreserveThreadContext();
             return result.Accept(new FidoAuthorisationResultVisitor());
         }
 

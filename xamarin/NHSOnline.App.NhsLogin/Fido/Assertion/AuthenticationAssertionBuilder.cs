@@ -23,7 +23,7 @@ namespace NHSOnline.App.NhsLogin.Fido.Assertion
             => _assertionBuilder.KeyId(_assertion.UafV1SignedData.KeyId, keyId);
 
         public async Task<AuthenticationAssertionBuilder> Sign(Func<byte[], Task<byte[]>> signer)
-            => await _assertionBuilder.Sign(signer, _assertion.UafV1SignedData.Write, _assertion.Signature).ResumeOnThreadPool();
+            => await _assertionBuilder.Sign(signer, _assertion.UafV1SignedData.Write, _assertion.Signature).PreserveThreadContext();
 
         public async Task<string> Build()
             => await _assertionBuilder.Build("Authentication", _assertion).ResumeOnThreadPool();

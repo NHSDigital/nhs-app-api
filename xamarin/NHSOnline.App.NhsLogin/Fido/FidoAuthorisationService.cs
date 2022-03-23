@@ -26,14 +26,14 @@ namespace NHSOnline.App.NhsLogin.Fido
 
         public async Task<FidoAuthorisationResult> Authorise(IFidoKey fidoKey)
         {
-            var authRequest = await GetAuthRequest().ResumeOnThreadPool();
+            var authRequest = await GetAuthRequest().PreserveThreadContext();
 
             var header = authRequest.Header.DeepClone();
             header.AppId = AppId;
 
             var finalChallengeParams = GenerateFinalChallengeParams(authRequest.Challenge);
 
-            var assertion = await GenerateAuthenticationAssertion(fidoKey, finalChallengeParams).ResumeOnThreadPool();
+            var assertion = await GenerateAuthenticationAssertion(fidoKey, finalChallengeParams).PreserveThreadContext();
 
             var authResponse = new UafAuthenticationResponse
             {
@@ -94,8 +94,8 @@ namespace NHSOnline.App.NhsLogin.Fido
                 .FinalChallengeParams(fcParams)
                 .KeyId(key.KeyId());
 
-                builder = await builder.Sign(key.SignBytes).ResumeOnThreadPool();
-                return await builder.Build().ResumeOnThreadPool();
+                builder = await builder.Sign(key.SignBytes).PreserveThreadContext();
+                return await builder.Build().PreserveThreadContext();
         }
     }
 }
