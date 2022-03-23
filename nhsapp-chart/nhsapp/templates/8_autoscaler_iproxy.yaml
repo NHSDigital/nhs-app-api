@@ -18,4 +18,6 @@ spec:
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ $.Values.iproxy.targetCPUUtilizationPercentage }}
+        target:
+          type: Utilization
+          averageUtilization: {{ $.Values.iproxy.targetCPUUtilizationPercentage }}
