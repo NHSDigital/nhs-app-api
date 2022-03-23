@@ -43,10 +43,13 @@ namespace NHSOnline.App.Areas.Errors.Presenters
                 .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler);
         }
 
-        private Task HelpRequested()
+        private async Task HelpRequested()
         {
             _logger.LogInformation("Help requested");
-            return _browserOverlay.OpenBrowserOverlay( _model.HelpUrl ?? _nhsExternalServicesConfiguration.NhsUkHealthRecordDownloadHelpUrl);
+
+            await _browserOverlay
+                .OpenBrowserOverlay(_model.HelpUrl ?? _nhsExternalServicesConfiguration.NhsUkHealthRecordDownloadHelpUrl)
+                .PreserveThreadContext();
         }
 
         private async Task TryAgainRequested()
