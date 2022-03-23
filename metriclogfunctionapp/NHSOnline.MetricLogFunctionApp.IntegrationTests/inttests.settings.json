@@ -1,0 +1,391 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "ClusterName": "dev",
+    "AzureWebJobsStorage": "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://storage:10000/devstoreaccount1;QueueEndpoint=http://storage:10001/devstoreaccount1;",
+
+    "AzureFileRepository__AzureFileContainer": "integration-tests",
+    "AzureFileRepository__AzureFileStorage": "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://storage:10000/devstoreaccount1;QueueEndpoint=http://storage:10001/devstoreaccount1;",
+
+    "ServiceAlert__SlackChannel": "service-alert",
+    "ServiceAlert__FailureSlackChannel": "service-alert-failure",
+
+    "HighLoginFailureAlert__MaxFailures": 5,
+    "HighLoginFailureAlert__MinFailures": 2,
+    "HighLoginFailureAlert__MaxFailurePercent": 25,
+
+    "UnknownErrorsAlert__MaxFailures": 5,
+    "UnknownErrorsAlert__MinFailures": 2,
+    "UnknownErrorsAlert__MaxFailurePercent": 25,
+
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "FUNCTIONS_EXTENSION_VERSION": "~3",
+
+    "QueueNameSuffix": "dev-local",
+
+    "Splunk__Address": "https://splunk:8089",
+    "Splunk__UserName": "admin",
+    "Splunk__Password": "password",
+    "Splunk__App": "search",
+    "Splunk__IndexSuffix": "local",
+    "SplunkSpecialCategory__Address": "https://splunk:8089",
+    "SplunkSpecialCategory__UserName": "admin",
+    "SplunkSpecialCategory__Password": "password",
+    "SplunkSpecialCategory__App": "search",
+    "SplunkSpecialCategory__IndexSuffix": "local",
+
+    "TestData__NumberOfLogins": 1850,
+    "TestData__NumberOfNewUsers": 500,
+    "TestData__PercentageOfNewUsersWhoAreP9": 50,
+    "TestData__NumberOfP9Uplifts": 350,
+    "TestData__PercentageOfNewUsersConsenting": 90,
+
+    "Spine__OrganisationsBaseUri": "http://host.docker.internal:8080/spine/ORD/2-0-0/organisations",
+
+    "AppleDownloads__AppleEndpoint": "http://host.docker.internal:8080/mockDownloadFile/v1/salesReports?filter[reportSubType]=SUMMARY&filter[reportType]=SALES&filter[reportDate]={date}&filter[frequency]=DAILY&filter[vendorNumber]={vendorNumber}&filter[version]=1_0",
+    "AppleDownloads__AppleVendorNumber": "88122785",
+    "AppleDownloads__AppleKid": "ZHJJ3L7LAT",
+    "AppleDownloads__AppleIssueId": "69a6de7e-8a94-47e3-e053-5b8c7c11a4d1",
+    "AppleDownloads__ECParameterD": "wCDiHDznU2Ss1dHcal+b/r5We1keiJD8IQ7UXHEV5Yc=",
+    "AppleDownloads__ECParameterX": "bGawvCDbAWHHXeuijtZTt5wQ2JHtSWYOg1LKdxGy4g0=",
+    "AppleDownloads__ECParameterY": "WirWB7N2lCWEtdqAksonbVdZxG6YWVy+h3It4tE4CBc=",
+
+    "GoogleDownloads__GoogleAccountType": "TestString",
+    "GoogleDownloads__GoogleProjectId": "TestString",
+    "GoogleDownloads__GooglePrivateKeyId": "TestString",
+    "GoogleDownloads__GooglePrivateKey": "TestString",
+    "GoogleDownloads__GoogleClientEmail": "TestString",
+    "GoogleDownloads__GoogleClientId": "TestString",
+    "GoogleDownloads__GoogleAuthUri": "TestString",
+    "GoogleDownloads__GoogleTokenUri": "TestString",
+    "GoogleDownloads__GoogleAuthProviderX509CertUrl": "TestString",
+    "GoogleDownloads__GoogleClientX509CertUrl": "TestString",
+    "GoogleDownloads__GoogleStorageBucketName": "TestString",
+
+    "EmisResponsesAlert__MaxUnexpectedResponsePercentage": "10",
+    "EmisResponsesAlert__MaxUnexpectedResponses": "1000",
+    "EmisResponsesAlert__MinUnexpectedResponses": "100",
+    "TppResponsesAlert__MaxUnexpectedResponsePercentage": "10",
+    "TppResponsesAlert__MaxUnexpectedResponses": "1000",
+    "TppResponsesAlert__MinUnexpectedResponses": "100",
+    "VisionResponsesAlert__MaxUnexpectedResponsePercentage": "10",
+    "VisionResponsesAlert__MaxUnexpectedResponses": "1000",
+    "VisionResponsesAlert__MinUnexpectedResponses": "100",
+    "NhsLoginResponsesAlert__MaxUnexpectedResponsePercentage": "10",
+    "NhsLoginResponsesAlert__MaxUnexpectedResponses": "1000",
+    "NhsLoginResponsesAlert__MinUnexpectedResponses": "100",
+    "EConsultResponsesAlert__MaxUnexpectedResponsePercentage": "10",
+    "EConsultResponsesAlert__MaxUnexpectedResponses": "1000",
+    "EConsultResponsesAlert__MinUnexpectedResponses": "100",
+    "OrganDonationResponsesAlert__MaxUnexpectedResponsePercentage": "10",
+    "OrganDonationResponsesAlert__MaxUnexpectedResponses": "1000",
+    "OrganDonationResponsesAlert__MinUnexpectedResponses": "100",
+    "PharmacySearchResponsesAlert__MaxUnexpectedResponsePercentage": "10",
+    "PharmacySearchResponsesAlert__MaxUnexpectedResponses": "1000",
+    "PharmacySearchResponsesAlert__MinUnexpectedResponses": "100",
+
+    "AnalyticsSQLDbConnectionString": "U2VydmVyPXBvc3RncmVzO0RhdGFiYXNlPWFuYWx5dGljc2RiO1BvcnQ9NTQzMjtVc2VyIElkPWFuYWx5dGljc2RiX2FwcDtQYXNzd29yZD10ZXN0YXBwdXNlcg==",
+
+    "AzureFunctionsJobHost:functions:0": "Resilience_Etl_Requeue",
+    "AzureFunctionsJobHost:functions:1": "Resilience_Etl_RequeueAll",
+
+    "AzureFunctionsJobHost:functions:2": "Consent_Etl_Http",
+    "AzureFunctionsJobHost:functions:3": "Consent_Etl_Queue",
+    "AzureWebJobs.Consent_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:4": "Login_Etl_Http",
+    "AzureFunctionsJobHost:functions:5": "Login_Etl_Queue",
+    "AzureWebJobs.Login_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:6": "AppointmentBooking_Etl_Http",
+    "AzureFunctionsJobHost:functions:7": "AppointmentBooking_Etl_Queue",
+    "AzureWebJobs.AppointmentBooking_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:8": "AppointmentCancelling_Etl_Http",
+    "AzureFunctionsJobHost:functions:9": "AppointmentCancelling_Etl_Queue",
+    "AzureWebJobs.AppointmentCancelling_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:10": "SilverIntegrationJumpOff_Etl_Http",
+    "AzureFunctionsJobHost:functions:11": "SilverIntegrationJumpOff_Etl_Queue",
+    "AzureWebJobs.SilverIntegrationJumpOff_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:12": "Communication_Etl_Http",
+    "AzureFunctionsJobHost:functions:13": "Communication_Etl_Queue",
+    "AzureWebJobs.Communication_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:14": "Transmission_Etl_Http",
+    "AzureFunctionsJobHost:functions:15": "Transmission_Etl_Queue",
+    "AzureWebJobs.Transmission_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:16": "CommsHub_MessageRead_Etl_Http",
+    "AzureFunctionsJobHost:functions:17": "CommsHub_MessageRead_Etl_Queue",
+
+    "AzureFunctionsJobHost:functions:18": "ClinicalCommissioningGroup_Etl_Http",
+    "AzureFunctionsJobHost:functions:19": "ClinicalCommissioningGroup_Etl_Queue",
+    "AzureWebJobs.ClinicalCommissioningGroup_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:20": "Device_Etl_Http",
+    "AzureFunctionsJobHost:functions:21": "Device_Etl_Queue",
+    "AzureWebJobs.Device_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:22": "GeneralPractice_Etl_Http",
+    "AzureFunctionsJobHost:functions:23": "GeneralPractice_Etl_Queue",
+    "AzureWebJobs.GeneralPractice_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:24": "NominatedPharmacyCreate_Etl_Http",
+    "AzureFunctionsJobHost:functions:25": "NominatedPharmacyCreate_Etl_Queue",
+    "AzureWebJobs.NominatedPharmacyCreate_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:26": "NominatedPharmacyUpdate_Etl_Http",
+    "AzureFunctionsJobHost:functions:27": "NominatedPharmacyUpdate_Etl_Queue",
+    "AzureWebJobs.NominatedPharmacyUpdate_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:30": "PatientsEnabled_Etl_Http",
+    "AzureFunctionsJobHost:functions:31": "PatientsEnabled_Etl_Queue",
+
+    "AzureFunctionsJobHost:functions:28": "PatientList_Etl_Http",
+    "AzureFunctionsJobHost:functions:29": "PatientList_Etl_Queue",
+
+    "AzureFunctionsJobHost:functions:32": "OrganDonationRegistrationCreate_Etl_Http",
+    "AzureFunctionsJobHost:functions:33": "OrganDonationRegistrationCreate_Etl_Queue",
+    "AzureWebJobs.OrganDonationRegistrationCreate_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:34": "OrganDonationRegistrationGet_Etl_Http",
+    "AzureFunctionsJobHost:functions:35": "OrganDonationRegistrationGet_Etl_Queue",
+    "AzureWebJobs.OrganDonationRegistrationGet_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:36": "OrganDonationRegistrationUpdate_Etl_Http",
+    "AzureFunctionsJobHost:functions:37": "OrganDonationRegistrationUpdate_Etl_Queue",
+    "AzureWebJobs.OrganDonationRegistrationUpdate_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:38": "OrganDonationRegistrationWithdraw_Etl_Http",
+    "AzureFunctionsJobHost:functions:39": "OrganDonationRegistrationWithdraw_Etl_Queue",
+    "AzureWebJobs.OrganDonationRegistrationWithdraw_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:40": "RefreshMaterializedViews_Compute_Http",
+    "AzureFunctionsJobHost:functions:41": "RefreshMaterializedViews_Compute_Queue",
+    "AzureWebJobs.RefreshMaterializedViews_Compute_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:42": "MedicalRecordView_Etl_Http",
+    "AzureFunctionsJobHost:functions:43": "MedicalRecordView_Etl_Queue",
+    "AzureWebJobs.MedicalRecordView_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:44": "PrescriptionOrders_Etl_Http",
+    "AzureFunctionsJobHost:functions:45": "PrescriptionOrders_Etl_Queue",
+    "AzureWebJobs.PrescriptionOrders_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:46": "LoginWeeklyTransactionReport_Etl_Http",
+    "AzureFunctionsJobHost:functions:47": "LoginWeeklyTransactionReport_Etl_Queue",
+    "AzureWebJobs.LoginWeeklyTransactionReport_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:48": "MyRecordViewWeeklyTransactionReport_Etl_Http",
+    "AzureFunctionsJobHost:functions:49": "MyRecordViewWeeklyTransactionReport_Etl_Queue",
+    "AzureWebJobs.MyRecordViewWeeklyTransactionReport_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:50": "OrganDonationCreateWeeklyTransactionReport_Etl_Http",
+    "AzureFunctionsJobHost:functions:51": "OrganDonationCreateWeeklyTransactionReport_Etl_Queue",
+    "AzureWebJobs.OrganDonationCreateWeeklyTransactionReport_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:52": "OrganDonationGetWeeklyTransactionReport_Etl_Http",
+    "AzureFunctionsJobHost:functions:53": "OrganDonationGetWeeklyTransactionReport_Etl_Queue",
+    "AzureWebJobs.OrganDonationGetWeeklyTransactionReport_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:54": "OrganDonationUpdateWeeklyTransactionReport_Etl_Http",
+    "AzureFunctionsJobHost:functions:55": "OrganDonationUpdateWeeklyTransactionReport_Etl_Queue",
+    "AzureWebJobs.OrganDonationUpdateWeeklyTransactionReport_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:56": "OrganDonationWithdrawWeeklyTransactionReport_Etl_Http",
+    "AzureFunctionsJobHost:functions:57": "OrganDonationWithdrawWeeklyTransactionReport_Etl_Queue",
+    "AzureWebJobs.OrganDonationWithdrawWeeklyTransactionReport_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:58": "PrescriptionsOrderWeeklyTransactionReport_Etl_Http",
+    "AzureFunctionsJobHost:functions:59": "PrescriptionsOrderWeeklyTransactionReport_Etl_Queue",
+    "AzureWebJobs.PrescriptionsOrderWeeklyTransactionReport_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:60": "AppointmentBook_Etl_Http",
+    "AzureFunctionsJobHost:functions:61": "AppointmentBook_Etl_Queue",
+    "AzureWebJobs.AppointmentBook_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:62": "AppointmentCancel_Etl_Http",
+    "AzureFunctionsJobHost:functions:63": "AppointmentCancel_Etl_Queue",
+    "AzureWebJobs.AppointmentCancel_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:64": "AppointmentBookWeeklyTransactionReport_Etl_Http",
+    "AzureFunctionsJobHost:functions:65": "AppointmentBookWeeklyTransactionReport_Etl_Queue",
+    "AzureWebJobs.AppointmentBookWeeklyTransactionReport_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:66": "AppointmentCancelWeeklyTransactionReport_Etl_Http",
+    "AzureFunctionsJobHost:functions:67": "AppointmentCancelWeeklyTransactionReport_Etl_Queue",
+    "AzureWebJobs.AppointmentCancelWeeklyTransactionReport_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:68": "FirstLogins_Compute_Http",
+    "AzureFunctionsJobHost:functions:69": "FirstLogins_Compute_Queue",
+    "AzureWebJobs.FirstLogins_Compute_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:70": "LoginPatientIdentifier_Etl_Http",
+    "AzureFunctionsJobHost:functions:71": "LoginPatientIdentifier_Etl_Queue",
+    "AzureWebJobs.LoginPatientIdentifier_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:72": "UpliftStarted_Etl_Http",
+    "AzureFunctionsJobHost:functions:73": "UpliftStarted_Etl_Queue",
+    "AzureWebJobs.UpliftStarted_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:74": "HighLoginFailureServiceAlert_Etl_Http",
+    "AzureFunctionsJobHost:functions:75": "HighLoginFailureServiceAlert_Etl_Queue",
+    "AzureWebJobs.HighLoginFailureServiceAlert_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:76": "DailyUsage_Compute_Http",
+    "AzureFunctionsJobHost:functions:77": "DailyUsage_Compute_Queue",
+    "AzureWebJobs.DailyUsage_Compute_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:78": "DailyUpdate_Etl_Http",
+    "AzureFunctionsJobHost:functions:79": "DailyUpdate_Etl_Queue",
+    "AzureWebJobs.DailyUpdate_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:80": "WeeklyUsage_Compute_Http",
+    "AzureFunctionsJobHost:functions:81": "WeeklyUsage_Compute_Queue",
+    "AzureWebJobs.WeeklyUsage_Compute_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:82": "MonthlyUsage_Compute_Http",
+    "AzureFunctionsJobHost:functions:83": "MonthlyUsage_Compute_Queue",
+    "AzureWebJobs.MonthlyUsage_Compute_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:84": "IntegratedPartners_Compute_Http",
+    "AzureFunctionsJobHost:functions:85": "IntegratedPartners_Compute_Queue",
+    "AzureWebJobs.IntegratedPartners_Compute_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:86": "TestData_Generate_Http",
+    "AzureFunctionsJobHost:functions:87": "TestData_Generate_Queue",
+    "AzureWebJobs.TestData_Generate_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:88": "UnknownErrorsServiceAlert_Etl_Http",
+    "AzureFunctionsJobHost:functions:89": "UnknownErrorsServiceAlert_Etl_Queue",
+    "AzureWebJobs.UnknownErrorsServiceAlert_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:90": "AppGenMessageCreate_Etl_Http",
+    "AzureFunctionsJobHost:functions:91": "AppGenMessageCreate_Etl_Queue",
+    "AzureWebJobs.AppGenMessageCreate_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:92": "AppGenMessageRead_Etl_Http",
+    "AzureFunctionsJobHost:functions:93": "AppGenMessageRead_Etl_Queue",
+    "AzureWebJobs.AppGenMessageRead_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:94": "AppGenMessageLinkClick_Etl_Http",
+    "AzureFunctionsJobHost:functions:95": "AppGenMessageLinkClick_Etl_Queue",
+    "AzureWebJobs.AppGenMessageLinkClick_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:96": "CommsHub_Communication_Etl_Http",
+    "AzureFunctionsJobHost:functions:97": "CommsHub_Communication_Etl_Queue",
+
+    "AzureFunctionsJobHost:functions:98": "CommsHub_Transmission_Etl_Http",
+    "AzureFunctionsJobHost:functions:99": "CommsHub_Transmission_Etl_Queue",
+
+    "AzureFunctionsJobHost:functions:100": "DailyUserTransactions_Compute_Http",
+    "AzureFunctionsJobHost:functions:101": "DailyUserTransactions_Compute_Queue",
+    "AzureWebJobs.DailyUserTransactions_Compute_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:102": "First_Logins_Audit_Http",
+    "AzureFunctionsJobHost:functions:103": "First_Logins_Audit_Queue",
+
+    "AzureFunctionsJobHost:functions:104": "FirstLoginMessages_Compute_Http",
+    "AzureFunctionsJobHost:functions:105": "FirstLoginMessages_Compute_Queue",
+    "AzureWebJobs.FirstLoginMessages_Compute_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:108": "CommsHub_Compute_Http",
+    "AzureFunctionsJobHost:functions:109": "CommsHub_Compute_Queue",
+    "AzureWebJobs.CommsHub_Compute_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:112": "AppleDownloads_Etl_Http",
+    "AzureFunctionsJobHost:functions:113": "AppleDownloads_Etl_Queue",
+    "AzureWebJobs.AppleDownloads_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:114": "DailyOdsTransactions_Compute_Http",
+    "AzureFunctionsJobHost:functions:115": "DailyOdsTransactions_Compute_Queue",
+    "AzureWebJobs.DailyOdsTransactions_Compute_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:116": "DailyOdsUsage_Compute_Http",
+    "AzureFunctionsJobHost:functions:117": "DailyOdsUsage_Compute_Queue",
+    "AzureWebJobs.DailyOdsUsage_Compute_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:118": "GoogleDownloads_Etl_Http",
+    "AzureFunctionsJobHost:functions:119": "GoogleDownloads_Etl_Queue",
+    "AzureWebJobs.GoogleDownloads_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:120": "DeviceInfo_Compute_Http",
+    "AzureFunctionsJobHost:functions:121": "DeviceInfo_Compute_Queue",
+
+    "AzureFunctionsJobHost:functions:123": "DeviceInfo_Audit_Http",
+    "AzureFunctionsJobHost:functions:124 ": "DeviceInfo_Audit_Queue",
+
+    "AzureFunctionsJobHost:functions:125": "MonthlyUsage_Audit_Http",
+    "AzureFunctionsJobHost:functions:126": "MonthlyUsage_Audit_Queue",
+
+    "AzureFunctionsJobHost:functions:127": "WeeklyUsage_Audit_Http",
+    "AzureFunctionsJobHost:functions:128": "WeeklyUsage_Audit_Queue",
+
+    "AzureFunctionsJobHost:functions:129": "CommsHubSummary_Audit_Http",
+    "AzureFunctionsJobHost:functions:130": "CommsHubSummary_Audit_Queue",
+
+    "AzureFunctionsJobHost:functions:131": "CommsHubSummary_Compute_Http",
+    "AzureFunctionsJobHost:functions:132": "CommsHubSummary_Compute_Queue",
+    "AzureWebJobs.CommsHubSummary_Compute_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:133": "ThirdPartyResponsesServiceAlert_Etl_Http",
+    "AzureFunctionsJobHost:functions:134": "ThirdPartyResponsesServiceAlert_Etl_Queue",
+    "AzureWebJobs.ThirdPartyResponsesServiceAlert_Etl_Timer.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:135": "CommsHub_Etl_Http",
+    "AzureWebJobs.CommsHub_Etl_EventHub.Disabled": "true",
+
+    "AzureFunctionsJobHost:functions:136": "AuditLog_Etl_Http",
+    "AzureWebJobs.AuditLog_Etl_Http.Disabled": "true",
+
+    "AzureFunctionsJobHost:extensions:queues:maxPollingInterval": "00:00:01",
+    "AzureFunctionsJobHost:extensions:queues:visibilityTimeout": "00:00:01",
+
+    "AzureFunctionsJobHost:extensions:queues:maxDequeueCount": "3",
+
+    "AzureWebJobs.AuditLog_Etl_EventHub.Disabled": "true",
+
+    "AuditEventHubConnectionDataReceiver": "testString",
+
+    "PowerBIUrl": "N/A",
+    "AdobeCert": "NA",
+    "AdobeCertPassword": "N/A",
+    "AdobeClientId": "N/A",
+    "AdobeClientSecret": "N/A",
+    "AdobeJWTIss": "N/A",
+    "AdobeJWTSub": "N/A",
+    "AdobeJWTAud": "N/A",
+    "AdobeAccessTokenRequestUri": "N/A",
+    "AdobeUserInfoRequestUri": "N/A",
+    "AdobeReportsRequestUri": "N/A",
+    "AdobeCompanyId": "N/A",
+    "BaseAzureFunctionUrl": "N/A",
+    "DailyUpdate__SlackChannel": "N/A",
+    "Monitoring__SlackChannel": "N/A",
+    "Slack__Token": "N/A",
+    "AppleEndpoint": "N/A",
+    "AppleEndpoint_weekly": "N/A",
+    "AppleVendorNumber": "N/A",
+    "AppleKid": "N/A",
+    "AppleIssueId": "N/A",
+    "ApplepPkcs8PrivateKey_2": "N/A",
+    "ApplepPkcs8PrivateKey": "N/A",
+    "ApplepPkcs8PrivateKey_tt": "N/A",
+    "ECParameterD": "N/A",
+    "ECParameterX": "N/A",
+    "ECParameterY": "N/A",
+    "GoogleAccountType": "N/A",
+    "GoogleProjectId": "N/A",
+    "GooglePrivateKeyId": "N/A",
+    "GooglePrivateKey": "N/A",
+    "GoogleClientEmail": "N/A",
+    "GoogleClientId": "N/A",
+    "GoogleAuthUri": "N/A",
+    "GoogleTokenUri": "N/A",
+    "GoogleAuthProviderX509CertUrl": "N/A",
+    "GoogleClientX509CertUrl": "N/A",
+    "GoogleStorageBucketName": "N/A"
+  }
+}

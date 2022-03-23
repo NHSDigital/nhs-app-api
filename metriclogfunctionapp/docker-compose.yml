@@ -1,0 +1,24 @@
+version: "3.4"
+
+services:
+
+  storage:
+    image: mcr.microsoft.com/azure-storage/azurite
+    ports:
+      - 10000:10000
+      - 10001:10001
+      - 10002:10002
+
+  postgres:
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_USER=pgsadmin
+      - POSTGRES_PASSWORD=password
+      - DATABASE_NAME=analyticsdb
+      - UPDATE_SCRIPT=/init/update.sql
+    volumes:
+      - ./Database/update.sql:/init/update.sql
+      - ./Database/update.sh:/docker-entrypoint-initdb.d/01_update.sh
+      - ./docker/postgres/set_app_user_password.sql:/docker-entrypoint-initdb.d/02_set_app_user_password.sql
+    ports:
+        - 5432:5432

@@ -28,3 +28,7 @@ android/app/.settings/org.eclipse.buildship.core.prefs
 
 *.apk
 *.ipa
+/.vs
+/bddtests/src
+/docker.password
+/docker-login.sh

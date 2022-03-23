@@ -1,0 +1,8 @@
+version: "3.4"
+
+services:
+
+  function:
+    image: local/metriclog-function
+    ports:
+      - 7071:7071

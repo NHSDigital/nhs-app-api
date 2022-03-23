@@ -1,0 +1,9 @@
+version: "3.4"
+
+services:
+
+  # Simulate the host.docker.internal DNS entry on Linux build agents
+  host.docker.internal:
+    image: alpine/socat
+    entrypoint: ["socat"]
+    command: tcp-l:8080,fork,reuseaddr tcp:172.17.0.1:8080

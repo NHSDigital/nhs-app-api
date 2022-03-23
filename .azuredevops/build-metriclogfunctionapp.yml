@@ -1,0 +1,135 @@
+---
+variables:
+  major: 1
+  minor: 0
+
+  ${{ if or(eq(variables['Build.SourceBranchName'], 'develop'), startsWith(variables['Build.SourceBranchName'], 'refs/heads/release/')) }}:
+    patch: $[counter(format('{0}.{1}', variables['major'], variables['minor']), 0)]
+    version.assembly: $[format('{0}.{1}.{2}', variables['major'], variables['minor'], variables['patch'])]
+    version.file: $[format('{0}.{1}', variables['version.assembly'], variables['Build.BuildId'])]
+    version.informational: $[variables['version.file']]
+    build.number: $[variables['version.assembly']]
+
+  ${{ if and(ne(variables['Build.SourceBranchName'], 'develop'), not(startsWith(variables['Build.SourceBranchName'], 'refs/heads/release/'))) }}:
+    ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+      source.description: $[format('PR{0}', variables['System.PullRequest.PullRequestId'])]
+    ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
+      source.description: $[variables['Build.SourceBranchName']]
+
+    increment: $[counter(format('{0}.{1}-{2}', variables['major'], variables['minor'], variables['source.description']), 0)]
+    patch: 0
+    version.assembly: $[format('{0}.{1}.{2}', variables['major'], variables['minor'], variables['patch'])]
+    version.file: $[format('{0}.{1}', variables['version.assembly'], variables['Build.BuildId'])]
+    version.informational: $[format('{0}-{1}-{2}', variables['version.assembly'], variables['source.description'], variables['increment'])]
+    build.number: $[variables['version.informational']]
+
+name: $[variables['build.number']]
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - "*"
+  paths:
+    include:
+      - metriclogfunctionapp
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+jobs:
+  - job: build
+    displayName: Build
+    timeoutInMinutes: 180
+    steps:
+      - task: Docker@2
+        displayName: Login to docker registry
+        inputs:
+          command: login
+          containerRegistry: nhsappcontainers
+
+      - task: UseDotNet@2
+        displayName: 'Use .NET Core sdk'
+        inputs:
+          packageType: sdk
+          version: 6.0.x
+          installationPath: $(Agent.ToolsDirectory)/dotnet
+
+      - task: DotNetCoreCLI@2
+        displayName: Build
+        name: Build
+        inputs:
+          command: 'build'
+          projects: metriclogfunctionapp/NHSOnline.MetricLogFunctionApp.sln
+          arguments: --configuration Release -p:Version="$(version.assembly)" -p:FileVersion="$(version.file)" -p:InformationalVersion="$(version.informational)"
+
+      - task: ShellScript@2
+        displayName: Generate update.sql
+        inputs:
+          scriptPath: metriclogfunctionapp/Database/merge_scripts.sh
+
+      - task: PublishBuildArtifacts@1
+        displayName: Attach update.sh to build
+        inputs:
+          PathtoPublish: 'metriclogfunctionapp/Database/update.sh'
+          ArtifactName: 'drop'
+
+      - task: PublishBuildArtifacts@1
+        displayName: Attach update.sql to build
+        inputs:
+          PathtoPublish: 'metriclogfunctionapp/Database/update.sql'
+          ArtifactName: 'drop'
+
+      - task: DotNetCoreCLI@2
+        displayName: Run Unit Tests
+        inputs:
+          command: 'test'
+          projects: '**/*.UnitTests.csproj'
+          testRunTitle: 'Legacy Unit Tests'
+          publishTestResults: true
+          arguments: --configuration Release --no-build -p:Version="$(version.assembly)" -p:FileVersion="$(version.file)" -p:InformationalVersion="$(version.informational)"
+
+      - task: ShellScript@2
+        displayName: Start Integration Test Services
+        inputs:
+          scriptPath: metriclogfunctionapp/buildscripts/start_int_tests.sh
+
+      - task: DotNetCoreCLI@2
+        displayName: Run Integration Tests
+        inputs:
+          command: 'test'
+          version: '6.0.x'
+          packageType: sdk
+          projects: '**/*.MetricLogFunctionApp.IntegrationTests.csproj'
+          testRunTitle: 'Integration Tests'
+          publishTestResults: true
+          arguments: --configuration Release --no-build -p:Version="$(version.assembly)" -p:FileVersion="$(version.file)" -p:InformationalVersion="$(version.informational)"
+
+      - task: ShellScript@2
+        displayName: Stop Integration Test Services
+        inputs:
+          scriptPath: metriclogfunctionapp/buildscripts/stop_int_tests.sh
+
+      - task: DotNetCoreCLI@2
+        displayName: Publish Function App
+        inputs:
+          command: 'publish'
+          projects: 'metriclogfunctionapp/NHSOnline.MetricLogFunctionApp/NHSOnline.MetricLogFunctionApp.csproj'
+          publishWebProjects: false
+          zipAfterPublish: false
+          arguments: "--configuration Release --no-build -o Publish"
+
+      - task: ArchiveFiles@2
+        displayName: Zip Function App
+        inputs:
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/Publish/NHSOnline.MetricLogFunctionApp'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/function-app-$(Build.BuildNumber).zip'
+          replaceExistingArchive: true
+
+      - task: PublishBuildArtifacts@1
+        displayName: Publish Function App zip
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)/function-app-$(Build.BuildNumber).zip'
+          ArtifactName: 'drop'
