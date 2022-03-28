@@ -833,3 +833,9 @@ ODS,Organisation,PreviousSupplier,NewSupplier
 C81086,"THE SURGERY CLIFTON ROAD","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)","THE PHOENIX PARTNERSHIP"
 C81086,"THE SURGERY CLIFTON ROAD","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)","THE PHOENIX PARTNERSHIP"
 ==================================================================
+==================================================================
+Job Run - Mon 28 Mar 2022 10:26:34 BST
+ODS,Organisation,PreviousSupplier,NewSupplier
+B82049,"THIRSK DOCTORS SURGERY","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)","THE PHOENIX PARTNERSHIP"
+B82049,"THIRSK DOCTORS SURGERY","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)","THE PHOENIX PARTNERSHIP"
+==================================================================

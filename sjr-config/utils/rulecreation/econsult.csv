@@ -1025,7 +1025,6 @@ kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,scillyhealth,St Mary's
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,stillmoorhousemedicalpractice,Stillmoor House Medical Practice,L82010,10000
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,sunnysidesurgerypenzance,Sunnyside Surgery,L82070,5871
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,theclayspractice,The Clays Practice,L82051,13060
-kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,theramegrouppractice,The Rame Group Practice,Y00969,11900
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,roselandsurgeries,The Roseland Surgeries,L82048,3637
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,thestennacksurgery,The Stennack Surgery,Y01922,12250
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,threespiresmedicalp,The Three Spires Medical Practice,L82028,16058
@@ -1523,7 +1522,6 @@ skentcoast,South Kent Coast,CCG,South Kent Coast,Kent and Medway,manorclinic,The
 skentcoast,South Kent Coast,CCG,South Kent Coast,Kent and Medway,thenewsurgery-folkestone,The New Surgery,G82086,11050
 skentcoast,South Kent Coast,CCG,South Kent Coast,Kent and Medway,thesurgerylyminge,The Surgery,G82652,2562
 skentcoast,South Kent Coast,CCG,South Kent Coast,Kent and Medway,whitehousefolkestone,The White House Surgery,G82069,10175
-slincolnshire,South Lincolnshire,CCG,South Lincolnshire,Lincolnshire,lakesidehealthcarestamford,Lakeside Healthcare Stamford,C83007,31640
 ssefton,South Sefton,CCG,South Sefton,Cheshire and Merseyside,aintreeroadmedicalcentre,Aintree Road Medical Centre,N84002,2500
 ssefton,South Sefton,CCG,South Sefton,Cheshire and Merseyside,bootlevillagesurgery,Bootle Village Surgery,N84015,6100
 ssefton,South Sefton,CCG,South Sefton,Cheshire and Merseyside,bridgeroadmclitherland,Bridge Road Medical Centre,N84023,7300
@@ -1625,7 +1623,6 @@ swarwickshire,South Warwickshire,CCG,South Warwickshire,Coventry and Warwickshir
 swarwickshire,South Warwickshire,CCG,South Warwickshire,Coventry and Warwickshire,warwickgatesfhc,Warwick Gates Family Health Centre,M84070,8900
 swarwickshire,South Warwickshire,CCG,South Warwickshire,Coventry and Warwickshire,watersidemc,Waterside Medical Centre,M84032,13150
 swarwickshire,South Warwickshire,CCG,South Warwickshire,Coventry and Warwickshire,whitnashmc,Whitnash Medical Centre,M84064,6400
-sworcestershire,South Worcestershire,CCG,South Worcestershire,Herefordshire and Worcestershire,abbottswoodmedicalcentre,Abbottswood Medical Centre,M81046,10781
 sworcestershire,South Worcestershire,CCG,South Worcestershire,Herefordshire and Worcestershire,pershoremedicalpractice,Pershore Medical Practice,M81074,10403
 southampton,Southampton,CCG,Southampton,Hampshire and the Isle of Wight,almamedcen,Alma Road Surgery,J82122,9735
 southampton,Southampton,CCG,Southampton,Hampshire and the Isle of Wight,atherleyhousesurgery,Atherley House Surgery,J82115,5140
@@ -2037,7 +2034,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,North Leeds Medical Practice,B86013,
 ,,,Other,,,Hedgemans Medical Centre,F82015,
 ,,,Other,,,Dr Taylor and partners,B86016,
-,,,Other,,,Lane End Medical Group,E83053,
 ,,,Other,,,Bradley Stoke Surgery,L81649,
 ,,,Other,,,City View Medical Practice,B86002,
 ,,,Other,,,Little London Surgery,M91008,
@@ -2650,3 +2646,76 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,North Road West Medical Centre,L83030,
 ,,,Other,,,Dashwood Medical Centre,G82064,
 ,,,Other,,,Watton Place Clinic,E82121,
+,,,Other,,,Railway Medical Group,A84009,
+,,,Other,,,East Park Medical Centre,B86043,
+,,,Other,,,Leeds Student Medical Practice,B86110,
+,,,Other,,,Beacon Medical Practice,C83019,
+,,,Other,,,Salisbury House Surgery,E81004,
+,,,Other,,,Oliver Street Surgery,E81077,
+,,,Other,,,Stanmore Medical Group,E82005,
+,,,Other,,,The Maples Health centre,E82063,
+,,,Other,,,Cuffley and Goffs Oak Medical Practice,E82081,
+,,,Other,,,Birchwood Surgery,E82082,
+,,,Other,,,Dolphin House Surgery,E82092,
+,,,Other,,,West4GPs,E85040,
+,,,Other,,,Ritchie Street Group Practice,F83021,
+,,,Other,,,Goodmans Fields Health Centre,F84039,
+,,,Other,,,West Green Surgery,F85669,
+,,,Other,,,Woodingdean Medical Centre,G81065,
+,,,Other,,,The Avenue Surgery,G81075,
+,,,Other,,,Meridian Surgery,G81100,
+,,,Other,,,Bower Mount Medical Practice,G82031,
+,,,Other,,,Bearsted Medical Practice,G82074,
+,,,Other,,,Sturry Surgery & Canterbury Health Centre,G82082,
+,,,Other,,,Headcorn Surgery,G82112,
+,,,Other,,,Otford Medical Practice,G82125,
+,,,Other,,,St Werburgh Medical Practice,G82233,
+,,,Other,,,New Eltham Medical Centre,G83628,
+,,,Other,,,Waverley Practice,G83635,
+,,,Other,,,Waterloo Health Centre,G85136,
+,,,Other,,,Station Road Surgery,H81040,
+,,,Other,,,Holly Tree Surgery,H81110,
+,,,Other,,,Park Surgery,H82017,
+,,,Other,,,Woodlands & Clerklands Partnership,H82025,
+,,,Other,,,Ifield Medical Practice,H82050,
+,,,Other,,,Ball Tree Surgery,H82065,
+,,,Other,,,The Glebe Surgery,H82070,
+,,,Other,,,New Pond Row Surgery,H82091,
+,,,Other,,,The Village Surgery,H82092,
+,,,Other,,,Ouse Valley Practice,H82615,
+,,,Other,,,Red and Green Practice,J82056,
+,,,Other,,,Old Fire Station Surgery,J82128,
+,,,Other,,,Townhill Surgery,J82180,
+,,,Other,,,Crondall New Surgery,J82628,
+,,,Other,,,The Gainsborough Practice,K81059,
+,,,Other,,,Newbury Street Practice,K84019,
+,,,Other,,,Windrush Surgery,K84024,
+,,,Other,,,The Malthouse Surgery,K84027,
+,,,Other,,,Dr Cornwall & Partners Hightown Surgery - Oxfordshire,K84059,
+,,,Other,,,Woodlands Surgery,K84062,
+,,,Other,,,Wellington Road Family Practice,L81642,
+,,,Other,,,Alverton Practice,L82021,
+,,,Other,,,The Falmouth Health Centre Practice,L82049,
+,,,Other,,,Trescobeas Surgery,L82052,
+,,,Other,,,St Keverne Health Centre,L82057,
+,,,Other,,,Underwood Surgery,L84003,
+,,,Other,,,Lydney Practice,L84011,
+,,,Other,,,Berkeley Place Surgery,L84030,
+,,,Other,,,Portland Practice,L84033,
+,,,Other,,,The Royal Well Surgery,L84049,
+,,,Other,,,St Catherines Surgery,L84058,
+,,,Other,,,Coleford Family Doctors,L84069,
+,,,Other,,,Newnham and Westbury,L84615,
+,,,Other,,,Abbey Medical Centre,M84036,
+,,,Other,,,Trinity Court Surgery,M84043,
+,,,Other,,,Blackwood Health Centre,M91637,
+,,,Other,,,Folly Lane Medical Centre,N81056,
+,,,Other,,,Danebridge Medical Practice,N81087,
+,,,Other,,,Upton Village Surgery,N81100,
+,,,Other,,,Poulter Road Medical Centre,N82648,
+,,,Other,,,Bluebell Lane Medical Practice,N83015,
+,,,Other,,,Cornerways Medical Centre,N83025,
+,,,Other,,,Aston Healthcare,N83028,
+,,,Other,,,Cornerstone Surgery,N83604,
+,,,Other,,,The Robins Surgery,Y00312,
+,,,Other,,,St Andrews Health Centre,Y03023,
