@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using NHSOnline.App.Threading;
 using Xamarin.Forms;
@@ -18,7 +19,11 @@ namespace NHSOnline.App.DependencyServices.Navigation
 
             await Application.Current.MainPage.Navigation.PushAsync(page, false).PreserveThreadContext();
 
-            Application.Current.MainPage.Navigation.RemovePage(currentPage);
+            if (currentPage?.Id != null
+                && Application.Current.MainPage.Navigation.NavigationStack.Any(p => p.Id.Equals(currentPage.Id)))
+            {
+                Application.Current.MainPage.Navigation.RemovePage(currentPage);
+            }
         }
 
         public Task PopToNewRoot(Page page)
