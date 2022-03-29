@@ -1,7 +1,6 @@
 import {
   REFERRALS_LOADED,
   UPCOMING_APPOINTMENTS_LOADED,
-  PAST_APPOINTMENTS_LOADED,
 } from './mutation-types';
 
 
@@ -11,9 +10,6 @@ export default {
   },
   [UPCOMING_APPOINTMENTS_LOADED](state, referrals) {
     state.upcomingAppointments = referrals;
-  },
-  [PAST_APPOINTMENTS_LOADED](state, referrals) {
-    state.pastAppointments = referrals;
   },
 };
 

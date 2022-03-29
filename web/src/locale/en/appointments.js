@@ -178,5 +178,28 @@ export default {
     contactTheOrganisation: 'If you still think a referral is missing, contact the organisation that referred you.',
     contactTheHealthcareProvider: 'If you still think an appointment is missing, contact the healthcare provider you booked it with.',
     otherReferralsAppointmentsAndServices: 'Other referrals, appointments and services',
+    referralsSectionTitle: 'Referrals',
+    noReferrals: {
+      youHaveNoReferrals: 'You have no referrals to view and manage.',
+      youMayHaveOtherReferrals: 'You may have other referrals not shown available in other services.',
+      contactTheOrganisation: 'Contact the organisation that referred you if a referral is missing.',
+    },
+    referrals: {
+      bookingReference: 'Booking reference: {reference}',
+      referredBy: 'Referred by: {referrer}',
+      referredDate: 'Date you were referred: {referralDate}',
+      reviewDate: 'Due to be reviewed by: {reviewDate}',
+      manageThisReferral: 'Manage this referral',
+      inReview: {
+        title: 'Your referral request is being reviewed',
+        yourHealthcareProviderHasRequested: 'Your healthcare provider has requested for you to be referred to {speciality}. This request is being reviewed. You do not need to do anything.',
+      },
+      readyToBook: {
+        title: 'Ready to rebook',
+        youNeedToRebookYour: 'You need to rebook your {speciality} referral appointment as the one you had booked has been cancelled.',
+        youNeedToRebookYourNoSpeciality: 'You need to rebook your referral appointment as the one you had booked has been cancelled.',
+        bookOrManageThisReferral: 'Book or manage this referral',
+      },
+    },
   },
 };

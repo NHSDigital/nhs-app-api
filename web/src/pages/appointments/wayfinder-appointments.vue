@@ -1,7 +1,7 @@
 <template>
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <div v-if="!hasReferrals" class="nhsuk-u-padding-top-4">
+      <div v-if="hasNoReferralsOrAppointments" class="nhsuk-u-padding-top-4">
         <p>
           {{ $t('appointments.wayfinder.youMayHaveOtherReferrals') }}
         </p>
@@ -56,15 +56,59 @@
                                          appointments" />
         </menu-item-list>
       </div>
+      <div v-else class="nhsuk-u-padding-top-4">
+        <h2>
+          {{ $t('appointments.wayfinder.referralsSectionTitle') }}
+        </h2>
+        <div v-if="hasNoReferrals">
+          <p>
+            {{ $t('appointments.wayfinder.noReferrals.youHaveNoReferrals') }}
+          </p>
+
+          <p>
+            {{ $t('appointments.wayfinder.noReferrals.youMayHaveOtherReferrals') }}
+          </p>
+
+          <p>
+            {{ $t('appointments.wayfinder.noReferrals.contactTheOrganisation') }}
+          </p>
+        </div>
+        <div v-else>
+          <CardGroup class="nhsuk-grid-row">
+
+            <CardGroupItem v-for="referral in referrals"
+                           :key="referral.referralId"
+                           class="nhsuk-grid-column-three-quarters">
+
+              <InReviewReferralsCard v-if="isInReview(referral)"
+                                     :requested-speciality="referral.serviceSpeciality"
+                                     :referred-date="referral.referredDateTime"
+                                     :review-date="referral.reviewDueDate"
+                                     :booking-reference="referral.referralId"
+                                     :referred-by="referral.referrerOrganisation"/>
+
+              <ReadyToRebookReferralCard v-if="isBookableWasCancelled(referral)"
+                                         :requested-speciality="referral.serviceSpeciality"
+                                         :referred-date="referral.referredDatetime"
+                                         :booking-reference="referral.referralId"
+                                         :referred-by="referral.referrerOrganisation"/>
+            </CardGroupItem>
+          </CardGroup>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { EventBus, UPDATE_HEADER, UPDATE_TITLE } from '@/services/event-bus';
+import CardGroup from '@/components/widgets/card/CardGroup';
+import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 import MenuItemList from '@/components/MenuItemList';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
+import InReviewReferralsCard from '@/components/appointments/wayfinder/referrals/InReviewCard';
+import ReadyToRebookReferralCard from '@/components/appointments/wayfinder/referrals/ReadyToRebookReferralCard';
 import sjrIf from '@/lib/sjrIf';
 import { isEmptyArray } from '@/lib/utils';
 
@@ -75,6 +119,10 @@ const loadData = async (store) => {
 export default {
   name: 'WayfinderAppointmentsPage',
   components: {
+    CardGroup,
+    CardGroupItem,
+    InReviewReferralsCard,
+    ReadyToRebookReferralCard,
     MenuItemList,
     ThirdPartyJumpOffButton,
   },
@@ -85,13 +133,21 @@ export default {
     };
   },
   computed: {
-    hasReferrals() {
-      const { referrals, upcomingAppointments, pastAppointments }
-        = this.$store.state.wayfinderAppointments;
-
-      return !isEmptyArray(referrals) &&
-        !isEmptyArray(upcomingAppointments) &&
-        !isEmptyArray(pastAppointments);
+    referrals() {
+      return this.$store.state.wayfinderAppointments.referrals;
+    },
+    upcomingAppointments() {
+      return this.$store.state.wayfinderAppointments.upcomingAppointments;
+    },
+    hasNoReferrals() {
+      return isEmptyArray(this.referrals);
+    },
+    hasNoUpcomingAppointments() {
+      return isEmptyArray(this.upcomingAppointments);
+    },
+    hasNoReferralsOrAppointments() {
+      return this.hasNoReferrals &&
+        this.hasNoUpcomingAppointments;
     },
     hasErsAppointments() {
       return sjrIf({
@@ -175,17 +231,20 @@ export default {
   async mounted() {
     await loadData(this.$store);
 
-    const { referrals, upcomingAppointments, pastAppointments }
-      = this.$store.state.wayfinderAppointments;
-
-    if (isEmptyArray(referrals) &&
-      isEmptyArray(upcomingAppointments) &&
-      isEmptyArray(pastAppointments)) {
+    if (this.hasNoReferralsOrAppointments) {
       EventBus.$emit(UPDATE_HEADER, {
         headerKey: 'appointments.wayfinder.noReferralsOrAppointments',
       });
       EventBus.$emit(UPDATE_TITLE, 'appointments.wayfinder.noReferralsOrAppointments');
     }
+  },
+  methods: {
+    isInReview(referral) {
+      return referral.status === 'InReview';
+    },
+    isBookableWasCancelled(referral) {
+      return referral.status === 'BookableWasCancelled';
+    },
   },
 };
 </script>

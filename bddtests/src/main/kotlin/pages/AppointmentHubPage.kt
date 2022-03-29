@@ -48,6 +48,10 @@ open class AppointmentHubPage : HybridPageObject() {
         links.link("Hospital and other appointments")
     }
 
+    val referralsHospitalAndOtherAppointmentsLink by lazy {
+        links.link("Referrals, hospital and other appointments")
+    }
+
     fun assertAppointmentsHubIsDisplayed() {
         pageTitle.assertIsVisible()
     }

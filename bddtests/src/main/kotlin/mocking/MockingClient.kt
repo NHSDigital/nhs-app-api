@@ -24,6 +24,7 @@ import mocking.thirdPartyProviders.substrakt.SubstraktRequestBuilder
 import mocking.thirdPartyProviders.wellnessAndPrevention.WellnessAndPreventionRequestBuilder
 import mocking.tpp.TppMappingRouter
 import mocking.vision.VisionMappingRouter
+import mocking.wayfinder.WayfinderMappingBuilder
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers.equalTo
 import java.lang.Thread.sleep
@@ -59,6 +60,8 @@ class MockingClient(configuration: MockingConfiguration) {
     val forNetCompany = ExternalSupplierMockingClient(NetCompanyRequestBuilder(), wiremockHelper)
     val forNhsd = ExternalSupplierMockingClient(NhsdRequestBuilder(), wiremockHelper)
     val forWellness = ExternalSupplierMockingClient(WellnessAndPreventionRequestBuilder(), wiremockHelper)
+
+    val forWayfinder = ExternalSupplierMockingClient(WayfinderMappingBuilder(), wiremockHelper)
 
     val forHelp = ExternalSupplierMockingClient(HelpRequestBuilder(), wiremockHelper)
 

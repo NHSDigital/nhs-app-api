@@ -28,6 +28,11 @@ class AppointmentsHubUIStepDefinitions {
         appointmentHubPage.hospitalAppointmentsLink.click()
     }
 
+    @When("^I click the 'Referrals, hospital and other appointments' link on the Appointments Hub$")
+    fun iClickTheReferrlasHospitalAndOtherAppointmentsLinkOnTheAppointmentsHub() {
+        appointmentHubPage.referralsHospitalAndOtherAppointmentsLink.click()
+    }
+
     @Then("^the Appointments Hub page is displayed$")
     fun assertIsDisplayed() {
         appointmentHubPage.assertAppointmentsHubIsDisplayed()

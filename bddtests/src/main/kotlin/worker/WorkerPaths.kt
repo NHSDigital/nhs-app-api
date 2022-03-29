@@ -11,6 +11,7 @@ object WorkerPaths {
     const val getCoursesConnection = "/v1/patient/courses"
     const val myAppointments = "/v1/patient/appointments"
     const val appointmentSlots = "/v1/patient/appointment-slots"
+    const val wayfinderReferrerAndAppointments = "/v1/patient/secondary-care/summary"
     const val getMyRecordConnection = "/v1/patient/my-record"
     const val getDemographicsConnection = "/v1/patient/demographics"
     const val sessionConnectionExtend = "/v1/session/extend"
