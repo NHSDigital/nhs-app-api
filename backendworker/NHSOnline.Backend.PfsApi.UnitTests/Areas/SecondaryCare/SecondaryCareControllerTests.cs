@@ -18,13 +18,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         }
 
         [TestMethod]
-        public async Task GetSummary_GetSummaryResponseFromClientIsSuccessful_Returns200WithHardcodedSummaryResponse()
+        public async Task GetSummary_GetSummaryResponseFromClientIsSuccessful_Returns200WithSummaryResponse()
         {
+            // Arrange
+            Context.MockSecondaryCareHttpClientGetSummaryReturnsSuccessfulResponseWithData();
+
             // Act
             var result = await Context.CreateSystemUnderTest().Summary(Context.Data.P9UserSession);
 
             // Assert
-            result.Should().BeAssignableTo<OkObjectResult>().Subject.Value.Should().BeEquivalentTo(Context.Data.HardcodedSummaryResponse);
+            result.Should().BeAssignableTo<OkObjectResult>().Subject.Value.Should().BeEquivalentTo(Context.Data.SummaryResponse);
 
             Context.Mocks.Auditor.Verify(a => a.PreOperationAudit("SecondaryCare_GetSummary_Request","Attempting to get Secondary Care Summary"));
             Context.Mocks.Auditor.Verify(a => a.PostOperationAudit("SecondaryCare_GetSummary_Response","Secondary Care Summary successfully retrieved. Total Referrals: 3, Total Upcoming Appointments: 3"));
@@ -34,9 +37,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         public async Task GetSummary_GetSummaryResponseFromClientIsUnsuccessful_Returns502BadGateway()
         {
             // Arrange
-            Context
-                .MockSecondaryCareClient()
-                .MockSecondaryCareClientGetSummaryReturnsUnsuccessfulResponse();
+            Context.MockSecondaryCareHttpClientGetSummaryReturnsUnsuccessfulResponse();
 
             // Act
             var result = await Context.CreateSystemUnderTest().Summary(Context.Data.P9UserSession);

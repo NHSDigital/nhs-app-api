@@ -31,14 +31,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.SecondaryCare
         }
 
         [HttpGet("summary")]
-        public async Task<IActionResult> Summary([UserSession] P9UserSession _)
+        public async Task<IActionResult> Summary([UserSession] P9UserSession userSession)
         {
             try
             {
                 _logger.LogEnter();
                 await _auditor.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest, "Attempting to get Secondary Care Summary");
 
-                var result = _secondaryCareService.GetSummary();
+                var result = await _secondaryCareService.GetSummary(userSession);
 
                 await result.Accept(new SecondaryCareSummaryResultAuditingVisitor(_auditor, _logger));
                 return result.Accept(new SecondaryCareSummaryResultVisitor());

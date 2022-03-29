@@ -1,7 +1,10 @@
+using System.Threading.Tasks;
+using NHSOnline.Backend.Support.Session;
+
 namespace NHSOnline.Backend.PfsApi.SecondaryCare
 {
     public interface ISecondaryCareService
     {
-        SecondaryCareSummaryResult GetSummary();
+        Task<SecondaryCareSummaryResult> GetSummary(P9UserSession userSession);
     }
 }

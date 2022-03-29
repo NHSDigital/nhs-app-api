@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.PfsApi.SecondaryCare
 {
@@ -7,10 +8,19 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<ISecondaryCareClient, SecondaryCareClient>();
+            services.AddSingleton<ISecondaryCareConfig, SecondaryCareConfig>();
 
             services.AddSingleton<ISecondaryCareService, SecondaryCareService>();
             services.AddSingleton<SecondaryCareSummaryService>();
+
+            services.AddSingleton<ISecondaryCareClient, SecondaryCareClient>();
+
+            services.AddTransient<SecondaryCareHttpClientHandler>();
+            services.AddTransient<SecondaryCareHttpRequestIdentifier>();
+            services.AddHttpClient<SecondaryCareHttpClient>()
+                .ConfigurePrimaryHttpMessageHandler<SecondaryCareHttpClientHandler>()
+                .AddHttpMessageHandler<HttpTimeoutHandler<SecondaryCareHttpRequestIdentifier>>()
+                .AddHttpMessageHandler<HttpRequestIdentificationHandler<SecondaryCareHttpRequestIdentifier>>();
 
             base.ConfigureServices(services, configuration);
         }

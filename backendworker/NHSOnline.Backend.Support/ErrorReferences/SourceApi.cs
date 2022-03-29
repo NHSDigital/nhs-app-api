@@ -17,5 +17,6 @@ namespace NHSOnline.Backend.Support
         Qualtrics = 10,
         Fake = 11,
         Messages = 12,
+        SecondaryCare = 13,
     }
 }

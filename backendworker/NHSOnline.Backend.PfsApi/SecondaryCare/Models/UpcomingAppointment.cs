@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Models
     {
         public string AppointmentId { get; set; }
 
-        public DateTimeOffset AppointmentDateTime { get; set; }
+        public DateTimeOffset? AppointmentDateTime { get; set; }
 
         public string LocationDescription { get; set; }
 

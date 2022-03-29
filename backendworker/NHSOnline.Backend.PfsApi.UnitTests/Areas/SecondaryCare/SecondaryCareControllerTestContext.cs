@@ -1,24 +1,35 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Newtonsoft.Json;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.Areas.SecondaryCare;
 using NHSOnline.Backend.PfsApi.SecondaryCare;
 using NHSOnline.Backend.PfsApi.SecondaryCare.Models;
+using NHSOnline.Backend.PfsApi.UnitTests.Extensions;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Session;
+using NHSOnline.Backend.Support.Settings;
+using RichardSzalay.MockHttp;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 {
-    internal sealed class SecondaryCareControllerTestContext
+    internal sealed class SecondaryCareControllerTestContext : IDisposable
     {
         internal TestMocks Mocks { get; }
         internal TestData Data { get; }
         private ServiceCollection ServiceCollection { get; }
         private ServiceProvider ServiceProvider { get; set; }
+
+        private static string SecondaryCareApiBaseUrl = "http://stubs.local.bitraft.io:8080/fhir/secondary-care/";
+        private static readonly string SecondaryCareSummaryUrl = $"{SecondaryCareApiBaseUrl}summary/$evaluate";
 
         public SecondaryCareControllerTestContext()
         {
@@ -32,38 +43,57 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 
         private void InitializeServiceProvider()
         {
-            ServiceCollection.AddTransient<SecondaryCareController>();
-
-            new PfsApi.SecondaryCare.ServiceConfigurationModule().ConfigureServices(ServiceCollection, null);
+            new PfsApi.SecondaryCare.ServiceConfigurationModule().ConfigureServices(ServiceCollection, Mocks.Configuration.Object);
+            new Support.ResponseParsers.ServiceConfigurationModule().ConfigureServices(ServiceCollection, Mocks.Configuration.Object);
 
             Mocks.ConfigureServices(ServiceCollection);
+            ConfigureHttpServices(ServiceCollection);
+
+            ServiceCollection.AddTransient<SecondaryCareController>();
 
             ServiceProvider = ServiceCollection.BuildServiceProvider();
         }
 
-        internal SecondaryCareController CreateSystemUnderTest() => ServiceProvider.GetRequiredService<SecondaryCareController>();
-
-        internal SecondaryCareControllerTestContext MockSecondaryCareClient()
+        private void ConfigureHttpServices(ServiceCollection serviceCollection)
         {
-            ServiceProvider = ServiceCollection
-                .AddSingleton(Mocks.SecondaryCareClient.Object)
-                .BuildServiceProvider();
+            serviceCollection
+                .AddSingleton(typeof(HttpTimeoutHandler<>))
+                .AddSingleton(typeof(HttpRequestIdentificationHandler<>));
 
-            return this;
+            serviceCollection
+                .ReplacePrimaryHttpMessageHandler<SecondaryCareHttpClient, MockHttpMessageHandler>();
         }
 
-        internal void MockSecondaryCareClientGetSummaryReturnsUnsuccessfulResponse()
+        internal SecondaryCareController CreateSystemUnderTest() => ServiceProvider.GetRequiredService<SecondaryCareController>();
+
+        internal void MockSecondaryCareHttpClientGetSummaryReturnsSuccessfulResponseWithData()
         {
-            Mocks.SecondaryCareClient
-                .Setup(c => c.GetSummary())
-                .Returns(new SecondaryCareResponse<SummaryResponse>(HttpStatusCode.BadRequest));
+            Mocks.MockHttpMessageHandler
+                .When(HttpMethod.Get, SecondaryCareSummaryUrl)
+                .WithHeaders(Data.RequestHeaders)
+                .Respond("application/json", JsonConvert.SerializeObject(Data.SummaryResponse));
+        }
+
+        internal void MockSecondaryCareHttpClientGetSummaryReturnsUnsuccessfulResponse()
+        {
+            Mocks.MockHttpMessageHandler
+                .When(HttpMethod.Get, SecondaryCareSummaryUrl)
+                .WithHeaders(Data.RequestHeaders)
+                .Respond(HttpStatusCode.BadRequest);
         }
 
         internal sealed class TestData
         {
-            public P9UserSession P9UserSession { get; } = new P9UserSession("csrfToken", "111 111 1111", new CitizenIdUserSession(), "im1ConnectionToken");
+            private const string NhsNumber = "1111111111";
 
-            public SummaryResponse HardcodedSummaryResponse { get; } = new SummaryResponse
+            public Dictionary<string, string> RequestHeaders { get; } = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                {"X-NHS-Number", NhsNumber}
+            };
+
+            public P9UserSession P9UserSession { get; } = new P9UserSession("csrfToken", NhsNumber, new CitizenIdUserSession(), "im1ConnectionToken");
+
+            public SummaryResponse SummaryResponse { get; } = new SummaryResponse
             {
                 Referrals = new[]
                 {
@@ -131,23 +161,45 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             };
         }
 
-        internal sealed class TestMocks
+        internal sealed class TestMocks : IDisposable
         {
+            internal Mock<IConfiguration> Configuration { get; }
+                = new Mock<IConfiguration>();
+
             internal Mock<ILogger<SecondaryCareController>> Logger { get; }
                 = new Mock<ILogger<SecondaryCareController>>();
             internal Mock<IAuditor> Auditor { get; }
                 = new Mock<IAuditor>();
 
-            internal Mock<ISecondaryCareClient> SecondaryCareClient { get; }
-                = new Mock<ISecondaryCareClient>();
+            internal MockHttpMessageHandler MockHttpMessageHandler { get; }
+                = new MockHttpMessageHandler();
+            internal Mock<IHttpTimeoutConfigurationSettings> HttpTimeoutConfigurationSettings { get; }
+                = new Mock<IHttpTimeoutConfigurationSettings>();
 
-            public void ConfigureServices(IServiceCollection serviceCollection)
+            public TestMocks()
+            {
+                Configuration
+                    .SetupGet(x => x["SECONDARY_CARE_BASE_URL"])
+                    .Returns(SecondaryCareApiBaseUrl);
+
+                HttpTimeoutConfigurationSettings
+                    .Setup(x => x.DefaultHttpTimeoutSeconds).Returns(10);
+            }
+
+            public void ConfigureServices(ServiceCollection serviceCollection)
             {
                 serviceCollection
                     .AddSingleton(Auditor.Object)
                     .AddSingleton(Logger.Object)
+                    .AddSingleton(Configuration.Object)
+                    .AddSingleton(HttpTimeoutConfigurationSettings.Object)
+                    .AddSingleton(MockHttpMessageHandler)
                     .AddMockLoggers();
             }
+
+            public void Dispose() => MockHttpMessageHandler?.Dispose();
         }
+
+        public void Dispose() => Mocks?.Dispose();
     }
 }

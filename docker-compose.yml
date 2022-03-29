@@ -138,6 +138,7 @@ services:
       - ./docker/knownservicesV3.env
       - ./docker/health_checks_enabled.env
       - ./docker/tpp_test_results.env
+      - ./docker/secondarycare_connectivity.env
     depends_on:
       - servicejourneyrulesapi.local.bitraft.io
     secrets:

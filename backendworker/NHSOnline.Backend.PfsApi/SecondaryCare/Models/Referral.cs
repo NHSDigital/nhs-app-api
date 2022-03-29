@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Models
 
         public string Status { get; set; }
 
-        public DateTimeOffset ReviewDueDate { get; set; }
+        public DateTimeOffset? ReviewDueDate { get; set; }
 
         public string Provider { get; set; }
     }

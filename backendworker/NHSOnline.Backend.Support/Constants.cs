@@ -277,6 +277,11 @@ namespace NHSOnline.Backend.Support
             public const string HealthCheckLoggingEnabledConfigKeyName = "Global:IsHealthCheckLoggingEnabled";
         }
 
+        public static class SecondaryCareConstants
+        {
+            public const string NhsNumberHeader = "X-NHS-Number";
+        }
+
         public static class AuthenticationSchemeGroupings
         {
             public const string JwtAndCookieAuthenticationScheme = JwtBearerDefaults.AuthenticationScheme + ","

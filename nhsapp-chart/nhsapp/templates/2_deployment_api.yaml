@@ -370,6 +370,8 @@ spec:
       {{- end }}
         - name: SIXTEEN_WEEKS_SLOTS_ENABLED
           value: "{{ $.Values.sixteenWeeksSlotsEnabled }}"
+        - name: SECONDARY_CARE_BASE_URL
+          value: "https://stubs-preprod.stubs.nonlive.nhsapp.service.nhs.uk/fhir/secondary-care/"
         - name: NHSAPP_API_KEY
           valueFrom:
             secretKeyRef:
