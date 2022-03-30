@@ -6,7 +6,7 @@ privateDomain: private.nonlive.nhsapp.service.nhs.uk
 registry: nhsapp.azurecr.io
 cosmosDBName: loadtest
 AZURE_SUBSCRIPTION_NAME: nonlive
-networkPolicyEnabled: false
+networkPolicyEnabled: true
 
 environmentPublicHostSuffix: "-loadtest.loadtest.nonlive.nhsapp.service.nhs.uk"
 environmentPrivateHostSuffix: "-loadtest.private.loadtest.nonlive.nhsapp.service.nhs.uk"
@@ -106,7 +106,7 @@ api:
     servicesV3__engage__url: https://nhs1-nhsapp.engage.gp
     servicesV3__ers__url: https://pat.sa.refer.nhs.uk
     servicesV3__pkb__url: https://nhsapp.devstacks.pkb.io
-    servicesV3__pkb__doamins__url: https://nhsapp.devstacks.pkb.io:443
+    servicesV3__pkb__domains__url: https://nhsapp.devstacks.pkb.io:443
 
 sjrExternalIngressEnabled: true
 
