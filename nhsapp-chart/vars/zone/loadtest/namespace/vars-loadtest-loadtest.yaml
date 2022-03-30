@@ -39,8 +39,8 @@ api:
   publicURL: api-stubbed.stubbed.nhsapp.service.nhs.uk
 
 cid:
-  minAvailable: 8
-  minReplicas: 16
+  minAvailable: 12
+  minReplicas: 24
   maxReplicas: 100
   image_tag: latest
 
