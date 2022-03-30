@@ -26,14 +26,14 @@ stubs:
   containerPort: 8080
   role: stubs
   image: nhsonline-minimock
-  image_tag: pr4763
+  image_tag: latest
   imagePullPolicy: Always
   memoryRequest: "1536Mi"
   memoryLimit: "1536Mi"
   cpuRequest: "500m"
   cpuLimit: "500m"
   targetCPUUtilizationPercentage: 35
-  minReplicas: 3
+  minReplicas: 32
   maxReplicas: 300
   environmentVariables:
     - name: WAIT_FOR_TIMEOUT
