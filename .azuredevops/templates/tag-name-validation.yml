@@ -1,0 +1,14 @@
+parameters:
+  - name: tagName
+    type: string 
+
+jobs:
+    - job: tag_name_validation
+      displayName: Validate tag name
+      steps: 
+        - task: Bash@3
+          displayName: Validate tag name
+          inputs:
+            targetType: 'inline'
+            script: |
+              [[ "${{ parameters.tagName }}" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-((0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*)(\.(0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(\+([0-9a-zA-Z-]+(\.[0-9a-zA-Z-]+)*))?$ ]]

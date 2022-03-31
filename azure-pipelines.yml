@@ -105,6 +105,8 @@ variables:
     branchName: $[ replace(variables['Build.SourceBranch'], 'refs/heads/', '') ]
   ${{ if startsWith(variables['Build.SourceBranch'], 'refs/pull/') }}:
     branchName: $[ replace(variables['System.PullRequest.SourceBranch'], 'refs/heads/', '') ]
+  ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}:
+    tagName: $[ replace(variables['Build.SourceBranch'], 'refs/tags/', '') ]    
   ${{ if or(eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['source.tag'], 'True')) }}:
     docker.registry_release: nhsapprelease.azurecr.io
 
@@ -124,6 +126,14 @@ variables:
       security.scan.enabled: false
 
 stages:
+  - ${{ if eq(variables['source.tag'], 'True') }}:
+    - stage: tag_name_validation
+      displayName: Tag Name Validation
+      jobs:
+        - template: .azuredevops/templates/tag-name-validation.yml
+          parameters: 
+            tagName: $(tagName)
+
   - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
     - stage: pr_changes
       displayName: Determine PR Changes
