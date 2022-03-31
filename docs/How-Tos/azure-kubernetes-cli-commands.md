@@ -27,6 +27,16 @@ Get credentials: \
 
 If you get permission errors here - make sure to run `az logout` and then login again to refresh your permissions
 
+## Get credentials for the PreProd Stubs Azure CLI (Nonlive);
+
+Set active account for Nonlive: \
+```az account set --subscription="4bbd6a1f-80a5-485b-a0bb-32c5b6e35c09"```
+
+Get credentials: \
+```az aks get-credentials --resource-group nhsapp-stubs-preprod --name nhsapp-stubs-preprod --overwrite-existing```
+
+If you've double checked you have the correct permissions and it still doesn't work, try get the credentials again but include ```--admin```
+
 ## Get credentials for the Staging Azure CLI (Live):
 
 Set active account for Live: \
@@ -42,6 +52,9 @@ The [Kubernetes command-line tool](https://kubernetes.io/docs/tasks/tools/instal
 
 Dev: \
 ```kubectl config use-context nhsapp-devuks1```
+
+PreProd Stubs: \
+```kubectl config use-context nhsapp-stubs-preprod```
 
 Staging: \
 ```kubectl config use-context nhsapp-staginguks1```

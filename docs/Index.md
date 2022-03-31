@@ -38,3 +38,4 @@
 * [New Public Health Notifications](How-Tos/new-public-health-notifications.md)
 * [Recreate iOS Distribution Certificate](How-Tos/recreate-ios-distribution-certificate.md)
 * [Azure & Kubernetes CLI commands](How-Tos/azure-kubernetes-cli-commands.md)
+* [Stubbing with Minimocks and Deploying to Pre-Prod](How-Tos/stubbing-pre-prod-minimocks.md)
