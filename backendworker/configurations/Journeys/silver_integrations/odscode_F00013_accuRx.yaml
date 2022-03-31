@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "F00013"
+journeys:
+  silverIntegrations:
+    consultations:
+      - accurx

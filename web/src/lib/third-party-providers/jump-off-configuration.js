@@ -358,6 +358,14 @@ const thirdPartyProvider = {
       serviceType: 'healthTrackers',
     },
   },
+  accurx: {
+    triage: {
+      jumpOffId: 'triage',
+      redirectPath: '/api/OpenIdConnect/AuthenticatePatientTriage',
+      provider: 'accurx',
+      serviceType: 'consultations',
+    },
+  },
 };
 
 export const getJumpOffConfiguration = id => get(id)(thirdPartyProvider);

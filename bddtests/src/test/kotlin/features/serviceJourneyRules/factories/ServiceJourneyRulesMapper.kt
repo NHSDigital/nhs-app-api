@@ -249,6 +249,12 @@ class ServiceJourneyRulesMapper {
                             SJRJourneyType.WAYFINDER_ENABLED
                     )
             )
+            .add(
+                Supplier.EMIS, "F00013",
+                EnumSet.of(
+                    SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_ACCURX
+                )
+            )
 
         fun findPatientForConfiguration(
             gpSystem: Supplier?,

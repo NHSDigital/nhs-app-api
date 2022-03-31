@@ -21,7 +21,7 @@ namespace NHSOnline.IntegrationTests.Advice
     public class EconsultGpAdviceTests
     {
         [NhsAppAndroidTest]
-        public void APatientCanAccessGpAdviceJourneyAndroid(IAndroidDriverWrapper driver)
+        public void APatientCanAccessEngageGpAdviceJourneyAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
                 .WithName(b => b.GivenName("Electra").FamilyName("Consult"));
@@ -35,7 +35,61 @@ namespace NHSOnline.IntegrationTests.Advice
 
             AndroidAdvicePage
                 .AssertOnPage(driver)
-                .PageContent.NavigateToAskYourGpForAdvice();
+                .PageContent.NavigateToAskYourGpForAdviceEngage();
+
+            AndroidAskYourGpForAdviceStartPage
+                .AssertOnPage(driver)
+                .PageContent.SelectFindOutMore();
+
+            AndroidBrowserOverlayBrowserChoice
+                .IfDisplayed(driver, choice => choice.ChooseChrome());
+
+            AndroidBrowserOverlayOnlineConsultationPrivacyPolicyPage
+                .AssertOnPage(driver)
+                .ReturnToApp();
+
+            AndroidAskYourGpForAdviceStartPage
+                .AssertOnPage(driver)
+                .PageContent.SelectPrivacyPolicy();
+
+            AndroidBrowserOverlayBrowserChoice
+                .IfDisplayed(driver, choice => choice.ChooseChrome());
+
+            AndroidBrowserOverlayNhsAppPrivacyPolicyPage
+                .AssertOnPage(driver)
+                .ReturnToApp();
+
+            AndroidAskYourGpForAdviceStartPage
+                .AssertOnPage(driver)
+                .PageContent.AssertPageContent()
+                .ClickDemographicsCheckbox()
+                .Continue();
+
+            AndroidAskYourGpForAdviceTermsPage
+                .AssertOnPage(driver);
+
+            driver.PressBackButton();
+
+            AndroidAskYourGpForAdviceTermsPage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppAndroidTest]
+        public void APatientCanAccessAccuRxGpAdviceJourneyAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Electra").FamilyName("Consult"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToAdvice();
+
+            AndroidAdvicePage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToAskYourGpForAdviceAccuRx();
 
             AndroidAskYourGpForAdviceStartPage
                 .AssertOnPage(driver)
@@ -75,7 +129,7 @@ namespace NHSOnline.IntegrationTests.Advice
         }
 
         [NhsAppIOSTest]
-        public void APatientCanAccessGpAdviceJourneyIos(IIOSDriverWrapper driver)
+        public void APatientCanAccessEngageGpAdviceJourneyIos(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
                 .WithName(b => b.GivenName("Electra").FamilyName("Consult"));
@@ -89,7 +143,47 @@ namespace NHSOnline.IntegrationTests.Advice
 
             IOSAdvicePage
                 .AssertOnPage(driver)
-                .PageContent.NavigateToAskYourGpForAdvice();
+                .PageContent.NavigateToAskYourGpForAdviceEngage();
+
+            IOSAskYourGpForAdviceStartPage
+                .AssertOnPage(driver)
+                .PageContent.SelectFindOutMore();
+
+            IOSBrowserOverlayOnlineConsultationPrivacyPolicyPage
+                .AssertOnPage(driver)
+                .ReturnToApp();
+
+            IOSAskYourGpForAdviceStartPage
+                .AssertOnPage(driver)
+                .PageContent.AssertPageContent()
+                .ClickDemographicsCheckbox()
+                .Continue();
+
+            IOSAskYourGpForAdviceTermsPage
+                .AssertOnPage(driver);
+
+            driver.SwipeBack();
+
+            IOSAskYourGpForAdviceTermsPage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppIOSTest]
+        public void APatientCanAccessAccuRxGpAdviceJourneyIos(IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Electra").FamilyName("Consult"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToAdvice();
+
+            IOSAdvicePage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToAskYourGpForAdviceAccuRx();
 
             IOSAskYourGpForAdviceStartPage
                 .AssertOnPage(driver)

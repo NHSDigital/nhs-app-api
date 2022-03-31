@@ -40,6 +40,7 @@ journeys:
     - pkb
     - pkbCie
     - engage
+    - accurx
     consultationsAdmin:
     - engage
     healthTrackers:

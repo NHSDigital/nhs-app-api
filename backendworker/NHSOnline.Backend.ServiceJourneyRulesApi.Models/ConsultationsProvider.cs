@@ -10,5 +10,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
         pkb,
         pkbCie,
         engage,
+        accurx,
     }
 }

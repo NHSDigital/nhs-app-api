@@ -100,6 +100,7 @@ Before running the app locally, some entries need to be added to your machine's 
 127.0.0.1 pkb.stubs.local.bitraft.io
 127.0.0.1 pkb.securestubs.local.bitraft.io
 127.0.0.1 engage.stubs.local.bitraft.io
+127.0.0.1 accurx.stubs.local.bitraft.io
 127.0.0.1 gncr.stubs.local.bitraft.io
 127.0.0.1 substrakt.stubs.local.bitraft.io
 127.0.0.1 nhsd.stubs.local.bitraft.io
@@ -134,6 +135,7 @@ If you have difficulty accessing web.local.bitraft.io:3000 and web is running in
 ::1 pkb.stubs.local.bitraft.io
 ::1 pkb.securestubs.local.bitraft.io
 ::1 engage.stubs.local.bitraft.io
+::1 accurx.stubs.local.bitraft.io
 ::1 gncr.stubs.local.bitraft.io
 ::1 substrakt.stubs.local.bitraft.io
 ::1 nhsd.stubs.local.bitraft.io

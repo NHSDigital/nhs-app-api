@@ -52,7 +52,7 @@ describe('Advice Check Menu', () => {
     });
 
     it('will contain the correct number of items ', () => {
-      expect(menuItems.length).toBe(5);
+      expect(menuItems.length).toBe(6);
     });
 
     each([
@@ -61,6 +61,7 @@ describe('Advice Check Menu', () => {
       ['NHS 111 online', 2, { h2: 'Use NHS 111 online', p: 'Check if you need urgent help and find out what to do next' }],
       ['CDSS GP advice', 3, { h2: 'Ask your GP for advice', p: 'Answer questions online and get a response from your GP surgery. You may be able to get advice for your child if it\'s available at your surgery' }],
       ['Engage GP advice', 4, { h2: 'Ask your GP for advice', p: 'Answer questions online and get a response from your GP surgery' }],
+      ['AccuRx GP advice', 5, { h2: 'Ask your GP for advice', p: 'Answer questions online and get a response from your GP surgery' }],
     ]).describe('%s menu item', (_, position, text) => {
       beforeEach(() => {
         menuItem = menuItems.at(position);
@@ -177,6 +178,10 @@ describe('Advice Check Menu', () => {
       it('will hide engage medical advice', () => {
         expect(wrapper.find('#btn_engage_medical_advice').exists()).toBe(false);
       });
+
+      it('will hide accurx triage advice', () => {
+        expect(wrapper.find('#btn_accurx_triage_advice').exists()).toBe(false);
+      });
     });
 
     describe('and silver integration is enabled in SJR', () => {
@@ -190,6 +195,10 @@ describe('Advice Check Menu', () => {
         it('will show engage medical advice', () => {
           expect(wrapper.find('#btn_engage_medical_advice').exists()).toBe(true);
         });
+
+        it('will show accurx triage advice', () => {
+          expect(wrapper.find('#btn_accurx_triage_advice').exists()).toBe(true);
+        });
       });
 
       describe('and user is not P9', () => {
@@ -199,6 +208,10 @@ describe('Advice Check Menu', () => {
 
         it('will hide engage medical advice', () => {
           expect(wrapper.find('#btn_engage_medical_advice').exists()).toBe(false);
+        });
+
+        it('will hide accurx triage advice', () => {
+          expect(wrapper.find('#btn_accurx_triage_advice').exists()).toBe(false);
         });
       });
     });

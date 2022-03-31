@@ -737,6 +737,61 @@ defaultUsers:
       dateOfBirth: 1959-08-08T00:00:00
       sex: male
 
+  accurx:
+    9998571236:
+      userId: 67a812eb-9bfe-4654-95e9-aab6c3391cea
+      emailAddress: onboarding.nhsapp+accurx.user1@gmail.com
+      odsCode: F00013
+      givenName: Simon
+      familyName: Davis
+      dateOfBirth: "1997-10-10T00:00:00"
+      sex: Male
+
+    9998571237:
+      userId: 71e34d2b-c3c1-4c12-8af9-631d5c45b6d7
+      emailAddress: onboarding.nhsapp+accurx.user2@gmail.com
+      odsCode: F00013
+      givenName: Neil
+      familyName: Robertson
+      dateOfBirth: "1984-01-01T00:00:00"
+      sex: Male
+
+    9998571238:
+      userId: bd3ede48-b8e5-4d94-9045-77a382af08b4
+      emailAddress: onboarding.nhsapp+accurx.user3@gmail.com
+      odsCode: F00013
+      givenName: Karen
+      familyName: Pearson
+      dateOfBirth: "1994-02-02T00:00:00"
+      sex: Female
+
+    9998571239:
+      userId: 5206cbb5-2ebd-4111-94b2-421b564889a0
+      emailAddress: onboarding.nhsapp+accurx.user4@gmail.com
+      odsCode: F00013
+      givenName: Mike
+      familyName: Woods
+      dateOfBirth: "1999-05-05T00:00:00"
+      sex: Male
+
+    9998571240:
+      userId: 15cb44cf-a380-4210-a7c5-074b87a6005a
+      emailAddress: onboarding.nhsapp+accurx.user5@gmail.com
+      odsCode: F00013
+      givenName: Mary
+      familyName: Simpson
+      dateOfBirth: "1978-11-11T00:00:00"
+      sex: Female
+
+    9998571241:
+      userId: 381cf6fa-ad3e-4992-8ec7-aa452543bb3d
+      emailAddress: onboarding.nhsapp+accurx.user6@gmail.com
+      odsCode: F00013
+      givenName: Mollie
+      familyName: Harris
+      dateOfBirth: "1983-09-09T00:00:00"
+      sex: Female
+
   vaccinerecord:
     9692237818:
       userId: 0965ec5a-68f4-4d69-acf7-67a3c603115d

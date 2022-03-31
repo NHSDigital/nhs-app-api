@@ -220,7 +220,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [ "pkb", "pkbCie", "engage" ]
+            "enum": [ "pkb", "pkbCie", "engage", "accurx" ]
           }
         },
         "consultationsAdmin": {

@@ -46,6 +46,11 @@
                                    id="btn_engage_medical_advice"
                                    provider-id="engage"
                                    :provider-configuration="thirdPartyProvider.engage.medical"/>
+
+      <third-party-jump-off-button v-if="isLoggedIn && showAccuRxMedicalAdvice && isProofLevel9"
+                                   id="btn_accurx_triage_advice"
+                                   provider-id="accurx"
+                                   :provider-configuration="thirdPartyProvider.accurx.triage"/>
     </menu-item-list>
   </div>
 </template>
@@ -89,6 +94,14 @@ export default {
         journey: 'silverIntegration',
         context: {
           provider: 'engage',
+          serviceType: 'consultations',
+        },
+      }),
+      showAccuRxMedicalAdvice: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'accurx',
           serviceType: 'consultations',
         },
       }),

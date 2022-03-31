@@ -102,6 +102,22 @@ api:
     servicesV3__nhsd__url: https://vaccine-status-dev-uks.azurewebsites.net
     servicesV3__netCompany__url: https://stdevpistatic01.z33.web.core.windows.net
 
+    # Full AccuRx config is defined here as we want to confine the AccuRx KnownService
+    # to the dev cluster for the moment, due to only having configuration details for sandpit
+    services__accurx__subServices: null
+    services__accurx__javaScriptInteractionMode: SilverThirdParty
+    services__accurx__menuTab: None
+    services__accurx__viewMode: WebView
+    services__accurx__integrationLevel: SilverWithWebNavigation
+    services__accurx__showSpinner: true
+    services__accurx__showThirdPartyWarning: true
+    services__accurx__requiresAssertedLoginIdentity: true
+    services__accurx__validateSession: true
+    services__accurx__url: https://nhsapp.dev.accurx.com
+    servicesV3__accurx__showThirdPartyWarning: true
+    servicesV3__accurx__requiresAssertedLoginIdentity: true
+    servicesV3__accurx__url: https://nhsapp.dev.accurx.com
+
 sidecar_proxy:
   memoryRequest: "32Mi"
   memoryLimit: "256Mi"

@@ -719,4 +719,24 @@ export default {
       },
     ],
   },
+  accurx: {
+    serviceId: 'accurx',
+    providerName: 'accuRx Limited',
+    jumpOffs: [
+      {
+        id: 'triage',
+        jumpOffContent: {
+          headerText: 'Ask your GP for advice',
+          descriptionText: 'Answer questions online and get a response from your GP surgery',
+        },
+        thirdPartyWarning: {
+          featureName: 'Ask your GP for advice',
+          servicePurchaser: 'Your GP surgery',
+          serviceType: 'online consultation service',
+          serviceTypePlural: 'online consultation services',
+          linkHref: 'ONLINE_CONSULTATIONS_PRIVACY_URL',
+        },
+      },
+    ],
+  },
 };

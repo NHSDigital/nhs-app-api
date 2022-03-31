@@ -23,14 +23,19 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Advice
 
         private WebMenuItem UseNhsOnlineMenuItem => WebMenuItem.WithTitle(_interactor, "Use NHS 111 online");
 
-        private WebMenuItem AskGpMenuItem => WebMenuItem.WithTitle(_interactor, "Ask your GP for advice");
+        private WebMenuItem AskGpMenuItemEngage =>
+            WebMenuItem.WithTitle(_interactor, "Ask your GP for advice", "btn_engage_medical_advice");
+
+         private WebMenuItem AskGpMenuItemAccuRx =>
+             WebMenuItem.WithTitle(_interactor, "Ask your GP for advice", "btn_accurx_triage_advice");
 
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
             GetAdviceMenuItem,
             SearchConditionsMenuItem,
             UseNhsOnlineMenuItem,
-            AskGpMenuItem
+            AskGpMenuItemEngage,
+            AskGpMenuItemAccuRx
         };
 
         internal void AssertOnPage() => TitleText.AssertVisible();
@@ -44,7 +49,9 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Advice
 
         public void NavigateToAToZ() => SearchConditionsMenuItem.Click();
 
-        public void NavigateToAskYourGpForAdvice() => AskGpMenuItem.Click();
+        public void NavigateToAskYourGpForAdviceEngage() => AskGpMenuItemEngage.Click();
+
+        public void NavigateToAskYourGpForAdviceAccuRx() => AskGpMenuItemAccuRx.Click();
 
         public void KeyboardNavigateToOneOneOne(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(UseNhsOnlineMenuItem, navigation);
 
