@@ -6,7 +6,7 @@ privateDomain: private.nonlive.nhsapp.service.nhs.uk
 registry: nhsapp.azurecr.io
 cosmosDBName: loadtest
 AZURE_SUBSCRIPTION_NAME: nonlive
-networkPolicyEnabled: true
+networkPolicyEnabled: false
 
 environmentPublicHostSuffix: "-loadtest.loadtest.nonlive.nhsapp.service.nhs.uk"
 environmentPrivateHostSuffix: "-loadtest.private.loadtest.nonlive.nhsapp.service.nhs.uk"
