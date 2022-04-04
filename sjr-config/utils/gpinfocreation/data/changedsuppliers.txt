@@ -839,3 +839,6 @@ ODS,Organisation,PreviousSupplier,NewSupplier
 B82049,"THIRSK DOCTORS SURGERY","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)","THE PHOENIX PARTNERSHIP"
 B82049,"THIRSK DOCTORS SURGERY","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)","THE PHOENIX PARTNERSHIP"
 ==================================================================
+==================================================================
+Job Run - Sun 3 Apr 2022 23:34:38 BST
+==================================================================
