@@ -22,13 +22,14 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 
         private const string InstallationId = "InstallationId";
         private const string NhsLoginId = "NhsLoginId";
+        private const string NotificationId = "NotificationId";
 
         private readonly NotificationRequest _notificationRequest = new NotificationRequest
         {
             Title = "title",
             Subtitle = "subtitle",
             Body = "body",
-            Url = new Uri("http://www.example.com"),
+            Url = new Uri("https://www.example.com"),
             NhsLoginId = NhsLoginId
         };
 
@@ -37,23 +38,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             Title = "title",
             Subtitle = "subtitle",
             Body = "body",
-            Url = new Uri("http://www.example.com"),
+            Url = new Uri("https://www.example.com"),
             NhsLoginId = NhsLoginId,
             ScheduledTime = DateTimeOffset.UtcNow.AddHours(1)
-        };
-
-        private readonly NotificationResponse _scheduledNotificationResponse = new NotificationResponse
-        {
-            Scheduled = true,
-            NotificationId = "Scheduled Notification ID",
-            TrackingId = "Scheduled Tracking ID"
-        };
-
-        private readonly NotificationResponse _notificationResponse = new NotificationResponse
-        {
-            Scheduled = false,
-            NotificationId = "Notification ID",
-            TrackingId = "Tracking ID"
         };
 
         [TestInitialize]
@@ -106,7 +93,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         public async Task SendNotification_OneMatchingWrapper_NotificationSent()
         {
             // Arrange
-            SetupMockWrapper(_mockWrapper);
+            SetupMockWrapper(_mockWrapper, "hubPath");
 
             _mockWrapperService
                 .Setup(x => x.AllFor(NhsLoginId))
@@ -116,7 +103,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             var response = await _systemUnderTest.SendNotification(_notificationRequest);
 
             // Assert
-            response.Should().BeEquivalentTo(_notificationResponse);
+            response.Scheduled.Should().BeFalse();
+            response.HubPath.Should().Be("hubPath");
+            response.NotificationId.Should().Be(NotificationId);
 
             VerifyMocks();
         }
@@ -125,7 +114,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         public async Task SendNotification_OneMatchingWrapper_Scheduled_NotificationSent()
         {
             // Arrange
-            SetupMockWrapper(_mockWrapper, scheduled: true);
+            SetupMockWrapper(_mockWrapper, "hubPath", scheduled: true);
 
             _mockWrapperService
                 .Setup(x => x.AllFor(NhsLoginId))
@@ -135,7 +124,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             var response = await _systemUnderTest.SendNotification(_scheduledNotificationRequest);
 
             // Assert
-            response.Should().BeEquivalentTo(_scheduledNotificationResponse);
+            response.Scheduled.Should().BeTrue();
+            response.HubPath.Should().Be("hubPath");
+            response.NotificationId.Should().Be(NotificationId);
 
             VerifyMocks();
         }
@@ -144,8 +135,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         public void SendNotification_MultipleMatchingWrappers_InstallationNotFoundInAny_Throws()
         {
             // Arrange
-            SetupMockWrapper(_mockWrapper, false, true);
-            SetupMockWrapper(_mockWrapper2, false, true);
+            SetupMockWrapper(_mockWrapper, "hubPath1", false, true);
+            SetupMockWrapper(_mockWrapper2, "hubPath2", false, true);
 
             _mockWrapperService
                 .Setup(x => x.AllFor(NhsLoginId))
@@ -163,8 +154,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         public void SendNotification_MultipleMatchingWrappers_InstallationNotFoundInAny_Scheduled_Throws()
         {
             // Arrange
-            SetupMockWrapper(_mockWrapper, false, true);
-            SetupMockWrapper(_mockWrapper2, false, true);
+            SetupMockWrapper(_mockWrapper, "hubPath1", false, true);
+            SetupMockWrapper(_mockWrapper2, "hubPath2", false, true);
 
             _mockWrapperService
                 .Setup(x => x.AllFor(NhsLoginId))
@@ -182,8 +173,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         public async Task SendNotification_MultipleMatchingWrappers_InstallationFoundInFirstOne_SendsNotification()
         {
             // Arrange
-            SetupMockWrapper(_mockWrapper, true, true);
-            SetupMockWrapper(_mockWrapper2, false, true);
+            SetupMockWrapper(_mockWrapper, "hubPath1", true, true);
 
             _mockWrapperService
                 .Setup(x => x.AllFor(NhsLoginId))
@@ -193,18 +183,18 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             var response = await _systemUnderTest.SendNotification(_notificationRequest);
 
             // Assert
-            response.Should().BeEquivalentTo(_notificationResponse);
-            _mockWrapperService.VerifyAll();
-            _mockWrapper.VerifyAll();
-            _mockWrapper2.VerifyNoOtherCalls();
+            response.Scheduled.Should().BeFalse();
+            response.HubPath.Should().Be("hubPath1");
+            response.NotificationId.Should().Be(NotificationId);
+
+            VerifyMocks();
         }
 
         [TestMethod]
         public async Task SendNotification_MultipleMatchingWrappers_InstallationFoundInFirstOne_Scheduled_SendsNotification()
         {
             // Arrange
-            SetupMockWrapper(_mockWrapper, true, true, true);
-            SetupMockWrapper(_mockWrapper2, false, true, true);
+            SetupMockWrapper(_mockWrapper, "hubPath1", true, true, true);
 
             _mockWrapperService
                 .Setup(x => x.AllFor(NhsLoginId))
@@ -214,18 +204,19 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             var response = await _systemUnderTest.SendNotification(_scheduledNotificationRequest);
 
             // Assert
-            response.Should().BeEquivalentTo(_scheduledNotificationResponse);
-            _mockWrapperService.VerifyAll();
-            _mockWrapper.VerifyAll();
-            _mockWrapper2.VerifyNoOtherCalls();
+            response.Scheduled.Should().BeTrue();
+            response.HubPath.Should().Be("hubPath1");
+            response.NotificationId.Should().Be(NotificationId);
+
+            VerifyMocks();
         }
 
         [TestMethod]
         public async Task SendNotification_MultipleMatchingWrappers_InstallationFoundInSecondOne_SendsNotification()
         {
             // Arrange
-            SetupMockWrapper(_mockWrapper, false, true);
-            SetupMockWrapper(_mockWrapper2, true, true);
+            SetupMockWrapper(_mockWrapper,"hubPath1", false, true);
+            SetupMockWrapper(_mockWrapper2, "hubPath2", true, true);
 
             _mockWrapperService
                 .Setup(x => x.AllFor(NhsLoginId))
@@ -235,7 +226,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             var response = await _systemUnderTest.SendNotification(_notificationRequest);
 
             // Assert
-            response.Should().BeEquivalentTo(_notificationResponse);
+            response.Scheduled.Should().BeFalse();
+            response.HubPath.Should().Be("hubPath2");
+            response.NotificationId.Should().Be(NotificationId);
+
             VerifyMocks();
         }
 
@@ -243,8 +237,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         public async Task SendNotification_MultipleMatchingWrappers_InstallationFoundInSecondOne_Scheduled_SendsNotification()
         {
             // Arrange
-            SetupMockWrapper(_mockWrapper, false, true, true);
-            SetupMockWrapper(_mockWrapper2, true, true, true);
+            SetupMockWrapper(_mockWrapper, "hubPath1", false, true, true);
+            SetupMockWrapper(_mockWrapper2, "hubPath2", true, true, true);
 
             _mockWrapperService
                 .Setup(x => x.AllFor(NhsLoginId))
@@ -254,55 +248,17 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             var response = await _systemUnderTest.SendNotification(_scheduledNotificationRequest);
 
             // Assert
-            response.Should().BeEquivalentTo(_scheduledNotificationResponse);
+            response.Scheduled.Should().BeTrue();
+            response.HubPath.Should().Be("hubPath2");
+            response.NotificationId.Should().Be(NotificationId);
+
             VerifyMocks();
-        }
-
-        [TestMethod]
-        public async Task SendNotification_MultipleMatchingWrappers_InstallationFoundInAll_SendsNotification()
-        {
-            // Arrange
-            SetupMockWrapper(_mockWrapper, true, true);
-            SetupMockWrapper(_mockWrapper2, true, true);
-
-            _mockWrapperService
-                .Setup(x => x.AllFor(NhsLoginId))
-                .Returns(new[] { _mockWrapper.Object, _mockWrapper2.Object });
-
-            // Act
-            var response = await _systemUnderTest.SendNotification(_notificationRequest);
-
-            // Assert
-            response.Should().BeEquivalentTo(_notificationResponse);
-            _mockWrapperService.VerifyAll();
-            _mockWrapper.VerifyAll();
-            _mockWrapper2.VerifyNoOtherCalls();
-        }
-
-        [TestMethod]
-        public async Task SendNotification_MultipleMatchingWrappers_InstallationFoundInAll_Scheduled_SendsNotification()
-        {
-            // Arrange
-            SetupMockWrapper(_mockWrapper, true, true, true);
-            SetupMockWrapper(_mockWrapper2, true, true, true);
-
-            _mockWrapperService
-                .Setup(x => x.AllFor(NhsLoginId))
-                .Returns(new[] { _mockWrapper.Object, _mockWrapper2.Object });
-
-            // Act
-            var response = await _systemUnderTest.SendNotification(_scheduledNotificationRequest);
-
-            // Assert
-            response.Should().BeEquivalentTo(_scheduledNotificationResponse);
-            _mockWrapperService.VerifyAll();
-            _mockWrapper.VerifyAll();
-            _mockWrapper2.VerifyNoOtherCalls();
         }
 
         private void SetupMockWrapper(
             Mock<IAzureNotificationHubWrapper> wrapper,
-            bool hasInstallations = false,
+            string path,
+            bool hasInstallations = true,
             bool hasMultipleWrappers = false,
             bool scheduled = false)
         {
@@ -315,36 +271,23 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 wrapper
                     .Setup(x => x.GetInstallationIdsByNhsLoginId(NhsLoginId))
                     .ReturnsAsync(installationIds);
-
-                if (hasInstallations)
-                {
-                    if (scheduled)
-                    {
-                        wrapper
-                            .Setup(x => x.SendScheduledNotification(_scheduledNotificationRequest))
-                            .ReturnsAsync(_scheduledNotificationResponse);
-                    }
-                    else
-                    {
-                        wrapper
-                            .Setup(x => x.SendNotification(_notificationRequest))
-                            .ReturnsAsync(_notificationResponse);
-                    }
-                }
             }
-            else
+
+            if (hasInstallations)
             {
+                wrapper.SetupGet(x => x.Path).Returns(path);
+
                 if (scheduled)
                 {
                     wrapper
                         .Setup(x => x.SendScheduledNotification(_scheduledNotificationRequest))
-                        .ReturnsAsync(_scheduledNotificationResponse);
+                        .ReturnsAsync(NotificationId);
                 }
                 else
                 {
                     wrapper
                         .Setup(x => x.SendNotification(_notificationRequest))
-                        .ReturnsAsync(_notificationResponse);
+                        .ReturnsAsync(NotificationId);
                 }
             }
         }

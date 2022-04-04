@@ -45,9 +45,9 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
                 await _eventHubLogger.NotificationEnqueued(
                     new NotificationEnqueuedEventLogData(
                     _nhsLoginId,
-                    result.NotificationResponse.NotificationId,
-                    result.NotificationResponse.TrackingId,
-                    result.NotificationResponse.Scheduled,
+                    result.NotificationSendResponse.NotificationId,
+                    result.NotificationSendResponse.Scheduled,
+                    result.NotificationSendResponse.HubPath,
                     senderContextLogData
                 ));
             }

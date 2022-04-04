@@ -1,3 +1,4 @@
+using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 using NHSOnline.Backend.UsersApi.Notifications.Models;
 
 namespace NHSOnline.Backend.UsersApi.Notifications
@@ -32,11 +33,11 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public class Success : NotificationSendResult
         {
-            public NotificationResponse NotificationResponse { get; }
+            public NotificationSendResponse NotificationSendResponse { get; }
 
-            public Success(NotificationResponse notificationResponse)
+            public Success(NotificationSendResponse notificationSendResponse)
             {
-                NotificationResponse = notificationResponse;
+                NotificationSendResponse = notificationSendResponse;
             }
 
             public override T Accept<T>(INotificationSendResultVisitor<T> visitor)

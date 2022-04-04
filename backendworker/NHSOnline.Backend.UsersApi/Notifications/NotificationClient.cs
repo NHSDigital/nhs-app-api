@@ -108,7 +108,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             }
         }
 
-        public async Task<NotificationResponse> SendNotification(NotificationRequest request)
+        public async Task<NotificationSendResponse> SendNotification(NotificationRequest request)
         {
             _logger.LogEnter();
 
@@ -147,14 +147,20 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             }
         }
 
-        private static async Task<NotificationResponse> SendNotification(IAzureNotificationHubWrapper wrapper, NotificationRequest request)
+        private static async Task<NotificationSendResponse> SendNotification(IAzureNotificationHubWrapper wrapper, NotificationRequest request)
         {
-            if (request.ScheduledTime != null)
-            {
-                return await wrapper.SendScheduledNotification(request);
-            }
+            var scheduled = request.ScheduledTime != null;
 
-            return await wrapper.SendNotification(request);
+            var notificationId = scheduled
+                ? await wrapper.SendScheduledNotification(request)
+                : await wrapper.SendNotification(request);
+
+            return new NotificationSendResponse
+            {
+                Scheduled = scheduled,
+                HubPath = wrapper.Path,
+                NotificationId = notificationId
+            };
         }
     }
 }

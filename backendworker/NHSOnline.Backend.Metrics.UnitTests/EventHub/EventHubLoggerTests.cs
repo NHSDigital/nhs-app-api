@@ -263,7 +263,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
             );
 
             var notificationEnqueuedData = new NotificationEnqueuedEventLogData(
-                "Nhs Login ID", "Notification ID", "Tracking ID", true, senderContext);
+                "Nhs Login ID", "Notification ID", true, "Hub Path", senderContext);
 
             var loggedNonPidData = string.Empty;
             var loggedPidData = string.Empty;
@@ -290,8 +290,8 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
             AssertContains(loggedNonPidData, "EnvironmentName=TestEnv");
             AssertContains(loggedNonPidData, "NhsLoginId=Nhs+Login+ID");
             AssertContains(loggedNonPidData, "NotificationId=Notification+ID");
-            AssertContains(loggedNonPidData, "TrackingId=Tracking+ID");
             AssertContains(loggedNonPidData, "Scheduled=True");
+            AssertContains(loggedNonPidData, "HubPath=Hub+Path");
             AssertContains(loggedNonPidData, "CommunicationId=Communication+ID");
             AssertContains(loggedNonPidData, "TransmissionId=Transmission+ID");
             AssertContains(loggedNonPidData, "CommunicationCreatedDateTime=2021-04-22T01%3a05%3a25%3a000");
@@ -306,8 +306,8 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
             AssertContains(loggedPidData, "EnvironmentName=TestEnv");
             AssertContains(loggedPidData, "NhsLoginId=Nhs+Login+ID");
             AssertContains(loggedPidData, "NotificationId=Notification+ID");
-            AssertContains(loggedPidData, "TrackingId=Tracking+ID");
             AssertContains(loggedPidData, "Scheduled=True");
+            AssertContains(loggedPidData, "HubPath=Hub+Path");
             AssertContains(loggedPidData, "CommunicationId=Communication+ID");
             AssertContains(loggedPidData, "TransmissionId=Transmission+ID");
             AssertContains(loggedPidData, "CommunicationCreatedDateTime=2021-04-22T01%3a05%3a25%3a000");

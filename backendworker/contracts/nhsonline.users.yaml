@@ -277,10 +277,10 @@ components:
       properties:
         notificationId:
           type: string
-        trackingId:
-          type: string
         scheduled:
           type: boolean
+        hubPath:
+          type: string
     NotificationsPromptData:
       type: object
       required:

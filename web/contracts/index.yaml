@@ -5979,10 +5979,10 @@
                   properties: 
                     notificationId: 
                       type: "string"
-                    trackingId: 
-                      type: "string"
                     scheduled: 
                       type: "boolean"
+                    hubPath:
+                      type: "string"
           400: 
             description: "Bad request. Supplied request is invalid."
           409: 

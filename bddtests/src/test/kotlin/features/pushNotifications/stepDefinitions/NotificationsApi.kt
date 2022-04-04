@@ -5,6 +5,7 @@ import org.apache.http.HttpStatus
 import utils.getOrFail
 import utils.set
 import worker.WorkerClient
+import worker.models.pushNotifications.PushNotificationResponse
 import worker.models.userDevices.NotificationSendRequest
 import worker.models.userDevices.RegisterUserDevicesRequest
 
@@ -53,17 +54,17 @@ class NotificationsApi {
             PushNotificationsSerenityHelpers.DELETE_RESPONSE.set(response)
         }
 
-        fun getRegistrationIds(nhsloginId: String) {
+        fun getRegistrationIds(nhsLoginId: String) {
             val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .userDevices
-                    .getRegistrations(nhsloginId, true)
+                    .getRegistrations(nhsLoginId, true)
             PushNotificationsSerenityHelpers.GET_REGISTRATIONS_RESPONSE.set(response)
         }
 
-        fun postNotification(nhsloginId: String, notification: NotificationSendRequest): String? {
+        fun postNotification(nhsLoginId: String, notification: NotificationSendRequest): PushNotificationResponse? {
             val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .userDevices
-                    .postNotification(nhsloginId, notification, true)
+                    .postNotification(nhsLoginId, notification, true)
             PushNotificationsSerenityHelpers.CREATE_PUSH_NOTIFICATION_RESPONSE.set(response)
             return response
         }

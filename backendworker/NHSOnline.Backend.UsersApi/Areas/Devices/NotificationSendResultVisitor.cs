@@ -9,7 +9,7 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
     {
         public IActionResult Visit(NotificationSendResult.Success result)
         {
-            return new AcceptedResult(string.Empty, result.NotificationResponse);
+            return new AcceptedResult(string.Empty, result.NotificationSendResponse);
         }
 
         public IActionResult Visit(NotificationSendResult.Conflict result)

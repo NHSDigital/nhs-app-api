@@ -8,9 +8,11 @@ import mongodb.MongoDBConnection
 import mongodb.MongoRepositoryUserDevice
 import org.apache.http.HttpStatus
 import org.junit.Assert
+import org.junit.Assert.assertNotNull
 import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set
+import worker.models.pushNotifications.PushNotificationResponse
 import worker.models.userDevices.RegisterUserDevicesResponse
 
 private const val WAIT_FOR_HUB_UPDATE = 1000L
@@ -255,12 +257,14 @@ class PushNotificationsStepDefinitionsBackend {
         Assert.assertEquals("Registrations found", 1, response?.size)
     }
 
-    @Then("^I receive a response body with sender information$")
-    fun iReceiveAResponseBodyWithSenderInformation() {
-        val response = PushNotificationsSerenityHelpers.CREATE_PUSH_NOTIFICATION_RESPONSE.getOrFail<String>()
-        Assert.assertTrue(response.contains("trackingId"))
-        Assert.assertTrue(response.contains("notificationId"))
-        Assert.assertTrue(response.contains("scheduled"))
+    @Then("^I receive tracking details for the sent notification$")
+    fun iReceiveTrackingDetailsForTheSentNotification() {
+        val response =
+                PushNotificationsSerenityHelpers.CREATE_PUSH_NOTIFICATION_RESPONSE.getOrFail<PushNotificationResponse>()
+        assertNotNull(response)
+        assertNotNull("NotificationId", response.notificationId)
+        assertNotNull("Scheduled", response.scheduled)
+        assertNotNull("HubPath", response.hubPath)
     }
 
     private fun assertSingleRecordInDeviceRepository() {

@@ -1,5 +1,5 @@
 package worker.models.pushNotifications
 
 data class PushNotificationResponse(val notificationId:String,
-                                    val trackingId:String,
-                                    val scheduled: Boolean)
+                                    val scheduled:Boolean,
+                                    val hubPath:String)

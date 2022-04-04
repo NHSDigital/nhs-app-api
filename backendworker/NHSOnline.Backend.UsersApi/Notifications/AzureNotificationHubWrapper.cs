@@ -66,22 +66,17 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             return (await _hubClient.GetRegistrationsByTagAsync(tag, InstallationRecordMaxResults)).InstallationIds();
         }
 
-        public async Task<NotificationResponse> SendNotification(NotificationRequest request)
+        public async Task<string> SendNotification(NotificationRequest request)
         {
             var properties = request.ToDictionary();
             var tag = NhsLoginTagGenerator.Generate(request.NhsLoginId);
 
             var notificationOutcome = await _hubClient.SendTemplateNotificationAsync(properties, tag);
 
-            return new NotificationResponse
-            {
-                NotificationId = notificationOutcome.NotificationId,
-                Scheduled = false,
-                TrackingId = notificationOutcome.TrackingId
-            };
+            return notificationOutcome.NotificationId;
         }
 
-        public async Task<NotificationResponse> SendScheduledNotification(NotificationRequest request)
+        public async Task<string> SendScheduledNotification(NotificationRequest request)
         {
             var properties = request.ToDictionary();
             var tag = NhsLoginTagGenerator.Generate(request.NhsLoginId);
@@ -91,12 +86,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             Debug.Assert(request.ScheduledTime != null, "request.ScheduledTime != null");
             var notificationOutcome = await _hubClient.ScheduleNotificationAsync(notification, request.ScheduledTime.Value, tag);
 
-            return new NotificationResponse
-            {
-                NotificationId = notificationOutcome.ScheduledNotificationId,
-                Scheduled = true,
-                TrackingId = notificationOutcome.TrackingId
-            };
+            return notificationOutcome.ScheduledNotificationId;
         }
 
         public override string ToString() => _description;

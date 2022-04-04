@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import config.Config
 import org.apache.http.HttpResponse
 import org.apache.http.client.utils.URIBuilder
+import worker.models.pushNotifications.PushNotificationResponse
 import worker.models.userDevices.NotificationSendRequest
 import worker.models.userDevices.RegisterUserDevicesRequest
 import worker.models.userDevices.RegisterUserDevicesResponse
@@ -51,13 +52,15 @@ class WorkerClientUserDevices(val config: Config, val sender: WorkerClientSender
         return httpGet.sendAndGetResult(sender, gson, Array<String>::class.java)
     }
 
-    fun postNotification(nhsLoginId: String, notification: NotificationSendRequest, includeApiKey:Boolean): String?
+    fun postNotification(nhsLoginId: String, notification: NotificationSendRequest, includeApiKey:Boolean)
+        : PushNotificationResponse?
     {
         val uriBuilder = URIBuilder(uri(nhsLoginId) + "/notifications")
         val httpPost = RequestBuilder.post(uriBuilder.build().toString())
                 .addBody(notification, gson)
                 .addExternalSystemApiKey(includeApiKey)
-        return httpPost.sendAndGetResult(sender)
+
+        return httpPost.sendAndGetResult(sender, gson, PushNotificationResponse::class.java)
     }
 
     private fun uri(userIdentifier: String): String {

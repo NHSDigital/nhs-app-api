@@ -11,7 +11,6 @@ using NHSOnline.Backend.Support;
 using NHSOnline.Backend.UsersApi.Areas.Devices;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 using NHSOnline.Backend.UsersApi.Notifications;
-using NHSOnline.Backend.UsersApi.Notifications.Models;
 
 namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 {
@@ -46,14 +45,14 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
                 Title = "title",
                 Subtitle = "subtitle",
                 Body = "body",
-                Url = "http://www.example.com"
+                Url = "https://www.example.com"
             };
 
-            var notificationResponse = new NotificationResponse
+            var notificationResponse = new NotificationSendResponse
             {
                 Scheduled = false,
                 NotificationId = "Notification ID",
-                TrackingId = "Tracking ID"
+                HubPath = "Hub Path"
             };
 
             _mockNotificationService
@@ -86,14 +85,14 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
                 Title = title,
                 Subtitle = "subtitle",
                 Body = "body",
-                Url = "http://www.example.com"
+                Url = "https://www.example.com"
             };
 
-            var notificationResponse = new NotificationResponse
+            var notificationResponse = new NotificationSendResponse
             {
                 Scheduled = true,
                 NotificationId = "Notification ID",
-                TrackingId = "Tracking ID"
+                HubPath = "Hub Path"
             };
 
             _mockNotificationService
@@ -126,14 +125,14 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
                 Title = "title",
                 Subtitle = subtitle,
                 Body = "body",
-                Url = "http://www.example.com"
+                Url = "https://www.example.com"
             };
 
-            var notificationResponse = new NotificationResponse
+            var notificationResponse = new NotificationSendResponse
             {
                 Scheduled = false,
                 NotificationId = "Notification ID",
-                TrackingId = "Tracking ID"
+                HubPath = "Hub Path"
             };
 
             _mockNotificationService
@@ -169,11 +168,11 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
                 Url = url
             };
 
-            var notificationResponse = new NotificationResponse
+            var notificationResponse = new NotificationSendResponse
             {
                 Scheduled = false,
                 NotificationId = "Notification ID",
-                TrackingId = "Tracking ID"
+                HubPath = "Hub Path"
             };
 
             _mockNotificationService
@@ -206,7 +205,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
                 Title = "title",
                 Subtitle = "subtitle",
                 Body = body,
-                Url = "http://www.example.com"
+                Url = "https://www.example.com"
             };
 
             // Act
