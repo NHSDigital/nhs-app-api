@@ -261,7 +261,7 @@ sessionKey: cGxhY2Vob2xkZXI=
 spinePartyId: cGxhY2Vob2xkZXI=
 
 # Audit sink type (console, cosmosdb, eventhub)
-auditSinkType: cosmosdb
+auditSinkType: eventhub
 
 # Splunk
 splunk:

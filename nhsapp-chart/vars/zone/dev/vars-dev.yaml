@@ -50,7 +50,6 @@ qualtricsBaseUrl: "https://env.qualtrics.com/API/v3/"
 qualtricsDirectoryId: "POOL_21oowrmextjSJqb"
 qualtricsMailingListId: "CG_27lDgMxvttB7Oxg"
 
-auditSinkType: "eventhub"
 organDonationDesktopEnabled: true
 
 api:

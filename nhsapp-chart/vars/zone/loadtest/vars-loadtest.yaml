@@ -65,8 +65,6 @@ epsODSCheckOverride: "E83009"
 
 n3Hostname: 10.239.14.26
 
-auditSinkType: "eventhub"
-
 web:
   publicURL: www-loadtest.nhsapp.service.nhs.uk
   analyticsEnvironment: "loadtest"
