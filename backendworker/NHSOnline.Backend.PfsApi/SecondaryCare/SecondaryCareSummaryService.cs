@@ -1,4 +1,8 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
+using NHSOnline.Backend.PfsApi.SecondaryCare.Models;
 using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.SecondaryCare
@@ -18,6 +22,12 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
 
             if (summaryResponse.HasSuccessResponse)
             {
+                if (summaryResponse.Body.Referrals?.Count() > 1)
+                {
+                    summaryResponse.Body.Referrals =
+                        summaryResponse.Body.Referrals.OrderBy(referral => referral.ReferredDateTime);
+                }
+
                 return new SecondaryCareSummaryResult.Success(summaryResponse.Body);
             }
 

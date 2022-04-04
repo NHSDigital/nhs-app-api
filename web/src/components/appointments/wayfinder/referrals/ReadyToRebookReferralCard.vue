@@ -64,7 +64,7 @@ export default {
       return this.requestedSpeciality;
     },
     getFormattedReferredDate() {
-      return moment.tz(this.referredDate, 'Europe/London').format('d MMMM YYYY');
+      return moment.tz(this.referredDate, 'Europe/London').format('D MMMM YYYY');
     },
   },
 };

@@ -73,10 +73,10 @@ export default {
       return this.reviewDate;
     },
     getFormattedReviewDate() {
-      return moment.tz(this.reviewDate, 'Europe/London').format('d MMMM YYYY');
+      return moment.tz(this.reviewDate, 'Europe/London').format('D MMMM YYYY');
     },
     getFormattedReferredDate() {
-      return moment.tz(this.referredDate, 'Europe/London').format('d MMMM YYYY');
+      return moment.tz(this.referredDate, 'Europe/London').format('D MMMM YYYY');
     },
   },
 };
