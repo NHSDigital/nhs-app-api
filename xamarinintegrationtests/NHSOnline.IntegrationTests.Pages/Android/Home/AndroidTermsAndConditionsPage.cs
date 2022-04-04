@@ -34,10 +34,12 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
             PageContent.AssertPageContent();
         }
 
-        public void ScrollAndScreenshot()
+        public void ScrollToContinueAndScreenshot()
         {
             PageContent.ContinueButton.ScrollTo();
             _driver.Screenshot($"{nameof(AndroidTermsAndConditionsPage)}_scrolled");
         }
+
+        public void ScreenshotError() => _driver.Screenshot($"{nameof(AndroidTermsAndConditionsPage)}_error");
     }
 }

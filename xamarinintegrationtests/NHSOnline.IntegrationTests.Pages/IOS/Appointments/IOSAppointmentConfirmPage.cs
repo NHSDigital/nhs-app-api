@@ -28,9 +28,9 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Appointments
             return page;
         }
 
-        public void ScrollAndScreenshot()
+        public void ScrollToTextAreaAndScreenshot()
         {
-            PageContent.BackButton.ScrollTo();
+            PageContent.AppointmentReason.ScrollTo();
             _driver.Screenshot($"{nameof(IOSAppointmentConfirmPage)}_scrolled");
         }
     }

@@ -11,7 +11,6 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Prescriptions
 
         public ChoosePrescriptionPageContent PageContent { get; }
 
-
         private IOSChooseRepeatPrescriptionPage(IIOSDriverWrapper driver)
         {
             _driver = driver;
@@ -31,5 +30,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Prescriptions
 
             return page;
         }
+
+        public void ScreenshotError() =>  _driver.Screenshot($"{nameof(IOSChooseRepeatPrescriptionPage)}_error");
     }
 }

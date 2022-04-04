@@ -6,10 +6,12 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
     public class AndroidUserResearchOptInPage
     {
         public UserResearchOptInPageContent PageContent { get; }
+        private IAndroidDriverWrapper _driver { get; }
 
         private AndroidUserResearchOptInPage(IAndroidDriverWrapper driver)
         {
             PageContent = new UserResearchOptInPageContent(driver.Web.NhsAppPreHomeWebView());
+            _driver = driver;
         }
 
         public static AndroidUserResearchOptInPage AssertOnPage(IAndroidDriverWrapper driver,
@@ -25,5 +27,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
 
             return page;
         }
+
+        public void ScreenshotError() => _driver.Screenshot($"{nameof(AndroidUserResearchOptInPage)}_error");
     }
 }

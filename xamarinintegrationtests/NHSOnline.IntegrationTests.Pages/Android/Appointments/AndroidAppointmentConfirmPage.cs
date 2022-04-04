@@ -28,7 +28,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
             return page;
         }
 
-        public void ScrollAndScreenshot()
+        public void ScrollToBookAndScreenshot()
         {
             PageContent.BookingButton.ScrollTo();
             _driver.Screenshot($"{nameof(AndroidAppointmentConfirmPage)}_scrolled");

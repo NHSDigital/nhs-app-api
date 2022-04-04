@@ -107,6 +107,12 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.PreHome
             OptOut.AssertVisible();
         }
 
+        public void ContinueWithoutOption()
+        {
+            ContinueButton.ScrollTo();
+            ContinueButton.Click();
+        }
+
         public void OptInToUserResearch()
         {
             ContinueButton.ScrollTo();

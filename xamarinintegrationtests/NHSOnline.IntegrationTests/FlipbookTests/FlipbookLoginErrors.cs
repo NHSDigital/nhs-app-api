@@ -10,11 +10,11 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.FlipbookTests
 {
     [TestClass]
-    public class FlipbookLoginTests
+    public class FlipbookLoginErrorTests
     {
         [NhsAppAndroidTest]
-        [NhsAppFlipbookTest(FlipbookTestName = "A user logs into the app")]
-        public void APatientWithProofLevelNineCanSuccessfullyLogInAndroid(IAndroidDriverWrapper driver)
+        [NhsAppFlipbookTest(FlipbookTestName = "A user logs into the app seeing validation errors")]
+        public void APatientWithProofLevelNineCanSuccessfullyLogInSeeingErrorsAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
                 .WithName(b => b.GivenName("Wendy").FamilyName("House"));
@@ -37,17 +37,23 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
             var termsAndConditions = AndroidTermsAndConditionsPage
                 .AssertOnPage(driver, screenshot: true);
 
+            termsAndConditions.PageContent.ContinueWithoutAccepting();
+
+            termsAndConditions.ScreenshotError();
             termsAndConditions.ScrollToContinueAndScreenshot();
+
             termsAndConditions.PageContent.AcceptTermsAndConditions();
 
-            AndroidUserResearchOptInPage
-                .AssertOnPage(driver, screenshot: true)
-                .PageContent.OptInToUserResearch();
+            var androidUserResearchPage = AndroidUserResearchOptInPage
+                .AssertOnPage(driver, screenshot: true);
+
+            androidUserResearchPage.PageContent.ContinueWithoutOption();
+            androidUserResearchPage.ScreenshotError();
         }
 
         [NhsAppIOSTest]
-        [NhsAppFlipbookTest(FlipbookTestName = "A user logs into the app")]
-        public void APatientWithProofLevelNineCanSuccessfullyLogInIOS(IIOSDriverWrapper driver)
+        [NhsAppFlipbookTest(FlipbookTestName = "A user logs into the app seeing validation errors")]
+        public void APatientWithProofLevelNineCanSuccessfullyLogInSeeingErrorsIOS(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
                 .WithName(b => b.GivenName("Wendy").FamilyName("House"));
@@ -70,12 +76,18 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
             var termsAndConditions = IOSTermsAndConditionsPage
                 .AssertOnPage(driver, screenshot: true);
 
+            termsAndConditions.PageContent.ContinueWithoutAccepting();
+
+            termsAndConditions.ScreenshotError();
             termsAndConditions.ScrollToContinueAndScreenshot();
+
             termsAndConditions.PageContent.AcceptTermsAndConditions();
 
-            IOSUserResearchOptInPage
-                .AssertOnPage(driver, screenshot: true)
-                .PageContent.OptInToUserResearch();
+            var iosUserResearchPage = IOSUserResearchOptInPage
+                .AssertOnPage(driver, screenshot: true);
+
+            iosUserResearchPage.PageContent.ContinueWithoutOption();
+            iosUserResearchPage.ScreenshotError();
         }
     }
 }

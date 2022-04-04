@@ -34,7 +34,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
 
         public void ClickType() => SelectType.Click();
 
-        public void ScrollAndScreenshot()
+        public void ScrollToBookingTextAndScreenshot()
         {
             PageContent.AppointmentBookingText.ScrollTo();
             _driver.Screenshot($"{nameof(AndroidBookAppointmentsPage)}_scrolled");

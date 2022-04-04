@@ -33,5 +33,10 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Prescriptions
 
             return page;
         }
+
+        public void ScreenshotError()
+        {
+            _driver.Screenshot($"{nameof(IOSOrderARepeatPrescriptionPage)}_error");
+        }
     }
 }

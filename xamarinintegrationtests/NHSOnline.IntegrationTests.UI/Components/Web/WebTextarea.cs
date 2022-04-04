@@ -1,6 +1,7 @@
 using System;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Web
 {
@@ -19,12 +20,15 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
             => new(interactor, id);
 
         public void InsertText(string text)
-            => ActOnSelectElement(e => e.SendKeys(text));
+            => ActOnElement(e => e.SendKeys(text));
 
-        private void ActOnSelectElement(Action<IWebElement> action)
-            => _interactor.ActOnElement(CheckboxFindBy, action);
+        private void ActOnElement(Action<IWebElement> action)
+            => _interactor.ActOnElement(TextAreaFindBy, action);
 
-        private By CheckboxFindBy
+        public void ScrollTo() => _interactor.ActOnElementContext(
+            TextAreaFindBy, c => new Actions(c.Driver).MoveToElement(c.Element).Perform());
+
+        private By TextAreaFindBy
             => _by.Id;
     }
 }

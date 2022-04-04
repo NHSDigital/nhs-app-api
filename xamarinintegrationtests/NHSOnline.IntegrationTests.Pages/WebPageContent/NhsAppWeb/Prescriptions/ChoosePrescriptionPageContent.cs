@@ -25,13 +25,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
         private WebTextarea SpecialRequestText => WebTextarea.WithId(_interactor, "specialRequest");
         private WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
 
-        public ChoosePrescriptionPageContent ChooseRepeat()
-        {
-            PrescriptionCheckbox.Click();
-            return this;
-        }
-
-        public ChoosePrescriptionPageContent ClickPrescription()
+        public ChoosePrescriptionPageContent ChoosePrescription()
         {
             PrescriptionCheckbox.Click();
             return this;

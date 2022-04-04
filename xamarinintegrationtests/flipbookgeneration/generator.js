@@ -14,6 +14,7 @@ var outputHtml = `<html>
             .break:not(:last-of-type){ break-after: page;}
             body {
                 font-family: Arial;
+                font-size: 15px;
             }
         </style>
     </head>
@@ -51,7 +52,7 @@ for (var idx = 0; idx < testDetails.length; idx++) {
         outputHtml += `<div class="break" style="display:inline-block;margin-left:1em;">`;
 
         // Don't render arrows before first screenshot
-        if (screenshot > 0) {
+        if (screenshot > 0 && !files[screenshot].includes('_error') && !files[screenshot].includes('_scrolled')) {
             outputHtml += `<span style="padding:10px;font-weight:bold;font-size:30px;">&rarr;</span>`;
         }
             

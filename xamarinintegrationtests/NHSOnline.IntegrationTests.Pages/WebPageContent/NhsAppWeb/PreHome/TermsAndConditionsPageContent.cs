@@ -105,5 +105,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.PreHome
             AcceptTermsAndConditionsCheckbox.Click();
             ContinueButton.Click();
         }
+
+        public void ContinueWithoutAccepting()
+        {
+            AcceptAnalyticCookiesText.ScrollTo();
+            ContinueButton.Click();
+        }
     }
 }

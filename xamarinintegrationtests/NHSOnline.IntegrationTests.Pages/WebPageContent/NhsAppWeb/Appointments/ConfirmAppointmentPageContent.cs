@@ -19,9 +19,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments
 
         public  WebButton BookingButton => WebButton.WithText(_interactor, "Confirm and book appointment");
 
-        public WebLink BackButton => WebLink.WithText(_interactor, "Back");
-
-        private WebTextarea AppointmentReason => WebTextarea.WithId(_interactor, "reasonText");
+        public WebTextarea AppointmentReason => WebTextarea.WithId(_interactor, "reasonText");
 
         internal void AssertOnPage() => TitleText.AssertVisible();
 

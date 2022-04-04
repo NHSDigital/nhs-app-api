@@ -7,9 +7,12 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
     {
         public UserResearchOptInPageContent PageContent { get; }
 
+        private IIOSDriverWrapper _driver { get; }
+
         private IOSUserResearchOptInPage(IIOSDriverWrapper driver)
         {
             PageContent = new UserResearchOptInPageContent(driver.Web.NhsAppPreHomeWebView());
+            _driver = driver;
         }
 
         public static IOSUserResearchOptInPage AssertOnPage(IIOSDriverWrapper driver, bool screenshot = false)
@@ -24,5 +27,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
 
             return page;
         }
+
+        public void ScreenshotError() => _driver.Screenshot($"{nameof(IOSUserResearchOptInPage)}_error");
     }
 }

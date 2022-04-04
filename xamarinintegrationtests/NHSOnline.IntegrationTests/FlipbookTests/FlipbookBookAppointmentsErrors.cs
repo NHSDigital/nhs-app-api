@@ -11,12 +11,12 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.FlipbookTests
 {
     [TestClass]
-    public class FlipbookBookAppointmentTests
+    public class FlipbookBookAppointmentErrorTests
     {
         [NhsAppAndroidTest]
         [NhsAppFlipbookTest(ParentJourney = "A user logs into the app - Android",
-            FlipbookTestName = "A user can book an appointment")]
-        public void APatientWithProofLevelNineCanBookAnAppointmentAndroid(IAndroidDriverWrapper driver)
+            FlipbookTestName = "A user can book an appointment seeing validation errors")]
+        public void APatientWithProofLevelNineCanBookAnAppointmentSeeingErrorsAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
@@ -49,18 +49,14 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
             var androidAppointmentConfirmPage = AndroidAppointmentConfirmPage
                 .AssertOnPage(driver, screenshot: true);
 
-            androidAppointmentConfirmPage.PageContent.InsertReason();
-            androidAppointmentConfirmPage.ScrollToBookAndScreenshot();
             androidAppointmentConfirmPage.PageContent.ClickBook();
-
-            AndroidAppointmentConfirmedPage
-                .AssertOnPage(driver, screenshot: true);
+            androidAppointmentConfirmPage.ScrollToBookAndScreenshot();
         }
 
         [NhsAppIOSTest]
         [NhsAppFlipbookTest(ParentJourney = "A user logs into the app - iOS",
-            FlipbookTestName = "A user can book an appointment")]
-        public void APatientWithProofLevelNineCanBookAnAppointmentIOS(IIOSDriverWrapper driver)
+            FlipbookTestName = "A user can book an appointment seeing validation errors")]
+        public void APatientWithProofLevelNineCanBookAnAppointmentSeeingErrorsIOS(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
@@ -96,12 +92,8 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
             var iosAppointmentConfirmPage = IOSAppointmentConfirmPage
                 .AssertOnPage(driver, screenshot: true);
 
-            iosAppointmentConfirmPage.PageContent.InsertReason();
-            iosAppointmentConfirmPage.ScrollToTextAreaAndScreenshot();
             iosAppointmentConfirmPage.PageContent.ClickBook();
-
-            IOSAppointmentConfirmedPage
-                .AssertOnPage(driver, screenshot: true);
+            iosAppointmentConfirmPage.ScrollToTextAreaAndScreenshot();
         }
     }
 }

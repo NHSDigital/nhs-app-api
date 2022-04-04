@@ -6,7 +6,6 @@ using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.Prescriptions;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
-using OpenQA.Selenium;
 
 namespace NHSOnline.IntegrationTests.FlipbookTests
 {
@@ -39,7 +38,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
 
             AndroidChooseRepeatPrescriptionPage
                 .AssertOnPage(driver, screenshot: true)
-                .PageContent.ClickPrescription()
+                .PageContent.ChoosePrescription()
                 .InsertSpecialRequest()
                 .Continue();
 
@@ -77,7 +76,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
 
             IOSChooseRepeatPrescriptionPage
                 .AssertOnPage(driver, screenshot: true)
-                .PageContent.ClickPrescription()
+                .PageContent.ChoosePrescription()
                 .InsertSpecialRequest()
                 .Continue();
 

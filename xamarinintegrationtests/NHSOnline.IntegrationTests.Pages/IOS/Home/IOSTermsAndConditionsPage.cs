@@ -34,10 +34,12 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
             PageContent.AssertPageContent();
         }
 
-        public void ScrollAndScreenshot()
+        public void ScrollToContinueAndScreenshot()
         {
             PageContent.ContinueButton.ScrollTo();
             _driver.Screenshot($"{nameof(IOSTermsAndConditionsPage)}_scrolled");
         }
+
+        public void ScreenshotError() =>  _driver.Screenshot($"{nameof(IOSTermsAndConditionsPage)}_error");
     }
 }
