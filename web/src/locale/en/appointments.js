@@ -200,6 +200,16 @@ export default {
         youNeedToRebookYourNoSpeciality: 'You need to rebook your referral appointment as the one you had booked has been cancelled.',
         bookOrManageThisReferral: 'Book or manage this referral',
       },
+      bookable: {
+        title: 'Ready to book',
+        yourReferralAppointmentIsReadyToBook: 'Your referral appointment to {speciality} is ready to book.',
+        bookOrManageThisReferral: 'Book or manage this referral',
+      },
+      overdue: {
+        title: 'Review by clinic is overdue',
+        youNeedToContactSpeciality: 'You need to contact {speciality} as a review of this referral is overdue.',
+        contactTheClinic: 'Contact the clinic',
+      },
     },
   },
 };

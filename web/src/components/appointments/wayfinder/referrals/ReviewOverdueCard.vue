@@ -1,7 +1,7 @@
 <template>
   <Card class="nhsuk-u-margin-bottom-5">
     <h3 class="nhsuk-u-margin-bottom-1">
-      {{ $t('appointments.wayfinder.referrals.inReview.title') }}
+      {{ $t('appointments.wayfinder.referrals.overdue.title') }}
     </h3>
 
     <p v-if="hasSpeciality" class="nhsuk-u-margin-bottom-3">
@@ -9,7 +9,7 @@
     </p>
 
     <p v-if="hasSpeciality" class="nhsuk-u-margin-bottom-3">
-      {{ $tc('appointments.wayfinder.referrals.inReview.yourHealthcareProviderHasRequested',
+      {{ $tc('appointments.wayfinder.referrals.overdue.youNeedToContactSpeciality',
              null, {speciality: requestedSpeciality}) }}
     </p>
 
@@ -34,7 +34,7 @@
     </p>
 
     <primary-button id="manageInReviewReferral">
-      {{ $t('appointments.wayfinder.referrals.manageThisReferral') }}
+      {{ $t('appointments.wayfinder.referrals.overdue.contactTheClinic') }}
     </primary-button>
   </Card>
 </template>
@@ -44,7 +44,7 @@ import PrimaryButton from '@/components/PrimaryButton';
 import moment from 'moment-timezone';
 
 export default {
-  name: 'InReviewReferralsCard',
+  name: 'ReviewOverdueReferralsCard',
   components: {
     Card,
     PrimaryButton,

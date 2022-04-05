@@ -50,6 +50,16 @@ class WayfinderStepDefinitions {
         wayfinderReferralsAndAppointmentsPage.assertBookableCancelledReferralDisplayed()
     }
 
+    @Then("^I see an overdue referral$")
+    fun assertBookableOverdueReferralIsDisplayed() {
+        wayfinderReferralsAndAppointmentsPage.assertBookableOverdueReferralDisplayed()
+    }
+
+    @Then("^I see a bookable awaiting booking$")
+    fun assertBookableAwaitingBookIsDisplayed() {
+        wayfinderReferralsAndAppointmentsPage.assertBookableAwaitingBookDisplayed()
+    }
+
     private fun setupPatient(configuration: SJRJourneyType, proofLevel: IdentityProofingLevel? = null) {
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(null, configuration, proofLevel)
         setupJourney(patient)

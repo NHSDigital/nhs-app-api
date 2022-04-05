@@ -32,6 +32,18 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
         helpfulName = "Bookable Cancelled Referral H3"
     )
 
+    private val bookableOverdueReferralHeading = HybridPageElement(
+        webDesktopLocator = "//h3[contains(text(),\"Review by clinic is overdue\")]",
+        page = this,
+        helpfulName = "Bookable Overdue H3"
+    )
+
+    private val bookableAwaitingBookHeading = HybridPageElement(
+        webDesktopLocator = "//h3[contains(text(),\"Ready to book\")]",
+        page = this,
+        helpfulName = "Bookable Awaiting Booking H3"
+    )
+
     fun assertWayfinderWithDataTitleIsDisplayed() {
         pageTitleWithData.assertIsVisible()
     }
@@ -46,5 +58,13 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
 
     fun assertBookableCancelledReferralDisplayed() {
         bookableCancelledReferralHeading.assertIsVisible()
+    }
+
+    fun assertBookableOverdueReferralDisplayed() {
+        bookableOverdueReferralHeading.assertIsVisible()
+    }
+
+    fun assertBookableAwaitingBookDisplayed() {
+        bookableAwaitingBookHeading.assertIsVisible()
     }
 }

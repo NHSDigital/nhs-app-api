@@ -1,16 +1,11 @@
 <template>
   <Card class="nhsuk-u-margin-bottom-5">
     <h3 class="nhsuk-u-margin-bottom-1">
-      {{ $t('appointments.wayfinder.referrals.inReview.title') }}
+      {{ $t('appointments.wayfinder.referrals.bookable.title') }}
     </h3>
 
     <p v-if="hasSpeciality" class="nhsuk-u-margin-bottom-3">
       {{ requestedSpeciality }}
-    </p>
-
-    <p v-if="hasSpeciality" class="nhsuk-u-margin-bottom-3">
-      {{ $tc('appointments.wayfinder.referrals.inReview.yourHealthcareProviderHasRequested',
-             null, {speciality: requestedSpeciality}) }}
     </p>
 
     <p class="nhsuk-u-margin-bottom-3">
@@ -18,9 +13,9 @@
              null, {referralDate: getFormattedReferredDate}) }}
     </p>
 
-    <p v-if="hasReviewDate" class="nhsuk-u-margin-bottom-3">
-      {{ $tc('appointments.wayfinder.referrals.reviewDate',
-             null, {reviewDate: getFormattedReviewDate}) }}
+    <p v-if="hasSpeciality" class="nhsuk-u-margin-bottom-3">
+      {{ $tc('appointments.wayfinder.referrals.bookable.yourReferralAppointmentIsReadyToBook',
+             null, {speciality: requestedSpeciality}) }}
     </p>
 
     <p class="nhsuk-u-margin-bottom-3">
@@ -33,8 +28,8 @@
              null, {referrer: referredBy}) }}
     </p>
 
-    <primary-button id="manageInReviewReferral">
-      {{ $t('appointments.wayfinder.referrals.manageThisReferral') }}
+    <primary-button id="bookOrManageReferral">
+      {{ $t('appointments.wayfinder.referrals.bookable.bookOrManageThisReferral') }}
     </primary-button>
   </Card>
 </template>
@@ -44,7 +39,7 @@ import PrimaryButton from '@/components/PrimaryButton';
 import moment from 'moment-timezone';
 
 export default {
-  name: 'InReviewReferralsCard',
+  name: 'BookableReferralCard',
   components: {
     Card,
     PrimaryButton,
@@ -62,25 +57,14 @@ export default {
       type: String,
       default: '',
     },
-    reviewDate: {
-      type: String,
-      default: '',
-    },
     requestedSpeciality: {
       type: String,
       default: '',
     },
   },
-
   computed: {
     hasSpeciality() {
       return this.requestedSpeciality;
-    },
-    hasReviewDate() {
-      return this.reviewDate;
-    },
-    getFormattedReviewDate() {
-      return moment.tz(this.reviewDate, 'Europe/London').format('D MMMM YYYY');
     },
     getFormattedReferredDate() {
       return moment.tz(this.referredDate, 'Europe/London').format('D MMMM YYYY');

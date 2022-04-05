@@ -87,11 +87,24 @@
                                      :booking-reference="referral.referralId"
                                      :referred-by="referral.referrerOrganisation"/>
 
+              <ReviewOverdueReferralsCard v-if="isReviewOverdue(referral)"
+                                          :requested-speciality="referral.serviceSpeciality"
+                                          :referred-date="referral.referredDateTime"
+                                          :review-date="referral.reviewDueDate"
+                                          :booking-reference="referral.referralId"
+                                          :referred-by="referral.referrerOrganisation"/>
+
               <ReadyToRebookReferralCard v-if="isBookableWasCancelled(referral)"
                                          :requested-speciality="referral.serviceSpeciality"
-                                         :referred-date="referral.referredDatetime"
+                                         :referred-date="referral.referredDateTime"
                                          :booking-reference="referral.referralId"
                                          :referred-by="referral.referrerOrganisation"/>
+
+              <BookableReferralCard v-if="isBookable(referral)"
+                                    :requested-speciality="referral.serviceSpeciality"
+                                    :referred-date="referral.referredDateTime"
+                                    :booking-reference="referral.referralId"
+                                    :referred-by="referral.referrerOrganisation"/>
             </CardGroupItem>
           </CardGroup>
         </div>
@@ -109,8 +122,11 @@ import MenuItemList from '@/components/MenuItemList';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import InReviewReferralsCard from '@/components/appointments/wayfinder/referrals/InReviewCard';
 import ReadyToRebookReferralCard from '@/components/appointments/wayfinder/referrals/ReadyToRebookReferralCard';
+import ReviewOverdueReferralsCard from '@/components/appointments/wayfinder/referrals/ReviewOverdueCard';
+import BookableReferralCard from '@/components/appointments/wayfinder/referrals/BookableReferralCard';
 import sjrIf from '@/lib/sjrIf';
 import { isEmptyArray } from '@/lib/utils';
+import moment from 'moment';
 
 const loadData = async (store) => {
   await store.dispatch('wayfinderAppointments/load');
@@ -123,6 +139,8 @@ export default {
     CardGroupItem,
     InReviewReferralsCard,
     ReadyToRebookReferralCard,
+    ReviewOverdueReferralsCard,
+    BookableReferralCard,
     MenuItemList,
     ThirdPartyJumpOffButton,
   },
@@ -240,10 +258,16 @@ export default {
   },
   methods: {
     isInReview(referral) {
-      return referral.status === 'InReview';
+      return referral.status === 'InReview' && moment(referral.reviewDueDate).isSameOrAfter(moment.now());
+    },
+    isBookable(referral) {
+      return referral.status === 'Bookable';
     },
     isBookableWasCancelled(referral) {
       return referral.status === 'BookableWasCancelled';
+    },
+    isReviewOverdue(referral) {
+      return referral.status === 'InReview' && moment(referral.reviewDueDate).isBefore(moment.now());
     },
   },
 };

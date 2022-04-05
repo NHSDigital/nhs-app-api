@@ -19,4 +19,4 @@ Feature: Wayfinder accessibility
     Given I am a user who can view Wayfinder from Appointments and has referrals
     And I am logged in
     When I retrieve the 'Wayfinder' page directly
-    Then the Wayfinder_Desktop page is saved to disk
+    Then the Wayfinder_Desktop_Referrals page is saved to disk

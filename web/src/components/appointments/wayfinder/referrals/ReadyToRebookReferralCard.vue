@@ -3,28 +3,35 @@
     <h3 class="nhsuk-u-margin-bottom-1">
       {{ $t('appointments.wayfinder.referrals.readyToBook.title') }}
     </h3>
+
     <p v-if="hasSpeciality" class="nhsuk-u-margin-bottom-3">
       {{ requestedSpeciality }}
     </p>
+
     <p class="nhsuk-u-margin-bottom-3">
       {{ $tc('appointments.wayfinder.referrals.referredDate',
              null, {referralDate: getFormattedReferredDate}) }}
     </p>
+
     <p v-if="hasSpeciality" class="nhsuk-u-margin-bottom-3">
       {{ $tc('appointments.wayfinder.referrals.readyToBook.youNeedToRebookYour',
              null, {speciality: requestedSpeciality}) }}
     </p>
+
     <p v-if="!hasSpeciality" class="nhsuk-u-margin-bottom-3">
       {{ $t('appointments.wayfinder.referrals.readyToBook.youNeedToRebookYourNoSpeciality') }}
     </p>
+
     <p class="nhsuk-u-margin-bottom-3">
       {{ $tc('appointments.wayfinder.referrals.bookingReference',
              null, {reference: bookingReference}) }}
     </p>
+
     <p class="nhsuk-u-margin-bottom-3">
       {{ $tc('appointments.wayfinder.referrals.referredBy',
              null, {referrer: referredBy}) }}
     </p>
+
     <primary-button id="bookOrManageReferral">
       {{ $t('appointments.wayfinder.referrals.readyToBook.bookOrManageThisReferral') }}
     </primary-button>
