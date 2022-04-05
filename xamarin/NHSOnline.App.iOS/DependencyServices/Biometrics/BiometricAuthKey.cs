@@ -71,7 +71,8 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
                         BiometricRegistrationDomainState.Set(_context.EvaluatedPolicyDomainState);
                     }
 
-                    return new BiometricAuthVerifyUserResult.Authorised(new BiometricAuthSigner(_secKey));
+                    using var biometricAuthSigner = new BiometricAuthSigner(_secKey);
+                    return new BiometricAuthVerifyUserResult.Authorised(biometricAuthSigner);
                 }
 
                 var status = (LAStatus?) (long?) error?.Code;

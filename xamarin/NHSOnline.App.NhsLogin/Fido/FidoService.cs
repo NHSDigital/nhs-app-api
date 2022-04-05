@@ -26,7 +26,7 @@ namespace NHSOnline.App.NhsLogin.Fido
         {
             try
             {
-                return await _registrationService.Register(key, accessToken).ResumeOnThreadPool();
+                return await _registrationService.Register(key, accessToken).PreserveThreadContext();
             }
             catch (Exception e)
             {

@@ -6,7 +6,7 @@ using Security;
 
 namespace NHSOnline.App.iOS.DependencyServices.Biometrics
 {
-    internal sealed class BiometricAuthSigner : IBiometricAuthSigner
+    internal sealed class BiometricAuthSigner : IBiometricAuthSigner, IDisposable
     {
         private readonly SecKey _secKey;
 
@@ -31,6 +31,25 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
             {
                 error?.Dispose();
             }
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _secKey.Dispose();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~BiometricAuthSigner()
+        {
+            Dispose(false);
         }
     }
 }

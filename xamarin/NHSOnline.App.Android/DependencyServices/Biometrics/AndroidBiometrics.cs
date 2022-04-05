@@ -106,16 +106,29 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
             {
                 using var keyguardManager = (KeyguardManager?)Android.App.Application.Context.GetSystemService("keyguard");
 
-                Logger.LogError(
-                    keyguardManager?.IsDeviceSecure != true
-                        ? "KeyguardManager reported device is not secure. Original error message: {message}"
-                        : "KeyguardManager reported device is secure. Original error message: {message}", e.Message);
+                if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
+                {
+                    var isDeviceSecure = keyguardManager?.IsDeviceSecure == true;
+
+                    Logger.LogError(
+                        "KeyguardManager reported IsDeviceSecure as: {IsDeviceSecure}. Original error message: {Message}",
+                        isDeviceSecure, e.Message);
+                }
 
                 throw;
             }
 
             try
             {
+                _ = keyPairGenerator.GenerateKeyPair() ??
+                    throw new InvalidOperationException("GenerateKeyPair returns null");
+            }
+            catch (ProviderException e)
+                when (e.Message != null && e.Message.Contains("Keystore not initialized", StringComparison.Ordinal))
+            {
+                // Try this operation once more in case it is purely a timing issue in loading the KeyStore
+                Task.Delay(1000);
+
                 _ = keyPairGenerator.GenerateKeyPair() ??
                     throw new InvalidOperationException("GenerateKeyPair returns null");
             }
@@ -170,14 +183,19 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
         {
             try
             {
-                var secretKey = BiometricKeyStore.GetKey(fidoUsername);
-                var certificate = BiometricKeyStore.GetCertificate(fidoUsername);
+                var keyStoreResult = AccessKeyStoreAndRetrieveKey();
+                key = keyStoreResult.biometricAuthKey;
+                return keyStoreResult.keyLoaded;
+            }
+            catch (UnrecoverableKeyException e)
+                when (e.Message != null && e.Message.Contains("Keystore not initialized", StringComparison.Ordinal))
+            {
+                // Try this operation once more in case it is purely a timing issue in loading the KeyStore
+                Task.Delay(1000);
 
-                if (secretKey != null && certificate != null)
-                {
-                    key = new BiometricAuthKey((FragmentActivity) MainActivity, secretKey, certificate);
-                    return true;
-                }
+                var keyStoreResult = AccessKeyStoreAndRetrieveKey();
+                key = keyStoreResult.biometricAuthKey;
+                return keyStoreResult.keyLoaded;
             }
             catch (UnrecoverableKeyException e)
             {
@@ -191,6 +209,20 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
 
             key = default;
             return false;
+
+            (bool keyLoaded, IBiometricAuthKey? biometricAuthKey) AccessKeyStoreAndRetrieveKey()
+            {
+                var secretKey = BiometricKeyStore.GetKey(fidoUsername);
+                var certificate = BiometricKeyStore.GetCertificate(fidoUsername);
+
+                if (secretKey != null && certificate != null)
+                {
+                    using var keyStoreResult = new BiometricAuthKey((FragmentActivity)MainActivity, secretKey, certificate);
+                    return new (true, keyStoreResult);
+                }
+
+                return new (false, null);
+            }
         }
     }
 }

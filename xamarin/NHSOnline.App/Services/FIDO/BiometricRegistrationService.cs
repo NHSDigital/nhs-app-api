@@ -43,7 +43,7 @@ namespace NHSOnline.App.Services.FIDO
                     return authSignerFailure;
                 }
 
-                var keyId = await DoFidoRegistration(key, authSigner.Result, accessToken).ResumeOnThreadPool();
+                var keyId = await DoFidoRegistration(key, authSigner.Result, accessToken).PreserveThreadContext();
                 if (keyId.Failed(out var keyIdFailure))
                 {
                     return keyIdFailure;
@@ -86,7 +86,7 @@ namespace NHSOnline.App.Services.FIDO
         {
             var keyId = GenerateRandomFidoKeyId();
             var fidoKey = new FidoKey(keyId, key, authSigner);
-            var result = await _fidoService.Register(fidoKey, accessToken.Raw()).ResumeOnThreadPool();
+            var result = await _fidoService.Register(fidoKey, accessToken.Raw()).PreserveThreadContext();
             return result.Accept(new FidoRegisterResultVisitor(keyId, _userPreferencesService));
         }
 

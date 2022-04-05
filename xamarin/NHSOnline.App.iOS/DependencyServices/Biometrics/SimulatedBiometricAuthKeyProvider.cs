@@ -58,7 +58,7 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
 
         public bool TryGetKey([NotNullWhen(true)] out IBiometricAuthKey? key)
         {
-            var context = new LAContext();
+            using var context = new LAContext();
             try
             {
                 using var query = new SecRecord(SecKind.Key)
