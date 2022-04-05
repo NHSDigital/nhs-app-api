@@ -147,7 +147,7 @@ export default {
   hub: {
     gpSurgeryAppointments: 'GP surgery appointments',
     hospitalAndOtherAppointments: 'Hospital and other appointments',
-    wayfinderAppointments: 'Referrals, hospital and other appointments',
+    wayfinder: 'Referrals, hospital and other appointments',
     viewAndManageAppointmentsAtYourSurgery: 'View and manage appointments at your surgery',
     viewAndManageAppointmentsLikeReferrals: 'View and manage appointments, like your referral appointments',
     viewAndManageReferralsAndAppointments: 'View and manage your referrals and appointments',

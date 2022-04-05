@@ -120,20 +120,20 @@ import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 import MenuItemList from '@/components/MenuItemList';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
-import InReviewReferralsCard from '@/components/appointments/wayfinder/referrals/InReviewCard';
-import ReadyToRebookReferralCard from '@/components/appointments/wayfinder/referrals/ReadyToRebookReferralCard';
-import ReviewOverdueReferralsCard from '@/components/appointments/wayfinder/referrals/ReviewOverdueCard';
-import BookableReferralCard from '@/components/appointments/wayfinder/referrals/BookableReferralCard';
+import InReviewReferralsCard from '@/components/wayfinder/referrals/InReviewCard';
+import ReadyToRebookReferralCard from '@/components/wayfinder/referrals/ReadyToRebookReferralCard';
+import ReviewOverdueReferralsCard from '@/components/wayfinder/referrals/ReviewOverdueCard';
+import BookableReferralCard from '@/components/wayfinder/referrals/BookableReferralCard';
 import sjrIf from '@/lib/sjrIf';
 import { isEmptyArray } from '@/lib/utils';
 import moment from 'moment';
 
 const loadData = async (store) => {
-  await store.dispatch('wayfinderAppointments/load');
+  await store.dispatch('wayfinder/load');
 };
 
 export default {
-  name: 'WayfinderAppointmentsPage',
+  name: 'WayfinderPage',
   components: {
     CardGroup,
     CardGroupItem,
@@ -152,10 +152,10 @@ export default {
   },
   computed: {
     referrals() {
-      return this.$store.state.wayfinderAppointments.referrals;
+      return this.$store.state.wayfinder.referrals;
     },
     upcomingAppointments() {
-      return this.$store.state.wayfinderAppointments.upcomingAppointments;
+      return this.$store.state.wayfinder.upcomingAppointments;
     },
     hasNoReferrals() {
       return isEmptyArray(this.referrals);

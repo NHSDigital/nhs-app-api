@@ -37,7 +37,7 @@ import serviceJourneyRules from './modules/serviceJourneyRules';
 import session from './modules/session';
 import spinner from './modules/spinner';
 import termsAndConditions from './modules/termsAndConditions';
-import wayfinderAppointments from './modules/wayfinderAppointments';
+import wayfinder from './modules/wayfinder';
 
 Vue.use(Vuex);
 
@@ -88,6 +88,6 @@ export default new Vuex.Store({
     session,
     spinner,
     termsAndConditions,
-    wayfinderAppointments,
+    wayfinder,
   },
 });

@@ -5,7 +5,7 @@ import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertIsVisible
 
-@DefaultUrl("http://web.local.bitraft.io:3000/appointments/wayfinder-appointments")
+@DefaultUrl("http://web.local.bitraft.io:3000/wayfinder")
 open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
 
     private val pageTitleWithData = HybridPageElement(

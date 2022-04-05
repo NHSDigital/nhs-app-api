@@ -24,7 +24,6 @@ export const APPOINTMENTS_NAME = 'appointments';
 export const GP_APPOINTMENTS_NAME = 'appointments-gp-appointments';
 export const HEALTH_INFORMATION_UPDATES_NAMES = 'messages-app-messaging';
 export const HOSPITAL_APPOINTMENTS_NAME = 'appointments-hospital-appointments';
-export const APPOINTMENT_WAYFINDER_NAME = 'appointments-wayfinder-appointments';
 export const APPOINTMENT_ADMIN_HELP_NAME = 'appointments-gp-appointments-admin-help';
 export const GP_ADVICE_NAME = 'advice-gp-advice';
 export const APPOINTMENT_BOOKING_NAME = 'appointments-gp-appointments-booking';
@@ -134,6 +133,7 @@ export const REDIRECT_PAGE_PARAMETER = 'redirect_to_page';
 export const INTEGRATION_REFERRER_PARAMETER = 'integration_referrer';
 export const REFERRER_PARAMETER = 'referrer';
 export const SSO_PARAMETER = 'sso';
+export const WAYFINDER_NAME = 'wayfinder';
 
 const names = [
   INDEX_NAME,
@@ -268,6 +268,7 @@ const names = [
   INTEGRATION_REFERRER_PARAMETER,
   REFERRER_PARAMETER,
   SSO_PARAMETER,
+  WAYFINDER_NAME,
 ];
 
 export const GP_PRESCRIPTION_JOURNEY_NAME = 'GP_PRESCRIPTION_JOURNEY';

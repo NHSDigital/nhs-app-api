@@ -34,12 +34,12 @@
                    id="btn_wayfinderAppointments"
                    header-tag="h2"
                    data-purpose="text_link"
-                   :href="wayfinderAppointmentsPath"
-                   :click-func="redirectToWayfinderAppointments"
-                   :text="$t('appointments.hub.wayfinderAppointments')"
+                   :href="wayfinderPath"
+                   :click-func="redirectToWayfinder"
+                   :text="$t('appointments.hub.wayfinder')"
                    :description="$t('appointments.hub.viewAndManageReferralsAndAppointments')"
                    :aria-label="ariaLabelCaption(
-                     'appointments.hub.wayfinderAppointments',
+                     'appointments.hub.wayfinder',
                      'appointments.hub.viewAndManageReferralsAndAppointments')"/>
       </menu-item-list>
     </div>
@@ -53,7 +53,7 @@ import MenuItemList from '@/components/MenuItemList';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 import {
-  APPOINTMENT_WAYFINDER_PATH,
+  WAYFINDER_PATH,
   GP_APPOINTMENTS_PATH,
   HOSPITAL_APPOINTMENTS_PATH,
 } from '@/router/paths';
@@ -91,8 +91,8 @@ export default {
     hospitalAppointmentsPath() {
       return HOSPITAL_APPOINTMENTS_PATH;
     },
-    wayfinderAppointmentsPath() {
-      return APPOINTMENT_WAYFINDER_PATH;
+    wayfinderPath() {
+      return WAYFINDER_PATH;
     },
     showHospitalAppointments() {
       return !this.isProxying &&
@@ -116,8 +116,8 @@ export default {
     redirectToHospitalAppointments() {
       this.$router.push(this.hospitalAppointmentsPath);
     },
-    redirectToWayfinderAppointments() {
-      this.$router.push(this.wayfinderAppointmentsPath);
+    redirectToWayfinder() {
+      this.$router.push(this.wayfinderPath);
     },
   },
 };

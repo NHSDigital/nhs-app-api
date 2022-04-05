@@ -17,6 +17,7 @@ import logoutRoute from '@/router/routes/logout';
 import organDonationRoutes from '@/router/routes/organ-donation';
 import silverIntegrationRoutes from '@/router/routes/silver-integration';
 import gpSessionOndDemandRoutes from '@/router/routes/gp-session-on-demand';
+import wayfinder from '@/router/routes/wayfinder';
 import store from '@/store';
 
 import middlewarePipeline from '@/router/middlewarePipeline';
@@ -88,6 +89,7 @@ export const allRoutes = [
       ...dataSharingRoutes,
       ...silverIntegrationRoutes,
       ...gpSessionOndDemandRoutes,
+      ...wayfinder,
       // Route matching happens in order, generalRoutes should
       // be last so to not match before all other routes have been checked,
       // as it contains a catch-all NOT_FOUND route

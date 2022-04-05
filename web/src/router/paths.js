@@ -31,7 +31,6 @@ export const APPOINTMENTS_PATH = 'appointments';
 export const GP_APPOINTMENTS_PATH = 'appointments/gp-appointments';
 export const HOSPITAL_APPOINTMENTS_PATH = 'appointments/hospital-appointments';
 export const APPOINTMENT_ADMIN_HELP_PATH = 'appointments/gp-appointments/admin-help';
-export const APPOINTMENT_WAYFINDER_PATH = 'appointments/wayfinder-appointments';
 export const GP_ADVICE_PATH = 'advice/gp-advice';
 export const APPOINTMENT_BOOKING_PATH = 'appointments/gp-appointments/booking';
 export const APPOINTMENT_CANCELLING_PATH = 'appointments/gp-appointments/cancelling';
@@ -136,6 +135,7 @@ export const UPLIFT_PRESCRIPTIONS_PATH = 'uplift/prescriptions';
 export const UPLIFT_MORE_PATH = 'uplift/more';
 export const UPLIFT_SILVER_INTEGRATION_PATH = 'uplift/silver-integration';
 export const USER_RESEARCH_PATH = '/user-research';
+export const WAYFINDER_PATH = 'wayfinder';
 
 export default {
   EMPTY_PATH,
@@ -270,6 +270,7 @@ export default {
   UPLIFT_MORE_PATH,
   UPLIFT_SILVER_INTEGRATION_PATH,
   USER_RESEARCH_PATH,
+  WAYFINDER_PATH,
 };
 
 /**
