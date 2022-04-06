@@ -179,6 +179,22 @@ export default {
     contactTheHealthcareProvider: 'If you still think an appointment is missing, contact the healthcare provider you booked it with.',
     otherReferralsAppointmentsAndServices: 'Other referrals, appointments and services',
     referralsSectionTitle: 'Referrals',
+    upcomingAppointmentsSectionTitle: 'Upcoming Appointments',
+    appointments: {
+      booked: {
+        title: 'Booked appointment',
+        viewOrManageAppointment: 'View or manage this appointment',
+      },
+      readyToConfirm: {
+        title: 'Ready to confirm appointment',
+        anAppointmentHasBeenBooked: 'An appointment has been booked for you. You need to contact the clinic to confirm you are able to attend it.',
+        contactTheClinicToConfirm: 'Contact the clinic to confirm',
+      },
+    },
+    noAppointments: {
+      youHaveNoAppointments: 'You have no hospital appointments to view and manage.',
+      contactTheOrganisation: 'Contact the healthcare provider your appointment was booked with if an appointment is missing.',
+    },
     noReferrals: {
       youHaveNoReferrals: 'You have no referrals to view and manage.',
       youMayHaveOtherReferrals: 'You may have other referrals not shown available in other services.',

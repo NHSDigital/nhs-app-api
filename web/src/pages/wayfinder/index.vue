@@ -108,6 +108,40 @@
             </CardGroupItem>
           </CardGroup>
         </div>
+
+        <div>
+          <h2>
+            {{ $t('appointments.wayfinder.upcomingAppointmentsSectionTitle') }}
+          </h2>
+          <div v-if="hasNoUpcomingAppointments">
+            <p>
+              {{ $t('appointments.wayfinder.noAppointments.youHaveNoAppointments') }}
+            </p>
+
+            <p>
+              {{ $t('appointments.wayfinder.noAppointments.contactTheOrganisation') }}
+            </p>
+          </div>
+
+          <div v-else>
+            <CardGroup class="nhsuk-grid-row">
+              <CardGroupItem v-for="appointment in upcomingAppointments"
+                             :key="appointment.appointmentId"
+                             class="nhsuk-grid-column-three-quarters">
+
+                <AppointmentBookedCard
+                  v-if="isAppointmentBooked(appointment)"
+                  :location-description="appointment.locationDescription"
+                  :appointment-date-time="appointment.appointmentDateTime"/>
+
+                <AppointmentReadyToBookCard
+                  v-if="!isAppointmentBooked(appointment)"
+                  :location-description="appointment.locationDescription"/>
+
+              </CardGroupItem>
+            </CardGroup>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -115,6 +149,8 @@
 
 <script>
 import { EventBus, UPDATE_HEADER, UPDATE_TITLE } from '@/services/event-bus';
+import AppointmentBookedCard from '@/components/wayfinder/appointments/AppointmentBookedCard';
+import AppointmentReadyToBookCard from '@/components/wayfinder/appointments/AppointmentReadyToConfirmCard';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
@@ -135,6 +171,8 @@ const loadData = async (store) => {
 export default {
   name: 'WayfinderPage',
   components: {
+    AppointmentBookedCard,
+    AppointmentReadyToBookCard,
     CardGroup,
     CardGroupItem,
     InReviewReferralsCard,
@@ -164,8 +202,7 @@ export default {
       return isEmptyArray(this.upcomingAppointments);
     },
     hasNoReferralsOrAppointments() {
-      return this.hasNoReferrals &&
-        this.hasNoUpcomingAppointments;
+      return this.hasNoReferrals && this.hasNoUpcomingAppointments;
     },
     hasErsAppointments() {
       return sjrIf({
@@ -268,6 +305,9 @@ export default {
     },
     isReviewOverdue(referral) {
       return referral.status === 'InReview' && moment(referral.reviewDueDate).isBefore(moment.now());
+    },
+    isAppointmentBooked(appointment) {
+      return appointment.appointmentDateTime;
     },
   },
 };

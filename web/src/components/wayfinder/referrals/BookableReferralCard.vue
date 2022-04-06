@@ -33,10 +33,10 @@
     </primary-button>
   </Card>
 </template>
+
 <script>
 import Card from '@/components/widgets/card/Card';
 import PrimaryButton from '@/components/PrimaryButton';
-import moment from 'moment-timezone';
 
 export default {
   name: 'BookableReferralCard',
@@ -67,7 +67,7 @@ export default {
       return this.requestedSpeciality;
     },
     getFormattedReferredDate() {
-      return moment.tz(this.referredDate, 'Europe/London').format('D MMMM YYYY');
+      return this.$options.filters.longDate(this.referredDate);
     },
   },
 };

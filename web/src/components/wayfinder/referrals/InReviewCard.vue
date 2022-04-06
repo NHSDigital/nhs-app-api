@@ -38,10 +38,10 @@
     </primary-button>
   </Card>
 </template>
+
 <script>
 import Card from '@/components/widgets/card/Card';
 import PrimaryButton from '@/components/PrimaryButton';
-import moment from 'moment-timezone';
 
 export default {
   name: 'InReviewReferralsCard',
@@ -80,10 +80,10 @@ export default {
       return this.reviewDate;
     },
     getFormattedReviewDate() {
-      return moment.tz(this.reviewDate, 'Europe/London').format('D MMMM YYYY');
+      return this.$options.filters.longDate(this.reviewDate);
     },
     getFormattedReferredDate() {
-      return moment.tz(this.referredDate, 'Europe/London').format('D MMMM YYYY');
+      return this.$options.filters.longDate(this.referredDate);
     },
   },
 };
