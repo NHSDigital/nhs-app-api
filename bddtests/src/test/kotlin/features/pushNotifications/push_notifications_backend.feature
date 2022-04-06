@@ -106,17 +106,6 @@ Feature: Push Notifications Backend
     When I delete the registration for push notifications without a pns token
     Then I receive a "Bad Request" error
 
-  Scenario: An api user can retrieve a list of RegistrationIds that are linked to a given Nhs Login Id
-    Given I am an api user wishing to get a list of RegistrationIds that are linked to a given Nhs Login Id
-    And I get registrations based on an Nhs Login Id
-    Then I receive an "OK" success code
-    And I receive a list of NhsLoginIds from devices registrations endpoint
-
-  Scenario: An api user getting RegistrationIds from the registrations endpoint with no registrations will receive a 404
-    Given I am an api user wishing to get a list of RegistrationIds for a Nhs Login Id that has no registrations
-    And I get registrations based on an Nhs Login Id
-    Then I receive an "Not Found" response
-
   Scenario: An api user can send a notification
     Given I am an api user wishing to send a notification to a given Nhs Login Id
     And I send the notification

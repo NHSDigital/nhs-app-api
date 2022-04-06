@@ -6,16 +6,12 @@ import io.cucumber.java.en.When
 import features.sharedSteps.InvalidAccessTokenTester
 import mongodb.MongoDBConnection
 import mongodb.MongoRepositoryUserDevice
-import org.apache.http.HttpStatus
 import org.junit.Assert
 import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set
 import worker.models.pushNotifications.PushNotificationResponse
 import worker.models.userDevices.RegisterUserDevicesResponse
-
-private const val WAIT_FOR_HUB_UPDATE = 1000L
-private const val HUB_UPDATE_CHECK_LIMIT = 10
 
 class PushNotificationsStepDefinitionsBackend {
 
@@ -78,20 +74,6 @@ class PushNotificationsStepDefinitionsBackend {
         val patient = factory.setUpUser()
         factory.setUpDeviceValues(patient.accessToken)
         factory.setUpExistingRegistration()
-    }
-
-    @Given("^I am an api user wishing to get a list of RegistrationIds that are linked to a given Nhs Login Id$")
-    fun iAmAnApiUserWishingToGetAListOfRegistrationsForPushNotifications() {
-        val factory = NotificationsFactory()
-        val patient = factory.setUpUser()
-        factory.setUpDeviceValues(patient.accessToken)
-        factory.setUpExistingRegistration()
-    }
-
-    @Given("^I am an api user wishing to get a list of RegistrationIds for a Nhs Login Id that has no registrations$")
-    fun iAmAnApiUserWishingToGetAListOfRegistrationIdsForANhsLoginIdThatHasNoRegistrations() {
-        val factory = NotificationsFactory()
-        factory.setUpUser()
     }
 
     @Given("^I am an api user wishing to send a notification to a given Nhs Login Id$")
@@ -236,30 +218,10 @@ class PushNotificationsStepDefinitionsBackend {
                 registeredPnsTokens.toTypedArray())
     }
 
-    @Then("^I get registrations based on an Nhs Login Id$")
-    fun iGetRegistrationsBasedOnAnNhsLoginId() {
-        val nhsLoginId = SerenityHelpers.getPatient().subject
-        NotificationsApi.getRegistrationIds(nhsLoginId)
-
-        var conditionCheckLimit = 0
-        while (SerenityHelpers.getHttpResponse()!!.statusLine.statusCode != HttpStatus.SC_OK &&
-                conditionCheckLimit < HUB_UPDATE_CHECK_LIMIT) {
-            Thread.sleep(WAIT_FOR_HUB_UPDATE)
-            NotificationsApi.getRegistrationIds(nhsLoginId)
-            conditionCheckLimit++
-        }
-    }
-
-    @Then("^I receive a list of NhsLoginIds from devices registrations endpoint$")
-    fun iReceiveAListOfNhsLoginIdsFromUserInfoEndpoint() {
-        val response = PushNotificationsSerenityHelpers.GET_REGISTRATIONS_RESPONSE.getOrFail<Array<String>?>()
-        Assert.assertEquals("Registrations found", 1, response?.size)
-    }
-
     @Then("^I receive tracking details for the sent notification$")
     fun iReceiveTrackingDetailsForTheSentNotification() {
         val response =
-                PushNotificationsSerenityHelpers.CREATE_PUSH_NOTIFICATION_RESPONSE.getOrFail<PushNotificationResponse>()
+            PushNotificationsSerenityHelpers.CREATE_PUSH_NOTIFICATION_RESPONSE.getOrFail<PushNotificationResponse>()
         Assert.assertNotNull(response)
         Assert.assertNotNull("NotificationId", response.notificationId)
         Assert.assertNotNull("Scheduled", response.scheduled)

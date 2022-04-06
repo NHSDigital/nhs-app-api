@@ -5881,36 +5881,6 @@
             description: "Successfully logged"
           400: 
             description: "Bad request. Supplied request is invalid."
-    /v1/api/users/{nhsLoginId}/devices/registrations: 
-      get: 
-        tags: 
-          - "registrations"
-        summary: "Retreive device registrations"
-        description: "Retrieves a list of device registrations pertaining to the user."
-        parameters: 
-          - 
-            in: "path"
-            name: "nhsLoginId"
-            required: true
-            description: "Unique identifier of a user"
-            schema: 
-              type: "string"
-        responses: 
-          200: 
-            description: "Successful operation. Device registrations found."
-            content: 
-              application/json: 
-                schema: 
-                  type: "array"
-                  description: "Array of registrations"
-                  items: 
-                    type: "string"
-          404: 
-            description: "Registration is not found"
-          500: 
-            description: "An unexpected error occurred processing the request."
-          502: 
-            description: "An unexpected error occurred processing the request."
     /v1/api/users/{nhsLoginId}/devices/notifications: 
       post: 
         tags: 

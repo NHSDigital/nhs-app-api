@@ -135,28 +135,6 @@ namespace NHSOnline.Backend.Users.UnitTests.Repository
         }
 
         [TestMethod]
-        public async Task Find_By_NhsLoginId_Success()
-        {
-            // Arrange
-            var userDeviceOne = new UserDevice { NhsLoginId = NhsLoginId, RegistrationId = "RegistrationIdOne" };
-            var userDeviceTwo = new UserDevice { NhsLoginId = NhsLoginId, RegistrationId = "RegistrationIdTwo" };
-
-            var expectedRegistrationsIds = new [] { "RegistrationIdOne", "RegistrationIdTwo" };
-
-            _mockDeviceRepository.Setup(x => x.Find(NhsLoginId))
-                .ReturnsAsync(new RepositoryFindResult<UserDevice>.Found(new []{ userDeviceOne, userDeviceTwo }));
-
-            // Act
-            var result = await _systemUnderTest.Find(NhsLoginId);
-
-            // Assert
-            _mockDeviceRepository.VerifyAll();
-
-            var objectResult = result.Should().BeAssignableTo<FindRegistrationsResult.Found>();
-            objectResult.Subject.RegistrationIds.Should().BeEquivalentTo(expectedRegistrationsIds);
-        }
-
-        [TestMethod]
         public async Task Find_RepositoryDoesNotFindRecord_ReturnNotFound()
         {
             // Arrange
@@ -175,22 +153,6 @@ namespace NHSOnline.Backend.Users.UnitTests.Repository
         }
 
         [TestMethod]
-        public async Task Find_By_NhsLoginId_RepositoryDoesNotFindRecord_ReturnNotFound()
-        {
-            // Arrange
-            _mockDeviceRepository.Setup(x => x.Find(NhsLoginId))
-                .ReturnsAsync(new RepositoryFindResult<UserDevice>.NotFound());
-
-            // Act
-            var result = await _systemUnderTest.Find(NhsLoginId);
-
-            // Assert
-            _mockDeviceRepository.VerifyAll();
-
-            result.Should().BeAssignableTo<FindRegistrationsResult.NotFound>();
-        }
-
-        [TestMethod]
         public async Task Find_RepositoryThrowsException_ReturnsInternalServerError()
         {
             // Arrange
@@ -206,38 +168,6 @@ namespace NHSOnline.Backend.Users.UnitTests.Repository
             _mockDeviceRepository.VerifyAll();
 
             result.Should().BeAssignableTo<SearchDeviceResult.InternalServerError>();
-        }
-
-        [TestMethod]
-        public async Task Find_ByNhsLoginId_RepositoryThrowsException_ReturnsInternalServerError()
-        {
-            // Arrange
-            _mockDeviceRepository.Setup(x => x.Find(NhsLoginId))
-                .Throws(new ArgumentException("Test"));
-
-            // Act
-            var result = await _systemUnderTest.Find(NhsLoginId);
-
-            // Assert
-            _mockDeviceRepository.VerifyAll();
-
-            result.Should().BeAssignableTo<FindRegistrationsResult.InternalServerError>();
-        }
-
-        [TestMethod]
-        public async Task Find_ByNhsLoginId_WithRepositoryError_ReturnsBadGateway()
-        {
-            // Arrange
-            _mockDeviceRepository.Setup(x => x.Find(NhsLoginId))
-                .ReturnsAsync(new RepositoryFindResult<UserDevice>.RepositoryError());
-
-            // Act
-            var result = await _systemUnderTest.Find(NhsLoginId);
-
-            // Assert
-            _mockDeviceRepository.VerifyAll();
-
-            result.Should().BeAssignableTo<FindRegistrationsResult.BadGateway>();
         }
 
         [TestMethod]

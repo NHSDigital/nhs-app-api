@@ -85,8 +85,6 @@ paths:
     $ref: ./nhsonline.users.yaml#/paths/~1users~1me~1devices~1prompt~1metrics
   /v1/api/users/me/silver-integration-blocked/metrics:
     $ref: ./nhsonline.users.yaml#/paths/~1users~1me~1silver-integration-blocked~1metrics
-  /v1/api/users/{nhsLoginId}/devices/registrations:
-    $ref: ./nhsonline.users.yaml#/paths/~1users~1{nhsLoginId}~1devices~1registrations
   /v1/api/users/{nhsLoginId}/devices/notifications:
     $ref: ./nhsonline.users.yaml#/paths/~1users~1{nhsLoginId}~1devices~1notifications
   /v1/api/users/devices/notifications/{notificationId}:

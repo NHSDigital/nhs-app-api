@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.Users.Repository
             AccessToken accessToken);
 
         Task<SearchDeviceResult> Find(string devicePns, AccessToken accessToken);
-        Task<FindRegistrationsResult> Find(string nhsLoginId);
+
         Task<DeleteDeviceResult> Delete(string deviceId, string nhsLoginId);
     }
 }

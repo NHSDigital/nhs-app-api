@@ -195,32 +195,6 @@ paths:
           description: Successfully logged
         "400":
           $ref: '#/components/responses/BadRequest'
-  /users/{nhsLoginId}/devices/registrations:
-    get:
-      tags:
-        - registrations
-      summary: Retreive device registrations
-      description: Retrieves a list of device registrations pertaining to the user.
-      parameters:
-        - in: path
-          name: nhsLoginId
-          required: true
-          description: Unique identifier of a user
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation. Device registrations found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RegistrationsResponse'
-        "404":
-          description: Registration is not found
-        "500":
-          $ref: '#/components/responses/UnexpectedError'
-        "502":
-          $ref: '#/components/responses/UnexpectedError'
   /users/me/silver-integration-blocked/metrics:
     post:
       security:
@@ -285,11 +259,6 @@ components:
       example:
         deviceId: 2f2c28c8-3de9-4ffc-9d0b-23533363d7d3
         deviceType: android
-    RegistrationsResponse:
-      type: array
-      description: Array of registrations
-      items:
-        type: string
     NotificationSendRequest:
       type: object
       required:
