@@ -48,8 +48,8 @@ namespace NHSOnline.App.iOS.Controllers
                     }
                 }
 
-                await ShowDialog(alertController).ResumeOnThreadPool();
-            }).ResumeOnThreadPool();
+                await ShowDialog(alertController).PreserveThreadContext();
+            }).PreserveThreadContext();
         }
 
         public static async Task DismissAll()
@@ -63,8 +63,8 @@ namespace NHSOnline.App.iOS.Controllers
                     return;
                 }
 
-                await DismissModal(modal).ResumeOnThreadPool();
-            }).ResumeOnThreadPool();
+                await DismissModal(modal).PreserveThreadContext();
+            }).PreserveThreadContext();
         }
 
         private static UIAlertController? GetAlertController() =>
@@ -95,16 +95,16 @@ namespace NHSOnline.App.iOS.Controllers
             {
                 if (dismissAction != null)
                 {
-                    await dismissAction().ResumeOnThreadPool();
+                    await dismissAction().PreserveThreadContext();
                 }
 
-                if (AlertDismissActions.TryRemove(modal.Message, out _))
+                if (!AlertDismissActions.TryRemove(modal.Message, out _))
                 {
                     Logger.LogWarning("Unable to remove dismiss action for {Message} dialog", modal.Message);
                 }
             }
 
-            await modal.DismissViewControllerAsync(true).ResumeOnThreadPool();
+            await modal.DismissViewControllerAsync(true).PreserveThreadContext();
         }
 
         private static async Task ShowDialog(UIAlertController alertController)
@@ -113,10 +113,10 @@ namespace NHSOnline.App.iOS.Controllers
 
             if (modal != null)
             {
-                await DismissModal(modal).ResumeOnThreadPool();
+                await DismissModal(modal).PreserveThreadContext();
             }
 
-            await DisplayController(alertController).ResumeOnThreadPool();
+            await DisplayController(alertController).PreserveThreadContext();
         }
     }
 }
