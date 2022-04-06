@@ -40,6 +40,8 @@ namespace NHSOnline.Backend.PfsApi.Session
 
             await Audit(citizenIdSessionResult, request.IntegrationReferrer, request.Referrer);
 
+            _logger.LogInformation($"NhsNumber={citizenIdSessionResult.NhsNumber.RemoveWhiteSpace()}");
+
             return citizenIdSessionResult;
         }
 
