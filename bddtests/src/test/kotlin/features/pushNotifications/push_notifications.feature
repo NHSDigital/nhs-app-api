@@ -213,11 +213,10 @@ Feature: Push Notifications
     And the notifications toggle is displayed as off
     When I disable notifications in the device's settings
     And I change the notifications toggle to on
-    Then an error is displayed indicating that it could not save because the device's notifications are disabled
+    Then an error is displayed indicating that the device's notifications are disabled
     When I click the 'Try again' button
     # verify that the error is re-displayed if no action is taken to rectify the issue
-    Then an error is displayed indicating that it could not save because the device's notifications are disabled
+    Then an error is displayed indicating that the device's notifications are disabled
     When I enable notifications in the device's settings
     And I click the 'Try again' button
-    Then the notifications toggle is displayed as on
-    And the push registration has been added to the repository
+    Then the Notifications Settings page is displayed

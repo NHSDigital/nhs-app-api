@@ -13,7 +13,7 @@ Feature: notifications errors accessibility
     And the notifications toggle is displayed as off
     When I disable notifications in the device's settings
     And I change the notifications toggle to on
-    Then an error is displayed indicating that it could not save because the device's notifications are disabled
+    Then an error is displayed indicating that the device's notifications are disabled
     And the Errors_ENO1_NativeFailureWhenUserToggles page is saved to disk
 
   Scenario: Notification api error is captured

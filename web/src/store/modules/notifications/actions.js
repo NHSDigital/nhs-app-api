@@ -7,6 +7,7 @@ import {
   AUTH_RETURN_NAME,
   TERMSANDCONDITIONS_NAME,
   USER_RESEARCH_NAME,
+  MORE_ACCOUNTANDSETTINGS_MANAGENOTIFICATIONS_NAME,
 } from '@/router/names';
 import { NOTIFICATIONS_GENERIC_FAILURE_PATH } from '@/router/paths';
 import { setCookie } from '@/lib/cookie-manager';
@@ -184,7 +185,7 @@ export default {
     NativeApp.requestPnsToken(toggle);
     return toggling;
   },
-  unauthorised({ commit, dispatch }) {
+  unauthorised({ commit, dispatch, state }) {
     commit(SET_WAITING, false);
     switch (this.app.$router.currentRoute.name) {
       case NOTIFICATIONS_NAME:
@@ -204,6 +205,13 @@ export default {
         // the middleware we need to ensure the promise is
         // resolved and doesn't leave the user stuck
         resolveTask('');
+        break;
+      case MORE_ACCOUNTANDSETTINGS_MANAGENOTIFICATIONS_NAME:
+        if (state.registered) {
+          addApiError(this, 10002);
+        } else {
+          addApiError(this, 10001);
+        }
         break;
       default:
         addApiError(this, 10002);
