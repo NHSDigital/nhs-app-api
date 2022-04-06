@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
         {
             if (!HasSuccessResponse)
             {
-                logger.LogError("Aggregator returned with error.");
+                logger.LogError("Secondary Care Aggregator returned with error.");
 
                 return this;
             }

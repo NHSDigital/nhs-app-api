@@ -24,26 +24,35 @@ namespace NHSOnline.Backend.PfsApi.Areas.SecondaryCare
         {
             try
             {
+                var referralCount = result.Response.Referrals.Count();
+                var upcomingAppointmentCount = result.Response.UpcomingAppointments.Count();
+
                 await _auditor.PostOperationAudit(AuditType,
                     "Secondary Care Summary successfully retrieved. " +
-                    $"Total Referrals: {result.Response.Referrals.Count()}, " +
-                    $"Total Upcoming Appointments: {result.Response.UpcomingAppointments.Count()}");
+                    $"Total Referrals: {referralCount}, " +
+                    $"Total Upcoming Appointments: {upcomingAppointmentCount}");
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(SecondaryCareSummaryResult.Success)}");
+                _logger.LogError(e, "Exception thrown auditing {AuditType} {Result}", AuditType, nameof(SecondaryCareSummaryResult.Success));
             }
         }
 
         public async Task Visit(SecondaryCareSummaryResult.BadGateway _)
+            => await VisitError(nameof(SecondaryCareSummaryResult.BadGateway));
+
+        public async Task Visit(SecondaryCareSummaryResult.Timeout _)
+            => await VisitError(nameof(SecondaryCareSummaryResult.Timeout));
+
+        private async Task VisitError(string error)
         {
             try
             {
-                await _auditor.PostOperationAudit(AuditType, "Error retrieving Secondary Care Summary: bad gateway");
+                await _auditor.PostOperationAudit(AuditType, $"Error retrieving Secondary Care Summary: {error}");
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(SecondaryCareSummaryResult.BadGateway)}");
+                _logger.LogError(e, "Exception thrown auditing {AuditType} {Error}", AuditType, error);
             }
         }
     }

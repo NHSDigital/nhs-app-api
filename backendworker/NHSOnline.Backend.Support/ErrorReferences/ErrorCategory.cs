@@ -7,6 +7,7 @@ namespace NHSOnline.Backend.Support
         Timeout,
         Appointments,
         Prescriptions,
-        PatientPracticeMessages
+        PatientPracticeMessages,
+        SecondaryCare,
     }
 }

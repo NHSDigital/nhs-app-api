@@ -3,6 +3,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 {
@@ -43,10 +44,34 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             var result = await Context.CreateSystemUnderTest().Summary(Context.Data.P9UserSession);
 
             // Assert
-            result.Should().BeAssignableTo<StatusCodeResult>().Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            var pfsErrorResponse = actionResult.Value.Should().BeAssignableTo<PfsErrorResponse>().Subject;
+
+            actionResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            pfsErrorResponse.ServiceDeskReference.Should().StartWith("4u");
 
             Context.Mocks.Auditor.Verify(a => a.PreOperationAudit("SecondaryCare_GetSummary_Request","Attempting to get Secondary Care Summary"));
-            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit("SecondaryCare_GetSummary_Response", "Error retrieving Secondary Care Summary: bad gateway"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit("SecondaryCare_GetSummary_Response", "Error retrieving Secondary Care Summary: BadGateway"));
+        }
+
+        [TestMethod]
+        public async Task GetSummary_GetSummaryResponseFromClientTimesOut_Returns504GatewayTimeout()
+        {
+            // Arrange
+            Context.MockSecondaryCareHttpClientGetSummaryTimesOut();
+
+            // Act
+            var result = await Context.CreateSystemUnderTest().Summary(Context.Data.P9UserSession);
+
+            // Assert
+            var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            var pfsErrorResponse = actionResult.Value.Should().BeAssignableTo<PfsErrorResponse>().Subject;
+
+            actionResult.StatusCode.Should().Be(StatusCodes.Status504GatewayTimeout);
+            pfsErrorResponse.ServiceDeskReference.Should().StartWith("zu");
+
+            Context.Mocks.Auditor.Verify(a => a.PreOperationAudit("SecondaryCare_GetSummary_Request","Attempting to get Secondary Care Summary"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit("SecondaryCare_GetSummary_Response", "Error retrieving Secondary Care Summary: Timeout"));
         }
     }
 }

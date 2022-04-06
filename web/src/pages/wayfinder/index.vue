@@ -1,147 +1,120 @@
 <template>
-  <div v-if="showTemplate" class="nhsuk-grid-row">
+  <div v-if="hasLoaded" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <div v-if="hasNoReferralsOrAppointments" class="nhsuk-u-padding-top-4">
-        <p>
-          {{ $t('appointments.wayfinder.youMayHaveOtherReferrals') }}
-        </p>
+      <div class="nhsuk-u-padding-top-4">
 
-        <p>
-          {{ $t('appointments.wayfinder.contactTheOrganisation') }}
-        </p>
+        <template v-if="hasErrored">
+          <p>{{ $t('wayfinder.errors.cannotViewTryAgain') }}</p>
 
-        <p>
-          {{ $t('appointments.wayfinder.contactTheHealthcareProvider') }}
-        </p>
-
-        <h2>
-          {{ $t('appointments.wayfinder.otherReferralsAppointmentsAndServices') }}
-        </h2>
-
-        <menu-item-list>
-          <third-party-jump-off-button v-if="showManageYourReferral"
-                                       id="btn_manage_your_referral"
-                                       provider-id="ers"
-                                       :provider-configuration="thirdPartyProvider.ers.
-                                         manageYourReferralWayfinder" />
-
-          <third-party-jump-off-button v-if="showPkbAppointments"
-                                       id="btn_pkb_appointments"
-                                       provider-id="pkb"
-                                       :provider-configuration="thirdPartyProvider.pkb.
-                                         appointments" />
-
-          <third-party-jump-off-button v-if="showPkbCieAppointments"
-                                       id="btn_pkb_cie_appointments"
-                                       provider-id="pkb"
-                                       :provider-configuration="thirdPartyProvider.pkb.
-                                         appointmentsCie" />
-
-          <third-party-jump-off-button v-if="showPkbSecondaryCareAppointments"
-                                       id="btn_pkb_secondary_care_appointments"
-                                       provider-id="pkb"
-                                       :provider-configuration="thirdPartyProvider.pkb.
-                                         appointmentsPkbSecondaryCare" />
-
-          <third-party-jump-off-button v-if="showPkbMyCareViewAppointments"
-                                       id="btn_pkb_my_care_view_appointments"
-                                       provider-id="pkb"
-                                       :provider-configuration="thirdPartyProvider.pkb.
-                                         appointmentsPkbMyCareView" />
-
-          <third-party-jump-off-button v-if="showGncrAppointments"
-                                       id="btn_gncr_appointments"
-                                       provider-id="gncr"
-                                       :provider-configuration="thirdPartyProvider.gncr.
-                                         appointments" />
-        </menu-item-list>
-      </div>
-      <div v-else class="nhsuk-u-padding-top-4">
-        <h2>
-          {{ $t('appointments.wayfinder.referralsSectionTitle') }}
-        </h2>
-        <div v-if="hasNoReferrals">
-          <p>
-            {{ $t('appointments.wayfinder.noReferrals.youHaveNoReferrals') }}
-          </p>
+          <generic-button
+            id="try-again-button"
+            :class="['nhsuk-button', 'nhsuk-button--secondary']"
+            @click="tryAgainClicked">
+            {{ $t('generic.tryAgain') }}
+          </generic-button>
 
           <p>
-            {{ $t('appointments.wayfinder.noReferrals.youMayHaveOtherReferrals') }}
+            <a :href="contactUsLink"
+               :aria-label="contactUsAriaLabel"
+               @click.stop.prevent="contactUsClicked">
+              {{ contactUsLinkText }}
+            </a>
           </p>
 
-          <p>
-            {{ $t('appointments.wayfinder.noReferrals.contactTheOrganisation') }}
-          </p>
-        </div>
-        <div v-else>
-          <CardGroup class="nhsuk-grid-row">
+          <h2>{{ $t('wayfinder.otherReferralsAppointmentsAndServices') }}</h2>
 
-            <CardGroupItem v-for="referral in referrals"
-                           :key="referral.referralId"
-                           class="nhsuk-grid-column-three-quarters">
+          <p>{{ $t('wayfinder.errors.mayHaveOtherServicesAvailableNotShown') }}</p>
 
-              <InReviewReferralsCard v-if="isInReview(referral)"
-                                     :requested-speciality="referral.serviceSpeciality"
-                                     :referred-date="referral.referredDateTime"
-                                     :review-date="referral.reviewDueDate"
-                                     :booking-reference="referral.referralId"
-                                     :referred-by="referral.referrerOrganisation"/>
+          <other-available-services-menu-items />
+        </template>
 
-              <ReviewOverdueReferralsCard v-if="isReviewOverdue(referral)"
-                                          :requested-speciality="referral.serviceSpeciality"
-                                          :referred-date="referral.referredDateTime"
-                                          :review-date="referral.reviewDueDate"
-                                          :booking-reference="referral.referralId"
-                                          :referred-by="referral.referrerOrganisation"/>
+        <template v-else-if="hasReferralsOrAppointments">
+          <h2>{{ $t('wayfinder.referralsSectionTitle') }}</h2>
 
-              <ReadyToRebookReferralCard v-if="isBookableWasCancelled(referral)"
-                                         :requested-speciality="referral.serviceSpeciality"
-                                         :referred-date="referral.referredDateTime"
-                                         :booking-reference="referral.referralId"
-                                         :referred-by="referral.referrerOrganisation"/>
-
-              <BookableReferralCard v-if="isBookable(referral)"
-                                    :requested-speciality="referral.serviceSpeciality"
-                                    :referred-date="referral.referredDateTime"
-                                    :booking-reference="referral.referralId"
-                                    :referred-by="referral.referrerOrganisation"/>
-            </CardGroupItem>
-          </CardGroup>
-        </div>
-
-        <div>
-          <h2>
-            {{ $t('appointments.wayfinder.upcomingAppointmentsSectionTitle') }}
-          </h2>
-          <div v-if="hasNoUpcomingAppointments">
-            <p>
-              {{ $t('appointments.wayfinder.noAppointments.youHaveNoAppointments') }}
-            </p>
-
-            <p>
-              {{ $t('appointments.wayfinder.noAppointments.contactTheOrganisation') }}
-            </p>
-          </div>
-
-          <div v-else>
-            <CardGroup class="nhsuk-grid-row">
-              <CardGroupItem v-for="appointment in upcomingAppointments"
-                             :key="appointment.appointmentId"
+          <card-group v-if="hasReferrals" class="nhsuk-grid-row">
+            <card-group-item v-for="referral in referrals"
+                             :key="referral.referralId"
                              class="nhsuk-grid-column-three-quarters">
 
-                <AppointmentBookedCard
-                  v-if="isAppointmentBooked(appointment)"
-                  :location-description="appointment.locationDescription"
-                  :appointment-date-time="appointment.appointmentDateTime"/>
+              <referral-in-review-card
+                v-if="isInReview(referral)"
+                :requested-speciality="referral.serviceSpeciality"
+                :referred-date="referral.referredDateTime"
+                :review-date="referral.reviewDueDate"
+                :booking-reference="referral.referralId"
+                :referred-by="referral.referrerOrganisation"/>
 
-                <AppointmentReadyToBookCard
-                  v-if="!isAppointmentBooked(appointment)"
-                  :location-description="appointment.locationDescription"/>
+              <referral-review-overdue-card
+                v-if="isReviewOverdue(referral)"
+                :requested-speciality="referral.serviceSpeciality"
+                :referred-date="referral.referredDateTime"
+                :review-date="referral.reviewDueDate"
+                :booking-reference="referral.referralId"
+                :referred-by="referral.referrerOrganisation"/>
 
-              </CardGroupItem>
-            </CardGroup>
-          </div>
-        </div>
+              <referral-ready-to-rebook-card
+                v-if="isBookableWasCancelled(referral)"
+                :requested-speciality="referral.serviceSpeciality"
+                :referred-date="referral.referredDateTime"
+                :booking-reference="referral.referralId"
+                :referred-by="referral.referrerOrganisation"/>
+
+              <referral-bookable-card
+                v-if="isBookable(referral)"
+                :requested-speciality="referral.serviceSpeciality"
+                :referred-date="referral.referredDateTime"
+                :booking-reference="referral.referralId"
+                :referred-by="referral.referrerOrganisation"/>
+            </card-group-item>
+          </card-group>
+
+          <template v-else>
+            <p>{{ $t('wayfinder.noReferrals.youHaveNoReferrals') }}</p>
+
+            <p>{{ $t('wayfinder.noReferrals.youMayHaveOtherReferrals') }}</p>
+
+            <p>{{ $t('wayfinder.noReferrals.contactTheOrganisation') }}</p>
+          </template>
+
+          <h2>{{ $t('wayfinder.upcomingAppointmentsSectionTitle') }}</h2>
+
+          <card-group v-if="hasUpcomingAppointments" class="nhsuk-grid-row">
+            <card-group-item
+              v-for="appointment in upcomingAppointments"
+              :key="appointment.appointmentId"
+              class="nhsuk-grid-column-three-quarters">
+
+              <appointment-booked-card
+                v-if="isAppointmentBooked(appointment)"
+                :location-description="appointment.locationDescription"
+                :appointment-date-time="appointment.appointmentDateTime"/>
+
+              <appointment-ready-to-confirm-card
+                v-if="!isAppointmentBooked(appointment)"
+                :location-description="appointment.locationDescription"/>
+
+            </card-group-item>
+          </card-group>
+
+          <template v-else>
+            <p>{{ $t('wayfinder.noAppointments.youHaveNoAppointments') }}</p>
+
+            <p>{{ $t('wayfinder.noAppointments.contactTheOrganisation') }}</p>
+          </template>
+        </template>
+
+        <template v-else>
+          <p>{{ $t('wayfinder.youMayHaveOtherReferrals') }}</p>
+
+          <p>{{ $t('wayfinder.contactTheOrganisation') }}</p>
+
+          <p>{{ $t('wayfinder.contactTheHealthcareProvider') }}</p>
+
+          <h2>{{ $t('wayfinder.otherReferralsAppointmentsAndServices') }}</h2>
+
+          <other-available-services-menu-items />
+        </template>
+
       </div>
     </div>
   </div>
@@ -149,18 +122,16 @@
 
 <script>
 import { EventBus, UPDATE_HEADER, UPDATE_TITLE } from '@/services/event-bus';
-import AppointmentBookedCard from '@/components/wayfinder/appointments/AppointmentBookedCard';
-import AppointmentReadyToBookCard from '@/components/wayfinder/appointments/AppointmentReadyToConfirmCard';
+import GenericButton from '@/components/widgets/GenericButton';
+import OtherAvailableServicesMenuItems from '@/components/wayfinder/OtherAvailableServicesMenuItems';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
-import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
-import MenuItemList from '@/components/MenuItemList';
-import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
-import InReviewReferralsCard from '@/components/wayfinder/referrals/InReviewCard';
-import ReadyToRebookReferralCard from '@/components/wayfinder/referrals/ReadyToRebookReferralCard';
-import ReviewOverdueReferralsCard from '@/components/wayfinder/referrals/ReviewOverdueCard';
-import BookableReferralCard from '@/components/wayfinder/referrals/BookableReferralCard';
-import sjrIf from '@/lib/sjrIf';
+import AppointmentBookedCard from '@/components/wayfinder/appointments/AppointmentBookedCard';
+import AppointmentReadyToConfirmCard from '@/components/wayfinder/appointments/AppointmentReadyToConfirmCard';
+import ReferralInReviewCard from '@/components/wayfinder/referrals/ReferralInReviewCard';
+import ReferralReadyToRebookCard from '@/components/wayfinder/referrals/ReferralReadyToRebookCard';
+import ReferralReviewOverdueCard from '@/components/wayfinder/referrals/ReferralReviewOverdueCard';
+import ReferralBookableCard from '@/components/wayfinder/referrals/ReferralBookableCard';
 import { isEmptyArray } from '@/lib/utils';
 import moment from 'moment';
 
@@ -171,127 +142,69 @@ const loadData = async (store) => {
 export default {
   name: 'WayfinderPage',
   components: {
-    AppointmentBookedCard,
-    AppointmentReadyToBookCard,
+    GenericButton,
+    OtherAvailableServicesMenuItems,
     CardGroup,
     CardGroupItem,
-    InReviewReferralsCard,
-    ReadyToRebookReferralCard,
-    ReviewOverdueReferralsCard,
-    BookableReferralCard,
-    MenuItemList,
-    ThirdPartyJumpOffButton,
-  },
-  data() {
-    return {
-      isProxying: this.$store.getters['session/isProxying'],
-      thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
-    };
+    AppointmentBookedCard,
+    AppointmentReadyToConfirmCard,
+    ReferralInReviewCard,
+    ReferralReadyToRebookCard,
+    ReferralReviewOverdueCard,
+    ReferralBookableCard,
   },
   computed: {
+    hasLoaded() {
+      return this.$store.state.wayfinder.hasLoaded;
+    },
+    apiError() {
+      return this.$store.state.wayfinder.apiError;
+    },
+    hasErrored() {
+      return this.apiError !== undefined;
+    },
+    contactUsLink() {
+      return `${this.$store.$env.CONTACT_US_URL}?errorcode=${this.apiError.serviceDeskReference}`;
+    },
+    contactUsLinkText() {
+      const errorCode = this.apiError.serviceDeskReference;
+      return this.$t('wayfinder.errors.contactUs', { errorCode });
+    },
+    contactUsAriaLabel() {
+      const errorCode = this.apiError.serviceDeskReference.split('');
+      return this.$t('wayfinder.errors.contactUs', { errorCode });
+    },
     referrals() {
-      return this.$store.state.wayfinder.referrals;
+      return this.$store.state.wayfinder.summary.referrals;
     },
     upcomingAppointments() {
-      return this.$store.state.wayfinder.upcomingAppointments;
+      return this.$store.state.wayfinder.summary.upcomingAppointments;
     },
-    hasNoReferrals() {
-      return isEmptyArray(this.referrals);
+    hasReferrals() {
+      return !isEmptyArray(this.referrals);
     },
-    hasNoUpcomingAppointments() {
-      return isEmptyArray(this.upcomingAppointments);
+    hasUpcomingAppointments() {
+      return !isEmptyArray(this.upcomingAppointments);
     },
-    hasNoReferralsOrAppointments() {
-      return this.hasNoReferrals && this.hasNoUpcomingAppointments;
-    },
-    hasErsAppointments() {
-      return sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'ers',
-          serviceType: 'secondaryAppointments',
-        },
-      });
-    },
-    hasGncrAppointments() {
-      return sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'gncr',
-          serviceType: 'secondaryAppointments',
-        },
-      });
-    },
-    hasPkbAppointments() {
-      return sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkb',
-          serviceType: 'secondaryAppointments',
-        },
-      });
-    },
-    hasPkbCieAppointments() {
-      return sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbCie',
-          serviceType: 'secondaryAppointments',
-        },
-      });
-    },
-    hasPkbSecondaryCareAppointments() {
-      return sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbSecondaryCare',
-          serviceType: 'secondaryAppointments',
-        },
-      });
-    },
-    hasPkbMyCareViewAppointments() {
-      return sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbMyCareView',
-          serviceType: 'secondaryAppointments',
-        },
-      });
-    },
-    showGncrAppointments() {
-      return this.hasGncrAppointments && !this.isProxying;
-    },
-    showManageYourReferral() {
-      return this.hasErsAppointments && !this.isProxying;
-    },
-    showPkbAppointments() {
-      return this.hasPkbAppointments && !this.isProxying;
-    },
-    showPkbCieAppointments() {
-      return this.hasPkbCieAppointments && !this.isProxying;
-    },
-    showPkbSecondaryCareAppointments() {
-      return this.hasPkbSecondaryCareAppointments && !this.isProxying;
-    },
-    showPkbMyCareViewAppointments() {
-      return this.hasPkbMyCareViewAppointments && !this.isProxying;
+    hasReferralsOrAppointments() {
+      return this.hasReferrals || this.hasUpcomingAppointments;
     },
   },
   async mounted() {
     await loadData(this.$store);
 
-    if (this.hasNoReferralsOrAppointments) {
-      EventBus.$emit(UPDATE_HEADER, {
-        headerKey: 'appointments.wayfinder.noReferralsOrAppointments',
-      });
-      EventBus.$emit(UPDATE_TITLE, 'appointments.wayfinder.noReferralsOrAppointments');
+    if (this.hasErrored) {
+      const header = 'wayfinder.errors.cannotViewAndManageReferralsAndAppointments';
+      EventBus.$emit(UPDATE_HEADER, header);
+      EventBus.$emit(UPDATE_TITLE, header);
+    } else if (!this.hasReferralsOrAppointments) {
+      const header = 'wayfinder.noReferralsOrAppointments';
+      EventBus.$emit(UPDATE_HEADER, header);
+      EventBus.$emit(UPDATE_TITLE, header);
     }
+  },
+  beforeDestroy() {
+    this.$store.dispatch('wayfinder/init');
   },
   methods: {
     isInReview(referral) {
@@ -308,6 +221,12 @@ export default {
     },
     isAppointmentBooked(appointment) {
       return appointment.appointmentDateTime;
+    },
+    tryAgainClicked() {
+      this.$router.go();
+    },
+    contactUsClicked() {
+      window.open(this.contactUsLink, '_blank', 'noopener,noreferrer');
     },
   },
 };

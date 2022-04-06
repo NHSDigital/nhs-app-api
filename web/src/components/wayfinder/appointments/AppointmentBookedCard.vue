@@ -1,7 +1,7 @@
 <template>
   <Card class="nhsuk-u-margin-bottom-5">
     <h3 class="nhsuk-u-margin-bottom-1">
-      {{ $t('appointments.wayfinder.appointments.booked.title') }}
+      {{ $t('wayfinder.appointments.booked.title') }}
     </h3>
     <p>
       <strong>{{ appointmentDateTime | fullDate }}</strong><br>
@@ -11,7 +11,7 @@
       {{ locationDescription }}
     </p>
     <primary-button id="bookOrManageAppointment">
-      {{ $t('appointments.wayfinder.appointments.booked.viewOrManageAppointment') }}
+      {{ $t('wayfinder.appointments.booked.viewOrManageAppointment') }}
     </primary-button>
   </Card>
 </template>

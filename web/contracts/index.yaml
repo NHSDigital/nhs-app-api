@@ -5673,6 +5673,23 @@
                     serviceDeskReference: 
                       type: "string"
                       description: "Six character service desk reference code."
+          504: 
+            description: "Timeout when calling upstream system."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
     /v1/api/users/me/devices: 
       get: 
         security: 

@@ -22,6 +22,9 @@ namespace NHSOnline.Backend.Support
         Fake = 6,
 
         [SourceApi(SourceApi.None)]
-        Disconnected = 7
+        Disconnected = 7,
+
+        [SourceApi(SourceApi.SecondaryCareAggregator)]
+        SecondaryCareAggregator = 8,
     }
 }

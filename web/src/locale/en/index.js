@@ -28,6 +28,7 @@ import adviceCheck from './adviceCheck';
 import termsAndConditions from './termsAndConditions';
 import thirdPartyProviders from './third-party-providers';
 import userResearch from './userResearch';
+import wayfinder from './wayfinder';
 
 export default {
   language: 'en-GB',
@@ -63,4 +64,5 @@ export default {
   termsAndConditions,
   thirdPartyProviders,
   userResearch,
+  wayfinder,
 };

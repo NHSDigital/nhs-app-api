@@ -1,7 +1,7 @@
 <template>
   <Card class="nhsuk-u-margin-bottom-5">
     <h3 class="nhsuk-u-margin-bottom-1">
-      {{ $t('appointments.wayfinder.referrals.overdue.title') }}
+      {{ $t('wayfinder.referrals.inReview.title') }}
     </h3>
 
     <p v-if="hasSpeciality" class="nhsuk-u-margin-bottom-3">
@@ -9,32 +9,32 @@
     </p>
 
     <p v-if="hasSpeciality" class="nhsuk-u-margin-bottom-3">
-      {{ $tc('appointments.wayfinder.referrals.overdue.youNeedToContactSpeciality',
+      {{ $tc('wayfinder.referrals.inReview.yourHealthcareProviderHasRequested',
              null, {speciality: requestedSpeciality}) }}
     </p>
 
     <p class="nhsuk-u-margin-bottom-3">
-      {{ $tc('appointments.wayfinder.referrals.referredDate',
+      {{ $tc('wayfinder.referrals.referredDate',
              null, {referralDate: getFormattedReferredDate}) }}
     </p>
 
     <p v-if="hasReviewDate" class="nhsuk-u-margin-bottom-3">
-      {{ $tc('appointments.wayfinder.referrals.reviewDate',
+      {{ $tc('wayfinder.referrals.reviewDate',
              null, {reviewDate: getFormattedReviewDate}) }}
     </p>
 
     <p class="nhsuk-u-margin-bottom-3">
-      {{ $tc('appointments.wayfinder.referrals.bookingReference',
+      {{ $tc('wayfinder.referrals.bookingReference',
              null, {reference: bookingReference}) }}
     </p>
 
     <p class="nhsuk-u-margin-bottom-3">
-      {{ $tc('appointments.wayfinder.referrals.referredBy',
+      {{ $tc('wayfinder.referrals.referredBy',
              null, {referrer: referredBy}) }}
     </p>
 
     <primary-button id="manageInReviewReferral">
-      {{ $t('appointments.wayfinder.referrals.overdue.contactTheClinic') }}
+      {{ $t('wayfinder.referrals.manageThisReferral') }}
     </primary-button>
   </Card>
 </template>
@@ -44,7 +44,7 @@ import Card from '@/components/widgets/card/Card';
 import PrimaryButton from '@/components/PrimaryButton';
 
 export default {
-  name: 'ReviewOverdueReferralsCard',
+  name: 'ReferralInReviewCard',
   components: {
     Card,
     PrimaryButton,

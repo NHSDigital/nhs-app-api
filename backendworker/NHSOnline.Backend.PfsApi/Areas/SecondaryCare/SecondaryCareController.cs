@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.SecondaryCare;
 using NHSOnline.Backend.PfsApi.Session;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Session;
@@ -19,15 +20,18 @@ namespace NHSOnline.Backend.PfsApi.Areas.SecondaryCare
         private readonly ILogger<SecondaryCareController> _logger;
         private readonly IAuditor _auditor;
         private readonly ISecondaryCareService _secondaryCareService;
+        private readonly IErrorReferenceGenerator _errorReferenceGenerator;
 
         public SecondaryCareController(
             ILogger<SecondaryCareController> logger,
             IAuditor auditor,
-            ISecondaryCareService secondaryCareService)
+            ISecondaryCareService secondaryCareService,
+            IErrorReferenceGenerator errorReferenceGenerator)
         {
             _logger = logger;
             _auditor = auditor;
             _secondaryCareService = secondaryCareService;
+            _errorReferenceGenerator = errorReferenceGenerator;
         }
 
         [HttpGet("summary")]
@@ -41,7 +45,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.SecondaryCare
                 var result = await _secondaryCareService.GetSummary(userSession);
 
                 await result.Accept(new SecondaryCareSummaryResultAuditingVisitor(_auditor, _logger));
-                return result.Accept(new SecondaryCareSummaryResultVisitor());
+                return result.Accept(new SecondaryCareSummaryResultVisitor(_errorReferenceGenerator, Supplier.SecondaryCareAggregator));
             }
             finally
             {

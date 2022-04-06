@@ -1,16 +1,16 @@
 <template>
   <Card class="nhsuk-u-margin-bottom-5">
     <h3 class="nhsuk-u-margin-bottom-1">
-      {{ $t('appointments.wayfinder.appointments.readyToConfirm.title') }}
+      {{ $t('wayfinder.appointments.readyToConfirm.title') }}
     </h3>
     <p>
-      {{ $t('appointments.wayfinder.appointments.readyToConfirm.anAppointmentHasBeenBooked') }}
+      {{ $t('wayfinder.appointments.readyToConfirm.anAppointmentHasBeenBooked') }}
     </p>
     <p>
       {{ locationDescription }}
     </p>
     <primary-button id="contactTheClinicToConfirm">
-      {{ $t('appointments.wayfinder.appointments.readyToConfirm.contactTheClinicToConfirm') }}
+      {{ $t('wayfinder.appointments.readyToConfirm.contactTheClinicToConfirm') }}
     </primary-button>
   </Card>
 </template>

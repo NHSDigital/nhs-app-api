@@ -6,5 +6,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.SecondaryCare
     {
         T Visit(SecondaryCareSummaryResult.Success result);
         T Visit(SecondaryCareSummaryResult.BadGateway _);
+        T Visit(SecondaryCareSummaryResult.Timeout _);
     }
 }

@@ -23,5 +23,10 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
         {
             public override T Accept<T>(ISecondaryCareSummaryResultVisitor<T> visitor) => visitor.Visit(this);
         }
+
+        public class Timeout : SecondaryCareSummaryResult
+        {
+            public override T Accept<T>(ISecondaryCareSummaryResultVisitor<T> visitor) => visitor.Visit(this);
+        }
     }
 }

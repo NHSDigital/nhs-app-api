@@ -1,19 +1,27 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.PfsApi.SecondaryCare;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.Areas.SecondaryCare
 {
-    public class SecondaryCareSummaryResultVisitor : ISecondaryCareSummaryResultVisitor<IActionResult>
+    public class SecondaryCareSummaryResultVisitor : ResultVisitorBase,
+        ISecondaryCareSummaryResultVisitor<IActionResult>
     {
-        public IActionResult Visit(SecondaryCareSummaryResult.Success result)
+        public SecondaryCareSummaryResultVisitor(IErrorReferenceGenerator errorReferenceGenerator, Supplier supplier) :
+            base(errorReferenceGenerator, supplier)
         {
-            return new OkObjectResult(result.Response);
         }
 
+        protected override ErrorCategory ErrorCategory => ErrorCategory.SecondaryCare;
+
+        public IActionResult Visit(SecondaryCareSummaryResult.Success result)
+            => new OkObjectResult(result.Response);
+
         public IActionResult Visit(SecondaryCareSummaryResult.BadGateway _)
-        {
-            return new StatusCodeResult(StatusCodes.Status502BadGateway);
-        }
+            => BuildErrorResult(StatusCodes.Status502BadGateway);
+
+        public IActionResult Visit(SecondaryCareSummaryResult.Timeout _)
+            => BuildErrorResult(StatusCodes.Status504GatewayTimeout);
     }
 }

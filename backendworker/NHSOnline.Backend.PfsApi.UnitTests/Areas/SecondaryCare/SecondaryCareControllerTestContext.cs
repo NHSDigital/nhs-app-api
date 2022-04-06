@@ -13,6 +13,7 @@ using NHSOnline.Backend.PfsApi.SecondaryCare;
 using NHSOnline.Backend.PfsApi.SecondaryCare.Models;
 using NHSOnline.Backend.PfsApi.UnitTests.Extensions;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Session;
 using NHSOnline.Backend.Support.Settings;
@@ -45,6 +46,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         {
             new PfsApi.SecondaryCare.ServiceConfigurationModule().ConfigureServices(ServiceCollection, Mocks.Configuration.Object);
             new Support.ResponseParsers.ServiceConfigurationModule().ConfigureServices(ServiceCollection, Mocks.Configuration.Object);
+            new Support.ServiceConfigurationModule().ConfigureServices(ServiceCollection, Mocks.Configuration.Object);
 
             Mocks.ConfigureServices(ServiceCollection);
             ConfigureHttpServices(ServiceCollection);
@@ -80,6 +82,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                 .When(HttpMethod.Get, SecondaryCareSummaryUrl)
                 .WithHeaders(Data.RequestHeaders)
                 .Respond(HttpStatusCode.BadRequest);
+        }
+
+        internal void MockSecondaryCareHttpClientGetSummaryTimesOut()
+        {
+            Mocks.MockHttpMessageHandler
+                .When(HttpMethod.Get, SecondaryCareSummaryUrl)
+                .WithHeaders(Data.RequestHeaders)
+                .Throw(new OperationCanceledException());
         }
 
         internal sealed class TestData
