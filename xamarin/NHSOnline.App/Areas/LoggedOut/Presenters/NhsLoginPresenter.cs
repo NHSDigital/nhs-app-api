@@ -124,7 +124,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         public async Task Visit(AuthReturnCheckResult.SignatureInvalid signatureInvalid)
         {
-            _logger.LogError("NHS Login No FIDO record");
+            _logger.LogInformation("NHS Login No FIDO record");
 
             // iOS doesn't use a fidoUsername and for Android we only care for the type of biometric
             var biometricStatus = await _biometricAuthenticationService.FetchBiometricStatus(string.Empty)

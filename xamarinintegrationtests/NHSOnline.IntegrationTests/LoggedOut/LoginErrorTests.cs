@@ -17,68 +17,6 @@ namespace NHSOnline.IntegrationTests.LoggedOut
     public class LoginErrorTests
     {
         [NhsAppAndroidTest]
-        public void AnErrorIsDisplayedWhenNhsLoginReturnsASignatureInvalidErrorRedirectAndroid(IAndroidDriverWrapper driver)
-        {
-            var patient = new EmisPatient()
-                .WithBehaviour(new NhsLoginAuthoriseInvalidSignatureBehaviour())
-                .WithProofLevel5();
-
-            using var patients = Mocks.Patients.Add(patient);
-
-            AndroidLoggedOutHomePage
-                .AssertOnPage(driver)
-                .ContinueWithNhsLogin();
-
-            AndroidGettingStartedPage
-                .AssertOnPage(driver)
-                .Continue();
-
-            var timing = TimedTestExecutor.Execute(() =>
-            {
-                AndroidStubbedLoginPageSlimHeader
-                    .AssertOnPage(driver)
-                    .PageContent.Login(patient);
-
-                AndroidFingerprintLockoutPage
-                    .AssertOnPage(driver);
-            });
-
-            var clientLogs = new ClientLoggerLogs(timing.StartTime, timing.StopTime);
-            clientLogs.AssertClientLogContainsRegex(@"NHS Login No FIDO record");
-        }
-
-        [NhsAppIOSTest]
-        public void AnErrorIsDisplayedWhenNhsLoginReturnsASignatureInvalidErrorRedirectIos(IIOSDriverWrapper driver)
-        {
-            var patient = new EmisPatient()
-                .WithBehaviour(new NhsLoginAuthoriseInvalidSignatureBehaviour())
-                .WithProofLevel5();
-
-            using var patients = Mocks.Patients.Add(patient);
-
-            IOSLoggedOutHomePage
-                .AssertOnPage(driver)
-                .ContinueWithNhsLogin();
-
-            IOSGettingStartedPage
-                .AssertOnPage(driver)
-                .Continue();
-
-            var timing = TimedTestExecutor.Execute(() =>
-            {
-                IOSStubbedLoginPage
-                    .AssertOnPage(driver)
-                    .PageContent.Login(patient);
-
-                IOSFaceIdLockedOutPage
-                    .AssertOnPage(driver);
-            });
-
-            var clientLogs = new ClientLoggerLogs(timing.StartTime, timing.StopTime);
-            clientLogs.AssertClientLogContainsRegex(@"NHS Login No FIDO record");
-        }
-
-        [NhsAppAndroidTest]
         public void AnErrorIsDisplayedWhenNhsLoginReturnsAnErrorRedirectAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
