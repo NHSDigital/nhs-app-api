@@ -3,8 +3,12 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:icons="clr-namespace:NHSOnline.App.Controls.Icons;assembly=NHSOnline.App.Controls"
+             xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Controls.Navigation.SlimLogoNavigationHeader"
              x:Name="Root">
+    <ContentView.Effects>
+        <effects:SafeAreaPaddingTop/>
+    </ContentView.Effects>
 
     <View.Resources>
         <ResourceDictionary>
@@ -35,6 +39,9 @@
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
         <StackLayout Grid.Column="1">
             <icons:NhsLogoWhite />
         </StackLayout>
