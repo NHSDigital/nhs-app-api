@@ -14,8 +14,19 @@ jobs:
         inputs:
           scriptPath: xamarinintegrationtests/buildscripts/09_build_flipbook.sh
 
+      - task: Bash@3
+        displayName: Set Flipbook Artefact Name Variable
+        condition: succeededOrFailed()
+        inputs:
+          targetType: 'inline'
+          script: |
+            formattedDate=$(date '+%Y-%m-%d')
+            echo "##vso[task.setvariable variable=native.xamarin.flipbookPdfName]flipbook_${formattedDate}_$(System.JobAttempt)"
+
       - task: ShellScript@2
         displayName: Generate Xamarin integration test flipbook
+        env:
+          FLIPBOOK_NAME: $(native.xamarin.flipbookPdfName)
         inputs:
           scriptPath: xamarinintegrationtests/buildscripts/10_flipbook_generate.sh
 
@@ -23,4 +34,4 @@ jobs:
         displayName: Publish Xamarin tests flipbook
         inputs:
           artifactName: Flipbook
-          targetPath: 'xamarinintegrationtests/flipbookgeneration/flipbook'
+          targetPath: 'xamarinintegrationtests/flipbookgeneration/flipbook/$(native.xamarin.flipbookPdfName).pdf'

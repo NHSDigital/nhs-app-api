@@ -1,4 +1,5 @@
 using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers
 {
@@ -8,7 +9,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         internal void Cleanup(IDriverCleanupContext context);
         internal void UpdateBrowserStackStatusToFailed(IDriverCleanupContext context);
         internal void UpdateBrowserStackStatusToPassed(IDriverCleanupContext context);
-        internal void WriteTestDetails(string parentJourney, string testName);
+        internal void WriteTestDetails(string parentJourney, string testName, UnitTestOutcome testOutcome);
         internal void AddBrowserStackSessionDetailsToLogs(IDriverCleanupContext context, TestLogs testLogs);
     }
 }

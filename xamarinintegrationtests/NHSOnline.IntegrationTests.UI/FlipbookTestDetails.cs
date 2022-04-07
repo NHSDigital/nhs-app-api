@@ -1,3 +1,5 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 namespace NHSOnline.IntegrationTests.UI
 {
     public class FlipbookTestDetails
@@ -11,5 +13,6 @@ namespace NHSOnline.IntegrationTests.UI
         public string? TestId { get; set; }
 
         public string? Folder { get; set; }
+        public UnitTestOutcome? TestOutcome { get; set; }
     }
 }

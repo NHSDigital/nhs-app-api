@@ -53,7 +53,7 @@ namespace NHSOnline.IntegrationTests.UI
 
             if (isFlipbookTest)
             {
-                _driver.WriteTestDetails(parentJourney, testName);
+                _driver.WriteTestDetails(parentJourney, testName, testResult.Outcome);
             }
 
             _driver.AddBrowserStackSessionDetailsToLogs(testResultContext, Logs);

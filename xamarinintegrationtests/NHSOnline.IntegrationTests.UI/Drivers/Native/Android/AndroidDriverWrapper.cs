@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.IntegrationTests.UI.Drivers.BrowserStack;
 using NHSOnline.IntegrationTests.UI.Drivers.WebContext;
 using OpenQA.Selenium;
@@ -231,7 +232,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         }
 
         //Write test details to file for flip book generation
-        void IDriverWrapper.WriteTestDetails(string parentJourney, string testName)
+        void IDriverWrapper.WriteTestDetails(string parentJourney, string testName, UnitTestOutcome testOutcome)
         {
             var flipBookDetails = new FlipbookTestDetails
             {
@@ -240,7 +241,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
                 OSVersion = OsVersion.ToName(),
                 ParentJourney = parentJourney,
                 TestName = $"{testName} - Android",
-                Folder = TestName
+                Folder = TestName,
+                TestOutcome = testOutcome
             };
 
             _flipbookGeneration.WriteTestDetails(flipBookDetails);

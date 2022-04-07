@@ -17,7 +17,7 @@ echo "Generating flipbook..."
 docker run \
   "${DOCKER_ARGS[@]}" \
   "${DOCKER_REGISTRY:-local}/flipbook-generation:${DOCKER_TAG:-latest}" bash -c "
-   ./generate.sh"
+   FLIPBOOK_NAME=${FLIPBOOK_NAME:-flipbook_local} ./generate.sh"
 
 docker cp int_flipbook:/src/flipbook/. flipbook
 

@@ -72,6 +72,7 @@ fetch_container_logs
 
 destroy_services_under_test
 
-if [ $TESTS_EXIT_CODE -ne 0 ]; then
+## We want to still produce the flipbook for the passing tests
+if [ $TESTS_EXIT_CODE -ne 0 ] && [ "$FLIPBOOK_RUN" == 'False' ]; then
   die "Xamarin Integration tests failed"
 fi
