@@ -113,10 +113,10 @@ api:
     services__accurx__showThirdPartyWarning: true
     services__accurx__requiresAssertedLoginIdentity: true
     services__accurx__validateSession: true
-    services__accurx__url: https://nhsapp.dev.accurx.com
+    services__accurx__url: https://nhsapp-florey.dev.accurx.com
     servicesV3__accurx__showThirdPartyWarning: true
     servicesV3__accurx__requiresAssertedLoginIdentity: true
-    servicesV3__accurx__url: https://nhsapp.dev.accurx.com
+    servicesV3__accurx__url: https://nhsapp-florey.dev.accurx.com
 
 sidecar_proxy:
   memoryRequest: "32Mi"
