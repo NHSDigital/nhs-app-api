@@ -12,10 +12,11 @@ using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.UserInfo.Areas.UserInfo;
+using NHSOnline.Backend.UserInfo.Areas.UserInfo.Models;
+using NHSOnline.Backend.UserInfo.Repository;
 using NHSOnline.Backend.UserInfoApi.Areas.UserInfo;
-using NHSOnline.Backend.UserInfoApi.Areas.UserInfo.Models;
 using NHSOnline.Backend.UserInfoApi.Areas.UserResearch;
-using NHSOnline.Backend.UserInfoApi.Repository;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo

@@ -8,10 +8,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auth.CitizenId.Models;
+using NHSOnline.Backend.UserInfo.Areas.UserInfo.Models;
+using NHSOnline.Backend.UserInfo.Areas.UserResearch;
+using NHSOnline.Backend.UserInfo.Clients;
 using NHSOnline.Backend.UserInfoApi.Areas.UserInfo;
-using NHSOnline.Backend.UserInfoApi.Areas.UserInfo.Models;
 using NHSOnline.Backend.UserInfoApi.Areas.UserResearch;
-using NHSOnline.Backend.UserInfoApi.Clients;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserResearch

@@ -3,9 +3,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.UserInfo.Areas.UserInfo.Models;
+using NHSOnline.Backend.UserInfo.Areas.UserResearch;
+using NHSOnline.Backend.UserInfo.Clients;
 using NHSOnline.Backend.UserInfoApi.Areas.UserInfo;
-using NHSOnline.Backend.UserInfoApi.Areas.UserInfo.Models;
-using NHSOnline.Backend.UserInfoApi.Clients;
 
 namespace NHSOnline.Backend.UserInfoApi.Areas.UserResearch
 {

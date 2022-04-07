@@ -13,9 +13,11 @@ using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.UserInfoApi.Areas.UserInfo.Models;
+using NHSOnline.Backend.UserInfo.Areas.UserInfo;
+using NHSOnline.Backend.UserInfo.Areas.UserInfo.Models;
+using NHSOnline.Backend.UserInfo.Areas.UserResearch.Models;
+using NHSOnline.Backend.UserInfo.Areas.UserResearch;
 using NHSOnline.Backend.UserInfoApi.Areas.UserResearch;
-using NHSOnline.Backend.UserInfoApi.Areas.UserResearch.Models;
 
 namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
 {

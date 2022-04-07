@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{F90D4DEB-CC2C-44A8-9532-0041354B73FF}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>NHSOnline.Backend.UsersInfo</RootNamespace>
+        <AssemblyName>NHSOnline.Backend.UsersInfo</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Xml" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Areas\UserInfo\GetInfoResult.cs" />
+        <Compile Include="Areas\UserInfo\GetInfoResultVisitor.cs" />
+        <Compile Include="Areas\UserInfo\GetInfoResultVisitorV2.cs" />
+        <Compile Include="Areas\UserInfo\GetMeInfoResultVisitor.cs" />
+        <Compile Include="Areas\UserInfo\IGetInfoResultVisitor.cs" />
+        <Compile Include="Areas\UserInfo\IInfoResultVisitor.cs" />
+        <Compile Include="Areas\UserInfo\IInfoService.cs" />
+        <Compile Include="Areas\UserInfo\InfoService.cs" />
+        <Compile Include="Areas\UserInfo\Mappers\InfoUserProfileMapper.cs" />
+        <Compile Include="Areas\UserInfo\Models\InfoUser.cs" />
+        <Compile Include="Areas\UserInfo\Models\InfoUserProfile.cs" />
+        <Compile Include="Areas\UserInfo\Models\UserInfoResponse.cs" />
+        <Compile Include="Areas\UserInfo\PostInfoResult.cs" />
+        <Compile Include="Areas\UserInfo\PostInfoResultVisitor.cs" />
+        <Compile Include="Areas\UserInfo\RepositoryCreateResultVisitor.cs" />
+        <Compile Include="Areas\UserInfo\RepositoryGetAllInfoRecordsResultVisitor.cs" />
+        <Compile Include="Areas\UserInfo\RepositoryGetInfoRecordResultVisitor.cs" />
+        <Compile Include="Areas\UserResearch\IUserResearchResultVisitor.cs" />
+        <Compile Include="Areas\UserResearch\IUserResearchService.cs" />
+        <Compile Include="Areas\UserResearch\Models\UserResearchPreference.cs" />
+        <Compile Include="Areas\UserResearch\Models\UserResearchRequest.cs" />
+        <Compile Include="Areas\UserResearch\PostUserResearchResult.cs" />
+        <Compile Include="Areas\UserResearch\PostUserResearchResultVisitor.cs" />
+        <Compile Include="Areas\UserResearch\ServiceConfigurationModule.cs" />
+        <Compile Include="Areas\UserResearch\UserResearchService.cs" />
+        <Compile Include="Class1.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Clients" />
+      <Folder Include="Repository" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>

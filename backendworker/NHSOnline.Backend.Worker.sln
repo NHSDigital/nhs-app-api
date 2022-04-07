@@ -126,6 +126,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.AspNet", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.AspNet.UnitTests", "NHSOnline.Backend.AspNet.UnitTests\NHSOnline.Backend.AspNet.UnitTests.csproj", "{98E0601F-B382-49AE-8F6B-DA10457B5892}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.UserInfo", "NHSOnline.Backend.UserInfo\NHSOnline.Backend.UserInfo.csproj", "{B7E01788-BAE2-46B9-B43E-A028DE0E5173}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.UserInfo.UnitTests", "NHSOnline.Backend.UserInfo.UnitTests\NHSOnline.Backend.UserInfo.UnitTests.csproj", "{B3990D28-D9CD-4333-BF8C-92475D1C72E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -272,6 +276,14 @@ Global
 		{98E0601F-B382-49AE-8F6B-DA10457B5892}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98E0601F-B382-49AE-8F6B-DA10457B5892}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98E0601F-B382-49AE-8F6B-DA10457B5892}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7E01788-BAE2-46B9-B43E-A028DE0E5173}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7E01788-BAE2-46B9-B43E-A028DE0E5173}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7E01788-BAE2-46B9-B43E-A028DE0E5173}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7E01788-BAE2-46B9-B43E-A028DE0E5173}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3990D28-D9CD-4333-BF8C-92475D1C72E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3990D28-D9CD-4333-BF8C-92475D1C72E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3990D28-D9CD-4333-BF8C-92475D1C72E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3990D28-D9CD-4333-BF8C-92475D1C72E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
