@@ -1,0 +1,31 @@
+namespace NHSOnline.Backend.Users.Repository
+{
+    public abstract class DeleteDeviceResult
+    {
+        public class Success : DeleteDeviceResult
+        {
+            public override T Accept<T>(IDeleteDeviceResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class BadGateway : DeleteDeviceResult
+        {
+            public override T Accept<T>(IDeleteDeviceResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class InternalServerError : DeleteDeviceResult
+        {
+            public override T Accept<T>(IDeleteDeviceResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public abstract T Accept<T>(IDeleteDeviceResultVisitor<T> visitor);
+    }
+}

@@ -7,8 +7,9 @@ using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
-using NHSOnline.Backend.UsersApi.Registrations;
+using NHSOnline.Backend.Users.Areas.Devices;
+using NHSOnline.Backend.Users.Areas.Devices.Models;
+using NHSOnline.Backend.Users.Registrations;
 
 namespace NHSOnline.Backend.UsersApi.Areas.Devices
 {

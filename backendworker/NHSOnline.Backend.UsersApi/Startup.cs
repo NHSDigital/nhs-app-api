@@ -25,7 +25,8 @@ using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Settings;
-using NHSOnline.Backend.UsersApi.Notifications;
+using NHSOnline.Backend.Users;
+using NHSOnline.Backend.Users.Notifications;
 
 namespace NHSOnline.Backend.UsersApi
 {

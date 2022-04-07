@@ -6,8 +6,9 @@ using NHSOnline.Backend.Auth.AspNet.ApiKey;
 using NHSOnline.Backend.Metrics.EventHub;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
-using NHSOnline.Backend.UsersApi.Notifications;
+using NHSOnline.Backend.Users.Areas.Devices;
+using NHSOnline.Backend.Users.Areas.Devices.Models;
+using NHSOnline.Backend.Users.Notifications;
 
 namespace NHSOnline.Backend.UsersApi.Areas.Devices
 {

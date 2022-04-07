@@ -9,11 +9,11 @@ using Moq;
 using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Metrics;
+using NHSOnline.Backend.Users.Areas.Devices.Models;
+using NHSOnline.Backend.Users.Notifications;
+using NHSOnline.Backend.Users.Registrations;
+using NHSOnline.Backend.Users.Repository;
 using NHSOnline.Backend.UsersApi.Areas.Devices;
-using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
-using NHSOnline.Backend.UsersApi.Notifications;
-using NHSOnline.Backend.UsersApi.Registrations;
-using NHSOnline.Backend.UsersApi.Repository;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         private Mock<IMetricLogger> _mockMetricLogger;
         private Mock<ILogger<DevicesController>> _mockLogger;
         private const string DevicePns = "PNS";
-        private const DeviceType DeviceType = UsersApi.Areas.Devices.Models.DeviceType.Android;
+        private const DeviceType DeviceType = Users.Areas.Devices.Models.DeviceType.Android;
         private const string DeviceId = "DeviceId";
         private const string NhsNumber = "NhsNumber";
 

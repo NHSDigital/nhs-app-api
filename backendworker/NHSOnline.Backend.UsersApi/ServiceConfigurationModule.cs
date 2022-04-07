@@ -14,9 +14,10 @@ using NHSOnline.Backend.Metrics.EventHub;
 using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
-using NHSOnline.Backend.UsersApi.Areas.Devices;
-using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
-using NHSOnline.Backend.UsersApi.Repository;
+using NHSOnline.Backend.Users;
+using NHSOnline.Backend.Users.Areas.Devices;
+using NHSOnline.Backend.Users.Areas.Devices.Models;
+using NHSOnline.Backend.Users.Repository;
 
 namespace NHSOnline.Backend.UsersApi
 {

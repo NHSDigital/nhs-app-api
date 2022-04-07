@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.AspNet.ApiKey;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.UsersApi.Registrations;
+using NHSOnline.Backend.Users.Areas.Devices;
+using NHSOnline.Backend.Users.Registrations;
 
 namespace NHSOnline.Backend.UsersApi.Areas.Devices
 {

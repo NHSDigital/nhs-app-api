@@ -1,0 +1,29 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using NHSOnline.Backend.Users.Notifications;
+
+namespace NHSOnline.Backend.Users.Areas.Devices
+{
+    public class NotificationSendResultVisitor: INotificationSendResultVisitor<IActionResult>
+    {
+        public IActionResult Visit(NotificationSendResult.Success result)
+        {
+            return new AcceptedResult(string.Empty, result.NotificationSendResponse);
+        }
+
+        public IActionResult Visit(NotificationSendResult.Conflict result)
+        {
+            return new ConflictResult();
+        }
+
+        public IActionResult Visit(NotificationSendResult.InternalServerError result)
+        {
+            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        }
+
+        public IActionResult Visit(NotificationSendResult.BadGateway result)
+        {
+            return new StatusCodeResult(StatusCodes.Status502BadGateway);
+        }
+    }
+}

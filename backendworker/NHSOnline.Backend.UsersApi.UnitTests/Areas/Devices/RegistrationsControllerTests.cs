@@ -7,8 +7,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.UsersApi.Areas.Devices;
-using NHSOnline.Backend.UsersApi.Notifications;
-using NHSOnline.Backend.UsersApi.Registrations;
+using NHSOnline.Backend.Users.Notifications;
+using NHSOnline.Backend.Users.Registrations;
 
 namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 {

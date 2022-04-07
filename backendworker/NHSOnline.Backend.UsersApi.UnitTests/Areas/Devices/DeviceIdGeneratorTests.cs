@@ -7,8 +7,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auth.CitizenId.Models;
-using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
-using NHSOnline.Backend.UsersApi.Repository;
+using NHSOnline.Backend.Users.Areas.Devices.Models;
+using NHSOnline.Backend.Users.Repository;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
@@ -24,9 +24,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            
+
             var mockLogger = _fixture.Freeze<Mock<ILogger<DeviceRepositoryService>>>();
-            
+
             var accessTokenString = JwtToken.Generate(new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, _fixture.Create<string>()),
@@ -41,10 +41,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         {
             // Arrange
             var request = _fixture.Create<RegisterDeviceRequest>();
-                
+
             // Act
             var result = _systemUnderTest.Generate(_accessToken, request);
-            
+
             // Assert
             result.Should().Be($"{_accessToken.Subject}-{request.DevicePns}");
         }
@@ -54,10 +54,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         {
             // Arrange
             var devicePns = _fixture.Create<string>();
-                
+
             // Act
             var result = _systemUnderTest.Generate(_accessToken, devicePns);
-            
+
             // Assert
             result.Should().Be($"{_accessToken.Subject}-{devicePns}");
         }

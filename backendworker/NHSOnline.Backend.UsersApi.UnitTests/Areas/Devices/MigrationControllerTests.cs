@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Users.Areas.Devices.Models;
+using NHSOnline.Backend.Users.Notifications.Migration;
 using NHSOnline.Backend.UsersApi.Areas.Devices;
-using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
-using NHSOnline.Backend.UsersApi.Notifications.Migration;
 
 namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 {

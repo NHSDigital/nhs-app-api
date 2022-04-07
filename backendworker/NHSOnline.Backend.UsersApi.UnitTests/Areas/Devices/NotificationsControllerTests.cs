@@ -10,8 +10,8 @@ using Moq;
 using NHSOnline.Backend.Metrics.EventHub;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.UsersApi.Areas.Devices;
-using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
-using NHSOnline.Backend.UsersApi.Notifications;
+using NHSOnline.Backend.Users.Areas.Devices.Models;
+using NHSOnline.Backend.Users.Notifications;
 
 namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 {
