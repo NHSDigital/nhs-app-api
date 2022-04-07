@@ -8,7 +8,7 @@
       }
     },
     "logLevel": {
-      "NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.AuditLogConsumerFunction": "Information"
+      "default": "Information"
     }
   },
   "extensions": {
@@ -18,6 +18,12 @@
         "maxBatchSize": 256,
         "prefetchCount": 512
       }
+    },
+    "queues": {
+      "maxPollingInterval": "00:01:00",
+      "visibilityTimeout": "00:15:00",
+      "batchSize": 1,
+      "maxDequeueCount": 10
     }
   }
 }

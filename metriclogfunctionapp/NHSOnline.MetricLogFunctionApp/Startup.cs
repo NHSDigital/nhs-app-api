@@ -1,8 +1,10 @@
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using NHSOnline.MetricLogFunctionApp;
+using NHSOnline.MetricLogFunctionApp.Compute;
 using NHSOnline.MetricLogFunctionApp.Database.EntityFramework;
 using NHSOnline.MetricLogFunctionApp.Etl;
 using NHSOnline.MetricLogFunctionApp.Monitoring;
+using NHSOnline.MetricLogFunctionApp.Resilience;
 using NHSOnline.MetricLogFunctionApp.Slack;
 
 [assembly: FunctionsStartup(typeof(Startup))]
@@ -16,6 +18,8 @@ namespace NHSOnline.MetricLogFunctionApp
             builder.Services.AddMonitoring();
             builder.Services.AddSlack();
             builder.Services.AddEtl();
+            builder.Services.AddCompute();
+            builder.Services.AddResilience();
         }
     }
 }

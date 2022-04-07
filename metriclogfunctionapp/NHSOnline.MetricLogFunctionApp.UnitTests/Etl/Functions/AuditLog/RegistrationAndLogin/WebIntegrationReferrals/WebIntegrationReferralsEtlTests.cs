@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.MetricLogFunctionApp.Compute.QueueRequests;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.WebIntegrationReferrals;
 using NHSOnline.MetricLogFunctionApp.Etl.Load;
+using NHSOnline.MetricLogFunctionApp.Resilience;
 
 namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog.RegistrationAndLogin.WebIntegrationReferrals
 {
@@ -17,13 +19,15 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog.Regist
         private Mock<IEventsRepository> _repo;
         private Mock<IAuditLogParser<WebIntegrationReferralsMetric>> _parser;
         private WebIntegrationReferralsMetricEtl _etl;
+        private Mock<IRequestQueueOrchestrator<AuditReportRequest>> _requestQueueOrchestrator;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _repo = new Mock<IEventsRepository>();
             _parser = new Mock<IAuditLogParser<WebIntegrationReferralsMetric>>(MockBehavior.Strict);
-            _etl = new WebIntegrationReferralsMetricEtl(_repo.Object, _parser.Object);
+            _requestQueueOrchestrator = new Mock<IRequestQueueOrchestrator<AuditReportRequest>>();
+            _etl = new WebIntegrationReferralsMetricEtl(_repo.Object, _parser.Object, _requestQueueOrchestrator.Object);
         }
 
         [TestMethod]

@@ -5,4 +5,6 @@ COPY NHSOnline.MetricLogFunctionApp.IntegrationTests/inttests.settings.json /src
 
 WORKDIR /src/NHSOnline.MetricLogFunctionApp
 
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+
 CMD func start

@@ -6,7 +6,11 @@ CREATE TABLE IF NOT EXISTS "compute"."FirstLogins" (
     "ConsentProofLevel" text,
     "FirstP5LoginTimestamp" timestamp with time zone,
     "FirstP9LoginTimestamp" timestamp with time zone,
-    "ConsentTimestamp" timestamp with time zone
+    "ConsentTimestamp" timestamp with time zone,
+    "LatestOdsCode" character varying(6),
+    "LatestProofLevel" character varying(2),
+    "LatestLoginTimestamp" timestamp with time zone,
+    "SingleLoginFlag" character varying(1)
 );
 
 CREATE INDEX IF NOT EXISTS FirstLogins_FirstP5LoginTimestamp_idx on "compute"."FirstLogins" ("FirstP5LoginTimestamp");

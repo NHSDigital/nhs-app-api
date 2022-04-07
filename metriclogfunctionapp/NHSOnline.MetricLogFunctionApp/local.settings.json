@@ -2,7 +2,10 @@
   "IsEncrypted": false,
   "Values": {
     "ClusterName": "dev",
-    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;",
+    "AzureFileStorage": "DefaultEndpointsProtocol=https;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;",
+    "AzureFileContainer" : "nhsapp-analytics-sc-dev-uks/ci",
+    "QueueNameSuffix": "dev-local",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "AuditEventHubName": "{{INSERT CLUSTER NAME HERE}}-auditing",
     "AuditEventHubConnectionDataReceiver__fullyQualifiedNamespace": "{{INSERT EVENT HUB NAMESPACE HERE}}.servicebus.windows.net",
@@ -12,6 +15,9 @@
     "AnalyticsSQLDbConnectionString": "U2VydmVyPXBvc3RncmVzO0RhdGFiYXNlPWFuYWx5dGljc2RiO1BvcnQ9NTQzMjtVc2VyIElkPWFuYWx5dGljc2RiX2FwcDtQYXNzd29yZD10ZXN0YXBwdXNlcg==",
     "AzureWebJobs.AuditLog_Etl_EventHub.Disabled": "true",
     "Monitoring__SlackChannel": "analytics2-0-alerts-dev",
-    "Slack__Token": "{{INSERT TOKEN HERE}}"
+    "Slack__Token": "{{INSERT TOKEN HERE}}",
+    "AzureFunctionsJobHost:functions:0": "FirstLogins_Compute_Http",
+    "AzureFunctionsJobHost:functions:1": "FirstLogins_Compute_Queue",
+    "AzureFunctionsJobHost:functions:2": "AuditLog_Etl_Http"
   }
 }

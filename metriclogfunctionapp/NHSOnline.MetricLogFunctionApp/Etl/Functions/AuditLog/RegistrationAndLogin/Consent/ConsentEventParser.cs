@@ -9,6 +9,9 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndL
         {
             if (!IsConsentMetric(source)) return null;
 
+            // We aren't extracting the ODS Code from the Audit Record
+            // But we do have it in the metric, and try search on it in int tests.
+
             return new ConsentMetric
             {
                 Timestamp = source.Timestamp,

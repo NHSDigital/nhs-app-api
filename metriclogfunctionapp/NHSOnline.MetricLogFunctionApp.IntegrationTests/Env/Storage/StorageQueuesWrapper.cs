@@ -60,7 +60,7 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Storage
         internal QueueWrapper OrganDonationWithdrawWeeklyTransactionReport => CreateQueueWrapper("od-withdraw-weekly-transaction-reports-dev-local");
         internal QueueWrapper PrescriptionsOrderWeeklyTransactionReport => CreateQueueWrapper("prescriptions-order-weekly-transaction-reports-dev-local");
 
-        internal QueueWrapper FirstLogins => CreateQueueWrapper("first-logins-dev-local");
+        internal QueueWrapper FirstLogins => CreateQueueWrapper("first-logins-metric-dev-local");
         internal QueueWrapper FirstLoginsAudit => CreateQueueWrapper("first-logins-audit-dev-local");
         internal QueueWrapper DeviceInfoAudit => CreateQueueWrapper("device-info-audit-dev-local");
         internal QueueWrapper IntegratedPartners => CreateQueueWrapper("integrated-partners-dev-local");

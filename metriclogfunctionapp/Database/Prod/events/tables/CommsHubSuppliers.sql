@@ -24,4 +24,11 @@ WHERE NOT EXISTS (
     SELECT 1 FROM events."CommsHubSuppliers" WHERE "Supplier" = 'Mjog' AND "SupplierId" = '409a0887-a946-4884-9796-45296a053192'
     );
 
+INSERT INTO events."CommsHubSuppliers" ("Supplier","SupplierId")
+SELECT
+    'PKB','7d17c12c-09c9-400d-8909-5714d98ff8cc'
+WHERE NOT EXISTS (
+    SELECT 1 FROM events."CommsHubSuppliers" WHERE "Supplier" = 'PKB' AND "SupplierId" = '7d17c12c-09c9-400d-8909-5714d98ff8cc'
+    );
+
 CALL perms.apply_etl_select_permissions('events', 'CommsHubSuppliers');

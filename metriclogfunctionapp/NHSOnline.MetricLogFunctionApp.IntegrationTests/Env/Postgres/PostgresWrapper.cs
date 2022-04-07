@@ -28,6 +28,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres
         private TestLogs Logs { get; }
 
         internal EventsSchema Events => new EventsSchema(this);
+        internal ComputeSchema Compute => new ComputeSchema(this);
+
+        internal AuditSchema Audit => new AuditSchema(this);
         internal TransactionContext TransactionContext { get; private set; }
 
         internal async Task Initialise()

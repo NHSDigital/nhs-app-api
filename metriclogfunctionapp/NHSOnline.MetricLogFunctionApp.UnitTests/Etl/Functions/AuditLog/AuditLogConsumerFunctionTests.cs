@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog;
@@ -22,6 +23,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
         private Mock<IAuditLogEtl<WebIntegrationReferralsMetric>> _webIntegrationReferralEtl;
         private Mock<IAuditLogEtl<SecondaryCareSummaryMetric>> _secondaryCareSummaryEtl;
         private Mock<IEtlLogger<AuditLogConsumerFunction>> _logger;
+        private Mock<ILogger<AuditLogConsumerFunction>> _queueLogger;
         private AuditLogConsumerFunction _function;
 
         [TestInitialize]
@@ -32,13 +34,15 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
             _webIntegrationReferralEtl = new Mock<IAuditLogEtl<WebIntegrationReferralsMetric>>();
             _secondaryCareSummaryEtl = new Mock<IAuditLogEtl<SecondaryCareSummaryMetric>>();
             _logger = new Mock<IEtlLogger<AuditLogConsumerFunction>>();
+            _queueLogger = new Mock<ILogger<AuditLogConsumerFunction>>();
 
             _function = new AuditLogConsumerFunction(
                 _consentEtl.Object,
                 _loginEtl.Object,
                 _webIntegrationReferralEtl.Object,
                 _secondaryCareSummaryEtl.Object,
-                _logger.Object);
+                _logger.Object,
+                _queueLogger.Object);
         }
 
         [TestMethod]
@@ -53,9 +57,9 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
 
             // Assert
             _consentEtl.Verify(etl =>
-                etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
+                etl.ExecuteDependentEvent(It.IsAny<ILogger<AuditLogConsumerFunction>>(),It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
             _loginEtl.Verify(etl =>
-                etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
+                etl.ExecuteDependentEvent(It.IsAny<ILogger<AuditLogConsumerFunction>>(),It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
             _webIntegrationReferralEtl.Verify(etl =>
                 etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
             _secondaryCareSummaryEtl.Verify(etl =>

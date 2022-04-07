@@ -10,6 +10,7 @@
     <ItemGroup>
         <PackageReference Include="Dapper" Version="2.0.123" />
         <PackageReference Include="FluentAssertions" Version="6.5.1" />
+        <PackageReference Include="FluentAssertions.Json" Version="6.1.0" />
         <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="11.2.3" />
         <PackageReference Include="Microsoft.Azure.Storage.Queue" Version="11.2.3" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />

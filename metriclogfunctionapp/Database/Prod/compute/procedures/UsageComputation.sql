@@ -104,10 +104,66 @@ BEGIN
     END IF;
     logResult = audit.updateprocessduration(loginsLogId);
 
+    CREATE TEMP TABLE IF NOT EXISTS UserTransactions (
+                                                         "LoginId" character varying NOT NULL,
+                                                         "Date" timestamp with time zone NOT NULL,
+                                                         "Logins" int,
+                                                         "RecordViews" int,
+                                                         "Prescriptions" int,
+                                                         "ODRegistrations" int,
+                                                         "NomPharmacyUpdate" int,
+                                                         "NomPharmacyCreate" int,
+                                                         "AppointmentsBooked" int,
+                                                         "ODWithdrawals" int,
+                                                         "ODUpdates" int,
+                                                         "ODLookups" int,
+                                                         "AppointmentsCancelled" int DEFAULT 0,
+                                                         "RecordViewsDCR" INT DEFAULT 0,
+                                                         "RecordViewsSCR" INT DEFAULT 0);
+
+    tempTableCreationLogId = audit.insertprocessduration(concat(usagePrefix, 'TempTableCreation'));
+    CREATE INDEX IF NOT EXISTS usertransactions_date_loginid_idx ON UserTransactions ("Date","LoginId");
+    INSERT INTO UserTransactions (
+        "LoginId",
+        "Date",
+        "Logins",
+        "RecordViews",
+        "Prescriptions",
+        "ODRegistrations",
+        "NomPharmacyUpdate",
+        "NomPharmacyCreate",
+        "AppointmentsBooked",
+        "ODWithdrawals",
+        "ODUpdates",
+        "ODLookups",
+        "AppointmentsCancelled",
+        "RecordViewsDCR",
+        "RecordViewsSCR")
+    SELECT
+        "LoginId",
+        "Date",
+        "Logins",
+        "RecordViews",
+        "Prescriptions",
+        "ODRegistrations",
+        "NomPharmacyUpdate",
+        "NomPharmacyCreate",
+        "AppointmentsBooked",
+        "ODWithdrawals",
+        "ODUpdates",
+        "ODLookups",
+        "AppointmentsCancelled",
+        "RecordViewsDCR",
+        "RecordViewsSCR"
+    FROM "compute"."DailyUserTransactions" transactionTable
+    WHERE (transactionTable."Date" >= "startDate")
+      AND (transactionTable."Date" < "endDate");
+    logResult = audit.updateprocessduration(tempTableCreationLogId);
+
     usersLogId = audit.insertprocessduration(concat(usagePrefix, 'UsersLogin'));
     INSERT INTO Counts ("Date", "UsersLogin")
     SELECT "startDate", count(DISTINCT "LoginId") as "UsersLogin"
-    FROM "compute"."DailyUserTransactions" transactionTable
+    FROM UserTransactions transactionTable
     WHERE (transactionTable."Date" >= "startDate")
       AND (transactionTable."Date" < "endDate")
       AND (transactionTable."Logins" > 0)
@@ -119,7 +175,7 @@ BEGIN
     prescriptionLogId = audit.insertprocessduration(concat(usagePrefix, 'UsersPrescriptions'));
     INSERT INTO Counts ("Date", "UsersPrescriptions")
     SELECT "startDate", count(DISTINCT "LoginId") as "UsersPrescriptions"
-    FROM "compute"."DailyUserTransactions" transactionTable
+    FROM UserTransactions transactionTable
     WHERE (transactionTable."Date" >= "startDate")
       AND (transactionTable."Date" < "endDate")
       AND (transactionTable."Prescriptions" > 0)
@@ -131,7 +187,7 @@ BEGIN
     recordViewLogId = audit.insertprocessduration(concat(usagePrefix, 'UsersRecordViews'));
     INSERT INTO Counts ("Date", "UsersRecordViews")
     SELECT "startDate", count(DISTINCT "LoginId") as "UsersRecordViews"
-    FROM "compute"."DailyUserTransactions" transactionTable
+    FROM UserTransactions transactionTable
     WHERE (transactionTable."Date" >= "startDate")
       AND (transactionTable."Date" < "endDate")
       AND (transactionTable."RecordViews" > 0)
@@ -143,7 +199,7 @@ BEGIN
     odRegistrationsLogId = audit.insertprocessduration(concat(usagePrefix, 'UsersODRegistrations'));
     INSERT INTO Counts ("Date", "UsersODRegistrations")
     SELECT "startDate", count(DISTINCT "LoginId") as "UsersODRegistrations"
-    FROM "compute"."DailyUserTransactions" transactionTable
+    FROM UserTransactions transactionTable
     WHERE (transactionTable."Date" >= "startDate")
       AND (transactionTable."Date" < "endDate")
       AND (transactionTable."ODRegistrations" > 0)
@@ -155,7 +211,7 @@ BEGIN
     odWithdrawalsLogId = audit.insertprocessduration(concat(usagePrefix, 'UsersODWithdrawals'));
     INSERT INTO Counts ("Date", "UsersODWithdrawals")
     SELECT "startDate", count(DISTINCT "LoginId") as "UsersODWithdrawals"
-    FROM "compute"."DailyUserTransactions" transactionTable
+    FROM UserTransactions transactionTable
     WHERE (transactionTable."Date" >= "startDate")
       AND (transactionTable."Date" < "endDate")
       AND (transactionTable."ODWithdrawals" > 0)
@@ -167,7 +223,7 @@ BEGIN
     odUpdatesLogId = audit.insertprocessduration(concat(usagePrefix, 'UsersODUpdates'));
     INSERT INTO Counts ("Date", "UsersODUpdates")
     SELECT "startDate", count(DISTINCT "LoginId") as "UsersODUpdates"
-    FROM "compute"."DailyUserTransactions" transactionTable
+    FROM UserTransactions transactionTable
     WHERE (transactionTable."Date" >= "startDate")
       AND (transactionTable."Date" < "endDate")
       AND (transactionTable."ODUpdates" > 0)
@@ -179,7 +235,7 @@ BEGIN
     odLookupsLogId = audit.insertprocessduration(concat(usagePrefix, 'UsersODLookups'));
     INSERT INTO Counts ("Date", "UsersODLookups")
     SELECT "startDate", count(DISTINCT "LoginId") as "UsersODLookups"
-    FROM "compute"."DailyUserTransactions" transactionTable
+    FROM UserTransactions transactionTable
     WHERE (transactionTable."Date" >= "startDate")
       AND (transactionTable."Date" < "endDate")
       AND (transactionTable."ODLookups" > 0)
@@ -191,7 +247,7 @@ BEGIN
     appointmentsBookedLogId = audit.insertprocessduration(concat(usagePrefix, 'UsersAppointmentsBooked'));
     INSERT INTO Counts ("Date", "UsersAppointmentsBooked")
     SELECT "startDate", count(DISTINCT "LoginId") as "UsersAppointmentsBooked"
-    FROM "compute"."DailyUserTransactions" transactionTable
+    FROM UserTransactions transactionTable
     WHERE (transactionTable."Date" >= "startDate")
       AND (transactionTable."Date" < "endDate")
       AND (transactionTable."AppointmentsBooked" > 0)
@@ -203,7 +259,7 @@ BEGIN
     appointmentsCancelledLogId = audit.insertprocessduration(concat(usagePrefix, 'UsersAppointmentsCancelled'));
     INSERT INTO Counts ("Date", "UsersAppointmentsCancelled")
     SELECT "startDate", count(DISTINCT "LoginId") as "UsersAppointmentsCancelled"
-    FROM "compute"."DailyUserTransactions" transactionTable
+    FROM UserTransactions transactionTable
     WHERE (transactionTable."Date" >= "startDate")
       AND (transactionTable."Date" < "endDate")
       AND (transactionTable."AppointmentsCancelled" > 0)
@@ -215,7 +271,7 @@ BEGIN
     nomPharmacyLogId = audit.insertprocessduration(concat(usagePrefix, 'UsersNomPharmacy'));
     INSERT INTO Counts ("Date", "UsersNomPharmacy")
     SELECT "startDate", count(DISTINCT "LoginId") as "UsersNomPharmacy"
-    FROM "compute"."DailyUserTransactions" transactionTable
+    FROM UserTransactions transactionTable
     WHERE (transactionTable."Date" >= "startDate")
       AND (transactionTable."Date" < "endDate")
       AND (transactionTable."NomPharmacyCreate" > 0 OR transactionTable."NomPharmacyUpdate" > 0 )
@@ -224,29 +280,32 @@ BEGIN
     WHERE Counts."UsersNomPharmacy" IS NULL;
     logResult = audit.updateprocessduration(nomPharmacyLogId);
 
-    recordDCRLogId = audit.insertprocessduration(concat(usagePrefix, 'UsersRecordViewsDCR'));
-    INSERT INTO Counts ("Date", "UsersRecordViewsDCR")
-    SELECT "startDate", count(DISTINCT "LoginId") as "UsersRecordViewsDCR"
-    FROM "compute"."DailyUserTransactions" transactionTable
-    WHERE (transactionTable."Date" >= "startDate")
-      AND (transactionTable."Date" < "endDate")
-      AND (transactionTable."RecordViewsDCR" > 0 )
-    ON CONFLICT("Date") DO UPDATE
-        SET "UsersRecordViewsDCR" = Excluded."UsersRecordViewsDCR"
-    WHERE Counts."UsersRecordViewsDCR" IS NULL;
-    logResult = audit.updateprocessduration(recordDCRLogId);
+    IF "tableName" != 'MonthlyUsage' THEN
+        recordDCRLogId = audit.insertprocessduration(concat(usagePrefix, 'UsersRecordViewsDCR'));
+        INSERT INTO Counts ("Date", "UsersRecordViewsDCR")
+        SELECT "startDate", count(DISTINCT "LoginId") as "UsersRecordViewsDCR"
+        FROM UserTransactions transactionTable
+        WHERE (transactionTable."Date" >= "startDate")
+          AND (transactionTable."Date" < "endDate")
+          AND (transactionTable."RecordViewsDCR" > 0 )
+        ON CONFLICT("Date") DO UPDATE
+            SET "UsersRecordViewsDCR" = Excluded."UsersRecordViewsDCR"
+        WHERE Counts."UsersRecordViewsDCR" IS NULL;
+        logResult = audit.updateprocessduration(recordDCRLogId);
 
-    recordSCRLogId = audit.insertprocessduration(concat(usagePrefix, 'UsersRecordViewsSCR'));
-    INSERT INTO Counts ("Date", "UsersRecordViewsSCR")
-    SELECT "startDate", count(DISTINCT "LoginId") as "UsersRecordViewsSCR"
-    FROM "compute"."DailyUserTransactions" transactionTable
-    WHERE (transactionTable."Date" >= "startDate")
-      AND (transactionTable."Date" < "endDate")
-      AND (transactionTable."RecordViewsSCR" > 0 )
-    ON CONFLICT("Date") DO UPDATE
-        SET "UsersRecordViewsSCR" = Excluded."UsersRecordViewsSCR"
-    WHERE Counts."UsersRecordViewsSCR" IS NULL;
-    logResult = audit.updateprocessduration(recordSCRLogId);
+        recordSCRLogId = audit.insertprocessduration(concat(usagePrefix, 'UsersRecordViewsSCR'));
+        INSERT INTO Counts ("Date", "UsersRecordViewsSCR")
+        SELECT "startDate", count(DISTINCT "LoginId") as "UsersRecordViewsSCR"
+        FROM UserTransactions transactionTable
+        WHERE (transactionTable."Date" >= "startDate")
+          AND (transactionTable."Date" < "endDate")
+          AND (transactionTable."RecordViewsSCR" > 0 )
+        ON CONFLICT("Date") DO UPDATE
+            SET "UsersRecordViewsSCR" = Excluded."UsersRecordViewsSCR"
+        WHERE Counts."UsersRecordViewsSCR" IS NULL;
+        logResult = audit.updateprocessduration(recordSCRLogId);
+    END IF;
+
 
     IF "tableName" = 'DailyUsage' THEN
         p5NewAppUsersLogId = audit.insertprocessduration(concat(usagePrefix, 'P5NewAppUsers'));
@@ -291,63 +350,63 @@ BEGIN
 
     insertFromCountsLogId = audit.insertprocessduration(concat(usagePrefix, 'InsertFromTempTable'));
     EXECUTE format(
-            'INSERT INTO "compute".%I (
-                "Date",
-                "P5NewAppUsers",
-                "AcceptedTermsAndConditions",
-                "P9VerifiedNHSAppUsers",
-                "Logins",
-                "UsersLogin",
-                "RecordViews",
-                "UsersRecordViews",
-                "Prescriptions",
-                "UsersPrescriptions",
-                "ODRegistrations",
-                "UsersODRegistrations",
-                "ODWithdrawals",
-                "UsersODWithdrawals",
-                "ODUpdates",
-                "UsersODUpdates",
-                "ODLookups",
-                "UsersODLookups",
-                "NomPharmacy",
-                "UsersNomPharmacy",
-                "AppointmentsBooked",
-                "UsersAppointmentsBooked",
-                "AppointmentsCancelled",
-                "UsersAppointmentsCancelled",
-                "RecordViewsDCR",
-                "UsersRecordViewsDCR",
-                "RecordViewsSCR",
-                "UsersRecordViewsSCR")
-            SELECT "Date",
-                "P5NewAppUsers",
-                "AcceptedTermsAndConditions",
-                "P9VerifiedNHSAppUsers",
-                "Logins",
-                "UsersLogin",
-                "RecordViews",
-                "UsersRecordViews",
-                "Prescriptions",
-                "UsersPrescriptions",
-                "ODRegistrations",
-                "UsersODRegistrations",
-                "ODWithdrawals",
-                "UsersODWithdrawals",
-                "ODUpdates",
-                "UsersODUpdates",
-                "ODLookups",
-                "UsersODLookups",
-                "NomPharmacy",
-                "UsersNomPharmacy",
-                "AppointmentsBooked",
-                "UsersAppointmentsBooked",
-                "AppointmentsCancelled",
-                "UsersAppointmentsCancelled",
-                "RecordViewsDCR",
-                "UsersRecordViewsDCR",
-                "RecordViewsSCR",
-                "UsersRecordViewsSCR" FROM Counts;', "tableName");
+        'INSERT INTO "compute".%I (
+            "Date",
+            "P5NewAppUsers",
+            "AcceptedTermsAndConditions",
+            "P9VerifiedNHSAppUsers",
+            "Logins",
+            "UsersLogin",
+            "RecordViews",
+            "UsersRecordViews",
+            "Prescriptions",
+            "UsersPrescriptions",
+            "ODRegistrations",
+            "UsersODRegistrations",
+            "ODWithdrawals",
+            "UsersODWithdrawals",
+            "ODUpdates",
+            "UsersODUpdates",
+            "ODLookups",
+            "UsersODLookups",
+            "NomPharmacy",
+            "UsersNomPharmacy",
+            "AppointmentsBooked",
+            "UsersAppointmentsBooked",
+            "AppointmentsCancelled",
+            "UsersAppointmentsCancelled",
+            "RecordViewsDCR",
+            "UsersRecordViewsDCR",
+            "RecordViewsSCR",
+            "UsersRecordViewsSCR")
+        SELECT "Date",
+            "P5NewAppUsers",
+            "AcceptedTermsAndConditions",
+            "P9VerifiedNHSAppUsers",
+            "Logins",
+            "UsersLogin",
+            "RecordViews",
+            "UsersRecordViews",
+            "Prescriptions",
+            "UsersPrescriptions",
+            "ODRegistrations",
+            "UsersODRegistrations",
+            "ODWithdrawals",
+            "UsersODWithdrawals",
+            "ODUpdates",
+            "UsersODUpdates",
+            "ODLookups",
+            "UsersODLookups",
+            "NomPharmacy",
+            "UsersNomPharmacy",
+            "AppointmentsBooked",
+            "UsersAppointmentsBooked",
+            "AppointmentsCancelled",
+            "UsersAppointmentsCancelled",
+            "RecordViewsDCR",
+            "UsersRecordViewsDCR",
+            "RecordViewsSCR",
+            "UsersRecordViewsSCR" FROM Counts;', "tableName");
     logResult = audit.updateprocessduration(insertFromCountsLogId);
 
     logResult = audit.updateprocessduration(usageComputationLogId);

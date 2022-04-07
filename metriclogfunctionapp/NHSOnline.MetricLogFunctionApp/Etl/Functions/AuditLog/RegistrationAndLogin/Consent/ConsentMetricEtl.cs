@@ -1,11 +1,13 @@
+using NHSOnline.MetricLogFunctionApp.Compute.QueueRequests;
 using NHSOnline.MetricLogFunctionApp.Etl.Load;
+using NHSOnline.MetricLogFunctionApp.Resilience;
 
 namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Consent
 {
     public class ConsentMetricEtl : AuditLogEtl<ConsentMetric>
     {
-        public ConsentMetricEtl(IEventsRepository repo, IAuditLogParser<ConsentMetric> parser)
-            : base(repo, parser)
+        public ConsentMetricEtl(IEventsRepository repo, IAuditLogParser<ConsentMetric> parser,IRequestQueueOrchestrator<AuditReportRequest> queueOrchestrator)
+            : base(repo, parser, queueOrchestrator)
         {
         }
 

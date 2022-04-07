@@ -1,12 +1,14 @@
+using NHSOnline.MetricLogFunctionApp.Compute.QueueRequests;
 using NHSOnline.MetricLogFunctionApp.Etl.Load;
 using NHSOnline.MetricLogFunctionApp.Etl.Logging;
+using NHSOnline.MetricLogFunctionApp.Resilience;
 
 namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.WebIntegrationReferrals
 {
     public class WebIntegrationReferralsMetricEtl : AuditLogEtl<WebIntegrationReferralsMetric>
     {
-        public WebIntegrationReferralsMetricEtl(IEventsRepository repo, IAuditLogParser<WebIntegrationReferralsMetric> parser)
-            : base(repo, parser)
+        public WebIntegrationReferralsMetricEtl(IEventsRepository repo, IAuditLogParser<WebIntegrationReferralsMetric> parser,IRequestQueueOrchestrator<AuditReportRequest> queueOrchestrator)
+            : base(repo, parser, queueOrchestrator)
         {
         }
 

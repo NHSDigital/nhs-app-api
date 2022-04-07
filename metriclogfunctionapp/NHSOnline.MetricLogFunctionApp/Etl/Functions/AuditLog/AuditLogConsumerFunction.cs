@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Consent;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Login;
@@ -20,19 +21,22 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
         private readonly IAuditLogEtl<WebIntegrationReferralsMetric> _webIntegrationReferralEtl;
         private readonly IAuditLogEtl<SecondaryCareSummaryMetric> _secondaryCareSummaryEtl;
         private readonly IEtlLogger<AuditLogConsumerFunction> _logger;
+        private readonly ILogger _queueLogger;
 
         public AuditLogConsumerFunction(
             IAuditLogEtl<ConsentMetric> consentEtl,
             IAuditLogEtl<LoginMetric> loginEtl,
             IAuditLogEtl<WebIntegrationReferralsMetric> webIntegrationReferralEtl,
             IAuditLogEtl<SecondaryCareSummaryMetric> secondaryCareSummaryEtl,
-            IEtlLogger<AuditLogConsumerFunction> logger)
+            IEtlLogger<AuditLogConsumerFunction> logger,
+            ILogger<AuditLogConsumerFunction> queueLogger)
         {
             _consentEtl = consentEtl;
             _loginEtl = loginEtl;
             _webIntegrationReferralEtl = webIntegrationReferralEtl;
             _secondaryCareSummaryEtl = secondaryCareSummaryEtl;
             _logger = logger;
+            _queueLogger = queueLogger;
         }
 
         [FunctionName("AuditLog_Etl_EventHub")]
@@ -67,8 +71,8 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             {
                 _logger.StartedTriggered("AuditLogEtl", "");
 
-                await _consentEtl.Execute(events);
-                await _loginEtl.Execute(events);
+                await _consentEtl.ExecuteDependentEvent(_queueLogger,events);
+                await _loginEtl.ExecuteDependentEvent(_queueLogger,events);
                 await _secondaryCareSummaryEtl.Execute(events);
                 await _webIntegrationReferralEtl.Execute(events);
             }

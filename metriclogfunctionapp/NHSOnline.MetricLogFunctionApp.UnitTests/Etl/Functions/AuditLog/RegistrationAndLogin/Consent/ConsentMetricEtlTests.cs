@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.MetricLogFunctionApp.Compute.QueueRequests;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Consent;
 using NHSOnline.MetricLogFunctionApp.Etl.Load;
 using NHSOnline.MetricLogFunctionApp.Etl.Logging;
+using NHSOnline.MetricLogFunctionApp.Resilience;
 
 namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog.RegistrationAndLogin.Consent
 {
@@ -17,6 +19,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog.Regist
         private Mock<IEventsRepository> _repo;
         private Mock<IAuditLogParser<ConsentMetric>> _parser;
         private Mock<IEtlLogger<AuditLogEtl<ConsentMetric>>> _logger;
+        private Mock<IRequestQueueOrchestrator<AuditReportRequest>> _requestQueueOrchestrator;
         private ConsentMetricEtl _etl;
 
         [TestInitialize]
@@ -24,7 +27,8 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog.Regist
         {
             _repo = new Mock<IEventsRepository>();
             _parser = new Mock<IAuditLogParser<ConsentMetric>>(MockBehavior.Strict);
-            _etl = new ConsentMetricEtl(_repo.Object, _parser.Object);
+            _requestQueueOrchestrator = new Mock<IRequestQueueOrchestrator<AuditReportRequest>>();
+            _etl = new ConsentMetricEtl(_repo.Object, _parser.Object, _requestQueueOrchestrator.Object);
         }
 
         [TestMethod]
@@ -110,7 +114,6 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog.Regist
             string auditId,
             string loginId,
             string proofLevel)
-
         {
             return new ConsentMetric
             {

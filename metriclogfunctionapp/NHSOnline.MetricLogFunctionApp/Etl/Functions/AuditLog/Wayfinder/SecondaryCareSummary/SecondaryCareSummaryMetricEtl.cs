@@ -1,11 +1,13 @@
+using NHSOnline.MetricLogFunctionApp.Compute.QueueRequests;
 using NHSOnline.MetricLogFunctionApp.Etl.Load;
+using NHSOnline.MetricLogFunctionApp.Resilience;
 
 namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Wayfinder.SecondaryCareSummary
 {
     public class SecondaryCareSummaryMetricEtl : AuditLogEtl<SecondaryCareSummaryMetric>
     {
-        public SecondaryCareSummaryMetricEtl(IEventsRepository repo, IAuditLogParser<SecondaryCareSummaryMetric> parser)
-            : base(repo, parser)
+        public SecondaryCareSummaryMetricEtl(IEventsRepository repo, IAuditLogParser<SecondaryCareSummaryMetric> parser,IRequestQueueOrchestrator<AuditReportRequest> queueOrchestrator)
+            : base(repo, parser,queueOrchestrator)
         {
 
         }

@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS audit."DataShareAudit" (
                                                 "DataEndDate" timestamp with time zone,
                                                 "ProcessStartDateTime" timestamp with time zone,
                                                 "IsSuccess" BOOLEAN,
-                                                "ADFPipelineName" TEXT
+                                                "ADFPipelineName" TEXT,
+                                                "SourceTableName" TEXT
 );
 
 CALL perms.apply_compute_table_permissions('audit', 'DataShareAudit');

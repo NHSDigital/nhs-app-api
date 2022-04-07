@@ -120,44 +120,44 @@ BEGIN
                       ELSE "CommsHub"."LoggedIn"
                     END);
 
-    INSERT INTO compute."CommsHubPivot" ("LoginId","RequestId","SendDate","MessageSendTimestamp","InAppStatus","Supplier","CampaignRef","MessageReadTimestamp","InAppUserFirstLoginTimestamp")
-    SELECT
-        COALESCE("LoginId",'ffffffff-ffff-ffff-ffff-ffffffff') AS "LoginId",
-        COALESCE("RequestId",'ffffffff-ffff-ffff-ffff-ffffffffffff') AS "RequestId",
+	INSERT INTO compute."CommsHubPivot" ("LoginId","RequestId","SendDate","MessageSendTimestamp","InAppStatus","Supplier","CampaignRef","MessageReadTimestamp","InAppUserFirstLoginTimestamp")
+	SELECT
+        "LoginId",
+        "RequestId",
         "SendDate",
         "MessageSendTimestamp",
         "Status",
-        COALESCE("Supplier",'Not Mapped') AS "Supplier",
+        "Supplier",
         "CampaignRef",
         "MessageReadTimestamp",
         "UserFirstLoginTimestamp"
-    FROM
+	FROM
         compute."CommsHub"
-    WHERE "Type" = 'In-App'
-      AND "SendDate" >= '2021-01-01'
-      AND
-        (
-                ("MessageSendTimestamp" >= startDate AND "MessageSendTimestamp" < endDate)
-                OR
-                ("MessageReadTimestamp" >= startDate AND "MessageReadTimestamp" < endDate AND "MessageSendTimestamp" IS NOT NULL)
-                OR
-                ("UserFirstLoginTimestamp" >= startDate AND "UserFirstLoginTimestamp" < endDate AND "MessageSendTimestamp" IS NOT NULL)
-            )
-    ON CONFLICT ("LoginId","RequestId") DO UPDATE
-        SET
-            "SendDate" =
-                ( CASE
-                      WHEN ( "CommsHubPivot"."SendDate" IS NULL)
-                          THEN Excluded."SendDate"
-                      ELSE "CommsHubPivot"."SendDate"
-                    END),
-            "MessageSendTimestamp" =
-                ( CASE
-                      WHEN ( "CommsHubPivot"."MessageSendTimestamp" IS NULL)
-                          THEN Excluded."MessageSendTimestamp"
-                      ELSE "CommsHubPivot"."MessageSendTimestamp"
-                    END),
-            "InAppStatus" =
+	WHERE "Type" = 'In-App'
+	AND "SendDate" >= '2021-01-01'
+	AND
+	(
+		(("MessageSendTimestamp" >= startDate) AND ("MessageSendTimestamp" < endDate))
+		OR
+		(("MessageReadTimestamp" >= startDate) AND ("MessageReadTimestamp" < endDate))
+		OR
+		(("UserFirstLoginTimestamp" >= startDate) AND ("UserFirstLoginTimestamp" < endDate))
+	)
+ 	ON CONFLICT ("LoginId","RequestId") DO UPDATE
+	    SET
+			"SendDate" =
+				( CASE
+					  WHEN ( "CommsHubPivot"."SendDate" IS NULL)
+						  THEN Excluded."SendDate"
+					  ELSE "CommsHubPivot"."SendDate"
+					END),
+			"MessageSendTimestamp" =
+				( CASE
+					  WHEN ( "CommsHubPivot"."MessageSendTimestamp" IS NULL)
+						  THEN Excluded."MessageSendTimestamp"
+					  ELSE "CommsHubPivot"."MessageSendTimestamp"
+					END),
+			"InAppStatus" =
                 ( CASE
                       WHEN ( "CommsHubPivot"."InAppStatus" IS NULL)
                           THEN Excluded."InAppStatus"
@@ -165,9 +165,9 @@ BEGIN
                     END),
             "Supplier" =
                 ( CASE
-                      WHEN ( "CommsHubPivot"."Supplier" IS NULL)
-                          THEN Excluded."Supplier"
-                      ELSE "CommsHubPivot"."Supplier"
+                      WHEN ( "CommsHubPivot"."Supplier" IS NULL OR "CommsHubPivot"."Supplier" = 'Not Mapped')
+                          THEN COALESCE(Excluded."Supplier",' Not Mapped')
+                      ELSE COALESCE("CommsHubPivot"."Supplier", 'Not Mapped')
                     END),
             "CampaignRef" =
                 ( CASE
@@ -181,44 +181,72 @@ BEGIN
                           THEN Excluded."MessageReadTimestamp"
                       ELSE "CommsHubPivot"."MessageReadTimestamp"
                     END),
-            "InAppUserFirstLoginTimestamp" =
+			"InAppUserFirstLoginTimestamp" =
                 ( CASE
                       WHEN ( "CommsHubPivot"."InAppUserFirstLoginTimestamp" IS NULL)
                           THEN Excluded."InAppUserFirstLoginTimestamp"
                       ELSE "CommsHubPivot"."InAppUserFirstLoginTimestamp"
                     END);
 
-    INSERT INTO compute."CommsHubPivot" ("LoginId","RequestId","PushStatus","PushUserFirstLoginTimestamp")
-    SELECT
-        COALESCE("LoginId",'ffffffff-ffff-ffff-ffff-ffffffff') AS "LoginId",
-        COALESCE("RequestId",'ffffffff-ffff-ffff-ffff-ffffffffffff') AS "RequestId",
-        "Status",
-        "UserFirstLoginTimestamp"
-    FROM
+	INSERT INTO compute."CommsHubPivot" ("LoginId","RequestId","PushStatus","PushUserFirstLoginTimestamp","SendDate","MessageSendTimestamp","Supplier","CampaignRef")
+	SELECT
+	"LoginId",
+	"RequestId",
+	"Status",
+	"UserFirstLoginTimestamp",
+	"SendDate",
+	"MessageSendTimestamp",
+	"Supplier",
+	"CampaignRef"
+	FROM
         compute."CommsHub"
-    WHERE
-            "Type" = 'Push'
-      AND "SendDate" >= '2021-01-01'
-      AND
-        (
-                ("MessageSendTimestamp" >= startDate AND "MessageSendTimestamp" < endDate)
-                OR
-                ("MessageReadTimestamp" >= startDate AND "MessageReadTimestamp" < endDate AND "MessageSendTimestamp" IS NOT NULL)
-                OR
-                ("UserFirstLoginTimestamp" >= startDate AND "UserFirstLoginTimestamp" < endDate AND "MessageSendTimestamp" IS NOT NULL)
-            )
-    ON CONFLICT ("LoginId","RequestId") DO UPDATE
+	WHERE
+	"Type" = 'Push'
+	AND "SendDate" >= '2021-01-01'
+	AND
+	(
+		(("MessageSendTimestamp" >= startDate) AND ("MessageSendTimestamp" < endDate))
+		OR
+		(("MessageReadTimestamp" >= startDate) AND ("MessageReadTimestamp" < endDate))
+		OR
+		(("UserFirstLoginTimestamp" >= startDate) AND ("UserFirstLoginTimestamp" < endDate))
+	)
+ 	ON CONFLICT ("LoginId","RequestId") DO UPDATE
         SET "PushStatus" =
                 ( CASE
                       WHEN ( "CommsHubPivot"."PushStatus" IS NULL)
                           THEN Excluded."PushStatus"
                       ELSE "CommsHubPivot"."PushStatus"
                     END),
-            "PushUserFirstLoginTimestamp" =
+			"PushUserFirstLoginTimestamp" =
                 ( CASE
                       WHEN ( "CommsHubPivot"."PushUserFirstLoginTimestamp" IS NULL)
                           THEN Excluded."PushUserFirstLoginTimestamp"
                       ELSE "CommsHubPivot"."PushUserFirstLoginTimestamp"
+                    END),
+			"SendDate" =
+                ( CASE
+                      WHEN ( "CommsHubPivot"."SendDate" IS NULL)
+                          THEN Excluded."SendDate"
+                      ELSE "CommsHubPivot"."SendDate"
+                    END),
+			"MessageSendTimestamp" =
+                ( CASE
+                      WHEN ( "CommsHubPivot"."MessageSendTimestamp" IS NULL)
+                          THEN Excluded."MessageSendTimestamp"
+                      ELSE "CommsHubPivot"."MessageSendTimestamp"
+                    END),
+			"Supplier" =
+                ( CASE
+                      WHEN ( "CommsHubPivot"."Supplier" IS NULL OR "CommsHubPivot"."Supplier" = 'Not Mapped')
+                          THEN COALESCE(Excluded."Supplier",' Not Mapped')
+                      ELSE COALESCE("CommsHubPivot"."Supplier", 'Not Mapped')
+                    END),
+			"CampaignRef" =
+                ( CASE
+                      WHEN ( "CommsHubPivot"."CampaignRef" IS NULL)
+                          THEN Excluded."CampaignRef"
+                      ELSE "CommsHubPivot"."CampaignRef"
                     END);
 
 END;

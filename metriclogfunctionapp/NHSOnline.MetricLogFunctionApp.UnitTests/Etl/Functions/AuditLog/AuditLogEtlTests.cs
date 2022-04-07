@@ -1,10 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.MetricLogFunctionApp.Compute.QueueRequests;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Consent;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Login;
 using NHSOnline.MetricLogFunctionApp.Etl.Load;
+using NHSOnline.MetricLogFunctionApp.Resilience;
 
 namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
 {
@@ -12,8 +17,14 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
     public class AuditLogEtlTests
     {
         private Mock<IAuditLogParser<TestMetric>> _parser;
+        private Mock<IAuditLogParser<LoginMetric>> _loginMetricParser;
+        private Mock<IAuditLogParser<ConsentMetric>> _consentMetricParser;
         private Mock<IEventsRepository> _repo;
+        private Mock<ILogger> _logger;
+        private Mock<IRequestQueueOrchestrator<AuditReportRequest>> _requestQueueOrchestrator;
         private TestEtl _etl;
+        private LoginMetricEtl _dependentLoginEtl;
+        private ConsentMetricEtl _dependentConsentEtl;
 
         private readonly DateTimeOffset _timestamp =
             new DateTimeOffset(DateTime.Parse("2021-01-01T09:00:00"));
@@ -22,8 +33,14 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
         public void TestInitialize()
         {
             _parser = new Mock<IAuditLogParser<TestMetric>>(MockBehavior.Strict);
+            _loginMetricParser = new Mock<IAuditLogParser<LoginMetric>>();
+            _consentMetricParser = new Mock<IAuditLogParser<ConsentMetric>>();
             _repo = new Mock<IEventsRepository>();
-            _etl = new TestEtl(_repo.Object, _parser.Object);
+            _requestQueueOrchestrator = new Mock<IRequestQueueOrchestrator<AuditReportRequest>>();
+            _etl = new TestEtl(_repo.Object, _parser.Object, _requestQueueOrchestrator.Object);
+            _logger = new Mock<ILogger>();
+            _dependentLoginEtl = new LoginMetricEtl(_repo.Object, _loginMetricParser.Object, _requestQueueOrchestrator.Object);
+            _dependentConsentEtl = new ConsentMetricEtl(_repo.Object, _consentMetricParser.Object, _requestQueueOrchestrator.Object);
         }
 
         [TestMethod]
@@ -59,6 +76,72 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
             );
 
             VerifyMocks();
+        }
+
+        [TestMethod]
+        public async Task ExecuteDependentEvent_WhenLoginEventLogged_MessageShouldBePushedToFirstLoginsQueue()
+        {
+            // Arrange
+            var eventsIds = new List<string>
+            {
+                "TestId1", "TestId2"
+            };
+
+            var events = new List<AuditRecord>
+            {
+                new() {Operation = "TestId1"},
+                new() {Operation = "TestId2"}
+            };
+
+            eventsIds.ForEach(id =>
+            {
+                _loginMetricParser.Setup(p =>
+                        p.Parse(It.Is<AuditRecord>(s => s.Operation.Contains(id))))
+                    .Returns(new LoginMetric() { AuditId = id, LoginId = id, Timestamp = _timestamp });
+            });
+
+            // Act
+            await _dependentLoginEtl.ExecuteDependentEvent(_logger.Object,events);
+
+            _requestQueueOrchestrator.Verify(r =>
+                r.AddMessage(It.IsAny<ILogger>(), "first-logins-metric-", It.Is<AuditReportRequest>(x =>
+                    x.LoginId == "TestId1")));
+            _requestQueueOrchestrator.Verify(r =>
+                r.AddMessage(It.IsAny<ILogger>(), "first-logins-metric-", It.Is<AuditReportRequest>(x =>
+                    x.LoginId == "TestId2")));
+        }
+
+        [TestMethod]
+        public async Task ExecuteDependentEvent_WhenConsentEventLogged_MessageShouldBePushedToFirstLoginsQueue()
+        {
+            // Arrange
+            var eventsIds = new List<string>
+            {
+                "TestId1", "TestId2"
+            };
+
+            var events = new List<AuditRecord>
+            {
+                new() {Operation = "TestId1"},
+                new() {Operation = "TestId2"}
+            };
+
+            eventsIds.ForEach(id =>
+            {
+                _consentMetricParser.Setup(p =>
+                        p.Parse(It.Is<AuditRecord>(s => s.Operation.Contains(id))))
+                    .Returns(new ConsentMetric() { AuditId = id, LoginId = id, Timestamp = _timestamp });
+            });
+
+            // Act
+            await _dependentConsentEtl.ExecuteDependentEvent(_logger.Object,events);
+
+            _requestQueueOrchestrator.Verify(r =>
+                r.AddMessage(It.IsAny<ILogger>(), "first-logins-metric-", It.Is<AuditReportRequest>(x =>
+                    x.LoginId == "TestId1")));
+            _requestQueueOrchestrator.Verify(r =>
+                r.AddMessage(It.IsAny<ILogger>(), "first-logins-metric-", It.Is<AuditReportRequest>(x =>
+                    x.LoginId == "TestId2")));
         }
 
         [TestMethod]
@@ -127,7 +210,8 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
 
         public class TestEtl : AuditLogEtl<TestMetric>
         {
-            public TestEtl(IEventsRepository repo, IAuditLogParser<TestMetric> parser) : base(repo, parser)
+            public TestEtl(IEventsRepository repo, IAuditLogParser<TestMetric> parser,IRequestQueueOrchestrator<AuditReportRequest> queueOrchestrator)
+                : base(repo, parser, queueOrchestrator)
             {
             }
 

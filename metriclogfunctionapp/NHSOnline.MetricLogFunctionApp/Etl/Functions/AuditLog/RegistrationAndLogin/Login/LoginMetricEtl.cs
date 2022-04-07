@@ -1,11 +1,13 @@
+using NHSOnline.MetricLogFunctionApp.Compute.QueueRequests;
 using NHSOnline.MetricLogFunctionApp.Etl.Load;
+using NHSOnline.MetricLogFunctionApp.Resilience;
 
 namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Login
 {
     public class LoginMetricEtl : AuditLogEtl<LoginMetric>
     {
-        public LoginMetricEtl(IEventsRepository repo, IAuditLogParser<LoginMetric> parser)
-            : base(repo, parser)
+        public LoginMetricEtl(IEventsRepository repo, IAuditLogParser<LoginMetric> parser,IRequestQueueOrchestrator<AuditReportRequest> queueOrchestrator)
+            : base(repo, parser,queueOrchestrator)
         {
         }
 
