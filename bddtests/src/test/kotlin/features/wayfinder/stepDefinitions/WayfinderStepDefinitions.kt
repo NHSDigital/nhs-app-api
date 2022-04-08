@@ -2,20 +2,27 @@ package features.wayfinder.stepDefinitions
 
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
+import features.sharedSteps.BrowserSteps
 import features.wayfinder.factories.WayfinderFactory
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import models.IdentityProofingLevel
 import models.Patient
 import net.thucydides.core.annotations.Steps
+import pages.wayfinder.WayfinderAggregatorErrorPage
 import pages.wayfinder.WayfinderReferralsAndAppointmentsPage
 import utils.SerenityHelpers
 
 class WayfinderStepDefinitions {
+    private lateinit var wayfinderReferralsAndAppointmentsPage: WayfinderReferralsAndAppointmentsPage
+    private lateinit var wayfinderAggregatorErrorPage: WayfinderAggregatorErrorPage
+
     @Steps
-    lateinit var wayfinderReferralsAndAppointmentsPage: WayfinderReferralsAndAppointmentsPage
+    private lateinit var browser: BrowserSteps
+
     private val wayfinderFactory = WayfinderFactory()
 
     @Given("^I am a user who can view Wayfinder from Appointments$")
@@ -28,6 +35,32 @@ class WayfinderStepDefinitions {
     fun iAmAUserWhoCanViewReferralsInWayfinderFromTheAppointmentsHub(){
         setupPatient(SJRJourneyType.WAYFINDER_ENABLED)
         wayfinderFactory.setupReferralsResponse()
+    }
+
+    @When("^the Wayfinder Aggregator API is timing out$")
+    fun theAggregatorApiTimesOut(){
+        wayfinderFactory.setupDelayedResponse()
+    }
+
+    @When("^the Wayfinder Aggregator API is encountering an issue$")
+    fun theAggregatorApiEncountersAnError(){
+        wayfinderFactory.setupInternalServerError()
+    }
+
+    @When("^the Wayfinder Aggregator API issues are resolved and is returning referrals$")
+    fun theAggregatorApiIssuesAreResolvedAndIsReturningReferrals() {
+        wayfinderFactory.setupReferralsResponse()
+    }
+
+    @When("^I click the try again button on the unavailable secondary care services error screen$")
+    fun iClickTheTryAgainButtonOnTheUnavailableSecondaryCareServicesErrorScreen() {
+        wayfinderAggregatorErrorPage.clickTryAgain()
+    }
+
+    @When("^I click the contact us link with the (.*) error code$")
+    fun iClickTheContactUsLinkWithThePrefixErrorCode(prefix: String) {
+        browser.storeCurrentTabCount()
+        wayfinderAggregatorErrorPage.clickContactUsLinkWithPrefix(prefix)
     }
 
     @Then("^the Referrals, hospital and other appointments screen with data is displayed$")
@@ -58,6 +91,11 @@ class WayfinderStepDefinitions {
     @Then("^I see a bookable awaiting booking$")
     fun assertBookableAwaitingBookIsDisplayed() {
         wayfinderReferralsAndAppointmentsPage.assertBookableAwaitingBookDisplayed()
+    }
+
+    @Then("^I see a helpful message indicating unavailable secondary care services with a (.*) service desk reference$")
+    fun iSeeAHelpfulMessageIndicatingUnavailableSecondaryCareServicesWithAPrefixedServiceDeskReference(prefix: String) {
+        wayfinderAggregatorErrorPage.assertIsDisplayedWithPrefix(prefix)
     }
 
     private fun setupPatient(configuration: SJRJourneyType, proofLevel: IdentityProofingLevel? = null) {

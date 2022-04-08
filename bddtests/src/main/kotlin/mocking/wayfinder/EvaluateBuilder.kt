@@ -4,6 +4,8 @@ import mocking.models.Mapping
 import org.apache.http.HttpStatus
 import utils.SerenityHelpers
 
+private const val TIMEOUT_DELAY_IN_MILLISECONDS = 30000;
+
 class EvaluateBuilder
     : WayfinderMappingBuilder("GET","/fhir/secondary-care/summary/\$evaluate") {
 
@@ -11,9 +13,19 @@ class EvaluateBuilder
         requestBuilder.andHeader("X-NHS-Number", SerenityHelpers.getPatient().nhsNumbers[0])
     }
 
+    fun returnAfterThirtySecondsForTimeout(): Mapping {
+        return respondWith(HttpStatus.SC_OK){
+            andDelay(TIMEOUT_DELAY_IN_MILLISECONDS)
+        }
+    }
+
+    fun returnInternalServerError(): Mapping {
+        return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR){}
+    }
+
     fun returnNoReferralsOrAppointments(): Mapping {
         val response = """
-            {
+        {
             "referrals": [],
             "upcomingAppointments": []
         } 
@@ -27,7 +39,7 @@ class EvaluateBuilder
 
     fun returnReferralsAndAppointments(): Mapping {
         val response = """
-            {
+        {
             "referrals": [
             {
                 "referralId": "1500 5957 5801",

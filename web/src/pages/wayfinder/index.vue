@@ -14,7 +14,8 @@
           </generic-button>
 
           <p>
-            <a :href="contactUsLink"
+            <a id="contact-us-link"
+               :href="contactUsLink"
                :aria-label="contactUsAriaLabel"
                @click.stop.prevent="contactUsClicked">
               {{ contactUsLinkText }}

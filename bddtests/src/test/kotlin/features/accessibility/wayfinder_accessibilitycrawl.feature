@@ -20,3 +20,15 @@ Feature: Wayfinder accessibility
     And I am logged in
     When I retrieve the 'Wayfinder' page directly
     Then the Wayfinder_Desktop_Referrals page is saved to disk
+
+  Scenario Outline: The 'Wayfinder API <An Error>' desktop page is captured
+    Given I am a user who can view Wayfinder from Appointments
+    And the Wayfinder Aggregator API is <An Error>
+    And I am logged in
+    When I retrieve the 'Wayfinder' page directly
+    Then I see a helpful message indicating unavailable secondary care services with a <Prefix> service desk reference
+    And the <FileName> page is saved to disk
+    Examples:
+      | An Error              | Prefix | FileName                           |
+      | timing out            | zu     | Wayfinder_Desktop_Timeout_Error    |
+      | encountering an issue | 4u     | Wayfinder_Desktop_BadGateway_Error |
