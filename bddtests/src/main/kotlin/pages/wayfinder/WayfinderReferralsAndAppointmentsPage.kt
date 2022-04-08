@@ -20,6 +20,18 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
         helpfulName = "Wayfinder No Referrals And Appointments Title"
     )
 
+    private val appointmentToConfirmHeading = HybridPageElement(
+        webDesktopLocator = "//h3[contains(text(),\"Ready to confirm appointment\")]",
+        page = this,
+        helpfulName = "Appointment to confirm H3"
+    )
+
+    private val noUpcomingAppointments = HybridPageElement(
+            webDesktopLocator = "//p[contains(text(),\"You have no hospital appointments to view and manage.\")]",
+            page = this,
+            helpfulName = "Appointment to confirm H3"
+    )
+
     private val inReviewReferralHeading = HybridPageElement(
         webDesktopLocator = "//h3[contains(text(),\"Your referral request is being reviewed\")]",
         page = this,
@@ -44,12 +56,30 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
         helpfulName = "Bookable Awaiting Booking H3"
     )
 
+    private val appointmentBookedHeading = HybridPageElement(
+        webDesktopLocator = "//h3[contains(text(),\"Booked appointment\")]",
+        page = this,
+        helpfulName = "Appointment booked H3"
+    )
+
     fun assertWayfinderWithDataTitleIsDisplayed() {
         pageTitleWithData.assertIsVisible()
     }
 
     fun assertWayfinderWithoutDataTitleIsDisplayed() {
         pageTitleWithNoData.assertIsVisible()
+    }
+
+    fun assertNoUpcomingAppointmentsDisplayed() {
+        noUpcomingAppointments.assertIsVisible()
+    }
+
+    fun assertApointmentToConfirmIsDisplayed() {
+        appointmentToConfirmHeading.assertIsVisible()
+    }
+
+    fun assertBookedAppointmentIsDisplayed() {
+        appointmentBookedHeading.assertIsVisible()
     }
 
     fun assertInReviewReferralDisplayed(){

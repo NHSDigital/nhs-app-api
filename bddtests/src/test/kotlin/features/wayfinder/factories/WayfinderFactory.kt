@@ -30,4 +30,10 @@ class WayfinderFactory {
             wayfinderMappingBuilder.referrals()
         }
     }
+
+    fun setupReferralsNoAppointmentsResponse() {
+        mockingClient.forWayfinder.mock {
+            wayfinderMappingBuilder.referralsNoAppointments();
+        }
+    }
 }

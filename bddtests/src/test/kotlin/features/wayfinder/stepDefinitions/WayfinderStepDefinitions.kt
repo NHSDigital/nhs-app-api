@@ -25,13 +25,19 @@ class WayfinderStepDefinitions {
 
     private val wayfinderFactory = WayfinderFactory()
 
+    @Given("^I am a user who can view Wayfinder from Appointments and has referrals but no upcoming appointments$")
+    fun iAmAUserWhoHasReferralsButNoUpcomingAppointments(){
+        setupPatient(SJRJourneyType.WAYFINDER_ENABLED)
+        wayfinderFactory.setupReferralsNoAppointmentsResponse()
+    }
+
     @Given("^I am a user who can view Wayfinder from Appointments$")
     fun iAmAUserWhoCanViewWayfinderFromTheAppointmentsHub(){
         setupPatient(SJRJourneyType.WAYFINDER_ENABLED)
         wayfinderFactory.setupNoReferralsOrAppointmentsResponse();
     }
 
-    @Given("^I am a user who can view Wayfinder from Appointments and has referrals$")
+    @Given("^I am a user who can view Wayfinder from Appointments and has referrals and upcoming appointments$")
     fun iAmAUserWhoCanViewReferralsInWayfinderFromTheAppointmentsHub(){
         setupPatient(SJRJourneyType.WAYFINDER_ENABLED)
         wayfinderFactory.setupReferralsResponse()
@@ -76,6 +82,21 @@ class WayfinderStepDefinitions {
     @Then("^I see an in review referral$")
     fun assertInReviewReferralIsDisplayed() {
         wayfinderReferralsAndAppointmentsPage.assertInReviewReferralDisplayed()
+    }
+
+    @Then("^I can see that I have no upcoming appointments$")
+    fun assertNoUpcomingAppointmentsIsDisplayed() {
+        wayfinderReferralsAndAppointmentsPage.assertNoUpcomingAppointmentsDisplayed()
+    }
+
+    @Then("^I see an appointment to confirm$")
+    fun assertAppointmentToConfirmIsDisplayed() {
+        wayfinderReferralsAndAppointmentsPage.assertApointmentToConfirmIsDisplayed()
+    }
+
+    @Then("^I see a booked appointment$")
+    fun assertBookedAppointmentIsDisplayed() {
+        wayfinderReferralsAndAppointmentsPage.assertBookedAppointmentIsDisplayed()
     }
 
     @Then("^I see a bookable cancelled referral$")
