@@ -54,6 +54,5 @@ class UserInfoGetStepDefinitionsBackend {
         Assert.assertEquals("Expected NHS Login ID.", patient.subject, responseUserInfo.nhsLoginId)
         Assert.assertEquals("Expected ODS Code.", patient.odsCode, responseUserInfo.info.odsCode)
         Assert.assertEquals("Expected NHS Number.",  patient.nhsNumbers.first(), responseUserInfo.info.nhsNumber)
-        Assert.assertEquals("Expected Beta Tester.", false, responseUserInfo.info.betaTester)
     }
 }

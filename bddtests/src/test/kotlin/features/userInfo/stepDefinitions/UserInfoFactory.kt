@@ -79,7 +79,6 @@ class UserInfoFactory {
         return MongoRepositoryUserAndInfo(
                 NhsLoginId = nhsLoginId,
                 Info = MongoRepositoryUserInfo(odsCode ?: "OdsCodeX",
-                        nhsNumber ?: "1111111111",
-                        false))
+                        nhsNumber ?: "1111111111"))
     }
 }

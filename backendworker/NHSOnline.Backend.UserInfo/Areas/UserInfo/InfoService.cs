@@ -31,8 +31,7 @@ namespace NHSOnline.Backend.UserInfo.Areas.UserInfo
                     Info = new Info
                     {
                         NhsNumber = userProfile.NhsNumber,
-                        OdsCode = userProfile.OdsCode,
-                        BetaTester = false
+                        OdsCode = userProfile.OdsCode
                     }
                 };
 

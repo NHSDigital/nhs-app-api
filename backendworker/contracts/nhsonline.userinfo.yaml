@@ -136,11 +136,9 @@ components:
           type: string
         odsCode:
           type: string
-        betaTester:
-          type: boolean
     UserResearchRequest:
       type: object
-      required: 
+      required:
         - preference
       properties:
         preference:

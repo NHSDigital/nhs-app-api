@@ -6493,8 +6493,6 @@
                           type: "string"
                         odsCode: 
                           type: "string"
-                        betaTester: 
-                          type: "boolean"
           401: 
             description: "Access token is missing or invalid."
           404: 
