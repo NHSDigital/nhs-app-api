@@ -78,9 +78,13 @@ class SetupAndTeardown {
             if (scenario.isFailed) {
                 println("Console logs:\r\n$logs")
             } else {
+                val blankMessageRegex = "^http://web.local.bitraft.io:3000.+chunk-vendors.[0-9a-f]+\\.js \\d+:\\d+ \$"
                 val errorLogs = logs
                         .filter { it.level == Level.SEVERE }
                         .filterNot { it.message.contains(CONSOLE_LOG_STRINGS_TO_IGNORE) }
+                        // Filter out blank log line that erroneously appears in bdd test.
+                        // It should include an error response code in the output but this is missing due to a bug
+                        .filterNot { it.message.matches(blankMessageRegex.toRegex())}
 
                 Assert.assertTrue(
                         "There should not be any console logs but found:\r\n$errorLogs",

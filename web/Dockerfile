@@ -12,20 +12,25 @@ CMD ["npm", "run", "dev"]
 # Security Audit
 FROM ${DOCKER_IMAGE_WEB_BUILD} as security_audit
 
+WORKDIR /app
+
 COPY .npmrc .
 COPY package.json .
 COPY package-lock.json .
 
-COPY lint/.npmrc lint/.npmrc
-COPY lint/package.json lint/package.json
-COPY lint/package-lock.json lint/package-lock.json
+COPY lint/.npmrc lint/
+COPY lint/package.json lint/
+COPY lint/package-lock.json lint/
 
 RUN --mount=type=secret,id=npmrc,dst=/root/.npmrc \
     --mount=type=cache,id=npm,dst=/root/.npm \
-    npm install -g npm-audit-ci-wrapper \
-      && npm run audit \
+    npm i -g npm \
+      && npm install \
+      && npm install -g auditjs \
+      && npm run audit\
       && cd lint \
-      && npm run audit
+      && npm install \
+      && npm run audit 
 
 # Production Dependencies
 FROM ${DOCKER_IMAGE_WEB_BUILD} AS production_dependencies

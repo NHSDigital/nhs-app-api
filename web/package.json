@@ -8,7 +8,7 @@
     "assetsDir": "dev_web_npm"
   },
   "scripts": {
-    "audit": "npm-audit-ci-wrapper --threshold=high --ignore-dev-dependencies --registry='https://registry.npmjs.org/'",
+    "audit": "auditjs ossi --q",
     "outdated": "npm outdated || printf '\\nWARN: Outdated packages detected\\n\\n'",
     "serve": "vue-cli-service serve",
     "vue-build": "vue-cli-service build --mode=production",
@@ -74,14 +74,14 @@
     "outputName": "./junit.xml"
   },
   "dependencies": {
-    "axios": "0.18.1",
+    "axios": "0.21.2",
     "babel-jest": "26.0.1",
     "core-js": "2.6.5",
     "deepmerge": "3.2.0",
     "focus-trap": "5.0.1",
     "jwt-decode": "2.2.0",
     "linkify-it": "2.2.0",
-    "lodash": "4.17.15",
+    "lodash": "4.17.21",
     "markdown-it": "12.0.2",
     "mime": "2.4.4",
     "minimist": "1.2.5",
@@ -135,7 +135,6 @@
     "jest-vue-preprocessor": "1.7.1",
     "mockdate": "2.0.5",
     "nhsuk-frontend": "2.0.0",
-    "npm-audit-ci-wrapper": "2.5.4",
     "sass": "1.26.7",
     "sass-loader": "9.0.2",
     "typescript": "3.4.3",
