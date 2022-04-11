@@ -58,6 +58,10 @@ export const isBlankString = value => typeof value !== 'string' || value.trim() 
 
 export const isNumber = value => typeof value === 'number';
 
+export const isBefore = date => moment(date).isBefore(moment.now());
+
+export const isSameOrAfter = date => moment(date).isSameOrAfter(moment.now());
+
 /*
    session storage is used to avoid the issue of the retry
    flag being reset after a store rebuild which occurs when navigating

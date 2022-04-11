@@ -45,3 +45,14 @@ Feature: Wayfinder Referrals
     When I click the 'Referrals, hospital and other appointments' link on the Appointments Hub
     Then the Referrals, hospital and other appointments screen with data is displayed
     And I see a bookable awaiting booking
+
+  Scenario: A user with bookables awaiting booking can see them in the Wayfinder screen and can go back to the appointments hub
+    Given I am a user who can view Wayfinder from Appointments and has referrals
+    And I am logged in
+    When I navigate to Appointments
+    Then the Appointments Hub page is displayed
+    When I click the 'Referrals, hospital and other appointments' link on the Appointments Hub
+    And the Referrals, hospital and other appointments screen with data is displayed
+    Then I see a bookable awaiting booking
+    When I click the Back link
+    Then the Appointments Hub page is displayed

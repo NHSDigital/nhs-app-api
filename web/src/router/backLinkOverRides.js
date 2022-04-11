@@ -37,6 +37,7 @@ import {
   TEST_RESULTS_FOR_YEAR_NAME,
   TESTRESULTS_V2_NAME,
   GP_MEDICAL_RECORD_NAME,
+  WAYFINDER_NAME,
 } from '@/router/names';
 
 /**
@@ -133,5 +134,9 @@ export default {
   [GP_MEDICAL_RECORD_NAME]: {
     ignoreStore: false,
     defaultPath: INDEX_PATH,
+  },
+  [WAYFINDER_NAME]: {
+    ignoreStore: false,
+    defaultPath: APPOINTMENTS_PATH,
   },
 };

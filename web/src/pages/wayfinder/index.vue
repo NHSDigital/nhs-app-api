@@ -118,6 +118,14 @@
 
       </div>
     </div>
+
+    <desktopGenericBackLink v-if="!isNativeApp"
+                            id="desktopBackLink"
+                            data-purpose="back-to-appointments-hub-button"
+                            :path="appoinmentsHubPath"
+                            :button-text="'generic.back'"
+                            @clickAndPrevent="backClicked"/>
+
   </div>
 </template>
 
@@ -133,8 +141,9 @@ import ReferralInReviewCard from '@/components/wayfinder/referrals/ReferralInRev
 import ReferralReadyToRebookCard from '@/components/wayfinder/referrals/ReferralReadyToRebookCard';
 import ReferralReviewOverdueCard from '@/components/wayfinder/referrals/ReferralReviewOverdueCard';
 import ReferralBookableCard from '@/components/wayfinder/referrals/ReferralBookableCard';
-import { isEmptyArray } from '@/lib/utils';
-import moment from 'moment';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import { isEmptyArray, isBefore, isSameOrAfter, redirectTo } from '@/lib/utils';
+import { APPOINTMENTS_PATH } from '@/router/paths';
 
 const loadData = async (store) => {
   await store.dispatch('wayfinder/load');
@@ -143,26 +152,28 @@ const loadData = async (store) => {
 export default {
   name: 'WayfinderPage',
   components: {
-    GenericButton,
-    OtherAvailableServicesMenuItems,
-    CardGroup,
-    CardGroupItem,
     AppointmentBookedCard,
     AppointmentReadyToConfirmCard,
+    CardGroup,
+    CardGroupItem,
+    DesktopGenericBackLink,
+    GenericButton,
+    OtherAvailableServicesMenuItems,
     ReferralInReviewCard,
     ReferralReadyToRebookCard,
     ReferralReviewOverdueCard,
     ReferralBookableCard,
   },
   computed: {
-    hasLoaded() {
-      return this.$store.state.wayfinder.hasLoaded;
-    },
     apiError() {
       return this.$store.state.wayfinder.apiError;
     },
-    hasErrored() {
-      return this.apiError !== undefined;
+    appoinmentsHubPath() {
+      return APPOINTMENTS_PATH;
+    },
+    contactUsAriaLabel() {
+      const errorCode = this.apiError.serviceDeskReference.split('');
+      return this.$t('wayfinder.errors.contactUs', { errorCode });
     },
     contactUsLink() {
       return `${this.$store.$env.CONTACT_US_URL}?errorcode=${this.apiError.serviceDeskReference}`;
@@ -171,24 +182,29 @@ export default {
       const errorCode = this.apiError.serviceDeskReference;
       return this.$t('wayfinder.errors.contactUs', { errorCode });
     },
-    contactUsAriaLabel() {
-      const errorCode = this.apiError.serviceDeskReference.split('');
-      return this.$t('wayfinder.errors.contactUs', { errorCode });
+    hasErrored() {
+      return this.apiError !== undefined;
+    },
+    hasLoaded() {
+      return this.$store.state.wayfinder.hasLoaded;
+    },
+    hasReferrals() {
+      return !isEmptyArray(this.referrals);
+    },
+    hasReferralsOrAppointments() {
+      return this.hasReferrals || this.hasUpcomingAppointments;
+    },
+    hasUpcomingAppointments() {
+      return !isEmptyArray(this.upcomingAppointments);
+    },
+    isNativeApp() {
+      return this.$store.state.device.isNativeApp;
     },
     referrals() {
       return this.$store.state.wayfinder.summary.referrals;
     },
     upcomingAppointments() {
       return this.$store.state.wayfinder.summary.upcomingAppointments;
-    },
-    hasReferrals() {
-      return !isEmptyArray(this.referrals);
-    },
-    hasUpcomingAppointments() {
-      return !isEmptyArray(this.upcomingAppointments);
-    },
-    hasReferralsOrAppointments() {
-      return this.hasReferrals || this.hasUpcomingAppointments;
     },
   },
   async mounted() {
@@ -209,7 +225,7 @@ export default {
   },
   methods: {
     isInReview(referral) {
-      return referral.status === 'InReview' && moment(referral.reviewDueDate).isSameOrAfter(moment.now());
+      return referral.status === 'InReview' && isSameOrAfter(referral.reviewDueDate);
     },
     isBookable(referral) {
       return referral.status === 'Bookable';
@@ -218,7 +234,7 @@ export default {
       return referral.status === 'BookableWasCancelled';
     },
     isReviewOverdue(referral) {
-      return referral.status === 'InReview' && moment(referral.reviewDueDate).isBefore(moment.now());
+      return referral.status === 'InReview' && isBefore(referral.reviewDueDate);
     },
     isAppointmentBooked(appointment) {
       return appointment.appointmentDateTime;
@@ -228,6 +244,9 @@ export default {
     },
     contactUsClicked() {
       window.open(this.contactUsLink, '_blank', 'noopener,noreferrer');
+    },
+    backClicked() {
+      redirectTo(this, this.appoinmentsHubPath);
     },
   },
 };
