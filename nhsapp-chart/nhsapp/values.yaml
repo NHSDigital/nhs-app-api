@@ -43,7 +43,7 @@ tppApiVersion: 1
 tppApplicationName: NhsApp
 tppApplicationVersion: 1.0
 tppApplicationDeviceType: NhsApp
-tppSupportsTestResultV2: false
+tppSupportsTestResultV2: true
 
 visionHostname: viab-ute.inps.co.uk
 visionPort: 443

@@ -8,9 +8,6 @@ users:
 wellKnownAndroidPackageName: com.nhs.online.nhsonline.scratch16
 wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.scratch16a
 
-# tpp test results version 2
-tppSupportsTestResultV2: true
-
 # web
 web:
   qualtricsSurveyEnabled: true
