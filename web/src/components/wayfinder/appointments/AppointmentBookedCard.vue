@@ -10,7 +10,7 @@
     <p class="nhsuk-u-margin-bottom-3">
       {{ locationDescription }}
     </p>
-    <primary-button id="bookOrManageAppointment">
+    <primary-button :id="`bookOrManageAppointment-${appointmentId}`">
       {{ $t('wayfinder.appointments.booked.viewOrManageAppointment') }}
     </primary-button>
   </Card>
@@ -27,6 +27,10 @@ export default {
     PrimaryButton,
   },
   props: {
+    appointmentId: {
+      type: String,
+      default: '',
+    },
     appointmentDateTime: {
       type: String,
       default: '',

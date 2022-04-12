@@ -87,11 +87,13 @@
 
               <appointment-booked-card
                 v-if="isAppointmentBooked(appointment)"
+                :appointment-id="appointment.appointmentId"
                 :location-description="appointment.locationDescription"
                 :appointment-date-time="appointment.appointmentDateTime"/>
 
               <appointment-ready-to-confirm-card
                 v-if="!isAppointmentBooked(appointment)"
+                :appointment-id="appointment.appointmentId"
                 :location-description="appointment.locationDescription"/>
 
             </card-group-item>
@@ -117,15 +119,14 @@
         </template>
 
       </div>
+
+      <desktopGenericBackLink v-if="!isNativeApp"
+                              id="desktopBackLink"
+                              data-purpose="back-to-appointments-hub-button"
+                              :path="appoinmentsHubPath"
+                              :button-text="'generic.back'"
+                              @clickAndPrevent="backClicked"/>
     </div>
-
-    <desktopGenericBackLink v-if="!isNativeApp"
-                            id="desktopBackLink"
-                            data-purpose="back-to-appointments-hub-button"
-                            :path="appoinmentsHubPath"
-                            :button-text="'generic.back'"
-                            @clickAndPrevent="backClicked"/>
-
   </div>
 </template>
 

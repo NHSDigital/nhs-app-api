@@ -33,7 +33,7 @@
              null, {referrer: referredBy}) }}
     </p>
 
-    <primary-button id="manageInReviewReferral">
+    <primary-button :id="`manageInReviewReferral-${bookingReference}`">
       {{ $t('wayfinder.referrals.manageThisReferral') }}
     </primary-button>
   </Card>

@@ -9,7 +9,7 @@
     <p>
       {{ locationDescription }}
     </p>
-    <primary-button id="contactTheClinicToConfirm">
+    <primary-button :id="`contactTheClinicToConfirm-${appointmentId}`">
       {{ $t('wayfinder.appointments.readyToConfirm.contactTheClinicToConfirm') }}
     </primary-button>
   </Card>
@@ -26,6 +26,10 @@ export default {
     PrimaryButton,
   },
   props: {
+    appointmentId: {
+      type: String,
+      default: '',
+    },
     locationDescription: {
       type: String,
       default: '',
