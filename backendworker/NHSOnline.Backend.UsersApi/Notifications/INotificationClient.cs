@@ -11,5 +11,6 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         Task DeleteInstallation(string installationId, string nhsLoginId);
         Task<(HttpStatusCode, string)> Migrate(MigrationRequest request);
         Task<NotificationSendResponse> SendNotification(NotificationRequest request);
+        Task<NotificationOutcomeResponse> GetNotificationOutcomeDetails(string notificationId, string hubPath);
     }
 }

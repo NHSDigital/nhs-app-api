@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 using NHSOnline.Backend.UsersApi.Notifications.Models;
 
 namespace NHSOnline.Backend.UsersApi.Notifications
@@ -16,5 +17,6 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         Task<string[]> GetInstallationIdsByNhsLoginId(string nhsLoginId);
         Task<string> SendNotification(NotificationRequest request);
         Task<string> SendScheduledNotification(NotificationRequest request);
+        Task<NotificationOutcomeResponse> GetNotificationOutcomeDetails(string notificationId);
     }
 }

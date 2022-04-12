@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -22,7 +21,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
             if (!output.Any())
             {
-                throw new ArgumentOutOfRangeException(nameof(nhsLoginId), nhsLoginId);
+                throw new NotificationHubNotFoundException($"Notification hub not found for Nhs login id {nhsLoginId}");
             }
 
             return output;
@@ -37,7 +36,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
             if (output.Count != 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(nhsLoginId), nhsLoginId);
+                throw new NotificationHubNotFoundException($"Notification hub not found for Nhs login id {nhsLoginId}");
             }
 
             return output.First();
@@ -47,7 +46,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         {
             if (!_wrappers.ContainsKey(path))
             {
-                throw new ArgumentOutOfRangeException(nameof(path), path);
+                throw new NotificationHubNotFoundException($"Notification hub not found for hub path {path}");
             }
 
             return _wrappers[path];

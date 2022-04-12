@@ -8,7 +8,6 @@ import mongodb.MongoDBConnection
 import mongodb.MongoRepositoryUserDevice
 import org.apache.http.HttpStatus
 import org.junit.Assert
-import org.junit.Assert.assertNotNull
 import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set
@@ -261,10 +260,10 @@ class PushNotificationsStepDefinitionsBackend {
     fun iReceiveTrackingDetailsForTheSentNotification() {
         val response =
                 PushNotificationsSerenityHelpers.CREATE_PUSH_NOTIFICATION_RESPONSE.getOrFail<PushNotificationResponse>()
-        assertNotNull(response)
-        assertNotNull("NotificationId", response.notificationId)
-        assertNotNull("Scheduled", response.scheduled)
-        assertNotNull("HubPath", response.hubPath)
+        Assert.assertNotNull(response)
+        Assert.assertNotNull("NotificationId", response.notificationId)
+        Assert.assertNotNull("Scheduled", response.scheduled)
+        Assert.assertNotNull("HubPath", response.hubPath)
     }
 
     private fun assertSingleRecordInDeviceRepository() {

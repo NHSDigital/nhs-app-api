@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             // Arrange
             _mockNotificationClient
                 .Setup(x => x.DeleteInstallation(InstallationId, NhsLoginId))
-                .Throws(MessagingExceptionFactory.Create());
+                .Throws(MessagingExceptionFactory.CreateMessagingException());
 
             // Act
             var result = await _systemUnderTest.Delete(InstallationId, NhsLoginId);

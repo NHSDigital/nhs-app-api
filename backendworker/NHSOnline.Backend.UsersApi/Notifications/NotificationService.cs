@@ -9,7 +9,7 @@ using NHSOnline.Backend.UsersApi.Notifications.Models;
 
 namespace NHSOnline.Backend.UsersApi.Notifications
 {
-    public class NotificationService: INotificationService
+    public class NotificationService : INotificationService
     {
         private readonly ILogger<NotificationService> _logger;
         private readonly INotificationClient _notificationClient;
@@ -64,7 +64,60 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             }
             finally
             {
-               _logger.LogExit();
+                _logger.LogExit();
+            }
+        }
+
+        public async Task<NotificationOutcomeResult> GetNotificationOutcomeDetails(string notificationId,
+            string hubPath)
+        {
+            try
+            {
+                _logger.LogEnter();
+                var notificationOutcomeResponse =
+                    await _notificationClient.GetNotificationOutcomeDetails(notificationId, hubPath);
+                return new NotificationOutcomeResult.Success(notificationOutcomeResponse);
+            }
+            catch (NotificationHubNotFoundException ex)
+            {
+                _logger.LogError(ex, "Failed to retrieve notification outcome details for " +
+                                     $"NotificationId = {notificationId} and HubPath = {hubPath}," +
+                                     ". The requested hub path was not found");
+                return new NotificationOutcomeResult.NotFound();
+            }
+            catch (MessagingEntityNotFoundException ex)
+            {
+                _logger.LogError(ex, "Failed to retrieve notification outcome details for " +
+                                     $"NotificationId = {notificationId} and HubPath = {hubPath}," +
+                                     ".The requested notification outcome details are not present in the hub");
+                
+                return new NotificationOutcomeResult.NotFound();
+            }
+            catch (MessagingException ex)
+            {
+                _logger.LogError(ex, "Failed to retrieve notification outcome details for " +
+                                     $"NotificationId = {notificationId} and HubPath = {hubPath}," +
+                                     ". Possibly the outcome for the current notification is not yet available.");
+                
+                return new NotificationOutcomeResult.BadGateway();
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "Failed to retrieve notification outcome details for " +
+                                     $"NotificationId = {notificationId} and HubPath = {hubPath}," +
+                                     " an unexpected exception has been thrown");
+                return new NotificationOutcomeResult.BadGateway();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to retrieve notification outcome details for " +
+                                     $"NotificationId = {notificationId} and HubPath = {hubPath}," +
+                                     ". An unexpected exception has been thrown");
+                return new NotificationOutcomeResult.InternalServerError();
+            }
+            finally
+            {
+                _logger.LogExit();
             }
         }
     }

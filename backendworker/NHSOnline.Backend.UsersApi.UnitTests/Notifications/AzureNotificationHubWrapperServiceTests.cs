@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         {
             _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
 
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => _systemUnderTest.AllFor(NhsLoginId));
+            Assert.ThrowsException<NotificationHubNotFoundException>(() => _systemUnderTest.AllFor(NhsLoginId));
         }
 
         [TestMethod]
@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 
             _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
 
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => _systemUnderTest.AllFor(NhsLoginId));
+            Assert.ThrowsException<NotificationHubNotFoundException>(() => _systemUnderTest.AllFor(NhsLoginId));
         }
 
         [TestMethod]
@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 
             _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
 
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => _systemUnderTest.AllFor(NhsLoginId));
+            Assert.ThrowsException<NotificationHubNotFoundException>(() => _systemUnderTest.AllFor(NhsLoginId));
         }
 
         [TestMethod]
@@ -111,7 +111,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         {
             _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
 
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => _systemUnderTest.CurrentFor(NhsLoginId));
+            Assert.ThrowsException<NotificationHubNotFoundException>(() => _systemUnderTest.CurrentFor(NhsLoginId));
         }
 
         [TestMethod]
@@ -121,7 +121,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 
             _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
 
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => _systemUnderTest.CurrentFor(NhsLoginId));
+            Assert.ThrowsException<NotificationHubNotFoundException>(() => _systemUnderTest.CurrentFor(NhsLoginId));
         }
 
         [TestMethod]
@@ -146,7 +146,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 
             _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
 
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => _systemUnderTest.CurrentFor(NhsLoginId));
+            Assert.ThrowsException<NotificationHubNotFoundException>(() => _systemUnderTest.CurrentFor(NhsLoginId));
         }
 
         [TestMethod]
@@ -173,7 +173,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 
             _systemUnderTest = new AzureNotificationHubWrapperService(_wrappers);
 
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => _systemUnderTest.CurrentFor(NhsLoginId));
+            Assert.ThrowsException<NotificationHubNotFoundException>(() => _systemUnderTest.CurrentFor(NhsLoginId));
         }
 
         private static Mock<IAzureNotificationHubWrapper> GetMockWrapperForReading(int generation, bool handlesNhsLoginId)

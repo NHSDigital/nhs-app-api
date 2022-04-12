@@ -14,18 +14,20 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
     [Authorize(AuthenticationSchemes = ApiKeyAuthenticationOptions.DefaultScheme)]
     public class NotificationsController : Controller
     {
-        private readonly ILogger<NotificationsController> _logger;
-        private readonly INotificationService _notificationService;
         private readonly IEventHubLogger _eventHubLogger;
+        private readonly ILogger<NotificationsController> _logger;
 
         private readonly IMapper<AddNotificationSenderContext, SenderContextEventLogData>
             _notificationSenderContextEventLogDataMapper;
+
+        private readonly INotificationService _notificationService;
 
         public NotificationsController(
             INotificationService notificationService,
             ILogger<NotificationsController> logger,
             IEventHubLogger eventHubLogger,
-            IMapper<AddNotificationSenderContext, SenderContextEventLogData> notificationSenderContextEventLogDataMapper)
+            IMapper<AddNotificationSenderContext, SenderContextEventLogData>
+                notificationSenderContextEventLogDataMapper)
         {
             _notificationService = notificationService;
             _logger = logger;
@@ -60,6 +62,37 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
                 );
 
                 return sendResult.Accept(new NotificationSendResultVisitor());
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        [HttpGet]
+        [Route("api/users/devices/notifications/{notificationId}")]
+        public async Task<IActionResult> GetNotificationOutcomeDetails
+        (
+            [FromRoute(Name = "notificationId")] string notificationId,
+            [FromQuery(Name = "hubPath")] string hubPath
+        )
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                if (string.IsNullOrWhiteSpace(notificationId))
+                {
+                    return BadRequest();
+                }
+
+                if (string.IsNullOrWhiteSpace(hubPath))
+                {
+                    return BadRequest();
+                }
+
+                var outcomeResult = await _notificationService.GetNotificationOutcomeDetails(notificationId, hubPath);
+                return outcomeResult.Accept(new NotificationOutcomeResultVisitor());
             }
             finally
             {

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -7,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 using NHSOnline.Backend.UsersApi.Notifications;
-using NotificationRequest = NHSOnline.Backend.UsersApi.Notifications.Models.NotificationRequest;
+using NHSOnline.Backend.UsersApi.Notifications.Models;
 
 namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 {
@@ -306,7 +307,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                         y.Body == body &&
                         y.Url == new Uri(url) &&
                         y.NhsLoginId == NhsLoginId)))
-                .ThrowsAsync(MessagingExceptionFactory.Create());
+                .ThrowsAsync(MessagingExceptionFactory.CreateMessagingException());
 
             // Act
             var result = await _systemUnderTest.Send(NhsLoginId, request);
@@ -436,6 +437,125 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 
             var successResult = result.Should().BeOfType<NotificationSendResult.Success>().Subject;
             successResult.NotificationSendResponse.Should().BeEquivalentTo(response);
+        }
+
+        [TestMethod]
+        public async Task NotificationOutcome_NotificationServiceThrows_HttpRequestException_Returns_BadGatewayResult()
+        {
+            // Arrange
+            _mockNotificationClient
+                .Setup(x => x.GetNotificationOutcomeDetails("notificationId", "hubPath"))
+                .ThrowsAsync(new HttpRequestException("Failed request"));
+
+            // Act
+            var result = await _systemUnderTest.GetNotificationOutcomeDetails("notificationId", "hubPath");
+
+            // Assert
+            _mockNotificationClient.VerifyAll();
+
+            result.Should().BeOfType<NotificationOutcomeResult.BadGateway>();
+        }
+
+        [TestMethod]
+        public async Task NotificationOutcome_NotificationServiceThrows_HubNotFound_Returns_NotFoundResult()
+        {
+            // Arrange
+            _mockNotificationClient
+                .Setup(x => x.GetNotificationOutcomeDetails("notificationId", "hubPath"))
+                .ThrowsAsync(new NotificationHubNotFoundException("Hub not found"));
+
+            // Act
+            var result = await _systemUnderTest.GetNotificationOutcomeDetails("notificationId", "hubPath");
+
+            // Assert
+            _mockNotificationClient.VerifyAll();
+
+            result.Should().BeOfType<NotificationOutcomeResult.NotFound>();
+        }
+
+        [TestMethod]
+        public async Task NotificationOutcome_NotificationServiceThrows_MessagingEntityNotFoundException_Returns_NotFoundResult()
+        {
+            // Arrange
+            _mockNotificationClient
+                .Setup(x => x.GetNotificationOutcomeDetails("notificationId", "hubPath"))
+                .ThrowsAsync(MessagingExceptionFactory.CreateMessagingEntityNotFoundException());
+
+            // Act
+            var result = await _systemUnderTest.GetNotificationOutcomeDetails("notificationId", "hubPath");
+
+            // Assert
+            _mockNotificationClient.VerifyAll();
+
+            result.Should().BeOfType<NotificationOutcomeResult.NotFound>();
+        }
+        
+        [TestMethod]
+        public async Task NotificationOutcome_NotificationServiceThrows_MessagingException_Returns_BadGatewayResult()
+        {
+            // Arrange
+            _mockNotificationClient
+                .Setup(x => x.GetNotificationOutcomeDetails("notificationId", "hubPath"))
+                .ThrowsAsync(MessagingExceptionFactory.CreateMessagingException());
+
+            // Act
+            var result = await _systemUnderTest.GetNotificationOutcomeDetails("notificationId", "hubPath");
+
+            // Assert
+            _mockNotificationClient.VerifyAll();
+
+            result.Should().BeOfType<NotificationOutcomeResult.BadGateway>();
+        }
+        
+        [TestMethod]
+        public async Task NotificationOutcome_NotificationServiceThrows_Exception_Generic_CatchBlock_Handler_Returns_InternalServerError()
+        {
+            // Arrange
+            _mockNotificationClient
+                .Setup(x => x.GetNotificationOutcomeDetails("notificationId", "hubPath"))
+                .ThrowsAsync(new AggregateException());
+
+            // Act
+            var result = await _systemUnderTest.GetNotificationOutcomeDetails("notificationId", "hubPath");
+
+            // Assert
+            _mockNotificationClient.VerifyAll();
+
+            result.Should().BeOfType<NotificationOutcomeResult.InternalServerError>();
+        }
+
+        [TestMethod]
+        public async Task NotificationOutcome_NotificationService_Success()
+        {
+            // Arrange
+            var expectedNotificationOutcomeResponse = new NotificationOutcomeResponse
+            {
+                State = "Completed",
+                EndTime = DateTime.UtcNow.AddMinutes(2),
+                EnqueueTime = DateTime.UtcNow.AddHours(-1),
+                StartTime = DateTime.UtcNow.AddMinutes(1),
+                PnsErrorDetailsUri = "ErrorDetailsUri",
+                PlatformOutcomes = new List<PlatformOutcome>
+                {
+                    new PlatformOutcome { Count = 1, Outcome = "Success", Platform = "iOS" },
+                    new PlatformOutcome { Count = 1, Outcome = "Skipped", Platform = "iOS" },
+                    new PlatformOutcome { Count = 2, Outcome = "ExpiredChannel", Platform = "Android" },
+                    new PlatformOutcome { Count = 2, Outcome = "BadChannel", Platform = "Android" }
+                }
+            };
+
+            _mockNotificationClient
+                .Setup(x => x.GetNotificationOutcomeDetails("notificationId", "hubPath"))
+                .ReturnsAsync(expectedNotificationOutcomeResponse);
+
+            // Act
+            var result = await _systemUnderTest.GetNotificationOutcomeDetails("notificationId", "hubPath");
+
+            // Assert
+            _mockNotificationClient.VerifyAll();
+            result.Should().BeOfType<NotificationOutcomeResult.Success>();
+            var successResult = result.Should().BeOfType<NotificationOutcomeResult.Success>().Subject;
+            successResult.NotificationOutcomeResponse.Should().BeEquivalentTo(expectedNotificationOutcomeResponse);
         }
     }
 }

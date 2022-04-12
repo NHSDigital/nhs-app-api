@@ -2,6 +2,8 @@ package worker
 
 object WorkerPaths {
     const val userPlaceholder = "<user>"
+    const val notificationIdPlaceholder="<notificationId>";
+    const val hubPathPlaceholder="<hubPath>";
     const val patientIm1ConnectionV2 = "/v2/patient/im1connection"
     const val patientIm1ConnectionV1 = "/v1/patient/im1connection"
     const val sessionConnection = "/v1/session"
@@ -29,4 +31,6 @@ object WorkerPaths {
     const val configurationV2 = "/v2/configuration"
     const val clientLogger = "/v1/api/log"
     const val healthReady = "/health/ready"
+    const val notificationOutComes = "/v1/api/users/devices/notifications/" +
+                                    "$notificationIdPlaceholder?hubPath=$hubPathPlaceholder"
 }

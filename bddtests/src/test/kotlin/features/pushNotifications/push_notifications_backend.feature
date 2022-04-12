@@ -133,3 +133,22 @@ Feature: Push Notifications Backend
     Given I am an api user wishing to send a notification to a given Nhs Login Id
     And I send a malformed notification
     Then I receive a "Bad Request" error
+
+  Scenario: An api user retrieving notification outcome details using invalid hub path will receive a 400
+    Given  I am api user trying to get the notification outcome details using invalid hub path
+    Then I receive a "Bad Request" error
+
+  Scenario: An api user retrieving notification outcome details using non existent hub path will receive a 404
+    Given  I am api user trying to get the notification outcome details using non existent hub path
+    Then I receive an "Not Found" error
+
+  Scenario: An api user retrieving notification outcome details using non existent notification id will receive a 404
+    Given  I have a valid hub path
+    And  I am api user trying to get the notification outcome details using an non existent notification id
+    Then I receive an "Not Found" error
+
+  Scenario: An api user can retrieve notification outcome details
+    Given I am api user trying to send a notification to a given Nhs Login Id
+    And I am api user trying to get the notification outcome details
+    Then I receive an "OK" success code
+    And I receive a response with outcome details

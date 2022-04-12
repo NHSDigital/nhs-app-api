@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import config.Config
 import org.apache.http.HttpResponse
 import org.apache.http.client.utils.URIBuilder
+import worker.models.pushNotifications.NotificationOutComeResponse
 import worker.models.pushNotifications.PushNotificationResponse
 import worker.models.userDevices.NotificationSendRequest
 import worker.models.userDevices.RegisterUserDevicesRequest
@@ -63,8 +64,23 @@ class WorkerClientUserDevices(val config: Config, val sender: WorkerClientSender
         return httpPost.sendAndGetResult(sender, gson, PushNotificationResponse::class.java)
     }
 
+    fun getNotificationOutComeDetails(notificationId: String, hubPath: String,
+                                      includeApiKey:Boolean) :NotificationOutComeResponse?
+    {
+        val uriBuilder = URIBuilder(notificationOutComeUri(notificationId,hubPath))
+        val httpGet = RequestBuilder.get(uriBuilder.build().toString())
+                .addExternalSystemApiKey(includeApiKey)
+        return httpGet.sendAndGetResult(sender,gson, NotificationOutComeResponse::class.java)
+    }
+
     private fun uri(userIdentifier: String): String {
         return config.apiBackendUrl +
                 WorkerPaths.userDevices.replace(WorkerPaths.userPlaceholder, userIdentifier)
+    }
+
+    private fun notificationOutComeUri(notificationId: String,hubPath: String) :String {
+        return config.apiBackendUrl +
+                WorkerPaths.notificationOutComes.replace(WorkerPaths.notificationIdPlaceholder, notificationId)
+                        .replace(WorkerPaths.hubPathPlaceholder, hubPath)
     }
 }

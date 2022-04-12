@@ -5981,12 +5981,74 @@
                       type: "string"
                     scheduled: 
                       type: "boolean"
-                    hubPath:
+                    hubPath: 
                       type: "string"
           400: 
             description: "Bad request. Supplied request is invalid."
           409: 
             description: "Conflict. Request could not be completed due to a conflict with the current state of the target resource."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "An unexpected error occurred processing the request."
+    /v1/api/users/devices/notifications/{notificationId}: 
+      get: 
+        tags: 
+          - "notifications"
+        summary: "Retrieves notification outcome details for given notification id"
+        description: "Gets detailed notification outcome details"
+        parameters: 
+          - 
+            in: "path"
+            name: "notificationId"
+            required: true
+            description: "Unique identifier of a notification"
+            schema: 
+              type: "string"
+          - 
+            in: "query"
+            name: "hubPath"
+            required: true
+            description: "The path of notification hub to query for outcome details"
+            schema: 
+              type: "string"
+        responses: 
+          200: 
+            description: "Successfully retrieved notification outcome details"
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  properties: 
+                    state: 
+                      type: "string"
+                    enqueueTime: 
+                      type: "string"
+                      format: "date-time"
+                    startTime: 
+                      type: "string"
+                      format: "date-time"
+                    endTime: 
+                      type: "string"
+                      format: "date-time"
+                    pnsErrorDetailsUri: 
+                      type: "string"
+                    platformOutcomes: 
+                      type: "array"
+                      description: "Array of Platform outcomes"
+                      items: 
+                        type: "object"
+                        properties: 
+                          platform: 
+                            type: "string"
+                          outcome: 
+                            type: "string"
+                          count: 
+                            type: "integer"
+          400: 
+            description: "Bad request. Supplied request is invalid."
+          404: 
+            description: "Not found. Requested resource is not found."
           500: 
             description: "An unexpected error occurred processing the request."
           502: 

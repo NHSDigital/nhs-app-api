@@ -89,6 +89,8 @@ paths:
     $ref: ./nhsonline.users.yaml#/paths/~1users~1{nhsLoginId}~1devices~1registrations
   /v1/api/users/{nhsLoginId}/devices/notifications:
     $ref: ./nhsonline.users.yaml#/paths/~1users~1{nhsLoginId}~1devices~1notifications
+  /v1/api/users/devices/notifications/{notificationId}:
+    $ref: ./nhsonline.users.yaml#/paths/~1users~1devices~1notifications~1{notificationId}
   /v1/api/users/me/messages:
     $ref: ./nhsonline.messages.yaml#/paths/~1users~1me~1messages
   /v1/api/users/me/messages/{messageId}:

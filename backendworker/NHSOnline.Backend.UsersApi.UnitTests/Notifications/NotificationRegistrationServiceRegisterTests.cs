@@ -101,7 +101,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             // Arrange
             _mockNotificationClient
                 .Setup(x => x.CreateInstallation(_installation, null))
-                .Throws(MessagingExceptionFactory.Create());
+                .Throws(MessagingExceptionFactory.CreateMessagingException());
 
             // Act
             var result = await _systemUnderTest.Register(_installation);

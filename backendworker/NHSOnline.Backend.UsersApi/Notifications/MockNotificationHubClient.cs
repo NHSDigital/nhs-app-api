@@ -509,7 +509,23 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         public Task<NotificationDetails> GetNotificationOutcomeDetailsAsync(string notificationId)
         {
             SimulateDelay();
-            return Task.FromResult(new NotificationDetails { NotificationId = notificationId });
+            return Task.FromResult(new NotificationDetails 
+            {
+                State = NotificationOutcomeState.Completed,
+                EnqueueTime = DateTime.Now.AddHours(-2),
+                StartTime = DateTime.Now.AddHours(-1),
+                EndTime = DateTime.Now,
+                FcmOutcomeCounts = new NotificationOutcomeCollection()
+                {
+                    {"Success",1},
+                    {"ExpiredChannel",10}
+                },
+                ApnsOutcomeCounts = new NotificationOutcomeCollection()
+                {
+                    {"BadChannel",5},
+                    {"Skipped",2}
+                }
+            });
         }
 
         public Task<NotificationDetails> GetNotificationOutcomeDetailsAsync(string notificationId,

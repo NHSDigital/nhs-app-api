@@ -147,6 +147,21 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             }
         }
 
+        public async Task<NotificationOutcomeResponse> GetNotificationOutcomeDetails(string notificationId, string hubPath)
+        {
+            _logger.LogEnter();
+
+            try
+            {
+                return await _wrapperService.Hub(hubPath).GetNotificationOutcomeDetails(notificationId);
+                
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+        
         private static async Task<NotificationSendResponse> SendNotification(IAzureNotificationHubWrapper wrapper, NotificationRequest request)
         {
             var scheduled = request.ScheduledTime != null;

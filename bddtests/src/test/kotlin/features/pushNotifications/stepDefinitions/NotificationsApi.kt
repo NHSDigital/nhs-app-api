@@ -5,6 +5,7 @@ import org.apache.http.HttpStatus
 import utils.getOrFail
 import utils.set
 import worker.WorkerClient
+import worker.models.pushNotifications.NotificationOutComeResponse
 import worker.models.pushNotifications.PushNotificationResponse
 import worker.models.userDevices.NotificationSendRequest
 import worker.models.userDevices.RegisterUserDevicesRequest
@@ -68,5 +69,14 @@ class NotificationsApi {
             PushNotificationsSerenityHelpers.CREATE_PUSH_NOTIFICATION_RESPONSE.set(response)
             return response
         }
+
+        fun getNotificationOutComeDetails(notificationId: String, hubPath: String) : NotificationOutComeResponse? {
+            val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .userDevices
+                    .getNotificationOutComeDetails(notificationId, hubPath,true)
+            PushNotificationsSerenityHelpers.GET_NOTIFICATION_OUTCOME_RESPONSE.set(response)
+            return response
+        }
+
     }
 }

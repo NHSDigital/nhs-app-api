@@ -1,6 +1,10 @@
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.NotificationHubs;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 using NHSOnline.Backend.UsersApi.Notifications.Extensions;
 using NHSOnline.Backend.UsersApi.Notifications.Models;
 
@@ -10,16 +14,11 @@ namespace NHSOnline.Backend.UsersApi.Notifications
     {
         private const int InstallationRecordMaxResults = 100;
 
+        private readonly string _description;
         private readonly INotificationHubClient _hubClient;
-
         private readonly IInstallationFactory _installationFactory;
         private readonly INhsLoginIdService _readService;
         private readonly INhsLoginIdService _writeService;
-
-        private readonly string _description;
-
-        public int Generation { get; }
-        public string Path { get; }
 
         public AzureNotificationHubWrapper(
             AzureNotificationHubConfiguration configuration,
@@ -43,9 +42,19 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             Path = configuration.NotificationHubPath;
         }
 
-        public bool CanReadFor(string nhsLoginId) => _readService.HandlesNhsLoginId(nhsLoginId);
-        public bool CanWriteFor(string nhsLoginId) => _writeService.HandlesNhsLoginId(nhsLoginId);
+        public int Generation { get; }
+        public string Path { get; }
 
+        public bool CanReadFor(string nhsLoginId)
+        {
+            return _readService.HandlesNhsLoginId(nhsLoginId);
+        }
+
+        public bool CanWriteFor(string nhsLoginId)
+        {
+            return _writeService.HandlesNhsLoginId(nhsLoginId);
+        }
+        
         public async Task<string> CreateInstallation(InstallationRequest request)
         {
             var installation = _installationFactory.Create(request);
@@ -55,9 +64,15 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             return installation.InstallationId;
         }
 
-        public Task DeleteInstallation(string installationId) => _hubClient.DeleteInstallationAsync(installationId);
+        public Task DeleteInstallation(string installationId)
+        {
+            return _hubClient.DeleteInstallationAsync(installationId);
+        }
 
-        public Task<bool> InstallationExists(string installationId) => _hubClient.InstallationExistsAsync(installationId);
+        public Task<bool> InstallationExists(string installationId)
+        {
+            return _hubClient.InstallationExistsAsync(installationId);
+        }
 
         public async Task<string[]> GetInstallationIdsByNhsLoginId(string nhsLoginId)
         {
@@ -84,11 +99,48 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             var notification = new TemplateNotification(properties);
 
             Debug.Assert(request.ScheduledTime != null, "request.ScheduledTime != null");
-            var notificationOutcome = await _hubClient.ScheduleNotificationAsync(notification, request.ScheduledTime.Value, tag);
+            var notificationOutcome =
+                await _hubClient.ScheduleNotificationAsync(notification, request.ScheduledTime.Value, tag);
 
             return notificationOutcome.ScheduledNotificationId;
         }
 
-        public override string ToString() => _description;
+        public async Task<NotificationOutcomeResponse> GetNotificationOutcomeDetails(string notificationId)
+        {
+            var notificationOutcome = await _hubClient.GetNotificationOutcomeDetailsAsync(notificationId);
+
+            var iosPushNotificationOutcomeCounts =
+                notificationOutcome.ApnsOutcomeCounts?.Select(keyValuePair => new PlatformOutcome
+                {
+                    Outcome = keyValuePair.Key,
+                    Count = keyValuePair.Value,
+                    Platform = Constants.SupportedDeviceNames.iOS
+                }) ??
+                new List<PlatformOutcome>();
+
+            var androidPushNotificationOutcomeCounts =
+                notificationOutcome.FcmOutcomeCounts?.Select(keyValuePair => new PlatformOutcome
+                {
+                    Outcome = keyValuePair.Key,
+                    Count = keyValuePair.Value,
+                    Platform = Constants.SupportedDeviceNames.Android
+                }) ??
+                new List<PlatformOutcome>();
+
+            return new NotificationOutcomeResponse
+            {
+                State = notificationOutcome.State.ToString(),
+                EnqueueTime = notificationOutcome.EnqueueTime,
+                StartTime = notificationOutcome.StartTime,
+                EndTime = notificationOutcome.EndTime,
+                PnsErrorDetailsUri = notificationOutcome.PnsErrorDetailsUri,
+                PlatformOutcomes = iosPushNotificationOutcomeCounts.Concat(androidPushNotificationOutcomeCounts)
+            };
+        }
+
+        public override string ToString()
+        {
+            return _description;
+        }
     }
 }

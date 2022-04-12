@@ -140,6 +140,40 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
         "502":
           $ref: '#/components/responses/UnexpectedError'
+  /users/devices/notifications/{notificationId}:
+    get:
+      tags:
+        - notifications
+      summary: Retrieves notification outcome details for given notification id
+      description: Gets detailed notification outcome details
+      parameters:
+        - in: path
+          name: notificationId
+          required: true
+          description: Unique identifier of a notification
+          schema:
+            type: string
+        - in: query
+          name: hubPath
+          required: true
+          description: The path of notification hub to query for outcome details
+          schema:
+              type: string
+      responses:
+        "200":
+          description: Successfully retrieved notification outcome details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotificationOutcomeResponse"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "500":
+          $ref: '#/components/responses/UnexpectedError'
+        "502":
+          $ref: '#/components/responses/UnexpectedError'
   /users/me/devices/prompt/metrics:
     post:
       security:
@@ -221,6 +255,8 @@ components:
       description: An unexpected error occurred processing the request.
     BadRequest:
       description: Bad request. Supplied request is invalid.
+    NotFound:
+        description: Not found. Requested resource is not found.
     Conflict:
       description: Conflict. Request could not be completed due to a conflict with the current state of the target resource.
   schemas:
@@ -281,6 +317,36 @@ components:
           type: boolean
         hubPath:
           type: string
+    NotificationOutcomeResponse:
+      type: object
+      properties:
+        state:
+          type: string
+        enqueueTime:
+          type: string
+          format: date-time
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        pnsErrorDetailsUri:
+          type: string
+        platformOutcomes:
+          type: array
+          description: Array of Platform outcomes
+          items:
+            $ref: "#/components/schemas/PlatformOutcome"
+    PlatformOutcome:
+      type: object
+      properties:
+        platform:
+          type: string
+        outcome:
+          type: string
+        count:
+          type: integer
     NotificationsPromptData:
       type: object
       required:
