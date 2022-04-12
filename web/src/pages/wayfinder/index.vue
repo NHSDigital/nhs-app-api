@@ -46,7 +46,7 @@
                 :referred-by="referral.referrerOrganisation"/>
 
               <referral-review-overdue-card
-                v-if="isReviewOverdue(referral)"
+                v-else-if="isReviewOverdue(referral)"
                 :requested-speciality="referral.serviceSpeciality"
                 :referred-date="referral.referredDateTime"
                 :review-date="referral.reviewDueDate"
@@ -54,14 +54,14 @@
                 :referred-by="referral.referrerOrganisation"/>
 
               <referral-ready-to-rebook-card
-                v-if="isBookableWasCancelled(referral)"
+                v-else-if="isBookableWasCancelled(referral)"
                 :requested-speciality="referral.serviceSpeciality"
                 :referred-date="referral.referredDateTime"
                 :booking-reference="referral.referralId"
                 :referred-by="referral.referrerOrganisation"/>
 
               <referral-bookable-card
-                v-if="isBookable(referral)"
+                v-else-if="isBookable(referral)"
                 :requested-speciality="referral.serviceSpeciality"
                 :referred-date="referral.referredDateTime"
                 :booking-reference="referral.referralId"
@@ -226,7 +226,8 @@ export default {
   },
   methods: {
     isInReview(referral) {
-      return referral.status === 'InReview' && isSameOrAfter(referral.reviewDueDate);
+      return referral.status === 'InReview'
+        && (referral.reviewDueDate === null || isSameOrAfter(referral.reviewDueDate));
     },
     isBookable(referral) {
       return referral.status === 'Bookable';
