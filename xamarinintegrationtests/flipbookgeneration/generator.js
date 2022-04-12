@@ -14,7 +14,7 @@ var outputHtml = `<html>
         <style>
             .break:not(:last-of-type){ break-after: page;}
             body {
-                font-family: Arial;
+                font-family: Arial, Helvetica, sans-serif !important;
                 font-size: 15px;
             }
         </style>
