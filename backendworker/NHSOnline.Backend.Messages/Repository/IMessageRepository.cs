@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
-using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
+using NHSOnline.Backend.Messages.Areas.Messages.Models;
 using NHSOnline.Backend.Repository;
 
-namespace NHSOnline.Backend.MessagesApi.Repository
+namespace NHSOnline.Backend.Messages.Repository
 {
     public interface IMessageRepository
     {

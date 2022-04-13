@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.MessagesApi.Areas.Messages;
-using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
+using NHSOnline.Backend.Messages.Areas.Messages;
+using NHSOnline.Backend.Messages.Areas.Messages.Models;
 
-namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
+namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
 {
     [TestClass]
     public class MessagesValidationServiceTests
@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         private string _userMessageId;
         private JsonPatchDocument<Message> _jsonPatchDoc;
         private Operation<Message> _validPatchOperation;
-        
+
         private AddMessageRequest _validAddMessageRequest;
         private string _nhsLoginId;
 
@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             _validAddMessageRequest = _fixture.Create<AddMessageRequest>();
             _nhsLoginId = _fixture.Create<string>();
         }
-        
+
         [TestMethod]
         public void IsPatchRequestValid_ValidData_ReturnsTrue()
         {
@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Assert
             result.Should().BeTrue();
         }
-        
+
         [TestMethod]
         public void IsPatchRequestValid_EmptyJsonPatchOperations_ReturnsFalse()
         {
@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Assert
             result.Should().BeFalse();
         }
-        
+
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("            ")]
@@ -68,14 +68,14 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Arrange
             _validPatchOperation.op = op;
             _jsonPatchDoc.Operations.Add(_validPatchOperation);
-            
+
             // Act
             var result = _systemUnderTest.IsPatchRequestValid(_jsonPatchDoc, _userMessageId);
 
             // Assert
             result.Should().BeFalse();
         }
-        
+
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("            ")]
@@ -85,17 +85,17 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Arrange
             var invalidPatchOperation = _validPatchOperation;
             invalidPatchOperation.op = op;
-            
+
             _jsonPatchDoc.Operations.Add(_validPatchOperation);
             _jsonPatchDoc.Operations.Add(invalidPatchOperation);
-            
+
             // Act
             var result = _systemUnderTest.IsPatchRequestValid(_jsonPatchDoc, _userMessageId);
 
             // Assert
             result.Should().BeFalse();
         }
-        
+
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("            ")]
@@ -121,7 +121,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Assert
             result.Should().BeTrue();
         }
-        
+
         [TestMethod]
         public void IsMessageRequestValid_NullAddMessageRequest_ReturnsFalse()
         {
@@ -131,7 +131,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Assert
             result.Should().BeFalse();
         }
-        
+
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("            ")]
@@ -140,14 +140,14 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         {
             // Arrange
             _validAddMessageRequest.Sender = messageSender;
-            
+
             // Act
             var result = _systemUnderTest.IsMessageRequestValid(_validAddMessageRequest, _nhsLoginId);
 
             // Assert
             result.Should().BeFalse();
         }
-        
+
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("            ")]
@@ -156,14 +156,14 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         {
             // Arrange
             _validAddMessageRequest.Body = messageBody;
-            
+
             // Act
             var result = _systemUnderTest.IsMessageRequestValid(_validAddMessageRequest, _nhsLoginId);
 
             // Assert
             result.Should().BeFalse();
         }
-        
+
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("            ")]
@@ -176,7 +176,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Assert
             result.Should().BeFalse();
         }
-        
+
         [DataTestMethod]
         [DataRow("something","something", null)]
         [DataRow("something",null, null)]
@@ -190,7 +190,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             //Arrange
             _validAddMessageRequest.Body = body;
             _validAddMessageRequest.Sender = sender;
-            
+
             // Act
             var result = _systemUnderTest.IsMessageRequestValid(_validAddMessageRequest, nhsLoginId);
 

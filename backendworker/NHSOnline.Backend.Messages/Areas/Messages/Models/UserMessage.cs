@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.IdGenerators;
 using NHSOnline.Backend.Repository;
 
-namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
+namespace NHSOnline.Backend.Messages.Areas.Messages.Models
 {
     [BsonIgnoreExtraElements]
     public class UserMessage : RepositoryRecord

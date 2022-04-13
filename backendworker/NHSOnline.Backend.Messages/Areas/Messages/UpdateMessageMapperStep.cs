@@ -4,11 +4,11 @@ using System.Linq;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
+using NHSOnline.Backend.Messages.Areas.Messages.Models;
 using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
 
-namespace NHSOnline.Backend.MessagesApi.Areas.Messages
+namespace NHSOnline.Backend.Messages.Areas.Messages
 {
     internal sealed class UpdateMessageMapperStep
     {

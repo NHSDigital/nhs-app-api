@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>NHSOnline.Backend.MessagesApi.UnitTests</RootNamespace>
+    <RootNamespace>NHSOnline.Backend.Messages.UnitTests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

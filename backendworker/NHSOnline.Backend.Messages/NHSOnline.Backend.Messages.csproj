@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>NHSOnline.Backend.MessagesApi</RootNamespace>
+    <RootNamespace>NHSOnline.Backend.Messages</RootNamespace>
     <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
   </PropertyGroup>
 

@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.LoggerApi.Areas.Logging.Models;
+using NHSOnline.Backend.Logger.Areas.Logging.Models;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Logging

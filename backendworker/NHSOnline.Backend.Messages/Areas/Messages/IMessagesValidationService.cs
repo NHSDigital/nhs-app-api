@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.JsonPatch;
-using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
+using NHSOnline.Backend.Messages.Areas.Messages.Models;
 
-namespace NHSOnline.Backend.MessagesApi.Areas.Messages
+namespace NHSOnline.Backend.Messages.Areas.Messages
 {
     public interface IMessagesValidationService
     {

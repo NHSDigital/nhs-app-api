@@ -1,6 +1,6 @@
-using NHSOnline.Backend.LoggerApi.Areas.Logging.Models;
+using NHSOnline.Backend.Logger.Areas.Logging.Models;
 
-namespace NHSOnline.Backend.LoggerApi.Logging
+namespace NHSOnline.Backend.Logger.Logging
 {
     public interface ILoggingService
     {

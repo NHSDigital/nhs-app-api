@@ -1,9 +1,9 @@
 using System.Linq;
-using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
+using NHSOnline.Backend.Messages.Areas.Messages.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Repository;
 
-namespace NHSOnline.Backend.MessagesApi.Areas.Messages
+namespace NHSOnline.Backend.Messages.Areas.Messages
 {
     internal class RepositoryFindMessageResultVisitor : IRepositoryFindResultVisitor<UserMessage, MessagesResult>
     {

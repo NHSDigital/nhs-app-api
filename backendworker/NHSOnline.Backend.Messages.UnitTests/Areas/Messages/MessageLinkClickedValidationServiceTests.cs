@@ -1,10 +1,10 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.MessagesApi.Areas.Messages;
-using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
+using NHSOnline.Backend.Messages.Areas.Messages;
+using NHSOnline.Backend.Messages.Areas.Messages.Models;
 
-namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
+namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
 {
     [TestClass]
     public class MessageLinkClickedValidationServiceTests

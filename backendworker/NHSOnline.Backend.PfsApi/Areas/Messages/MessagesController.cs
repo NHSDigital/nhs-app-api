@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -10,8 +9,8 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.AspNet.ApiKey;
 using NHSOnline.Backend.Auth.CitizenId.Models;
-using NHSOnline.Backend.MessagesApi.Areas.Messages;
-using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
+using NHSOnline.Backend.Messages.Areas.Messages;
+using NHSOnline.Backend.Messages.Areas.Messages.Models;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Metrics.EventHub;
 using NHSOnline.Backend.Support;

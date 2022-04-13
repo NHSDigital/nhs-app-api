@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.MessagesApi.Areas.Messages;
-using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
+using NHSOnline.Backend.Messages.Areas.Messages;
+using NHSOnline.Backend.Messages.Areas.Messages.Models;
 using NHSOnline.Backend.Metrics.EventHub;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;

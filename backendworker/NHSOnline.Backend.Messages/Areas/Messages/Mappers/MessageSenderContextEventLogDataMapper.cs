@@ -1,10 +1,10 @@
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
+using NHSOnline.Backend.Messages.Areas.Messages.Models;
 using NHSOnline.Backend.Metrics.EventHub;
 using NHSOnline.Backend.Support;
 using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 
-namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Mappers
+namespace NHSOnline.Backend.Messages.Areas.Messages.Mappers
 {
     public class MessageSenderContextEventLogDataMapper : IMapper<SenderContext, SenderContextEventLogData>
     {

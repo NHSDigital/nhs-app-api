@@ -1,8 +1,8 @@
 using System.Text.Encodings.Web;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.LoggerApi.Areas.Logging.Models;
+using NHSOnline.Backend.Logger.Areas.Logging.Models;
 
-namespace NHSOnline.Backend.LoggerApi.Logging
+namespace NHSOnline.Backend.Logger.Logging
 {
     public class LoggingService : ILoggingService
     {

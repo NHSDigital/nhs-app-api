@@ -4,7 +4,7 @@ using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Settings;
 
-namespace NHSOnline.Backend.MessagesApi
+namespace NHSOnline.Backend.Messages
 {
     public class MessagesRepositoryConfiguration : IRepositoryConfiguration
     {

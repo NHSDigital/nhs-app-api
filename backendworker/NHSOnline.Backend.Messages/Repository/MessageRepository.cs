@@ -2,13 +2,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
-using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
+using NHSOnline.Backend.Messages.Areas.Messages.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Repository;
 using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 
-namespace NHSOnline.Backend.MessagesApi.Repository
+namespace NHSOnline.Backend.Messages.Repository
 {
     public class MessageRepository : IMessageRepository
     {

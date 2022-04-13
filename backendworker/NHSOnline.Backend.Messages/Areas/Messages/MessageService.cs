@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.CitizenId.Models;
-using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
-using NHSOnline.Backend.MessagesApi.Repository;
+using NHSOnline.Backend.Messages.Areas.Messages.Models;
+using NHSOnline.Backend.Messages.Repository;
 using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
-namespace NHSOnline.Backend.MessagesApi.Areas.Messages
+namespace NHSOnline.Backend.Messages.Areas.Messages
 {
     public class MessageService : IMessageService
     {

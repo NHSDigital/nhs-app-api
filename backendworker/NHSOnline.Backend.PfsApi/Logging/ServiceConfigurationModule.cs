@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NHSOnline.Backend.LoggerApi.Logging;
+using NHSOnline.Backend.Logger.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Logging
 {

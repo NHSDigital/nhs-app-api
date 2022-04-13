@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
+using NHSOnline.Backend.Messages.Areas.Messages.Models;
 using NHSOnline.Backend.Support;
 using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 
-namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Mappers
+namespace NHSOnline.Backend.Messages.Areas.Messages.Mappers
 {
     public class MessagesResponseMapper :
         IMapper<List<UserMessage>, MessagesResponse>,

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
-using NHSOnline.Backend.MessagesApi.Repository;
+using NHSOnline.Backend.Messages.Areas.Messages.Models;
+using NHSOnline.Backend.Messages.Repository;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Metrics.EventHub;
 using NHSOnline.Backend.Repository;
@@ -12,7 +12,7 @@ using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Hasher;
 using NHSOnline.Backend.Support.Logging;
 
-namespace NHSOnline.Backend.MessagesApi.Areas.Messages
+namespace NHSOnline.Backend.Messages.Areas.Messages
 {
     public class MessageLinkClickedService : IMessageLinkClickedService
     {

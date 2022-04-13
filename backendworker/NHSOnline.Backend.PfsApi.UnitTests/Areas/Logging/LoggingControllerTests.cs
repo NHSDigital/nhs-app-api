@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.LoggerApi.Areas.Logging.Models;
-using NHSOnline.Backend.LoggerApi.Logging;
+using NHSOnline.Backend.Logger.Areas.Logging.Models;
+using NHSOnline.Backend.Logger.Logging;
 using NHSOnline.Backend.PfsApi.Areas.Logging;
 
-namespace NHSOnline.Backend.LoggerApi.UnitTests.Areas.Logging
+namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Logging
 {
     [TestClass]
     public sealed class LoggingControllerTests : IDisposable

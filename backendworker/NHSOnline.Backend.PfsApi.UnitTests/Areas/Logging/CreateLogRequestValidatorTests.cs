@@ -3,10 +3,10 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.LoggerApi.Areas.Logging.Models;
+using NHSOnline.Backend.Logger.Areas.Logging.Models;
 using NHSOnline.Backend.PfsApi.Areas.Logging;
 
-namespace NHSOnline.Backend.LoggerApi.UnitTests.Areas.Logging
+namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Logging
 {
     [TestClass]
     public class CreateLogRequestValidatorTests

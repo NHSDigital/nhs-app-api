@@ -5,16 +5,16 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Bson;
 using Moq;
-using NHSOnline.Backend.MessagesApi.Areas.Messages;
-using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
-using NHSOnline.Backend.MessagesApi.Repository;
+using NHSOnline.Backend.Messages.Areas.Messages;
+using NHSOnline.Backend.Messages.Areas.Messages.Models;
+using NHSOnline.Backend.Messages.Repository;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Metrics.EventHub;
 using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Hasher;
 
-namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
+namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
 {
     [TestClass]
     public class MessageLinkClickedServiceTests

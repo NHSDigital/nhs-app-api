@@ -2,11 +2,11 @@ using System;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.LoggerApi.Areas.Logging.Models;
-using NHSOnline.Backend.LoggerApi.Logging;
+using NHSOnline.Backend.Logger.Areas.Logging.Models;
+using NHSOnline.Backend.Logger.Logging;
 using UnitTestHelper;
 
-namespace NHSOnline.Backend.LoggerApi.UnitTests.Logging
+namespace NHSOnline.Backend.Logger.UnitTests.Logging
 {
     [TestClass]
     public class LoggingServiceTests

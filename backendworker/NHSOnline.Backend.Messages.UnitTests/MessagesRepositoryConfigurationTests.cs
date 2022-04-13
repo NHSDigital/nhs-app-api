@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Support.Settings;
 
-namespace NHSOnline.Backend.MessagesApi.UnitTests
+namespace NHSOnline.Backend.Messages.UnitTests
 {
     [TestClass]
     public class MessagesRepositoryConfigurationTests

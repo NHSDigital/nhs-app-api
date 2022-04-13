@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
+namespace NHSOnline.Backend.Messages.Areas.Messages.Models
 {
     public class MessagesResponse
     {

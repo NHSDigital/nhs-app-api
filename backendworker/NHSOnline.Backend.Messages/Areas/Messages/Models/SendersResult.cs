@@ -1,4 +1,4 @@
-namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
+namespace NHSOnline.Backend.Messages.Areas.Messages.Models
 {
     public abstract class SendersResult
     {

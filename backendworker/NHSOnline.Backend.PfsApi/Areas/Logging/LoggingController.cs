@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.LoggerApi.Areas.Logging.Models;
-using NHSOnline.Backend.LoggerApi.Logging;
+using NHSOnline.Backend.Logger.Areas.Logging.Models;
+using NHSOnline.Backend.Logger.Logging;
 using NHSOnline.Backend.Support.AspNet;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Logging

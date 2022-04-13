@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
+using NHSOnline.Backend.Messages.Areas.Messages.Models;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Metrics.EventHub;
 using NHSOnline.Backend.Support;
 
-namespace NHSOnline.Backend.MessagesApi.Areas.Messages
+namespace NHSOnline.Backend.Messages.Areas.Messages
 {
     public class MessageLogPatchResultVisitor : IMessagePatchResultVisitor<Task>
     {

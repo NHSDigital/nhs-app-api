@@ -1,6 +1,6 @@
 using System;
 
-namespace NHSOnline.Backend.LoggerApi.Areas.Logging.Models
+namespace NHSOnline.Backend.Logger.Areas.Logging.Models
 {
     public class CreateLogRequest
     {

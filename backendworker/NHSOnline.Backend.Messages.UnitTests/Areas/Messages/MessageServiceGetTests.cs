@@ -7,14 +7,14 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auth.CitizenId.Models;
-using NHSOnline.Backend.MessagesApi.Areas.Messages;
-using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
-using NHSOnline.Backend.MessagesApi.Repository;
+using NHSOnline.Backend.Messages.Areas.Messages;
+using NHSOnline.Backend.Messages.Areas.Messages.Models;
+using NHSOnline.Backend.Messages.Repository;
 using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
 using UnitTestHelper;
 
-namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
+namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
 {
     [TestClass]
     public class MessageServiceGetTests

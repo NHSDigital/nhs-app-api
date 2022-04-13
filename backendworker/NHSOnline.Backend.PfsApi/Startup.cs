@@ -80,7 +80,6 @@ namespace NHSOnline.Backend.PfsApi
 
             services.AddCors();
 
-            // From MessagesApi.Startup.cs
             services.SetupApiKeys(Configuration, _logger);
             services.SetupHttpHandlers();
 

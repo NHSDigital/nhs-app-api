@@ -6,11 +6,11 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
-using NHSOnline.Backend.MessagesApi.Repository;
+using NHSOnline.Backend.Messages.Areas.Messages.Models;
+using NHSOnline.Backend.Messages.Repository;
 using NHSOnline.Backend.Repository;
 
-namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
+namespace NHSOnline.Backend.Messages.UnitTests.Repository
 {
     [TestClass]
     public class MessageRepositoryTests
