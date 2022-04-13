@@ -52,6 +52,9 @@ validate_secret browserstack_accesskey
 validate_secret browserstack_playstore_user_pass
 validate_secret gp_lookup_api_key
 validate_secret nhsapp_api_key
+validate_secret nhs_app_apim.pfx
+validate_secret nhs_app_apim.password
+validate_secret nhs_app_apim_key
 validate_secret organ_donation_cert.password
 validate_secret organ_donation_cert.pfx
 validate_secret session_encryption_key

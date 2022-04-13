@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support.AspNet.Filters;
+using NHSOnline.Backend.PfsApi.NHSApim;
 using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.SecondaryCare
@@ -11,20 +12,25 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
     {
         private readonly ISecondaryCareClient _secondaryCareClient;
         private readonly ILogger<SecondaryCareSummaryService> _logger;
+        private readonly INhsApimClient _nhsApimClient;
 
         public SecondaryCareSummaryService(
             ISecondaryCareClient secondaryCareClient,
-            ILogger<SecondaryCareSummaryService> logger)
+            ILogger<SecondaryCareSummaryService> logger,
+            INhsApimClient nhsApimClient)
         {
             _secondaryCareClient = secondaryCareClient;
             _logger = logger;
+            _nhsApimClient = nhsApimClient;
         }
 
         public async Task<SecondaryCareSummaryResult> GetSummary(P9UserSession userSession)
         {
             try
             {
-                var summaryResponse = await _secondaryCareClient.GetSummary(userSession);
+                var authResponse = await _nhsApimClient.GetAuthToken();
+
+                var summaryResponse = await _secondaryCareClient.GetSummary(userSession, authResponse.Body.AccessToken);
 
                 if (!summaryResponse.HasSuccessResponse)
                 {

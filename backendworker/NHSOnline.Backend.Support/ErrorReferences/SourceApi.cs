@@ -18,5 +18,6 @@ namespace NHSOnline.Backend.Support
         Fake = 11,
         Messages = 12,
         SecondaryCareAggregator = 13,
+        NhsApim = 14,
     }
 }

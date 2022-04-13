@@ -1,4 +1,5 @@
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.SecondaryCare.Models;
@@ -26,12 +27,13 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
             _logger = logger;
         }
 
-        public async Task<SecondaryCareResponse<SummaryResponse>> GetSummary(P9UserSession userSession)
-            => await Get<SummaryResponse>(SummaryPath, userSession.NhsNumber.RemoveWhiteSpace());
+        public async Task<SecondaryCareResponse<SummaryResponse>> GetSummary(P9UserSession userSession, string accessToken)
+            => await Get<SummaryResponse>(SummaryPath, userSession.NhsNumber.RemoveWhiteSpace(), accessToken);
 
-        private async Task<SecondaryCareResponse<TResponse>> Get<TResponse>(string path, string nhsNumber)
+        private async Task<SecondaryCareResponse<TResponse>> Get<TResponse>(string path, string nhsNumber, string accessToken)
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, path);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             request.Headers.Add(Constants.SecondaryCareConstants.NhsNumberHeader, nhsNumber);
 
             return await SendRequestAndParseResponse<TResponse>(request);

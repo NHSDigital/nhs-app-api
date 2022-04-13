@@ -71,6 +71,8 @@ webVueGlobalObject: false
 gpSessionOnDemandEnabled: true
 organDonationDesktopEnabled: true
 
+nhsAppApimKid: test-1
+
 organDonationIPTrust: "13.73.176.25/32"
 organDonationProtocol: https
 organDonationHostname: nhsbt-apim-dev01.azure-api.net

@@ -8,17 +8,20 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Auth.APIM;
 using NHSOnline.Backend.PfsApi.Areas.SecondaryCare;
+using NHSOnline.Backend.PfsApi.NHSApim;
+using NHSOnline.Backend.PfsApi.NHSApim.Models;
 using NHSOnline.Backend.PfsApi.SecondaryCare;
 using NHSOnline.Backend.PfsApi.SecondaryCare.Models;
 using NHSOnline.Backend.PfsApi.UnitTests.Extensions;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Session;
 using NHSOnline.Backend.Support.Settings;
 using RichardSzalay.MockHttp;
 using UnitTestHelper;
+using DateTime = System.DateTime;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 {
@@ -31,6 +34,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 
         private static string SecondaryCareApiBaseUrl = "http://stubs.local.bitraft.io:8080/fhir/secondary-care/";
         private static readonly string SecondaryCareSummaryUrl = $"{SecondaryCareApiBaseUrl}summary/$evaluate";
+
+        private const string ApimOathBaseUrl = "http://stubs.local.bitraft.io:8080/";
+        private const string ApimOathUrl = "http://stubs.local.bitraft.io:8080/oauth2/token";
+        private const string ApimCertPath = "testPath";
+        private const string ApimCertPass = "testPhrase";
+        private const string ApimKey = "key";
+        private const string ApimKid = "kid";
 
         public SecondaryCareControllerTestContext()
         {
@@ -47,6 +57,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             new PfsApi.SecondaryCare.ServiceConfigurationModule().ConfigureServices(ServiceCollection, Mocks.Configuration.Object);
             new Support.ResponseParsers.ServiceConfigurationModule().ConfigureServices(ServiceCollection, Mocks.Configuration.Object);
             new Support.ServiceConfigurationModule().ConfigureServices(ServiceCollection, Mocks.Configuration.Object);
+            new NHSApim.ServiceConfigurationModule().ConfigureServices(ServiceCollection, Mocks.Configuration.Object);
 
             Mocks.ConfigureServices(ServiceCollection);
             ConfigureHttpServices(ServiceCollection);
@@ -60,7 +71,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         {
             serviceCollection
                 .AddSingleton(typeof(HttpTimeoutHandler<>))
-                .AddSingleton(typeof(HttpRequestIdentificationHandler<>));
+                .AddSingleton(typeof(HttpRequestIdentificationHandler<>))
+                .AddHttpClient<NhsApimHttpClient>()
+                .ConfigurePrimaryHttpMessageHandler<MockHttpMessageHandler>();
 
             serviceCollection
                 .ReplacePrimaryHttpMessageHandler<SecondaryCareHttpClient, MockHttpMessageHandler>();
@@ -70,6 +83,19 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 
         internal void MockSecondaryCareHttpClientGetSummaryReturnsSuccessfulResponseWithData()
         {
+            Mocks.ApimJwtHelper
+                .Setup(x => x.CreateApimJwt(
+                    new Uri(ApimOathUrl),
+                    ApimCertPath,
+                    ApimCertPass,
+                    ApimKey,
+                    ApimKid))
+                .Returns("qwerthygfd");
+
+            Mocks.MockHttpMessageHandler
+                .When(HttpMethod.Post, ApimOathUrl)
+                .Respond("application/json", JsonConvert.SerializeObject(Data.OauthResponse));
+
             Mocks.MockHttpMessageHandler
                 .When(HttpMethod.Get, SecondaryCareSummaryUrl)
                 .WithHeaders(Data.RequestHeaders)
@@ -78,6 +104,19 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 
         internal void MockSecondaryCareHttpClientGetSummaryReturnsUnsuccessfulResponse()
         {
+            Mocks.ApimJwtHelper
+                .Setup(x => x.CreateApimJwt(
+                    new Uri(ApimOathUrl),
+                    ApimCertPath,
+                    ApimCertPass,
+                    ApimKey,
+                    ApimKid))
+                .Returns("qwerthygfd");
+
+            Mocks.MockHttpMessageHandler
+                .When(HttpMethod.Post, ApimOathUrl)
+                .Respond("application/json", JsonConvert.SerializeObject(Data.OauthResponse));
+
             Mocks.MockHttpMessageHandler
                 .When(HttpMethod.Get, SecondaryCareSummaryUrl)
                 .WithHeaders(Data.RequestHeaders)
@@ -86,6 +125,19 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 
         internal void MockSecondaryCareHttpClientGetSummaryTimesOut()
         {
+            Mocks.ApimJwtHelper
+                .Setup(x => x.CreateApimJwt(
+                    new Uri(ApimOathUrl),
+                    ApimCertPath,
+                    ApimCertPass,
+                    ApimKey,
+                    ApimKid))
+                .Returns("qwerthygfd");
+
+            Mocks.MockHttpMessageHandler
+                .When(HttpMethod.Post, ApimOathUrl)
+                .Respond("application/json", JsonConvert.SerializeObject(Data.OauthResponse));
+
             Mocks.MockHttpMessageHandler
                 .When(HttpMethod.Get, SecondaryCareSummaryUrl)
                 .WithHeaders(Data.RequestHeaders)
@@ -169,6 +221,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                     }
                 },
             };
+
+            public ApimAccessToken OauthResponse { get; } = new ApimAccessToken
+            {
+                ExpiresIn = "123",
+                IssuedAt = "123",
+                AccessToken = "qwertyhgfdsaswedrfghgfds",
+                TokenType = "Bearer"
+            };
         }
 
         internal sealed class TestMocks : IDisposable
@@ -186,11 +246,34 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             internal Mock<IHttpTimeoutConfigurationSettings> HttpTimeoutConfigurationSettings { get; }
                 = new Mock<IHttpTimeoutConfigurationSettings>();
 
+            internal Mock<IApimJwtHelper> ApimJwtHelper { get; }
+            = new Mock<IApimJwtHelper>();
+
             public TestMocks()
             {
                 Configuration
                     .SetupGet(x => x["SECONDARY_CARE_BASE_URL"])
                     .Returns(SecondaryCareApiBaseUrl);
+
+                Configuration
+                    .SetupGet(x => x["NHSAPP_APIM_BASE_URL"])
+                    .Returns(ApimOathBaseUrl);
+
+                Configuration
+                    .SetupGet(x => x["NHSAPP_APIM_PFX"])
+                    .Returns(ApimOathBaseUrl);
+
+                Configuration
+                    .SetupGet(x => x["NHSAPP_APIM_PFX_PASSPHRASE"])
+                    .Returns(ApimOathBaseUrl);
+
+                Configuration
+                    .SetupGet(x => x["NHSAPP_APIM_KEY"])
+                    .Returns(ApimOathBaseUrl);
+
+                Configuration
+                    .SetupGet(x => x["NHSAPP_APIM_KID"])
+                    .Returns(ApimOathBaseUrl);
 
                 HttpTimeoutConfigurationSettings
                     .Setup(x => x.DefaultHttpTimeoutSeconds).Returns(10);
@@ -204,6 +287,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                     .AddSingleton(Configuration.Object)
                     .AddSingleton(HttpTimeoutConfigurationSettings.Object)
                     .AddSingleton(MockHttpMessageHandler)
+                    .AddSingleton(ApimJwtHelper.Object)
                     .AddMockLoggers();
             }
 

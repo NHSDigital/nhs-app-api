@@ -5,6 +5,12 @@ secrets:
     file: "./docker/bddtests/secrets/session_encryption_key"
   nhsapp_api_key:
     file: "./docker/bddtests/secrets/nhsapp_api_key"
+  nhsapp_apim_pfx:
+    file: "./docker/stubbed/certs/TestCert.pfx"
+  nhsapp_apim_pfx_passphrase:
+    file: "./docker/stubbed/certs/TestCert.password"
+  nhsapp_apim_key:
+    file: "./docker/bddtests/secrets/nhsapp_apim_key"
   organ_donation_cert:
     file: "./docker/stubbed/certs/TestCert.pfx"
   organ_donation_cert_passphrase:

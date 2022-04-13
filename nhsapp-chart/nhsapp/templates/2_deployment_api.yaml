@@ -261,6 +261,16 @@ spec:
         {{- end }}
         - name: NDOP_SIGNING_KEY
           value: "/mnt/secrets-store/ndopSigningKey"
+        - name: NHSAPP_APIM_PFX
+          value: "/mnt/secrets-store/nhsAppApimPfx"
+        - name: NHSAPP_APIM_KEY 
+          value: "/mnt/secrets-store/nhsAppApimAppKey"
+        - name: NHSAPP_APIM_KID
+        {{- if $.Values.nhsAppApimKid }}
+          value: "{{ $.Values.nhsAppApimKid }}"
+        {{- else }}
+          value: "test-1"
+        {{- end }}
         - name: NDOP_CLAIM_AUDIENCE
           value: "{{ $.Values.ndopClaimAudience }}"
         - name: NDOP_CLAIM_ISSUER
@@ -372,6 +382,8 @@ spec:
           value: "{{ $.Values.sixteenWeeksSlotsEnabled }}"
         - name: SECONDARY_CARE_BASE_URL
           value: "https://stubs-preprod.stubs.nonlive.nhsapp.service.nhs.uk/fhir/secondary-care/"
+        - name: NHSAPP_APIM_BASE_URL
+          value: "https://stubs-preprod.stubs.nonlive.nhsapp.service.nhs.uk/"
         - name: NHSAPP_API_KEY
           valueFrom:
             secretKeyRef:

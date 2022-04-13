@@ -6,11 +6,11 @@ using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.ResponseParsers;
 
-namespace NHSOnline.Backend.PfsApi.SecondaryCare
+namespace NHSOnline.Backend.PfsApi.NHSApim
 {
-    public class SecondaryCareResponse<TBody> : ApiResponse
+    public class NhsApimAuthResponse<TBody> : ApiResponse
     {
-        public SecondaryCareResponse(HttpStatusCode statusCode) : base(statusCode)
+        public NhsApimAuthResponse(HttpStatusCode statusCode) : base(statusCode)
         {
         }
 
@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
 
         public TBody Body { get; private set; }
 
-        public async Task<SecondaryCareResponse<TBody>> Parse(
+        public async Task<NhsApimAuthResponse<TBody>> Parse(
             HttpResponseMessage responseMessage,
             IJsonResponseParser responseParser,
             ILogger logger)
@@ -28,18 +28,18 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
             var stringResponse = await GetStringResponse(
                 responseMessage,
                 logger,
-                "Secondary care request to Aggregator");
+                "Auth request for APIM Aggregator");
 
             return string.IsNullOrEmpty(stringResponse)
                 ? this
                 : ParseResponse(responseParser, logger, stringResponse);
         }
 
-        private SecondaryCareResponse<TBody> ParseResponse(IJsonResponseParser responseParser, ILogger logger, string stringResponse)
+        private NhsApimAuthResponse<TBody> ParseResponse(IJsonResponseParser responseParser, ILogger logger, string stringResponse)
         {
             if (!HasSuccessResponse)
             {
-                logger.LogError("Secondary Care Aggregator returned with error.");
+                logger.LogError("Auth request for APIM Aggregator returned with error");
 
                 return this;
             }

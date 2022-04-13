@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace NHSOnline.Backend.Support
 {
@@ -18,11 +19,18 @@ namespace NHSOnline.Backend.Support
 
         protected abstract bool FormatResponseIfUnsuccessful { get; }
 
-        protected async Task<string> GetStringResponse(HttpResponseMessage responseMessage, ILogger logger)
+        protected async Task<string> GetStringResponse(
+            HttpResponseMessage responseMessage,
+            ILogger logger,
+            string context = "")
         {
             if (!HasSuccessResponse)
             {
-                logger.LogWarning($"Request failed with status code {(int) responseMessage?.StatusCode}");
+                var message = context.IsNullOrEmpty()
+                    ? $"{context} failed with status code {(int) responseMessage?.StatusCode}"
+                    : $"Request failed with status code {(int) responseMessage?.StatusCode}";
+
+                logger.LogWarning(message);
 
                 if (!FormatResponseIfUnsuccessful)
                 {

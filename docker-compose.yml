@@ -11,6 +11,12 @@ secrets:
     file: "~/.nhsonline/secrets/gp_lookup_api_key"
   nhsapp_api_key:
     file: "~/.nhsonline/secrets/nhsapp_api_key"
+  nhsapp_apim_pfx:
+    file: "~/.nhsonline/secrets/nhs_app_apim.pfx"
+  nhsapp_apim_pfx_passphrase:
+    file: "~/.nhsonline/secrets/nhs_app_apim.password"
+  nhsapp_apim_key:
+    file: "~/.nhsonline/secrets/nhs_app_apim_key"
   organ_donation_cert:
     file: "~/.nhsonline/secrets/organ_donation_cert.pfx"
   organ_donation_cert_passphrase:
@@ -111,6 +117,12 @@ services:
           if [ -f "$$COMMS_HUB_EVENT_HUB_CONNECTION_STRING" ]; then
             export COMMS_HUB_EVENT_HUB_CONNECTION_STRING=$$(<$$COMMS_HUB_EVENT_HUB_CONNECTION_STRING)
           fi
+          if [ -f "$$NHSAPP_APIM_PFX_PASSPHRASE" ]; then
+            export NHSAPP_APIM_PFX_PASSPHRASE=$$(<$$NHSAPP_APIM_PFX_PASSPHRASE)
+          fi
+          if [ -f "$$NHSAPP_APIM_KEY" ]; then
+            export NHSAPP_APIM_KEY=$$(<$$NHSAPP_APIM_KEY)
+          fi
           if [ -f "$$AUDIT_EVENT_HUB_CONNECTION_STRING" ]; then
             export AUDIT_EVENT_HUB_CONNECTION_STRING=$$(<$$AUDIT_EVENT_HUB_CONNECTION_STRING)
           fi
@@ -139,6 +151,7 @@ services:
       - ./docker/health_checks_enabled.env
       - ./docker/tpp_test_results.env
       - ./docker/secondarycare_connectivity.env
+      - ./docker/apim_connectivity.env
     depends_on:
       - servicejourneyrulesapi.local.bitraft.io
     secrets:
@@ -158,6 +171,9 @@ services:
       - comms_hub_event_hub_pid_connection_string
       - comms_hub_event_hub_connection_string
       - audit_event_hub_connection_string
+      - nhsapp_apim_pfx
+      - nhsapp_apim_pfx_passphrase
+      - nhsapp_apim_key
 
   cid.local.bitraft.io:
     image: ${CIDAPI_DOCKER_REGISTRY:-local}/nhsonline-backendcidapi:${CIDAPI_DOCKER_TAG:-latest}
