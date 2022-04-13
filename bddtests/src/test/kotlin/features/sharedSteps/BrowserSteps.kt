@@ -16,6 +16,7 @@ import webdrivers.options.ChromeOptionManager
 import webdrivers.options.OptionManager
 import webdrivers.options.nojs.NoJsOption
 import java.net.URL
+import java.net.URLDecoder
 import java.time.Duration
 import java.util.*
 
@@ -101,11 +102,12 @@ open class BrowserSteps {
         val originalPathMessage= if (originalPath != null) {" Original Path : '$originalPath'"} else {""}
         WebDriverWait(loginPage.driver, LOAD_URL_WAIT_TIME)
                 .pollingEvery(Duration.ofMillis(POLLING_DURATION))
-                .withMessage("Expected url to be '$url', but was '${loginPage.driver.currentUrl}'"
+                .withMessage("Expected url to be '$url', but was " +
+                        "'${URLDecoder.decode(loginPage.driver.currentUrl, "UTF-8")}'"
                         + originalPathMessage)
                 .until {
                     val escapedUrl = url.replace("?", "\\?")
-                    it.currentUrl.matches(Regex(".*$escapedUrl\$"))
+                    URLDecoder.decode(it.currentUrl, "UTF-8").matches(Regex(".*$escapedUrl.*"))
                 }
     }
 
