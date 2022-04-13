@@ -15,11 +15,11 @@ Feature: Wayfinder accessibility
     When I retrieve the 'Wayfinder' page directly
     Then the Wayfinder_Desktop page is saved to disk
 
-  Scenario: The 'Wayfinder with in review referral' desktop page is captured
+  Scenario: The 'Wayfinder with appointments and referrals' desktop page is captured
     Given I am a user who can view Wayfinder from Appointments and has referrals and upcoming appointments
     And I am logged in
     When I retrieve the 'Wayfinder' page directly
-    Then the Wayfinder_Desktop_Referrals page is saved to disk
+    Then the Wayfinder_Desktop page is saved to disk
 
   Scenario Outline: The 'Wayfinder API <An Error>' desktop page is captured
     Given I am a user who can view Wayfinder from Appointments
