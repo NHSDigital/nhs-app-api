@@ -28,6 +28,13 @@ describe('util library patientId', () => {
       expect(result).toBe('/patient/pathName');
     });
 
+    it('will not add patient prefix when url is patient', () => {
+      const param = { trimmedPath: 'patient', store: $store };
+      // act
+      const result = getPathWithPatientIdPrefix(param);
+      expect(result).toBe('/patient');
+    });
+
     it('will not add patient id prefix when url begins with patient/<id>/', () => {
       const patientId = '330b2795-e20f-427e-9699-7943dd31d4db';
       const param = { trimmedPath: `patient/${patientId}/pathName`, store: $store };

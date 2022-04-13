@@ -268,7 +268,7 @@ const definePatientIdPathParams = (store) => {
 };
 
 export const getPathWithPatientIdPrefix = ({ trimmedPath, store }) => {
-  if (trimmedPath && trimmedPath.match(/^patient\//)) {
+  if (trimmedPath && trimmedPath.match(/^patient\/?/)) {
     return `/${trimmedPath}`;
   }
   const { patientId, paramString } = definePatientIdPathParams(store);
