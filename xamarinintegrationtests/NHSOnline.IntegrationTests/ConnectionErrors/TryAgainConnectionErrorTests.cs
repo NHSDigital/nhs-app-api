@@ -193,7 +193,6 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
         }
 
         [NhsAppAndroidTest]
-        [NhsAppFlakyTest]
         public async Task APatientCanTryAgainByClosingTheErrorWhenThereIsAConnectionErrorWhenLoadingTheNhsAppWebAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)

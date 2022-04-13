@@ -21,7 +21,6 @@ namespace NHSOnline.IntegrationTests.NativeFooter
     public class NavigatingToAWebIntegrationNavItemsRemainSelectedTests
     {
         [NhsAppAndroidTest]
-        [NhsAppFlakyTest]
         public void APatientSeesTheNavigationFooterRemainSelectedWhenNavigatingToAWebIntegrationAndroid(
             IAndroidDriverWrapper driver)
         {
@@ -77,7 +76,6 @@ namespace NHSOnline.IntegrationTests.NativeFooter
         }
 
         [NhsAppIOSTest]
-        [NhsAppFlakyTest]
         public void APatientSeesTheNavigationFooterRemainSelectedWhenNavigatingToAWebIntegrationIOS(
             IIOSDriverWrapper driver)
         {

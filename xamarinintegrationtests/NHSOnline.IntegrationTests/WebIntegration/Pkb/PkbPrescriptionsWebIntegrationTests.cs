@@ -16,7 +16,6 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
     public class PkbPrescriptionsWebIntegrationTests
     {
         [NhsAppAndroidTest]
-        [NhsAppFlakyTest]
         public void APatientCanAccessTheirPkbPrescriptionsFromThePrescriptionsScreenAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new PkbPatient()
@@ -43,7 +42,6 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
         }
 
         [NhsAppIOSTest]
-        [NhsAppFlakyTest]
         public void APatientCanAccessTheirPkbPrescriptionsFromThePrescriptionsScreenIOS(IIOSDriverWrapper driver)
         {
             var patient = new PkbPatient()

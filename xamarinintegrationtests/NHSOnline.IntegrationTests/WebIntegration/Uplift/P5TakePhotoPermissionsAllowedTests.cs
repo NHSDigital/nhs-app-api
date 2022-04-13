@@ -64,7 +64,6 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
         }
 
         [NhsAppIOSTest]
-        [NhsAppFlakyTest]
         public void APatientWithProofLevelFiveCanTakeAPhotoOfTheirDocumentIOS(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
