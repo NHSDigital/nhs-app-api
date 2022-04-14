@@ -29,3 +29,12 @@ Feature: Help pages
     And I click help and support
     Then I see the your health help page
 
+  Scenario: A user can get help with referrals and upcoming appointments
+    Given I am a user who can view Wayfinder from Appointments and has referrals and upcoming appointments
+    And I am logged in
+    When I navigate to Appointments
+    Then the Appointments Hub page is displayed
+    When I click the 'Referrals, hospital and other appointments' link on the Appointments Hub
+    And I click help and support
+    Then I see the referrals and upcoming appointments help page
+

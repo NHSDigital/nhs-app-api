@@ -6,6 +6,7 @@ import io.cucumber.java.en.When
 import mocking.pages.help.NhsAppointmentsHelpPage
 import mocking.pages.help.NhsMessagingHelpPage
 import mocking.pages.help.NhsPrescriptionsHelpPage
+import mocking.pages.help.NhsReferralsAndUpcomingAppointmentsHelpPage
 import mocking.pages.help.NhsYourHealthHelpPage
 import net.thucydides.core.annotations.Steps
 import pages.navigation.WebHeader
@@ -20,6 +21,7 @@ class HelpStepDefinitions {
     private lateinit var nhsPrescriptionsHelpPage: NhsPrescriptionsHelpPage
     private lateinit var nhsMessagingHelpPage: NhsMessagingHelpPage
     private lateinit var nhsYourHealthHelpPage: NhsYourHealthHelpPage
+    private lateinit var referralsAndUpcomingAppointmentsHelpPage: NhsReferralsAndUpcomingAppointmentsHelpPage
 
     @When("^I click help and support$")
     fun iClickHelpAndSupport() {
@@ -48,5 +50,11 @@ class HelpStepDefinitions {
     fun iSeeTheCorrectYourHealthHelpPage() {
         browser.changeTab(nhsYourHealthHelpPage.url)
         nhsYourHealthHelpPage.assertTitle()
+    }
+
+    @Then("^I see the referrals and upcoming appointments help page$")
+    fun iSeeTheReferralsHelpPage() {
+        browser.changeTab(referralsAndUpcomingAppointmentsHelpPage.url)
+        referralsAndUpcomingAppointmentsHelpPage.assertTitle()
     }
 }
