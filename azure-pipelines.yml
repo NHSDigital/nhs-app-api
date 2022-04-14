@@ -44,11 +44,13 @@ parameters:
     type: string
     default: ' '
     values:
-      - ' '
-      - ext
+      - ' '     
       - aos
-      - sandpit
+      - dev10
+      - dev18
+      - ext
       - production
+      - sandpit
       - stubbed
 
   - name: intTestsRunXamarinNative

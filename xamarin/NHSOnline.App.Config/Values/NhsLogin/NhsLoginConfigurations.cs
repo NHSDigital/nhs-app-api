@@ -12,6 +12,10 @@ namespace NHSOnline.App.Config.Values.NhsLogin
         internal static INhsLoginConfiguration NhsLoginConfiguration { get; } = new SandpitNhsLoginConfiguration();
 #elif NHSLOGIN_ENV_STUBBED
         internal static INhsLoginConfiguration NhsLoginConfiguration { get; } = new StubbedNhsLoginConfiguration();
+#elif NHSLOGIN_ENV_DEV10
+        internal static INhsLoginConfiguration NhsLoginConfiguration { get; } = new Dev10NhsLoginConfiguration();
+#elif NHSLOGIN_ENV_DEV18
+        internal static INhsLoginConfiguration NhsLoginConfiguration { get; } = new Dev18NhsLoginConfiguration();
 #else
         internal static INhsLoginConfiguration NhsLoginConfiguration { get; } = new ProductionNhsLoginConfiguration();
 #endif
