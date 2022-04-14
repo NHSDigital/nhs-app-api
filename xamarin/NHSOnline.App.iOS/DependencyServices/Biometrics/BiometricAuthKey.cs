@@ -95,7 +95,7 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
                     return new BiometricAuthVerifyUserResult.SystemCancelled();
                 }
 
-                Logger.LogWarning("EvaluatePolicyAsync failed: {Error}", error);
+                Logger.LogWarning("EvaluatePolicyAsync failed: {Error} with status :{Status}", error, status);
                 return new BiometricAuthVerifyUserResult.Unauthorised();
             }
             finally
