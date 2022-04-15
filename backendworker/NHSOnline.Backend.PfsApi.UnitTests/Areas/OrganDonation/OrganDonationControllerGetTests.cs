@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.PfsApi.Areas.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
 using NHSOnline.Backend.GpSystems;
@@ -82,7 +83,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 _mockOrganDonationService.Object,
                 _mockAuditor.Object,
                 new Mock<IOrganDonationValidationService>().Object,
-                new Mock<IMetricLogger>().Object);
+                new Mock<IMetricLogger<UserSessionMetricContext>>().Object);
         }
 
         [TestMethod]

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.Filters;
@@ -26,7 +27,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         private readonly ILogger<OrganDonationController> _logger;
         private readonly IAuditor _auditor;
         private readonly IOrganDonationValidationService _validator;
-        private readonly IMetricLogger _metricLogger;
+        private readonly IMetricLogger<UserSessionMetricContext> _metricLogger;
         private readonly IOrganDonationService _organDonationService;
         private readonly IGpSystemFactory _gpSystemFactory;
 
@@ -36,7 +37,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             IOrganDonationService organDonationService,
             IAuditor auditor,
             IOrganDonationValidationService validator,
-            IMetricLogger metricLogger
+            IMetricLogger<UserSessionMetricContext> metricLogger
         )
         {
             _logger = logger;

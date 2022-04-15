@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Users.Notifications;
 
@@ -8,9 +9,9 @@ namespace NHSOnline.Backend.Users.Areas.Devices
 {
     public class DeleteRegistrationResultVisitor : IDeleteRegistrationResultVisitor<Task<IActionResult>>
     {
-        private readonly IMetricLogger _metricLogger;
+        private readonly IMetricLogger<AccessTokenMetricContext> _metricLogger;
 
-        public DeleteRegistrationResultVisitor(IMetricLogger metricLogger)
+        public DeleteRegistrationResultVisitor(IMetricLogger<AccessTokenMetricContext> metricLogger)
         {
             _metricLogger = metricLogger;
         }

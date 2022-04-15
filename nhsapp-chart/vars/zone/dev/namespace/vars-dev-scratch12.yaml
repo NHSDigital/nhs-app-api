@@ -1,5 +1,5 @@
 ---
-users:
+api:
   notificationHubs:
     - notificationHubPath: nhsapp-nonlive-scratch12
       notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=

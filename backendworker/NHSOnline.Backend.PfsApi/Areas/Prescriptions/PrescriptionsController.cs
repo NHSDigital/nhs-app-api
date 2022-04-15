@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
@@ -32,7 +33,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         private readonly ILogger<PrescriptionsController> _logger;
         private readonly IAuditor _auditor;
         private readonly IErrorReferenceGenerator _errorReferenceGenerator;
-        private readonly IMetricLogger _metricLogger;
+        private readonly IMetricLogger<UserSessionMetricContext> _metricLogger;
 
         public PrescriptionsController(
             ConfigurationSettings settings,
@@ -40,7 +41,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             IGpSystemFactory gpSystemFactory,
             IAuditor auditor,
             IErrorReferenceGenerator errorReferenceGenerator,
-            IMetricLogger metricLogger)
+            IMetricLogger<UserSessionMetricContext> metricLogger)
         {
             _settings = settings;
             _logger = logger;

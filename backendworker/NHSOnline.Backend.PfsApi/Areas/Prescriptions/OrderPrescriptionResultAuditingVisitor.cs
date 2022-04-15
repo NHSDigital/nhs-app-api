@@ -3,8 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.Metrics;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
@@ -14,7 +16,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         private readonly IAuditor _auditor;
         private readonly ILogger<PrescriptionsController> _logger;
         private readonly string _courseIds;
-        private readonly IMetricLogger _metricLogger;
+        private readonly IMetricLogger<UserSessionMetricContext> _metricLogger;
         private readonly P9UserSession _userSession;
 
         private const string AuditType = AuditingOperations.RepeatPrescriptionsOrderRepeatMedicationsResponse;
@@ -22,7 +24,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         public OrderPrescriptionResultAuditingVisitor(IAuditor auditor,
             ILogger<PrescriptionsController> logger,
             string courseIds,
-            IMetricLogger metricLogger,
+            IMetricLogger<UserSessionMetricContext> metricLogger,
             P9UserSession userSession)
         {
             _auditor = auditor;

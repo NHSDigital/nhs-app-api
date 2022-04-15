@@ -3,9 +3,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.AssertedLoginIdentity;
 using NHSOnline.Backend.PfsApi.AssertedLoginIdentity.Models;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Session;
 
@@ -14,13 +16,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
     public class CreateJwtResultVisitor : ICreateJwtResultVisitor<Task<IActionResult>>
     {
         private readonly ILogger _logger;
-        private readonly IMetricLogger _metricLogger;
+        private readonly IMetricLogger<UserSessionMetricContext> _metricLogger;
         private readonly CreateJwtRequest _request;
         private readonly P5UserSession _userSession;
 
         public CreateJwtResultVisitor(
             ILogger logger,
-            IMetricLogger metricLogger,
+            IMetricLogger<UserSessionMetricContext> metricLogger,
             CreateJwtRequest request,
             P5UserSession userSession)
         {

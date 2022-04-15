@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.AspNet.ApiKey;
 using NHSOnline.Backend.Auth.CitizenId.Models;
@@ -13,6 +14,7 @@ using NHSOnline.Backend.Messages.Areas.Messages;
 using NHSOnline.Backend.Messages.Areas.Messages.Models;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Metrics.EventHub;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
@@ -25,7 +27,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         private readonly IAccessTokenProvider _accessTokenProvider;
         private readonly IMessageService _messageService;
         private readonly ILogger<MessagesController> _logger;
-        private readonly IMetricLogger _metricLogger;
+        private readonly IMetricLogger<UserSessionMetricContext> _metricLogger;
         private readonly IEventHubLogger _eventHubLogger;
         private readonly IMapper<SenderContext, SenderContextEventLogData> _messageSenderContextEventLogDataMapper;
 
@@ -33,7 +35,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         (
             IMessageService messageService,
             ILogger<MessagesController> logger,
-            IMetricLogger metricLogger,
+            IMetricLogger<UserSessionMetricContext> metricLogger,
             IEventHubLogger eventHubLogger,
             IMapper<SenderContext, SenderContextEventLogData> messageSenderContextEventLogDataMapper,
             IAccessTokenProvider accessTokenProvider)

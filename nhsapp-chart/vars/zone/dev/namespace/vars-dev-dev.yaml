@@ -5,7 +5,7 @@ secrets:
       notificationHubSecretVersionuks: "570a20e0acf6446f9646f8aaeb52f233"
       notificationHubSecretVersionukw: "b487bfcab7a74411bf53b3862d26565d"
 
-users:
+api:
   notificationHubs:
     - notificationHubPath: nhsapp-nonlive-preview
       notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=

@@ -3,7 +3,7 @@ define AdditionalHelp
 @echo 'For run* targets the following options can be used to customise the version of the docker images used:'
 @echo
 @echo '* TAG: Set the default tag for all images, e.g. set TAG=develop to run the images pushed by the develop CI build. Defaults to latest local build.'
-@echo '* WEB, PFSAPI, CIDAPI, SJRCONFIG, SJRAPI, USERSAPI, USERINFOAPI: Override the tag used for specific containers.'
+@echo '* WEB, PFSAPI, CIDAPI, SJRCONFIG, SJRAPI: Override the tag used for specific containers.'
 @echo '* LOGINENV: Override the login environment. Valid values are dev, ext (default), sandpit, aos and stubbed.'
 @echo '    Set to "host" to route all traffic for that container to the host machine so the process can be run and debugged on the host'
 endef

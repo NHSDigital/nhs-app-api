@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Auditing.UnitTestsSupport;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Im1Connection.Cache;
 using NHSOnline.Backend.GpSystems.SessionManager;
@@ -123,9 +124,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     .AddSingleton(new Mock<IOdsCodeMassager>().Object)
                     .AddSingleton(new Mock<IServiceJourneyRulesService>().Object)
                     .AddSingleton(new Mock<IErrorReferenceGenerator>().Object)
-                    .AddSingleton(new Mock<IUserInfoService>().Object)
                     .AddSingleton(new Mock<IAuthenticationService>().Object)
-                    .AddSingleton(new Mock<IMetricLogger>().Object)
+                    .AddSingleton(new Mock<IMetricLogger<UserSessionMetricContext>>().Object)
                     .AddSingleton(new Mock<ISigning>().Object)
                     .AddSingleton(new AuthSigningConfig(new Mock<IConfiguration>().Object, new Mock<ILogger<AuthSigningConfig>>().Object))
                     .AddSingleton(new Mock<ICurrentDateTimeProvider>().Object)

@@ -371,8 +371,6 @@ spec:
         - name: SPINE_CERT_PATH
           value: "/mnt/secrets-store/spinePfx"
       {{- end }}
-        - name: USERINFO_API_BASE_URL
-          value: "https://nhsapp-info-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/v1/api/users/me/info"
       {{- if $.Values.spineLdapLookupEnabled }}
         - name: SPINE_LDAP_HOST
           value: "{{ $.Values.spineLdapHost }}"
@@ -454,6 +452,65 @@ spec:
           value: "{{ $.Values.messages.senderIdNhsApp }}"
         - name: MESSAGES_SUPPLIER_ID_NHS_APP
           value: "{{ $.Values.messages.supplierIdNhsApp }}"
+        - name: USERINFO_MONGO_DATABASE_COLLECTION
+          value: {{ $.Values.info.mongoDatabaseInfoCollection }}
+        - name: USERINFO_NHS_NUMBER_CONTAINER
+          value: {{ $.Values.info.commsSqlDatabaseInfoNhsNumberCollection }}
+        - name: USERINFO_ODS_CODE_CONTAINER
+          value: {{ $.Values.info.commsSqlDatabaseInfoOdsCodeCollection }}
+        - name: QUALTRICS_BASE_URL
+        {{- if $.Values.environmentStubbed.qualtricsStubbed }}
+          value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/qualtrics/"
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/qualtrics/"
+        {{- else }}
+          value: "{{ $.Values.qualtricsBaseUrl }}"
+        {{- end }}
+        - name: QUALTRICS_DIRECTORY_ID
+          value: "{{ $.Values.qualtricsDirectoryId }}"
+        - name: QUALTRICS_MAILING_LIST_ID
+          value: "{{ $.Values.qualtricsMailingListId }}"
+        - name: QUALTRICS_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: qualtrics-api-key-{{ .Chart.AppVersion }}
+              key: apikey
+        - name: USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION
+          value: {{ $.Values.users.mongoDatabaseUserDeviceCollection }}
+        - name: MOCK_NOTIFICATION_HUB_CLIENT
+          value: "{{ $.Values.api.mockNotificationHubClient }}"
+        {{- range $index, $notificationHub := .Values.api.notificationHubs }}
+        - name: AZURE_NOTIFICATION_HUBS__{{ $index }}__AZURE_NOTIFICATION_HUB_PATH
+          value: {{ $notificationHub.notificationHubPath }}
+        - name: AZURE_NOTIFICATION_HUBS__{{ $index }}__AZURE_NOTIFICATION_HUB_CONNECTION_STRING
+          value: {{ $notificationHub.notificationHubConnectionString }}
+        - name: AZURE_NOTIFICATION_HUBS__{{ $index }}__AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: notification-hub-shared-access-key-{{ $index }}-{{ $.Chart.AppVersion }}
+              key: password
+        {{- if $notificationHub.notificationHubReadCharacters }}
+        - name: AZURE_NOTIFICATION_HUBS__{{ $index }}__AZURE_NOTIFICATION_HUB_READ_CHARACTERS
+          value: "{{ $notificationHub.notificationHubReadCharacters }}"
+        {{- else }}
+        - name: AZURE_NOTIFICATION_HUBS__{{ $index }}__AZURE_NOTIFICATION_HUB_READ_CHARACTERS
+          value: 0123456789ABCDEF
+        {{- end }}
+        {{- if $notificationHub.notificationHubWriteCharacters }}
+        - name: AZURE_NOTIFICATION_HUBS__{{ $index }}__AZURE_NOTIFICATION_HUB_WRITE_CHARACTERS
+          value: "{{ $notificationHub.notificationHubWriteCharacters }}"
+        {{- else }}
+        - name: AZURE_NOTIFICATION_HUBS__{{ $index }}__AZURE_NOTIFICATION_HUB_WRITE_CHARACTERS
+          value: 0123456789ABCDEF
+        {{- end }}
+        {{- if $notificationHub.notificationHubGeneration }}
+        - name: AZURE_NOTIFICATION_HUBS__{{ $index }}__AZURE_NOTIFICATION_HUB_GENERATION
+          value: "{{ $notificationHub.notificationHubGeneration }}"
+        {{- else }}
+        - name: AZURE_NOTIFICATION_HUBS__{{ $index }}__AZURE_NOTIFICATION_HUB_GENERATION
+          value: "1"
+        {{- end }}
+        {{- end }}
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"

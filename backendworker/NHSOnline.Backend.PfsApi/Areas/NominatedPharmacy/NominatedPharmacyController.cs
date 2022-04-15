@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.NominatedPharmacy;
 using NHSOnline.Backend.NominatedPharmacy.Models;
@@ -38,7 +39,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         private readonly IAuditor _auditor;
         private readonly INominatedPharmacyConfigurationSettings _config;
         private readonly IGpSearchService _gpSearchService;
-        private readonly IMetricLogger _metricLogger;
+        private readonly IMetricLogger<UserSessionMetricContext> _metricLogger;
 
         public NominatedPharmacyController(
             ILogger<NominatedPharmacyController> logger,
@@ -50,7 +51,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             IAuditor auditor,
             INominatedPharmacyConfigurationSettings config,
             IGpSearchService gpSearchService,
-            IMetricLogger metricLogger
+            IMetricLogger<UserSessionMetricContext> metricLogger
            )
         {
             _logger = logger;

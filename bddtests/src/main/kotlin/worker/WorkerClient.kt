@@ -40,8 +40,6 @@ class WorkerClient(val config:Config = Config.instance) {
     val clientLogger = WorkerClientLogger(config, workerClientSender, gson)
 
     val sjrHealth = WorkerClientHealth(config.sjrBackendUrl, workerClientSender, gson)
-    val usersHealth = WorkerClientHealth(config.usersBackendUrl, workerClientSender, gson)
-    val userInfoHealth = WorkerClientHealth(config.userInfoBackendUrl, workerClientSender, gson)
 
     companion object {
 

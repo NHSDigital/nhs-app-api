@@ -4,6 +4,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.Messages;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
@@ -25,7 +26,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
         private Mock<IMapper<ConsentRequest, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>>> _mockConsentRequestToUpdateMapper;
         private Mock<IMapper<AnalyticsCookieAcceptance, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>>> _mockAnalyticsCookieAcceptanceToUpdateMapper;
         private Mock<IIntroMessagesService> _mockIntroMessageService;
-        private Mock<IMetricLogger> _mockMetricLogger;
+        private Mock<IMetricLogger<UserSessionMetricContext>> _mockMetricLogger;
 
         private const string MessageId = "MessageId";
 
@@ -47,7 +48,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
 
             _mockIntroMessageService = new Mock<IIntroMessagesService>(MockBehavior.Strict);
 
-            _mockMetricLogger = new Mock<IMetricLogger>();
+            _mockMetricLogger = new Mock<IMetricLogger<UserSessionMetricContext>>();
 
             _systemUnderTest = new TermsAndConditionsService(
                 logger,

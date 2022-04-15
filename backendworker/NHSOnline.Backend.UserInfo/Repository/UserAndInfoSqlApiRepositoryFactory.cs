@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.UserInfo.Repository
             return partitionKey switch
             {
                 UserAndInfoRepositoryKey.NhsNumber => (ISqlApiRepository<UserAndInfo>) _serviceProvider.GetRequiredService(
-                    typeof(SqlApiRepository<UserAndInfoRepositoryByNhsNumberConfiguration, UserAndInfo>)),
+                    typeof(SqlApiRepository<UserAndInfoRepositoryByNhsNoConfiguration, UserAndInfo>)),
                 UserAndInfoRepositoryKey.OdsCode => (ISqlApiRepository<UserAndInfo>) _serviceProvider.GetRequiredService(
                     typeof(SqlApiRepository<UserAndInfoRepositoryByOdsCodeConfiguration, UserAndInfo>)),
                 _ => throw new ArgumentOutOfRangeException(nameof(partitionKey), partitionKey,

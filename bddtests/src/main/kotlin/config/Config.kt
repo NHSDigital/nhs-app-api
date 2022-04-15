@@ -11,8 +11,6 @@ class Config private constructor() {
     var apiBackendUrl: String
     var cidBackendUrl: String
     val sjrBackendUrl: String
-    val usersBackendUrl: String
-    val userInfoBackendUrl: String
     val wiremockUrl: String
 
     val cidSettingsUrl: String
@@ -60,8 +58,6 @@ class Config private constructor() {
         apiBackendUrl = envOrDefault("apiBackendUrl", "http://api.local.bitraft.io:8089")
         cidBackendUrl = envOrDefault("cidBackendUrl", "http://cid.local.bitraft.io:8084")
         sjrBackendUrl = envOrDefault("sjrBackendUrl", "http://servicejourneyrulesapi.local.bitraft.io:8086")
-        usersBackendUrl = envOrDefault("usersBackendUrl", "http://users.local.bitraft.io:8083")
-        userInfoBackendUrl = envOrDefault("userInfoBackendUrl", "http://userinfo.local.bitraft.io:8091")
         isDockerised = envOrDefault("DOCKER",false)
 
         showPageSourceForXPathQuery = envOrDefault("XPATH_PAGE_SOURCE", false)

@@ -88,8 +88,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Auth", "N
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Auth.UnitTests", "NHSOnline.Backend.Auth.UnitTests\NHSOnline.Backend.Auth.UnitTests.csproj", "{EC0CD78E-0866-45DA-A4BF-6BBFE749DC1E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.UsersApi.UnitTests", "NHSOnline.Backend.UsersApi.UnitTests\NHSOnline.Backend.UsersApi.UnitTests.csproj", "{3E119DBD-FB24-4960-82B8-8858832393F6}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GpSupplierSpecific", "GpSupplierSpecific", "{736E9543-7D67-4D77-822A-79BFD65E80CB}"
 	ProjectSection(SolutionItems) = preProject
 		contracts\gpSupplierSpecific\emis-linkage.yaml = contracts\gpSupplierSpecific\emis-linkage.yaml
@@ -103,12 +101,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Logger", "NHSOnline.Backend.Logger\NHSOnline.Backend.Logger.csproj", "{37A118C6-606C-4803-B785-235E6A54DC0C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Logger.UnitTests", "NHSOnline.Backend.Logger.UnitTests\NHSOnline.Backend.Logger.UnitTests.csproj", "{7DF21FD7-92D4-4581-B7CD-BBC14228ED75}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.UserInfoApi", "NHSOnline.Backend.UserInfoApi\NHSOnline.Backend.UserInfoApi.csproj", "{98E8AA2E-450C-4973-815E-FA2CFFA8D81D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.UsersApi", "NHSOnline.Backend.UsersApi\NHSOnline.Backend.UsersApi.csproj", "{CC8869DC-0E52-479F-A1D9-98227AB6FC4F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.UserInfoApi.UnitTests", "NHSOnline.Backend.UserInfoApi.UnitTests\NHSOnline.Backend.UserInfoApi.UnitTests.csproj", "{F84EB744-22DE-4067-B76A-C211C678A2AB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.ServiceJourneyRules.Common", "NHSOnline.Backend.ServiceJourneyRules.Common\NHSOnline.Backend.ServiceJourneyRules.Common.csproj", "{F3E8E9DE-CC0F-488D-A427-4CF234092F27}"
 EndProject
@@ -214,10 +206,6 @@ Global
 		{EC0CD78E-0866-45DA-A4BF-6BBFE749DC1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC0CD78E-0866-45DA-A4BF-6BBFE749DC1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC0CD78E-0866-45DA-A4BF-6BBFE749DC1E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3E119DBD-FB24-4960-82B8-8858832393F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3E119DBD-FB24-4960-82B8-8858832393F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3E119DBD-FB24-4960-82B8-8858832393F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3E119DBD-FB24-4960-82B8-8858832393F6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DC1B54DB-8F80-4B09-BC2D-E7DE1DA72520}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DC1B54DB-8F80-4B09-BC2D-E7DE1DA72520}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC1B54DB-8F80-4B09-BC2D-E7DE1DA72520}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -234,18 +222,6 @@ Global
 		{7DF21FD7-92D4-4581-B7CD-BBC14228ED75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DF21FD7-92D4-4581-B7CD-BBC14228ED75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DF21FD7-92D4-4581-B7CD-BBC14228ED75}.Release|Any CPU.Build.0 = Release|Any CPU
-		{98E8AA2E-450C-4973-815E-FA2CFFA8D81D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{98E8AA2E-450C-4973-815E-FA2CFFA8D81D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{98E8AA2E-450C-4973-815E-FA2CFFA8D81D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{98E8AA2E-450C-4973-815E-FA2CFFA8D81D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CC8869DC-0E52-479F-A1D9-98227AB6FC4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CC8869DC-0E52-479F-A1D9-98227AB6FC4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CC8869DC-0E52-479F-A1D9-98227AB6FC4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CC8869DC-0E52-479F-A1D9-98227AB6FC4F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F84EB744-22DE-4067-B76A-C211C678A2AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F84EB744-22DE-4067-B76A-C211C678A2AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F84EB744-22DE-4067-B76A-C211C678A2AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F84EB744-22DE-4067-B76A-C211C678A2AB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F3E8E9DE-CC0F-488D-A427-4CF234092F27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F3E8E9DE-CC0F-488D-A427-4CF234092F27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3E8E9DE-CC0F-488D-A427-4CF234092F27}.Release|Any CPU.ActiveCfg = Release|Any CPU

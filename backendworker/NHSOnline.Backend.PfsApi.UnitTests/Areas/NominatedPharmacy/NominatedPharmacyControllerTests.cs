@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Support.Session;
 
@@ -72,7 +73,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 _auditor.Object,
                 _configMock.Object,
                 _mockGpSearchService.Object,
-                new Mock<IMetricLogger>().Object);
+                new Mock<IMetricLogger<UserSessionMetricContext>>().Object);
         }
 
         [TestMethod]

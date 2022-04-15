@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Metrics.UnitTests
@@ -16,7 +17,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests
     {
         [TestMethod]
         [DynamicData(nameof(DefaultMetricLogMethods), typeof(MetricLoggerTests), DynamicDataDisplayName = nameof(MetricLogMethodsDisplayName))]
-        public async Task MetricLog_LogsTimestampFirst(Func<IMetricLogger, Task> logMethod, string _)
+        public async Task MetricLog_LogsTimestampFirst(Func<IMetricLogger<IMetricContext>, Task> logMethod, string _)
         {
             // Arrange
             var mockMetricContext = new Mock<IMetricContext>();
@@ -32,7 +33,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests
 
         [TestMethod]
         [DynamicData(nameof(DefaultMetricLogMethods), typeof(MetricLoggerTests), DynamicDataDisplayName = nameof(MetricLogMethodsDisplayName))]
-        public async Task MetricLog_LogsNhsLoginIdFromContext(Func<IMetricLogger, Task> logMethod, string _)
+        public async Task MetricLog_LogsNhsLoginIdFromContext(Func<IMetricLogger<IMetricContext>, Task> logMethod, string _)
         {
             // Arrange
             var mockMetricContext = new Mock<IMetricContext>();
@@ -49,7 +50,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests
 
         [TestMethod]
         [DynamicData(nameof(DefaultMetricLogMethods), typeof(MetricLoggerTests), DynamicDataDisplayName = nameof(MetricLogMethodsDisplayName))]
-        public async Task MetricLog_LogsOdsCodeFromContext(Func<IMetricLogger, Task> logMethod, string _)
+        public async Task MetricLog_LogsOdsCodeFromContext(Func<IMetricLogger<IMetricContext>, Task> logMethod, string _)
         {
             // Arrange
             var mockMetricContext = new Mock<IMetricContext>();
@@ -66,7 +67,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests
 
         [TestMethod]
         [DynamicData(nameof(DefaultMetricLogMethods), typeof(MetricLoggerTests), DynamicDataDisplayName = nameof(MetricLogMethodsDisplayName))]
-        public async Task MetricLog_LogsProofLevelFromContext(Func<IMetricLogger, Task> logMethod, string _)
+        public async Task MetricLog_LogsProofLevelFromContext(Func<IMetricLogger<IMetricContext>, Task> logMethod, string _)
         {
             // Arrange
             var mockMetricContext = new Mock<IMetricContext>();
@@ -83,7 +84,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests
 
         [TestMethod]
         [DynamicData(nameof(DefaultMetricLogMethods), typeof(MetricLoggerTests), DynamicDataDisplayName = nameof(MetricLogMethodsDisplayName))]
-        public async Task MetricLog_LogsAction(Func<IMetricLogger, Task> logMethod, string action)
+        public async Task MetricLog_LogsAction(Func<IMetricLogger<IMetricContext>, Task> logMethod, string action)
         {
             // Arrange
             var mockMetricContext = new Mock<IMetricContext>();
@@ -363,13 +364,14 @@ namespace NHSOnline.Backend.Metrics.UnitTests
             "TransmissionId"
         );
 
-        private static IMetricLogger CreateMetricLogger(Mock<IMetricContext> mockMetricContext)
+        private static IMetricLogger<IMetricContext> CreateMetricLogger(Mock<IMetricContext> mockMetricContext)
         {
             var services = new ServiceCollection();
             new ServiceConfigurationModule().ConfigureServices(services, new Mock<IConfiguration>().Object);
             services.AddSingleton(mockMetricContext.Object);
+            services.AddTransient<IMetricLogger<IMetricContext>, MetricLogger<IMetricContext>>();
 
-            var metricLogger = services.BuildServiceProvider().GetRequiredService<IMetricLogger>();
+            var metricLogger = services.BuildServiceProvider().GetRequiredService<IMetricLogger<IMetricContext>>();
             return metricLogger;
         }
 
@@ -419,7 +421,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests
                 var messageLinkedClickData = GetTestMessageLinkClickedData();
                 yield return new object[] { Method(metricLogger => metricLogger.MessageLinkClicked(messageLinkedClickData)), "MessageLinkClicked" };
 
-                static Func<IMetricLogger, Task> Method(Func<IMetricLogger, Task> method) => method;
+                static Func<IMetricLogger<IMetricContext>, Task> Method(Func<IMetricLogger<IMetricContext>, Task> method) => method;
             }
         }
 

@@ -52,6 +52,7 @@ services:
       - ./docker/bddtests/env/proxy_access.env
       - ./docker/bddtests/env/pfs.env
       - ./docker/bddtests/env/tpp_test_results.env
+      - ./docker/bddtests/env/notificationhub_connectivity.env
     secrets:
       - ndop_signing_key
       - ndop_signing_key_passphrase
@@ -60,10 +61,6 @@ services:
     env_file:
       - ./docker/bddtests/env/emis_connectivity.env
       - ./docker/bddtests/env/proxy_access.env
-
-  users.local.bitraft.io:
-    env_file:
-      - ./docker/bddtests/env/notificationhub_connectivity.env
 
   mongo_seed:
     env_file:

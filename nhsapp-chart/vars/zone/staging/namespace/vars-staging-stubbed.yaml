@@ -46,14 +46,11 @@ web:
 api:
   image_tag: latest
   publicURL: api-stubbed.staging.nhsapp.service.nhs.uk
-
-cid:
-  image_tag: latest
-
-users:
   notificationHubs:
     - notificationHubPath: nhsapp-stubbed
       notificationHubConnectionString: Endpoint=sb://nhsapp-staging.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
+cid:
+  image_tag: latest
 
 secrets:
   notificationHubs:

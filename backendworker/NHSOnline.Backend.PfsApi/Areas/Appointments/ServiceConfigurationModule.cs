@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.Backend.Auth;
+using NHSOnline.Backend.Metrics;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
@@ -9,6 +11,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             services.AddTransient<IAppointmentSlotMetadataLogger, AppointmentSlotMetadataLogger>();
             services.AddTransient<IAppointmentTypeTransformingVisitor, AppointmentTypeTransformingVisitor>();
+            services.AddTransient<IMetricContext, UserSessionMetricContext>();
             base.ConfigureServices(services, configuration);
         }
     }

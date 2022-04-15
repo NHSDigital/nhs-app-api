@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.Areas.Session;
@@ -110,7 +111,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     .AddSingleton(new Mock<ICurrentDateTimeProvider>().Object)
                     .AddSingleton(new Mock<IJwtTokenGenerator>().Object)
                     .AddSingleton(new Mock<IWebHostEnvironment>().Object)
-                    .AddSingleton(new Mock<IMetricLogger>().Object)
+                    .AddSingleton(new Mock<IMetricLogger<UserSessionMetricContext>>().Object)
                     .AddSingleton(new Mock<ISessionErrorResultBuilder>().Object)
                     .AddSingleton(new Mock<IAuthenticationService>().Object)
                     .AddSingleton(new AuthSigningConfig(new Mock<IConfiguration>().Object, new Mock<ILogger<AuthSigningConfig>>().Object))

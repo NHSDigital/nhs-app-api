@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.Metrics
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<IMetricLogger, MetricLogger>();
+            services.AddTransient(typeof(IMetricLogger<>), typeof(MetricLogger<>));
             services.AddTransient<IAnonymousMetricLogger, AnonymousMetricLogger>();
         }
     }

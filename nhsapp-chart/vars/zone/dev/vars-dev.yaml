@@ -118,6 +118,11 @@ api:
     servicesV3__substraktPatientPack__domains__1: https://admin-request.test.substrakthealth.com
     servicesV3__substraktPatientPack__domains__2: https://auth.test.substrakthealth.com
     servicesV3__zesty__url: https://enterprise.ytsez-sandbox.co.uk
+  mockNotificationHubClient: false
+  notificationHubs:
+    - notificationHubPath: nhsapp-nonlive-preview
+      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
+
 
 sidecar_proxy:
   memoryRequest: "32Mi"
@@ -184,29 +189,6 @@ wiremock:
   cpuRequest: "10m"
   cpuLimit: "2"
   targetCPUUtilizationPercentage: 35
-
-users:
-  mockNotificationHubClient: false
-  minAvailable: 0
-  minReplicas: 1
-  maxReplicas: 1
-  memoryRequest: "32Mi"
-  memoryLimit: "128Mi"
-  cpuRequest: "10m"
-  cpuLimit: "200m"
-  notificationHubs:
-    - notificationHubPath: nhsapp-nonlive-preview
-      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
-
-info:
-  minAvailable: 0
-  minReplicas: 1
-  maxReplicas: 1
-  memoryRequest: "32Mi"
-  memoryLimit: "128Mi"
-  cpuRequest: "10m"
-  cpuLimit: "200m"
-  targetCPUUtilizationPercentage: 45
 
 sjr:
   minAvailable: 0

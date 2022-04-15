@@ -440,47 +440,13 @@ wiremock:
       value: "60"
 
 users:
-  containerPort: 8080
-  publicURL: null
-  role: users
-  image: nhsonline-backendusersapi
-  image_tag: latest
-  imagePullPolicy: Always
-  minAvailable: 1
-  minReplicas: 2
-  maxReplicas: 100
-  memoryRequest: "416Mi"
-  memoryLimit: "416Mi"
-  cpuRequest: "350m"
-  cpuLimit: "350m"
-  targetCPUUtilizationPercentage: 45
   mongoDatabaseUserDeviceCollection: devices
-  environmentVariables:
-    - name: ASPNETCORE_ENVIRONMENT
-      value: "Production"
 
 info:
-  containerPort: 8080
-  publicURL: null
-  role: info
-  image: nhsonline-backenduserinfoapi
-  image_tag: 3229
-  imagePullPolicy: Always
-  minAvailable: 1
-  minReplicas: 2
-  maxReplicas: 100
-  memoryRequest: "512Mi"
-  memoryLimit: "521Mi"
-  cpuRequest: "600m"
-  cpuLimit: "600m"
-  targetCPUUtilizationPercentage: 45
   mongoDatabaseInfoCollection: info
   commsSqlDatabaseInfoNhsNumberCollection: info_nhs_number
   commsSqlDatabaseInfoOdsCodeCollection: info_ods_code
   mongoDatabaseInfoAuditCollection: audit_info
-  environmentVariables:
-    - name: ASPNETCORE_ENVIRONMENT
-      value: "Production"
 
 sjr:
   createService: true

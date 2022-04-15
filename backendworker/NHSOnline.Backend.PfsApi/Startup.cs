@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -30,6 +32,8 @@ using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Settings;
+using NHSOnline.Backend.Users;
+using NHSOnline.Backend.Users.Notifications;
 using ConfigurationSettings = NHSOnline.Backend.Support.Settings.ConfigurationSettings;
 
 namespace NHSOnline.Backend.PfsApi
@@ -68,6 +72,7 @@ namespace NHSOnline.Backend.PfsApi
         public void ConfigureServices(IServiceCollection services)
         {
             SetupConfigurationSettings(services);
+            SetupNotificationConfigurationSettings(services);
 
             services.ConfigureAuthentication(Configuration, _logger, _env.IsDevelopment(), _configurationSettings);
 
@@ -102,7 +107,6 @@ namespace NHSOnline.Backend.PfsApi
             services.AddPerformanceCounterService(Configuration);
 
             services.RegisterDatabaseClient(Configuration, _logger);
-
             services.RegisterSqlApiDatabaseClient(Configuration, _logger);
 
             _supplierStartup.ConfigureServices(services);
@@ -171,5 +175,66 @@ namespace NHSOnline.Backend.PfsApi
 
             _modularStartup.Configure(app, env);
         }
+
+        private void SetupNotificationConfigurationSettings(IServiceCollection services)
+        {
+            var mockNotificationHub = Configuration.GetBoolOrFallback("MOCK_NOTIFICATION_HUB_CLIENT", false);
+            INotificationHubClientFactory clientFactory;
+
+            if (mockNotificationHub)
+            {
+                _logger.LogWarning("Using mock notification hub client");
+                clientFactory = new MockNotificationHubClientFactory();
+            }
+            else
+            {
+                clientFactory = new NotificationHubClientFactory();
+            }
+
+            services.AddSingleton(
+                CreateAzureNotificationHubConfigurations()
+                    .Select(x => new AzureNotificationHubWrapper(x, clientFactory))
+                    .Cast<IAzureNotificationHubWrapper>()
+            );
+
+            var httpTimeoutConfig = CreateHttpTimeoutConfiguration();
+            services.AddSingleton<IHttpTimeoutConfigurationSettings>(httpTimeoutConfig);
+        }
+
+        private IEnumerable<AzureNotificationHubConfiguration> CreateAzureNotificationHubConfigurations()
+        {
+            var output = new List<AzureNotificationHubConfiguration>();
+            var hubConfigurations = Configuration.GetSection("AZURE_NOTIFICATION_HUBS").GetChildren();
+
+            foreach (var config in hubConfigurations)
+            {
+                var connectionString = config.GetOrThrow("AZURE_NOTIFICATION_HUB_CONNECTION_STRING", _logger);
+                var path = config.GetOrThrow("AZURE_NOTIFICATION_HUB_PATH", _logger);
+                var sharedAccessKey = config.GetOrThrow("AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY", _logger);
+                var readCharacters = config.GetOrThrow("AZURE_NOTIFICATION_HUB_READ_CHARACTERS", _logger);
+                var writeCharacters = config.GetOrNull("AZURE_NOTIFICATION_HUB_WRITE_CHARACTERS");
+                var generation = config.GetIntOrThrow("AZURE_NOTIFICATION_HUB_GENERATION", _logger);
+
+                output.Add(new AzureNotificationHubConfiguration(
+                    connectionString,
+                    path,
+                    sharedAccessKey,
+                    readCharacters,
+                    writeCharacters,
+                    generation
+                ));
+            }
+            new AzureNotificationHubConfigurationValidator(_logger).Validate(output);
+
+            return output;
+        }
+
+        private HttpTimeoutConfigurationSettings CreateHttpTimeoutConfiguration()
+        {
+            var defaultHttpTimeoutSeconds = Configuration.GetIntOrThrow("ConfigurationSettings:DefaultHttpTimeoutSeconds", _logger);
+            var config = new HttpTimeoutConfigurationSettings(defaultHttpTimeoutSeconds);
+            return config;
+        }
+
     }
 }

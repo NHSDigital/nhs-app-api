@@ -59,8 +59,6 @@ services:
       - ./docker/nginx/api:/etc/nginx/conf.d
     depends_on:
       - pfs.local.bitraft.io
-      - userinfo.local.bitraft.io
-      - users.local.bitraft.io
 
   silver.local.bitraft.io:
     image: nginx:alpine
@@ -128,8 +126,14 @@ services:
           if [ -f "$$AUDIT_EVENT_HUB_CONNECTION_STRING" ]; then
             export AUDIT_EVENT_HUB_CONNECTION_STRING=$$(<$$AUDIT_EVENT_HUB_CONNECTION_STRING)
           fi
+          if [ -f "$$QUALTRICS_API_KEY" ]; then
+            export QUALTRICS_API_KEY=$$(<$$QUALTRICS_API_KEY)
+          fi
           if [ -f "$$COSMOS_SQL_API_CONNECTION_STRING" ]; then
             export COSMOS_SQL_API_CONNECTION_STRING=$$(<$$COSMOS_SQL_API_CONNECTION_STRING)
+          fi
+          if [ -f "$$AZURE_NOTIFICATION_HUBS__0__AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY" ]; then
+            export AZURE_NOTIFICATION_HUBS__0__AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=$$(<$$AZURE_NOTIFICATION_HUBS__0__AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY)
           fi
           exec $$*
       - "--"
@@ -145,7 +149,6 @@ services:
       - ./docker/sjr_connectivity.env
       - ./docker/spine_connectivity.env
       - ./docker/tpp_connectivity.env
-      - ./docker/userinfo_connectivity.env
       - ./docker/vision_connectivity.env
       - ./docker/eventhub_connectivity.env
       - ./docker/proxy_access.env
@@ -153,10 +156,13 @@ services:
       - ./docker/pfs.env
       - ./docker/knownservices.env
       - ./docker/knownservicesV3.env
-      - ./docker/health_checks_enabled.env
       - ./docker/tpp_test_results.env
       - ./docker/secondarycare_connectivity.env
       - ./docker/apim_connectivity.env
+      - ./docker/notificationhub_connectivity.env
+      - ./docker/nhslogin_connectivity_ext.env
+      - ./docker/qualtrics_connectivity.env
+      - ./docker/health_checks_enabled.env
     depends_on:
       - servicejourneyrulesapi.local.bitraft.io
     secrets:
@@ -179,6 +185,8 @@ services:
       - nhsapp_apim_pfx
       - nhsapp_apim_pfx_passphrase
       - nhsapp_apim_key
+      - azure_notification_hub_key
+      - qualtrics_api_key
       - cosmos_sql_api_connection_string
 
   cid.local.bitraft.io:
@@ -231,85 +239,6 @@ services:
       - servicejourneyrulesapi.config
     volumes:
       - 'servicejourneyrules_data:/app/input'
-
-  users.local.bitraft.io:
-    image: ${USERSAPI_DOCKER_REGISTRY:-local}/nhsonline-backendusersapi:${USERSAPI_DOCKER_TAG:-latest}
-    entrypoint:
-      - /bin/bash # The service currently expects secrets as env vars but docker-compose only supports files
-      - -c        # Therefore we run a script before starting the service to read the file into an env var
-      - |
-          if [ -f "$$AUTH_SIGNING_PASSWORD" ]; then
-            export AUTH_SIGNING_PASSWORD=$$(<$$AUTH_SIGNING_PASSWORD)
-          fi
-          if [ -f "$$NHSAPP_API_KEY" ]; then
-            export NHSAPP_API_KEY=$$(<$$NHSAPP_API_KEY)
-          fi
-          if [ -f "$$AZURE_NOTIFICATION_HUBS__0__AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY" ]; then
-            export AZURE_NOTIFICATION_HUBS__0__AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=$$(<$$AZURE_NOTIFICATION_HUBS__0__AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY)
-          fi
-          if [ -f "$$COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING" ]; then
-            export COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING=$$(<$$COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING)
-          fi
-          if [ -f "$$COMMS_HUB_EVENT_HUB_CONNECTION_STRING" ]; then
-            export COMMS_HUB_EVENT_HUB_CONNECTION_STRING=$$(<$$COMMS_HUB_EVENT_HUB_CONNECTION_STRING)
-          fi
-          exec $$*
-      - "--"
-    command: dotnet NHSOnline.Backend.UsersApi.dll
-    env_file:
-      - ./docker/notificationhub_connectivity.env
-      - ./docker/eventhub_connectivity.env
-      - ./docker/users.env
-      - ./docker/health_checks_enabled.env
-    secrets:
-      - auth_signing_private_key
-      - auth_signing_rsapass
-      - azure_notification_hub_key
-      - nhsapp_api_key
-      - comms_hub_event_hub_pid_connection_string
-      - comms_hub_event_hub_connection_string
-
-  userinfo.local.bitraft.io:
-    image: ${USERINFOAPI_DOCKER_REGISTRY:-local}/nhsonline-backenduserinfoapi:${USERINFOAPI_DOCKER_TAG:-latest}
-    entrypoint:
-      - /bin/bash # The service currently expects secrets as env vars but docker-compose only supports files
-      - -c        # Therefore we run a script before starting the service to read the file into an env var
-      - |
-          if [ -f "$$AUTH_SIGNING_PASSWORD" ]; then
-            export AUTH_SIGNING_PASSWORD=$$(<$$AUTH_SIGNING_PASSWORD)
-          fi
-          if [ -f "$$NHSAPP_API_KEY" ]; then
-            export NHSAPP_API_KEY=$$(<$$NHSAPP_API_KEY)
-          fi
-          if [ -f "$$QUALTRICS_API_KEY" ]; then
-            export QUALTRICS_API_KEY=$$(<$$QUALTRICS_API_KEY)
-          fi
-          if [ -f "$$COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING" ]; then
-            export COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING=$$(<$$COMMS_HUB_EVENT_HUB_PID_CONNECTION_STRING)
-          fi
-          if [ -f "$$COMMS_HUB_EVENT_HUB_CONNECTION_STRING" ]; then
-            export COMMS_HUB_EVENT_HUB_CONNECTION_STRING=$$(<$$COMMS_HUB_EVENT_HUB_CONNECTION_STRING)
-          fi
-          if [ -f "$$COSMOS_SQL_API_CONNECTION_STRING" ]; then
-            export COSMOS_SQL_API_CONNECTION_STRING=$$(<$$COSMOS_SQL_API_CONNECTION_STRING)
-          fi
-          exec $$*
-      - "--"
-    command: dotnet NHSOnline.Backend.UserInfoApi.dll
-    env_file:
-      - ./docker/nhslogin_connectivity_ext.env
-      - ./docker/qualtrics_connectivity.env
-      - ./docker/eventhub_connectivity.env
-      - ./docker/userinfo.env
-      - ./docker/health_checks_enabled.env
-    secrets:
-      - auth_signing_private_key
-      - auth_signing_rsapass
-      - nhsapp_api_key
-      - qualtrics_api_key
-      - comms_hub_event_hub_pid_connection_string
-      - comms_hub_event_hub_connection_string
-      - cosmos_sql_api_connection_string
 
   mongo_seed:
     image: mongo:latest

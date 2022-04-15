@@ -123,14 +123,12 @@ api:
     servicesV3__substraktPatientPack__domains__1: https://admin-request.test.substrakthealth.com
     servicesV3__substraktPatientPack__domains__2: https://auth.test.substrakthealth.com
     servicesV3__zesty__url: https://enterprise.ytsez-sandbox.co.uk
+  mockNotificationHubClient: true
 
 sjrExternalIngressEnabled: true
 
 cid:
   clientAuth: false
-
-users:
-  mockNotificationHubClient: true
 
 metrics:
   memoryRequest: "120Mi"

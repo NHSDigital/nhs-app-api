@@ -24,20 +24,6 @@ spec:
                name: cold-api
                port:
                   number: {{ $.Values.defaultServicePort }}
-          - path: /v[1,2]/api/users/me/messages
-            pathType: ImplementationSpecific 
-            backend:
-              service:
-                name: cold-api
-                port:
-                  number: {{ .Values.defaultServicePort }}
-          - path: /v[1,2]/api/users/([A-Za-z0-9-:]{36,37})/messages
-            pathType: ImplementationSpecific 
-            backend:
-              service:
-                name: cold-api
-                port:
-                  number: {{ .Values.defaultServicePort }}
   tls:
     - hosts:
         - api-cold.{{ $.Values.zone }}.{{ $.Values.domain }}

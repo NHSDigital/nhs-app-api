@@ -52,12 +52,11 @@ web:
 api:
   image_tag: latest
   publicURL: api-stubbed2.staging.nhsapp.service.nhs.uk
+  notificationHubs:
+    - notificationHubPath: nhsapp-stubbed2
+      notificationHubConnectionString: Endpoint=sb://nhsapp-staging.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
 
 cid:
   image_tag: latest
 
-users:
-  notificationHubs:
-    - notificationHubPath: nhsapp-stubbed2
-      notificationHubConnectionString: Endpoint=sb://nhsapp-staging.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
 ...

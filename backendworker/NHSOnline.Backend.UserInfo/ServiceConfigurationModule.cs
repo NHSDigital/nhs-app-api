@@ -9,11 +9,10 @@ using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.CitizenId;
 using NHSOnline.Backend.Auth.CitizenId.Models;
-using NHSOnline.Backend.Metrics;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Repository.SqlApi;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.UserInfo.Areas.UserInfo;
 using NHSOnline.Backend.UserInfo.Areas.UserInfo.Mappers;
 using NHSOnline.Backend.UserInfo.Areas.UserInfo.Models;
@@ -45,9 +44,9 @@ namespace NHSOnline.Backend.UserInfo
             services.AddSingleton<IInfoService, InfoService>();
 
             services.RegisterSqlApiRepository<UserAndInfo, UserAndInfoRepositoryByOdsCodeConfiguration>(configuration);
-            services.RegisterSqlApiRepository<UserAndInfo, UserAndInfoRepositoryByNhsNumberConfiguration>(configuration);
+            services.RegisterSqlApiRepository<UserAndInfo, UserAndInfoRepositoryByNhsNoConfiguration>(configuration);
             services.AddTransient<SqlApiRepository<UserAndInfoRepositoryByOdsCodeConfiguration, UserAndInfo>>();
-            services.AddTransient<SqlApiRepository<UserAndInfoRepositoryByNhsNumberConfiguration, UserAndInfo>>();
+            services.AddTransient<SqlApiRepository<UserAndInfoRepositoryByNhsNoConfiguration, UserAndInfo>>();
         }
 
         private static void ConfigureCitizenIdServices(IServiceCollection services)
@@ -73,7 +72,7 @@ namespace NHSOnline.Backend.UserInfo
             services.AddHttpContextAccessor();
             services.AddScoped<UserProfileService>();
             services.AddScoped<IUserProfileService>(sp => sp.GetService<UserProfileService>());
-            services.AddScoped<IMetricContext, AccessTokenMetricContext>();
+            services.AddTransient<AccessTokenMetricContext>();
 
             services.Configure<MvcOptions>(opts =>
             {

@@ -17,21 +17,7 @@ spec:
       http:
         paths:
         - path: /
-          pathType: ImplementationSpecific 
-          backend:
-            service:
-              name: default-api
-              port:
-                number: {{ .Values.defaultServicePort }}
-        - path: /v[1,2]/api/users/me/messages
-          pathType: ImplementationSpecific 
-          backend:
-            service:
-              name: default-api
-              port:
-                number: {{ .Values.defaultServicePort }}
-        - path: /v[1,2]/api/users/([A-Za-z0-9-:]{36,37})/messages
-          pathType: ImplementationSpecific 
+          pathType: ImplementationSpecific
           backend:
             service:
               name: default-api

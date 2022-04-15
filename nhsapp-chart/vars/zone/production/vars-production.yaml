@@ -170,6 +170,28 @@ api:
     servicesV3__drDoctor__domains__1: https://login.drdoctor.co.uk
     servicesV3__netcall__url: https://patienthub.co.uk
     servicesV3__zesty__url: https://patient-portal.zesty.co.uk
+  mockNotificationHubClient: false
+  notificationHubs:
+    - notificationHubPath: nhsapp-production
+      notificationHubConnectionString: Endpoint=sb://nhsapp-production.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
+      notificationHubReadCharacters: "0123"
+      notificationHubWriteCharacters: "0123"
+    - notificationHubPath: nhsapp-production-0
+      notificationHubConnectionString: Endpoint=sb://nhsapp-production-0.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
+      notificationHubReadCharacters: "4567"
+      notificationHubWriteCharacters: "4567"
+      notificationHubGeneration: "2"
+    - notificationHubPath: nhsapp-production-1
+      notificationHubConnectionString: Endpoint=sb://nhsapp-production-1.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
+      notificationHubReadCharacters: "89AB"
+      notificationHubWriteCharacters: "89AB"
+      notificationHubGeneration: "2"
+    - notificationHubPath: nhsapp-production-2
+      notificationHubConnectionString: Endpoint=sb://nhsapp-production-2.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
+      notificationHubReadCharacters: "CDEF"
+      notificationHubWriteCharacters: "CDEF"
+      notificationHubGeneration: "2"
+
 
 cid:
   imagePullPolicy: IfNotPresent
@@ -198,37 +220,6 @@ iproxy:
   minAvailable: 4
   minReplicas: 8
   maxReplicas: 100
-
-info:
-  minAvailable: 4
-  minReplicas: 8
-  maxReplicas: 100
-
-users:
-  mockNotificationHubClient: false
-  minAvailable: 7
-  minReplicas: 13
-  maxReplicas: 100
-  notificationHubs:
-    - notificationHubPath: nhsapp-production
-      notificationHubConnectionString: Endpoint=sb://nhsapp-production.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
-      notificationHubReadCharacters: "0123"
-      notificationHubWriteCharacters: "0123"
-    - notificationHubPath: nhsapp-production-0
-      notificationHubConnectionString: Endpoint=sb://nhsapp-production-0.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
-      notificationHubReadCharacters: "4567"
-      notificationHubWriteCharacters: "4567"
-      notificationHubGeneration: "2"
-    - notificationHubPath: nhsapp-production-1
-      notificationHubConnectionString: Endpoint=sb://nhsapp-production-1.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
-      notificationHubReadCharacters: "89AB"
-      notificationHubWriteCharacters: "89AB"
-      notificationHubGeneration: "2"
-    - notificationHubPath: nhsapp-production-2
-      notificationHubConnectionString: Endpoint=sb://nhsapp-production-2.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
-      notificationHubReadCharacters: "CDEF"
-      notificationHubWriteCharacters: "CDEF"
-      notificationHubGeneration: "2"
 
 metrics:
   memoryRequest: "12Mi"

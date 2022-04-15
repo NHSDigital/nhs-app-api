@@ -14,11 +14,6 @@ wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.onboardingaos
 # Allow access to private API without the redirector
 createDefaultPrivateIngress: true
 
-users:
-  notificationHubs:
-    - notificationHubPath: nhsapp-nonlive-onboardingaos
-      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
-
 secrets:
   notificationHubs:
     - name: "notificationHubSharedAccessKey-nonlive-onboardingaos"
@@ -78,3 +73,6 @@ api:
     servicesV3__substraktPatientPack__domains__1: https://admin-request.aoc.substrakthealth.com
     servicesV3__substraktPatientPack__domains__2: https://auth.aoc.substrakthealth.com
     servicesV3__zesty__url: https://patient-portal-wayfinder-test.zesty.co.uk
+  notificationHubs:
+    - notificationHubPath: nhsapp-nonlive-onboardingaos
+      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=

@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Users.Areas.Devices.Models;
 using NHSOnline.Backend.Users.Repository;
@@ -10,11 +11,11 @@ namespace NHSOnline.Backend.Users.Areas.Devices
     public class RegisterDeviceResultVisitor : IRegisterDeviceResultVisitor<Task<IActionResult>>
     {
         private readonly RegisterDeviceRequest _initialRequest;
-        private readonly IMetricLogger _metricLogger;
+        private readonly IMetricLogger<AccessTokenMetricContext> _metricLogger;
 
         public RegisterDeviceResultVisitor(
             RegisterDeviceRequest initialRequest,
-            IMetricLogger metricLogger)
+            IMetricLogger<AccessTokenMetricContext> metricLogger)
         {
             _initialRequest = initialRequest;
             _metricLogger = metricLogger;

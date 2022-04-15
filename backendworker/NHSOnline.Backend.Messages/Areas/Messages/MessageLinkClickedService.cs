@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Messages.Areas.Messages.Models;
 using NHSOnline.Backend.Messages.Repository;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Metrics.EventHub;
 using NHSOnline.Backend.Repository;
@@ -20,7 +21,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
         private readonly IMapper<SenderContext, SenderContextEventLogData> _senderContextEventLogDataMapper;
         private readonly IMessageLinkClickedValidationService _validationService;
         private readonly IMessageRepository _messageRepository;
-        private readonly IMetricLogger _metricLogger;
+        private readonly IMetricLogger<UserSessionMetricContext> _metricLogger;
         private readonly IEventHubLogger _eventHubLogger;
         private readonly IHashingService _hashingService;
 
@@ -29,7 +30,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
             IMapper<SenderContext, SenderContextEventLogData> senderContextEventLogDataMapper,
             IMessageLinkClickedValidationService validationService,
             IMessageRepository messageRepository,
-            IMetricLogger metricLogger,
+            IMetricLogger<UserSessionMetricContext> metricLogger,
             IEventHubLogger eventHubLogger,
             IHashingService hashingService)
         {

@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.PfsApi.Session
                 return userSessionFailure;
             }
 
-            await _userInfoService.Update(request, serviceJourneyRules, citizenIdSession);
+            await _userInfoService.Update(serviceJourneyRules, citizenIdSession);
 
             return new CreateSessionResult.Success(serviceJourneyRules, userSession);
         }

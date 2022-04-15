@@ -8,6 +8,7 @@ using Moq;
 using NHSOnline.Backend.Messages.Areas.Messages;
 using NHSOnline.Backend.Messages.Areas.Messages.Models;
 using NHSOnline.Backend.Messages.Repository;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Metrics.EventHub;
 using NHSOnline.Backend.Repository;
@@ -24,7 +25,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
         private Mock<IMapper<SenderContext, SenderContextEventLogData>> _mockSenderContextEventLogDataMapper;
         private Mock<IMessageLinkClickedValidationService> _mockValidationService;
         private Mock<IMessageRepository> _mockMessageRepository;
-        private Mock<IMetricLogger> _mockMetricLogger;
+        private Mock<IMetricLogger<UserSessionMetricContext>> _mockMetricLogger;
         private Mock<IEventHubLogger> _mockEventHubLogger;
         private Mock<IHashingService> _mockHashingService;
 
@@ -66,7 +67,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
                 new Mock<IMapper<SenderContext, SenderContextEventLogData>>(MockBehavior.Strict);
             _mockValidationService = new Mock<IMessageLinkClickedValidationService>(MockBehavior.Strict);
             _mockMessageRepository = new Mock<IMessageRepository>(MockBehavior.Strict);
-            _mockMetricLogger = new Mock<IMetricLogger>(MockBehavior.Strict);
+            _mockMetricLogger = new Mock<IMetricLogger<UserSessionMetricContext>>(MockBehavior.Strict);
             _mockEventHubLogger = new Mock<IEventHubLogger>(MockBehavior.Strict);
             _mockHashingService = new Mock<IHashingService>(MockBehavior.Strict);
 

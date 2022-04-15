@@ -75,7 +75,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                     NhsNumber = NhsNumber,
                     GpRegistrationDetails = { OdsCode = _odsCode },
                     FamilyName = _familyName,
-                    IdentityProofingLevel = "P9"
+                    IdentityProofingLevel = "P9",
+                    Email = "email"
                 },
                 _accessToken,
                 _refreshToken,
@@ -120,6 +121,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                     ProofLevel = ProofLevel.P9,
                     RefreshToken = _refreshToken
                 },
+                Email = userProfile.Email,
                 StatusCode = 200
             });
         }

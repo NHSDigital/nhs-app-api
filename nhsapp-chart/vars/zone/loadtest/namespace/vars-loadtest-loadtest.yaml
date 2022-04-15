@@ -37,20 +37,15 @@ api:
   maxReplicas: 300
   image_tag: latest
   publicURL: api-stubbed.stubbed.nhsapp.service.nhs.uk
+  notificationHubs:
+    - notificationHubPath: nhsapp-stubbed
+      notificationHubConnectionString: Endpoint=sb://nhsapp-staging.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
 
 cid:
   minAvailable: 12
   minReplicas: 24
   maxReplicas: 100
   image_tag: latest
-
-users:
-  minAvailable: 7
-  minReplicas: 13
-  maxReplicas: 100
-  notificationHubs:
-    - notificationHubPath: nhsapp-stubbed
-      notificationHubConnectionString: Endpoint=sb://nhsapp-staging.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
 
 secrets:
   notificationHubs:
@@ -69,11 +64,6 @@ sjr:
   maxReplicas: 100
 
 iproxy:
-  minAvailable: 4
-  minReplicas: 8
-  maxReplicas: 100
-
-info:
   minAvailable: 4
   minReplicas: 8
   maxReplicas: 100

@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 namespace NHSOnline.Backend.Metrics
 {
-    public interface IMetricLogger
+    public interface IMetricLogger<TIMetricContext>
     {
         Task AppointmentBook(AppointmentData data);
 

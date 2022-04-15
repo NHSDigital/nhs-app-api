@@ -40,6 +40,8 @@
     <ProjectReference Include="..\NHSOnline.Backend.GpSystems\NHSOnline.Backend.GpSystems.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.Logger\NHSOnline.Backend.Logger.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.Messages\NHSOnline.Backend.Messages.csproj" />
+    <ProjectReference Include="..\NHSOnline.Backend.Users\NHSOnline.Backend.Users.csproj" />
+    <ProjectReference Include="..\NHSOnline.Backend.UserInfo\NHSOnline.Backend.UserInfo.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.Metrics\NHSOnline.Backend.Metrics.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.NominatedPharmacy\NHSOnline.Backend.NominatedPharmacy.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.ServiceJourneyRules.Common\NHSOnline.Backend.ServiceJourneyRules.Common.csproj" />
@@ -132,5 +134,9 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\Markdown\IntroductoryMessage.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\UserInfo" />
   </ItemGroup>
 </Project>

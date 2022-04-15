@@ -1,5 +1,7 @@
 using System;
 using System.Net;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
@@ -11,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Auditing.UnitTestsSupport;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Im1Connection.Cache;
@@ -25,13 +28,14 @@ using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
 using NHSOnline.Backend.PfsApi.Session;
-using NHSOnline.Backend.PfsApi.UserInfo;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Certificate;
 using NHSOnline.Backend.Support.Session;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support.Temporal;
+using NHSOnline.Backend.UserInfo.Areas.UserInfo;
+using NHSOnline.Backend.UserInfo.Areas.UserInfo.Models;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Session
@@ -43,7 +47,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
         internal const string ApiSessionId = "ApiSessionId";
 
         private const int SessionTimeoutMinutes = 10;
-        private const string AccessToken = "AccessToken";
         private const string RefreshToken = "RefreshToken";
         private const string IdToken = "IDToken";
 
@@ -159,6 +162,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
 
             internal TestData(TestMocks mocks)
             {
+                // Arrange
+                var accessToken = JwtToken.Generate(new[]
+                {
+                    new Claim(JwtRegisteredClaimNames.Sub, "938748274892478926464782647824"),
+                    new Claim("nhs_number", "012 345 6789"),
+                });
+
                 UserInfo = new Auth.CitizenId.Models.UserInfo
                 {
                     Birthdate = "1980-01-02",
@@ -168,7 +178,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                     FamilyName = "Family",
                     GpRegistrationDetails = { OdsCode = "OdsCode" }
                 };
-                UserProfile = new UserProfile(UserInfo, AccessToken, RefreshToken, IdToken);
+                UserProfile = new UserProfile(UserInfo, accessToken, RefreshToken, IdToken);
 
                 EmisUserSession = new EmisUserSession
                 {
@@ -184,7 +194,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
 
                 CitizenIdUserSession = new CitizenIdUserSession
                 {
-                    AccessToken = AccessToken,
+                    AccessToken = accessToken,
                     ProofLevel = ProofLevel.P9,
                     OdsCode = UserProfile.OdsCode,
                     RefreshToken = RefreshToken,
@@ -198,10 +208,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                     DateOfBirth = new DateTime(1980, 01, 02, 0, 0, 0, DateTimeKind.Utc),
                     Im1ConnectionToken = UserProfile.Im1ConnectionToken,
                     NhsNumber = UserProfile.NhsNumber,
-                    Session = CitizenIdUserSession
+                    Session = CitizenIdUserSession,
+                    Email = "Email"
                 };
 
-                ServiceJourneyRulesResponse = new ServiceJourneyRulesResponse { Journeys = new Journeys { Supplier = Supplier.Emis } };
+                ServiceJourneyRulesResponse = new ServiceJourneyRulesResponse { Journeys = new Journeys { Supplier = Supplier.Emis, UserInfo = true} };
                 ServiceJourneyRulesConfigResult = new ServiceJourneyRulesConfigResult.Success(ServiceJourneyRulesResponse);
 
                 SessionConfigSettings = new SessionConfigurationSettings(false);
@@ -233,9 +244,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
             internal Mock<HttpContext> HttpContext { get; } = new Mock<HttpContext>();
             internal Mock<IAntiforgery> Antiforgery { get; } = new Mock<IAntiforgery>();
             internal Mock<ISessionCacheService> SessionCacheService { get; } = new Mock<ISessionCacheService>();
+            internal Mock<IInfoService> InfoService { get; } = new Mock<IInfoService>();
+            internal Mock<IMapper<CitizenIdSessionResult, InfoUserProfile>> UserProfileMapper { get; } =
+                new Mock<IMapper<CitizenIdSessionResult, InfoUserProfile>>();
+
             public void ConfigureServices(IServiceCollection serviceCollection)
             {
                 serviceCollection
+                    .AddSingleton(InfoService.Object)
+                    .AddSingleton(UserProfileMapper.Object)
                     .AddSingleton(CitizenIdSessionService.Object)
                     .AddSingleton(GpSystemFactory.Object)
                     .AddSingleton(Auditor.Object)
@@ -247,9 +264,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                     .AddSingleton(Antiforgery.Object)
                     .AddSingleton(SessionCacheService.Object)
                     .AddSingleton(new Mock<IUserSessionManager>().Object)
-                    .AddSingleton(new Mock<IUserInfoService>().Object)
                     .AddSingleton(new Mock<IAuthenticationService>().Object)
-                    .AddSingleton(new Mock<IMetricLogger>().Object)
+                    .AddSingleton(new Mock<IMetricLogger<UserSessionMetricContext>>().Object)
                     .AddSingleton(new Mock<ISigning>().Object)
                     .AddSingleton(new AuthSigningConfig(new Mock<IConfiguration>().Object, new Mock<ILogger<AuthSigningConfig>>().Object))
                     .AddSingleton(new Mock<ICurrentDateTimeProvider>().Object)

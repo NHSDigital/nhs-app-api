@@ -1,14 +1,16 @@
 using System.Threading.Tasks;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Metrics;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Repository;
 
 namespace NHSOnline.Backend.PfsApi.TermsAndConditions
 {
     internal class RepositoryCreateConsentResponseVisitor : IRepositoryCreateResultVisitor<TermsAndConditionsRecord, Task<TermsAndConditionsRecordConsentResult>>
     {
-        private readonly IMetricLogger _metricLogger;
+        private readonly IMetricLogger<UserSessionMetricContext> _metricLogger;
 
-        public RepositoryCreateConsentResponseVisitor(IMetricLogger metricLogger)
+        public RepositoryCreateConsentResponseVisitor(IMetricLogger<UserSessionMetricContext> metricLogger)
         {
             _metricLogger = metricLogger;
         }

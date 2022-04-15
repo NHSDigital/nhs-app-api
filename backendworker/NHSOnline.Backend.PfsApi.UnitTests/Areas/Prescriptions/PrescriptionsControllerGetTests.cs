@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.PfsApi.Areas.Prescriptions;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems;
@@ -102,7 +103,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 _mockGpSystemFactory.Object,
                 _mockAuditor.Object,
                 _mockErrorReferenceGenerator.Object,
-                new Mock<IMetricLogger>().Object);
+                new Mock<IMetricLogger<UserSessionMetricContext>>().Object);
         }
 
         [TestMethod]

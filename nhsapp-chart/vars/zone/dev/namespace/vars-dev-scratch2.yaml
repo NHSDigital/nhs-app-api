@@ -1,9 +1,4 @@
 ---
-users:
-  notificationHubs:
-    - notificationHubPath: nhsapp-nonlive-scratch2
-      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=
-
 # well known
 wellKnownAndroidPackageName: com.nhs.online.nhsonline.scratch2
 wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.scratch2
@@ -18,3 +13,6 @@ api:
   knownServicesOverrides:
     services__nhsd__url: https://int.coronavirus-record.service.nhs.uk
     servicesV3__nhsd__url: https://int.coronavirus-record.service.nhs.uk
+  notificationHubs:
+    - notificationHubPath: nhsapp-nonlive-scratch2
+      notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=NhsAppFullAccess;SharedAccessKey=

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 namespace NHSOnline.Backend.Metrics
 {
     [SuppressMessage("Microsoft.Performance", "CA1812", Justification = "Created by DI")]
-    internal sealed class MetricLogger : IMetricLogger
+    public sealed class MetricLogger<TMetricContext> : IMetricLogger<TMetricContext> where TMetricContext : IMetricContext
     {
         private readonly IMetricContext _metricContext;
 
-        public MetricLogger(IMetricContext metricContext) => _metricContext = metricContext;
+        public MetricLogger(TMetricContext metricContext) => _metricContext = metricContext;
 
         public Task AppointmentBook(AppointmentData data) => WriteMetricLog(data);
 

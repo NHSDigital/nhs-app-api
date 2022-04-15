@@ -31,16 +31,13 @@ services:
       - ./docker/stubbed/env/tpp_connectivity.env
       - ./docker/stubbed/env/vision_connectivity.env
       - ./docker/stubbed/env/knownservices.env
+      - ./docker/stubbed/env/qualtrics_connectivity.env
 
   cid.local.bitraft.io:
     env_file:
       - ./docker/stubbed/env/emis_connectivity.env
       - ./docker/stubbed/env/tpp_connectivity.env
       - ./docker/stubbed/env/vision_connectivity.env
-
-  userinfo.local.bitraft.io:
-    env_file:
-      - ./docker/stubbed/env/qualtrics_connectivity.env
 
   stubs.local.bitraft.io:
     networks:

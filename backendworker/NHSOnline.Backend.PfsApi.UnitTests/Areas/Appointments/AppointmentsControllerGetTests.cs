@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.PfsApi.Areas.Appointments;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems;
@@ -98,7 +99,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 _mockErrorReferenceGenerator.Object,
                 _mockAppointmentTypeTransformingVisitor.Object,
                 new Mock<IAnonymousMetricLogger>().Object,
-                new Mock<IMetricLogger>().Object);
+                new Mock<IMetricLogger<UserSessionMetricContext>>().Object);
         }
 
         [TestMethod]

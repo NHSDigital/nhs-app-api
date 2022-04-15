@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Auditing.UnitTestsSupport;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity;
@@ -29,7 +30,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
         private Mock<IAssertedLoginIdentityService> _mockAssertedLoginIdentityService;
         private Mock<IAuditor> _mockAuditor;
         private Mock<ILogger<AssertedLoginIdentityController>> _mockLogger;
-        private Mock<IMetricLogger> _mockMetricLogger;
+        private Mock<IMetricLogger<UserSessionMetricContext>> _mockMetricLogger;
         private P9UserSession _p9UserSession;
         private P5UserSession _p5UserSession;
 
@@ -51,7 +52,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
             _mockAssertedLoginIdentityService = new Mock<IAssertedLoginIdentityService>();
             _mockAuditor = new Mock<IAuditor>();
             _mockLogger = new Mock<ILogger<AssertedLoginIdentityController>>();
-            _mockMetricLogger = new Mock<IMetricLogger>();
+            _mockMetricLogger = new Mock<IMetricLogger<UserSessionMetricContext>>();
 
             _systemUnderTest = new AssertedLoginIdentityController(
                 _mockAuditor.Object,

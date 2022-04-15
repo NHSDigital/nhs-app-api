@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Messages.Areas.Messages;
@@ -29,7 +30,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
 
         private Mock<IMessageService> _mockMessageService;
         private Mock<IEventHubLogger> _mockEventHubLogger;
-        private Mock<IMetricLogger> _mockMetricLogger;
+        private Mock<IMetricLogger<UserSessionMetricContext>> _mockMetricLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -43,7 +44,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 .Returns(_accessToken);
 
             _mockEventHubLogger = new Mock<IEventHubLogger>();
-            _mockMetricLogger = new Mock<IMetricLogger>();
+            _mockMetricLogger = new Mock<IMetricLogger<UserSessionMetricContext>>();
             _mockMessageService = new Mock<IMessageService>(MockBehavior.Strict);
 
             _systemUnderTest = new MessagesController(

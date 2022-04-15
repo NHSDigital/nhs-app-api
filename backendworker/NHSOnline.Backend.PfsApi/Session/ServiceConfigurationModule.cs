@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.Areas.Session;
 using NHSOnline.Backend.Support.Session;
@@ -22,7 +23,7 @@ namespace NHSOnline.Backend.PfsApi.Session
         {
             services.AddScoped<UserSessionService>();
             services.AddTransient<IUserSessionService>(sp => sp.GetRequiredService<UserSessionService>());
-            services.AddTransient<IMetricContext, UserSessionMetricContext>();
+            services.AddTransient<UserSessionMetricContext>();
             services.AddTransient<ISessionResultVisitor<Task<IActionResult>>, SessionResultVisitor>();
             services.AddSingleton<ISessionErrorResultBuilder, SessionErrorResultBuilder>();
 

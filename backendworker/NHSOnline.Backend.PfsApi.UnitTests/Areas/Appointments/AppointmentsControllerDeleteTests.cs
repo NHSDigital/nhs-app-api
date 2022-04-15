@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.PfsApi.Areas.Appointments;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.Support;
@@ -108,7 +109,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 _mockErrorReferenceGenerator.Object,
                 new Mock<IAppointmentTypeTransformingVisitor>().Object,
                 _mockAnonymousMetricLogger.Object,
-                new Mock<IMetricLogger>().Object);
+                new Mock<IMetricLogger<UserSessionMetricContext>>().Object);
 
             _requestAuditMessage = $"Attempting to cancel appointment with id: {_appointmentCancelRequest.AppointmentId}";
         }

@@ -2,8 +2,10 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.GpSystems.PatientRecord;
 using NHSOnline.Backend.Metrics;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
@@ -12,14 +14,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<MyRecordController> _logger;
-        private readonly IMetricLogger _metricLogger;
+        private readonly IMetricLogger<UserSessionMetricContext> _metricLogger;
         private readonly P9UserSession _userSession;
 
         private const string AuditType = AuditingOperations.ViewPatientRecordAuditTypeResponse;
 
         public MyRecordAuditingVisitor(IAuditor auditor,
             ILogger<MyRecordController> logger,
-            IMetricLogger metricLogger,
+            IMetricLogger<UserSessionMetricContext> metricLogger,
             P9UserSession userSession)
         {
             _auditor = auditor;

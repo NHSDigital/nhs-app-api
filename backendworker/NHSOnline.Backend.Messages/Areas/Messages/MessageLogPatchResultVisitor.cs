@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Messages.Areas.Messages.Models;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Metrics.EventHub;
 using NHSOnline.Backend.Support;
@@ -11,7 +12,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
 {
     public class MessageLogPatchResultVisitor : IMessagePatchResultVisitor<Task>
     {
-        private readonly IMetricLogger _metricLogger;
+        private readonly IMetricLogger<UserSessionMetricContext> _metricLogger;
         private readonly IEventHubLogger _eventHubLogger;
         private readonly ILogger _logger;
 
@@ -19,7 +20,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
             _messageSenderContextEventLogDataMapper;
 
         public MessageLogPatchResultVisitor(
-            IMetricLogger metricLogger,
+            IMetricLogger<UserSessionMetricContext> metricLogger,
             IEventHubLogger eventHubLogger,
             IMapper<SenderContext, SenderContextEventLogData> messageSenderContextEventLogDataMapper,
             ILogger logger)

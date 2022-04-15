@@ -1,15 +1,16 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Metrics;
 
 namespace NHSOnline.Backend.UserInfo.Areas.UserResearch
 {
     public class PostUserResearchResultVisitor : IUserResearchResultVisitor<Task<IActionResult>>
     {
-        private readonly IMetricLogger _metricLogger;
+        private readonly IMetricLogger<AccessTokenMetricContext> _metricLogger;
 
-        public PostUserResearchResultVisitor(IMetricLogger metricLogger)
+        public PostUserResearchResultVisitor(IMetricLogger<AccessTokenMetricContext> metricLogger)
         {
             _metricLogger = metricLogger;
         }

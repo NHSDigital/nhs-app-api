@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.PatientRecord;
 using NHSOnline.Backend.Metrics;
@@ -26,14 +27,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         private readonly ILogger<MyRecordController> _logger;
         private readonly IAuditor _auditor;
         private readonly IMyRecordMetadataLogger _myRecordMetadataLogger;
-        private readonly IMetricLogger _metricLogger;
+        private readonly IMetricLogger<UserSessionMetricContext> _metricLogger;
 
         public MyRecordController(
             ILogger<MyRecordController> logger,
             IGpSystemFactory gpSystemFactory,
             IAuditor auditor,
             IMyRecordMetadataLogger myRecordMetadataLogger,
-            IMetricLogger metricLogger)
+            IMetricLogger<UserSessionMetricContext> metricLogger)
         {
             _gpSystemFactory = gpSystemFactory;
             _logger = logger;

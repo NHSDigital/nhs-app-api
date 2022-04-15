@@ -1,8 +1,10 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.Messages;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.PfsApi.TermsAndConditions.Models;
 using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
@@ -19,7 +21,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
         private readonly IMapper<ConsentRequest, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> _consentRequestToUpdateMapper;
         private readonly IMapper<AnalyticsCookieAcceptance, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> _analyticsCookieAcceptanceToUpdateMapper;
         private readonly IIntroMessagesService _introMessagesService;
-        private readonly IMetricLogger _metricLogger;
+        private readonly IMetricLogger<UserSessionMetricContext> _metricLogger;
 
         public TermsAndConditionsService
         (
@@ -30,7 +32,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             IMapper<ConsentRequest, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> consentRequestToUpdateMapper,
             IMapper<AnalyticsCookieAcceptance, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> analyticsCookieAcceptanceToUpdateMapper,
             IIntroMessagesService introMessagesService,
-            IMetricLogger metricLogger
+            IMetricLogger<UserSessionMetricContext> metricLogger
         )
         {
             _logger = logger;

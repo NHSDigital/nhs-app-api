@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.AssertedLoginIdentity;
 using NHSOnline.Backend.PfsApi.AssertedLoginIdentity.Models;
@@ -20,13 +21,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<AssertedLoginIdentityController> _logger;
-        private readonly IMetricLogger _metricLogger;
+        private readonly IMetricLogger<UserSessionMetricContext> _metricLogger;
         private readonly IAssertedLoginIdentityService _assertedLoginIdentityService;
 
         public AssertedLoginIdentityController(
             IAuditor auditor,
             ILogger<AssertedLoginIdentityController> logger,
-            IMetricLogger metricLogger,
+            IMetricLogger<UserSessionMetricContext> metricLogger,
             IAssertedLoginIdentityService assertedLoginIdentityService)
         {
             _auditor = auditor;

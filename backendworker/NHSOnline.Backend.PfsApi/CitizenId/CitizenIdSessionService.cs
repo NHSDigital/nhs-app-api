@@ -100,7 +100,8 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
                         IdTokenJti = userProfileResult.IdTokenJti,
                         ProofLevel = proofLevel.Value,
                         RefreshToken = cidUserProfile.RefreshToken
-                    }
+                    },
+                    Email = cidUserProfile.Email
                 };
             }
             finally

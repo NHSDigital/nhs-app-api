@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Messages.Areas.Messages;
@@ -32,7 +33,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
         private Mock<IMessageService> _mockMessageService;
         private Mock<IMessagesValidationService> _mockMessagesValidationService;
         private Mock<IEventHubLogger> _mockEventHubLogger;
-        private Mock<IMetricLogger> _mockMetricLogger;
+        private Mock<IMetricLogger<UserSessionMetricContext>> _mockMetricLogger;
 
         private AccessToken _accessToken;
         private AddMessageRequest _validAddMessageRequest;
@@ -49,7 +50,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 .Returns(_accessToken);
 
             _mockEventHubLogger = new Mock<IEventHubLogger>(MockBehavior.Strict);
-            _mockMetricLogger = new Mock<IMetricLogger>(MockBehavior.Strict);
+            _mockMetricLogger = new Mock<IMetricLogger<UserSessionMetricContext>>(MockBehavior.Strict);
             _mockMessageService = new Mock<IMessageService>(MockBehavior.Strict);
             _mockMessagesValidationService = new Mock<IMessagesValidationService>(MockBehavior.Strict);
 

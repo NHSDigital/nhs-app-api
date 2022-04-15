@@ -47,7 +47,7 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             NotificationLogs.GetLogs(testTiming.StartTime,
                     testTiming.StopTime,
-                    "users",
+                    "pfs",
                     patient,
                     patient.OdsCode,
                     "NotificationsEnabled")
@@ -85,7 +85,7 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             NotificationLogs.GetLogs(testTiming.StartTime,
                     testTiming.StopTime,
-                    "users",
+                    "pfs",
                     patient,
                     patient.OdsCode,
                     "NotificationsDisabled")

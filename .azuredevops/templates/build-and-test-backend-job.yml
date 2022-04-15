@@ -125,13 +125,3 @@ jobs:
         displayName: Package non-live SJR config
         inputs:
           scriptPath: backendworker/buildscripts/11_package_non_live_sjr_config.sh
-
-      - task: ShellScript@2
-        displayName: Package Users API
-        inputs:
-          scriptPath: backendworker/buildscripts/12_package_users_api.sh
-
-      - task: ShellScript@2
-        displayName: Package User Info API
-        inputs:
-          scriptPath: backendworker/buildscripts/13_package_userinfo_api.sh

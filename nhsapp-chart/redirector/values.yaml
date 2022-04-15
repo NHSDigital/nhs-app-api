@@ -20,12 +20,6 @@ cid:
 www:
   role: www
   version: ""
-users:
-  role: users
-  version: ""
-info:
-  role: info
-  version: ""
 sjr:
   role: sjr
   version: ""

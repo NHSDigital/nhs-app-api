@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.Session;
@@ -21,7 +22,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         private readonly UserSessionService _userSessionService;
         private readonly ILogger<SessionResultVisitor> _logger;
         private readonly ConfigurationSettings _settings;
-        private readonly IMetricLogger _metricLogger;
+        private readonly IMetricLogger<UserSessionMetricContext> _metricLogger;
         private readonly ISessionErrorResultBuilder _errorResultBuilder;
         private readonly ISessionExpiryCookieCreator _sessionExpiryCookieCreator;
         private readonly IAuditor _auditor;
@@ -30,7 +31,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             UserSessionService userSessionService,
             ILogger<SessionResultVisitor> logger,
             ConfigurationSettings settings,
-            IMetricLogger metricLogger,
+            IMetricLogger<UserSessionMetricContext> metricLogger,
             ISessionErrorResultBuilder errorResultBuilder,
             ISessionExpiryCookieCreator sessionExpiryCookieCreator,
             IAuditor auditor)
