@@ -37,6 +37,12 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
                         summaryResponse.Body.Referrals.OrderBy(referral => referral.ReferredDateTime);
                 }
 
+                if (summaryResponse.Body.UpcomingAppointments?.Count() > 1)
+                {
+                    summaryResponse.Body.UpcomingAppointments =
+                        summaryResponse.Body.UpcomingAppointments.OrderBy(appointment => appointment.AppointmentDateTime);
+                }
+
                 return new SecondaryCareSummaryResult.Success(summaryResponse.Body);
 
             }
