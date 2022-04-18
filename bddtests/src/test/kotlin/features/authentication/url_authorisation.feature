@@ -122,9 +122,9 @@ Feature: Authorisation occurs during each URL visit
     Given I am a EMIS patient
     And I am about to directly access every page
     And I am not logged in
-    When I browse to the <Url> and see the urlcontains page
+    When I browse to the page at <Url>
     Then I am on the relevant <Page> page
-    Examples: # includes a target page which requires a GP session and one which does not
+    Examples: # Includes a target page which requires a GP session and one which does not.
       | Url                                                                                                       | Page                                                              |
       | /advice?referrer=nhs_uk&assertedLoginIdentity=valid-asserted-login-identity                               | /advice?integration_referrer=nhs_uk                               |
       | /patient/appointments/gp-appointments?referrer=nhs_uk&assertedLoginIdentity=valid-asserted-login-identity | /patient/appointments/gp-appointments?integration_referrer=nhs_uk |

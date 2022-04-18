@@ -25,7 +25,6 @@ class SSOLoginRequestBuilder(
     }
 
     fun respondWithRedirectURI(): Mapping {
-        return redirectTo("{{request.query.redirect_uri}}?state={{request.query.state}}&code=" +
-                    patient.authCode)
+        return redirectTo("{{request.query.redirect_uri}}?code=${patient.authCode}&state={{{request.query.state}}}");
     }
 }

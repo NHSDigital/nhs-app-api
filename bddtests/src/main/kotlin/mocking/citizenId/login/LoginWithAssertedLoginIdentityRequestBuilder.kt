@@ -24,6 +24,6 @@ class LoginWithAssertedLoginIdentityRequestBuilder(
 
     fun respondWithRedirectBackToNhsAppPage(): Mapping {
         return redirectTo(
-            "{{request.query.redirect_uri}}?state={{{request.query.state}}}&code=" + patient.authCode)
+            "{{request.query.redirect_uri}}?code=${patient.authCode}&state={{{request.query.state}}}")
         }
 }
