@@ -118,9 +118,9 @@ paths:
       operationId: create-in-app
       description: |
         ## Overview
-        Use this endpoint to send an in-app message to one or more NHS App users.
+        Use this endpoint to send an in-app message to a single NHS App user.
 
-        Recipients are specified by NHS number. A single request to this endpoint can send an identical message to between 1 and 100 distinct NHS numbers.
+        Recipients are specified by NHS number. A single request to this endpoint can send a message to a single NHS number.
         In-app messages will only be sent to users who have had their identity verified to 'high' (P9) level.
 
         We support a subset of [Markdown](https://en.wikipedia.org/wiki/Markdown) for describing the body text of in-app messages. The length of each in-app message is limited to 5000 characters, including any markdown characters and embedded hyperlinks.
@@ -141,7 +141,7 @@ paths:
         - communication
       responses:
         "201":
-          description: Request successfully received by the server and queued for sending to recipients.
+          description: Request successfully received by the server and queued for sending to recipient.
           headers:
             Location:
               schema:
@@ -175,13 +175,17 @@ paths:
                   value:
                     $ref: components/examples/responses/communication/400contentStringTooLong.json
                 no-recipients:
-                  summary: No recipients have been specified
+                  summary: No recipient has been specified
                   value:
                     $ref: components/examples/responses/communication/400noRecipients.json
                 invalid-recipient:
                   summary: A recipient has an invalid NHS number
                   value:
                     $ref: components/examples/responses/communication/400invalidNhsNumber.json
+                exceed-recipient:
+                  summary: Too many recipients have been specified
+                  value:
+                    $ref: components/examples/responses/communication/400tooManyRecipients.json   
                 sender-missing-and-campaign-id-too-long:
                   summary: Multiple issues - sender name is missing and campaign ID exceed maximum length
                   value:
@@ -251,7 +255,7 @@ paths:
 
         Push notifications will not be sent to users between the hours of 10pm and 6am UK time. If a valid request to send a push notification is processed between these hours, the push notification will be scheduled for delivery at 6am.
 
-        Recipients are specified by NHS number. A single request to this endpoint can send an identical push notification to between 1 and 100 distinct NHS numbers.
+        Recipients are specified by NHS number. A single request to this endpoint can send a push notification to a single NHS number.
         Push notifications will only be sent to users who have had their identity verified to 'high' (P9) level.
 
         The body text of notifications can be up to 200 characters in length.
@@ -280,7 +284,7 @@ paths:
         - communication
       responses:
         "201":
-          description: Request successfully received by the server and queued for sending to recipients.
+          description: Request successfully received by the server and queued for sending to recipient.
           headers:
             Location:
               schema:
@@ -292,7 +296,6 @@ paths:
           content:
             application/fhir+json:
               schema:
-                schema:
                 $ref: components/schemas/responses/communication/communication-push-notifications.yaml
               example:
                 $ref: components/examples/responses/communication/201successNotification.json
@@ -315,13 +318,17 @@ paths:
                   value:
                     $ref: components/examples/responses/communication/400contentReferenceDisplayTooLong.json
                 no-recipients:
-                  summary: No recipients have been specified
+                  summary: No recipient has been specified
                   value:
                     $ref: components/examples/responses/communication/400noRecipients.json
                 invalid-recipient:
                   summary: A recipient has an invalid NHS number
                   value:
                     $ref: components/examples/responses/communication/400invalidNhsNumber.json
+                exceed-recipient:
+                  summary: Too many recipients have been specified
+                  value:
+                    $ref: components/examples/responses/communication/400tooManyRecipients.json
                 sender-missing-and-campaign-id-too-long:
                   summary: Multiple issues - sender name is missing and campaign ID exceed maximum length
                   value:
@@ -386,11 +393,11 @@ paths:
       operationId: create-in-app-with-notification
       description: |
         ## Overview
-        Use this endpoint to send an in-app message followed by an associated native Apple or Android push notification to one or more NHS App users.
+        Use this endpoint to send an in-app message followed by an associated native Apple or Android push notification to one NHS App user.
 
         Push notifications will not be sent to users between the hours of 10pm and 6am UK time. If a valid request to send an in-app message with an associated push notification is processed between these hours, the in-app message will be delivered immediately, and the push notification will be scheduled for delivery at 6am.
 
-        Recipients are specified by NHS number. A single request to this endpoint can send an identical message and push notification to between 1 and 100 distinct NHS numbers.
+        Recipients are specified by NHS number. A single request to this endpoint can send a message and push notification to a single NHS number.
         In-app messages and push notifications will only be sent to users who have had their identity verified to 'high' (P9) level.
 
         If a recipient is an active NHS App user but has not registered a device to receive native push notifications, they will still receive the in-app message.
@@ -419,7 +426,7 @@ paths:
         - communication
       responses:
         "201":
-          description: Request successfully received by the server and queued for sending to recipients.
+          description: Request successfully received by the server and queued for sending to recipient.
           headers:
             Location:
               schema:
@@ -453,13 +460,17 @@ paths:
                   value:
                     $ref: components/examples/responses/communication/400contentStringTooLong.json
                 no-recipients:
-                  summary: No recipients have been specified
+                  summary: No recipient has been specified
                   value:
                     $ref: components/examples/responses/communication/400noRecipients.json
                 invalid-recipient:
                   summary: A recipient has an invalid NHS number
                   value:
                     $ref: components/examples/responses/communication/400invalidNhsNumber.json
+                exceed-recipient:
+                  summary: Too many recipients have been specified
+                  value:
+                    $ref: components/examples/responses/communication/400tooManyRecipients.json    
                 sender-missing-and-campaign-id-too-long:
                   summary: Multiple issues - sender name is missing and campaign ID exceed maximum length
                   value:

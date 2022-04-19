@@ -1,0 +1,13 @@
+{
+    "resourceType": "OperationOutcome",
+    "issue": [
+        {
+            "severity": "error",
+            "code": "invalid",
+            "diagnostics": "Too many recipients have been specified",
+            "expression": [
+                "recipient"
+            ]
+        }
+    ]
+}
