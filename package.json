@@ -20,6 +20,6 @@
     "newman-reporter-htmlextra": "^1.11.3",
     "apigeetool": "^0.14.2",
     "license-checker": "^25.0.1",
-    "minimist": "^1.2.2"
+    "minimist": "^1.2.6"
   }
 }
