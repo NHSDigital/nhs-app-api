@@ -18,7 +18,7 @@
              null, {speciality: requestedSpeciality}) }}
     </p>
 
-    <p v-if="!hasSpeciality" class="nhsuk-u-margin-bottom-3">
+    <p v-else class="nhsuk-u-margin-bottom-3">
       {{ $t('wayfinder.referrals.readyToBook.youNeedToRebookYourNoSpeciality') }}
     </p>
 

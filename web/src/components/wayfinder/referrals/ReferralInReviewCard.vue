@@ -13,6 +13,10 @@
              null, {speciality: requestedSpeciality}) }}
     </p>
 
+    <p v-else class="nhsuk-u-margin-bottom-3">
+      {{ $t('wayfinder.referrals.inReview.yourHealthcareProviderHasRequestedNoSpeciality') }}
+    </p>
+
     <p class="nhsuk-u-margin-bottom-3">
       {{ $tc('wayfinder.referrals.referredDate',
              null, {referralDate: getFormattedReferredDate}) }}

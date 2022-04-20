@@ -36,6 +36,7 @@ export default {
     inReview: {
       title: 'Your referral request is being reviewed',
       yourHealthcareProviderHasRequested: 'Your healthcare provider has requested for you to be referred to {speciality}. This request is being reviewed. You do not need to do anything.',
+      yourHealthcareProviderHasRequestedNoSpeciality: 'Your healthcare provider has requested for you to be referred. This request is being reviewed. You do not need to do anything.',
     },
     readyToBook: {
       title: 'Ready to rebook',
