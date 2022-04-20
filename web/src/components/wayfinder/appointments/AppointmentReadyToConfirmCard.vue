@@ -6,7 +6,7 @@
     <p>
       {{ $t('wayfinder.appointments.readyToConfirm.anAppointmentHasBeenBooked') }}
     </p>
-    <p>
+    <p :id="`location-description-${appointmentId}`">
       {{ locationDescription }}
     </p>
     <primary-button :id="`contactTheClinicToConfirm-${appointmentId}`">

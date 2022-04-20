@@ -3,11 +3,11 @@
     <h3 class="nhsuk-u-margin-bottom-1">
       {{ $t('wayfinder.appointments.booked.title') }}
     </h3>
-    <p>
+    <p :id="`datetime-${appointmentId}`">
       <strong>{{ appointmentDateTime | fullDate }}</strong><br>
-      {{ appointmentDateTime | formatDate('h:mma') }}
+      <span>{{ appointmentDateTime | formatDate('h:mma') }}</span>
     </p>
-    <p class="nhsuk-u-margin-bottom-3">
+    <p :id="`location-description-${appointmentId}`" class="nhsuk-u-margin-bottom-3">
       {{ locationDescription }}
     </p>
     <primary-button :id="`bookOrManageAppointment-${appointmentId}`">
