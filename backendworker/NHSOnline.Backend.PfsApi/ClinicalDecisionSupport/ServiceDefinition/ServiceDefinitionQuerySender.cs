@@ -1,9 +1,10 @@
+extern alias stu3;
+
 using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Hl7.Fhir.Model;
-using Hl7.Fhir.Serialization;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Auditing;
@@ -13,6 +14,8 @@ using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Models;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils;
 using NHSOnline.Backend.Support.Sanitization;
+using STU3Models = stu3::Hl7.Fhir.Model;
+using STU3Serialization = stu3::Hl7.Fhir.Serialization;
 
 namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 {
@@ -24,8 +27,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
         private readonly IFhirSanitizationHelper _fhirSanitizationHelper;
         private readonly IFhirParameterHelpers _fhirParameterHelpers;
 
-        private readonly FhirJsonParser _parser;
-        private readonly FhirJsonSerializer _serializer;
+        private readonly STU3Serialization.FhirJsonParser _parser;
+        private readonly STU3Serialization.FhirJsonSerializer _serializer;
         private readonly IEvaluateServiceDefinitionQuery _evaluateServiceDefinitionQuery;
         private readonly IServiceDefinitionIsValidQuery _serviceDefinitionIsValidQuery;
 
@@ -46,8 +49,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             _fhirSanitizationHelper = fhirSanitizationHelper;
             _fhirParameterHelpers = fhirParameterHelpers;
 
-            _serializer = new FhirJsonSerializer();
-            _parser = new FhirJsonParser();
+            _serializer = new STU3Serialization.FhirJsonSerializer();
+            _parser = new STU3Serialization.FhirJsonParser();
 
             _evaluateServiceDefinitionQuery = evaluateServiceDefinitionQuery;
             _serviceDefinitionIsValidQuery = serviceDefinitionIsValidQuery;
@@ -127,7 +130,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             string sessionId = null)
         {
             HttpResponseMessage responseMessage;
-            GuidanceResponse guidanceResponse;
+            STU3Models.GuidanceResponse guidanceResponse;
 
             try
             {
@@ -171,7 +174,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
             try
             {
-                guidanceResponse = _parser.Parse<GuidanceResponse>(stringResponse);
+                guidanceResponse = _parser.Parse<STU3Models.GuidanceResponse>(stringResponse);
             }
             catch (ArgumentNullException e)
             {
@@ -190,7 +193,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             {
                 var responseSessionId = _fhirParameterHelpers.GetSessionIdFromParameters(guidanceResponse.Contained?
                     .Where(c => c.TryDeriveResourceType(out var resourceType)
-                                && resourceType == ResourceType.Parameters)
+                                 && resourceType == STU3Models.ResourceType.Parameters)
                     .Cast<Parameters>()
                     .FirstOrDefault());
 
@@ -202,13 +205,13 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
             _fhirSanitizationHelper.SanitizeGuidanceResponse(guidanceResponse, _htmlSanitizer);
 
-            if (guidanceResponse.Status == GuidanceResponse.GuidanceResponseStatus.Failure)
+            if (guidanceResponse.Status == STU3Models.GuidanceResponse.GuidanceResponseStatus.Failure)
             {
                 _logger.LogInformation($"Ending consultation with failure status for {serviceDefinitionDescription}. ODSCode: {odsCode}");
                 return GetServiceDefinitionResultFromErrorCode(guidanceResponse);
             }
 
-            if (guidanceResponse.Status == GuidanceResponse.GuidanceResponseStatus.Success)
+            if (guidanceResponse.Status == STU3Models.GuidanceResponse.GuidanceResponseStatus.Success)
             {
                 _logger.LogInformation(
                     $"Ending consultation for {serviceDefinitionDescription}. ODSCode: {odsCode}");

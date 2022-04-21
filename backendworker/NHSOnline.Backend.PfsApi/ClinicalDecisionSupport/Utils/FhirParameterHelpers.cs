@@ -1,3 +1,5 @@
+extern alias stu3;
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -7,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
 using NHSOnline.Backend.Support.Session;
 using NhsAppFhir = NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Models.Fhir;
+using STU3Models = stu3::Hl7.Fhir.Model;
 
 namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
 {
@@ -25,7 +28,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
             _logger = logger;
         }
 
-        public Patient CreateFhirPatient(P9UserSession userSession, string address)
+        public STU3Models.Patient CreateFhirPatient(P9UserSession userSession, string address)
         {
             var identifierList = new List<Identifier>();
             var identifier = new Identifier
@@ -33,18 +36,18 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
                 Value = userSession.NhsNumber, System = "https://fhir.nhs.uk/Id/nhs-number"
             };
             identifierList.Add(identifier);
-            var fhirAddress = new Address { Text = address };
-            var addressList = new List<Address> { fhirAddress };
+            var fhirAddress = new STU3Models.Address { Text = address };
+            var addressList = new List<STU3Models.Address> { fhirAddress };
 
-            return new Patient
+            return new STU3Models.Patient
             {
                 Identifier = identifierList,
                 BirthDate = userSession.CitizenIdUserSession.DateOfBirth
                     .ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                 Address = addressList,
-                Name = new List<HumanName>
+                Name = new List<STU3Models.HumanName>
                 {
-                    new HumanName
+                    new STU3Models.HumanName
                     {
                         Text = userSession.CitizenIdUserSession.Name
                     }
@@ -111,7 +114,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
                         Name = OrganizationName,
                         Resource = new NhsAppFhir.Resource
                         {
-                            ResourceType = ResourceType.Organization.ToString(),
+                            ResourceType = STU3Models.ResourceType.Organization.ToString(),
                             Identifier = new NhsAppFhir.Identifier
                             {
                                 Value = odsCode

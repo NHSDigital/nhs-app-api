@@ -1,8 +1,9 @@
+extern alias stu3;
+
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Hl7.Fhir.Model;
-using Hl7.Fhir.Serialization;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -17,6 +18,7 @@ using NHSOnline.Backend.PfsApi.GpSession;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Session;
+using STU3Serialization = stu3::Hl7.Fhir.Serialization;
 
 namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 {
@@ -24,7 +26,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
     {
         private readonly ILogger<ServiceDefinitionService> _logger;
 
-        private readonly FhirJsonSerializer _serializer;
+        private readonly STU3Serialization.FhirJsonSerializer _serializer;
         private readonly IAuditor _auditor;
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly IFhirParameterHelpers _fhirParameterHelpers;
@@ -45,8 +47,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             _guidCreator = guidCreator;
             _querySender = querySender;
 
-            _serializer = new FhirJsonSerializer();
-
+            _serializer = new STU3Serialization.FhirJsonSerializer();
 
             _auditor = auditor;
 

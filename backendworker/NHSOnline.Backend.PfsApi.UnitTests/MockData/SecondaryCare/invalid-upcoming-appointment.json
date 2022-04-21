@@ -1,0 +1,39 @@
+[
+  {
+    "resourceType": "CarePlan",
+    "status": "active",
+    "intent": "order",
+    "subject": {
+      "identifier": {
+        "system": "https://fhir.nhs.uk/Id/nhs-number",
+        "value": "9694318408"
+      }
+    },
+    "activity": [
+      {
+        "detail": {
+          "extension": [
+            {
+              "extension": [
+                {
+                  "url": "code",
+                  "valueCode": "PKB"
+                }
+              ],
+              "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+              "valueUrl": "http://stubs.local.bitraft.io:8080/pkb/upcoming-appointments?ubrn=276830555003"
+            },
+            {
+              "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+              "valueDate": "2021-09-09"
+            }
+          ],
+          "kind": "Appointment",
+          "scheduledPeriod": {
+            "start": "2022-01-09T11:48:56+00:00"
+          }
+        }
+      }
+    ]
+  }
+]

@@ -10,7 +10,7 @@ Feature: Wayfinder Errors
     Then the Appointments Hub page is displayed
     When I click the 'Referrals, hospital and other appointments' link on the Appointments Hub
     Then I see a helpful message indicating unavailable secondary care services with a <Prefix> service desk reference
-    When the Wayfinder Aggregator API issues are resolved and is returning referrals
+    When the Wayfinder Aggregator API issues are resolved and is returning referrals and upcoming appointments
     And I click the try again button on the unavailable secondary care services error screen
     Then I see an in review referral
     Examples:

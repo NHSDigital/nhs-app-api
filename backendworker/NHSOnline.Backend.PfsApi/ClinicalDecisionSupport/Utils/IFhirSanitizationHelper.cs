@@ -1,12 +1,13 @@
-using Hl7.Fhir.Model;
+extern alias stu3;
+
 using NHSOnline.Backend.Support.Sanitization;
+using STU3Models = stu3::Hl7.Fhir.Model;
 
 namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
 {
     public interface IFhirSanitizationHelper
     {
-        void SanitizeGuidanceResponse(GuidanceResponse guidanceResponse, IHtmlSanitizer htmlSanitizer);
-        void SanitizeServiceDefinition(Hl7.Fhir.Model.ServiceDefinition serviceDefinition, IHtmlSanitizer htmlSanitizer);
-        void SanitizeServiceDefinitionSearchBundle(Bundle bundle, IHtmlSanitizer htmlSanitizer);
+        void SanitizeGuidanceResponse(stu3::Hl7.Fhir.Model.GuidanceResponse guidanceResponse, IHtmlSanitizer htmlSanitizer);
+        void SanitizeServiceDefinition(STU3Models.ServiceDefinition serviceDefinition, IHtmlSanitizer htmlSanitizer);
     }
 }

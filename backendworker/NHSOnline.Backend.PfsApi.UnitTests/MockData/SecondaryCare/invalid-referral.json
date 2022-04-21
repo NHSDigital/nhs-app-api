@@ -1,0 +1,44 @@
+[
+  {
+    "resourceType": "CarePlan",
+    "status": "active",
+    "intent": "order",
+    "activity": [
+      {
+        "reference": {
+          "type": "ServiceRequest"
+        },
+        "detail": {
+          "extension": [
+            {
+              "extension": [
+                {
+                  "url": "codee",
+                  "valueCode": "eRS"
+                }
+              ],
+              "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link"
+            },
+            {
+              "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
+              "valueCoding": {
+                "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
+                "code": "InReview"
+              }
+            }
+          ],
+          "kind": "ServiceRequest",
+          "scheduledPeriod": {
+            "extension": [
+              {
+                "url": "https://fhir.nhs.net/ReviewDueDate",
+                "valueDate": "2022-04-24"
+              }
+            ]
+          },
+          "description": "Cardiology"
+        }
+      }
+    ]
+  }
+]

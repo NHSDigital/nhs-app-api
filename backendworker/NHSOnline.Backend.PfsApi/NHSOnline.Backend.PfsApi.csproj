@@ -11,11 +11,27 @@
     <PackageReference Include="CorrelationId" Version="3.0.0" />
     <PackageReference Include="GeoCoordinate.NetCore" Version="1.0.0.1" />
     <PackageReference Include="Hl7.Fhir.STU3" Version="3.8.2" />
+    <PackageReference Include="Hl7.Fhir.R4" Version="3.8.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.21" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.19" />
     <PackageReference Include="Novell.Directory.Ldap.NETStandard" Version="3.6.0" />
     <PackageReference Include="Yisoft.AspNetCore.Configuration.Yaml" Version="2.0.0" />
   </ItemGroup>
+
+  <!--
+    Aliasing the FHIR packages as they have conflicting namespaces.
+    See the docs for more info https://docs.fire.ly/projects/Firely-NET-SDK/model/multiple-fhir-versions.html
+  -->
+  <Target Name="AddPackageAliases" BeforeTargets="ResolveReferences" Outputs="%(PackageReference.Identity)">
+    <ItemGroup>
+      <ReferencePath Condition="'%(FileName)'=='Hl7.Fhir.STU3.Core'">
+        <Aliases>stu3</Aliases>
+      </ReferencePath>
+      <ReferencePath Condition="'%(FileName)'=='Hl7.Fhir.R4.Core'">
+        <Aliases>r4</Aliases>
+      </ReferencePath>
+    </ItemGroup>
+  </Target>
 
   <ItemGroup>
     <ProjectReference Include="..\NHSOnline.Backend.AspNet\NHSOnline.Backend.AspNet.csproj" />

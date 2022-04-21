@@ -35,17 +35,17 @@ class WayfinderFactory {
         }
 
         mockingClient.forWayfinder.mock {
-            wayfinderMappingBuilder.noReferrals()
+            wayfinderMappingBuilder.noReferralsOrUpcomingAppointments()
         }
     }
 
-    fun setupReferralsResponse() {
+    fun setupReferralsAndUpcomingAppointmentsResponse() {
         mockingClient.forWayfinder.mock {
             apimMappingBuilder.successfulTokenRequest()
         }
 
         mockingClient.forWayfinder.mock {
-            wayfinderMappingBuilder.referrals()
+            wayfinderMappingBuilder.referralsAndUpcomingAppointments()
         }
     }
 

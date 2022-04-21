@@ -39,7 +39,7 @@
 
               <referral-in-review-card
                 v-if="isInReview(referral)"
-                :requested-speciality="referral.serviceSpeciality"
+                :requested-specialty="referral.serviceSpecialty"
                 :referred-date="referral.referredDateTime"
                 :review-date="referral.reviewDueDate"
                 :booking-reference="referral.referralId"
@@ -47,7 +47,7 @@
 
               <referral-review-overdue-card
                 v-else-if="isReviewOverdue(referral)"
-                :requested-speciality="referral.serviceSpeciality"
+                :requested-specialty="referral.serviceSpecialty"
                 :referred-date="referral.referredDateTime"
                 :review-date="referral.reviewDueDate"
                 :booking-reference="referral.referralId"
@@ -55,14 +55,14 @@
 
               <referral-ready-to-rebook-card
                 v-else-if="isBookableWasCancelled(referral)"
-                :requested-speciality="referral.serviceSpeciality"
+                :requested-specialty="referral.serviceSpecialty"
                 :referred-date="referral.referredDateTime"
                 :booking-reference="referral.referralId"
                 :referred-by="referral.referrerOrganisation"/>
 
               <referral-bookable-card
                 v-else-if="isBookable(referral)"
-                :requested-speciality="referral.serviceSpeciality"
+                :requested-specialty="referral.serviceSpecialty"
                 :referred-date="referral.referredDateTime"
                 :booking-reference="referral.referralId"
                 :referred-by="referral.referrerOrganisation"/>

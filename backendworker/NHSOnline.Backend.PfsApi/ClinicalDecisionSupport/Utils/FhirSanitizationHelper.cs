@@ -1,15 +1,18 @@
+extern alias stu3;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Hl7.Fhir.Model;
 using NHSOnline.Backend.Support.Sanitization;
+using STU3Models = stu3::Hl7.Fhir.Model;
 
 namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
 {
     public class FhirSanitizationHelper : IFhirSanitizationHelper
     {
-        public void SanitizeGuidanceResponse(GuidanceResponse guidanceResponse, IHtmlSanitizer htmlSanitizer)
+        public void SanitizeGuidanceResponse(STU3Models.GuidanceResponse guidanceResponse, IHtmlSanitizer htmlSanitizer)
         {
             if (guidanceResponse == null)
             {
@@ -20,7 +23,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
             SanitizeQuestionnaires(guidanceResponse, guidanceResponse.DataRequirement, htmlSanitizer);
         }
 
-        public void SanitizeServiceDefinition(Hl7.Fhir.Model.ServiceDefinition serviceDefinition, IHtmlSanitizer htmlSanitizer)
+        public void SanitizeServiceDefinition(STU3Models.ServiceDefinition serviceDefinition, IHtmlSanitizer htmlSanitizer)
         {
             if (serviceDefinition == null)
             {
@@ -30,20 +33,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
             SanitizeQuestionnaires(serviceDefinition, serviceDefinition.DataRequirement, htmlSanitizer);
         }
 
-        public void SanitizeServiceDefinitionSearchBundle(Bundle bundle, IHtmlSanitizer htmlSanitizer)
-        {
-            var serviceDefinitionEntries = bundle.Entry
-                .Where(e => e.Resource.TryDeriveResourceType(out var resourceType)
-                            && resourceType == ResourceType.ServiceDefinition)
-                .Select(e => e.Resource as Hl7.Fhir.Model.ServiceDefinition).ToList();
-
-            foreach (var serviceDefinition in serviceDefinitionEntries)
-            {
-                SanitizeServiceDefinition(serviceDefinition, htmlSanitizer);
-            }
-        }
-
-        private static void SanitizeGuidanceResponseResults(GuidanceResponse guidanceResponse, IHtmlSanitizer htmlSanitizer)
+        private static void SanitizeGuidanceResponseResults(STU3Models.GuidanceResponse guidanceResponse, IHtmlSanitizer htmlSanitizer)
         {
             var resultId = guidanceResponse.Result?.Reference?.Substring(1);
 
@@ -66,8 +56,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
                     continue;
                 }
 
-                var carePlan = contained as CarePlan;
-                var referralRequest = contained as ReferralRequest;
+                var carePlan = contained as STU3Models.CarePlan;
+                var referralRequest = contained as STU3Models.ReferralRequest;
 
                 SanitizeReferralRequest(referralRequest, htmlSanitizer);
                 SanitizeCarePlan(carePlan, htmlSanitizer);
@@ -85,7 +75,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
 
             if (!(domainResource.Contained
                     .FirstOrDefault(contained => resultId.Equals(contained.Id, StringComparison.Ordinal)) is
-                RequestGroup requestGroup))
+                STU3Models.RequestGroup requestGroup))
             {
                 return result;
             }
@@ -98,7 +88,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
             return result;
         }
 
-        private static void SanitizeReferralRequest(ReferralRequest referralRequest, IHtmlSanitizer htmlSanitizer)
+        private static void SanitizeReferralRequest(STU3Models.ReferralRequest referralRequest, IHtmlSanitizer htmlSanitizer)
         {
             if (referralRequest == null)
             {
@@ -108,7 +98,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
             referralRequest.Description = SanitizeAndDecodeHtml(referralRequest.Description, htmlSanitizer);
         }
 
-        private static void SanitizeCarePlan(CarePlan carePlan, IHtmlSanitizer htmlSanitizer)
+        private static void SanitizeCarePlan(STU3Models.CarePlan carePlan, IHtmlSanitizer htmlSanitizer)
         {
             if (carePlan == null)
             {
@@ -119,7 +109,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
             SanitizeCarePlanActivities(carePlan.Activity, htmlSanitizer);
         }
 
-        private static void SanitizeCarePlanActivities(IReadOnlyCollection<CarePlan.ActivityComponent> activityComponents, IHtmlSanitizer htmlSanitizer)
+        private static void SanitizeCarePlanActivities(IReadOnlyCollection<STU3Models.CarePlan.ActivityComponent> activityComponents, IHtmlSanitizer htmlSanitizer)
         {
             if (activityComponents == null)
             {
@@ -132,14 +122,14 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
             }
         }
 
-        private static void SanitizeQuestionnaires(DomainResource domainResource, IReadOnlyCollection<DataRequirement> dataRequirements, IHtmlSanitizer htmlSanitizer)
+        private static void SanitizeQuestionnaires(DomainResource domainResource, IReadOnlyCollection<STU3Models.DataRequirement> dataRequirements, IHtmlSanitizer htmlSanitizer)
         {
             var questionnaireIds = GetQuestionnaireIdsFromDataRequirements(dataRequirements).ToList();
 
             SanitizeQuestionnaires(domainResource, questionnaireIds, htmlSanitizer);
         }
 
-        private static IEnumerable<string> GetQuestionnaireIdsFromDataRequirements(IReadOnlyCollection<DataRequirement> dataRequirements)
+        private static IEnumerable<string> GetQuestionnaireIdsFromDataRequirements(IReadOnlyCollection<STU3Models.DataRequirement> dataRequirements)
         {
             var result = new List<string>();
 
@@ -150,7 +140,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
 
             foreach (var dataRequirement in dataRequirements)
             {
-                if (dataRequirement.Type != FHIRAllTypes.QuestionnaireResponse)
+                if (dataRequirement.Type != STU3Models.FHIRAllTypes.QuestionnaireResponse)
                 {
                     continue;
                 }
@@ -174,12 +164,12 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
                     continue;
                 }
 
-                var questionnaire = contained as Questionnaire;
+                var questionnaire = contained as STU3Models.Questionnaire;
                 SanitizeItems(questionnaire?.Item, htmlSanitizer);
             }
         }
 
-        private static void SanitizeItems(List<Questionnaire.ItemComponent> items, IHtmlSanitizer htmlSanitizer)
+        private static void SanitizeItems(List<STU3Models.Questionnaire.ItemComponent> items, IHtmlSanitizer htmlSanitizer)
         {
             if (items == null || items.Count == 0)
             {

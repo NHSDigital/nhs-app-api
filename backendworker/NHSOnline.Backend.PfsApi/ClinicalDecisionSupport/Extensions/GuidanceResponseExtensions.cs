@@ -1,7 +1,10 @@
+extern alias stu3;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hl7.Fhir.Model;
+using STU3Models = stu3::Hl7.Fhir.Model;
 
 namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Extensions
 {
@@ -18,7 +21,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Extensions
 
             foreach (var container in guidanceResponse.Contained
                 .Where(a => a.TryDeriveResourceType(out var resourceType)
-                            && resourceType == ResourceType.OperationOutcome))
+                            && resourceType == STU3Models.ResourceType.OperationOutcome))
             {
                 operationOutcomes.Add((OperationOutcome)container);
             }

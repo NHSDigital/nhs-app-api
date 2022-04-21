@@ -32,19 +32,15 @@ namespace NHSOnline.Backend.PfsApi.NHSApim
 
             return string.IsNullOrEmpty(stringResponse)
                 ? this
-                : ParseResponse(responseParser, logger, stringResponse);
+                : ParseResponse(responseParser, stringResponse);
         }
 
-        private NhsApimAuthResponse<TBody> ParseResponse(IJsonResponseParser responseParser, ILogger logger, string stringResponse)
+        private NhsApimAuthResponse<TBody> ParseResponse(IJsonResponseParser responseParser, string stringResponse)
         {
-            if (!HasSuccessResponse)
+            if (HasSuccessResponse)
             {
-                logger.LogError("Auth request for APIM Aggregator returned with error");
-
-                return this;
+                Body = responseParser.ParseBody<TBody>(stringResponse);
             }
-
-            Body = responseParser.ParseBody<TBody>(stringResponse);
 
             return this;
         }

@@ -24,10 +24,35 @@
     <ProjectReference Include="..\NHSOnline.Backend.Support\NHSOnline.Backend.Support.csproj" />
     <ProjectReference Include="..\UnitTestHelper\UnitTestHelper.csproj" />
   </ItemGroup>
+
+  <!--
+    Aliasing the FHIR packages as they have conflicting namespaces (dependencies of the PFS API project)
+    See the docs for more info https://docs.fire.ly/projects/Firely-NET-SDK/model/multiple-fhir-versions.html
+  -->
+  <Target Name="AddPackageAliases" BeforeTargets="ResolveReferences" Outputs="%(PackageReference.Identity)">
+    <ItemGroup>
+      <ReferencePath Condition="'%(FileName)'=='Hl7.Fhir.STU3.Core'">
+        <Aliases>stu3</Aliases>
+      </ReferencePath>
+      <ReferencePath Condition="'%(FileName)'=='Hl7.Fhir.R4.Core'">
+        <Aliases>r4</Aliases>
+      </ReferencePath>
+    </ItemGroup>
+  </Target>
+
   <ItemGroup>
     <EmbeddedResource Remove="Bridges\**" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="MockData\SecondaryCare\complete-valid-secondary-care-summary-response.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\SecondaryCare\invalid-referral.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockData\SecondaryCare\invalid-upcoming-appointment.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="OrganDonation\Resources\mycert.pfx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

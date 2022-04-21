@@ -4,8 +4,8 @@
       {{ $t('wayfinder.referrals.readyToBook.title') }}
     </h3>
 
-    <p v-if="hasSpeciality" class="nhsuk-u-margin-bottom-3">
-      {{ requestedSpeciality }}
+    <p v-if="hasSpecialty" class="nhsuk-u-margin-bottom-3">
+      {{ requestedSpecialty }}
     </p>
 
     <p class="nhsuk-u-margin-bottom-3">
@@ -13,13 +13,13 @@
              null, {referralDate: getFormattedReferredDate}) }}
     </p>
 
-    <p v-if="hasSpeciality" class="nhsuk-u-margin-bottom-3">
+    <p v-if="hasSpecialty" class="nhsuk-u-margin-bottom-3">
       {{ $tc('wayfinder.referrals.readyToBook.youNeedToRebookYour',
-             null, {speciality: requestedSpeciality}) }}
+             null, {specialty: requestedSpecialty}) }}
     </p>
 
     <p v-else class="nhsuk-u-margin-bottom-3">
-      {{ $t('wayfinder.referrals.readyToBook.youNeedToRebookYourNoSpeciality') }}
+      {{ $t('wayfinder.referrals.readyToBook.youNeedToRebookYourNoSpecialty') }}
     </p>
 
     <p class="nhsuk-u-margin-bottom-3">
@@ -61,14 +61,14 @@ export default {
       type: String,
       default: '',
     },
-    requestedSpeciality: {
+    requestedSpecialty: {
       type: String,
       default: '',
     },
   },
   computed: {
-    hasSpeciality() {
-      return this.requestedSpeciality;
+    hasSpecialty() {
+      return this.requestedSpecialty;
     },
     getFormattedReferredDate() {
       return this.$options.filters.longDate(this.referredDate);

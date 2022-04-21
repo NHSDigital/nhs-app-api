@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.Backend.PfsApi.SecondaryCare.Mappers;
 using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.PfsApi.SecondaryCare
@@ -12,6 +13,8 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
 
             services.AddSingleton<ISecondaryCareService, SecondaryCareService>();
             services.AddSingleton<SecondaryCareSummaryService>();
+
+            services.AddSingleton<ISecondaryCareSummaryMapper, SecondaryCareSummaryMapper>();
 
             services.AddSingleton<ISecondaryCareClient, SecondaryCareClient>();
 

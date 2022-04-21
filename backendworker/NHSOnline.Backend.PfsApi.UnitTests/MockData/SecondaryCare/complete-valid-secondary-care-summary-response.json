@@ -1,0 +1,184 @@
+[
+  {
+    "resourceType": "CarePlan",
+    "status": "active",
+    "intent": "order",
+    "subject": {
+      "identifier": {
+        "system": "https://fhir.nhs.uk/Id/nhs-number",
+        "value": "9694318408"
+      }
+    },
+    "activity": [
+      {
+        "reference": {
+          "type": "ServiceRequest",
+          "identifier": {
+            "system": "https://fhir.nhs.uk/Id/UBRN",
+            "value": "521379702986"
+          }
+        },
+        "detail": {
+          "extension": [
+            {
+              "extension": [
+                {
+                  "url": "code",
+                  "valueCode": "eRS"
+                }
+              ],
+              "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+              "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?ubrn=521379702986"
+            },
+            {
+              "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
+              "valueCoding": {
+                "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
+                "code": "InReview"
+              }
+            }
+          ],
+          "kind": "ServiceRequest",
+          "scheduledPeriod": {
+            "extension": [
+              {
+                "url": "https://fhir.nhs.net/ReviewDueDate",
+                "valueDate": "2022-03-12"
+              }
+            ],
+            "start": "2022-03-09T11:48:56+00:00"
+          },
+          "performer": [
+            {
+              "type": "Organization",
+              "display": "Willow GP Surgery"
+            }
+          ],
+          "description": "Cardiology"
+        }
+      },
+      {
+        "reference": {
+          "type": "ServiceRequest",
+          "identifier": {
+            "system": "https://fhir.nhs.uk/Id/UBRN",
+            "value": "521379702987"
+          }
+        },
+        "detail": {
+          "extension": [
+            {
+              "extension": [
+                {
+                  "url": "code",
+                  "valueCode": "eRS"
+                }
+              ],
+              "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+              "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?ubrn=521379702987"
+            },
+            {
+              "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
+              "valueCoding": {
+                "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
+                "code": "Bookable"
+              }
+            }
+          ],
+          "kind": "ServiceRequest",
+          "scheduledPeriod": {
+            "start": "2022-03-08T11:48:56+00:00"
+          },
+          "performer": [
+            {
+              "type": "Organization",
+              "display": "Birch GP Surgery"
+            }
+          ],
+          "description": "Neurology"
+        }
+      },
+      {
+        "detail": {
+          "extension": [
+            {
+              "extension": [
+                {
+                  "url": "code",
+                  "valueCode": "PKB"
+                }
+              ],
+              "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+              "valueUrl": "http://stubs.local.bitraft.io:8080/pkb/upcoming-appointments?ubrn=276830555003"
+            },
+            {
+              "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+              "valueCoding": {
+                "system": "http://hl7.org/fhir/appointmentstatus",
+                "code": "Booked"
+              }
+            }
+          ],
+          "kind": "Appointment",
+          "scheduledPeriod": {
+            "start": "2022-01-09T11:48:56+00:00"
+          },
+          "description": "The Royal Victoria Hospital, Belfast, BT1"
+        }
+      },
+      {
+        "detail": {
+          "extension": [
+            {
+              "extension": [
+                {
+                  "url": "code",
+                  "valueCode": "eRS"
+                }
+              ],
+              "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+              "valueUrl": "http://stubs.local.bitraft.io:8080/ers/upcoming-appointments?ubrn=276830555004"
+            },
+            {
+              "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+              "valueCoding": {
+                "system": "http://hl7.org/fhir/appointmentstatus",
+                "code": "Booked"
+              }
+            }
+          ],
+          "kind": "Appointment",
+          "scheduledPeriod": {
+            "start": "2022-01-08T11:48:56+00:00"
+          },
+          "description": "The Royal Victoria Hospital, Belfast, BT1"
+        }
+      },
+      {
+        "detail": {
+          "extension": [
+            {
+              "extension": [
+                {
+                  "url": "code",
+                  "valueCode": "Netcall"
+                }
+              ],
+              "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+              "valueUrl": "http://stubs.local.bitraft.io:8080/netcall/upcoming-appointments?ubrn=276830555005"
+            },
+            {
+              "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+              "valueCoding": {
+                "system": "http://hl7.org/fhir/appointmentstatus",
+                "code": "Booked"
+              }
+            }
+          ],
+          "kind": "Appointment",
+          "description": "The Royal Victoria Hospital, Belfast, BT1"
+        }
+      }
+    ]
+  }
+]

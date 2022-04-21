@@ -9,9 +9,9 @@ open class WayfinderMappingBuilder(method: String="GET", relativePath: String= "
 
     fun internalServerError() = EvaluateBuilder().returnInternalServerError()
 
-    fun referrals() = EvaluateBuilder().returnReferralsAndAppointments()
+    fun referralsAndUpcomingAppointments() = EvaluateBuilder().returnReferralsAndUpcomingAppointments()
 
-    fun noReferrals() = EvaluateBuilder().returnNoReferralsOrAppointments()
+    fun noReferralsOrUpcomingAppointments() = EvaluateBuilder().returnNoReferralsOrUpcomingAppointments()
 
-    fun referralsNoAppointments() = EvaluateBuilder().returnReferralsAndNoAppointments()
+    fun referralsNoAppointments() = EvaluateBuilder().returnReferralsAndNoUpcomingAppointments()
 }

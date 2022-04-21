@@ -5551,10 +5551,11 @@
                         required: 
                           - "referralId"
                           - "referredDatetime"
-                          - "serviceSpeciality"
+                          - "serviceSpecialty"
                           - "referrerOrganisation"
                           - "status"
                           - "provider"
+                          - "deepLinkUrl"
                         properties: 
                           referralId: 
                             type: "string"
@@ -5563,9 +5564,9 @@
                             type: "string"
                             format: "date-time"
                             description: "The date-time the referral was initiated."
-                          serviceSpeciality: 
+                          serviceSpecialty: 
                             type: "string"
-                            description: "The speciality of the department the patient is being referred to."
+                            description: "The specialty of the department the patient is being referred to."
                           referrerOrganisation: 
                             type: "string"
                             description: "Patient friendly name of the referrer organisation."
@@ -5587,32 +5588,32 @@
                               - "pkb"
                               - "ers"
                               - "drdoctor"
+                          deepLinkUrl: 
+                            type: "string"
+                            description: "Deep link url for the user to get more details on the referral."
                     upcomingAppointments: 
                       type: "array"
                       description: "An array of upcoming appointments for the authorized user."
                       items: 
                         type: "object"
                         required: 
+                          - "appointmentStatus"
                           - "locationDescription"
                           - "deepLinkUrl"
                           - "provider"
                         properties: 
-                          appointmentId: 
-                            type: "string"
-                            description: "Optional - Supplier specific reference - booking reference."
                           appointmentDatetime: 
                             type: "string"
                             format: "date-time"
                             description: "Optional - The date-time of the upcoming appointment."
+                          appointmentStatus: 
+                            type: "string"
+                            description: "State of the appointment. Initially only booked appointments will be returned."
+                            enum: 
+                              - "booked"
                           locationDescription: 
                             type: "string"
                             description: "A patient friendly term for where the appointment will be."
-                          serviceSpeciality: 
-                            type: "string"
-                            description: "Optional - The speciality of the department of the appointment."
-                          deepLinkUrl: 
-                            type: "string"
-                            description: "Deep link url for the user to get more details on the provider."
                           provider: 
                             type: "string"
                             description: "The linked referral or portal system."
@@ -5620,6 +5621,9 @@
                               - "pkb"
                               - "ers"
                               - "drdoctor"
+                          deepLinkUrl: 
+                            type: "string"
+                            description: "Deep link url for the user to get more details on the appointment."
           400: 
             description: "Bad request. Supplied request is incomplete or invalid."
             content: 

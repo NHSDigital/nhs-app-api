@@ -1,3 +1,5 @@
+extern alias r4;
+
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -13,15 +15,18 @@ using NHSOnline.Backend.PfsApi.Areas.SecondaryCare;
 using NHSOnline.Backend.PfsApi.NHSApim;
 using NHSOnline.Backend.PfsApi.NHSApim.Models;
 using NHSOnline.Backend.PfsApi.SecondaryCare;
+using NHSOnline.Backend.PfsApi.SecondaryCare.Mappers;
 using NHSOnline.Backend.PfsApi.SecondaryCare.Models;
 using NHSOnline.Backend.PfsApi.UnitTests.Extensions;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Session;
 using NHSOnline.Backend.Support.Settings;
+using r4::Hl7.Fhir.Model;
 using RichardSzalay.MockHttp;
 using UnitTestHelper;
-using DateTime = System.DateTime;
+using ServiceProvider = Microsoft.Extensions.DependencyInjection.ServiceProvider;
+using WayfinderServiceProvider = NHSOnline.Backend.PfsApi.SecondaryCare.Models.ServiceProvider;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 {
@@ -44,8 +49,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 
         public SecondaryCareControllerTestContext()
         {
-            Mocks = new TestMocks();
             Data = new TestData();
+            Mocks = new TestMocks();
 
             ServiceCollection = new ServiceCollection();
 
@@ -81,42 +86,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 
         internal SecondaryCareController CreateSystemUnderTest() => ServiceProvider.GetRequiredService<SecondaryCareController>();
 
-        internal void MockSecondaryCareHttpClientGetSummaryReturnsSuccessfulResponseWithData()
+        internal void MockSecondaryCareHttpClientGetSummaryReturnsSuccessfulResponseWithData(string data)
         {
-            Mocks.ApimJwtHelper
-                .Setup(x => x.CreateApimJwt(
-                    new Uri(ApimOathUrl),
-                    ApimCertPath,
-                    ApimCertPass,
-                    ApimKey,
-                    ApimKid))
-                .Returns("qwerthygfd");
-
-            Mocks.MockHttpMessageHandler
-                .When(HttpMethod.Post, ApimOathUrl)
-                .Respond("application/json", JsonConvert.SerializeObject(Data.OauthResponse));
-
             Mocks.MockHttpMessageHandler
                 .When(HttpMethod.Get, SecondaryCareSummaryUrl)
                 .WithHeaders(Data.RequestHeaders)
-                .Respond("application/json", JsonConvert.SerializeObject(Data.SummaryResponse));
+                .Respond("application/json", data);
         }
 
         internal void MockSecondaryCareHttpClientGetSummaryReturnsUnsuccessfulResponse()
         {
-            Mocks.ApimJwtHelper
-                .Setup(x => x.CreateApimJwt(
-                    new Uri(ApimOathUrl),
-                    ApimCertPath,
-                    ApimCertPass,
-                    ApimKey,
-                    ApimKid))
-                .Returns("qwerthygfd");
-
-            Mocks.MockHttpMessageHandler
-                .When(HttpMethod.Post, ApimOathUrl)
-                .Respond("application/json", JsonConvert.SerializeObject(Data.OauthResponse));
-
             Mocks.MockHttpMessageHandler
                 .When(HttpMethod.Get, SecondaryCareSummaryUrl)
                 .WithHeaders(Data.RequestHeaders)
@@ -125,19 +104,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 
         internal void MockSecondaryCareHttpClientGetSummaryTimesOut()
         {
-            Mocks.ApimJwtHelper
-                .Setup(x => x.CreateApimJwt(
-                    new Uri(ApimOathUrl),
-                    ApimCertPath,
-                    ApimCertPass,
-                    ApimKey,
-                    ApimKid))
-                .Returns("qwerthygfd");
-
-            Mocks.MockHttpMessageHandler
-                .When(HttpMethod.Post, ApimOathUrl)
-                .Respond("application/json", JsonConvert.SerializeObject(Data.OauthResponse));
-
             Mocks.MockHttpMessageHandler
                 .When(HttpMethod.Get, SecondaryCareSummaryUrl)
                 .WithHeaders(Data.RequestHeaders)
@@ -146,11 +112,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 
         internal sealed class TestData
         {
+            public static string OAuthAccessToken => "qwertyhgfdsaswedrfghgfds";
             private const string NhsNumber = "1111111111";
 
             public Dictionary<string, string> RequestHeaders { get; } = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                {"X-NHS-Number", NhsNumber}
+                {"X-NHS-Number", NhsNumber},
+                {"Authorization", $"Bearer {OAuthAccessToken}"}
             };
 
             public P9UserSession P9UserSession { get; } = new P9UserSession("csrfToken", NhsNumber, new CitizenIdUserSession(), "im1ConnectionToken");
@@ -161,73 +129,52 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                 {
                     new Referral
                     {
-                        ReferralId = "28fa7a42-b6b4-4063-8052-171cd7c6bf34",
-                        Provider = ReferralProvider.Ers.ToString(),
-                        ReferredDateTime = new DateTime(2022, 1, 6, 8, 0, 0, DateTimeKind.Utc),
-                        ReferrerOrganisation = "eRS",
-                        ReviewDueDate = new DateTime(2022, 4, 6, 13, 10, 0, DateTimeKind.Utc),
-                        ServiceSpeciality = "Cardiology",
-                        Status = ReferralStatus.InReview.ToString(),
-                    },
-                    new Referral
-                    {
-                        ReferralId = "67cf3dc6-dc98-4154-b8f4-966cbb55ff7f",
-                        Provider = ReferralProvider.Pkb.ToString(),
-                        ReferredDateTime = new DateTime(2021, 2, 3, 9, 30, 0, DateTimeKind.Utc),
-                        ReferrerOrganisation = "Patient Knows Best",
-                        ReviewDueDate = new DateTime(2022, 2, 3, 17, 15, 0, DateTimeKind.Utc),
-                        ServiceSpeciality = "Oncology",
+                        ReferralId = "521379702987",
+                        Provider = WayfinderServiceProvider.eRS.ToString(),
+                        ReferredDateTime = new DateTimeOffset(2022, 03, 08, 11, 48, 56, TimeSpan.Zero),
+                        ReferrerOrganisation = "Birch GP Surgery",
+                        ServiceSpecialty = "Neurology",
                         Status = ReferralStatus.Bookable.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/ers/referrals?ubrn=521379702987",
                     },
                     new Referral
                     {
-                        ReferralId = "467a3d7a-9a70-4595-addf-472507d0b95b",
-                        Provider = ReferralProvider.Drdoctor.ToString(),
-                        ReferredDateTime = new DateTime(2022, 3, 3, 10, 30, 0, DateTimeKind.Utc),
-                        ReferrerOrganisation = "Dr. Doctor",
-                        ReviewDueDate = new DateTime(2022, 9, 1, 11, 0, 0, DateTimeKind.Utc),
-                        ServiceSpeciality = "Neurology",
-                        Status = ReferralStatus.BookableWasCancelled.ToString(),
-                    }
+                        ReferralId = "521379702986",
+                        Provider = WayfinderServiceProvider.eRS.ToString(),
+                        ReferredDateTime = new DateTimeOffset(2022, 03, 09, 11, 48, 56, TimeSpan.Zero),
+                        ReferrerOrganisation = "Willow GP Surgery",
+                        ReviewDueDate = new DateTimeOffset(2022, 03, 12, 0, 0, 0, 0, TimeSpan.Zero),
+                        ServiceSpecialty = "Cardiology",
+                        Status = ReferralStatus.InReview.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/ers/referrals?ubrn=521379702986",
+                    },
                 },
                 UpcomingAppointments = new[]
                 {
                     new UpcomingAppointment
                     {
-                        AppointmentId = "7d1f4365-c3b6-4669-af25-f3da03d2ec7b",
-                        Provider = ReferralProvider.Ers.ToString(),
-                        AppointmentDateTime = new DateTime(2022, 7, 6, 8, 0, 0, DateTimeKind.Utc),
-                        ServiceSpeciality = "Cardiology",
-                        LocationDescription = "City Hospital, Floor 2",
-                        DeepLinkUrl = "https://www.google.co.uk",
+                        AppointmentStatus = Appointment.AppointmentStatus.Booked.ToString(),
+                        LocationDescription = "The Royal Victoria Hospital, Belfast, BT1",
+                        Provider = WayfinderServiceProvider.Netcall.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/netcall/upcoming-appointments?ubrn=276830555005",
                     },
                     new UpcomingAppointment
                     {
-                        AppointmentId = "431eef4d-6554-43ae-9228-03b9e197825b",
-                        Provider = ReferralProvider.Pkb.ToString(),
-                        AppointmentDateTime = new DateTime(2022, 8, 3, 9, 30, 0, DateTimeKind.Utc),
-                        ServiceSpeciality = "Oncology",
-                        LocationDescription = "City Hospital, Floor 3",
-                        DeepLinkUrl = "https://www.google.co.uk",
+                        AppointmentStatus = Appointment.AppointmentStatus.Booked.ToString(),
+                        LocationDescription = "The Royal Victoria Hospital, Belfast, BT1",
+                        Provider = WayfinderServiceProvider.eRS.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/ers/upcoming-appointments?ubrn=276830555004",
+                        AppointmentDateTime = new DateTimeOffset(2022, 01, 08, 11, 48, 56, TimeSpan.Zero),
                     },
                     new UpcomingAppointment
                     {
-                        AppointmentId = "2da5d68d-5b78-4eb0-bf73-9b392935d15a",
-                        Provider = ReferralProvider.Drdoctor.ToString(),
-                        AppointmentDateTime = new DateTime(2022, 9, 3, 10, 30, 0, DateTimeKind.Utc),
-                        ServiceSpeciality = "Neurology",
-                        LocationDescription = "City Hospital, Floor 4",
-                        DeepLinkUrl = "https://www.google.co.uk",
-                    }
+                        AppointmentStatus = Appointment.AppointmentStatus.Booked.ToString(),
+                        LocationDescription = "The Royal Victoria Hospital, Belfast, BT1",
+                        Provider = WayfinderServiceProvider.PKB.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/pkb/upcoming-appointments?ubrn=276830555003",
+                        AppointmentDateTime = new DateTimeOffset(2022, 01, 09, 11, 48, 56, TimeSpan.Zero),
+                    },
                 },
-            };
-
-            public ApimAccessToken OauthResponse { get; } = new ApimAccessToken
-            {
-                ExpiresIn = "123",
-                IssuedAt = "123",
-                AccessToken = "qwertyhgfdsaswedrfghgfds",
-                TokenType = "Bearer"
             };
         }
 
@@ -236,8 +183,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             internal Mock<IConfiguration> Configuration { get; }
                 = new Mock<IConfiguration>();
 
-            internal Mock<ILogger<SecondaryCareController>> Logger { get; }
+            internal Mock<ILogger<SecondaryCareController>> ControllerLogger { get; }
                 = new Mock<ILogger<SecondaryCareController>>();
+
+            internal Mock<ILogger<ISecondaryCareSummaryMapper>> SummaryMapperLogger { get; }
+                = new Mock<ILogger<ISecondaryCareSummaryMapper>>();
             internal Mock<IAuditor> Auditor { get; }
                 = new Mock<IAuditor>();
 
@@ -277,17 +227,37 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 
                 HttpTimeoutConfigurationSettings
                     .Setup(x => x.DefaultHttpTimeoutSeconds).Returns(10);
+
+                ApimJwtHelper
+                    .Setup(x => x.CreateApimJwt(
+                        new Uri(ApimOathUrl),
+                        ApimCertPath,
+                        ApimCertPass,
+                        ApimKey,
+                        ApimKid))
+                    .Returns("qwerthygfd");
+
+                MockHttpMessageHandler
+                    .When(HttpMethod.Post, ApimOathUrl)
+                    .Respond("application/json", JsonConvert.SerializeObject(new ApimAccessToken
+                    {
+                        ExpiresIn = "123",
+                        IssuedAt = "123",
+                        AccessToken = TestData.OAuthAccessToken,
+                        TokenType = "Bearer"
+                    }));
             }
 
             public void ConfigureServices(ServiceCollection serviceCollection)
             {
                 serviceCollection
                     .AddSingleton(Auditor.Object)
-                    .AddSingleton(Logger.Object)
+                    .AddSingleton(ControllerLogger.Object)
+                    .AddSingleton(SummaryMapperLogger.Object)
                     .AddSingleton(Configuration.Object)
                     .AddSingleton(HttpTimeoutConfigurationSettings.Object)
-                    .AddSingleton(MockHttpMessageHandler)
                     .AddSingleton(ApimJwtHelper.Object)
+                    .AddSingleton(MockHttpMessageHandler)
                     .AddMockLoggers();
             }
 

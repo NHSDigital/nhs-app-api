@@ -20,7 +20,6 @@ Feature: Wayfinder Appointments
     Then the Referrals, hospital and other appointments screen with data is displayed
     And I see a booked appointment
 
-
   Scenario: A user with no appointments but with referrals can see they have no upcoming appointments
     Given I am a user who can view Wayfinder from Appointments and has referrals but no upcoming appointments
     And I am logged in

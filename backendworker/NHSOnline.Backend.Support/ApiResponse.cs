@@ -27,8 +27,8 @@ namespace NHSOnline.Backend.Support
             if (!HasSuccessResponse)
             {
                 var message = context.IsNullOrEmpty()
-                    ? $"{context} failed with status code {(int) responseMessage?.StatusCode}"
-                    : $"Request failed with status code {(int) responseMessage?.StatusCode}";
+                    ? $"{context} failed with status code {responseMessage?.StatusCode}"
+                    : $"Request failed with status code {responseMessage?.StatusCode}";
 
                 logger.LogWarning(message);
 

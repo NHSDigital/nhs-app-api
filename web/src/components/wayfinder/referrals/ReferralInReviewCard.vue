@@ -4,17 +4,17 @@
       {{ $t('wayfinder.referrals.inReview.title') }}
     </h3>
 
-    <p v-if="hasSpeciality" class="nhsuk-u-margin-bottom-3">
-      {{ requestedSpeciality }}
+    <p v-if="hasSpecialty" class="nhsuk-u-margin-bottom-3">
+      {{ requestedSpecialty }}
     </p>
 
-    <p v-if="hasSpeciality" class="nhsuk-u-margin-bottom-3">
+    <p v-if="hasSpecialty" class="nhsuk-u-margin-bottom-3">
       {{ $tc('wayfinder.referrals.inReview.yourHealthcareProviderHasRequested',
-             null, {speciality: requestedSpeciality}) }}
+             null, {specialty: requestedSpecialty}) }}
     </p>
 
     <p v-else class="nhsuk-u-margin-bottom-3">
-      {{ $t('wayfinder.referrals.inReview.yourHealthcareProviderHasRequestedNoSpeciality') }}
+      {{ $t('wayfinder.referrals.inReview.yourHealthcareProviderHasRequestedNoSpecialty') }}
     </p>
 
     <p class="nhsuk-u-margin-bottom-3">
@@ -70,15 +70,15 @@ export default {
       type: String,
       default: '',
     },
-    requestedSpeciality: {
+    requestedSpecialty: {
       type: String,
       default: '',
     },
   },
 
   computed: {
-    hasSpeciality() {
-      return this.requestedSpeciality;
+    hasSpecialty() {
+      return this.requestedSpecialty;
     },
     hasReviewDate() {
       return this.reviewDate;

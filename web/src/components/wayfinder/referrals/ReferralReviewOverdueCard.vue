@@ -4,13 +4,13 @@
       {{ $t('wayfinder.referrals.overdue.title') }}
     </h3>
 
-    <p v-if="hasSpeciality" class="nhsuk-u-margin-bottom-3">
-      {{ requestedSpeciality }}
+    <p v-if="hasSpecialty" class="nhsuk-u-margin-bottom-3">
+      {{ requestedSpecialty }}
     </p>
 
-    <p v-if="hasSpeciality" class="nhsuk-u-margin-bottom-3">
-      {{ $tc('wayfinder.referrals.overdue.youNeedToContactSpeciality',
-             null, {speciality: requestedSpeciality}) }}
+    <p v-if="hasSpecialty" class="nhsuk-u-margin-bottom-3">
+      {{ $tc('wayfinder.referrals.overdue.youNeedToContactSpecialty',
+             null, {specialty: requestedSpecialty}) }}
     </p>
 
     <p class="nhsuk-u-margin-bottom-3">
@@ -66,15 +66,15 @@ export default {
       type: String,
       default: '',
     },
-    requestedSpeciality: {
+    requestedSpecialty: {
       type: String,
       default: '',
     },
   },
 
   computed: {
-    hasSpeciality() {
-      return this.requestedSpeciality;
+    hasSpecialty() {
+      return this.requestedSpecialty;
     },
     hasReviewDate() {
       return this.reviewDate;

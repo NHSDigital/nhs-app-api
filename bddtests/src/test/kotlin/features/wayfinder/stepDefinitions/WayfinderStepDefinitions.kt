@@ -38,9 +38,9 @@ class WayfinderStepDefinitions {
     }
 
     @Given("^I am a user who can view Wayfinder from Appointments and has referrals and upcoming appointments$")
-    fun iAmAUserWhoCanViewReferralsInWayfinderFromTheAppointmentsHub(){
+    fun iAmAUserWhoCanViewReferralsAndUpcomingAppointmentsInWayfinderFromTheAppointmentsHub(){
         setupPatient(SJRJourneyType.WAYFINDER_ENABLED)
-        wayfinderFactory.setupReferralsResponse()
+        wayfinderFactory.setupReferralsAndUpcomingAppointmentsResponse()
     }
 
     @When("^the Wayfinder Aggregator API is timing out$")
@@ -53,9 +53,9 @@ class WayfinderStepDefinitions {
         wayfinderFactory.setupInternalServerError()
     }
 
-    @When("^the Wayfinder Aggregator API issues are resolved and is returning referrals$")
-    fun theAggregatorApiIssuesAreResolvedAndIsReturningReferrals() {
-        wayfinderFactory.setupReferralsResponse()
+    @When("^the Wayfinder Aggregator API issues are resolved and is returning referrals and upcoming appointments$")
+    fun theAggregatorApiIssuesAreResolvedAndIsReturningReferralsAndUpcomingAppointments() {
+        wayfinderFactory.setupReferralsAndUpcomingAppointmentsResponse()
     }
 
     @When("^I click the try again button on the unavailable secondary care services error screen$")
@@ -109,7 +109,7 @@ class WayfinderStepDefinitions {
         wayfinderReferralsAndAppointmentsPage.assertBookableOverdueReferralDisplayed()
     }
 
-    @Then("^I see a bookable awaiting booking$")
+    @Then("^I see a referral awaiting booking$")
     fun assertBookableAwaitingBookIsDisplayed() {
         wayfinderReferralsAndAppointmentsPage.assertBookableAwaitingBookDisplayed()
     }
