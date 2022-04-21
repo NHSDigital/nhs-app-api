@@ -47,7 +47,7 @@ properties:
         example: Onboarded Third Party
   recipient:
     type: array
-    description: An array of NHS numbers corresponding to the patient(s) to whom this in-app message and push notification was sent.
+    description: An array containing a single NHS number corresponding to the patient to whom this in-app message and push notification was sent.
     items:
       type: object
       properties:
