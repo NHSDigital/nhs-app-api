@@ -56,3 +56,23 @@ Feature: Wayfinder Referrals
     Then I see a bookable awaiting booking
     When I click the Back link
     Then the Appointments Hub page is displayed
+
+  Scenario: A user with an in review referral with no speciality does not see the speciality referenced
+    Given I am a user who can view Wayfinder from Appointments and has referrals and upcoming appointments
+    And I am logged in
+    When I navigate to Appointments
+    Then the Appointments Hub page is displayed
+    When I click the 'Referrals, hospital and other appointments' link on the Appointments Hub
+    And the Referrals, hospital and other appointments screen with data is displayed
+    Then I can see the InReview referral with no speciality referenced
+
+  Scenario: A user with a ready to rebook referral with no speciality does not see the speciality referenced
+    Given I am a user who can view Wayfinder from Appointments and has referrals and upcoming appointments
+    And I am logged in
+    When I navigate to Appointments
+    Then the Appointments Hub page is displayed
+    When I click the 'Referrals, hospital and other appointments' link on the Appointments Hub
+    And the Referrals, hospital and other appointments screen with data is displayed
+    Then I can see the ReadyToRebook referral with no speciality referenced
+
+

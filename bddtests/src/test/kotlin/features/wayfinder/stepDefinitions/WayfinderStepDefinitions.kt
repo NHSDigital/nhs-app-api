@@ -119,6 +119,14 @@ class WayfinderStepDefinitions {
         wayfinderAggregatorErrorPage.assertIsDisplayedWithPrefix(prefix)
     }
 
+    @Then("^I can see the (\\w+) referral with no speciality referenced$")
+    fun iSeeTheReferralWithNoSpecialityReferenced(status: String) {
+        when (status) {
+            "InReview" -> wayfinderReferralsAndAppointmentsPage.assertNoSpecialityReferencedForInReview()
+            "ReadyToRebook" -> wayfinderReferralsAndAppointmentsPage.assertNoSpecialityReferencedForRebook()
+        }
+    }
+
     private fun setupPatient(configuration: SJRJourneyType, proofLevel: IdentityProofingLevel? = null) {
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(null, configuration, proofLevel)
         setupJourney(patient)

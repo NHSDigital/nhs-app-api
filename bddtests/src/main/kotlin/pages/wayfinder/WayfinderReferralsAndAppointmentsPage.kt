@@ -8,6 +8,11 @@ import pages.assertIsVisible
 @DefaultUrl("http://web.local.bitraft.io:3000/wayfinder")
 open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
 
+    private val noSpecialityInReview = "Your healthcare provider has requested for you to be referred. " +
+            "This request is being reviewed. You do not need to do anything."
+    private val noSpecialityRebook = "You need to rebook your referral appointment " +
+            "as the one you had booked has been cancelled."
+
     private val pageTitleWithData = HybridPageElement(
         webDesktopLocator = "//h1[contains(text(),\"Referrals, hospital and other appointments\")]",
         page = this,
@@ -27,9 +32,9 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
     )
 
     private val noUpcomingAppointments = HybridPageElement(
-            webDesktopLocator = "//p[contains(text(),\"You have no hospital appointments to view and manage.\")]",
-            page = this,
-            helpfulName = "Appointment to confirm H3"
+        webDesktopLocator = "//p[contains(text(),\"You have no hospital appointments to view and manage.\")]",
+        page = this,
+        helpfulName = "Appointment to confirm H3"
     )
 
     private val inReviewReferralHeading = HybridPageElement(
@@ -60,6 +65,18 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
         webDesktopLocator = "//h3[contains(text(),\"Booked appointment\")]",
         page = this,
         helpfulName = "Appointment booked H3"
+    )
+
+    private val noSpecialityReferencedInReview = HybridPageElement(
+        webDesktopLocator = "//p[contains(text(),\"${noSpecialityInReview}\")]",
+        page = this,
+        helpfulName = "No speciality referenced in review paragraph"
+    )
+
+    private val noSpecialityReferencedRebook = HybridPageElement(
+            webDesktopLocator = "//p[contains(text(),\"${noSpecialityRebook}\")]",
+            page = this,
+            helpfulName = "No speciality referenced in review paragraph"
     )
 
     fun assertWayfinderWithDataTitleIsDisplayed() {
@@ -96,5 +113,13 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
 
     fun assertBookableAwaitingBookDisplayed() {
         bookableAwaitingBookHeading.assertIsVisible()
+    }
+
+    fun assertNoSpecialityReferencedForInReview() {
+        noSpecialityReferencedInReview.assertIsVisible()
+    }
+
+    fun assertNoSpecialityReferencedForRebook() {
+        noSpecialityReferencedRebook.assertIsVisible()
     }
 }
