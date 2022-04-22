@@ -10,9 +10,14 @@ namespace NHSOnline.Backend.PfsApi.NHSApim
             return new OkObjectResult(result.Response);
         }
 
-        public IActionResult Visit(GetAuthTokenResult.Unauthorized result)
+        public IActionResult Visit(GetAuthTokenResult.BadRequest result)
         {
-            return new StatusCodeResult(StatusCodes.Status401Unauthorized);
+            return new StatusCodeResult(StatusCodes.Status400BadRequest);
+        }
+
+        public IActionResult Visit(GetAuthTokenResult.Forbidden result)
+        {
+            return new StatusCodeResult(StatusCodes.Status403Forbidden);
         }
     }
 }

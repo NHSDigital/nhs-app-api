@@ -126,7 +126,8 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
             var userProfile = new UserProfile(
                 new Auth.CitizenId.Models.UserInfo(),
                 "AccessToken",
-                "RefreshToken");
+                "RefreshToken",
+                "IDToken");
 
             // Act
             var result = await _systemUnderTest.PostUserResearchPreference(new UserResearchRequest
@@ -154,7 +155,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
                 GpRegistrationDetails = { OdsCode = userProfile.OdsCode },
                 NhsNumber = userProfile.NhsNumber,
             };
-            return new UserProfile(userInfo, "Access token", "Refresh Token");
+            return new UserProfile(userInfo, "Access token", "Refresh Token", "ID Token");
         }
     }
 }

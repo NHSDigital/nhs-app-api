@@ -6,6 +6,7 @@ namespace NHSOnline.Backend.Support
     public class CitizenIdUserSession
     {
         public string AccessToken { get; set; }
+        public string NhsLoginIdToken { get; set; }
         public string GivenName { get; set; }
         public string FamilyName { get; set; }
         public DateTime DateOfBirth { get; set; }
@@ -13,7 +14,7 @@ namespace NHSOnline.Backend.Support
         public ProofLevel ProofLevel { get; set; }
         public string OdsCode { get; set; }
         public string RefreshToken { get; set; }
-    
+
         public string Name => $"{GivenName} {FamilyName}";
     }
 }

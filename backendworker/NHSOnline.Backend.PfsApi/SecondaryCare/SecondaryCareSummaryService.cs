@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
         {
             try
             {
-                var authResponse = await _nhsApimClient.GetAuthToken();
+                var authResponse = await _nhsApimClient.GetAuthToken(userSession.CitizenIdUserSession.NhsLoginIdToken);
 
                 var aggregatorResponse = await _secondaryCareClient.GetSummary(userSession, authResponse.Body.AccessToken);
 

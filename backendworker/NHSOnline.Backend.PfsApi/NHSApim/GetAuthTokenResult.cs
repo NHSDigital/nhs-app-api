@@ -18,11 +18,23 @@ namespace NHSOnline.Backend.PfsApi.NHSApim
             public override T Accept<T>(INhsApimResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
-        public class Unauthorized : GetAuthTokenResult
+        public class BadRequest : GetAuthTokenResult
         {
             public ApimAccessToken Response { get; }
 
-            public Unauthorized(ApimAccessToken response)
+            public BadRequest(ApimAccessToken response)
+            {
+                Response = response;
+            }
+
+            public override T Accept<T>(INhsApimResultVisitor<T> visitor) => visitor.Visit(this);
+        }
+
+        public class Forbidden : GetAuthTokenResult
+        {
+            public ApimAccessToken Response { get; }
+
+            public Forbidden(ApimAccessToken response)
             {
                 Response = response;
             }

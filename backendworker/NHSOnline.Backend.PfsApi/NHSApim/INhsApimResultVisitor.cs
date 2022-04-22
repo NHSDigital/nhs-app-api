@@ -4,6 +4,8 @@ namespace NHSOnline.Backend.PfsApi.NHSApim
     {
         T Visit(GetAuthTokenResult.Success result);
 
-        T Visit(GetAuthTokenResult.Unauthorized result);
+        T Visit(GetAuthTokenResult.BadRequest result);
+
+        T Visit(GetAuthTokenResult.Forbidden result);
     }
 }

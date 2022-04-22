@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.APIM;
 using NHSOnline.Backend.PfsApi.NHSApim.Models;
-using NHSOnline.Backend.PfsApi.SecondaryCare;
 using NHSOnline.Backend.Support.ResponseParsers;
 
 namespace NHSOnline.Backend.PfsApi.NHSApim
@@ -34,13 +33,13 @@ namespace NHSOnline.Backend.PfsApi.NHSApim
             _config = config;
         }
 
-        public async Task<NhsApimAuthResponse<ApimAccessToken>> GetAuthToken()
-            => await PostAuthTokenRequest(AuthPath);
+        public async Task<NhsApimAuthResponse<ApimAccessToken>> GetAuthToken(string nhsLoginIdToken)
+            => await PostAuthTokenRequest(AuthPath, nhsLoginIdToken);
 
-        private async Task<NhsApimAuthResponse<ApimAccessToken>> PostAuthTokenRequest(string path)
+        private async Task<NhsApimAuthResponse<ApimAccessToken>> PostAuthTokenRequest(string path, string nhsLoginIdToken)
         {
 
-            var token = _apimJwtHelper.CreateApimJwt(
+            var clientAssertionToken = _apimJwtHelper.CreateApimJwt(
                 new Uri(_config.BaseUrl + path),
                 _config.CertPath,
                 _config.CertPassphrase,
@@ -49,9 +48,11 @@ namespace NHSOnline.Backend.PfsApi.NHSApim
 
             var dict = new Dictionary<string, string>
             {
-                { "grant_type", "client_credentials" },
+                { "subject_token", nhsLoginIdToken },
+                { "client_assertion", clientAssertionToken },
+                { "subject_token_type", "urn:ietf:params:oauth:token-type:id_token" },
                 { "client_assertion_type", "urn:ietf:params:oauth:client-assertion-type:jwt-bearer" },
-                { "client_assertion", token },
+                { "grant_type", "urn:ietf:params:oauth:grant-type:token-exchange" }
             };
 
             using var request = new HttpRequestMessage(HttpMethod.Post, path);

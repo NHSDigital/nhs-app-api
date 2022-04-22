@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace NHSOnline.Backend.Support
 {
-    [SuppressMessage("Microsoft.Naming", "CA1716", 
+    [SuppressMessage("Microsoft.Naming", "CA1716",
         Justification = "We knowingly choose to use the 'Option' keyword. This class library will not be consumed externally.")]
     public static class Option
     {
@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.Support
         public static Option<T> None<T>() => new Option<T>(default, false);
     }
 
-    [SuppressMessage("Microsoft.Naming", "CA1716", 
+    [SuppressMessage("Microsoft.Naming", "CA1716",
         Justification = "We knowingly choose to use the 'Option' keyword. This class library will not be consumed externally.")]
     [SuppressMessage("Microsoft.Performance", "CA1815",
         Justification = "Instances of the Option type will not be compared to each other.")]
@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.Support
         {
             return HasValue ? $"{Value}" : "None";
         }
-    
+
         public Option<TResult> Select<TResult>(Func<T, TResult> next)
         {
             return HasValue ? Option.Some(next(Value)) : Option.None<TResult>();

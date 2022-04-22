@@ -169,7 +169,11 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
                 GpRegistrationDetails = { OdsCode = userProfile.OdsCode },
                 NhsNumber = userProfile.NhsNumber,
             };
-            return new UserProfile(userInfo, "Access token", "Refresh Token");
+            return new UserProfile(
+                userInfo,
+                "Access token",
+                "Refresh Token",
+                "ID Token");
         }
     }
 }

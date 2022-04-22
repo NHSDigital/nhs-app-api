@@ -46,6 +46,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
         private const int SessionTimeoutMinutes = 10;
         private const string AccessToken = "AccessToken";
         private const string RefreshToken = "RefreshToken";
+        private const string IdToken = "IDToken";
 
         internal TestData Data { get; }
         internal TestMocks Mocks { get; }
@@ -168,7 +169,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                     FamilyName = "Family",
                     GpRegistrationDetails = { OdsCode = "OdsCode" }
                 };
-                UserProfile = new UserProfile(UserInfo, AccessToken, RefreshToken);
+                UserProfile = new UserProfile(UserInfo, AccessToken, RefreshToken, IdToken);
 
                 EmisUserSession = new EmisUserSession
                 {

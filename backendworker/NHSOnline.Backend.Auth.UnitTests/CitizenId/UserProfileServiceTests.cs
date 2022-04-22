@@ -52,7 +52,8 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             var userProfile = new UserProfile(
                 new UserInfo(),
                 "AccessToken",
-                "RefreshToken");
+                "RefreshToken",
+                "IDToken");
 
             _systemUnderTest.SetUserProfile(userProfile);
 
@@ -74,7 +75,8 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                     new UserProfile(
                         new UserInfo(),
                         "AccessToken",
-                        "RefreshToken"
+                        "RefreshToken",
+                        "IDToken"
                     )
                 );
 

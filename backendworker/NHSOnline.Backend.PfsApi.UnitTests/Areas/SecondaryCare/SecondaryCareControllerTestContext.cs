@@ -121,7 +121,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                 {"Authorization", $"Bearer {OAuthAccessToken}"}
             };
 
-            public P9UserSession P9UserSession { get; } = new P9UserSession("csrfToken", NhsNumber, new CitizenIdUserSession(), "im1ConnectionToken");
+            public P9UserSession P9UserSession { get; } = new P9UserSession(
+                "csrfToken",
+                NhsNumber,
+                new CitizenIdUserSession{ NhsLoginIdToken = "token" },
+                "im1ConnectionToken");
 
             public SummaryResponse SummaryResponse { get; } = new SummaryResponse
             {
@@ -242,7 +246,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                     .Respond("application/json", JsonConvert.SerializeObject(new ApimAccessToken
                     {
                         ExpiresIn = "123",
-                        IssuedAt = "123",
+                        IssuedTokenType = "urn:ietf:params:oauth:token-type:access_token",
                         AccessToken = TestData.OAuthAccessToken,
                         TokenType = "Bearer"
                     }));

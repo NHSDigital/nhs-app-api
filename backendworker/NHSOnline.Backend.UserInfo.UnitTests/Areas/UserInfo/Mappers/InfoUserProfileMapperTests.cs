@@ -27,7 +27,8 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Areas.UserInfo.Mappers
                     NhsNumber = "NHS Number",
                 },
                 "Access Token",
-                "Refresh Token"
+                "Refresh Token",
+                "ID Token"
             );
 
             _mockProofLevelMapper = new Mock<IMapper<string, ProofLevel?>>();

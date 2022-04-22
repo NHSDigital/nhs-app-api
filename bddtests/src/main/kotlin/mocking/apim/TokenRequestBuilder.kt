@@ -12,7 +12,7 @@ class TokenRequestBuilder
             "access_token": "accessToken",
             "expires_in": "123",
             "token_type": "Bearer",
-            "issued_at": "123"
+            "issued_token_type": "urn:ietf:params:oauth:token-type:access_token"
         } 
         """
 

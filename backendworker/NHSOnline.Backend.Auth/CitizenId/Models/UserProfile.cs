@@ -4,10 +4,11 @@ namespace NHSOnline.Backend.Auth.CitizenId.Models
     {
         private readonly UserInfo _userInfo;
 
-        public UserProfile(UserInfo userInfo, string accessToken, string refreshToken)
+        public UserProfile(UserInfo userInfo, string accessToken, string refreshToken, string idToken)
         {
             _userInfo = userInfo;
             AccessToken = accessToken;
+            IdToken = idToken;
             RefreshToken = refreshToken;
         }
 
@@ -35,6 +36,7 @@ namespace NHSOnline.Backend.Auth.CitizenId.Models
         public string IdentityProofingLevel => _userInfo.IdentityProofingLevel;
         public string Email => _userInfo.Email;
         public string AccessToken { get; }
+        public string IdToken { get; }
         public string RefreshToken { get; }
     }
 }

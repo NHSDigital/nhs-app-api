@@ -91,6 +91,7 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
                     NhsNumber = nhsNumberFormatted,
                     Session = new CitizenIdUserSession
                     {
+                        NhsLoginIdToken = cidUserProfile.IdToken,
                         AccessToken = cidUserProfile.AccessToken,
                         GivenName = cidUserProfile.GivenName,
                         FamilyName = cidUserProfile.FamilyName,

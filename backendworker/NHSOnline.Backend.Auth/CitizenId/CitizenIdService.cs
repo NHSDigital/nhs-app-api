@@ -53,15 +53,16 @@ namespace NHSOnline.Backend.Auth.CitizenId
 
                 _logger.LogJwtExpiry(tokenResponse.Body.AccessToken);
 
-                var token = await _idTokenService.ReadToken(tokenResponse.Body.IdToken);
+                var tokenResponseReadIdToken = await _idTokenService.ReadToken(tokenResponse.Body.IdToken);
 
-                await token.IfSome(async idToken =>
+                await tokenResponseReadIdToken.IfSome(async readIdToken =>
                 {
                     result = await GetUserProfileFromCitizenId(
                         tokenResponse.Body.AccessToken,
-                        idToken.Subject,
-                        tokenResponse.Body.RefreshToken);
-                    result.IdTokenJti = idToken.Jti;
+                        readIdToken.Subject,
+                        tokenResponse.Body.RefreshToken,
+                        tokenResponse.Body.IdToken);
+                    result.IdTokenJti = readIdToken.Jti;
                 })
                 .IfNone(() =>
                 {
@@ -136,7 +137,7 @@ namespace NHSOnline.Backend.Auth.CitizenId
             }
         }
 
-        private async Task<GetUserProfileResult> GetUserProfileFromCitizenId(string accessToken, string subject, string refreshToken = null)
+        private async Task<GetUserProfileResult> GetUserProfileFromCitizenId(string accessToken, string subject, string refreshToken = null, string idToken = null)
         {
             var userInfoResponse = await _citizenIdClient.GetUserInfo(accessToken);
 
@@ -152,7 +153,7 @@ namespace NHSOnline.Backend.Auth.CitizenId
                 return validatedUserInfoFailure;
             }
 
-            var userProfile = new UserProfile(validatedUserInfo, accessToken, refreshToken);
+            var userProfile = new UserProfile(validatedUserInfo, accessToken, refreshToken, idToken);
 
             return new GetUserProfileResult
             {
