@@ -4,36 +4,37 @@
       {{ $t('wayfinder.referrals.overdue.title') }}
     </h3>
 
-    <p v-if="hasSpecialty" class="nhsuk-u-margin-bottom-3">
+    <p v-if="hasSpecialty" :id="`requested-specialty-${referralId}`"
+       class="nhsuk-u-margin-bottom-3">
       {{ requestedSpecialty }}
     </p>
 
-    <p v-if="hasSpecialty" class="nhsuk-u-margin-bottom-3">
+    <p v-if="hasSpecialty" :id="`contact-specialty-${referralId}`" class="nhsuk-u-margin-bottom-3">
       {{ $tc('wayfinder.referrals.overdue.youNeedToContactSpecialty',
              null, {specialty: requestedSpecialty}) }}
     </p>
 
-    <p class="nhsuk-u-margin-bottom-3">
+    <p :id="`referral-date-${referralId}`" class="nhsuk-u-margin-bottom-3">
       {{ $tc('wayfinder.referrals.referredDate',
              null, {referralDate: getFormattedReferredDate}) }}
     </p>
 
-    <p v-if="hasReviewDate" class="nhsuk-u-margin-bottom-3">
+    <p v-if="hasReviewDate" :id="`review-date-${referralId}`" class="nhsuk-u-margin-bottom-3">
       {{ $tc('wayfinder.referrals.reviewDate',
              null, {reviewDate: getFormattedReviewDate}) }}
     </p>
 
-    <p class="nhsuk-u-margin-bottom-3">
+    <p :id="`booking-reference-${referralId}`" class="nhsuk-u-margin-bottom-3">
       {{ $tc('wayfinder.referrals.bookingReference',
              null, {reference: bookingReference}) }}
     </p>
 
-    <p class="nhsuk-u-margin-bottom-3">
+    <p :id="`referred-by-${referralId}`" class="nhsuk-u-margin-bottom-3">
       {{ $tc('wayfinder.referrals.referredBy',
              null, {referrer: referredBy}) }}
     </p>
 
-    <primary-button :id="`manageInReviewReferral-${bookingReference}`">
+    <primary-button :id="`manageInReviewReferral-${referralId}`">
       {{ $t('wayfinder.referrals.overdue.contactTheClinic') }}
     </primary-button>
   </Card>
@@ -67,6 +68,10 @@ export default {
       default: '',
     },
     requestedSpecialty: {
+      type: String,
+      default: '',
+    },
+    referralId: {
       type: String,
       default: '',
     },

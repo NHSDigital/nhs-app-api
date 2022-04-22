@@ -81,19 +81,19 @@
 
           <card-group v-if="hasUpcomingAppointments" class="nhsuk-grid-row">
             <card-group-item
-              v-for="appointment in upcomingAppointments"
-              :key="appointment.appointmentId"
+              v-for="(appointment, index) in upcomingAppointments"
+              :key="`upcoming-appointment-${index}`"
               class="nhsuk-grid-column-three-quarters">
 
               <appointment-booked-card
                 v-if="isAppointmentBooked(appointment)"
-                :appointment-id="appointment.appointmentId"
+                :appointment-id="index"
                 :location-description="appointment.locationDescription"
                 :appointment-date-time="appointment.appointmentDateTime"/>
 
               <appointment-ready-to-confirm-card
                 v-if="!isAppointmentBooked(appointment)"
-                :appointment-id="appointment.appointmentId"
+                :appointment-id="index"
                 :location-description="appointment.locationDescription"/>
 
             </card-group-item>

@@ -4,31 +4,33 @@
       {{ $t('wayfinder.referrals.bookable.title') }}
     </h3>
 
-    <p v-if="hasSpecialty" class="nhsuk-u-margin-bottom-3">
+    <p v-if="hasSpecialty" :id="`requested-specialty-${referralId}`"
+       class="nhsuk-u-margin-bottom-3">
       {{ requestedSpecialty }}
     </p>
 
-    <p class="nhsuk-u-margin-bottom-3">
+    <p :id="`referral-date-${referralId}`" class="nhsuk-u-margin-bottom-3">
       {{ $tc('wayfinder.referrals.referredDate',
              null, {referralDate: getFormattedReferredDate}) }}
     </p>
 
-    <p v-if="hasSpecialty" class="nhsuk-u-margin-bottom-3">
+    <p v-if="hasSpecialty" :id="`referral-ready-to-book-${referralId}`"
+       class="nhsuk-u-margin-bottom-3">
       {{ $tc('wayfinder.referrals.bookable.yourReferralAppointmentIsReadyToBook',
              null, {specialty: requestedSpecialty}) }}
     </p>
 
-    <p class="nhsuk-u-margin-bottom-3">
+    <p :id="`booking-reference-${referralId}`" class="nhsuk-u-margin-bottom-3">
       {{ $tc('wayfinder.referrals.bookingReference',
              null, {reference: bookingReference}) }}
     </p>
 
-    <p class="nhsuk-u-margin-bottom-3">
+    <p :id="`referred-by-${referralId}`" class="nhsuk-u-margin-bottom-3">
       {{ $tc('wayfinder.referrals.referredBy',
              null, {referrer: referredBy}) }}
     </p>
 
-    <primary-button :id="`bookOrManageReferral-${bookingReference}`">
+    <primary-button :id="`bookOrManageReferral-${referralId}`">
       {{ $t('wayfinder.referrals.bookable.bookOrManageThisReferral') }}
     </primary-button>
   </Card>
@@ -58,6 +60,10 @@ export default {
       default: '',
     },
     requestedSpecialty: {
+      type: String,
+      default: '',
+    },
+    referralId: {
       type: String,
       default: '',
     },
