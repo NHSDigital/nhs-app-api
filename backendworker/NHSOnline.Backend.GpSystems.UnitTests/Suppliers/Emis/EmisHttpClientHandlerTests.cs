@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -20,13 +21,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         private ILogger<EmisHttpClientHandler> _mockLogger;
         private Mock<ICertificateService> _certificateService;
 
-        public const string DefaultEmisVersion = "2.1.0.0";
-        public static readonly string DefaultEmisApplicationId = Guid.NewGuid().ToString();
+        private const string DefaultEmisVersion = "2.1.0.0";
+        private static readonly string DefaultEmisApplicationId = Guid.NewGuid().ToString();
 
-        public static readonly Uri BaseUri = new Uri("http://emis_base_url/");
+        private static readonly Uri BaseUri = new Uri("http://emis_base_url/");
 
         private const string CertificatePath = "CertificatePath";
-        private const string CertificatePassphrase = "CertificatePassphrase";       
+        private const string CertificatePassphrase = "CertificatePassphrase";
 
         private const int CoursesMaxCoursesLimit = 100;
         private const int EmisExtendedHttpTimeoutSeconds = 6;
@@ -41,9 +42,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _mockLogger = _fixture.Create<ILogger<EmisHttpClientHandler>>();
 
-            _config = new EmisConfigurationSettings(BaseUri, DefaultEmisApplicationId, DefaultEmisVersion, CertificatePath, 
+            _config = new EmisConfigurationSettings(BaseUri, DefaultEmisApplicationId, DefaultEmisVersion, CertificatePath,
                 CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit);
-            
+
             _certificateService = _fixture.Freeze<Mock<ICertificateService>>();
         }
 
@@ -53,7 +54,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             _certificateService
                 .Setup(x => x.GetCertificate(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new X509Certificate2(Path, Passphrase));
-            
+
             _systemUnderTest = CreateEmisHttpClientHandler();
             _systemUnderTest.ServerCertificateCustomValidationCallback.Should().NotBeNull();
         }
@@ -78,8 +79,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             _systemUnderTest = CreateEmisHttpClientHandler();
             _systemUnderTest.ServerCertificateCustomValidationCallback.Should().NotBeNull();
-            _systemUnderTest.ClientCertificates.Should().NotBeEmpty();
-            _systemUnderTest.ClientCertificates.Should().HaveCount(1);
+            _systemUnderTest.ClientCertificates.Cast<X509Certificate>().Should().NotBeEmpty();
+            _systemUnderTest.ClientCertificates.Cast<X509Certificate>().Should().HaveCount(1);
         }
 
         [TestMethod]
@@ -89,7 +90,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
                 .Returns((X509Certificate2)null);
 
             _systemUnderTest = CreateEmisHttpClientHandler();
-            _systemUnderTest.ClientCertificates.Should().BeEmpty();
+            _systemUnderTest.ClientCertificates.Cast<X509Certificate>().Should().BeEmpty();
         }
 
         private EmisHttpClientHandler CreateEmisHttpClientHandler()

@@ -39,13 +39,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             Func<Task> act = async () => await _step.Execute(null);
 
             // Assert
-            act.Should().Throw<AggregateException>()
-                .And.InnerExceptions.Should().HaveCount(3)
-                .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("context", StringComparison.Ordinal))
-                .And.Contain(x =>
-                    ((ArgumentNullException) x).ParamName.Equals("FolderConfigurations", StringComparison.Ordinal))
-                .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("GpInfos", StringComparison.Ordinal));
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("context");
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("FolderConfigurations");
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("GpInfos");
         }
 
         [TestMethod]
@@ -58,12 +57,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             Func<Task> act = async () => await _step.Execute(context);
 
             // Assert
-            act.Should().Throw<AggregateException>()
-                .And.InnerExceptions.Should().HaveCount(2)
-                .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x =>
-                    ((ArgumentNullException) x).ParamName.Equals("FolderConfigurations", StringComparison.Ordinal))
-                .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("GpInfos", StringComparison.Ordinal));
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("FolderConfigurations");
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("GpInfos");
         }
 
         [TestMethod]
@@ -79,7 +76,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             Func<Task> act = async () => await _step.Execute(context);
 
             // Assert
-            act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("GpInfos");
+            act.Should().ThrowAsync<ArgumentException>()
+                .WithParameterName("GpInfos");
         }
 
         [TestMethod]
@@ -95,7 +93,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             Func<Task> act = async () => await _step.Execute(context);
 
             // Assert
-            act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("FolderConfigurations");
+            act.Should().ThrowAsync<ArgumentException>()
+                .WithParameterName("FolderConfigurations");
         }
 
         [TestMethod]
@@ -145,7 +144,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             result.Should().BeTrue();
             context.FolderOdsJourneys.Should().NotBeNull().And.HaveCount(1);
             context.FolderOdsJourneys.Should().ContainKey(folderName)
-                .WhichValue.Should().NotBeNull().And.BeEmpty();
+                .WhoseValue.Should().NotBeNull().And.BeEmpty();
         }
 
         [TestMethod]
@@ -233,29 +232,29 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var firstFolderConfigurations = context.FolderOdsJourneys[folderName];
             firstFolderConfigurations.Should().NotBeNull().And.HaveCount(4);
 
-            firstFolderConfigurations.Should().ContainKey("1").WhichValue.Should()
+            firstFolderConfigurations.Should().ContainKey("1").WhoseValue.Should()
                 .NotBe(allConfiguration.Journeys.AddSupplier(Supplier.Emis)).And
                 .BeEquivalentTo(allConfiguration.Journeys.AddSupplier(Supplier.Emis));
-            firstFolderConfigurations.Should().ContainKey("2").WhichValue.Should()
+            firstFolderConfigurations.Should().ContainKey("2").WhoseValue.Should()
                 .NotBe(allConfiguration.Journeys.AddSupplier(Supplier.Emis)).And
                 .BeEquivalentTo(allConfiguration.Journeys.AddSupplier(Supplier.Emis));
-            firstFolderConfigurations.Should().ContainKey("3").WhichValue.Should()
+            firstFolderConfigurations.Should().ContainKey("3").WhoseValue.Should()
                 .NotBe(allConfiguration.Journeys.AddSupplier(Supplier.Vision)).And
                 .BeEquivalentTo(allConfiguration.Journeys.AddSupplier(Supplier.Vision));
-            firstFolderConfigurations.Should().ContainKey("4").WhichValue.Should()
+            firstFolderConfigurations.Should().ContainKey("4").WhoseValue.Should()
                 .NotBe(odsCodeConfiguration.Journeys.AddSupplier(Supplier.Tpp)).And
                 .BeEquivalentTo(allConfiguration.Journeys.AddSupplier(Supplier.Tpp));
 
             var secondFolderConfigurations = context.FolderOdsJourneys[folderName2];
             secondFolderConfigurations.Should().NotBeNull().And.HaveCount(3);
 
-            secondFolderConfigurations.Should().ContainKey("2").WhichValue.Should()
+            secondFolderConfigurations.Should().ContainKey("2").WhoseValue.Should()
                 .NotBe(ccgConfiguration.Journeys.AddSupplier(Supplier.Emis)).And
                 .BeEquivalentTo(ccgConfiguration.Journeys.AddSupplier(Supplier.Emis));
-            secondFolderConfigurations.Should().ContainKey("3").WhichValue.Should()
+            secondFolderConfigurations.Should().ContainKey("3").WhoseValue.Should()
                 .NotBe(ccgConfiguration.Journeys.AddSupplier(Supplier.Vision)).And
                 .BeEquivalentTo(ccgConfiguration.Journeys.AddSupplier(Supplier.Vision));
-            secondFolderConfigurations.Should().ContainKey("4").WhichValue.Should()
+            secondFolderConfigurations.Should().ContainKey("4").WhoseValue.Should()
                 .NotBe(odsCodesConfiguration.Journeys.AddSupplier(Supplier.Tpp)).And
                 .BeEquivalentTo(supplierConfiguration.Journeys.AddSupplier(Supplier.Tpp));
         }

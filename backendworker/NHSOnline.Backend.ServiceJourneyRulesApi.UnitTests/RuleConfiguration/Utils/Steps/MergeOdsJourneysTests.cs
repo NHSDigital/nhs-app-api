@@ -32,12 +32,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             Func<Task> act = async () => await _step.Execute(null);
 
             // Assert
-            act.Should().Throw<AggregateException>()
-                .And.InnerExceptions.Should().HaveCount(2)
-                .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("context", StringComparison.Ordinal))
-                .And.Contain(x =>
-                    ((ArgumentNullException) x).ParamName.Equals("FolderOdsJourneys", StringComparison.Ordinal));
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("context");
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("FolderOdsJourneys");
         }
 
         [TestMethod]
@@ -50,7 +48,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             Func<Task> act = async () => await _step.Execute(context);
 
             // Assert
-            act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("FolderOdsJourneys");
+            act.Should().ThrowAsync<ArgumentException>()
+                .WithParameterName("FolderOdsJourneys");
         }
 
         [TestMethod]

@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auth.CitizenId;
@@ -53,7 +51,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
 
             // Assert
             actualResult.UserProfile.HasValue.Should().BeFalse();
-            actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            actualResult.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             actualResult.IdTokenJti.Should().BeNull();
         }
 
@@ -70,7 +68,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
 
             // Assert
             actualResult.UserProfile.HasValue.Should().BeFalse();
-            actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            actualResult.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             actualResult.IdTokenJti.Should().BeNull();
         }
 
@@ -129,9 +127,6 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
 
             var bearerToken = tokenResponse.Body.AccessToken;
 
-            var signingKeys = Mock.Of<JsonWebKeySet>();
-            var signingKeysResponse = Option.Some(signingKeys);
-
             var idToken = _fixture
                 .Build<IdToken>()
                 .With(x => x.Subject, subject)
@@ -172,7 +167,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             actualUserProfile.OdsCode.Should().Be(userProfileResponse.Body.GpRegistrationDetails.OdsCode);
             actualUserProfile.AccessToken.Should().Be(tokenResponse.Body.AccessToken);
 
-            actualResult.StatusCode.Should().Be(StatusCodes.Status200OK);
+            actualResult.StatusCode.Should().Be(HttpStatusCode.OK);
 
             actualResult.IdTokenJti.Should().Be(idToken.Jti);
         }
@@ -191,9 +186,6 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                 ErrorResponse = new ErrorResponse { Error = "invalid_grant" }
             };
 
-            var signingKeys = Mock.Of<JsonWebKeySet>();
-            var signingKeysResponse = Option.Some(signingKeys);
-
             _citizenIdClientMock
                 .Setup(x => x.ExchangeAuthToken(authCode, codeVerifier, redirectUrl))
                 .ReturnsAsync(tokenResponse);
@@ -205,7 +197,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             _citizenIdClientMock.VerifyAll();
 
             actualResult.UserProfile.HasValue.Should().BeFalse();
-            actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            actualResult.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             actualResult.IdTokenJti.Should().BeNull();
             _loggerMock.VerifyLogger(LogLevel.Error,
                 "Failed to exchange auth token for access token", Times.Once());
@@ -226,9 +218,6 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                 ErrorResponse = null
             };
 
-            var signingKeys = Mock.Of<JsonWebKeySet>();
-            var signingKeysResponse = Option.Some(signingKeys);
-
             var tokenServiceResponse = Option.None<IdToken>();
 
             _citizenIdClientMock
@@ -248,7 +237,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             _citizenIdClientMock.VerifyNoOtherCalls();
 
             actualResult.UserProfile.HasValue.Should().BeFalse();
-            actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            actualResult.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             actualResult.IdTokenJti.Should().BeNull();
             _loggerMock.VerifyLogger(LogLevel.Error,
                 "Failed to read ID Token", Times.Once());
@@ -270,9 +259,6 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             };
 
             var bearerToken = tokenResponse.Body.AccessToken;
-
-            var signingKeys = Mock.Of<JsonWebKeySet>();
-            var signingKeysResponse = Option.Some(signingKeys);
 
             var idToken = _fixture.Create<IdToken>();
             var tokenServiceResponse = Option.Some(idToken);
@@ -302,7 +288,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             _idTokenService.VerifyAll();
             _citizenIdClientMock.VerifyAll();
             actualResult.UserProfile.HasValue.Should().BeFalse();
-            actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            actualResult.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             actualResult.IdTokenJti.Should().Be(idToken.Jti);
             _loggerMock.VerifyLogger(LogLevel.Error,
                 "Value of subject claim differed between Token and UserInfo responses", Times.Once());
@@ -319,7 +305,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             // Assert
             actualResult.Should().NotBeNull();
             actualResult.UserProfile.HasValue.Should().BeFalse();
-            actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            actualResult.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             actualResult.IdTokenJti.Should().BeNull();
         }
 
@@ -352,7 +338,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
 
             // Assert
             actualResult.Should().NotBeNull();
-            actualResult.StatusCode.Should().Be(StatusCodes.Status200OK);
+            actualResult.StatusCode.Should().Be(HttpStatusCode.OK);
             actualResult.UserProfile.HasValue.Should().BeTrue();
             actualResult.IdTokenJti.Should().BeNull();
 

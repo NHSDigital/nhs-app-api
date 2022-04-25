@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -93,7 +94,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
             await SystemUnderTest.Post(tppRequestParameters);
 
             //Assert
-            requestMessage.Headers.Should().ContainHeader("suid", suidHeaderName);
+            requestMessage.Headers.Should().ContainSingle(x => x.Key == "suid"
+                                                               && x.Value.Single().Equals(suidHeaderName,
+                                                                   StringComparison.Ordinal));
         }
 
         [TestMethod]

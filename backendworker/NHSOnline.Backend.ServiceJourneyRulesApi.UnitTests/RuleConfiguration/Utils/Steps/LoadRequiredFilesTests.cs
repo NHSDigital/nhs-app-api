@@ -22,13 +22,13 @@ using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps;
         private Mock<IGpInfoReader> _mockGpInfoReader;
         private Mock<IFileHandler> _mockFileHandler;
         private Mock<ILogger<LoadRequiredFiles>> _mockLogger;
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
             var fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
-            
+
             _mockGpInfoReader = fixture.Freeze<Mock<IGpInfoReader>>();
             _mockFileHandler = fixture.Freeze<Mock<IFileHandler>>();
             _mockLogger = fixture.Freeze<Mock<ILogger<LoadRequiredFiles>>>();
@@ -41,11 +41,12 @@ using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps;
         {
             // Act
             Func<Task> act = async () => await _step.Execute(null);
-            
+
             // Assert
-            act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("context");
+            act.Should().ThrowAsync<ArgumentException>()
+                .WithParameterName("context");
         }
-        
+
         [TestMethod]
         public async Task Execute_WhenGpInfoDoesNotExist_ReturnsFalse()
         {
@@ -53,13 +54,13 @@ using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps;
             var context = new ConfigurationContext();
             _mockGpInfoReader.Setup(s => s.GetGpInfo(It.IsAny<string>()))
                 .Returns((IDictionary<string, GpInfo>)null);
-            
+
             // Act
             var result = await _step.Execute(context);
-            
+
             // Assert
             _mockLogger.VerifyLogger(LogLevel.Critical, Times.Once());
-            
+
             result.Should().BeFalse();
             context.GpInfos.Should().BeNull();
         }
@@ -72,14 +73,14 @@ using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps;
             FileData fileData;
             _mockFileHandler.Setup(x => x.ReadEmbeddedResourceFromFileName(Constants.FileNames.RulesSchema, out fileData))
                 .Returns(false);
-            
-            
+
+
             // Act
             var result = await _step.Execute(context);
-            
+
             // Assert
             _mockLogger.VerifyLogger(LogLevel.Critical, Times.Once());
-            
+
             result.Should().BeFalse();
             context.RulesSchema.Should().BeNull();
         }
@@ -92,13 +93,13 @@ using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps;
             FileData fileData;
             _mockFileHandler.Setup(x => x.ReadEmbeddedResourceFromFileName(Constants.FileNames.JourneyConfigurationSchema, out fileData))
                 .Returns(false);
-            
+
             // Act
             var result = await _step.Execute(context);
-            
+
             // Assert
             _mockLogger.VerifyLogger(LogLevel.Critical, Times.Once());
-            
+
             result.Should().BeFalse();
             context.TargetSchema.Should().BeNull();
         }
@@ -110,26 +111,26 @@ using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps;
             var context = new ConfigurationContext();
             var targetSchema = new FileData(null, null);
             var rulesSchema = new FileData(null, null);
-            
+
             _mockFileHandler.Setup(x => x.ReadEmbeddedResourceFromFileName(Constants.FileNames.JourneyConfigurationSchema, out targetSchema))
                 .Returns(true);
             _mockFileHandler.Setup(x => x.ReadEmbeddedResourceFromFileName(Constants.FileNames.RulesSchema, out rulesSchema))
                 .Returns(true);
             _mockGpInfoReader.Setup(s => s.GetGpInfo(It.IsAny<string>()))
                 .Returns(new Dictionary<string, GpInfo>());
-            
+
             // Act
             var result = await _step.Execute(context);
-            
+
             // Assert
             _mockLogger.VerifyNoOtherCalls();
-            
+
             result.Should().BeTrue();
             context.TargetSchema.Should().BeSameAs(targetSchema);
             context.RulesSchema.Should().BeSameAs(rulesSchema);
             context.GpInfos.Should().NotBeNull();
         }
-        
+
         [TestMethod]
         public async Task ExecuteWithLoadContext_WhenJourneysSchemaDoesNotExist_ReturnsFalse()
         {
@@ -138,33 +139,33 @@ using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps;
             FileData fileData;
             _mockFileHandler.Setup(x => x.ReadEmbeddedResourceFromFileName(Constants.FileNames.JourneyConfigurationSchema, out fileData))
                 .Returns(false);
-            
+
             // Act
             var result = await _loadStep.Execute(context);
-            
+
             // Assert
             _mockLogger.VerifyLogger(LogLevel.Critical, Times.Once());
-            
+
             result.Should().BeFalse();
             context.TargetSchema.Should().BeNull();
         }
-        
+
         [TestMethod]
         public async Task ExecuteWithLoadContext_WhenAllFilesExist_ReturnsTrue()
         {
             // Arrange
             var context = new LoadContext();
             var targetSchema = new FileData(null, null);
-            
+
             _mockFileHandler.Setup(x => x.ReadEmbeddedResourceFromFileName(Constants.FileNames.JourneyConfigurationSchema, out targetSchema))
                 .Returns(true);
 
             // Act
             var result = await _loadStep.Execute(context);
-            
+
             // Assert
             _mockLogger.VerifyNoOtherCalls();
-            
+
             result.Should().BeTrue();
             context.TargetSchema.Should().BeSameAs(targetSchema);
         }

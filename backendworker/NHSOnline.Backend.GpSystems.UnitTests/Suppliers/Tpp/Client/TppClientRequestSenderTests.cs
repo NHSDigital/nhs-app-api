@@ -168,7 +168,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
             FluentActions
                 .Invoking(() => systemUnderTestOne.SendRequestAndParseResponse<LogoffReply>(request))
                 .Should()
-                .Throw<TppThrottlingHttpRequestException>();
+                .ThrowAsync<TppThrottlingHttpRequestException>();
         }
 
         [TestCleanup]

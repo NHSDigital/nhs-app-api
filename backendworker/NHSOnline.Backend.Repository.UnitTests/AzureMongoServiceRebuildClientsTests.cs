@@ -191,7 +191,7 @@ namespace NHSOnline.Backend.Repository.UnitTests
                     It.IsAny<CancellationToken>()),
                 Times.Exactly(2));
 
-            result.Current.Should().BeEquivalentTo(record);
+            result.Current.Should().BeEquivalentTo(new []{record});
             PostTestVerifications();
         }
 

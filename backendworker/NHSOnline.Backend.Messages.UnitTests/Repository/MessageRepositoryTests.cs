@@ -33,11 +33,8 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
             Func<Task> act = async () => await _systemUnderTest.Create(null);
 
             // Assert
-            act.Should().Throw<AggregateException>()
-                .And.InnerExceptions.Should().HaveCount(1)
-                .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x =>
-                    ((ArgumentNullException) x).ParamName.Equals("userMessage", StringComparison.Ordinal));
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("userMessage");
         }
 
         [TestMethod]
@@ -65,10 +62,8 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
             Func<Task> act = async () => await _systemUnderTest.FindMessagesFromSender(nhsLoginId, sender);
 
             // Assert
-            act.Should().Throw<AggregateException>()
-                .And.InnerExceptions.Should().HaveCount(1)
-                .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals(paramName, StringComparison.Ordinal));
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName(paramName);
         }
 
         [TestMethod]
@@ -111,25 +106,19 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
             Func<Task> act = async () => await _systemUnderTest.FindMessage("value", null);
 
             // Assert
-            act.Should().Throw<AggregateException>()
-                .And.InnerExceptions.Should().HaveCount(1)
-                .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x =>
-                    ((ArgumentNullException) x).ParamName.Equals("messageId", StringComparison.Ordinal));
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("messageId");
         }
 
         [TestMethod]
-        public void FindMessage_WhenNhsLoginidIsNull_ThrowsException()
+        public void FindMessage_WhenNhsLoginIdIsNull_ThrowsException()
         {
             // Act
             Func<Task> act = async () => await _systemUnderTest.FindMessage(null, "value");
 
             // Assert
-            act.Should().Throw<AggregateException>()
-                .And.InnerExceptions.Should().HaveCount(1)
-                .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x =>
-                    ((ArgumentNullException) x).ParamName.Equals("nhsLoginId", StringComparison.Ordinal));
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("nhsLoginId");
         }
 
         [TestMethod]
@@ -137,7 +126,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
         {
             // Arrange
             var userMessage = new UserMessage();
-            var nhsLoginId = "value";
+            const string nhsLoginId = "value";
             _mockRepository.Setup(x =>
                     x.Find(It.IsAny<Expression<Func<UserMessage, bool>>>(), It.IsAny<string>(), null))
                 .ReturnsAsync(new RepositoryFindResult<UserMessage>.Found(new []{userMessage}));
@@ -146,7 +135,8 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
             var result = await _systemUnderTest.FindMessage(nhsLoginId, userMessage.Id.ToString());
 
             // Assert
-            result.Should().BeOfType<RepositoryFindResult<UserMessage>.Found>().Subject.Records.Should().BeEquivalentTo(new[]{userMessage});
+            result.Should().BeOfType<RepositoryFindResult<UserMessage>.Found>()
+                .Subject.Records.Should().BeEquivalentTo(new[]{userMessage});
         }
 
         [TestMethod]
@@ -174,11 +164,8 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
                 It.IsAny<UpdateRecordBuilder<UserMessage>>());
 
             // Assert
-            act.Should().Throw<AggregateException>()
-                .And.InnerExceptions.Should().HaveCount(1)
-                .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x =>
-                    ((ArgumentNullException)x).ParamName.Equals("messageId", StringComparison.Ordinal));
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("messageId");
         }
 
         [TestMethod]
@@ -191,11 +178,8 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
                 It.IsAny<UpdateRecordBuilder<UserMessage>>());
 
             // Assert
-            act.Should().Throw<AggregateException>()
-                .And.InnerExceptions.Should().HaveCount(1)
-                .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x =>
-                    ((ArgumentNullException)x).ParamName.Equals("nhsLoginId", StringComparison.Ordinal));
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("nhsLoginId");
         }
 
         [TestMethod]
@@ -223,10 +207,8 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
             Func<Task> act = async () => await _systemUnderTest.FindAllForUser(null);
 
             // Assert
-            act.Should().Throw<AggregateException>()
-                .And.InnerExceptions.Should().HaveCount(1)
-                .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("nhsLoginId", StringComparison.Ordinal));
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("nhsLoginId");
         }
 
         [TestMethod]

@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Im1Connection
         {
             var systemUnderTest = new Im1ConnectionErrorCodes();
             var errorResponses = systemUnderTest.InternalErrorResponses;
-            
+
             errorResponses.Should().NotBeNull();
             errorResponses.Count.Should().Be(50);
             const int singleCode = (int)Im1ConnectionErrorCodes.InternalCode.InvalidLinkageDetails;
@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Im1Connection
         {
             var systemUnderTest = new Im1ConnectionErrorCodes();
             var errorResponses = systemUnderTest.ExternalErrorResponses;
-            
+
             errorResponses.Should().NotBeNull();
             errorResponses.Count.Should().Be(20);
 
@@ -81,12 +81,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Im1Connection
             foreach (var internalCode in internalCodesToTest)
             {
                 var externalCode = systemUnderTest.GetExternalCode(internalCode);
-                externalCode.Should().NotBeNull();
+                externalCode.Should().NotBe(Im1ConnectionErrorCodes.ExternalCode.InvalidOption);
             }
 
             // Act
             Action act = () => systemUnderTest.GetExternalCode(Im1ConnectionErrorCodes.InternalCode.InvalidOption);
-            
+
             // Assert
             act.Should().Throw<ArgumentException>()
                 .WithMessage("InvalidOption is not a valid option");

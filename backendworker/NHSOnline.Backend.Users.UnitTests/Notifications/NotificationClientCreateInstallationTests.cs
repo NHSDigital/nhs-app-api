@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.Users.UnitTests.Notifications
 
             Func<Task> task = async () => await _systemUnderTest.CreateInstallation(_request);
 
-            task.Should().Throw<ArgumentOutOfRangeException>();
+            task.Should().ThrowAsync<ArgumentOutOfRangeException>();
 
             VerifySetups();
         }

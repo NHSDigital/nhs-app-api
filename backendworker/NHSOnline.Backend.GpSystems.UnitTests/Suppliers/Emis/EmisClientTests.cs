@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             using var context = new EmisClientTestsContext();
-            var endUserSessionId = "end user session id";
+            const string endUserSessionId = "end user session id";
             var expectedResponse = new SessionsPostResponse();
             var requestBody = new SessionsPostRequest();
 
@@ -104,7 +104,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             using var context = new EmisClientTestsContext();
-            var endUserSessionId = "end user session id";
+            const string endUserSessionId = "end user session id";
             var expectedResponse = new MeApplicationsPostResponse();
             var requestBody = new MeApplicationsPostRequest();
 
@@ -124,7 +124,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
-            response.StatusCode.Should().Be(200);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ExceptionErrorResponse.Should().Be(null);
         }
 
@@ -159,7 +159,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             using var context = new EmisClientTestsContext();
-            var endUserSessionId = "end user session id";
+            const string endUserSessionId = "end user session id";
             var expectedResponse = new ExceptionErrorResponse();
             var requestBody = new MeApplicationsPostRequest();
 
@@ -180,15 +180,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             // Assert
             response.ExceptionErrorResponse.Should().BeEquivalentTo(expectedResponse);
-            response.StatusCode.Should().Be(500);
+            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
         }
 
         [TestMethod]
         public async Task MeSettingsGet_ReturnsUserSettingsGetResponse_WhenValidlyRequested()
         {
             var context = new EmisClientTestsContext();
-            var sessionId = "session id";
-            var endUserSessionId = "end user session id";
+            const string sessionId = "session id";
+            const string endUserSessionId = "end user session id";
             var expectedResponse = new MeSettingsGetResponse();
 
             var emisUserSession = new EmisUserSession
@@ -211,7 +211,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             var response = await context.SystemUnderTest.MeSettingsGet(new EmisRequestParameters(emisUserSession));
 
             response.Body.Should().BeEquivalentTo(expectedResponse);
-            response.StatusCode.Should().Be(200);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ExceptionErrorResponse.Should().Be(null);
         }
 
@@ -220,9 +220,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             using var context = new EmisClientTestsContext();
-            var userPatientLinkToken = "user patient link token";
-            var sessionId = "session id";
-            var endUserSessionId = "end user session id";
+            const string userPatientLinkToken = "user patient link token";
+            const string sessionId = "session id";
+            const string endUserSessionId = "end user session id";
 
             var expectedResponse = new DemographicsGetResponse();
 
@@ -247,7 +247,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
-            response.StatusCode.Should().Be(200);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ExceptionErrorResponse.Should().Be(null);
         }
 
@@ -256,7 +256,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             using var context = new EmisClientTestsContext();
-            var endUserSessionId = "end user session id";
+            const string endUserSessionId = "end user session id";
             var requestBody = new SessionsPostRequest();
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
@@ -285,7 +285,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             using var context = new EmisClientTestsContext();
-            var endUserSessionId = "end user session id";
+            const string endUserSessionId = "end user session id";
             var requestBody = new SessionsPostRequest();
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
@@ -314,7 +314,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             using var context = new EmisClientTestsContext();
-            var endUserSessionId = "end user session id";
+            const string endUserSessionId = "end user session id";
             var requestBody = new SessionsPostRequest();
             var expectedResponse = new BadRequestErrorResponse();
 
@@ -343,9 +343,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             using var context = new EmisClientTestsContext();
-            var userPatientLinkToken = "user patient link token";
-            var sessionId = "session id";
-            var endUserSessionId = "end user session id";
+            const string userPatientLinkToken = "user patient link token";
+            const string sessionId = "session id";
+            const string endUserSessionId = "end user session id";
 
             var expectedResponse = new MedicationRootObject();
 
@@ -372,7 +372,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
-            response.StatusCode.Should().Be(200);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ExceptionErrorResponse.Should().Be(null);
         }
 
@@ -381,9 +381,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             using var context = new EmisClientTestsContext();
-            var userPatientLinkToken = "user patient link token";
-            var sessionId = "session id";
-            var endUserSessionId = "end user session id";
+            const string userPatientLinkToken = "user patient link token";
+            const string sessionId = "session id";
+            const string endUserSessionId = "end user session id";
             var fromDateTime = new DateTimeOffset();
             var toDateTime = new DateTimeOffset();
 
@@ -415,7 +415,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
-            response.StatusCode.Should().Be(200);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ExceptionErrorResponse.Should().Be(null);
         }
 
@@ -424,9 +424,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             using var context = new EmisClientTestsContext();
-            var userPatientLinkToken = "user patient link token";
-            var sessionId = "session id";
-            var endUserSessionId = "end user session id";
+            const string userPatientLinkToken = "user patient link token";
+            const string sessionId = "session id";
+            const string endUserSessionId = "end user session id";
 
             var expectedResponse = new CoursesGetResponse();
 
@@ -451,7 +451,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
-            response.StatusCode.Should().Be(200);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ExceptionErrorResponse.Should().Be(null);
         }
 
@@ -461,7 +461,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             // Arrange
             using var context = new EmisClientTestsContext(emisExtendedHttpTimeoutSeconds: 6);
 
-            var userPatientLinkToken = "user patient link token";
+            const string userPatientLinkToken = "user patient link token";
 
             HttpRequestMessage requestMessage = null;
             context.MockHttpHandler
@@ -489,8 +489,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             using var context = new EmisClientTestsContext();
-            var sessionId = "session id";
-            var endUserSessionId = "end user session id";
+            const string sessionId = "session id";
+            const string endUserSessionId = "end user session id";
             var prescriptionPostRequest = new PrescriptionRequestsPost();
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
@@ -522,11 +522,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             using var context = new EmisClientTestsContext();
-            var sessionId = "session id";
-            var endUserSessionId = "end user session id";
-            var userPatientLinkToken = "user patient link token";
-            var appointmentBookRequest = new AppointmentBookRequest();
-            appointmentBookRequest.SlotId = "21";
+            const string sessionId = "session id";
+            const string endUserSessionId = "end user session id";
+            const string userPatientLinkToken = "user patient link token";
+            var appointmentBookRequest = new AppointmentBookRequest
+            {
+                SlotId = "21"
+            };
 
             var expectedRequest = new BookAppointmentSlotPostRequest(userPatientLinkToken, appointmentBookRequest);
 
@@ -572,11 +574,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             using var context = new EmisClientTestsContext();
-            var sessionId = "session id";
-            var endUserSessionId = "end user session id";
-            var userPatientLinkToken = "user patient link token";
-            var slotId = 99;
-            var cancellationReason = "cancellation reason";
+            const string sessionId = "session id";
+            const string endUserSessionId = "end user session id";
+            const string userPatientLinkToken = "user patient link token";
+            const int slotId = 99;
+            const string cancellationReason = "cancellation reason";
 
             var expectedRequest = new CancelAppointmentDeleteRequest(userPatientLinkToken, cancellationReason, slotId);
 
@@ -623,7 +625,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             using var context = new EmisClientTestsContext();
-            var endUserSessionId = "end user session id";
+            const string endUserSessionId = "end user session id";
             var requestBody = new AddNhsUserRequest();
             var expectedResponse = new AddNhsUserResponse();
 
@@ -650,7 +652,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
-            response.StatusCode.Should().Be(200);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ExceptionErrorResponse.Should().Be(null);
         }
 
@@ -711,7 +713,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
-            response.StatusCode.Should().Be(200);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ExceptionErrorResponse.Should().Be(null);
         }
 
@@ -749,9 +751,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             using var context = new EmisClientTestsContext();
-            var userPatientLinkToken = "user patient link token";
-            var sessionId = "session id";
-            var endUserSessionId = "end user session id";
+            const string userPatientLinkToken = "user patient link token";
+            const string sessionId = "session id";
+            const string endUserSessionId = "end user session id";
 
             var expectedResponse = new MessagesGetResponse();
 
@@ -776,7 +778,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
-            response.StatusCode.Should().Be(200);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ExceptionErrorResponse.Should().Be(null);
         }
 
@@ -785,9 +787,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             using var context = new EmisClientTestsContext();
-            var userPatientLinkToken = "user patient link token";
-            var sessionId = "session id";
-            var endUserSessionId = "end user session id";
+            const string userPatientLinkToken = "user patient link token";
+            const string sessionId = "session id";
+            const string endUserSessionId = "end user session id";
 
             var expectedResponse = new MessageGetResponse();
 
@@ -812,7 +814,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
-            response.StatusCode.Should().Be(200);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ExceptionErrorResponse.Should().Be(null);
         }
 
@@ -821,9 +823,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             using var context = new EmisClientTestsContext();
-            var userPatientLinkToken = "user patient link token";
-            var sessionId = "session id";
-            var endUserSessionId = "end user session id";
+            const string userPatientLinkToken = "user patient link token";
+            const string sessionId = "session id";
+            const string endUserSessionId = "end user session id";
 
             var expectedResponse = new MessageUpdateResponse();
 
@@ -852,7 +854,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
-            response.StatusCode.Should().Be(200);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ExceptionErrorResponse.Should().Be(null);
         }
 
@@ -861,9 +863,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             using var context = new EmisClientTestsContext();
-            var userPatientLinkToken = "user patient link token";
-            var sessionId = "session id";
-            var endUserSessionId = "end user session id";
+            const string userPatientLinkToken = "user patient link token";
+            const string sessionId = "session id";
+            const string endUserSessionId = "end user session id";
 
             var expectedResponse = new MessageDeleteResponse();
 
@@ -888,7 +890,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
-            response.StatusCode.Should().Be(200);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ExceptionErrorResponse.Should().Be(null);
         }
 
@@ -897,9 +899,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             using var context = new EmisClientTestsContext();
-            var userPatientLinkToken = "user patient link token";
-            var sessionId = "session id";
-            var endUserSessionId = "end user session id";
+            const string userPatientLinkToken = "user patient link token";
+            const string sessionId = "session id";
+            const string endUserSessionId = "end user session id";
 
             var expectedResponse = new MessageRecipientsResponse();
 
@@ -924,7 +926,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
-            response.StatusCode.Should().Be(200);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ExceptionErrorResponse.Should().Be(null);
         }
 
@@ -933,9 +935,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             using var context = new EmisClientTestsContext();
-            var userPatientLinkToken = "user patient link token";
-            var sessionId = "session id";
-            var endUserSessionId = "end user session id";
+            const string userPatientLinkToken = "user patient link token";
+            const string sessionId = "session id";
+            const string endUserSessionId = "end user session id";
             var createPatientMessage = new CreatePatientMessage();
 
             var expectedRequestContent = new PostMessageRequest(userPatientLinkToken, createPatientMessage);
@@ -963,7 +965,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
-            response.StatusCode.Should().Be(200);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ExceptionErrorResponse.Should().Be(null);
         }
 
@@ -972,9 +974,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             using var context = new EmisClientTestsContext();
-            var userPatientLinkToken = "user patient link token";
-            var sessionId = "session id";
-            var endUserSessionId = "end user session id";
+            const string userPatientLinkToken = "user patient link token";
+            const string sessionId = "session id";
+            const string endUserSessionId = "end user session id";
             var createPatientMessage = new CreatePatientMessage();
 
             var expectedRequestContent = new PostMessageRequest(userPatientLinkToken, createPatientMessage);
@@ -1001,7 +1003,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
                 }, createPatientMessage);
 
             // Assert
-
             await act.Should().ThrowAsync<UnauthorisedGpSystemHttpRequestException>();
         }
     }

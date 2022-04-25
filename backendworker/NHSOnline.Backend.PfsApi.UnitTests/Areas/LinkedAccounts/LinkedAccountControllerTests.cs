@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -202,7 +201,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             _linkedAccountService.VerifyAll();
 
             var subject = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            subject.StatusCode.Value.Should().Equals(HttpStatusCode.OK);
+            subject.StatusCode.Should().Be(StatusCodes.Status200OK);
             subject.Value.Should().NotBeNull();
         }
 
@@ -226,7 +225,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             _mockSessionCacheService.Verify(x => x.UpdateUserSession(It.IsAny<P9UserSession>()), Times.Never());
 
             var subject = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            subject.StatusCode.Value.Should().Equals(HttpStatusCode.OK);
+            subject.StatusCode.Should().Be(StatusCodes.Status200OK);
             subject.Value.Should().NotBeNull();
         }
 
@@ -271,7 +270,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             _linkedAccountService.Verify();
             _gpSearchService.Verify();
             var subject = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            subject.StatusCode.Value.Should().Equals(HttpStatusCode.OK);
+            subject.StatusCode.Should().Be(StatusCodes.Status200OK);
             subject.Value.Should().NotBeNull();
             var response = subject.Value.Should().BeAssignableTo<LinkedAccountAccessSummaryResponse>().Subject;
 
@@ -312,7 +311,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             _linkedAccountService.Verify();
             _gpSearchService.Verify();
             var subject = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            subject.StatusCode.Value.Should().Equals(HttpStatusCode.OK);
+            subject.StatusCode.Should().Be(StatusCodes.Status200OK);
             subject.Value.Should().NotBeNull();
             var response = subject.Value.Should().BeAssignableTo<LinkedAccountAccessSummaryResponse>().Subject;
 
@@ -326,8 +325,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
         public async Task GetAccessSummaryOfLinkedAccount_ResultsInEmptyPracticeNameTo_WhenGpSearchServiceErrors()
         {
             // Arrange
-            var id = Guid.NewGuid();
-            var odsCode = "ODS code";
+            const string odsCode = "ODS code";
             var gpSearchResult = new GpSearchResult.InternalServerError();
 
             var linkedAccountAccessSummaryResponse = new GetAccountAccessSummaryResponse();
@@ -353,7 +351,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             _linkedAccountService.Verify();
             _gpSearchService.Verify();
             var subject = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            subject.StatusCode.Value.Should().Equals(HttpStatusCode.OK);
+            subject.StatusCode.Should().Be(StatusCodes.Status200OK);
             subject.Value.Should().NotBeNull();
             var response = subject.Value.Should().BeAssignableTo<LinkedAccountAccessSummaryResponse>().Subject;
 
@@ -367,8 +365,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
         public async Task GetAccessSummaryOfLinkedAccount_Returns502_WhenLinkedAccountServiceReturnsErrorResult()
         {
             // Arrange
-            var id = Guid.NewGuid();
-            var odsCode = "ODS code";
+            const string odsCode = "ODS code";
             var gpSearchResponse = new GpSearchResponse();
             var gpSearchResult = new GpSearchResult.Success(gpSearchResponse);
 

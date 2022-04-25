@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -68,8 +69,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             _mockConfiguration.SetupGet(x => x["ASPNETCORE_ENVIRONMENT"]).Returns("Production");
             _systemUnderTest = CreateOrganDonationHttpClientHandler();
             _systemUnderTest.ServerCertificateCustomValidationCallback.Should().NotBeNull();
-            _systemUnderTest.ClientCertificates.Should().NotBeEmpty();
-            _systemUnderTest.ClientCertificates.Should().HaveCount(1);
+            _systemUnderTest.ClientCertificates.Cast<X509Certificate>().Should().NotBeEmpty();
+            _systemUnderTest.ClientCertificates.Cast<X509Certificate>().Should().HaveCount(1);
         }
 
         [TestMethod]
@@ -80,7 +81,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
 
             _mockConfiguration.SetupGet(x => x["ASPNETCORE_ENVIRONMENT"]).Returns("Production");
             _systemUnderTest = CreateOrganDonationHttpClientHandler();
-            _systemUnderTest.ClientCertificates.Should().BeEmpty();
+            _systemUnderTest.ClientCertificates.Cast<X509Certificate>().Should().BeEmpty();
         }
 
         private OrganDonationHttpClientHandler CreateOrganDonationHttpClientHandler()

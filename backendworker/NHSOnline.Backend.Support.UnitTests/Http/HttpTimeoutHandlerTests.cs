@@ -74,12 +74,11 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
             var invoker = new HttpMessageInvoker(systemUnderTest);
 
             // Act
-            Func<Task> act = async () => { await invoker.SendAsync(_httpRequestMessage, new CancellationToken()); };
-
-            // Assert
-            var nhsTimeoutException = act.Should().Throw<NhsTimeoutException>();
-            nhsTimeoutException.Which.Message.Should().Be(expectedRequestId.ToString());
-            nhsTimeoutException.Which.SourceApi.Should().Be(sourceApi);
+            FluentActions
+                .Awaiting(async () => await invoker.SendAsync(_httpRequestMessage, new CancellationToken()))
+                .Should().ThrowAsync<NhsTimeoutException>()
+                .WithMessage(expectedRequestId.ToString())
+                .Where(x => x.SourceApi == sourceApi);
         }
 
         [TestMethod]

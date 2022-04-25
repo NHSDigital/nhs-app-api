@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             var response = result.Should().BeAssignableTo<PharmacyDetailResponse>().Subject;
             using (new AssertionScope())
             {
-                response.StatusCode.Should().Be(200);
+                response.StatusCode.Should().Be(HttpStatusCode.OK);
                 response.Pharmacy.Should().BeEquivalentTo(organisationReturnResults[0]);
             }
         }
@@ -83,7 +83,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             var response = result.Should().BeAssignableTo<PharmacyDetailResponse>().Subject;
             using (new AssertionScope())
             {
-                response.StatusCode.Should().Be(500);
+                response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
                 response.Pharmacy.Should().BeNull();
             }
         }
@@ -109,7 +109,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             var response = result.Should().BeAssignableTo<PharmacyDetailResponse>().Subject;
             using (new AssertionScope())
             {
-                response.StatusCode.Should().Be(400);
+                response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
                 response.Pharmacy.Should().BeNull();
             }
         }
@@ -138,7 +138,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             var response = result.Should().BeAssignableTo<PharmacyDetailResponse>().Subject;
             using (new AssertionScope())
             {
-                response.StatusCode.Should().Be(404);
+                response.StatusCode.Should().Be(HttpStatusCode.NotFound);
                 response.Pharmacy.Should().BeNull();
             }
         }
@@ -163,7 +163,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             result.Should().BeAssignableTo<PharmacyDetailResponse>();
             using (new AssertionScope())
             {
-                result.StatusCode.Should().Be(503);
+                result.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
                 result.Pharmacy.Should().BeNull();
             }
         }

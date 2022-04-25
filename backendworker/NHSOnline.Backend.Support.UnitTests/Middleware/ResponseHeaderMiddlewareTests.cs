@@ -1,7 +1,9 @@
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Support.AspNet;
@@ -30,10 +32,10 @@ namespace NHSOnline.Backend.Support.UnitTests.Middleware
             // Assert
             var response = context.Response;
             response.Headers.Should().ContainKey(HeaderNames.CacheControl)
-                .WhichValue.Equals("no-store, no-transform, must-revalidate, no-cache, private");
+                .WhoseValue.Should().BeEquivalentTo(new []{"no-store, no-transform, must-revalidate, no-cache, private"});
 
             response.Headers.Should().ContainKey(HeaderNames.Pragma)
-                .WhichValue.Equals("no-cache");
+                .WhoseValue.Should().BeEquivalentTo(new []{"no-cache"});
         }
     }
 }

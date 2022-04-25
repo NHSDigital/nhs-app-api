@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.Repository.UnitTests
             // Assert
             _mongoClientWrapperMock.VerifyAll();
             result.Should().BeOfType<RepositoryFindResult<TestRepositoryRecord>.Found>()
-                .Subject.Records.Should().BeEquivalentTo(record);
+                .Subject.Records.Should().BeEquivalentTo(new []{ record});
         }
 
         [TestMethod]
@@ -72,7 +72,7 @@ namespace NHSOnline.Backend.Repository.UnitTests
             // Assert
             _mongoClientWrapperMock.VerifyAll();
             result.Should().BeOfType<RepositoryFindResult<TestRepositoryRecord>.Found>()
-                .Subject.Records.Should().BeEquivalentTo(record1, record2);
+                .Subject.Records.Should().BeEquivalentTo(new []{ record1, record2});
         }
 
         [TestMethod]

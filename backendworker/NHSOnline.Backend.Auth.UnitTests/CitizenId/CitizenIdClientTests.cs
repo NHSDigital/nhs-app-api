@@ -154,7 +154,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             Func<Task> act = async () => { await _systemUnderTest.GetSigningKeys(); };
 
             // Assert
-            act.Should().Throw<NhsUnparsableException>();
+            act.Should().ThrowAsync<NhsUnparsableException>();
         }
 
         [TestMethod]

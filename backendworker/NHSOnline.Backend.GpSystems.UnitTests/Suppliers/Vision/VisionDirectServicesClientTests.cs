@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
         private const string ConfigurationBasePath = "v1/organisations/{0}/onlineservices/configuration";
         private const string DemographicsBasePath = "v1/organisations/{0}/onlineservices/demographics";
         private const string PrescriptionHistoryBasePath = "v1/organisations/{0}/onlineservices/history";
-        private const string VisionTestData_DirectServices_Directory = "Suppliers/Vision/TestData/DirectServices";
+        private const string VisionTestDataDirectServicesDirectory = "Suppliers/Vision/TestData/DirectServices";
 
         [TestInitialize]
         public void TestInitialize()
@@ -81,7 +81,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 ApiUri,
                 string.Format(CultureInfo.CurrentCulture, ConfigurationBasePath, _odsCode));
 
-            var xmlResponseText = await File.ReadAllTextAsync($"{VisionTestData_DirectServices_Directory}/validGetConfigurationResponse.xml");
+            var xmlResponseText = await File.ReadAllTextAsync($"{VisionTestDataDirectServicesDirectory}/validGetConfigurationResponse.xml");
             _mockHttpHandler
                 .WhenVision(HttpMethod.Post, expectedUri)
                 .WithContent(expectedRequestContent)
@@ -90,7 +90,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
             var response = await _systemUnderTest.GetConfigurationV2(_connectionToken, _odsCode);
 
             response.Body.Configuration.Account.Name.Should().Be("Mrs TestNameFirst TestNameSecond");
-            response.StatusCode.Should().Be(200);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.HasSuccessResponse.Should().BeTrue();
         }
 
@@ -103,7 +103,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 ApiUri,
                 string.Format(CultureInfo.CurrentCulture, DemographicsBasePath, _visionUserSession.OdsCode));
 
-            var xmlResponseText = await File.ReadAllTextAsync($"{VisionTestData_DirectServices_Directory}/validGetDemographicsResponse.xml");
+            var xmlResponseText = await File.ReadAllTextAsync($"{VisionTestDataDirectServicesDirectory}/validGetDemographicsResponse.xml");
             _mockHttpHandler
                 .WhenVision(HttpMethod.Post, expectedUri)
                 .WithContent(expectedRequestContent)
@@ -125,7 +125,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
             response.Body.Demographics.DateOfBirth.Day.Should().Be(21);
             response.Body.Demographics.DateOfBirth.Month.Should().Be(9);
             response.Body.Demographics.DateOfBirth.Year.Should().Be(1970);
-            response.StatusCode.Should().Be(200);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.HasSuccessResponse.Should().BeTrue();
         }
 
@@ -138,7 +138,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 ApiUri,
                 string.Format(CultureInfo.CurrentCulture, PrescriptionHistoryBasePath, _visionUserSession.OdsCode));
 
-            var xmlResponseText = await File.ReadAllTextAsync($"{VisionTestData_DirectServices_Directory}/validGetPrescriptionHistoryResponse.xml");
+            var xmlResponseText = await File.ReadAllTextAsync($"{VisionTestDataDirectServicesDirectory}/validGetPrescriptionHistoryResponse.xml");
             _mockHttpHandler
                 .WhenVision(HttpMethod.Post, expectedUri)
                 .WithContent(expectedRequestContent)
@@ -154,7 +154,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
             response.Body.PrescriptionHistory.Requests[2].Repeats[0].Drug.Should().Be("Paracetamol 500mg capsules");
             response.Body.PrescriptionHistory.Requests[2].Repeats[0].Dosage.Should().Be("1 TO 2 CAPSULES UP TO FOUR TIMES DAILY AS REQUIRED");
             response.Body.PrescriptionHistory.Requests[2].Repeats[0].Quantity.Should().Be("(21) capsule");
-            response.StatusCode.Should().Be(200);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.HasSuccessResponse.Should().BeTrue();
         }
 
@@ -166,7 +166,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 ApiUri,
                 string.Format(CultureInfo.CurrentCulture, ConfigurationBasePath, _odsCode));
 
-            var xmlText = await File.ReadAllTextAsync($"{VisionTestData_DirectServices_Directory}/unknownErrorResponse.xml");
+            var xmlText = await File.ReadAllTextAsync($"{VisionTestDataDirectServicesDirectory}/unknownErrorResponse.xml");
             var responseContent = new StringContent(xmlText);
             _mockHttpHandler
                 .WhenVision(HttpMethod.Post, expectedUri)
@@ -175,7 +175,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
 
             var response = await _systemUnderTest.GetConfigurationV2(_connectionToken, _odsCode);
 
-            response.StatusCode.Should().Be(400);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             response.HasErrorResponse.Should().BeTrue();
             response.ErrorText.Should().Be("Unknown Error");
             response.ErrorDescription.Should().Be("ERROR: invalid input syntax for integer: \"\"");

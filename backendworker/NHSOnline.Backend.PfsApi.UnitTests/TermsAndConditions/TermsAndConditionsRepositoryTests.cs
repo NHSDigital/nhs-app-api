@@ -32,10 +32,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
             Func<Task> act = async () => await _systemUnderTest.Create(null);
 
             // Assert
-            act.Should().Throw<AggregateException>()
-                .And.InnerExceptions.Should().HaveCount(1)
-                .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("record", StringComparison.Ordinal));
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("record");
         }
 
         [TestMethod]
@@ -96,7 +94,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
             Func<Task> act = async () => await _systemUnderTest.Find(null);
 
             // Assert
-            act.Should().Throw<AggregateException>();
+            act.Should().ThrowAsync<AggregateException>();
         }
 
         [TestMethod]
@@ -106,10 +104,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
             Func<Task> act = async () => await _systemUnderTest.Update(null, new UpdateRecordBuilder<TermsAndConditionsRecord>());
 
             // Assert
-            act.Should().Throw<AggregateException>()
-                .And.InnerExceptions.Should().HaveCount(1)
-                .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("nhsLoginId", StringComparison.Ordinal));
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("nhsLoginId");
         }
 
         [TestMethod]
@@ -119,7 +115,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
             _mockRepository.Setup(x =>
                     x.Update(It.IsAny<Expression<Func<TermsAndConditionsRecord, bool>>>(), It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>(), It.IsAny<string>()))
                 .ReturnsAsync(new RepositoryUpdateResult<TermsAndConditionsRecord>.Updated());
-            var updatedRecord = new TermsAndConditionsRecord();
 
             // Act
             var result = await _systemUnderTest.Update("nhsLoginId", new UpdateRecordBuilder<TermsAndConditionsRecord>());

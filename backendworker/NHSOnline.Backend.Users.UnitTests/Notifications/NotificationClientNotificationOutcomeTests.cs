@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.Users.UnitTests.Notifications
             Func<Task> act = async () =>
                 await _systemUnderTest.GetNotificationOutcomeDetails(NotificationId, HubPath);
 
-            act.Should().Throw<NotificationHubNotFoundException>();
+            act.Should().ThrowAsync<NotificationHubNotFoundException>();
             _mockWrapperService.VerifyAll();
             _mockWrapper.VerifyAll();
         }
@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.Users.UnitTests.Notifications
             Func<Task> act = async () =>
                 await _systemUnderTest.GetNotificationOutcomeDetails(NotificationId, HubPath);
 
-            act.Should().Throw<MessagingException>();
+            act.Should().ThrowAsync<MessagingException>();
             _mockWrapperService.VerifyAll();
             _mockWrapper.VerifyAll();
         }

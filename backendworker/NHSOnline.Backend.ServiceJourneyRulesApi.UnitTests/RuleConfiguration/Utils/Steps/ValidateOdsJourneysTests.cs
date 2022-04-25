@@ -42,12 +42,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             Func<Task> act = async () => await _step.Execute(null);
 
             // Assert
-            act.Should().Throw<AggregateException>()
-                .And.InnerExceptions.Should().HaveCount(2)
-                .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("context", StringComparison.Ordinal))
-                .And.Contain(x =>
-                    ((ArgumentNullException) x).ParamName.Equals("MergedOdsJourneys", StringComparison.Ordinal));
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("context");
         }
 
         [TestMethod]
@@ -60,7 +56,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             Func<Task> act = async () => await _step.Execute(context);
 
             // Assert
-            act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("MergedOdsJourneys");
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("MergedOdsJourneys");
         }
 
         [TestMethod]

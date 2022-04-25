@@ -46,12 +46,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             Func<Task> act = async () => await _step.Execute(null);
 
             // Assert
-            act.Should().Throw<AggregateException>()
-                .And.InnerExceptions.Should().HaveCount(2)
-                .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("context", StringComparison.Ordinal))
-                .And.Contain(x =>
-                    ((ArgumentNullException) x).ParamName.Equals("MergedOdsJourneys", StringComparison.Ordinal));
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("context");
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("MergedOdsJourneys");
         }
 
         [TestMethod]
@@ -64,7 +62,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             Func<Task> act = async () => await _step.Execute(context);
 
             // Assert
-            act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("MergedOdsJourneys");
+            act.Should().ThrowAsync<ArgumentException>()
+                .WithParameterName("MergedOdsJourneys");
         }
 
         [TestMethod]
@@ -163,21 +162,21 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             result.Should().BeTrue();
             writeCalls.Should().HaveCount(3);
             writeCalls.Should().ContainKey("c:/output/A1.yaml")
-                .WhichValue.Should().BeEquivalentTo(new TargetConfiguration
+                .WhoseValue.Should().BeEquivalentTo(new TargetConfiguration
                 {
                     Target = new Target { OdsCode = "A1" },
                     Journeys = context.MergedOdsJourneys["A1"]
                 });
 
             writeCalls.Should().ContainKey("c:/output/A2.yaml")
-                .WhichValue.Should().BeEquivalentTo(new TargetConfiguration
+                .WhoseValue.Should().BeEquivalentTo(new TargetConfiguration
                 {
                     Target = new Target { OdsCode = "A2" },
                     Journeys = context.MergedOdsJourneys["A2"]
                 });
 
             writeCalls.Should().ContainKey("c:/output/A3.yaml")
-                .WhichValue.Should().BeEquivalentTo(new TargetConfiguration
+                .WhoseValue.Should().BeEquivalentTo(new TargetConfiguration
                 {
                     Target = new Target { OdsCode = "A3" },
                     Journeys = context.MergedOdsJourneys["A3"]

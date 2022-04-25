@@ -37,10 +37,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         private Mock<IMapper<OrganDonationWithdrawRequest, WithdrawRequest>>
             _mockRegistrationWithdrawMapper;
 
-        private Mock<IMapper<HttpStatusCode, OrganDonationResult>> 
+        private Mock<IMapper<HttpStatusCode, OrganDonationResult>>
             _mockResultErrorMapper;
-        
-        private Mock<IMapper<HttpStatusCode, OrganDonationRegistrationResult>> 
+
+        private Mock<IMapper<HttpStatusCode, OrganDonationRegistrationResult>>
             _mockRegistrationResultErrorMapper;
 
         private Mock<IMapper<HttpStatusCode, OrganDonationReferenceDataResult>>
@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
 
         private Mock<IMapper<HttpStatusCode, OrganDonationWithdrawResult>>
             _mockWithdrawResultErrorMapper;
-        
+
         // needed for Callback
         private delegate void TryGetValueCallback(object key, out object value);
 
@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         [TestMethod]
         public void GetOrganDonation_WhenCalledAndNoExistingRegistration_ReturnsNewRegistrationResponse()
         {
-            // Arrange 
+            // Arrange
             var context = SetupGetOrganDonationTest(httpStatus: HttpStatusCode.NotFound);
 
             // Act
@@ -99,7 +99,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         [TestMethod]
         public void GetOrganDonation_WhenCalledAndWithExistingRegistration_ReturnsExistingRegistrationResponse()
         {
-            // Arrange 
+            // Arrange
             var context = SetupGetOrganDonationTest();
 
             // Act
@@ -114,7 +114,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         [TestMethod]
         public void GetOrganDonation_WhenCalledAndWithExistingRegistrationInConflict_ReturnsExistingRegistrationResponseInConflict()
         {
-            // Arrange 
+            // Arrange
             var context = SetupGetOrganDonationTest(httpStatus: HttpStatusCode.Conflict);
 
             // Act
@@ -125,14 +125,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
 
             var registration = result.Result.Should().BeOfType<OrganDonationResult.ExistingRegistration>().Subject;
 
-            registration.Registration.State.Should().BeEquivalentTo(State.Conflicted);
-            registration.Registration.Decision.Should().BeEquivalentTo(Decision.Unknown);
+            registration.Registration.State.Should().Be(State.Conflicted);
+            registration.Registration.Decision.Should().Be(Decision.Unknown);
         }
 
         [TestMethod]
         public void GetOrganDonation_WhenCalledAndSearchFailsWithException_ReturnsSearchErrorResponse()
         {
-            // Arrange 
+            // Arrange
             var context = SetupGetOrganDonationTest(true);
 
             // Act
@@ -156,7 +156,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         public void GetOrganDonation_WhenCalledAndSearchFailsWithError_MapsSearchErrorResponse(
             HttpStatusCode httpStatus)
         {
-            // Arrange 
+            // Arrange
             var context = SetupGetOrganDonationTest(httpStatus: httpStatus);
 
             // Act
@@ -171,7 +171,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         public void
             GetOrganDonation_WhenCalledAndDemographicsRetrievedUnsuccessfully_ReturnsDemographicsBadGateway()
         {
-            // Arrange 
+            // Arrange
             var demographicsResult = new DemographicsResult.BadGateway();
 
             // Act
@@ -186,7 +186,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         public void
             GetOrganDonation_WhenCalledAndDemographicsForbidden_ReturnsDemographicsForbidden()
         {
-            // Arrange 
+            // Arrange
             var demographicsResult = new DemographicsResult.Forbidden();
 
             // Act
@@ -201,7 +201,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         public void
             GetOrganDonation_WhenCalledAndDemographicsInternalServerError_ReturnsDemographicsInternalServerError()
         {
-            // Arrange 
+            // Arrange
             var demographicsResult = new DemographicsResult.InternalServerError();
 
             // Act
@@ -216,7 +216,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         public void
             GetOrganDonation_WhenCalledAndDemographicsBadGateway_ReturnsDemographicsBadGateway()
         {
-            // Arrange 
+            // Arrange
             var demographicsResult = new DemographicsResult.BadGateway();
 
             // Act
@@ -286,7 +286,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             // Assert
             _mockOrganDonationClient.Verify(x => x.GetAllReferenceData());
             _mockReferenceDataResultErrorMapper.Verify(x => x.Map(httpStatus));
-            
+
             context.AbsoluteExpiration.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
             result.Result.Should().BeEquivalentTo(context.Cached);
         }
@@ -311,7 +311,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         [TestMethod]
         public void Register_WhenCalledWithRequest_ReturnsSuccessfullyRegisteredResponse()
         {
-            // Arrange 
+            // Arrange
             var context = SetupRegistrationTest();
 
             // Act
@@ -344,7 +344,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             var _ = _organDonationService.Register(context.Request, _userSession);
 
             // Assert
-            _mockOrganDonationClient.Verify(x => x.PostRegistration(It.IsAny<RegistrationRequest>(), _userSession));                                  
+            _mockOrganDonationClient.Verify(x => x.PostRegistration(It.IsAny<RegistrationRequest>(), _userSession));
             _mockRegistrationResultErrorMapper.Verify(x => x.Map(httpStatus));
         }
 
@@ -366,7 +366,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         [TestMethod]
         public void Update_WhenCalledWithRequest_ReturnsSuccessfullyUpdatedResponse()
         {
-            // Arrange 
+            // Arrange
             var context = SetupUpdateTest();
 
             // Act
@@ -422,7 +422,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         [TestMethod]
         public void Withdraw_WhenCalledWithRequest_ReturnsSuccessfullyDeletedResponse()
         {
-            // Arrange 
+            // Arrange
             var context = SetupWithdrawTest();
 
             // Act
@@ -490,7 +490,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             HttpStatusCode httpStatus = HttpStatusCode.OK
         )
         {
-            return new GetOrganDonationTestContext(_mockOrganDonationClient, _userSession, throwException, httpStatus, 
+            return new GetOrganDonationTestContext(_mockOrganDonationClient, _userSession, throwException, httpStatus,
                 _mockLookupRegistrationRequestMapper);
         }
 
@@ -536,7 +536,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             {
                 var demographicsResponse = new DemographicsResponse();
                 var organDonationResponse = new OrganDonationResponse<RegistrationLookupResponse>(httpStatus);
-                
+
                 DemographicsResult = new DemographicsResult.Success(demographicsResponse);
 
                 SetupMockClient(x => x.PostLookup(It.IsAny<RegistrationLookupRequest>(), userSession),

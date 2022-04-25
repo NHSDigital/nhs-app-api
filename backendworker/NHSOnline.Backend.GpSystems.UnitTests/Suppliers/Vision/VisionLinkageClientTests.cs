@@ -67,7 +67,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
             var response = await _systemUnderTest.GetLinkageKey(getLinkageKeyRequest);
 
             response.Body.Should().BeEquivalentTo(expectedResponse);
-            response.StatusCode.Should().Be(200);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.HasSuccessResponse.Should().BeTrue();
         }
 
@@ -92,7 +92,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
 
             // Assert
             response.Body.Should().BeEquivalentTo(linkageResponse);
-            response.StatusCode.Should().Be(200);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ErrorResponse.Should().Be(null);
         }
 
@@ -114,7 +114,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
             var response = await _systemUnderTest.CreateLinkageKey(createLinkageKey);
 
             // Assert
-            response.StatusCode.Should().Be(409);
+            response.StatusCode.Should().Be(HttpStatusCode.Conflict);
             response.ErrorResponse.Code.Should().Be("12345");
         }
 

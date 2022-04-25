@@ -31,11 +31,8 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Repository
             Func<Task> act = async () => await _systemUnderTest.Create(null);
 
             // Assert
-            act.Should().Throw<AggregateException>()
-                .And.InnerExceptions.Should().HaveCount(1)
-                .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x =>
-                    ((ArgumentNullException) x).ParamName.Equals("userAndInfo", StringComparison.Ordinal));
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("userAndInfo");
         }
 
         [TestMethod]
@@ -71,7 +68,7 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Repository
 
             // Assert
             result.Should().BeAssignableTo<RepositoryFindResult<UserAndInfo>.Found>()
-                .Subject.Records.Should().BeEquivalentTo(userInfo);
+                .Subject.Records.Should().BeEquivalentTo(new []{userInfo});
         }
 
         [TestMethod]

@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             _choiceStateMapperMock.Setup(c => c.From(ChoiceState.Yes)).Returns("yes");
             _choiceStateMapperMock.Setup(c => c.From(ChoiceState.No)).Returns("no");
             _choiceStateMapperMock.Setup(c => c.From(ChoiceState.NotStated)).Returns("not-stated");
-            
+
             _organDonationDonationWishesMapper = fixture.Create<OrganDonationDonationWishesMapper>();
         }
 
@@ -77,12 +77,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             _choiceStateMapperMock.Verify(c => c.From(ChoiceState.Yes));
             _choiceStateMapperMock.Verify(c => c.From(ChoiceState.No));
             _choiceStateMapperMock.Verify(c => c.From(ChoiceState.NotStated));
-            
+
             result.Should().NotBeNull().And.HaveCount(4);
-            result.Should().ContainKey("all").WhichValue.Should().Be("yes");
-            result.Should().ContainKey("heart").WhichValue.Should().Be("yes");
-            result.Should().ContainKey("liver").WhichValue.Should().Be("no");
-            result.Should().ContainKey("tissue").WhichValue.Should().Be("not-stated");
+            result.Should().ContainKey("all").WhoseValue.Should().Be("yes");
+            result.Should().ContainKey("heart").WhoseValue.Should().Be("yes");
+            result.Should().ContainKey("liver").WhoseValue.Should().Be("no");
+            result.Should().ContainKey("tissue").WhoseValue.Should().Be("not-stated");
         }
     }
 }

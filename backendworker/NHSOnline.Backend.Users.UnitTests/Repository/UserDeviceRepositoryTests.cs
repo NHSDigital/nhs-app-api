@@ -31,10 +31,8 @@ namespace NHSOnline.Backend.Users.UnitTests.Repository
             Func<Task> act = async () => await _systemUnderTest.Create(null);
 
             // Assert
-            act.Should().Throw<AggregateException>()
-                .And.InnerExceptions.Should().HaveCount(1)
-                .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("userDevice", StringComparison.Ordinal));
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("userDevice");
         }
 
         [TestMethod]
@@ -67,7 +65,7 @@ namespace NHSOnline.Backend.Users.UnitTests.Repository
 
             // Assert
             result.Should().BeOfType<RepositoryFindResult<UserDevice>.Found>()
-                .Subject.Records.Should().BeEquivalentTo(userDevice);
+                .Subject.Records.Should().BeEquivalentTo(new []{userDevice});
         }
 
         [TestMethod]
@@ -95,7 +93,7 @@ namespace NHSOnline.Backend.Users.UnitTests.Repository
             Func<Task> act = async () => await _systemUnderTest.Find(nhsLoginId, deviceId);
 
             // Assert
-            act.Should().Throw<AggregateException>();
+            act.Should().ThrowAsync<AggregateException>();
         }
 
         [TestMethod]
@@ -123,7 +121,7 @@ namespace NHSOnline.Backend.Users.UnitTests.Repository
             Func<Task> act = async () => await _systemUnderTest.Delete(nhsLoginId, deviceId);
 
             // Assert
-            act.Should().Throw<AggregateException>();
+            act.Should().ThrowAsync<AggregateException>();
         }
 
         [TestMethod]
@@ -136,7 +134,7 @@ namespace NHSOnline.Backend.Users.UnitTests.Repository
             Func<Task> act = async () => await _systemUnderTest.Find(nhsLoginId);
 
             // Assert
-            act.Should().Throw<AggregateException>();
+            act.Should().ThrowAsync<AggregateException>();
         }
 
         [TestMethod]
@@ -153,7 +151,7 @@ namespace NHSOnline.Backend.Users.UnitTests.Repository
 
             // Assert
             result.Should().BeOfType<RepositoryFindResult<UserDevice>.Found>()
-                .Subject.Records.Should().BeEquivalentTo(userDevice);
+                .Subject.Records.Should().BeEquivalentTo(new []{userDevice});
         }
 
         [TestMethod]

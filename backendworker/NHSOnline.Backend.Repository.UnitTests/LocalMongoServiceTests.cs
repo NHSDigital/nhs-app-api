@@ -152,7 +152,7 @@ namespace NHSOnline.Backend.Repository.UnitTests
             // Assert
             mockMongoCollection.VerifyAll();
             _mockMongoClient.VerifyAll();
-            result.Current.Should().BeEquivalentTo(record);
+            result.Current.Should().BeEquivalentTo(new []{record});
         }
 
         [TestMethod]

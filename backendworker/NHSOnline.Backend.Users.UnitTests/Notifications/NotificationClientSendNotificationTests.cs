@@ -67,7 +67,7 @@ namespace NHSOnline.Backend.Users.UnitTests.Notifications
 
             // Act
             FluentActions.Invoking(async () => await _systemUnderTest.SendNotification(_notificationRequest))
-                .Should().ThrowExactly<InstallationNotFoundException>();
+                .Should().ThrowExactlyAsync<InstallationNotFoundException>();
 
             // Assert
             VerifyMocks();
@@ -83,7 +83,7 @@ namespace NHSOnline.Backend.Users.UnitTests.Notifications
 
             // Act
             FluentActions.Invoking(async () => await _systemUnderTest.SendNotification(_scheduledNotificationRequest))
-                .Should().ThrowExactly<InstallationNotFoundException>();
+                .Should().ThrowExactlyAsync<InstallationNotFoundException>();
 
             // Assert
             VerifyMocks();
@@ -144,7 +144,7 @@ namespace NHSOnline.Backend.Users.UnitTests.Notifications
 
             // Act
             FluentActions.Invoking(async () => await _systemUnderTest.SendNotification(_notificationRequest))
-                .Should().ThrowExactly<InstallationNotFoundException>();
+                .Should().ThrowExactlyAsync<InstallationNotFoundException>();
 
             // Assert
             VerifyMocks();
@@ -163,7 +163,7 @@ namespace NHSOnline.Backend.Users.UnitTests.Notifications
 
             // Act
             FluentActions.Invoking(async () => await _systemUnderTest.SendNotification(_scheduledNotificationRequest))
-                .Should().ThrowExactly<InstallationNotFoundException>();
+                .Should().ThrowExactlyAsync<InstallationNotFoundException>();
 
             // Assert
             VerifyMocks();

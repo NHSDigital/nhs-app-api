@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         {
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
-            
+
             var mockServiceJourneyRulesConfiguration =
                 _fixture.Freeze<Mock<IServiceJourneyRulesConfiguration>>();
             mockServiceJourneyRulesConfiguration.SetupGet(c => c.RulesFolderPath)
@@ -57,13 +57,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             Func<Task> act = async () => await _step.Execute(null);
 
             // Assert
-            act.Should().Throw<AggregateException>()
-                .And.InnerExceptions.Should().HaveCount(3)
-                .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("context", StringComparison.Ordinal))
-                .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("RulesSchema", StringComparison.Ordinal))
-                .And.Contain(x =>
-                    ((ArgumentNullException) x).ParamName.Equals("TargetSchema", StringComparison.Ordinal));
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("context");
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("RulesSchema");
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("TargetSchema");
         }
 
         [TestMethod]
@@ -76,12 +75,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             Func<Task> act = async () => await _step.Execute(context);
 
             // Assert
-            act.Should().Throw<AggregateException>()
-                .And.InnerExceptions.Should().HaveCount(2)
-                .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("RulesSchema", StringComparison.Ordinal))
-                .And.Contain(x =>
-                    ((ArgumentNullException) x).ParamName.Equals("TargetSchema", StringComparison.Ordinal));
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("RulesSchema");
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("TargetSchema");
         }
 
         [TestMethod]
@@ -97,7 +94,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             Func<Task> act = async () => await _step.Execute(context);
 
             // Assert
-            act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("RulesSchema");
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("RulesSchema");
         }
 
         [TestMethod]
@@ -113,7 +111,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             Func<Task> act = async () => await _step.Execute(context);
 
             // Assert
-            act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("TargetSchema");
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("TargetSchema");
         }
 
         [TestMethod]
@@ -261,7 +260,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var targetConfiguration = _fixture.Create<TargetConfiguration>();
             var target3Configuration = _fixture.Create<TargetConfiguration>();
             var target4Configuration = _fixture.Create<TargetConfiguration>();
-            
+
             SetupReader(targetFileName, targetConfiguration);
             SetupReader(target2FileName, (TargetConfiguration) null);
             SetupReader(target3FileName, target3Configuration);
@@ -319,11 +318,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             context.FolderConfigurations.Should().NotBeNull()
                 .And.HaveCount(1)
                 .And.ContainKey(folder1Path)
-                .WhichValue.Should().NotBeNull()
+                .WhoseValue.Should().NotBeNull()
                 .And.HaveCount(1)
                 .And.Contain(targetConfiguration);
         }
-        
+
         [TestMethod]
         public void ExecuteWithLoadContext_WhenTargetSchemaIsNotPresent_ThrowsAnException()
         {
@@ -334,9 +333,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             Func<Task> act = async () => await _loadStep.Execute(context);
 
             // Assert
-            act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("TargetSchema");
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("TargetSchema");
         }
-        
+
         [TestMethod]
         public async Task ExecuteWithLoadContext_WhenItFailsToReadTheMergedConfigurationFile_ReturnsFalse()
         {
@@ -358,7 +358,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
 
             result.Should().BeFalse();
         }
-        
+
         [TestMethod]
         public async Task ExecuteWithLoadContext_WhenThereAreNoTargetConfigurationFiles_ReturnsFalse()
         {
