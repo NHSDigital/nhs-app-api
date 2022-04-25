@@ -1,6 +1,7 @@
 <template>
   <div v-if="showTemplate">
-    <error-container v-if="error.status === genericStatusCodes.BAD_REQUEST" :id="errorId">
+    <message-dialog-generic
+      v-if="error.status === genericStatusCodes.BAD_REQUEST" :id="errorId" override-style="plain">
       <error-title title="appointments.error.thereIsAProblemAppointments"
                    header="appointments.error.thereIsAProblem" />
       <contact-111
@@ -9,7 +10,7 @@
       <error-link from="generic.back"
                   :action="appointmentsPath"
                   :desktop-only="true" />
-    </error-container>
+    </message-dialog-generic>
 
     <error-page v-else-if="error.status === genericStatusCodes.FORBIDDEN"
                 header-locale-ref="forbiddenErrors.appointments.gpAppointmentBookingUnavailable"
@@ -23,29 +24,30 @@
       </template>
     </error-page>
 
-    <error-container v-else-if="error.status === appointmentStatusCodes.APPOINTMENT_DOES_NOT_EXIST"
-                     :id="errorId">
+    <message-dialog-generic
+      v-else-if="error.status === appointmentStatusCodes.APPOINTMENT_DOES_NOT_EXIST"
+      :id="errorId" override-style="plain">
       <error-title title="appointments.error.youCannotCancelThisAppointment"/>
       <error-paragraph from="appointments.error.theAppointmentMayBeCancelledOrInThePast" />
       <error-link from="generic.back"
                   :action="appointmentsPath"
                   :desktop-only="true" />
-    </error-container>
+    </message-dialog-generic>
 
-    <error-container
+    <message-dialog-generic
       v-else-if="error.status === appointmentStatusCodes.APPOINTMENT_TOO_LATE_TO_CANCEL"
-      :id="errorId">
+      :id="errorId" override-style="plain">
       <error-title title="appointments.error.contactYouSurgeryToCancel"/>
       <error-paragraph from="appointments.error.itIsTooLateToCancel" />
       <error-link from="generic.back"
                   :action="appointmentsPath"
                   :desktop-only="true" />
-    </error-container>
+    </message-dialog-generic>
 
-    <error-container v-else-if="error.status === genericStatusCodes.INTERNAL_SERVER_ERROR
-                       || error.status === genericStatusCodes.BAD_GATEWAY
-                       || error.status === genericStatusCodes.GATEWAY_TIMEOUT"
-                     :id="errorId">
+    <message-dialog-generic v-else-if="error.status === genericStatusCodes.INTERNAL_SERVER_ERROR
+                              || error.status === genericStatusCodes.BAD_GATEWAY
+                              || error.status === genericStatusCodes.GATEWAY_TIMEOUT"
+                            :id="errorId" override-style="plain">
       <error-title title="appointments.error.thereIsAProblemAppointments"
                    header="appointments.error.thereIsAProblem" />
       <error-paragraph from="appointments.error.tryAgainOrContactUs"
@@ -59,7 +61,7 @@
       <error-link from="generic.back"
                   :action="appointmentsPath"
                   :desktop-only="true"/>
-    </error-container>
+    </message-dialog-generic>
 
     <error-container v-else id="error-dialog-unknown">
       <error-title title="apiErrors.pageHeader"
@@ -81,7 +83,7 @@ import ErrorPage from '@/components/errors/ErrorPage';
 import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
 import ErrorParagraph from '@/components/errors/ErrorParagraph';
 import ErrorTitle from '@/components/errors/ErrorTitle';
-
+import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 import genericStatus from '@/components/errors/statusCodes/GenericStatusCodes';
 import appointmentStatus from '@/components/errors/statusCodes/AppointmentCustomStatusCodes';
 
@@ -100,6 +102,7 @@ export default {
     ErrorPage,
     ErrorParagraph,
     ErrorTitle,
+    MessageDialogGeneric,
   },
   mixins: [ErrorPageMixin],
   props: {

@@ -120,7 +120,7 @@ Feature: Cancel Appointments Frontend
       | VISION    |
 
   #403
-  Scenario Outline: A <GP System> user sees appropriate error message when it is not allowed to cancel
+  Scenario Outline: A <GP System> user sees appropriate warning message when it is not allowed to cancel
     Given <GP System> user is not allowed to cancel appointments with '<Reason>'
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
@@ -133,48 +133,48 @@ Feature: Cancel Appointments Frontend
       | Unable to attend | EMIS      |
 
   #409
-  Scenario Outline: A <GP System> user sees appropriate error message when booking has been cancelled already
+  Scenario Outline: A <GP System> user sees appropriate warning message when booking has been cancelled already
     Given <GP System> prevents cancellation of previously booked appointment with '<Reason>' because it is already cancelled
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     And I select "Cancel appointment" button
-    Then I see an appropriate error message when it is already cancelled
-    When I click the error 'Back' link
+    Then I see an appropriate warning message when it is already cancelled
+    When I click the warning 'Back' link
     Then the Your Appointments page is displayed
     Examples:
       | Reason           | GP System |
       | Unable to attend | EMIS      |
 
   #461
-  Scenario: A TPP user sees appropriate error message when it is too late to cancel
+  Scenario: A TPP user sees appropriate warning message when it is too late to cancel
     Given TPP prevents cancellation of previously booked appointment because it is too late
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
     And I select a "Cancel this appointment" link
     And I select "Cancel appointment" button
-    Then I see an appropriate error message when it is too late to cancel
-    When I click the error 'Back' link
+    Then I see an appropriate warning message when it is too late to cancel
+    When I click the warning 'Back' link
     Then the Your Appointments page is displayed
 
   #500
-  Scenario Outline: VISION user sees appropriate error message when it returns corrupt data when cancelling appointment
+  Scenario Outline: VISION user sees appropriate warning message when it returns corrupt data when cancelling appointment
     Given VISION returns corrupt data when cancelling appointment with '<Reason>'
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     And I select "Cancel appointment" button
-    Then I see appropriate submit error message when there is an error with '<Prefix>'
-    When I click the error 'Back' link
+    Then I see appropriate warning message when there is an error with '<Prefix>'
+    When I click the warning 'Back' link
     Then the Your Appointments page is displayed
     Examples:
       | Reason   | Prefix |
       | Reason 1 | xx     |
 
   #502
-  Scenario Outline: EMIS user sees appropriate error message when it returns unknown exception when cancelling appointment
+  Scenario Outline: EMIS user sees appropriate warning message when it returns unknown exception when cancelling appointment
     Given EMIS returns unknown exception when cancelling appointment with '<Reason>'
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     And I am logged in
@@ -182,15 +182,15 @@ Feature: Cancel Appointments Frontend
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     And I select "Cancel appointment" button
-    Then I see appropriate submit error message when there is an error with '<Prefix>'
-    When I click the error 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
+    Then I see appropriate warning message when there is an error with '<Prefix>'
+    When I click the warning 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
     Then a new tab has been opened by the link
     Examples:
       | Reason           | Prefix |
       | Unable to attend | 4e     |
 
   #504
-  Scenario Outline: A <GP System> user sees appropriate information message when there is a timeout
+  Scenario Outline: A <GP System> user sees appropriate warning message when there is a timeout
     Given  <GP System> will time out when trying to cancel with '<Reason>'
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     And I am logged in
@@ -198,8 +198,8 @@ Feature: Cancel Appointments Frontend
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     And I select "Cancel appointment" button
-    Then I see appropriate submit error message when there is an error with '<Prefix>'
-    When I click the error 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
+    Then I see appropriate warning message when there is an error with '<Prefix>'
+    When I click the warning 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
     Then a new tab has been opened by the link
     Examples:
       | Reason             | Prefix | GP System |

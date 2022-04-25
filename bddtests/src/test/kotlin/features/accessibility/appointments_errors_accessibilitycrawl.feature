@@ -45,7 +45,7 @@ Feature: appointment errors accessibility
     When I retrieve the 'Your GP Appointments' page directly
     And I select a "Cancel this appointment" link
     And I select "Cancel appointment" button
-    Then I see an appropriate error message when it is too late to cancel
+    Then I see an appropriate warning message when it is too late to cancel
     And the Errors_AB07G_TooLateToCancel page is saved to disk
 
   Scenario Outline: Cannot cancel appointment is captured
@@ -55,7 +55,7 @@ Feature: appointment errors accessibility
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     And I select "Cancel appointment" button
-    Then I see an appropriate error message when it is already cancelled
+    Then I see an appropriate warning message when it is already cancelled
     And the Errors_AB07H_CannotCancelAppointment page is saved to disk
     Examples:
       | Reason           | GP System |
@@ -123,3 +123,44 @@ Feature: appointment errors accessibility
     When I retrieve the 'Appointment Booking' page directly
     Then I see appropriate warning message when there is a loading error with '4e'
     And the Errors_AGP15B_UnexpectedErrorRetrievingAppointmentSlots page is saved to disk
+
+  Scenario Outline: VISION user sees appropriate warning message when it returns corrupt data when cancelling appointment
+    Given VISION returns corrupt data when cancelling appointment with '<Reason>'
+    And I am logged in
+    When I retrieve the 'Your GP Appointments' page directly
+    And I select a "Cancel this appointment" link
+    And I select a cancellation reason of <Reason>
+    And I select "Cancel appointment" button
+    Then I see appropriate warning message when there is an error with '<Prefix>'
+    And the Errors_AGP14_500_CorruptDataCancellingAppointment page is saved to disk
+    Examples:
+      | Reason   | Prefix |
+      | Reason 1 | xx     |
+
+  Scenario Outline: EMIS user sees appropriate warning message when it returns unknown exception when cancelling appointment
+    Given EMIS returns unknown exception when cancelling appointment with '<Reason>'
+    And 'NHS UK' responds to requests for '/nhs-app-contact-us'
+    And I am logged in
+    When I retrieve the 'Your GP Appointments' page directly
+    And I select a "Cancel this appointment" link
+    And I select a cancellation reason of <Reason>
+    And I select "Cancel appointment" button
+    Then I see appropriate warning message when there is an error with '<Prefix>'
+    And the Errors_AGP14_502_UnknownExceptionCancellingAppointment page is saved to disk
+    Examples:
+      | Reason           | Prefix |
+      | Unable to attend | 4e     |
+
+  Scenario Outline: A <GP System> user sees appropriate warning message when there is a timeout
+    Given  <GP System> will time out when trying to cancel with '<Reason>'
+    And 'NHS UK' responds to requests for '/nhs-app-contact-us'
+    And I am logged in
+    When I retrieve the 'Your GP Appointments' page directly
+    And I select a "Cancel this appointment" link
+    And I select a cancellation reason of <Reason>
+    And I select "Cancel appointment" button
+    Then I see appropriate warning message when there is an error with '<Prefix>'
+    And the Errors_AGP14_504_TimeoutCancellingAppointment page is saved to disk
+    Examples:
+      | Reason             | Prefix | GP System |
+      | No longer required | ze     | EMIS      |
