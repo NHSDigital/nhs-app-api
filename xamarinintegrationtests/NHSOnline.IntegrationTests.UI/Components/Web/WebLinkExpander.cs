@@ -4,7 +4,6 @@ using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Interactions;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Web
 {
@@ -26,7 +25,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
         {
             foreach (var component in _containerElements)
             {
-                component.ActOnElementContext(c => c.Element.Size.Height.Should().Be(0));
+                component.ActOnElementContext(c => c.Element.FindElement(By.XPath("//summary"))
+                    .GetAttribute("aria-expanded").Should().Be("false"));
             }
         }
 
@@ -34,7 +34,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
         {
             foreach (var component in _containerElements)
             {
-                component.ActOnElementContext(c => c.Element.Size.Height.Should().BeGreaterThan(0));
+                component.ActOnElementContext(c => c.Element.FindElement(By.XPath("//summary"))
+                    .GetAttribute("aria-expanded").Should().Be("true"));
             }
         }
 
