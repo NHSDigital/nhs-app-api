@@ -127,8 +127,8 @@ Feature: Your Appointments Frontend
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed
     When I click the GP Appointments link
-    Then I see appropriate try again error message when there is an error with 'xx'
-    When I click the error 'Report a problem' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
+    Then I see appropriate try again warning message when there is an error with 'xx'
+    When I click the warning 'Report a problem' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
     Then a new tab has been opened by the link
 
   Scenario: EMIS user retries to view my appointments after it returns corrupt data
@@ -137,7 +137,7 @@ Feature: Your Appointments Frontend
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed
     When I click the GP Appointments link
-    And I see appropriate try again error message when there is an error with 'xx'
+    And I see appropriate try again warning message when there is an error with 'xx'
     And I click the 'Try again' button
     Then the page title is "Your GP appointments"
     And I am informed I have no historical appointments
@@ -167,8 +167,8 @@ Feature: Your Appointments Frontend
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed
     When I click the GP Appointments link
-    Then I see appropriate try again error message when there is an error with '4t'
-    When I click the error 'Back' link
+    Then I see appropriate try again warning message when there is an error with '4t'
+    When I click the warning 'Back' link
     Then the Appointments Hub page is displayed
 
   Scenario: A TPP user sees appropriate error message when GP system is throttling
@@ -177,8 +177,8 @@ Feature: Your Appointments Frontend
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed
     When I click the GP Appointments link
-    Then I see appropriate try again error message when there is an error with '4t'
-    When I click the error 'Back' link
+    Then I see appropriate try again warning message when there is an error with '4t'
+    When I click the warning 'Back' link
     Then the Appointments Hub page is displayed
 
   #504
@@ -189,8 +189,8 @@ Feature: Your Appointments Frontend
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed
     When I click the GP Appointments link
-    Then I see appropriate try again book/cancel error message when there is an error with 'zs'
-    When I click the error 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
+    Then I see appropriate try again book/cancel warning message when there is an error with 'zs'
+    When I click the warning 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
     Then a new tab has been opened by the link
 
   Scenario: Cancellation link won't be displayed for VISION appointment before cancellation cut off period without cancellation reason(s) available

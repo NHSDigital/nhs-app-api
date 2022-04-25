@@ -33,10 +33,10 @@
       </template>
     </error-page>
 
-    <error-container
+    <message-dialog-generic
       v-else-if="error && (error.status === genericStatusCodes.INTERNAL_SERVER_ERROR
         || error.status === genericStatusCodes.BAD_GATEWAY)"
-      :id="errorId">
+      :id="errorId" override-style="plain">
       <error-title title="appointments.error.thereIsAProblemLoading"/>
       <error-paragraph from="appointments.error.tryAgainOrContactUs"
                        :variable="error.serviceDeskReference"/>
@@ -49,11 +49,11 @@
       <error-link from="generic.back"
                   :action="appointmentsPath"
                   :desktop-only="true"/>
-    </error-container>
+    </message-dialog-generic>
 
-    <error-container
+    <message-dialog-generic
       v-else-if="error && error.status === genericStatusCodes.GATEWAY_TIMEOUT"
-      :id="errorId">
+      :id="errorId" override-style="plain">
       <error-title title="appointments.error.thereIsAProblemLoading"/>
       <error-paragraph from="appointments.error.tryAgainNowOrContactUs"
                        :variable="error.serviceDeskReference"/>
@@ -67,7 +67,8 @@
       <error-link from="generic.back"
                   :action="appointmentsPath"
                   :desktop-only="true" />
-    </error-container>
+    </message-dialog-generic>
+
     <error-container v-else id="error-dialog-unknown">
       <error-title title="apiErrors.pageHeader"
                    header="apiErrors.pageHeader" />
@@ -89,6 +90,7 @@ import ErrorPage from '@/components/errors/ErrorPage';
 import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
 import ErrorParagraph from '@/components/errors/ErrorParagraph';
 import ErrorTitle from '@/components/errors/ErrorTitle';
+import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 
 import genericStatus from '@/components/errors/statusCodes/GenericStatusCodes';
 import appointmentStatus from '@/components/errors/statusCodes/AppointmentCustomStatusCodes';
@@ -109,6 +111,7 @@ export default {
     ErrorPage,
     ErrorParagraph,
     ErrorTitle,
+    MessageDialogGeneric,
   },
   mixins: [ErrorPageMixin],
   props: {

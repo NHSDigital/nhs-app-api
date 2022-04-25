@@ -110,11 +110,12 @@ class AppointmentsConfirmationStepDefinitions {
 
     }
 
-    @Then("^a message is displayed indicating that the slot has already been taken$")
-    fun aMessageIsDisplayedInformingTheSlotHasAlreadyBeenTaken() {
-        errorDialogPage.assertParagraphText(appointmentsConfirmationSteps.appointmentsConfirmation.chooseDifferent)
-                .assertPageHeader(appointmentsConfirmationSteps.appointmentsConfirmation.notAvailableTitle)
-                .assertPageTitle(appointmentsConfirmationSteps.appointmentsConfirmation.notAvailableTitle)
+    @Then("^a warning message is displayed indicating that the slot has already been taken$")
+    fun aWarningMessageIsDisplayedInformingTheSlotHasAlreadyBeenTaken() {
+        errorDialogPage
+            .assertShutterParagraphText(appointmentsConfirmationSteps.appointmentsConfirmation.chooseDifferent)
+            .assertPageHeader(appointmentsConfirmationSteps.appointmentsConfirmation.notAvailableTitle)
+            .assertPageTitle(appointmentsConfirmationSteps.appointmentsConfirmation.notAvailableTitle)
     }
 
     @Then("^I do not see a text input to enter phone number$")

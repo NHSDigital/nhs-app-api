@@ -21,18 +21,18 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
         }
     }
 
-    @Then("^I see appropriate error message for loading time-outs with '(.*)'$")
-    fun iSeeAppropriateErrorMessageForLoadingTimesOutWithPrefix(prefix: String) {
-        errorDialogPage.assertParagraphText(availableAppointmentsPage.getTryAgainNowParagraph(prefix))
-                .assertParagraphText(availableAppointmentsPage.ifItContinues)
+    @Then("^I see appropriate warning message for loading time-outs with '(.*)'$")
+    fun iSeeAppropriateWarningMessageForLoadingTimesOutWithPrefix(prefix: String) {
+        errorDialogPage.assertShutterParagraphText(availableAppointmentsPage.getTryAgainNowParagraph(prefix))
+                .assertShutterParagraphText(availableAppointmentsPage.ifItContinues)
                 .assertPageHeader(availableAppointmentsPage.problemLoadingTitle)
                 .assertPageTitle(availableAppointmentsPage.problemLoadingTitle)
     }
 
-    @Then("^I see appropriate error message when there is a loading error with '(.*)'$")
-    fun iSeeAppropriateErrorMessageWhenThereIsALoadingErrorWithPrefix(prefix: String) {
-        errorDialogPage.assertParagraphText(availableAppointmentsPage.getGoBackAndTryAgainParagraph(prefix))
-                .assertParagraphText(availableAppointmentsPage.ifItContinues)
+    @Then("^I see appropriate warning message when there is a loading error with '(.*)'$")
+    fun iSeeAppropriateErrorWarningMessageWhenThereIsALoadingErrorWithPrefix(prefix: String) {
+        errorDialogPage.assertShutterParagraphText(availableAppointmentsPage.getGoBackAndTryAgainParagraph(prefix))
+                .assertShutterParagraphText(availableAppointmentsPage.ifItContinues)
                 .assertPageHeader(availableAppointmentsPage.problemLoadingTitle)
                 .assertPageTitle(availableAppointmentsPage.problemLoadingTitle)
     }

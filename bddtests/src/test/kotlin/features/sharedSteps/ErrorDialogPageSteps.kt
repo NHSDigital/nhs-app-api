@@ -15,6 +15,17 @@ class ErrorDialogPageSteps {
         errorDialogPage.assertLink(linkText).click()
     }
 
+    @When("^I click the warning '(.*)' link$")
+    fun iClickTheWarningLink(linkText: String) {
+        errorDialogPage.assertWarningLink(linkText).click()
+    }
+
+    @When("^I click the warning '(.*)' link with a url of '(.*)'$")
+    fun iClickTheWarningLinkWithAUrlOf(linkText: String, url: String) {
+        browser.storeCurrentTabCount()
+        errorDialogPage.assertWarningLink(linkText, url).click()
+    }
+
     @When("^I click the error '(.*)' link with a url of '(.*)'$")
     fun iClickTheErrorLinkWithAUrlOf(linkText: String, url: String) {
         browser.storeCurrentTabCount()

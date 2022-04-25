@@ -233,11 +233,11 @@ class YourAppointmentsStepDefinitions {
         appointmentForbiddenError.assertNHS111Online()
     }
 
-    @Then("^I see appropriate try again error message when there is an error with '(.*)'$")
-    fun iSeeAppropriateTryAgainErrorMessageWhenThereIsAnErrorWithPrefix(prefix: String) {
+    @Then("^I see appropriate try again warning message when there is an error with '(.*)'$")
+    fun iSeeAppropriateTryAgainWarningMessageWhenThereIsAnErrorWithPrefix(prefix: String) {
         errorDialogPage.assertReferenceCode(prefix)
-                .assertParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.ifItContinues)
-                .assertParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.tryAgainNow)
+                .assertShutterParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.ifItContinues)
+                .assertShutterParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.tryAgainNow)
                 .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.problemLoadingTitle)
                 .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.problemLoadingTitle)
     }
@@ -250,11 +250,11 @@ class YourAppointmentsStepDefinitions {
                 .assertPageTitle("Sorry, there is a problem with GP appointment booking")
     }
 
-    @Then("^I see appropriate try again book/cancel error message when there is an error with '(.*)'$")
-    fun iSeeAppropriateTryAgainBookCancelErrorMessageWhenThereIsAnErrorWithPrefix(prefix: String) {
+    @Then("^I see appropriate try again book/cancel warning message when there is an error with '(.*)'$")
+    fun iSeeAppropriateTryAgainBookCancelWarningMessageWhenThereIsAnErrorWithPrefix(prefix: String) {
         val tryAgainParagraph = yourAppointmentsUISteps.yourAppointmentsPage.getTryAgainNowParagraph(prefix)
-        errorDialogPage.assertParagraphText(tryAgainParagraph)
-                .assertParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.ifItContinuesBookOrCancel)
+        errorDialogPage.assertShutterParagraphText(tryAgainParagraph)
+                .assertShutterParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.ifItContinuesBookOrCancel)
                 .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.problemLoadingTitle)
                 .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.problemLoadingTitle)
     }

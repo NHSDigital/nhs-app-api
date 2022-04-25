@@ -23,15 +23,15 @@
       </template>
     </error-page>
 
-
-    <error-container v-else-if="error.status === appointmentStatusCodes.APPOINTMENT_DOES_NOT_EXIST"
-                     :id="errorId">
+    <message-dialog-generic
+      v-else-if="error.status === appointmentStatusCodes.APPOINTMENT_DOES_NOT_EXIST"
+      :id="errorId" override-style="plain">
       <error-title title="appointments.confirmation.error.theAppointmentIsNoLongerAvailable"/>
       <error-paragraph from="appointments.confirmation.error.pleaseChooseADifferentAppointment" />
       <error-link from="generic.back"
                   :action="appointmentsPath"
                   :desktop-only="true"/>
-    </error-container>
+    </message-dialog-generic>
 
     <error-container
       v-else-if="error.status === appointmentStatusCodes.MAX_PENDING_APPOINTMENTS_BOOKED"
@@ -88,6 +88,7 @@ import ErrorPage from '@/components/errors/ErrorPage';
 import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
 import ErrorParagraph from '@/components/errors/ErrorParagraph';
 import ErrorTitle from '@/components/errors/ErrorTitle';
+import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 
 import genericStatus from '@/components/errors/statusCodes/GenericStatusCodes';
 import appointmentStatus from '@/components/errors/statusCodes/AppointmentCustomStatusCodes';
@@ -107,6 +108,7 @@ export default {
     ErrorPage,
     ErrorParagraph,
     ErrorTitle,
+    MessageDialogGeneric,
   },
   mixins: [ErrorPageMixin],
   props: {

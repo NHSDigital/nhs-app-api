@@ -6,7 +6,7 @@ Feature: appointment errors accessibility
     Given the first request to EMIS for available appointment slots times out but later requests succeed
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    Then I see appropriate error message for loading time-outs with '<Error Code>'
+    Then I see appropriate warning message for loading time-outs with '<Error Code>'
     And the Errors_AB04C_TimeoutGettingAppointmentSlots page is saved to disk
     Examples:
       | Error Code |
@@ -20,7 +20,7 @@ Feature: appointment errors accessibility
     Then the Appointment Slot page is displayed
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button
-    Then a message is displayed indicating that the slot has already been taken
+    Then a warning message is displayed indicating that the slot has already been taken
     And the Errors_AB05A_AppointmentSlotsConflict page is saved to disk
     Examples:
       | GP System |
@@ -65,7 +65,7 @@ Feature: appointment errors accessibility
     Given the first request to EMIS for available appointment slots times out but later requests succeed
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    Then I see appropriate error message for loading time-outs with 'ze'
+    Then I see appropriate warning message for loading time-outs with 'ze'
     And the Errors_AGP09_TimeoutGettingAppointmentHistory page is saved to disk
 
   Scenario Outline: Appointment booking is unavailable is captured
@@ -114,12 +114,12 @@ Feature: appointment errors accessibility
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed
     When I click the GP Appointments link
-    And I see appropriate try again error message when there is an error with 'xx'
+    And I see appropriate try again warning message when there is an error with 'xx'
     And the Errors_AGP15A_UnexpectedErrorBookingAppointment page is saved to disk
 
   Scenario: GP15b error is captured
     Given EMIS is unavailable for available appointment slots
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    Then I see appropriate error message when there is a loading error with '4e'
+    Then I see appropriate warning message when there is a loading error with '4e'
     And the Errors_AGP15B_UnexpectedErrorRetrievingAppointmentSlots page is saved to disk

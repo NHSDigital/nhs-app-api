@@ -3,8 +3,8 @@
        :class="[mType,
                 ...extraClasses,
                 'nhsuk-width-container--full',
-                {[$style.desktopWeb] : !$store.state.device.isNativeApp},
-                plainStyle]">
+                {[$style.desktopWeb] : !$store.state.device.isNativeApp}
+       ]">
     <h2 v-if="showIcon"
         :class="['nhsuk-heading-m', $style.icon, $style.break]"
         :aria-label="headingAriaLabel">
@@ -56,9 +56,6 @@ export default {
     },
     mType() {
       return this.showIcon ? [this.$style.msg, this.$style[this.messageType]] : [];
-    },
-    plainStyle() {
-      return this.overrideStyle === 'plain' ? this.$style.plain : '';
     },
     showIcon() {
       return this.overrideStyle !== 'plain';

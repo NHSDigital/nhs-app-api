@@ -23,10 +23,8 @@
       </template>
     </error-page>
 
-    <error-container
-      v-else-if="error.status === genericStatusCodes.INTERNAL_SERVER_ERROR
-        || error.status === genericStatusCodes.BAD_GATEWAY"
-      :id="errorId">
+    <message-dialog-generic v-else-if="error.status === genericStatusCodes.INTERNAL_SERVER_ERROR
+      || error.status === genericStatusCodes.BAD_GATEWAY" :id="errorId" override-style="plain">
       <error-title title="appointments.error.thereIsAProblemLoading"/>
       <error-paragraph from="appointments.error.tryAgainNow"/>
       <contact-111
@@ -37,10 +35,10 @@
       <error-link from="generic.back"
                   :action="backUrl"
                   :desktop-only="true"/>
-    </error-container>
+    </message-dialog-generic>
 
-    <error-container v-else-if="error.status === genericStatusCodes.GATEWAY_TIMEOUT"
-                     :id="errorId">
+    <message-dialog-generic v-else-if="error.status === genericStatusCodes.GATEWAY_TIMEOUT"
+                            :id="errorId" override-style="plain">
       <error-title title="appointments.error.thereIsAProblemLoading"/>
       <error-paragraph from="appointments.error.tryAgainNowOrContactUs"
                        :variable="error.serviceDeskReference"/>
@@ -51,7 +49,7 @@
       <error-link from="generic.contactUs"
                   :action="contactUsUrl"
                   target="_blank"/>
-    </error-container>
+    </message-dialog-generic>
 
     <div v-else-if="error.status === appointmentStatusCodes.GP_SESSION_ERROR">
       <gp-appointment-gp-session-errors :error="error" />
@@ -79,6 +77,7 @@ import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
 import ErrorParagraph from '@/components/errors/ErrorParagraph';
 import ErrorTitle from '@/components/errors/ErrorTitle';
 import GpAppointmentGpSessionErrors from '@/components/errors/pages/appointments/GpAppointmentGpSessionErrors';
+import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 import ReportAProblem from '@/components/errors/ReportAProblem';
 
 import {
@@ -101,6 +100,7 @@ export default {
     ErrorParagraph,
     ErrorTitle,
     GpAppointmentGpSessionErrors,
+    MessageDialogGeneric,
     ReportAProblem,
   },
   mixins: [ErrorPageMixin],

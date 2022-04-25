@@ -126,8 +126,8 @@ Feature: Book Appointments Frontend
     Then the Appointment Slot page is displayed
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button
-    Then a message is displayed indicating that the slot has already been taken
-    When I click the error 'Back' link
+    Then a warning message is displayed indicating that the slot has already been taken
+    When I click the warning 'Back' link
     Then the Your Appointments page is displayed
     Examples:
       | GP System |
