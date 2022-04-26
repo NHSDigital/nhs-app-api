@@ -107,7 +107,6 @@ export default {
       errorOverrideStyles: { 403: 'plain', 500: 'plain', 502: 'plain' },
       redirectUrl: {
         default: MORE_ACCOUNTANDSETTINGS_PATH,
-        10001: MORE_ACCOUNTANDSETTINGS_MANAGENOTIFICATIONS_PATH,
       },
     },
     {
