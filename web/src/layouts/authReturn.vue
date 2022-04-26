@@ -31,8 +31,7 @@
                       <error-paragraph-with-links
                         from="login.authReturn.howToGetYourCovidPass" />
                       <error-header from="login.authReturn.ifYourSurgeryIsInWales" />
-                      <error-paragraph
-                        from="login.authReturn.notAvailableInWales" />
+                      <error-paragraph from="login.authReturn.notAvailableInWales" />
                       <error-paragraph-with-links
                         from="login.authReturn.ifYouNeedAnAppointment" />
                       <error-paragraph-with-links
@@ -60,7 +59,7 @@
                                   :query-param="contactUsParam"
                                   :params="{errorCode: serviceDeskReference}"/>
                     </div>
-                    <error-container v-else-if="statusCode===468">
+                    <shutter-container v-else-if="statusCode===468">
                       <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
                           nhsuk-u-margin-bottom-0">
                         {{ $t('login.authReturn.cannotLogin') }} </h1>
@@ -78,8 +77,8 @@
                                   target="_blank"
                                   :query-param="contactUsParam"
                                   :params="{errorCode: serviceDeskReference}"/>
-                    </error-container>
-                    <error-container v-else-if="statusCode===469">
+                    </shutter-container>
+                    <shutter-container v-else-if="statusCode===469">
                       <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
                           nhsuk-u-margin-bottom-0">
                         {{ $t('login.authReturn.cannotLogin') }} </h1>
@@ -92,7 +91,7 @@
                                   target="_blank"
                                   :query-param="contactUsParam"
                                   :params="{errorCode: serviceDeskReference}"/>
-                    </error-container>
+                    </shutter-container>
                     <error-container v-else-if="statusCode===465" override-style="plain">
                       <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
                           nhsuk-u-margin-bottom-0">
@@ -113,7 +112,7 @@
                                   :action="nhs111Url"
                                   target="_blank" />
                     </error-container>
-                    <error-container v-else-if="statusCode===400">
+                    <shutter-container v-else-if="statusCode===400">
                       <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
                           nhsuk-u-margin-bottom-0">
                         {{ $t('login.authReturn.cannotLogin') }} </h1>
@@ -125,8 +124,8 @@
                                   target="_blank" />
                       <service-desk-reference-link />
                       <error-link from="login.authReturn.backToLogin" :action="loginUrl"/>
-                    </error-container>
-                    <error-container v-else-if="statusCode===403">
+                    </shutter-container>
+                    <shutter-container v-else-if="statusCode===403">
                       <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
                           nhsuk-u-margin-bottom-0">
                         {{ $t('login.authReturn.cannotLogin') }} </h1>
@@ -138,8 +137,8 @@
                                   target="_blank" />
                       <service-desk-reference-link />
                       <error-link from="login.authReturn.backToLogin" :action="loginUrl"/>
-                    </error-container>
-                    <error-container v-else-if="statusCode===500">
+                    </shutter-container>
+                    <shutter-container v-else-if="statusCode===500">
                       <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
                           nhsuk-u-margin-bottom-0">
                         {{ $t('login.authReturn.cannotLogin') }} </h1>
@@ -151,24 +150,8 @@
                                   target="_blank" />
                       <service-desk-reference-link />
                       <error-link from="login.authReturn.backToLogin" :action="loginUrl"/>
-                    </error-container>
-                    <error-container v-else-if="statusCode===502">
-                      <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
-                          nhsuk-u-margin-bottom-0">
-                        {{ $t('login.authReturn.cannotLogin') }} </h1>
-                      <error-paragraph from="login.authReturn.thereWasAnErrorEither" />
-                      <error-unordered-list
-                        from="login.authReturn.connectToGetYourSurgeryOrGettingYourLoginDetails" />
-                      <error-paragraph from="login.authReturn.goBackAndTryAgain" />
-                      <error-paragraph from="login.authReturn.ifYouNeedToBook" />
-                      <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
-                      <error-link from="login.authReturn.goToNhs111"
-                                  :action="nhs111Url"
-                                  target="_blank" />
-                      <service-desk-reference-link />
-                      <error-link from="login.authReturn.backToLogin" :action="loginUrl"/>
-                    </error-container>
-                    <error-container v-else-if="statusCode===504">
+                    </shutter-container>
+                    <shutter-container v-else-if="statusCode===502">
                       <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
                           nhsuk-u-margin-bottom-0">
                         {{ $t('login.authReturn.cannotLogin') }} </h1>
@@ -183,7 +166,23 @@
                                   target="_blank" />
                       <service-desk-reference-link />
                       <error-link from="login.authReturn.backToLogin" :action="loginUrl"/>
-                    </error-container>
+                    </shutter-container>
+                    <shutter-container v-else-if="statusCode===504">
+                      <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
+                          nhsuk-u-margin-bottom-0">
+                        {{ $t('login.authReturn.cannotLogin') }} </h1>
+                      <error-paragraph from="login.authReturn.thereWasAnErrorEither" />
+                      <error-unordered-list
+                        from="login.authReturn.connectToGetYourSurgeryOrGettingYourLoginDetails" />
+                      <error-paragraph from="login.authReturn.goBackAndTryAgain" />
+                      <error-paragraph from="login.authReturn.ifYouNeedToBook" />
+                      <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
+                      <error-link from="login.authReturn.goToNhs111"
+                                  :action="nhs111Url"
+                                  target="_blank" />
+                      <service-desk-reference-link />
+                      <error-link from="login.authReturn.backToLogin" :action="loginUrl"/>
+                    </shutter-container>
                     <error-container v-else>
                       <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
                           nhsuk-u-margin-bottom-0">
@@ -257,6 +256,7 @@ import HeaderSlim from '@/components/HeaderSlim';
 import NativeVersionSetup from '@/services/nativeVersionSetup';
 import PageTitle from '@/components/widgets/PageTitle';
 import ServiceDeskReferenceLink from '@/components/errors/ServiceDeskReferenceLink';
+import ShutterContainer from '@/components/shutters/ShutterContainer';
 import Spinner from '@/components/widgets/Spinner';
 import WebHeader from '@/components/widgets/WebHeader';
 import WebFooter from '@/components/widgets/WebFooter';
@@ -283,6 +283,7 @@ export default {
     HeaderSlim,
     PageTitle,
     ServiceDeskReferenceLink,
+    ShutterContainer,
     Spinner,
     WebHeader,
     WebFooter,

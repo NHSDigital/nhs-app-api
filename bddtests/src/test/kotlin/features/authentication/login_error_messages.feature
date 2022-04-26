@@ -3,12 +3,13 @@
 Feature: Login error messages
 
   The user is shown appropriate error messages if something goes wrong during login
+
   #400
   Scenario: CitizenID provides invalid data after successful login
     Given I am logged into Citizen ID but am receiving invalid data
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'
-    Then I see an error 'Contact us if you keep seeing this message, quoting error code' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3a' and error prefix of '3a'
-    When I click the error 'Back to login' link
+    Then I see a shutter 'Contact us if you keep seeing this message, quoting error code' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3a' and error prefix of '3a'
+    When I click the shutter 'Back to login' link
     Then I see the login page
 
   #465
@@ -29,7 +30,7 @@ Feature: Login error messages
       | EMIS      | 'Go to 111.nhs.uk'                                   | 'http://stubs.local.bitraft.io:8080/external/111/home'                                                              |
       | TPP       | 'Go to 111.nhs.uk'                                   | 'http://stubs.local.bitraft.io:8080/external/111/home'                                                              |
 
-    #465
+  #465
   Scenario Outline: Cannot log in as a TPP user with an age under 13
     Given I attempt to log in as a TPP user with an age under 13
     And 'NHS COVID Pass' responds to requests for type '/'
@@ -68,8 +69,8 @@ Feature: Login error messages
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     And '111' responds to requests for '/home'
     And 'COVID Pass or proof' responds to requests for type ''
-    And I see the error 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3r'
-    When I click the error <Link text> link with a url of <Link url>
+    And I see the shutter 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3r'
+    When I click the shutter <Link text> link with a url of <Link url>
     Then a new tab has been opened by the link
     Examples:
       | Link text         | Link url                                                                                 |
@@ -82,8 +83,8 @@ Feature: Login error messages
     Given I attempt to log in as a EMIS user without an NHS Number
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     And '111' responds to requests for '/home'
-    And I see the error 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3u'
-    When I click the error <Link text> link with a url of <Link url>
+    And I see the shutter 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3u'
+    When I click the shutter <Link text> link with a url of <Link url>
     Then a new tab has been opened by the link
     Examples:
       | Link text           | Link url                                                                            |
@@ -94,12 +95,12 @@ Feature: Login error messages
   Scenario: Cannot log in as a EMIS when the request timeout I see error code with "zn" prefix
     Given I attempt to log in as an EMIS and the CID request timeout
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'
-    Then I click an error 'Contact us if you keep seeing this message, quoting error code' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=zn' and error prefix of 'zn'
+    Then I click a shutter 'Contact us if you keep seeing this message, quoting error code' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=zn' and error prefix of 'zn'
     And a new tab has been opened by the link
 
 #502
   Scenario: Cannot log in when NHS Login returns internal server error response and I see error code with "3n" prefix
     Given I attempt to log in as an EMIS and received internal server error from CID
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'
-    Then I click an error 'Contact us if you keep seeing this message, quoting error code' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3n' and error prefix of '3n'
+    Then I click a shutter 'Contact us if you keep seeing this message, quoting error code' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3n' and error prefix of '3n'
     And a new tab has been opened by the link

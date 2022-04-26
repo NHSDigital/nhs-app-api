@@ -37,19 +37,25 @@ class ErrorDialogPageSteps {
         errorDialogPage.assertLink(linkText, url).click()
     }
 
-    @Then("^I see the error '(.*)' link with a url of '(.*)'$")
-    fun iSeeTheErrorLinkWithAUrlOf(linkText: String, url: String) {
-        errorDialogPage.assertLink(linkText, url)
-    }
-
-    @Then("^I see an error '(.*)' link with a url of '(.*)' and error prefix of '(.*)'$")
-    fun iSeeTheErrorLinkWithAUrlAndPrefix(linkText: String, url: String, prefix: String) {
-        errorDialogPage.assertLinkWithPrefix(linkText, url, prefix)
-    }
-
-    @Then("^I click an error '(.*)' link with a url of '(.*)' and error prefix of '(.*)'$")
-    fun iClickTheErrorLinkWithAUrlAndPrefix(linkText: String, url: String, prefix: String) {
+    @When("^I click the shutter '(.*)' link with a url of '(.*)'$")
+    fun iClickTheShutterLinkWithAUrlOf(linkText: String, url: String) {
         browser.storeCurrentTabCount()
-        errorDialogPage.assertLinkWithPrefix(linkText, url, prefix).click()
+        errorDialogPage.assertLinkOnShutter(linkText, url).click()
+    }
+
+    @Then("^I see the shutter '(.*)' link with a url of '(.*)'$")
+    fun iSeeTheShutterLinkWithAUrlOf(linkText: String, url: String) {
+        errorDialogPage.assertLinkOnShutter(linkText, url)
+    }
+
+    @Then("^I see a shutter '(.*)' link with a url of '(.*)' and error prefix of '(.*)'$")
+    fun iSeeTheShutterLinkWithAUrlAndPrefix(linkText: String, url: String, prefix: String) {
+        errorDialogPage.assertLinkWithPrefixOnShutter(linkText, url, prefix)
+    }
+
+    @Then("^I click a shutter '(.*)' link with a url of '(.*)' and error prefix of '(.*)'$")
+    fun iClickTheShutterLinkWithAUrlAndPrefix(linkText: String, url: String, prefix: String) {
+        browser.storeCurrentTabCount()
+        errorDialogPage.assertLinkWithPrefixOnShutter(linkText, url, prefix).click()
     }
 }

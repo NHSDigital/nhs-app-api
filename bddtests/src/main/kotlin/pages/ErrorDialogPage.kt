@@ -17,9 +17,6 @@ class ErrorDialogPage : HybridPageObject() {
     private val shutterTextFinderFormat = "$shutterContainerLocator//p[@data-purpose='%s']"
     private val shutterTextLocator = String.format(shutterTextFinderFormat, "msg-text")
 
-    private val shutterBackFinderFormat = "$shutterContainerLocator//p//a[@data-purpose='%s']"
-    private val shutterBackButtonLocator = String.format(shutterBackFinderFormat, "main-back-button")
-
     fun assertPageTitle(title: String): ErrorDialogPage {
         var retryCount = (TIME_TO_WAIT_FOR_ELEMENT / ELEMENT_RETRY_TIME).toInt()
         while (retryCount > 0) {
@@ -137,8 +134,8 @@ class ErrorDialogPage : HybridPageObject() {
         return element.assertIsVisible(message)
     }
 
-    fun assertShutterLinkWithPrefix(linkText: String, url: String? = null, prefix: String) : HybridPageElement {
-        var locator = "$shutterBackButtonLocator[contains(text(),'$linkText')]"
+    fun assertLinkWithPrefixOnShutter(linkText: String, url: String? = null, prefix: String) : HybridPageElement {
+        var locator = "$shutterContainerLocator//a[contains(text(),'$linkText')]"
         var message: String? = null
 
         if (!url.isNullOrBlank()) {

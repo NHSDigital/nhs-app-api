@@ -45,7 +45,7 @@ Feature: Messages/Biometric authentication/Login/Registration errors accessibili
   Scenario: '400 bad request - Supplied OAuth details are incomplete or invalid' page is captured
     Given I am logged into Citizen ID but am receiving invalid data
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'
-    Then I see an error 'Contact us if you keep seeing this message, quoting error code' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3a' and error prefix of '3a'
+    Then I see a shutter 'Contact us if you keep seeing this message, quoting error code' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3a' and error prefix of '3a'
     And the Errors_400_BadRequest_SuppliedOAuthDetailsIncompleteOrInvalid page is saved to disk
 
   Scenario: '464 ODS code associated with a user is not supported or no NHS number found' page is captured
@@ -69,5 +69,5 @@ Feature: Messages/Biometric authentication/Login/Registration errors accessibili
   Scenario: '504 Timeout when calling upstream system' page is captured
     Given I attempt to log in as an EMIS and the CID request timeout
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'
-    Then I click an error 'Contact us if you keep seeing this message, quoting error code' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=zn' and error prefix of 'zn'
+    Then I click a shutter 'Contact us if you keep seeing this message, quoting error code' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=zn' and error prefix of 'zn'
     And the Errors_504_TimeoutWhenCallingUpstreamSystem page is saved to disk
