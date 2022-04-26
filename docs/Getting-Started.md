@@ -14,17 +14,30 @@
   xcode-select --install
   ```
 
+* [Docker Desktop Client](https://docs.docker.com/get-docker/)
+
+  Follow the link and install the last version. Docker Desktop does require a licence but is free for the trial period or if you intend using the full Docker package, a licence will be required, [raise a support ticket for this](https://kainoshelp.atlassian.net/servicedesk/customer/portal/23/group/242/create/1027), remember to add an approvers name if required.
+
+* [Jetbrains Intellij Idea](https://www.jetbrains.com/idea/download)
+
+  Follow the link and install the latest version. You will require a licence for this IDE. [raise a support ticket for this](https://kainoshelp.atlassian.net/servicedesk/customer/portal/23/group/242/create/1027), remember to add an approvers name if required.
+
+* [Jetbrains Rider](https://www.jetbrains.com/rider/download)
+
+  Follow the link and install the latest version. You will require a licence for this IDE. [raise a support ticket for this](https://kainoshelp.atlassian.net/servicedesk/customer/portal/23/group/242/create/1027), remember to add an approvers name if required.
+  
+  Also, install the following plugin for Rider - [Rider Xamarin Android Support](https://plugins.jetbrains.com/plugin/12056-rider-xamarin-android-support)
+
+* [AppLayer VPN](https://kainoshelp.atlassian.net/servicedesk/customer/portal/23/group/242/create/1027)
+
+  Follow the link to create a new support ticket, in the license section select `other` and add the justification that you need a VPN to work on the project.
+
 * [HomeBrew](https://brew.sh)
 
   ```bash
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   ```
-
-* [DevTools](http://phase2.github.io/devtools/)
-
-  ```bash
-  brew install devtools
-  ```
+  **Please note** on MacOS you may require systems to give you temporary admin access to install Homebrew, you can do this by requesting temporary admin access via the following [ticket link](https://kainoshelp.atlassian.net/servicedesk/customer/portal/23/group/240/create/1006) and selecting `issues` under the my computer section.
 
 * [Visual Studio Code](https://code.visualstudio.com)
 
@@ -32,24 +45,18 @@
   brew install visual-studio-code
   ```
 
-* [Ruby](https://code.visualstudio.com)
-
-  ```bash
-  curl -L https://get.rvm.io | bash -s stable
-  rvm install ruby-2.7.2
-  ```
-
-* [Cocoapods](https://cocoapods.org)
-
-  ```bash
-  sudo gem install cocoapods
-  ```
-
 * [.NET Core SDK](https://dotnet.microsoft.com/download)
 
-  Follow the link and install version 3.1
+  Follow the link and install version 5.0, if you have already installed dotnet 6.0, you can also install the dotnet 5.0 sdk. 
+
+* [NPM](https://www.npmjs.com/package/npm)
+
+  ```bash
+  curl -qL https://www.npmjs.com/install.sh | sh
+  ```
 
 ## Configure Git
+You will need to run the SSH process on your laptop `ssh -keygen -C "your_email@hscic.gov.uk"` do not rename the file and do not add any password when requested. Copy the content of the "id_rsa.pub" file to ADO https://dev.azure.com/nhsapp/_usersSettings/keys. **NOTE**: if there is another id_rsa.pub file further down in the folder structure this may cause a clash in the keys.
 
 ```bash
 git config --global user.name "Your name"
@@ -158,16 +165,21 @@ make configure-package-feed
 
 You will be prompted for parameters when needed. Alternatively you can follow the [manual instructions](How-Tos/configure-azure-dev-ops-feeds.md#manually-configure-feeds).
 
+If you have trouble getting package feeds setup, you can [check the troubleshooting steps here](https://dev.azure.com/nhsapp/NHS%20App/_wiki/wikis/MonoRepo/649/getting-started)
+
 ## Secrets
 
 The team use [Keybase](https://keybase.io) to share and synchronise secrets.
-Sign up for an account if you don't already have one, and ask a friendly tech lead to add you to the team.
+Sign up for an account if you don't already have one, and ask a friendly tech lead to add you to the NHSOnline team.
+
 The secrets required for running the app locally are stored in the folder (`team/nhsonline/development_secrets`). If the keybase filesystem integration is installed and running these will be automatically copied to your home directory (`~/.nhsonline/secrets`) when the NHS App is run using make. Otherwise an error will be reported and the necessary files should be manually copied across.
+
+You may receive `Error Code 2806` after getting access to the Keybase files,  It can take an hour or more for the automated process to apply permissions to keybase files.
 
 ## Docker
 
 Locate the following file in Keybase: `team/nhsonline/docker-login.sh`.
 
-Copy the file to the root of your local repository and then run the script. 
+Copy the file to the root of your local repository. When copying `team/nhsonline/docker-login.sh` also copy `team/nhsonline/docker.password` to the same location and then run the `team/nhsonline/docker-login.sh` script in terminal. 
 
-This will need to be done only once at the beginning of your set up to prevent an "Authentification Required" error when building.
+This will need to be done only once at the beginning of your set up to prevent an "Authentication Required" error when building.
