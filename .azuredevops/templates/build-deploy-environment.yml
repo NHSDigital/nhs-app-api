@@ -375,7 +375,7 @@ stages:
                   --set clusterIP=$(clusterIP) \
                   --set networkPolicyEnabled=true \
                   --set createDefaultPrivateIngress=true \
-                  --set cluster=devuks6
+                  --set cluster=devuks3
               else
                 echo "Installing without namespace override file"
                 helm upgrade $releaseName $(System.DefaultWorkingDirectory)/nhsapp/nhsapp-chart/nhsapp/ \
@@ -404,7 +404,7 @@ stages:
                   --set clusterIP=$(clusterIP) \
                   --set networkPolicyEnabled=true \
                   --set createDefaultPrivateIngress=true \
-                  --set cluster=devuks6
+                  --set cluster=devuks3
               fi
           env:
             releaseName: $(lowercaseReleaseName)
