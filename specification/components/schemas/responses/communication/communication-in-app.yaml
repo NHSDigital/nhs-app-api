@@ -48,7 +48,7 @@ properties:
   recipient:
     type: array
     description:
-      An array of NHS numbers corresponding to the patient(s) to whom this in-app message was sent.
+      An array containing a single NHS number corresponding to the patient to whom this in-app message was sent.
     items:
       type: object
       properties:
