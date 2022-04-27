@@ -381,9 +381,21 @@ spec:
         - name: SIXTEEN_WEEKS_SLOTS_ENABLED
           value: "{{ $.Values.sixteenWeeksSlotsEnabled }}"
         - name: SECONDARY_CARE_BASE_URL
+        {{- if $.Values.environmentStubbed.wayfinderStubbed }}
+          value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/fhir/secondary-care/"
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}/fhir/secondary-care/"
+        {{- else }}
           value: "https://stubs-preprod.stubs.nonlive.nhsapp.service.nhs.uk/fhir/secondary-care/"
+        {{- end }}
         - name: NHSAPP_APIM_BASE_URL
+        {{- if $.Values.environmentStubbed.wayfinderStubbed }}
+          value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}"
+        {{- else if $.Values.environmentStubbed.useExternalStubs }}
+          value: "{{ $.Values.environmentStubbed.externalStubsBaseUrl }}"
+        {{- else }}
           value: "https://stubs-preprod.stubs.nonlive.nhsapp.service.nhs.uk/"
+        {{- end }}
         - name: NHSAPP_API_KEY
           valueFrom:
             secretKeyRef:

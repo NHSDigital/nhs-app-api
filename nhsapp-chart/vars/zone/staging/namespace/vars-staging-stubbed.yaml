@@ -30,6 +30,7 @@ environmentStubbed:
   nhsSearchStubbed: true
   ndopStubbed: true
   qualtricsStubbed: true
+  wayfinderStubbed: true
 
 emisCertEnabled: true
 emisPort: 444
