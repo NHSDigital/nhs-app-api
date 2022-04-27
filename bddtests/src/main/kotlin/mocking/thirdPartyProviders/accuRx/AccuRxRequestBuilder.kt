@@ -1,9 +1,37 @@
 package mocking.thirdPartyProviders.accuRx
 
 import mocking.MappingBuilder
+import mocking.models.Mapping
+import org.apache.http.HttpStatus
 
-open class AccuRxRequestBuilder(method: String ="GET", relativePath:String="")
-    : MappingBuilder(method, "$relativePath") {
+class AccuRxRequestBuilder(queryStringEntries: HashMap<String, String> = hashMapOf())
+    : MappingBuilder("GET", "/api/OpenIdConnect/AuthenticatePatientTriage") {
+    init {
+        if (queryStringEntries.isNotEmpty()) {
+            queryStringEntries.entries.forEach {
+                requestBuilder.andQueryParameter(it.key, it.value)
+            }
+        }
+    }
 
-    fun accuRxTriageAdviceRequest() = AccuRxTriageAdviceRequestBuilder()
+    fun messagesRequest() = AccuRxRequestBuilder(
+        hashMapOf("requestType" to "admin")
+    )
+
+    fun medicalAdviceRequest() = AccuRxRequestBuilder(
+        hashMapOf("requestType" to "medical")
+    )
+
+    fun respondWithPage(): Mapping {
+        return respondWith(HttpStatus.SC_OK) {
+            andHtmlBody("""
+                <html>
+                    <title>AccuRx</title>
+                    <body>
+                        <h1>AccuRx</h1>
+                    </body>
+                </html>
+            """.trimIndent())
+        }
+    }
 }

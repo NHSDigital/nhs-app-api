@@ -23,37 +23,37 @@ class AccuRxStepDefinitions : HybridPageObject() {
     private lateinit var healthAdvicePage: HealthAdvicePage
     private lateinit var accuRxPage: AccuRxPage
 
-    @Given("^I am a user who can view Triage Advice from accuRx$")
-    fun iAmAUserWhoCanViewTriageAdviceFromAccuRx() {
+    @Given("^I am a user who can view Medical Advice from accuRx$")
+    fun iAmAUserWhoCanViewMedicalAdviceFromAccuRx() {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_ACCURX)
     }
 
-    @Given("^I am a user who cannot view Triage Advice from accuRx$")
-    fun iAmAUserWhoCannotTriageAdviceFromAccuRx(){
+    @Given("^I am a user who cannot view Medical Advice from accuRx$")
+    fun iAmAUserWhoCannotMedicalAdviceFromAccuRx(){
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_NONE)
     }
 
-    @Given("^accuRx responds to requests for Triage Advice")
-    fun accuRxRespondsToRequestsForTriageAdvice() {
-        MockingClient.instance.forAccuRx.mock { AccuRxRequestBuilder().accuRxTriageAdviceRequest().respondWithPage() }
+    @Given("^accuRx responds to requests for Medical Advice")
+    fun accuRxRespondsToRequestsForMedicalAdvice() {
+        MockingClient.instance.forAccuRx.mock { AccuRxRequestBuilder().medicalAdviceRequest().respondWithPage() }
     }
 
-    @Then("^the link to accuRx Triage Advice is available on the Advice page$")
-    fun theLinkToAccuRxTriageAdviceIsAvailableOnTheAdvicePage() {
-        healthAdvicePage.accuRxTriageAdvice.assertIsVisible()
+    @Then("^the link to accuRx Medical Advice is available on the Advice page$")
+    fun theLinkToAccuRxMedicalAdviceIsAvailableOnTheAdvicePage() {
+        healthAdvicePage.accuRxMedicalAdvice.assertIsVisible()
     }
 
-    @Then("^the link to accuRx Triage Advice is not available on the Advice page$")
-    fun theLinkToAccuRxTriageAdviceIsNotAvailableOnTheAdvicePage() {
-        healthAdvicePage.accuRxTriageAdvice.assertElementNotPresent()
+    @Then("^the link to accuRx Medical Advice is not available on the Advice page$")
+    fun theLinkToAccuRxMedicalAdviceIsNotAvailableOnTheAdvicePage() {
+        healthAdvicePage.accuRxMedicalAdvice.assertElementNotPresent()
     }
 
-    @When("^I click the accuRx Triage Advice link on the Advice page")
-    fun iClickTheAccuRxTriageAdviceLinkOnTheAdvicePage() {
-        healthAdvicePage.accuRxTriageAdvice.click()
+    @When("^I click the accuRx Medical Advice link on the Advice page")
+    fun iClickTheAccuRxMedicalAdviceLinkOnTheAdvicePage() {
+        healthAdvicePage.accuRxMedicalAdvice.click()
     }
 
-    @Then("the Triage Advice warning message on the Redirector page explains the service is from accuRx$")
+    @Then("the Medical Advice warning message on the Redirector page explains the service is from accuRx$")
     fun assertAdviceWarningMessageContent() {
         redirector.interruptionCard.assertContent(
             "Ask your GP for advice\nThis service is provided by accuRx Limited",
@@ -64,6 +64,35 @@ class AccuRxStepDefinitions : HybridPageObject() {
     @Then("^I am navigated to a third party site for accuRx$")
     fun iNavigateToThirdPartySiteForAccuRx() {
         accuRxPage.assertTitleVisible()
+    }
+
+    @Given("^AccuRx responds to requests for messages$")
+    fun accurxRespondsToRequestsForMessages() {
+        MockingClient.instance.forAccuRx.mock { AccuRxRequestBuilder().messagesRequest().respondWithPage() }
+    }
+
+    @Given("^I am a user with proof level 5 who can view Ask Your Gp Surgery a Question from AccuRx$")
+    fun iAmAUserWithProofLevel5WhoCanViewAskYourGpSurgeryAQuestionFromAccuRxt(){
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_ACCURX, IdentityProofingLevel.P5)
+    }
+
+    @Given("^I am a user who can view Ask Your Gp Surgery a Question from AccuRx$")
+    fun iAmAUserWhoCanViewAskYourGpSurgeryAQuestionFromAccuRx(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_MESSAGES_ACCURX)
+    }
+
+    @Given("^I am a user who cannot view Ask Your Gp Surgery a Question from AccuRx$")
+    fun iAmAUserWhoCannotViewAskYourGpSurgeryAQuestionFromAccuRx() {
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_NONE)
+    }
+
+
+    @Then("the question warning message on the Redirector page explains the service is from AccuRx$")
+    fun assertQuestionWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+            "Ask your GP surgery a question\nThis service is provided by accuRx Limited",
+            "Your GP surgery or hospital has chosen this personal health record service provider.",
+            "Find out more about personal health record services")
     }
 
     private fun setupPatient(configuration: SJRJourneyType, proofLevel: IdentityProofingLevel? = null) {

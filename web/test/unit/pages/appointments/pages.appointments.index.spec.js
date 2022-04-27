@@ -73,6 +73,9 @@ describe('appointments hub', () => {
           case 'engage':
             linkElement = '#btn_engage_admin';
             break;
+          case 'accurx':
+            linkElement = '#btn_accurx_admin';
+            break;
           default:
             break;
         }

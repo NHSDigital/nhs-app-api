@@ -1,6 +1,6 @@
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
-  odsCode: emis_with_all_silvers
+  odsCode: emis_with_accurx
 journeys:
   appointments:
     provider: im1
@@ -28,44 +28,24 @@ journeys:
   prescriptions:
     provider: im1
   silverIntegrations:
-    accountAdmin:
-    - substraktPatientPack
-    - gncr
-    carePlans:
-    - pkb
+    accountAdmin: []
+    carePlans: []
     consultations:
-    - pkb
-    - engage
-    - accurx
-    consultationsAdmin:
-    - engage
-    healthTrackers:
-    - pkb
-    libraries:
-    - pkb
-    medicines:
-    - pkb
+      - accurx
+    consultationsAdmin: []
+    healthTrackers: []
+    libraries: []
+    medicines: []
     messages:
-    - pkb
-    - testSilverThirdPartyProvider
-    - gncr
-    - engage
-    - substraktPatientPack
-    - accurx
-    participation:
-    - substraktPatientPack
-    recordSharing:
-    - pkb
-    secondaryAppointments:
-    - ers
-    - pkb
-    - gncr
-    testResults:
-    - pkb
+      - accurx
+    participation: []
+    recordSharing: []
+    secondaryAppointments: []
+    testResults: []
     vaccineRecord:
-    - netCompany
-    - nhsd
-    - netCompanyP5
+      - netCompany
+      - nhsd
+      - netCompanyP5
   supplier: Emis
   supportsLinkedProfiles: true
   userInfo: true

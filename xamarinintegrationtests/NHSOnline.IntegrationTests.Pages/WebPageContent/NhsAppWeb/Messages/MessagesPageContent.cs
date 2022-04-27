@@ -19,9 +19,13 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Messages
 
         private WebText GpSurgeryMessagesText => WebText.WithTagAndText(_interactor, "p", "Send and view messages from staff at your GP surgery");
 
-        private WebMenuItem AskYourGpSurgeryAQuestionMenuItem => WebMenuItem.WithTitle(_interactor, "Ask your GP surgery a question");
+        private WebMenuItem AskYourGpSurgeryAQuestionMenuItemSubstrakt => WebMenuItem.WithTitle(_interactor, "Ask your GP surgery a question", "btn_substrakt_messages");
 
-        private WebText AskYourGpSurgeryAQuestionText => WebText.WithTagAndText(_interactor,"p", "Fill out a form to send a request, get advice or ask a question");
+        private WebText AskYourGpSurgeryAQuestionTextSubstrakt => WebText.WithTagAndText(_interactor,"p", "Fill out a form to send a request, get advice or ask a question");
+
+        private WebMenuItem AskYourGpSurgeryAQuestionMenuItemAccuRx => WebMenuItem.WithTitle(_interactor, "Ask your GP surgery a question", "btn_accurx_messages");
+
+        private WebText AskYourGpSurgeryAQuestionTextAccuRx => WebText.WithTagAndText(_interactor,"p", "Fill out a form to send a request, get advice or ask a question");
 
         private WebMenuItem OnlineConsultationsMenuItem => WebMenuItem.WithTitle(_interactor, "Online consultations");
 
@@ -40,7 +44,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Messages
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
             GpSurgeryMessagingMenuItem,
-            AskYourGpSurgeryAQuestionMenuItem,
+            AskYourGpSurgeryAQuestionMenuItemSubstrakt,
+            AskYourGpSurgeryAQuestionMenuItemAccuRx,
             OnlineConsultationsMenuItem,
             ConsultationsEventsAndMessagesPkbMenuItem,
             TestProviderMenuItem,
@@ -57,8 +62,15 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Messages
 
         public MessagesPageContent AssertSubstraktElements()
         {
-            AskYourGpSurgeryAQuestionMenuItem.AssertVisible();
-            AskYourGpSurgeryAQuestionText.AssertVisible();
+            AskYourGpSurgeryAQuestionMenuItemSubstrakt.AssertVisible();
+            AskYourGpSurgeryAQuestionTextSubstrakt.AssertVisible();
+            return this;
+        }
+
+        public MessagesPageContent AssertAccuRxElements()
+        {
+            AskYourGpSurgeryAQuestionMenuItemAccuRx.AssertVisible();
+            AskYourGpSurgeryAQuestionTextAccuRx.AssertVisible();
             return this;
         }
 
@@ -93,7 +105,9 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Messages
 
         public void KeyboardNavigateToGpSurgeryMessages(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(GpSurgeryMessagingMenuItem, navigation);
 
-        public void KeyboardNavigateToSubstrakt(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(AskYourGpSurgeryAQuestionMenuItem, navigation);
+        public void KeyboardNavigateToSubstrakt(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(AskYourGpSurgeryAQuestionMenuItemSubstrakt, navigation);
+
+        public void KeyboardNavigateToAccuRx(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(AskYourGpSurgeryAQuestionMenuItemAccuRx, navigation);
 
         public void KeyboardNavigateToGncr(AndroidKeyboardNavigation navigation) => KeyboardNavigateToAndActivateMenuItem(OnlineConsultationsMenuItem, navigation);
 

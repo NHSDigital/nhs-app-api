@@ -227,8 +227,9 @@ class ServiceJourneyRulesMapper {
             .add(
                 Supplier.EMIS, "F00013",
                 EnumSet.of(
-                    SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_ACCURX
-                )
+                    SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_ACCURX,
+                    SJRJourneyType.SILVER_INTEGRATION_MESSAGES_ACCURX
+                    )
             )
 
         fun findPatientForConfiguration(

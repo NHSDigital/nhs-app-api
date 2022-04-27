@@ -23,6 +23,9 @@ const knownServices = [{
 }, {
   id: 'substraktPatientPack',
   url: 'www.url.com',
+}, {
+  id: 'accurx',
+  url: 'www.url.com',
 }];
 
 const mountPage = ({
@@ -189,6 +192,10 @@ describe('messages page', () => {
       ['substraktPatientPack', true, false, false, false],
       ['substraktPatientPack', true, true, true, false],
       ['substraktPatientPack', false, false, true, false],
+      ['accurx', true, false, true, true],
+      ['accurx', true, false, false, false],
+      ['accurx', true, true, true, false],
+      ['accurx', false, false, true, false],
     ]).describe('%s messaging enabled is %s, proxy is %s', (
       provider, context, isProxying, isProofLevel9, expectedResult,
     ) => {
@@ -202,6 +209,9 @@ describe('messages page', () => {
             break;
           case 'substraktPatientPack':
             linkElement = '#btn_substrakt_messages';
+            break;
+          case 'accurx':
+            linkElement = '#btn_accurx_messages';
             break;
           default:
             break;

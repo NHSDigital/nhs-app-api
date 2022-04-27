@@ -255,7 +255,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [ "pkb", "testSilverThirdPartyProvider", "engage" , "gncr", "substraktPatientPack"]
+            "enum": [ "pkb", "testSilverThirdPartyProvider", "engage" , "gncr", "substraktPatientPack", "accurx" ]
           }
         },
         "participation":  {

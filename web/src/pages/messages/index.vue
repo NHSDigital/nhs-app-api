@@ -17,6 +17,10 @@
           id="btn_substrakt_messages"
           provider-id="substraktPatientPack"
           :provider-configuration="thirdPartyProvider.substraktPatientPack.messages" />
+        <third-party-jump-off-button v-if="accurxEnabled"
+                                     id="btn_accurx_messages"
+                                     provider-id="accurx"
+                                     :provider-configuration="thirdPartyProvider.accurx.messages"/>
         <third-party-jump-off-button v-if="engageEnabled"
                                      id="btn_engage_messages"
                                      provider-id="engage"
@@ -108,6 +112,14 @@ export default {
           serviceType: 'messages',
         },
       }),
+      hasAccurxMessages: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'accurx',
+          serviceType: 'messages',
+        },
+      }),
     };
   },
   computed: {
@@ -120,6 +132,7 @@ export default {
         this.engageEnabled ||
         this.pkbEnabled ||
         this.substraktEnabled ||
+        this.accurxEnabled ||
         this.testProviderEnabled;
     },
     shouldLoadGpMessages() {
@@ -141,6 +154,9 @@ export default {
     },
     substraktEnabled() {
       return this.hasSubstraktMessages && !this.isProxying && this.isProofLevel9;
+    },
+    accurxEnabled() {
+      return this.hasAccurxMessages && !this.isProxying && this.isProofLevel9;
     },
   },
   async mounted() {

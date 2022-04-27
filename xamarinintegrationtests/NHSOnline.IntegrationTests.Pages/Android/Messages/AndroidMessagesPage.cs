@@ -58,6 +58,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Messages
 
         public void KeyboardNavigateToSubstrakt() => PageContent.KeyboardNavigateToSubstrakt(KeyboardPageContentNavigation);
 
+        public void KeyboardNavigateToAccuRx() => PageContent.KeyboardNavigateToAccuRx(KeyboardPageContentNavigation);
+
         public void KeyboardNavigateToGncr() => PageContent.KeyboardNavigateToGncr(KeyboardPageContentNavigation);
 
         public void KeyboardNavigateToPkb() => PageContent.KeyboardNavigateToPkb(KeyboardPageContentNavigation);

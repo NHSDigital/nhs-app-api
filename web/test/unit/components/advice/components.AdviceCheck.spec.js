@@ -179,8 +179,8 @@ describe('Advice Check Menu', () => {
         expect(wrapper.find('#btn_engage_medical_advice').exists()).toBe(false);
       });
 
-      it('will hide accurx triage advice', () => {
-        expect(wrapper.find('#btn_accurx_triage_advice').exists()).toBe(false);
+      it('will hide accurx medical advice', () => {
+        expect(wrapper.find('#btn_accurx_medical_advice').exists()).toBe(false);
       });
     });
 
@@ -196,8 +196,8 @@ describe('Advice Check Menu', () => {
           expect(wrapper.find('#btn_engage_medical_advice').exists()).toBe(true);
         });
 
-        it('will show accurx triage advice', () => {
-          expect(wrapper.find('#btn_accurx_triage_advice').exists()).toBe(true);
+        it('will show accurx medical advice', () => {
+          expect(wrapper.find('#btn_accurx_medical_advice').exists()).toBe(true);
         });
       });
 
@@ -210,8 +210,8 @@ describe('Advice Check Menu', () => {
           expect(wrapper.find('#btn_engage_medical_advice').exists()).toBe(false);
         });
 
-        it('will hide accurx triage advice', () => {
-          expect(wrapper.find('#btn_accurx_triage_advice').exists()).toBe(false);
+        it('will hide accurx medical advice', () => {
+          expect(wrapper.find('#btn_accurx_medical_advice').exists()).toBe(false);
         });
       });
     });

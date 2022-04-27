@@ -17,6 +17,11 @@ class MessagesHubStepDefinitions {
         messagesHubPage.clickOnMenuItem("btn_substrakt_messages")
     }
 
+    @When("^I click the AccuRx Ask Your GP Surgery a Question link on the Messages Hub page$")
+    fun clickOnAccuRxAskYourGpSurgeryAQuestion() {
+        messagesHubPage.clickOnMenuItem("btn_accurx_messages")
+    }
+
     @When("^I click the Engage Messages link on the Messages Hub page$")
     fun clickOnEngageMessagesConsultations() {
         messagesHubPage.clickOnMenuItem("btn_engage_messages")

@@ -39,6 +39,7 @@ namespace NHSOnline.IntegrationTests.Messages
                 .AssertPageElements()
                 .AssertEngageElements()
                 .AssertSubstraktElements()
+                .AssertAccuRxElements()
                 .AssertPkbElements();
         }
 
@@ -61,6 +62,7 @@ namespace NHSOnline.IntegrationTests.Messages
                 .AssertPageElements()
                 .AssertEngageElements()
                 .AssertSubstraktElements()
+                .AssertAccuRxElements()
                 .AssertPkbElements();
         }
 
@@ -107,6 +109,15 @@ namespace NHSOnline.IntegrationTests.Messages
             AndroidMessagesPage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
+                .KeyboardNavigateToAccuRx();
+
+            AndroidWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "Ask your GP surgery a question")
+                .KeyboardNavigateBack();
+
+            AndroidMessagesPage
+                .AssertOnPage(driver)
+                .TabIntoFocus()
                 .KeyboardNavigateToPkb();
 
             AndroidWebIntegrationWarningPanelPage
@@ -128,6 +139,7 @@ namespace NHSOnline.IntegrationTests.Messages
                 .AssertPageElements()
                 .AssertEngageElements()
                 .AssertSubstraktElements()
+                .AssertAccuRxElements()
                 .AssertPkbElements();
         }
 
@@ -168,6 +180,16 @@ namespace NHSOnline.IntegrationTests.Messages
                 .AssertOnPage(driver)
                 .TabIntoFocus()
                 .KeyboardNavigateToSubstrakt();
+
+            AndroidWebIntegrationWarningPanelPage
+                .AssertOnPage(driver, "Ask your GP surgery a question");
+
+            driver.PressBackButton();
+
+            AndroidMessagesPage
+                .AssertOnPage(driver)
+                .TabIntoFocus()
+                .KeyboardNavigateToAccuRx();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, "Ask your GP surgery a question");

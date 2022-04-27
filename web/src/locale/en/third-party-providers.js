@@ -372,7 +372,7 @@ export default {
     providerName: 'accuRx Limited',
     jumpOffs: [
       {
-        id: 'triage',
+        id: 'medical',
         jumpOffContent: {
           headerText: 'Ask your GP for advice',
           descriptionText: 'Answer questions online and get a response from your GP surgery',
@@ -383,6 +383,20 @@ export default {
           serviceType: 'online consultation service',
           serviceTypePlural: 'online consultation services',
           linkHref: 'ONLINE_CONSULTATIONS_PRIVACY_URL',
+        },
+      },
+      {
+        id: 'messages',
+        jumpOffContent: {
+          headerText: 'Ask your GP surgery a question',
+          descriptionText: 'Fill out a form to send a request, get advice or ask a question',
+        },
+        thirdPartyWarning: {
+          featureName: 'Ask your GP surgery a question',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'PERSONAL_HEALTH_RECORDS_PRIVACY_URL',
         },
       },
     ],

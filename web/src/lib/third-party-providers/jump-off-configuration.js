@@ -189,11 +189,19 @@ const thirdPartyProvider = {
     },
   },
   accurx: {
-    triage: {
-      jumpOffId: 'triage',
-      redirectPath: '/api/OpenIdConnect/AuthenticatePatientTriage',
+    medical: {
+      acceptablePathsRegex: '^\\/api\\/OpenIdConnect\\/AuthenticatePatientTriage\\?requestType=medical$',
+      jumpOffId: 'medical',
+      redirectPath: '/api/OpenIdConnect/AuthenticatePatientTriage?requestType=medical',
       provider: 'accurx',
       serviceType: 'consultations',
+    },
+    messages: {
+      acceptablePathsRegex: '^\\/api\\/OpenIdConnect\\/AuthenticatePatientTriage\\?requestType=admin$',
+      jumpOffId: 'messages',
+      redirectPath: '/api/OpenIdConnect/AuthenticatePatientTriage?requestType=admin',
+      provider: 'accurx',
+      serviceType: 'messages',
     },
   },
 };

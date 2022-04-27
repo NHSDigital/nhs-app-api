@@ -11,7 +11,8 @@ namespace NHSOnline.HttpMocks.Domain
         UnknownOdsCode,
         Pkb,
         Substrakt,
-        Gncr
+        Gncr,
+        AccuRx
     }
 
     public static class EmisPatientOdsExtensions
@@ -28,6 +29,7 @@ namespace NHSOnline.HttpMocks.Domain
                 EmisPatientOds.Pkb => "emis_with_pkb",
                 EmisPatientOds.Substrakt => "emis_with_substrakt",
                 EmisPatientOds.Gncr => "emis_with_gncr",
+                EmisPatientOds.AccuRx => "emis_with_accurx",
                 _ => throw new ArgumentOutOfRangeException(nameof(odsCode), odsCode, null)
             };
         }
