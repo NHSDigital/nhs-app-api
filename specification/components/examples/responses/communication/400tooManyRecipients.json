@@ -1,0 +1,13 @@
+{
+    "resourceType": "OperationOutcome",
+    "issue": [
+        {
+            "severity": "error",
+            "code": "invalid",
+            "diagnostics": "Exceeds maximum length",
+            "expression": [
+                "recipient"
+            ]
+        }
+    ]
+}
