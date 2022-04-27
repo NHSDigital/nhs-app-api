@@ -44,7 +44,7 @@ parameters:
     type: string
     default: ' '
     values:
-      - ' '     
+      - ' '
       - aos
       - dev10
       - dev18
@@ -98,7 +98,7 @@ variables:
   native.xamarin.runFlipbookTests: ${{ parameters.runFlipbookTests }}
   native.xamarin.flipbookInterimFolderName: 'FlipbookResources'
   native.xamarin.flipbookPdfName: ''
-  native.xamarin.version: '2.8.0'
+  native.xamarin.version: '2.9.0'
   native.xamarin.ios.build.number:  $[counter(variables['native.version.number'], 1)]
   native.xamarin.android.build.number: $[counter('android', 100)]
   sjr.config.image.name: 'nhsonline-service-journey-prod-config'
@@ -109,7 +109,7 @@ variables:
   ${{ if startsWith(variables['Build.SourceBranch'], 'refs/pull/') }}:
     branchName: $[ replace(variables['System.PullRequest.SourceBranch'], 'refs/heads/', '') ]
   ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}:
-    tagName: $[ replace(variables['Build.SourceBranch'], 'refs/tags/', '') ]    
+    tagName: $[ replace(variables['Build.SourceBranch'], 'refs/tags/', '') ]
   ${{ if or(eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['source.tag'], 'True')) }}:
     docker.registry_release: nhsapprelease.azurecr.io
 
@@ -134,7 +134,7 @@ stages:
       displayName: Tag Name Validation
       jobs:
         - template: .azuredevops/templates/tag-name-validation.yml
-          parameters: 
+          parameters:
             tagName: $(tagName)
 
   - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
