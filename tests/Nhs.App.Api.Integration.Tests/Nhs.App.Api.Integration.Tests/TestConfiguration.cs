@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Nhs.App.Api.Integration.Tests
@@ -13,20 +12,13 @@ namespace Nhs.App.Api.Integration.Tests
         public string IssuerKey { get; }
         public string PrivateKeyFilePath { get; }
         public string KidValue { get; }
-        public string ApigeeApiKey  { get; }
-        public string[] SendToNhsNumbers { get; }
-        public string SendToOdsCode { get; }
+        public string SendToNhsNumber { get; }
 
         public TestConfiguration(TestContext context)
         {
             _context = context;
             ApplicationUrl = GetTestPropertySetting("ApplicationUrl");
-            ApigeeApiKey = GetTestPropertySetting("ApigeeApiKey");
-            SendToNhsNumbers = GetTestPropertySetting("SendToNhsNumbers")
-                .Split(',')
-                .Select(x => x.Trim())
-                .ToArray();
-            SendToOdsCode = GetTestPropertySetting("SendToOdsCode");
+            SendToNhsNumber = GetTestPropertySetting("SendToNhsNumber");
             TokenEndpoint = GetTestPropertySetting("TokenEndpoint");
             IssuerKey = GetTestPropertySetting("IssuerKey");
             PrivateKeyFilePath = GetTestPropertySetting("PrivateKeyFilePath");
