@@ -3,6 +3,12 @@
     <p data-purpose="info">
       {{ $t('onlineConsultations.unavailable.thisServiceIsNormallyAvailable') }}
     </p>
+    <h2 class="nhsuk-heading-m nhsuk-u-padding-bottom-0" data-purpose="coronavirus-heading">
+      {{ $t('onlineConsultations.unavailable.coronavirusIfYouThinkYouMightHave') }}
+    </h2>
+    <p data-purpose="coronavirus-info">
+      {{ $t('onlineConsultations.unavailable.coronavirusStayAtHome') }}
+    </p>
     <contact-111
       :text="$t('onlineConsultations.unavailable.forUrgentMedicalAdvice.text')"
       :aria-label="$t('onlineConsultations.unavailable.forUrgentMedicalAdvice.label')"/>

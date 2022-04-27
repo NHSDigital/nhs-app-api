@@ -23,7 +23,19 @@ class OnlineConsultationsUnavailablePage: HybridPageObject() {
             "[contains(text(), \"This service is normally available during your GP surgery's opening hours.\")]",
         page = this)
 
-   private val urgentMedicalAdvice = HybridPageElement(
+    private val coronavirusHeading = HybridPageElement(
+        webDesktopLocator = "//div[@data-purpose='olc-unavailable']" +
+            "//h2[@data-purpose='coronavirus-heading']" +
+            "[contains(text(), 'If you think you might have coronavirus')]",
+        page = this)
+
+    private val coronavirusInfo = HybridPageElement(
+        webDesktopLocator = "//div[@data-purpose='olc-unavailable']" +
+            "//p[@data-purpose='coronavirus-info']" +
+            "[contains(text(), 'Stay at home and avoid close contact with other people.')]",
+        page = this)
+
+    private val urgentMedicalAdvice = HybridPageElement(
             webDesktopLocator = "//div[@data-purpose='olc-unavailable']" +
                     "//p[@aria-label='For urgent medical advice, go to 111.nhs.uk or call one one one.']" +
                     "[contains(text(), 'For urgent medical advice, go to')]",
@@ -42,6 +54,8 @@ class OnlineConsultationsUnavailablePage: HybridPageObject() {
             adminHelpHeading.assertIsVisible()
         }
         info.assertIsVisible()
+        coronavirusHeading.assertIsVisible()
+        coronavirusInfo.assertIsVisible()
         urgentMedicalAdvice.assertIsVisible()
         coronavirusLink.assertIsVisible()
     }

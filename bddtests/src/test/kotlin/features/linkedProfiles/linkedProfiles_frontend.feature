@@ -138,7 +138,7 @@ Feature: Login with proxy access
     Then the Appointments Hub page is displayed
     And I click the GP Appointments link
     And the appointments shutter page is displayed
-    When I click the link called 'What to do if you think they might have coronavirus' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/covid'
+    When I click the link called 'Find out what to do if you think they might have coronavirus' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/covid'
     Then a new tab has been opened by the link
 
   Scenario Outline: A <GP System> user proxying on behalf of another will see the confirmation page after booking a repeat prescription
@@ -301,7 +301,7 @@ Feature: Login with proxy access
     Then the Appointments Hub page is displayed
     And I click the GP Appointments link
     And the appointments shutter page is displayed
-     When I click the link called 'What to do if you think they might have coronavirus' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/covid'
+     When I click the link called 'Find out what to do if you think they might have coronavirus' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/covid'
     Then a new tab has been opened by the link
 
   Scenario Outline: An <GP System> user can recover their session when in linked profiles on try again

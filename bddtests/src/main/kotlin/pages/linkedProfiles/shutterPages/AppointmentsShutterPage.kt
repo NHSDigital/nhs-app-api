@@ -21,7 +21,9 @@ class AppointmentsShutterPage : HybridPageObject() {
         val expected = ExpectedPageStructure()
                 .paragraph("Contact $patientName's GP surgery for more information.")
                 .paragraph("For urgent medical advice, go to 111.nhs.uk or call 111.")
-                .paragraph("What to do if you think they might have coronavirus")
+                .h2("If you think $patientName might have coronavirus")
+                .paragraph("They must stay at home and avoid close contact with other people.")
+                .paragraph("Find out what to do if you think they might have coronavirus")
                 .paragraph("Switch to your profile to book appointments for yourself.")
                 .button("Switch to my profile")
 

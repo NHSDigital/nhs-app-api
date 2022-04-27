@@ -34,7 +34,9 @@ export default {
         label: 'For urgent medical advice, go to 111.nhs.uk or call one one one.',
       },
       coronaVirus: {
-        link: 'What to do if you think they might have coronavirus',
+        header: 'If you think {name} might have coronavirus',
+        body: 'They must stay at home and avoid close contact with other people.',
+        link: 'Find out what to do if you think they might have coronavirus',
       },
       switch: 'Switch to your profile to book appointments for yourself.',
     },

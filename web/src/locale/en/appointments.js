@@ -97,11 +97,13 @@ export default {
   },
   coronavirus: {
     coronavirus: 'Coronavirus',
+    doNotVisitIfYouThinkYouMightHave: 'Do not visit your GP surgery if you think you might have coronavirus.',
+    stayAtHomeAndAvoidCloseContact: 'Stay at home and avoid close contact with other people.',
     forUrgentMedicalAdvice: {
       text: 'For urgent medical advice, go to',
       label: 'For urgent medical advice, go to 111.nhs.uk or call one one one.',
     },
-    findOutWhatToDo: 'What to do if you think you might have coronavirus',
+    findOutWhatToDo: 'Find out what to do if you think you might have coronavirus',
   },
   error: {
     contactYouSurgeryToCancel: 'Contact your GP surgery to cancel',
