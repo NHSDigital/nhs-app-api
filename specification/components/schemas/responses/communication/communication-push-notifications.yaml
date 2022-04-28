@@ -49,7 +49,7 @@ properties:
   recipient:
     type: array
     description:
-      An array of NHS numbers corresponding to the patient(s) to whom this push notification was sent.
+      An array containing a single NHS number corresponding to the patient to whom this push notification was sent.
     items:
       type: object
       properties:

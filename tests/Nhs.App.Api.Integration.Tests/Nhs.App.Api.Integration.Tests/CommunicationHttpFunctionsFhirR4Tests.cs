@@ -308,15 +308,15 @@ namespace Nhs.App.Api.Integration.Tests
 
         private static List<ResourceReference> BuildValidRecipient()
         {
-            var recipients = new List<ResourceReference>();
-
-            recipients.AddRange(_testConfiguration.SendToNhsNumbers.Select(nhsNumber => new ResourceReference
+            var recipient = new List<ResourceReference>
             {
-                Identifier = new Identifier(FhirR4IdentifierSystem.NhsNumber, nhsNumber),
-                Type = ResourceType.Patient.ToString()
-            }));
-
-            return recipients;
+                new ResourceReference
+                {
+                    Identifier = new Identifier(FhirR4IdentifierSystem.NhsNumber, _testConfiguration.SendToNhsNumber),
+                    Type = ResourceType.Patient.ToString()
+                }
+            };
+            return recipient;
         }
 
         private static async Task<CommunicationRequest> DeserializeFhirResponseAsync(HttpResponseMessage response)

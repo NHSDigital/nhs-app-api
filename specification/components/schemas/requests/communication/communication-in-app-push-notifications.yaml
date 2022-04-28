@@ -67,9 +67,9 @@ properties:
   recipient:
     type: array
     description:
-      An array of NHS numbers corresponding to the patient(s) to whom this in-app message and push notification should be sent. Each communication may be sent to between 1 and 100 distinct NHS numbers. The communication request will be rejected if any duplicated values exist in this array.
+      An array containing a single NHS number corresponding to the patient to whom this in-app message and push notification should be sent. Each communication may be sent to only a single recipient.
     minItems: 1
-    maxItems: 100
+    maxItems: 1
     items:
       type: object
       properties:
