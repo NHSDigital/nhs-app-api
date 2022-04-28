@@ -37,9 +37,7 @@ export default {
     next_week: 'Next week',
     noAppointmentsAvailable: 'No appointments available to book online at this time',
     youWillNeedToContactGpSurgery: 'You\'ll need to contact your GP surgery to book an appointment.',
-    ifYouThinkYouMightHaveCoronavirus: 'If you think you might have coronavirus',
-    stayAtHome: 'Stay at home and avoid close contact with other people.',
-    findOutWhatToDo: 'Find out what to do if you think you might have coronavirus',
+    findOutWhatToDo: 'What to do if you think you might have coronavirus',
     noAppointmentsAvailableForYourSearch: 'No appointments available for your search',
     noPreference: 'No preference',
     practiceMember: 'Practice member (optional)',
@@ -97,13 +95,11 @@ export default {
   },
   coronavirus: {
     coronavirus: 'Coronavirus',
-    doNotVisitIfYouThinkYouMightHave: 'Do not visit your GP surgery if you think you might have coronavirus.',
-    stayAtHomeAndAvoidCloseContact: 'Stay at home and avoid close contact with other people.',
     forUrgentMedicalAdvice: {
       text: 'For urgent medical advice, go to',
       label: 'For urgent medical advice, go to 111.nhs.uk or call one one one.',
     },
-    findOutWhatToDo: 'Find out what to do if you think you might have coronavirus',
+    findOutWhatToDo: 'What to do if you think you might have coronavirus',
   },
   error: {
     contactYouSurgeryToCancel: 'Contact your GP surgery to cancel',

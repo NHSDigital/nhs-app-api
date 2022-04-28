@@ -23,8 +23,6 @@
           :aria-label="$t('appointments.book.forUrgentMedicalAdvice.label')"/>
       </template>
       <template v-slot:actions>
-        <h2>{{ $t('appointments.book.ifYouThinkYouMightHaveCoronavirus') }}</h2>
-        <p>{{ $t('appointments.book.stayAtHome') }}</p>
         <p>
           <a :href="coronaConditionsUrl"
              rel="noopener noreferrer"

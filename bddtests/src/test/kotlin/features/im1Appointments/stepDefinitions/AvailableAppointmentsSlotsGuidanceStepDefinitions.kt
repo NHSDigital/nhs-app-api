@@ -46,11 +46,9 @@ class AvailableAppointmentsSlotsGuidanceStepDefinitions {
                 "to book an appointment.")
         noOnlineAppointmentsMessage.assertParagraphText("For urgent medical advice, go to")
         noOnlineAppointmentsMessage.assertLinkExists(
-                "Find out what to do if you think you might have coronavirus",
+                "What to do if you think you might have coronavirus",
                 "http://stubs.local.bitraft.io:8080/external/nhsuk/covid", false)
-        noOnlineAppointmentsMessage.assertCoronaVirusInfoHeader()
-                .assertParagraphText("Stay at home and avoid close contact with other people.")
-                .assertGpAdminMenuItem()
+        noOnlineAppointmentsMessage.assertGpAdminMenuItem()
                 .assertGpAdviceMenuItem()
                 .assertNHS111Online()
     }

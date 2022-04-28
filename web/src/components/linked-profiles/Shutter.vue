@@ -12,8 +12,6 @@
       <contact-111 id="shutter-medical-advice-text"
                    :text="medicalAdviceText" :aria-label="medicalAdviceLabel"/>
     </template>
-    <h2 v-if="coronaVirusHeaderText">{{ coronaVirusHeaderText }}</h2>
-    <p v-if="coronaVirusBodyText">{{ coronaVirusBodyText }}</p>
     <p v-if="coronaVirusLinkText">
       <analytics-tracked-tag
         :href="coronaConditionsUrl"
@@ -23,9 +21,6 @@
         {{ coronaVirusLinkText }}
       </analytics-tracked-tag>
     </p>
-    <hr v-if="coronaVirusHeaderText"
-        class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-1"
-        aria-hidden="true">
     <p v-if="switchText"
        id="shutter-switch-text"
        class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3">
@@ -65,8 +60,6 @@ export default {
   data() {
     return {
       coronaConditionsUrl: this.$store.$env.CORONA_CONDITIONS_URL,
-      coronaVirusBodyText: '',
-      coronaVirusHeaderText: '',
       coronaVirusLinkText: '',
       givenName: get('$store.state.linkedAccounts.actingAsUser.givenName')(this),
       subHeader: '',
@@ -92,15 +85,6 @@ export default {
 
     if (this.$te(`profiles.shutter.${featureName}.switch`)) {
       this.switchText = this.$t(`profiles.shutter.${featureName}.switch`);
-    }
-
-    if (this.$te(`profiles.shutter.${featureName}.coronaVirus.header`)) {
-      this.coronaVirusHeaderText = this.$t(`profiles.shutter.${featureName}.coronaVirus.header`)
-        .replace('{name}', this.givenName);
-    }
-
-    if (this.$te(`profiles.shutter.${featureName}.coronaVirus.body`)) {
-      this.coronaVirusBodyText = this.$t(`profiles.shutter.${featureName}.coronaVirus.body`);
     }
 
     if (this.$te(`profiles.shutter.${featureName}.coronaVirus.link`)) {
