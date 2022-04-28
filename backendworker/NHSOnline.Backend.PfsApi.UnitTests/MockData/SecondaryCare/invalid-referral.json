@@ -1,44 +1,50 @@
-[
-  {
-    "resourceType": "CarePlan",
-    "status": "active",
-    "intent": "order",
-    "activity": [
-      {
-        "reference": {
-          "type": "ServiceRequest"
-        },
-        "detail": {
-          "extension": [
-            {
+{
+  "resourceType": "Bundle",
+  "entry": [
+    {
+      "fullUrl": "https://servita-sandbox.co.uk/CarePlan/1",
+      "resource": {
+        "resourceType": "CarePlan",
+        "status": "active",
+        "intent": "order",
+        "activity": [
+          {
+            "reference": {
+              "type": "ServiceRequest"
+            },
+            "detail": {
               "extension": [
                 {
-                  "url": "codee",
-                  "valueCode": "eRS"
+                  "extension": [
+                    {
+                      "url": "codee",
+                      "valueCode": "eRS"
+                    }
+                  ],
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link"
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
+                  "valueCoding": {
+                    "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
+                    "code": "InReview"
+                  }
                 }
               ],
-              "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link"
-            },
-            {
-              "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
-              "valueCoding": {
-                "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
-                "code": "InReview"
-              }
+              "kind": "ServiceRequest",
+              "scheduledPeriod": {
+                "extension": [
+                  {
+                    "url": "https://fhir.nhs.net/ReviewDueDate",
+                    "valueDate": "2022-04-24"
+                  }
+                ]
+              },
+              "description": "Cardiology"
             }
-          ],
-          "kind": "ServiceRequest",
-          "scheduledPeriod": {
-            "extension": [
-              {
-                "url": "https://fhir.nhs.net/ReviewDueDate",
-                "valueDate": "2022-04-24"
-              }
-            ]
-          },
-          "description": "Cardiology"
-        }
+          }
+        ]
       }
-    ]
-  }
-]
+    }
+  ]
+}

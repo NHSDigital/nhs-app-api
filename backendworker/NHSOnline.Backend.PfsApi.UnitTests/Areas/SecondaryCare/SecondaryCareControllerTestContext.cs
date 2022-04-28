@@ -133,25 +133,63 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                 {
                     new Referral
                     {
-                        ReferralId = "521379702987",
+                        ReferralId = "861710366336",
                         Provider = WayfinderServiceProvider.eRS.ToString(),
-                        ReferredDateTime = new DateTimeOffset(2022, 03, 08, 11, 48, 56, TimeSpan.Zero),
-                        ReferrerOrganisation = "Birch GP Surgery",
-                        ServiceSpecialty = "Neurology",
+                        ReferredDateTime = new DateTimeOffset(2022, 04, 17, 15, 11, 45, TimeSpan.Zero),
+                        ReferrerOrganisation = "Willow GP Surgery",
+                        ServiceSpecialty = "Paediatrics",
                         Status = ReferralStatus.Bookable.ToString(),
-                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/ers/referrals?ubrn=521379702987",
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/ers/referrals?ubrn=861710366336",
                     },
                     new Referral
                     {
-                        ReferralId = "521379702986",
+                        ReferralId = "530793722623",
                         Provider = WayfinderServiceProvider.eRS.ToString(),
-                        ReferredDateTime = new DateTimeOffset(2022, 03, 09, 11, 48, 56, TimeSpan.Zero),
+                        ReferredDateTime = new DateTimeOffset(2022, 04, 17, 15, 11, 45, TimeSpan.Zero),
                         ReferrerOrganisation = "Willow GP Surgery",
-                        ReviewDueDate = new DateTimeOffset(2022, 03, 12, 0, 0, 0, 0, TimeSpan.Zero),
-                        ServiceSpecialty = "Cardiology",
-                        Status = ReferralStatus.InReview.ToString(),
-                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/ers/referrals?ubrn=521379702986",
+                        Status = ReferralStatus.Bookable.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/ers/referrals?ubrn=530793722623",
                     },
+                    new Referral
+                    {
+                        ReferralId = "839416493852",
+                        Provider = WayfinderServiceProvider.eRS.ToString(),
+                        ReferredDateTime = new DateTimeOffset(2022, 04, 24, 15, 11, 45, TimeSpan.Zero),
+                        ReferrerOrganisation = "Birch GP Surgery",
+                        Status = ReferralStatus.BookableWasCancelled.ToString(),
+                        ServiceSpecialty = "Neurology",
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/ers/referrals?ubrn=839416493852",
+                    },
+                    new Referral
+                    {
+                        ReferralId = "879675036211",
+                        Provider = WayfinderServiceProvider.eRS.ToString(),
+                        ReferredDateTime = new DateTimeOffset(2022, 04, 24, 15, 11, 45, TimeSpan.Zero),
+                        ReferrerOrganisation = "Birch GP Surgery",
+                        Status = ReferralStatus.BookableWasCancelled.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/ers/referrals?ubrn=879675036211",
+                    },
+                    new Referral
+                    {
+                        ReferralId = "156168111459",
+                        Provider = WayfinderServiceProvider.eRS.ToString(),
+                        ReferredDateTime = new DateTimeOffset(2022, 04, 25, 15, 11, 45, TimeSpan.Zero),
+                        ReferrerOrganisation = "Willow GP Surgery",
+                        ReviewDueDate = new DateTime(2022, 05, 08),
+                        Status = ReferralStatus.InReview.ToString(),
+                        ServiceSpecialty = "Cardiology",
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/ers/referrals?ubrn=156168111459",
+                    },
+                    new Referral
+                    {
+                    ReferralId = "628932202760",
+                    Provider = WayfinderServiceProvider.eRS.ToString(),
+                    ReferredDateTime = new DateTimeOffset(2022, 04, 25, 15, 11, 45, TimeSpan.Zero),
+                    ReferrerOrganisation = "Willow GP Surgery",
+                    ReviewDueDate = new DateTime(2022, 05, 08),
+                    Status = ReferralStatus.InReview.ToString(),
+                    DeepLinkUrl = "http://stubs.local.bitraft.io:8080/ers/referrals?ubrn=628932202760",
+                    }
                 },
                 UpcomingAppointments = new[]
                 {
@@ -159,26 +197,34 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                     {
                         AppointmentStatus = Appointment.AppointmentStatus.Booked.ToString(),
                         LocationDescription = "The Royal Victoria Hospital, Belfast, BT1",
-                        Provider = WayfinderServiceProvider.Netcall.ToString(),
-                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/netcall/upcoming-appointments?ubrn=276830555005",
+                        Provider = WayfinderServiceProvider.eRS.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/pkb/upcoming-appointments?ubrn=325308672657",
                     },
                     new UpcomingAppointment
                     {
                         AppointmentStatus = Appointment.AppointmentStatus.Booked.ToString(),
                         LocationDescription = "The Royal Victoria Hospital, Belfast, BT1",
                         Provider = WayfinderServiceProvider.eRS.ToString(),
-                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/ers/upcoming-appointments?ubrn=276830555004",
-                        AppointmentDateTime = new DateTimeOffset(2022, 01, 08, 11, 48, 56, TimeSpan.Zero),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/drdoctor/upcoming-appointments?ubrn=217478550345",
+                        AppointmentDateTime = new DateTimeOffset(2022, 05, 10, 15, 11, 45, TimeSpan.Zero),
                     },
                     new UpcomingAppointment
                     {
                         AppointmentStatus = Appointment.AppointmentStatus.Booked.ToString(),
                         LocationDescription = "The Royal Victoria Hospital, Belfast, BT1",
-                        Provider = WayfinderServiceProvider.PKB.ToString(),
-                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/pkb/upcoming-appointments?ubrn=276830555003",
-                        AppointmentDateTime = new DateTimeOffset(2022, 01, 09, 11, 48, 56, TimeSpan.Zero),
+                        Provider = WayfinderServiceProvider.eRS.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/drdoctor/upcoming-appointments?ubrn=927486036201",
+                        AppointmentDateTime = new DateTimeOffset(2022, 05, 19, 15, 11, 45, TimeSpan.Zero),
                     },
-                },
+                    new UpcomingAppointment
+                    {
+                        AppointmentStatus = Appointment.AppointmentStatus.Booked.ToString(),
+                        LocationDescription = "The Royal Victoria Hospital, Belfast, BT1",
+                        Provider = WayfinderServiceProvider.eRS.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/drdoctor/upcoming-appointments?ubrn=681078755944",
+                        AppointmentDateTime = new DateTimeOffset(2022, 05, 23, 15, 11, 45, TimeSpan.Zero),
+                    }
+                }
             };
         }
 

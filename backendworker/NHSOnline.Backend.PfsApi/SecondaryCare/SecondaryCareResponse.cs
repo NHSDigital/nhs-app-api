@@ -1,11 +1,9 @@
 extern alias r4;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 using r4::Hl7.Fhir.Model;
@@ -27,7 +25,7 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
 
         protected override bool FormatResponseIfUnsuccessful => false;
 
-        public CarePlan Body { get; private set; }
+        public Bundle Body { get; private set; }
 
         public async Task<SecondaryCareResponse> Parse(HttpResponseMessage responseMessage, ILogger logger)
         {
@@ -41,29 +39,20 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
                 : await ParseResponse(logger, stringResponse);
         }
 
-        private async Task<SecondaryCareResponse> ParseResponse(ILogger logger, string stringResponse)
+        private async Task<SecondaryCareResponse> ParseResponse(ILogger logger, string response)
         {
             if (!HasSuccessResponse)
             {
                 return this;
             }
 
-            var response = JsonConvert.DeserializeObject<List<object>>(stringResponse);
-            if (response is null)
-            {
-                logger.LogError("Failed to parse response to list from Aggregator");
-                FailedToParseResponse = true;
-
-                return this;
-            }
-
             try
             {
-                Body = await _fhirParser.ParseAsync<CarePlan>(response[0].ToString());
+                Body = await _fhirParser.ParseAsync<Bundle>(response);
             }
             catch (Exception e)
             {
-                logger.LogError(e, "Failed to parse CarePlan from Aggregator");
+                logger.LogError(e, "Failed to parse Bundle response from Aggregator");
                 FailedToParseResponse = true;
             }
 

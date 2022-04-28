@@ -12,6 +12,7 @@ using Code = Hl7.Fhir.Model.Code;
 using Coding = Hl7.Fhir.Model.Coding;
 using Extension = Hl7.Fhir.Model.Extension;
 using FhirUrl = Hl7.Fhir.Model.FhirUrl;
+using OperationOutcome = Hl7.Fhir.Model.OperationOutcome;
 using Period = Hl7.Fhir.Model.Period;
 
 namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
@@ -30,38 +31,58 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
             _logger = logger;
         }
 
-        public SummaryResponse Map(CarePlan carePlan)
+        public SummaryResponse Map(Bundle bundle)
         {
             var referrals = new List<Referral>();
             var upcomingAppointments = new List<UpcomingAppointment>();
 
-            foreach (var activity in carePlan.Activity)
+            foreach (var entry in bundle.Entry)
             {
-                switch (activity.Detail?.Kind)
+                if (entry.Resource?.GetType() == typeof(OperationOutcome))
                 {
-                    case CarePlan.CarePlanActivityKind.ServiceRequest:
+                    var operationOutcome = (OperationOutcome) entry.Resource;
+
+                    foreach (var issueComponent in operationOutcome.Issue)
                     {
-                        var referral = MapActivityToReferral(activity);
-
-                        if (referral is null)
-                        {
-                            return null;
-                        }
-
-                        referrals.Add(referral);
-                        break;
+                       _logger.LogError(MapErrorForLogging(issueComponent));
                     }
-                    case CarePlan.CarePlanActivityKind.Appointment:
+
+                    return null;
+                }
+
+                if (entry.Resource?.GetType() == typeof(CarePlan))
+                {
+                    var carePlan = (CarePlan) entry.Resource;
+
+                    foreach (var activity in carePlan.Activity)
                     {
-                        var appointment = MapActivityToUpcomingAppointment(activity);
-
-                        if (appointment is null)
+                        switch (activity.Detail?.Kind)
                         {
-                            return null;
-                        }
+                            case CarePlan.CarePlanActivityKind.ServiceRequest:
+                            {
+                                var referral = MapActivityToReferral(activity);
 
-                        upcomingAppointments.Add(appointment);
-                        break;
+                                if (referral is null)
+                                {
+                                    return null;
+                                }
+
+                                referrals.Add(referral);
+                                break;
+                            }
+                            case CarePlan.CarePlanActivityKind.Appointment:
+                            {
+                                var appointment = MapActivityToUpcomingAppointment(activity);
+
+                                if (appointment is null)
+                                {
+                                    return null;
+                                }
+
+                                upcomingAppointments.Add(appointment);
+                                break;
+                            }
+                        }
                     }
                 }
             }
@@ -69,7 +90,7 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
             return new SummaryResponse
             {
                 Referrals = referrals.OrderBy(r => r.ReferredDateTime).ToList(),
-                UpcomingAppointments = upcomingAppointments.OrderBy(a => a.AppointmentDateTime).ToList(),
+                UpcomingAppointments = upcomingAppointments.OrderBy(a => a.AppointmentDateTime).ToList()
             };
         }
 
@@ -286,5 +307,9 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
 
             return null;
         }
+
+        private string MapErrorForLogging(OperationOutcome.IssueComponent issueComponent) =>
+            $"Partial Error: Diagnostics: {issueComponent.Diagnostics}, " +
+                       $"Value Code: {issueComponent.Extension.First().Value}";
     }
 }

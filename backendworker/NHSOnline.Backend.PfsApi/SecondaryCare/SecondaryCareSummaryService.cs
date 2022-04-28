@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
 
                 if (summaryResponse is null)
                 {
-                    _logger.LogError("Unsuccessfully mapped {CarePlan} to {Response}. See previous log entries for more detail", nameof(CarePlan), nameof(SummaryResponse));
+                    _logger.LogError("Unsuccessfully mapped {Bundle} to {Response}. See previous log entries for more detail", nameof(Bundle), nameof(SummaryResponse));
                     return new SecondaryCareSummaryResult.BadGateway();
                 }
 
