@@ -138,7 +138,7 @@ export default {
         id: 'vaccineRecord',
         jumpOffContent: {
           headerText: 'NHS COVID Pass',
-          descriptionText: 'View and download your COVID Pass for places in England and Wales using this service, or for travel abroad',
+          descriptionText: 'View and download your COVID Pass for travel abroad',
         },
         thirdPartyWarning: {
           featureName: 'Get your NHS COVID Pass',
@@ -150,7 +150,7 @@ export default {
         id: 'vaccineRecordP5',
         jumpOffContent: {
           headerText: 'NHS COVID Pass',
-          descriptionText: 'View and download your COVID Pass for places in England and Wales using this service, or for travel abroad',
+          descriptionText: 'View and download your COVID Pass for travel abroad',
         },
       },
     ],
