@@ -147,7 +147,8 @@
                                 x:Name="NhsLogoWhite"
                                 AutomationProperties.IsInAccessibleTree="true"
                                 AutomationProperties.HelpText="NHS Logo"
-                                IsTabStop="False" />
+                                IsEnabled="False" 
+                                IsTabStop="False"/>
             
             <StackLayout StyleClass="BottomStackLayout" 
                          x:Name="BottomStackLayout"
