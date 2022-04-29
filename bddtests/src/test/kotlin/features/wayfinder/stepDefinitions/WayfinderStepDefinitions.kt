@@ -43,6 +43,12 @@ class WayfinderStepDefinitions {
         wayfinderFactory.setupReferralsAndUpcomingAppointmentsResponse()
     }
 
+    @Given("^I am a user who can view Wayfinder from Appointments and receives a partial error$")
+    fun iAmAUserWhoCanViewReferralsAndUpcomingAppointmentsPartialError(){
+        setupPatient(SJRJourneyType.WAYFINDER_ENABLED)
+        wayfinderFactory.setupReferralsAppointmentsPartialErrorResponse()
+    }
+
     @When("^the Wayfinder Aggregator API is timing out$")
     fun theAggregatorApiTimesOut(){
         wayfinderFactory.setupDelayedResponse()

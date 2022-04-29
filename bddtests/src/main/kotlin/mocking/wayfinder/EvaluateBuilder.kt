@@ -38,205 +38,489 @@ class EvaluateBuilder
         }
     }
 
+    fun returnReferralsAndUpcomingAppointmentsWithPartialError(): Mapping {
+        val response = """
+        {
+            "resourceType": "Bundle",
+            "type": "collection",
+            "entry" : [{
+                "fullUrl": "https://servita-sandbox.co.uk/CarePlan/1",
+                "search": {
+                    "mode": "match"
+                },
+                "resource": {
+            "resourceType": "CarePlan",
+            "status": "active",
+            "intent": "order",
+            "subject": {
+                "identifier": {
+                    "system": "https://fhir.nhs.uk/Id/nhs-number",
+                    "value": "1111111111"
+                }
+            },
+            "activity": [
+                {
+                    "reference": {
+                        "type": "ServiceRequest",
+                        "identifier": {
+                            "system": "https://fhir.nhs.uk/Id/UBRN",
+                            "value": "150059575801"
+                        }
+                    },
+                    "detail": {
+                        "extension": [
+                            {
+                                "extension": [
+                                    {
+                                        "url": "code",
+                                        "valueCode": "eRS"
+                                    }
+                                ],
+                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                                "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=150059575801"
+                            },
+                            {
+                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
+                                "valueCoding": {
+                                    "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
+                                    "code": "InReview"
+                                }
+                            }
+                        ],
+                        "kind": "ServiceRequest",
+                        "scheduledPeriod": {
+                            "extension": [
+                                {
+                                    "url": "https://fhir.nhs.net/ReviewDueDate",
+                                    "valueDate": "2125-04-06"
+                                }
+                            ],
+                            "start": "2022-03-20T12:18:10.0150205+00:00"
+                        },
+                        "performer": [
+                            {
+                                "type": "Organization",
+                                "display": "Mahogany GP Surgery"
+                            }
+                        ],
+                        "description": "Cardiology"
+                    }
+                },
+                {
+                    "reference": {
+                        "type": "ServiceRequest",
+                        "identifier": {
+                            "system": "https://fhir.nhs.uk/Id/UBRN",
+                            "value": "150059575802"
+                        }
+                    },
+                    "detail": {
+                        "extension": [
+                            {
+                                "extension": [
+                                    {
+                                        "url": "code",
+                                        "valueCode": "eRS"
+                                    }
+                                ],
+                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                                "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=150059575802"
+                            },
+                            {
+                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
+                                "valueCoding": {
+                                    "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
+                                    "code": "BookableWasCancelled"
+                                }
+                            }
+                        ],
+                        "kind": "ServiceRequest",
+                        "scheduledPeriod": {
+                            "start": "2022-03-20T12:18:10.0150205+00:00"
+                        },
+                        "performer": [
+                            {
+                                "type": "Organization",
+                                "display": "Mahogany GP Surgery"
+                            }
+                        ],
+                        "description": "Cardiology"
+                    }
+                },
+                {
+                    "reference": {
+                        "type": "ServiceRequest",
+                        "identifier": {
+                            "system": "https://fhir.nhs.uk/Id/UBRN",
+                            "value": "160023091234"
+                        }
+                    },
+                    "detail": {
+                        "extension": [
+                            {
+                                "extension": [
+                                    {
+                                        "url": "code",
+                                        "valueCode": "eRS"
+                                    }
+                                ],
+                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                                "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=160023091234"
+                            },
+                            {
+                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
+                                "valueCoding": {
+                                    "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
+                                    "code": "BookableWasCancelled"
+                                }
+                            }
+                        ],
+                        "kind": "ServiceRequest",
+                        "scheduledPeriod": {
+                            "start": "2022-03-20T12:18:10.0150205+00:00"
+                        },
+                        "performer": [
+                            {
+                                "type": "Organization",
+                                "display": "Chestnut GP Surgery"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "reference": {
+                        "type": "ServiceRequest",
+                        "identifier": {
+                            "system": "https://fhir.nhs.uk/Id/UBRN",
+                            "value": "150059575803"
+                        }
+                    },
+                    "detail": {
+                        "extension": [
+                            {
+                                "extension": [
+                                    {
+                                        "url": "code",
+                                        "valueCode": "eRS"
+                                    }
+                                ],
+                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                                "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=150059575803"
+                            },
+                            {
+                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
+                                "valueCoding": {
+                                    "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
+                                    "code": "Bookable"
+                                }
+                            }
+                        ],
+                        "kind": "ServiceRequest",
+                        "scheduledPeriod": {
+                            "extension": [
+                                {
+                                    "url": "https://fhir.nhs.net/ReviewDueDate",
+                                    "valueDate": "2022-04-06"
+                                }
+                            ],
+                            "start": "2022-03-20T12:18:10.0150205+00:00"
+                        },
+                        "performer": [
+                            {
+                                "type": "Organization",
+                                "display": "Mahogany GP Surgery"
+                            }
+                        ],
+                        "description": "Cardiology"
+                    }
+                },
+                {
+                    "reference": {
+                        "type": "ServiceRequest",
+                        "identifier": {
+                            "system": "https://fhir.nhs.uk/Id/UBRN",
+                            "value": "150059575804"
+                        }
+                    },
+                    "detail": {
+                        "extension": [
+                            {
+                                "extension": [
+                                    {
+                                        "url": "code",
+                                        "valueCode": "eRS"
+                                    }
+                                ],
+                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                                "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=150059575804"
+                            },
+                            {
+                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
+                                "valueCoding": {
+                                    "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
+                                    "code": "InReview"
+                                }
+                            }
+                        ],
+                        "kind": "ServiceRequest",
+                        "scheduledPeriod": {
+                            "extension": [
+                                {
+                                    "url": "https://fhir.nhs.net/ReviewDueDate",
+                                    "valueDate": "2022-04-01"
+                                }
+                            ],
+                            "start": "2022-03-20T12:18:10.0150205+00:00"
+                        },
+                        "performer": [
+                            {
+                                "type": "Organization",
+                                "display": "Mahogany GP Surgery"
+                            }
+                        ],
+                        "description": "Cardiology"
+                    }
+                },
+                {
+                    "reference": {
+                        "type": "ServiceRequest",
+                        "identifier": {
+                            "system": "https://fhir.nhs.uk/Id/UBRN",
+                            "value": "261160686915"
+                        }
+                    },
+                    "detail": {
+                        "extension": [
+                            {
+                                "extension": [
+                                    {
+                                        "url": "code",
+                                        "valueCode": "eRS"
+                                    }
+                                ],
+                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                                "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=261160686915"
+                            },
+                            {
+                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
+                                "valueCoding": {
+                                    "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
+                                    "code": "InReview"
+                                }
+                            }
+                        ],
+                        "kind": "ServiceRequest",
+                        "scheduledPeriod": {
+                            "start": "2022-03-20T12:18:10.0150205+00:00"
+                        },
+                        "performer": [
+                            {
+                                "type": "Organization",
+                                "display": "Oak GP Surgery"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "detail": {
+                        "extension": [
+                            {
+                                "extension": [
+                                    {
+                                        "url": "code",
+                                        "valueCode": "PKB"
+                                    }
+                                ],
+                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                                "valueUrl": "http://stubs.local.bitraft.io:8080/pkb/upcoming-appointments?reference=821923575528"
+                            },
+                            {
+                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                                "valueCoding": {
+                                    "system": "http://hl7.org/fhir/appointmentstatus",
+                                    "code": "Booked"
+                                }
+                            }
+                        ],
+                        "kind": "Appointment",
+                        "description": "General, The Willows, Croydon University Hospital, RJ6 5EU"
+                    }
+                },
+                {
+                    "detail": {
+                        "extension": [
+                            {
+                                "extension": [
+                                    {
+                                        "url": "code",
+                                        "valueCode": "PKB"
+                                    }
+                                ],
+                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                                "valueUrl": "http://stubs.local.bitraft.io:8080/pkb/upcoming-appointments?reference=932034686639"
+                            },
+                            {
+                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                                "valueCoding": {
+                                    "system": "http://hl7.org/fhir/appointmentstatus",
+                                    "code": "Booked"
+                                }
+                            }
+                        ],
+                        "kind": "Appointment",
+                        "scheduledPeriod": {
+                            "start": "2022-04-20T12:18:10.0150205+00:00"
+                        },
+                        "description": "Neurology, The Willows, Croydon University Hospital, RJ6 5EU"
+                    }
+                },
+                {
+                    "detail": {
+                        "extension": [
+                            {
+                                "extension": [
+                                    {
+                                        "url": "code",
+                                        "valueCode": "eRS"
+                                    }
+                                ],
+                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                                "valueUrl": "http://stubs.local.bitraft.io:8080/ers/upcoming-appointments?reference=100130035005"
+                            },
+                            {
+                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                                "valueCoding": {
+                                    "system": "http://hl7.org/fhir/appointmentstatus",
+                                    "code": "Booked"
+                                }
+                            }
+                        ],
+                        "kind": "Appointment",
+                        "description": "General, The Oaks, Wembley University Hospital, WJ7 6EU"
+                    }
+                },
+                {
+                    "detail": {
+                        "extension": [
+                            {
+                                "extension": [
+                                    {
+                                        "url": "code",
+                                        "valueCode": "eRS"
+                                    }
+                                ],
+                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                                "valueUrl": "http://stubs.local.bitraft.io:8080/ers/upcoming-appointments?reference=200240046006"
+                            },
+                            {
+                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                                "valueCoding": {
+                                    "system": "http://hl7.org/fhir/appointmentstatus",
+                                    "code": "Booked"
+                                }
+                            }
+                        ],
+                        "kind": "Appointment",
+                        "description": "Cardiology, The Oaks, Wembley University Hospital, WJ7 6EU"
+                    }
+                }
+            ]
+        }
+    }, 
+    {
+        "fullUrl": "https://servita-sandbox.co.uk/OperationOutcome/1",
+        "search": {
+            "mode": "include"
+        },
+        "resource": {
+            "resourceType": "OperationOutcome",
+            "issue": [{
+                    "severity": "error",
+                    "code": "timeout",
+                    "extension": [{
+                            "url": "https://fhir.nhs.uk/StructureDefinition/ExtensionErrorSource",
+                            "valueCode": "{client-id}"
+                        }],
+                    "diagnostics": "Patient Knows Best request timed out"
+                }]
+            }
+        }]
+    }
+    """
+
+        return respondWith(HttpStatus.SC_OK) {
+            andJsonBody(response)
+                    .build()
+        }
+    }
+
     fun returnReferralsAndNoUpcomingAppointments(): Mapping {
         val response = """
-[
-    {
-        "resourceType": "CarePlan",
-        "status": "active",
-        "intent": "order",
-        "subject": {
-            "identifier": {
-                "system": "https://fhir.nhs.uk/Id/nhs-number",
-                "value": "1111111111"
-            }
-        },
-        "activity": [
-            {
-                "reference": {
-                    "type": "ServiceRequest",
-                    "identifier": {
-                        "system": "https://fhir.nhs.uk/Id/UBRN",
-                        "value": "150059575801"
-                    }
-                },
-                "detail": {
-                    "extension": [
-                        {
-                            "extension": [
-                                {
-                                    "url": "code",
-                                    "valueCode": "eRS"
-                                }
-                            ],
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                            "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=150059575801"
-                        },
-                        {
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
-                            "valueCoding": {
-                                "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
-                                "code": "InReview"
+        {
+            "resourceType": "Bundle",
+            "entry": [
+                {
+                    "fullUrl": "https://servita-sandbox.co.uk/CarePlan/1",
+                    "resource": {
+                        "resourceType": "CarePlan",
+                        "status": "active",
+                        "intent": "order",
+                        "subject": {
+                            "identifier": {
+                                "system": "https://fhir.nhs.uk/Id/nhs-number",
+                                "value": "9659979258"
                             }
-                        }
-                    ],
-                    "kind": "ServiceRequest",
-                    "scheduledPeriod": {
-                        "extension": [
+                        },
+                        "activity": [
                             {
-                                "url": "https://fhir.nhs.net/ReviewDueDate",
-                                "valueDate": "2125-04-06"
-                            }
-                        ],
-                        "start": "2022-03-20T12:18:10.0150205+00:00"
-                    },
-                    "performer": [
-                        {
-                            "type": "Organization",
-                            "display": "Mahogany GP Surgery"
-                        }
-                    ],
-                    "description": "Cardiology"
-                }
-            },
-            {
-                "reference": {
-                    "type": "ServiceRequest",
-                    "identifier": {
-                        "system": "https://fhir.nhs.uk/Id/UBRN",
-                        "value": "150059575802"
-                    }
-                },
-                "detail": {
-                    "extension": [
-                        {
-                            "extension": [
-                                {
-                                    "url": "code",
-                                    "valueCode": "eRS"
+                                "reference": {
+                                    "type": "ServiceRequest",
+                                    "identifier": {
+                                        "system": "https://fhir.nhs.uk/Id/UBRN",
+                                        "value": "935345565437"
+                                    }
+                                },
+                                "detail": {
+                                    "extension": [
+                                        {
+                                            "extension": [
+                                                {
+                                                    "url": "code",
+                                                    "valueCode": "eRS"
+                                                }
+                                            ],
+                                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                                            "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?ubrn=935345565437"
+                                        },
+                                        {
+                                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
+                                            "valueCoding": {
+                                                "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
+                                                "code": "BookableWasCancelled"
+                                            }
+                                        }
+                                    ],
+                                    "kind": "ServiceRequest",
+                                    "scheduledPeriod": {
+                                        "start": "2022-04-26T14:23:09+00:00"
+                                    },
+                                    "performer": [
+                                        {
+                                            "type": "Organization",
+                                            "display": "Birch GP Surgery"
+                                        }
+                                    ],
+                                    "description": "Neurology"
                                 }
-                            ],
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                            "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=150059575802"
-                        },
-                        {
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
-                            "valueCoding": {
-                                "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
-                                "code": "BookableWasCancelled"
                             }
-                        }
-                    ],
-                    "kind": "ServiceRequest",
-                    "scheduledPeriod": {
-                        "start": "2022-03-20T12:18:10.0150205+00:00"
+                        ]
                     },
-                    "performer": [
-                        {
-                            "type": "Organization",
-                            "display": "Mahogany GP Surgery"
-                        }
-                    ],
-                    "description": "Cardiology"
-                }
-            },
-            {
-                "reference": {
-                    "type": "ServiceRequest",
-                    "identifier": {
-                        "system": "https://fhir.nhs.uk/Id/UBRN",
-                        "value": "150059575803"
+                    "search": {
+                        "mode": "match"
                     }
-                },
-                "detail": {
-                    "extension": [
-                        {
-                            "extension": [
-                                {
-                                    "url": "code",
-                                    "valueCode": "eRS"
-                                }
-                            ],
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                            "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=150059575803"
-                        },
-                        {
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
-                            "valueCoding": {
-                                "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
-                                "code": "Bookable"
-                            }
-                        }
-                    ],
-                    "kind": "ServiceRequest",
-                    "scheduledPeriod": {
-                        "extension": [
-                            {
-                                "url": "https://fhir.nhs.net/ReviewDueDate",
-                                "valueDate": "2022-04-06"
-                            }
-                        ],
-                        "start": "2022-03-20T12:18:10.0150205+00:00"
-                    },
-                    "performer": [
-                        {
-                            "type": "Organization",
-                            "display": "Mahogany GP Surgery"
-                        }
-                    ],
-                    "description": "Cardiology"
                 }
-            },
-            {
-                "reference": {
-                    "type": "ServiceRequest",
-                    "identifier": {
-                        "system": "https://fhir.nhs.uk/Id/UBRN",
-                        "value": "150059575804"
-                    }
-                },
-                "detail": {
-                    "extension": [
-                        {
-                            "extension": [
-                                {
-                                    "url": "code",
-                                    "valueCode": "eRS"
-                                }
-                            ],
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                            "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=150059575804"
-                        },
-                        {
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
-                            "valueCoding": {
-                                "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
-                                "code": "InReview"
-                            }
-                        }
-                    ],
-                    "kind": "ServiceRequest",
-                    "scheduledPeriod": {
-                        "extension": [
-                            {
-                                "url": "https://fhir.nhs.net/ReviewDueDate",
-                                "valueDate": "2022-04-01"
-                            }
-                        ],
-                        "start": "2022-03-20T12:18:10.0150205+00:00"
-                    },
-                    "performer": [
-                        {
-                            "type": "Organization",
-                            "display": "Mahogany GP Surgery"
-                        }
-                    ],
-                    "description": "Cardiology"
-                }
-            }
-        ]
-    }
-] 
+            ]
+        }
         """
 
         return respondWith(HttpStatus.SC_OK) {
@@ -248,386 +532,392 @@ class EvaluateBuilder
 
     fun returnReferralsAndUpcomingAppointments(): Mapping {
         val response = """
-[
-    {
-        "resourceType": "CarePlan",
-        "status": "active",
-        "intent": "order",
-        "subject": {
-            "identifier": {
-                "system": "https://fhir.nhs.uk/Id/nhs-number",
-                "value": "1111111111"
-            }
-        },
-        "activity": [
+        {
+          "resourceType": "Bundle",
+          "entry": [
             {
-                "reference": {
-                    "type": "ServiceRequest",
-                    "identifier": {
+              "fullUrl": "https://servita-sandbox.co.uk/CarePlan/1",
+              "resource": {
+                "resourceType": "CarePlan",
+                "status": "active",
+                "intent": "order",
+                "subject": {
+                  "identifier": {
+                    "system": "https://fhir.nhs.uk/Id/nhs-number",
+                    "value": "1111111111"
+                  }
+                },
+                "activity": [
+                  {
+                    "reference": {
+                      "type": "ServiceRequest",
+                      "identifier": {
                         "system": "https://fhir.nhs.uk/Id/UBRN",
                         "value": "150059575801"
-                    }
-                },
-                "detail": {
-                    "extension": [
+                      }
+                    },
+                    "detail": {
+                      "extension": [
                         {
-                            "extension": [
-                                {
-                                    "url": "code",
-                                    "valueCode": "eRS"
-                                }
-                            ],
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                            "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=150059575801"
+                          "extension": [
+                            {
+                              "url": "code",
+                              "valueCode": "eRS"
+                            }
+                          ],
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                          "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=150059575801"
                         },
                         {
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
-                            "valueCoding": {
-                                "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
-                                "code": "InReview"
-                            }
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
+                          "valueCoding": {
+                            "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
+                            "code": "InReview"
+                          }
                         }
-                    ],
-                    "kind": "ServiceRequest",
-                    "scheduledPeriod": {
+                      ],
+                      "kind": "ServiceRequest",
+                      "scheduledPeriod": {
                         "extension": [
-                            {
-                                "url": "https://fhir.nhs.net/ReviewDueDate",
-                                "valueDate": "2125-04-06"
-                            }
+                          {
+                            "url": "https://fhir.nhs.net/ReviewDueDate",
+                            "valueDate": "2125-04-06"
+                          }
                         ],
                         "start": "2022-03-20T12:18:10.0150205+00:00"
-                    },
-                    "performer": [
+                      },
+                      "performer": [
                         {
-                            "type": "Organization",
-                            "display": "Mahogany GP Surgery"
+                          "type": "Organization",
+                          "display": "Mahogany GP Surgery"
                         }
-                    ],
-                    "description": "Cardiology"
-                }
-            },
-            {
-                "reference": {
-                    "type": "ServiceRequest",
-                    "identifier": {
+                      ],
+                      "description": "Cardiology"
+                    }
+                  },
+                  {
+                    "reference": {
+                      "type": "ServiceRequest",
+                      "identifier": {
                         "system": "https://fhir.nhs.uk/Id/UBRN",
                         "value": "150059575802"
-                    }
-                },
-                "detail": {
-                    "extension": [
+                      }
+                    },
+                    "detail": {
+                      "extension": [
                         {
-                            "extension": [
-                                {
-                                    "url": "code",
-                                    "valueCode": "eRS"
-                                }
-                            ],
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                            "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=150059575802"
+                          "extension": [
+                            {
+                              "url": "code",
+                              "valueCode": "eRS"
+                            }
+                          ],
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                          "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=150059575802"
                         },
                         {
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
-                            "valueCoding": {
-                                "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
-                                "code": "BookableWasCancelled"
-                            }
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
+                          "valueCoding": {
+                            "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
+                            "code": "BookableWasCancelled"
+                          }
                         }
-                    ],
-                    "kind": "ServiceRequest",
-                    "scheduledPeriod": {
+                      ],
+                      "kind": "ServiceRequest",
+                      "scheduledPeriod": {
                         "start": "2022-03-20T12:18:10.0150205+00:00"
-                    },
-                    "performer": [
+                      },
+                      "performer": [
                         {
-                            "type": "Organization",
-                            "display": "Mahogany GP Surgery"
+                          "type": "Organization",
+                          "display": "Mahogany GP Surgery"
                         }
-                    ],
-                    "description": "Cardiology"
-                }
-            },
-            {
-                "reference": {
-                    "type": "ServiceRequest",
-                    "identifier": {
+                      ],
+                      "description": "Cardiology"
+                    }
+                  },
+                  {
+                    "reference": {
+                      "type": "ServiceRequest",
+                      "identifier": {
                         "system": "https://fhir.nhs.uk/Id/UBRN",
                         "value": "160023091234"
-                    }
-                },
-                "detail": {
-                    "extension": [
+                      }
+                    },
+                    "detail": {
+                      "extension": [
                         {
-                            "extension": [
-                                {
-                                    "url": "code",
-                                    "valueCode": "eRS"
-                                }
-                            ],
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                            "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=160023091234"
+                          "extension": [
+                            {
+                              "url": "code",
+                              "valueCode": "eRS"
+                            }
+                          ],
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                          "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=160023091234"
                         },
                         {
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
-                            "valueCoding": {
-                                "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
-                                "code": "BookableWasCancelled"
-                            }
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
+                          "valueCoding": {
+                            "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
+                            "code": "BookableWasCancelled"
+                          }
                         }
-                    ],
-                    "kind": "ServiceRequest",
-                    "scheduledPeriod": {
+                      ],
+                      "kind": "ServiceRequest",
+                      "scheduledPeriod": {
                         "start": "2022-03-20T12:18:10.0150205+00:00"
-                    },
-                    "performer": [
+                      },
+                      "performer": [
                         {
-                            "type": "Organization",
-                            "display": "Chestnut GP Surgery"
+                          "type": "Organization",
+                          "display": "Chestnut GP Surgery"
                         }
-                    ]
-                }
-            },
-            {
-                "reference": {
-                    "type": "ServiceRequest",
-                    "identifier": {
+                      ]
+                    }
+                  },
+                  {
+                    "reference": {
+                      "type": "ServiceRequest",
+                      "identifier": {
                         "system": "https://fhir.nhs.uk/Id/UBRN",
                         "value": "150059575803"
-                    }
-                },
-                "detail": {
-                    "extension": [
+                      }
+                    },
+                    "detail": {
+                      "extension": [
                         {
-                            "extension": [
-                                {
-                                    "url": "code",
-                                    "valueCode": "eRS"
-                                }
-                            ],
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                            "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=150059575803"
+                          "extension": [
+                            {
+                              "url": "code",
+                              "valueCode": "eRS"
+                            }
+                          ],
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                          "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=150059575803"
                         },
                         {
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
-                            "valueCoding": {
-                                "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
-                                "code": "Bookable"
-                            }
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
+                          "valueCoding": {
+                            "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
+                            "code": "Bookable"
+                          }
                         }
-                    ],
-                    "kind": "ServiceRequest",
-                    "scheduledPeriod": {
+                      ],
+                      "kind": "ServiceRequest",
+                      "scheduledPeriod": {
                         "extension": [
-                            {
-                                "url": "https://fhir.nhs.net/ReviewDueDate",
-                                "valueDate": "2022-04-06"
-                            }
+                          {
+                            "url": "https://fhir.nhs.net/ReviewDueDate",
+                            "valueDate": "2022-04-06"
+                          }
                         ],
                         "start": "2022-03-20T12:18:10.0150205+00:00"
-                    },
-                    "performer": [
+                      },
+                      "performer": [
                         {
-                            "type": "Organization",
-                            "display": "Mahogany GP Surgery"
+                          "type": "Organization",
+                          "display": "Mahogany GP Surgery"
                         }
-                    ],
-                    "description": "Cardiology"
-                }
-            },
-            {
-                "reference": {
-                    "type": "ServiceRequest",
-                    "identifier": {
+                      ],
+                      "description": "Cardiology"
+                    }
+                  },
+                  {
+                    "reference": {
+                      "type": "ServiceRequest",
+                      "identifier": {
                         "system": "https://fhir.nhs.uk/Id/UBRN",
                         "value": "150059575804"
-                    }
-                },
-                "detail": {
-                    "extension": [
+                      }
+                    },
+                    "detail": {
+                      "extension": [
                         {
-                            "extension": [
-                                {
-                                    "url": "code",
-                                    "valueCode": "eRS"
-                                }
-                            ],
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                            "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=150059575804"
+                          "extension": [
+                            {
+                              "url": "code",
+                              "valueCode": "eRS"
+                            }
+                          ],
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                          "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=150059575804"
                         },
                         {
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
-                            "valueCoding": {
-                                "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
-                                "code": "InReview"
-                            }
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
+                          "valueCoding": {
+                            "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
+                            "code": "InReview"
+                          }
                         }
-                    ],
-                    "kind": "ServiceRequest",
-                    "scheduledPeriod": {
+                      ],
+                      "kind": "ServiceRequest",
+                      "scheduledPeriod": {
                         "extension": [
-                            {
-                                "url": "https://fhir.nhs.net/ReviewDueDate",
-                                "valueDate": "2022-04-01"
-                            }
+                          {
+                            "url": "https://fhir.nhs.net/ReviewDueDate",
+                            "valueDate": "2022-04-01"
+                          }
                         ],
                         "start": "2022-03-20T12:18:10.0150205+00:00"
-                    },
-                    "performer": [
+                      },
+                      "performer": [
                         {
-                            "type": "Organization",
-                            "display": "Mahogany GP Surgery"
+                          "type": "Organization",
+                          "display": "Mahogany GP Surgery"
                         }
-                    ],
-                    "description": "Cardiology"
-                }
-            },
-            {
-                "reference": {
-                    "type": "ServiceRequest",
-                    "identifier": {
+                      ],
+                      "description": "Cardiology"
+                    }
+                  },
+                  {
+                    "reference": {
+                      "type": "ServiceRequest",
+                      "identifier": {
                         "system": "https://fhir.nhs.uk/Id/UBRN",
                         "value": "261160686915"
-                    }
-                },
-                "detail": {
-                    "extension": [
+                      }
+                    },
+                    "detail": {
+                      "extension": [
                         {
-                            "extension": [
-                                {
-                                    "url": "code",
-                                    "valueCode": "eRS"
-                                }
-                            ],
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                            "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=261160686915"
+                          "extension": [
+                            {
+                              "url": "code",
+                              "valueCode": "eRS"
+                            }
+                          ],
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                          "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?reference=261160686915"
                         },
                         {
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
-                            "valueCoding": {
-                                "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
-                                "code": "InReview"
-                            }
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
+                          "valueCoding": {
+                            "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
+                            "code": "InReview"
+                          }
                         }
-                    ],
-                    "kind": "ServiceRequest",
-                    "scheduledPeriod": {
+                      ],
+                      "kind": "ServiceRequest",
+                      "scheduledPeriod": {
                         "start": "2022-03-20T12:18:10.0150205+00:00"
-                    },
-                    "performer": [
+                      },
+                      "performer": [
                         {
-                            "type": "Organization",
-                            "display": "Oak GP Surgery"
+                          "type": "Organization",
+                          "display": "Oak GP Surgery"
                         }
-                    ]
-                }
-            },
-            {
-                "detail": {
-                    "extension": [
+                      ]
+                    }
+                  },
+                  {
+                    "detail": {
+                      "extension": [
                         {
-                            "extension": [
-                                {
-                                    "url": "code",
-                                    "valueCode": "PKB"
-                                }
-                            ],
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                            "valueUrl": "http://stubs.local.bitraft.io:8080/pkb/upcoming-appointments?reference=821923575528"
+                          "extension": [
+                            {
+                              "url": "code",
+                              "valueCode": "PKB"
+                            }
+                          ],
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                          "valueUrl": "http://stubs.local.bitraft.io:8080/pkb/upcoming-appointments?reference=821923575528"
                         },
                         {
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
-                            "valueCoding": {
-                                "system": "http://hl7.org/fhir/appointmentstatus",
-                                "code": "Booked"
-                            }
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                          "valueCoding": {
+                            "system": "http://hl7.org/fhir/appointmentstatus",
+                            "code": "Booked"
+                          }
                         }
-                    ],
-                    "kind": "Appointment",
-                    "description": "General, The Willows, Croydon University Hospital, RJ6 5EU"
-                }
-            },
-            {
-                "detail": {
-                    "extension": [
+                      ],
+                      "kind": "Appointment",
+                      "description": "General, The Willows, Croydon University Hospital, RJ6 5EU"
+                    }
+                  },
+                  {
+                    "detail": {
+                      "extension": [
                         {
-                            "extension": [
-                                {
-                                    "url": "code",
-                                    "valueCode": "PKB"
-                                }
-                            ],
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                            "valueUrl": "http://stubs.local.bitraft.io:8080/pkb/upcoming-appointments?reference=932034686639"
+                          "extension": [
+                            {
+                              "url": "code",
+                              "valueCode": "PKB"
+                            }
+                          ],
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                          "valueUrl": "http://stubs.local.bitraft.io:8080/pkb/upcoming-appointments?reference=932034686639"
                         },
                         {
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
-                            "valueCoding": {
-                                "system": "http://hl7.org/fhir/appointmentstatus",
-                                "code": "Booked"
-                            }
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                          "valueCoding": {
+                            "system": "http://hl7.org/fhir/appointmentstatus",
+                            "code": "Booked"
+                          }
                         }
-                    ],
-                    "kind": "Appointment",
-                    "scheduledPeriod": {
+                      ],
+                      "kind": "Appointment",
+                      "scheduledPeriod": {
                         "start": "2022-04-20T12:18:10.0150205+00:00"
-                    },
-                    "description": "Neurology, The Willows, Croydon University Hospital, RJ6 5EU"
-                }
-            },
-            {
-                "detail": {
-                    "extension": [
+                      },
+                      "description": "Neurology, The Willows, Croydon University Hospital, RJ6 5EU"
+                    }
+                  },
+                  {
+                    "detail": {
+                      "extension": [
                         {
-                            "extension": [
-                                {
-                                    "url": "code",
-                                    "valueCode": "eRS"
-                                }
-                            ],
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                            "valueUrl": "http://stubs.local.bitraft.io:8080/ers/upcoming-appointments?reference=100130035005"
+                          "extension": [
+                            {
+                              "url": "code",
+                              "valueCode": "eRS"
+                            }
+                          ],
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                          "valueUrl": "http://stubs.local.bitraft.io:8080/ers/upcoming-appointments?reference=100130035005"
                         },
                         {
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
-                            "valueCoding": {
-                                "system": "http://hl7.org/fhir/appointmentstatus",
-                                "code": "Booked"
-                            }
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                          "valueCoding": {
+                            "system": "http://hl7.org/fhir/appointmentstatus",
+                            "code": "Booked"
+                          }
                         }
-                    ],
-                    "kind": "Appointment",
-                    "description": "General, The Oaks, Wembley University Hospital, WJ7 6EU"
-                }
-            },
-            {
-                "detail": {
-                    "extension": [
+                      ],
+                      "kind": "Appointment",
+                      "description": "General, The Oaks, Wembley University Hospital, WJ7 6EU"
+                    }
+                  },
+                  {
+                    "detail": {
+                      "extension": [
                         {
-                            "extension": [
-                                {
-                                    "url": "code",
-                                    "valueCode": "eRS"
-                                }
-                            ],
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                            "valueUrl": "http://stubs.local.bitraft.io:8080/ers/upcoming-appointments?reference=200240046006"
+                          "extension": [
+                            {
+                              "url": "code",
+                              "valueCode": "eRS"
+                            }
+                          ],
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                          "valueUrl": "http://stubs.local.bitraft.io:8080/ers/upcoming-appointments?reference=200240046006"
                         },
                         {
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
-                            "valueCoding": {
-                                "system": "http://hl7.org/fhir/appointmentstatus",
-                                "code": "Booked"
-                            }
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                          "valueCoding": {
+                            "system": "http://hl7.org/fhir/appointmentstatus",
+                            "code": "Booked"
+                          }
                         }
-                    ],
-                    "kind": "Appointment",
-                    "description": "Cardiology, The Oaks, Wembley University Hospital, WJ7 6EU"
-                }
+                      ],
+                      "kind": "Appointment",
+                      "description": "Cardiology, The Oaks, Wembley University Hospital, WJ7 6EU"
+                    }
+                  }
+                ]
+              }
             }
-        ]
-    }
-]
+          ]
+        }
         """
 
         return respondWith(HttpStatus.SC_OK) {

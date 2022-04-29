@@ -3,7 +3,7 @@
 Feature: Wayfinder Errors
 
   Scenario Outline: A user sees a helpful error screen when Wayfinder is <An Error> and can try again
-    Given I am a user who can view Wayfinder from Appointments
+    Given I am a user who can view Wayfinder from Appointments and has referrals and upcoming appointments
     And the Wayfinder Aggregator API is <An Error>
     And I am logged in
     When I navigate to Appointments
@@ -32,3 +32,13 @@ Feature: Wayfinder Errors
       | An Error              | Prefix |
       | timing out            | zu     |
       | encountering an issue | 4u     |
+
+  Scenario: A user can easily contact the service desk when they encounter a partial error with Wayfinder
+    Given I am a user who can view Wayfinder from Appointments and receives a partial error
+    And I am logged in
+    When I navigate to Appointments
+    Then the Appointments Hub page is displayed
+    When I click the 'Referrals, hospital and other appointments' link on the Appointments Hub
+    Then I see a helpful message indicating unavailable secondary care services with a 4u service desk reference
+    When I click the contact us link with the 4u error code
+    Then a new tab has been opened by the link
