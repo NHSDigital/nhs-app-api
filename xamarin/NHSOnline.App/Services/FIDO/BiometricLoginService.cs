@@ -29,7 +29,7 @@ namespace NHSOnline.App.Services.FIDO
 
         public async Task<BiometricLoginResult> Authenticate(string fidoUsername)
         {
-            var keyId = await ValidateRegistration(fidoUsername).PreserveThreadContext();
+            var keyId = await ValidateRegistration(fidoUsername).ResumeOnThreadPool();
             if (keyId.Failed(out var keyIdFailure))
             {
                 return keyIdFailure;
@@ -48,7 +48,7 @@ namespace NHSOnline.App.Services.FIDO
                     return authSignerFailure;
                 }
 
-                return await DoFidoLogin(keyId, biometricAuthKey, authSigner.Result).PreserveThreadContext();
+                return await DoFidoLogin(keyId, biometricAuthKey, authSigner.Result).ResumeOnThreadPool();
             }
             catch (CrossPlatformException e) when (e.ErrorType is CrossPlatformErrorType.UnrecoverableKey)
             {
