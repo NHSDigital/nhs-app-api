@@ -13,6 +13,7 @@ describe('Referral In Review Card', () => {
     const wrapper = mountReferralInReview({
       propsData: {
         bookingReference: '6081 1995 6620',
+        deepLinkUrl: 'default',
         referredBy: 'Mahogany GP Surgery',
         referredDate: '2022-04-10T10:00:00',
         reviewDate: '2022-04-18T10:00:00',
@@ -25,7 +26,7 @@ describe('Referral In Review Card', () => {
       const headerTarget = wrapper.find('h3');
 
       expect(headerTarget.exists()).toBe(true);
-      expect(headerTarget.text()).toBe('Your referral request is being reviewed');
+      expect(headerTarget.text()).toBe('Referral request in review');
     });
 
     it('will display the requested specialty', () => {
@@ -42,32 +43,37 @@ describe('Referral In Review Card', () => {
       expect(requestedSpecialtyTarget.text()).toBe('Your healthcare provider has requested for you to be referred to Cardiology. This request is being reviewed. You do not need to do anything.');
     });
 
-    it('will display the booking reference', () => {
-      const bookingreferenceTarget = wrapper.find('#booking-reference-1');
-
-      expect(bookingreferenceTarget.exists()).toBe(true);
-      expect(bookingreferenceTarget.text()).toBe('Booking reference: 6081 1995 6620');
-    });
-
     it('will display the referred by value', () => {
-      const referredByTarget = wrapper.find('#referred-by-1');
+      const referredByHeaderTarget = wrapper.find('#referred-by-header-1');
+      const referredByTextTarget = wrapper.find('#referred-by-text-1');
 
-      expect(referredByTarget.exists()).toBe(true);
-      expect(referredByTarget.text()).toBe('Referred by: Mahogany GP Surgery');
+      expect(referredByHeaderTarget.exists()).toBe(true);
+      expect(referredByTextTarget.exists()).toBe(true);
+
+      expect(referredByHeaderTarget.text()).toBe('Referred by:');
+      expect(referredByTextTarget.text()).toBe('Mahogany GP Surgery');
     });
 
     it('will display the referred date value', () => {
-      const referredDateTarget = wrapper.find('#referral-date-1');
+      const referredDateHeaderTarget = wrapper.find('#referral-date-header-1');
+      const referredDateTextTarget = wrapper.find('#referral-date-text-1');
 
-      expect(referredDateTarget.exists()).toBe(true);
-      expect(referredDateTarget.text()).toBe('Date you were referred: 10 April 2022');
+      expect(referredDateHeaderTarget.exists()).toBe(true);
+      expect(referredDateTextTarget.exists()).toBe(true);
+
+      expect(referredDateHeaderTarget.text()).toBe('Date you were referred:');
+      expect(referredDateTextTarget.text()).toBe('10 April 2022');
     });
 
     it('will display the review date value', () => {
-      const reviewDateTarget = wrapper.find('#review-date-1');
+      const reviewDateHeaderTarget = wrapper.find('#review-date-header-1');
+      const reviewDateTextTarget = wrapper.find('#review-date-text-1');
 
-      expect(reviewDateTarget.exists()).toBe(true);
-      expect(reviewDateTarget.text()).toBe('Due to be reviewed by: 18 April 2022');
+      expect(reviewDateHeaderTarget.exists()).toBe(true);
+      expect(reviewDateTextTarget.exists()).toBe(true);
+
+      expect(reviewDateHeaderTarget.text()).toBe('Due to be reviewed by:');
+      expect(reviewDateTextTarget.text()).toBe('18 April 2022');
     });
 
     it('will hide the no requested specialty message', () => {
@@ -76,11 +82,11 @@ describe('Referral In Review Card', () => {
       expect(noRequestedSpecialtyTarget.exists()).toBe(false);
     });
 
-    it('will display a button', () => {
-      const button = wrapper.find('#manageInReviewReferral-1');
+    it('will display a deep link', () => {
+      const deepLink = wrapper.find('#manageInReviewReferral-1');
 
-      expect(button.exists()).toBe(true);
-      expect(button.text()).toBe('Manage this referral');
+      expect(deepLink.exists()).toBe(true);
+      expect(deepLink.text()).toBe('Manage this referral');
     });
   });
 
@@ -88,6 +94,7 @@ describe('Referral In Review Card', () => {
     const wrapper = mountReferralInReview({
       propsData: {
         bookingReference: '6081 1995 6620',
+        deepLinkUrl: 'default',
         referredBy: 'Mahogany GP Surgery',
         referredDate: '2022-04-10T10:00:00',
         reviewDate: '2022-04-18T10:00:00',
@@ -115,11 +122,11 @@ describe('Referral In Review Card', () => {
       expect(noRequestedSpecialtyTarget.text()).toBe('Your healthcare provider has requested for you to be referred. This request is being reviewed. You do not need to do anything.');
     });
 
-    it('will display a button', () => {
-      const button = wrapper.find('#manageInReviewReferral-1');
+    it('will display a deep link', () => {
+      const deepLink = wrapper.find('#manageInReviewReferral-1');
 
-      expect(button.exists()).toBe(true);
-      expect(button.text()).toBe('Manage this referral');
+      expect(deepLink.exists()).toBe(true);
+      expect(deepLink.text()).toBe('Manage this referral');
     });
   });
 });

@@ -3,11 +3,11 @@
     <h3 class="nhsuk-u-margin-bottom-1">
       {{ $t('wayfinder.appointments.readyToConfirm.title') }}
     </h3>
-    <p>
-      {{ $t('wayfinder.appointments.readyToConfirm.anAppointmentHasBeenBooked') }}
-    </p>
     <p :id="`location-description-${appointmentId}`">
       {{ locationDescription }}
+    </p>
+    <p>
+      {{ $t('wayfinder.appointments.readyToConfirm.anAppointmentHasBeenBooked') }}
     </p>
     <primary-button :id="`contactTheClinicToConfirm-${appointmentId}`" @click="onClick">
       {{ $t('wayfinder.appointments.readyToConfirm.contactTheClinicToConfirm') }}
@@ -29,8 +29,8 @@ export default {
   mixins: [RedirectorMixin],
   props: {
     appointmentId: {
-      type: String,
-      default: '',
+      type: Number,
+      required: true,
     },
     locationDescription: {
       type: String,

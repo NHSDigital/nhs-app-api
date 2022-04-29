@@ -23,107 +23,51 @@
           </p>
 
           <h2>{{ $t('wayfinder.otherReferralsAppointmentsAndServices') }}</h2>
-
           <p>{{ $t('wayfinder.errors.mayHaveOtherServicesAvailableNotShown') }}</p>
 
           <other-available-services-menu-items />
         </template>
 
         <template v-else-if="hasReferralsOrAppointments">
-          <h2>{{ $t('wayfinder.referralsSectionTitle') }}</h2>
+          <h2 id="book-Or-Manage-Referrals-And-Appointments-Title">
+            {{ $t('wayfinder.bookOrManageReferralsAndAppointmentsTitle') }}
+          </h2>
+          <book-or-manage-referrals-or-appointments-card
+            :referrals-not-in-review="referralsNotInReview"
+            :has-referrals-not-in-review="hasReferralsNotInReview"
+            :unconfirmed-appointments="unconfirmedAppointments"
+            :has-unconfirmed-appointments="hasUnconfirmedAppointments"/>
 
-          <card-group v-if="hasReferrals" class="nhsuk-grid-row">
-            <card-group-item v-for="referral in referrals"
-                             :key="referral.referralId"
-                             class="nhsuk-grid-column-three-quarters">
+          <h2 id="confirmed-appointments-title">
+            {{ $t('wayfinder.confirmedAppointmentsTitle') }}
+          </h2>
+          <confirmed-appointments-card
+            :confirmed-appointments="confirmedAppointments"
+            :has-confirmed-appointments="hasConfirmedAppointments"/>
 
-              <referral-in-review-card
-                v-if="isInReview(referral)"
-                :requested-specialty="referral.serviceSpecialty"
-                :referred-date="referral.referredDateTime"
-                :review-date="referral.reviewDueDate"
-                :booking-reference="referral.referralId"
-                :referred-by="referral.referrerOrganisation"
-                :deep-link-url="referral.deepLinkUrl"/>
-
-              <referral-review-overdue-card
-                v-else-if="isReviewOverdue(referral)"
-                :requested-specialty="referral.serviceSpecialty"
-                :referred-date="referral.referredDateTime"
-                :review-date="referral.reviewDueDate"
-                :booking-reference="referral.referralId"
-                :referred-by="referral.referrerOrganisation"
-                :deep-link-url="referral.deepLinkUrl"/>
-
-              <referral-ready-to-rebook-card
-                v-else-if="isBookableWasCancelled(referral)"
-                :requested-specialty="referral.serviceSpecialty"
-                :referred-date="referral.referredDateTime"
-                :booking-reference="referral.referralId"
-                :referred-by="referral.referrerOrganisation"
-                :deep-link-url="referral.deepLinkUrl"/>
-
-              <referral-bookable-card
-                v-else-if="isBookable(referral)"
-                :requested-specialty="referral.serviceSpecialty"
-                :referred-date="referral.referredDateTime"
-                :booking-reference="referral.referralId"
-                :referred-by="referral.referrerOrganisation"
-                :deep-link-url="referral.deepLinkUrl"/>
-            </card-group-item>
-          </card-group>
-
-          <template v-else>
-            <p>{{ $t('wayfinder.noReferrals.youHaveNoReferrals') }}</p>
-
-            <p>{{ $t('wayfinder.noReferrals.youMayHaveOtherReferrals') }}</p>
-
-            <p>{{ $t('wayfinder.noReferrals.contactTheOrganisation') }}</p>
-          </template>
-
-          <h2>{{ $t('wayfinder.upcomingAppointmentsSectionTitle') }}</h2>
-
-          <card-group v-if="hasUpcomingAppointments" class="nhsuk-grid-row">
-            <card-group-item
-              v-for="(appointment, index) in upcomingAppointments"
-              :key="`upcoming-appointment-${index}`"
-              class="nhsuk-grid-column-three-quarters">
-
-              <appointment-booked-card
-                v-if="isAppointmentBooked(appointment)"
-                :appointment-id="index"
-                :location-description="appointment.locationDescription"
-                :appointment-date-time="appointment.appointmentDateTime"
-                :deep-link-url="appointment.deepLinkUrl"/>
-
-              <appointment-ready-to-confirm-card
-                v-if="!isAppointmentBooked(appointment)"
-                :appointment-id="index"
-                :location-description="appointment.locationDescription"
-                :deep-link-url="appointment.deepLinkUrl"/>
-
-            </card-group-item>
-          </card-group>
-
-          <template v-else>
-            <p>{{ $t('wayfinder.noAppointments.youHaveNoAppointments') }}</p>
-
-            <p>{{ $t('wayfinder.noAppointments.contactTheOrganisation') }}</p>
-          </template>
+          <h2 id="referrals-in-review-title">
+            {{ $t('wayfinder.inReviewTitle') }}
+          </h2>
+          <referrals-in-review-card
+            :referrals-in-review="referralsInReview"
+            :has-referrals-in-review="hasReferralsInReview"/>
         </template>
 
         <template v-else>
-          <p>{{ $t('wayfinder.youMayHaveOtherReferrals') }}</p>
-
-          <p>{{ $t('wayfinder.contactTheOrganisation') }}</p>
-
-          <p>{{ $t('wayfinder.contactTheHealthcareProvider') }}</p>
-
-          <h2>{{ $t('wayfinder.otherReferralsAppointmentsAndServices') }}</h2>
-
-          <other-available-services-menu-items />
+          <p id="you-may-have-other-referrals-text">
+            {{ $t('wayfinder.youMayHaveOtherReferrals') }}
+          </p>
+          <p id="contact-the-organisation-text">
+            {{ $t('wayfinder.contactTheOrganisation') }}
+          </p>
+          <p id="contact-the-healthcare-provider-text">
+            {{ $t('wayfinder.contactTheHealthcareProvider') }}
+          </p>
+          <h2 id="other-referrals-appointments-and-services-header">
+            {{ $t('wayfinder.otherReferralsAppointmentsAndServices') }}
+          </h2>
+          <other-available-services-menu-items id="other-available-services-menu-items" />
         </template>
-
       </div>
 
       <desktopGenericBackLink v-if="!isNativeApp"
@@ -140,16 +84,11 @@
 import { EventBus, UPDATE_HEADER, UPDATE_TITLE } from '@/services/event-bus';
 import GenericButton from '@/components/widgets/GenericButton';
 import OtherAvailableServicesMenuItems from '@/components/wayfinder/OtherAvailableServicesMenuItems';
-import CardGroup from '@/components/widgets/card/CardGroup';
-import CardGroupItem from '@/components/widgets/card/CardGroupItem';
-import AppointmentBookedCard from '@/components/wayfinder/appointments/AppointmentBookedCard';
-import AppointmentReadyToConfirmCard from '@/components/wayfinder/appointments/AppointmentReadyToConfirmCard';
-import ReferralInReviewCard from '@/components/wayfinder/referrals/ReferralInReviewCard';
-import ReferralReadyToRebookCard from '@/components/wayfinder/referrals/ReferralReadyToRebookCard';
-import ReferralReviewOverdueCard from '@/components/wayfinder/referrals/ReferralReviewOverdueCard';
-import ReferralBookableCard from '@/components/wayfinder/referrals/ReferralBookableCard';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import { isEmptyArray, isBefore, isSameOrAfter, redirectTo } from '@/lib/utils';
+import BookOrManageReferralsOrAppointmentsCard from '@/components/wayfinder/sections/BookOrManageReferralsOrAppointmentsCard';
+import ConfirmedAppointmentsCard from '@/components/wayfinder/sections/ConfirmedAppointmentsCard';
+import ReferralsInReviewCard from '@/components/wayfinder/sections/ReferralsInReviewCard';
+import { redirectTo } from '@/lib/utils';
 import { APPOINTMENTS_PATH } from '@/router/paths';
 
 const loadData = async (store) => {
@@ -159,17 +98,12 @@ const loadData = async (store) => {
 export default {
   name: 'WayfinderPage',
   components: {
-    AppointmentBookedCard,
-    AppointmentReadyToConfirmCard,
-    CardGroup,
-    CardGroupItem,
     DesktopGenericBackLink,
     GenericButton,
     OtherAvailableServicesMenuItems,
-    ReferralInReviewCard,
-    ReferralReadyToRebookCard,
-    ReferralReviewOverdueCard,
-    ReferralBookableCard,
+    BookOrManageReferralsOrAppointmentsCard,
+    ConfirmedAppointmentsCard,
+    ReferralsInReviewCard,
   },
   computed: {
     apiError() {
@@ -195,23 +129,38 @@ export default {
     hasLoaded() {
       return this.$store.state.wayfinder.hasLoaded;
     },
-    hasReferrals() {
-      return !isEmptyArray(this.referrals);
-    },
     hasReferralsOrAppointments() {
-      return this.hasReferrals || this.hasUpcomingAppointments;
+      return this.hasReferralsInReview
+      || this.hasReferralsNotInReview
+      || this.hasConfirmedAppointments
+      || this.hasUnconfirmedAppointments;
     },
-    hasUpcomingAppointments() {
-      return !isEmptyArray(this.upcomingAppointments);
+    referralsInReview() {
+      return this.$store.state.wayfinder.summary.referralsInReview;
+    },
+    hasReferralsInReview() {
+      return this.referralsInReview.length >= 1;
+    },
+    referralsNotInReview() {
+      return this.$store.state.wayfinder.summary.referralsNotInReview;
+    },
+    hasReferralsNotInReview() {
+      return this.referralsNotInReview.length >= 1;
+    },
+    unconfirmedAppointments() {
+      return this.$store.state.wayfinder.summary.unconfirmedAppointments;
+    },
+    hasUnconfirmedAppointments() {
+      return this.unconfirmedAppointments.length >= 1;
+    },
+    confirmedAppointments() {
+      return this.$store.state.wayfinder.summary.confirmedAppointments;
+    },
+    hasConfirmedAppointments() {
+      return this.confirmedAppointments.length >= 1;
     },
     isNativeApp() {
       return this.$store.state.device.isNativeApp;
-    },
-    referrals() {
-      return this.$store.state.wayfinder.summary.referrals;
-    },
-    upcomingAppointments() {
-      return this.$store.state.wayfinder.summary.upcomingAppointments;
     },
   },
   async mounted() {
@@ -231,22 +180,6 @@ export default {
     this.$store.dispatch('wayfinder/init');
   },
   methods: {
-    isInReview(referral) {
-      return referral.status === 'InReview'
-        && (referral.reviewDueDate === null || isSameOrAfter(referral.reviewDueDate));
-    },
-    isBookable(referral) {
-      return referral.status === 'Bookable';
-    },
-    isBookableWasCancelled(referral) {
-      return referral.status === 'BookableWasCancelled';
-    },
-    isReviewOverdue(referral) {
-      return referral.status === 'InReview' && isBefore(referral.reviewDueDate);
-    },
-    isAppointmentBooked(appointment) {
-      return appointment.appointmentDateTime;
-    },
     tryAgainClicked() {
       this.$router.go();
     },

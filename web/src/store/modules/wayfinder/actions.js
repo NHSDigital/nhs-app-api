@@ -1,8 +1,10 @@
 import { createLocalError } from '@/lib/utils';
 import {
   INIT,
-  REFERRALS_LOADED,
-  UPCOMING_APPOINTMENTS_LOADED,
+  CONFIRMED_APPOINTMENTS_LOADED,
+  UNCONFIRMED_APPOINTMENTS_LOADED,
+  REFERRALS_IN_REVIEW_LOADED,
+  REFERRALS_NOT_IN_REVIEW_LOADED,
   SHOW_ERROR,
   HAS_LOADED,
 } from './mutation-types';
@@ -14,11 +16,14 @@ export default {
   },
   async load({ commit }) {
     try {
-      const { referrals, upcomingAppointments }
+      const { confirmedAppointments, unconfirmedAppointments,
+        referralsInReview, referralsNotInReview }
         = await this.app.$http.getV1PatientSecondaryCareSummary({ ignoreError: true });
 
-      commit(REFERRALS_LOADED, referrals);
-      commit(UPCOMING_APPOINTMENTS_LOADED, upcomingAppointments);
+      commit(REFERRALS_IN_REVIEW_LOADED, referralsInReview);
+      commit(REFERRALS_NOT_IN_REVIEW_LOADED, referralsNotInReview);
+      commit(CONFIRMED_APPOINTMENTS_LOADED, confirmedAppointments);
+      commit(UNCONFIRMED_APPOINTMENTS_LOADED, unconfirmedAppointments);
     } catch (error) {
       const apiError = createLocalError(error);
 

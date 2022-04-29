@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             result.Should().BeAssignableTo<OkObjectResult>().Subject.Value.Should().BeEquivalentTo(Context.Data.SummaryResponse);
 
             Context.Mocks.Auditor.Verify(a => a.PreOperationAudit("SecondaryCare_GetSummary_Request","Attempting to get Secondary Care Summary"));
-            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit("SecondaryCare_GetSummary_Response","Secondary Care Summary successfully retrieved. Total Referrals: 6, Total Upcoming Appointments: 4"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit("SecondaryCare_GetSummary_Response", "Secondary Care Summary successfully retrieved. Total Referrals: 6, Total Upcoming Appointments: 4"));
 
             Context.Mocks.SummaryMapperLogger.VerifyNoOtherCalls();
         }
