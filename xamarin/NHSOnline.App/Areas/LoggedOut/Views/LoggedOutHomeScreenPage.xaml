@@ -145,9 +145,10 @@
              
             <icons:NhsLogoWhite Grid.Row="1"
                                 x:Name="NhsLogoWhite"
-                                AutomationProperties.IsInAccessibleTree="true"
+                                AutomationProperties.IsInAccessibleTree="False"
                                 AutomationProperties.HelpText="NHS Logo"
-                                IsTabStop="False" />
+                                IsEnabled="False" 
+                                IsTabStop="False"/>
             
             <StackLayout StyleClass="BottomStackLayout" 
                          x:Name="BottomStackLayout"
