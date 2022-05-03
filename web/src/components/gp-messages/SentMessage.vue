@@ -8,13 +8,15 @@
             {{ $t('messages.you') }}
           </span>
         </div>
-        <div :id="sentPrefixIdentifier+`MessageSentPanel`+sentIndex"
-             :class="[$style['nhsuk-panel'], 'nhsuk-u-margin-top-0', 'nhsuk-u-padding-2']">
-          <h2 v-if="hasSubject" :id="sentPrefixIdentifier+`MessageSubject`+sentIndex"
-              class="nhsuk-heading-s nhsuk-u-font-size-19 nhsuk-u-margin-bottom-0">
-            {{ message.subject }}</h2>
-          <linkify-content class="panel-content nhsuk-u-font-size-19"
-                           :content="getContent" tag="p"/>
+        <div :class="[$style['nhsuk-panel-sender-container-content'], 'nhsuk-u-margin-bottom-0']">
+          <div :id="sentPrefixIdentifier+`MessageSentPanel`+sentIndex"
+               :class="[$style['nhsuk-card'], 'nhsuk-u-margin-top-0', 'nhsuk-u-padding-2', 'nhsuk-u-margin-bottom-0']">
+            <h2 v-if="hasSubject" :id="sentPrefixIdentifier+`MessageSubject`+sentIndex"
+                class="nhsuk-card__heading nhsuk-u-font-size-19 nhsuk-u-margin-bottom-0">
+              {{ message.subject }}</h2>
+            <linkify-content class="panel-content nhsuk-u-font-size-19 nhsuk-u-margin-bottom-0"
+                             :content="getContent" tag="p"/>
+          </div>
         </div>
         <div>
           <formatted-date-time :id="sentPrefixIdentifier+`MessageSentDateTime`+sentIndex"

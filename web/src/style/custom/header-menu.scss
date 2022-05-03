@@ -33,51 +33,53 @@ nav {
       display: none;
     }
 
-    & > ul {
-      display: flex;
-      flex-wrap: wrap;
-      list-style: none;
+    div {
+      & > ul {
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
 
-      li {
-        display: inline-block;
-        margin: 0;
-        color: $white;
-        flex-grow: 1;
-        text-align: center;
-
-        :focus {
-          outline-color: $focus_highlight;
-          box-shadow: inset 0 0 0 4px $focus_highlight;
-          outline-offset: -5px;
-        }
-
-        a {
-          @include default_text_web;
+        li {
+          display: inline-block;
+          margin: 0;
           color: $white;
-          padding: 1em;
+          flex-grow: 1;
+          text-align: center;
 
-          &:visited,
-          &:active {
+          :focus {
+            outline-color: $focus_highlight;
+            box-shadow: inset 0 0 0 4px $focus_highlight;
+            outline-offset: -5px;
+          }
+
+          a {
+            @include default_text_web;
             color: $white;
-          }
 
-          &:hover {
-            // Editted as part of NHSO-13314
-            // Made !important to override the a:hover in _focus.scss
-            background: #003d78 !important;
-            box-shadow: none !important;
-            color: #FFFFFF !important;
-            text-decoration: underline !important;
-            // End of Edit
-          }
+            &:visited,
+            &:active {
+              color: $white;
+            }
 
-          // Added as part of NHSO-13314
-          // Needed for box shadow on desktop as margin is zero
-          &:focus {
-            margin-bottom: 4px;
-            padding-bottom: 12px;
+            &:hover {
+              // Editted as part of NHSO-13314
+              // Made !important to override the a:hover in _focus.scss
+              background: #003d78 !important;
+              box-shadow: none !important;
+              color: #FFFFFF !important;
+              text-decoration: underline !important;
+              // End of Edit
+            }
+
+            // Added as part of NHSO-13314
+            // Needed for box shadow on desktop as margin is zero
+            &:focus {
+              margin-bottom: 4px;
+              padding-bottom: 12px;
+            }
+
+            // End of Addition
           }
-          // End of Addition
         }
       }
     }

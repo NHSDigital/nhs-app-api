@@ -165,7 +165,7 @@ button {
   .nhsuk-button--reverse {
     border-bottom: 0px !important;
     &:focus {
-      box-shadow: 0 4px 0 $nhsuk-reverse-button-shadow-colour !important;
+      box-shadow: 0 4px 0 $nhsuk-reverse-button-shadow-color !important;
 
       &:hover {
         background-color: $focus_highlight!important;
@@ -173,9 +173,9 @@ button {
     }
 
     &:hover {
-      background-color: $nhsuk-reverse-button-hover-colour !important;
-      color: $nhsuk-reverse-button-text-colour !important;
-      box-shadow: 0 4px 0 $nhsuk-reverse-button-shadow-colour !important;
+      background-color: $nhsuk-reverse-button-hover-color !important;
+      color: $nhsuk-reverse-button-text-color !important;
+      box-shadow: 0 4px 0 $nhsuk-reverse-button-shadow-color !important;
     }
   }
 

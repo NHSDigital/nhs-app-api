@@ -4,11 +4,11 @@
 @import '~nhsuk-frontend/packages/core/settings/spacing';
 @import '~nhsuk-frontend/packages/core/tools/all';
 
-@import '~nhsuk-frontend/packages/components/panel/panel';
+@import '~nhsuk-frontend/packages/components/card/card';
 
 @import "../../style/colours";
 
-.nhsuk-panel {
+.nhsuk-card {
   border: 1px solid $border_grey;
   width: fit-content;
 }

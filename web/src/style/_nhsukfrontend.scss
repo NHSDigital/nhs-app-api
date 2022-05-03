@@ -7,7 +7,6 @@
 // Generic
 @import '~nhsuk-frontend/packages/core/generic/box-sizing';
 @import '~nhsuk-frontend/packages/core/generic/font-face';
-@import '~nhsuk-frontend/packages/core/generic/ie';
 
 // Elements
 @import '~nhsuk-frontend/packages/core/elements/forms';
@@ -46,7 +45,6 @@
 @import "~nhsuk-frontend/packages/components/tables/tables";
 @import "~nhsuk-frontend/packages/components/label/label";
 @import "~nhsuk-frontend/packages/components/hint/hint";
-@import "~nhsuk-frontend/packages/components/promo/promo";
 @import "~nhsuk-frontend/packages/components/inset-text/inset-text";
 @import "~nhsuk-frontend/packages/components/checkboxes/checkboxes";
 @import "~nhsuk-frontend/packages/components/breadcrumb/breadcrumb";
@@ -54,14 +52,13 @@
 @import "~nhsuk-frontend/packages/components/header/header";
 @import "~nhsuk-frontend/packages/components/do-dont-list/do-dont-list";
 @import "~nhsuk-frontend/packages/core/styles/icons";
-@import '~nhsuk-frontend/packages/components/care-card/care-card';
+@import '~nhsuk-frontend/packages/components/card/card';
 
 // Misc
 @import '~nhsuk-frontend/packages/core/settings/typography';
 @import '~nhsuk-frontend/packages/core/settings/colours';
 @import '~nhsuk-frontend/packages/core/settings/globals';
 @import '~nhsuk-frontend/packages/core/settings/spacing';
-@import '~nhsuk-frontend/packages/components/panel/panel';
 @import '~nhsuk-frontend/packages/components/button/button';
 @import '~nhsuk-frontend/packages/components/details/details';
 

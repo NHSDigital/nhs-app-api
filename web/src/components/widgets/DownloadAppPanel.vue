@@ -1,5 +1,5 @@
 <template>
-  <div data-id="app-panel">
+  <div data-id="app-panel" class="nhsuk-card__content">
     <p><strong data-id="panel-title">
       {{ $t('login.getTheNhsAppOnYourDevice') }}</strong>
     </p>

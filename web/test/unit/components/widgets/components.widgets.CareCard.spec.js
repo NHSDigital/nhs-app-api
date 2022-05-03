@@ -54,18 +54,18 @@ describe('Care card', () => {
 
   describe('care card style', () => {
     each([
-      { urgency: 'urgent', style: 'nhsuk-care-card--urgent' },
-      { urgency: 'nonUrgent', style: 'nhsuk-care-card--non-urgent' },
-      { urgency: 'immediate', style: 'nhsuk-care-card--immediate' },
+      { urgency: 'urgent', style: 'nhsuk-card--care--urgent' },
+      { urgency: 'nonUrgent', style: 'nhsuk-card--care--non-urgent' },
+      { urgency: 'immediate', style: 'nhsuk-card--care--emergency' },
     ]).it('will match urgency prop', ({ urgency, style }) => {
       mountComponent({ urgency });
-      const careCard = wrapper.find(`.nhsuk-care-card.${style}`);
+      const careCard = wrapper.find(`.${style}`);
       expect(careCard.exists()).toBe(true);
     });
 
     it('will default if urgency not provided', () => {
       mountComponent();
-      const careCard = wrapper.find('.nhsuk-care-card.nhsuk-care-card--non-urgent');
+      const careCard = wrapper.find('.nhsuk-card--care--non-urgent');
       expect(careCard.exists()).toBe(true);
     });
   });
@@ -73,7 +73,7 @@ describe('Care card', () => {
   describe('heading', () => {
     it('will be styled like a heading level 3', () => {
       mountComponent();
-      const heading = wrapper.find('.nhsuk-care-card__heading.nhsuk-heading-m');
+      const heading = wrapper.find('.nhsuk-card--care__heading');
       expect(heading.exists()).toBe(true);
     });
     each([
@@ -83,7 +83,7 @@ describe('Care card', () => {
     ]).it('will contain an appropriate prefix for accessibility', ({ urgency, prefix }) => {
       mountComponent({ urgency });
       const prefixSpan = wrapper
-        .find('.nhsuk-care-card__heading.nhsuk-heading-m')
+        .find('.nhsuk-card--care__heading')
         .element.firstChild.firstChild;
       expect(prefixSpan.innerHTML).toEqual(prefix);
     });

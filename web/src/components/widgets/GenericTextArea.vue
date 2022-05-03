@@ -9,7 +9,7 @@
               v-tabbing="textAreaClasses"
               tabindex="0"
               :rows="rows"
-              :class="inputClasses"
+              :class="[inputClasses, 'nhsuk-textarea']"
               :required="required"
               :aria-labelledby="aLabelledBy"
               :maxlength="maxlength"

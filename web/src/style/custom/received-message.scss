@@ -4,10 +4,11 @@
 @import '~nhsuk-frontend/packages/core/settings/globals';
 @import '~nhsuk-frontend/packages/core/settings/spacing';
 
-@import '~nhsuk-frontend/packages/components/panel/panel';
+@import '~nhsuk-frontend/packages/components/card/card';
 
 @import "../../style/colours";
 
 .nhsuk-panel-group__item {
   padding-right: 15%;
+  list-style-type: none;
 }

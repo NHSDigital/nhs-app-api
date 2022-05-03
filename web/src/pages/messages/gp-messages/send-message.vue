@@ -1,6 +1,6 @@
 <template>
   <div v-if="showTemplate && !hasSent">
-    <div class="nhsuk-grid-row nhsuk-grid-column-full">
+    <div class="nhsuk-grid-row nhsuk-grid-column-full nhsuk-u-padding-bottom-4">
       <form-error-summary v-if="showError"
                           :header-locale-ref="'prescriptions.repeatCourses.errors.thereIsAProblem'"
                           :errors="getErrors"/>

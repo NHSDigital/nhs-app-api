@@ -7,11 +7,3 @@
 
 @include fromDesktop() {
 }
-
-a.nhsuk-action-link__link {
-  &:focus {
-    svg{
-      fill: black;
-    }
-  }
-}

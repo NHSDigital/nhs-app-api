@@ -1,5 +1,6 @@
 import get from 'lodash/fp/get';
 import isEmpty from 'lodash/fp/isEmpty';
+import mapHtmlTags from '@/lib/online-consultations/mappers/html-tags';
 import {
   CARE_PLAN,
   ORGANIZATION,
@@ -76,10 +77,12 @@ function getRequestGroupActions(guidanceResponse, actionIds) {
 
       if (c.resourceType === CARE_PLAN) {
         const activities = activity
-          .map(a => get('detail.description', a))
+          .map(a => mapHtmlTags(get('detail.description', a)))
           .filter(a => a !== undefined);
 
-        carePlans.push({ id, title, activities });
+        const mappedTitle = mapHtmlTags(title);
+
+        carePlans.push({ id, title: mappedTitle, activities });
       }
 
       if (c.resourceType === REFERRAL_REQUEST && !isEmpty(description)) {

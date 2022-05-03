@@ -40,15 +40,6 @@
       @include nhsuk-responsive-padding(2, "bottom");
     }
 
-    &:hover {
-      @include outlineStyle;
-      box-shadow: 0 0 0 4px $nhsuk-link-hover-background-color inset;
-    }
-    &:focus {
-      @include outlineStyle;
-      box-shadow: 0 0 0 4px $nhsuk-link-focus-background-color inset;
-    }
-
     .listMenuItemContainer {
 
       @import './break.scss';

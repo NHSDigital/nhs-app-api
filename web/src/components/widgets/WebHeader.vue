@@ -4,10 +4,8 @@
     <skip-link v-if="!$store.state.device.isNativeApp" />
     <header class="nhsuk-header" role="banner">
       <div class="nhsuk-width-container nhsuk-header__container">
-        <div class="nhsuk-header__logo nhsuk-header__logo--only">
-          <NhsHeaderLogo id="nhs-header-logo" :index-path="indexPath"
-                         :is-logo-link="isLogoLink"/>
-        </div>
+        <NhsHeaderLogo id="nhs-header-logo" :index-path="indexPath"
+                       :is-logo-link="isLogoLink"/>
         <div id="web-content-header" class="nhsuk-header__content">
           <div v-if="showMenu" class="nhsuk-header__menu">
             <button id="toggle-menu"
@@ -22,8 +20,8 @@
           </div>
           <header-links v-if="showLinks"/>
         </div>
-        <header-menu v-if="showMenu" />
       </div>
+      <header-menu v-if="showMenu" />
     </header>
   </div>
 </template>

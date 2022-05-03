@@ -39,7 +39,7 @@
             </div>
             <div class="nhsuk-grid-column-one-third"
                  :class="$style['nhs-app-mobile-hide']">
-              <div class="nhsuk-panel nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-0">
+              <div class="nhsuk-card nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-0">
                 <download-app-panel id="desktop-app-panel"/>
               </div>
             </div>
@@ -51,7 +51,7 @@
             <div class="nhsuk-grid-row">
               <div class="nhsuk-grid-column-one-third"
                    :class="$style['nhs-app-desktop-hide']">
-                <div class="nhsuk-panel nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-4">
+                <div class="nhsuk-card nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-4">
                   <download-app-panel id="mobile-app-panel"/>
                 </div>
               </div>

@@ -1,15 +1,15 @@
 <template>
-  <div class="nhsuk-care-card" :class="urgencyStyle">
-    <div class="nhsuk-care-card__heading-container">
-      <p class="nhsuk-care-card__heading nhsuk-heading-m">
+  <div :class="urgencyStyle">
+    <div class="nhsuk-card--care__heading-container">
+      <p class="nhsuk-card--care__heading">
         <span>
           <span class="nhsuk-u-visually-hidden">{{ headingPrefix }}</span>
           {{ heading }}
         </span>
       </p>
-      <span class="nhsuk-care-card__arrow" aria-hidden="true"/>
+      <span class="nhsuk-card--care__arrow" aria-hidden="true"/>
     </div>
-    <div class="nhsuk-care-card__content">
+    <div class="nhsuk-card__content">
       <slot/>
     </div>
   </div>
@@ -17,9 +17,9 @@
 
 <script>
 const urgencyClasses = {
-  nonUrgent: 'nhsuk-care-card--non-urgent',
-  urgent: 'nhsuk-care-card--urgent',
-  immediate: 'nhsuk-care-card--immediate',
+  nonUrgent: 'nhsuk-card nhsuk-card--care nhsuk-card--care--non-urgent',
+  urgent: 'nhsuk-card nhsuk-card--care nhsuk-card--care--urgent',
+  immediate: 'nhsuk-card nhsuk-card--care nhsuk-card--care--emergency',
 };
 
 export default {

@@ -5,11 +5,11 @@
             class="nhsuk-u-font-size-16">{{ message.sender }}</span>
     </div>
     <div :id="idPrefix+`MessageReplyPanel`+index"
-         :class="[$style['nhsuk-panel'],
+         :class="[$style['nhsuk-card'],
                   'nhsuk-u-margin-top-0',
                   'nhsuk-u-margin-bottom-0',
                   'nhsuk-u-padding-2']">
-      <linkify-content class="panel-content nhsuk-u-font-size-19"
+      <linkify-content class="panel-content nhsuk-u-font-size-19 nhsuk-u-margin-bottom-0"
                        :content="getContent" tag="p"/>
       <div v-if="fileAttached">
         <strong>

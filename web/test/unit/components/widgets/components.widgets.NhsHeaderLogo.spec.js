@@ -34,7 +34,7 @@ describe('NhsHeaderLogo.vue', () => {
     });
 
     it('will have the service header design for the logo', () => {
-      expect(wrapper.find('#nhs_logo').attributes('class')).toBe('nhsuk-header__link nhsuk-header__link--service');
+      expect(wrapper.find('#nhs_logo').attributes('class')).toBe('nhsuk-header__link');
     });
   });
 

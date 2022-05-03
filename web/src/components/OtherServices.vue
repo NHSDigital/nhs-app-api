@@ -6,7 +6,6 @@
     <p>{{ $t('login.toFindOutMoreAboutHealthConditions') }}</p>
     <div class="nhsuk-action-link">
       <a class="nhsuk-action-link__link"
-         :class="$style['nhsuk-action-link__link']"
          :href="goToNhsWebsiteUrl">
         <svg class="nhsuk-icon nhsuk-icon__arrow-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" width="36" height="36">
           <path d="M0 0h24v24H0z" fill="none"/>

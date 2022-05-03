@@ -86,7 +86,7 @@
       </div>
       <div v-if="showBookingReason" class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full nhsuk-u-padding-top-3">
-          <div role="form" data-purpose="booking-reason" :class="reasonTextErrorStyle">
+          <div role="form" data-purpose="booking-reason" :class="[reasonTextErrorStyle, 'nhsuk-u-margin-bottom-6']">
             <label id="booking-reason-label" class="nhsuk-fieldset__legend"
                    for="reasonText">
               <strong>

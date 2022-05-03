@@ -4,7 +4,7 @@
 @import '~nhsuk-frontend/packages/core/settings/globals';
 @import '~nhsuk-frontend/packages/core/settings/spacing';
 
-@import '~nhsuk-frontend/packages/components/panel/panel';
+@import '~nhsuk-frontend/packages/components/card/card';
 
 @import "../../style/colours";
 
@@ -18,7 +18,11 @@
     float: right;
   }
 
-  .nhsuk-panel {
+  .nhsuk-panel-sender-container-content {
+    text-align: left;
+  }
+
+  .nhsuk-card {
     background-color: $grey_panel;
     border: 1px solid $border_grey;
     text-align: left;

@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="nhsuk-header__logo">
     <router-link
       v-if="isLogoLink"
       id="nhs_logo"
       ref="homeLogoEl"
       :href="indexPath"
       :to="indexPath"
-      :class="'nhsuk-header__link nhsuk-header__link--service'"
+      class="nhsuk-header__link"
       :aria-label="$t('navigation.header.nhsAppOnlineHomepage')"
       @click.stop.prevent="onClick">
       <nhs-header-svg/>
