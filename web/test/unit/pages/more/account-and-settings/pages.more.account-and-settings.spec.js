@@ -53,7 +53,11 @@ describe('Account and Settings Page', () => {
     biometricSupported = false,
     biometricType = 'fingerPrint',
   }) => {
-    const $store = createStore({ state: $state });
+    const $http = {
+      postV1PatientAssertedLoginIdentity: jest.fn()
+        .mockImplementation(() => Promise.resolve({ token: 'jwtToken' })),
+    };
+    const $store = createStore({ state: $state, $http });
     $store.getters = buildStoreGetters({
       notificationsEnabled,
       isProofLevel9,

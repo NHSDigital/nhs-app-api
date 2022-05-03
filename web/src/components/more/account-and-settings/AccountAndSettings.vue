@@ -10,6 +10,7 @@
                :header-tag="headerTag"
                :target="(isNativeApp ? '_parent' : '_blank')"
                :text="$t('accountAndSettings.manageNhsAccount')"
+               :href="settingsUrl"
                :aria-label="$t('accountAndSettings.manageNhsAccount')"
                :click-func="goToNHSSettings"/>
     <menu-item v-if="showNotifications"
@@ -73,6 +74,15 @@ export default {
       return 'loginSettings.biometrics.noBiometricType.settingsLinkText';
     },
   },
+  async created() {
+    const { token } = await this.$store.app.$http
+      .postV1PatientAssertedLoginIdentity({
+        assertedLoginIdentityRequest: {
+          IntendedRelyingPartyUrl: window.location.hostname,
+        },
+      });
+    this.settingsUrl = `${this.cidSettingsUrl}?asserted_login_identity=${token}`;
+  },
   methods: {
     goToLoginOptions() {
       const biometricSupported = this.$store.getters['loginSettings/biometricSupported'];
@@ -99,22 +109,16 @@ export default {
     },
     async goToNHSSettings() {
       const helpUrl = `${this.$store.$env.BASE_NHS_APP_HELP_URL}${MANAGING_YOUR_NHS_APP_ACCOUNT_HELP_PATH}`;
-      const { token } = await this.$store.app.$http
-        .postV1PatientAssertedLoginIdentity({
-          assertedLoginIdentityRequest: {
-            IntendedRelyingPartyUrl: window.location.hostname,
-          },
-        });
-      const settingsUrl = `${this.cidSettingsUrl}?asserted_login_identity=${token}`;
+
       this.configureWebContext(helpUrl);
       if (this.isNativeApp) {
         if (NativeApp.supportsNativeWebIntegration()) {
-          NativeApp.openWebIntegration(settingsUrl, [], helpUrl);
+          NativeApp.openWebIntegration(this.settingsUrl, [], helpUrl);
         } else {
-          window.location = settingsUrl;
+          window.location = this.settingsUrl;
         }
       } else {
-        window.open(settingsUrl, '_blank', 'noopener,noreferrer');
+        window.open(this.settingsUrl, '_blank', 'noopener,noreferrer');
       }
     },
   },
