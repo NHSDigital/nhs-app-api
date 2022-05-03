@@ -2,11 +2,11 @@
 
 [[_TOC_]]
 
-## Mac Prerequisites
+## Mac Software installation guide
 
 * [XCode](https://developer.apple.com/xcode/)
 
-  Install from the link, an Apple Id is required to do so.
+  Install from the link, an Apple Id is required to do so. Check with your team first what version they are on - its not good to be too far ahead / behind.
 
 * [XCode Command Line Tools](https://developer.apple.com/library/archive/technotes/tn2339/_index.html)
 
@@ -14,35 +14,38 @@
   xcode-select --install
   ```
 
-* [Docker Desktop Client](https://docs.docker.com/get-docker/)
-
-  Follow the link and install the last version. Docker Desktop does require a licence but is free for the trial period or if you intend using the full Docker package, a licence will be required, [raise a support ticket for this](https://kainoshelp.atlassian.net/servicedesk/customer/portal/23/group/242/create/1027), remember to add an approvers name if required.
-
-* [Jetbrains Intellij Idea](https://www.jetbrains.com/idea/download)
-
-  Follow the link and install the latest version. You will require a licence for this IDE. [raise a support ticket for this](https://kainoshelp.atlassian.net/servicedesk/customer/portal/23/group/242/create/1027), remember to add an approvers name if required.
-
-* [Jetbrains Rider](https://www.jetbrains.com/rider/download)
-
-  Follow the link and install the latest version. You will require a licence for this IDE. [raise a support ticket for this](https://kainoshelp.atlassian.net/servicedesk/customer/portal/23/group/242/create/1027), remember to add an approvers name if required.
-  
-  Also, install the following plugin for Rider - [Rider Xamarin Android Support](https://plugins.jetbrains.com/plugin/12056-rider-xamarin-android-support)
-
-* [AppLayer VPN](https://kainoshelp.atlassian.net/servicedesk/customer/portal/23/group/242/create/1027)
-
-  Follow the link to create a new support ticket, in the license section select `other` and add the justification that you need a VPN to work on the project.
-
+**Kainos staff - the following install section requires Admin rights to be granted to your Mac - ask your TL to raise/approve a Kainos systems request to do this.**
 * [HomeBrew](https://brew.sh)
 
   ```bash
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   ```
-  **Please note** on MacOS you may require systems to give you temporary admin access to install Homebrew, you can do this by requesting temporary admin access via the following [ticket link](https://kainoshelp.atlassian.net/servicedesk/customer/portal/23/group/240/create/1006) and selecting `issues` under the my computer section.
 
-* [Visual Studio Code](https://code.visualstudio.com)
+* Selected software to install once you get temporary Admin rights granted - confirm list with your TL:
 
   ```bash
-  brew install visual-studio-code
+  # Rider IDE for .NET Dev on Mac - needs a licence (ask TL to raise this systems request)
+  brew install --cask rider
+  # IntelliJ if doing anything in Java / Scala (such as performance tests) - needs a licence (ask TL)
+  brew install --cask intellij-idea
+  # Will need docker running locally
+  brew install --cask docker
+  # VS Code is a good WebDev IDE. Other IDEs are available!
+  brew install --cask visual-studio-code
+  # Slack App (browser version is great too if you dont want this)
+  brew install --cask slack
+  # You will need this for access to dev secrets, secure file share, etc
+  brew install --cask keybase
+  # good to have in case you need to update anything android specific
+  brew install --cask android-studio
+  # Used for testing APIs manually
+  brew install --cask postman
+  # Need this for accessing Azure resources via CLI
+  brew install azure-cli
+  # Need this for checking K8s resources via CLI
+  brew install kubernetes-cli
+  # K9s is much much easier to use than e.g. kubectl
+  brew install k9s
   ```
 
 * [.NET Core SDK](https://dotnet.microsoft.com/download)
@@ -54,7 +57,16 @@
   ```bash
   curl -qL https://www.npmjs.com/install.sh | sh
   ```
+  
+* [Docker Desktop Client](https://docs.docker.com/get-docker/)
 
+  Follow the link and install the last version. Docker Desktop does require a licence but is free for the trial period or if you intend using the full Docker package, a licence will be required. Ask your TL to add this to the Systems request seeking licences which has Cost Centre approval.
+
+* Once Rider is up and running, install the following plugin - [Rider Xamarin Android Support](https://plugins.jetbrains.com/plugin/12056-rider-xamarin-android-support)
+
+### ZScaler Certificates required to install for selected software (Rider, IntelliJ, etc)
+Some of the software you just installed will not play nicely with ZScaler unless you install the ZScaler certificate. 
+Go here: https://kainossoftwareltd.sharepoint.com/systems/SitePages/Zscaler-Quick-Fixes.aspx and set this certificate up with everything you need.
 ## Configure Git
 You will need to run the SSH process on your laptop `ssh -keygen -C "your_email@hscic.gov.uk"` do not rename the file and do not add any password when requested. Copy the content of the "id_rsa.pub" file to ADO https://dev.azure.com/nhsapp/_usersSettings/keys. **NOTE**: if there is another id_rsa.pub file further down in the folder structure this may cause a clash in the keys.
 
