@@ -1,39 +1,27 @@
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
   odsCodes:
-    - L82036
     - L82058
     - L82011
     - L82009
-    - L82061
     - L82035
     - L82620
-    - L82001
     - L82030
     - L82039
-    - L82059
     - L82026
-    - L82056
     - L82029
     - L82016
     - L82022
-    - L82013
     - L82066
-    - L82045
     - L82043
     - L82050
-    - Y01050
     - L82046
-    - L82054
     - Y04957
-    - L82017
     - L82010
     - L82070
     - L82051
     - L82048
-    - Y01922
     - L82004
-    - L82622
 journeys:
   cdssAdvice:
     provider: eConsult

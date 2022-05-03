@@ -5,11 +5,9 @@ target:
     - L81040
     - L81600
     - L81085
-    - L81063
     - L81086
     - L81018
     - L81075
-    - L81047
 journeys:
   cdssAdvice:
     provider: eConsult
