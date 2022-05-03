@@ -3,7 +3,7 @@ description: Communication response body for a successful in-app message togethe
 properties:
   resourceType:
     type: string
-    description: FHIR Resource Type - this will be `CommunicationRequest`.
+    description: FHIR Resource Type – this will be `CommunicationRequest`.
   identifier:
     type: array
     description: |
@@ -26,7 +26,7 @@ properties:
           example: 58dccb28-671f-4237-8095-e80cf54861e1
   status:
     type: string
-    description: Request Status of the message - this will be `active`.
+    description: Request Status of the message – this will be `active`.
   payload:
     type: array
     description: The body text of the message to be displayed in the NHS App.
