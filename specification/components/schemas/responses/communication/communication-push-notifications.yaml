@@ -3,7 +3,7 @@ description: Communication response body from a successful push notification req
 properties:
   resourceType:
     type: string
-    description: FHIR Resource Type - this will be `CommunicationRequest`.
+    description: FHIR Resource Type – this will be `CommunicationRequest`.
   identifier:
     type: array
     description: |
@@ -26,7 +26,7 @@ properties:
           example: 54615138-df34-4a79-840d-dd07e9451519
   status:
     type: string
-    description: Request Status of the message - this will be `active`
+    description: Request Status of the message – this will be `active`
   payload:
     type: array
     description: The body text to be displayed in the push notification.

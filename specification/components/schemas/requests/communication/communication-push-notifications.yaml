@@ -8,7 +8,7 @@ required:
 properties:
   resourceType:
     type: string
-    description: FHIR Resource Type - this must be `CommunicationRequest`.
+    description: FHIR Resource Type – this must be `CommunicationRequest`.
   identifier:
     type: array
     description: |
@@ -16,8 +16,8 @@ properties:
       
       We have defined the following two systems for identifiers that will be stored with the request:
 
-      * Campaign ID - denoted by system https://fhir.nhs.uk/NHSApp/campaign-id .  This is an optional campaign identifier, used for later identification of a group of multiple communication requests. For example, this could be used to identify all messages that pertain to invitations for a particular vaccination programme.
-      * Request Reference - denoted by system https://fhir.nhs.uk/NHSApp/request-id . This is an optional request identifier, used for later identification of a specific request.
+      * Campaign ID – denoted by system https://fhir.nhs.uk/NHSApp/campaign-id .  This is an optional campaign identifier, used for later identification of a group of multiple communication requests. For example, this could be used to identify all messages that pertain to invitations for a particular vaccination programme.
+      * Request Reference – denoted by system https://fhir.nhs.uk/NHSApp/request-id . This is an optional request identifier, used for later identification of a specific request.
 
       Note that these identifier system names are case-sensitive. The values provided for each of these two identifiers are limited to 50 characters, and must not match the regular expression `<(.|\n)*?>`.
       No more than one campaign ID and one request reference can be supplied with each request.
