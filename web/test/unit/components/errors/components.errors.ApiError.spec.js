@@ -60,7 +60,7 @@ const createState = ({
       pageSettings: {
         action,
         additionalInfoComponentName,
-        errorOverrideStyles: {},
+        errorOverrideStyles: { 401: 'plain', 403: 'none' },
         backLinks,
       },
       routePath: path,
@@ -461,6 +461,21 @@ describe('api errors', () => {
         $store = createStore({ getters, state });
         wrapper = mountApiError();
         expect(wrapper.vm.component).toEqual(expectedComponent);
+      });
+    });
+    describe('override style', () => {
+      it('will not return an override style if not defined for given status code', () => {
+        state = createState({ isNativeApp: true, path: '/', status: 500 });
+        $store = createStore({ getters, state });
+        wrapper = mountApiError();
+        expect(wrapper.vm.overrideStyle).toBeUndefined();
+      });
+
+      it('will return an override style if defined for given status code', () => {
+        state = createState({ isNativeApp: true, path: '/', status: 403 });
+        $store = createStore({ getters, state });
+        wrapper = mountApiError();
+        expect(wrapper.vm.overrideStyle).toEqual('none');
       });
     });
   });
