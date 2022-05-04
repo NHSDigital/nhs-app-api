@@ -67,6 +67,20 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
 
         private WebButton TryAgainButton => WebButton.WithText(_interactor, "Try again");
 
+        private WebText ErrorCannotChangeChoiceTitleText => WebText.WithTagAndText(_interactor, "h1", "Cannot change notifications choice");
+
+        private WebText NotificationsMayBeTurnedOffText => WebText.WithTagAndText(
+            _interactor,
+            "p",
+            "This may be because notifications are turned off in your device settings.");
+
+        private WebText GoToDeviceSettingsText => WebText.WithTagAndText(
+            _interactor,
+            "p",
+            "Go to your device settings and check notifications are turned on, then try again.");
+
+        private WebLink DeviceSettingsLink => WebLink.WithText(_interactor, "Go to device settings");
+
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
             PrivacyLink,
@@ -78,6 +92,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
         internal void AssertOnPage() => TitleText.AssertVisible();
 
         internal void AssertErrorOnPage() => ErrorTitleText.AssertVisible();
+
+        internal void AssertNotificationsChoiceErrorOnPage() => ErrorCannotChangeChoiceTitleText.AssertVisible();
 
         public void AssertPageElements()
         {
@@ -102,6 +118,20 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
             NotificationsTurnedOffText.AssertVisible();
             TurnOnNotificationsText.AssertVisible();
             TryAgainButton.AssertVisible();
+        }
+
+        public NotificationsPageContent AssertNotificationsChoiceErrorOnPageElements()
+        {
+            ErrorCannotChangeChoiceTitleText.AssertVisible();
+            NotificationsMayBeTurnedOffText.AssertVisible();
+            GoToDeviceSettingsText.AssertVisible();
+            DeviceSettingsLink.AssertVisible();
+            return this;
+        }
+
+        public void ClickDeviceSettings()
+        {
+            DeviceSettingsLink.Click();
         }
 
         public void AssertNotificationsEnabled()
@@ -130,6 +160,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
             using var timeout = ExtendedTimeout.FromSeconds(10);
             NotificationsToggle.AssertToggledOff();
             return this;
+        }
+
+        public void ToggleOffNotificationsAndDoNotAssert()
+        {
+            NotificationsToggle.ToggleOff();
         }
 
         public void OpenNotificationSettings() => NotificationSettingsLink.Click();

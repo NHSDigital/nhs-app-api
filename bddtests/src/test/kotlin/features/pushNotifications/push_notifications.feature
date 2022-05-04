@@ -194,13 +194,7 @@ Feature: Push Notifications
     When I disable notifications in the device's settings
     And I change the notifications toggle to off
     Then an error is displayed indicating that it could not save because the device's notifications are disabled
-    When I click the 'Try again' button
-    # verify that the error is re-displayed if no action is taken to rectify the issue
-    Then an error is displayed indicating that it could not save because the device's notifications are disabled
-    When I enable notifications in the device's settings
-    And I click the 'Try again' button
-    Then the notifications toggle is displayed as off
-    And the push registration has been removed from the repository
+    And I click the 'Go to device settings' link
 
   Scenario: A user attempting to enable push notifications when device's notifications are disabled sees an error
     Given I am using the native app user agent

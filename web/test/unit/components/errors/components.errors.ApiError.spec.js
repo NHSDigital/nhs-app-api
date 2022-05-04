@@ -1,6 +1,7 @@
 import ApiError from '@/components/errors/ApiError';
 import each from 'jest-each';
 import i18n from '@/plugins/i18n';
+import NativeApp from '@/services/native-app';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import ReportAProblem from '@/components/errors/ReportAProblem';
@@ -130,31 +131,33 @@ describe('api errors', () => {
         'errors/showApiError': true,
         'errors/isStandardError': true,
       };
+      NativeApp.openAppSettings = jest.fn();
     });
 
-    describe('additional info', () => {
-      const getAdditionalInfo = () => wrapper.find(`.${$style.additionalInformation}`);
+    describe('device settings', () => {
+      const getDeviceSettings = () => wrapper.find('*[id="device-settings"]');
 
-      describe('path has additional info', () => {
-        let additionalInfo;
+      describe('path has device settings', () => {
+        let deviceSettings;
 
         beforeEach(() => {
           state = createState({ isNativeApp: true, path: '/account/notifications', status: 500, error: 10002 });
           $store = createStore({ getters, state });
           wrapper = mountApiError();
-          additionalInfo = getAdditionalInfo();
+          deviceSettings = getDeviceSettings();
         });
 
         it('will exist', () => {
-          expect(additionalInfo.exists()).toBe(true);
+          expect(deviceSettings.exists()).toBe(true);
         });
 
         it('will have text', () => {
-          expect(additionalInfo.text()).toBe('Go to your device settings and check notifications are turned on, then try again.');
+          expect(deviceSettings.text()).toBe('Go to device settings');
         });
 
-        it('will not have label', () => {
-          expect(additionalInfo.attributes('aria-label')).toBeUndefined();
+        it('will call native app when clicked', () => {
+          deviceSettings.trigger('click');
+          expect(NativeApp.openAppSettings).toHaveBeenCalled();
         });
       });
 
@@ -166,7 +169,7 @@ describe('api errors', () => {
         });
 
         it('will not exist', () => {
-          expect(getAdditionalInfo().exists()).toBe(false);
+          expect(getDeviceSettings().exists()).toBe(false);
         });
       });
     });

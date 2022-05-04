@@ -23,13 +23,13 @@
                       :aria-label="messageLabel"
                       data-purpose="msg-text"
                       v-html="messageText"/>
-        <message-text v-if="additionalInfo"
+        <message-text v-if="deviceSettings"
                       :unindent="isPlainNativeError"
-                      :override-style="overrideStyle"
-                      :aria-label="additionalInfoLabel"
-                      :class="$style.additionalInformation"
-                      data-purpose="msg-extratext">
-          {{ additionalInfoText }}
+                      :aria-label="deviceSettingsLabel"
+                      data-purpose="msg-device-settings">
+          <a id="device-settings" href="#" @click.prevent.stop="openAppSettings">
+            {{ deviceSettingsText }}
+          </a>
         </message-text>
         <component :is="additionalInfoComponentName" v-if="additionalInfoComponentName"
                    :unindent="isPlainNativeError"
@@ -38,7 +38,7 @@
           <report-a-problem :reference="hasSessionReferenceCode"/>
         </message-text>
       </message-dialog>
-      <form v-if="retryButtonText && !backLinkUrl" id="retryButton"
+      <form v-if="retryButtonText && !backLinkUrl && !deviceSettings" id="retryButton"
             ref="retryFormRef"
             :action="retryUrl" method="get" tabindex="-1">
         <generic-button
@@ -172,6 +172,15 @@ export default {
     },
     messageText() {
       return (isObject(this.message) ? this.message.text : this.message).replace(/{111link}/g, this.get111HyperLink);
+    },
+    deviceSettings() {
+      return this.getMessage('deviceSettings');
+    },
+    deviceSettingsLabel() {
+      return isObject(this.deviceSettings) ? this.deviceSettings.label : undefined;
+    },
+    deviceSettingsText() {
+      return isObject(this.deviceSettings) ? this.deviceSettings.text : this.deviceSettings;
     },
     additionalInfo() {
       return this.getMessage('additionalInfo');
@@ -315,6 +324,9 @@ export default {
     },
     backLinkClicked() {
       redirectTo(this, this.backLinkUrl);
+    },
+    openAppSettings() {
+      NativeApp.openAppSettings();
     },
   },
 };

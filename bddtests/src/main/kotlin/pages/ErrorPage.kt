@@ -11,6 +11,7 @@ open class ErrorPage : HybridPageObject() {
     private val messageTextLocator = String.format(errorTextFinderFormat, "msg-text")
     private val extraMessageTextLocator = String.format(errorTextFinderFormat, "msg-extratext")
     private val desktopBackLinkLocator = "//*[@data-purpose='retry-or-back-button']"
+    private val desktopDeviceSettingsLinkLocator = "//*[@id='device-settings']"
 
     lateinit var webHeader: WebHeader
 
@@ -23,6 +24,8 @@ open class ErrorPage : HybridPageObject() {
     private val errorText2 = findElementByLocator(extraMessageTextLocator)
 
     val button = findElementByLocator(desktopBackLinkLocator)
+
+    val deviceSettings = findElementByLocator(desktopDeviceSettingsLinkLocator)
 
     protected fun findElementByLocator(locator: String): HybridPageElement {
         return HybridPageElement(
@@ -76,6 +79,11 @@ open class ErrorPage : HybridPageObject() {
 
     fun assertRetryButtonText(retryButtonText: String): ErrorPage {
         assertEquals("Retry button text incorrect. ", retryButtonText, button.text)
+        return this
+    }
+
+    fun assertDeviceSettingsText(deviceSettingsText: String): ErrorPage {
+        assertEquals("Device settings text incorrect. ", deviceSettingsText, deviceSettings.text)
         return this
     }
 

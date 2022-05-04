@@ -60,6 +60,13 @@ namespace NHSOnline.IntegrationTests.Pages.Android.More.AccountSettings
             return page;
         }
 
+        public static AndroidNotificationsPage AssertCannotChangeNotificationsChoiceErrorOnPage(IAndroidDriverWrapper driver)
+        {
+            var page = new AndroidNotificationsPage(driver);
+            page.PageContent.AssertNotificationsChoiceErrorOnPage();
+            return page;
+        }
+
         public AndroidNotificationsPage AssertPageElements()
         {
             Navigation.AssertNavigationIconsArePresent();

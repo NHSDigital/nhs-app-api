@@ -166,14 +166,10 @@ class PushNotificationsStepDefinitions {
 
     @Then("^an error is displayed indicating that it could not save because the device's notifications are disabled$")
     fun anErrorIsDisplayedIndicatingThatItCouldNotSaveBecauseTheDeviceNotificationsAreDisabled() {
-        errorPage.assertHeaderText("Sorry, we could not change your notifications choice")
+        errorPage.assertHeaderText("This may be because notifications are turned off in your device settings.")
             .assertNoSubHeader()
-            .assertMessageText("This might be because notifications are turned off in your device settings.")
-            .assertErrorDetailText(
-                "Go to your device settings and check notifications are turned on," +
-                        " then try again."
-            )
-            .assertRetryButtonText("Try again")
+            .assertMessageText("Go to your device settings and check notifications are turned on, then try again.")
+            .assertDeviceSettingsText("Go to device settings")
     }
 
     @Then("^I see the notifications prompt$")
