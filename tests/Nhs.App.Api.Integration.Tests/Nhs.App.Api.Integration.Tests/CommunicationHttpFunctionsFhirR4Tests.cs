@@ -46,12 +46,6 @@ namespace Nhs.App.Api.Integration.Tests
                     Path = "communication/notification/FHIR/R4/CommunicationRequest",
                     DisplayName = "Notification"
                 }};
-
-                yield return new object[]{ new EndpointInfo
-                {
-                    Path = "communication/in-app-with-notification/FHIR/R4/CommunicationRequest",
-                    DisplayName = "In-App With Notification"
-                }};
             }
         }
 
