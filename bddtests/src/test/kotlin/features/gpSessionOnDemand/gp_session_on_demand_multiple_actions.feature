@@ -7,7 +7,7 @@ Feature: GP Session On Demand multiple actions
     When I navigate to Prescriptions
     Then the Prescriptions Hub page is displayed
     When I click the View Orders link
-    Then I see appropriate try again error message for prescriptions when there is no GP session
+    Then I see appropriate try again shutter screen for prescriptions when there is no GP session
     And The <GP System> GP system becomes available
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats

@@ -30,20 +30,20 @@
       </menu-item-list>
     </div>
 
-    <error-container v-else id="error-dialog-599">
+    <shutter-container id="shutter-dialog-599">
       <error-title title="gpSessionErrors.healthRecord.tryAgainHeader"/>
       <error-paragraph from="gpSessionErrors.healthRecord.youAreNotCurrentlyAble"/>
       <error-paragraph from="gpSessionErrors.temporaryProblem"/>
       <error-button from="generic.tryAgain" @click="tryAgain" />
-    </error-container>
+    </shutter-container>
 
   </div>
 </template>
 
 <script>
 import Contact111 from '@/components/widgets/Contact111';
+import ShutterContainer from '@/components/shutters/ShutterContainer';
 import ErrorButton from '@/components/errors/ErrorButton';
-import ErrorContainer from '@/components/errors/ErrorContainer';
 import ErrorPage from '@/components/errors/ErrorPage';
 import ErrorParagraph from '@/components/errors/ErrorParagraph';
 import ErrorTitle from '@/components/errors/ErrorTitle';
@@ -58,8 +58,8 @@ export default {
   name: 'HealthRecordErrors',
   components: {
     Contact111,
+    ShutterContainer,
     ErrorButton,
-    ErrorContainer,
     ErrorPage,
     ErrorParagraph,
     ErrorTitle,

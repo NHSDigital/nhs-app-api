@@ -46,7 +46,7 @@ describe('OrganDonationErrors', () => {
     it('will show the try again component if hasRetried is false', async () => {
       wrapper = await mountPage();
 
-      expect(wrapper.find('#error-dialog-599').exists()).toBe(true);
+      expect(wrapper.find('#shutter-dialog-599').exists()).toBe(true);
     });
   });
 });

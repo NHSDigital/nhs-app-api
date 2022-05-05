@@ -236,8 +236,8 @@ class YourAppointmentsStepDefinitions {
     @Then("^I see appropriate try again warning message when there is an error with '(.*)'$")
     fun iSeeAppropriateTryAgainWarningMessageWhenThereIsAnErrorWithPrefix(prefix: String) {
         errorDialogPage.assertReferenceCode(prefix)
-                .assertShutterParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.ifItContinues)
-                .assertShutterParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.tryAgainNow)
+                .assertWarningParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.ifItContinues)
+                .assertWarningParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.tryAgainNow)
                 .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.problemLoadingTitle)
                 .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.problemLoadingTitle)
     }
@@ -253,8 +253,8 @@ class YourAppointmentsStepDefinitions {
     @Then("^I see appropriate try again book/cancel warning message when there is an error with '(.*)'$")
     fun iSeeAppropriateTryAgainBookCancelWarningMessageWhenThereIsAnErrorWithPrefix(prefix: String) {
         val tryAgainParagraph = yourAppointmentsUISteps.yourAppointmentsPage.getTryAgainNowParagraph(prefix)
-        errorDialogPage.assertShutterParagraphText(tryAgainParagraph)
-                .assertShutterParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.ifItContinuesBookOrCancel)
+        errorDialogPage.assertWarningParagraphText(tryAgainParagraph)
+                .assertWarningParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.ifItContinuesBookOrCancel)
                 .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.problemLoadingTitle)
                 .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.problemLoadingTitle)
     }

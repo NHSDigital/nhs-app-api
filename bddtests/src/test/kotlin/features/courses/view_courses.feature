@@ -409,7 +409,7 @@ Feature: View Courses Frontend
     When I retrieve the 'Your Prescriptions' page directly
     And The <GP System> GP system is still unavailable
     And I click the Order a prescription button
-    Then I see appropriate try again error message for prescriptions when there is no GP session
+    Then I see appropriate try again shutter screen for prescriptions when there is no GP session
     And The <GP System> GP system becomes available
     And I have historic prescriptions
     And I have 1 assigned prescriptions which have only quantity info
@@ -431,7 +431,7 @@ Feature: View Courses Frontend
     When I retrieve the 'Your Prescriptions' page directly
     And The <GP System> GP system is still unavailable
     And I click the Order a prescription button
-    Then I see appropriate try again error message for prescriptions when there is no GP session
+    Then I see appropriate try again shutter screen for prescriptions when there is no GP session
     When I click the 'Try again' button
     Then I see what I can do next with a prescriptions error message and reference code '3p'
     And I click the session error back link

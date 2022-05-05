@@ -12,7 +12,7 @@ Feature: GP Session Expiry
     And the GP System session has expired when viewing prescriptions
     When I retrieve the 'Your Prescriptions' page directly
     And I click the Order a prescription button
-    Then I see appropriate try again error message for prescriptions when there is no GP session
+    Then I see appropriate try again shutter screen for prescriptions when there is no GP session
     Examples:
       | GP System |
       | TPP       |
@@ -31,7 +31,7 @@ Feature: GP Session Expiry
     Then I see the home page
     And the GP System session has expired when viewing prescriptions
     When I retrieve the 'prescription repeat courses' page directly
-    Then I see appropriate try again error message for prescriptions when there is no GP session
+    Then I see appropriate try again shutter screen for prescriptions when there is no GP session
     Examples:
       | GP System |
       | TPP       |

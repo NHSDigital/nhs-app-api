@@ -101,7 +101,7 @@ class CancelAppointmentStepDefinitions {
         val pageHeader = cancelAppointmentSteps.cancelAppointmentPage.cannotCancelTitle
         val message = cancelAppointmentSteps.cancelAppointmentPage.alreadyCancelled
 
-        errorDialogPage.assertShutterParagraphText(message)
+        errorDialogPage.assertWarningParagraphText(message)
             .assertPageHeader(pageHeader)
             .assertPageTitle(pageTitle)
     }
@@ -112,7 +112,7 @@ class CancelAppointmentStepDefinitions {
         val pageHeader = cancelAppointmentSteps.cancelAppointmentPage.contactToCancelTitle
         val message = cancelAppointmentSteps.cancelAppointmentPage.tooLateToCancel
 
-        errorDialogPage.assertShutterParagraphText(message)
+        errorDialogPage.assertWarningParagraphText(message)
             .assertPageHeader(pageHeader)
             .assertPageTitle(pageTitle)
     }
@@ -129,8 +129,8 @@ class CancelAppointmentStepDefinitions {
     @Then("^I see appropriate warning message when there is an error with '(.*)'$")
     fun iSeeAppropriateWarningMessageWhenThereIsAnErrorWithPrefix(prefix: String) {
         val goBackParagraph = cancelAppointmentSteps.cancelAppointmentPage.getGoBackAndTryAgainParagraph(prefix)
-        errorDialogPage.assertShutterParagraphText(goBackParagraph)
-            .assertShutterParagraphText(cancelAppointmentSteps.cancelAppointmentPage.ifItContinuesBookOrCancel)
+        errorDialogPage.assertWarningParagraphText(goBackParagraph)
+            .assertWarningParagraphText(cancelAppointmentSteps.cancelAppointmentPage.ifItContinuesBookOrCancel)
             .assertPageHeader(cancelAppointmentSteps.cancelAppointmentPage.problemHeader)
             .assertPageTitle(cancelAppointmentSteps.cancelAppointmentPage.problemTitle)
     }

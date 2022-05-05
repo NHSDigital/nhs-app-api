@@ -5,7 +5,7 @@ Feature: GP Session On Demand linked profiles
     Given I am an <GP System> patient whose GP system is unavailable
     And I am logged in
     When I can see and follow the Linked profiles link
-    And I see appropriate linked profiles try again error message when there is no GP session
+    And I see appropriate linked profiles try again shutter screen when there is no GP session
     And The <GP System> GP system becomes available
     And I click the 'Try again' button
     And the linked profiles page is displayed
@@ -19,7 +19,7 @@ Feature: GP Session On Demand linked profiles
     Given I am an <GP System> patient whose GP system is unavailable
     And I am logged in
     When I can see and follow the Linked profiles link
-    And I see appropriate linked profiles try again error message when there is no GP session
+    And I see appropriate linked profiles try again shutter screen when there is no GP session
     And I click the 'Try again' button
     Then I see what I can do next with a linked accounts error message and reference code '<Code>'
     Examples:

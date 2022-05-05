@@ -308,7 +308,7 @@ Feature: Login with proxy access
     Given I am an <GP System> patient with linked profiles whose GP system is unavailable
     And I am logged in
     When I navigate to linked profiles from the home page via more
-    Then I see appropriate linked profiles try again error message when there is no GP session
+    Then I see appropriate linked profiles try again shutter screen when there is no GP session
     When The <GP System> GP system becomes available
     And I click the 'Try again' button
     Then linked profiles are displayed
@@ -321,7 +321,7 @@ Feature: Login with proxy access
     Given I am an <GP System> patient with linked profiles whose GP system is unavailable
     And I am logged in
     When I navigate to linked profiles from the home page via more
-    And I see appropriate linked profiles try again error message when there is no GP session
+    And I see appropriate linked profiles try again shutter screen when there is no GP session
     And I click the 'Try again' button
     Then I see what I can do next with a linked accounts error message and reference code '<Code>'
     And I click the session error back link
@@ -336,8 +336,8 @@ Feature: Login with proxy access
     Given I am an <GP System> patient with linked profiles whose GP system is unavailable
     And I am logged in
     When I navigate to linked profiles from the home page via more
-    And I see appropriate linked profiles try again error message when there is no GP session
-    And I click the error 'Back' link
+    And I see appropriate linked profiles try again shutter screen when there is no GP session
+    And I click the shutter 'Back' link
     And The <GP System> GP system becomes available
     And I click the Linked profiles link on the more page
     Then linked profiles are displayed
@@ -362,7 +362,7 @@ Feature: Login with proxy access
     And the GP System session has expired when viewing prescriptions
     When I retrieve the 'Your Prescriptions' page directly
     And I click the Order a prescription button
-    Then I see appropriate try again error message for prescriptions when there is no GP session
+    Then I see appropriate try again shutter screen for prescriptions when there is no GP session
 
   Scenario: The TPP GP practice session has expired and a proxy user visits the prescription repeat courses page
     Given I am logged in as a TPP user with linked profiles and appointments provider IM1
@@ -379,4 +379,4 @@ Feature: Login with proxy access
     And there are 5 repeatable prescriptions available
     And the GP System session has expired when viewing prescriptions
     When I retrieve the 'prescription repeat courses' page directly
-    Then I see appropriate try again error message for prescriptions when there is no GP session
+    Then I see appropriate try again shutter screen for prescriptions when there is no GP session

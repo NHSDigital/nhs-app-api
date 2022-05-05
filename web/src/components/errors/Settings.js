@@ -131,6 +131,7 @@ export default {
     },
     {
       route: ORGAN_DONATION_REVIEW_YOUR_DECISION_PATH,
+      errorOverrideStyles: { 500: 'plain', 502: 'plain' },
       action: {
         1: 'organDonation/submitDecision',
       },

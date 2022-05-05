@@ -21,7 +21,7 @@ Feature: View prescriptions error cases
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     And I am logged in
     When I retrieve the 'Prescription Repeat Courses' page directly
-    Then I see appropriate try again error message for prescriptions when there is no GP session
+    Then I see appropriate try again shutter screen for prescriptions when there is no GP session
     When I click the 'Try again' button
     Then I see the error reference code with prefix '<Prefix>'
     And I click the report a problem link

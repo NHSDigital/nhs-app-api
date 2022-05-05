@@ -8,7 +8,7 @@ Feature: GP Session On Demand medical record
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
-    And I see appropriate try again error message for gp medical record when there is no GP session
+    And I see appropriate try again shutter screen for gp medical record when there is no GP session
     And The <GP System> GP system becomes available
     And I am a <GP System> user setup to use medical record version 2
     And the GP Practice has enabled all medical records for the patient
@@ -29,7 +29,7 @@ Feature: GP Session On Demand medical record
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
-    And I see appropriate try again error message for gp medical record when there is no GP session
+    And I see appropriate try again shutter screen for gp medical record when there is no GP session
     And I click the 'Try again' button
     Then I see what I can do next with a medical record error message and reference code '<Prefix>'
     Examples:
@@ -43,7 +43,7 @@ Feature: GP Session On Demand medical record
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
-    And I see appropriate try again error message for gp medical record when there is no GP session
+    And I see appropriate try again shutter screen for gp medical record when there is no GP session
     And I click the 'Try again' button
     And I see the Third Party menu item 'Care plans'
 
@@ -53,7 +53,7 @@ Feature: GP Session On Demand medical record
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
-    And I see appropriate try again error message for gp medical record when there is no GP session
+    And I see appropriate try again shutter screen for gp medical record when there is no GP session
     And I click the 'Try again' button
     And I see the Third Party menu item 'Track your health'
 
@@ -63,7 +63,7 @@ Feature: GP Session On Demand medical record
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
-    And I see appropriate try again error message for gp medical record when there is no GP session
+    And I see appropriate try again shutter screen for gp medical record when there is no GP session
     And I click the 'Try again' button
     And I do not see the Third Party menu item '<Menu item text>'
     Examples:

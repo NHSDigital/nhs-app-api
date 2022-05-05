@@ -71,7 +71,7 @@ describe('Prescriptions errors', () => {
 
       page = mountWrapper({ repeatError: error });
 
-      expect(page.find('#error-dialog-599').exists()).toBe(true);
+      expect(page.find('#shutter-dialog-599').exists()).toBe(true);
       expect(page.vm.hasRetried).toBe(false);
     });
 

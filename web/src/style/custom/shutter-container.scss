@@ -1,0 +1,28 @@
+@import '~nhsuk-frontend/packages/core/settings/breakpoints';
+@import '~nhsuk-frontend/packages/core/settings/colours';
+@import '~nhsuk-frontend/packages/core/settings/spacing';
+@import '~nhsuk-frontend/packages/core/tools/ifff';
+@import '~nhsuk-frontend/packages/core/tools/mixins';
+@import '~nhsuk-frontend/packages/core/tools/sass-mq';
+@import '~nhsuk-frontend/packages/core/tools/spacing';
+
+.msg {
+  &:not(.plain) {
+    @include nhsuk-responsive-margin(3, "bottom");
+    @include nhsuk-responsive-margin(1, "top");
+    @include nhsuk-responsive-padding(3, "bottom");
+    width: 100%;
+    height: auto;
+
+    .msg-content {
+      @include nhsuk-responsive-padding(2, "top");
+      @include nhsuk-responsive-padding(4, "right");
+    }
+  }
+
+  &.plain {
+    .msg-content {
+      @include nhsuk-responsive-padding(3, "top");
+    }
+  }
+}

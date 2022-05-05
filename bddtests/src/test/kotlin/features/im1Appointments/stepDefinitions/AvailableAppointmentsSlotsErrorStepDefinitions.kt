@@ -23,16 +23,16 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
 
     @Then("^I see appropriate warning message for loading time-outs with '(.*)'$")
     fun iSeeAppropriateWarningMessageForLoadingTimesOutWithPrefix(prefix: String) {
-        errorDialogPage.assertShutterParagraphText(availableAppointmentsPage.getTryAgainNowParagraph(prefix))
-                .assertShutterParagraphText(availableAppointmentsPage.ifItContinues)
+        errorDialogPage.assertWarningParagraphText(availableAppointmentsPage.getTryAgainNowParagraph(prefix))
+                .assertWarningParagraphText(availableAppointmentsPage.ifItContinues)
                 .assertPageHeader(availableAppointmentsPage.problemLoadingTitle)
                 .assertPageTitle(availableAppointmentsPage.problemLoadingTitle)
     }
 
     @Then("^I see appropriate warning message when there is a loading error with '(.*)'$")
     fun iSeeAppropriateErrorWarningMessageWhenThereIsALoadingErrorWithPrefix(prefix: String) {
-        errorDialogPage.assertShutterParagraphText(availableAppointmentsPage.getGoBackAndTryAgainParagraph(prefix))
-                .assertShutterParagraphText(availableAppointmentsPage.ifItContinues)
+        errorDialogPage.assertWarningParagraphText(availableAppointmentsPage.getGoBackAndTryAgainParagraph(prefix))
+                .assertWarningParagraphText(availableAppointmentsPage.ifItContinues)
                 .assertPageHeader(availableAppointmentsPage.problemLoadingTitle)
                 .assertPageTitle(availableAppointmentsPage.problemLoadingTitle)
     }

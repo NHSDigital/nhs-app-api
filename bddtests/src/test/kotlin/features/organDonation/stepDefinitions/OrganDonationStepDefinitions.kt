@@ -176,8 +176,8 @@ open class OrganDonationStepDefinitions {
         errorDialogPage
             .assertPageHeader("Sorry, there is a problem with organ donation")
             .assertPageTitle("Sorry, there is a problem with organ donation")
-            .assertParagraphText("You are not currently able to view or manage your organ donation decision.")
-            .assertParagraphText("This may be a temporary problem.")
+            .assertShutterParagraphText("You are not currently able to view or manage your organ donation decision.")
+            .assertShutterParagraphText("This may be a temporary problem.")
     }
 
     @Then("^I see what I can do next with an organ donation error message$")

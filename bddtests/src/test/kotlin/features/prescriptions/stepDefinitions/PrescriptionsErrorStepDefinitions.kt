@@ -136,10 +136,12 @@ class PrescriptionsErrorStepDefinitions {
                 "For urgent medical help, go to 111.nhs.uk or call 111.", errorPage.errorText1.text)
     }
 
-    @Then("^I see appropriate try again error message for prescriptions when there is no GP session$")
-    fun iSeeAppropriateTryAgainErrorMessageWhenThereIsNoGpSession() {
-        errorDialogPage.assertParagraphText("You are not currently able to order or view repeat prescriptions online.")
-                .assertParagraphText("This may be a temporary problem.")
+    @Then("^I see appropriate try again shutter screen for prescriptions when there is no GP session$")
+    fun iSeeAppropriateTryAgainShutterScreenWhenThereIsNoGpSession() {
+        errorDialogPage.assertShutterParagraphText(
+                "You are not currently able to order or view repeat prescriptions online."
+                )
+                .assertShutterParagraphText("This may be a temporary problem.")
                 .assertPageHeader("Sorry, there is a problem getting your repeat prescription information")
                 .assertPageTitle("Sorry, there is a problem getting your repeat prescription information")
     }

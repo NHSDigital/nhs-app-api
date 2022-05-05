@@ -77,11 +77,11 @@ open class MedicalRecordStepDefinitions {
         webHeader.waitForPageHeaderText("Your GP health record")
     }
 
-    @Then("^I see appropriate try again error message for gp medical record when there is no GP session$")
-    fun iSeeAppropriateTryAgainErrorMessageWhenThereIsNoGpSessionForGpMedicalRecord() {
+    @Then("^I see appropriate try again shutter screen for gp medical record when there is no GP session$")
+    fun iSeeAppropriateTryAgainShutterScreenWhenThereIsNoGpSessionForGpMedicalRecord() {
         errorDialogPage
-                .assertParagraphText("You are not currently able to view your GP health record online.")
-                .assertParagraphText("This may be a temporary problem.")
+                .assertShutterParagraphText("You are not currently able to view your GP health record online.")
+                .assertShutterParagraphText("This may be a temporary problem.")
                 .assertPageHeader("Sorry, there is a problem getting your GP health record")
                 .assertPageTitle("Sorry, there is a problem getting your GP health record")
     }

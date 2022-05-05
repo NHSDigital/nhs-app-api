@@ -1,6 +1,6 @@
 <template>
   <div v-if="error.status === gpSessionErrorStatus">
-    <error-container v-if="!hasRetried" id="linked-profiles-599-temporary-error">
+    <shutter-container v-if="!hasRetried" id="linked-profiles-599-temporary-shutter">
       <error-title title="gpSessionErrors.linkedProfiles.temporaryHeader"/>
       <error-paragraph from="gpSessionErrors.linkedProfiles.youAreNotCurrentlyAble"/>
       <error-paragraph from="gpSessionErrors.temporaryProblem"/>
@@ -8,7 +8,7 @@
       <error-link from="generic.back"
                   :action="backUrl"
                   :desktop-only="true"/>
-    </error-container>
+    </shutter-container>
 
     <error-page v-else id="linked-profiles-599-error"
                 :code="error.serviceDeskReference"
@@ -39,7 +39,7 @@
 <script>
 import Contact111 from '@/components/widgets/Contact111';
 import ErrorButton from '@/components/errors/ErrorButton';
-import ErrorContainer from '@/components/errors/ErrorContainer';
+import ShutterContainer from '@/components/shutters/ShutterContainer';
 import ErrorLink from '@/components/errors/ErrorLink';
 import ErrorPage from '@/components/errors/ErrorPage';
 import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
@@ -58,7 +58,7 @@ export default {
   components: {
     Contact111,
     ErrorButton,
-    ErrorContainer,
+    ShutterContainer,
     ErrorLink,
     ErrorPage,
     ErrorParagraph,

@@ -20,7 +20,7 @@
       </template>
     </error-page>
 
-    <error-container v-else id="error-dialog-599">
+    <shutter-container v-else id="shutter-dialog-599">
       <error-title title="gpSessionErrors.prescriptions.tryAgainHeader"/>
       <error-paragraph from="gpSessionErrors.prescriptions.youAreNotCurrentlyAble"/>
       <error-paragraph from="gpSessionErrors.temporaryProblem"/>
@@ -28,7 +28,7 @@
       <error-link from="generic.back"
                   :action="backUrl"
                   :desktop-only="true"/>
-    </error-container>
+    </shutter-container>
 
 
   </div>
@@ -38,7 +38,7 @@
 import Contact111 from '@/components/widgets/Contact111';
 import EmergencyPrescriptionMenuItem from '@/components/menuItems/EmergencyPrescriptionMenuItem';
 import ErrorButton from '@/components/errors/ErrorButton';
-import ErrorContainer from '@/components/errors/ErrorContainer';
+import ShutterContainer from '@/components/shutters/ShutterContainer';
 import ErrorLink from '@/components/errors/ErrorLink';
 import ErrorPage from '@/components/errors/ErrorPage';
 import ErrorParagraph from '@/components/errors/ErrorParagraph';
@@ -55,7 +55,7 @@ export default {
     Contact111,
     EmergencyPrescriptionMenuItem,
     ErrorButton,
-    ErrorContainer,
+    ShutterContainer,
     ErrorLink,
     ErrorPage,
     ErrorParagraph,

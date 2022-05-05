@@ -49,7 +49,7 @@ describe('linked profiles error component', () => {
     ])
       .it('will %s the temporary error when hasRetried is %s', (_, hasRetried, errorVisible) => {
         page = mountComponent({ hasRetried });
-        expect(page.find('#linked-profiles-599-temporary-error').exists()).toBe(errorVisible);
+        expect(page.find('#linked-profiles-599-temporary-shutter').exists()).toBe(errorVisible);
       });
 
     each([

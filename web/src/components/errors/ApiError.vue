@@ -14,6 +14,7 @@
         </message-text>
         <message-text v-if="subheader!==''"
                       :unindent="isPlainNativeError"
+                      :override-style="overrideStyle"
                       data-purpose="msg-subheader">
           {{ subheader }}
         </message-text>
@@ -24,13 +25,15 @@
                       v-html="messageText"/>
         <message-text v-if="additionalInfo"
                       :unindent="isPlainNativeError"
+                      :override-style="overrideStyle"
                       :aria-label="additionalInfoLabel"
                       :class="$style.additionalInformation"
                       data-purpose="msg-extratext">
           {{ additionalInfoText }}
         </message-text>
         <component :is="additionalInfoComponentName" v-if="additionalInfoComponentName"
-                   :class="$style.additionalInformation" />
+                   :unindent="isPlainNativeError"
+                   :class="$style.additionalInformation"/>
         <message-text v-if="hasSessionReferenceCode">
           <report-a-problem :reference="hasSessionReferenceCode"/>
         </message-text>

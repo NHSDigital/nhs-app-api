@@ -9,10 +9,10 @@ class LinkedProfileErrorStepDefinitions {
     private lateinit var errorDialogPage: ErrorDialogPage
     private lateinit var linkedAccountsGpSessionError: GpSessionError
 
-    @Then("^I see appropriate linked profiles try again error message when there is no GP session$")
-    fun iSeeAppropriateTryAgainErrorMessageWhenThereIsNoGpSession() {
-        errorDialogPage.assertParagraphText("You are not currently able to access linked profiles.")
-                .assertParagraphText("This may be a temporary problem.")
+    @Then("^I see appropriate linked profiles try again shutter screen when there is no GP session$")
+    fun iSeeAppropriateTryAgainShutterScreenWhenThereIsNoGpSession() {
+        errorDialogPage.assertShutterParagraphText("You are not currently able to access linked profiles.")
+                .assertShutterParagraphText("This may be a temporary problem.")
                 .assertPageHeader("Sorry, there is a problem getting your linked profiles information")
                 .assertPageTitle("Sorry, there is a problem getting your linked profiles information")
     }

@@ -8,7 +8,7 @@ Feature: Medical Record Errors
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
-    And I see appropriate try again error message for gp medical record when there is no GP session
+    And I see appropriate try again shutter screen for gp medical record when there is no GP session
     And I click the 'Try again' button
     Then I see the error reference code with prefix '<Prefix>'
     When I click the 'Report a problem' link

@@ -9,9 +9,13 @@ class ErrorDialogPage : HybridPageObject() {
     private val errorTextFinderFormat = "$errorContainerLocator//p[@data-purpose='%s']"
     private val errorMessageTextLocator = String.format(errorTextFinderFormat, "msg-text")
 
-    private val shutterContainerLocator = "//div[@data-purpose='warning']"
+    private val warningContainerLocator = "//div[@data-purpose='warning']"
+    private val warningTextFinderFormat = "$warningContainerLocator//p[@data-purpose='%s']"
+    private val warningMessageTextLocator = String.format(warningTextFinderFormat, "msg-text")
+
+    private val shutterContainerLocator = "//div[@data-purpose='shutter']"
     private val shutterTextFinderFormat = "$shutterContainerLocator//p[@data-purpose='%s']"
-    private val shutterMessageTextLocator = String.format(shutterTextFinderFormat, "msg-text")
+    private val shutterTextLocator = String.format(shutterTextFinderFormat, "msg-text")
 
     fun assertPageTitle(title: String): ErrorDialogPage {
         var retryCount = (TIME_TO_WAIT_FOR_ELEMENT / ELEMENT_RETRY_TIME).toInt()
@@ -39,8 +43,19 @@ class ErrorDialogPage : HybridPageObject() {
         return this
     }
 
+    fun assertWarningParagraphText(paragraphText: String): ErrorDialogPage {
+        val message = getElement("$warningMessageTextLocator[normalize-space()=\"$paragraphText\"]")
+        message.assertIsVisible()
+        return this
+    }
+
+    fun assertWarningParagraphText(paragraph: ErrorCodeParagraph): ErrorDialogPage {
+        val locator = "$warningMessageTextLocator[starts-with(normalize-space(),'${paragraph.startText}')]"
+        return assertTextMatches(locator, paragraph);
+    }
+    
     fun assertShutterParagraphText(paragraphText: String): ErrorDialogPage {
-        val message = getElement("$shutterMessageTextLocator[normalize-space()=\"$paragraphText\"]")
+        val message = getElement("$shutterTextLocator[normalize-space()=\"$paragraphText\"]")
         message.assertIsVisible()
         return this
     }
@@ -53,11 +68,6 @@ class ErrorDialogPage : HybridPageObject() {
 
     fun assertParagraphText(paragraph: ErrorCodeParagraph): ErrorDialogPage {
         val locator = "$errorMessageTextLocator[starts-with(normalize-space(),'${paragraph.startText}')]"
-        return assertTextMatches(locator, paragraph);
-    }
-
-    fun assertShutterParagraphText(paragraph: ErrorCodeParagraph): ErrorDialogPage {
-        val locator = "$shutterMessageTextLocator[starts-with(normalize-space(),'${paragraph.startText}')]"
         return assertTextMatches(locator, paragraph);
     }
 
@@ -87,7 +97,18 @@ class ErrorDialogPage : HybridPageObject() {
     }
 
     fun assertWarningLink(linkText: String, url: String? = null) : HybridPageElement {
-        var locator = "$shutterContainerLocator//a[contains(text(),'$linkText')]"
+        var locator = "${warningContainerLocator}ContainerLocator//a[contains(text(),'$linkText')]"
+        var message: String? = null
+
+        if (!url.isNullOrBlank()) {
+            locator += "[starts-with(@href, '$url')]"
+            message = "Expected the link called $linkText with target of $url to be available"
+        }
+        return getElement(locator).assertIsVisible(message)
+    }
+
+    fun assertLinkOnShutter(linkText: String, url: String? = null) : HybridPageElement {
+        var locator = "${shutterContainerLocator}//a[contains(text(),'$linkText')]"
         var message: String? = null
 
         if (!url.isNullOrBlank()) {

@@ -14,19 +14,19 @@
       </template>
     </error-page>
 
-    <error-container v-else id="error-dialog-599">
+    <shutter-container v-else id="shutter-dialog-599">
       <error-title title="gpSessionErrors.organDonation.tryAgainHeader"/>
       <error-paragraph from="gpSessionErrors.organDonation.youAreNotCurrentlyAble"/>
       <error-paragraph from="gpSessionErrors.temporaryProblem"/>
       <error-button from="generic.tryAgain" @click="tryAgain" />
-    </error-container>
+    </shutter-container>
 
   </div>
 </template>
 
 <script>
 import ErrorButton from '@/components/errors/ErrorButton';
-import ErrorContainer from '@/components/errors/ErrorContainer';
+import ShutterContainer from '@/components/shutters/ShutterContainer';
 import ErrorPage from '@/components/errors/ErrorPage';
 import ErrorParagraph from '@/components/errors/ErrorParagraph';
 import ErrorTitle from '@/components/errors/ErrorTitle';
@@ -37,7 +37,7 @@ export default {
   name: 'OrganDonationErrors',
   components: {
     ErrorButton,
-    ErrorContainer,
+    ShutterContainer,
     ErrorPage,
     ErrorParagraph,
     ErrorTitle,

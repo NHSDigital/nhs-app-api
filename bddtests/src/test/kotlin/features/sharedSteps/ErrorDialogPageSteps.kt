@@ -26,6 +26,11 @@ class ErrorDialogPageSteps {
         errorDialogPage.assertWarningLink(linkText, url).click()
     }
 
+    @When("^I click the shutter '(.*)' link$")
+    fun iClickTheShutterLink(linkText: String) {
+        errorDialogPage.assertLinkOnShutter(linkText).click()
+    }
+
     @When("^I click the error '(.*)' link with a url of '(.*)'$")
     fun iClickTheErrorLinkWithAUrlOf(linkText: String, url: String) {
         browser.storeCurrentTabCount()

@@ -9,7 +9,7 @@ Feature: GP Session On Demand subject claim mismatch
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
     And I click the View Orders link
-    And I see appropriate try again error message for prescriptions when there is no GP session
+    And I see appropriate try again shutter screen for prescriptions when there is no GP session
     Examples:
       | GP System |
       | EMIS      |
@@ -35,7 +35,7 @@ Feature: GP Session On Demand subject claim mismatch
     And I am a patient using the <GP System> GP System
     And I am logged in
     When I can see and follow the Linked profiles link
-    And I see appropriate linked profiles try again error message when there is no GP session
+    And I see appropriate linked profiles try again shutter screen when there is no GP session
     Examples:
       | GP System |
       | EMIS      |
@@ -48,7 +48,7 @@ Feature: GP Session On Demand subject claim mismatch
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
-    And I see appropriate try again error message for gp medical record when there is no GP session
+    And I see appropriate try again shutter screen for gp medical record when there is no GP session
     Examples:
       | GP System |
       | EMIS      |

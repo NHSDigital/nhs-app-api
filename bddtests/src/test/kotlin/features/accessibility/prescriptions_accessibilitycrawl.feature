@@ -163,7 +163,7 @@ Feature: Repeat prescriptions and Your orders accessibility
     When I retrieve the 'Your Prescriptions' page directly
     And The EMIS GP system is still unavailable
     And I click the View Orders link
-    Then I see appropriate try again error message for prescriptions when there is no GP session
+    Then I see appropriate try again shutter screen for prescriptions when there is no GP session
     And the Prescriptions_GPSessionError_TemporaryProblem page is saved to disk
 
   Scenario: The 'Repeat prescriptions GP session error - other things you can do' page is captured
@@ -172,7 +172,7 @@ Feature: Repeat prescriptions and Your orders accessibility
     When I retrieve the 'Your Prescriptions' page directly
     And The EMIS GP system is still unavailable
     And I click the View Orders link
-    Then I see appropriate try again error message for prescriptions when there is no GP session
+    Then I see appropriate try again shutter screen for prescriptions when there is no GP session
     When I click the 'Try again' button
     Then I see what I can do next with a prescriptions error message and reference code '3p'
     And the Prescriptions_GPSessionError_OtherThingsYouCanDo page is saved to disk
