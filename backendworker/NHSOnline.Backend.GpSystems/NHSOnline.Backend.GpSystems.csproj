@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlToOpenXml.dll" Version="2.2.0" />
+    <PackageReference Include="HtmlToOpenXml.dll" Version="2.3.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.21" />
     <PackageReference Include="Open-XML-SDK" Version="2.9.1" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="5.0.0" />
