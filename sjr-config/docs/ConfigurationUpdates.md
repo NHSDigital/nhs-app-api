@@ -90,7 +90,7 @@ NB: full_gpinfo.csv file is used to create an updated gpinfo.csv after step 3 be
 
 	and add to the [eConsult SharePoint folder](https://hscic365.sharepoint.com/:f:/r/sites/eConsult/Shared%20Documents/eConsult%20Practice%20Management?csf=1&web=1&e=xfDYrk). Do this even if there were no changes to eConsult for the release. 
 	
-	Email the file to liz.jones@webgp.com with subject 'NHS App config'.
+	Email the file to liz.jones@webgp.com and data-bi@econsult.health with subject 'NHS App config'.
 
 7. Add the latest sjr-config/utils/rulecreation/engage.csv to the [Engage SharePoint folder](https://hscic365.sharepoint.com/sites/EngageHealthSystemsLtd/Shared%20Documents/Forms/AllItems.aspx?csf=1&web=1&e=097t7s&cid=1e0bd1d8%2D3964%2D4bba%2D80e2%2Ddc7b3b6abca1&RootFolder=%2Fsites%2FEngageHealthSystemsLtd%2FShared%20Documents%2FEngage%20Practice%20Management&FolderCTID=0x0120009F236CF489C42E4E8C5F68FA5FC260FE) and rename the csv file to the format `YYMMDD-practices-live.csv`. Do this even if there were no changes to Engage for the release.
 
