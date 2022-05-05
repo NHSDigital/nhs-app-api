@@ -81,6 +81,11 @@ namespace NHSOnline.App.Droid.DependencyServices.Notifications
                 Logger.LogInformation("Token retrieved, returning as authorised");
                 return new GetPnsTokenResult.Authorised(new AndroidGetPnsTokenResponse(token.ToString()));
             }
+            catch(IOException ex) when (ex.Message != null && ex.Message.Contains("TOO_MANY_REGISTRATIONS", StringComparison.InvariantCultureIgnoreCase))
+            {
+                Logger.LogError(ex, "Too many registrations exception thrown while trying to retrieve token");
+                return new GetPnsTokenResult.Unauthorised();
+            }
             catch(Exception e)
             {
                 Logger.LogError(e, "Exception thrown while trying to retrieve token");

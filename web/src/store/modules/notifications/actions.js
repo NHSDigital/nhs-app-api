@@ -199,6 +199,16 @@ export default {
   },
   unauthorised({ commit, dispatch, state }) {
     commit(SET_WAITING, false);
+    // handles case during login when
+    // - middleware has initiated notification flow (so current route is null)
+    //   before notification page is shown for the first time
+    // - an error occurs
+    // - we don't want to show an error screen about notifications when all they've done is login
+    if (this.app.$router.currentRoute.name === null &&
+        get('name')(this.app.$router.history.pending) === NOTIFICATIONS_NAME) {
+      resolveTask('');
+      return;
+    }
     switch (this.app.$router.currentRoute.name) {
       case NOTIFICATIONS_NAME:
       case USER_RESEARCH_NAME:

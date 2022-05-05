@@ -614,6 +614,25 @@ describe('notifications actions', () => {
         });
       });
     });
+    describe('notifications prompt for too many registrations', () => {
+      let loading;
+      beforeEach(() => {
+        loading = actions.load();
+        actions.app.$router.currentRoute.name = null;
+        $router.history = {
+          pending: {
+            name: NOTIFICATIONS_NAME,
+          },
+        };
+        actions.unauthorised({ commit, dispatch });
+      });
+
+      it('will commit a value of `false` to `SET_WAITING`', () => {
+        expect(commit).toBeCalledWith(SET_WAITING, false);
+      });
+
+      it('will resolve loading promise with ``', () => expect(loading).resolves.toBe(''));
+    });
   });
 
   describe('addNotificationCookie', () => {
