@@ -50,16 +50,6 @@
         "eventDetail": null
     },
     {
-        "eventDateTime": "2021-08-05T14:59:25Z",
-        "communicationId": "b95faccc-9d63-42d7-aa99-aad84c3369ef",
-        "campaignId": null,
-        "requestReference": null,
-        "channel": "AppMessage",
-        "communicationCreatedDateTime": "2021-08-05T14:59:16Z",
-        "event": "Failed",
-        "eventDetail": "Failure details"
-    },
-    {
         "eventDateTime": "2021-08-05T13:29:52Z",
         "communicationId": "4bed75b6-8dc8-4514-bf29-50737467a928",
         "campaignId": "Influenza_202108",

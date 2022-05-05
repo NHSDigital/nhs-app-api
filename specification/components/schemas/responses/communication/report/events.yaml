@@ -39,18 +39,17 @@ items:
       nullable: false
     event:
       type: string
-      enum: [Completed, Failed, Read, Rejected]
+      enum: [Completed, Read, Rejected]
       description: |
         Indicates the nature of the event being reported, as follows:
 
         - Completed: Processing of the communication has successfully completed for this recipient and channel. For in-app messages this indicates that the message has been delivered to the patient's NHS App messaging inbox. For push notifications it indicates that the messages has been relayed for sending to the Apple or Google Push Notification Service (PNS), or scheduled for sending at 6am if processing occured during the hours of 10pm to 6am (UK time).
-        - Failed: Processing of the communication failed abnormally for this recipient and channel. Further information can be found in the `eventDetail` field.
         - Read: An in-app message has been read for the first time by the recipient.
         - Rejected: A request to send a communication to this recipient has been rejected. This usually occurs when no NHS App user is known with the specified NHS number. Further information can be found in the `eventDetail` field.
       example: "Completed"
       nullable: false
     eventDetail:
       type: string
-      description: Gives additional information about the event, particularly where the event was Rejected or Failed.
+      description: Gives additional information about the event in the case where the event was Rejected.
       nullable: true
       example: "NHS number not found"
