@@ -1,6 +1,7 @@
 <template>
   <div v-if="showTemplate">
-    <error-container v-if="error.status === genericStatusCodes.BAD_REQUEST" :id="errorId">
+    <message-dialog-generic v-if="error.status === genericStatusCodes.BAD_REQUEST"
+                            :id="errorId" override-style="plain">
       <error-title title="appointments.error.thereIsAProblemAppointments"
                    header="appointments.error.thereIsAProblem" />
       <contact-111
@@ -9,7 +10,7 @@
       <error-link from="generic.back"
                   :action="appointmentsPath"
                   :desktop-only="true" />
-    </error-container>
+    </message-dialog-generic>
 
     <error-page v-else-if="error.status === genericStatusCodes.FORBIDDEN"
                 header-locale-ref="forbiddenErrors.appointments.gpAppointmentBookingUnavailable"

@@ -23,7 +23,7 @@ Feature: GP Session On Demand subject claim mismatch
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed
     When I click the GP Appointments link
-    And I see appropriate try again error message when there is no GP session
+    And I see appropriate warning message when there is no GP session
     Examples:
       | GP System |
       | EMIS      |

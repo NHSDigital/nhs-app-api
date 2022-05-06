@@ -242,12 +242,23 @@ class YourAppointmentsStepDefinitions {
                 .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.problemLoadingTitle)
     }
 
-    @Then("^I see appropriate try again error message when there is no GP session$")
-    fun iSeeAppropriateTryAgainErrorMessageWhenThereIsNoGpSession() {
-        errorDialogPage.assertParagraphText("You are not currently able to book and manage GP appointments online.")
-                .assertParagraphText("This may be a temporary problem.")
-                .assertPageHeader("Sorry, there is a problem with GP appointment booking")
-                .assertPageTitle("Sorry, there is a problem with GP appointment booking")
+    @Then("^I see appropriate go back try again warning message when there is an error with '(.*)'$")
+    fun iSeeAppropriateGoBackTryAgainWarningMessageWhenThereIsAnErrorWithPrefix(prefix: String) {
+        val tryAgainParagraph = yourAppointmentsUISteps.yourAppointmentsPage.getGoBackAndTryAgainParagraph(prefix)
+        errorDialogPage
+            .assertWarningParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.ifItContinuesBookOrCancel)
+            .assertWarningParagraphText(tryAgainParagraph)
+            .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.problemHeader)
+            .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.problemTitle)
+    }
+
+    @Then("^I see appropriate warning message when there is no GP session")
+    fun iSeeAppropriateWarningMessageWhenThereIsNoGpSession() {
+        errorDialogPage
+            .assertWarningParagraphText("You are not currently able to book and manage GP appointments online.")
+            .assertWarningParagraphText("This may be a temporary problem.")
+            .assertPageHeader("Sorry, there is a problem with GP appointment booking")
+            .assertPageTitle("Sorry, there is a problem with GP appointment booking")
     }
 
     @Then("^I click the session error back link$")

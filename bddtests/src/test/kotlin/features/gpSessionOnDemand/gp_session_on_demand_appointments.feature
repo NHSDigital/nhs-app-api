@@ -7,7 +7,7 @@ Feature: GP Session On Demand appointments
     When I navigate to Appointments
     Then the Appointments Hub page is displayed
     And I click the GP Appointments link
-    And I see appropriate try again error message when there is no GP session
+    And I see appropriate warning message when there is no GP session
     And The <GP System> GP system becomes available
     And I have no booked appointments for <GP System>
     When I click the 'Try again' button
@@ -23,7 +23,7 @@ Feature: GP Session On Demand appointments
     When I navigate to Appointments
     Then the Appointments Hub page is displayed
     And I click the GP Appointments link
-    And I see appropriate try again error message when there is no GP session
+    And I see appropriate warning message when there is no GP session
     When I click the 'Try again' button
     Then I see what I can do next with an error message and reference code '<Prefix>'
     Examples:
@@ -39,6 +39,6 @@ Feature: GP Session On Demand appointments
     When I navigate to Appointments
     Then the Appointments Hub page is displayed
     And I click the GP Appointments link
-    And I see appropriate try again error message when there is no GP session
+    And I see appropriate warning message when there is no GP session
     When I click the 'Try again' button
     Then I am shown a message and a list of actions I can perform

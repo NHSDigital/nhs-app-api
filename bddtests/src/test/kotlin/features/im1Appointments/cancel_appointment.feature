@@ -166,7 +166,7 @@ Feature: Cancel Appointments Frontend
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     And I select "Cancel appointment" button
-    Then I see appropriate warning message when there is an error with '<Prefix>'
+    Then I see appropriate go back try again warning message when there is an error with '<Prefix>'
     When I click the warning 'Back' link
     Then the Your Appointments page is displayed
     Examples:
@@ -182,7 +182,7 @@ Feature: Cancel Appointments Frontend
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     And I select "Cancel appointment" button
-    Then I see appropriate warning message when there is an error with '<Prefix>'
+    Then I see appropriate go back try again warning message when there is an error with '<Prefix>'
     When I click the warning 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
     Then a new tab has been opened by the link
     Examples:
@@ -198,7 +198,7 @@ Feature: Cancel Appointments Frontend
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     And I select "Cancel appointment" button
-    Then I see appropriate warning message when there is an error with '<Prefix>'
+    Then I see appropriate go back try again warning message when there is an error with '<Prefix>'
     When I click the warning 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
     Then a new tab has been opened by the link
     Examples:

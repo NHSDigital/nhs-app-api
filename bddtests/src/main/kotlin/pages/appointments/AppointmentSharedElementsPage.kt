@@ -19,7 +19,7 @@ abstract class AppointmentSharedElementsPage : HybridPageObject() {
     val contactGpSurgeryDirectly = "You can contact your GP surgery directly if you need to book " +
             "or change an upcoming appointment now."
     val contactUsQuotingErrorCode = "Contact us if you keep seeing this message, quoting error code "
-    val problemTitle = "Sorry, there is a problem - Appointments"
+    val problemTitle = "Sorry, there is a problem - Your GP Appointments"
     val problemHeader = "Sorry, there is a problem"
     val problemLoadingTitle = "Sorry, there is a problem with loading GP appointments"
     val unavailableTitle = "GP appointment booking unavailable"

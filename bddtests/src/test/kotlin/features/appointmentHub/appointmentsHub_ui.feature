@@ -19,8 +19,8 @@ Feature: Appointments Hub Frontend
     And <GP System> GP appointments returns unauthorized
     When I navigate to Appointments
     And I click the GP Appointments link
-    Then I see appropriate try again error message when there is no GP session
-    When I click the error 'Back' link
+    Then I see appropriate warning message when there is no GP session
+    When I click the warning 'Back' link
     Then the Appointments Hub page is displayed
     And I have no booked appointments for <GP System>
     And there are <GP System> appointments available to book
@@ -41,7 +41,7 @@ Feature: Appointments Hub Frontend
     Then the Appointments Hub page is displayed
     And The <GP System> GP system is still unavailable
     When I click the GP Appointments link
-    Then I see appropriate try again error message when there is no GP session
+    Then I see appropriate warning message when there is no GP session
     Examples:
       | GP System |
       | EMIS      |
@@ -54,8 +54,8 @@ Feature: Appointments Hub Frontend
     When I navigate to Appointments
     And The <GP System> GP system is still unavailable
     And I click the GP Appointments link
-    Then I see appropriate try again error message when there is no GP session
-    When I click the error 'Back' link
+    Then I see appropriate warning message when there is no GP session
+    When I click the warning 'Back' link
     Then the Appointments Hub page is displayed
     And The <GP System> GP system becomes available
     And I have no booked appointments for <GP System>
@@ -89,7 +89,7 @@ Feature: Appointments Hub Frontend
     When I navigate to Appointments
     And The <GP System> GP system is still unavailable
     And I click the GP Appointments link
-    Then I see appropriate try again error message when there is no GP session
+    Then I see appropriate warning message when there is no GP session
     And The <GP System> GP system becomes available
     And I have no booked appointments for <GP System>
     And there are <GP System> appointments available to book
@@ -107,7 +107,7 @@ Feature: Appointments Hub Frontend
     When I navigate to Appointments
     And The <GP System> GP system is still unavailable
     And I click the GP Appointments link
-    Then I see appropriate try again error message when there is no GP session
+    Then I see appropriate warning message when there is no GP session
     When I click the 'Try again' button
     Then I see what I can do next with an error message and reference code '3p'
     And I click the session error back link

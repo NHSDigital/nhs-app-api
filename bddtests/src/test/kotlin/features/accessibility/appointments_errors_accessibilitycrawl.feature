@@ -87,7 +87,7 @@ Feature: appointment errors accessibility
     Then the Appointment Slot page is displayed
     When I enter symptoms
     And I click the 'Confirm and book appointment' button
-    Then I see appropriate information message when there is an error sending data on appointment confirmation page
+    Then I see appropriate warning message when there is an error sending data on appointment confirmation page
     And the Errors_AGP13_AppointmentBookingUnavailable page is saved to disk
 
   Scenario Outline: GP14 error is captured
@@ -128,7 +128,7 @@ Feature: appointment errors accessibility
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     And I select "Cancel appointment" button
-    Then I see appropriate warning message when there is an error with '<Prefix>'
+    Then I see appropriate go back try again warning message when there is an error with '<Prefix>'
     And the Errors_AGP14_500_CorruptDataCancellingAppointment page is saved to disk
     Examples:
       | Reason   | Prefix |
@@ -142,7 +142,7 @@ Feature: appointment errors accessibility
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     And I select "Cancel appointment" button
-    Then I see appropriate warning message when there is an error with '<Prefix>'
+    Then I see appropriate go back try again warning message when there is an error with '<Prefix>'
     And the Errors_AGP14_502_UnknownExceptionCancellingAppointment page is saved to disk
     Examples:
       | Reason           | Prefix |
@@ -156,7 +156,7 @@ Feature: appointment errors accessibility
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     And I select "Cancel appointment" button
-    Then I see appropriate warning message when there is an error with '<Prefix>'
+    Then I see appropriate go back try again warning message when there is an error with '<Prefix>'
     And the Errors_AGP14_504_TimeoutCancellingAppointment page is saved to disk
     Examples:
       | Reason             | Prefix | GP System |

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <error-container v-if="!hasRetried" :id="errorId">
+    <message-dialog-generic v-if="!hasRetried" :id="errorId" override-style="plain">
       <error-title title="gpSessionErrors.appointments.temporaryHeader"/>
       <error-paragraph from="gpSessionErrors.appointments.youCannotBookOnline"/>
       <error-paragraph from="gpSessionErrors.appointments.temporaryProblem"/>
@@ -8,7 +8,7 @@
       <error-link from="generic.back"
                   :action="backUrl"
                   :desktop-only="true"/>
-    </error-container>
+    </message-dialog-generic>
 
     <error-page v-else
                 id="alternative_actions"
@@ -31,12 +31,12 @@
 import AlternativeAppointmentActions from '@/components/appointments/AlternativeAppointmentActions';
 import Contact111 from '@/components/widgets/Contact111';
 import ErrorButton from '@/components/errors/ErrorButton';
-import ErrorContainer from '@/components/errors/ErrorContainer';
 import ErrorLink from '@/components/errors/ErrorLink';
 import ErrorPage from '@/components/errors/ErrorPage';
 import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
 import ErrorParagraph from '@/components/errors/ErrorParagraph';
 import ErrorTitle from '@/components/errors/ErrorTitle';
+import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 
 import {
   APPOINTMENTS_PATH,
@@ -50,11 +50,11 @@ export default {
     AlternativeAppointmentActions,
     Contact111,
     ErrorButton,
-    ErrorContainer,
     ErrorLink,
     ErrorPage,
     ErrorParagraph,
     ErrorTitle,
+    MessageDialogGeneric,
   },
   mixins: [ErrorPageMixin],
   props: {

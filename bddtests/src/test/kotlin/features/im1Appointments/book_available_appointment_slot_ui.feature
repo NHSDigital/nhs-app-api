@@ -110,8 +110,8 @@ Feature: Book Appointments Frontend
     Then the Appointment Slot page is displayed
     When I enter symptoms
     And I click the 'Confirm and book appointment' button
-    Then I see appropriate information message when there is an error sending data on appointment confirmation page
-    When I click the error '111.nhs.uk' link with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
+    Then I see appropriate warning message when there is an error sending data on appointment confirmation page
+    When I click the warning '111.nhs.uk' link with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
     Then a new tab has been opened by the link
     Examples:
       | GP System |
@@ -192,7 +192,6 @@ Feature: Book Appointments Frontend
     Examples:
       | Prefix | GP System |
       | 4s     | VISION    |
-
 
   #504
   Scenario Outline: A <GP System> user sees appropriate information message when there is a timeout

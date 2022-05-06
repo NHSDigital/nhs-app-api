@@ -111,7 +111,7 @@ export default {
     itIsTooLateToCancel: 'It\'s too late to cancel this appointment online. Call your GP surgery as soon as possible to let them know you need to cancel.',
     theAppointmentMayBeCancelledOrInThePast: 'This may be because the appointment is already cancelled or it occurs in the past.',
     thereIsAProblem: 'Sorry, there is a problem',
-    thereIsAProblemAppointments: 'Sorry, there is a problem - Appointments',
+    thereIsAProblemAppointments: 'Sorry, there is a problem - Your GP Appointments',
     thereIsAProblemLoading: 'Sorry, there is a problem with loading GP appointments',
     thereIsAProblemWithTheServiceAppointments: 'Sorry, there is a problem with the service - Appointments',
     tryAgainNow: 'Try again now.',

@@ -149,7 +149,7 @@ Feature: Your Appointments Frontend
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed
     When I click the GP Appointments link
-    Then I see appropriate try again error message when there is no GP session
+    Then I see appropriate warning message when there is no GP session
     When I click the 'Try again' button
     Then I see what I can do next with an error message and reference code '<Prefix>'
     And I click the report a problem link

@@ -113,7 +113,7 @@ Feature: Appointments Hub accessibility
     And EMIS GP appointments returns unauthorized
     When I navigate to Appointments
     And I click the GP Appointments link
-    Then I see appropriate try again error message when there is no GP session
+    Then I see appropriate warning message when there is no GP session
     And the Appointments_GPSessionError page is saved to disk
 
   Scenario: The 'Appointments GP session error - what you can do next' page is captured

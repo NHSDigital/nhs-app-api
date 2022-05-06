@@ -84,9 +84,9 @@ import ErrorPage from '@/components/errors/ErrorPage';
 import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
 import ErrorParagraph from '@/components/errors/ErrorParagraph';
 import ErrorTitle from '@/components/errors/ErrorTitle';
-import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 import genericStatus from '@/components/errors/statusCodes/GenericStatusCodes';
 import appointmentStatus from '@/components/errors/statusCodes/AppointmentCustomStatusCodes';
+import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 
 import {
   APPOINTMENTS_PATH,

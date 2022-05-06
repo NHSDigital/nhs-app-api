@@ -81,12 +81,13 @@ class AppointmentsConfirmationStepDefinitions {
         appointmentsConfirmationSteps.appointmentsConfirmation.describeTelephoneNumber(telephoneNumber)
     }
 
-    @Then("^I see appropriate information message " +
+     @Then("^I see appropriate warning message " +
             "when there is an error sending data on appointment confirmation page$")
-    fun thenISeeAppropriateInformationMessageWhenThereIsAnErrorSendingDataOnAppointmentConfirmationPage() {
-        errorDialogPage.assertPageHeader(appointmentsConfirmationSteps.appointmentsConfirmation.problemHeader)
-                .assertPageTitle(appointmentsConfirmationSteps.appointmentsConfirmation.problemTitle)
-                .assertParagraphText(appointmentsConfirmationSteps.appointmentsConfirmation.goBackAndTryAgainProblem)
+    fun thenISeeAppropriateWarningMessageWhenThereIsAnErrorSendingDataOnAppointmentConfirmationPage() {
+        errorDialogPage
+            .assertPageHeader(appointmentsConfirmationSteps.appointmentsConfirmation.problemHeader)
+            .assertPageTitle(appointmentsConfirmationSteps.appointmentsConfirmation.problemTitle)
+            .assertWarningParagraphText(appointmentsConfirmationSteps.appointmentsConfirmation.goBackAndTryAgainProblem)
     }
 
     @Then("^an error is displayed that \"Describe your symptoms\" is mandatory$")

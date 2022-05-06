@@ -127,15 +127,6 @@ class CancelAppointmentStepDefinitions {
                 .assertPageTitle(cancelAppointmentSteps.cancelAppointmentPage.problemTitle)
     }
 
-    @Then("^I see appropriate warning message when there is an error with '(.*)'$")
-    fun iSeeAppropriateWarningMessageWhenThereIsAnErrorWithPrefix(prefix: String) {
-        val goBackParagraph = cancelAppointmentSteps.cancelAppointmentPage.getGoBackAndTryAgainParagraph(prefix)
-        errorDialogPage.assertWarningParagraphText(goBackParagraph)
-            .assertWarningParagraphText(cancelAppointmentSteps.cancelAppointmentPage.ifItContinuesBookOrCancel)
-            .assertPageHeader(cancelAppointmentSteps.cancelAppointmentPage.problemHeader)
-            .assertPageTitle(cancelAppointmentSteps.cancelAppointmentPage.problemTitle)
-    }
-
     @Then("^I will be on the \"Cancellation reason\" screen$")
     fun iWillBeOnTheCancellationScreen() {
         cancelAppointmentSteps.verifyWeAreOnTheCancelAppointmentScreen()
