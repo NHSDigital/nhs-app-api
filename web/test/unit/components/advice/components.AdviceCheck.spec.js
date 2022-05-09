@@ -61,7 +61,7 @@ describe('Advice Check Menu', () => {
       ['NHS 111 online', 2, { h2: 'Use NHS 111 online', p: 'Check if you need urgent help and find out what to do next' }],
       ['CDSS GP advice', 3, { h2: 'Ask your GP for advice', p: 'Answer questions online and get a response from your GP surgery. You may be able to get advice for your child if it\'s available at your surgery' }],
       ['Engage GP advice', 4, { h2: 'Ask your GP for advice', p: 'Answer questions online and get a response from your GP surgery' }],
-      ['AccuRx GP advice', 5, { h2: 'Ask your GP for advice', p: 'Answer questions online and get a response from your GP surgery' }],
+      ['AccuRx GP advice', 5, { h2: 'Ask your GP for medical advice', p: 'Answer questions online and get a response from your GP surgery' }],
     ]).describe('%s menu item', (_, position, text) => {
       beforeEach(() => {
         menuItem = menuItems.at(position);

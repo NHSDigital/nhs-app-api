@@ -9,6 +9,13 @@
       <admin-help-menu-item
         v-if="showEngageAdminHelp" description="appointments
           .guidance.additionalGpServices.engage.getSickNotesAndLetters"/>
+      <gp-advice-menu-item v-if="showAccuRxMedicalAdvice"
+                           heading="adviceCheck.gpAdvice.accurx.heading"
+                           description="adviceCheck.gpAdvice.accurx.description"
+                           route-crumb="appointmentsCrumb"/>
+      <messages-menu-item v-if="showAccuRxAdminHelp"
+                          text="messages.adminAdvice.accurx.text"
+                          description="messages.adminAdvice.accurx.description" />
       <one-one-one-service-menu-item v-if="showOneOneOneItem" />
     </template>
   </error-screen-alternative-actions>
@@ -18,6 +25,7 @@
 import sjrIf from '@/lib/sjrIf';
 import GpAdviceMenuItem from '@/components/menuItems/GpAdviceMenuItem';
 import AdminHelpMenuItem from '@/components/menuItems/AdminHelpMenuItem';
+import MessagesMenuItem from '@/components/menuItems/MessagesMenuItem';
 import OneOneOneServiceMenuItem from '@/components/menuItems/OneOneOneServiceMenuItem';
 import ErrorScreenAlternativeActions from '@/components/errors/ErrorScreenAlternativeActions';
 
@@ -27,6 +35,7 @@ export default {
     AdminHelpMenuItem,
     ErrorScreenAlternativeActions,
     GpAdviceMenuItem,
+    MessagesMenuItem,
     OneOneOneServiceMenuItem,
   },
   computed: {
@@ -53,6 +62,26 @@ export default {
         context: {
           provider: 'engage',
           serviceType: 'consultationsAdmin',
+        },
+      });
+    },
+    showAccuRxMedicalAdvice() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'accurx',
+          serviceType: 'consultations',
+        },
+      });
+    },
+    showAccuRxAdminHelp() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'accurx',
+          serviceType: 'messages',
         },
       });
     },

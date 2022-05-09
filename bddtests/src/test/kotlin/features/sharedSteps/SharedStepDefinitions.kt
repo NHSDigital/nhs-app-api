@@ -67,11 +67,14 @@ open class SharedStepDefinitions {
     fun initialisePatientAndUnavailableGpSystem(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val patient = Patient.getDefault(supplier)
-        setupPatient(patient, supplier)
+        setupPatientWithUnavailableGpSession(patient, supplier)
+    }
 
-        AuthenticationFactory.getForSupplier(supplier)
-            .validOAuthDetailsAndGpSystemUnavailable(patient)
-        TermsAndConditionsJourneyFactory.consent(patient)
+    @Given("^GP session is unavailable$")
+    fun initialisePatientWithUnavailableGpSystem() {
+        val patient = SerenityHelpers.getPatient()
+        val supplier = SerenityHelpers.getGpSupplier()
+        setupPatientWithUnavailableGpSession(patient, supplier)
     }
 
     @Given("^I am an? (.*) patient with linked profiles whose GP system is unavailable$")
@@ -280,7 +283,7 @@ open class SharedStepDefinitions {
     ) {
         val journeyTypes = SJRJourneyTypesMapper.map(journey, disabled)
         var patient = SerenityHelpers.getPatientOrNull()
-        var supplier: Supplier?
+        val supplier: Supplier?
 
         if (patient != null) {
             supplier = SerenityHelpers.getGpSupplier()
@@ -332,6 +335,15 @@ open class SharedStepDefinitions {
         cookieSteps.setInstructionsCookie("true")
 
         return patient
+    }
+
+    private fun setupPatientWithUnavailableGpSession(patient: Patient, supplier: Supplier) {
+        setupPatient(patient, supplier)
+
+        AuthenticationFactory.getForSupplier(supplier)
+            .validOAuthDetailsAndGpSystemUnavailable(patient)
+
+        TermsAndConditionsJourneyFactory.consent(patient)
     }
 
     private fun setupPatient(patient: Patient, supplier: Supplier) {

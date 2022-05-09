@@ -28,7 +28,8 @@ open class HealthAdvicePage : HybridPageObject() {
     )
 
     val accuRxMedicalAdvice = HybridPageElement(
-        webDesktopLocator = "//*[@id='btn_accurx_medical_advice']//h2[contains(text(),'Ask your GP for advice')]",
+        webDesktopLocator = "//*[@id='btn_accurx_medical_advice']//h2[contains(text()," +
+                "'Ask your GP for medical advice')]",
         page = this
     )
 }

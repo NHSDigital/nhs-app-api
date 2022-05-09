@@ -17,5 +17,9 @@ export default {
     onlineConsultationsUnavailable: 'Online consultations are currently unavailable',
     toSaveYouTypingIn: 'To save you typing in personal information the online consultation service needs, you can use the personal information we already hold.',
     weAreExperiencingTechnicalDifficulties: 'Sorry, we\'re experiencing technical difficulties',
+    accurx: {
+      heading: 'Ask your GP for medical advice',
+      description: 'Answer questions online and get a response from your GP surgery',
+    },
   },
 };

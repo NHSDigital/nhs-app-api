@@ -85,4 +85,10 @@ export default {
     viewMessagesFromHealthServicesAndTheApp: 'View messages from the NHS App and connected healthcare providers, like your GP surgery',
     yourHealthServiceMessages: 'Your health service messages',
   },
+  adminAdvice: {
+    accurx: {
+      text: 'Ask your GP surgery a question',
+      description: 'Fill out a form to send a request, get advice or ask a question',
+    },
+  },
 };

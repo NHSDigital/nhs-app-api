@@ -4,12 +4,11 @@
     data-purpose="text_link"
     header-tag="h2"
     :href="gpAdvicePath"
-    :text="$t('adviceCheck.gpAdvice.askYourGpForAdvice')"
-    :description="$t('adviceCheck.gpAdvice.consultThroughOnlineForm')"
+    :text="$t(heading)"
+    :description="$t(description)"
     :click-func="navigate"
     :aria-label="ariaLabelCaption(
-      'adviceCheck.gpAdvice.askYourGpForAdvice',
-      'adviceCheck.gpAdvice.consultThroughOnlineForm')"/>
+      'adviceCheck.gpAdvice.askYourGpForAdvice', description)"/>
 </template>
 
 <script>
@@ -27,6 +26,16 @@ export default {
       type: String,
       required: false,
       default: undefined,
+    },
+    heading: {
+      type: String,
+      required: false,
+      default: 'adviceCheck.gpAdvice.askYourGpForAdvice',
+    },
+    description: {
+      type: String,
+      required: false,
+      default: 'adviceCheck.gpAdvice.consultThroughOnlineForm',
     },
   },
   data() {

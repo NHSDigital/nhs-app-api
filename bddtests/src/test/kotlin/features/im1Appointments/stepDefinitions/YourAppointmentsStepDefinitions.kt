@@ -281,4 +281,19 @@ class YourAppointmentsStepDefinitions {
                 .assertReportAProblemLink()
         appointmentGpSessionError.assertNHS111Online()
     }
+
+    @Then("^I am shown a message and a list of actions I can perform$")
+    fun iSeeGPAppointmentsUnavailableOptions(){
+        appointmentGpSessionError.assertPageHeader("Sorry, GP appointment booking is unavailable")
+            .assertMenuListHeader("What you can do next")
+            .assertParagraphText("You are not currently able to book and manage GP appointments online.")
+            .assertParagraphText("If you need to book an appointment now, contact your GP surgery.")
+            .assertParagraphText("For urgent medical advice, go to ")
+            .assertReportAProblemLink()
+
+        appointmentGpSessionError
+            .assertGpMedicalAdviceMenuItem()
+            .assertAskYourGpSurgeryAQuestionMenuItem()
+            .assertNHS111Online()
+    }
 }

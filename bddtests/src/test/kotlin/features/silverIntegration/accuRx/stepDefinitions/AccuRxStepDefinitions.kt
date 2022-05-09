@@ -56,7 +56,7 @@ class AccuRxStepDefinitions : HybridPageObject() {
     @Then("the Medical Advice warning message on the Redirector page explains the service is from accuRx$")
     fun assertAdviceWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-            "Ask your GP for advice\nThis service is provided by accuRx Limited",
+            "Ask your GP for medical advice\nThis service is provided by accuRx Limited",
             "Your GP surgery has chosen this online consultation service provider.",
             "Find out more about online consultation services")
     }
@@ -86,13 +86,21 @@ class AccuRxStepDefinitions : HybridPageObject() {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_NONE)
     }
 
+    @Given("^I am a patient with access to all accuRx services$")
+    fun initialiseAccuRxPatientWithUnableGpSystem() {
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(null,
+            arrayListOf(
+                SJRJourneyType.SILVER_INTEGRATION_MESSAGES_ACCURX,
+                SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_ACCURX))
+        SerenityHelpers.setPatient(patient)
+    }
 
     @Then("the question warning message on the Redirector page explains the service is from AccuRx$")
     fun assertQuestionWarningMessageContent() {
         redirector.interruptionCard.assertContent(
             "Ask your GP surgery a question\nThis service is provided by accuRx Limited",
-            "Your GP surgery or hospital has chosen this personal health record service provider.",
-            "Find out more about personal health record services")
+            "Your GP surgery has chosen this online consultation service provider.",
+            "Find out more about online consultation services")
     }
 
     private fun setupPatient(configuration: SJRJourneyType, proofLevel: IdentityProofingLevel? = null) {

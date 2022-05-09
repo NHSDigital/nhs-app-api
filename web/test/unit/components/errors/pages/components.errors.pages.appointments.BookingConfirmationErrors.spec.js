@@ -66,8 +66,8 @@ describe('BookingConfirmationErrors', () => {
         expect(content.at(1).text()).toContain('or call 111.');
       });
 
-      it('will have 5 menu items', () => {
-        expect(menuItems.length).toBe(5);
+      it('will have 7 menu items', () => {
+        expect(menuItems.length).toBe(7);
       });
 
       it('will have a menu item for gp advice', () => {
@@ -133,12 +133,12 @@ describe('BookingConfirmationErrors', () => {
 
       it('will show the gp advice menu item', () => {
         expect(wrapper.find('#btn_gpAdvice').exists()).toBe(true);
-        expect(menuItems.length).toBe(2);
+        expect(menuItems.length).toBe(4);
       });
 
       it('will show the admin help menu item', () => {
         expect(wrapper.find('#btn_adminHelp').exists()).toBe(true);
-        expect(menuItems.length).toBe(2);
+        expect(menuItems.length).toBe(4);
       });
     });
 

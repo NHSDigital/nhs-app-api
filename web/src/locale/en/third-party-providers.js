@@ -374,11 +374,11 @@ export default {
       {
         id: 'medical',
         jumpOffContent: {
-          headerText: 'Ask your GP for advice',
+          headerText: 'Ask your GP for medical advice',
           descriptionText: 'Answer questions online and get a response from your GP surgery',
         },
         thirdPartyWarning: {
-          featureName: 'Ask your GP for advice',
+          featureName: 'Ask your GP for medical advice',
           servicePurchaser: 'Your GP surgery',
           serviceType: 'online consultation service',
           serviceTypePlural: 'online consultation services',
@@ -393,10 +393,10 @@ export default {
         },
         thirdPartyWarning: {
           featureName: 'Ask your GP surgery a question',
-          servicePurchaser: 'Your GP surgery or hospital',
-          serviceType: 'personal health record service',
-          serviceTypePlural: 'personal health record services',
-          linkHref: 'PERSONAL_HEALTH_RECORDS_PRIVACY_URL',
+          servicePurchaser: 'Your GP surgery',
+          serviceType: 'online consultation service',
+          serviceTypePlural: 'online consultation services',
+          linkHref: 'ONLINE_CONSULTATIONS_PRIVACY_URL',
         },
       },
     ],

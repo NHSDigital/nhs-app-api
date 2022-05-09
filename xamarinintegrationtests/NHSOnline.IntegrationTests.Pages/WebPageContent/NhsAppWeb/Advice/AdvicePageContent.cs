@@ -27,7 +27,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Advice
             WebMenuItem.WithTitle(_interactor, "Ask your GP for advice", "btn_engage_medical_advice");
 
         private WebMenuItem AskGpMenuItemAccuRx =>
-            WebMenuItem.WithTitle(_interactor, "Ask your GP for advice", "btn_accurx_medical_advice");
+            WebMenuItem.WithTitle(_interactor, "Ask your GP for medical advice", "btn_accurx_medical_advice");
 
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
