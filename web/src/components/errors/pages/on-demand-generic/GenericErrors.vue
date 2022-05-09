@@ -16,18 +16,18 @@
       </template>
     </error-page>
 
-    <error-container v-else id="error-dialog-599">
+    <message-dialog-generic v-else id="error-dialog-599" override-style="plain">
       <error-title title="gpSessionErrors.genericOnDemand.tryAgainHeader"/>
       <error-paragraph from="gpSessionErrors.genericOnDemand.temporaryProblem"/>
       <error-button from="generic.tryAgain" @click="tryAgain" />
-    </error-container>
+    </message-dialog-generic>
   </div>
 </template>
 
 <script>
 import Contact111 from '@/components/widgets/Contact111';
 import ErrorButton from '@/components/errors/ErrorButton';
-import ErrorContainer from '@/components/errors/ErrorContainer';
+import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 import ErrorPage from '@/components/errors/ErrorPage';
 import ErrorParagraph from '@/components/errors/ErrorParagraph';
 import ErrorTitle from '@/components/errors/ErrorTitle';
@@ -39,7 +39,7 @@ export default {
   components: {
     Contact111,
     ErrorButton,
-    ErrorContainer,
+    MessageDialogGeneric,
     ErrorPage,
     ErrorParagraph,
     ErrorTitle,
