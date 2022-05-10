@@ -52,8 +52,20 @@ export default {
       type: String,
       required: true,
     },
+    isWayfinderUrl: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
+    if (this.isWayfinderUrl) {
+      const thirdPartyServiceContent = this.getText('thirdPartyProviders.wayfinder');
+      return {
+        buttonDisabled: false,
+        thirdPartyServiceContent,
+        jumpOffContent: thirdPartyServiceContent,
+      };
+    }
     const thirdPartyServiceContent = this.getText(`thirdPartyProviders.${this.knownService.id}`);
     const jumpOffContent = thirdPartyServiceContent.jumpOffs.find(
       item => item.id === this.jumpOffId,

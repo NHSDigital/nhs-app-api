@@ -43,7 +43,8 @@
                 :referred-date="referral.referredDateTime"
                 :review-date="referral.reviewDueDate"
                 :booking-reference="referral.referralId"
-                :referred-by="referral.referrerOrganisation"/>
+                :referred-by="referral.referrerOrganisation"
+                :deep-link-url="referral.deepLinkUrl"/>
 
               <referral-review-overdue-card
                 v-else-if="isReviewOverdue(referral)"
@@ -51,21 +52,24 @@
                 :referred-date="referral.referredDateTime"
                 :review-date="referral.reviewDueDate"
                 :booking-reference="referral.referralId"
-                :referred-by="referral.referrerOrganisation"/>
+                :referred-by="referral.referrerOrganisation"
+                :deep-link-url="referral.deepLinkUrl"/>
 
               <referral-ready-to-rebook-card
                 v-else-if="isBookableWasCancelled(referral)"
                 :requested-specialty="referral.serviceSpecialty"
                 :referred-date="referral.referredDateTime"
                 :booking-reference="referral.referralId"
-                :referred-by="referral.referrerOrganisation"/>
+                :referred-by="referral.referrerOrganisation"
+                :deep-link-url="referral.deepLinkUrl"/>
 
               <referral-bookable-card
                 v-else-if="isBookable(referral)"
                 :requested-specialty="referral.serviceSpecialty"
                 :referred-date="referral.referredDateTime"
                 :booking-reference="referral.referralId"
-                :referred-by="referral.referrerOrganisation"/>
+                :referred-by="referral.referrerOrganisation"
+                :deep-link-url="referral.deepLinkUrl"/>
             </card-group-item>
           </card-group>
 
@@ -89,12 +93,14 @@
                 v-if="isAppointmentBooked(appointment)"
                 :appointment-id="index"
                 :location-description="appointment.locationDescription"
-                :appointment-date-time="appointment.appointmentDateTime"/>
+                :appointment-date-time="appointment.appointmentDateTime"
+                :deep-link-url="appointment.deepLinkUrl"/>
 
               <appointment-ready-to-confirm-card
                 v-if="!isAppointmentBooked(appointment)"
                 :appointment-id="index"
-                :location-description="appointment.locationDescription"/>
+                :location-description="appointment.locationDescription"
+                :deep-link-url="appointment.deepLinkUrl"/>
 
             </card-group-item>
           </card-group>

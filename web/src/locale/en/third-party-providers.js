@@ -401,4 +401,18 @@ export default {
       },
     ],
   },
+  wayfinder: {
+    id: 'wayfinder',
+    jumpOffContent: {
+      headerText: 'View appointments',
+      descriptionText: '',
+    },
+    thirdPartyWarning: {
+      featureName: 'View appointments',
+      servicePurchaser: 'Your GP surgery or hospital',
+      serviceType: 'personal health record service',
+      serviceTypePlural: 'personal health record services',
+      linkHref: 'PERSONAL_HEALTH_RECORDS_PRIVACY_URL',
+    },
+  },
 };

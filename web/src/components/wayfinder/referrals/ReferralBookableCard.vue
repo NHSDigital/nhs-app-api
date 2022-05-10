@@ -30,7 +30,7 @@
              null, {referrer: referredBy}) }}
     </p>
 
-    <primary-button :id="`bookOrManageReferral-${referralId}`">
+    <primary-button :id="`bookOrManageReferral-${referralId}`" @click="onClick">
       {{ $t('wayfinder.referrals.bookable.bookOrManageThisReferral') }}
     </primary-button>
   </Card>
@@ -39,6 +39,7 @@
 <script>
 import Card from '@/components/widgets/card/Card';
 import PrimaryButton from '@/components/PrimaryButton';
+import RedirectorMixin from '@/components/wayfinder/RedirectorMixin';
 
 export default {
   name: 'ReferralBookableCard',
@@ -46,6 +47,7 @@ export default {
     Card,
     PrimaryButton,
   },
+  mixins: [RedirectorMixin],
   props: {
     bookingReference: {
       type: String,

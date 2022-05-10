@@ -10,7 +10,7 @@
     <p :id="`location-description-${appointmentId}`" class="nhsuk-u-margin-bottom-3">
       {{ locationDescription }}
     </p>
-    <primary-button :id="`bookOrManageAppointment-${appointmentId}`">
+    <primary-button :id="`bookOrManageAppointment-${appointmentId}`" @click="onClick">
       {{ $t('wayfinder.appointments.booked.viewOrManageAppointment') }}
     </primary-button>
   </Card>
@@ -19,6 +19,7 @@
 <script>
 import Card from '@/components/widgets/card/Card';
 import PrimaryButton from '@/components/PrimaryButton';
+import RedirectorMixin from '@/components/wayfinder/RedirectorMixin';
 
 export default {
   name: 'AppointmentBookedCard',
@@ -26,6 +27,7 @@ export default {
     Card,
     PrimaryButton,
   },
+  mixins: [RedirectorMixin],
   props: {
     appointmentId: {
       type: String,

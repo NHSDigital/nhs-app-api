@@ -6,6 +6,7 @@
       :redirect-path="redirectParameter"
       :jump-off-id="jumpOffId"
       :session-storage-name="sessionStorageName"
+      :is-wayfinder-url="isWayfinderUrl"
       @click.stop.prevent="getAssertedLoginIdentityAndNavigate"/>
     <div v-else :class="$style['spacer']" />
   </div>
@@ -57,6 +58,7 @@ export default {
       sessionStorageName: '',
       thirdPartyServiceContent: '',
       jumpOffId: null,
+      isWayfinderUrl: false,
     };
   },
   computed: {
@@ -165,7 +167,9 @@ export default {
         },
       });
     },
-
+    hasWayfinder() {
+      return sjrIf({ $store: this.$store, journey: 'wayfinder' });
+    },
     navigateToThirdParty({ url }) {
       this.sessionStorageName = `agreedThirdPartyWarning_${this.matchedService.id}`;
 
@@ -193,7 +197,11 @@ export default {
       );
     },
     checkCanAccessSilverIntegration({ jumpOffConfig, featureJumpOffContent }, next) {
-      if (this.canAccessSilverIntegration(this.$store, jumpOffConfig)) {
+      if (this.hasWayfinder() && this.isWayfinderUrl) {
+        next();
+        return;
+      }
+      if (this.canAccessSilverIntegration(this.$store, jumpOffConfig || {})) {
         next();
         return;
       }
@@ -217,6 +225,10 @@ export default {
       next();
     },
     getJumpOffConfig({ url, thirdPartyConfig }, next) {
+      if (this.isWayfinderUrl) {
+        next();
+        return;
+      }
       const redirectParameterAndQuery = getPathAndQuery(url);
       const jumpOffConfig = getThirdPartyJumpOff(
         { jumpOffs: Object.values(thirdPartyConfig) },
@@ -260,6 +272,21 @@ export default {
 
       redirectTo(this, INDEX_PATH);
     },
+    getWayfinderProvider(url) {
+      const pathAndQuery = getPathAndQuery(decodeURIComponent(url));
+      const wayfinderConfig = getJumpOffConfiguration('wayfinder');
+      const wayfinderProvider = wayfinderConfig[this.matchedService.id];
+
+      if (!wayfinderProvider) {
+        return null;
+      }
+
+      const pathRegex = wayfinderProvider.acceptablePathsRegex;
+      if (pathRegex && pathAndQuery.match(new RegExp(pathRegex))) {
+        return wayfinderProvider;
+      }
+      return null;
+    },
     handleExternalRedirect(url) {
       this.matchedService = this.$store.getters['knownServices/matchOneByUrl'](url) || {};
       if (isEmpty(this.matchedService)) {
@@ -268,6 +295,17 @@ export default {
       }
 
       let context = { url };
+
+      const wayfinderProvider = this.getWayfinderProvider(url);
+
+      if (wayfinderProvider) {
+        this.isWayfinderUrl = true;
+        context.featureJumpOffContent = {
+          jumpOffContent: {
+            headerText: this.getText('thirdPartyProviders.wayfinder.jumpOffContent.headerText'),
+          },
+        };
+      }
 
       const steps = [
         this.getThirdPartyConfig,

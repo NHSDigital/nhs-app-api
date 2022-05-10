@@ -204,6 +204,18 @@ const thirdPartyProvider = {
       serviceType: 'messages',
     },
   },
+  wayfinder: {
+    ers: {
+      jumpOffId: 'ers',
+      acceptablePathsRegex: '^\\/nhslogin(\\/?\\?.*)?$',
+      redirectPath: '/nhslogin?',
+    },
+    pkb: {
+      jumpOffId: 'pkb',
+      acceptablePathsRegex: '^\\/nhs-login\\/login\\?phrPath=\\/diary\\/viewAppointment\\.action.*$',
+      redirectPath: '/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action?',
+    },
+  },
 };
 
 export const getJumpOffConfiguration = id => get(id)(thirdPartyProvider);

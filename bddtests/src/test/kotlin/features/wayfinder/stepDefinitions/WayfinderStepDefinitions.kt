@@ -49,6 +49,18 @@ class WayfinderStepDefinitions {
         wayfinderFactory.setupReferralsAppointmentsPartialErrorResponse()
     }
 
+    @Given("^I am a user who can view Wayfinder from Appointments and has eRS referrals and upcoming appointments$")
+    fun iAmAUserWhoCanViewErsReferralsAndUpcomingAppointmentsInWayfinderFromTheAppointmentsHub(){
+        setupPatient(SJRJourneyType.WAYFINDER_ENABLED)
+        wayfinderFactory.setupReferralsErs()
+    }
+
+    @Given("^I am an eRS user who can view Wayfinder from Appointments and has PKB referrals and upcoming appointments")
+    fun iAmAUserWhoCanViewPkbReferralsAndUpcomingAppointmentsInWayfinderFromTheAppointmentsHub(){
+        setupPatient(SJRJourneyType.WAYFINDER_ENABLED)
+        wayfinderFactory.setupReferralsPkb()
+    }
+
     @When("^the Wayfinder Aggregator API is timing out$")
     fun theAggregatorApiTimesOut(){
         wayfinderFactory.setupDelayedResponse()

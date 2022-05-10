@@ -34,7 +34,7 @@
              null, {referrer: referredBy}) }}
     </p>
 
-    <primary-button :id="`manageInReviewReferral-${referralId}`">
+    <primary-button :id="`manageInReviewReferral-${referralId}`" @click="onClick">
       {{ $t('wayfinder.referrals.overdue.contactTheClinic') }}
     </primary-button>
   </Card>
@@ -43,6 +43,7 @@
 <script>
 import Card from '@/components/widgets/card/Card';
 import PrimaryButton from '@/components/PrimaryButton';
+import RedirectorMixin from '@/components/wayfinder/RedirectorMixin';
 
 export default {
   name: 'ReferralReviewOverdueCard',
@@ -50,6 +51,7 @@ export default {
     Card,
     PrimaryButton,
   },
+  mixins: [RedirectorMixin],
   props: {
     bookingReference: {
       type: String,

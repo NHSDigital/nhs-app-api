@@ -9,7 +9,7 @@
     <p :id="`location-description-${appointmentId}`">
       {{ locationDescription }}
     </p>
-    <primary-button :id="`contactTheClinicToConfirm-${appointmentId}`">
+    <primary-button :id="`contactTheClinicToConfirm-${appointmentId}`" @click="onClick">
       {{ $t('wayfinder.appointments.readyToConfirm.contactTheClinicToConfirm') }}
     </primary-button>
   </Card>
@@ -18,6 +18,7 @@
 <script>
 import Card from '@/components/widgets/card/Card';
 import PrimaryButton from '@/components/PrimaryButton';
+import RedirectorMixin from '@/components/wayfinder/RedirectorMixin';
 
 export default {
   name: 'AppointmentReadyToConfirmCard',
@@ -25,6 +26,7 @@ export default {
     Card,
     PrimaryButton,
   },
+  mixins: [RedirectorMixin],
   props: {
     appointmentId: {
       type: String,

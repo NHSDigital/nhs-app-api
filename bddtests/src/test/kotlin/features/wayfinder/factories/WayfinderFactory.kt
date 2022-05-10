@@ -68,4 +68,24 @@ class WayfinderFactory {
             wayfinderMappingBuilder.referralsAppointmentsPartialError()
         }
     }
+
+    fun setupReferralsErs(){
+        mockingClient.forWayfinder.mock {
+            apimMappingBuilder.successfulTokenRequest()
+        }
+
+        mockingClient.forWayfinder.mock {
+            wayfinderMappingBuilder.referralsAndUpcomingAppointmentsErs()
+        }
+    }
+
+    fun setupReferralsPkb(){
+        mockingClient.forWayfinder.mock {
+            apimMappingBuilder.successfulTokenRequest()
+        }
+
+        mockingClient.forWayfinder.mock {
+            wayfinderMappingBuilder.referralsAndUpcomingAppointmentsPkb()
+        }
+    }
 }
