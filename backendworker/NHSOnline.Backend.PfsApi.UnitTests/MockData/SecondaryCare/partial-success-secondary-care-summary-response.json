@@ -1,0 +1,109 @@
+{
+  "resourceType": "Bundle",
+  "entry": [
+    {
+      "fullUrl": "https://servita-sandbox.co.uk/OperationOutCome/1",
+      "resource": {
+        "resourceType": "OperationOutcome",
+        "issue": [
+          {
+            "extension": [
+              {
+                "url": "https://fhir.nhs.uk/StructureDefinition/ExtensionErrorSource",
+                "valueCode": "company-1"
+              }
+            ],
+            "severity": "error",
+            "code": "structure",
+            "diagnostics": "Response failed validation"
+          },
+          {
+            "extension": [
+              {
+                "url": "https://fhir.nhs.uk/StructureDefinition/ExtensionErrorSource",
+                "valueCode": "company-2"
+              }
+            ],
+            "severity": "error",
+            "code": "transient",
+            "diagnostics": "HTTP-404 returned"
+          },
+          {
+            "extension": [
+              {
+                "url": "https://fhir.nhs.uk/StructureDefinition/ExtensionErrorSource",
+                "valueCode": "company-3"
+              }
+            ],
+            "severity": "error",
+            "code": "timeout",
+            "diagnostics": "Timeout occured"
+          }
+        ]
+      },
+      "search": {
+        "mode": "include"
+      }
+    },
+    {
+      "fullUrl": "https://servita-sandbox.co.uk/CarePlan/1",
+      "resource": {
+        "resourceType": "CarePlan",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "identifier": {
+            "system": "https://fhir.nhs.uk/Id/nhs-number",
+            "value": "9694318408"
+          }
+        },
+        "activity": [
+          {
+            "reference": {
+              "type": "ServiceRequest",
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/UBRN",
+                "value": "861710366336"
+              }
+            },
+            "detail": {
+              "extension": [
+                {
+                  "extension": [
+                    {
+                      "url": "code",
+                      "valueCode": "eRS"
+                    }
+                  ],
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                  "valueUrl": "http://stubs.local.bitraft.io:8080/ers/referrals?ubrn=861710366336"
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
+                  "valueCoding": {
+                    "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
+                    "code": "Bookable"
+                  }
+                }
+              ],
+              "kind": "ServiceRequest",
+              "scheduledPeriod": {
+                "start": "2022-04-17T15:11:45+00:00"
+              },
+              "performer": [
+                {
+                  "type": "Organization",
+                  "display": "Willow GP Surgery"
+                }
+              ],
+              "description": "Paediatrics"
+            }
+          }
+        ]
+      },
+      "search": {
+        "mode": "match"
+      }
+    }
+  ]
+}

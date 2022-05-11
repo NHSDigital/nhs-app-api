@@ -86,5 +86,6 @@ namespace NHSOnline.Backend.Auditing
         public const string LoginSuccess = "Login_Success";
         public const string SecondaryCareGetSummaryRequest = "SecondaryCare_GetSummary_Request";
         public const string SecondaryCareGetSummaryResponse = "SecondaryCare_GetSummary_Response";
+        public const string SecondaryCareGetSummaryResult = "SecondaryCare_GetSummaryResult";
     }
 }

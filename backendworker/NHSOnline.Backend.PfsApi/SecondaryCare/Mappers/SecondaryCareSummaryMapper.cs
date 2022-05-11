@@ -27,76 +27,77 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
 
         private readonly ILogger<ISecondaryCareSummaryMapper> _logger;
 
-        public SecondaryCareSummaryMapper(ILogger<ISecondaryCareSummaryMapper> logger)
+        public SecondaryCareSummaryMapper(ILogger<SecondaryCareSummaryMapper> logger)
         {
             _logger = logger;
         }
 
-        public SummaryResponse Map(Bundle bundle)
+        public SummaryResponse Map(Bundle bundle, out List<string> issues)
         {
             var referralsInReview = new List<Referral>();
             var referralsNotInReview = new List<Referral>();
             var confirmedAppointments = new List<UpcomingAppointment>();
             var unconfirmedAppointments = new List<UpcomingAppointment>();
 
-            foreach (var entry in bundle.Entry)
+            var operationIssues = bundle.Entry
+                .Select(x => x.Resource)
+                .OfType<OperationOutcome>()
+                .SelectMany(x => x.Issue)
+                .ToList();
+
+            if (operationIssues.Any())
             {
-                if (entry.Resource?.GetType() == typeof(OperationOutcome))
+                issues = operationIssues.Select(MapErrorForLogging).ToList();
+                return null;
+            }
+
+            issues = new List<string>();
+
+            var carePlans = bundle.Entry
+                .Select(x => x.Resource)
+                .OfType<CarePlan>();
+
+            foreach (var carePlan in carePlans)
+            {
+                foreach (var activity in carePlan.Activity)
                 {
-                    var operationOutcome = (OperationOutcome) entry.Resource;
-
-                    foreach (var issueComponent in operationOutcome.Issue)
+                    switch (activity.Detail?.Kind)
                     {
-                       _logger.LogError(MapErrorForLogging(issueComponent));
-                    }
-
-                    return null;
-                }
-
-                if (entry.Resource?.GetType() == typeof(CarePlan))
-                {
-                    var carePlan = (CarePlan) entry.Resource;
-
-                    foreach (var activity in carePlan.Activity)
-                    {
-                        switch (activity.Detail?.Kind)
+                        case CarePlan.CarePlanActivityKind.ServiceRequest:
                         {
-                            case CarePlan.CarePlanActivityKind.ServiceRequest:
+                            var referral = MapActivityToReferral(activity);
+
+                            if (referral is null)
                             {
-                                var referral = MapActivityToReferral(activity);
+                                return null;
+                            }
 
-                                if (referral is null)
-                                {
-                                    return null;
-                                }
-
-                                if (referral.Status == InReviewStatus)
-                                {
-                                    referralsInReview.Add(referral);
-                                    break;
-                                }
-
-                                referralsNotInReview.Add(referral);
+                            if (referral.Status == InReviewStatus)
+                            {
+                                referralsInReview.Add(referral);
                                 break;
                             }
-                            case CarePlan.CarePlanActivityKind.Appointment:
+
+                            referralsNotInReview.Add(referral);
+                            break;
+                        }
+                        case CarePlan.CarePlanActivityKind.Appointment:
+                        {
+                            var appointment = MapActivityToUpcomingAppointment(activity);
+
+                            if (appointment is null)
                             {
-                                var appointment = MapActivityToUpcomingAppointment(activity);
+                                return null;
+                            }
 
-                                if (appointment is null)
-                                {
-                                    return null;
-                                }
-
-                                if (appointment.AppointmentDateTime != null)
-                                {
-                                    confirmedAppointments.Add(appointment);
-                                    break;
-                                }
-
-                                unconfirmedAppointments.Add(appointment);
+                            if (appointment.AppointmentDateTime != null)
+                            {
+                                confirmedAppointments.Add(appointment);
                                 break;
                             }
+
+                            unconfirmedAppointments.Add(appointment);
+                            break;
                         }
                     }
                 }
@@ -333,6 +334,6 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
 
         private string MapErrorForLogging(OperationOutcome.IssueComponent issueComponent) =>
             $"Partial Error: Diagnostics: {issueComponent.Diagnostics}, " +
-                       $"Value Code: {issueComponent.Extension.First().Value}";
+            $"Value Code: {issueComponent.Extension.FirstOrDefault()?.Value}";
     }
 }

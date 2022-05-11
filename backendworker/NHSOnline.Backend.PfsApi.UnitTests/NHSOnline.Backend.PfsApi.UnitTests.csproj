@@ -53,6 +53,9 @@
     <Content Include="MockData\SecondaryCare\invalid-upcoming-appointment.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="MockData\SecondaryCare\partial-success-secondary-care-summary-response.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="OrganDonation\Resources\mycert.pfx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

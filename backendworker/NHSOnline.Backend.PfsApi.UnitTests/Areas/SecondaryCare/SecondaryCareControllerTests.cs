@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Support;
 using UnitTestHelper;
 
@@ -35,8 +36,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             // Assert
             result.Should().BeAssignableTo<OkObjectResult>().Subject.Value.Should().BeEquivalentTo(Context.Data.SummaryResponse);
 
-            Context.Mocks.Auditor.Verify(a => a.PreOperationAudit("SecondaryCare_GetSummary_Request","Attempting to get Secondary Care Summary"));
-            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit("SecondaryCare_GetSummary_Response", "Secondary Care Summary successfully retrieved. Total Referrals: 6, Total Upcoming Appointments: 4"));
+            Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,"Attempting to get Secondary Care Summary"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse,"Secondary Care Summary successfully retrieved. Total Referrals: 6, Total Upcoming Appointments: 4"));
 
             Context.Mocks.SummaryMapperLogger.VerifyNoOtherCalls();
         }
@@ -57,8 +58,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             actionResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             pfsErrorResponse.ServiceDeskReference.Should().StartWith("4u");
 
-            Context.Mocks.Auditor.Verify(a => a.PreOperationAudit("SecondaryCare_GetSummary_Request","Attempting to get Secondary Care Summary"));
-            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit("SecondaryCare_GetSummary_Response", "Error retrieving Secondary Care Summary: BadGateway"));
+            Context.Mocks.Auditor.Verify(x => x.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResult, "Failed - response code: BadRequest"));
+            Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,"Attempting to get Secondary Care Summary"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse, "Error retrieving Secondary Care Summary: BadGateway"));
         }
 
         [TestMethod]
@@ -77,29 +79,53 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             actionResult.StatusCode.Should().Be(StatusCodes.Status504GatewayTimeout);
             pfsErrorResponse.ServiceDeskReference.Should().StartWith("zu");
 
-            Context.Mocks.Auditor.Verify(a => a.PreOperationAudit("SecondaryCare_GetSummary_Request","Attempting to get Secondary Care Summary"));
-            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit("SecondaryCare_GetSummary_Response", "Error retrieving Secondary Care Summary: Timeout"));
+            Context.Mocks.Auditor.Verify(x => x.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResult, "Failed - request timed out"));
+            Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,"Attempting to get Secondary Care Summary"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse, "Error retrieving Secondary Care Summary: Timeout"));
         }
 
         [TestMethod]
         [DynamicData(nameof(InvalidResponseData))]
-        public async Task GetSummary_GetSummaryResponseHasMissingOrInvalidData_LogsErrorsAndReturns502(string response, List<string> errorMessages)
+        public async Task GetSummary_GetSummaryResponseHasMissingOrInvalidData_LogsErrorsAndReturns502(
+            string response,
+            List<string> mapperErrorMessages,
+            List<string> serviceErrorMessages,
+            List<string> auditMessages)
         {
+            // Arrange
             Context.MockSecondaryCareHttpClientGetSummaryReturnsSuccessfulResponseWithData(response);
 
+            // Act
             var result = await Context.CreateSystemUnderTest().Summary(Context.Data.P9UserSession);
 
+            // Assert
             var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
             var pfsErrorResponse = actionResult.Value.Should().BeAssignableTo<PfsErrorResponse>().Subject;
 
             actionResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             pfsErrorResponse.ServiceDeskReference.Should().StartWith("4u");
 
-            foreach (var errorMessage in errorMessages)
+            foreach (var errorMessage in mapperErrorMessages)
             {
                 Context.Mocks.SummaryMapperLogger.VerifyLogger(LogLevel.Error, errorMessage, Times.Once());
             }
+
+            foreach (var errorMessage in serviceErrorMessages)
+            {
+                Context.Mocks.ServiceLogger.VerifyLogger(LogLevel.Error, errorMessage, Times.Once());
+            }
+
+            foreach (var auditMessage in auditMessages)
+            {
+                Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResult,auditMessage));
+            }
+
+            Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,"Attempting to get Secondary Care Summary"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse, "Error retrieving Secondary Care Summary: BadGateway"));
+
             Context.Mocks.SummaryMapperLogger.VerifyNoOtherCalls();
+            Context.Mocks.ServiceLogger.VerifyNoOtherCalls();
+            Context.Mocks.Auditor.VerifyNoOtherCalls();
         }
 
         private static IEnumerable<object[]> InvalidResponseData
@@ -119,6 +145,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                         "Failed to get Provider from extensions",
                         "Failed to get Deep Link from extensions",
                     },
+                    new List<string>
+                    {
+                        "Aggregator Secondary Care Summary API unsuccessfully mapped Bundle to SummaryResponse. See previous log entries for more detail"
+                    },
+                    new List<string>
+                    {
+                        "Failed - mapping failed for at least one entry",
+                    }
                 };
 
                 yield return new object[]
@@ -129,7 +163,29 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                         "Expected Extension value to be of type Hl7.Fhir.Model.Coding but was Hl7.Fhir.Model.Date",
                         "Failed to get Upcoming Appointment Status from extensions",
                         "Failed to get Upcoming Appointment Location from Description",
+                    },
+                    new List<string>
+                    {
+                        "Aggregator Secondary Care Summary API unsuccessfully mapped Bundle to SummaryResponse. See previous log entries for more detail"
+                    },
+                    new List<string>
+                    {
+                        "Failed - mapping failed for at least one entry",
                     }
+                };
+
+                yield return new object[]
+                {
+                    LoadAggregatorResponse("partial-success-secondary-care-summary-response"),
+                    new List<string>(),
+                    new List<string>
+                    {
+                        "Aggregator Secondary Care Summary API errors found in response: Partial Error: Diagnostics: Response failed validation, Value Code: company-1|Partial Error: Diagnostics: HTTP-404 returned, Value Code: company-2|Partial Error: Diagnostics: Timeout occured, Value Code: company-3"
+                    },
+                    new List<string>
+                    {
+                        "Failed - errors in response: Partial Error: Diagnostics: Response failed validation, Value Code: company-1|Partial Error: Diagnostics: HTTP-404 returned, Value Code: company-2|Partial Error: Diagnostics: Timeout occured, Value Code: company-3"
+                    },
                 };
             }
         }

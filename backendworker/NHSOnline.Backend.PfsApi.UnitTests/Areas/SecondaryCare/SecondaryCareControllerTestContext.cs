@@ -250,8 +250,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             internal Mock<ILogger<SecondaryCareController>> ControllerLogger { get; }
                 = new Mock<ILogger<SecondaryCareController>>();
 
-            internal Mock<ILogger<ISecondaryCareSummaryMapper>> SummaryMapperLogger { get; }
-                = new Mock<ILogger<ISecondaryCareSummaryMapper>>();
+            internal Mock<ILogger<SecondaryCareSummaryService>> ServiceLogger { get; }
+                = new Mock<ILogger<SecondaryCareSummaryService>>();
+
+            internal Mock<ILogger<SecondaryCareSummaryMapper>> SummaryMapperLogger { get; }
+                = new Mock<ILogger<SecondaryCareSummaryMapper>>();
             internal Mock<IAuditor> Auditor { get; }
                 = new Mock<IAuditor>();
 
@@ -317,6 +320,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                 serviceCollection
                     .AddSingleton(Auditor.Object)
                     .AddSingleton(ControllerLogger.Object)
+                    .AddSingleton(ServiceLogger.Object)
                     .AddSingleton(SummaryMapperLogger.Object)
                     .AddSingleton(Configuration.Object)
                     .AddSingleton(HttpTimeoutConfigurationSettings.Object)
