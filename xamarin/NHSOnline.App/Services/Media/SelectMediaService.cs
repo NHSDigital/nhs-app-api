@@ -55,7 +55,7 @@ namespace NHSOnline.App.Services.Media
                     await _dialogPresenter.DisplayAlertDialog(
                         new CameraPermissionRationale(async () =>
                         {
-                            _logger.LogError(AcceptedCameraDialogLogText);
+                            _logger.LogInformation(AcceptedCameraDialogLogText);
 
                             if (!Preferences.ContainsKey(prefKey))
                             {
@@ -74,7 +74,7 @@ namespace NHSOnline.App.Services.Media
                             }
                         }, () =>
                         {
-                            _logger.LogError(CancelledCameraDialogLogText);
+                            _logger.LogInformation(CancelledCameraDialogLogText);
 
                             selectMediaRequest.NoMediaSelected();
 
@@ -86,7 +86,7 @@ namespace NHSOnline.App.Services.Media
                     await _dialogPresenter.DisplayAlertDialog(
                         new FileStoragePermissionRationale(async () =>
                         {
-                            _logger.LogError(AcceptedStorageDialogLogText);
+                            _logger.LogInformation(AcceptedStorageDialogLogText);
 
                             if (!Preferences.ContainsKey(prefKey))
                             {
@@ -105,14 +105,13 @@ namespace NHSOnline.App.Services.Media
                             }
                         }, () =>
                         {
-                            _logger.LogError(CancelledStorageDialogLogText);
+                            _logger.LogInformation(CancelledStorageDialogLogText);
 
                             selectMediaRequest.NoMediaSelected();
 
                             return Task.CompletedTask;
                         })).PreserveThreadContext();
                 }
-
             }
             else
             {

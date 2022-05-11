@@ -34,7 +34,7 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
                 await AndroidDialogPresenter.CreateAndShowAlertDialog(
                     new LocationPermissionRationale(async () =>
                     {
-                        Logger.LogError("User has accepted the info dialog for the location permission");
+                        Logger.LogInformation("User has accepted the info dialog for the location permission");
                         if (!Preferences.ContainsKey(FirstGeoLocationSharedPrefKey))
                         {
                             Preferences.Set(FirstGeoLocationSharedPrefKey, "true");
@@ -43,14 +43,13 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
                         await ShowGeoLocationPrompt(origin, callback).ResumeOnThreadPool();
                     }, () =>
                     {
-                        Logger.LogError("User has cancelled the info dialog for the location permission");
+                        Logger.LogInformation("User has cancelled the info dialog for the location permission");
                         callback?.Invoke(origin, false, false);
                         return Task.CompletedTask;
                     })).PreserveThreadContext();
             }
             else
             {
-                Logger.LogError("User has already seen the info dialog for the location permission");
                 await ShowGeoLocationPrompt(origin, callback).ResumeOnThreadPool();
             }
         }

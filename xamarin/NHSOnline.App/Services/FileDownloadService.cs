@@ -35,7 +35,7 @@ namespace NHSOnline.App.Services
                 await dialogPresenter.DisplayAlertDialog(
                     new FileStoragePermissionRationale(async () =>
                     {
-                        _logger.LogError("User has accepted the info dialog for the file write permission");
+                        _logger.LogInformation("User has accepted the info dialog for the file write permission");
                         if (!Preferences.ContainsKey(FirstStorageWriteSharedPrefKey))
                         {
                             Preferences.Set(FirstStorageWriteSharedPrefKey, "true");
@@ -44,13 +44,12 @@ namespace NHSOnline.App.Services
                         await RequestPermissionAndAttemptFileDownload(downloadRequest, fileHandler, webViewElement, downloadFailed).PreserveThreadContext();
                     }, () =>
                     {
-                        _logger.LogError("User has cancelled the info dialog for the file write permission");
+                        _logger.LogInformation("User has cancelled the info dialog for the file write permission");
                         return Task.CompletedTask;
                     })).PreserveThreadContext();
             }
             else
             {
-                _logger.LogError("User has already seen the info dialog for the file write permission, showing request");
                 await RequestPermissionAndAttemptFileDownload(downloadRequest, fileHandler, webViewElement, downloadFailed).PreserveThreadContext();
             }
         }
