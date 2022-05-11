@@ -32,6 +32,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
             var consentMetricRows = await env.Postgres.Events.ConsentMetric.FetchAll();
             consentMetricRows.Should().HaveCount(3);
 
+            var secondaryCareSummaryMetricRows = await env.Postgres.Events.SecondaryCareSummaryMetric.FetchAll();
+            secondaryCareSummaryMetricRows.Should().HaveCount(1);
+
             using (new AssertionScope())
             {
                 var loginMetricRow1 = loginMetricRows.First(r => r.SessionId == "TestSession1");
@@ -71,6 +74,12 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 var consentMetricRow3 = consentMetricRows.First(r => r.SessionId == "TestSession5");
                 consentMetricRow3.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.005Z"));
                 consentMetricRow3.AuditId.Should().Be("AuditId5");
+
+                var secondaryCareSummaryMetricRow1 = secondaryCareSummaryMetricRows.First(r => r.SessionId == "TestSession6");
+                secondaryCareSummaryMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.006Z"));
+                secondaryCareSummaryMetricRow1.TotalReferrals.Should().Be(123);
+                secondaryCareSummaryMetricRow1.TotalUpcomingAppointments.Should().Be(456);
+                secondaryCareSummaryMetricRow1.AuditId.Should().Be("AuditId6");
             }
         }
 
@@ -95,6 +104,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
             var consentMetricRows = await env.Postgres.Events.ConsentMetric.FetchAll();
             consentMetricRows.Should().HaveCount(3);
 
+            var secondaryCareSummaryMetricRows = await env.Postgres.Events.SecondaryCareSummaryMetric.FetchAll();
+            secondaryCareSummaryMetricRows.Should().HaveCount(1);
+
             using (new AssertionScope())
             {
                 var loginMetricRow1 = loginMetricRows.First(r => r.SessionId == "TestSession1");
@@ -134,6 +146,12 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 var consentMetricRow3 = consentMetricRows.First(r => r.SessionId == "TestSession5");
                 consentMetricRow3.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.005Z"));
                 consentMetricRow3.AuditId.Should().Be("AuditId5");
+
+                var secondaryCareSummaryMetricRow1 = secondaryCareSummaryMetricRows.First(r => r.SessionId == "TestSession6");
+                secondaryCareSummaryMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.006Z"));
+                secondaryCareSummaryMetricRow1.TotalReferrals.Should().Be(123);
+                secondaryCareSummaryMetricRow1.TotalUpcomingAppointments.Should().Be(456);
+                secondaryCareSummaryMetricRow1.AuditId.Should().Be("AuditId6");
             }
         }
 
@@ -160,13 +178,24 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 ProofLevel = "P5"
             });
 
+            await env.Postgres.Events.SecondaryCareSummaryMetric.Insert(new SecondaryCareSummaryMetricRow()
+            {
+                Timestamp = new DateTime(2021, 11, 01, 09, 00, 00, 3),
+                SessionId = "TestSession3",
+                TotalReferrals = 123,
+                TotalUpcomingAppointments = 456,
+                AuditId = "AuditId3"
+            });
+
             var response = await env.HttpEndpointCallers.PostAuditLogConsumer(
                 BuildEvent("AuditId1", "TestSession1", new DateTime(2021, 11, 01, 09, 00, 00, 1),
                     "Login_Success",
                     "Successful Login with", "P5", "ods1", "ref1"),
                 BuildEvent("AuditId2", "TestSession2", new DateTime(2021, 11, 01, 09, 00, 00, 2),
                     "TermsAndConditions_RecordConsent_Response",
-                    "Initial Consent Successfully recorded", "P5", "ods2", "ref2"));
+                    "Initial Consent Successfully recorded", "P5", "ods2", "ref2"),
+                BuildEvent("AuditId3", "TestSession3", new DateTime(2021, 11, 01, 09, 00, 00, 3),
+                    "SecondaryCare_GetSummary_Response", "Secondary Care Summary successfully retrieved. Total Referrals: 123, Total Upcoming Appointments: 456", "P9", "ods3", "ref3"));
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -178,6 +207,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
 
             var consentMetricRows = await env.Postgres.Events.ConsentMetric.FetchAll();
             var consentMetricRow = consentMetricRows.Should().ContainSingle().Subject;
+
+            var secondaryCareSummaryMetricRows = await env.Postgres.Events.SecondaryCareSummaryMetric.FetchAll();
+            var secondaryCareSummaryMetricRow = secondaryCareSummaryMetricRows.Should().ContainSingle().Subject;
 
             using (new AssertionScope())
             {
@@ -199,6 +231,12 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 consentMetricRow.AuditId.Should().Be("AuditId2");
                 consentMetricRow.ProofLevel.Should().Be("P5");
                 consentMetricRow.LoginId.Should().Be("ConsentMetric-Test");
+
+                secondaryCareSummaryMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.003Z"));
+                secondaryCareSummaryMetricRow.SessionId.Should().Be("TestSession3");
+                secondaryCareSummaryMetricRow.TotalReferrals.Should().Be(123);
+                secondaryCareSummaryMetricRow.TotalUpcomingAppointments.Should().Be(456);
+                secondaryCareSummaryMetricRow.AuditId.Should().Be("AuditId3");
             }
         }
 
@@ -218,6 +256,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
 
             var consentMetricRows = await env.Postgres.Events.ConsentMetric.FetchAll();
             consentMetricRows.Should().BeEmpty();
+
+            var secondaryCareSummaryMetricRows = await env.Postgres.Events.SecondaryCareSummaryMetric.FetchAll();
+            secondaryCareSummaryMetricRows.Should().BeEmpty();
         }
 
         [NhsAppTest]
@@ -236,6 +277,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
 
             var consentMetricRows = await env.Postgres.Events.ConsentMetric.FetchAll();
             consentMetricRows.Should().BeEmpty();
+
+            var secondaryCareSummaryMetricRows = await env.Postgres.Events.SecondaryCareSummaryMetric.FetchAll();
+            secondaryCareSummaryMetricRows.Should().BeEmpty();
         }
 
         private static AuditRecord BuildEvent(string auditId, string sessionId, DateTime eventTimestamp, string operation, string details, string proofLevel, string odsCode, string referrer)
@@ -271,7 +315,8 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 BuildEvent("AuditId2", "TestSession2", new DateTime(2021, 11, 01, 09, 00, 00, 2), "Login_Success", "Successful Login with", "P9", "ods2", "ref2"),
                 BuildEvent("AuditId3", "TestSession3", new DateTime(2021, 11, 01, 09, 00, 00, 3), "TermsAndConditions_RecordConsent_Response", "Initial Consent Successfully recorded", "P5", "ods3", "ref3"),
                 BuildEvent("AuditId4", "TestSession4", new DateTime(2021, 11, 01, 09, 00, 00, 4), "TermsAndConditions_RecordConsent_Response", "Initial Consent Successfully recorded", "P5", "ods4", "ref4"),
-                BuildEvent("AuditId5", "TestSession5", new DateTime(2021, 11, 01, 09, 00, 00, 5), "TermsAndConditions_RecordConsent_Response", "Initial Consent Successfully recorded", "P5", "ods5", "ref5")
+                BuildEvent("AuditId5", "TestSession5", new DateTime(2021, 11, 01, 09, 00, 00, 5), "TermsAndConditions_RecordConsent_Response", "Initial Consent Successfully recorded", "P5", "ods5", "ref5"),
+                BuildEvent("AuditId6", "TestSession6", new DateTime(2021, 11, 01, 09, 00, 00, 6), "SecondaryCare_GetSummary_Response", "Secondary Care Summary successfully retrieved. Total Referrals: 123, Total Upcoming Appointments: 456", "P9", "ods6", "ref6")
             };
     }
 }

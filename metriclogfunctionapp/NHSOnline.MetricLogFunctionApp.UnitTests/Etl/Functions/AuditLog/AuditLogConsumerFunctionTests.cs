@@ -9,6 +9,7 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Consent;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Login;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.WebIntegrationReferrals;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Wayfinder.SecondaryCareSummary;
 using NHSOnline.MetricLogFunctionApp.Etl.Logging;
 
 namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
@@ -19,6 +20,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
         private Mock<IAuditLogEtl<ConsentMetric>> _consentEtl;
         private Mock<IAuditLogEtl<LoginMetric>> _loginEtl;
         private Mock<IAuditLogEtl<WebIntegrationReferralsMetric>> _webIntegrationReferralEtl;
+        private Mock<IAuditLogEtl<SecondaryCareSummaryMetric>> _secondaryCareSummaryEtl;
         private Mock<IEtlLogger<AuditLogConsumerFunction>> _logger;
         private AuditLogConsumerFunction _function;
 
@@ -28,12 +30,14 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
             _consentEtl = new Mock<IAuditLogEtl<ConsentMetric>>();
             _loginEtl = new Mock<IAuditLogEtl<LoginMetric>>();
             _webIntegrationReferralEtl = new Mock<IAuditLogEtl<WebIntegrationReferralsMetric>>();
+            _secondaryCareSummaryEtl = new Mock<IAuditLogEtl<SecondaryCareSummaryMetric>>();
             _logger = new Mock<IEtlLogger<AuditLogConsumerFunction>>();
 
             _function = new AuditLogConsumerFunction(
                 _consentEtl.Object,
                 _loginEtl.Object,
                 _webIntegrationReferralEtl.Object,
+                _secondaryCareSummaryEtl.Object,
                 _logger.Object);
         }
 
@@ -53,6 +57,8 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
             _loginEtl.Verify(etl =>
                 etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
             _webIntegrationReferralEtl.Verify(etl =>
+                etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
+            _secondaryCareSummaryEtl.Verify(etl =>
                 etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
         }
 

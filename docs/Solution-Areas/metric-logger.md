@@ -68,6 +68,36 @@ Consent Body:
     }
 ]
 ```
+
+SecondaryCareSummary Body:
+```bash
+[
+    {
+        "Id": "db9da242-3572-4a7d-b610-78def49488c6",
+        "Timestamp": "2022-03-28T09:12:54.7260781Z",
+        "AuditId": "db9da242-3572-4a7d-b610-78def49488c6",
+        "NhsLoginSubject": "7fa5d376-7b2f-42e6-9f27-793f38be0355",
+        "NhsNumber": "111 111 1111",
+        "IsActingOnBehalfOfAnother": false,
+        "Supplier": "Disconnected",
+        "Operation": "SecondaryCare_GetSummary_Response",
+        "Details": "Secondary Care Summary successfully retrieved. Total Referrals: 3, Total Upcoming Appointments: 3",
+        "ApiVersion": "develop",
+        "WebVersion": "develop (commit:20ea9e3a4)",
+        "NativeVersion": "ios 2.6.0",
+        "Environment": "scratch19",
+        "IntegrationReferrer": null,
+        "SessionId": "3024ba94-9614-44dd-bea8-d88303bd9282",
+        "ProofLevel": "P9",
+        "id": "d9dd8af3-0799-43ec-b7f3-6312617fc7c3",
+        "_rid": "RuVQAKPVga8POQMAAAAAAA==",
+        "_self": "dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga8POQMAAAAAAA==/",
+        "_etag": "\"50015471-0000-1100-0000-62417c160000\"",
+        "_attachments": "attachments/",
+        "_ts": 1648458774
+    }
+]
+```
 ## Running the Metric Logger Integration Tests Locally 
 
 The ideal way of checking that changes you have made locally work is by kicking off the Integration test environment which can be done by running this command in the root of the metric logger function app folder

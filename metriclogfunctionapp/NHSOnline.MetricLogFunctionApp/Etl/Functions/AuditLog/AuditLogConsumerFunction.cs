@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Consent;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Login;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.WebIntegrationReferrals;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Wayfinder.SecondaryCareSummary;
 using NHSOnline.MetricLogFunctionApp.Etl.Logging;
 
 namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
@@ -17,17 +18,20 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
         private readonly IAuditLogEtl<ConsentMetric> _consentEtl;
         private readonly IAuditLogEtl<LoginMetric> _loginEtl;
         private readonly IAuditLogEtl<WebIntegrationReferralsMetric> _webIntegrationReferralEtl;
+        private readonly IAuditLogEtl<SecondaryCareSummaryMetric> _secondaryCareSummaryEtl;
         private readonly IEtlLogger<AuditLogConsumerFunction> _logger;
 
         public AuditLogConsumerFunction(
             IAuditLogEtl<ConsentMetric> consentEtl,
             IAuditLogEtl<LoginMetric> loginEtl,
             IAuditLogEtl<WebIntegrationReferralsMetric> webIntegrationReferralEtl,
+            IAuditLogEtl<SecondaryCareSummaryMetric> secondaryCareSummaryEtl,
             IEtlLogger<AuditLogConsumerFunction> logger)
         {
             _consentEtl = consentEtl;
             _loginEtl = loginEtl;
             _webIntegrationReferralEtl = webIntegrationReferralEtl;
+            _secondaryCareSummaryEtl = secondaryCareSummaryEtl;
             _logger = logger;
         }
 
@@ -65,6 +69,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
 
                 await _consentEtl.Execute(events);
                 await _loginEtl.Execute(events);
+                await _secondaryCareSummaryEtl.Execute(events);
                 await _webIntegrationReferralEtl.Execute(events);
             }
             catch (Exception)

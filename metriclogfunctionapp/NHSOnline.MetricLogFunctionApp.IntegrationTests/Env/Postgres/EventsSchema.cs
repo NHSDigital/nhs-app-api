@@ -17,6 +17,7 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres
 
         internal PostgresTable<WebIntegrationReferralsMetricRow> WebIntegrationReferrals => Table<WebIntegrationReferralsMetricRow>();
 
+        internal PostgresTable<SecondaryCareSummaryMetricRow> SecondaryCareSummaryMetric => Table<SecondaryCareSummaryMetricRow>();
 
         private PostgresTable<TRow> Table<TRow>([CallerMemberName] string viewName = "") where TRow : ITableRow
             => _postgres.Table<TRow>(SchemaName, viewName);
