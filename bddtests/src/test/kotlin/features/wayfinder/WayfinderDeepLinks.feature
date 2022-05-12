@@ -11,7 +11,7 @@ Feature: Wayfinder DeepLinks
     When I click the 'Referrals, hospital and other appointments' link on the Appointments Hub
     Then the Referrals, hospital and other appointments screen with data is displayed
     And I see an appointment to confirm
-    When I click the 'Manage this referral' button
+    When I click the 'Manage this referral' link
     Then I am navigated to a third party site
 
   Scenario: A user with a PKB referral can follow the deep link without seeing the third party warning screen
@@ -23,5 +23,5 @@ Feature: Wayfinder DeepLinks
     When I click the 'Referrals, hospital and other appointments' link on the Appointments Hub
     Then the Referrals, hospital and other appointments screen with data is displayed
     And I see an appointment to confirm
-    When I click the 'Manage this referral' button
+    When I click the 'Manage this referral' link
     Then I am redirected to the redirector page with the header 'View appointments'

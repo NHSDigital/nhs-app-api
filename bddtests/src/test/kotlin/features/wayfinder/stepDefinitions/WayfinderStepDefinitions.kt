@@ -97,12 +97,12 @@ class WayfinderStepDefinitions {
         wayfinderReferralsAndAppointmentsPage.assertWayfinderWithoutDataTitleIsDisplayed()
     }
 
-    @Then("^I see an in review referral$")
+    @Then("^I see an in-review referral$")
     fun assertInReviewReferralIsDisplayed() {
         wayfinderReferralsAndAppointmentsPage.assertInReviewReferralDisplayed()
     }
 
-    @Then("^I can see that I have no upcoming appointments$")
+    @Then("^I can see that I have no confirmed appointments$")
     fun assertNoUpcomingAppointmentsIsDisplayed() {
         wayfinderReferralsAndAppointmentsPage.assertNoUpcomingAppointmentsDisplayed()
     }

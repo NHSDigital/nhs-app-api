@@ -30,8 +30,8 @@ export default {
   mixins: [RedirectorMixin],
   props: {
     appointmentId: {
-      type: String,
-      default: '',
+      type: Number,
+      required: true,
     },
     appointmentDateTime: {
       type: String,

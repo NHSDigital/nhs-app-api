@@ -24,13 +24,18 @@ namespace NHSOnline.Backend.PfsApi.Areas.SecondaryCare
         {
             try
             {
-                var referralCount = result.Response.Referrals.Count();
-                var upcomingAppointmentCount = result.Response.UpcomingAppointments.Count();
+                var referralsNotInReviewCount = result.Response.ReferralsNotInReview.Count();
+                var referralsInReviewCount = result.Response.ReferralsInReview.Count();
+                var unconfirmedAppointments = result.Response.UnconfirmedAppointments.Count();
+                var confirmedAppointmentsCount = result.Response.ConfirmedAppointments.Count();
+
+                var totalReferralsCount = (referralsInReviewCount + referralsNotInReviewCount);
+                var totalUpcomingAppointmentsCount = (unconfirmedAppointments + confirmedAppointmentsCount);
 
                 await _auditor.PostOperationAudit(AuditType,
                     "Secondary Care Summary successfully retrieved. " +
-                    $"Total Referrals: {referralCount}, " +
-                    $"Total Upcoming Appointments: {upcomingAppointmentCount}");
+                    $"Total Referrals: {totalReferralsCount}, " +
+                    $"Total Upcoming Appointments: {totalUpcomingAppointmentsCount}");
             }
             catch (Exception e)
             {

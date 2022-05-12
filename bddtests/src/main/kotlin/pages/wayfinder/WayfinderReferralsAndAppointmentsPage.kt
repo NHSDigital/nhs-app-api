@@ -20,7 +20,7 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
     )
 
     private val pageTitleWithNoData = HybridPageElement(
-        webDesktopLocator = "//h1[contains(text(),\"No referrals or appointments to view and manage\")]",
+        webDesktopLocator = "//h1[contains(text(),\"You have no referrals or appointments to view or manage\")]",
         page = this,
         helpfulName = "Wayfinder No Referrals And Appointments Title"
     )
@@ -32,13 +32,13 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
     )
 
     private val noUpcomingAppointments = HybridPageElement(
-        webDesktopLocator = "//p[contains(text(),\"You have no hospital appointments to view and manage.\")]",
+        webDesktopLocator = "//p[contains(text(),\"You have no confirmed appointments to view or manage.\")]",
         page = this,
         helpfulName = "Appointment to confirm H3"
     )
 
     private val inReviewReferralHeading = HybridPageElement(
-        webDesktopLocator = "//h3[contains(text(),\"Your referral request is being reviewed\")]",
+        webDesktopLocator = "//h3[contains(text(),\"Referral request in review\")]",
         page = this,
         helpfulName = "In Review Referral H3"
     )

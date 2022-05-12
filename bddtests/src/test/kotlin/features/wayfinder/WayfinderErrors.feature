@@ -12,7 +12,7 @@ Feature: Wayfinder Errors
     Then I see a helpful message indicating unavailable secondary care services with a <Prefix> service desk reference
     When the Wayfinder Aggregator API issues are resolved and is returning referrals and upcoming appointments
     And I click the try again button on the unavailable secondary care services error screen
-    Then I see an in review referral
+    Then I see an in-review referral
     Examples:
       | An Error              | Prefix |
       | timing out            | zu     |

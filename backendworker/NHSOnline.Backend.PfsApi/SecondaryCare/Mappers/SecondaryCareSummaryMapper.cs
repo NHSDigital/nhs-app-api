@@ -23,6 +23,7 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
         private const string ReferralStateResourceUrl = "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State";
         private const string ReviewDueDateResourceUrl = "https://fhir.nhs.net/ReviewDueDate";
         private const string AppointmentStatusResourceUrl = "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status";
+        private const string InReviewStatus = "InReview";
 
         private readonly ILogger<ISecondaryCareSummaryMapper> _logger;
 
@@ -33,8 +34,10 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
 
         public SummaryResponse Map(Bundle bundle)
         {
-            var referrals = new List<Referral>();
-            var upcomingAppointments = new List<UpcomingAppointment>();
+            var referralsInReview = new List<Referral>();
+            var referralsNotInReview = new List<Referral>();
+            var confirmedAppointments = new List<UpcomingAppointment>();
+            var unconfirmedAppointments = new List<UpcomingAppointment>();
 
             foreach (var entry in bundle.Entry)
             {
@@ -67,7 +70,13 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
                                     return null;
                                 }
 
-                                referrals.Add(referral);
+                                if (referral.Status == InReviewStatus)
+                                {
+                                    referralsInReview.Add(referral);
+                                    break;
+                                }
+
+                                referralsNotInReview.Add(referral);
                                 break;
                             }
                             case CarePlan.CarePlanActivityKind.Appointment:
@@ -79,7 +88,13 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
                                     return null;
                                 }
 
-                                upcomingAppointments.Add(appointment);
+                                if (appointment.AppointmentDateTime != null)
+                                {
+                                    confirmedAppointments.Add(appointment);
+                                    break;
+                                }
+
+                                unconfirmedAppointments.Add(appointment);
                                 break;
                             }
                         }
@@ -89,8 +104,16 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
 
             return new SummaryResponse
             {
-                Referrals = referrals.OrderBy(r => r.ReferredDateTime).ToList(),
-                UpcomingAppointments = upcomingAppointments.OrderBy(a => a.AppointmentDateTime).ToList()
+                ReferralsNotInReview = referralsNotInReview
+                    .OrderBy(r => r.ReferredDateTime)
+                    .ToList(),
+                ReferralsInReview = referralsInReview
+                    .OrderBy(r => r.ReferredDateTime)
+                    .ToList(),
+                UnconfirmedAppointments = unconfirmedAppointments,
+                ConfirmedAppointments = confirmedAppointments
+                    .OrderBy(a => a.AppointmentDateTime)
+                    .ToList(),
             };
         }
 

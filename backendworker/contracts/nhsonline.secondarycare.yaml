@@ -49,25 +49,36 @@ components:
     SecondaryCareSummaryResponse:
       type: object
       required:
-        - referrals
-        - upcomingAppointments
+        - referralsNotInReview
+        - referralsInReview
+        - confirmedAppointments
+        - unconfirmedAppointments
       properties:
-        referrals:
+        referralsNotInReview:
           type: array
-          description: An array of referrals for the authorized user.
+          description: An array of referrals (Not in review) for the authorized user.
           items:
-            $ref: "#/components/schemas/Referral"
-        upcomingAppointments:
+            $ref: "#/components/schemas/ReferralNotInReview"
+        referralsInReview:
           type: array
-          description: An array of upcoming appointments for the authorized user.
+          description: An array of referrals (In review) for the authorized user.
           items:
-            $ref: "#/components/schemas/UpcomingAppointment"
-    Referral:
+            $ref: "#/components/schemas/ReferralInReview"
+        confirmedAppointments:
+          type: array
+          description: An array of confirmed (with appointment date) appointments for the authorized user.
+          items:
+            $ref: "#/components/schemas/ConfirmedAppointment"
+        unconfirmedAppointments:
+          type: array
+          description: An array of unconfirmed (without appointment date) appointments for the authorized user.
+          items:
+            $ref: "#/components/schemas/UnconfirmedAppointment"
+    ReferralNotInReview:
       type: object
       required:
         - referralId
         - referredDatetime
-        - serviceSpecialty
         - referrerOrganisation
         - status
         - provider
@@ -92,6 +103,47 @@ components:
           enum:
             - Bookable
             - BookableWasCancelled
+        reviewDueDate:
+          type: string
+          format: date-time
+          description: Optional - Date when referral is due if applicable. Only will be returned if status is InReview.
+        provider:
+          type: string
+          description: The linked referral or portal system.
+          enum:
+            - pkb
+            - ers
+            - drdoctor
+        deepLinkUrl:
+          type: string
+          description: Deep link url for the user to get more details on the referral.
+    ReferralInReview:
+      type: object
+      required:
+        - referralId
+        - referredDatetime
+        - referrerOrganisation
+        - status
+        - provider
+        - deepLinkUrl
+      properties:
+        referralId:
+          type: string
+          description: Supplier specific reference - booking reference.
+        referredDatetime:
+          type: string
+          format: date-time
+          description: The date-time the referral was initiated.
+        serviceSpecialty:
+          type: string
+          description: The specialty of the department the patient is being referred to.
+        referrerOrganisation:
+          type: string
+          description: Patient friendly name of the referrer organisation.
+        status:
+          type: string
+          description: Possible referral states.
+          enum:
             - InReview
         reviewDueDate:
           type: string
@@ -107,9 +159,10 @@ components:
         deepLinkUrl:
           type: string
           description: Deep link url for the user to get more details on the referral.
-    UpcomingAppointment:
+    ConfirmedAppointment:
       type: object
       required:
+        - appointmentDatetime
         - appointmentStatus
         - locationDescription
         - deepLinkUrl
@@ -118,7 +171,33 @@ components:
         appointmentDatetime:
           type: string
           format: date-time
-          description: Optional - The date-time of the upcoming appointment.
+          description: The date-time of the upcoming appointment.
+        appointmentStatus:
+          type: string
+          description: State of the appointment. Initially only booked appointments will be returned.
+          enum:
+            - booked
+        locationDescription:
+          type: string
+          description: A patient friendly term for where the appointment will be.
+        provider:
+          type: string
+          description: The linked referral or portal system.
+          enum:
+            - pkb
+            - ers
+            - drdoctor
+        deepLinkUrl:
+          type: string
+          description: Deep link url for the user to get more details on the appointment.
+    UnconfirmedAppointment:
+      type: object
+      required:
+        - appointmentStatus
+        - locationDescription
+        - deepLinkUrl
+        - provider
+      properties:
         appointmentStatus:
           type: string
           description: State of the appointment. Initially only booked appointments will be returned.
