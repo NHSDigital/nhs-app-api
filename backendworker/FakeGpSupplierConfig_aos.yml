@@ -995,3 +995,58 @@ defaultUsers:
       familyName: Donor
       dateOfBirth: "1964-02-15T00:00:00"
       sex: Male
+
+  accurx:
+    9692113915:
+      userId: cc5c8551-e36f-4690-a602-5c5fa65ed57b
+      emailAddress: nhsapp.aos+accurx.user1@gmail.com
+      odsCode: F00013
+      givenName: Simon
+      familyName: Williams
+      dateOfBirth: "2001-10-10T00:00:00"
+      sex: Male
+
+    9692113916:
+      userId: 8f7cba80-6f00-4881-843f-91f65ec3c06a
+      emailAddress: nhsapp.aos+accurx.user2@gmail.com
+      odsCode: F00013
+      givenName: Greg
+      familyName: Willis
+      dateOfBirth: "1999-01-01T00:00:00"
+      sex: Male
+
+    9692113917:
+      userId: bbc270c3-2541-4120-8004-09c27b7d9e02
+      emailAddress: nhsapp.aos+accurx.user3@gmail.com
+      odsCode: F00013
+      givenName: Heather
+      familyName: Douglas
+      dateOfBirth: "1988-02-02T00:00:00"
+      sex: Female
+
+    9692113918:
+      userId: d459a2b4-a031-440d-9548-9f9bd1519917
+      emailAddress: nhsapp.aos+accurx.user4@gmail.com
+      odsCode: F00013
+      givenName: Jim
+      familyName: Hammond
+      dateOfBirth: "1974-05-05T00:00:00"
+      sex: Male
+
+    9692113919:
+      userId: 0f3835db-f009-4993-875d-f987e914ec06
+      emailAddress: nhsapp.aos+accurx.user5@gmail.com
+      odsCode: F00013
+      givenName: Carol
+      familyName: Danvers
+      dateOfBirth: "1991-11-11T00:00:00"
+      sex: Female
+
+    9692113920:
+      userId: 7e2203af-d98c-4ea0-aa03-5042fae8f2e0
+      emailAddress: nhsapp.aos+accurx.user6@gmail.com
+      odsCode: F00013
+      givenName: Patsy
+      familyName: Walker
+      dateOfBirth: "1985-09-09T00:00:00"
+      sex: Female

@@ -77,6 +77,7 @@ api:
     services__substraktPatientPack_auth__url: https://auth.test.substrakthealth.com
     services__gncr__url: https://my-sandpit.gncr.org.uk
     services__engage__url: https://nhs1-nhsapp.engage.gp
+    services__accurx__url: https://nhsapp-florey.dev.accurx.com
     services__silver_third_party_api_test__url: https://silverintegrationtestsa.z33.web.core.windows.net
     services__http_status__url: https://httpstat.us
     services__nhsd__url: https://vaccine-status-dev-uks.azurewebsites.net
@@ -100,21 +101,6 @@ api:
     servicesV3__silver_third_party_api_test__domains__1: https://httpstat.us
     servicesV3__nhsd__url: https://vaccine-status-dev-uks.azurewebsites.net
     servicesV3__netCompany__url: https://stdevpistatic01.z33.web.core.windows.net
-
-    # Full AccuRx config is defined here as we want to confine the AccuRx KnownService
-    # to the dev cluster for the moment, due to only having configuration details for sandpit
-    services__accurx__subServices: null
-    services__accurx__javaScriptInteractionMode: SilverThirdParty
-    services__accurx__menuTab: None
-    services__accurx__viewMode: WebView
-    services__accurx__integrationLevel: SilverWithWebNavigation
-    services__accurx__showSpinner: true
-    services__accurx__showThirdPartyWarning: true
-    services__accurx__requiresAssertedLoginIdentity: true
-    services__accurx__validateSession: true
-    services__accurx__url: https://nhsapp-florey.dev.accurx.com
-    servicesV3__accurx__showThirdPartyWarning: true
-    servicesV3__accurx__requiresAssertedLoginIdentity: true
     servicesV3__accurx__url: https://nhsapp-florey.dev.accurx.com
 
 sidecar_proxy:

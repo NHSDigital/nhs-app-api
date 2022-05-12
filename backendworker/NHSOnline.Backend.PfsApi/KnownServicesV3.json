@@ -88,6 +88,10 @@
       "url": "https://hub-dev.wpalpha.clouddev.works",
       "requiresAssertedLoginIdentity": true,
       "showThirdPartyWarning": true
+    },
+    "accurx": {
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true
     }
   }
 }

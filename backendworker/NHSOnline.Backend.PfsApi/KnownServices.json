@@ -574,6 +574,17 @@
       "validateSession": true,
       "javaScriptInteractionMode": "SilverThirdParty",
       "viewMode": "WebView"
+    },
+    "accurx": {
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
     }
   }
 }
