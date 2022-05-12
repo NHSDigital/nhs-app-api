@@ -13,7 +13,6 @@ describe('Referral Ready Overdue Card', () => {
     const wrapper = mountReferralReviewOverdue({
       propsData: {
         bookingReference: '608119956620',
-        deepLinkUrl: 'default',
         referredBy: 'Mahogany GP Surgery',
         referredDate: '2022-04-10T10:00:00',
         reviewDate: '2022-04-18T10:00:00',
@@ -43,37 +42,32 @@ describe('Referral Ready Overdue Card', () => {
       expect(bookingreferenceTarget.text()).toBe('You need to contact Cardiology as a review of this referral is overdue.');
     });
 
+    it('will display the booking reference', () => {
+      const bookingreferenceTarget = wrapper.find('#booking-reference-1');
+
+      expect(bookingreferenceTarget.exists()).toBe(true);
+      expect(bookingreferenceTarget.text()).toBe('Booking reference: 608119956620');
+    });
+
     it('will display the referred by value', () => {
-      const referredByHeaderTarget = wrapper.find('#referred-by-header-1');
-      const referredByTextTarget = wrapper.find('#referred-by-text-1');
+      const referredByTarget = wrapper.find('#referred-by-1');
 
-      expect(referredByHeaderTarget.exists()).toBe(true);
-      expect(referredByTextTarget.exists()).toBe(true);
-
-      expect(referredByHeaderTarget.text()).toBe('Referred by:');
-      expect(referredByTextTarget.text()).toBe('Mahogany GP Surgery');
+      expect(referredByTarget.exists()).toBe(true);
+      expect(referredByTarget.text()).toBe('Referred by: Mahogany GP Surgery');
     });
 
     it('will display the review date value', () => {
-      const referredByHeaderTarget = wrapper.find('#review-date-header-1');
-      const referredByTextTarget = wrapper.find('#review-date-text-1');
+      const referredByTarget = wrapper.find('#review-date-1');
 
-      expect(referredByHeaderTarget.exists()).toBe(true);
-      expect(referredByTextTarget.exists()).toBe(true);
-
-      expect(referredByHeaderTarget.text()).toBe('Due to be reviewed by:');
-      expect(referredByTextTarget.text()).toBe('18 April 2022');
+      expect(referredByTarget.exists()).toBe(true);
+      expect(referredByTarget.text()).toBe('Due to be reviewed by: 18 April 2022');
     });
 
     it('will display the referred date value', () => {
-      const referredDateHeaderTarget = wrapper.find('#referral-date-header-1');
-      const referredDateTextTarget = wrapper.find('#referral-date-text-1');
+      const referredDateTarget = wrapper.find('#referral-date-1');
 
-      expect(referredDateHeaderTarget.exists()).toBe(true);
-      expect(referredDateTextTarget.exists()).toBe(true);
-
-      expect(referredDateHeaderTarget.text()).toBe('Date you were referred:');
-      expect(referredDateTextTarget.text()).toBe('10 April 2022');
+      expect(referredDateTarget.exists()).toBe(true);
+      expect(referredDateTarget.text()).toBe('Date you were referred: 10 April 2022');
     });
 
     it('will display a button', () => {
@@ -88,7 +82,6 @@ describe('Referral Ready Overdue Card', () => {
     const wrapper = mountReferralReviewOverdue({
       propsData: {
         bookingReference: '608119956620',
-        deepLinkUrl: 'default',
         referredBy: 'Mahogany GP Surgery',
         referredDate: '2022-04-10T10:00:00',
         requestedSpecialty: null,

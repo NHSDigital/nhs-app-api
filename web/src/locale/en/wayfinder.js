@@ -1,10 +1,6 @@
 
 export default {
-  bookOrManageReferralsAndAppointmentsTitle: 'Book or manage your referrals and appointments',
-  confirmedAppointmentsTitle: 'Confirmed Appointments',
-  inReviewTitle: 'In review',
-  noConfirmedAppointments: 'You have no confirmed appointments to view or manage.',
-  noReferralsOrAppointments: 'You have no referrals or appointments to view or manage',
+  noReferralsOrAppointments: 'No referrals or appointments to view and manage',
   youMayHaveOtherReferrals: 'You may have other referrals or appointments not shown that are available in other services.',
   contactTheOrganisation: 'If you still think a referral is missing, contact the organisation that referred you.',
   contactTheHealthcareProvider: 'If you still think an appointment is missing, contact the healthcare provider you booked it with.',
@@ -32,13 +28,13 @@ export default {
     contactTheOrganisation: 'Contact the organisation that referred you if a referral is missing.',
   },
   referrals: {
-    bookingReference: 'Booking reference:',
-    referredBy: 'Referred by:',
-    referredDate: 'Date you were referred:',
-    reviewDate: 'Due to be reviewed by:',
+    bookingReference: 'Booking reference: {reference}',
+    referredBy: 'Referred by: {referrer}',
+    referredDate: 'Date you were referred: {referralDate}',
+    reviewDate: 'Due to be reviewed by: {reviewDate}',
     manageThisReferral: 'Manage this referral',
     inReview: {
-      title: 'Referral request in review',
+      title: 'Your referral request is being reviewed',
       yourHealthcareProviderHasRequested: 'Your healthcare provider has requested for you to be referred to {specialty}. This request is being reviewed. You do not need to do anything.',
       yourHealthcareProviderHasRequestedNoSpecialty: 'Your healthcare provider has requested for you to be referred. This request is being reviewed. You do not need to do anything.',
     },

@@ -6,42 +6,32 @@
 
     <p v-if="hasSpecialty" :id="`requested-specialty-${referralId}`"
        class="nhsuk-u-margin-bottom-3">
-      <strong>{{ requestedSpecialty }}</strong>
+      {{ requestedSpecialty }}
     </p>
 
     <p v-if="hasSpecialty" :id="`contact-specialty-${referralId}`" class="nhsuk-u-margin-bottom-3">
-      {{ $t('wayfinder.referrals.overdue.youNeedToContactSpecialty',
-            null, {specialty: requestedSpecialty}) }}
+      {{ $tc('wayfinder.referrals.overdue.youNeedToContactSpecialty',
+             null, {specialty: requestedSpecialty}) }}
     </p>
 
     <p :id="`referral-date-${referralId}`" class="nhsuk-u-margin-bottom-3">
-      <strong>
-        <span :id="`referral-date-header-${referralId}`">
-          {{ $t('wayfinder.referrals.referredDate') }}
-        </span>
-      </strong>
-      <br>
-      <span :id="`referral-date-text-${referralId}`">{{ getFormattedReferredDate }}</span>
+      {{ $tc('wayfinder.referrals.referredDate',
+             null, {referralDate: getFormattedReferredDate}) }}
     </p>
 
     <p v-if="hasReviewDate" :id="`review-date-${referralId}`" class="nhsuk-u-margin-bottom-3">
-      <strong>
-        <span :id="`review-date-header-${referralId}`">
-          {{ $t('wayfinder.referrals.reviewDate') }}
-        </span>
-      </strong>
-      <br>
-      <span :id="`review-date-text-${referralId}`">{{ getFormattedReviewDate }}</span>
+      {{ $tc('wayfinder.referrals.reviewDate',
+             null, {reviewDate: getFormattedReviewDate}) }}
+    </p>
+
+    <p :id="`booking-reference-${referralId}`" class="nhsuk-u-margin-bottom-3">
+      {{ $tc('wayfinder.referrals.bookingReference',
+             null, {reference: bookingReference}) }}
     </p>
 
     <p :id="`referred-by-${referralId}`" class="nhsuk-u-margin-bottom-3">
-      <strong>
-        <span :id="`referred-by-header-${referralId}`">
-          {{ $t('wayfinder.referrals.referredBy') }}
-        </span>
-      </strong>
-      <br>
-      <span :id="`referred-by-text-${referralId}`">{{ referredBy }}</span>
+      {{ $tc('wayfinder.referrals.referredBy',
+             null, {referrer: referredBy}) }}
     </p>
 
     <primary-button :id="`manageInReviewReferral-${referralId}`" @click="onClick">

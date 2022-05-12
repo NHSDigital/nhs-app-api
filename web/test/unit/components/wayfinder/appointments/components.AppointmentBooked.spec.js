@@ -14,10 +14,9 @@ describe('Appointment Booked Card', () => {
   describe('template', () => {
     wrapper = mountAppointmentBooked({
       propsData: {
+        locationDescription: 'A Clinic, A Town, A Country',
         appointmentDateTime: '2022-04-18T10:00:00',
         appointmentId: '1',
-        deepLinkUrl: '',
-        locationDescription: 'A Clinic, A Town, A Country',
       },
     });
 

@@ -11,9 +11,8 @@ describe('Appointment Ready To Confirm Card', () => {
   describe('template', () => {
     wrapper = mountAppointmentReadyToConfirm({
       propsData: {
-        appointmentId: '1',
-        deepLinkUrl: 'default',
         locationDescription: 'A Clinic, A Town, A Country',
+        appointmentId: '1',
       },
     });
 
@@ -27,8 +26,8 @@ describe('Appointment Ready To Confirm Card', () => {
       const paragraphs = wrapper.findAll('p');
 
       expect(paragraphs.length).toBe(2);
-      expect(paragraphs.at(0).text()).toBe('A Clinic, A Town, A Country');
-      expect(paragraphs.at(1).text()).toBe('An appointment has been booked for you. You need to contact the clinic to confirm you are able to attend it.');
+      expect(paragraphs.at(0).text()).toBe('An appointment has been booked for you. You need to contact the clinic to confirm you are able to attend it.');
+      expect(paragraphs.at(1).text()).toBe('A Clinic, A Town, A Country');
     });
 
     it('will display a button', () => {

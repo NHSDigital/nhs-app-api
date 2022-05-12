@@ -1,10 +1,8 @@
 import mapKeys from 'lodash/fp/mapKeys';
 import {
   INIT,
-  CONFIRMED_APPOINTMENTS_LOADED,
-  UNCONFIRMED_APPOINTMENTS_LOADED,
-  REFERRALS_NOT_IN_REVIEW_LOADED,
-  REFERRALS_IN_REVIEW_LOADED,
+  REFERRALS_LOADED,
+  UPCOMING_APPOINTMENTS_LOADED,
   SHOW_ERROR,
   HAS_LOADED,
   initialState,
@@ -17,17 +15,11 @@ export default {
       state[key] = blank[key];
     })(state);
   },
-  [REFERRALS_IN_REVIEW_LOADED](state, referralsInReview) {
-    state.summary.referralsInReview = referralsInReview;
+  [REFERRALS_LOADED](state, referrals) {
+    state.summary.referrals = referrals;
   },
-  [REFERRALS_NOT_IN_REVIEW_LOADED](state, referralsNotInReview) {
-    state.summary.referralsNotInReview = referralsNotInReview;
-  },
-  [CONFIRMED_APPOINTMENTS_LOADED](state, confirmedAppointments) {
-    state.summary.confirmedAppointments = confirmedAppointments;
-  },
-  [UNCONFIRMED_APPOINTMENTS_LOADED](state, unconfirmedAppointments) {
-    state.summary.unconfirmedAppointments = unconfirmedAppointments;
+  [UPCOMING_APPOINTMENTS_LOADED](state, upcomingAppointments) {
+    state.summary.upcomingAppointments = upcomingAppointments;
   },
   [SHOW_ERROR](state, apiError) {
     state.apiError = apiError;
