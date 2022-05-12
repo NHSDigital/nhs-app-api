@@ -9,13 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         private AndroidCreateSessionOdsCodeNotFoundErrorPage(IAndroidDriverWrapper driver) => _driver = driver;
 
-        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Login failed");
-
-        private AndroidLabel WeCannotConnectToYourGpSurgeryText => AndroidLabel
-            .WithText(
-                _driver,
-                "We cannot connect to your GP surgery.")
-            .ScrollIntoView();
+        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Cannot log in");
 
         private AndroidLabel FindOutHowToGetCovidPassText => AndroidLabel
             .WithText(
@@ -65,7 +59,6 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         public AndroidCreateSessionOdsCodeNotFoundErrorPage AssertPageElements()
         {
-            WeCannotConnectToYourGpSurgeryText.AssertVisible();
             FindOutHowToGetCovidPassText.AssertVisible();
             ContactYourGpSurgeryText.AssertVisible();
             SurgeryMayNeedToResubmitRegistrationText.AssertVisible();

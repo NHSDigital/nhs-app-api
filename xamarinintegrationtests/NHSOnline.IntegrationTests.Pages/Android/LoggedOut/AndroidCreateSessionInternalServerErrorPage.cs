@@ -17,8 +17,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             _driver = driver;
         }
 
-        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Login failed");
-        private AndroidLabel CannotLogInText => AndroidLabel.WithText(_driver, "We cannot log you in to the NHS App.");
+        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Cannot log in");
         private AndroidLabel GoBackText => AndroidLabel.WithText(_driver, "Go back and try logging in again.");
         private AndroidLabel IfYouNeedText => AndroidLabel.WithText(_driver, "If you need to book an appointment or get a prescription now, contact your GP surgery directly.");
         private AndroidLabel ForUrgentMedicalAdvice => AndroidLabel.WithText(_driver, "For urgent medical advice, use NHS 111 online or call 111.");
@@ -45,7 +44,6 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         public AndroidCreateSessionInternalServerErrorPage AssertPageElements()
         {
-            CannotLogInText.AssertVisible();
             GoBackText.AssertVisible();
             IfYouNeedText.AssertVisible();
             ForUrgentMedicalAdvice.AssertVisible();

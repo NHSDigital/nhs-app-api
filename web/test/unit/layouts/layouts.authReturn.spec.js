@@ -276,8 +276,8 @@ describe('authReturn layout', () => {
         expect(container.findAll('h2').length).toBe(1);
       });
 
-      it('will have eight paragraphs', () => {
-        expect(container.findAll('p').length).toBe(8);
+      it('will have seven paragraphs', () => {
+        expect(container.findAll('p').length).toBe(7);
       });
 
       it('will have three links', () => {
@@ -424,6 +424,31 @@ describe('authReturn layout', () => {
             expect(wrapper.find('#termsAndConditionsError').exists()).toBe(termsAndConditionsErrorVisible);
             expect(wrapper.find('#authReturnError').exists()).toBe(authReturnErrorVisible);
           });
+    });
+
+    describe.each([
+      [400, 'Cannot log in'],
+      [468, 'Cannot log in'],
+      [500, 'Cannot log in'],
+      [403, 'Login failed'],
+      [469, 'Login failed'],
+      [502, 'Login failed'],
+      [504, 'Login failed'],
+    ])('on error %i the heading content of h1 should be %s', (status, headingTitle) => {
+      beforeEach(() => {
+        wrapper = mountAuthReturnLayout({ status });
+      });
+      describe('will check the heading h1 content', () => {
+        let container;
+        beforeEach(() => {
+          container = wrapper.find('[data-purpose=error]');
+        });
+
+        it('will check the heading content', () => {
+          const heading1 = container.find('h1');
+          expect(heading1.text()).toContain(headingTitle);
+        });
+      });
     });
   });
 });

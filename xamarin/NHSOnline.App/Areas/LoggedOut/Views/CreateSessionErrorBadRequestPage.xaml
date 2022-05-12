@@ -10,11 +10,11 @@
                                  mc:Ignorable="d"
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorBadRequestPage"
                                  x:Name="Page"
-                                 PageDescription="Login failed">
+                                 PageDescription="Cannot log in">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <panels:ResponsiveLayoutPanel>
             <StackLayout>
-                <elements:Heading1 Text="Login failed" x:Name="Heading" />
+                <elements:Heading1 Text="Cannot log in" x:Name="Heading" />
 
                 <panels:NhsErrorCallout LabelText="Error">
                     <StackLayout> 

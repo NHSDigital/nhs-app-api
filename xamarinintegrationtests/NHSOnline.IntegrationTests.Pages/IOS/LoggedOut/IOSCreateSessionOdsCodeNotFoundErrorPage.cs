@@ -9,14 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         private IOSCreateSessionOdsCodeNotFoundErrorPage(IIOSDriverWrapper driver) => _driver = driver;
 
-        private IOSLabel Title => IOSLabel.WithText(_driver, "Login failed");
-
-        private IOSLabel WeCannotConnectToYourGpSurgeryText => IOSLabel
-            .WithText(
-                _driver,
-                "We cannot connect to your GP surgery.")
-            .ScrollIntoView();
-
+        private IOSLabel Title => IOSLabel.WithText(_driver, "Cannot log in");
         private IOSLink FindOutHowToGetCovidPassLink => IOSLink
             .WithText(
                 _driver,
@@ -65,7 +58,6 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         public IOSCreateSessionOdsCodeNotFoundErrorPage AssertPageElements()
         {
-            WeCannotConnectToYourGpSurgeryText.AssertVisible();
             FindOutHowToGetCovidPassLink.AssertVisible();
             ContactYourGpSurgeryText.AssertVisible();
             SurgeryMayNeedToResubmitRegistrationText.AssertVisible();

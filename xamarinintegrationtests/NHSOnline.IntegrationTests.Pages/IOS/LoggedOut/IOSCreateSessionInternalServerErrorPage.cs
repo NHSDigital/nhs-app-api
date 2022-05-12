@@ -8,8 +8,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
         private readonly IIOSDriverWrapper _driver;
         private IOSCreateSessionInternalServerErrorPage(IIOSDriverWrapper driver) => _driver = driver;
 
-        private IOSLabel Title => IOSLabel.WithText(_driver, "Login failed");
-        private IOSLabel CannotLogInText => IOSLabel.WithText(_driver, "We cannot log you in to the NHS App.");
+        private IOSLabel Title => IOSLabel.WithText(_driver, "Cannot log in");
         private IOSLabel GoBackText => IOSLabel.WithText(_driver, "Go back and try logging in again.");
         private IOSLabel IfYouNeedText => IOSLabel.WithText(_driver, "If you need to book an appointment or get a prescription now, contact your GP surgery directly.");
         private IOSLabel ForUrgentMedicalAdvice => IOSLabel.WithText(_driver, "For urgent medical advice, use NHS 111 online or call 111.");
@@ -26,7 +25,6 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         public IOSCreateSessionInternalServerErrorPage AssertPageElements()
         {
-            CannotLogInText.AssertVisible();
             GoBackText.AssertVisible();
             IfYouNeedText.AssertVisible();
             ForUrgentMedicalAdvice.AssertVisible();

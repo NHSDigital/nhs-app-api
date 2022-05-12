@@ -63,8 +63,7 @@
                     <error-container v-else-if="statusCode===468">
                       <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
                           nhsuk-u-margin-bottom-0">
-                        {{ $t('login.authReturn.loginFailed') }} </h1>
-                      <error-paragraph from="login.authReturn.cannotConnectToGpSurgery" />
+                        {{ $t('login.authReturn.cannotLogin') }} </h1>
                       <error-paragraph-with-links
                         from="login.authReturn.findOutHowToGetYourCovidPass"/>
                       <error-paragraph from="login.authReturn.checkIfRegisteredWithSurgery" />
@@ -117,7 +116,7 @@
                     <error-container v-else-if="statusCode===400">
                       <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
                           nhsuk-u-margin-bottom-0">
-                        {{ $t('login.authReturn.loginFailed') }} </h1>
+                        {{ $t('login.authReturn.cannotLogin') }} </h1>
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
                       <error-paragraph from="login.authReturn.ifYouNeedToBook" />
                       <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
@@ -145,8 +144,7 @@
                     <error-container v-else-if="statusCode===500">
                       <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
                           nhsuk-u-margin-bottom-0">
-                        {{ $t('login.authReturn.loginFailed') }} </h1>
-                      <error-paragraph from="login.authReturn.weCannotLoginYouIn" />
+                        {{ $t('login.authReturn.cannotLogin') }} </h1>
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
                       <error-paragraph from="login.authReturn.ifYouNeedToBook" />
                       <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
@@ -315,6 +313,8 @@ export default {
         title = this.$t('login.authReturn.termsNotAccepted');
       } else if (this.statusCode === 465) {
         title = this.$t('login.authReturn.under13.title');
+      } else if (this.statusCode === 400 || this.statusCode === 500 || this.statusCode === 468) {
+        title = this.$t('login.authReturn.cannotLogin');
       } else {
         title = this.$t('login.authReturn.loginFailed');
       }
