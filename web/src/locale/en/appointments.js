@@ -139,6 +139,11 @@ export default {
       useOneOneOneOnline: 'Use NHS one one one online',
       checkIfYouNeedUrgentHelp: 'Check if you need urgent help and find out what to do next',
     },
+    missingOrIncorrectReferralsOrAppointments: {
+      ReferralsOrAppointments: 'Missing or incorrect referrals or appointments',
+      ConfirmedAppointments: 'Missing or incorrect confirmed appointments',
+      ReferralsInReview: 'Missing or incorrect referrals in review',
+    },
   },
   hub: {
     gpSurgeryAppointments: 'GP surgery appointments',

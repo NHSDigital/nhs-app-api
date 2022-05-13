@@ -33,6 +33,12 @@
           <h2 id="book-Or-Manage-Referrals-And-Appointments-Title">
             {{ $t('wayfinder.bookOrManageReferralsAndAppointmentsTitle') }}
           </h2>
+          <wayfinder-help-link
+            id="btn_missingOrIncorrectReferralsOrAppointments"
+            :href="referralsOrAppointmentsHelpPath"
+            :click-func="redirectToReferralsOrAppointmentsHelp"
+            :text="$t('appointments.guidance.missingOrIncorrectReferralsOrAppointments.' +
+              'ReferralsOrAppointments')"/>
           <book-or-manage-referrals-or-appointments-card
             :referrals-not-in-review="referralsNotInReview"
             :referrals-in-review="referralsInReview"
@@ -43,6 +49,12 @@
           <h2 id="confirmed-appointments-title">
             {{ $t('wayfinder.confirmedAppointmentsTitle') }}
           </h2>
+          <wayfinder-help-link
+            id="btn_missingOrIncorrectConfirmedAppointments"
+            :href="confirmedAppointmentsHelpPath"
+            :click-func="redirectToConfirmedAppointmentsHelp"
+            :text="$t('appointments.guidance.missingOrIncorrectReferralsOrAppointments.' +
+              'ConfirmedAppointments')"/>
           <confirmed-appointments-card
             :confirmed-appointments="confirmedAppointments"
             :has-confirmed-appointments="hasConfirmedAppointments"/>
@@ -50,6 +62,12 @@
           <h2 id="referrals-in-review-title">
             {{ $t('wayfinder.inReviewTitle') }}
           </h2>
+          <wayfinder-help-link
+            id="btn_missingOrIncorrectReferralsInReview"
+            :href="referralsInReviewHelpPath"
+            :click-func="redirectToReferralsInReviewHelp"
+            :text="$t('appointments.guidance.missingOrIncorrectReferralsOrAppointments.' +
+              'ReferralsInReview')"/>
           <referrals-in-review-card
             :referrals-in-review="referralsInReview"
             :has-referrals-in-review="hasReferralsInReview"/>
@@ -87,8 +105,15 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import BookOrManageReferralsOrAppointmentsCard from '@/components/wayfinder/sections/BookOrManageReferralsOrAppointmentsCard';
 import ConfirmedAppointmentsCard from '@/components/wayfinder/sections/ConfirmedAppointmentsCard';
 import ReferralsInReviewCard from '@/components/wayfinder/sections/ReferralsInReviewCard';
+import WayfinderHelpLink from '@/components/wayfinder/WayfinderHelpLink';
+
 import { redirectTo } from '@/lib/utils';
-import { APPOINTMENTS_PATH } from '@/router/paths';
+import {
+  APPOINTMENTS_PATH,
+  WAYFINDER_REFERRALS_OR_APPOINTMENTS_HELP_PATH,
+  WAYFINDER_CONFIRMED_APPOINTMENTS_HELP_PATH,
+  WAYFINDER_REFERRALS_IN_REVIEW_HELP_PATH,
+} from '@/router/paths';
 
 const loadData = async (store) => {
   await store.dispatch('wayfinder/load');
@@ -97,6 +122,7 @@ const loadData = async (store) => {
 export default {
   name: 'WayfinderPage',
   components: {
+    WayfinderHelpLink,
     DesktopGenericBackLink,
     GenericButton,
     OtherAvailableServicesMenuItems,
@@ -104,12 +130,18 @@ export default {
     ConfirmedAppointmentsCard,
     ReferralsInReviewCard,
   },
+  data() {
+    return {
+      isNativeApp: this.$store.state.device.isNativeApp,
+      referralsInReviewHelpPath: WAYFINDER_REFERRALS_IN_REVIEW_HELP_PATH,
+      confirmedAppointmentsHelpPath: WAYFINDER_CONFIRMED_APPOINTMENTS_HELP_PATH,
+      referralsOrAppointmentsHelpPath: WAYFINDER_REFERRALS_OR_APPOINTMENTS_HELP_PATH,
+      appoinmentsHubPath: APPOINTMENTS_PATH,
+    };
+  },
   computed: {
     apiError() {
       return this.$store.state.wayfinder.apiError;
-    },
-    appoinmentsHubPath() {
-      return APPOINTMENTS_PATH;
     },
     contactUsAriaLabel() {
       const errorCode = this.apiError.serviceDeskReference.split('');
@@ -161,9 +193,6 @@ export default {
     hasConfirmedAppointments() {
       return this.confirmedAppointments.length >= 1;
     },
-    isNativeApp() {
-      return this.$store.state.device.isNativeApp;
-    },
   },
   async mounted() {
     await loadData(this.$store);
@@ -190,6 +219,18 @@ export default {
     },
     backClicked() {
       redirectTo(this, this.appoinmentsHubPath);
+    },
+    ariaLabelCaption(header, body) {
+      return `${this.$t(header)}. ${this.$t(body)}`;
+    },
+    redirectToReferralsOrAppointmentsHelp() {
+      this.$router.push(this.WAYFINDER_REFERRALS_OR_APPOINTMENTS_HELP_PATH);
+    },
+    redirectToConfirmedAppointmentsHelp() {
+      this.$router.push(this.WAYFINDER_CONFIRMED_APPOINTMENTS_HELP_PATH);
+    },
+    redirectToReferralsInReviewHelp() {
+      this.$router.push(this.WAYFINDER_REFERRALS_IN_REVIEW_HELP_PATH);
     },
   },
 };

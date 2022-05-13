@@ -11,7 +11,7 @@ describe('Appointment Ready To Confirm Card', () => {
   describe('template', () => {
     wrapper = mountAppointmentReadyToConfirm({
       propsData: {
-        appointmentId: '1',
+        appointmentId: 1,
         deepLinkUrl: 'default',
         locationDescription: 'A Clinic, A Town, A Country',
       },

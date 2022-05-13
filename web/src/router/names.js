@@ -134,6 +134,10 @@ export const INTEGRATION_REFERRER_PARAMETER = 'integration_referrer';
 export const REFERRER_PARAMETER = 'referrer';
 export const SSO_PARAMETER = 'sso';
 export const WAYFINDER_NAME = 'wayfinder';
+export const WAYFINDER_HELP_NAME = 'wayfinder-help';
+export const WAYFINDER_REFERRALS_OR_APPOINTMENTS_HELP_NAME = 'wayfinder-help-referrals-or-appointments-help';
+export const WAYFINDER_CONFIRMED_APPOINTMENTS_HELP_NAME = 'wayfinder-help-confirmed-appointments-help';
+export const WAYFINDER_REFERRALS_IN_REVIEW_HELP_NAME = 'wayfinder-help-referrals-in-review-help';
 
 const names = [
   INDEX_NAME,
@@ -269,6 +273,10 @@ const names = [
   REFERRER_PARAMETER,
   SSO_PARAMETER,
   WAYFINDER_NAME,
+  WAYFINDER_HELP_NAME,
+  WAYFINDER_REFERRALS_OR_APPOINTMENTS_HELP_NAME,
+  WAYFINDER_CONFIRMED_APPOINTMENTS_HELP_NAME,
+  WAYFINDER_REFERRALS_IN_REVIEW_HELP_NAME,
 ];
 
 export const GP_PRESCRIPTION_JOURNEY_NAME = 'GP_PRESCRIPTION_JOURNEY';

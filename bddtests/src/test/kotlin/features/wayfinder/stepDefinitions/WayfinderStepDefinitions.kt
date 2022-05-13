@@ -14,11 +14,17 @@ import models.Patient
 import net.thucydides.core.annotations.Steps
 import pages.wayfinder.WayfinderAggregatorErrorPage
 import pages.wayfinder.WayfinderReferralsAndAppointmentsPage
+import pages.wayfinder.help.ReferralsOrAppointmentsHelpPage
+import pages.wayfinder.help.ConfirmedAppointmentsHelpPage
+import pages.wayfinder.help.ReferralsInReviewHelpPage
 import utils.SerenityHelpers
 
 class WayfinderStepDefinitions {
     private lateinit var wayfinderReferralsAndAppointmentsPage: WayfinderReferralsAndAppointmentsPage
     private lateinit var wayfinderAggregatorErrorPage: WayfinderAggregatorErrorPage
+    private lateinit var referralsOrAppointmentsHelpPage: ReferralsOrAppointmentsHelpPage
+    private lateinit var confirmedAppointmentsHelpPage: ConfirmedAppointmentsHelpPage
+    private lateinit var referralsInReviewHelpPage: ReferralsInReviewHelpPage
 
     @Steps
     private lateinit var browser: BrowserSteps
@@ -67,6 +73,21 @@ class WayfinderStepDefinitions {
         wayfinderFactory.setupReferralsPkb()
     }
 
+    @Given("^I see the Missing or incorrect referrals or appointments link")
+    fun assertMissingOrIncorrectReferralsOrAppointmentsLinkIsDisplayed(){
+        wayfinderReferralsAndAppointmentsPage.assertMissingOrIncorrectReferralsOrAppointmentsHelpLinkIsDisplayed()
+    }
+
+    @Given("^I see the Missing or incorrect confirmed appointments link")
+    fun assertConfirmedAppointmentsLinkIsDisplayed(){
+        wayfinderReferralsAndAppointmentsPage.assertConfirmedAppointmentsHelpLinkIsDisplayed()
+    }
+
+    @Given("^I see the Missing or incorrect referrals in review link")
+    fun assertReferralsInReviewLinkIsDisplayed(){
+        wayfinderReferralsAndAppointmentsPage.assertReferralsInReviewHelpLinkIsDisplayed()
+    }
+
     @When("^the Wayfinder Aggregator API is timing out$")
     fun theAggregatorApiTimesOut(){
         wayfinderFactory.setupDelayedResponse()
@@ -91,6 +112,21 @@ class WayfinderStepDefinitions {
     fun iClickTheContactUsLinkWithThePrefixErrorCode(prefix: String) {
         browser.storeCurrentTabCount()
         wayfinderAggregatorErrorPage.clickContactUsLinkWithPrefix(prefix)
+    }
+
+    @When("^I click the Missing or incorrect referrals or appointments link$")
+    fun iClickTheMissingOrIncorrectReferralsOrApppointmentslink() {
+        wayfinderReferralsAndAppointmentsPage.missingOrIncorrectReferralsOrAppointmentsLink.click()
+    }
+
+    @When("^I click the Missing or incorrect confirmed appointments link")
+    fun iClickTheMissingOrIncorrectConfirmedApppointmentslink() {
+        wayfinderReferralsAndAppointmentsPage.confirmedAppointmentsLink.click()
+    }
+
+    @When("^I click the Missing or incorrect referrals in review link")
+    fun iClickTheMissingOrIncorrectReferralsInReviewlink() {
+        wayfinderReferralsAndAppointmentsPage.referralsInReviewLink.click()
     }
 
     @Then("^the Referrals, hospital and other appointments screen with data is displayed$")
@@ -154,6 +190,21 @@ class WayfinderStepDefinitions {
             "InReview" -> wayfinderReferralsAndAppointmentsPage.assertNoSpecialityReferencedForInReview()
             "ReadyToRebook" -> wayfinderReferralsAndAppointmentsPage.assertNoSpecialityReferencedForRebook()
         }
+    }
+
+    @Then("^I am navigated to the help page for Missing or incorrect referrals or appointments$")
+    fun assertReferralsOrAppointmentsHelpPageDisplayed() {
+        referralsOrAppointmentsHelpPage.assertHelpPageIsDisplayed()
+    }
+
+    @Then("^I am navigated to the help page for Missing or incorrect confirmed appointments$")
+    fun assertConfirmedAppointmentsHelpPageDisplayed() {
+        confirmedAppointmentsHelpPage.assertHelpPageIsDisplayed()
+    }
+
+    @Then("^I am navigated to the help page for Missing or incorrect referrals in review$")
+    fun assertReferralsInReviewHelpPageDisplayed() {
+        referralsInReviewHelpPage.assertHelpPageIsDisplayed()
     }
 
     private fun setupPatient(configuration: SJRJourneyType, proofLevel: IdentityProofingLevel? = null) {

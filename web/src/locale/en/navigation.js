@@ -39,8 +39,9 @@ export default {
     myRecord: 'Your GP health record',
     prescriptions: 'Prescriptions',
     prescriptionType: 'Prescription type',
-    yourHealth: 'Your health',
     testResults: 'Test results',
+    wayfinderReferralsAndAppointments: 'Referrals, hospital and other appointments',
+    yourHealth: 'Your health',
     yourHealthServiceMessages: 'Your health service messages',
   },
   header: {
@@ -161,6 +162,9 @@ export default {
       wayfinder: 'Referrals, hospital and other appointments',
       yourHealth: 'Your health',
       yourHealthServiceMessages: 'Your health service messages',
+      referralsOrAppointmentsHelp: 'Missing or incorrect referrals or appointments',
+      confirmedAppointmentsHelp: 'Missing or incorrect confirmed appointments',
+      referralsInReviewHelp: 'Missing or incorrect referrals in review',
     },
     titles: {
       accountAndSettings: 'Account and settings',
@@ -259,6 +263,9 @@ export default {
       wayfinder: 'Referrals, hospital and other appointments',
       yourHealth: 'Your health',
       yourHealthServiceMessages: 'Your health service messages',
+      referralsOrAppointmentsHelp: 'Missing or incorrect referrals or appointments',
+      confirmedAppointmentsHelp: 'Missing or incorrect confirmed appointments',
+      referralsInReviewHelp: 'Missing or incorrect referrals in review',
     },
   },
 };

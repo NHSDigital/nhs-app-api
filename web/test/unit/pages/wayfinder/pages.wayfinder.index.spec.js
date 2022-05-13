@@ -99,6 +99,9 @@ describe('Summary care response with: ' +
   let referralsInReviewTitle;
   let noConfirmedAppointmentsText;
   let noReferralsInReviewText;
+  let ReferralsOrAppointmentsLink;
+  let ConfirmedAppointmentsLink;
+  let ReferralsInReviewLink;
 
   const createIndexPage = () => mount(WayfinderPage, {
     $store,
@@ -129,6 +132,33 @@ describe('Summary care response with: ' +
 
       expect(referralsInReviewTitle.exists()).toBe(true);
     });
+  });
+
+  it('Missing or incorrect referrals or appointments link is visible', () => {
+    wrapper = createIndexPage();
+    ReferralsOrAppointmentsLink = wrapper.find('#btn_missingOrIncorrectReferralsOrAppointments');
+
+    expect(ReferralsOrAppointmentsLink.exists()).toBe(true);
+    expect(ReferralsOrAppointmentsLink.text())
+      .toEqual('Missing or incorrect referrals or appointments');
+  });
+
+  it('Missing or incorrect confirmed appointments link is visible', () => {
+    wrapper = createIndexPage();
+    ConfirmedAppointmentsLink = wrapper.find('#btn_missingOrIncorrectConfirmedAppointments');
+
+    expect(ConfirmedAppointmentsLink.exists()).toBe(true);
+    expect(ConfirmedAppointmentsLink.text())
+      .toEqual('Missing or incorrect confirmed appointments');
+  });
+
+  it('Missing or incorrect referrals in review link is visible', () => {
+    wrapper = createIndexPage();
+    ReferralsInReviewLink = wrapper.find('#btn_missingOrIncorrectReferralsInReview');
+
+    expect(ReferralsInReviewLink.exists()).toBe(true);
+    expect(ReferralsInReviewLink.text())
+      .toEqual('Missing or incorrect referrals in review');
   });
 
   describe('if there are confirmed appointments', () => {
@@ -162,6 +192,9 @@ describe('Summary care response with: ' +
   let referralsInReviewTitle;
   let noConfirmedAppointmentsText;
   let noReferralsInReviewText;
+  let ReferralsOrAppointmentsLink;
+  let ConfirmedAppointmentsLink;
+  let ReferralsInReviewLink;
 
   const createIndexPage = () => mount(WayfinderPage, {
     $store,
@@ -192,6 +225,33 @@ describe('Summary care response with: ' +
 
       expect(referralsInReviewTitle.exists()).toBe(true);
     });
+  });
+
+  it('Missing or incorrect referrals or appointments link is visible', () => {
+    wrapper = createIndexPage();
+    ReferralsOrAppointmentsLink = wrapper.find('#btn_missingOrIncorrectReferralsOrAppointments');
+
+    expect(ReferralsOrAppointmentsLink.exists()).toBe(true);
+    expect(ReferralsOrAppointmentsLink.text())
+      .toEqual('Missing or incorrect referrals or appointments');
+  });
+
+  it('Missing or incorrect confirmed appointments link is visible', () => {
+    wrapper = createIndexPage();
+    ConfirmedAppointmentsLink = wrapper.find('#btn_missingOrIncorrectConfirmedAppointments');
+
+    expect(ConfirmedAppointmentsLink.exists()).toBe(true);
+    expect(ConfirmedAppointmentsLink.text())
+      .toEqual('Missing or incorrect confirmed appointments');
+  });
+
+  it('Missing or incorrect referrals in review link is visible', () => {
+    wrapper = createIndexPage();
+    ReferralsInReviewLink = wrapper.find('#btn_missingOrIncorrectReferralsInReview');
+
+    expect(ReferralsInReviewLink.exists()).toBe(true);
+    expect(ReferralsInReviewLink.text())
+      .toEqual('Missing or incorrect referrals in review');
   });
 
   describe('if there are no confirmed appointments', () => {
@@ -226,6 +286,9 @@ describe('Summary care response with: ' +
   let otherServicesHeader;
   let otherAvailableServicesMenuItems;
   let backButton;
+  let ReferralsOrAppointmentsLink;
+  let ConfirmedAppointmentsLink;
+  let ReferralsInReviewLink;
 
   const createIndexPage = () => mount(WayfinderPage, {
     $store,
@@ -278,6 +341,26 @@ describe('Summary care response with: ' +
 
       expect(backButton.exists()).toBe(true);
     });
+
+    it('Missing or incorrect referrals or appointments link is hidden', () => {
+      wrapper = createIndexPage();
+      ReferralsOrAppointmentsLink = wrapper.find('#btn_missingOrIncorrectReferralsOrAppointments');
+
+      expect(ReferralsOrAppointmentsLink.exists()).toBe(false);
+    });
+
+    it('Missing or incorrect confirmed appointments link is hidden', () => {
+      wrapper = createIndexPage();
+      ConfirmedAppointmentsLink = wrapper.find('#btn_missingOrIncorrectConfirmedAppointments');
+
+      expect(ConfirmedAppointmentsLink.exists()).toBe(false);
+    });
+
+    it('Missing or incorrect referrals in review link is hidden', () => {
+      wrapper = createIndexPage();
+      ReferralsInReviewLink = wrapper.find('#btn_missingOrIncorrectReferralsInReview');
+
+      expect(ReferralsInReviewLink.exists()).toBe(false);
+    });
   });
 });
-

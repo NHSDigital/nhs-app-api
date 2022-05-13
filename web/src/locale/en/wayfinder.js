@@ -65,4 +65,27 @@ export default {
     contactUs: 'Contact us if the problem continues, quoting error code {errorCode}',
     doesNotMeetMinimumAge: 'You must be aged 16 or over to access your referrals and appointments in the NHS App. You may be able to do this using other services.',
   },
+  wayfinderHelp: {
+    referralsOrAppointmentsHelp: {
+      title1: 'If something is missing',
+      text1: 'You may have referrals or appointments not shown that are in other services. Contact the relevant organisation or healthcare provider.',
+      title2: 'If a change or cancellation is not showing',
+      text2: 'You may have requested to change or cancel a referral or appointment.',
+      text3: 'Any updates you have made may not be shown until the request is approved by the relevant organisation or healthcare provider.',
+    },
+    confirmedAppointmentsHelp: {
+      title1: 'If something is missing',
+      text1: 'You may have appointments not shown that are in other services. Contact the healthcare provider the appointment is booked with.',
+      title2: 'If a change or cancellation is not showing',
+      text2: 'You may have requested to change or cancel a booked appointment.',
+      text3: 'Any updates you have made may not be shown until the request is approved by the healthcare provider the appointment is booked with.',
+    },
+    referralsInReviewHelp: {
+      title1: 'If something is missing',
+      text1: 'You may have referrals being reviewed by a clinic that are not shown but are in other services. Contact the organisation that referred you.',
+      title2: 'If a cancellation is not showing',
+      text2: 'You may have requested to cancel a referral that\'s being reviewed.',
+      text3: 'Your cancellation may not be shown until the request is approved by the organisation that referred you.',
+    },
+  },
 };

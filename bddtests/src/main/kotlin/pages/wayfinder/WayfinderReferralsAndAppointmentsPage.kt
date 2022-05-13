@@ -4,6 +4,8 @@ import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertIsVisible
+import pages.sharedElements.LinksElement
+import pages.sharedElements.LinksWithDescriptionsContent
 
 @DefaultUrl("http://web.local.bitraft.io:3000/wayfinder")
 open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
@@ -79,6 +81,50 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
             helpfulName = "No speciality referenced in review paragraph"
     )
 
+    private val missingOrIncorrectReferralsOrAppointmentsHelpLink = HybridPageElement(
+        webDesktopLocator = "//h2[contains(text(),\"Missing or incorrect referrals or appointments\")]",
+        page = this,
+        helpfulName = "Missing or incorrect referrals or appointments H2"
+    )
+
+    private val confirmedAppointmentsHelpLink = HybridPageElement(
+        webDesktopLocator = "//h2[contains(text(),\"Missing or incorrect confirmed appointments\")]",
+        page = this,
+        helpfulName = "Missing or incorrect confirmed appointments H2"
+    )
+
+    private val referralsInReviewHelpLink = HybridPageElement(
+        webDesktopLocator = "//h2[contains(text(),\"Missing or incorrect referrals in review\")]",
+        page = this,
+        helpfulName = "Missing or incorrect referrals in review H2"
+    )
+
+    private val referralsOrAppointmentsHelpTitle = "Missing or incorrect referrals or appointments"
+    private val confirmedAppointmentsHelpTitle = "Missing or incorrect confirmed appointments"
+    private val referralsInReviewHelpTitle = "Missing or incorrect referrals in review"
+
+    var content = LinksWithDescriptionsContent(
+        linkBlockTitle = "Wayfinder Help links",
+        containerXPath = "//div[@class='nhsuk-grid-column-full']",
+        linkStyling = "h2")
+        .addLink(referralsOrAppointmentsHelpTitle, "")
+        .addLink(confirmedAppointmentsHelpTitle, "")
+        .addLink(referralsInReviewHelpTitle, "")
+
+    val links by lazy { LinksElement(this, content) }
+
+    val missingOrIncorrectReferralsOrAppointmentsLink by lazy {
+        links.link("Missing or incorrect referrals or appointments")
+    }
+
+    val confirmedAppointmentsLink by lazy {
+        links.link("Missing or incorrect confirmed appointments")
+    }
+
+    val referralsInReviewLink by lazy {
+        links.link("Missing or incorrect referrals in review")
+    }
+
     fun assertWayfinderWithDataTitleIsDisplayed() {
         pageTitleWithData.assertIsVisible()
     }
@@ -121,5 +167,17 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
 
     fun assertNoSpecialityReferencedForRebook() {
         noSpecialityReferencedRebook.assertIsVisible()
+    }
+
+    fun assertMissingOrIncorrectReferralsOrAppointmentsHelpLinkIsDisplayed(){
+        missingOrIncorrectReferralsOrAppointmentsHelpLink.assertIsVisible()
+    }
+
+    fun assertConfirmedAppointmentsHelpLinkIsDisplayed(){
+        confirmedAppointmentsHelpLink.assertIsVisible()
+    }
+
+    fun assertReferralsInReviewHelpLinkIsDisplayed(){
+        referralsInReviewHelpLink.assertIsVisible()
     }
 }
