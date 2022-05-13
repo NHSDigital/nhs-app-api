@@ -201,7 +201,7 @@ export default {
         next();
         return;
       }
-      if (this.canAccessSilverIntegration(this.$store, jumpOffConfig || {})) {
+      if (this.canAccessSilverIntegration(this.$store, jumpOffConfig)) {
         next();
         return;
       }
