@@ -226,13 +226,13 @@ export default {
       return `${this.$t(header)}. ${this.$t(body)}`;
     },
     redirectToReferralsOrAppointmentsHelp() {
-      this.$router.push(this.WAYFINDER_REFERRALS_OR_APPOINTMENTS_HELP_PATH);
+      redirectTo(this, this.referralsOrAppointmentsHelpPath);
     },
     redirectToConfirmedAppointmentsHelp() {
-      this.$router.push(this.WAYFINDER_CONFIRMED_APPOINTMENTS_HELP_PATH);
+      redirectTo(this, this.confirmedAppointmentsHelpPath);
     },
     redirectToReferralsInReviewHelp() {
-      this.$router.push(this.WAYFINDER_REFERRALS_IN_REVIEW_HELP_PATH);
+      redirectTo(this, this.referralsInReviewHelpPath);
     },
   },
 };

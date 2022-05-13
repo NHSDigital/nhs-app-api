@@ -7,7 +7,6 @@
                :click-func="clickFunc"
                :text="text"
                :description="body"
-               :prevent-default="isNativeApp"
                :aria-label="ariaLabelCaption(text,body)"/>
   </menu-item-list>
 </template>
@@ -43,9 +42,6 @@ export default {
       type: Function,
       required: true,
     },
-  },
-  data() {
-    return { isNativeApp: this.$store.state.device.isNativeApp };
   },
   methods: {
     ariaLabelCaption(text, body) {

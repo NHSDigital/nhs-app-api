@@ -58,6 +58,7 @@ import {
   HOSPITAL_APPOINTMENTS_PATH,
 } from '@/router/paths';
 import sjrIf from '@/lib/sjrIf';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'AppointmentsIndexPage',
@@ -111,13 +112,13 @@ export default {
       return `${this.$t(header)}. ${this.$t(body)}`;
     },
     redirectToGpAppointments() {
-      this.$router.push(this.gpAppointmentsPath);
+      redirectTo(this, this.gpAppointmentsPath);
     },
     redirectToHospitalAppointments() {
-      this.$router.push(this.hospitalAppointmentsPath);
+      redirectTo(this, this.hospitalAppointmentsPath);
     },
     redirectToWayfinder() {
-      this.$router.push(this.wayfinderPath);
+      redirectTo(this, this.wayfinderPath);
     },
   },
 };
