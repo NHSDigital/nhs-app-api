@@ -225,7 +225,7 @@ export default {
       next();
     },
     getJumpOffConfig({ url, thirdPartyConfig }, next) {
-      if (this.isWayfinderUrl) {
+      if (this.hasWayfinder() && this.isWayfinderUrl) {
         next();
         return;
       }
