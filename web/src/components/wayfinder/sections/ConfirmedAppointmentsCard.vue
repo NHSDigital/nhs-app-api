@@ -4,12 +4,17 @@
       v-for="(appointment, index) in confirmedAppointments"
       :key="`confirmed-appointment-${index}`"
       class="nhsuk-grid-column-three-quarters">
-
       <appointment-booked-card
+        v-if="isBooked(appointment)"
         :appointment-id="index"
         :location-description="appointment.locationDescription"
         :appointment-date-time="appointment.appointmentDateTime"
         :deep-link-url="appointment.deepLinkUrl"/>
+      <appointment-cancelled-card
+        v-else-if="isCancelled(appointment)"
+        :appointment-id="index"
+        :location-description="appointment.locationDescription"
+        :appointment-date-time="appointment.appointmentDateTime"/>
     </card-group-item>
   </card-group>
   <p v-else id="no-confirmed-appointments-text">
@@ -19,6 +24,7 @@
 
 <script>
 import AppointmentBookedCard from '@/components/wayfinder/appointments/AppointmentBookedCard';
+import AppointmentCancelledCard from '@/components/wayfinder/appointments/AppointmentCancelledCard';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 
@@ -26,6 +32,7 @@ export default {
   name: 'ConfirmedAppointmentsCard',
   components: {
     AppointmentBookedCard,
+    AppointmentCancelledCard,
     CardGroup,
     CardGroupItem,
   },
@@ -37,6 +44,14 @@ export default {
     confirmedAppointments: {
       type: Array,
       default: null,
+    },
+  },
+  methods: {
+    isBooked(appointment) {
+      return appointment.appointmentStatus === 'Booked';
+    },
+    isCancelled(appointment) {
+      return appointment.appointmentStatus === 'Cancelled';
     },
   },
 };

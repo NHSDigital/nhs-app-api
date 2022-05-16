@@ -21,6 +21,11 @@ export default {
       anAppointmentHasBeenBooked: 'An appointment has been booked for you. You need to contact the clinic to confirm you are able to attend it.',
       contactTheClinicToConfirm: 'Contact the clinic to confirm',
     },
+    cancelled: {
+      title: 'Cancelled appointment',
+      anAppointmentHasBeenCancelled: 'This appointment has been cancelled. You do not need to do anything.',
+      viewThisAppointment: 'View this appointment',
+    },
   },
   noAppointments: {
     youHaveNoAppointments: 'You have no hospital appointments to view and manage.',

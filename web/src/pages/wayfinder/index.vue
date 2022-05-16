@@ -58,7 +58,6 @@
           <confirmed-appointments-card
             :confirmed-appointments="confirmedAppointments"
             :has-confirmed-appointments="hasConfirmedAppointments"/>
-
           <h2 id="referrals-in-review-title">
             {{ $t('wayfinder.inReviewTitle') }}
           </h2>

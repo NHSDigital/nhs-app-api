@@ -69,6 +69,12 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
         helpfulName = "Appointment booked H3"
     )
 
+    private val appointmentCancelledHeading = HybridPageElement(
+            webDesktopLocator = "//h3[contains(text(),\"Cancelled appointment\")]",
+            page = this,
+            helpfulName = "Appointment cancelled H3"
+    )
+
     private val noSpecialityReferencedInReview = HybridPageElement(
         webDesktopLocator = "//p[contains(text(),\"${noSpecialityInReview}\")]",
         page = this,
@@ -143,6 +149,10 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
 
     fun assertBookedAppointmentIsDisplayed() {
         appointmentBookedHeading.assertIsVisible()
+    }
+
+    fun assertCancelledAppointmentIsDisplayed(){
+        appointmentCancelledHeading.assertIsVisible()
     }
 
     fun assertInReviewReferralDisplayed(){

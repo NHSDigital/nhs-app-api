@@ -4,9 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Hl7.Fhir.Utility;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.SecondaryCare.Models;
 using r4::Hl7.Fhir.Model;
+using AppointmentStatus = r4::Hl7.Fhir.Model.Appointment.AppointmentStatus;
 using Date = Hl7.Fhir.Model.Date;
 using Code = Hl7.Fhir.Model.Code;
 using Coding = Hl7.Fhir.Model.Coding;
@@ -78,11 +80,24 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
 
                             if (appointment.AppointmentDateTime != null)
                             {
-                                confirmedAppointments.Add(appointment);
-                                break;
+                                if (string.Equals(appointment.AppointmentStatus,
+                                        AppointmentStatus.Booked.GetLiteral(),
+                                        StringComparison.OrdinalIgnoreCase)
+                                    || string.Equals(appointment.AppointmentStatus,
+                                         AppointmentStatus.Cancelled.GetLiteral(),
+                                         StringComparison.OrdinalIgnoreCase)
+                                   )
+                                {
+                                    confirmedAppointments.Add(appointment);
+                                    break;
+                                }
+                                unconfirmedAppointments.Add(appointment);
+                            }
+                            else
+                            {
+                                unconfirmedAppointments.Add(appointment);
                             }
 
-                            unconfirmedAppointments.Add(appointment);
                             break;
                         }
                     }
@@ -97,9 +112,12 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
                 ReferralsInReview = referralsInReview
                     .OrderBy(r => r.ReferredDateTime)
                     .ToList(),
-                UnconfirmedAppointments = unconfirmedAppointments,
-                ConfirmedAppointments = confirmedAppointments
+                UnconfirmedAppointments = unconfirmedAppointments
                     .OrderBy(a => a.AppointmentDateTime)
+                    .ToList(),
+                ConfirmedAppointments = confirmedAppointments
+                    .OrderBy(a => string.Equals(a.AppointmentStatus, AppointmentStatus.Cancelled.GetLiteral(), StringComparison.OrdinalIgnoreCase))
+                    .ThenBy(a => a.AppointmentDateTime)
                     .ToList(),
             };
         }

@@ -289,7 +289,7 @@
                   "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
                   "valueCoding": {
                     "system": "http://hl7.org/fhir/appointmentstatus",
-                    "code": "Booked"
+                    "code": "booked"
                   }
                 }
               ],
@@ -314,7 +314,7 @@
                   "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
                   "valueCoding": {
                     "system": "http://hl7.org/fhir/appointmentstatus",
-                    "code": "Booked"
+                    "code": "booked"
                   }
                 }
               ],
@@ -342,7 +342,7 @@
                   "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
                   "valueCoding": {
                     "system": "http://hl7.org/fhir/appointmentstatus",
-                    "code": "Booked"
+                    "code": "booked"
                   }
                 }
               ],
@@ -370,13 +370,125 @@
                   "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
                   "valueCoding": {
                     "system": "http://hl7.org/fhir/appointmentstatus",
-                    "code": "Booked"
+                    "code": "booked"
                   }
                 }
               ],
               "kind": "Appointment",
               "scheduledPeriod": {
                 "start": "2022-05-23T15:11:45+00:00"
+              },
+              "description": "The Royal Victoria Hospital, Belfast, BT1"
+            }
+          },
+          {
+            "detail": {
+              "extension": [
+                {
+                  "extension": [
+                    {
+                      "url": "code",
+                      "valueCode": "eRS"
+                    }
+                  ],
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                  "valueUrl": "http://stubs.local.bitraft.io:8080/drdoctor/upcoming-appointments?ubrn=681078755944"
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                  "valueCoding": {
+                    "system": "http://hl7.org/fhir/appointmentstatus",
+                    "code": "cancelled"
+                  }
+                }
+              ],
+              "kind": "Appointment",
+              "scheduledPeriod": {
+                "start": "2300-05-05T15:11:45+00:00"
+              },
+              "description": "The Royal Victoria Hospital, Belfast, BT1"
+            }
+          },
+          {
+            "detail": {
+              "extension": [
+                {
+                  "extension": [
+                    {
+                      "url": "code",
+                      "valueCode": "eRS"
+                    }
+                  ],
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                  "valueUrl": "http://stubs.local.bitraft.io:8080/drdoctor/upcoming-appointments?ubrn=681078755944"
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                  "valueCoding": {
+                    "system": "http://hl7.org/fhir/appointmentstatus",
+                    "code": "cancelled"
+                  }
+                }
+              ],
+              "kind": "Appointment",
+              "scheduledPeriod": {
+                "start": "2300-05-10T15:11:45+00:00"
+              },
+              "description": "The Royal Victoria Hospital, Belfast, BT1"
+            }
+          },
+          {
+            "detail": {
+              "extension": [
+                {
+                  "extension": [
+                    {
+                      "url": "code",
+                      "valueCode": "eRS"
+                    }
+                  ],
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                  "valueUrl": "http://stubs.local.bitraft.io:8080/drdoctor/upcoming-appointments?ubrn=681078755944"
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                  "valueCoding": {
+                    "system": "http://hl7.org/fhir/appointmentstatus",
+                    "code": "cancelled"
+                  }
+                }
+              ],
+              "kind": "Appointment",
+              "scheduledPeriod": {
+                "start": "2300-06-24T15:11:45+00:00"
+              },
+              "description": "The Royal Victoria Hospital, Belfast, BT1"
+            }
+          },
+          {
+            "detail": {
+              "extension": [
+                {
+                  "extension": [
+                    {
+                      "url": "code",
+                      "valueCode": "eRS"
+                    }
+                  ],
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                  "valueUrl": "http://stubs.local.bitraft.io:8080/drdoctor/upcoming-appointments?ubrn=681078755944"
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                  "valueCoding": {
+                    "system": "http://hl7.org/fhir/appointmentstatus",
+                    "code": "cancelled"
+                  }
+                }
+              ],
+              "kind": "Appointment",
+              "scheduledPeriod": {
+                "start": "2300-05-30T15:11:45+00:00"
               },
               "description": "The Royal Victoria Hospital, Belfast, BT1"
             }

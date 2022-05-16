@@ -338,7 +338,7 @@ class EvaluateBuilder
                                 "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
                                 "valueCoding": {
                                     "system": "http://hl7.org/fhir/appointmentstatus",
-                                    "code": "Booked"
+                                    "code": "booked"
                                 }
                             }
                         ],
@@ -363,7 +363,7 @@ class EvaluateBuilder
                                 "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
                                 "valueCoding": {
                                     "system": "http://hl7.org/fhir/appointmentstatus",
-                                    "code": "Booked"
+                                    "code": "booked"
                                 }
                             }
                         ],
@@ -391,7 +391,7 @@ class EvaluateBuilder
                                 "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
                                 "valueCoding": {
                                     "system": "http://hl7.org/fhir/appointmentstatus",
-                                    "code": "Booked"
+                                    "code": "booked"
                                 }
                             }
                         ],
@@ -416,7 +416,7 @@ class EvaluateBuilder
                                 "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
                                 "valueCoding": {
                                     "system": "http://hl7.org/fhir/appointmentstatus",
-                                    "code": "Booked"
+                                    "code": "booked"
                                 }
                             }
                         ],
@@ -881,7 +881,7 @@ class EvaluateBuilder
                           "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
                           "valueCoding": {
                             "system": "http://hl7.org/fhir/appointmentstatus",
-                            "code": "Booked"
+                            "code": "booked"
                           }
                         }
                       ],
@@ -906,7 +906,7 @@ class EvaluateBuilder
                           "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
                           "valueCoding": {
                             "system": "http://hl7.org/fhir/appointmentstatus",
-                            "code": "Booked"
+                            "code": "booked"
                           }
                         }
                       ],
@@ -934,7 +934,7 @@ class EvaluateBuilder
                           "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
                           "valueCoding": {
                             "system": "http://hl7.org/fhir/appointmentstatus",
-                            "code": "Booked"
+                            "code": "booked"
                           }
                         }
                       ],
@@ -959,12 +959,40 @@ class EvaluateBuilder
                           "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
                           "valueCoding": {
                             "system": "http://hl7.org/fhir/appointmentstatus",
-                            "code": "Booked"
+                            "code": "booked"
                           }
                         }
                       ],
                       "kind": "Appointment",
                       "description": "Cardiology, The Oaks, Wembley University Hospital, WJ7 6EU"
+                    }
+                  },
+                  {
+                    "detail": {
+                      "extension": [
+                        {
+                          "extension": [
+                            {
+                              "url": "code",
+                              "valueCode": "PKB"
+                            }
+                          ],
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                          "valueUrl": "http://stubs.local.bitraft.io:8080/pkb/upcoming-appointments?reference=932034686639"
+                        },
+                        {
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                          "valueCoding": {
+                            "system": "http://hl7.org/fhir/appointmentstatus",
+                            "code": "cancelled"
+                          }
+                        }
+                      ],
+                      "kind": "Appointment",
+                      "scheduledPeriod": {
+                        "start": "2300-04-20T12:18:10.0150205+00:00"
+                      },
+                      "description": "Neurology, The Willows, Croydon University Hospital, RJ6 5EU"
                     }
                   }
                 ]
@@ -1062,7 +1090,7 @@ class EvaluateBuilder
                                             "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
                                             "valueCoding": {
                                                 "system": "http://hl7.org/fhir/appointmentstatus",
-                                                "code": "Booked"
+                                                "code": "booked"
                                             }
                                         }
                                     ],
@@ -1165,7 +1193,7 @@ class EvaluateBuilder
                                             "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
                                             "valueCoding": {
                                                 "system": "http://hl7.org/fhir/appointmentstatus",
-                                                "code": "Booked"
+                                                "code": "booked"
                                             }
                                         }
                                     ],

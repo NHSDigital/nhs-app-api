@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using Hl7.Fhir.Utility;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -215,7 +216,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                 {
                     new UpcomingAppointment
                     {
-                        AppointmentStatus = Appointment.AppointmentStatus.Booked.ToString(),
+                        AppointmentStatus = Appointment.AppointmentStatus.Booked.GetLiteral(),
                         LocationDescription = "The Royal Victoria Hospital, Belfast, BT1",
                         Provider = WayfinderServiceProvider.eRS.ToString(),
                         DeepLinkUrl = "http://stubs.local.bitraft.io:8080/drdoctor/upcoming-appointments?ubrn=217478550345",
@@ -223,7 +224,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                     },
                     new UpcomingAppointment
                     {
-                        AppointmentStatus = Appointment.AppointmentStatus.Booked.ToString(),
+                        AppointmentStatus = Appointment.AppointmentStatus.Booked.GetLiteral(),
                         LocationDescription = "The Royal Victoria Hospital, Belfast, BT1",
                         Provider = WayfinderServiceProvider.eRS.ToString(),
                         DeepLinkUrl = "http://stubs.local.bitraft.io:8080/drdoctor/upcoming-appointments?ubrn=927486036201",
@@ -231,18 +232,50 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                     },
                     new UpcomingAppointment
                     {
-                        AppointmentStatus = Appointment.AppointmentStatus.Booked.ToString(),
+                        AppointmentStatus = Appointment.AppointmentStatus.Booked.GetLiteral(),
                         LocationDescription = "The Royal Victoria Hospital, Belfast, BT1",
                         Provider = WayfinderServiceProvider.eRS.ToString(),
                         DeepLinkUrl = "http://stubs.local.bitraft.io:8080/drdoctor/upcoming-appointments?ubrn=681078755944",
                         AppointmentDateTime = new DateTimeOffset(2022, 05, 23, 15, 11, 45, TimeSpan.Zero),
+                    },
+                    new UpcomingAppointment
+                    {
+                        AppointmentStatus = Appointment.AppointmentStatus.Cancelled.GetLiteral(),
+                        LocationDescription = "The Royal Victoria Hospital, Belfast, BT1",
+                        Provider = WayfinderServiceProvider.eRS.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/drdoctor/upcoming-appointments?ubrn=681078755944",
+                        AppointmentDateTime = new DateTimeOffset(2300, 05, 05, 15, 11, 45, TimeSpan.Zero),
+                    },
+                    new UpcomingAppointment
+                    {
+                        AppointmentStatus = Appointment.AppointmentStatus.Cancelled.GetLiteral(),
+                        LocationDescription = "The Royal Victoria Hospital, Belfast, BT1",
+                        Provider = WayfinderServiceProvider.eRS.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/drdoctor/upcoming-appointments?ubrn=681078755944",
+                        AppointmentDateTime = new DateTimeOffset(2300, 05, 10, 15, 11, 45, TimeSpan.Zero),
+                    },
+                    new UpcomingAppointment
+                    {
+                        AppointmentStatus = Appointment.AppointmentStatus.Cancelled.GetLiteral(),
+                        LocationDescription = "The Royal Victoria Hospital, Belfast, BT1",
+                        Provider = WayfinderServiceProvider.eRS.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/drdoctor/upcoming-appointments?ubrn=681078755944",
+                        AppointmentDateTime = new DateTimeOffset(2300, 05, 30, 15, 11, 45, TimeSpan.Zero),
+                    },
+                    new UpcomingAppointment
+                    {
+                        AppointmentStatus = Appointment.AppointmentStatus.Cancelled.GetLiteral(),
+                        LocationDescription = "The Royal Victoria Hospital, Belfast, BT1",
+                        Provider = WayfinderServiceProvider.eRS.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/drdoctor/upcoming-appointments?ubrn=681078755944",
+                        AppointmentDateTime = new DateTimeOffset(2300, 06, 24, 15, 11, 45, TimeSpan.Zero),
                     },
                 },
                 UnconfirmedAppointments = new[]
                 {
                     new UpcomingAppointment
                     {
-                        AppointmentStatus = Appointment.AppointmentStatus.Booked.ToString(),
+                        AppointmentStatus = Appointment.AppointmentStatus.Booked.GetLiteral(),
                         LocationDescription = "The Royal Victoria Hospital, Belfast, BT1",
                         Provider = WayfinderServiceProvider.eRS.ToString(),
                         DeepLinkUrl = "http://stubs.local.bitraft.io:8080/pkb/upcoming-appointments?ubrn=325308672657",

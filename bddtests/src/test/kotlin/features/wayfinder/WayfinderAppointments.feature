@@ -28,3 +28,12 @@ Feature: Wayfinder Appointments
     When I click the 'Referrals, hospital and other appointments' link on the Appointments Hub
     Then the Referrals, hospital and other appointments screen with data is displayed
     And I can see that I have no confirmed appointments
+
+  Scenario: A user with cancelled appointments can see this on the wayfinder screen
+    Given I am a user who can view Wayfinder from Appointments and has referrals and upcoming appointments
+    And I am logged in
+    When I navigate to Appointments
+    Then the Appointment Hub page is displayed
+    When I click the 'Referrals, hospital and other appointments' link on the Appointments Hub
+    Then the Referrals, hospital and other appointments screen with data is displayed
+    And I see a cancelled appointment

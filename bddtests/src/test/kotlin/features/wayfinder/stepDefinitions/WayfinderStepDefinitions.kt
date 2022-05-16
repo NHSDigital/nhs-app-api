@@ -159,6 +159,11 @@ class WayfinderStepDefinitions {
         wayfinderReferralsAndAppointmentsPage.assertBookedAppointmentIsDisplayed()
     }
 
+    @Then("^I see a cancelled appointment$")
+    fun assertCancelledAppointmentIsDisplayed() {
+        wayfinderReferralsAndAppointmentsPage.assertCancelledAppointmentIsDisplayed()
+    }
+
     @Then("^I see a bookable cancelled referral$")
     fun assertBookableCancelledReferralIsDisplayed() {
         wayfinderReferralsAndAppointmentsPage.assertBookableCancelledReferralDisplayed()
