@@ -1,0 +1,13 @@
+{
+    "resourceType": "OperationOutcome",
+    "issue": [
+        {
+            "severity": "error",
+            "code": "invalid",
+            "diagnostics": "Identifier system is invalid",
+            "expression": [
+                "requester.identifier.system"
+            ]
+        }
+    ]
+}

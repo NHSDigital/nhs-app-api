@@ -200,6 +200,10 @@ paths:
                   summary: Multiple issues - sender name is missing and campaign ID exceed maximum length
                   value:
                     $ref: components/examples/responses/communication/400multipleIssues.json
+                invalid-requester:
+                  summary: The requester has an invalid identifier
+                  value:
+                    $ref: components/examples/responses/communication/400InvalidRequester.json
         "401":
           description: Authorisation issue, for example a missing or expired bearer token.
           headers:
