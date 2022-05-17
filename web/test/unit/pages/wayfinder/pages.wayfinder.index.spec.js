@@ -62,7 +62,7 @@ const setupStore = (hasReferralsInReview,
     }),
     'serviceJourneyRules/cdssAdminEnabled': false,
     'serviceJourneyRules/silverIntegrationAppointmentsEnabled': false,
-    'serviceJourneyRules/silverIntegrationEnabled': () => (false),
+    'serviceJourneyRules/silverIntegrationEnabled': () => (true),
     'session/isProxying': false,
     };
   }
@@ -79,7 +79,7 @@ const setupStore = (hasReferralsInReview,
           confirmedAppointments: confirmedAppointmentsArray,
           unconfirmedAppointments: unconfirmedAppointmentsArray,
         },
-        apiError: undefined,
+        apiError: null,
         hasLoaded: true,
       },
     },
@@ -223,7 +223,7 @@ describe('Summary care response with: ' +
   let youMayHaveOtherReferralsText;
   let contactTheOrganisationText;
   let contactHealthcareProviderText;
-  let otherReferralsAppointmentsAndServicesHeader;
+  let otherServicesHeader;
   let otherAvailableServicesMenuItems;
   let backButton;
 
@@ -258,11 +258,11 @@ describe('Summary care response with: ' +
       expect(contactHealthcareProviderText.exists()).toBe(true);
     });
 
-    it('show other referrals appointments and services header', () => {
+    it('show other services header', () => {
       wrapper = createIndexPage();
-      otherReferralsAppointmentsAndServicesHeader = wrapper.find('#other-referrals-appointments-and-services-header');
+      otherServicesHeader = wrapper.find('#other-services-header');
 
-      expect(otherReferralsAppointmentsAndServicesHeader.exists()).toBe(true);
+      expect(otherServicesHeader.exists()).toBe(true);
     });
 
     it('show other available services menu items', () => {

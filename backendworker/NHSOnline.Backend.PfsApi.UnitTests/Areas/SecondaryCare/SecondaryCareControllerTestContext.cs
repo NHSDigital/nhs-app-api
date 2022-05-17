@@ -86,6 +86,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 
         internal SecondaryCareController CreateSystemUnderTest() => ServiceProvider.GetRequiredService<SecondaryCareController>();
 
+        internal void MockSecondaryCareHttpClientGetSummaryReturnsResponseWithData(
+            HttpStatusCode httpStatusCode,
+            string data)
+        {
+            Mocks.MockHttpMessageHandler
+                .When(HttpMethod.Get, SecondaryCareSummaryUrl)
+                .WithHeaders(Data.RequestHeaders)
+                .Respond(httpStatusCode, "application/json", data);
+        }
+
         internal void MockSecondaryCareHttpClientGetSummaryReturnsSuccessfulResponseWithData(string data)
         {
             Mocks.MockHttpMessageHandler

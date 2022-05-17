@@ -10,11 +10,14 @@ using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.PfsApi.NHSApim;
 using NHSOnline.Backend.Support.Session;
 using r4::Hl7.Fhir.Model;
+using OperationOutcome = Hl7.Fhir.Model.OperationOutcome;
 
 namespace NHSOnline.Backend.PfsApi.SecondaryCare
 {
     public class SecondaryCareSummaryService
     {
+        private const string SecondaryCareLogPrefix = "Aggregator Secondary Care Summary API";
+
         private readonly ILogger<SecondaryCareSummaryService> _logger;
         private readonly ISecondaryCareSummaryMapper _mapper;
         private readonly ISecondaryCareClient _secondaryCareClient;
@@ -43,31 +46,37 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
 
                 var aggregatorResponse = await _secondaryCareClient.GetSummary(userSession, authResponse.Body.AccessToken);
 
-                if (!aggregatorResponse.HasSuccessResponse)
-                {
-                    await AuditSecondaryCareResult($"Failed - response code: {aggregatorResponse.StatusCode}");
-                    return new SecondaryCareSummaryResult.BadGateway();
-                }
-
                 if (aggregatorResponse.FailedToParseResponse)
                 {
                     await AuditSecondaryCareResult("Failed - unable to parse response");
                     return new SecondaryCareSummaryResult.BadGateway();
                 }
 
-                var summaryResponse = _mapper.Map(aggregatorResponse.Body, out var issues);
-
-                if (issues.Any())
+                if (!aggregatorResponse.HasSuccessResponse)
                 {
-                    var errorMessagesForLogging = string.Join("|", issues);
-                    _logger.LogError("Aggregator Secondary Care Summary API errors found in response: {ErrorMessages}", errorMessagesForLogging);
+                    if (aggregatorResponse.IsUnder16Error())
+                    {
+                        _logger.LogInformation("{LogPrefix} failed minimum age requirement", SecondaryCareLogPrefix);
+                        return new SecondaryCareSummaryResult.FailedSecondaryCareMinimumAgeRequirement();
+                    }
+
+                    await AuditSecondaryCareResult($"Failed - response code: {aggregatorResponse.StatusCode}");
+                    return new SecondaryCareSummaryResult.BadGateway();
+                }
+
+                if (aggregatorResponse.Issues.Any())
+                {
+                    var errorMessagesForLogging = string.Join("|", aggregatorResponse.Issues.Select(MapErrorForLogging));
+                    _logger.LogError("{LogPrefix} errors found in response: {ErrorMessages}", SecondaryCareLogPrefix, errorMessagesForLogging);
                     await AuditSecondaryCareResult($"Failed - errors in response: {errorMessagesForLogging}");
                     return new SecondaryCareSummaryResult.BadGateway();
                 }
 
+                var summaryResponse = _mapper.Map(aggregatorResponse.Body);
+
                 if (summaryResponse is null)
                 {
-                    _logger.LogError("Aggregator Secondary Care Summary API unsuccessfully mapped {Bundle} to {Response}. See previous log entries for more detail", nameof(Bundle), nameof(SummaryResponse));
+                    _logger.LogError("{LogPrefix} unsuccessfully mapped {Bundle} to {Response}. See previous log entries for more detail", SecondaryCareLogPrefix, nameof(Bundle), nameof(SummaryResponse));
                     await AuditSecondaryCareResult("Failed - mapping failed for at least one entry");
                     return new SecondaryCareSummaryResult.BadGateway();
                 }
@@ -76,13 +85,13 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
             }
             catch (NhsTimeoutException e)
             {
-                _logger.LogError(e, "Aggregator Secondary Care Summary API timed out");
+                _logger.LogError(e, "{LogPrefix} timed out", SecondaryCareLogPrefix);
                 await AuditSecondaryCareResult("Failed - request timed out");
                 return new SecondaryCareSummaryResult.Timeout();
             }
             catch (HttpRequestException e)
             {
-                _logger.LogError(e, "Aggregator Secondary Care Summary API encountered an error");
+                _logger.LogError(e, "{LogPrefix} encountered an error", SecondaryCareLogPrefix);
                 await AuditSecondaryCareResult("Failed - HTTP error");
                 return new SecondaryCareSummaryResult.BadGateway();
             }
@@ -92,5 +101,9 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
         {
             await _auditor.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResult, auditText);
         }
+
+        private string MapErrorForLogging(OperationOutcome.IssueComponent issueComponent) =>
+            $"Reason: {issueComponent.Diagnostics}, " +
+            $"Provider: {issueComponent.Extension.FirstOrDefault()?.Value}";
     }
 }

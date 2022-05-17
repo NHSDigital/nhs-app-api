@@ -69,6 +69,16 @@ class WayfinderFactory {
         }
     }
 
+    fun setupReferralsAppointmentsUnderMinimumAgeResponse() {
+        mockingClient.forWayfinder.mock {
+            apimMappingBuilder.successfulTokenRequest()
+        }
+
+        mockingClient.forWayfinder.mock {
+            wayfinderMappingBuilder.referralsAppointmentsUnderMinimumAgeError()
+        }
+    }
+
     fun setupReferralsErs(){
         mockingClient.forWayfinder.mock {
             apimMappingBuilder.successfulTokenRequest()

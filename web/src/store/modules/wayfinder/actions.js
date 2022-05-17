@@ -27,7 +27,7 @@ export default {
     } catch (error) {
       const apiError = createLocalError(error);
 
-      if (apiError.status === 504 || apiError.status === 502) {
+      if (apiError.status === 504 || apiError.status === 502 || apiError.status === 470) {
         commit(SHOW_ERROR, apiError);
       } else {
         this.dispatch('errors/addApiError', error);

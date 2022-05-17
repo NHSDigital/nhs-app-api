@@ -49,6 +49,12 @@ class WayfinderStepDefinitions {
         wayfinderFactory.setupReferralsAppointmentsPartialErrorResponse()
     }
 
+    @Given("^I am a user who is too young to use Wayfinder to retrieve referrals and appointments$")
+    fun iAmAUserWhoIsTooYoungToUseWayfinderToRetrieveReferralsAndAppointments() {
+        setupPatient(SJRJourneyType.WAYFINDER_ENABLED)
+        wayfinderFactory.setupReferralsAppointmentsUnderMinimumAgeResponse()
+    }
+
     @Given("^I am a user who can view Wayfinder from Appointments and has eRS referrals and upcoming appointments$")
     fun iAmAUserWhoCanViewErsReferralsAndUpcomingAppointmentsInWayfinderFromTheAppointmentsHub(){
         setupPatient(SJRJourneyType.WAYFINDER_ENABLED)
@@ -135,6 +141,11 @@ class WayfinderStepDefinitions {
     @Then("^I see a helpful message indicating unavailable secondary care services with a (.*) service desk reference$")
     fun iSeeAHelpfulMessageIndicatingUnavailableSecondaryCareServicesWithAPrefixedServiceDeskReference(prefix: String) {
         wayfinderAggregatorErrorPage.assertIsDisplayedWithPrefix(prefix)
+    }
+
+    @Then("^I see a message indicating secondary care services are unavailable because the user is under minimum age$")
+    fun iSeeAHelpfulMessageIndicatingPatientSecondaryCareServicesAreUnavailableBecauseTheUserIsUnderAge() {
+        wayfinderAggregatorErrorPage.assertIsDisplayedWithUnderMinimumAgeError()
     }
 
     @Then("^I can see the (\\w+) referral with no speciality referenced$")

@@ -32,26 +32,12 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
             _logger = logger;
         }
 
-        public SummaryResponse Map(Bundle bundle, out List<string> issues)
+        public SummaryResponse Map(Bundle bundle)
         {
             var referralsInReview = new List<Referral>();
             var referralsNotInReview = new List<Referral>();
             var confirmedAppointments = new List<UpcomingAppointment>();
             var unconfirmedAppointments = new List<UpcomingAppointment>();
-
-            var operationIssues = bundle.Entry
-                .Select(x => x.Resource)
-                .OfType<OperationOutcome>()
-                .SelectMany(x => x.Issue)
-                .ToList();
-
-            if (operationIssues.Any())
-            {
-                issues = operationIssues.Select(MapErrorForLogging).ToList();
-                return null;
-            }
-
-            issues = new List<string>();
 
             var carePlans = bundle.Entry
                 .Select(x => x.Resource)
@@ -331,9 +317,5 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
 
             return null;
         }
-
-        private string MapErrorForLogging(OperationOutcome.IssueComponent issueComponent) =>
-            $"Partial Error: Diagnostics: {issueComponent.Diagnostics}, " +
-            $"Value Code: {issueComponent.Extension.FirstOrDefault()?.Value}";
     }
 }

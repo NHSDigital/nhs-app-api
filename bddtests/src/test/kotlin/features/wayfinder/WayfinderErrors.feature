@@ -42,3 +42,11 @@ Feature: Wayfinder Errors
     Then I see a helpful message indicating unavailable secondary care services with a 4u service desk reference
     When I click the contact us link with the 4u error code
     Then a new tab has been opened by the link
+
+  Scenario: A user is not at the minimum age to get a valid response from Wayfinder
+    Given I am a user who is too young to use Wayfinder to retrieve referrals and appointments
+    And I am logged in
+    When I navigate to Appointments
+    Then the Appointments Hub page is displayed
+    When I click the 'Referrals, hospital and other appointments' link on the Appointments Hub
+    Then I see a message indicating secondary care services are unavailable because the user is under minimum age

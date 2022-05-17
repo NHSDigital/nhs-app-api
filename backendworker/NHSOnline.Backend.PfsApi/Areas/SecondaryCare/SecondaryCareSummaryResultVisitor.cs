@@ -23,5 +23,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.SecondaryCare
 
         public IActionResult Visit(SecondaryCareSummaryResult.Timeout _)
             => BuildErrorResult(StatusCodes.Status504GatewayTimeout);
+
+        public IActionResult Visit(SecondaryCareSummaryResult.FailedSecondaryCareMinimumAgeRequirement _)
+            => BuildErrorResult(Constants.CustomHttpStatusCodes.Status470FailedSecondaryCareMinimumAgeRequirement);
     }
 }

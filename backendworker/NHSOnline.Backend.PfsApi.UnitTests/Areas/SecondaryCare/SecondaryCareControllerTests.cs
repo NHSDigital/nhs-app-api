@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -82,6 +83,27 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             Context.Mocks.Auditor.Verify(x => x.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResult, "Failed - request timed out"));
             Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,"Attempting to get Secondary Care Summary"));
             Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse, "Error retrieving Secondary Care Summary: Timeout"));
+        }
+
+        [TestMethod]
+        public async Task GetSummary_WhenPatientIsUnderMinimumAge_Returns470()
+        {
+            // Arrange
+            Context.MockSecondaryCareHttpClientGetSummaryReturnsResponseWithData(
+                HttpStatusCode.Forbidden,
+                LoadAggregatorResponse("under-minimum-age-response"));
+
+            // Act
+            var result = await Context.CreateSystemUnderTest().Summary(Context.Data.P9UserSession);
+
+            // Assert
+            var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            actionResult.Value.Should().BeAssignableTo<PfsErrorResponse>();
+            actionResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status470FailedSecondaryCareMinimumAgeRequirement);
+
+            Context.Mocks.ServiceLogger.VerifyLogger(LogLevel.Information, "Aggregator Secondary Care Summary API failed minimum age requirement", Times.Once());
+            Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,"Attempting to get Secondary Care Summary"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse, "Error retrieving Secondary Care Summary: FailedSecondaryCareMinimumAgeRequirement"));
         }
 
         [TestMethod]
@@ -180,11 +202,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                     new List<string>(),
                     new List<string>
                     {
-                        "Aggregator Secondary Care Summary API errors found in response: Partial Error: Diagnostics: Response failed validation, Value Code: company-1|Partial Error: Diagnostics: HTTP-404 returned, Value Code: company-2|Partial Error: Diagnostics: Timeout occured, Value Code: company-3"
+                        "Aggregator Secondary Care Summary API errors found in response: Reason: Response failed validation, Provider: company-1|Reason: HTTP-404 returned, Provider: company-2|Reason: Timeout occured, Provider: company-3"
                     },
                     new List<string>
                     {
-                        "Failed - errors in response: Partial Error: Diagnostics: Response failed validation, Value Code: company-1|Partial Error: Diagnostics: HTTP-404 returned, Value Code: company-2|Partial Error: Diagnostics: Timeout occured, Value Code: company-3"
+                        "Failed - errors in response: Reason: Response failed validation, Provider: company-1|Reason: HTTP-404 returned, Provider: company-2|Reason: Timeout occured, Provider: company-3"
                     },
                 };
             }

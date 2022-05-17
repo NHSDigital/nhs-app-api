@@ -8,7 +8,7 @@ export default {
   youMayHaveOtherReferrals: 'You may have other referrals or appointments not shown that are available in other services.',
   contactTheOrganisation: 'If you still think a referral is missing, contact the organisation that referred you.',
   contactTheHealthcareProvider: 'If you still think an appointment is missing, contact the healthcare provider you booked it with.',
-  otherReferralsAppointmentsAndServices: 'Other referrals, appointments and services',
+  otherServices: 'Other services',
   referralsSectionTitle: 'Referrals',
   upcomingAppointmentsSectionTitle: 'Upcoming Appointments',
   appointments: {
@@ -60,9 +60,9 @@ export default {
     },
   },
   errors: {
-    cannotViewAndManageReferralsAndAppointments: 'Cannot view and manage referrals and appointments',
+    cannotViewOrManageReferralsAndAppointments: 'Cannot view or manage referrals and appointments',
     cannotViewTryAgain: 'Try again. If the problem continues and you need to access your referrals or appointments now you may be able to do this using other services.',
     contactUs: 'Contact us if the problem continues, quoting error code {errorCode}',
-    mayHaveOtherServicesAvailableNotShown: 'You may have more referrals, appointments or services not currently shown that are available to you.',
+    doesNotMeetMinimumAge: 'You must be aged 16 or over to access your referrals and appointments in the NHS App. You may be able to do this using other services.',
   },
 };

@@ -23,13 +23,15 @@ namespace NHSOnline.Backend.Support
             public const int Status460LimitReached = 460;
             public const int Status461TooLate = 461;
             public const int Status464OdsCodeNotSupported = 464;
-            public const int Status468OdsCodeNotFound = 468;
-            public const int Status469NhsNumberNotFound = 469;
-            public const int Status599GpSessionUnavailable = 599;
-            public const int Status598GpSessionRequired = 598;
             public const int Status465FailedAgeRequirement = 465;
             public const int Status466MedicationAlreadyOrderedWithinLast30Days = 466;
             public const int Status467InvalidPatientId = 467;
+            public const int Status468OdsCodeNotFound = 468;
+            public const int Status469NhsNumberNotFound = 469;
+            public const int Status470FailedSecondaryCareMinimumAgeRequirement = 470;
+            public const int Status599GpSessionUnavailable = 599;
+            public const int Status598GpSessionRequired = 598;
+
             public const int Status550SupplierDoesNotSupportLinkageKeys = 550;
             public const int Status580ServiceDefinitionUnavailable = 580;
         }

@@ -1,5 +1,7 @@
 extern alias r4;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -8,6 +10,7 @@ using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 using r4::Hl7.Fhir.Model;
 using r4::Hl7.Fhir.Serialization;
+using OperationOutcome = Hl7.Fhir.Model.OperationOutcome;
 
 namespace NHSOnline.Backend.PfsApi.SecondaryCare
 {
@@ -20,12 +23,18 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
             _fhirParser = new FhirJsonParser();
         }
 
+        private const string Under16DiagnosticsErrorText = "UNDER_16_DENIED";
+
         public override bool HasSuccessResponse => StatusCode.IsSuccessStatusCode();
+
         public bool FailedToParseResponse { get; private set; }
 
-        protected override bool FormatResponseIfUnsuccessful => false;
+        protected override bool FormatResponseIfUnsuccessful => true;
 
         public Bundle Body { get; private set; }
+
+        public List<OperationOutcome.IssueComponent> Issues { get; private set; } =
+            new List<OperationOutcome.IssueComponent>();
 
         public async Task<SecondaryCareResponse> Parse(HttpResponseMessage responseMessage, ILogger logger)
         {
@@ -41,7 +50,7 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
 
         private async Task<SecondaryCareResponse> ParseResponse(ILogger logger, string response)
         {
-            if (!HasSuccessResponse)
+            if (string.IsNullOrEmpty(response))
             {
                 return this;
             }
@@ -49,6 +58,13 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
             try
             {
                 Body = await _fhirParser.ParseAsync<Bundle>(response);
+
+                Issues =
+                    Body?.Entry
+                        .Select(x => x.Resource)
+                        .OfType<OperationOutcome>()
+                        .SelectMany(x => x.Issue)
+                        .ToList() ?? new List<OperationOutcome.IssueComponent>();
             }
             catch (Exception e)
             {
@@ -57,6 +73,12 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
             }
 
             return this;
+        }
+
+        public bool IsUnder16Error()
+        {
+            return StatusCode == HttpStatusCode.Forbidden
+                   && Issues.Any(x => x.Diagnostics == Under16DiagnosticsErrorText);
         }
     }
 }

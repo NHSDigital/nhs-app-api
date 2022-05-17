@@ -49,6 +49,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.SecondaryCare
         public async Task Visit(SecondaryCareSummaryResult.Timeout _)
             => await VisitError(nameof(SecondaryCareSummaryResult.Timeout));
 
+        public async Task Visit(SecondaryCareSummaryResult.FailedSecondaryCareMinimumAgeRequirement _)
+            => await VisitError(nameof(SecondaryCareSummaryResult.FailedSecondaryCareMinimumAgeRequirement));
+
         private async Task VisitError(string error)
         {
             try

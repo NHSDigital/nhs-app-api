@@ -13,6 +13,6 @@ export const initialState = () => ({
     confirmedAppointments: [],
     unconfirmedAppointments: [],
   },
-  apiError: undefined,
+  apiError: null,
   hasLoaded: false,
 });

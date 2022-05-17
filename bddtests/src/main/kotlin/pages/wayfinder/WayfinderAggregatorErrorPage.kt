@@ -11,7 +11,7 @@ import pages.text
 open class WayfinderAggregatorErrorPage : HybridPageObject() {
 
     private val pageTitle = HybridPageElement(
-        webDesktopLocator = "//h1[contains(text(),\"Cannot view and manage referrals and appointments\")]",
+        webDesktopLocator = "//h1[contains(text(),\"Cannot view or manage referrals and appointments\")]",
         page = this
     )
 
@@ -33,14 +33,14 @@ open class WayfinderAggregatorErrorPage : HybridPageObject() {
         page = this
     )
 
-    private val otherServicesHeader = HybridPageElement(
-        webDesktopLocator = "//h2[contains(text(), \"Other referrals, appointments and services\")]",
+    private val underMinimumAgeText = HybridPageElement(
+        webDesktopLocator = "//p[contains(text(), \"You must be aged 16 or over to access your referrals and" +
+                " appointments in the NHS App. You may be able to do this using other services.\")]",
         page = this
     )
 
-    private val youMayHaveOtherAvailableServicesText = HybridPageElement(
-        webDesktopLocator = "//p[contains(text(), \"You may have more referrals, " +
-            "appointments or services not currently shown that are available to you.\")]",
+    private val otherServicesHeader = HybridPageElement(
+        webDesktopLocator = "//h2[contains(text(), \"Other services\")]",
         page = this
     )
 
@@ -57,7 +57,12 @@ open class WayfinderAggregatorErrorPage : HybridPageObject() {
         tryAgainButton.assertIsVisible()
         assertContactUsLinkText(prefix)
         otherServicesHeader.assertIsVisible()
-        youMayHaveOtherAvailableServicesText.assertIsVisible()
+    }
+
+    fun assertIsDisplayedWithUnderMinimumAgeError() {
+        pageTitle.assertIsVisible()
+        underMinimumAgeText.assertIsVisible()
+        otherServicesHeader.assertIsVisible()
     }
 
     fun clickTryAgain() {

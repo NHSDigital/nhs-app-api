@@ -16,7 +16,10 @@ open class WayfinderMappingBuilder(method: String="GET", relativePath: String= "
     fun referralsNoAppointments() = EvaluateBuilder().returnReferralsAndNoUpcomingAppointments()
 
     fun referralsAppointmentsPartialError() = EvaluateBuilder().returnReferralsAndUpcomingAppointmentsWithPartialError()
-    
+
+    fun referralsAppointmentsUnderMinimumAgeError() =
+        EvaluateBuilder().returnReferralsAndUpcomingAppointmentsUnderAgeError()
+
     fun referralsAndUpcomingAppointmentsErs() = EvaluateBuilder().returnReferralsAndUpcomingAppointmentsErs()
 
     fun referralsAndUpcomingAppointmentsPkb() = EvaluateBuilder().returnReferralsAndUpcomingAppointmentsPkb()

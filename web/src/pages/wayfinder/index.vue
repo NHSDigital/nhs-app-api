@@ -4,27 +4,28 @@
       <div class="nhsuk-u-padding-top-4">
 
         <template v-if="hasErrored">
-          <p>{{ $t('wayfinder.errors.cannotViewTryAgain') }}</p>
 
-          <generic-button
-            id="try-again-button"
-            :class="['nhsuk-button', 'nhsuk-button--secondary']"
-            @click="tryAgainClicked">
-            {{ $t('generic.tryAgain') }}
-          </generic-button>
+          <template v-if="showDoesNotMeetMinimumAgeError">
+            <p>{{ $t('wayfinder.errors.doesNotMeetMinimumAge') }}</p>
+          </template>
 
-          <p>
-            <a id="contact-us-link"
-               :href="contactUsLink"
-               :aria-label="contactUsAriaLabel"
-               @click.stop.prevent="contactUsClicked">
-              {{ contactUsLinkText }}
-            </a>
-          </p>
-
-          <h2>{{ $t('wayfinder.otherReferralsAppointmentsAndServices') }}</h2>
-          <p>{{ $t('wayfinder.errors.mayHaveOtherServicesAvailableNotShown') }}</p>
-
+          <template v-else>
+            <p>{{ $t('wayfinder.errors.cannotViewTryAgain') }}</p>
+            <generic-button
+              id="try-again-button"
+              :class="['nhsuk-button', 'nhsuk-button--secondary']"
+              @click="tryAgainClicked">
+              {{ $t('generic.tryAgain') }}
+            </generic-button>
+            <p>
+              <a id="contact-us-link"
+                 :href="contactUsLink"
+                 :aria-label="contactUsAriaLabel"
+                 @click.stop.prevent="contactUsClicked">
+                {{ contactUsLinkText }}
+              </a>
+            </p>
+          </template>
           <other-available-services-menu-items />
         </template>
 
@@ -64,9 +65,6 @@
           <p id="contact-the-healthcare-provider-text">
             {{ $t('wayfinder.contactTheHealthcareProvider') }}
           </p>
-          <h2 id="other-referrals-appointments-and-services-header">
-            {{ $t('wayfinder.otherReferralsAppointmentsAndServices') }}
-          </h2>
           <other-available-services-menu-items id="other-available-services-menu-items" />
         </template>
       </div>
@@ -125,7 +123,10 @@ export default {
       return this.$t('wayfinder.errors.contactUs', { errorCode });
     },
     hasErrored() {
-      return this.apiError !== undefined;
+      return this.apiError !== null;
+    },
+    showDoesNotMeetMinimumAgeError() {
+      return this.hasErrored && this.apiError && this.apiError.status === 470;
     },
     hasLoaded() {
       return this.$store.state.wayfinder.hasLoaded;
@@ -168,7 +169,7 @@ export default {
     await loadData(this.$store);
 
     if (this.hasErrored) {
-      const header = 'wayfinder.errors.cannotViewAndManageReferralsAndAppointments';
+      const header = 'wayfinder.errors.cannotViewOrManageReferralsAndAppointments';
       EventBus.$emit(UPDATE_HEADER, header);
       EventBus.$emit(UPDATE_TITLE, header);
     } else if (!this.hasReferralsOrAppointments) {
