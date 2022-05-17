@@ -26,6 +26,7 @@ class MessagesPostStepDefinitionsBackend {
         iAmAnApiUserWishingToPostAMessage(
             senderContext = SenderContext(
                 supplierId = "supplierId",
+                senderId = "senderId",
                 communicationId = "communicationId",
                 transmissionId = "transmissionId",
                 communicationCreatedDateTime = Instant.now().truncatedTo(ChronoUnit.MILLIS).toString(),

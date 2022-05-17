@@ -1,6 +1,7 @@
 package worker.models.messages
 
 data class SenderContext(var supplierId: String? = null,
+                         var senderId: String? = null,
                          var communicationId: String? = null,
                          var transmissionId: String? = null,
                          var communicationCreatedDateTime: String? = null,

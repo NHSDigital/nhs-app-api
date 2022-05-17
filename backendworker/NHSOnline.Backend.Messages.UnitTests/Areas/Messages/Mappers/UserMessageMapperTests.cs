@@ -101,6 +101,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                     NhsNumber = "NhsNumber",
                     OdsCode = "OdsCode",
                     RequestReference = "RequestReference",
+                    SenderId = "SenderId",
                     SupplierId = "SupplierId",
                     TransmissionId = "TransmissionId"
                 }
@@ -124,6 +125,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                 NhsNumber = "NhsNumber",
                 OdsCode = "OdsCode",
                 RequestReference = "RequestReference",
+                SenderId = "SenderId",
                 SupplierId = "SupplierId",
                 TransmissionId = "TransmissionId"
             });

@@ -5,6 +5,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages.Models
     public class AddMessageSenderContext
     {
         public string SupplierId { get; set; }
+        public string SenderId { get; set; }
         public string CommunicationId { get; set; }
         public string TransmissionId { get; set; }
         public DateTime? CommunicationCreatedDateTime { get; set; }

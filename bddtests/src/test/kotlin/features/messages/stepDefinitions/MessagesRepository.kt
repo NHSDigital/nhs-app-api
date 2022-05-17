@@ -38,6 +38,11 @@ class MessagesRepository {
                     actualSenderContext.SupplierId
                 )
                 Assert.assertEquals(
+                    "Message sender context sender Id",
+                    expectedSenderContext.senderId,
+                    actualSenderContext.SenderId
+                )
+                Assert.assertEquals(
                     "Message sender context communication Id",
                     expectedSenderContext.communicationId,
                     actualSenderContext.CommunicationId

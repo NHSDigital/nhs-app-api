@@ -28,12 +28,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Messages
         private const string CampaignId = "CampaignId";
         private const string MessageId = "ae0b4ffd40c44828b884961b";
         private const string NhsLoginId = "NhsLoginId";
-        private const string SupplierId = "DrDre";
-        private const string CommunicationId = "Compton";
-        private const string TransmissionId = "All in a Day's Work";
-        private const string RequestReference = "I'm Working";
-        private const string OdsCode = "Easy E";
-        private const string NhsNumber = "123456789";
 
         [TestInitialize]
         public void TestInitialize()
@@ -145,21 +139,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Messages
         private void VerifyAsserts()
         {
             _mockIntroMessagesServiceConfig.VerifyAll();
-        }
-
-        private SenderContextEventLogData CreateEventLogData()
-        {
-            return new SenderContextEventLogData(
-                SupplierId,
-                CommunicationId,
-                TransmissionId,
-                DateTime.Today,
-                RequestReference,
-                CampaignId,
-                OdsCode,
-                NhsNumber,
-                NhsLoginId
-            );
         }
     }
 }

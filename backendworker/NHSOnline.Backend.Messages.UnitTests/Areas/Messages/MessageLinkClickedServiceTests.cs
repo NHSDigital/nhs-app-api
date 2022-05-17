@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
                 }
             };
 
-            _senderContextEventLogData = new SenderContextEventLogData(null, CommunicationId, TransmissionId, null,
+            _senderContextEventLogData = new SenderContextEventLogData(null, null, CommunicationId, TransmissionId, null,
                 null, CampaignId, null, null, null);
 
             _mockSenderContextEventLogDataMapper =

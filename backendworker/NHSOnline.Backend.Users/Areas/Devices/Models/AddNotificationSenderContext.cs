@@ -5,6 +5,7 @@ namespace NHSOnline.Backend.Users.Areas.Devices.Models
     public class AddNotificationSenderContext
     {
         public string SupplierId { get; set; }
+        public string SenderId { get; set; }
         public string CommunicationId { get; set; }
         public string TransmissionId { get; set; }
         public DateTime? CommunicationCreatedDateTime { get; set; }

@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Metrics.EventHub;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Users.Areas.Devices.Models;
@@ -7,13 +6,6 @@ namespace NHSOnline.Backend.Users.Areas.Devices
 {
     public class NotificationSenderContextEventLogDataMapper : IMapper<AddNotificationSenderContext, SenderContextEventLogData>
     {
-        private readonly ILogger<NotificationSenderContextEventLogDataMapper> _logger;
-
-        public NotificationSenderContextEventLogDataMapper(ILogger<NotificationSenderContextEventLogDataMapper> logger)
-        {
-            _logger = logger;
-        }
-
         public SenderContextEventLogData Map(AddNotificationSenderContext source)
         {
             if (source == null)
@@ -23,6 +15,7 @@ namespace NHSOnline.Backend.Users.Areas.Devices
 
             return new SenderContextEventLogData(
                 source.SupplierId,
+                source.SenderId,
                 source.CommunicationId,
                 source.TransmissionId,
                 source.CommunicationCreatedDateTime,

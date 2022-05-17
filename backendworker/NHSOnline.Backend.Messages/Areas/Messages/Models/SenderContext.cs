@@ -9,6 +9,9 @@ namespace NHSOnline.Backend.Messages.Areas.Messages.Models
         public string SupplierId { get; set; }
 
         [BsonElement]
+        public string SenderId { get; set; }
+
+        [BsonElement]
         public string CommunicationId { get; set; }
 
         [BsonElement]

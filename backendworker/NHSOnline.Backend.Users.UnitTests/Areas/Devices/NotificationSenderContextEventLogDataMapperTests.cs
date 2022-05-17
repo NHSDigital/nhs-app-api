@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using NHSOnline.Backend.Users.Areas.Devices;
 using NHSOnline.Backend.Users.Areas.Devices.Models;
 
@@ -18,9 +16,7 @@ namespace NHSOnline.Backend.Users.UnitTests.Areas.Devices
         [TestInitialize]
         public void TestInitialize()
         {
-            _systemUnderTest =
-                new NotificationSenderContextEventLogDataMapper(new Mock<ILogger<NotificationSenderContextEventLogDataMapper>>()
-                    .Object);
+            _systemUnderTest = new NotificationSenderContextEventLogDataMapper();
         }
 
         [TestMethod]
@@ -31,8 +27,9 @@ namespace NHSOnline.Backend.Users.UnitTests.Areas.Devices
 
             result.Should().NotBeNull();
             var allData = result.ToKeyValuePairs(true).ToList();
-            allData.Should().HaveCount(9);
+            allData.Should().HaveCount(10);
             AssertContain(allData, "SupplierId", null);
+            AssertContain(allData, "SenderId", null);
             AssertContain(allData, "CommunicationId", null);
             AssertContain(allData, "TransmissionId", null);
             AssertContain(allData, "CommunicationCreatedDateTime", null);
@@ -56,6 +53,7 @@ namespace NHSOnline.Backend.Users.UnitTests.Areas.Devices
                 NhsNumber = "NHS Number",
                 OdsCode = "ODS Code",
                 RequestReference = "Request Reference",
+                SenderId = "Sender ID",
                 SupplierId = "Supplier ID",
                 TransmissionId = "Transmission ID"
             };
@@ -67,8 +65,9 @@ namespace NHSOnline.Backend.Users.UnitTests.Areas.Devices
             result.Should().NotBeNull();
             var allData = result.ToKeyValuePairs(true).ToList();
 
-            allData.Should().HaveCount(9);
+            allData.Should().HaveCount(10);
             AssertContain(allData, "SupplierId", "Supplier ID");
+            AssertContain(allData, "SenderId", "Sender ID");
             AssertContain(allData, "CommunicationId", "Communication ID");
             AssertContain(allData, "TransmissionId", "Transmission ID");
             AssertContain(allData, "CommunicationCreatedDateTime", "2021-04-22T01:05:25:000");

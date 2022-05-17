@@ -23,6 +23,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages.Mappers
 
             return new SenderContextEventLogData(
                 source.SupplierId,
+                source.SenderId,
                 source.CommunicationId,
                 source.TransmissionId,
                 source.CommunicationCreatedDateTime,

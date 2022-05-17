@@ -7,6 +7,7 @@ namespace NHSOnline.Backend.Metrics.EventHub
     public class SenderContextEventLogData : IEventLogData
     {
         private readonly string _supplierId;
+        private readonly string _senderId;
         private readonly string _communicationId;
         private readonly string _transmissionId;
         private readonly DateTime? _communicationCreatedDateTime;
@@ -18,11 +19,12 @@ namespace NHSOnline.Backend.Metrics.EventHub
 
         public SenderContextEventLogData(){}
 
-        public SenderContextEventLogData(string supplierId, string communicationId,
+        public SenderContextEventLogData(string supplierId, string senderId, string communicationId,
             string transmissionId, DateTime? communicationCreatedDateTime, string requestReference, string campaignId,
             string odsCode, string nhsNumber, string nhsLoginId)
         {
             _supplierId = supplierId;
+            _senderId = senderId;
             _communicationId = communicationId;
             _transmissionId = transmissionId;
             _communicationCreatedDateTime = communicationCreatedDateTime;
@@ -36,6 +38,7 @@ namespace NHSOnline.Backend.Metrics.EventHub
         public IEnumerable<KeyValuePair<string, string>> ToKeyValuePairs(bool pidAllowed)
         {
             yield return new KeyValuePair<string, string>("SupplierId", _supplierId);
+            yield return new KeyValuePair<string, string>("SenderId", _senderId);
             yield return new KeyValuePair<string, string>("CommunicationId", _communicationId);
             yield return new KeyValuePair<string, string>("TransmissionId", _transmissionId);
             yield return new KeyValuePair<string, string>("CommunicationCreatedDateTime", _communicationCreatedDateTime?.ToSplunkString());

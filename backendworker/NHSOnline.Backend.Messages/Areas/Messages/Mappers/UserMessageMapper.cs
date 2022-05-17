@@ -49,6 +49,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages.Mappers
                 NhsNumber = senderContext.NhsNumber,
                 OdsCode = senderContext.OdsCode,
                 RequestReference = senderContext.RequestReference,
+                SenderId = senderContext.SenderId,
                 SupplierId = senderContext.SupplierId
             };
         }

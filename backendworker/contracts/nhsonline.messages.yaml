@@ -274,6 +274,7 @@ components:
         body: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
         senderContext:
           supplierId: 7e874122-d6c0-47c1-96eb-0a2532b51675
+          senderId: B82041
           communicationId: 1c92e18e-6221-4bfd-8d30-d535e16dacd1
           transmissionId: 2c92e18e-6221-4bfd-8d30-d535e16dacd2
           communicationCreatedDateTime: 2020-10-26T15:06:37.35Z
@@ -293,6 +294,8 @@ components:
       type: object
       properties:
         supplierId:
+          type: string
+        senderId:
           type: string
         communicationId:
           type: string
@@ -345,7 +348,7 @@ components:
         sendTime: 2019-09-17T02:15:12.35Z
         read: true
     SenderResponse:
-      type: objects
+      type: object
       properties:
         name:
           type: string
