@@ -156,5 +156,71 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Courses
 
             result.Should().BeEquivalentTo(expectedResult);
         }
+
+        [TestMethod]
+        public void MapMedicationsToCommonMedicationCourses_VariousMedications_ReturnsCorrectValues()
+        {
+            var medicationCourses = new List<Medication>()
+            {
+                new Medication()
+                {
+                    Type = "RepeatDispensing",
+                    Requestable = "y"
+                },
+                new Medication()
+                {
+                    Type = "Acute",
+                    Requestable = "n"
+                },
+                new Medication()
+                {
+                    Type = "RepeatDispensing",
+                    Requestable = "n"
+                },
+                new Medication()
+                {
+                    Type = "Repeat",
+                    Requestable = "y"
+                },
+                new Medication()
+                {
+                    Type = "Repeat",
+                    Requestable = "null"
+                }
+            };
+
+            var result = _mapper.MapMedicationsToCommonMedicationCourses(medicationCourses);
+
+            var expected = new List<CommonMedicationCourse>
+            {
+                new CommonMedicationCourse()
+                {
+                    Type = "RepeatDispensing",
+                    Orderable = "yes"
+                },
+                new CommonMedicationCourse()
+                {
+                    Type = "Acute",
+                    Orderable = "no"
+                },
+                new CommonMedicationCourse()
+                {
+                    Type = "RepeatDispensing",
+                    Orderable = "no"
+                },
+                new CommonMedicationCourse()
+                {
+                    Type = "Repeat",
+                    Orderable = "yes"
+                },
+                new CommonMedicationCourse()
+                {
+                    Type = "Repeat",
+                    Orderable = "null"
+                },
+            };
+
+            result.Should().BeEquivalentTo(expected);
+        }
     }
 }

@@ -119,7 +119,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
         private static Course MapMedicationCourseToCourse(MedicationCourse course)
         {
             string details = null;
-            
+
             if (!string.IsNullOrEmpty(course.Dosage) && !string.IsNullOrEmpty(course.QuantityRepresentation))
             {
                 details = $"{course.Dosage} ‐ {course.QuantityRepresentation}";
@@ -155,6 +155,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                 default:
                     return Status.Unknown;
             }
+        }
+
+        public List<CommonMedicationCourse> MapMedicationCoursesToCommonMedicationCourses(List<MedicationCourse> courses)
+        {
+            var medicationCourses = courses.Select(x => new CommonMedicationCourse()
+            {
+                Type = x.PrescriptionType.ToString(),
+                Orderable = x.CanBeRequested ? "yes" : "no",
+            }).ToList();
+
+            return medicationCourses;
         }
     }
 }

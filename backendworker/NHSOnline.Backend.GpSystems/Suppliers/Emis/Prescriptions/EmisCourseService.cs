@@ -52,9 +52,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                 {
                     try
                     {
-                        var courses = coursesResponse.Body.Courses;
-                        var totalCourses = coursesResponse.Body.Courses.Count();
+                        var courses = coursesResponse.Body.Courses.ToList();
 
+                        var commonMedicationCourses = _emisPrescriptionMapper.MapMedicationCoursesToCommonMedicationCourses(courses);
+                        var logText = CommonMedicationCourseConverter.GroupAndConvertCommonMedicationCoursesToLogText(commonMedicationCourses);
+                        _logger.LogInformation(logText);
+
+                        var totalCourses = courses.Count;
                         if (totalCourses != 0)
                         {
                             var mostRecentIssueCount = courses.Count(c => c.MostRecentIssueDate.HasValue);

@@ -503,5 +503,61 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
 
             result.Should().BeEquivalentTo(expectedResult);
         }
+
+        [TestMethod]
+        public void MapMedicationCoursesToCommonMedicationCourses_VariousMedicationCourses_ReturnsCorrectValues()
+        {
+            var medicationCourses = new List<MedicationCourse>()
+            {
+                new MedicationCourse()
+                {
+                    PrescriptionType = PrescriptionType.RepeatDispensing,
+                    CanBeRequested = true
+                },
+                new MedicationCourse()
+                {
+                    PrescriptionType = PrescriptionType.Acute,
+                    CanBeRequested = false
+                },
+                new MedicationCourse()
+                {
+                    PrescriptionType = PrescriptionType.RepeatDispensing,
+                    CanBeRequested = false
+                },
+                new MedicationCourse()
+                {
+                    PrescriptionType = PrescriptionType.Repeat,
+                    CanBeRequested = true
+                }
+            };
+
+            var result = _mapper.MapMedicationCoursesToCommonMedicationCourses(medicationCourses);
+
+            var expected = new List<CommonMedicationCourse>
+            {
+                new CommonMedicationCourse()
+                {
+                    Type = PrescriptionType.RepeatDispensing.ToString(),
+                    Orderable = "yes"
+                },
+                new CommonMedicationCourse()
+                {
+                    Type = PrescriptionType.Acute.ToString(),
+                    Orderable = "no"
+                },
+                new CommonMedicationCourse()
+                {
+                    Type = PrescriptionType.RepeatDispensing.ToString(),
+                    Orderable = "no"
+                },
+                new CommonMedicationCourse()
+                {
+                    Type = PrescriptionType.Repeat.ToString(),
+                    Orderable = "yes"
+                },
+            };
+
+            result.Should().BeEquivalentTo(expected);
+        }
     }
 }

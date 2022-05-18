@@ -51,5 +51,24 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
 
             return result;
         }
+
+        public List<CommonMedicationCourse> MapMedicationsToCommonMedicationCourses(List<Medication> courses)
+        {
+            var medicationCourses = courses.Select(x => new CommonMedicationCourse()
+            {
+                Type = x.Type,
+                Orderable = GetOrderableValue(x.Requestable)
+            }).ToList();
+
+            string GetOrderableValue(string requestable) =>
+                requestable switch
+                {
+                    "y" => "yes",
+                    "n" => "no",
+                    _ => requestable
+                };
+
+            return medicationCourses;
+        }
     }
 }

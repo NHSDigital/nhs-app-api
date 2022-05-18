@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -63,6 +64,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                             .LogDebug("Filtering courses from successful tpp response so we are left with only repeat courses which can be requested");
 
                         var medications = response.Body.Medications.ToList();
+
+                        var commonMedicationCourses = _tppCourseMapper.MapMedicationsToCommonMedicationCourses(medications);
+                        var logText = CommonMedicationCourseConverter.GroupAndConvertCommonMedicationCoursesToLogText(commonMedicationCourses);
+                        _logger.LogInformation(logText);
 
                         var requestableRepeatablePrescriptions = medications
                             .Where(x => TppApiConstants.MedicationRequestable.Yes.Equals(x.Requestable,
