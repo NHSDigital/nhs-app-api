@@ -1,0 +1,214 @@
+{
+	"info": {
+		"_postman_id": "ca3f7db3-64c4-4fec-a944-cf9b9cf8cf0e",
+		"name": "Metric Logger",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "local dev",
+			"item": [
+				{
+					"name": "POST Login Event to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"AuditId\": \"3840f219-cb5a-4c8b-a3f8-17fc59280b7c\",\r\n        \"NhsLoginSubject\": \"cb09b2b9-aae3-4162-96d3-0eea6ae938d8\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Unknown\",\r\n        \"Operation\": \"Login_Success\",\r\n        \"Details\": \"Successful Login with test details\",\r\n        \"ApiVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9\",\r\n        \"WebVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9 (commit:de5652256)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"cs-test\",\r\n        \"SessionId\": null,\r\n        \"Timestamp\": \"2022-02-21T15:29:58.8572498Z\",\r\n        \"ProofLevel\": \"P5\",\r\n        \"ODS\": \"\",\r\n        \"Referrer\": \"\",\r\n        \"IntegrationReferrer\": \"IntRef189\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7071/api/AuditLog_Etl_Http",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7071",
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Consent Event to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"AuditId\": \"4cd7631b-242c-465a-9017-f6e089461554\",\r\n        \"NhsLoginSubject\": \"9d9a2a6b-809e-42f0-90ec-5271f7b02679\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Unknown\",\r\n        \"Operation\": \"TermsAndConditions_RecordConsent_Response\",\r\n        \"Details\": \"Initial Consent Successfully recorded\",\r\n        \"ApiVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9\",\r\n        \"WebVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9 (commit:de5652256)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"CS-Test\",\r\n        \"SessionId\": \"850578da-0813-46c0-84f0-9219fa583ffd\",\r\n        \"Timestamp\": \"2022-03-23T08:15:00.8572498Z\",\r\n        \"ProofLevel\": \"P5\",\r\n        \"ODS\": \"CS099\",\r\n        \"Referrer\": \"CS-099\",\r\n        \"IntegrationReferrer\": \"IntRef189\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7071/api/AuditLog_Etl_Http",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7071",
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Alert to Metric Logger Monitoring",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Data\": {\r\n        \"Essentials\": {\r\n            \"AlertRule\": \"AuditLog ETL Unprocessed Events Alert\"\r\n        },\r\n        \"AlertContext\": {\r\n            \"SearchResults\": {\r\n                \"Tables\": [\r\n                    {\r\n                        \"name\": \"PrimaryResult\",\r\n                        \"columns\": [\r\n                            {\r\n                                \"name\": \"env\",\r\n                                \"type\": \"string\"\r\n                            },\r\n                            {\r\n                                \"name\": \"message\",\r\n                                \"type\": \"string\"\r\n                            },\r\n                            {\r\n                                \"name\": \"eventhubevents\",\r\n                                \"type\": \"string\"\r\n                            }\r\n                        ],\r\n                        \"rows\": [\r\n                            [\r\n                                \"dev\",\r\n                                \"Failed Encountered error while processing events\",\r\n                                \"PartionId: 1, Offset: 0-1\"\r\n                            ],\r\n                            [\r\n                                \"dev\",\r\n                                \"Failed Encountered error while processing events\",\r\n                                \"PartionId: 2, Offset: 0-2\"\r\n                            ]\r\n                        ]\r\n                    }\r\n                ]\r\n            }\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7071/api/Monitoring_AppInsightsAlert",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7071",
+							"path": [
+								"api",
+								"Monitoring_AppInsightsAlert"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "dev-uks3 cluster",
+			"item": [
+				{
+					"name": "POST Login Event to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"AuditId\": \"3840f219-cb5a-4c8b-a3f8-17fc59280b7c\",\r\n        \"NhsLoginSubject\": \"cb09b2b9-aae3-4162-96d3-0eea6ae938d8\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Unknown\",\r\n        \"Operation\": \"Login_Success\",\r\n        \"Details\": \"Successful Login with test details\",\r\n        \"ApiVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9\",\r\n        \"WebVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9 (commit:de5652256)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"cs-test\",\r\n        \"SessionId\": null,\r\n        \"Timestamp\": \"2022-02-21T15:29:58.8572498Z\",\r\n        \"ProofLevel\": \"P5\",\r\n        \"ODS\": \"\",\r\n        \"Referrer\": \"\",\r\n        \"IntegrationReferrer\": \"IntRef189\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://nhsapp-devuks3-analytics-metric-log-app.azurewebsites.net/api/AuditLog_Etl_Http?code=tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg==",
+							"protocol": "https",
+							"host": [
+								"nhsapp-devuks3-analytics-metric-log-app",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg=="
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Consent Event to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"AuditId\": \"4cd7631b-242c-465a-9017-f6e089461554\",\r\n        \"NhsLoginSubject\": \"9d9a2a6b-809e-42f0-90ec-5271f7b02679\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Unknown\",\r\n        \"Operation\": \"TermsAndConditions_RecordConsent_Response\",\r\n        \"Details\": \"Initial Consent Successfully recorded\",\r\n        \"ApiVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9\",\r\n        \"WebVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9 (commit:de5652256)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"CS-Test\",\r\n        \"SessionId\": \"850578da-0813-46c0-84f0-9219fa583ffd\",\r\n        \"Timestamp\": \"2022-03-23T08:15:00.8572498Z\",\r\n        \"ProofLevel\": \"P5\",\r\n        \"ODS\": \"CS099\",\r\n        \"Referrer\": \"CS-099\",\r\n        \"IntegrationReferrer\": \"IntRef189\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://nhsapp-devuks3-analytics-metric-log-app.azurewebsites.net/api/AuditLog_Etl_Http?code=tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg==",
+							"protocol": "https",
+							"host": [
+								"nhsapp-devuks3-analytics-metric-log-app",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg=="
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Alert to Metric Logger Monitoring",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Data\": {\r\n        \"Essentials\": {\r\n            \"AlertRule\": \"AuditLog ETL Unprocessed Events Alert\"\r\n        },\r\n        \"AlertContext\": {\r\n            \"SearchResults\": {\r\n                \"Tables\": [\r\n                    {\r\n                        \"name\": \"PrimaryResult\",\r\n                        \"columns\": [\r\n                            {\r\n                                \"name\": \"env\",\r\n                                \"type\": \"string\"\r\n                            },\r\n                            {\r\n                                \"name\": \"message\",\r\n                                \"type\": \"string\"\r\n                            },\r\n                            {\r\n                                \"name\": \"eventhubevents\",\r\n                                \"type\": \"string\"\r\n                            }\r\n                        ],\r\n                        \"rows\": [\r\n                            [\r\n                                \"dev\",\r\n                                \"Failed Encountered error while processing events\",\r\n                                \"PartionId: 1, Offset: 0-1\"\r\n                            ],\r\n                            [\r\n                                \"dev\",\r\n                                \"Failed Encountered error while processing events\",\r\n                                \"PartionId: 2, Offset: 0-2\"\r\n                            ]\r\n                        ]\r\n                    }\r\n                ]\r\n            }\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://nhsapp-devuks3-analytics-metric-log-app.azurewebsites.net/api/AuditLog_Etl_Http?code=tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg==",
+							"protocol": "https",
+							"host": [
+								"nhsapp-devuks3-analytics-metric-log-app",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg=="
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
