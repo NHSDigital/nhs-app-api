@@ -26,7 +26,7 @@ describe('Silver Integration warning panel', () => {
               id: 'appointments',
               jumpOffContent: {
                 headerText: 'View appointments',
-                descriptionText: 'See your upcoming and past hospital or other appointments',
+                descriptionText: 'See your upcoming and past hospital and other appointments',
               },
               thirdPartyWarning: {
                 featureName: 'View appointments',

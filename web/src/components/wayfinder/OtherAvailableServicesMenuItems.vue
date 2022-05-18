@@ -42,6 +42,12 @@ export default {
     MenuItemList,
     ThirdPartyJumpOffButton,
   },
+  props: {
+    showErs: {
+      type: Boolean,
+      default: () => true,
+    },
+  },
   data() {
     return {
       isProxying: this.$store.getters['session/isProxying'],
@@ -83,7 +89,7 @@ export default {
       return this.hasGncrAppointments && !this.isProxying;
     },
     showManageYourReferral() {
-      return this.hasErsAppointments && !this.isProxying;
+      return this.hasErsAppointments && this.showErs && !this.isProxying;
     },
     showPkbAppointments() {
       return this.hasPkbAppointments && !this.isProxying;

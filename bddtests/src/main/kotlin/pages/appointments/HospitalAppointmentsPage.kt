@@ -20,7 +20,7 @@ open class HospitalAppointmentsPage : HybridPageObject() {
     private val hospitalAppointmentsDescription =
             "If you've had a referral, you can book or cancel your first appointment here"
     private val viewPkbAppointmentsTitle = "View appointments"
-    private val viewPkbAppointmentsDescription = "See your upcoming and past hospital or other appointments"
+    private val viewPkbAppointmentsDescription = "See your upcoming and past hospital and other appointments"
     private val viewGncrAppointmentTitle = "View and manage your hospital and other appointments"
     private val viewGncrAppointmentDescription =
             "This includes your hospital, mental health and social care appointments"

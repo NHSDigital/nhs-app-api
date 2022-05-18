@@ -83,7 +83,9 @@
           <p id="contact-the-healthcare-provider-text">
             {{ $t('wayfinder.contactTheHealthcareProvider') }}
           </p>
-          <other-available-services-menu-items id="other-available-services-menu-items" />
+          <other-available-services-menu-items
+            id="other-available-services-menu-items"
+            :show-ers="false"/>
         </template>
       </div>
 
