@@ -397,7 +397,7 @@ iproxy:
   containerPort: 8443
   role: iproxy
   image: nhsonline-nginx
-  image_tag: "v1.16.1"
+  image_tag: "v1.20.2"
   imagePullPolicy: IfNotPresent
   minAvailable: 1
   minReplicas: 2
