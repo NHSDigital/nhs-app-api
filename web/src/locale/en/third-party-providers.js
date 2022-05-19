@@ -101,6 +101,13 @@ export default {
         },
       },
       {
+        id: 'appointmentsWayfinder',
+        jumpOffContent: {
+          headerText: 'View and manage other appointments',
+          descriptionText: 'This includes other hospital, mental health and social care appointments currently not shown',
+        },
+      },
+      {
         id: 'correspondence',
         jumpOffContent: {
           headerText: 'Hospital and other healthcare documents',

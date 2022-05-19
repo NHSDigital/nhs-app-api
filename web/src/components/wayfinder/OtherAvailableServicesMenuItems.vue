@@ -24,7 +24,7 @@
         id="btn_gncr_appointments"
         provider-id="gncr"
         :provider-configuration="thirdPartyProvider.gncr.
-          appointments" />
+          appointmentsWayfinder" />
     </menu-item-list>
 
   </div>

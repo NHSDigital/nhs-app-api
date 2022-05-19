@@ -107,6 +107,13 @@ const thirdPartyProvider = {
       provider: 'gncr',
       serviceType: 'secondaryAppointments',
     },
+    appointmentsWayfinder: {
+      acceptablePathsRegex: '^\\/appointment(\\/?\\?.*)?$',
+      jumpOffId: 'appointmentsWayfinder',
+      redirectPath: '/appointment',
+      provider: 'gncr',
+      serviceType: 'secondaryAppointments',
+    },
     correspondence: {
       acceptablePathsRegex: '^\\/correspondence(\\/?\\?.*)?$',
       jumpOffId: 'correspondence',
