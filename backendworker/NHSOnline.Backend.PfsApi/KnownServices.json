@@ -585,6 +585,11 @@
       "showThirdPartyWarning": true,
       "requiresAssertedLoginIdentity": true,
       "validateSession": true
+    },
+    "drDoctor": {
+      "url": "https://my-uat2.drdoctor.co.uk",
+      "requiresAssertedLoginIdentity": true,
+      "showThirdPartyWarning": true
     }
   }
 }

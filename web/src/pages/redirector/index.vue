@@ -41,7 +41,10 @@ import {
   removeNhsAppHost,
 } from '@/lib/utils';
 import { setWindowLocation } from '@/lib/window';
-import { getJumpOffConfiguration } from '@/lib/third-party-providers/jump-off-configuration';
+import {
+  getJumpOffConfiguration,
+  getWayfinderJumpOffConfiguration,
+} from '@/lib/third-party-providers/jump-off-configuration';
 
 export default {
   name: 'InterstitialRedirectorPage',
@@ -197,7 +200,7 @@ export default {
       );
     },
     checkCanAccessSilverIntegration({ jumpOffConfig, featureJumpOffContent }, next) {
-      if (this.hasWayfinder() && this.isWayfinderUrl) {
+      if (this.isWayfinderUrl) {
         next();
         return;
       }
@@ -214,6 +217,11 @@ export default {
     },
     updateTitle({ featureJumpOffContent }, next) {
       if (!isEmpty(featureJumpOffContent)) {
+        if (this.isWayfinderUrl) {
+          next();
+          return;
+        }
+
         const { jumpOffContent, thirdPartyWarning } = featureJumpOffContent;
         if (!isEmpty(thirdPartyWarning)) {
           this.$route.meta.titleKey = featureJumpOffContent.thirdPartyWarning.featureName;
@@ -225,31 +233,44 @@ export default {
       next();
     },
     getJumpOffConfig({ url, thirdPartyConfig }, next) {
-      if (this.hasWayfinder() && this.isWayfinderUrl) {
-        next();
-        return;
-      }
       const redirectParameterAndQuery = getPathAndQuery(url);
-      const jumpOffConfig = getThirdPartyJumpOff(
-        { jumpOffs: Object.values(thirdPartyConfig) },
-        redirectParameterAndQuery,
-      );
+      let jumpOffConfig;
+
+      if (this.isWayfinderUrl) {
+        jumpOffConfig = thirdPartyConfig;
+      } else {
+        jumpOffConfig = getThirdPartyJumpOff(
+          { jumpOffs: Object.values(thirdPartyConfig) },
+          redirectParameterAndQuery,
+        );
+      }
 
       this.jumpOffId = jumpOffConfig.jumpOffId;
       if (this.jumpOffId === undefined) {
         redirectTo(this, INDEX_PATH);
         return;
       }
-      this.thirdPartyServiceContent = this.getText(`thirdPartyProviders.${this.matchedService.id}`);
 
-      const featureJumpOffContent = this.thirdPartyServiceContent.jumpOffs.find(
-        item => item.id === this.jumpOffId,
-      );
+      let featureJumpOffContent = {};
+      if (this.isWayfinderUrl) {
+        this.thirdPartyServiceContent = this.getText(`thirdPartyProviders.wayfinder.wayfinderJumpOffs.${this.matchedService.id}`);
+        featureJumpOffContent = this.thirdPartyServiceContent;
+      } else {
+        this.thirdPartyServiceContent = this.getText(`thirdPartyProviders.${this.matchedService.id}`);
 
+        featureJumpOffContent = this.thirdPartyServiceContent.jumpOffs.find(
+          item => item.id === this.jumpOffId,
+        );
+      }
       next({ jumpOffConfig, featureJumpOffContent });
     },
     getThirdPartyConfig({ url }, next) {
-      const thirdPartyConfig = getJumpOffConfiguration(this.matchedService.id);
+      let thirdPartyConfig;
+      if (this.isWayfinderUrl) {
+        thirdPartyConfig = getWayfinderJumpOffConfiguration(this.matchedService.id);
+      } else {
+        thirdPartyConfig = getJumpOffConfiguration(this.matchedService.id);
+      }
 
       if (thirdPartyConfig) {
         next({ url, thirdPartyConfig });
@@ -296,15 +317,8 @@ export default {
 
       let context = { url };
 
-      const wayfinderProvider = this.getWayfinderProvider(url);
-
-      if (wayfinderProvider) {
+      if (this.getWayfinderProvider(url) && this.hasWayfinder()) {
         this.isWayfinderUrl = true;
-        context.featureJumpOffContent = {
-          jumpOffContent: {
-            headerText: this.getText('thirdPartyProviders.wayfinder.jumpOffContent.headerText'),
-          },
-        };
       }
 
       const steps = [

@@ -70,7 +70,7 @@ api:
     services__cid_access__url: https://access.ext.signin.nhs.uk
     services__cid_idvm__url: https://idvm.ext.signin.nhs.uk
     services__ers__url: https://pat.rc.refer.nhs.uk
-    services__pkb__url: https://nhsapp-test.devstacks.pkb.io
+    services__pkb__url: https://nhsapp-pkb.devstacks.pkb.io
     services__pkb_alt__url: http://nhsapp-test.devstacks.pkb.io:443
     services__substraktPatientPack__url: https://jump-point.test.substrakthealth.com
     services__substraktPatientPack_admin__url: https://admin-request.test.substrakthealth.com
@@ -90,7 +90,7 @@ api:
     servicesV3__cid_access__url: https://access.ext.signin.nhs.uk
     servicesV3__cid_idvm__url: https://idvm.ext.signin.nhs.uk
     servicesV3__ers__url: https://pat.rc.refer.nhs.uk
-    servicesV3__pkb__url: https://nhsapp-test.devstacks.pkb.io
+    servicesV3__pkb__url: https://nhsapp-pkb.devstacks.pkb.io
     servicesV3__pkb__domains__1: http://nhsapp-test.devstacks.pkb.io:443
     servicesV3__substraktPatientPack__url: https://jump-point.test.substrakthealth.com
     servicesV3__substraktPatientPack__domains__1: https://admin-request.test.substrakthealth.com

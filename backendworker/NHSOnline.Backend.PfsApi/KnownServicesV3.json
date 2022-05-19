@@ -92,6 +92,11 @@
     "accurx": {
       "showThirdPartyWarning": true,
       "requiresAssertedLoginIdentity": true
+    },
+    "drDoctor": {
+      "url": "https://my-uat2.drdoctor.co.uk",
+      "requiresAssertedLoginIdentity": true,
+      "showThirdPartyWarning": true
     }
   }
 }

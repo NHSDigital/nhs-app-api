@@ -213,12 +213,17 @@ const thirdPartyProvider = {
   },
   wayfinder: {
     ers: {
-      jumpOffId: 'ers',
+      jumpOffId: 'ersWayfinder',
       acceptablePathsRegex: '^\\/nhslogin(\\/?\\?.*)?$',
       redirectPath: '/nhslogin?',
     },
+    drDoctor: {
+      jumpOffId: 'drDoctorWayfinder',
+      acceptablePathsRegex: '^\\/appointments\\/.*$',
+      redirectPath: '/appointments/',
+    },
     pkb: {
-      jumpOffId: 'pkb',
+      jumpOffId: 'pkbWayfinder',
       acceptablePathsRegex: '^\\/nhs-login\\/login\\?phrPath=\\/diary\\/viewAppointment\\.action.*$',
       redirectPath: '/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action?',
     },
@@ -226,5 +231,6 @@ const thirdPartyProvider = {
 };
 
 export const getJumpOffConfiguration = id => get(id)(thirdPartyProvider);
+export const getWayfinderJumpOffConfiguration = id => get(`wayfinder.${id}`)(thirdPartyProvider);
 
 export default { thirdPartyProvider };

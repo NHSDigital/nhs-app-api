@@ -414,6 +414,20 @@ export default {
       headerText: 'View appointments',
       descriptionText: '',
     },
+    wayfinderJumpOffs: {
+      ers: {
+        serviceId: 'ers',
+        providerName: 'Electronic Referral Service',
+      },
+      drDoctor: {
+        serviceId: 'drDoctor',
+        providerName: 'Dr Doctor',
+      },
+      pkb: {
+        serviceId: 'pkb',
+        providerName: 'Patients Know Best',
+      },
+    },
     thirdPartyWarning: {
       featureName: 'View appointments',
       servicePurchaser: 'Your GP surgery or hospital',

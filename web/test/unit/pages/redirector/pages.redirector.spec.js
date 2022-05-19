@@ -35,6 +35,7 @@ describe('redirector page', () => {
     isSilverIntegrationEnabled = false,
     isProofLevel9 = false,
     domains = ['http://additional.domain.com'],
+    isWayfinderEnabled = true,
   } = {}) => {
     $http = {
       postV1PatientAssertedLoginIdentity: jest.fn()
@@ -59,6 +60,7 @@ describe('redirector page', () => {
         }),
         'session/isProofLevel9': isProofLevel9,
         'serviceJourneyRules/silverIntegrationEnabled': jest.fn().mockImplementation(() => isSilverIntegrationEnabled),
+        'serviceJourneyRules/wayfinderEnabled': isWayfinderEnabled,
       },
     });
 
@@ -283,6 +285,65 @@ describe('redirector page', () => {
 
       it('will redirect to the external url', () => {
         expect(window.setWindowLocation).toHaveBeenCalledWith('http://www.url.com/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages&assertedLoginIdentity=jwtToken');
+      });
+    });
+
+    afterEach(() => {
+      hasAgreedToThirdPartyWarning.mockClear();
+    });
+  });
+
+  describe('has a redirect parameter to a wayfinder external site in the knownServices list and the path is included in the third-party-provider locale on web', () => {
+    beforeEach(() => {
+      NativeApp.supportsNativeWebIntegration.mockReturnValue(false);
+      hasAgreedToThirdPartyWarning.mockReturnValue(false);
+      $route = {
+        name: names.INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [names.REDIRECT_PARAMETER]: 'http://www.url.com/appointments/' },
+        meta: {},
+      };
+
+      window.setWindowLocation = jest.fn();
+
+      wrapper = mountRedirector({
+        knownServiceId: 'drDoctor',
+        hasKnownService: true,
+        requiresAssertedLoginIdentity: true,
+        showThirdPartyWarning: true,
+        isSilverIntegrationEnabled: true,
+        isProofLevel9: true,
+      });
+    });
+
+    it('warning section should be shown', () => {
+      expect(wrapper.vm.shouldShowWarning).toEqual(true);
+    });
+
+    it('will not set tab title', () => {
+      expect(wrapper.vm.$route.meta.titleKey).toBeUndefined();
+    });
+
+    describe('on continue button click', () => {
+      beforeEach(() => {
+        const continueButton = wrapper.find('a.nhsuk-button');
+        continueButton.trigger('click');
+      });
+
+      it('will call `postV1PatientAssertedLoginIdentity`', () => {
+        expect($http.postV1PatientAssertedLoginIdentity).toHaveBeenCalledWith({
+          assertedLoginIdentityRequest: {
+            IntendedRelyingPartyUrl: 'http://www.url.com/appointments/',
+            JumpOffId: 'drDoctorWayfinder',
+            ProviderId: 'drDoctor',
+            ProviderName: 'Dr Doctor',
+            Action: 'SilverIntegrationJumpOff',
+          },
+          ignoreError: true,
+        });
+      });
+
+      it('will redirect to the external url', () => {
+        expect(window.setWindowLocation).toHaveBeenCalledWith('http://www.url.com/appointments/?assertedLoginIdentity=jwtToken');
       });
     });
 

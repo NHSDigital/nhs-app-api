@@ -1,0 +1,12 @@
+#
+#
+#   Sandpit users in ODS code F00001 are used by ers wayfinder.
+#   DO NOT enable any external third-party silver integrations for this ODS code.
+#
+#
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "F00001"
+journeys:
+  wayfinder:
+    isEnabled: true

@@ -94,6 +94,9 @@ export default {
     },
     providerName() {
       if (this.knownService) {
+        if (this.isWayfinderUrl) {
+          return this.getText(`thirdPartyProviders.wayfinder.wayfinderJumpOffs.${this.knownService.id}.providerName`);
+        }
         return this.getText(`thirdPartyProviders.${this.knownService.id}.providerName`);
       }
       return '';
