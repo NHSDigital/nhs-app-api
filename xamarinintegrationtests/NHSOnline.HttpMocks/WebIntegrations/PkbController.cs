@@ -84,6 +84,14 @@ namespace NHSOnline.HttpMocks.WebIntegrations
         }
 
         [Host(PkbHostName)]
+        [HttpGet("NativeBackAction.html")]
+        public IActionResult NativeBackActionPage()
+        {
+            (string Title, HttpRequest Request) model = ("Web Integration Functionality - Native Back Action", Request);
+            return View("~/Views/WebIntegrations/WebIntegrationFunctionalityPages/NativeBackActionPage.cshtml", model);
+        }
+
+        [Host(PkbHostName)]
         [HttpGet("FileUpload.html")]
         public IActionResult FileUploadPage()
         {

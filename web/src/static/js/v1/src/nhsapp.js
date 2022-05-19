@@ -1,7 +1,24 @@
 import { AppPage } from './constants';
 
+let backAction = null;
+
 window.nhsapp = {
+  callbacks: {
+    back() {
+      if (backAction !== null) {
+        backAction();
+      }
+    },
+  },
   navigation: {
+    setBackAction(action) {
+      if (typeof action === 'function') {
+        backAction = action;
+      }
+    },
+    clearBackAction() {
+      backAction = null;
+    },
     goToHomePage() {
       // TODO: remove when min app version is 1.36
       if (window.nhsappNative.goToHomepage) {

@@ -1,10 +1,12 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Logging;
+using NHSOnline.App.Threading;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Controls.WebViews
@@ -70,6 +72,9 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty WebIntegrationRequestProperty =
             BindableProperty.Create(nameof(WebIntegrationRequest), typeof(WebIntegrationRequest), typeof(WebIntegrationWebView));
 
+        public static readonly BindableProperty BackCommandProperty =
+            BindableProperty.Create(nameof(WebIntegrationRequest), typeof(WebIntegrationRequest), typeof(WebIntegrationWebView));
+
         public AsyncCommand<string> GoToNhsAppPageCommand
         {
             get => (AsyncCommand<string>) GetValue(GoToNhsAppPageCommandProperty);
@@ -125,6 +130,12 @@ namespace NHSOnline.App.Controls.WebViews
             set => SetValue(AddEventToCalendarCommandProperty, value);
         }
 
+        public AsyncCommand BackCommand
+        {
+            get => (AsyncCommand) GetValue(BackCommandProperty);
+            set => SetValue(BackCommandProperty, value);
+        }
+
         private static T ConvertFromJsonString<T>(string json)
             => JsonConvert.DeserializeObject<T>(json, Settings) ?? throw new ArgumentException($"Failed to deserialise JSON to {typeof(T).FullName}", nameof(json));
 
@@ -142,6 +153,12 @@ namespace NHSOnline.App.Controls.WebViews
         void IRedirectFlowAwareWebView.OnPageLoadComplete(WebViewPageLoadEventArgs pageLoadEventArgs)
         {
             PageLoadComplete?.Invoke(this, pageLoadEventArgs);
+        }
+
+        public async Task NavigateBack()
+        {
+            await EvaluateJavaScriptAsync($"window.nhsapp.callbacks.back()")
+                .ResumeOnThreadPool();
         }
     }
 }

@@ -35,6 +35,7 @@ namespace NHSOnline.App.Areas.WebIntegration
 
             Func<AddEventToCalendarRequest, Task>? AddEventToCalendarRequested { get; set; }
             Func<DownloadRequest, Task>? StartDownloadRequested { get; set; }
+            Func<Task>? BackRequested { get; set; }
         }
 
         void SetWebIntegrationRequest(WebIntegrationRequest webIntegrationRequest);
@@ -42,5 +43,7 @@ namespace NHSOnline.App.Areas.WebIntegration
         void SetNavigationFooterItem(NavigationFooterItem footerItem);
 
         View GetWebViewElement();
+
+        Task NavigateBack();
     }
 }

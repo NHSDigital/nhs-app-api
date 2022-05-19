@@ -69,6 +69,10 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
 
         public Action<WebViewPageLoadEventArgs>? PageLoadComplete { get; set; }
 
+        public Func<Task>? BackRequested { get; set; }
+        public AsyncCommand BackRequestedCommand
+            => new AsyncCommand(() => BackRequested);
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -159,7 +163,17 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
             }
         }
 
-        protected override bool OnBackButtonPressed() => true;
+        public async Task NavigateBack()
+        {
+            WebView.Focus();
+            await WebView.NavigateBack().PreserveThreadContext();
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            BackRequestedCommand.Execute(true);
+            return true;
+        }
 
         public bool OnSwipeBack() => true;
 

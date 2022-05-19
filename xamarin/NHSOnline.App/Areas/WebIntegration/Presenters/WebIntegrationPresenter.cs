@@ -77,7 +77,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                 .RegisterHandler<string>(OpenExternalBrowserRequested, (view, handler) => view.OpenExternalBrowserRequested = handler)
                 .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeepLinkRequested = handler)
                 .RegisterHandler<AddEventToCalendarRequest>(AddEventToCalendarRequested, (view, handler) => view.AddEventToCalendarRequested = handler)
-                .RegisterHandler<DownloadRequest>(StartDownloadRequested, (view, handler) => view.StartDownloadRequested = handler);
+                .RegisterHandler<DownloadRequest>(StartDownloadRequested, (view, handler) => view.StartDownloadRequested = handler)
+                .RegisterHandler(BackRequested, (view, handler) => view.BackRequested = handler);
         }
 
         private async Task GoToNhsAppPageRequested(string page)
@@ -190,6 +191,12 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                     await _calendar.ShowCalendarPermissionDeniedAlert().PreserveThreadContext();
                 }
             }
+        }
+
+        private async Task BackRequested()
+        {
+            _logger.LogInformation("Display back requested");
+            await _view.NavigateBack().PreserveThreadContext();
         }
     }
 }
